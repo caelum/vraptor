@@ -31,7 +31,9 @@ package br.com.caelum.vraptor.example;
 
 import static br.com.caelum.vraptor.view.Results.logic;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 
 import br.com.caelum.vraptor.Delete;
 import br.com.caelum.vraptor.Get;
@@ -42,6 +44,7 @@ import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.example.dao.Repository;
 import br.com.caelum.vraptor.validator.Hibernate;
+import br.com.caelum.vraptor.validator.ValidationMessage;
 import br.com.caelum.vraptor.validator.Validations;
 
 @Resource
@@ -59,23 +62,25 @@ public class ClientsController {
 		this.validator = validator;
 	}
 
-	@Path("/clients/form")
 	public void form() {
 	}
 
 	@Get
 	@Path("/clients")
-	public void list() {
-		result.include("clients", repository.all());
+	public Collection<Client> list() {
+		return repository.all();
 	}
 
 	@Post
 	@Path("/clients")
 	public void add(final Client client) {
 		validator.onError().goTo(ClientsController.class).form();
+		if(client.getName().equals("guilherme")) {
+			validator.add(new ValidationMessage("", "ha!"));
+		}
+		validator.validate();
 		validator.checking(new Validations() {{
 			that("client", "should_not_be_null", client != null);
-
 			if(client != null) {
 				that("client", "should_not_be_null", client.getAge() > 10);
 			}
@@ -83,6 +88,14 @@ public class ClientsController {
 		}});
 		repository.add(client);
 	}
+	
+	
+	
+	
+	
+	
+	
+	
 
 	@Delete
 	@Path("/clients/{client.id}")
@@ -90,6 +103,21 @@ public class ClientsController {
 		repository.remove(client);
 		result.use(logic()).redirectTo(ClientsController.class).list();
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 	@Get
 	@Path("/clients/{client.id}")
@@ -105,6 +133,10 @@ public class ClientsController {
 		ArrayList<Client> all = new ArrayList<Client>(repository.all());
 		Client client = all.get((int) (Math.random() * all.size()));
 		result.use(logic()).redirectTo(ClientsController.class).view(client);
+	}
+
+	public File download(Client client) {
+		return repository.find(client.getId()).getFile().getFile();
 	}
 
 }

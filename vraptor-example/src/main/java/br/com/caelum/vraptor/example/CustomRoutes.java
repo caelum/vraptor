@@ -44,13 +44,12 @@ public class CustomRoutes implements RoutesConfiguration {
         new Rules(router) {
             public void routes() {
                 routeFor("/").is(ClientsController.class).list();
+                routeFor("/clients/download/{client.id}").is(ClientsController.class).download(null);
                 routeFor("/clients/random").is(ClientsController.class).random();
-                // routeFor("/(*)").is(type(""), method(""));
+                routeFor("/clients/form").is(ClientsController.class).form();
+                //routeFor("/{webResource}/xpto/{webMethod}").is(type("br.com.caelum.nomedoprojeto.{webResource}"), method(""));
             }
         };
-
-        // ListOfRoutes routes = ...;
-        // router.add(routes);
     }
 
 }

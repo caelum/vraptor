@@ -27,6 +27,7 @@
  */
 package br.com.caelum.vraptor;
 
+import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.Validations;
 
 /**
@@ -42,5 +43,10 @@ public interface Validator {
     Validator onError();
 
 	<T> T goTo(Class<T> type);
+	
+	void add(Message message);
+	
+	void validate();
 
+	
 }

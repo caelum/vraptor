@@ -28,6 +28,7 @@
 package br.com.caelum.vraptor.validator;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -56,6 +57,8 @@ public class DefaultValidator implements Validator {
     private Method method;
     private Class<?> typeToUse;
 	private final HttpServletRequest request;
+	
+	private final List<Message> errors = new ArrayList<Message>();
 
     public DefaultValidator(Proxifier proxifier, Result result, HttpServletRequest request) {
         this.proxifier = proxifier;
@@ -66,22 +69,8 @@ public class DefaultValidator implements Validator {
     // TODO: do not use String consequences anymore
     // TODO: on error action should be defined by the onError method
     public void checking(Validations validations) {
-        List<Message> errors = validations.getErrors();
-        if (!errors.isEmpty()) {
-            result.include("errors", errors);
-            if (method != null) {
-                Object instance = result.use(Results.logic()).forwardTo(typeToUse);
-                try {
-                    method.invoke(instance, argsToUse);
-                } catch (Exception e) {
-                    throw new ResultException(e);
-                }
-            } else {
-            	result.use(Results.page()).forward(request.getRequestURI());
-            }
-            // finished just fine
-            throw new ValidationError(errors);
-        }
+        this.errors.addAll(validations.getErrors());
+        validate();
     }
 
     public Validator onError() {
@@ -100,5 +89,27 @@ public class DefaultValidator implements Validator {
             }
         });
     }
+
+	public void add(Message message) {
+		this.errors.add(message);
+	}
+
+	public void validate() {
+        if (!errors.isEmpty()) {
+            result.include("errors", errors);
+            if (method != null) {
+                Object instance = result.use(Results.logic()).forwardTo(typeToUse);
+                try {
+                    method.invoke(instance, argsToUse);
+                } catch (Exception e) {
+                    throw new ResultException(e);
+                }
+            } else {
+            	result.use(Results.page()).forward(request.getRequestURI());
+            }
+            // finished just fine
+            throw new ValidationError(errors);
+        }
+	}
 
 }

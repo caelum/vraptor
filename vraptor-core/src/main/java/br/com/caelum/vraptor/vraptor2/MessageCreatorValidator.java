@@ -28,6 +28,7 @@
 package br.com.caelum.vraptor.vraptor2;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -68,6 +69,7 @@ public class MessageCreatorValidator implements Validator {
 	private final ResourceMethod resource;
 	private final HttpServletRequest request;
 	private final MethodInfo info;
+	private boolean containsErrors;
 
     public MessageCreatorValidator(Proxifier proxifier, Result result, ValidationErrors errors, ResourceMethod resource, HttpServletRequest request, MethodInfo info) {
         this.proxifier = proxifier;
@@ -80,29 +82,10 @@ public class MessageCreatorValidator implements Validator {
 
     public void checking(Validations validations) {
         List<Message> messages = validations.getErrors();
-        if (!messages.isEmpty()) {
             for (Message s : messages) {
-                this.errors.add(new FixedMessage(s.getCategory(), s.getMessage(), s.getCategory()));
+            	add(s);
             }
-            result.include("errors", this.errors);
-            if (method != null) {
-                Object instance = result.use(Results.logic()).forwardTo(typeToUse);
-                try {
-                    method.invoke(instance, argsToUse);
-                } catch (Exception e) {
-                    throw new ResultException(e);
-                }
-            } else {
-            	if(Info.isOldComponent(resource.getResource())) {
-            		info.setResult("invalid");
-            		result.use(Results.page()).forward();
-            	} else {
-                	result.use(Results.page()).forward(request.getRequestURI());
-            	}
-            }
-            // finished just fine
-            throw new ValidationError(messages);
-        }
+            validate();
     }
 
     public Validator onError() {
@@ -121,5 +104,33 @@ public class MessageCreatorValidator implements Validator {
             }
         });
     }
+
+	public void add(Message message) {
+		containsErrors = true;
+        this.errors.add(new FixedMessage(message.getCategory(), message.getMessage(), message.getCategory()));
+	}
+
+	public void validate() {
+        if (containsErrors) {
+            result.include("errors", this.errors);
+            if (method != null) {
+                Object instance = result.use(Results.logic()).forwardTo(typeToUse);
+                try {
+                    method.invoke(instance, argsToUse);
+                } catch (Exception e) {
+                    throw new ResultException(e);
+                }
+            } else {
+            	if(Info.isOldComponent(resource.getResource())) {
+            		info.setResult("invalid");
+            		result.use(Results.page()).forward();
+            	} else {
+                	result.use(Results.page()).forward(request.getRequestURI());
+            	}
+            }
+            // finished just fine
+            throw new ValidationError(new ArrayList<Message>());
+        }
+	}
 
 }

@@ -57,16 +57,16 @@ public class DefaultPathResolver implements PathResolver {
 		}
         String name = method.getResource().getType().getSimpleName();
         String folderName = extractControllerFromName(name);
-		return "/" + folderName + "/" + method.getMethod().getName() + suffix
+		return "/WEB-INF/jsp/" + folderName + "/" + method.getMethod().getName() + suffix
 				+ ".jsp";
 	}
 
     private String extractControllerFromName(String baseName) {
         baseName = lowerFirstCharacter(baseName);
         if (baseName.endsWith("Controller")) {
-            return "/" + baseName.substring(0, baseName.lastIndexOf("Controller"));
+            return baseName.substring(0, baseName.lastIndexOf("Controller"));
         }
-        return "/" + baseName;
+        return baseName;
     }
 
     private String lowerFirstCharacter(String baseName) {

@@ -33,6 +33,8 @@ import java.util.List;
 
 import org.hibernate.validator.Length;
 
+import br.com.caelum.vraptor.interceptor.multipart.UploadedFile;
+
 public class Client {
     
     private Long id;
@@ -45,8 +47,18 @@ public class Client {
     private List<String> emails;
     
     private List<Address> addresses;
+    
+    private UploadedFile file;
 
-    public String getName() {
+    public UploadedFile getFile() {
+		return file;
+	}
+
+	public void setFile(UploadedFile file) {
+		this.file = file;
+	}
+
+	public String getName() {
         return name;
     }
 

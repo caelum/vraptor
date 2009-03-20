@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== 
+	VRaptor 3 full build
+	====================================================================== -->
+<project name="VRaptor 3" default="artifacts">
+
+	<description>VRaptor 3 full build</description>
+
+	<property file="build.properties" />
+	<path id="libs.classpath" path=".">
+		<fileset dir="${libs.dir}">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+	<path id="servlet-api.classpath">
+		<fileset dir="${common.dir}">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+	<path id="compile.classpath">
+		<path refid="libs.classpath" />
+		<path refid="servlet-api.classpath" />
+	</path>
+
+	<target name="prepare" description="--> prepares directories">
+		<mkdir dir="${tmp.dir}" />
+		<mkdir dir="${tmp.classes.dir}" />
+		<mkdir dir="${tmp.test.classes.dir}" />
+	</target>
+
+	<target name="compile" depends="prepare" description="--> compiles the classes">
+		<javac destdir="${tmp.classes.dir}" srcdir="${src.dir}" classpathref="compile.classpath" debug="true" encoding="UTF-8">
+			<compilerarg value="-Xlint:none" />
+		</javac>
+		<javac destdir="${tmp.test.classes.dir}" srcdir="${src.test.dir}" classpathref="compile.classpath" debug="true" encoding="UTF-8">
+			<compilerarg value="-Xlint:none" />
+		</javac>
+	</target>
+
+	<property name="jar.file" value="${tmp.dir}/${jar.filename}-${version}.jar" />
+	
+	<target name="artifacts" depends="compile" description="--> generate project's artifacts">
+		<jar destfile="${jar.file}" compress="true">
+			<fileset dir="${tmp.classes.dir}" includes="**/*.class" />
+		</jar>
+	</target>
+
+	<target name="clean" description="--> delete build artifacts">
+		<delete file="${jar.file}" />
+		<delete dir="${tmp.dir}" />
+	</target>
+
+</project>

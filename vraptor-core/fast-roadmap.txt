@@ -1,0 +1,20 @@
+fast organize prior to generating docs and real roadmap
+
+- sl4j usage
+- support @Post, @...
+- support @Path
+- support @Path with nice urls
+- support Result
+- support Validator
+- site docs
+- ant build run tests
+- spring support
+- guice support
+- validation support
+- hibernate plugin
+- hibernate validation plugin
+
+questions
+
+	- should we allow pico container components customization through web.xml properties? where should one configure its parts? for example, where to configure the ResourceLocator while using PicoContainer?
+	

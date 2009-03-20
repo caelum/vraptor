@@ -24,17 +24,14 @@ public class PicoBasedContainer implements Container {
 		this.container.addComponent(WebInfClassesScanner.class);
 	}
 
-	@Override
 	public <T> T withA(Class<T> type) {
 		return container.getComponent(type);
 	}
 
-	@Override
 	public void start() {
 		container.start();
 	}
 
-	@Override
 	public void stop() {
 		container.stop();
 	}

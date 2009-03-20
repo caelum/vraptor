@@ -31,10 +31,10 @@
 	</target>
 
 	<target name="compile" depends="prepare" description="--> compiles the classes">
-		<javac destdir="${tmp.classes.dir}" srcdir="${src.dir}" classpathref="compile.classpath" debug="true" encoding="UTF-8">
+		<javac destdir="${tmp.classes.dir}" srcdir="${src.dir}" classpathref="compile.classpath" debug="true" encoding="UTF-8" target="1.5" source="1.5">
 			<compilerarg value="-Xlint:none" />
 		</javac>
-		<javac destdir="${tmp.test.classes.dir}" srcdir="${src.test.dir}" classpathref="compile.classpath" debug="true" encoding="UTF-8">
+		<javac destdir="${tmp.test.classes.dir}" srcdir="${src.test.dir}" classpathref="compile.classpath" debug="true" encoding="UTF-8" target="1.5" source="1.5">
 			<compilerarg value="-Xlint:none" />
 		</javac>
 	</target>

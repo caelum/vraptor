@@ -8,7 +8,6 @@ public class DefaultResource implements Resource {
 		this.type = type;
 	}
 
-	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof DefaultResource)) {
 			return false;
@@ -17,9 +16,12 @@ public class DefaultResource implements Resource {
 		return this.type.equals(resource.type);
 	}
 
-	@Override
 	public String toString() {
 		return "{DefaultResource " + type.getName() + "}";
+	}
+
+	public Class<?> getType() {
+		return type;
 	}
 
 }

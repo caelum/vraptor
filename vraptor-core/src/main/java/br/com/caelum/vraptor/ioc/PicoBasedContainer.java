@@ -5,7 +5,9 @@ import javax.servlet.ServletContext;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.PicoBuilder;
 
+import br.com.caelum.vraptor.http.StupidTranslator;
 import br.com.caelum.vraptor.resource.DefaultDirScanner;
+import br.com.caelum.vraptor.resource.DefaultResourceRegistry;
 import br.com.caelum.vraptor.resource.WebInfClassesScanner;
 
 /**
@@ -19,7 +21,10 @@ public class PicoBasedContainer implements Container {
 
 	public PicoBasedContainer(ServletContext context) {
 		this.container = new PicoBuilder().withCaching().build();
+		this.container.addComponent(this);
 		this.container.addComponent(context);
+		this.container.addComponent(StupidTranslator.class);
+		this.container.addComponent(DefaultResourceRegistry.class);
 		this.container.addComponent(DefaultDirScanner.class);
 		this.container.addComponent(WebInfClassesScanner.class);
 	}

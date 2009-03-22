@@ -1,5 +1,6 @@
 package br.com.caelum.vraptor.example;
 
+import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 
@@ -10,5 +11,10 @@ public class ClientsController {
 
 	public ClientsController(Result result) {
 		this.result = result;
+	}
+	
+	@Path("/clientes")
+	public void add() {
+		
 	}
 }

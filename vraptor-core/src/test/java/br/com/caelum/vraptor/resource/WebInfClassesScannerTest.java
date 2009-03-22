@@ -2,6 +2,7 @@ package br.com.caelum.vraptor.resource;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletContext;
 
@@ -26,6 +27,7 @@ public class WebInfClassesScannerTest {
 		final DirScanner scanner = mockery.mock(DirScanner.class);
 		final ServletContext context = mockery.mock(ServletContext.class);
 		final String myPath = "myPath";
+		final ResourceRegistry registry = mockery.mock(ResourceRegistry.class);
 		mockery.checking(new Expectations() {
 			{
 				one(context).getRealPath("");
@@ -33,9 +35,13 @@ public class WebInfClassesScannerTest {
 				one(scanner)
 						.scan(new File(new File(myPath), "WEB-INF/classes"));
 				will(returnValue(new ArrayList<Resource>()));
+				// TODO i forgot how to do it without the cast :)
+				one(registry)
+						.register(
+								(List<br.com.caelum.vraptor.resource.Resource>) with(a(List.class)));
 			}
 		});
-		new WebInfClassesScanner(context, scanner).loadAll();
+		new WebInfClassesScanner(context, scanner, registry).loadAll();
 		mockery.assertIsSatisfied();
 	}
 

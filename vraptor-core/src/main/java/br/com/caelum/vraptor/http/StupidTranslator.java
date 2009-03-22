@@ -15,6 +15,9 @@ public class StupidTranslator implements UrlToResourceTranslator {
 
 	public ResourceMethod translate(HttpServletRequest request) {
 		String resourceName = request.getRequestURI();
+		if(resourceName.length()>1 && resourceName.indexOf('/',1)!=-1) {
+			resourceName = resourceName.substring(resourceName.indexOf('/',1));
+		}
 		String methodName = request.getMethod();
 		ResourceMethod resource = registry.gimmeThis(resourceName, methodName);
 		return resource;

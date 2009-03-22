@@ -24,6 +24,11 @@
 		<path refid="servlet-api.classpath" />
 	</path>
 
+	<path id="test.classpath">
+		<path refid="compile.classpath" />
+		<dirset dir="${tmp.classes.dir}" />
+	</path>
+
 	<target name="prepare" description="--> prepares directories">
 		<mkdir dir="${tmp.dir}" />
 		<mkdir dir="${tmp.classes.dir}" />
@@ -34,7 +39,7 @@
 		<javac destdir="${tmp.classes.dir}" srcdir="${src.dir}" classpathref="compile.classpath" debug="true" encoding="UTF-8" target="1.5" source="1.5">
 			<compilerarg value="-Xlint:none" />
 		</javac>
-		<javac destdir="${tmp.test.classes.dir}" srcdir="${src.test.dir}" classpathref="compile.classpath" debug="true" encoding="UTF-8" target="1.5" source="1.5">
+		<javac destdir="${tmp.test.classes.dir}" srcdir="${src.test.dir}" classpathref="test.classpath" debug="true" encoding="UTF-8" target="1.5" source="1.5">
 			<compilerarg value="-Xlint:none" />
 		</javac>
 	</target>

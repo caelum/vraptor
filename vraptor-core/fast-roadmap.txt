@@ -1,8 +1,9 @@
 fast organize prior to generating docs and real roadmap
 
+- CachedResourceRegistry caches with a map of 2xStrings --> Resource
+- DRAML name sucks.
 - sl4j usage
 - support @Post, @...
-- support @Path
 - support @Path with nice urls
 - support Result
 - support Validator
@@ -13,8 +14,8 @@ fast organize prior to generating docs and real roadmap
 - validation support
 - hibernate plugin
 - hibernate validation plugin
+- default path?
+- public methods are defaulted to paths?
 
-questions
-
-	- should we allow pico container components customization through web.xml properties? where should one configure its parts? for example, where to configure the ResourceLocator while using PicoContainer?
-	
+done:
+- support @Path

@@ -4,6 +4,7 @@ fast organize prior to generating docs and real roadmap
 - DRAML name sucks.
 - sl4j usage
 - support @Post, @...
+- *for nice urls support* default resource and method lookup factory should be injected in the required component (default resource registry)
 - support @Path with nice urls
 - support Result
 - support Validator

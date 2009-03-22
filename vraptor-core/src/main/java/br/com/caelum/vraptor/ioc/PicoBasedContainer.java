@@ -1,6 +1,7 @@
 package br.com.caelum.vraptor.ioc;
 
 import javax.servlet.ServletContext;
+import javax.servlet.ServletRequest;
 
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.PicoBuilder;
@@ -39,6 +40,10 @@ public class PicoBasedContainer implements Container {
 
 	public void stop() {
 		container.stop();
+	}
+
+	public Request forRequest(ServletRequest request) {
+		return null;
 	}
 
 }

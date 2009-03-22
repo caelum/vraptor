@@ -1,5 +1,7 @@
 package br.com.caelum.vraptor.ioc;
 
+import javax.servlet.ServletRequest;
+
 public interface Container {
 
 	<T> T withA(Class<T> type);
@@ -7,5 +9,7 @@ public interface Container {
 	void start();
 
 	void stop();
+
+	Request forRequest(ServletRequest request);
 
 }

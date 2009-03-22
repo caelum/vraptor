@@ -25,21 +25,22 @@ public class VRaptor implements Filter {
 		container.stop();
 	}
 
-	public void doFilter(ServletRequest request, ServletResponse res,
+	public void doFilter(ServletRequest req, ServletResponse res,
 			FilterChain chain) throws IOException, ServletException {
+		
+		HttpServletRequest request = (HttpServletRequest) req;
+		HttpServletResponse response = (HttpServletResponse) res;
+
 		UrlToResourceTranslator translator = container
 				.withA(UrlToResourceTranslator.class);
-		ResourceMethod method = translator
-				.translate((HttpServletRequest) request);
-		HttpServletResponse response = (HttpServletResponse) res;
+		ResourceMethod method = translator.translate(request);
 		if (method == null) {
 			response.setStatus(404);
 			response.getWriter().println("resource not found");
 			return;
 		}
 
-		response.getWriter().println("found resource " + method);
-		container.forRequest(request).execute(method);
+		container.prepareFor(request, response).execute(method);
 
 	}
 

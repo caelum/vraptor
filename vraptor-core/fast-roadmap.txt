@@ -16,6 +16,9 @@ fast organize prior to generating docs and real roadmap
 - hibernate validation plugin
 - default path?
 - public methods are defaulted to paths?
+- 404 component (so its customizable)
+- customizable requestexecution
+- customizable error process on request execution
 
 done:
 - support @Path

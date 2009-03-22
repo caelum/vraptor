@@ -30,7 +30,7 @@ public class DefaultDirScanner implements DirScanner {
 				String typeName = currentPackage + child.getName();
 				typeName = typeName.substring(0, typeName.length()-6);
 				try {
-					Class type = Class.forName(typeName, false, this.getClass()
+					Class<?> type = Class.forName(typeName, false, this.getClass()
 							.getClassLoader());
 					if (type.isAnnotationPresent(br.com.caelum.vraptor.Resource.class)) {
 						resources.add(new DefaultResource(type));

@@ -2,9 +2,9 @@ package br.com.caelum.vraptor.resource;
 
 public class DefaultResource implements Resource {
 
-	private final Class type;
+	private final Class<?> type;
 
-	public DefaultResource(Class type) {
+	public DefaultResource(Class<?> type) {
 		this.type = type;
 	}
 

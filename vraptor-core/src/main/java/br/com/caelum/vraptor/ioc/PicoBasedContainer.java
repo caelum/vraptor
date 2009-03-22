@@ -1,11 +1,14 @@
 package br.com.caelum.vraptor.ioc;
 
 import javax.servlet.ServletContext;
-import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.PicoBuilder;
 
+import br.com.caelum.vraptor.core.Request;
+import br.com.caelum.vraptor.core.RequestExecution;
 import br.com.caelum.vraptor.http.StupidTranslator;
 import br.com.caelum.vraptor.resource.DefaultDirScanner;
 import br.com.caelum.vraptor.resource.DefaultResourceRegistry;
@@ -42,8 +45,8 @@ public class PicoBasedContainer implements Container {
 		container.stop();
 	}
 
-	public Request forRequest(ServletRequest request) {
-		return null;
+	public Request prepareFor(HttpServletRequest request, HttpServletResponse response) {
+		return new RequestExecution(request, response);
 	}
 
 }

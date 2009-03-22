@@ -16,4 +16,8 @@ public class DefaultResourceMethod implements ResourceMethod {
 		return "{DefaultResourceMethod: " + method.getDeclaringClass().getName() + "." + method.getName() + "}";
 	}
 
+	public Method getMethod() {
+		return method;
+	}
+
 }

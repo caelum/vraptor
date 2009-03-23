@@ -12,6 +12,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.Resource;
+import br.com.caelum.vraptor.ioc.pico.WebInfClassesScanner;
+import br.com.caelum.vraptor.ioc.pico.DirScanner;
 
 public class WebInfClassesScannerTest {
 

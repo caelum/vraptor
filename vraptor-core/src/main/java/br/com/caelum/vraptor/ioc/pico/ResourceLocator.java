@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor.resource;
+package br.com.caelum.vraptor.ioc.pico;
 
 public interface ResourceLocator {
 

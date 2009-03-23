@@ -1,8 +1,10 @@
-package br.com.caelum.vraptor.resource;
+package br.com.caelum.vraptor.ioc.pico;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.not;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 
 import java.io.File;
 import java.util.List;
@@ -10,6 +12,8 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import br.com.caelum.vraptor.ioc.pico.DefaultDirScanner;
+import br.com.caelum.vraptor.resource.Resource;
+import br.com.caelum.vraptor.resource.DefaultResource;
 
 
 public class DefaultDirScannerTest {
@@ -27,7 +31,7 @@ public class DefaultDirScannerTest {
 	@Test
 	public void testAcceptsClassWithinFolders() {
 		List<Resource> results = scanner.scan(baseDir);
-		assertThat(results, hasItem(new DefaultResource(MyResource.class)));
+		MatcherAssert.assertThat(results, Matchers.hasItem(new DefaultResource(MyResource.class)));
 	}
 
 	@Test

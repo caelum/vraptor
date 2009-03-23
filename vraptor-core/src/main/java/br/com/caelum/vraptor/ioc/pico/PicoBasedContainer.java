@@ -47,7 +47,7 @@ public class PicoBasedContainer implements Container {
 		container.stop();
 	}
 
-	public Request prepareFor(ResourceMethod method, HttpServletRequest request, HttpServletResponse response) {
+	public Request prepare(ResourceMethod method, HttpServletRequest request, HttpServletResponse response) {
 		PicoBasedRequestContainer container = new PicoBasedRequestContainer(this.container, method, request,response);
 		return container.withA(RequestExecution.class);
 	}

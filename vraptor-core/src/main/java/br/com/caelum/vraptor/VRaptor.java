@@ -46,7 +46,7 @@ public class VRaptor implements Filter {
 			return;
 		}
 
-		container.prepareFor(method, request, response).execute(method);
+		container.prepare(method, request, response).execute(method);
 
 	}
 

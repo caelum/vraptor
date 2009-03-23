@@ -17,6 +17,6 @@ public interface Container {
 	/**
 	 * Prepares a request execution for this request/response pair.
 	 */
-	Request prepareFor(ResourceMethod method, HttpServletRequest request, HttpServletResponse response);
+	Request prepare(ResourceMethod method, HttpServletRequest request, HttpServletResponse response);
 
 }

@@ -25,7 +25,7 @@ public class DefaultResourceRegistryTest {
 	@Before
 	public void setup() {
 		this.mockery = new Mockery();
-		this.registry = new DefaultResourceRegistry(null);
+		this.registry = new DefaultResourceRegistry();
 	}
 
 	@Test

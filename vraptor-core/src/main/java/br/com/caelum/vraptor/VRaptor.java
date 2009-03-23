@@ -38,7 +38,7 @@ public class VRaptor implements Filter {
         }
 
         UrlToResourceTranslator translator = container
-				.withA(UrlToResourceTranslator.class);
+				.instanceFor(UrlToResourceTranslator.class);
 		ResourceMethod method = translator.translate(request);
 		if (method == null) {
 			response.setStatus(404);
@@ -52,7 +52,7 @@ public class VRaptor implements Filter {
 
 	public void init(FilterConfig cfg) throws ServletException {
 		this.container = new PicoBasedContainer(cfg.getServletContext());
-		container.withA(ResourceLocator.class).loadAll();
+		container.instanceFor(ResourceLocator.class).loadAll();
 		container.start();
 	}
 

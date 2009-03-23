@@ -35,7 +35,7 @@ public class PicoBasedContainer implements Container {
 		this.container.addComponent(WebInfClassesScanner.class);
 	}
 
-	public <T> T withA(Class<T> type) {
+	public <T> T instanceFor(Class<T> type) {
 		return container.getComponent(type);
 	}
 

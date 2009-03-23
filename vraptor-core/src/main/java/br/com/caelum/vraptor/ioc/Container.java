@@ -8,7 +8,7 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 
 public interface Container {
 
-	<T> T withA(Class<T> type);
+	<T> T instanceFor(Class<T> type);
 
 	void start();
 

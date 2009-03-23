@@ -7,11 +7,13 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
+ * Annotations which are intended to mark VRaptor components should be annotated with this.
+ *
  * @author Fabio Kung
+ * @see br.com.caelum.vraptor.ioc.Component
  */
-@Target(ElementType.TYPE)
+@Target(ElementType.ANNOTATION_TYPE)
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
-@Stereotype
-public @interface Component {
+public @interface Stereotype {
 }

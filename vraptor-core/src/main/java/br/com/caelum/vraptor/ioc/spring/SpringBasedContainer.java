@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.context.support.GenericWebApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigUtils;
 import org.springframework.aop.config.AopConfigUtils;
+import org.springframework.beans.factory.BeanFactoryUtils;
 
 /**
  * @author Fabio Kung
@@ -20,22 +21,25 @@ public class SpringBasedContainer implements Container {
         applicationContext = new GenericWebApplicationContext();
         AnnotationConfigUtils.registerAnnotationConfigProcessors(applicationContext);
         AopConfigUtils.registerAspectJAnnotationAutoProxyCreatorIfNecessary(applicationContext);
-
-    }
-
-    public <T> T instanceFor(Class<T> type) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        
     }
 
     public void start() {
-        //To change body of implemented methods use File | Settings | File Templates.
+        new ComponentScanner(applicationContext).scan("br.com.caelum.vraptor");
+        applicationContext.refresh();
+        applicationContext.start();
     }
 
     public void stop() {
-        //To change body of implemented methods use File | Settings | File Templates.
+        applicationContext.stop();
+        applicationContext.destroy();
     }
 
     public Request prepare(HttpServletRequest request, HttpServletResponse response) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return instanceFor(Request.class);
+    }
+
+    public <T> T instanceFor(Class<T> type) {
+        return (T) BeanFactoryUtils.beanOfType(applicationContext, type);
     }
 }

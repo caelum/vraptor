@@ -13,7 +13,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-// TODO use new pico 2.5 features: annotations and classpath scanning
 /**
  * Managing internal components by using pico container.
  *
@@ -24,6 +23,7 @@ public class PicoBasedContainer implements Container {
     private final MutablePicoContainer container;
 
     public PicoBasedContainer(ServletContext context) {
+        // TODO scan classpath for @Component annotated classes
         this.container = new PicoBuilder().withCaching().build();
         this.container.addComponent(this);
         this.container.addComponent(context);

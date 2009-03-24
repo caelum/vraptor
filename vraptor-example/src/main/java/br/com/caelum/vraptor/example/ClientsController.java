@@ -13,7 +13,7 @@ public class ClientsController {
 		this.result = result;
 	}
 	
-	@Path("/clientes")
+	@Path("/clients")
 	public void add() {
 		
 	}

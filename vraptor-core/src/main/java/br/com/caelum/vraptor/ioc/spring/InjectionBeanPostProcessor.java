@@ -4,7 +4,6 @@ import br.com.caelum.vraptor.In;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 
 /**

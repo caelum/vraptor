@@ -4,22 +4,29 @@ import org.junit.Test;
 import org.junit.Assert;
 import org.junit.Before;
 import static org.junit.Assert.*;
+import org.jmock.Mockery;
+
+import javax.servlet.ServletContext;
 
 /**
  * @author Fabio Kung
  */
 public class SpringBasedContainerTest {
     private SpringBasedContainer container;
+    private Mockery mockery;
 
     @Before
     public void initContainer() {
-        container = new SpringBasedContainer("br.com.caelum.vraptor.ioc.spring");
+        mockery = new Mockery();
+        ServletContext servletContext = mockery.mock(ServletContext.class);
+        container = new SpringBasedContainer(servletContext, "br.com.caelum.vraptor.ioc.spring");
         container.start();
     }
 
     public void destroyContainer() {
         container.stop();
         container = null;
+        mockery.assertIsSatisfied();
     }
 
 

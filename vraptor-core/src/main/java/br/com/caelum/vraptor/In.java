@@ -9,14 +9,12 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Resources are entry points for requests; i.e, requests are handled by VRaptor Resources.
+ * Annotation for dependency injection points.
  *
- * @author Guilherme Silveira
  * @author Fabio Kung
  */
-@Target(ElementType.TYPE)
+@Target({ElementType.FIELD, ElementType.METHOD, ElementType.CONSTRUCTOR})
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
-@Stereotype
-public @interface Resource {
+public @interface In {
 }

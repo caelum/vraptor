@@ -1,4 +1,7 @@
-package br.com.caelum.vraptor.resource;
+package br.com.caelum.vraptor.ioc.pico;
+
+import br.com.caelum.vraptor.resource.Resource;
+import br.com.caelum.vraptor.resource.DefaultResource;
 
 import java.io.File;
 import java.util.ArrayList;

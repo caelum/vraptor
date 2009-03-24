@@ -14,11 +14,6 @@ import br.com.caelum.vraptor.ioc.Container;
 public class DefaultResourceRegistry implements ResourceRegistry {
 
 	private final List<DefaultResourceAndMethodLookup> resources = new ArrayList<DefaultResourceAndMethodLookup>();
-	private final Container container;
-
-	public DefaultResourceRegistry(Container container) {
-		this.container = container;
-	}
 
 	public void register(List<Resource> results) {
 		for (Resource r : results) {

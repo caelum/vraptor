@@ -1,4 +1,8 @@
-package br.com.caelum.vraptor.resource;
+package br.com.caelum.vraptor.ioc.pico;
+
+import br.com.caelum.vraptor.ioc.pico.DirScanner;
+import br.com.caelum.vraptor.resource.ResourceRegistry;
+import br.com.caelum.vraptor.resource.Resource;
 
 import java.io.File;
 import java.util.List;

@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor.resource;
+package br.com.caelum.vraptor.ioc.pico;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -12,6 +12,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.Resource;
+import br.com.caelum.vraptor.resource.ResourceRegistry;
+import br.com.caelum.vraptor.ioc.pico.WebInfClassesScanner;
+import br.com.caelum.vraptor.ioc.pico.DirScanner;
 
 public class WebInfClassesScannerTest {
 

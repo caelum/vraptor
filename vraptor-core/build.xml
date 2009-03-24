@@ -14,7 +14,7 @@
 	</path>
 
 	<path id="servlet-api.classpath">
-		<fileset dir="${common.dir}">
+		<fileset dir="common">
 			<include name="*.jar" />
 		</fileset>
 	</path>

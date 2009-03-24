@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor.resource;
+package br.com.caelum.vraptor.ioc.pico;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.nullValue;
@@ -11,6 +11,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.Path;
+import br.com.caelum.vraptor.resource.DefaultResourceAndMethodLookup;
+import br.com.caelum.vraptor.resource.Resource;
+import br.com.caelum.vraptor.resource.ResourceMethod;
 
 public class DefaultResourceAndMethodLookupTest {
 

@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor.resource;
+package br.com.caelum.vraptor.ioc.pico;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -13,6 +13,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.Path;
+import br.com.caelum.vraptor.resource.DefaultResourceRegistry;
+import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.resource.Resource;
 
 public class DefaultResourceRegistryTest {
 
@@ -22,7 +25,7 @@ public class DefaultResourceRegistryTest {
 	@Before
 	public void setup() {
 		this.mockery = new Mockery();
-		this.registry = new DefaultResourceRegistry(null);
+		this.registry = new DefaultResourceRegistry();
 	}
 
 	@Test

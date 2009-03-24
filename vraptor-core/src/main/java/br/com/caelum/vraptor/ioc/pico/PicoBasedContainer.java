@@ -32,7 +32,7 @@ public class PicoBasedContainer implements Container {
         this.container.addComponent(DefaultDirScanner.class);
         this.container.addComponent(WebInfClassesScanner.class);
     }
-
+    
     public <T> T instanceFor(Class<T> type) {
         return container.getComponent(type);
     }

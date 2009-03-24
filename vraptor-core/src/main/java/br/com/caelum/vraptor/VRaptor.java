@@ -15,6 +15,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * VRaptor 3 entrance point.
+ * 
+ * @author Guilherme Silveira
+ */
 public class VRaptor implements Filter {
 
     private Container container;
@@ -23,18 +28,18 @@ public class VRaptor implements Filter {
         container.stop();
     }
 
-    public void doFilter(ServletRequest req, ServletResponse res,
-            FilterChain chain) throws IOException, ServletException {
+    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException,
+            ServletException {
 
-        if(!(req instanceof HttpServletRequest) || !(res instanceof HttpServletResponse)) {
-            throw new ServletException("VRaptor must be run inside a Servlet environment. Portlets and others aren't supported.");
+        if (!(req instanceof HttpServletRequest) || !(res instanceof HttpServletResponse)) {
+            throw new ServletException(
+                    "VRaptor must be run inside a Servlet environment. Portlets and others aren't supported.");
         }
 
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) res;
 
-        UrlToResourceTranslator translator = container
-                .instanceFor(UrlToResourceTranslator.class);
+        UrlToResourceTranslator translator = container.instanceFor(UrlToResourceTranslator.class);
         ResourceMethod method = translator.translate(request);
         if (method == null) {
             response.setStatus(404);

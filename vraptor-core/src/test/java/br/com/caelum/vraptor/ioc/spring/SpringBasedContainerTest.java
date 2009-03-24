@@ -10,11 +10,19 @@ import static org.junit.Assert.*;
 public class SpringBasedContainerTest {
     @Test
     public void shouldScanAndRegisterAnnotatedBeans() {
-        SpringBasedContainer container = new SpringBasedContainer();
+        SpringBasedContainer container = new SpringBasedContainer("br.com.caelum.vraptor.ioc.spring");
         container.start();
         DummyComponent component = container.instanceFor(DummyComponent.class);
         assertNotNull("can instantiate", component);
         assertTrue("is the right implementation", component instanceof DummyImplementation);
+        container.stop();
+    }
+
+    public void shouldSupportOtherStereotypeAnnotations() {
+        SpringBasedContainer container = new SpringBasedContainer("br.com.caelum.vraptor.ioc.spring");
+        container.start();
+        SpecialImplementation component = container.instanceFor(SpecialImplementation.class);
+        assertNotNull("can instantiate", component);
         container.stop();
     }
 }

@@ -1,31 +1,35 @@
 package br.com.caelum.vraptor.ioc.spring;
 
-import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.core.Request;
+import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor.resource.ResourceMethod;
+import org.springframework.aop.config.AopConfigUtils;
+import org.springframework.beans.factory.BeanFactoryUtils;
+import org.springframework.context.annotation.AnnotationConfigUtils;
+import org.springframework.web.context.support.GenericWebApplicationContext;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.web.context.support.GenericWebApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigUtils;
-import org.springframework.aop.config.AopConfigUtils;
-import org.springframework.beans.factory.BeanFactoryUtils;
 
 /**
  * @author Fabio Kung
  */
 public class SpringBasedContainer implements Container {
     private GenericWebApplicationContext applicationContext;
+    private String[] basePackages = {"br.com.caelum.vraptor"};
 
-    public SpringBasedContainer() {
+    public SpringBasedContainer(String ... basePackages) {
+        if (basePackages.length > 0) {
+            this.basePackages = basePackages;
+        }
         applicationContext = new GenericWebApplicationContext();
         AnnotationConfigUtils.registerAnnotationConfigProcessors(applicationContext);
         AopConfigUtils.registerAspectJAnnotationAutoProxyCreatorIfNecessary(applicationContext);
-        
+
     }
 
     public void start() {
-        new ComponentScanner(applicationContext).scan("br.com.caelum.vraptor");
+        new ComponentScanner(applicationContext).scan(basePackages);
         applicationContext.refresh();
         applicationContext.start();
     }
@@ -35,7 +39,7 @@ public class SpringBasedContainer implements Container {
         applicationContext.destroy();
     }
 
-    public Request prepare(HttpServletRequest request, HttpServletResponse response) {
+    public Request prepare(ResourceMethod method, HttpServletRequest request, HttpServletResponse response) {
         return instanceFor(Request.class);
     }
 

@@ -17,9 +17,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * VRaptor 3 entrance point.
+ * VRaptor entry point.
  *
  * @author Guilherme Silveira
+ * @author Fabio Kung
  */
 public class VRaptor implements Filter {
 

@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import br.com.caelum.vraptor.http.UrlToResourceTranslator;
 import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.ioc.PicoBasedContainer;
+import br.com.caelum.vraptor.ioc.pico.PicoBasedContainer;
 import br.com.caelum.vraptor.resource.ResourceLocator;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
@@ -40,7 +40,7 @@ public class VRaptor implements Filter {
 			return;
 		}
 
-		container.prepareFor(request, response).execute(method);
+		container.prepareFor(method, request, response).execute(method);
 
 	}
 

@@ -20,4 +20,8 @@ public class DefaultResourceMethod implements ResourceMethod {
 		return method;
 	}
 
+	public Resource getResource() {
+		return resource;
+	}
+
 }

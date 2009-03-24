@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import br.com.caelum.vraptor.core.Request;
+import br.com.caelum.vraptor.resource.ResourceMethod;
 
 public interface Container {
 
@@ -16,6 +17,6 @@ public interface Container {
 	/**
 	 * Prepares a request execution for this request/response pair.
 	 */
-	Request prepareFor(HttpServletRequest request, HttpServletResponse response);
+	Request prepareFor(ResourceMethod method, HttpServletRequest request, HttpServletResponse response);
 
 }

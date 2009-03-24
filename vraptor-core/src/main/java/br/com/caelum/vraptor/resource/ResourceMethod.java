@@ -6,4 +6,6 @@ public interface ResourceMethod {
 	
 	Method getMethod();
 
+	Resource getResource();
+
 }

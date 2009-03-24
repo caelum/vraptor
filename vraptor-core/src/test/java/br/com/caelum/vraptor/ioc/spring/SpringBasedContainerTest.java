@@ -13,20 +13,16 @@ import javax.servlet.ServletContext;
  */
 public class SpringBasedContainerTest {
     private SpringBasedContainer container;
-    private Mockery mockery;
 
     @Before
     public void initContainer() {
-        mockery = new Mockery();
-        ServletContext servletContext = mockery.mock(ServletContext.class);
-        container = new SpringBasedContainer(servletContext, "br.com.caelum.vraptor.ioc.spring");
+        container = new SpringBasedContainer("br.com.caelum.vraptor.ioc.spring");
         container.start();
     }
 
     public void destroyContainer() {
         container.stop();
         container = null;
-        mockery.assertIsSatisfied();
     }
 
 

@@ -11,6 +11,7 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -23,6 +24,7 @@ import java.io.IOException;
 public class VRaptor implements Filter {
 
     private Container container;
+    private ServletContext servletContext;
 
     public void destroy() {
         container.stop();
@@ -39,12 +41,13 @@ public class VRaptor implements Filter {
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) res;
 
-        container.instanceFor(RequestExecution.class).execute(new VRaptorRequest(request, response));
+        container.instanceFor(RequestExecution.class).execute(new VRaptorRequest(servletContext, request, response));
     }
 
     public void init(FilterConfig cfg) throws ServletException {
-        this.container = new PicoBasedContainer(cfg.getServletContext());
-        // container = new SpringBasedContainer(cfg.getServletContext());
+        servletContext = cfg.getServletContext();
+        this.container = new PicoBasedContainer(servletContext);
+        // container = new SpringBasedContainer(servletContext);
         container.start();
     }
 

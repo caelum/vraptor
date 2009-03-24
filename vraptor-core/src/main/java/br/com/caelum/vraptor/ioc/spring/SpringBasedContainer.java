@@ -1,8 +1,12 @@
 package br.com.caelum.vraptor.ioc.spring;
 
 import br.com.caelum.vraptor.core.RequestExecution;
+import br.com.caelum.vraptor.core.DefaultInterceptorStack;
+import br.com.caelum.vraptor.core.DefaultRequestExecution;
 import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor.ioc.pico.PicoBasedInstantiateInterceptor;
 import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.resource.DefaultResourceRegistry;
 import br.com.caelum.vraptor.http.StupidTranslator;
 import org.springframework.aop.config.AopConfigUtils;
 import org.springframework.beans.factory.BeanFactoryUtils;
@@ -31,14 +35,13 @@ import javax.servlet.ServletContext;
  * @author Fabio Kung
  */
 public class SpringBasedContainer implements Container {
+    private final AnnotationBeanNameGenerator beanNameGenerator = new AnnotationBeanNameGenerator();
     private final GenericWebApplicationContext applicationContext;
-    private final ServletContext servletContext;
 
     private String[] basePackages = {"br.com.caelum.vraptor"};
 
-    public SpringBasedContainer(ServletContext context, String... basePackages) {
+    public SpringBasedContainer(String... basePackages) {
         // TODO provide users the ability to provide custom containers
-        servletContext = context;
         if (basePackages.length > 0) {
             this.basePackages = basePackages;
         }
@@ -46,6 +49,17 @@ public class SpringBasedContainer implements Container {
         registerCustomInjectionProcessor(applicationContext);
         AnnotationConfigUtils.registerAnnotationConfigProcessors(applicationContext);
         AopConfigUtils.registerAspectJAnnotationAutoProxyCreatorIfNecessary(applicationContext);
+
+        registerBeanOf(DefaultResourceRegistry.class, applicationContext);
+        registerBeanOf(StupidTranslator.class, applicationContext);
+        registerBeanOf(DefaultRequestExecution.class, applicationContext);
+        registerBeanOf(DefaultInterceptorStack.class, applicationContext);
+		registerBeanOf(PicoBasedInstantiateInterceptor.class, applicationContext);
+    }
+
+    private void registerBeanOf(Class<?> type, BeanDefinitionRegistry registry) {
+        AnnotatedGenericBeanDefinition definition = new AnnotatedGenericBeanDefinition(type);
+        registry.registerBeanDefinition(beanNameGenerator.generateBeanName(definition, registry), definition);
     }
 
     private void registerCustomInjectionProcessor(GenericApplicationContext applicationContext) {

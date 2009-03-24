@@ -7,3 +7,4 @@ out
 target
 build
 .settings
+cobertura.ser

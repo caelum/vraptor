@@ -26,14 +26,12 @@ public class VRaptor implements Filter {
     public void doFilter(ServletRequest req, ServletResponse res,
             FilterChain chain) throws IOException, ServletException {
 
-        HttpServletRequest request = null;
-        HttpServletResponse response = null;
-        try {
-            request = (HttpServletRequest) req;
-            response = (HttpServletResponse) res;
-        } catch (ClassCastException e) {
-            throw new ServletException("VRaptor must be run inside a Servlet environment. Portlets and others aren't supported.", e);
+        if(!(req instanceof HttpServletRequest) || !(res instanceof HttpServletResponse)) {
+            throw new ServletException("VRaptor must be run inside a Servlet environment. Portlets and others aren't supported.");
         }
+
+        HttpServletRequest request = (HttpServletRequest) req;
+        HttpServletResponse response = (HttpServletResponse) res;
 
         UrlToResourceTranslator translator = container
                 .instanceFor(UrlToResourceTranslator.class);

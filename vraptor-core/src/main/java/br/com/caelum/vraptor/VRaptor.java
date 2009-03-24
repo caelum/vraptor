@@ -1,9 +1,9 @@
 package br.com.caelum.vraptor;
 
-import br.com.caelum.vraptor.http.UrlToResourceTranslator;
+import br.com.caelum.vraptor.core.RequestExecution;
+import br.com.caelum.vraptor.core.VRaptorRequest;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.pico.PicoBasedContainer;
-import br.com.caelum.vraptor.resource.ResourceMethod;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -17,7 +17,7 @@ import java.io.IOException;
 
 /**
  * VRaptor 3 entrance point.
- * 
+ *
  * @author Guilherme Silveira
  */
 public class VRaptor implements Filter {
@@ -39,20 +39,12 @@ public class VRaptor implements Filter {
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) res;
 
-        UrlToResourceTranslator translator = container.instanceFor(UrlToResourceTranslator.class);
-        ResourceMethod method = translator.translate(request);
-        if (method == null) {
-            response.setStatus(404);
-            response.getWriter().println("resource not found");
-            return;
-        }
-
-        container.prepare(method, request, response).execute(method);
-
+        container.instanceFor(RequestExecution.class).execute(new VRaptorRequest(request, response));
     }
 
     public void init(FilterConfig cfg) throws ServletException {
         this.container = new PicoBasedContainer(cfg.getServletContext());
+        // container = new SpringBasedContainer(cfg.getServletContext());
         container.start();
     }
 

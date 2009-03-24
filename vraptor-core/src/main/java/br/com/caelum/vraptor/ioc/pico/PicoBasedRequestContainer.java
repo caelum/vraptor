@@ -7,7 +7,7 @@ import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.PicoBuilder;
 
 import br.com.caelum.vraptor.core.DefaultInterceptorStack;
-import br.com.caelum.vraptor.core.DefaultRequest;
+import br.com.caelum.vraptor.core.DefaultRequestExecution;
 import br.com.caelum.vraptor.http.RequestContainer;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
@@ -19,7 +19,7 @@ public class PicoBasedRequestContainer implements RequestContainer {
         // TODO scan classpath and find @Scope(REQUEST) annotated components
 	    this.container = new PicoBuilder(parent).withCaching().build();
 		this.container.addComponent(this).addComponent(request).addComponent(response).addComponent(method);
-		this.container.addComponent(DefaultInterceptorStack.class).addComponent(DefaultRequest.class);
+		this.container.addComponent(DefaultInterceptorStack.class).addComponent(DefaultRequestExecution.class);
 		this.container.addComponent(PicoBasedInstantiateInterceptor.class);
 	}
 

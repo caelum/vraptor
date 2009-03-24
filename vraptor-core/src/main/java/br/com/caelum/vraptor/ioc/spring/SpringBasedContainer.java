@@ -1,6 +1,6 @@
 package br.com.caelum.vraptor.ioc.spring;
 
-import br.com.caelum.vraptor.core.Request;
+import br.com.caelum.vraptor.core.RequestExecution;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import org.springframework.aop.config.AopConfigUtils;
@@ -27,6 +27,7 @@ public class SpringBasedContainer implements Container {
     private ServletContext servletContext;
 
     public SpringBasedContainer(ServletContext context, String... basePackages) {
+        // TODO provide users the ability to provide custom containers
         servletContext = context;
         if (basePackages.length > 0) {
             this.basePackages = basePackages;
@@ -35,7 +36,6 @@ public class SpringBasedContainer implements Container {
         registerCustomInjectionProcessor(applicationContext);
         AnnotationConfigUtils.registerAnnotationConfigProcessors(applicationContext);
         AopConfigUtils.registerAspectJAnnotationAutoProxyCreatorIfNecessary(applicationContext);
-
     }
 
     private void registerCustomInjectionProcessor(GenericApplicationContext applicationContext) {
@@ -57,10 +57,10 @@ public class SpringBasedContainer implements Container {
         applicationContext.destroy();
     }
 
-    public Request prepare(ResourceMethod method, HttpServletRequest request, HttpServletResponse response) {
+    public RequestExecution prepare(ResourceMethod method, HttpServletRequest request, HttpServletResponse response) {
         RequestContextListener requestListener = new RequestContextListener();
         requestListener.requestInitialized(new ServletRequestEvent(servletContext, request));
-        return instanceFor(Request.class);
+        return instanceFor(RequestExecution.class);
     }
 
     public <T> T instanceFor(Class<T> type) {

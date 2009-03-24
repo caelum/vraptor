@@ -11,9 +11,12 @@ import org.springframework.context.annotation.AnnotationConfigUtils;
 import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.core.Ordered;
 import org.springframework.web.context.support.GenericWebApplicationContext;
+import org.springframework.web.context.request.RequestContextListener;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.ServletRequestEvent;
+import javax.servlet.ServletContext;
 
 /**
  * @author Fabio Kung
@@ -21,8 +24,10 @@ import javax.servlet.http.HttpServletResponse;
 public class SpringBasedContainer implements Container {
     private GenericWebApplicationContext applicationContext;
     private String[] basePackages = {"br.com.caelum.vraptor"};
+    private ServletContext servletContext;
 
-    public SpringBasedContainer(String... basePackages) {
+    public SpringBasedContainer(ServletContext context, String... basePackages) {
+        servletContext = context;
         if (basePackages.length > 0) {
             this.basePackages = basePackages;
         }
@@ -53,6 +58,8 @@ public class SpringBasedContainer implements Container {
     }
 
     public Request prepare(ResourceMethod method, HttpServletRequest request, HttpServletResponse response) {
+        RequestContextListener requestListener = new RequestContextListener();
+        requestListener.requestInitialized(new ServletRequestEvent(servletContext, request));
         return instanceFor(Request.class);
     }
 

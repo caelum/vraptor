@@ -1,7 +1,7 @@
 package br.com.caelum.vraptor.ioc.pico;
 
 import br.com.caelum.vraptor.core.Request;
-import br.com.caelum.vraptor.core.RequestExecution;
+import br.com.caelum.vraptor.core.DefaultRequest;
 import br.com.caelum.vraptor.http.StupidTranslator;
 import br.com.caelum.vraptor.resource.DefaultResourceRegistry;
 import br.com.caelum.vraptor.resource.ResourceMethod;
@@ -48,7 +48,7 @@ public class PicoBasedContainer implements Container {
 
     public Request prepare(ResourceMethod method, HttpServletRequest request, HttpServletResponse response) {
         PicoBasedRequestContainer container = new PicoBasedRequestContainer(this.container, method, request, response);
-        return container.withA(RequestExecution.class);
+        return container.withA(DefaultRequest.class);
     }
 
 }

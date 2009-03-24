@@ -1,5 +1,6 @@
 fast organize prior to generating docs and real roadmap
 
+- default custom request with vraptor info
 - CachedResourceRegistry caches with a map of 2xStrings --> Resource
 - DRAML name sucks.
 - sl4j usage

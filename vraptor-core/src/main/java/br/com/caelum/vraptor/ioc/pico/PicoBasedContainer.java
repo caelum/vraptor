@@ -24,8 +24,9 @@ public class PicoBasedContainer implements Container {
 
     public PicoBasedContainer(ServletContext context) {
         // TODO scan classpath for @Component annotated classes
+        // FIXME avoid container injection -> do not register itself
         this.container = new PicoBuilder().withCaching().build();
-        this.container.addComponent(this);
+        this.container.addComponent(this); // should go away!
         this.container.addComponent(context);
         this.container.addComponent(StupidTranslator.class);
         this.container.addComponent(DefaultResourceRegistry.class);

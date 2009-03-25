@@ -4,10 +4,13 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
+import java.io.IOException;
+
 import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.Interceptor;
+import br.com.caelum.vraptor.resource.ResourceMethod;
 
 public class DefaultInterceptorStackTest {
     
@@ -19,13 +22,13 @@ public class DefaultInterceptorStackTest {
     }
     
     @Test
-    public void testInvokesAllInterceptorsInItsCorrectOrder() {
-        DefaultInterceptorStack stack = new DefaultInterceptorStack();
+    public void testInvokesAllInterceptorsInItsCorrectOrder() throws IOException {
+        DefaultInterceptorStack stack = new DefaultInterceptorStack(null);
         CountInterceptor first = new CountInterceptor();
         CountInterceptor second = new CountInterceptor();
         stack.add(first);
         stack.add(second);
-        stack.next();
+        stack.next(null,null);
         assertThat(first.run, is(equalTo(0)));
         assertThat(second.run, is(equalTo(1)));
     }
@@ -33,9 +36,9 @@ public class DefaultInterceptorStackTest {
     class CountInterceptor implements Interceptor{
         int run;
 
-        public void intercept(InterceptorStack invocation) {
+        public void intercept(InterceptorStack invocation, ResourceMethod method, Object resourceInstance) throws IOException {
             run = count++;
-            invocation.next();
+            invocation.next(method, resourceInstance);
         }
     }
 

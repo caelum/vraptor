@@ -46,7 +46,7 @@ public class BasicConfigurationTest {
             return null;
         }
 
-        public void start() {
+        public void start(ServletContext context) {
         }
 
         public void stop() {

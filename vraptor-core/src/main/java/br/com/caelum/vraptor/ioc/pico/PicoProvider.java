@@ -10,6 +10,7 @@ import br.com.caelum.vraptor.http.StupidTranslator;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
 import br.com.caelum.vraptor.resource.DefaultResourceRegistry;
+import br.com.caelum.vraptor.resource.ResourceRegistry;
 
 /**
  * Managing internal components by using pico container.
@@ -43,7 +44,7 @@ public class PicoProvider implements ContainerProvider {
     }
 
     public Container provide(VRaptorRequest request) {
-        return new PicoBasedContainer(container, request);
+        return new PicoBasedContainer(container, request, instanceFor(ResourceRegistry.class));
     }
 
 }

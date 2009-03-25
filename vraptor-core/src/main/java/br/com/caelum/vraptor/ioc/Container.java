@@ -1,5 +1,7 @@
 package br.com.caelum.vraptor.ioc;
 
+import br.com.caelum.vraptor.resource.DefaultResourceInstance;
+
 
 public interface Container {
 
@@ -11,5 +13,7 @@ public interface Container {
      * @return the registered component
      */
     <T> T instanceFor(Class<T> type);
+
+    void register(Object instance);
 
 }

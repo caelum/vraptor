@@ -1,5 +1,9 @@
 package br.com.caelum.vraptor.core;
 
+import java.io.IOException;
+
+import br.com.caelum.vraptor.resource.ResourceMethod;
+
 /**
  * An interceptor handler is a wrapper to either an interceptor instance or a
  * interceptor definition. This way, the interceptor stack is capable of pushing
@@ -12,6 +16,6 @@ package br.com.caelum.vraptor.core;
  */
 public interface InterceptorHandler {
 
-    void execute(InterceptorStack stack);
+    void execute(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws IOException;
 
 }

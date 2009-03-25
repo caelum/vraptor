@@ -17,7 +17,7 @@ public class SpringBasedContainerTest {
     @Before
     public void initContainer() {
         container = new SpringBasedContainer("br.com.caelum.vraptor.ioc.spring");
-        container.start();
+        container.start(null);
     }
 
     public void destroyContainer() {

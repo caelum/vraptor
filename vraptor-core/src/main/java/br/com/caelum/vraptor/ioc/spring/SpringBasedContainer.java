@@ -1,40 +1,36 @@
 package br.com.caelum.vraptor.ioc.spring;
 
-import br.com.caelum.vraptor.core.RequestExecution;
-import br.com.caelum.vraptor.core.DefaultInterceptorStack;
-import br.com.caelum.vraptor.core.DefaultRequestExecution;
-import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.ioc.pico.PicoBasedInstantiateInterceptor;
-import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.resource.DefaultResourceRegistry;
-import br.com.caelum.vraptor.http.StupidTranslator;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.aop.config.AopConfigUtils;
 import org.springframework.beans.factory.BeanFactoryUtils;
 import org.springframework.beans.factory.annotation.AnnotatedGenericBeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
-import org.springframework.context.annotation.AnnotationConfigUtils;
-import org.springframework.context.annotation.ScannedGenericBeanDefinition;
+import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.context.annotation.AnnotationBeanNameGenerator;
+import org.springframework.context.annotation.AnnotationConfigUtils;
 import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.core.Ordered;
-import org.springframework.core.type.classreading.MetadataReader;
-import org.springframework.core.type.ClassMetadata;
-import org.springframework.core.type.AnnotationMetadata;
-import org.springframework.core.type.StandardAnnotationMetadata;
 import org.springframework.web.context.support.GenericWebApplicationContext;
-import org.springframework.web.context.request.RequestContextListener;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.ServletRequestEvent;
-import javax.servlet.ServletContext;
+import br.com.caelum.vraptor.core.DefaultInterceptorStack;
+import br.com.caelum.vraptor.core.DefaultRequestExecution;
+import br.com.caelum.vraptor.core.RequestExecution;
+import br.com.caelum.vraptor.core.VRaptorRequest;
+import br.com.caelum.vraptor.http.StupidTranslator;
+import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor.ioc.ContainerProvider;
+import br.com.caelum.vraptor.ioc.pico.PicoBasedInstantiateInterceptor;
+import br.com.caelum.vraptor.resource.DefaultResourceRegistry;
+import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**
  * @author Fabio Kung
  */
-public class SpringBasedContainer implements Container {
+public class SpringBasedContainer implements ContainerProvider {
     private final AnnotationBeanNameGenerator beanNameGenerator = new AnnotationBeanNameGenerator();
     private final GenericWebApplicationContext applicationContext;
 
@@ -69,7 +65,7 @@ public class SpringBasedContainer implements Container {
         applicationContext.registerBeanDefinition(AnnotationConfigUtils.AUTOWIRED_ANNOTATION_PROCESSOR_BEAN_NAME, definition);
     }
 
-    public void start() {
+    public void start(ServletContext context) {
         new ComponentScanner(applicationContext).scan(basePackages);
         applicationContext.refresh();
         applicationContext.start();
@@ -80,12 +76,14 @@ public class SpringBasedContainer implements Container {
         applicationContext.destroy();
     }
 
-    public RequestExecution prepare(ResourceMethod method, HttpServletRequest request, HttpServletResponse response) {
-        RequestExecution execution = instanceFor(RequestExecution.class);
-        return new RequestExecutionWrapper(execution);
-    }
-
     public <T> T instanceFor(Class<T> type) {
         return (T) BeanFactoryUtils.beanOfType(applicationContext, type);
     }
+
+    public Container provide(VRaptorRequest vraptorRequest) {
+        RequestExecution execution = instanceFor(RequestExecution.class);
+        // TODO i dunno what to do here????
+        return new RequestExecutionWrapper(execution);
+    }
+
 }

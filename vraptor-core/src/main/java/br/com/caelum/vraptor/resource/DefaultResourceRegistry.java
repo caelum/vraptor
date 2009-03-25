@@ -3,8 +3,6 @@ package br.com.caelum.vraptor.resource;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.caelum.vraptor.ioc.Container;
-
 /**
  * This default registry uses a Path annotation to discover path->method
  * mappings using the DefaultResourceAndMethodLookup.
@@ -13,16 +11,17 @@ import br.com.caelum.vraptor.ioc.Container;
  */
 public class DefaultResourceRegistry implements ResourceRegistry {
 
-	private final List<DefaultResourceAndMethodLookup> resources = new ArrayList<DefaultResourceAndMethodLookup>();
+	private final List<DefaultResourceAndMethodLookup> lookup = new ArrayList<DefaultResourceAndMethodLookup>();
+    private final List<Resource> resources = new ArrayList<Resource>();
 
 	public void register(List<Resource> results) {
 		for (Resource r : results) {
-			this.resources.add(new DefaultResourceAndMethodLookup(r));
+			this.lookup.add(new DefaultResourceAndMethodLookup(r));
 		}
 	}
 
 	public ResourceMethod gimmeThis(String id, String methodName) {
-		for (DefaultResourceAndMethodLookup lookuper : resources) {
+		for (DefaultResourceAndMethodLookup lookuper : lookup) {
 			ResourceMethod method = lookuper.methodFor(id, methodName);
 			if (method != null) {
 				return method;
@@ -30,5 +29,9 @@ public class DefaultResourceRegistry implements ResourceRegistry {
 		}
 		return null;
 	}
+
+    public List<Resource> all() {
+        return this.resources;
+    }
 
 }

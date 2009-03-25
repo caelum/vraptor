@@ -3,6 +3,7 @@ package br.com.caelum.vraptor;
 import br.com.caelum.vraptor.core.RequestExecution;
 import br.com.caelum.vraptor.core.VRaptorRequest;
 import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor.ioc.ContainerProvider;
 import br.com.caelum.vraptor.ioc.pico.PicoBasedContainer;
 
 import javax.servlet.Filter;
@@ -29,6 +30,8 @@ public class VRaptor implements Filter {
 
     public void destroy() {
         container.stop();
+        container = null;
+        servletContext = null;
     }
 
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException,
@@ -42,7 +45,8 @@ public class VRaptor implements Filter {
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) res;
 
-        container.instanceFor(RequestExecution.class).execute(new VRaptorRequest(servletContext, request, response));
+        VRaptorRequest vraptorRequest = new VRaptorRequest(servletContext, request, response);
+        //container.getContainerProvider().provide(vraptorRequest).instanceFor(RequestExecution.class).execute();
     }
 
     public void init(FilterConfig cfg) throws ServletException {

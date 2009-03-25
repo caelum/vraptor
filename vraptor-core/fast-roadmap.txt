@@ -1,27 +1,35 @@
 fast organize prior to generating docs and real roadmap
 
-- default custom request with vraptor info
-- CachedResourceRegistry caches with a map of 2xStrings --> Resource
-- DRAML name sucks.
+- PicoBasedContainer and RequestContainer test
 - sl4j usage
 - support @Post, @...
+- support Result with expose
+
+- default custom request with vraptor info
+- DRAML name sucks.
 - *for nice urls support* default resource and method lookup factory should be injected in the required component (default resource registry)
 - support @Path with nice urls
-- support Result
+- support Result with custom views
 - support Validator
 - site docs
-- spring support
 - guice support
-- validation support
 - hibernate plugin
 - hibernate validation plugin
 - default path?
 - public methods are defaulted to paths?
+
+later customization
+
 - 404 component (so its customizable)
 - customizable requestexecution
 - customizable error process on request execution
+
+later optimization
+
+- CachedResourceRegistry caches with a map of 2xStrings --> Resource
 
 done:
 - support @Path
 - ant build run tests
 - cobertura report
+- spring support

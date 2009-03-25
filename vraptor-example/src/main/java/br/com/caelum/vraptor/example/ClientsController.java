@@ -15,6 +15,5 @@ public class ClientsController {
 	
 	@Path("/clients")
 	public void add() {
-		
 	}
 }

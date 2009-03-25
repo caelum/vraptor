@@ -1,5 +1,7 @@
 package br.com.caelum.vraptor.ioc;
 
+import javax.servlet.ServletContext;
+
 import br.com.caelum.vraptor.core.VRaptorRequest;
 
 public interface ContainerProvider {
@@ -8,6 +10,6 @@ public interface ContainerProvider {
 
     void stop();
     
-    void start();
+    void start(ServletContext context);
 
 }

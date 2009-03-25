@@ -1,55 +1,27 @@
 package br.com.caelum.vraptor.ioc.pico;
 
-import br.com.caelum.vraptor.core.RequestExecution;
-import br.com.caelum.vraptor.core.DefaultRequestExecution;
-import br.com.caelum.vraptor.http.StupidTranslator;
-import br.com.caelum.vraptor.resource.DefaultResourceRegistry;
-import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.ioc.Container;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.PicoBuilder;
 
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import br.com.caelum.vraptor.core.DefaultInterceptorStack;
+import br.com.caelum.vraptor.core.DefaultRequestExecution;
+import br.com.caelum.vraptor.core.VRaptorRequest;
+import br.com.caelum.vraptor.ioc.Container;
 
-/**
- * Managing internal components by using pico container.
- *
- * @author Guilherme Silveira
- */
 public class PicoBasedContainer implements Container {
+	
+	private final MutablePicoContainer container;
 
-    private final MutablePicoContainer container;
+	public PicoBasedContainer(MutablePicoContainer parent, VRaptorRequest request) {
+        // TODO scan classpath and find @Scope(REQUEST) annotated components
+	    this.container = new PicoBuilder(parent).withCaching().build();
+		this.container.addComponent(request).addComponent(request.getRequest()).addComponent(request.getResponse());
+		this.container.addComponent(DefaultInterceptorStack.class).addComponent(DefaultRequestExecution.class);
+		this.container.addComponent(PicoBasedInstantiateInterceptor.class);
+	}
 
-    public PicoBasedContainer(ServletContext context) {
-        // TODO scan classpath for @Component annotated classes
-        // FIXME avoid container injection -> do not register itself
-        this.container = new PicoBuilder().withCaching().build();
-        this.container.addComponent(this); // should go away!
-        this.container.addComponent(context);
-        this.container.addComponent(StupidTranslator.class);
-        this.container.addComponent(DefaultResourceRegistry.class);
-        this.container.addComponent(DefaultDirScanner.class);
-        this.container.addComponent(WebInfClassesScanner.class);
-    }
-    
     public <T> T instanceFor(Class<T> type) {
         return container.getComponent(type);
-    }
-
-    public void start() {
-        instanceFor(ResourceLocator.class).loadAll();
-        container.start();
-    }
-
-    public void stop() {
-        container.stop();
-    }
-
-    public RequestExecution prepare(ResourceMethod method, HttpServletRequest request, HttpServletResponse response) {
-        PicoBasedRequestContainer container = new PicoBasedRequestContainer(this.container, method, request, response);
-        return container.withA(DefaultRequestExecution.class);
     }
 
 }

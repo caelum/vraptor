@@ -12,6 +12,6 @@ public interface RequestExecution {
     /**
      * Executes this method.
      */
-    void execute(VRaptorRequest request) throws IOException;
+    void execute() throws IOException;
     
 }

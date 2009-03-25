@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import br.com.caelum.vraptor.config.BasicConfiguration;
+import br.com.caelum.vraptor.core.RequestExecution;
 import br.com.caelum.vraptor.core.VRaptorRequest;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
 
@@ -40,11 +41,11 @@ public class VRaptor implements Filter {
                     "VRaptor must be run inside a Servlet environment. Portlets and others aren't supported.");
         }
 
-        HttpServletRequest request = (HttpServletRequest) req;
-        HttpServletResponse response = (HttpServletResponse) res;
+        HttpServletRequest webRequest = (HttpServletRequest) req;
+        HttpServletResponse webResponse = (HttpServletResponse) res;
 
-        VRaptorRequest vraptorRequest = new VRaptorRequest(servletContext, request, response);
-        // container.getContainerProvider().provide(vraptorRequest).instanceFor(RequestExecution.class).execute();
+        VRaptorRequest request = new VRaptorRequest(servletContext, webRequest, webResponse);
+        provider.provide(request).instanceFor(RequestExecution.class).execute();
     }
 
     public void init(FilterConfig cfg) throws ServletException {

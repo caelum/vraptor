@@ -1,36 +1,34 @@
 package br.com.caelum.vraptor;
 
-import br.com.caelum.vraptor.core.RequestExecution;
-import br.com.caelum.vraptor.core.VRaptorRequest;
-import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.ioc.ContainerProvider;
-import br.com.caelum.vraptor.ioc.pico.PicoBasedContainer;
+import java.io.IOException;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+
+import br.com.caelum.vraptor.config.BasicConfiguration;
+import br.com.caelum.vraptor.core.VRaptorRequest;
+import br.com.caelum.vraptor.ioc.ContainerProvider;
 
 /**
- * VRaptor entry point.
- *
+ * VRaptor entry point. Provider configuration through init parameter
+ * 
  * @author Guilherme Silveira
  * @author Fabio Kung
  */
 public class VRaptor implements Filter {
-
-    private Container container;
+    private ContainerProvider provider;
     private ServletContext servletContext;
 
     public void destroy() {
-        container.stop();
-        container = null;
+        provider.stop();
+        provider = null;
         servletContext = null;
     }
 
@@ -46,14 +44,14 @@ public class VRaptor implements Filter {
         HttpServletResponse response = (HttpServletResponse) res;
 
         VRaptorRequest vraptorRequest = new VRaptorRequest(servletContext, request, response);
-        //container.getContainerProvider().provide(vraptorRequest).instanceFor(RequestExecution.class).execute();
+        // container.getContainerProvider().provide(vraptorRequest).instanceFor(RequestExecution.class).execute();
     }
 
     public void init(FilterConfig cfg) throws ServletException {
         servletContext = cfg.getServletContext();
-        this.container = new PicoBasedContainer(servletContext);
-        // container = new SpringBasedContainer(servletContext);
-        container.start();
+        BasicConfiguration config = new BasicConfiguration(servletContext);
+        this.provider = config.getProvider();
+        this.provider.start();
     }
 
 }

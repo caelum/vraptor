@@ -1,14 +1,12 @@
 package br.com.caelum.vraptor.ioc;
 
-import br.com.caelum.vraptor.resource.DefaultResourceInstance;
-
-
 public interface Container {
 
     /**
      * Retrieves the appropriate instance for the given class.
-     *
-     * @param type of the required component
+     * 
+     * @param type
+     *            of the required component
      * @param <T>
      * @return the registered component
      */

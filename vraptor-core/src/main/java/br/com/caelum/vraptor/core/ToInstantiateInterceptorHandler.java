@@ -19,14 +19,16 @@ public class ToInstantiateInterceptorHandler implements InterceptorHandler {
     public ToInstantiateInterceptorHandler(Container container, Class<?> type) {
         this.container = container;
         this.type = type;
-        if (Interceptor.class.isAssignableFrom(type)) {
-            throw new IllegalArgumentException("Type " + type.getName()
-                    + " does not implement the interceptor interface");
-        }
+        // TODO not working, why????
+        // if (Interceptor.class.isAssignableFrom(type)) {
+        // throw new IllegalArgumentException("Type " + type.getName()
+        // + " does not implement the interface " + Interceptor.class.getName()
+        // + " interface");
+        // }
     }
 
     public void execute(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws IOException {
-        Interceptor interceptor = (Interceptor) container.instanceFor(type);
+        Interceptor interceptor = Interceptor.class.cast(container.instanceFor(type));
         interceptor.intercept(stack, method, resourceInstance);
     }
 

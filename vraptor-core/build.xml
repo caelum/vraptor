@@ -47,20 +47,25 @@
 	</target>
 
 	<property name="jar.file" value="${tmp.dir}/${jar.filename}-${version}.jar" />
-	<taskdef classpathref="test.classpath" resource="tasks.properties" />
 
 	<target name="test" depends="compile">
+		<taskdef classpathref="test.classpath" resource="tasks.properties" />
 		<delete file="cobertura.ser" verbose="false" />
 		<cobertura-instrument todir="${instrumentation.dir}">
-			<fileset dir="${tmp.classes.dir}" includes="**/*.class" />
+			<fileset dir="${tmp.classes.dir}">
+				<include name="**/*.class"/>
+				<include name="**/*Test.class"/>
+			</fileset>
 		</cobertura-instrument>
 		<fileset dir="${tmp.test.classes.dir}" id="unittests.fileset" includes="**/*Test.class" />
+		
 		<junit fork="yes" forkmode="once" printsummary="false" showoutput="true" failureproperty="failed-test">
 			<sysproperty key="net.sourceforge.cobertura.datafile" file="cobertura.ser" />
 
 			<classpath>
 				<pathelement path="${instrumentation.dir}" />
-				<pathelement path="${tmp.test-classes.dir}" />
+				<pathelement path="${tmp.classes.dir}" />
+				<pathelement path="${tmp.test.classes.dir}" />
 			</classpath>
 			<classpath refid="test.classpath" />
 
@@ -69,12 +74,7 @@
 				<fileset refid="unittests.fileset" />
 			</batchtest>
 		</junit>
-		<cobertura-report format="html" destdir="${reports.dir}/cobertura">
-			<fileset dir="${src.dir}">
-				<include name="**/*.java" />
-				<exclude name="**/*Test.java" />
-			</fileset>
-		</cobertura-report>
+		<cobertura-report destdir="${reports.dir}/cobertura" srcdir="${src.dir}" />
 		<junitreport todir="${reports.dir}/">
 			<fileset dir="${reports.dir}/test-results">
 				<include name="TEST-*.xml" />

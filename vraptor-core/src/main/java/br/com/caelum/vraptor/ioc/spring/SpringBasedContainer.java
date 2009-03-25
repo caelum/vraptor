@@ -1,8 +1,6 @@
 package br.com.caelum.vraptor.ioc.spring;
 
 import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.aop.config.AopConfigUtils;
 import org.springframework.beans.factory.BeanFactoryUtils;
@@ -25,7 +23,6 @@ import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
 import br.com.caelum.vraptor.ioc.pico.PicoBasedInstantiateInterceptor;
 import br.com.caelum.vraptor.resource.DefaultResourceRegistry;
-import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**
  * @author Fabio Kung
@@ -82,8 +79,8 @@ public class SpringBasedContainer implements ContainerProvider {
 
     public Container provide(VRaptorRequest vraptorRequest) {
         RequestExecution execution = instanceFor(RequestExecution.class);
-        // TODO i dunno what to do here????
-        return new RequestExecutionWrapper(execution);
+        // TODO UGH? WHAT TO DO?  HELP!!!
+        return (Container) new RequestExecutionWrapper(execution, vraptorRequest);
     }
 
 }

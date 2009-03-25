@@ -17,6 +17,7 @@ public class DefaultResourceRegistry implements ResourceRegistry {
 	public void register(List<Resource> results) {
 		for (Resource r : results) {
 			this.lookup.add(new DefaultResourceAndMethodLookup(r));
+			this.resources.add(r);
 		}
 	}
 

@@ -9,6 +9,7 @@ import java.io.IOException;
 import org.junit.Before;
 import org.junit.Test;
 
+import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Interceptor;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
@@ -22,7 +23,7 @@ public class DefaultInterceptorStackTest {
     }
     
     @Test
-    public void testInvokesAllInterceptorsInItsCorrectOrder() throws IOException {
+    public void testInvokesAllInterceptorsInItsCorrectOrder() throws IOException, InterceptionException {
         DefaultInterceptorStack stack = new DefaultInterceptorStack(null);
         CountInterceptor first = new CountInterceptor();
         CountInterceptor second = new CountInterceptor();
@@ -36,7 +37,7 @@ public class DefaultInterceptorStackTest {
     class CountInterceptor implements Interceptor{
         int run;
 
-        public void intercept(InterceptorStack invocation, ResourceMethod method, Object resourceInstance) throws IOException {
+        public void intercept(InterceptorStack invocation, ResourceMethod method, Object resourceInstance) throws IOException, InterceptionException {
             run = count++;
             invocation.next(method, resourceInstance);
         }

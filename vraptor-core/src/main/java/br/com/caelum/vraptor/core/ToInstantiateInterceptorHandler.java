@@ -2,6 +2,7 @@ package br.com.caelum.vraptor.core;
 
 import java.io.IOException;
 
+import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Interceptor;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.resource.ResourceMethod;
@@ -27,7 +28,7 @@ public class ToInstantiateInterceptorHandler implements InterceptorHandler {
         // }
     }
 
-    public void execute(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws IOException {
+    public void execute(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws IOException, InterceptionException {
         Interceptor interceptor = Interceptor.class.cast(container.instanceFor(type));
         interceptor.intercept(stack, method, resourceInstance);
     }

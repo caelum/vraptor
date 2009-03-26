@@ -1,5 +1,6 @@
 package br.com.caelum.vraptor.resource;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 import br.com.caelum.vraptor.Path;
@@ -25,10 +26,22 @@ public class DefaultResourceAndMethodLookup {
 			}
 			Path path = method.getAnnotation(Path.class);
 			if (path.value().equals(id)) {
-				return new DefaultResourceMethod(resource, method);
+			    Class<? extends Annotation> annotation = HttpMethod.valueOf(methodName).getAnnotation();
+                if(method.isAnnotationPresent(annotation) || noAnnotationPresent(HttpMethod.values(), method)) {
+			        return new DefaultResourceMethod(resource, method);
+			    }
 			}
 		}
 		return null;
 	}
+
+    private boolean noAnnotationPresent(HttpMethod[] values, Method method) {
+        for (HttpMethod key : values) {
+            if(method.isAnnotationPresent(key.getAnnotation())) {
+                return false;
+            }
+        }
+        return true;
+    }
 
 }

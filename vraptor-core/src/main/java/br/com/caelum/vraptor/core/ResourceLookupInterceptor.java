@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpServletResponse;
 
+import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Interceptor;
 import br.com.caelum.vraptor.http.UrlToResourceTranslator;
 import br.com.caelum.vraptor.resource.ResourceMethod;
@@ -18,7 +19,7 @@ public class ResourceLookupInterceptor implements Interceptor {
         this.request = request;
     }
 
-    public void intercept(InterceptorStack invocation, ResourceMethod ignorableMethod, Object resourceInstance) throws IOException {
+    public void intercept(InterceptorStack invocation, ResourceMethod ignorableMethod, Object resourceInstance) throws IOException, InterceptionException {
         HttpServletResponse response = request.getResponse();
         ResourceMethod method = translator.translate(request.getRequest());
         if (method == null) {

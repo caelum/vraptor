@@ -45,7 +45,11 @@ public class VRaptor implements Filter {
         HttpServletResponse webResponse = (HttpServletResponse) res;
 
         VRaptorRequest request = new VRaptorRequest(servletContext, webRequest, webResponse);
-        provider.provide(request).instanceFor(RequestExecution.class).execute();
+        try {
+            provider.provide(request).instanceFor(RequestExecution.class).execute();
+        } catch (VRaptorException e) {
+            throw new ServletException(e);
+        }
     }
 
     public void init(FilterConfig cfg) throws ServletException {

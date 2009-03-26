@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.web.context.request.RequestContextListener;
 
+import br.com.caelum.vraptor.VRaptorException;
 import br.com.caelum.vraptor.core.RequestExecution;
 import br.com.caelum.vraptor.core.VRaptorRequest;
 
@@ -25,7 +26,7 @@ class RequestExecutionWrapper implements RequestExecution {
         this.request = request;
     }
 
-    public void execute() throws IOException {
+    public void execute() throws IOException, VRaptorException {
         ServletContext servletContext = request.getServletContext();
         HttpServletRequest servletRequest = request.getRequest();
 

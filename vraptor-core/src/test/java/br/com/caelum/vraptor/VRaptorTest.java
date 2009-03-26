@@ -47,7 +47,7 @@ public class VRaptorTest {
     }
 
     @Test
-    public void shouldExecuteARequestUsingTheSpecifiedContainer() throws ServletException, IOException {
+    public void shouldExecuteARequestUsingTheSpecifiedContainer() throws ServletException, IOException, VRaptorException {
         mockery.checking(new Expectations() {
             {
                 one(config).getServletContext();

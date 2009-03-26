@@ -3,10 +3,16 @@ package br.com.caelum.vraptor.core;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
+import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Interceptor;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
-public class ExecuteMethodInterceptor implements Interceptor{
+/**
+ * Interceptor that executes the logic method.
+ * 
+ * @author Guilherme Silveira
+ */
+public class ExecuteMethodInterceptor implements Interceptor {
 
     public void intercept(InterceptorStack invocation, ResourceMethod method, Object resourceInstance)
             throws IOException, InterceptionException {

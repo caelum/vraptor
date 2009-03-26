@@ -1,12 +1,10 @@
 fast organize prior to generating docs and real roadmap
 
-- invoke method
-- support @Post, @...
-
-- sl4j usage
 - support Result with expose
+- sl4j usage
+- 70% coverage
 
-- default custom request with vraptor info
+- method parameter support
 - DRAML name sucks.
 - *for nice urls support* default resource and method lookup factory should be injected in the required component (default resource registry)
 - support @Path with nice urls
@@ -34,3 +32,5 @@ done:
 - ant build run tests
 - cobertura report
 - spring support
+- invoke method
+- support @Post, @...

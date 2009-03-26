@@ -14,6 +14,7 @@ import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
 
+import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.http.UrlToResourceTranslator;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
@@ -37,7 +38,7 @@ public class ResourceLookupInterceptorTest {
     }
 
     @Test
-    public void shouldHandle404() throws IOException {
+    public void shouldHandle404() throws IOException, InterceptionException {
         final StringWriter writer = new StringWriter();
         mockery.checking(new Expectations() {
             {
@@ -54,7 +55,7 @@ public class ResourceLookupInterceptorTest {
     }
 
     @Test
-    public void shouldUseResourceMethodFoundWithNextInterceptor() throws IOException {
+    public void shouldUseResourceMethodFoundWithNextInterceptor() throws IOException, InterceptionException {
         final ResourceMethod method = mockery.mock(ResourceMethod.class);
         final InterceptorStack stack = mockery.mock(InterceptorStack.class);
         mockery.checking(new Expectations() {

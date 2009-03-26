@@ -3,6 +3,7 @@ package br.com.caelum.vraptor.core;
 import java.io.IOException;
 import java.util.LinkedList;
 
+import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Interceptor;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.resource.ResourceMethod;
@@ -27,7 +28,7 @@ public class DefaultInterceptorStack implements InterceptorStack {
 		this.interceptors.add(new InstantiatedInterceptorHandler(interceptor));
 	}
 	
-	public void next(ResourceMethod method, Object resourceInstance) throws IOException {
+	public void next(ResourceMethod method, Object resourceInstance) throws IOException, InterceptionException {
 		if(nextInterceptor==interceptors.size()) {
 			return;
 		}

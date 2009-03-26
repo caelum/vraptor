@@ -2,6 +2,8 @@ package br.com.caelum.vraptor.core;
 
 import java.io.IOException;
 
+import br.com.caelum.vraptor.VRaptorException;
+
 /**
  * A request execution process.
  * 
@@ -11,7 +13,8 @@ public interface RequestExecution {
 
     /**
      * Executes this method.
+     * @throws VRaptorException 
      */
-    void execute() throws IOException;
+    void execute() throws IOException, VRaptorException;
     
 }

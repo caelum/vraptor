@@ -1,8 +1,9 @@
 fast organize prior to generating docs and real roadmap
 
-- PicoBasedContainer and RequestContainer test
-- sl4j usage
+- invoke method
 - support @Post, @...
+
+- sl4j usage
 - support Result with expose
 
 - default custom request with vraptor info

@@ -18,7 +18,7 @@ public class JspView implements View {
         this.response = res;
     }
 
-    public static Class<? extends View> jsp() {
+    public static Class<JspView> jsp() {
         return JspView.class;
     }
 

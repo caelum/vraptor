@@ -12,7 +12,7 @@ import br.com.caelum.vraptor.resource.ResourceRegistry;
  */
 public class StupidTranslator implements UrlToResourceTranslator {
 
-	private final ResourceRegistry registry;
+    private final ResourceRegistry registry;
 
 	public StupidTranslator(ResourceRegistry registry) {
 		this.registry = registry;

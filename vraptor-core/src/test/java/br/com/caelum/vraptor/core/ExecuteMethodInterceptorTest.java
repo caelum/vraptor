@@ -6,6 +6,7 @@ import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
+import org.junit.Assert;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.InterceptionException;
@@ -49,10 +50,11 @@ public class ExecuteMethodInterceptorTest {
         });
         try {
             interceptor.intercept(null, method, auau);
+            Assert.fail();
         } catch (InterceptionException e) {
             MatcherAssert.assertThat((RuntimeException) e.getCause(), Matchers.is(Matchers.equalTo(exception)));
+            mockery.assertIsSatisfied();
         }
-        mockery.assertIsSatisfied();
     }
 
 }

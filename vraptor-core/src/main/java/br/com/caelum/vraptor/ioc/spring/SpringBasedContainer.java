@@ -16,12 +16,12 @@ import org.springframework.web.context.support.GenericWebApplicationContext;
 
 import br.com.caelum.vraptor.core.DefaultInterceptorStack;
 import br.com.caelum.vraptor.core.DefaultRequestExecution;
+import br.com.caelum.vraptor.core.InstantiateInterceptor;
 import br.com.caelum.vraptor.core.RequestExecution;
 import br.com.caelum.vraptor.core.VRaptorRequest;
 import br.com.caelum.vraptor.http.StupidTranslator;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
-import br.com.caelum.vraptor.ioc.pico.PicoBasedInstantiateInterceptor;
 import br.com.caelum.vraptor.resource.DefaultResourceRegistry;
 
 /**
@@ -47,7 +47,7 @@ public class SpringBasedContainer implements ContainerProvider {
         registerBeanOf(StupidTranslator.class, applicationContext);
         registerBeanOf(DefaultRequestExecution.class, applicationContext);
         registerBeanOf(DefaultInterceptorStack.class, applicationContext);
-		registerBeanOf(PicoBasedInstantiateInterceptor.class, applicationContext);
+		registerBeanOf(InstantiateInterceptor.class, applicationContext);
     }
 
     private void registerBeanOf(Class<?> type, BeanDefinitionRegistry registry) {

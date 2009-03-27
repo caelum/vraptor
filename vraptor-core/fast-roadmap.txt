@@ -34,3 +34,4 @@ done:
 - invoke method
 - support @Post, @...
 - support Result with include
+- vraptor info component

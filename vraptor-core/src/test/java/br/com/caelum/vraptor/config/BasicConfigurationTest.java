@@ -1,5 +1,7 @@
 package br.com.caelum.vraptor.config;
 
+import java.io.IOException;
+
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
@@ -7,6 +9,7 @@ import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -64,5 +67,38 @@ public class BasicConfigurationTest {
         MatcherAssert.assertThat(config.getProvider().getClass(), Matchers.is(Matchers
                 .typeCompatibleWith(MyCustomProvider.class)));
         mockery.assertIsSatisfied();
+    }
+
+    public static class DogProvider implements ContainerProvider {
+        DogProvider() throws IOException {
+            throw new IOException("");
+        }
+
+        public Container provide(VRaptorRequest vraptorRequest) {
+            return null;
+        }
+
+        public void start(ServletContext context) {
+        }
+
+        public void stop() {
+        }
+    }
+
+    @Test
+    public void shouldThrowInstantiationExceptionCauseIfThereIsSuchException() {
+        mockery.checking(new Expectations() {
+            {
+                one(context).getInitParameter(BasicConfiguration.CONTAINER_PROVIDER);
+                will(returnValue(DogProvider.class.getName()));
+            }
+        });
+        try {
+            config.getProvider();
+            Assert.fail();
+        } catch (ServletException e) {
+            Assert.assertEquals(IOException.class, e.getCause().getClass());
+            mockery.assertIsSatisfied();
+        }
     }
 }

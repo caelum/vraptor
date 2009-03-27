@@ -1,5 +1,7 @@
 package br.com.caelum.vraptor.config;
 
+import java.lang.reflect.InvocationTargetException;
+
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
@@ -27,12 +29,20 @@ public class BasicConfiguration {
             provider = PicoProvider.class.getName();
         }
         try {
-            return (ContainerProvider) Class.forName(provider).newInstance();
+            return (ContainerProvider) Class.forName(provider).getDeclaredConstructor().newInstance();
         } catch (InstantiationException e) {
             throw new ServletException(e);
         } catch (IllegalAccessException e) {
             throw new ServletException(e);
         } catch (ClassNotFoundException e) {
+            throw new ServletException(e);
+        } catch (IllegalArgumentException e) {
+            throw new ServletException(e);
+        } catch (SecurityException e) {
+            throw new ServletException(e);
+        } catch (InvocationTargetException e) {
+            throw new ServletException(e.getCause());
+        } catch (NoSuchMethodException e) {
             throw new ServletException(e);
         }
     }

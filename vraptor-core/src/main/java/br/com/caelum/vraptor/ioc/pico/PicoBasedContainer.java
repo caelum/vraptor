@@ -19,7 +19,7 @@ public class PicoBasedContainer implements Container {
 
     public PicoBasedContainer(MutablePicoContainer parent, VRaptorRequest request, ResourceRegistry resources) {
         this.container = new PicoBuilder(parent).withCaching().build();
-        // TODO try to remove this - InstantiateInterceptor and InterceptorStack
+        // TODO try to remove addComponent(this) - InstantiateInterceptor and InterceptorStack
         // needs to instantiate objects with dependency injection
         this.container.addComponent(this);
         this.container.addComponent(request).addComponent(request.getRequest()).addComponent(request.getResponse());

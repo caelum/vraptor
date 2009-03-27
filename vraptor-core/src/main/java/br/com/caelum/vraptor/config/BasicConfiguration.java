@@ -30,19 +30,9 @@ public class BasicConfiguration {
         }
         try {
             return (ContainerProvider) Class.forName(provider).getDeclaredConstructor().newInstance();
-        } catch (InstantiationException e) {
-            throw new ServletException(e);
-        } catch (IllegalAccessException e) {
-            throw new ServletException(e);
-        } catch (ClassNotFoundException e) {
-            throw new ServletException(e);
-        } catch (IllegalArgumentException e) {
-            throw new ServletException(e);
-        } catch (SecurityException e) {
-            throw new ServletException(e);
         } catch (InvocationTargetException e) {
             throw new ServletException(e.getCause());
-        } catch (NoSuchMethodException e) {
+        } catch (Exception e) {
             throw new ServletException(e);
         }
     }

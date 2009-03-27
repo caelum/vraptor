@@ -37,10 +37,6 @@ public class ClientsController {
     @Path("/clients")
     public void list() throws ServletException, IOException {
         result.include("clients", clients);
-        result.use(JspView.jsp(new JspResolver() {
-            public String pathFor(ResourceMethod method, String result) {
-                return "/" + method.getResource().getType().getName() + "/" + method.getMethod().getName() + "." + result + ".jsp";
-            }
-        })).forward();
+        result.use(JspView.jsp()).forward("ok");
     }
 }

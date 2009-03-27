@@ -1,6 +1,5 @@
 fast organize prior to generating docs and real roadmap
 
-- support Result with expose
 - sl4j usage
 - 70% coverage
 
@@ -34,3 +33,4 @@ done:
 - spring support
 - invoke method
 - support @Post, @...
+- support Result with include

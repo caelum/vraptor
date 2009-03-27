@@ -23,7 +23,7 @@ public class ExecuteMethodInterceptor implements Interceptor {
         } catch (IllegalAccessException e) {
             throw new InterceptionException(e);
         } catch (InvocationTargetException e) {
-            throw new InterceptionException(e);
+            throw new InterceptionException(e.getCause());
         }
     }
 

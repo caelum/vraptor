@@ -14,49 +14,54 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.resource.DefaultResourceRegistry;
-import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.resource.Resource;
+import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.resource.VRaptorInfo;
 
 public class DefaultResourceRegistryTest {
 
-	private Mockery mockery;
-	private DefaultResourceRegistry registry;
+    private Mockery mockery;
+    private DefaultResourceRegistry registry;
 
-	@Before
-	public void setup() {
-		this.mockery = new Mockery();
-		this.registry = new DefaultResourceRegistry();
-	}
+    @Before
+    public void setup() {
+        this.mockery = new Mockery();
+        this.registry = new DefaultResourceRegistry();
+    }
 
-	@Test
-	public void testReturnsResourceIfFound() throws SecurityException,
-			NoSuchMethodException {
-		ResourceMethod expected = mockery.mock(ResourceMethod.class);
-		final Resource resource = mockery.mock(Resource.class);
-		mockery.checking(new Expectations() {
-			{
-				one(resource).getType();
-				will(returnValue(Clients.class));
-			}
-		});
-		registry.register(Arrays.asList(resource));
-		ResourceMethod method = registry.gimmeThis("/clients", "POST");
-		assertThat(method.getMethod(), is(equalTo(Clients.class
-				.getMethod("add"))));
-		mockery.assertIsSatisfied();
-	}
+    @Test
+    public void testReturnsResourceIfFound() throws SecurityException, NoSuchMethodException {
+        ResourceMethod expected = mockery.mock(ResourceMethod.class);
+        final Resource resource = mockery.mock(Resource.class);
+        mockery.checking(new Expectations() {
+            {
+                one(resource).getType();
+                will(returnValue(Clients.class));
+            }
+        });
+        registry.register(Arrays.asList(resource));
+        ResourceMethod method = registry.gimmeThis("/clients", "POST");
+        assertThat(method.getMethod(), is(equalTo(Clients.class.getMethod("add"))));
+        mockery.assertIsSatisfied();
+    }
 
-	public static class Clients {
-		@Path("/clients")
-		public void add() {
+    public static class Clients {
+        @Path("/clients")
+        public void add() {
 
-		}
-	}
+        }
+    }
 
-	@Test
-	public void testReturnsNullIfResourceNotFound() {
-		ResourceMethod method = registry.gimmeThis("unknown_id", "POST");
-		assertThat(method, is(Matchers.nullValue()));
-	}
+    @Test
+    public void testReturnsNullIfResourceNotFound() {
+        ResourceMethod method = registry.gimmeThis("unknown_id", "POST");
+        assertThat(method, is(Matchers.nullValue()));
+    }
+
+    @Test
+    public void shouldRegisterVRaptorInfoByDefault() throws SecurityException, NoSuchMethodException {
+        ResourceMethod method = registry.gimmeThis("/is_using_vraptor", "GET");
+        assertThat(method.getMethod(), is(equalTo(VRaptorInfo.class.getMethod("info"))));
+    }
 
 }

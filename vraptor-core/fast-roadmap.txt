@@ -1,13 +1,13 @@
 fast organize prior to generating docs and real roadmap
 
-- sl4j usage
-- 70% coverage
+- support Result with custom views
 
+- sl4j usage
+- paranamer support
 - method parameter support
-- DRAML name sucks.
+- 80% coverage
 - *for nice urls support* default resource and method lookup factory should be injected in the required component (default resource registry)
 - support @Path with nice urls
-- support Result with custom views
 - support Validator
 - site docs
 - guice support
@@ -35,3 +35,4 @@ done:
 - support @Post, @...
 - support Result with include
 - vraptor info component
+- 70% coverage

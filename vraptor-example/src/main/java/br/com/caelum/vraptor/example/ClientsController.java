@@ -15,8 +15,8 @@ public class ClientsController {
     private static final List<Client> clients = new ArrayList<Client>();
     static {
         clients.add(client("Guilherme"));
-    }
 
+    }
     public ClientsController(Result result) {
         this.result = result;
     }
@@ -30,5 +30,6 @@ public class ClientsController {
     @Path("/clients")
     public void list() {
         result.include("clients", clients);
+        result.use(JSPView.jsp()).forward();
     }
 }

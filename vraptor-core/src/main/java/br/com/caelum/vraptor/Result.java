@@ -7,6 +7,8 @@ package br.com.caelum.vraptor;
  */
 public interface Result {
 
-	void include(String key, Object value);
+    void include(String key, Object value);
+
+	<T extends View> T use(Class<T> view);
 
 }

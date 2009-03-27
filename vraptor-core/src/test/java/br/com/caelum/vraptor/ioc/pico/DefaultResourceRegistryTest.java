@@ -63,5 +63,12 @@ public class DefaultResourceRegistryTest {
         ResourceMethod method = registry.gimmeThis("/is_using_vraptor", "GET");
         assertThat(method.getMethod(), is(equalTo(VRaptorInfo.class.getMethod("info"))));
     }
+    
+    @Test
+    public void shouldAddAllResourcesToACommonList() {
+        Resource myResource = mockery.mock(Resource.class);
+        registry.register(Arrays.asList(myResource));
+        assertThat(registry.all(), Matchers.hasItem(myResource));
+    }
 
 }

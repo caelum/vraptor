@@ -1,10 +1,9 @@
 fast organize prior to generating docs and real roadmap
 
-- support Result with custom views
-
-- sl4j usage
 - paranamer support
 - method parameter support
+
+- sl4j usage
 - 80% coverage
 - *for nice urls support* default resource and method lookup factory should be injected in the required component (default resource registry)
 - support @Path with nice urls
@@ -15,6 +14,7 @@ fast organize prior to generating docs and real roadmap
 - hibernate validation plugin
 - default path?
 - public methods are defaulted to paths?
+- check pico container constructor choice algorithm so it can instantiate the correct JspView (otherwise find another way to use a custom PathResolver)
 
 later customization
 
@@ -36,3 +36,6 @@ done:
 - support Result with include
 - vraptor info component
 - 70% coverage
+- support Result with custom views
+- customizable strategies for JspView name (PathResolver)
+- default strategy: resourceclass + resourcemethod

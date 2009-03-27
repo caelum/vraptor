@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor.core;
+package br.com.caelum.vraptor.interceptor;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -15,7 +15,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.InterceptionException;
+import br.com.caelum.vraptor.core.InterceptorStack;
+import br.com.caelum.vraptor.core.VRaptorRequest;
 import br.com.caelum.vraptor.http.UrlToResourceTranslator;
+import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 public class ResourceLookupInterceptorTest {

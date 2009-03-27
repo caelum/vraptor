@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor.core;
+package br.com.caelum.vraptor.interceptor;
 
 import java.io.IOException;
 
@@ -10,6 +10,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.InterceptionException;
+import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
 import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 

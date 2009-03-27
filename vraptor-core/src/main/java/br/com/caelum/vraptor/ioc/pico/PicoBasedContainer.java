@@ -6,12 +6,14 @@ import org.picocontainer.PicoBuilder;
 import br.com.caelum.vraptor.core.DefaultInterceptorStack;
 import br.com.caelum.vraptor.core.DefaultRequestExecution;
 import br.com.caelum.vraptor.core.DefaultResult;
-import br.com.caelum.vraptor.core.InstantiateInterceptor;
-import br.com.caelum.vraptor.core.ResourceLookupInterceptor;
 import br.com.caelum.vraptor.core.VRaptorRequest;
+import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
+import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
+import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceRegistry;
+import br.com.caelum.vraptor.view.jsp.JspView;
 
 public class PicoBasedContainer implements Container {
 
@@ -25,7 +27,8 @@ public class PicoBasedContainer implements Container {
         this.container.addComponent(request).addComponent(request.getRequest()).addComponent(request.getResponse());
         this.container.addComponent(DefaultInterceptorStack.class).addComponent(DefaultRequestExecution.class);
         this.container.addComponent(ResourceLookupInterceptor.class).addComponent(InstantiateInterceptor.class);
-        this.container.addComponent(DefaultResult.class);
+        this.container.addComponent(DefaultResult.class).addComponent(ExecuteMethodInterceptor.class);
+        this.container.addComponent(JspView.class);
         for (Resource resource : resources.all()) {
             this.container.addComponent(resource.getType());
         }

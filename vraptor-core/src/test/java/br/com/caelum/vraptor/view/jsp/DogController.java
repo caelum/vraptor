@@ -1,6 +1,8 @@
 package br.com.caelum.vraptor.view.jsp;
 
-public class DogController {
+import br.com.caelum.vraptor.interceptor.DogAlike;
+
+public class DogController implements DogAlike {
     
     public void bark() {
         

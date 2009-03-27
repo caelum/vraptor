@@ -21,8 +21,8 @@ public class ExecuteMethodInterceptorTest {
             NoSuchMethodException, IOException, InterceptionException {
         Mockery mockery = new Mockery();
         ExecuteMethodInterceptor interceptor = new ExecuteMethodInterceptor();
-        ResourceMethod method = new DefaultResourceMethod(null, Dog.class.getMethod("bark"));
-        final Dog auau = mockery.mock(Dog.class);
+        ResourceMethod method = new DefaultResourceMethod(null, DogAlike.class.getMethod("bark"));
+        final DogAlike auau = mockery.mock(DogAlike.class);
         mockery.checking(new Expectations() {
             {
                 one(auau).bark();
@@ -31,17 +31,13 @@ public class ExecuteMethodInterceptorTest {
         interceptor.intercept(null, method, auau);
         mockery.assertIsSatisfied();
     }
-
-    public interface Dog {
-        abstract void bark();
-    }
     
     @Test
     public void shouldThrowMethodExceptionIfThereIsAnInvocationException() throws IOException, SecurityException, NoSuchMethodException {
         Mockery mockery = new Mockery();
         ExecuteMethodInterceptor interceptor = new ExecuteMethodInterceptor();
-        ResourceMethod method = new DefaultResourceMethod(null, Dog.class.getMethod("bark"));
-        final Dog auau = mockery.mock(Dog.class);
+        ResourceMethod method = new DefaultResourceMethod(null, DogAlike.class.getMethod("bark"));
+        final DogAlike auau = mockery.mock(DogAlike.class);
         final RuntimeException exception = new RuntimeException();
         mockery.checking(new Expectations() {
             {

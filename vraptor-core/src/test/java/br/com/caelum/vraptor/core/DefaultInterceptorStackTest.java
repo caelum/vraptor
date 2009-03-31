@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.is;
 
 import java.io.IOException;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -41,6 +42,11 @@ public class DefaultInterceptorStackTest {
             run = count++;
             invocation.next(method, resourceInstance);
         }
+    }
+
+    @Test
+    public void shouldAddTheListOfInterceptorsAsFollowingInterceptorsInTheReverseOrderAsItsRunInTheLastAddedToFirstAddedOrder() throws InterceptionException, IOException {
+        Assert.fail("should check it was added in reverse order");
     }
 
 }

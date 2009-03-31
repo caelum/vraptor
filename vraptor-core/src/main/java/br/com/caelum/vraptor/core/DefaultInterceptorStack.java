@@ -40,4 +40,10 @@ public class DefaultInterceptorStack implements InterceptorStack {
         this.interceptors.add(new ToInstantiateInterceptorHandler(container, type));
     }
 
+    public void addAsNext(Class<? extends Interceptor>... interceptors) {
+        for (int i = interceptors.length-1; i >= 0; i--) {
+            this.interceptors.add(nextInterceptor, new ToInstantiateInterceptorHandler(container, interceptors[i]));
+        }
+    }
+
 }

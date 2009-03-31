@@ -14,4 +14,6 @@ public interface InterceptorStack {
 
     void next(ResourceMethod method, Object resourceInstance) throws IOException, InterceptionException;
 
+    void addAsNext(Class<? extends Interceptor>... interceptors);
+
 }

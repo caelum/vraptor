@@ -12,8 +12,6 @@ right now:
 - pico container allows interceptor registration
 - pico container common component registration
 
-later (prior to release)
-
 - use mirrors where there is reflection 
 - support @Path with nice urls
 
@@ -33,7 +31,7 @@ kung help
 - full spring support
 - concatenate convertion and validation errors
 - better package for typecreators
-
+- method addAsNext on InterceptorStack could have another name, could have been another interface (same implmementation)?
 
 
 

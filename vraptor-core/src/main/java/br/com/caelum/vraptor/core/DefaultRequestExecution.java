@@ -5,6 +5,7 @@ import java.io.IOException;
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
 import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
+import br.com.caelum.vraptor.interceptor.InterceptorListPriorToExecutionExtractor;
 import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
 
 /**
@@ -14,16 +15,17 @@ import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
  */
 public class DefaultRequestExecution implements RequestExecution {
     private final InterceptorStack interceptorStack;
-    private final InstantiateInterceptor instantiateInterceptor;
+    private final InstantiateInterceptor instantiator;
 
-    public DefaultRequestExecution(InterceptorStack interceptorStack, InstantiateInterceptor instantiateInterceptor) {
+    public DefaultRequestExecution(InterceptorStack interceptorStack, InstantiateInterceptor instantiator) {
         this.interceptorStack = interceptorStack;
-        this.instantiateInterceptor = instantiateInterceptor;
+        this.instantiator = instantiator;
     }
 
     public void execute() throws IOException, InterceptionException {
         interceptorStack.add(ResourceLookupInterceptor.class);
-        interceptorStack.add(instantiateInterceptor);
+        interceptorStack.add(instantiator);
+        interceptorStack.add(InterceptorListPriorToExecutionExtractor.class);
         interceptorStack.add(ExecuteMethodInterceptor.class);
         interceptorStack.next(null, null);
     }

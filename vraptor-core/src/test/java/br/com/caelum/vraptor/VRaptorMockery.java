@@ -6,6 +6,7 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.internal.ExpectationBuilder;
 
+import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 public class VRaptorMockery {
@@ -33,6 +34,17 @@ public class VRaptorMockery {
             }
         });
         return method;
+    }
+
+    public <T> Resource resource(final Class<T> type) {
+        final Resource resource = mockery.mock(Resource.class);
+        mockery.checking(new Expectations() {
+            {
+                one(resource).getType();
+                will(returnValue(type));
+            }
+        });
+        return resource;
     }
 
 }

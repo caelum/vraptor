@@ -8,7 +8,6 @@ right now:
 
 - use asm instead of javassist to instantiate types
 
-- interceptor support
 - pico container allows interceptor registration
 - pico container common component registration
 
@@ -69,3 +68,4 @@ done:
 - customizable strategies for JspView name (PathResolver)
 - default strategy: resourceclass + resourcemethod
 - sl4j usage
+- interceptor support

@@ -12,6 +12,9 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import br.com.caelum.vraptor.config.BasicConfiguration;
 import br.com.caelum.vraptor.core.RequestExecution;
 import br.com.caelum.vraptor.core.VRaptorRequest;
@@ -26,6 +29,8 @@ import br.com.caelum.vraptor.ioc.ContainerProvider;
 public class VRaptor implements Filter {
     private ContainerProvider provider;
     private ServletContext servletContext;
+    
+    private static final Logger logger = LoggerFactory.getLogger(VRaptor.class);
 
     public void destroy() {
         provider.stop();

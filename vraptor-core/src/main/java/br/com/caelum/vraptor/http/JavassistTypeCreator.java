@@ -10,9 +10,15 @@ import javassist.CtClass;
 import javassist.CtField;
 import javassist.CtNewMethod;
 import javassist.LoaderClassPath;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 public class JavassistTypeCreator implements TypeCreator {
+
+    private static final Logger logger = LoggerFactory.getLogger(JavassistTypeCreator.class);
 
     /*
      * we require the class loading counter in order to reload method params
@@ -24,9 +30,10 @@ public class JavassistTypeCreator implements TypeCreator {
         Method reflectionMethod = method.getMethod();
         ClassPool pool = new ClassPool();
         pool.appendClassPath(new LoaderClassPath(this.getClass().getClassLoader()));
-        CtClass ctType = pool
-                .makeClass(reflectionMethod.getDeclaringClass().getName() + "$" + reflectionMethod.getName() + "$"
-                        + Math.abs(reflectionMethod.hashCode()) + "$" + (++classLoadCounter));
+        String newTypeName = reflectionMethod.getDeclaringClass().getName() + "$" + reflectionMethod.getName() + "$"
+                + Math.abs(reflectionMethod.hashCode()) + "$" + (++classLoadCounter);
+        logger.debug("Trying to make class for " + newTypeName);
+        CtClass ctType = pool.makeClass(newTypeName);
         String valueLists = "";
         for (Class type : reflectionMethod.getParameterTypes()) {
             try {

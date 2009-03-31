@@ -1,27 +1,21 @@
 right now:
 
-- method parameter support with ognl
+- report javassist bug: public Object[] gimmeMyValues() { return new Object[]{};}
+
+1. method parameter support with ognl
+2. either instantiate objects with Container or Mirrors using ognl
+3. paranamer support
+5. support Validator
+
 - use asm instead of javassist to instantiate types
 
-- either instantiate objects with Container or Mirrors using ognl
-- paranamer support
-- sl4j usage
-- support Validator
-
+- interceptor support
 - pico container allows interceptor registration
 - pico container common component registration
 
-- como customizar a saida de um UNICO metodo para qq coisa (jsp ou nao)
 - customizar a saida de um metodo para outro componente/metodo
-- interceptor support
-- DefaultResourceAndMethodLookup  esta usando @Post?
-- JspView is actually a forward/redirect guy... nothing to do with jsp
-- easier way to forward (result.forward?): Result --> JspResult (implements Result, wrapping DefaultResult, and "extending" JspView)... by default register 10 of then
-- concatenae convertion and validation errors
-- improve code within ognlparametersprovider and test it
+- concatenate convertion and validation errors
 - ognlparametersprovider should create a class only during first request to that method
-- fully test ognlparametersprovider
-- report javassist bug: public Object[] gimmeMyValues() { return new Object[]{};}
 
 later (prior to release)
 
@@ -29,9 +23,15 @@ later (prior to release)
 - support @Path with nice urls
 - CachedResourceRegistry caches with a map of (talvez o cache deva ser Map<MethodName, ResourceMethod>)
 
+projo
+
+- further log
+
 site docs (prior to release)
 - doc how to change the PathResolver algorithm
 - doc how to use PageResult directly
+- doc how to configure log
+- faq xxx doesnt work: activate log
 
 kung help
 
@@ -63,3 +63,4 @@ done:
 - support Result with custom views
 - customizable strategies for JspView name (PathResolver)
 - default strategy: resourceclass + resourcemethod
+- sl4j usage

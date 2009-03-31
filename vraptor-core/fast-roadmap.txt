@@ -26,8 +26,10 @@ later (prior to release)
 - use mirrors where there is reflection 
 - support @Path with nice urls
 - CachedResourceRegistry caches with a map of (talvez o cache deva ser Map<MethodName, ResourceMethod>)
-- site docs
+
+site docs (prior to release)
 - doc how to change the PathResolver algorithm
+- doc how to use PageResult directly
 
 kung help
 

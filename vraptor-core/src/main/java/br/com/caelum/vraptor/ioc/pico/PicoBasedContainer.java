@@ -14,7 +14,7 @@ import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceRegistry;
-import br.com.caelum.vraptor.view.jsp.JspView;
+import br.com.caelum.vraptor.view.jsp.PageResult;
 
 public class PicoBasedContainer implements Container {
 
@@ -29,7 +29,7 @@ public class PicoBasedContainer implements Container {
         this.container.addComponent(DefaultInterceptorStack.class).addComponent(DefaultRequestExecution.class);
         this.container.addComponent(ResourceLookupInterceptor.class).addComponent(InstantiateInterceptor.class);
         this.container.addComponent(DefaultResult.class).addComponent(ExecuteMethodInterceptor.class);
-        this.container.addComponent(JspView.class);
+        this.container.addComponent(PageResult.class);
         this.container.addComponent(OgnlParametersProvider.class);
         for (Resource resource : resources.all()) {
             this.container.addComponent(resource.getType());

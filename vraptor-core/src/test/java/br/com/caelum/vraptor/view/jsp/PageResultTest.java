@@ -16,7 +16,7 @@ import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.view.PathResolver;
 
-public class JspViewTest {
+public class PageResultTest {
 
     private Mockery mockery;
     private HttpServletRequest request;
@@ -43,7 +43,7 @@ public class JspViewTest {
 
     @Test
     public void shouldUseDefaultPathResolverWhileForwarding() throws ServletException, IOException, NoSuchMethodException {
-        JspView view = new JspView(request, response, method);
+        PageResult view = new PageResult(request, response, method);
         mockery.checking(new Expectations() {
             {
                 one(method).getResource(); will(returnValue(resource));
@@ -60,7 +60,7 @@ public class JspViewTest {
 
     @Test
     public void shouldUseDefaultPathResolverWhileIncluding() throws ServletException, IOException, NoSuchMethodException {
-        JspView view = new JspView(request, response, method);
+        PageResult view = new PageResult(request, response, method);
         mockery.checking(new Expectations() {
             {
                 one(method).getResource(); will(returnValue(resource));
@@ -77,7 +77,7 @@ public class JspViewTest {
 
     @Test
     public void shouldAllowCustomPathResolverWhileForwarding() throws ServletException, IOException {
-        JspView view = new JspView(request, response, method, fixedResolver);
+        PageResult view = new PageResult(request, response, method, fixedResolver);
         mockery.checking(new Expectations() {
             {
                 one(request).getRequestDispatcher("fixed");
@@ -91,7 +91,7 @@ public class JspViewTest {
 
     @Test
     public void shouldAllowCustomPathResolverWhileIncluding() throws ServletException, IOException {
-        JspView view = new JspView(request, response, method, fixedResolver);
+        PageResult view = new PageResult(request, response, method, fixedResolver);
         mockery.checking(new Expectations() {
             {
                 one(request).getRequestDispatcher("fixed");

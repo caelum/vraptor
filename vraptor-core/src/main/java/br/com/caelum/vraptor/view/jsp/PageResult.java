@@ -16,18 +16,18 @@ import br.com.caelum.vraptor.view.PathResolver;
  * 
  * @author Guilherme Silveira
  */
-public class JspView implements View {
+public class PageResult implements View {
 
     private final HttpServletRequest request;
     private final HttpServletResponse response;
     private final ResourceMethod method;
     private final PathResolver resolver;
 
-    public JspView(HttpServletRequest req, HttpServletResponse res, ResourceMethod method) {
+    public PageResult(HttpServletRequest req, HttpServletResponse res, ResourceMethod method) {
         this(req,res,method, new DefaultPathResolver());
     }
 
-    public JspView(HttpServletRequest req, HttpServletResponse res, ResourceMethod method,
+    public PageResult(HttpServletRequest req, HttpServletResponse res, ResourceMethod method,
             PathResolver resolver) {
         this.request = req;
         this.response = res;
@@ -35,8 +35,8 @@ public class JspView implements View {
         this.resolver = resolver;
     }
 
-    public static Class<JspView> jsp() {
-        return JspView.class;
+    public static Class<PageResult> jsp() {
+        return PageResult.class;
     }
 
     public void forward(String result) throws ServletException, IOException {
@@ -46,5 +46,9 @@ public class JspView implements View {
     public void include(String result) throws ServletException, IOException {
         request.getRequestDispatcher(resolver.pathFor(method, result)).include(request, response);
     }
-    
+
+    public void include(String key, Object value) {
+        request.setAttribute(key, value);
+    }
+
 }

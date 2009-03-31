@@ -12,13 +12,10 @@ right now:
 - pico container allows interceptor registration
 - pico container common component registration
 
-- customizar a saida de um metodo para outro componente/metodo
-
 later (prior to release)
 
 - use mirrors where there is reflection 
 - support @Path with nice urls
-- CachedResourceRegistry caches with a map of (talvez o cache deva ser Map<MethodName, ResourceMethod>)
 
 projo
 

@@ -9,9 +9,9 @@ import java.util.List;
  */
 public interface ResourceRegistry {
 
-    void register(List<Resource> results);
+    void register(List<Resource> resources);
 
-    ResourceMethod gimmeThis(String resourceName, String methodName);
+    ResourceMethod gimmeThis(String name, String methodName);
 
     List<Resource> all();
 

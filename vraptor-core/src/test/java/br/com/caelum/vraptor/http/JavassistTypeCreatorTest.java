@@ -64,6 +64,16 @@ public class JavassistTypeCreatorTest {
     }
 
     @Test
+    public void shouldCreateGimmeIfThereIsNoArgs() throws SecurityException, NoSuchMethodException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+        Class<?> type = creator.typeFor(mockery.method(DogAlike.class.getDeclaredMethod("bark")));
+        
+        Method gimme = type.getDeclaredMethod("gimmeMyValues");
+        
+        Object instance = type.newInstance();
+        MatcherAssert.assertThat(((Object[])gimme.invoke(instance)), Matchers.emptyArray());
+        mockery.assertIsSatisfied();
+    }
+    @Test
     public void shouldBeAbleToDealWithGenericCollection() throws SecurityException, NoSuchMethodException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         Class<?> type = creator.typeFor(mockery.method(DogAlike.class.getDeclaredMethod("eat",List.class)));
         

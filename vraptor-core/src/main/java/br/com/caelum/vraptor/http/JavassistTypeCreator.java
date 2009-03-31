@@ -49,8 +49,14 @@ public class JavassistTypeCreator implements TypeCreator {
             }
         }
         try {
-            ctType.addMethod(CtNewMethod.make("public Object[] gimmeMyValues() { return new Object[]{" + valueLists
-                    + "};}", ctType));
+            String content;
+            if (valueLists.length() == 0) {
+                content = "new Object[0]";
+            } else {
+                content = "new Object[]{" + valueLists + "}";
+            }
+            String gimmeCode = "public Object[] gimmeMyValues() { return " + content + ";}";
+            ctType.addMethod(CtNewMethod.make(gimmeCode, ctType));
         } catch (CannotCompileException e) {
             // TODO validation exception?
             throw new IllegalArgumentException("unable to compile expression", e);

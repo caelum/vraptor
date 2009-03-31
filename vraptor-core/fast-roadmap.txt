@@ -1,6 +1,7 @@
 right now:
 
 - method parameter support with ognl
+- use asm instead of javassist to instantiate types
 
 - either instantiate objects with Container or Mirrors using ognl
 - paranamer support
@@ -20,6 +21,7 @@ right now:
 - improve code within ognlparametersprovider and test it
 - ognlparametersprovider should create a class only during first request to that method
 - fully test ognlparametersprovider
+- report javassist bug: public Object[] gimmeMyValues() { return new Object[]{};}
 
 later (prior to release)
 

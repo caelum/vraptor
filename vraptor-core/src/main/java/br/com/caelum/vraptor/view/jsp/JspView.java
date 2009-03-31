@@ -46,5 +46,5 @@ public class JspView implements View {
     public void include(String result) throws ServletException, IOException {
         request.getRequestDispatcher(resolver.pathFor(method, result)).include(request, response);
     }
-
+    
 }

@@ -7,5 +7,9 @@ public class DogController implements DogAlike {
     public void bark() {
         
     }
+    
+    public void bark(int times) {
+        
+    }
 
 }

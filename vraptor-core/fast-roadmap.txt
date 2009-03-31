@@ -1,20 +1,29 @@
 right now:
 
-- method parameter support
-- ongl
-- paranamer support
+- method parameter support with ognl
 
+- either instantiate objects with Container or Mirrors using ognl
+- paranamer support
 - sl4j usage
-- 80% coverage
 - support Validator
 
-- pico container permite registrar interceptor
+- pico container allows interceptor registration
 - pico container common component registration
+
+- como customizar a saida de um UNICO metodo para qq coisa (jsp ou nao)
+- customizar a saida de um metodo para outro componente/metodo
 - interceptor support
 - DefaultResourceAndMethodLookup  esta usando @Post?
+- JspView is actually a forward/redirect guy... nothing to do with jsp
+- easier way to forward (result.forward?): Result --> JspResult (implements Result, wrapping DefaultResult, and "extending" JspView)... by default register 10 of then
+- concatenae convertion and validation errors
+- improve code within ognlparametersprovider and test it
+- ognlparametersprovider should create a class only during first request to that method
+- fully test ognlparametersprovider
 
 later (prior to release)
 
+- use mirrors where there is reflection 
 - support @Path with nice urls
 - CachedResourceRegistry caches with a map of (talvez o cache deva ser Map<MethodName, ResourceMethod>)
 - site docs

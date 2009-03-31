@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.view.jsp.DogController;
 
 public class DefaultPathResolverTest {
 
@@ -23,11 +24,6 @@ public class DefaultPathResolverTest {
         this.resource = mockery.mock(Resource.class);
     }
     
-    public static class DogController {
-        public void bark() {
-        }
-    }
-
     @Test
     public void shouldUseResourceTypeAndMethodNameToResolveJsp() throws NoSuchMethodException {
         mockery.checking(new Expectations() {

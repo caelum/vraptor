@@ -11,11 +11,10 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.core.InterceptorStack;
-import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.resource.DefaultResource;
-import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.view.jsp.DogController;
 
 public class InstantiateInterceptorTest {
 
@@ -28,10 +27,6 @@ public class InstantiateInterceptorTest {
         this.mockery = new Mockery();
         this.request = mockery.mock(HttpServletRequest.class);
         this.container = mockery.mock(Container.class);
-    }
-
-    public static class DogController {
-
     }
 
     @Test

@@ -9,7 +9,6 @@ import javax.servlet.ServletException;
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.view.jsp.JspView;
 
 @Resource
@@ -28,6 +27,19 @@ public class ClientsController {
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     private final Result result;
 
     public ClientsController(Result result) {
@@ -37,6 +49,12 @@ public class ClientsController {
     @Path("/clients")
     public void list() throws ServletException, IOException {
         result.include("clients", clients);
+        result.use(JspView.jsp()).forward("ok");
+    }
+
+    @Path("/clients/add")
+    public void add(Client c) throws ServletException, IOException {
+        result.include("client", c);
         result.use(JspView.jsp()).forward("ok");
     }
 }

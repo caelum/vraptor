@@ -15,10 +15,6 @@ public class OgnlParametersProvider implements ParametersProvider {
 
     private final TypeCreator creator; 
 
-    public OgnlParametersProvider(HttpServletRequest request) {
-        this(request, new JavassistTypeCreator());
-    }
-    
     public OgnlParametersProvider(HttpServletRequest request, TypeCreator creator) {
         this.creator = creator;
         this.request = request;

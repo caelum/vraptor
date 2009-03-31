@@ -5,7 +5,6 @@ right now:
 1. method parameter support with ognl
 2. either instantiate objects with Container or Mirrors using ognl
 3. paranamer support
-5. support Validator
 
 - use asm instead of javassist to instantiate types
 
@@ -14,8 +13,6 @@ right now:
 - pico container common component registration
 
 - customizar a saida de um metodo para outro componente/metodo
-- concatenate convertion and validation errors
-- ognlparametersprovider should create a class only during first request to that method
 
 later (prior to release)
 
@@ -35,7 +32,20 @@ site docs (prior to release)
 
 kung help
 
+- support Validator
 - full spring support
+- concatenate convertion and validation errors
+- better package for typecreators
+
+
+
+
+
+
+
+
+
+
 
 later customization (after first release)
 

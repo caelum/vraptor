@@ -16,6 +16,7 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.core.VRaptorRequest;
 import br.com.caelum.vraptor.http.UrlToResourceTranslator;
+import br.com.caelum.vraptor.reflection.CacheBasedTypeCreator;
 import br.com.caelum.vraptor.resource.ResourceRegistry;
 
 /**
@@ -55,6 +56,7 @@ public class GenericProviderTest {
         MatcherAssert.assertThat(canProvide(ResourceRegistry.class), Matchers.is(Matchers.equalTo(true)));
         MatcherAssert.assertThat(canProvide(DirScanner.class), Matchers.is(Matchers.equalTo(true)));
         MatcherAssert.assertThat(canProvide(ResourceLocator.class), Matchers.is(Matchers.equalTo(true)));
+        MatcherAssert.assertThat(canProvide(CacheBasedTypeCreator.class), Matchers.is(Matchers.equalTo(true)));
         mockery.assertIsSatisfied();
     }
 

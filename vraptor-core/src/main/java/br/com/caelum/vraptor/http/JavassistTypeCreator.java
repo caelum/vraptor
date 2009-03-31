@@ -21,8 +21,9 @@ public class JavassistTypeCreator implements TypeCreator {
     private static final Logger logger = LoggerFactory.getLogger(JavassistTypeCreator.class);
 
     /*
-     * we require the class loading counter in order to reload method params
-     * when reloading classes in the same classloader
+     * we require the class loading counter in order to work under the same
+     * classloader during tests. better than forking per tests (which is
+     * sooooooo slow)
      */
     private static int classLoadCounter = 0;
 

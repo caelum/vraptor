@@ -6,9 +6,11 @@ import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.PicoBuilder;
 
 import br.com.caelum.vraptor.core.VRaptorRequest;
+import br.com.caelum.vraptor.http.JavassistTypeCreator;
 import br.com.caelum.vraptor.http.StupidTranslator;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
+import br.com.caelum.vraptor.reflection.CacheBasedTypeCreator;
 import br.com.caelum.vraptor.resource.DefaultResourceRegistry;
 import br.com.caelum.vraptor.resource.ResourceRegistry;
 
@@ -27,6 +29,7 @@ public class PicoProvider implements ContainerProvider {
         this.container.addComponent(DefaultResourceRegistry.class);
         this.container.addComponent(DefaultDirScanner.class);
         this.container.addComponent(WebInfClassesScanner.class);
+        this.container.addComponent(new CacheBasedTypeCreator(new JavassistTypeCreator()));
     }
     
     public <T> T instanceFor(Class<T> type) {

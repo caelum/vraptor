@@ -3,6 +3,9 @@ package br.com.caelum.vraptor.reflection;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import br.com.caelum.vraptor.http.TypeCreator;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
@@ -14,6 +17,7 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  */
 public class CacheBasedTypeCreator implements TypeCreator {
 
+    private static final Logger logger = LoggerFactory.getLogger(CacheBasedTypeCreator.class);
     private final Map<ResourceMethod, Class<?>> cache = new HashMap<ResourceMethod, Class<?>>();
     private final TypeCreator creator;
 
@@ -24,6 +28,7 @@ public class CacheBasedTypeCreator implements TypeCreator {
     public Class<?> typeFor(ResourceMethod method) {
         if (!cache.containsKey(method)) {
             cache.put(method, creator.typeFor(method));
+            logger.debug("cached generic type for method " + method);
         }
         return cache.get(method);
     }

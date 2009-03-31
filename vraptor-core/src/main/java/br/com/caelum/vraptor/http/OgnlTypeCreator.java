@@ -10,11 +10,14 @@ import javassist.CtClass;
 import javassist.CtField;
 import javassist.CtNewMethod;
 import javassist.LoaderClassPath;
-import javassist.NotFoundException;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 public class OgnlTypeCreator implements TypeCreator {
 
+    /*
+     * we require the class loading counter in order to reload method params
+     * when reloading classes in the same classloader
+     */
     private static int classLoadCounter = 0;
 
     public Class<?> typeFor(ResourceMethod method) {
@@ -25,11 +28,10 @@ public class OgnlTypeCreator implements TypeCreator {
                 .makeClass(reflectionMethod.getDeclaringClass().getName() + "$" + reflectionMethod.getName() + "$"
                         + Math.abs(reflectionMethod.hashCode()) + "$" + (++classLoadCounter));
         String valueLists = "";
-        for (Class<?> type : reflectionMethod.getParameterTypes()) {
+        for (Class type : reflectionMethod.getParameterTypes()) {
             try {
-                CtClass fieldType = pool.get(type.getName());
-                String fieldName = type.getSimpleName();
-                CtField field = new CtField(fieldType, fieldName + "_", ctType);
+                String fieldName = extractName(type);
+                CtField field = CtField.make("private " + extractTypeDefinition(type) + " " + fieldName + "_;", ctType);
                 ctType.addField(field);
                 ctType.addMethod(CtNewMethod.getter("get" + fieldName, field));
                 ctType.addMethod(CtNewMethod.setter("set" + fieldName, field));
@@ -44,9 +46,6 @@ public class OgnlTypeCreator implements TypeCreator {
             } catch (CannotCompileException e) {
                 // TODO validation exception?
                 throw new IllegalArgumentException("unable to compile expression", e);
-            } catch (NotFoundException e) {
-                // TODO validation exception?
-                throw new IllegalArgumentException("unable to add field " + type.getName(), e);
             }
         }
         try {
@@ -62,6 +61,20 @@ public class OgnlTypeCreator implements TypeCreator {
             // TODO validation exception?
             throw new IllegalArgumentException("unable to compile expression", e);
         }
+    }
+
+    private String extractTypeDefinition(Class type) {
+        if (type.isArray()) {
+            return type.getComponentType().getName() + "[] ";
+        }
+        return type.getName();
+    }
+
+    private String extractName(Class type) {
+        if (type.isArray()) {
+            return type.getComponentType().getSimpleName();
+        }
+        return type.getSimpleName();
     }
 
     private static final Map<Class<?>, String> wrapper = new HashMap<Class<?>, String>();

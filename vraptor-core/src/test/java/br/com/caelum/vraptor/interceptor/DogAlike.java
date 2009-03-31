@@ -7,4 +7,6 @@ public interface DogAlike {
     abstract void bark(int times);
     abstract void bark(String phrase);
     abstract void eat(List<String> portions);
+    abstract void dropDead(int[] positions);
+    abstract void recurse(DogAlike[] dogs);
 }

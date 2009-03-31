@@ -2,11 +2,11 @@ package br.com.caelum.vraptor.http;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -70,20 +70,35 @@ public class OgnlTypeCreatorTest {
         Method getter = type.getDeclaredMethod("getList");
         Method setter = type.getDeclaredMethod("setList", List.class);
         
+        Assert.fail("should check if the method declares the List<String> as its return and parameter type");
+        mockery.assertIsSatisfied();
+    }
+
+    @Test
+    public void shouldHandleArraysOfPrimitive() throws SecurityException, NoSuchMethodException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+        Class<?> type = creator.typeFor(mockery.method(DogAlike.class.getDeclaredMethod("dropDead",int[].class)));
+        
+        Method getter = type.getDeclaredMethod("getint");
+        Method setter = type.getDeclaredMethod("setint", int[].class);
+        
         Object instance = type.newInstance();
-        List list = new ArrayList();
-        setter.invoke(instance, list);
-        MatcherAssert.assertThat((List)getter.invoke(instance), Matchers.is(Matchers.equalTo(list)));
+        int[] array = new int[]{0,1};
+        setter.invoke(instance, array);
+        MatcherAssert.assertThat((int[])getter.invoke(instance), Matchers.is(Matchers.equalTo(array)));
         mockery.assertIsSatisfied();
     }
 
     @Test
-    public void shouldHandleArraysOfPrimitive() {
-        mockery.assertIsSatisfied();
-    }
-
-    @Test
-    public void shouldHandleArraysOfType() {
+    public void shouldHandleArraysOfType() throws SecurityException, NoSuchMethodException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+        Class<?> type = creator.typeFor(mockery.method(DogAlike.class.getDeclaredMethod("recurse",DogAlike[].class)));
+        
+        Method getter = type.getDeclaredMethod("getDogAlike");
+        Method setter = type.getDeclaredMethod("setDogAlike", DogAlike[].class);
+        
+        Object instance = type.newInstance();
+        DogAlike[] array = new DogAlike[]{mockery.mock(DogAlike.class)};
+        setter.invoke(instance, new Object[]{array});
+        MatcherAssert.assertThat((DogAlike[])getter.invoke(instance), Matchers.is(Matchers.equalTo(array)));
         mockery.assertIsSatisfied();
     }
 

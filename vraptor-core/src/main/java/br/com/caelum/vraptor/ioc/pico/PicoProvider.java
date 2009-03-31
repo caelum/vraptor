@@ -11,6 +11,7 @@ import br.com.caelum.vraptor.http.StupidTranslator;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
 import br.com.caelum.vraptor.reflection.CacheBasedTypeCreator;
+import br.com.caelum.vraptor.resource.CacheBasedResourceRegistry;
 import br.com.caelum.vraptor.resource.DefaultResourceRegistry;
 import br.com.caelum.vraptor.resource.ResourceRegistry;
 
@@ -26,7 +27,7 @@ public class PicoProvider implements ContainerProvider {
     public PicoProvider() {
         this.container = new PicoBuilder().withCaching().build();
         this.container.addComponent(StupidTranslator.class);
-        this.container.addComponent(DefaultResourceRegistry.class);
+        this.container.addComponent(new CacheBasedResourceRegistry(new DefaultResourceRegistry()));
         this.container.addComponent(DefaultDirScanner.class);
         this.container.addComponent(WebInfClassesScanner.class);
         this.container.addComponent(new CacheBasedTypeCreator(new JavassistTypeCreator()));

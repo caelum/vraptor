@@ -19,6 +19,8 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 public class AsmBasedTypeCreator implements TypeCreator, Opcodes {
 
     private static final Logger logger = LoggerFactory.getLogger(AsmBasedTypeCreator.class);
+    
+    private static final SignatureConverter CONVERTER = new SignatureConverter();
 
     /*
      * we require the class loading counter in order to work under the same
@@ -54,7 +56,7 @@ public class AsmBasedTypeCreator implements TypeCreator, Opcodes {
             if (type instanceof ParameterizedType) {
                 parse(cw, (ParameterizedType) type, valueLists, newTypeName);
             } else if (type instanceof Class) {
-                parse(cw, (Class) type, valueLists, newTypeName);
+                parse(cw, (Class<?>) type, valueLists, newTypeName);
             } else {
                 throw new IllegalArgumentException("Unable to identify field " + type + " of type "
                         + type.getClass().getName());
@@ -84,8 +86,8 @@ public class AsmBasedTypeCreator implements TypeCreator, Opcodes {
 
     private void parse(ClassWriter cw, ParameterizedType type, StringBuilder valueLists, String newTypeName) {
         String fieldName = extractName(type);
-        String definition = extractTypeDefinition((Class) type.getRawType());
-        String genericDefinition = extractTypeDefinition(type);
+        String definition = CONVERTER.extractTypeDefinition((Class<?>) type.getRawType());
+        String genericDefinition = CONVERTER.extractTypeDefinition(type);
         parse(cw,valueLists,newTypeName, definition, genericDefinition, fieldName, ALOAD, ARETURN);
         if (valueLists.length() != 0) {
             valueLists.append(',');
@@ -143,7 +145,7 @@ public class AsmBasedTypeCreator implements TypeCreator, Opcodes {
 
     private void parse(ClassWriter cw, Class type, StringBuilder valueLists, String newTypeName) {
         String fieldName = extractName(type);
-        String definition = extractTypeDefinition(type);
+        String definition = CONVERTER.extractTypeDefinition(type);
         String genericDefinition = null;
         parse(cw,valueLists,newTypeName,definition, genericDefinition, fieldName, loadFor(type), returnFor(type));
         
@@ -177,42 +179,8 @@ public class AsmBasedTypeCreator implements TypeCreator, Opcodes {
         return type.isPrimitive()? IRETURN : ARETURN;
     }
 
-    private int loadFor(Class type) {
+    private int loadFor(Class<?> type) {
         return type.isPrimitive() ? ILOAD : ALOAD;
-    }
-
-    static Map<Class,String> mapped = new HashMap<Class, String>();
-    static {
-        mapped.put(boolean.class, "Z");
-        mapped.put(int.class, "I");
-        mapped.put(short.class, "S");
-        mapped.put(long.class, "J");
-        mapped.put(double.class, "D");
-        mapped.put(float.class, "F");
-        mapped.put(byte.class, "B");
-        mapped.put(char.class, "C");
-    }
-
-    private String extractTypeDefinition(Class type) {
-        if(type.isArray()) {
-            return "[" + extractTypeDefinition(type.getComponentType());
-        }
-        if (type.isPrimitive()) {
-            return mapped.get(type);
-        }
-        return 'L' + type.getName().replace('.', '/') + ';';
-    }
-
-
-    private String extractTypeDefinition(ParameterizedType type) {
-        Type raw = type.getRawType();
-        String name = extractTypeDefinition((Class) raw);
-        name = name.substring(0,name.length()-1) + "<";
-        Type[] types = type.getActualTypeArguments();
-        for(Type t : types) {
-            name += extractTypeDefinition((Class) t);
-        }
-        return name + ">;";
     }
 
 }

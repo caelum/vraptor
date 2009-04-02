@@ -1,0 +1,195 @@
+package br.com.caelum.vraptor.http;
+
+import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.FieldVisitor;
+import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Opcodes;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import br.com.caelum.vraptor.resource.ResourceMethod;
+
+public class AsmBasedTypeCreator implements TypeCreator, Opcodes {
+
+    private static final Logger logger = LoggerFactory.getLogger(AsmBasedTypeCreator.class);
+
+    /*
+     * we require the class loading counter in order to work under the same
+     * classloader during tests. better than forking per tests (which is
+     * sooooooo slow)
+     */
+    private static int classLoadCounter = 0;
+
+    public Class<?> typeFor(ResourceMethod method) {
+        Method reflectionMethod = method.getMethod();
+
+        final String newTypeName = reflectionMethod.getDeclaringClass().getSimpleName().replace('.','/') + "$" + reflectionMethod.getName()
+                + "$" + Math.abs(reflectionMethod.hashCode()) + "$" + (++classLoadCounter);
+        logger.debug("Trying to make class for " + newTypeName);
+
+        ClassWriter cw = new ClassWriter(0);
+
+        cw.visit(V1_6, ACC_PUBLIC + ACC_SUPER, newTypeName, null, "java/lang/Object", null);
+
+        {
+            MethodVisitor mv = cw.visitMethod(ACC_PUBLIC, "<init>", "()V", null, null);
+            mv.visitCode();
+            mv.visitVarInsn(ALOAD, 0);
+            mv.visitMethodInsn(INVOKESPECIAL, "java/lang/Object", "<init>", "()V");
+            mv.visitInsn(RETURN);
+            mv.visitMaxs(1, 1);
+            mv.visitEnd();
+        }
+        StringBuilder valueLists = new StringBuilder();
+        java.lang.reflect.Type[] types = reflectionMethod.getGenericParameterTypes();
+        for (java.lang.reflect.Type type : types) {
+
+            if (type instanceof ParameterizedType) {
+                parse(cw, (ParameterizedType) type, valueLists, newTypeName);
+            } else if (type instanceof Class) {
+                parse(cw, (Class) type, valueLists, newTypeName);
+            } else {
+                throw new IllegalArgumentException("Unable to identify field " + type + " of type "
+                        + type.getClass().getName());
+            }
+
+        }
+        cw.visitEnd();
+        final byte[] bytes = cw.toByteArray();
+        ClassLoader loader = new ClassLoader() {
+            public Class<?> loadClass(String name) throws ClassNotFoundException {
+                if (name.equals(newTypeName)) {
+                    this.defineClass(newTypeName, bytes, 0, bytes.length);
+                }
+                return super.loadClass(name);
+            }
+        };
+        try {
+            Class<?> found = loader.loadClass(newTypeName);
+            System.out.println(Arrays.toString(found.getDeclaredMethods()));
+            System.out.println(Arrays.toString(found.getDeclaredFields()));
+            return found;
+        } catch (ClassNotFoundException e) {
+            // TODO Auto-generated catch block
+            throw new IllegalArgumentException("unable to compile class", e);
+        }
+    }
+
+    private void parse(ClassWriter cw, ParameterizedType type, StringBuilder valueLists, String newTypeName) {
+        String fieldName = extractName(type);
+        String definition = extractTypeDefinition((Class) type.getRawType());
+        String genericDefinition = extractTypeDefinition(type);
+        parse(cw,valueLists,newTypeName, definition, genericDefinition, fieldName, ALOAD, ARETURN);
+        if (valueLists.length() != 0) {
+            valueLists.append(',');
+        }
+        valueLists.append(fieldName + "_");
+    }
+
+    private void parse(ClassWriter cw, StringBuilder valueLists, String newTypeName, String definition,
+            String genericDefinition, String fieldName, int loadKey, int returnKey) {
+        System.out.println("Method definition " + definition);
+
+        {
+            FieldVisitor fv = cw.visitField(ACC_PRIVATE, fieldName + "_", definition, genericDefinition, null);
+            fv.visitEnd();
+        }
+        {
+            MethodVisitor mv = cw.visitMethod(ACC_PUBLIC, "set" + fieldName, "(" + definition + ")V",
+                    genericDefinition==null?null: "("+genericDefinition+")V", null);
+            mv.visitCode();
+            mv.visitVarInsn(ALOAD, 0);
+            mv.visitVarInsn(loadKey, 1);
+            mv.visitFieldInsn(PUTFIELD, newTypeName, fieldName + "_", definition);
+            mv.visitInsn(RETURN);
+            mv.visitMaxs(2, 2);
+            mv.visitEnd();
+        }
+        {
+            MethodVisitor mv = cw
+                    .visitMethod(ACC_PUBLIC, "get" + fieldName, "()" + definition, genericDefinition==null?null: "()"+genericDefinition, null);
+            mv.visitCode();
+            mv.visitVarInsn(ALOAD, 0);
+            mv.visitFieldInsn(GETFIELD, newTypeName, fieldName + "_", definition);
+            mv.visitInsn(returnKey);
+            mv.visitMaxs(1, 1);
+            mv.visitEnd();
+        }
+    }
+
+    private String extractName(ParameterizedType type) {
+        Type raw = type.getRawType();
+        String name = JavassistTypeCreator.extractName((Class) raw) + "Of";
+        Type[] types = type.getActualTypeArguments();
+        for(Type t : types) {
+            name += JavassistTypeCreator.extractName((Class) t);
+        }
+        return name;
+    }
+
+    private void parse(ClassWriter cw, Class type, StringBuilder valueLists, String newTypeName) {
+        String fieldName = JavassistTypeCreator.extractName(type);
+        String definition = extractTypeDefinition(type);
+        String genericDefinition = null;
+        parse(cw,valueLists,newTypeName,definition, genericDefinition, fieldName, loadFor(type), returnFor(type));
+        
+        if (valueLists.length() != 0) {
+            valueLists.append(',');
+        }
+        if (type.isPrimitive()) {
+            valueLists.append(JavassistTypeCreator.wrapperCodeFor(type, fieldName + "_"));
+        } else {
+            valueLists.append(fieldName + "_");
+        }
+    }
+    
+    private int returnFor(Class type) {
+        return type.isPrimitive()? IRETURN : ARETURN;
+    }
+
+    private int loadFor(Class type) {
+        return type.isPrimitive() ? ILOAD : ALOAD;
+    }
+
+    static Map<Class,String> mapped = new HashMap<Class, String>();
+    static {
+        mapped.put(boolean.class, "Z");
+        mapped.put(int.class, "I");
+        mapped.put(short.class, "S");
+        mapped.put(long.class, "J");
+        mapped.put(double.class, "D");
+        mapped.put(float.class, "F");
+        mapped.put(byte.class, "B");
+        mapped.put(char.class, "C");
+    }
+
+    private String extractTypeDefinition(Class type) {
+        if(type.isArray()) {
+            return "[" + extractTypeDefinition(type.getComponentType());
+        }
+        if (type.isPrimitive()) {
+            return mapped.get(type);
+        }
+        return 'L' + type.getName().replace('.', '/') + ';';
+    }
+
+
+    private String extractTypeDefinition(ParameterizedType type) {
+        Type raw = type.getRawType();
+        String name = extractTypeDefinition((Class) raw);
+        name = name.substring(0,name.length()-1) + "<";
+        Type[] types = type.getActualTypeArguments();
+        for(Type t : types) {
+            name += extractTypeDefinition((Class) t);
+        }
+        return name + ">;";
+    }
+
+}

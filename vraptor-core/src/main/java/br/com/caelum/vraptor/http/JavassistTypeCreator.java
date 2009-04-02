@@ -77,14 +77,14 @@ public class JavassistTypeCreator implements TypeCreator {
         }
     }
 
-    private String extractTypeDefinition(Class type) {
+    static String extractTypeDefinition(Class type) {
         if (type.isArray()) {
             return type.getComponentType().getName() + "[] ";
         }
         return type.getName();
     }
 
-    private String extractName(Class type) {
+    static String extractName(Class type) {
         if (type.isArray()) {
             return type.getComponentType().getSimpleName();
         }
@@ -103,7 +103,7 @@ public class JavassistTypeCreator implements TypeCreator {
         wrapper.put(boolean.class, "Boolean.valueOf(");
     }
 
-    private String wrapperCodeFor(Class<?> type, String fieldName) {
+    static String wrapperCodeFor(Class<?> type, String fieldName) {
         return wrapper.get(type) + fieldName + ")";
     }
 

@@ -1,12 +1,16 @@
 package br.com.caelum.vraptor.http;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
+import ognl.NullHandler;
 import ognl.Ognl;
 import ognl.OgnlException;
+import ognl.OgnlRuntime;
+import br.com.caelum.vraptor.http.ognl.ContainerBasedNullHandler;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 public class OgnlParametersProvider implements ParametersProvider {
@@ -18,6 +22,7 @@ public class OgnlParametersProvider implements ParametersProvider {
     public OgnlParametersProvider(HttpServletRequest request, TypeCreator creator) {
         this.creator = creator;
         this.request = request;
+        OgnlRuntime.setNullHandler(Object.class, new ContainerBasedNullHandler());
     }
 
     public Object[] getParametersFor(ResourceMethod method) {

@@ -1,6 +1,6 @@
 right now:
 
-1. method parameter support with ognl
+- nullhandler should be able to instantiate generic collections 
 2. either instantiate objects with Container: NullHandler
 3. paranamer support
 4. ognl TypeConverter (DTC)
@@ -16,6 +16,8 @@ projo
 - further log
 - MIRROR usage as a fallback for OGNL instantiation
 - MIRROR usage everywhere
+- custom converter based on locale
+- better exception handling everywhere
 
 site docs (prior to release)
 - doc how to change the PathResolver algorithm

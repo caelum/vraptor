@@ -62,6 +62,7 @@ public class VRaptor implements Filter {
         BasicConfiguration config = new BasicConfiguration(servletContext);
         this.provider = config.getProvider();
         this.provider.start(servletContext);
+        logger.info("VRaptor 3 successfuly initialized");
     }
 
 }

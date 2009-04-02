@@ -2,7 +2,6 @@ package br.com.caelum.vraptor.http;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,6 +13,7 @@ import org.objectweb.asm.Opcodes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import br.com.caelum.vraptor.http.asm.NameCreator;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 public class AsmBasedTypeCreator implements TypeCreator, Opcodes {
@@ -21,6 +21,7 @@ public class AsmBasedTypeCreator implements TypeCreator, Opcodes {
     private static final Logger logger = LoggerFactory.getLogger(AsmBasedTypeCreator.class);
     
     private static final SignatureConverter CONVERTER = new SignatureConverter();
+    private static final NameCreator NAMER = new NameCreator();
 
     /*
      * we require the class loading counter in order to work under the same
@@ -65,10 +66,11 @@ public class AsmBasedTypeCreator implements TypeCreator, Opcodes {
         }
         cw.visitEnd();
         final byte[] bytes = cw.toByteArray();
-        ClassLoader loader = new ClassLoader() {
+        
+        ClassLoader loader = new ClassLoader(this.getClass().getClassLoader()) {
             public Class<?> loadClass(String name) throws ClassNotFoundException {
                 if (name.equals(newTypeName)) {
-                    this.defineClass(newTypeName, bytes, 0, bytes.length);
+                    return this.defineClass(newTypeName, bytes, 0, bytes.length);
                 }
                 return super.loadClass(name);
             }
@@ -85,7 +87,7 @@ public class AsmBasedTypeCreator implements TypeCreator, Opcodes {
     }
 
     private void parse(ClassWriter cw, ParameterizedType type, StringBuilder valueLists, String newTypeName) {
-        String fieldName = extractName(type);
+        String fieldName = NAMER.extractName(type);
         String definition = CONVERTER.extractTypeDefinition((Class<?>) type.getRawType());
         String genericDefinition = CONVERTER.extractTypeDefinition(type);
         parse(cw,valueLists,newTypeName, definition, genericDefinition, fieldName, ALOAD, ARETURN);
@@ -126,25 +128,8 @@ public class AsmBasedTypeCreator implements TypeCreator, Opcodes {
         }
     }
 
-    private String extractName(ParameterizedType type) {
-        Type raw = type.getRawType();
-        String name = extractName((Class) raw) + "Of";
-        Type[] types = type.getActualTypeArguments();
-        for(Type t : types) {
-            name += extractName((Class) t);
-        }
-        return name;
-    }
-
-    private String extractName(Class type) {
-        if(type.isArray()) {
-            return type.getComponentType().getSimpleName();
-        }
-        return type.getSimpleName();
-    }
-
     private void parse(ClassWriter cw, Class type, StringBuilder valueLists, String newTypeName) {
-        String fieldName = extractName(type);
+        String fieldName = NAMER.extractName(type);
         String definition = CONVERTER.extractTypeDefinition(type);
         String genericDefinition = null;
         parse(cw,valueLists,newTypeName,definition, genericDefinition, fieldName, loadFor(type), returnFor(type));
@@ -159,7 +144,7 @@ public class AsmBasedTypeCreator implements TypeCreator, Opcodes {
         }
     }
     
-    private static final Map<Class, String> wrappers = new HashMap<Class,String>();
+    private static final Map<Class<?>, String> wrappers = new HashMap<Class<?>,String>();
     
     static {
         wrappers.put(int.class, "Integer.valueOf(");
@@ -171,11 +156,11 @@ public class AsmBasedTypeCreator implements TypeCreator, Opcodes {
         wrappers.put(char.class, "Character.valueOf(");
     }
     
-    private String wrapperCodeFor(Class type, String fieldName) {
+    private String wrapperCodeFor(Class<?> type, String fieldName) {
         return wrappers.get(type) + fieldName + ")";
     }
 
-    private int returnFor(Class type) {
+    private int returnFor(Class<?> type) {
         return type.isPrimitive()? IRETURN : ARETURN;
     }
 

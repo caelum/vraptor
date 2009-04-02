@@ -6,4 +6,8 @@ public class InterceptionException extends VRaptorException {
         super(e);
     }
 
+    public InterceptionException(String msg) {
+        super(msg);
+    }
+
 }

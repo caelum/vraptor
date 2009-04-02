@@ -1,12 +1,9 @@
 right now:
 
-- report javassist bug: public Object[] gimmeMyValues() { return new Object[]{};}
-
 1. method parameter support with ognl
-2. either instantiate objects with Container or Mirrors using ognl
+2. either instantiate objects with Container: NullHandler
 3. paranamer support
-
-- use asm instead of javassist to instantiate types
+4. ognl TypeConverter (DTC)
 
 - pico container allows interceptor registration
 - pico container common component registration
@@ -17,6 +14,8 @@ right now:
 projo
 
 - further log
+- MIRROR usage as a fallback for OGNL instantiation
+- MIRROR usage everywhere
 
 site docs (prior to release)
 - doc how to change the PathResolver algorithm

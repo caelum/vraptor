@@ -6,4 +6,8 @@ public class VRaptorException extends Exception {
         super(e);
     }
 
+    public VRaptorException(String msg) {
+        super(msg);
+    }
+
 }

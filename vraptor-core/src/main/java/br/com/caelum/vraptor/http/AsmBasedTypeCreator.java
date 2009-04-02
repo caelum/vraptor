@@ -126,16 +126,23 @@ public class AsmBasedTypeCreator implements TypeCreator, Opcodes {
 
     private String extractName(ParameterizedType type) {
         Type raw = type.getRawType();
-        String name = JavassistTypeCreator.extractName((Class) raw) + "Of";
+        String name = extractName((Class) raw) + "Of";
         Type[] types = type.getActualTypeArguments();
         for(Type t : types) {
-            name += JavassistTypeCreator.extractName((Class) t);
+            name += extractName((Class) t);
         }
         return name;
     }
 
+    private String extractName(Class type) {
+        if(type.isArray()) {
+            return type.getComponentType().getSimpleName();
+        }
+        return type.getSimpleName();
+    }
+
     private void parse(ClassWriter cw, Class type, StringBuilder valueLists, String newTypeName) {
-        String fieldName = JavassistTypeCreator.extractName(type);
+        String fieldName = extractName(type);
         String definition = extractTypeDefinition(type);
         String genericDefinition = null;
         parse(cw,valueLists,newTypeName,definition, genericDefinition, fieldName, loadFor(type), returnFor(type));
@@ -144,12 +151,28 @@ public class AsmBasedTypeCreator implements TypeCreator, Opcodes {
             valueLists.append(',');
         }
         if (type.isPrimitive()) {
-            valueLists.append(JavassistTypeCreator.wrapperCodeFor(type, fieldName + "_"));
+            valueLists.append(wrapperCodeFor(type, fieldName + "_"));
         } else {
             valueLists.append(fieldName + "_");
         }
     }
     
+    private static final Map<Class, String> wrappers = new HashMap<Class,String>();
+    
+    static {
+        wrappers.put(int.class, "Integer.valueOf(");
+        wrappers.put(boolean.class, "Boolean.valueOf(");
+        wrappers.put(short.class, "Short.valueOf(");
+        wrappers.put(long.class, "Long.valueOf(");
+        wrappers.put(double.class, "Double.valueOf(");
+        wrappers.put(float.class, "Float.valueOf(");
+        wrappers.put(char.class, "Character.valueOf(");
+    }
+    
+    private String wrapperCodeFor(Class type, String fieldName) {
+        return wrappers.get(type) + fieldName + ")";
+    }
+
     private int returnFor(Class type) {
         return type.isPrimitive()? IRETURN : ARETURN;
     }

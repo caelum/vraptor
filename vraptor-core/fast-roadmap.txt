@@ -67,6 +67,7 @@ later customization (after first release)
 - generic interface support
 - allow private/protected constructors (search for every newInstance with getConstructor and setAccessible them, work it out with pico/mirror and so on)
 - allow private/protected getters/setters (ognl?)
+- custom converters for specified method parameters
 
 done:
 - support @Path

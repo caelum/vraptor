@@ -2,17 +2,19 @@ package br.com.caelum.vraptor.http;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
-import java.util.Map;
+import java.util.List;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
 import ognl.Ognl;
+import ognl.OgnlContext;
 import ognl.OgnlException;
 import ognl.OgnlRuntime;
 import br.com.caelum.vraptor.converter.OgnlToConvertersController;
 import br.com.caelum.vraptor.core.Converters;
-import br.com.caelum.vraptor.http.ognl.ContainerBasedNullHandler;
+import br.com.caelum.vraptor.http.ognl.ListAccessor;
+import br.com.caelum.vraptor.http.ognl.ReflectionBasedNullHandler;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
@@ -31,19 +33,20 @@ public class OgnlParametersProvider implements ParametersProvider {
         this.request = request;
         this.container = container;
         this.converters = converters;
-        OgnlRuntime.setNullHandler(Object.class, new ContainerBasedNullHandler());
+        OgnlRuntime.setNullHandler(Object.class, new ReflectionBasedNullHandler());
+        OgnlRuntime.setPropertyAccessor(List.class, new ListAccessor());
     }
 
     public Object[] getParametersFor(ResourceMethod method) {
         try {
             Class<?> type = creator.typeFor(method);
             Object root = type.getDeclaredConstructor().newInstance();
-            Map context = Ognl.createDefaultContext(root);
+            OgnlContext context = (OgnlContext) Ognl.createDefaultContext(root);
+            context.setTraceEvaluations(true);
             context.put(Container.class,this.container);
             Ognl.setTypeConverter(context, new OgnlToConvertersController(converters));
             for(String key : (Set<String>)request.getParameterMap().keySet()) {
                 String[] values = request.getParameterValues(key);
-                //Map<Class,Object> context= new HashMap<Class,Object>();
                 Ognl.setValue(key, context,root, values.length==1 ? values[0] : values);
             }
             Type[] types = method.getMethod().getGenericParameterTypes();

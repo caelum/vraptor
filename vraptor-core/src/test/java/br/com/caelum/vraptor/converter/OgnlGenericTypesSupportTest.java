@@ -53,11 +53,11 @@ public class OgnlGenericTypesSupportTest {
     }
 
     public static class Cat {
-        private List<Integer> legLength;
-        public void setLegLength(List<Integer> legLength) {
+        private List<String> legLength;
+        public void setLegLength(List<String> legLength) {
             this.legLength = legLength;
         }
-        public List<Integer> getLegLength() {
+        public List<String> getLegLength() {
             return legLength;
         }
         public void setLegs(List<Leg> legs) {
@@ -86,5 +86,15 @@ public class OgnlGenericTypesSupportTest {
         Ognl.setValue("legs[0].color", context, myCat, "red");
         assertThat(myCat.legs.get(0).color, is(equalTo("red")));
     }
+
+    @Test
+    public void isCapableOfInstantiatingStringsInAListSettingItsInternalValue() throws OgnlException {
+        Ognl.setValue("legLength[0]", context, myCat, "small");
+        List<String> legs = myCat.legLength;
+        assertThat(legs.get(0), is(equalTo("small")));
+        Ognl.setValue("legLength[1]", context, myCat, "big");
+        assertThat(legs.get(1), is(equalTo("big")));
+    }
+
 
 }

@@ -1,13 +1,12 @@
 package br.com.caelum.vraptor.ioc.pico;
 
-import br.com.caelum.vraptor.ioc.pico.DirScanner;
-import br.com.caelum.vraptor.resource.ResourceRegistry;
-import br.com.caelum.vraptor.resource.Resource;
-
 import java.io.File;
 import java.util.List;
 
 import javax.servlet.ServletContext;
+
+import br.com.caelum.vraptor.resource.Resource;
+import br.com.caelum.vraptor.resource.ResourceRegistry;
 
 public class WebInfClassesScanner implements ResourceLocator {
 

@@ -1,10 +1,11 @@
 package br.com.caelum.vraptor.ioc.spring;
 
-import br.com.caelum.vraptor.In;
+import java.lang.reflect.Constructor;
+
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor;
 
-import java.lang.reflect.Constructor;
+import br.com.caelum.vraptor.In;
 
 /**
  * Enhances the default behavior from Spring, adding support to injection

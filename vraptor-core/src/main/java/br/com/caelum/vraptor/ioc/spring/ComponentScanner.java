@@ -1,7 +1,7 @@
 package br.com.caelum.vraptor.ioc.spring;
 
-import org.springframework.context.annotation.ClassPathBeanDefinitionScanner;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
+import org.springframework.context.annotation.ClassPathBeanDefinitionScanner;
 
 /**
  * @author Fabio Kung

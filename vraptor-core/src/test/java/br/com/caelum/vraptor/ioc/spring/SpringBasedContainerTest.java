@@ -1,12 +1,10 @@
 package br.com.caelum.vraptor.ioc.spring;
 
-import org.junit.Test;
-import org.junit.Assert;
-import org.junit.Before;
-import static org.junit.Assert.*;
-import org.jmock.Mockery;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
-import javax.servlet.ServletContext;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * @author Fabio Kung

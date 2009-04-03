@@ -7,13 +7,13 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.objectweb.asm.ClassWriter;
-import org.objectweb.asm.FieldVisitor;
-import org.objectweb.asm.MethodVisitor;
-import org.objectweb.asm.Opcodes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import br.com.caelum.vraptor.asm.ClassWriter;
+import br.com.caelum.vraptor.asm.FieldVisitor;
+import br.com.caelum.vraptor.asm.MethodVisitor;
+import br.com.caelum.vraptor.asm.Opcodes;
 import br.com.caelum.vraptor.http.asm.NameCreator;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 

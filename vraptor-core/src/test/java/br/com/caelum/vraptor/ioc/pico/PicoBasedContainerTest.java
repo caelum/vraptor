@@ -5,7 +5,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;

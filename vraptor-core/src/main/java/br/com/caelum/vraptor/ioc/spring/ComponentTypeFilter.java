@@ -1,18 +1,18 @@
 package br.com.caelum.vraptor.ioc.spring;
 
-import org.springframework.core.type.filter.TypeFilter;
+import java.io.IOException;
+import java.lang.annotation.Annotation;
+import java.util.ArrayList;
+import java.util.Collection;
+
+import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.core.type.classreading.MetadataReader;
 import org.springframework.core.type.classreading.MetadataReaderFactory;
-import org.springframework.core.type.AnnotationMetadata;
+import org.springframework.core.type.filter.TypeFilter;
 
-import java.lang.annotation.Annotation;
-import java.util.Collection;
-import java.util.ArrayList;
-import java.io.IOException;
-
+import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.ioc.Stereotype;
-import br.com.caelum.vraptor.Resource;
 
 /**
  * @author Fabio Kung

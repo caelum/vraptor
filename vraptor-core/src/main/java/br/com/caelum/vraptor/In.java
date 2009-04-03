@@ -1,7 +1,5 @@
 package br.com.caelum.vraptor;
 
-import br.com.caelum.vraptor.ioc.Stereotype;
-
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

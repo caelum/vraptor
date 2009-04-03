@@ -1,8 +1,8 @@
 package br.com.caelum.vraptor.core;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.ServletContext;
 
 /**
  * @author Fabio Kung

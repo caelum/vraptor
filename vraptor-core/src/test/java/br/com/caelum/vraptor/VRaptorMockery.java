@@ -6,6 +6,7 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.internal.ExpectationBuilder;
 
+import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 

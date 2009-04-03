@@ -1,19 +1,18 @@
 right now:
 
-- nullhandler should be able to instantiate generic collections 
-2. either instantiate objects with Container: NullHandler
-3. paranamer support
-4. ognl TypeConverter (DTC)
+- interceptor registration real support
+- copyright caelum
 
-- pico container allows interceptor registration
-- pico container common component registration
 
-- use mirrors where there is reflection 
-- support @Path with nice urls
+
+
+
 
 projo
 
+- ContainerBasedNullHandler support (non cached instances)
 - further log
+- reflection fallback system on nullhandler (automatic?)
 - MIRROR usage as a fallback for OGNL instantiation
 - MIRROR usage everywhere
 - custom converter based on locale
@@ -24,9 +23,20 @@ site docs (prior to release)
 - doc how to use PageResult directly
 - doc how to configure log
 - faq xxx doesnt work: activate log
+- no array support (ognl sucks)
+
+vraptor 2 support
+
+- instantiate with injection
+- setters/getters for value injection
+- method invocation without parameters
+- method invocation w parameters
+- interceptor invocation
 
 kung help
 
+- paranamer support
+- support @Path with nice urls
 - support Validator
 - full spring support
 - concatenate convertion and validation errors
@@ -54,6 +64,11 @@ later customization (after first release)
 - hibernate validation plugin
 - guice support
 - hibernate plugin
+- array new instance support
+- enum support
+- map support
+- list/set support, Collection, SortedSet, Queue, SortedMap support
+- generic interface support
 
 done:
 - support @Path
@@ -70,3 +85,5 @@ done:
 - default strategy: resourceclass + resourcemethod
 - sl4j usage
 - interceptor support
+- type converters
+- ognl support

@@ -2,6 +2,7 @@ package br.com.caelum.vraptor.http;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -166,6 +167,13 @@ public class AsmBasedTypeCreator implements TypeCreator, Opcodes {
 
     private int loadFor(Class<?> type) {
         return type.isPrimitive() ? ILOAD : ALOAD;
+    }
+
+    public String nameFor(Type type) {
+        if(type instanceof ParameterizedType) {
+            return NAMER.extractName((ParameterizedType) type);
+        }
+        return NAMER.extractName((Class) type);
     }
 
 }

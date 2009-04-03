@@ -7,17 +7,14 @@ import java.lang.reflect.Type;
 import java.util.Map;
 
 import ognl.NullHandler;
-import br.com.caelum.vraptor.ioc.Container;
 
-public class ContainerBasedNullHandler implements NullHandler {
+public class ReflectionBasedNullHandler implements NullHandler {
 
     public Object nullMethodResult(Map context, Object target, String methodName, Object[] args) {
         return null;
     }
 
     public Object nullPropertyValue(Map context, Object target, Object property) {
-        Container container = (Container) context.get(Container.class);
-        // TODO UNCACHED INSTANCES!!!!
         Method method = findMethod(target.getClass(), "get" + translate((String) property), target.getClass());
         Type returnType = method.getGenericReturnType();
         if (returnType instanceof ParameterizedType) {
@@ -25,7 +22,12 @@ public class ContainerBasedNullHandler implements NullHandler {
             returnType = paramType.getRawType();
         }
         try {
-            Object instance = ((Class<?>) returnType).newInstance();
+            Class<?> baseType = (Class<?>) returnType;
+            if(baseType.isArray()) {
+                // TODO better
+                throw new IllegalArgumentException("Vraptor does not support array types: use lists instead!");
+            }
+            Object instance = baseType.newInstance();
             Method setter= findMethod(target.getClass(), "set" + translate((String) property), target.getClass(), method.getReturnType());
             setter.invoke(target, instance);
             return instance;

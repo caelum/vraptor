@@ -15,27 +15,6 @@ import br.com.caelum.vraptor.view.jsp.PageResult;
 public class ClientsController {
 
     private static final List<Client> clients = new ArrayList<Client>();
-    private static Client client(String name) {
-        Client c = new Client();
-        c.setName(name);
-        return c;
-    }
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     private final Result result;
 

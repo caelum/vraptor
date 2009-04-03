@@ -4,6 +4,10 @@ import java.util.List;
 
 public class Client {
     
+    private Long id;
+
+    private int age;
+    
     private String name;
     
     private List<String> emails;
@@ -32,6 +36,22 @@ public class Client {
 
     public List<Address> getAddresses() {
         return addresses;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getId() {
+        return id;
     }
 
 }

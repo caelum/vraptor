@@ -1,10 +1,7 @@
 right now:
 
-- converters working
 - interceptor registration real support
 - copyright caelum
-
-- increase test coverage
 
 
 
@@ -12,6 +9,10 @@ right now:
 
 projo
 
+- converters: Enum String, Enum Ordinal, Date, Calendar, FixedLocaleCalendar, FixedLocaleDate
+- converters: long, boolean, char, short, byte, double, float
+- converters: jodatime
+- converters WRAPPERS: boolean, char, short, byte, double, float
 - enum support (prior)
 - ContainerBasedNullHandler support (non cached instances)
 - further log
@@ -20,6 +21,7 @@ projo
 - MIRROR usage everywhere
 - custom converter based on locale
 - better exception handling everywhere (prior)
+- converters: File
 
 site docs (prior to release)
 - doc how to change the PathResolver algorithm
@@ -71,6 +73,11 @@ later customization (after first release)
 - allow private/protected constructors (search for every newInstance with getConstructor and setAccessible them, work it out with pico/mirror and so on)
 - allow private/protected getters/setters (ognl?)
 - custom converters for specified method parameters
+- setting errors during ognl expression evaluation should be defined as validation errors
+- biginteger, bigdecimal support
+- allow registering of global converters
+- allows registering of specific converters (model or method based)
+
 
 done:
 - support @Path

@@ -15,9 +15,6 @@ import br.com.caelum.vraptor.view.jsp.PageResult;
 public class ClientsController {
 
     private static final List<Client> clients = new ArrayList<Client>();
-    static {
-        clients.add(client("Guilherme"));
-    }
     private static Client client(String name) {
         Client c = new Client();
         c.setName(name);
@@ -54,6 +51,7 @@ public class ClientsController {
 
     @Path("/clients/add")
     public void add(Client c) throws ServletException, IOException {
+        clients.add(c);
         result.include("client", c);
         result.use(PageResult.jsp()).forward("ok");
     }

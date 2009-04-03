@@ -15,14 +15,14 @@ import br.com.caelum.vraptor.Interceptor;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 public class DefaultInterceptorStackTest {
-    
+
     int count;
-    
+
     @Before
     public void setup() {
         count = 0;
     }
-    
+
     @Test
     public void testInvokesAllInterceptorsInItsCorrectOrder() throws IOException, InterceptionException {
         DefaultInterceptorStack stack = new DefaultInterceptorStack(null);
@@ -30,22 +30,24 @@ public class DefaultInterceptorStackTest {
         CountInterceptor second = new CountInterceptor();
         stack.add(first);
         stack.add(second);
-        stack.next(null,null);
+        stack.next(null, null);
         assertThat(first.run, is(equalTo(0)));
         assertThat(second.run, is(equalTo(1)));
     }
-    
-    class CountInterceptor implements Interceptor{
+
+    class CountInterceptor implements Interceptor {
         int run;
 
-        public void intercept(InterceptorStack invocation, ResourceMethod method, Object resourceInstance) throws IOException, InterceptionException {
+        public void intercept(InterceptorStack invocation, ResourceMethod method, Object resourceInstance)
+                throws IOException, InterceptionException {
             run = count++;
             invocation.next(method, resourceInstance);
         }
     }
 
     @Test
-    public void shouldAddTheListOfInterceptorsAsFollowingInterceptorsInTheReverseOrderAsItsRunInTheLastAddedToFirstAddedOrder() throws InterceptionException, IOException {
+    public void shouldAddTheListOfInterceptorsAsFollowingInterceptorsInTheReverseOrderAsItsRunInTheLastAddedToFirstAddedOrder()
+            throws InterceptionException, IOException {
         Assert.fail("should check it was added in reverse order");
     }
 

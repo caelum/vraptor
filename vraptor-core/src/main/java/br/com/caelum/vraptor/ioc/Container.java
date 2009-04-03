@@ -13,5 +13,7 @@ public interface Container {
     <T> T instanceFor(Class<T> type);
 
     void register(Object instance);
+    
+    <T> void register(Class<T> type);
 
 }

@@ -44,6 +44,7 @@ public class OgnlParametersProvider implements ParametersProvider {
             OgnlContext context = (OgnlContext) Ognl.createDefaultContext(root);
             context.setTraceEvaluations(true);
             context.put(Container.class,this.container);
+            
             Ognl.setTypeConverter(context, new OgnlToConvertersController(converters));
             for(String key : (Set<String>)request.getParameterMap().keySet()) {
                 String[] values = request.getParameterValues(key);

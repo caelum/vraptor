@@ -6,8 +6,8 @@ package br.com.caelum.vraptor;
  * 
  * @author Guilherme Silveira
  */
-public interface Converter {
+public interface Converter<T> {
 
-    Object convert(String value);
+    T convert(String value);
 
 }

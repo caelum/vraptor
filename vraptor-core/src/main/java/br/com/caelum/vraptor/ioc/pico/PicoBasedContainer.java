@@ -3,6 +3,7 @@ package br.com.caelum.vraptor.ioc.pico;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.PicoBuilder;
 
+import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.core.DefaultConverters;
 import br.com.caelum.vraptor.core.DefaultInterceptorStack;
 import br.com.caelum.vraptor.core.DefaultRequestExecution;
@@ -44,6 +45,10 @@ public class PicoBasedContainer implements Container {
 
     public void register(Object instance) {
         this.container.addComponent(instance);
+    }
+
+    public <T> void register(Class<T> type) {
+        this.container.addComponent(type);
     }
 
 }

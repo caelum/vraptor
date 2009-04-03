@@ -1,8 +1,7 @@
 package br.com.caelum.vraptor.http.ognl;
 
-import java.util.List;
-
 import ognl.Ognl;
+import ognl.OgnlContext;
 import ognl.OgnlException;
 import ognl.OgnlRuntime;
 
@@ -14,73 +13,45 @@ import org.junit.Test;
 public class ReflectionBasedNullHandlerTest {
     
     private ReflectionBasedNullHandler handler;
+    private OgnlContext context;
 
     @Before
     public void setup() {
         this.handler = new ReflectionBasedNullHandler();
+        this.context = (OgnlContext) Ognl.createDefaultContext(null);
+        context.setTraceEvaluations(true);
     }
     
     @Test
     public void shouldInstantiateAnObjectIfRequiredToSetAProperty() throws OgnlException {
         OgnlRuntime.setNullHandler(House.class, handler);
         House house = new House();
-        Ognl.setValue("cat.name", house, "James");
-        MatcherAssert.assertThat(house.getCat().getName(), Matchers.is(Matchers.equalTo("James")));
+        Ognl.setValue("mouse.name",context, house, "James");
+        MatcherAssert.assertThat(house.getMouse().getName(), Matchers.is(Matchers.equalTo("James")));
     }
     @Test
     public void shouldInstantiateAListOfStrings() throws OgnlException {
         OgnlRuntime.setNullHandler(House.class, handler);
-        OgnlRuntime.setNullHandler(Cat.class, handler);
+        OgnlRuntime.setNullHandler(Mouse.class, handler);
         House house = new House();
-        Ognl.setValue("cat.eyeColors[0]", house, "Blue");
-        Ognl.setValue("cat.eyeColors[1]", house, "Green");
-        MatcherAssert.assertThat(house.getCat().getEyeColors().get(0), Matchers.is(Matchers.equalTo("Blue")));
-        MatcherAssert.assertThat(house.getCat().getEyeColors().get(1), Matchers.is(Matchers.equalTo("Green")));
+        Ognl.setValue("mouse.eyeColors[0]",context, house, "Blue");
+        Ognl.setValue("mouse.eyeColors[1]", context,house, "Green");
+        MatcherAssert.assertThat(house.getMouse().getEyeColors().get(0), Matchers.is(Matchers.equalTo("Blue")));
+        MatcherAssert.assertThat(house.getMouse().getEyeColors().get(1), Matchers.is(Matchers.equalTo("Green")));
     }
 
     public static class House {
-        private Cat cat;
+        private Mouse mouse;
 
-        public void setCat(Cat cat) {
-            this.cat = cat;
+        public void setMouse(Mouse cat) {
+            this.mouse = cat;
         }
 
-        public Cat getCat() {
-            return cat;
+        public Mouse getMouse() {
+            return mouse;
         }
         
     }
     
 
-}
-class Cat{
-    private String name;
-    
-    private List<String> eyeColors;
-
-    private int[] legSize;
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setEyeColors(List<String> eyeColors) {
-        this.eyeColors = eyeColors;
-    }
-
-    public List<String> getEyeColors() {
-        return eyeColors;
-    }
-
-    public void setLegSize(int[] legSize) {
-        this.legSize = legSize;
-    }
-
-    public int[] getLegSize() {
-        return legSize;
-    }
 }

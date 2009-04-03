@@ -16,13 +16,18 @@ public class ReflectionBasedNullHandler extends ObjectNullHandler {
 
     private static final Map<Class<?>, Class<?>> CONCRETE_TYPES = new HashMap<Class<?>, Class<?>>();
 
+    private static final CustomHandlers HANDLERS = new CachedCustomHandlers(new DefaultCustomHandlers());
+
     static {
         CONCRETE_TYPES.put(List.class, ArrayList.class);
+        HANDLERS.register(new GenericObjectHandler());
     }
 
+    @SuppressWarnings("unchecked")
     public Object nullPropertyValue(Map context, Object target, Object property) {
 
         OgnlContext ctx = (OgnlContext) context;
+
         int indexInParent = ctx.getCurrentEvaluation().getNode().getIndexInParent();
         int maxIndex = ctx.getRootEvaluation().getNode().jjtGetNumChildren() - 1;
 
@@ -30,13 +35,35 @@ public class ReflectionBasedNullHandler extends ObjectNullHandler {
             return null;
         }
 
-        Method method = findMethod(target.getClass(), "get" + translate((String) property), target.getClass());
-        Type returnType = method.getGenericReturnType();
-        if (returnType instanceof ParameterizedType) {
-            ParameterizedType paramType = (ParameterizedType) returnType;
-            returnType = paramType.getRawType();
-        }
         try {
+            if (target instanceof List) {
+                int index = (Integer) property;
+                Object listHolder = ctx.getCurrentEvaluation().getPrevious().getSource();
+                String listPropertyName = ctx.getCurrentEvaluation().getPrevious().getNode().toString();
+                Method listSetter = findMethod(listHolder.getClass(), "set" + translate((String) listPropertyName),
+                        target.getClass());
+                Type[] types = listSetter.getGenericParameterTypes();
+                Type type = types[0];
+                if (!(type instanceof ParameterizedType)) {
+                    // TODO better
+                    throw new IllegalArgumentException("Vraptor does not support non-generic collection at "
+                            + listSetter.getName());
+                }
+                Object instance = ((Class)((ParameterizedType) type).getActualTypeArguments()[0]).getConstructor().newInstance();
+                List list = (List) target;
+                while (list.size() < index) {
+                    list.add(null);
+                }
+                list.add(instance);
+                return instance;
+            }
+
+            Method method = findMethod(target.getClass(), "get" + translate((String) property), target.getClass());
+            Type returnType = method.getGenericReturnType();
+            if (returnType instanceof ParameterizedType) {
+                ParameterizedType paramType = (ParameterizedType) returnType;
+                returnType = paramType.getRawType();
+            }
             Class<?> baseType = (Class<?>) returnType;
             if (baseType.isArray()) {
                 // TODO better
@@ -51,9 +78,8 @@ public class ReflectionBasedNullHandler extends ObjectNullHandler {
                 }
                 typeToInstantiate = CONCRETE_TYPES.get(baseType);
             }
-            Object instance = typeToInstantiate.newInstance();
-            Method setter = findMethod(target.getClass(), "set" + translate((String) property), target.getClass(),
-                    method.getReturnType());
+            Object instance = typeToInstantiate.getConstructor().newInstance();
+            Method setter = findMethod(target.getClass(), "set" + translate((String) property), target.getClass());
             setter.invoke(target, instance);
             return instance;
         } catch (InstantiationException e) {
@@ -62,10 +88,13 @@ public class ReflectionBasedNullHandler extends ObjectNullHandler {
         } catch (IllegalAccessException e) {
             // TODO better
             throw new IllegalArgumentException(e);
-        } catch (IllegalArgumentException e) {
+        } catch (InvocationTargetException e) {
             // TODO better
             throw new IllegalArgumentException(e);
-        } catch (InvocationTargetException e) {
+        } catch (SecurityException e) {
+            // TODO better
+            throw new IllegalArgumentException(e);
+        } catch (NoSuchMethodException e) {
             // TODO better
             throw new IllegalArgumentException(e);
         }
@@ -76,20 +105,18 @@ public class ReflectionBasedNullHandler extends ObjectNullHandler {
                 + property.substring(1);
     }
 
-    private Method findMethod(Class<? extends Object> type, String name, Class<? extends Object> baseType,
-            Class<?>... params) {
-        try {
-            return type.getDeclaredMethod(name, params);
-        } catch (SecurityException e) {
-            // TODO better
-            throw new IllegalArgumentException(e);
-        } catch (NoSuchMethodException e) {
-            if (type.equals(Object.class)) {
-                // TODO better
-                throw new IllegalArgumentException("Unable to find getter for " + name + " @ " + baseType.getName());
+    private Method findMethod(Class<? extends Object> type, String name, Class<? extends Object> baseType) {
+        Method[] methods = type.getDeclaredMethods();
+        for (Method method : methods) {
+            if (method.getName().equals(name)) {
+                return method;
             }
-            return findMethod(type.getSuperclass(), name, type, params);
         }
+        if (type.equals(Object.class)) {
+            // TODO better
+            throw new IllegalArgumentException("Unable to find method for " + name + " @ " + baseType.getName());
+        }
+        return findMethod(type.getSuperclass(), name, type);
     }
 
 }

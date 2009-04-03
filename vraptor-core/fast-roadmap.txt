@@ -65,6 +65,8 @@ later customization (after first release)
 - hibernate plugin
 - Array, Set, Collection, SortedSet, Queue, Map, SortedMap support
 - generic interface support
+- allow private/protected constructors (search for every newInstance with getConstructor and setAccessible them, work it out with pico/mirror and so on)
+- allow private/protected getters/setters (ognl?)
 
 done:
 - support @Path

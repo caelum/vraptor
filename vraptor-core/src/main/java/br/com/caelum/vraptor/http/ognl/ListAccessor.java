@@ -6,6 +6,15 @@ import java.util.Map;
 import ognl.ListPropertyAccessor;
 import ognl.OgnlException;
 
+/**
+ * This list accessor is responsible for setting null values up to the list
+ * size.<br>
+ * Compatibility issues might arrive (in previous vraptor versions, the object
+ * was instantiated instead of null being set).
+ * 
+ * @author Guilherme Silveira
+ * 
+ */
 public class ListAccessor extends ListPropertyAccessor {
 
     @SuppressWarnings("unchecked")

@@ -16,11 +16,8 @@ public class ReflectionBasedNullHandler extends ObjectNullHandler {
 
     private static final Map<Class<?>, Class<?>> CONCRETE_TYPES = new HashMap<Class<?>, Class<?>>();
 
-    private static final CustomHandlers HANDLERS = new CachedCustomHandlers(new DefaultCustomHandlers());
-
     static {
         CONCRETE_TYPES.put(List.class, ArrayList.class);
-        HANDLERS.register(new GenericObjectHandler());
     }
 
     @SuppressWarnings("unchecked")
@@ -31,13 +28,15 @@ public class ReflectionBasedNullHandler extends ObjectNullHandler {
         int indexInParent = ctx.getCurrentEvaluation().getNode().getIndexInParent();
         int maxIndex = ctx.getRootEvaluation().getNode().jjtGetNumChildren() - 1;
 
+        // TODO all those ifs should be methods in mapped types
+
         if (!(indexInParent != -1 && indexInParent < maxIndex)) {
             return null;
         }
 
         try {
             if (target instanceof List) {
-                int index = (Integer) property;
+                int position = (Integer) property;
                 Object listHolder = ctx.getCurrentEvaluation().getPrevious().getSource();
                 String listPropertyName = ctx.getCurrentEvaluation().getPrevious().getNode().toString();
                 Method listSetter = findMethod(listHolder.getClass(), "set" + translate((String) listPropertyName),
@@ -49,12 +48,13 @@ public class ReflectionBasedNullHandler extends ObjectNullHandler {
                     throw new IllegalArgumentException("Vraptor does not support non-generic collection at "
                             + listSetter.getName());
                 }
-                Object instance = ((Class)((ParameterizedType) type).getActualTypeArguments()[0]).getConstructor().newInstance();
+                Object instance = ((Class) ((ParameterizedType) type).getActualTypeArguments()[0]).getConstructor()
+                        .newInstance();
                 List list = (List) target;
-                while (list.size() < index) {
+                while (list.size() <= position) {
                     list.add(null);
                 }
-                list.add(instance);
+                list.set(position, instance);
                 return instance;
             }
 

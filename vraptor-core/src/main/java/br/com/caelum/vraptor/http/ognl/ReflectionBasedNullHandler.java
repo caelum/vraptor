@@ -4,17 +4,32 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import ognl.NullHandler;
+import ognl.ObjectNullHandler;
+import ognl.OgnlContext;
 
-public class ReflectionBasedNullHandler implements NullHandler {
+public class ReflectionBasedNullHandler extends ObjectNullHandler {
 
-    public Object nullMethodResult(Map context, Object target, String methodName, Object[] args) {
-        return null;
+    private static final Map<Class<?>, Class<?>> CONCRETE_TYPES = new HashMap<Class<?>, Class<?>>();
+
+    static {
+        CONCRETE_TYPES.put(List.class, ArrayList.class);
     }
 
     public Object nullPropertyValue(Map context, Object target, Object property) {
+
+        OgnlContext ctx = (OgnlContext) context;
+        int indexInParent = ctx.getCurrentEvaluation().getNode().getIndexInParent();
+        int maxIndex = ctx.getRootEvaluation().getNode().jjtGetNumChildren() - 1;
+
+        if (!(indexInParent != -1 && indexInParent < maxIndex)) {
+            return null;
+        }
+
         Method method = findMethod(target.getClass(), "get" + translate((String) property), target.getClass());
         Type returnType = method.getGenericReturnType();
         if (returnType instanceof ParameterizedType) {
@@ -23,12 +38,22 @@ public class ReflectionBasedNullHandler implements NullHandler {
         }
         try {
             Class<?> baseType = (Class<?>) returnType;
-            if(baseType.isArray()) {
+            if (baseType.isArray()) {
                 // TODO better
                 throw new IllegalArgumentException("Vraptor does not support array types: use lists instead!");
             }
-            Object instance = baseType.newInstance();
-            Method setter= findMethod(target.getClass(), "set" + translate((String) property), target.getClass(), method.getReturnType());
+            Class<?> typeToInstantiate = baseType;
+            if (baseType.isInterface()) {
+                if (!CONCRETE_TYPES.containsKey(baseType)) {
+                    // TODO better
+                    throw new IllegalArgumentException("Vraptor does not support this interface: "
+                            + typeToInstantiate.getName());
+                }
+                typeToInstantiate = CONCRETE_TYPES.get(baseType);
+            }
+            Object instance = typeToInstantiate.newInstance();
+            Method setter = findMethod(target.getClass(), "set" + translate((String) property), target.getClass(),
+                    method.getReturnType());
             setter.invoke(target, instance);
             return instance;
         } catch (InstantiationException e) {
@@ -51,7 +76,8 @@ public class ReflectionBasedNullHandler implements NullHandler {
                 + property.substring(1);
     }
 
-    private Method findMethod(Class<? extends Object> type, String name, Class<? extends Object> baseType, Class<?> ...params) {
+    private Method findMethod(Class<? extends Object> type, String name, Class<? extends Object> baseType,
+            Class<?>... params) {
         try {
             return type.getDeclaredMethod(name, params);
         } catch (SecurityException e) {

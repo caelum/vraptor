@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import ognl.Ognl;
 import ognl.OgnlException;
 import ognl.OgnlRuntime;
-import br.com.caelum.vraptor.converter.OgnlBasedConverterController;
+import br.com.caelum.vraptor.converter.OgnlToConvertersController;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.http.ognl.ContainerBasedNullHandler;
 import br.com.caelum.vraptor.ioc.Container;
@@ -40,7 +40,7 @@ public class OgnlParametersProvider implements ParametersProvider {
             Object root = type.getDeclaredConstructor().newInstance();
             Map context = Ognl.createDefaultContext(root);
             context.put(Container.class,this.container);
-            Ognl.setTypeConverter(context, new OgnlBasedConverterController(converters));
+            Ognl.setTypeConverter(context, new OgnlToConvertersController(converters));
             for(String key : (Set<String>)request.getParameterMap().keySet()) {
                 String[] values = request.getParameterValues(key);
                 //Map<Class,Object> context= new HashMap<Class,Object>();

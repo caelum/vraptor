@@ -7,9 +7,9 @@ right now:
 
 
 
-
 projo
 
+- enum support
 - ContainerBasedNullHandler support (non cached instances)
 - further log
 - reflection fallback system on nullhandler (automatic?)
@@ -23,7 +23,6 @@ site docs (prior to release)
 - doc how to use PageResult directly
 - doc how to configure log
 - faq xxx doesnt work: activate log
-- no array support (ognl sucks)
 
 vraptor 2 support
 
@@ -64,10 +63,7 @@ later customization (after first release)
 - hibernate validation plugin
 - guice support
 - hibernate plugin
-- array new instance support
-- enum support
-- map support
-- list/set support, Collection, SortedSet, Queue, SortedMap support
+- Array, Set, Collection, SortedSet, Queue, Map, SortedMap support
 - generic interface support
 
 done:

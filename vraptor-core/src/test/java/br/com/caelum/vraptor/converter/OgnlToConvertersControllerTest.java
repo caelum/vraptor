@@ -8,11 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import ognl.NullHandler;
 import ognl.Ognl;
-import ognl.OgnlContext;
 import ognl.OgnlException;
-import ognl.OgnlRuntime;
 
 import org.jmock.Expectations;
 import org.junit.Before;
@@ -22,11 +19,11 @@ import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.VRaptorMockery;
 import br.com.caelum.vraptor.core.Converters;
 
-public class OgnlBasedConverterControllerTest {
+public class OgnlToConvertersControllerTest {
 
     private VRaptorMockery mockery;
     private Converters converters;
-    private OgnlBasedConverterController controller;
+    private OgnlToConvertersController controller;
     private Cat myCat;
     private Converter converter;
 
@@ -34,7 +31,7 @@ public class OgnlBasedConverterControllerTest {
     public void setup() {
         this.mockery = new VRaptorMockery();
         this.converters = mockery.mock(Converters.class);
-        this.controller = new OgnlBasedConverterController(converters);
+        this.controller = new OgnlToConvertersController(converters);
         this.converter = mockery.mock(Converter.class);
         this.myCat = new Cat();
     }
@@ -42,7 +39,7 @@ public class OgnlBasedConverterControllerTest {
     public static class Cat {
         private int length;
         private Tail tail;
-        private List<Leg> legs;
+        private List<Leg> legs = new ArrayList<Leg>();
 
         public void setLength(int length) {
             this.length = length;
@@ -117,47 +114,6 @@ public class OgnlBasedConverterControllerTest {
         Ognl.setTypeConverter(context, controller);
         Ognl.setValue("tail", context, myCat, "15");
         assertThat(myCat.tail.length, is(equalTo(15)));
-        mockery.assertIsSatisfied();
-    }
-
-    @Test
-    public void shouldInvokeCustomTypeConverterForGenericCollectionOfTypeConverter() throws OgnlException {
-        mockery.checking(new Expectations() {
-            {
-                one(converters).to(Tail.class);
-                will(returnValue(converter));
-                one(converter).convert("15");
-                will(returnValue(new Tail(15)));
-            }
-        });
-        OgnlRuntime.setNullHandler(Object.class, new NullHandler() {
-
-            public Object nullMethodResult(Map arg0, Object arg1, String arg2, Object[] arg3) {
-                return null;
-            }
-
-            public Object nullPropertyValue(Map context, Object target, Object property) {
-
-                OgnlContext ctx = (OgnlContext) context;
-                int indexInParent = ctx.getCurrentEvaluation().getNode().getIndexInParent();
-                int maxIndex = ctx.getRootEvaluation().getNode().jjtGetNumChildren() - 1;
-                if ( (indexInParent != -1 && indexInParent < maxIndex)) {
-                    // insantiate
-                }
-                if(target instanceof Cat) {
-                    return new ArrayList();
-                }
-                return null;
-            }
-
-        });
-        OgnlContext context = (OgnlContext) Ognl.createDefaultContext(myCat);
-        context.setTraceEvaluations(true);
-        Ognl.setTypeConverter(context, controller);
-        Ognl.setValue("legs[0]", context, myCat, "15");
-        assertThat(myCat.getLegs().get(0).length, is(equalTo(15)));
-        Ognl.setValue("legs[1]", context, myCat, "11");
-        assertThat(myCat.getLegs().get(1).length, is(equalTo(11)));
         mockery.assertIsSatisfied();
     }
 

@@ -9,11 +9,11 @@ import java.util.Map;
 import ognl.TypeConverter;
 import br.com.caelum.vraptor.core.Converters;
 
-public class OgnlBasedConverterController implements TypeConverter {
+public class OgnlToConvertersController implements TypeConverter {
     
     private final Converters converters;
 
-    public OgnlBasedConverterController(Converters converters) {
+    public OgnlToConvertersController(Converters converters) {
         this.converters = converters;
     }
 

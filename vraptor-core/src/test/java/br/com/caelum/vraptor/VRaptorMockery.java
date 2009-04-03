@@ -6,6 +6,7 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.internal.ExpectationBuilder;
 
+import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
@@ -45,6 +46,17 @@ public class VRaptorMockery {
             }
         });
         return resource;
+    }
+
+    public <T> Container container(final Class<T> type, final T object) {
+        final Container container = mockery.mock(Container.class);
+        mockery.checking(new Expectations() {
+            {
+                one(container).instanceFor(type);
+                will(returnValue(object));
+            }
+        });
+        return container;
     }
 
 }

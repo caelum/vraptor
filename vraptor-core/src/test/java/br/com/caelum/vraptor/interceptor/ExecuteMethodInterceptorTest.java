@@ -75,7 +75,7 @@ public class ExecuteMethodInterceptorTest {
         mockery.checking(new Expectations() {
             {
                 one(auau).bark(3);
-                one(provider).getParametersFor(with(VRaptorMatchers.resourceMethod(DogAlike.class.getMethod("bark"))));
+                one(provider).getParametersFor(with(VRaptorMatchers.resourceMethod(DogAlike.class.getMethod("bark", int.class))));
                 will(returnValue(new Object[]{3}));
             }
         });

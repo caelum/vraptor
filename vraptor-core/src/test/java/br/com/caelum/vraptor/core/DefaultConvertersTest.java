@@ -21,12 +21,12 @@ public class DefaultConvertersTest {
     public void setup() {
         this.mockery = new VRaptorMockery();
         this.container = mockery.mock(Container.class);
-        this.converters = new DefaultConverters(container);
+        this.converters = new DefaultConverters();
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void complainsIfNoConverterFound() {
-        converters.to(DefaultConvertersTest.class);
+        converters.to(DefaultConvertersTest.class, container);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -62,7 +62,7 @@ public class DefaultConvertersTest {
                 will(returnValue(new MyConverter()));
             }
         });
-        Converter found = converters.to(MyData.class);
+        Converter found = converters.to(MyData.class, container);
         MatcherAssert.assertThat(found.getClass(), Matchers.is(Matchers.equalTo((Class)MyConverter.class)));
         mockery.assertIsSatisfied();
     }

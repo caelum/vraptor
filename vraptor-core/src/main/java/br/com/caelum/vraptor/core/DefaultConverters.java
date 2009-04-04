@@ -1,3 +1,32 @@
+/***
+ *
+ * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ * 3. Neither the name of the copyright holders nor the names of its
+ *    contributors may be used to endorse or promote products derived from
+ *    this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
+ * THE POSSIBILITY OF SUCH DAMAGE.
+ */
 package br.com.caelum.vraptor.core;
 
 import java.util.Iterator;
@@ -6,7 +35,12 @@ import java.util.LinkedList;
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.converter.LongConverter;
+import br.com.caelum.vraptor.converter.PrimitiveByteConverter;
+import br.com.caelum.vraptor.converter.PrimitiveDoubleConverter;
+import br.com.caelum.vraptor.converter.PrimitiveFloatConverter;
 import br.com.caelum.vraptor.converter.PrimitiveIntConverter;
+import br.com.caelum.vraptor.converter.PrimitiveLongConverter;
+import br.com.caelum.vraptor.converter.PrimitiveShortConverter;
 import br.com.caelum.vraptor.ioc.Container;
 
 public class DefaultConverters implements Converters {
@@ -14,12 +48,10 @@ public class DefaultConverters implements Converters {
     private LinkedList<Class<? extends Converter<?>>> types;
 
     public static final Class<? extends Converter<?>>[] DEFAULTS = new Class[] { PrimitiveIntConverter.class,
-            LongConverter.class };
+            PrimitiveLongConverter.class, PrimitiveShortConverter.class, PrimitiveByteConverter.class,
+            PrimitiveDoubleConverter.class, PrimitiveFloatConverter.class, LongConverter.class };
 
-    private final Container container;
-
-    public DefaultConverters(Container container) {
-        this.container = container;
+    public DefaultConverters() {
         this.types = new LinkedList<Class<? extends Converter<?>>>();
         for (Class<? extends Converter<?>> type : DEFAULTS) {
             register(type);
@@ -35,7 +67,7 @@ public class DefaultConverters implements Converters {
         types.add(converterType);
     }
 
-    public Converter to(Class type) {
+    public Converter to(Class type, Container container) {
         for (Iterator iterator = types.iterator(); iterator.hasNext();) {
             Class<? extends Converter> converterType = (Class<? extends Converter>) iterator.next();
             Class boundType = converterType.getAnnotation(Convert.class).value();

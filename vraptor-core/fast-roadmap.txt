@@ -1,27 +1,27 @@
 right now:
 
-- interceptor registration real support
-- copyright caelum
-
-
-
-
+	- converters test: wrong, right, null
+	- test converter int to method start
+	- test to use the same converter twice in the same request, does it work fine?
+	- test vraptorinfo component
+	- enum converter (ordinal and string)
+	- primitive converters: boolean, char
+	- Boolean, Double converter (wrapper)
+	- BigDecimal, BigInteger converter
+	- vraptor2 component lookup algorithm
 
 projo
 
-- converters: Enum String, Enum Ordinal, Date, Calendar, FixedLocaleCalendar, FixedLocaleDate
-- converters: long, boolean, char, short, byte, double, float
+- converters: Date, Calendar, FixedLocaleCalendar, FixedLocaleDate
 - converters: jodatime
-- converters WRAPPERS: boolean, char, short, byte, double, float
-- enum support (prior)
-- ContainerBasedNullHandler support (non cached instances)
+- converters WRAPPERS: , char, short, byte, float
 - further log
 - reflection fallback system on nullhandler (automatic?)
 - MIRROR usage as a fallback for OGNL instantiation
 - MIRROR usage everywhere
-- custom converter based on locale
 - better exception handling everywhere (prior)
 - converters: File
+- CachedConverters and others should neve register(Class), they should do it at startup and clone those pico instances if faster... check it!
 
 site docs (prior to release)
 - doc how to change the PathResolver algorithm
@@ -39,6 +39,7 @@ vraptor 2 support
 
 kung help
 
+- interceptor registration real support
 - paranamer support
 - support @Path with nice urls
 - support Validator
@@ -58,6 +59,7 @@ kung help
 
 later customization (after first release)
 
+- ContainerBasedNullHandler support (non cached instances)
 - vraptor acceptance tests (sem integracao com servidor)
 - vraptor2 component support
 - vraptor2 interceptor support
@@ -74,7 +76,6 @@ later customization (after first release)
 - allow private/protected getters/setters (ognl?)
 - custom converters for specified method parameters
 - setting errors during ognl expression evaluation should be defined as validation errors
-- biginteger, bigdecimal support
 - allow registering of global converters
 - allows registering of specific converters (model or method based)
 

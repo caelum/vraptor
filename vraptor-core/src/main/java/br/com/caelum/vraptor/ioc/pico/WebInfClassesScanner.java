@@ -34,10 +34,15 @@ import java.util.List;
 
 import javax.servlet.ServletContext;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceRegistry;
 
 public class WebInfClassesScanner implements ResourceLocator {
+    
+    private static final Logger logger = LoggerFactory.getLogger(WebInfClassesScanner.class);
 
 	private final File classes;
 
@@ -53,11 +58,10 @@ public class WebInfClassesScanner implements ResourceLocator {
 	}
 
 	public void loadAll() {
-		// TODO Auto-generated method stub
-		System.out.println("Starting looking for " + classes.getAbsolutePath());
+		logger.info("Starting looking for " + classes.getAbsolutePath());
 		// TODO this should be in a start/config method... tried with pico but was unable... urgh!
 		List<Resource> results = scanner.scan(classes);
-		System.out.println("Resources found: " + results);
+		logger.debug("Resources found: " + results);
 		this.registry.register(results);
 	}
 

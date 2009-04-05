@@ -1,10 +1,9 @@
 right now:
 
-	- vraptor2 custom component register through custom ComponentRegistryFactory
 	- enum converter (ordinal and string)
 
 	- Boolean, Double converter (wrapper)
-	- custom vraptor2 converters through custom Converters implementation
+	- vraptor2 public method register algorithm
 
 	- BigDecimal, BigInteger converter
 
@@ -24,6 +23,7 @@ projo
 - test that checks that the main PicoContainer is not registered... and the converters interface is also not registered so it doesnt give the same converter to two different requests
 - silently skip unused request params? or complain? probably a debug/run flag... (debug = complain, run = skip) 
 - run flags in a vraptor-deploy.jar (only containing the custom config file)
+- better than vraptor2: support for inheritance
 
 site docs (prior to release)
 - doc how to change the PathResolver algorithm
@@ -32,6 +32,9 @@ site docs (prior to release)
 - faq xxx doesnt work: activate log
 - note on converter lookup (injection system)... note that it might change???
 - component are annotated by @Stereotyped annotations: right now: Resource and vraptor2 component
+- better than vraptor2:
+	- method parameters: list of custom type supported
+	- enum converter: private enums (usually only locally used) supported
 
 vraptor 2 support
 
@@ -40,6 +43,8 @@ vraptor 2 support
 - method invocation without parameters
 - method invocation w parameters
 - interceptor invocation
+- custom vraptor2 converters through custom Converters implementation
+
 
 kung help
 
@@ -105,3 +110,4 @@ done:
 - interceptor support
 - type converters
 - ognl support
+- vraptor2: @Component lookup

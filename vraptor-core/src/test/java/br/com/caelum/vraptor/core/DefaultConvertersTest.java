@@ -36,7 +36,7 @@ public class DefaultConvertersTest {
 
     class WrongConverter implements Converter<String> {
 
-        public String convert(String value) {
+        public String convert(String value, Class<? extends String> type) {
             // TODO Auto-generated method stub
             return null;
         }
@@ -47,7 +47,7 @@ public class DefaultConvertersTest {
 
     @Convert(MyData.class)
     class MyConverter implements Converter<MyData> {
-        public MyData convert(String value) {
+        public MyData convert(String value, Class<? extends MyData> type) {
             return null;
         }
     }

@@ -39,9 +39,9 @@ import br.com.caelum.vraptor.Converter;
  * @author Guilherme Silveira
  */
 @Convert(Enum.class)
-public class EnumConverter implements Converter {
+public class EnumConverter implements Converter<Enum> {
 
-    public Object convert(String value) {
+    public Enum convert(String value, Class<? extends Enum> type) {
         if (value == null || value.equals("")) {
             return null;
         }
@@ -53,7 +53,7 @@ public class EnumConverter implements Converter {
         }
     }
 
-    private Object resolveByName(String value, Class<? extends Enum> enumType) {
+    private Enum resolveByName(String value, Class<? extends Enum> enumType) {
         try {
             return Enum.valueOf(enumType, value);
         } catch (IllegalArgumentException e) {
@@ -63,7 +63,7 @@ public class EnumConverter implements Converter {
         }
     }
 
-    private Object resolveByOrdinal(String value, Class<? extends Enum> enumType) {
+    private Enum resolveByOrdinal(String value, Class<? extends Enum> enumType) {
         try {
             int ordinal = Integer.parseInt(value);
             if (ordinal >= enumType.getEnumConstants().length) {

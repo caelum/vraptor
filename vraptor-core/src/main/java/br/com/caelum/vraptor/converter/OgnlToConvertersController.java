@@ -65,7 +65,7 @@ public class OgnlToConvertersController implements TypeConverter {
             type = (Class) parameterType;
         }
         Container container = (Container) context.get(Container.class);
-        return converters.to(type, container).convert((String) value);
+        return converters.to(type, container).convert((String) value, type);
     }
 
 }

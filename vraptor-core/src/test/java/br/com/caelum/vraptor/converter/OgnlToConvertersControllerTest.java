@@ -89,7 +89,7 @@ public class OgnlToConvertersControllerTest {
             {
                 one(converters).to(int.class, null);
                 will(returnValue(converter));
-                one(converter).convert("2");
+                one(converter).convert("2", int.class);
                 will(returnValue(2));
             }
         });
@@ -106,7 +106,7 @@ public class OgnlToConvertersControllerTest {
             {
                 one(converters).to(Tail.class, null);
                 will(returnValue(converter));
-                one(converter).convert("15");
+                one(converter).convert("15", Tail.class);
                 will(returnValue(new Tail(15)));
             }
         });

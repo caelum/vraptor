@@ -17,17 +17,17 @@ public class PrimitiveShortConverterTest {
     
     @Test
     public void shouldBeAbleToConvertNumbers(){
-        assertThat((Short) converter.convert("5"), is(equalTo((short) 5)));
+        assertThat((Short) converter.convert("5", short.class), is(equalTo((short) 5)));
     }
     
     @Test(expected=IllegalArgumentException.class)
     public void shouldComplainAboutInvalidNumber() {
-        converter.convert("---");
+        converter.convert("---", short.class);
     }
     
     @Test(expected=IllegalArgumentException.class)
     public void shouldComplainAboutNull() {
-        converter.convert(null);
+        converter.convert(null, short.class);
     }
 
 }

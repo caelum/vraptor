@@ -17,17 +17,17 @@ public class PrimitiveFloatConverterTest {
     
     @Test
     public void shouldBeAbleToConvertNumbers(){
-        assertThat((Float) converter.convert("2.2"), is(equalTo(2.2f)));
+        assertThat((Float) converter.convert("2.2", float.class), is(equalTo(2.2f)));
     }
     
     @Test(expected=IllegalArgumentException.class)
     public void shouldComplainAboutInvalidNumber() {
-        converter.convert("---");
+        converter.convert("---", float.class);
     }
     
     @Test(expected=IllegalArgumentException.class)
     public void shouldComplainAboutNull() {
-        converter.convert(null);
+        converter.convert(null, float.class);
     }
 
 }

@@ -17,17 +17,17 @@ public class PrimitiveDoubleConverterTest {
     
     @Test
     public void shouldBeAbleToConvertNumbers(){
-        assertThat((Double) converter.convert("2.3"), is(equalTo(2.3d)));
+        assertThat((Double) converter.convert("2.3", double.class), is(equalTo(2.3d)));
     }
     
     @Test(expected=IllegalArgumentException.class)
     public void shouldComplainAboutInvalidNumber() {
-        converter.convert("---");
+        converter.convert("---", double.class);
     }
     
     @Test(expected=IllegalArgumentException.class)
     public void shouldComplainAboutNull() {
-        converter.convert(null);
+        converter.convert(null, double.class);
     }
 
 }

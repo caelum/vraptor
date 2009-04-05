@@ -17,17 +17,17 @@ public class PrimitiveLongConverterTest {
     
     @Test
     public void shouldBeAbleToConvertNumbers(){
-        assertThat((Long) converter.convert("2"), is(equalTo(2L)));
+        assertThat((Long) converter.convert("2", long.class), is(equalTo(2L)));
     }
     
     @Test(expected=IllegalArgumentException.class)
     public void shouldComplainAboutInvalidNumber() {
-        converter.convert("---");
+        converter.convert("---", long.class);
     }
     
     @Test(expected=IllegalArgumentException.class)
     public void shouldComplainAboutNull() {
-        converter.convert(null);
+        converter.convert(null, long.class);
     }
 
 }

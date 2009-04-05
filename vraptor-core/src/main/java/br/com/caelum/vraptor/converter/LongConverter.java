@@ -35,7 +35,7 @@ import br.com.caelum.vraptor.Converter;
 @Convert(Long.class)
 public class LongConverter implements Converter<Long> {
 
-    public Long convert(String value) {
+    public Long convert(String value, Class<? extends Long> type) {
         return Long.valueOf(value);
     }
 

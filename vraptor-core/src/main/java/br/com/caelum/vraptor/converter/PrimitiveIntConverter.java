@@ -35,7 +35,7 @@ import br.com.caelum.vraptor.Converter;
 @Convert(int.class)
 public class PrimitiveIntConverter implements Converter {
 
-    public Object convert(String value) {
+    public Object convert(String value, Class type) {
         if(value==null) {
             // TODO validation??
             throw new IllegalArgumentException("Unable to convert null to primitive int");
@@ -44,7 +44,7 @@ public class PrimitiveIntConverter implements Converter {
             return Integer.parseInt(value);
         } catch (NumberFormatException e) {
             // TODO validation??
-            throw new IllegalArgumentException("Unable to convert " + value + " to primitive");
+            throw new IllegalArgumentException("Unable to convert '" + value + "' to primitive");
         }
     }
     

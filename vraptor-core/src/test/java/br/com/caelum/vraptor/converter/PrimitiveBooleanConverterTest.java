@@ -17,16 +17,16 @@ public class PrimitiveBooleanConverterTest {
     
     @Test
     public void shouldBeAbleToConvertNumbers(){
-        assertThat((Boolean) converter.convert(""), is(equalTo(false)));
-        assertThat((Boolean) converter.convert("false"), is(equalTo(false)));
-        assertThat((Boolean) converter.convert("weird-stuff"), is(equalTo(false)));
-        assertThat((Boolean) converter.convert("true"), is(equalTo(true)));
-        assertThat((Boolean) converter.convert("True"), is(equalTo(true)));
+        assertThat((Boolean) converter.convert("", boolean.class), is(equalTo(false)));
+        assertThat((Boolean) converter.convert("false", boolean.class), is(equalTo(false)));
+        assertThat((Boolean) converter.convert("weird-stuff", boolean.class), is(equalTo(false)));
+        assertThat((Boolean) converter.convert("true", boolean.class), is(equalTo(true)));
+        assertThat((Boolean) converter.convert("True", boolean.class), is(equalTo(true)));
     }
     
     @Test(expected=IllegalArgumentException.class)
     public void shouldComplainAboutNull() {
-        converter.convert(null);
+        converter.convert(null, boolean.class);
     }
 
 }

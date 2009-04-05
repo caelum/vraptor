@@ -18,17 +18,17 @@ public class PrimitiveCharConverterTest {
     
     @Test
     public void shouldBeAbleToConvertNumbers(){
-        assertThat(((Character) converter.convert("r")).charValue(), is(equalTo('r')));
+        assertThat(((Character) converter.convert("r", char.class)).charValue(), is(equalTo('r')));
     }
     
     @Test(expected=IllegalArgumentException.class)
     public void shouldComplainAboutInvalidNumber() {
-        converter.convert("---");
+        converter.convert("---", char.class);
     }
     
     @Test(expected=IllegalArgumentException.class)
     public void shouldComplainAboutNull() {
-        converter.convert(null);
+        converter.convert(null, char.class);
     }
 
 }

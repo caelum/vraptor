@@ -30,48 +30,55 @@
 package br.com.caelum.vraptor.ioc.pico;
 
 import java.io.File;
+import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.caelum.vraptor.ioc.Stereotype;
 import br.com.caelum.vraptor.resource.DefaultResource;
 import br.com.caelum.vraptor.resource.Resource;
 
+/**
+ * Default DirScanner implementation which looks for annotated resources.
+ * 
+ * @author Guilherme Silveira
+ */
 public class DefaultDirScanner implements DirScanner {
+    
+    public List<Resource> scan(File baseDirectory) {
+        List<Resource> resources = new ArrayList<Resource>();
+        search(baseDirectory, "", resources);
+        return resources;
+    }
 
-	public List<Resource> scan(File dir) {
-		List<Resource> resources = new ArrayList<Resource>();
-		search(dir, "", resources);
-		return resources;
-	}
-
-	private void search(File baseDir, String currentPackage,
-			List<Resource> resources) {
-		if (baseDir.listFiles() == null) {
-			return;
-		}
-		if (!currentPackage.equals("")) {
-			currentPackage += ".";
-		}
-		for (File child : baseDir.listFiles()) {
-			if (child.isHidden()) {
-				continue;
-			}
-			if (child.isDirectory()) {
-				search(child, currentPackage + child.getName(), resources);
-			} else if (child.isFile() && child.getName().endsWith(".class")) {
-				String typeName = currentPackage + child.getName();
-				typeName = typeName.substring(0, typeName.length()-6);
-				try {
-					Class<?> type = Class.forName(typeName, false, this.getClass()
-							.getClassLoader());
-					if (type.isAnnotationPresent(br.com.caelum.vraptor.Resource.class)) {
-						resources.add(new DefaultResource(type));
-					}
-				} catch (ClassNotFoundException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-	}
+    private void search(File baseDirectory, String currentPackage, List<Resource> resources) {
+        if (baseDirectory.listFiles() == null) {
+            return;
+        }
+        if (!currentPackage.equals("")) {
+            currentPackage += ".";
+        }
+        for (File child : baseDirectory.listFiles()) {
+            if (child.isHidden()) {
+                continue;
+            }
+            if (child.isDirectory()) {
+                search(child, currentPackage + child.getName(), resources);
+            } else if (child.isFile() && child.getName().endsWith(".class")) {
+                String typeName = currentPackage + child.getName();
+                typeName = typeName.substring(0, typeName.length() - 6);
+                try {
+                    Class<?> type = Class.forName(typeName, false, this.getClass().getClassLoader());
+                    for(Annotation annotation : type.getAnnotations()) {
+                        if(annotation.annotationType().isAnnotationPresent(Stereotype.class)) {
+                            resources.add(new DefaultResource(type));
+                        }
+                    }
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 
 }

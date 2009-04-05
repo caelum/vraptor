@@ -1,9 +1,8 @@
 right now:
 
 	- converters test: wrong, right, null
-	- test converter int to method start
+
 	- test to use the same converter twice in the same request, does it work fine?
-	- test vraptorinfo component
 	- enum converter (ordinal and string)
 	- primitive converters: boolean, char
 	- Boolean, Double converter (wrapper)

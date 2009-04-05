@@ -1,16 +1,18 @@
 right now:
 
-	- vraptor2 component lookup algorithm
-
+	- vraptor2 custom component register through custom ComponentRegistryFactory
 	- enum converter (ordinal and string)
+
 	- Boolean, Double converter (wrapper)
+	- custom vraptor2 converters through custom Converters implementation
+
 	- BigDecimal, BigInteger converter
 
 projo
 
 - converters: Date, Calendar, FixedLocaleCalendar, FixedLocaleDate
 - converters: jodatime
-- converters WRAPPERS: , char, short, byte, float
+- converters WRAPPERS: char, short, byte, float
 - further log
 - reflection fallback system on nullhandler (automatic?)
 - MIRROR usage as a fallback for OGNL instantiation
@@ -19,7 +21,9 @@ projo
 - converters: File
 - CachedConverters and others should neve register(Class), they should do it at startup and clone those pico instances if faster... check it!
 - all converter erros messages should contain the original value between '' so its clear in the message if it was empty (or null)
-- test that checks that the main PicoContainer is not registered... and the converters interface is also not registered so it doesnt give the same converter to two different requests 
+- test that checks that the main PicoContainer is not registered... and the converters interface is also not registered so it doesnt give the same converter to two different requests
+- silently skip unused request params? or complain? probably a debug/run flag... (debug = complain, run = skip) 
+- run flags in a vraptor-deploy.jar (only containing the custom config file)
 
 site docs (prior to release)
 - doc how to change the PathResolver algorithm
@@ -27,6 +31,7 @@ site docs (prior to release)
 - doc how to configure log
 - faq xxx doesnt work: activate log
 - note on converter lookup (injection system)... note that it might change???
+- component are annotated by @Stereotyped annotations: right now: Resource and vraptor2 component
 
 vraptor 2 support
 
@@ -52,9 +57,11 @@ kung help
 
 
 
+
 right before release
 	copyright in all files check
-
+	vraptor2 release with customized code
+		Component annotation was modified
 
 
 

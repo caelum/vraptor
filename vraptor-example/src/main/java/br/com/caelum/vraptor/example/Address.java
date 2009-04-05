@@ -3,11 +3,11 @@ package br.com.caelum.vraptor.example;
 public class Address {
     
     private String street;
-    private String number;
-    public void setNumber(String number) {
+    private int number;
+    public void setNumber(int number) {
         this.number = number;
     }
-    public String getNumber() {
+    public int getNumber() {
         return number;
     }
     public void setStreet(String street) {

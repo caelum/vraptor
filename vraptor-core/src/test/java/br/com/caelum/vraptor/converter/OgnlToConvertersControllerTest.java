@@ -87,7 +87,7 @@ public class OgnlToConvertersControllerTest {
     public void shouldInvokePrimitiveConverter() throws OgnlException {
         mockery.checking(new Expectations() {
             {
-                one(converters).to(int.class);
+                one(converters).to(int.class, null);
                 will(returnValue(converter));
                 one(converter).convert("2");
                 will(returnValue(2));
@@ -104,7 +104,7 @@ public class OgnlToConvertersControllerTest {
     public void shouldInvokeCustomTypeConverter() throws OgnlException {
         mockery.checking(new Expectations() {
             {
-                one(converters).to(Tail.class);
+                one(converters).to(Tail.class, null);
                 will(returnValue(converter));
                 one(converter).convert("15");
                 will(returnValue(new Tail(15)));

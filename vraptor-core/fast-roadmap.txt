@@ -1,7 +1,5 @@
 right now:
 
-	- converters test: wrong, right, null
-
 	- test to use the same converter twice in the same request, does it work fine?
 	- enum converter (ordinal and string)
 	- primitive converters: boolean, char
@@ -52,6 +50,8 @@ kung help
 
 
 
+right before release
+	copyright in all files check
 
 
 

@@ -14,7 +14,7 @@ import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.core.DefaultConverters;
+import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.core.DefaultInterceptorStack;
 import br.com.caelum.vraptor.core.DefaultRequestExecution;
 import br.com.caelum.vraptor.core.DefaultResult;
@@ -66,7 +66,7 @@ public class GenericContainerTest {
         check(HttpServletRequest.class, HttpServletResponse.class,
                 VRaptorRequest.class, DefaultInterceptorStack.class, DefaultRequestExecution.class,
                 ResourceLookupInterceptor.class, InstantiateInterceptor.class, DefaultResult.class,
-                ExecuteMethodInterceptor.class, OgnlParametersProvider.class, DefaultConverters.class);
+                ExecuteMethodInterceptor.class, OgnlParametersProvider.class, Converters.class);
         container.register(mockery.mock(ResourceMethod.class));
         check(PageResult.class);
         mockery.assertIsSatisfied();
@@ -74,12 +74,8 @@ public class GenericContainerTest {
 
     private void check(Class<?>...  components) {
         for (Class<?> component : components) {
-            MatcherAssert.assertThat(canProvide(component), Matchers.is(Matchers.equalTo(true)));
+            MatcherAssert.assertThat("Should be able to give me a " + component.getName(), container.instanceFor(component), Matchers.is(Matchers.notNullValue()));
         }
-    }
-
-    private Boolean canProvide(Class<?> type) {
-        return container.instanceFor(type) != null;
     }
 
 }

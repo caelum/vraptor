@@ -1,14 +1,11 @@
 right now:
 
-	- Boolean, Double converter (wrapper)
-
-	- BigDecimal, BigInteger converter
-
-	- v2: instantiate with injection
-	
 	- MAKE CACHE WORKS
 	- MAKE CUSTOM COMPONENTS WORKS
-
+	- MAKE CONVERTERS GLOBAL, NOT LOCAL
+	- allow session attributes injection
+	- allow request attributes injection
+	
 projo
 
 - converters: Date, Calendar, FixedLocaleCalendar, FixedLocaleDate
@@ -26,6 +23,8 @@ projo
 - silently skip unused request params? or complain? probably a debug/run flag... (debug = complain, run = skip) 
 - run flags in a vraptor-deploy.jar (only containing the custom config file)
 - better than vraptor2: support for inheritance
+minha ideia:
+- vraptor 2 interceptor migration tutorial
 
 site docs (prior to release)
 - doc how to change the PathResolver algorithm
@@ -37,15 +36,22 @@ site docs (prior to release)
 - better than vraptor2:
 	- method parameters: list of custom type supported
 	- enum converter: private enums (usually only locally used) supported
+- migration
+	- Provider config
+	- plugins not supported
+	- converters without access to LogicRequest automatically supported through vraptor.xml
+- BigDecimal, BigInteger converter
 
 vraptor 2 support
 
 - v2: setters/getters for value injection
 - method invocation without parameters
 - method invocation w parameters
-- interceptor invocation
 - custom vraptor2 converters through custom Converters implementation
-
+- v2: instantiate with injection
+- v2: converters with access to request/session/context
+- v2: custom converters used on annotated fields
+- vraptor2: pathresolver support on vraptor.xml based info
 
 kung help
 
@@ -115,3 +121,5 @@ done:
 - primitive converters
 - enum converter
 - vraptor2: public method lookup (old algo)
+- vraptor2: converter without request/session/context access support
+	- v2: view interceptor

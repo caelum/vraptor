@@ -3,6 +3,7 @@
 <body>
 <form action="clients/add">Name: <input type="text"
 	name="client.name" value="" /><br />
+	<input type="text" name="client.balance" value="" /><br/>
 Street: <input type="text" name="client.addresses[0].street" value="" /><br />
 Number: <input type="text" name="client.addresses[0].number" value="" /><br />
 Id: <input type="text" name="client.id" value="" /><br />
@@ -11,7 +12,7 @@ Id: <input type="text" name="client.id" value="" /><br />
 <c:forEach var="client" items="${clients }">
 <tr>
 <td>
-Name: ${client.name} (id= ${client.id})
+Name: ${client.name} (id= ${client.id}), balance = ${client.balance }
 <ul>
 		<c:forEach var="address" items="${client.addresses }">
 			<li>${address.street }, ${address.number }</li>

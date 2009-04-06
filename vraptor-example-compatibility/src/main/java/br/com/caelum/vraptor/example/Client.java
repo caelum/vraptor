@@ -1,5 +1,6 @@
 package br.com.caelum.vraptor.example;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class Client {
@@ -13,6 +14,16 @@ public class Client {
     private List<String> emails;
     
     private List<Address> addresses;
+    
+    private BigDecimal balance;
+
+    public BigDecimal getBalance() {
+        return balance;
+    }
+
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
+    }
 
     public String getName() {
         return name;

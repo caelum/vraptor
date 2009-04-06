@@ -35,6 +35,11 @@ import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Interceptor;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
+/**
+ * The interceptors stack.
+ * 
+ * @author Guilherme Silveira
+ */
 public interface InterceptorStack {
 
     void add(Interceptor interceptor);

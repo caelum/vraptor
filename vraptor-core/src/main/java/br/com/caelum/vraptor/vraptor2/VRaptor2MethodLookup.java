@@ -29,15 +29,11 @@ public class VRaptor2MethodLookup implements ResourceAndMethodLookup {
     }
 
     public ResourceMethod methodFor(String id, String methodName) {
-        Class<?> type = resource.getType();
-        if(!type.isAnnotationPresent(Component.class)) {
+        if(!Info.isOldComponent(resource)) {
             return delegate.methodFor(id, methodName);
         }
-        Component component = type.getAnnotation(Component.class);
-        String componentName = component.value();
-        if(componentName.equals("")) {
-            componentName = type.getSimpleName();
-        }
+        Class<?> type = resource.getType();
+        String componentName = Info.getComponentName(type);
         for (Method method : type.getDeclaredMethods()) {
             if (!Modifier.isPublic(method.getModifiers())) {
                 continue;
@@ -51,4 +47,5 @@ public class VRaptor2MethodLookup implements ResourceAndMethodLookup {
         }
         return null;
     }
+
 }

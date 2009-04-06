@@ -33,6 +33,8 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import javax.servlet.http.HttpServletRequest;
+
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Interceptor;
 import br.com.caelum.vraptor.core.InterceptorStack;
@@ -47,9 +49,11 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 public class ExecuteMethodInterceptor implements Interceptor {
 
     private final ParametersProvider provider;
+    private final HttpServletRequest request;
 
-    public ExecuteMethodInterceptor(ParametersProvider provider) {
+    public ExecuteMethodInterceptor(ParametersProvider provider, HttpServletRequest request) {
         this.provider = provider;
+        this.request = request;
     }
 
     public void intercept(InterceptorStack invocation, ResourceMethod method, Object resourceInstance)

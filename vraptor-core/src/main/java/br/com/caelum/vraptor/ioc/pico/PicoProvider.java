@@ -29,21 +29,34 @@
  */
 package br.com.caelum.vraptor.ioc.pico;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.ServletContext;
 
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.PicoBuilder;
 
+import br.com.caelum.vraptor.converter.CachedConverters;
+import br.com.caelum.vraptor.core.DefaultConverters;
+import br.com.caelum.vraptor.core.DefaultInterceptorStack;
+import br.com.caelum.vraptor.core.DefaultRequestExecution;
+import br.com.caelum.vraptor.core.DefaultResult;
 import br.com.caelum.vraptor.core.VRaptorRequest;
 import br.com.caelum.vraptor.http.AsmBasedTypeCreator;
+import br.com.caelum.vraptor.http.OgnlParametersProvider;
 import br.com.caelum.vraptor.http.StupidTranslator;
 import br.com.caelum.vraptor.interceptor.DefaultInterceptorRegistry;
+import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
+import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
 import br.com.caelum.vraptor.interceptor.InterceptorListPriorToExecutionExtractor;
+import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
 import br.com.caelum.vraptor.resource.DefaultMethodLookupBuilder;
 import br.com.caelum.vraptor.resource.DefaultResourceRegistry;
 import br.com.caelum.vraptor.resource.ResourceRegistry;
+import br.com.caelum.vraptor.view.jsp.PageResult;
 
 /**
  * Managing internal components by using pico container.<br>
@@ -58,7 +71,9 @@ public class PicoProvider implements ContainerProvider {
 
     public PicoProvider() {
         this.container = new PicoBuilder().withCaching().build();
-        registerComponents(container);
+        for(Class<?> componentType : getComponentTypes()) {
+            container.addComponent(componentType);
+        }
         // cache(CacheBasedResourceRegistry.class, ResourceRegistry.class);
         // cache(CacheBasedTypeCreator.class, AsmBasedTypeCreator.class);
     }
@@ -70,15 +85,17 @@ public class PicoProvider implements ContainerProvider {
      * those who access the previous implementation will keep the reference
      * while new components will reference the new one -> NASTY!
      */
-    protected void registerComponents(MutablePicoContainer container) {
-        this.container.addComponent(StupidTranslator.class);
-        this.container.addComponent(DefaultResourceRegistry.class);
-        this.container.addComponent(DefaultDirScanner.class);
-        this.container.addComponent(WebInfClassesScanner.class);
-        this.container.addComponent(InterceptorListPriorToExecutionExtractor.class);
-        this.container.addComponent(DefaultInterceptorRegistry.class);
-        this.container.addComponent(DefaultMethodLookupBuilder.class);
-        this.container.addComponent(AsmBasedTypeCreator.class);
+    protected List<Class<?>> getComponentTypes() {
+        List<Class<?>> components = new ArrayList<Class<?>>();
+        components.add(StupidTranslator.class);
+        components.add(DefaultResourceRegistry.class);
+        components.add(DefaultDirScanner.class);
+        components.add(WebInfClassesScanner.class);
+        components.add(InterceptorListPriorToExecutionExtractor.class);
+        components.add(DefaultInterceptorRegistry.class);
+        components.add(AsmBasedTypeCreator.class);
+        components.add(DefaultMethodLookupBuilder.class);
+        return components;
     }
 
     public <T> T instanceFor(Class<T> type) {
@@ -96,7 +113,27 @@ public class PicoProvider implements ContainerProvider {
     }
 
     public Container provide(VRaptorRequest request) {
+        MutablePicoContainer container = new PicoBuilder(this.container).withCaching().build();
+        for(Class<?> componentType : getChildComponentTypes()) {
+            container.addComponent(componentType);
+        }
+        container.addComponent(request).addComponent(request.getRequest()).addComponent(request.getResponse());
+        // cache(CachedConverters.class, Converters.class);
         return new PicoBasedContainer(container, request, instanceFor(ResourceRegistry.class));
+    }
+
+    protected List<Class<?>> getChildComponentTypes() {
+        List<Class<?>> components = new ArrayList<Class<?>>();
+        components.add(DefaultInterceptorStack.class);
+        components.add(DefaultRequestExecution.class);
+        components.add(ResourceLookupInterceptor.class);
+        components.add(InstantiateInterceptor.class);
+        components.add(DefaultResult.class);
+        components.add(ExecuteMethodInterceptor.class);
+        components.add(PageResult.class);
+        components.add(OgnlParametersProvider.class);
+        components.add(DefaultConverters.class);
+        return components;
     }
 
 }

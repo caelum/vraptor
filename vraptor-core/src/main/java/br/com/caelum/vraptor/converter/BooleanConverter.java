@@ -39,12 +39,7 @@ public class BooleanConverter implements Converter<Boolean> {
         if (value == null) {
             return null;
         }
-        try {
-            return Boolean.valueOf(value);
-        } catch (NumberFormatException e) {
-            // TODO validation?
-            throw new IllegalArgumentException("Unable to convert '" + value + "'.");
-        }
+        return Boolean.valueOf(value);
     }
 
 }

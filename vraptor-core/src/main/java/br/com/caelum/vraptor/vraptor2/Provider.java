@@ -1,15 +1,24 @@
 package br.com.caelum.vraptor.vraptor2;
 
-import org.picocontainer.MutablePicoContainer;
+import java.util.ArrayList;
+import java.util.List;
 
+import br.com.caelum.vraptor.core.DefaultInterceptorStack;
+import br.com.caelum.vraptor.core.DefaultRequestExecution;
+import br.com.caelum.vraptor.core.DefaultResult;
 import br.com.caelum.vraptor.http.AsmBasedTypeCreator;
+import br.com.caelum.vraptor.http.OgnlParametersProvider;
 import br.com.caelum.vraptor.http.StupidTranslator;
 import br.com.caelum.vraptor.interceptor.DefaultInterceptorRegistry;
+import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
+import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
 import br.com.caelum.vraptor.interceptor.InterceptorListPriorToExecutionExtractor;
+import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
 import br.com.caelum.vraptor.ioc.pico.DefaultDirScanner;
 import br.com.caelum.vraptor.ioc.pico.PicoProvider;
 import br.com.caelum.vraptor.ioc.pico.WebInfClassesScanner;
 import br.com.caelum.vraptor.resource.DefaultResourceRegistry;
+import br.com.caelum.vraptor.view.jsp.PageResult;
 
 /**
  * Customized provider with support for both vraptor 2 and 3 components.
@@ -18,15 +27,32 @@ import br.com.caelum.vraptor.resource.DefaultResourceRegistry;
  */
 public class Provider extends PicoProvider {
     
-    protected void registerComponents(MutablePicoContainer container) {
-        container.addComponent(StupidTranslator.class);
-        container.addComponent(DefaultResourceRegistry.class);
-        container.addComponent(DefaultDirScanner.class);
-        container.addComponent(WebInfClassesScanner.class);
-        container.addComponent(InterceptorListPriorToExecutionExtractor.class);
-        container.addComponent(DefaultInterceptorRegistry.class);
-        container.addComponent(AsmBasedTypeCreator.class);
-        container.addComponent(VRaptor2MethodLookupBuilder.class);
+    protected List<Class<?>> getComponentTypes() {
+        List<Class<?>> components = new ArrayList<Class<?>>();
+        components.add(StupidTranslator.class);
+        components.add(DefaultResourceRegistry.class);
+        components.add(DefaultDirScanner.class);
+        components.add(WebInfClassesScanner.class);
+        components.add(InterceptorListPriorToExecutionExtractor.class);
+        components.add(DefaultInterceptorRegistry.class);
+        components.add(AsmBasedTypeCreator.class);
+        components.add(VRaptor2MethodLookupBuilder.class);
+        components.add(Config.class);
+        return components;
+    }
+    
+    protected List<Class<?>> getChildComponentTypes() {
+        List<Class<?>> components = new ArrayList<Class<?>>();
+        components.add(DefaultInterceptorStack.class);
+        components.add(VRaptor2RequestExecution.class);
+        components.add(ResourceLookupInterceptor.class);
+        components.add(InstantiateInterceptor.class);
+        components.add(DefaultResult.class);
+        components.add(ExecuteMethodInterceptor.class);
+        components.add(PageResult.class);
+        components.add(OgnlParametersProvider.class);
+        components.add(VRaptor2Converters.class);
+        return components;
     }
 
 }

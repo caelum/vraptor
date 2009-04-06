@@ -35,7 +35,7 @@ public class PicoBasedContainerTest {
         final HttpServletRequest webRequest = mockery.mock(HttpServletRequest.class);
         final HttpServletResponse webResponse = mockery.mock(HttpServletResponse.class);
         final VRaptorRequest request = new VRaptorRequest(null, webRequest, webResponse);
-        this.container = new PicoBasedContainer(null, request, new DefaultResourceRegistry());
+        this.container = new PicoBasedContainer(null, request, new DefaultResourceRegistry(null));
     }
 
     @Test

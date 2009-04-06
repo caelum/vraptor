@@ -6,6 +6,7 @@ import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 
+import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**
@@ -29,6 +30,24 @@ public class VRaptorMatchers {
 
             public void describeTo(Description description) {
                 description.appendText(" resource method for " + method.getName());
+            }
+
+        };
+    }
+
+    public static Matcher<Resource> resource(final Class<?> type) {
+        return new BaseMatcher<Resource>() {
+
+            public boolean matches(Object item) {
+                if (!(item instanceof Resource)) {
+                    return false;
+                }
+                Resource other = (Resource) item;
+                return other.getType().equals(type);
+            }
+
+            public void describeTo(Description description) {
+                description.appendText(" resource for " + type.getName());
             }
 
         };

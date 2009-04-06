@@ -33,13 +33,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.caelum.vraptor.Interceptor;
+import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 public class DefaultInterceptorRegistry implements InterceptorRegistry{
+    
+    private final List<Class<? extends Interceptor>> interceptors = new ArrayList<Class<? extends Interceptor>>();
+    
+    public Interceptor[] interceptorsFor(ResourceMethod method, Container container) {
+        List<Interceptor> list = new ArrayList<Interceptor>();
+        for (Class<? extends Interceptor> type : interceptors) {
+            Interceptor instance = container.instanceFor(type);
+            if(instance.accepts(method)) {
+                list.add(instance);
+            }
+        }
+        return list.toArray(new Interceptor[list.size()]);
+    }
 
-    public Class<? extends Interceptor>[] interceptorsFor(ResourceMethod method) {
-        List<Class<? extends Interceptor>> list = new ArrayList<Class<? extends Interceptor>>();
-        return list.toArray(new Class[list.size()]);
+    public void register(List<Class<? extends Interceptor>> interceptors) {
+        this.interceptors.addAll(interceptors);
+    }
+
+    public List<Class<? extends Interceptor>> all() {
+        return interceptors;
     }
 
 }

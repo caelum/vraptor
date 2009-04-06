@@ -76,4 +76,8 @@ public class DefaultInterceptorStack implements InterceptorStack {
         }
     }
 
+    public void addAsNext(Interceptor interceptor) {
+        this.interceptors.add(nextInterceptor, new InstantiatedInterceptorHandler(interceptor));
+    }
+
 }

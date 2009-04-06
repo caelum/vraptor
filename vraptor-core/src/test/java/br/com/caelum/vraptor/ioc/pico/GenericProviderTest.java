@@ -57,10 +57,10 @@ public class GenericProviderTest {
     @Test
     public void canProvideAllComponents() {
         Class<?>[] components = new Class[] { UrlToResourceTranslator.class, ResourceRegistry.class, DirScanner.class,
-                ResourceLocator.class, TypeCreator.class, InterceptorListPriorToExecutionExtractor.class,
-                InterceptorRegistry.class };
+                ResourceLocator.class, TypeCreator.class, InterceptorRegistry.class };
         for (Class<?> component : components) {
-            MatcherAssert.assertThat("Should be able to provide a " + component.getName(),canProvide(component), Matchers.is(Matchers.equalTo(true)));
+            MatcherAssert.assertThat("Should be able to provide a " + component.getName(), canProvide(component),
+                    Matchers.is(Matchers.equalTo(true)));
         }
         mockery.assertIsSatisfied();
     }

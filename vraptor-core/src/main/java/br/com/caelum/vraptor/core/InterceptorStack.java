@@ -50,4 +50,6 @@ public interface InterceptorStack {
 
     void addAsNext(Class<? extends Interceptor>... interceptors);
 
+    void addAsNext(Interceptor interceptor);
+
 }

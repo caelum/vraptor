@@ -67,4 +67,8 @@ public class ExecuteMethodInterceptor implements Interceptor {
         }
     }
 
+    public boolean accepts(ResourceMethod method) {
+        return true;
+    }
+
 }

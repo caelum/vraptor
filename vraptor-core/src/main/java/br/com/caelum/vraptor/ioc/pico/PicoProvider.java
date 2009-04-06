@@ -37,6 +37,7 @@ import javax.servlet.ServletContext;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.PicoBuilder;
 
+import br.com.caelum.vraptor.Interceptor;
 import br.com.caelum.vraptor.converter.CachedConverters;
 import br.com.caelum.vraptor.core.DefaultConverters;
 import br.com.caelum.vraptor.core.DefaultInterceptorStack;
@@ -50,6 +51,7 @@ import br.com.caelum.vraptor.interceptor.DefaultInterceptorRegistry;
 import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
 import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
 import br.com.caelum.vraptor.interceptor.InterceptorListPriorToExecutionExtractor;
+import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
 import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
@@ -91,7 +93,6 @@ public class PicoProvider implements ContainerProvider {
         components.add(DefaultResourceRegistry.class);
         components.add(DefaultDirScanner.class);
         components.add(WebInfClassesScanner.class);
-        components.add(InterceptorListPriorToExecutionExtractor.class);
         components.add(DefaultInterceptorRegistry.class);
         components.add(AsmBasedTypeCreator.class);
         components.add(DefaultMethodLookupBuilder.class);
@@ -117,6 +118,9 @@ public class PicoProvider implements ContainerProvider {
         for(Class<?> componentType : getChildComponentTypes()) {
             container.addComponent(componentType);
         }
+        for(Class<? extends Interceptor> type : instanceFor(InterceptorRegistry.class).all()) {
+            container.addComponent(type);
+        }
         container.addComponent(request).addComponent(request.getRequest()).addComponent(request.getResponse());
         // cache(CachedConverters.class, Converters.class);
         return new PicoBasedContainer(container, request, instanceFor(ResourceRegistry.class));
@@ -124,6 +128,7 @@ public class PicoProvider implements ContainerProvider {
 
     protected List<Class<?>> getChildComponentTypes() {
         List<Class<?>> components = new ArrayList<Class<?>>();
+        components.add(InterceptorListPriorToExecutionExtractor.class);
         components.add(DefaultInterceptorStack.class);
         components.add(DefaultRequestExecution.class);
         components.add(ResourceLookupInterceptor.class);

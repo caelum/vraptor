@@ -11,9 +11,9 @@ import br.com.caelum.vraptor.Intercepts;
 public class InterceptorAcceptor implements Acceptor {
 
     private static final Logger logger = LoggerFactory.getLogger(InterceptorAcceptor.class);
-    private final List<Class<Interceptor>> interceptors;
+    private final List<Class<? extends Interceptor>> interceptors;
 
-    public InterceptorAcceptor(List<Class<Interceptor>> interceptors) {
+    public InterceptorAcceptor(List<Class<? extends Interceptor>> interceptors) {
         this.interceptors = interceptors;
     }
 

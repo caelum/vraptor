@@ -18,12 +18,12 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 
 public class InterceptorAcceptorTest {
 
-    private List<Class<Interceptor>> interceptors;
+    private List<Class<? extends Interceptor>> interceptors;
     private InterceptorAcceptor acceptor;
 
     @Before
     public void setup() {
-        this.interceptors = new ArrayList<Class<Interceptor>>();
+        this.interceptors = new ArrayList<Class<? extends Interceptor>>();
         this.acceptor = new InterceptorAcceptor(interceptors);
     }
     
@@ -44,11 +44,17 @@ public class InterceptorAcceptorTest {
         public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
                 throws IOException, InterceptionException {
         }
+        public boolean accepts(ResourceMethod method) {
+            return true;
+        }
     }
     
     class InterceptorNotAnnotated implements Interceptor {
         public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
                 throws IOException, InterceptionException {
+        }
+        public boolean accepts(ResourceMethod method) {
+            return true;
         }
     }
 }

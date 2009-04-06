@@ -33,7 +33,6 @@ public class Provider extends PicoProvider {
         components.add(DefaultResourceRegistry.class);
         components.add(DefaultDirScanner.class);
         components.add(WebInfClassesScanner.class);
-        components.add(InterceptorListPriorToExecutionExtractor.class);
         components.add(DefaultInterceptorRegistry.class);
         components.add(AsmBasedTypeCreator.class);
         components.add(VRaptor2MethodLookupBuilder.class);
@@ -44,6 +43,7 @@ public class Provider extends PicoProvider {
     protected List<Class<?>> getChildComponentTypes() {
         List<Class<?>> components = new ArrayList<Class<?>>();
         components.add(DefaultInterceptorStack.class);
+        components.add(InterceptorListPriorToExecutionExtractor.class);
         components.add(VRaptor2RequestExecution.class);
         components.add(ResourceLookupInterceptor.class);
         components.add(InstantiateInterceptor.class);

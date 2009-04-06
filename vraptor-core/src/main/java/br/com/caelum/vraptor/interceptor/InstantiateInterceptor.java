@@ -50,5 +50,8 @@ public class InstantiateInterceptor implements Interceptor {
         Object instance = container.instanceFor(type);
         invocation.next(method, instance);
     }
+    public boolean accepts(ResourceMethod method) {
+        return true;
+    }
 
 }

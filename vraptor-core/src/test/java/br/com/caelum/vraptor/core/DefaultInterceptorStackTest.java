@@ -43,6 +43,10 @@ public class DefaultInterceptorStackTest {
             run = count++;
             invocation.next(method, resourceInstance);
         }
+
+        public boolean accepts(ResourceMethod method) {
+            return true;
+        }
     }
 
     @Test

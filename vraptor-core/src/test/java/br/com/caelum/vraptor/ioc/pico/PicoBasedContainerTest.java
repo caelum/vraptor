@@ -11,6 +11,7 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.core.VRaptorRequest;
 import br.com.caelum.vraptor.resource.DefaultResourceRegistry;
+import br.com.caelum.vraptor.resource.MethodLookupBuilder;
 
 public class PicoBasedContainerTest {
 
@@ -28,14 +29,16 @@ public class PicoBasedContainerTest {
 
     private Mockery mockery;
     private PicoBasedContainer container;
+    private MethodLookupBuilder builder;
 
     @Before
     public void setup() {
         this.mockery = new Mockery();
+        this.builder = mockery.mock(MethodLookupBuilder.class);
         final HttpServletRequest webRequest = mockery.mock(HttpServletRequest.class);
         final HttpServletResponse webResponse = mockery.mock(HttpServletResponse.class);
         final VRaptorRequest request = new VRaptorRequest(null, webRequest, webResponse);
-        this.container = new PicoBasedContainer(null, request, new DefaultResourceRegistry(null));
+        this.container = new PicoBasedContainer(null, request, new DefaultResourceRegistry(builder));
     }
 
     @Test

@@ -12,6 +12,7 @@ import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Interceptor;
 import br.com.caelum.vraptor.VRaptorMockery;
 import br.com.caelum.vraptor.core.InterceptorStack;
+import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 public class InterceptorListPriorToExecutionExtractorTest {
@@ -21,30 +22,34 @@ public class InterceptorListPriorToExecutionExtractorTest {
     private InterceptorListPriorToExecutionExtractor extractor;
     private ResourceMethod method;
     private InterceptorStack stack;
+    private Container container;
 
     @Before
     public void setup() throws SecurityException, NoSuchMethodException {
         this.mockery = new VRaptorMockery();
+        this.container = mockery.mock(Container.class);
         this.registry = mockery.mock(InterceptorRegistry.class);
-        this.extractor = new InterceptorListPriorToExecutionExtractor(registry);
+        this.extractor = new InterceptorListPriorToExecutionExtractor(registry, container);
         this.method = mockery.mock(ResourceMethod.class);
         this.stack = mockery.mock(InterceptorStack.class);
     }
 
-    @SuppressWarnings("unchecked")
     @Test
     public void shouldAddTheListOfInterceptorsAsFollowingInterceptors() throws InterceptionException, IOException {
-        final List<Class<? extends Interceptor>> interceptors = new ArrayList<Class<? extends Interceptor>>();
-        final Class[] array = interceptors.toArray(new Class[interceptors.size()]);
+        final List<Interceptor> interceptors = new ArrayList<Interceptor>();
+        final Interceptor[] array = interceptors.toArray(new Interceptor[interceptors.size()]);
         mockery.checking(new Expectations() {
             {
-                one(registry).interceptorsFor(method); will(returnValue(array));
-                one(stack).addAsNext(array);
+                one(registry).interceptorsFor(method, container);
+                will(returnValue(array));
+                for (Interceptor i : array) {
+                    one(stack).addAsNext(i);
+                }
                 one(stack).next(method, null);
             }
         });
         extractor.intercept(this.stack, method, null);
         mockery.assertIsSatisfied();
     }
-    
+
 }

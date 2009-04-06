@@ -38,4 +38,6 @@ public interface Interceptor {
 
 	void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws IOException, InterceptionException;
 
+    boolean accepts(ResourceMethod method);
+
 }

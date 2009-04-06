@@ -32,6 +32,9 @@ public class ToInstantiateInterceptorHandlerTest {
         public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
                 throws IOException, InterceptionException {
         }
+        public boolean accepts(ResourceMethod method) {
+            return true;
+        }
     }
 
     public static class Dependency {

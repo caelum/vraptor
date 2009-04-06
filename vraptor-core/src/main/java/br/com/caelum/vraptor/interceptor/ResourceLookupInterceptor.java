@@ -65,5 +65,8 @@ public class ResourceLookupInterceptor implements Interceptor {
         container.register(method);
         invocation.next(method, resourceInstance);
     }
+    public boolean accepts(ResourceMethod method) {
+        return true;
+    }
 
 }

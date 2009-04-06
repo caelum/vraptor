@@ -46,4 +46,8 @@ public class ExecuteAndViewInterceptor implements Interceptor {
         }
     }
 
+    public boolean accepts(ResourceMethod method) {
+        return true;
+    }
+
 }

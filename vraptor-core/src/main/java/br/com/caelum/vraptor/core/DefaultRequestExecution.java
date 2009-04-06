@@ -38,7 +38,8 @@ import br.com.caelum.vraptor.interceptor.InterceptorListPriorToExecutionExtracto
 import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
 
 /**
- * A request execution process.
+ * A request execution process. The default order is extremely important but
+ * this behaviour can be change by providing your own RequestExecution.
  * 
  * @author Guilherme Silveira
  */
@@ -53,8 +54,8 @@ public class DefaultRequestExecution implements RequestExecution {
 
     public void execute() throws IOException, InterceptionException {
         interceptorStack.add(ResourceLookupInterceptor.class);
-        interceptorStack.add(instantiator);
         interceptorStack.add(InterceptorListPriorToExecutionExtractor.class);
+        interceptorStack.add(instantiator);
         interceptorStack.add(ExecuteMethodInterceptor.class);
         interceptorStack.next(null, null);
     }

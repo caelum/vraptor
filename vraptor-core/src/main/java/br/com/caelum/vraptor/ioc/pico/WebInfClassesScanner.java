@@ -30,6 +30,7 @@
 package br.com.caelum.vraptor.ioc.pico;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletContext;
@@ -37,32 +38,34 @@ import javax.servlet.ServletContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import br.com.caelum.vraptor.Interceptor;
 import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceRegistry;
 
 public class WebInfClassesScanner implements ResourceLocator {
-    
+
     private static final Logger logger = LoggerFactory.getLogger(WebInfClassesScanner.class);
 
-	private final File classes;
+    private final File classes;
 
-	private final DirScanner scanner;
+    private final DirScanner scanner;
 
-	private final ResourceRegistry registry;
+    private final ResourceRegistry registry;
 
-	public WebInfClassesScanner(ServletContext context, DirScanner scanner, ResourceRegistry registry) {
-		this.registry = registry;
-		String path = context.getRealPath("");
-		this.classes = new File(path, "WEB-INF/classes");
-		this.scanner = scanner;
-	}
+    public WebInfClassesScanner(ServletContext context, DirScanner scanner, ResourceRegistry registry) {
+        this.registry = registry;
+        String path = context.getRealPath("");
+        this.classes = new File(path, "WEB-INF/classes");
+        this.scanner = scanner;
+    }
 
-	public void loadAll() {
-		logger.info("Starting looking for " + classes.getAbsolutePath());
-		// TODO this should be in a start/config method... tried with pico but was unable... urgh!
-		List<Resource> results = scanner.scan(classes);
-		logger.debug("Resources found: " + results);
-		this.registry.register(results);
-	}
+    public void loadAll() {
+        logger.info("Starting looking for " + classes.getAbsolutePath());
+        List<Resource> results = new ArrayList<Resource>();
+        scanner.scan(classes, new ResourceAcceptor(results));
+        this.registry.register(results);
+        final List<Class<Interceptor>> interceptors = new ArrayList<Class<Interceptor>>();
+        scanner.scan(classes, new InterceptorAcceptor(interceptors));
+    }
 
 }

@@ -32,18 +32,16 @@ package br.com.caelum.vraptor.ioc.pico;
 import java.io.File;
 import java.util.List;
 
-import br.com.caelum.vraptor.resource.Resource;
-
 /**
  * Scans directories looking for resources.
  * @author Guilherme Silveira
  *
  */
-public interface DirScanner {
+public interface DirScanner<T> {
 
     /**
      * Returns a list of resources containing all resources found within the base directory.
      */
-	List<Resource> scan(File baseDirectory);
+	void scan(File baseDirectory, Acceptor acceptor);
 
 }

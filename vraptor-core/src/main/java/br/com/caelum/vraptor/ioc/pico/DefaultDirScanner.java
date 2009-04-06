@@ -30,12 +30,7 @@
 package br.com.caelum.vraptor.ioc.pico;
 
 import java.io.File;
-import java.lang.annotation.Annotation;
-import java.util.ArrayList;
-import java.util.List;
 
-import br.com.caelum.vraptor.ioc.Stereotype;
-import br.com.caelum.vraptor.resource.DefaultResource;
 import br.com.caelum.vraptor.resource.Resource;
 
 /**
@@ -43,15 +38,13 @@ import br.com.caelum.vraptor.resource.Resource;
  * 
  * @author Guilherme Silveira
  */
-public class DefaultDirScanner implements DirScanner {
-    
-    public List<Resource> scan(File baseDirectory) {
-        List<Resource> resources = new ArrayList<Resource>();
-        search(baseDirectory, "", resources);
-        return resources;
+public class DefaultDirScanner implements DirScanner<Resource> {
+
+    public void scan(File baseDirectory, Acceptor acceptor) {
+        search(baseDirectory, "", acceptor);
     }
 
-    private void search(File baseDirectory, String currentPackage, List<Resource> resources) {
+    private void search(File baseDirectory, String currentPackage, Acceptor acceptor) {
         if (baseDirectory.listFiles() == null) {
             return;
         }
@@ -63,17 +56,13 @@ public class DefaultDirScanner implements DirScanner {
                 continue;
             }
             if (child.isDirectory()) {
-                search(child, currentPackage + child.getName(), resources);
+                search(child, currentPackage + child.getName(), acceptor);
             } else if (child.isFile() && child.getName().endsWith(".class")) {
                 String typeName = currentPackage + child.getName();
                 typeName = typeName.substring(0, typeName.length() - 6);
                 try {
                     Class<?> type = Class.forName(typeName, false, this.getClass().getClassLoader());
-                    for(Annotation annotation : type.getAnnotations()) {
-                        if(annotation.annotationType().isAnnotationPresent(Stereotype.class)) {
-                            resources.add(new DefaultResource(type));
-                        }
-                    }
+                    acceptor.analyze(type);
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                 }

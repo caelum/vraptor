@@ -40,7 +40,7 @@ import br.com.caelum.vraptor.Path;
  * 
  * @author Guilherme Silveira
  */
-public class DefaultResourceAndMethodLookup {
+public class DefaultResourceAndMethodLookup implements ResourceAndMethodLookup {
 
 	private final Resource resource;
 

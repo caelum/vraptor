@@ -14,6 +14,7 @@ public class ClientsController {
     private static final List<Client> clients = new ArrayList<Client>();
     
     public void list() throws ServletException, IOException {
+        System.out.println("Listing");
     }
 
     public void add(Client c) throws ServletException, IOException {

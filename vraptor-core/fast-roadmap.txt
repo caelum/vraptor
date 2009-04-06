@@ -1,11 +1,15 @@
 right now:
 
-	- enum converter (ordinal and string)
-
-	- Boolean, Double converter (wrapper)
 	- vraptor2 public method register algorithm
 
+	- Boolean, Double converter (wrapper)
+
 	- BigDecimal, BigInteger converter
+
+	- v2: instantiate with injection
+	
+	- MAKE CACHE WORKS
+	- MAKE CUSTOM COMPONENTS WORKS
 
 projo
 
@@ -38,8 +42,7 @@ site docs (prior to release)
 
 vraptor 2 support
 
-- instantiate with injection
-- setters/getters for value injection
+- v2: setters/getters for value injection
 - method invocation without parameters
 - method invocation w parameters
 - interceptor invocation
@@ -111,3 +114,5 @@ done:
 - type converters
 - ognl support
 - vraptor2: @Component lookup
+- primitive converters
+- enum converter

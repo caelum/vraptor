@@ -3,8 +3,13 @@
 	xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 	
-	<display-name>vraptor-example</display-name>
+	<display-name>VRaptor3 compatibility with VRaptor 2 example</display-name>
 	
+	<context-param>
+		<param-name>br.com.caelum.vraptor.container_provider</param-name>
+		<param-value>br.com.caelum.vraptor.vraptor2.Provider</param-value>
+	</context-param>
+
 	<filter>
 		<filter-name>vraptor</filter-name>
 		<filter-class>br.com.caelum.vraptor.VRaptor</filter-class>

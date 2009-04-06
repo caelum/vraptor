@@ -35,35 +35,37 @@ import java.util.List;
 
 /**
  * This default registry uses a Path annotation to discover path->method
- * mappings using the DefaultResourceAndMethodLookup.
+ * mappings using the supplied ResourceAndMethodLookup.
  * 
  * @author Guilherme Silveira
  */
 public class DefaultResourceRegistry implements ResourceRegistry {
 
-	private final List<DefaultResourceAndMethodLookup> lookup = new ArrayList<DefaultResourceAndMethodLookup>();
+    private final List<ResourceAndMethodLookup> lookup = new ArrayList<ResourceAndMethodLookup>();
     private final List<Resource> resources = new ArrayList<Resource>();
-    
-    public DefaultResourceRegistry() {
+    private final MethodLookupBuilder lookupBuilder;
+
+    public DefaultResourceRegistry(MethodLookupBuilder lookupBuilder) {
+        this.lookupBuilder = lookupBuilder;
         register(Arrays.asList((Resource) new DefaultResource(VRaptorInfo.class)));
     }
 
-	public void register(List<Resource> results) {
-		for (Resource r : results) {
-			this.lookup.add(new DefaultResourceAndMethodLookup(r));
-			this.resources.add(r);
-		}
-	}
+    public void register(List<Resource> results) {
+        for (Resource r : results) {
+            this.lookup.add(lookupBuilder.lookupFor(r));
+            this.resources.add(r);
+        }
+    }
 
-	public ResourceMethod gimmeThis(String id, String methodName) {
-		for (DefaultResourceAndMethodLookup lookuper : lookup) {
-			ResourceMethod method = lookuper.methodFor(id, methodName);
-			if (method != null) {
-				return method;
-			}
-		}
-		return null;
-	}
+    public ResourceMethod gimmeThis(String id, String methodName) {
+        for (ResourceAndMethodLookup lookuper : lookup) {
+            ResourceMethod method = lookuper.methodFor(id, methodName);
+            if (method != null) {
+                return method;
+            }
+        }
+        return null;
+    }
 
     public List<Resource> all() {
         return this.resources;

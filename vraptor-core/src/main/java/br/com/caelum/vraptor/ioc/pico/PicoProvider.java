@@ -41,14 +41,15 @@ import br.com.caelum.vraptor.interceptor.DefaultInterceptorRegistry;
 import br.com.caelum.vraptor.interceptor.InterceptorListPriorToExecutionExtractor;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
-import br.com.caelum.vraptor.reflection.CacheBasedTypeCreator;
-import br.com.caelum.vraptor.resource.CacheBasedResourceRegistry;
+import br.com.caelum.vraptor.resource.DefaultMethodLookupBuilder;
 import br.com.caelum.vraptor.resource.DefaultResourceRegistry;
 import br.com.caelum.vraptor.resource.ResourceRegistry;
 
 /**
- * Managing internal components by using pico container.
- *
+ * Managing internal components by using pico container.<br>
+ * There is an extension point through the getDefaultContainer method, which
+ * allows one to give a customized container.
+ * 
  * @author Guilherme Silveira
  */
 public class PicoProvider implements ContainerProvider {
@@ -57,15 +58,29 @@ public class PicoProvider implements ContainerProvider {
 
     public PicoProvider() {
         this.container = new PicoBuilder().withCaching().build();
+        registerComponents(container);
+        // cache(CacheBasedResourceRegistry.class, ResourceRegistry.class);
+        // cache(CacheBasedTypeCreator.class, AsmBasedTypeCreator.class);
+    }
+
+    /**
+     * While extending pico provider, do not register any INSTANCE component!
+     * Cached instances might give problems later on.<br>
+     * If there is any component instantiated and we change the implementation,
+     * those who access the previous implementation will keep the reference
+     * while new components will reference the new one -> NASTY!
+     */
+    protected void registerComponents(MutablePicoContainer container) {
         this.container.addComponent(StupidTranslator.class);
-        this.container.addComponent(new CacheBasedResourceRegistry(new DefaultResourceRegistry()));
+        this.container.addComponent(DefaultResourceRegistry.class);
         this.container.addComponent(DefaultDirScanner.class);
         this.container.addComponent(WebInfClassesScanner.class);
-        this.container.addComponent(new CacheBasedTypeCreator(new AsmBasedTypeCreator()));
         this.container.addComponent(InterceptorListPriorToExecutionExtractor.class);
         this.container.addComponent(DefaultInterceptorRegistry.class);
+        this.container.addComponent(DefaultMethodLookupBuilder.class);
+        this.container.addComponent(AsmBasedTypeCreator.class);
     }
-    
+
     public <T> T instanceFor(Class<T> type) {
         return container.getComponent(type);
     }

@@ -14,11 +14,12 @@ import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
 
+import br.com.caelum.vraptor.VRaptorException;
 import br.com.caelum.vraptor.core.VRaptorRequest;
+import br.com.caelum.vraptor.http.TypeCreator;
 import br.com.caelum.vraptor.http.UrlToResourceTranslator;
 import br.com.caelum.vraptor.interceptor.InterceptorListPriorToExecutionExtractor;
 import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
-import br.com.caelum.vraptor.reflection.CacheBasedTypeCreator;
 import br.com.caelum.vraptor.resource.ResourceRegistry;
 
 /**
@@ -34,7 +35,7 @@ public class GenericProviderTest {
     private VRaptorRequest request;
 
     @Before
-    public void setup() throws IOException {
+    public void setup() throws IOException, VRaptorException {
         this.provider = new PicoProvider();
         this.mockery = new Mockery();
         final File tmpDir = File.createTempFile("tmp_", "_file").getParentFile();
@@ -56,10 +57,10 @@ public class GenericProviderTest {
     @Test
     public void canProvideAllComponents() {
         Class<?>[] components = new Class[] { UrlToResourceTranslator.class, ResourceRegistry.class, DirScanner.class,
-                ResourceLocator.class, CacheBasedTypeCreator.class, InterceptorListPriorToExecutionExtractor.class,
+                ResourceLocator.class, TypeCreator.class, InterceptorListPriorToExecutionExtractor.class,
                 InterceptorRegistry.class };
         for (Class<?> component : components) {
-            MatcherAssert.assertThat(canProvide(component), Matchers.is(Matchers.equalTo(true)));
+            MatcherAssert.assertThat("Should be able to provide a " + component.getName(),canProvide(component), Matchers.is(Matchers.equalTo(true)));
         }
         mockery.assertIsSatisfied();
     }

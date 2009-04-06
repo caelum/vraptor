@@ -1,7 +1,5 @@
 right now:
 
-	- vraptor2 public method register algorithm
-
 	- Boolean, Double converter (wrapper)
 
 	- BigDecimal, BigInteger converter
@@ -116,3 +114,4 @@ done:
 - vraptor2: @Component lookup
 - primitive converters
 - enum converter
+- vraptor2: public method lookup (old algo)

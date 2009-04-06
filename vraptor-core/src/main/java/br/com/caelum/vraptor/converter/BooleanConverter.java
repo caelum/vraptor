@@ -32,18 +32,18 @@ package br.com.caelum.vraptor.converter;
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 
-@Convert(Long.class)
-public class LongConverter implements Converter<Long> {
+@Convert(Boolean.class)
+public class BooleanConverter implements Converter<Boolean> {
 
-    public Long convert(String value, Class<? extends Long> type) {
+    public Boolean convert(String value, Class<? extends Boolean> type) {
         if (value == null) {
             return null;
         }
         try {
-            return Long.valueOf(value);
+            return Boolean.valueOf(value);
         } catch (NumberFormatException e) {
             // TODO validation?
-            throw new IllegalArgumentException("Unable to converter '" + value + "'.");
+            throw new IllegalArgumentException("Unable to convert '" + value + "'.");
         }
     }
 

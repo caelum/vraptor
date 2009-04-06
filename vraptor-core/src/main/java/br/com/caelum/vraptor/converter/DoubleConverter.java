@@ -32,15 +32,15 @@ package br.com.caelum.vraptor.converter;
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 
-@Convert(Long.class)
-public class LongConverter implements Converter<Long> {
+@Convert(Double.class)
+public class DoubleConverter implements Converter<Double> {
 
-    public Long convert(String value, Class<? extends Long> type) {
+    public Double convert(String value, Class<? extends Double> type) {
         if (value == null) {
             return null;
         }
         try {
-            return Long.valueOf(value);
+            return Double.valueOf(value);
         } catch (NumberFormatException e) {
             // TODO validation?
             throw new IllegalArgumentException("Unable to converter '" + value + "'.");

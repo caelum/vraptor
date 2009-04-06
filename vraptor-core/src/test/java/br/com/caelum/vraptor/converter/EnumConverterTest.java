@@ -27,9 +27,19 @@ public class EnumConverterTest {
         assertThat((MyCustomEnum) converter.convert("FIRST", MyCustomEnum.class), is(equalTo(MyCustomEnum.FIRST)));
     }
 
+    @Test
+    public void shouldConvertEmptyToNull() {
+        assertThat(converter.convert("", MyCustomEnum.class), is(nullValue()));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldComplainAboutInvalidIndex() {
+        converter.convert("3200", MyCustomEnum.class);
+    }
+
     @Test(expected = IllegalArgumentException.class)
     public void shouldComplainAboutInvalidNumber() {
-        converter.convert("3200", MyCustomEnum.class);
+        converter.convert("32a00", MyCustomEnum.class);
     }
 
     @Test(expected = IllegalArgumentException.class)

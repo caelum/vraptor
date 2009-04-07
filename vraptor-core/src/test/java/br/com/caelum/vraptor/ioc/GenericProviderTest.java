@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor.ioc.pico;
+package br.com.caelum.vraptor.ioc;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,6 +20,8 @@ import br.com.caelum.vraptor.http.TypeCreator;
 import br.com.caelum.vraptor.http.UrlToResourceTranslator;
 import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
+import br.com.caelum.vraptor.ioc.pico.DirScanner;
+import br.com.caelum.vraptor.ioc.pico.ResourceLocator;
 import br.com.caelum.vraptor.resource.ResourceRegistry;
 
 /**

@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor.ioc.pico;
+package br.com.caelum.vraptor.ioc;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,6 +24,7 @@ import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
 import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
 import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
 import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor.ioc.pico.PicoProvider;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.view.jsp.PageResult;
 

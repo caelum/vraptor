@@ -29,13 +29,18 @@
  */
 package br.com.caelum.vraptor.ioc.spring;
 
-import javax.servlet.ServletContext;
-
+import br.com.caelum.vraptor.core.DefaultRequestExecution;
+import br.com.caelum.vraptor.http.AsmBasedTypeCreator;
+import br.com.caelum.vraptor.http.StupidTranslator;
+import br.com.caelum.vraptor.interceptor.DefaultInterceptorRegistry;
+import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
+import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor.resource.DefaultMethodLookupBuilder;
+import br.com.caelum.vraptor.resource.DefaultResourceRegistry;
 import org.springframework.aop.config.AopConfigUtils;
 import org.springframework.beans.factory.BeanFactoryUtils;
 import org.springframework.beans.factory.annotation.AnnotatedGenericBeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.context.annotation.AnnotationBeanNameGenerator;
 import org.springframework.context.annotation.AnnotationConfigUtils;
@@ -43,20 +48,12 @@ import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.core.Ordered;
 import org.springframework.web.context.support.GenericWebApplicationContext;
 
-import br.com.caelum.vraptor.core.DefaultInterceptorStack;
-import br.com.caelum.vraptor.core.DefaultRequestExecution;
-import br.com.caelum.vraptor.core.RequestExecution;
-import br.com.caelum.vraptor.core.VRaptorRequest;
-import br.com.caelum.vraptor.http.StupidTranslator;
-import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
-import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.ioc.ContainerProvider;
-import br.com.caelum.vraptor.resource.DefaultResourceRegistry;
+import javax.servlet.ServletContext;
 
 /**
  * @author Fabio Kung
  */
-public class SpringBasedContainer implements ContainerProvider {
+public class SpringBasedContainer implements Container {
     private final AnnotationBeanNameGenerator beanNameGenerator = new AnnotationBeanNameGenerator();
     private final GenericWebApplicationContext applicationContext;
 
@@ -71,17 +68,6 @@ public class SpringBasedContainer implements ContainerProvider {
         registerCustomInjectionProcessor(applicationContext);
         AnnotationConfigUtils.registerAnnotationConfigProcessors(applicationContext);
         AopConfigUtils.registerAspectJAnnotationAutoProxyCreatorIfNecessary(applicationContext);
-
-        registerBeanOf(DefaultResourceRegistry.class, applicationContext);
-        registerBeanOf(StupidTranslator.class, applicationContext);
-        registerBeanOf(DefaultRequestExecution.class, applicationContext);
-        registerBeanOf(DefaultInterceptorStack.class, applicationContext);
-		registerBeanOf(InstantiateInterceptor.class, applicationContext);
-    }
-
-    private void registerBeanOf(Class<?> type, BeanDefinitionRegistry registry) {
-        AnnotatedGenericBeanDefinition definition = new AnnotatedGenericBeanDefinition(type);
-        registry.registerBeanDefinition(beanNameGenerator.generateBeanName(definition, registry), definition);
     }
 
     private void registerCustomInjectionProcessor(GenericApplicationContext applicationContext) {
@@ -92,6 +78,15 @@ public class SpringBasedContainer implements ContainerProvider {
     }
 
     public void start(ServletContext context) {
+        register(context);
+        register(DefaultResourceRegistry.class);
+        register(StupidTranslator.class);
+        register(DefaultRequestExecution.class);
+        register(DefaultInterceptorRegistry.class);
+        register(InstantiateInterceptor.class);
+        register(AsmBasedTypeCreator.class);
+        register(DefaultMethodLookupBuilder.class);
+
         new ComponentScanner(applicationContext).scan(basePackages);
         applicationContext.refresh();
         applicationContext.start();
@@ -106,10 +101,13 @@ public class SpringBasedContainer implements ContainerProvider {
         return (T) BeanFactoryUtils.beanOfType(applicationContext, type);
     }
 
-    public Container provide(VRaptorRequest vraptorRequest) {
-        RequestExecution execution = instanceFor(RequestExecution.class);
-        // TODO UGH? WHAT TO DO?  HELP!!!
-        return (Container) new RequestExecutionWrapper(execution, vraptorRequest);
+    public void register(Object instance) {
+        applicationContext.getBeanFactory().registerSingleton(instance.getClass().getName(), instance);
     }
 
+    public void register(Class<?> type) {
+        AnnotatedGenericBeanDefinition definition = new AnnotatedGenericBeanDefinition(type);
+        String name = beanNameGenerator.generateBeanName(definition, applicationContext);
+        applicationContext.registerBeanDefinition(name, definition);
+    }
 }

@@ -39,6 +39,6 @@ public class ComponentScanner extends ClassPathBeanDefinitionScanner {
     public ComponentScanner(BeanDefinitionRegistry registry) {
         super(registry, false);
         addIncludeFilter(new ComponentTypeFilter());
-//        setScopeMetadataResolver(new VRaptorScopeResolver());
+        setScopeMetadataResolver(new VRaptorScopeResolver());
     }
 }

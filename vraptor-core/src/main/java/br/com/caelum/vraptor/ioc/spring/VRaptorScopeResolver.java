@@ -35,12 +35,12 @@ public class VRaptorScopeResolver implements ScopeMetadataResolver {
                 return scopeMetadata;
             }
         }
-        return singletonAsDefault();
+        return requestScopeAsDefault();
     }
 
-    private ScopeMetadata singletonAsDefault() {
+    private ScopeMetadata requestScopeAsDefault() {
         ScopeMetadata singleton = new ScopeMetadata();
-        singleton.setScopeName(BeanDefinition.SCOPE_SINGLETON);
+        singleton.setScopeName(WebApplicationContext.SCOPE_REQUEST);
         return singleton;
     }
 }

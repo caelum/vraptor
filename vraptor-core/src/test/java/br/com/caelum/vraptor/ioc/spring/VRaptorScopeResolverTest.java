@@ -18,10 +18,10 @@ import br.com.caelum.vraptor.ioc.spring.components.SessionScopedComponent;
 public class VRaptorScopeResolverTest {
 
     @Test
-    public void shouldResolveToSingletonScopeByDefault() {
+    public void shouldResolveToRequestScopeByDefault() {
         ScopeMetadata scopeMetadata = readScopeMetadata(DummyComponent.class);
         Assert.assertEquals(ScopedProxyMode.NO, scopeMetadata.getScopedProxyMode());
-        Assert.assertEquals(BeanDefinition.SCOPE_SINGLETON, scopeMetadata.getScopeName());
+        Assert.assertEquals(WebApplicationContext.SCOPE_REQUEST, scopeMetadata.getScopeName());
     }
 
     @Test

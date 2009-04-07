@@ -8,6 +8,11 @@ import org.junit.Test;
 
 import javax.servlet.ServletContext;
 
+import br.com.caelum.vraptor.ioc.spring.components.ConstructorInjection;
+import br.com.caelum.vraptor.ioc.spring.components.DummyComponent;
+import br.com.caelum.vraptor.ioc.spring.components.DummyImplementation;
+import br.com.caelum.vraptor.ioc.spring.components.SpecialImplementation;
+
 /**
  * @author Fabio Kung
  */

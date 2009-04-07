@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor.ioc.spring;
+package br.com.caelum.vraptor.ioc.spring.components;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

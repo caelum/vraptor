@@ -36,4 +36,8 @@ public class SpringProvider implements ContainerProvider {
         container = new SpringBasedContainer(packages);
         container.start(context);
     }
+
+    public <T> T instanceFor(Class<T> type) {
+        return null;
+    }
 }

@@ -15,7 +15,7 @@ import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
 
 public class ResourceAcceptorTest {
 
-    private List<br.com.caelum.vraptor.resource.Resource> resources;
+    private List resources;
     private ResourceAcceptor acceptor;
 
     @Before

@@ -32,6 +32,7 @@ package br.com.caelum.vraptor.core;
 import java.io.IOException;
 
 import br.com.caelum.vraptor.InterceptionException;
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
 import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
 import br.com.caelum.vraptor.interceptor.InterceptorListPriorToExecutionExtractor;
@@ -43,6 +44,7 @@ import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
  * 
  * @author Guilherme Silveira
  */
+@ApplicationScoped
 public class DefaultRequestExecution implements RequestExecution {
     private final InterceptorStack interceptorStack;
     private final InstantiateInterceptor instantiator;

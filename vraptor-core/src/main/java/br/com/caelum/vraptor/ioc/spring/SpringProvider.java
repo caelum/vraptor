@@ -13,6 +13,7 @@ public class SpringProvider implements ContainerProvider {
     public static final String BASE_PACKAGES_PARAMETER_NAME = "br.com.caelum.vraptor.spring.packages";
 
     private SpringBasedContainer container;
+    private ServletContext context;
 
     public Container provide(VRaptorRequest vraptorRequest) {
         // TODO: black magic with ThreadLocal variables for http request and container
@@ -24,6 +25,7 @@ public class SpringProvider implements ContainerProvider {
     }
 
     public void start(ServletContext context) {
+        this.context = context;
         String packagesParameter = context.getInitParameter(BASE_PACKAGES_PARAMETER_NAME);
 
         String[] packages = null;

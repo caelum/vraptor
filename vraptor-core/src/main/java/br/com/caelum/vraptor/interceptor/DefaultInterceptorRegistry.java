@@ -34,8 +34,10 @@ import java.util.List;
 
 import br.com.caelum.vraptor.Interceptor;
 import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
+@ApplicationScoped
 public class DefaultInterceptorRegistry implements InterceptorRegistry{
     
     private final List<Class<? extends Interceptor>> interceptors = new ArrayList<Class<? extends Interceptor>>();

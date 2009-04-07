@@ -29,6 +29,8 @@
  */
 package br.com.caelum.vraptor.resource;
 
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -39,6 +41,7 @@ import java.util.List;
  * 
  * @author Guilherme Silveira
  */
+@ApplicationScoped
 public class DefaultResourceRegistry implements ResourceRegistry {
 
     private final List<ResourceAndMethodLookup> lookup = new ArrayList<ResourceAndMethodLookup>();

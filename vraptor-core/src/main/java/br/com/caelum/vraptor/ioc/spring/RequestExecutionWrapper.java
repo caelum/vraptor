@@ -29,38 +29,37 @@
  */
 package br.com.caelum.vraptor.ioc.spring;
 
-import java.io.IOException;
+import br.com.caelum.vraptor.VRaptorException;
+import br.com.caelum.vraptor.core.RequestExecution;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.RequestContextListener;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequestEvent;
 import javax.servlet.http.HttpServletRequest;
-
-import org.springframework.web.context.request.RequestContextListener;
-
-import br.com.caelum.vraptor.VRaptorException;
-import br.com.caelum.vraptor.core.RequestExecution;
-import br.com.caelum.vraptor.core.VRaptorRequest;
+import java.io.IOException;
 
 /**
  * @author Fabio Kung
  */
 class RequestExecutionWrapper implements RequestExecution {
     private RequestExecution execution;
+    private ServletContext servletContext;
     private RequestContextListener requestListener;
-    private VRaptorRequest request;
 
-    public RequestExecutionWrapper(RequestExecution execution, VRaptorRequest request) {
+    public RequestExecutionWrapper(RequestExecution execution, ServletContext context) {
         this.execution = execution;
+        servletContext = context;
         requestListener = new RequestContextListener();
-        this.request = request;
     }
 
     public void execute() throws IOException, VRaptorException {
-        ServletContext servletContext = request.getServletContext();
-        HttpServletRequest servletRequest = request.getRequest();
-
-        requestListener.requestInitialized(new ServletRequestEvent(servletContext, servletRequest));
+        ServletRequestAttributes requestAttributes =
+                (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+        HttpServletRequest request = requestAttributes.getRequest();
+        requestListener.requestInitialized(new ServletRequestEvent(servletContext, request));
         execution.execute();
-        requestListener.requestDestroyed(new ServletRequestEvent(servletContext, servletRequest));
+        requestListener.requestDestroyed(new ServletRequestEvent(servletContext, request));
     }
 }

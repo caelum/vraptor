@@ -45,7 +45,9 @@ import br.com.caelum.vraptor.asm.MethodVisitor;
 import br.com.caelum.vraptor.asm.Opcodes;
 import br.com.caelum.vraptor.http.asm.NameCreator;
 import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
+@ApplicationScoped
 public class AsmBasedTypeCreator implements TypeCreator, Opcodes {
 
     private static final Logger logger = LoggerFactory.getLogger(AsmBasedTypeCreator.class);

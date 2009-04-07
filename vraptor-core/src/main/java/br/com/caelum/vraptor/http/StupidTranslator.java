@@ -36,12 +36,14 @@ import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.resource.ResourceRegistry;
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
 /**
  * Basic url to resource method translator.
  * 
  * @author Guilherme Silveira
  */
+@ApplicationScoped
 public class StupidTranslator implements UrlToResourceTranslator {
 
     private final ResourceRegistry registry;

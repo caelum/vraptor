@@ -15,7 +15,7 @@ public class SpringProvider implements ContainerProvider {
     private SpringBasedContainer container;
 
     public Container provide(VRaptorRequest vraptorRequest) {
-        // TODO: black magic with ThreadLocal variables
+        // TODO: black magic with ThreadLocal variables for http request and container
         return container;
     }
 

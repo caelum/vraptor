@@ -1,12 +1,6 @@
 right now:
 
-	- MAKE CACHE WORKS
-	- MAKE CUSTOM COMPONENTS WORKS
-	- MAKE CONVERTERS GLOBAL, NOT LOCAL
-	- allow session attributes injection
-	- allow request attributes injection
-	
-	- resolve to null all Interceptor arguments which are not resolved
+	- MAKE CONVERTERS GLOBAL, NOT LOCAL?
 	
 	- resolve interceptororder with interceptorstack
 	- lookup de dir da para fazer uma vez so para tudo com varios acceptors
@@ -46,6 +40,7 @@ site docs (prior to release)
 	- plugins not supported
 	- converters without access to LogicRequest automatically supported through vraptor.xml
 - BigDecimal, BigInteger converter
+	- MAKE CACHE WORKS
 
 vraptor 2 support
 

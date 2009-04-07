@@ -38,7 +38,13 @@ public interface ContainerProvider {
     Container provide(VRaptorRequest vraptorRequest);
 
     void stop();
-    
+
     void start(ServletContext context);
+
+    /**
+     * Checks that the provider can provide this element. Used in acceptance
+     * tests to check that the provider is correctly configured by default.
+     */
+    <T> T instanceFor(Class<T> type);
 
 }

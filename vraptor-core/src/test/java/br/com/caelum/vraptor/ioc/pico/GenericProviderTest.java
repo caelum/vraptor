@@ -18,8 +18,8 @@ import br.com.caelum.vraptor.VRaptorException;
 import br.com.caelum.vraptor.core.VRaptorRequest;
 import br.com.caelum.vraptor.http.TypeCreator;
 import br.com.caelum.vraptor.http.UrlToResourceTranslator;
-import br.com.caelum.vraptor.interceptor.InterceptorListPriorToExecutionExtractor;
 import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
+import br.com.caelum.vraptor.ioc.ContainerProvider;
 import br.com.caelum.vraptor.resource.ResourceRegistry;
 
 /**
@@ -28,15 +28,15 @@ import br.com.caelum.vraptor.resource.ResourceRegistry;
  * @author Guilherme Silveira
  * 
  */
-public class GenericProviderTest {
+public abstract class GenericProviderTest {
 
-    private PicoProvider provider;
+    private ContainerProvider provider;
     private Mockery mockery;
     private VRaptorRequest request;
 
     @Before
     public void setup() throws IOException, VRaptorException {
-        this.provider = new PicoProvider();
+        this.provider = getProvider();
         this.mockery = new Mockery();
         final File tmpDir = File.createTempFile("tmp_", "_file").getParentFile();
         final File tmp = new File(tmpDir, "_tmp_vraptor_test");
@@ -53,6 +53,8 @@ public class GenericProviderTest {
         HttpServletResponse response = mockery.mock(HttpServletResponse.class);
         this.request = new VRaptorRequest(context, request, response);
     }
+
+    protected abstract ContainerProvider getProvider();
 
     @Test
     public void canProvideAllComponents() {

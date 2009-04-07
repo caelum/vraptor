@@ -5,13 +5,18 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
+import org.picocontainer.MutablePicoContainer;
+import org.picocontainer.PicoBuilder;
 
 import br.com.caelum.vraptor.core.VRaptorRequest;
+import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
 import br.com.caelum.vraptor.resource.DefaultResourceRegistry;
 import br.com.caelum.vraptor.resource.MethodLookupBuilder;
+import br.com.caelum.vraptor.resource.VRaptorInfo;
 
 public class PicoBasedContainerTest {
 
@@ -30,6 +35,7 @@ public class PicoBasedContainerTest {
     private Mockery mockery;
     private PicoBasedContainer container;
     private MethodLookupBuilder builder;
+    private MutablePicoContainer picoContainer;
 
     @Before
     public void setup() {
@@ -38,7 +44,13 @@ public class PicoBasedContainerTest {
         final HttpServletRequest webRequest = mockery.mock(HttpServletRequest.class);
         final HttpServletResponse webResponse = mockery.mock(HttpServletResponse.class);
         final VRaptorRequest request = new VRaptorRequest(null, webRequest, webResponse);
-        this.container = new PicoBasedContainer(null, request, new DefaultResourceRegistry(builder));
+        this.picoContainer = new PicoBuilder().withCaching().build();
+        mockery.checking(new Expectations() {
+            {
+                one(builder).lookupFor(with(VRaptorMatchers.resource(VRaptorInfo.class)));
+            }
+        });
+        this.container = new PicoBasedContainer(picoContainer, request, new DefaultResourceRegistry(builder));
     }
 
     @Test

@@ -27,7 +27,7 @@ import br.com.caelum.vraptor.view.jsp.PageResult;
  */
 public class Provider extends PicoProvider {
     
-    protected List<Class<?>> getComponentTypes() {
+    protected List<Class<?>> getCoreComponents() {
         List<Class<?>> components = new ArrayList<Class<?>>();
         components.add(StupidTranslator.class);
         components.add(DefaultResourceRegistry.class);

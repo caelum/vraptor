@@ -38,7 +38,6 @@ import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.PicoBuilder;
 
 import br.com.caelum.vraptor.Interceptor;
-import br.com.caelum.vraptor.converter.CachedConverters;
 import br.com.caelum.vraptor.core.DefaultConverters;
 import br.com.caelum.vraptor.core.DefaultInterceptorStack;
 import br.com.caelum.vraptor.core.DefaultRequestExecution;
@@ -73,7 +72,10 @@ public class PicoProvider implements ContainerProvider {
 
     public PicoProvider() {
         this.container = new PicoBuilder().withCaching().build();
-        for(Class<?> componentType : getComponentTypes()) {
+        for(Class<?> componentType : getCoreComponents()) {
+            container.addComponent(componentType);
+        }
+        for(Class<?> componentType : getApplicationComponents()) {
             container.addComponent(componentType);
         }
         // cache(CacheBasedResourceRegistry.class, ResourceRegistry.class);
@@ -87,7 +89,7 @@ public class PicoProvider implements ContainerProvider {
      * those who access the previous implementation will keep the reference
      * while new components will reference the new one -> NASTY!
      */
-    protected List<Class<?>> getComponentTypes() {
+    protected List<Class<?>> getCoreComponents() {
         List<Class<?>> components = new ArrayList<Class<?>>();
         components.add(StupidTranslator.class);
         components.add(DefaultResourceRegistry.class);
@@ -121,6 +123,9 @@ public class PicoProvider implements ContainerProvider {
         for(Class<? extends Interceptor> type : instanceFor(InterceptorRegistry.class).all()) {
             container.addComponent(type);
         }
+        for(Class<?> componentType : getRequestComponents()) {
+            container.addComponent(componentType);
+        }
         container.addComponent(request).addComponent(request.getRequest()).addComponent(request.getResponse());
         // cache(CachedConverters.class, Converters.class);
         return new PicoBasedContainer(container, request, instanceFor(ResourceRegistry.class));
@@ -141,4 +146,12 @@ public class PicoProvider implements ContainerProvider {
         return components;
     }
 
+    protected Class<?>[] getApplicationComponents() {
+        return new Class<?>[0];
+    }
+
+    protected Class<?>[] getRequestComponents() {
+        return new Class<?>[0];
+    }
+    
 }

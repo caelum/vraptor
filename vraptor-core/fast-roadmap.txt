@@ -9,6 +9,8 @@ right now:
 	- resolve to null all Interceptor arguments which are not resolved
 	
 	- resolve interceptororder with interceptorstack
+	- lookup de dir da para fazer uma vez so para tudo com varios acceptors
+	
 projo
 
 - converters: Date, Calendar, FixedLocaleCalendar, FixedLocaleDate

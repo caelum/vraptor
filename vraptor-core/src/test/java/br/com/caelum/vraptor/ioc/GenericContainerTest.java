@@ -11,27 +11,25 @@ import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.After;
 
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.core.DefaultInterceptorStack;
-import br.com.caelum.vraptor.core.DefaultRequestExecution;
 import br.com.caelum.vraptor.core.DefaultResult;
+import br.com.caelum.vraptor.core.RequestExecution;
 import br.com.caelum.vraptor.core.VRaptorRequest;
 import br.com.caelum.vraptor.http.OgnlParametersProvider;
-import br.com.caelum.vraptor.http.UrlToResourceTranslator;
 import br.com.caelum.vraptor.http.TypeCreator;
+import br.com.caelum.vraptor.http.UrlToResourceTranslator;
 import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
 import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
-import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
 import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
-import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.ioc.spring.SpringProvider;
-import br.com.caelum.vraptor.ioc.pico.PicoProvider;
+import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
 import br.com.caelum.vraptor.ioc.pico.DirScanner;
 import br.com.caelum.vraptor.ioc.pico.ResourceLocator;
+import br.com.caelum.vraptor.ioc.spring.SpringProvider;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.resource.ResourceRegistry;
 import br.com.caelum.vraptor.view.jsp.PageResult;
@@ -44,13 +42,15 @@ import br.com.caelum.vraptor.view.jsp.PageResult;
  */
 public abstract class GenericContainerTest {
 
-    private Mockery mockery;
+    protected Mockery mockery;
 
     private Container container;
 
     private ContainerProvider provider;
 
     private VRaptorRequest request;
+
+    protected ServletContext context;
 
     protected abstract ContainerProvider getProvider();
 
@@ -60,7 +60,7 @@ public abstract class GenericContainerTest {
         final File tmpDir = File.createTempFile("tmp_", "_file").getParentFile();
         final File tmp = new File(tmpDir, "_tmp_vraptor_test");
         tmp.mkdir();
-        final ServletContext context = mockery.mock(ServletContext.class);
+        this.context = mockery.mock(ServletContext.class);
         mockery.checking(new Expectations() {
             {
                 one(context).getRealPath("");
@@ -86,7 +86,7 @@ public abstract class GenericContainerTest {
     @Test
     public void canProvideAllRequestScopedComponents() {
         check(HttpServletRequest.class, HttpServletResponse.class,
-                VRaptorRequest.class, DefaultInterceptorStack.class, DefaultRequestExecution.class,
+                VRaptorRequest.class, DefaultInterceptorStack.class, RequestExecution.class,
                 ResourceLookupInterceptor.class, InstantiateInterceptor.class, DefaultResult.class,
                 ExecuteMethodInterceptor.class, OgnlParametersProvider.class, Converters.class);
         container.register(mockery.mock(ResourceMethod.class));

@@ -35,8 +35,8 @@ public class VRaptorMatchers {
         };
     }
 
-    public static Matcher resource(final Class<?> type) {
-        return new BaseMatcher() {
+    public static Matcher<Resource> resource(final Class<?> type) {
+        return new BaseMatcher<Resource>() {
 
             public boolean matches(Object item) {
                 if (!(item instanceof Resource)) {

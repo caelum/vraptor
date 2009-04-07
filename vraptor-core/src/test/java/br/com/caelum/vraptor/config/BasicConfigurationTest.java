@@ -54,6 +54,10 @@ public class BasicConfigurationTest {
 
         public void stop() {
         }
+
+        public <T> T instanceFor(Class<T> type) {
+            return null;
+        }
     }
 
     @Test
@@ -82,6 +86,10 @@ public class BasicConfigurationTest {
         }
 
         public void stop() {
+        }
+
+        public <T> T instanceFor(Class<T> type) {
+            return null;
         }
     }
 

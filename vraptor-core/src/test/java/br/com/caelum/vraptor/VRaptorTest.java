@@ -81,6 +81,10 @@ public class VRaptorTest {
         public void stop() {
         }
 
+        public <T> T instanceFor(Class<T> type) {
+            return null;
+        }
+
     }
 
 }

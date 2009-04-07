@@ -1,21 +1,25 @@
 package br.com.caelum.vraptor.ioc.spring;
 
+import org.jmock.Mockery;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-
 import org.junit.Before;
 import org.junit.Test;
+
+import javax.servlet.ServletContext;
 
 /**
  * @author Fabio Kung
  */
 public class SpringBasedContainerTest {
     private SpringBasedContainer container;
+    private Mockery mockery;
 
     @Before
     public void initContainer() {
+        mockery = new Mockery();
         container = new SpringBasedContainer("br.com.caelum.vraptor.ioc.spring");
-        container.start(null);
+        container.start(mockery.mock(ServletContext.class));
     }
 
     public void destroyContainer() {

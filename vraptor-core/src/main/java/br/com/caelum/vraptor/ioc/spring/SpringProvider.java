@@ -10,7 +10,7 @@ import javax.servlet.ServletContext;
  * @author Fabio Kung
  */
 public class SpringProvider implements ContainerProvider {
-    private static final String BASE_PACKAGES_PARAMETER_NAME = "br.com.caelum.vraptor.spring.packages";
+    public static final String BASE_PACKAGES_PARAMETER_NAME = "br.com.caelum.vraptor.spring.packages";
 
     private SpringBasedContainer container;
 

@@ -13,6 +13,7 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.After;
 
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.core.DefaultInterceptorStack;
@@ -20,12 +21,19 @@ import br.com.caelum.vraptor.core.DefaultRequestExecution;
 import br.com.caelum.vraptor.core.DefaultResult;
 import br.com.caelum.vraptor.core.VRaptorRequest;
 import br.com.caelum.vraptor.http.OgnlParametersProvider;
+import br.com.caelum.vraptor.http.UrlToResourceTranslator;
+import br.com.caelum.vraptor.http.TypeCreator;
 import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
 import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
 import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
+import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
 import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor.ioc.spring.SpringProvider;
 import br.com.caelum.vraptor.ioc.pico.PicoProvider;
+import br.com.caelum.vraptor.ioc.pico.DirScanner;
+import br.com.caelum.vraptor.ioc.pico.ResourceLocator;
 import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.resource.ResourceRegistry;
 import br.com.caelum.vraptor.view.jsp.PageResult;
 
 /**
@@ -34,11 +42,17 @@ import br.com.caelum.vraptor.view.jsp.PageResult;
  * 
  * @author Guilherme Silveira
  */
-public class GenericContainerTest {
+public abstract class GenericContainerTest {
+
+    private Mockery mockery;
 
     private Container container;
-    private Mockery mockery;
+
+    private ContainerProvider provider;
+
     private VRaptorRequest request;
+
+    protected abstract ContainerProvider getProvider();
 
     @Before
     public void setup() throws IOException {
@@ -51,19 +65,26 @@ public class GenericContainerTest {
             {
                 one(context).getRealPath("");
                 will(returnValue(tmp.getAbsolutePath()));
+                // UGLY! move to Spring implementation...
+                allowing(context).getInitParameter(SpringProvider.BASE_PACKAGES_PARAMETER_NAME);
+                will(returnValue("no.packages"));
             }
         });
         HttpServletRequest request = mockery.mock(HttpServletRequest.class);
         HttpServletResponse response = mockery.mock(HttpServletResponse.class);
         this.request = new VRaptorRequest(context, request, response);
-        PicoProvider provider = new PicoProvider();
+        provider = getProvider();
         provider.start(context);
         this.container = provider.provide(this.request);
-        
+    }
+
+    @After
+    public void tearDown() {
+        provider.stop();
     }
 
     @Test
-    public void canProvideAllComponents() {
+    public void canProvideAllRequestScopedComponents() {
         check(HttpServletRequest.class, HttpServletResponse.class,
                 VRaptorRequest.class, DefaultInterceptorStack.class, DefaultRequestExecution.class,
                 ResourceLookupInterceptor.class, InstantiateInterceptor.class, DefaultResult.class,
@@ -73,10 +94,19 @@ public class GenericContainerTest {
         mockery.assertIsSatisfied();
     }
 
-    private void check(Class<?>...  components) {
+    private void check(Class<?> ...  components) {
         for (Class<?> component : components) {
-            MatcherAssert.assertThat("Should be able to give me a " + component.getName(), container.instanceFor(component), Matchers.is(Matchers.notNullValue()));
+            MatcherAssert.assertThat("Should be able to give me a " + component.getName(),
+                    container.instanceFor(component), Matchers.is(Matchers.notNullValue()));
         }
+    }
+
+    @Test
+    public void canProvideAllApplicationScopedComponents() {
+        Class<?>[] components = new Class[] { UrlToResourceTranslator.class, ResourceRegistry.class, DirScanner.class,
+                ResourceLocator.class, TypeCreator.class, InterceptorRegistry.class };
+        check(components);
+        mockery.assertIsSatisfied();
     }
 
 }

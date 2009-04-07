@@ -43,6 +43,6 @@ public interface Container {
 
     void register(Object instance);
     
-    <T> void register(Class<T> type);
+    void register(Class<?> type);
 
 }

@@ -29,12 +29,11 @@
  */
 package br.com.caelum.vraptor.ioc.pico;
 
-import org.picocontainer.MutablePicoContainer;
-
 import br.com.caelum.vraptor.core.VRaptorRequest;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceRegistry;
+import org.picocontainer.MutablePicoContainer;
 
 public class PicoBasedContainer implements Container {
 
@@ -58,7 +57,7 @@ public class PicoBasedContainer implements Container {
         this.container.addComponent(instance);
     }
 
-    public <T> void register(Class<T> type) {
+    public void register(Class<?> type) {
         this.container.addComponent(type);
     }
 

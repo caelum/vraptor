@@ -1,5 +1,8 @@
 package br.com.caelum.vraptor.ioc;
 
+import static org.hamcrest.MatcherAssert.*;
+import static org.hamcrest.Matchers.*;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -42,13 +45,11 @@ import br.com.caelum.vraptor.view.jsp.PageResult;
  */
 public abstract class GenericContainerTest {
 
+    private int counter;
+    
     protected Mockery mockery;
 
-    private Container container;
-
     private ContainerProvider provider;
-
-    private VRaptorRequest request;
 
     protected ServletContext context;
 
@@ -56,6 +57,7 @@ public abstract class GenericContainerTest {
 
     @Before
     public void setup() throws IOException {
+        counter = 0;
         this.mockery = new Mockery();
         final File tmpDir = File.createTempFile("tmp_", "_file").getParentFile();
         final File tmp = new File(tmpDir, "_tmp_vraptor_test");
@@ -70,12 +72,15 @@ public abstract class GenericContainerTest {
                 will(returnValue("no.packages"));
             }
         });
-        HttpServletRequest request = mockery.mock(HttpServletRequest.class);
-        HttpServletResponse response = mockery.mock(HttpServletResponse.class);
-        this.request = new VRaptorRequest(context, request, response);
+        createRequest();
         provider = getProvider();
         provider.start(context);
-        this.container = provider.provide(this.request);
+    }
+
+    private VRaptorRequest createRequest() {
+        HttpServletRequest request = mockery.mock(HttpServletRequest.class, "req" + counter++);
+        HttpServletResponse response = mockery.mock(HttpServletResponse.class, "res" + counter++);
+        return new VRaptorRequest(context, request, response);
     }
 
     @After
@@ -85,19 +90,29 @@ public abstract class GenericContainerTest {
 
     @Test
     public void canProvideAllRequestScopedComponents() {
-        check(HttpServletRequest.class, HttpServletResponse.class,
+        checkAvailabilityFor(false, HttpServletRequest.class, HttpServletResponse.class,
                 VRaptorRequest.class, DefaultInterceptorStack.class, RequestExecution.class,
                 ResourceLookupInterceptor.class, InstantiateInterceptor.class, DefaultResult.class,
                 ExecuteMethodInterceptor.class, OgnlParametersProvider.class, Converters.class);
-        container.register(mockery.mock(ResourceMethod.class));
-        check(PageResult.class);
+        checkAvailabilityFor(false, PageResult.class);
         mockery.assertIsSatisfied();
     }
 
-    private void check(Class<?> ...  components) {
+    private void checkAvailabilityFor(boolean shouldBeTheSame, Class<?> ...  components) {
         for (Class<?> component : components) {
-            MatcherAssert.assertThat("Should be able to give me a " + component.getName(),
-                    container.instanceFor(component), Matchers.is(Matchers.notNullValue()));
+            Container firstContainer = provider.provide(createRequest());
+            firstContainer.register(mockery.mock(ResourceMethod.class, "rm" + firstContainer));
+            Object firstInstance = firstContainer.instanceFor(component);
+            Container secondContainer = provider.provide(createRequest());
+            secondContainer.register(mockery.mock(ResourceMethod.class, "rm" + secondContainer ));
+            Object secondInstance = secondContainer.instanceFor(component);
+            if(shouldBeTheSame) {
+                MatcherAssert.assertThat("Should be the same instance for " + component.getName(),
+                        firstInstance, Matchers.is(equalTo(secondInstance)));
+            } else {
+                MatcherAssert.assertThat("Should not be the same instance for " + component.getName(),
+                        firstInstance, Matchers.is(not(equalTo(secondInstance))));
+            }
         }
     }
 
@@ -105,7 +120,7 @@ public abstract class GenericContainerTest {
     public void canProvideAllApplicationScopedComponents() {
         Class<?>[] components = new Class[] { UrlToResourceTranslator.class, ResourceRegistry.class, DirScanner.class,
                 ResourceLocator.class, TypeCreator.class, InterceptorRegistry.class };
-        check(components);
+        checkAvailabilityFor(true, components);
         mockery.assertIsSatisfied();
     }
 

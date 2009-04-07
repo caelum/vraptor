@@ -1,5 +1,9 @@
 right now:
 
+	- STARTABLE/STOPABLE COMPONENTS
+	- SCOPE REGISTERED CONMPIOENTS
+	
+
 	- MAKE CONVERTERS GLOBAL, NOT LOCAL?
 	
 	- resolve interceptororder with interceptorstack

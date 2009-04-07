@@ -29,6 +29,14 @@
  */
 package br.com.caelum.vraptor.ioc;
 
+/**
+ * Registers and provides components.<br>
+ * Registerable components can have two different scopes: request (by default)
+ * and application scope (only one instance for the entire app). App scoped
+ * components are registered through the use of the annotation \@ApplicatonScope.
+ * 
+ * @author Guilherme Silveira
+ */
 public interface Container {
 
     /**
@@ -41,8 +49,20 @@ public interface Container {
      */
     <T> T instanceFor(Class<T> type);
 
+    /**
+     * Registers an instance in this container respecting the lookup algorithm
+     * defined.
+     * 
+     * @param instance
+     */
     void register(Object instance);
-    
+
+    /**
+     * Registers a component type in this container respecting the lookup
+     * algorithm defined.
+     * 
+     * @param type
+     */
     void register(Class<?> type);
 
 }

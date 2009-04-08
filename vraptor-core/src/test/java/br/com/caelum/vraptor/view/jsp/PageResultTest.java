@@ -42,40 +42,6 @@ public class PageResultTest {
     }
 
     @Test
-    public void shouldUseDefaultPathResolverWhileForwarding() throws ServletException, IOException, NoSuchMethodException {
-        PageResult view = new PageResult(request, response, method);
-        mockery.checking(new Expectations() {
-            {
-                one(method).getResource(); will(returnValue(resource));
-                one(method).getMethod(); will(returnValue(DogController.class.getDeclaredMethod("bark")));
-                one(resource).getType(); will(returnValue(DogController.class));
-                one(request).getRequestDispatcher("/DogController/bark.ok.jsp");
-                will(returnValue(dispatcher));
-                one(dispatcher).forward(request, response);
-            }
-        });
-        view.forward("ok");
-        mockery.assertIsSatisfied();
-    }
-
-    @Test
-    public void shouldUseDefaultPathResolverWhileIncluding() throws ServletException, IOException, NoSuchMethodException {
-        PageResult view = new PageResult(request, response, method);
-        mockery.checking(new Expectations() {
-            {
-                one(method).getResource(); will(returnValue(resource));
-                one(method).getMethod(); will(returnValue(DogController.class.getDeclaredMethod("bark")));
-                one(resource).getType(); will(returnValue(DogController.class));
-                one(request).getRequestDispatcher("/DogController/bark.notOk.jsp");
-                will(returnValue(dispatcher));
-                one(dispatcher).include(request, response);
-            }
-        });
-        view.include("notOk");
-        mockery.assertIsSatisfied();
-    }
-
-    @Test
     public void shouldAllowCustomPathResolverWhileForwarding() throws ServletException, IOException {
         PageResult view = new PageResult(request, response, method, fixedResolver);
         mockery.checking(new Expectations() {

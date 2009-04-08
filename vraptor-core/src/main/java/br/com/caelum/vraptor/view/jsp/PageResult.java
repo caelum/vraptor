@@ -37,7 +37,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.view.DefaultPathResolver;
 import br.com.caelum.vraptor.view.PathResolver;
 
 /**
@@ -51,10 +50,6 @@ public class PageResult implements View {
     private final HttpServletResponse response;
     private final ResourceMethod method;
     private final PathResolver resolver;
-
-    public PageResult(HttpServletRequest req, HttpServletResponse res, ResourceMethod method) {
-        this(req,res,method, new DefaultPathResolver());
-    }
 
     public PageResult(HttpServletRequest req, HttpServletResponse res, ResourceMethod method,
             PathResolver resolver) {

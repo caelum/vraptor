@@ -1,7 +1,7 @@
 package br.com.caelum.vraptor.ioc;
 
-import static org.hamcrest.MatcherAssert.*;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.not;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,6 +9,7 @@ import java.io.IOException;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -78,7 +79,12 @@ public abstract class GenericContainerTest {
     }
 
     private VRaptorRequest createRequest() {
-        HttpServletRequest request = mockery.mock(HttpServletRequest.class, "req" + counter++);
+        final HttpServletRequest request = mockery.mock(HttpServletRequest.class, "req" + counter++);
+        mockery.checking(new Expectations() {
+            {
+                allowing(request).getSession(); will(returnValue(mockery.mock(HttpSession.class, "session" + counter++)));
+            }
+        });
         HttpServletResponse response = mockery.mock(HttpServletResponse.class, "res" + counter++);
         return new VRaptorRequest(context, request, response);
     }
@@ -93,7 +99,7 @@ public abstract class GenericContainerTest {
         checkAvailabilityFor(false, HttpServletRequest.class, HttpServletResponse.class, VRaptorRequest.class,
                 DefaultInterceptorStack.class, RequestExecution.class, ResourceLookupInterceptor.class,
                 InstantiateInterceptor.class, DefaultResult.class, ExecuteMethodInterceptor.class,
-                OgnlParametersProvider.class, Converters.class);
+                OgnlParametersProvider.class, Converters.class, HttpSession.class);
         checkAvailabilityFor(false, PageResult.class);
         mockery.assertIsSatisfied();
     }
@@ -107,12 +113,12 @@ public abstract class GenericContainerTest {
 
         if (componentToRegister != null) {
             firstContainer.register(componentToRegister);
-            if(secondContainer.instanceFor(componentToRegister)==null) {
+            if (secondContainer.instanceFor(componentToRegister) == null) {
                 // not an app scoped... then register on the other one too
                 secondContainer.register(componentToRegister);
             }
         }
-        
+
         Object firstInstance = firstContainer.instanceFor(component);
         Object secondInstance = secondContainer.instanceFor(component);
         checkSimilarity(component, shouldBeTheSame, firstInstance, secondInstance);
@@ -138,7 +144,7 @@ public abstract class GenericContainerTest {
     }
 
     private void checkAvailabilityFor(boolean shouldBeTheSame, Class<?>... components) {
-        for(Class<?> component : components) {
+        for (Class<?> component : components) {
             checkAvailabilityFor(shouldBeTheSame, component, null);
         }
     }

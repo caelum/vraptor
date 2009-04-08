@@ -65,7 +65,7 @@ public class ToInstantiateInterceptorHandler implements InterceptorHandler {
     public void execute(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws IOException, InterceptionException {
         Interceptor interceptor = Interceptor.class.cast(container.instanceFor(type));
         if(interceptor==null) {
-            throw new InterceptionException("Unable to instantiate interceptor for " + type.getName());
+            throw new InterceptionException("Unable to instantiate interceptor for " + type.getName() + ": the container returned null.");
         }
         interceptor.intercept(stack, method, resourceInstance);
     }

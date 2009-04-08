@@ -1,13 +1,10 @@
 right now:
 
-	- STARTABLE/STOPABLE COMPONENTS
-	- SCOPE REGISTERED CONMPIOENTS
-	
-
-	- MAKE CONVERTERS GLOBAL, NOT LOCAL?
-	
+	- caelumweb use Container to register App and normal scoped components
+	- STARTABLE/STOPABLE COMPONENTS with annotation + tests
 	- resolve interceptororder with interceptorstack
-	- lookup de dir da para fazer uma vez so para tudo com varios acceptors
+	- result interface as wished
+	- spring: defaultpathresolver
 	
 projo
 
@@ -15,19 +12,12 @@ projo
 - converters: jodatime
 - converters WRAPPERS: char, short, byte, float
 - further log
-- reflection fallback system on nullhandler (automatic?)
-- MIRROR usage as a fallback for OGNL instantiation
-- MIRROR usage everywhere
 - better exception handling everywhere (prior)
 - converters: File
-- CachedConverters and others should neve register(Class), they should do it at startup and clone those pico instances if faster... check it!
-- all converter erros messages should contain the original value between '' so its clear in the message if it was empty (or null)
-- test that checks that the main PicoContainer is not registered... and the converters interface is also not registered so it doesnt give the same converter to two different requests
 - silently skip unused request params? or complain? probably a debug/run flag... (debug = complain, run = skip) 
 - run flags in a vraptor-deploy.jar (only containing the custom config file)
 - better than vraptor2: support for inheritance
-minha ideia:
-- vraptor 2 interceptor migration tutorial
+- migration tutorial
 
 site docs (prior to release)
 - doc how to change the PathResolver algorithm
@@ -45,6 +35,7 @@ site docs (prior to release)
 	- converters without access to LogicRequest automatically supported through vraptor.xml
 - BigDecimal, BigInteger converter
 	- MAKE CACHE WORKS
+- MAKE CONVERTERS GLOBAL, NOT LOCAL?
 
 vraptor 2 support
 
@@ -83,10 +74,8 @@ right before release
 
 later customization (after first release)
 
+- lookup de dir da para fazer uma vez so para tudo com varios acceptors
 - ContainerBasedNullHandler support (non cached instances)
-- vraptor acceptance tests (sem integracao com servidor)
-- vraptor2 component support
-- vraptor2 interceptor support
 - vraptor2 plugin support?
 - 404 component (so its customizable)
 - customizable requestexecution
@@ -104,6 +93,18 @@ later customization (after first release)
 - allows registering of specific converters (model or method based)
 
 - default dir scanner misses unit tests
+
+ONLY AFTER RELEASE
+- MIRROR usage as a fallback for OGNL instantiation
+- MIRROR usage everywhere
+- reflection fallback system on nullhandler (automatic?)
+- CachedConverters and others should neve register(Class), they should do it at startup and clone those pico instances if faster... check it!
+- all converter erros messages should contain the original value between '' so its clear in the message if it was empty (or null)
+- test that checks that the main PicoContainer is not registered... and the converters interface is also not registered so it doesnt give the same converter to two different requests
+
+
+
+
 
 done:
 - support @Path
@@ -128,3 +129,6 @@ done:
 - vraptor2: public method lookup (old algo)
 - vraptor2: converter without request/session/context access support
 	- v2: view interceptor
+	- vraptor2 path resolver
+	- vraptor2 component instantiation
+	- vraptor2 interceptor instantiation

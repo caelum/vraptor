@@ -38,8 +38,7 @@ public class VRaptor2MethodLookup implements ResourceAndMethodLookup {
             if (!Modifier.isPublic(method.getModifiers())) {
                 continue;
             }
-            Logic logic = method.getAnnotation(Logic.class);
-            String logicName = (logic==null || logic.value()==null || logic.value().length==0) ? method.getName() : logic.value()[0];
+            String logicName = Info.getLogicName(method);
             logicName = "/" + componentName + "." + logicName + ".logic";
             if (logicName.equals(id)) {
                 return new DefaultResourceMethod(resource, method);

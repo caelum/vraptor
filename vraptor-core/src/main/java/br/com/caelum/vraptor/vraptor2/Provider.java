@@ -35,6 +35,7 @@ public class Provider extends PicoProvider {
         components.add(DefaultInterceptorRegistry.class);
         components.add(AsmBasedTypeCreator.class);
         components.add(VRaptor2MethodLookupBuilder.class);
+        components.add(VRaptor2PathResolver.class);
         components.add(Config.class);
         return components;
     }
@@ -47,7 +48,7 @@ public class Provider extends PicoProvider {
         components.add(ResourceLookupInterceptor.class);
         components.add(InstantiateInterceptor.class);
         components.add(DefaultResult.class);
-        components.add(ExecuteMethodInterceptor.class);
+        components.add(ExecuteAndViewInterceptor.class);
         components.add(PageResult.class);
         components.add(OgnlParametersProvider.class);
         components.add(VRaptor2Converters.class);

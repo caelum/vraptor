@@ -57,6 +57,7 @@ import br.com.caelum.vraptor.ioc.ContainerProvider;
 import br.com.caelum.vraptor.resource.DefaultMethodLookupBuilder;
 import br.com.caelum.vraptor.resource.DefaultResourceRegistry;
 import br.com.caelum.vraptor.resource.ResourceRegistry;
+import br.com.caelum.vraptor.view.DefaultPathResolver;
 import br.com.caelum.vraptor.view.jsp.PageResult;
 
 /**
@@ -71,7 +72,7 @@ public class PicoProvider implements ContainerProvider {
     private final MutablePicoContainer container;
 
     public PicoProvider() {
-        this.container = new PicoBuilder().withCaching().build();
+        this.container = new PicoBuilder().withCaching().withLifecycle().build();
         for(Class<?> componentType : getCoreComponents()) {
             container.addComponent(componentType);
         }
@@ -98,6 +99,7 @@ public class PicoProvider implements ContainerProvider {
         components.add(DefaultInterceptorRegistry.class);
         components.add(AsmBasedTypeCreator.class);
         components.add(DefaultMethodLookupBuilder.class);
+        components.add(DefaultPathResolver.class);
         return components;
     }
 
@@ -126,6 +128,7 @@ public class PicoProvider implements ContainerProvider {
         for(Class<?> componentType : getRequestComponents()) {
             container.addComponent(componentType);
         }
+        container.addComponent(request.getRequest().getSession());
         container.addComponent(request).addComponent(request.getRequest()).addComponent(request.getResponse());
         // cache(CachedConverters.class, Converters.class);
         return new PicoBasedContainer(this.container, container, request, instanceFor(ResourceRegistry.class));

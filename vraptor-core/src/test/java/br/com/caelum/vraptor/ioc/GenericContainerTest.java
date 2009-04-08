@@ -36,6 +36,7 @@ import br.com.caelum.vraptor.ioc.pico.ResourceLocator;
 import br.com.caelum.vraptor.ioc.spring.SpringProvider;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.resource.ResourceRegistry;
+import br.com.caelum.vraptor.view.PathResolver;
 import br.com.caelum.vraptor.view.jsp.PageResult;
 
 /**
@@ -108,8 +109,8 @@ public abstract class GenericContainerTest {
         Container firstContainer = provider.provide(createRequest());
         Container secondContainer = provider.provide(createRequest());
 
-        firstContainer.register(mockery.mock(ResourceMethod.class, "rm" + firstContainer));
-        secondContainer.register(mockery.mock(ResourceMethod.class, "rm" + secondContainer));
+        firstContainer.register(mockery.mock(ResourceMethod.class, "rm" + counter++));
+        secondContainer.register(mockery.mock(ResourceMethod.class, "rm" + counter++));
 
         if (componentToRegister != null) {
             firstContainer.register(componentToRegister);
@@ -138,7 +139,7 @@ public abstract class GenericContainerTest {
     @Test
     public void canProvideAllApplicationScopedComponents() {
         Class<?>[] components = new Class[] { UrlToResourceTranslator.class, ResourceRegistry.class, DirScanner.class,
-                ResourceLocator.class, TypeCreator.class, InterceptorRegistry.class };
+                ResourceLocator.class, TypeCreator.class, InterceptorRegistry.class, PathResolver.class };
         checkAvailabilityFor(true, components);
         mockery.assertIsSatisfied();
     }

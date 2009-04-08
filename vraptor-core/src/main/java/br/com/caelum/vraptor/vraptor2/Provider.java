@@ -25,7 +25,7 @@ import br.com.caelum.vraptor.view.jsp.PageResult;
  * @author Guilherme Silveira
  */
 public class Provider extends PicoProvider {
-    
+
     protected List<Class<?>> getCoreComponents() {
         List<Class<?>> components = new ArrayList<Class<?>>();
         components.add(StupidTranslator.class);
@@ -36,10 +36,10 @@ public class Provider extends PicoProvider {
         components.add(AsmBasedTypeCreator.class);
         components.add(VRaptor2MethodLookupBuilder.class);
         components.add(VRaptor2PathResolver.class);
-        components.add(Config.class);
+        components.add(VRaptor2Config.class);
         return components;
     }
-    
+
     protected List<Class<?>> getChildComponentTypes() {
         List<Class<?>> components = new ArrayList<Class<?>>();
         components.add(DefaultInterceptorStack.class);
@@ -52,6 +52,9 @@ public class Provider extends PicoProvider {
         components.add(PageResult.class);
         components.add(OgnlParametersProvider.class);
         components.add(VRaptor2Converters.class);
+        // TODO the following components are not required by vraptor2/3
+        // compatibility mode, but was added for unit tests
+        components.add(ExecuteMethodInterceptor.class);
         return components;
     }
 

@@ -13,7 +13,7 @@ public class VRaptor2Converters implements Converters {
     private final DefaultConverters vraptor3;
     private final List<org.vraptor.converter.Converter> converterList = new ArrayList<org.vraptor.converter.Converter>();
 
-    public VRaptor2Converters(Config config) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+    public VRaptor2Converters(VRaptor2Config config) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
         List<String> list = config.getConverters();
         for (String l : list) {
             Class<? extends org.vraptor.converter.Converter> converterType = (Class<? extends org.vraptor.converter.Converter>) Class

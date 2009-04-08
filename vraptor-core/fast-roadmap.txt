@@ -85,8 +85,6 @@ later customization (after first release)
 - hibernate plugin
 - Array, Set, Collection, SortedSet, Queue, Map, SortedMap support
 - generic interface support
-- allow private/protected constructors (search for every newInstance with getConstructor and setAccessible them, work it out with pico/mirror and so on)
-- allow private/protected getters/setters (ognl?)
 - custom converters for specified method parameters
 - setting errors during ognl expression evaluation should be defined as validation errors
 - allow registering of global converters
@@ -101,6 +99,9 @@ ONLY AFTER RELEASE
 - CachedConverters and others should neve register(Class), they should do it at startup and clone those pico instances if faster... check it!
 - all converter erros messages should contain the original value between '' so its clear in the message if it was empty (or null)
 - test that checks that the main PicoContainer is not registered... and the converters interface is also not registered so it doesnt give the same converter to two different requests
+- check all TODOS and do something about them
+- allow private/protected constructors (search for every newInstance with getConstructor and setAccessible them, work it out with pico/mirror and so on)
+- allow private/protected getters/setters
 
 
 
@@ -132,3 +133,5 @@ done:
 	- vraptor2 path resolver
 	- vraptor2 component instantiation
 	- vraptor2 interceptor instantiation
+	- vraptor2 regex view manager support
+	

@@ -109,11 +109,10 @@ public class SpringBasedContainer implements Container {
     private void registerApplicationScopedComponents() {
         register(DefaultResourceRegistry.class);
         register(StupidTranslator.class);
-        register(DefaultRequestExecution.class);
         register(DefaultInterceptorRegistry.class);
-        register(InstantiateInterceptor.class);
         register(AsmBasedTypeCreator.class);
         register(DefaultMethodLookupBuilder.class);
+        register(DefaultConverters.class);
     }
 
     private void registerRequestScopedComponents() {
@@ -126,7 +125,7 @@ public class SpringBasedContainer implements Container {
         register(ExecuteMethodInterceptor.class);
         register(PageResult.class);
         register(OgnlParametersProvider.class);
-        register(DefaultConverters.class);
+        register(this);
     }
 
     @SuppressWarnings("unchecked")

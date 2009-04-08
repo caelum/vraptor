@@ -19,22 +19,32 @@ public class VRaptor2PathResolverTest {
     private ResourceMethod method;
     private Resource resource;
     private VRaptor2PathResolver resolver;
+    private Config config;
 
     @Before
     public void config() {
         this.mockery = new Mockery();
         this.method = mockery.mock(ResourceMethod.class);
         this.resource = mockery.mock(Resource.class);
-        this.resolver = new VRaptor2PathResolver();
+        this.config = mockery.mock(Config.class);
+        mockery.checking(new Expectations() {
+            {
+                one(config).getViewPattern(); will(returnValue("/$component/$logic.$result.jsp"));
+            }
+        });
+        this.resolver = new VRaptor2PathResolver(config);
     }
-    
+
     @Test
     public void shouldDelegateToVraptor3IfItsNotAVRaptor2Component() throws NoSuchMethodException {
         mockery.checking(new Expectations() {
             {
-                exactly(2).of(method).getResource(); will(returnValue(resource));
-                one(method).getMethod(); will(returnValue(DogController.class.getDeclaredMethod("bark")));
-                exactly(2).of(resource).getType(); will(returnValue(DogController.class));
+                exactly(2).of(method).getResource();
+                will(returnValue(resource));
+                one(method).getMethod();
+                will(returnValue(DogController.class.getDeclaredMethod("bark")));
+                exactly(2).of(resource).getType();
+                will(returnValue(DogController.class));
             }
         });
         String result = resolver.pathFor(method, "ok");
@@ -46,9 +56,12 @@ public class VRaptor2PathResolverTest {
     public void shouldUseVRaptor2AlgorithmIfAVRaptor2Component() throws NoSuchMethodException {
         mockery.checking(new Expectations() {
             {
-                one(method).getResource(); will(returnValue(resource));
-                one(method).getMethod(); will(returnValue(CowLogic.class.getDeclaredMethod("eat")));
-                exactly(2).of(resource).getType(); will(returnValue(CowLogic.class));
+                one(method).getResource();
+                will(returnValue(resource));
+                one(method).getMethod();
+                will(returnValue(CowLogic.class.getDeclaredMethod("eat")));
+                exactly(2).of(resource).getType();
+                will(returnValue(CowLogic.class));
             }
         });
         String result = resolver.pathFor(method, "ok");

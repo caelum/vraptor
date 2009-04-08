@@ -128,7 +128,7 @@ public class PicoProvider implements ContainerProvider {
         }
         container.addComponent(request).addComponent(request.getRequest()).addComponent(request.getResponse());
         // cache(CachedConverters.class, Converters.class);
-        return new PicoBasedContainer(container, request, instanceFor(ResourceRegistry.class));
+        return new PicoBasedContainer(this.container, container, request, instanceFor(ResourceRegistry.class));
     }
 
     protected List<Class<?>> getChildComponentTypes() {

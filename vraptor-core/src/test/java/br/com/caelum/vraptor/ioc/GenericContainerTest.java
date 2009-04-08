@@ -46,7 +46,7 @@ import br.com.caelum.vraptor.view.jsp.PageResult;
 public abstract class GenericContainerTest {
 
     private int counter;
-    
+
     protected Mockery mockery;
 
     private ContainerProvider provider;
@@ -90,29 +90,42 @@ public abstract class GenericContainerTest {
 
     @Test
     public void canProvideAllRequestScopedComponents() {
-        checkAvailabilityFor(false, HttpServletRequest.class, HttpServletResponse.class,
-                VRaptorRequest.class, DefaultInterceptorStack.class, RequestExecution.class,
-                ResourceLookupInterceptor.class, InstantiateInterceptor.class, DefaultResult.class,
-                ExecuteMethodInterceptor.class, OgnlParametersProvider.class, Converters.class);
+        checkAvailabilityFor(false, HttpServletRequest.class, HttpServletResponse.class, VRaptorRequest.class,
+                DefaultInterceptorStack.class, RequestExecution.class, ResourceLookupInterceptor.class,
+                InstantiateInterceptor.class, DefaultResult.class, ExecuteMethodInterceptor.class,
+                OgnlParametersProvider.class, Converters.class);
         checkAvailabilityFor(false, PageResult.class);
         mockery.assertIsSatisfied();
     }
 
-    private void checkAvailabilityFor(boolean shouldBeTheSame, Class<?> ...  components) {
-        for (Class<?> component : components) {
-            Container firstContainer = provider.provide(createRequest());
-            firstContainer.register(mockery.mock(ResourceMethod.class, "rm" + firstContainer));
-            Object firstInstance = firstContainer.instanceFor(component);
-            Container secondContainer = provider.provide(createRequest());
-            secondContainer.register(mockery.mock(ResourceMethod.class, "rm" + secondContainer ));
-            Object secondInstance = secondContainer.instanceFor(component);
-            if(shouldBeTheSame) {
-                MatcherAssert.assertThat("Should be the same instance for " + component.getName(),
-                        firstInstance, Matchers.is(equalTo(secondInstance)));
-            } else {
-                MatcherAssert.assertThat("Should not be the same instance for " + component.getName(),
-                        firstInstance, Matchers.is(not(equalTo(secondInstance))));
+    private void checkAvailabilityFor(boolean shouldBeTheSame, Class<?> component, Class<?> componentToRegister) {
+        Container firstContainer = provider.provide(createRequest());
+        Container secondContainer = provider.provide(createRequest());
+
+        firstContainer.register(mockery.mock(ResourceMethod.class, "rm" + firstContainer));
+        secondContainer.register(mockery.mock(ResourceMethod.class, "rm" + secondContainer));
+
+        if (componentToRegister != null) {
+            firstContainer.register(componentToRegister);
+            if(secondContainer.instanceFor(componentToRegister)==null) {
+                // not an app scoped... then register on the other one too
+                secondContainer.register(componentToRegister);
             }
+        }
+        
+        Object firstInstance = firstContainer.instanceFor(component);
+        Object secondInstance = secondContainer.instanceFor(component);
+        checkSimilarity(component, shouldBeTheSame, firstInstance, secondInstance);
+    }
+
+    private void checkSimilarity(Class<?> component, boolean shouldBeTheSame, Object firstInstance,
+            Object secondInstance) {
+        if (shouldBeTheSame) {
+            MatcherAssert.assertThat("Should be the same instance for " + component.getName(), firstInstance, Matchers
+                    .is(equalTo(secondInstance)));
+        } else {
+            MatcherAssert.assertThat("Should not be the same instance for " + component.getName(), firstInstance,
+                    Matchers.is(not(equalTo(secondInstance))));
         }
     }
 
@@ -121,6 +134,33 @@ public abstract class GenericContainerTest {
         Class<?>[] components = new Class[] { UrlToResourceTranslator.class, ResourceRegistry.class, DirScanner.class,
                 ResourceLocator.class, TypeCreator.class, InterceptorRegistry.class };
         checkAvailabilityFor(true, components);
+        mockery.assertIsSatisfied();
+    }
+
+    private void checkAvailabilityFor(boolean shouldBeTheSame, Class<?>... components) {
+        for(Class<?> component : components) {
+            checkAvailabilityFor(shouldBeTheSame, component, null);
+        }
+    }
+
+    @ApplicationScoped
+    public static class MyAppComponent {
+
+    }
+
+    @Test
+    public void processesCorrectlyAppBasedComponents() {
+        checkAvailabilityFor(true, MyAppComponent.class, MyAppComponent.class);
+        mockery.assertIsSatisfied();
+    }
+
+    public static class MyRequestComponent {
+
+    }
+
+    @Test
+    public void processesCorrectlyRequestBasedComponents() {
+        checkAvailabilityFor(false, MyRequestComponent.class, MyRequestComponent.class);
         mockery.assertIsSatisfied();
     }
 

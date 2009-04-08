@@ -29,19 +29,25 @@
  */
 package br.com.caelum.vraptor.ioc.pico;
 
+import org.picocontainer.MutablePicoContainer;
+
 import br.com.caelum.vraptor.core.VRaptorRequest;
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceRegistry;
-import org.picocontainer.MutablePicoContainer;
 
 public class PicoBasedContainer implements Container {
 
     private final MutablePicoContainer container;
+    private final MutablePicoContainer parent;
 
-    public PicoBasedContainer(MutablePicoContainer container, VRaptorRequest request, ResourceRegistry resources) {
+    public PicoBasedContainer(MutablePicoContainer parent, MutablePicoContainer container, VRaptorRequest request,
+            ResourceRegistry resources) {
+        this.parent = parent;
         this.container = container;
-        // TODO try to remove addComponent(this) - InstantiateInterceptor and InterceptorStack
+        // TODO try to remove addComponent(this) - InstantiateInterceptor and
+        // InterceptorStack
         // needs to instantiate objects with dependency injection
         this.container.addComponent(this);
         for (Resource resource : resources.all()) {
@@ -54,11 +60,19 @@ public class PicoBasedContainer implements Container {
     }
 
     public void register(Object instance) {
-        this.container.addComponent(instance);
+        if (instance.getClass().isAnnotationPresent(ApplicationScoped.class)) {
+            this.parent.addComponent(instance);
+        } else {
+            this.container.addComponent(instance);
+        }
     }
 
     public void register(Class<?> type) {
-        this.container.addComponent(type);
+        if (type.isAnnotationPresent(ApplicationScoped.class)) {
+            this.parent.addComponent(type);
+        } else {
+            this.container.addComponent(type);
+        }
     }
 
 }

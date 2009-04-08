@@ -50,7 +50,7 @@ public class PicoBasedContainerTest {
                 one(builder).lookupFor(with(VRaptorMatchers.resource(VRaptorInfo.class)));
             }
         });
-        this.container = new PicoBasedContainer(picoContainer, request, new DefaultResourceRegistry(builder));
+        this.container = new PicoBasedContainer(new PicoBuilder().build(), picoContainer, request, new DefaultResourceRegistry(builder));
     }
 
     @Test

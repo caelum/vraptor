@@ -29,23 +29,8 @@
  */
 package br.com.caelum.vraptor.ioc.spring;
 
-import br.com.caelum.vraptor.core.DefaultConverters;
-import br.com.caelum.vraptor.core.DefaultInterceptorStack;
-import br.com.caelum.vraptor.core.DefaultRequestExecution;
-import br.com.caelum.vraptor.core.DefaultResult;
-import br.com.caelum.vraptor.core.RequestExecution;
-import br.com.caelum.vraptor.http.AsmBasedTypeCreator;
-import br.com.caelum.vraptor.http.OgnlParametersProvider;
-import br.com.caelum.vraptor.http.StupidTranslator;
-import br.com.caelum.vraptor.interceptor.DefaultInterceptorRegistry;
-import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
-import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
-import br.com.caelum.vraptor.interceptor.InterceptorListPriorToExecutionExtractor;
-import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
-import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.resource.DefaultMethodLookupBuilder;
-import br.com.caelum.vraptor.resource.DefaultResourceRegistry;
-import br.com.caelum.vraptor.view.jsp.PageResult;
+import javax.servlet.ServletContext;
+
 import org.springframework.aop.config.AopConfigUtils;
 import org.springframework.aop.scope.ScopedProxyUtils;
 import org.springframework.beans.factory.BeanFactoryUtils;
@@ -62,7 +47,24 @@ import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.core.Ordered;
 import org.springframework.web.context.support.GenericWebApplicationContext;
 
-import javax.servlet.ServletContext;
+import br.com.caelum.vraptor.core.DefaultConverters;
+import br.com.caelum.vraptor.core.DefaultInterceptorStack;
+import br.com.caelum.vraptor.core.DefaultRequestExecution;
+import br.com.caelum.vraptor.core.DefaultResult;
+import br.com.caelum.vraptor.core.RequestExecution;
+import br.com.caelum.vraptor.http.AsmBasedTypeCreator;
+import br.com.caelum.vraptor.http.OgnlParametersProvider;
+import br.com.caelum.vraptor.http.StupidTranslator;
+import br.com.caelum.vraptor.interceptor.DefaultInterceptorRegistry;
+import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
+import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
+import br.com.caelum.vraptor.interceptor.InterceptorListPriorToExecutionExtractor;
+import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
+import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor.resource.DefaultMethodLookupBuilder;
+import br.com.caelum.vraptor.resource.DefaultResourceRegistry;
+import br.com.caelum.vraptor.view.DefaultPathResolver;
+import br.com.caelum.vraptor.view.jsp.PageResult;
 
 /**
  * @author Fabio Kung
@@ -113,6 +115,7 @@ public class SpringBasedContainer implements Container {
         register(AsmBasedTypeCreator.class);
         register(DefaultMethodLookupBuilder.class);
         register(DefaultConverters.class);
+        register(DefaultPathResolver.class);
     }
 
     private void registerRequestScopedComponents() {

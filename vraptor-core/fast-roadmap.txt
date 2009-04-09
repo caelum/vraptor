@@ -4,7 +4,6 @@ right now:
 	- STARTABLE/STOPABLE COMPONENTS with annotation + tests
 	- resolve interceptororder with interceptorstack
 	- result interface as wished
-	- spring: defaultpathresolver
 	
 projo
 

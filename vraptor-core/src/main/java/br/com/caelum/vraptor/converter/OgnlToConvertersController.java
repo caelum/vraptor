@@ -50,12 +50,12 @@ public class OgnlToConvertersController implements TypeConverter {
     @SuppressWarnings("unchecked")
     public Object convertValue(Map context, Object target, Member member, String propertyName, Object value, Class toType) {
         if(!(member instanceof Method)) {
-            throw new IllegalArgumentException("Vraptor can only navigate through getter/setter methods");
+            throw new IllegalArgumentException("Vraptor can only navigate through getter/setter methods, not " + member + " from " + target.getClass().getName());
         }
         Method method = (Method) member;
         Type[] parameterTypes = method.getGenericParameterTypes();
         if(parameterTypes.length!=1) {
-            throw new IllegalArgumentException("Vraptor can only navigate through setters with one parameter");
+            throw new IllegalArgumentException("Vraptor can only navigate through setters with one parameter, not " + member + " from " + target.getClass().getName());
         }
         Type parameterType = parameterTypes[0];
         Class type;

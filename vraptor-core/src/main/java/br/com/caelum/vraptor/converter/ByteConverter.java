@@ -36,7 +36,7 @@ import br.com.caelum.vraptor.Converter;
 public class ByteConverter implements Converter<Byte> {
 
     public Byte convert(String value, Class<? extends Byte> type) {
-        if (value == null) {
+        if (value == null || value.equals("")) {
             return null;
         }
         try {

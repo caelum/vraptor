@@ -36,7 +36,7 @@ import br.com.caelum.vraptor.Converter;
 public class LongConverter implements Converter<Long> {
 
     public Long convert(String value, Class<? extends Long> type) {
-        if (value == null) {
+        if (value == null || value.equals("")) {
             return null;
         }
         try {

@@ -36,7 +36,7 @@ import br.com.caelum.vraptor.Converter;
 public class DoubleConverter implements Converter<Double> {
 
     public Double convert(String value, Class<? extends Double> type) {
-        if (value == null) {
+        if (value == null || value.equals("")) {
             return null;
         }
         try {

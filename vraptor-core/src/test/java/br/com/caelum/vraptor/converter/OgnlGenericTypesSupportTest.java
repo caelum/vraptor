@@ -85,6 +85,7 @@ public class OgnlGenericTypesSupportTest {
     public void isCapableOfInstantiatingCustomTypesInAListSettingItsInternalValue() throws OgnlException {
         Ognl.setValue("legs[0].color", context, myCat, "red");
         assertThat(myCat.legs.get(0).color, is(equalTo("red")));
+        mockery.assertIsSatisfied();
     }
 
     @Test
@@ -94,6 +95,7 @@ public class OgnlGenericTypesSupportTest {
         assertThat(legs.get(0), is(equalTo("small")));
         Ognl.setValue("legLength[1]", context, myCat, "big");
         assertThat(legs.get(1), is(equalTo("big")));
+        mockery.assertIsSatisfied();
     }
 
 

@@ -41,6 +41,7 @@ site docs (prior to release)
 	- filter optimization
 	- transaction/ddc optimization
 	- lookup for other common mistakes
+	- deploy mode: complain about unused args/ignore unused args
 
 
 vraptor 2 support

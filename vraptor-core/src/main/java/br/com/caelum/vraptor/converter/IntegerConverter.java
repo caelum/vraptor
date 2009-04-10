@@ -36,7 +36,7 @@ import br.com.caelum.vraptor.Converter;
 public class IntegerConverter implements Converter<Integer> {
 
     public Integer convert(String value, Class<? extends Integer> type) {
-        if (value == null) {
+        if (value == null || value.equals("")) {
             return null;
         }
         try {

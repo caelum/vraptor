@@ -36,7 +36,7 @@ import br.com.caelum.vraptor.Converter;
 public class FloatConverter implements Converter<Float> {
 
     public Float convert(String value, Class<? extends Float> type) {
-        if (value == null) {
+        if (value == null || value.equals("")) {
             return null;
         }
         try {

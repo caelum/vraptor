@@ -36,7 +36,7 @@ import br.com.caelum.vraptor.Converter;
 public class ShortConverter implements Converter<Short> {
 
     public Short convert(String value, Class<? extends Short> type) {
-        if (value == null) {
+        if (value == null || value.equals("")) {
             return null;
         }
         try {

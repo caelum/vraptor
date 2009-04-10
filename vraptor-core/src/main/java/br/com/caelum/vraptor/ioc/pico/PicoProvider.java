@@ -34,8 +34,12 @@ import java.util.List;
 
 import javax.servlet.ServletContext;
 
+import org.picocontainer.DefaultPicoContainer;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.PicoBuilder;
+import org.picocontainer.behaviors.Behaviors;
+import org.picocontainer.behaviors.Caching;
+import org.picocontainer.lifecycle.JavaEE5LifecycleStrategy;
 
 import br.com.caelum.vraptor.Interceptor;
 import br.com.caelum.vraptor.core.DefaultConverters;
@@ -72,7 +76,7 @@ public class PicoProvider implements ContainerProvider {
     private final MutablePicoContainer container;
 
     public PicoProvider() {
-        this.container = new PicoBuilder().withCaching().withLifecycle().build();
+        this.container = new PicoBuilder().withCaching().build();
         for(Class<?> componentType : getCoreComponents()) {
             container.addComponent(componentType);
         }

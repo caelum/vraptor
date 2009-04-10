@@ -52,6 +52,7 @@ public class Provider extends PicoProvider {
         components.add(PageResult.class);
         components.add(OgnlParametersProvider.class);
         components.add(VRaptor2Converters.class);
+        components.add(Validator.class);
         // TODO the following components are not required by vraptor2/3
         // compatibility mode, but was added for unit tests
         components.add(ExecuteMethodInterceptor.class);

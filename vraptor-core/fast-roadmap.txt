@@ -1,8 +1,6 @@
 right now:
 
-	- STARTABLE/STOPABLE COMPONENTS with annotation + tests
-
-
+	- validate compatible com vraptor2
 
 	- caelumweb use method FILL to app scope and request scope: adds to a list and adds on the run
 	- resolve interceptororder with interceptorstack
@@ -33,6 +31,19 @@ site docs (prior to release)
 - BigDecimal, BigInteger converter
 	- MAKE CACHE WORKS
 - MAKE CONVERTERS GLOBAL, NOT LOCAL?
+
+
+	pico problem:
+	- STARTABLE/STOPABLE COMPONENTS with annotation + tests
+	
+	optimizations (product):
+	- converter optimization
+	- connection leak
+	- static file lookup cache
+	- filter optimization
+	- transaction/ddc optimization
+	- lookup for other common mistakes
+
 
 vraptor 2 support
 
@@ -101,6 +112,7 @@ ONLY AFTER RELEASE
 - allow private/protected getters/setters
 - method addAsNext on InterceptorStack could have another name, could have been another interface (same implmementation)?
 - converters: jodatime
+- accept do base interceptors are not being invoked
 
 
 

@@ -39,4 +39,8 @@ public class VRaptorException extends Exception {
         super(msg);
     }
 
+    public VRaptorException(String msg, Throwable e) {
+        super(msg,e);
+    }
+
 }

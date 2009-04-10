@@ -39,4 +39,8 @@ public class InterceptionException extends VRaptorException {
         super(msg);
     }
 
+    public InterceptionException(String msg, Throwable e) {
+        super(msg, e);
+    }
+
 }

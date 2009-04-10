@@ -9,9 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.InterceptionException;
-import br.com.caelum.vraptor.core.DefaultRequestExecution;
 import br.com.caelum.vraptor.core.InterceptorStack;
-import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
 import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
 import br.com.caelum.vraptor.interceptor.InterceptorListPriorToExecutionExtractor;
 import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
@@ -39,6 +37,7 @@ public class VRaptor2RequestExecutionTest {
                 one(stack).add(ResourceLookupInterceptor.class); inSequence(sequence);
                 one(stack).add(InterceptorListPriorToExecutionExtractor.class); inSequence(sequence);
                 one(stack).add(instantiator); inSequence(sequence);
+                one(stack).add(Validator.class); inSequence(sequence);
                 one(stack).add(ExecuteAndViewInterceptor.class); inSequence(sequence);
                 one(stack).next(null, null); inSequence(sequence);
             }

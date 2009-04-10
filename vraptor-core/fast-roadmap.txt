@@ -1,9 +1,12 @@
 right now:
 
+	- ognl why sometimes field, why sometimes method
+	- caelumweb2 tarefa working
+
 	- caelumweb use method FILL to app scope and request scope: adds to a list and adds on the run
 	- resolve interceptororder with interceptorstack
 	
-- converters: Date, Calendar, FixedLocaleCalendar, FixedLocaleDate
+- converters: Date
 - better exception handling everywhere (prior)
 - converters: File
 - silently skip unused request params? or complain? probably a debug/run flag... (debug = complain, run = skip) 

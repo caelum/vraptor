@@ -39,6 +39,7 @@ import br.com.caelum.vraptor.converter.ByteConverter;
 import br.com.caelum.vraptor.converter.DoubleConverter;
 import br.com.caelum.vraptor.converter.FloatConverter;
 import br.com.caelum.vraptor.converter.IntegerConverter;
+import br.com.caelum.vraptor.converter.LocaleBasedCalendarConverter;
 import br.com.caelum.vraptor.converter.LongConverter;
 import br.com.caelum.vraptor.converter.PrimitiveBooleanConverter;
 import br.com.caelum.vraptor.converter.PrimitiveByteConverter;
@@ -60,7 +61,7 @@ public class DefaultConverters implements Converters {
             PrimitiveLongConverter.class, PrimitiveShortConverter.class, PrimitiveByteConverter.class,
             PrimitiveDoubleConverter.class, PrimitiveFloatConverter.class, PrimitiveBooleanConverter.class,
             IntegerConverter.class, LongConverter.class, ShortConverter.class, ByteConverter.class, DoubleConverter.class,
-            FloatConverter.class, BooleanConverter.class };
+            FloatConverter.class, BooleanConverter.class, LocaleBasedCalendarConverter.class };
 
     public DefaultConverters() {
         this.types = new LinkedList<Class<? extends Converter<?>>>();

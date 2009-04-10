@@ -1,24 +1,22 @@
 right now:
 
-	- caelumweb use Container to register App and normal scoped components
 	- STARTABLE/STOPABLE COMPONENTS with annotation + tests
-	- resolve interceptororder with interceptorstack
-	- result interface as wished
-	
-projo
 
+
+
+	- caelumweb use method FILL to app scope and request scope: adds to a list and adds on the run
+	- resolve interceptororder with interceptorstack
+	
 - converters: Date, Calendar, FixedLocaleCalendar, FixedLocaleDate
-- converters: jodatime
-- converters WRAPPERS: char, short, byte, float
-- further log
 - better exception handling everywhere (prior)
 - converters: File
 - silently skip unused request params? or complain? probably a debug/run flag... (debug = complain, run = skip) 
 - run flags in a vraptor-deploy.jar (only containing the custom config file)
 - better than vraptor2: support for inheritance
-- migration tutorial
+- result interface as wished
 
 site docs (prior to release)
+- migration tutorial
 - doc how to change the PathResolver algorithm
 - doc how to use PageResult directly
 - doc how to configure log
@@ -56,7 +54,6 @@ kung help
 - full spring support
 - concatenate convertion and validation errors
 - better package for typecreators
-- method addAsNext on InterceptorStack could have another name, could have been another interface (same implmementation)?
 
 
 
@@ -68,6 +65,7 @@ right before release
 	copyright in all files check
 	vraptor2 release with customized code
 		Component annotation was modified
+	static file redirect: extract to a testable component
 
 
 
@@ -101,6 +99,8 @@ ONLY AFTER RELEASE
 - check all TODOS and do something about them
 - allow private/protected constructors (search for every newInstance with getConstructor and setAccessible them, work it out with pico/mirror and so on)
 - allow private/protected getters/setters
+- method addAsNext on InterceptorStack could have another name, could have been another interface (same implmementation)?
+- converters: jodatime
 
 
 

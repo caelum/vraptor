@@ -30,6 +30,8 @@
 package br.com.caelum.vraptor;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -58,7 +60,7 @@ import br.com.caelum.vraptor.ioc.ContainerProvider;
 public class VRaptor implements Filter {
     private ContainerProvider provider;
     private ServletContext servletContext;
-    
+
     private static final Logger logger = LoggerFactory.getLogger(VRaptor.class);
 
     public void destroy() {
@@ -78,6 +80,11 @@ public class VRaptor implements Filter {
         HttpServletRequest webRequest = (HttpServletRequest) req;
         HttpServletResponse webResponse = (HttpServletResponse) res;
 
+        if (requestingStaticFile(webRequest)) {
+            deferProcessingToContainer(chain, webRequest, webResponse);
+            return;
+        }
+
         VRaptorRequest request = new VRaptorRequest(servletContext, webRequest, webResponse);
         try {
             provider.provide(request).instanceFor(RequestExecution.class).execute();
@@ -86,12 +93,34 @@ public class VRaptor implements Filter {
         }
     }
 
+    private void deferProcessingToContainer(FilterChain filterChain, HttpServletRequest request,
+            HttpServletResponse response) throws IOException, ServletException {
+        if (logger.isDebugEnabled()) {
+            logger.debug("deferring URI to container: " + request.getRequestURI());
+        }
+
+        filterChain.doFilter(request, response);
+    }
+
     public void init(FilterConfig cfg) throws ServletException {
         servletContext = cfg.getServletContext();
         BasicConfiguration config = new BasicConfiguration(servletContext);
         this.provider = config.getProvider();
         this.provider.start(servletContext);
         logger.info("VRaptor 3 successfuly initialized");
+    }
+
+    private boolean requestingStaticFile(HttpServletRequest request) throws MalformedURLException {
+        URL resourceUrl = servletContext.getResource(uriRelativeToContextRoot(request));
+        return resourceUrl != null && isAFile(resourceUrl);
+    }
+
+    private String uriRelativeToContextRoot(HttpServletRequest request) {
+        return request.getRequestURI().substring(request.getContextPath().length());
+    }
+
+    private boolean isAFile(URL resourceUrl) {
+        return !resourceUrl.toString().endsWith("/");
     }
 
 }

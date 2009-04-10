@@ -3,9 +3,6 @@ package br.com.caelum.vraptor.vraptor2;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
-import org.vraptor.annotations.Component;
-import org.vraptor.annotations.Logic;
-
 import br.com.caelum.vraptor.resource.DefaultResourceAndMethodLookup;
 import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.resource.Resource;

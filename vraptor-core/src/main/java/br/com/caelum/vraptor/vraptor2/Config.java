@@ -4,4 +4,6 @@ public interface Config {
 
     public String getViewPattern();
 
+    public String getForwardFor(String key);
+
 }

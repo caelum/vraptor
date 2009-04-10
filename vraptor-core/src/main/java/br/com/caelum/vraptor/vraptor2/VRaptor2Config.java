@@ -2,11 +2,15 @@ package br.com.caelum.vraptor.vraptor2;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
 import javax.servlet.ServletContext;
 
@@ -25,16 +29,40 @@ public class VRaptor2Config implements Config {
 
     private final List<String> converters = new ArrayList<String>();
 
+    private final Map<String, String> results = new HashMap<String,String>();
+
     private String viewPattern = "/$component/$logic.$result.jsp";
 
     public VRaptor2Config(ServletContext context) throws IOException {
-        File file = new File(context.getRealPath("/WEB-INF/classes/vraptor.xml"));
-        if (file.exists()) {
-            loadFile(file);
-        }
+        File xml = new File(context.getRealPath("/WEB-INF/classes/vraptor.xml"));
+        parseVRaptor(xml);
+        File views = new File(context.getRealPath("/WEB-INF/classes/views.properties"));
+        parseViews(views);
+    }
+    interface LineListener{
+        void content(String line);
     }
 
-    private void loadFile(File file) throws FileNotFoundException, IOException {
+    private void parseVRaptor(File file) throws FileNotFoundException, IOException {
+        parse(file, new LineListener() {
+            public void content(String line) {
+                if (line.contains("<converter>")) {
+                    line = extract(line, "converter");
+                    logger.info("Vraptor 2 converter found - remember to migrate to vraptor3 : " + line);
+                    converters.add(line);
+                } else if(line.contains("<regex-view-manager>")) {
+                    line = extract(line, "regex-view-manager");
+                    logger.info("Vraptor 2 regex-view-manager found - remember to migrate to vraptor3 : " + line);
+                    viewPattern = line;
+                }
+            }
+        });
+    }
+
+    private void parse(File file, LineListener listener) throws IOException {
+        if(!file.exists()) {
+            return;
+        }
         FileReader fileReader = new FileReader(file);
         BufferedReader reader = new BufferedReader(fileReader);
         while (true) {
@@ -42,18 +70,24 @@ public class VRaptor2Config implements Config {
             if (line == null) {
                 break;
             }
-            if (line.contains("<converter>")) {
-                line = extract(line, "converter");
-                logger.info("Vraptor 2 converter found - remember to migrate to vraptor3 : " + line);
-                this.converters.add(line);
-            } else if(line.contains("<regex-view-manager>")) {
-                line = extract(line, "regex-view-manager");
-                logger.info("Vraptor 2 regex-view-manager found - remember to migrate to vraptor3 : " + line);
-                this.viewPattern = line;
-            }
+            listener.content(line);
         }
         fileReader.close();
         reader.close();
+    }
+
+    private void parseViews(File file) throws FileNotFoundException, IOException {
+        if(!file.exists()) {
+            return;
+        }
+        logger.warn("Vraptor 2 views.properties found - remember to migrate to vraptor3");
+        Properties p = new Properties();
+        FileInputStream stream = new FileInputStream(file);
+        p.load(stream);
+        for(Object key : p.keySet()) {
+            results.put((String) key, p.getProperty((String) key));
+        }
+        stream.close();
     }
 
     private String extract(String line, String tag) {
@@ -66,6 +100,10 @@ public class VRaptor2Config implements Config {
 
     public List<String> getConverters() {
         return converters;
+    }
+
+    public String getForwardFor(String key) {
+        return this.results.get(key);
     }
 
 }

@@ -49,7 +49,7 @@ public class Provider extends PicoProvider {
         components.add(InstantiateInterceptor.class);
         components.add(DefaultResult.class);
         components.add(ExecuteAndViewInterceptor.class);
-        components.add(PageResult.class);
+        components.add(ViewsPropertiesPageResult.class);
         components.add(OgnlParametersProvider.class);
         components.add(VRaptor2Converters.class);
         components.add(Validator.class);

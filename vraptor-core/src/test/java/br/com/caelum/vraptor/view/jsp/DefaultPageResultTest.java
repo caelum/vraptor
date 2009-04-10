@@ -16,7 +16,7 @@ import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.view.PathResolver;
 
-public class PageResultTest {
+public class DefaultPageResultTest {
 
     private Mockery mockery;
     private HttpServletRequest request;
@@ -43,7 +43,7 @@ public class PageResultTest {
 
     @Test
     public void shouldAllowCustomPathResolverWhileForwarding() throws ServletException, IOException {
-        PageResult view = new PageResult(request, response, method, fixedResolver);
+        DefaultPageResult view = new DefaultPageResult(request, response, method, fixedResolver);
         mockery.checking(new Expectations() {
             {
                 one(request).getRequestDispatcher("fixed");
@@ -57,7 +57,7 @@ public class PageResultTest {
 
     @Test
     public void shouldAllowCustomPathResolverWhileIncluding() throws ServletException, IOException {
-        PageResult view = new PageResult(request, response, method, fixedResolver);
+        DefaultPageResult view = new DefaultPageResult(request, response, method, fixedResolver);
         mockery.checking(new Expectations() {
             {
                 one(request).getRequestDispatcher("fixed");

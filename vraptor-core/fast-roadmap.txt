@@ -53,7 +53,7 @@ vraptor 2 support
 - v2: converters with access to request/session/context
 - v2: custom converters used on annotated fields
 - vraptor2: pathresolver support on vraptor.xml based info
-- v2: support to validate method
+- v2: support to validate method (improved: complain about method with wrong number of args)
 - v2: support for views.properties
 
 kung help

@@ -34,13 +34,20 @@ import java.util.LinkedList;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
+import br.com.caelum.vraptor.converter.BooleanConverter;
+import br.com.caelum.vraptor.converter.ByteConverter;
+import br.com.caelum.vraptor.converter.DoubleConverter;
+import br.com.caelum.vraptor.converter.FloatConverter;
+import br.com.caelum.vraptor.converter.IntegerConverter;
 import br.com.caelum.vraptor.converter.LongConverter;
+import br.com.caelum.vraptor.converter.PrimitiveBooleanConverter;
 import br.com.caelum.vraptor.converter.PrimitiveByteConverter;
 import br.com.caelum.vraptor.converter.PrimitiveDoubleConverter;
 import br.com.caelum.vraptor.converter.PrimitiveFloatConverter;
 import br.com.caelum.vraptor.converter.PrimitiveIntConverter;
 import br.com.caelum.vraptor.converter.PrimitiveLongConverter;
 import br.com.caelum.vraptor.converter.PrimitiveShortConverter;
+import br.com.caelum.vraptor.converter.ShortConverter;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Container;
 
@@ -51,7 +58,9 @@ public class DefaultConverters implements Converters {
 
     public static final Class<? extends Converter<?>>[] DEFAULTS = new Class[] { PrimitiveIntConverter.class,
             PrimitiveLongConverter.class, PrimitiveShortConverter.class, PrimitiveByteConverter.class,
-            PrimitiveDoubleConverter.class, PrimitiveFloatConverter.class, LongConverter.class };
+            PrimitiveDoubleConverter.class, PrimitiveFloatConverter.class, PrimitiveBooleanConverter.class,
+            IntegerConverter.class, LongConverter.class, ShortConverter.class, ByteConverter.class, DoubleConverter.class,
+            FloatConverter.class, BooleanConverter.class };
 
     public DefaultConverters() {
         this.types = new LinkedList<Class<? extends Converter<?>>>();

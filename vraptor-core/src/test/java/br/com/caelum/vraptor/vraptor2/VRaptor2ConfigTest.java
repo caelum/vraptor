@@ -35,10 +35,28 @@ public class VRaptor2ConfigTest {
             {
                 one(context).getRealPath("/WEB-INF/classes/vraptor.xml");
                 will(returnValue(file.getAbsolutePath()));
+                one(context).getRealPath("/WEB-INF/classes/views.properties");
+                will(returnValue(new File("unknown").getAbsolutePath()));
             }
         });
         VRaptor2Config config = new VRaptor2Config(context);
         assertThat(config.getViewPattern(), is(equalTo("/custom/$component/$logic.$result.jsp")));
+        mockery.assertIsSatisfied();
+    }
+
+    @Test
+    public void readsViewsPropertiesIfFound() throws IOException {
+        final File file = create("key = value");
+        mockery.checking(new Expectations() {
+            {
+                one(context).getRealPath("/WEB-INF/classes/views.properties");
+                will(returnValue(file.getAbsolutePath()));
+                one(context).getRealPath("/WEB-INF/classes/vraptor.xml");
+                will(returnValue(new File("unknown").getAbsolutePath()));
+            }
+        });
+        VRaptor2Config config = new VRaptor2Config(context);
+        assertThat(config.getForwardFor("key"), is(equalTo("value")));
         mockery.assertIsSatisfied();
     }
 
@@ -57,6 +75,8 @@ public class VRaptor2ConfigTest {
             {
                 one(context).getRealPath("/WEB-INF/classes/vraptor.xml");
                 will(returnValue(file.getAbsolutePath()));
+                one(context).getRealPath("/WEB-INF/classes/views.properties");
+                will(returnValue(new File("unknown").getAbsolutePath()));
             }
         });
         VRaptor2Config config = new VRaptor2Config(context);
@@ -71,6 +91,8 @@ public class VRaptor2ConfigTest {
             {
                 one(context).getRealPath("/WEB-INF/classes/vraptor.xml");
                 will(returnValue(new File("unknown_file").getAbsolutePath()));
+                one(context).getRealPath("/WEB-INF/classes/views.properties");
+                will(returnValue(new File("unknown").getAbsolutePath()));
             }
         });
         VRaptor2Config config = new VRaptor2Config(context);
@@ -85,6 +107,8 @@ public class VRaptor2ConfigTest {
             {
                 one(context).getRealPath("/WEB-INF/classes/vraptor.xml");
                 will(returnValue(file.getAbsolutePath()));
+                one(context).getRealPath("/WEB-INF/classes/views.properties");
+                will(returnValue(new File("unknown").getAbsolutePath()));
             }
         });
         VRaptor2Config config = new VRaptor2Config(context);

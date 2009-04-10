@@ -86,6 +86,7 @@ public class VRaptor2Config implements Config {
         p.load(stream);
         for(Object key : p.keySet()) {
             results.put((String) key, p.getProperty((String) key));
+            logger.debug("Mapped: " + key + " to " + p.getProperty((String) key));
         }
         stream.close();
     }

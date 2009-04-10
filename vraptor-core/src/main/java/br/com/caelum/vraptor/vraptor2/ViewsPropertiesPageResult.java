@@ -42,12 +42,15 @@ public class ViewsPropertiesPageResult implements PageResult{
     }
 
     public void forward(String result) throws ServletException, IOException {
-        String path = config.getForwardFor(result);
+        String key = Info.getComponentName(method.getResource().getType()) + "." + Info.getLogicName(method.getMethod()) + "." + result;
+        
+        String path = config.getForwardFor(key);
+        
         if(path==null) {
             request.getRequestDispatcher(resolver.pathFor(method, result)).forward(request, response);
         } else{
             if (logger.isDebugEnabled()) {
-                logger.debug("overriden view found " + result + " : " + path);
+                logger.debug("overriden view found for " + key + " : " + path);
             }
             try {
                 result = evaluator.parseExpression(path, logic);

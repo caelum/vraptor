@@ -64,7 +64,7 @@ import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.resource.DefaultMethodLookupBuilder;
 import br.com.caelum.vraptor.resource.DefaultResourceRegistry;
 import br.com.caelum.vraptor.view.DefaultPathResolver;
-import br.com.caelum.vraptor.view.jsp.PageResult;
+import br.com.caelum.vraptor.view.jsp.DefaultPageResult;
 
 /**
  * @author Fabio Kung
@@ -126,7 +126,7 @@ public class SpringBasedContainer implements Container {
         register(InstantiateInterceptor.class);
         register(DefaultResult.class);
         register(ExecuteMethodInterceptor.class);
-        register(PageResult.class);
+        register(DefaultPageResult.class);
         register(OgnlParametersProvider.class);
         register(this);
     }

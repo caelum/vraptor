@@ -34,12 +34,8 @@ import java.util.List;
 
 import javax.servlet.ServletContext;
 
-import org.picocontainer.DefaultPicoContainer;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.PicoBuilder;
-import org.picocontainer.behaviors.Behaviors;
-import org.picocontainer.behaviors.Caching;
-import org.picocontainer.lifecycle.JavaEE5LifecycleStrategy;
 
 import br.com.caelum.vraptor.Interceptor;
 import br.com.caelum.vraptor.core.DefaultConverters;
@@ -62,7 +58,7 @@ import br.com.caelum.vraptor.resource.DefaultMethodLookupBuilder;
 import br.com.caelum.vraptor.resource.DefaultResourceRegistry;
 import br.com.caelum.vraptor.resource.ResourceRegistry;
 import br.com.caelum.vraptor.view.DefaultPathResolver;
-import br.com.caelum.vraptor.view.jsp.PageResult;
+import br.com.caelum.vraptor.view.jsp.DefaultPageResult;
 
 /**
  * Managing internal components by using pico container.<br>
@@ -148,7 +144,7 @@ public class PicoProvider implements ContainerProvider {
         components.add(InstantiateInterceptor.class);
         components.add(DefaultResult.class);
         components.add(ExecuteMethodInterceptor.class);
-        components.add(PageResult.class);
+        components.add(DefaultPageResult.class);
         components.add(OgnlParametersProvider.class);
         components.add(DefaultConverters.class);
         return components;

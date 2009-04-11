@@ -1,8 +1,7 @@
-right now:
+right now: 78/71
 
 	1 - static file redirect: extract to a testable component
 	2 - v2: getters for value injection if vraptor2 component, using vraptor2 crazy introspectors
-	3 - vraptor2converters tests
 	
 	4 - v2 paranamer support if vraptor2 component
 

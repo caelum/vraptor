@@ -75,6 +75,24 @@ public class DefaultConvertersTest {
             }
         });
         Converter<?> found = converters.to(MyData.class, container);
+        assertThat(found.getClass(), is(typeCompatibleWith(MyConverter.class)));
+        mockery.assertIsSatisfied();
+    }
+    @Test
+    public void askingTwiceForTheSameConverterWontRegisterItTwice() {
+        converters.register(MyConverter.class);
+        mockery.checking(new Expectations() {
+            {
+                one(container).instanceFor(MyConverter.class);
+                will(returnValue(null));
+                one(container).register(MyConverter.class);
+                exactly(3).of(container).instanceFor(MyConverter.class);
+                will(returnValue(new MyConverter()));
+            }
+        });
+        Converter<?> found = converters.to(MyData.class, container);
+        MatcherAssert.assertThat(found.getClass(), Matchers.is(Matchers.equalTo((Class)MyConverter.class)));
+        found = converters.to(MyData.class, container);
         MatcherAssert.assertThat(found.getClass(), Matchers.is(Matchers.equalTo((Class)MyConverter.class)));
         mockery.assertIsSatisfied();
     }

@@ -85,7 +85,9 @@ public class DefaultConverters implements Converters {
             Class<? extends Converter> converterType = (Class<? extends Converter>) iterator.next();
             Class boundType = converterType.getAnnotation(Convert.class).value();
             if (boundType.isAssignableFrom(type)) {
-                container.register(converterType);
+                if(container.instanceFor(converterType)==null) {
+                    container.register(converterType);
+                }
                 return container.instanceFor(converterType);
             }
         }

@@ -9,8 +9,6 @@ right now:
 
 
 
-
-	- ognl: why sometimes field, why sometimes method
 	- caelumweb use method FILL to app scope and request scope: adds to a list and adds on the run
 	- resolve interceptororder with interceptorstack
 	

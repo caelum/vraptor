@@ -1,8 +1,12 @@
 right now: 78/71
 
-	- caelumweb2: trocar senha support
-	
 	- paranamer support
+	- caelumweb2: trocar senha support
+	- ParanamerParameterNameProvider test
+	- Validator test
+	- ViewsProperties test
+	- VRaptor2MethodLookup test
+	
 	- caelumweb2: logout
 	- cw2: telefones
 	- path annotation with support to regex (niceurls?)

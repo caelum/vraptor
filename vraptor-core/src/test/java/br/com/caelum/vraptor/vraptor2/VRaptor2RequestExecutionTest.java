@@ -39,6 +39,8 @@ public class VRaptor2RequestExecutionTest {
                 one(stack).add(instantiator); inSequence(sequence);
                 one(stack).add(Validator.class); inSequence(sequence);
                 one(stack).add(ExecuteAndViewInterceptor.class); inSequence(sequence);
+                one(stack).add(OutjectionInterceptor.class); inSequence(sequence);
+                one(stack).add(ViewInterceptor.class); inSequence(sequence);
                 one(stack).next(null, null); inSequence(sequence);
             }
         });

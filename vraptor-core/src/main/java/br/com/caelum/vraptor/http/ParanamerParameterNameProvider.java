@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
  * 
  * @author Guilherme Silveira
  */
-public class ParanamerParameterNameProvider {
+public class ParanamerParameterNameProvider implements ParameterNameProvider{
 
     private static final String[] EMPTY_ARRAY = new String[0];
     private final ParameterNameProvider delegate = new DefaultParameterNameProvider();
@@ -25,7 +25,7 @@ public class ParanamerParameterNameProvider {
     
     private static final Logger logger = LoggerFactory.getLogger(ParanamerParameterNameProvider.class);
 
-    public String[] provideFor(Method method) {
+    public String[] parameterNamesFor(Method method) {
         if (method.getParameterTypes().length == 0) {
             return EMPTY_ARRAY;
         }

@@ -54,7 +54,7 @@ public class OutjectionInterceptorTest {
     public void shouldComplainAboutGetterWithArgs() throws SecurityException, NoSuchMethodException,
             InterceptionException, IOException {
         final ResourceMethod method = mockery.methodForResource(WithArgsComponent.class);
-        final WithArgsComponent component = mockery.mock(WithArgsComponent.class);
+        final WithArgsComponent component = new WithArgsComponent();
         mockery.checking(new Expectations() {
             {
                 one(stack).next(method, component);
@@ -68,7 +68,7 @@ public class OutjectionInterceptorTest {
     public void shouldComplainAboutNotReturningAnything() throws SecurityException, NoSuchMethodException,
             InterceptionException, IOException {
         final ResourceMethod method = mockery.methodForResource(NoReturnComponent.class);
-        final NoReturnComponent component = mockery.mock(NoReturnComponent.class);
+        final NoReturnComponent component = new NoReturnComponent();
         mockery.checking(new Expectations() {
             {
                 one(stack).next(method, component);

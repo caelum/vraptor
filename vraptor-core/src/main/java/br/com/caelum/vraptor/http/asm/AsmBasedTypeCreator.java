@@ -27,11 +27,10 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package br.com.caelum.vraptor.http;
+package br.com.caelum.vraptor.http.asm;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -43,9 +42,10 @@ import br.com.caelum.vraptor.asm.ClassWriter;
 import br.com.caelum.vraptor.asm.FieldVisitor;
 import br.com.caelum.vraptor.asm.MethodVisitor;
 import br.com.caelum.vraptor.asm.Opcodes;
-import br.com.caelum.vraptor.http.asm.NameCreator;
-import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.http.ParameterNameProvider;
+import br.com.caelum.vraptor.http.TypeCreator;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
+import br.com.caelum.vraptor.resource.ResourceMethod;
 
 @ApplicationScoped
 public class AsmBasedTypeCreator implements TypeCreator, Opcodes {
@@ -53,7 +53,6 @@ public class AsmBasedTypeCreator implements TypeCreator, Opcodes {
     private static final Logger logger = LoggerFactory.getLogger(AsmBasedTypeCreator.class);
     
     private static final SignatureConverter CONVERTER = new SignatureConverter();
-    private static final NameCreator NAMER = new NameCreator();
 
     /*
      * we require the class loading counter in order to work under the same
@@ -61,6 +60,12 @@ public class AsmBasedTypeCreator implements TypeCreator, Opcodes {
      * sooooooo slow)
      */
     private static int classLoadCounter = 0;
+
+    private final ParameterNameProvider provider;
+    
+    public AsmBasedTypeCreator(ParameterNameProvider provider) {
+        this.provider = provider;
+    }
 
     public Class<?> typeFor(ResourceMethod method) {
         Method reflectionMethod = method.getMethod();
@@ -119,7 +124,7 @@ public class AsmBasedTypeCreator implements TypeCreator, Opcodes {
     }
 
     private void parse(ClassWriter cw, ParameterizedType type, StringBuilder valueLists, String newTypeName) {
-        String fieldName = NAMER.extractName(type);
+        String fieldName = provider.nameFor(type);
         String definition = CONVERTER.extractTypeDefinition((Class<?>) type.getRawType());
         String genericDefinition = CONVERTER.extractTypeDefinition(type);
         parse(cw,valueLists,newTypeName, definition, genericDefinition, fieldName, ALOAD, ARETURN);
@@ -161,7 +166,7 @@ public class AsmBasedTypeCreator implements TypeCreator, Opcodes {
     }
 
     private void parse(ClassWriter cw, Class type, StringBuilder valueLists, String newTypeName) {
-        String fieldName = NAMER.extractName(type);
+        String fieldName = provider.nameFor(type);
         String definition = CONVERTER.extractTypeDefinition(type);
         String genericDefinition = null;
         parse(cw,valueLists,newTypeName,definition, genericDefinition, fieldName, loadFor(type), returnFor(type));
@@ -198,13 +203,6 @@ public class AsmBasedTypeCreator implements TypeCreator, Opcodes {
 
     private int loadFor(Class<?> type) {
         return type.isPrimitive() ? ILOAD : ALOAD;
-    }
-
-    public String nameFor(Type type) {
-        if(type instanceof ParameterizedType) {
-            return NAMER.extractName((ParameterizedType) type);
-        }
-        return NAMER.extractName((Class) type);
     }
 
 }

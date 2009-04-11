@@ -29,7 +29,6 @@
  */
 package br.com.caelum.vraptor.reflection;
 
-import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -61,10 +60,6 @@ public class CacheBasedTypeCreator implements TypeCreator {
             logger.debug("cached generic type for method " + method);
         }
         return cache.get(method);
-    }
-
-    public String nameFor(Type paramType) {
-        return creator.nameFor(paramType);
     }
 
 }

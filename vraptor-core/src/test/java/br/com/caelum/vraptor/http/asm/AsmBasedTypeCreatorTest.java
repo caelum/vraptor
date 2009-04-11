@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor.http;
+package br.com.caelum.vraptor.http.asm;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -13,6 +13,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.VRaptorMockery;
+import br.com.caelum.vraptor.http.DefaultParameterNameProvider;
+import br.com.caelum.vraptor.http.asm.AsmBasedTypeCreator;
 import br.com.caelum.vraptor.interceptor.DogAlike;
 
 public class AsmBasedTypeCreatorTest {
@@ -22,7 +24,7 @@ public class AsmBasedTypeCreatorTest {
 
     @Before
     public void setup() {
-        this.creator = new AsmBasedTypeCreator();
+        this.creator = new AsmBasedTypeCreator(new DefaultParameterNameProvider());
         this.mockery = new VRaptorMockery();
     }
 

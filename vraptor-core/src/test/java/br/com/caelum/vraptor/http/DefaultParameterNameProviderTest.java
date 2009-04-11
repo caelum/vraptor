@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor.http.asm;
+package br.com.caelum.vraptor.http;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
@@ -8,19 +8,18 @@ import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 
-
-public class NameCreatorTest {
+public class DefaultParameterNameProviderTest {
     
-    private NameCreator creator;
+    private DefaultParameterNameProvider creator;
 
     @Before
     public void setup() {
-        this.creator = new NameCreator();
+        this.creator = new DefaultParameterNameProvider();
     }
     
     @Test
     public void shouldNameObjectTypeAsItsSimpleName() {
-        MatcherAssert.assertThat(creator.extractName(NameCreatorTest.class), Matchers.is(Matchers.equalTo(NameCreatorTest.class.getSimpleName())));
+        MatcherAssert.assertThat(creator.extractName(DefaultParameterNameProviderTest.class), Matchers.is(Matchers.equalTo(DefaultParameterNameProviderTest.class.getSimpleName())));
     }
 
     @Test

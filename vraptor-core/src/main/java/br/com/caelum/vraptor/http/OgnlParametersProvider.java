@@ -55,13 +55,16 @@ public class OgnlParametersProvider implements ParametersProvider {
 
     private final Container container;
 
-    private final Converters converters; 
+    private final Converters converters;
 
-    public OgnlParametersProvider(HttpServletRequest request, TypeCreator creator, Container container, Converters converters) {
+    private final ParameterNameProvider provider; 
+
+    public OgnlParametersProvider(HttpServletRequest request, TypeCreator creator, Container container, Converters converters, ParameterNameProvider provider) {
         this.creator = creator;
         this.request = request;
         this.container = container;
         this.converters = converters;
+        this.provider = provider;
         OgnlRuntime.setNullHandler(Object.class, new ReflectionBasedNullHandler());
         OgnlRuntime.setPropertyAccessor(List.class, new ListAccessor());
     }
@@ -84,7 +87,7 @@ public class OgnlParametersProvider implements ParametersProvider {
             Object[] result = new Object[types.length];
             for (int i = 0; i < types.length; i++) {
                 Type paramType = types[i];
-                result[i] = root.getClass().getMethod("get" + creator.nameFor(paramType)).invoke(root);
+                result[i] = root.getClass().getMethod("get" + provider.nameFor(paramType)).invoke(root);
             }
             return result;
         } catch (InstantiationException e) {

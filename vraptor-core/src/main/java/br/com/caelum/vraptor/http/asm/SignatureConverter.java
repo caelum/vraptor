@@ -31,24 +31,48 @@ package br.com.caelum.vraptor.http.asm;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.HashMap;
+import java.util.Map;
 
-public class NameCreator {
+public class SignatureConverter {
 
-    public String extractName(ParameterizedType type) {
+    private static Map<Class<?>, String> WRAPPERS = new HashMap<Class<?>, String>();
+    static {
+        WRAPPERS.put(boolean.class, "Z");
+        WRAPPERS.put(int.class, "I");
+        WRAPPERS.put(short.class, "S");
+        WRAPPERS.put(long.class, "J");
+        WRAPPERS.put(double.class, "D");
+        WRAPPERS.put(float.class, "F");
+        WRAPPERS.put(byte.class, "B");
+        WRAPPERS.put(char.class, "C");
+    }
+
+    String wrapperFor(Class<?> type) {
+        return WRAPPERS.get(type);
+    }
+
+    String extractTypeDefinition(Class type) {
+        if(type.isArray()) {
+            return "[" + extractTypeDefinition(type.getComponentType());
+        }
+        if (type.isPrimitive()) {
+            return WRAPPERS.get(type);
+        }
+        return 'L' + type.getName().replace('.', '/') + ';';
+    }
+
+
+    String extractTypeDefinition(ParameterizedType type) {
         Type raw = type.getRawType();
-        String name = extractName((Class<?>) raw) + "Of";
+        String name = extractTypeDefinition((Class) raw);
+        name = name.substring(0,name.length()-1) + "<";
         Type[] types = type.getActualTypeArguments();
         for(Type t : types) {
-            name += extractName((Class<?>) t);
+            name += extractTypeDefinition((Class) t);
         }
-        return name;
+        return name + ">;";
     }
 
-    public String extractName(Class<?> type) {
-        if(type.isArray()) {
-            return type.getComponentType().getSimpleName();
-        }
-        return type.getSimpleName();
-    }
 
 }

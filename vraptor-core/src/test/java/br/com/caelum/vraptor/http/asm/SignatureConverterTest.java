@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor.http;
+package br.com.caelum.vraptor.http.asm;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
@@ -7,6 +7,8 @@ import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
+
+import br.com.caelum.vraptor.http.asm.SignatureConverter;
 
 public class SignatureConverterTest {
 

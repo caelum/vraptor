@@ -1,18 +1,18 @@
 right now: 78/71
 
-	1 - static file redirect: extract to a testable component
-	2 - v2: getters for value injection if vraptor2 component, using vraptor2 crazy introspectors
+	- caelumweb2: trocar senha support
 	
-	4 - v2 paranamer support if vraptor2 component
-
+	- paranamer support
 	- caelumweb2: logout
-
+	- cw2: telefones
 	- path annotation with support to regex (niceurls?)
+
+	- Array, Collection
+	Set support
+	Map support
 
 	- caelumweb2 finalizar tarefa
 	- cw2: statements
-	- cw2: telefones
-
 
 
 
@@ -31,7 +31,6 @@ right now: 78/71
 - result interface as wished
 	- MAKE CACHE WORKS
 - MAKE CONVERTERS GLOBAL, NOT LOCAL?
-- Array, Set, Collection, Map support
 - pico problem: STARTABLE/STOPABLE COMPONENTS with annotation + tests
 	
 site docs (prior to release)
@@ -54,6 +53,7 @@ site docs (prior to release)
 
 vraptor 2 support
 
+- v2: @Logic (parameters=...) support
 - method invocation w parameters
 - v2: converters with access to request/session/context
 - v2: custom converters used on annotated fields
@@ -163,7 +163,10 @@ ONLY AFTER RELEASE
 	- mistakes check removal: i.e. outjectioninterceptor ifs, assuming that the client code is just fine
 	- log visualization tool
 	- log per user on log file (so you can keep track of who did what and debug an specific user)
-
+	- v2: getters for value injection if vraptor2 component, using vraptor2 crazy introspectors, otherwise vraptor3
+	- v2 paranamer support if vraptor2 component
+	- validate invalid parameter names in vraptor2 (duplicated names)
+	- validate invalid parameter names in vraptor3 (duplicated names)
 
 
 done:

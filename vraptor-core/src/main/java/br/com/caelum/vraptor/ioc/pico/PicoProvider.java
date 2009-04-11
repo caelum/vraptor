@@ -44,6 +44,7 @@ import br.com.caelum.vraptor.core.DefaultRequestExecution;
 import br.com.caelum.vraptor.core.DefaultResult;
 import br.com.caelum.vraptor.core.VRaptorRequest;
 import br.com.caelum.vraptor.http.OgnlParametersProvider;
+import br.com.caelum.vraptor.http.ParanamerParameterNameProvider;
 import br.com.caelum.vraptor.http.StupidTranslator;
 import br.com.caelum.vraptor.http.asm.AsmBasedTypeCreator;
 import br.com.caelum.vraptor.interceptor.DefaultInterceptorRegistry;
@@ -100,6 +101,7 @@ public class PicoProvider implements ContainerProvider {
         components.add(AsmBasedTypeCreator.class);
         components.add(DefaultMethodLookupBuilder.class);
         components.add(DefaultPathResolver.class);
+        components.add(ParanamerParameterNameProvider.class);
         return components;
     }
 

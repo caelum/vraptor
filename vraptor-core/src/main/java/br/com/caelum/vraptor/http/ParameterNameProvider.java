@@ -1,9 +1,9 @@
 package br.com.caelum.vraptor.http;
 
-import java.lang.reflect.Type;
+import java.lang.reflect.Method;
 
 public interface ParameterNameProvider {
 
-    String nameFor(Type paramType);
+    String[] parameterNamesFor(Method method);
 
 }

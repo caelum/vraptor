@@ -51,7 +51,7 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 public class AsmBasedTypeCreator implements TypeCreator, Opcodes {
 
     private static final Logger logger = LoggerFactory.getLogger(AsmBasedTypeCreator.class);
-    
+
     private static final SignatureConverter CONVERTER = new SignatureConverter();
 
     /*
@@ -62,16 +62,16 @@ public class AsmBasedTypeCreator implements TypeCreator, Opcodes {
     private static int classLoadCounter = 0;
 
     private final ParameterNameProvider provider;
-    
+
     public AsmBasedTypeCreator(ParameterNameProvider provider) {
         this.provider = provider;
     }
 
-    public Class<?> typeFor(ResourceMethod method) {
-        Method reflectionMethod = method.getMethod();
+    public Class<?> typeFor(ResourceMethod resourceMethod) {
+        Method method = resourceMethod.getMethod();
 
-        final String newTypeName = reflectionMethod.getDeclaringClass().getSimpleName().replace('.','/') + "$" + reflectionMethod.getName()
-                + "$" + Math.abs(reflectionMethod.hashCode()) + "$" + (++classLoadCounter);
+        final String newTypeName = method.getDeclaringClass().getSimpleName().replace('.', '/') + "$"
+                + method.getName() + "$" + Math.abs(method.hashCode()) + "$" + (++classLoadCounter);
         logger.debug("Trying to make class for " + newTypeName);
 
         ClassWriter cw = new ClassWriter(0);
@@ -88,13 +88,14 @@ public class AsmBasedTypeCreator implements TypeCreator, Opcodes {
             mv.visitEnd();
         }
         StringBuilder valueLists = new StringBuilder();
-        java.lang.reflect.Type[] types = reflectionMethod.getGenericParameterTypes();
-        for (java.lang.reflect.Type type : types) {
-
+        java.lang.reflect.Type[] types = method.getGenericParameterTypes();
+        String[] names = provider.parameterNamesFor(method);
+        for (int i=0;i<types.length;i++) {
+            java.lang.reflect.Type type = types[i];
             if (type instanceof ParameterizedType) {
-                parse(cw, (ParameterizedType) type, valueLists, newTypeName);
+                parse(cw, (ParameterizedType) type, valueLists, newTypeName, names[i]);
             } else if (type instanceof Class) {
-                parse(cw, (Class<?>) type, valueLists, newTypeName);
+                parse(cw, (Class<?>) type, valueLists, newTypeName, names[i]);
             } else {
                 throw new IllegalArgumentException("Unable to identify field " + type + " of type "
                         + type.getClass().getName());
@@ -103,7 +104,7 @@ public class AsmBasedTypeCreator implements TypeCreator, Opcodes {
         }
         cw.visitEnd();
         final byte[] bytes = cw.toByteArray();
-        
+
         ClassLoader loader = new ClassLoader(this.getClass().getClassLoader()) {
             public Class<?> loadClass(String name) throws ClassNotFoundException {
                 if (name.equals(newTypeName)) {
@@ -123,11 +124,10 @@ public class AsmBasedTypeCreator implements TypeCreator, Opcodes {
         }
     }
 
-    private void parse(ClassWriter cw, ParameterizedType type, StringBuilder valueLists, String newTypeName) {
-        String fieldName = provider.nameFor(type);
+    private void parse(ClassWriter cw, ParameterizedType type, StringBuilder valueLists, String newTypeName, String fieldName) {
         String definition = CONVERTER.extractTypeDefinition((Class<?>) type.getRawType());
         String genericDefinition = CONVERTER.extractTypeDefinition(type);
-        parse(cw,valueLists,newTypeName, definition, genericDefinition, fieldName, ALOAD, ARETURN);
+        parse(cw, valueLists, newTypeName, definition, genericDefinition, fieldName, ALOAD, ARETURN);
         if (valueLists.length() != 0) {
             valueLists.append(',');
         }
@@ -144,7 +144,7 @@ public class AsmBasedTypeCreator implements TypeCreator, Opcodes {
         }
         {
             MethodVisitor mv = cw.visitMethod(ACC_PUBLIC, "set" + fieldName, "(" + definition + ")V",
-                    genericDefinition==null?null: "("+genericDefinition+")V", null);
+                    genericDefinition == null ? null : "(" + genericDefinition + ")V", null);
             mv.visitCode();
             mv.visitVarInsn(ALOAD, 0);
             mv.visitVarInsn(loadKey, 1);
@@ -154,8 +154,8 @@ public class AsmBasedTypeCreator implements TypeCreator, Opcodes {
             mv.visitEnd();
         }
         {
-            MethodVisitor mv = cw
-                    .visitMethod(ACC_PUBLIC, "get" + fieldName, "()" + definition, genericDefinition==null?null: "()"+genericDefinition, null);
+            MethodVisitor mv = cw.visitMethod(ACC_PUBLIC, "get" + fieldName, "()" + definition,
+                    genericDefinition == null ? null : "()" + genericDefinition, null);
             mv.visitCode();
             mv.visitVarInsn(ALOAD, 0);
             mv.visitFieldInsn(GETFIELD, newTypeName, fieldName + "_", definition);
@@ -165,12 +165,11 @@ public class AsmBasedTypeCreator implements TypeCreator, Opcodes {
         }
     }
 
-    private void parse(ClassWriter cw, Class type, StringBuilder valueLists, String newTypeName) {
-        String fieldName = provider.nameFor(type);
+    private void parse(ClassWriter cw, Class type, StringBuilder valueLists, String newTypeName, String fieldName) {
         String definition = CONVERTER.extractTypeDefinition(type);
         String genericDefinition = null;
-        parse(cw,valueLists,newTypeName,definition, genericDefinition, fieldName, loadFor(type), returnFor(type));
-        
+        parse(cw, valueLists, newTypeName, definition, genericDefinition, fieldName, loadFor(type), returnFor(type));
+
         if (valueLists.length() != 0) {
             valueLists.append(',');
         }
@@ -180,9 +179,9 @@ public class AsmBasedTypeCreator implements TypeCreator, Opcodes {
             valueLists.append(fieldName + "_");
         }
     }
-    
-    private static final Map<Class<?>, String> wrappers = new HashMap<Class<?>,String>();
-    
+
+    private static final Map<Class<?>, String> wrappers = new HashMap<Class<?>, String>();
+
     static {
         wrappers.put(int.class, "Integer.valueOf(");
         wrappers.put(boolean.class, "Boolean.valueOf(");
@@ -192,13 +191,13 @@ public class AsmBasedTypeCreator implements TypeCreator, Opcodes {
         wrappers.put(float.class, "Float.valueOf(");
         wrappers.put(char.class, "Character.valueOf(");
     }
-    
+
     private String wrapperCodeFor(Class<?> type, String fieldName) {
         return wrappers.get(type) + fieldName + ")";
     }
 
     private int returnFor(Class<?> type) {
-        return type.isPrimitive()? IRETURN : ARETURN;
+        return type.isPrimitive() ? IRETURN : ARETURN;
     }
 
     private int loadFor(Class<?> type) {

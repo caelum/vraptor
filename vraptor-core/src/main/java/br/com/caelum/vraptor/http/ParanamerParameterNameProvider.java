@@ -3,17 +3,12 @@ package br.com.caelum.vraptor.http;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.picocontainer.paranamer.BytecodeReadingParanamer;
 import org.picocontainer.paranamer.CachingParanamer;
 import org.picocontainer.paranamer.Paranamer;
-import org.vraptor.component.DefaultParameterInfoProvider;
-import org.vraptor.component.MethodParameter;
-import org.vraptor.component.ParameterInfoProvider;
-import org.vraptor.component.ParanamerParameterInfoProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Paranamer based parameter name provider provides parameter names based on
@@ -24,37 +19,33 @@ import org.vraptor.component.ParanamerParameterInfoProvider;
  */
 public class ParanamerParameterNameProvider {
 
-    private static final List<MethodParameter> EMPTY_LIST = new ArrayList<MethodParameter>();
-    private final ParameterInfoProvider delegate = new DefaultParameterInfoProvider();
-    private final Paranamer infoProvider = new CachingParanamer(new BytecodeReadingParanamer());
-    private static final Logger LOGGER = Logger.getLogger(ParanamerParameterInfoProvider.class);
+    private static final String[] EMPTY_ARRAY = new String[0];
+    private final ParameterNameProvider delegate = new DefaultParameterNameProvider();
+    private final Paranamer info = new CachingParanamer(new BytecodeReadingParanamer());
+    
+    private static final Logger logger = LoggerFactory.getLogger(ParanamerParameterNameProvider.class);
 
-    public List<MethodParameter> provideFor(Method method) {
+    public String[] provideFor(Method method) {
         if (method.getParameterTypes().length == 0) {
-            return EMPTY_LIST;
+            return EMPTY_ARRAY;
         }
         Class<?> declaringType = method.getDeclaringClass();
-        List<MethodParameter> original = delegate.provideFor(method);
-        if (infoProvider.areParameterNamesAvailable(declaringType, method.getName()) != Paranamer.PARAMETER_NAMES_FOUND) {
+        String[] original = delegate.parameterNamesFor(method);
+        if (info.areParameterNamesAvailable(declaringType, method.getName()) != Paranamer.PARAMETER_NAMES_FOUND) {
             return original;
         }
-        String[] parameterNames = infoProvider.lookupParameterNames(method);
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Found parameter names with paranamer for " + method + " as " + parameterNames);
+        String[] parameterNames = info.lookupParameterNames(method);
+        if (logger.isDebugEnabled()) {
+            logger.debug("Found parameter names with paranamer for " + method + " as " + parameterNames);
         }
-        List<MethodParameter> modified = new ArrayList<MethodParameter>();
-        int i = 0;
-        for (MethodParameter p : original) {
-            modified.add(new MethodParameter(p.getType(), p.getGenericType(), p.getPosition(), parameterNames[i++]));
-        }
-        return modified;
+        return parameterNames;
     }
 
     public String nameFor(Type type) {
         if (type instanceof ParameterizedType) {
             return extractName((ParameterizedType) type);
         }
-        return extractName((Class) type);
+        return extractName((Class<?>) type);
     }
 
     public String extractName(ParameterizedType type) {

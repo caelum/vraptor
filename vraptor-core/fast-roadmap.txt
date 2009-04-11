@@ -32,6 +32,9 @@ right now: 78/71
 	- MAKE CACHE WORKS
 - MAKE CONVERTERS GLOBAL, NOT LOCAL?
 - pico problem: STARTABLE/STOPABLE COMPONENTS with annotation + tests
+- verify org.apache.log4j logs -> sl4j
+- json output support
+- xml output support
 	
 site docs (prior to release)
 - migration tutorial
@@ -58,8 +61,8 @@ vraptor 2 support
 - v2: converters with access to request/session/context
 - v2: custom converters used on annotated fields
 - default Logic,Action and so on key removal
-- json
-- xml
+- json output
+- xml output
 
 kung help
 
@@ -68,8 +71,6 @@ kung help
 - support Validator
 - full spring support
 - concatenate convertion and validation errors
-- better package for typecreators
-
 
 
 
@@ -120,7 +121,6 @@ right before release
 
 
 
-
 ONLY AFTER RELEASE
 - MIRROR usage as a fallback for OGNL instantiation
 - MIRROR usage everywhere
@@ -142,6 +142,7 @@ ONLY AFTER RELEASE
 - vraptor2 components with support for inherited outjection/injection
 - vraptor2 logic with 2 names support
 - niceurl extra features
+- Logger.isDebugEnabled
 
 	optimizations (product):
 	- converter optimization
@@ -167,6 +168,9 @@ ONLY AFTER RELEASE
 	- v2 paranamer support if vraptor2 component
 	- validate invalid parameter names in vraptor2 (duplicated names)
 	- validate invalid parameter names in vraptor3 (duplicated names)
+	- empty lists should be cached and early returned
+	- cache EMPTY parameter class for method without parameters
+	- parameter name provider needs cache? maybe
 
 
 done:

@@ -69,6 +69,7 @@ public class OgnlParametersProvider implements ParametersProvider {
         OgnlRuntime.setPropertyAccessor(List.class, new ListAccessor());
     }
 
+    @SuppressWarnings("unchecked")
     public Object[] getParametersFor(ResourceMethod method) {
         try {
             Class<?> type = creator.typeFor(method);
@@ -85,9 +86,9 @@ public class OgnlParametersProvider implements ParametersProvider {
             }
             Type[] types = method.getMethod().getGenericParameterTypes();
             Object[] result = new Object[types.length];
+            String[] names = provider.parameterNamesFor(method.getMethod());
             for (int i = 0; i < types.length; i++) {
-                Type paramType = types[i];
-                result[i] = root.getClass().getMethod("get" + provider.nameFor(paramType)).invoke(root);
+                result[i] = root.getClass().getMethod("get" + names[i]).invoke(root);
             }
             return result;
         } catch (InstantiationException e) {

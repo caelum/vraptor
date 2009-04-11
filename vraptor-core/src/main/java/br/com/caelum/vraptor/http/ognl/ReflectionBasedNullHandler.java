@@ -31,9 +31,12 @@ package br.com.caelum.vraptor.http.ognl;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,6 +50,7 @@ public class ReflectionBasedNullHandler extends ObjectNullHandler {
 
     static {
         CONCRETE_TYPES.put(List.class, ArrayList.class);
+        CONCRETE_TYPES.put(Calendar.class, GregorianCalendar.class);
     }
 
     @SuppressWarnings("unchecked")
@@ -99,10 +103,10 @@ public class ReflectionBasedNullHandler extends ObjectNullHandler {
                 throw new IllegalArgumentException("Vraptor does not support array types: use lists instead!");
             }
             Class<?> typeToInstantiate = baseType;
-            if (baseType.isInterface()) {
+            if (baseType.isInterface() || Modifier.isAbstract(baseType.getModifiers())) {
                 if (!CONCRETE_TYPES.containsKey(baseType)) {
                     // TODO better
-                    throw new IllegalArgumentException("Vraptor does not support this interface: "
+                    throw new IllegalArgumentException("Vraptor does not support this interface or abstract type: "
                             + typeToInstantiate.getName());
                 }
                 typeToInstantiate = CONCRETE_TYPES.get(baseType);

@@ -5,7 +5,6 @@ import java.util.Locale;
 import br.com.caelum.vraptor.core.VRaptorRequest;
 
 public class JstlWrapper {
-    private static final String DEFAULT_BUNDLE_NAME = "messages";
 
     public Object find(VRaptorRequest request, String name) {
         if (request.getRequest().getAttribute(name + ".request")!=null) {
@@ -15,7 +14,7 @@ public class JstlWrapper {
         } else if (request.getServletContext().getAttribute(name + ".application")!=null) {
             return request.getServletContext().getAttribute(name + ".application");
         }
-        return request.getRequest().getSession().getServletContext().getInitParameter(name);
+        return request.getServletContext().getInitParameter(name);
     }
 
     public Locale findLocale(VRaptorRequest request) {

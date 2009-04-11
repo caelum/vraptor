@@ -1,18 +1,26 @@
 right now:
 
-	- ognl why sometimes field, why sometimes method
 	- caelumweb2 tarefa working
 
+	- caelumweb2 statement and telefones working
+	- better than vraptor2: support for inheritance
+
+
+
+
+
+
+	- ognl: why sometimes field, why sometimes method
 	- caelumweb use method FILL to app scope and request scope: adds to a list and adds on the run
 	- resolve interceptororder with interceptorstack
 	
-- converters: Date
 - better exception handling everywhere (prior)
 - converters: File
-- silently skip unused request params? or complain? probably a debug/run flag... (debug = complain, run = skip) 
-- run flags in a vraptor-deploy.jar (only containing the custom config file)
-- better than vraptor2: support for inheritance
 - result interface as wished
+- static file redirect: extract to a testable component
+- path annotation with support to nice urls
+	- MAKE CACHE WORKS
+- MAKE CONVERTERS GLOBAL, NOT LOCAL?
 
 site docs (prior to release)
 - migration tutorial
@@ -29,9 +37,8 @@ site docs (prior to release)
 	- Provider config
 	- plugins not supported
 	- converters without access to LogicRequest automatically supported through vraptor.xml
+- calendar support: either birthday or birthday.time
 - BigDecimal, BigInteger converter
-	- MAKE CACHE WORKS
-- MAKE CONVERTERS GLOBAL, NOT LOCAL?
 
 
 	pico problem:
@@ -45,6 +52,13 @@ site docs (prior to release)
 	- transaction/ddc optimization
 	- lookup for other common mistakes
 	- deploy mode: complain about unused args/ignore unused args
+	- support
+	- extra vraptor2 compatibility procedures:
+		- interceptor with restricted functionalities
+		- plugins with restricted functionalities
+		- custom lib
+	- vraptor2 code analysis product
+	- instantiate asm class only once
 
 
 vraptor 2 support
@@ -64,7 +78,6 @@ kung help
 
 - interceptor registration real support
 - paranamer support
-- support @Path with nice urls
 - support Validator
 - full spring support
 - concatenate convertion and validation errors
@@ -79,8 +92,14 @@ kung help
 right before release
 	copyright in all files check
 	vraptor2 release with customized code
-		Component annotation was modified
-	static file redirect: extract to a testable component
+		the org.vraptor.Component annotation was modified
+
+
+
+
+
+
+
 
 
 
@@ -117,7 +136,7 @@ ONLY AFTER RELEASE
 - method addAsNext on InterceptorStack could have another name, could have been another interface (same implmementation)?
 - converters: jodatime
 - accept do base interceptors are not being invoked
-
+- time converters
 
 
 
@@ -149,4 +168,10 @@ done:
 	- vraptor2 component instantiation
 	- vraptor2 interceptor instantiation
 	- vraptor2 regex view manager support
+- converters
+	primitive
+	wrappers
+	calendar
+	date
+	bigdecimal
 	

@@ -29,6 +29,7 @@
  */
 package br.com.caelum.vraptor.converter;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
@@ -36,11 +37,12 @@ import java.lang.reflect.Type;
 import java.util.Map;
 
 import ognl.TypeConverter;
+import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.ioc.Container;
 
 public class OgnlToConvertersController implements TypeConverter {
-    
+
     private final Converters converters;
 
     public OgnlToConvertersController(Converters converters) {
@@ -48,24 +50,39 @@ public class OgnlToConvertersController implements TypeConverter {
     }
 
     @SuppressWarnings("unchecked")
-    public Object convertValue(Map context, Object target, Member member, String propertyName, Object value, Class toType) {
-        if(!(member instanceof Method)) {
-            throw new IllegalArgumentException("Vraptor can only navigate through getter/setter methods, not " + member + " from " + target.getClass().getName());
-        }
-        Method method = (Method) member;
-        Type[] parameterTypes = method.getGenericParameterTypes();
-        if(parameterTypes.length!=1) {
-            throw new IllegalArgumentException("Vraptor can only navigate through setters with one parameter, not " + member + " from " + target.getClass().getName());
-        }
-        Type parameterType = parameterTypes[0];
-        Class type;
-        if(parameterType instanceof ParameterizedType) {
-            type = (Class) ((ParameterizedType) parameterType).getRawType();
+    public Object convertValue(Map context, Object target, Member member, String propertyName, Object value,
+            Class toType) {
+        Type genericType;
+        if (member instanceof Field) {
+            Field field = (Field) member;
+            genericType = field.getGenericType();
+        } else if (member instanceof Method) {
+            Method method = (Method) member;
+            Type[] parameterTypes = method.getGenericParameterTypes();
+            if (parameterTypes.length != 1) {
+                // TODO better
+                throw new IllegalArgumentException("Vraptor can only navigate through setters with one parameter, not "
+                        + member + " from " + target.getClass().getName());
+            }
+            genericType = parameterTypes[0];
         } else {
-            type = (Class) parameterType;
+            // TODO better
+            throw new IllegalArgumentException("Vraptor can only navigate through getter/setter methods, not " + member
+                    + " from " + target.getClass().getName());
+        }
+        Class type;
+        if (genericType instanceof ParameterizedType) {
+            type = (Class) ((ParameterizedType) genericType).getRawType();
+        } else {
+            type = (Class) genericType;
         }
         Container container = (Container) context.get(Container.class);
-        return converters.to(type, container).convert((String) value, type);
+        Converter<?> converter = converters.to(type, container);
+        if (converter == null) {
+            // TODO better, validation error?
+            throw new IllegalArgumentException("Cannot find a converter to " + type.getName());
+        }
+        return converter.convert((String) value, type);
     }
 
 }

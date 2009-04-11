@@ -4,7 +4,11 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 import ognl.Ognl;
 import ognl.OgnlContext;
@@ -16,9 +20,8 @@ import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.converter.OgnlGenericTypesSupportTest.Cat;
-import br.com.caelum.vraptor.converter.OgnlGenericTypesSupportTest.Leg;
 import br.com.caelum.vraptor.core.Converters;
+import br.com.caelum.vraptor.core.VRaptorRequest;
 import br.com.caelum.vraptor.http.ognl.ListAccessor;
 import br.com.caelum.vraptor.http.ognl.ReflectionBasedNullHandler;
 
@@ -69,6 +72,7 @@ public class MiscOgnlSupportTest {
 
     public static class Leg {
         private Integer id;
+        private Calendar birthDay; // weird leg birthday!!
 
         public void setId(Integer id) {
             this.id = id;
@@ -77,15 +81,36 @@ public class MiscOgnlSupportTest {
         public Integer getId() {
             return id;
         }
+
+        public void setBirthDay(Calendar birthDay) {
+            this.birthDay = birthDay;
+        }
+
+        public Calendar getBirthDay() {
+            return birthDay;
+        }
     }
 
     @Test
-    public void isCapableOfDealingWithEmptyParameterForInternalValue() throws OgnlException {
+    public void isCapableOfDealingWithEmptyParameterForInternalWrapperValue() throws OgnlException {
         mockery.checking(new Expectations() {{
             one(converters).to(Integer.class, null); will(returnValue(new IntegerConverter()));
         }});
         Ognl.setValue("firstLeg.id", context, myCat, "");
         assertThat(myCat.firstLeg.id, is(equalTo(null)));
+        mockery.assertIsSatisfied();
+    }
+
+    @Test
+    public void isCapableOfDealingWithEmptyParameterForInternalValueWhichNeedsAConverter() throws OgnlException {
+        final HttpServletRequest request = mockery.mock(HttpServletRequest.class);
+        final VRaptorRequest webRequest = new VRaptorRequest(null, request, null);
+        mockery.checking(new Expectations() {{
+            exactly(2).of(request).getAttribute("javax.servlet.jsp.jstl.fmt.locale.request"); will(returnValue("pt_br"));
+            one(converters).to(Calendar.class, null); will(returnValue(new LocaleBasedCalendarConverter(webRequest)));
+        }});
+        Ognl.setValue("firstLeg.birthDay", context, myCat, "10/5/2010");
+        assertThat(myCat.firstLeg.birthDay, is(equalTo((Calendar) new GregorianCalendar(2010,4,10))));
         mockery.assertIsSatisfied();
     }
 

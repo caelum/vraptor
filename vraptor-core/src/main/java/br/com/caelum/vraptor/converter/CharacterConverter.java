@@ -43,12 +43,7 @@ public class CharacterConverter implements Converter<Character> {
             // TODO validation?
             throw new IllegalArgumentException("Unable to convert '" + value + "' to Character.");
         }
-        try {
-            return Character.valueOf(value.charAt(0));
-        } catch (NumberFormatException e) {
-            // TODO validation?
-            throw new IllegalArgumentException("Unable to convert '" + value + "'.");
-        }
+        return Character.valueOf(value.charAt(0));
     }
 
 }

@@ -28,8 +28,13 @@ public class DoubleConverterTest {
     }
     
     @Test
-    public void shouldComplainAboutNull() {
+    public void shouldNotComplainAboutNull() {
         assertThat(converter.convert(null, Double.class), is(nullValue()));
+    }
+
+    @Test
+    public void shouldNotComplainAboutEmpty() {
+        assertThat(converter.convert("", Double.class), is(nullValue()));
     }
 
 }

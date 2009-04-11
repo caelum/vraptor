@@ -28,8 +28,13 @@ public class ByteConverterTest {
     }
     
     @Test
-    public void shouldComplainAboutNull() {
+    public void shouldNotComplainAboutNull() {
         assertThat(converter.convert(null, Byte.class), is(nullValue()));
+    }
+
+    @Test
+    public void shouldNotComplainAboutEmpty() {
+        assertThat(converter.convert("", Byte.class), is(nullValue()));
     }
 
 }

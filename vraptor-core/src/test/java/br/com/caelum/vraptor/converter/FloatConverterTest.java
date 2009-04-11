@@ -28,8 +28,13 @@ public class FloatConverterTest {
     }
     
     @Test
-    public void shouldComplainAboutNull() {
+    public void shouldNotComplainAboutNull() {
         assertThat(converter.convert(null, Float.class), is(nullValue()));
+    }
+
+    @Test
+    public void shouldNotComplainAboutEmpty() {
+        assertThat(converter.convert("", Float.class), is(nullValue()));
     }
 
 }

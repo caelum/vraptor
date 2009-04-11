@@ -16,14 +16,14 @@ import br.com.caelum.vraptor.view.jsp.PageResult;
 public class ExecuteAndViewInterceptor implements Interceptor {
 
     private final ParametersProvider provider;
-    private final PageResult result;
+    private final RequestResult result;
 
-    public ExecuteAndViewInterceptor(ParametersProvider provider, PageResult result) {
+    public ExecuteAndViewInterceptor(ParametersProvider provider, RequestResult result) {
         this.provider = provider;
         this.result = result;
     }
 
-    public void intercept(InterceptorStack invocation, ResourceMethod method, Object resourceInstance)
+    public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
             throws IOException, InterceptionException {
         try {
             Method reflectionMethod = method.getMethod();
@@ -31,18 +31,18 @@ public class ExecuteAndViewInterceptor implements Interceptor {
             Object result = reflectionMethod.invoke(resourceInstance, parameters);
             if (Info.isOldComponent(method.getResource())) {
                 if (result == null) {
-                    result = "ok";
+                    this.result.setValue("ok");
+                } else {
+                    this.result.setValue((String) result);
                 }
-                this.result.forward((String) result);
             }
+            stack.next(method, resourceInstance);
         } catch (IllegalArgumentException e) {
             throw new InterceptionException(e);
         } catch (IllegalAccessException e) {
             throw new InterceptionException(e);
         } catch (InvocationTargetException e) {
             throw new InterceptionException(e.getCause());
-        } catch (ServletException e) {
-            throw new InterceptionException(e);
         }
     }
 

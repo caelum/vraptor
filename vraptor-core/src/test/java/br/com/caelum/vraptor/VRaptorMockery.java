@@ -59,4 +59,16 @@ public class VRaptorMockery {
         return container;
     }
 
+    public <T> ResourceMethod methodForResource(Class<T> type) {
+        final Resource resource = resource(type);
+        final ResourceMethod method = mockery.mock(ResourceMethod.class);
+        checking(new Expectations() {
+            {
+                one(method).getResource();
+                will(returnValue(resource));
+            }
+        });
+        return method;
+    }
+
 }

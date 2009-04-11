@@ -1,7 +1,6 @@
 right now:
 
-	- v2: getters for outjection
-	- caelumweb2 tarefa working
+	- caelumweb2 finalizar tarefa
 
 	- caelumweb2 statement and telefones working
 	- better than vraptor2: support for inheritance
@@ -188,6 +187,7 @@ done:
 	- custom vraptor2 converters through custom Converters implementation
 	- v2: instantiate with injection
 	- better clarifying messages on common mistakes (i.e. logic getter which receives a parameter)
+	- v2: getters for outjection
 - converters
 	primitive
 	wrappers

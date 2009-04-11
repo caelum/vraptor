@@ -21,6 +21,7 @@ public class OutjectionInterceptor implements Interceptor{
     
     private static final Logger logger = LoggerFactory.getLogger(OutjectionInterceptor.class);
     private final HttpServletRequest request;
+    private static final BeanHelper helper = new BeanHelper();
     
     public OutjectionInterceptor(HttpServletRequest request) {
         this.request = request;
@@ -33,33 +34,28 @@ public class OutjectionInterceptor implements Interceptor{
     public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws IOException,
             InterceptionException {
         Method[] methods = method.getResource().getType().getDeclaredMethods();
-        for (Method m : methods) {
-            if(m.getName().length()<3 || !(m.getName().startsWith(IS) || m.getName().startsWith(GET))) {
+        for (Method outject : methods) {
+            if(outject.getName().length()<3 || !(outject.getName().startsWith(IS) || outject.getName().startsWith(GET))) {
                 continue;
             }
-            if(m.getParameterTypes().length!=0) {
+            if(outject.getParameterTypes().length!=0) {
                 logger.error("A get method was found at " + method.getResource().getType() + " but was not used because it receives parameters. Fix it.");
                 continue;
-            } else if(m.getReturnType().equals(Void.class)) {
+            } else if(outject.getReturnType().equals(Void.class)) {
                 logger.error("A get method was found at " + method.getResource().getType() + " but was not used because it returns void. Fix it.");
                 continue;
             }
             try {
-                Object result = m.invoke(resourceInstance);
-                String name = method.getMethod().getName();
-                if(name.startsWith(IS)) {
-                    name = name.substring(2);
-                } else {
-                    name = name.substring(3);
-                }
+                Object result = outject.invoke(resourceInstance);
+                String name = helper.nameForGetter(outject);
                 logger.debug("Outjecting " + name);
                 request.setAttribute(name, result);
             } catch (IllegalArgumentException e) {
-                throw new InterceptionException("Unable to outject value for " + method.getMethod().getName(), e);
+                throw new InterceptionException("Unable to outject value for " + outject.getName(), e);
             } catch (IllegalAccessException e) {
-                throw new InterceptionException("Unable to outject value for " + method.getMethod().getName(), e);
+                throw new InterceptionException("Unable to outject value for " + outject.getName(), e);
             } catch (InvocationTargetException e) {
-                throw new InterceptionException("Unable to outject value for " + method.getMethod().getName(), e.getCause());
+                throw new InterceptionException("Unable to outject value for " + outject.getName(), e.getCause());
             }
         }
         stack.next(method, resourceInstance);

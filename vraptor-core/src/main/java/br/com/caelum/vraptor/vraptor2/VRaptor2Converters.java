@@ -31,7 +31,7 @@ public class VRaptor2Converters implements Converters {
                 }
             }
         }
-        return null;
+        return vraptor3.to(type, container);
     }
 
 }

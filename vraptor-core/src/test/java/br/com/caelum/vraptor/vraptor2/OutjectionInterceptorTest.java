@@ -28,13 +28,26 @@ public class OutjectionInterceptorTest {
         this.stack = mockery.mock(InterceptorStack.class);
     }
 
-    public interface WithArgsComponent {
-        public String withArgs(String s);
+    public class WithArgsComponent {
+        public String withArgs(String s) {
+            return null;
+        }
     }
 
-    public interface NoReturnComponent {
-
-        public void noReturn();
+    public class NoReturnComponent {
+        public void noReturn() {
+        }
+    }
+    
+    public class Dog {
+        private String name;
+        private boolean male;
+        public boolean isMale() {
+            return male;
+        }
+        public String getName() {
+            return name;
+        }
     }
 
     @Test
@@ -62,6 +75,24 @@ public class OutjectionInterceptorTest {
             }
         });
         interceptor.intercept(stack, method, component);
+        mockery.assertIsSatisfied();
+    }
+
+    @Test
+    public void shouldOutjectGetAndIsBasedMethod() throws SecurityException, NoSuchMethodException,
+            InterceptionException, IOException {
+        final Dog dog = new Dog();
+        dog.name = "james";
+        dog.male = true;
+        final ResourceMethod method = mockery.methodForResource(Dog.class);
+        mockery.checking(new Expectations() {
+            {
+                one(request).setAttribute("name", "james");
+                one(request).setAttribute("male", true);
+                one(stack).next(method, dog);
+            }
+        });
+        interceptor.intercept(stack, method, dog);
         mockery.assertIsSatisfied();
     }
 

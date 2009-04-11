@@ -43,6 +43,7 @@ public class ViewInterceptorTest {
         mockery.assertIsSatisfied();
     }
     class MyThrowable extends Throwable {
+        private static final long serialVersionUID = 1L;
         
     }
 
@@ -57,7 +58,7 @@ public class ViewInterceptorTest {
         try {
             interceptor.intercept(null, null, null);
         } catch (InterceptionException e) {
-            assertThat(e.getCause().getClass(), is(typeCompatibleWith(MyThrowable.class)));
+            assertThat(e.getCause().getCause().getClass(), is(typeCompatibleWith(MyThrowable.class)));
             mockery.assertIsSatisfied();
             return;
         }

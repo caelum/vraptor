@@ -1,9 +1,21 @@
 right now:
 
-	- caelumweb2 finalizar tarefa
+	1 - static file redirect: extract to a testable component
+	2 - v2: getters for value injection if vraptor2 component, using vraptor2 crazy introspectors
+	3 - vraptor2converters tests
+	
+	4 - v2 paranamer support if vraptor2 component
 
-	- caelumweb2 statement and telefones working
-	- better than vraptor2: support for inheritance
+	- caelumweb2: logout
+
+	- path annotation with support to regex (niceurls?)
+
+	- caelumweb2 finalizar tarefa
+	- cw2: statements
+	- cw2: telefones
+
+
+
 
 
 
@@ -12,11 +24,12 @@ right now:
 	- caelumweb use method FILL to app scope and request scope: adds to a list and adds on the run
 	- resolve interceptororder with interceptorstack
 	
+- better than vraptor2: support for inheritance
 - better exception handling everywhere (prior)
 - converters: File
+- path annotation with support to value injection (niceurls?)
+- path annotation with support to dynamic logic and component lookup (niceurls?)
 - result interface as wished
-- static file redirect: extract to a testable component
-- path annotation with support to nice urls
 	- MAKE CACHE WORKS
 - MAKE CONVERTERS GLOBAL, NOT LOCAL?
 - Array, Set, Collection, Map support
@@ -42,12 +55,12 @@ site docs (prior to release)
 
 vraptor 2 support
 
-- v2: getters for value injection
-- v2 paranamer support
 - method invocation w parameters
 - v2: converters with access to request/session/context
 - v2: custom converters used on annotated fields
 - default Logic,Action and so on key removal
+- json
+- xml
 
 kung help
 
@@ -129,6 +142,7 @@ ONLY AFTER RELEASE
 - generic interface support: instantiates the implementation
 - vraptor2 components with support for inherited outjection/injection
 - vraptor2 logic with 2 names support
+- niceurl extra features
 
 	optimizations (product):
 	- converter optimization

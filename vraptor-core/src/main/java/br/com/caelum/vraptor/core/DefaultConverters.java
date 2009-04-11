@@ -77,7 +77,7 @@ public class DefaultConverters implements Converters {
             throw new IllegalArgumentException("The converter type " + converterType.getName()
                     + " should have the Convert annotation");
         }
-        types.add(converterType);
+        types.addFirst(converterType);
     }
 
     public Converter to(Class type, Container container) {

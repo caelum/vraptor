@@ -1,5 +1,8 @@
 package br.com.caelum.vraptor.core;
 
+import static org.hamcrest.MatcherAssert.*;
+import static org.hamcrest.Matchers.*;
+
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.jmock.Expectations;
@@ -52,18 +55,45 @@ public class DefaultConvertersTest {
         }
     }
 
+    @Convert(MyData.class)
+    class MySecondConverter implements Converter<MyData> {
+        public MyData convert(String value, Class<? extends MyData> type) {
+            return null;
+        }
+    }
+
     @Test
     public void registersAndUsesTheConverterInstaceForTheSpecifiedType() {
         converters.register(MyConverter.class);
         mockery.checking(new Expectations() {
             {
+                one(container).instanceFor(MyConverter.class);
+                will(returnValue(null));
                 one(container).register(MyConverter.class);
                 one(container).instanceFor(MyConverter.class);
                 will(returnValue(new MyConverter()));
             }
         });
-        Converter found = converters.to(MyData.class, container);
+        Converter<?> found = converters.to(MyData.class, container);
         MatcherAssert.assertThat(found.getClass(), Matchers.is(Matchers.equalTo((Class)MyConverter.class)));
+        mockery.assertIsSatisfied();
+    }
+
+    @Test
+    public void registersAndUsesTheLastConverterInstaceRegisteredForTheSpecifiedType() {
+        converters.register(MyConverter.class);
+        converters.register(MySecondConverter.class);
+        mockery.checking(new Expectations() {
+            {
+                one(container).register(MySecondConverter.class);
+                one(container).instanceFor(MySecondConverter.class);
+                will(returnValue(null));
+                one(container).instanceFor(MySecondConverter.class);
+                will(returnValue(new MySecondConverter()));
+            }
+        });
+        Converter<?> found = converters.to(MyData.class, container);
+        assertThat(found.getClass(), is(typeCompatibleWith(MySecondConverter.class)));
         mockery.assertIsSatisfied();
     }
 

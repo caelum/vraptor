@@ -30,7 +30,7 @@ public class ViewInterceptor implements Interceptor {
             this.result.forward(reqResult.getValue());
         } catch (ServletException e) {
             // TODO better
-            throw new InterceptionException(e.getCause());
+            throw new InterceptionException(e.getMessage(), e);
         }
     }
 

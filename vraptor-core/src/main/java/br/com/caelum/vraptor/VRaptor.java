@@ -30,8 +30,6 @@
 package br.com.caelum.vraptor;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -48,6 +46,7 @@ import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.config.BasicConfiguration;
 import br.com.caelum.vraptor.core.RequestExecution;
+import br.com.caelum.vraptor.core.StaticContentHandler;
 import br.com.caelum.vraptor.core.VRaptorRequest;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
 
@@ -60,6 +59,8 @@ import br.com.caelum.vraptor.ioc.ContainerProvider;
 public class VRaptor implements Filter {
     private ContainerProvider provider;
     private ServletContext servletContext;
+    
+    private StaticContentHandler staticHandler;
 
     private static final Logger logger = LoggerFactory.getLogger(VRaptor.class);
 
@@ -80,8 +81,8 @@ public class VRaptor implements Filter {
         HttpServletRequest webRequest = (HttpServletRequest) req;
         HttpServletResponse webResponse = (HttpServletResponse) res;
 
-        if (requestingStaticFile(webRequest)) {
-            deferProcessingToContainer(chain, webRequest, webResponse);
+        if (staticHandler.requestingStaticFile(webRequest)) {
+            staticHandler.deferProcessingToContainer(chain, webRequest, webResponse);
             return;
         }
 
@@ -93,34 +94,13 @@ public class VRaptor implements Filter {
         }
     }
 
-    private void deferProcessingToContainer(FilterChain filterChain, HttpServletRequest request,
-            HttpServletResponse response) throws IOException, ServletException {
-        if (logger.isDebugEnabled()) {
-            logger.debug("deferring URI to container: " + request.getRequestURI());
-        }
-
-        filterChain.doFilter(request, response);
-    }
-
     public void init(FilterConfig cfg) throws ServletException {
         servletContext = cfg.getServletContext();
         BasicConfiguration config = new BasicConfiguration(servletContext);
         this.provider = config.getProvider();
         this.provider.start(servletContext);
+        this.staticHandler = new StaticContentHandler(servletContext);
         logger.info("VRaptor 3 successfuly initialized");
-    }
-
-    private boolean requestingStaticFile(HttpServletRequest request) throws MalformedURLException {
-        URL resourceUrl = servletContext.getResource(uriRelativeToContextRoot(request));
-        return resourceUrl != null && isAFile(resourceUrl);
-    }
-
-    private String uriRelativeToContextRoot(HttpServletRequest request) {
-        return request.getRequestURI().substring(request.getContextPath().length());
-    }
-
-    private boolean isAFile(URL resourceUrl) {
-        return !resourceUrl.toString().endsWith("/");
     }
 
 }

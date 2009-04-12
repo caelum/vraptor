@@ -6,7 +6,6 @@ right now: 78/71
 	
 	3 path annotation with support to regex (niceurls?)
 	
-	5 v2: @Logic (parameters=...) support
 	6 path annotation with support to dynamic logic and component lookup (niceurls?)
 	
 	7 v2: converters with access to request/session/context
@@ -76,6 +75,7 @@ site docs (prior to release)
 - paranamer
 - vraptor2 with paranamer by default
 - vraptor2 without paranamer: how to
+- vraptor2 default LogicParameterAnnotationWithParanamerFallback: how to migrate when not using paranamer and annotation
 
 kung help
 
@@ -198,6 +198,8 @@ ONLY AFTER RELEASE
 	- statement product
 	- graph product
 	- ehcache
+	- v2: migration without paranamer and annotation (defaultprovider)
+	- v2: complain about parameter annotation on @Logic when not usingthe correct number of values (same as parameters) 
 
 
 done:
@@ -236,6 +238,7 @@ done:
 	- v2: better clarifying messages on common mistakes (i.e. logic getter which receives a parameter)
 	- v2: getters for outjection
 	- v2: method invocation with parameters
+	- v2: @Logic (parameters=...) support
 - converters
 	primitive
 	wrappers

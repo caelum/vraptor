@@ -37,7 +37,7 @@ public class Provider extends PicoProvider {
         components.add(VRaptor2MethodLookupBuilder.class);
         components.add(VRaptor2PathResolver.class);
         components.add(VRaptor2Config.class);
-        components.add(ParanamerParameterNameProvider.class);
+        components.add(LogicAnnotationWithParanamerParameterNameProvider.class);
         return components;
     }
 

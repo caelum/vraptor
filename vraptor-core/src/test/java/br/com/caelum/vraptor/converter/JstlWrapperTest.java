@@ -1,11 +1,7 @@
 package br.com.caelum.vraptor.converter;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
-
-import java.util.Locale;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -138,108 +134,6 @@ public class JstlWrapperTest {
         });
         Object value = jstlWrapper.find(webRequest, "my.attribute");
         assertSame(attributeValue, value);
-        mockery.assertIsSatisfied();
-    }
-
-    @Test
-    public void testFindLocaleProvidedByTheClient() {
-        // there aren't locales in any context
-
-        Locale expected = webRequest.getRequest().getLocale();
-        assertNotNull(expected);
-
-        // get the Locale sent by the client (on the request, browser
-        // configuration)
-        Locale locale = jstlWrapper.findLocale(webRequest);
-        assertNotNull(locale);
-        assertEquals(expected, locale);
-        mockery.assertIsSatisfied();
-    }
-
-    @Test
-    public void testFindLocaleInRequest() {
-        webRequest.getRequest().setAttribute(JSTL_LOCALE_KEY + ".request", Locale.GERMANY);
-        Locale locale = jstlWrapper.findLocale(webRequest);
-        assertEquals(Locale.GERMANY, locale);
-        mockery.assertIsSatisfied();
-    }
-
-    @Test
-    public void testFindLocaleInSession() {
-        JstlWrapper jstlWrapper = new JstlWrapper();
-
-        webRequest.getRequest().getSession().setAttribute(JSTL_LOCALE_KEY + ".session", Locale.GERMANY);
-        Locale locale = jstlWrapper.findLocale(webRequest);
-        assertEquals(Locale.GERMANY, locale);
-        mockery.assertIsSatisfied();
-    }
-
-    @Test
-    public void testFindLocaleInApplication() {
-        JstlWrapper jstlWrapper = new JstlWrapper();
-
-        webRequest.getServletContext().setAttribute(JSTL_LOCALE_KEY + ".application", Locale.GERMANY);
-        Locale locale = jstlWrapper.findLocale(webRequest);
-        assertEquals(Locale.GERMANY, locale);
-    }
-
-    @Test
-    public void testFindLocaleAsInitParameter() {
-        JstlWrapper jstlWrapper = new JstlWrapper();
-        mockery.checking(new Expectations() {
-            {
-                one(context).getInitParameter(JSTL_LOCALE_KEY);
-                will(returnValue("de_DE"));
-            }
-        });
-        Locale locale = jstlWrapper.findLocale(webRequest);
-        assertEquals(Locale.GERMANY, locale);
-        mockery.assertIsSatisfied();
-    }
-
-    @Test
-    public void testFindLocaleShouldUseTheSmallestContext() {
-        webRequest.getRequest().setAttribute(JSTL_LOCALE_KEY + ".request", Locale.GERMANY);
-        webRequest.getRequest().getSession().setAttribute(JSTL_LOCALE_KEY + ".session", Locale.FRANCE);
-        webRequest.getServletContext().setAttribute(JSTL_LOCALE_KEY + ".application", Locale.ITALY);
-        mockery.checking(new Expectations() {
-            {
-                one(context).getInitParameter(JSTL_LOCALE_KEY);
-                will(returnValue("en_GB"));
-            }
-        });
-        Locale locale = jstlWrapper.findLocale(webRequest);
-        assertEquals(Locale.GERMANY, locale);
-        mockery.assertIsSatisfied();
-    }
-
-    @Test
-    public void testFindLocaleShouldUseTheSmallestContextWhenAllButRequestAreFilled() {
-        webRequest.getRequest().getSession().setAttribute(JSTL_LOCALE_KEY + ".session", Locale.FRANCE);
-        webRequest.getServletContext().setAttribute(JSTL_LOCALE_KEY + ".application", Locale.ITALY);
-        mockery.checking(new Expectations() {
-            {
-                one(context).getInitParameter(JSTL_LOCALE_KEY);
-                will(returnValue("en_GB"));
-            }
-        });
-        Locale locale = jstlWrapper.findLocale(webRequest);
-        assertEquals(Locale.FRANCE, locale);
-        mockery.assertIsSatisfied();
-    }
-
-    @Test
-    public void testFindLocaleShouldUseTheSmallestContextWhenOnlyAppAndInitParameterAreSet() {
-
-        webRequest.getServletContext().setAttribute(JSTL_LOCALE_KEY + ".application", Locale.ITALY);
-        mockery.checking(new Expectations() {
-            {
-                one(context).getInitParameter(JSTL_LOCALE_KEY);
-                will(returnValue("en_GB"));
-            }
-        });
-        Locale locale = jstlWrapper.findLocale(webRequest);
-        assertEquals(Locale.ITALY, locale);
         mockery.assertIsSatisfied();
     }
 

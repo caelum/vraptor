@@ -38,6 +38,11 @@ public class OutjectionInterceptorTest {
         public void getNoReturn() {
         }
     }
+
+    public static class WeirdIsComponent {
+        public void is() {
+        }
+    }
     
     public class Dog {
         private String name;
@@ -55,6 +60,20 @@ public class OutjectionInterceptorTest {
             InterceptionException, IOException {
         final ResourceMethod method = mockery.methodForResource(WithArgsComponent.class);
         final WithArgsComponent component = new WithArgsComponent();
+        mockery.checking(new Expectations() {
+            {
+                one(stack).next(method, component);
+            }
+        });
+        interceptor.intercept(stack, method, component);
+        mockery.assertIsSatisfied();
+    }
+
+    @Test
+    public void shouldIgnoreIsWithNotEnoughChars() throws SecurityException, NoSuchMethodException,
+            InterceptionException, IOException {
+        final ResourceMethod method = mockery.methodForResource(WeirdIsComponent.class);
+        final WeirdIsComponent component = new WeirdIsComponent();
         mockery.checking(new Expectations() {
             {
                 one(stack).next(method, component);

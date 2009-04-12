@@ -1,7 +1,5 @@
 right now: 78/71
 
-	- cweb2 stats page
-
 	- ViewsProperties test
 	3 path annotation with support to regex (niceurls?)
 	- sistema de criar e listar turmas

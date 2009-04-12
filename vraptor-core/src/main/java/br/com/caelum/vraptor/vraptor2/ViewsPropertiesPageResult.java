@@ -16,11 +16,12 @@ import org.vraptor.introspector.ExpressionEvaluationException;
 import org.vraptor.introspector.ExpressionEvaluator;
 import org.vraptor.scope.DefaultLogicRequest;
 
+import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.view.PathResolver;
 import br.com.caelum.vraptor.view.jsp.PageResult;
 
-public class ViewsPropertiesPageResult implements PageResult{
+public class ViewsPropertiesPageResult implements PageResult {
 
     private final Config config;
     private final HttpServletRequest request;
@@ -29,35 +30,43 @@ public class ViewsPropertiesPageResult implements PageResult{
     private final HttpServletResponse response;
     private final ExpressionEvaluator evaluator = new ExpressionEvaluator();
     private final DefaultLogicRequest logic;
-    
+
     private static final Logger logger = LoggerFactory.getLogger(ViewsPropertiesPageResult.class);
 
-    public ViewsPropertiesPageResult(Config config, HttpServletRequest request, PathResolver resolver, ResourceMethod method, HttpServletResponse response, ServletContext context) {
+    public ViewsPropertiesPageResult(Config config, HttpServletRequest request, PathResolver resolver,
+            ResourceMethod method, HttpServletResponse response, ServletContext context) {
         this.config = config;
         this.request = request;
         this.resolver = resolver;
         this.method = method;
         this.response = response;
-        logic = new DefaultLogicRequest(null,new WebRequest(new VRaptorServletRequest(request,null), new VRaptorServletResponse(response), context),null);
+        logic = new DefaultLogicRequest(null, new WebRequest(new VRaptorServletRequest(request, null),
+                new VRaptorServletResponse(response), context), null);
     }
 
     public void forward(String result) throws ServletException, IOException {
-        String key = Info.getComponentName(method.getResource().getType()) + "." + Info.getLogicName(method.getMethod()) + "." + result;
-        
-        String path = config.getForwardFor(key);
-        
-        if(path==null) {
+        Resource resource = method.getResource();
+        if(!Info.isOldComponent(resource)) {
             request.getRequestDispatcher(resolver.pathFor(method, result)).forward(request, response);
-        } else{
+            return;
+        }
+        String key = Info.getComponentName(resource.getType()) + "."
+                + Info.getLogicName(method.getMethod()) + "." + result;
+
+        String path = config.getForwardFor(key);
+
+        if (path == null) {
+            request.getRequestDispatcher(resolver.pathFor(method, result)).forward(request, response);
+        } else {
             if (logger.isDebugEnabled()) {
                 logger.debug("overriden view found for " + key + " : " + path);
             }
             try {
                 result = evaluator.parseExpression(path, logic);
             } catch (ExpressionEvaluationException e) {
-                throw new IOException("Unable to redirect while evaluating expression '" + path + "'.",e);
+                throw new IOException("Unable to redirect while evaluating expression '" + path + "'.", e);
             }
-            if(path.startsWith("redirect:")) {
+            if (path.startsWith("redirect:")) {
                 response.sendRedirect(path.substring(9));
             } else {
                 request.getRequestDispatcher(path).forward(request, response);

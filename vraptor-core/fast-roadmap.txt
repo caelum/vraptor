@@ -1,9 +1,5 @@
 right now: 78/71
 
-	- paranamer support
-	- caelumweb2: trocar senha support
-	- ParanamerParameterNameProvider test
-	
 	- Validator test
 	- ViewsProperties test
 	- VRaptor2MethodLookup test
@@ -60,6 +56,9 @@ site docs (prior to release)
 	- converters without access to LogicRequest automatically supported through vraptor.xml
 - calendar support: either birthday or birthday.time
 - BigDecimal, BigInteger converter
+- paranamer
+- vraptor2 with paranamer by default
+- vraptor2 without paranamer: how to
 
 kung help
 
@@ -184,6 +183,9 @@ ONLY AFTER RELEASE
 	- cache EMPTY parameter class for method without parameters
 	- parameter name provider needs cache? maybe
 	- be able to throw an exception if wrong parameters are passed
+	- vraptor2 validation method lookup: remove the search
+	- vrapro2 customization: log/error/pre-check on wrong validation method parameters or similar name (edid distance < 2)
+	- vraptor2/3 customization: log/error/pre-check on most validations (faster/error prone/etc) - pre-analysis tool base
 
 
 done:
@@ -227,4 +229,4 @@ done:
 	calendar
 	date
 	bigdecimal
-	
+- paranamer support

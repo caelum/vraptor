@@ -21,9 +21,9 @@ public class Validator implements Interceptor {
 
     private final ParametersProvider provider;
     private final PageResult result;
-    
+
     private static final Logger logger = LoggerFactory.getLogger(Validator.class);
-    
+
     public Validator(ParametersProvider provider, PageResult result) {
         this.provider = provider;
         this.result = result;
@@ -36,15 +36,15 @@ public class Validator implements Interceptor {
     public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws IOException,
             InterceptionException {
         if (Info.isOldComponent(method.getResource())) {
-            Object[] parameters = provider.getParametersFor(method);
-            Object[] validationParameters = new Object[parameters.length + 1];
-            BasicValidationErrors errors = new BasicValidationErrors();
-            validationParameters[0] = errors;
-            for (int i = 0; i < parameters.length; i++) {
-                validationParameters[i + 1] = parameters[i];
-            }
             Method validationMethod = getValidationFor(method.getMethod(), method.getResource().getType());
             if (validationMethod != null) {
+                Object[] parameters = provider.getParametersFor(method);
+                Object[] validationParameters = new Object[parameters.length + 1];
+                BasicValidationErrors errors = new BasicValidationErrors();
+                validationParameters[0] = errors;
+                for (int i = 0; i < parameters.length; i++) {
+                    validationParameters[i + 1] = parameters[i];
+                }
                 try {
                     validationMethod.invoke(resourceInstance, validationParameters);
                 } catch (IllegalArgumentException e) {
@@ -72,7 +72,7 @@ public class Validator implements Interceptor {
         String validationMethodName = "validate" + capitalize(method.getName());
         for (Method m : type.getDeclaredMethods()) {
             if (m.getName().equals(validationMethodName)) {
-                if(m.getParameterTypes().length!=method.getParameterTypes().length+1) {
+                if (m.getParameterTypes().length != method.getParameterTypes().length + 1) {
                     logger.error("Validate method for " + method + " has a different number of args+1!");
                 }
                 return m;

@@ -14,7 +14,7 @@ import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
 
-public class StaticContentHandlerTest {
+public class DefaultStaticContentHandlerTest {
 
     private Mockery mockery;
     private HttpServletRequest request;
@@ -39,7 +39,7 @@ public class StaticContentHandlerTest {
                 one(context).getResource(key); will(returnValue(file.toURL()));
             }
         });
-        boolean result = new StaticContentHandler(context).requestingStaticFile(request);
+        boolean result = new DefaultStaticContentHandler(context).requestingStaticFile(request);
         assertThat(Boolean.valueOf(result), is(equalTo(true)));
         mockery.assertIsSatisfied();
     }
@@ -56,7 +56,7 @@ public class StaticContentHandlerTest {
                 one(context).getResource(key); will(returnValue(null));
             }
         });
-        boolean result = new StaticContentHandler(context).requestingStaticFile(request);
+        boolean result = new DefaultStaticContentHandler(context).requestingStaticFile(request);
         assertThat(Boolean.valueOf(result), is(equalTo(false)));
         mockery.assertIsSatisfied();
     }

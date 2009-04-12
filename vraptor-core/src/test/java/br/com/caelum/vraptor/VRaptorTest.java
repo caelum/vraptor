@@ -2,6 +2,7 @@ package br.com.caelum.vraptor;
 
 import java.io.IOException;
 
+import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -17,6 +18,7 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.config.BasicConfiguration;
 import br.com.caelum.vraptor.core.RequestExecution;
+import br.com.caelum.vraptor.core.StaticContentHandler;
 import br.com.caelum.vraptor.core.VRaptorRequest;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
@@ -47,7 +49,8 @@ public class VRaptorTest {
     }
 
     @Test
-    public void shouldExecuteARequestUsingTheSpecifiedContainer() throws ServletException, IOException, VRaptorException {
+    public void shouldExecuteARequestUsingTheSpecifiedContainer() throws ServletException, IOException,
+            VRaptorException {
         mockery.checking(new Expectations() {
             {
                 one(config).getServletContext();
@@ -85,6 +88,34 @@ public class VRaptorTest {
             return null;
         }
 
+    }
+    
+    public static class DoNothingProvider implements ContainerProvider{
+        public Container provide(VRaptorRequest vraptorRequest) {
+            return null;
+        }
+        public void start(ServletContext context) {
+        }
+        public void stop() {
+        }
+    }
+
+    @Test
+    public void shouldDeferToContainerIfStaticFile() throws IOException, ServletException {
+        VRaptor raptor = new VRaptor();
+        final HttpServletRequest request = mockery.mock(HttpServletRequest.class);
+        final HttpServletResponse response = mockery.mock(HttpServletResponse.class);
+        final StaticContentHandler handler = mockery.mock(StaticContentHandler.class);
+        final FilterChain chain = mockery.mock(FilterChain.class);
+        mockery.checking(new Expectations() {
+            {
+                one(handler).requestingStaticFile(request); will(returnValue(true));
+                one(handler).deferProcessingToContainer(chain, request, response);
+            }
+        });
+        raptor.init(new DoNothingProvider(), handler);
+        raptor.doFilter(request, response, chain);
+        mockery.assertIsSatisfied();
     }
 
 }

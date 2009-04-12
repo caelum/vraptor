@@ -48,6 +48,8 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import br.com.caelum.vraptor.vraptor2.Info;
+
 import ognl.ObjectNullHandler;
 import ognl.OgnlContext;
 
@@ -83,7 +85,7 @@ public class ReflectionBasedNullHandler extends ObjectNullHandler {
                 int position = (Integer) property;
                 Object listHolder = ctx.getCurrentEvaluation().getPrevious().getSource();
                 String listPropertyName = ctx.getCurrentEvaluation().getPrevious().getNode().toString();
-                Method listSetter = findMethod(listHolder.getClass(), "set" + translate((String) listPropertyName),
+                Method listSetter = findMethod(listHolder.getClass(), "set" + Info.capitalize((String) listPropertyName),
                         target.getClass());
                 Type[] types = listSetter.getGenericParameterTypes();
                 Type type = types[0];
@@ -102,7 +104,7 @@ public class ReflectionBasedNullHandler extends ObjectNullHandler {
                 return instance;
             }
 
-            Method method = findMethod(target.getClass(), "get" + translate((String) property), target.getClass());
+            Method method = findMethod(target.getClass(), "get" + Info.capitalize((String) property), target.getClass());
             Type returnType = method.getGenericReturnType();
             if (returnType instanceof ParameterizedType) {
                 ParameterizedType paramType = (ParameterizedType) returnType;
@@ -123,7 +125,7 @@ public class ReflectionBasedNullHandler extends ObjectNullHandler {
                 typeToInstantiate = CONCRETE_TYPES.get(baseType);
             }
             Object instance = typeToInstantiate.getConstructor().newInstance();
-            Method setter = findMethod(target.getClass(), "set" + translate((String) property), target.getClass());
+            Method setter = findMethod(target.getClass(), "set" + Info.capitalize((String) property), target.getClass());
             setter.invoke(target, instance);
             return instance;
         } catch (InstantiationException e) {
@@ -142,11 +144,6 @@ public class ReflectionBasedNullHandler extends ObjectNullHandler {
             // TODO better
             throw new IllegalArgumentException(e);
         }
-    }
-
-    private String translate(String property) {
-        return property.length() == 1 ? property.toUpperCase() : Character.toUpperCase(property.charAt(0))
-                + property.substring(1);
     }
 
     private Method findMethod(Class<? extends Object> type, String name, Class<? extends Object> baseType) {

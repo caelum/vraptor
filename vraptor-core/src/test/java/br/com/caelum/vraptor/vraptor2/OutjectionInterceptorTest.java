@@ -28,14 +28,14 @@ public class OutjectionInterceptorTest {
         this.stack = mockery.mock(InterceptorStack.class);
     }
 
-    public class WithArgsComponent {
-        public String withArgs(String s) {
+    public static class WithArgsComponent {
+        public String isWithArgs(String s) {
             return null;
         }
     }
 
-    public class NoReturnComponent {
-        public void noReturn() {
+    public static class NoReturnComponent {
+        public void getNoReturn() {
         }
     }
     
@@ -95,5 +95,5 @@ public class OutjectionInterceptorTest {
         interceptor.intercept(stack, method, dog);
         mockery.assertIsSatisfied();
     }
-
+    
 }

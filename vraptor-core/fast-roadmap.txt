@@ -1,5 +1,8 @@
 right now: 78/71
 
+	test:
+	- outjectioninterceptor
+	- validator
 	- methodlookup: test ignores non public, test ignores static
 	
 	3 path annotation with support to regex (niceurls?)

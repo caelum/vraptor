@@ -33,16 +33,17 @@ public class OutjectionInterceptor implements Interceptor{
 
     public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws IOException,
             InterceptionException {
-        Method[] methods = method.getResource().getType().getDeclaredMethods();
+        Class<?> type = method.getResource().getType();
+        Method[] methods = type.getDeclaredMethods();
         for (Method outject : methods) {
             if(outject.getName().length()<3 || !(outject.getName().startsWith(IS) || outject.getName().startsWith(GET))) {
                 continue;
             }
             if(outject.getParameterTypes().length!=0) {
-                logger.error("A get method was found at " + method.getResource().getType() + " but was not used because it receives parameters. Fix it.");
+                logger.error("A get method was found at " + type + " but was not used because it receives parameters. Fix it.");
                 continue;
-            } else if(outject.getReturnType().equals(Void.class)) {
-                logger.error("A get method was found at " + method.getResource().getType() + " but was not used because it returns void. Fix it.");
+            } else if(outject.getReturnType().equals(void.class)) {
+                logger.error("A get method was found at " + type + " but was not used because it returns void. Fix it.");
                 continue;
             }
             try {

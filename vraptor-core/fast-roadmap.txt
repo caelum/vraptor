@@ -4,18 +4,13 @@ right now: 78/71
 	- validator
 	- methodlookup: test ignores non public, test ignores static
 	
-	3 path annotation with support to regex (niceurls?)
+	2 path annotation with support to regex (niceurls?)
+	3 path annotation with support to dynamic logic and component lookup (niceurls?)
+	4 resolve interceptororder with interceptorstack
 	
-	6 path annotation with support to dynamic logic and component lookup (niceurls?)
+	5 path annotation with support to value injection (niceurls?)
 	
-	7 v2: converters with access to request/session/context
-	
-	8 resolve interceptororder with interceptorstack
-	- verify org.apache.log4j logs -> sl4j
-	
-	9 path annotation with support to value injection (niceurls?)
-	
-	10 v2: default Logic,Action and so on key removal
+	6 v2: default Logic,Action and so on key removal
 	
 	11 v2: json output
 
@@ -31,7 +26,6 @@ right now: 78/71
 	16 hibernate validation plugin
 	17 customizable error process on request execution
 	18 404 component
-19 ContainerBasedNullHandler support (non cached instances)
 20 hibernate plugin
 21 custom converters for specified method parameters
 22 setting errors during ognl expression evaluation should be defined as validation errors
@@ -98,6 +92,7 @@ kung help
 
 
 right before release
+	verify org.apache.log4j logs -> sl4j
 	copyright in all files check
 	vraptor2 release with customized code
 		the org.vraptor.Component annotation was modified
@@ -134,6 +129,7 @@ right before release
 
 
 ONLY AFTER RELEASE
+- DDD related: ContainerBasedNullHandler support (non cached instances)
 - MIRROR usage as a fallback for OGNL instantiation
 - MIRROR usage everywhere
 - reflection fallback system on nullhandler (automatic?)
@@ -160,6 +156,7 @@ ONLY AFTER RELEASE
 - extract the Interface/Implementation part from ReflectionBasedNullHandler
 	- extra tests for Colleciton/List/and so on instantiate algorithm
 - v2: support extra extensions 
+- v2: converters with access to request/session/context
 
 	optimizations (product):
 	- converter optimization
@@ -247,3 +244,4 @@ done:
 	bigdecimal
 - paranamer support
 - Collection, List, Set, Calendar, SortedSet, Queue interface support
+	1 path annotation default value (without annotation)

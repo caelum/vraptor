@@ -13,6 +13,7 @@ import br.com.caelum.vraptor.Delete;
 import br.com.caelum.vraptor.Head;
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.VRaptorMockery;
+import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
 import br.com.caelum.vraptor.resource.DefaultResourceAndMethodLookup;
 import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceMethod;
@@ -44,6 +45,20 @@ public class DefaultResourceAndMethodLookupTest {
         mockery.assertIsSatisfied();
     }
 
+    @Test
+    public void returnsNullIfMethodIsNotPublic() {
+        ResourceMethod method = lookuper.methodFor("/protectMe", "POST");
+        assertThat(method, is(nullValue()));
+        mockery.assertIsSatisfied();
+    }
+
+    @Test
+    public void returnsNullIfMethodIsStatic() {
+        ResourceMethod method = lookuper.methodFor("/staticMe", "POST");
+        assertThat(method, is(nullValue()));
+        mockery.assertIsSatisfied();
+    }
+
     static class Clients {
         @Path("/clients")
         public void list() {
@@ -58,12 +73,18 @@ public class DefaultResourceAndMethodLookupTest {
         }
         public void add() {
         }
+        @Path("/protectMe")
+        protected void protectMe() {
+        }
+        @Path("/staticMe")
+        public static void staticMe() {
+        }
     }
 
     @Test
-    public void shouldIgnoreANonAnnotatedMethod() throws SecurityException, NoSuchMethodException {
+    public void shouldAcceptAPublicNonStaticNonAnnotatedMethod() throws SecurityException, NoSuchMethodException {
         ResourceMethod method = lookuper.methodFor("/add", "POST");
-        assertThat(method, is(Matchers.nullValue()));
+        assertThat(method, is(VRaptorMatchers.resourceMethod(Clients.class.getMethod("add"))));
         mockery.assertIsSatisfied();
     }
 

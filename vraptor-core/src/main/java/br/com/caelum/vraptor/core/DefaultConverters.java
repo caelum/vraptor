@@ -37,6 +37,7 @@ import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.converter.BooleanConverter;
 import br.com.caelum.vraptor.converter.ByteConverter;
 import br.com.caelum.vraptor.converter.DoubleConverter;
+import br.com.caelum.vraptor.converter.EnumConverter;
 import br.com.caelum.vraptor.converter.FloatConverter;
 import br.com.caelum.vraptor.converter.IntegerConverter;
 import br.com.caelum.vraptor.converter.LocaleBasedCalendarConverter;
@@ -61,8 +62,9 @@ public class DefaultConverters implements Converters {
     public static final Class<? extends Converter<?>>[] DEFAULTS = new Class[] { PrimitiveIntConverter.class,
             PrimitiveLongConverter.class, PrimitiveShortConverter.class, PrimitiveByteConverter.class,
             PrimitiveDoubleConverter.class, PrimitiveFloatConverter.class, PrimitiveBooleanConverter.class,
-            IntegerConverter.class, LongConverter.class, ShortConverter.class, ByteConverter.class, DoubleConverter.class,
-            FloatConverter.class, BooleanConverter.class, LocaleBasedCalendarConverter.class, LocaleBasedDateConverter.class };
+            IntegerConverter.class, LongConverter.class, ShortConverter.class, ByteConverter.class,
+            DoubleConverter.class, FloatConverter.class, BooleanConverter.class, LocaleBasedCalendarConverter.class,
+            LocaleBasedDateConverter.class, EnumConverter.class };
 
     public DefaultConverters() {
         this.types = new LinkedList<Class<? extends Converter<?>>>();
@@ -85,7 +87,7 @@ public class DefaultConverters implements Converters {
             Class<? extends Converter> converterType = (Class<? extends Converter>) iterator.next();
             Class boundType = converterType.getAnnotation(Convert.class).value();
             if (boundType.isAssignableFrom(type)) {
-                if(container.instanceFor(converterType)==null) {
+                if (container.instanceFor(converterType) == null) {
                     container.register(converterType);
                 }
                 return container.instanceFor(converterType);

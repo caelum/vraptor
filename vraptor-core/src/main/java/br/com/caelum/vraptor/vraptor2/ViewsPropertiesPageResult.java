@@ -58,18 +58,18 @@ public class ViewsPropertiesPageResult implements PageResult {
         if (path == null) {
             request.getRequestDispatcher(resolver.pathFor(method, result)).forward(request, response);
         } else {
-            if (logger.isDebugEnabled()) {
-                logger.debug("overriden view found for " + key + " : " + path);
-            }
             try {
                 result = evaluator.parseExpression(path, logic);
             } catch (ExpressionEvaluationException e) {
                 throw new IOException("Unable to redirect while evaluating expression '" + path + "'.", e);
             }
-            if (path.startsWith("redirect:")) {
-                response.sendRedirect(path.substring(9));
+            if (logger.isDebugEnabled()) {
+                logger.debug("overriden view found for " + key + " : " + path + " expressed as " + result);
+            }
+            if (result.startsWith("redirect:")) {
+                response.sendRedirect(result.substring(9));
             } else {
-                request.getRequestDispatcher(path).forward(request, response);
+                request.getRequestDispatcher(result).forward(request, response);
             }
         }
     }

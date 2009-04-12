@@ -1,40 +1,27 @@
 right now: 78/71
 
-	- sistema de criar e listar turmas
-
-	- ViewsProperties test
-	3 path annotation with support to regex (niceurls?)
+	- methodlookup: test ignores non public, test ignores static
 	
-	- VRaptor2MethodLookup test
-	- todas as telas atreladas a turma
+	3 path annotation with support to regex (niceurls?)
 	
 	5 v2: @Logic (parameters=...) support
 	6 path annotation with support to dynamic logic and component lookup (niceurls?)
-	- todas as telas atreladas a aluno
 	
 	7 v2: converters with access to request/session/context
-	- todas as telas atreladas a contrato
 	
 	8 resolve interceptororder with interceptorstack
 	- verify org.apache.log4j logs -> sl4j
-	- todas as telas atreladas a admin
 	
 	9 path annotation with support to value injection (niceurls?)
-	- todas as telas atreladas a diretor
-	
-	- todas as telas atreladas a PDF
 	
 	10 v2: default Logic,Action and so on key removal
-	- cw2: telefones
 	
 	11 v2: json output
-	- caelumweb2 finalizar tarefa
 
 	12 better than vraptor2: support for inheritance
 	- v2: xml output
 
 	13 converters: File
-	- cw2: statements
 	
 	14 support Validator
 	
@@ -93,7 +80,7 @@ kung help
 - full spring support
 	- Array
 	Map support
-
+- forward problem with opening 2 connections to the database and 2 components... one or two? solve it?
 
 
 
@@ -170,6 +157,7 @@ ONLY AFTER RELEASE
 - MAKE CONVERTERS GLOBAL, NOT LOCAL?
 - extract the Interface/Implementation part from ReflectionBasedNullHandler
 	- extra tests for Colleciton/List/and so on instantiate algorithm
+- v2: support extra extensions 
 
 	optimizations (product):
 	- converter optimization

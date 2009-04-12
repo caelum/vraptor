@@ -29,7 +29,7 @@ public class VRaptorMatchers {
             }
 
             public void describeTo(Description description) {
-                description.appendText(" resource method for " + method.getName());
+                description.appendText(" an instance of a resource method for method " + method.getName() + " declared at " + method.getDeclaringClass().getName());
             }
 
         };

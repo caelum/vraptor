@@ -32,7 +32,7 @@ public class VRaptor2MethodLookup implements ResourceAndMethodLookup {
         Class<?> type = resource.getType();
         String componentName = Info.getComponentName(type);
         for (Method method : type.getDeclaredMethods()) {
-            if (!Modifier.isPublic(method.getModifiers())) {
+            if ((!Modifier.isPublic(method.getModifiers())) || (Modifier.isStatic(method.getModifiers()))) {
                 continue;
             }
             String logicName = Info.getLogicName(method);

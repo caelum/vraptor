@@ -1,43 +1,75 @@
 right now: 78/71
 
-	- Validator test
+	1 Validator test
+	2 Collection support
+	- cweb2 stats page
+
 	- ViewsProperties test
+	3 path annotation with support to regex (niceurls?)
+	- sistema de criar e listar turmas
+	
 	- VRaptor2MethodLookup test
+	4 Set support
+	- todas as telas atreladas a turma
 	
-	- caelumweb2: logout
+	5 v2: @Logic (parameters=...) support
+	6 path annotation with support to dynamic logic and component lookup (niceurls?)
+	- todas as telas atreladas a aluno
+	
+	7 v2: converters with access to request/session/context
+	- todas as telas atreladas a contrato
+	
+	8 resolve interceptororder with interceptorstack
+	- verify org.apache.log4j logs -> sl4j
+	- todas as telas atreladas a admin
+	
+	9 path annotation with support to value injection (niceurls?)
+	- todas as telas atreladas a diretor
+	
+	- todas as telas atreladas a PDF
+	
+	10 v2: default Logic,Action and so on key removal
 	- cw2: telefones
-	- path annotation with support to regex (niceurls?)
-
-	- Array, Collection
-	Set support
-	Map support
-
-	- caelumweb2 finalizar tarefa
-	- cw2: statements
-	- support Validator
-	- concatenate convertion and validation errors
-
-
-
-
-
-
-
-	- caelumweb use method FILL to app scope and request scope: adds to a list and adds on the run
-	- resolve interceptororder with interceptorstack
 	
-- better than vraptor2: support for inheritance
-- better exception handling everywhere (prior)
-- converters: File
-- path annotation with support to value injection (niceurls?)
-- path annotation with support to dynamic logic and component lookup (niceurls?)
-- result interface as wished
-	- MAKE CACHE WORKS
-- MAKE CONVERTERS GLOBAL, NOT LOCAL?
+	11 v2: json output
+	- caelumweb2 finalizar tarefa
+
+	12 better than vraptor2: support for inheritance
+	- v2: xml output
+
+	13 converters: File
+	- cw2: statements
+	
+	14 support Validator
+	
+	15 concatenate convertion and validation errors
+
+	16 hibernate validation plugin
+	17 customizable error process on request execution
+	18 404 component
+19 ContainerBasedNullHandler support (non cached instances)
+20 hibernate plugin
+21 custom converters for specified method parameters
+22 setting errors during ognl expression evaluation should be defined as validation errors
+- default dir scanner misses unit tests
+23 json output support
+24 xml output support
+25 better exception handling everywhere (prior)
+
+- v2: lookup custom converter annotated field and complain?
+- caelumweb use method FILL to app scope and request scope: adds to a list and adds on the run
+
+- MAKE CACHE WORKS
 - pico problem: STARTABLE/STOPABLE COMPONENTS with annotation + tests
-- verify org.apache.log4j logs -> sl4j
-- json output support
-- xml output support
+
+
+
+
+
+
+
+
+
 	
 site docs (prior to release)
 - migration tutorial
@@ -63,18 +95,10 @@ site docs (prior to release)
 kung help
 
 - full spring support
+	- Array
+	Map support
 
 
-
-vraptor 2 support
-
-- v2: @Logic (parameters=...) support
-- method invocation w parameters
-- v2: converters with access to request/session/context
-- v2: custom converters used on annotated fields
-- default Logic,Action and so on key removal
-- json output
-- xml output
 
 
 
@@ -102,14 +126,6 @@ right before release
 
 
 
-- ContainerBasedNullHandler support (non cached instances)
-- 404 component (so its customizable)
-- customizable error process on request execution
-- hibernate validation plugin
-- hibernate plugin
-- custom converters for specified method parameters
-- setting errors during ognl expression evaluation should be defined as validation errors
-- default dir scanner misses unit tests
 
 
 
@@ -154,6 +170,8 @@ ONLY AFTER RELEASE
 - vraptor2 logic with 2 names support
 - niceurl extra features
 - Logger.isDebugEnabled
+- result interface as wished
+- MAKE CONVERTERS GLOBAL, NOT LOCAL?
 
 	optimizations (product):
 	- converter optimization
@@ -186,6 +204,12 @@ ONLY AFTER RELEASE
 	- vraptor2 validation method lookup: remove the search
 	- vrapro2 customization: log/error/pre-check on wrong validation method parameters or similar name (edid distance < 2)
 	- vraptor2/3 customization: log/error/pre-check on most validations (faster/error prone/etc) - pre-analysis tool base
+	- v2: custom converters used on annotated fields
+	- global converters annotation/local converter annotation
+	- stats ala hibernate stats
+	- statement product
+	- graph product
+	- ehcache
 
 
 done:
@@ -221,8 +245,9 @@ done:
 	- method invocation without parameters
 	- custom vraptor2 converters through custom Converters implementation
 	- v2: instantiate with injection
-	- better clarifying messages on common mistakes (i.e. logic getter which receives a parameter)
+	- v2: better clarifying messages on common mistakes (i.e. logic getter which receives a parameter)
 	- v2: getters for outjection
+	- v2: method invocation with parameters
 - converters
 	primitive
 	wrappers

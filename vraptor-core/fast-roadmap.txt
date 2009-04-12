@@ -1,7 +1,5 @@
 right now: 78/71
 
-	1 Validator test
-	2 Collection support
 	- cweb2 stats page
 
 	- ViewsProperties test
@@ -9,7 +7,6 @@ right now: 78/71
 	- sistema de criar e listar turmas
 	
 	- VRaptor2MethodLookup test
-	4 Set support
 	- todas as telas atreladas a turma
 	
 	5 v2: @Logic (parameters=...) support
@@ -163,7 +160,7 @@ ONLY AFTER RELEASE
 - accept do base interceptors are not being invoked
 - time converters
 - guice support
-- SortedSet, Queue, SortedMap support
+- SortedMap support
 - BigInteger converter
 - generic interface support: instantiates the implementation
 - vraptor2 components with support for inherited outjection/injection
@@ -172,6 +169,8 @@ ONLY AFTER RELEASE
 - Logger.isDebugEnabled
 - result interface as wished
 - MAKE CONVERTERS GLOBAL, NOT LOCAL?
+- extract the Interface/Implementation part from ReflectionBasedNullHandler
+	- extra tests for Colleciton/List/and so on instantiate algorithm
 
 	optimizations (product):
 	- converter optimization
@@ -255,3 +254,4 @@ done:
 	date
 	bigdecimal
 - paranamer support
+- Collection, List, Set, Calendar, SortedSet, Queue interface support

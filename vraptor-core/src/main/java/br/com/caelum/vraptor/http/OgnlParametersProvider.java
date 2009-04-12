@@ -36,6 +36,7 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
+import ognl.NoSuchPropertyException;
 import ognl.Ognl;
 import ognl.OgnlContext;
 import ognl.OgnlException;
@@ -82,7 +83,12 @@ public class OgnlParametersProvider implements ParametersProvider {
             Ognl.setTypeConverter(context, controller);
             for(String key : (Set<String>)request.getParameterMap().keySet()) {
                 String[] values = request.getParameterValues(key);
-                Ognl.setValue(key, context,root, values.length==1 ? values[0] : values);
+                try {
+                    Ognl.setValue(key, context,root, values.length==1 ? values[0] : values);
+                } catch (NoSuchPropertyException ex) {
+                    // TODO optimization: be able to ignore or not
+                    // ignoring
+                }
             }
             Type[] types = method.getMethod().getGenericParameterTypes();
             Object[] result = new Object[types.length];

@@ -46,6 +46,7 @@ import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.TypeCreator;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.vraptor2.Info;
 
 @ApplicationScoped
 public class AsmBasedTypeCreator implements TypeCreator, Opcodes {
@@ -90,6 +91,9 @@ public class AsmBasedTypeCreator implements TypeCreator, Opcodes {
         StringBuilder valueLists = new StringBuilder();
         java.lang.reflect.Type[] types = method.getGenericParameterTypes();
         String[] names = provider.parameterNamesFor(method);
+        for (int i=0;i<names.length;i++) {
+            names[i] = Info.capitalize(names[i]); 
+        }
         for (int i=0;i<types.length;i++) {
             java.lang.reflect.Type type = types[i];
             if (type instanceof ParameterizedType) {
@@ -115,8 +119,10 @@ public class AsmBasedTypeCreator implements TypeCreator, Opcodes {
         };
         try {
             Class<?> found = loader.loadClass(newTypeName);
-            System.out.println(Arrays.toString(found.getDeclaredMethods()));
-            System.out.println(Arrays.toString(found.getDeclaredFields()));
+            if(logger.isDebugEnabled()) {
+                logger.debug("Methods: " + Arrays.toString(found.getDeclaredMethods()));
+                logger.debug("Fields: " + Arrays.toString(found.getDeclaredFields()));
+            }
             return found;
         } catch (ClassNotFoundException e) {
             // TODO Auto-generated catch block
@@ -136,7 +142,9 @@ public class AsmBasedTypeCreator implements TypeCreator, Opcodes {
 
     private void parse(ClassWriter cw, StringBuilder valueLists, String newTypeName, String definition,
             String genericDefinition, String fieldName, int loadKey, int returnKey) {
-        System.out.println("Method definition " + definition);
+        if(logger.isDebugEnabled()){
+            logger.debug("Method for field '" + fieldName + "' being defined for type " + definition);
+        }
 
         {
             FieldVisitor fv = cw.visitField(ACC_PRIVATE, fieldName + "_", definition, genericDefinition, null);

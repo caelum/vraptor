@@ -3,6 +3,7 @@ right now: 78/71
 	- paranamer support
 	- caelumweb2: trocar senha support
 	- ParanamerParameterNameProvider test
+	
 	- Validator test
 	- ViewsProperties test
 	- VRaptor2MethodLookup test
@@ -17,6 +18,8 @@ right now: 78/71
 
 	- caelumweb2 finalizar tarefa
 	- cw2: statements
+	- support Validator
+	- concatenate convertion and validation errors
 
 
 
@@ -58,6 +61,12 @@ site docs (prior to release)
 - calendar support: either birthday or birthday.time
 - BigDecimal, BigInteger converter
 
+kung help
+
+- full spring support
+
+
+
 vraptor 2 support
 
 - v2: @Logic (parameters=...) support
@@ -68,13 +77,12 @@ vraptor 2 support
 - json output
 - xml output
 
-kung help
 
-- interceptor registration real support
-- paranamer support
-- support Validator
-- full spring support
-- concatenate convertion and validation errors
+
+
+
+
+
 
 
 
@@ -175,6 +183,7 @@ ONLY AFTER RELEASE
 	- empty lists should be cached and early returned
 	- cache EMPTY parameter class for method without parameters
 	- parameter name provider needs cache? maybe
+	- be able to throw an exception if wrong parameters are passed
 
 
 done:

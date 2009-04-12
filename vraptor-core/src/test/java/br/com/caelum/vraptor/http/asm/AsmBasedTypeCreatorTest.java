@@ -45,8 +45,8 @@ public class AsmBasedTypeCreatorTest {
     public void testShouldWorkFineIfMemberNameIsAReservedWordAsInt() throws SecurityException, NoSuchMethodException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         Class<?> type = creator.typeFor(mockery.method(DogAlike.class.getDeclaredMethod("bark",int.class)));
         
-        Method getter = type.getDeclaredMethod("getint");
-        Method setter = type.getDeclaredMethod("setint", int.class);
+        Method getter = type.getDeclaredMethod("getInt");
+        Method setter = type.getDeclaredMethod("setInt", int.class);
         
         Object instance = type.newInstance();
         setter.invoke(instance, 3);
@@ -73,8 +73,8 @@ public class AsmBasedTypeCreatorTest {
     public void shouldHandleArraysOfPrimitive() throws SecurityException, NoSuchMethodException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         Class<?> type = creator.typeFor(mockery.method(DogAlike.class.getDeclaredMethod("dropDead",int[].class)));
         
-        Method getter = type.getDeclaredMethod("getint");
-        Method setter = type.getDeclaredMethod("setint", int[].class);
+        Method getter = type.getDeclaredMethod("getInt");
+        Method setter = type.getDeclaredMethod("setInt", int[].class);
         
         Object instance = type.newInstance();
         int[] array = new int[]{0,1};

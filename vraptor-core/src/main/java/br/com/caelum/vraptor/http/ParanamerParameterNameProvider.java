@@ -3,12 +3,15 @@ package br.com.caelum.vraptor.http;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.Arrays;
 
-import org.picocontainer.paranamer.BytecodeReadingParanamer;
-import org.picocontainer.paranamer.CachingParanamer;
-import org.picocontainer.paranamer.Paranamer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.thoughtworks.paranamer.BytecodeReadingParanamer;
+import com.thoughtworks.paranamer.CachingParanamer;
+import com.thoughtworks.paranamer.ParameterNamesNotFoundException;
+import com.thoughtworks.paranamer.Paranamer;
 
 /**
  * Paranamer based parameter name provider provides parameter names based on
@@ -29,16 +32,15 @@ public class ParanamerParameterNameProvider implements ParameterNameProvider{
         if (method.getParameterTypes().length == 0) {
             return EMPTY_ARRAY;
         }
-        Class<?> declaringType = method.getDeclaringClass();
-        String[] original = delegate.parameterNamesFor(method);
-        if (info.areParameterNamesAvailable(declaringType, method.getName()) != Paranamer.PARAMETER_NAMES_FOUND) {
-            return original;
+        try {
+            String[] parameterNames = info.lookupParameterNames(method);
+            if (logger.isDebugEnabled()) {
+                logger.debug("Found parameter names with paranamer for " + method + " as " + Arrays.toString(parameterNames));
+            }
+            return parameterNames;
+        } catch (ParameterNamesNotFoundException e) {
+            return delegate.parameterNamesFor(method);
         }
-        String[] parameterNames = info.lookupParameterNames(method);
-        if (logger.isDebugEnabled()) {
-            logger.debug("Found parameter names with paranamer for " + method + " as " + parameterNames);
-        }
-        return parameterNames;
     }
 
     public String nameFor(Type type) {

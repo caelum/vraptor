@@ -80,5 +80,17 @@ public class InfoTest {
         assertThat(Info.getLogicName(DefaultComponent.class.getMethod("full")), is(equalTo("value")));
         mockery.assertIsSatisfied();
     }
+    
+    @Test
+    public void shouldBeAbleToCapitalizeASingleCharacter() {
+        assertThat(Info.capitalize("v"), is(equalTo("V")));
+        mockery.assertIsSatisfied();
+    }
+
+    @Test
+    public void shouldBeAbleToCapitalizeAStringLongerThanOneCharacter() {
+        assertThat(Info.capitalize("value"), is(equalTo("Value")));
+        mockery.assertIsSatisfied();
+    }
 
 }

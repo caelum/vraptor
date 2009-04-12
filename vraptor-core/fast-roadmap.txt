@@ -1,8 +1,9 @@
 right now: 78/71
 
+	- sistema de criar e listar turmas
+
 	- ViewsProperties test
 	3 path annotation with support to regex (niceurls?)
-	- sistema de criar e listar turmas
 	
 	- VRaptor2MethodLookup test
 	- todas as telas atreladas a turma

@@ -89,30 +89,95 @@ public class ViewsPropertiesPageResultTest {
     }
 
     @Test
-    public void redirectPrefixExecutesClientRedirection() throws ServletException, IOException {
+    public void redirectPrefixExecutesClientRedirection() throws ServletException, IOException, NoSuchMethodException {
+        mockery.checking(new Expectations() {
+            {
+                allowing(resource).getType();
+                will(returnValue(CommonComponent.class));
+                allowing(method).getMethod();
+                will(returnValue(CommonComponent.class.getMethod("base")));
+                one(config).getForwardFor("CommonComponent.base.ok");
+                will(returnValue("redirect:clientSide"));
+                one(response).sendRedirect("clientSide");
+            }
+        });
+        this.result.forward("ok");
+        mockery.assertIsSatisfied();
+    }
+    
+    class NewResource {
+        public void base() {
+        }
+    }
+
+    @Test
+    public void newResourceUsesCommonAlgorithm() throws ServletException, IOException, NoSuchMethodException {
+        mockery.checking(new Expectations() {
+            {
+                allowing(resource).getType();
+                will(returnValue(NewResource.class));
+                allowing(method).getMethod();
+                will(returnValue(NewResource.class.getMethod("base")));
+                one(resolver).pathFor(method, "ok"); will(returnValue("MyPath"));
+                one(request).getRequestDispatcher("MyPath"); will(returnValue(dispatcher));
+                one(dispatcher).forward(request,response);
+            }
+        });
         this.result.forward("ok");
         mockery.assertIsSatisfied();
     }
 
     @Test
-    public void newResourceUsesCommonAlgorithm() throws ServletException, IOException {
-        this.result.forward("ok");
-        mockery.assertIsSatisfied();
-    }
-
-    @Test
-    public void commonOverrideExecutesForward() throws ServletException, IOException {
+    public void commonOverrideExecutesForward() throws ServletException, IOException, NoSuchMethodException {
+        mockery.checking(new Expectations() {
+            {
+                allowing(resource).getType();
+                will(returnValue(CommonComponent.class));
+                allowing(method).getMethod();
+                will(returnValue(CommonComponent.class.getMethod("base")));
+                one(config).getForwardFor("CommonComponent.base.ok");
+                will(returnValue("serverSide"));
+                one(request).getRequestDispatcher("serverSide");
+                will(returnValue(dispatcher));
+                one(dispatcher).forward(request, response);
+            }
+        });
         this.result.forward("ok");
         mockery.assertIsSatisfied();
     }
 
     @Test(expected = IOException.class)
-    public void expressionProblemThrowsExceptionAndDoesNotRedirect() throws ServletException, IOException {
+    public void expressionProblemThrowsExceptionAndDoesNotRedirect() throws ServletException, IOException, NoSuchMethodException {
+        mockery.checking(new Expectations() {
+            {
+                allowing(resource).getType();
+                will(returnValue(CommonComponent.class));
+                allowing(method).getMethod();
+                will(returnValue(CommonComponent.class.getMethod("base")));
+                one(config).getForwardFor("CommonComponent.base.ok");
+                will(returnValue("serverSide?client.id=${client.id}"));
+                exactly(2).of(request).getAttribute("client"); will(returnValue(new CommonComponent()));
+            }
+        });
         this.result.forward("ok");
+        mockery.assertIsSatisfied();
     }
 
     @Test
-    public void includesUsesTheCommonAlgorithm() throws ServletException, IOException {
+    public void includesUsesTheCommonAlgorithm() throws ServletException, IOException, NoSuchMethodException {
+        mockery.checking(new Expectations() {
+            {
+                allowing(resource).getType();
+                will(returnValue(CommonComponent.class));
+                allowing(method).getMethod();
+                will(returnValue(CommonComponent.class.getMethod("base")));
+                one(resolver).pathFor(method, "ok");
+                will(returnValue("defaultPath"));
+                one(request).getRequestDispatcher("defaultPath");
+                will(returnValue(dispatcher));
+                one(dispatcher).include(request, response);
+            }
+        });
         this.result.include("ok");
         mockery.assertIsSatisfied();
     }

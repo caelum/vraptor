@@ -9,10 +9,16 @@ right now:
 		- nao cadastra-los por padrao
 
 
+	3 v2: json output
+	4 v2: support v2 hibernate plugin
+	5 caelumweb -> v3 workforce
+	
+	- niceurls with programmatic support
+	- niceurls -> path support
+	- niceurls with file config support -> path support
 	1 path annotation with support to value injection (niceurls?)
 	- resolve interceptororder with interceptorstack
 	2 test validator
-	3 v2: json output
 	4 support Validator
 	5 support HibernateValidator
 	niceurls programatico e arquivo de config
@@ -28,7 +34,6 @@ right now:
 	13 converters: File
 	15 concatenate convertion and validation errors
 	support vraptor2 plugins if possible:
-		- hibernatevalidator
 		- what else?
 	17 customizable error process on request execution
 	18 404 component
@@ -38,9 +43,7 @@ right now:
 	- default dir scanner misses unit tests
 	23 json output support
 	24 xml output support
-	25 better exception handling everywhere (prior)
-	4 better than vraptor2: support for inheritance
-
+	25 better exception handling everywhere
 	- v2: lookup custom converter annotated field and complain?
 - caelumweb use method FILL to app scope and request scope: adds to a list and adds on the run
 
@@ -104,7 +107,8 @@ right before release
 	vraptor2 release with customized code
 		the org.vraptor.Component annotation was modified
 
-
+maybe
+	better than vraptor2: support for inheritance
 
 
 

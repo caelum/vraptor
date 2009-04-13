@@ -32,8 +32,6 @@ package br.com.caelum.vraptor.resource;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import br.com.caelum.vraptor.Path;
 

@@ -16,10 +16,13 @@ import javax.servlet.ServletContext;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.vraptor.plugin.VRaptorPlugin;
 
 /**
- * Loads some basic config from vraptor.xml. Only this basic configuration is
- * automatically supported.
+ * Loads some basic config from vraptor.xml.<br>
+ * Only this basic configuration is automatically supported. This way we can
+ * support vraptor2 most important features. We do not really parse the xml file
+ * as it would be a little bit too much for the information that we require.
  * 
  * @author Guilherme Silveira
  */
@@ -28,39 +31,45 @@ public class VRaptor2Config implements Config {
     private static final Logger logger = LoggerFactory.getLogger(VRaptor2Config.class);
 
     private final List<String> converters = new ArrayList<String>();
+    private final List<String> plugins = new ArrayList<String>();
 
-    private final Map<String, String> results = new HashMap<String,String>();
+    private final Map<String, String> results = new HashMap<String, String>();
 
     private String viewPattern = "/$component/$logic.$result.jsp";
 
-    public VRaptor2Config(ServletContext context) throws IOException {
+    public VRaptor2Config(ServletContext context) throws IOException, ConfigException {
         File xml = new File(context.getRealPath("/WEB-INF/classes/vraptor.xml"));
         parseVRaptor(xml);
         File views = new File(context.getRealPath("/WEB-INF/classes/views.properties"));
         parseViews(views);
     }
-    interface LineListener{
-        void content(String line);
+
+    interface LineListener {
+        void content(String line) throws ConfigException;
     }
 
-    private void parseVRaptor(File file) throws FileNotFoundException, IOException {
+    private void parseVRaptor(File file) throws FileNotFoundException, IOException, ConfigException {
         parse(file, new LineListener() {
-            public void content(String line) {
+            public void content(String line) throws ConfigException {
                 if (line.contains("<converter>")) {
                     line = extract(line, "converter");
                     logger.info("Vraptor 2 converter found - remember to migrate to vraptor3 : " + line);
                     converters.add(line);
-                } else if(line.contains("<regex-view-manager>")) {
+                } else if (line.contains("<regex-view-manager>")) {
                     line = extract(line, "regex-view-manager");
                     logger.info("Vraptor 2 regex-view-manager found - remember to migrate to vraptor3 : " + line);
                     viewPattern = line;
+                } else if (line.contains("<plugin>")) {
+                    line = extract(line, "plugin");
+                    logger.info("Vraptor 2 plugin found - remember to migrate to vraptor3 : " + line);
+                    plugins.add(line);
                 }
             }
         });
     }
 
-    private void parse(File file, LineListener listener) throws IOException {
-        if(!file.exists()) {
+    private void parse(File file, LineListener listener) throws IOException, ConfigException {
+        if (!file.exists()) {
             return;
         }
         FileReader fileReader = new FileReader(file);
@@ -77,24 +86,29 @@ public class VRaptor2Config implements Config {
     }
 
     private void parseViews(File file) throws FileNotFoundException, IOException {
-        if(!file.exists()) {
+        if (!file.exists()) {
             return;
         }
         logger.warn("Vraptor 2 views.properties found - remember to migrate to vraptor3");
         Properties p = new Properties();
         FileInputStream stream = new FileInputStream(file);
         p.load(stream);
-        for(Object key : p.keySet()) {
+        for (Object key : p.keySet()) {
             results.put((String) key, p.getProperty((String) key));
             logger.debug("Mapped: " + key + " to " + p.getProperty((String) key));
         }
         stream.close();
     }
 
-    private String extract(String line, String tag) {
-        return line.substring(line.indexOf("<" + tag + ">") + tag.length()+2, line.lastIndexOf("</" + tag + ">"));
+    private String extract(String line, String tag) throws ConfigException {
+        int lastPosition = line.lastIndexOf("</" + tag + ">");
+        if (lastPosition == -1) {
+            throw new ConfigException("Valid vraptor.xml but not supported by vraptor3. You should put all " + tag
+                    + " tags in separate lines (one line for an opening, content and closing tag)");
+        }
+        return line.substring(line.indexOf("<" + tag + ">") + tag.length() + 2, lastPosition);
     }
-    
+
     public String getViewPattern() {
         return viewPattern;
     }
@@ -105,6 +119,10 @@ public class VRaptor2Config implements Config {
 
     public String getForwardFor(String key) {
         return this.results.get(key);
+    }
+
+    public boolean hasPlugin(Class<? extends VRaptorPlugin> type) {
+        return this.plugins.contains(type.getName());
     }
 
 }

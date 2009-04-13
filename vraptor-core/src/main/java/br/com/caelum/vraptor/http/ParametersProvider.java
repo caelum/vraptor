@@ -31,6 +31,11 @@ package br.com.caelum.vraptor.http;
 
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
+/**
+ * Provides all parameters required to invoke an specific java method.
+ * 
+ * @author Guilherme Silveira
+ */
 public interface ParametersProvider {
 
     Object[] getParametersFor(ResourceMethod method);

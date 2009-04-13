@@ -16,6 +16,9 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
+import org.vraptor.VRaptorException;
+import org.vraptor.plugin.VRaptorPlugin;
+import org.vraptor.webapp.WebApplication;
 
 public class VRaptor2ConfigTest {
 
@@ -29,7 +32,7 @@ public class VRaptor2ConfigTest {
     }
 
     @Test
-    public void isAbleToReadRegexViewManager() throws IOException {
+    public void isAbleToReadRegexViewManager() throws IOException, ConfigException {
         final File file = create("<regex-view-manager>/custom/$component/$logic.$result.jsp</regex-view-manager>");
         mockery.checking(new Expectations() {
             {
@@ -45,7 +48,7 @@ public class VRaptor2ConfigTest {
     }
 
     @Test
-    public void readsViewsPropertiesIfFound() throws IOException {
+    public void readsViewsPropertiesIfFound() throws IOException, ConfigException {
         final File file = create("key = value");
         mockery.checking(new Expectations() {
             {
@@ -69,7 +72,7 @@ public class VRaptor2ConfigTest {
     }
 
     @Test
-    public void usesTheDefaultRegexViewManager() throws IOException {
+    public void usesTheDefaultRegexViewManager() throws IOException, ConfigException {
         final File file = create("");
         mockery.checking(new Expectations() {
             {
@@ -85,8 +88,7 @@ public class VRaptor2ConfigTest {
     }
 
     @Test
-    public void usesTheDefaultRegexViewManagerIfFileDoesNotExist() throws IOException {
-        final File file = create("");
+    public void usesTheDefaultRegexViewManagerIfFileDoesNotExist() throws IOException, ConfigException {
         mockery.checking(new Expectations() {
             {
                 one(context).getRealPath("/WEB-INF/classes/vraptor.xml");
@@ -101,7 +103,7 @@ public class VRaptor2ConfigTest {
     }
 
     @Test
-    public void readsConverters() throws IOException {
+    public void readsConverters() throws IOException, ConfigException {
         final File file = create("<converter>myCustomConverter</converter>");
         mockery.checking(new Expectations() {
             {
@@ -114,6 +116,26 @@ public class VRaptor2ConfigTest {
         VRaptor2Config config = new VRaptor2Config(context);
         assertThat(config.getConverters(), hasItem("myCustomConverter"));
         assertThat(config.getConverters(), hasSize(1));
+        mockery.assertIsSatisfied();
+    }
+
+    class MyPluginType implements VRaptorPlugin {
+        public void init(WebApplication application) throws VRaptorException {
+        }
+    }
+    @Test
+    public void readsPlugins() throws IOException, ConfigException {
+        final File file = create("<plugin>" + MyPluginType.class.getName() + "</plugin>");
+        mockery.checking(new Expectations() {
+            {
+                one(context).getRealPath("/WEB-INF/classes/vraptor.xml");
+                will(returnValue(file.getAbsolutePath()));
+                one(context).getRealPath("/WEB-INF/classes/views.properties");
+                will(returnValue(new File("unknown").getAbsolutePath()));
+            }
+        });
+        VRaptor2Config config = new VRaptor2Config(context);
+        assertThat(config.hasPlugin(MyPluginType.class), is(equalTo(true)));
         mockery.assertIsSatisfied();
     }
 

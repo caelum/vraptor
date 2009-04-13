@@ -2,6 +2,10 @@ package br.com.caelum.vraptor.vraptor2;
 
 import java.util.List;
 
+/**
+ * VRaptor2 config file representation.
+ * @author Guilherme Silveira
+ */
 public interface Config {
 
     public String getViewPattern();

@@ -32,8 +32,6 @@ package br.com.caelum.vraptor.resource;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import br.com.caelum.vraptor.Path;
 
@@ -51,35 +49,52 @@ public class DefaultResourceAndMethodLookup implements ResourceAndMethodLookup {
 		this.resource = resource;
 	}
 
-	public ResourceMethod methodFor(String id, String methodName) {
-		for (Method method : resource.getType().getDeclaredMethods()) {
-			if ((!Modifier.isPublic(method.getModifiers())) || Modifier.isStatic(method.getModifiers())) {
-				continue;
-			}
-			Path path = method.getAnnotation(Path.class);
-			if ((path==null && ("/" + method.getName()).equals(id)) || (path!=null && matches(path.value(),id))) {
-			    Class<? extends Annotation> annotation = HttpMethod.valueOf(methodName).getAnnotation();
-                if(method.isAnnotationPresent(annotation) || noAnnotationPresent(HttpMethod.values(), method)) {
-			        return new DefaultResourceMethod(resource, method);
-			    }
+	public ResourceMethod methodFor(String pathUriComponent, String httpMethodName) {
+		for (Method javaMethod : resource.getType().getDeclaredMethods()) {
+			if (isEligible(javaMethod) 
+				&& pathAccepted(pathUriComponent, javaMethod) 
+				&& httpMethodAccepted(httpMethodName, javaMethod)) {
+				return new DefaultResourceMethod(resource, javaMethod);
 			}
 		}
 		return null;
 	}
 
-    private boolean matches(String value, String id) {
-        String replacedWildcards = value.replaceAll("\\*", ".\\*");
-        String regex= replacedWildcards;
-        return id.matches(regex);
-    }
+	private boolean isEligible(Method javaMethod) {
+		return Modifier.isPublic(javaMethod.getModifiers()) && !Modifier.isStatic(javaMethod.getModifiers());
+	}
 
-    private boolean noAnnotationPresent(HttpMethod[] values, Method method) {
-        for (HttpMethod key : values) {
-            if(method.isAnnotationPresent(key.getAnnotation())) {
-                return false;
-            }
-        }
-        return true;
-    }
+	private boolean pathAccepted(String id, Method method) {
+		return hasMatchingPathAnnotation(id, method) || sameNameAsId(id, method);
+	}
+
+	private boolean hasMatchingPathAnnotation(String id, Method method) {
+		Path path = method.getAnnotation(Path.class);
+		if (path == null)
+			return false;
+		
+		String regexFromWildcards = path.value().replaceAll("\\*", ".\\*");
+		return id.matches(regexFromWildcards);
+	}
+
+	private boolean sameNameAsId(String id, Method method) {
+		return ("/" + method.getName()).equals(id);
+	}
+
+	private boolean httpMethodAccepted(String httpMethodName, Method javaMethod) {
+		Class<? extends Annotation> httpMethodAnnotation = HttpMethod.valueOf(httpMethodName)
+				.getAnnotation();
+		return javaMethod.isAnnotationPresent(httpMethodAnnotation)
+				|| noAnnotationPresent(HttpMethod.values(), javaMethod);
+	}
+
+	private boolean noAnnotationPresent(HttpMethod[] values, Method javaMethod) {
+		for (HttpMethod key : values) {
+			if (javaMethod.isAnnotationPresent(key.getAnnotation())) {
+				return false;
+			}
+		}
+		return true;
+	}
 
 }

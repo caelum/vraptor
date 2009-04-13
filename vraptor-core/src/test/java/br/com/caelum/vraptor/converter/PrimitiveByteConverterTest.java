@@ -25,9 +25,14 @@ public class PrimitiveByteConverterTest {
         converter.convert("---", byte.class);
     }
     
-    @Test(expected=IllegalArgumentException.class)
-    public void shouldComplainAboutNull() {
-        converter.convert(null, byte.class);
+    @Test
+    public void shouldConvertToZeroWhenNull() {
+    	assertThat((Byte) converter.convert(null, byte.class), is(equalTo((byte) 0)));
+    }
+
+    @Test
+    public void shouldConvertToZeroWhenEmpty() {
+    	assertThat((Byte) converter.convert("", byte.class), is(equalTo((byte) 0)));
     }
 
 }

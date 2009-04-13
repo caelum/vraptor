@@ -32,9 +32,6 @@ package br.com.caelum.vraptor.http;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 import java.util.List;
-import java.util.Set;
-
-import javax.servlet.http.HttpServletRequest;
 
 import ognl.NoSuchPropertyException;
 import ognl.Ognl;
@@ -50,27 +47,26 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 
 public class OgnlParametersProvider implements ParametersProvider {
 
-    private final HttpServletRequest request;
-
     private final TypeCreator creator;
 
     private final Container container;
 
     private final Converters converters;
 
-    private final ParameterNameProvider provider; 
+    private final ParameterNameProvider provider;
 
-    public OgnlParametersProvider(HttpServletRequest request, TypeCreator creator, Container container, Converters converters, ParameterNameProvider provider) {
+    private final RequestParameters parameters; 
+
+    public OgnlParametersProvider(TypeCreator creator, Container container, Converters converters, ParameterNameProvider provider, RequestParameters parameters) {
         this.creator = creator;
-        this.request = request;
         this.container = container;
         this.converters = converters;
         this.provider = provider;
+        this.parameters = parameters;
         OgnlRuntime.setNullHandler(Object.class, new ReflectionBasedNullHandler());
         OgnlRuntime.setPropertyAccessor(List.class, new ListAccessor());
     }
 
-    @SuppressWarnings("unchecked")
     public Object[] getParametersFor(ResourceMethod method) {
         try {
             Class<?> type = creator.typeFor(method);
@@ -81,8 +77,8 @@ public class OgnlParametersProvider implements ParametersProvider {
             
             OgnlToConvertersController controller = new OgnlToConvertersController(converters);
             Ognl.setTypeConverter(context, controller);
-            for(String key : (Set<String>)request.getParameterMap().keySet()) {
-                String[] values = request.getParameterValues(key);
+            for(String key : parameters.getNames()) {
+                String[] values = parameters.get(key);
                 try {
                     Ognl.setValue(key, context,root, values.length==1 ? values[0] : values);
                 } catch (NoSuchPropertyException ex) {

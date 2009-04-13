@@ -26,12 +26,12 @@ public class PrimitiveIntConverterTest {
     }
     
     @Test
-    public void shouldTranslateNullToZero() {
+    public void shouldConvertToZeroWhenNull() {
         assertThat((Integer) converter.convert(null, int.class), is(equalTo(0)));
     }
 
     @Test
-    public void shouldTranslateEmptyToZero() {
+    public void shouldConvertToZeroWhenEmpty() {
         assertThat((Integer) converter.convert("", int.class), is(equalTo(0)));
     }
 

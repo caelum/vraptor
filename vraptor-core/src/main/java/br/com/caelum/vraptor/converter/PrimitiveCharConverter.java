@@ -36,9 +36,8 @@ import br.com.caelum.vraptor.Converter;
 public class PrimitiveCharConverter implements Converter {
 
     public Object convert(String value, Class type) {
-        if(value==null) {
-            // TODO validation??
-            throw new IllegalArgumentException("Unable to convert null to primitive char");
+        if(value==null || value=="") {
+        	return '\u0000';
         }
         if(value.length()!=1) {
             // TODO validation??
@@ -46,5 +45,5 @@ public class PrimitiveCharConverter implements Converter {
         }
         return value.charAt(0);
     }
-    
+
 }

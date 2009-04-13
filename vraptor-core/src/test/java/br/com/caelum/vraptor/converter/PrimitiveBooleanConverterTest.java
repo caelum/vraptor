@@ -24,9 +24,14 @@ public class PrimitiveBooleanConverterTest {
         assertThat((Boolean) converter.convert("True", boolean.class), is(equalTo(true)));
     }
     
-    @Test(expected=IllegalArgumentException.class)
-    public void shouldComplainAboutNull() {
-        converter.convert(null, boolean.class);
+    @Test
+    public void shouldConvertToZeroWhenNull() {
+    	assertThat((Boolean) converter.convert(null, boolean.class), is(equalTo(false)));
+    }
+
+    @Test
+    public void shouldConvertToZeroWhenEmpty() {
+    	assertThat((Boolean) converter.convert("", boolean.class), is(equalTo(false)));
     }
 
 }

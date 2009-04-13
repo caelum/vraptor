@@ -25,9 +25,14 @@ public class PrimitiveFloatConverterTest {
         converter.convert("---", float.class);
     }
     
-    @Test(expected=IllegalArgumentException.class)
-    public void shouldComplainAboutNull() {
-        converter.convert(null, float.class);
+    @Test
+    public void shouldConvertToZeroWhenNull() {
+    	assertThat((Float) converter.convert(null, float.class), is(equalTo(0F)));
     }
 
+    @Test
+    public void shouldConvertToZeroWhenEmpty() {
+    	assertThat((Float) converter.convert("", float.class), is(equalTo(0F)));
+    }
+    
 }

@@ -25,9 +25,14 @@ public class PrimitiveDoubleConverterTest {
         converter.convert("---", double.class);
     }
     
-    @Test(expected=IllegalArgumentException.class)
-    public void shouldComplainAboutNull() {
-        converter.convert(null, double.class);
+    @Test
+    public void shouldConvertToZeroWhenNull() {
+    	assertThat((Double) converter.convert(null, double.class), is(equalTo(0D)));
+    }
+
+    @Test
+    public void shouldConvertToZeroWhenEmpty() {
+    	assertThat((Double) converter.convert("", double.class), is(equalTo(0D)));
     }
 
 }

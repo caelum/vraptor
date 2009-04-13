@@ -36,9 +36,8 @@ import br.com.caelum.vraptor.Converter;
 public class PrimitiveDoubleConverter implements Converter {
 
     public Object convert(String value, Class type) {
-        if(value==null) {
-            // TODO validation??
-            throw new IllegalArgumentException("Unable to convert null to primitive");
+        if(value==null || value=="") {
+        	return 0D;
         }
         try {
             return Double.parseDouble(value);

@@ -38,9 +38,6 @@ public class DefaultResourceAndMethodLookupTest {
         mockery.assertIsSatisfied();
     }
     
-    
-    
-
     @Test
     public void findsTheCorrectAnnotatedMethodIfThereIsNoWebMethodAnnotationPresent() throws SecurityException, NoSuchMethodException {
         ResourceMethod method = lookuper.methodFor("/clients", "POST");
@@ -95,7 +92,7 @@ public class DefaultResourceAndMethodLookupTest {
     }
 
     @Test
-    public void shouldAcceptAPublicNonStaticNonAnnotatedMethod() throws SecurityException, NoSuchMethodException {
+    public void shouldFindAPublicNonStaticNonAnnotatedMethodWithTheSameNameAsTheGivenId() throws SecurityException, NoSuchMethodException {
         ResourceMethod method = lookuper.methodFor("/add", "POST");
         assertThat(method, is(VRaptorMatchers.resourceMethod(Clients.class.getMethod("add"))));
         mockery.assertIsSatisfied();
@@ -107,11 +104,11 @@ public class DefaultResourceAndMethodLookupTest {
         assertThat(method, is(Matchers.nullValue()));
         mockery.assertIsSatisfied();
     }
+    
     @Test
     public void shouldAcceptAResultWithASpecificWebMethod() throws SecurityException, NoSuchMethodException {
         ResourceMethod method = lookuper.methodFor("/clients/head", "HEAD");
-        assertThat(method.getMethod(), is(equalTo(Clients.class.getMethod("head"))));
+        assertThat(method, is(VRaptorMatchers.resourceMethod(Clients.class.getMethod("head"))));
         mockery.assertIsSatisfied();
     }
-
 }

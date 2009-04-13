@@ -25,9 +25,14 @@ public class PrimitiveShortConverterTest {
         converter.convert("---", short.class);
     }
     
-    @Test(expected=IllegalArgumentException.class)
-    public void shouldComplainAboutNull() {
-        converter.convert(null, short.class);
+    @Test
+    public void shouldConvertToZeroWhenNull() {
+    	assertThat((Short) converter.convert(null, short.class), is(equalTo((short) 0)));
+    }
+
+    @Test
+    public void shouldConvertToZeroWhenEmpty() {
+    	assertThat((Short) converter.convert("", short.class), is(equalTo((short) 0)));
     }
 
 }

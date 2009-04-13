@@ -26,7 +26,7 @@ public class VRaptor2RequestExecution implements RequestExecution {
 
     public void execute() throws IOException, InterceptionException {
         interceptorStack.add(ResourceLookupInterceptor.class);
-        interceptorStack.add(URLParameterExtractorInterceptor.class)
+        interceptorStack.add(URLParameterExtractorInterceptor.class);
         interceptorStack.add(InterceptorListPriorToExecutionExtractor.class);
         interceptorStack.add(instantiator);
         interceptorStack.add(Validator.class);

@@ -40,6 +40,7 @@ import br.com.caelum.vraptor.Path;
  * searching for one mapped with the same id in the Path annotation.
  * 
  * @author Guilherme Silveira
+ * @author Rafael Ferreira
  */
 public class DefaultResourceAndMethodLookup implements ResourceAndMethodLookup {
 

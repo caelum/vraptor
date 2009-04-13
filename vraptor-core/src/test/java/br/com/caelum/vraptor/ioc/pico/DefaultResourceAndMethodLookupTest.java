@@ -30,6 +30,16 @@ public class DefaultResourceAndMethodLookupTest {
         this.resource = mockery.resource(Clients.class);
         this.lookuper = new DefaultResourceAndMethodLookup(resource);
     }
+    
+    @Test
+    public void matchesWhenUsingAWildcard() throws SecurityException, NoSuchMethodException {
+        ResourceMethod method = lookuper.methodFor("/move/second/child", "POST");
+        assertThat(method, is(VRaptorMatchers.resourceMethod(Clients.class.getMethod("move"))));
+        mockery.assertIsSatisfied();
+    }
+    
+    
+    
 
     @Test
     public void findsTheCorrectAnnotatedMethodIfThereIsNoWebMethodAnnotationPresent() throws SecurityException, NoSuchMethodException {
@@ -60,6 +70,9 @@ public class DefaultResourceAndMethodLookupTest {
     }
 
     static class Clients {
+        @Path("/move/*/child")
+        public void move() {
+        }
         @Path("/clients")
         public void list() {
         }

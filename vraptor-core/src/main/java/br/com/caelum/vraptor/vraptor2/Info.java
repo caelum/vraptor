@@ -14,11 +14,14 @@ import br.com.caelum.vraptor.resource.Resource;
  */
 public class Info {
 
+    public static final String[] OLD_COMPONENT_TERMINATIONS = { "Controller", "Logic", "Command", "Action",
+            "Component", "Manager" };
+
     public static String getComponentName(Class<?> type) {
         Component component = type.getAnnotation(Component.class);
         String componentName = component.value();
         if (componentName.equals("")) {
-            componentName = type.getSimpleName();
+            return getComponentNameForTypeWithoutAnnotationValue(type);
         }
         return componentName;
     }
@@ -41,6 +44,28 @@ public class Info {
             return name.toUpperCase();
         }
         return Character.toUpperCase(name.charAt(0)) + name.substring(1);
+    }
+
+    private static String getComponentNameForTypeWithoutAnnotationValue(Class<?> type) {
+        String name = removeEnding(type.getSimpleName(), OLD_COMPONENT_TERMINATIONS);
+        if (!name.equals(type.getSimpleName())) {
+            // removed some endings --> lowercase the type name without the
+            // ending
+            return name.toLowerCase();
+        } else {
+            // did not remove the ending, therefore the component name is the
+            // type name
+            return type.getSimpleName();
+        }
+    }
+
+    private static String removeEnding(String string, String[] terminations) {
+        for (String ending : terminations) {
+            if (string.endsWith(ending)) {
+                return string.substring(0, string.length() - ending.length());
+            }
+        }
+        return string;
     }
 
 }

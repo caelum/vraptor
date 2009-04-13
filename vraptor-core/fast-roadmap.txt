@@ -1,16 +1,11 @@
 right now: 78/71
 
-	test:
-	- validator
-	- methodlookup: test ignores non public, test ignores static
-	
-	2 path annotation with support to regex (niceurls?)
-	3 path annotation with support to dynamic logic and component lookup (niceurls?)
-	4 resolve interceptororder with interceptorstack
-	
+	- test validator
 	5 path annotation with support to value injection (niceurls?)
+
+
+
 	
-	6 v2: default Logic,Action and so on key removal
 	
 	11 v2: json output
 
@@ -18,21 +13,18 @@ right now: 78/71
 	- v2: xml output
 
 	13 converters: File
-	
 	14 support Validator
-	
 	15 concatenate convertion and validation errors
-
 	16 hibernate validation plugin
 	17 customizable error process on request execution
 	18 404 component
-20 hibernate plugin
-21 custom converters for specified method parameters
-22 setting errors during ognl expression evaluation should be defined as validation errors
-- default dir scanner misses unit tests
-23 json output support
-24 xml output support
-25 better exception handling everywhere (prior)
+	20 hibernate plugin
+	21 custom converters for specified method parameters
+	22 setting errors during ognl expression evaluation should be defined as validation errors
+	- default dir scanner misses unit tests
+	23 json output support
+	24 xml output support
+	25 better exception handling everywhere (prior)
 
 - v2: lookup custom converter annotated field and complain?
 - caelumweb use method FILL to app scope and request scope: adds to a list and adds on the run
@@ -72,11 +64,13 @@ site docs (prior to release)
 - vraptor2 default LogicParameterAnnotationWithParanamerFallback: how to migrate when not using paranamer and annotation
 
 kung help
-
 - full spring support
-	- Array
-	Map support
+- Array
+- Map support
 - forward problem with opening 2 connections to the database and 2 components... one or two? solve it?
+- url matching: auto add *? or not?
+- path annotation with support to dynamic logic and component lookup (niceurls?)
+- resolve interceptororder with interceptorstack
 
 
 
@@ -130,6 +124,9 @@ right before release
 
 ONLY AFTER RELEASE
 - DDD related: ContainerBasedNullHandler support (non cached instances)
+- better than vpraptor2: niceurl route caching	
+- better tha vraptor2: faster niceurl parsing when matching
+- RequestParameters implementation for POSTed xml and json values.
 - MIRROR usage as a fallback for OGNL instantiation
 - MIRROR usage everywhere
 - reflection fallback system on nullhandler (automatic?)
@@ -236,6 +233,7 @@ done:
 	- v2: getters for outjection
 	- v2: method invocation with parameters
 	- v2: @Logic (parameters=...) support
+	- v2: default Logic,Action and so on key removal
 - converters
 	primitive
 	wrappers
@@ -244,4 +242,6 @@ done:
 	bigdecimal
 - paranamer support
 - Collection, List, Set, Calendar, SortedSet, Queue interface support
-	1 path annotation default value (without annotation)
+1 path annotation default value (without annotation)
+2 path annotation with support to regex (niceurls?)
+	

@@ -32,6 +32,8 @@ package br.com.caelum.vraptor.resource;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import br.com.caelum.vraptor.Path;
 
@@ -55,7 +57,7 @@ public class DefaultResourceAndMethodLookup implements ResourceAndMethodLookup {
 				continue;
 			}
 			Path path = method.getAnnotation(Path.class);
-			if ((path==null && ("/" + method.getName()).equals(id)) || (path!=null && path.value().equals(id))) {
+			if ((path==null && ("/" + method.getName()).equals(id)) || (path!=null && matches(path.value(),id))) {
 			    Class<? extends Annotation> annotation = HttpMethod.valueOf(methodName).getAnnotation();
                 if(method.isAnnotationPresent(annotation) || noAnnotationPresent(HttpMethod.values(), method)) {
 			        return new DefaultResourceMethod(resource, method);
@@ -64,6 +66,12 @@ public class DefaultResourceAndMethodLookup implements ResourceAndMethodLookup {
 		}
 		return null;
 	}
+
+    private boolean matches(String value, String id) {
+        String replacedWildcards = value.replaceAll("\\*", ".\\*");
+        String regex= replacedWildcards;
+        return id.matches(regex);
+    }
 
     private boolean noAnnotationPresent(HttpMethod[] values, Method method) {
         for (HttpMethod key : values) {

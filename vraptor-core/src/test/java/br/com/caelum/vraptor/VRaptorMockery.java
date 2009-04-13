@@ -78,7 +78,7 @@ public class VRaptorMockery {
         return method;
     }
 
-    public <T> ResourceMethod methodFor(final Class<T> type, final String methodName, final Class... params) throws NoSuchMethodException {
+    public <T> ResourceMethod methodFor(final Class<T> type, final String methodName, final Class<?>... params) throws NoSuchMethodException {
         final Resource resource = mockery.mock(Resource.class);
         mockery.checking(new Expectations() {
             {

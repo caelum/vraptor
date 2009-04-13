@@ -23,6 +23,7 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.core.VRaptorRequest;
+import br.com.caelum.vraptor.http.OgnlParametersProvider;
 import br.com.caelum.vraptor.http.ognl.ListAccessor;
 import br.com.caelum.vraptor.http.ognl.ReflectionBasedNullHandler;
 

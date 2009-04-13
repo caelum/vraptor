@@ -1,7 +1,7 @@
 right now: 78/71
 
-	- test validator
 	5 path annotation with support to value injection (niceurls?)
+	- test validator
 
 
 

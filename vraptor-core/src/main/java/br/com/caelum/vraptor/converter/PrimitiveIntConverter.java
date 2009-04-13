@@ -32,13 +32,15 @@ package br.com.caelum.vraptor.converter;
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 
+/**
+ * @author Guilherme Silveira
+ */
 @Convert(int.class)
 public class PrimitiveIntConverter implements Converter {
 
     public Object convert(String value, Class type) {
-        if(value==null) {
-            // TODO validation??
-            throw new IllegalArgumentException("Unable to convert null to primitive int");
+        if(value==null || value.equals("")) {
+            return 0;
         }
         try {
             return Integer.parseInt(value);

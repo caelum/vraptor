@@ -5,8 +5,8 @@ import java.util.List;
 
 import br.com.caelum.vraptor.core.DefaultInterceptorStack;
 import br.com.caelum.vraptor.core.DefaultResult;
+import br.com.caelum.vraptor.http.DefaultRequestParameters;
 import br.com.caelum.vraptor.http.OgnlParametersProvider;
-import br.com.caelum.vraptor.http.ParanamerParameterNameProvider;
 import br.com.caelum.vraptor.http.StupidTranslator;
 import br.com.caelum.vraptor.http.asm.AsmBasedTypeCreator;
 import br.com.caelum.vraptor.interceptor.DefaultInterceptorRegistry;
@@ -43,6 +43,7 @@ public class Provider extends PicoProvider {
 
     protected List<Class<?>> getChildComponentTypes() {
         List<Class<?>> components = new ArrayList<Class<?>>();
+        components.add(DefaultRequestParameters.class);
         components.add(DefaultInterceptorStack.class);
         components.add(InterceptorListPriorToExecutionExtractor.class);
         components.add(VRaptor2RequestExecution.class);

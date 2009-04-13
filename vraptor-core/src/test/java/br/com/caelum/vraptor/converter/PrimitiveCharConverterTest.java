@@ -26,9 +26,14 @@ public class PrimitiveCharConverterTest {
         converter.convert("---", char.class);
     }
     
-    @Test(expected=IllegalArgumentException.class)
-    public void shouldComplainAboutNull() {
-        converter.convert(null, char.class);
+    @Test
+    public void shouldConvertToZeroWhenNull() {
+        assertThat(((Character) converter.convert(null, char.class)).charValue(), is(equalTo('\u0000')));
+    }
+
+    @Test
+    public void shouldConvertToZeroWhenEmpty() {
+        assertThat(((Character) converter.convert("", char.class)).charValue(), is(equalTo('\u0000')));
     }
 
 }

@@ -37,7 +37,7 @@ public class PrimitiveLongConverter implements Converter {
 
     public Object convert(String value, Class type) {
         if(value==null || value=="") {
-        	return 0l;
+        	return 0L;
         }
         try {
             return Long.parseLong(value);

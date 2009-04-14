@@ -21,7 +21,6 @@ import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodParameters;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.interceptor.DogAlike;
-import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
 import br.com.caelum.vraptor.resource.DefaultResource;
 import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
@@ -53,6 +52,7 @@ public class ExecuteAndViewInterceptorTest {
             {
                 one(auau).bark();
                 one(stack).next(method, auau);
+                one(parameters).getValues(); will(returnValue(new Object[]{}));
             }
         });
         interceptor.intercept(stack, method, auau);
@@ -70,6 +70,7 @@ public class ExecuteAndViewInterceptorTest {
             {
                 one(auau).bark();
                 will(throwException(exception));
+                one(parameters).getValues(); will(returnValue(new Object[]{}));
             }
         });
         try {
@@ -89,9 +90,8 @@ public class ExecuteAndViewInterceptorTest {
         mockery.checking(new Expectations() {
             {
                 one(auau).bark(3);
-                one(provider).getParametersFor(with(VRaptorMatchers.resourceMethod(DogAlike.class.getMethod("bark", int.class))));
-                will(returnValue(new Object[]{3}));
                 one(stack).next(method, auau);
+                one(parameters).getValues(); will(returnValue(new Object[]{3}));
             }
         });
         interceptor.intercept(stack, method, auau);
@@ -113,6 +113,7 @@ public class ExecuteAndViewInterceptorTest {
             {
                 one(auau).bark();
                 one(stack).next(method, auau);
+                one(parameters).getValues(); will(returnValue(new Object[]{}));
             }
         });
         interceptor.intercept(stack, method, auau);
@@ -129,6 +130,7 @@ public class ExecuteAndViewInterceptorTest {
             {
                 one(auau).barkResponse(); will(returnValue("response"));
                 one(stack).next(method, auau);
+                one(parameters).getValues(); will(returnValue(new Object[]{}));
             }
         });
         interceptor.intercept(stack, method, auau);

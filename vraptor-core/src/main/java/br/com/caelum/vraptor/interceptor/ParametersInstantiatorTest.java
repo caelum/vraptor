@@ -1,6 +1,7 @@
 package br.com.caelum.vraptor.interceptor;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 
 import org.jmock.Expectations;
 import org.junit.Before;
@@ -30,7 +31,7 @@ public class ParametersInstantiatorTest {
         this.parametersProvider = mockery.mock(ParametersProvider.class);
         this.instantiator = new ParametersInstantiator(parametersProvider, params, provider);
     }
-    
+
     class Component {
         void method() {
         }
@@ -40,13 +41,16 @@ public class ParametersInstantiatorTest {
     public void shouldUseTheProvidedParameters() throws InterceptionException, IOException, NoSuchMethodException {
         final InterceptorStack stack = mockery.mock(InterceptorStack.class);
         final ResourceMethod method = mockery.methodFor(Component.class, "method");
+        final Method reflected = method.getMethod();
         mockery.checking(new Expectations() {
             {
-                one(parametersProvider).getParametersFor(method); Object[] values = new Object[]{new Object()};
+                one(parametersProvider).getParametersFor(method);
+                Object[] values = new Object[] { new Object() };
                 will(returnValue(values));
-                one(provider).parameterNamesFor(method.getMethod()); will(returnValue(new String[]{"names"}));
+                one(provider).parameterNamesFor(reflected);
+                will(returnValue(new String[] { "names" }));
                 one(stack).next(method, null);
-                one(params).set(values, new String[]{"names"});
+                one(params).set(values, new String[] { "names" });
             }
         });
         instantiator.intercept(stack, method, null);

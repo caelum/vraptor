@@ -3,6 +3,8 @@ package br.com.caelum.vraptor.vraptor2;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.vraptor.validator.BasicValidationErrors;
+
 import br.com.caelum.vraptor.core.DefaultInterceptorStack;
 import br.com.caelum.vraptor.core.DefaultResult;
 import br.com.caelum.vraptor.http.DefaultRequestParameters;
@@ -47,6 +49,7 @@ public class Provider extends PicoProvider {
         components.add(DefaultInterceptorStack.class);
         components.add(InterceptorListPriorToExecutionExtractor.class);
         components.add(VRaptor2RequestExecution.class);
+        components.add(BasicValidationErrors.class);
         components.add(ResourceLookupInterceptor.class);
         components.add(InstantiateInterceptor.class);
         components.add(DefaultResult.class);

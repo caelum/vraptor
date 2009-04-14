@@ -121,8 +121,8 @@ public class VRaptor2Config implements Config {
         return this.results.get(key);
     }
 
-    public boolean hasPlugin(Class<? extends VRaptorPlugin> type) {
-        return this.plugins.contains(type.getName());
+    public boolean hasPlugin(String type) {
+        return this.plugins.contains(type);
     }
 
 }

@@ -14,4 +14,6 @@ public interface Config {
 
     public List<String> getConverters();
 
+    public boolean hasPlugin(String type);
+
 }

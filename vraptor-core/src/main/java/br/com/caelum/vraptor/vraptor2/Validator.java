@@ -8,7 +8,7 @@ import javax.servlet.ServletException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.vraptor.validator.BasicValidationErrors;
+import org.vraptor.validator.ValidationErrors;
 
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Interceptor;
@@ -23,10 +23,12 @@ public class Validator implements Interceptor {
     private final PageResult result;
 
     private static final Logger logger = LoggerFactory.getLogger(Validator.class);
+    private final ValidationErrors errors;
 
-    public Validator(ParametersProvider provider, PageResult result) {
+    public Validator(ParametersProvider provider, PageResult result, ValidationErrors errors) {
         this.provider = provider;
         this.result = result;
+        this.errors = errors;
     }
 
     public boolean accepts(ResourceMethod method) {
@@ -40,7 +42,6 @@ public class Validator implements Interceptor {
             if (validationMethod != null) {
                 Object[] parameters = provider.getParametersFor(method);
                 Object[] validationParameters = new Object[parameters.length + 1];
-                BasicValidationErrors errors = new BasicValidationErrors();
                 validationParameters[0] = errors;
                 for (int i = 0; i < parameters.length; i++) {
                     validationParameters[i + 1] = parameters[i];

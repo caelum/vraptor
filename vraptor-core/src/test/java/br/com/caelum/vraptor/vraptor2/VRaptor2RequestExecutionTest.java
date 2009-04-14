@@ -20,13 +20,15 @@ public class VRaptor2RequestExecutionTest {
     private InterceptorStack stack;
     private VRaptor2RequestExecution execution;
     private InstantiateInterceptor instantiator;
+    private Config config;
 
     @Before
     public void setup() {
         this.mockery = new Mockery();
         this.stack = mockery.mock(InterceptorStack.class);
         this.instantiator = new InstantiateInterceptor(null);
-        this.execution = new VRaptor2RequestExecution(stack, instantiator);
+        this.config = mockery.mock(Config.class);
+        this.execution = new VRaptor2RequestExecution(stack, instantiator, config);
     }
 
     @Test

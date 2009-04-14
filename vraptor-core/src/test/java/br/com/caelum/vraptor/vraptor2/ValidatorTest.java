@@ -24,13 +24,15 @@ public class ValidatorTest {
     private PageResult result;
     private ParametersProvider provider;
     private InterceptorStack stack;
+    private ValidationErrors errors;
 
     @Before
     public void setup() {
         this.mockery = new VRaptorMockery();
         this.result = mockery.mock(PageResult.class);
         this.provider = mockery.mock(ParametersProvider.class);
-        this.validator = new Validator(this.provider, this.result);
+        this.errors = mockery.mock(ValidationErrors.class);
+        this.validator = new Validator(this.provider, this.result, errors);
         this.stack = mockery.mock(InterceptorStack.class);
     }
 

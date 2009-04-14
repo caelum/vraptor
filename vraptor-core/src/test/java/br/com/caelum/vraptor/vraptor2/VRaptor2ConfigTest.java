@@ -135,7 +135,7 @@ public class VRaptor2ConfigTest {
             }
         });
         VRaptor2Config config = new VRaptor2Config(context);
-        assertThat(config.hasPlugin(MyPluginType.class), is(equalTo(true)));
+        assertThat(config.hasPlugin(MyPluginType.class.getName()), is(equalTo(true)));
         mockery.assertIsSatisfied();
     }
 

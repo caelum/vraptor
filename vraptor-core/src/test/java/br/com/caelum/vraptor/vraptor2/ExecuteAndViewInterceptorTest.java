@@ -18,6 +18,7 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.core.InterceptorStack;
+import br.com.caelum.vraptor.core.MethodParameters;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.interceptor.DogAlike;
 import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
@@ -31,6 +32,7 @@ public class ExecuteAndViewInterceptorTest {
     private ParametersProvider provider;
     private RequestResult requestResult;
     private InterceptorStack stack;
+    private MethodParameters parameters;
 
     @Before
     public void setup() throws NoSuchMethodException {
@@ -38,12 +40,13 @@ public class ExecuteAndViewInterceptorTest {
         this.provider = mockery.mock(ParametersProvider.class);
         this.requestResult = new RequestResult();
         this.stack = mockery.mock(InterceptorStack.class);
+        this.parameters = new MethodParameters();
     }
 
     @Test
     public void shouldInvokeTheMethodAndNotProceedWithInterceptorStack() throws SecurityException,
             NoSuchMethodException, IOException, InterceptionException {
-        ExecuteAndViewInterceptor interceptor = new ExecuteAndViewInterceptor(provider, requestResult);
+        ExecuteAndViewInterceptor interceptor = new ExecuteAndViewInterceptor(requestResult, parameters);
         final ResourceMethod method = new DefaultResourceMethod(new DefaultResource(DogAlike.class), DogAlike.class.getMethod("bark"));
         final DogAlike auau = mockery.mock(DogAlike.class);
         mockery.checking(new Expectations() {
@@ -61,7 +64,7 @@ public class ExecuteAndViewInterceptorTest {
     @Test
     public void shouldThrowMethodExceptionIfThereIsAnInvocationException() throws IOException, SecurityException,
             NoSuchMethodException {
-        ExecuteAndViewInterceptor interceptor = new ExecuteAndViewInterceptor(provider, requestResult);
+        ExecuteAndViewInterceptor interceptor = new ExecuteAndViewInterceptor(requestResult, parameters);
         ResourceMethod method = new DefaultResourceMethod(new DefaultResource(DogAlike.class), DogAlike.class.getMethod("bark"));
         final DogAlike auau = mockery.mock(DogAlike.class);
         final RuntimeException exception = new RuntimeException();
@@ -84,7 +87,7 @@ public class ExecuteAndViewInterceptorTest {
     
     @Test
     public void shouldUseTheProvidedArguments() throws SecurityException, NoSuchMethodException, InterceptionException, IOException {
-        ExecuteAndViewInterceptor interceptor = new ExecuteAndViewInterceptor(provider, requestResult);
+        ExecuteAndViewInterceptor interceptor = new ExecuteAndViewInterceptor(requestResult, parameters);
         final ResourceMethod method = new DefaultResourceMethod(new DefaultResource(DogAlike.class), DogAlike.class.getMethod("bark", int.class));
         final DogAlike auau = mockery.mock(DogAlike.class);
         mockery.checking(new Expectations() {
@@ -107,7 +110,7 @@ public class ExecuteAndViewInterceptorTest {
 
     @Test
     public void shouldForwardIfUsingAnOldComponent() throws SecurityException, NoSuchMethodException, InterceptionException, IOException, ServletException {
-        ExecuteAndViewInterceptor interceptor = new ExecuteAndViewInterceptor(provider, requestResult);
+        ExecuteAndViewInterceptor interceptor = new ExecuteAndViewInterceptor(requestResult, parameters);
         final ResourceMethod method = new DefaultResourceMethod(new DefaultResource(OldDog.class), OldDog.class.getMethod("bark"));
         final OldDog auau = mockery.mock(OldDog.class);
         mockery.checking(new Expectations() {
@@ -125,7 +128,7 @@ public class ExecuteAndViewInterceptorTest {
 
     @Test
     public void shouldForwardWithResultIfUsingAnOldComponent() throws SecurityException, NoSuchMethodException, InterceptionException, IOException, ServletException {
-        ExecuteAndViewInterceptor interceptor = new ExecuteAndViewInterceptor(provider, requestResult);
+        ExecuteAndViewInterceptor interceptor = new ExecuteAndViewInterceptor(requestResult, parameters);
         final ResourceMethod method = new DefaultResourceMethod(new DefaultResource(OldDog.class), OldDog.class.getMethod("barkResponse"));
         final OldDog auau = mockery.mock(OldDog.class);
         mockery.checking(new Expectations() {

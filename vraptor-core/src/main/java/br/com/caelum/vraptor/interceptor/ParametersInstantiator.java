@@ -1,6 +1,10 @@
 package br.com.caelum.vraptor.interceptor;
 
 import java.io.IOException;
+import java.util.Arrays;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Interceptor;
@@ -10,13 +14,21 @@ import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
-public class ParametersInstantiator implements Interceptor{
+/**
+ * An interceptor which instantiates parameters and provide them to the stack.
+ * 
+ * @author Guilherme Silveira
+ */
+public class ParametersInstantiator implements Interceptor {
 
     private final ParametersProvider provider;
     private final MethodParameters parameters;
     private final ParameterNameProvider nameProvider;
 
-    public ParametersInstantiator(ParametersProvider provider, MethodParameters parameters, ParameterNameProvider nameProvider) {
+    private static final Logger logger = LoggerFactory.getLogger(ParametersInstantiator.class);
+
+    public ParametersInstantiator(ParametersProvider provider, MethodParameters parameters,
+            ParameterNameProvider nameProvider) {
         this.provider = provider;
         this.parameters = parameters;
         this.nameProvider = nameProvider;
@@ -28,7 +40,11 @@ public class ParametersInstantiator implements Interceptor{
 
     public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws IOException,
             InterceptionException {
-        parameters.set(provider.getParametersFor(method), nameProvider.parameterNamesFor(method.getMethod()));
+        Object[] values = provider.getParametersFor(method);
+        if (logger.isDebugEnabled()) {
+            logger.debug("Parameter values for " + method + " are " + Arrays.asList(values));
+        }
+        parameters.set(values, nameProvider.parameterNamesFor(method.getMethod()));
         stack.next(method, resourceInstance);
     }
 

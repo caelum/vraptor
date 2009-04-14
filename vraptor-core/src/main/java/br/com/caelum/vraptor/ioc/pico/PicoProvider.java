@@ -30,7 +30,7 @@
 package br.com.caelum.vraptor.ioc.pico;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.ServletContext;
@@ -43,9 +43,9 @@ import org.slf4j.LoggerFactory;
 import br.com.caelum.vraptor.Interceptor;
 import br.com.caelum.vraptor.core.DefaultConverters;
 import br.com.caelum.vraptor.core.DefaultInterceptorStack;
+import br.com.caelum.vraptor.core.DefaultMethodParameters;
 import br.com.caelum.vraptor.core.DefaultRequestExecution;
 import br.com.caelum.vraptor.core.DefaultResult;
-import br.com.caelum.vraptor.core.MethodParameters;
 import br.com.caelum.vraptor.core.URLParameterExtractorInterceptor;
 import br.com.caelum.vraptor.core.VRaptorRequest;
 import br.com.caelum.vraptor.http.DefaultRequestParameters;
@@ -93,6 +93,8 @@ public class PicoProvider implements ContainerProvider {
         }
         this.requestComponents = getRequestComponents();
         this.childComponents = getChildComponentTypes();
+        logger.debug("Request components are " + Arrays.asList(requestComponents));
+        logger.debug("Child components are " + childComponents);
         // cache(CacheBasedResourceRegistry.class, ResourceRegistry.class);
         // cache(CacheBasedTypeCreator.class, AsmBasedTypeCreator.class);
     }
@@ -155,7 +157,7 @@ public class PicoProvider implements ContainerProvider {
     protected List<Class<?>> getChildComponentTypes() {
         List<Class<?>> components = new ArrayList<Class<?>>();
         components.add(ParametersInstantiator.class);
-        components.add(MethodParameters.class);
+        components.add(DefaultMethodParameters.class);
         components.add(DefaultRequestParameters.class);
         components.add(InterceptorListPriorToExecutionExtractor.class);
         components.add(URLParameterExtractorInterceptor.class);

@@ -26,7 +26,7 @@ public class ExecuteMethodInterceptorTest {
     public void setup() throws NoSuchMethodException {
         this.mockery = new Mockery();
         this.provider = mockery.mock(ParametersProvider.class);
-        this.parameters =new MethodParameters();
+        this.parameters =mockery.mock(MethodParameters.class);
     }
 
     @Test

@@ -8,13 +8,11 @@ right now:
 		- nao cadastra-los por padrao
 
 
-	4 v2: support v2 hibernate plugin -> CadastroAlunoLogic
-		- testar sem o hibernate e ver se nao da classnotfound
+	4 v2: - testar sem o hibernate e ver se nao da classnotfound
 		- confirmar mensagens do hibernate plugin estao vindo do arquivo certo
-		
-		
-		
 	3 v2: json output
+	
+	
 	5 caelumweb -> v3 workforce
 	
 	- niceurls with programmatic support
@@ -176,6 +174,7 @@ ONLY AFTER RELEASE
 - v2: support extra extensions 
 - v2: converters with access to request/session/context
 - niceurls extra routes
+- refactor ParametersInstantiator into MethodParameters constructor?
 
 	optimizations (product):
 	- converter optimization
@@ -219,7 +218,8 @@ ONLY AFTER RELEASE
 	- niceurl injection cache component
 	- niceurl and common path two components for one url live detection (for  integration test or live)
 	- niceurl cache (so the previous thing is not a problem)
-	- internal component cache limits (due to niceurl which might be huge) 
+	- internal component cache limits (due to niceurl which might be huge)
+	- log when trying to register a component with no interface 
 
 
 done:

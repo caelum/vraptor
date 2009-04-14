@@ -40,7 +40,7 @@ public class ExecuteAndViewInterceptorTest {
         this.provider = mockery.mock(ParametersProvider.class);
         this.requestResult = new RequestResult();
         this.stack = mockery.mock(InterceptorStack.class);
-        this.parameters = new MethodParameters();
+        this.parameters = mockery.mock(MethodParameters.class);
     }
 
     @Test

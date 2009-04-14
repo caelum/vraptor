@@ -75,6 +75,7 @@ public class HibernateValidatorPluginInterceptor implements Interceptor {
         if (param.indexOf(".") != -1) {
             param = param.substring(param.indexOf("."));
         }
+        param = Info.capitalize(param);
         for (int i = 0; i < names.length; i++) {
             if (names[i].equals(param)) {
                 return values[i];

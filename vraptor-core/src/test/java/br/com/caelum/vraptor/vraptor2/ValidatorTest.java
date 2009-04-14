@@ -4,10 +4,12 @@ import java.io.IOException;
 
 import javax.servlet.ServletException;
 
+import org.hamcrest.Matcher;
 import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
 import org.vraptor.i18n.Message;
+import org.vraptor.i18n.ValidationMessage;
 import org.vraptor.validator.ValidationErrors;
 
 import br.com.caelum.vraptor.InterceptionException;
@@ -92,6 +94,8 @@ public class ValidatorTest {
                 one(provider).getParametersFor(method); will(returnValue(new Object[0]));
                 one(result).include(with(equal("errors")), with(an(ValidationErrors.class)));
                 one(result).forward("invalid");
+                one(errors).add(with((Matcher<? extends ValidationMessage>) an(Message.class)));
+                one(errors).size(); will(returnValue(1));
             }
         });
         validator.intercept(stack, method, resourceInstance);
@@ -113,6 +117,7 @@ public class ValidatorTest {
             {
                 one(provider).getParametersFor(method); will(returnValue(new Object[0]));
                 one(stack).next(method, resourceInstance);
+                one(errors).size(); will(returnValue(0));
             }
         });
         validator.intercept(stack, method, resourceInstance);

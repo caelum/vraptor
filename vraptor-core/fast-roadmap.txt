@@ -1,5 +1,6 @@
 right now:
 
+	ceci: testar o vraptor2-compatible-example sem o hibernate.jar no classpath (conferir... tem que ter certeza) e ver se nao da classnotfound
 	ceci: BigInteger converter (+test)... ja existe de BigDecimal (se bobear, ja existe no vraptor2)
 	ceci: converters: jodatime (ver no vraptor2)
 		- se o arquivo jodatime.jar estiver no classpath (use Class.forName com catch exception), loada automatico
@@ -7,12 +8,12 @@ right now:
 	ceci: time converters (igual ao Date e ao Calendar, so que usa Time.SHORT, ou pattern hh:mm, ver no vraptor2...)
 		- nao cadastra-los por padrao
 
-
-	4 v2: - testar sem o hibernate e ver se nao da classnotfound
-		- confirmar mensagens do hibernate plugin estao vindo do arquivo certo
+TODAY
 	3 v2: json output
-	
-	
+
+
+
+	13 converters: File
 	5 caelumweb -> v3 workforce
 	
 	- niceurls with programmatic support
@@ -20,10 +21,11 @@ right now:
 	- niceurls with file config support -> path support
 	1 path annotation with support to value injection (niceurls?)
 	- resolve interceptororder with interceptorstack
-	2 test validator
 	4 support Validator
 	5 support HibernateValidator
 	niceurls programatico e arquivo de config
+	
+	should ignore @br.com...Component as a component... what to do now?
 
 
 
@@ -32,7 +34,6 @@ right now:
 
 	- v2: xml output
 
-	13 converters: File
 	15 concatenate convertion and validation errors
 	support vraptor2 plugins if possible:
 		- what else?
@@ -81,6 +82,8 @@ site docs (prior to release)
 - vraptor2 with paranamer by default
 - vraptor2 without paranamer: how to
 - vraptor2 default LogicParameterAnnotationWithParanamerFallback: how to migrate when not using paranamer and annotation
+- migration tutorial on every documented topic of vraptor2
+	- might find useful things to support
 
 kung help
 - full spring support

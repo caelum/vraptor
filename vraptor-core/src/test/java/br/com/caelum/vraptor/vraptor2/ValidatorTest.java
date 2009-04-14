@@ -79,9 +79,10 @@ public class ValidatorTest {
 
     @Test
     public void forwardToValidationPageWithErrorsIfSomeFound() throws NoSuchMethodException, InterceptionException, IOException, ServletException {
+        final Message message = new Message("", "");
         final MyComponent resourceInstance = new MyComponent() {
             public void validateWithValidation(ValidationErrors errors) {
-                errors.add(new Message("", ""));
+                errors.add(message);
             }
             public void noValidation() {
             }
@@ -94,7 +95,7 @@ public class ValidatorTest {
                 one(provider).getParametersFor(method); will(returnValue(new Object[0]));
                 one(result).include(with(equal("errors")), with(an(ValidationErrors.class)));
                 one(result).forward("invalid");
-                one(errors).add(with((Matcher<? extends ValidationMessage>) an(Message.class)));
+                one(errors).add(message);
                 one(errors).size(); will(returnValue(1));
             }
         });

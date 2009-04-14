@@ -15,6 +15,7 @@ import br.com.caelum.vraptor.interceptor.DefaultInterceptorRegistry;
 import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
 import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
 import br.com.caelum.vraptor.interceptor.InterceptorListPriorToExecutionExtractor;
+import br.com.caelum.vraptor.interceptor.ParametersInstantiator;
 import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
 import br.com.caelum.vraptor.ioc.pico.DefaultDirScanner;
 import br.com.caelum.vraptor.ioc.pico.PicoProvider;
@@ -45,6 +46,7 @@ public class Provider extends PicoProvider {
 
     protected List<Class<?>> getChildComponentTypes() {
         List<Class<?>> components = new ArrayList<Class<?>>();
+        components.add(ParametersInstantiator.class);
         components.add(DefaultRequestParameters.class);
         components.add(DefaultInterceptorStack.class);
         components.add(InterceptorListPriorToExecutionExtractor.class);

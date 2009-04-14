@@ -36,6 +36,7 @@ import java.lang.reflect.Method;
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Interceptor;
 import br.com.caelum.vraptor.core.InterceptorStack;
+import br.com.caelum.vraptor.core.MethodParameters;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
@@ -47,16 +48,18 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 public class ExecuteMethodInterceptor implements Interceptor {
 
     private final ParametersProvider provider;
+    private final MethodParameters parameters;
 
-    public ExecuteMethodInterceptor(ParametersProvider provider) {
+    public ExecuteMethodInterceptor(ParametersProvider provider, MethodParameters parameters) {
         this.provider = provider;
+        this.parameters = parameters;
     }
 
     public void intercept(InterceptorStack invocation, ResourceMethod method, Object resourceInstance)
             throws IOException, InterceptionException {
         try {
             Method reflectionMethod = method.getMethod();
-            Object[] parameters = provider.getParametersFor(method);
+            Object[] parameters = this.parameters.getValues();
             reflectionMethod.invoke(resourceInstance, parameters);
         } catch (IllegalArgumentException e) {
             throw new InterceptionException(e);

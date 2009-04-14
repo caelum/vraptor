@@ -4,30 +4,27 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import javax.servlet.ServletException;
-
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Interceptor;
 import br.com.caelum.vraptor.core.InterceptorStack;
-import br.com.caelum.vraptor.http.ParametersProvider;
+import br.com.caelum.vraptor.core.MethodParameters;
 import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.view.jsp.PageResult;
 
 public class ExecuteAndViewInterceptor implements Interceptor {
 
-    private final ParametersProvider provider;
     private final RequestResult result;
+    private final MethodParameters parameters;
 
-    public ExecuteAndViewInterceptor(ParametersProvider provider, RequestResult result) {
-        this.provider = provider;
+    public ExecuteAndViewInterceptor(RequestResult result, MethodParameters parameters) {
         this.result = result;
+        this.parameters = parameters;
     }
 
     public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
             throws IOException, InterceptionException {
         try {
             Method reflectionMethod = method.getMethod();
-            Object[] parameters = provider.getParametersFor(method);
+            Object[] parameters = this.parameters.getValues();
             Object result = reflectionMethod.invoke(resourceInstance, parameters);
             if (Info.isOldComponent(method.getResource())) {
                 if (result == null) {

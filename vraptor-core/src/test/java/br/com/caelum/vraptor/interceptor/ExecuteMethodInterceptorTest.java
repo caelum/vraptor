@@ -38,6 +38,7 @@ public class ExecuteMethodInterceptorTest {
         mockery.checking(new Expectations() {
             {
                 one(auau).bark();
+                one(parameters).getValues(); will(returnValue(new Object[]{}));
             }
         });
         interceptor.intercept(null, method, auau);
@@ -55,6 +56,7 @@ public class ExecuteMethodInterceptorTest {
             {
                 one(auau).bark();
                 will(throwException(exception));
+                one(parameters).getValues(); will(returnValue(new Object[]{}));
             }
         });
         try {
@@ -71,10 +73,10 @@ public class ExecuteMethodInterceptorTest {
         ExecuteMethodInterceptor interceptor = new ExecuteMethodInterceptor(provider, parameters);
         ResourceMethod method = new DefaultResourceMethod(null, DogAlike.class.getMethod("bark", int.class));
         final DogAlike auau = mockery.mock(DogAlike.class);
-        parameters.set(new Object[]{3}, new String[]{"Value"});
         mockery.checking(new Expectations() {
             {
                 one(auau).bark(3);
+                one(parameters).getValues(); will(returnValue(new Object[]{3}));
             }
         });
         interceptor.intercept(null, method, auau);

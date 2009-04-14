@@ -30,12 +30,15 @@
 package br.com.caelum.vraptor.ioc.pico;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.ServletContext;
 
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.PicoBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.Interceptor;
 import br.com.caelum.vraptor.core.DefaultConverters;
@@ -75,15 +78,21 @@ import br.com.caelum.vraptor.view.jsp.DefaultPageResult;
 public class PicoProvider implements ContainerProvider {
 
     private final MutablePicoContainer container;
+    private final Class<?>[] requestComponents;
+    private final List<Class<?>> childComponents;
+
+    private static final Logger logger = LoggerFactory.getLogger(PicoProvider.class);
 
     public PicoProvider() {
         this.container = new PicoBuilder().withCaching().build();
-        for(Class<?> componentType : getCoreComponents()) {
+        for (Class<?> componentType : getApplicationComponents()) {
             container.addComponent(componentType);
         }
-        for(Class<?> componentType : getApplicationComponents()) {
+        for (Class<?> componentType : getCoreComponents()) {
             container.addComponent(componentType);
         }
+        this.requestComponents = getRequestComponents();
+        this.childComponents = getChildComponentTypes();
         // cache(CacheBasedResourceRegistry.class, ResourceRegistry.class);
         // cache(CacheBasedTypeCreator.class, AsmBasedTypeCreator.class);
     }
@@ -125,19 +134,21 @@ public class PicoProvider implements ContainerProvider {
 
     public Container provide(VRaptorRequest request) {
         MutablePicoContainer container = new PicoBuilder(this.container).withCaching().build();
-        for(Class<?> componentType : getChildComponentTypes()) {
+        // TODO guarantee order on tests!!!
+        for (Class<?> componentType : requestComponents) {
             container.addComponent(componentType);
         }
-        for(Class<? extends Interceptor> type : instanceFor(InterceptorRegistry.class).all()) {
+        for (Class<?> componentType : childComponents) {
+            container.addComponent(componentType);
+        }
+        for (Class<? extends Interceptor> type : instanceFor(InterceptorRegistry.class).all()) {
             container.addComponent(type);
-        }
-        for(Class<?> componentType : getRequestComponents()) {
-            container.addComponent(componentType);
         }
         container.addComponent(request.getRequest().getSession());
         container.addComponent(request).addComponent(request.getRequest()).addComponent(request.getResponse());
         // cache(CachedConverters.class, Converters.class);
-        PicoBasedContainer baseContainer = new PicoBasedContainer(this.container, container, request, instanceFor(ResourceRegistry.class));
+        PicoBasedContainer baseContainer = new PicoBasedContainer(this.container, container, request,
+                instanceFor(ResourceRegistry.class));
         return baseContainer;
     }
 
@@ -167,5 +178,5 @@ public class PicoProvider implements ContainerProvider {
     protected Class<?>[] getRequestComponents() {
         return new Class<?>[0];
     }
-    
+
 }

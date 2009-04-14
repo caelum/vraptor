@@ -1,6 +1,5 @@
 right now:
 
-
 	ceci: BigInteger converter (+test)... ja existe de BigDecimal (se bobear, ja existe no vraptor2)
 	ceci: converters: jodatime (ver no vraptor2)
 		- se o arquivo jodatime.jar estiver no classpath (use Class.forName com catch exception), loada automatico
@@ -12,6 +11,9 @@ right now:
 	4 v2: support v2 hibernate plugin -> CadastroAlunoLogic
 		- testar sem o hibernate e ver se nao da classnotfound
 		- confirmar mensagens do hibernate plugin estao vindo do arquivo certo
+		
+		
+		
 	3 v2: json output
 	5 caelumweb -> v3 workforce
 	

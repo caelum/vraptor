@@ -51,8 +51,12 @@ public class VRaptorTest {
     @Test
     public void shouldExecuteARequestUsingTheSpecifiedContainer() throws ServletException, IOException,
             VRaptorException {
+        final HttpServletRequest request = mockery.mock(HttpServletRequest.class);
         mockery.checking(new Expectations() {
             {
+                one(request).getRequestURI(); will(returnValue("/unknown_file"));
+                one(request).getContextPath(); will(returnValue(""));
+                one(context).getResource("/unknown_file"); will(returnValue(null));
                 one(config).getServletContext();
                 will(returnValue(context));
                 one(context).getInitParameter(BasicConfiguration.CONTAINER_PROVIDER);
@@ -64,7 +68,6 @@ public class VRaptorTest {
                 one(execution).execute();
             }
         });
-        ServletRequest request = mockery.mock(HttpServletRequest.class);
         ServletResponse response = mockery.mock(HttpServletResponse.class);
         VRaptor raptor = new VRaptor();
         raptor.init(this.config);

@@ -26,7 +26,7 @@ public class ExecuteMethodInterceptorTest {
     public void setup() throws NoSuchMethodException {
         this.mockery = new Mockery();
         this.provider = mockery.mock(ParametersProvider.class);
-        this.parameters =mockery.mock(MethodParameters.class);
+        this.parameters =new MethodParameters();
     }
 
     @Test
@@ -38,8 +38,6 @@ public class ExecuteMethodInterceptorTest {
         mockery.checking(new Expectations() {
             {
                 one(auau).bark();
-                one(provider).getParametersFor(with(VRaptorMatchers.resourceMethod(DogAlike.class.getMethod("bark"))));
-                will(returnValue(new Object[]{}));
             }
         });
         interceptor.intercept(null, method, auau);
@@ -55,8 +53,6 @@ public class ExecuteMethodInterceptorTest {
         final RuntimeException exception = new RuntimeException();
         mockery.checking(new Expectations() {
             {
-                one(provider).getParametersFor(with(VRaptorMatchers.resourceMethod(DogAlike.class.getMethod("bark"))));
-                will(returnValue(new Object[]{}));
                 one(auau).bark();
                 will(throwException(exception));
             }
@@ -75,11 +71,10 @@ public class ExecuteMethodInterceptorTest {
         ExecuteMethodInterceptor interceptor = new ExecuteMethodInterceptor(provider, parameters);
         ResourceMethod method = new DefaultResourceMethod(null, DogAlike.class.getMethod("bark", int.class));
         final DogAlike auau = mockery.mock(DogAlike.class);
+        parameters.set(new Object[]{3}, new String[]{"Value"});
         mockery.checking(new Expectations() {
             {
                 one(auau).bark(3);
-                one(provider).getParametersFor(with(VRaptorMatchers.resourceMethod(DogAlike.class.getMethod("bark", int.class))));
-                will(returnValue(new Object[]{3}));
             }
         });
         interceptor.intercept(null, method, auau);

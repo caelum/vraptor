@@ -55,7 +55,6 @@ public class Provider extends PicoProvider {
         components.add(URLParameterExtractorInterceptor.class);
         components.add(InterceptorListPriorToExecutionExtractor.class);
         components.add(VRaptor2RequestExecution.class);
-        components.add(BasicValidationErrors.class);
         components.add(ResourceLookupInterceptor.class);
         components.add(InstantiateInterceptor.class);
         components.add(DefaultResult.class);
@@ -68,10 +67,19 @@ public class Provider extends PicoProvider {
         components.add(ViewInterceptor.class);
         components.add(OutjectionInterceptor.class);
         components.add(RequestResult.class);
+        registerValidationErrorsComponent(components);
         // TODO the following components are not required by vraptor2/3
         // compatibility mode, but was added for unit tests
         components.add(ExecuteMethodInterceptor.class);
         return components;
+    }
+
+    /**
+     * Exists for backward compatibility with projects using an undocumented
+     * feature of vraptor which makes it work with waffle taglib.
+     */
+    protected void registerValidationErrorsComponent(List<Class<?>> components) {
+        components.add(BasicValidationErrors.class);
     }
 
 }

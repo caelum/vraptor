@@ -52,8 +52,6 @@ public class ExecuteAndViewInterceptorTest {
         mockery.checking(new Expectations() {
             {
                 one(auau).bark();
-                one(provider).getParametersFor(with(VRaptorMatchers.resourceMethod(DogAlike.class.getMethod("bark"))));
-                will(returnValue(new Object[]{}));
                 one(stack).next(method, auau);
             }
         });
@@ -70,8 +68,6 @@ public class ExecuteAndViewInterceptorTest {
         final RuntimeException exception = new RuntimeException();
         mockery.checking(new Expectations() {
             {
-                one(provider).getParametersFor(with(VRaptorMatchers.resourceMethod(DogAlike.class.getMethod("bark"))));
-                will(returnValue(new Object[]{}));
                 one(auau).bark();
                 will(throwException(exception));
             }
@@ -116,8 +112,6 @@ public class ExecuteAndViewInterceptorTest {
         mockery.checking(new Expectations() {
             {
                 one(auau).bark();
-                one(provider).getParametersFor(with(VRaptorMatchers.resourceMethod(OldDog.class.getMethod("bark"))));
-                will(returnValue(new Object[0]));
                 one(stack).next(method, auau);
             }
         });
@@ -134,8 +128,6 @@ public class ExecuteAndViewInterceptorTest {
         mockery.checking(new Expectations() {
             {
                 one(auau).barkResponse(); will(returnValue("response"));
-                one(provider).getParametersFor(with(VRaptorMatchers.resourceMethod(OldDog.class.getMethod("barkResponse"))));
-                will(returnValue(new Object[0]));
                 one(stack).next(method, auau);
             }
         });

@@ -10,8 +10,10 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.core.InterceptorStack;
+import br.com.caelum.vraptor.core.URLParameterExtractorInterceptor;
 import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
 import br.com.caelum.vraptor.interceptor.InterceptorListPriorToExecutionExtractor;
+import br.com.caelum.vraptor.interceptor.ParametersInstantiator;
 import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
 
 public class VRaptor2RequestExecutionTest {
@@ -28,6 +30,12 @@ public class VRaptor2RequestExecutionTest {
         this.stack = mockery.mock(InterceptorStack.class);
         this.instantiator = new InstantiateInterceptor(null);
         this.config = mockery.mock(Config.class);
+        mockery.checking(new Expectations() {
+            {
+                one(config).hasPlugin(org.vraptor.plugin.hibernate.HibernateValidatorPlugin.class.getName());
+                will(returnValue(true));
+            }
+        });
         this.execution = new VRaptor2RequestExecution(stack, instantiator, config);
     }
 
@@ -36,14 +44,28 @@ public class VRaptor2RequestExecutionTest {
         final Sequence sequence = mockery.sequence("executionSequence");
         mockery.checking(new Expectations() {
             {
-                one(stack).add(ResourceLookupInterceptor.class); inSequence(sequence);
-                one(stack).add(InterceptorListPriorToExecutionExtractor.class); inSequence(sequence);
-                one(stack).add(instantiator); inSequence(sequence);
-                one(stack).add(Validator.class); inSequence(sequence);
-                one(stack).add(ExecuteAndViewInterceptor.class); inSequence(sequence);
-                one(stack).add(OutjectionInterceptor.class); inSequence(sequence);
-                one(stack).add(ViewInterceptor.class); inSequence(sequence);
-                one(stack).next(null, null); inSequence(sequence);
+                one(stack).add(ResourceLookupInterceptor.class);
+                inSequence(sequence);
+                one(stack).add(URLParameterExtractorInterceptor.class);
+                inSequence(sequence);
+                one(stack).add(InterceptorListPriorToExecutionExtractor.class);
+                inSequence(sequence);
+                one(stack).add(instantiator);
+                inSequence(sequence);
+                one(stack).add(ParametersInstantiator.class);
+                inSequence(sequence);
+                one(stack).add(HibernateValidatorPluginInterceptor.class);
+                inSequence(sequence);
+                one(stack).add(Validator.class);
+                inSequence(sequence);
+                one(stack).add(ExecuteAndViewInterceptor.class);
+                inSequence(sequence);
+                one(stack).add(OutjectionInterceptor.class);
+                inSequence(sequence);
+                one(stack).add(ViewInterceptor.class);
+                inSequence(sequence);
+                one(stack).next(null, null);
+                inSequence(sequence);
             }
         });
         execution.execute();

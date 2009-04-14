@@ -42,6 +42,8 @@ import br.com.caelum.vraptor.core.DefaultConverters;
 import br.com.caelum.vraptor.core.DefaultInterceptorStack;
 import br.com.caelum.vraptor.core.DefaultRequestExecution;
 import br.com.caelum.vraptor.core.DefaultResult;
+import br.com.caelum.vraptor.core.MethodParameters;
+import br.com.caelum.vraptor.core.URLParameterExtractorInterceptor;
 import br.com.caelum.vraptor.core.VRaptorRequest;
 import br.com.caelum.vraptor.http.DefaultRequestParameters;
 import br.com.caelum.vraptor.http.OgnlParametersProvider;
@@ -142,8 +144,10 @@ public class PicoProvider implements ContainerProvider {
     protected List<Class<?>> getChildComponentTypes() {
         List<Class<?>> components = new ArrayList<Class<?>>();
         components.add(ParametersInstantiator.class);
+        components.add(MethodParameters.class);
         components.add(DefaultRequestParameters.class);
         components.add(InterceptorListPriorToExecutionExtractor.class);
+        components.add(URLParameterExtractorInterceptor.class);
         components.add(DefaultInterceptorStack.class);
         components.add(DefaultRequestExecution.class);
         components.add(ResourceLookupInterceptor.class);

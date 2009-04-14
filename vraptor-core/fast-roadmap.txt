@@ -10,7 +10,8 @@ right now:
 
 
 	4 v2: support v2 hibernate plugin -> CadastroAlunoLogic
-	- confirmar mensagens do hibernate plugin estao vindo do arquivo certo
+		- testar sem o hibernate e ver se nao da classnotfound
+		- confirmar mensagens do hibernate plugin estao vindo do arquivo certo
 	3 v2: json output
 	5 caelumweb -> v3 workforce
 	
@@ -165,7 +166,6 @@ ONLY AFTER RELEASE
 - generic interface support: instantiates the implementation
 - vraptor2 components with support for inherited outjection/injection
 - vraptor2 logic with 2 names support
-- niceurl extra features
 - Logger.isDebugEnabled
 - result interface as wished
 - MAKE CONVERTERS GLOBAL, NOT LOCAL?

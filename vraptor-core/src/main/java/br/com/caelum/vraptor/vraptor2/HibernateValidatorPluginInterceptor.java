@@ -16,6 +16,7 @@ import org.vraptor.validator.ValidationErrors;
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Interceptor;
 import br.com.caelum.vraptor.core.InterceptorStack;
+import br.com.caelum.vraptor.core.MethodParameters;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
@@ -34,12 +35,14 @@ public class HibernateValidatorPluginInterceptor implements Interceptor {
     // sucks, cannot find a way to register without checking for hibernate
     // existence first...
     private final static ValidatorLocator locator = new ValidatorLocator();
+    private final MethodParameters parameters;
 
     public HibernateValidatorPluginInterceptor(ValidationErrors errors, ParameterNameProvider provider,
-            HttpServletRequest request) {
+            HttpServletRequest request, MethodParameters parameters) {
         this.errors = errors;
         this.provider = provider;
         this.request = request;
+        this.parameters = parameters;
     }
 
     public boolean accepts(ResourceMethod method) {
@@ -49,18 +52,22 @@ public class HibernateValidatorPluginInterceptor implements Interceptor {
     public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws IOException,
             InterceptionException {
         Validate validate = method.getMethod().getAnnotation(Validate.class);
-        ResourceBundle bundle = ResourceBundle.getBundle("org.hibernate.validator.resources.DefaultValidatorMessages",
-                request.getLocale());
-        String[] names = provider.parameterNamesFor(method.getMethod());
-        for (String path : validate.params()) {
-            try {
-                Object[] paramValues = null;
-                Object object = paramFor(names, path, paramValues);
-                HibernateLogicMethod.validateParam(locator, request, bundle, errors, object, path);
-            } catch (GettingException e) {
-                throw new InterceptionException("Unable to validate objects due to an exception during validation.", e);
+        if (validate != null) {
+            ResourceBundle bundle = ResourceBundle.getBundle(
+                    "org.hibernate.validator.resources.DefaultValidatorMessages", request.getLocale());
+            String[] names = provider.parameterNamesFor(method.getMethod());
+            for (String path : validate.params()) {
+                try {
+                    Object[] paramValues = parameters.getValues();
+                    Object object = paramFor(names, path, paramValues);
+                    HibernateLogicMethod.validateParam(locator, request, bundle, errors, object, path);
+                } catch (GettingException e) {
+                    throw new InterceptionException(
+                            "Unable to validate objects due to an exception during validation.", e);
+                }
             }
         }
+        stack.next(method, resourceInstance);
     }
 
     private Object paramFor(String[] names, String path, Object[] values) throws InterceptionException {
@@ -73,7 +80,7 @@ public class HibernateValidatorPluginInterceptor implements Interceptor {
                 return values[i];
             }
         }
-        throw new InterceptionException("Unable to find param for hibernate validator: " + path);
+        throw new InterceptionException("Unable to find param for hibernate validator: '" + path + "'");
     }
 
 }

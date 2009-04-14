@@ -29,6 +29,7 @@ public class ParametersInstantiator implements Interceptor{
     public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws IOException,
             InterceptionException {
         parameters.set(provider.getParametersFor(method), nameProvider.parameterNamesFor(method.getMethod()));
+        stack.next(method, resourceInstance);
     }
 
 }

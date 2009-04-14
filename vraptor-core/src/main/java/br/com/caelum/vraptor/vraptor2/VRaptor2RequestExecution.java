@@ -3,7 +3,6 @@ package br.com.caelum.vraptor.vraptor2;
 import java.io.IOException;
 
 import br.com.caelum.vraptor.InterceptionException;
-import br.com.caelum.vraptor.Interceptor;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.RequestExecution;
 import br.com.caelum.vraptor.core.URLParameterExtractorInterceptor;
@@ -35,12 +34,7 @@ public class VRaptor2RequestExecution implements RequestExecution {
         interceptorStack.add(instantiator);
         interceptorStack.add(ParametersInstantiator.class);
         if(shouldRegisterHibernateValidator) {
-            // lazy load: use only if hibernate is available on the classpath
-            try {
-                interceptorStack.add((Class<? extends Interceptor>)Class.forName("br.com.caelum.vraptor.vraptor2.HibernateValidatorPluginInterceptor"));
-            } catch (ClassNotFoundException e) {
-                throw new InterceptionException("Did you create your own vraptor jar file?", e);
-            }
+            interceptorStack.add(HibernateValidatorPluginInterceptor.class);
         }
         interceptorStack.add(Validator.class);
         interceptorStack.add(ExecuteAndViewInterceptor.class);

@@ -7,6 +7,8 @@ import org.vraptor.validator.BasicValidationErrors;
 
 import br.com.caelum.vraptor.core.DefaultInterceptorStack;
 import br.com.caelum.vraptor.core.DefaultResult;
+import br.com.caelum.vraptor.core.MethodParameters;
+import br.com.caelum.vraptor.core.URLParameterExtractorInterceptor;
 import br.com.caelum.vraptor.http.DefaultRequestParameters;
 import br.com.caelum.vraptor.http.OgnlParametersProvider;
 import br.com.caelum.vraptor.http.StupidTranslator;
@@ -47,8 +49,10 @@ public class Provider extends PicoProvider {
     protected List<Class<?>> getChildComponentTypes() {
         List<Class<?>> components = new ArrayList<Class<?>>();
         components.add(ParametersInstantiator.class);
+        components.add(MethodParameters.class);
         components.add(DefaultRequestParameters.class);
         components.add(DefaultInterceptorStack.class);
+        components.add(URLParameterExtractorInterceptor.class);
         components.add(InterceptorListPriorToExecutionExtractor.class);
         components.add(VRaptor2RequestExecution.class);
         components.add(BasicValidationErrors.class);
@@ -56,6 +60,7 @@ public class Provider extends PicoProvider {
         components.add(InstantiateInterceptor.class);
         components.add(DefaultResult.class);
         components.add(ExecuteAndViewInterceptor.class);
+        components.add(HibernateValidatorPluginInterceptor.class);
         components.add(ViewsPropertiesPageResult.class);
         components.add(OgnlParametersProvider.class);
         components.add(VRaptor2Converters.class);

@@ -9,8 +9,11 @@ right now:
 		- nao cadastra-los por padrao
 
 TODAY
-	3 v2: json output
+	- support ProcuraAlunoTest -> support Long[] with AsmBased stuff
+	- resolve interceptororder with interceptorstack
 
+	- v2: json output
+	- move register method to a different intermediate interface
 
 
 	13 converters: File
@@ -20,9 +23,8 @@ TODAY
 	- niceurls -> path support
 	- niceurls with file config support -> path support
 	1 path annotation with support to value injection (niceurls?)
-	- resolve interceptororder with interceptorstack
-	4 support Validator
-	5 support HibernateValidator
+	- support Validator
+	- support HibernateValidator
 	niceurls programatico e arquivo de config
 	
 	should ignore @br.com...Component as a component... what to do now?

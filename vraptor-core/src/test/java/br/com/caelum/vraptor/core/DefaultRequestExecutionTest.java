@@ -12,7 +12,13 @@ import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
 import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
 import br.com.caelum.vraptor.interceptor.InterceptorListPriorToExecutionExtractor;
+import br.com.caelum.vraptor.interceptor.ParametersInstantiator;
 import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
+import br.com.caelum.vraptor.vraptor2.ExecuteAndViewInterceptor;
+import br.com.caelum.vraptor.vraptor2.HibernateValidatorPluginInterceptor;
+import br.com.caelum.vraptor.vraptor2.OutjectionInterceptor;
+import br.com.caelum.vraptor.vraptor2.Validator;
+import br.com.caelum.vraptor.vraptor2.ViewInterceptor;
 
 public class DefaultRequestExecutionTest {
 
@@ -35,8 +41,12 @@ public class DefaultRequestExecutionTest {
         mockery.checking(new Expectations() {
             {
                 one(stack).add(ResourceLookupInterceptor.class); inSequence(sequence);
+                one(stack).add(URLParameterExtractorInterceptor.class);
+                inSequence(sequence);
                 one(stack).add(InterceptorListPriorToExecutionExtractor.class); inSequence(sequence);
                 one(stack).add(instantiator); inSequence(sequence);
+                one(stack).add(ParametersInstantiator.class);
+                inSequence(sequence);
                 one(stack).add(ExecuteMethodInterceptor.class); inSequence(sequence);
                 one(stack).next(null, null); inSequence(sequence);
             }

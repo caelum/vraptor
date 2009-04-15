@@ -5,6 +5,9 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.After;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.ServletContext;
 
@@ -12,6 +15,7 @@ import br.com.caelum.vraptor.ioc.spring.components.ConstructorInjection;
 import br.com.caelum.vraptor.ioc.spring.components.DummyComponent;
 import br.com.caelum.vraptor.ioc.spring.components.DummyImplementation;
 import br.com.caelum.vraptor.ioc.spring.components.SpecialImplementation;
+import br.com.caelum.vraptor.test.HttpServletRequestMock;
 
 /**
  * @author Fabio Kung
@@ -22,16 +26,18 @@ public class SpringBasedContainerTest {
 
     @Before
     public void initContainer() {
+        RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(new HttpServletRequestMock()));
         mockery = new Mockery();
         container = new SpringBasedContainer("br.com.caelum.vraptor.ioc.spring");
         container.start(mockery.mock(ServletContext.class));
     }
 
+    @After
     public void destroyContainer() {
         container.stop();
         container = null;
+        RequestContextHolder.resetRequestAttributes();
     }
-
 
     @Test
     public void shouldScanAndRegisterAnnotatedBeans() {

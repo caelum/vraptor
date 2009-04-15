@@ -14,9 +14,6 @@ import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
 import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
 import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
 import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
-import br.com.caelum.vraptor.ioc.pico.DirScanner;
-import br.com.caelum.vraptor.ioc.pico.ResourceLocator;
-import br.com.caelum.vraptor.ioc.spring.SpringProvider;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.resource.ResourceRegistry;
 import br.com.caelum.vraptor.view.PathResolver;
@@ -64,19 +61,12 @@ public abstract class GenericContainerTest {
         final File tmpDir = File.createTempFile("tmp_", "_file").getParentFile();
         final File tmp = new File(tmpDir, "_tmp_vraptor_test");
         tmp.mkdir();
-        final File unknownFile = new File(tmp, "unknown");
         this.context = mockery.mock(ServletContext.class);
         mockery.checking(new Expectations() {
             {
+                // TODO argh! move to the Pico specific test
                 allowing(context).getRealPath("");
                 will(returnValue(tmp.getAbsolutePath()));
-                allowing(context).getRealPath("/WEB-INF/classes/vraptor.xml");
-                will(returnValue(unknownFile.getAbsolutePath()));
-                allowing(context).getRealPath("/WEB-INF/classes/views.properties");
-                will(returnValue(unknownFile.getAbsolutePath()));
-                // UGLY! move to Spring implementation...
-                allowing(context).getInitParameter(SpringProvider.BASE_PACKAGES_PARAMETER_NAME);
-                will(returnValue("no.packages"));
             }
         });
         createRequest();
@@ -148,13 +138,13 @@ public abstract class GenericContainerTest {
 
     @Test
     public void canProvideAllApplicationScopedComponents() {
-        Class<?>[] components = new Class[]{UrlToResourceTranslator.class, ResourceRegistry.class, DirScanner.class,
-                ResourceLocator.class, TypeCreator.class, InterceptorRegistry.class, PathResolver.class, ParameterNameProvider.class};
+        Class<?>[] components = new Class[]{UrlToResourceTranslator.class, ResourceRegistry.class, TypeCreator.class,
+                InterceptorRegistry.class, PathResolver.class, ParameterNameProvider.class};
         checkAvailabilityFor(true, components);
         mockery.assertIsSatisfied();
     }
 
-    private void checkAvailabilityFor(boolean shouldBeTheSame, Class<?>... components) {
+    protected void checkAvailabilityFor(boolean shouldBeTheSame, Class<?>... components) {
         for (Class<?> component : components) {
             checkAvailabilityFor(shouldBeTheSame, component, null);
         }

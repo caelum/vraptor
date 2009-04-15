@@ -37,7 +37,7 @@
 		<mkdir dir="${tmp.test.classes.dir}" />
 	</target>
 
-	<target name="compile" depends="prepare" description="--> compiles the classes">
+	<target name="compile" depends="prepare" description="--> compiles classes">
 		<javac destdir="${tmp.classes.dir}" srcdir="${src.dir}" classpathref="compile.classpath" debug="true" encoding="UTF-8" target="1.5" source="1.5">
 			<compilerarg value="-Xlint:none" />
 		</javac>

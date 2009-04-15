@@ -151,7 +151,7 @@ public class ViewsPropertiesPageResultTest {
         mockery.assertIsSatisfied();
     }
 
-    @Test(expected = IOException.class)
+    @Test(expected = ServletException.class)
     public void expressionProblemThrowsExceptionAndDoesNotRedirect() throws ServletException, IOException, NoSuchMethodException {
         mockery.checking(new Expectations() {
             {

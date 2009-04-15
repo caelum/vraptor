@@ -29,7 +29,7 @@ public class ClientsController {
 
     @Path("/clients/add")
     public void add(Client c) throws ServletException, IOException {
-        validator.checking(clientValidator(c));
+//        validator.checking(clientValidator(c));
         clients.add(c);
         result.include("client", c);
         result.use(DefaultPageResult.jsp()).forward("ok");

@@ -37,7 +37,6 @@ import java.util.List;
 import ognl.NoSuchPropertyException;
 import ognl.Ognl;
 import ognl.OgnlContext;
-import ognl.OgnlException;
 import ognl.OgnlRuntime;
 
 import org.slf4j.Logger;
@@ -111,25 +110,10 @@ public class OgnlParametersProvider implements ParametersProvider {
                 result[i] = root.getClass().getMethod("get" + names[i]).invoke(root);
             }
             return result;
-        } catch (InstantiationException e) {
-            // TODO validation exception?
-            throw new IllegalArgumentException("unable to compile expression",e);
-        } catch (IllegalAccessException e) {
-            // TODO validation exception?
-            throw new IllegalArgumentException("unable to compile expression",e);
-        } catch (IllegalArgumentException e) {
-            // TODO validation exception?
-            throw new IllegalArgumentException("unable to compile expression",e);
-        } catch (SecurityException e) {
-            // TODO validation exception?
-            throw new IllegalArgumentException("unable to compile expression",e);
         } catch (InvocationTargetException e) {
             // TODO validation exception?
-            throw new IllegalArgumentException("unable to compile expression",e);
-        } catch (NoSuchMethodException e) {
-            // TODO validation exception?
-            throw new IllegalArgumentException("unable to compile expression",e);
-        } catch (OgnlException e) {
+            throw new IllegalArgumentException("unable to compile expression",e.getCause());
+        } catch (Exception e) {
             // TODO validation exception?
             throw new IllegalArgumentException("unable to compile expression",e);
         }

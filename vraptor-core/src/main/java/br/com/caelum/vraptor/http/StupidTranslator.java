@@ -49,20 +49,33 @@ public class StupidTranslator implements UrlToResourceTranslator {
     private final ResourceRegistry registry;
 
     private static final Logger logger = LoggerFactory.getLogger(StupidTranslator.class);
+    private static final String INCLUDE_REQUEST_URI = "javax.servlet.include.request_uri";
 
     public StupidTranslator(ResourceRegistry registry) {
         this.registry = registry;
     }
 
     public ResourceMethod translate(HttpServletRequest request) {
-        String resourceName = request.getRequestURI();
-        logger.debug("trying to access " + resourceName);
+        String resourceName = getURI(request);
+        if (logger.isDebugEnabled()) {
+            logger.debug("trying to access " + resourceName);
+        }
         if (resourceName.length() > 1 && resourceName.indexOf('/', 1) != -1) {
             resourceName = resourceName.substring(resourceName.indexOf('/', 1));
         }
         String methodName = request.getMethod();
         ResourceMethod resource = registry.gimmeThis(resourceName, methodName);
+        if (logger.isDebugEnabled()) {
+            logger.debug("found resource " + resource);
+        }
         return resource;
+    }
+
+    private String getURI(HttpServletRequest request) {
+        if (request.getAttribute(INCLUDE_REQUEST_URI) != null) {
+            return (String) request.getAttribute(INCLUDE_REQUEST_URI);
+        }
+        return request.getRequestURI();
     }
 
 }

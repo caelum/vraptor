@@ -1,9 +1,13 @@
 package br.com.caelum.vraptor.vraptor2;
 
 import java.io.IOException;
+import java.util.HashMap;
+
+import javax.servlet.http.HttpSession;
 
 import org.jmock.Expectations;
 
+import br.com.caelum.vraptor.core.VRaptorRequest;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
 import br.com.caelum.vraptor.ioc.GenericContainerTest;
 
@@ -22,6 +26,18 @@ public class ProviderTest extends GenericContainerTest {
 
     protected ContainerProvider getProvider() {
         return new Provider();
+    }
+
+    protected VRaptorRequest createRequest() {
+        VRaptorRequest webRequest = super.createRequest();
+        final HttpSession session = webRequest.getRequest().getSession();
+        mockery.checking(new Expectations() {
+            {
+                allowing(session).setAttribute("org.vraptor.scope.ScopeType_FLASH", new HashMap());
+                allowing(session).getAttribute("org.vraptor.scope.ScopeType_FLASH"); will(returnValue(new HashMap()));
+            }
+        });
+        return webRequest;
     }
 
 }

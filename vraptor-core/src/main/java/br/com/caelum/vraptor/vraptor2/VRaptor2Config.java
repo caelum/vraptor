@@ -49,6 +49,9 @@ public class VRaptor2Config implements Config {
     }
 
     private void parseVRaptor(File file) throws FileNotFoundException, IOException, ConfigException {
+        if (!file.exists()) {
+            return;
+        }
         parse(file, new LineListener() {
             public void content(String line) throws ConfigException {
                 if (line.contains("<converter>")) {

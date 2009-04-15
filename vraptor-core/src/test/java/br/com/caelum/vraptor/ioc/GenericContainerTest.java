@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.not;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -65,11 +66,16 @@ public abstract class GenericContainerTest {
         final File tmpDir = File.createTempFile("tmp_", "_file").getParentFile();
         final File tmp = new File(tmpDir, "_tmp_vraptor_test");
         tmp.mkdir();
+        final File unknownFile = new File(tmp, "unknown");
         this.context = mockery.mock(ServletContext.class);
         mockery.checking(new Expectations() {
             {
-                one(context).getRealPath("");
+                allowing(context).getRealPath("");
                 will(returnValue(tmp.getAbsolutePath()));
+                allowing(context).getRealPath("/WEB-INF/classes/vraptor.xml");
+                will(returnValue(unknownFile.getAbsolutePath()));
+                allowing(context).getRealPath("/WEB-INF/classes/views.properties");
+                will(returnValue(unknownFile.getAbsolutePath()));
                 // UGLY! move to Spring implementation...
                 allowing(context).getInitParameter(SpringProvider.BASE_PACKAGES_PARAMETER_NAME);
                 will(returnValue("no.packages"));
@@ -80,11 +86,12 @@ public abstract class GenericContainerTest {
         provider.start(context);
     }
 
-    private VRaptorRequest createRequest() {
+    protected VRaptorRequest createRequest() {
         final HttpServletRequest request = mockery.mock(HttpServletRequest.class, "req" + counter++);
         mockery.checking(new Expectations() {
             {
                 allowing(request).getSession(); will(returnValue(mockery.mock(HttpSession.class, "session" + counter++)));
+                allowing(request).getParameterMap(); will(returnValue(new HashMap<String,Object>()));
             }
         });
         HttpServletResponse response = mockery.mock(HttpServletResponse.class, "res" + counter++);

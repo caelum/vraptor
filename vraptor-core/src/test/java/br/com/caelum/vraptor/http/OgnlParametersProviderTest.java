@@ -136,32 +136,6 @@ public class OgnlParametersProviderTest {
     }
 
     @Test
-    public void removeFromTheCollectionIfAnElementIsCreatedWithinAListAndItsAttributesAreSetToExplicitelyToNull() throws SecurityException, NoSuchMethodException {
-        final Method method = MyResource.class.getDeclaredMethod("buyA", House.class);
-        final Matcher<ResourceMethod> resourceMethod = VRaptorMatchers.resourceMethod(method);
-        mockery.checking(new Expectations() {
-            {
-                one(parameters).get("house.extraCats[1].id");
-                will(returnValue(new String[] { "guilherme" }));
-                one(parameters).get("house.extraCats[0].id");
-                will(returnValue(new String[] { "" }));
-                one(parameters).getNames();
-                will(returnValue(new HashSet(Arrays.asList(new String[] { "house.extraCats[1].id",
-                        "house.extraCats[0].id" }))));
-                one(creator).typeFor(with(resourceMethod));
-                will(returnValue(BuyASetter.class));
-                one(nameProvider).parameterNamesFor(method);
-                will(returnValue(new String[] { "House" }));
-            }
-        });
-        Object[] params = provider.getParametersFor(mockery.methodFor(MyResource.class, "buyA", House.class));
-        House house = (House) params[0];
-        assertThat(house.extraCats, hasSize(1));
-        assertThat(house.extraCats.get(0).id, is(equalTo("guilherme")));
-        mockery.assertIsSatisfied();
-    }
-
-    @Test
     public void removeFromTheCollectionIfAnElementIsCreatedWithinACollectionButNoFieldIsSet() throws SecurityException,
             NoSuchMethodException {
         final Method method = MyResource.class.getDeclaredMethod("buyA", House.class);

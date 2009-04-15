@@ -25,11 +25,12 @@ public class ClientsController {
     @Path("/clients")
     public void list() throws ServletException, IOException {
         result.include("clients", clients);
-        result.use(PageResult.jsp()).forward("ok");
+        //result.use(PageResult.jsp()).forward("ok");
     }
 
     @Path("/clients/add")
     public void add(Client c) throws ServletException, IOException {
+        validator.checking(clientValidator(c));
         clients.add(c);
         result.include("client", c);
         result.use(PageResult.jsp()).forward("ok");

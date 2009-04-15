@@ -186,48 +186,52 @@ ONLY AFTER RELEASE
 - refactor ParametersInstantiator into MethodParameters constructor?
 
 	optimizations (product):
+	- cluster (v2, v3?)
 	- converter optimization
 	- connection leak
-	- static file lookup cache
-	- filter optimization
-	- transaction/ddc optimization
-	- lookup for other common mistakes
-	- deploy mode: complain about unused args/ignore unused args
+	- (optimization) static file lookup cache
+	- (optimization) filter optimization
+	- (support) lookup for common mistakes:
+		- example: two components with the same name, same method name (same path)
+	- deploy mode: complain about request unused args/ignore request unused args
 	- support
 	- extra vraptor2 compatibility procedures:
 		- interceptor with restricted functionalities
 		- plugins with restricted functionalities
 		- custom lib
+		- @In, @Out, @Read, @Parameter, @Logic(full support), @Component(full support)
+		- v2: getters for value injection if vraptor2 component, using vraptor2 crazy introspectors, otherwise vraptor3
+		- v2 paranamer support if vraptor2 component
+		- v2: custom converters used on annotated fields
+		- v2: migration without paranamer and annotation (defaultprovider)
+		- v2: complain about parameter annotation on @Logic when not usingthe correct number of values (same as parameters)
 	- vraptor2 code analysis product
-	- instantiate asm class only once
-	- @In, @Out, @Read, @Parameter, @Logic(full support), @Component(full support)
-	- dir lookup run only once (faster startup)
+		- migrator
+	- (optimization) instantiate asm class only once
+	- (optimization) dir lookup run only once (faster startup)
 	- mistakes check removal: i.e. outjectioninterceptor ifs, assuming that the client code is just fine
-	- log visualization tool
-	- log per user on log file (so you can keep track of who did what and debug an specific user)
-	- v2: getters for value injection if vraptor2 component, using vraptor2 crazy introspectors, otherwise vraptor3
-	- v2 paranamer support if vraptor2 component
+	
+	- totally new:
+		- log visualization tool
+		- log per user on log file (so you can keep track of who did what and debug an specific user)
+		- stats ala hibernate stats
+		
 	- validate invalid parameter names in vraptor2 (duplicated names)
 	- validate invalid parameter names in vraptor3 (duplicated names)
-	- empty lists should be cached and early returned
-	- cache EMPTY parameter class for method without parameters
-	- parameter name provider needs cache? maybe
-	- be able to throw an exception if wrong parameters are passed
-	- vraptor2 validation method lookup: remove the search
+	- (optimization) empty lists should be cached and early returned
+	- (optimization) cache EMPTY parameter class for method without parameters
+	- (optimization) parameter name provider needs cache? maybe
+	- (optimization) vraptor2 validation method lookup: remove the search
 	- vrapro2 customization: log/error/pre-check on wrong validation method parameters or similar name (edid distance < 2)
 	- vraptor2/3 customization: log/error/pre-check on most validations (faster/error prone/etc) - pre-analysis tool base
-	- v2: custom converters used on annotated fields
-	- global converters annotation/local converter annotation
-	- stats ala hibernate stats
+	- (optimization) global converters annotation/local converter annotation
 	- statement product
 	- graph product
 	- ehcache
-	- v2: migration without paranamer and annotation (defaultprovider)
-	- v2: complain about parameter annotation on @Logic when not usingthe correct number of values (same as parameters)
 	- niceurl injection cache component
 	- niceurl and common path two components for one url live detection (for  integration test or live)
 	- niceurl cache (so the previous thing is not a problem)
-	- internal component cache limits (due to niceurl which might be huge)
+	- (optimization) internal component cache limits (due to niceurl which might be huge)
 	- log when trying to register a component with no interface 
 
 

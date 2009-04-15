@@ -14,6 +14,7 @@ TODAY
 
 	- v2: json output
 	- move register method to a different intermediate interface
+	- cweb tem que rodar teste antes de comecar tudo... bizarro
 
 
 	13 converters: File

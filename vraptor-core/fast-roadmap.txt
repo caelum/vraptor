@@ -10,11 +10,17 @@ right now:
 	ceci: support generic Set with ognl (look at MiscOgnlSupportTest for generic list support - you need to create a SetAccessor)
 
 TODAY
+OgnlParametersProviderTest
+    @Test
+    public void canHandleListOfWrapperTypes() {
+        Assert.fail("doesnt support list of wrapper types yet");
+    }
 	- resolve interceptororder with interceptorstack
 
 	- v2: json output
 	- move register method to a different intermediate interface
 	- cweb tem que rodar teste antes de comecar tudo... bizarro
+
 
 
 	13 converters: File

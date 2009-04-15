@@ -131,11 +131,6 @@ public class OgnlParametersProviderTest {
     }
 
     @Test
-    public void canHandleListOfWrapperTypes() {
-        Assert.fail("doesnt support list of wrapper types yet");
-    }
-
-    @Test
     public void removeFromTheCollectionIfAnElementIsCreatedWithinACollectionButNoFieldIsSet() throws SecurityException,
             NoSuchMethodException {
         final Method method = MyResource.class.getDeclaredMethod("buyA", House.class);

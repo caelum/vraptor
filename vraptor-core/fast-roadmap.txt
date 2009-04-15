@@ -14,18 +14,12 @@ OgnlParametersProviderTest
     @Test
     public void canHandleListOfWrapperTypes() {
         Assert.fail("doesnt support list of wrapper types yet");
+		asm support List<Long>
     }
-	- resolve interceptororder with interceptorstack
 
 	- v2: json output
-	- move register method to a different intermediate interface
 	- cweb tem que rodar teste antes de comecar tudo... bizarro
-
-
-
 	13 converters: File
-	5 caelumweb -> v3 workforce
-	
 	- niceurls with programmatic support
 	- niceurls -> path support
 	- niceurls with file config support -> path support
@@ -35,14 +29,6 @@ OgnlParametersProviderTest
 	niceurls programatico e arquivo de config
 	
 	should ignore @br.com...Component as a component... what to do now?
-
-
-
-	
-ASM
-	- support ProcuraAlunoTest -> support Long[] with AsmBased stuff support Long[]
-	- support List<Long>
-- go through every request component and check if it really needs to be request based
 	
 
 	- v2: xml output
@@ -100,6 +86,7 @@ site docs (prior to release)
 	- might find useful things to support
 
 kung help
+- move register method to a different intermediate interface
 - full spring support
 - Array
 - Map support
@@ -120,6 +107,7 @@ kung help
 
 
 right before release
+	go through every request component and check if it really needs to be request based
 	verify org.apache.log4j logs -> sl4j
 	copyright in all files check
 	vraptor2 release with customized code
@@ -328,4 +316,4 @@ done:
 - Collection, List, Set, Calendar, SortedSet, Queue interface support
 1 path annotation default value (without annotation)
 2 path annotation with support to regex (niceurls?)
-	
+- interceptor sequence support

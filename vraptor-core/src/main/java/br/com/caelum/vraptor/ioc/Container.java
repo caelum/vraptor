@@ -50,14 +50,6 @@ public interface Container {
     <T> T instanceFor(Class<T> type);
 
     /**
-     * Registers an instance in this container respecting the lookup algorithm
-     * defined.
-     * 
-     * @param instance
-     */
-    void register(Object instance);
-
-    /**
      * Registers a component type in this container respecting the lookup
      * algorithm defined.
      * 

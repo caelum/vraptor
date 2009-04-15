@@ -1,7 +1,14 @@
 package br.com.caelum.vraptor.vraptor2;
 
-import java.io.IOException;
-import java.util.HashMap;
+import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.resource.Resource;
+import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.view.PathResolver;
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.junit.Before;
+import org.junit.Test;
+import org.vraptor.annotations.Component;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -9,16 +16,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.junit.Before;
-import org.junit.Test;
-import org.vraptor.annotations.Component;
-
-import br.com.caelum.vraptor.resource.Resource;
-import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.view.PathResolver;
+import java.io.IOException;
+import java.util.HashMap;
 
 public class ViewsPropertiesPageResultTest {
 
@@ -33,6 +32,7 @@ public class ViewsPropertiesPageResultTest {
     private HttpSession session;
     private Resource resource;
     private RequestDispatcher dispatcher;
+    private RequestInfo requestInfo;
 
     @Before
     public void setup() {
@@ -41,6 +41,7 @@ public class ViewsPropertiesPageResultTest {
         this.response = mockery.mock(HttpServletResponse.class);
         this.session = mockery.mock(HttpSession.class);
         this.method = mockery.mock(ResourceMethod.class);
+        this.requestInfo = mockery.mock(RequestInfo.class);
         this.resource = mockery.mock(Resource.class);
         this.config = mockery.mock(Config.class);
         this.resolver = mockery.mock(PathResolver.class);
@@ -53,11 +54,13 @@ public class ViewsPropertiesPageResultTest {
                 will(returnValue(session));
                 one(session).getAttribute("org.vraptor.scope.ScopeType_FLASH");
                 will(returnValue(new HashMap<String, Object>()));
+                allowing(requestInfo).getResourceMethod();
+                will(returnValue(method));
                 allowing(method).getResource();
                 will(returnValue(resource));
             }
         });
-        this.result = new ViewsPropertiesPageResult(this.config, this.request, this.resolver, this.method,
+        this.result = new ViewsPropertiesPageResult(this.config, this.request, this.resolver, this.requestInfo,
                 this.response, this.context);
     }
 
@@ -104,7 +107,7 @@ public class ViewsPropertiesPageResultTest {
         this.result.forward("ok");
         mockery.assertIsSatisfied();
     }
-    
+
     class NewResource {
         public void base() {
         }
@@ -118,9 +121,11 @@ public class ViewsPropertiesPageResultTest {
                 will(returnValue(NewResource.class));
                 allowing(method).getMethod();
                 will(returnValue(NewResource.class.getMethod("base")));
-                one(resolver).pathFor(method, "ok"); will(returnValue("MyPath"));
-                one(request).getRequestDispatcher("MyPath"); will(returnValue(dispatcher));
-                one(dispatcher).forward(request,response);
+                one(resolver).pathFor(method, "ok");
+                will(returnValue("MyPath"));
+                one(request).getRequestDispatcher("MyPath");
+                will(returnValue(dispatcher));
+                one(dispatcher).forward(request, response);
             }
         });
         this.result.forward("ok");

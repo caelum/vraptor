@@ -1,20 +1,19 @@
 package br.com.caelum.vraptor.view.jsp;
 
-import java.io.IOException;
-
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import br.com.caelum.vraptor.core.DefaultRequestInfo;
+import br.com.caelum.vraptor.resource.Resource;
+import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.view.PathResolver;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.resource.Resource;
-import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.view.PathResolver;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 public class DefaultPageResultTest {
 
@@ -25,6 +24,7 @@ public class DefaultPageResultTest {
     private ResourceMethod method;
     private Resource resource;
     private PathResolver fixedResolver;
+    private DefaultRequestInfo requestInfo;
 
     @Before
     public void setup() {
@@ -33,6 +33,8 @@ public class DefaultPageResultTest {
         response = mockery.mock(HttpServletResponse.class);
         dispatcher = mockery.mock(RequestDispatcher.class);
         method = mockery.mock(ResourceMethod.class);
+        requestInfo = new DefaultRequestInfo();
+        requestInfo.setResourceMethod(method);
         resource = mockery.mock(Resource.class);
         fixedResolver = new PathResolver() {
             public String pathFor(ResourceMethod method, String result) {
@@ -43,7 +45,7 @@ public class DefaultPageResultTest {
 
     @Test
     public void shouldAllowCustomPathResolverWhileForwarding() throws ServletException, IOException {
-        DefaultPageResult view = new DefaultPageResult(request, response, method, fixedResolver);
+        DefaultPageResult view = new DefaultPageResult(request, response, requestInfo, fixedResolver);
         mockery.checking(new Expectations() {
             {
                 one(request).getRequestDispatcher("fixed");
@@ -57,7 +59,7 @@ public class DefaultPageResultTest {
 
     @Test
     public void shouldAllowCustomPathResolverWhileIncluding() throws ServletException, IOException {
-        DefaultPageResult view = new DefaultPageResult(request, response, method, fixedResolver);
+        DefaultPageResult view = new DefaultPageResult(request, response, requestInfo, fixedResolver);
         mockery.checking(new Expectations() {
             {
                 one(request).getRequestDispatcher("fixed");

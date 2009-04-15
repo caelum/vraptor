@@ -1,11 +1,10 @@
 package br.com.caelum.vraptor.interceptor;
 
 import br.com.caelum.vraptor.InterceptionException;
-import br.com.caelum.vraptor.core.DefaultRequestInfo;
 import br.com.caelum.vraptor.core.InterceptorStack;
+import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.core.VRaptorRequest;
 import br.com.caelum.vraptor.http.UrlToResourceTranslator;
-import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -28,7 +27,7 @@ public class ResourceLookupInterceptorTest {
     private ResourceLookupInterceptor lookup;
     private HttpServletRequest webRequest;
     private HttpServletResponse webResponse;
-    private Container container;
+    private RequestInfo requestInfo;
 
     @Before
     public void config() {
@@ -37,7 +36,8 @@ public class ResourceLookupInterceptorTest {
         this.webRequest = mockery.mock(HttpServletRequest.class);
         this.webResponse = mockery.mock(HttpServletResponse.class);
         this.request = new VRaptorRequest(null, webRequest, webResponse);
-        this.lookup = new ResourceLookupInterceptor(translator, new DefaultRequestInfo(), request);
+        this.requestInfo = mockery.mock(RequestInfo.class);
+        this.lookup = new ResourceLookupInterceptor(translator, requestInfo, request);
     }
 
     @Test
@@ -66,7 +66,7 @@ public class ResourceLookupInterceptorTest {
                 one(translator).translate(webRequest);
                 will(returnValue(method));
                 one(stack).next(method, null);
-                one(container).register(method);
+                one(requestInfo).setResourceMethod(method);
             }
         });
         lookup.intercept(stack, null, null);

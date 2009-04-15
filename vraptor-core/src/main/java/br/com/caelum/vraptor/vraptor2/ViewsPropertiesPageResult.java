@@ -1,12 +1,10 @@
 package br.com.caelum.vraptor.vraptor2;
 
-import java.io.IOException;
-
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.resource.Resource;
+import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.view.PathResolver;
+import br.com.caelum.vraptor.view.jsp.PageResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vraptor.core.WebRequest;
@@ -16,10 +14,11 @@ import org.vraptor.introspector.ExpressionEvaluationException;
 import org.vraptor.introspector.ExpressionEvaluator;
 import org.vraptor.scope.DefaultLogicRequest;
 
-import br.com.caelum.vraptor.resource.Resource;
-import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.view.PathResolver;
-import br.com.caelum.vraptor.view.jsp.PageResult;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 public class ViewsPropertiesPageResult implements PageResult {
 
@@ -34,11 +33,11 @@ public class ViewsPropertiesPageResult implements PageResult {
     private static final Logger logger = LoggerFactory.getLogger(ViewsPropertiesPageResult.class);
 
     public ViewsPropertiesPageResult(Config config, HttpServletRequest request, PathResolver resolver,
-            ResourceMethod method, HttpServletResponse response, ServletContext context) {
+            RequestInfo requestInfo, HttpServletResponse response, ServletContext context) {
         this.config = config;
         this.request = request;
         this.resolver = resolver;
-        this.method = method;
+        this.method = requestInfo.getResourceMethod();
         this.response = response;
         logic = new DefaultLogicRequest(null, new WebRequest(new VRaptorServletRequest(request, null),
                 new VRaptorServletResponse(response), context), null);
@@ -46,7 +45,7 @@ public class ViewsPropertiesPageResult implements PageResult {
 
     public void forward(String result) throws ServletException, IOException {
         Resource resource = method.getResource();
-        if(!Info.isOldComponent(resource)) {
+        if (!Info.isOldComponent(resource)) {
             request.getRequestDispatcher(resolver.pathFor(method, result)).forward(request, response);
             return;
         }

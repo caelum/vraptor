@@ -1,5 +1,6 @@
 package br.com.caelum.vraptor.ioc.pico;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -7,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.Interceptor;
 import br.com.caelum.vraptor.Intercepts;
+import br.com.caelum.vraptor.interceptor.InterceptorSequence;
 
 public class InterceptorAcceptor implements Acceptor {
 
@@ -19,8 +21,36 @@ public class InterceptorAcceptor implements Acceptor {
 
     public void analyze(Class<?> type) {
         if (type.isAnnotationPresent(Intercepts.class)) {
-            logger.debug("Found interceptor for " + type);
-            interceptors.add((Class<Interceptor>) type);
+            if (Interceptor.class.isAssignableFrom(type)) {
+                logger.debug("Found interceptor for " + type);
+                interceptors.add((Class<Interceptor>) type);
+            } else if (InterceptorSequence.class.isAssignableFrom(type)) {
+                logger.debug("Found interceptor sequence for " + type);
+                parseSequence(type);
+            } else {
+                logger.error("Annotation " + Intercepts.class + " found but this is neither an Interceptor nor an InterceptorSequence. Ignoring");
+            }
+        }
+    }
+
+    private void parseSequence(Class<?> type) {
+        try {
+            InterceptorSequence sequence = InterceptorSequence.class.cast(type.getConstructor().newInstance());
+            for(Class<? extends Interceptor> internalType: sequence.getSequence()) {
+                interceptors.add(internalType);
+            }
+        } catch (InstantiationException e) {
+            logger.error("Problem ocurred while instantiating an interceptor sequence",e);
+        } catch (IllegalAccessException e) {
+            logger.error("Problem ocurred while instantiating an interceptor sequence",e);
+        } catch (IllegalArgumentException e) {
+            logger.error("Problem ocurred while instantiating an interceptor sequence",e);
+        } catch (SecurityException e) {
+            logger.error("Problem ocurred while instantiating an interceptor sequence",e);
+        } catch (InvocationTargetException e) {
+            logger.error("Problem ocurred while instantiating an interceptor sequence",e.getCause());
+        } catch (NoSuchMethodException e) {
+            logger.error("Problem ocurred while instantiating an interceptor sequence",e);
         }
     }
 

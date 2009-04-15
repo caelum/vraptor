@@ -1,7 +1,10 @@
 package br.com.caelum.vraptor.ioc.pico;
 
-import static org.hamcrest.MatcherAssert.*;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,6 +17,7 @@ import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Interceptor;
 import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.core.InterceptorStack;
+import br.com.caelum.vraptor.interceptor.InterceptorSequence;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 public class InterceptorAcceptorTest {
@@ -26,7 +30,30 @@ public class InterceptorAcceptorTest {
         this.interceptors = new ArrayList<Class<? extends Interceptor>>();
         this.acceptor = new InterceptorAcceptor(interceptors);
     }
-    
+
+    @Intercepts
+    class IgnorableIntercepts{
+    }
+    @Test
+    public void shouldIgnoreInterceptsWithAFailingType() {
+        acceptor.analyze(IgnorableIntercepts.class);
+        assertThat(interceptors,hasSize(0));
+    }
+
+    @Intercepts
+    public static class MySequence implements InterceptorSequence{
+        @SuppressWarnings("unchecked")
+        public Class<? extends Interceptor>[] getSequence() {
+            return new Class[]{InterceptorAnnotated.class, InterceptorNotAnnotated.class};
+        }
+    }
+    @Test
+    public void shouldAddAllInterceptorsFromASequenceInItsOrder() {
+        acceptor.analyze(MySequence.class);
+        assertThat(interceptors,hasSize(2));
+        assertThat(interceptors, contains(InterceptorAnnotated.class, InterceptorNotAnnotated.class));
+    }
+
     @Test
     public void shouldAcceptInterceptorsAnnotatedWithInterceptorAnnotation() {
         acceptor.analyze(InterceptorAnnotated.class);

@@ -30,7 +30,7 @@ public class InfoTest {
         assertThat(Info.getComponentName(CustomComponent.class), is(equalTo("customized")));
     }
     @Component
-    class DefaultComponent {
+    class DefaultComponents {
         public void noAnnotation(){
         }
         @Logic
@@ -42,7 +42,14 @@ public class InfoTest {
     }
     @Test
     public void shouldReadAComponentDefaultName() {
-        assertThat(Info.getComponentName(DefaultComponent.class), is(equalTo("DefaultComponent")));
+        assertThat(Info.getComponentName(DefaultComponents.class), is(equalTo("DefaultComponents")));
+    }
+    @Component
+    class DefaultController {
+    }
+    @Test
+    public void shouldReadAComponentDefaultNameWithSuffixRemoval() {
+        assertThat(Info.getComponentName(DefaultController.class), is(equalTo("default")));
     }
 
     @Test
@@ -65,19 +72,19 @@ public class InfoTest {
 
     @Test
     public void shouldDetectTheDefaultLogicNameIfNoAnnotationPresent() throws SecurityException, NoSuchMethodException {
-        assertThat(Info.getLogicName(DefaultComponent.class.getMethod("noAnnotation")), is(equalTo("noAnnotation")));
+        assertThat(Info.getLogicName(DefaultComponents.class.getMethod("noAnnotation")), is(equalTo("noAnnotation")));
         mockery.assertIsSatisfied();
     }
 
     @Test
     public void shouldDetectTheDefaultLogicNameIfAnnotationWithoutValue() throws SecurityException, NoSuchMethodException {
-        assertThat(Info.getLogicName(DefaultComponent.class.getMethod("emptyAnnotation")), is(equalTo("emptyAnnotation")));
+        assertThat(Info.getLogicName(DefaultComponents.class.getMethod("emptyAnnotation")), is(equalTo("emptyAnnotation")));
         mockery.assertIsSatisfied();
     }
 
     @Test
     public void shouldDetectTheDefaultLogicNameIfAnnotationWithName() throws SecurityException, NoSuchMethodException {
-        assertThat(Info.getLogicName(DefaultComponent.class.getMethod("full")), is(equalTo("value")));
+        assertThat(Info.getLogicName(DefaultComponents.class.getMethod("full")), is(equalTo("value")));
         mockery.assertIsSatisfied();
     }
     

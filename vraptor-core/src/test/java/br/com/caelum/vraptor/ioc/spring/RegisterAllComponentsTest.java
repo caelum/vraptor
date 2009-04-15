@@ -4,7 +4,6 @@ import br.com.caelum.vraptor.ioc.ContainerProvider;
 import br.com.caelum.vraptor.ioc.GenericContainerTest;
 import br.com.caelum.vraptor.test.HttpServletRequestMock;
 import org.jmock.Mockery;
-import org.jmock.Expectations;
 import org.junit.After;
 import org.junit.Before;
 import org.springframework.web.context.request.RequestContextListener;

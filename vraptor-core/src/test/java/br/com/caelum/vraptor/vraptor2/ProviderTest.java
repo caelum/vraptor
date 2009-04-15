@@ -20,6 +20,8 @@ public class ProviderTest extends GenericContainerTest {
                 // TODO nasty, should be one()?
                 allowing(context).getRealPath("/WEB-INF/classes/vraptor.xml");
                 will(returnValue("non-existing-vraptor.xml"));
+                allowing(context).getRealPath("/WEB-INF/classes/views.properties");
+                will(returnValue("views.properties"));
             }
         });
     }

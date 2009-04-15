@@ -33,7 +33,7 @@ public class SpringProviderTest {
     public void shouldLoadInitParameterForBasePackages() {
         final ServletContext servletContext = mockery.mock(ServletContext.class);
         mockery.checking(new Expectations() {{
-            one(servletContext).getInitParameter("br.com.caelum.vraptor.spring.packages");
+            one(servletContext).getInitParameter(SpringProvider.BASE_PACKAGES_PARAMETER_NAME);
         }});
         SpringProvider provider = new SpringProvider();
         provider.start(servletContext);

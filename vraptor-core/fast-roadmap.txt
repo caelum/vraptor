@@ -92,7 +92,7 @@ kung help
 - Map support
 - forward problem with opening 2 connections to the database and 2 components... one or two? solve it?
 - path annotation with support to dynamic logic and component lookup (niceurls?)
-
+- create session context
 
 
 

@@ -8,6 +8,7 @@ import org.hibernate.validator.NotNull;
 import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
+import org.vraptor.plugin.hibernate.Validate;
 import org.vraptor.validator.ValidationErrors;
 
 import br.com.caelum.vraptor.InterceptionException;
@@ -38,14 +39,32 @@ public class HibernateValidatorPluginInterceptorTest {
         @NotNull
         String color;
     }
-
+    class Window {
+    }
     class Car {
         void paintWithoutValidate(Door door) {
+        }
+        @Validate
+        void paint(Window w) {
         }
     }
 
     @Test
     public void shouldDoNothingIfTheMethodShouldNotBeValidatedButTheParamIsUnvalid() throws NoSuchMethodException,
+            InterceptionException, IOException {
+        final ResourceMethod method = mockery.methodFor(Car.class, "paintWithoutValidate", Door.class);
+        mockery.checking(new Expectations() {
+            {
+                one(stack).next(method, null);
+            }
+        });
+        interceptor.intercept(stack, method, null);
+        mockery.assertIsSatisfied();
+
+    }
+
+    @Test
+    public void shouldDoNothingIfTheMethodAsksForValidationOfNoParams() throws NoSuchMethodException,
             InterceptionException, IOException {
         final ResourceMethod method = mockery.methodFor(Car.class, "paintWithoutValidate", Door.class);
         mockery.checking(new Expectations() {

@@ -4,7 +4,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
-import java.io.Serializable;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -18,12 +17,12 @@ import ognl.OgnlRuntime;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.core.VRaptorRequest;
-import br.com.caelum.vraptor.http.OgnlParametersProvider;
 import br.com.caelum.vraptor.http.ognl.ListAccessor;
 import br.com.caelum.vraptor.http.ognl.ReflectionBasedNullHandler;
 

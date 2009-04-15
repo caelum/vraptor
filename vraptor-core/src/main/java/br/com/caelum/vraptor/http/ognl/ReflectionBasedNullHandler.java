@@ -48,10 +48,11 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import br.com.caelum.vraptor.vraptor2.Info;
-
 import ognl.ObjectNullHandler;
 import ognl.OgnlContext;
+import br.com.caelum.vraptor.http.EmptyElementsRemoval;
+import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor.vraptor2.Info;
 
 public class ReflectionBasedNullHandler extends ObjectNullHandler {
 
@@ -100,6 +101,9 @@ public class ReflectionBasedNullHandler extends ObjectNullHandler {
                 while (list.size() <= position) {
                     list.add(null);
                 }
+                Container container = (Container) context.get(Container.class.getName());
+                EmptyElementsRemoval removal = container.instanceFor(EmptyElementsRemoval.class);
+                removal.add(list);
                 list.set(position, instance);
                 return instance;
             }

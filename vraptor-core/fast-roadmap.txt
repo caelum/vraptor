@@ -7,9 +7,11 @@ right now:
 		- se estiver no classpath, tem que adicionar os conversores atraves de reflection, nao pode referenciar nenhuma classe diretamente que referencia joda
 	ceci: time converters (igual ao Date e ao Calendar, so que usa Time.SHORT, ou pattern hh:mm, ver no vraptor2...)
 		- nao cadastra-los por padrao
+	ceci: support generic Set with ognl (look at MiscOgnlSupportTest for generic list support - you need to create a SetAccessor)
 
 TODAY
-	- support ProcuraAlunoTest -> support Long[] with AsmBased stuff
+	- support ProcuraAlunoTest -> support Long[] with AsmBased stuff support Long[]
+	- support List<Long>
 	- resolve interceptororder with interceptorstack
 
 	- v2: json output

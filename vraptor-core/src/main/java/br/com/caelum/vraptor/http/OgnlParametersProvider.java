@@ -55,7 +55,9 @@ public class OgnlParametersProvider implements ParametersProvider {
 
     private final ParameterNameProvider provider;
 
-    private final RequestParameters parameters; 
+    private final RequestParameters parameters;
+
+    private final EmptyElementsRemoval removal; 
 
     public OgnlParametersProvider(TypeCreator creator, Container container, Converters converters, ParameterNameProvider provider, RequestParameters parameters) {
         this.creator = creator;
@@ -63,6 +65,9 @@ public class OgnlParametersProvider implements ParametersProvider {
         this.converters = converters;
         this.provider = provider;
         this.parameters = parameters;
+        // TODO move it from here... no need to do it like this... should receive on constructor, register earlier on
+        container.register(EmptyElementsRemoval.class);
+        this.removal = container.instanceFor(EmptyElementsRemoval.class);
         OgnlRuntime.setNullHandler(Object.class, new ReflectionBasedNullHandler());
         OgnlRuntime.setPropertyAccessor(List.class, new ListAccessor());
     }
@@ -73,7 +78,7 @@ public class OgnlParametersProvider implements ParametersProvider {
             Object root = type.getDeclaredConstructor().newInstance();
             OgnlContext context = (OgnlContext) Ognl.createDefaultContext(root);
             context.setTraceEvaluations(true);
-            context.put(Container.class,this.container);
+            context.put(Container.class.getName(),this.container);
             
             OgnlToConvertersController controller = new OgnlToConvertersController(converters);
             Ognl.setTypeConverter(context, controller);
@@ -86,6 +91,7 @@ public class OgnlParametersProvider implements ParametersProvider {
                     // ignoring
                 }
             }
+            removal.removeExtraElements();
             Type[] types = method.getMethod().getGenericParameterTypes();
             Object[] result = new Object[types.length];
             String[] names = provider.parameterNamesFor(method.getMethod());

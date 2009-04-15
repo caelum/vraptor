@@ -47,22 +47,22 @@ import ognl.OgnlException;
 public class ListAccessor extends ListPropertyAccessor {
 
     @SuppressWarnings("unchecked")
-    public Object getProperty(Map map, Object target, Object object) throws OgnlException {
+    public Object getProperty(Map context, Object target, Object object) throws OgnlException {
         try {
-            return super.getProperty(map, target, object);
+            return super.getProperty(context, target, object);
         } catch (IndexOutOfBoundsException ex) {
             return null;
         }
     }
 
     @SuppressWarnings("unchecked")
-    public void setProperty(Map map, Object target, Object key, Object parent) throws OgnlException {
+    public void setProperty(Map context, Object target, Object key, Object parent) throws OgnlException {
         List<?> list = (List<?>) target;
         int index = (Integer) key;
         for (int i = list.size(); i <= index; i++) {
             list.add(null);
         }
-        super.setProperty(map, target, key, parent);
+        super.setProperty(context, target, key, parent);
     }
 
 }

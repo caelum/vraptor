@@ -25,6 +25,7 @@ import br.com.caelum.vraptor.core.DefaultInterceptorStack;
 import br.com.caelum.vraptor.core.DefaultResult;
 import br.com.caelum.vraptor.core.RequestExecution;
 import br.com.caelum.vraptor.core.VRaptorRequest;
+import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.http.OgnlParametersProvider;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.TypeCreator;
@@ -106,7 +107,7 @@ public abstract class GenericContainerTest {
     @Test
     public void canProvideAllRequestScopedComponents() {
         checkAvailabilityFor(false, HttpServletRequest.class, HttpServletResponse.class, VRaptorRequest.class,
-                DefaultInterceptorStack.class, RequestExecution.class, ResourceLookupInterceptor.class,
+                DefaultInterceptorStack.class, RequestInfo.class, RequestExecution.class, ResourceLookupInterceptor.class,
                 InstantiateInterceptor.class, DefaultResult.class, ExecuteMethodInterceptor.class,
                 OgnlParametersProvider.class, Converters.class, HttpSession.class);
         checkAvailabilityFor(false, PageResult.class);

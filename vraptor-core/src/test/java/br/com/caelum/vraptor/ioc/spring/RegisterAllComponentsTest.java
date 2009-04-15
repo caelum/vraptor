@@ -2,6 +2,7 @@ package br.com.caelum.vraptor.ioc.spring;
 
 import br.com.caelum.vraptor.ioc.ContainerProvider;
 import br.com.caelum.vraptor.ioc.GenericContainerTest;
+import br.com.caelum.vraptor.test.HttpServletRequestMock;
 import org.jmock.Mockery;
 import org.jmock.Expectations;
 import org.junit.After;
@@ -25,10 +26,7 @@ public class RegisterAllComponentsTest extends GenericContainerTest {
         requestListener = new RequestContextListener();
         mockery = new Mockery();
         servletContext = mockery.mock(ServletContext.class);
-        httpServletRequest = mockery.mock(HttpServletRequest.class);
-        mockery.checking(new Expectations() {{
-            ignoring(httpServletRequest);
-        }});
+        httpServletRequest = new HttpServletRequestMock();
         requestListener.requestInitialized(new ServletRequestEvent(servletContext, httpServletRequest));
         super.setup();
     }
@@ -36,7 +34,7 @@ public class RegisterAllComponentsTest extends GenericContainerTest {
     @After
     public void tearDown() {
         super.tearDown();
-//        requestListener.requestDestroyed(new ServletRequestEvent(servletContext, httpServletRequest));
+        requestListener.requestDestroyed(new ServletRequestEvent(servletContext, httpServletRequest));
     }
 
     protected ContainerProvider getProvider() {

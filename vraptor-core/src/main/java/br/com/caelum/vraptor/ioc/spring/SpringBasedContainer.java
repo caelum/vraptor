@@ -86,9 +86,9 @@ public class SpringBasedContainer implements Container {
             this.basePackages = basePackages;
         }
         applicationContext = new GenericWebApplicationContext();
-        registerCustomInjectionProcessor(applicationContext);
         AnnotationConfigUtils.registerAnnotationConfigProcessors(applicationContext);
         AopConfigUtils.registerAspectJAnnotationAutoProxyCreatorIfNecessary(applicationContext);
+        registerCustomInjectionProcessor(applicationContext);
     }
 
     private void registerCustomInjectionProcessor(GenericApplicationContext applicationContext) {

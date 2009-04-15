@@ -62,7 +62,7 @@ public class ViewsPropertiesPageResultTest {
     }
 
     @Component
-    class CommonComponent {
+    class CommonComponentOld {
         public void base() {
         }
     }
@@ -72,10 +72,10 @@ public class ViewsPropertiesPageResultTest {
         mockery.checking(new Expectations() {
             {
                 allowing(resource).getType();
-                will(returnValue(CommonComponent.class));
+                will(returnValue(CommonComponentOld.class));
                 allowing(method).getMethod();
-                will(returnValue(CommonComponent.class.getMethod("base")));
-                one(config).getForwardFor("CommonComponent.base.ok");
+                will(returnValue(CommonComponentOld.class.getMethod("base")));
+                one(config).getForwardFor("CommonComponentOld.base.ok");
                 will(returnValue(null));
                 one(resolver).pathFor(method, "ok");
                 will(returnValue("defaultPath"));
@@ -93,10 +93,10 @@ public class ViewsPropertiesPageResultTest {
         mockery.checking(new Expectations() {
             {
                 allowing(resource).getType();
-                will(returnValue(CommonComponent.class));
+                will(returnValue(CommonComponentOld.class));
                 allowing(method).getMethod();
-                will(returnValue(CommonComponent.class.getMethod("base")));
-                one(config).getForwardFor("CommonComponent.base.ok");
+                will(returnValue(CommonComponentOld.class.getMethod("base")));
+                one(config).getForwardFor("CommonComponentOld.base.ok");
                 will(returnValue("redirect:clientSide"));
                 one(response).sendRedirect("clientSide");
             }
@@ -132,10 +132,10 @@ public class ViewsPropertiesPageResultTest {
         mockery.checking(new Expectations() {
             {
                 allowing(resource).getType();
-                will(returnValue(CommonComponent.class));
+                will(returnValue(CommonComponentOld.class));
                 allowing(method).getMethod();
-                will(returnValue(CommonComponent.class.getMethod("base")));
-                one(config).getForwardFor("CommonComponent.base.ok");
+                will(returnValue(CommonComponentOld.class.getMethod("base")));
+                one(config).getForwardFor("CommonComponentOld.base.ok");
                 will(returnValue("serverSide"));
                 one(request).getRequestDispatcher("serverSide");
                 will(returnValue(dispatcher));
@@ -151,12 +151,12 @@ public class ViewsPropertiesPageResultTest {
         mockery.checking(new Expectations() {
             {
                 allowing(resource).getType();
-                will(returnValue(CommonComponent.class));
+                will(returnValue(CommonComponentOld.class));
                 allowing(method).getMethod();
-                will(returnValue(CommonComponent.class.getMethod("base")));
-                one(config).getForwardFor("CommonComponent.base.ok");
+                will(returnValue(CommonComponentOld.class.getMethod("base")));
+                one(config).getForwardFor("CommonComponentOld.base.ok");
                 will(returnValue("serverSide?client.id=${client.id}"));
-                exactly(2).of(request).getAttribute("client"); will(returnValue(new CommonComponent()));
+                exactly(2).of(request).getAttribute("client"); will(returnValue(new CommonComponentOld()));
             }
         });
         this.result.forward("ok");
@@ -168,9 +168,9 @@ public class ViewsPropertiesPageResultTest {
         mockery.checking(new Expectations() {
             {
                 allowing(resource).getType();
-                will(returnValue(CommonComponent.class));
+                will(returnValue(CommonComponentOld.class));
                 allowing(method).getMethod();
-                will(returnValue(CommonComponent.class.getMethod("base")));
+                will(returnValue(CommonComponentOld.class.getMethod("base")));
                 one(resolver).pathFor(method, "ok");
                 will(returnValue("defaultPath"));
                 one(request).getRequestDispatcher("defaultPath");

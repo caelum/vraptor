@@ -186,6 +186,15 @@ ONLY AFTER RELEASE
 - niceurls extra routes
 - refactor ParametersInstantiator into MethodParameters constructor?
 
+OgnlGenericTypesSupportTest:
+    @Test
+    public void isCapableOfInstantiatingCustomTypesInAListSettingItsInternalValue() throws OgnlException {
+        Ognl.setValue("legs[0].color", context, myCat, "red");
+        assertThat(myCat.legs.get(0).color, is(equalTo("red")));
+        mockery.assertIsSatisfied();
+    }
+
+
 	optimizations (product):
 	- cluster (v2, v3?)
 	- converter optimization

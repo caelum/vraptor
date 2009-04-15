@@ -52,14 +52,19 @@ import br.com.caelum.vraptor.core.DefaultInterceptorStack;
 import br.com.caelum.vraptor.core.DefaultRequestExecution;
 import br.com.caelum.vraptor.core.DefaultResult;
 import br.com.caelum.vraptor.core.RequestExecution;
+import br.com.caelum.vraptor.core.DefaultMethodParameters;
+import br.com.caelum.vraptor.core.URLParameterExtractorInterceptor;
 import br.com.caelum.vraptor.http.OgnlParametersProvider;
 import br.com.caelum.vraptor.http.StupidTranslator;
+import br.com.caelum.vraptor.http.ParanamerNameProvider;
+import br.com.caelum.vraptor.http.DefaultRequestParameters;
 import br.com.caelum.vraptor.http.asm.AsmBasedTypeCreator;
 import br.com.caelum.vraptor.interceptor.DefaultInterceptorRegistry;
 import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
 import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
 import br.com.caelum.vraptor.interceptor.InterceptorListPriorToExecutionExtractor;
 import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
+import br.com.caelum.vraptor.interceptor.ParametersInstantiator;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.resource.DefaultMethodLookupBuilder;
 import br.com.caelum.vraptor.resource.DefaultResourceRegistry;
@@ -114,12 +119,16 @@ public class SpringBasedContainer implements Container {
         register(DefaultInterceptorRegistry.class);
         register(AsmBasedTypeCreator.class);
         register(DefaultMethodLookupBuilder.class);
-        register(DefaultConverters.class);
         register(DefaultPathResolver.class);
+        register(ParanamerNameProvider.class);
     }
 
     private void registerRequestScopedComponents() {
+        register(ParametersInstantiator.class);
+        register(DefaultMethodParameters.class);
+        register(DefaultRequestParameters.class);
         register(InterceptorListPriorToExecutionExtractor.class);
+        register(URLParameterExtractorInterceptor.class);
         register(DefaultInterceptorStack.class);
         register(DefaultRequestExecution.class);
         register(ResourceLookupInterceptor.class);
@@ -128,6 +137,7 @@ public class SpringBasedContainer implements Container {
         register(ExecuteMethodInterceptor.class);
         register(DefaultPageResult.class);
         register(OgnlParametersProvider.class);
+        register(DefaultConverters.class);
         register(this);
     }
 

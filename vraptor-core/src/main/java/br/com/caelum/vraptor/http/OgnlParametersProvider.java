@@ -31,6 +31,7 @@ package br.com.caelum.vraptor.http;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
+import java.util.Arrays;
 import java.util.List;
 
 import ognl.NoSuchPropertyException;
@@ -38,6 +39,10 @@ import ognl.Ognl;
 import ognl.OgnlContext;
 import ognl.OgnlException;
 import ognl.OgnlRuntime;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import br.com.caelum.vraptor.converter.OgnlToConvertersController;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.http.ognl.ListAccessor;
@@ -54,6 +59,8 @@ public class OgnlParametersProvider implements ParametersProvider {
     private final Converters converters;
 
     private final ParameterNameProvider provider;
+    
+    private static final Logger logger = LoggerFactory.getLogger(OgnlParametersProvider.class);
 
     private final RequestParameters parameters;
 
@@ -78,17 +85,22 @@ public class OgnlParametersProvider implements ParametersProvider {
             Object root = type.getDeclaredConstructor().newInstance();
             OgnlContext context = (OgnlContext) Ognl.createDefaultContext(root);
             context.setTraceEvaluations(true);
-            context.put(Container.class.getName(),this.container);
+            context.put(Container.class,this.container);
             
             OgnlToConvertersController controller = new OgnlToConvertersController(converters);
             Ognl.setTypeConverter(context, controller);
             for(String key : parameters.getNames()) {
                 String[] values = parameters.get(key);
                 try {
+                    if(logger.isDebugEnabled()) {
+                        logger.debug("Applying " + key + " with " + Arrays.toString(values));
+                    }
                     Ognl.setValue(key, context,root, values.length==1 ? values[0] : values);
                 } catch (NoSuchPropertyException ex) {
                     // TODO optimization: be able to ignore or not
-                    // ignoring
+                    if(logger.isDebugEnabled()) {
+                        logger.debug("Ignoring exception", ex);
+                    }
                 }
             }
             removal.removeExtraElements();

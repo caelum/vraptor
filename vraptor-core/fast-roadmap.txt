@@ -10,8 +10,6 @@ right now:
 	ceci: support generic Set with ognl (look at MiscOgnlSupportTest for generic list support - you need to create a SetAccessor)
 
 TODAY
-	- support ProcuraAlunoTest -> support Long[] with AsmBased stuff support Long[]
-	- support List<Long>
 	- resolve interceptororder with interceptorstack
 
 	- v2: json output
@@ -34,6 +32,9 @@ TODAY
 
 
 	
+ASM
+	- support ProcuraAlunoTest -> support Long[] with AsmBased stuff support Long[]
+	- support List<Long>
 	
 
 	- v2: xml output
@@ -55,7 +56,8 @@ TODAY
 
 - MAKE CACHE WORKS
 - pico problem: STARTABLE/STOPABLE COMPONENTS with annotation + tests
-
+- read ALL todos
+- register in a decent way the class named ElementsRemovalBlaBlaBla
 
 
 

@@ -101,7 +101,7 @@ public class ReflectionBasedNullHandler extends ObjectNullHandler {
                 while (list.size() <= position) {
                     list.add(null);
                 }
-                Container container = (Container) context.get(Container.class.getName());
+                Container container = (Container) context.get(Container.class);
                 EmptyElementsRemoval removal = container.instanceFor(EmptyElementsRemoval.class);
                 removal.add(list);
                 list.set(position, instance);

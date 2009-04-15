@@ -49,7 +49,7 @@ public class WebInfClassesScanner implements ResourceLocator {
 
     private final File classes;
 
-    private final DirScanner scanner;
+    private final DirScanner<?> scanner;
 
     private final ResourceRegistry registry;
 

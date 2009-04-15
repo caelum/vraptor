@@ -42,6 +42,7 @@ OgnlParametersProviderTest
 ASM
 	- support ProcuraAlunoTest -> support Long[] with AsmBased stuff support Long[]
 	- support List<Long>
+- go through every request component and check if it really needs to be request based
 	
 
 	- v2: xml output

@@ -8,8 +8,10 @@ import org.junit.Test;
 import org.junit.After;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.context.request.ServletWebRequest;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletResponse;
 
 import br.com.caelum.vraptor.ioc.spring.components.ConstructorInjection;
 import br.com.caelum.vraptor.ioc.spring.components.DummyComponent;
@@ -26,8 +28,8 @@ public class SpringBasedContainerTest {
 
     @Before
     public void initContainer() {
-        RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(new HttpServletRequestMock()));
         mockery = new Mockery();
+        RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(new HttpServletRequestMock()));
         container = new SpringBasedContainer("br.com.caelum.vraptor.ioc.spring");
         container.start(mockery.mock(ServletContext.class));
     }

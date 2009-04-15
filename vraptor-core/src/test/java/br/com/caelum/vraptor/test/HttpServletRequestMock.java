@@ -58,6 +58,7 @@ public class HttpServletRequestMock implements HttpServletRequest {
     private String localName;
     private String localAddr;
     private int localPort;
+    private HttpSession session;
 
     public String getAuthType() {
         return authType;
@@ -188,11 +189,15 @@ public class HttpServletRequestMock implements HttpServletRequest {
     }
 
     public HttpSession getSession(boolean b) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return session;
     }
 
     public HttpSession getSession() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return session;
+    }
+
+    public void setSession(HttpSession session) {
+        this.session = session;
     }
 
     public boolean isRequestedSessionIdValid() {

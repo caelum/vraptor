@@ -12,6 +12,7 @@ import com.thoughtworks.paranamer.BytecodeReadingParanamer;
 import com.thoughtworks.paranamer.CachingParanamer;
 import com.thoughtworks.paranamer.ParameterNamesNotFoundException;
 import com.thoughtworks.paranamer.Paranamer;
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
 /**
  * Paranamer based parameter name provider provides parameter names based on
@@ -20,6 +21,7 @@ import com.thoughtworks.paranamer.Paranamer;
  * 
  * @author Guilherme Silveira
  */
+@ApplicationScoped
 public class ParanamerNameProvider implements ParameterNameProvider{
 
     private static final String[] EMPTY_ARRAY = new String[0];

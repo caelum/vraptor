@@ -8,8 +8,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.context.request.ServletWebRequest;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author Fabio Kung

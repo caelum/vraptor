@@ -99,7 +99,7 @@ public class SpringBasedContainer implements Container {
     }
 
     public void start(ServletContext context) {
-        register(context);
+//        register(context);
         registerApplicationScopedComponents();
         registerRequestScopedComponents();
 
@@ -139,6 +139,9 @@ public class SpringBasedContainer implements Container {
         register(OgnlParametersProvider.class);
         register(DefaultConverters.class);
         register(DefaultRequestInfo.class);
+        register(HttpServletRequestProvider.class);
+        register(HttpServletResponseProvider.class);
+        register(VRaptorRequestProvider.class);
         register(this);
     }
 

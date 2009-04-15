@@ -16,6 +16,7 @@ import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
 import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.resource.ResourceRegistry;
+import br.com.caelum.vraptor.test.HttpServletRequestMock;
 import br.com.caelum.vraptor.view.PathResolver;
 import br.com.caelum.vraptor.view.jsp.PageResult;
 import org.hamcrest.MatcherAssert;
@@ -34,7 +35,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 
 /**
  * Acceptance test that checks if the container is capable of giving all
@@ -75,15 +75,8 @@ public abstract class GenericContainerTest {
     }
 
     protected VRaptorRequest createRequest() {
-        final HttpServletRequest request = mockery.mock(HttpServletRequest.class, "req" + counter++);
-        mockery.checking(new Expectations() {
-            {
-                allowing(request).getSession();
-                will(returnValue(mockery.mock(HttpSession.class, "session" + counter++)));
-                allowing(request).getParameterMap();
-                will(returnValue(new HashMap<String, String>()));
-            }
-        });
+        HttpServletRequestMock request = new HttpServletRequestMock();
+        request.setSession(mockery.mock(HttpSession.class, "session" + counter++));
         HttpServletResponse response = mockery.mock(HttpServletResponse.class, "res" + counter++);
         return new VRaptorRequest(context, request, response);
     }

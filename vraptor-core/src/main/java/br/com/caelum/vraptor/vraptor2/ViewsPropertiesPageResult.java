@@ -61,7 +61,7 @@ public class ViewsPropertiesPageResult implements PageResult {
             try {
                 result = evaluator.parseExpression(path, logic);
             } catch (ExpressionEvaluationException e) {
-                throw new IOException("Unable to redirect while evaluating expression '" + path + "'.", e);
+                throw new ServletException("Unable to redirect while evaluating expression '" + path + "'.", e);
             }
             if (logger.isDebugEnabled()) {
                 logger.debug("overriden view found for " + key + " : " + path + " expressed as " + result);

@@ -58,13 +58,13 @@ public abstract class GenericContainerTest {
     public void setup() throws IOException {
         counter = 0;
         this.mockery = new Mockery();
+        this.context = mockery.mock(ServletContext.class);
         final File tmpDir = File.createTempFile("tmp_", "_file").getParentFile();
         final File tmp = new File(tmpDir, "_tmp_vraptor_test");
         tmp.mkdir();
-        this.context = mockery.mock(ServletContext.class);
         mockery.checking(new Expectations() {
             {
-                // TODO argh! move to the Pico specific test
+                // argh, should be in Pico specific tests
                 allowing(context).getRealPath("");
                 will(returnValue(tmp.getAbsolutePath()));
             }

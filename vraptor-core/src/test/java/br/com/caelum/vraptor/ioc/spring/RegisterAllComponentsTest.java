@@ -4,6 +4,7 @@ import br.com.caelum.vraptor.core.VRaptorRequest;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
 import br.com.caelum.vraptor.ioc.GenericContainerTest;
 import br.com.caelum.vraptor.test.HttpServletRequestMock;
+import org.jmock.Expectations;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -19,6 +20,13 @@ public class RegisterAllComponentsTest extends GenericContainerTest {
     public void setup() throws IOException {
         RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(new HttpServletRequestMock()));
         super.setup();
+        mockery.checking(new Expectations() {
+            {
+                allowing(context).getInitParameter(SpringProvider.BASE_PACKAGES_PARAMETER_NAME);
+                will(returnValue("no.packages"));
+            }
+        });
+
     }
 
     @Override

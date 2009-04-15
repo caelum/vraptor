@@ -68,6 +68,7 @@ public class OgnlToConvertersControllerTest {
     }
 
     public static class Leg {
+        @SuppressWarnings("unused")
         private int length;
 
         public Leg(int length) {
@@ -115,6 +116,25 @@ public class OgnlToConvertersControllerTest {
         Ognl.setValue("tail", context, myCat, "15");
         assertThat(myCat.tail.length, is(equalTo(15)));
         mockery.assertIsSatisfied();
+    }
+    
+    @SuppressWarnings("unchecked")
+    @Test(expected=IllegalArgumentException.class)
+    public void shouldThrowExceptionIfNoConverterIsFound() throws Throwable {
+        mockery.checking(new Expectations() {
+            {
+                one(converters).to(Tail.class, null);
+                will(returnValue(null));
+            }
+        });
+        Map context = Ognl.createDefaultContext(myCat);
+        Ognl.setTypeConverter(context, controller);
+        try {
+            Ognl.setValue("tail", context, myCat, "15");
+        } catch (OgnlException e) {
+            mockery.assertIsSatisfied();
+            throw e.getCause();
+        }
     }
 
 }

@@ -29,6 +29,22 @@ public class StupidTranslatorTest {
 		this.request = mockery.mock(HttpServletRequest.class);
 	}
 
+    @Test
+    public void handlesInclude() {
+        
+        final ResourceMethod expected = mockery.mock(ResourceMethod.class);
+        
+        mockery.checking(new Expectations(){{
+            exactly(2).of(request).getAttribute(StupidTranslator.INCLUDE_REQUEST_URI); will(returnValue("/url"));
+            one(request).getMethod(); will(returnValue("POST"));
+            one(registry).gimmeThis("/url", "POST"); will(returnValue(expected));
+        }});
+        
+        ResourceMethod resource = translator.translate(request);
+        assertThat(resource, is(equalTo(expected)));
+        mockery.assertIsSatisfied();
+        
+    }
 	@Test
 	public void testCanHandleTheCorrectMethod() {
 		

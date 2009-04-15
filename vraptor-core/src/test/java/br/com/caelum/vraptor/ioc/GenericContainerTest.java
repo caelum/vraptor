@@ -92,7 +92,7 @@ public abstract class GenericContainerTest {
         mockery.checking(new Expectations() {
             {
                 allowing(request).getSession(); will(returnValue(mockery.mock(HttpSession.class, "session" + counter++)));
-                allowing(request).getParameterMap(); will(returnValue(new HashMap<String,Object>()));
+                allowing(request).getParameterMap(); will(returnValue(new HashMap<String, String>()));
             }
         });
         HttpServletResponse response = mockery.mock(HttpServletResponse.class, "res" + counter++);

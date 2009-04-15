@@ -39,17 +39,9 @@ public class InterceptorAcceptor implements Acceptor {
             for(Class<? extends Interceptor> internalType: sequence.getSequence()) {
                 interceptors.add(internalType);
             }
-        } catch (InstantiationException e) {
-            logger.error("Problem ocurred while instantiating an interceptor sequence",e);
-        } catch (IllegalAccessException e) {
-            logger.error("Problem ocurred while instantiating an interceptor sequence",e);
-        } catch (IllegalArgumentException e) {
-            logger.error("Problem ocurred while instantiating an interceptor sequence",e);
-        } catch (SecurityException e) {
-            logger.error("Problem ocurred while instantiating an interceptor sequence",e);
         } catch (InvocationTargetException e) {
             logger.error("Problem ocurred while instantiating an interceptor sequence",e.getCause());
-        } catch (NoSuchMethodException e) {
+        } catch (Exception e) {
             logger.error("Problem ocurred while instantiating an interceptor sequence",e);
         }
     }

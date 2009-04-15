@@ -129,6 +129,7 @@ public class OgnlParametersProviderTest {
         mockery.assertIsSatisfied();
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void removeFromTheCollectionIfAnElementIsCreatedWithinACollectionButNoFieldIsSet() throws SecurityException,
             NoSuchMethodException {

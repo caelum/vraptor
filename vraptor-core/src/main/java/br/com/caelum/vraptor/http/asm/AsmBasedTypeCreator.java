@@ -173,7 +173,7 @@ public class AsmBasedTypeCreator implements TypeCreator, Opcodes {
         }
     }
 
-    private void parse(ClassWriter cw, Class type, StringBuilder valueLists, String newTypeName, String fieldName) {
+    private void parse(ClassWriter cw, Class<?> type, StringBuilder valueLists, String newTypeName, String fieldName) {
         String definition = CONVERTER.extractTypeDefinition(type);
         String genericDefinition = null;
         parse(cw, valueLists, newTypeName, definition, genericDefinition, fieldName, loadFor(type), returnFor(type));

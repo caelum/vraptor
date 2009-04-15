@@ -49,7 +49,7 @@ public class StupidTranslator implements UrlToResourceTranslator {
     private final ResourceRegistry registry;
 
     private static final Logger logger = LoggerFactory.getLogger(StupidTranslator.class);
-    private static final String INCLUDE_REQUEST_URI = "javax.servlet.include.request_uri";
+    static final String INCLUDE_REQUEST_URI = "javax.servlet.include.request_uri";
 
     public StupidTranslator(ResourceRegistry registry) {
         this.registry = registry;

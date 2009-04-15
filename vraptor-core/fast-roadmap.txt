@@ -180,6 +180,7 @@ ONLY AFTER RELEASE
 - v2: converters with access to request/session/context
 - niceurls extra routes
 - refactor ParametersInstantiator into MethodParameters constructor?
+- vraptor forward config with request/forward/optional include
 
 OgnlGenericTypesSupportTest:
     @Test

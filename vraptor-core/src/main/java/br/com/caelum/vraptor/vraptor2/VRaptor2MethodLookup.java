@@ -36,8 +36,8 @@ public class VRaptor2MethodLookup implements ResourceAndMethodLookup {
                 continue;
             }
             String logicName = Info.getLogicName(method);
-            logicName = "/" + componentName + "." + logicName + ".logic";
-            if (logicName.equals(id)) {
+            String entireName = "/" + componentName + "." + logicName + ".logic";
+            if (entireName.equals(id)) {
                 return new DefaultResourceMethod(resource, method);
             }
         }

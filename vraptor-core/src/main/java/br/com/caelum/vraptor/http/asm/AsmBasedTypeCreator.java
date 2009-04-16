@@ -77,7 +77,7 @@ public class AsmBasedTypeCreator implements TypeCreator, Opcodes {
 
         ClassWriter cw = new ClassWriter(0);
 
-        cw.visit(V1_6, ACC_PUBLIC + ACC_SUPER, newTypeName, null, "java/lang/Object", null);
+        cw.visit(V1_5, ACC_PUBLIC + ACC_SUPER, newTypeName, null, "java/lang/Object", null);
 
         {
             MethodVisitor mv = cw.visitMethod(ACC_PUBLIC, "<init>", "()V", null, null);

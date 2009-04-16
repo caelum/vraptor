@@ -29,29 +29,28 @@
  */
 package br.com.caelum.vraptor.interceptor;
 
-import java.io.IOException;
-
-import javax.servlet.http.HttpServletResponse;
-
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Interceptor;
 import br.com.caelum.vraptor.core.InterceptorStack;
+import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.core.VRaptorRequest;
 import br.com.caelum.vraptor.http.UrlToResourceTranslator;
-import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.resource.ResourceMethod;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 public class ResourceLookupInterceptor implements Interceptor {
 
     private final UrlToResourceTranslator translator;
+    private final RequestInfo requestInfo;
     private final VRaptorRequest request;
-    private final Container container;
 
-    public ResourceLookupInterceptor(UrlToResourceTranslator translator, VRaptorRequest request, Container container) {
+    public ResourceLookupInterceptor(UrlToResourceTranslator translator, RequestInfo requestInfo,
+            VRaptorRequest request) {
         this.translator = translator;
+        this.requestInfo = requestInfo;
         this.request = request;
-        // TODO unfortunately we need the container to register the ResourceMethod
-        this.container = container;
     }
 
     public void intercept(InterceptorStack invocation, ResourceMethod ignorableMethod, Object resourceInstance) throws IOException, InterceptionException {
@@ -62,9 +61,10 @@ public class ResourceLookupInterceptor implements Interceptor {
             response.getWriter().println("resource not found");
             return;
         }
-        container.register(method);
+        requestInfo.setResourceMethod(method);
         invocation.next(method, resourceInstance);
     }
+
     public boolean accepts(ResourceMethod method) {
         return true;
     }

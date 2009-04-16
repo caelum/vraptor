@@ -1,12 +1,8 @@
 package br.com.caelum.vraptor.vraptor2;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.vraptor.validator.BasicValidationErrors;
-
 import br.com.caelum.vraptor.core.DefaultInterceptorStack;
 import br.com.caelum.vraptor.core.DefaultMethodParameters;
+import br.com.caelum.vraptor.core.DefaultRequestInfo;
 import br.com.caelum.vraptor.core.DefaultResult;
 import br.com.caelum.vraptor.core.URLParameterExtractorInterceptor;
 import br.com.caelum.vraptor.http.DefaultRequestParameters;
@@ -23,10 +19,14 @@ import br.com.caelum.vraptor.ioc.pico.DefaultDirScanner;
 import br.com.caelum.vraptor.ioc.pico.PicoProvider;
 import br.com.caelum.vraptor.ioc.pico.WebInfClassesScanner;
 import br.com.caelum.vraptor.resource.DefaultResourceRegistry;
+import org.vraptor.validator.BasicValidationErrors;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Customized provider with support for both vraptor 2 and 3 components.
- * 
+ *
  * @author Guilherme Silveira
  */
 public class Provider extends PicoProvider {
@@ -67,6 +67,7 @@ public class Provider extends PicoProvider {
         components.add(ViewInterceptor.class);
         components.add(OutjectionInterceptor.class);
         components.add(RequestResult.class);
+        components.add(DefaultRequestInfo.class);
         registerValidationErrorsComponent(components);
         // TODO the following components are not required by vraptor2/3
         // compatibility mode, but was added for unit tests

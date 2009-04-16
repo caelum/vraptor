@@ -41,6 +41,10 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 /**
+ * Provides request scope support for Spring IoC Container when
+ * org.springframework.web.context.request.RequestContextListener has not been called.
+ *
+ * @see  org.springframework.web.context.request.RequestContextListener
  * @author Fabio Kung
  */
 class RequestExecutionWrapper implements RequestExecution {
@@ -55,11 +59,18 @@ class RequestExecutionWrapper implements RequestExecution {
     }
 
     public void execute() throws IOException, VRaptorException {
-        ServletRequestAttributes requestAttributes =
-                (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-        HttpServletRequest request = requestAttributes.getRequest();
-        requestListener.requestInitialized(new ServletRequestEvent(servletContext, request));
-        execution.execute();
-        requestListener.requestDestroyed(new ServletRequestEvent(servletContext, request));
+        if(springListenerAlreadyCalled()) {
+            execution.execute();
+        } else {
+            HttpServletRequest request = VRaptorRequestHolder.currentRequest().getRequest();
+            requestListener.requestInitialized(new ServletRequestEvent(servletContext, request));
+            execution.execute();
+            requestListener.requestDestroyed(new ServletRequestEvent(servletContext, request));
+        }
+        VRaptorRequestHolder.resetRequestForCurrentThread();
+    }
+
+    private boolean springListenerAlreadyCalled() {
+        return RequestContextHolder.getRequestAttributes() == null;
     }
 }

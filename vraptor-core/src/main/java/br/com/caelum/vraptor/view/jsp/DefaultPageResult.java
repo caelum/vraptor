@@ -29,19 +29,19 @@
  */
 package br.com.caelum.vraptor.view.jsp;
 
-import java.io.IOException;
+import br.com.caelum.vraptor.View;
+import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.view.PathResolver;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import br.com.caelum.vraptor.View;
-import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.view.PathResolver;
+import java.io.IOException;
 
 /**
  * A jsp view which can be customized by providing your own PathConstructor.
- * 
+ *
  * @author Guilherme Silveira
  */
 public class DefaultPageResult implements View, PageResult {
@@ -51,11 +51,11 @@ public class DefaultPageResult implements View, PageResult {
     private final ResourceMethod method;
     private final PathResolver resolver;
 
-    public DefaultPageResult(HttpServletRequest req, HttpServletResponse res, ResourceMethod method,
+    public DefaultPageResult(HttpServletRequest req, HttpServletResponse res, RequestInfo requestInfo,
             PathResolver resolver) {
         this.request = req;
         this.response = res;
-        this.method = method;
+        this.method = requestInfo.getResourceMethod();
         this.resolver = resolver;
     }
 

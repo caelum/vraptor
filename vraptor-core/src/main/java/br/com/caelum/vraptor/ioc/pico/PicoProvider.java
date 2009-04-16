@@ -29,28 +29,18 @@
  */
 package br.com.caelum.vraptor.ioc.pico;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import javax.servlet.ServletContext;
-
-import org.picocontainer.MutablePicoContainer;
-import org.picocontainer.PicoBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import br.com.caelum.vraptor.Interceptor;
 import br.com.caelum.vraptor.core.DefaultConverters;
 import br.com.caelum.vraptor.core.DefaultInterceptorStack;
 import br.com.caelum.vraptor.core.DefaultMethodParameters;
 import br.com.caelum.vraptor.core.DefaultRequestExecution;
+import br.com.caelum.vraptor.core.DefaultRequestInfo;
 import br.com.caelum.vraptor.core.DefaultResult;
 import br.com.caelum.vraptor.core.URLParameterExtractorInterceptor;
 import br.com.caelum.vraptor.core.VRaptorRequest;
 import br.com.caelum.vraptor.http.DefaultRequestParameters;
 import br.com.caelum.vraptor.http.OgnlParametersProvider;
-import br.com.caelum.vraptor.http.ParanamerParameterNameProvider;
+import br.com.caelum.vraptor.http.ParanamerNameProvider;
 import br.com.caelum.vraptor.http.StupidTranslator;
 import br.com.caelum.vraptor.http.asm.AsmBasedTypeCreator;
 import br.com.caelum.vraptor.interceptor.DefaultInterceptorRegistry;
@@ -67,12 +57,21 @@ import br.com.caelum.vraptor.resource.DefaultResourceRegistry;
 import br.com.caelum.vraptor.resource.ResourceRegistry;
 import br.com.caelum.vraptor.view.DefaultPathResolver;
 import br.com.caelum.vraptor.view.jsp.DefaultPageResult;
+import org.picocontainer.MutablePicoContainer;
+import org.picocontainer.PicoBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.servlet.ServletContext;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Managing internal components by using pico container.<br>
  * There is an extension point through the getDefaultContainer method, which
  * allows one to give a customized container.
- * 
+ *
  * @author Guilherme Silveira
  */
 public class PicoProvider implements ContainerProvider {
@@ -116,7 +115,7 @@ public class PicoProvider implements ContainerProvider {
         components.add(AsmBasedTypeCreator.class);
         components.add(DefaultMethodLookupBuilder.class);
         components.add(DefaultPathResolver.class);
-        components.add(ParanamerParameterNameProvider.class);
+        components.add(ParanamerNameProvider.class);
         return components;
     }
 
@@ -170,6 +169,7 @@ public class PicoProvider implements ContainerProvider {
         components.add(DefaultPageResult.class);
         components.add(OgnlParametersProvider.class);
         components.add(DefaultConverters.class);
+        components.add(DefaultRequestInfo.class);
         return components;
     }
 

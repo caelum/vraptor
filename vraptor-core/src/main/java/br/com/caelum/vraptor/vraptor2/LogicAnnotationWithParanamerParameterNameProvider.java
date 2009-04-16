@@ -5,7 +5,7 @@ import java.lang.reflect.Method;
 import org.vraptor.annotations.Logic;
 
 import br.com.caelum.vraptor.http.ParameterNameProvider;
-import br.com.caelum.vraptor.http.ParanamerParameterNameProvider;
+import br.com.caelum.vraptor.http.ParanamerNameProvider;
 
 /**
  * Looks up for the Logic annotation on the method, if its found and containing
@@ -19,7 +19,7 @@ public class LogicAnnotationWithParanamerParameterNameProvider implements Parame
     private final ParameterNameProvider delegate;
 
     public LogicAnnotationWithParanamerParameterNameProvider() {
-        this(new ParanamerParameterNameProvider());
+        this(new ParanamerNameProvider());
     }
 
     public LogicAnnotationWithParanamerParameterNameProvider(ParameterNameProvider delegate) {

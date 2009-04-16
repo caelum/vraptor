@@ -9,13 +9,13 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-public class ParanamerParameterNameProviderTest {
+public class ParanamerNameProviderTest {
 
-    private ParanamerParameterNameProvider provider;
+    private ParanamerNameProvider provider;
 
     @Before
     public void setup() {
-        this.provider = new ParanamerParameterNameProvider();
+        this.provider = new ParanamerNameProvider();
     }
     
     class Field {

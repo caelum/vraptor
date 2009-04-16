@@ -5,7 +5,6 @@ import static org.hamcrest.Matchers.not;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -25,6 +24,7 @@ import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.core.DefaultInterceptorStack;
 import br.com.caelum.vraptor.core.DefaultResult;
 import br.com.caelum.vraptor.core.RequestExecution;
+import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.core.VRaptorRequest;
 import br.com.caelum.vraptor.http.OgnlParametersProvider;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
@@ -34,18 +34,16 @@ import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
 import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
 import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
 import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
-import br.com.caelum.vraptor.ioc.pico.DirScanner;
-import br.com.caelum.vraptor.ioc.pico.ResourceLocator;
-import br.com.caelum.vraptor.ioc.spring.SpringProvider;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.resource.ResourceRegistry;
+import br.com.caelum.vraptor.test.HttpServletRequestMock;
 import br.com.caelum.vraptor.view.PathResolver;
 import br.com.caelum.vraptor.view.jsp.PageResult;
 
 /**
  * Acceptance test that checks if the container is capable of giving all
  * required components.
- * 
+ *
  * @author Guilherme Silveira
  */
 @Ignore
@@ -65,22 +63,15 @@ public abstract class GenericContainerTest {
     public void setup() throws IOException {
         counter = 0;
         this.mockery = new Mockery();
+        this.context = mockery.mock(ServletContext.class);
         final File tmpDir = File.createTempFile("tmp_", "_file").getParentFile();
         final File tmp = new File(tmpDir, "_tmp_vraptor_test");
         tmp.mkdir();
-        final File unknownFile = new File(tmp, "unknown");
-        this.context = mockery.mock(ServletContext.class);
         mockery.checking(new Expectations() {
             {
+                // argh, should be in Pico specific tests
                 allowing(context).getRealPath("");
                 will(returnValue(tmp.getAbsolutePath()));
-                allowing(context).getRealPath("/WEB-INF/classes/vraptor.xml");
-                will(returnValue(unknownFile.getAbsolutePath()));
-                allowing(context).getRealPath("/WEB-INF/classes/views.properties");
-                will(returnValue(unknownFile.getAbsolutePath()));
-                // UGLY! move to Spring implementation...
-                allowing(context).getInitParameter(SpringProvider.BASE_PACKAGES_PARAMETER_NAME);
-                will(returnValue("no.packages"));
             }
         });
         createRequest();
@@ -89,13 +80,8 @@ public abstract class GenericContainerTest {
     }
 
     protected VRaptorRequest createRequest() {
-        final HttpServletRequest request = mockery.mock(HttpServletRequest.class, "req" + counter++);
-        mockery.checking(new Expectations() {
-            {
-                allowing(request).getSession(); will(returnValue(mockery.mock(HttpSession.class, "session" + counter++)));
-                allowing(request).getParameterMap(); will(returnValue(new HashMap<String,Object>()));
-            }
-        });
+        HttpServletRequestMock request = new HttpServletRequestMock();
+        request.setSession(mockery.mock(HttpSession.class, "session" + counter++));
         HttpServletResponse response = mockery.mock(HttpServletResponse.class, "res" + counter++);
         return new VRaptorRequest(context, request, response);
     }
@@ -108,7 +94,7 @@ public abstract class GenericContainerTest {
     @Test
     public void canProvideAllRequestScopedComponents() {
         checkAvailabilityFor(false, HttpServletRequest.class, HttpServletResponse.class, VRaptorRequest.class,
-                DefaultInterceptorStack.class, RequestExecution.class, ResourceLookupInterceptor.class,
+                DefaultInterceptorStack.class, RequestInfo.class, RequestExecution.class, ResourceLookupInterceptor.class,
                 InstantiateInterceptor.class, DefaultResult.class, ExecuteMethodInterceptor.class,
                 OgnlParametersProvider.class, Converters.class, HttpSession.class);
         checkAvailabilityFor(false, PageResult.class);
@@ -119,8 +105,10 @@ public abstract class GenericContainerTest {
         Container firstContainer = provider.provide(createRequest());
         Container secondContainer = provider.provide(createRequest());
 
-        firstContainer.register(mockery.mock(ResourceMethod.class, "rm" + counter++));
-        secondContainer.register(mockery.mock(ResourceMethod.class, "rm" + counter++));
+        ResourceMethod firstMethod = mockery.mock(ResourceMethod.class, "rm" + counter++);
+        ResourceMethod secondMethod = mockery.mock(ResourceMethod.class, "rm" + counter++);
+        firstContainer.instanceFor(RequestInfo.class).setResourceMethod(firstMethod);
+        secondContainer.instanceFor(RequestInfo.class).setResourceMethod(secondMethod);
 
         if (componentToRegister != null) {
             firstContainer.register(componentToRegister);
@@ -148,13 +136,13 @@ public abstract class GenericContainerTest {
 
     @Test
     public void canProvideAllApplicationScopedComponents() {
-        Class<?>[] components = new Class[] { UrlToResourceTranslator.class, ResourceRegistry.class, DirScanner.class,
-                ResourceLocator.class, TypeCreator.class, InterceptorRegistry.class, PathResolver.class, ParameterNameProvider.class };
+        Class<?>[] components = new Class[]{UrlToResourceTranslator.class, ResourceRegistry.class, TypeCreator.class,
+                InterceptorRegistry.class, PathResolver.class, ParameterNameProvider.class};
         checkAvailabilityFor(true, components);
         mockery.assertIsSatisfied();
     }
 
-    private void checkAvailabilityFor(boolean shouldBeTheSame, Class<?>... components) {
+    protected void checkAvailabilityFor(boolean shouldBeTheSame, Class<?>... components) {
         for (Class<?> component : components) {
             checkAvailabilityFor(shouldBeTheSame, component, null);
         }

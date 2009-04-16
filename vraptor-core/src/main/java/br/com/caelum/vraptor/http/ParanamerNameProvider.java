@@ -12,6 +12,7 @@ import com.thoughtworks.paranamer.BytecodeReadingParanamer;
 import com.thoughtworks.paranamer.CachingParanamer;
 import com.thoughtworks.paranamer.ParameterNamesNotFoundException;
 import com.thoughtworks.paranamer.Paranamer;
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
 /**
  * Paranamer based parameter name provider provides parameter names based on
@@ -20,13 +21,14 @@ import com.thoughtworks.paranamer.Paranamer;
  * 
  * @author Guilherme Silveira
  */
-public class ParanamerParameterNameProvider implements ParameterNameProvider{
+@ApplicationScoped
+public class ParanamerNameProvider implements ParameterNameProvider{
 
     private static final String[] EMPTY_ARRAY = new String[0];
     private final ParameterNameProvider delegate = new DefaultParameterNameProvider();
     private final Paranamer info = new CachingParanamer(new BytecodeReadingParanamer());
     
-    private static final Logger logger = LoggerFactory.getLogger(ParanamerParameterNameProvider.class);
+    private static final Logger logger = LoggerFactory.getLogger(ParanamerNameProvider.class);
 
     public String[] parameterNamesFor(Method method) {
         if (method.getParameterTypes().length == 0) {

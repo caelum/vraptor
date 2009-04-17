@@ -148,6 +148,10 @@ public class SpringBasedContainer implements Container {
     @SuppressWarnings("unchecked")
     public <T> T instanceFor(Class<T> type) {
         T instance = (T) BeanFactoryUtils.beanOfType(applicationContext, type);
+        return wrapWhenNeeded(type, instance);
+    }
+
+    private <T> T wrapWhenNeeded(Class<T> type, T instance) {
         if (RequestExecution.class.isAssignableFrom(type)) {
             return (T) new RequestExecutionWrapper((RequestExecution) instance, instanceFor(ServletContext.class));
         }

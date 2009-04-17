@@ -37,6 +37,7 @@ public class VRaptor2RequestExecution implements RequestExecution {
             interceptorStack.add(HibernateValidatorPluginInterceptor.class);
         }
         interceptorStack.add(Validator.class);
+        interceptorStack.add(ResultSupplierInterceptor.class);
         interceptorStack.add(ExecuteAndViewInterceptor.class);
         interceptorStack.add(OutjectionInterceptor.class);
         interceptorStack.add(ViewInterceptor.class);

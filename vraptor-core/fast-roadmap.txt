@@ -18,20 +18,19 @@ OgnlParametersProviderTest
     }
 
 	- v2: json output
-	- cweb tem que rodar teste antes de comecar tudo... bizarro
 	13 converters: File
+	- support Validator
+	- support HibernateValidator
+
+
+	- cweb tem que rodar teste antes de comecar tudo... bizarro
 	- niceurls with programmatic support
 	- niceurls -> path support
 	- niceurls with file config support -> path support
 	1 path annotation with support to value injection (niceurls?)
-	- support Validator
-	- support HibernateValidator
 	niceurls programatico e arquivo de config
 	
 	should ignore @br.com...Component as a component... what to do now?
-	
-
-	- v2: xml output
 
 	15 concatenate convertion and validation errors
 	support vraptor2 plugins if possible:
@@ -181,6 +180,7 @@ ONLY AFTER RELEASE
 - niceurls extra routes
 - refactor ParametersInstantiator into MethodParameters constructor?
 - vraptor forward config with request/forward/optional include
+- v2: xml output
 
 OgnlGenericTypesSupportTest:
     @Test

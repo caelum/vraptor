@@ -13,6 +13,7 @@ import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Interceptor;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.vraptor2.outject.Outjecter;
 
 public class OutjectionInterceptor implements Interceptor{
     
@@ -22,9 +23,11 @@ public class OutjectionInterceptor implements Interceptor{
     private static final Logger logger = LoggerFactory.getLogger(OutjectionInterceptor.class);
     private final HttpServletRequest request;
     private static final BeanHelper helper = new BeanHelper();
+    private final Outjecter outjecter;
     
-    public OutjectionInterceptor(HttpServletRequest request) {
+    public OutjectionInterceptor(HttpServletRequest request, Outjecter outjecter) {
         this.request = request;
+        this.outjecter = outjecter;
     }
 
     public boolean accepts(ResourceMethod method) {
@@ -50,7 +53,7 @@ public class OutjectionInterceptor implements Interceptor{
                 Object result = outject.invoke(resourceInstance);
                 String name = helper.nameForGetter(outject);
                 logger.debug("Outjecting " + name);
-                request.setAttribute(name, result);
+                outjecter.include(name, result);
             } catch (IllegalArgumentException e) {
                 throw new InterceptionException("Unable to outject value for " + outject.getName(), e);
             } catch (IllegalAccessException e) {

@@ -49,9 +49,9 @@ import java.io.IOException;
  */
 class RequestExecutionWrapper implements RequestExecution {
     private final VRaptorRequest request;
-    private RequestExecution execution;
-    private ServletContext servletContext;
-    private RequestContextListener requestListener;
+    private final RequestExecution execution;
+    private final ServletContext servletContext;
+    private final RequestContextListener requestListener;
 
     public RequestExecutionWrapper(VRaptorRequest request, RequestExecution execution, ServletContext context) {
         this.request = request;
@@ -65,15 +65,15 @@ class RequestExecutionWrapper implements RequestExecution {
         if (springListenerAlreadyCalled()) {
             execution.execute();
         } else {
-            HttpServletRequest request = VRaptorRequestHolder.currentRequest().getRequest();
-            requestListener.requestInitialized(new ServletRequestEvent(servletContext, request));
+            HttpServletRequest webRequest = request.getRequest();
+            requestListener.requestInitialized(new ServletRequestEvent(servletContext, webRequest));
             execution.execute();
-            requestListener.requestDestroyed(new ServletRequestEvent(servletContext, request));
+            requestListener.requestDestroyed(new ServletRequestEvent(servletContext, webRequest));
         }
         VRaptorRequestHolder.resetRequestForCurrentThread();
     }
 
     private boolean springListenerAlreadyCalled() {
-        return RequestContextHolder.getRequestAttributes() == null;
+        return RequestContextHolder.getRequestAttributes() != null;
     }
 }

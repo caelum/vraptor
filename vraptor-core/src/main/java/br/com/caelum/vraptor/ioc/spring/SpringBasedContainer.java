@@ -94,12 +94,12 @@ public class SpringBasedContainer implements Container {
     private void registerCustomInjectionProcessor(GenericApplicationContext applicationContext) {
         RootBeanDefinition definition = new RootBeanDefinition(InjectionBeanPostProcessor.class);
         definition.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-        definition.getPropertyValues().addPropertyValue("order", new Integer(Ordered.LOWEST_PRECEDENCE));
+        definition.getPropertyValues().addPropertyValue("order", Ordered.LOWEST_PRECEDENCE);
         applicationContext.registerBeanDefinition(AnnotationConfigUtils.AUTOWIRED_ANNOTATION_PROCESSOR_BEAN_NAME, definition);
     }
 
     public void start(ServletContext context) {
-//        register(context);
+        registerInstanceFor(ServletContext.class, context);
         registerApplicationScopedComponents();
         registerRequestScopedComponents();
 
@@ -151,6 +151,7 @@ public class SpringBasedContainer implements Container {
         return wrapWhenNeeded(type, instance);
     }
 
+    @SuppressWarnings("unchecked")
     private <T> T wrapWhenNeeded(Class<T> type, T instance) {
         if (RequestExecution.class.isAssignableFrom(type)) {
             return (T) new RequestExecutionWrapper((RequestExecution) instance, instanceFor(ServletContext.class));
@@ -158,8 +159,8 @@ public class SpringBasedContainer implements Container {
         return instance;
     }
 
-    public void register(Object instance) {
-        applicationContext.getBeanFactory().registerSingleton(instance.getClass().getName(), instance);
+    private <T> void registerInstanceFor(Class<? super T> resolvableType, T instance) {
+        applicationContext.getBeanFactory().registerResolvableDependency(resolvableType, instance);
     }
 
     public void register(Class<?> type) {

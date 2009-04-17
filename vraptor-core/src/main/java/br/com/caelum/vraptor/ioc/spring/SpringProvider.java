@@ -15,7 +15,6 @@ public class SpringProvider implements ContainerProvider {
     private SpringBasedContainer container;
 
     public Container provide(VRaptorRequest request) {
-        VRaptorRequestHolder.setRequestForCurrentThread(request);
         return container;
     }
 

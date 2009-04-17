@@ -37,6 +37,7 @@ import br.com.caelum.vraptor.core.DefaultRequestInfo;
 import br.com.caelum.vraptor.core.DefaultResult;
 import br.com.caelum.vraptor.core.RequestExecution;
 import br.com.caelum.vraptor.core.URLParameterExtractorInterceptor;
+import br.com.caelum.vraptor.core.VRaptorRequest;
 import br.com.caelum.vraptor.http.DefaultRequestParameters;
 import br.com.caelum.vraptor.http.OgnlParametersProvider;
 import br.com.caelum.vraptor.http.ParanamerNameProvider;
@@ -142,7 +143,7 @@ public class SpringBasedContainer implements Container {
         register(HttpServletRequestProvider.class);
         register(HttpServletResponseProvider.class);
         register(VRaptorRequestProvider.class);
-        register(this);
+        registerInstanceFor(Container.class, this);
     }
 
     @SuppressWarnings("unchecked")
@@ -154,7 +155,10 @@ public class SpringBasedContainer implements Container {
     @SuppressWarnings("unchecked")
     private <T> T wrapWhenNeeded(Class<T> type, T instance) {
         if (RequestExecution.class.isAssignableFrom(type)) {
-            return (T) new RequestExecutionWrapper((RequestExecution) instance, instanceFor(ServletContext.class));
+            VRaptorRequest request = instanceFor(VRaptorRequest.class);
+            RequestExecution execution = (RequestExecution) instance;
+            ServletContext context = instanceFor(ServletContext.class);
+            return (T) new RequestExecutionWrapper(request, execution, context);
         }
         return instance;
     }

@@ -10,6 +10,13 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.vraptor2.outject.DefaultExporter;
 import br.com.caelum.vraptor.vraptor2.outject.JsonExporter;
 
+/**
+ * Supplies the expected exporter (outjecter) for this specific request.<br>
+ * Dependable on this specific request therefore being a request scoped
+ * interceptor.
+ * 
+ * @author Guilherme Silveira
+ */
 public class ResultSupplierInterceptor implements Interceptor {
 
     private final Container container;

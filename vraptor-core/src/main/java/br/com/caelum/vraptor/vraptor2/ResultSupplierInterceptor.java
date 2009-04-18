@@ -16,10 +16,12 @@ public class ResultSupplierInterceptor implements Interceptor {
 
     private final Container container;
     private final HttpServletRequest request;
+    private final ComponentInfoProvider info;
 
-    public ResultSupplierInterceptor(Container container, HttpServletRequest request) {
+    public ResultSupplierInterceptor(Container container, HttpServletRequest request, ComponentInfoProvider info) {
         this.container = container;
         this.request = request;
+        this.info = info;
     }
 
     public boolean accepts(ResourceMethod method) {
@@ -30,7 +32,7 @@ public class ResultSupplierInterceptor implements Interceptor {
             InterceptionException {
         String view = request.getParameter("view");
         // simple version to do ajax parsing
-        if ("ajax".equals(view) || request.getRequestURI().contains(".ajax.")) {
+        if (info.isAjax()) {
             container.register(JsonExporter.class);
         } else {
             container.register(DefaultExporter.class);

@@ -1,7 +1,5 @@
 package br.com.caelum.vraptor.vraptor2;
 
-import javax.servlet.http.HttpServletRequest;
-
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**
@@ -9,16 +7,16 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  * 
  * @author Guilherme Silveira
  */
-public interface InfoProvider {
+public interface ComponentInfoProvider {
 
     /**
      * Whether a show view should be shown for this request.
      */
-    boolean shouldShowView(HttpServletRequest request, ResourceMethod method);
+    boolean shouldShowView(ResourceMethod method);
 
     /**
      * Whether this is an ajax request.
      */
-    boolean isAjax(HttpServletRequest request);
+    boolean isAjax();
 
 }

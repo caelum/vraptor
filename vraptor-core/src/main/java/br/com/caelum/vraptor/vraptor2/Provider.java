@@ -65,6 +65,7 @@ public class Provider extends PicoProvider {
         components.add(VRaptor2Converters.class);
         components.add(Validator.class);
         components.add(ViewInterceptor.class);
+        components.add(DefaultComponentInfoProvider.class);
         components.add(OutjectionInterceptor.class);
         components.add(RequestResult.class);
         components.add(DefaultRequestInfo.class);

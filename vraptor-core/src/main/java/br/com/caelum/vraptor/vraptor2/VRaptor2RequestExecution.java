@@ -40,6 +40,7 @@ public class VRaptor2RequestExecution implements RequestExecution {
         interceptorStack.add(ResultSupplierInterceptor.class);
         interceptorStack.add(ExecuteAndViewInterceptor.class);
         interceptorStack.add(OutjectionInterceptor.class);
+        interceptorStack.add(AjaxInterceptor.class);
         interceptorStack.add(ViewInterceptor.class);
         interceptorStack.next(null, null);
     }

@@ -57,9 +57,6 @@ public class PicoContainersProvider implements RegisterContainer {
         if (sessionScope == null) {
             sessionScope = createSessionContainer(session);
         }
-        for (Class<?> componentType : sessionScoped) {
-            container.addComponent(componentType);
-        }
         if (logger.isDebugEnabled()) {
             logger.debug("Request components are " + requestScoped);
         }
@@ -79,12 +76,15 @@ public class PicoContainersProvider implements RegisterContainer {
     }
 
     private MutablePicoContainer createSessionContainer(HttpSession session) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("Session components are " + sessionScoped);
-        }
         MutablePicoContainer sessionScope = new PicoBuilder(this.container).withCaching().build();
         sessionScope.addComponent(session);
         session.setAttribute(CONTAINER_SESSION_KEY, sessionScope);
+        if (logger.isDebugEnabled()) {
+            logger.debug("Session components are " + sessionScoped);
+        }
+        for (Class<?> componentType : sessionScoped) {
+            container.addComponent(componentType);
+        }
         return sessionScope;
     }
 

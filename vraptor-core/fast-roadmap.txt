@@ -142,6 +142,8 @@ maybe
 
 
 ONLY AFTER RELEASE
+- common-fileupload is mandatory, make it optional by only registering the interceptor if on the classpath
+	- same thing with hibernate's validator plugin interceptor and vraptor2
 - DDD related: ContainerBasedNullHandler support (non cached instances)
 - better than vpraptor2: niceurl route caching	
 - better tha vraptor2: faster niceurl parsing when matching

@@ -11,7 +11,7 @@ import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Interceptor;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.vraptor2.outject.JsonExporter;
+import br.com.caelum.vraptor.vraptor2.outject.JsonOutjecter;
 import br.com.caelum.vraptor.vraptor2.outject.Outjecter;
 
 /**
@@ -46,7 +46,7 @@ public class AjaxInterceptor implements Interceptor {
     public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws IOException,
             InterceptionException {
         if (info.isAjax()) {
-            JsonExporter outjecter = (JsonExporter) this.outjecter;
+            JsonOutjecter outjecter = (JsonOutjecter) this.outjecter;
             CharSequence output = new JSONSerializer().serialize(outjecter.contents());
             response.setCharacterEncoding(UTF8);
             response.setContentType("application/json");

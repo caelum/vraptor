@@ -7,11 +7,11 @@ import javax.servlet.http.HttpServletRequest;
  * 
  * @author Guilehrme Silveira
  */
-public class DefaultExporter implements Outjecter {
+public class DefaultOutjecter implements Outjecter {
 
     private final HttpServletRequest request;
 
-    public DefaultExporter(HttpServletRequest request) {
+    public DefaultOutjecter(HttpServletRequest request) {
         this.request = request;
     }
 

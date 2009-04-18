@@ -7,8 +7,8 @@ import br.com.caelum.vraptor.Interceptor;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.vraptor2.outject.DefaultExporter;
-import br.com.caelum.vraptor.vraptor2.outject.JsonExporter;
+import br.com.caelum.vraptor.vraptor2.outject.DefaultOutjecter;
+import br.com.caelum.vraptor.vraptor2.outject.JsonOutjecter;
 
 /**
  * Supplies the expected exporter (outjecter) for this specific request.<br>
@@ -35,9 +35,9 @@ public class ResultSupplierInterceptor implements Interceptor {
             InterceptionException {
         // simple version to do ajax parsing
         if (info.isAjax()) {
-            container.register(JsonExporter.class);
+            container.register(JsonOutjecter.class);
         } else {
-            container.register(DefaultExporter.class);
+            container.register(DefaultOutjecter.class);
         }
         stack.next(method, resourceInstance);
     }

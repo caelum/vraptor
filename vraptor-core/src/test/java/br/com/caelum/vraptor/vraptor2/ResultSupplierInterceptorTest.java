@@ -10,8 +10,8 @@ import org.junit.Test;
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.vraptor2.outject.DefaultExporter;
-import br.com.caelum.vraptor.vraptor2.outject.JsonExporter;
+import br.com.caelum.vraptor.vraptor2.outject.DefaultOutjecter;
+import br.com.caelum.vraptor.vraptor2.outject.JsonOutjecter;
 
 public class ResultSupplierInterceptorTest {
 
@@ -35,7 +35,7 @@ public class ResultSupplierInterceptorTest {
         mockery.checking(new Expectations() {
             {
                 one(info).isAjax(); will(returnValue(true));
-                one(container).register(JsonExporter.class);
+                one(container).register(JsonOutjecter.class);
                 one(stack).next(null,null);
             }
         });
@@ -48,7 +48,7 @@ public class ResultSupplierInterceptorTest {
         mockery.checking(new Expectations() {
             {
                 one(info).isAjax(); will(returnValue(false));
-                one(container).register(DefaultExporter.class);
+                one(container).register(DefaultOutjecter.class);
                 one(stack).next(null,null);
             }
         });

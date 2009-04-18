@@ -16,14 +16,14 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.core.InterceptorStack;
-import br.com.caelum.vraptor.vraptor2.outject.JsonExporter;
+import br.com.caelum.vraptor.vraptor2.outject.JsonOutjecter;
 
 public class AjaxInterceptorTest {
 
     private Mockery mockery;
     private ComponentInfoProvider info;
     private HttpServletResponse response;
-    private JsonExporter outjecter;
+    private JsonOutjecter outjecter;
     private AjaxInterceptor interceptor;
     private InterceptorStack stack;
 
@@ -31,7 +31,7 @@ public class AjaxInterceptorTest {
     public void setup() {
         this.mockery = new Mockery();
         this.stack = mockery.mock(InterceptorStack.class);
-        this.outjecter = new JsonExporter();
+        this.outjecter = new JsonOutjecter();
         this.info = mockery.mock(ComponentInfoProvider.class);
         this.response = mockery.mock(HttpServletResponse.class);
         this.interceptor = new AjaxInterceptor(outjecter, response, info);

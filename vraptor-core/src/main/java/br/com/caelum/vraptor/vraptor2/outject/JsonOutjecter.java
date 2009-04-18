@@ -8,11 +8,11 @@ import java.util.Map;
  * 
  * @author Guilherme Silveira
  */
-public class JsonExporter implements Outjecter {
+public class JsonOutjecter implements Outjecter {
 
     private final HashMap<String, Object> toExport;
 
-    public JsonExporter() {
+    public JsonOutjecter() {
         this.toExport = new HashMap<String, Object>();
     }
 

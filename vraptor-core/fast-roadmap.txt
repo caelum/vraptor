@@ -1,17 +1,18 @@
-- refactor all interceptors from RequestExecution inside the DefaultInterceptorStack or InterceptorRegistry so it always load. 
-- this way, the Execution bla bla should always ask the accept method before proceeding 
 
 right now:
 
 	ceci: testar o vraptor2-compatible-example sem o hibernate.jar no classpath (conferir... tem que ter certeza) e ver se nao da classnotfound
 	ceci: BigInteger converter (+test)... ja existe de BigDecimal (se bobear, ja existe no vraptor2)
+	ceci: annotate all converters which do not depend on session or request as @AppScoped
+
 	ceci: converters: jodatime (ver no vraptor2)
 		- se o arquivo jodatime.jar estiver no classpath (use Class.forName com catch exception), loada automatico
 		- se estiver no classpath, tem que adicionar os conversores atraves de reflection, nao pode referenciar nenhuma classe diretamente que referencia joda
 	ceci: time converters (igual ao Date e ao Calendar, so que usa Time.SHORT, ou pattern hh:mm, ver no vraptor2...)
 		- nao cadastra-los por padrao
 	ceci: support generic Set with ognl (look at MiscOgnlSupportTest for generic list support - you need to create a SetAccessor)
-	ceci: annotate all converters which do not depend on session or request as @AppScoped
+	ceci: customizable error process on request execution
+	ceci: 404 component
 
 TODAY
 OgnlParametersProviderTest
@@ -21,40 +22,27 @@ OgnlParametersProviderTest
 		asm support List<Long>
     }
 
-	13 converters: File
+	- vraptor2: session scope component lookup for instantiation 
+	- converters: File
 	- support Validator
 	- support HibernateValidator
 
 
-	- startable api
+	- pico problem: STARTABLE/STOPABLE COMPONENTS with annotation + tests
 	- cweb tem que rodar teste antes de comecar tudo... bizarro
 	- niceurls with programmatic support
 	- niceurls -> path support
 	- niceurls with file config support -> path support
-	1 path annotation with support to value injection (niceurls?)
-	niceurls programatico e arquivo de config
-	
-	should ignore @br.com...Component as a component... what to do now?
-
-	15 concatenate convertion and validation errors
-	support vraptor2 plugins if possible:
-		- what else?
-	17 customizable error process on request execution
-	18 404 component
-	20 hibernate plugin
-	21 custom converters for specified method parameters
-	22 setting errors during ognl expression evaluation should be defined as validation errors
-	- default dir scanner misses unit tests
-	23 json output support
-	24 xml output support
-	25 better exception handling everywhere
-	- v2: lookup custom converter annotated field and complain?
-- caelumweb use method FILL to app scope and request scope: adds to a list and adds on the run
-
-- MAKE CACHE WORKS
-- pico problem: STARTABLE/STOPABLE COMPONENTS with annotation + tests
-- read ALL todos
-- register in a decent way the class named ElementsRemovalBlaBlaBla
+	- path annotation with support to value injection (niceurls?)
+	- should ignore @br.com...Component as a component... what to do now?
+	- concatenate convertion and validation errors
+	- hibernate plugin
+	- custom converters for specified method parameters
+	- setting errors during ognl expression evaluation should be defined as validation errors
+	- json output support
+	- xml output support
+	- better exception handling everywhere
+	- vraptor2: app scope component lookup for instantiation 
 
 
 
@@ -113,6 +101,7 @@ right before release
 	go through every request component and check if it really needs to be request based
 	verify org.apache.log4j logs -> sl4j
 	copyright in all files check
+	- read ALL todos
 	vraptor2 release with customized code
 		the org.vraptor.Component annotation was modified
 		vraptor2 bug found: HibernateLogicMethod: params with more than one dot does not work: modified
@@ -185,6 +174,12 @@ ONLY AFTER RELEASE
 - refactor ParametersInstantiator into MethodParameters constructor?
 - vraptor forward config with request/forward/optional include
 - v2: xml output
+- refactor all interceptors from RequestExecution inside the DefaultInterceptorStack or InterceptorRegistry so it always load. 
+	- this way, the Execution bla bla should always ask the accept method before proceeding
+- MAKE CACHE WORKS
+	support vraptor2 plugins if possible:
+		- what else?
+	- v2: lookup custom converter annotated field and complain?
 
 OgnlGenericTypesSupportTest:
     @Test

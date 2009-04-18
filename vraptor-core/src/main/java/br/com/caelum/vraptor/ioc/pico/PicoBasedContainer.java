@@ -46,7 +46,6 @@ public class PicoBasedContainer implements Container {
     private final MutablePicoContainer container;
 
     public PicoBasedContainer(MutablePicoContainer container, VRaptorRequest request, ResourceRegistry resources) {
-        this.parent = parent;
         this.container = container;
         // TODO try to remove addComponent(this) - InstantiateInterceptor and
         // InterceptorStack

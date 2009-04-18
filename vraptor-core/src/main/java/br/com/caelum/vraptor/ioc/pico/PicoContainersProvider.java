@@ -1,7 +1,6 @@
 package br.com.caelum.vraptor.ioc.pico;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -47,29 +46,40 @@ public class PicoContainersProvider implements RegisterContainer {
     }
 
     public Container provide(VRaptorRequest request) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("Request components are " + Arrays.asList(requestScoped));
-            logger.debug("Session components are " + sessionScoped);
-        }
         HttpSession session = request.getRequest().getSession();
-        MutablePicoContainer sessionContainer = (MutablePicoContainer) session.getAttribute(CONTAINER_SESSION_KEY);
-        MutablePicoContainer container = new PicoBuilder(this.container).withCaching().build();
+        MutablePicoContainer sessionScope = (MutablePicoContainer) session.getAttribute(CONTAINER_SESSION_KEY);
+        if (sessionScope == null) {
+            sessionScope = createSessionContainer(session);
+        }
+        for (Class<?> componentType : sessionScoped) {
+            container.addComponent(componentType);
+        }
+        if (logger.isDebugEnabled()) {
+            logger.debug("Request components are " + requestScoped);
+        }
+        MutablePicoContainer requestScope = new PicoBuilder(sessionScope).withCaching().build();
         // TODO guarantee request component registered order on tests!!!
         for (Class<?> componentType : requestScoped) {
-            container.addComponent(componentType);
+            requestScope.addComponent(componentType);
         }
-        for (Class<?> componentType : childComponents) {
-            container.addComponent(componentType);
+        for (Class<? extends Interceptor> type : this.container.getComponent(InterceptorRegistry.class).all()) {
+            requestScope.addComponent(type);
         }
-        for (Class<? extends Interceptor> type : instanceFor(InterceptorRegistry.class).all()) {
-            container.addComponent(type);
-        }
-        container.addComponent(request.getRequest().getSession());
-        container.addComponent(request).addComponent(request.getRequest()).addComponent(request.getResponse());
+        requestScope.addComponent(request).addComponent(request.getRequest()).addComponent(request.getResponse());
         // cache(CachedConverters.class, Converters.class);
-        PicoBasedContainer baseContainer = new PicoBasedContainer(container, request,
-                instanceFor(ResourceRegistry.class));
+        PicoBasedContainer baseContainer = new PicoBasedContainer(requestScope, request,
+                this.container.getComponent(ResourceRegistry.class));
         return baseContainer;
+    }
+
+    private MutablePicoContainer createSessionContainer(HttpSession session) {
+        if (logger.isDebugEnabled()) {
+            logger.debug("Session components are " + sessionScoped);
+        }
+        MutablePicoContainer sessionScope = new PicoBuilder(this.container).withCaching().build();
+        sessionScope.addComponent(session);
+        session.setAttribute(CONTAINER_SESSION_KEY, sessionScope);
+        return sessionScope;
     }
 
 }

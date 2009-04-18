@@ -14,6 +14,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.InterceptionException;
+import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.view.jsp.PageResult;
 
 public class ViewInterceptorTest {
@@ -22,6 +23,8 @@ public class ViewInterceptorTest {
     private RequestResult requestResult;
     private PageResult result;
     private ViewInterceptor interceptor;
+    private ComponentInfoProvider info;
+    private ResourceMethod method;
 
     @Before
     public void setup() throws NoSuchMethodException {
@@ -29,17 +32,20 @@ public class ViewInterceptorTest {
         this.requestResult = new RequestResult();
         this.requestResult.setValue("ok");
         this.result = mockery.mock(PageResult.class);
-        this.interceptor = new ViewInterceptor(result, requestResult);
+        this.info = mockery.mock(ComponentInfoProvider.class);
+        this.method = mockery.mock(ResourceMethod.class);
+        this.interceptor = new ViewInterceptor(result, requestResult, info);
     }
 
     @Test
     public void shouldForward() throws SecurityException, NoSuchMethodException, InterceptionException, IOException, ServletException {
         mockery.checking(new Expectations() {
             {
+                one(info).shouldShowView(method); will(returnValue(true));
                 one(result).forward("ok");
             }
         });
-        interceptor.intercept(null, null, null);
+        interceptor.intercept(null, this.method, null);
         mockery.assertIsSatisfied();
     }
     class MyThrowable extends Throwable {
@@ -52,11 +58,12 @@ public class ViewInterceptorTest {
         final Throwable cause = new MyThrowable();
         mockery.checking(new Expectations() {
             {
+                one(info).shouldShowView(method); will(returnValue(true));
                 one(result).forward("ok"); will(throwException(new ServletException(cause)));
             }
         });
         try {
-            interceptor.intercept(null, null, null);
+            interceptor.intercept(null, method, null);
         } catch (InterceptionException e) {
             assertThat(e.getCause().getCause().getClass(), is(typeCompatibleWith(MyThrowable.class)));
             mockery.assertIsSatisfied();
@@ -66,5 +73,16 @@ public class ViewInterceptorTest {
         Assert.fail("Exception expected");
     }
 
+
+    @Test
+    public void doesNothingInAViewlessMethodResource() throws SecurityException, NoSuchMethodException, InterceptionException, IOException, ServletException {
+        mockery.checking(new Expectations() {
+            {
+                one(info).shouldShowView(method); will(returnValue(false));
+            }
+        });
+        interceptor.intercept(null, this.method, null);
+        mockery.assertIsSatisfied();
+    }
 
 }

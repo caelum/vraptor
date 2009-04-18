@@ -14,10 +14,12 @@ public class ViewInterceptor implements Interceptor {
 
     private RequestResult reqResult;
     private final PageResult result;
-    
-    public ViewInterceptor(PageResult result, RequestResult reqResult) {
+    private final ComponentInfoProvider info;
+
+    public ViewInterceptor(PageResult result, RequestResult reqResult, ComponentInfoProvider info) {
         this.result = result;
         this.reqResult = reqResult;
+        this.info = info;
     }
 
     public boolean accepts(ResourceMethod method) {
@@ -26,11 +28,13 @@ public class ViewInterceptor implements Interceptor {
 
     public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws IOException,
             InterceptionException {
-        try {
-            this.result.forward(reqResult.getValue());
-        } catch (ServletException e) {
-            // TODO better
-            throw new InterceptionException(e.getMessage(), e);
+        if (info.shouldShowView(method)) {
+            try {
+                this.result.forward(reqResult.getValue());
+            } catch (ServletException e) {
+                // TODO better
+                throw new InterceptionException(e.getMessage(), e);
+            }
         }
     }
 

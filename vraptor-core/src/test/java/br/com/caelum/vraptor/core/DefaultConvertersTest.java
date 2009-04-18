@@ -1,10 +1,11 @@
 package br.com.caelum.vraptor.core;
 
-import static org.hamcrest.MatcherAssert.*;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.typeCompatibleWith;
 
 import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
 import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,6 +28,11 @@ public class DefaultConvertersTest {
         this.mockery = new VRaptorMockery();
         this.container = mockery.mock(Container.class);
         this.registerContainer = mockery.mock(RegisterContainer.class);
+        mockery.checking(new Expectations() {
+            {
+                allowing(registerContainer).register((Class)with(an(Class.class)));
+            }
+        });
         this.converters = new DefaultConverters(registerContainer);
     }
 
@@ -71,9 +77,6 @@ public class DefaultConvertersTest {
         mockery.checking(new Expectations() {
             {
                 one(container).instanceFor(MyConverter.class);
-                will(returnValue(null));
-                one(registerContainer).register(MyConverter.class);
-                one(container).instanceFor(MyConverter.class);
                 will(returnValue(new MyConverter()));
             }
         });
@@ -81,34 +84,13 @@ public class DefaultConvertersTest {
         assertThat(found.getClass(), is(typeCompatibleWith(MyConverter.class)));
         mockery.assertIsSatisfied();
     }
-    @Test
-    public void askingTwiceForTheSameConverterWontRegisterItTwice() {
-        converters.register(MyConverter.class);
-        mockery.checking(new Expectations() {
-            {
-                one(container).instanceFor(MyConverter.class);
-                will(returnValue(null));
-                one(registerContainer).register(MyConverter.class);
-                exactly(3).of(container).instanceFor(MyConverter.class);
-                will(returnValue(new MyConverter()));
-            }
-        });
-        Converter<?> found = converters.to(MyData.class, container);
-        MatcherAssert.assertThat(found.getClass(), Matchers.is(Matchers.equalTo((Class)MyConverter.class)));
-        found = converters.to(MyData.class, container);
-        MatcherAssert.assertThat(found.getClass(), Matchers.is(Matchers.equalTo((Class)MyConverter.class)));
-        mockery.assertIsSatisfied();
-    }
 
     @Test
-    public void registersAndUsesTheLastConverterInstaceRegisteredForTheSpecifiedType() {
+    public void usesTheLastConverterInstanceRegisteredForTheSpecifiedType() {
         converters.register(MyConverter.class);
         converters.register(MySecondConverter.class);
         mockery.checking(new Expectations() {
             {
-                one(registerContainer).register(MySecondConverter.class);
-                one(container).instanceFor(MySecondConverter.class);
-                will(returnValue(null));
                 one(container).instanceFor(MySecondConverter.class);
                 will(returnValue(new MySecondConverter()));
             }

@@ -29,6 +29,25 @@
  */
 package br.com.caelum.vraptor.ioc.spring;
 
+import javax.servlet.ServletContext;
+
+import org.springframework.aop.config.AopConfigUtils;
+import org.springframework.aop.scope.ScopedProxyUtils;
+import org.springframework.beans.factory.BeanFactoryUtils;
+import org.springframework.beans.factory.annotation.AnnotatedGenericBeanDefinition;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.config.BeanDefinitionHolder;
+import org.springframework.beans.factory.support.BeanDefinitionReaderUtils;
+import org.springframework.beans.factory.support.RootBeanDefinition;
+import org.springframework.context.annotation.AnnotationBeanNameGenerator;
+import org.springframework.context.annotation.AnnotationConfigUtils;
+import org.springframework.context.annotation.ScopeMetadata;
+import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.context.support.GenericApplicationContext;
+import org.springframework.core.Ordered;
+import org.springframework.web.context.support.GenericWebApplicationContext;
+
+import br.com.caelum.vraptor.RegisterContainer;
 import br.com.caelum.vraptor.core.DefaultConverters;
 import br.com.caelum.vraptor.core.DefaultInterceptorStack;
 import br.com.caelum.vraptor.core.DefaultMethodParameters;
@@ -54,28 +73,11 @@ import br.com.caelum.vraptor.resource.DefaultMethodLookupBuilder;
 import br.com.caelum.vraptor.resource.DefaultResourceRegistry;
 import br.com.caelum.vraptor.view.DefaultPathResolver;
 import br.com.caelum.vraptor.view.jsp.DefaultPageResult;
-import org.springframework.aop.config.AopConfigUtils;
-import org.springframework.aop.scope.ScopedProxyUtils;
-import org.springframework.beans.factory.BeanFactoryUtils;
-import org.springframework.beans.factory.annotation.AnnotatedGenericBeanDefinition;
-import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.beans.factory.config.BeanDefinitionHolder;
-import org.springframework.beans.factory.support.BeanDefinitionReaderUtils;
-import org.springframework.beans.factory.support.RootBeanDefinition;
-import org.springframework.context.annotation.AnnotationBeanNameGenerator;
-import org.springframework.context.annotation.AnnotationConfigUtils;
-import org.springframework.context.annotation.ScopeMetadata;
-import org.springframework.context.annotation.ScopedProxyMode;
-import org.springframework.context.support.GenericApplicationContext;
-import org.springframework.core.Ordered;
-import org.springframework.web.context.support.GenericWebApplicationContext;
-
-import javax.servlet.ServletContext;
 
 /**
  * @author Fabio Kung
  */
-public class SpringBasedContainer implements Container {
+public class SpringBasedContainer implements Container, RegisterContainer {
     private final AnnotationBeanNameGenerator beanNameGenerator = new AnnotationBeanNameGenerator();
     private final GenericWebApplicationContext applicationContext;
 
@@ -144,6 +146,7 @@ public class SpringBasedContainer implements Container {
         register(HttpServletResponseProvider.class);
         register(VRaptorRequestProvider.class);
         registerInstanceFor(Container.class, this);
+        registerInstanceFor(RegisterContainer.class, this);
     }
 
     @SuppressWarnings("unchecked")

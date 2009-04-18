@@ -12,6 +12,7 @@ import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.VRaptorMockery;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.vraptor2.outject.Outjecter;
 
 public class OutjectionInterceptorTest {
 
@@ -19,12 +20,14 @@ public class OutjectionInterceptorTest {
     private HttpServletRequest request;
     private OutjectionInterceptor interceptor;
     private InterceptorStack stack;
+    private Outjecter outjecter;
 
     @Before
     public void setup() {
         this.mockery = new VRaptorMockery();
         this.request = mockery.mock(HttpServletRequest.class);
-        this.interceptor = new OutjectionInterceptor(request);
+        this.outjecter = mockery.mock(Outjecter.class);
+        this.interceptor = new OutjectionInterceptor(request, outjecter);
         this.stack = mockery.mock(InterceptorStack.class);
     }
 
@@ -106,8 +109,8 @@ public class OutjectionInterceptorTest {
         final ResourceMethod method = mockery.methodForResource(Dog.class);
         mockery.checking(new Expectations() {
             {
-                one(request).setAttribute("name", "james");
-                one(request).setAttribute("male", true);
+                one(outjecter).include("name", "james");
+                one(outjecter).include("male", true);
                 one(stack).next(method, dog);
             }
         });

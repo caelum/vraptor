@@ -74,37 +74,38 @@ import br.com.caelum.vraptor.view.jsp.DefaultPageResult;
  * Managing internal components by using pico container.<br>
  * There is an extension point through the registerComponents method, which
  * allows one to give a customized container.
- *
+ * 
  * @author Guilherme Silveira
  */
 public class PicoProvider implements ContainerProvider {
 
     private final MutablePicoContainer container;
-    private final List<Class<?>> childComponents;
 
     private static final Logger logger = LoggerFactory.getLogger(PicoProvider.class);
-    
+
     public PicoProvider() {
         this.container = new PicoBuilder().withCaching().build();
         this.container.addComponent(new PicoContainersProvider(this.container));
         for (Class<?> componentType : getCoreComponents()) {
             container.addComponent(componentType);
         }
-        this.childComponents = getChildComponentTypes();
-        registerComponents(this.container.getComponent(PicoContainersProvider.class));
-        if(logger.isDebugEnabled()) {
-            logger.debug("Request components are " + Arrays.asList(requestComponents));
-            logger.debug("Child components are " + childComponents);
-        }
+        registerComponents(getContainers());
         // TODO
         // cache(CacheBasedResourceRegistry.class, ResourceRegistry.class);
         // cache(CacheBasedTypeCreator.class, AsmBasedTypeCreator.class);
+    }
+
+    private PicoContainersProvider getContainers() {
+        return this.container.getComponent(PicoContainersProvider.class);
     }
 
     /**
      * Register extra components that your app wants to.
      */
     protected void registerComponents(RegisterContainer container) {
+        for (Class<?> type : getChildComponentTypes()) {
+            container.register(type);
+        }
     }
 
     /**
@@ -143,26 +144,12 @@ public class PicoProvider implements ContainerProvider {
     }
 
     public Container provide(VRaptorRequest request) {
-        MutablePicoContainer container = new PicoBuilder(this.container).withCaching().build();
-        // TODO guarantee order on tests!!!
-        for (Class<?> componentType : requestComponents) {
-            container.addComponent(componentType);
-        }
-        for (Class<?> componentType : childComponents) {
-            container.addComponent(componentType);
-        }
-        for (Class<? extends Interceptor> type : instanceFor(InterceptorRegistry.class).all()) {
-            container.addComponent(type);
-        }
-        container.addComponent(request.getRequest().getSession());
-        container.addComponent(request).addComponent(request.getRequest()).addComponent(request.getResponse());
-        // cache(CachedConverters.class, Converters.class);
-        PicoBasedContainer baseContainer = new PicoBasedContainer(this.container, container, request,
-                instanceFor(ResourceRegistry.class));
-        return baseContainer;
+        return getContainers().provide(request);
     }
 
     protected List<Class<?>> getChildComponentTypes() {
+        // TODO remove and replace by invoking register on registercontainer
+        // only if interfaces were not registered
         List<Class<?>> components = new ArrayList<Class<?>>();
         components.add(ParametersInstantiator.class);
         components.add(DefaultMethodParameters.class);

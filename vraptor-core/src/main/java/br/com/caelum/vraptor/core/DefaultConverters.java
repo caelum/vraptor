@@ -87,6 +87,7 @@ public class DefaultConverters implements Converters {
         container.register(converterType);
     }
 
+    @SuppressWarnings("unchecked")
     public Converter to(Class type, Container container) {
         for (Iterator iterator = types.iterator(); iterator.hasNext();) {
             Class<? extends Converter> converterType = (Class<? extends Converter>) iterator.next();

@@ -1,11 +1,9 @@
 package br.com.caelum.vraptor.core;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.typeCompatibleWith;
 
-import org.hamcrest.MatcherAssert;
 import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;

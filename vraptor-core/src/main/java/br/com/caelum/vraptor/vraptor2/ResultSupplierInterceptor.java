@@ -4,8 +4,8 @@ import java.io.IOException;
 
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Interceptor;
-import br.com.caelum.vraptor.RegisterContainer;
 import br.com.caelum.vraptor.core.InterceptorStack;
+import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.vraptor2.outject.DefaultOutjecter;
 import br.com.caelum.vraptor.vraptor2.outject.JsonOutjecter;
@@ -19,10 +19,10 @@ import br.com.caelum.vraptor.vraptor2.outject.JsonOutjecter;
  */
 public class ResultSupplierInterceptor implements Interceptor {
 
-    private final RegisterContainer container;
+    private final Container container;
     private final ComponentInfoProvider info;
 
-    public ResultSupplierInterceptor(RegisterContainer container, ComponentInfoProvider info) {
+    public ResultSupplierInterceptor(Container container, ComponentInfoProvider info) {
         this.container = container;
         this.info = info;
     }

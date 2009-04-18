@@ -77,15 +77,16 @@ public class PicoContainersProvider implements RegisterContainer {
 
     private MutablePicoContainer createSessionContainer(HttpSession session) {
         MutablePicoContainer sessionScope = new PicoBuilder(this.container).withCaching().build();
-        sessionScope.addComponent(session);
+        sessionScope.addComponent(HttpSession.class, session);
         session.setAttribute(CONTAINER_SESSION_KEY, sessionScope);
         if (logger.isDebugEnabled()) {
             logger.debug("Session components are " + sessionScoped);
         }
         for (Class<?> componentType : sessionScoped) {
-            container.addComponent(componentType);
+            sessionScope.addComponent(componentType);
         }
         return sessionScope;
     }
 
 }
+

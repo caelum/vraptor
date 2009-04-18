@@ -19,9 +19,15 @@ import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.SessionScoped;
 import br.com.caelum.vraptor.resource.ResourceRegistry;
 
+/**
+ * Provides containers, controlling all scopes and registering all different
+ * components on their respective areas.
+ * 
+ * @author Guilherme Silveira
+ */
 public class PicoContainersProvider implements RegisterContainer {
 
-    private static final String CONTAINER_SESSION_KEY = PicoContainersProvider.class.getName() + ".session";
+    public static final String CONTAINER_SESSION_KEY = PicoContainersProvider.class.getName() + ".session";
 
     private static final Logger logger = LoggerFactory.getLogger(PicoContainersProvider.class);
 
@@ -67,8 +73,8 @@ public class PicoContainersProvider implements RegisterContainer {
         }
         requestScope.addComponent(request).addComponent(request.getRequest()).addComponent(request.getResponse());
         // cache(CachedConverters.class, Converters.class);
-        PicoBasedContainer baseContainer = new PicoBasedContainer(requestScope, request,
-                this.container.getComponent(ResourceRegistry.class));
+        PicoBasedContainer baseContainer = new PicoBasedContainer(requestScope, request, this.container
+                .getComponent(ResourceRegistry.class));
         return baseContainer;
     }
 

@@ -71,6 +71,7 @@ public class Provider extends PicoProvider {
         components.add(RequestResult.class);
         components.add(DefaultRequestInfo.class);
         components.add(EmptyElementsRemoval.class);
+        components.add(ResultSupplierInterceptor.class);
         registerValidationErrorsComponent(components);
         // TODO the following components are not required by vraptor2/3
         // compatibility mode, but was added for unit tests

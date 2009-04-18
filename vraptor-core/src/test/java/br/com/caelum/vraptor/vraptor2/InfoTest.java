@@ -11,9 +11,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.vraptor.annotations.Component;
 import org.vraptor.annotations.Logic;
+import org.vraptor.annotations.Viewless;
 
 import br.com.caelum.vraptor.VRaptorMockery;
 import br.com.caelum.vraptor.resource.Resource;
+import br.com.caelum.vraptor.resource.ResourceMethod;
 
 public class InfoTest {
 
@@ -45,6 +47,12 @@ public class InfoTest {
 
         @Logic("value")
         public void full() {
+        }
+
+        @Viewless
+        public void nothing() {
+        }
+        public void showIt() {
         }
     }
 
@@ -148,6 +156,27 @@ public class InfoTest {
             }
         });
         assertThat(Info.isAjax(request), is(equalTo(false)));
+        mockery.assertIsSatisfied();
+    }
+    
+    @Test
+    public void shouldThreatViewlessAsNonDisplayView() throws NoSuchMethodException {
+        ResourceMethod method = mockery.methodFor(DefaultComponents.class, "nothing");
+        assertThat(Info.shouldShowView(null, method), is(equalTo(false)));
+        mockery.assertIsSatisfied();
+    }
+
+    @Test
+    public void shouldThreatNormalMethod() throws NoSuchMethodException {
+        final HttpServletRequest request = mockery.mock(HttpServletRequest.class);
+        mockery.checking(new Expectations() {
+            {
+                one(request).getRequestURI(); will(returnValue("somethig.non-ajax.logic"));
+                one(request).getParameter("view"); will(returnValue("xml"));
+            }
+        });
+        ResourceMethod method = mockery.methodFor(DefaultComponents.class, "showIt");
+        assertThat(Info.shouldShowView(request, method), is(equalTo(true)));
         mockery.assertIsSatisfied();
     }
 

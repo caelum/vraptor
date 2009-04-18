@@ -21,7 +21,6 @@ OgnlParametersProviderTest
 		asm support List<Long>
     }
 
-	(MUST) - vraptor2: session scope component lookup for instantiation 
 	(MUST) - converters: File
 	(MUST) - support Validator
 	(MUST) - support HibernateValidator
@@ -106,6 +105,9 @@ right before release
 			RecursiveFieldValidation
 			EntireFieldValidation
 			its interface
+	jira
+	forum
+	official support by caelum
 
 maybe
 	better than vraptor2: support for inheritance
@@ -304,6 +306,8 @@ done:
 	- v2: method invocation with parameters
 	- v2: @Logic (parameters=...) support
 	- v2: default Logic,Action and so on key removal
+	- v2: support for session scoped components for constructor injection
+	- v2: constructor injection only
 - converters
 	primitive
 	wrappers

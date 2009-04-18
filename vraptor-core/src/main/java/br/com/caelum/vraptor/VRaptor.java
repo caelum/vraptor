@@ -49,10 +49,12 @@ import br.com.caelum.vraptor.core.DefaultStaticContentHandler;
 import br.com.caelum.vraptor.core.RequestExecution;
 import br.com.caelum.vraptor.core.StaticContentHandler;
 import br.com.caelum.vraptor.core.VRaptorRequest;
+import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
 
 /**
- * VRaptor entry point. Provider configuration through init parameter
+ * VRaptor entry point.<br>
+ * Provider configuration is supported through init parameter.
  * 
  * @author Guilherme Silveira
  * @author Fabio Kung
@@ -60,7 +62,7 @@ import br.com.caelum.vraptor.ioc.ContainerProvider;
 public class VRaptor implements Filter {
     private ContainerProvider provider;
     private ServletContext servletContext;
-    
+
     private StaticContentHandler staticHandler;
 
     private static final Logger logger = LoggerFactory.getLogger(VRaptor.class);
@@ -89,7 +91,8 @@ public class VRaptor implements Filter {
 
         VRaptorRequest request = new VRaptorRequest(servletContext, webRequest, webResponse);
         try {
-            provider.provide(request).instanceFor(RequestExecution.class).execute();
+            Container container = provider.provide(request);
+            container.instanceFor(RequestExecution.class).execute();
         } catch (VRaptorException e) {
             throw new ServletException(e);
         }

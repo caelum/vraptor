@@ -58,9 +58,13 @@ public class VRaptor2RequestExecutionTest {
                 inSequence(sequence);
                 one(stack).add(Validator.class);
                 inSequence(sequence);
+                one(stack).add(ResultSupplierInterceptor.class);
+                inSequence(sequence);
                 one(stack).add(ExecuteAndViewInterceptor.class);
                 inSequence(sequence);
                 one(stack).add(OutjectionInterceptor.class);
+                inSequence(sequence);
+                one(stack).add(AjaxInterceptor.class);
                 inSequence(sequence);
                 one(stack).add(ViewInterceptor.class);
                 inSequence(sequence);

@@ -4,6 +4,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
 import org.vraptor.annotations.Component;
@@ -13,40 +16,47 @@ import br.com.caelum.vraptor.VRaptorMockery;
 import br.com.caelum.vraptor.resource.Resource;
 
 public class InfoTest {
-    
+
     private VRaptorMockery mockery;
 
     @Before
     public void setup() {
         this.mockery = new VRaptorMockery();
     }
-    
+
     @Component("customized")
     class CustomComponent {
-        
+
     }
+
     @Test
     public void shouldReadAComponentAnnotatedName() {
         assertThat(Info.getComponentName(CustomComponent.class), is(equalTo("customized")));
     }
+
     @Component
     class DefaultComponents {
-        public void noAnnotation(){
+        public void noAnnotation() {
         }
+
         @Logic
-        public void emptyAnnotation(){
+        public void emptyAnnotation() {
         }
+
         @Logic("value")
-        public void full(){
+        public void full() {
         }
     }
+
     @Test
     public void shouldReadAComponentDefaultName() {
         assertThat(Info.getComponentName(DefaultComponents.class), is(equalTo("DefaultComponents")));
     }
+
     @Component
     class DefaultController {
     }
+
     @Test
     public void shouldReadAComponentDefaultNameWithSuffixRemoval() {
         assertThat(Info.getComponentName(DefaultController.class), is(equalTo("default")));
@@ -59,8 +69,8 @@ public class InfoTest {
         mockery.assertIsSatisfied();
     }
 
-    class DefaultResource{
-        
+    class DefaultResource {
+
     }
 
     @Test
@@ -77,8 +87,10 @@ public class InfoTest {
     }
 
     @Test
-    public void shouldDetectTheDefaultLogicNameIfAnnotationWithoutValue() throws SecurityException, NoSuchMethodException {
-        assertThat(Info.getLogicName(DefaultComponents.class.getMethod("emptyAnnotation")), is(equalTo("emptyAnnotation")));
+    public void shouldDetectTheDefaultLogicNameIfAnnotationWithoutValue() throws SecurityException,
+            NoSuchMethodException {
+        assertThat(Info.getLogicName(DefaultComponents.class.getMethod("emptyAnnotation")),
+                is(equalTo("emptyAnnotation")));
         mockery.assertIsSatisfied();
     }
 
@@ -87,7 +99,7 @@ public class InfoTest {
         assertThat(Info.getLogicName(DefaultComponents.class.getMethod("full")), is(equalTo("value")));
         mockery.assertIsSatisfied();
     }
-    
+
     @Test
     public void shouldBeAbleToCapitalizeASingleCharacter() {
         assertThat(Info.capitalize("v"), is(equalTo("V")));
@@ -97,6 +109,45 @@ public class InfoTest {
     @Test
     public void shouldBeAbleToCapitalizeAStringLongerThanOneCharacter() {
         assertThat(Info.capitalize("value"), is(equalTo("Value")));
+        mockery.assertIsSatisfied();
+    }
+
+    @Test
+    public void shouldThreatViewParameterAsAjax() {
+        final HttpServletRequest request = mockery.mock(HttpServletRequest.class);
+        mockery.checking(new Expectations() {
+            {
+                one(request).getRequestURI(); will(returnValue(""));
+                one(request).getParameter("view"); will(returnValue("ajax"));
+            }
+        });
+        assertThat(Info.isAjax(request), is(equalTo(true)));
+        mockery.assertIsSatisfied();
+    }
+
+    @Test
+    public void shouldThreatViewURIAsAjax() {
+        final HttpServletRequest request = mockery.mock(HttpServletRequest.class);
+        mockery.checking(new Expectations() {
+            {
+                one(request).getRequestURI(); will(returnValue("somethig.ajax.logic"));
+            }
+        });
+        assertThat(Info.isAjax(request), is(equalTo(true)));
+        mockery.assertIsSatisfied();
+    }
+
+
+    @Test
+    public void shouldNormalURIAsNotAjax() {
+        final HttpServletRequest request = mockery.mock(HttpServletRequest.class);
+        mockery.checking(new Expectations() {
+            {
+                one(request).getRequestURI(); will(returnValue("somethig.non-ajax.logic"));
+                one(request).getParameter("view"); will(returnValue("xml"));
+            }
+        });
+        assertThat(Info.isAjax(request), is(equalTo(false)));
         mockery.assertIsSatisfied();
     }
 

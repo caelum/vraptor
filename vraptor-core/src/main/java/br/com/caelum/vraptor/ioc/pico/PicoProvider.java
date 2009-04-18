@@ -29,7 +29,19 @@
  */
 package br.com.caelum.vraptor.ioc.pico;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import javax.servlet.ServletContext;
+
+import org.picocontainer.MutablePicoContainer;
+import org.picocontainer.PicoBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import br.com.caelum.vraptor.Interceptor;
+import br.com.caelum.vraptor.RegisterContainer;
 import br.com.caelum.vraptor.core.DefaultConverters;
 import br.com.caelum.vraptor.core.DefaultInterceptorStack;
 import br.com.caelum.vraptor.core.DefaultMethodParameters;
@@ -57,19 +69,10 @@ import br.com.caelum.vraptor.resource.DefaultResourceRegistry;
 import br.com.caelum.vraptor.resource.ResourceRegistry;
 import br.com.caelum.vraptor.view.DefaultPathResolver;
 import br.com.caelum.vraptor.view.jsp.DefaultPageResult;
-import org.picocontainer.MutablePicoContainer;
-import org.picocontainer.PicoBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.servlet.ServletContext;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Managing internal components by using pico container.<br>
- * There is an extension point through the getDefaultContainer method, which
+ * There is an extension point through the registerComponents method, which
  * allows one to give a customized container.
  *
  * @author Guilherme Silveira
@@ -77,25 +80,31 @@ import java.util.List;
 public class PicoProvider implements ContainerProvider {
 
     private final MutablePicoContainer container;
-    private final Class<?>[] requestComponents;
     private final List<Class<?>> childComponents;
 
     private static final Logger logger = LoggerFactory.getLogger(PicoProvider.class);
-
+    
     public PicoProvider() {
         this.container = new PicoBuilder().withCaching().build();
-        for (Class<?> componentType : getApplicationComponents()) {
-            container.addComponent(componentType);
-        }
+        this.container.addComponent(new PicoContainersProvider(this.container));
         for (Class<?> componentType : getCoreComponents()) {
             container.addComponent(componentType);
         }
-        this.requestComponents = getRequestComponents();
         this.childComponents = getChildComponentTypes();
-        logger.debug("Request components are " + Arrays.asList(requestComponents));
-        logger.debug("Child components are " + childComponents);
+        registerComponents(this.container.getComponent(PicoContainersProvider.class));
+        if(logger.isDebugEnabled()) {
+            logger.debug("Request components are " + Arrays.asList(requestComponents));
+            logger.debug("Child components are " + childComponents);
+        }
+        // TODO
         // cache(CacheBasedResourceRegistry.class, ResourceRegistry.class);
         // cache(CacheBasedTypeCreator.class, AsmBasedTypeCreator.class);
+    }
+
+    /**
+     * Register extra components that your app wants to.
+     */
+    protected void registerComponents(RegisterContainer container) {
     }
 
     /**
@@ -171,14 +180,6 @@ public class PicoProvider implements ContainerProvider {
         components.add(DefaultConverters.class);
         components.add(DefaultRequestInfo.class);
         return components;
-    }
-
-    protected Class<?>[] getApplicationComponents() {
-        return new Class<?>[0];
-    }
-
-    protected Class<?>[] getRequestComponents() {
-        return new Class<?>[0];
     }
 
 }

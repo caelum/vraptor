@@ -1,4 +1,6 @@
-- rename outjecter classes
+- refactor all interceptors from RequestExecution inside the DefaultInterceptorStack or InterceptorRegistry so it always load. 
+- this way, the Execution bla bla should always ask the accept method before proceeding 
+
 right now:
 
 	ceci: testar o vraptor2-compatible-example sem o hibernate.jar no classpath (conferir... tem que ter certeza) e ver se nao da classnotfound
@@ -23,6 +25,7 @@ OgnlParametersProviderTest
 	- support HibernateValidator
 
 
+	- startable api
 	- cweb tem que rodar teste antes de comecar tudo... bizarro
 	- niceurls with programmatic support
 	- niceurls -> path support

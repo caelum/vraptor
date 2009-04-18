@@ -37,7 +37,13 @@ import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
-public class InterceptorListPriorToExecutionExtractor implements Interceptor{
+/**
+ * Extracts all interceptors which are supposed to be applied for this current
+ * resource method.
+ * 
+ * @author Guilherme Silveira
+ */
+public class InterceptorListPriorToExecutionExtractor implements Interceptor {
 
     private final InterceptorRegistry registry;
     private final Container container;
@@ -47,8 +53,8 @@ public class InterceptorListPriorToExecutionExtractor implements Interceptor{
         this.container = container;
     }
 
-    public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
-            throws IOException, InterceptionException {
+    public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws IOException,
+            InterceptionException {
         Interceptor[] interceptors = registry.interceptorsFor(method, container);
         for (Interceptor interceptor : interceptors) {
             stack.addAsNext(interceptor);

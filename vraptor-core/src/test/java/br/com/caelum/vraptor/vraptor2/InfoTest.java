@@ -49,11 +49,6 @@ public class InfoTest {
         public void full() {
         }
 
-        @Viewless
-        public void nothing() {
-        }
-        public void showIt() {
-        }
     }
 
     @Test
@@ -117,66 +112,6 @@ public class InfoTest {
     @Test
     public void shouldBeAbleToCapitalizeAStringLongerThanOneCharacter() {
         assertThat(Info.capitalize("value"), is(equalTo("Value")));
-        mockery.assertIsSatisfied();
-    }
-
-    @Test
-    public void shouldThreatViewParameterAsAjax() {
-        final HttpServletRequest request = mockery.mock(HttpServletRequest.class);
-        mockery.checking(new Expectations() {
-            {
-                one(request).getRequestURI(); will(returnValue(""));
-                one(request).getParameter("view"); will(returnValue("ajax"));
-            }
-        });
-        assertThat(Info.isAjax(request), is(equalTo(true)));
-        mockery.assertIsSatisfied();
-    }
-
-    @Test
-    public void shouldThreatViewURIAsAjax() {
-        final HttpServletRequest request = mockery.mock(HttpServletRequest.class);
-        mockery.checking(new Expectations() {
-            {
-                one(request).getRequestURI(); will(returnValue("somethig.ajax.logic"));
-            }
-        });
-        assertThat(Info.isAjax(request), is(equalTo(true)));
-        mockery.assertIsSatisfied();
-    }
-
-
-    @Test
-    public void shouldNormalURIAsNotAjax() {
-        final HttpServletRequest request = mockery.mock(HttpServletRequest.class);
-        mockery.checking(new Expectations() {
-            {
-                one(request).getRequestURI(); will(returnValue("somethig.non-ajax.logic"));
-                one(request).getParameter("view"); will(returnValue("xml"));
-            }
-        });
-        assertThat(Info.isAjax(request), is(equalTo(false)));
-        mockery.assertIsSatisfied();
-    }
-    
-    @Test
-    public void shouldThreatViewlessAsNonDisplayView() throws NoSuchMethodException {
-        ResourceMethod method = mockery.methodFor(DefaultComponents.class, "nothing");
-        assertThat(Info.shouldShowView(null, method), is(equalTo(false)));
-        mockery.assertIsSatisfied();
-    }
-
-    @Test
-    public void shouldThreatNormalMethod() throws NoSuchMethodException {
-        final HttpServletRequest request = mockery.mock(HttpServletRequest.class);
-        mockery.checking(new Expectations() {
-            {
-                one(request).getRequestURI(); will(returnValue("somethig.non-ajax.logic"));
-                one(request).getParameter("view"); will(returnValue("xml"));
-            }
-        });
-        ResourceMethod method = mockery.methodFor(DefaultComponents.class, "showIt");
-        assertThat(Info.shouldShowView(request, method), is(equalTo(true)));
         mockery.assertIsSatisfied();
     }
 

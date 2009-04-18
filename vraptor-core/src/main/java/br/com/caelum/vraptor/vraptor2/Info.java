@@ -2,14 +2,10 @@ package br.com.caelum.vraptor.vraptor2;
 
 import java.lang.reflect.Method;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.vraptor.annotations.Component;
 import org.vraptor.annotations.Logic;
-import org.vraptor.annotations.Viewless;
 
 import br.com.caelum.vraptor.resource.Resource;
-import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**
  * VRaptor 2 util methods.
@@ -70,24 +66,6 @@ public class Info {
             }
         }
         return string;
-    }
-
-    /**
-     * Returns true if this is not a "Viewless" method, not an ajax or xml
-     * request.
-     */
-    public static boolean shouldShowView(HttpServletRequest request, ResourceMethod method) {
-        if(method.getMethod().isAnnotationPresent(Viewless.class)) {
-            return false;
-        }
-        return !isAjax(request);
-    }
-
-    public static boolean isAjax(HttpServletRequest request) {
-        if(request.getRequestURI().contains(".ajax.") || "ajax".equals(request.getParameter("view"))) {
-            return true;
-        }
-        return false;
     }
 
 }

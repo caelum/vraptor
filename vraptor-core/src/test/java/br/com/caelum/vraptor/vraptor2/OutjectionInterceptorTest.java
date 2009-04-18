@@ -2,8 +2,6 @@ package br.com.caelum.vraptor.vraptor2;
 
 import java.io.IOException;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,7 +15,6 @@ import br.com.caelum.vraptor.vraptor2.outject.Outjecter;
 public class OutjectionInterceptorTest {
 
     private VRaptorMockery mockery;
-    private HttpServletRequest request;
     private OutjectionInterceptor interceptor;
     private InterceptorStack stack;
     private Outjecter outjecter;
@@ -25,9 +22,8 @@ public class OutjectionInterceptorTest {
     @Before
     public void setup() {
         this.mockery = new VRaptorMockery();
-        this.request = mockery.mock(HttpServletRequest.class);
         this.outjecter = mockery.mock(Outjecter.class);
-        this.interceptor = new OutjectionInterceptor(request, outjecter);
+        this.interceptor = new OutjectionInterceptor(outjecter);
         this.stack = mockery.mock(InterceptorStack.class);
     }
 

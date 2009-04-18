@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,18 +13,24 @@ import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.vraptor2.outject.Outjecter;
 
-public class OutjectionInterceptor implements Interceptor{
-    
+/**
+ * Uses the designated outjecter to outjects all vraptor2 compatible get
+ * accessible parameters.<br>
+ * VRaptor3-2 compatibility mode only supports type methods, not @Out annotation
+ * (further support might be implemented if required).
+ * 
+ * @author Guilherme Silveira
+ */
+public class OutjectionInterceptor implements Interceptor {
+
     private static final String GET = "get";
     private static final String IS = "is";
-    
+
     private static final Logger logger = LoggerFactory.getLogger(OutjectionInterceptor.class);
-    private final HttpServletRequest request;
     private static final BeanHelper helper = new BeanHelper();
     private final Outjecter outjecter;
-    
-    public OutjectionInterceptor(HttpServletRequest request, Outjecter outjecter) {
-        this.request = request;
+
+    public OutjectionInterceptor(Outjecter outjecter) {
         this.outjecter = outjecter;
     }
 
@@ -39,14 +43,18 @@ public class OutjectionInterceptor implements Interceptor{
         Class<?> type = method.getResource().getType();
         Method[] methods = type.getDeclaredMethods();
         for (Method outject : methods) {
-            if(outject.getName().length()<3 || !(outject.getName().startsWith(IS) || outject.getName().startsWith(GET))) {
+            if (outject.getName().length() < 3
+                    || !(outject.getName().startsWith(IS) || outject.getName().startsWith(GET))) {
                 continue;
             }
-            if(outject.getParameterTypes().length!=0) {
-                logger.error("A get method was found at " + type + " but was not used because it receives parameters. Fix it.");
+            if (outject.getParameterTypes().length != 0) {
+                logger.error("A get method was found at " + type
+                        + " but was not used because it receives parameters. Fix it.");
                 continue;
-            } else if(outject.getReturnType().equals(void.class)) {
-                logger.error("A get method was found at " + type + " but was not used because it returns void. Fix it.");
+            } else if (outject.getReturnType().equals(void.class)) {
+                logger
+                        .error("A get method was found at " + type
+                                + " but was not used because it returns void. Fix it.");
                 continue;
             }
             try {

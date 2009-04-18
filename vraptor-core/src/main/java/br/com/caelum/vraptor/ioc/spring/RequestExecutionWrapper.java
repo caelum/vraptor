@@ -31,9 +31,9 @@ package br.com.caelum.vraptor.ioc.spring;
 
 import br.com.caelum.vraptor.VRaptorException;
 import br.com.caelum.vraptor.core.RequestExecution;
+import br.com.caelum.vraptor.core.VRaptorRequest;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.RequestContextListener;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequestEvent;
@@ -44,33 +44,36 @@ import java.io.IOException;
  * Provides request scope support for Spring IoC Container when
  * org.springframework.web.context.request.RequestContextListener has not been called.
  *
- * @see  org.springframework.web.context.request.RequestContextListener
  * @author Fabio Kung
+ * @see org.springframework.web.context.request.RequestContextListener
  */
 class RequestExecutionWrapper implements RequestExecution {
-    private RequestExecution execution;
-    private ServletContext servletContext;
-    private RequestContextListener requestListener;
+    private final VRaptorRequest request;
+    private final RequestExecution execution;
+    private final ServletContext servletContext;
+    private final RequestContextListener requestListener;
 
-    public RequestExecutionWrapper(RequestExecution execution, ServletContext context) {
+    public RequestExecutionWrapper(VRaptorRequest request, RequestExecution execution, ServletContext context) {
+        this.request = request;
         this.execution = execution;
         servletContext = context;
         requestListener = new RequestContextListener();
     }
 
     public void execute() throws IOException, VRaptorException {
-        if(springListenerAlreadyCalled()) {
+        VRaptorRequestHolder.setRequestForCurrentThread(request);
+        if (springListenerAlreadyCalled()) {
             execution.execute();
         } else {
-            HttpServletRequest request = VRaptorRequestHolder.currentRequest().getRequest();
-            requestListener.requestInitialized(new ServletRequestEvent(servletContext, request));
+            HttpServletRequest webRequest = request.getRequest();
+            requestListener.requestInitialized(new ServletRequestEvent(servletContext, webRequest));
             execution.execute();
-            requestListener.requestDestroyed(new ServletRequestEvent(servletContext, request));
+            requestListener.requestDestroyed(new ServletRequestEvent(servletContext, webRequest));
         }
         VRaptorRequestHolder.resetRequestForCurrentThread();
     }
 
     private boolean springListenerAlreadyCalled() {
-        return RequestContextHolder.getRequestAttributes() == null;
+        return RequestContextHolder.getRequestAttributes() != null;
     }
 }

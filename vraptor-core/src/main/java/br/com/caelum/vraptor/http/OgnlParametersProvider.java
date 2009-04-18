@@ -65,15 +65,13 @@ public class OgnlParametersProvider implements ParametersProvider {
 
     private final EmptyElementsRemoval removal; 
 
-    public OgnlParametersProvider(TypeCreator creator, Container container, Converters converters, ParameterNameProvider provider, RequestParameters parameters) {
+    public OgnlParametersProvider(TypeCreator creator, Container container, Converters converters, ParameterNameProvider provider, RequestParameters parameters, EmptyElementsRemoval removal) {
         this.creator = creator;
         this.container = container;
         this.converters = converters;
         this.provider = provider;
         this.parameters = parameters;
-        // TODO move it from here... no need to do it like this... should receive on constructor, register earlier on
-        container.register(EmptyElementsRemoval.class);
-        this.removal = container.instanceFor(EmptyElementsRemoval.class);
+        this.removal = removal;
         OgnlRuntime.setNullHandler(Object.class, new ReflectionBasedNullHandler());
         OgnlRuntime.setPropertyAccessor(List.class, new ListAccessor());
     }

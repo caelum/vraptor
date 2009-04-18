@@ -43,13 +43,7 @@ public class OgnlParametersProviderTest {
         this.nameProvider = mockery.mock(ParameterNameProvider.class);
         this.container = mockery.mock(Container.class);
         this.removal = new EmptyElementsRemoval();
-        mockery.checking(new Expectations() {
-            {
-                one(container).register(EmptyElementsRemoval.class);
-                allowing(container).instanceFor(EmptyElementsRemoval.class); will(returnValue(removal));
-            }
-        });
-        this.provider = new OgnlParametersProvider(creator, container, converters, nameProvider, parameters);
+        this.provider = new OgnlParametersProvider(creator, container, converters, nameProvider, parameters, removal);
     }
 
     public static class Cat {

@@ -49,6 +49,7 @@ import br.com.caelum.vraptor.core.DefaultResult;
 import br.com.caelum.vraptor.core.URLParameterExtractorInterceptor;
 import br.com.caelum.vraptor.core.VRaptorRequest;
 import br.com.caelum.vraptor.http.DefaultRequestParameters;
+import br.com.caelum.vraptor.http.EmptyElementsRemoval;
 import br.com.caelum.vraptor.http.OgnlParametersProvider;
 import br.com.caelum.vraptor.http.ParanamerNameProvider;
 import br.com.caelum.vraptor.http.StupidTranslator;
@@ -162,6 +163,7 @@ public class PicoProvider implements ContainerProvider {
         components.add(OgnlParametersProvider.class);
         components.add(DefaultConverters.class);
         components.add(DefaultRequestInfo.class);
+        components.add(EmptyElementsRemoval.class);
         return components;
     }
 

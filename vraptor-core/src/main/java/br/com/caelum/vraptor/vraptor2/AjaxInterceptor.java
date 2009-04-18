@@ -14,6 +14,11 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.vraptor2.outject.JsonExporter;
 import br.com.caelum.vraptor.vraptor2.outject.Outjecter;
 
+/**
+ * VRaptor2 based ajax interceptor.
+ * 
+ * @author Guilherme Silveira
+ */
 public class AjaxInterceptor implements Interceptor {
 
     private static final String UTF8 = "UTF-8";

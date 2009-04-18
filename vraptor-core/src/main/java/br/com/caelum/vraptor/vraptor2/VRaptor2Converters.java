@@ -4,12 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.caelum.vraptor.Converter;
+import br.com.caelum.vraptor.RegisterContainer;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.core.DefaultConverters;
 import br.com.caelum.vraptor.ioc.Container;
 
 /**
- * An adaptor between vraptor2 converter list and vraptor 3.
+ * An adaptor between vraptor2 converter list and vraptor 3.<br>
+ * If you use the default converters delegate, it requires the register
+ * container in order to register new converters.
  * 
  * @author Guilherme Silveira
  */
@@ -18,9 +21,9 @@ public class VRaptor2Converters implements Converters {
     private final Converters vraptor3;
     private final List<org.vraptor.converter.Converter> converterList = new ArrayList<org.vraptor.converter.Converter>();
 
-    public VRaptor2Converters(Config config) throws ClassNotFoundException, InstantiationException,
-            IllegalAccessException {
-        this(config, new DefaultConverters());
+    public VRaptor2Converters(Config config, RegisterContainer container) throws ClassNotFoundException,
+            InstantiationException, IllegalAccessException {
+        this(config, new DefaultConverters(container));
     }
 
     @SuppressWarnings("unchecked")

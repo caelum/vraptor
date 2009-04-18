@@ -11,6 +11,7 @@ right now:
 	ceci: time converters (igual ao Date e ao Calendar, so que usa Time.SHORT, ou pattern hh:mm, ver no vraptor2...)
 		- nao cadastra-los por padrao
 	ceci: support generic Set with ognl (look at MiscOgnlSupportTest for generic list support - you need to create a SetAccessor)
+	ceci: annotate all converters which do not depend on session or request as @AppScoped
 
 TODAY
 OgnlParametersProviderTest
@@ -86,9 +87,9 @@ site docs (prior to release)
 - vraptor2 default LogicParameterAnnotationWithParanamerFallback: how to migrate when not using paranamer and annotation
 - migration tutorial on every documented topic of vraptor2
 	- might find useful things to support
+- containers now can be @Request, @Session, @App scoped
 
 kung help
-- move register method to a different intermediate interface
 - full spring support
 - Array
 - Map support

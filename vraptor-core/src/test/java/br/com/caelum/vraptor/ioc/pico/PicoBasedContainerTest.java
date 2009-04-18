@@ -50,20 +50,20 @@ public class PicoBasedContainerTest {
                 one(builder).lookupFor(with(VRaptorMatchers.resource(VRaptorInfo.class)));
             }
         });
-        this.container = new PicoBasedContainer(new PicoBuilder().build(), picoContainer, request, new DefaultResourceRegistry(builder));
+        this.container = new PicoBasedContainer(picoContainer, request, new DefaultResourceRegistry(builder));
     }
 
     @Test
     public void shouldBeAbleToInstantiateABean() {
-        this.container.register(Fruit.class);
+        this.picoContainer.addComponent(Fruit.class);
         MatcherAssert.assertThat(container.instanceFor(Fruit.class), Matchers.is(Matchers.notNullValue()));
         mockery.assertIsSatisfied();
     }
 
     @Test
     public void shouldBeAbleToInstantiateADependentBean() {
-        this.container.register(Fruit.class);
-        this.container.register(Juice.class);
+        this.picoContainer.addComponent(Fruit.class);
+        this.picoContainer.addComponent(Juice.class);
         Fruit fruit = container.instanceFor(Fruit.class);
         Juice juice = container.instanceFor(Juice.class);
         MatcherAssert.assertThat(juice, Matchers.is(Matchers.notNullValue()));

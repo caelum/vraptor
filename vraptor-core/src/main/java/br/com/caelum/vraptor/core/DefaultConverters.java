@@ -34,6 +34,7 @@ import java.util.LinkedList;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
+import br.com.caelum.vraptor.RegisterContainer;
 import br.com.caelum.vraptor.converter.BooleanConverter;
 import br.com.caelum.vraptor.converter.ByteConverter;
 import br.com.caelum.vraptor.converter.DoubleConverter;
@@ -66,7 +67,10 @@ public class DefaultConverters implements Converters {
             DoubleConverter.class, FloatConverter.class, BooleanConverter.class, LocaleBasedCalendarConverter.class,
             LocaleBasedDateConverter.class, EnumConverter.class };
 
-    public DefaultConverters() {
+    private final RegisterContainer container;
+
+    public DefaultConverters(RegisterContainer container) {
+        this.container = container;
         this.types = new LinkedList<Class<? extends Converter<?>>>();
         for (Class<? extends Converter<?>> type : DEFAULTS) {
             register(type);
@@ -80,6 +84,7 @@ public class DefaultConverters implements Converters {
                     + " should have the Convert annotation");
         }
         types.addFirst(converterType);
+        container.register(converterType);
     }
 
     public Converter to(Class type, Container container) {
@@ -87,9 +92,6 @@ public class DefaultConverters implements Converters {
             Class<? extends Converter> converterType = (Class<? extends Converter>) iterator.next();
             Class boundType = converterType.getAnnotation(Convert.class).value();
             if (boundType.isAssignableFrom(type)) {
-                if (container.instanceFor(converterType) == null) {
-                    container.register(converterType);
-                }
                 return container.instanceFor(converterType);
             }
         }

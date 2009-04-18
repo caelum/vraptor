@@ -11,6 +11,7 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
+import br.com.caelum.vraptor.RegisterContainer;
 import br.com.caelum.vraptor.VRaptorMockery;
 import br.com.caelum.vraptor.ioc.Container;
 
@@ -19,12 +20,14 @@ public class DefaultConvertersTest {
     private VRaptorMockery mockery;
     private Container container;
     private DefaultConverters converters;
+    private RegisterContainer registerContainer;
 
     @Before
     public void setup() {
         this.mockery = new VRaptorMockery();
         this.container = mockery.mock(Container.class);
-        this.converters = new DefaultConverters();
+        this.registerContainer = mockery.mock(RegisterContainer.class);
+        this.converters = new DefaultConverters(registerContainer);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -69,7 +72,7 @@ public class DefaultConvertersTest {
             {
                 one(container).instanceFor(MyConverter.class);
                 will(returnValue(null));
-                one(container).register(MyConverter.class);
+                one(registerContainer).register(MyConverter.class);
                 one(container).instanceFor(MyConverter.class);
                 will(returnValue(new MyConverter()));
             }
@@ -85,7 +88,7 @@ public class DefaultConvertersTest {
             {
                 one(container).instanceFor(MyConverter.class);
                 will(returnValue(null));
-                one(container).register(MyConverter.class);
+                one(registerContainer).register(MyConverter.class);
                 exactly(3).of(container).instanceFor(MyConverter.class);
                 will(returnValue(new MyConverter()));
             }
@@ -103,7 +106,7 @@ public class DefaultConvertersTest {
         converters.register(MySecondConverter.class);
         mockery.checking(new Expectations() {
             {
-                one(container).register(MySecondConverter.class);
+                one(registerContainer).register(MySecondConverter.class);
                 one(container).instanceFor(MySecondConverter.class);
                 will(returnValue(null));
                 one(container).instanceFor(MySecondConverter.class);

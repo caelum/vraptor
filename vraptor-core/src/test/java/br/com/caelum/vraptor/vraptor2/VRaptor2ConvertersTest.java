@@ -59,7 +59,7 @@ public class VRaptor2ConvertersTest {
                 one(config).getConverters(); will(returnValue(Arrays.asList(new String[]{VRaptor2BasedConverter.class.getName()})));
             }
         });
-        VRaptor2Converters converters = new VRaptor2Converters(config);
+        VRaptor2Converters converters = new VRaptor2Converters(config, (Converters)null);
         br.com.caelum.vraptor.Converter<?> converter = converters.to(Integer.class, container);
         assertThat(converter.getClass(), is(typeCompatibleWith(ConverterWrapper.class)));
         mockery.assertIsSatisfied();

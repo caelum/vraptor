@@ -1,5 +1,8 @@
 package br.com.caelum.vraptor.converter;
 
+import static org.hamcrest.MatcherAssert.*;
+import static org.hamcrest.Matchers.*;
+
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.jmock.Expectations;
@@ -36,18 +39,17 @@ public class CachedConvertersTest {
     @Test
     public void shouldUseTheProvidedConverterDuringFirstRequest() {
         Converter found = converters.to(CachedConvertersTest.class, container);
-        MatcherAssert.assertThat(found, Matchers.is(Matchers.equalTo(this.converter)));
+        assertThat(found, is(equalTo(this.converter)));
         mockery.assertIsSatisfied();
     }
 
     @Test
     public void shouldUseTheSameConverterOnFurtherRequests() {
         mockery.checking(new Expectations(){{
-            one(container).register(converter.getClass());
             one(container).instanceFor(converter.getClass()); will(returnValue(converter));
         }});
         Converter found = converters.to(CachedConvertersTest.class, container);
-        MatcherAssert.assertThat(converters.to(CachedConvertersTest.class, container), Matchers.is(Matchers.equalTo(found)));
+        assertThat(converters.to(CachedConvertersTest.class, container), is(equalTo(found)));
         mockery.assertIsSatisfied();
     }
 

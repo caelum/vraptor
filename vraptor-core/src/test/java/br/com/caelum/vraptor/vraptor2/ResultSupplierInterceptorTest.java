@@ -8,8 +8,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.InterceptionException;
+import br.com.caelum.vraptor.RegisterContainer;
 import br.com.caelum.vraptor.core.InterceptorStack;
-import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.vraptor2.outject.DefaultOutjecter;
 import br.com.caelum.vraptor.vraptor2.outject.JsonOutjecter;
 
@@ -17,14 +17,14 @@ public class ResultSupplierInterceptorTest {
 
     private Mockery mockery;
     private ComponentInfoProvider info;
-    private Container container;
+    private RegisterContainer container;
     private ResultSupplierInterceptor interceptor;
     private InterceptorStack stack;
 
     @Before
     public void setup() {
         this.mockery = new Mockery();
-        this.container = mockery.mock(Container.class);
+        this.container = mockery.mock(RegisterContainer.class);
         this.info = mockery.mock(ComponentInfoProvider.class);
         this.stack = mockery.mock(InterceptorStack.class);
         this.interceptor = new ResultSupplierInterceptor(container, info);

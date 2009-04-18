@@ -6,6 +6,7 @@ import br.com.caelum.vraptor.core.DefaultRequestInfo;
 import br.com.caelum.vraptor.core.DefaultResult;
 import br.com.caelum.vraptor.core.URLParameterExtractorInterceptor;
 import br.com.caelum.vraptor.http.DefaultRequestParameters;
+import br.com.caelum.vraptor.http.EmptyElementsRemoval;
 import br.com.caelum.vraptor.http.OgnlParametersProvider;
 import br.com.caelum.vraptor.http.StupidTranslator;
 import br.com.caelum.vraptor.http.asm.AsmBasedTypeCreator;
@@ -69,6 +70,7 @@ public class Provider extends PicoProvider {
         components.add(OutjectionInterceptor.class);
         components.add(RequestResult.class);
         components.add(DefaultRequestInfo.class);
+        components.add(EmptyElementsRemoval.class);
         registerValidationErrorsComponent(components);
         // TODO the following components are not required by vraptor2/3
         // compatibility mode, but was added for unit tests

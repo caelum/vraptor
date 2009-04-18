@@ -1,7 +1,6 @@
-
 right now:
 
-	ceci: testar o vraptor2-compatible-example sem o hibernate.jar no classpath (conferir... tem que ter certeza) e ver se nao da classnotfound
+	(MUST) ceci: testar o vraptor2-compatible-example sem o hibernate.jar no classpath (conferir... tem que ter certeza) e ver se nao da classnotfound
 	ceci: BigInteger converter (+test)... ja existe de BigDecimal (se bobear, ja existe no vraptor2)
 	ceci: annotate all converters which do not depend on session or request as @AppScoped
 
@@ -11,38 +10,38 @@ right now:
 	ceci: time converters (igual ao Date e ao Calendar, so que usa Time.SHORT, ou pattern hh:mm, ver no vraptor2...)
 		- nao cadastra-los por padrao
 	ceci: support generic Set with ognl (look at MiscOgnlSupportTest for generic list support - you need to create a SetAccessor)
-	ceci: customizable error process on request execution
-	ceci: 404 component
+	(MUST) ceci: customizable error process on request execution
+	(MUST) ceci: 404 component
 
-TODAY
+gui
 OgnlParametersProviderTest
-    @Test
+    (MUST) @Test
     public void canHandleListOfWrapperTypes() {
         Assert.fail("doesnt support list of wrapper types yet");
 		asm support List<Long>
     }
 
-	- vraptor2: session scope component lookup for instantiation 
-	- converters: File
-	- support Validator
-	- support HibernateValidator
+	(MUST) - vraptor2: session scope component lookup for instantiation 
+	(MUST) - converters: File
+	(MUST) - support Validator
+	(MUST) - support HibernateValidator
 
 
-	- pico problem: STARTABLE/STOPABLE COMPONENTS with annotation + tests
-	- cweb tem que rodar teste antes de comecar tudo... bizarro
-	- niceurls with programmatic support
-	- niceurls -> path support
-	- niceurls with file config support -> path support
-	- path annotation with support to value injection (niceurls?)
-	- should ignore @br.com...Component as a component... what to do now?
-	- concatenate convertion and validation errors
-	- hibernate plugin
-	- custom converters for specified method parameters
-	- setting errors during ognl expression evaluation should be defined as validation errors
-	- json output support
-	- xml output support
-	- better exception handling everywhere
-	- vraptor2: app scope component lookup for instantiation 
+	(MUST) - pico problem: STARTABLE/STOPABLE COMPONENTS with annotation + tests
+	(MUST) - cweb tem que rodar teste antes de comecar tudo... bizarro
+	(MUST) - niceurls with programmatic support
+	(MUST) - niceurls -> path support
+	(MUST) - niceurls with file config support -> path support
+	(MUST) - path annotation with support to value injection (niceurls?)
+	(MUST) - should ignore @br.com...Component as a component... what to do now?
+	(MUST) - concatenate convertion and validation errors
+	(MUST) - hibernate plugin
+	(MUST) - custom converters for specified method parameters
+	(MUST) - setting errors during ognl expression evaluation should be defined as validation errors
+	(MUST) - json output support
+	(MUST) - xml output support
+	(MUST) - better exception handling everywhere
+	(MUST) - vraptor2: app scope component lookup for instantiation 
 
 
 
@@ -78,12 +77,10 @@ site docs (prior to release)
 - containers now can be @Request, @Session, @App scoped
 
 kung help
-- full spring support
-- Array
-- Map support
-- forward problem with opening 2 connections to the database and 2 components... one or two? solve it?
-- path annotation with support to dynamic logic and component lookup (niceurls?)
-- create session context
+(MUST) - full spring support
+(MUST) - Array
+(MUST) - Map support
+(MUST) - forward problem with opening 2 connections to the database and 2 components... one or two? solve it?
 
 
 
@@ -180,6 +177,7 @@ ONLY AFTER RELEASE
 	support vraptor2 plugins if possible:
 		- what else?
 	- v2: lookup custom converter annotated field and complain?
+- path annotation with support to dynamic logic and component lookup (niceurls?)
 
 OgnlGenericTypesSupportTest:
     @Test

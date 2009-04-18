@@ -35,6 +35,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * Supports the PUT http method.
+ * 
+ * @author Guilherme Silveira
+ */
 @Target(ElementType.METHOD)
 @Documented
 @Retention(RetentionPolicy.RUNTIME)

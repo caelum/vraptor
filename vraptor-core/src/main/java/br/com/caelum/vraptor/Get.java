@@ -35,6 +35,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * Notifies Vraptor that the annotated method supports the http GET
+ * requisitions.
+ * 
+ * @author Guilherme Silveira
+ */
 @Target(ElementType.METHOD)
 @Documented
 @Retention(RetentionPolicy.RUNTIME)

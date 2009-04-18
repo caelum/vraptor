@@ -34,9 +34,20 @@ import java.io.IOException;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
+/**
+ * Whenever an interceptor accepts a resource method, its intercept method is
+ * invoked to intercept the process of request parsing in order to allow the
+ * software to do some specific tasks.<br>
+ * Common usage for interceptors for end-users (end-programmers) are security
+ * constraint checks, database session (open session in view) opening and much
+ * more.
+ * 
+ * @author Guilherme Silveira
+ */
 public interface Interceptor {
 
-	void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws IOException, InterceptionException;
+    void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws IOException,
+            InterceptionException;
 
     boolean accepts(ResourceMethod method);
 

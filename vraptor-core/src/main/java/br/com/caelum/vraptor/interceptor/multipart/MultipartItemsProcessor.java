@@ -41,7 +41,7 @@ public class MultipartItemsProcessor {
                     File file = File.createTempFile("raptor.", ".upload");
                     file.deleteOnExit();
                     item.write(file);
-                    UploadedFile fileInformation = new BasicUploadedFileInformation(file, item.getName(),
+                    UploadedFile fileInformation = new DefaultUploadedFile(file, item.getName(),
                             item.getContentType());
                     parameters.set(item.getFieldName(), new String[] { file.getAbsolutePath() });
                     request.setAttribute(item.getFieldName(), fileInformation);

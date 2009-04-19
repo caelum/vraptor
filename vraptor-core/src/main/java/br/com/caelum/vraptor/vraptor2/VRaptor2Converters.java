@@ -7,6 +7,7 @@ import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.RegisterContainer;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.core.DefaultConverters;
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Container;
 
 /**
@@ -16,6 +17,7 @@ import br.com.caelum.vraptor.ioc.Container;
  * 
  * @author Guilherme Silveira
  */
+@ApplicationScoped
 public class VRaptor2Converters implements Converters {
 
     private final Converters vraptor3;

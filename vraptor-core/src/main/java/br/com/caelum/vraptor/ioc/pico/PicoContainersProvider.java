@@ -41,6 +41,7 @@ public class PicoContainersProvider implements RegisterContainer {
     }
 
     public void register(Class<?> type) {
+        logger.debug("Registering " + type.getName() + " as a component");
         if (type.isAnnotationPresent(ApplicationScoped.class)) {
             this.applicationScoped.add(type);
             this.container.addComponent(type);
@@ -89,4 +90,3 @@ public class PicoContainersProvider implements RegisterContainer {
     }
 
 }
-

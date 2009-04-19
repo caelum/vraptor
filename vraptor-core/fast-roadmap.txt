@@ -1,3 +1,7 @@
+	(MUST) - converters: File
+
+
+
 right now:
 
 	(MUST) ceci: testar o vraptor2-compatible-example sem o hibernate.jar no classpath (conferir... tem que ter certeza) e ver se nao da classnotfound
@@ -21,7 +25,6 @@ OgnlParametersProviderTest
 		asm support List<Long>
     }
 
-	(MUST) - converters: File
 	(MUST) - support Validator
 	(MUST) - support HibernateValidator
 

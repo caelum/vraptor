@@ -47,7 +47,7 @@ OgnlParametersProviderTest
 	- unit test for PicoContainersProvider.. .every scope should be tested
 	- each Provider should have a getComponentsToTest template method
     - test SessionattributeController with replace method in a live enviroment
-
+	- MultiPartInterceptor config
 
 
 

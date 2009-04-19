@@ -94,6 +94,9 @@ public class AsmBasedTypeCreator implements TypeCreator, Opcodes {
         for (int i=0;i<names.length;i++) {
             names[i] = Info.capitalize(names[i]); 
         }
+        if(logger.isDebugEnabled()) {
+            logger.debug("Parameter names found for creating type are: " + Arrays.toString(names));
+        }
         for (int i=0;i<types.length;i++) {
             java.lang.reflect.Type type = types[i];
             if (type instanceof ParameterizedType) {

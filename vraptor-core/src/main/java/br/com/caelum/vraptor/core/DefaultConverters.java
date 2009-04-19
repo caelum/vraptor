@@ -52,6 +52,7 @@ import br.com.caelum.vraptor.converter.PrimitiveIntConverter;
 import br.com.caelum.vraptor.converter.PrimitiveLongConverter;
 import br.com.caelum.vraptor.converter.PrimitiveShortConverter;
 import br.com.caelum.vraptor.converter.ShortConverter;
+import br.com.caelum.vraptor.interceptor.multipart.UploadedFileConverter;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Container;
 
@@ -65,7 +66,7 @@ public class DefaultConverters implements Converters {
             PrimitiveDoubleConverter.class, PrimitiveFloatConverter.class, PrimitiveBooleanConverter.class,
             IntegerConverter.class, LongConverter.class, ShortConverter.class, ByteConverter.class,
             DoubleConverter.class, FloatConverter.class, BooleanConverter.class, LocaleBasedCalendarConverter.class,
-            LocaleBasedDateConverter.class, EnumConverter.class };
+            LocaleBasedDateConverter.class, EnumConverter.class, UploadedFileConverter.class };
 
     private final RegisterContainer container;
 

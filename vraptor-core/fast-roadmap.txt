@@ -1,7 +1,3 @@
-	(MUST) - converters: File
-
-
-
 right now:
 
 	(MUST) ceci: testar o vraptor2-compatible-example sem o hibernate.jar no classpath (conferir... tem que ter certeza) e ver se nao da classnotfound
@@ -16,14 +12,16 @@ right now:
 	ceci: support generic Set with ognl (look at MiscOgnlSupportTest for generic list support - you need to create a SetAccessor)
 	(MUST) ceci: customizable error process on request execution
 	(MUST) ceci: 404 component
+	ceci: test multipart interceptor
 
 gui
 OgnlParametersProviderTest
-    (MUST) @Test
+    1- (MUST) @Test
     public void canHandleListOfWrapperTypes() {
         Assert.fail("doesnt support list of wrapper types yet");
 		asm support List<Long>
     }
+    2- js test
 
 	(MUST) - support Validator
 	(MUST) - support HibernateValidator
@@ -48,6 +46,7 @@ OgnlParametersProviderTest
 	- each Provider should have a getComponentsToTest template method
     - test SessionattributeController with replace method in a live enviroment
 	- MultiPartInterceptor config
+	- check that converters and vraptor work without multipart jar on classpath (its converter has been registered automatically), otherwise, lazy load it
 
 
 
@@ -322,6 +321,7 @@ done:
 	calendar
 	date
 	bigdecimal
+	File
 - paranamer support
 - Collection, List, Set, Calendar, SortedSet, Queue interface support
 1 path annotation default value (without annotation)

@@ -19,6 +19,13 @@ import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.http.RequestParameters;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
+/**
+ * An interceptor which handles multipart requests.<br>
+ * Provided parameters are injected through RequestParameters.set and uploaded
+ * files are made available through
+ * 
+ * @author Guilherme Silveira
+ */
 public class MultipartInterceptor implements Interceptor {
 
     private static final Logger logger = LoggerFactory.getLogger(MultipartInterceptor.class);
@@ -39,7 +46,8 @@ public class MultipartInterceptor implements Interceptor {
         this.temporaryDirectory = File.createTempFile("raptor.", ".upload").getParentFile();
     }
 
-    public void intercept(InterceptorStack stack, ResourceMethod method, Object instance) throws InterceptionException, IOException {
+    public void intercept(InterceptorStack stack, ResourceMethod method, Object instance) throws InterceptionException,
+            IOException {
 
         logger.debug("Trying to parse multipart request.");
 

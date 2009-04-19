@@ -8,11 +8,15 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.fileupload.FileItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.vraptor.interceptor.BasicUploadedFileInformation;
-import org.vraptor.interceptor.UploadedFileInformation;
 
 import br.com.caelum.vraptor.http.RequestParameters;
 
+/**
+ * Processes all elements in a multipart request.
+ * 
+ * @author Guilherme Silveira
+ * @author Paulo Silveira
+ */
 public class MultipartItemsProcessor {
 
     private static final Logger logger = LoggerFactory.getLogger(MultipartItemsProcessor.class);
@@ -37,15 +41,16 @@ public class MultipartItemsProcessor {
                     File file = File.createTempFile("raptor.", ".upload");
                     file.deleteOnExit();
                     item.write(file);
-                    UploadedFileInformation fileInformation = new BasicUploadedFileInformation(file, item.getName(),
+                    UploadedFile fileInformation = new BasicUploadedFileInformation(file, item.getName(),
                             item.getContentType());
+                    parameters.set(item.getFieldName(), new String[] { file.getAbsolutePath() });
                     request.setAttribute(item.getFieldName(), fileInformation);
-                    LOG.info("Uploaded file: " + item.getFieldName() + " with " + fileInformation);
+                    logger.info("Uploaded file: " + item.getFieldName() + " with " + fileInformation);
                 } catch (Exception e) {
-                    LOG.error("Nasty uploaded file " + item.getName(), e);
+                    logger.error("Nasty uploaded file " + item.getName(), e);
                 }
             } else {
-                LOG.info("A file field was empy: " + item.getFieldName());
+                logger.info("A file field was empy: " + item.getFieldName());
             }
         }
     }

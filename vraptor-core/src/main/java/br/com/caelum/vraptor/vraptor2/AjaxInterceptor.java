@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.vraptor.annotations.Remotable;
 import org.vraptor.remote.json.JSONSerializer;
 
 import br.com.caelum.vraptor.InterceptionException;
@@ -46,8 +47,12 @@ public class AjaxInterceptor implements Interceptor {
     public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws IOException,
             InterceptionException {
         if (info.isAjax()) {
+            if(!method.getMethod().isAnnotationPresent(Remotable.class)) {
+                throw new InterceptionException("Unable to make an ajax result in a non-remotable method.");
+            }
+            int depth = method.getMethod().getAnnotation(Remotable.class).depth();
             JsonOutjecter outjecter = (JsonOutjecter) this.outjecter;
-            CharSequence output = new JSONSerializer().serialize(outjecter.contents());
+            CharSequence output = new JSONSerializer(depth).serialize(outjecter.contents());
             response.setCharacterEncoding(UTF8);
             response.setContentType("application/json");
 

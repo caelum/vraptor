@@ -31,11 +31,11 @@ public class VRaptor2RequestExecution implements RequestExecution {
         interceptorStack.add(ResourceLookupInterceptor.class);
         interceptorStack.add(URLParameterExtractorInterceptor.class);
         interceptorStack.add(InterceptorListPriorToExecutionExtractor.class);
+        interceptorStack.add(instantiator);
+        interceptorStack.add(ParametersInstantiator.class);
         if(shouldRegisterHibernateValidator) {
             interceptorStack.add(HibernateValidatorPluginInterceptor.class);
         }
-        interceptorStack.add(instantiator);
-        interceptorStack.add(ParametersInstantiator.class);
         interceptorStack.add(ResultSupplierInterceptor.class);
         interceptorStack.add(Validator.class);
         interceptorStack.add(ExecuteAndViewInterceptor.class);

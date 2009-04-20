@@ -5,8 +5,6 @@ import java.util.ResourceBundle;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.vraptor.plugin.hibernate.HibernateLogicMethod;
 import org.vraptor.plugin.hibernate.Validate;
 import org.vraptor.plugin.hibernate.ValidatorLocator;
@@ -28,7 +26,6 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  */
 public class HibernateValidatorPluginInterceptor implements Interceptor {
 
-    private static final Logger logger = LoggerFactory.getLogger(HibernateValidatorPluginInterceptor.class);
     private final ValidationErrors errors;
     private final ParameterNameProvider provider;
     private final HttpServletRequest request;
@@ -75,7 +72,7 @@ public class HibernateValidatorPluginInterceptor implements Interceptor {
         if (param.indexOf(".") != -1) {
             param = param.substring(param.indexOf("."));
         }
-        param = Info.capitalize(param);
+        param= Info.capitalize(param);
         for (int i = 0; i < names.length; i++) {
             if (names[i].equals(param)) {
                 return values[i];

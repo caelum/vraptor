@@ -34,6 +34,12 @@ import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Generates the signature String based on a class.<br>
+ * Currently supports generics, arrays, primitives and custom types.
+ * 
+ * @author Guilherme Silveira
+ */
 public class SignatureConverter {
 
     private static Map<Class<?>, String> WRAPPERS = new HashMap<Class<?>, String>();
@@ -52,8 +58,8 @@ public class SignatureConverter {
         return WRAPPERS.get(type);
     }
 
-    String extractTypeDefinition(Class type) {
-        if(type.isArray()) {
+    String extractTypeDefinition(Class<?> type) {
+        if (type.isArray()) {
             return "[" + extractTypeDefinition(type.getComponentType());
         }
         if (type.isPrimitive()) {
@@ -62,17 +68,16 @@ public class SignatureConverter {
         return 'L' + type.getName().replace('.', '/') + ';';
     }
 
-
+    @SuppressWarnings("unchecked")
     String extractTypeDefinition(ParameterizedType type) {
         Type raw = type.getRawType();
         String name = extractTypeDefinition((Class) raw);
-        name = name.substring(0,name.length()-1) + "<";
+        name = name.substring(0, name.length() - 1) + "<";
         Type[] types = type.getActualTypeArguments();
-        for(Type t : types) {
+        for (Type t : types) {
             name += extractTypeDefinition((Class) t);
         }
         return name + ">;";
     }
-
 
 }

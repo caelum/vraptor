@@ -214,5 +214,5 @@ public class AsmBasedTypeCreator implements TypeCreator, Opcodes {
     private int loadFor(Class<?> type) {
         return type.isPrimitive() ? ILOAD : ALOAD;
     }
-
+    
 }

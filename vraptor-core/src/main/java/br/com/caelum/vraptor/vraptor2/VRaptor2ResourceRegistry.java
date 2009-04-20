@@ -11,6 +11,7 @@ import org.vraptor.annotations.In;
 import org.vraptor.annotations.Logic;
 import org.vraptor.annotations.Out;
 import org.vraptor.annotations.Parameter;
+import org.vraptor.plugin.hibernate.Validate;
 
 import br.com.caelum.vraptor.resource.DefaultResourceRegistry;
 import br.com.caelum.vraptor.resource.MethodLookupBuilder;
@@ -61,6 +62,13 @@ public class VRaptor2ResourceRegistry extends DefaultResourceRegistry {
             if (method.isAnnotationPresent(Logic.class)) {
                 logger.warn("Method " + method.getName() + " from " + originalType.getName()
                         + " is annotated with @Logic. Although its supported, we suggest you to migrate to @Path.");
+            }
+            if (method.isAnnotationPresent(Validate.class)) {
+                Validate validate = method.getAnnotation(Validate.class);
+                if (validate.fields().length != 0) {
+                    logger.error("Method " + method.getName() + " from " + originalType.getName()
+                            + " is annotated with @Validate with fields. This is not supported.");
+                }
             }
         }
         parse(type.getSuperclass(), type);

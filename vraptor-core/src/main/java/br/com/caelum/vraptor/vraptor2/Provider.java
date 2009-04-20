@@ -1,5 +1,10 @@
 package br.com.caelum.vraptor.vraptor2;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.vraptor.validator.BasicValidationErrors;
+
 import br.com.caelum.vraptor.core.DefaultInterceptorStack;
 import br.com.caelum.vraptor.core.DefaultMethodParameters;
 import br.com.caelum.vraptor.core.DefaultRequestInfo;
@@ -19,11 +24,6 @@ import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
 import br.com.caelum.vraptor.ioc.pico.DefaultDirScanner;
 import br.com.caelum.vraptor.ioc.pico.PicoProvider;
 import br.com.caelum.vraptor.ioc.pico.WebInfClassesScanner;
-import br.com.caelum.vraptor.resource.DefaultResourceRegistry;
-import org.vraptor.validator.BasicValidationErrors;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Customized provider with support for both vraptor 2 and 3 components.
@@ -35,7 +35,7 @@ public class Provider extends PicoProvider {
     protected List<Class<?>> getCoreComponents() {
         List<Class<?>> components = new ArrayList<Class<?>>();
         components.add(StupidTranslator.class);
-        components.add(DefaultResourceRegistry.class);
+        components.add(VRaptor2ResourceRegistry.class);
         components.add(DefaultDirScanner.class);
         components.add(WebInfClassesScanner.class);
         components.add(DefaultInterceptorRegistry.class);

@@ -1,4 +1,3 @@
-- if it finds a field annotated with @In, @Out or @Param, vraptor error
 - json test
 - OgnlParametersProviderTest
     (MUST) @Test

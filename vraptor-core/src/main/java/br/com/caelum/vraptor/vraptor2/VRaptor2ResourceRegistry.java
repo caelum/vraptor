@@ -8,6 +8,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vraptor.annotations.In;
+import org.vraptor.annotations.Logic;
 import org.vraptor.annotations.Out;
 import org.vraptor.annotations.Parameter;
 
@@ -48,11 +49,18 @@ public class VRaptor2ResourceRegistry extends DefaultResourceRegistry {
                             + annotation.getName() + " but is not supported by VRaptor3! Read the migration guide.");
                 }
             }
-            for (Method method : type.getDeclaredMethods()) {
+        }
+        for (Method method : type.getDeclaredMethods()) {
+            for (Class<? extends Annotation> annotation : new Class[] { Out.class, In.class }) {
                 if (method.isAnnotationPresent(annotation)) {
-                    logger.error("Method " + method.getName() + " from " + originalType.getName() + " is annotated with "
-                            + annotation.getName() + " but is not supported by VRaptor3! Read the migration guide.");
+                    logger.error("Method " + method.getName() + " from " + originalType.getName()
+                            + " is annotated with " + annotation.getName()
+                            + " but is not supported by VRaptor3! Read the migration guide.");
                 }
+            }
+            if (method.isAnnotationPresent(Logic.class)) {
+                logger.error("Method " + method.getName() + " from " + originalType.getName()
+                        + " is annotated with @Logic. Although its supported, we suggest you to migrate to @Path.");
             }
         }
         parse(type.getSuperclass(), type);

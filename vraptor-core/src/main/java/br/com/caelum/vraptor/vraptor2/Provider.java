@@ -24,6 +24,7 @@ import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
 import br.com.caelum.vraptor.ioc.pico.DefaultDirScanner;
 import br.com.caelum.vraptor.ioc.pico.PicoProvider;
 import br.com.caelum.vraptor.ioc.pico.WebInfClassesScanner;
+import br.com.caelum.vraptor.resource.DefaultResourceRegistry;
 
 /**
  * Customized provider with support for both vraptor 2 and 3 components.
@@ -35,7 +36,7 @@ public class Provider extends PicoProvider {
     protected List<Class<?>> getCoreComponents() {
         List<Class<?>> components = new ArrayList<Class<?>>();
         components.add(StupidTranslator.class);
-        components.add(VRaptor2ResourceRegistry.class);
+        components.add(DefaultResourceRegistry.class);
         components.add(DefaultDirScanner.class);
         components.add(WebInfClassesScanner.class);
         components.add(DefaultInterceptorRegistry.class);

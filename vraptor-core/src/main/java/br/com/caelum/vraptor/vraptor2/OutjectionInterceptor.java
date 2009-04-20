@@ -41,6 +41,11 @@ public class OutjectionInterceptor implements Interceptor {
     public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws IOException,
             InterceptionException {
         Class<?> type = method.getResource().getType();
+        outject(resourceInstance, type);
+        stack.next(method, resourceInstance);
+    }
+
+    void outject(Object resourceInstance, Class<?> type) throws InterceptionException {
         Method[] methods = type.getDeclaredMethods();
         for (Method outject : methods) {
             if (outject.getName().length() < 3
@@ -70,7 +75,6 @@ public class OutjectionInterceptor implements Interceptor {
                 throw new InterceptionException("Unable to outject value for " + outject.getName(), e.getCause());
             }
         }
-        stack.next(method, resourceInstance);
     }
 
 }

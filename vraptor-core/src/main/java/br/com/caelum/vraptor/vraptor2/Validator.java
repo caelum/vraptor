@@ -24,11 +24,13 @@ public class Validator implements Interceptor {
 
     private static final Logger logger = LoggerFactory.getLogger(Validator.class);
     private final ValidationErrors errors;
+    private final OutjectionInterceptor outjection;
 
-    public Validator(ParametersProvider provider, PageResult result, ValidationErrors errors) {
+    public Validator(ParametersProvider provider, PageResult result, ValidationErrors errors, OutjectionInterceptor outjection) {
         this.provider = provider;
         this.result = result;
         this.errors = errors;
+        this.outjection = outjection;
     }
 
     public boolean accepts(ResourceMethod method) {
@@ -38,7 +40,8 @@ public class Validator implements Interceptor {
     public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws IOException,
             InterceptionException {
         if (Info.isOldComponent(method.getResource())) {
-            Method validationMethod = getValidationFor(method.getMethod(), method.getResource().getType());
+            Class<?> type = method.getResource().getType();
+            Method validationMethod = getValidationFor(method.getMethod(), type);
             if (validationMethod != null) {
                 Object[] parameters = provider.getParametersFor(method);
                 Object[] validationParameters = new Object[parameters.length + 1];
@@ -57,10 +60,11 @@ public class Validator implements Interceptor {
                 }
                 if (errors.size() != 0) {
                     try {
+                        this.outjection.outject(resourceInstance, type);
                         this.result.include("errors", errors);
                         this.result.forward("invalid");
                     } catch (ServletException e) {
-                        throw new InterceptionException("Unable to forward", e.getCause());
+                        throw new InterceptionException("Unable to forward", e);
                     }
                     return;
                 }

@@ -1,6 +1,5 @@
 (MUST) - support Validator
 (MUST) - support HibernateValidator
-- TurmaLogic support for @Out annotation
 - cweb: test upload boleto info
 - cweb: all RequiresTRansaction
 
@@ -111,6 +110,8 @@ right before release
 			RecursiveFieldValidation
 			EntireFieldValidation
 			its interface
+		class ExpressionEvaluator
+				throw new ExpressionEvaluationException("Invalid redirection using: " + redirection);
 	jira
 	forum
 	official support by caelum

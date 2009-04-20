@@ -46,6 +46,7 @@ public class MultipartInterceptor implements Interceptor {
         this.temporaryDirectory = File.createTempFile("raptor.", ".upload").getParentFile();
     }
 
+    @SuppressWarnings("unchecked")
     public void intercept(InterceptorStack stack, ResourceMethod method, Object instance) throws InterceptionException,
             IOException {
 
@@ -87,6 +88,7 @@ public class MultipartInterceptor implements Interceptor {
         return factory;
     }
 
+    @SuppressWarnings("deprecation")
     public boolean accepts(ResourceMethod method) {
         return ServletFileUpload.isMultipartContent(request);
     }

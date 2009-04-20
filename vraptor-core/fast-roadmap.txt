@@ -2,6 +2,27 @@
 (MUST) - support HibernateValidator
 - cweb: test upload boleto info
 - cweb: all RequiresTRansaction
+- cweb: disp on ADD PESSOA how works?
+- cweb tests:
+	br.com.caelum.caelumweb2.integracao.aluno.busca
+	br.com.caelum.caelumweb2.integracao.aluno.matricula
+	br.com.caelum.caelumweb2.integracao.aluno.turma
+	br.com.caelum.caelumweb2.integracao.boleto
+	br.com.caelum.caelumweb2.integracao.consultoria
+	br.com.caelum.caelumweb2.integracao.contrato
+	br.com.caelum.caelumweb2.integracao.contrato.especifico
+	br.com.caelum.caelumweb2.integracao.empresa
+	br.com.caelum.caelumweb2.integracao.financeiro
+	br.com.caelum.caelumweb2.integracao.financeiro.sal
+	br.com.caelum.caelumweb2.integracao.selenium
+	br.com.caelum.caelumweb2.integracao.sistema
+	br.com.caelum.caelumweb2.integracao.sistema.comercial
+	br.com.caelum.caelumweb2.integracao.sistema.consultor
+	br.com.caelum.caelumweb2.integracao.sistema.financeiro
+	br.com.caelum.caelumweb2.integracao.system
+	br.com.caelum.caelumweb2.integracao.turma
+	br.com.caelum.caelumweb2.integracao.turma.basico
+	br.com.caelum.caelumweb2.integracao.usuario
 
 	(MUST) ceci: testar o vraptor2-compatible-example sem o hibernate.jar no classpath (conferir... tem que ter certeza) e ver se nao da classnotfound
 	ceci: BigInteger converter (+test)... ja existe de BigDecimal (se bobear, ja existe no vraptor2)

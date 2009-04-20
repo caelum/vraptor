@@ -59,7 +59,7 @@ public class VRaptor2ResourceRegistry extends DefaultResourceRegistry {
                 }
             }
             if (method.isAnnotationPresent(Logic.class)) {
-                logger.error("Method " + method.getName() + " from " + originalType.getName()
+                logger.warn("Method " + method.getName() + " from " + originalType.getName()
                         + " is annotated with @Logic. Although its supported, we suggest you to migrate to @Path.");
             }
         }

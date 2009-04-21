@@ -83,11 +83,10 @@ public class PicoProvider implements ContainerProvider {
 
     public PicoProvider() {
         this.container = new PicoBuilder().withCaching().build();
-        this.container.addComponent(new PicoContainersProvider(this.container));
-        for (Class<?> componentType : getCoreComponents()) {
-            container.addComponent(componentType);
-        }
+        PicoContainersProvider containersProvider = new PicoContainersProvider(this.container);
+        this.container.addComponent(containersProvider);
         registerComponents(getContainers());
+        containersProvider.init();
         // TODO
         // cache(CacheBasedResourceRegistry.class, ResourceRegistry.class);
         // cache(CacheBasedTypeCreator.class, AsmBasedTypeCreator.class);
@@ -104,27 +103,15 @@ public class PicoProvider implements ContainerProvider {
         for (Class<?> type : getChildComponentTypes()) {
             container.register(type);
         }
-    }
-
-    /**
-     * While extending pico provider, do not register any INSTANCE component!
-     * Cached instances might give problems later on.<br>
-     * If there is any component instantiated and we change the implementation,
-     * those who access the previous implementation will keep the reference
-     * while new components will reference the new one -> NASTY!
-     */
-    protected List<Class<?>> getCoreComponents() {
-        List<Class<?>> components = new ArrayList<Class<?>>();
-        components.add(StupidTranslator.class);
-        components.add(DefaultResourceRegistry.class);
-        components.add(DefaultDirScanner.class);
-        components.add(WebInfClassesScanner.class);
-        components.add(DefaultInterceptorRegistry.class);
-        components.add(AsmBasedTypeCreator.class);
-        components.add(DefaultMethodLookupBuilder.class);
-        components.add(DefaultPathResolver.class);
-        components.add(ParanamerNameProvider.class);
-        return components;
+        container.register(StupidTranslator.class);
+        container.register(DefaultResourceRegistry.class);
+        container.register(DefaultDirScanner.class);
+        container.register(WebInfClassesScanner.class);
+        container.register(DefaultInterceptorRegistry.class);
+        container.register(AsmBasedTypeCreator.class);
+        container.register(DefaultMethodLookupBuilder.class);
+        container.register(DefaultPathResolver.class);
+        container.register(ParanamerNameProvider.class);
     }
 
     public <T> T instanceFor(Class<T> type) {

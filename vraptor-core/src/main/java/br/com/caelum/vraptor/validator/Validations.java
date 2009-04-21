@@ -21,9 +21,7 @@ public class Validations {
                 errors.add(reason);
             } else {
                 Description description = new StringDescription();
-                description.appendText(reason).appendText("\nExpected: ").appendDescriptionOf(matcher).appendText(
-                        "\n     but: ");
-                matcher.describeTo(description);
+                description.appendDescriptionOf(matcher);
                 errors.add(description.toString());
             }
         }

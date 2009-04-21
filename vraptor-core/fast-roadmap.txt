@@ -45,6 +45,8 @@ OgnlParametersProviderTest:
     public void canHandleArray() {
         Assert.fail("doesnt support arrays yet");
     }
+	(MUST) - support HibernateValidator with i18n messages
+	(MUST) - support i18n messages
 
 
 
@@ -81,7 +83,6 @@ kung help
 (MUST) - full spring support
 (MUST) - Map support
 (MUST) - forward problem with opening 2 connections to the database and 2 components... one or two? solve it?
-(MUST) - support HibernateValidator with i18n messages
 
 
 

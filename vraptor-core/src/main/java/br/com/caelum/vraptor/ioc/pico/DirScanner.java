@@ -30,7 +30,6 @@
 package br.com.caelum.vraptor.ioc.pico;
 
 import java.io.File;
-import java.util.List;
 
 /**
  * Scans directories looking for resources.

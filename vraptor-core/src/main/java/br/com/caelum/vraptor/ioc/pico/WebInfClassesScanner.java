@@ -40,9 +40,11 @@ import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.Interceptor;
 import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceRegistry;
 
+@ApplicationScoped
 public class WebInfClassesScanner implements ResourceLocator {
 
     private static final Logger logger = LoggerFactory.getLogger(WebInfClassesScanner.class);

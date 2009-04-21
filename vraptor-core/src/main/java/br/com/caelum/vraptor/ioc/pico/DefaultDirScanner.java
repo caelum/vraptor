@@ -31,6 +31,7 @@ package br.com.caelum.vraptor.ioc.pico;
 
 import java.io.File;
 
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.resource.Resource;
 
 /**
@@ -38,6 +39,7 @@ import br.com.caelum.vraptor.resource.Resource;
  * 
  * @author Guilherme Silveira
  */
+@ApplicationScoped
 public class DefaultDirScanner implements DirScanner<Resource> {
 
     public void scan(File baseDirectory, Acceptor acceptor) {

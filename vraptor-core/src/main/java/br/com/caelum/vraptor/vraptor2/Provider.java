@@ -25,6 +25,7 @@ import br.com.caelum.vraptor.ioc.pico.DefaultDirScanner;
 import br.com.caelum.vraptor.ioc.pico.PicoProvider;
 import br.com.caelum.vraptor.ioc.pico.WebInfClassesScanner;
 import br.com.caelum.vraptor.resource.DefaultResourceRegistry;
+import br.com.caelum.vraptor.validator.DefaultValidator;
 
 /**
  * Customized provider with support for both vraptor 2 and 3 components.
@@ -78,6 +79,7 @@ public class Provider extends PicoProvider {
         // TODO the following components are not required by vraptor2/3
         // compatibility mode, but was added for unit tests
         components.add(ExecuteMethodInterceptor.class);
+        components.add(DefaultValidator.class);
         return components;
     }
 

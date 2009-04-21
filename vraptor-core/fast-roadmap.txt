@@ -1,30 +1,20 @@
 (MUST) - support Validator
 (MUST) - support HibernateValidator
-- cweb: test upload boleto info
-- cweb: all RequiresTRansaction
-- cweb: disp on ADD PESSOA how works?
-- cweb tests:
-	br.com.caelum.caelumweb2.integracao.aluno.busca
-	br.com.caelum.caelumweb2.integracao.aluno.matricula
-	br.com.caelum.caelumweb2.integracao.aluno.turma
-	br.com.caelum.caelumweb2.integracao.boleto
-	br.com.caelum.caelumweb2.integracao.consultoria
-	br.com.caelum.caelumweb2.integracao.contrato
-	br.com.caelum.caelumweb2.integracao.contrato.especifico
-	br.com.caelum.caelumweb2.integracao.empresa
-	br.com.caelum.caelumweb2.integracao.financeiro
-	br.com.caelum.caelumweb2.integracao.financeiro.sal
-	br.com.caelum.caelumweb2.integracao.selenium
-	br.com.caelum.caelumweb2.integracao.sistema
-	br.com.caelum.caelumweb2.integracao.sistema.comercial
-	br.com.caelum.caelumweb2.integracao.sistema.consultor
-	br.com.caelum.caelumweb2.integracao.sistema.financeiro
-	br.com.caelum.caelumweb2.integracao.system
-	br.com.caelum.caelumweb2.integracao.turma
-	br.com.caelum.caelumweb2.integracao.turma.basico
-	br.com.caelum.caelumweb2.integracao.usuario
+com a galera:
+- cweb: remova all RequiresTRansaction
+- cweb: disponibilidade on ADD PESSOA how works?
+- cweb all tests
+- cweb tem que rodar teste antes de comecar tudo... bizarro
+- check that converters and vraptor work without multipart jar on classpath (its converter has been registered automatically), otherwise, lazy load it
+(MUST) ceci: testar o vraptor2-compatible-example sem o hibernate.jar no classpath (conferir... tem que ter certeza) e ver se nao da classnotfound
+(MUST) ceci: test multipart interceptor
+- MultiPartInterceptor config
+(MUST) - pico problem: STARTABLE/STOPABLE COMPONENTS with annotation + tests
+(MUST) - niceurls with programmatic support
 
-	(MUST) ceci: testar o vraptor2-compatible-example sem o hibernate.jar no classpath (conferir... tem que ter certeza) e ver se nao da classnotfound
+se possivel:
+	(MUST) ceci: customizable error process on request execution
+	(MUST) ceci: 404 component
 	ceci: BigInteger converter (+test)... ja existe de BigDecimal (se bobear, ja existe no vraptor2)
 	ceci: annotate all converters which do not depend on session or request as @AppScoped
 
@@ -34,31 +24,27 @@
 	ceci: time converters (igual ao Date e ao Calendar, so que usa Time.SHORT, ou pattern hh:mm, ver no vraptor2...)
 		- nao cadastra-los por padrao
 	ceci: support generic Set with ognl (look at MiscOgnlSupportTest for generic list support - you need to create a SetAccessor)
-	(MUST) ceci: customizable error process on request execution
-	(MUST) ceci: 404 component
-	ceci: test multipart interceptor
 
 
-
-	(MUST) - pico problem: STARTABLE/STOPABLE COMPONENTS with annotation + tests
-	(MUST) - cweb tem que rodar teste antes de comecar tudo... bizarro
-	(MUST) - niceurls with programmatic support
 	(MUST) - niceurls -> path support
 	(MUST) - niceurls with file config support -> path support
 	(MUST) - path annotation with support to value injection (niceurls?)
-	(MUST) - should ignore @br.com...Component as a component... what to do now?
-	(MUST) - concatenate convertion and validation errors
 	(MUST) - hibernate plugin
-	(MUST) - custom converters for specified method parameters
 	(MUST) - setting errors during ognl expression evaluation should be defined as validation errors
 	(MUST) - json output support
 	(MUST) - xml output support
 	(MUST) - better exception handling everywhere
-	(MUST) - vraptor2: app scope component lookup for instantiation 
-	- unit test for PicoContainersProvider.. .every scope should be tested
-	- each Provider should have a getComponentsToTest template method
-	- MultiPartInterceptor config
-	- check that converters and vraptor work without multipart jar on classpath (its converter has been registered automatically), otherwise, lazy load it
+	- unit test for PicoContainersProvider... every scope should be tested
+OgnlParametersProviderTest:
+    @Test
+    public void canHandleListOfWrapperTypes() {
+        Assert.fail("doesnt support list of wrapper types yet");
+    }
+
+    @Test
+    public void canHandleArray() {
+        Assert.fail("doesnt support arrays yet");
+    }
 
 
 
@@ -93,20 +79,8 @@ site docs (prior to release)
 
 kung help
 (MUST) - full spring support
-(MUST) - Array
 (MUST) - Map support
 (MUST) - forward problem with opening 2 connections to the database and 2 components... one or two? solve it?
-
-OgnlParametersProviderTest:
-    @Test
-    public void canHandleListOfWrapperTypes() {
-        Assert.fail("doesnt support list of wrapper types yet");
-    }
-
-    @Test
-    public void canHandleArray() {
-        Assert.fail("doesnt support arrays yet");
-    }
 
 
 
@@ -170,6 +144,7 @@ maybe
 
 
 ONLY AFTER RELEASE
+- each Provider should have a getComponentsToTest template method
 - common-fileupload is mandatory, make it optional by only registering the interceptor if on the classpath
 	- same thing with hibernate's validator plugin interceptor and vraptor2
 - DDD related: ContainerBasedNullHandler support (non cached instances)
@@ -210,6 +185,8 @@ ONLY AFTER RELEASE
 		- what else?
 	- v2: lookup custom converter annotated field and complain?
 - path annotation with support to dynamic logic and component lookup (niceurls?)
+- custom converters for specified method parameters
+- v2: support for session scoped components for constructor injection
 
 OgnlGenericTypesSupportTest:
     @Test
@@ -336,7 +313,6 @@ done:
 	- v2: method invocation with parameters
 	- v2: @Logic (parameters=...) support
 	- v2: default Logic,Action and so on key removal
-	- v2: support for session scoped components for constructor injection
 	- v2: constructor injection only
 - converters
 	primitive

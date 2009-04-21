@@ -64,6 +64,7 @@ import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
 import br.com.caelum.vraptor.resource.DefaultMethodLookupBuilder;
 import br.com.caelum.vraptor.resource.DefaultResourceRegistry;
+import br.com.caelum.vraptor.validator.DefaultValidator;
 import br.com.caelum.vraptor.view.DefaultPathResolver;
 import br.com.caelum.vraptor.view.jsp.DefaultPageResult;
 
@@ -164,6 +165,7 @@ public class PicoProvider implements ContainerProvider {
         components.add(DefaultConverters.class);
         components.add(DefaultRequestInfo.class);
         components.add(EmptyElementsRemoval.class);
+        components.add(DefaultValidator.class);
         return components;
     }
 

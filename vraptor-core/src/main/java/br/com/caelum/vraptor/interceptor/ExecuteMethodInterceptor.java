@@ -49,11 +49,9 @@ import br.com.caelum.vraptor.validator.ValidationError;
  */
 public class ExecuteMethodInterceptor implements Interceptor {
 
-    private final ParametersProvider provider;
     private final MethodParameters parameters;
 
-    public ExecuteMethodInterceptor(ParametersProvider provider, MethodParameters parameters) {
-        this.provider = provider;
+    public ExecuteMethodInterceptor(MethodParameters parameters) {
         this.parameters = parameters;
     }
 

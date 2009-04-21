@@ -12,27 +12,24 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.core.MethodParameters;
-import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 public class ExecuteMethodInterceptorTest {
 
     private Mockery mockery;
-    private ParametersProvider provider;
     private MethodParameters parameters;
 
     @Before
     public void setup() throws NoSuchMethodException {
         this.mockery = new Mockery();
-        this.provider = mockery.mock(ParametersProvider.class);
         this.parameters =mockery.mock(MethodParameters.class);
     }
 
     @Test
     public void shouldInvokeTheMethodAndNotProceedWithInterceptorStack() throws SecurityException,
             NoSuchMethodException, IOException, InterceptionException {
-        ExecuteMethodInterceptor interceptor = new ExecuteMethodInterceptor(provider, parameters);
+        ExecuteMethodInterceptor interceptor = new ExecuteMethodInterceptor(parameters);
         ResourceMethod method = new DefaultResourceMethod(null, DogAlike.class.getMethod("bark"));
         final DogAlike auau = mockery.mock(DogAlike.class);
         mockery.checking(new Expectations() {
@@ -48,7 +45,7 @@ public class ExecuteMethodInterceptorTest {
     @Test
     public void shouldThrowMethodExceptionIfThereIsAnInvocationException() throws IOException, SecurityException,
             NoSuchMethodException {
-        ExecuteMethodInterceptor interceptor = new ExecuteMethodInterceptor(provider, parameters);
+        ExecuteMethodInterceptor interceptor = new ExecuteMethodInterceptor(parameters);
         ResourceMethod method = new DefaultResourceMethod(null, DogAlike.class.getMethod("bark"));
         final DogAlike auau = mockery.mock(DogAlike.class);
         final RuntimeException exception = new RuntimeException();
@@ -70,7 +67,7 @@ public class ExecuteMethodInterceptorTest {
     
     @Test
     public void shouldUseTheProvidedArguments() throws SecurityException, NoSuchMethodException, InterceptionException, IOException {
-        ExecuteMethodInterceptor interceptor = new ExecuteMethodInterceptor(provider, parameters);
+        ExecuteMethodInterceptor interceptor = new ExecuteMethodInterceptor(parameters);
         ResourceMethod method = new DefaultResourceMethod(null, DogAlike.class.getMethod("bark", int.class));
         final DogAlike auau = mockery.mock(DogAlike.class);
         mockery.checking(new Expectations() {

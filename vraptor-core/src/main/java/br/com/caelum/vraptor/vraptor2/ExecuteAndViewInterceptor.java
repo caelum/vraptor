@@ -9,6 +9,7 @@ import br.com.caelum.vraptor.Interceptor;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodParameters;
 import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.validator.ValidationError;
 
 public class ExecuteAndViewInterceptor implements Interceptor {
 
@@ -34,6 +35,8 @@ public class ExecuteAndViewInterceptor implements Interceptor {
                 }
             }
             stack.next(method, resourceInstance);
+        } catch (ValidationError e) {
+            // fine... already parsed
         } catch (IllegalArgumentException e) {
             throw new InterceptionException(e);
         } catch (IllegalAccessException e) {

@@ -35,14 +35,17 @@ public class ExecuteAndViewInterceptor implements Interceptor {
                 }
             }
             stack.next(method, resourceInstance);
-        } catch (ValidationError e) {
-            // fine... already parsed
         } catch (IllegalArgumentException e) {
             throw new InterceptionException(e);
         } catch (IllegalAccessException e) {
             throw new InterceptionException(e);
         } catch (InvocationTargetException e) {
-            throw new InterceptionException(e.getCause());
+            Throwable cause = e.getCause();
+            if(cause instanceof ValidationError) {
+                // fine... already parsed
+            } else {
+                throw new InterceptionException(cause);
+            }
         }
     }
 

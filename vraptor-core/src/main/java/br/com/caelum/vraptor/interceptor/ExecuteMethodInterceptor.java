@@ -32,6 +32,7 @@ package br.com.caelum.vraptor.interceptor;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.List;
 
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Interceptor;
@@ -39,6 +40,7 @@ import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodParameters;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.validator.ValidationError;
 
 /**
  * Interceptor that executes the logic method.
@@ -61,6 +63,8 @@ public class ExecuteMethodInterceptor implements Interceptor {
             Method reflectionMethod = method.getMethod();
             Object[] parameters = this.parameters.getValues();
             reflectionMethod.invoke(resourceInstance, parameters);
+        } catch (ValidationError e) {
+            // finished just fine
         } catch (IllegalArgumentException e) {
             throw new InterceptionException(e);
         } catch (IllegalAccessException e) {

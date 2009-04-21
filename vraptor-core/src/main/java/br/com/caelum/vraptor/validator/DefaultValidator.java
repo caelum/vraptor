@@ -25,6 +25,7 @@ public class DefaultValidator implements Validator {
         List<String> errors = validations.getErrors();
         if(!errors.isEmpty()) {
             try {
+                result.include("errors", errors);
                 result.forward("invalid");
                 // finished just fine
                 throw new ValidationError(errors);

@@ -35,7 +35,7 @@ public class Validations {
         }
     }
     
-    List<String> getErrors() {
+    public List<String> getErrors() {
         return errors;
     }
     

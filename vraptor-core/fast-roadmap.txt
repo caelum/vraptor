@@ -1,4 +1,3 @@
-(MUST) - support Validator
 (MUST) - support HibernateValidator
 com a galera:
 - cweb: remova all RequiresTRansaction

@@ -23,7 +23,7 @@ public class Validations {
                 Description description = new StringDescription();
                 description.appendText(reason).appendText("\nExpected: ").appendDescriptionOf(matcher).appendText(
                         "\n     but: ");
-                matcher.describeMismatch(actual, description);
+                matcher.describeTo(description);
                 errors.add(description.toString());
             }
         }
@@ -37,6 +37,10 @@ public class Validations {
     
     List<String> getErrors() {
         return errors;
+    }
+    
+    public void and(List<String> errors) {
+        this.errors.addAll(errors);
     }
 
 }

@@ -1,4 +1,6 @@
-(MUST) - support HibernateValidator
+- PicoContainer only register if it needs
+- MultiPartInterceptor config
+
 com a galera:
 - cweb: remova all RequiresTRansaction
 - cweb: disponibilidade on ADD PESSOA how works?
@@ -7,7 +9,6 @@ com a galera:
 - check that converters and vraptor work without multipart jar on classpath (its converter has been registered automatically), otherwise, lazy load it
 (MUST) ceci: testar o vraptor2-compatible-example sem o hibernate.jar no classpath (conferir... tem que ter certeza) e ver se nao da classnotfound
 (MUST) ceci: test multipart interceptor
-- MultiPartInterceptor config
 (MUST) - pico problem: STARTABLE/STOPABLE COMPONENTS with annotation + tests
 (MUST) - niceurls with programmatic support
 
@@ -80,6 +81,7 @@ kung help
 (MUST) - full spring support
 (MUST) - Map support
 (MUST) - forward problem with opening 2 connections to the database and 2 components... one or two? solve it?
+(MUST) - support HibernateValidator with i18n messages
 
 
 
@@ -112,6 +114,8 @@ right before release
 
 maybe
 	better than vraptor2: support for inheritance
+- Hibernate.validate(Object instance, String ... fields)
+- Hibernate.validate(Object instance) : Proxy.getFirst(), Proxy.getSecond() will hibernate validate those fields
 
 
 
@@ -292,8 +296,7 @@ done:
 - type converters
 - ognl support
 - vraptor2: @Component lookup
-- primitive converters
-- enum converter
+- validation support
 - vraptor2: public method lookup (old algo)
 - vraptor2: converter without request/session/context access support
 	- v2: view interceptor
@@ -313,6 +316,7 @@ done:
 	- v2: @Logic (parameters=...) support
 	- v2: default Logic,Action and so on key removal
 	- v2: constructor injection only
+- hibernate validator
 - converters
 	primitive
 	wrappers
@@ -320,6 +324,8 @@ done:
 	date
 	bigdecimal
 	File
+	enum
+	primitive
 - paranamer support
 - Collection, List, Set, Calendar, SortedSet, Queue interface support
 1 path annotation default value (without annotation)

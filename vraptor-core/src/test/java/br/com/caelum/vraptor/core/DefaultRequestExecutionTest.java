@@ -17,7 +17,7 @@ import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
 import br.com.caelum.vraptor.vraptor2.ExecuteAndViewInterceptor;
 import br.com.caelum.vraptor.vraptor2.HibernateValidatorPluginInterceptor;
 import br.com.caelum.vraptor.vraptor2.OutjectionInterceptor;
-import br.com.caelum.vraptor.vraptor2.Validator;
+import br.com.caelum.vraptor.vraptor2.ValidatorInterceptor;
 import br.com.caelum.vraptor.vraptor2.ViewInterceptor;
 
 public class DefaultRequestExecutionTest {

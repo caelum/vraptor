@@ -66,7 +66,7 @@ public class Provider extends PicoProvider {
         components.add(HibernateValidatorPluginInterceptor.class);
         components.add(OgnlParametersProvider.class);
         components.add(VRaptor2Converters.class);
-        components.add(Validator.class);
+        components.add(ValidatorInterceptor.class);
         components.add(ViewInterceptor.class);
         components.add(DefaultComponentInfoProvider.class);
         components.add(OutjectionInterceptor.class);

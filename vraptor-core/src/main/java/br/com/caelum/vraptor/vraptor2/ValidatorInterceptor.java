@@ -17,16 +17,16 @@ import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.view.jsp.PageResult;
 
-public class Validator implements Interceptor {
+public class ValidatorInterceptor implements Interceptor {
 
     private final ParametersProvider provider;
     private final PageResult result;
 
-    private static final Logger logger = LoggerFactory.getLogger(Validator.class);
+    private static final Logger logger = LoggerFactory.getLogger(ValidatorInterceptor.class);
     private final ValidationErrors errors;
     private final OutjectionInterceptor outjection;
 
-    public Validator(ParametersProvider provider, PageResult result, ValidationErrors errors, OutjectionInterceptor outjection) {
+    public ValidatorInterceptor(ParametersProvider provider, PageResult result, ValidationErrors errors, OutjectionInterceptor outjection) {
         this.provider = provider;
         this.result = result;
         this.errors = errors;

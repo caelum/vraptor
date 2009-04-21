@@ -19,10 +19,10 @@ import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.view.jsp.PageResult;
 
-public class ValidatorTest {
+public class ValidatorInterceptorTest {
 
     private VRaptorMockery mockery;
-    private Validator validator;
+    private ValidatorInterceptor validator;
     private PageResult result;
     private ParametersProvider provider;
     private InterceptorStack stack;
@@ -34,7 +34,7 @@ public class ValidatorTest {
         this.result = mockery.mock(PageResult.class);
         this.provider = mockery.mock(ParametersProvider.class);
         this.errors = mockery.mock(ValidationErrors.class);
-        this.validator = new Validator(this.provider, this.result, errors);
+        this.validator = new ValidatorInterceptor(this.provider, this.result, errors);
         this.stack = mockery.mock(InterceptorStack.class);
     }
 

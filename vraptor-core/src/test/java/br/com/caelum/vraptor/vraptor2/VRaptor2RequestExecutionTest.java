@@ -56,7 +56,7 @@ public class VRaptor2RequestExecutionTest {
                 inSequence(sequence);
                 one(stack).add(ParametersInstantiator.class);
                 inSequence(sequence);
-                one(stack).add(Validator.class);
+                one(stack).add(ValidatorInterceptor.class);
                 inSequence(sequence);
                 one(stack).add(ResultSupplierInterceptor.class);
                 inSequence(sequence);

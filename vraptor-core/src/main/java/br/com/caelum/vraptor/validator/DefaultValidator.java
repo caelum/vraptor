@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.servlet.ServletException;
 
+import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.view.jsp.PageResult;
 
 /**
@@ -12,7 +13,7 @@ import br.com.caelum.vraptor.view.jsp.PageResult;
  * 
  * @author Guilherme Silveira
  */
-public class DefaultValidator {
+public class DefaultValidator implements Validator {
     
     private final PageResult result;
 

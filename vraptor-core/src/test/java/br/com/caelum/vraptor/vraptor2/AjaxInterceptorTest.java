@@ -1,7 +1,8 @@
 package br.com.caelum.vraptor.vraptor2;
 
-import static org.hamcrest.MatcherAssert.*;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -10,17 +11,20 @@ import java.io.StringWriter;
 import javax.servlet.http.HttpServletResponse;
 
 import org.jmock.Expectations;
-import org.jmock.Mockery;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.vraptor.annotations.Remotable;
 
 import br.com.caelum.vraptor.InterceptionException;
+import br.com.caelum.vraptor.VRaptorMockery;
 import br.com.caelum.vraptor.core.InterceptorStack;
+import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.vraptor2.outject.JsonOutjecter;
 
 public class AjaxInterceptorTest {
 
-    private Mockery mockery;
+    private VRaptorMockery mockery;
     private ComponentInfoProvider info;
     private HttpServletResponse response;
     private JsonOutjecter outjecter;
@@ -29,7 +33,7 @@ public class AjaxInterceptorTest {
 
     @Before
     public void setup() {
-        this.mockery = new Mockery();
+        this.mockery = new VRaptorMockery();
         this.stack = mockery.mock(InterceptorStack.class);
         this.outjecter = new JsonOutjecter();
         this.info = mockery.mock(ComponentInfoProvider.class);
@@ -48,12 +52,21 @@ public class AjaxInterceptorTest {
         interceptor.intercept(stack, null, null);
         mockery.assertIsSatisfied();
     }
+    
+    class MyComponent {
+        @Remotable
+        void ajaxed() {
+        }
+        void nonAjaxed() {
+        }
+    }
 
     @Test
-    public void outjectsToResponseIfAjax() throws InterceptionException, IOException {
+    public void outjectsToResponseIfAjax() throws InterceptionException, IOException, NoSuchMethodException {
         outjecter.include("author", "Guilherme");
         StringWriter content = new StringWriter();
         final PrintWriter writer = new PrintWriter(content);
+        ResourceMethod method = mockery.methodFor(MyComponent.class, "ajaxed");
         mockery.checking(new Expectations() {
             {
                 one(info).isAjax(); will(returnValue(true));
@@ -62,9 +75,28 @@ public class AjaxInterceptorTest {
                 one(response).getWriter(); will(returnValue(writer));
             }
         });
-        interceptor.intercept(stack, null, null);
+        interceptor.intercept(stack, method, null);
         assertThat(content.getBuffer().toString(), is(equalTo("{\"author\":\"Guilherme\"}")));
         mockery.assertIsSatisfied();
+    }
+
+
+    @Test
+    public void complainsIfTryingToAjaxANonRemotableMethod() throws IOException, NoSuchMethodException {
+        outjecter.include("author", "Guilherme");
+        ResourceMethod method = mockery.methodFor(MyComponent.class, "nonAjaxed");
+        mockery.checking(new Expectations() {
+            {
+                one(info).isAjax(); will(returnValue(true));
+            }
+        });
+        try {
+            interceptor.intercept(stack, method, null);
+            Assert.fail();
+        } catch (InterceptionException e) {
+            // DO NOT move it from here... we need to satisfy the mockery issues
+            mockery.assertIsSatisfied();
+        }
     }
 
 }

@@ -4,6 +4,7 @@ import java.lang.reflect.Method;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;
+import org.jmock.lib.legacy.ClassImposteriser;
 import org.jmock.internal.ExpectationBuilder;
 
 import br.com.caelum.vraptor.ioc.Container;

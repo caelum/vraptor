@@ -9,6 +9,7 @@ import br.com.caelum.vraptor.core.RequestExecution;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.core.VRaptorRequest;
 import br.com.caelum.vraptor.core.MethodParameters;
+import br.com.caelum.vraptor.core.URLParameterExtractorInterceptor;
 import br.com.caelum.vraptor.http.OgnlParametersProvider;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.TypeCreator;
@@ -77,10 +78,10 @@ public abstract class GenericContainerTest {
     public void canProvideAllRequestScopedComponents() {
         checkAvailabilityFor(false, HttpServletRequest.class, HttpServletResponse.class, VRaptorRequest.class,
                 HttpSession.class, ParametersInstantiator.class, MethodParameters.class, RequestParameters.class,
-                InterceptorListPriorToExecutionExtractor.class, InterceptorStack.class, RequestExecution.class,
-                ResourceLookupInterceptor.class, InstantiateInterceptor.class, Result.class,
-                ExecuteMethodInterceptor.class, PageResult.class, ParametersProvider.class, RequestInfo.class,
-                Validator.class);
+                InterceptorListPriorToExecutionExtractor.class, URLParameterExtractorInterceptor.class,
+                InterceptorStack.class, RequestExecution.class, ResourceLookupInterceptor.class,
+                InstantiateInterceptor.class, Result.class, ExecuteMethodInterceptor.class, PageResult.class,
+                ParametersProvider.class, RequestInfo.class, Validator.class);
         mockery.assertIsSatisfied();
     }
 

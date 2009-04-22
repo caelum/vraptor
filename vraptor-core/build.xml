@@ -59,7 +59,7 @@
 		</cobertura-instrument>
 		<fileset dir="${tmp.test.classes.dir}" id="unittests.fileset" includes="**/*Test.class" />
 		
-		<junit fork="yes" forkmode="once" printsummary="false" showoutput="true" failureproperty="failed-test">
+		<junit fork="yes" forkmode="once" printsummary="withOutAndErr" showoutput="true" failureproperty="failed-test">
 			<sysproperty key="net.sourceforge.cobertura.datafile" file="cobertura.ser" />
 
 			<classpath>
@@ -70,6 +70,8 @@
 			<classpath refid="test.classpath" />
 
 			<formatter type="xml" />
+			<formatter type="brief" usefile="false" />
+  			
 			<batchtest fork="yes" todir="${reports.dir}/test-results">
 				<fileset refid="unittests.fileset" />
 			</batchtest>

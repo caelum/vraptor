@@ -80,6 +80,7 @@ public class DefaultConvertersTest {
                 put(Enum.class, EnumConverter.class);
                 put(UploadedFile.class, UploadedFileConverter.class);
             }
+            private static final long serialVersionUID = 8559316558416038474L;
         };
 
         mockery.checking(new Expectations() {

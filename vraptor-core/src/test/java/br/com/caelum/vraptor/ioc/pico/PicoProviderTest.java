@@ -15,7 +15,7 @@ public class PicoProviderTest extends GenericContainerTest {
     private int counter;
 
     @Test
-    public void canProvidePicoSpecificComponents() {
+    public void canProvidePicoSpecificApplicationScopedComponents() {
         Class<?>[] components = new Class[]{DirScanner.class, ResourceLocator.class};
         checkAvailabilityFor(true, components);
         mockery.assertIsSatisfied();

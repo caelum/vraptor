@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.caelum.vraptor.Converter;
-import br.com.caelum.vraptor.RegisterContainer;
+import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.core.DefaultConverters;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
@@ -23,7 +23,7 @@ public class VRaptor2Converters implements Converters {
     private final Converters vraptor3;
     private final List<org.vraptor.converter.Converter> converterList = new ArrayList<org.vraptor.converter.Converter>();
 
-    public VRaptor2Converters(Config config, RegisterContainer container) throws ClassNotFoundException,
+    public VRaptor2Converters(Config config, ComponentRegistry container) throws ClassNotFoundException,
             InstantiationException, IllegalAccessException {
         this(config, new DefaultConverters(container));
     }

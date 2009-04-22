@@ -47,7 +47,7 @@ import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.core.Ordered;
 import org.springframework.web.context.support.GenericWebApplicationContext;
 
-import br.com.caelum.vraptor.RegisterContainer;
+import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.core.DefaultConverters;
 import br.com.caelum.vraptor.core.DefaultInterceptorStack;
 import br.com.caelum.vraptor.core.DefaultMethodParameters;
@@ -77,7 +77,7 @@ import br.com.caelum.vraptor.view.jsp.DefaultPageResult;
 /**
  * @author Fabio Kung
  */
-public class SpringBasedContainer implements Container, RegisterContainer {
+public class SpringBasedContainer implements Container, ComponentRegistry {
     private final AnnotationBeanNameGenerator beanNameGenerator = new AnnotationBeanNameGenerator();
     private final GenericWebApplicationContext applicationContext;
 
@@ -146,7 +146,7 @@ public class SpringBasedContainer implements Container, RegisterContainer {
         register(HttpServletResponseProvider.class);
         register(VRaptorRequestProvider.class);
         registerInstanceFor(Container.class, this);
-        registerInstanceFor(RegisterContainer.class, this);
+        registerInstanceFor(ComponentRegistry.class, this);
     }
 
     @SuppressWarnings("unchecked")

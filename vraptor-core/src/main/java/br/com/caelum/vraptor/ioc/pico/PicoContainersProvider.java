@@ -41,7 +41,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.Interceptor;
-import br.com.caelum.vraptor.RegisterContainer;
+import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.core.VRaptorRequest;
 import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
@@ -55,15 +55,15 @@ import br.com.caelum.vraptor.resource.ResourceRegistry;
  * 
  * @author Guilherme Silveira
  */
-public class PicoContainersProvider implements RegisterContainer {
+public class PicoContainersProvider implements ComponentRegistry {
 
     public static final String CONTAINER_SESSION_KEY = PicoContainersProvider.class.getName() + ".session";
 
     private static final Logger logger = LoggerFactory.getLogger(PicoContainersProvider.class);
 
-    private List<Class<?>> applicationScoped = new ArrayList<Class<?>>();
-    private List<Class<?>> sessionScoped = new ArrayList<Class<?>>();
-    private List<Class<?>> requestScoped = new ArrayList<Class<?>>();
+    private final List<Class<?>> applicationScoped = new ArrayList<Class<?>>();
+    private final List<Class<?>> sessionScoped = new ArrayList<Class<?>>();
+    private final List<Class<?>> requestScoped = new ArrayList<Class<?>>();
     private final MutablePicoContainer container;
 
     public PicoContainersProvider(MutablePicoContainer container) {

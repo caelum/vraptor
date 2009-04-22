@@ -29,7 +29,7 @@ public class SpringBasedContainerTest {
     @Before
     public void initContainer() {
         mockery = new Mockery();
-        RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(new HttpServletRequestMock()));
+//        RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(new HttpServletRequestMock()));
         container = new SpringBasedContainer("br.com.caelum.vraptor.ioc.spring");
         container.start(mockery.mock(ServletContext.class));
     }

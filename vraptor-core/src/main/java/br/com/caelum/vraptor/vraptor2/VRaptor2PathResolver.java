@@ -4,12 +4,14 @@ import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.view.DefaultPathResolver;
 import br.com.caelum.vraptor.view.PathResolver;
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
 /**
  * Vraptor 2 and 3 compatible path resolver.
  * 
  * @author Guilherme Silveira
  */
+@ApplicationScoped
 public class VRaptor2PathResolver implements PathResolver {
 
     private final PathResolver vraptor3 = new DefaultPathResolver();

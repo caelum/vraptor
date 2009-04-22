@@ -3,16 +3,22 @@ package br.com.caelum.vraptor.vraptor2;
 import br.com.caelum.vraptor.core.VRaptorRequest;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
 import br.com.caelum.vraptor.ioc.GenericContainerTest;
+import br.com.caelum.vraptor.ioc.Execution;
+import br.com.caelum.vraptor.test.HttpServletRequestMock;
+import br.com.caelum.vraptor.test.HttpSessionMock;
 import org.jmock.Expectations;
 import org.junit.Before;
 
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
 
 public class ProviderTest extends GenericContainerTest {
+    private int counter;
 
     @Before
+    @Override
     public void setup() throws IOException {
         super.setup();
         mockery.checking(new Expectations() {
@@ -30,17 +36,11 @@ public class ProviderTest extends GenericContainerTest {
         return new Provider();
     }
 
-    protected VRaptorRequest createRequest() {
-        VRaptorRequest webRequest = super.createRequest();
-        final HttpSession session = webRequest.getRequest().getSession();
-        mockery.checking(new Expectations() {
-            {
-                allowing(session).setAttribute("org.vraptor.scope.ScopeType_FLASH", new HashMap());
-                allowing(session).getAttribute("org.vraptor.scope.ScopeType_FLASH");
-                will(returnValue(new HashMap()));
-            }
-        });
-        return webRequest;
+    protected <T> T executeInsideRequest(Execution<T> execution) {
+        final HttpSessionMock session = new HttpSessionMock(context, "session" + ++counter);
+        HttpServletRequestMock httpRequest = new HttpServletRequestMock(session);
+        HttpServletResponse response = mockery.mock(HttpServletResponse.class, "response" + counter);
+        VRaptorRequest request = new VRaptorRequest(context, httpRequest, response);
+        return execution.execute(request, counter);
     }
-
 }

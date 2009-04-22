@@ -31,7 +31,7 @@ package br.com.caelum.vraptor.vraptor2;
 
 import org.vraptor.validator.BasicValidationErrors;
 
-import br.com.caelum.vraptor.RegisterContainer;
+import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.ioc.pico.PicoProvider;
 
 /**
@@ -41,7 +41,7 @@ import br.com.caelum.vraptor.ioc.pico.PicoProvider;
  */
 public class Provider extends PicoProvider {
     
-    protected void registerComponents(RegisterContainer container) {
+    protected void registerComponents(ComponentRegistry container) {
         super.registerComponents(container);
         container.register(VRaptor2MethodLookupBuilder.class);
         container.register(VRaptor2PathResolver.class);
@@ -62,5 +62,4 @@ public class Provider extends PicoProvider {
         container.register(MessageCreatorValidator.class);
         container.register(BasicValidationErrors.class);
     }
-
 }

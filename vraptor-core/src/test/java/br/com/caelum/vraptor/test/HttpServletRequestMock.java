@@ -60,6 +60,10 @@ public class HttpServletRequestMock implements HttpServletRequest {
     private int localPort;
     private HttpSession session;
 
+    public HttpServletRequestMock(HttpSession session) {
+        this.session = session;
+    }
+
     public String getAuthType() {
         return authType;
     }

@@ -34,7 +34,7 @@ import java.util.LinkedList;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
-import br.com.caelum.vraptor.RegisterContainer;
+import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.converter.BooleanConverter;
 import br.com.caelum.vraptor.converter.ByteConverter;
 import br.com.caelum.vraptor.converter.DoubleConverter;
@@ -53,14 +53,15 @@ import br.com.caelum.vraptor.converter.PrimitiveLongConverter;
 import br.com.caelum.vraptor.converter.PrimitiveShortConverter;
 import br.com.caelum.vraptor.converter.ShortConverter;
 import br.com.caelum.vraptor.interceptor.multipart.UploadedFileConverter;
-import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
 @ApplicationScoped
 public class DefaultConverters implements Converters {
 
-    private LinkedList<Class<? extends Converter<?>>> types;
+    private LinkedList<Class<? extends Converter>> types;
 
+    // TODO: should all DEFAULT converters be @ApplicationScoped?
     public static final Class<? extends Converter<?>>[] DEFAULTS = new Class[] { PrimitiveIntConverter.class,
             PrimitiveLongConverter.class, PrimitiveShortConverter.class, PrimitiveByteConverter.class,
             PrimitiveDoubleConverter.class, PrimitiveFloatConverter.class, PrimitiveBooleanConverter.class,
@@ -68,11 +69,11 @@ public class DefaultConverters implements Converters {
             DoubleConverter.class, FloatConverter.class, BooleanConverter.class, LocaleBasedCalendarConverter.class,
             LocaleBasedDateConverter.class, EnumConverter.class, UploadedFileConverter.class };
 
-    private final RegisterContainer container;
+    private final ComponentRegistry container;
 
-    public DefaultConverters(RegisterContainer container) {
+    public DefaultConverters(ComponentRegistry container) {
         this.container = container;
-        this.types = new LinkedList<Class<? extends Converter<?>>>();
+        this.types = new LinkedList<Class<? extends Converter>>();
         for (Class<? extends Converter<?>> type : DEFAULTS) {
             register(type);
         }
@@ -88,10 +89,9 @@ public class DefaultConverters implements Converters {
         container.register(converterType);
     }
 
-    @SuppressWarnings("unchecked")
-    public Converter to(Class type, Container container) {
-        for (Iterator iterator = types.iterator(); iterator.hasNext();) {
-            Class<? extends Converter> converterType = (Class<? extends Converter>) iterator.next();
+    public Converter to(Class<?> type, Container container) {
+        for (Iterator<Class<? extends Converter>> iterator = types.iterator(); iterator.hasNext();) {
+            Class<? extends Converter> converterType = iterator.next();
             Class boundType = converterType.getAnnotation(Convert.class).value();
             if (boundType.isAssignableFrom(type)) {
                 return container.instanceFor(converterType);

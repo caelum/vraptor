@@ -36,7 +36,7 @@ import org.picocontainer.PicoBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import br.com.caelum.vraptor.RegisterContainer;
+import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.core.DefaultConverters;
 import br.com.caelum.vraptor.core.DefaultInterceptorStack;
 import br.com.caelum.vraptor.core.DefaultMethodParameters;
@@ -84,7 +84,7 @@ public class PicoProvider implements ContainerProvider {
         this.container.addComponent(containersProvider);
         registerComponents(getContainers());
         containersProvider.init();
-        // TODO
+        // TODO: cache
         // cache(CacheBasedResourceRegistry.class, ResourceRegistry.class);
         // cache(CacheBasedTypeCreator.class, AsmBasedTypeCreator.class);
     }
@@ -96,7 +96,7 @@ public class PicoProvider implements ContainerProvider {
     /**
      * Register extra components that your app wants to.
      */
-    protected void registerComponents(RegisterContainer container) {
+    protected void registerComponents(ComponentRegistry container) {
         // app scoped
         container.register(StupidTranslator.class);
         container.register(DefaultResourceRegistry.class);

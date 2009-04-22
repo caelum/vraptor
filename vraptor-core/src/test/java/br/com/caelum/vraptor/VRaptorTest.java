@@ -25,7 +25,7 @@ import br.com.caelum.vraptor.ioc.ContainerProvider;
 
 public class VRaptorTest {
 
-    private Mockery mockery;
+    private VRaptorMockery mockery;
     private FilterConfig config;
     private ServletContext context;
     private Container container;
@@ -33,7 +33,7 @@ public class VRaptorTest {
 
     @Before
     public void setup() {
-        this.mockery = new Mockery();
+        this.mockery = new VRaptorMockery();
         this.config = mockery.mock(FilterConfig.class);
         this.context = mockery.mock(ServletContext.class);
         this.container = mockery.mock(Container.class);

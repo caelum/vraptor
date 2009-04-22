@@ -133,7 +133,7 @@ public class PicoProvider implements ContainerProvider {
                 DefaultConverters.class, EmptyElementsRemoval.class);
     }
 
-    protected List<Class<?>> getRequestScopedComponents() {
+    protected Collection<Class<?>> getRequestScopedComponents() {
         // TODO make InterceptorStack itself register components
         return Arrays.asList(
                 ParametersInstantiator.class, DefaultMethodParameters.class, DefaultRequestParameters.class,

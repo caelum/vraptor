@@ -69,8 +69,8 @@
 			</classpath>
 			<classpath refid="test.classpath" />
 
-			<formatter type="xml" />
 			<formatter type="brief" usefile="false" />
+			<formatter type="xml" />
   			
 			<batchtest fork="yes" todir="${reports.dir}/test-results">
 				<fileset refid="unittests.fileset" />

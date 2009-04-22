@@ -4,6 +4,7 @@ import java.lang.reflect.Method;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;
+import org.jmock.lib.legacy.ClassImposteriser;
 import org.jmock.internal.ExpectationBuilder;
 
 import br.com.caelum.vraptor.ioc.Container;
@@ -12,7 +13,18 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 
 public class VRaptorMockery {
 
-    private Mockery mockery = new Mockery();
+    private Mockery mockery;
+
+    public VRaptorMockery() {
+        this(false);
+    }
+
+    public VRaptorMockery(boolean supportConcreteClasses) {
+        mockery = new Mockery();
+        if (supportConcreteClasses) {
+            mockery.setImposteriser(ClassImposteriser.INSTANCE);
+        }
+    }
 
     public void assertIsSatisfied() {
         mockery.assertIsSatisfied();

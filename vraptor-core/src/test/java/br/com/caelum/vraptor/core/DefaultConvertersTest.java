@@ -10,7 +10,7 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
-import br.com.caelum.vraptor.RegisterContainer;
+import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.VRaptorMockery;
 import br.com.caelum.vraptor.ioc.Container;
 
@@ -19,19 +19,19 @@ public class DefaultConvertersTest {
     private VRaptorMockery mockery;
     private Container container;
     private DefaultConverters converters;
-    private RegisterContainer registerContainer;
+    private ComponentRegistry componentRegistry;
 
     @Before
     public void setup() {
         this.mockery = new VRaptorMockery();
         this.container = mockery.mock(Container.class);
-        this.registerContainer = mockery.mock(RegisterContainer.class);
+        this.componentRegistry = mockery.mock(ComponentRegistry.class);
         mockery.checking(new Expectations() {
             {
-                allowing(registerContainer).register((Class)with(an(Class.class)));
+                allowing(componentRegistry).register((Class)with(an(Class.class)));
             }
         });
-        this.converters = new DefaultConverters(registerContainer);
+        this.converters = new DefaultConverters(componentRegistry);
     }
 
     @Test(expected = IllegalArgumentException.class)

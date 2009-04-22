@@ -37,7 +37,7 @@ package br.com.caelum.vraptor;
  *
  * @author Guilherme Silveira
  */
-public interface RegisterContainer {
+public interface ComponentRegistry {
 
     /**
      * Registers a component in the component registry.

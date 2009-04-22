@@ -34,7 +34,7 @@ import java.util.List;
 
 import org.vraptor.validator.BasicValidationErrors;
 
-import br.com.caelum.vraptor.RegisterContainer;
+import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.core.DefaultInterceptorStack;
 import br.com.caelum.vraptor.core.DefaultMethodParameters;
 import br.com.caelum.vraptor.core.DefaultRequestInfo;
@@ -57,7 +57,7 @@ import br.com.caelum.vraptor.ioc.pico.PicoProvider;
  */
 public class Provider extends PicoProvider {
     
-    protected void registerComponents(RegisterContainer container) {
+    protected void registerComponents(ComponentRegistry container) {
         super.registerComponents(container);
         container.register(VRaptor2MethodLookupBuilder.class);
         container.register(VRaptor2PathResolver.class);

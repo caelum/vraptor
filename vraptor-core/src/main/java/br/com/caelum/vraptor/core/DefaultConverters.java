@@ -34,7 +34,7 @@ import java.util.LinkedList;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
-import br.com.caelum.vraptor.RegisterContainer;
+import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.converter.BooleanConverter;
 import br.com.caelum.vraptor.converter.ByteConverter;
 import br.com.caelum.vraptor.converter.DoubleConverter;
@@ -53,7 +53,6 @@ import br.com.caelum.vraptor.converter.PrimitiveLongConverter;
 import br.com.caelum.vraptor.converter.PrimitiveShortConverter;
 import br.com.caelum.vraptor.converter.ShortConverter;
 import br.com.caelum.vraptor.interceptor.multipart.UploadedFileConverter;
-import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Container;
 
 public class DefaultConverters implements Converters {
@@ -67,9 +66,9 @@ public class DefaultConverters implements Converters {
             DoubleConverter.class, FloatConverter.class, BooleanConverter.class, LocaleBasedCalendarConverter.class,
             LocaleBasedDateConverter.class, EnumConverter.class, UploadedFileConverter.class };
 
-    private final RegisterContainer container;
+    private final ComponentRegistry container;
 
-    public DefaultConverters(RegisterContainer container) {
+    public DefaultConverters(ComponentRegistry container) {
         this.container = container;
         this.types = new LinkedList<Class<? extends Converter<?>>>();
         for (Class<? extends Converter<?>> type : DEFAULTS) {

@@ -40,8 +40,9 @@ package br.com.caelum.vraptor;
 public interface ComponentRegistry {
 
     /**
-     * Registers a component in the component registry.
+     * Registers a component to be used only when the required type is required.
+     * @param componentType the component type
      */
-    public void register(Class<?> type);
+    public void register(Class<?> requiredType, Class<?> componentType);
 
 }

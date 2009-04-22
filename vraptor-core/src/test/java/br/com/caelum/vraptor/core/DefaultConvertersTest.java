@@ -53,7 +53,7 @@ public class DefaultConvertersTest {
         this.componentRegistry = mockery.mock(ComponentRegistry.class);
         mockery.checking(new Expectations() {
             {
-                allowing(componentRegistry).register((Class) with(an(Class.class)));
+                allowing(componentRegistry).register((Class) with(an(Class.class)), (Class) with(an(Class.class)));
             }
         });
         this.converters = new DefaultConverters(componentRegistry);
@@ -88,7 +88,7 @@ public class DefaultConvertersTest {
             {
                 for (Class<? extends Converter> converterType : EXPECTED_CONVERTERS.values()) {
                     Converter expected = mockery.mock(converterType);
-                    one(componentRegistry).register(converterType);
+                    one(componentRegistry).register(converterType, converterType);
                     one(container).instanceFor(converterType);
                     will(returnValue(expected));
                 }

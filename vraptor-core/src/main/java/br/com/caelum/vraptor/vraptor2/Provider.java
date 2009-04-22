@@ -30,9 +30,17 @@
 package br.com.caelum.vraptor.vraptor2;
 
 import org.vraptor.validator.BasicValidationErrors;
+import org.vraptor.validator.ValidationErrors;
 
 import br.com.caelum.vraptor.ComponentRegistry;
+import br.com.caelum.vraptor.Validator;
+import br.com.caelum.vraptor.core.Converters;
+import br.com.caelum.vraptor.core.RequestExecution;
+import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.ioc.pico.PicoProvider;
+import br.com.caelum.vraptor.resource.MethodLookupBuilder;
+import br.com.caelum.vraptor.view.PathResolver;
+import br.com.caelum.vraptor.view.jsp.PageResult;
 
 /**
  * Customized provider with support for both vraptor 2 and 3 components.
@@ -43,23 +51,23 @@ public class Provider extends PicoProvider {
     
     protected void registerComponents(ComponentRegistry container) {
         super.registerComponents(container);
-        container.register(VRaptor2MethodLookupBuilder.class);
-        container.register(VRaptor2PathResolver.class);
-        container.register(VRaptor2Config.class);
-        container.register(LogicAnnotationWithParanamerParameterNameProvider.class);
-        container.register(VRaptor2RequestExecution.class);
-        container.register(ViewsPropertiesPageResult.class);
-        container.register(ExecuteAndViewInterceptor.class);
-        container.register(HibernateValidatorPluginInterceptor.class);
-        container.register(VRaptor2Converters.class);
-        container.register(ValidatorInterceptor.class);
-        container.register(ViewInterceptor.class);
-        container.register(DefaultComponentInfoProvider.class);
-        container.register(OutjectionInterceptor.class);
-        container.register(RequestResult.class);
-        container.register(ResultSupplierInterceptor.class);
-        container.register(AjaxInterceptor.class);
-        container.register(MessageCreatorValidator.class);
-        container.register(BasicValidationErrors.class);
+        container.register(MethodLookupBuilder.class, VRaptor2MethodLookupBuilder.class);
+        container.register(PathResolver.class, VRaptor2PathResolver.class);
+        container.register(Config.class, VRaptor2Config.class);
+        container.register(ParameterNameProvider.class, LogicAnnotationWithParanamerParameterNameProvider.class);
+        container.register(RequestExecution.class, VRaptor2RequestExecution.class);
+        container.register(PageResult.class, ViewsPropertiesPageResult.class);
+        container.register(ExecuteAndViewInterceptor.class, ExecuteAndViewInterceptor.class);
+        container.register(HibernateValidatorPluginInterceptor.class,HibernateValidatorPluginInterceptor.class);
+        container.register(Converters.class, VRaptor2Converters.class);
+        container.register(ValidatorInterceptor.class,ValidatorInterceptor.class);
+        container.register(ViewInterceptor.class,ViewInterceptor.class);
+        container.register(ComponentInfoProvider.class, DefaultComponentInfoProvider.class);
+        container.register(OutjectionInterceptor.class,OutjectionInterceptor.class);
+        container.register(RequestResult.class, RequestResult.class);
+        container.register(ResultSupplierInterceptor.class, ResultSupplierInterceptor.class);
+        container.register(AjaxInterceptor.class, AjaxInterceptor.class);
+        container.register(Validator.class, MessageCreatorValidator.class);
+        container.register(ValidationErrors.class, BasicValidationErrors.class);
     }
 }

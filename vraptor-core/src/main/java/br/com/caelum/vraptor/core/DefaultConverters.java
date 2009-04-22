@@ -86,7 +86,7 @@ public class DefaultConverters implements Converters {
                     + " should have the Convert annotation");
         }
         types.addFirst(converterType);
-        container.register(converterType);
+        container.register(converterType, converterType);
     }
 
     public Converter to(Class<?> type, Container container) {

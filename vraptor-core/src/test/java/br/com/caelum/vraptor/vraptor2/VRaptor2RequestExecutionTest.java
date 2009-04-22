@@ -50,15 +50,15 @@ public class VRaptor2RequestExecutionTest {
                 inSequence(sequence);
                 one(stack).add(InterceptorListPriorToExecutionExtractor.class);
                 inSequence(sequence);
-                one(stack).add(HibernateValidatorPluginInterceptor.class);
-                inSequence(sequence);
                 one(stack).add(instantiator);
                 inSequence(sequence);
                 one(stack).add(ParametersInstantiator.class);
                 inSequence(sequence);
-                one(stack).add(ValidatorInterceptor.class);
+                one(stack).add(HibernateValidatorPluginInterceptor.class);
                 inSequence(sequence);
                 one(stack).add(ResultSupplierInterceptor.class);
+                inSequence(sequence);
+                one(stack).add(ValidatorInterceptor.class);
                 inSequence(sequence);
                 one(stack).add(ExecuteAndViewInterceptor.class);
                 inSequence(sequence);

@@ -87,7 +87,7 @@ public class PicoProvider implements ContainerProvider {
         this.container.addComponent(containersProvider);
         registerComponents(getContainers());
         containersProvider.init();
-        // TODO
+        // TODO: cache
         // cache(CacheBasedResourceRegistry.class, ResourceRegistry.class);
         // cache(CacheBasedTypeCreator.class, AsmBasedTypeCreator.class);
     }
@@ -100,7 +100,7 @@ public class PicoProvider implements ContainerProvider {
      * Register extra components that your app wants to.
      */
     protected void registerComponents(ComponentRegistry container) {
-        for (Class<?> type : getChildComponentTypes()) {
+        for (Class<?> type : getRequestScopedComponents()) {
             container.register(type);
         }
         container.register(StupidTranslator.class);
@@ -112,6 +112,7 @@ public class PicoProvider implements ContainerProvider {
         container.register(DefaultMethodLookupBuilder.class);
         container.register(DefaultPathResolver.class);
         container.register(ParanamerNameProvider.class);
+        container.register(DefaultConverters.class);
     }
 
     public <T> T instanceFor(Class<T> type) {
@@ -132,7 +133,7 @@ public class PicoProvider implements ContainerProvider {
         return getContainers().provide(request);
     }
 
-    protected List<Class<?>> getChildComponentTypes() {
+    protected List<Class<?>> getRequestScopedComponents() {
         // TODO remove and replace by invoking register on registercontainer
         // only if interfaces were not registered
         List<Class<?>> components = new ArrayList<Class<?>>();
@@ -149,7 +150,6 @@ public class PicoProvider implements ContainerProvider {
         components.add(ExecuteMethodInterceptor.class);
         components.add(DefaultPageResult.class);
         components.add(OgnlParametersProvider.class);
-        components.add(DefaultConverters.class);
         components.add(DefaultRequestInfo.class);
         components.add(EmptyElementsRemoval.class);
         components.add(DefaultValidator.class);

@@ -1,11 +1,11 @@
 package br.com.caelum.vraptor.ioc;
 
-import br.com.caelum.vraptor.core.Converters;
-import br.com.caelum.vraptor.core.DefaultInterceptorStack;
-import br.com.caelum.vraptor.core.DefaultResult;
+import br.com.caelum.vraptor.Result;
+import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.RequestExecution;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.core.VRaptorRequest;
+import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.http.OgnlParametersProvider;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.TypeCreator;
@@ -55,6 +55,43 @@ public abstract class GenericContainerTest {
 
     protected abstract <T> T executeInsideRequest(Execution<T> execution);
 
+    @Test
+    public void canProvideAllApplicationScopedComponents() {
+        Class<?>[] components = new Class[]{UrlToResourceTranslator.class, ResourceRegistry.class, TypeCreator.class,
+                InterceptorRegistry.class, PathResolver.class, ParameterNameProvider.class, Converters.class};
+        checkAvailabilityFor(true, components);
+        mockery.assertIsSatisfied();
+    }
+
+    @Test
+    public void canProvideAllRequestScopedComponents() {
+        checkAvailabilityFor(false, HttpServletRequest.class, HttpServletResponse.class, VRaptorRequest.class,
+                InterceptorStack.class, RequestInfo.class, RequestExecution.class, ResourceLookupInterceptor.class,
+                InstantiateInterceptor.class, Result.class, ExecuteMethodInterceptor.class,
+                OgnlParametersProvider.class, HttpSession.class, PageResult.class);
+        mockery.assertIsSatisfied();
+    }
+
+    @ApplicationScoped
+    public static class MyAppComponent {
+    }
+
+    @Test
+    public void processesCorrectlyAppBasedComponents() {
+        checkAvailabilityFor(true, MyAppComponent.class, MyAppComponent.class);
+        mockery.assertIsSatisfied();
+    }
+
+    @Component
+    public static class MyRequestComponent {
+    }
+
+    @Test
+    public void processesCorrectlyRequestBasedComponents() {
+        checkAvailabilityFor(false, MyRequestComponent.class, MyRequestComponent.class);
+        mockery.assertIsSatisfied();
+    }
+
     @Before
     public void setup() throws IOException {
         this.mockery = new Mockery();
@@ -76,15 +113,6 @@ public abstract class GenericContainerTest {
     @After
     public void tearDown() {
         provider.stop();
-    }
-
-    @Test
-    public void canProvideAllRequestScopedComponents() {
-        checkAvailabilityFor(false, HttpServletRequest.class, HttpServletResponse.class, VRaptorRequest.class,
-                DefaultInterceptorStack.class, RequestInfo.class, RequestExecution.class, ResourceLookupInterceptor.class,
-                InstantiateInterceptor.class, DefaultResult.class, ExecuteMethodInterceptor.class,
-                OgnlParametersProvider.class, Converters.class, HttpSession.class, PageResult.class);
-        mockery.assertIsSatisfied();
     }
 
     private <T> void checkAvailabilityFor(final boolean shouldBeTheSame, final Class<T> component,
@@ -134,40 +162,10 @@ public abstract class GenericContainerTest {
         }
     }
 
-    @Test
-    public void canProvideAllApplicationScopedComponents() {
-        Class<?>[] components = new Class[]{UrlToResourceTranslator.class, ResourceRegistry.class, TypeCreator.class,
-                InterceptorRegistry.class, PathResolver.class, ParameterNameProvider.class};
-        checkAvailabilityFor(true, components);
-        mockery.assertIsSatisfied();
-    }
-
     protected void checkAvailabilityFor(boolean shouldBeTheSame, Class<?>... components) {
         for (Class<?> component : components) {
             checkAvailabilityFor(shouldBeTheSame, component, null);
         }
-    }
-
-    @ApplicationScoped
-    public static class MyAppComponent {
-
-    }
-
-    @Test
-    public void processesCorrectlyAppBasedComponents() {
-        checkAvailabilityFor(true, MyAppComponent.class, MyAppComponent.class);
-        mockery.assertIsSatisfied();
-    }
-
-    @Component
-    public static class MyRequestComponent {
-
-    }
-
-    @Test
-    public void processesCorrectlyRequestBasedComponents() {
-        checkAvailabilityFor(false, MyRequestComponent.class, MyRequestComponent.class);
-        mockery.assertIsSatisfied();
     }
 
 }

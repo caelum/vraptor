@@ -54,11 +54,14 @@ import br.com.caelum.vraptor.converter.PrimitiveShortConverter;
 import br.com.caelum.vraptor.converter.ShortConverter;
 import br.com.caelum.vraptor.interceptor.multipart.UploadedFileConverter;
 import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
+@ApplicationScoped
 public class DefaultConverters implements Converters {
 
     private LinkedList<Class<? extends Converter<?>>> types;
 
+    // TODO: should all DEFAULT converters be @ApplicationScoped?
     public static final Class<? extends Converter<?>>[] DEFAULTS = new Class[] { PrimitiveIntConverter.class,
             PrimitiveLongConverter.class, PrimitiveShortConverter.class, PrimitiveByteConverter.class,
             PrimitiveDoubleConverter.class, PrimitiveFloatConverter.class, PrimitiveBooleanConverter.class,

@@ -15,12 +15,14 @@ import org.vraptor.plugin.hibernate.Validate;
 import br.com.caelum.vraptor.resource.MethodLookupBuilder;
 import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceAndMethodLookup;
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
 /**
  * A vraptor 2 compatible method lookup builder.
  * 
  * @author Guilherme Silveira
  */
+@ApplicationScoped
 public class VRaptor2MethodLookupBuilder implements MethodLookupBuilder {
     
     private static final Logger logger = LoggerFactory.getLogger(VRaptor2MethodLookupBuilder.class);

@@ -65,7 +65,7 @@ public class Provider extends PicoProvider {
         container.register(LogicAnnotationWithParanamerParameterNameProvider.class);
     }
 
-    protected List<Class<?>> getChildComponentTypes() {
+    protected List<Class<?>> getRequestScopedComponents() {
         List<Class<?>> components = new ArrayList<Class<?>>();
         components.add(ParametersInstantiator.class);
         components.add(DefaultMethodParameters.class);

@@ -17,6 +17,7 @@ import javax.servlet.ServletContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vraptor.plugin.VRaptorPlugin;
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
 /**
  * Loads some basic config from vraptor.xml.<br>
@@ -26,6 +27,7 @@ import org.vraptor.plugin.VRaptorPlugin;
  * 
  * @author Guilherme Silveira
  */
+@ApplicationScoped
 public class VRaptor2Config implements Config {
 
     private static final Logger logger = LoggerFactory.getLogger(VRaptor2Config.class);

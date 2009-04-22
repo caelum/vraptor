@@ -1,25 +1,5 @@
 package br.com.caelum.vraptor.ioc;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.not;
-
-import java.io.File;
-import java.io.IOException;
-
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
-import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.core.DefaultInterceptorStack;
 import br.com.caelum.vraptor.core.DefaultResult;
@@ -36,9 +16,25 @@ import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
 import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.resource.ResourceRegistry;
-import br.com.caelum.vraptor.test.HttpServletRequestMock;
 import br.com.caelum.vraptor.view.PathResolver;
 import br.com.caelum.vraptor.view.jsp.PageResult;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.not;
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
+
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Acceptance test that checks if the container is capable of giving all
@@ -57,7 +53,7 @@ public abstract class GenericContainerTest {
 
     protected abstract ContainerProvider getProvider();
 
-    protected abstract <T> T executeInsideRequest(Execution<T> execution); 
+    protected abstract <T> T executeInsideRequest(Execution<T> execution);
 
     @Before
     public void setup() throws IOException {
@@ -87,31 +83,44 @@ public abstract class GenericContainerTest {
         checkAvailabilityFor(false, HttpServletRequest.class, HttpServletResponse.class, VRaptorRequest.class,
                 DefaultInterceptorStack.class, RequestInfo.class, RequestExecution.class, ResourceLookupInterceptor.class,
                 InstantiateInterceptor.class, DefaultResult.class, ExecuteMethodInterceptor.class,
-                OgnlParametersProvider.class, Converters.class, HttpSession.class);
-        checkAvailabilityFor(false, PageResult.class);
+                OgnlParametersProvider.class, Converters.class, HttpSession.class, PageResult.class);
         mockery.assertIsSatisfied();
     }
 
-    private void checkAvailabilityFor(boolean shouldBeTheSame, Class<?> component, Class<?> componentToRegister) {
-        Container firstContainer = provider.provide(createRequest());
-        Container secondContainer = provider.provide(createRequest());
+    private <T> void checkAvailabilityFor(final boolean shouldBeTheSame, final Class<T> component,
+            final Class<? super T> componentToRegister) {
 
-        ResourceMethod firstMethod = mockery.mock(ResourceMethod.class, "rm" + counter++);
-        ResourceMethod secondMethod = mockery.mock(ResourceMethod.class, "rm" + counter++);
-        firstContainer.instanceFor(RequestInfo.class).setResourceMethod(firstMethod);
-        secondContainer.instanceFor(RequestInfo.class).setResourceMethod(secondMethod);
-
-        if (componentToRegister != null) {
-            firstContainer.register(componentToRegister);
-            if (secondContainer.instanceFor(componentToRegister) == null) {
-                // not an app scoped... then register on the other one too
-                secondContainer.register(componentToRegister);
+        T firstInstance = executeInsideRequest(new Execution<T>() {
+            public T execute(VRaptorRequest request, int counter) {
+                Container firstContainer = provider.provide(request);
+                if (componentToRegister != null) {
+                    firstContainer.register(componentToRegister);
+                }
+                ResourceMethod firstMethod = mockery.mock(ResourceMethod.class, "rm" + counter);
+                firstContainer.instanceFor(RequestInfo.class).setResourceMethod(firstMethod);
+                return firstContainer.instanceFor(component);
             }
-        }
+        });
 
-        Object firstInstance = firstContainer.instanceFor(component);
-        Object secondInstance = secondContainer.instanceFor(component);
+        T secondInstance = executeInsideRequest(new Execution<T>() {
+            public T execute(VRaptorRequest request, int counter) {
+                Container secondContainer = provider.provide(request);
+
+                if (componentToRegister != null && !isAppScoped(secondContainer, componentToRegister)) {
+                    secondContainer.register(componentToRegister);
+                }
+
+                ResourceMethod secondMethod = mockery.mock(ResourceMethod.class, "rm" + counter);
+                secondContainer.instanceFor(RequestInfo.class).setResourceMethod(secondMethod);
+                return secondContainer.instanceFor(component);
+            }
+        });
+
         checkSimilarity(component, shouldBeTheSame, firstInstance, secondInstance);
+    }
+
+    private boolean isAppScoped(Container secondContainer, Class<?> componentToRegister) {
+        return secondContainer.instanceFor(componentToRegister) != null;
     }
 
     private void checkSimilarity(Class<?> component, boolean shouldBeTheSame, Object firstInstance,
@@ -150,6 +159,7 @@ public abstract class GenericContainerTest {
         mockery.assertIsSatisfied();
     }
 
+    @Component
     public static class MyRequestComponent {
 
     }

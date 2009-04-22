@@ -56,7 +56,6 @@ import br.com.caelum.vraptor.interceptor.multipart.UploadedFileConverter;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Container;
 
-@ApplicationScoped
 public class DefaultConverters implements Converters {
 
     private LinkedList<Class<? extends Converter<?>>> types;

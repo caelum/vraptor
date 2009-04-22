@@ -3,6 +3,7 @@ package br.com.caelum.vraptor.ioc.spring;
 import br.com.caelum.vraptor.core.VRaptorRequest;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
 import br.com.caelum.vraptor.ioc.GenericContainerTest;
+import br.com.caelum.vraptor.ioc.Execution;
 import br.com.caelum.vraptor.test.HttpServletRequestMock;
 import org.jmock.Expectations;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -16,9 +17,16 @@ public class RegisterAllComponentsTest extends GenericContainerTest {
         return new SpringProvider();
     }
 
+    protected <T> T executeInsideRequest(Execution<T> execution) {
+//        VRaptorRequest request = super.createRequest();
+//        VRaptorRequestHolder.setRequestForCurrentThread(request);
+//        RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request.getRequest()));
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
     @Override
     public void setup() throws IOException {
-        RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(new HttpServletRequestMock()));
+//        RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(new HttpServletRequestMock()));
         super.setup();
         mockery.checking(new Expectations() {
             {
@@ -33,13 +41,5 @@ public class RegisterAllComponentsTest extends GenericContainerTest {
     public void tearDown() {
         super.tearDown();
         RequestContextHolder.resetRequestAttributes();
-    }
-
-    @Override
-    protected VRaptorRequest createRequest() {
-        VRaptorRequest request = super.createRequest();
-        VRaptorRequestHolder.setRequestForCurrentThread(request);
-        RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request.getRequest()));
-        return request;
     }
 }

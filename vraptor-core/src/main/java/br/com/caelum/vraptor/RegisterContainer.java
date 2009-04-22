@@ -30,11 +30,11 @@
 package br.com.caelum.vraptor;
 
 /**
- * Represents the base of all components allowing them to be registered.<br>
- * This interface doesnt allow component lookup so during the component
- * registration phase no provider tries to instantiate something before its time
- * to do so.
- * 
+ * <p>Represents the registry of all components allowing them to be registered for injection.</p>
+ * <p>This interface doesnt allow component lookup, so during component
+ * registration phase no provider tries to instantiate something before it's time
+ * to do so.</p>
+ *
  * @author Guilherme Silveira
  */
 public interface RegisterContainer {

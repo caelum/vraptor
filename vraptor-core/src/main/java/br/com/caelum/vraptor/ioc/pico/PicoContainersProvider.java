@@ -60,9 +60,9 @@ public class PicoContainersProvider implements RegisterContainer {
 
     private static final Logger logger = LoggerFactory.getLogger(PicoContainersProvider.class);
 
-    private List<Class<?>> applicationScoped = new ArrayList<Class<?>>();
-    private List<Class<?>> sessionScoped = new ArrayList<Class<?>>();
-    private List<Class<?>> requestScoped = new ArrayList<Class<?>>();
+    private final List<Class<?>> applicationScoped = new ArrayList<Class<?>>();
+    private final List<Class<?>> sessionScoped = new ArrayList<Class<?>>();
+    private final List<Class<?>> requestScoped = new ArrayList<Class<?>>();
     private final MutablePicoContainer container;
 
     public PicoContainersProvider(MutablePicoContainer container) {

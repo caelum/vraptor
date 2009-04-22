@@ -22,7 +22,7 @@ public class SpringProviderTest {
     @Before
     public void init() {
         mockery = new Mockery();
-        RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(new HttpServletRequestMock()));
+//        RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(new HttpServletRequestMock()));
     }
 
     @After

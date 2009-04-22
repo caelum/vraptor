@@ -5,6 +5,7 @@ import br.com.caelum.vraptor.ioc.ContainerProvider;
 import br.com.caelum.vraptor.ioc.Execution;
 import br.com.caelum.vraptor.ioc.GenericContainerTest;
 import br.com.caelum.vraptor.test.HttpServletRequestMock;
+import br.com.caelum.vraptor.test.HttpSessionMock;
 import org.junit.Test;
 
 import javax.servlet.http.HttpServletResponse;
@@ -25,11 +26,11 @@ public class PicoProviderTest extends GenericContainerTest {
     }
 
     protected <T> T executeInsideRequest(Execution<T> execution) {
-        HttpServletRequestMock httpRequest = new HttpServletRequestMock();
-        httpRequest.setSession(mockery.mock(HttpSession.class, "session" + ++counter));
+        HttpSessionMock session = new HttpSessionMock(context, "session" + ++counter);
+        HttpServletRequestMock httpRequest = new HttpServletRequestMock(session);
         HttpServletResponse response = mockery.mock(HttpServletResponse.class, "response" + counter);
         VRaptorRequest request = new VRaptorRequest(context, httpRequest, response);
-        return execution.execute(request);
+        return execution.execute(request, counter);
     }
 
 }

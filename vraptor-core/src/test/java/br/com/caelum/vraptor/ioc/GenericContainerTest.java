@@ -60,10 +60,13 @@ public abstract class GenericContainerTest {
     private ContainerProvider provider;
 
     protected ServletContext context;
+    private File temporaryFile;
 
     protected abstract ContainerProvider getProvider();
 
     protected abstract <T> T executeInsideRequest(Execution<T> execution);
+
+    protected abstract void configureExpectations();
 
     @Test
     public void canProvideAllApplicationScopedComponents() {
@@ -87,6 +90,7 @@ public abstract class GenericContainerTest {
 
     @ApplicationScoped
     public static class MyAppComponent {
+
     }
 
     @Test
@@ -97,6 +101,7 @@ public abstract class GenericContainerTest {
 
     @Component
     public static class MyRequestComponent {
+
     }
 
     @Test
@@ -109,16 +114,7 @@ public abstract class GenericContainerTest {
     public void setup() throws IOException {
         this.mockery = new Mockery();
         this.context = mockery.mock(ServletContext.class);
-        final File tmpDir = File.createTempFile("tmp_", "_file").getParentFile();
-        final File tmp = new File(tmpDir, "_tmp_vraptor_test");
-        tmp.mkdir();
-        mockery.checking(new Expectations() {
-            {
-                // argh, should be in Pico specific tests
-                allowing(context).getRealPath("");
-                will(returnValue(tmp.getAbsolutePath()));
-            }
-        });
+        configureExpectations();
         provider = getProvider();
         provider.start(context);
     }

@@ -13,6 +13,7 @@ import org.vraptor.validator.ValidationErrors;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.File;
 
 public class ProviderTest extends GenericContainerTest {
     private int counter;
@@ -55,5 +56,21 @@ public class ProviderTest extends GenericContainerTest {
         HttpServletResponse response = mockery.mock(HttpServletResponse.class, "response" + counter);
         VRaptorRequest request = new VRaptorRequest(context, httpRequest, response);
         return execution.execute(request, counter);
+    }
+
+    protected void configureExpectations() {
+        try {
+            mockery.checking(new Expectations() {
+                {
+                    File tmpDir = File.createTempFile("tmp_", "_file").getParentFile();
+                    File tmp = new File(tmpDir, "_tmp_vraptor_test");
+                    tmp.mkdir();
+                    allowing(context).getRealPath("");
+                    will(returnValue(tmp.getAbsolutePath()));
+                }
+            });
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

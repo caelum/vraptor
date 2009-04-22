@@ -1,6 +1,7 @@
 package br.com.caelum.vraptor.ioc.spring;
 
 import br.com.caelum.vraptor.test.HttpServletRequestMock;
+import br.com.caelum.vraptor.test.HttpSessionMock;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.After;
@@ -18,11 +19,15 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class SpringProviderTest {
     private Mockery mockery;
+    private ServletContext servletContext;
 
     @Before
     public void init() {
         mockery = new Mockery();
-//        RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(new HttpServletRequestMock()));
+        servletContext = mockery.mock(ServletContext.class);
+        HttpServletRequestMock request = new HttpServletRequestMock(new HttpSessionMock(servletContext, "session"));
+        ServletRequestAttributes requestAttributes = new ServletRequestAttributes(request);
+        RequestContextHolder.setRequestAttributes(requestAttributes);
     }
 
     @After
@@ -33,7 +38,6 @@ public class SpringProviderTest {
 
     @Test
     public void shouldLoadInitParameterForBasePackages() {
-        final ServletContext servletContext = mockery.mock(ServletContext.class);
         mockery.checking(new Expectations() {{
             one(servletContext).getInitParameter(SpringProvider.BASE_PACKAGES_PARAMETER_NAME);
         }});

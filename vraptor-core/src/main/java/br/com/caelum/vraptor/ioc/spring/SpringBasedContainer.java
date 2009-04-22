@@ -102,7 +102,7 @@ public class SpringBasedContainer implements Container, ComponentRegistry {
     }
 
     public void start(ServletContext context) {
-        registerInstanceFor(ServletContext.class, context);
+//        registerInstanceFor(ServletContext.class, context);
         registerApplicationScopedComponents();
         registerRequestScopedComponents();
 
@@ -146,8 +146,8 @@ public class SpringBasedContainer implements Container, ComponentRegistry {
         register(OgnlParametersProvider.class);
         register(DefaultConverters.class);
         register(DefaultRequestInfo.class);
-        register(HttpServletRequestProvider.class);
-        register(HttpServletResponseProvider.class);
+//        register(HttpServletRequestProvider.class);
+//        register(HttpServletResponseProvider.class);
         register(VRaptorRequestProvider.class);
         registerInstanceFor(Container.class, this);
         registerInstanceFor(ComponentRegistry.class, this);

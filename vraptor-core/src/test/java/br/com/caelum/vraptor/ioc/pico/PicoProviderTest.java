@@ -6,10 +6,12 @@ import br.com.caelum.vraptor.ioc.Execution;
 import br.com.caelum.vraptor.ioc.GenericContainerTest;
 import br.com.caelum.vraptor.test.HttpServletRequestMock;
 import br.com.caelum.vraptor.test.HttpSessionMock;
+import org.jmock.Expectations;
 import org.junit.Test;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.IOException;
 
 public class PicoProviderTest extends GenericContainerTest {
     private int counter;
@@ -30,6 +32,22 @@ public class PicoProviderTest extends GenericContainerTest {
         HttpServletResponse response = mockery.mock(HttpServletResponse.class, "response" + counter);
         VRaptorRequest request = new VRaptorRequest(context, httpRequest, response);
         return execution.execute(request, counter);
+    }
+
+    protected void configureExpectations() {
+        try {
+            mockery.checking(new Expectations() {
+                {
+                    File tmpDir = File.createTempFile("tmp_", "_file").getParentFile();
+                    File tmp = new File(tmpDir, "_tmp_vraptor_test");
+                    tmp.mkdir();
+                    allowing(context).getRealPath("");
+                    will(returnValue(tmp.getAbsolutePath()));
+                }
+            });
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

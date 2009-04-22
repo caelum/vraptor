@@ -29,9 +29,9 @@
  */
 package br.com.caelum.vraptor.ioc.pico;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -40,8 +40,8 @@ import org.picocontainer.PicoBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import br.com.caelum.vraptor.Interceptor;
 import br.com.caelum.vraptor.ComponentRegistry;
+import br.com.caelum.vraptor.Interceptor;
 import br.com.caelum.vraptor.core.VRaptorRequest;
 import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
@@ -61,9 +61,9 @@ public class PicoContainersProvider implements ComponentRegistry {
 
     private static final Logger logger = LoggerFactory.getLogger(PicoContainersProvider.class);
 
-    private final List<Class<?>> applicationScoped = new ArrayList<Class<?>>();
-    private final List<Class<?>> sessionScoped = new ArrayList<Class<?>>();
-    private final List<Class<?>> requestScoped = new ArrayList<Class<?>>();
+    private final Map<Class<?>,Class<?>> applicationScoped = new HashMap<Class<?>,Class<?>>();
+    private final Map<Class<?>,Class<?>> sessionScoped = new HashMap<Class<?>,Class<?>>();
+    private final Map<Class<?>,Class<?>> requestScoped = new HashMap<Class<?>,Class<?>>();
     private final MutablePicoContainer container;
 
     public PicoContainersProvider(MutablePicoContainer container) {
@@ -71,31 +71,25 @@ public class PicoContainersProvider implements ComponentRegistry {
     }
 
     public void register(Class<?> requiredType, Class<?> type) {
-        for (Class<?> interfaceType : type.getInterfaces()) {
-            if (alreadyRegistered(interfaceType)) {
-                logger.debug("Overriding interface " + interfaceType.getName() + " with " + type.getName());
-            }
+        if (alreadyRegistered(requiredType)) {
+            logger.debug("Overriding interface " + requiredType.getName() + " with " + type.getName());
         }
         if (type.isAnnotationPresent(ApplicationScoped.class)) {
             logger.debug("Registering " + type.getName() + " as an application component");
-            this.applicationScoped.add(type);
+            this.applicationScoped.put(requiredType, type);
         } else if (type.isAnnotationPresent(SessionScoped.class)) {
             logger.debug("Registering " + type.getName() + " a an session component");
-            this.sessionScoped.add(type);
+            this.sessionScoped.put(requiredType, type);
         } else {
             logger.debug("Registering " + type.getName() + " as a request component");
-            this.requestScoped.add(type);
+            this.requestScoped.put(requiredType, type);
         }
     }
     
     private boolean alreadyRegistered(Class<?> interfaceType) {
-        for (List<Class<?>> scope : new List[] { applicationScoped, sessionScoped, requestScoped }) {
-            for (Iterator<Class<?>> iterator = scope.iterator(); iterator.hasNext();) {
-                Class<?> type = (Class<?>) iterator.next();
-                if (interfaceType.isAssignableFrom(type)) {
-                    iterator.remove();
-                    return true;
-                }
+        for (Map<Class<?>,Class<?>> scope : new Map[] { applicationScoped, sessionScoped, requestScoped }) {
+            if(scope.containsKey(interfaceType)) {
+                return true;
             }
         }
         return false;
@@ -112,8 +106,8 @@ public class PicoContainersProvider implements ComponentRegistry {
         }
         MutablePicoContainer requestScope = new PicoBuilder(sessionScope).withCaching().build();
         // TODO guarantee request component registered order on tests!!!
-        for (Class<?> componentType : requestScoped) {
-            requestScope.addComponent(componentType);
+        for (Class<?> requiredType : requestScoped.keySet()) {
+            requestScope.addComponent(requiredType, requestScoped.get(requiredType));
         }
         for (Class<? extends Interceptor> type : this.container.getComponent(InterceptorRegistry.class).all()) {
             requestScope.addComponent(type);
@@ -132,8 +126,8 @@ public class PicoContainersProvider implements ComponentRegistry {
         if (logger.isDebugEnabled()) {
             logger.debug("Session components are " + sessionScoped);
         }
-        for (Class<?> componentType : sessionScoped) {
-            sessionScope.addComponent(componentType);
+        for (Class<?> requiredType : sessionScoped.keySet()) {
+            sessionScope.addComponent(requiredType, sessionScoped.get(requiredType));
         }
         return sessionScope;
     }
@@ -142,9 +136,10 @@ public class PicoContainersProvider implements ComponentRegistry {
      * Registers all application scoped elements into the container.
      */
     public void init() {
-        for (Class<?> type : applicationScoped) {
+        for (Class<?> requiredType : applicationScoped.keySet()) {
+            Class<?> type = applicationScoped.get(requiredType);
             logger.debug("Initializing application scope with " + type);
-            this.container.addComponent(type);
+            this.container.addComponent(requiredType, type);
         }
     }
 

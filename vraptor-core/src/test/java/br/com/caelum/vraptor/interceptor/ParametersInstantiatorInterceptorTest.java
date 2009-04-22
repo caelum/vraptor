@@ -15,10 +15,10 @@ import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
-public class ParametersInstantiatorTest {
+public class ParametersInstantiatorInterceptorTest {
 
     private VRaptorMockery mockery;
-    private ParametersInstantiator instantiator;
+    private ParametersInstantiatorInterceptor instantiator;
     private MethodParameters params;
     private ParameterNameProvider provider;
     private ParametersProvider parametersProvider;
@@ -29,7 +29,7 @@ public class ParametersInstantiatorTest {
         this.params = mockery.mock(MethodParameters.class);
         this.provider = mockery.mock(ParameterNameProvider.class);
         this.parametersProvider = mockery.mock(ParametersProvider.class);
-        this.instantiator = new ParametersInstantiator(parametersProvider, params, provider);
+        this.instantiator = new ParametersInstantiatorInterceptor(parametersProvider, params, provider);
     }
 
     class Component {

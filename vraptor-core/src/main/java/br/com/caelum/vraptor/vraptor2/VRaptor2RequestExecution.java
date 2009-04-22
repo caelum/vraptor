@@ -8,7 +8,7 @@ import br.com.caelum.vraptor.core.RequestExecution;
 import br.com.caelum.vraptor.core.URLParameterExtractorInterceptor;
 import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
 import br.com.caelum.vraptor.interceptor.InterceptorListPriorToExecutionExtractor;
-import br.com.caelum.vraptor.interceptor.ParametersInstantiator;
+import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
 import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
 
 /**
@@ -32,7 +32,7 @@ public class VRaptor2RequestExecution implements RequestExecution {
         interceptorStack.add(URLParameterExtractorInterceptor.class);
         interceptorStack.add(InterceptorListPriorToExecutionExtractor.class);
         interceptorStack.add(instantiator);
-        interceptorStack.add(ParametersInstantiator.class);
+        interceptorStack.add(ParametersInstantiatorInterceptor.class);
         if(shouldRegisterHibernateValidator) {
             interceptorStack.add(HibernateValidatorPluginInterceptor.class);
         }

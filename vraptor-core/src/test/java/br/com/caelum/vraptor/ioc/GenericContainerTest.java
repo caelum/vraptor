@@ -20,7 +20,7 @@ import br.com.caelum.vraptor.http.EmptyElementsRemoval;
 import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
 import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
 import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
-import br.com.caelum.vraptor.interceptor.ParametersInstantiator;
+import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
 import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
 import br.com.caelum.vraptor.interceptor.InterceptorListPriorToExecutionExtractor;
 import br.com.caelum.vraptor.resource.MethodLookupBuilder;
@@ -77,7 +77,7 @@ public abstract class GenericContainerTest {
     @Test
     public void canProvideAllRequestScopedComponents() {
         checkAvailabilityFor(false, HttpServletRequest.class, HttpServletResponse.class, VRaptorRequest.class,
-                HttpSession.class, ParametersInstantiator.class, MethodParameters.class, RequestParameters.class,
+                HttpSession.class, ParametersInstantiatorInterceptor.class, MethodParameters.class, RequestParameters.class,
                 InterceptorListPriorToExecutionExtractor.class, URLParameterExtractorInterceptor.class,
                 InterceptorStack.class, RequestExecution.class, ResourceLookupInterceptor.class,
                 InstantiateInterceptor.class, Result.class, ExecuteMethodInterceptor.class, PageResult.class,
@@ -135,7 +135,7 @@ public abstract class GenericContainerTest {
             public T execute(VRaptorRequest request, int counter) {
                 Container firstContainer = provider.provide(request);
                 if (componentToRegister != null) {
-                    firstContainer.instanceFor(ComponentRegistry.class).register(componentToRegister);
+                    firstContainer.instanceFor(ComponentRegistry.class).register(componentToRegister, componentToRegister);
                 }
                 ResourceMethod firstMethod = mockery.mock(ResourceMethod.class, "rm" + counter);
                 firstContainer.instanceFor(RequestInfo.class).setResourceMethod(firstMethod);
@@ -148,7 +148,7 @@ public abstract class GenericContainerTest {
                 Container secondContainer = provider.provide(request);
 
                 if (componentToRegister != null && !isAppScoped(secondContainer, componentToRegister)) {
-                    secondContainer.instanceFor(ComponentRegistry.class).register(componentToRegister);
+                    secondContainer.instanceFor(ComponentRegistry.class).register(componentToRegister, componentToRegister);
                 }
 
                 ResourceMethod secondMethod = mockery.mock(ResourceMethod.class, "rm" + counter);

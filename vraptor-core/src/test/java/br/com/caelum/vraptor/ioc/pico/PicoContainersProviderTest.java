@@ -62,8 +62,8 @@ public class PicoContainersProviderTest {
 
     @Test
     public void shouldRemovePreviouslyRegisteredComponentIfRegisteringAgain() {
-        provider.register(MyFirstImplementation.class);
-        provider.register(MySecondImplementation.class);
+        provider.register(Base.class, MyFirstImplementation.class);
+        provider.register(Base.class,MySecondImplementation.class);
         Container container = provider.provide(webRequest);
         Base instance = container.instanceFor(Base.class);
         assertThat(instance.getClass(), is(typeCompatibleWith(MySecondImplementation.class)));

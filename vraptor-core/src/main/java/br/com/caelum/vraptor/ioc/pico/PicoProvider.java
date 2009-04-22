@@ -29,6 +29,13 @@
  */
 package br.com.caelum.vraptor.ioc.pico;
 
+import javax.servlet.ServletContext;
+
+import org.picocontainer.MutablePicoContainer;
+import org.picocontainer.PicoBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.core.DefaultConverters;
 import br.com.caelum.vraptor.core.DefaultInterceptorStack;
@@ -48,7 +55,7 @@ import br.com.caelum.vraptor.interceptor.DefaultInterceptorRegistry;
 import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
 import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
 import br.com.caelum.vraptor.interceptor.InterceptorListPriorToExecutionExtractor;
-import br.com.caelum.vraptor.interceptor.ParametersInstantiator;
+import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
 import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
@@ -57,21 +64,12 @@ import br.com.caelum.vraptor.resource.DefaultResourceRegistry;
 import br.com.caelum.vraptor.validator.DefaultValidator;
 import br.com.caelum.vraptor.view.DefaultPathResolver;
 import br.com.caelum.vraptor.view.jsp.DefaultPageResult;
-import org.picocontainer.MutablePicoContainer;
-import org.picocontainer.PicoBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.servlet.ServletContext;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
 
 /**
  * Managing internal components by using pico container.<br>
  * There is an extension point through the registerComponents method, which
  * allows one to give a customized container.
- *
+ * 
  * @author Guilherme Silveira
  */
 public class PicoProvider implements ContainerProvider {
@@ -95,12 +93,44 @@ public class PicoProvider implements ContainerProvider {
      * Register extra components that your app wants to.
      */
     protected void registerComponents(ComponentRegistry container) {
-        for (Class<?> type : getApplicationScopedComponents()) {
-            container.register(type);
+        singleInterfaceRegister(StupidTranslator.class, container);
+        singleInterfaceRegister(DefaultResourceRegistry.class, container);
+        singleInterfaceRegister(DefaultDirScanner.class, container);
+        singleInterfaceRegister(WebInfClassesScanner.class, container); 
+        singleInterfaceRegister(DefaultInterceptorRegistry.class, container);
+        singleInterfaceRegister(AsmBasedTypeCreator.class, container);
+        singleInterfaceRegister(DefaultMethodLookupBuilder.class, container);
+        singleInterfaceRegister(DefaultPathResolver.class, container); 
+        singleInterfaceRegister(ParanamerNameProvider.class, container);
+        singleInterfaceRegister(DefaultConverters.class, container); 
+        singleInterfaceRegister(DefaultMethodParameters.class, container);
+        singleInterfaceRegister(DefaultRequestParameters.class, container);
+        singleInterfaceRegister(DefaultInterceptorStack.class, container); 
+        singleInterfaceRegister(DefaultRequestExecution.class, container);
+        singleInterfaceRegister(DefaultResult.class, container); 
+        singleInterfaceRegister(DefaultPageResult.class, container); 
+        singleInterfaceRegister(OgnlParametersProvider.class, container);
+        singleInterfaceRegister(DefaultRequestInfo.class, container); 
+        singleInterfaceRegister(DefaultValidator.class, container);
+
+        container.register(EmptyElementsRemoval.class, EmptyElementsRemoval.class);
+        container.register(ParametersInstantiatorInterceptor.class, ParametersInstantiatorInterceptor.class);
+        container.register(InterceptorListPriorToExecutionExtractor.class, InterceptorListPriorToExecutionExtractor.class);
+        container.register(URLParameterExtractorInterceptor.class, URLParameterExtractorInterceptor.class);
+        container.register(ResourceLookupInterceptor.class, ResourceLookupInterceptor.class);
+        container.register(InstantiateInterceptor.class, InstantiateInterceptor.class);
+        container.register(ExecuteMethodInterceptor.class, ExecuteMethodInterceptor.class);
+    }
+
+    private void singleInterfaceRegister(Class<?> type, ComponentRegistry registry) {
+        Class<?>[] interfaces = type.getInterfaces();
+        if (interfaces.length != 1) {
+            throw new IllegalArgumentException(
+                    "Invalid registering of a type with more than one interface" +
+                    " being registered as a single interface component: "
+                            + type.getName());
         }
-        for (Class<?> type : getRequestScopedComponents()) {
-            container.register(type);
-        }
+        registry.register(interfaces[0], type);
     }
 
     public Container provide(VRaptorRequest request) {
@@ -123,24 +153,6 @@ public class PicoProvider implements ContainerProvider {
 
     private PicoContainersProvider getContainers() {
         return this.container.getComponent(PicoContainersProvider.class);
-    }
-
-    private Collection<Class<?>> getApplicationScopedComponents() {
-        return Arrays.asList(
-                StupidTranslator.class, DefaultResourceRegistry.class, DefaultDirScanner.class,
-                WebInfClassesScanner.class, DefaultInterceptorRegistry.class, AsmBasedTypeCreator.class,
-                DefaultMethodLookupBuilder.class, DefaultPathResolver.class, ParanamerNameProvider.class,
-                DefaultConverters.class, EmptyElementsRemoval.class);
-    }
-
-    protected Collection<Class<?>> getRequestScopedComponents() {
-        // TODO make InterceptorStack itself register components
-        return Arrays.asList(
-                ParametersInstantiator.class, DefaultMethodParameters.class, DefaultRequestParameters.class,
-                InterceptorListPriorToExecutionExtractor.class, URLParameterExtractorInterceptor.class,
-                DefaultInterceptorStack.class, DefaultRequestExecution.class, ResourceLookupInterceptor.class,
-                InstantiateInterceptor.class, DefaultResult.class, ExecuteMethodInterceptor.class,
-                DefaultPageResult.class, OgnlParametersProvider.class, DefaultRequestInfo.class, DefaultValidator.class);
     }
 
 }

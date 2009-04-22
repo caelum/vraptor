@@ -66,7 +66,7 @@ import br.com.caelum.vraptor.interceptor.DefaultInterceptorRegistry;
 import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
 import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
 import br.com.caelum.vraptor.interceptor.InterceptorListPriorToExecutionExtractor;
-import br.com.caelum.vraptor.interceptor.ParametersInstantiator;
+import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
 import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.resource.DefaultMethodLookupBuilder;
@@ -126,8 +126,12 @@ public class SpringBasedContainer implements Container, ComponentRegistry {
         register(ParanamerNameProvider.class);
     }
 
+    private void register(Class<?> type) {
+        register(type, type);
+    }
+
     private void registerRequestScopedComponents() {
-        register(ParametersInstantiator.class);
+        register(ParametersInstantiatorInterceptor.class);
         register(DefaultMethodParameters.class);
         register(DefaultRequestParameters.class);
         register(InterceptorListPriorToExecutionExtractor.class);
@@ -170,7 +174,7 @@ public class SpringBasedContainer implements Container, ComponentRegistry {
         applicationContext.getBeanFactory().registerResolvableDependency(resolvableType, instance);
     }
 
-    public void register(Class<?> type) {
+    public void register(Class<?> requiredType, Class<?> type) {
         AnnotatedGenericBeanDefinition definition = new AnnotatedGenericBeanDefinition(type);
         String name = beanNameGenerator.generateBeanName(definition, applicationContext);
         BeanDefinitionHolder definitionHolder = new BeanDefinitionHolder(definition, name);

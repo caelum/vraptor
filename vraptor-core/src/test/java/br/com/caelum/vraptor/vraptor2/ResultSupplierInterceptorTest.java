@@ -1,16 +1,18 @@
 package br.com.caelum.vraptor.vraptor2;
 
-import br.com.caelum.vraptor.ComponentRegistry;
-import br.com.caelum.vraptor.InterceptionException;
-import br.com.caelum.vraptor.core.InterceptorStack;
-import br.com.caelum.vraptor.vraptor2.outject.DefaultOutjecter;
-import br.com.caelum.vraptor.vraptor2.outject.JsonOutjecter;
+import java.io.IOException;
+
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.IOException;
+import br.com.caelum.vraptor.ComponentRegistry;
+import br.com.caelum.vraptor.InterceptionException;
+import br.com.caelum.vraptor.core.InterceptorStack;
+import br.com.caelum.vraptor.vraptor2.outject.DefaultOutjecter;
+import br.com.caelum.vraptor.vraptor2.outject.JsonOutjecter;
+import br.com.caelum.vraptor.vraptor2.outject.Outjecter;
 
 public class ResultSupplierInterceptorTest {
 
@@ -35,7 +37,7 @@ public class ResultSupplierInterceptorTest {
             {
                 one(info).isAjax();
                 will(returnValue(true));
-                one(container).register(JsonOutjecter.class);
+                one(container).register(Outjecter.class, JsonOutjecter.class);
                 one(stack).next(null, null);
             }
         });
@@ -49,7 +51,7 @@ public class ResultSupplierInterceptorTest {
             {
                 one(info).isAjax();
                 will(returnValue(false));
-                one(container).register(DefaultOutjecter.class);
+                one(container).register(Outjecter.class, DefaultOutjecter.class);
                 one(stack).next(null, null);
             }
         });

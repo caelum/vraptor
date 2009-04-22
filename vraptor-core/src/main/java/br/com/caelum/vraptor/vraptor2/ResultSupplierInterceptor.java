@@ -2,14 +2,14 @@ package br.com.caelum.vraptor.vraptor2;
 
 import java.io.IOException;
 
+import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Interceptor;
-import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.core.InterceptorStack;
-import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.vraptor2.outject.DefaultOutjecter;
 import br.com.caelum.vraptor.vraptor2.outject.JsonOutjecter;
+import br.com.caelum.vraptor.vraptor2.outject.Outjecter;
 
 /**
  * Supplies the expected exporter (outjecter) for this specific request.<br>
@@ -36,9 +36,9 @@ public class ResultSupplierInterceptor implements Interceptor {
             InterceptionException {
         // simple version to do ajax parsing
         if (info.isAjax()) {
-            container.register(JsonOutjecter.class);
+            container.register(Outjecter.class, JsonOutjecter.class);
         } else {
-            container.register(DefaultOutjecter.class);
+            container.register(Outjecter.class, DefaultOutjecter.class);
         }
         stack.next(method, resourceInstance);
     }

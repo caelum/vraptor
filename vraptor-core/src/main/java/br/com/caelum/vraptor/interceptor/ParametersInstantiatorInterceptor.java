@@ -19,15 +19,15 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  * 
  * @author Guilherme Silveira
  */
-public class ParametersInstantiator implements Interceptor {
+public class ParametersInstantiatorInterceptor implements Interceptor {
 
     private final ParametersProvider provider;
     private final MethodParameters parameters;
     private final ParameterNameProvider nameProvider;
 
-    private static final Logger logger = LoggerFactory.getLogger(ParametersInstantiator.class);
+    private static final Logger logger = LoggerFactory.getLogger(ParametersInstantiatorInterceptor.class);
 
-    public ParametersInstantiator(ParametersProvider provider, MethodParameters parameters,
+    public ParametersInstantiatorInterceptor(ParametersProvider provider, MethodParameters parameters,
             ParameterNameProvider nameProvider) {
         this.provider = provider;
         this.parameters = parameters;

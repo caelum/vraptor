@@ -49,8 +49,6 @@ import br.com.caelum.vraptor.view.jsp.PageResult;
 @Ignore
 public abstract class GenericContainerTest {
 
-    private int counter;
-
     protected Mockery mockery;
 
     private ContainerProvider provider;
@@ -59,9 +57,10 @@ public abstract class GenericContainerTest {
 
     protected abstract ContainerProvider getProvider();
 
+    protected abstract <T> T executeInsideRequest(Execution<T> execution); 
+
     @Before
     public void setup() throws IOException {
-        counter = 0;
         this.mockery = new Mockery();
         this.context = mockery.mock(ServletContext.class);
         final File tmpDir = File.createTempFile("tmp_", "_file").getParentFile();
@@ -74,16 +73,8 @@ public abstract class GenericContainerTest {
                 will(returnValue(tmp.getAbsolutePath()));
             }
         });
-        createRequest();
         provider = getProvider();
         provider.start(context);
-    }
-
-    protected VRaptorRequest createRequest() {
-        HttpServletRequestMock request = new HttpServletRequestMock();
-        request.setSession(mockery.mock(HttpSession.class, "session" + counter++));
-        HttpServletResponse response = mockery.mock(HttpServletResponse.class, "res" + counter++);
-        return new VRaptorRequest(context, request, response);
     }
 
     @After

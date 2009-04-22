@@ -3,14 +3,18 @@ package br.com.caelum.vraptor.vraptor2;
 import br.com.caelum.vraptor.core.VRaptorRequest;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
 import br.com.caelum.vraptor.ioc.GenericContainerTest;
+import br.com.caelum.vraptor.ioc.Execution;
+import br.com.caelum.vraptor.test.HttpServletRequestMock;
 import org.jmock.Expectations;
 import org.junit.Before;
 
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
 
 public class ProviderTest extends GenericContainerTest {
+    private int counter;
 
     @Before
     public void setup() throws IOException {
@@ -30,9 +34,12 @@ public class ProviderTest extends GenericContainerTest {
         return new Provider();
     }
 
-    protected VRaptorRequest createRequest() {
-        VRaptorRequest webRequest = super.createRequest();
-        final HttpSession session = webRequest.getRequest().getSession();
+    protected <T> T executeInsideRequest(Execution<T> execution) {
+        HttpServletRequestMock httpRequest = new HttpServletRequestMock();
+        final HttpSession session = mockery.mock(HttpSession.class, "session" + ++counter);
+        httpRequest.setSession(session);
+        HttpServletResponse response = mockery.mock(HttpServletResponse.class, "response" + counter);
+        VRaptorRequest request = new VRaptorRequest(context, httpRequest, response);
         mockery.checking(new Expectations() {
             {
                 allowing(session).setAttribute("org.vraptor.scope.ScopeType_FLASH", new HashMap());
@@ -40,7 +47,6 @@ public class ProviderTest extends GenericContainerTest {
                 will(returnValue(new HashMap()));
             }
         });
-        return webRequest;
+        return execution.execute(request);
     }
-
 }

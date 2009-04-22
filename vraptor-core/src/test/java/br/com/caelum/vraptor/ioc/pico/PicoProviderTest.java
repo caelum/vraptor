@@ -1,15 +1,17 @@
 package br.com.caelum.vraptor.ioc.pico;
 
+import br.com.caelum.vraptor.core.VRaptorRequest;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
+import br.com.caelum.vraptor.ioc.Execution;
 import br.com.caelum.vraptor.ioc.GenericContainerTest;
-import org.jmock.Expectations;
-import org.junit.Before;
+import br.com.caelum.vraptor.test.HttpServletRequestMock;
 import org.junit.Test;
 
-import java.io.IOException;
-import java.io.File;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 public class PicoProviderTest extends GenericContainerTest {
+    private int counter;
 
     @Test
     public void canProvidePicoSpecificComponents() {
@@ -20,6 +22,14 @@ public class PicoProviderTest extends GenericContainerTest {
 
     protected ContainerProvider getProvider() {
         return new PicoProvider();
+    }
+
+    protected <T> T executeInsideRequest(Execution<T> execution) {
+        HttpServletRequestMock httpRequest = new HttpServletRequestMock();
+        httpRequest.setSession(mockery.mock(HttpSession.class, "session" + ++counter));
+        HttpServletResponse response = mockery.mock(HttpServletResponse.class, "response" + counter);
+        VRaptorRequest request = new VRaptorRequest(context, httpRequest, response);
+        return execution.execute(request);
     }
 
 }

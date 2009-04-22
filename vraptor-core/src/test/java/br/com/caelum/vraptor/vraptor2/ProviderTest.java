@@ -2,20 +2,33 @@ package br.com.caelum.vraptor.vraptor2;
 
 import br.com.caelum.vraptor.core.VRaptorRequest;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
-import br.com.caelum.vraptor.ioc.GenericContainerTest;
 import br.com.caelum.vraptor.ioc.Execution;
+import br.com.caelum.vraptor.ioc.GenericContainerTest;
 import br.com.caelum.vraptor.test.HttpServletRequestMock;
 import br.com.caelum.vraptor.test.HttpSessionMock;
 import org.jmock.Expectations;
 import org.junit.Before;
+import org.junit.Test;
+import org.vraptor.validator.ValidationErrors;
 
-import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.HashMap;
 
 public class ProviderTest extends GenericContainerTest {
     private int counter;
+
+    @Test
+    public void canProvideVRaptor2SpecificApplicationScopedComponents() {
+        checkAvailabilityFor(true, Config.class);
+    }
+
+    @Test
+    public void canProvideVRaptor2SpecificRequestScopedComponents() {
+        checkAvailabilityFor(false, ExecuteAndViewInterceptor.class, HibernateValidatorPluginInterceptor.class,
+                ValidatorInterceptor.class, ViewInterceptor.class, ComponentInfoProvider.class,
+                OutjectionInterceptor.class, RequestResult.class, ResultSupplierInterceptor.class,
+                AjaxInterceptor.class, ValidationErrors.class);
+    }
 
     @Before
     @Override

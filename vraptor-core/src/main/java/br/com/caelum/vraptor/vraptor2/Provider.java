@@ -29,10 +29,9 @@
  */
 package br.com.caelum.vraptor.vraptor2;
 
-import org.vraptor.validator.BasicValidationErrors;
-
 import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.ioc.pico.PicoProvider;
+import org.vraptor.validator.BasicValidationErrors;
 
 /**
  * Customized provider with support for both vraptor 2 and 3 components.
@@ -40,18 +39,27 @@ import br.com.caelum.vraptor.ioc.pico.PicoProvider;
  * @author Guilherme Silveira
  */
 public class Provider extends PicoProvider {
-    
+
     protected void registerComponents(ComponentRegistry container) {
         super.registerComponents(container);
+
+        applicationScopedComponentsFor(container);
+        requestScopedComponentsFor(container);
+    }
+
+    private void applicationScopedComponentsFor(ComponentRegistry container) {
         container.register(VRaptor2MethodLookupBuilder.class);
         container.register(VRaptor2PathResolver.class);
         container.register(VRaptor2Config.class);
+        container.register(VRaptor2Converters.class);
         container.register(LogicAnnotationWithParanamerParameterNameProvider.class);
+    }
+
+    private void requestScopedComponentsFor(ComponentRegistry container) {
         container.register(VRaptor2RequestExecution.class);
         container.register(ViewsPropertiesPageResult.class);
         container.register(ExecuteAndViewInterceptor.class);
         container.register(HibernateValidatorPluginInterceptor.class);
-        container.register(VRaptor2Converters.class);
         container.register(ValidatorInterceptor.class);
         container.register(ViewInterceptor.class);
         container.register(DefaultComponentInfoProvider.class);

@@ -29,9 +29,6 @@
  */
 package br.com.caelum.vraptor.ioc.pico;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.servlet.ServletContext;
 
 import org.picocontainer.MutablePicoContainer;
@@ -100,9 +97,7 @@ public class PicoProvider implements ContainerProvider {
      * Register extra components that your app wants to.
      */
     protected void registerComponents(RegisterContainer container) {
-        for (Class<?> type : getChildComponentTypes()) {
-            container.register(type);
-        }
+        // app scoped
         container.register(StupidTranslator.class);
         container.register(DefaultResourceRegistry.class);
         container.register(DefaultDirScanner.class);
@@ -112,6 +107,25 @@ public class PicoProvider implements ContainerProvider {
         container.register(DefaultMethodLookupBuilder.class);
         container.register(DefaultPathResolver.class);
         container.register(ParanamerNameProvider.class);
+        container.register(DefaultConverters.class);
+
+        // request scoped
+        container.register(ParametersInstantiator.class);
+        container.register(DefaultMethodParameters.class);
+        container.register(DefaultRequestParameters.class);
+        container.register(InterceptorListPriorToExecutionExtractor.class);
+        container.register(URLParameterExtractorInterceptor.class);
+        container.register(DefaultInterceptorStack.class);
+        container.register(DefaultRequestExecution.class);
+        container.register(ResourceLookupInterceptor.class);
+        container.register(InstantiateInterceptor.class);
+        container.register(DefaultResult.class);
+        container.register(ExecuteMethodInterceptor.class);
+        container.register(DefaultPageResult.class);
+        container.register(OgnlParametersProvider.class);
+        container.register(DefaultRequestInfo.class);
+        container.register(EmptyElementsRemoval.class);
+        container.register(DefaultValidator.class);
     }
 
     public <T> T instanceFor(Class<T> type) {
@@ -130,30 +144,6 @@ public class PicoProvider implements ContainerProvider {
 
     public Container provide(VRaptorRequest request) {
         return getContainers().provide(request);
-    }
-
-    protected List<Class<?>> getChildComponentTypes() {
-        // TODO remove and replace by invoking register on registercontainer
-        // only if interfaces were not registered
-        List<Class<?>> components = new ArrayList<Class<?>>();
-        components.add(ParametersInstantiator.class);
-        components.add(DefaultMethodParameters.class);
-        components.add(DefaultRequestParameters.class);
-        components.add(InterceptorListPriorToExecutionExtractor.class);
-        components.add(URLParameterExtractorInterceptor.class);
-        components.add(DefaultInterceptorStack.class);
-        components.add(DefaultRequestExecution.class);
-        components.add(ResourceLookupInterceptor.class);
-        components.add(InstantiateInterceptor.class);
-        components.add(DefaultResult.class);
-        components.add(ExecuteMethodInterceptor.class);
-        components.add(DefaultPageResult.class);
-        components.add(OgnlParametersProvider.class);
-        components.add(DefaultConverters.class);
-        components.add(DefaultRequestInfo.class);
-        components.add(EmptyElementsRemoval.class);
-        components.add(DefaultValidator.class);
-        return components;
     }
 
 }

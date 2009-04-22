@@ -29,25 +29,9 @@
  */
 package br.com.caelum.vraptor.vraptor2;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.vraptor.validator.BasicValidationErrors;
 
 import br.com.caelum.vraptor.RegisterContainer;
-import br.com.caelum.vraptor.core.DefaultInterceptorStack;
-import br.com.caelum.vraptor.core.DefaultMethodParameters;
-import br.com.caelum.vraptor.core.DefaultRequestInfo;
-import br.com.caelum.vraptor.core.DefaultResult;
-import br.com.caelum.vraptor.core.URLParameterExtractorInterceptor;
-import br.com.caelum.vraptor.http.DefaultRequestParameters;
-import br.com.caelum.vraptor.http.EmptyElementsRemoval;
-import br.com.caelum.vraptor.http.OgnlParametersProvider;
-import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
-import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
-import br.com.caelum.vraptor.interceptor.InterceptorListPriorToExecutionExtractor;
-import br.com.caelum.vraptor.interceptor.ParametersInstantiator;
-import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
 import br.com.caelum.vraptor.ioc.pico.PicoProvider;
 
 /**
@@ -63,48 +47,20 @@ public class Provider extends PicoProvider {
         container.register(VRaptor2PathResolver.class);
         container.register(VRaptor2Config.class);
         container.register(LogicAnnotationWithParanamerParameterNameProvider.class);
-    }
-
-    protected List<Class<?>> getChildComponentTypes() {
-        List<Class<?>> components = new ArrayList<Class<?>>();
-        components.add(ParametersInstantiator.class);
-        components.add(DefaultMethodParameters.class);
-        components.add(DefaultRequestParameters.class);
-        components.add(DefaultInterceptorStack.class);
-        components.add(URLParameterExtractorInterceptor.class);
-        components.add(InterceptorListPriorToExecutionExtractor.class);
-        components.add(VRaptor2RequestExecution.class);
-        components.add(ViewsPropertiesPageResult.class);
-        components.add(ResourceLookupInterceptor.class);
-        components.add(InstantiateInterceptor.class);
-        components.add(DefaultResult.class);
-        components.add(ExecuteAndViewInterceptor.class);
-        components.add(HibernateValidatorPluginInterceptor.class);
-        components.add(OgnlParametersProvider.class);
-        components.add(VRaptor2Converters.class);
-        components.add(ValidatorInterceptor.class);
-        components.add(ViewInterceptor.class);
-        components.add(DefaultComponentInfoProvider.class);
-        components.add(OutjectionInterceptor.class);
-        components.add(RequestResult.class);
-        components.add(DefaultRequestInfo.class);
-        components.add(EmptyElementsRemoval.class);
-        components.add(ResultSupplierInterceptor.class);
-        components.add(AjaxInterceptor.class);
-        registerValidationErrorsComponent(components);
-        // TODO the following components are not required by vraptor2/3
-        // compatibility mode, but was added for unit tests
-        components.add(ExecuteMethodInterceptor.class);
-        components.add(MessageCreatorValidator.class);
-        return components;
-    }
-
-    /**
-     * Exists for backward compatibility with projects using an undocumented
-     * feature of vraptor which makes it work with waffle taglib.
-     */
-    protected void registerValidationErrorsComponent(List<Class<?>> components) {
-        components.add(BasicValidationErrors.class);
+        container.register(VRaptor2RequestExecution.class);
+        container.register(ViewsPropertiesPageResult.class);
+        container.register(ExecuteAndViewInterceptor.class);
+        container.register(HibernateValidatorPluginInterceptor.class);
+        container.register(VRaptor2Converters.class);
+        container.register(ValidatorInterceptor.class);
+        container.register(ViewInterceptor.class);
+        container.register(DefaultComponentInfoProvider.class);
+        container.register(OutjectionInterceptor.class);
+        container.register(RequestResult.class);
+        container.register(ResultSupplierInterceptor.class);
+        container.register(AjaxInterceptor.class);
+        container.register(MessageCreatorValidator.class);
+        container.register(BasicValidationErrors.class);
     }
 
 }

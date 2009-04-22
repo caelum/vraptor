@@ -30,6 +30,7 @@
 package br.com.caelum.vraptor.ioc.pico;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -87,11 +88,12 @@ public class PicoContainersProvider implements RegisterContainer {
         }
     }
     
-    @SuppressWarnings("unused") 
     private boolean alreadyRegistered(Class<?> interfaceType) {
-        for (List<Class<?>> scopes : new List[] { applicationScoped, sessionScoped, requestScoped }) {
-            for (Class<?> type : applicationScoped) {
+        for (List<Class<?>> scope : new List[] { applicationScoped, sessionScoped, requestScoped }) {
+            for (Iterator<Class<?>> iterator = scope.iterator(); iterator.hasNext();) {
+                Class<?> type = (Class<?>) iterator.next();
                 if (interfaceType.isAssignableFrom(type)) {
+                    iterator.remove();
                     return true;
                 }
             }

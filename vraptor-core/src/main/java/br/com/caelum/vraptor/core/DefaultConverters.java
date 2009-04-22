@@ -59,7 +59,7 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
 @ApplicationScoped
 public class DefaultConverters implements Converters {
 
-    private LinkedList<Class<? extends Converter<?>>> types;
+    private LinkedList<Class<? extends Converter>> types;
 
     // TODO: should all DEFAULT converters be @ApplicationScoped?
     public static final Class<? extends Converter<?>>[] DEFAULTS = new Class[] { PrimitiveIntConverter.class,
@@ -73,7 +73,7 @@ public class DefaultConverters implements Converters {
 
     public DefaultConverters(ComponentRegistry container) {
         this.container = container;
-        this.types = new LinkedList<Class<? extends Converter<?>>>();
+        this.types = new LinkedList<Class<? extends Converter>>();
         for (Class<? extends Converter<?>> type : DEFAULTS) {
             register(type);
         }
@@ -89,10 +89,9 @@ public class DefaultConverters implements Converters {
         container.register(converterType);
     }
 
-    @SuppressWarnings("unchecked")
-    public Converter to(Class type, Container container) {
-        for (Iterator iterator = types.iterator(); iterator.hasNext();) {
-            Class<? extends Converter> converterType = (Class<? extends Converter>) iterator.next();
+    public Converter to(Class<?> type, Container container) {
+        for (Iterator<Class<? extends Converter>> iterator = types.iterator(); iterator.hasNext();) {
+            Class<? extends Converter> converterType = iterator.next();
             Class boundType = converterType.getAnnotation(Convert.class).value();
             if (boundType.isAssignableFrom(type)) {
                 return container.instanceFor(converterType);

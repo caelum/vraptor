@@ -50,11 +50,4 @@ public interface Container {
      */
     <T> T instanceFor(Class<T> type);
 
-    /**
-     * Registers a component in this specific container.<br>
-     * Remember that registering components later on (after initialization) will
-     * ONLY affect the current request scoped container.
-     */
-    public void register(Class<?> type);
-
 }

@@ -1,11 +1,12 @@
 package br.com.caelum.vraptor.ioc;
 
+import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.Result;
+import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.RequestExecution;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.core.VRaptorRequest;
-import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.http.OgnlParametersProvider;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.TypeCreator;
@@ -122,7 +123,7 @@ public abstract class GenericContainerTest {
             public T execute(VRaptorRequest request, int counter) {
                 Container firstContainer = provider.provide(request);
                 if (componentToRegister != null) {
-                    firstContainer.register(componentToRegister);
+                    firstContainer.instanceFor(ComponentRegistry.class).register(componentToRegister);
                 }
                 ResourceMethod firstMethod = mockery.mock(ResourceMethod.class, "rm" + counter);
                 firstContainer.instanceFor(RequestInfo.class).setResourceMethod(firstMethod);
@@ -135,7 +136,7 @@ public abstract class GenericContainerTest {
                 Container secondContainer = provider.provide(request);
 
                 if (componentToRegister != null && !isAppScoped(secondContainer, componentToRegister)) {
-                    secondContainer.register(componentToRegister);
+                    secondContainer.instanceFor(ComponentRegistry.class).register(componentToRegister);
                 }
 
                 ResourceMethod secondMethod = mockery.mock(ResourceMethod.class, "rm" + counter);

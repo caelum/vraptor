@@ -13,18 +13,7 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 
 public class VRaptorMockery {
 
-    private Mockery mockery;
-
-    public VRaptorMockery() {
-        this(false);
-    }
-
-    public VRaptorMockery(boolean supportConcreteClasses) {
-        mockery = new Mockery();
-        if (supportConcreteClasses) {
-            mockery.setImposteriser(ClassImposteriser.INSTANCE);
-        }
-    }
+    private Mockery mockery = new Mockery();
 
     public void assertIsSatisfied() {
         mockery.assertIsSatisfied();

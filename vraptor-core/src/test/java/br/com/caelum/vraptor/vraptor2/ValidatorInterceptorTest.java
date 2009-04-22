@@ -31,7 +31,7 @@ public class ValidatorInterceptorTest {
 
     @Before
     public void setup() {
-        this.mockery = new VRaptorMockery(true);
+        this.mockery = new VRaptorMockery();
         this.result = mockery.mock(PageResult.class);
         this.provider = mockery.mock(ParametersProvider.class);
         this.errors = mockery.mock(ValidationErrors.class);

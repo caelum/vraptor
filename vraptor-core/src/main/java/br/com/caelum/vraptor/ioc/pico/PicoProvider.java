@@ -50,6 +50,7 @@ import br.com.caelum.vraptor.http.EmptyElementsRemoval;
 import br.com.caelum.vraptor.http.OgnlParametersProvider;
 import br.com.caelum.vraptor.http.ParanamerNameProvider;
 import br.com.caelum.vraptor.http.StupidTranslator;
+import br.com.caelum.vraptor.http.TypeCreator;
 import br.com.caelum.vraptor.http.asm.AsmBasedTypeCreator;
 import br.com.caelum.vraptor.interceptor.DefaultInterceptorRegistry;
 import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
@@ -64,6 +65,7 @@ import br.com.caelum.vraptor.resource.DefaultResourceRegistry;
 import br.com.caelum.vraptor.validator.DefaultValidator;
 import br.com.caelum.vraptor.view.DefaultPathResolver;
 import br.com.caelum.vraptor.view.jsp.DefaultPageResult;
+import br.com.caelum.vraptor.view.jsp.PageResult;
 
 /**
  * Managing internal components by using pico container.<br>
@@ -98,7 +100,6 @@ public class PicoProvider implements ContainerProvider {
         singleInterfaceRegister(DefaultDirScanner.class, container);
         singleInterfaceRegister(WebInfClassesScanner.class, container); 
         singleInterfaceRegister(DefaultInterceptorRegistry.class, container);
-        singleInterfaceRegister(AsmBasedTypeCreator.class, container);
         singleInterfaceRegister(DefaultMethodLookupBuilder.class, container);
         singleInterfaceRegister(DefaultPathResolver.class, container); 
         singleInterfaceRegister(ParanamerNameProvider.class, container);
@@ -108,11 +109,12 @@ public class PicoProvider implements ContainerProvider {
         singleInterfaceRegister(DefaultInterceptorStack.class, container); 
         singleInterfaceRegister(DefaultRequestExecution.class, container);
         singleInterfaceRegister(DefaultResult.class, container); 
-        singleInterfaceRegister(DefaultPageResult.class, container); 
         singleInterfaceRegister(OgnlParametersProvider.class, container);
         singleInterfaceRegister(DefaultRequestInfo.class, container); 
         singleInterfaceRegister(DefaultValidator.class, container);
 
+        container.register(PageResult.class, DefaultPageResult.class); 
+        container.register(TypeCreator.class, AsmBasedTypeCreator.class);
         container.register(EmptyElementsRemoval.class, EmptyElementsRemoval.class);
         container.register(ParametersInstantiatorInterceptor.class, ParametersInstantiatorInterceptor.class);
         container.register(InterceptorListPriorToExecutionExtractor.class, InterceptorListPriorToExecutionExtractor.class);

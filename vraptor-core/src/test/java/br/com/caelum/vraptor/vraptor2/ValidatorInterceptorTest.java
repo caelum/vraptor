@@ -4,12 +4,10 @@ import java.io.IOException;
 
 import javax.servlet.ServletException;
 
-import org.hamcrest.Matcher;
 import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
 import org.vraptor.i18n.Message;
-import org.vraptor.i18n.ValidationMessage;
 import org.vraptor.validator.ValidationErrors;
 
 import br.com.caelum.vraptor.InterceptionException;
@@ -18,6 +16,7 @@ import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.view.jsp.PageResult;
+import br.com.caelum.vraptor.vraptor2.outject.Outjecter;
 
 public class ValidatorInterceptorTest {
 
@@ -27,6 +26,8 @@ public class ValidatorInterceptorTest {
     private ParametersProvider provider;
     private InterceptorStack stack;
     private ValidationErrors errors;
+    private Outjecter outjecter;
+    private OutjectionInterceptor interceptor;
 
     @Before
     public void setup() {
@@ -34,7 +35,9 @@ public class ValidatorInterceptorTest {
         this.result = mockery.mock(PageResult.class);
         this.provider = mockery.mock(ParametersProvider.class);
         this.errors = mockery.mock(ValidationErrors.class);
-        this.validator = new ValidatorInterceptor(this.provider, this.result, errors);
+        this.outjecter = mockery.mock(Outjecter.class);
+        this.interceptor = new OutjectionInterceptor(outjecter);
+        this.validator = new ValidatorInterceptor(this.provider, this.result, errors, interceptor);
         this.stack = mockery.mock(InterceptorStack.class);
     }
 

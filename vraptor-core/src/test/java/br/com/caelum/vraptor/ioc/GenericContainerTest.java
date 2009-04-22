@@ -2,19 +2,28 @@ package br.com.caelum.vraptor.ioc;
 
 import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.Result;
+import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.RequestExecution;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.core.VRaptorRequest;
+import br.com.caelum.vraptor.core.MethodParameters;
+import br.com.caelum.vraptor.core.URLParameterExtractorInterceptor;
 import br.com.caelum.vraptor.http.OgnlParametersProvider;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.TypeCreator;
 import br.com.caelum.vraptor.http.UrlToResourceTranslator;
+import br.com.caelum.vraptor.http.RequestParameters;
+import br.com.caelum.vraptor.http.ParametersProvider;
+import br.com.caelum.vraptor.http.EmptyElementsRemoval;
 import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
 import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
 import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
+import br.com.caelum.vraptor.interceptor.ParametersInstantiator;
 import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
+import br.com.caelum.vraptor.interceptor.InterceptorListPriorToExecutionExtractor;
+import br.com.caelum.vraptor.resource.MethodLookupBuilder;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.resource.ResourceRegistry;
 import br.com.caelum.vraptor.view.PathResolver;
@@ -58,8 +67,9 @@ public abstract class GenericContainerTest {
 
     @Test
     public void canProvideAllApplicationScopedComponents() {
-        Class<?>[] components = new Class[]{UrlToResourceTranslator.class, ResourceRegistry.class, TypeCreator.class,
-                InterceptorRegistry.class, PathResolver.class, ParameterNameProvider.class, Converters.class};
+        Class<?>[] components = new Class[]{ServletContext.class, UrlToResourceTranslator.class, ResourceRegistry.class,
+                TypeCreator.class, InterceptorRegistry.class, MethodLookupBuilder.class, PathResolver.class,
+                ParameterNameProvider.class, Converters.class, EmptyElementsRemoval.class};
         checkAvailabilityFor(true, components);
         mockery.assertIsSatisfied();
     }
@@ -67,9 +77,11 @@ public abstract class GenericContainerTest {
     @Test
     public void canProvideAllRequestScopedComponents() {
         checkAvailabilityFor(false, HttpServletRequest.class, HttpServletResponse.class, VRaptorRequest.class,
-                InterceptorStack.class, RequestInfo.class, RequestExecution.class, ResourceLookupInterceptor.class,
-                InstantiateInterceptor.class, Result.class, ExecuteMethodInterceptor.class,
-                OgnlParametersProvider.class, HttpSession.class, PageResult.class);
+                HttpSession.class, ParametersInstantiator.class, MethodParameters.class, RequestParameters.class,
+                InterceptorListPriorToExecutionExtractor.class, URLParameterExtractorInterceptor.class,
+                InterceptorStack.class, RequestExecution.class, ResourceLookupInterceptor.class,
+                InstantiateInterceptor.class, Result.class, ExecuteMethodInterceptor.class, PageResult.class,
+                ParametersProvider.class, RequestInfo.class, Validator.class);
         mockery.assertIsSatisfied();
     }
 

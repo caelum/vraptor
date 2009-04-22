@@ -29,13 +29,6 @@
  */
 package br.com.caelum.vraptor.ioc.pico;
 
-import javax.servlet.ServletContext;
-
-import org.picocontainer.MutablePicoContainer;
-import org.picocontainer.PicoBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.core.DefaultConverters;
 import br.com.caelum.vraptor.core.DefaultInterceptorStack;
@@ -64,12 +57,21 @@ import br.com.caelum.vraptor.resource.DefaultResourceRegistry;
 import br.com.caelum.vraptor.validator.DefaultValidator;
 import br.com.caelum.vraptor.view.DefaultPathResolver;
 import br.com.caelum.vraptor.view.jsp.DefaultPageResult;
+import org.picocontainer.MutablePicoContainer;
+import org.picocontainer.PicoBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.servlet.ServletContext;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Managing internal components by using pico container.<br>
  * There is an extension point through the registerComponents method, which
  * allows one to give a customized container.
- * 
+ *
  * @author Guilherme Silveira
  */
 public class PicoProvider implements ContainerProvider {
@@ -89,43 +91,20 @@ public class PicoProvider implements ContainerProvider {
         // cache(CacheBasedTypeCreator.class, AsmBasedTypeCreator.class);
     }
 
-    private PicoContainersProvider getContainers() {
-        return this.container.getComponent(PicoContainersProvider.class);
-    }
-
     /**
      * Register extra components that your app wants to.
      */
     protected void registerComponents(ComponentRegistry container) {
-        // app scoped
-        container.register(StupidTranslator.class);
-        container.register(DefaultResourceRegistry.class);
-        container.register(DefaultDirScanner.class);
-        container.register(WebInfClassesScanner.class);
-        container.register(DefaultInterceptorRegistry.class);
-        container.register(AsmBasedTypeCreator.class);
-        container.register(DefaultMethodLookupBuilder.class);
-        container.register(DefaultPathResolver.class);
-        container.register(ParanamerNameProvider.class);
-        container.register(DefaultConverters.class);
+        for (Class<?> type : getApplicationScopedComponents()) {
+            container.register(type);
+        }
+        for (Class<?> type : getRequestScopedComponents()) {
+            container.register(type);
+        }
+    }
 
-        // request scoped
-        container.register(ParametersInstantiator.class);
-        container.register(DefaultMethodParameters.class);
-        container.register(DefaultRequestParameters.class);
-        container.register(InterceptorListPriorToExecutionExtractor.class);
-        container.register(URLParameterExtractorInterceptor.class);
-        container.register(DefaultInterceptorStack.class);
-        container.register(DefaultRequestExecution.class);
-        container.register(ResourceLookupInterceptor.class);
-        container.register(InstantiateInterceptor.class);
-        container.register(DefaultResult.class);
-        container.register(ExecuteMethodInterceptor.class);
-        container.register(DefaultPageResult.class);
-        container.register(OgnlParametersProvider.class);
-        container.register(DefaultRequestInfo.class);
-        container.register(EmptyElementsRemoval.class);
-        container.register(DefaultValidator.class);
+    public Container provide(VRaptorRequest request) {
+        return getContainers().provide(request);
     }
 
     public <T> T instanceFor(Class<T> type) {
@@ -142,8 +121,26 @@ public class PicoProvider implements ContainerProvider {
         container.stop();
     }
 
-    public Container provide(VRaptorRequest request) {
-        return getContainers().provide(request);
+    private PicoContainersProvider getContainers() {
+        return this.container.getComponent(PicoContainersProvider.class);
+    }
+
+    private Collection<Class<?>> getApplicationScopedComponents() {
+        return Arrays.asList(
+                StupidTranslator.class, DefaultResourceRegistry.class, DefaultDirScanner.class,
+                WebInfClassesScanner.class, DefaultInterceptorRegistry.class, AsmBasedTypeCreator.class,
+                DefaultMethodLookupBuilder.class, DefaultPathResolver.class, ParanamerNameProvider.class,
+                DefaultConverters.class, EmptyElementsRemoval.class);
+    }
+
+    protected Collection<Class<?>> getRequestScopedComponents() {
+        // TODO make InterceptorStack itself register components
+        return Arrays.asList(
+                ParametersInstantiator.class, DefaultMethodParameters.class, DefaultRequestParameters.class,
+                InterceptorListPriorToExecutionExtractor.class, URLParameterExtractorInterceptor.class,
+                DefaultInterceptorStack.class, DefaultRequestExecution.class, ResourceLookupInterceptor.class,
+                InstantiateInterceptor.class, DefaultResult.class, ExecuteMethodInterceptor.class,
+                DefaultPageResult.class, OgnlParametersProvider.class, DefaultRequestInfo.class, DefaultValidator.class);
     }
 
 }

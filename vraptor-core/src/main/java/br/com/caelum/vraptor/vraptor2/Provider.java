@@ -48,7 +48,7 @@ import br.com.caelum.vraptor.view.jsp.PageResult;
  * @author Guilherme Silveira
  */
 public class Provider extends PicoProvider {
-    
+
     protected void registerComponents(ComponentRegistry container) {
         super.registerComponents(container);
         container.register(MethodLookupBuilder.class, VRaptor2MethodLookupBuilder.class);

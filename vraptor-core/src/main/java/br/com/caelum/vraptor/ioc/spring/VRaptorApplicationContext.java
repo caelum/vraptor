@@ -31,6 +31,7 @@ import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.annotation.AnnotatedGenericBeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinitionHolder;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionReaderUtils;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
@@ -50,8 +51,9 @@ import java.util.Map;
  * @author Fabio Kung
  */
 public class VRaptorApplicationContext extends AbstractRefreshableWebApplicationContext {
-    private final AnnotationBeanNameGenerator beanNameGenerator = new AnnotationBeanNameGenerator();
+    public static final String RESOURCES_LIST = "br.com.caelum.vraptor.resources.list";
 
+    private final AnnotationBeanNameGenerator beanNameGenerator = new AnnotationBeanNameGenerator();
     private String[] basePackages;
     private SpringBasedContainer container;
 
@@ -82,8 +84,9 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
         registerOn(beanFactory, ParanamerNameProvider.class);
         registerOn(beanFactory, DefaultConverters.class);
         registerOn(beanFactory, EmptyElementsRemoval.class);
+        registerOn(beanFactory, ResourcesHolder.class);
+        registerOn(beanFactory, ResourceFinder.class);
         registerOn(beanFactory, ResourceRegistrar.class);
-
     }
 
     private void registerRequestScopedComponentsOn(DefaultListableBeanFactory beanFactory) {

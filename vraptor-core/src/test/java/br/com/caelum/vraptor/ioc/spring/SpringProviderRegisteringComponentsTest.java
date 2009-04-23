@@ -7,8 +7,12 @@ import br.com.caelum.vraptor.ioc.GenericContainerTest;
 import br.com.caelum.vraptor.test.HttpServletRequestMock;
 import br.com.caelum.vraptor.test.HttpSessionMock;
 import org.jmock.Expectations;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.context.request.RequestContextListener;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.ServletRequestEvent;
 
 public class SpringProviderRegisteringComponentsTest extends GenericContainerTest {
     private int counter;
@@ -19,23 +23,39 @@ public class SpringProviderRegisteringComponentsTest extends GenericContainerTes
 
     protected <T> T executeInsideRequest(final Execution<T> execution) {
         final Object[] holder = new Object[1];
+        Object lock = new Object();
+        holder[0] = lock;
         new Thread(new Runnable() {
             public void run() {
-                HttpSessionMock session = new HttpSessionMock(context, "session" + ++counter);
-                HttpServletRequestMock httpRequest = new HttpServletRequestMock(session);
-                HttpServletResponse response = mockery.mock(HttpServletResponse.class, "response" + counter);
-                VRaptorRequest request = new VRaptorRequest(context, httpRequest, response);
-                VRaptorRequestHolder.setRequestForCurrentThread(request);
-                T result = execution.execute(request, counter);
-                VRaptorRequestHolder.resetRequestForCurrentThread();
-                holder[0] = result;
-                holder.notifyAll();
+                T result = null;
+                try {
+                    HttpSessionMock session = new HttpSessionMock(context, "session" + ++counter);
+                    HttpServletRequestMock httpRequest = new HttpServletRequestMock(session);
+                    HttpServletResponse response = mockery.mock(HttpServletResponse.class, "response" + counter);
+
+                    VRaptorRequest request = new VRaptorRequest(context, httpRequest, response);
+                    VRaptorRequestHolder.setRequestForCurrentThread(request);
+
+                    RequestContextListener contextListener = new RequestContextListener();
+                    contextListener.requestInitialized(new ServletRequestEvent(context, httpRequest));
+                    result = execution.execute(request, counter);
+                    contextListener.requestDestroyed(new ServletRequestEvent(context, httpRequest));
+
+                    VRaptorRequestHolder.resetRequestForCurrentThread();
+                } finally {
+                    synchronized (holder) {
+                        holder[0] = result;
+                        holder.notifyAll();
+                    }
+                }
             }
         }).start();
-        
-        while (holder[0] == null) {
+
+        while (holder[0] == lock) {
             try {
-                holder.wait();
+                synchronized (holder) {
+                    holder.wait(1000);
+                }
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }

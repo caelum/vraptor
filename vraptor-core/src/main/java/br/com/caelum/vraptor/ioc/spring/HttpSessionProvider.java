@@ -1,32 +1,31 @@
 package br.com.caelum.vraptor.ioc.spring;
 
-import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.core.VRaptorRequest;
 import org.springframework.beans.factory.FactoryBean;
-import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 /**
- * Provides the current javax.servlet.http.HttpServletRequest object, provided that Spring has registered it for the
+ * Provides the current javax.servlet.http.HttpSession object, provided that Spring has registered it for the
  * current Thread.
  *
  * @author Fabio Kung
  * @see org.springframework.web.context.request.RequestContextHolder
  */
-public class HttpServletRequestProvider implements FactoryBean {
+public class HttpSessionProvider implements FactoryBean {
     private final HttpServletRequest request;
 
-    public HttpServletRequestProvider(VRaptorRequest request) {
+    public HttpSessionProvider(VRaptorRequest request) {
         this.request = request.getRequest();
     }
 
     public Object getObject() throws Exception {
-        return request;
+        return request.getSession();
     }
 
     public Class getObjectType() {
-        return HttpServletRequest.class;
+        return HttpSession.class;
     }
 
     public boolean isSingleton() {

@@ -169,6 +169,7 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
     }
 
     public <T> T getBean(Class<T> type) {
+        @SuppressWarnings("unchecked")
         Map<String, ? extends T> instances = BeanFactoryUtils.beansOfTypeIncludingAncestors(this, type);
         if (instances.size() == 0) {
             throw new NoSuchBeanDefinitionException(type, "no bean for this type registered");

@@ -60,8 +60,4 @@ public class PicoBasedContainer implements Container {
         return container.getComponent(type);
     }
 
-    public void register(Class<?> type) {
-        this.container.addComponent(type);
-    }
-
 }

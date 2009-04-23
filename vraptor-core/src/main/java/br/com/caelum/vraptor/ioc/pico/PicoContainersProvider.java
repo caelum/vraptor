@@ -70,7 +70,7 @@ public class PicoContainersProvider implements ComponentRegistry {
         this.container = container;
     }
 
-    public void register(Class<?> requiredType, Class<?> type) {
+    public void register(Class requiredType, Class type) {
         if (alreadyRegistered(requiredType)) {
             logger.debug("Overriding interface " + requiredType.getName() + " with " + type.getName());
         }

@@ -43,7 +43,7 @@ public class LongConverter implements Converter<Long> {
             return Long.valueOf(value);
         } catch (NumberFormatException e) {
             // TODO validation?
-            throw new IllegalArgumentException("Unable to converter '" + value + "'.");
+            throw new IllegalArgumentException("Unable to convert value '" + value + "'.");
         }
     }
 

@@ -53,7 +53,7 @@ public class DefaultResourceRegistryTest {
                 will(returnValue(method));
             }
         });
-        registry.register(Arrays.asList(resource));
+        registry.register(resource);
         assertThat(registry.gimmeThis("/clients", "POST"), is(equalTo(method)));
         mockery.assertIsSatisfied();
     }
@@ -93,7 +93,7 @@ public class DefaultResourceRegistryTest {
                 will(returnValue(null));
             }
         });
-        registry.register(Arrays.asList(myResource));
+        registry.register(myResource);
         assertThat(registry.all(), Matchers.hasItem(myResource));
         mockery.assertIsSatisfied();
     }

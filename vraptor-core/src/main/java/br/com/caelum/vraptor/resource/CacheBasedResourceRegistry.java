@@ -36,7 +36,7 @@ import java.util.Map;
 /**
  * A cached resource registry that avoids iterating over the entire set just in
  * order to find a resource already searched.
- * 
+ *
  * @author Guilherme Silveira
  */
 public class CacheBasedResourceRegistry implements ResourceRegistry {
@@ -64,8 +64,8 @@ public class CacheBasedResourceRegistry implements ResourceRegistry {
         return cachedMap.get(methodName);
     }
 
-    public void register(List<Resource> resources) {
-        delegate.register(resources);
+    public void register(Resource... resource) {
+        delegate.register(resource);
     }
 
 }

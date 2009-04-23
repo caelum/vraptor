@@ -1,39 +1,41 @@
 package br.com.caelum.vraptor.ioc.pico;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.not;
-
-import java.util.ArrayList;
-import java.util.List;
-
+import br.com.caelum.vraptor.Resource;
+import br.com.caelum.vraptor.resource.DefaultResource;
+import br.com.caelum.vraptor.resource.ResourceRegistry;
+import org.jmock.Expectations;
+import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.Resource;
-import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
-
 public class ResourceAcceptorTest {
 
-    private List resources;
     private ResourceAcceptor acceptor;
+    private Mockery mockery;
+    private ResourceRegistry registry;
 
     @Before
     public void setup() {
-        this.resources = new ArrayList<br.com.caelum.vraptor.resource.Resource>();
-        this.acceptor = new ResourceAcceptor(resources);
+        mockery = new Mockery();
+        registry = mockery.mock(ResourceRegistry.class);
+        this.acceptor = new ResourceAcceptor(registry);
     }
 
     @Test
     public void shouldAcceptResourcesAnnotatedWithResourceAnnotation() {
+        mockery.checking(new Expectations() {
+            {
+                one(registry).register(new DefaultResource(ResourceAnnotated.class));
+            }
+        });
         acceptor.analyze(ResourceAnnotated.class);
-//        assertThat(resources, hasItem(VRaptorMatchers.resource(ResourceAnnotated.class)));
+        mockery.assertIsSatisfied();
     }
 
     @Test
     public void ignoresNonAnnotatedResources() {
         acceptor.analyze(ResourceNotAnnotated.class);
-//        assertThat(resources, not(hasItem(VRaptorMatchers.resource(ResourceAnnotated.class))));
+        mockery.assertIsSatisfied();
     }
 
     @Resource

@@ -50,6 +50,32 @@
 
 	<target name="test" depends="compile">
 		<taskdef classpathref="test.classpath" resource="tasks.properties" />
+		<fileset dir="${tmp.test.classes.dir}" id="unittests.fileset" includes="**/*Test.class" />
+		<junit fork="yes" forkmode="once" printsummary="false" showoutput="true" failureproperty="failed-test">
+			<classpath>
+				<pathelement path="${tmp.classes.dir}" />
+				<pathelement path="${tmp.test.classes.dir}" />
+			</classpath>
+			<classpath refid="test.classpath" />
+
+			<formatter type="brief" usefile="false" />
+			<formatter type="xml" />
+  			
+			<batchtest fork="yes" todir="${reports.dir}/test-results">
+				<fileset refid="unittests.fileset" />
+			</batchtest>
+		</junit>
+		<junitreport todir="${reports.dir}/">
+			<fileset dir="${reports.dir}/test-results">
+				<include name="TEST-*.xml" />
+			</fileset>
+			<report format="frames" todir="${reports.dir}/junit" />
+		</junitreport>
+		<fail if="failed-test" message="Failing tests" />
+	</target>
+
+	<target name="coverage" depends="compile">
+		<taskdef classpathref="test.classpath" resource="tasks.properties" />
 		<delete file="cobertura.ser" verbose="false" />
 		<cobertura-instrument todir="${instrumentation.dir}">
 			<fileset dir="${tmp.classes.dir}">
@@ -70,7 +96,7 @@
 
 			<formatter type="brief" usefile="false" />
 			<formatter type="xml" />
-  			
+
 			<batchtest fork="yes" todir="${reports.dir}/test-results">
 				<fileset refid="unittests.fileset" />
 			</batchtest>
@@ -82,10 +108,10 @@
 			</fileset>
 			<report format="frames" todir="${reports.dir}/junit" />
 		</junitreport>
-		<fail if="failed-test" message="Testes unitarios com problema!" />
+		<fail if="failed-test" message="Failing tests" />
 	</target>
 
-	<target name="artifacts" depends="compile" description="--> generate project's artifacts">
+	<target name="artifacts" depends="test" description="--> generate project's artifacts">
 		<jar destfile="${jar.file}" compress="true">
 			<fileset dir="${tmp.classes.dir}" includes="**/*.class" />
 		</jar>

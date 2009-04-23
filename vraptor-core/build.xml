@@ -111,7 +111,7 @@
 		<fail if="failed-test" message="Failing tests" />
 	</target>
 
-	<target name="artifacts" depends="test" description="--> generate project's artifacts">
+	<target name="artifacts" depends="compile" description="--> generate project's artifacts">
 		<jar destfile="${jar.file}" compress="true">
 			<fileset dir="${tmp.classes.dir}" includes="**/*.class" />
 		</jar>

@@ -30,13 +30,18 @@
 package br.com.caelum.vraptor.ioc.pico;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.servlet.http.HttpSession;
 
+import org.picocontainer.DefaultPicoContainer;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.PicoBuilder;
+import org.picocontainer.behaviors.Caching;
+import org.picocontainer.lifecycle.JavaEE5LifecycleStrategy;
+import org.picocontainer.monitors.NullComponentMonitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -104,7 +109,7 @@ public class PicoContainersProvider implements ComponentRegistry {
         if (logger.isDebugEnabled()) {
             logger.debug("Request components are " + requestScoped);
         }
-        MutablePicoContainer requestScope = new PicoBuilder(sessionScope).withCaching().build();
+        MutablePicoContainer requestScope = new DefaultPicoContainer(new Caching(),new JavaEE5LifecycleStrategy(new NullComponentMonitor()), sessionScope);
         for (Class<?> requiredType : requestScoped.keySet()) {
             requestScope.addComponent(requestScoped.get(requiredType));
         }
@@ -119,7 +124,7 @@ public class PicoContainersProvider implements ComponentRegistry {
     }
 
     private MutablePicoContainer createSessionContainer(HttpSession session) {
-        MutablePicoContainer sessionScope = new PicoBuilder(this.container).withCaching().build();
+        MutablePicoContainer sessionScope = new DefaultPicoContainer(new Caching(),new JavaEE5LifecycleStrategy(new NullComponentMonitor()), this.container);
         sessionScope.addComponent(HttpSession.class, session);
         session.setAttribute(CONTAINER_SESSION_KEY, sessionScope);
         if (logger.isDebugEnabled()) {

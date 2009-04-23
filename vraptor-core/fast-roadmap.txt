@@ -18,7 +18,6 @@ com a galera:
 - PicoContainer only register if it needs
 	(MUST) - support HibernateValidator with i18n messages
 	(MUST) - support i18n messages
-	(MUST) - pico problem: STARTABLE/STOPABLE COMPONENTS with annotation + tests
 	(MUST) - niceurls with programmatic support
 	(MUST) - niceurls -> path support
 	(MUST) - niceurls with file config support -> path support
@@ -73,7 +72,7 @@ kung help
 (MUST) - full spring support
 (MUST) - Map support
 (MUST) - forward problem with opening 2 connections to the database and 2 components... one or two? solve it?
-
+known bug: accessing / when its /index.html.... if its a dir containing an index.html it doesnt work, but if your url is /clients/ it works...
 
 
 
@@ -300,6 +299,7 @@ done:
 - ognl support
 - vraptor2: @Component lookup
 - validation support
+- pico: STARTABLE/STOPABLE COMPONENTS with @PostConstruct, @PreDestroy
 - vraptor2: public method lookup (old algo)
 - vraptor2: converter without request/session/context access support
 	- v2: view interceptor

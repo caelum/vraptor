@@ -31,8 +31,12 @@ package br.com.caelum.vraptor.ioc.pico;
 
 import javax.servlet.ServletContext;
 
+import org.picocontainer.DefaultPicoContainer;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.PicoBuilder;
+import org.picocontainer.behaviors.Caching;
+import org.picocontainer.lifecycle.JavaEE5LifecycleStrategy;
+import org.picocontainer.monitors.NullComponentMonitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -81,7 +85,7 @@ public class PicoProvider implements ContainerProvider {
     private static final Logger logger = LoggerFactory.getLogger(PicoProvider.class);
 
     public PicoProvider() {
-        this.container = new PicoBuilder().withCaching().build();
+        this.container = new DefaultPicoContainer(new Caching(),new JavaEE5LifecycleStrategy(new NullComponentMonitor()), null);
         PicoContainersProvider containersProvider = new PicoContainersProvider(this.container);
         this.container.addComponent(containersProvider);
         registerComponents(getContainers());
@@ -151,6 +155,7 @@ public class PicoProvider implements ContainerProvider {
 
     public void stop() {
         container.stop();
+        container.dispose();
     }
 
     private PicoContainersProvider getContainers() {

@@ -5,6 +5,7 @@ import org.springframework.beans.factory.FactoryBean;
 import javax.servlet.http.HttpServletResponse;
 
 import br.com.caelum.vraptor.core.VRaptorRequest;
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
 /**
  * Provides the current javax.servlet.http.HttpServletResponse object, provided that Spring has registered it for the
@@ -13,15 +14,11 @@ import br.com.caelum.vraptor.core.VRaptorRequest;
  * @author Fabio Kung
  * @see org.springframework.web.context.request.ServletWebRequest
  */
+@ApplicationScoped
 public class HttpServletResponseProvider implements FactoryBean {
-    private VRaptorRequest request;
-
-    public HttpServletResponseProvider(VRaptorRequest request) {
-        this.request = request;
-    }
 
     public Object getObject() throws Exception {
-        return request.getResponse();
+        return VRaptorRequestHolder.currentRequest().getResponse();
     }
 
     public Class getObjectType() {

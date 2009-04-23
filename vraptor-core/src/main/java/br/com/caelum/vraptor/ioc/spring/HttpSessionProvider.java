@@ -1,10 +1,10 @@
 package br.com.caelum.vraptor.ioc.spring;
 
-import br.com.caelum.vraptor.core.VRaptorRequest;
 import org.springframework.beans.factory.FactoryBean;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
 /**
  * Provides the current javax.servlet.http.HttpSession object, provided that Spring has registered it for the
@@ -13,15 +13,11 @@ import javax.servlet.http.HttpSession;
  * @author Fabio Kung
  * @see org.springframework.web.context.request.RequestContextHolder
  */
+@ApplicationScoped
 public class HttpSessionProvider implements FactoryBean {
-    private final HttpServletRequest request;
-
-    public HttpSessionProvider(VRaptorRequest request) {
-        this.request = request.getRequest();
-    }
 
     public Object getObject() throws Exception {
-        return request.getSession();
+        return VRaptorRequestHolder.currentRequest().getRequest().getSession();
     }
 
     public Class getObjectType() {

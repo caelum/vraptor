@@ -1,9 +1,7 @@
 package br.com.caelum.vraptor.ioc.spring;
 
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
-import br.com.caelum.vraptor.core.VRaptorRequest;
 import org.springframework.beans.factory.FactoryBean;
-import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -14,15 +12,11 @@ import javax.servlet.http.HttpServletRequest;
  * @author Fabio Kung
  * @see org.springframework.web.context.request.RequestContextHolder
  */
+@ApplicationScoped
 public class HttpServletRequestProvider implements FactoryBean {
-    private final HttpServletRequest request;
-
-    public HttpServletRequestProvider(VRaptorRequest request) {
-        this.request = request.getRequest();
-    }
 
     public Object getObject() throws Exception {
-        return request;
+        return VRaptorRequestHolder.currentRequest().getRequest();
     }
 
     public Class getObjectType() {

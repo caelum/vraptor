@@ -2,7 +2,7 @@
 <!-- ====================================================================== 
 	VRaptor 3 example build
 	====================================================================== -->
-<project name="VRaptor 3 Example" default="artifacts" basedir=".">
+<project name="VRaptor 3 Example" default="war" basedir=".">
 
   <description>VRaptor 3 example build</description>
 

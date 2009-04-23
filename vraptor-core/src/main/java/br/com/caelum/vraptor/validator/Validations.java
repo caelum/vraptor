@@ -60,7 +60,8 @@ public class Validations {
             }
             
         });
-        return used((T) enhancer.create());
+        used(instance);
+        return (T) enhancer.create();
     }
     public <T> T used(T object) {
         this.lastUsed = object;
@@ -68,7 +69,11 @@ public class Validations {
     }
     
     public <T> void shouldBe(Matcher<T> matcher) {
-        
+        if (matcher.matches(lastUsed)) {
+            Description description = new StringDescription();
+            description.appendDescriptionOf(matcher);
+            errors.add(description.toString());
+        }
     }
 
 }

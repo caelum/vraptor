@@ -7,7 +7,8 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
@@ -22,8 +23,8 @@ import br.com.caelum.vraptor.core.VRaptorRequest;
 public class LocaleBasedCalendarConverter implements Converter<Calendar> {
     
     private final JstlWrapper jstlWrapper = new JstlWrapper();
-
-    private static final Logger logger = Logger.getLogger(LocaleBasedCalendarConverter.class);
+    
+    private static final Logger logger = LoggerFactory.getLogger(LocaleBasedCalendarConverter.class);
 
     private final VRaptorRequest request;
     

@@ -7,7 +7,7 @@
 	
 
 	<context-param>
-		<param-name>br.com.caelum.vraptor.container</param-name>
+		<param-name>br.com.caelum.vraptor.provider</param-name>
 		<param-value>br.com.caelum.vraptor.example.CustomProvider</param-value>
 	</context-param>
 	

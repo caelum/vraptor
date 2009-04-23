@@ -1,7 +1,5 @@
 package br.com.caelum.vraptor.vraptor2;
 
-import java.io.IOException;
-
 import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Interceptor;
@@ -32,8 +30,7 @@ public class ResultSupplierInterceptor implements Interceptor {
         return true;
     }
 
-    public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws IOException,
-            InterceptionException {
+    public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws InterceptionException {
         // simple version to do ajax parsing
         if (info.isAjax()) {
             container.register(Outjecter.class, JsonOutjecter.class);

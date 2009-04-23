@@ -29,7 +29,16 @@
  */
 package br.com.caelum.vraptor;
 
-import java.io.IOException;
+import br.com.caelum.vraptor.config.BasicConfiguration;
+import br.com.caelum.vraptor.core.DefaultStaticContentHandler;
+import br.com.caelum.vraptor.core.Execution;
+import br.com.caelum.vraptor.core.RequestExecution;
+import br.com.caelum.vraptor.core.StaticContentHandler;
+import br.com.caelum.vraptor.core.VRaptorRequest;
+import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor.ioc.ContainerProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -40,22 +49,12 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import br.com.caelum.vraptor.config.BasicConfiguration;
-import br.com.caelum.vraptor.core.DefaultStaticContentHandler;
-import br.com.caelum.vraptor.core.RequestExecution;
-import br.com.caelum.vraptor.core.StaticContentHandler;
-import br.com.caelum.vraptor.core.VRaptorRequest;
-import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.ioc.ContainerProvider;
+import java.io.IOException;
 
 /**
  * VRaptor entry point.<br>
  * Provider configuration is supported through init parameter.
- * 
+ *
  * @author Guilherme Silveira
  * @author Fabio Kung
  */
@@ -90,12 +89,13 @@ public class VRaptor implements Filter {
         }
 
         VRaptorRequest request = new VRaptorRequest(servletContext, webRequest, webResponse);
-        try {
-            Container container = provider.provide(request);
-            container.instanceFor(RequestExecution.class).execute();
-        } catch (VRaptorException e) {
-            throw new ServletException(e);
-        }
+        // TODO create ExecutionWithoutResult?
+        provider.provideForRequest(request, new Execution<Object>() {
+            public Object insideRequest(Container container) {
+                container.instanceFor(RequestExecution.class).execute();
+                return null;
+            }
+        });
     }
 
     public void init(FilterConfig cfg) throws ServletException {

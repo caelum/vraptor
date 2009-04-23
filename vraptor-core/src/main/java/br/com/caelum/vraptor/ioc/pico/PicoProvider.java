@@ -29,17 +29,6 @@
  */
 package br.com.caelum.vraptor.ioc.pico;
 
-import javax.servlet.ServletContext;
-
-import org.picocontainer.DefaultPicoContainer;
-import org.picocontainer.MutablePicoContainer;
-import org.picocontainer.PicoBuilder;
-import org.picocontainer.behaviors.Caching;
-import org.picocontainer.lifecycle.JavaEE5LifecycleStrategy;
-import org.picocontainer.monitors.NullComponentMonitor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.core.DefaultConverters;
 import br.com.caelum.vraptor.core.DefaultInterceptorStack;
@@ -47,6 +36,7 @@ import br.com.caelum.vraptor.core.DefaultMethodParameters;
 import br.com.caelum.vraptor.core.DefaultRequestExecution;
 import br.com.caelum.vraptor.core.DefaultRequestInfo;
 import br.com.caelum.vraptor.core.DefaultResult;
+import br.com.caelum.vraptor.core.Execution;
 import br.com.caelum.vraptor.core.URLParameterExtractorInterceptor;
 import br.com.caelum.vraptor.core.VRaptorRequest;
 import br.com.caelum.vraptor.http.DefaultRequestParameters;
@@ -62,7 +52,6 @@ import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
 import br.com.caelum.vraptor.interceptor.InterceptorListPriorToExecutionExtractor;
 import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
 import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
-import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
 import br.com.caelum.vraptor.resource.DefaultMethodLookupBuilder;
 import br.com.caelum.vraptor.resource.DefaultResourceRegistry;
@@ -70,12 +59,21 @@ import br.com.caelum.vraptor.validator.DefaultValidator;
 import br.com.caelum.vraptor.view.DefaultPathResolver;
 import br.com.caelum.vraptor.view.jsp.DefaultPageResult;
 import br.com.caelum.vraptor.view.jsp.PageResult;
+import org.picocontainer.DefaultPicoContainer;
+import org.picocontainer.MutablePicoContainer;
+import org.picocontainer.behaviors.Caching;
+import org.picocontainer.lifecycle.JavaEE5LifecycleStrategy;
+import org.picocontainer.monitors.NullComponentMonitor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.servlet.ServletContext;
 
 /**
  * Managing internal components by using pico container.<br>
  * There is an extension point through the registerComponents method, which
  * allows one to give a customized container.
- * 
+ *
  * @author Guilherme Silveira
  */
 public class PicoProvider implements ContainerProvider {
@@ -85,7 +83,7 @@ public class PicoProvider implements ContainerProvider {
     private static final Logger logger = LoggerFactory.getLogger(PicoProvider.class);
 
     public PicoProvider() {
-        this.container = new DefaultPicoContainer(new Caching(),new JavaEE5LifecycleStrategy(new NullComponentMonitor()), null);
+        this.container = new DefaultPicoContainer(new Caching(), new JavaEE5LifecycleStrategy(new NullComponentMonitor()), null);
         PicoContainersProvider containersProvider = new PicoContainersProvider(this.container);
         this.container.addComponent(containersProvider);
         registerComponents(getContainers());
@@ -102,22 +100,22 @@ public class PicoProvider implements ContainerProvider {
         singleInterfaceRegister(StupidTranslator.class, container);
         singleInterfaceRegister(DefaultResourceRegistry.class, container);
         singleInterfaceRegister(DefaultDirScanner.class, container);
-        singleInterfaceRegister(WebInfClassesScanner.class, container); 
+        singleInterfaceRegister(WebInfClassesScanner.class, container);
         singleInterfaceRegister(DefaultInterceptorRegistry.class, container);
         singleInterfaceRegister(DefaultMethodLookupBuilder.class, container);
-        singleInterfaceRegister(DefaultPathResolver.class, container); 
+        singleInterfaceRegister(DefaultPathResolver.class, container);
         singleInterfaceRegister(ParanamerNameProvider.class, container);
-        singleInterfaceRegister(DefaultConverters.class, container); 
+        singleInterfaceRegister(DefaultConverters.class, container);
         singleInterfaceRegister(DefaultMethodParameters.class, container);
         singleInterfaceRegister(DefaultRequestParameters.class, container);
-        singleInterfaceRegister(DefaultInterceptorStack.class, container); 
+        singleInterfaceRegister(DefaultInterceptorStack.class, container);
         singleInterfaceRegister(DefaultRequestExecution.class, container);
-        singleInterfaceRegister(DefaultResult.class, container); 
+        singleInterfaceRegister(DefaultResult.class, container);
         singleInterfaceRegister(OgnlParametersProvider.class, container);
-        singleInterfaceRegister(DefaultRequestInfo.class, container); 
+        singleInterfaceRegister(DefaultRequestInfo.class, container);
         singleInterfaceRegister(DefaultValidator.class, container);
 
-        container.register(PageResult.class, DefaultPageResult.class); 
+        container.register(PageResult.class, DefaultPageResult.class);
         container.register(TypeCreator.class, AsmBasedTypeCreator.class);
         container.register(EmptyElementsRemoval.class, EmptyElementsRemoval.class);
         container.register(ParametersInstantiatorInterceptor.class, ParametersInstantiatorInterceptor.class);
@@ -133,23 +131,19 @@ public class PicoProvider implements ContainerProvider {
         if (interfaces.length != 1) {
             throw new IllegalArgumentException(
                     "Invalid registering of a type with more than one interface" +
-                    " being registered as a single interface component: "
+                            " being registered as a single interface component: "
                             + type.getName());
         }
         registry.register(interfaces[0], type);
     }
 
-    public Container provide(VRaptorRequest request) {
-        return getContainers().provide(request);
-    }
-
-    public <T> T instanceFor(Class<T> type) {
-        return container.getComponent(type);
+    public <T> T provideForRequest(VRaptorRequest request, Execution<T> execution) {
+        return execution.insideRequest(getContainers().provide(request));
     }
 
     public void start(ServletContext context) {
         this.container.addComponent(context);
-        instanceFor(ResourceLocator.class).loadAll();
+        container.getComponent(ResourceLocator.class).loadAll();
         container.start();
     }
 

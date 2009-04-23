@@ -1,6 +1,5 @@
 package br.com.caelum.vraptor.vraptor2;
 
-import java.io.IOException;
 import java.util.ResourceBundle;
 
 import javax.servlet.http.HttpServletRequest;
@@ -46,8 +45,7 @@ public class HibernateValidatorPluginInterceptor implements Interceptor {
         return method.getMethod().isAnnotationPresent(Validate.class);
     }
 
-    public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws IOException,
-            InterceptionException {
+    public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws InterceptionException {
         Validate validate = method.getMethod().getAnnotation(Validate.class);
         if (validate != null) {
             ResourceBundle bundle = ResourceBundle.getBundle(

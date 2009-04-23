@@ -5,6 +5,6 @@ import br.com.caelum.vraptor.core.VRaptorRequest;
 /**
  * @author Fabio Kung
  */
-public interface Execution<T> {
+public interface WhatToDo<T> {
     T execute(VRaptorRequest request, int counter);
 }

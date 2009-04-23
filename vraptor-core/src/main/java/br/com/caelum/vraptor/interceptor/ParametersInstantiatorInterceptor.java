@@ -1,6 +1,5 @@
 package br.com.caelum.vraptor.interceptor;
 
-import java.io.IOException;
 import java.util.Arrays;
 
 import org.slf4j.Logger;
@@ -38,8 +37,7 @@ public class ParametersInstantiatorInterceptor implements Interceptor {
         return true;
     }
 
-    public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws IOException,
-            InterceptionException {
+    public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws InterceptionException {
         Object[] values = provider.getParametersFor(method);
         if (logger.isDebugEnabled()) {
             logger.debug("Parameter values for " + method + " are " + Arrays.asList(values));

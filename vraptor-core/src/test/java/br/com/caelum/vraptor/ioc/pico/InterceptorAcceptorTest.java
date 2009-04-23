@@ -6,7 +6,6 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,7 +68,7 @@ public class InterceptorAcceptorTest {
     @Intercepts
     class InterceptorAnnotated implements Interceptor {
         public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
-                throws IOException, InterceptionException {
+                throws InterceptionException {
         }
         public boolean accepts(ResourceMethod method) {
             return true;
@@ -78,7 +77,7 @@ public class InterceptorAcceptorTest {
     
     class InterceptorNotAnnotated implements Interceptor {
         public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
-                throws IOException, InterceptionException {
+                throws InterceptionException {
         }
         public boolean accepts(ResourceMethod method) {
             return true;

@@ -53,13 +53,17 @@ public class ResourceLookupInterceptor implements Interceptor {
         this.request = request;
     }
 
-    public void intercept(InterceptorStack invocation, ResourceMethod ignorableMethod, Object resourceInstance) throws IOException, InterceptionException {
+    public void intercept(InterceptorStack invocation, ResourceMethod ignorableMethod, Object resourceInstance) throws InterceptionException {
         HttpServletResponse response = request.getResponse();
         ResourceMethod method = translator.translate(request.getRequest());
         if (method == null) {
-            response.setStatus(404);
-            response.getWriter().println("resource not found");
-            return;
+            try {
+                response.setStatus(404);
+                response.getWriter().println("resource not found");
+                return;
+            } catch (IOException e) {
+                throw new InterceptionException(e);
+            }
         }
         requestInfo.setResourceMethod(method);
         invocation.next(method, resourceInstance);

@@ -1,14 +1,13 @@
 package br.com.caelum.vraptor.vraptor2;
 
-import java.io.IOException;
-
-import javax.servlet.ServletException;
-
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Interceptor;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.view.jsp.PageResult;
+
+import javax.servlet.ServletException;
+import java.io.IOException;
 
 public class ViewInterceptor implements Interceptor {
 
@@ -26,14 +25,15 @@ public class ViewInterceptor implements Interceptor {
         return true;
     }
 
-    public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws IOException,
-            InterceptionException {
+    public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws InterceptionException {
         if (info.shouldShowView(method)) {
             try {
                 this.result.forward(reqResult.getValue());
             } catch (ServletException e) {
                 // TODO better
                 throw new InterceptionException(e.getMessage(), e);
+            } catch (IOException e) {
+                throw new InterceptionException(e);
             }
         }
     }

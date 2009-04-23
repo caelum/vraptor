@@ -1,21 +1,19 @@
 package br.com.caelum.vraptor.vraptor2;
 
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
-import javax.servlet.ServletException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.vraptor.validator.ValidationErrors;
-
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Interceptor;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.view.jsp.PageResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.vraptor.validator.ValidationErrors;
+
+import javax.servlet.ServletException;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 public class ValidatorInterceptor implements Interceptor {
 
@@ -37,8 +35,7 @@ public class ValidatorInterceptor implements Interceptor {
         return true;
     }
 
-    public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws IOException,
-            InterceptionException {
+    public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws InterceptionException {
         if (Info.isOldComponent(method.getResource())) {
             Class<?> type = method.getResource().getType();
             Method validationMethod = getValidationFor(method.getMethod(), type);
@@ -64,6 +61,8 @@ public class ValidatorInterceptor implements Interceptor {
                         this.result.include("errors", errors);
                         this.result.forward("invalid");
                     } catch (ServletException e) {
+                        throw new InterceptionException("Unable to forward", e);
+                    } catch (IOException e) {
                         throw new InterceptionException("Unable to forward", e);
                     }
                     return;

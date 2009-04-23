@@ -1,9 +1,5 @@
 package br.com.caelum.vraptor.core;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 
 import br.com.caelum.vraptor.InterceptionException;
@@ -23,8 +19,7 @@ public class URLParameterExtractorInterceptor implements Interceptor {
         return true;
     }
 
-    public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws IOException,
-            InterceptionException {
+    public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws InterceptionException {
         Path path = method.getResource().getType().getAnnotation(Path.class);
         if (path != null) {
             /*List<String> groupNames = new ArrayList<String>();

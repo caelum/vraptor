@@ -29,7 +29,7 @@
  */
 package br.com.caelum.vraptor;
 
-public class VRaptorException extends Exception {
+public class VRaptorException extends RuntimeException {
 
     public VRaptorException(Throwable e) {
         super(e);
@@ -40,7 +40,7 @@ public class VRaptorException extends Exception {
     }
 
     public VRaptorException(String msg, Throwable e) {
-        super(msg,e);
+        super(msg, e);
     }
 
 }

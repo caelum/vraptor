@@ -4,25 +4,25 @@ import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.core.Converters;
+import br.com.caelum.vraptor.core.Execution;
 import br.com.caelum.vraptor.core.InterceptorStack;
+import br.com.caelum.vraptor.core.MethodParameters;
 import br.com.caelum.vraptor.core.RequestExecution;
 import br.com.caelum.vraptor.core.RequestInfo;
-import br.com.caelum.vraptor.core.VRaptorRequest;
-import br.com.caelum.vraptor.core.MethodParameters;
 import br.com.caelum.vraptor.core.URLParameterExtractorInterceptor;
-import br.com.caelum.vraptor.http.OgnlParametersProvider;
+import br.com.caelum.vraptor.core.VRaptorRequest;
+import br.com.caelum.vraptor.http.EmptyElementsRemoval;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
+import br.com.caelum.vraptor.http.ParametersProvider;
+import br.com.caelum.vraptor.http.RequestParameters;
 import br.com.caelum.vraptor.http.TypeCreator;
 import br.com.caelum.vraptor.http.UrlToResourceTranslator;
-import br.com.caelum.vraptor.http.RequestParameters;
-import br.com.caelum.vraptor.http.ParametersProvider;
-import br.com.caelum.vraptor.http.EmptyElementsRemoval;
 import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
 import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
+import br.com.caelum.vraptor.interceptor.InterceptorListPriorToExecutionExtractor;
 import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
 import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
 import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
-import br.com.caelum.vraptor.interceptor.InterceptorListPriorToExecutionExtractor;
 import br.com.caelum.vraptor.resource.MethodLookupBuilder;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.resource.ResourceRegistry;
@@ -32,7 +32,6 @@ import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
-import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.After;
 import org.junit.Before;
@@ -64,7 +63,7 @@ public abstract class GenericContainerTest {
 
     protected abstract ContainerProvider getProvider();
 
-    protected abstract <T> T executeInsideRequest(Execution<T> execution);
+    protected abstract <T> T executeInsideRequest(WhatToDo<T> execution);
 
     protected abstract void configureExpectations();
 
@@ -127,29 +126,40 @@ public abstract class GenericContainerTest {
     private <T> void checkAvailabilityFor(final boolean shouldBeTheSame, final Class<T> component,
             final Class<? super T> componentToRegister) {
 
-        T firstInstance = executeInsideRequest(new Execution<T>() {
-            public T execute(VRaptorRequest request, int counter) {
-                Container firstContainer = provider.provide(request);
-                if (componentToRegister != null) {
-                    firstContainer.instanceFor(ComponentRegistry.class).register(componentToRegister, componentToRegister);
-                }
-                ResourceMethod firstMethod = mockery.mock(ResourceMethod.class, "rm" + counter);
-                firstContainer.instanceFor(RequestInfo.class).setResourceMethod(firstMethod);
-                return firstContainer.instanceFor(component);
+        T firstInstance = executeInsideRequest(new WhatToDo<T>() {
+            public T execute(VRaptorRequest request, final int counter) {
+
+                return provider.provideForRequest(request, new Execution<T>() {
+                    public T insideRequest(Container firstContainer) {
+                        if (componentToRegister != null) {
+                            ComponentRegistry registry = firstContainer.instanceFor(ComponentRegistry.class);
+                            registry.register(componentToRegister, componentToRegister);
+                        }
+                        ResourceMethod firstMethod = mockery.mock(ResourceMethod.class, "rm" + counter);
+                        firstContainer.instanceFor(RequestInfo.class).setResourceMethod(firstMethod);
+                        return firstContainer.instanceFor(component);
+                    }
+                });
+
             }
         });
 
-        T secondInstance = executeInsideRequest(new Execution<T>() {
-            public T execute(VRaptorRequest request, int counter) {
-                Container secondContainer = provider.provide(request);
+        T secondInstance = executeInsideRequest(new WhatToDo<T>() {
+            public T execute(VRaptorRequest request, final int counter) {
 
-                if (componentToRegister != null && !isAppScoped(secondContainer, componentToRegister)) {
-                    secondContainer.instanceFor(ComponentRegistry.class).register(componentToRegister, componentToRegister);
-                }
+                return provider.provideForRequest(request, new Execution<T>() {
+                    public T insideRequest(Container secondContainer) {
+                        if (componentToRegister != null && !isAppScoped(secondContainer, componentToRegister)) {
+                            ComponentRegistry registry = secondContainer.instanceFor(ComponentRegistry.class);
+                            registry.register(componentToRegister, componentToRegister);
+                        }
 
-                ResourceMethod secondMethod = mockery.mock(ResourceMethod.class, "rm" + counter);
-                secondContainer.instanceFor(RequestInfo.class).setResourceMethod(secondMethod);
-                return secondContainer.instanceFor(component);
+                        ResourceMethod secondMethod = mockery.mock(ResourceMethod.class, "rm" + counter);
+                        secondContainer.instanceFor(RequestInfo.class).setResourceMethod(secondMethod);
+                        return secondContainer.instanceFor(component);
+                    }
+                });
+
             }
         });
 

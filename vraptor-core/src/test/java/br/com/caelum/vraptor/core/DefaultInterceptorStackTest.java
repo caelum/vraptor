@@ -43,7 +43,7 @@ public class DefaultInterceptorStackTest {
         int run;
 
         public void intercept(InterceptorStack invocation, ResourceMethod method, Object resourceInstance)
-                throws IOException, InterceptionException {
+                throws InterceptionException {
             run = count++;
             invocation.next(method, resourceInstance);
         }

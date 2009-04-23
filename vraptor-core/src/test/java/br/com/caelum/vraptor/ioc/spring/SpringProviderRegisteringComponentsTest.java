@@ -2,13 +2,11 @@ package br.com.caelum.vraptor.ioc.spring;
 
 import br.com.caelum.vraptor.core.VRaptorRequest;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
-import br.com.caelum.vraptor.ioc.Execution;
+import br.com.caelum.vraptor.ioc.WhatToDo;
 import br.com.caelum.vraptor.ioc.GenericContainerTest;
 import br.com.caelum.vraptor.test.HttpServletRequestMock;
 import br.com.caelum.vraptor.test.HttpSessionMock;
 import org.jmock.Expectations;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.context.request.RequestContextListener;
 
 import javax.servlet.http.HttpServletResponse;
@@ -21,7 +19,7 @@ public class SpringProviderRegisteringComponentsTest extends GenericContainerTes
         return new SpringProvider();
     }
 
-    protected <T> T executeInsideRequest(final Execution<T> execution) {
+    protected <T> T executeInsideRequest(final WhatToDo<T> execution) {
         final Object[] holder = new Object[1];
         Object lock = new Object();
         holder[0] = lock;

@@ -29,16 +29,13 @@
  */
 package br.com.caelum.vraptor.interceptor;
 
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.List;
 
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Interceptor;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodParameters;
-import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.validator.ValidationError;
 
@@ -56,7 +53,7 @@ public class ExecuteMethodInterceptor implements Interceptor {
     }
 
     public void intercept(InterceptorStack invocation, ResourceMethod method, Object resourceInstance)
-            throws IOException, InterceptionException {
+            throws InterceptionException {
         try {
             Method reflectionMethod = method.getMethod();
             Object[] parameters = this.parameters.getValues();

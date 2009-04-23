@@ -1,6 +1,5 @@
 package br.com.caelum.vraptor.ioc.spring;
 
-import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.core.DefaultConverters;
 import br.com.caelum.vraptor.core.DefaultInterceptorStack;
 import br.com.caelum.vraptor.core.DefaultMethodParameters;
@@ -20,7 +19,6 @@ import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
 import br.com.caelum.vraptor.interceptor.InterceptorListPriorToExecutionExtractor;
 import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
 import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
-import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.resource.DefaultMethodLookupBuilder;
 import br.com.caelum.vraptor.resource.DefaultResourceRegistry;
 import br.com.caelum.vraptor.validator.DefaultValidator;
@@ -130,6 +128,7 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
             definition.setRole(BeanDefinition.ROLE_APPLICATION);
         } else {
             definition.setPrimary(false);
+            definition.getPropertyValues().addPropertyValue("order", Ordered.LOWEST_PRECEDENCE);
             definition.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
         }
         String name = beanNameGenerator.generateBeanName(definition, registry);

@@ -1,4 +1,5 @@
-TODO: 33 
+TODO: 33
+- add a @PostConstruct @PreDestroy test for providers 
 - validation with support to proxies
 - cweb: remova all RequiresTRansaction
 - cweb: disponibilidade on ADD PESSOA how works?

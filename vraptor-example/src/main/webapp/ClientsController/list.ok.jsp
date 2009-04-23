@@ -12,7 +12,7 @@ Id: <input type="text" name="client.id" value="" /><br />
 <c:forEach var="client" items="${clients }">
 <tr>
 <td>
-Name: ${client.name} (id= ${client.id}), balance = ${client.balance }
+Name: ${client.name} (id= ${client.id})
 <ul>
 		<c:forEach var="address" items="${client.addresses }">
 			<li>${address.street }, ${address.number }</li>

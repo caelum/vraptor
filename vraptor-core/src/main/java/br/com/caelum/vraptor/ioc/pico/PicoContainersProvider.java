@@ -69,10 +69,10 @@ public class PicoContainersProvider implements ComponentRegistry {
     private final Map<Class<?>,Class<?>> applicationScoped = new HashMap<Class<?>,Class<?>>();
     private final Map<Class<?>,Class<?>> sessionScoped = new HashMap<Class<?>,Class<?>>();
     private final Map<Class<?>,Class<?>> requestScoped = new HashMap<Class<?>,Class<?>>();
-    private final MutablePicoContainer container;
+    private final MutablePicoContainer appContainer;
 
     public PicoContainersProvider(MutablePicoContainer container) {
-        this.container = container;
+        this.appContainer = container;
     }
 
     public void register(Class requiredType, Class type) {
@@ -109,31 +109,31 @@ public class PicoContainersProvider implements ComponentRegistry {
         if (logger.isDebugEnabled()) {
             logger.debug("Request components are " + requestScoped);
         }
-        MutablePicoContainer requestScope = new DefaultPicoContainer(new Caching(),new JavaEE5LifecycleStrategy(new NullComponentMonitor()), sessionScope);
+        MutablePicoContainer requestContainer = new DefaultPicoContainer(new Caching(),new JavaEE5LifecycleStrategy(new NullComponentMonitor()), sessionScope);
         for (Class<?> requiredType : requestScoped.keySet()) {
-            requestScope.addComponent(requestScoped.get(requiredType));
+            requestContainer.addComponent(requestScoped.get(requiredType));
         }
-        for (Class<? extends Interceptor> type : this.container.getComponent(InterceptorRegistry.class).all()) {
-            requestScope.addComponent(type);
+        for (Class<? extends Interceptor> type : this.appContainer.getComponent(InterceptorRegistry.class).all()) {
+            requestContainer.addComponent(type);
         }
-        requestScope.addComponent(request).addComponent(request.getRequest()).addComponent(request.getResponse());
+        requestContainer.addComponent(request).addComponent(request.getRequest()).addComponent(request.getResponse());
         // cache(CachedConverters.class, Converters.class);
-        PicoBasedContainer baseContainer = new PicoBasedContainer(requestScope, request, this.container
+        PicoBasedContainer baseContainer = new PicoBasedContainer(requestContainer, request, this.appContainer
                 .getComponent(ResourceRegistry.class));
         return baseContainer;
     }
 
     private MutablePicoContainer createSessionContainer(HttpSession session) {
-        MutablePicoContainer sessionScope = new DefaultPicoContainer(new Caching(),new JavaEE5LifecycleStrategy(new NullComponentMonitor()), this.container);
-        sessionScope.addComponent(HttpSession.class, session);
-        session.setAttribute(CONTAINER_SESSION_KEY, sessionScope);
+        MutablePicoContainer sessionContainer = new DefaultPicoContainer(new Caching(),new JavaEE5LifecycleStrategy(new NullComponentMonitor()), this.appContainer);
+        sessionContainer.addComponent(HttpSession.class, session);
+        session.setAttribute(CONTAINER_SESSION_KEY, sessionContainer);
         if (logger.isDebugEnabled()) {
             logger.debug("Session components are " + sessionScoped);
         }
         for (Class<?> requiredType : sessionScoped.keySet()) {
-            sessionScope.addComponent(sessionScoped.get(requiredType));
+            sessionContainer.addComponent(sessionScoped.get(requiredType));
         }
-        return sessionScope;
+        return sessionContainer;
     }
 
     /**
@@ -143,7 +143,7 @@ public class PicoContainersProvider implements ComponentRegistry {
         for (Class<?> requiredType : applicationScoped.keySet()) {
             Class<?> type = applicationScoped.get(requiredType);
             logger.debug("Initializing application scope with " + type);
-            this.container.addComponent(type);
+            this.appContainer.addComponent(type);
         }
         logger.debug("Session components to initialize: " + sessionScoped.keySet());
         logger.debug("Requets components to initialize: " + requestScoped.keySet());

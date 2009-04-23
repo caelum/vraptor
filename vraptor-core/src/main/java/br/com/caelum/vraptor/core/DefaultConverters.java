@@ -32,6 +32,8 @@ package br.com.caelum.vraptor.core;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import javax.annotation.PostConstruct;
+
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.ComponentRegistry;
@@ -56,8 +58,9 @@ import br.com.caelum.vraptor.interceptor.multipart.UploadedFileConverter;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
+@SuppressWarnings("unchecked")
 @ApplicationScoped
-public class DefaultConverters implements Converters {
+public final class DefaultConverters implements Converters {
 
     private LinkedList<Class<? extends Converter>> types;
 
@@ -74,6 +77,10 @@ public class DefaultConverters implements Converters {
     public DefaultConverters(ComponentRegistry container) {
         this.container = container;
         this.types = new LinkedList<Class<? extends Converter>>();
+    }
+    
+    @PostConstruct
+    public void start() {
         for (Class<? extends Converter<?>> type : DEFAULTS) {
             register(type);
         }
@@ -89,6 +96,7 @@ public class DefaultConverters implements Converters {
         container.register(converterType, converterType);
     }
 
+    @SuppressWarnings("unchecked")
     public Converter to(Class<?> type, Container container) {
         for (Iterator<Class<? extends Converter>> iterator = types.iterator(); iterator.hasNext();) {
             Class<? extends Converter> converterType = iterator.next();

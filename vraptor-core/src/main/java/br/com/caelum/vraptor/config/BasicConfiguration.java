@@ -44,7 +44,7 @@ import br.com.caelum.vraptor.ioc.pico.PicoProvider;
  */
 public class BasicConfiguration {
 
-    public static final String CONTAINER_PROVIDER = "br.com.caelum.vraptor.container_provider";
+    public static final String CONTAINER_PROVIDER = "br.com.caelum.vraptor.provider";
 
     private final ServletContext servletContext;
 

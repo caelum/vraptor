@@ -2,7 +2,7 @@
 <!-- ====================================================================== 
 	VRaptor 3 full build
 	====================================================================== -->
-<project name="VRaptor 3" default="artifacts">
+<project name="VRaptor 3" default="artifacts" basedir=".">
 
 	<description>VRaptor 3 full build</description>
 
@@ -45,8 +45,6 @@
 			<compilerarg value="-Xlint:none" />
 		</javac>
 	</target>
-
-	<property name="jar.file" value="${tmp.dir}/${jar.filename}-${version}.jar" />
 
 	<target name="test" depends="compile">
 		<taskdef classpathref="test.classpath" resource="tasks.properties" />

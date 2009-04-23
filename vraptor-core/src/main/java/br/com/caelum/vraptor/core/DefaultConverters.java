@@ -80,7 +80,7 @@ public final class DefaultConverters implements Converters {
     }
     
     @PostConstruct
-    public void start() {
+    public void init() {
         for (Class<? extends Converter<?>> type : DEFAULTS) {
             register(type);
         }

@@ -3,6 +3,8 @@ package br.com.caelum.vraptor.vraptor2;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.core.Converters;
@@ -27,7 +29,7 @@ public class VRaptor2Converters implements Converters {
             InstantiationException, IllegalAccessException {
         this(config, new DefaultConverters(container));
     }
-
+    
     @SuppressWarnings("unchecked")
     public VRaptor2Converters(Config config, Converters delegateConverters) throws InstantiationException,
             IllegalAccessException, ClassNotFoundException {
@@ -49,6 +51,11 @@ public class VRaptor2Converters implements Converters {
             }
         }
         return vraptor3.to(type, container);
+    }
+
+    @PostConstruct
+    public void init() {
+        vraptor3.init();
     }
 
 }

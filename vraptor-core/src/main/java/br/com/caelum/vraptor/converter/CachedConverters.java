@@ -32,6 +32,8 @@ package br.com.caelum.vraptor.converter;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,6 +61,11 @@ public class CachedConverters implements Converters {
         Converter<?> converter = delegate.to(type, container);
         cache.put(type, converter.getClass());
         return converter;
+    }
+
+    @PostConstruct
+    public void init() {
+        delegate.init();
     }
 
 }

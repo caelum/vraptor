@@ -50,4 +50,6 @@ public interface Converters {
      */
     Converter<?> to(Class<?> type, Container container);
 
+    void init();
+
 }

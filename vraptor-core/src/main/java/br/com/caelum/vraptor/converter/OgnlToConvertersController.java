@@ -80,7 +80,7 @@ public class OgnlToConvertersController implements TypeConverter {
         Converter<?> converter = converters.to(type, container);
         if (converter == null) {
             // TODO better, validation error?
-            throw new IllegalArgumentException("Cannot find a converter to " + type.getName());
+            throw new IllegalArgumentException("Cannot instantiate a converter to " + type.getName());
         }
         return converter.convert((String) value, type);
     }

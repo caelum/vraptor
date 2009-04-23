@@ -1,15 +1,15 @@
 TODO: 33 
+- validation with support to proxies
 - cweb: remova all RequiresTRansaction
 - cweb: disponibilidade on ADD PESSOA how works?
 - cweb all tests
 - cweb tem que rodar teste antes de comecar tudo... bizarro
-- validation with support to proxies
 - check test multipart interceptor
 - support for FORWARD + REDIRECT 
 - result support (new style, logic or string)
 - new view properties
 (MUST) - setting errors during ognl expression evaluation should be defined as validation errors
-- PicoContainer only register if it needs
+	(MUST) - errors should not be strings
 	(MUST) - support HibernateValidator with i18n messages
 	(MUST) - support i18n messages
 	(MUST) - niceurls with programmatic support

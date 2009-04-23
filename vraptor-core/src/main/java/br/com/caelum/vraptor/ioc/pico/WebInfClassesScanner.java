@@ -29,20 +29,17 @@
  */
 package br.com.caelum.vraptor.ioc.pico;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.servlet.ServletContext;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import br.com.caelum.vraptor.Interceptor;
 import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
-import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceRegistry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.servlet.ServletContext;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 @ApplicationScoped
 public class WebInfClassesScanner implements ResourceLocator {
@@ -67,17 +64,12 @@ public class WebInfClassesScanner implements ResourceLocator {
     }
 
     public void loadAll() {
-        
         logger.info("Starting looking for " + classes.getAbsolutePath());
-        
-        List<Resource> results = new ArrayList<Resource>();
-        scanner.scan(classes, new ResourceAcceptor(results));
-        this.registry.register(results);
-        
+        scanner.scan(classes, new ResourceAcceptor(registry));
+
         List<Class<? extends Interceptor>> interceptors = new ArrayList<Class<? extends Interceptor>>();
         scanner.scan(classes, new InterceptorAcceptor(interceptors));
         this.interceptors.register(interceptors);
-        
     }
 
 }

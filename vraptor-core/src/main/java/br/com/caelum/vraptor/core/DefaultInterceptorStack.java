@@ -58,7 +58,7 @@ public class DefaultInterceptorStack implements InterceptorStack {
         this.interceptors.add(new InstantiatedInterceptorHandler(interceptor));
     }
 
-    public void next(ResourceMethod method, Object resourceInstance) throws IOException, InterceptionException {
+    public void next(ResourceMethod method, Object resourceInstance) throws InterceptionException {
         if (nextInterceptor == interceptors.size()) {
             return;
         }

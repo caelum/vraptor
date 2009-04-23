@@ -1,6 +1,15 @@
 package br.com.caelum.vraptor;
 
-import java.io.IOException;
+import br.com.caelum.vraptor.config.BasicConfiguration;
+import br.com.caelum.vraptor.core.Execution;
+import br.com.caelum.vraptor.core.RequestExecution;
+import br.com.caelum.vraptor.core.StaticContentHandler;
+import br.com.caelum.vraptor.core.VRaptorRequest;
+import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor.ioc.ContainerProvider;
+import org.jmock.Expectations;
+import org.junit.Before;
+import org.junit.Test;
 
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -10,18 +19,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.junit.Before;
-import org.junit.Test;
-
-import br.com.caelum.vraptor.config.BasicConfiguration;
-import br.com.caelum.vraptor.core.RequestExecution;
-import br.com.caelum.vraptor.core.StaticContentHandler;
-import br.com.caelum.vraptor.core.VRaptorRequest;
-import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.ioc.ContainerProvider;
+import java.io.IOException;
 
 public class VRaptorTest {
 
@@ -54,9 +52,12 @@ public class VRaptorTest {
         final HttpServletRequest request = mockery.mock(HttpServletRequest.class);
         mockery.checking(new Expectations() {
             {
-                one(request).getRequestURI(); will(returnValue("/unknown_file"));
-                one(request).getContextPath(); will(returnValue(""));
-                one(context).getResource("/unknown_file"); will(returnValue(null));
+                one(request).getRequestURI();
+                will(returnValue("/unknown_file"));
+                one(request).getContextPath();
+                will(returnValue(""));
+                one(context).getResource("/unknown_file");
+                will(returnValue(null));
                 one(config).getServletContext();
                 will(returnValue(context));
                 one(context).getInitParameter(BasicConfiguration.CONTAINER_PROVIDER);
@@ -76,9 +77,9 @@ public class VRaptorTest {
     }
 
     public static class MyProvider implements ContainerProvider {
-
-        public Container provide(VRaptorRequest vraptorRequest) {
-            return (Container) vraptorRequest.getServletContext().getAttribute("container");
+        public <T> T provideForRequest(VRaptorRequest vraptorRequest, Execution<T> execution) {
+            Container container = (Container) vraptorRequest.getServletContext().getAttribute("container");
+            return execution.insideRequest(container);
         }
 
         public void start(ServletContext context) {
@@ -86,19 +87,16 @@ public class VRaptorTest {
 
         public void stop() {
         }
-
-        public <T> T instanceFor(Class<T> type) {
-            return null;
-        }
-
     }
-    
-    public static class DoNothingProvider implements ContainerProvider{
-        public Container provide(VRaptorRequest vraptorRequest) {
-            return null;
+
+    public static class DoNothingProvider implements ContainerProvider {
+        public <T> T provideForRequest(VRaptorRequest vraptorRequest, Execution<T> execution) {
+            return execution.insideRequest(null);
         }
+
         public void start(ServletContext context) {
         }
+
         public void stop() {
         }
     }
@@ -112,7 +110,8 @@ public class VRaptorTest {
         final FilterChain chain = mockery.mock(FilterChain.class);
         mockery.checking(new Expectations() {
             {
-                one(handler).requestingStaticFile(request); will(returnValue(true));
+                one(handler).requestingStaticFile(request);
+                will(returnValue(true));
                 one(handler).deferProcessingToContainer(chain, request, response);
             }
         });

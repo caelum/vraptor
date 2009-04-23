@@ -29,15 +29,12 @@
  */
 package br.com.caelum.vraptor.ioc.spring;
 
-import java.util.Collection;
-import java.util.HashSet;
+import br.com.caelum.vraptor.ComponentRegistry;
+import br.com.caelum.vraptor.ioc.Container;
 
 import javax.servlet.ServletContext;
-
-import br.com.caelum.vraptor.ComponentRegistry;
-import br.com.caelum.vraptor.core.RequestExecution;
-import br.com.caelum.vraptor.core.VRaptorRequest;
-import br.com.caelum.vraptor.ioc.Container;
+import java.util.Collection;
+import java.util.HashSet;
 
 /**
  * @author Fabio Kung
@@ -61,18 +58,7 @@ public class SpringBasedContainer implements Container, ComponentRegistry {
 
     @SuppressWarnings("unchecked")
     public <T> T instanceFor(Class<T> type) {
-        return wrapWhenNeeded(type, applicationContext.getBean(type));
-    }
-
-    @SuppressWarnings("unchecked")
-    private <T> T wrapWhenNeeded(Class<T> type, T instance) {
-        if (RequestExecution.class.isAssignableFrom(type)) {
-            VRaptorRequest request = instanceFor(VRaptorRequest.class);
-            RequestExecution execution = (RequestExecution) instance;
-            ServletContext context = instanceFor(ServletContext.class);
-            return (T) new RequestExecutionWrapper(request, execution, context);
-        }
-        return instance;
+        return applicationContext.getBean(type);
     }
 
     public void start(ServletContext context) {

@@ -2,7 +2,7 @@ package br.com.caelum.vraptor.ioc.pico;
 
 import br.com.caelum.vraptor.core.VRaptorRequest;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
-import br.com.caelum.vraptor.ioc.Execution;
+import br.com.caelum.vraptor.ioc.WhatToDo;
 import br.com.caelum.vraptor.ioc.GenericContainerTest;
 import br.com.caelum.vraptor.test.HttpServletRequestMock;
 import br.com.caelum.vraptor.test.HttpSessionMock;
@@ -26,7 +26,7 @@ public class PicoProviderTest extends GenericContainerTest {
         return new PicoProvider();
     }
 
-    protected <T> T executeInsideRequest(Execution<T> execution) {
+    protected <T> T executeInsideRequest(WhatToDo<T> execution) {
         HttpSessionMock session = new HttpSessionMock(context, "session" + ++counter);
         HttpServletRequestMock httpRequest = new HttpServletRequestMock(session);
         HttpServletResponse response = mockery.mock(HttpServletResponse.class, "response" + counter);

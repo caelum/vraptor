@@ -1,6 +1,5 @@
 package br.com.caelum.vraptor.vraptor2;
 
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -38,8 +37,7 @@ public class OutjectionInterceptor implements Interceptor {
         return true;
     }
 
-    public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws IOException,
-            InterceptionException {
+    public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws InterceptionException {
         Class<?> type = method.getResource().getType();
         outject(resourceInstance, type);
         stack.next(method, resourceInstance);

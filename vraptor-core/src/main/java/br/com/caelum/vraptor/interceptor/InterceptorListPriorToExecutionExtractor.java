@@ -29,8 +29,6 @@
  */
 package br.com.caelum.vraptor.interceptor;
 
-import java.io.IOException;
-
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Interceptor;
 import br.com.caelum.vraptor.core.InterceptorStack;
@@ -53,8 +51,7 @@ public class InterceptorListPriorToExecutionExtractor implements Interceptor {
         this.container = container;
     }
 
-    public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws IOException,
-            InterceptionException {
+    public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws InterceptionException {
         Interceptor[] interceptors = registry.interceptorsFor(method, container);
         for (Interceptor interceptor : interceptors) {
             stack.addAsNext(interceptor);

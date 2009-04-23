@@ -32,13 +32,12 @@ package br.com.caelum.vraptor.resource;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
  * This default registry uses a Path annotation to discover path->method
  * mappings using the supplied ResourceAndMethodLookup.
- * 
+ *
  * @author Guilherme Silveira
  */
 @ApplicationScoped
@@ -50,13 +49,13 @@ public class DefaultResourceRegistry implements ResourceRegistry {
 
     public DefaultResourceRegistry(MethodLookupBuilder lookupBuilder) {
         this.lookupBuilder = lookupBuilder;
-        register(Arrays.asList((Resource) new DefaultResource(VRaptorInfo.class)));
+        register(new DefaultResource(VRaptorInfo.class));
     }
 
-    public void register(List<Resource> results) {
-        for (Resource r : results) {
-            this.lookup.add(lookupBuilder.lookupFor(r));
-            this.resources.add(r);
+    public void register(Resource... resources) {
+        for (Resource resource : resources) {
+            this.lookup.add(lookupBuilder.lookupFor(resource));
+            this.resources.add(resource);
         }
     }
 

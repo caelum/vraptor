@@ -1,6 +1,5 @@
 package br.com.caelum.vraptor.vraptor2;
 
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -22,7 +21,7 @@ public class ExecuteAndViewInterceptor implements Interceptor {
     }
 
     public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
-            throws IOException, InterceptionException {
+            throws InterceptionException {
         try {
             Method reflectionMethod = method.getMethod();
             Object[] parameters = this.parameters.getValues();

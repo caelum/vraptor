@@ -27,7 +27,7 @@ public class VRaptor2RequestExecution implements RequestExecution {
         this.shouldRegisterHibernateValidator = config.hasPlugin("org.vraptor.plugin.hibernate.HibernateValidatorPlugin");
     }
 
-    public void execute() throws IOException, InterceptionException {
+    public void execute() throws InterceptionException {
         interceptorStack.add(ResourceLookupInterceptor.class);
         interceptorStack.add(URLParameterExtractorInterceptor.class);
         interceptorStack.add(InterceptorListPriorToExecutionExtractor.class);

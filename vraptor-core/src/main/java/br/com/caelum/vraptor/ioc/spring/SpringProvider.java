@@ -1,10 +1,14 @@
 package br.com.caelum.vraptor.ioc.spring;
 
+import br.com.caelum.vraptor.core.Execution;
 import br.com.caelum.vraptor.core.VRaptorRequest;
-import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.RequestContextListener;
 
 import javax.servlet.ServletContext;
+import javax.servlet.ServletRequestEvent;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author Fabio Kung
@@ -12,10 +16,27 @@ import javax.servlet.ServletContext;
 public class SpringProvider implements ContainerProvider {
     public static final String BASE_PACKAGES_PARAMETER_NAME = "br.com.caelum.vraptor.spring.packages";
 
+    private final RequestContextListener requestListener = new RequestContextListener();
     private SpringBasedContainer container;
 
-    public Container provide(VRaptorRequest request) {
-        return container;
+    /**
+     * Provides request scope support for Spring IoC Container when
+     * org.springframework.web.context.request.RequestContextListener has not been called.
+     */
+    public <T> T provideForRequest(VRaptorRequest request, Execution<T> execution) {
+        VRaptorRequestHolder.setRequestForCurrentThread(request);
+        T result;
+        if (springListenerAlreadyCalled()) {
+            result = execution.insideRequest(container);
+        } else {
+            ServletContext context = request.getServletContext();
+            HttpServletRequest webRequest = request.getRequest();
+            requestListener.requestInitialized(new ServletRequestEvent(context, webRequest));
+            result = execution.insideRequest(container);
+            requestListener.requestDestroyed(new ServletRequestEvent(context, webRequest));
+        }
+        VRaptorRequestHolder.resetRequestForCurrentThread();
+        return result;
     }
 
     public void stop() {
@@ -27,13 +48,17 @@ public class SpringProvider implements ContainerProvider {
 
         String[] packages = null;
         if (packagesParameter == null) {
-            throw new MissingConfigurationException("org.vraptor.spring.packages init-parameter not found in web.xml");
+            throw new MissingConfigurationException(BASE_PACKAGES_PARAMETER_NAME + " context-param not found in web.xml");
         } else {
             packages = packagesParameter.split(",");
         }
 
         container = new SpringBasedContainer(packages);
         container.start(context);
+    }
+
+    private boolean springListenerAlreadyCalled() {
+        return RequestContextHolder.getRequestAttributes() != null;
     }
 
 }

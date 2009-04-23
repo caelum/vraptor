@@ -46,6 +46,6 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  */
 public interface InterceptorHandler {
 
-    void execute(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws IOException, InterceptionException;
+    void execute(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws InterceptionException;
 
 }

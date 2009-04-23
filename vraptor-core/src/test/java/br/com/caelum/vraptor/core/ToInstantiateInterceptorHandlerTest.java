@@ -26,7 +26,7 @@ public class ToInstantiateInterceptorHandlerTest {
         }
 
         public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
-                throws IOException, InterceptionException {
+                throws InterceptionException {
         }
 
         public boolean accepts(ResourceMethod method) {

@@ -33,12 +33,12 @@ import java.util.List;
 
 /**
  * Keeps a list of searchable resources.
- * 
+ *
  * @author Guilherme Silveira
  */
 public interface ResourceRegistry {
 
-    void register(List<Resource> resources);
+    void register(Resource... resources);
 
     ResourceMethod gimmeThis(String name, String methodName);
 

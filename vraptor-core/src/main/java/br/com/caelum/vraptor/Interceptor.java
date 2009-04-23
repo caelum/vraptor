@@ -41,13 +41,12 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  * Common usage for interceptors for end-users (end-programmers) are security
  * constraint checks, database session (open session in view) opening and much
  * more.
- * 
+ *
  * @author Guilherme Silveira
  */
 public interface Interceptor {
 
-    void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws IOException,
-            InterceptionException;
+    void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws InterceptionException;
 
     boolean accepts(ResourceMethod method);
 

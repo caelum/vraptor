@@ -44,6 +44,6 @@ public interface RequestExecution {
      * Executes this method.
      * @throws VRaptorException 
      */
-    void execute() throws IOException, VRaptorException;
+    void execute() throws VRaptorException;
     
 }

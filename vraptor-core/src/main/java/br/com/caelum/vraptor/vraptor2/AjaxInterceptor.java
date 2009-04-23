@@ -1,23 +1,21 @@
 package br.com.caelum.vraptor.vraptor2;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-
-import javax.servlet.http.HttpServletResponse;
-
-import org.vraptor.annotations.Remotable;
-import org.vraptor.remote.json.JSONSerializer;
-
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Interceptor;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.vraptor2.outject.JsonOutjecter;
 import br.com.caelum.vraptor.vraptor2.outject.Outjecter;
+import org.vraptor.annotations.Remotable;
+import org.vraptor.remote.json.JSONSerializer;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 /**
  * VRaptor2 based ajax interceptor.
- * 
+ *
  * @author Guilherme Silveira
  */
 public class AjaxInterceptor implements Interceptor {
@@ -44,10 +42,9 @@ public class AjaxInterceptor implements Interceptor {
         return info.isAjax();
     }
 
-    public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws IOException,
-            InterceptionException {
+    public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws InterceptionException {
         if (info.isAjax()) {
-            if(!method.getMethod().isAnnotationPresent(Remotable.class)) {
+            if (!method.getMethod().isAnnotationPresent(Remotable.class)) {
                 throw new InterceptionException("Unable to make an ajax result in a non-remotable method.");
             }
             int depth = method.getMethod().getAnnotation(Remotable.class).depth();
@@ -56,10 +53,15 @@ public class AjaxInterceptor implements Interceptor {
             response.setCharacterEncoding(UTF8);
             response.setContentType("application/json");
 
-            PrintWriter writer = response.getWriter();
-            writer.append(output);
-            writer.flush();
-            writer.close();
+            PrintWriter writer = null;
+            try {
+                writer = response.getWriter();
+                writer.append(output);
+                writer.flush();
+                writer.close();
+            } catch (IOException e) {
+                throw new InterceptionException(e);
+            }
         } else {
             stack.next(method, resourceInstance);
         }

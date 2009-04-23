@@ -29,8 +29,6 @@
  */
 package br.com.caelum.vraptor.core;
 
-import java.io.IOException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,7 +55,7 @@ public class ToInstantiateInterceptorHandler implements InterceptorHandler {
         // TODO check if this is a real interceptor
     }
 
-    public void execute(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws IOException, InterceptionException {
+    public void execute(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws InterceptionException {
         Interceptor interceptor = Interceptor.class.cast(container.instanceFor(type));
         if(interceptor==null) {
             throw new InterceptionException("Unable to instantiate interceptor for " + type.getName() + ": the container returned null.");

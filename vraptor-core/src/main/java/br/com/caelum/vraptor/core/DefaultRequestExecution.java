@@ -53,7 +53,7 @@ public class DefaultRequestExecution implements RequestExecution {
         this.instantiator = instantiator;
     }
 
-    public void execute() throws IOException, InterceptionException {
+    public void execute() throws InterceptionException {
         interceptorStack.add(ResourceLookupInterceptor.class);
         interceptorStack.add(URLParameterExtractorInterceptor.class);
         interceptorStack.add(InterceptorListPriorToExecutionExtractor.class);

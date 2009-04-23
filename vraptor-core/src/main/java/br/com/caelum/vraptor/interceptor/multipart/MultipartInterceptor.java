@@ -47,8 +47,7 @@ public class MultipartInterceptor implements Interceptor {
     }
 
     @SuppressWarnings("unchecked")
-    public void intercept(InterceptorStack stack, ResourceMethod method, Object instance) throws InterceptionException,
-            IOException {
+    public void intercept(InterceptorStack stack, ResourceMethod method, Object instance) throws InterceptionException {
 
         logger.debug("Trying to parse multipart request.");
 

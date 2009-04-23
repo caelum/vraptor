@@ -48,6 +48,7 @@ import br.com.caelum.vraptor.http.ognl.ListAccessor;
 import br.com.caelum.vraptor.http.ognl.ReflectionBasedNullHandler;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.vraptor2.Info;
 
 public class OgnlParametersProvider implements ParametersProvider {
 
@@ -105,7 +106,7 @@ public class OgnlParametersProvider implements ParametersProvider {
             Object[] result = new Object[types.length];
             String[] names = provider.parameterNamesFor(method.getMethod());
             for (int i = 0; i < types.length; i++) {
-                result[i] = root.getClass().getMethod("get" + names[i]).invoke(root);
+                result[i] = root.getClass().getMethod("get" + Info.capitalize(names[i])).invoke(root);
             }
             return result;
         } catch (InvocationTargetException e) {

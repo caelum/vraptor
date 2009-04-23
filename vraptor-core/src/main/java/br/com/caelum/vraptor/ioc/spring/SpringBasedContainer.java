@@ -29,134 +29,40 @@
  */
 package br.com.caelum.vraptor.ioc.spring;
 
-import javax.servlet.ServletContext;
-
-import org.springframework.aop.config.AopConfigUtils;
-import org.springframework.aop.scope.ScopedProxyUtils;
-import org.springframework.beans.factory.BeanFactoryUtils;
-import org.springframework.beans.factory.annotation.AnnotatedGenericBeanDefinition;
-import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.beans.factory.config.BeanDefinitionHolder;
-import org.springframework.beans.factory.support.BeanDefinitionReaderUtils;
-import org.springframework.beans.factory.support.RootBeanDefinition;
-import org.springframework.context.annotation.AnnotationBeanNameGenerator;
-import org.springframework.context.annotation.AnnotationConfigUtils;
-import org.springframework.context.annotation.ScopeMetadata;
-import org.springframework.context.annotation.ScopedProxyMode;
-import org.springframework.context.support.GenericApplicationContext;
-import org.springframework.core.Ordered;
-import org.springframework.web.context.support.GenericWebApplicationContext;
-
 import br.com.caelum.vraptor.ComponentRegistry;
-import br.com.caelum.vraptor.core.DefaultConverters;
-import br.com.caelum.vraptor.core.DefaultInterceptorStack;
-import br.com.caelum.vraptor.core.DefaultMethodParameters;
-import br.com.caelum.vraptor.core.DefaultRequestExecution;
-import br.com.caelum.vraptor.core.DefaultRequestInfo;
-import br.com.caelum.vraptor.core.DefaultResult;
 import br.com.caelum.vraptor.core.RequestExecution;
-import br.com.caelum.vraptor.core.URLParameterExtractorInterceptor;
 import br.com.caelum.vraptor.core.VRaptorRequest;
-import br.com.caelum.vraptor.http.DefaultRequestParameters;
-import br.com.caelum.vraptor.http.OgnlParametersProvider;
-import br.com.caelum.vraptor.http.ParanamerNameProvider;
-import br.com.caelum.vraptor.http.StupidTranslator;
-import br.com.caelum.vraptor.http.asm.AsmBasedTypeCreator;
-import br.com.caelum.vraptor.interceptor.DefaultInterceptorRegistry;
-import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
-import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
-import br.com.caelum.vraptor.interceptor.InterceptorListPriorToExecutionExtractor;
-import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
-import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
 import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.resource.DefaultMethodLookupBuilder;
-import br.com.caelum.vraptor.resource.DefaultResourceRegistry;
-import br.com.caelum.vraptor.view.DefaultPathResolver;
-import br.com.caelum.vraptor.view.jsp.DefaultPageResult;
+import org.springframework.beans.factory.BeanFactoryUtils;
+
+import javax.servlet.ServletContext;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Map;
 
 /**
  * @author Fabio Kung
  */
 public class SpringBasedContainer implements Container, ComponentRegistry {
-    private final AnnotationBeanNameGenerator beanNameGenerator = new AnnotationBeanNameGenerator();
-    private final GenericWebApplicationContext applicationContext;
+    private VRaptorApplicationContext applicationContext;
 
     private String[] basePackages = {"br.com.caelum.vraptor"};
+    private Collection<Class<?>> toBeRegistered = new HashSet<Class<?>>();
 
     public SpringBasedContainer(String... basePackages) {
-        // TODO provide users the ability to provide custom containers
         if (basePackages.length > 0) {
             this.basePackages = basePackages;
         }
-        applicationContext = new GenericWebApplicationContext();
-        AnnotationConfigUtils.registerAnnotationConfigProcessors(applicationContext);
-        AopConfigUtils.registerAspectJAnnotationAutoProxyCreatorIfNecessary(applicationContext);
-        registerCustomInjectionProcessor(applicationContext);
+        applicationContext = new VRaptorApplicationContext(this, this.basePackages);
     }
 
-    private void registerCustomInjectionProcessor(GenericApplicationContext applicationContext) {
-        RootBeanDefinition definition = new RootBeanDefinition(InjectionBeanPostProcessor.class);
-        definition.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-        definition.getPropertyValues().addPropertyValue("order", Ordered.LOWEST_PRECEDENCE);
-        applicationContext.registerBeanDefinition(AnnotationConfigUtils.AUTOWIRED_ANNOTATION_PROCESSOR_BEAN_NAME, definition);
-    }
-
-    public void start(ServletContext context) {
-//        registerInstanceFor(ServletContext.class, context);
-        registerApplicationScopedComponents();
-        registerRequestScopedComponents();
-
-        new ComponentScanner(applicationContext).scan(basePackages);
-        applicationContext.refresh();
-        applicationContext.start();
-    }
-
-    public void stop() {
-        applicationContext.stop();
-        applicationContext.destroy();
-    }
-
-    private void registerApplicationScopedComponents() {
-        register(DefaultResourceRegistry.class);
-        register(StupidTranslator.class);
-        register(DefaultInterceptorRegistry.class);
-        register(AsmBasedTypeCreator.class);
-        register(DefaultMethodLookupBuilder.class);
-        register(DefaultPathResolver.class);
-        register(ParanamerNameProvider.class);
-    }
-
-    private void register(Class<?> type) {
-        register(type, type);
-    }
-
-    private void registerRequestScopedComponents() {
-        register(ParametersInstantiatorInterceptor.class);
-        register(DefaultMethodParameters.class);
-        register(DefaultRequestParameters.class);
-        register(InterceptorListPriorToExecutionExtractor.class);
-        register(URLParameterExtractorInterceptor.class);
-        register(DefaultInterceptorStack.class);
-        register(DefaultRequestExecution.class);
-        register(ResourceLookupInterceptor.class);
-        register(InstantiateInterceptor.class);
-        register(DefaultResult.class);
-        register(ExecuteMethodInterceptor.class);
-        register(DefaultPageResult.class);
-        register(OgnlParametersProvider.class);
-        register(DefaultConverters.class);
-        register(DefaultRequestInfo.class);
-//        register(HttpServletRequestProvider.class);
-//        register(HttpServletResponseProvider.class);
-        register(VRaptorRequestProvider.class);
-        registerInstanceFor(Container.class, this);
-        registerInstanceFor(ComponentRegistry.class, this);
+    public void register(Class requiredType, Class componentType) {
+        applicationContext.register(componentType);
     }
 
     @SuppressWarnings("unchecked")
     public <T> T instanceFor(Class<T> type) {
-        T instance = (T) BeanFactoryUtils.beanOfType(applicationContext, type);
-        return wrapWhenNeeded(type, instance);
+        return wrapWhenNeeded(type, applicationContext.getBean(type));
     }
 
     @SuppressWarnings("unchecked")
@@ -170,39 +76,16 @@ public class SpringBasedContainer implements Container, ComponentRegistry {
         return instance;
     }
 
-    private <T> void registerInstanceFor(Class<? super T> resolvableType, T instance) {
-        applicationContext.getBeanFactory().registerResolvableDependency(resolvableType, instance);
+    public void start(ServletContext context) {
+        applicationContext.setServletContext(context);
+        applicationContext.refresh();
+        applicationContext.start();
     }
 
-    public void register(Class<?> requiredType, Class<?> type) {
-        AnnotatedGenericBeanDefinition definition = new AnnotatedGenericBeanDefinition(type);
-        String name = beanNameGenerator.generateBeanName(definition, applicationContext);
-        BeanDefinitionHolder definitionHolder = new BeanDefinitionHolder(definition, name);
-
-        VRaptorScopeResolver scopeResolver = new VRaptorScopeResolver();
-        ScopeMetadata scopeMetadata = scopeResolver.resolveScopeMetadata(definition);
-        definitionHolder = applyScope(definitionHolder, scopeMetadata);
-
-        BeanDefinitionReaderUtils.registerBeanDefinition(definitionHolder, applicationContext);
+    public void stop() {
+        applicationContext.stop();
+        applicationContext.destroy();
+        applicationContext = null;
     }
 
-    /**
-     * From org.springframework.context.annotation.ClassPathBeanDefinitionScanner#applyScope()
-     *
-     * @param definition
-     * @param scopeMetadata
-     * @return
-     */
-    private BeanDefinitionHolder applyScope(BeanDefinitionHolder definition, ScopeMetadata scopeMetadata) {
-        String scope = scopeMetadata.getScopeName();
-        ScopedProxyMode proxyMode = scopeMetadata.getScopedProxyMode();
-        definition.getBeanDefinition().setScope(scope);
-        if (BeanDefinition.SCOPE_SINGLETON.equals(scope) || BeanDefinition.SCOPE_PROTOTYPE.equals(scope) ||
-                proxyMode.equals(ScopedProxyMode.NO)) {
-            return definition;
-        } else {
-            boolean proxyTargetClass = proxyMode.equals(ScopedProxyMode.TARGET_CLASS);
-            return ScopedProxyUtils.createScopedProxy(definition, applicationContext, proxyTargetClass);
-        }
-    }
 }

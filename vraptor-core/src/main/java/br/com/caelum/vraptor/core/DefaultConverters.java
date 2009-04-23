@@ -79,7 +79,7 @@ public class DefaultConverters implements Converters {
         }
     }
 
-    protected void register(Class<? extends Converter<?>> converterType) {
+    protected void register(Class<? extends Converter> converterType) {
         if (!converterType.isAnnotationPresent(Convert.class)) {
             // TODO is this the correct one?
             throw new IllegalArgumentException("The converter type " + converterType.getName()

@@ -22,7 +22,7 @@ public class SpringProvider implements ContainerProvider {
         container.stop();
     }
 
-    public synchronized void start(ServletContext context) {
+    public void start(ServletContext context) {
         String packagesParameter = context.getInitParameter(BASE_PACKAGES_PARAMETER_NAME);
 
         String[] packages = null;

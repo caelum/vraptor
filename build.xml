@@ -16,7 +16,10 @@
 
   <target name="deploy-to-examples" description="copy the vraptor build to examples lib dir" depends="core">
     <property file="vraptor-core/build.properties"/>
+    <delete file="vraptor-example/src/main/webapp/WEB-INF/lib/vraptor3-*.jar" />
+    <delete file="vraptor-example-compatibility/src/main/webapp/WEB-INF/lib/vraptor3-*.jar" />
     <copy file="vraptor-core/${jar.file}" todir="vraptor-example/src/main/webapp/WEB-INF/lib" />
+    <copy file="vraptor-core/${jar.file}" todir="vraptor-example-compatibility/src/main/webapp/WEB-INF/lib" />
   </target>
 
   <target name="test" depends="core-tests" />

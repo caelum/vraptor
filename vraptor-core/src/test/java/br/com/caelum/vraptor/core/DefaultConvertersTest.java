@@ -55,6 +55,7 @@ public class DefaultConvertersTest {
             }
         });
         this.converters = new DefaultConverters(componentRegistry);
+        this.converters.init();
     }
 
     @Test

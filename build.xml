@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== 
+	VRaptor 3 full build
+	====================================================================== -->
+<project name="VRaptor 3" default="all">
+
+	<description>VRaptor 3 Root Buildfile</description>
+
+  <target name="core-tests" description="core module tests">
+    <ant dir="vraptor-core" target="test" />
+  </target>
+
+  <target name="core" description="core module build">
+    <ant dir="vraptor-core" />
+  </target>
+
+  <target name="deploy-to-examples" description="copy the vraptor build to examples lib dir" depends="core">
+    <property file="vraptor-core/build.properties"/>
+    <copy file="vraptor-core/${jar.file}" todir="vraptor-example/src/main/webapp/WEB-INF/lib" />
+  </target>
+
+  <target name="test" depends="core-tests" />
+  <target name="all" depends="deploy-to-examples" />
+
+</project>

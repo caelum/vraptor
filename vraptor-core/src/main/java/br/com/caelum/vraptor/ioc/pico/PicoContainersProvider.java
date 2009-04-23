@@ -105,9 +105,8 @@ public class PicoContainersProvider implements ComponentRegistry {
             logger.debug("Request components are " + requestScoped);
         }
         MutablePicoContainer requestScope = new PicoBuilder(sessionScope).withCaching().build();
-        // TODO guarantee request component registered order on tests!!!
         for (Class<?> requiredType : requestScoped.keySet()) {
-            requestScope.addComponent(requiredType, requestScoped.get(requiredType));
+            requestScope.addComponent(requestScoped.get(requiredType));
         }
         for (Class<? extends Interceptor> type : this.container.getComponent(InterceptorRegistry.class).all()) {
             requestScope.addComponent(type);
@@ -127,7 +126,7 @@ public class PicoContainersProvider implements ComponentRegistry {
             logger.debug("Session components are " + sessionScoped);
         }
         for (Class<?> requiredType : sessionScoped.keySet()) {
-            sessionScope.addComponent(requiredType, sessionScoped.get(requiredType));
+            sessionScope.addComponent(sessionScoped.get(requiredType));
         }
         return sessionScope;
     }
@@ -139,7 +138,7 @@ public class PicoContainersProvider implements ComponentRegistry {
         for (Class<?> requiredType : applicationScoped.keySet()) {
             Class<?> type = applicationScoped.get(requiredType);
             logger.debug("Initializing application scope with " + type);
-            this.container.addComponent(requiredType, type);
+            this.container.addComponent(type);
         }
     }
 

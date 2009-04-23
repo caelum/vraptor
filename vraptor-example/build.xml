@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== 
+	VRaptor 3 example build
+	====================================================================== -->
+<project name="VRaptor 3 Example" default="war" basedir=".">
+
+  <description>VRaptor 3 example build</description>
+
+  <property file="build.properties"/>
+  <path id="libs.classpath" path=".">
+    <fileset dir="${libs.dir}">
+      <include name="*.jar"/>
+    </fileset>
+  </path>
+
+  <path id="servlet-api.classpath">
+    <fileset dir="${common.dir}">
+      <include name="*.jar"/>
+    </fileset>
+  </path>
+
+  <path id="compile.classpath">
+    <path refid="libs.classpath"/>
+    <path refid="servlet-api.classpath"/>
+  </path>
+
+  <path id="test.classpath">
+    <path refid="compile.classpath"/>
+    <dirset dir="${tmp.classes.dir}"/>
+  </path>
+
+  <target name="prepare" description="--> prepares directories">
+    <mkdir dir="${tmp.dir}"/>
+    <mkdir dir="${reports.dir}"/>
+    <mkdir dir="${reports.dir}/test-results"/>
+    <mkdir dir="${tmp.classes.dir}"/>
+    <mkdir dir="${tmp.test.classes.dir}"/>
+  </target>
+
+  <target name="compile" depends="prepare" description="--> compiles classes">
+    <javac destdir="${tmp.classes.dir}" srcdir="${src.dir}" classpathref="compile.classpath" debug="true"
+           encoding="UTF-8" target="1.5" source="1.5">
+      <compilerarg value="-Xlint:none"/>
+    </javac>
+    <javac destdir="${tmp.test.classes.dir}" srcdir="${src.test.dir}" classpathref="test.classpath" debug="true"
+           encoding="UTF-8" target="1.5" source="1.5">
+      <compilerarg value="-Xlint:none"/>
+    </javac>
+  </target>
+
+  <target name="copy-resources" depends="compile" description="copy resourcesdo WEB-INF/classes">
+    <copy todir="${classes.dir}">
+      <fileset dir="${tmp.classes.dir}"/>
+      <fileset dir="${resources.dir}"/>
+    </copy>
+  </target>
+
+  <target name="test" depends="compile">
+    <fileset dir="${tmp.test.classes.dir}" id="unittests.fileset" includes="**/*Test.class"/>
+    <junit fork="yes" forkmode="once" printsummary="false" showoutput="true" failureproperty="failed-test">
+      <classpath>
+        <pathelement path="${tmp.classes.dir}"/>
+        <pathelement path="${tmp.test.classes.dir}"/>
+      </classpath>
+      <classpath refid="test.classpath"/>
+
+      <formatter type="brief" usefile="false"/>
+      <formatter type="xml"/>
+
+      <batchtest fork="yes" todir="${reports.dir}/test-results">
+        <fileset refid="unittests.fileset"/>
+      </batchtest>
+    </junit>
+    <junitreport todir="${reports.dir}/">
+      <fileset dir="${reports.dir}/test-results">
+        <include name="TEST-*.xml"/>
+      </fileset>
+      <report format="frames" todir="${reports.dir}/junit"/>
+    </junitreport>
+    <fail if="failed-test" message="Failing tests"/>
+  </target>
+
+  <target name="clean" description="--> delete build artifacts">
+    <delete dir="${tmp.dir}"/>
+    <delete dir="${classes.dir}"/>
+  </target>
+
+  <target name="war" depends="copy-resources" description="--> generate project's war">
+    <delete file="${tmp.dir}/${war.file}"/>
+    <war destfile="${tmp.dir}/${war.file}" webxml="${webapp.dir}/WEB-INF/web.xml" compress="true">
+      <fileset dir="${webapp.dir}" excludes="WEB-INF/web.xml"/>
+      <classes dir="${tmp.classes.dir}"/>
+      <lib dir="${libs.dir}">
+        <exclude name="servlet*.jar"/>
+      </lib>
+    </war>
+  </target>
+
+  <macrodef name="jetty">
+    <attribute name="port" default="8080"/>
+    <attribute name="databasePort" default="9001"/>
+    <sequential>
+      <echo message="Running jetty at @{port}"/>
+      <delete dir="jetty_@{port}"/>
+      <mkdir dir="jetty_@{port}"/>
+      <java fork="true" spawn="true"
+            classname="br.com.caelum.caelumweb2.tasks.JettyStartTask">
+        <arg value="@{port}"/>
+        <arg value="@{databasePort}"/>
+        <arg value="${tmp.dir}/${war.file}"/>
+        <arg value="-logDir=target/artifacts"/>
+        <classpath>
+          <fileset dir="../build-lib" includes="*.jar"/>
+          <path refid="servlet-api.classpath"/>
+        </classpath>
+      </java>
+    </sequential>
+  </macrodef>
+
+  <macrodef name="jetty-stopper">
+    <attribute name="port" default="9191"/>
+    <sequential>
+      <taskdef name="jetty-stop"
+               classname="br.com.caelum.caelumweb2.tasks.JettyStopTask">
+        <classpath>
+          <fileset dir="../build-lib" includes="*.jar"/>
+          <path refid="servlet-api.classpath"/>
+        </classpath>
+      </taskdef>
+      <echo message="Stopping jetty at @{port}"/>
+      <jetty-stop port="@{port}"/>
+    </sequential>
+  </macrodef>
+
+  <target name="run-jetty" depends="war"
+          description="--> runs a jetty instance">
+    <jetty port="8080" databasePort="9001"/>
+    <waitfor maxwait="3" maxwaitunit="minute" checkevery="500">
+      <http url="http://localhost:8080/vraptor-example/"/>
+    </waitfor>
+    <input message="Waiting for jetty"/>
+    <jetty-stopper port="9191"/>
+  </target>
+
+</project>

@@ -6,7 +6,7 @@
 	<display-name>VRaptor3 compatibility with VRaptor 2 example</display-name>
 	
 	<context-param>
-		<param-name>br.com.caelum.vraptor.container_provider</param-name>
+		<param-name>br.com.caelum.vraptor.container</param-name>
 		<param-value>br.com.caelum.vraptor.vraptor2.Provider</param-value>
 	</context-param>
 

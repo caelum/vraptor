@@ -2,6 +2,7 @@ package br.com.caelum.vraptor.example;
 
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 
 import java.io.IOException;
 
@@ -37,14 +38,19 @@ public class ClientsController {
     }
 
     @Path("/clients/add")
-    public void add(final Client c) throws ServletException, IOException {
+    public void add(final Client client) throws ServletException, IOException {
         validator.checking(new Validations() {
             {
-                that(c.getAge(), is(greaterThan(10)));
+                that(client, is(notNullValue()));
+                ifExists(client).getAge(); canBe(greaterThan(10)) ;
+                that(client).getAdress();
+                if(client!=null) {
+                    that(client.getAge(), is(greaterThan(10)));
+                }
             }
         });
-        database.add(c);
-        result.include("client", c);
+        database.add(client);
+        result.include("client", client);
         result.use(DefaultPageResult.jsp()).forward("ok");
     }
 }

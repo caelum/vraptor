@@ -6,7 +6,7 @@
          version="2.5">
 
   <context-param>
-    <param-name>br.com.caelum.vraptor.container</param-name>
+    <param-name>br.com.caelum.vraptor.provider</param-name>
     <param-value>br.com.caelum.vraptor.ioc.spring.SpringProvider</param-value>
   </context-param>
 

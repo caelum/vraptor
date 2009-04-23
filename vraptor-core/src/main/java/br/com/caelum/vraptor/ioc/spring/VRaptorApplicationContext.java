@@ -82,6 +82,7 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
         registerOn(beanFactory, ParanamerNameProvider.class);
         registerOn(beanFactory, DefaultConverters.class);
         registerOn(beanFactory, EmptyElementsRemoval.class);
+        registerOn(beanFactory, ResourceRegistrar.class);
 
     }
 
@@ -128,7 +129,6 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
             definition.setRole(BeanDefinition.ROLE_APPLICATION);
         } else {
             definition.setPrimary(false);
-            definition.getPropertyValues().addPropertyValue("order", Ordered.LOWEST_PRECEDENCE);
             definition.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
         }
         String name = beanNameGenerator.generateBeanName(definition, registry);

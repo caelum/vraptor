@@ -29,16 +29,15 @@
  */
 package br.com.caelum.vraptor.ioc.spring;
 
+import java.util.Collection;
+import java.util.HashSet;
+
+import javax.servlet.ServletContext;
+
 import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.core.RequestExecution;
 import br.com.caelum.vraptor.core.VRaptorRequest;
 import br.com.caelum.vraptor.ioc.Container;
-import org.springframework.beans.factory.BeanFactoryUtils;
-
-import javax.servlet.ServletContext;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Map;
 
 /**
  * @author Fabio Kung
@@ -47,7 +46,7 @@ public class SpringBasedContainer implements Container, ComponentRegistry {
     private VRaptorApplicationContext applicationContext;
 
     private String[] basePackages = {"br.com.caelum.vraptor"};
-    private Collection<Class<?>> toBeRegistered = new HashSet<Class<?>>();
+    private final Collection<Class<?>> toBeRegistered = new HashSet<Class<?>>();
 
     public SpringBasedContainer(String... basePackages) {
         if (basePackages.length > 0) {

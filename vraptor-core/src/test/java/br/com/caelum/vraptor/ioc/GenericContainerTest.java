@@ -59,7 +59,6 @@ public abstract class GenericContainerTest {
     private ContainerProvider provider;
 
     protected ServletContext context;
-    private File temporaryFile;
 
     protected abstract ContainerProvider getProvider();
 

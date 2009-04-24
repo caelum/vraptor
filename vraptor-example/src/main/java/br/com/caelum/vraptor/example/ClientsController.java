@@ -14,6 +14,7 @@ import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.example.dao.Database;
 import br.com.caelum.vraptor.validator.Validations;
 import br.com.caelum.vraptor.view.jsp.DefaultPageResult;
+import br.com.caelum.vraptor.view.jsp.EmptyResult;
 
 @Resource
 public class ClientsController {
@@ -46,5 +47,9 @@ public class ClientsController {
         database.add(client);
         result.include("client", client);
         result.use(DefaultPageResult.page()).forward("ok");
+    }
+
+    public void sendEmail() {
+    	result.use(EmptyResult.class).doNothing();
     }
 }

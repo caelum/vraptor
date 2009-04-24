@@ -29,8 +29,6 @@
  */
 package br.com.caelum.vraptor.view;
 
-import java.util.Enumeration;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
@@ -55,11 +53,11 @@ public class DefaultPathResolver implements PathResolver {
     }
 
     public String pathFor(ResourceMethod method, String result) {
-        Enumeration accepts = request.getHeaders("Accept");
+        /*Enumeration accepts = request.getHeaders("Accept");
         while(accepts.hasMoreElements()) {
             Object value = accepts.nextElement();
             logger.debug("Accepts: " + value);
-        }
+        }*/
         return "/" + method.getResource().getType().getSimpleName() + "/" + method.getMethod().getName() + "." + result
                 + ".jsp";
     }

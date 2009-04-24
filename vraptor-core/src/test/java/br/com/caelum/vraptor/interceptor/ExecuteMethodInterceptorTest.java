@@ -75,7 +75,7 @@ public class ExecuteMethodInterceptorTest {
     @Test
     public void shouldUseTheProvidedArguments() throws SecurityException, NoSuchMethodException, InterceptionException, IOException {
         ExecuteMethodInterceptor interceptor = new ExecuteMethodInterceptor(result, parameters);
-        ResourceMethod method = new DefaultResourceMethod(null, DogAlike.class.getMethod("bark", int.class));
+        final ResourceMethod method = new DefaultResourceMethod(null, DogAlike.class.getMethod("bark", int.class));
         final DogAlike auau = mockery.mock(DogAlike.class);
         mockery.checking(new Expectations() {
             {

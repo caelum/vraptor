@@ -5,13 +5,12 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
 
-import br.com.caelum.vraptor.http.EmptyElementsRemoval;
-import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.vraptor2.Info;
-
 import ognl.ArrayPropertyAccessor;
 import ognl.OgnlContext;
 import ognl.OgnlException;
+import br.com.caelum.vraptor.http.EmptyElementsRemoval;
+import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor.vraptor2.Info;
 
 public class ArrayAccessor extends ArrayPropertyAccessor {
 
@@ -32,14 +31,7 @@ public class ArrayAccessor extends ArrayPropertyAccessor {
         int index = (Integer) key;
         int length = Array.getLength(array);
         if (length <= index) {
-            Object newArray = Array.newInstance(array.getClass().getComponentType(), index + 1);
-            for (int i = 0; i < length; i++) {
-                Array.set(newArray, i, Array.get(array, i));
-            }
-            for (int i = length; i < index; i++) {
-                Array.set(newArray, i, null);
-            }
-            array = newArray;
+            array = copyOf(array, index, length);
             OgnlContext ctx = (OgnlContext) context;
             String fieldName = ctx.getCurrentEvaluation().getPrevious().getNode().toString();
             Object origin = ctx.getCurrentEvaluation().getPrevious().getSource();
@@ -61,6 +53,18 @@ public class ArrayAccessor extends ArrayPropertyAccessor {
             }
         }
         super.setProperty(context, array, key, value);
+    }
+
+    private Object copyOf(Object array, int desiredLength, int currentLength) {
+        Object newArray = Array.newInstance(array.getClass().getComponentType(), desiredLength + 1);
+        for (int i = 0; i < currentLength; i++) {
+            Array.set(newArray, i, Array.get(array, i));
+        }
+        for (int i = currentLength; i < desiredLength; i++) {
+            Array.set(newArray, i, null);
+        }
+        array = newArray;
+        return array;
     }
 
 }

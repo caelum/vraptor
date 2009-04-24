@@ -1,4 +1,4 @@
-TODO: 33/34/29
+TODO: 33/34/29/31/27
 a) test ListHandler, GenericHandler
 b) EERemoval test
 d) OgnlToConverters extract
@@ -15,17 +15,13 @@ d) OgnlToConverters extract
 	(MUST) - niceurls with file config support -> path support
 	(MUST) - path annotation with support to value injection (niceurls?)
 	(MUST) - hibernate plugin
-	(MUST) - json output support
+	(MUST) - json output support: three different options
 	(MUST) - better exception handling everywhere
 	- unit test for PicoContainersProvider... every scope should be tested
 OgnlParametersProviderTest:
     @Test
     public void canHandleListOfWrapperTypes() {
         Assert.fail("doesnt support list of wrapper types yet");
-    }
-    @Test
-    public void canHandleArray() {
-        Assert.fail("doesnt support arrays yet");
     }
 (MUST) - Map support
 - Set support

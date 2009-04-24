@@ -41,6 +41,13 @@ import ognl.ObjectNullHandler;
 import ognl.OgnlContext;
 import br.com.caelum.vraptor.vraptor2.Info;
 
+/**
+ * This null handler is a decorator for ognl api to invoke vraptor's api in
+ * order to be able to instantiate collections, arrays and custom types whenever
+ * the property is null.
+ * 
+ * @author Guilherme Silveira
+ */
 public class ReflectionBasedNullHandler extends ObjectNullHandler {
 
     private ListNullHandler list = new ListNullHandler();
@@ -72,7 +79,7 @@ public class ReflectionBasedNullHandler extends ObjectNullHandler {
                 ParameterizedType paramType = (ParameterizedType) returnType;
                 returnType = paramType.getRawType();
             }
-            
+
             Class<?> baseType = (Class<?>) returnType;
             Object instance;
             if (baseType.isArray()) {
@@ -80,11 +87,11 @@ public class ReflectionBasedNullHandler extends ObjectNullHandler {
             } else {
                 instance = generic.instantiate(baseType);
             }
-            
+
             Method setter = findMethod(target.getClass(), "set" + Info.capitalize((String) property), target.getClass());
             setter.invoke(target, instance);
             return instance;
-            
+
         } catch (InstantiationException e) {
             // TODO better
             throw new IllegalArgumentException(e);

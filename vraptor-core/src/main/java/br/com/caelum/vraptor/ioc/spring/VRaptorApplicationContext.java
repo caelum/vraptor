@@ -49,6 +49,7 @@ import br.com.caelum.vraptor.validator.DefaultValidator;
 import br.com.caelum.vraptor.view.DefaultLogicResult;
 import br.com.caelum.vraptor.view.DefaultPathResolver;
 import br.com.caelum.vraptor.view.jsp.DefaultPageResult;
+import br.com.caelum.vraptor.vraptor2.RequestResult;
 
 /**
  * @author Fabio Kung
@@ -93,6 +94,7 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
     }
 
     private void registerRequestScopedComponentsOn(DefaultListableBeanFactory beanFactory) {
+        registerOn(beanFactory, RequestResult.class);
         registerOn(beanFactory, ParametersInstantiatorInterceptor.class);
         registerOn(beanFactory, DefaultMethodParameters.class);
         registerOn(beanFactory, DefaultRequestParameters.class);

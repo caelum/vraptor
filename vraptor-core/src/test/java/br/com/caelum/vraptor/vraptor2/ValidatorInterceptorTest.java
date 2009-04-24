@@ -82,6 +82,7 @@ public class ValidatorInterceptorTest {
         final ResourceMethod method = mockery.methodFor(MyComponent.class, "noValidation");
         mockery.checking(new Expectations() {
             {
+                one(errors).size(); will(returnValue(0));
                 one(stack).next(method, resourceInstance);
             }
         });

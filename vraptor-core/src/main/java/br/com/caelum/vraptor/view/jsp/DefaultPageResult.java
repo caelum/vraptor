@@ -29,15 +29,16 @@
  */
 package br.com.caelum.vraptor.view.jsp;
 
-import br.com.caelum.vraptor.View;
-import br.com.caelum.vraptor.core.RequestInfo;
-import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.view.PathResolver;
+import java.io.IOException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+
+import br.com.caelum.vraptor.View;
+import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.view.PathResolver;
 
 /**
  * A jsp view which can be customized by providing your own PathConstructor.
@@ -59,7 +60,7 @@ public class DefaultPageResult implements View, PageResult {
         this.resolver = resolver;
     }
 
-    public static Class<DefaultPageResult> jsp() {
+    public static Class<DefaultPageResult> page() {
         return DefaultPageResult.class;
     }
 

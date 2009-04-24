@@ -29,6 +29,16 @@
  */
 package br.com.caelum.vraptor.ioc.pico;
 
+import javax.servlet.ServletContext;
+
+import org.picocontainer.DefaultPicoContainer;
+import org.picocontainer.MutablePicoContainer;
+import org.picocontainer.behaviors.Caching;
+import org.picocontainer.lifecycle.JavaEE5LifecycleStrategy;
+import org.picocontainer.monitors.NullComponentMonitor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.core.DefaultConverters;
 import br.com.caelum.vraptor.core.DefaultInterceptorStack;
@@ -59,15 +69,7 @@ import br.com.caelum.vraptor.validator.DefaultValidator;
 import br.com.caelum.vraptor.view.DefaultPathResolver;
 import br.com.caelum.vraptor.view.jsp.DefaultPageResult;
 import br.com.caelum.vraptor.view.jsp.PageResult;
-import org.picocontainer.DefaultPicoContainer;
-import org.picocontainer.MutablePicoContainer;
-import org.picocontainer.behaviors.Caching;
-import org.picocontainer.lifecycle.JavaEE5LifecycleStrategy;
-import org.picocontainer.monitors.NullComponentMonitor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.servlet.ServletContext;
+import br.com.caelum.vraptor.vraptor2.RequestResult;
 
 /**
  * Managing internal components by using pico container.<br>
@@ -115,6 +117,7 @@ public class PicoProvider implements ContainerProvider {
         singleInterfaceRegister(DefaultRequestInfo.class, container);
         singleInterfaceRegister(DefaultValidator.class, container);
 
+        container.register(RequestResult.class, RequestResult.class);
         container.register(PageResult.class, DefaultPageResult.class);
         container.register(TypeCreator.class, AsmBasedTypeCreator.class);
         container.register(EmptyElementsRemoval.class, EmptyElementsRemoval.class);

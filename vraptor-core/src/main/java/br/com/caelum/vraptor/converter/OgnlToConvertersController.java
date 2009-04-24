@@ -65,6 +65,8 @@ public class OgnlToConvertersController implements TypeConverter {
                         + member + " from " + target.getClass().getName());
             }
             genericType = parameterTypes[0];
+        } else if(member==null && target.getClass().isArray()) {
+            genericType = target.getClass().getComponentType();
         } else {
             // TODO better
             throw new IllegalArgumentException("Vraptor can only navigate through getter/setter methods, not " + member

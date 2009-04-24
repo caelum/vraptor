@@ -11,13 +11,17 @@ import ognl.OgnlContext;
 import ognl.OgnlException;
 import ognl.OgnlRuntime;
 
+import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.core.Converters;
+import br.com.caelum.vraptor.http.EmptyElementsRemoval;
+import br.com.caelum.vraptor.http.ognl.ArrayAccessor;
 import br.com.caelum.vraptor.http.ognl.ListAccessor;
 import br.com.caelum.vraptor.http.ognl.ReflectionBasedNullHandler;
+import br.com.caelum.vraptor.ioc.Container;
 
 /**
  * Unfortunately OGNL sucks so bad in its design that we had to create a "unit"
@@ -36,39 +40,64 @@ public class OgnlGenericTypesSupportTest {
     private Cat myCat;
     private Converters converters;
     private OgnlContext context;
+    private Container container;
+    private EmptyElementsRemoval removal;
 
     @Before
     public void setup() {
         this.mockery = new Mockery();
         this.converters = mockery.mock(Converters.class);
+        this.container = mockery.mock(Container.class);
+        this.removal = new EmptyElementsRemoval();
+        mockery.checking(new Expectations() {
+            {
+                allowing(converters).to(Long.class, container); will(returnValue(new LongConverter()));
+                allowing(container).instanceFor(EmptyElementsRemoval.class); will(returnValue(removal));
+            }
+        });
         this.myCat = new Cat();
         OgnlRuntime.setNullHandler(Object.class, new ReflectionBasedNullHandler());
         OgnlRuntime.setPropertyAccessor(List.class, new ListAccessor());
+        OgnlRuntime.setPropertyAccessor(Object[].class, new ArrayAccessor());
         this.context = (OgnlContext) Ognl.createDefaultContext(myCat);
         context.setTraceEvaluations(true);
+        context.put(Container.class, container);
         // OgnlRuntime.setPropertyAccessor(Set.class, new SetAccessor());
-        // OgnlRuntime.setPropertyAccessor(Array.class, new ArrayAccessor());
         // OgnlRuntime.setPropertyAccessor(Map.class, new MapAccessor());
         Ognl.setTypeConverter(context, new OgnlToConvertersController(converters));
     }
 
     public static class Cat {
         private List<String> legLength;
+
         public void setLegLength(List<String> legLength) {
             this.legLength = legLength;
         }
+
         public List<String> getLegLength() {
             return legLength;
         }
+
         public void setLegs(List<Leg> legs) {
             this.legs = legs;
         }
+
         public List<Leg> getLegs() {
             return legs;
         }
+
+        public void setIds(Long[] ids) {
+            this.ids = ids;
+        }
+
+        public Long[] getIds() {
+            return ids;
+        }
+
         private List<Leg> legs;
+        private Long[] ids;
     }
-    
+
     public static class Leg {
         private String color;
 
@@ -91,5 +120,13 @@ public class OgnlGenericTypesSupportTest {
         mockery.assertIsSatisfied();
     }
 
+    @Test
+    public void canInstantiateAndPopulateAnArrayOfWrappers() throws OgnlException {
+        Ognl.setValue("ids[0]", context, myCat, "3");
+        assertThat(myCat.ids[0], is(equalTo(3L)));
+        Ognl.setValue("ids[1]", context, myCat, "5");
+        assertThat(myCat.ids[1], is(equalTo(5L)));
+        mockery.assertIsSatisfied();
+    }
 
 }

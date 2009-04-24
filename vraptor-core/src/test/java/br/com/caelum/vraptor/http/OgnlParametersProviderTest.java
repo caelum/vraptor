@@ -19,6 +19,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.VRaptorMockery;
+import br.com.caelum.vraptor.converter.LongConverter;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
 import br.com.caelum.vraptor.ioc.Container;
@@ -45,6 +46,11 @@ public class OgnlParametersProviderTest {
         this.container = mockery.mock(Container.class);
         this.removal = new EmptyElementsRemoval();
         this.provider = new OgnlParametersProvider(creator, container, converters, nameProvider, parameters, removal);
+        mockery.checking(new Expectations() {
+            {
+                allowing(converters).to((Class) with(an(Class.class)), with(any(Container.class))); will(returnValue(new LongConverter()));
+            }
+        });
     }
 
     public static class Cat {
@@ -78,7 +84,17 @@ public class OgnlParametersProviderTest {
             return extraCats;
         }
 
+        public void setIds(Long[] ids) {
+            this.ids = ids;
+        }
+
+        public Long[] getIds() {
+            return ids;
+        }
+
         private List<Cat> extraCats;
+        
+        private Long[] ids;
 
     }
 
@@ -147,6 +163,32 @@ public class OgnlParametersProviderTest {
         House house = (House) params[0];
         assertThat(house.extraCats, hasSize(1));
         assertThat(house.extraCats.get(0).id, is(equalTo("guilherme")));
+        mockery.assertIsSatisfied();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    public void removeFromTheCollectionIfAnElementIsCreatedWithinAnArrayButNoFieldIsSet() throws SecurityException,
+            NoSuchMethodException {
+        final Method method = MyResource.class.getDeclaredMethod("buyA", House.class);
+        final Matcher<ResourceMethod> resourceMethod = VRaptorMatchers.resourceMethod(method);
+        mockery.checking(new Expectations() {
+            {
+                one(parameters).get("house.ids[1]");
+                will(returnValue(new String[] { "3" }));
+                one(parameters).getNames();
+                will(returnValue(new HashSet(Arrays.asList(new String[] { "house.ids[1]" }))));
+                one(creator).typeFor(with(resourceMethod));
+                will(returnValue(BuyASetter.class));
+                one(nameProvider).parameterNamesFor(method);
+                will(returnValue(new String[] { "House" }));
+                one(container).instanceFor(EmptyElementsRemoval.class); will(returnValue(removal));
+            }
+        });
+        Object[] params = provider.getParametersFor(mockery.methodFor(MyResource.class, "buyA", House.class));
+        House house = (House) params[0];
+        assertThat(house.ids.length, is(equalTo(1)));
+        assertThat(house.ids[0], is(equalTo(3L)));
         mockery.assertIsSatisfied();
     }
 

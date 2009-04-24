@@ -1,4 +1,9 @@
 TODO: 33/34/29
+a) refactor out ReflectionBasedNullHandler e testes por partes
+b) EERemoval test
+c) EERemoval could have a key = setter + instance so unused arrays are removed
+d) OgnlToConverters extract
+e) ArrayAccessorTest
 - add a @PostConstruct @PreDestroy test for providers 
 - check test multipart interceptor
 - support for FORWARD + REDIRECT 
@@ -26,6 +31,7 @@ OgnlParametersProviderTest:
         Assert.fail("doesnt support arrays yet");
     }
 (MUST) - Map support
+- Set support
 (MUST) - forward problem with opening 2 connections to the database and 2 components... one or two? solve it?
 
 

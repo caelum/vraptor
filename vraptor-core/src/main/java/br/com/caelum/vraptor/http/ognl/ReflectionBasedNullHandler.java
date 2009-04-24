@@ -29,12 +29,14 @@
  */
 package br.com.caelum.vraptor.http.ognl;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.GregorianCalendar;
@@ -86,8 +88,8 @@ public class ReflectionBasedNullHandler extends ObjectNullHandler {
                 int position = (Integer) property;
                 Object listHolder = ctx.getCurrentEvaluation().getPrevious().getSource();
                 String listPropertyName = ctx.getCurrentEvaluation().getPrevious().getNode().toString();
-                Method listSetter = findMethod(listHolder.getClass(), "set" + Info.capitalize((String) listPropertyName),
-                        target.getClass());
+                Method listSetter = findMethod(listHolder.getClass(), "set"
+                        + Info.capitalize((String) listPropertyName), target.getClass());
                 Type[] types = listSetter.getGenericParameterTypes();
                 Type type = types[0];
                 if (!(type instanceof ParameterizedType)) {
@@ -95,8 +97,8 @@ public class ReflectionBasedNullHandler extends ObjectNullHandler {
                     throw new IllegalArgumentException("Vraptor does not support non-generic collection at "
                             + listSetter.getName());
                 }
-                Object instance = ((Class) ((ParameterizedType) type).getActualTypeArguments()[0]).getConstructor()
-                        .newInstance();
+                Class typeToInstantiate = (Class) ((ParameterizedType) type).getActualTypeArguments()[0];
+                Object instance = typeToInstantiate.getConstructor().newInstance();
                 List list = (List) target;
                 while (list.size() <= position) {
                     list.add(null);
@@ -115,20 +117,21 @@ public class ReflectionBasedNullHandler extends ObjectNullHandler {
                 returnType = paramType.getRawType();
             }
             Class<?> baseType = (Class<?>) returnType;
+            Object instance;
             if (baseType.isArray()) {
-                // TODO better
-                throw new IllegalArgumentException("Vraptor does not support array types: use lists instead!");
-            }
-            Class<?> typeToInstantiate = baseType;
-            if (baseType.isInterface() || Modifier.isAbstract(baseType.getModifiers())) {
-                if (!CONCRETE_TYPES.containsKey(baseType)) {
-                    // TODO better
-                    throw new IllegalArgumentException("Vraptor does not support this interface or abstract type: "
-                            + typeToInstantiate.getName());
+                instance = Array.newInstance(baseType.getComponentType(), 0);
+            } else {
+                Class<?> typeToInstantiate = baseType;
+                if (baseType.isInterface() || Modifier.isAbstract(baseType.getModifiers())) {
+                    if (!CONCRETE_TYPES.containsKey(baseType)) {
+                        // TODO better
+                        throw new IllegalArgumentException("Vraptor does not support this interface or abstract type: "
+                                + typeToInstantiate.getName());
+                    }
+                    typeToInstantiate = CONCRETE_TYPES.get(baseType);
                 }
-                typeToInstantiate = CONCRETE_TYPES.get(baseType);
+                instance = typeToInstantiate.getConstructor().newInstance();
             }
-            Object instance = typeToInstantiate.getConstructor().newInstance();
             Method setter = findMethod(target.getClass(), "set" + Info.capitalize((String) property), target.getClass());
             setter.invoke(target, instance);
             return instance;
@@ -150,7 +153,7 @@ public class ReflectionBasedNullHandler extends ObjectNullHandler {
         }
     }
 
-    private Method findMethod(Class<? extends Object> type, String name, Class<? extends Object> baseType) {
+    static Method findMethod(Class<? extends Object> type, String name, Class<? extends Object> baseType) {
         Method[] methods = type.getDeclaredMethods();
         for (Method method : methods) {
             if (method.getName().equals(name)) {

@@ -3,20 +3,25 @@ package br.com.caelum.vraptor.http.ognl;
 import java.util.ArrayList;
 import java.util.List;
 
+import ognl.OgnlContext;
+
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
 
+import br.com.caelum.vraptor.VRaptorMockery;
+
 public class ListAccessorTest {
-    
+
     private ListAccessor accessor;
 
     @Before
     public void setup() {
         this.accessor = new ListAccessor();
     }
-    
+
     @Test
     public void gettingShouldReturnNullIfIndexNotFound() throws Exception {
         List<String> l = new ArrayList<String>();

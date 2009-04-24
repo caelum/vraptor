@@ -1,10 +1,7 @@
 TODO: 33/34/29
-a) refactor out ReflectionBasedNullHandler e testes por partes
+a) test ListHandler, GenericHandler
 b) EERemoval test
-c) EERemoval could have a key = setter + instance so unused arrays are removed
 d) OgnlToConverters extract
-e) ArrayAccessorTest
-- add a @PostConstruct @PreDestroy test for providers 
 - check test multipart interceptor
 - support for FORWARD + REDIRECT 
 - result support (new style, logic or string)
@@ -32,7 +29,6 @@ OgnlParametersProviderTest:
     }
 (MUST) - Map support
 - Set support
-(MUST) - forward problem with opening 2 connections to the database and 2 components... one or two? solve it?
 
 
 
@@ -66,7 +62,8 @@ site docs (prior to release)
 - containers now can be @Request, @Session, @App scoped
 
 kung help
-known bug: accessing / when its /index.html.... if its a dir containing an index.html it doesnt work, but if your url is /clients/ it works...
+	- known bug: accessing / when its /index.html.... if its a dir containing an index.html it doesnt work, but if your url is /clients/ it works...
+	- add a @PostConstruct @PreDestroy test for providers 
 
 
 

@@ -14,7 +14,6 @@ import ognl.OgnlException;
 
 import org.hamcrest.Matcher;
 import org.jmock.Expectations;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 

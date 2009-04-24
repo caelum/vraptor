@@ -1,0 +1,115 @@
+package br.com.caelum.vraptor.http.ognl;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
+
+import java.lang.reflect.Member;
+import java.util.Map;
+
+import ognl.Evaluation;
+import ognl.OgnlContext;
+import ognl.SimpleNode;
+import ognl.TypeConverter;
+
+import org.jmock.Expectations;
+import org.junit.Before;
+import org.junit.Test;
+
+import br.com.caelum.vraptor.VRaptorMockery;
+import br.com.caelum.vraptor.http.EmptyElementsRemoval;
+import br.com.caelum.vraptor.ioc.Container;
+
+public class ArrayAccessorTest {
+
+    private ArrayAccessor accessor;
+    private VRaptorMockery mockery;
+    private OgnlContext context;
+    private Evaluation evaluation;
+    private SimpleNode node;
+    private Data instance;
+    private TypeConverter typeConverter;
+    private Container container;
+
+    class Data {
+        private Long[] simpleNode;
+
+        public void setSimpleNode(Long[] simpleNode) {
+            this.simpleNode = simpleNode;
+        }
+
+        public Long[] getSimpleNode() {
+            return simpleNode;
+        }
+    }
+
+    @Before
+    public void setup() {
+        this.accessor = new ArrayAccessor();
+        this.mockery = new VRaptorMockery(true);
+        this.context = mockery.mock(OgnlContext.class);
+        this.evaluation = mockery.mock(Evaluation.class);
+        this.node = mockery.mock(SimpleNode.class);
+        this.instance = new Data();
+        this.container = mockery.mock(Container.class);
+        this.typeConverter = mockery.mock(TypeConverter.class);
+        mockery.checking(new Expectations() {
+            {
+                allowing(context).getCurrentEvaluation();
+                will(returnValue(evaluation));
+                allowing(evaluation).getPrevious();
+                will(returnValue(evaluation));
+                allowing(evaluation).getNode();
+                will(returnValue(node));
+                one(node).toString();
+                will(returnValue("values"));
+                allowing(evaluation).getSource();
+                will(returnValue(instance));
+                one(context).get(Container.class);
+                will(returnValue(container));
+                one(context).getTypeConverter();
+                will(returnValue(typeConverter));
+            }
+        });
+    }
+
+    @Test
+    public void gettingShouldReturnNullIfIndexNotFound() throws Exception {
+        Long[] l = new Long[] {};
+        Object value = accessor.getProperty(null, l, 1);
+        assertThat(value, is(nullValue()));
+    }
+
+    @Test
+    public void gettingShouldReturnValueIfIndexFound() throws Exception {
+        Long[] l = new Long[] { 15L, 22L };
+        Object value = accessor.getProperty(null, l, 1);
+        assertThat(value, is(equalTo((Object) 22L)));
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    public void settingShouldNullifyUpToIndexAndIgnoreRemoval() throws Exception {
+        final Long[] l = new Long[] {};
+        final EmptyElementsRemoval removal = new EmptyElementsRemoval() {
+            public void removeExtraElements() {
+                // does nothing
+            }
+        };
+        mockery.checking(new Expectations() {
+            {
+                one(container).instanceFor(EmptyElementsRemoval.class);
+                will(returnValue(removal));
+                one(typeConverter).convertValue((Map) with(anything()), with(anything()),
+                        (Member) with(anything()), (String) with(an(String.class)), with(anything()),
+                        (Class) with(an(Class.class)));
+                will(returnValue(22L));
+            }
+        });
+        accessor.setProperty(context, l, 1, 22L);
+        assertThat(instance.simpleNode[0], is(nullValue()));
+        assertThat(instance.simpleNode[1], is(equalTo(22L)));
+    }
+
+}

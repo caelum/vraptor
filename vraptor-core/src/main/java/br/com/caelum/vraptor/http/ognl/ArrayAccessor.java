@@ -12,6 +12,13 @@ import br.com.caelum.vraptor.http.EmptyElementsRemoval;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.vraptor2.Info;
 
+/**
+ * Deals with acessing values within an array.<br>
+ * Re-instantiates and invokes setter methods on arrays as soon as they are not
+ * big enough for all required parameters.
+ * 
+ * @author Guilherme Silveira
+ */
 public class ArrayAccessor extends ArrayPropertyAccessor {
 
     @SuppressWarnings("unchecked")
@@ -27,7 +34,7 @@ public class ArrayAccessor extends ArrayPropertyAccessor {
     @SuppressWarnings("unchecked")
     @Override
     public void setProperty(Map context, Object array, Object key, Object value) throws OgnlException {
-        
+
         int index = (Integer) key;
         int length = Array.getLength(array);
         if (length <= index) {
@@ -35,7 +42,8 @@ public class ArrayAccessor extends ArrayPropertyAccessor {
             OgnlContext ctx = (OgnlContext) context;
             String fieldName = ctx.getCurrentEvaluation().getPrevious().getNode().toString();
             Object origin = ctx.getCurrentEvaluation().getPrevious().getSource();
-            Method setter = ReflectionBasedNullHandler.findMethod(origin.getClass(), "set" + Info.capitalize(fieldName), origin.getClass());
+            Method setter = ReflectionBasedNullHandler.findMethod(origin.getClass(),
+                    "set" + Info.capitalize(fieldName), origin.getClass());
             Container container = (Container) context.get(Container.class);
             EmptyElementsRemoval removal = container.instanceFor(EmptyElementsRemoval.class);
             removal.add(array, setter, origin);

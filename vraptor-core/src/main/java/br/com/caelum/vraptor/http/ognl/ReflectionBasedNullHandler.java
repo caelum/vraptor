@@ -32,42 +32,19 @@ package br.com.caelum.vraptor.http.ognl;
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Queue;
-import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 import ognl.ObjectNullHandler;
 import ognl.OgnlContext;
-import br.com.caelum.vraptor.http.EmptyElementsRemoval;
-import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.vraptor2.Info;
 
 public class ReflectionBasedNullHandler extends ObjectNullHandler {
 
-    private static final Map<Class<?>, Class<?>> CONCRETE_TYPES = new HashMap<Class<?>, Class<?>>();
-
-    static {
-        CONCRETE_TYPES.put(List.class, ArrayList.class);
-        CONCRETE_TYPES.put(Calendar.class, GregorianCalendar.class);
-        CONCRETE_TYPES.put(Collection.class, ArrayList.class);
-        CONCRETE_TYPES.put(Set.class, HashSet.class);
-        CONCRETE_TYPES.put(SortedSet.class, TreeSet.class);
-        CONCRETE_TYPES.put(Queue.class, LinkedList.class);
-    }
+    private ListNullHandler list = new ListNullHandler();
+    private GenericNullHandler generic = new GenericNullHandler();
 
     @SuppressWarnings("unchecked")
     public Object nullPropertyValue(Map context, Object target, Object property) {
@@ -84,30 +61,9 @@ public class ReflectionBasedNullHandler extends ObjectNullHandler {
         }
 
         try {
+
             if (target instanceof List) {
-                int position = (Integer) property;
-                Object listHolder = ctx.getCurrentEvaluation().getPrevious().getSource();
-                String listPropertyName = ctx.getCurrentEvaluation().getPrevious().getNode().toString();
-                Method listSetter = findMethod(listHolder.getClass(), "set"
-                        + Info.capitalize((String) listPropertyName), target.getClass());
-                Type[] types = listSetter.getGenericParameterTypes();
-                Type type = types[0];
-                if (!(type instanceof ParameterizedType)) {
-                    // TODO better
-                    throw new IllegalArgumentException("Vraptor does not support non-generic collection at "
-                            + listSetter.getName());
-                }
-                Class typeToInstantiate = (Class) ((ParameterizedType) type).getActualTypeArguments()[0];
-                Object instance = typeToInstantiate.getConstructor().newInstance();
-                List list = (List) target;
-                while (list.size() <= position) {
-                    list.add(null);
-                }
-                Container container = (Container) context.get(Container.class);
-                EmptyElementsRemoval removal = container.instanceFor(EmptyElementsRemoval.class);
-                removal.add(list);
-                list.set(position, instance);
-                return instance;
+                return list.instantiate(context, target, property, ctx);
             }
 
             Method method = findMethod(target.getClass(), "get" + Info.capitalize((String) property), target.getClass());
@@ -116,25 +72,19 @@ public class ReflectionBasedNullHandler extends ObjectNullHandler {
                 ParameterizedType paramType = (ParameterizedType) returnType;
                 returnType = paramType.getRawType();
             }
+            
             Class<?> baseType = (Class<?>) returnType;
             Object instance;
             if (baseType.isArray()) {
-                instance = Array.newInstance(baseType.getComponentType(), 0);
+                instance = instantiateArray(baseType);
             } else {
-                Class<?> typeToInstantiate = baseType;
-                if (baseType.isInterface() || Modifier.isAbstract(baseType.getModifiers())) {
-                    if (!CONCRETE_TYPES.containsKey(baseType)) {
-                        // TODO better
-                        throw new IllegalArgumentException("Vraptor does not support this interface or abstract type: "
-                                + typeToInstantiate.getName());
-                    }
-                    typeToInstantiate = CONCRETE_TYPES.get(baseType);
-                }
-                instance = typeToInstantiate.getConstructor().newInstance();
+                instance = generic.instantiate(baseType);
             }
+            
             Method setter = findMethod(target.getClass(), "set" + Info.capitalize((String) property), target.getClass());
             setter.invoke(target, instance);
             return instance;
+            
         } catch (InstantiationException e) {
             // TODO better
             throw new IllegalArgumentException(e);
@@ -151,6 +101,10 @@ public class ReflectionBasedNullHandler extends ObjectNullHandler {
             // TODO better
             throw new IllegalArgumentException(e);
         }
+    }
+
+    private Object instantiateArray(Class<?> baseType) {
+        return Array.newInstance(baseType.getComponentType(), 0);
     }
 
     static Method findMethod(Class<? extends Object> type, String name, Class<? extends Object> baseType) {

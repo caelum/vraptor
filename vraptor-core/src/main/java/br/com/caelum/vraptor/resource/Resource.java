@@ -29,9 +29,13 @@
  */
 package br.com.caelum.vraptor.resource;
 
-
+/**
+ * Represents a resource.
+ * 
+ * @author Guilherme Silveira
+ */
 public interface Resource {
-	
-	public Class<?> getType();
+
+    public Class<?> getType();
 
 }

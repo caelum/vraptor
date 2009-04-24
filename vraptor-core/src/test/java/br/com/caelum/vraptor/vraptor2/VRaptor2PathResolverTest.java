@@ -4,6 +4,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Before;
@@ -20,6 +22,7 @@ public class VRaptor2PathResolverTest {
     private Resource resource;
     private VRaptor2PathResolver resolver;
     private Config config;
+    private HttpServletRequest request;
 
     @Before
     public void config() {
@@ -27,12 +30,13 @@ public class VRaptor2PathResolverTest {
         this.method = mockery.mock(ResourceMethod.class);
         this.resource = mockery.mock(Resource.class);
         this.config = mockery.mock(Config.class);
+        this.request = mockery.mock(HttpServletRequest.class);
         mockery.checking(new Expectations() {
             {
                 one(config).getViewPattern(); will(returnValue("/$component/$logic.$result.jsp"));
             }
         });
-        this.resolver = new VRaptor2PathResolver(config);
+        this.resolver = new VRaptor2PathResolver(config, request);
     }
 
     @Test

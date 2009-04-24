@@ -71,7 +71,7 @@ public abstract class GenericContainerTest {
     @Test
     public void canProvideAllApplicationScopedComponents() {
         Class<?>[] components = new Class[]{ServletContext.class, UrlToResourceTranslator.class, ResourceRegistry.class,
-                TypeCreator.class, InterceptorRegistry.class, MethodLookupBuilder.class, PathResolver.class,
+                TypeCreator.class, InterceptorRegistry.class, MethodLookupBuilder.class, 
                 ParameterNameProvider.class, Converters.class, EmptyElementsRemoval.class};
         checkAvailabilityFor(true, components);
         mockery.assertIsSatisfied();
@@ -84,7 +84,7 @@ public abstract class GenericContainerTest {
                 InterceptorListPriorToExecutionExtractor.class, URLParameterExtractorInterceptor.class,
                 InterceptorStack.class, RequestExecution.class, ResourceLookupInterceptor.class,
                 InstantiateInterceptor.class, Result.class, ExecuteMethodInterceptor.class, PageResult.class,
-                ParametersProvider.class, RequestInfo.class, Validator.class);
+                ParametersProvider.class, RequestInfo.class, Validator.class, PathResolver.class);
         mockery.assertIsSatisfied();
     }
 

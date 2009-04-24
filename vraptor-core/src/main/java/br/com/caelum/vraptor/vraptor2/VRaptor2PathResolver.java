@@ -1,10 +1,12 @@
 package br.com.caelum.vraptor.vraptor2;
 
+import javax.servlet.http.HttpServletRequest;
+
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.view.DefaultPathResolver;
 import br.com.caelum.vraptor.view.PathResolver;
-import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
 /**
  * Vraptor 2 and 3 compatible path resolver.
@@ -14,11 +16,12 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
 @ApplicationScoped
 public class VRaptor2PathResolver implements PathResolver {
 
-    private final PathResolver vraptor3 = new DefaultPathResolver();
+    private final PathResolver vraptor3;
     private final String pattern;
     
-    public VRaptor2PathResolver(Config config) {
+    public VRaptor2PathResolver(Config config, HttpServletRequest request) {
         this.pattern = config.getViewPattern();
+        this.vraptor3 = new DefaultPathResolver(request);
     }
 
     public String pathFor(ResourceMethod method, String result) {

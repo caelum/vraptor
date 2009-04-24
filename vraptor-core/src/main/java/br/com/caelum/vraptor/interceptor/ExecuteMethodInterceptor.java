@@ -62,11 +62,11 @@ public class ExecuteMethodInterceptor implements Interceptor {
             Object[] parameters = this.parameters.getValues();
             Object result = reflectionMethod.invoke(resourceInstance, parameters);
             if (result == null) {
-            //    this.result.setValue("ok");
+                this.result.setValue("ok");
             } else {
-            //    this.result.setValue((String) result);
+                this.result.setValue((String) result);
             }
-            //stack.next(method, resourceInstance);
+            stack.next(method, resourceInstance);
         } catch (IllegalArgumentException e) {
             throw new InterceptionException(e);
         } catch (IllegalAccessException e) {

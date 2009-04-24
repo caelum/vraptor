@@ -58,7 +58,7 @@ public class DefaultRequestExecution implements RequestExecution {
         interceptorStack.add(instantiator);
         interceptorStack.add(ParametersInstantiatorInterceptor.class);
         interceptorStack.add(ExecuteMethodInterceptor.class);
-        // interceptorStack.add(ForwardToDefaultViewInterceptor.class);
+        interceptorStack.add(ForwardToDefaultViewInterceptor.class);
         interceptorStack.next(null, null);
     }
 }

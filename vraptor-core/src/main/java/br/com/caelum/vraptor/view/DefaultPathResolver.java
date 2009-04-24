@@ -29,7 +29,13 @@
  */
 package br.com.caelum.vraptor.view;
 
-import br.com.caelum.vraptor.ioc.ApplicationScoped;
+import java.util.Enumeration;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**
@@ -38,10 +44,22 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  *
  * @author Guilherme Silveira
  */
-@ApplicationScoped
 public class DefaultPathResolver implements PathResolver {
+    
+    private final HttpServletRequest request;
+    
+    private static final Logger logger = LoggerFactory.getLogger(DefaultPathResolver.class);
+
+    public DefaultPathResolver(HttpServletRequest request) {
+        this.request = request;
+    }
 
     public String pathFor(ResourceMethod method, String result) {
+        Enumeration accepts = request.getHeaders("Accept");
+        while(accepts.hasMoreElements()) {
+            Object value = accepts.nextElement();
+            logger.debug("Accepts: " + value);
+        }
         return "/" + method.getResource().getType().getSimpleName() + "/" + method.getMethod().getName() + "." + result
                 + ".jsp";
     }

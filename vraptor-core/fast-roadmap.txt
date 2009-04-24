@@ -1,14 +1,13 @@
-- automatic REDIRECT depending on accepts
-- support for redirect on Result 
-
-TODO: 33/34/29/31/27/26
-- result support (new style, logic or string)
-- new view properties
+TODO: 33/34/29/31/27/26/24
+- support to viewless
+- support for redirect on Result
 (MUST) - setting errors during ognl expression evaluation should be defined as validation errors
 (MUST) - converter errors should be validation errors
 (MUST) - errors should not be strings
 (MUST) - support HibernateValidator with i18n messages
 (MUST) - support i18n messages
+
+- new view properties
 (MUST) - niceurls with programmatic support
 (MUST) - niceurls -> path support
 (MUST) - niceurls with file config support -> path support
@@ -29,6 +28,8 @@ test and refactor:
 a) test ListHandler, GenericHandler
 b) EERemoval test
 c) unit test for PicoContainersProvider... every scope should be tested
+- defaultpathresolver better test
+- new interceptor test 
 
 
 
@@ -61,8 +62,10 @@ site docs (prior to release)
 - containers now can be @Request, @Session, @App scoped
 
 kung help
+	- result support to another component
 	- known bug: accessing / when its /index.html.... if its a dir containing an index.html it doesnt work, but if your url is /clients/ it works...
 	- add a @PostConstruct @PreDestroy test for providers 
+	- automatic REDIRECT depending on accepts
 
 
 
@@ -309,6 +312,7 @@ done:
 	- v2: @Logic (parameters=...) support
 	- v2: default Logic,Action and so on key removal
 	- v2: constructor injection only
+- automatic redirect
 - hibernate validator
 - converters
 	primitive

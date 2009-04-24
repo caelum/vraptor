@@ -24,7 +24,7 @@ public class DogsController {
     public void list() throws IOException, ServletException {
         result.include("dogs", Arrays.asList("lulu", "pluto"));
         // TODO argh, better exception handling
-        result.use(DefaultPageResult.jsp()).forward("ok");
+        result.use(DefaultPageResult.page()).forward("ok");
     }
 
 }

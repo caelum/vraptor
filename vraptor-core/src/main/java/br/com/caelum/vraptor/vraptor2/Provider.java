@@ -34,8 +34,6 @@ import org.vraptor.validator.ValidationErrors;
 
 import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.Validator;
-import br.com.caelum.vraptor.vraptor2.outject.DefaultOutjecter;
-import br.com.caelum.vraptor.vraptor2.outject.Outjecter;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.core.RequestExecution;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
@@ -67,10 +65,8 @@ public class Provider extends PicoProvider {
         container.register(ComponentInfoProvider.class, DefaultComponentInfoProvider.class);
         container.register(OutjectionInterceptor.class,OutjectionInterceptor.class);
         container.register(RequestResult.class, RequestResult.class);
-        container.register(ResultSupplierInterceptor.class, ResultSupplierInterceptor.class);
         container.register(AjaxInterceptor.class, AjaxInterceptor.class);
         container.register(Validator.class, MessageCreatorValidator.class);
         container.register(ValidationErrors.class, BasicValidationErrors.class);
-        container.register(Outjecter.class, DefaultOutjecter.class);
     }
 }

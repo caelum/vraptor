@@ -27,7 +27,7 @@ public class ProviderTest extends GenericContainerTest {
     public void canProvideVRaptor2SpecificRequestScopedComponents() {
         checkAvailabilityFor(false, ExecuteAndViewInterceptor.class, HibernateValidatorPluginInterceptor.class,
                 ValidatorInterceptor.class, ViewInterceptor.class, ComponentInfoProvider.class,
-                OutjectionInterceptor.class, RequestResult.class, ResultSupplierInterceptor.class,
+                OutjectionInterceptor.class, RequestResult.class, 
                 AjaxInterceptor.class, ValidationErrors.class);
     }
 

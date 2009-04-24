@@ -1,8 +1,7 @@
-TODO: 33/34/29/31/27
+TODO: 33/34/29/31/27/26
 a) test ListHandler, GenericHandler
 b) EERemoval test
 d) OgnlToConverters extract
-- check test multipart interceptor
 - support for FORWARD + REDIRECT 
 - result support (new style, logic or string)
 - new view properties

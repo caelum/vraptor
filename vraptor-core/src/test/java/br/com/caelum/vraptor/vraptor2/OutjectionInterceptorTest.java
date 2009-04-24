@@ -23,7 +23,13 @@ public class OutjectionInterceptorTest {
     public void setup() {
         this.mockery = new VRaptorMockery();
         this.outjecter = mockery.mock(Outjecter.class);
-        this.interceptor = new OutjectionInterceptor(outjecter);
+        final ComponentInfoProvider info = mockery.mock(ComponentInfoProvider.class);
+        mockery.checking(new Expectations() {
+            {
+                allowing(info).getOutjecter(); will(returnValue(outjecter));
+            }
+        });
+        this.interceptor = new OutjectionInterceptor(info);
         this.stack = mockery.mock(InterceptorStack.class);
     }
 

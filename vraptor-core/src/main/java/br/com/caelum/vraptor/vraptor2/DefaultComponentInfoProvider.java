@@ -5,13 +5,22 @@ import javax.servlet.http.HttpServletRequest;
 import org.vraptor.annotations.Viewless;
 
 import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.vraptor2.outject.DefaultOutjecter;
+import br.com.caelum.vraptor.vraptor2.outject.JsonOutjecter;
+import br.com.caelum.vraptor.vraptor2.outject.Outjecter;
 
 public class DefaultComponentInfoProvider implements ComponentInfoProvider {
 
     private final HttpServletRequest request;
+    private final Outjecter outjecter;
 
     public DefaultComponentInfoProvider(HttpServletRequest request) {
         this.request = request;
+        if(isAjax()) {
+            this.outjecter = new JsonOutjecter();
+        } else {
+            this.outjecter = new DefaultOutjecter(request);
+        }
     }
 
     /**
@@ -25,11 +34,18 @@ public class DefaultComponentInfoProvider implements ComponentInfoProvider {
         return !isAjax();
     }
 
+    /**
+     * This is non-final so you can configure your own ajax discovery algorithm.
+     */
     public boolean isAjax() {
         if(request.getRequestURI().contains(".ajax.") || "ajax".equals(request.getParameter("view"))) {
             return true;
         }
         return false;
+    }
+
+    public Outjecter getOutjecter() {
+        return this.outjecter;
     }
 
 }

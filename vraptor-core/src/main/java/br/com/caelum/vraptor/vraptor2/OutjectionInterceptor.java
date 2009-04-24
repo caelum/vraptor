@@ -29,8 +29,8 @@ public class OutjectionInterceptor implements Interceptor {
     private static final BeanHelper helper = new BeanHelper();
     private final Outjecter outjecter;
 
-    public OutjectionInterceptor(Outjecter outjecter) {
-        this.outjecter = outjecter;
+    public OutjectionInterceptor(ComponentInfoProvider provider) {
+        this.outjecter = provider.getOutjecter();
     }
 
     public boolean accepts(ResourceMethod method) {

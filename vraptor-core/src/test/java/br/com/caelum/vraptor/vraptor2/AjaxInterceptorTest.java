@@ -38,25 +38,32 @@ public class AjaxInterceptorTest {
         this.outjecter = new JsonOutjecter();
         this.info = mockery.mock(ComponentInfoProvider.class);
         this.response = mockery.mock(HttpServletResponse.class);
-        this.interceptor = new AjaxInterceptor(outjecter, response, info);
+        mockery.checking(new Expectations() {
+            {
+                allowing(info).getOutjecter(); will(returnValue(outjecter));
+            }
+        });
+        this.interceptor = new AjaxInterceptor(response, info);
     }
 
     @Test
     public void invokesNextIfNonAjax() throws InterceptionException, IOException {
         mockery.checking(new Expectations() {
             {
-                one(info).isAjax(); will(returnValue(false));
+                one(info).isAjax();
+                will(returnValue(false));
                 one(stack).next(null, null);
             }
         });
         interceptor.intercept(stack, null, null);
         mockery.assertIsSatisfied();
     }
-    
+
     class MyComponent {
         @Remotable
         void ajaxed() {
         }
+
         void nonAjaxed() {
         }
     }
@@ -69,10 +76,12 @@ public class AjaxInterceptorTest {
         ResourceMethod method = mockery.methodFor(MyComponent.class, "ajaxed");
         mockery.checking(new Expectations() {
             {
-                one(info).isAjax(); will(returnValue(true));
+                one(info).isAjax();
+                will(returnValue(true));
                 one(response).setContentType("application/json");
                 one(response).setCharacterEncoding("UTF-8");
-                one(response).getWriter(); will(returnValue(writer));
+                one(response).getWriter();
+                will(returnValue(writer));
             }
         });
         interceptor.intercept(stack, method, null);
@@ -80,14 +89,14 @@ public class AjaxInterceptorTest {
         mockery.assertIsSatisfied();
     }
 
-
     @Test
     public void complainsIfTryingToAjaxANonRemotableMethod() throws IOException, NoSuchMethodException {
         outjecter.include("author", "Guilherme");
         ResourceMethod method = mockery.methodFor(MyComponent.class, "nonAjaxed");
         mockery.checking(new Expectations() {
             {
-                one(info).isAjax(); will(returnValue(true));
+                one(info).isAjax();
+                will(returnValue(true));
             }
         });
         try {

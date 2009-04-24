@@ -1,5 +1,23 @@
 package br.com.caelum.vraptor.ioc;
 
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.not;
+
+import java.io.IOException;
+
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.jmock.Mockery;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
+
 import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
@@ -28,22 +46,6 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.resource.ResourceRegistry;
 import br.com.caelum.vraptor.view.PathResolver;
 import br.com.caelum.vraptor.view.jsp.PageResult;
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.not;
-import org.jmock.Mockery;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.io.File;
-import java.io.IOException;
 
 /**
  * Acceptance test that checks if the container is capable of giving all
@@ -56,7 +58,7 @@ public abstract class GenericContainerTest {
 
     protected Mockery mockery;
 
-    private ContainerProvider provider;
+    protected ContainerProvider provider;
 
     protected ServletContext context;
 
@@ -114,12 +116,14 @@ public abstract class GenericContainerTest {
         this.context = mockery.mock(ServletContext.class);
         configureExpectations();
         provider = getProvider();
-        provider.start(context);
+        // provider.start cannot be executed here! we still need to set expectations on the child
     }
-
+    
     @After
     public void tearDown() {
-        provider.stop();
+        if(provider!=null) {
+            provider.stop();
+        }
     }
 
     private <T> void checkAvailabilityFor(final boolean shouldBeTheSame, final Class<T> component,

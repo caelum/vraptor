@@ -7,6 +7,7 @@ import br.com.caelum.vraptor.ioc.GenericContainerTest;
 import br.com.caelum.vraptor.test.HttpServletRequestMock;
 import br.com.caelum.vraptor.test.HttpSessionMock;
 import org.jmock.Expectations;
+import org.junit.Before;
 import org.junit.Test;
 
 import javax.servlet.http.HttpServletResponse;
@@ -49,5 +50,13 @@ public class PicoProviderTest extends GenericContainerTest {
             throw new RuntimeException(e);
         }
     }
+
+    @Before
+    @Override
+    public void setup() throws IOException {
+        super.setup();
+        provider.start(context);
+    }
+
 
 }

@@ -44,6 +44,7 @@ public class ProviderTest extends GenericContainerTest {
                 will(returnValue("views.properties"));
             }
         });
+        provider.start(context);
     }
 
     protected ContainerProvider getProvider() {

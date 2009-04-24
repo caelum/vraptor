@@ -8,8 +8,8 @@
 <body>
 <h1>This is my dog list</h1>
 <ul>
-  <c:forEach itens="${dogs}" var="dog">
-    <li>${dog.name}</li>
+  <c:forEach items="${dogs}" var="dog">
+    <li>${dog}</li>
   </c:forEach>
 </ul>
 </body>

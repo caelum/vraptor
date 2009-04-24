@@ -15,9 +15,12 @@
     <param-value>br.com.caelum.vraptor.example.spring</param-value>
   </context-param>
 
+  <!-- Not required, but you also could have it -->
+  <!--
   <listener>
     <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
   </listener>
+  -->
 
   <filter>
     <filter-name>vraptor</filter-name>

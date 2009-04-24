@@ -31,9 +31,8 @@ public class ClientsController {
     }
 
     @Path("/clients")
-    public void list() throws ServletException, IOException {
+    public void list() {
         result.include("clients", database.all());
-        result.use(DefaultPageResult.page()).forward("ok");
     }
 
     @Path("/clients/add")

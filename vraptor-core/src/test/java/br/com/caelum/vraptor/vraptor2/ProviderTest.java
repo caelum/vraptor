@@ -1,19 +1,22 @@
 package br.com.caelum.vraptor.vraptor2;
 
-import br.com.caelum.vraptor.core.VRaptorRequest;
-import br.com.caelum.vraptor.ioc.ContainerProvider;
-import br.com.caelum.vraptor.ioc.WhatToDo;
-import br.com.caelum.vraptor.ioc.GenericContainerTest;
-import br.com.caelum.vraptor.test.HttpServletRequestMock;
-import br.com.caelum.vraptor.test.HttpSessionMock;
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
 import org.vraptor.validator.ValidationErrors;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.File;
+import br.com.caelum.vraptor.core.VRaptorRequest;
+import br.com.caelum.vraptor.ioc.ContainerProvider;
+import br.com.caelum.vraptor.ioc.GenericContainerTest;
+import br.com.caelum.vraptor.ioc.WhatToDo;
+import br.com.caelum.vraptor.test.HttpSessionMock;
 
 public class ProviderTest extends GenericContainerTest {
     private int counter;
@@ -27,24 +30,7 @@ public class ProviderTest extends GenericContainerTest {
     public void canProvideVRaptor2SpecificRequestScopedComponents() {
         checkAvailabilityFor(false, ExecuteAndViewInterceptor.class, HibernateValidatorPluginInterceptor.class,
                 ValidatorInterceptor.class, ViewInterceptor.class, ComponentInfoProvider.class,
-                OutjectionInterceptor.class, RequestResult.class, 
-                AjaxInterceptor.class, ValidationErrors.class);
-    }
-
-    @Before
-    @Override
-    public void setup() throws IOException {
-        super.setup();
-        mockery.checking(new Expectations() {
-            {
-                // TODO nasty, should be one()?
-                allowing(context).getRealPath("/WEB-INF/classes/vraptor.xml");
-                will(returnValue("non-existing-vraptor.xml"));
-                allowing(context).getRealPath("/WEB-INF/classes/views.properties");
-                will(returnValue("views.properties"));
-            }
-        });
-        provider.start(context);
+                OutjectionInterceptor.class, RequestResult.class, AjaxInterceptor.class, ValidationErrors.class);
     }
 
     protected ContainerProvider getProvider() {
@@ -53,16 +39,30 @@ public class ProviderTest extends GenericContainerTest {
 
     protected <T> T executeInsideRequest(WhatToDo<T> execution) {
         final HttpSessionMock session = new HttpSessionMock(context, "session" + ++counter);
-        HttpServletRequestMock httpRequest = new HttpServletRequestMock(session);
+        final HttpServletRequest request = mockery.mock(HttpServletRequest.class, "request" + ++counter);
+        mockery.checking(new Expectations() {
+            {
+                allowing(request).getRequestURI(); will(returnValue("what.ever.request.uri"));
+                allowing(request).getSession(); will(returnValue(session));
+                allowing(request).getParameterMap(); will(returnValue(new HashMap()));
+                allowing(request).getParameter("view"); will(returnValue(null));
+            }
+        });
         HttpServletResponse response = mockery.mock(HttpServletResponse.class, "response" + counter);
-        VRaptorRequest request = new VRaptorRequest(context, httpRequest, response);
-        return execution.execute(request, counter);
+        VRaptorRequest webRequest = new VRaptorRequest(context, request, response);
+        return execution.execute(webRequest, counter);
     }
 
+    @Override
     protected void configureExpectations() {
         try {
             mockery.checking(new Expectations() {
                 {
+                    allowing(context).getRealPath("/WEB-INF/classes/vraptor.xml");
+                    will(returnValue("non-existing-vraptor.xml"));
+                    allowing(context).getRealPath("/WEB-INF/classes/views.properties");
+                    will(returnValue("views.properties"));
+
                     File tmpDir = File.createTempFile("tmp_", "_file").getParentFile();
                     File tmp = new File(tmpDir, "_tmp_vraptor_test");
                     tmp.mkdir();
@@ -74,4 +74,5 @@ public class ProviderTest extends GenericContainerTest {
             throw new RuntimeException(e);
         }
     }
+
 }

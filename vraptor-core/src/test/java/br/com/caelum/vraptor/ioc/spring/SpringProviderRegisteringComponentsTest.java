@@ -1,30 +1,21 @@
 package br.com.caelum.vraptor.ioc.spring;
 
-import java.io.IOException;
+import javax.servlet.ServletRequestEvent;
+import javax.servlet.http.HttpServletResponse;
+
+import org.jmock.Expectations;
+import org.springframework.web.context.request.RequestContextListener;
 
 import br.com.caelum.vraptor.core.VRaptorRequest;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
-import br.com.caelum.vraptor.ioc.WhatToDo;
 import br.com.caelum.vraptor.ioc.GenericContainerTest;
+import br.com.caelum.vraptor.ioc.WhatToDo;
 import br.com.caelum.vraptor.test.HttpServletRequestMock;
 import br.com.caelum.vraptor.test.HttpSessionMock;
-import org.jmock.Expectations;
-import org.junit.Before;
-import org.springframework.web.context.request.RequestContextListener;
-
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.ServletRequestEvent;
 
 public class SpringProviderRegisteringComponentsTest extends GenericContainerTest {
     private int counter;
     
-    @Before
-    @Override
-    public void setup() throws IOException {
-        super.setup();
-        provider.start(context);
-    }
-
     protected ContainerProvider getProvider() {
         return new SpringProvider();
     }

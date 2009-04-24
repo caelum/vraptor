@@ -1,18 +1,19 @@
 package br.com.caelum.vraptor.ioc.pico;
 
-import br.com.caelum.vraptor.core.VRaptorRequest;
-import br.com.caelum.vraptor.ioc.ContainerProvider;
-import br.com.caelum.vraptor.ioc.WhatToDo;
-import br.com.caelum.vraptor.ioc.GenericContainerTest;
-import br.com.caelum.vraptor.test.HttpServletRequestMock;
-import br.com.caelum.vraptor.test.HttpSessionMock;
-import org.jmock.Expectations;
-import org.junit.Before;
-import org.junit.Test;
-
-import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
+
+import javax.servlet.http.HttpServletResponse;
+
+import org.jmock.Expectations;
+import org.junit.Test;
+
+import br.com.caelum.vraptor.core.VRaptorRequest;
+import br.com.caelum.vraptor.ioc.ContainerProvider;
+import br.com.caelum.vraptor.ioc.GenericContainerTest;
+import br.com.caelum.vraptor.ioc.WhatToDo;
+import br.com.caelum.vraptor.test.HttpServletRequestMock;
+import br.com.caelum.vraptor.test.HttpSessionMock;
 
 public class PicoProviderTest extends GenericContainerTest {
     private int counter;
@@ -29,14 +30,25 @@ public class PicoProviderTest extends GenericContainerTest {
 
     protected <T> T executeInsideRequest(WhatToDo<T> execution) {
         HttpSessionMock session = new HttpSessionMock(context, "session" + ++counter);
-        HttpServletRequestMock httpRequest = new HttpServletRequestMock(session);
+        HttpServletRequestMock request = new HttpServletRequestMock(session);
         HttpServletResponse response = mockery.mock(HttpServletResponse.class, "response" + counter);
-        VRaptorRequest request = new VRaptorRequest(context, httpRequest, response);
-        return execution.execute(request, counter);
+        configureExpectations(request);
+        VRaptorRequest webRequest = new VRaptorRequest(context, request, response);
+        return execution.execute(webRequest, counter);
     }
 
+    /**
+     * Children providers can set custom expectations on request.
+     */
+    protected void configureExpectations(HttpServletRequestMock request) {
+    }
+
+    /**
+     * Children providers can set custom expectations.
+     */
+    @Override
     protected void configureExpectations() {
-        try {
+       try {
             mockery.checking(new Expectations() {
                 {
                     File tmpDir = File.createTempFile("tmp_", "_file").getParentFile();
@@ -50,13 +62,5 @@ public class PicoProviderTest extends GenericContainerTest {
             throw new RuntimeException(e);
         }
     }
-
-    @Before
-    @Override
-    public void setup() throws IOException {
-        super.setup();
-        provider.start(context);
-    }
-
 
 }

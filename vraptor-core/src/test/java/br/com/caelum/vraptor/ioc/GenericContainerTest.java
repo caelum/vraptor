@@ -116,7 +116,7 @@ public abstract class GenericContainerTest {
         this.context = mockery.mock(ServletContext.class);
         configureExpectations();
         provider = getProvider();
-        // provider.start cannot be executed here! we still need to set expectations on the child
+        provider.start(context);
     }
     
     @After

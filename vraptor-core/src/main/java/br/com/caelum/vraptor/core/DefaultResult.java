@@ -39,6 +39,7 @@ public class DefaultResult implements Result {
     
     private final HttpServletRequest request;
     private final Container container;
+    private boolean went = false;
 
     public DefaultResult(HttpServletRequest request, Container container) {
         this.request = request;
@@ -48,11 +49,16 @@ public class DefaultResult implements Result {
     }
 
     public <T extends View> T use(Class<T> view) {
+        this.went = true;
         return container.instanceFor(view);
     }
     
     public void include(String key, Object value) {
         request.setAttribute(key, value);
+    }
+    
+    public boolean used() {
+        return went;
     }
 
 }

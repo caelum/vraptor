@@ -40,4 +40,9 @@ public interface Result {
 
 	<T extends View> T use(Class<T> view);
 
+	/**
+	 * Whether this result was used.
+	 */
+    boolean used();
+
 }

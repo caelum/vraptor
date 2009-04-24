@@ -33,7 +33,7 @@ public class ClientsController {
     @Path("/clients")
     public void list() throws ServletException, IOException {
         result.include("clients", database.all());
-        result.use(DefaultPageResult.jsp()).forward("ok");
+        result.use(jsp()).forward("ok");
     }
 
     @Path("/clients/add")

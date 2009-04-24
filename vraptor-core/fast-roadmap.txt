@@ -6,16 +6,17 @@ d) OgnlToConverters extract
 - result support (new style, logic or string)
 - new view properties
 (MUST) - setting errors during ognl expression evaluation should be defined as validation errors
-	(MUST) - errors should not be strings
-	(MUST) - support HibernateValidator with i18n messages
-	(MUST) - support i18n messages
-	(MUST) - niceurls with programmatic support
-	(MUST) - niceurls -> path support
-	(MUST) - niceurls with file config support -> path support
-	(MUST) - path annotation with support to value injection (niceurls?)
-	(MUST) - hibernate plugin
-	(MUST) - json output support: three different options
-	(MUST) - better exception handling everywhere
+(MUST) - converter errors should be validation errors
+(MUST) - errors should not be strings
+(MUST) - support HibernateValidator with i18n messages
+(MUST) - support i18n messages
+(MUST) - niceurls with programmatic support
+(MUST) - niceurls -> path support
+(MUST) - niceurls with file config support -> path support
+(MUST) - path annotation with support to value injection (niceurls?)
+(MUST) - hibernate plugin
+(MUST) - json output support: three different options
+(MUST) - better exception handling everywhere
 	- unit test for PicoContainersProvider... every scope should be tested
 OgnlParametersProviderTest:
     @Test

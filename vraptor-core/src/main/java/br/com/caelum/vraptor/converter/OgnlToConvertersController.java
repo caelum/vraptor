@@ -52,39 +52,57 @@ public class OgnlToConvertersController implements TypeConverter {
     @SuppressWarnings("unchecked")
     public Object convertValue(Map context, Object target, Member member, String propertyName, Object value,
             Class toType) {
-        Type genericType;
-        if (member instanceof Field) {
-            Field field = (Field) member;
-            genericType = field.getGenericType();
-        } else if (member instanceof Method) {
-            Method method = (Method) member;
-            Type[] parameterTypes = method.getGenericParameterTypes();
-            if (parameterTypes.length != 1) {
-                // TODO better
-                throw new IllegalArgumentException("Vraptor can only navigate through setters with one parameter, not "
-                        + member + " from " + target.getClass().getName());
-            }
-            genericType = parameterTypes[0];
-        } else if(member==null && target.getClass().isArray()) {
-            genericType = target.getClass().getComponentType();
-        } else {
-            // TODO better
-            throw new IllegalArgumentException("Vraptor can only navigate through getter/setter methods, not " + member
-                    + " from " + target.getClass().getName());
-        }
-        Class type;
-        if (genericType instanceof ParameterizedType) {
-            type = (Class) ((ParameterizedType) genericType).getRawType();
-        } else {
-            type = (Class) genericType;
-        }
+        Type genericType = genericTypeToConvert(target, member);
+        Class type = rawTypeOf(genericType);
         Container container = (Container) context.get(Container.class);
         Converter<?> converter = converters.to(type, container);
         if (converter == null) {
             // TODO better, validation error?
-            throw new IllegalArgumentException("Cannot instantiate a converter to " + type.getName());
+            throw new IllegalArgumentException("Cannot instantiate a converter for type " + type.getName());
         }
         return converter.convert((String) value, type);
+    }
+
+    private Type genericTypeToConvert(Object target, Member member) {
+        if (member instanceof Field) {
+            return extractFieldType(member);
+        } else if (member instanceof Method) {
+            return extractMethodType(target, member);
+        } else if (member == null && target.getClass().isArray()) {
+            return extractArrayType(target);
+        }
+        // TODO better
+        throw new IllegalArgumentException("Vraptor can only navigate through getter/setter methods, not " + member
+                + " from " + target.getClass().getName());
+    }
+
+    @SuppressWarnings("unchecked")
+    private Class rawTypeOf(Type genericType) {
+        if (genericType instanceof ParameterizedType) {
+            return (Class) ((ParameterizedType) genericType).getRawType();
+        }
+        return (Class) genericType;
+    }
+
+    private Type extractArrayType(Object target) {
+        return target.getClass().getComponentType();
+    }
+
+    private Type extractFieldType(Member member) {
+        return ((Field)member).getGenericType();
+    }
+
+    private Type extractMethodType(Object target, Member member) {
+        Type genericType;
+        Method method = (Method) member;
+        Type[] parameterTypes = method.getGenericParameterTypes();
+        if (parameterTypes.length != 1) {
+            // TODO better
+            throw new IllegalArgumentException("Vraptor can only navigate through setters with one parameter, not "
+                    + member + " from " + target.getClass().getName());
+        }
+        genericType = parameterTypes[0];
+        return genericType;
     }
 
 }

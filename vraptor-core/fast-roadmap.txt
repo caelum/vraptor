@@ -1,11 +1,13 @@
 TODO: 33/34/29/31/27/26/24
-- support to viewless
 OgnlParametersProviderTest:
     @Test
     public void canHandleListOfWrapperTypes() {
         Assert.fail("doesnt support list of wrapper types yet");
     }
-- result support (new style, logic or string)
+- support to viewless
+- support client side redirect to logic
+- support client side redirect to a random page
+- factory methods
 - new view properties
 (MUST) - setting errors during ognl expression evaluation should be defined as validation errors
 (MUST) - converter errors should be validation errors

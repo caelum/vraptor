@@ -16,6 +16,7 @@ public class DefaultComponentInfoProvider implements ComponentInfoProvider {
 
     public DefaultComponentInfoProvider(HttpServletRequest request) {
         this.request = request;
+        // ignores if the view should be displayed or not
         if(isAjax()) {
             this.outjecter = new JsonOutjecter();
         } else {

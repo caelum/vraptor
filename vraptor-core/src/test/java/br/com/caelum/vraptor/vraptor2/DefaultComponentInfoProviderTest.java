@@ -30,8 +30,8 @@ public class DefaultComponentInfoProviderTest {
         final HttpServletRequest request = mockery.mock(HttpServletRequest.class);
         mockery.checking(new Expectations() {
             {
-                one(request).getRequestURI(); will(returnValue(""));
-                one(request).getParameter("view"); will(returnValue("ajax"));
+                allowing(request).getRequestURI(); will(returnValue(""));
+                allowing(request).getParameter("view"); will(returnValue("ajax"));
             }
         });
         DefaultComponentInfoProvider info = new DefaultComponentInfoProvider(request);
@@ -44,7 +44,7 @@ public class DefaultComponentInfoProviderTest {
         final HttpServletRequest request = mockery.mock(HttpServletRequest.class);
         mockery.checking(new Expectations() {
             {
-                one(request).getRequestURI(); will(returnValue("somethig.ajax.logic"));
+                allowing(request).getRequestURI(); will(returnValue("somethig.ajax.logic"));
             }
         });
         DefaultComponentInfoProvider info = new DefaultComponentInfoProvider(request);
@@ -58,8 +58,8 @@ public class DefaultComponentInfoProviderTest {
         final HttpServletRequest request = mockery.mock(HttpServletRequest.class);
         mockery.checking(new Expectations() {
             {
-                one(request).getRequestURI(); will(returnValue("somethig.non-ajax.logic"));
-                one(request).getParameter("view"); will(returnValue("xml"));
+                allowing(request).getRequestURI(); will(returnValue("somethig.non-ajax.logic"));
+                allowing(request).getParameter("view"); will(returnValue("xml"));
             }
         });
         DefaultComponentInfoProvider info = new DefaultComponentInfoProvider(request);
@@ -70,7 +70,14 @@ public class DefaultComponentInfoProviderTest {
     @Test
     public void shouldThreatViewlessAsNonDisplayView() throws NoSuchMethodException {
         ResourceMethod method = mockery.methodFor(DefaultComponents.class, "nothing");
-        DefaultComponentInfoProvider info = new DefaultComponentInfoProvider(null);
+        final HttpServletRequest request = mockery.mock(HttpServletRequest.class);
+        mockery.checking(new Expectations() {
+            {
+                allowing(request).getRequestURI(); will(returnValue("somethig.whatever.logic"));
+                allowing(request).getParameter("view"); will(returnValue(null));
+            }
+        });
+        DefaultComponentInfoProvider info = new DefaultComponentInfoProvider(request);
         assertThat(info.shouldShowView(method), is(equalTo(false)));
         mockery.assertIsSatisfied();
     }
@@ -80,8 +87,8 @@ public class DefaultComponentInfoProviderTest {
         final HttpServletRequest request = mockery.mock(HttpServletRequest.class);
         mockery.checking(new Expectations() {
             {
-                one(request).getRequestURI(); will(returnValue("somethig.non-ajax.logic"));
-                one(request).getParameter("view"); will(returnValue("xml"));
+                allowing(request).getRequestURI(); will(returnValue("somethig.non-ajax.logic"));
+                allowing(request).getParameter("view"); will(returnValue("xml"));
             }
         });
         ResourceMethod method = mockery.methodFor(DefaultComponents.class, "showIt");

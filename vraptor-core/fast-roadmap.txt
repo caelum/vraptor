@@ -1,6 +1,5 @@
 TODO: 33/34/29/31/27/26/24
 - support to viewless
-- support for redirect on Result
 OgnlParametersProviderTest:
     @Test
     public void canHandleListOfWrapperTypes() {
@@ -27,6 +26,7 @@ OgnlParametersProviderTest:
 
 
 test and refactor:
+a) caelumweb: use logicredirect that is most advanced
 a) test ListHandler, GenericHandler
 b) EERemoval test
 c) unit test for PicoContainersProvider... every scope should be tested
@@ -68,6 +68,7 @@ kung help
 	- known bug: accessing / when its /index.html.... if its a dir containing an index.html it doesnt work, but if your url is /clients/ it works...
 	- add a @PostConstruct @PreDestroy test for providers 
 	- automatic REDIRECT depending on accepts
+- the most inovative way to redirect: use the parameters yourself
 
 
 
@@ -132,6 +133,8 @@ maybe
 
 
 ONLY AFTER RELEASE
+3.0.1 -  warn on views.properties redirect --> teach how to use the logicresult
+ResourceMethod: two methods with the same name: Log.error
 (3.0.1) ceci: BigInteger converter (+test)... ja existe de BigDecimal (se bobear, ja existe no vraptor2)
 (3.0.1): annotate all converters which do not depend on session or request as @AppScoped
 (3.0.1)ceci: converters: jodatime (ver no vraptor2)
@@ -330,3 +333,4 @@ done:
 1 path annotation default value (without annotation)
 2 path annotation with support to regex (niceurls?)
 - interceptor sequence support
+- support for redirect on Result

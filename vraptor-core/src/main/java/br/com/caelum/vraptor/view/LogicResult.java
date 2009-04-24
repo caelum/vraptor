@@ -27,58 +27,22 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package br.com.caelum.vraptor.view.jsp;
-
-import java.io.IOException;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+package br.com.caelum.vraptor.view;
 
 import br.com.caelum.vraptor.View;
-import br.com.caelum.vraptor.core.RequestInfo;
-import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.view.LogicResult;
-import br.com.caelum.vraptor.view.PathResolver;
 
 /**
- * A jsp view which can be customized by providing your own PathConstructor.
- *
+ * Logic result allows logics to redirect to another logic by invoking the
+ * method itself.
+ * 
  * @author Guilherme Silveira
  */
-public class DefaultPageResult implements View, PageResult {
+public interface LogicResult extends View {
 
-    private final HttpServletRequest request;
-    private final HttpServletResponse response;
-    private final ResourceMethod method;
-    private final PathResolver resolver;
-
-    public DefaultPageResult(HttpServletRequest req, HttpServletResponse res, RequestInfo requestInfo,
-            PathResolver resolver) {
-        this.request = req;
-        this.response = res;
-        this.method = requestInfo.getResourceMethod();
-        this.resolver = resolver;
-    }
-
-    public static Class<DefaultPageResult> page() {
-        return DefaultPageResult.class;
-    }
-    
-    public static Class<LogicResult> logic() {
-        return LogicResult.class;
-    }
-
-    public void forward(String result) throws ServletException, IOException {
-        request.getRequestDispatcher(resolver.pathFor(method, result)).forward(request, response);
-    }
-
-    public void include(String result) throws ServletException, IOException {
-        request.getRequestDispatcher(resolver.pathFor(method, result)).include(request, response);
-    }
-
-    public void include(String key, Object value) {
-        request.setAttribute(key, value);
-    }
+    /**
+     * Returns an instance of that (pre-registered) logic so you can redirect
+     * the request.
+     */
+    <T> T redirectTo(Class<T> type);
 
 }

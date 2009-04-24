@@ -1,10 +1,5 @@
-TODO: 33/34
+TODO: 33/34/29
 - add a @PostConstruct @PreDestroy test for providers 
-- validation with support to proxies
-- cweb: remova all RequiresTRansaction
-- cweb: disponibilidade on ADD PESSOA how works?
-- cweb all tests
-- cweb tem que rodar teste antes de comecar tudo... bizarro
 - check test multipart interceptor
 - support for FORWARD + REDIRECT 
 - result support (new style, logic or string)

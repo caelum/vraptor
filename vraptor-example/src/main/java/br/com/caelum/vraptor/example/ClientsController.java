@@ -43,7 +43,7 @@ import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.example.dao.Database;
 import br.com.caelum.vraptor.validator.Validations;
-import br.com.caelum.vraptor.view.jsp.DefaultPageResult;
+import br.com.caelum.vraptor.view.Results;
 
 @Resource
 public class ClientsController {
@@ -70,21 +70,20 @@ public class ClientsController {
         validator.checking(new Validations() {
             {
                 that(client, is(notNullValue()));
-                // has the same result as:
-                // if(client!=null)
-                // but cuter
                 when(client).isNotNull().then(new Validations() {
                     public void check() {
-                        that(client).getAge();
-                        shouldBe(greaterThan(10));
+                        that(client.getAge(), is(greaterThan(10)));
                     }
                 });
+                // has the same result as:
+                // if(client!=null)
+                // but cuter?!
             }
         });
         database.add(client);
         result.include("client", client);
-        result.use(DefaultPageResult.page()).forward("ok");
-        result.use(DefaultPageResult.logic()).redirectTo(ClientsController.class).list();
+        result.use(Results.page()).forward("ok");
+        result.use(Results.logic()).redirectTo(ClientsController.class).list();
     }
 
     public void sendEmail() {

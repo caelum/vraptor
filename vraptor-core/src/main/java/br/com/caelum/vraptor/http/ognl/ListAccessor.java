@@ -35,6 +35,7 @@ import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 
+import ognl.Evaluation;
 import ognl.ListPropertyAccessor;
 import ognl.OgnlContext;
 import ognl.OgnlException;
@@ -77,26 +78,32 @@ public class ListAccessor extends ListPropertyAccessor {
             // values[i] = 2l in a List<Long>.
             // we all just looooove ognl.
             OgnlContext ctx = (OgnlContext) context;
-            String fieldName = ctx.getCurrentEvaluation().getPrevious().getNode().toString();
-            Object origin = ctx.getCurrentEvaluation().getPrevious().getSource();
-            Method getter = ReflectionBasedNullHandler.findMethod(origin.getClass(),
-                    "get" + Info.capitalize(fieldName), origin.getClass());
-            Type genericType = getter.getGenericReturnType();
-            Class type;
-            if (genericType instanceof ParameterizedType) {
-                type = (Class) ((ParameterizedType) genericType).getActualTypeArguments()[0];
-            } else {
-                type = (Class) genericType;
-            }
-            if (!type.equals(String.class)) {
-                // suckable ognl doesnt support dependency injection or anything
-                // alike... just that suckable context.procedural
-                // programming and ognl live together forever!
-                Container container = (Container) context.get(Container.class);
-                Converter<?> converter = container.instanceFor(Converters.class).to(type, container);
-                Object result = converter.convert((String) value, type);
-                super.setProperty(context, target, key, result);
-                return;
+            // if direct injecting, cannot find out what to do, use string
+            if (ctx.getRoot() != target) {
+                Evaluation eval = ctx.getCurrentEvaluation();
+                Evaluation previous = eval.getPrevious();
+                String fieldName = previous.getNode().toString();
+                Object origin = previous.getSource();
+                Method getter = ReflectionBasedNullHandler.findMethod(origin.getClass(), "get"
+                        + Info.capitalize(fieldName), origin.getClass());
+                Type genericType = getter.getGenericReturnType();
+                Class type;
+                if (genericType instanceof ParameterizedType) {
+                    type = (Class) ((ParameterizedType) genericType).getActualTypeArguments()[0];
+                } else {
+                    type = (Class) genericType;
+                }
+                if (!type.equals(String.class)) {
+                    // suckable ognl doesnt support dependency injection or
+                    // anything
+                    // alike... just that suckable context.procedural
+                    // programming and ognl live together forever!
+                    Container container = (Container) context.get(Container.class);
+                    Converter<?> converter = container.instanceFor(Converters.class).to(type, container);
+                    Object result = converter.convert((String) value, type);
+                    super.setProperty(context, target, key, result);
+                    return;
+                }
             }
         }
         super.setProperty(context, target, key, value);

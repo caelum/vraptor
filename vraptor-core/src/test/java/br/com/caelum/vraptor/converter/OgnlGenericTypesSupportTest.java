@@ -148,5 +148,4 @@ public class OgnlGenericTypesSupportTest {
         mockery.assertIsSatisfied();
     }
 
-
 }

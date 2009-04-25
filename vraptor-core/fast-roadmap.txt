@@ -25,11 +25,12 @@ TODO: 23
 
 test and refactor:
 a) caelumweb: use logicredirect that is most advanced
-a) test ListHandler, GenericHandler
+a) test ListNullHandler, GenericNullHandler
 b) EERemoval test
 c) unit test for PicoContainersProvider... every scope should be tested
 - defaultpathresolver better test
 - new interceptor test 
+- ListAccessorTest for if part
 
 
 

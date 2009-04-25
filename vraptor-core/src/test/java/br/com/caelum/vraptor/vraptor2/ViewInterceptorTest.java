@@ -1,15 +1,7 @@
 package br.com.caelum.vraptor.vraptor2;
 
-import static org.hamcrest.MatcherAssert.*;
-import static org.hamcrest.Matchers.*;
-
-import java.io.IOException;
-
-import javax.servlet.ServletException;
-
 import org.jmock.Expectations;
 import org.jmock.Mockery;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -27,7 +19,7 @@ public class ViewInterceptorTest {
     private ResourceMethod method;
 
     @Before
-    public void setup() throws NoSuchMethodException {
+    public void setup() {
         this.mockery = new Mockery();
         this.requestResult = new RequestResult();
         this.requestResult.setValue("ok");
@@ -38,7 +30,7 @@ public class ViewInterceptorTest {
     }
 
     @Test
-    public void shouldForward() throws SecurityException, NoSuchMethodException, InterceptionException, IOException, ServletException {
+    public void shouldForward() throws SecurityException, InterceptionException {
         mockery.checking(new Expectations() {
             {
                 one(info).shouldShowView(method); will(returnValue(true));
@@ -48,34 +40,14 @@ public class ViewInterceptorTest {
         interceptor.intercept(null, this.method, null);
         mockery.assertIsSatisfied();
     }
-    class MyThrowable extends Throwable {
+    class MyThrowable extends RuntimeException{
         private static final long serialVersionUID = 1L;
         
     }
 
-    @Test
-    public void shouldThrowCauseIfAnErrorOccurs() throws SecurityException, NoSuchMethodException, IOException, ServletException {
-        final Throwable cause = new MyThrowable();
-        mockery.checking(new Expectations() {
-            {
-                one(info).shouldShowView(method); will(returnValue(true));
-                one(result).forward("ok"); will(throwException(new ServletException(cause)));
-            }
-        });
-        try {
-            interceptor.intercept(null, method, null);
-        } catch (InterceptionException e) {
-            assertThat(e.getCause().getCause().getClass(), is(typeCompatibleWith(MyThrowable.class)));
-            mockery.assertIsSatisfied();
-            return;
-        }
-        // cannot use annotation due to assert on cause type
-        Assert.fail("Exception expected");
-    }
-
 
     @Test
-    public void doesNothingInAViewlessMethodResource() throws SecurityException, NoSuchMethodException, InterceptionException, IOException, ServletException {
+    public void doesNothingInAViewlessMethodResource() throws SecurityException, InterceptionException {
         mockery.checking(new Expectations() {
             {
                 one(info).shouldShowView(method); will(returnValue(false));

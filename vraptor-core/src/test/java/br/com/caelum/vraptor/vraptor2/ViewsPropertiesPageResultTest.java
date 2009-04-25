@@ -1,14 +1,7 @@
 package br.com.caelum.vraptor.vraptor2;
 
-import br.com.caelum.vraptor.core.RequestInfo;
-import br.com.caelum.vraptor.resource.Resource;
-import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.view.PathResolver;
-import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.junit.Before;
-import org.junit.Test;
-import org.vraptor.annotations.Component;
+import java.io.IOException;
+import java.util.HashMap;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -16,8 +9,18 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
-import java.util.HashMap;
+
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.junit.Before;
+import org.junit.Test;
+import org.vraptor.annotations.Component;
+
+import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.resource.Resource;
+import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.view.PathResolver;
+import br.com.caelum.vraptor.view.ResultException;
 
 public class ViewsPropertiesPageResultTest {
 
@@ -151,7 +154,7 @@ public class ViewsPropertiesPageResultTest {
         mockery.assertIsSatisfied();
     }
 
-    @Test(expected = ServletException.class)
+    @Test(expected = ResultException.class)
     public void expressionProblemThrowsExceptionAndDoesNotRedirect() throws ServletException, IOException, NoSuchMethodException {
         mockery.checking(new Expectations() {
             {

@@ -333,3 +333,4 @@ done:
 - interceptor sequence support
 - support for redirect on Result
 - support to viewless
+- support server side redirect to a random url

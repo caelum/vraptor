@@ -1,20 +1,17 @@
 package br.com.caelum.vraptor.validator;
 
-import java.io.IOException;
-import java.util.List;
-
-import javax.servlet.ServletException;
-
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.view.jsp.PageResult;
 
+import java.util.List;
+
 /**
  * The default validator implementation.
- * 
+ *
  * @author Guilherme Silveira
  */
 public class DefaultValidator implements Validator {
-    
+
     private final PageResult result;
 
     public DefaultValidator(PageResult result) {
@@ -23,17 +20,11 @@ public class DefaultValidator implements Validator {
 
     public void checking(Validations validations) {
         List<String> errors = validations.getErrors();
-        if(!errors.isEmpty()) {
-            try {
-                result.include("errors", errors);
-                result.forward("invalid");
-                // finished just fine
-                throw new ValidationError(errors);
-            } catch (ServletException e) {
-                throw new InvalidValidationProcess(e);
-            } catch (IOException e) {
-                throw new InvalidValidationProcess(e);
-            }
+        if (!errors.isEmpty()) {
+            result.include("errors", errors);
+            result.forward("invalid");
+            // finished just fine
+            throw new ValidationError(errors);
         }
     }
 

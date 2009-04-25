@@ -40,9 +40,15 @@ import br.com.caelum.vraptor.View;
 public interface LogicResult extends View {
 
     /**
-     * Returns an instance of that (pre-registered) logic so you can redirect
-     * the request.
+     * Returns an instance of that (pre-registered) logic so you can server side
+     * redirect the request.
      */
-    <T> T redirectTo(Class<T> type);
+    <T> T redirectServerTo(Class<T> type);
+
+    /**
+     * Returns an instance of that (pre-registered) logic so you can client side
+     * redirect the request.
+     */
+    <T> T redirectClientTo(Class<T> type);
 
 }

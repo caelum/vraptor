@@ -77,7 +77,7 @@ public class ClientsController {
         database.add(client);
         result.include("client", client);
         result.use(Results.page()).forward("ok");
-        result.use(Results.logic()).redirectTo(ClientsController.class).list();
+        result.use(Results.logic()).redirectServerTo(ClientsController.class).list();
     }
 
     public void sendEmail() {

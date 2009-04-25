@@ -36,7 +36,7 @@ public class DefaultLogicResultTest {
                 one(container).instanceFor(MyComponent.class); will(returnValue(instance));
             }
         });
-        MyComponent component = logicResult.redirectTo(MyComponent.class);
+        MyComponent component = logicResult.redirectServerTo(MyComponent.class);
         assertThat(component, is(equalTo(instance)));
         mockery.assertIsSatisfied();
     }

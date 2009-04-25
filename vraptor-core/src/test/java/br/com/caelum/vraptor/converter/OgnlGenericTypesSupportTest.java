@@ -94,8 +94,17 @@ public class OgnlGenericTypesSupportTest {
             return ids;
         }
 
+        public void setEyeColorCode(List<Long> eyeColorCode) {
+            this.eyeColorCode = eyeColorCode;
+        }
+
+        public List<Long> getEyeColorCode() {
+            return eyeColorCode;
+        }
+
         private List<Leg> legs;
         private Long[] ids;
+        private List<Long> eyeColorCode;
     }
 
     public static class Leg {
@@ -128,5 +137,15 @@ public class OgnlGenericTypesSupportTest {
         assertThat(myCat.ids[1], is(equalTo(5L)));
         mockery.assertIsSatisfied();
     }
+
+    @Test
+    public void canInstantiateAndPopulateAListOfWrappers() throws OgnlException {
+        Ognl.setValue("eyeColorCode[0]", context, myCat, "3");
+        assertThat(myCat.eyeColorCode.get(0), is(equalTo(3L)));
+        Ognl.setValue("eyeColorCode[1]", context, myCat, "5");
+        assertThat(myCat.eyeColorCode.get(1), is(equalTo(5L)));
+        mockery.assertIsSatisfied();
+    }
+
 
 }

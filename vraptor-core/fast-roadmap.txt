@@ -1,10 +1,15 @@
-TODO: 33/34/29/31/27/26/24
+TODO: 27
 OgnlParametersProviderTest:
     @Test
     public void canHandleListOfWrapperTypes() {
         Assert.fail("doesnt support list of wrapper types yet");
     }
 - support to viewless
+
+
+
+
+
 - support client side redirect to logic
 - support client side redirect to a random page
 - factory methods
@@ -25,7 +30,9 @@ OgnlParametersProviderTest:
 (MUST) - better exception handling everywhere
 (MUST) - Map support
 - Set support
-
+- the redirect proxy/direct way: use the parameters yourself
+- automatic REDIRECT depending on accepts
+- result support to another component (client side)
 
 test and refactor:
 a) caelumweb: use logicredirect that is most advanced
@@ -66,11 +73,9 @@ site docs (prior to release)
 - containers now can be @Request, @Session, @App scoped
 
 kung help
-	- result support to another component
 	- known bug: accessing / when its /index.html.... if its a dir containing an index.html it doesnt work, but if your url is /clients/ it works...
 	- add a @PostConstruct @PreDestroy test for providers 
-	- automatic REDIRECT depending on accepts
-- the most inovative way to redirect: use the parameters yourself
+	- support new provider style
 
 
 

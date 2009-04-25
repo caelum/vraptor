@@ -1,6 +1,5 @@
-TODO: 21
+TODO: 20
 - support client side redirect to logic
-- support client side redirect to a random page
 (MUST) - setting errors during ognl expression evaluation should be defined as validation errors
 (MUST) - converter errors should be validation errors
 (MUST) - errors should not be strings

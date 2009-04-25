@@ -2,7 +2,6 @@ TODO: 23
 - support client side redirect to logic
 - support client side redirect to a random page
 - factory methods for results
-- remove proxy validation
 - new view properties
 (MUST) - setting errors during ognl expression evaluation should be defined as validation errors
 (MUST) - converter errors should be validation errors
@@ -79,6 +78,7 @@ kung help
 
 
 right before release
+	- check all TODOS and do something about them
 	go through every request component and check if it really needs to be request based
 	verify org.apache.log4j logs -> sl4j
 	copyright in all files check
@@ -129,6 +129,8 @@ maybe
 
 
 
+right before ANY release
+	- check all TODOS and do something about them
 
 ONLY AFTER RELEASE
 3.0.1 -  warn on views.properties redirect --> teach how to use the logicresult
@@ -158,7 +160,6 @@ ResourceMethod: two methods with the same name: Log.error
 - CachedConverters and others should neve register(Class), they should do it at startup and clone those pico instances if faster... check it!
 - all converter erros messages should contain the original value between '' so its clear in the message if it was empty (or null)
 - test that checks that the main PicoContainer is not registered... and the converters interface is also not registered so it doesnt give the same converter to two different requests
-- check all TODOS and do something about them
 - allow private/protected constructors (search for every newInstance with getConstructor and setAccessible them, work it out with pico/mirror and so on)
 - allow private/protected getters/setters
 - method addAsNext on InterceptorStack could have another name, could have been another interface (same implmementation)?
@@ -334,3 +335,5 @@ done:
 - support for redirect on Result
 - support to viewless
 - support server side redirect to a random url
+- cute validation methods
+- cute validation should methods

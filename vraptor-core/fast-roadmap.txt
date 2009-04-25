@@ -1,4 +1,4 @@
-TODO: 20
+TODO: 19
 - support client side redirect to logic
 (MUST) - setting errors during ognl expression evaluation should be defined as validation errors
 (MUST) - converter errors should be validation errors
@@ -6,7 +6,6 @@ TODO: 20
 (MUST) - support HibernateValidator with i18n messages
 (MUST) - support i18n messages
 
-- new view properties
 (MUST) - niceurls with programmatic support
 (MUST) - niceurls -> path support
 (MUST) - niceurls with file config support -> path support

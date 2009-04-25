@@ -121,7 +121,7 @@ public class OgnlGenericTypesSupportTest {
     }
 
     @Test
-    public void isCapableOfInstantiatingStringsInAListSettingItsInternalValue() throws OgnlException {
+    public void isCapableOfInstantiatingStringsInAListSettingItsInternalValueWithoutInvokingConverters() throws OgnlException {
         Ognl.setValue("legLength[0]", context, myCat, "small");
         List<String> legs = myCat.legLength;
         assertThat(legs.get(0), is(equalTo("small")));

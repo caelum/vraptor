@@ -65,7 +65,8 @@ public class ListAccessor extends ListPropertyAccessor {
 
     @SuppressWarnings("unchecked")
     public void setProperty(Map context, Object target, Object key, Object value) throws OgnlException {
-        // code comments by Guilherme Silveira in a moment of rage agains ognl code
+        // code comments by Guilherme Silveira in a moment of rage agains ognl
+        // code
         List<?> list = (List<?>) target;
         int index = (Integer) key;
         for (int i = list.size(); i <= index; i++) {
@@ -87,16 +88,18 @@ public class ListAccessor extends ListPropertyAccessor {
             } else {
                 type = (Class) genericType;
             }
-            // suckable ognl doesnt support dependency injection or anything
-            // alike... just that suckable context. procedural programming and
-            // ognl live forever
-            Container container = (Container) context.get(Container.class);
-            Converter<?> converter = container.instanceFor(Converters.class).to(type, container);
-            Object result = converter.convert((String) value, type);
-            super.setProperty(context, target, key, result);
-        } else {
-            super.setProperty(context, target, key, value);
+            if (!type.equals(String.class)) {
+                // suckable ognl doesnt support dependency injection or anything
+                // alike... just that suckable context.procedural
+                // programming and ognl live together forever!
+                Container container = (Container) context.get(Container.class);
+                Converter<?> converter = container.instanceFor(Converters.class).to(type, container);
+                Object result = converter.convert((String) value, type);
+                super.setProperty(context, target, key, result);
+                return;
+            }
         }
+        super.setProperty(context, target, key, value);
     }
 
 }

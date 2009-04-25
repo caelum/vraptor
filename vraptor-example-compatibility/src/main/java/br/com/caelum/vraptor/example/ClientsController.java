@@ -27,11 +27,8 @@
  */
 package br.com.caelum.vraptor.example;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.servlet.ServletException;
 
 import org.vraptor.annotations.Component;
 
@@ -44,11 +41,11 @@ public class ClientsController {
     	return clients;
     }
     
-    public void list() throws ServletException, IOException {
+    public void list() {
         System.out.println("Listing");
     }
 
-    public void add(Client client) throws ServletException, IOException {
+    public void add(Client client) {
         clients.add(client);
     }
 }

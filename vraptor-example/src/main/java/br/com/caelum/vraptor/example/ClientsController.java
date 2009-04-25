@@ -32,11 +32,6 @@ package br.com.caelum.vraptor.example;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
-
-import java.io.IOException;
-
-import javax.servlet.ServletException;
-
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
@@ -66,7 +61,7 @@ public class ClientsController {
     }
 
     @Path("/clients/add")
-    public void add(final Client client) throws ServletException, IOException {
+    public void add(final Client client) {
         validator.checking(new Validations() {
             {
                 // has the same result as:

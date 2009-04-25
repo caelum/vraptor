@@ -30,6 +30,7 @@
 package br.com.caelum.vraptor.example;
 
 import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
 import java.io.IOException;
@@ -68,8 +69,13 @@ public class ClientsController {
     public void add(final Client client) throws ServletException, IOException {
         validator.checking(new Validations() {
             {
-                that(client); shouldBe(notNullValue());
-                that(client).getAge(); shouldBe(greaterThan(10));
+                that(client, is(notNullValue()));
+                // has the same result as:
+                // if(client!=null)
+                // but cuter
+                when(client).isNotNull(new Validations() {{
+                    that(client).getAge(); shouldBe(greaterThan(10));
+                }});
             }
         });
         database.add(client);

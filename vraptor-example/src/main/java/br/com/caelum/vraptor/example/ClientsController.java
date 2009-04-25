@@ -79,6 +79,6 @@ public class ClientsController {
     }
 
     public void sendEmail() {
-    	result.use(EmptyResult.class).doNothing();
+    	result.use(EmptyResult.class);
     }
 }

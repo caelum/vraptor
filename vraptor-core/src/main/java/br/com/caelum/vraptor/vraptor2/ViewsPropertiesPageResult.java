@@ -1,11 +1,12 @@
 package br.com.caelum.vraptor.vraptor2;
 
-import br.com.caelum.vraptor.core.RequestInfo;
-import br.com.caelum.vraptor.resource.Resource;
-import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.view.PathResolver;
-import br.com.caelum.vraptor.view.ResultException;
-import br.com.caelum.vraptor.view.jsp.PageResult;
+import java.io.IOException;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vraptor.core.WebRequest;
@@ -15,11 +16,12 @@ import org.vraptor.introspector.ExpressionEvaluationException;
 import org.vraptor.introspector.ExpressionEvaluator;
 import org.vraptor.scope.DefaultLogicRequest;
 
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.resource.Resource;
+import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.view.PathResolver;
+import br.com.caelum.vraptor.view.ResultException;
+import br.com.caelum.vraptor.view.jsp.PageResult;
 
 public class ViewsPropertiesPageResult implements PageResult {
 
@@ -92,6 +94,14 @@ public class ViewsPropertiesPageResult implements PageResult {
 
     public void include(String key, Object value) {
         request.setAttribute(key, value);
+    }
+
+    public void redirect(String url) {
+        try {
+            response.sendRedirect(url);
+        } catch (IOException e) {
+            throw new ResultException(e);
+        }
     }
 
 }

@@ -29,12 +29,14 @@
  */
 package br.com.caelum.vraptor.view.jsp;
 
+import br.com.caelum.vraptor.View;
+
 /**
  * A common forward/redirect/include page result.
  * 
  * @author Guilherme Silveira
  */
-public interface PageResult {
+public interface PageResult extends View {
 
     /**
      * Server side forwarding to a result.

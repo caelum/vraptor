@@ -73,9 +73,12 @@ public class ClientsController {
                 // has the same result as:
                 // if(client!=null)
                 // but cuter
-                when(client).isNotNull(new Validations() {{
-                    that(client).getAge(); shouldBe(greaterThan(10));
-                }});
+                when(client).isNotNull().then(new Validations() {
+                    public void check() {
+                        that(client).getAge();
+                        shouldBe(greaterThan(10));
+                    }
+                });
             }
         });
         database.add(client);
@@ -85,6 +88,6 @@ public class ClientsController {
     }
 
     public void sendEmail() {
-    	result.use(EmptyResult.class);
+        result.use(EmptyResult.class);
     }
 }

@@ -38,11 +38,11 @@ public class Validations {
 
     private final List<String> errors = new ArrayList<String>();
 
-    public <T> void that(T id, Matcher<T> matcher) {
-        that(null, id, matcher);
+    public <T> boolean that(T id, Matcher<T> matcher) {
+        return that(null, id, matcher);
     }
 
-    public <T> void that(String reason, T actual, Matcher<? super T> matcher) {
+    public <T> boolean that(String reason, T actual, Matcher<? super T> matcher) {
         if (!matcher.matches(actual)) {
             if (reason != null) {
                 errors.add(reason);
@@ -51,7 +51,9 @@ public class Validations {
                 description.appendDescriptionOf(matcher);
                 errors.add(description.toString());
             }
+            return false;
         }
+        return true;
     }
 
     public void that(String reason, boolean assertion) {
@@ -68,7 +70,7 @@ public class Validations {
         this.errors.addAll(errors);
     }
 
-    public <T> If<T> when(T instance) {
+    public <T> If<T> that(T instance) {
         return new If<T>(instance, this);
     }
 

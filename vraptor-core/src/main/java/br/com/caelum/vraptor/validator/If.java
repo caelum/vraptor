@@ -27,11 +27,14 @@
  */
 package br.com.caelum.vraptor.validator;
 
+import org.hamcrest.Matcher;
+
 public class If<T> {
 
     @SuppressWarnings("unchecked")
     private static final Then NOTHING = new Then(new Validations()) {
-        public void then(Validations validations) {
+        @Override
+        public void otherwise(Validations validations) {
             // does nothing
         }
     };
@@ -45,8 +48,8 @@ public class If<T> {
     }
 
     @SuppressWarnings("unchecked")
-    public Then<T> isNotNull() {
-        if (instance == null) {
+    public Then <T> shouldBe(Matcher matcher) {
+        if(!actual.that(instance, matcher)) {
             return NOTHING;
         }
         return new Then<T>(actual);

@@ -29,8 +29,8 @@ package br.com.caelum.vraptor.validator;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
 import org.junit.Test;
@@ -51,7 +51,7 @@ public class ValidationsTest {
     public void canHandleTheSingleCheck() {
         Client guilherme = new Client();
         Validations validations = new Validations();
-        validations.that(guilherme, is(notNullValue()));
+        validations.that(guilherme).shouldBe(notNullValue());
         assertThat(validations.getErrors(), hasSize(0));
     }
 
@@ -59,7 +59,7 @@ public class ValidationsTest {
     public void canHandleTheSingleCheckWhenProblematic() {
         Client guilherme = null;
         Validations validations = new Validations();
-        validations.that(guilherme, is(notNullValue()));
+        validations.that(guilherme).shouldBe(notNullValue());
         assertThat(validations.getErrors(), hasSize(1));
     }
 
@@ -68,7 +68,7 @@ public class ValidationsTest {
         Client guilherme = new Client();
         guilherme.age = 22;
         Validations validations = new Validations();
-        validations.that(guilherme.getAge(), is(greaterThan(17)));
+        validations.that(guilherme.getAge()).shouldBe(greaterThan(17));
         assertThat(validations.getErrors(), hasSize(0));
     }
 
@@ -76,12 +76,27 @@ public class ValidationsTest {
     public void canIgnoreInternalPrimitiveValidationIfAlreadyNull() {
         final Client guilherme = null;
         Validations validations = new Validations();
-        validations.when(guilherme).isNotNull().then(new Validations() {
+        validations.that(guilherme).shouldBe(notNullValue()).otherwise(new Validations() {
             public void check(){
-                that(guilherme.getAge(), is(greaterThan(17)));
+                that(guilherme.getAge()).shouldBe(greaterThan(17));
+                that(guilherme.getAge()).shouldBe(greaterThanOrEqualTo(12));
             }
         });
-        assertThat(validations.getErrors(), hasSize(0));
+        assertThat(validations.getErrors(), hasSize(1));
+    }
+
+    @Test
+    public void executesInternalValidationIfSuccessful() {
+        final Client guilherme = new Client();
+        guilherme.age = 10;
+        Validations validations = new Validations();
+        validations.that(guilherme).shouldBe(notNullValue()).otherwise(new Validations() {
+            public void check(){
+                that(guilherme.getAge()).shouldBe(greaterThan(17));
+                that(guilherme.getAge()).shouldBe(greaterThanOrEqualTo(12));
+            }
+        });
+        assertThat(validations.getErrors(), hasSize(2));
     }
 
     @Test
@@ -89,7 +104,7 @@ public class ValidationsTest {
         Client guilherme = new Client();
         guilherme.age = 15;
         Validations validations = new Validations();
-        validations.that(guilherme.getAge(), is(greaterThan(17)));
+        validations.that(guilherme.getAge()).shouldBe(greaterThan(17));
         assertThat(validations.getErrors(), hasSize(1));
     }
 

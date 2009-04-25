@@ -69,15 +69,14 @@ public class ClientsController {
     public void add(final Client client) throws ServletException, IOException {
         validator.checking(new Validations() {
             {
-                that(client, is(notNullValue()));
-                when(client).isNotNull().then(new Validations() {
+                // has the same result as:
+                // if(client!=null)
+                // but cuter?!
+                that(client).shouldBe(notNullValue()).otherwise(new Validations() {
                     public void check() {
                         that(client.getAge(), is(greaterThan(10)));
                     }
                 });
-                // has the same result as:
-                // if(client!=null)
-                // but cuter?!
             }
         });
         database.add(client);

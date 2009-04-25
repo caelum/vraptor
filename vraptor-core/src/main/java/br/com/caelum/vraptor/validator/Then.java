@@ -35,7 +35,7 @@ public class Then<T> {
         this.actual = actual;
     }
 
-    public void then(Validations validations) {
+    public void otherwise(Validations validations) {
         validations.check();
         actual.and(validations.getErrors());
     }

@@ -27,44 +27,31 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package br.com.caelum.vraptor.core;
+package br.com.caelum.vraptor.view;
 
-import br.com.caelum.vraptor.InterceptionException;
-import br.com.caelum.vraptor.Interceptor;
-import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.view.Results;
-import br.com.caelum.vraptor.vraptor2.RequestResult;
-
-import javax.servlet.http.HttpServletRequest;
+import br.com.caelum.vraptor.view.jsp.DefaultPageResult;
 
 /**
- * Intercepts the request and forwards to the default view if no view was
- * rendered so far.
- *
+ * Some common results for most web based logics.
+ * 
  * @author Guilherme Silveira
  */
-public class ForwardToDefaultViewInterceptor implements Interceptor {
-    private final Result result;
-    private final HttpServletRequest request;
-    private final RequestResult methodResult;
+public class Results {
 
-    public ForwardToDefaultViewInterceptor(Result result, HttpServletRequest request, RequestResult methodResult) {
-        this.result = result;
-        this.request = request;
-        this.methodResult = methodResult;
+    /**
+     * Offers server side forward and include for web pages.<br>
+     * Should be used only with end results (not logics), otherwise you might
+     * achieve the server-redirect-hell (f5 problem) issue.
+     */
+    public static Class<DefaultPageResult> page() {
+        return DefaultPageResult.class;
     }
 
-    public boolean accepts(ResourceMethod method) {
-        return true;
-    }
-
-    public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
-            throws InterceptionException {
-        if (result.used()) {
-            return;
-        }
-        result.use(Results.page()).forward(methodResult.getValue());
+    /**
+     * Server and client side forward to another logic.
+     */
+    public static Class<LogicResult> logic() {
+        return LogicResult.class;
     }
 
 }

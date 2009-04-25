@@ -30,6 +30,7 @@
 package br.com.caelum.vraptor.view;
 
 import br.com.caelum.vraptor.view.jsp.DefaultPageResult;
+import br.com.caelum.vraptor.view.jsp.PageResult;
 
 /**
  * Some common results for most web based logics.
@@ -43,7 +44,7 @@ public class Results {
      * Should be used only with end results (not logics), otherwise you might
      * achieve the server-redirect-hell (f5 problem) issue.
      */
-    public static Class<DefaultPageResult> page() {
+    public static Class<? extends PageResult> page() {
         return DefaultPageResult.class;
     }
 

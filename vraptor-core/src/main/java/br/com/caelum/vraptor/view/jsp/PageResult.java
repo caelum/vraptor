@@ -50,5 +50,11 @@ public interface PageResult {
      * Includes an object in your result.
      */
     public abstract void include(String key, Object value);
+    
+    /**
+     * Client side redirect to an specific url.
+     * @param url
+     */
+    void redirect(String url);
 
 }

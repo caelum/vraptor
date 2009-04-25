@@ -42,7 +42,7 @@ import br.com.caelum.vraptor.view.PathResolver;
 import br.com.caelum.vraptor.view.ResultException;
 
 /**
- * A jsp view which can be customized by providing your own PathConstructor.
+ * Default page result implementation.
  *
  * @author Guilherme Silveira
  */
@@ -83,6 +83,14 @@ public class DefaultPageResult implements View, PageResult {
 
     public void include(String key, Object value) {
         request.setAttribute(key, value);
+    }
+
+    public void redirect(String url) {
+        try {
+            response.sendRedirect(url);
+        } catch (IOException e) {
+            throw new ResultException(e);
+        }
     }
 
 }

@@ -29,11 +29,19 @@
  */
 package br.com.caelum.vraptor.http.ognl;
 
+import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 
 import ognl.ListPropertyAccessor;
+import ognl.OgnlContext;
 import ognl.OgnlException;
+import br.com.caelum.vraptor.Converter;
+import br.com.caelum.vraptor.core.Converters;
+import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor.vraptor2.Info;
 
 /**
  * This list accessor is responsible for setting null values up to the list
@@ -47,22 +55,48 @@ import ognl.OgnlException;
 public class ListAccessor extends ListPropertyAccessor {
 
     @SuppressWarnings("unchecked")
-    public Object getProperty(Map context, Object target, Object object) throws OgnlException {
+    public Object getProperty(Map context, Object target, Object value) throws OgnlException {
         try {
-            return super.getProperty(context, target, object);
+            return super.getProperty(context, target, value);
         } catch (IndexOutOfBoundsException ex) {
             return null;
         }
     }
 
     @SuppressWarnings("unchecked")
-    public void setProperty(Map context, Object target, Object key, Object parent) throws OgnlException {
+    public void setProperty(Map context, Object target, Object key, Object value) throws OgnlException {
+        // code comments by Guilherme Silveira in a moment of rage agains ognl code
         List<?> list = (List<?>) target;
         int index = (Integer) key;
         for (int i = list.size(); i <= index; i++) {
             list.add(null);
         }
-        super.setProperty(context, target, key, parent);
+        if (value instanceof String) {
+            // it might be that suckable ognl did not call convert, i.e.: on the
+            // values[i] = 2l in a List<Long>.
+            // we all just looooove ognl.
+            OgnlContext ctx = (OgnlContext) context;
+            String fieldName = ctx.getCurrentEvaluation().getPrevious().getNode().toString();
+            Object origin = ctx.getCurrentEvaluation().getPrevious().getSource();
+            Method getter = ReflectionBasedNullHandler.findMethod(origin.getClass(),
+                    "get" + Info.capitalize(fieldName), origin.getClass());
+            Type genericType = getter.getGenericReturnType();
+            Class type;
+            if (genericType instanceof ParameterizedType) {
+                type = (Class) ((ParameterizedType) genericType).getActualTypeArguments()[0];
+            } else {
+                type = (Class) genericType;
+            }
+            // suckable ognl doesnt support dependency injection or anything
+            // alike... just that suckable context. procedural programming and
+            // ognl live forever
+            Container container = (Container) context.get(Container.class);
+            Converter<?> converter = container.instanceFor(Converters.class).to(type, container);
+            Object result = converter.convert((String) value, type);
+            super.setProperty(context, target, key, result);
+        } else {
+            super.setProperty(context, target, key, value);
+        }
     }
 
 }

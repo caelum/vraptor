@@ -1,18 +1,7 @@
-TODO: 27
-OgnlParametersProviderTest:
-    @Test
-    public void canHandleListOfWrapperTypes() {
-        Assert.fail("doesnt support list of wrapper types yet");
-    }
-- support to viewless
-
-
-
-
-
+TODO: 23
 - support client side redirect to logic
 - support client side redirect to a random page
-- factory methods
+- factory methods for results
 - new view properties
 (MUST) - setting errors during ognl expression evaluation should be defined as validation errors
 (MUST) - converter errors should be validation errors
@@ -341,3 +330,4 @@ done:
 2 path annotation with support to regex (niceurls?)
 - interceptor sequence support
 - support for redirect on Result
+- support to viewless

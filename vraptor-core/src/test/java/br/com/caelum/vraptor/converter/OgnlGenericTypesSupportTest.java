@@ -51,6 +51,7 @@ public class OgnlGenericTypesSupportTest {
         this.removal = new EmptyElementsRemoval();
         mockery.checking(new Expectations() {
             {
+                allowing(container).instanceFor(Converters.class); will(returnValue(converters));
                 allowing(converters).to(Long.class, container); will(returnValue(new LongConverter()));
                 allowing(container).instanceFor(EmptyElementsRemoval.class); will(returnValue(removal));
             }

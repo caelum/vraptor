@@ -61,8 +61,6 @@ public class ReflectionBasedNullHandler extends ObjectNullHandler {
         int indexInParent = ctx.getCurrentEvaluation().getNode().getIndexInParent();
         int maxIndex = ctx.getRootEvaluation().getNode().jjtGetNumChildren() - 1;
 
-        // TODO all those ifs should be methods in mapped types
-
         if (!(indexInParent != -1 && indexInParent < maxIndex)) {
             return null;
         }

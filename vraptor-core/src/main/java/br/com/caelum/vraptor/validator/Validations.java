@@ -68,4 +68,13 @@ public class Validations {
         this.errors.addAll(errors);
     }
 
+    public <T> If<T> when(T instance) {
+        return new If<T>(instance, this);
+    }
+
+    /**
+     * Can be overriden to add extra validations processes.
+     */
+    public void check() {
+    }
 }

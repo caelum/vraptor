@@ -90,10 +90,12 @@ public class DefaultResourceAndMethodLookupTest {
         public static void staticMe() {
         }
     }
+    static class NiceClients extends Clients {
+    }
 
     @Test
     public void shouldFindAPublicNonStaticNonAnnotatedMethodWithTheSameNameAsTheGivenId() throws SecurityException, NoSuchMethodException {
-        ResourceMethod method = lookuper.methodFor("/add", "POST");
+        ResourceMethod method = lookuper.methodFor("/Clients/add", "POST");
         assertThat(method, is(VRaptorMatchers.resourceMethod(Clients.class.getMethod("add"))));
         mockery.assertIsSatisfied();
     }

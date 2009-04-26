@@ -128,7 +128,7 @@ public class DefaultResourceAndMethodLookupTest {
     }
 
     @Test
-    public void shouldIgnoreAResourceWithTheWrongWebMethod() throws SecurityException, NoSuchMethodException {
+    public void shouldIgnoreAResourceWithTheWrongWebMethod() throws SecurityException {
         ResourceMethod method = lookuper.methodFor("/clients/remove", "POST");
         assertThat(method, is(Matchers.nullValue()));
         mockery.assertIsSatisfied();

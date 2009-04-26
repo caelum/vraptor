@@ -1,8 +1,5 @@
-TODO: 19
-- DefaultResourceMethodLookup should cache methods so it doesnt query every time
-- DefaultResourceRegistry cache
+TODO: 20
 - support client side redirect to logic
-MLBuilder: rename
 REAL TEST: is default @Path working correctly?
 (MUST) - setting errors during ognl expression evaluation should be defined as validation errors
 (MUST) - converter errors should be validation errors
@@ -31,6 +28,9 @@ c) unit test for PicoContainersProvider... every scope should be tested
 - defaultpathresolver better test
 - new interceptor test 
 - ListAccessorTest for if part
+- DefaultResourceMethodLookup should cache methods so it doesnt query every time
+- DefaultResourceRegistry cache
+MethodLookupBuilder: rename
 
 
 
@@ -97,7 +97,6 @@ right before release
 	official support by caelum
 
 maybe
-	better than vraptor2: support for inheritance
 - Hibernate.validate(Object instance, String ... fields)
 - Hibernate.validate(Object instance) : Proxy.getFirst(), Proxy.getSecond() will hibernate validate those fields
 
@@ -279,6 +278,7 @@ OgnlParametersProviderTest:
 
 
 done:
+- better than vraptor2: support for inheritance
 - support @Path
 - ant build run tests
 - cobertura report

@@ -4,8 +4,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
-import java.util.Arrays;
-
 import org.hamcrest.Matchers;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -42,7 +40,7 @@ public class DefaultResourceRegistryTest {
     }
 
     @Test
-    public void testReturnsResourceIfFound() throws SecurityException, NoSuchMethodException {
+    public void testReturnsResourceIfFound() throws SecurityException {
         final ResourceMethod method = mockery.mock(ResourceMethod.class);
         final Resource resource = mockery.mock(Resource.class);
         mockery.checking(new Expectations() {
@@ -72,7 +70,7 @@ public class DefaultResourceRegistryTest {
     }
 
     @Test
-    public void shouldRegisterVRaptorInfoByDefault() throws SecurityException, NoSuchMethodException {
+    public void shouldRegisterVRaptorInfoByDefault() throws SecurityException {
         final ResourceMethod method = mockery.mock(ResourceMethod.class);
         mockery.checking(new Expectations() {
             {
@@ -95,6 +93,15 @@ public class DefaultResourceRegistryTest {
         });
         registry.register(myResource);
         assertThat(registry.all(), Matchers.hasItem(myResource));
+        mockery.assertIsSatisfied();
+    }
+    
+    @Test
+    public void canBuildTheUrlForASpecifidMethodLookup() {
+        final ResourceMethod method = mockery.mock(ResourceMethod.class);
+        final Resource resource = mockery.mock(Resource.class);
+        registry.register(resource);
+        assertThat(registry.gimmeThis("/clients", "POST"), is(equalTo(method)));
         mockery.assertIsSatisfied();
     }
 

@@ -28,6 +28,7 @@
 package br.com.caelum.vraptor.view;
 
 import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor.resource.ResourceRegistry;
 
 /**
  * The default implementation of LogicResult.
@@ -37,9 +38,11 @@ import br.com.caelum.vraptor.ioc.Container;
 public class DefaultLogicResult implements LogicResult {
 
     private final Container container;
+    private final ResourceRegistry registry;
 
-    public DefaultLogicResult(Container container) {
+    public DefaultLogicResult(Container container, ResourceRegistry registry) {
         this.container = container;
+        this.registry = registry;
     }
 
     public <T> T redirectServerTo(Class<T> type) {

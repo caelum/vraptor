@@ -1,5 +1,4 @@
 TODO: 17
-TEST: make redirect server to work exactly the same way with url rewriting
 DO: (MUST) - setting errors during ognl expression evaluation should be defined as validation errors
 (MUST) - converter errors should be validation errors
 (MUST) - errors should not be strings
@@ -16,7 +15,6 @@ DO: (MUST) - setting errors during ognl expression evaluation should be defined 
 (MUST) - json output support: three different options
 (MUST) - Map support
 - Set support
-- the redirect proxy/direct way: use the parameters yourself
 - automatic REDIRECT depending on accepts
 
 
@@ -343,3 +341,7 @@ done:
 - support server side redirect to a random url
 - cute validation methods
 - cute validation should methods
+- server forward based on Logic result
+- client redirect based on Logic result
+- server forward/include based on url
+- client redirect based on url

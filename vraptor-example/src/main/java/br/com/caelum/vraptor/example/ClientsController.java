@@ -85,4 +85,9 @@ public class ClientsController {
     public void sendEmail() {
         result.use(EmptyResult.class);
     }
+
+    @Path("/clients/fake")
+    public void redirect() {
+        result.use(Results.logic()).redirectServerTo(ClientsController.class).list();
+    }
 }

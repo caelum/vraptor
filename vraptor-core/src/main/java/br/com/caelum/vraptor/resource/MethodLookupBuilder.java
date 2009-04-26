@@ -50,6 +50,6 @@ public interface MethodLookupBuilder {
      * through the invocation of the method within an instance of the child
      * type.
      */
-    String urlFor(Class<?> type, Method method, Object params[]);
+    String urlFor(Class<?> type, Method method, Object ...params);
 
 }

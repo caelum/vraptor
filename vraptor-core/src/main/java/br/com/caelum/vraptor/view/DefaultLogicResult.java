@@ -27,30 +27,50 @@
  */
 package br.com.caelum.vraptor.view;
 
+import java.lang.reflect.Method;
+
+import javax.servlet.http.HttpServletResponse;
+
+import net.sf.cglib.proxy.Enhancer;
+import net.sf.cglib.proxy.MethodInterceptor;
+import net.sf.cglib.proxy.MethodProxy;
 import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.resource.ResourceRegistry;
+import br.com.caelum.vraptor.resource.MethodLookupBuilder;
 
 /**
- * The default implementation of LogicResult.
+ * The default implementation of LogicResult.<br>
+ * Uses cglib to provide proxies for client side redirect (url creation).
  * 
  * @author Guilherme Silveira
  */
 public class DefaultLogicResult implements LogicResult {
 
     private final Container container;
-    private final ResourceRegistry registry;
+    private final MethodLookupBuilder builder;
+    private final HttpServletResponse response;
 
-    public DefaultLogicResult(Container container, ResourceRegistry registry) {
+    public DefaultLogicResult(Container container, MethodLookupBuilder builder, HttpServletResponse response) {
         this.container = container;
-        this.registry = registry;
+        this.builder = builder;
+        this.response = response;
     }
 
     public <T> T redirectServerTo(Class<T> type) {
         return container.instanceFor(type);
     }
 
-    public <T> T redirectClientTo(Class<T> type) {
-        return null;
+    @SuppressWarnings("unchecked")
+    public <T> T redirectClientTo(final Class<T> type) {
+        Enhancer enhancer = new Enhancer();
+        enhancer.setSuperclass(type);
+        enhancer.setCallback(new MethodInterceptor() {
+            public Object intercept(Object instance, Method method, Object[] args, MethodProxy proxy) throws Throwable {
+                String url = builder.urlFor(type, method, args);
+                response.sendRedirect(url);
+                return null;
+            }
+        });
+        return (T) enhancer.create();
     }
 
 }

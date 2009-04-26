@@ -45,7 +45,7 @@ public class DefaultMethodLookupBuilder implements MethodLookupBuilder {
         return new DefaultResourceAndMethodLookup(r);
     }
 
-    public String urlFor(Class<?> type, Method method, Object[] params) {
+    public String urlFor(Class<?> type, Method method, Object... params) {
         Path path = method.getAnnotation(Path.class);
         if (path != null) {
             String value = path.value();

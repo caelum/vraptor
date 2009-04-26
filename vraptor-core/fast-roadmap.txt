@@ -29,6 +29,7 @@ c) unit test for PicoContainersProvider... every scope should be tested
 - DefaultResourceMethodLookup should cache methods so it doesnt query every time
 - DefaultResourceRegistry cache
 MethodLookupBuilder: rename
+DefaultLogicResult should cache enhancers in order to create objects
 
 
 

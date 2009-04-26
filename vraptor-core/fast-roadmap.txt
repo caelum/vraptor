@@ -1,5 +1,4 @@
-TODO: 18
-- support client side redirect to logic
+TODO: 17
 (MUST) - setting errors during ognl expression evaluation should be defined as validation errors
 (MUST) - converter errors should be validation errors
 (MUST) - errors should not be strings
@@ -278,6 +277,7 @@ OgnlParametersProviderTest:
 
 done:
 - better than vraptor2: support for inheritance
+- amazing support for client side redirect to logic with refactoring support! all you need is an accessible non-args constructor
 - support @Path
 - ant build run tests
 - cobertura report

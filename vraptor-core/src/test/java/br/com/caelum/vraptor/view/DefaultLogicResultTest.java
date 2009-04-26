@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.is;
 
 import java.io.IOException;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 
 import org.jmock.Expectations;
@@ -24,6 +25,7 @@ public class DefaultLogicResultTest {
     private Container container;
     private MethodLookupBuilder builder;
     private HttpServletResponse response;
+    private ServletContext context;
 
     public static class MyComponent {
         public void base() {
@@ -37,7 +39,8 @@ public class DefaultLogicResultTest {
         this.container = mockery.mock(Container.class);
         this.builder = mockery.mock(MethodLookupBuilder.class);
         this.response = mockery.mock(HttpServletResponse.class);
-        this.logicResult = new DefaultLogicResult(container, builder, response);
+        this.context =mockery.mock(ServletContext.class);
+        this.logicResult = new DefaultLogicResult(container, builder, response, context);
     }
 
     @Test
@@ -57,9 +60,10 @@ public class DefaultLogicResultTest {
         final String url = "custom_url";
         mockery.checking(new Expectations() {
             {
+                one(context).getContextPath(); will(returnValue("/context"));
                 one(builder).urlFor(MyComponent.class, MyComponent.class.getDeclaredMethod("base"));
                 will(returnValue(url));
-                one(response).sendRedirect(url);
+                one(response).sendRedirect("/context" + url);
             }
         });
         logicResult.redirectClientTo(MyComponent.class).base();

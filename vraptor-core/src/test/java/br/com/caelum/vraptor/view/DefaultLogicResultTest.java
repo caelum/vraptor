@@ -1,12 +1,11 @@
 package br.com.caelum.vraptor.view;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-
 import java.io.IOException;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.jmock.Expectations;
@@ -14,18 +13,16 @@ import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.resource.MethodLookupBuilder;
 
 public class DefaultLogicResultTest {
 
     private Mockery mockery;
     private LogicResult logicResult;
-    private MyComponent instance;
-    private Container container;
     private MethodLookupBuilder builder;
     private HttpServletResponse response;
     private ServletContext context;
+    private HttpServletRequest request;
 
     public static class MyComponent {
         public void base() {
@@ -35,23 +32,27 @@ public class DefaultLogicResultTest {
     @Before
     public void setup() {
         this.mockery = new Mockery();
-        this.instance = new MyComponent();
-        this.container = mockery.mock(Container.class);
         this.builder = mockery.mock(MethodLookupBuilder.class);
         this.response = mockery.mock(HttpServletResponse.class);
-        this.context =mockery.mock(ServletContext.class);
-        this.logicResult = new DefaultLogicResult(container, builder, response, context);
+        this.request = mockery.mock(HttpServletRequest.class);
+        this.context = mockery.mock(ServletContext.class);
+        this.logicResult = new DefaultLogicResult(builder, response, context, request);
     }
 
     @Test
-    public void instantiatesUsingTheContainer() {
+    public void instantiatesUsingTheContainerAndAddsTheExecutionInterceptors() throws NoSuchMethodException, IOException, ServletException {
+        final String url = "custom_url";
         mockery.checking(new Expectations() {
             {
-                one(container).instanceFor(MyComponent.class); will(returnValue(instance));
+                one(builder).urlFor(MyComponent.class, MyComponent.class.getDeclaredMethod("base"));
+                will(returnValue(url));
+                one(request).getRequestDispatcher(url);
+                RequestDispatcher dispatcher = mockery.mock(RequestDispatcher.class);
+                will(returnValue(dispatcher));
+                one(dispatcher).forward(request, response);
             }
         });
-        MyComponent component = logicResult.redirectServerTo(MyComponent.class);
-        assertThat(component, is(equalTo(instance)));
+        logicResult.redirectServerTo(MyComponent.class).base();
         mockery.assertIsSatisfied();
     }
     
@@ -69,5 +70,5 @@ public class DefaultLogicResultTest {
         logicResult.redirectClientTo(MyComponent.class).base();
         mockery.assertIsSatisfied();
     }
-
+    
 }

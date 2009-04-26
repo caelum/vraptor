@@ -30,12 +30,12 @@ package br.com.caelum.vraptor.view;
 import java.lang.reflect.Method;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
-import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.resource.MethodLookupBuilder;
 
 /**
@@ -46,20 +46,29 @@ import br.com.caelum.vraptor.resource.MethodLookupBuilder;
  */
 public class DefaultLogicResult implements LogicResult {
 
-    private final Container container;
     private final MethodLookupBuilder builder;
     private final HttpServletResponse response;
     private final ServletContext context;
+    private final HttpServletRequest request;
 
-    public DefaultLogicResult(Container container, MethodLookupBuilder builder, HttpServletResponse response, ServletContext context) {
-        this.container = container;
+    public DefaultLogicResult(MethodLookupBuilder builder, HttpServletResponse response, ServletContext context, HttpServletRequest request) {
         this.builder = builder;
         this.response = response;
         this.context = context;
+        this.request = request;
     }
 
-    public <T> T redirectServerTo(Class<T> type) {
-        return container.instanceFor(type);
+    public <T> T redirectServerTo(final Class<T> type) {
+        Enhancer enhancer = new Enhancer();
+        enhancer.setSuperclass(type);
+        enhancer.setCallback(new MethodInterceptor() {
+            public Object intercept(Object instance, Method method, Object[] args, MethodProxy proxy) throws Throwable {
+                String url = builder.urlFor(type, method, args);
+                request.getRequestDispatcher(url).forward(request, response);
+                return null;
+            }
+        });
+        return (T) enhancer.create();
     }
 
     @SuppressWarnings("unchecked")

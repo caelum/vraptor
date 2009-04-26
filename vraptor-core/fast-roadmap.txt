@@ -1,6 +1,6 @@
 TODO: 17
-(1) make redirect server to work exactly the same way with url rewriting
-(MUST) - setting errors during ognl expression evaluation should be defined as validation errors
+TEST: make redirect server to work exactly the same way with url rewriting
+DO: (MUST) - setting errors during ognl expression evaluation should be defined as validation errors
 (MUST) - converter errors should be validation errors
 (MUST) - errors should not be strings
 (MUST) - support HibernateValidator with i18n messages
@@ -134,6 +134,8 @@ right before ANY release
 	- check all TODOS and do something about them
 
 ONLY AFTER RELEASE
+3.0.1 - extract VRaptor Validator
+- Question: RequestResult should contain an Object so logics could execute a totally custom method???
 3.0.1 - Register other caches
 3.0.1 -  warn on views.properties redirect --> teach how to use the logicresult
 ResourceMethod: two methods with the same name: Log.error

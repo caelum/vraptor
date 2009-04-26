@@ -27,7 +27,18 @@
  */
 package br.com.caelum.vraptor.resource;
 
+/**
+ * Component responsible for looking up resources based on the web request
+ * information.
+ * 
+ * @author Guilherme Silveira
+ */
 public interface ResourceAndMethodLookup {
-    public ResourceMethod methodFor(String id, String methodName);
+
+    /**
+     * Retrieves an unique resource method identifiable by this id and http
+     * method name.
+     */
+    ResourceMethod methodFor(String id, String methodName);
 
 }

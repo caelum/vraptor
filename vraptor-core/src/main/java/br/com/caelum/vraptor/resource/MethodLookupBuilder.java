@@ -29,10 +29,22 @@ package br.com.caelum.vraptor.resource;
 
 import java.lang.reflect.Method;
 
+/**
+ * Helps translating resources and request info into methods and methods into
+ * http urls.
+ * 
+ * @author Guilherme Silveira
+ */
 public interface MethodLookupBuilder {
 
+    /**
+     * Returns a look up algorithm for a specific resource.
+     */
     ResourceAndMethodLookup lookupFor(Resource r);
-    
+
+    /**
+     * Returns the url for a specific method with those parameters.
+     */
     String urlFor(Method method, Object params[]);
 
 }

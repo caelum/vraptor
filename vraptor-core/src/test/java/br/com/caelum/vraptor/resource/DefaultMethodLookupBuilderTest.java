@@ -70,6 +70,7 @@ public class DefaultMethodLookupBuilderTest {
         DefaultMethodLookupBuilder builder = new DefaultMethodLookupBuilder();
         String url = builder.urlFor(MyResource.class, mockery.methodFor(MyResource.class, "notAnnotated").getMethod(), new Object[] {});
         assertThat(url, is(equalTo("/MyResource/notAnnotated")));
+        mockery.assertIsSatisfied();
     }
 
     @Test
@@ -77,6 +78,7 @@ public class DefaultMethodLookupBuilderTest {
         DefaultMethodLookupBuilder builder = new DefaultMethodLookupBuilder();
         String url = builder.urlFor(MyResource.class, mockery.methodFor(MyResource.class, "customizedPath").getMethod(), new Object[] {});
         assertThat(url, is(equalTo("/myPath")));
+        mockery.assertIsSatisfied();
     }
 
     @Test
@@ -84,6 +86,7 @@ public class DefaultMethodLookupBuilderTest {
         DefaultMethodLookupBuilder builder = new DefaultMethodLookupBuilder();
         String url = builder.urlFor(InheritanceExample.class, mockery.methodFor(MyResource.class, "notAnnotated").getMethod(), new Object[] {});
         assertThat(url, is(equalTo("/InheritanceExample/notAnnotated")));
+        mockery.assertIsSatisfied();
     }
 
     @Test
@@ -91,6 +94,7 @@ public class DefaultMethodLookupBuilderTest {
         DefaultMethodLookupBuilder builder = new DefaultMethodLookupBuilder();
         String url = builder.urlFor(MyResource.class, mockery.methodFor(MyResource.class, "starPath").getMethod(), new Object[] {});
         assertThat(url, is(equalTo("//customPath")));
+        mockery.assertIsSatisfied();
     }
 
     @Test
@@ -100,6 +104,7 @@ public class DefaultMethodLookupBuilderTest {
         String url = builder.urlFor(MyResource.class, method, new Object[] {});
         ResourceAndMethodLookup lookup = builder.lookupFor(mockery.resource(MyResource.class));
         assertThat(lookup.methodFor(url, "POST").getMethod(), is(equalTo(method)));
+        mockery.assertIsSatisfied();
     }
 
     @Test
@@ -109,6 +114,7 @@ public class DefaultMethodLookupBuilderTest {
         String url = builder.urlFor(InheritanceExample.class, method, new Object[] {});
         ResourceAndMethodLookup lookup = builder.lookupFor(mockery.resource(InheritanceExample.class));
         assertThat(lookup.methodFor(url, "POST").getMethod(), is(equalTo(method)));
+        mockery.assertIsSatisfied();
     }
 
     @Test
@@ -118,6 +124,7 @@ public class DefaultMethodLookupBuilderTest {
         String url = builder.urlFor(MyResource.class, method, new Object[] {});
         ResourceAndMethodLookup lookup = builder.lookupFor(mockery.resource(MyResource.class));
         assertThat(lookup.methodFor(url, "POST").getMethod(), is(equalTo(method)));
+        mockery.assertIsSatisfied();
     }
 
 

@@ -48,6 +48,10 @@ public class ClientsController {
     private final Database database;
 
     private final Validator validator;
+    
+    public ClientsController() {
+        this(null,null,null);
+    }
 
     public ClientsController(Result result, Database database, Validator validator) {
         this.result = result;
@@ -75,9 +79,7 @@ public class ClientsController {
             }
         });
         database.add(client);
-        result.include("client", client);
-        result.use(Results.page()).forward("ok");
-        result.use(Results.logic()).redirectServerTo(ClientsController.class).list();
+        result.use(Results.logic()).redirectClientTo(ClientsController.class).list();
     }
 
     public void sendEmail() {

@@ -29,6 +29,7 @@ package br.com.caelum.vraptor.view;
 
 import java.lang.reflect.Method;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 
 import net.sf.cglib.proxy.Enhancer;
@@ -48,11 +49,13 @@ public class DefaultLogicResult implements LogicResult {
     private final Container container;
     private final MethodLookupBuilder builder;
     private final HttpServletResponse response;
+    private final ServletContext context;
 
-    public DefaultLogicResult(Container container, MethodLookupBuilder builder, HttpServletResponse response) {
+    public DefaultLogicResult(Container container, MethodLookupBuilder builder, HttpServletResponse response, ServletContext context) {
         this.container = container;
         this.builder = builder;
         this.response = response;
+        this.context = context;
     }
 
     public <T> T redirectServerTo(Class<T> type) {
@@ -65,8 +68,9 @@ public class DefaultLogicResult implements LogicResult {
         enhancer.setSuperclass(type);
         enhancer.setCallback(new MethodInterceptor() {
             public Object intercept(Object instance, Method method, Object[] args, MethodProxy proxy) throws Throwable {
+                String path = context.getContextPath();
                 String url = builder.urlFor(type, method, args);
-                response.sendRedirect(url);
+                response.sendRedirect(path + url);
                 return null;
             }
         });

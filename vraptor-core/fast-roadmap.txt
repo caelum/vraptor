@@ -1,4 +1,6 @@
 TODO: 17
+- make redirect server to work exactly the same way with url rewriting
+- make client server redirect work with parameters, which ones?, you pass a series of strings when you say the logic name??
 (MUST) - setting errors during ognl expression evaluation should be defined as validation errors
 (MUST) - converter errors should be validation errors
 (MUST) - errors should not be strings

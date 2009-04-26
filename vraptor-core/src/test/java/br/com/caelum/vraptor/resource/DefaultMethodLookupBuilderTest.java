@@ -54,6 +54,10 @@ public class DefaultMethodLookupBuilderTest {
         @Path("/myPath")
         public void customizedPath() {
         }
+        
+        @Path("/.*/customPath")
+        public void starPath() {
+        }
     }
     
     class InheritanceExample extends MyResource {
@@ -79,5 +83,13 @@ public class DefaultMethodLookupBuilderTest {
         String url = builder.urlFor(InheritanceExample.class, mockery.methodFor(MyResource.class, "notAnnotated").getMethod(), new Object[] {});
         assertThat(url, is(equalTo("/InheritanceExample/notAnnotated")));
     }
+
+    @Test
+    public void canTranslateAMethodUsingAsteriskAsAPatternMatcher() throws NoSuchMethodException {
+        DefaultMethodLookupBuilder builder = new DefaultMethodLookupBuilder();
+        String url = builder.urlFor(MyResource.class, mockery.methodFor(MyResource.class, "starPath").getMethod(), new Object[] {});
+        assertThat(url, is(equalTo("//customPath")));
+    }
+
 
 }

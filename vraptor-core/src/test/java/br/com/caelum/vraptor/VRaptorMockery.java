@@ -52,17 +52,10 @@ public class VRaptorMockery {
     }
 
     public <T> Resource resource(final Class<T> type) {
-        return resource(type, 1);
-    }
-    
-    /**
-     * Mocks a resource which expects "times" times invocation of method getType
-     */
-    public <T> Resource resource(final Class<T> type, final int times) {
-        final Resource resource = mockery.mock(Resource.class, "resource_for_" + type+ (++count));
+        final Resource resource = mockery.mock(Resource.class, "resource : " + type+ (++count));
         mockery.checking(new Expectations() {
             {
-                exactly(times).of(resource).getType();
+                allowing(resource).getType();
                 will(returnValue(type));
             }
         });

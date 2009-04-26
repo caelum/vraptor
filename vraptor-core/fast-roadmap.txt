@@ -1,4 +1,6 @@
 TODO: 19
+- DefaultResourceMethodLookup should cache methods so it doesnt query every time
+- DefaultResourceRegistry cache
 - support client side redirect to logic
 MLBuilder: rename
 REAL TEST: is default @Path working correctly?
@@ -131,6 +133,7 @@ right before ANY release
 	- check all TODOS and do something about them
 
 ONLY AFTER RELEASE
+3.0.1 - Register other caches
 3.0.1 -  warn on views.properties redirect --> teach how to use the logicresult
 ResourceMethod: two methods with the same name: Log.error
 (3.0.1) ceci: BigInteger converter (+test)... ja existe de BigDecimal (se bobear, ja existe no vraptor2)

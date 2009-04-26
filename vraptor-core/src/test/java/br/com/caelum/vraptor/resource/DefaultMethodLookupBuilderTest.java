@@ -102,5 +102,15 @@ public class DefaultMethodLookupBuilderTest {
         assertThat(lookup.methodFor(url, "POST").getMethod(), is(equalTo(method)));
     }
 
+    @Test
+    public void canTranslateAInheritedResourceBothWays() throws NoSuchMethodException {
+        DefaultMethodLookupBuilder builder = new DefaultMethodLookupBuilder();
+        Method method = mockery.methodFor(MyResource.class, "notAnnotated").getMethod();
+        String url = builder.urlFor(InheritanceExample.class, method, new Object[] {});
+        ResourceAndMethodLookup lookup = builder.lookupFor(mockery.resource(InheritanceExample.class));
+        assertThat(lookup.methodFor(url, "POST").getMethod(), is(equalTo(method)));
+    }
+
+
 
 }

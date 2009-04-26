@@ -5,7 +5,6 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 
-import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
 import org.vraptor.annotations.Component;
@@ -32,12 +31,7 @@ public class VRaptor2MethodLookupTest {
 
     @Test
     public void shouldUseVRaptor3AlgorithmIfNotAVRaptor2Component() {
-        final Resource resource = mockery.mock(Resource.class);
-        mockery.checking(new Expectations() {
-            {
-                exactly(3).of(resource).getType(); will(returnValue(NonVRaptorComponent.class));
-            }
-        });
+        final Resource resource = mockery.resource(NonVRaptorComponent.class);
         VRaptor2MethodLookup lookup = new VRaptor2MethodLookup(resource);
         assertThat(lookup.methodFor("id", "name"), is(equalTo(new DefaultResourceAndMethodLookup(resource).methodFor(
                 "id", "name"))));
@@ -59,7 +53,7 @@ public class VRaptor2MethodLookupTest {
 
     @Test
     public void ignoresNonPublicMethod() {
-        final Resource resource = mockery.resource(MyResource.class, 2);
+        final Resource resource = mockery.resource(MyResource.class);
         VRaptor2MethodLookup lookup = new VRaptor2MethodLookup(resource);
         assertThat(lookup.methodFor("/MyResource.ignorableStatic.logic", "ignorableStatic"), is(nullValue()));
         mockery.assertIsSatisfied();
@@ -67,7 +61,7 @@ public class VRaptor2MethodLookupTest {
 
     @Test
     public void ignoresStaticMethod() {
-        final Resource resource = mockery.resource(MyResource.class, 2);
+        final Resource resource = mockery.resource(MyResource.class);
         VRaptor2MethodLookup lookup = new VRaptor2MethodLookup(resource);
         assertThat(lookup.methodFor("/MyResource.ignorableProtected.logic", "ignorableProtected"), is(nullValue()));
         mockery.assertIsSatisfied();
@@ -75,7 +69,7 @@ public class VRaptor2MethodLookupTest {
 
     @Test
     public void returnsNullIfNothingFound() {
-        final Resource resource = mockery.resource(MyResource.class, 2);
+        final Resource resource = mockery.resource(MyResource.class);
         VRaptor2MethodLookup lookup = new VRaptor2MethodLookup(resource);
         assertThat(lookup.methodFor("/MyResource.unfindable.logic", "unfindable"), is(nullValue()));
         mockery.assertIsSatisfied();
@@ -83,7 +77,7 @@ public class VRaptor2MethodLookupTest {
 
     @Test
     public void returnsTheCorrectDefaultResourceMethodIfFound() throws SecurityException, NoSuchMethodException {
-        final Resource resource = mockery.resource(MyResource.class, 2);
+        final Resource resource = mockery.resource(MyResource.class);
         VRaptor2MethodLookup lookup = new VRaptor2MethodLookup(resource);
         assertThat(lookup.methodFor("/MyResource.findable.logic", "findable"), is(VRaptorMatchers.resourceMethod(MyResource.class.getMethod("findable"))));
         mockery.assertIsSatisfied();

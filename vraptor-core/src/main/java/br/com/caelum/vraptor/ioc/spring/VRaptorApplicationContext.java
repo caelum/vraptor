@@ -112,6 +112,7 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
         registerOn(beanFactory, OgnlParametersProvider.class);
         registerOn(beanFactory, DefaultRequestInfo.class);
         registerOn(beanFactory, DefaultValidator.class);
+        registerOn(beanFactory, DefaultLogicResult.class);
         registerOn(beanFactory, VRaptorRequestProvider.class, true);
         registerOn(beanFactory, HttpServletRequestProvider.class, true);
         registerOn(beanFactory, HttpServletResponseProvider.class, true);

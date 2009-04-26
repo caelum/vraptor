@@ -31,6 +31,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
+import java.lang.reflect.Method;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -55,7 +57,7 @@ public class DefaultMethodLookupBuilderTest {
         public void customizedPath() {
         }
         
-        @Path("/.*/customPath")
+        @Path("/*/customPath")
         public void starPath() {
         }
     }
@@ -89,6 +91,15 @@ public class DefaultMethodLookupBuilderTest {
         DefaultMethodLookupBuilder builder = new DefaultMethodLookupBuilder();
         String url = builder.urlFor(MyResource.class, mockery.methodFor(MyResource.class, "starPath").getMethod(), new Object[] {});
         assertThat(url, is(equalTo("//customPath")));
+    }
+
+    @Test
+    public void usesAsteriskBothWays() throws NoSuchMethodException {
+        DefaultMethodLookupBuilder builder = new DefaultMethodLookupBuilder();
+        Method method = mockery.methodFor(MyResource.class, "starPath").getMethod();
+        String url = builder.urlFor(MyResource.class, method, new Object[] {});
+        ResourceAndMethodLookup lookup = builder.lookupFor(mockery.resource(MyResource.class));
+        assertThat(lookup.methodFor(url, "POST").getMethod(), is(equalTo(method)));
     }
 
 

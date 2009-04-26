@@ -4,14 +4,16 @@ import java.lang.reflect.Method;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;
-import org.jmock.lib.legacy.ClassImposteriser;
 import org.jmock.internal.ExpectationBuilder;
+import org.jmock.lib.legacy.ClassImposteriser;
 
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 public class VRaptorMockery {
+    
+    private int count = 0;
 
     private Mockery mockery;
 
@@ -57,7 +59,7 @@ public class VRaptorMockery {
      * Mocks a resource which expects "times" times invocation of method getType
      */
     public <T> Resource resource(final Class<T> type, final int times) {
-        final Resource resource = mockery.mock(Resource.class);
+        final Resource resource = mockery.mock(Resource.class, "resource_for_" + type+ (++count));
         mockery.checking(new Expectations() {
             {
                 exactly(times).of(resource).getType();

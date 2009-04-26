@@ -49,7 +49,7 @@ public class DefaultMethodLookupBuilder implements MethodLookupBuilder {
         Path path = method.getAnnotation(Path.class);
         if (path != null) {
             String value = path.value();
-            value = value.replaceAll("\\.\\*", "");
+            value = value.replaceAll("\\*", "");
             return value;
         }
         return "/" + type.getSimpleName() + "/" + method.getName();

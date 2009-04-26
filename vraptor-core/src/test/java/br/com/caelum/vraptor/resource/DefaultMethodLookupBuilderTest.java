@@ -67,6 +67,13 @@ public class DefaultMethodLookupBuilderTest {
     }
 
     @Test
+    public void canTranslateAnnotatedMethod() throws NoSuchMethodException {
+        DefaultMethodLookupBuilder builder = new DefaultMethodLookupBuilder();
+        String url = builder.urlFor(MyResource.class, mockery.methodFor(MyResource.class, "customizedPath").getMethod(), new Object[] {});
+        assertThat(url, is(equalTo("/myPath")));
+    }
+
+    @Test
     public void canTranslateAInheritedResourceMethod() throws NoSuchMethodException {
         DefaultMethodLookupBuilder builder = new DefaultMethodLookupBuilder();
         String url = builder.urlFor(InheritanceExample.class, mockery.methodFor(MyResource.class, "notAnnotated").getMethod(), new Object[] {});

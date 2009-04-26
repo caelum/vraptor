@@ -50,7 +50,7 @@ public class DefaultMethodLookupBuilder implements MethodLookupBuilder {
         if (path != null) {
             return path.value();
         }
-        return "/" + method.getDeclaringClass().getSimpleName() + "/" + method.getName();
+        return "/" + type.getSimpleName() + "/" + method.getName();
     }
 
 }

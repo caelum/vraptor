@@ -27,6 +27,11 @@
  */
 package br.com.caelum.vraptor.validator;
 
+/**
+ * Executes a piece of code's check.
+ * 
+ * @author Guilherme Silveira
+ */
 public class Then<T> {
 
     private final Validations actual;

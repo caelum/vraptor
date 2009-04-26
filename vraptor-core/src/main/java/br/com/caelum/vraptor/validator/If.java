@@ -29,6 +29,12 @@ package br.com.caelum.vraptor.validator;
 
 import org.hamcrest.Matcher;
 
+/**
+ * Executes some piece of code only if the matching is true. If its false, add
+ * the description for the false check as an error.
+ * 
+ * @author Guilherme Silveira
+ */
 public class If<T> {
 
     @SuppressWarnings("unchecked")
@@ -38,7 +44,7 @@ public class If<T> {
             // does nothing
         }
     };
-    
+
     private final T instance;
     private final Validations actual;
 
@@ -48,11 +54,11 @@ public class If<T> {
     }
 
     @SuppressWarnings("unchecked")
-    public Then <T> shouldBe(Matcher matcher) {
-        if(!actual.that(instance, matcher)) {
+    public Then<T> shouldBe(Matcher matcher) {
+        if (!actual.that(instance, matcher)) {
             return NOTHING;
         }
         return new Then<T>(actual);
     }
-    
+
 }

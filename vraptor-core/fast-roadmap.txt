@@ -1,23 +1,25 @@
 TODO: 17
-- make redirect server to work exactly the same way with url rewriting
-- make client server redirect work with parameters, which ones?, you pass a series of strings when you say the logic name??
+(1) make redirect server to work exactly the same way with url rewriting
 (MUST) - setting errors during ognl expression evaluation should be defined as validation errors
 (MUST) - converter errors should be validation errors
 (MUST) - errors should not be strings
 (MUST) - support HibernateValidator with i18n messages
 (MUST) - support i18n messages
 
+- make client server redirect work with parameters, which ones?
 (MUST) - niceurls with programmatic support
 (MUST) - niceurls -> path support
 (MUST) - niceurls with file config support -> path support
 (MUST) - path annotation with support to value injection (niceurls?)
 (MUST) - hibernate plugin
-(MUST) - json output support: three different options
 (MUST) - better exception handling everywhere
+(MUST) - json output support: three different options
 (MUST) - Map support
 - Set support
 - the redirect proxy/direct way: use the parameters yourself
 - automatic REDIRECT depending on accepts
+
+
 
 test and refactor:
 a) caelumweb: use logicredirect that is most advanced

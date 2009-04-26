@@ -27,29 +27,40 @@
  */
 package br.com.caelum.vraptor.resource;
 
-import java.lang.reflect.Method;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 
-/**
- * Helps translating resources and request info into methods and methods into
- * http urls.
- * 
- * @author Guilherme Silveira
- */
-public interface MethodLookupBuilder {
+import org.junit.Before;
+import org.junit.Test;
 
-    /**
-     * Returns a look up algorithm for a specific resource.
-     */
-    ResourceAndMethodLookup lookupFor(Resource r);
+import br.com.caelum.vraptor.Path;
+import br.com.caelum.vraptor.VRaptorMockery;
 
-    /**
-     * Returns the url for a specific method with those parameters.<br>
-     * Uses the specified type where the method was found. It could happen that
-     * due to inheritance, the method was defined in the parent type but if one
-     * is using it through the child type, the url should invoke the method
-     * through the invocation of the method within an instance of the child
-     * type.
-     */
-    String urlFor(Class<?> type, Method method, Object params[]);
+public class DefaultMethodLookupBuilderTest {
+    
+    private VRaptorMockery mockery;
+
+    @Before
+    public void setup() {
+        this.mockery = new VRaptorMockery();
+        
+    }
+    
+    class MyResource {
+        public void notAnnotated() {
+        }
+
+        @Path("/myPath")
+        public void customizedPath() {
+        }
+    }
+    
+    @Test
+    public void canTranslateADefaultResource() throws NoSuchMethodException {
+        DefaultMethodLookupBuilder builder = new DefaultMethodLookupBuilder();
+        String url = builder.urlFor(MyResource.class, mockery.methodFor(MyResource.class, "notAnnotated").getMethod(), new Object[] {});
+        assertThat(url, is(equalTo("/MyResource/notAnnotated")));
+    }
 
 }

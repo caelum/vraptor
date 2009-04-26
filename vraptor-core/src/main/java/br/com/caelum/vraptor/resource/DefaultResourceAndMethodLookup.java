@@ -71,8 +71,9 @@ public class DefaultResourceAndMethodLookup implements ResourceAndMethodLookup {
 
 	private boolean hasMatchingPathAnnotation(String id, Method method) {
 		Path path = method.getAnnotation(Path.class);
-		if (path == null)
+		if (path == null) {
 			return false;
+		}
 		
 		String regexFromWildcards = path.value().replaceAll("\\*", ".\\*");
 		return id.matches(regexFromWildcards);

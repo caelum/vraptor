@@ -12,10 +12,10 @@ import org.vraptor.annotations.Out;
 import org.vraptor.annotations.Parameter;
 import org.vraptor.plugin.hibernate.Validate;
 
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.resource.MethodLookupBuilder;
 import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceAndMethodLookup;
-import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
 /**
  * A vraptor 2 compatible method lookup builder.
@@ -69,6 +69,10 @@ public class VRaptor2MethodLookupBuilder implements MethodLookupBuilder {
             }
         }
         parse(type.getSuperclass(), type);
+    }
+
+    public String urlFor(Method method, Object[] params) {
+        throw new IllegalArgumentException("Unsupported feature from vraptor3 - vraptor2 compatibility mode (not yet implemented)");
     }
 
 

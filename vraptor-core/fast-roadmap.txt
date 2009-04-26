@@ -1,6 +1,5 @@
-TODO: 20
+TODO: 18
 - support client side redirect to logic
-REAL TEST: is default @Path working correctly?
 (MUST) - setting errors during ognl expression evaluation should be defined as validation errors
 (MUST) - converter errors should be validation errors
 (MUST) - errors should not be strings
@@ -18,7 +17,6 @@ REAL TEST: is default @Path working correctly?
 - Set support
 - the redirect proxy/direct way: use the parameters yourself
 - automatic REDIRECT depending on accepts
-- result support to another component (client side)
 
 test and refactor:
 a) caelumweb: use logicredirect that is most advanced

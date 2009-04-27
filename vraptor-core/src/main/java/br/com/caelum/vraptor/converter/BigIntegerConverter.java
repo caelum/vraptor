@@ -15,7 +15,6 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
 @ApplicationScoped
 public class BigIntegerConverter implements Converter<BigInteger>{
 
-	@Override
 	public BigInteger convert(String value, Class<? extends BigInteger> type) {
 		if (value == null || value.equals("")) {
 			return null;

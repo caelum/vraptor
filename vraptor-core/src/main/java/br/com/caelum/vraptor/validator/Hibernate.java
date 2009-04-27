@@ -43,13 +43,13 @@ public class Hibernate {
     private static final ValidatorLocator locator = new ValidatorLocator();
 
     @SuppressWarnings("unchecked")
-    public static List<String> validate(Object instance) {
-        List<String> errors = new ArrayList<String>();
+    public static List<ValidationMessage> validate(Object instance) {
+        List<ValidationMessage> errors = new ArrayList<ValidationMessage>();
         ClassValidator<Object> validator = (ClassValidator<Object>) locator.getValidator(instance.getClass(), null);
         InvalidValue[] invalidValues = validator.getInvalidValues(instance);
 
         for (InvalidValue value : invalidValues) {
-            errors.add(value.getMessage());
+            errors.add(new ValidationMessage(value.getMessage(), value.getPropertyPath()));
         }
         return errors;
     }

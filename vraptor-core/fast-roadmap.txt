@@ -1,6 +1,7 @@
 TODO: 17
 DO: (MUST) - setting errors during ognl expression evaluation should be defined as validation errors
 (MUST) - converter errors should be validation errors
+(MUST) - support i18n messages on hamcrest based validations
 (MUST) - support HibernateValidator with i18n messages
 (MUST) - support i18n messages
 

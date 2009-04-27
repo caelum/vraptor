@@ -163,6 +163,7 @@ public class PicoContainersProvider implements ComponentRegistry {
 		}
 		logger.debug("Session components to initialize: " + sessionScoped.keySet());
 		logger.debug("Requets components to initialize: " + requestScoped.keySet());
+		this.initialized = true;
 	}
 
 }

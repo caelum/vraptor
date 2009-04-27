@@ -34,7 +34,10 @@ import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
 /**
+ * VRaptor's primitive int converter. 
+ * 
  * @author Guilherme Silveira
+ * @author Cecilia Fernandes
  */
 @Convert(int.class)
 @ApplicationScoped

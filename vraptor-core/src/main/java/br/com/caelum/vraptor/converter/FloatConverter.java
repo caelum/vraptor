@@ -33,6 +33,11 @@ import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
+/**
+ * VRaptor's Float converter. 
+ * 
+ * @author Guilherme Silveira
+ */
 @Convert(Float.class)
 @ApplicationScoped
 public class FloatConverter implements Converter<Float> {

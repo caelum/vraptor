@@ -1,5 +1,7 @@
 package br.com.caelum.vraptor.http.ognl;
 
+import java.util.List;
+
 import ognl.Ognl;
 import ognl.OgnlContext;
 import ognl.OgnlException;
@@ -25,6 +27,8 @@ public class ReflectionBasedNullHandlerTest {
         this.context = (OgnlContext) Ognl.createDefaultContext(null);
         context.setTraceEvaluations(true);
         this.mockery = new Mockery();
+        OgnlRuntime.setPropertyAccessor(List.class, new ListAccessor());
+        OgnlRuntime.setPropertyAccessor(Object[].class, new ArrayAccessor());
     }
 
     @Test

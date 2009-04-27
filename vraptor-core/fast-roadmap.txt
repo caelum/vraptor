@@ -17,6 +17,10 @@ DO: (MUST) - setting errors during ognl expression evaluation should be defined 
 - Set support
 - automatic REDIRECT depending on accepts
 
+(3.0.1): annotate all converters which do not depend on session or request as @AppScoped
+(3.0.1) ceci: BigInteger converter (+test)... ja existe de BigDecimal (se bobear, ja existe no vraptor2)
+(3.0.1) ceci: 404 component
+
 
 
 test and refactor:
@@ -138,8 +142,6 @@ ONLY AFTER RELEASE
 3.0.1 - Register other caches
 3.0.1 -  warn on views.properties redirect --> teach how to use the logicresult
 ResourceMethod: two methods with the same name: Log.error
-(3.0.1) ceci: BigInteger converter (+test)... ja existe de BigDecimal (se bobear, ja existe no vraptor2)
-(3.0.1): annotate all converters which do not depend on session or request as @AppScoped
 (3.0.1)ceci: converters: jodatime (ver no vraptor2)
 	- se o arquivo jodatime.jar estiver no classpath (use Class.forName com catch exception), loada automatico
 	- se estiver no classpath, tem que adicionar os conversores atraves de reflection, nao pode referenciar nenhuma classe diretamente que referencia joda
@@ -147,7 +149,6 @@ ResourceMethod: two methods with the same name: Log.error
 	- nao cadastra-los por padrao
 (3.0.1)ceci: support generic Set with ognl (look at MiscOgnlSupportTest for generic list support - you need to create a SetAccessor)
 (3.0.2) - xml output support
-(3.0.1) ceci: 404 component
 (3.0.1) MultiPartInterceptor config
 - customizable error process on request execution
 - each Provider should have a getComponentsToTest template method

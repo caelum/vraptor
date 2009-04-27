@@ -31,6 +31,7 @@ package br.com.caelum.vraptor.converter;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
 /**
  * Accepts either the ordinal value or name. Null and empty strings are treated
@@ -39,6 +40,7 @@ import br.com.caelum.vraptor.Converter;
  * @author Guilherme Silveira
  */
 @Convert(Enum.class)
+@ApplicationScoped
 public class EnumConverter implements Converter<Enum> {
 
     public Enum convert(String value, Class<? extends Enum> type) {

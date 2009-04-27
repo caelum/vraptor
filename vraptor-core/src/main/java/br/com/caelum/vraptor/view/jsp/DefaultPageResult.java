@@ -39,9 +39,10 @@ import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.view.PathResolver;
+import br.com.caelum.vraptor.view.ResultException;
 
 /**
- * A jsp view which can be customized by providing your own PathConstructor.
+ * Default page result implementation.
  *
  * @author Guilherme Silveira
  */
@@ -60,20 +61,36 @@ public class DefaultPageResult implements View, PageResult {
         this.resolver = resolver;
     }
 
-    public static Class<DefaultPageResult> page() {
-        return DefaultPageResult.class;
+    public void forward(String result) {
+        try {
+            request.getRequestDispatcher(resolver.pathFor(method, result)).forward(request, response);
+        } catch (ServletException e) {
+            throw new ResultException(e);
+        } catch (IOException e) {
+            throw new ResultException(e);
+        }
     }
 
-    public void forward(String result) throws ServletException, IOException {
-        request.getRequestDispatcher(resolver.pathFor(method, result)).forward(request, response);
-    }
-
-    public void include(String result) throws ServletException, IOException {
-        request.getRequestDispatcher(resolver.pathFor(method, result)).include(request, response);
+    public void include(String result) {
+        try {
+            request.getRequestDispatcher(resolver.pathFor(method, result)).include(request, response);
+        } catch (ServletException e) {
+            throw new ResultException(e);
+        } catch (IOException e) {
+            throw new ResultException(e);
+        }
     }
 
     public void include(String key, Object value) {
         request.setAttribute(key, value);
+    }
+
+    public void redirect(String url) {
+        try {
+            response.sendRedirect(url);
+        } catch (IOException e) {
+            throw new ResultException(e);
+        }
     }
 
 }

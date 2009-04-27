@@ -23,6 +23,7 @@ import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.core.Execution;
+import br.com.caelum.vraptor.core.ForwardToDefaultViewInterceptor;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodParameters;
 import br.com.caelum.vraptor.core.RequestExecution;
@@ -44,13 +45,15 @@ import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
 import br.com.caelum.vraptor.resource.MethodLookupBuilder;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.resource.ResourceRegistry;
+import br.com.caelum.vraptor.view.LogicResult;
 import br.com.caelum.vraptor.view.PathResolver;
 import br.com.caelum.vraptor.view.jsp.PageResult;
+import br.com.caelum.vraptor.vraptor2.RequestResult;
 
 /**
  * Acceptance test that checks if the container is capable of giving all
  * required components.
- *
+ * 
  * @author Guilherme Silveira
  */
 @Ignore
@@ -70,9 +73,9 @@ public abstract class GenericContainerTest {
 
     @Test
     public void canProvideAllApplicationScopedComponents() {
-        Class<?>[] components = new Class[]{ServletContext.class, UrlToResourceTranslator.class, ResourceRegistry.class,
-                TypeCreator.class, InterceptorRegistry.class, MethodLookupBuilder.class, 
-                ParameterNameProvider.class, Converters.class, EmptyElementsRemoval.class};
+        Class<?>[] components = new Class[] { ServletContext.class, UrlToResourceTranslator.class,
+                ResourceRegistry.class, TypeCreator.class, InterceptorRegistry.class, MethodLookupBuilder.class,
+                ParameterNameProvider.class, Converters.class, EmptyElementsRemoval.class };
         checkAvailabilityFor(true, components);
         mockery.assertIsSatisfied();
     }
@@ -80,11 +83,13 @@ public abstract class GenericContainerTest {
     @Test
     public void canProvideAllRequestScopedComponents() {
         checkAvailabilityFor(false, HttpServletRequest.class, HttpServletResponse.class, VRaptorRequest.class,
-                HttpSession.class, ParametersInstantiatorInterceptor.class, MethodParameters.class, RequestParameters.class,
-                InterceptorListPriorToExecutionExtractor.class, URLParameterExtractorInterceptor.class,
-                InterceptorStack.class, RequestExecution.class, ResourceLookupInterceptor.class,
-                InstantiateInterceptor.class, Result.class, ExecuteMethodInterceptor.class, PageResult.class,
-                ParametersProvider.class, RequestInfo.class, Validator.class, PathResolver.class);
+                HttpSession.class, ParametersInstantiatorInterceptor.class, MethodParameters.class,
+                RequestParameters.class, InterceptorListPriorToExecutionExtractor.class,
+                URLParameterExtractorInterceptor.class, InterceptorStack.class, RequestExecution.class,
+                ResourceLookupInterceptor.class, InstantiateInterceptor.class, Result.class,
+                ExecuteMethodInterceptor.class, PageResult.class, ParametersProvider.class, RequestInfo.class,
+                Validator.class, PathResolver.class, ForwardToDefaultViewInterceptor.class, LogicResult.class,
+                RequestResult.class);
         mockery.assertIsSatisfied();
     }
 
@@ -118,10 +123,10 @@ public abstract class GenericContainerTest {
         provider = getProvider();
         provider.start(context);
     }
-    
+
     @After
     public void tearDown() {
-        if(provider!=null) {
+        if (provider != null) {
             provider.stop();
         }
     }

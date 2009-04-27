@@ -51,35 +51,43 @@ public class DefaultResourceAndMethodLookup implements ResourceAndMethodLookup {
 	}
 
 	public ResourceMethod methodFor(String pathUriComponent, String httpMethodName) {
-		for (Method javaMethod : resource.getType().getDeclaredMethods()) {
-			if (isEligible(javaMethod) 
-				&& pathAccepted(pathUriComponent, javaMethod) 
-				&& httpMethodAccepted(httpMethodName, javaMethod)) {
-				return new DefaultResourceMethod(resource, javaMethod);
-			}
-		}
-		return null;
+	    return methodFor(resource.getType(), resource.getType(), pathUriComponent, httpMethodName);
 	}
 
-	private boolean isEligible(Method javaMethod) {
+	private ResourceMethod methodFor(Class<?> resourceType, Class<?> searchingType, String pathUriComponent, String httpMethodName) {
+	    if(searchingType.equals(Object.class)) {
+	        return null;
+	    }
+        for (Method javaMethod : searchingType.getDeclaredMethods()) {
+            if (isEligible(javaMethod) 
+                && pathAccepted(pathUriComponent, resourceType, javaMethod) 
+                && httpMethodAccepted(httpMethodName, javaMethod)) {
+                return new DefaultResourceMethod(resource, javaMethod);
+            }
+        }
+        return methodFor(resourceType, searchingType.getSuperclass(), pathUriComponent, httpMethodName);
+    }
+
+    private boolean isEligible(Method javaMethod) {
 		return Modifier.isPublic(javaMethod.getModifiers()) && !Modifier.isStatic(javaMethod.getModifiers());
 	}
 
-	private boolean pathAccepted(String id, Method method) {
-		return hasMatchingPathAnnotation(id, method) || sameNameAsId(id, method);
+	private boolean pathAccepted(String id, Class<?> resourceType, Method method) {
+		return hasMatchingPathAnnotation(id, method) || sameNameAsId(id, resourceType, method);
 	}
 
 	private boolean hasMatchingPathAnnotation(String id, Method method) {
 		Path path = method.getAnnotation(Path.class);
-		if (path == null)
+		if (path == null) {
 			return false;
+		}
 		
 		String regexFromWildcards = path.value().replaceAll("\\*", ".\\*");
 		return id.matches(regexFromWildcards);
 	}
 
-	private boolean sameNameAsId(String id, Method method) {
-		return ("/" + method.getName()).equals(id);
+	private boolean sameNameAsId(String id, Class<?> resourceType, Method method) {
+		return ("/" + resourceType.getSimpleName() + "/" + method.getName()).equals(id);
 	}
 
 	private boolean httpMethodAccepted(String httpMethodName, Method javaMethod) {

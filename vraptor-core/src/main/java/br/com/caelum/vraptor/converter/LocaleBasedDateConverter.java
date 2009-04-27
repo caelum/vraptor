@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.core.VRaptorRequest;
+import br.com.caelum.vraptor.ioc.RequestScoped;
 
 /**
  * Locale based date converter.
@@ -18,6 +19,7 @@ import br.com.caelum.vraptor.core.VRaptorRequest;
  * @author Guilherme Silveira
  */
 @Convert(Date.class)
+@RequestScoped
 public class LocaleBasedDateConverter implements Converter<Date> {
     
     private final JstlWrapper jstlWrapper = new JstlWrapper();

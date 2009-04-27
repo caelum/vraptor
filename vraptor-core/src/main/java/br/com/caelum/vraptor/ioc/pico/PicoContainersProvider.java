@@ -32,13 +32,10 @@ package br.com.caelum.vraptor.ioc.pico;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.servlet.http.HttpSession;
 
 import org.picocontainer.DefaultPicoContainer;
 import org.picocontainer.MutablePicoContainer;
-import org.picocontainer.PicoBuilder;
 import org.picocontainer.behaviors.Caching;
 import org.picocontainer.lifecycle.JavaEE5LifecycleStrategy;
 import org.picocontainer.monitors.NullComponentMonitor;
@@ -59,6 +56,7 @@ import br.com.caelum.vraptor.resource.ResourceRegistry;
  * components on their respective areas.
  * 
  * @author Guilherme Silveira
+ * @author Adriano Almeida
  */
 public class PicoContainersProvider implements ComponentRegistry {
 
@@ -75,7 +73,8 @@ public class PicoContainersProvider implements ComponentRegistry {
         this.appContainer = container;
     }
 
-    public void register(Class requiredType, Class type) {
+    @SuppressWarnings("unchecked")
+	public void register(Class requiredType, Class type) {
         if (alreadyRegistered(requiredType)) {
             logger.debug("Overriding interface " + requiredType.getName() + " with " + type.getName());
         }
@@ -94,6 +93,7 @@ public class PicoContainersProvider implements ComponentRegistry {
     private boolean alreadyRegistered(Class<?> interfaceType) {
         for (Map<Class<?>,Class<?>> scope : new Map[] { applicationScoped, sessionScoped, requestScoped }) {
             if(scope.containsKey(interfaceType)) {
+            	scope.remove(interfaceType);
                 return true;
             }
         }

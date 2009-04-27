@@ -31,8 +31,15 @@ package br.com.caelum.vraptor.converter;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
+/**
+ * VRaptor's primitive char converter. 
+ * 
+ * @author Cecilia Fernandes
+ */
 @Convert(char.class)
+@ApplicationScoped
 public class PrimitiveCharConverter implements Converter {
 
     public Object convert(String value, Class type) {

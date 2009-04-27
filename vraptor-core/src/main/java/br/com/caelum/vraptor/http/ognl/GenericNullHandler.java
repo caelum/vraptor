@@ -47,7 +47,7 @@ import java.util.TreeSet;
 
 /**
  * Capable of instantiating generic interfaces and custom types.
- * 
+ *
  * @author Guilherme Silveira
  */
 public class GenericNullHandler {
@@ -63,7 +63,8 @@ public class GenericNullHandler {
         CONCRETE_TYPES.put(Queue.class, LinkedList.class);
     }
 
-    Object instantiate(Class<?> baseType) throws InstantiationException, IllegalAccessException,
+    @SuppressWarnings("unchecked")
+    <T> T instantiate(Class<T> baseType) throws InstantiationException, IllegalAccessException,
             InvocationTargetException, NoSuchMethodException {
         Object instance;
         Class<?> typeToInstantiate = baseType;
@@ -76,7 +77,8 @@ public class GenericNullHandler {
             typeToInstantiate = CONCRETE_TYPES.get(baseType);
         }
         instance = typeToInstantiate.getConstructor().newInstance();
-        return instance;
+
+        return (T) instance;
     }
 
 }

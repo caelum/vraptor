@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.InterceptionException;
+import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodParameters;
 import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
@@ -21,11 +22,13 @@ public class ExecuteMethodInterceptorTest {
     private Mockery mockery;
     private MethodParameters parameters;
     private RequestResult result;
+    private InterceptorStack stack;
 
     @Before
     public void setup() throws NoSuchMethodException {
         this.mockery = new Mockery();
         this.result = new RequestResult();
+        this.stack = mockery.mock(InterceptorStack.class);
         this.parameters =mockery.mock(MethodParameters.class);
     }
 
@@ -33,15 +36,16 @@ public class ExecuteMethodInterceptorTest {
     public void shouldInvokeTheMethodAndNotProceedWithInterceptorStack() throws SecurityException,
             NoSuchMethodException, IOException, InterceptionException {
         ExecuteMethodInterceptor interceptor = new ExecuteMethodInterceptor(result, parameters);
-        ResourceMethod method = new DefaultResourceMethod(null, DogAlike.class.getMethod("bark"));
+        final ResourceMethod method = new DefaultResourceMethod(null, DogAlike.class.getMethod("bark"));
         final DogAlike auau = mockery.mock(DogAlike.class);
         mockery.checking(new Expectations() {
             {
                 one(auau).bark();
                 one(parameters).getValues(); will(returnValue(new Object[]{}));
+                one(stack).next(method, auau);
             }
         });
-        interceptor.intercept(null, method, auau);
+        interceptor.intercept(stack, method, auau);
         mockery.assertIsSatisfied();
     }
 
@@ -60,7 +64,7 @@ public class ExecuteMethodInterceptorTest {
             }
         });
         try {
-            interceptor.intercept(null, method, auau);
+            interceptor.intercept(stack, method, auau);
             Assert.fail();
         } catch (InterceptionException e) {
             MatcherAssert.assertThat((RuntimeException) e.getCause(), Matchers.is(Matchers.equalTo(exception)));
@@ -71,15 +75,16 @@ public class ExecuteMethodInterceptorTest {
     @Test
     public void shouldUseTheProvidedArguments() throws SecurityException, NoSuchMethodException, InterceptionException, IOException {
         ExecuteMethodInterceptor interceptor = new ExecuteMethodInterceptor(result, parameters);
-        ResourceMethod method = new DefaultResourceMethod(null, DogAlike.class.getMethod("bark", int.class));
+        final ResourceMethod method = new DefaultResourceMethod(null, DogAlike.class.getMethod("bark", int.class));
         final DogAlike auau = mockery.mock(DogAlike.class);
         mockery.checking(new Expectations() {
             {
                 one(auau).bark(3);
                 one(parameters).getValues(); will(returnValue(new Object[]{3}));
+                one(stack).next(method, auau);
             }
         });
-        interceptor.intercept(null, method, auau);
+        interceptor.intercept(stack, method, auau);
         mockery.assertIsSatisfied();
     }
 

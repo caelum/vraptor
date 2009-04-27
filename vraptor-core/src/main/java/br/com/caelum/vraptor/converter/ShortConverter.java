@@ -31,8 +31,15 @@ package br.com.caelum.vraptor.converter;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
+/**
+ * VRaptor's Short converter. 
+ * 
+ * @author Guilherme Silveira
+ */
 @Convert(Short.class)
+@ApplicationScoped
 public class ShortConverter implements Converter<Short> {
 
     public Short convert(String value, Class<? extends Short> type) {

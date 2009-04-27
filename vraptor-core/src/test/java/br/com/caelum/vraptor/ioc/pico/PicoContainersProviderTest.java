@@ -19,6 +19,7 @@ import org.picocontainer.PicoBuilder;
 
 import br.com.caelum.vraptor.core.VRaptorRequest;
 import br.com.caelum.vraptor.interceptor.DefaultInterceptorRegistry;
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.resource.ResourceRegistry;
 
@@ -60,6 +61,10 @@ public class PicoContainersProviderTest {
     public static class MySecondImplementation implements Base {
     }
 
+    @ApplicationScoped
+    public static class AppImplementation implements Base {
+    }
+
     @Test
     public void shouldRemovePreviouslyRegisteredComponentIfRegisteringAgain() {
         provider.register(Base.class, MyFirstImplementation.class);
@@ -67,6 +72,16 @@ public class PicoContainersProviderTest {
         Container container = provider.provide(webRequest);
         Base instance = container.instanceFor(Base.class);
         assertThat(instance.getClass(), is(typeCompatibleWith(MySecondImplementation.class)));
+    }
+
+    @Test
+    public void shouldRemovePreviouslyRegisteredComponentIfRegisteringAgainInAnotherScope() {
+        provider.register(Base.class, MyFirstImplementation.class);
+        provider.register(Base.class,AppImplementation.class);
+        provider.init();
+        Container container = provider.provide(webRequest);
+        Base instance = container.instanceFor(Base.class);
+        assertThat(instance.getClass(), is(typeCompatibleWith(AppImplementation.class)));
     }
 
 }

@@ -1,10 +1,9 @@
 package br.com.caelum.vraptor.ioc.spring;
 
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import org.springframework.beans.factory.FactoryBean;
 
 import javax.servlet.http.HttpSession;
-
-import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
 /**
  * Provides the current javax.servlet.http.HttpSession object, provided that Spring has registered it for the

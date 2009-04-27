@@ -29,22 +29,19 @@
  */
 package br.com.caelum.vraptor.core;
 
-import java.io.IOException;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Interceptor;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.view.jsp.DefaultPageResult;
+import br.com.caelum.vraptor.view.Results;
 import br.com.caelum.vraptor.vraptor2.RequestResult;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Intercepts the request and forwards to the default view if no view was
  * rendered so far.
- * 
+ *
  * @author Guilherme Silveira
  */
 public class ForwardToDefaultViewInterceptor implements Interceptor {
@@ -64,18 +61,10 @@ public class ForwardToDefaultViewInterceptor implements Interceptor {
 
     public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
             throws InterceptionException {
-        if(result.used()) {
+        if (result.used()) {
             return;
         }
-        try {
-            result.use(DefaultPageResult.page()).forward(methodResult.getValue());
-        } catch (ServletException e) {
-            // TODO better?
-            throw new InterceptionException(e);
-        } catch (IOException e) {
-            // TODO better?
-            throw new InterceptionException(e);
-        }
+        result.use(Results.page()).forward(methodResult.getValue());
     }
 
 }

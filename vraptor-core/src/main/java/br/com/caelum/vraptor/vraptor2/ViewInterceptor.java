@@ -6,9 +6,6 @@ import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.view.jsp.PageResult;
 
-import javax.servlet.ServletException;
-import java.io.IOException;
-
 public class ViewInterceptor implements Interceptor {
 
     private RequestResult reqResult;
@@ -27,14 +24,7 @@ public class ViewInterceptor implements Interceptor {
 
     public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws InterceptionException {
         if (info.shouldShowView(method)) {
-            try {
-                this.result.forward(reqResult.getValue());
-            } catch (ServletException e) {
-                // TODO better
-                throw new InterceptionException(e.getMessage(), e);
-            } catch (IOException e) {
-                throw new InterceptionException(e);
-            }
+            this.result.forward(reqResult.getValue());
         }
     }
 

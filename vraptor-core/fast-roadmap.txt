@@ -1,37 +1,40 @@
-TODO: 33/34/29/31/27/26/24
-- support to viewless
-- support for redirect on Result
-OgnlParametersProviderTest:
-    @Test
-    public void canHandleListOfWrapperTypes() {
-        Assert.fail("doesnt support list of wrapper types yet");
-    }
-- result support (new style, logic or string)
-- new view properties
-(MUST) - setting errors during ognl expression evaluation should be defined as validation errors
+TODO: 17
+DO: (MUST) - setting errors during ognl expression evaluation should be defined as validation errors
 (MUST) - converter errors should be validation errors
 (MUST) - errors should not be strings
 (MUST) - support HibernateValidator with i18n messages
 (MUST) - support i18n messages
 
-- new view properties
+- make client server redirect work with parameters, which ones?
 (MUST) - niceurls with programmatic support
 (MUST) - niceurls -> path support
 (MUST) - niceurls with file config support -> path support
 (MUST) - path annotation with support to value injection (niceurls?)
 (MUST) - hibernate plugin
-(MUST) - json output support: three different options
 (MUST) - better exception handling everywhere
+(MUST) - json output support: three different options
 (MUST) - Map support
 - Set support
+- automatic REDIRECT depending on accepts
+
+done - (3.0.1): annotate all converters which do not depend on session or request as @AppScoped
+done - (3.0.1) ceci: BigInteger converter (+test)... ja existe de BigDecimal (se bobear, ja existe no vraptor2)
+(3.0.1) ceci: 404 component
+
 
 
 test and refactor:
-a) test ListHandler, GenericHandler
+a) caelumweb: use logicredirect that is most advanced
+a) test ListNullHandler, GenericNullHandler
 b) EERemoval test
 c) unit test for PicoContainersProvider... every scope should be tested
 - defaultpathresolver better test
 - new interceptor test 
+- ListAccessorTest for if part
+- DefaultResourceMethodLookup should cache methods so it doesnt query every time
+- DefaultResourceRegistry cache
+MethodLookupBuilder: rename
+DefaultLogicResult should cache enhancers in order to create objects
 
 
 
@@ -64,10 +67,9 @@ site docs (prior to release)
 - containers now can be @Request, @Session, @App scoped
 
 kung help
-	- result support to another component
 	- known bug: accessing / when its /index.html.... if its a dir containing an index.html it doesnt work, but if your url is /clients/ it works...
 	- add a @PostConstruct @PreDestroy test for providers 
-	- automatic REDIRECT depending on accepts
+	- support new provider style
 
 
 
@@ -80,6 +82,7 @@ kung help
 
 
 right before release
+	- check all TODOS and do something about them
 	go through every request component and check if it really needs to be request based
 	verify org.apache.log4j logs -> sl4j
 	copyright in all files check
@@ -98,7 +101,6 @@ right before release
 	official support by caelum
 
 maybe
-	better than vraptor2: support for inheritance
 - Hibernate.validate(Object instance, String ... fields)
 - Hibernate.validate(Object instance) : Proxy.getFirst(), Proxy.getSecond() will hibernate validate those fields
 
@@ -130,10 +132,16 @@ maybe
 
 
 
+right before ANY release
+	- check all TODOS and do something about them
 
 ONLY AFTER RELEASE
-(3.0.1) ceci: BigInteger converter (+test)... ja existe de BigDecimal (se bobear, ja existe no vraptor2)
-(3.0.1): annotate all converters which do not depend on session or request as @AppScoped
+3.0.1 - vraptor quartz component 
+3.0.1 - extract VRaptor Validator
+- Question: RequestResult should contain an Object so logics could execute a totally custom method???
+3.0.1 - Register other caches
+3.0.1 -  warn on views.properties redirect --> teach how to use the logicresult
+ResourceMethod: two methods with the same name: Log.error
 (3.0.1)ceci: converters: jodatime (ver no vraptor2)
 	- se o arquivo jodatime.jar estiver no classpath (use Class.forName com catch exception), loada automatico
 	- se estiver no classpath, tem que adicionar os conversores atraves de reflection, nao pode referenciar nenhuma classe diretamente que referencia joda
@@ -141,7 +149,6 @@ ONLY AFTER RELEASE
 	- nao cadastra-los por padrao
 (3.0.1)ceci: support generic Set with ognl (look at MiscOgnlSupportTest for generic list support - you need to create a SetAccessor)
 (3.0.2) - xml output support
-(3.0.1) ceci: 404 component
 (3.0.1) MultiPartInterceptor config
 - customizable error process on request execution
 - each Provider should have a getComponentsToTest template method
@@ -157,7 +164,6 @@ ONLY AFTER RELEASE
 - CachedConverters and others should neve register(Class), they should do it at startup and clone those pico instances if faster... check it!
 - all converter erros messages should contain the original value between '' so its clear in the message if it was empty (or null)
 - test that checks that the main PicoContainer is not registered... and the converters interface is also not registered so it doesnt give the same converter to two different requests
-- check all TODOS and do something about them
 - allow private/protected constructors (search for every newInstance with getConstructor and setAccessible them, work it out with pico/mirror and so on)
 - allow private/protected getters/setters
 - method addAsNext on InterceptorStack could have another name, could have been another interface (same implmementation)?
@@ -276,6 +282,8 @@ OgnlParametersProviderTest:
 
 
 done:
+- better than vraptor2: support for inheritance
+- amazing support for client side redirect to logic with refactoring support! all you need is an accessible non-args constructor
 - support @Path
 - ant build run tests
 - cobertura report
@@ -330,3 +338,12 @@ done:
 1 path annotation default value (without annotation)
 2 path annotation with support to regex (niceurls?)
 - interceptor sequence support
+- support for redirect on Result
+- support to viewless
+- support server side redirect to a random url
+- cute validation methods
+- cute validation should methods
+- server forward based on Logic result
+- client redirect based on Logic result
+- server forward/include based on url
+- client redirect based on url

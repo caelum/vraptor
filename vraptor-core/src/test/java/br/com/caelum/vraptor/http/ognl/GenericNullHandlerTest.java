@@ -29,6 +29,90 @@
  */
 package br.com.caelum.vraptor.http.ognl;
 
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertThat;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.GregorianCalendar;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
+
 public class GenericNullHandlerTest {
 
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldDenyMostInterfaces() throws Exception {
+        GenericNullHandler handler = new GenericNullHandler();
+        handler.instantiate(TheInterface.class);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldDenyMostAbstractClasses() throws Exception {
+        GenericNullHandler handler = new GenericNullHandler();
+        handler.instantiate(AbstractClass.class);
+    }
+
+    @Test
+    public void shouldInstantiateGregorianCalendarForAbstractCalendarType() throws Exception {
+        GenericNullHandler handler = new GenericNullHandler();
+        Calendar calendar = handler.instantiate(Calendar.class);
+        assertThat(calendar, is(notNullValue()));
+        assertThat(calendar, is(instanceOf(GregorianCalendar.class)));
+    }
+
+    @Test
+    public void shouldInstantiateArrayListForCollectionInterface() throws Exception {
+        GenericNullHandler handler = new GenericNullHandler();
+        Collection collection = handler.instantiate(Collection.class);
+        assertThat(collection, is(notNullValue()));
+        assertThat(collection, is(instanceOf(ArrayList.class)));
+    }
+
+    @Test
+    public void shouldInstantiateArrayListForListInterface() throws Exception {
+        GenericNullHandler handler = new GenericNullHandler();
+        List list = handler.instantiate(List.class);
+        assertThat(list, is(notNullValue()));
+        assertThat(list, is(instanceOf(ArrayList.class)));
+    }
+
+    @Test
+    public void shouldInstantiateLinkedListForQueueInterface() throws Exception {
+        GenericNullHandler handler = new GenericNullHandler();
+        Queue queue = handler.instantiate(Queue.class);
+        assertThat(queue, is(notNullValue()));
+        assertThat(queue, is(instanceOf(LinkedList.class)));
+    }
+
+    @Test
+    public void shouldInstantiateHashSetListForSetInterface() throws Exception {
+        GenericNullHandler handler = new GenericNullHandler();
+        Set set = handler.instantiate(Set.class);
+        assertThat(set, is(notNullValue()));
+        assertThat(set, is(instanceOf(HashSet.class)));
+    }
+
+    @Test
+    public void shouldInstantiateTreeSetListForSortedSetInterface() throws Exception {
+        GenericNullHandler handler = new GenericNullHandler();
+        Set set = handler.instantiate(SortedSet.class);
+        assertThat(set, is(notNullValue()));
+        assertThat(set, is(instanceOf(TreeSet.class)));
+    }
+
+}
+
+interface TheInterface {
+}
+
+abstract class AbstractClass {
 }

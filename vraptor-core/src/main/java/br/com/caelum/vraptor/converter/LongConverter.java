@@ -33,6 +33,11 @@ import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
+/**
+ * VRaptor's Long converter. 
+ * 
+ * @author Guilherme Silveira
+ */
 @Convert(Long.class)
 @ApplicationScoped
 public class LongConverter implements Converter<Long> {

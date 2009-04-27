@@ -33,6 +33,11 @@ import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
+/**
+ * VRaptor's primitive boolean converter. 
+ * 
+ * @author Cecilia Fernandes
+ */
 @Convert(boolean.class)
 @ApplicationScoped
 public class PrimitiveBooleanConverter implements Converter {

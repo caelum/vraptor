@@ -33,6 +33,11 @@ import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
+/**
+ * VRaptor's Integer converter. 
+ * 
+ * @author Guilherme Silveira
+ */
 @Convert(Integer.class)
 @ApplicationScoped
 public class IntegerConverter implements Converter<Integer> {

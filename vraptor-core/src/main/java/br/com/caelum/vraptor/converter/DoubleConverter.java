@@ -33,6 +33,11 @@ import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
+/**
+ * VRaptor's Double converter. 
+ * 
+ * @author Guilherme Silveira
+ */
 @Convert(Double.class)
 @ApplicationScoped
 public class DoubleConverter implements Converter<Double> {

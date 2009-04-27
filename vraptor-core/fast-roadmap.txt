@@ -5,6 +5,10 @@ DO: (MUST) - setting errors during ognl expression evaluation should be defined 
 (MUST) - support HibernateValidator with i18n messages
 (MUST) - support i18n messages
 
+- if you invoke container.register after init --> exception
+- ClientsController --> clients.list
+- if you instanceFor returns null on pico --> log debug
+
 - make client server redirect work with parameters, which ones?
 (MUST) - niceurls with programmatic support
 (MUST) - niceurls -> path support
@@ -18,6 +22,8 @@ DO: (MUST) - setting errors during ognl expression evaluation should be defined 
 - automatic REDIRECT depending on accepts
 
 (3.0.1) ceci: BigInteger converter (+test)... ja existe de BigDecimal (se bobear, ja existe no vraptor2)
+done - (3.0.1): annotate all converters which do not depend on session or request as @AppScoped
+done - (3.0.1) ceci: BigInteger converter (+test)... ja existe de BigDecimal (se bobear, ja existe no vraptor2)
 (3.0.1) ceci: 404 component
 
 test and refactor:
@@ -32,6 +38,11 @@ c) unit test for PicoContainersProvider... every scope should be tested
 - DefaultResourceRegistry cache
 MethodLookupBuilder: rename
 DefaultLogicResult should cache enhancers in order to create objects
+
+FileDownload support:
+	- either return FileDownload
+	- result.use(FileDownload)
+
 
 
 

@@ -33,6 +33,11 @@ import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
+/**
+ * VRaptor's Byte converter. 
+ * 
+ * @author Guilherme Silveira
+ */
 @Convert(Byte.class)
 @ApplicationScoped
 public class ByteConverter implements Converter<Byte> {

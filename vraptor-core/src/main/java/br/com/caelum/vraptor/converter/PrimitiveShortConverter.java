@@ -33,6 +33,11 @@ import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
+/**
+ * VRaptor's primitive short converter. 
+ * 
+ * @author Cecilia Fernandes
+ */
 @Convert(short.class)
 @ApplicationScoped
 public class PrimitiveShortConverter implements Converter {

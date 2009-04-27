@@ -31,8 +31,10 @@ package br.com.caelum.vraptor.converter;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
 @Convert(Boolean.class)
+@ApplicationScoped
 public class BooleanConverter implements Converter<Boolean> {
 
     public Boolean convert(String value, Class<? extends Boolean> type) {

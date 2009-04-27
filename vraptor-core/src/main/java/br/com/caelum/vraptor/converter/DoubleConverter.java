@@ -31,8 +31,10 @@ package br.com.caelum.vraptor.converter;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
 @Convert(Double.class)
+@ApplicationScoped
 public class DoubleConverter implements Converter<Double> {
 
     public Double convert(String value, Class<? extends Double> type) {

@@ -31,8 +31,10 @@ package br.com.caelum.vraptor.converter;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
 @Convert(Float.class)
+@ApplicationScoped
 public class FloatConverter implements Converter<Float> {
 
     public Float convert(String value, Class<? extends Float> type) {

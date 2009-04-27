@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.core.VRaptorRequest;
+import br.com.caelum.vraptor.ioc.RequestScoped;
 
 /**
  * Locale based calendar converter.
@@ -20,6 +21,7 @@ import br.com.caelum.vraptor.core.VRaptorRequest;
  * @author Guilherme Silveira
  */
 @Convert(Calendar.class)
+@RequestScoped
 public class LocaleBasedCalendarConverter implements Converter<Calendar> {
     
     private final JstlWrapper jstlWrapper = new JstlWrapper();

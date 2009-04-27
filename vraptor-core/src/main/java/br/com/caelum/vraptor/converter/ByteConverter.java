@@ -31,8 +31,10 @@ package br.com.caelum.vraptor.converter;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
 @Convert(Byte.class)
+@ApplicationScoped
 public class ByteConverter implements Converter<Byte> {
 
     public Byte convert(String value, Class<? extends Byte> type) {

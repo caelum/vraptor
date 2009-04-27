@@ -247,6 +247,7 @@ OgnlParametersProviderTest:
 
 
 	optimizations (product):
+	- component instances without any logging (faster proceedings)
 	- cluster (v2, v3?)
 	- converter optimization
 	- connection leak

@@ -21,9 +21,10 @@ DO: (MUST) - setting errors during ognl expression evaluation should be defined 
 - Set support
 - automatic REDIRECT depending on accepts
 
-done - (3.0.1): annotate all converters which do not depend on session or request as @ApplicationScoped
+done - (3.0.1) ceci: annotate all converters which do not depend on session or request as @ApplicationScoped
 done - (3.0.1) ceci: BigInteger converter (+test) e BigDecimal converter (+test) 
 done - (3.0.1) ceci: 404 component
+ceci: integration test for vraptor-example project
 
 test and refactor:
 a) caelumweb: use logicredirect that is most advanced

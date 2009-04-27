@@ -132,6 +132,7 @@ right before ANY release
 	- check all TODOS and do something about them
 
 ONLY AFTER RELEASE
+3.0.1 - vraptor quartz component 
 3.0.1 - extract VRaptor Validator
 - Question: RequestResult should contain an Object so logics could execute a totally custom method???
 3.0.1 - Register other caches

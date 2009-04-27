@@ -1,5 +1,4 @@
 TODO: 17
-DO: (MUST) - setting errors during ognl expression evaluation should be defined as validation errors
 (MUST) - converter errors should be validation errors
 (MUST) - support i18n messages on hamcrest based validations
 (MUST) - support HibernateValidator with i18n messages
@@ -8,6 +7,7 @@ DO: (MUST) - setting errors during ognl expression evaluation should be defined 
 - ClientsController --> clients.list
 - support for Long[]
 
+- ClientsController --> clients.list
 - make client server redirect work with parameters, which ones?
 (MUST) - niceurls with programmatic support
 (MUST) - niceurls -> path support
@@ -149,6 +149,7 @@ ONLY AFTER RELEASE
 FileDownload support:
 	- either return FileDownload
 	- result.use(FileDownload)
+- if you instanceFor returns null on pico --> log debug???
 3.0.1 - vraptor quartz component 
 3.0.1 - extract VRaptor Validator
 - Question: RequestResult should contain an Object so logics could execute a totally custom method???

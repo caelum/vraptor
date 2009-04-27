@@ -31,11 +31,13 @@ package br.com.caelum.vraptor.converter;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
 /**
  * @author Guilherme Silveira
  */
 @Convert(int.class)
+@ApplicationScoped
 public class PrimitiveIntConverter implements Converter {
 
     public Object convert(String value, Class type) {

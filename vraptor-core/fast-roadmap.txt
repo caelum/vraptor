@@ -1,7 +1,7 @@
 TODO: 17
+(MUST) - errors should not be strings
 DO: (MUST) - setting errors during ognl expression evaluation should be defined as validation errors
 (MUST) - converter errors should be validation errors
-(MUST) - errors should not be strings
 (MUST) - support HibernateValidator with i18n messages
 (MUST) - support i18n messages
 

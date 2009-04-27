@@ -1,16 +1,19 @@
 package br.com.caelum.vraptor.validator;
 
-import br.com.caelum.vraptor.view.jsp.PageResult;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import javax.servlet.ServletException;
-import java.io.IOException;
+import br.com.caelum.vraptor.view.jsp.PageResult;
 
 public class ValidatorAcceptanceTest {
     private PageResult result;
@@ -45,7 +48,7 @@ public class ValidatorAcceptanceTest {
         try {
             validator.checking(new Validations() {
                 {
-                    that(guilherme.id, is(notNullValue()));
+                    that("id",guilherme.id, is(notNullValue()));
                 }
             });
             Assert.fail();
@@ -64,7 +67,7 @@ public class ValidatorAcceptanceTest {
         validator.checking(new Validations() {
             {
                 // this is the Assertion itself
-                that(guilherme.id, is(notNullValue()));
+                that("id", guilherme.id, is(notNullValue()));
             }
         });
         mockery.assertIsSatisfied();

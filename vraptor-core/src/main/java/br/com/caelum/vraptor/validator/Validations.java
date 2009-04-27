@@ -34,49 +34,58 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.StringDescription;
 
+/**
+ * Hamcrest based validation support.
+ * 
+ * @author Guilherme Silveira
+ */
 public class Validations {
 
-    private final List<String> errors = new ArrayList<String>();
+	private final List<ValidationMessage> errors = new ArrayList<ValidationMessage>();
 
-    public <T> boolean that(T id, Matcher<T> matcher) {
-        return that(null, id, matcher);
-    }
+	public <T> boolean that(T id, Matcher<T> matcher) {
+		return that("", null, id, matcher);
+	}
 
-    public <T> boolean that(String reason, T actual, Matcher<? super T> matcher) {
-        if (!matcher.matches(actual)) {
-            if (reason != null) {
-                errors.add(reason);
-            } else {
-                Description description = new StringDescription();
-                description.appendDescriptionOf(matcher);
-                errors.add(description.toString());
-            }
-            return false;
-        }
-        return true;
-    }
+	public <T> boolean that(String category, T id, Matcher<T> matcher) {
+		return that(category, null, id, matcher);
+	}
 
-    public void that(String reason, boolean assertion) {
-        if (!assertion) {
-            errors.add(reason);
-        }
-    }
+	public <T> boolean that(String category, String reason, T actual, Matcher<? super T> matcher) {
+		if (!matcher.matches(actual)) {
+			if (reason != null) {
+				errors.add(new ValidationMessage(reason, category));
+			} else {
+				Description description = new StringDescription();
+				description.appendDescriptionOf(matcher);
+				errors.add(new ValidationMessage(description.toString(), category));
+			}
+			return false;
+		}
+		return true;
+	}
 
-    public List<String> getErrors() {
-        return errors;
-    }
+	public void that(String category, String reason, boolean assertion) {
+		if (!assertion) {
+			errors.add(new ValidationMessage(reason, category));
+		}
+	}
 
-    public void and(List<String> errors) {
-        this.errors.addAll(errors);
-    }
+	public List<ValidationMessage> getErrors() {
+		return errors;
+	}
 
-    public <T> If<T> that(T instance) {
-        return new If<T>(instance, this);
-    }
+	public void and(List<ValidationMessage> errors) {
+		this.errors.addAll(errors);
+	}
 
-    /**
-     * Can be overriden to add extra validations processes.
-     */
-    public void check() {
-    }
+	public <T> If<T> that(T instance) {
+		return new If<T>(instance, this);
+	}
+
+	/**
+	 * Can be overriden to add extra validations processes.
+	 */
+	public void check() {
+	}
 }

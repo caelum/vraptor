@@ -27,54 +27,26 @@
  */
 package br.com.caelum.vraptor.validator;
 
-import org.hamcrest.Matcher;
-
 /**
- * Executes some piece of code only if the matching is true. If its false, add
- * the description for the false check as an error.
+ * A simple validation message.
  * 
  * @author Guilherme Silveira
  */
-public class If<T> {
+public class ValidationMessage implements SimpleMessage {
 
-    @SuppressWarnings("unchecked")
-    private static final Then NOTHING = new Then(new Validations()) {
-        @Override
-        public void otherwise(Validations validations) {
-            // does nothing
-        }
-    };
+	private final String message, category;
 
-    private final T instance;
-    private final Validations actual;
+	public ValidationMessage(String message, String category) {
+		this.message = message;
+		this.category = category;
+	}
 
-    public If(T instance, Validations actual) {
-        this.instance = instance;
-        this.actual = actual;
-    }
+	public String getMessage() {
+		return message;
+	}
 
-    @SuppressWarnings("unchecked")
-    public Then<T> shouldBe(Matcher matcher) {
-        if (!actual.that(instance, matcher)) {
-            return NOTHING;
-        }
-        return new Then<T>(actual);
-    }
-
-    @SuppressWarnings("unchecked")
-    public Then<T> shouldBe(String category, Matcher matcher) {
-        if (!actual.that(category, instance, matcher)) {
-            return NOTHING;
-        }
-        return new Then<T>(actual);
-    }
-
-    @SuppressWarnings("unchecked")
-    public Then<T> shouldBe(String category, String reason, Matcher matcher) {
-        if (!actual.that(category, reason, instance, matcher)) {
-            return NOTHING;
-        }
-        return new Then<T>(actual);
-    }
+	public String getCategory() {
+		return category;
+	}
 
 }

@@ -65,6 +65,7 @@ import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
 import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
 import br.com.caelum.vraptor.resource.DefaultMethodLookupBuilder;
+import br.com.caelum.vraptor.resource.DefaultResourceNotFoundHandler;
 import br.com.caelum.vraptor.resource.DefaultResourceRegistry;
 import br.com.caelum.vraptor.validator.DefaultValidator;
 import br.com.caelum.vraptor.view.DefaultLogicResult;
@@ -104,6 +105,7 @@ public class PicoProvider implements ContainerProvider {
     protected void registerComponents(ComponentRegistry container) {
         singleInterfaceRegister(StupidTranslator.class, container);
         singleInterfaceRegister(DefaultResourceRegistry.class, container);
+        singleInterfaceRegister(DefaultResourceNotFoundHandler.class, container);
         singleInterfaceRegister(DefaultDirScanner.class, container);
         singleInterfaceRegister(WebInfClassesScanner.class, container);
         singleInterfaceRegister(DefaultInterceptorRegistry.class, container);

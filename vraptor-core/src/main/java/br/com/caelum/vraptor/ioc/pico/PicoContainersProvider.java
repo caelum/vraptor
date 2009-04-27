@@ -68,7 +68,7 @@ public class PicoContainersProvider implements ComponentRegistry {
 	private final Map<Class<?>, Class<?>> sessionScoped = new HashMap<Class<?>, Class<?>>();
 	private final Map<Class<?>, Class<?>> requestScoped = new HashMap<Class<?>, Class<?>>();
 	private final MutablePicoContainer appContainer;
-	private final boolean initialized = false;
+	private boolean initialized = false;
 
 	public PicoContainersProvider(MutablePicoContainer container) {
 		this.appContainer = container;

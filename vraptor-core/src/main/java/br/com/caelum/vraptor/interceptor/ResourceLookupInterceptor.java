@@ -36,34 +36,28 @@ import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.core.VRaptorRequest;
 import br.com.caelum.vraptor.http.UrlToResourceTranslator;
 import br.com.caelum.vraptor.resource.ResourceMethod;
-
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import br.com.caelum.vraptor.resource.ResourceNotFoundHandler;
 
 public class ResourceLookupInterceptor implements Interceptor {
 
     private final UrlToResourceTranslator translator;
     private final RequestInfo requestInfo;
     private final VRaptorRequest request;
+	private final ResourceNotFoundHandler resourceNotFoundHandler;
 
     public ResourceLookupInterceptor(UrlToResourceTranslator translator, RequestInfo requestInfo,
-            VRaptorRequest request) {
+            ResourceNotFoundHandler resourceNotFoundHandler, VRaptorRequest request) {
         this.translator = translator;
         this.requestInfo = requestInfo;
         this.request = request;
+        this.resourceNotFoundHandler = resourceNotFoundHandler;
     }
 
     public void intercept(InterceptorStack invocation, ResourceMethod ignorableMethod, Object resourceInstance) throws InterceptionException {
-        HttpServletResponse response = request.getResponse();
         ResourceMethod method = translator.translate(request.getRequest());
         if (method == null) {
-            try {
-                response.setStatus(404);
-                response.getWriter().println("resource not found");
-                return;
-            } catch (IOException e) {
-                throw new InterceptionException(e);
-            }
+        	resourceNotFoundHandler.couldntFind(request.getResponse());
+        	return;
         }
         requestInfo.setResourceMethod(method);
         invocation.next(method, resourceInstance);

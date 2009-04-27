@@ -44,6 +44,7 @@ import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
 import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
 import br.com.caelum.vraptor.resource.MethodLookupBuilder;
 import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.resource.ResourceNotFoundHandler;
 import br.com.caelum.vraptor.resource.ResourceRegistry;
 import br.com.caelum.vraptor.view.LogicResult;
 import br.com.caelum.vraptor.view.PathResolver;
@@ -89,7 +90,7 @@ public abstract class GenericContainerTest {
                 ResourceLookupInterceptor.class, InstantiateInterceptor.class, Result.class,
                 ExecuteMethodInterceptor.class, PageResult.class, ParametersProvider.class, RequestInfo.class,
                 Validator.class, PathResolver.class, ForwardToDefaultViewInterceptor.class, LogicResult.class,
-                RequestResult.class);
+                RequestResult.class, ResourceNotFoundHandler.class);
         mockery.assertIsSatisfied();
     }
 

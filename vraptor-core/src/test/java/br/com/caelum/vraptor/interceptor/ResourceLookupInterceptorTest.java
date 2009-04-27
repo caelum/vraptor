@@ -6,10 +6,13 @@ import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.core.VRaptorRequest;
 import br.com.caelum.vraptor.http.UrlToResourceTranslator;
 import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.resource.ResourceNotFoundHandler;
+
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
+import org.jmock.api.Action;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -28,6 +31,7 @@ public class ResourceLookupInterceptorTest {
     private HttpServletRequest webRequest;
     private HttpServletResponse webResponse;
     private RequestInfo requestInfo;
+	private ResourceNotFoundHandler notFoundHandler;
 
     @Before
     public void config() {
@@ -37,23 +41,20 @@ public class ResourceLookupInterceptorTest {
         this.webResponse = mockery.mock(HttpServletResponse.class);
         this.request = new VRaptorRequest(null, webRequest, webResponse);
         this.requestInfo = mockery.mock(RequestInfo.class);
-        this.lookup = new ResourceLookupInterceptor(translator, requestInfo, request);
+        this.notFoundHandler = mockery.mock(ResourceNotFoundHandler.class);
+        this.lookup = new ResourceLookupInterceptor(translator, requestInfo, notFoundHandler, request);
     }
 
     @Test
     public void shouldHandle404() throws IOException, InterceptionException {
-        final StringWriter writer = new StringWriter();
         mockery.checking(new Expectations() {
             {
                 one(translator).translate(webRequest);
                 will(returnValue(null));
-                one(webResponse).setStatus(404);
-                one(webResponse).getWriter();
-                will(returnValue(new PrintWriter(writer)));
+                one(notFoundHandler).couldntFind(webResponse);
             }
         });
         lookup.intercept(null, null, null);
-        MatcherAssert.assertThat(writer.getBuffer().toString(), Matchers.is(Matchers.equalTo("resource not found\n")));
         mockery.assertIsSatisfied();
     }
 

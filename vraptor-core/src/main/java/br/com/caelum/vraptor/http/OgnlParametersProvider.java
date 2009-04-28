@@ -48,9 +48,11 @@ import br.com.caelum.vraptor.http.ognl.ArrayAccessor;
 import br.com.caelum.vraptor.http.ognl.ListAccessor;
 import br.com.caelum.vraptor.http.ognl.ReflectionBasedNullHandler;
 import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.vraptor2.Info;
 
+@RequestScoped
 public class OgnlParametersProvider implements ParametersProvider {
 
     private final TypeCreator creator;
@@ -87,7 +89,7 @@ public class OgnlParametersProvider implements ParametersProvider {
             context.setTraceEvaluations(true);
             context.put(Container.class,this.container);
             
-            OgnlToConvertersController controller = new OgnlToConvertersController(converters);
+			OgnlToConvertersController controller = new OgnlToConvertersController(converters, errors, bundle);
             Ognl.setTypeConverter(context, controller);
             for(String key : parameters.getNames()) {
                 String[] values = parameters.get(key);

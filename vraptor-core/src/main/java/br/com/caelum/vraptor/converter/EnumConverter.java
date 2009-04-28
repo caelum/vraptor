@@ -29,6 +29,7 @@
  */
 package br.com.caelum.vraptor.converter;
 
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -53,23 +54,22 @@ public class EnumConverter implements Converter<Enum> {
         }
         Class<? extends Enum> enumType = type;
         if (Character.isDigit(value.charAt(0))) {
-            return resolveByOrdinal(value, enumType);
+            return resolveByOrdinal(value, enumType, errors, bundle);
         } else {
-            return resolveByName(value, enumType);
+            return resolveByName(value, enumType, errors, bundle);
         }
     }
 
-    private Enum resolveByName(String value, Class<? extends Enum> enumType) {
+    private Enum resolveByName(String value, Class<? extends Enum> enumType, List<ValidationMessage> errors, ResourceBundle bundle) {
         try {
             return Enum.valueOf(enumType, value);
         } catch (IllegalArgumentException e) {
-            // TODO better?
-            throw new IllegalArgumentException("Invalid enumeration value '" + value + "' for type "
-                    + enumType.getName() + " value " + value, e);
+			errors.add(new ValidationMessage(MessageFormat.format(bundle.getString("is_not_a_valid_enum_value"), value), ""));
+			return null;
         }
     }
 
-    private Enum resolveByOrdinal(String value, Class<? extends Enum> enumType) {
+    private Enum resolveByOrdinal(String value, Class<? extends Enum> enumType, List<ValidationMessage> errors, ResourceBundle bundle) {
         try {
             int ordinal = Integer.parseInt(value);
             if (ordinal >= enumType.getEnumConstants().length) {
@@ -78,8 +78,8 @@ public class EnumConverter implements Converter<Enum> {
             }
             return enumType.getEnumConstants()[ordinal];
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Invalid enumeration value '" + value + "'for type "
-                    + enumType.getName() + " value " + value, e);
+			errors.add(new ValidationMessage(MessageFormat.format(bundle.getString("is_not_a_valid_enum_value"), value), ""));
+			return null;
         }
     }
 

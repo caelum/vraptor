@@ -38,6 +38,7 @@ import java.util.ResourceBundle;
 import org.junit.Before;
 import org.junit.Test;
 
+import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
 import br.com.caelum.vraptor.validator.ValidationMessage;
 
 public class EnumConverterTest {
@@ -68,14 +69,16 @@ public class EnumConverterTest {
         assertThat(converter.convert("", MyCustomEnum.class, errors, bundle), is(nullValue()));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldComplainAboutInvalidIndex() {
         converter.convert("3200", MyCustomEnum.class, errors, bundle);
+        assertThat(errors.get(0), is(VRaptorMatchers.error("", "3200 is not a valid option.")));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldComplainAboutInvalidNumber() {
         converter.convert("32a00", MyCustomEnum.class, errors, bundle);
+        assertThat(errors.get(0), is(VRaptorMatchers.error("", "32a00 is not a valid option.")));
     }
 
     @Test(expected = IllegalArgumentException.class)

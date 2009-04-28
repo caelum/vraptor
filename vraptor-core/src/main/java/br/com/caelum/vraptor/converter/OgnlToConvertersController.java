@@ -34,19 +34,28 @@ import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import ognl.TypeConverter;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor.ioc.RequestScoped;
+import br.com.caelum.vraptor.validator.ValidationMessage;
 
+@RequestScoped
 public class OgnlToConvertersController implements TypeConverter {
 
     private final Converters converters;
+	private final ResourceBundle bundle;
+	private final List<ValidationMessage> errors;
 
-    public OgnlToConvertersController(Converters converters) {
+    public OgnlToConvertersController(Converters converters, List<ValidationMessage> errors, ResourceBundle bundle) {
         this.converters = converters;
+		this.errors = errors;
+		this.bundle = bundle;
     }
 
     @SuppressWarnings("unchecked")

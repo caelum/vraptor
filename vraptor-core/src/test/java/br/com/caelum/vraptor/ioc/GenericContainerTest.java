@@ -119,7 +119,7 @@ public abstract class GenericContainerTest {
     @Before
     public void setup() throws IOException {
         this.mockery = new Mockery();
-        this.context = mockery.mock(ServletContext.class);
+        this.context = mockery.mock(ServletContext.class, "servlet context");
         configureExpectations();
         provider = getProvider();
         provider.start(context);

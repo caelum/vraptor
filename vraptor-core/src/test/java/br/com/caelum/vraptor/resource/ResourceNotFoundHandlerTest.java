@@ -12,16 +12,20 @@ import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
 
+import br.com.caelum.vraptor.core.VRaptorRequest;
+
 public class ResourceNotFoundHandlerTest {
 
 	private ResourceNotFoundHandler notFoundHandler;
 	private Mockery mockery;
 	private HttpServletResponse webResponse;
+	private VRaptorRequest request;
 
 	@Before
 	public void setUp() {
 		this.mockery = new Mockery();
 		this.webResponse = mockery.mock(HttpServletResponse.class);
+		this.request = new VRaptorRequest(null, null, webResponse);
 		this.notFoundHandler = new DefaultResourceNotFoundHandler();
 	}
 	
@@ -35,7 +39,7 @@ public class ResourceNotFoundHandlerTest {
                 will(returnValue(new PrintWriter(writer)));
             }
         });
-		notFoundHandler.couldntFind(webResponse);
+		notFoundHandler.couldntFind(request);
         MatcherAssert.assertThat(writer.getBuffer().toString(), Matchers.is(Matchers.equalTo("resource not found\n")));
         mockery.assertIsSatisfied();
 	}

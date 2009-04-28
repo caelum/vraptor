@@ -1,5 +1,15 @@
 package br.com.caelum.vraptor.interceptor;
 
+import java.io.IOException;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.junit.Before;
+import org.junit.Test;
+
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.RequestInfo;
@@ -7,20 +17,6 @@ import br.com.caelum.vraptor.core.VRaptorRequest;
 import br.com.caelum.vraptor.http.UrlToResourceTranslator;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.resource.ResourceNotFoundHandler;
-
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
-import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.api.Action;
-import org.junit.Before;
-import org.junit.Test;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 
 public class ResourceLookupInterceptorTest {
 
@@ -51,7 +47,7 @@ public class ResourceLookupInterceptorTest {
             {
                 one(translator).translate(webRequest);
                 will(returnValue(null));
-                one(notFoundHandler).couldntFind(webResponse);
+                one(notFoundHandler).couldntFind(request);
             }
         });
         lookup.intercept(null, null, null);

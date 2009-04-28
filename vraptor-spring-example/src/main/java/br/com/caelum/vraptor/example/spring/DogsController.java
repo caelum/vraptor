@@ -1,10 +1,10 @@
 package br.com.caelum.vraptor.example.spring;
 
-import br.com.caelum.vraptor.In;
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.view.Results;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Arrays;
 
@@ -14,7 +14,7 @@ import java.util.Arrays;
 @Resource
 public class DogsController {
 
-    @In
+    @Autowired
     private Result result;
 
     @Path("/dogs")

@@ -1,6 +1,8 @@
 package br.com.caelum.vraptor.vraptor2;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.ResourceBundle;
 
 import javax.servlet.ServletException;
 
@@ -16,6 +18,7 @@ import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.validator.ValidationMessage;
 import br.com.caelum.vraptor.view.jsp.PageResult;
 import br.com.caelum.vraptor.vraptor2.outject.Outjecter;
 
@@ -31,6 +34,8 @@ public class ValidatorInterceptorTest {
     private OutjectionInterceptor interceptor;
     private ComponentInfoProvider info;
 	private Localization localization;
+	private ArrayList<ValidationMessage> listErrors;
+	private ResourceBundle bundle;
 
     @Before
     public void setup() {
@@ -41,6 +46,8 @@ public class ValidatorInterceptorTest {
         this.outjecter = mockery.mock(Outjecter.class);
         this.info = mockery.mock(ComponentInfoProvider.class);
         this.localization = mockery.mock(Localization.class);
+        this.listErrors = new ArrayList<ValidationMessage>();
+        this.bundle = ResourceBundle.getBundle("messages");
         mockery.checking(new Expectations() {
             {
                 one(info).getOutjecter(); will(returnValue(outjecter));
@@ -111,7 +118,7 @@ public class ValidatorInterceptorTest {
         final ResourceMethod method = mockery.methodFor(MyComponent.class, "withValidation");
         mockery.checking(new Expectations() {
             {
-                one(provider).getParametersFor(method);
+                one(provider).getParametersFor(method, listErrors, bundle);
                 will(returnValue(new Object[0]));
                 one(result).include(with(equal("errors")), with(an(ValidationErrors.class)));
                 one(result).forward("invalid");
@@ -140,7 +147,7 @@ public class ValidatorInterceptorTest {
         final ResourceMethod method = mockery.methodFor(MyComponent.class, "withValidation");
         mockery.checking(new Expectations() {
             {
-                one(provider).getParametersFor(method);
+                one(provider).getParametersFor(method, listErrors, bundle);
                 will(returnValue(new Object[0]));
                 one(stack).next(method, resourceInstance);
                 one(errors).size();

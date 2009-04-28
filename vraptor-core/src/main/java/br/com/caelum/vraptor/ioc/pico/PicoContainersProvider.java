@@ -78,7 +78,7 @@ public class PicoContainersProvider implements ComponentRegistry {
 	public void register(Class requiredType, Class type) {
 		if (initialized) {
 			logger
-					.error("VRaptor was already initialized and the contexts were created but you are trying to register a new component. This is nasty. Do not do it.");
+					.error("VRaptor was already initialized and the contexts were created but you are trying to register a new component. This is nasty. Do not do it: " + requiredType.getName());
 		}
 		boolean overriding = alreadyRegistered(requiredType);
 		if (overriding) {

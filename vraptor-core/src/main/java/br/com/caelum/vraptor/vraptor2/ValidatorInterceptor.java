@@ -1,17 +1,22 @@
 package br.com.caelum.vraptor.vraptor2;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.vraptor.i18n.FixedMessage;
+import org.vraptor.validator.ValidationErrors;
+
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Interceptor;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.validator.ValidationMessage;
 import br.com.caelum.vraptor.view.jsp.PageResult;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.vraptor.validator.ValidationErrors;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 public class ValidatorInterceptor implements Interceptor {
 
@@ -38,7 +43,8 @@ public class ValidatorInterceptor implements Interceptor {
             Class<?> type = method.getResource().getType();
             Method validationMethod = getValidationFor(method.getMethod(), type);
             if (validationMethod != null) {
-                Object[] parameters = provider.getParametersFor(method);
+            	List<ValidationMessage> messages= new ArrayList<ValidationMessage>();
+                Object[] parameters = provider.getParametersFor(method, messages, bundle);
                 Object[] validationParameters = new Object[parameters.length + 1];
                 validationParameters[0] = errors;
                 for (int i = 0; i < parameters.length; i++) {
@@ -52,6 +58,9 @@ public class ValidatorInterceptor implements Interceptor {
                     throw new InterceptionException("Unable to validate.", e);
                 } catch (InvocationTargetException e) {
                     throw new InterceptionException("Unable to validate.", e.getCause());
+                }
+                for(ValidationMessage msg : messages) {
+                	errors.add(new FixedMessage(msg.getCategory(), msg.getMessage(), msg.getCategory()));
                 }
             }
             if (errors.size() != 0) {

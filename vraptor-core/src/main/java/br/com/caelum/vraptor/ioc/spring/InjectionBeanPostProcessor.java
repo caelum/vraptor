@@ -29,12 +29,10 @@
  */
 package br.com.caelum.vraptor.ioc.spring;
 
-import java.lang.reflect.Constructor;
-
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor;
 
-import br.com.caelum.vraptor.In;
+import java.lang.reflect.Constructor;
 
 /**
  * Enhances the default behavior from Spring, adding support to injection
@@ -45,9 +43,10 @@ import br.com.caelum.vraptor.In;
 public class InjectionBeanPostProcessor extends AutowiredAnnotationBeanPostProcessor {
 
 
-    public InjectionBeanPostProcessor() {
-        this.setAutowiredAnnotationType(In.class);
-    }
+    //  in case we are required to change the injection annotation:
+    //  public InjectionBeanPostProcessor() {
+    //      this.setAutowiredAnnotationType(In.class);
+    //  }
 
     public Constructor[] determineCandidateConstructors(Class beanClass, String beanName) throws BeansException {
         Constructor[] candidates = super.determineCandidateConstructors(beanClass, beanName);

@@ -125,6 +125,7 @@ public class ValidatorInterceptorTest {
                 one(errors).add(message);
                 one(errors).size();
                 will(returnValue(1));
+                one(localization).getBundle(); will(returnValue(bundle));
             }
         });
         validator.intercept(stack, method, resourceInstance);
@@ -152,6 +153,7 @@ public class ValidatorInterceptorTest {
                 one(stack).next(method, resourceInstance);
                 one(errors).size();
                 will(returnValue(0));
+                one(localization).getBundle(); will(returnValue(bundle));
             }
         });
         validator.intercept(stack, method, resourceInstance);

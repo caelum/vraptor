@@ -70,7 +70,7 @@ public class AjaxInterceptor implements Interceptor {
 
 	public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
 			throws InterceptionException {
-		if (info.shouldShowView(method) && info.isAjax()) {
+		if (info.isAjax()) {
 			if (!method.getMethod().isAnnotationPresent(Remotable.class)) {
 				throw new InterceptionException("Unable to make an ajax result in a non-remotable method.");
 			}

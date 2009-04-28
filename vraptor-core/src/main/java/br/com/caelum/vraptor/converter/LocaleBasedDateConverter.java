@@ -1,8 +1,10 @@
 package br.com.caelum.vraptor.converter;
 
 import java.text.DateFormat;
+import java.text.MessageFormat;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -13,6 +15,7 @@ import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.core.VRaptorRequest;
 import br.com.caelum.vraptor.ioc.RequestScoped;
+import br.com.caelum.vraptor.validator.ValidationMessage;
 
 /**
  * Locale based date converter.
@@ -45,8 +48,8 @@ public class LocaleBasedDateConverter implements Converter<Date> {
         try {
             return format.parse(value);
         } catch (ParseException e) {
-            // TODO validation?
-            throw new IllegalArgumentException("Unable to convert '" + value + "'.");
+			errors.add(new ValidationMessage(MessageFormat.format(bundle.getString("is_not_a_valid_date"), value), ""));
+			return null;
         }
     }
 

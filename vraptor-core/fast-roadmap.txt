@@ -4,9 +4,7 @@ TODO: 17
 (MUST) - support HibernateValidator with i18n messages
 (MUST) - support i18n messages
 
-- ClientsController --> clients.list
 - support for Long[]
-
 - ClientsController --> clients.list
 - make client server redirect work with parameters, which ones?
 (MUST) - niceurls with programmatic support
@@ -149,6 +147,7 @@ ONLY AFTER RELEASE
 FileDownload support:
 	- either return FileDownload
 	- result.use(FileDownload)
+- extract BUNDLEMESSAGE validation keys from converters
 - if you instanceFor returns null on pico --> log debug???
 3.0.1 - vraptor quartz component 
 3.0.1 - extract VRaptor Validator

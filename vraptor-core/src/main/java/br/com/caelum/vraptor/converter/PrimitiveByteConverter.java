@@ -29,16 +29,19 @@
  */
 package br.com.caelum.vraptor.converter;
 
+import java.text.MessageFormat;
 import java.util.ResourceBundle;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
+import br.com.caelum.vraptor.validator.ValidationMessage;
 
 /**
  * VRaptor's primitive byte converter. 
  * 
  * @author Cecilia Fernandes
+ * @author Guilherme Silveira
  */
 @Convert(byte.class)
 @ApplicationScoped
@@ -51,8 +54,8 @@ public class PrimitiveByteConverter implements Converter {
         try {
             return Byte.parseByte(value);
         } catch (NumberFormatException e) {
-            // TODO validation??
-            throw new IllegalArgumentException("Unable to convert " + value + " to primitive");
+			errors.add(new ValidationMessage(MessageFormat.format(bundle.getString("is_not_a_valid_number"), value), ""));
+			return null;
         }
     }
     

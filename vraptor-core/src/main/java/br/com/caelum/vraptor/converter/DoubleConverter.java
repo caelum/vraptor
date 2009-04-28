@@ -29,11 +29,14 @@
  */
 package br.com.caelum.vraptor.converter;
 
+import java.text.MessageFormat;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
+import br.com.caelum.vraptor.validator.ValidationMessage;
 
 /**
  * VRaptor's Double converter. 
@@ -51,8 +54,8 @@ public class DoubleConverter implements Converter<Double> {
         try {
             return Double.valueOf(value);
         } catch (NumberFormatException e) {
-            // TODO validation?
-            throw new IllegalArgumentException("Unable to converter '" + value + "'.");
+			errors.add(new ValidationMessage(MessageFormat.format(bundle.getString("is_not_a_valid_decimal"), value), ""));
+			return null;
         }
     }
 

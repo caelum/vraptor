@@ -1,6 +1,7 @@
 package br.com.caelum.vraptor.converter;
 
 import java.math.BigInteger;
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -25,7 +26,8 @@ public class BigIntegerConverter implements Converter<BigInteger>{
 		try {
 			return new BigInteger(value);
 		} catch (NumberFormatException e) {
-			throw new IllegalArgumentException("Unable to convert '" + value + "'.");
+			errors.add(new ValidationMessage(MessageFormat.format(bundle.getString("is_not_a_valid_integer"), value), ""));
+			return null;
 		}
 		
 	}

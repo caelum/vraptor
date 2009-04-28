@@ -29,11 +29,14 @@
  */
 package br.com.caelum.vraptor.converter;
 
+import java.text.MessageFormat;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
+import br.com.caelum.vraptor.validator.ValidationMessage;
 
 /**
  * VRaptor's primitive short converter. 
@@ -51,8 +54,8 @@ public class PrimitiveShortConverter implements Converter {
         try {
             return Short.parseShort(value);
         } catch (NumberFormatException e) {
-            // TODO validation??
-            throw new IllegalArgumentException("Unable to convert " + value + " to primitive");
+			errors.add(new ValidationMessage(MessageFormat.format(bundle.getString("is_not_a_valid_number"), value), ""));
+			return (short) 0;
         }
     }
     

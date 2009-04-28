@@ -29,6 +29,7 @@
  */
 package br.com.caelum.vraptor.converter;
 
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -53,8 +54,8 @@ public class ByteConverter implements Converter<Byte> {
         try {
             return Byte.valueOf(value);
         } catch (NumberFormatException e) {
-            // TODO validation?
-            throw new IllegalArgumentException("Unable to convert '" + value + "' to byte.");
+			errors.add(new ValidationMessage(MessageFormat.format(bundle.getString("is_not_a_valid_number"), value), ""));
+			return null;
         }
     }
 

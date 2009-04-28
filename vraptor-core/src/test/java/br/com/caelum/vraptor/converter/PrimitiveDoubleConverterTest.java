@@ -17,22 +17,22 @@ public class PrimitiveDoubleConverterTest {
     
     @Test
     public void shouldBeAbleToConvertNumbers(){
-        assertThat((Double) converter.convert("2.3", double.class), is(equalTo(2.3d)));
+        assertThat((Double) converter.convert("2.3", double.class, errors, bundle), is(equalTo(2.3d)));
     }
     
     @Test(expected=IllegalArgumentException.class)
     public void shouldComplainAboutInvalidNumber() {
-        converter.convert("---", double.class);
+        converter.convert("---", double.class, errors, bundle);
     }
     
     @Test
     public void shouldConvertToZeroWhenNull() {
-    	assertThat((Double) converter.convert(null, double.class), is(equalTo(0D)));
+    	assertThat((Double) converter.convert(null, double.class, errors, bundle), is(equalTo(0D)));
     }
 
     @Test
     public void shouldConvertToZeroWhenEmpty() {
-    	assertThat((Double) converter.convert("", double.class), is(equalTo(0D)));
+    	assertThat((Double) converter.convert("", double.class, errors, bundle), is(equalTo(0D)));
     }
 
 }

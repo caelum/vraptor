@@ -29,6 +29,11 @@
  */
 package br.com.caelum.vraptor;
 
+import java.util.List;
+import java.util.ResourceBundle;
+
+import br.com.caelum.vraptor.validator.ValidationMessage;
+
 
 /**
  * Converts a string value to an object.
@@ -37,6 +42,6 @@ package br.com.caelum.vraptor;
  */
 public interface Converter<T> {
 
-    T convert(String value, Class<? extends T> type);
+    T convert(String value, Class<? extends T> type, List<ValidationMessage> errors, ResourceBundle bundle);
 
 }

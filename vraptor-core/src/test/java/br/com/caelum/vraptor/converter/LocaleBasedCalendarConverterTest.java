@@ -47,7 +47,7 @@ public class LocaleBasedCalendarConverterTest {
         mockery.checking(new Expectations() {{
             exactly(2).of(request).getAttribute("javax.servlet.jsp.jstl.fmt.locale.request"); will(returnValue("pt_br"));
         }});
-        assertThat(converter.convert("10/06/2008", Calendar.class), is(equalTo((Calendar) new GregorianCalendar(2008,5,10))));
+        assertThat(converter.convert("10/06/2008", Calendar.class, errors, bundle), is(equalTo((Calendar) new GregorianCalendar(2008,5,10))));
         mockery.assertIsSatisfied();
     }
 
@@ -65,19 +65,19 @@ public class LocaleBasedCalendarConverterTest {
         Calendar cal = new GregorianCalendar();
         cal.setTime(date);
         String formattedToday = DateFormat.getDateInstance(DateFormat.SHORT).format(date);
-        assertThat(converter.convert(formattedToday, Calendar.class), is(equalTo(cal)));
+        assertThat(converter.convert(formattedToday, Calendar.class, errors, bundle), is(equalTo(cal)));
         mockery.assertIsSatisfied();
     }
 
     @Test
     public void shouldBeAbleToConvertEmpty() {
-        assertThat(converter.convert("", Calendar.class), is(nullValue()));
+        assertThat(converter.convert("", Calendar.class, errors, bundle), is(nullValue()));
         mockery.assertIsSatisfied();
     }
 
     @Test
     public void shouldBeAbleToConvertNull() {
-        assertThat(converter.convert(null, Calendar.class), is(nullValue()));
+        assertThat(converter.convert(null, Calendar.class, errors, bundle), is(nullValue()));
         mockery.assertIsSatisfied();
     }
 
@@ -87,7 +87,7 @@ public class LocaleBasedCalendarConverterTest {
         mockery.checking(new Expectations() {{
             exactly(2).of(request).getAttribute("javax.servlet.jsp.jstl.fmt.locale.request"); will(returnValue("pt_br"));
         }});
-        converter.convert("a,10/06/2008/a/b/c", Calendar.class);
+        converter.convert("a,10/06/2008/a/b/c", Calendar.class, errors, bundle);
     }
 
 }

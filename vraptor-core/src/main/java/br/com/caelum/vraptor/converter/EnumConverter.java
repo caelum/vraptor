@@ -29,6 +29,8 @@
  */
 package br.com.caelum.vraptor.converter;
 
+import java.util.ResourceBundle;
+
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
@@ -43,7 +45,7 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
 @ApplicationScoped
 public class EnumConverter implements Converter<Enum> {
 
-    public Enum convert(String value, Class<? extends Enum> type) {
+    public Enum convert(String value, Class<? extends Enum> type, List<ValidationMessage> errors, ResourceBundle bundle) {
         if (value == null || value.equals("")) {
             return null;
         }

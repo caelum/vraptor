@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
+import java.util.ResourceBundle;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +35,7 @@ public class LocaleBasedCalendarConverter implements Converter<Calendar> {
         this.request = request;
     }
 
-    public Calendar convert(String value, Class<? extends Calendar> type) {
+    public Calendar convert(String value, Class<? extends Calendar> type, List<ValidationMessage> errors, ResourceBundle bundle) {
         if (value == null || value.equals("")) {
             return null;
         }

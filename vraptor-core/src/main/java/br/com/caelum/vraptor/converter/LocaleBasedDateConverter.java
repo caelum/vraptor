@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.Locale;
+import java.util.ResourceBundle;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +33,7 @@ public class LocaleBasedDateConverter implements Converter<Date> {
         this.request = request;
     }
 
-    public Date convert(String value, Class<? extends Date> type) {
+    public Date convert(String value, Class<? extends Date> type, List<ValidationMessage> errors, ResourceBundle bundle) {
         if (value == null || value.equals("")) {
             return null;
         }

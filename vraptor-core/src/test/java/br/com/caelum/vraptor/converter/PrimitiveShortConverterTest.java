@@ -17,22 +17,22 @@ public class PrimitiveShortConverterTest {
     
     @Test
     public void shouldBeAbleToConvertNumbers(){
-        assertThat((Short) converter.convert("5", short.class), is(equalTo((short) 5)));
+        assertThat((Short) converter.convert("5", short.class, errors, bundle), is(equalTo((short) 5)));
     }
     
     @Test(expected=IllegalArgumentException.class)
     public void shouldComplainAboutInvalidNumber() {
-        converter.convert("---", short.class);
+        converter.convert("---", short.class, errors, bundle);
     }
     
     @Test
     public void shouldConvertToZeroWhenNull() {
-    	assertThat((Short) converter.convert(null, short.class), is(equalTo((short) 0)));
+    	assertThat((Short) converter.convert(null, short.class, errors, bundle), is(equalTo((short) 0)));
     }
 
     @Test
     public void shouldConvertToZeroWhenEmpty() {
-    	assertThat((Short) converter.convert("", short.class), is(equalTo((short) 0)));
+    	assertThat((Short) converter.convert("", short.class, errors, bundle), is(equalTo((short) 0)));
     }
 
 }

@@ -19,22 +19,22 @@ public class ByteConverterTest {
     
     @Test
     public void shouldBeAbleToConvertNumbers(){
-        assertThat((Byte) converter.convert("2", Byte.class), is(equalTo((byte) 2)));
+        assertThat((Byte) converter.convert("2", Byte.class, errors, bundle), is(equalTo((byte) 2)));
     }
     
     @Test(expected=IllegalArgumentException.class)
     public void shouldComplainAboutInvalidNumber() {
-        converter.convert("---", Byte.class);
+        converter.convert("---", Byte.class, errors, bundle);
     }
     
     @Test
     public void shouldNotComplainAboutNull() {
-        assertThat(converter.convert(null, Byte.class), is(nullValue()));
+        assertThat(converter.convert(null, Byte.class, errors, bundle), is(nullValue()));
     }
 
     @Test
     public void shouldNotComplainAboutEmpty() {
-        assertThat(converter.convert("", Byte.class), is(nullValue()));
+        assertThat(converter.convert("", Byte.class, errors, bundle), is(nullValue()));
     }
 
 }

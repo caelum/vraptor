@@ -45,7 +45,7 @@ public class LocaleBasedDateConverterTest {
         mockery.checking(new Expectations() {{
             exactly(2).of(request).getAttribute("javax.servlet.jsp.jstl.fmt.locale.request"); will(returnValue("pt_br"));
         }});
-        assertThat(converter.convert("10/06/2008", Date.class), is(equalTo(new SimpleDateFormat("dd/MM/yyyy").parse("10/06/2008"))));
+        assertThat(converter.convert("10/06/2008", Date.class, errors, bundle), is(equalTo(new SimpleDateFormat("dd/MM/yyyy").parse("10/06/2008"))));
         mockery.assertIsSatisfied();
     }
 
@@ -61,19 +61,19 @@ public class LocaleBasedDateConverterTest {
         }});
         Date date = new SimpleDateFormat("dd/MM/yyyy").parse("10/05/2010");
         String formattedToday = DateFormat.getDateInstance(DateFormat.SHORT).format(date);
-        assertThat(converter.convert(formattedToday, Date.class), is(equalTo(date)));
+        assertThat(converter.convert(formattedToday, Date.class, errors, bundle), is(equalTo(date)));
         mockery.assertIsSatisfied();
     }
 
     @Test
     public void shouldBeAbleToConvertEmpty() {
-        assertThat(converter.convert("", Date.class), is(nullValue()));
+        assertThat(converter.convert("", Date.class, errors, bundle), is(nullValue()));
         mockery.assertIsSatisfied();
     }
 
     @Test
     public void shouldBeAbleToConvertNull() {
-        assertThat(converter.convert(null, Date.class), is(nullValue()));
+        assertThat(converter.convert(null, Date.class, errors, bundle), is(nullValue()));
         mockery.assertIsSatisfied();
     }
 
@@ -83,7 +83,7 @@ public class LocaleBasedDateConverterTest {
         mockery.checking(new Expectations() {{
             exactly(2).of(request).getAttribute("javax.servlet.jsp.jstl.fmt.locale.request"); will(returnValue("pt_br"));
         }});
-        converter.convert("a,10/06/2008/a/b/c", Date.class);
+        converter.convert("a,10/06/2008/a/b/c", Date.class, errors, bundle);
     }
 
 }

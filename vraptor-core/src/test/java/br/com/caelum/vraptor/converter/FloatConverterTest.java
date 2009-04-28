@@ -19,22 +19,22 @@ public class FloatConverterTest {
     
     @Test
     public void shouldBeAbleToConvertNumbers(){
-        assertThat((Float) converter.convert("2.3", Float.class), is(equalTo(2.3f)));
+        assertThat((Float) converter.convert("2.3", Float.class, errors, bundle), is(equalTo(2.3f)));
     }
     
     @Test(expected=IllegalArgumentException.class)
     public void shouldComplainAboutInvalidNumber() {
-        converter.convert("---", Float.class);
+        converter.convert("---", Float.class, errors, bundle);
     }
     
     @Test
     public void shouldNotComplainAboutNull() {
-        assertThat(converter.convert(null, Float.class), is(nullValue()));
+        assertThat(converter.convert(null, Float.class, errors, bundle), is(nullValue()));
     }
 
     @Test
     public void shouldNotComplainAboutEmpty() {
-        assertThat(converter.convert("", Float.class), is(nullValue()));
+        assertThat(converter.convert("", Float.class, errors, bundle), is(nullValue()));
     }
 
 }

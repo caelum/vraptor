@@ -19,22 +19,22 @@ public class DoubleConverterTest {
     
     @Test
     public void shouldBeAbleToConvertNumbers(){
-        assertThat((Double) converter.convert("2.3", Double.class), is(equalTo(2.3d)));
+        assertThat((Double) converter.convert("2.3", Double.class, errors, bundle), is(equalTo(2.3d)));
     }
     
     @Test(expected=IllegalArgumentException.class)
     public void shouldComplainAboutInvalidNumber() {
-        converter.convert("---", Double.class);
+        converter.convert("---", Double.class, errors, bundle);
     }
     
     @Test
     public void shouldNotComplainAboutNull() {
-        assertThat(converter.convert(null, Double.class), is(nullValue()));
+        assertThat(converter.convert(null, Double.class, errors, bundle), is(nullValue()));
     }
 
     @Test
     public void shouldNotComplainAboutEmpty() {
-        assertThat(converter.convert("", Double.class), is(nullValue()));
+        assertThat(converter.convert("", Double.class, errors, bundle), is(nullValue()));
     }
 
 }

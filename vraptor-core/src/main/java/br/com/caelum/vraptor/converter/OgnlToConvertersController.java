@@ -60,7 +60,7 @@ public class OgnlToConvertersController implements TypeConverter {
             // TODO better, validation error?
             throw new IllegalArgumentException("Cannot instantiate a converter for type " + type.getName());
         }
-        return converter.convert((String) value, type);
+        return converter.convert((String) value, type, errors, bundle);
     }
 
     private Type genericTypeToConvert(Object target, Member member) {

@@ -18,22 +18,22 @@ public class PrimitiveCharConverterTest {
     
     @Test
     public void shouldBeAbleToConvertNumbers(){
-        assertThat(((Character) converter.convert("r", char.class)).charValue(), is(equalTo('r')));
+        assertThat(((Character) converter.convert("r", char.class, errors, bundle)).charValue(), is(equalTo('r')));
     }
     
     @Test(expected=IllegalArgumentException.class)
     public void shouldComplainAboutInvalidNumber() {
-        converter.convert("---", char.class);
+        converter.convert("---", char.class, errors, bundle);
     }
     
     @Test
     public void shouldConvertToZeroWhenNull() {
-        assertThat(((Character) converter.convert(null, char.class)).charValue(), is(equalTo('\u0000')));
+        assertThat(((Character) converter.convert(null, char.class, errors, bundle)).charValue(), is(equalTo('\u0000')));
     }
 
     @Test
     public void shouldConvertToZeroWhenEmpty() {
-        assertThat(((Character) converter.convert("", char.class)).charValue(), is(equalTo('\u0000')));
+        assertThat(((Character) converter.convert("", char.class, errors, bundle)).charValue(), is(equalTo('\u0000')));
     }
 
 }

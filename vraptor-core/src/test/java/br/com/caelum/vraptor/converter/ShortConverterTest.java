@@ -19,17 +19,17 @@ public class ShortConverterTest {
     
     @Test
     public void shouldBeAbleToConvertNumbers(){
-        assertThat((Short) converter.convert("2", Short.class), is(equalTo((short)2)));
+        assertThat((Short) converter.convert("2", Short.class, errors, bundle), is(equalTo((short)2)));
     }
     
     @Test(expected=IllegalArgumentException.class)
     public void shouldComplainAboutInvalidNumber() {
-        converter.convert("---", Short.class);
+        converter.convert("---", Short.class, errors, bundle);
     }
     
     @Test
     public void shouldComplainAboutNull() {
-        assertThat(converter.convert(null, Short.class), is(nullValue()));
+        assertThat(converter.convert(null, Short.class, errors, bundle), is(nullValue()));
     }
 
 }

@@ -29,9 +29,13 @@
  */
 package br.com.caelum.vraptor.converter;
 
+import java.util.List;
+import java.util.ResourceBundle;
+
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
+import br.com.caelum.vraptor.validator.ValidationMessage;
 
 /**
  * VRaptor's Byte converter. 
@@ -42,7 +46,7 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
 @ApplicationScoped
 public class ByteConverter implements Converter<Byte> {
 
-    public Byte convert(String value, Class<? extends Byte> type) {
+    public Byte convert(String value, Class<? extends Byte> type, List<ValidationMessage> errors, ResourceBundle bundle) {
         if (value == null || value.equals("")) {
             return null;
         }

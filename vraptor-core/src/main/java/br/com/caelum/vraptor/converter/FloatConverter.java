@@ -29,6 +29,8 @@
  */
 package br.com.caelum.vraptor.converter;
 
+import java.util.ResourceBundle;
+
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
@@ -42,7 +44,7 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
 @ApplicationScoped
 public class FloatConverter implements Converter<Float> {
 
-    public Float convert(String value, Class<? extends Float> type) {
+    public Float convert(String value, Class<? extends Float> type, List<ValidationMessage> errors, ResourceBundle bundle) {
         if (value == null || value.equals("")) {
             return null;
         }

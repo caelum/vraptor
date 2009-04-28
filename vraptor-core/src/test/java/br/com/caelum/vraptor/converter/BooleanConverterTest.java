@@ -19,15 +19,15 @@ public class BooleanConverterTest {
     
     @Test
     public void shouldBeAbleToConvertTrueAndFalse(){
-        assertThat((Boolean) converter.convert("true", Boolean.class), is(equalTo(true)));
-        assertThat((Boolean) converter.convert("True", Boolean.class), is(equalTo(true)));
-        assertThat((Boolean) converter.convert("shhshs", Boolean.class), is(equalTo(false)));
-        assertThat((Boolean) converter.convert("false", Boolean.class), is(equalTo(false)));
+        assertThat((Boolean) converter.convert("true", Boolean.class, errors, bundle), is(equalTo(true)));
+        assertThat((Boolean) converter.convert("True", Boolean.class, errors, bundle), is(equalTo(true)));
+        assertThat((Boolean) converter.convert("shhshs", Boolean.class, errors, bundle), is(equalTo(false)));
+        assertThat((Boolean) converter.convert("false", Boolean.class, errors, bundle), is(equalTo(false)));
     }
     
     @Test
     public void shouldNotComplainAboutNull() {
-        assertThat(converter.convert(null, Boolean.class), is(nullValue()));
+        assertThat(converter.convert(null, Boolean.class, errors, bundle), is(nullValue()));
     }
 
 }

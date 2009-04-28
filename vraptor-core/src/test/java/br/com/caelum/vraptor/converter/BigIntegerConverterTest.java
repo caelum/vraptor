@@ -26,27 +26,27 @@ public class BigIntegerConverterTest {
     
     @Test
     public void shouldBeAbleToConvertIntegerNumbers(){
-        assertThat((BigInteger) converter.convert("3", BigInteger.class), is(equalTo(new BigInteger("3"))));
+        assertThat((BigInteger) converter.convert("3", BigInteger.class, errors, bundle), is(equalTo(new BigInteger("3"))));
     }
     
     @Test(expected=IllegalArgumentException.class)
     public void shouldComplainAboutNonIntegerNumbers() {
-        converter.convert("2.3", BigInteger.class);
+        converter.convert("2.3", BigInteger.class, errors, bundle);
     }
     
     @Test(expected=IllegalArgumentException.class)
     public void shouldComplainAboutInvalidNumber() {
-        converter.convert("---", BigInteger.class);
+        converter.convert("---", BigInteger.class, errors, bundle);
     }
     
     @Test
     public void shouldNotComplainAboutNull() {
-        assertThat(converter.convert(null, BigInteger.class), is(nullValue()));
+        assertThat(converter.convert(null, BigInteger.class, errors, bundle), is(nullValue()));
     }
 
     @Test
     public void shouldNotComplainAboutEmpty() {
-        assertThat(converter.convert("", BigInteger.class), is(nullValue()));
+        assertThat(converter.convert("", BigInteger.class, errors, bundle), is(nullValue()));
     }
 
 }

@@ -19,17 +19,17 @@ public class IntegerConverterTest {
     
     @Test
     public void shouldBeAbleToConvertNumbers(){
-        assertThat((Integer) converter.convert("2", Integer.class), is(equalTo(2)));
+        assertThat((Integer) converter.convert("2", Integer.class, errors, bundle), is(equalTo(2)));
     }
     
     @Test(expected=IllegalArgumentException.class)
     public void shouldComplainAboutInvalidNumber() {
-        converter.convert("---", Integer.class);
+        converter.convert("---", Integer.class, errors, bundle);
     }
     
     @Test
     public void shouldNotComplainAboutNull() {
-        assertThat(converter.convert(null, Integer.class), is(nullValue()));
+        assertThat(converter.convert(null, Integer.class, errors, bundle), is(nullValue()));
     }
 
 }

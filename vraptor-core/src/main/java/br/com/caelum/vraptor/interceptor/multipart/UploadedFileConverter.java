@@ -1,5 +1,7 @@
 package br.com.caelum.vraptor.interceptor.multipart;
 
+import java.util.ResourceBundle;
+
 import javax.servlet.http.HttpServletRequest;
 
 import br.com.caelum.vraptor.Convert;
@@ -20,7 +22,7 @@ public class UploadedFileConverter implements Converter<UploadedFile> {
         this.request = request;
     }
 
-    public UploadedFile convert(String value, Class<? extends UploadedFile> type) {
+    public UploadedFile convert(String value, Class<? extends UploadedFile> type, List<ValidationMessage> errors, ResourceBundle bundle) {
         return (UploadedFile) request.getAttribute(value);
     }
 

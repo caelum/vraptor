@@ -17,22 +17,22 @@ public class PrimitiveByteConverterTest {
     
     @Test
     public void shouldBeAbleToConvertNumbers(){
-        assertThat((Byte) converter.convert("7", byte.class), is(equalTo((byte)7)));
+        assertThat((Byte) converter.convert("7", byte.class, errors, bundle), is(equalTo((byte)7)));
     }
     
     @Test(expected=IllegalArgumentException.class)
     public void shouldComplainAboutInvalidNumber() {
-        converter.convert("---", byte.class);
+        converter.convert("---", byte.class, errors, bundle);
     }
     
     @Test
     public void shouldConvertToZeroWhenNull() {
-    	assertThat((Byte) converter.convert(null, byte.class), is(equalTo((byte) 0)));
+    	assertThat((Byte) converter.convert(null, byte.class, errors, bundle), is(equalTo((byte) 0)));
     }
 
     @Test
     public void shouldConvertToZeroWhenEmpty() {
-    	assertThat((Byte) converter.convert("", byte.class), is(equalTo((byte) 0)));
+    	assertThat((Byte) converter.convert("", byte.class, errors, bundle), is(equalTo((byte) 0)));
     }
 
 }

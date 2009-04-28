@@ -5,9 +5,11 @@ import java.lang.reflect.Method;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
 
 import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.validator.ValidationMessage;
 
 /**
  * Useful matchers to use while mocking and hamcresting tests with internal
@@ -52,5 +54,26 @@ public class VRaptorMatchers {
 
         };
     }
+
+	public static Matcher<ValidationMessage> error(final String category, final String message) {
+		return new TypeSafeMatcher<ValidationMessage>() {
+
+			protected void describeMismatchSafely(ValidationMessage item, Description mismatchDescription) {
+				mismatchDescription.appendText(" validation message='" +item.getMessage() + "', category = '"+item.getCategory()+"'");
+			}
+
+			protected boolean matchesSafely(ValidationMessage m) {
+				if(message.equals(m.getMessage()) && category.equals(m.getCategory())) {
+					return true;
+				}
+				return false;
+			}
+
+			public void describeTo(Description description) {
+				description.appendText(" validation message='" +message + "', category = '"+category+"'");
+			}
+			
+		};
+	}
 
 }

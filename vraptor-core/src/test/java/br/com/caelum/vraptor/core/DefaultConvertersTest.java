@@ -36,6 +36,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 public class DefaultConvertersTest {
 
@@ -115,7 +116,7 @@ public class DefaultConvertersTest {
 
     class WrongConverter implements Converter<String> {
 
-        public String convert(String value, Class<? extends String> type) {
+        public String convert(String value, Class<? extends String> type, List<ValidationMessage> errors, ResourceBundle bundle) {
             // TODO Auto-generated method stub
             return null;
         }
@@ -126,14 +127,14 @@ public class DefaultConvertersTest {
 
     @Convert(MyData.class)
     class MyConverter implements Converter<MyData> {
-        public MyData convert(String value, Class<? extends MyData> type) {
+        public MyData convert(String value, Class<? extends MyData> type, List<ValidationMessage> errors, ResourceBundle bundle) {
             return null;
         }
     }
 
     @Convert(MyData.class)
     class MySecondConverter implements Converter<MyData> {
-        public MyData convert(String value, Class<? extends MyData> type) {
+        public MyData convert(String value, Class<? extends MyData> type, List<ValidationMessage> errors, ResourceBundle bundle) {
             return null;
         }
     }

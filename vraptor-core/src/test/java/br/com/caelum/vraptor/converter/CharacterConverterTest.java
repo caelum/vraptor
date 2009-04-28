@@ -19,18 +19,18 @@ public class CharacterConverterTest {
     
     @Test
     public void shouldBeAbleToConvertCharacters(){
-        assertThat((Character) converter.convert("Z", Character.class), is(equalTo(new Character('Z'))));
+        assertThat((Character) converter.convert("Z", Character.class, errors, bundle), is(equalTo(new Character('Z'))));
     }
     
     @Test(expected=IllegalArgumentException.class)
     public void shouldComplainAboutStringTooBig() {
-        converter.convert("---", Character.class);
+        converter.convert("---", Character.class, errors, bundle);
     }
     
     @Test
     public void shouldNotComplainAboutNullAndEmpty() {
-        assertThat(converter.convert(null, Character.class), is(nullValue()));
-        assertThat(converter.convert("", Character.class), is(nullValue()));
+        assertThat(converter.convert(null, Character.class, errors, bundle), is(nullValue()));
+        assertThat(converter.convert("", Character.class, errors, bundle), is(nullValue()));
     }
 
 

@@ -19,17 +19,17 @@ public class LongConverterTest {
     
     @Test
     public void shouldBeAbleToConvertNumbers(){
-        assertThat((Long) converter.convert("2", long.class), is(equalTo(2L)));
+        assertThat((Long) converter.convert("2", long.class, errors, bundle), is(equalTo(2L)));
     }
     
     @Test(expected=IllegalArgumentException.class)
     public void shouldComplainAboutInvalidNumber() {
-        converter.convert("---", long.class);
+        converter.convert("---", long.class, errors, bundle);
     }
     
     @Test
     public void shouldNotComplainAboutNull() {
-        assertThat(converter.convert(null, long.class), is(nullValue()));
+        assertThat(converter.convert(null, long.class, errors, bundle), is(nullValue()));
     }
 
 }

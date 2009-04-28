@@ -100,7 +100,7 @@ public class ListAccessor extends ListPropertyAccessor {
                     // programming and ognl live together forever!
                     Container container = (Container) context.get(Container.class);
                     Converter<?> converter = container.instanceFor(Converters.class).to(type, container);
-                    Object result = converter.convert((String) value, type);
+                    Object result = converter.convert((String) value, type, errors, bundle);
                     super.setProperty(context, target, key, result);
                     return;
                 }

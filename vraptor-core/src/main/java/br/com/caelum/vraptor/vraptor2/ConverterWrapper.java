@@ -1,5 +1,7 @@
 package br.com.caelum.vraptor.vraptor2;
 
+import java.util.ResourceBundle;
+
 import org.vraptor.converter.ConversionException;
 
 import br.com.caelum.vraptor.Converter;
@@ -12,7 +14,7 @@ public class ConverterWrapper implements Converter {
         this.converter = converter;
     }
 
-    public Object convert(String value, Class type) {
+    public Object convert(String value, Class type, List<ValidationMessage> errors, ResourceBundle bundle) {
         try {
             return converter.convert(value, type, null);
         } catch (ConversionException e) {

@@ -171,30 +171,6 @@ public class ViewsPropertiesPageResultTest {
         mockery.assertIsSatisfied();
     }
 
-    public static class MyClient {
-    	private Long id;
-		public Long getId() {
-			return id;
-		}
-    }
-    @Test
-    public void nullValueIsWrittenAsEmpty() throws ServletException, IOException, NoSuchMethodException {
-        mockery.checking(new Expectations() {
-            {
-                allowing(resource).getType();
-                will(returnValue(CommonComponentOld.class));
-                allowing(method).getMethod();
-                will(returnValue(CommonComponentOld.class.getMethod("base")));
-                one(config).getForwardFor("CommonComponentOld.base.ok");
-                will(returnValue("serverSide?client.id=${client.id}"));
-                exactly(2).of(request).getAttribute("client"); will(returnValue(new MyClient()));
-                one(request).getRequestDispatcher("serverSide?client.id=");
-            }
-        });
-        this.result.forward("ok");
-        mockery.assertIsSatisfied();
-    }
-
     @Test
     public void includesUsesTheCommonAlgorithm() throws ServletException, IOException, NoSuchMethodException {
         mockery.checking(new Expectations() {

@@ -33,6 +33,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import ognl.NoSuchPropertyException;
 import ognl.Ognl;
@@ -50,6 +51,7 @@ import br.com.caelum.vraptor.http.ognl.ReflectionBasedNullHandler;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.validator.ValidationMessage;
 import br.com.caelum.vraptor.vraptor2.Info;
 
 @RequestScoped
@@ -81,7 +83,7 @@ public class OgnlParametersProvider implements ParametersProvider {
         OgnlRuntime.setPropertyAccessor(Object[].class, new ArrayAccessor());
     }
 
-    public Object[] getParametersFor(ResourceMethod method) {
+    public Object[] getParametersFor(ResourceMethod method, List<ValidationMessage> errors, ResourceBundle bundle) {
         try {
             Class<?> type = creator.typeFor(method);
             Object root = type.getDeclaredConstructor().newInstance();

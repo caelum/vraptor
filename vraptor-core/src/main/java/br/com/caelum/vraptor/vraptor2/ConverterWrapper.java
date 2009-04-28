@@ -1,10 +1,13 @@
 package br.com.caelum.vraptor.vraptor2;
 
+import java.text.MessageFormat;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import org.vraptor.converter.ConversionException;
 
 import br.com.caelum.vraptor.Converter;
+import br.com.caelum.vraptor.validator.ValidationMessage;
 
 public class ConverterWrapper implements Converter {
 
@@ -14,11 +17,14 @@ public class ConverterWrapper implements Converter {
         this.converter = converter;
     }
 
-    public Object convert(String value, Class type, List<ValidationMessage> errors, ResourceBundle bundle) {
+    public Object convert(String value, Class type, List errors, ResourceBundle bundle) {
         try {
             return converter.convert(value, type, null);
         } catch (ConversionException e) {
-            throw new IllegalArgumentException("Unable to convert using vraptor2 converter " + converter.getClass().getName() + " for value " + value);
+        	// prints stack trace because its an internal problem that ocurred
+        	e.printStackTrace();
+			errors.add(new ValidationMessage(MessageFormat.format(bundle.getString("is_not_valid"), value), ""));
+			return null;
         }
     }
 

@@ -31,12 +31,15 @@ package br.com.caelum.vraptor.example;
 
 import java.util.List;
 
+import org.hibernate.validator.Length;
+
 public class Client {
     
     private Long id;
 
     private int age;
     
+    @Length(min=5)
     private String name;
     
     private List<String> emails;

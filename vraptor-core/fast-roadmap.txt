@@ -1,6 +1,6 @@
 TODO: 17
-(MUST) - support i18n messages on hamcrest based validations
-(MUST) - support HibernateValidator with i18n messages
+(MUST) - support i18n messages on hamcrest based validations: make sense: SHOULD be
+
 - ClientsController --> clients.list
 
 
@@ -364,3 +364,5 @@ done:
 - client redirect based on url
 - biginteger,bigdecimal converters
 - 404 component
+- i18n conversion messages
+support HibernateValidator with i18n messages

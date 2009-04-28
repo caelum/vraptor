@@ -123,7 +123,7 @@ public class LocaleBasedCalendarConverterTest {
             exactly(2).of(request).getAttribute("javax.servlet.jsp.jstl.fmt.locale.request"); will(returnValue("pt_br"));
         }});
         converter.convert("a,10/06/2008/a/b/c", Calendar.class, errors, bundle);
-        assertThat(errors.get(0), is(VRaptorMatchers.error("", "--- is not a valid date.")));
+        assertThat(errors.get(0), is(VRaptorMatchers.error("", "a,10/06/2008/a/b/c is not a valid date.")));
     }
 
 }

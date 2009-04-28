@@ -62,7 +62,7 @@ public class ByteConverterTest {
     @Test
     public void shouldComplainAboutInvalidNumber() {
         converter.convert("---", Byte.class, errors, bundle);
-        assertThat(errors.get(0), is(VRaptorMatchers.error("", "--- is not a valid number.")));
+        assertThat(errors.get(0), is(VRaptorMatchers.error("", "--- is not a valid integer.")));
     }
     
     @Test

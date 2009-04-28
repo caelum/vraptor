@@ -13,6 +13,7 @@ import org.vraptor.validator.ValidationErrors;
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Interceptor;
 import br.com.caelum.vraptor.core.InterceptorStack;
+import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.validator.ValidationMessage;
@@ -26,12 +27,14 @@ public class ValidatorInterceptor implements Interceptor {
     private static final Logger logger = LoggerFactory.getLogger(ValidatorInterceptor.class);
     private final ValidationErrors errors;
     private final OutjectionInterceptor outjection;
+	private final Localization bundles;
 
-    public ValidatorInterceptor(ParametersProvider provider, PageResult result, ValidationErrors errors, OutjectionInterceptor outjection) {
+    public ValidatorInterceptor(ParametersProvider provider, PageResult result, ValidationErrors errors, OutjectionInterceptor outjection, Localization bundles) {
         this.provider = provider;
         this.result = result;
         this.errors = errors;
         this.outjection = outjection;
+		this.bundles = bundles;
     }
 
     public boolean accepts(ResourceMethod method) {
@@ -44,7 +47,7 @@ public class ValidatorInterceptor implements Interceptor {
             Method validationMethod = getValidationFor(method.getMethod(), type);
             if (validationMethod != null) {
             	List<ValidationMessage> messages= new ArrayList<ValidationMessage>();
-                Object[] parameters = provider.getParametersFor(method, messages, bundle);
+                Object[] parameters = provider.getParametersFor(method, messages, bundles.getBundle());
                 Object[] validationParameters = new Object[parameters.length + 1];
                 validationParameters[0] = errors;
                 for (int i = 0; i < parameters.length; i++) {

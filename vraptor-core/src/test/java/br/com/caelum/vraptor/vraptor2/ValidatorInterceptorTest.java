@@ -13,6 +13,7 @@ import org.vraptor.validator.ValidationErrors;
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.VRaptorMockery;
 import br.com.caelum.vraptor.core.InterceptorStack;
+import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.view.jsp.PageResult;
@@ -29,6 +30,7 @@ public class ValidatorInterceptorTest {
     private Outjecter outjecter;
     private OutjectionInterceptor interceptor;
     private ComponentInfoProvider info;
+	private Localization localization;
 
     @Before
     public void setup() {
@@ -38,13 +40,14 @@ public class ValidatorInterceptorTest {
         this.errors = mockery.mock(ValidationErrors.class);
         this.outjecter = mockery.mock(Outjecter.class);
         this.info = mockery.mock(ComponentInfoProvider.class);
+        this.localization = mockery.mock(Localization.class);
         mockery.checking(new Expectations() {
             {
                 one(info).getOutjecter(); will(returnValue(outjecter));
             }
         });
         this.interceptor = new OutjectionInterceptor(info);
-        this.validator = new ValidatorInterceptor(this.provider, this.result, errors, interceptor);
+        this.validator = new ValidatorInterceptor(this.provider, this.result, errors, interceptor, localization);
         this.stack = mockery.mock(InterceptorStack.class);
     }
 

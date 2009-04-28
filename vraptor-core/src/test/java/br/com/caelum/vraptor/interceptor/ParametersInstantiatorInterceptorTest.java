@@ -12,6 +12,7 @@ import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.VRaptorMockery;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.core.InterceptorStack;
+import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.core.MethodParameters;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParametersProvider;
@@ -25,6 +26,7 @@ public class ParametersInstantiatorInterceptorTest {
     private ParameterNameProvider provider;
     private ParametersProvider parametersProvider;
 	private Validator validator;
+	private Localization localization;
 
     @Before
     public void setup() {
@@ -33,7 +35,8 @@ public class ParametersInstantiatorInterceptorTest {
         this.provider = mockery.mock(ParameterNameProvider.class);
         this.parametersProvider = mockery.mock(ParametersProvider.class);
         this.validator = mockery.mock(Validator.class);
-        this.instantiator = new ParametersInstantiatorInterceptor(parametersProvider, params, provider, validator);
+        this.localization = mockery.localization();
+        this.instantiator = new ParametersInstantiatorInterceptor(parametersProvider, params, provider, validator, localization);
     }
 
     class Component {

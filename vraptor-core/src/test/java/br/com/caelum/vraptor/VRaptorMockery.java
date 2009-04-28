@@ -1,108 +1,121 @@
 package br.com.caelum.vraptor;
 
 import java.lang.reflect.Method;
+import java.util.ResourceBundle;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.internal.ExpectationBuilder;
 import org.jmock.lib.legacy.ClassImposteriser;
 
+import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 public class VRaptorMockery {
-    
-    private int count = 0;
 
-    private Mockery mockery;
+	private int count = 0;
 
-    public VRaptorMockery() {
-        this(false);
-    }
+	private Mockery mockery;
 
-    public VRaptorMockery(boolean supportConcreteClasses) {
-        mockery = new Mockery();
-        if (supportConcreteClasses) {
-            mockery.setImposteriser(ClassImposteriser.INSTANCE);
-        }
-    }
+	public VRaptorMockery() {
+		this(false);
+	}
 
-    public void assertIsSatisfied() {
-        mockery.assertIsSatisfied();
-    }
+	public VRaptorMockery(boolean supportConcreteClasses) {
+		mockery = new Mockery();
+		if (supportConcreteClasses) {
+			mockery.setImposteriser(ClassImposteriser.INSTANCE);
+		}
+	}
 
-    public void checking(ExpectationBuilder expectations) {
-        mockery.checking(expectations);
-    }
+	public void assertIsSatisfied() {
+		mockery.assertIsSatisfied();
+	}
 
-    public <T> T mock(Class<T> typeToMock) {
-        return mockery.mock(typeToMock);
-    }
+	public void checking(ExpectationBuilder expectations) {
+		mockery.checking(expectations);
+	}
 
-    public ResourceMethod method(final Method declaredMethod) {
-        final ResourceMethod method = mockery.mock(ResourceMethod.class);
-        checking(new Expectations() {
-            {
-                one(method).getMethod();
-                will(returnValue(declaredMethod));
-            }
-        });
-        return method;
-    }
+	public <T> T mock(Class<T> typeToMock) {
+		return mockery.mock(typeToMock);
+	}
 
-    public <T> Resource resource(final Class<T> type) {
-        final Resource resource = mockery.mock(Resource.class, "resource : " + type+ (++count));
-        mockery.checking(new Expectations() {
-            {
-                allowing(resource).getType();
-                will(returnValue(type));
-            }
-        });
-        return resource;
-    }
+	public ResourceMethod method(final Method declaredMethod) {
+		final ResourceMethod method = mockery.mock(ResourceMethod.class);
+		checking(new Expectations() {
+			{
+				one(method).getMethod();
+				will(returnValue(declaredMethod));
+			}
+		});
+		return method;
+	}
 
-    public <T> Container container(final Class<T> type, final T object) {
-        final Container container = mockery.mock(Container.class);
-        mockery.checking(new Expectations() {
-            {
-                one(container).instanceFor(type);
-                will(returnValue(object));
-            }
-        });
-        return container;
-    }
+	public <T> Resource resource(final Class<T> type) {
+		final Resource resource = mockery.mock(Resource.class, "resource : " + type + (++count));
+		mockery.checking(new Expectations() {
+			{
+				allowing(resource).getType();
+				will(returnValue(type));
+			}
+		});
+		return resource;
+	}
 
-    public <T> ResourceMethod methodForResource(Class<T> type) {
-        final Resource resource = resource(type);
-        final ResourceMethod method = mockery.mock(ResourceMethod.class);
-        checking(new Expectations() {
-            {
-                one(method).getResource();
-                will(returnValue(resource));
-            }
-        });
-        return method;
-    }
+	public <T> Container container(final Class<T> type, final T object) {
+		final Container container = mockery.mock(Container.class);
+		mockery.checking(new Expectations() {
+			{
+				one(container).instanceFor(type);
+				will(returnValue(object));
+			}
+		});
+		return container;
+	}
 
-    public <T> ResourceMethod methodFor(final Class<T> type, final String methodName, final Class<?>... params) throws NoSuchMethodException {
-        final Resource resource = mockery.mock(Resource.class);
-        mockery.checking(new Expectations() {
-            {
-                allowing(resource).getType();
-                will(returnValue(type));
-            }
-        });
-        final ResourceMethod method = mockery.mock(ResourceMethod.class);
-        checking(new Expectations() {
-            {
-                allowing(method).getResource();
-                will(returnValue(resource));
-                allowing(method).getMethod();
-                will(returnValue(type.getDeclaredMethod(methodName, params)));
-            }
-        });
-        return method;
-    }
+	public <T> ResourceMethod methodForResource(Class<T> type) {
+		final Resource resource = resource(type);
+		final ResourceMethod method = mockery.mock(ResourceMethod.class);
+		checking(new Expectations() {
+			{
+				one(method).getResource();
+				will(returnValue(resource));
+			}
+		});
+		return method;
+	}
+
+	public <T> ResourceMethod methodFor(final Class<T> type, final String methodName, final Class<?>... params)
+			throws NoSuchMethodException {
+		final Resource resource = mockery.mock(Resource.class);
+		mockery.checking(new Expectations() {
+			{
+				allowing(resource).getType();
+				will(returnValue(type));
+			}
+		});
+		final ResourceMethod method = mockery.mock(ResourceMethod.class);
+		checking(new Expectations() {
+			{
+				allowing(method).getResource();
+				will(returnValue(resource));
+				allowing(method).getMethod();
+				will(returnValue(type.getDeclaredMethod(methodName, params)));
+			}
+		});
+		return method;
+	}
+
+	public Localization localization() {
+		final Localization loc = mockery.mock(Localization.class);
+		mockery.checking(new Expectations() {
+			{
+				allowing(loc).getBundle(); will(returnValue(ResourceBundle.getBundle("messages")));
+			}
+		});
+		return loc;
+	}
 
 }

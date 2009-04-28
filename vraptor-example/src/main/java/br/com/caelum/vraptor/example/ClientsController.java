@@ -37,6 +37,7 @@ import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.example.dao.Database;
+import br.com.caelum.vraptor.validator.Hibernate;
 import br.com.caelum.vraptor.validator.Validations;
 import br.com.caelum.vraptor.view.Results;
 
@@ -76,6 +77,7 @@ public class ClientsController {
                         that(client.getAge(), is(greaterThan(10)));
                     }
                 });
+                and(Hibernate.validate(client));
             }
         });
         database.add(client);

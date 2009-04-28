@@ -81,9 +81,10 @@ public class EnumConverterTest {
         assertThat(errors.get(0), is(VRaptorMatchers.error("", "32a00 is not a valid option.")));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldComplainAboutInvalidOrdinal() {
         converter.convert("THIRD", MyCustomEnum.class, errors, bundle);
+        assertThat(errors.get(0), is(VRaptorMatchers.error("", "THIRD is not a valid option.")));
     }
 
     @Test

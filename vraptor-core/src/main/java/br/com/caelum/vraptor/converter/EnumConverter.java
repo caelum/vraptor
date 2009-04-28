@@ -73,8 +73,8 @@ public class EnumConverter implements Converter<Enum> {
         try {
             int ordinal = Integer.parseInt(value);
             if (ordinal >= enumType.getEnumConstants().length) {
-                throw new IllegalArgumentException("Invalid enumeration value '" + value + "' for type "
-                        + enumType.getName() + " value " + value);
+    			errors.add(new ValidationMessage(MessageFormat.format(bundle.getString("is_not_a_valid_enum_value"), value), ""));
+    			return null;
             }
             return enumType.getEnumConstants()[ordinal];
         } catch (NumberFormatException e) {

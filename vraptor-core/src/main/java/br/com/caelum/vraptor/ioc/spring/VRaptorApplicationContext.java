@@ -35,6 +35,7 @@ import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.annotation.AnnotatedGenericBeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinitionHolder;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionReaderUtils;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
@@ -46,6 +47,7 @@ import org.springframework.context.annotation.ScopeMetadata;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.core.Ordered;
 import org.springframework.web.context.support.AbstractRefreshableWebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import javax.servlet.ServletContext;
 import java.util.Map;
@@ -65,8 +67,14 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
         this.basePackages = basePackages;
     }
 
+    @Override
+    protected void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) {
+        WebApplicationContextUtils.registerWebApplicationScopes(beanFactory);
+    }
+
     protected void loadBeanDefinitions(DefaultListableBeanFactory beanFactory) {
         beanFactory.registerSingleton(ServletContext.class.getName(), getServletContext());
+        beanFactory.ignoreDependencyType(ServletContext.class);
         registerApplicationScopedComponentsOn(beanFactory);
         registerRequestScopedComponentsOn(beanFactory);
 

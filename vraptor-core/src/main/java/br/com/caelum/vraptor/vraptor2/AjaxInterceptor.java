@@ -33,6 +33,7 @@ import java.io.PrintWriter;
 import javax.servlet.http.HttpServletResponse;
 
 import org.vraptor.annotations.Remotable;
+import org.vraptor.annotations.Viewless;
 import org.vraptor.remote.json.JSONSerializer;
 
 import br.com.caelum.vraptor.InterceptionException;
@@ -70,7 +71,7 @@ public class AjaxInterceptor implements Interceptor {
 
 	public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
 			throws InterceptionException {
-		if (info.isAjax()) {
+		if (!method.getMethod().isAnnotationPresent(Viewless.class) && info.isAjax()) {
 			if (!method.getMethod().isAnnotationPresent(Remotable.class)) {
 				throw new InterceptionException("Unable to make an ajax result in a non-remotable method.");
 			}

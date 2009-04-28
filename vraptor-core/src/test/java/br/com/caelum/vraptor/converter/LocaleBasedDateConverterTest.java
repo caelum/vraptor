@@ -35,8 +35,10 @@ import static org.hamcrest.Matchers.nullValue;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+import java.util.ResourceBundle;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -48,6 +50,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.core.VRaptorRequest;
+import br.com.caelum.vraptor.validator.ValidationMessage;
 
 public class LocaleBasedDateConverterTest {
 
@@ -56,6 +59,8 @@ public class LocaleBasedDateConverterTest {
     private HttpServletRequest request;
     private HttpSession session;
     private ServletContext context;
+	private ArrayList<ValidationMessage> errors;
+	private ResourceBundle bundle;
 
     @Before
     public void setup() {
@@ -65,6 +70,8 @@ public class LocaleBasedDateConverterTest {
         this.context= mockery.mock(ServletContext.class);
         final VRaptorRequest webRequest = new VRaptorRequest(context, request, null);
         this.converter = new LocaleBasedDateConverter(webRequest);
+        this.errors = new ArrayList<ValidationMessage>();
+        this.bundle = ResourceBundle.getBundle("messages");
     }
 
     @Test

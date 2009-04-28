@@ -34,6 +34,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import ognl.Evaluation;
 import ognl.ListPropertyAccessor;
@@ -42,6 +43,7 @@ import ognl.OgnlException;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor.validator.ValidationMessage;
 import br.com.caelum.vraptor.vraptor2.Info;
 
 /**
@@ -100,7 +102,9 @@ public class ListAccessor extends ListPropertyAccessor {
                     // programming and ognl live together forever!
                     Container container = (Container) context.get(Container.class);
                     Converter<?> converter = container.instanceFor(Converters.class).to(type, container);
-                    Object result = converter.convert((String) value, type, errors, bundle);
+                    List<ValidationMessage> errors = (List<ValidationMessage>) context.get("errors");
+                    ResourceBundle bundle = (ResourceBundle) context.get(ResourceBundle.class);
+					Object result = converter.convert((String) value, type, errors, bundle);
                     super.setProperty(context, target, key, result);
                     return;
                 }

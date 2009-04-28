@@ -21,6 +21,7 @@ import br.com.caelum.vraptor.interceptor.InterceptorListPriorToExecutionExtracto
 import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
 import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
 import br.com.caelum.vraptor.resource.DefaultMethodLookupBuilder;
+import br.com.caelum.vraptor.resource.DefaultResourceNotFoundHandler;
 import br.com.caelum.vraptor.resource.DefaultResourceRegistry;
 import br.com.caelum.vraptor.validator.DefaultValidator;
 import br.com.caelum.vraptor.view.DefaultLogicResult;
@@ -111,14 +112,13 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
         registerOn(beanFactory, DefaultRequestInfo.class);
         registerOn(beanFactory, DefaultValidator.class);
         registerOn(beanFactory, DefaultLogicResult.class);
+        registerOn(beanFactory, DefaultResourceNotFoundHandler.class);
         registerOn(beanFactory, VRaptorRequestProvider.class, true);
         registerOn(beanFactory, HttpServletRequestProvider.class, true);
         registerOn(beanFactory, HttpServletResponseProvider.class, true);
         registerOn(beanFactory, HttpSessionProvider.class, true);
 
         beanFactory.registerSingleton(SpringBasedContainer.class.getName(), container);
-//        beanFactory.registerResolvableDependency(Container.class, container);
-//        beanFactory.registerResolvableDependency(ComponentRegistry.class, container);
     }
 
     public void register(Class<?> type) {

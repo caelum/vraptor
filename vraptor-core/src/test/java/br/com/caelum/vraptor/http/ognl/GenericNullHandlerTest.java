@@ -33,12 +33,12 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
-import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -47,67 +47,122 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import org.jmock.Expectations;
+import org.junit.Before;
+import org.junit.Test;
+
+import br.com.caelum.vraptor.VRaptorMockery;
+import br.com.caelum.vraptor.http.EmptyElementsRemoval;
+import br.com.caelum.vraptor.ioc.Container;
+
 public class GenericNullHandlerTest {
 
-    @Test(expected = IllegalArgumentException.class)
-    public void shouldDenyMostInterfaces() throws Exception {
-        GenericNullHandler handler = new GenericNullHandler();
-        handler.instantiate(TheInterface.class);
-    }
+	private VRaptorMockery mockery;
+	private EmptyElementsRemoval removal;
+	private HashMap context;
+	private Container container;
 
-    @Test(expected = IllegalArgumentException.class)
-    public void shouldDenyMostAbstractClasses() throws Exception {
-        GenericNullHandler handler = new GenericNullHandler();
-        handler.instantiate(AbstractClass.class);
-    }
+	@Before
+	public void setup() {
+		this.mockery = new VRaptorMockery(true);
+		this.removal = mockery.mock(EmptyElementsRemoval.class);
+		this.container = mockery.mock(Container.class);
+		mockery.checking(new Expectations() {
+			{
+				allowing(container).instanceFor(EmptyElementsRemoval.class); will(returnValue(removal));
+			}
+		});
+		this.context = new HashMap();
+		this.context.put(Container.class, container);
+	}
 
-    @Test
-    public void shouldInstantiateGregorianCalendarForAbstractCalendarType() throws Exception {
-        GenericNullHandler handler = new GenericNullHandler();
-        Calendar calendar = handler.instantiate(Calendar.class);
-        assertThat(calendar, is(notNullValue()));
-        assertThat(calendar, is(instanceOf(GregorianCalendar.class)));
-    }
+	@Test(expected = IllegalArgumentException.class)
+	public void shouldDenyMostInterfaces() throws Exception {
+		GenericNullHandler handler = new GenericNullHandler();
+		handler.instantiate(TheInterface.class, context);
+	}
 
-    @Test
-    public void shouldInstantiateArrayListForCollectionInterface() throws Exception {
-        GenericNullHandler handler = new GenericNullHandler();
-        Collection collection = handler.instantiate(Collection.class);
-        assertThat(collection, is(notNullValue()));
-        assertThat(collection, is(instanceOf(ArrayList.class)));
-    }
+	@Test(expected = IllegalArgumentException.class)
+	public void shouldDenyMostAbstractClasses() throws Exception {
+		GenericNullHandler handler = new GenericNullHandler();
+		handler.instantiate(AbstractClass.class, context);
+	}
 
-    @Test
-    public void shouldInstantiateArrayListForListInterface() throws Exception {
-        GenericNullHandler handler = new GenericNullHandler();
-        List list = handler.instantiate(List.class);
-        assertThat(list, is(notNullValue()));
-        assertThat(list, is(instanceOf(ArrayList.class)));
-    }
+	@Test
+	public void shouldInstantiateGregorianCalendarForAbstractCalendarType()
+			throws Exception {
+		GenericNullHandler handler = new GenericNullHandler();
+		Calendar calendar = handler.instantiate(Calendar.class, context);
+		assertThat(calendar, is(notNullValue()));
+		assertThat(calendar, is(instanceOf(GregorianCalendar.class)));
+	}
 
-    @Test
-    public void shouldInstantiateLinkedListForQueueInterface() throws Exception {
-        GenericNullHandler handler = new GenericNullHandler();
-        Queue queue = handler.instantiate(Queue.class);
-        assertThat(queue, is(notNullValue()));
-        assertThat(queue, is(instanceOf(LinkedList.class)));
-    }
+	@Test
+	public void shouldInstantiateArrayListForCollectionInterface()
+			throws Exception {
+		mockery.checking(new Expectations() {
+			{
+				one(removal).add(new ArrayList());
+			}
+		});
+		GenericNullHandler handler = new GenericNullHandler();
+		Collection collection = handler.instantiate(Collection.class, context);
+		assertThat(collection, is(notNullValue()));
+		assertThat(collection, is(instanceOf(ArrayList.class)));
+	}
 
-    @Test
-    public void shouldInstantiateHashSetListForSetInterface() throws Exception {
-        GenericNullHandler handler = new GenericNullHandler();
-        Set set = handler.instantiate(Set.class);
-        assertThat(set, is(notNullValue()));
-        assertThat(set, is(instanceOf(HashSet.class)));
-    }
+	@Test
+	public void shouldInstantiateArrayListForListInterface() throws Exception {
+		mockery.checking(new Expectations() {
+			{
+				one(removal).add(new ArrayList());
+			}
+		});
+		GenericNullHandler handler = new GenericNullHandler();
+		List list = handler.instantiate(List.class, context);
+		assertThat(list, is(notNullValue()));
+		assertThat(list, is(instanceOf(ArrayList.class)));
+	}
 
-    @Test
-    public void shouldInstantiateTreeSetListForSortedSetInterface() throws Exception {
-        GenericNullHandler handler = new GenericNullHandler();
-        Set set = handler.instantiate(SortedSet.class);
-        assertThat(set, is(notNullValue()));
-        assertThat(set, is(instanceOf(TreeSet.class)));
-    }
+	@Test
+	public void shouldInstantiateLinkedListForQueueInterface() throws Exception {
+		mockery.checking(new Expectations() {
+			{
+				one(removal).add(new LinkedList());
+			}
+		});
+		GenericNullHandler handler = new GenericNullHandler();
+		Queue queue = handler.instantiate(Queue.class, context);
+		assertThat(queue, is(notNullValue()));
+		assertThat(queue, is(instanceOf(LinkedList.class)));
+	}
+
+	@Test
+	public void shouldInstantiateHashSetListForSetInterface() throws Exception {
+		mockery.checking(new Expectations() {
+			{
+				one(removal).add(new HashSet());
+			}
+		});
+		GenericNullHandler handler = new GenericNullHandler();
+		Set set = handler.instantiate(Set.class, context);
+		assertThat(set, is(notNullValue()));
+		assertThat(set, is(instanceOf(HashSet.class)));
+	}
+
+	@Test
+	public void shouldInstantiateTreeSetListForSortedSetInterface()
+			throws Exception {
+		mockery.checking(new Expectations() {
+			{
+				one(removal).add(new TreeSet());
+			}
+		});
+		GenericNullHandler handler = new GenericNullHandler();
+		Set set = handler.instantiate(SortedSet.class, context);
+		assertThat(set, is(notNullValue()));
+		assertThat(set, is(instanceOf(TreeSet.class)));
+	}
 
 }
 

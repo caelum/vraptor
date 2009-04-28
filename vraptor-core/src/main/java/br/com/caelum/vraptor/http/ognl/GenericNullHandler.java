@@ -45,7 +45,6 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import ognl.OgnlContext;
 import br.com.caelum.vraptor.http.EmptyElementsRemoval;
 import br.com.caelum.vraptor.ioc.Container;
 
@@ -68,7 +67,7 @@ public class GenericNullHandler {
     }
 
     @SuppressWarnings("unchecked")
-    <T> T instantiate(Class<T> baseType, OgnlContext context) throws InstantiationException, IllegalAccessException,
+    <T> T instantiate(Class<T> baseType, Map context) throws InstantiationException, IllegalAccessException,
             InvocationTargetException, NoSuchMethodException {
         Object instance;
         Class<?> typeToInstantiate = baseType;

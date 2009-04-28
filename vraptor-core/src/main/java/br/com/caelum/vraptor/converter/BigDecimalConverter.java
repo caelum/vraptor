@@ -19,7 +19,7 @@ import br.com.caelum.vraptor.validator.ValidationMessage;
 @ApplicationScoped
 public class BigDecimalConverter implements Converter<BigDecimal>{
 
-	public BigDecimal convert(String value, Class<? extends BigDecimal> type, List<ValidationMessage> errors, ResourceBundle bundle) {
+	public BigDecimal convert(String value, Class type, List<ValidationMessage> errors, ResourceBundle bundle) {
 		if (value == null || value.equals("")) {
 			return null;
 		}

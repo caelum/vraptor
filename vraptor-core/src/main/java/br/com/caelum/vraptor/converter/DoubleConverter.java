@@ -47,14 +47,14 @@ import br.com.caelum.vraptor.validator.ValidationMessage;
 @ApplicationScoped
 public class DoubleConverter implements Converter<Double> {
 
-    public Double convert(String value, Class<? extends Double> type, List<ValidationMessage> errors, ResourceBundle bundle) {
+    public Double convert(String value, Class type, List<ValidationMessage> errors, ResourceBundle bundle) {
         if (value == null || value.equals("")) {
             return null;
         }
         try {
             return Double.valueOf(value);
         } catch (NumberFormatException e) {
-			errors.add(new ValidationMessage(MessageFormat.format(bundle.getString("is_not_a_valid_decimal"), value), ""));
+			errors.add(new ValidationMessage(MessageFormat.format(bundle.getString("is_not_a_valid_number"), value), ""));
 			return null;
         }
     }

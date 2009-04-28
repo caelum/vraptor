@@ -42,19 +42,20 @@ import br.com.caelum.vraptor.validator.ValidationMessage;
  * VRaptor's primitive long converter. 
  * 
  * @author Cecilia Fernandes
+ * @author Guilherme Silveira
  */
 @Convert(long.class)
 @ApplicationScoped
 public class PrimitiveLongConverter implements Converter {
 
-    public Object convert(String value, Class type, List<ValidationMessage> errors, ResourceBundle bundle) {
+    public Object convert(String value, Class type, List errors, ResourceBundle bundle) {
         if(value==null || value=="") {
         	return 0L;
         }
         try {
             return Long.parseLong(value);
         } catch (NumberFormatException e) {
-			errors.add(new ValidationMessage(MessageFormat.format(bundle.getString("is_not_a_valid_number"), value), ""));
+			errors.add(new ValidationMessage(MessageFormat.format(bundle.getString("is_not_a_valid_integer"), value), ""));
 			return null;
         }
     }

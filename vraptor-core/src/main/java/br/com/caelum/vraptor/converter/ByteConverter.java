@@ -47,14 +47,14 @@ import br.com.caelum.vraptor.validator.ValidationMessage;
 @ApplicationScoped
 public class ByteConverter implements Converter<Byte> {
 
-    public Byte convert(String value, Class<? extends Byte> type, List<ValidationMessage> errors, ResourceBundle bundle) {
+    public Byte convert(String value, Class type, List<ValidationMessage> errors, ResourceBundle bundle) {
         if (value == null || value.equals("")) {
             return null;
         }
         try {
             return Byte.valueOf(value);
         } catch (NumberFormatException e) {
-			errors.add(new ValidationMessage(MessageFormat.format(bundle.getString("is_not_a_valid_number"), value), ""));
+			errors.add(new ValidationMessage(MessageFormat.format(bundle.getString("is_not_a_valid_integer"), value), ""));
 			return null;
         }
     }

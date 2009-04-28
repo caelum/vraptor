@@ -30,6 +30,7 @@
 package br.com.caelum.vraptor.converter;
 
 import java.text.MessageFormat;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import br.com.caelum.vraptor.Convert;
@@ -47,14 +48,14 @@ import br.com.caelum.vraptor.validator.ValidationMessage;
 @ApplicationScoped
 public class PrimitiveByteConverter implements Converter {
 
-    public Object convert(String value, Class type, List<ValidationMessage> errors, ResourceBundle bundle) {
+    public Object convert(String value, Class type, List errors, ResourceBundle bundle) {
         if(value==null || value=="") {
         	return (byte) 0;
         }
         try {
             return Byte.parseByte(value);
         } catch (NumberFormatException e) {
-			errors.add(new ValidationMessage(MessageFormat.format(bundle.getString("is_not_a_valid_number"), value), ""));
+			errors.add(new ValidationMessage(MessageFormat.format(bundle.getString("is_not_a_valid_integer"), value), ""));
 			return null;
         }
     }

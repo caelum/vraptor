@@ -38,7 +38,7 @@ public class LocaleBasedCalendarConverter implements Converter<Calendar> {
         this.request = request;
     }
 
-    public Calendar convert(String value, Class<? extends Calendar> type, List<ValidationMessage> errors, ResourceBundle bundle) {
+    public Calendar convert(String value, Class type, List<ValidationMessage> errors, ResourceBundle bundle) {
         if (value == null || value.equals("")) {
             return null;
         }

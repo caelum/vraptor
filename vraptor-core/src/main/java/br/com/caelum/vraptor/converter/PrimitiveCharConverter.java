@@ -29,11 +29,13 @@
  */
 package br.com.caelum.vraptor.converter;
 
+import java.text.MessageFormat;
 import java.util.ResourceBundle;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
+import br.com.caelum.vraptor.validator.ValidationMessage;
 
 /**
  * VRaptor's primitive char converter. 
@@ -49,8 +51,8 @@ public class PrimitiveCharConverter implements Converter {
         	return '\u0000';
         }
         if(value.length()!=1) {
-            // TODO validation??
-            throw new IllegalArgumentException("String too long to convert to char");
+			errors.add(new ValidationMessage(MessageFormat.format(bundle.getString("is_not_a_valid_character"), value), ""));
+			return null;
         }
         return value.charAt(0);
     }

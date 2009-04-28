@@ -36,7 +36,7 @@ public class LocaleBasedDateConverter implements Converter<Date> {
         this.request = request;
     }
 
-    public Date convert(String value, Class<? extends Date> type, List<ValidationMessage> errors, ResourceBundle bundle) {
+    public Date convert(String value, Class type, List<ValidationMessage> errors, ResourceBundle bundle) {
         if (value == null || value.equals("")) {
             return null;
         }

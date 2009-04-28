@@ -47,7 +47,7 @@ import br.com.caelum.vraptor.validator.ValidationMessage;
 @ApplicationScoped
 public class EnumConverter implements Converter<Enum> {
 
-    public Enum convert(String value, Class<? extends Enum> type, List<ValidationMessage> errors, ResourceBundle bundle) {
+    public Enum convert(String value, Class type, List<ValidationMessage> errors, ResourceBundle bundle) {
         if (value == null || value.equals("")) {
             return null;
         }

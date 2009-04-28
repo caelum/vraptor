@@ -47,7 +47,7 @@ import br.com.caelum.vraptor.validator.ValidationMessage;
 @ApplicationScoped
 public class PrimitiveFloatConverter implements Converter {
 
-    public Object convert(String value, Class type, List<ValidationMessage> errors, ResourceBundle bundle) {
+    public Object convert(String value, Class type, List errors, ResourceBundle bundle) {
         if(value==null || value=="") {
         	return 0F;
         }

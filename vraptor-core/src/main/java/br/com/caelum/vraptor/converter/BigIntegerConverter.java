@@ -19,7 +19,7 @@ import br.com.caelum.vraptor.validator.ValidationMessage;
 @ApplicationScoped
 public class BigIntegerConverter implements Converter<BigInteger>{
 
-	public BigInteger convert(String value, Class<? extends BigInteger> type, List<ValidationMessage> errors, ResourceBundle bundle) {
+	public BigInteger convert(String value, Class type, List<ValidationMessage> errors, ResourceBundle bundle) {
 		if (value == null || value.equals("")) {
 			return null;
 		}

@@ -47,14 +47,14 @@ import br.com.caelum.vraptor.validator.ValidationMessage;
 @ApplicationScoped
 public class ShortConverter implements Converter<Short> {
 
-    public Short convert(String value, Class<? extends Short> type, List<ValidationMessage> errors, ResourceBundle bundle) {
+    public Short convert(String value, Class type, List<ValidationMessage> errors, ResourceBundle bundle) {
         if (value == null || value.equals("")) {
             return null;
         }
         try {
             return Short.valueOf(value);
         } catch (NumberFormatException e) {
-			errors.add(new ValidationMessage(MessageFormat.format(bundle.getString("is_not_a_valid_number"), value), ""));
+			errors.add(new ValidationMessage(MessageFormat.format(bundle.getString("is_not_a_valid_integer"), value), ""));
 			return null;
         }
     }

@@ -52,6 +52,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.core.VRaptorRequest;
+import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
 import br.com.caelum.vraptor.validator.ValidationMessage;
 
 public class LocaleBasedCalendarConverterTest {
@@ -116,12 +117,13 @@ public class LocaleBasedCalendarConverterTest {
     }
 
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test
     public void shouldThrowExceptionWhenUnableToParse() {
         mockery.checking(new Expectations() {{
             exactly(2).of(request).getAttribute("javax.servlet.jsp.jstl.fmt.locale.request"); will(returnValue("pt_br"));
         }});
         converter.convert("a,10/06/2008/a/b/c", Calendar.class, errors, bundle);
+        assertThat(errors.get(0), is(VRaptorMatchers.error("", "--- is not a valid date.")));
     }
 
 }

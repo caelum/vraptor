@@ -47,7 +47,7 @@ import br.com.caelum.vraptor.validator.ValidationMessage;
 @ApplicationScoped
 public class IntegerConverter implements Converter<Integer> {
 
-    public Integer convert(String value, Class<? extends Integer> type, List<ValidationMessage> errors, ResourceBundle bundle) {
+    public Integer convert(String value, Class type, List<ValidationMessage> errors, ResourceBundle bundle) {
         if (value == null || value.equals("")) {
             return null;
         }

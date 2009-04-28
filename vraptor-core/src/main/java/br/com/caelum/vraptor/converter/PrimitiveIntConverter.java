@@ -48,14 +48,14 @@ import br.com.caelum.vraptor.validator.ValidationMessage;
 @ApplicationScoped
 public class PrimitiveIntConverter implements Converter {
 
-    public Object convert(String value, Class type, List<ValidationMessage> errors, ResourceBundle bundle) {
+    public Object convert(String value, Class type, List errors, ResourceBundle bundle) {
         if(value==null || value.equals("")) {
             return 0;
         }
         try {
             return Integer.parseInt(value);
         } catch (NumberFormatException e) {
-			errors.add(new ValidationMessage(MessageFormat.format(bundle.getString("is_not_a_valid_number"), value), ""));
+			errors.add(new ValidationMessage(MessageFormat.format(bundle.getString("is_not_a_valid_integer"), value), ""));
 			return null;
         }
     }

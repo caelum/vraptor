@@ -46,7 +46,7 @@ import br.com.caelum.vraptor.validator.ValidationMessage;
 @ApplicationScoped
 public class BooleanConverter implements Converter<Boolean> {
 
-    public Boolean convert(String value, Class<? extends Boolean> type, List<ValidationMessage> errors, ResourceBundle bundle) {
+    public Boolean convert(String value, Class type, List<ValidationMessage> errors, ResourceBundle bundle) {
         if (value == null) {
             return null;
         }

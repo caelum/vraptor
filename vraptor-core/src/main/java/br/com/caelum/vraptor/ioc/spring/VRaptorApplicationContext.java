@@ -1,28 +1,5 @@
 package br.com.caelum.vraptor.ioc.spring;
 
-import java.util.Map;
-
-import javax.servlet.ServletContext;
-
-import org.springframework.aop.config.AopConfigUtils;
-import org.springframework.aop.scope.ScopedProxyUtils;
-import org.springframework.beans.factory.BeanFactoryUtils;
-import org.springframework.beans.factory.NoSuchBeanDefinitionException;
-import org.springframework.beans.factory.annotation.AnnotatedGenericBeanDefinition;
-import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.beans.factory.config.BeanDefinitionHolder;
-import org.springframework.beans.factory.support.AbstractBeanDefinition;
-import org.springframework.beans.factory.support.BeanDefinitionReaderUtils;
-import org.springframework.beans.factory.support.BeanDefinitionRegistry;
-import org.springframework.beans.factory.support.DefaultListableBeanFactory;
-import org.springframework.beans.factory.support.RootBeanDefinition;
-import org.springframework.context.annotation.AnnotationBeanNameGenerator;
-import org.springframework.context.annotation.AnnotationConfigUtils;
-import org.springframework.context.annotation.ScopeMetadata;
-import org.springframework.context.annotation.ScopedProxyMode;
-import org.springframework.core.Ordered;
-import org.springframework.web.context.support.AbstractRefreshableWebApplicationContext;
-
 import br.com.caelum.vraptor.core.DefaultConverters;
 import br.com.caelum.vraptor.core.DefaultInterceptorStack;
 import br.com.caelum.vraptor.core.DefaultMethodParameters;
@@ -50,6 +27,27 @@ import br.com.caelum.vraptor.view.DefaultLogicResult;
 import br.com.caelum.vraptor.view.DefaultPathResolver;
 import br.com.caelum.vraptor.view.jsp.DefaultPageResult;
 import br.com.caelum.vraptor.vraptor2.RequestResult;
+import org.springframework.aop.config.AopConfigUtils;
+import org.springframework.aop.scope.ScopedProxyUtils;
+import org.springframework.beans.factory.BeanFactoryUtils;
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
+import org.springframework.beans.factory.annotation.AnnotatedGenericBeanDefinition;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.config.BeanDefinitionHolder;
+import org.springframework.beans.factory.support.AbstractBeanDefinition;
+import org.springframework.beans.factory.support.BeanDefinitionReaderUtils;
+import org.springframework.beans.factory.support.BeanDefinitionRegistry;
+import org.springframework.beans.factory.support.DefaultListableBeanFactory;
+import org.springframework.beans.factory.support.RootBeanDefinition;
+import org.springframework.context.annotation.AnnotationBeanNameGenerator;
+import org.springframework.context.annotation.AnnotationConfigUtils;
+import org.springframework.context.annotation.ScopeMetadata;
+import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.core.Ordered;
+import org.springframework.web.context.support.AbstractRefreshableWebApplicationContext;
+
+import javax.servlet.ServletContext;
+import java.util.Map;
 
 /**
  * @author Fabio Kung
@@ -189,7 +187,7 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
         } else {
             for (Map.Entry<String, ? extends T> entry : instances.entrySet()) {
                 BeanDefinition definition = getBeanFactory().getBeanDefinition(entry.getKey());
-                if (definition instanceof AbstractBeanDefinition && isPrimary(definition)) {
+                if (isPrimary(definition)) {
                     return entry.getValue();
                 } else if (hasGreaterRoleThanInfrastructure(definition)) {
                     return entry.getValue();
@@ -202,7 +200,7 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
     }
 
     private boolean isPrimary(BeanDefinition definition) {
-        return ((AbstractBeanDefinition) definition).isPrimary();
+        return definition instanceof AbstractBeanDefinition && ((AbstractBeanDefinition) definition).isPrimary();
     }
 
     private boolean hasGreaterRoleThanInfrastructure(BeanDefinition definition) {

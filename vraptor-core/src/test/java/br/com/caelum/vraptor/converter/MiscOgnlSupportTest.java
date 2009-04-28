@@ -31,9 +31,11 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -49,8 +51,10 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.core.VRaptorRequest;
+import br.com.caelum.vraptor.http.ognl.ArrayAccessor;
 import br.com.caelum.vraptor.http.ognl.ListAccessor;
 import br.com.caelum.vraptor.http.ognl.ReflectionBasedNullHandler;
+import br.com.caelum.vraptor.validator.ValidationMessage;
 
 /**
  * Unfortunately OGNL sucks so bad in its design that we had to create a "unit"
@@ -69,6 +73,8 @@ public class MiscOgnlSupportTest {
     private Converters converters;
     private OgnlContext context;
     private House house;
+	private ResourceBundle bundle;
+	private ArrayList<ValidationMessage> errors;
 
     @Before
     public void setup() {
@@ -77,12 +83,14 @@ public class MiscOgnlSupportTest {
         this.house = new House();
         OgnlRuntime.setNullHandler(Object.class, new ReflectionBasedNullHandler());
         OgnlRuntime.setPropertyAccessor(List.class, new ListAccessor());
+        OgnlRuntime.setPropertyAccessor(Object[].class, new ArrayAccessor());
         this.context = (OgnlContext) Ognl.createDefaultContext(house);
         context.setTraceEvaluations(true);
         // OgnlRuntime.setPropertyAccessor(Set.class, new SetAccessor());
-        // OgnlRuntime.setPropertyAccessor(Array.class, new ArrayAccessor());
         // OgnlRuntime.setPropertyAccessor(Map.class, new MapAccessor());
-        Ognl.setTypeConverter(context, new OgnlToConvertersController(converters));
+        this.bundle = ResourceBundle.getBundle("messages");
+        this.errors = new ArrayList<ValidationMessage>();
+        Ognl.setTypeConverter(context, new OgnlToConvertersController(converters, errors, bundle));
     }
 
     public static class Cat {

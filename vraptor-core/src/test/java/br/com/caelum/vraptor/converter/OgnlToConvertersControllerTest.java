@@ -34,6 +34,7 @@ import static org.hamcrest.Matchers.is;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import ognl.Ognl;
 import ognl.OgnlException;
@@ -45,6 +46,7 @@ import org.junit.Test;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.VRaptorMockery;
 import br.com.caelum.vraptor.core.Converters;
+import br.com.caelum.vraptor.validator.ValidationMessage;
 
 public class OgnlToConvertersControllerTest {
 
@@ -53,12 +55,16 @@ public class OgnlToConvertersControllerTest {
     private OgnlToConvertersController controller;
     private Cat myCat;
     private Converter converter;
+	private ArrayList<ValidationMessage> errors;
+	private ResourceBundle bundle;
 
     @Before
     public void setup() {
         this.mockery = new VRaptorMockery();
         this.converters = mockery.mock(Converters.class);
-        this.controller = new OgnlToConvertersController(converters);
+        this.errors = new ArrayList<ValidationMessage>();
+        this.bundle = ResourceBundle.getBundle("messages");
+        this.controller = new OgnlToConvertersController(converters, errors, bundle);
         this.converter = mockery.mock(Converter.class);
         this.myCat = new Cat();
     }

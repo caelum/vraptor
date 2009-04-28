@@ -31,7 +31,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import ognl.Ognl;
 import ognl.OgnlContext;
@@ -49,6 +51,7 @@ import br.com.caelum.vraptor.http.ognl.ArrayAccessor;
 import br.com.caelum.vraptor.http.ognl.ListAccessor;
 import br.com.caelum.vraptor.http.ognl.ReflectionBasedNullHandler;
 import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor.validator.ValidationMessage;
 
 /**
  * Unfortunately OGNL sucks so bad in its design that we had to create a "unit"
@@ -69,6 +72,8 @@ public class OgnlGenericTypesSupportTest {
     private OgnlContext context;
     private Container container;
     private EmptyElementsRemoval removal;
+	private ResourceBundle bundle;
+	private ArrayList<ValidationMessage> errors;
 
     @Before
     public void setup() {
@@ -76,6 +81,8 @@ public class OgnlGenericTypesSupportTest {
         this.converters = mockery.mock(Converters.class);
         this.container = mockery.mock(Container.class);
         this.removal = new EmptyElementsRemoval();
+        this.bundle = ResourceBundle.getBundle("messages");
+        this.errors = new ArrayList<ValidationMessage>();
         mockery.checking(new Expectations() {
             {
                 allowing(container).instanceFor(Converters.class); will(returnValue(converters));
@@ -92,7 +99,7 @@ public class OgnlGenericTypesSupportTest {
         context.put(Container.class, container);
         // OgnlRuntime.setPropertyAccessor(Set.class, new SetAccessor());
         // OgnlRuntime.setPropertyAccessor(Map.class, new MapAccessor());
-        Ognl.setTypeConverter(context, new OgnlToConvertersController(converters));
+        Ognl.setTypeConverter(context, new OgnlToConvertersController(converters, errors, bundle));
     }
 
     public static class Cat {

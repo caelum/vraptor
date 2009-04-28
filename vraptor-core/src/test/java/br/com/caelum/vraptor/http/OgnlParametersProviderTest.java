@@ -87,12 +87,22 @@ public class OgnlParametersProviderTest {
             this.ids = ids;
         }
 
+        private List<String> owners;
+
         public Long[] getIds() {
             return ids;
         }
 
-        private List<Cat> extraCats;
-        
+        public void setOwners(List<String> owners) {
+			this.owners = owners;
+		}
+
+		public List<String> getOwners() {
+			return owners;
+		}
+
+		private List<Cat> extraCats;
+
         private Long[] ids;
 
     }
@@ -155,7 +165,7 @@ public class OgnlParametersProviderTest {
                 will(returnValue(BuyASetter.class));
                 one(nameProvider).parameterNamesFor(method);
                 will(returnValue(new String[] { "House" }));
-                one(container).instanceFor(EmptyElementsRemoval.class); will(returnValue(removal));
+                allowing(container).instanceFor(EmptyElementsRemoval.class); will(returnValue(removal));
             }
         });
         Object[] params = provider.getParametersFor(mockery.methodFor(MyResource.class, "buyA", House.class));
@@ -188,6 +198,32 @@ public class OgnlParametersProviderTest {
         House house = (House) params[0];
         assertThat(house.ids.length, is(equalTo(1)));
         assertThat(house.ids[0], is(equalTo(3L)));
+        mockery.assertIsSatisfied();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    public void removeFromTheCollectionIfAnElementIsCreatedWithinACollectionButNoFieldIsSetAppartFromTheValueItselfNotAChild() throws SecurityException,
+            NoSuchMethodException {
+        final Method method = MyResource.class.getDeclaredMethod("buyA", House.class);
+        final Matcher<ResourceMethod> resourceMethod = VRaptorMatchers.resourceMethod(method);
+        mockery.checking(new Expectations() {
+            {
+                one(parameters).get("house.owners[1]");
+                will(returnValue(new String[] { "guilherme" }));
+                one(parameters).getNames();
+                will(returnValue(new HashSet(Arrays.asList(new String[] { "house.owners[1]" }))));
+                one(creator).typeFor(with(resourceMethod));
+                will(returnValue(BuyASetter.class));
+                one(nameProvider).parameterNamesFor(method);
+                will(returnValue(new String[] { "House" }));
+                one(container).instanceFor(EmptyElementsRemoval.class); will(returnValue(removal));
+            }
+        });
+        Object[] params = provider.getParametersFor(mockery.methodFor(MyResource.class, "buyA", House.class));
+        House house = (House) params[0];
+        assertThat(house.owners, hasSize(1));
+        assertThat(house.owners.get(0), is(equalTo("guilherme")));
         mockery.assertIsSatisfied();
     }
 

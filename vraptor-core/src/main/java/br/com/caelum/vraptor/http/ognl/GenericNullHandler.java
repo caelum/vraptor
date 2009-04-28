@@ -45,6 +45,10 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import ognl.OgnlContext;
+import br.com.caelum.vraptor.http.EmptyElementsRemoval;
+import br.com.caelum.vraptor.ioc.Container;
+
 /**
  * Capable of instantiating generic interfaces and custom types.
  *
@@ -64,7 +68,7 @@ public class GenericNullHandler {
     }
 
     @SuppressWarnings("unchecked")
-    <T> T instantiate(Class<T> baseType) throws InstantiationException, IllegalAccessException,
+    <T> T instantiate(Class<T> baseType, OgnlContext context) throws InstantiationException, IllegalAccessException,
             InvocationTargetException, NoSuchMethodException {
         Object instance;
         Class<?> typeToInstantiate = baseType;
@@ -77,6 +81,11 @@ public class GenericNullHandler {
             typeToInstantiate = CONCRETE_TYPES.get(baseType);
         }
         instance = typeToInstantiate.getConstructor().newInstance();
+        if(Collection.class.isAssignableFrom(typeToInstantiate)) {
+	        Container container = (Container) context.get(Container.class);
+	        EmptyElementsRemoval removal = container.instanceFor(EmptyElementsRemoval.class);
+        	removal.add((Collection)instance);
+        }
 
         return (T) instance;
     }

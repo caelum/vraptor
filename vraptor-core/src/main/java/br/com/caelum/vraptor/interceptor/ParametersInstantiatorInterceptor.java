@@ -3,7 +3,6 @@ package br.com.caelum.vraptor.interceptor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.ResourceBundle;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,9 +11,11 @@ import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Interceptor;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.core.InterceptorStack;
+import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.core.MethodParameters;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParametersProvider;
+import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.validator.ValidationMessage;
 import br.com.caelum.vraptor.validator.Validations;
@@ -24,6 +25,7 @@ import br.com.caelum.vraptor.validator.Validations;
  * 
  * @author Guilherme Silveira
  */
+@RequestScoped
 public class ParametersInstantiatorInterceptor implements Interceptor {
 
 	private final ParametersProvider provider;
@@ -32,13 +34,15 @@ public class ParametersInstantiatorInterceptor implements Interceptor {
 
 	private static final Logger logger = LoggerFactory.getLogger(ParametersInstantiatorInterceptor.class);
 	private final Validator validator;
+	private final Localization localization;
 
 	public ParametersInstantiatorInterceptor(ParametersProvider provider, MethodParameters parameters,
-			ParameterNameProvider nameProvider, Validator validator) {
+			ParameterNameProvider nameProvider, Validator validator, Localization localization) {
 		this.provider = provider;
 		this.parameters = parameters;
 		this.nameProvider = nameProvider;
 		this.validator = validator;
+		this.localization = localization;
 	}
 
 	public boolean accepts(ResourceMethod method) {
@@ -47,9 +51,8 @@ public class ParametersInstantiatorInterceptor implements Interceptor {
 
 	public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
 			throws InterceptionException {
-		ResourceBundle bundle = null;
 		final List<ValidationMessage> errors = new ArrayList<ValidationMessage>();
-		Object[] values = provider.getParametersFor(method, errors, bundle);
+		Object[] values = provider.getParametersFor(method, errors, localization.getBundle());
 		if (!errors.isEmpty()) {
 			validator.checking(new Validations() {
 				@Override

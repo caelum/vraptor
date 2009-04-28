@@ -89,20 +89,6 @@ public class AjaxInterceptorTest {
         mockery.assertIsSatisfied();
     }
 
-    @Test
-    public void invokesNextIfViewless() throws InterceptionException, IOException {
-    	final ResourceMethod method = mockery.mock(ResourceMethod.class);
-        mockery.checking(new Expectations() {
-            {
-                one(info).shouldShowView(method);
-                will(returnValue(false));
-                one(stack).next(method, null);
-            }
-        });
-        interceptor.intercept(stack, method, null);
-        mockery.assertIsSatisfied();
-    }
-
     class MyComponent {
         @Remotable
         void ajaxed() {

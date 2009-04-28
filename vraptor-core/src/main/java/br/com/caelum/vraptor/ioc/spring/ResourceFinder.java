@@ -26,7 +26,7 @@ public class ResourceFinder implements BeanFactoryPostProcessor {
         String[] definitionNames = beanFactory.getBeanDefinitionNames();
         for (String name : definitionNames) {
             BeanDefinition beanDefinition = beanFactory.getBeanDefinition(name);
-            LOGGER.info("scanning definition: " + beanDefinition + ", name: " + name +
+            LOGGER.debug("scanning definition: " + beanDefinition + ", name: " + name +
                     ", to see if it is a Resource candidate");
             if (beanDefinition instanceof AnnotatedBeanDefinition) {
                 AnnotationMetadata metadata = ((AnnotatedBeanDefinition) beanDefinition).getMetadata();

@@ -5,9 +5,8 @@ DO: (MUST) - setting errors during ognl expression evaluation should be defined 
 (MUST) - support HibernateValidator with i18n messages
 (MUST) - support i18n messages
 
-- if you invoke container.register after init --> exception
 - ClientsController --> clients.list
-- if you instanceFor returns null on pico --> log debug
+- support for Long[]
 
 - make client server redirect work with parameters, which ones?
 (MUST) - niceurls with programmatic support
@@ -21,9 +20,6 @@ DO: (MUST) - setting errors during ognl expression evaluation should be defined 
 - Set support
 - automatic REDIRECT depending on accepts
 
-done - (3.0.1) ceci: annotate all converters which do not depend on session or request as @ApplicationScoped
-done - (3.0.1) ceci: BigInteger converter (+test) e BigDecimal converter (+test) 
-done - (3.0.1) ceci: 404 component
 ceci: integration test for vraptor-example project
 
 test and refactor:
@@ -39,9 +35,15 @@ c) unit test for PicoContainersProvider... every scope should be tested
 MethodLookupBuilder: rename
 DefaultLogicResult should cache enhancers in order to create objects
 
-FileDownload support:
-	- either return FileDownload
-	- result.use(FileDownload)
+
+
+
+
+
+
+
+
+
 
 
 
@@ -144,6 +146,9 @@ right before ANY release
 	- check all TODOS and do something about them
 
 ONLY AFTER RELEASE
+FileDownload support:
+	- either return FileDownload
+	- result.use(FileDownload)
 3.0.1 - vraptor quartz component 
 3.0.1 - extract VRaptor Validator
 - Question: RequestResult should contain an Object so logics could execute a totally custom method???
@@ -357,3 +362,5 @@ done:
 - client redirect based on Logic result
 - server forward/include based on url
 - client redirect based on url
+- biginteger,bigdecimal converters
+- 404 component

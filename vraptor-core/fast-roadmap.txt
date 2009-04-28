@@ -1,8 +1,9 @@
 TODO: 17
 (MUST) - support i18n messages on hamcrest based validations
 (MUST) - support HibernateValidator with i18n messages
-
 - ClientsController --> clients.list
+
+
 - make client server redirect work with parameters, which ones?
 (MUST) - niceurls with programmatic support
 (MUST) - niceurls -> path support
@@ -14,6 +15,7 @@ TODO: 17
 (MUST) - Map support
 - Set support
 - automatic REDIRECT depending on accepts
+@Component should not be web acessible
 
 ceci: integration test for vraptor-example project
 

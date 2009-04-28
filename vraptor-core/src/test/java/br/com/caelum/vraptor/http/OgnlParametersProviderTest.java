@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -23,6 +24,7 @@ import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.validator.ValidationMessage;
 
 public class OgnlParametersProviderTest {
 
@@ -34,6 +36,7 @@ public class OgnlParametersProviderTest {
     private ParameterNameProvider nameProvider;
     private RequestParameters parameters;
     private EmptyElementsRemoval removal;
+	private ArrayList<ValidationMessage> errors;
 
     @Before
     public void setup() {
@@ -45,6 +48,7 @@ public class OgnlParametersProviderTest {
         this.container = mockery.mock(Container.class);
         this.removal = new EmptyElementsRemoval();
         this.provider = new OgnlParametersProvider(creator, container, converters, nameProvider, parameters, removal);
+        this.errors = new ArrayList<ValidationMessage>();
         mockery.checking(new Expectations() {
             {
                 allowing(converters).to((Class) with(an(Class.class)), with(any(Container.class))); will(returnValue(new LongConverter()));
@@ -143,7 +147,7 @@ public class OgnlParametersProviderTest {
             }
         });
 
-        Object[] params = provider.getParametersFor(mockery.methodFor(MyResource.class, "buyA", House.class));
+        Object[] params = provider.getParametersFor(mockery.methodFor(MyResource.class, "buyA", House.class), errors, null);
         House house = (House) params[0];
         assertThat(house.cat.id, is(equalTo("guilherme")));
         mockery.assertIsSatisfied();
@@ -168,7 +172,7 @@ public class OgnlParametersProviderTest {
                 allowing(container).instanceFor(EmptyElementsRemoval.class); will(returnValue(removal));
             }
         });
-        Object[] params = provider.getParametersFor(mockery.methodFor(MyResource.class, "buyA", House.class));
+        Object[] params = provider.getParametersFor(mockery.methodFor(MyResource.class, "buyA", House.class), errors, null);
         House house = (House) params[0];
         assertThat(house.extraCats, hasSize(1));
         assertThat(house.extraCats.get(0).id, is(equalTo("guilherme")));
@@ -194,7 +198,7 @@ public class OgnlParametersProviderTest {
                 one(container).instanceFor(EmptyElementsRemoval.class); will(returnValue(removal));
             }
         });
-        Object[] params = provider.getParametersFor(mockery.methodFor(MyResource.class, "buyA", House.class));
+        Object[] params = provider.getParametersFor(mockery.methodFor(MyResource.class, "buyA", House.class), errors, null);
         House house = (House) params[0];
         assertThat(house.ids.length, is(equalTo(1)));
         assertThat(house.ids[0], is(equalTo(3L)));

@@ -38,6 +38,7 @@ import java.util.ResourceBundle;
 import org.junit.Before;
 import org.junit.Test;
 
+import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
 import br.com.caelum.vraptor.validator.ValidationMessage;
 
 public class CharacterConverterTest {
@@ -58,9 +59,10 @@ public class CharacterConverterTest {
         assertThat(converter.convert("Z", Character.class, errors, bundle), is(equalTo(new Character('Z'))));
     }
     
-    @Test(expected=IllegalArgumentException.class)
+    @Test
     public void shouldComplainAboutStringTooBig() {
         converter.convert("---", Character.class, errors, bundle);
+        assertThat(errors.get(0), is(VRaptorMatchers.error("", "--- is not a valid character.")));
     }
     
     @Test

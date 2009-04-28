@@ -37,6 +37,7 @@ import java.util.ResourceBundle;
 import org.junit.Before;
 import org.junit.Test;
 
+import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
 import br.com.caelum.vraptor.validator.ValidationMessage;
 
 public class PrimitiveShortConverterTest {
@@ -57,9 +58,10 @@ public class PrimitiveShortConverterTest {
         assertThat((Short) converter.convert("5", short.class, errors, bundle), is(equalTo((short) 5)));
     }
     
-    @Test(expected=IllegalArgumentException.class)
+    @Test
     public void shouldComplainAboutInvalidNumber() {
         converter.convert("---", short.class, errors, bundle);
+        assertThat(errors.get(0), is(VRaptorMatchers.error("", "--- is not a valid integer.")));
     }
     
     @Test

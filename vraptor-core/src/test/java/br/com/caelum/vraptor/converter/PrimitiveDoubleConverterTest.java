@@ -37,6 +37,7 @@ import java.util.ResourceBundle;
 import org.junit.Before;
 import org.junit.Test;
 
+import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
 import br.com.caelum.vraptor.validator.ValidationMessage;
 
 public class PrimitiveDoubleConverterTest {
@@ -57,9 +58,10 @@ public class PrimitiveDoubleConverterTest {
         assertThat((Double) converter.convert("2.3", double.class, errors, bundle), is(equalTo(2.3d)));
     }
     
-    @Test(expected=IllegalArgumentException.class)
+    @Test
     public void shouldComplainAboutInvalidNumber() {
         converter.convert("---", double.class, errors, bundle);
+        assertThat(errors.get(0), is(VRaptorMatchers.error("", "--- is not a valid number.")));
     }
     
     @Test

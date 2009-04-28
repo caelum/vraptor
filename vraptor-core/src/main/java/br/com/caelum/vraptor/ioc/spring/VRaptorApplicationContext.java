@@ -7,6 +7,7 @@ import br.com.caelum.vraptor.core.DefaultRequestExecution;
 import br.com.caelum.vraptor.core.DefaultRequestInfo;
 import br.com.caelum.vraptor.core.DefaultResult;
 import br.com.caelum.vraptor.core.ForwardToDefaultViewInterceptor;
+import br.com.caelum.vraptor.core.JstlLocalization;
 import br.com.caelum.vraptor.core.URLParameterExtractorInterceptor;
 import br.com.caelum.vraptor.http.DefaultRequestParameters;
 import br.com.caelum.vraptor.http.EmptyElementsRemoval;
@@ -125,6 +126,7 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
         registerOn(beanFactory, HttpServletRequestProvider.class, true);
         registerOn(beanFactory, HttpServletResponseProvider.class, true);
         registerOn(beanFactory, HttpSessionProvider.class, true);
+        registerOn(beanFactory, JstlLocalization.class);
 
         beanFactory.registerSingleton(SpringBasedContainer.class.getName(), container);
     }

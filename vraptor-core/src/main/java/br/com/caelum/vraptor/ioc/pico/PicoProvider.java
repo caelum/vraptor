@@ -48,6 +48,7 @@ import br.com.caelum.vraptor.core.DefaultRequestInfo;
 import br.com.caelum.vraptor.core.DefaultResult;
 import br.com.caelum.vraptor.core.Execution;
 import br.com.caelum.vraptor.core.ForwardToDefaultViewInterceptor;
+import br.com.caelum.vraptor.core.JstlLocalization;
 import br.com.caelum.vraptor.core.URLParameterExtractorInterceptor;
 import br.com.caelum.vraptor.core.VRaptorRequest;
 import br.com.caelum.vraptor.http.DefaultRequestParameters;
@@ -121,6 +122,7 @@ public class PicoProvider implements ContainerProvider {
         singleInterfaceRegister(OgnlParametersProvider.class, container);
         singleInterfaceRegister(DefaultRequestInfo.class, container);
         singleInterfaceRegister(DefaultValidator.class, container);
+        singleInterfaceRegister(JstlLocalization.class, container);
 
         container.register(ForwardToDefaultViewInterceptor.class, ForwardToDefaultViewInterceptor.class);
         container.register(LogicResult.class, DefaultLogicResult.class);

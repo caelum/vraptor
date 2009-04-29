@@ -42,6 +42,7 @@ public class DefaultLocatorRulesTest {
 	
 	private LocatorRules rules;
 
+	@org.junit.Before
 	public void setup() {
 		this.rules = new DefaultLocatorRules();
 	}
@@ -56,7 +57,7 @@ public class DefaultLocatorRulesTest {
 		}
 	}
 	
-	class MyControl {
+	public static class MyControl {
 		public void add(Dog object) {
 		}
 

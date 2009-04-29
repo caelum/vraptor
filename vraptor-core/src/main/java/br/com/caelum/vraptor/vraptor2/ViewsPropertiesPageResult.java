@@ -43,7 +43,8 @@ public class ViewsPropertiesPageResult implements PageResult {
 		try {
 			Resource resource = method.getResource();
 			if (!Info.isOldComponent(resource)) {
-				request.getRequestDispatcher(resolver.pathFor(method, result)).forward(request, response);
+				String forwardPath = resolver.pathFor(method, result);
+				request.getRequestDispatcher(forwardPath).forward(request, response);
 				return;
 			}
 			String key = Info.getComponentName(resource.getType()) + "." + Info.getLogicName(method.getMethod()) + "."
@@ -52,7 +53,8 @@ public class ViewsPropertiesPageResult implements PageResult {
 			String path = config.getForwardFor(key);
 
 			if (path == null) {
-				request.getRequestDispatcher(resolver.pathFor(method, result)).forward(request, response);
+				String forwardPath = resolver.pathFor(method, result);
+				request.getRequestDispatcher(forwardPath).forward(request, response);
 			} else {
 				try {
 					result = evaluator.parseExpression(path, webRequest);

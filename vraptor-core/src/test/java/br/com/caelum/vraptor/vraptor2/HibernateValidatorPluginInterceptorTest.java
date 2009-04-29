@@ -14,6 +14,7 @@ import org.vraptor.validator.ValidationErrors;
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.VRaptorMockery;
 import br.com.caelum.vraptor.core.InterceptorStack;
+import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.core.MethodParameters;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.resource.ResourceMethod;
@@ -27,11 +28,13 @@ public class HibernateValidatorPluginInterceptorTest {
     private ValidationErrors errors;
     private HibernateValidatorPluginInterceptor interceptor;
     private InterceptorStack stack;
+	private Localization localization;
 
     @Before
     public void setup() {
         this.mockery = new VRaptorMockery();
-        this.interceptor = new HibernateValidatorPluginInterceptor(errors, provider, request, parameters);
+        this.localization = mockery.localization();
+        this.interceptor = new HibernateValidatorPluginInterceptor(errors, provider, request, parameters, localization);
         this.stack = mockery.mock(InterceptorStack.class);
     }
 

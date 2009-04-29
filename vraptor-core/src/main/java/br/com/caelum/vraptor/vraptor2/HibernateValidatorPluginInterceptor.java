@@ -17,6 +17,7 @@ import org.vraptor.validator.ValidationErrors;
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Interceptor;
 import br.com.caelum.vraptor.core.InterceptorStack;
+import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.core.MethodParameters;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.resource.ResourceMethod;
@@ -36,13 +37,15 @@ public class HibernateValidatorPluginInterceptor implements Interceptor {
     // existence first...
     private final static ValidatorLocator locator = new ValidatorLocator();
     private final MethodParameters parameters;
+	private final Localization localization;
 
     public HibernateValidatorPluginInterceptor(ValidationErrors errors, ParameterNameProvider provider,
-            HttpServletRequest request, MethodParameters parameters) {
+            HttpServletRequest request, MethodParameters parameters, Localization localization) {
         this.errors = errors;
         this.provider = provider;
         this.request = request;
         this.parameters = parameters;
+		this.localization = localization;
     }
 
     public boolean accepts(ResourceMethod method) {
@@ -52,8 +55,9 @@ public class HibernateValidatorPluginInterceptor implements Interceptor {
     public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws InterceptionException {
         Validate validate = method.getMethod().getAnnotation(Validate.class);
         if (validate != null) {
-            ResourceBundle bundle = ResourceBundle.getBundle(
+            ResourceBundle validatorBundle = ResourceBundle.getBundle(
                     "org.hibernate.validator.resources.DefaultValidatorMessages", request.getLocale());
+            FallbackResourceBundle bundle = new FallbackResourceBundle(localization.getBundle(), validatorBundle);
             String[] names = provider.parameterNamesFor(method.getMethod());
             for (String path : validate.params()) {
                 try {
@@ -63,7 +67,9 @@ public class HibernateValidatorPluginInterceptor implements Interceptor {
                     HibernateLogicMethod.validateParam(locator, request, bundle, newErrors, object, path);
                     for(org.vraptor.i18n.ValidationMessage msg : newErrors) {
                     	if(msg instanceof FixedMessage) {
-                    		errors.add(msg);
+                    		FixedMessage m = (FixedMessage) msg;
+                    		String content = bundle.getString(m.getKey());
+                    		errors.add(new FixedMessage(msg.getPath(), content, msg.getCategory()));
                     	} else if (msg instanceof Message){
                     		Message m = (Message) msg;
                     		String content = bundle.getString(m.getKey());

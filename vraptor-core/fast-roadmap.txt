@@ -39,7 +39,7 @@ c) unit test for PicoContainersProvider... every scope should be tested
 MethodLookupBuilder: rename
 DefaultLogicResult should cache enhancers in order to create objects
 - JstlLocalization test
-
+- fallback enumeration, fallback local unit tests
 
 
 

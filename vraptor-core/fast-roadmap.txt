@@ -1,9 +1,14 @@
 TODO: 14
+(MUST) - niceurls with programmatic support
+
+
+
+
+
 - ClientsController --> clients.list
 - better exception handling everywhere (search for TODO within exceptions)
 
 - make client server redirect work with parameters, which ones?
-(MUST) - niceurls with programmatic support
 (MUST) - niceurls -> path support
 (MUST) - niceurls with file config support -> path support
 (MUST) - path annotation with support to value injection (niceurls?)

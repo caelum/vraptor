@@ -27,7 +27,7 @@ public class JstlLocalization implements Localization {
 	}
 
 	public ResourceBundle getBundle() {
-		if (this.bundle != null) {
+		if (this.bundle == null) {
 			Locale locale = getLocale();
 			String baseName = (String) get(Config.FMT_LOCALIZATION_CONTEXT);
 			if (baseName == null) {

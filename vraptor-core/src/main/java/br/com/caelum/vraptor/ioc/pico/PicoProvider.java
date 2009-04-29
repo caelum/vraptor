@@ -155,7 +155,7 @@ public class PicoProvider implements ContainerProvider {
 
     public void start(ServletContext context) {
         this.container.addComponent(context);
-        container.getComponent(ResourceLocator.class).loadAll();
+        container.getComponent(ResourceLoader.class).loadAll();
         container.start();
     }
 

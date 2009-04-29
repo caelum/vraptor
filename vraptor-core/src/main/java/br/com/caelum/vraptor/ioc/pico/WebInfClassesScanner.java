@@ -42,7 +42,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @ApplicationScoped
-public class WebInfClassesScanner implements ResourceLocator {
+public class WebInfClassesScanner implements ResourceLoader {
 
     private static final Logger logger = LoggerFactory.getLogger(WebInfClassesScanner.class);
 

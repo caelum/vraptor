@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,14 +28,14 @@ public class ValidatorInterceptor implements Interceptor {
     private static final Logger logger = LoggerFactory.getLogger(ValidatorInterceptor.class);
     private final ValidationErrors errors;
     private final OutjectionInterceptor outjection;
-	private final Localization bundles;
+	private final Localization localization;
 
-    public ValidatorInterceptor(ParametersProvider provider, PageResult result, ValidationErrors errors, OutjectionInterceptor outjection, Localization bundles) {
+    public ValidatorInterceptor(ParametersProvider provider, PageResult result, ValidationErrors errors, OutjectionInterceptor outjection, Localization localization) {
         this.provider = provider;
         this.result = result;
         this.errors = errors;
         this.outjection = outjection;
-		this.bundles = bundles;
+		this.localization = localization;
     }
 
     public boolean accepts(ResourceMethod method) {
@@ -47,7 +48,8 @@ public class ValidatorInterceptor implements Interceptor {
             Method validationMethod = getValidationFor(method.getMethod(), type);
             if (validationMethod != null) {
             	List<ValidationMessage> messages= new ArrayList<ValidationMessage>();
-                Object[] parameters = provider.getParametersFor(method, messages, bundles.getBundle());
+                ResourceBundle bundle = localization.getBundle();
+				Object[] parameters = provider.getParametersFor(method, messages, bundle);
                 Object[] validationParameters = new Object[parameters.length + 1];
                 validationParameters[0] = errors;
                 for (int i = 0; i < parameters.length; i++) {
@@ -63,7 +65,7 @@ public class ValidatorInterceptor implements Interceptor {
                     throw new InterceptionException("Unable to validate.", e.getCause());
                 }
                 for(ValidationMessage msg : messages) {
-                	errors.add(new FixedMessage(msg.getCategory(), msg.getMessage(), msg.getCategory()));
+                	errors.add(new FixedMessage(msg.getCategory(), bundle.getString(msg.getMessage()), msg.getCategory()));
                 }
             }
             if (errors.size() != 0) {

@@ -29,7 +29,12 @@
  */
 package br.com.caelum.vraptor.ioc.pico;
 
-public interface ResourceLocator {
+/**
+ * Loads all resources for vraptor.
+ * 
+ * @author Guilherme Silveira
+ */
+public interface ResourceLoader {
 
 	void loadAll();
 

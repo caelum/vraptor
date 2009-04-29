@@ -29,47 +29,55 @@
  */
 package br.com.caelum.vraptor.ioc.pico;
 
-import br.com.caelum.vraptor.Interceptor;
-import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
-import br.com.caelum.vraptor.ioc.ApplicationScoped;
-import br.com.caelum.vraptor.resource.ResourceRegistry;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.servlet.ServletContext;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.ServletContext;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import br.com.caelum.vraptor.Interceptor;
+import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
+import br.com.caelum.vraptor.resource.ResourceRegistry;
+
+/**
+ * Searchs for resources in the web's web-inf classes directory.
+ * 
+ * @author Guilherme Silveira
+ */
 @ApplicationScoped
 public class WebInfClassesScanner implements ResourceLoader {
 
-    private static final Logger logger = LoggerFactory.getLogger(WebInfClassesScanner.class);
+	private static final Logger logger = LoggerFactory.getLogger(WebInfClassesScanner.class);
 
-    private final File classes;
+	private final File classes;
 
-    private final DirScanner<?> scanner;
+	private final DirScanner<?> scanner;
 
-    private final ResourceRegistry registry;
+	private final ResourceRegistry registry;
 
-    private final InterceptorRegistry interceptors;
+	private final InterceptorRegistry interceptors;
 
-    @SuppressWarnings("unchecked")
-    public WebInfClassesScanner(ServletContext context, DirScanner scanner, ResourceRegistry registry, InterceptorRegistry interceptors) {
-        this.registry = registry;
-        this.interceptors = interceptors;
-        String path = context.getRealPath("");
-        this.classes = new File(path, "WEB-INF/classes");
-        this.scanner = scanner;
-    }
+	@SuppressWarnings("unchecked")
+	public WebInfClassesScanner(ServletContext context, DirScanner scanner, ResourceRegistry registry,
+			InterceptorRegistry interceptors) {
+		this.registry = registry;
+		this.interceptors = interceptors;
+		String path = context.getRealPath("");
+		this.classes = new File(path, "WEB-INF/classes");
+		this.scanner = scanner;
+	}
 
-    public void loadAll() {
-        logger.info("Starting looking for " + classes.getAbsolutePath());
-        scanner.scan(classes, new ResourceAcceptor(registry));
+	public void loadAll() {
+		logger.info("Starting looking for " + classes.getAbsolutePath());
+		scanner.scan(classes, new ResourceAcceptor(registry));
 
-        List<Class<? extends Interceptor>> interceptors = new ArrayList<Class<? extends Interceptor>>();
-        scanner.scan(classes, new InterceptorAcceptor(interceptors));
-        this.interceptors.register(interceptors);
-    }
+		List<Class<? extends Interceptor>> interceptors = new ArrayList<Class<? extends Interceptor>>();
+		scanner.scan(classes, new InterceptorAcceptor(interceptors));
+		this.interceptors.register(interceptors);
+	}
 
 }

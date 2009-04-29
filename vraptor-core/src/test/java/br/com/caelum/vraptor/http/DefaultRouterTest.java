@@ -30,10 +30,13 @@ package br.com.caelum.vraptor.http;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.jmock.Mockery;
 import org.junit.Assert;
@@ -47,11 +50,13 @@ public class DefaultRouterTest {
 	
 	private Router rules;
 	private Mockery mockery;
+	private VRaptorRequest request;
 
 	@org.junit.Before
 	public void setup() {
-		this.rules = new DefaultRouter();
 		this.mockery = new Mockery();
+		this.request = new VRaptorRequest(mockery.mock(HttpServletRequest.class));
+		this.rules = new DefaultRouter();
 	}
 	
 	class Dog{
@@ -83,7 +88,7 @@ public class DefaultRouterTest {
 		rules.add(new Rules() {{
 			routeFor("/clients/add").is(MyControl.class).add(null);
 		}});
-		assertThat(rules.parse("/clients/add", HttpMethod.POST), is(VRaptorMatchers.resourceMethod(method("add",Dog.class))));
+		assertThat(rules.parse("/clients/add", HttpMethod.POST, request), is(VRaptorMatchers.resourceMethod(method("add",Dog.class))));
 	}
 
 	private Method method(String name, Class...types) throws SecurityException, NoSuchMethodException {
@@ -96,7 +101,7 @@ public class DefaultRouterTest {
 			 routeFor("/clients/add").is(MyControl.class).add(null);
 			 routeFor("/clients/add").is(MyControl.class).list();
 		}});
-		assertThat(rules.parse("/clients/add", HttpMethod.POST), is(VRaptorMatchers.resourceMethod(method("add", Dog.class))));
+		assertThat(rules.parse("/clients/add", HttpMethod.POST, request), is(VRaptorMatchers.resourceMethod(method("add", Dog.class))));
 	}
 
 	@Test
@@ -104,7 +109,15 @@ public class DefaultRouterTest {
 		rules.add(new Rules() {{
 			routeFor("/clients/add").with(HttpMethod.POST).is(MyControl.class).add(null);
 		}});
-		assertThat(rules.parse("/clients/add", HttpMethod.POST), is(VRaptorMatchers.resourceMethod(method("add",Dog.class))));
+		assertThat(rules.parse("/clients/add", HttpMethod.POST, request), is(VRaptorMatchers.resourceMethod(method("add",Dog.class))));
+	}
+
+	@Test
+	public void ignoresAnHttpMethodLimitedMappingRule() throws NoSuchMethodException {
+		rules.add(new Rules() {{
+			routeFor("/clients/add").with(HttpMethod.GET).is(MyControl.class).add(null);
+		}});
+		assertThat(rules.parse("/clients/add", HttpMethod.POST, request), is(nullValue()));
 	}
 
 	@Test
@@ -126,7 +139,7 @@ public class DefaultRouterTest {
 		rules.add(new Rules() {{
 			routeFor("/clients").is(MyControl.class).list(); // if not defined, any http method is allowed
 		}});
-		assertThat(rules.parse("/clients", HttpMethod.POST), is(equalTo(method)));
+		assertThat(rules.parse("/clients", HttpMethod.POST, request), is(equalTo(method)));
 	}
 
 	@Test
@@ -134,7 +147,7 @@ public class DefaultRouterTest {
 		rules.add(new Rules() {{
 			routeFor("/clients/{dog.id}").with(HttpMethod.GET).is(MyControl.class).show(null);;
 		}});
-		ResourceMethod method = rules.parse("/clients/45", HttpMethod.POST);
+		ResourceMethod method = rules.parse("/clients/45", HttpMethod.POST, request);
 		assertThat(method, is(VRaptorMatchers.resourceMethod(method("show", Dog.class))));
 		Assert.fail();
 	}
@@ -144,7 +157,7 @@ public class DefaultRouterTest {
 		rules.add(new Rules() {{
 			routeFor("/clients*").with(HttpMethod.POST).is(MyControl.class).unknownMethod();;
 		}});
-		assertThat(rules.parse("/clientsWhatever", HttpMethod.POST), is(VRaptorMatchers.resourceMethod(method("unknownMethod"))));
+		assertThat(rules.parse("/clientsWhatever", HttpMethod.POST, request), is(VRaptorMatchers.resourceMethod(method("unknownMethod"))));
 	}
 
 }

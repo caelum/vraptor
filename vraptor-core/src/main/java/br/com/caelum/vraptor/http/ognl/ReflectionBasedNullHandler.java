@@ -72,8 +72,9 @@ public class ReflectionBasedNullHandler extends ObjectNullHandler {
                 return list.instantiate(context, target, property, ctx);
             }
 
-            Method method = findMethod(target.getClass(), "get" + Info.capitalize((String) property), target.getClass());
-            Type returnType = method.getGenericReturnType();
+            String propertyCapitalized = Info.capitalize((String) property);
+			Method getter = findMethod(target.getClass(), "get" + propertyCapitalized, target.getClass());
+            Type returnType = getter.getGenericReturnType();
             if (returnType instanceof ParameterizedType) {
                 ParameterizedType paramType = (ParameterizedType) returnType;
                 returnType = paramType.getRawType();
@@ -87,7 +88,7 @@ public class ReflectionBasedNullHandler extends ObjectNullHandler {
                 instance = generic.instantiate(baseType, ctx);
             }
 
-            Method setter = findMethod(target.getClass(), "set" + Info.capitalize((String) property), target.getClass());
+            Method setter = findMethod(target.getClass(), "set" + propertyCapitalized, target.getClass(), getter.getReturnType());
             setter.invoke(target, instance);
             return instance;
 
@@ -116,7 +117,7 @@ public class ReflectionBasedNullHandler extends ObjectNullHandler {
     static Method findMethod(Class<? extends Object> type, String name, Class<? extends Object> baseType) {
         Method[] methods = type.getDeclaredMethods();
         for (Method method : methods) {
-            if (method.getName().equals(name)) {
+            if (method.getName().equals(name) && method.getReturnType().equals(baseType)) {
                 return method;
             }
         }

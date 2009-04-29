@@ -50,7 +50,7 @@ public class UriBasedRule implements Rule {
 	private HttpMethod method;
 
 	public UriBasedRule(String uri) {
-		this.uri = uri;
+		this.uri = uri.replaceAll("\\*", ".\\*");
 	}
 
 	public UriBasedRule with(HttpMethod method) {
@@ -82,7 +82,15 @@ public class UriBasedRule implements Rule {
 	}
 
 	public boolean matches(String uri, HttpMethod method) {
-		return uri.equals(this.uri) && (this.method==null || this.method.equals(method));
+		return uriMatches(uri) && methodMatches(method);
+	}
+
+	private boolean uriMatches(String uri) {
+		return uri.matches(this.uri);
+	}
+
+	private boolean methodMatches(HttpMethod method) {
+		return (this.method==null || this.method.equals(method));
 	}
 
 	public ResourceMethod resourceMethod() {

@@ -1,7 +1,7 @@
 package br.com.caelum.vraptor.config;
 
 import br.com.caelum.vraptor.core.Execution;
-import br.com.caelum.vraptor.core.VRaptorRequest;
+import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
 import br.com.caelum.vraptor.ioc.pico.PicoProvider;
 import org.hamcrest.MatcherAssert;
@@ -46,7 +46,7 @@ public class BasicConfigurationTest {
         public void start(ServletContext context) {
         }
 
-        public <T> T provideForRequest(VRaptorRequest vraptorRequest, Execution<T> execution) {
+        public <T> T provideForRequest(RequestInfo vraptorRequest, Execution<T> execution) {
             return execution.insideRequest(null);
         }
 
@@ -72,7 +72,7 @@ public class BasicConfigurationTest {
             throw new IOException("");
         }
 
-        public <T> T provideForRequest(VRaptorRequest vraptorRequest, Execution<T> execution) {
+        public <T> T provideForRequest(RequestInfo vraptorRequest, Execution<T> execution) {
             return execution.insideRequest(null);
         }
 

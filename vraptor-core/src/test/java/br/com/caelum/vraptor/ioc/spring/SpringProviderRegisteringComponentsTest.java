@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.jmock.Expectations;
 import org.springframework.web.context.request.RequestContextListener;
 
-import br.com.caelum.vraptor.core.VRaptorRequest;
+import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
 import br.com.caelum.vraptor.ioc.GenericContainerTest;
 import br.com.caelum.vraptor.ioc.WhatToDo;
@@ -32,7 +32,7 @@ public class SpringProviderRegisteringComponentsTest extends GenericContainerTes
                     HttpServletRequestMock httpRequest = new HttpServletRequestMock(session);
                     HttpServletResponse response = mockery.mock(HttpServletResponse.class, "response" + counter);
 
-                    VRaptorRequest request = new VRaptorRequest(context, httpRequest, response);
+                    RequestInfo request = new RequestInfo(context, httpRequest, response);
                     VRaptorRequestHolder.setRequestForCurrentThread(request);
 
                     RequestContextListener contextListener = new RequestContextListener();

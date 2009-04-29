@@ -4,7 +4,7 @@ import br.com.caelum.vraptor.config.BasicConfiguration;
 import br.com.caelum.vraptor.core.Execution;
 import br.com.caelum.vraptor.core.RequestExecution;
 import br.com.caelum.vraptor.core.StaticContentHandler;
-import br.com.caelum.vraptor.core.VRaptorRequest;
+import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
 import org.jmock.Expectations;
@@ -77,7 +77,7 @@ public class VRaptorTest {
     }
 
     public static class MyProvider implements ContainerProvider {
-        public <T> T provideForRequest(VRaptorRequest vraptorRequest, Execution<T> execution) {
+        public <T> T provideForRequest(RequestInfo vraptorRequest, Execution<T> execution) {
             Container container = (Container) vraptorRequest.getServletContext().getAttribute("container");
             return execution.insideRequest(container);
         }
@@ -90,7 +90,7 @@ public class VRaptorTest {
     }
 
     public static class DoNothingProvider implements ContainerProvider {
-        public <T> T provideForRequest(VRaptorRequest vraptorRequest, Execution<T> execution) {
+        public <T> T provideForRequest(RequestInfo vraptorRequest, Execution<T> execution) {
             return execution.insideRequest(null);
         }
 

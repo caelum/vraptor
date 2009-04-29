@@ -12,7 +12,7 @@ import org.junit.Test;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.PicoBuilder;
 
-import br.com.caelum.vraptor.core.VRaptorRequest;
+import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
 import br.com.caelum.vraptor.resource.DefaultResourceRegistry;
 import br.com.caelum.vraptor.resource.MethodLookupBuilder;
@@ -43,7 +43,7 @@ public class PicoBasedContainerTest {
         this.builder = mockery.mock(MethodLookupBuilder.class);
         final HttpServletRequest webRequest = mockery.mock(HttpServletRequest.class);
         final HttpServletResponse webResponse = mockery.mock(HttpServletResponse.class);
-        final VRaptorRequest request = new VRaptorRequest(null, webRequest, webResponse);
+        final RequestInfo request = new RequestInfo(null, webRequest, webResponse);
         this.picoContainer = new PicoBuilder().withCaching().build();
         mockery.checking(new Expectations() {
             {

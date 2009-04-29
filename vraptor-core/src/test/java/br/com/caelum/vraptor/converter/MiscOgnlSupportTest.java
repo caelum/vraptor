@@ -50,7 +50,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.core.Converters;
-import br.com.caelum.vraptor.core.VRaptorRequest;
+import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.http.ognl.ArrayAccessor;
 import br.com.caelum.vraptor.http.ognl.ListAccessor;
 import br.com.caelum.vraptor.http.ognl.ReflectionBasedNullHandler;
@@ -152,7 +152,7 @@ public class MiscOgnlSupportTest {
     @Test
     public void isCapableOfDealingWithEmptyParameterForInternalValueWhichNeedsAConverter() throws OgnlException {
         final HttpServletRequest request = mockery.mock(HttpServletRequest.class);
-        final VRaptorRequest webRequest = new VRaptorRequest(null, request, null);
+        final RequestInfo webRequest = new RequestInfo(null, request, null);
         mockery.checking(new Expectations() {{
             exactly(2).of(request).getAttribute("javax.servlet.jsp.jstl.fmt.locale.request"); will(returnValue("pt_br"));
             one(converters).to(Calendar.class, null); will(returnValue(new LocaleBasedCalendarConverter(webRequest)));

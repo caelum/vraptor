@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.jmock.Expectations;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.core.VRaptorRequest;
+import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
 import br.com.caelum.vraptor.ioc.GenericContainerTest;
 import br.com.caelum.vraptor.ioc.WhatToDo;
@@ -33,7 +33,7 @@ public class PicoProviderTest extends GenericContainerTest {
         HttpServletRequestMock request = new HttpServletRequestMock(session);
         HttpServletResponse response = mockery.mock(HttpServletResponse.class, "response" + counter);
         configureExpectations(request);
-        VRaptorRequest webRequest = new VRaptorRequest(context, request, response);
+        RequestInfo webRequest = new RequestInfo(context, request, response);
         return execution.execute(webRequest, counter);
     }
 

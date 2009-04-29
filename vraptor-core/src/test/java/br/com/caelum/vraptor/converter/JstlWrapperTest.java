@@ -39,7 +39,7 @@ import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.core.VRaptorRequest;
+import br.com.caelum.vraptor.core.RequestInfo;
 
 public class JstlWrapperTest {
 
@@ -51,7 +51,7 @@ public class JstlWrapperTest {
 
     private HttpServletRequest request;
 
-    private VRaptorRequest webRequest;
+    private RequestInfo webRequest;
 
     private JstlWrapper jstlWrapper;
 
@@ -64,7 +64,7 @@ public class JstlWrapperTest {
         this.context = mockery.mock(ServletContext.class);
         this.request = mockery.mock(HttpServletRequest.class);
         this.session = mockery.mock(HttpSession.class);
-        this.webRequest = new VRaptorRequest(context, request, null);
+        this.webRequest = new RequestInfo(context, request, null);
         mockery.checking(new Expectations() {
             {
                 allowing(request).getSession();

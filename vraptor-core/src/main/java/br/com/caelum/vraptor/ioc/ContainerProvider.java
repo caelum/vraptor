@@ -31,12 +31,12 @@ package br.com.caelum.vraptor.ioc;
 
 import javax.servlet.ServletContext;
 
-import br.com.caelum.vraptor.core.VRaptorRequest;
+import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.core.Execution;
 
 public interface ContainerProvider {
 
-    <T> T provideForRequest(VRaptorRequest vraptorRequest, Execution<T> execution);
+    <T> T provideForRequest(RequestInfo vraptorRequest, Execution<T> execution);
 
     void stop();
 

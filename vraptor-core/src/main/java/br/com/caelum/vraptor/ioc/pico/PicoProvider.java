@@ -50,7 +50,7 @@ import br.com.caelum.vraptor.core.Execution;
 import br.com.caelum.vraptor.core.ForwardToDefaultViewInterceptor;
 import br.com.caelum.vraptor.core.JstlLocalization;
 import br.com.caelum.vraptor.core.URLParameterExtractorInterceptor;
-import br.com.caelum.vraptor.core.VRaptorRequest;
+import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.http.DefaultRequestParameters;
 import br.com.caelum.vraptor.http.EmptyElementsRemoval;
 import br.com.caelum.vraptor.http.OgnlParametersProvider;
@@ -149,7 +149,7 @@ public class PicoProvider implements ContainerProvider {
         registry.register(interfaces[0], type);
     }
 
-    public <T> T provideForRequest(VRaptorRequest request, Execution<T> execution) {
+    public <T> T provideForRequest(RequestInfo request, Execution<T> execution) {
         return execution.insideRequest(getContainers().provide(request));
     }
 

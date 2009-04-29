@@ -29,7 +29,7 @@ import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.core.RequestExecution;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.core.URLParameterExtractorInterceptor;
-import br.com.caelum.vraptor.core.VRaptorRequest;
+import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.http.EmptyElementsRemoval;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParametersProvider;
@@ -83,7 +83,7 @@ public abstract class GenericContainerTest {
 
     @Test
     public void canProvideAllRequestScopedComponents() {
-        checkAvailabilityFor(false, HttpServletRequest.class, HttpServletResponse.class, VRaptorRequest.class,
+        checkAvailabilityFor(false, HttpServletRequest.class, HttpServletResponse.class, RequestInfo.class,
                 HttpSession.class, ParametersInstantiatorInterceptor.class, MethodInfo.class,
                 RequestParameters.class, InterceptorListPriorToExecutionExtractor.class,
                 URLParameterExtractorInterceptor.class, InterceptorStack.class, RequestExecution.class,
@@ -136,7 +136,7 @@ public abstract class GenericContainerTest {
             final Class<? super T> componentToRegister) {
 
         T firstInstance = executeInsideRequest(new WhatToDo<T>() {
-            public T execute(VRaptorRequest request, final int counter) {
+            public T execute(RequestInfo request, final int counter) {
 
                 return provider.provideForRequest(request, new Execution<T>() {
                     public T insideRequest(Container firstContainer) {
@@ -154,7 +154,7 @@ public abstract class GenericContainerTest {
         });
 
         T secondInstance = executeInsideRequest(new WhatToDo<T>() {
-            public T execute(VRaptorRequest request, final int counter) {
+            public T execute(RequestInfo request, final int counter) {
 
                 return provider.provideForRequest(request, new Execution<T>() {
                     public T insideRequest(Container secondContainer) {

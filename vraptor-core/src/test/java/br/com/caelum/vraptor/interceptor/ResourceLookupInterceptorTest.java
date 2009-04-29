@@ -13,7 +13,7 @@ import org.junit.Test;
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodInfo;
-import br.com.caelum.vraptor.core.VRaptorRequest;
+import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.http.UrlToResourceTranslator;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.resource.ResourceNotFoundHandler;
@@ -22,7 +22,7 @@ public class ResourceLookupInterceptorTest {
 
     private Mockery mockery;
     private UrlToResourceTranslator translator;
-    private VRaptorRequest request;
+    private RequestInfo request;
     private ResourceLookupInterceptor lookup;
     private HttpServletRequest webRequest;
     private HttpServletResponse webResponse;
@@ -35,7 +35,7 @@ public class ResourceLookupInterceptorTest {
         this.translator = mockery.mock(UrlToResourceTranslator.class);
         this.webRequest = mockery.mock(HttpServletRequest.class);
         this.webResponse = mockery.mock(HttpServletResponse.class);
-        this.request = new VRaptorRequest(null, webRequest, webResponse);
+        this.request = new RequestInfo(null, webRequest, webResponse);
         this.requestInfo = mockery.mock(MethodInfo.class);
         this.notFoundHandler = mockery.mock(ResourceNotFoundHandler.class);
         this.lookup = new ResourceLookupInterceptor(translator, requestInfo, notFoundHandler, request);

@@ -17,7 +17,7 @@ import org.junit.Test;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.PicoBuilder;
 
-import br.com.caelum.vraptor.core.VRaptorRequest;
+import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.interceptor.DefaultInterceptorRegistry;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Container;
@@ -29,7 +29,7 @@ public class PicoContainersProviderTest {
     private MutablePicoContainer container;
     private PicoContainersProvider provider;
     private HttpServletRequest request;
-    private VRaptorRequest webRequest;
+    private RequestInfo webRequest;
 
     @Before
     public void setup() {
@@ -48,7 +48,7 @@ public class PicoContainersProviderTest {
                 allowing(session).setAttribute(with(any(String.class)), with(any(String.class))); will(returnValue(null));
             }
         });
-        this.webRequest = new VRaptorRequest(null, request, mockery.mock(HttpServletResponse.class));
+        this.webRequest = new RequestInfo(null, request, mockery.mock(HttpServletResponse.class));
         this.provider = new PicoContainersProvider(container);
     }
 

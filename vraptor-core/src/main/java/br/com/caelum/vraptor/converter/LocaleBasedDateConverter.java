@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
-import br.com.caelum.vraptor.core.VRaptorRequest;
+import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.validator.ValidationMessage;
 
@@ -30,9 +30,9 @@ public class LocaleBasedDateConverter implements Converter<Date> {
 
     private static final Logger logger = LoggerFactory.getLogger(LocaleBasedDateConverter.class);
     
-    private final VRaptorRequest request;
+    private final RequestInfo request;
     
-    public LocaleBasedDateConverter(VRaptorRequest request) {
+    public LocaleBasedDateConverter(RequestInfo request) {
         this.request = request;
     }
 

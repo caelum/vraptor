@@ -4,7 +4,7 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
-import br.com.caelum.vraptor.core.VRaptorRequest;
+import br.com.caelum.vraptor.core.RequestInfo;
 
 /**
  * A simple expression evaluator.Based on vraptor2 code.
@@ -15,7 +15,7 @@ public class ExpressionEvaluator {
 
 	private final Map<String, Method> cache = new HashMap<String, Method>();
 
-	public String parseExpression(String expression, VRaptorRequest request) throws ExpressionEvaluationException {
+	public String parseExpression(String expression, RequestInfo request) throws ExpressionEvaluationException {
 		boolean in = false;
 		int start = 0;
 		StringBuilder result = new StringBuilder();
@@ -39,7 +39,7 @@ public class ExpressionEvaluator {
 		return result.toString();
 	}
 
-	private String evaluate(String expression, VRaptorRequest request) throws ExpressionEvaluationException {
+	private String evaluate(String expression, RequestInfo request) throws ExpressionEvaluationException {
 		if ("".equals(expression)) {
 			return "";
 		}
@@ -54,7 +54,7 @@ public class ExpressionEvaluator {
 		return current == null ? "" : current.toString();
 	}
 
-	private Object findAttribute(VRaptorRequest request, String key) {
+	private Object findAttribute(RequestInfo request, String key) {
 		Object value = request.getRequest().getAttribute(key);
 		if(value!=null) {
 			return value;

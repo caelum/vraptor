@@ -12,7 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.vraptor.validator.ValidationErrors;
 
-import br.com.caelum.vraptor.core.VRaptorRequest;
+import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
 import br.com.caelum.vraptor.ioc.GenericContainerTest;
 import br.com.caelum.vraptor.ioc.WhatToDo;
@@ -49,7 +49,7 @@ public class ProviderTest extends GenericContainerTest {
             }
         });
         HttpServletResponse response = mockery.mock(HttpServletResponse.class, "response" + counter);
-        VRaptorRequest webRequest = new VRaptorRequest(context, request, response);
+        RequestInfo webRequest = new RequestInfo(context, request, response);
         return execution.execute(webRequest, counter);
     }
 

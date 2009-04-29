@@ -36,14 +36,14 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * @author Fabio Kung
  */
-public class VRaptorRequest {
+public class RequestInfo {
     private final ServletContext servletContext;
 
     private final HttpServletRequest request;
 
     private final HttpServletResponse response;
 
-    public VRaptorRequest(ServletContext servletContext, HttpServletRequest request, HttpServletResponse response) {
+    public RequestInfo(ServletContext servletContext, HttpServletRequest request, HttpServletResponse response) {
         this.servletContext = servletContext;
         this.request = request;
         this.response = response;

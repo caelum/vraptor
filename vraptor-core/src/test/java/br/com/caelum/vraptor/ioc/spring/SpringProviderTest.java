@@ -1,7 +1,7 @@
 package br.com.caelum.vraptor.ioc.spring;
 
 import br.com.caelum.vraptor.core.Execution;
-import br.com.caelum.vraptor.core.VRaptorRequest;
+import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.http.UrlToResourceTranslator;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.spring.components.CustomTranslator;
@@ -68,7 +68,7 @@ public class SpringProviderTest {
         }});
         SpringProvider provider = new SpringProvider();
         provider.start(servletContext);
-        UrlToResourceTranslator translator = provider.provideForRequest(new VRaptorRequest(servletContext, request, response),
+        UrlToResourceTranslator translator = provider.provideForRequest(new RequestInfo(servletContext, request, response),
                 new Execution<UrlToResourceTranslator>() {
                     public UrlToResourceTranslator insideRequest(Container container) {
                         return container.instanceFor(UrlToResourceTranslator.class);

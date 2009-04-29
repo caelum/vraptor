@@ -1,6 +1,6 @@
 package br.com.caelum.vraptor.ioc.spring;
 
-import br.com.caelum.vraptor.core.VRaptorRequest;
+import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.http.UrlToResourceTranslator;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.spring.components.ConstructorInjection;
@@ -50,7 +50,7 @@ public class SpringBasedContainerTest {
         request = new HttpServletRequestMock(session);
         response = mockery.mock(HttpServletResponse.class);
 
-        VRaptorRequestHolder.setRequestForCurrentThread(new VRaptorRequest(servletContext, request, response));
+        VRaptorRequestHolder.setRequestForCurrentThread(new RequestInfo(servletContext, request, response));
         RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
         container = new SpringBasedContainer("br.com.caelum.vraptor.ioc.spring");
         container.start(servletContext);
@@ -92,7 +92,7 @@ public class SpringBasedContainerTest {
 
     @Test
     public void shouldProvideCurrentVRaptorRequest() {
-        VRaptorRequest vraptorRequest = container.instanceFor(VRaptorRequest.class);
+        RequestInfo vraptorRequest = container.instanceFor(RequestInfo.class);
         assertNotNull("can provide request", vraptorRequest);
     }
 

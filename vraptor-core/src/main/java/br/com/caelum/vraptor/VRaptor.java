@@ -34,7 +34,7 @@ import br.com.caelum.vraptor.core.DefaultStaticContentHandler;
 import br.com.caelum.vraptor.core.Execution;
 import br.com.caelum.vraptor.core.RequestExecution;
 import br.com.caelum.vraptor.core.StaticContentHandler;
-import br.com.caelum.vraptor.core.VRaptorRequest;
+import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
 import org.slf4j.Logger;
@@ -88,7 +88,7 @@ public class VRaptor implements Filter {
             return;
         }
 
-        VRaptorRequest request = new VRaptorRequest(servletContext, webRequest, webResponse);
+        RequestInfo request = new RequestInfo(servletContext, webRequest, webResponse);
         // TODO create ExecutionWithoutResult?
         provider.provideForRequest(request, new Execution<Object>() {
             public Object insideRequest(Container container) {

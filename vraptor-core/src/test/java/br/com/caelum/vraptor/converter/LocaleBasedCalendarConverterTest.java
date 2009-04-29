@@ -51,7 +51,7 @@ import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.core.VRaptorRequest;
+import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
 import br.com.caelum.vraptor.validator.ValidationMessage;
 
@@ -71,7 +71,7 @@ public class LocaleBasedCalendarConverterTest {
         this.request = mockery.mock(HttpServletRequest.class);
         this.session = mockery.mock(HttpSession.class);
         this.context= mockery.mock(ServletContext.class);
-        final VRaptorRequest webRequest = new VRaptorRequest(context, request, null);
+        final RequestInfo webRequest = new RequestInfo(context, request, null);
         this.converter = new LocaleBasedCalendarConverter(webRequest);
         this.errors = new ArrayList<ValidationMessage>();
         this.bundle = ResourceBundle.getBundle("messages");

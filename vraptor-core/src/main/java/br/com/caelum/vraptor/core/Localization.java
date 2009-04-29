@@ -40,5 +40,6 @@ public interface Localization {
 	ResourceBundle getBundle();
 	Locale getLocale();
 	Locale getFallbackLocale();
+	String getMessage(String key, String... parameters);
 
 }

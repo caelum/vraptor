@@ -29,7 +29,6 @@ package br.com.caelum.vraptor.vraptor2;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -103,8 +102,7 @@ public class ValidatorInterceptor implements Interceptor {
                 		errors.add(msg);
                 	} else if (msg instanceof Message){
                 		Message m = (Message) msg;
-                		String content = bundle.getString(m.getKey());
-                		content = MessageFormat.format(content, m.getParameters());
+                		String content = localization.getMessage(m.getKey(), m.getParameters());
                 		errors.add(new FixedMessage(msg.getPath(), content, msg.getCategory()));
                 	} else {
                 		throw new IllegalArgumentException("Unsupported validation message type: " + msg.getClass().getName());

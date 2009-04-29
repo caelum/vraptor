@@ -53,11 +53,11 @@ public class ViewsPropertiesPageResultTest {
         this.dispatcher = mockery.mock(RequestDispatcher.class);
         mockery.checking(new Expectations() {
             {
-                one(request).getParameterMap();
+                allowing(request).getParameterMap();
                 will(returnValue(new HashMap<String, Object>()));
                 allowing(request).getSession();
                 will(returnValue(session));
-                one(session).getAttribute("org.vraptor.scope.ScopeType_FLASH");
+                allowing(session).getAttribute("org.vraptor.scope.ScopeType_FLASH");
                 will(returnValue(new HashMap<String, Object>()));
                 allowing(requestInfo).getResourceMethod();
                 will(returnValue(method));

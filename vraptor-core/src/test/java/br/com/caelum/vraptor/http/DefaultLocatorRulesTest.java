@@ -32,6 +32,9 @@ import static org.hamcrest.Matchers.is;
 
 import java.lang.reflect.Method;
 
+import org.junit.Assert;
+import org.junit.Test;
+
 import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
 import br.com.caelum.vraptor.resource.HttpMethod;
 
@@ -67,47 +70,58 @@ public class DefaultLocatorRulesTest {
 		}
 	}
 	
+	@Test
 	public void acceptsASingleMappingRule() throws SecurityException, NoSuchMethodException {
 		rules.add(new Rules() {{
-			accept(MyControl.class).add(null); as("/clients/add");
+			when("/clients/add").invoke(MyControl.class).add(null);
 		}});
-		assertThat(rules.parse("/clients/add"), is(VRaptorMatchers.resourceMethod(method("add"))));
+		assertThat(rules.parse("/clients/add", HttpMethod.POST), is(VRaptorMatchers.resourceMethod(method("add"))));
 	}
 
 	private Method method(String name, Class...types) throws SecurityException, NoSuchMethodException {
 		return MyControl.class.getDeclaredMethod(name, types);
 	}
 
-	public void usesTheFirstRegisteredRuleMatchingThePattern() {
+	@Test
+	public void usesTheFirstRegisteredRuleMatchingThePattern() throws SecurityException, NoSuchMethodException {
 		rules.add(new Rules() {{
-			accept(MyControl.class).add(null); as("/clients/add");
-			accept(MyControl.class).list(); as("/clients/add");
+			 when("/clients/add").invoke(MyControl.class).add(null);
+			 when("/clients/add").invoke(MyControl.class).list();
 		}});
+		assertThat(rules.parse("/clients/add", HttpMethod.POST), is(VRaptorMatchers.resourceMethod(method("add"))));
 	}
 
-	public void acceptsAnHttpMethodLimitedMappingRule() {
+	@Test
+	public void acceptsAnHttpMethodLimitedMappingRule() throws NoSuchMethodException {
 		rules.add(new Rules() {{
-			accept(MyControl.class).add(null); as("/clients/add", HttpMethod.POST);
+			when("/clients/add").with(HttpMethod.POST).invoke(MyControl.class).add(null);
 		}});
+		assertThat(rules.parse("/clients/add", HttpMethod.POST), is(VRaptorMatchers.resourceMethod(method("add"))));
 	}
 
-	public void usesTheFirstRegisteredRuleIfDifferentCreatorsWereUsed() {
+	@Test
+	public void usesTheFirstRegisteredRuleIfDifferentCreatorsWereUsed() throws SecurityException, NoSuchMethodException {
 		rules.add(new Rules() {{
-			accept(MyControl.class).list(); as("/clients"); // if not defined, any http method is allowed
+			when("/clients").invoke(MyControl.class).list(); // if not defined, any http method is allowed
 		}});
 		// rules.add(new DefaultPublicMethodNotAnnotatedRules());
+		Assert.fail();
 	}
 
+	@Test
 	public void registerExtraParametersFromAcessedUrl() {
 		rules.add(new Rules() {{
-			accept(MyControl.class).show(null); as("/clients/{client.id}", HttpMethod.GET);
+			when("/clients/{client.id}").with(HttpMethod.GET).invoke(MyControl.class).show(null);;
 		}});
+		Assert.fail();
 	}
 
-	public void worksWithBasicRegexEvaluation() {
+	@Test
+	public void worksWithBasicRegexEvaluation() throws SecurityException, NoSuchMethodException {
 		rules.add(new Rules() {{
-			accept(MyControl.class).unknownMethod(); as("/clients*", HttpMethod.POST);
+			when("/clients*").with(HttpMethod.POST).invoke(MyControl.class).unknownMethod();;
 		}});
+		assertThat(rules.parse("/clientsWhatever", HttpMethod.POST), is(VRaptorMatchers.resourceMethod(method("unknownMethod"))));
 	}
 
 }

@@ -1,5 +1,6 @@
 package br.com.caelum.vraptor.http;
 
+import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**
@@ -11,6 +12,6 @@ public interface LocatorRules {
 
 	void add(Rules rules);
 
-	ResourceMethod parse(String uri);
+	ResourceMethod parse(String uri, HttpMethod method);
 
 }

@@ -150,6 +150,7 @@ right before ANY release
 	- check all TODOS and do something about them
 
 ONLY AFTER RELEASE
+3.0.1 - nice url support as invoke(type).method(param("name1"),param("name2"))
 - support i18n messages on hamcrest based validations
 FileDownload support:
 	- either return FileDownload

@@ -27,6 +27,8 @@
  */
 package br.com.caelum.vraptor.http;
 
+import br.com.caelum.vraptor.resource.ResourceMethod;
+
 /**
  * The default implementation of resource localization rules.
  * 
@@ -35,6 +37,10 @@ package br.com.caelum.vraptor.http;
 public class DefaultLocatorRules implements LocatorRules {
 
 	public void add(Rules rules) {
+	}
+
+	public ResourceMethod parse(String uri) {
+		return null;
 	}
 
 }

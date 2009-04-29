@@ -27,6 +27,7 @@
  */
 package br.com.caelum.vraptor.http;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 import java.lang.reflect.Method;
@@ -66,7 +67,7 @@ public class DefaultLocatorRulesTest {
 		}
 	}
 	
-	public void acceptsASingleMappingRule() {
+	public void acceptsASingleMappingRule() throws SecurityException, NoSuchMethodException {
 		rules.add(new Rules() {{
 			accept(MyControl.class).add(null); as("/clients/add");
 		}});

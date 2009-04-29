@@ -42,7 +42,7 @@ public class DefaultRouter implements Router {
 	
 	private final List<Rule> rules = new ArrayList<Rule>();
 
-	public void add(Rules rules) {
+	public void add(ListOfRules rules) {
 		this.rules.addAll(rules.getRules());
 	}
 

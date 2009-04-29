@@ -10,7 +10,7 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  */
 public interface Router {
 
-	void add(Rules rules);
+	void add(ListOfRules rules);
 
 	ResourceMethod parse(String uri, HttpMethod method);
 

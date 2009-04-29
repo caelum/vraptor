@@ -36,13 +36,15 @@ import net.sf.cglib.proxy.MethodProxy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import br.com.caelum.vraptor.resource.DefaultResource;
+import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.resource.HttpMethod;
+import br.com.caelum.vraptor.resource.ResourceMethod;
 
 public class UriBasedRule implements Rule {
 	private static final Logger logger = LoggerFactory.getLogger(UriBasedRule.class);
 
-	private Method currentMethod;
-	private Class definingType;
+	private DefaultResourceMethod resource;
 
 	private final String uri;
 	private HttpMethod method;
@@ -63,8 +65,8 @@ public class UriBasedRule implements Rule {
 
 			public Object intercept(Object instance, Method method, Object[] args, MethodProxy proxy) throws Throwable {
 				Class<? extends Object> baseType = instance.getClass();
-				definingType = lookFor(baseType, baseType, method);
-				currentMethod = method;
+				Class definingType = lookFor(baseType, baseType, method);
+				resource = new DefaultResourceMethod(new DefaultResource(definingType), method);
 				return null;
 			}
 
@@ -77,6 +79,14 @@ public class UriBasedRule implements Rule {
 			}
 		});
 		return (T) e.create();
+	}
+
+	public boolean matches(String uri, HttpMethod method) {
+		return uri.equals(this.uri) && (this.method==null || this.method.equals(method));
+	}
+
+	public ResourceMethod resourceMethod() {
+		return this.resource;
 	}
 
 }

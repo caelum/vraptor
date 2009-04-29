@@ -28,23 +28,30 @@
 package br.com.caelum.vraptor.http;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.List;
 
+import org.jmock.Mockery;
 import org.junit.Assert;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
 import br.com.caelum.vraptor.resource.HttpMethod;
+import br.com.caelum.vraptor.resource.ResourceMethod;
 
 public class DefaultRouterTest {
 	
 	private Router rules;
+	private Mockery mockery;
 
 	@org.junit.Before
 	public void setup() {
 		this.rules = new DefaultRouter();
+		this.mockery = new Mockery();
 	}
 	
 	class Dog{
@@ -89,7 +96,7 @@ public class DefaultRouterTest {
 			 routeFor("/clients/add").is(MyControl.class).add(null);
 			 routeFor("/clients/add").is(MyControl.class).list();
 		}});
-		assertThat(rules.parse("/clients/add", HttpMethod.POST), is(VRaptorMatchers.resourceMethod(method("add"))));
+		assertThat(rules.parse("/clients/add", HttpMethod.POST), is(VRaptorMatchers.resourceMethod(method("add", Dog.class))));
 	}
 
 	@Test
@@ -97,16 +104,29 @@ public class DefaultRouterTest {
 		rules.add(new Rules() {{
 			routeFor("/clients/add").with(HttpMethod.POST).is(MyControl.class).add(null);
 		}});
-		assertThat(rules.parse("/clients/add", HttpMethod.POST), is(VRaptorMatchers.resourceMethod(method("add"))));
+		assertThat(rules.parse("/clients/add", HttpMethod.POST), is(VRaptorMatchers.resourceMethod(method("add",Dog.class))));
 	}
 
 	@Test
 	public void usesTheFirstRegisteredRuleIfDifferentCreatorsWereUsed() throws SecurityException, NoSuchMethodException {
+		final ResourceMethod method = mockery.mock(ResourceMethod.class);
+		final Rule customRule = new Rule() {
+			public boolean matches(String uri, HttpMethod method) {
+				return true;
+			}
+			public ResourceMethod resourceMethod() {
+				return method;
+			}
+		};
+		rules.add(new ListOfRules() {
+			public List<Rule> getRules() {
+				return Arrays.asList(customRule);
+			}
+		});
 		rules.add(new Rules() {{
 			routeFor("/clients").is(MyControl.class).list(); // if not defined, any http method is allowed
 		}});
-		// rules.add(new DefaultPublicMethodNotAnnotatedRules());
-		Assert.fail();
+		assertThat(rules.parse("/clients", HttpMethod.POST), is(equalTo(method)));
 	}
 
 	@Test

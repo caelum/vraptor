@@ -27,26 +27,15 @@
  */
 package br.com.caelum.vraptor.http;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Rules for resource localization.
+ * A list of rules to add to a router.
  * 
- * @author Guilherme Silveira
+ * @author guilherme silveira
  */
-public class Rules implements ListOfRules {
+public interface ListOfRules {
 
-	private final List<Rule> rules = new ArrayList<Rule>();
-
-	public UriBasedRule routeFor(String uri) {
-		UriBasedRule rule = new UriBasedRule(uri);
-		this.rules.add(rule);
-		return rule;
-	}
-
-	public List<Rule> getRules() {
-		return this.rules;
-	}
+	List<Rule> getRules();
 
 }

@@ -4,7 +4,7 @@ import br.com.caelum.vraptor.core.DefaultConverters;
 import br.com.caelum.vraptor.core.DefaultInterceptorStack;
 import br.com.caelum.vraptor.core.DefaultMethodParameters;
 import br.com.caelum.vraptor.core.DefaultRequestExecution;
-import br.com.caelum.vraptor.core.DefaultRequestInfo;
+import br.com.caelum.vraptor.core.DefaultMethodInfo;
 import br.com.caelum.vraptor.core.DefaultResult;
 import br.com.caelum.vraptor.core.ForwardToDefaultViewInterceptor;
 import br.com.caelum.vraptor.core.JstlLocalization;
@@ -118,7 +118,7 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
         registerOn(beanFactory, ForwardToDefaultViewInterceptor.class);
         registerOn(beanFactory, DefaultLogicResult.class);
         registerOn(beanFactory, OgnlParametersProvider.class);
-        registerOn(beanFactory, DefaultRequestInfo.class);
+        registerOn(beanFactory, DefaultMethodInfo.class);
         registerOn(beanFactory, DefaultValidator.class);
         registerOn(beanFactory, DefaultLogicResult.class);
         registerOn(beanFactory, DefaultResourceNotFoundHandler.class);

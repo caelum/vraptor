@@ -130,10 +130,12 @@ public class DefaultRouterTest {
 	}
 
 	@Test
-	public void registerExtraParametersFromAcessedUrl() {
+	public void registerExtraParametersFromAcessedUrl() throws SecurityException, NoSuchMethodException {
 		rules.add(new Rules() {{
-			routeFor("/clients/{client.id}").with(HttpMethod.GET).is(MyControl.class).show(null);;
+			routeFor("/clients/{dog.id}").with(HttpMethod.GET).is(MyControl.class).show(null);;
 		}});
+		ResourceMethod method = rules.parse("/clients/45", HttpMethod.POST);
+		assertThat(method, is(VRaptorMatchers.resourceMethod(method("show", Dog.class))));
 		Assert.fail();
 	}
 

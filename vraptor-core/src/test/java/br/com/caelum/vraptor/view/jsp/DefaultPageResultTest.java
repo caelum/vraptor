@@ -1,6 +1,6 @@
 package br.com.caelum.vraptor.view.jsp;
 
-import br.com.caelum.vraptor.core.DefaultRequestInfo;
+import br.com.caelum.vraptor.core.DefaultMethodInfo;
 import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.view.PathResolver;
@@ -24,7 +24,7 @@ public class DefaultPageResultTest {
     private ResourceMethod method;
     private Resource resource;
     private PathResolver fixedResolver;
-    private DefaultRequestInfo requestInfo;
+    private DefaultMethodInfo requestInfo;
 
     @Before
     public void setup() {
@@ -33,7 +33,7 @@ public class DefaultPageResultTest {
         response = mockery.mock(HttpServletResponse.class);
         dispatcher = mockery.mock(RequestDispatcher.class);
         method = mockery.mock(ResourceMethod.class);
-        requestInfo = new DefaultRequestInfo();
+        requestInfo = new DefaultMethodInfo();
         requestInfo.setResourceMethod(method);
         resource = mockery.mock(Resource.class);
         fixedResolver = new PathResolver() {

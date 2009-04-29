@@ -32,7 +32,7 @@ package br.com.caelum.vraptor.interceptor;
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Interceptor;
 import br.com.caelum.vraptor.core.InterceptorStack;
-import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.core.VRaptorRequest;
 import br.com.caelum.vraptor.http.UrlToResourceTranslator;
 import br.com.caelum.vraptor.resource.ResourceMethod;
@@ -48,11 +48,11 @@ import br.com.caelum.vraptor.resource.ResourceNotFoundHandler;
 public class ResourceLookupInterceptor implements Interceptor {
 
 	private final UrlToResourceTranslator translator;
-	private final RequestInfo requestInfo;
+	private final MethodInfo requestInfo;
 	private final VRaptorRequest request;
 	private final ResourceNotFoundHandler resourceNotFoundHandler;
 
-	public ResourceLookupInterceptor(UrlToResourceTranslator translator, RequestInfo requestInfo,
+	public ResourceLookupInterceptor(UrlToResourceTranslator translator, MethodInfo requestInfo,
 			ResourceNotFoundHandler resourceNotFoundHandler, VRaptorRequest request) {
 		this.translator = translator;
 		this.requestInfo = requestInfo;

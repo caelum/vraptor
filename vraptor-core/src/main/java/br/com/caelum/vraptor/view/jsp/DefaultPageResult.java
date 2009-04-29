@@ -36,7 +36,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import br.com.caelum.vraptor.View;
-import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.view.PathResolver;
 import br.com.caelum.vraptor.view.ResultException;
@@ -53,7 +53,7 @@ public class DefaultPageResult implements View, PageResult {
     private final ResourceMethod method;
     private final PathResolver resolver;
 
-    public DefaultPageResult(HttpServletRequest req, HttpServletResponse res, RequestInfo requestInfo,
+    public DefaultPageResult(HttpServletRequest req, HttpServletResponse res, MethodInfo requestInfo,
             PathResolver resolver) {
         this.request = req;
         this.response = res;

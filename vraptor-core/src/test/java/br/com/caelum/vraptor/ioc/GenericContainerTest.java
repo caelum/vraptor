@@ -27,7 +27,7 @@ import br.com.caelum.vraptor.core.ForwardToDefaultViewInterceptor;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodParameters;
 import br.com.caelum.vraptor.core.RequestExecution;
-import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.core.URLParameterExtractorInterceptor;
 import br.com.caelum.vraptor.core.VRaptorRequest;
 import br.com.caelum.vraptor.http.EmptyElementsRemoval;
@@ -88,7 +88,7 @@ public abstract class GenericContainerTest {
                 RequestParameters.class, InterceptorListPriorToExecutionExtractor.class,
                 URLParameterExtractorInterceptor.class, InterceptorStack.class, RequestExecution.class,
                 ResourceLookupInterceptor.class, InstantiateInterceptor.class, Result.class,
-                ExecuteMethodInterceptor.class, PageResult.class, ParametersProvider.class, RequestInfo.class,
+                ExecuteMethodInterceptor.class, PageResult.class, ParametersProvider.class, MethodInfo.class,
                 Validator.class, PathResolver.class, ForwardToDefaultViewInterceptor.class, LogicResult.class,
                 RequestResult.class, ResourceNotFoundHandler.class);
         mockery.assertIsSatisfied();
@@ -145,7 +145,7 @@ public abstract class GenericContainerTest {
                             registry.register(componentToRegister, componentToRegister);
                         }
                         ResourceMethod firstMethod = mockery.mock(ResourceMethod.class, "rm" + counter);
-                        firstContainer.instanceFor(RequestInfo.class).setResourceMethod(firstMethod);
+                        firstContainer.instanceFor(MethodInfo.class).setResourceMethod(firstMethod);
                         return firstContainer.instanceFor(component);
                     }
                 });
@@ -164,7 +164,7 @@ public abstract class GenericContainerTest {
                         }
 
                         ResourceMethod secondMethod = mockery.mock(ResourceMethod.class, "rm" + counter);
-                        secondContainer.instanceFor(RequestInfo.class).setResourceMethod(secondMethod);
+                        secondContainer.instanceFor(MethodInfo.class).setResourceMethod(secondMethod);
                         return secondContainer.instanceFor(component);
                     }
                 });

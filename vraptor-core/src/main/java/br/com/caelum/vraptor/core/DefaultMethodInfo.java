@@ -5,7 +5,7 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 /**
  * @author Fabio Kung
  */
-public class DefaultRequestInfo implements RequestInfo {
+public class DefaultMethodInfo implements MethodInfo {
     private ResourceMethod resourceMethod;
 
     public ResourceMethod getResourceMethod() {

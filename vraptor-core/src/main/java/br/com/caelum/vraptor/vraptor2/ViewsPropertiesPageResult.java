@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.core.VRaptorRequest;
 import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceMethod;
@@ -29,7 +29,7 @@ public class ViewsPropertiesPageResult implements PageResult {
 	private static final Logger logger = LoggerFactory.getLogger(ViewsPropertiesPageResult.class);
 	private final VRaptorRequest webRequest;
 
-	public ViewsPropertiesPageResult(Config config, PathResolver resolver, RequestInfo requestInfo,
+	public ViewsPropertiesPageResult(Config config, PathResolver resolver, MethodInfo requestInfo,
 			VRaptorRequest webRequest) {
 		this.config = config;
 		this.webRequest = webRequest;

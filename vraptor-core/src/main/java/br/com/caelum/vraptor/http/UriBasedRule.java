@@ -50,14 +50,28 @@ public class UriBasedRule implements Rule {
 	private HttpMethod method;
 
 	public UriBasedRule(String uri) {
-		this.uri = uri.replaceAll("\\*", ".\\*");
+		uri = uri.replaceAll("\\*", ".\\*");
+		String finalUri = "";
+		// not using stringbuffer because this is only run in startup
+		boolean ignore = false;
+		for (int i = 0; i < uri.length(); i++) {
+			if (uri.charAt(i) == '{') {
+				ignore = true;
+			} else if (uri.charAt(i) == '}') {
+				ignore = false;
+				finalUri += ".*";
+			} else if (!ignore) {
+				finalUri += uri.charAt(i);
+			}
+		}
+		this.uri = finalUri;
 	}
 
 	public UriBasedRule with(HttpMethod method) {
 		this.method = method;
 		return this;
 	}
-	
+
 	public <T> T is(Class<T> type) {
 		Enhancer e = new Enhancer();
 		e.setSuperclass(type);
@@ -90,7 +104,7 @@ public class UriBasedRule implements Rule {
 	}
 
 	private boolean methodMatches(HttpMethod method) {
-		return (this.method==null || this.method.equals(method));
+		return (this.method == null || this.method.equals(method));
 	}
 
 	public ResourceMethod resourceMethod() {

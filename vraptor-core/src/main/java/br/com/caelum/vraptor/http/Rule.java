@@ -27,32 +27,23 @@
  */
 package br.com.caelum.vraptor.http;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**
- * The default implementation of resource localization rules.
+ * An specific route rule.
  * 
  * @author Guilherme Silveira
  */
-public class DefaultLocatorRules implements LocatorRules {
-	
-	private final List<Rule> rules = new ArrayList<Rule>();
+public interface Rule {
 
-	public void add(Rules rules) {
-		this.rules.addAll(rules.getRules());
-	}
+	boolean matches(String uri, HttpMethod method);
 
-	public ResourceMethod parse(String uri, HttpMethod method) {
-		for (Rule rule : rules) {
-			if(rule.matches(uri, method)) {
-				return rule.resourceMethod();
-			}
-		}
-		return null;
-	}
+	/**
+	 * Returns the resource method for this specifig rule.
+	 * 
+	 * @return the resource method
+	 */
+	ResourceMethod resourceMethod();
 
 }

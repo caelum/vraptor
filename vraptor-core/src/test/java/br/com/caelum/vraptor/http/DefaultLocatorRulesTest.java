@@ -76,7 +76,7 @@ public class DefaultLocatorRulesTest {
 		rules.add(new Rules() {{
 			when("/clients/add").invoke(MyControl.class).add(null);
 		}});
-		assertThat(rules.parse("/clients/add", HttpMethod.POST), is(VRaptorMatchers.resourceMethod(method("add"))));
+		assertThat(rules.parse("/clients/add", HttpMethod.POST), is(VRaptorMatchers.resourceMethod(method("add",Dog.class))));
 	}
 
 	private Method method(String name, Class...types) throws SecurityException, NoSuchMethodException {

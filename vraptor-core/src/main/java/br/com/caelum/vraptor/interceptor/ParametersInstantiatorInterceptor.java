@@ -17,6 +17,7 @@ import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.validator.ValidationError;
 import br.com.caelum.vraptor.validator.ValidationMessage;
 import br.com.caelum.vraptor.validator.Validations;
 
@@ -54,12 +55,17 @@ public class ParametersInstantiatorInterceptor implements Interceptor {
 		final List<ValidationMessage> errors = new ArrayList<ValidationMessage>();
 		Object[] values = provider.getParametersFor(method, errors, localization.getBundle());
 		if (!errors.isEmpty()) {
-			validator.checking(new Validations() {
-				@Override
-				public List<ValidationMessage> getErrors() {
-					return errors;
-				}
-			});
+			try {
+				validator.checking(new Validations() {
+					@Override
+					public List<ValidationMessage> getErrors() {
+						return errors;
+					}
+				});
+			} catch (ValidationError e) {
+				// just fine... i was expecting that
+				return;
+			}
 		}
 		if (logger.isDebugEnabled()) {
 			logger.debug("Parameter values for " + method + " are " + Arrays.asList(values));

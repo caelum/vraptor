@@ -73,7 +73,7 @@ public class ReflectionBasedNullHandler extends ObjectNullHandler {
             }
 
             String propertyCapitalized = Info.capitalize((String) property);
-			Method getter = findMethod(target.getClass(), "get" + propertyCapitalized, target.getClass());
+			Method getter = findMethod(target.getClass(), "get" + propertyCapitalized, target.getClass(), null);
             Type returnType = getter.getGenericReturnType();
             if (returnType instanceof ParameterizedType) {
                 ParameterizedType paramType = (ParameterizedType) returnType;
@@ -114,18 +114,20 @@ public class ReflectionBasedNullHandler extends ObjectNullHandler {
         return Array.newInstance(baseType.getComponentType(), 0);
     }
 
-    static Method findMethod(Class<? extends Object> type, String name, Class<? extends Object> baseType) {
+    static Method findMethod(Class<? extends Object> type, String name, Class<? extends Object> baseType, Class parameterType) {
         Method[] methods = type.getDeclaredMethods();
         for (Method method : methods) {
-            if (method.getName().equals(name) && method.getReturnType().equals(baseType)) {
-                return method;
+            if (method.getName().equals(name)) {
+            	if(parameterType==null || (method.getParameterTypes().length==1 && method.getParameterTypes()[0].equals(parameterType))) {
+            		return method;
+            	}
             }
         }
         if (type.equals(Object.class)) {
             // TODO better
             throw new IllegalArgumentException("Unable to find method for " + name + " @ " + baseType.getName());
         }
-        return findMethod(type.getSuperclass(), name, type);
+        return findMethod(type.getSuperclass(), name, type, parameterType);
     }
 
 }

@@ -43,7 +43,7 @@ public class ArrayAccessor extends ArrayPropertyAccessor {
             String fieldName = ctx.getCurrentEvaluation().getPrevious().getNode().toString();
             Object origin = ctx.getCurrentEvaluation().getPrevious().getSource();
             Method setter = ReflectionBasedNullHandler.findMethod(origin.getClass(),
-                    "set" + Info.capitalize(fieldName), origin.getClass());
+                    "set" + Info.capitalize(fieldName), origin.getClass(), null);
             Container container = (Container) context.get(Container.class);
             EmptyElementsRemoval removal = container.instanceFor(EmptyElementsRemoval.class);
             removal.add(array, setter, origin);

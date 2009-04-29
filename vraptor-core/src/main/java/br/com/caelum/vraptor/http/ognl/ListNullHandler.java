@@ -54,7 +54,7 @@ public class ListNullHandler {
         Object listHolder = ctx.getCurrentEvaluation().getPrevious().getSource();
         String listPropertyName = ctx.getCurrentEvaluation().getPrevious().getNode().toString();
         Method listSetter = ReflectionBasedNullHandler.findMethod(listHolder.getClass(), "set"
-                + Info.capitalize((String) listPropertyName), target.getClass());
+                + Info.capitalize(listPropertyName), target.getClass(), null);
         Type[] types = listSetter.getGenericParameterTypes();
         Type type = types[0];
         if (!(type instanceof ParameterizedType)) {

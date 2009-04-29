@@ -110,9 +110,10 @@ public class VRaptorMockery {
 
 	public Localization localization() {
 		final Localization loc = mockery.mock(Localization.class);
+		final ResourceBundle bundle = ResourceBundle.getBundle("messages");
 		mockery.checking(new Expectations() {
 			{
-				allowing(loc).getBundle(); will(returnValue(ResourceBundle.getBundle("messages")));
+				allowing(loc).getBundle(); will(returnValue(bundle));
 			}
 		});
 		return loc;

@@ -20,17 +20,22 @@ public class JstlLocalization implements Localization {
 
 	private final VRaptorRequest request;
 
+	private ResourceBundle bundle;
+
 	public JstlLocalization(VRaptorRequest request) {
 		this.request = request;
 	}
 
 	public ResourceBundle getBundle() {
-		Locale locale = getLocale();
-		String baseName = (String) get(Config.FMT_LOCALIZATION_CONTEXT);
-		if (baseName == null) {
-			baseName = DEFAULT_BUNDLE_NAME;
+		if (this.bundle != null) {
+			Locale locale = getLocale();
+			String baseName = (String) get(Config.FMT_LOCALIZATION_CONTEXT);
+			if (baseName == null) {
+				baseName = DEFAULT_BUNDLE_NAME;
+			}
+			this.bundle = ResourceBundle.getBundle(baseName, locale);
 		}
-		return ResourceBundle.getBundle(baseName, locale);
+		return this.bundle;
 	}
 
 	public Locale getLocale() {

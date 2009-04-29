@@ -3,6 +3,7 @@ package br.com.caelum.vraptor.interceptor;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.ResourceBundle;
 
 import org.jmock.Expectations;
 import org.junit.Before;
@@ -49,9 +50,10 @@ public class ParametersInstantiatorInterceptorTest {
         final InterceptorStack stack = mockery.mock(InterceptorStack.class);
         final ResourceMethod method = mockery.methodFor(Component.class, "method");
         final Method reflected = method.getMethod();
+        final ResourceBundle bundle = localization.getBundle();
         mockery.checking(new Expectations() {
             {
-                one(parametersProvider).getParametersFor(method, new ArrayList(),null);
+                one(parametersProvider).getParametersFor(method, new ArrayList(), bundle);
                 Object[] values = new Object[] { new Object() };
                 will(returnValue(values));
                 one(provider).parameterNamesFor(reflected);

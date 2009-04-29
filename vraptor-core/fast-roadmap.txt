@@ -4,7 +4,9 @@ TODO: 14
 
 
 
-
+- if there is a conversion error, ognl should not set
+- conversion error should set the path variable
+- conversion should log what is being set
 - ClientsController --> clients.list
 - better exception handling everywhere (search for TODO within exceptions)
 - suppor for kung's register api

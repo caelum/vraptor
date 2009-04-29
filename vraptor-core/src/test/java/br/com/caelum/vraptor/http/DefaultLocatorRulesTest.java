@@ -27,10 +27,86 @@
  */
 package br.com.caelum.vraptor.http;
 
+import static org.hamcrest.Matchers.is;
+
+import java.lang.reflect.Method;
+
+import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
+import br.com.caelum.vraptor.resource.HttpMethod;
+
 public class DefaultLocatorRulesTest {
 	
-	public void acceptsASingleMappingRule() throws Exception {
-		
+	private LocatorRules rules;
+
+	public void setup() {
+		this.rules = new DefaultLocatorRules();
+	}
+	
+	class Dog{
+		private Long id;
+		public void setId(Long id) {
+			this.id = id;
+		}
+		public Long getId() {
+			return id;
+		}
+	}
+	
+	class MyControl {
+		public void add(Dog object) {
+		}
+
+		public void unknownMethod() {
+		}
+
+		public void list() {
+		}
+
+		public void show(Dog dog) {
+		}
+	}
+	
+	public void acceptsASingleMappingRule() {
+		rules.add(new Rules() {{
+			accept(MyControl.class).add(null); as("/clients/add");
+		}});
+		assertThat(rules.parse("/clients/add"), is(VRaptorMatchers.resourceMethod(method("add"))));
+	}
+
+	private Method method(String name, Class...types) throws SecurityException, NoSuchMethodException {
+		return MyControl.class.getDeclaredMethod(name, types);
+	}
+
+	public void usesTheFirstRegisteredRuleMatchingThePattern() {
+		rules.add(new Rules() {{
+			accept(MyControl.class).add(null); as("/clients/add");
+			accept(MyControl.class).list(); as("/clients/add");
+		}});
+	}
+
+	public void acceptsAnHttpMethodLimitedMappingRule() {
+		rules.add(new Rules() {{
+			accept(MyControl.class).add(null); as("/clients/add", HttpMethod.POST);
+		}});
+	}
+
+	public void usesTheFirstRegisteredRuleIfDifferentCreatorsWereUsed() {
+		rules.add(new Rules() {{
+			accept(MyControl.class).list(); as("/clients"); // if not defined, any http method is allowed
+		}});
+		// rules.add(new DefaultPublicMethodNotAnnotatedRules());
+	}
+
+	public void registerExtraParametersFromAcessedUrl() {
+		rules.add(new Rules() {{
+			accept(MyControl.class).show(null); as("/clients/{client.id}", HttpMethod.GET);
+		}});
+	}
+
+	public void worksWithBasicRegexEvaluation() {
+		rules.add(new Rules() {{
+			accept(MyControl.class).unknownMethod(); as("/clients*", HttpMethod.POST);
+		}});
 	}
 
 }

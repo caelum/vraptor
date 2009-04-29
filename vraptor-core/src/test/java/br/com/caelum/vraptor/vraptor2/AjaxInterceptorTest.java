@@ -74,12 +74,10 @@ public class AjaxInterceptorTest {
     }
 
     @Test
-    public void invokesNextIfNonAjax() throws InterceptionException, IOException {
-    	final ResourceMethod method = mockery.mock(ResourceMethod.class);
+    public void invokesNextIfNonAjax() throws InterceptionException, IOException, NoSuchMethodException {
+    	final ResourceMethod method = mockery.methodFor(MyComponent.class, "nonAjaxed");
         mockery.checking(new Expectations() {
             {
-                one(info).shouldShowView(method);
-                will(returnValue(true));
                 one(info).isAjax();
                 will(returnValue(false));
                 one(stack).next(method, null);
@@ -106,8 +104,6 @@ public class AjaxInterceptorTest {
         final ResourceMethod method = mockery.methodFor(MyComponent.class, "ajaxed");
         mockery.checking(new Expectations() {
             {
-                one(info).shouldShowView(method);
-                will(returnValue(true));
                 one(info).isAjax();
                 will(returnValue(true));
                 one(response).setContentType("application/json");
@@ -127,8 +123,6 @@ public class AjaxInterceptorTest {
         final ResourceMethod method = mockery.methodFor(MyComponent.class, "nonAjaxed");
         mockery.checking(new Expectations() {
             {
-                one(info).shouldShowView(method);
-                will(returnValue(true));
                 one(info).isAjax();
                 will(returnValue(true));
             }

@@ -1,6 +1,6 @@
-TODO: 17
+TODO: 14
 - ClientsController --> clients.list
-
+- better exception handling everywhere (search for TODO within exceptions)
 
 - make client server redirect work with parameters, which ones?
 (MUST) - niceurls with programmatic support
@@ -8,7 +8,6 @@ TODO: 17
 (MUST) - niceurls with file config support -> path support
 (MUST) - path annotation with support to value injection (niceurls?)
 (MUST) - hibernate plugin
-(MUST) - better exception handling everywhere
 (MUST) - json output support: three different options
 (MUST) - Map support
 - Set support
@@ -16,6 +15,9 @@ TODO: 17
 @Component should not be web acessible
 
 ceci: integration test for vraptor-example project
+
+
+
 
 test and refactor:
 a) caelumweb: use logicredirect that is most advanced

@@ -38,7 +38,7 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  * 
  * @author Guilherme Silveira
  */
-public class DefaultLocatorRules implements LocatorRules {
+public class DefaultRouter implements Router {
 	
 	private final List<Rule> rules = new ArrayList<Rule>();
 

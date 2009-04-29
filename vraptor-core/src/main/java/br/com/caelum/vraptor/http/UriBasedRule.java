@@ -37,7 +37,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.resource.HttpMethod;
-import br.com.caelum.vraptor.resource.ResourceMethod;
 
 public class UriBasedRule implements Rule {
 	private static final Logger logger = LoggerFactory.getLogger(UriBasedRule.class);
@@ -56,8 +55,8 @@ public class UriBasedRule implements Rule {
 		this.method = method;
 		return this;
 	}
-
-	public <T> T invoke(Class<T> type) {
+	
+	public <T> T is(Class<T> type) {
 		Enhancer e = new Enhancer();
 		e.setSuperclass(type);
 		e.setCallback(new MethodInterceptor() {
@@ -78,14 +77,6 @@ public class UriBasedRule implements Rule {
 			}
 		});
 		return (T) e.create();
-	}
-
-	public boolean matches(String uri, HttpMethod method) {
-		return false;
-	}
-
-	public ResourceMethod resourceMethod() {
-		return null;
 	}
 
 }

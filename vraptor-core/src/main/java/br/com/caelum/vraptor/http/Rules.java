@@ -39,7 +39,7 @@ public class Rules {
 
 	private final List<Rule> rules = new ArrayList<Rule>();
 
-	public UriBasedRule when(String uri) {
+	public UriBasedRule routeFor(String uri) {
 		UriBasedRule rule = new UriBasedRule(uri);
 		this.rules.add(rule);
 		return rule;

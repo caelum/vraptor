@@ -8,7 +8,7 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  * 
  * @author Guilherme Silveira
  */
-public interface LocatorRules {
+public interface Router {
 
 	void add(Rules rules);
 

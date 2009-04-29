@@ -1,5 +1,6 @@
 TODO: 14
 (MUST) - niceurls with programmatic support
+(MUST) - niceurls -> path support
 
 
 
@@ -11,7 +12,6 @@ TODO: 14
 - better exception handling everywhere (search for TODO within exceptions)
 - suppor for kung's register api
 - make client server redirect work with parameters, which ones?
-(MUST) - niceurls -> path support
 (MUST) - niceurls with file config support -> path support
 (MUST) - path annotation with support to value injection (niceurls?)
 (MUST) - hibernate plugin
@@ -20,6 +20,7 @@ TODO: 14
 - Set support
 - automatic REDIRECT depending on accepts
 @Component should not be web acessible
+- start/stop:app/session/request support + @Listener, @Startup, @Shutdown/implements Listener 
 
 ceci: integration test for vraptor-example project
 
@@ -150,6 +151,8 @@ right before ANY release
 	- check all TODOS and do something about them
 
 ONLY AFTER RELEASE
+3.0.1 - support to @Path(priority=...)...
+3.0.1 - print out @Path priority (rules) debug info on startup
 3.0.1 - maybe a lista lready exists and i set the items.. i would still have to remove the nulls
 3.0.1 - nice url support as invoke(type).method(param("name1"),param("name2"))
 - support i18n messages on hamcrest based validations

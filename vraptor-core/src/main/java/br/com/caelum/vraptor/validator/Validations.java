@@ -88,4 +88,9 @@ public class Validations {
 	 */
 	public void check() {
 	}
+
+	public static <T> org.hamcrest.Matcher<T> is(org.hamcrest.Matcher<T> matcher) {
+		return ShouldBe.<T> shouldBe(matcher);
+	}
+
 }

@@ -30,7 +30,6 @@
 package br.com.caelum.vraptor.example;
 
 import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Resource;

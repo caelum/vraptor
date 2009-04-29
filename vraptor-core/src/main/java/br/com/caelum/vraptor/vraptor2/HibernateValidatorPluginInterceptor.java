@@ -24,7 +24,7 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 /**
  * Support to vraptor2 hibernate validator plugin.<br>
  * Limited support to parameters only.
- * 
+ *
  * @author Guilherme Silveira
  */
 public class HibernateValidatorPluginInterceptor implements Interceptor {

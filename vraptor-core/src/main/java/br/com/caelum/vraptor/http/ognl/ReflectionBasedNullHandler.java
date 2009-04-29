@@ -86,7 +86,6 @@ public class ReflectionBasedNullHandler extends ObjectNullHandler {
             } else {
                 instance = generic.instantiate(baseType, ctx);
             }
-
             Method setter = findMethod(target.getClass(), "set" + Info.capitalize((String) property), target.getClass());
             setter.invoke(target, instance);
             return instance;

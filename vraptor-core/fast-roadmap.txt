@@ -7,7 +7,7 @@ TODO: 14
 
 - ClientsController --> clients.list
 - better exception handling everywhere (search for TODO within exceptions)
-
+- suppor for kung's register api
 - make client server redirect work with parameters, which ones?
 (MUST) - niceurls -> path support
 (MUST) - niceurls with file config support -> path support

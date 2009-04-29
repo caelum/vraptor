@@ -1,13 +1,17 @@
 package br.com.caelum.vraptor.vraptor2;
 
+import java.text.MessageFormat;
 import java.util.ResourceBundle;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.vraptor.i18n.FixedMessage;
+import org.vraptor.i18n.Message;
 import org.vraptor.plugin.hibernate.HibernateLogicMethod;
 import org.vraptor.plugin.hibernate.Validate;
 import org.vraptor.plugin.hibernate.ValidatorLocator;
 import org.vraptor.reflection.GettingException;
+import org.vraptor.validator.BasicValidationErrors;
 import org.vraptor.validator.ValidationErrors;
 
 import br.com.caelum.vraptor.InterceptionException;
@@ -55,7 +59,20 @@ public class HibernateValidatorPluginInterceptor implements Interceptor {
                 try {
                     Object[] paramValues = parameters.getValues();
                     Object object = paramFor(names, path, paramValues);
-                    HibernateLogicMethod.validateParam(locator, request, bundle, errors, object, path);
+                    BasicValidationErrors newErrors = new BasicValidationErrors();
+                    HibernateLogicMethod.validateParam(locator, request, bundle, newErrors, object, path);
+                    for(org.vraptor.i18n.ValidationMessage msg : newErrors) {
+                    	if(msg instanceof FixedMessage) {
+                    		errors.add(msg);
+                    	} else if (msg instanceof Message){
+                    		Message m = (Message) msg;
+                    		String content = bundle.getString(m.getKey());
+                    		content = MessageFormat.format(content, m.getParameters());
+                    		errors.add(new FixedMessage(msg.getPath(), content, msg.getCategory()));
+                    	} else {
+                    		throw new IllegalArgumentException("Unsupported validation message type: " + msg.getClass().getName());
+                    	}
+                    }
                 } catch (GettingException e) {
                     throw new InterceptionException(
                             "Unable to validate objects due to an exception during validation.", e);

@@ -6,16 +6,16 @@ import java.lang.reflect.Method;
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Interceptor;
 import br.com.caelum.vraptor.core.InterceptorStack;
-import br.com.caelum.vraptor.core.MethodParameters;
+import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.validator.ValidationError;
 
 public class ExecuteAndViewInterceptor implements Interceptor {
 
     private final RequestResult result;
-    private final MethodParameters parameters;
+    private final MethodInfo parameters;
 
-    public ExecuteAndViewInterceptor(RequestResult result, MethodParameters parameters) {
+    public ExecuteAndViewInterceptor(RequestResult result, MethodInfo parameters) {
         this.result = result;
         this.parameters = parameters;
     }
@@ -24,7 +24,7 @@ public class ExecuteAndViewInterceptor implements Interceptor {
             throws InterceptionException {
         try {
             Method reflectionMethod = method.getMethod();
-            Object[] parameters = this.parameters.getValues();
+            Object[] parameters = this.parameters.getParameters();
             Object result = reflectionMethod.invoke(resourceInstance, parameters);
             if (Info.isOldComponent(method.getResource())) {
                 if (result == null) {

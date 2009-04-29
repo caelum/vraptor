@@ -12,7 +12,7 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.core.InterceptorStack;
-import br.com.caelum.vraptor.core.MethodParameters;
+import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.vraptor2.RequestResult;
@@ -20,7 +20,7 @@ import br.com.caelum.vraptor.vraptor2.RequestResult;
 public class ExecuteMethodInterceptorTest {
 
     private Mockery mockery;
-    private MethodParameters parameters;
+    private MethodInfo parameters;
     private RequestResult result;
     private InterceptorStack stack;
 
@@ -29,7 +29,7 @@ public class ExecuteMethodInterceptorTest {
         this.mockery = new Mockery();
         this.result = new RequestResult();
         this.stack = mockery.mock(InterceptorStack.class);
-        this.parameters =mockery.mock(MethodParameters.class);
+        this.parameters =mockery.mock(MethodInfo.class);
     }
 
     @Test
@@ -41,7 +41,7 @@ public class ExecuteMethodInterceptorTest {
         mockery.checking(new Expectations() {
             {
                 one(auau).bark();
-                one(parameters).getValues(); will(returnValue(new Object[]{}));
+                one(parameters).getParameters(); will(returnValue(new Object[]{}));
                 one(stack).next(method, auau);
             }
         });
@@ -60,7 +60,7 @@ public class ExecuteMethodInterceptorTest {
             {
                 one(auau).bark();
                 will(throwException(exception));
-                one(parameters).getValues(); will(returnValue(new Object[]{}));
+                one(parameters).getParameters(); will(returnValue(new Object[]{}));
             }
         });
         try {
@@ -80,7 +80,7 @@ public class ExecuteMethodInterceptorTest {
         mockery.checking(new Expectations() {
             {
                 one(auau).bark(3);
-                one(parameters).getValues(); will(returnValue(new Object[]{3}));
+                one(parameters).getParameters(); will(returnValue(new Object[]{3}));
                 one(stack).next(method, auau);
             }
         });

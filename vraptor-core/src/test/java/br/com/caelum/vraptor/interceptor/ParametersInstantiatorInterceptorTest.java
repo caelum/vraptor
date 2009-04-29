@@ -14,7 +14,7 @@ import br.com.caelum.vraptor.VRaptorMockery;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.Localization;
-import br.com.caelum.vraptor.core.MethodParameters;
+import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.resource.ResourceMethod;
@@ -23,7 +23,7 @@ public class ParametersInstantiatorInterceptorTest {
 
     private VRaptorMockery mockery;
     private ParametersInstantiatorInterceptor instantiator;
-    private MethodParameters params;
+    private MethodInfo params;
     private ParameterNameProvider provider;
     private ParametersProvider parametersProvider;
 	private Validator validator;
@@ -32,7 +32,7 @@ public class ParametersInstantiatorInterceptorTest {
     @Before
     public void setup() {
         this.mockery = new VRaptorMockery();
-        this.params = mockery.mock(MethodParameters.class);
+        this.params = mockery.mock(MethodInfo.class);
         this.provider = mockery.mock(ParameterNameProvider.class);
         this.parametersProvider = mockery.mock(ParametersProvider.class);
         this.validator = mockery.mock(Validator.class);
@@ -59,7 +59,7 @@ public class ParametersInstantiatorInterceptorTest {
                 one(provider).parameterNamesFor(reflected);
                 will(returnValue(new String[] { "names" }));
                 one(stack).next(method, null);
-                one(params).set(values, new String[] { "names" });
+                one(params).setParameters(values, new String[] { "names" });
             }
         });
         instantiator.intercept(stack, method, null);

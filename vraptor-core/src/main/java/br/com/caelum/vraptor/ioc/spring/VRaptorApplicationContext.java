@@ -2,7 +2,7 @@ package br.com.caelum.vraptor.ioc.spring;
 
 import br.com.caelum.vraptor.core.DefaultConverters;
 import br.com.caelum.vraptor.core.DefaultInterceptorStack;
-import br.com.caelum.vraptor.core.DefaultMethodParameters;
+import br.com.caelum.vraptor.core.DefaultMethodInfo;
 import br.com.caelum.vraptor.core.DefaultRequestExecution;
 import br.com.caelum.vraptor.core.DefaultMethodInfo;
 import br.com.caelum.vraptor.core.DefaultResult;
@@ -104,7 +104,7 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
     private void registerRequestScopedComponentsOn(DefaultListableBeanFactory beanFactory) {
         registerOn(beanFactory, RequestResult.class);
         registerOn(beanFactory, ParametersInstantiatorInterceptor.class);
-        registerOn(beanFactory, DefaultMethodParameters.class);
+        registerOn(beanFactory, DefaultMethodInfo.class);
         registerOn(beanFactory, DefaultRequestParameters.class);
         registerOn(beanFactory, InterceptorListPriorToExecutionExtractor.class);
         registerOn(beanFactory, URLParameterExtractorInterceptor.class);

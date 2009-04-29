@@ -42,7 +42,7 @@ import org.slf4j.LoggerFactory;
 import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.core.DefaultConverters;
 import br.com.caelum.vraptor.core.DefaultInterceptorStack;
-import br.com.caelum.vraptor.core.DefaultMethodParameters;
+import br.com.caelum.vraptor.core.DefaultMethodInfo;
 import br.com.caelum.vraptor.core.DefaultRequestExecution;
 import br.com.caelum.vraptor.core.DefaultMethodInfo;
 import br.com.caelum.vraptor.core.DefaultResult;
@@ -114,7 +114,7 @@ public class PicoProvider implements ContainerProvider {
         singleInterfaceRegister(DefaultPathResolver.class, container);
         singleInterfaceRegister(ParanamerNameProvider.class, container);
         singleInterfaceRegister(DefaultConverters.class, container);
-        singleInterfaceRegister(DefaultMethodParameters.class, container);
+        singleInterfaceRegister(DefaultMethodInfo.class, container);
         singleInterfaceRegister(DefaultRequestParameters.class, container);
         singleInterfaceRegister(DefaultInterceptorStack.class, container);
         singleInterfaceRegister(DefaultRequestExecution.class, container);

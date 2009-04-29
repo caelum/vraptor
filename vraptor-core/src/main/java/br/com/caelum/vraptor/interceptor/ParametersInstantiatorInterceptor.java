@@ -39,7 +39,7 @@ import br.com.caelum.vraptor.Interceptor;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.Localization;
-import br.com.caelum.vraptor.core.MethodParameters;
+import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.ioc.RequestScoped;
@@ -57,14 +57,14 @@ import br.com.caelum.vraptor.validator.Validations;
 public class ParametersInstantiatorInterceptor implements Interceptor {
 
 	private final ParametersProvider provider;
-	private final MethodParameters parameters;
+	private final MethodInfo parameters;
 	private final ParameterNameProvider nameProvider;
 
 	private static final Logger logger = LoggerFactory.getLogger(ParametersInstantiatorInterceptor.class);
 	private final Validator validator;
 	private final Localization localization;
 
-	public ParametersInstantiatorInterceptor(ParametersProvider provider, MethodParameters parameters,
+	public ParametersInstantiatorInterceptor(ParametersProvider provider, MethodInfo parameters,
 			ParameterNameProvider nameProvider, Validator validator, Localization localization) {
 		this.provider = provider;
 		this.parameters = parameters;
@@ -97,7 +97,7 @@ public class ParametersInstantiatorInterceptor implements Interceptor {
 		if (logger.isDebugEnabled()) {
 			logger.debug("Parameter values for " + method + " are " + Arrays.asList(values));
 		}
-		parameters.set(values, nameProvider.parameterNamesFor(method.getMethod()));
+		parameters.setParameters(values, nameProvider.parameterNamesFor(method.getMethod()));
 		stack.next(method, resourceInstance);
 	}
 

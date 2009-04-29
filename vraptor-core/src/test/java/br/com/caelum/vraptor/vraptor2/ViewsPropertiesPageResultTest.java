@@ -16,7 +16,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.vraptor.annotations.Component;
 
-import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.core.VRaptorRequest;
 import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceMethod;
@@ -36,7 +36,7 @@ public class ViewsPropertiesPageResultTest {
     private HttpSession session;
     private Resource resource;
     private RequestDispatcher dispatcher;
-    private RequestInfo requestInfo;
+    private MethodInfo requestInfo;
 	private VRaptorRequest webRequest;
 
     @Before
@@ -46,7 +46,7 @@ public class ViewsPropertiesPageResultTest {
         this.response = mockery.mock(HttpServletResponse.class);
         this.session = mockery.mock(HttpSession.class);
         this.method = mockery.mock(ResourceMethod.class);
-        this.requestInfo = mockery.mock(RequestInfo.class);
+        this.requestInfo = mockery.mock(MethodInfo.class);
         this.resource = mockery.mock(Resource.class);
         this.config = mockery.mock(Config.class);
         this.resolver = mockery.mock(PathResolver.class);

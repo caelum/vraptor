@@ -30,6 +30,7 @@ package br.com.caelum.vraptor.http;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.caelum.vraptor.core.VRaptorRequest;
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
@@ -46,7 +47,7 @@ public class DefaultRouter implements Router {
 		this.rules.addAll(rules.getRules());
 	}
 
-	public ResourceMethod parse(String uri, HttpMethod method) {
+	public ResourceMethod parse(String uri, HttpMethod method, VRaptorRequest request) {
 		for (Rule rule : rules) {
 			if(rule.matches(uri, method)) {
 				return rule.resourceMethod();

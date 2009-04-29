@@ -35,7 +35,7 @@ import java.lang.reflect.Method;
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Interceptor;
 import br.com.caelum.vraptor.core.InterceptorStack;
-import br.com.caelum.vraptor.core.MethodParameters;
+import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.validator.ValidationError;
 import br.com.caelum.vraptor.vraptor2.RequestResult;
@@ -47,10 +47,10 @@ import br.com.caelum.vraptor.vraptor2.RequestResult;
  */
 public class ExecuteMethodInterceptor implements Interceptor {
 
-    private final MethodParameters parameters;
+    private final MethodInfo parameters;
     private final RequestResult result;
 
-    public ExecuteMethodInterceptor(RequestResult result, MethodParameters parameters) {
+    public ExecuteMethodInterceptor(RequestResult result, MethodInfo parameters) {
         this.result = result;
         this.parameters = parameters;
     }
@@ -59,7 +59,7 @@ public class ExecuteMethodInterceptor implements Interceptor {
             throws InterceptionException {
         try {
             Method reflectionMethod = method.getMethod();
-            Object[] parameters = this.parameters.getValues();
+            Object[] parameters = this.parameters.getParameters();
             Object result = reflectionMethod.invoke(resourceInstance, parameters);
             if (result == null) {
                 this.result.setValue("ok");

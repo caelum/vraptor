@@ -18,7 +18,7 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.core.InterceptorStack;
-import br.com.caelum.vraptor.core.MethodParameters;
+import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.interceptor.DogAlike;
 import br.com.caelum.vraptor.resource.DefaultResource;
@@ -31,7 +31,7 @@ public class ExecuteAndViewInterceptorTest {
     private ParametersProvider provider;
     private RequestResult requestResult;
     private InterceptorStack stack;
-    private MethodParameters parameters;
+    private MethodInfo parameters;
 
     @Before
     public void setup() throws NoSuchMethodException {
@@ -39,7 +39,7 @@ public class ExecuteAndViewInterceptorTest {
         this.provider = mockery.mock(ParametersProvider.class);
         this.requestResult = new RequestResult();
         this.stack = mockery.mock(InterceptorStack.class);
-        this.parameters = mockery.mock(MethodParameters.class);
+        this.parameters = mockery.mock(MethodInfo.class);
     }
 
     @Test
@@ -52,7 +52,7 @@ public class ExecuteAndViewInterceptorTest {
             {
                 one(auau).bark();
                 one(stack).next(method, auau);
-                one(parameters).getValues(); will(returnValue(new Object[]{}));
+                one(parameters).getParameters(); will(returnValue(new Object[]{}));
             }
         });
         interceptor.intercept(stack, method, auau);
@@ -70,7 +70,7 @@ public class ExecuteAndViewInterceptorTest {
             {
                 one(auau).bark();
                 will(throwException(exception));
-                one(parameters).getValues(); will(returnValue(new Object[]{}));
+                one(parameters).getParameters(); will(returnValue(new Object[]{}));
             }
         });
         try {
@@ -91,7 +91,7 @@ public class ExecuteAndViewInterceptorTest {
             {
                 one(auau).bark(3);
                 one(stack).next(method, auau);
-                one(parameters).getValues(); will(returnValue(new Object[]{3}));
+                one(parameters).getParameters(); will(returnValue(new Object[]{3}));
             }
         });
         interceptor.intercept(stack, method, auau);
@@ -113,7 +113,7 @@ public class ExecuteAndViewInterceptorTest {
             {
                 one(auau).bark();
                 one(stack).next(method, auau);
-                one(parameters).getValues(); will(returnValue(new Object[]{}));
+                one(parameters).getParameters(); will(returnValue(new Object[]{}));
             }
         });
         interceptor.intercept(stack, method, auau);
@@ -130,7 +130,7 @@ public class ExecuteAndViewInterceptorTest {
             {
                 one(auau).barkResponse(); will(returnValue("response"));
                 one(stack).next(method, auau);
-                one(parameters).getValues(); will(returnValue(new Object[]{}));
+                one(parameters).getParameters(); will(returnValue(new Object[]{}));
             }
         });
         interceptor.intercept(stack, method, auau);

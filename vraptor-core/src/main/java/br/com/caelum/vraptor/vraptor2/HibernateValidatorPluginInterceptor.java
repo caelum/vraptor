@@ -18,7 +18,7 @@ import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Interceptor;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.Localization;
-import br.com.caelum.vraptor.core.MethodParameters;
+import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
@@ -36,11 +36,11 @@ public class HibernateValidatorPluginInterceptor implements Interceptor {
     // sucks, cannot find a way to register without checking for hibernate
     // existence first...
     private final static ValidatorLocator locator = new ValidatorLocator();
-    private final MethodParameters parameters;
+    private final MethodInfo parameters;
 	private final Localization localization;
 
     public HibernateValidatorPluginInterceptor(ValidationErrors errors, ParameterNameProvider provider,
-            HttpServletRequest request, MethodParameters parameters, Localization localization) {
+            HttpServletRequest request, MethodInfo parameters, Localization localization) {
         this.errors = errors;
         this.provider = provider;
         this.request = request;
@@ -61,7 +61,7 @@ public class HibernateValidatorPluginInterceptor implements Interceptor {
             String[] names = provider.parameterNamesFor(method.getMethod());
             for (String path : validate.params()) {
                 try {
-                    Object[] paramValues = parameters.getValues();
+                    Object[] paramValues = parameters.getParameters();
                     Object object = paramFor(names, path, paramValues);
                     BasicValidationErrors newErrors = new BasicValidationErrors();
                     HibernateLogicMethod.validateParam(locator, request, bundle, newErrors, object, path);

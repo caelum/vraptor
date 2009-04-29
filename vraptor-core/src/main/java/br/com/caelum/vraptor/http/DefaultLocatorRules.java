@@ -27,6 +27,7 @@
  */
 package br.com.caelum.vraptor.http;
 
+import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**
@@ -39,7 +40,7 @@ public class DefaultLocatorRules implements LocatorRules {
 	public void add(Rules rules) {
 	}
 
-	public ResourceMethod parse(String uri) {
+	public ResourceMethod parse(String uri, HttpMethod method) {
 		return null;
 	}
 

@@ -17,6 +17,7 @@ import org.junit.Test;
 import org.vraptor.annotations.Component;
 
 import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.core.VRaptorRequest;
 import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.view.PathResolver;
@@ -36,6 +37,7 @@ public class ViewsPropertiesPageResultTest {
     private Resource resource;
     private RequestDispatcher dispatcher;
     private RequestInfo requestInfo;
+	private VRaptorRequest webRequest;
 
     @Before
     public void setup() {
@@ -63,8 +65,8 @@ public class ViewsPropertiesPageResultTest {
                 will(returnValue(resource));
             }
         });
-        this.result = new ViewsPropertiesPageResult(this.config, this.request, this.resolver, this.requestInfo,
-                this.response, this.context);
+        this.webRequest = new VRaptorRequest(context, request, response);
+        this.result = new ViewsPropertiesPageResult(this.config, this.resolver, this.requestInfo, this.webRequest);
     }
 
     @Component

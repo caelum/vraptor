@@ -1,8 +1,5 @@
 package br.com.caelum.vraptor.example;
 
-public class CustomResourceLocator implements ResourceLocator {
+public class CustomResourceLocator {
 	
-	public void register(LocatorRules rules) {
-	}
-
 }

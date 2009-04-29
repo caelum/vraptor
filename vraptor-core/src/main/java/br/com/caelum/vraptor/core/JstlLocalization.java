@@ -1,5 +1,6 @@
 package br.com.caelum.vraptor.core;
 
+import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -96,6 +97,14 @@ public class JstlLocalization implements Localization {
 			return value;
 		}
 		return request.getServletContext().getInitParameter(key);
+	}
+
+	public String getMessage(String key, String[] parameters) {
+		if(!getBundle().containsKey(key)) {
+			return "???" + key + "???";
+		}
+		String content = getBundle().getString(key);
+		return MessageFormat.format(content, parameters);
 	}
 
 }

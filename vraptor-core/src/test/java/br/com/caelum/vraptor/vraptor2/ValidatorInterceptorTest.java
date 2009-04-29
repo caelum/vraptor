@@ -6,9 +6,12 @@ import java.util.ResourceBundle;
 
 import javax.servlet.ServletException;
 
+import org.hamcrest.Description;
+import org.hamcrest.TypeSafeMatcher;
 import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
+import org.vraptor.i18n.FixedMessage;
 import org.vraptor.i18n.Message;
 import org.vraptor.validator.ValidationErrors;
 
@@ -51,6 +54,7 @@ public class ValidatorInterceptorTest {
         mockery.checking(new Expectations() {
             {
                 one(info).getOutjecter(); will(returnValue(outjecter));
+                allowing(localization).getBundle(); will(returnValue(bundle));
             }
         });
         this.interceptor = new OutjectionInterceptor(info);
@@ -103,7 +107,7 @@ public class ValidatorInterceptorTest {
     @Test
     public void forwardToValidationPageWithErrorsIfSomeFound() throws NoSuchMethodException, InterceptionException,
             IOException, ServletException {
-        final Message message = new Message("", "");
+        final Message message = new Message("", "is_not_a_valid_number");
         final MyComponent resourceInstance = new MyComponent() {
             public void validateWithValidation(ValidationErrors errors) {
                 errors.add(message);
@@ -122,11 +126,29 @@ public class ValidatorInterceptorTest {
                 will(returnValue(new Object[0]));
                 one(result).include(with(equal("errors")), with(an(ValidationErrors.class)));
                 one(result).forward("invalid");
-                one(errors).add(message);
+                one(errors).add(with(fixedMessage("invalid")));
                 one(errors).size();
                 will(returnValue(1));
-                one(localization).getBundle(); will(returnValue(bundle));
+                one(localization).getMessage("is_not_a_valid_number"); will(returnValue("invalid"));
             }
+
+			private TypeSafeMatcher<FixedMessage> fixedMessage(final String key) {
+				return new TypeSafeMatcher<FixedMessage>() {
+
+					protected void describeMismatchSafely(FixedMessage item, Description mismatchDescription) {
+						mismatchDescription.appendText(item.getKey());
+					}
+
+					protected boolean matchesSafely(FixedMessage item) {
+						return item.getKey().equals(key);
+					}
+
+					public void describeTo(Description description) {
+						description.appendText(key);
+					}
+					
+				};
+			}
         });
         validator.intercept(stack, method, resourceInstance);
         mockery.assertIsSatisfied();

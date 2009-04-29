@@ -224,7 +224,7 @@ public class OgnlParametersProviderTest {
                 one(container).instanceFor(EmptyElementsRemoval.class); will(returnValue(removal));
             }
         });
-        Object[] params = provider.getParametersFor(mockery.methodFor(MyResource.class, "buyA", House.class));
+        Object[] params = provider.getParametersFor(mockery.methodFor(MyResource.class, "buyA", House.class), errors, null);
         House house = (House) params[0];
         assertThat(house.owners, hasSize(1));
         assertThat(house.owners.get(0), is(equalTo("guilherme")));

@@ -1,6 +1,4 @@
 TODO: 17
-(MUST) - support i18n messages on hamcrest based validations: make sense: SHOULD be
-
 - ClientsController --> clients.list
 
 
@@ -143,6 +141,7 @@ right before ANY release
 	- check all TODOS and do something about them
 
 ONLY AFTER RELEASE
+- support i18n messages on hamcrest based validations
 FileDownload support:
 	- either return FileDownload
 	- result.use(FileDownload)

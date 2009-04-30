@@ -89,6 +89,7 @@ public class DefaultRouterTest {
 			routeFor("/clients/add").is(MyControl.class).add(null);
 		}});
 		assertThat(rules.parse("/clients/add", HttpMethod.POST, request), is(VRaptorMatchers.resourceMethod(method("add",Dog.class))));
+		mockery.assertIsSatisfied();
 	}
 
 	private Method method(String name, Class...types) throws SecurityException, NoSuchMethodException {
@@ -102,6 +103,7 @@ public class DefaultRouterTest {
 			 routeFor("/clients/add").is(MyControl.class).list();
 		}});
 		assertThat(rules.parse("/clients/add", HttpMethod.POST, request), is(VRaptorMatchers.resourceMethod(method("add", Dog.class))));
+		mockery.assertIsSatisfied();
 	}
 
 	@Test
@@ -110,6 +112,7 @@ public class DefaultRouterTest {
 			routeFor("/clients/add").with(HttpMethod.POST).is(MyControl.class).add(null);
 		}});
 		assertThat(rules.parse("/clients/add", HttpMethod.POST, request), is(VRaptorMatchers.resourceMethod(method("add",Dog.class))));
+		mockery.assertIsSatisfied();
 	}
 
 	@Test
@@ -118,6 +121,7 @@ public class DefaultRouterTest {
 			routeFor("/clients/add").with(HttpMethod.GET).is(MyControl.class).add(null);
 		}});
 		assertThat(rules.parse("/clients/add", HttpMethod.POST, request), is(nullValue()));
+		mockery.assertIsSatisfied();
 	}
 
 	@Test
@@ -140,6 +144,7 @@ public class DefaultRouterTest {
 			routeFor("/clients").is(MyControl.class).list(); // if not defined, any http method is allowed
 		}});
 		assertThat(rules.parse("/clients", HttpMethod.POST, request), is(equalTo(method)));
+		mockery.assertIsSatisfied();
 	}
 
 	@Test
@@ -151,6 +156,7 @@ public class DefaultRouterTest {
 		assertThat(request.getParameter("dog.id"), is(equalTo("45")));
 		assertThat(method, is(VRaptorMatchers.resourceMethod(method("show", Dog.class))));
 		Assert.fail();
+		mockery.assertIsSatisfied();
 	}
 
 	@Test
@@ -159,6 +165,7 @@ public class DefaultRouterTest {
 			routeFor("/clients*").with(HttpMethod.POST).is(MyControl.class).unknownMethod();;
 		}});
 		assertThat(rules.parse("/clientsWhatever", HttpMethod.POST, request), is(VRaptorMatchers.resourceMethod(method("unknownMethod"))));
+		mockery.assertIsSatisfied();
 	}
 
 }

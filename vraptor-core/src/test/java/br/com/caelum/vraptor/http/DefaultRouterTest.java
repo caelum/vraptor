@@ -148,6 +148,7 @@ public class DefaultRouterTest {
 			routeFor("/clients/{dog.id}").with(HttpMethod.GET).is(MyControl.class).show(null);;
 		}});
 		ResourceMethod method = rules.parse("/clients/45", HttpMethod.POST, request);
+		assertThat(request.getParameter("dog.id"), is(equalTo("45")));
 		assertThat(method, is(VRaptorMatchers.resourceMethod(method("show", Dog.class))));
 		Assert.fail();
 	}

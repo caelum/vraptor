@@ -1,9 +1,7 @@
 TODO: 16
-(MUST) - niceurls with programmatic support
-(MUST) - niceurls -> path support
+- router usage and router example
 
-- tirar fora a interface parameters, substituir por HSRWrapper
-- if there is a conversion error, ognl should not set - conversion error should set the path variable - conversion should log what is being set
+- if there is a conversion error, ognl should not set - conversion error should set the path variable - conversion should log what is being set... use also an exception to do it
 - ClientsController --> clients.list
 - better exception handling everywhere (search for TODO within exceptions)
 - suppor for kung's register api
@@ -379,3 +377,4 @@ done:
 - 404 component
 - i18n conversion messages
 support HibernateValidator with i18n messages
+- Router support

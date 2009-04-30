@@ -4,7 +4,8 @@ TODO: 16
 3) create @PathRule
 4) support it
 
-- if there is a conversion error, ognl should not set - conversion error should set the path variable - conversion should log what is being set... use also an exception to do it
+- if there is a conversion error, ognl should not set - conversion error should set the path variable 
+- conversion should log what is being set... use also an exception to do it
 - ClientsController --> clients.list
 - better exception handling everywhere (search for TODO within exceptions)
 - suppor for kung's register api
@@ -19,7 +20,7 @@ TODO: 16
 - start/stop:app/session/request support + @Listener, @Startup, @Shutdown/implements Listener 
   onError().goTo("xpto");
   return"invalid" support
-
+- converter registering is causing many log messages
 
 
 ceci: integration test for vraptor-example project
@@ -28,6 +29,7 @@ ceci: integration test for vraptor-example project
 
 
 test and refactor:
+- test with logging on sucks
 a) caelumweb: use logicredirect that is most advanced
 a) test ListNullHandler, GenericNullHandler
 b) EERemoval test

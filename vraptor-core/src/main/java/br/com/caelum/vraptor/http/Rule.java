@@ -37,13 +37,10 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  */
 public interface Rule {
 
-	boolean matches(String uri, HttpMethod method);
-
 	/**
-	 * Returns the resource method for this specifig rule.
-	 * 
-	 * @return the resource method
+	 * Returns the resource method for this specifig rule. Also applies the
+	 * required parameters to this vraptor request.
 	 */
-	ResourceMethod resourceMethod();
+	ResourceMethod matches(String uri, HttpMethod method,VRaptorRequest request);
 
 }

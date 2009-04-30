@@ -39,7 +39,7 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  * @author Guilherme Silveira
  */
 public class DefaultRouter implements Router {
-	
+
 	private final List<Rule> rules = new ArrayList<Rule>();
 
 	public void add(ListOfRules rules) {
@@ -48,8 +48,9 @@ public class DefaultRouter implements Router {
 
 	public ResourceMethod parse(String uri, HttpMethod method, VRaptorRequest request) {
 		for (Rule rule : rules) {
-			if(rule.matches(uri, method)) {
-				return rule.resourceMethod();
+			ResourceMethod value = rule.matches(uri, method, request);
+			if (value != null) {
+				return value;
 			}
 		}
 		return null;

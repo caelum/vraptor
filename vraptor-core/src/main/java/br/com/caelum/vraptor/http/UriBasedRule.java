@@ -28,6 +28,10 @@
 package br.com.caelum.vraptor.http;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
@@ -46,25 +50,39 @@ public class UriBasedRule implements Rule {
 
 	private DefaultResourceMethod resource;
 
-	private final String uri;
 	private HttpMethod method;
+
+	private Pattern pattern;
+	
+	private final List<String> parameters = new ArrayList<String>();
 
 	public UriBasedRule(String uri) {
 		uri = uri.replaceAll("\\*", ".\\*");
 		String finalUri = "";
+		String patternUri = "";
+		String paramName = "";
 		// not using stringbuffer because this is only run in startup
 		boolean ignore = false;
 		for (int i = 0; i < uri.length(); i++) {
 			if (uri.charAt(i) == '{') {
 				ignore = true;
+				patternUri += "(";
+				continue;
 			} else if (uri.charAt(i) == '}') {
 				ignore = false;
 				finalUri += ".*";
+				patternUri += ".*)";
+				parameters.add(paramName);
+				paramName = "";
+				continue;
 			} else if (!ignore) {
+				patternUri += uri.charAt(i);
 				finalUri += uri.charAt(i);
+			} else {
+				paramName += uri.charAt(i);
 			}
 		}
-		this.uri = finalUri;
+		this.pattern = Pattern.compile(patternUri);
 	}
 
 	public UriBasedRule with(HttpMethod method) {
@@ -95,20 +113,26 @@ public class UriBasedRule implements Rule {
 		return (T) e.create();
 	}
 
-	public boolean matches(String uri, HttpMethod method) {
-		return uriMatches(uri) && methodMatches(method);
+	public ResourceMethod matches(String uri, HttpMethod method, VRaptorRequest request) {
+		if(!methodMatches(method)) {
+			return null;
+		}
+		return uriMatches(uri, request);
 	}
 
-	private boolean uriMatches(String uri) {
-		return uri.matches(this.uri);
+	private DefaultResourceMethod uriMatches(String uri, VRaptorRequest request) {
+		Matcher m = pattern.matcher(uri);
+		if(!m.matches()) {
+			return null;
+		}
+		for(int i=1;i<=m.groupCount();i++) {
+			request.setParameter(parameters.get(i-1), m.group(i));
+		}
+		return resource;
 	}
 
 	private boolean methodMatches(HttpMethod method) {
 		return (this.method == null || this.method.equals(method));
-	}
-
-	public ResourceMethod resourceMethod() {
-		return this.resource;
 	}
 
 }

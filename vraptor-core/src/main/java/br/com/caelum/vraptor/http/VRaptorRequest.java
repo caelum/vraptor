@@ -35,12 +35,17 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * A request capable of adding new parameters.
  * @author guilherme silveira
  *
  */
 public class VRaptorRequest extends HttpServletRequestWrapper{
+	
+	private static final Logger logger = LoggerFactory.getLogger(VRaptorRequest.class);
 	
 	private final Hashtable<String, String[]> extraParameters = new Hashtable<String,String[]>();
 
@@ -83,6 +88,7 @@ public class VRaptorRequest extends HttpServletRequestWrapper{
 	}
 
 	public void setParameter(String key, String... value) {
+		logger.debug("Setting " + key + " with " + value);
 		this.extraParameters.put(key,value);
 	}
 

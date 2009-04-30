@@ -16,7 +16,8 @@ TODO: 16
 - automatic REDIRECT depending on accepts
 @Component should not be web acessible
 - start/stop:app/session/request support + @Listener, @Startup, @Shutdown/implements Listener 
-
+  onError().goTo("xpto");
+  return"invalid" support
 
 
 

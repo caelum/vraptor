@@ -39,7 +39,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.jmock.Mockery;
-import org.junit.Assert;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
@@ -126,13 +125,11 @@ public class DefaultRouterTest {
 
 	@Test
 	public void usesTheFirstRegisteredRuleIfDifferentCreatorsWereUsed() throws SecurityException, NoSuchMethodException {
-		final ResourceMethod method = mockery.mock(ResourceMethod.class);
+		final ResourceMethod resourceMethod = mockery.mock(ResourceMethod.class);
 		final Rule customRule = new Rule() {
-			public boolean matches(String uri, HttpMethod method) {
-				return true;
-			}
-			public ResourceMethod resourceMethod() {
-				return method;
+
+			public ResourceMethod matches(String uri, HttpMethod method, VRaptorRequest request) {
+				return resourceMethod;
 			}
 		};
 		rules.add(new ListOfRules() {
@@ -143,19 +140,18 @@ public class DefaultRouterTest {
 		rules.add(new Rules() {{
 			routeFor("/clients").is(MyControl.class).list(); // if not defined, any http method is allowed
 		}});
-		assertThat(rules.parse("/clients", HttpMethod.POST, request), is(equalTo(method)));
+		assertThat(rules.parse("/clients", HttpMethod.POST, request), is(equalTo(resourceMethod)));
 		mockery.assertIsSatisfied();
 	}
 
 	@Test
 	public void registerExtraParametersFromAcessedUrl() throws SecurityException, NoSuchMethodException {
 		rules.add(new Rules() {{
-			routeFor("/clients/{dog.id}").with(HttpMethod.GET).is(MyControl.class).show(null);;
+			routeFor("/clients/{dog.id}").is(MyControl.class).show(null);;
 		}});
 		ResourceMethod method = rules.parse("/clients/45", HttpMethod.POST, request);
 		assertThat(request.getParameter("dog.id"), is(equalTo("45")));
 		assertThat(method, is(VRaptorMatchers.resourceMethod(method("show", Dog.class))));
-		Assert.fail();
 		mockery.assertIsSatisfied();
 	}
 

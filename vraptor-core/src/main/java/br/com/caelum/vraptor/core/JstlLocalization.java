@@ -99,7 +99,7 @@ public class JstlLocalization implements Localization {
 		return request.getServletContext().getInitParameter(key);
 	}
 
-	public String getMessage(String key, String[] parameters) {
+	public String getMessage(String key, String... parameters) {
 		if(!getBundle().containsKey(key)) {
 			return "???" + key + "???";
 		}

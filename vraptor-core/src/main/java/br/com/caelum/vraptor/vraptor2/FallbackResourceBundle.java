@@ -20,7 +20,7 @@ public class FallbackResourceBundle extends ResourceBundle{
 	}
 
 	public Enumeration<String> getKeys() {
-		return new FallbackEnumeration(main, fallback);
+		return new FallbackEnumeration(main.getKeys(), fallback.getKeys());
 	}
 
 	protected Object handleGetObject(String key) {

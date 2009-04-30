@@ -1,5 +1,8 @@
 TODO: 16
-- router usage and router example
+1) router uses by default
+2) customize router on app example
+3) create @PathRule
+4) support it
 
 - if there is a conversion error, ognl should not set - conversion error should set the path variable - conversion should log what is being set... use also an exception to do it
 - ClientsController --> clients.list

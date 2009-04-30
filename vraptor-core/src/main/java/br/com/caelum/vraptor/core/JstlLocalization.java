@@ -2,6 +2,7 @@ package br.com.caelum.vraptor.core;
 
 import java.text.MessageFormat;
 import java.util.Locale;
+import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 import javax.servlet.jsp.jstl.core.Config;
@@ -100,11 +101,12 @@ public class JstlLocalization implements Localization {
 	}
 
 	public String getMessage(String key, String... parameters) {
-		if(!getBundle().containsKey(key)) {
+		try {
+			String content = getBundle().getString(key);
+			return MessageFormat.format(content, parameters);
+		} catch (MissingResourceException e) {
 			return "???" + key + "???";
 		}
-		String content = getBundle().getString(key);
-		return MessageFormat.format(content, parameters);
 	}
 
 }

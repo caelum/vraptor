@@ -29,6 +29,7 @@
  */
 package br.com.caelum.vraptor.resource;
 
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -74,6 +75,10 @@ public class CacheBasedRouter implements Router {
 
 	public void add(ListOfRules rules) {
 		delegate.add(rules);
+	}
+
+	public <T> String urlFor(Class<T> type, Method method, Object... params) {
+		return delegate.urlFor(type, method, params);
 	}
 
 }

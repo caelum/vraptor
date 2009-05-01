@@ -13,13 +13,13 @@ import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.resource.MethodLookupBuilder;
+import br.com.caelum.vraptor.http.Router;
 
 public class DefaultLogicResultTest {
 
     private Mockery mockery;
     private LogicResult logicResult;
-    private MethodLookupBuilder builder;
+    private Router router;
     private HttpServletResponse response;
     private ServletContext context;
     private HttpServletRequest request;
@@ -32,11 +32,11 @@ public class DefaultLogicResultTest {
     @Before
     public void setup() {
         this.mockery = new Mockery();
-        this.builder = mockery.mock(MethodLookupBuilder.class);
+        this.router = mockery.mock(Router.class);
         this.response = mockery.mock(HttpServletResponse.class);
         this.request = mockery.mock(HttpServletRequest.class);
         this.context = mockery.mock(ServletContext.class);
-        this.logicResult = new DefaultLogicResult(builder, response, context, request);
+        this.logicResult = new DefaultLogicResult(response, context, request,router);
     }
 
     @Test
@@ -44,7 +44,7 @@ public class DefaultLogicResultTest {
         final String url = "custom_url";
         mockery.checking(new Expectations() {
             {
-                one(builder).urlFor(MyComponent.class, MyComponent.class.getDeclaredMethod("base"));
+                one(router).urlFor(MyComponent.class, MyComponent.class.getDeclaredMethod("base"));
                 will(returnValue(url));
                 one(request).getRequestDispatcher(url);
                 RequestDispatcher dispatcher = mockery.mock(RequestDispatcher.class);
@@ -62,7 +62,7 @@ public class DefaultLogicResultTest {
         mockery.checking(new Expectations() {
             {
                 one(context).getContextPath(); will(returnValue("/context"));
-                one(builder).urlFor(MyComponent.class, MyComponent.class.getDeclaredMethod("base"));
+                one(router).urlFor(MyComponent.class, MyComponent.class.getDeclaredMethod("base"));
                 will(returnValue(url));
                 one(response).sendRedirect("/context" + url);
             }

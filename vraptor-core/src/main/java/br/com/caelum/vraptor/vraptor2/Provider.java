@@ -38,7 +38,6 @@ import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.core.RequestExecution;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.ioc.pico.PicoProvider;
-import br.com.caelum.vraptor.resource.MethodLookupBuilder;
 import br.com.caelum.vraptor.view.PathResolver;
 import br.com.caelum.vraptor.view.jsp.PageResult;
 

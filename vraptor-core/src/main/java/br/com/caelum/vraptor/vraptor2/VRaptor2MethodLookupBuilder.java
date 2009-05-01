@@ -31,17 +31,12 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.vraptor.annotations.In;
 import org.vraptor.annotations.Logic;
 import org.vraptor.annotations.Out;
 import org.vraptor.annotations.Parameter;
 import org.vraptor.plugin.hibernate.Validate;
 
-import br.com.caelum.vraptor.ioc.ApplicationScoped;
-import br.com.caelum.vraptor.resource.DefaultMethodLookupBuilder;
-import br.com.caelum.vraptor.resource.MethodLookupBuilder;
 import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceAndMethodLookup;
 
@@ -50,16 +45,8 @@ import br.com.caelum.vraptor.resource.ResourceAndMethodLookup;
  * 
  * @author Guilherme Silveira
  */
-@ApplicationScoped
 public class VRaptor2MethodLookupBuilder implements MethodLookupBuilder {
     
-    private static final Logger logger = LoggerFactory.getLogger(VRaptor2MethodLookupBuilder.class);
-    private final DefaultMethodLookupBuilder newBuilder;
-    
-    public VRaptor2MethodLookupBuilder() {
-        this.newBuilder = new DefaultMethodLookupBuilder();
-    }
-
     public ResourceAndMethodLookup lookupFor(Resource resource) {
         Class<?> type = resource.getType();
         if(Info.isOldComponent(resource)) {
@@ -102,10 +89,6 @@ public class VRaptor2MethodLookupBuilder implements MethodLookupBuilder {
             }
         }
         parse(type.getSuperclass(), type);
-    }
-
-    public String urlFor(Class<?> type, Method method, Object... params) {
-        return newBuilder.urlFor(type, method, params);
     }
 
 }

@@ -30,8 +30,8 @@
 package br.com.caelum.vraptor.resource;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import br.com.caelum.vraptor.http.MutableRequest;
 
@@ -51,7 +51,7 @@ public class CacheBasedResourceRegistry implements ResourceRegistry {
         this.delegate = delegate;
     }
 
-    public List<Resource> all() {
+    public Set<Resource> all() {
         return delegate.all();
     }
 

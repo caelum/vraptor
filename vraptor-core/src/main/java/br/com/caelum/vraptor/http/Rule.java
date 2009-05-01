@@ -28,6 +28,7 @@
 package br.com.caelum.vraptor.http;
 
 import br.com.caelum.vraptor.resource.HttpMethod;
+import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**
@@ -42,5 +43,10 @@ public interface Rule {
 	 * required parameters to this vraptor request.
 	 */
 	ResourceMethod matches(String uri, HttpMethod method,MutableRequest request);
+
+	/**
+	 * Returns the resource related to this rule.
+	 */
+	Resource getResource();
 
 }

@@ -43,6 +43,7 @@ import org.slf4j.LoggerFactory;
 import br.com.caelum.vraptor.resource.DefaultResource;
 import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.resource.HttpMethod;
+import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 public class UriBasedRule implements Rule {
@@ -133,6 +134,10 @@ public class UriBasedRule implements Rule {
 
 	private boolean methodMatches(HttpMethod method) {
 		return (this.method == null || this.method.equals(method));
+	}
+
+	public Resource getResource() {
+		return this.resource.getResource();
 	}
 
 }

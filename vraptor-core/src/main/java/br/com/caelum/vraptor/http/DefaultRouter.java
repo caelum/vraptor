@@ -28,7 +28,9 @@
 package br.com.caelum.vraptor.http;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.resource.HttpMethod;
@@ -45,9 +47,14 @@ import br.com.caelum.vraptor.resource.ResourceRegistry;
 public class DefaultRouter implements Router, ResourceRegistry {
 
 	private final List<Rule> rules = new ArrayList<Rule>();
+    private final Set<Resource> resources = new HashSet<Resource>();
 
-	public void add(ListOfRules rules) {
-		this.rules.addAll(rules.getRules());
+	public void add(ListOfRules rulesToAdd) {
+		List<Rule> rules = rulesToAdd.getRules();
+		for(Rule r : rules) {
+			resources.add(r.getResource());
+			this.rules.add(r);
+		}
 	}
 
 	public ResourceMethod parse(String uri, HttpMethod method, MutableRequest request) {
@@ -60,8 +67,8 @@ public class DefaultRouter implements Router, ResourceRegistry {
 		return null;
 	}
 
-	public List<Resource> all() {
-		return null;
+	public Set<Resource> all() {
+		return resources;
 	}
 
 	public void register(Resource... resources) {

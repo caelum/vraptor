@@ -30,7 +30,9 @@
 package br.com.caelum.vraptor.resource;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
@@ -45,7 +47,7 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
 public class DefaultResourceRegistry implements ResourceRegistry {
 
     private final List<ResourceAndMethodLookup> lookup = new ArrayList<ResourceAndMethodLookup>();
-    private final List<Resource> resources = new ArrayList<Resource>();
+    private final Set<Resource> resources = new HashSet<Resource>();
     private final MethodLookupBuilder lookupBuilder;
 
     public DefaultResourceRegistry(MethodLookupBuilder lookupBuilder) {
@@ -70,7 +72,7 @@ public class DefaultResourceRegistry implements ResourceRegistry {
         return null;
     }
 
-    public List<Resource> all() {
+    public Set<Resource> all() {
         return this.resources;
     }
 

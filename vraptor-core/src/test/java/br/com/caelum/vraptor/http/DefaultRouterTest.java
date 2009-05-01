@@ -43,6 +43,7 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
 import br.com.caelum.vraptor.resource.HttpMethod;
+import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 public class DefaultRouterTest {
@@ -130,6 +131,10 @@ public class DefaultRouterTest {
 
 			public ResourceMethod matches(String uri, HttpMethod method, MutableRequest request) {
 				return resourceMethod;
+			}
+
+			public Resource getResource() {
+				return null;
 			}
 		};
 		rules.add(new ListOfRules() {

@@ -29,7 +29,7 @@
  */
 package br.com.caelum.vraptor.resource;
 
-import java.util.List;
+import java.util.Set;
 
 import br.com.caelum.vraptor.http.MutableRequest;
 
@@ -44,6 +44,6 @@ public interface ResourceRegistry {
 
     ResourceMethod parse(String uri, HttpMethod methodName, MutableRequest request);
 
-    List<Resource> all();
+    Set<Resource> all();
 
 }

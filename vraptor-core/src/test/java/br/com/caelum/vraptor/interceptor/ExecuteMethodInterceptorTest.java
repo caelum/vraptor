@@ -67,6 +67,7 @@ public class ExecuteMethodInterceptorTest {
                 one(auau).bark();
                 one(info).getParameters(); will(returnValue(new Object[]{}));
                 one(stack).next(method, auau);
+                one(info).setResult("ok");
             }
         });
         interceptor.intercept(stack, method, auau);
@@ -106,6 +107,7 @@ public class ExecuteMethodInterceptorTest {
                 one(auau).bark(3);
                 one(info).getParameters(); will(returnValue(new Object[]{3}));
                 one(stack).next(method, auau);
+                one(info).setResult("ok");
             }
         });
         interceptor.intercept(stack, method, auau);

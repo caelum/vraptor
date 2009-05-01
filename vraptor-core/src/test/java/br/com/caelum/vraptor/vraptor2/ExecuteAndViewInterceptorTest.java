@@ -27,10 +27,6 @@
  */
 package br.com.caelum.vraptor.vraptor2;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -136,10 +132,10 @@ public class ExecuteAndViewInterceptorTest {
                 one(auau).bark();
                 one(stack).next(method, auau);
                 one(info).getParameters(); will(returnValue(new Object[]{}));
+                one(info).setResult("ok");
             }
         });
         interceptor.intercept(stack, method, auau);
-        assertThat((String)info.getResult(), is(equalTo("ok")));
         mockery.assertIsSatisfied();
     }
 
@@ -153,10 +149,10 @@ public class ExecuteAndViewInterceptorTest {
                 one(auau).barkResponse(); will(returnValue("response"));
                 one(stack).next(method, auau);
                 one(info).getParameters(); will(returnValue(new Object[]{}));
+                one(info).setResult("response");
             }
         });
         interceptor.intercept(stack, method, auau);
-        assertThat((String)info.getResult(), is(equalTo("response")));
         mockery.assertIsSatisfied();
     }
 

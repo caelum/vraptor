@@ -25,8 +25,10 @@ public class ResourcesHolder {
         resources.add(resource);
     }
 
-    public void registerAllOn(Router resourceRegistry) {
+    public void registerAllOn(Router router) {
         LOGGER.info("registering all resources in Router: " + resources);
-        resourceRegistry.register(resources.toArray(new Resource[resources.size()]));
+        for(Resource r : resources) {
+            router.register(r);
+        }
     }
 }

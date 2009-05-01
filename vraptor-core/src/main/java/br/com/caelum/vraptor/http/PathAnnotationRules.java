@@ -40,7 +40,6 @@ public class PathAnnotationRules implements ListOfRules {
 
 	private final List<Rule> rules = new ArrayList<Rule>();
 
-	@SuppressWarnings("unchecked")
 	public PathAnnotationRules(Resource resource) {
 		Class<?> baseType = resource.getType();
 		registerRulesFor(baseType, baseType);

@@ -27,30 +27,17 @@
  */
 package br.com.caelum.vraptor.http;
 
-import javax.servlet.ServletContext;
-
-import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
-import br.com.caelum.vraptor.ioc.pico.DirScanner;
-
 /**
- * Uses the @Path annotation algorithm to look up routes.
+ * No extra routes are registered.
  * 
  * @author guilherme silveira
  */
 public class NoRoutesConfiguration implements RoutesConfiguration {
 
-	private final DirScanner scanner;
-	private final ServletContext context;
-	private final InterceptorRegistry registry;
-
-	public NoRoutesConfiguration(DirScanner scanner, ServletContext context, InterceptorRegistry registry) {
-		this.scanner = scanner;
-		this.context = context;
-		this.registry = registry;
+	public NoRoutesConfiguration() {
 	}
 
 	public void config(Router router) {
-		router.add(new PathAnnotationRules(context, scanner, registry));
 	}
 
 }

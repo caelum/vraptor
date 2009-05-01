@@ -68,7 +68,7 @@ public class CacheBasedRouter implements Router {
         return cachedMap.get(methodName);
     }
 
-    public void register(Resource... resource) {
+    public void register(Resource resource) {
         delegate.register(resource);
     }
 

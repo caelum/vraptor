@@ -28,15 +28,16 @@
 package br.com.caelum.vraptor.http;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.Resource;
-import br.com.caelum.vraptor.resource.ResourceAndMethodLookup;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.resource.VRaptorInfo;
 
@@ -50,7 +51,6 @@ import br.com.caelum.vraptor.resource.VRaptorInfo;
 @ApplicationScoped
 public class DefaultRouter implements Router {
 
-    private final List<ResourceAndMethodLookup> lookup = new ArrayList<ResourceAndMethodLookup>();
 	private final List<Rule> rules = new ArrayList<Rule>();
     private final Set<Resource> resources = new HashSet<Resource>();
 
@@ -95,6 +95,16 @@ public class DefaultRouter implements Router {
 
 	public void register(Resource resource) {
 		add(new PathAnnotationRules(resource));
+	}
+
+	public <T> String urlFor(Class<T> type, Method method, Object... params) {
+        Path path = method.getAnnotation(Path.class);
+        if (path != null) {
+            String value = path.value();
+            value = value.replaceAll("\\*", "");
+            return value;
+        }
+        return "/" + type.getSimpleName() + "/" + method.getName();
 	}
 
 }

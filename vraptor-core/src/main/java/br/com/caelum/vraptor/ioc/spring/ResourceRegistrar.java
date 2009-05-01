@@ -1,11 +1,10 @@
 package br.com.caelum.vraptor.ioc.spring;
 
-import br.com.caelum.vraptor.ioc.ApplicationScoped;
-import br.com.caelum.vraptor.resource.ResourceRegistry;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 
-import javax.annotation.PostConstruct;
+import br.com.caelum.vraptor.http.Router;
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
 /**
  * @author Fabio Kung
@@ -13,10 +12,10 @@ import javax.annotation.PostConstruct;
 @ApplicationScoped
 public class ResourceRegistrar implements BeanPostProcessor {
     private final ResourcesHolder resourcesHolder;
-    private final ResourceRegistry resourceRegistry;
+    private final Router resourceRegistry;
     private boolean run;
 
-    public ResourceRegistrar(ResourcesHolder resourcesHolder, ResourceRegistry resourceRegistry) {
+    public ResourceRegistrar(ResourcesHolder resourcesHolder, Router resourceRegistry) {
         this.resourcesHolder = resourcesHolder;
         this.resourceRegistry = resourceRegistry;
     }

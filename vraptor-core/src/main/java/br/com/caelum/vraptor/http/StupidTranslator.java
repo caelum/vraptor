@@ -37,7 +37,6 @@ import org.slf4j.LoggerFactory;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.resource.ResourceRegistry;
 
 /**
  * Basic url to resource method translator.
@@ -47,12 +46,12 @@ import br.com.caelum.vraptor.resource.ResourceRegistry;
 @ApplicationScoped
 public class StupidTranslator implements UrlToResourceTranslator {
 
-    private final ResourceRegistry registry;
+    private final Router registry;
 
     private static final Logger logger = LoggerFactory.getLogger(StupidTranslator.class);
     static final String INCLUDE_REQUEST_URI = "javax.servlet.include.request_uri";
 
-    public StupidTranslator(ResourceRegistry registry) {
+    public StupidTranslator(Router registry) {
         this.registry = registry;
     }
 

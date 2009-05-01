@@ -27,13 +27,13 @@ import br.com.caelum.vraptor.core.ForwardToDefaultViewInterceptor;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.core.RequestExecution;
-import br.com.caelum.vraptor.core.MethodInfo;
-import br.com.caelum.vraptor.core.URLParameterExtractorInterceptor;
 import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.core.URLParameterExtractorInterceptor;
 import br.com.caelum.vraptor.http.EmptyElementsRemoval;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.http.RequestParameters;
+import br.com.caelum.vraptor.http.Router;
 import br.com.caelum.vraptor.http.TypeCreator;
 import br.com.caelum.vraptor.http.UrlToResourceTranslator;
 import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
@@ -45,7 +45,6 @@ import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
 import br.com.caelum.vraptor.resource.MethodLookupBuilder;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.resource.ResourceNotFoundHandler;
-import br.com.caelum.vraptor.resource.ResourceRegistry;
 import br.com.caelum.vraptor.view.LogicResult;
 import br.com.caelum.vraptor.view.PathResolver;
 import br.com.caelum.vraptor.view.jsp.PageResult;
@@ -75,7 +74,7 @@ public abstract class GenericContainerTest {
     @Test
     public void canProvideAllApplicationScopedComponents() {
         Class<?>[] components = new Class[] { ServletContext.class, UrlToResourceTranslator.class,
-                ResourceRegistry.class, TypeCreator.class, InterceptorRegistry.class, MethodLookupBuilder.class,
+                Router.class, TypeCreator.class, InterceptorRegistry.class, MethodLookupBuilder.class,
                 ParameterNameProvider.class, Converters.class, EmptyElementsRemoval.class };
         checkAvailabilityFor(true, components);
         mockery.assertIsSatisfied();

@@ -18,10 +18,10 @@ import org.picocontainer.PicoBuilder;
 
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor.http.Router;
 import br.com.caelum.vraptor.interceptor.DefaultInterceptorRegistry;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.resource.ResourceRegistry;
 
 public class PicoContainersProviderTest {
 
@@ -36,7 +36,7 @@ public class PicoContainersProviderTest {
         this.mockery = new Mockery();
         this.container = new PicoBuilder().withCaching().build();
         container.addComponent(DefaultInterceptorRegistry.class);
-        final ResourceRegistry registry = mockery.mock(ResourceRegistry.class, "registry");
+        final Router registry = mockery.mock(Router.class, "registry");
         container.addComponent(registry);
         this.request = mockery.mock(MutableRequest.class, "request");
         final HttpSession session = mockery.mock(HttpSession.class, "session");

@@ -36,22 +36,23 @@ import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
 
+import br.com.caelum.vraptor.http.Router;
 import br.com.caelum.vraptor.http.VRaptorRequest;
 
-public class CacheBasedResourceRegistryTest {
+public class CacheBasedRouterTest {
 
     private Mockery mockery;
-    private CacheBasedResourceRegistry registry;
-    private ResourceRegistry delegate;
+    private CacheBasedRouter registry;
+    private Router delegate;
     private ResourceMethod resource;
 	private VRaptorRequest webRequest;
 
     @Before
     public void setup() {
         this.mockery = new Mockery();
-        this.delegate = mockery.mock(ResourceRegistry.class);
+        this.delegate = mockery.mock(Router.class);
         this.resource = mockery.mock(ResourceMethod.class);
-        this.registry = new CacheBasedResourceRegistry(delegate);
+        this.registry = new CacheBasedRouter(delegate);
         this.webRequest = new VRaptorRequest(mockery.mock(HttpServletRequest.class));
         mockery.checking(new Expectations() {
             {

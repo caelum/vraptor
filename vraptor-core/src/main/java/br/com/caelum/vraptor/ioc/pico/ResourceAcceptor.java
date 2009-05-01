@@ -32,16 +32,16 @@ import java.lang.annotation.Annotation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import br.com.caelum.vraptor.http.Router;
 import br.com.caelum.vraptor.ioc.Stereotype;
 import br.com.caelum.vraptor.resource.DefaultResource;
-import br.com.caelum.vraptor.resource.ResourceRegistry;
 
 public class ResourceAcceptor implements Acceptor {
 
     private static final Logger logger = LoggerFactory.getLogger(ResourceAcceptor.class);
-    private final ResourceRegistry resourceRegistry;
+    private final Router resourceRegistry;
 
-    public ResourceAcceptor(ResourceRegistry registry) {
+    public ResourceAcceptor(Router registry) {
         resourceRegistry = registry;
     }
 

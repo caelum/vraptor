@@ -1,15 +1,6 @@
 package br.com.caelum.vraptor;
 
-import br.com.caelum.vraptor.config.BasicConfiguration;
-import br.com.caelum.vraptor.core.Execution;
-import br.com.caelum.vraptor.core.RequestExecution;
-import br.com.caelum.vraptor.core.StaticContentHandler;
-import br.com.caelum.vraptor.core.RequestInfo;
-import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.ioc.ContainerProvider;
-import org.jmock.Expectations;
-import org.junit.Before;
-import org.junit.Test;
+import java.io.IOException;
 
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -19,7 +10,18 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+
+import org.jmock.Expectations;
+import org.junit.Before;
+import org.junit.Test;
+
+import br.com.caelum.vraptor.config.BasicConfiguration;
+import br.com.caelum.vraptor.core.Execution;
+import br.com.caelum.vraptor.core.RequestExecution;
+import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.core.StaticContentHandler;
+import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor.ioc.ContainerProvider;
 
 public class VRaptorTest {
 

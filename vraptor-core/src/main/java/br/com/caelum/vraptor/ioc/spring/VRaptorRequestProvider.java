@@ -1,8 +1,9 @@
 package br.com.caelum.vraptor.ioc.spring;
 
+import org.springframework.beans.factory.FactoryBean;
+
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
-import org.springframework.beans.factory.FactoryBean;
 
 /**
  * @author Fabio Kung

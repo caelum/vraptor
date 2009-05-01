@@ -1,9 +1,10 @@
 package br.com.caelum.vraptor.ioc.spring;
 
-import br.com.caelum.vraptor.ioc.ApplicationScoped;
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.FactoryBean;
 
-import javax.servlet.http.HttpServletRequest;
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
 /**
  * Provides the current javax.servlet.http.HttpServletRequest object, provided that Spring has registered it for the

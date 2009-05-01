@@ -29,14 +29,14 @@
  */
 package br.com.caelum.vraptor.core;
 
+import javax.servlet.http.HttpServletRequest;
+
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Interceptor;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.view.Results;
 import br.com.caelum.vraptor.vraptor2.RequestResult;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * Intercepts the request and forwards to the default view if no view was

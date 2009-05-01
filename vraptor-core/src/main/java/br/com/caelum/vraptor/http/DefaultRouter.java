@@ -39,7 +39,6 @@ import br.com.caelum.vraptor.resource.MethodLookupBuilder;
 import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceAndMethodLookup;
 import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.resource.ResourceRegistry;
 import br.com.caelum.vraptor.resource.VRaptorInfo;
 
 /**
@@ -50,7 +49,7 @@ import br.com.caelum.vraptor.resource.VRaptorInfo;
  * @author Guilherme Silveira
  */
 @ApplicationScoped
-public class DefaultRouter implements Router, ResourceRegistry {
+public class DefaultRouter implements Router {
 
     private final List<ResourceAndMethodLookup> lookup = new ArrayList<ResourceAndMethodLookup>();
 	private final List<Rule> rules = new ArrayList<Rule>();

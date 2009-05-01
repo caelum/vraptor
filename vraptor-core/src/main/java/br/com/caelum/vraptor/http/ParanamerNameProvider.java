@@ -8,11 +8,12 @@ import java.util.Arrays;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
+
 import com.thoughtworks.paranamer.BytecodeReadingParanamer;
 import com.thoughtworks.paranamer.CachingParanamer;
 import com.thoughtworks.paranamer.ParameterNamesNotFoundException;
 import com.thoughtworks.paranamer.Paranamer;
-import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
 /**
  * Paranamer based parameter name provider provides parameter names based on

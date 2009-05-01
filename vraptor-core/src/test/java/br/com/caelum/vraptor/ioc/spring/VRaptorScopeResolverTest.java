@@ -7,6 +7,7 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.ScopeMetadata;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.web.context.WebApplicationContext;
+
 import br.com.caelum.vraptor.ioc.spring.components.ApplicationScopedComponent;
 import br.com.caelum.vraptor.ioc.spring.components.DummyComponent;
 import br.com.caelum.vraptor.ioc.spring.components.RequestScopedComponent;

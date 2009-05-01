@@ -1,6 +1,9 @@
 package br.com.caelum.vraptor.http;
 
+import java.util.Set;
+
 import br.com.caelum.vraptor.resource.HttpMethod;
+import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**
@@ -13,5 +16,9 @@ public interface Router {
 	void add(ListOfRules rules);
 
 	ResourceMethod parse(String uri, HttpMethod method, MutableRequest request);
+
+    void register(Resource... resources);
+
+    Set<Resource> all();
 
 }

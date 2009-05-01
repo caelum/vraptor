@@ -39,9 +39,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.Interceptor;
+import br.com.caelum.vraptor.http.Router;
 import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
-import br.com.caelum.vraptor.resource.ResourceRegistry;
 
 /**
  * Searchs for resources in the web's web-inf classes directory.
@@ -57,12 +57,12 @@ public class WebInfClassesScanner implements ResourceLoader {
 
 	private final DirScanner<?> scanner;
 
-	private final ResourceRegistry registry;
+	private final Router registry;
 
 	private final InterceptorRegistry interceptors;
 
 	@SuppressWarnings("unchecked")
-	public WebInfClassesScanner(ServletContext context, DirScanner scanner, ResourceRegistry registry,
+	public WebInfClassesScanner(ServletContext context, DirScanner scanner, Router registry,
 			InterceptorRegistry interceptors) {
 		this.registry = registry;
 		this.interceptors = interceptors;

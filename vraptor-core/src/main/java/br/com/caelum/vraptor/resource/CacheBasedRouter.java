@@ -33,7 +33,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import br.com.caelum.vraptor.http.ListOfRules;
 import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor.http.Router;
 
 /**
  * A cached resource registry that avoids iterating over the entire set just in
@@ -41,13 +43,13 @@ import br.com.caelum.vraptor.http.MutableRequest;
  *
  * @author Guilherme Silveira
  */
-public class CacheBasedResourceRegistry implements ResourceRegistry {
+public class CacheBasedRouter implements Router {
 
-    private final ResourceRegistry delegate;
+    private final Router delegate;
 
     private final Map<String, Map<HttpMethod, ResourceMethod>> cache = new HashMap<String, Map<HttpMethod, ResourceMethod>>();
 
-    public CacheBasedResourceRegistry(ResourceRegistry delegate) {
+    public CacheBasedRouter(Router delegate) {
         this.delegate = delegate;
     }
 
@@ -69,5 +71,9 @@ public class CacheBasedResourceRegistry implements ResourceRegistry {
     public void register(Resource... resource) {
         delegate.register(resource);
     }
+
+	public void add(ListOfRules rules) {
+		delegate.add(rules);
+	}
 
 }

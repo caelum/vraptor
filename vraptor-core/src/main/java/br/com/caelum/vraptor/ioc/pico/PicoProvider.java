@@ -44,14 +44,14 @@ import br.com.caelum.vraptor.core.DefaultConverters;
 import br.com.caelum.vraptor.core.DefaultInterceptorStack;
 import br.com.caelum.vraptor.core.DefaultMethodInfo;
 import br.com.caelum.vraptor.core.DefaultRequestExecution;
-import br.com.caelum.vraptor.core.DefaultMethodInfo;
 import br.com.caelum.vraptor.core.DefaultResult;
 import br.com.caelum.vraptor.core.Execution;
 import br.com.caelum.vraptor.core.ForwardToDefaultViewInterceptor;
 import br.com.caelum.vraptor.core.JstlLocalization;
-import br.com.caelum.vraptor.core.URLParameterExtractorInterceptor;
 import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.core.URLParameterExtractorInterceptor;
 import br.com.caelum.vraptor.http.DefaultRequestParameters;
+import br.com.caelum.vraptor.http.DefaultRouter;
 import br.com.caelum.vraptor.http.EmptyElementsRemoval;
 import br.com.caelum.vraptor.http.OgnlParametersProvider;
 import br.com.caelum.vraptor.http.ParanamerNameProvider;
@@ -67,7 +67,6 @@ import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
 import br.com.caelum.vraptor.resource.DefaultMethodLookupBuilder;
 import br.com.caelum.vraptor.resource.DefaultResourceNotFoundHandler;
-import br.com.caelum.vraptor.resource.DefaultResourceRegistry;
 import br.com.caelum.vraptor.validator.DefaultValidator;
 import br.com.caelum.vraptor.view.DefaultLogicResult;
 import br.com.caelum.vraptor.view.DefaultPathResolver;
@@ -96,7 +95,7 @@ public class PicoProvider implements ContainerProvider {
         registerComponents(getContainers());
         containersProvider.init();
         // TODO: cache
-        // cache(CacheBasedResourceRegistry.class, ResourceRegistry.class);
+        // cache(CacheBasedRouter.class, Router.class);
         // cache(CacheBasedTypeCreator.class, AsmBasedTypeCreator.class);
     }
 
@@ -105,7 +104,7 @@ public class PicoProvider implements ContainerProvider {
      */
     protected void registerComponents(ComponentRegistry container) {
         singleInterfaceRegister(StupidTranslator.class, container);
-        singleInterfaceRegister(DefaultResourceRegistry.class, container);
+        singleInterfaceRegister(DefaultRouter.class, container);
         singleInterfaceRegister(DefaultResourceNotFoundHandler.class, container);
         singleInterfaceRegister(DefaultDirScanner.class, container);
         singleInterfaceRegister(WebInfClassesScanner.class, container);

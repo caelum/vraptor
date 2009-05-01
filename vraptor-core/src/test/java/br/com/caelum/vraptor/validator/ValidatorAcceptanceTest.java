@@ -1,6 +1,5 @@
 package br.com.caelum.vraptor.validator;
 
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
 import java.io.IOException;

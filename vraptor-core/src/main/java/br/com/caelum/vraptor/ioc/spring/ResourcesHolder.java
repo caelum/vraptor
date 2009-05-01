@@ -1,14 +1,15 @@
 package br.com.caelum.vraptor.ioc.spring;
 
-import br.com.caelum.vraptor.ioc.ApplicationScoped;
-import br.com.caelum.vraptor.resource.Resource;
-import br.com.caelum.vraptor.resource.ResourceRegistry;
+import java.util.Collection;
+import java.util.HashSet;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import java.util.Collection;
-import java.util.HashSet;
+import br.com.caelum.vraptor.http.Router;
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
+import br.com.caelum.vraptor.resource.Resource;
 
 /**
  * @author Fabio Kung
@@ -24,8 +25,8 @@ public class ResourcesHolder {
         resources.add(resource);
     }
 
-    public void registerAllOn(ResourceRegistry resourceRegistry) {
-        LOGGER.info("registering all resources in ResourceRegistry: " + resources);
+    public void registerAllOn(Router resourceRegistry) {
+        LOGGER.info("registering all resources in Router: " + resources);
         resourceRegistry.register(resources.toArray(new Resource[resources.size()]));
     }
 }

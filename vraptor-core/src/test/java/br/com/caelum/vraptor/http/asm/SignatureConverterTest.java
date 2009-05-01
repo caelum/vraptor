@@ -8,8 +8,6 @@ import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.http.asm.SignatureConverter;
-
 public class SignatureConverterTest {
 
     private SignatureConverter converter;

@@ -13,12 +13,11 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.resource.ResourceRegistry;
 
 public class StupidTranslatorTest {
 	
 	private Mockery mockery;
-	private ResourceRegistry registry;
+	private Router registry;
 	private StupidTranslator translator;
 	private HttpServletRequest request;
 	private VRaptorRequest webRequest;
@@ -26,7 +25,7 @@ public class StupidTranslatorTest {
 	@Before
 	public void setup() {
 		this.mockery = new Mockery();
-		this.registry = mockery.mock(ResourceRegistry.class);
+		this.registry = mockery.mock(Router.class);
 		this.translator = new StupidTranslator(registry);
 		this.request = mockery.mock(HttpServletRequest.class);
         this.webRequest = new VRaptorRequest(request);

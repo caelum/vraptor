@@ -29,12 +29,13 @@
  */
 package br.com.caelum.vraptor.ioc.spring;
 
-import br.com.caelum.vraptor.ComponentRegistry;
-import br.com.caelum.vraptor.ioc.Container;
-
-import javax.servlet.ServletContext;
 import java.util.Collection;
 import java.util.HashSet;
+
+import javax.servlet.ServletContext;
+
+import br.com.caelum.vraptor.ComponentRegistry;
+import br.com.caelum.vraptor.ioc.Container;
 
 /**
  * @author Fabio Kung

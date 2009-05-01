@@ -1,7 +1,5 @@
 package br.com.caelum.vraptor.vraptor2;
 
-import java.io.IOException;
-
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.RequestExecution;

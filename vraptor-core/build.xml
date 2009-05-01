@@ -87,7 +87,7 @@
 				<include name="**/*Test.class" />
 			</fileset>
 		</cobertura-instrument>
-		<fileset dir="${tmp.test.classes.dir}" id="unittests.fileset" includes="**/*NullHandlerTest.class" />
+		<fileset dir="${tmp.test.classes.dir}" id="unittests.fileset" includes="**/*Test.class" />
 		<junit fork="yes" forkmode="once" printsummary="false" showoutput="true" failureproperty="failed-test">
 			<sysproperty key="net.sourceforge.cobertura.datafile" file="cobertura.ser" />
 

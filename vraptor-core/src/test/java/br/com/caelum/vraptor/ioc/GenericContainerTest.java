@@ -31,7 +31,6 @@ import br.com.caelum.vraptor.http.EmptyElementsRemoval;
 import br.com.caelum.vraptor.http.NoRoutesConfiguration;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParametersProvider;
-import br.com.caelum.vraptor.http.RequestParameters;
 import br.com.caelum.vraptor.http.Router;
 import br.com.caelum.vraptor.http.TypeCreator;
 import br.com.caelum.vraptor.http.UrlToResourceTranslator;
@@ -83,7 +82,7 @@ public abstract class GenericContainerTest {
     public void canProvideAllRequestScopedComponents() {
         checkAvailabilityFor(false, HttpServletRequest.class, HttpServletResponse.class, RequestInfo.class,
                 HttpSession.class, ParametersInstantiatorInterceptor.class, MethodInfo.class,
-                RequestParameters.class, InterceptorListPriorToExecutionExtractor.class,
+                InterceptorListPriorToExecutionExtractor.class,
                 URLParameterExtractorInterceptor.class, InterceptorStack.class, RequestExecution.class,
                 ResourceLookupInterceptor.class, InstantiateInterceptor.class, Result.class,
                 ExecuteMethodInterceptor.class, PageResult.class, ParametersProvider.class, MethodInfo.class,

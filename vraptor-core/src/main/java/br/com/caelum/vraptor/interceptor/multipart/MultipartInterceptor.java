@@ -7,6 +7,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
@@ -16,7 +17,7 @@ import org.slf4j.LoggerFactory;
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Interceptor;
 import br.com.caelum.vraptor.core.InterceptorStack;
-import br.com.caelum.vraptor.http.RequestParameters;
+import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**
@@ -36,9 +37,9 @@ public class MultipartInterceptor implements Interceptor {
 
     private final HttpServletRequest request;
 
-    private final RequestParameters parameters;
+    private final MutableRequest parameters;
 
-    public MultipartInterceptor(HttpServletRequest request, RequestParameters parameters) throws IOException {
+    public MultipartInterceptor(HttpServletRequest request, MutableRequest parameters) throws IOException {
         this.request = request;
         this.parameters = parameters;
         this.sizeLimit = 2 * 1024 * 1024;
@@ -89,7 +90,7 @@ public class MultipartInterceptor implements Interceptor {
 
     @SuppressWarnings("deprecation")
     public boolean accepts(ResourceMethod method) {
-        return ServletFileUpload.isMultipartContent(request);
+        return FileUploadBase.isMultipartContent(request);
     }
 
 }

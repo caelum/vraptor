@@ -9,7 +9,7 @@ import org.apache.commons.fileupload.FileItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import br.com.caelum.vraptor.http.RequestParameters;
+import br.com.caelum.vraptor.http.MutableRequest;
 
 /**
  * Processes all elements in a multipart request.
@@ -22,9 +22,9 @@ public class MultipartItemsProcessor {
     private static final Logger logger = LoggerFactory.getLogger(MultipartItemsProcessor.class);
     private final List<FileItem> items;
     private final HttpServletRequest request;
-    private final RequestParameters parameters;
+    private final MutableRequest parameters;
 
-    public MultipartItemsProcessor(List<FileItem> items, HttpServletRequest request, RequestParameters parameters) {
+    public MultipartItemsProcessor(List<FileItem> items, HttpServletRequest request, MutableRequest parameters) {
         this.items = items;
         this.request = request;
         this.parameters = parameters;
@@ -33,7 +33,7 @@ public class MultipartItemsProcessor {
     public void process() {
         for (FileItem item : items) {
             if (item.isFormField()) {
-                parameters.set(item.getFieldName(), new String[] { item.getString() });
+                parameters.setParameter(item.getFieldName(), new String[] { item.getString() });
                 continue;
             }
             if (!item.getName().trim().equals("")) {
@@ -43,7 +43,7 @@ public class MultipartItemsProcessor {
                     item.write(file);
                     UploadedFile fileInformation = new DefaultUploadedFile(file, item.getName(),
                             item.getContentType());
-                    parameters.set(item.getFieldName(), new String[] { file.getAbsolutePath() });
+                    parameters.setParameter(item.getFieldName(), new String[] { file.getAbsolutePath() });
                     request.setAttribute(item.getFieldName(), fileInformation);
                     logger.info("Uploaded file: " + item.getFieldName() + " with " + fileInformation);
                 } catch (Exception e) {

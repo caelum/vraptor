@@ -29,6 +29,7 @@ package br.com.caelum.vraptor.http;
 
 import java.util.Arrays;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 
@@ -80,9 +81,10 @@ public class VRaptorRequest extends HttpServletRequestWrapper implements Mutable
 		return super.getParameterValues(name);
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public Map getParameterMap() {
-		Map complete = super.getParameterMap();
+		Map complete = new HashMap(super.getParameterMap());
 		complete.putAll(this.extraParameters);
 		return complete;
 	}

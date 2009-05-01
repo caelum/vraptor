@@ -32,8 +32,11 @@ package br.com.caelum.vraptor.http;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.ResourceBundle;
+
+import javax.servlet.http.HttpServletRequest;
 
 import ognl.NoSuchPropertyException;
 import ognl.Ognl;
@@ -67,11 +70,11 @@ public class OgnlParametersProvider implements ParametersProvider {
     
     private static final Logger logger = LoggerFactory.getLogger(OgnlParametersProvider.class);
 
-    private final RequestParameters parameters;
+    private final HttpServletRequest parameters;
 
     private final EmptyElementsRemoval removal; 
 
-    public OgnlParametersProvider(TypeCreator creator, Container container, Converters converters, ParameterNameProvider provider, RequestParameters parameters, EmptyElementsRemoval removal) {
+    public OgnlParametersProvider(TypeCreator creator, Container container, Converters converters, ParameterNameProvider provider, HttpServletRequest parameters, EmptyElementsRemoval removal) {
         this.creator = creator;
         this.container = container;
         this.converters = converters;
@@ -93,8 +96,9 @@ public class OgnlParametersProvider implements ParametersProvider {
             
 			OgnlToConvertersController controller = new OgnlToConvertersController(converters, errors, bundle);
             Ognl.setTypeConverter(context, controller);
-            for(String key : parameters.getNames()) {
-                String[] values = parameters.get(key);
+            for(Enumeration enumeration = parameters.getParameterNames(); enumeration.hasMoreElements();) {
+            	String key = (String) enumeration.nextElement();
+                String[] values = parameters.getParameterValues(key);
                 try {
                     if(logger.isDebugEnabled()) {
                         logger.debug("Applying " + key + " with " + Arrays.toString(values));

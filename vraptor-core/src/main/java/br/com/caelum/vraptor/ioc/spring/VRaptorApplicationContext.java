@@ -33,7 +33,6 @@ import br.com.caelum.vraptor.core.DefaultResult;
 import br.com.caelum.vraptor.core.ForwardToDefaultViewInterceptor;
 import br.com.caelum.vraptor.core.JstlLocalization;
 import br.com.caelum.vraptor.core.URLParameterExtractorInterceptor;
-import br.com.caelum.vraptor.http.DefaultRequestParameters;
 import br.com.caelum.vraptor.http.DefaultRouter;
 import br.com.caelum.vraptor.http.EmptyElementsRemoval;
 import br.com.caelum.vraptor.http.NoRoutesConfiguration;
@@ -108,7 +107,6 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
         registerOn(beanFactory, RequestResult.class);
         registerOn(beanFactory, ParametersInstantiatorInterceptor.class);
         registerOn(beanFactory, DefaultMethodInfo.class);
-        registerOn(beanFactory, DefaultRequestParameters.class);
         registerOn(beanFactory, InterceptorListPriorToExecutionExtractor.class);
         registerOn(beanFactory, URLParameterExtractorInterceptor.class);
         registerOn(beanFactory, DefaultInterceptorStack.class);

@@ -12,6 +12,6 @@ public interface Router {
 
 	void add(ListOfRules rules);
 
-	ResourceMethod parse(String uri, HttpMethod method, VRaptorRequest request);
+	ResourceMethod parse(String uri, HttpMethod method, MutableRequest request);
 
 }

@@ -50,25 +50,25 @@ public class DefaultResourceAndMethodLookup implements ResourceAndMethodLookup {
 		this.resource = resource;
 	}
 
-	public ResourceMethod methodFor(String pathUriComponent, String httpMethodName) {
-	    return methodFor(resource.getType(), resource.getType(), pathUriComponent, httpMethodName);
+	public ResourceMethod methodFor(String pathUriComponent, HttpMethod httpMethodName) {
+		return methodFor(resource.getType(), resource.getType(), pathUriComponent, httpMethodName);
 	}
 
-	private ResourceMethod methodFor(Class<?> resourceType, Class<?> searchingType, String pathUriComponent, String httpMethodName) {
-	    if(searchingType.equals(Object.class)) {
-	        return null;
-	    }
-        for (Method javaMethod : searchingType.getDeclaredMethods()) {
-            if (isEligible(javaMethod) 
-                && pathAccepted(pathUriComponent, resourceType, javaMethod) 
-                && httpMethodAccepted(httpMethodName, javaMethod)) {
-                return new DefaultResourceMethod(resource, javaMethod);
-            }
-        }
-        return methodFor(resourceType, searchingType.getSuperclass(), pathUriComponent, httpMethodName);
-    }
+	private ResourceMethod methodFor(Class<?> resourceType, Class<?> searchingType, String pathUriComponent,
+			HttpMethod httpMethod) {
+		if (searchingType.equals(Object.class)) {
+			return null;
+		}
+		for (Method javaMethod : searchingType.getDeclaredMethods()) {
+			if (isEligible(javaMethod) && pathAccepted(pathUriComponent, resourceType, javaMethod)
+					&& httpMethodAccepted(httpMethod, javaMethod)) {
+				return new DefaultResourceMethod(resource, javaMethod);
+			}
+		}
+		return methodFor(resourceType, searchingType.getSuperclass(), pathUriComponent, httpMethod);
+	}
 
-    private boolean isEligible(Method javaMethod) {
+	private boolean isEligible(Method javaMethod) {
 		return Modifier.isPublic(javaMethod.getModifiers()) && !Modifier.isStatic(javaMethod.getModifiers());
 	}
 
@@ -81,7 +81,7 @@ public class DefaultResourceAndMethodLookup implements ResourceAndMethodLookup {
 		if (path == null) {
 			return false;
 		}
-		
+
 		String regexFromWildcards = path.value().replaceAll("\\*", ".\\*");
 		return id.matches(regexFromWildcards);
 	}
@@ -90,9 +90,8 @@ public class DefaultResourceAndMethodLookup implements ResourceAndMethodLookup {
 		return ("/" + resourceType.getSimpleName() + "/" + method.getName()).equals(id);
 	}
 
-	private boolean httpMethodAccepted(String httpMethodName, Method javaMethod) {
-		Class<? extends Annotation> httpMethodAnnotation = HttpMethod.valueOf(httpMethodName)
-				.getAnnotation();
+	private boolean httpMethodAccepted(HttpMethod httpMethod, Method javaMethod) {
+		Class<? extends Annotation> httpMethodAnnotation = httpMethod.getAnnotation();
 		return javaMethod.isAnnotationPresent(httpMethodAnnotation)
 				|| noAnnotationPresent(HttpMethod.values(), javaMethod);
 	}

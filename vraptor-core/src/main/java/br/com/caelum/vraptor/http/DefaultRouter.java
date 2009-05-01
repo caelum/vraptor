@@ -50,7 +50,7 @@ public class DefaultRouter implements Router, ResourceRegistry {
 		this.rules.addAll(rules.getRules());
 	}
 
-	public ResourceMethod parse(String uri, HttpMethod method, VRaptorRequest request) {
+	public ResourceMethod parse(String uri, HttpMethod method, MutableRequest request) {
 		for (Rule rule : rules) {
 			ResourceMethod value = rule.matches(uri, method, request);
 			if (value != null) {

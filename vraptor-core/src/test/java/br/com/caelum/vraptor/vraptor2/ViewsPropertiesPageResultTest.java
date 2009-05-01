@@ -6,7 +6,6 @@ import java.util.HashMap;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -18,6 +17,7 @@ import org.vraptor.annotations.Component;
 
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.view.PathResolver;
@@ -28,7 +28,7 @@ public class ViewsPropertiesPageResultTest {
     private Mockery mockery;
     private ViewsPropertiesPageResult result;
     private Config config;
-    private HttpServletRequest request;
+    private MutableRequest request;
     private PathResolver resolver;
     private ResourceMethod method;
     private HttpServletResponse response;
@@ -42,7 +42,7 @@ public class ViewsPropertiesPageResultTest {
     @Before
     public void setup() {
         this.mockery = new Mockery();
-        this.request = mockery.mock(HttpServletRequest.class);
+        this.request = mockery.mock(MutableRequest.class);
         this.response = mockery.mock(HttpServletResponse.class);
         this.session = mockery.mock(HttpSession.class);
         this.method = mockery.mock(ResourceMethod.class);

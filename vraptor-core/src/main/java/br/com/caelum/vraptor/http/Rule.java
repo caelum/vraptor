@@ -41,6 +41,6 @@ public interface Rule {
 	 * Returns the resource method for this specifig rule. Also applies the
 	 * required parameters to this vraptor request.
 	 */
-	ResourceMethod matches(String uri, HttpMethod method,VRaptorRequest request);
+	ResourceMethod matches(String uri, HttpMethod method,MutableRequest request);
 
 }

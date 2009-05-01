@@ -39,6 +39,7 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
 import br.com.caelum.vraptor.resource.DefaultResourceRegistry;
+import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.MethodLookupBuilder;
 import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceAndMethodLookup;
@@ -74,12 +75,12 @@ public class DefaultResourceRegistryTest {
             {
                 one(builder).lookupFor(resource);
                 will(returnValue(methodLookup));
-                one(methodLookup).methodFor("/clients", "POST");
+                one(methodLookup).methodFor("/clients", HttpMethod.POST);
                 will(returnValue(method));
             }
         });
         registry.register(resource);
-        assertThat(registry.gimmeThis("/clients", "POST", null), is(equalTo(method)));
+        assertThat(registry.parse("/clients", HttpMethod.POST, null), is(equalTo(method)));
         mockery.assertIsSatisfied();
     }
 
@@ -87,11 +88,11 @@ public class DefaultResourceRegistryTest {
     public void testReturnsNullIfResourceNotFound() {
         mockery.checking(new Expectations() {
             {
-                one(methodLookup).methodFor("unknown_id", "POST");
+                one(methodLookup).methodFor("unknown_id", HttpMethod.POST);
                 will(returnValue(null));
             }
         });
-        ResourceMethod method = registry.gimmeThis("unknown_id", "POST", null);
+        ResourceMethod method = registry.parse("unknown_id", HttpMethod.POST, null);
         assertThat(method, is(Matchers.nullValue()));
         mockery.assertIsSatisfied();
     }
@@ -101,11 +102,11 @@ public class DefaultResourceRegistryTest {
         final ResourceMethod method = mockery.mock(ResourceMethod.class);
         mockery.checking(new Expectations() {
             {
-                one(methodLookup).methodFor("/is_using_vraptor", "GET");
+                one(methodLookup).methodFor("/is_using_vraptor", HttpMethod.GET);
                 will(returnValue(method));
             }
         });
-        assertThat(registry.gimmeThis("/is_using_vraptor", "GET", null), is(equalTo(method)));
+        assertThat(registry.parse("/is_using_vraptor", HttpMethod.GET, null), is(equalTo(method)));
         mockery.assertIsSatisfied();
     }
 

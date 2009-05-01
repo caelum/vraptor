@@ -1,6 +1,5 @@
 package br.com.caelum.vraptor.ioc.pico;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.hamcrest.MatcherAssert;
@@ -13,6 +12,7 @@ import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.PicoBuilder;
 
 import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
 import br.com.caelum.vraptor.resource.DefaultResourceRegistry;
 import br.com.caelum.vraptor.resource.MethodLookupBuilder;
@@ -41,7 +41,7 @@ public class PicoBasedContainerTest {
     public void setup() {
         this.mockery = new Mockery();
         this.builder = mockery.mock(MethodLookupBuilder.class);
-        final HttpServletRequest webRequest = mockery.mock(HttpServletRequest.class);
+        final MutableRequest webRequest = mockery.mock(MutableRequest.class);
         final HttpServletResponse webResponse = mockery.mock(HttpServletResponse.class);
         final RequestInfo request = new RequestInfo(null, webRequest, webResponse);
         this.picoContainer = new PicoBuilder().withCaching().build();

@@ -39,6 +39,6 @@ public interface ResourceAndMethodLookup {
      * Retrieves an unique resource method identifiable by this id and http
      * method name.
      */
-    ResourceMethod methodFor(String id, String methodName);
+    ResourceMethod methodFor(String id, HttpMethod methodName);
 
 }

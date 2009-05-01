@@ -43,7 +43,6 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.jmock.Expectations;
@@ -52,6 +51,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
 import br.com.caelum.vraptor.validator.ValidationMessage;
 
@@ -59,7 +59,7 @@ public class LocaleBasedCalendarConverterTest {
 
     private LocaleBasedCalendarConverter converter;
     private Mockery mockery;
-    private HttpServletRequest request;
+    private MutableRequest request;
     private HttpSession session;
     private ServletContext context;
 	private ArrayList<ValidationMessage> errors;
@@ -68,7 +68,7 @@ public class LocaleBasedCalendarConverterTest {
     @Before
     public void setup() {
         this.mockery =new Mockery();
-        this.request = mockery.mock(HttpServletRequest.class);
+        this.request = mockery.mock(MutableRequest.class);
         this.session = mockery.mock(HttpSession.class);
         this.context= mockery.mock(ServletContext.class);
         final RequestInfo webRequest = new RequestInfo(context, request, null);

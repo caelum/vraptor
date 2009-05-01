@@ -40,6 +40,7 @@ import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.VRaptorMockery;
 import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
 import br.com.caelum.vraptor.resource.DefaultResourceAndMethodLookup;
+import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.Resource;
 
 public class VRaptor2MethodLookupTest {
@@ -60,8 +61,8 @@ public class VRaptor2MethodLookupTest {
     public void shouldUseVRaptor3AlgorithmIfNotAVRaptor2Component() {
         final Resource resource = mockery.resource(NonVRaptorComponent.class);
         VRaptor2MethodLookup lookup = new VRaptor2MethodLookup(resource);
-        assertThat(lookup.methodFor("id", "name"), is(equalTo(new DefaultResourceAndMethodLookup(resource).methodFor(
-                "id", "name"))));
+        assertThat(lookup.methodFor("id", HttpMethod.POST), is(equalTo(new DefaultResourceAndMethodLookup(resource).methodFor(
+                "id", HttpMethod.POST))));
         mockery.assertIsSatisfied();
     }
 
@@ -82,7 +83,7 @@ public class VRaptor2MethodLookupTest {
     public void ignoresNonPublicMethod() {
         final Resource resource = mockery.resource(MyResource.class);
         VRaptor2MethodLookup lookup = new VRaptor2MethodLookup(resource);
-        assertThat(lookup.methodFor("/MyResource.ignorableStatic.logic", "ignorableStatic"), is(nullValue()));
+        assertThat(lookup.methodFor("/MyResource.ignorableStatic.logic", HttpMethod.POST), is(nullValue()));
         mockery.assertIsSatisfied();
     }
 
@@ -90,7 +91,7 @@ public class VRaptor2MethodLookupTest {
     public void ignoresStaticMethod() {
         final Resource resource = mockery.resource(MyResource.class);
         VRaptor2MethodLookup lookup = new VRaptor2MethodLookup(resource);
-        assertThat(lookup.methodFor("/MyResource.ignorableProtected.logic", "ignorableProtected"), is(nullValue()));
+        assertThat(lookup.methodFor("/MyResource.ignorableProtected.logic", HttpMethod.POST), is(nullValue()));
         mockery.assertIsSatisfied();
     }
 
@@ -98,7 +99,7 @@ public class VRaptor2MethodLookupTest {
     public void returnsNullIfNothingFound() {
         final Resource resource = mockery.resource(MyResource.class);
         VRaptor2MethodLookup lookup = new VRaptor2MethodLookup(resource);
-        assertThat(lookup.methodFor("/MyResource.unfindable.logic", "unfindable"), is(nullValue()));
+        assertThat(lookup.methodFor("/MyResource.unfindable.logic", HttpMethod.POST), is(nullValue()));
         mockery.assertIsSatisfied();
     }
 
@@ -106,7 +107,7 @@ public class VRaptor2MethodLookupTest {
     public void returnsTheCorrectDefaultResourceMethodIfFound() throws SecurityException, NoSuchMethodException {
         final Resource resource = mockery.resource(MyResource.class);
         VRaptor2MethodLookup lookup = new VRaptor2MethodLookup(resource);
-        assertThat(lookup.methodFor("/MyResource.findable.logic", "findable"), is(VRaptorMatchers.resourceMethod(MyResource.class.getMethod("findable"))));
+        assertThat(lookup.methodFor("/MyResource.findable.logic", HttpMethod.POST), is(VRaptorMatchers.resourceMethod(MyResource.class.getMethod("findable"))));
         mockery.assertIsSatisfied();
     }
 

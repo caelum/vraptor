@@ -32,7 +32,7 @@ package br.com.caelum.vraptor.resource;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.caelum.vraptor.http.VRaptorRequest;
+import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
 /**
@@ -60,7 +60,7 @@ public class DefaultResourceRegistry implements ResourceRegistry {
         }
     }
 
-    public ResourceMethod gimmeThis(String id, String methodName, VRaptorRequest request) {
+    public ResourceMethod parse(String id, HttpMethod methodName, MutableRequest request) {
         for (ResourceAndMethodLookup lookuper : lookup) {
             ResourceMethod method = lookuper.methodFor(id, methodName);
             if (method != null) {

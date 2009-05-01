@@ -5,6 +5,7 @@ import java.lang.reflect.Modifier;
 
 import br.com.caelum.vraptor.resource.DefaultResourceAndMethodLookup;
 import br.com.caelum.vraptor.resource.DefaultResourceMethod;
+import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceAndMethodLookup;
 import br.com.caelum.vraptor.resource.ResourceMethod;
@@ -25,9 +26,9 @@ public class VRaptor2MethodLookup implements ResourceAndMethodLookup {
         this.resource = r;
     }
 
-    public ResourceMethod methodFor(String id, String methodName) {
+    public ResourceMethod methodFor(String id, HttpMethod httpMethod) {
         if(!Info.isOldComponent(resource)) {
-            return delegate.methodFor(id, methodName);
+            return delegate.methodFor(id, httpMethod);
         }
         Class<?> type = resource.getType();
         String componentName = Info.getComponentName(type);

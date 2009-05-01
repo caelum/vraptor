@@ -4,15 +4,14 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.jmock.Expectations;
-import org.junit.Before;
 import org.junit.Test;
 import org.vraptor.validator.ValidationErrors;
 
 import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
 import br.com.caelum.vraptor.ioc.GenericContainerTest;
 import br.com.caelum.vraptor.ioc.WhatToDo;
@@ -39,7 +38,7 @@ public class ProviderTest extends GenericContainerTest {
 
     protected <T> T executeInsideRequest(WhatToDo<T> execution) {
         final HttpSessionMock session = new HttpSessionMock(context, "session" + ++counter);
-        final HttpServletRequest request = mockery.mock(HttpServletRequest.class, "request" + ++counter);
+        final MutableRequest request = mockery.mock(MutableRequest.class, "request" + ++counter);
         mockery.checking(new Expectations() {
             {
                 allowing(request).getRequestURI(); will(returnValue("what.ever.request.uri"));

@@ -35,6 +35,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
+import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.resource.ResourceRegistry;
 
@@ -55,7 +56,7 @@ public class StupidTranslator implements UrlToResourceTranslator {
         this.registry = registry;
     }
 
-    public ResourceMethod translate(HttpServletRequest request) {
+    public ResourceMethod translate(MutableRequest request) {
         String resourceName = getURI(request);
         if (logger.isDebugEnabled()) {
             logger.debug("trying to access " + resourceName);
@@ -64,7 +65,7 @@ public class StupidTranslator implements UrlToResourceTranslator {
             resourceName = resourceName.substring(resourceName.indexOf('/', 1));
         }
         String methodName = request.getMethod();
-        ResourceMethod resource = registry.gimmeThis(resourceName, methodName);
+        ResourceMethod resource = registry.parse(resourceName, HttpMethod.valueOf(methodName), request);
         if (logger.isDebugEnabled()) {
             logger.debug("found resource " + resource);
         }

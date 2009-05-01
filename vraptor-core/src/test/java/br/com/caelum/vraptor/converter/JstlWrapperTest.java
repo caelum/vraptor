@@ -31,7 +31,6 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 
 import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.jmock.Expectations;
@@ -40,6 +39,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.http.MutableRequest;
 
 public class JstlWrapperTest {
 
@@ -49,7 +49,7 @@ public class JstlWrapperTest {
 
     private ServletContext context;
 
-    private HttpServletRequest request;
+    private MutableRequest request;
 
     private RequestInfo webRequest;
 
@@ -62,7 +62,7 @@ public class JstlWrapperTest {
         this.jstlWrapper = new JstlWrapper();
         this.mockery = new Mockery();
         this.context = mockery.mock(ServletContext.class);
-        this.request = mockery.mock(HttpServletRequest.class);
+        this.request = mockery.mock(MutableRequest.class);
         this.session = mockery.mock(HttpSession.class);
         this.webRequest = new RequestInfo(context, request, null);
         mockery.checking(new Expectations() {

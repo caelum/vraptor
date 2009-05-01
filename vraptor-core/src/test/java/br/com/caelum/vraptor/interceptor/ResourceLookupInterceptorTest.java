@@ -2,7 +2,6 @@ package br.com.caelum.vraptor.interceptor;
 
 import java.io.IOException;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.jmock.Expectations;
@@ -14,6 +13,7 @@ import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.UrlToResourceTranslator;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.resource.ResourceNotFoundHandler;
@@ -24,7 +24,7 @@ public class ResourceLookupInterceptorTest {
     private UrlToResourceTranslator translator;
     private RequestInfo request;
     private ResourceLookupInterceptor lookup;
-    private HttpServletRequest webRequest;
+    private MutableRequest webRequest;
     private HttpServletResponse webResponse;
     private MethodInfo requestInfo;
 	private ResourceNotFoundHandler notFoundHandler;
@@ -33,7 +33,7 @@ public class ResourceLookupInterceptorTest {
     public void config() {
         this.mockery = new Mockery();
         this.translator = mockery.mock(UrlToResourceTranslator.class);
-        this.webRequest = mockery.mock(HttpServletRequest.class);
+        this.webRequest = mockery.mock(MutableRequest.class);
         this.webResponse = mockery.mock(HttpServletResponse.class);
         this.request = new RequestInfo(null, webRequest, webResponse);
         this.requestInfo = mockery.mock(MethodInfo.class);

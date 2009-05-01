@@ -31,7 +31,7 @@ package br.com.caelum.vraptor.resource;
 
 import java.util.List;
 
-import br.com.caelum.vraptor.http.VRaptorRequest;
+import br.com.caelum.vraptor.http.MutableRequest;
 
 /**
  * Keeps a list of searchable resources.
@@ -42,7 +42,7 @@ public interface ResourceRegistry {
 
     void register(Resource... resources);
 
-    ResourceMethod gimmeThis(String name, String methodName, VRaptorRequest request);
+    ResourceMethod parse(String uri, HttpMethod methodName, MutableRequest request);
 
     List<Resource> all();
 

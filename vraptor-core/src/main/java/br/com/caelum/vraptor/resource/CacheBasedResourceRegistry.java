@@ -33,7 +33,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import br.com.caelum.vraptor.http.VRaptorRequest;
+import br.com.caelum.vraptor.http.MutableRequest;
 
 /**
  * A cached resource registry that avoids iterating over the entire set just in
@@ -45,7 +45,7 @@ public class CacheBasedResourceRegistry implements ResourceRegistry {
 
     private final ResourceRegistry delegate;
 
-    private final Map<String, Map<String, ResourceMethod>> cache = new HashMap<String, Map<String, ResourceMethod>>();
+    private final Map<String, Map<HttpMethod, ResourceMethod>> cache = new HashMap<String, Map<HttpMethod, ResourceMethod>>();
 
     public CacheBasedResourceRegistry(ResourceRegistry delegate) {
         this.delegate = delegate;
@@ -55,13 +55,13 @@ public class CacheBasedResourceRegistry implements ResourceRegistry {
         return delegate.all();
     }
 
-    public ResourceMethod gimmeThis(String name, String methodName, VRaptorRequest request) {
+    public ResourceMethod parse(String name, HttpMethod methodName, MutableRequest request) {
         if (!cache.containsKey(name)) {
-            cache.put(name, new HashMap<String, ResourceMethod>());
+            cache.put(name, new HashMap<HttpMethod, ResourceMethod>());
         }
-        Map<String, ResourceMethod> cachedMap = cache.get(name);
+        Map<HttpMethod, ResourceMethod> cachedMap = cache.get(name);
         if (!cachedMap.containsKey(methodName)) {
-            cachedMap.put(methodName, delegate.gimmeThis(name, methodName, request));
+            cachedMap.put(methodName, delegate.parse(name, methodName, request));
         }
         return cachedMap.get(methodName);
     }

@@ -113,14 +113,14 @@ public class UriBasedRule implements Rule {
 		return (T) e.create();
 	}
 
-	public ResourceMethod matches(String uri, HttpMethod method, VRaptorRequest request) {
+	public ResourceMethod matches(String uri, HttpMethod method, MutableRequest request) {
 		if(!methodMatches(method)) {
 			return null;
 		}
 		return uriMatches(uri, request);
 	}
 
-	private DefaultResourceMethod uriMatches(String uri, VRaptorRequest request) {
+	private DefaultResourceMethod uriMatches(String uri, MutableRequest request) {
 		Matcher m = pattern.matcher(uri);
 		if(!m.matches()) {
 			return null;

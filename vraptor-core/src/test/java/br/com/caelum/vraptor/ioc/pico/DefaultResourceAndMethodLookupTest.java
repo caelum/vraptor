@@ -42,6 +42,7 @@ import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.VRaptorMockery;
 import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
 import br.com.caelum.vraptor.resource.DefaultResourceAndMethodLookup;
+import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
@@ -60,35 +61,35 @@ public class DefaultResourceAndMethodLookupTest {
     
     @Test
     public void matchesWhenUsingAWildcard() throws SecurityException, NoSuchMethodException {
-        ResourceMethod method = lookuper.methodFor("/move/second/child", "POST");
+        ResourceMethod method = lookuper.methodFor("/move/second/child", HttpMethod.POST);
         assertThat(method, is(VRaptorMatchers.resourceMethod(Clients.class.getMethod("move"))));
         mockery.assertIsSatisfied();
     }
     
     @Test
     public void findsTheCorrectAnnotatedMethodIfThereIsNoWebMethodAnnotationPresent() throws SecurityException, NoSuchMethodException {
-        ResourceMethod method = lookuper.methodFor("/clients", "POST");
+        ResourceMethod method = lookuper.methodFor("/clients", HttpMethod.POST);
         assertThat(method.getMethod(), is(equalTo(Clients.class.getMethod("list"))));
         mockery.assertIsSatisfied();
     }
 
     @Test
     public void returnsNullIfMethodNotFound() {
-        ResourceMethod method = lookuper.methodFor("/projects", "POST");
+        ResourceMethod method = lookuper.methodFor("/projects", HttpMethod.POST);
         assertThat(method, is(nullValue()));
         mockery.assertIsSatisfied();
     }
 
     @Test
     public void returnsNullIfMethodIsNotPublic() {
-        ResourceMethod method = lookuper.methodFor("/protectMe", "POST");
+        ResourceMethod method = lookuper.methodFor("/protectMe", HttpMethod.POST);
         assertThat(method, is(nullValue()));
         mockery.assertIsSatisfied();
     }
 
     @Test
     public void returnsNullIfMethodIsStatic() {
-        ResourceMethod method = lookuper.methodFor("/staticMe", "POST");
+        ResourceMethod method = lookuper.methodFor("/staticMe", HttpMethod.POST);
         assertThat(method, is(nullValue()));
         mockery.assertIsSatisfied();
     }
@@ -122,21 +123,21 @@ public class DefaultResourceAndMethodLookupTest {
     
     @Test
     public void shouldFindAPublicNonStaticNonAnnotatedMethodWithTheSameNameAsTheGivenId() throws SecurityException, NoSuchMethodException {
-        ResourceMethod method = lookuper.methodFor("/Clients/add", "POST");
+        ResourceMethod method = lookuper.methodFor("/Clients/add", HttpMethod.POST);
         assertThat(method, is(VRaptorMatchers.resourceMethod(Clients.class.getMethod("add"))));
         mockery.assertIsSatisfied();
     }
 
     @Test
     public void shouldIgnoreAResourceWithTheWrongWebMethod() throws SecurityException {
-        ResourceMethod method = lookuper.methodFor("/clients/remove", "POST");
+        ResourceMethod method = lookuper.methodFor("/clients/remove", HttpMethod.POST);
         assertThat(method, is(Matchers.nullValue()));
         mockery.assertIsSatisfied();
     }
     
     @Test
     public void shouldAcceptAResultWithASpecificWebMethod() throws SecurityException, NoSuchMethodException {
-        ResourceMethod method = lookuper.methodFor("/clients/head", "HEAD");
+        ResourceMethod method = lookuper.methodFor("/clients/head", HttpMethod.HEAD);
         assertThat(method, is(VRaptorMatchers.resourceMethod(Clients.class.getMethod("head"))));
         mockery.assertIsSatisfied();
     }
@@ -147,7 +148,7 @@ public class DefaultResourceAndMethodLookupTest {
     public void findsInheritedMethodsWithDefaultNames() throws SecurityException, NoSuchMethodException {
         this.resource = mockery.resource(NiceClients.class);
         this.lookuper = new DefaultResourceAndMethodLookup(resource);
-        ResourceMethod method = lookuper.methodFor("/NiceClients/toInherit", "POST");
+        ResourceMethod method = lookuper.methodFor("/NiceClients/toInherit", HttpMethod.POST);
         assertThat(method, is(VRaptorMatchers.resourceMethod(Clients.class.getMethod("toInherit"))));
         mockery.assertIsSatisfied();
     }

@@ -11,6 +11,7 @@ import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
 
+import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.resource.ResourceRegistry;
 
@@ -38,11 +39,11 @@ public class StupidTranslatorTest {
         
         mockery.checking(new Expectations(){{
             exactly(2).of(request).getAttribute(StupidTranslator.INCLUDE_REQUEST_URI); will(returnValue("/url"));
-            one(request).getMethod(); will(returnValue("POST"));
-            one(registry).gimmeThis("/url", "POST", webRequest); will(returnValue(expected));
+            one(request).getMethod(); will(returnValue(HttpMethod.POST));
+            one(registry).parse("/url", HttpMethod.POST, webRequest); will(returnValue(expected));
         }});
         
-        ResourceMethod resource = translator.translate(request);
+        ResourceMethod resource = translator.translate(webRequest);
         assertThat(resource, is(equalTo(expected)));
         mockery.assertIsSatisfied();
         
@@ -55,11 +56,11 @@ public class StupidTranslatorTest {
 		mockery.checking(new Expectations(){{
 		    one(request).getAttribute(StupidTranslator.INCLUDE_REQUEST_URI); will(returnValue(null));
 			one(request).getRequestURI(); will(returnValue("/url"));
-			one(request).getMethod(); will(returnValue("POST"));
-			one(registry).gimmeThis("/url", "POST",webRequest); will(returnValue(expected));
+			one(request).getMethod(); will(returnValue(HttpMethod.POST));
+			one(registry).parse("/url", HttpMethod.POST,webRequest); will(returnValue(expected));
 		}});
 		
-		ResourceMethod resource = translator.translate(request);
+		ResourceMethod resource = translator.translate(webRequest);
 		assertThat(resource, is(equalTo(expected)));
 		mockery.assertIsSatisfied();
 		
@@ -72,11 +73,11 @@ public class StupidTranslatorTest {
 		mockery.checking(new Expectations(){{
             one(request).getAttribute(StupidTranslator.INCLUDE_REQUEST_URI); will(returnValue(null));
 			one(request).getRequestURI(); will(returnValue("/url"));
-			one(request).getMethod(); will(returnValue("GET"));
-			one(registry).gimmeThis("/url", "GET",webRequest); will(returnValue(expected));
+			one(request).getMethod(); will(returnValue(HttpMethod.GET));
+			one(registry).parse("/url", HttpMethod.GET,webRequest); will(returnValue(expected));
 		}});
 		
-		ResourceMethod resource = translator.translate(request);
+		ResourceMethod resource = translator.translate(webRequest);
 		assertThat(resource, is(equalTo(expected)));
 		mockery.assertIsSatisfied();
 		
@@ -90,11 +91,11 @@ public class StupidTranslatorTest {
 		mockery.checking(new Expectations(){{
             one(request).getAttribute(StupidTranslator.INCLUDE_REQUEST_URI); will(returnValue(null));
 			one(request).getRequestURI(); will(returnValue("/custom_context/url"));
-			one(request).getMethod(); will(returnValue("GET"));
-			one(registry).gimmeThis("/url", "GET",webRequest); will(returnValue(expected));
+			one(request).getMethod(); will(returnValue(HttpMethod.GET));
+			one(registry).parse("/url", HttpMethod.GET,webRequest); will(returnValue(expected));
 		}});
 		
-		ResourceMethod resource = translator.translate(request);
+		ResourceMethod resource = translator.translate(webRequest);
 		assertThat(resource, is(equalTo(expected)));
 		mockery.assertIsSatisfied();
 		
@@ -108,11 +109,11 @@ public class StupidTranslatorTest {
 		mockery.checking(new Expectations(){{
             one(request).getAttribute(StupidTranslator.INCLUDE_REQUEST_URI); will(returnValue(null));
 			one(request).getRequestURI(); will(returnValue("/"));
-			one(request).getMethod(); will(returnValue("GET"));
-			one(registry).gimmeThis("/", "GET",webRequest); will(returnValue(expected));
+			one(request).getMethod(); will(returnValue(HttpMethod.GET));
+			one(registry).parse("/", HttpMethod.GET,webRequest); will(returnValue(expected));
 		}});
 		
-		ResourceMethod resource = translator.translate(request);
+		ResourceMethod resource = translator.translate(webRequest);
 		assertThat(resource, is(equalTo(expected)));
 		mockery.assertIsSatisfied();
 		
@@ -126,11 +127,11 @@ public class StupidTranslatorTest {
 		mockery.checking(new Expectations(){{
             one(request).getAttribute(StupidTranslator.INCLUDE_REQUEST_URI); will(returnValue(null));
 			one(request).getRequestURI(); will(returnValue("/custom_context/"));
-			one(request).getMethod(); will(returnValue("GET"));
-			one(registry).gimmeThis("/", "GET",webRequest); will(returnValue(expected));
+			one(request).getMethod(); will(returnValue(HttpMethod.GET));
+			one(registry).parse("/", HttpMethod.GET,webRequest); will(returnValue(expected));
 		}});
 		
-		ResourceMethod resource = translator.translate(request);
+		ResourceMethod resource = translator.translate(webRequest);
 		assertThat(resource, is(equalTo(expected)));
 		mockery.assertIsSatisfied();
 		

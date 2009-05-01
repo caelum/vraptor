@@ -6,7 +6,6 @@ import static org.hamcrest.Matchers.typeCompatibleWith;
 
 import java.util.ArrayList;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -18,6 +17,7 @@ import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.PicoBuilder;
 
 import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.interceptor.DefaultInterceptorRegistry;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Container;
@@ -28,7 +28,7 @@ public class PicoContainersProviderTest {
     private Mockery mockery;
     private MutablePicoContainer container;
     private PicoContainersProvider provider;
-    private HttpServletRequest request;
+    private MutableRequest request;
     private RequestInfo webRequest;
 
     @Before
@@ -38,7 +38,7 @@ public class PicoContainersProviderTest {
         container.addComponent(DefaultInterceptorRegistry.class);
         final ResourceRegistry registry = mockery.mock(ResourceRegistry.class, "registry");
         container.addComponent(registry);
-        this.request = mockery.mock(HttpServletRequest.class, "request");
+        this.request = mockery.mock(MutableRequest.class, "request");
         final HttpSession session = mockery.mock(HttpSession.class, "session");
         mockery.checking(new Expectations() {
             {

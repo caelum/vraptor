@@ -128,7 +128,7 @@ public class DefaultRouterTest {
 		final ResourceMethod resourceMethod = mockery.mock(ResourceMethod.class);
 		final Rule customRule = new Rule() {
 
-			public ResourceMethod matches(String uri, HttpMethod method, VRaptorRequest request) {
+			public ResourceMethod matches(String uri, HttpMethod method, MutableRequest request) {
 				return resourceMethod;
 			}
 		};

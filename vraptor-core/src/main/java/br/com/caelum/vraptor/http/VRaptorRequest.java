@@ -43,7 +43,7 @@ import org.slf4j.LoggerFactory;
  * @author guilherme silveira
  *
  */
-public class VRaptorRequest extends HttpServletRequestWrapper{
+public class VRaptorRequest extends HttpServletRequestWrapper implements MutableRequest {
 	
 	private static final Logger logger = LoggerFactory.getLogger(VRaptorRequest.class);
 	

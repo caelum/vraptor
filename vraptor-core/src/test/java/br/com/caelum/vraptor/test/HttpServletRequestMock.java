@@ -1,10 +1,5 @@
 package br.com.caelum.vraptor.test;
 
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletInputStream;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -16,12 +11,19 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletInputStream;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpSession;
+
+import br.com.caelum.vraptor.http.MutableRequest;
+
 /**
  * @author Fabio Kung
  */
-public class HttpServletRequestMock implements HttpServletRequest {
+public class HttpServletRequestMock implements MutableRequest {
     private Map<String, Object> attributes = new HashMap<String, Object>();
-    private Map<String, String> parameters = new HashMap<String, String>();
+    private Map<String, String[]> parameters = new HashMap<String, String[]>();
 
     private String authType;
     private Cookie[] cookies;
@@ -273,11 +275,11 @@ public class HttpServletRequestMock implements HttpServletRequest {
     }
 
     public String getParameter(String key) {
-        return parameters.get(key);
+        return parameters.get(key)[0];
     }
 
     public void setParameter(String key, String value) {
-        parameters.put(key, value);
+        parameters.put(key, new String[] {value});
     }
 
     public Enumeration getParameterNames() {
@@ -285,7 +287,7 @@ public class HttpServletRequestMock implements HttpServletRequest {
     }
 
     public String[] getParameterValues(String keys) {
-        return new String[]{parameters.get(keys)};
+        return parameters.get(keys);
     }
 
     public Map getParameterMap() {
@@ -424,4 +426,8 @@ public class HttpServletRequestMock implements HttpServletRequest {
     public void setLocalPort(int localPort) {
         this.localPort = localPort;
     }
+
+	public void setParameter(String key, String... value) {
+		this.parameters.put(key, value);
+	}
 }

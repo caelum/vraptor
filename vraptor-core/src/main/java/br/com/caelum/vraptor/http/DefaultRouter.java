@@ -30,15 +30,19 @@ package br.com.caelum.vraptor.http;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.resource.HttpMethod;
+import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.resource.ResourceRegistry;
 
 /**
  * The default implementation of resource localization rules.
  * 
  * @author Guilherme Silveira
  */
-public class DefaultRouter implements Router {
+@ApplicationScoped
+public class DefaultRouter implements Router, ResourceRegistry {
 
 	private final List<Rule> rules = new ArrayList<Rule>();
 
@@ -54,6 +58,13 @@ public class DefaultRouter implements Router {
 			}
 		}
 		return null;
+	}
+
+	public List<Resource> all() {
+		return null;
+	}
+
+	public void register(Resource... resources) {
 	}
 
 }

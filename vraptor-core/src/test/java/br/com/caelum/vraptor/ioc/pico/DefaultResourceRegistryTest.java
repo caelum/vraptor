@@ -79,7 +79,7 @@ public class DefaultResourceRegistryTest {
             }
         });
         registry.register(resource);
-        assertThat(registry.gimmeThis("/clients", "POST"), is(equalTo(method)));
+        assertThat(registry.gimmeThis("/clients", "POST", null), is(equalTo(method)));
         mockery.assertIsSatisfied();
     }
 
@@ -91,7 +91,7 @@ public class DefaultResourceRegistryTest {
                 will(returnValue(null));
             }
         });
-        ResourceMethod method = registry.gimmeThis("unknown_id", "POST");
+        ResourceMethod method = registry.gimmeThis("unknown_id", "POST", null);
         assertThat(method, is(Matchers.nullValue()));
         mockery.assertIsSatisfied();
     }
@@ -105,7 +105,7 @@ public class DefaultResourceRegistryTest {
                 will(returnValue(method));
             }
         });
-        assertThat(registry.gimmeThis("/is_using_vraptor", "GET"), is(equalTo(method)));
+        assertThat(registry.gimmeThis("/is_using_vraptor", "GET", null), is(equalTo(method)));
         mockery.assertIsSatisfied();
     }
 

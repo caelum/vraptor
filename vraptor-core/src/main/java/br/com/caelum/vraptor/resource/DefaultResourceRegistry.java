@@ -29,10 +29,11 @@
  */
 package br.com.caelum.vraptor.resource;
 
-import br.com.caelum.vraptor.ioc.ApplicationScoped;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import br.com.caelum.vraptor.http.VRaptorRequest;
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
 /**
  * This default registry uses a Path annotation to discover path->method
@@ -59,7 +60,7 @@ public class DefaultResourceRegistry implements ResourceRegistry {
         }
     }
 
-    public ResourceMethod gimmeThis(String id, String methodName) {
+    public ResourceMethod gimmeThis(String id, String methodName, VRaptorRequest request) {
         for (ResourceAndMethodLookup lookuper : lookup) {
             ResourceMethod method = lookuper.methodFor(id, methodName);
             if (method != null) {

@@ -33,6 +33,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import br.com.caelum.vraptor.http.VRaptorRequest;
+
 /**
  * A cached resource registry that avoids iterating over the entire set just in
  * order to find a resource already searched.
@@ -53,13 +55,13 @@ public class CacheBasedResourceRegistry implements ResourceRegistry {
         return delegate.all();
     }
 
-    public ResourceMethod gimmeThis(String name, String methodName) {
+    public ResourceMethod gimmeThis(String name, String methodName, VRaptorRequest request) {
         if (!cache.containsKey(name)) {
             cache.put(name, new HashMap<String, ResourceMethod>());
         }
         Map<String, ResourceMethod> cachedMap = cache.get(name);
         if (!cachedMap.containsKey(methodName)) {
-            cachedMap.put(methodName, delegate.gimmeThis(name, methodName));
+            cachedMap.put(methodName, delegate.gimmeThis(name, methodName, request));
         }
         return cachedMap.get(methodName);
     }

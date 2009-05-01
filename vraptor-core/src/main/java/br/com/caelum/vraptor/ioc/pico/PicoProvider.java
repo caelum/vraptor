@@ -105,7 +105,8 @@ public class PicoProvider implements ContainerProvider {
 	 * Register extra components that your app wants to.
 	 */
 	protected void registerComponents(ComponentRegistry container) {
-		for (Class type : new Class[] { StupidTranslator.class, DefaultRouter.class,
+		logger.debug("Registering base pico container related implementation components");
+		for (Class<?> type : new Class[] { StupidTranslator.class, DefaultRouter.class,
 				DefaultResourceNotFoundHandler.class, DefaultDirScanner.class, 
 				DefaultInterceptorRegistry.class, DefaultMethodLookupBuilder.class, DefaultPathResolver.class,
 				ParanamerNameProvider.class, DefaultConverters.class, DefaultMethodInfo.class,

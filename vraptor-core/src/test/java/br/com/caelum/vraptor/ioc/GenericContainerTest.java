@@ -3,8 +3,6 @@ package br.com.caelum.vraptor.ioc;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
 
-import java.io.IOException;
-
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -117,18 +115,25 @@ public abstract class GenericContainerTest {
     }
 
     @Before
-    public void setup() throws IOException {
+    public void setup() throws Exception {
         this.mockery = new Mockery();
         this.context = mockery.mock(ServletContext.class, "servlet context");
         configureExpectations();
-        provider = getProvider();
-        provider.start(context);
+		provider = getProvider();
+        try {
+	        provider.start(context);
+		} catch (Exception e) {
+			// so there is no exception on shutdown
+			provider = null;
+			throw e;
+		}
     }
 
     @After
     public void tearDown() {
         if (provider != null) {
             provider.stop();
+            provider = null;
         }
     }
 

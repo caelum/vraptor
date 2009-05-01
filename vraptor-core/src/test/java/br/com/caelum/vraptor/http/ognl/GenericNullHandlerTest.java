@@ -52,7 +52,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.VRaptorMockery;
-import br.com.caelum.vraptor.http.EmptyElementsRemoval;
 import br.com.caelum.vraptor.ioc.Container;
 
 public class GenericNullHandlerTest {

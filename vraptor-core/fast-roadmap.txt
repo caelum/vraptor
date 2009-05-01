@@ -1,10 +1,6 @@
 TODO: 16
-2) customize router on app example
-3) create @PathRule
-
 - if there is a conversion error, ognl should not set - conversion error should set the path variable 
 - conversion should log what is being set... use also an exception to do it
-- ClientsController --> clients.list
 - better exception handling everywhere (search for TODO within exceptions)
 - suppor for kung's register api
 - make client server redirect work with parameters, which ones?
@@ -27,10 +23,6 @@ ceci: integration test for vraptor-example project
 
 
 test and refactor:
-- test with logging on sucks
-a) caelumweb: use logicredirect that is most advanced
-a) test ListNullHandler, GenericNullHandler
-b) EERemoval test
 c) unit test for PicoContainersProvider... every scope should be tested
 - defaultpathresolver better test
 - new interceptor test 
@@ -384,3 +376,4 @@ done:
 - i18n conversion messages
 support HibernateValidator with i18n messages
 - Router support
+- ClientsController --> clients.list

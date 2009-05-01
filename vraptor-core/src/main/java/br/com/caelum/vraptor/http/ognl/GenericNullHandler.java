@@ -45,7 +45,6 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import br.com.caelum.vraptor.http.EmptyElementsRemoval;
 import br.com.caelum.vraptor.ioc.Container;
 
 /**

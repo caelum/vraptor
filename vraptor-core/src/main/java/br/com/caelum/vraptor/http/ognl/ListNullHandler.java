@@ -37,7 +37,6 @@ import java.util.List;
 import java.util.Map;
 
 import ognl.OgnlContext;
-import br.com.caelum.vraptor.http.EmptyElementsRemoval;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.vraptor2.Info;
 

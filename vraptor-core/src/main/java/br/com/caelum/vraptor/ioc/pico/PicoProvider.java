@@ -73,7 +73,6 @@ import br.com.caelum.vraptor.view.DefaultPathResolver;
 import br.com.caelum.vraptor.view.LogicResult;
 import br.com.caelum.vraptor.view.jsp.DefaultPageResult;
 import br.com.caelum.vraptor.view.jsp.PageResult;
-import br.com.caelum.vraptor.vraptor2.RequestResult;
 
 /**
  * Managing internal components by using pico container.<br>
@@ -117,7 +116,6 @@ public class PicoProvider implements ContainerProvider {
 
 		container.register(ForwardToDefaultViewInterceptor.class, ForwardToDefaultViewInterceptor.class);
 		container.register(LogicResult.class, DefaultLogicResult.class);
-		container.register(RequestResult.class, RequestResult.class);
 		container.register(PageResult.class, DefaultPageResult.class);
 		container.register(TypeCreator.class, AsmBasedTypeCreator.class);
 		container.register(EmptyElementsRemoval.class, EmptyElementsRemoval.class);

@@ -21,7 +21,13 @@
 <table>
 	<c:forEach var="client" items="${clients }">
 		<tr>
-			<td>Name: ${client.name} (id= ${client.id})
+			<td>Name</td>
+			<td>Info</td>
+			<td>Actions</td>
+		</tr>
+		<tr>
+			<td>${client.name} (id= ${client.id})</td>
+			<td>
 			<ul>
 				<c:forEach var="address" items="${client.addresses }">
 					<li>${address.street }, ${address.number }</li>
@@ -32,9 +38,14 @@
 					<li>${email }</li>
 				</c:forEach>
 			</ul>
+			</td>
+			<td>
+			<form 
+				action="<c:url value="/clients/delete/${client.id}"  />"><input
+				type="submit" value="remove" /></form>
+			</td>
+		</tr>
 	</c:forEach>
-	</td>
-	</tr>
 </table>
 </body>
 </html>

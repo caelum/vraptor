@@ -29,7 +29,7 @@ public class ExecuteAndViewInterceptorTest {
 
     private Mockery mockery;
     private ParametersProvider provider;
-    private RequestResult requestResult;
+    private MethodInfo info;
     private InterceptorStack stack;
     private MethodInfo parameters;
 
@@ -37,7 +37,7 @@ public class ExecuteAndViewInterceptorTest {
     public void setup() throws NoSuchMethodException {
         this.mockery = new Mockery();
         this.provider = mockery.mock(ParametersProvider.class);
-        this.requestResult = new RequestResult();
+        this.info = mockery.mock(MethodInfo.class);
         this.stack = mockery.mock(InterceptorStack.class);
         this.parameters = mockery.mock(MethodInfo.class);
     }
@@ -45,7 +45,7 @@ public class ExecuteAndViewInterceptorTest {
     @Test
     public void shouldInvokeTheMethodAndNotProceedWithInterceptorStack() throws SecurityException,
             NoSuchMethodException, IOException, InterceptionException {
-        ExecuteAndViewInterceptor interceptor = new ExecuteAndViewInterceptor(requestResult, parameters);
+        ExecuteAndViewInterceptor interceptor = new ExecuteAndViewInterceptor(info, parameters);
         final ResourceMethod method = new DefaultResourceMethod(new DefaultResource(DogAlike.class), DogAlike.class.getMethod("bark"));
         final DogAlike auau = mockery.mock(DogAlike.class);
         mockery.checking(new Expectations() {
@@ -62,7 +62,7 @@ public class ExecuteAndViewInterceptorTest {
     @Test
     public void shouldThrowMethodExceptionIfThereIsAnInvocationException() throws IOException, SecurityException,
             NoSuchMethodException {
-        ExecuteAndViewInterceptor interceptor = new ExecuteAndViewInterceptor(requestResult, parameters);
+        ExecuteAndViewInterceptor interceptor = new ExecuteAndViewInterceptor(info, parameters);
         ResourceMethod method = new DefaultResourceMethod(new DefaultResource(DogAlike.class), DogAlike.class.getMethod("bark"));
         final DogAlike auau = mockery.mock(DogAlike.class);
         final RuntimeException exception = new RuntimeException();
@@ -84,7 +84,7 @@ public class ExecuteAndViewInterceptorTest {
     
     @Test
     public void shouldUseTheProvidedArguments() throws SecurityException, NoSuchMethodException, InterceptionException, IOException {
-        ExecuteAndViewInterceptor interceptor = new ExecuteAndViewInterceptor(requestResult, parameters);
+        ExecuteAndViewInterceptor interceptor = new ExecuteAndViewInterceptor(info, parameters);
         final ResourceMethod method = new DefaultResourceMethod(new DefaultResource(DogAlike.class), DogAlike.class.getMethod("bark", int.class));
         final DogAlike auau = mockery.mock(DogAlike.class);
         mockery.checking(new Expectations() {
@@ -106,7 +106,7 @@ public class ExecuteAndViewInterceptorTest {
 
     @Test
     public void shouldForwardIfUsingAnOldComponent() throws SecurityException, NoSuchMethodException, InterceptionException, IOException, ServletException {
-        ExecuteAndViewInterceptor interceptor = new ExecuteAndViewInterceptor(requestResult, parameters);
+        ExecuteAndViewInterceptor interceptor = new ExecuteAndViewInterceptor(info, parameters);
         final ResourceMethod method = new DefaultResourceMethod(new DefaultResource(OldDog.class), OldDog.class.getMethod("bark"));
         final OldDog auau = mockery.mock(OldDog.class);
         mockery.checking(new Expectations() {
@@ -117,13 +117,13 @@ public class ExecuteAndViewInterceptorTest {
             }
         });
         interceptor.intercept(stack, method, auau);
-        assertThat(requestResult.getValue(), is(equalTo("ok")));
+        assertThat((String)info.getResult(), is(equalTo("ok")));
         mockery.assertIsSatisfied();
     }
 
     @Test
     public void shouldForwardWithResultIfUsingAnOldComponent() throws SecurityException, NoSuchMethodException, InterceptionException, IOException, ServletException {
-        ExecuteAndViewInterceptor interceptor = new ExecuteAndViewInterceptor(requestResult, parameters);
+        ExecuteAndViewInterceptor interceptor = new ExecuteAndViewInterceptor(info, parameters);
         final ResourceMethod method = new DefaultResourceMethod(new DefaultResource(OldDog.class), OldDog.class.getMethod("barkResponse"));
         final OldDog auau = mockery.mock(OldDog.class);
         mockery.checking(new Expectations() {
@@ -134,7 +134,7 @@ public class ExecuteAndViewInterceptorTest {
             }
         });
         interceptor.intercept(stack, method, auau);
-        assertThat(requestResult.getValue(), is(equalTo("response")));
+        assertThat((String)info.getResult(), is(equalTo("response")));
         mockery.assertIsSatisfied();
     }
 

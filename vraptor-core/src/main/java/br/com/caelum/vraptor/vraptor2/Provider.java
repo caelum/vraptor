@@ -64,7 +64,6 @@ public class Provider extends PicoProvider {
         container.register(ViewInterceptor.class,ViewInterceptor.class);
         container.register(ComponentInfoProvider.class, DefaultComponentInfoProvider.class);
         container.register(OutjectionInterceptor.class,OutjectionInterceptor.class);
-        container.register(RequestResult.class, RequestResult.class);
         container.register(AjaxInterceptor.class, AjaxInterceptor.class);
         container.register(Validator.class, MessageCreatorValidator.class);
         container.register(ValidationErrors.class, BasicValidationErrors.class);

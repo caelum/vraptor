@@ -13,4 +13,6 @@ public interface MethodInfo {
     void setResourceMethod(ResourceMethod resourceMethod);
     void setParameters(Object[] parameters);
     Object[] getParameters();
+    Object getResult();
+    void setResult(Object result);
 }

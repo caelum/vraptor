@@ -3,6 +3,8 @@ package br.com.caelum.vraptor;
 import java.lang.reflect.Method;
 import java.util.ResourceBundle;
 
+import javax.servlet.http.HttpServletRequest;
+
 import ognl.OgnlContext;
 import ognl.OgnlException;
 import ognl.SimpleNode;
@@ -139,6 +141,10 @@ public class VRaptorMockery {
 			}
 		};
 
+	}
+
+	public HttpServletRequest request() {
+		return mockery.mock(HttpServletRequest.class);
 	}
 
 }

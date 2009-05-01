@@ -25,23 +25,39 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package br.com.caelum.vraptor.vraptor2;
+package br.com.caelum.vraptor.core;
 
-/**
- * Represents the result of a logic method.
- * 
- * @author Guilherme Silveira
- */
-public class RequestResult {
+import org.jmock.Expectations;
+import org.junit.Before;
+import org.junit.Test;
 
-    private String value;
+import br.com.caelum.vraptor.Result;
+import br.com.caelum.vraptor.VRaptorMockery;
 
-    public void setValue(String value) {
-        this.value = value;
-    }
+public class ForwardToDefaultViewInterceptorTest {
 
-    public String getValue() {
-        return value;
-    }
+	private VRaptorMockery mockery;
+	private MethodInfo pageResult;
+	private Result result;
+	private ForwardToDefaultViewInterceptor interceptor;
+
+	@Before
+	public void setup() {
+		this.mockery = new VRaptorMockery(true);
+		this.pageResult = mockery.mock(MethodInfo.class);
+		this.result = mockery.mock(Result.class);
+		this.interceptor = new ForwardToDefaultViewInterceptor(result, pageResult);
+	}
+
+	@Test
+	public void doesNothingIfResultWasAlreadyUsed() {
+		mockery.checking(new Expectations() {
+			{
+				one(result).used(); will(returnValue(true));
+			}
+		});
+		interceptor.intercept(null, null, null);
+		mockery.assertIsSatisfied();
+	}
 
 }

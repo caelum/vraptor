@@ -82,6 +82,12 @@ public class ClientsController {
         database.add(client);
         result.use(Results.logic()).redirectClientTo(ClientsController.class).list();
     }
+    
+    @Path("/clients/delete/{client.id}")
+    public void delete(Client client) {
+    	database.remove(client);
+    	result.use(Results.logic()).redirectClientTo(ClientsController.class).list();
+    }
 
     public void sendEmail() {
         result.use(EmptyResult.class);

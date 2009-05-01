@@ -12,11 +12,11 @@ import br.com.caelum.vraptor.validator.ValidationError;
 
 public class ExecuteAndViewInterceptor implements Interceptor {
 
-    private final RequestResult result;
+    private final MethodInfo info;
     private final MethodInfo parameters;
 
-    public ExecuteAndViewInterceptor(RequestResult result, MethodInfo parameters) {
-        this.result = result;
+    public ExecuteAndViewInterceptor(MethodInfo info, MethodInfo parameters) {
+        this.info = info;
         this.parameters = parameters;
     }
 
@@ -28,9 +28,9 @@ public class ExecuteAndViewInterceptor implements Interceptor {
             Object result = reflectionMethod.invoke(resourceInstance, parameters);
             if (Info.isOldComponent(method.getResource())) {
                 if (result == null) {
-                    this.result.setValue("ok");
+                    this.info.setResult("ok");
                 } else {
-                    this.result.setValue((String) result);
+                    this.info.setResult(result);
                 }
             }
             stack.next(method, resourceInstance);

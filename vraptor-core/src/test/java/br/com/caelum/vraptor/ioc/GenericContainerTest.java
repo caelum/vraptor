@@ -46,7 +46,6 @@ import br.com.caelum.vraptor.resource.ResourceNotFoundHandler;
 import br.com.caelum.vraptor.view.LogicResult;
 import br.com.caelum.vraptor.view.PathResolver;
 import br.com.caelum.vraptor.view.jsp.PageResult;
-import br.com.caelum.vraptor.vraptor2.RequestResult;
 
 /**
  * Acceptance test that checks if the container is capable of giving all
@@ -87,7 +86,7 @@ public abstract class GenericContainerTest {
                 ResourceLookupInterceptor.class, InstantiateInterceptor.class, Result.class,
                 ExecuteMethodInterceptor.class, PageResult.class, ParametersProvider.class, MethodInfo.class,
                 Validator.class, PathResolver.class, ForwardToDefaultViewInterceptor.class, LogicResult.class,
-                RequestResult.class, ResourceNotFoundHandler.class);
+                ResourceNotFoundHandler.class);
         mockery.assertIsSatisfied();
     }
 

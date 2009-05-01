@@ -29,14 +29,11 @@
  */
 package br.com.caelum.vraptor.core;
 
-import javax.servlet.http.HttpServletRequest;
-
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Interceptor;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.view.Results;
-import br.com.caelum.vraptor.vraptor2.RequestResult;
 
 /**
  * Intercepts the request and forwards to the default view if no view was
@@ -46,13 +43,11 @@ import br.com.caelum.vraptor.vraptor2.RequestResult;
  */
 public class ForwardToDefaultViewInterceptor implements Interceptor {
     private final Result result;
-    private final HttpServletRequest request;
-    private final RequestResult methodResult;
+    private final MethodInfo methodInfo;
 
-    public ForwardToDefaultViewInterceptor(Result result, HttpServletRequest request, RequestResult methodResult) {
+    public ForwardToDefaultViewInterceptor(Result result, MethodInfo methodResult) {
         this.result = result;
-        this.request = request;
-        this.methodResult = methodResult;
+        this.methodInfo = methodResult;
     }
 
     public boolean accepts(ResourceMethod method) {
@@ -64,7 +59,7 @@ public class ForwardToDefaultViewInterceptor implements Interceptor {
         if (result.used()) {
             return;
         }
-        result.use(Results.page()).forward(methodResult.getValue());
+        result.use(Results.page()).forward(methodInfo.getResult().toString());
     }
 
 }

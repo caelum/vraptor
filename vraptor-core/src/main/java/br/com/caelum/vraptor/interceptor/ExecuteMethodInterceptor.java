@@ -48,9 +48,9 @@ import br.com.caelum.vraptor.vraptor2.RequestResult;
 public class ExecuteMethodInterceptor implements Interceptor {
 
     private final MethodInfo parameters;
-    private final RequestResult result;
+    private final MethodInfo info;
 
-    public ExecuteMethodInterceptor(RequestResult result, MethodInfo parameters) {
+    public ExecuteMethodInterceptor(MethodInfo info, MethodInfo parameters) {
         this.result = result;
         this.parameters = parameters;
     }

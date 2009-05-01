@@ -1,5 +1,5 @@
 TODO: 16
-(MUST) - path annotation is supporting injection?
+@Component should not be web acessible, @Component from vraptor2 should...
 - if there is a conversion error, ognl should not set - conversion error should set the path variable 
 - conversion should log what is being set... use also an exception to do it
 - better exception handling everywhere (search for TODO within exceptions)
@@ -10,10 +10,8 @@ TODO: 16
 (MUST) - Map support
 - Set support
 - automatic REDIRECT depending on accepts
-@Component should not be web acessible
 - start/stop:app/session/request support + @Listener, @Startup, @Shutdown/implements Listener 
   onError().goTo("xpto");
-  return"invalid" support
 - converter registering is causing many log messages
 
 
@@ -76,7 +74,7 @@ site docs (prior to release)
 kung help
 	- known bug: accessing / when its /index.html.... if its a dir containing an index.html it doesnt work, but if your url is /clients/ it works...
 	- add a @PostConstruct @PreDestroy test for providers 
-	- support new provider style
+	- delete is not working
 
 
 
@@ -377,3 +375,4 @@ done:
 support HibernateValidator with i18n messages
 - Router support
 - ClientsController --> clients.list
+- path annotation and routes with support to value injection

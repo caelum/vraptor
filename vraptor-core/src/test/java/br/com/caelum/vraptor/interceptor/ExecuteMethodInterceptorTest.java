@@ -21,13 +21,13 @@ public class ExecuteMethodInterceptorTest {
 
     private Mockery mockery;
     private MethodInfo parameters;
-    private RequestResult result;
+    private MethodInfo info;
     private InterceptorStack stack;
 
     @Before
     public void setup() throws NoSuchMethodException {
         this.mockery = new Mockery();
-        this.result = new RequestResult();
+        this.result = mockery.mock(MethodInfo.class)
         this.stack = mockery.mock(InterceptorStack.class);
         this.parameters =mockery.mock(MethodInfo.class);
     }

@@ -46,7 +46,6 @@ import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
 import br.com.caelum.vraptor.interceptor.InterceptorListPriorToExecutionExtractor;
 import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
 import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
-import br.com.caelum.vraptor.resource.DefaultMethodLookupBuilder;
 import br.com.caelum.vraptor.resource.DefaultResourceNotFoundHandler;
 import br.com.caelum.vraptor.validator.DefaultValidator;
 import br.com.caelum.vraptor.view.DefaultLogicResult;
@@ -91,7 +90,6 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
         registerOn(beanFactory, StupidTranslator.class);
         registerOn(beanFactory, DefaultInterceptorRegistry.class);
         registerOn(beanFactory, AsmBasedTypeCreator.class);
-        registerOn(beanFactory, DefaultMethodLookupBuilder.class);
         registerOn(beanFactory, DefaultPathResolver.class);
         registerOn(beanFactory, ParanamerNameProvider.class);
         registerOn(beanFactory, DefaultConverters.class);

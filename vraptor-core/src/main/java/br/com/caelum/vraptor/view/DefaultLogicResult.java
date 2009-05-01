@@ -36,7 +36,6 @@ import javax.servlet.http.HttpServletResponse;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
-import br.com.caelum.vraptor.resource.MethodLookupBuilder;
 
 /**
  * The default implementation of LogicResult.<br>
@@ -46,13 +45,11 @@ import br.com.caelum.vraptor.resource.MethodLookupBuilder;
  */
 public class DefaultLogicResult implements LogicResult {
 
-    private final MethodLookupBuilder builder;
     private final HttpServletResponse response;
     private final ServletContext context;
     private final HttpServletRequest request;
 
-    public DefaultLogicResult(MethodLookupBuilder builder, HttpServletResponse response, ServletContext context, HttpServletRequest request) {
-        this.builder = builder;
+    public DefaultLogicResult( HttpServletResponse response, ServletContext context, HttpServletRequest request) {
         this.response = response;
         this.context = context;
         this.request = request;

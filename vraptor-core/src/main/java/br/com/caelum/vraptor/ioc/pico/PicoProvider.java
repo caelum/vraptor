@@ -65,7 +65,6 @@ import br.com.caelum.vraptor.interceptor.InterceptorListPriorToExecutionExtracto
 import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
 import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
-import br.com.caelum.vraptor.resource.DefaultMethodLookupBuilder;
 import br.com.caelum.vraptor.resource.DefaultResourceNotFoundHandler;
 import br.com.caelum.vraptor.validator.DefaultValidator;
 import br.com.caelum.vraptor.view.DefaultLogicResult;
@@ -106,7 +105,7 @@ public class PicoProvider implements ContainerProvider {
 		logger.debug("Registering base pico container related implementation components");
 		for (Class<?> type : new Class[] { StupidTranslator.class, DefaultRouter.class,
 				DefaultResourceNotFoundHandler.class, DefaultDirScanner.class, 
-				DefaultInterceptorRegistry.class, DefaultMethodLookupBuilder.class, DefaultPathResolver.class,
+				DefaultInterceptorRegistry.class, DefaultPathResolver.class,
 				ParanamerNameProvider.class, DefaultConverters.class, DefaultMethodInfo.class,
 				DefaultInterceptorStack.class, DefaultRequestExecution.class,
 				DefaultResult.class, OgnlParametersProvider.class, DefaultMethodInfo.class, DefaultValidator.class,

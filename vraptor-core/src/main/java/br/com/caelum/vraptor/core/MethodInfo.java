@@ -10,9 +10,7 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  */
 public interface MethodInfo {
     ResourceMethod getResourceMethod();
-
     void setResourceMethod(ResourceMethod resourceMethod);
-    void setParameters(Object[] parameters, String[] names);
-
+    void setParameters(Object[] parameters);
     Object[] getParameters();
 }

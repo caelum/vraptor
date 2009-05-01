@@ -97,7 +97,7 @@ public class ParametersInstantiatorInterceptor implements Interceptor {
 		if (logger.isDebugEnabled()) {
 			logger.debug("Parameter values for " + method + " are " + Arrays.asList(values));
 		}
-		parameters.setParameters(values, nameProvider.parameterNamesFor(method.getMethod()));
+		parameters.setParameters(values);
 		stack.next(method, resourceInstance);
 	}
 

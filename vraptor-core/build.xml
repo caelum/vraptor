@@ -41,9 +41,15 @@
 		<javac destdir="${tmp.classes.dir}" srcdir="${src.dir}" classpathref="compile.classpath" debug="true" encoding="UTF-8" target="1.5" source="1.5">
 			<compilerarg value="-Xlint:none" />
 		</javac>
+	  	<copy todir="${tmp.classes.dir}">
+	  		<fileset dir="${resources.dir}" includes="**/*" />
+	  	</copy>
 		<javac destdir="${tmp.test.classes.dir}" srcdir="${src.test.dir}" classpathref="test.classpath" debug="true" encoding="UTF-8" target="1.5" source="1.5">
 			<compilerarg value="-Xlint:none" />
 		</javac>
+	  	<copy todir="${tmp.test.classes.dir}">
+	  		<fileset dir="${resources.test.dir}" includes="**/*" />
+	  	</copy>
 	</target>
 
 	<target name="test" depends="compile">
@@ -81,7 +87,7 @@
 				<include name="**/*Test.class" />
 			</fileset>
 		</cobertura-instrument>
-		<fileset dir="${tmp.test.classes.dir}" id="unittests.fileset" includes="**/*Test.class" />
+		<fileset dir="${tmp.test.classes.dir}" id="unittests.fileset" includes="**/*NullHandlerTest.class" />
 		<junit fork="yes" forkmode="once" printsummary="false" showoutput="true" failureproperty="failed-test">
 			<sysproperty key="net.sourceforge.cobertura.datafile" file="cobertura.ser" />
 

@@ -66,7 +66,7 @@ public class GenericNullHandler {
     }
 
     @SuppressWarnings("unchecked")
-    <T> T instantiate(Class<T> baseType, Map context) throws InstantiationException, IllegalAccessException,
+    <T> T instantiate(Class<T> baseType, Container container) throws InstantiationException, IllegalAccessException,
             InvocationTargetException, NoSuchMethodException {
         Object instance;
         Class<?> typeToInstantiate = baseType;
@@ -80,7 +80,6 @@ public class GenericNullHandler {
         }
         instance = typeToInstantiate.getConstructor().newInstance();
         if(Collection.class.isAssignableFrom(typeToInstantiate)) {
-	        Container container = (Container) context.get(Container.class);
 	        EmptyElementsRemoval removal = container.instanceFor(EmptyElementsRemoval.class);
         	removal.add((Collection)instance);
         }

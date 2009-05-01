@@ -38,7 +38,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -58,7 +57,6 @@ public class GenericNullHandlerTest {
 
 	private VRaptorMockery mockery;
 	private EmptyElementsRemoval removal;
-	private HashMap context;
 	private Container container;
 
 	@Before
@@ -71,27 +69,25 @@ public class GenericNullHandlerTest {
 				allowing(container).instanceFor(EmptyElementsRemoval.class); will(returnValue(removal));
 			}
 		});
-		this.context = new HashMap();
-		this.context.put(Container.class, container);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void shouldDenyMostInterfaces() throws Exception {
 		GenericNullHandler handler = new GenericNullHandler();
-		handler.instantiate(TheInterface.class, context);
+		handler.instantiate(TheInterface.class, container);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void shouldDenyMostAbstractClasses() throws Exception {
 		GenericNullHandler handler = new GenericNullHandler();
-		handler.instantiate(AbstractClass.class, context);
+		handler.instantiate(AbstractClass.class, container);
 	}
 
 	@Test
 	public void shouldInstantiateGregorianCalendarForAbstractCalendarType()
 			throws Exception {
 		GenericNullHandler handler = new GenericNullHandler();
-		Calendar calendar = handler.instantiate(Calendar.class, context);
+		Calendar calendar = handler.instantiate(Calendar.class, container);
 		assertThat(calendar, is(notNullValue()));
 		assertThat(calendar, is(instanceOf(GregorianCalendar.class)));
 	}
@@ -105,7 +101,7 @@ public class GenericNullHandlerTest {
 			}
 		});
 		GenericNullHandler handler = new GenericNullHandler();
-		Collection collection = handler.instantiate(Collection.class, context);
+		Collection collection = handler.instantiate(Collection.class, container);
 		assertThat(collection, is(notNullValue()));
 		assertThat(collection, is(instanceOf(ArrayList.class)));
 	}
@@ -118,7 +114,7 @@ public class GenericNullHandlerTest {
 			}
 		});
 		GenericNullHandler handler = new GenericNullHandler();
-		List list = handler.instantiate(List.class, context);
+		List list = handler.instantiate(List.class, container);
 		assertThat(list, is(notNullValue()));
 		assertThat(list, is(instanceOf(ArrayList.class)));
 	}
@@ -131,7 +127,7 @@ public class GenericNullHandlerTest {
 			}
 		});
 		GenericNullHandler handler = new GenericNullHandler();
-		Queue queue = handler.instantiate(Queue.class, context);
+		Queue queue = handler.instantiate(Queue.class, container);
 		assertThat(queue, is(notNullValue()));
 		assertThat(queue, is(instanceOf(LinkedList.class)));
 	}
@@ -144,7 +140,7 @@ public class GenericNullHandlerTest {
 			}
 		});
 		GenericNullHandler handler = new GenericNullHandler();
-		Set set = handler.instantiate(Set.class, context);
+		Set set = handler.instantiate(Set.class, container);
 		assertThat(set, is(notNullValue()));
 		assertThat(set, is(instanceOf(HashSet.class)));
 	}
@@ -158,7 +154,7 @@ public class GenericNullHandlerTest {
 			}
 		});
 		GenericNullHandler handler = new GenericNullHandler();
-		Set set = handler.instantiate(SortedSet.class, context);
+		Set set = handler.instantiate(SortedSet.class, container);
 		assertThat(set, is(notNullValue()));
 		assertThat(set, is(instanceOf(TreeSet.class)));
 	}

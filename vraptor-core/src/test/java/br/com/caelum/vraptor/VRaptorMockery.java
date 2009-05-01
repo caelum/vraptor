@@ -3,6 +3,10 @@ package br.com.caelum.vraptor;
 import java.lang.reflect.Method;
 import java.util.ResourceBundle;
 
+import ognl.OgnlContext;
+import ognl.OgnlException;
+import ognl.SimpleNode;
+
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.internal.ExpectationBuilder;
@@ -113,10 +117,28 @@ public class VRaptorMockery {
 		final ResourceBundle bundle = ResourceBundle.getBundle("messages");
 		mockery.checking(new Expectations() {
 			{
-				allowing(loc).getBundle(); will(returnValue(bundle));
+				allowing(loc).getBundle();
+				will(returnValue(bundle));
 			}
 		});
 		return loc;
+	}
+
+	/**
+	 * Creates a "simplenode" from ognl which returns the desired toString.
+	 */
+	public SimpleNode ognlNode(final String name) {
+		// ognl design sucks when methods should return the interface types, not the implementation types
+		return new SimpleNode(0) {
+			private static final long serialVersionUID = 1L;
+			protected Object getValueBody(OgnlContext arg0, Object arg1) throws OgnlException {
+				return null;
+			}
+			public String toString() {
+				return name;
+			}
+		};
+
 	}
 
 }

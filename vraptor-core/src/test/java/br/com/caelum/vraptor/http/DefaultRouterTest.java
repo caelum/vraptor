@@ -148,6 +148,11 @@ public class DefaultRouterTest {
 				routeFor("/clients/add").with(HttpMethod.GET).is(MyControl.class).add(null);
 			}
 		});
+		mockery.checking(new Expectations() {
+			{
+				one(methodLookup).methodFor("/clients/add", HttpMethod.POST); will(returnValue(null));
+			}
+		});
 		assertThat(router.parse("/clients/add", HttpMethod.POST, request), is(nullValue()));
 		mockery.assertIsSatisfied();
 	}
@@ -173,10 +178,10 @@ public class DefaultRouterTest {
 		router.add(new Rules() {
 			{
 				routeFor("/clients").is(MyControl.class).list(); // if not
-																	// defined,
-																	// any http
-																	// method is
-																	// allowed
+				// defined,
+				// any http
+				// method is
+				// allowed
 			}
 		});
 		assertThat(router.parse("/clients", HttpMethod.POST, request), is(equalTo(resourceMethod)));

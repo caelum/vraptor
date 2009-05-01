@@ -56,7 +56,7 @@ public class DefaultRouterTest {
 	public void setup() {
 		this.mockery = new Mockery();
 		this.request = new VRaptorRequest(mockery.mock(HttpServletRequest.class));
-		this.rules = new DefaultRouter();
+		this.rules = new DefaultRouter(null);
 	}
 	
 	class Dog{

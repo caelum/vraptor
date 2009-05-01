@@ -33,21 +33,34 @@ import java.util.List;
 import java.util.Set;
 
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
+import br.com.caelum.vraptor.resource.DefaultResource;
 import br.com.caelum.vraptor.resource.HttpMethod;
+import br.com.caelum.vraptor.resource.MethodLookupBuilder;
 import br.com.caelum.vraptor.resource.Resource;
+import br.com.caelum.vraptor.resource.ResourceAndMethodLookup;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.resource.ResourceRegistry;
+import br.com.caelum.vraptor.resource.VRaptorInfo;
 
 /**
  * The default implementation of resource localization rules.
+ * It also uses a Path annotation to discover path->method
+ * mappings using the supplied ResourceAndMethodLookup.
  * 
  * @author Guilherme Silveira
  */
 @ApplicationScoped
 public class DefaultRouter implements Router, ResourceRegistry {
 
+    private final List<ResourceAndMethodLookup> lookup = new ArrayList<ResourceAndMethodLookup>();
 	private final List<Rule> rules = new ArrayList<Rule>();
     private final Set<Resource> resources = new HashSet<Resource>();
+    private final MethodLookupBuilder lookupBuilder;
+
+    public DefaultRouter(MethodLookupBuilder lookupBuilder) {
+        this.lookupBuilder = lookupBuilder;
+        register(new DefaultResource(VRaptorInfo.class));
+    }
 
 	public void add(ListOfRules rulesToAdd) {
 		List<Rule> rules = rulesToAdd.getRules();
@@ -64,7 +77,13 @@ public class DefaultRouter implements Router, ResourceRegistry {
 				return value;
 			}
 		}
-		return null;
+        for (ResourceAndMethodLookup lookuper : lookup) {
+            ResourceMethod value = lookuper.methodFor(uri, method);
+            if (value != null) {
+                return value;
+            }
+        }
+        return null;
 	}
 
 	public Set<Resource> all() {
@@ -72,6 +91,10 @@ public class DefaultRouter implements Router, ResourceRegistry {
 	}
 
 	public void register(Resource... resources) {
+        for (Resource resource : resources) {
+            this.lookup.add(lookupBuilder.lookupFor(resource));
+            this.resources.add(resource);
+        }
 	}
 
 }

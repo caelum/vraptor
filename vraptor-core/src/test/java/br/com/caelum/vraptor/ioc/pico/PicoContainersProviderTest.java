@@ -4,7 +4,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.typeCompatibleWith;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -22,6 +22,7 @@ import br.com.caelum.vraptor.http.Router;
 import br.com.caelum.vraptor.interceptor.DefaultInterceptorRegistry;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor.resource.Resource;
 
 public class PicoContainersProviderTest {
 
@@ -36,13 +37,13 @@ public class PicoContainersProviderTest {
         this.mockery = new Mockery();
         this.container = new PicoBuilder().withCaching().build();
         container.addComponent(DefaultInterceptorRegistry.class);
-        final Router registry = mockery.mock(Router.class, "registry");
-        container.addComponent(registry);
+        final Router router = mockery.mock(Router.class, "registry");
+        container.addComponent(router);
         this.request = mockery.mock(MutableRequest.class, "request");
         final HttpSession session = mockery.mock(HttpSession.class, "session");
         mockery.checking(new Expectations() {
             {
-                one(registry).all(); will(returnValue(new ArrayList()));
+                one(router).all(); will(returnValue(new HashSet<Resource>()));
                 allowing(request).getSession(); will(returnValue(session));
                 allowing(session).getAttribute(with(any(String.class))); will(returnValue(null));
                 allowing(session).setAttribute(with(any(String.class)), with(any(String.class))); will(returnValue(null));

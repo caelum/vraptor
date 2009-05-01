@@ -45,13 +45,13 @@ public class PicoBasedContainer implements Container {
 
     private final MutablePicoContainer container;
 
-    public PicoBasedContainer(MutablePicoContainer container, RequestInfo request, Router resources) {
+    public PicoBasedContainer(MutablePicoContainer container, RequestInfo request, Router routes) {
         this.container = container;
         // TODO try to remove addComponent(this) - InstantiateInterceptor and
         // InterceptorStack
         // needs to instantiate objects with dependency injection
         this.container.addComponent(this);
-        for (Resource resource : resources.all()) {
+        for (Resource resource : routes.all()) {
             this.container.addComponent(resource.getType());
         }
     }

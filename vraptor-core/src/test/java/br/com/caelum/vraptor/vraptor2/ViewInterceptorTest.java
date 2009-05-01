@@ -50,7 +50,6 @@ public class ViewInterceptorTest {
     public void setup() {
         this.mockery = new Mockery();
         this.requestResult = mockery.mock(MethodInfo.class);
-        this.requestResult.setResult("ok");
         this.result = mockery.mock(PageResult.class);
         this.info = mockery.mock(ComponentInfoProvider.class);
         this.method = mockery.mock(ResourceMethod.class);
@@ -61,6 +60,7 @@ public class ViewInterceptorTest {
     public void shouldForward() throws SecurityException, InterceptionException {
         mockery.checking(new Expectations() {
             {
+            	one(requestResult).getResult(); will(returnValue("ok"));
                 one(info).shouldShowView(method); will(returnValue(true));
                 one(result).forward("ok");
             }

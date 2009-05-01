@@ -39,7 +39,7 @@ public class StupidTranslatorTest {
         
         mockery.checking(new Expectations(){{
             exactly(2).of(request).getAttribute(StupidTranslator.INCLUDE_REQUEST_URI); will(returnValue("/url"));
-            one(request).getMethod(); will(returnValue(HttpMethod.POST));
+            one(request).getMethod(); will(returnValue("POST"));
             one(registry).parse("/url", HttpMethod.POST, webRequest); will(returnValue(expected));
         }});
         
@@ -56,7 +56,7 @@ public class StupidTranslatorTest {
 		mockery.checking(new Expectations(){{
 		    one(request).getAttribute(StupidTranslator.INCLUDE_REQUEST_URI); will(returnValue(null));
 			one(request).getRequestURI(); will(returnValue("/url"));
-			one(request).getMethod(); will(returnValue(HttpMethod.POST));
+			one(request).getMethod(); will(returnValue("POST"));
 			one(registry).parse("/url", HttpMethod.POST,webRequest); will(returnValue(expected));
 		}});
 		
@@ -73,7 +73,7 @@ public class StupidTranslatorTest {
 		mockery.checking(new Expectations(){{
             one(request).getAttribute(StupidTranslator.INCLUDE_REQUEST_URI); will(returnValue(null));
 			one(request).getRequestURI(); will(returnValue("/url"));
-			one(request).getMethod(); will(returnValue(HttpMethod.GET));
+			one(request).getMethod(); will(returnValue("GET"));
 			one(registry).parse("/url", HttpMethod.GET,webRequest); will(returnValue(expected));
 		}});
 		
@@ -91,7 +91,7 @@ public class StupidTranslatorTest {
 		mockery.checking(new Expectations(){{
             one(request).getAttribute(StupidTranslator.INCLUDE_REQUEST_URI); will(returnValue(null));
 			one(request).getRequestURI(); will(returnValue("/custom_context/url"));
-			one(request).getMethod(); will(returnValue(HttpMethod.GET));
+			one(request).getMethod(); will(returnValue("GET"));
 			one(registry).parse("/url", HttpMethod.GET,webRequest); will(returnValue(expected));
 		}});
 		
@@ -109,7 +109,7 @@ public class StupidTranslatorTest {
 		mockery.checking(new Expectations(){{
             one(request).getAttribute(StupidTranslator.INCLUDE_REQUEST_URI); will(returnValue(null));
 			one(request).getRequestURI(); will(returnValue("/"));
-			one(request).getMethod(); will(returnValue(HttpMethod.GET));
+			one(request).getMethod(); will(returnValue("GET"));
 			one(registry).parse("/", HttpMethod.GET,webRequest); will(returnValue(expected));
 		}});
 		
@@ -127,7 +127,7 @@ public class StupidTranslatorTest {
 		mockery.checking(new Expectations(){{
             one(request).getAttribute(StupidTranslator.INCLUDE_REQUEST_URI); will(returnValue(null));
 			one(request).getRequestURI(); will(returnValue("/custom_context/"));
-			one(request).getMethod(); will(returnValue(HttpMethod.GET));
+			one(request).getMethod(); will(returnValue("GET"));
 			one(registry).parse("/", HttpMethod.GET,webRequest); will(returnValue(expected));
 		}});
 		

@@ -11,6 +11,7 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 public class DefaultMethodInfo implements MethodInfo {
 	private ResourceMethod resourceMethod;
 	private Object[] parameters;
+	private Object result;
 
 	public ResourceMethod getResourceMethod() {
 		return resourceMethod;
@@ -26,6 +27,14 @@ public class DefaultMethodInfo implements MethodInfo {
 
 	public Object[] getParameters() {
 		return parameters;
+	}
+
+	public Object getResult() {
+		return result;
+	}
+
+	public void setResult(Object result) {
+		this.result = result;
 	}
 
 }

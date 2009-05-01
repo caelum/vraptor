@@ -148,6 +148,7 @@ right before ANY release
 	- check all TODOS and do something about them
 
 ONLY AFTER RELEASE
+3.0.1 - redirect to logic should work with parameter INJECTIon @ url also
 - routes should tell if they are cacheable or not (* --> sucks, too many strings)
 3.0.1 - method return != string --> outject
 3.0.1 - method return == string --> default behaviour from vraptor 2

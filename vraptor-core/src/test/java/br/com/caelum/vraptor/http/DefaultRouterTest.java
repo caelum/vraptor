@@ -40,9 +40,10 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.hamcrest.Matchers;
 import org.hamcrest.TypeSafeMatcher;
-import org.jmock.Mockery;
 import org.junit.Test;
 
+import br.com.caelum.vraptor.Path;
+import br.com.caelum.vraptor.VRaptorMockery;
 import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.Resource;
@@ -52,12 +53,12 @@ import br.com.caelum.vraptor.resource.VRaptorInfo;
 public class DefaultRouterTest {
 
 	private Router router;
-	private Mockery mockery;
+	private VRaptorMockery mockery;
 	private VRaptorRequest request;
 
 	@org.junit.Before
 	public void setup() {
-		this.mockery = new Mockery();
+		this.mockery = new VRaptorMockery();
 		this.request = new VRaptorRequest(mockery.mock(HttpServletRequest.class));
 		this.router = new DefaultRouter(new NoRoutesConfiguration());
 	}
@@ -222,4 +223,55 @@ public class DefaultRouterTest {
 		assertThat(methodFound, is(expectedMethod));
 		mockery.assertIsSatisfied();
 	}
+
+
+    class MyResource {
+        public void notAnnotated() {
+        }
+
+        @Path("/myPath")
+        public void customizedPath() {
+        }
+        
+        @Path("/*/customPath")
+        public void starPath() {
+        }
+    }
+    
+    class InheritanceExample extends MyResource {
+    }
+    
+
+
+    @Test
+    public void usesAsteriskBothWays() throws NoSuchMethodException {
+		router.add(new PathAnnotationRules(mockery.resource(MyResource.class)));
+        Method method = mockery.methodFor(MyResource.class, "starPath").getMethod();
+        String url = router.urlFor(MyResource.class, method, new Object[] {});
+        assertThat(router.parse(url, HttpMethod.POST, null).getMethod(), is(equalTo(method)));
+        mockery.assertIsSatisfied();
+    }
+
+    @Test
+    public void canTranslateAInheritedResourceBothWays() throws NoSuchMethodException {
+		router.add(new PathAnnotationRules(mockery.resource(MyResource.class)));
+		router.add(new PathAnnotationRules(mockery.resource(InheritanceExample.class)));
+        Method method = mockery.methodFor(MyResource.class, "notAnnotated").getMethod();
+        String url = router.urlFor(InheritanceExample.class, method, new Object[] {});
+        assertThat(router.parse(url, HttpMethod.POST, null).getMethod(), is(equalTo(method)));
+        mockery.assertIsSatisfied();
+    }
+
+    @Test
+    public void canTranslateAnnotatedMethodBothWays() throws NoSuchMethodException {
+		router.add(new PathAnnotationRules(mockery.resource(MyResource.class)));
+        Method method = mockery.methodFor(MyResource.class, "customizedPath").getMethod();
+        String url = router.urlFor(MyResource.class, method, new Object[] {});
+        assertThat(router.parse(url, HttpMethod.POST, null).getMethod(), is(equalTo(method)));
+        mockery.assertIsSatisfied();
+    }
+
+
+
+
 }

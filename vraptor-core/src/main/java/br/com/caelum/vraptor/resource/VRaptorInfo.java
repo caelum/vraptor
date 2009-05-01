@@ -36,22 +36,30 @@ import javax.servlet.http.HttpServletResponse;
 
 import br.com.caelum.vraptor.Resource;
 
+/**
+ * A simple easter egg to let us know you are using vraptor (as dos4gw's header
+ * on exe files).<br>
+ * It doesnt disclose vraptor's exact release.
+ * 
+ * @author guilherme silveira
+ * 
+ */
 @Resource
 public class VRaptorInfo {
-    
-    private final HttpServletResponse response;
 
-    protected VRaptorInfo() {
-    	this(null);
-    }
-    
-    public VRaptorInfo(HttpServletResponse response) {
-        this.response = response;
-    }
-    
-    public void info() throws IOException {
-        PrintWriter writer = response.getWriter();
-        writer.println("vraptor3");
-    }
+	private final HttpServletResponse response;
+
+	protected VRaptorInfo() {
+		this(null);
+	}
+
+	public VRaptorInfo(HttpServletResponse response) {
+		this.response = response;
+	}
+
+	public void info() throws IOException {
+		PrintWriter writer = response.getWriter();
+		writer.println("vraptor3");
+	}
 
 }

@@ -104,6 +104,12 @@ public class UriBasedRule implements Rule {
 		e.setCallback(new MethodInterceptor() {
 
 			public Object intercept(Object instance, Method method, Object[] args, MethodProxy proxy) throws Throwable {
+				if(resource!=null) {
+					// you are either invoking a second method
+					// or the virtual machine might be invoking the finalize method (or anything similar)
+					// therefore we should ignore this emthod invocation
+					return null;
+				}
 				is(type, method);
 				return null;
 			}

@@ -46,7 +46,6 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 public class ExecuteMethodInterceptorTest {
 
     private Mockery mockery;
-    private MethodInfo parameters;
     private MethodInfo info;
     private InterceptorStack stack;
 
@@ -55,19 +54,18 @@ public class ExecuteMethodInterceptorTest {
         this.mockery = new Mockery();
         this.info = mockery.mock(MethodInfo.class);
         this.stack = mockery.mock(InterceptorStack.class);
-        this.parameters =mockery.mock(MethodInfo.class);
     }
 
     @Test
     public void shouldInvokeTheMethodAndNotProceedWithInterceptorStack() throws SecurityException,
             NoSuchMethodException, IOException, InterceptionException {
-        ExecuteMethodInterceptor interceptor = new ExecuteMethodInterceptor(info, parameters);
+        ExecuteMethodInterceptor interceptor = new ExecuteMethodInterceptor(info);
         final ResourceMethod method = new DefaultResourceMethod(null, DogAlike.class.getMethod("bark"));
         final DogAlike auau = mockery.mock(DogAlike.class);
         mockery.checking(new Expectations() {
             {
                 one(auau).bark();
-                one(parameters).getParameters(); will(returnValue(new Object[]{}));
+                one(info).getParameters(); will(returnValue(new Object[]{}));
                 one(stack).next(method, auau);
             }
         });
@@ -78,7 +76,7 @@ public class ExecuteMethodInterceptorTest {
     @Test
     public void shouldThrowMethodExceptionIfThereIsAnInvocationException() throws IOException, SecurityException,
             NoSuchMethodException {
-        ExecuteMethodInterceptor interceptor = new ExecuteMethodInterceptor(info , parameters);
+        ExecuteMethodInterceptor interceptor = new ExecuteMethodInterceptor(info);
         ResourceMethod method = new DefaultResourceMethod(null, DogAlike.class.getMethod("bark"));
         final DogAlike auau = mockery.mock(DogAlike.class);
         final RuntimeException exception = new RuntimeException();
@@ -86,7 +84,7 @@ public class ExecuteMethodInterceptorTest {
             {
                 one(auau).bark();
                 will(throwException(exception));
-                one(parameters).getParameters(); will(returnValue(new Object[]{}));
+                one(info).getParameters(); will(returnValue(new Object[]{}));
             }
         });
         try {
@@ -100,13 +98,13 @@ public class ExecuteMethodInterceptorTest {
     
     @Test
     public void shouldUseTheProvidedArguments() throws SecurityException, NoSuchMethodException, InterceptionException, IOException {
-        ExecuteMethodInterceptor interceptor = new ExecuteMethodInterceptor(info, parameters);
+        ExecuteMethodInterceptor interceptor = new ExecuteMethodInterceptor(info);
         final ResourceMethod method = new DefaultResourceMethod(null, DogAlike.class.getMethod("bark", int.class));
         final DogAlike auau = mockery.mock(DogAlike.class);
         mockery.checking(new Expectations() {
             {
                 one(auau).bark(3);
-                one(parameters).getParameters(); will(returnValue(new Object[]{3}));
+                one(info).getParameters(); will(returnValue(new Object[]{3}));
                 one(stack).next(method, auau);
             }
         });

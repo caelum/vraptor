@@ -46,19 +46,17 @@ import br.com.caelum.vraptor.validator.ValidationError;
  */
 public class ExecuteMethodInterceptor implements Interceptor {
 
-    private final MethodInfo parameters;
     private final MethodInfo info;
 
-    public ExecuteMethodInterceptor(MethodInfo info, MethodInfo parameters) {
-        this.info = info;
-        this.parameters = parameters;
+	public ExecuteMethodInterceptor(MethodInfo info) {
+		this.info = info;
     }
 
     public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
             throws InterceptionException {
         try {
             Method reflectionMethod = method.getMethod();
-            Object[] parameters = this.parameters.getParameters();
+            Object[] parameters = this.info.getParameters();
             Object result = reflectionMethod.invoke(resourceInstance, parameters);
             if (result == null) {
                 this.info.setResult("ok");

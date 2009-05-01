@@ -99,6 +99,9 @@ public class UriBasedRule implements Rule {
 			public Object intercept(Object instance, Method method, Object[] args, MethodProxy proxy) throws Throwable {
 				Class<? extends Object> baseType = instance.getClass();
 				Class definingType = lookFor(baseType, baseType, method);
+				if(resource!=null) {
+					throw new IllegalStateException("You invoked two methods to define what a rule is supposed to do. That's invalid.");
+				}
 				resource = new DefaultResourceMethod(new DefaultResource(definingType), method);
 				return null;
 			}
@@ -108,7 +111,14 @@ public class UriBasedRule implements Rule {
 					throw new IllegalArgumentException("Invalid rule registration, method " + method.getName()
 							+ " was not found, although it was declared at " + baseType.getName());
 				}
-				return null;
+				try {
+					currentType.getDeclaredMethod(method.getName(), method.getParameterTypes());
+					return currentType;
+				} catch (SecurityException e) {
+					throw new InvalidResourceException("We were unable to reflection access type " + currentType.getName() + " while adding a " + baseType.getName() + "." + method.getName());
+				} catch (NoSuchMethodException e) {
+					return lookFor(baseType, currentType.getSuperclass(), method);
+				}
 			}
 		});
 		return (T) e.create();
@@ -137,6 +147,9 @@ public class UriBasedRule implements Rule {
 	}
 
 	public Resource getResource() {
+		if(resource==null) {
+			throw new IllegalStateException("You forgot to invoke a method to let the rule know which method it is suposed to invoke.");
+		}
 		return this.resource.getResource();
 	}
 

@@ -31,32 +31,32 @@ package br.com.caelum.vraptor.resource;
 
 public class DefaultResource implements Resource {
 
-    private final Class<?> type;
+	private final Class<?> type;
 
-    public DefaultResource(Class<?> type) {
-        this.type = type;
-    }
+	public DefaultResource(Class<?> type) {
+		this.type = type;
+	}
 
-    @Override
-    public boolean equals(Object obj) {
-        if (!(obj instanceof DefaultResource)) {
-            return false;
-        }
-        DefaultResource resource = (DefaultResource) obj;
-        return this.type.equals(resource.type);
-    }
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof DefaultResource)) {
+			return false;
+		}
+		DefaultResource resource = (DefaultResource) obj;
+		return this.type.equals(resource.type);
+	}
 
-    @Override
-    public int hashCode() {
-        return type.hashCode();
-    }
+	@Override
+	public int hashCode() {
+		return type == null ? 0 : type.hashCode();
+	}
 
-    public String toString() {
-        return "{DefaultResource " + type.getName() + "}";
-    }
+	public String toString() {
+		return "{DefaultResource " + type.getName() + "}";
+	}
 
-    public Class<?> getType() {
-        return type;
-    }
+	public Class<?> getType() {
+		return type;
+	}
 
 }

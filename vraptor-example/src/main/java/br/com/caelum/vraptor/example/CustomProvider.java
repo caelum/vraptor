@@ -44,7 +44,7 @@ public class CustomProvider extends PicoProvider{
     protected void registerComponents(ComponentRegistry container) {
         super.registerComponents(container);
         container.register(Database.class, InMemoryDatabase.class);
-        container.register(RoutesConfiguration.class, MyCustomRoutes.class);
+        container.register(RoutesConfiguration.class, CustomRoutes.class);
     }
 
 }

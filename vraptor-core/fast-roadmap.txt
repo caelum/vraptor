@@ -1,10 +1,10 @@
 TODO: 16
+(MUST) - path annotation is supporting injection?
 - if there is a conversion error, ognl should not set - conversion error should set the path variable 
 - conversion should log what is being set... use also an exception to do it
 - better exception handling everywhere (search for TODO within exceptions)
 - suppor for kung's register api
 - make client server redirect work with parameters, which ones?
-(MUST) - path annotation and niceurl with support to value injection (niceurls?)
 (MUST) - hibernate plugin
 (MUST) - json output support: three different options
 (MUST) - Map support

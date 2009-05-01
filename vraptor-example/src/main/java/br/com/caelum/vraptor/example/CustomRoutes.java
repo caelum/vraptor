@@ -38,7 +38,7 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
  *
  */
 @ApplicationScoped
-public class MyCustomRoutes implements RoutesConfiguration{
+public class CustomRoutes implements RoutesConfiguration{
 
 	public void config(Router router) {
 		router.add(new Rules() {{

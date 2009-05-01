@@ -53,6 +53,7 @@ import br.com.caelum.vraptor.core.URLParameterExtractorInterceptor;
 import br.com.caelum.vraptor.http.DefaultRequestParameters;
 import br.com.caelum.vraptor.http.DefaultRouter;
 import br.com.caelum.vraptor.http.EmptyElementsRemoval;
+import br.com.caelum.vraptor.http.NoRoutesConfiguration;
 import br.com.caelum.vraptor.http.OgnlParametersProvider;
 import br.com.caelum.vraptor.http.ParanamerNameProvider;
 import br.com.caelum.vraptor.http.StupidTranslator;
@@ -79,92 +80,82 @@ import br.com.caelum.vraptor.vraptor2.RequestResult;
  * Managing internal components by using pico container.<br>
  * There is an extension point through the registerComponents method, which
  * allows one to give a customized container.
- *
+ * 
  * @author Guilherme Silveira
  */
 public class PicoProvider implements ContainerProvider {
 
-    private final MutablePicoContainer container;
+	private final MutablePicoContainer container;
 
-    private static final Logger logger = LoggerFactory.getLogger(PicoProvider.class);
+	private static final Logger logger = LoggerFactory.getLogger(PicoProvider.class);
 
-    public PicoProvider() {
-        this.container = new DefaultPicoContainer(new Caching(), new JavaEE5LifecycleStrategy(new NullComponentMonitor()), null);
-        PicoContainersProvider containersProvider = new PicoContainersProvider(this.container);
-        this.container.addComponent(containersProvider);
-        registerComponents(getContainers());
-        containersProvider.init();
-        // TODO: cache
-        // cache(CacheBasedRouter.class, Router.class);
-        // cache(CacheBasedTypeCreator.class, AsmBasedTypeCreator.class);
-    }
+	public PicoProvider() {
+		this.container = new DefaultPicoContainer(new Caching(), new JavaEE5LifecycleStrategy(
+				new NullComponentMonitor()), null);
+		PicoContainersProvider containersProvider = new PicoContainersProvider(this.container);
+		this.container.addComponent(containersProvider);
+		registerComponents(getContainers());
+		containersProvider.init();
+		// TODO: cache
+		// cache(CacheBasedRouter.class, Router.class);
+		// cache(CacheBasedTypeCreator.class, AsmBasedTypeCreator.class);
+	}
 
-    /**
-     * Register extra components that your app wants to.
-     */
-    protected void registerComponents(ComponentRegistry container) {
-        singleInterfaceRegister(StupidTranslator.class, container);
-        singleInterfaceRegister(DefaultRouter.class, container);
-        singleInterfaceRegister(DefaultResourceNotFoundHandler.class, container);
-        singleInterfaceRegister(DefaultDirScanner.class, container);
-        singleInterfaceRegister(WebInfClassesScanner.class, container);
-        singleInterfaceRegister(DefaultInterceptorRegistry.class, container);
-        singleInterfaceRegister(DefaultMethodLookupBuilder.class, container);
-        singleInterfaceRegister(DefaultPathResolver.class, container);
-        singleInterfaceRegister(ParanamerNameProvider.class, container);
-        singleInterfaceRegister(DefaultConverters.class, container);
-        singleInterfaceRegister(DefaultMethodInfo.class, container);
-        singleInterfaceRegister(DefaultRequestParameters.class, container);
-        singleInterfaceRegister(DefaultInterceptorStack.class, container);
-        singleInterfaceRegister(DefaultRequestExecution.class, container);
-        singleInterfaceRegister(DefaultResult.class, container);
-        singleInterfaceRegister(OgnlParametersProvider.class, container);
-        singleInterfaceRegister(DefaultMethodInfo.class, container);
-        singleInterfaceRegister(DefaultValidator.class, container);
-        singleInterfaceRegister(JstlLocalization.class, container);
+	/**
+	 * Register extra components that your app wants to.
+	 */
+	protected void registerComponents(ComponentRegistry container) {
+		for (Class type : new Class[] { StupidTranslator.class, DefaultRouter.class,
+				DefaultResourceNotFoundHandler.class, DefaultDirScanner.class, 
+				DefaultInterceptorRegistry.class, DefaultMethodLookupBuilder.class, DefaultPathResolver.class,
+				ParanamerNameProvider.class, DefaultConverters.class, DefaultMethodInfo.class,
+				DefaultRequestParameters.class, DefaultInterceptorStack.class, DefaultRequestExecution.class,
+				DefaultResult.class, OgnlParametersProvider.class, DefaultMethodInfo.class, DefaultValidator.class,
+				JstlLocalization.class, NoRoutesConfiguration.class,WebInfClassesScanner.class }) {
+			singleInterfaceRegister(type, container);
+		}
 
-        container.register(ForwardToDefaultViewInterceptor.class, ForwardToDefaultViewInterceptor.class);
-        container.register(LogicResult.class, DefaultLogicResult.class);
-        container.register(RequestResult.class, RequestResult.class);
-        container.register(PageResult.class, DefaultPageResult.class);
-        container.register(TypeCreator.class, AsmBasedTypeCreator.class);
-        container.register(EmptyElementsRemoval.class, EmptyElementsRemoval.class);
-        container.register(ParametersInstantiatorInterceptor.class, ParametersInstantiatorInterceptor.class);
-        container.register(InterceptorListPriorToExecutionExtractor.class, InterceptorListPriorToExecutionExtractor.class);
-        container.register(URLParameterExtractorInterceptor.class, URLParameterExtractorInterceptor.class);
-        container.register(ResourceLookupInterceptor.class, ResourceLookupInterceptor.class);
-        container.register(InstantiateInterceptor.class, InstantiateInterceptor.class);
-        container.register(ExecuteMethodInterceptor.class, ExecuteMethodInterceptor.class);
-    }
+		container.register(ForwardToDefaultViewInterceptor.class, ForwardToDefaultViewInterceptor.class);
+		container.register(LogicResult.class, DefaultLogicResult.class);
+		container.register(RequestResult.class, RequestResult.class);
+		container.register(PageResult.class, DefaultPageResult.class);
+		container.register(TypeCreator.class, AsmBasedTypeCreator.class);
+		container.register(EmptyElementsRemoval.class, EmptyElementsRemoval.class);
+		container.register(ParametersInstantiatorInterceptor.class, ParametersInstantiatorInterceptor.class);
+		container.register(InterceptorListPriorToExecutionExtractor.class,
+				InterceptorListPriorToExecutionExtractor.class);
+		container.register(URLParameterExtractorInterceptor.class, URLParameterExtractorInterceptor.class);
+		container.register(ResourceLookupInterceptor.class, ResourceLookupInterceptor.class);
+		container.register(InstantiateInterceptor.class, InstantiateInterceptor.class);
+		container.register(ExecuteMethodInterceptor.class, ExecuteMethodInterceptor.class);
+	}
 
-    private void singleInterfaceRegister(Class<?> type, ComponentRegistry registry) {
-        Class<?>[] interfaces = type.getInterfaces();
-        if (interfaces.length != 1) {
-            throw new IllegalArgumentException(
-                    "Invalid registering of a type with more than one interface" +
-                            " being registered as a single interface component: "
-                            + type.getName());
-        }
-        registry.register(interfaces[0], type);
-    }
+	private void singleInterfaceRegister(Class<?> type, ComponentRegistry registry) {
+		Class<?>[] interfaces = type.getInterfaces();
+		if (interfaces.length != 1) {
+			throw new IllegalArgumentException("Invalid registering of a type with more than one interface"
+					+ " being registered as a single interface component: " + type.getName());
+		}
+		registry.register(interfaces[0], type);
+	}
 
-    public <T> T provideForRequest(RequestInfo request, Execution<T> execution) {
-        return execution.insideRequest(getContainers().provide(request));
-    }
+	public <T> T provideForRequest(RequestInfo request, Execution<T> execution) {
+		return execution.insideRequest(getContainers().provide(request));
+	}
 
-    public void start(ServletContext context) {
-        this.container.addComponent(context);
-        container.getComponent(ResourceLoader.class).loadAll();
-        container.start();
-    }
+	public void start(ServletContext context) {
+		this.container.addComponent(context);
+		this.container.getComponent(WebInfClassesScanner.class).loadAll();
+		container.start();
+	}
 
-    public void stop() {
-        container.stop();
-        container.dispose();
-    }
+	public void stop() {
+		container.stop();
+		container.dispose();
+	}
 
-    private PicoContainersProvider getContainers() {
-        return this.container.getComponent(PicoContainersProvider.class);
-    }
+	private PicoContainersProvider getContainers() {
+		return this.container.getComponent(PicoContainersProvider.class);
+	}
 
 }

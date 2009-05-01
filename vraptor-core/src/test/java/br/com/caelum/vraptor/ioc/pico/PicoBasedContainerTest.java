@@ -14,6 +14,7 @@ import org.picocontainer.PicoBuilder;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.http.DefaultRouter;
 import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor.http.NoRoutesConfiguration;
 import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
 import br.com.caelum.vraptor.resource.MethodLookupBuilder;
 import br.com.caelum.vraptor.resource.VRaptorInfo;
@@ -50,7 +51,7 @@ public class PicoBasedContainerTest {
                 one(builder).lookupFor(with(VRaptorMatchers.resource(VRaptorInfo.class)));
             }
         });
-        this.container = new PicoBasedContainer(picoContainer, request, new DefaultRouter(builder));
+        this.container = new PicoBasedContainer(picoContainer, request, new DefaultRouter(builder, new NoRoutesConfiguration()));
     }
 
     @Test

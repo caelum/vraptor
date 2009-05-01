@@ -27,74 +27,61 @@
  */
 package br.com.caelum.vraptor.http;
 
-import java.io.IOException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
-import br.com.caelum.vraptor.ioc.ApplicationScoped;
+import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.Resource;
-import br.com.caelum.vraptor.resource.ResourceAndMethodLookup;
-import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.resource.VRaptorInfo;
 
-/**
- * The default implementation of resource localization rules.
- * It also uses a Path annotation to discover path->method
- * mappings using the supplied ResourceAndMethodLookup.
- * 
- * @author Guilherme Silveira
- */
-@ApplicationScoped
-public class DefaultRouter implements Router {
+public class PathAnnotationRules implements ListOfRules {
 
-    private final List<ResourceAndMethodLookup> lookup = new ArrayList<ResourceAndMethodLookup>();
 	private final List<Rule> rules = new ArrayList<Rule>();
-    private final Set<Resource> resources = new HashSet<Resource>();
 
-    public DefaultRouter(RoutesConfiguration config) {
-        // this resource should be kept here so it doesnt matter whether
-        // the user uses a custom routes config
-    	UriBasedRule rule = new UriBasedRule("/is_using_vraptor");
-    	try {
-			rule.is(VRaptorInfo.class).info();
-		} catch (IOException e) {
-			// ignorable
-		}
-    	add(rule);
-        config.config(this);
-    }
-
-	public void add(ListOfRules rulesToAdd) {
-		List<Rule> rules = rulesToAdd.getRules();
-		for(Rule r : rules) {
-			add(r);
-		}
+	@SuppressWarnings("unchecked")
+	public PathAnnotationRules(Resource resource) {
+		Class<?> baseType = resource.getType();
+		registerRulesFor(baseType, baseType);
 	}
 
-	private void add(Rule r) {
-		resources.add(r.getResource());
-		this.rules.add(r);
+	public List<Rule> getRules() {
+		return rules;
 	}
 
-	public ResourceMethod parse(String uri, HttpMethod method, MutableRequest request) {
-		for (Rule rule : rules) {
-			ResourceMethod value = rule.matches(uri, method, request);
-			if (value != null) {
-				return value;
+	private void registerRulesFor(Class<?> actualType, Class<?> baseType) {
+		for (Method javaMethod : actualType.getDeclaredMethods()) {
+			if (isEligible(javaMethod)) {
+				String uri = getUriFor(javaMethod, baseType);
+				UriBasedRule rule = new UriBasedRule(uri);
+				for (HttpMethod m : HttpMethod.values()) {
+					if (javaMethod.isAnnotationPresent(m.getAnnotation())) {
+						rule.with(m);
+					}
+				}
+				rule.is(baseType, javaMethod);
+				this.rules.add(rule);
 			}
 		}
-        return null;
 	}
 
-	public Set<Resource> all() {
-		return resources;
+	private String getUriFor(Method javaMethod, Class<?> type) {
+		if (javaMethod.isAnnotationPresent(Path.class)) {
+			return javaMethod.getAnnotation(Path.class).value();
+		}
+		return extractControllerFromName(type.getSimpleName()) + "/" + javaMethod.getName();
 	}
 
-	public void register(Resource resource) {
-		add(new PathAnnotationRules(resource));
+	private String extractControllerFromName(String baseName) {
+		if (baseName.endsWith("Controller")) {
+			return "/" + baseName.substring(0, baseName.lastIndexOf("Controller"));
+		}
+		return "/" + baseName;
+	}
+
+	private boolean isEligible(Method javaMethod) {
+		return Modifier.isPublic(javaMethod.getModifiers()) && !Modifier.isStatic(javaMethod.getModifiers());
 	}
 
 }

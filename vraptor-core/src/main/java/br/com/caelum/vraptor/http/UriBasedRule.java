@@ -29,7 +29,9 @@ package br.com.caelum.vraptor.http;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -51,7 +53,7 @@ public class UriBasedRule implements Rule {
 
 	private DefaultResourceMethod resource;
 
-	private HttpMethod method;
+	private final Set<HttpMethod> supportedMethods = new HashSet<HttpMethod>();
 
 	private Pattern pattern;
 	
@@ -86,39 +88,24 @@ public class UriBasedRule implements Rule {
 		this.pattern = Pattern.compile(patternUri);
 	}
 
+	/**
+	 * Accepts also this http method request. If this method is not invoked, any http method is supported, otherwise all parameters passed are supported.
+	 * @param method
+	 * @return
+	 */
 	public UriBasedRule with(HttpMethod method) {
-		this.method = method;
+		this.supportedMethods.add(method);
 		return this;
 	}
 
-	public <T> T is(Class<T> type) {
+	public <T> T is(final Class<T> type) {
 		Enhancer e = new Enhancer();
 		e.setSuperclass(type);
 		e.setCallback(new MethodInterceptor() {
 
 			public Object intercept(Object instance, Method method, Object[] args, MethodProxy proxy) throws Throwable {
-				Class<? extends Object> baseType = instance.getClass();
-				Class definingType = lookFor(baseType, baseType, method);
-				if(resource!=null) {
-					throw new IllegalStateException("You invoked two methods to define what a rule is supposed to do. That's invalid.");
-				}
-				resource = new DefaultResourceMethod(new DefaultResource(definingType), method);
+				is(type, method);
 				return null;
-			}
-
-			private Class lookFor(Class<? extends Object> baseType, Class currentType, Method method) {
-				if (currentType.equals(Object.class)) {
-					throw new IllegalArgumentException("Invalid rule registration, method " + method.getName()
-							+ " was not found, although it was declared at " + baseType.getName());
-				}
-				try {
-					currentType.getDeclaredMethod(method.getName(), method.getParameterTypes());
-					return currentType;
-				} catch (SecurityException e) {
-					throw new InvalidResourceException("We were unable to reflection access type " + currentType.getName() + " while adding a " + baseType.getName() + "." + method.getName());
-				} catch (NoSuchMethodException e) {
-					return lookFor(baseType, currentType.getSuperclass(), method);
-				}
 			}
 		});
 		return (T) e.create();
@@ -143,7 +130,7 @@ public class UriBasedRule implements Rule {
 	}
 
 	private boolean methodMatches(HttpMethod method) {
-		return (this.method == null || this.method.equals(method));
+		return (this.supportedMethods.isEmpty() || this.supportedMethods.contains(method));
 	}
 
 	public Resource getResource() {
@@ -151,6 +138,10 @@ public class UriBasedRule implements Rule {
 			throw new IllegalStateException("You forgot to invoke a method to let the rule know which method it is suposed to invoke.");
 		}
 		return this.resource.getResource();
+	}
+
+	protected void is(Class<?> type, Method method) {
+		resource = new DefaultResourceMethod(new DefaultResource(type), method);
 	}
 
 }

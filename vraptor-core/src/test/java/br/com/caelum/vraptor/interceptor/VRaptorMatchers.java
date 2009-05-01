@@ -19,20 +19,22 @@ import br.com.caelum.vraptor.validator.ValidationMessage;
  */
 public class VRaptorMatchers {
 
-    public static Matcher<ResourceMethod> resourceMethod(final Method method) {
-        return new BaseMatcher<ResourceMethod>() {
+    public static TypeSafeMatcher<ResourceMethod> resourceMethod(final Method method) {
+        return new TypeSafeMatcher<ResourceMethod>() {
 
-            public boolean matches(Object item) {
-                if (!(item instanceof ResourceMethod)) {
-                    return false;
-                }
-                ResourceMethod other = (ResourceMethod) item;
+            public boolean matchesSafely(ResourceMethod item) {
+                ResourceMethod other = item;
                 return other.getMethod().equals(method);
             }
 
             public void describeTo(Description description) {
                 description.appendText(" an instance of a resource method for method " + method.getName() + " declared at " + method.getDeclaringClass().getName());
             }
+
+			@Override
+			protected void describeMismatchSafely(ResourceMethod item, Description mismatchDescription) {
+				mismatchDescription.appendText(" an instance of a resource method for method " + item.getMethod().getName() + " declared at " + item.getMethod().getDeclaringClass().getName());
+			}
 
         };
     }

@@ -57,14 +57,14 @@ public class WebInfClassesScanner implements ResourceLoader {
 
 	private final DirScanner<?> scanner;
 
-	private final Router registry;
-
 	private final InterceptorRegistry interceptors;
 
+	private final Router router;
+
 	@SuppressWarnings("unchecked")
-	public WebInfClassesScanner(ServletContext context, DirScanner scanner, Router registry,
+	public WebInfClassesScanner(ServletContext context, DirScanner scanner, Router router,
 			InterceptorRegistry interceptors) {
-		this.registry = registry;
+		this.router = router;
 		this.interceptors = interceptors;
 		String path = context.getRealPath("");
 		this.classes = new File(path, "WEB-INF/classes");
@@ -73,7 +73,7 @@ public class WebInfClassesScanner implements ResourceLoader {
 
 	public void loadAll() {
 		logger.info("Starting looking for " + classes.getAbsolutePath());
-		scanner.scan(classes, new ResourceAcceptor(registry));
+		scanner.scan(classes, new ResourceAcceptor(router));
 
 		List<Class<? extends Interceptor>> interceptors = new ArrayList<Class<? extends Interceptor>>();
 		scanner.scan(classes, new InterceptorAcceptor(interceptors));

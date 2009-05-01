@@ -25,38 +25,32 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package br.com.caelum.vraptor.ioc.pico;
+package br.com.caelum.vraptor.http;
 
-import java.lang.annotation.Annotation;
+import javax.servlet.ServletContext;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import br.com.caelum.vraptor.http.Router;
-import br.com.caelum.vraptor.ioc.Stereotype;
-import br.com.caelum.vraptor.resource.DefaultResource;
+import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
+import br.com.caelum.vraptor.ioc.pico.DirScanner;
 
 /**
- * Whenever it finds some resources, registers it in this rules object.
+ * Uses the @Path annotation algorithm to look up routes.
  * 
  * @author guilherme silveira
  */
-public class ResourceAcceptor implements Acceptor {
+public class NoRoutesConfiguration implements RoutesConfiguration {
 
-	private static final Logger logger = LoggerFactory.getLogger(ResourceAcceptor.class);
-	private final Router router;
+	private final DirScanner scanner;
+	private final ServletContext context;
+	private final InterceptorRegistry registry;
 
-	public ResourceAcceptor(Router router) {
-		this.router = router;
+	public NoRoutesConfiguration(DirScanner scanner, ServletContext context, InterceptorRegistry registry) {
+		this.scanner = scanner;
+		this.context = context;
+		this.registry = registry;
 	}
 
-	public void analyze(Class<?> type) {
-		for (Annotation annotation : type.getAnnotations()) {
-			if (annotation.annotationType().isAnnotationPresent(Stereotype.class)) {
-				logger.debug("Found resource for " + type);
-				router.register(new DefaultResource(type));
-			}
-		}
+	public void config(Router router) {
+		router.add(new PathAnnotationRules(context, scanner, registry));
 	}
 
 }

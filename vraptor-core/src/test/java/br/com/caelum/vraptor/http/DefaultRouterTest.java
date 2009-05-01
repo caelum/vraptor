@@ -71,7 +71,7 @@ public class DefaultRouterTest {
 				will(returnValue(methodLookup));
 			}
 		});
-		this.router = new DefaultRouter(builder);
+		this.router = new DefaultRouter(builder, new NoRoutesConfiguration());
 	}
 
 	class Dog {
@@ -137,6 +137,20 @@ public class DefaultRouterTest {
 			}
 		});
 		assertThat(router.parse("/clients/add", HttpMethod.POST, request), is(VRaptorMatchers.resourceMethod(method(
+				"add", Dog.class))));
+		mockery.assertIsSatisfied();
+	}
+
+	@Test
+	public void acceptsAnHttpMethodLimitedMappingRuleWithBothMethods() throws NoSuchMethodException {
+		router.add(new Rules() {
+			{
+				routeFor("/clients/add").with(HttpMethod.POST).with(HttpMethod.GET).is(MyControl.class).add(null);
+			}
+		});
+		assertThat(router.parse("/clients/add", HttpMethod.POST, request), is(VRaptorMatchers.resourceMethod(method(
+				"add", Dog.class))));
+		assertThat(router.parse("/clients/add", HttpMethod.GET, request), is(VRaptorMatchers.resourceMethod(method(
 				"add", Dog.class))));
 		mockery.assertIsSatisfied();
 	}

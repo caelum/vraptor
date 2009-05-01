@@ -30,6 +30,7 @@ import br.com.caelum.vraptor.core.RequestExecution;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.core.URLParameterExtractorInterceptor;
 import br.com.caelum.vraptor.http.EmptyElementsRemoval;
+import br.com.caelum.vraptor.http.NoRoutesConfiguration;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.http.RequestParameters;
@@ -75,7 +76,7 @@ public abstract class GenericContainerTest {
     public void canProvideAllApplicationScopedComponents() {
         Class<?>[] components = new Class[] { ServletContext.class, UrlToResourceTranslator.class,
                 Router.class, TypeCreator.class, InterceptorRegistry.class, MethodLookupBuilder.class,
-                ParameterNameProvider.class, Converters.class, EmptyElementsRemoval.class };
+                ParameterNameProvider.class, Converters.class, EmptyElementsRemoval.class, NoRoutesConfiguration.class };
         checkAvailabilityFor(true, components);
         mockery.assertIsSatisfied();
     }

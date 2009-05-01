@@ -17,8 +17,11 @@ public interface Router {
 
 	ResourceMethod parse(String uri, HttpMethod method, MutableRequest request);
 
-    void register(Resource... resources);
-
     Set<Resource> all();
+
+    /**
+     * Registers this resource using the default algorithm for uri identification.
+     */
+	void register(Resource resource);
 
 }

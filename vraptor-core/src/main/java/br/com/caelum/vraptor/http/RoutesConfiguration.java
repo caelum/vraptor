@@ -25,38 +25,14 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package br.com.caelum.vraptor.ioc.pico;
-
-import java.lang.annotation.Annotation;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import br.com.caelum.vraptor.http.Router;
-import br.com.caelum.vraptor.ioc.Stereotype;
-import br.com.caelum.vraptor.resource.DefaultResource;
+package br.com.caelum.vraptor.http;
 
 /**
- * Whenever it finds some resources, registers it in this rules object.
- * 
+ * Configs your routes for your application.
  * @author guilherme silveira
  */
-public class ResourceAcceptor implements Acceptor {
+public interface RoutesConfiguration {
 
-	private static final Logger logger = LoggerFactory.getLogger(ResourceAcceptor.class);
-	private final Router router;
-
-	public ResourceAcceptor(Router router) {
-		this.router = router;
-	}
-
-	public void analyze(Class<?> type) {
-		for (Annotation annotation : type.getAnnotations()) {
-			if (annotation.annotationType().isAnnotationPresent(Stereotype.class)) {
-				logger.debug("Found resource for " + type);
-				router.register(new DefaultResource(type));
-			}
-		}
-	}
+	void config(Router router);
 
 }

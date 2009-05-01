@@ -41,6 +41,7 @@ public class OgnlParametersProviderTest {
 	private EmptyElementsRemoval removal;
 	private ArrayList<ValidationMessage> errors;
 
+	@SuppressWarnings("unchecked")
 	@Before
 	public void setup() {
 		this.mockery = new VRaptorMockery();
@@ -132,7 +133,6 @@ public class OgnlParametersProviderTest {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test
 	public void isCapableOfDealingWithEmptyParameterForInternalWrapperValue() throws OgnlException,
 			NoSuchMethodException {
@@ -140,7 +140,7 @@ public class OgnlParametersProviderTest {
 		final Matcher<ResourceMethod> resourceMethod = VRaptorMatchers.resourceMethod(method);
 		mockery.checking(new Expectations() {
 			{
-				one(parameters).getParameter("house.cat.id");
+				one(parameters).getParameterValues("house.cat.id");
 				will(returnValue(new String[] { "guilherme" }));
 				one(parameters).getParameterNames();
 				will(returnValue(enumFor("house.cat.id")));
@@ -158,7 +158,6 @@ public class OgnlParametersProviderTest {
 		mockery.assertIsSatisfied();
 	}
 
-	@SuppressWarnings("unchecked")
     @Test
     public void removeFromTheCollectionIfAnElementIsCreatedWithinACollectionButNoFieldIsSet() throws SecurityException,
             NoSuchMethodException {
@@ -166,7 +165,7 @@ public class OgnlParametersProviderTest {
         final Matcher<ResourceMethod> resourceMethod = VRaptorMatchers.resourceMethod(method);
         mockery.checking(new Expectations() {
             {
-                one(parameters).getParameter("house.extraCats[1].id");
+                one(parameters).getParameterValues("house.extraCats[1].id");
                 will(returnValue(new String[] { "guilherme" }));
                 one(parameters).getParameterNames();
                 will(returnValue(enumFor("house.extraCats[1].id")));
@@ -184,11 +183,11 @@ public class OgnlParametersProviderTest {
         mockery.assertIsSatisfied();
     }
 
+	@SuppressWarnings("unchecked")
 	private Enumeration enumFor(String... values) {
 		return new Vector(Arrays.asList(values)).elements();
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test
 	public void removeFromTheCollectionIfAnElementIsCreatedWithinAnArrayButNoFieldIsSet() throws SecurityException,
 			NoSuchMethodException {
@@ -196,7 +195,7 @@ public class OgnlParametersProviderTest {
 		final Matcher<ResourceMethod> resourceMethod = VRaptorMatchers.resourceMethod(method);
 		mockery.checking(new Expectations() {
 			{
-				one(parameters).getParameter("house.ids[1]");
+				one(parameters).getParameterValues("house.ids[1]");
 				will(returnValue(new String[] { "3" }));
 				one(parameters).getParameterNames();
 				will(returnValue(enumFor("house.ids[1]" )));
@@ -216,7 +215,6 @@ public class OgnlParametersProviderTest {
 		mockery.assertIsSatisfied();
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test
 	public void removeFromTheCollectionIfAnElementIsCreatedWithinACollectionButNoFieldIsSetAppartFromTheValueItselfNotAChild()
 			throws SecurityException, NoSuchMethodException {
@@ -224,7 +222,7 @@ public class OgnlParametersProviderTest {
 		final Matcher<ResourceMethod> resourceMethod = VRaptorMatchers.resourceMethod(method);
 		mockery.checking(new Expectations() {
 			{
-				one(parameters).getParameter("house.owners[1]");
+				one(parameters).getParameterValues("house.owners[1]");
 				will(returnValue(new String[] { "guilherme" }));
 				one(parameters).getParameterNames();
 				will(returnValue(enumFor( "house.owners[1]" )));

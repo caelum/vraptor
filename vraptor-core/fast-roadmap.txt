@@ -1,10 +1,8 @@
 - make client server redirect work with parameters, which ones?
-(MUST) - hibernate plugin
 (MUST) - json output support: three different options
-(MUST) - Map support
 - automatic REDIRECT depending on accepts
 	  onError().goTo("xpto");
-
+- delete support "_method" parameter, accept support "_accept" parameter
 
 
 
@@ -52,12 +50,14 @@ site docs (prior to release)
 - containers now can be @Request, @Session, @App scoped
 
 kung help
+	- suppor for kung's register api
 	- known bug: accessing / when its /index.html.... if its a dir containing an index.html it doesnt work, but if your url is /clients/ it works...
 	- add a @Listener 
-	- delete is not working
 	- better exception handling everywhere (search for TODO within exceptions)
+	- hibernate plugin, how?
+	maybe:
 	- Set support
-	- suppor for kung's register api
+	- Map support
 
 
 
@@ -86,10 +86,6 @@ right before release
 	jira
 	forum
 	official support by caelum
-
-maybe
-- Hibernate.validate(Object instance, String ... fields)
-- Hibernate.validate(Object instance) : Proxy.getFirst(), Proxy.getSecond() will hibernate validate those fields
 
 
 
@@ -123,6 +119,8 @@ right before ANY release
 	- check all TODOS and do something about them
 
 ONLY AFTER RELEASE
+- Hibernate.validate(Object instance, String ... fields)
+- Hibernate.validate(Object instance) : Proxy.getFirst(), Proxy.getSecond() will hibernate validate those fields
 - DefaultLogicResult should cache enhancers in order to create objects
 - Everywhere there is an Enhacer should cache enhancers
 - AsmTypeCreator should cache instances

@@ -55,23 +55,23 @@ public class PrimitiveDoubleConverterTest {
     
     @Test
     public void shouldBeAbleToConvertNumbers(){
-        assertThat((Double) converter.convert("2.3", double.class, errors, bundle), is(equalTo(2.3d)));
+        assertThat((Double) converter.convert("2.3", double.class, bundle), is(equalTo(2.3d)));
     }
     
     @Test
     public void shouldComplainAboutInvalidNumber() {
-        converter.convert("---", double.class, errors, bundle);
+        converter.convert("---", double.class, bundle);
         assertThat(errors.get(0), is(VRaptorMatchers.error("", "--- is not a valid number.")));
     }
     
     @Test
     public void shouldConvertToZeroWhenNull() {
-    	assertThat((Double) converter.convert(null, double.class, errors, bundle), is(equalTo(0D)));
+    	assertThat((Double) converter.convert(null, double.class, bundle), is(equalTo(0D)));
     }
 
     @Test
     public void shouldConvertToZeroWhenEmpty() {
-    	assertThat((Double) converter.convert("", double.class, errors, bundle), is(equalTo(0D)));
+    	assertThat((Double) converter.convert("", double.class, bundle), is(equalTo(0D)));
     }
 
 }

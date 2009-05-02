@@ -56,40 +56,40 @@ public class EnumConverterTest {
 
     @Test
     public void shouldBeAbleToConvertByOrdinal() {
-        assertThat((MyCustomEnum) converter.convert("1", MyCustomEnum.class, errors, bundle), is(equalTo(MyCustomEnum.SECOND)));
+        assertThat((MyCustomEnum) converter.convert("1", MyCustomEnum.class, bundle), is(equalTo(MyCustomEnum.SECOND)));
     }
 
     @Test
     public void shouldBeAbleToConvertByName() {
-        assertThat((MyCustomEnum) converter.convert("FIRST", MyCustomEnum.class, errors, bundle), is(equalTo(MyCustomEnum.FIRST)));
+        assertThat((MyCustomEnum) converter.convert("FIRST", MyCustomEnum.class, bundle), is(equalTo(MyCustomEnum.FIRST)));
     }
 
     @Test
     public void shouldConvertEmptyToNull() {
-        assertThat(converter.convert("", MyCustomEnum.class, errors, bundle), is(nullValue()));
+        assertThat(converter.convert("", MyCustomEnum.class, bundle), is(nullValue()));
     }
 
     @Test
     public void shouldComplainAboutInvalidIndex() {
-        converter.convert("3200", MyCustomEnum.class, errors, bundle);
+        converter.convert("3200", MyCustomEnum.class, bundle);
         assertThat(errors.get(0), is(VRaptorMatchers.error("", "3200 is not a valid option.")));
     }
 
     @Test
     public void shouldComplainAboutInvalidNumber() {
-        converter.convert("32a00", MyCustomEnum.class, errors, bundle);
+        converter.convert("32a00", MyCustomEnum.class, bundle);
         assertThat(errors.get(0), is(VRaptorMatchers.error("", "32a00 is not a valid option.")));
     }
 
     @Test
     public void shouldComplainAboutInvalidOrdinal() {
-        converter.convert("THIRD", MyCustomEnum.class, errors, bundle);
+        converter.convert("THIRD", MyCustomEnum.class, bundle);
         assertThat(errors.get(0), is(VRaptorMatchers.error("", "THIRD is not a valid option.")));
     }
 
     @Test
     public void shouldAcceptNull() {
-        assertThat((MyCustomEnum) converter.convert(null, MyCustomEnum.class, errors, bundle), is(nullValue()));
+        assertThat((MyCustomEnum) converter.convert(null, MyCustomEnum.class, bundle), is(nullValue()));
     }
 
     enum MyCustomEnum {

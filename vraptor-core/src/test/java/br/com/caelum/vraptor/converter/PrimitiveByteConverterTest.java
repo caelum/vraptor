@@ -55,23 +55,23 @@ public class PrimitiveByteConverterTest {
     
     @Test
     public void shouldBeAbleToConvertNumbers(){
-        assertThat((Byte) converter.convert("7", byte.class, errors, bundle), is(equalTo((byte)7)));
+        assertThat((Byte) converter.convert("7", byte.class, bundle), is(equalTo((byte)7)));
     }
     
     @Test
     public void shouldComplainAboutInvalidNumber() {
-        converter.convert("---", byte.class, errors, bundle);
+        converter.convert("---", byte.class, bundle);
         assertThat(errors.get(0), is(VRaptorMatchers.error("", "--- is not a valid integer.")));
     }
     
     @Test
     public void shouldConvertToZeroWhenNull() {
-    	assertThat((Byte) converter.convert(null, byte.class, errors, bundle), is(equalTo((byte) 0)));
+    	assertThat((Byte) converter.convert(null, byte.class, bundle), is(equalTo((byte) 0)));
     }
 
     @Test
     public void shouldConvertToZeroWhenEmpty() {
-    	assertThat((Byte) converter.convert("", byte.class, errors, bundle), is(equalTo((byte) 0)));
+    	assertThat((Byte) converter.convert("", byte.class, bundle), is(equalTo((byte) 0)));
     }
 
 }

@@ -55,23 +55,23 @@ public class PrimitiveIntConverterTest {
     
     @Test
     public void shouldBeAbleToConvertNumbers(){
-        assertThat((Integer) converter.convert("2", int.class, errors, bundle), is(equalTo(2)));
+        assertThat((Integer) converter.convert("2", int.class, bundle), is(equalTo(2)));
     }
     
     @Test
     public void shouldComplainAboutInvalidNumber() {
-        converter.convert("---", int.class, errors, bundle);
+        converter.convert("---", int.class, bundle);
         assertThat(errors.get(0), is(VRaptorMatchers.error("", "--- is not a valid integer.")));
     }
     
     @Test
     public void shouldConvertToZeroWhenNull() {
-        assertThat((Integer) converter.convert(null, int.class, errors, bundle), is(equalTo(0)));
+        assertThat((Integer) converter.convert(null, int.class, bundle), is(equalTo(0)));
     }
 
     @Test
     public void shouldConvertToZeroWhenEmpty() {
-        assertThat((Integer) converter.convert("", int.class, errors, bundle), is(equalTo(0)));
+        assertThat((Integer) converter.convert("", int.class, bundle), is(equalTo(0)));
     }
 
 }

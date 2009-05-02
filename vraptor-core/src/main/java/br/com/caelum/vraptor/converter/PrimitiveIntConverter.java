@@ -30,7 +30,6 @@
 package br.com.caelum.vraptor.converter;
 
 import java.text.MessageFormat;
-import java.util.List;
 import java.util.ResourceBundle;
 
 import br.com.caelum.vraptor.Convert;
@@ -47,7 +46,7 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
 @ApplicationScoped
 public class PrimitiveIntConverter implements Converter {
 
-    public Object convert(String value, Class type, List errors, ResourceBundle bundle) {
+    public Object convert(String value, Class type, ResourceBundle bundle) {
         if(value==null || value.equals("")) {
             return 0;
         }

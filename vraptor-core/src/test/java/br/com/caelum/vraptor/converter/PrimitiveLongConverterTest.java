@@ -55,23 +55,23 @@ public class PrimitiveLongConverterTest {
     
     @Test
     public void shouldBeAbleToConvertNumbers(){
-        assertThat((Long) converter.convert("2", long.class, errors, bundle), is(equalTo(2L)));
+        assertThat((Long) converter.convert("2", long.class, bundle), is(equalTo(2L)));
     }
     
     @Test
     public void shouldComplainAboutInvalidNumber() {
-        converter.convert("---", long.class, errors, bundle);
+        converter.convert("---", long.class, bundle);
         assertThat(errors.get(0), is(VRaptorMatchers.error("", "--- is not a valid integer.")));
     }
     
     @Test
     public void shouldConvertToZeroWhenNull() {
-    	assertThat((Long) converter.convert(null, long.class, errors, bundle), is(equalTo(0L)));
+    	assertThat((Long) converter.convert(null, long.class, bundle), is(equalTo(0L)));
     }
 
     @Test
     public void shouldConvertToZeroWhenEmpty() {
-    	assertThat((Long) converter.convert("", long.class, errors, bundle), is(equalTo(0L)));
+    	assertThat((Long) converter.convert("", long.class, bundle), is(equalTo(0L)));
     }
     
 }

@@ -63,23 +63,23 @@ public class BigDecimalConverterTest {
     
     @Test
     public void shouldBeAbleToConvertIntegerNumbers(){
-        assertThat(converter.convert("2.3", BigDecimal.class, errors, bundle), is(equalTo(new BigDecimal("2.3"))));
+        assertThat(converter.convert("2.3", BigDecimal.class, bundle), is(equalTo(new BigDecimal("2.3"))));
     }
     
     @Test
     public void shouldComplainAboutInvalidNumber() {
-        converter.convert("---", BigDecimal.class, errors, bundle);
+        converter.convert("---", BigDecimal.class, bundle);
         assertThat(errors.get(0), is(VRaptorMatchers.error("", "--- is not a valid number.")));
     }
     
     @Test
     public void shouldNotComplainAboutNull() {
-        assertThat(converter.convert(null, BigDecimal.class, errors, bundle), is(nullValue()));
+        assertThat(converter.convert(null, BigDecimal.class, bundle), is(nullValue()));
     }
 
     @Test
     public void shouldNotComplainAboutEmpty() {
-        assertThat(converter.convert("", BigDecimal.class, errors, bundle), is(nullValue()));
+        assertThat(converter.convert("", BigDecimal.class, bundle), is(nullValue()));
     }
 
 }

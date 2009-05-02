@@ -56,18 +56,18 @@ public class IntegerConverterTest {
     
     @Test
     public void shouldBeAbleToConvertNumbers(){
-        assertThat(converter.convert("2", Integer.class, errors, bundle), is(equalTo(2)));
+        assertThat(converter.convert("2", Integer.class, bundle), is(equalTo(2)));
     }
     
     @Test
     public void shouldComplainAboutInvalidNumber() {
-        converter.convert("---", Integer.class, errors, bundle);
+        converter.convert("---", Integer.class, bundle);
         assertThat(errors.get(0), is(VRaptorMatchers.error("", "--- is not a valid integer.")));
     }
     
     @Test
     public void shouldNotComplainAboutNull() {
-        assertThat(converter.convert(null, Integer.class, errors, bundle), is(nullValue()));
+        assertThat(converter.convert(null, Integer.class, bundle), is(nullValue()));
     }
 
 }

@@ -55,23 +55,23 @@ public class PrimitiveShortConverterTest {
     
     @Test
     public void shouldBeAbleToConvertNumbers(){
-        assertThat((Short) converter.convert("5", short.class, errors, bundle), is(equalTo((short) 5)));
+        assertThat((Short) converter.convert("5", short.class, bundle), is(equalTo((short) 5)));
     }
     
     @Test
     public void shouldComplainAboutInvalidNumber() {
-        converter.convert("---", short.class, errors, bundle);
+        converter.convert("---", short.class, bundle);
         assertThat(errors.get(0), is(VRaptorMatchers.error("", "--- is not a valid integer.")));
     }
     
     @Test
     public void shouldConvertToZeroWhenNull() {
-    	assertThat((Short) converter.convert(null, short.class, errors, bundle), is(equalTo((short) 0)));
+    	assertThat((Short) converter.convert(null, short.class, bundle), is(equalTo((short) 0)));
     }
 
     @Test
     public void shouldConvertToZeroWhenEmpty() {
-    	assertThat((Short) converter.convert("", short.class, errors, bundle), is(equalTo((short) 0)));
+    	assertThat((Short) converter.convert("", short.class, bundle), is(equalTo((short) 0)));
     }
 
 }

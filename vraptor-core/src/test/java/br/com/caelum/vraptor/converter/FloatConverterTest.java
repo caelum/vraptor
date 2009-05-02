@@ -56,23 +56,23 @@ public class FloatConverterTest {
     
     @Test
     public void shouldBeAbleToConvertNumbers(){
-        assertThat(converter.convert("2.3", Float.class, errors, bundle), is(equalTo(2.3f)));
+        assertThat(converter.convert("2.3", Float.class, bundle), is(equalTo(2.3f)));
     }
     
     @Test
     public void shouldComplainAboutInvalidNumber() {
-        converter.convert("---", Float.class, errors, bundle);
+        converter.convert("---", Float.class, bundle);
         assertThat(errors.get(0), is(VRaptorMatchers.error("", "--- is not a valid number.")));
     }
     
     @Test
     public void shouldNotComplainAboutNull() {
-        assertThat(converter.convert(null, Float.class, errors, bundle), is(nullValue()));
+        assertThat(converter.convert(null, Float.class, bundle), is(nullValue()));
     }
 
     @Test
     public void shouldNotComplainAboutEmpty() {
-        assertThat(converter.convert("", Float.class, errors, bundle), is(nullValue()));
+        assertThat(converter.convert("", Float.class, bundle), is(nullValue()));
     }
 
 }

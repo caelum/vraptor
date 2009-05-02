@@ -30,13 +30,11 @@
 package br.com.caelum.vraptor.converter;
 
 import java.text.MessageFormat;
-import java.util.List;
 import java.util.ResourceBundle;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
-import br.com.caelum.vraptor.validator.ValidationMessage;
 
 /**
  * VRaptor's Double converter. 
@@ -47,15 +45,14 @@ import br.com.caelum.vraptor.validator.ValidationMessage;
 @ApplicationScoped
 public class DoubleConverter implements Converter<Double> {
 
-    public Double convert(String value, Class type, List<ValidationMessage> errors, ResourceBundle bundle) {
+    public Double convert(String value, Class type, ResourceBundle bundle) {
         if (value == null || value.equals("")) {
             return null;
         }
         try {
             return Double.valueOf(value);
         } catch (NumberFormatException e) {
-			errors.add(new ValidationMessage(MessageFormat.format(bundle.getString("is_not_a_valid_number"), value), ""));
-			return null;
+			throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_number"), value));
         }
     }
 

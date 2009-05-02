@@ -56,18 +56,18 @@ public class ShortConverterTest {
     
     @Test
     public void shouldBeAbleToConvertNumbers(){
-        assertThat(converter.convert("2", Short.class, errors, bundle), is(equalTo((short)2)));
+        assertThat(converter.convert("2", Short.class, bundle), is(equalTo((short)2)));
     }
     
     @Test
     public void shouldComplainAboutInvalidNumber() {
-        converter.convert("---", Short.class, errors, bundle);
+        converter.convert("---", Short.class, bundle);
         assertThat(errors.get(0), is(VRaptorMatchers.error("", "--- is not a valid integer.")));
     }
     
     @Test
     public void shouldComplainAboutNull() {
-        assertThat(converter.convert(null, Short.class, errors, bundle), is(nullValue()));
+        assertThat(converter.convert(null, Short.class, bundle), is(nullValue()));
     }
 
 }

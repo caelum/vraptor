@@ -62,29 +62,29 @@ public class BigIntegerConverterTest {
     
     @Test
     public void shouldBeAbleToConvertIntegerNumbers(){
-        assertThat(converter.convert("3", BigInteger.class, errors, bundle), is(equalTo(new BigInteger("3"))));
+        assertThat(converter.convert("3", BigInteger.class, bundle), is(equalTo(new BigInteger("3"))));
     }
     
     @Test
     public void shouldComplainAboutNonIntegerNumbers() {
-        converter.convert("2.3", BigInteger.class, errors, bundle);
+        converter.convert("2.3", BigInteger.class, bundle);
         assertThat(errors.get(0), is(VRaptorMatchers.error("", "2.3 is not a valid integer.")));
     }
     
     @Test
     public void shouldComplainAboutInvalidNumber() {
-        converter.convert("---", BigInteger.class, errors, bundle);
+        converter.convert("---", BigInteger.class, bundle);
         assertThat(errors.get(0), is(VRaptorMatchers.error("", "--- is not a valid integer.")));
     }
     
     @Test
     public void shouldNotComplainAboutNull() {
-        assertThat(converter.convert(null, BigInteger.class, errors, bundle), is(nullValue()));
+        assertThat(converter.convert(null, BigInteger.class, bundle), is(nullValue()));
     }
 
     @Test
     public void shouldNotComplainAboutEmpty() {
-        assertThat(converter.convert("", BigInteger.class, errors, bundle), is(nullValue()));
+        assertThat(converter.convert("", BigInteger.class, bundle), is(nullValue()));
     }
 
 }

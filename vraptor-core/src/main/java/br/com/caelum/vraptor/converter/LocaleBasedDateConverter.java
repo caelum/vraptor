@@ -4,7 +4,6 @@ import java.text.DateFormat;
 import java.text.MessageFormat;
 import java.text.ParseException;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -15,7 +14,6 @@ import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.ioc.RequestScoped;
-import br.com.caelum.vraptor.validator.ValidationMessage;
 
 /**
  * Locale based date converter.
@@ -36,7 +34,7 @@ public class LocaleBasedDateConverter implements Converter<Date> {
         this.request = request;
     }
 
-    public Date convert(String value, Class type, List<ValidationMessage> errors, ResourceBundle bundle) {
+    public Date convert(String value, Class type, ResourceBundle bundle) {
         if (value == null || value.equals("")) {
             return null;
         }
@@ -48,8 +46,7 @@ public class LocaleBasedDateConverter implements Converter<Date> {
         try {
             return format.parse(value);
         } catch (ParseException e) {
-			errors.add(new ValidationMessage(MessageFormat.format(bundle.getString("is_not_a_valid_date"), value), ""));
-			return null;
+			throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_date"), value));
         }
     }
 

@@ -56,23 +56,23 @@ public class DoubleConverterTest {
     
     @Test
     public void shouldBeAbleToConvertNumbers(){
-        assertThat(converter.convert("2.3", Double.class, errors, bundle), is(equalTo(2.3d)));
+        assertThat(converter.convert("2.3", Double.class, bundle), is(equalTo(2.3d)));
     }
     
     @Test
     public void shouldComplainAboutInvalidNumber() {
-        converter.convert("---", Double.class, errors, bundle);
+        converter.convert("---", Double.class, bundle);
         assertThat(errors.get(0), is(VRaptorMatchers.error("", "--- is not a valid number.")));
     }
     
     @Test
     public void shouldNotComplainAboutNull() {
-        assertThat(converter.convert(null, Double.class, errors, bundle), is(nullValue()));
+        assertThat(converter.convert(null, Double.class, bundle), is(nullValue()));
     }
 
     @Test
     public void shouldNotComplainAboutEmpty() {
-        assertThat(converter.convert("", Double.class, errors, bundle), is(nullValue()));
+        assertThat(converter.convert("", Double.class, bundle), is(nullValue()));
     }
 
 }

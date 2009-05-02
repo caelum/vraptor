@@ -29,13 +29,12 @@
  */
 package br.com.caelum.vraptor.converter;
 
-import java.util.List;
+
 import java.util.ResourceBundle;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
-import br.com.caelum.vraptor.validator.ValidationMessage;
 
 /**
  * VRaptor's Boolean converter. 
@@ -46,7 +45,7 @@ import br.com.caelum.vraptor.validator.ValidationMessage;
 @ApplicationScoped
 public class BooleanConverter implements Converter<Boolean> {
 
-    public Boolean convert(String value, Class type, List<ValidationMessage> errors, ResourceBundle bundle) {
+    public Boolean convert(String value, Class type, ResourceBundle bundle) {
         if (value == null) {
             return null;
         }

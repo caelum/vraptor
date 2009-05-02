@@ -56,23 +56,23 @@ public class ByteConverterTest {
     
     @Test
     public void shouldBeAbleToConvertNumbers(){
-        assertThat(converter.convert("2", Byte.class, errors, bundle), is(equalTo((byte) 2)));
+        assertThat(converter.convert("2", Byte.class, bundle), is(equalTo((byte) 2)));
     }
     
     @Test
     public void shouldComplainAboutInvalidNumber() {
-        converter.convert("---", Byte.class, errors, bundle);
+        converter.convert("---", Byte.class, bundle);
         assertThat(errors.get(0), is(VRaptorMatchers.error("", "--- is not a valid integer.")));
     }
     
     @Test
     public void shouldNotComplainAboutNull() {
-        assertThat(converter.convert(null, Byte.class, errors, bundle), is(nullValue()));
+        assertThat(converter.convert(null, Byte.class, bundle), is(nullValue()));
     }
 
     @Test
     public void shouldNotComplainAboutEmpty() {
-        assertThat(converter.convert("", Byte.class, errors, bundle), is(nullValue()));
+        assertThat(converter.convert("", Byte.class, bundle), is(nullValue()));
     }
 
 }

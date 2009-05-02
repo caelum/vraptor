@@ -8,7 +8,6 @@ import static org.hamcrest.Matchers.typeCompatibleWith;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -40,7 +39,6 @@ import br.com.caelum.vraptor.converter.ShortConverter;
 import br.com.caelum.vraptor.interceptor.multipart.UploadedFile;
 import br.com.caelum.vraptor.interceptor.multipart.UploadedFileConverter;
 import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.validator.ValidationMessage;
 
 public class DefaultConvertersTest {
 
@@ -120,7 +118,7 @@ public class DefaultConvertersTest {
 
     class WrongConverter implements Converter<String> {
 
-        public String convert(String value, Class type, List<ValidationMessage> errors, ResourceBundle bundle) {
+        public String convert(String value, Class type, ResourceBundle bundle) {
             // TODO Auto-generated method stub
             return null;
         }
@@ -131,14 +129,14 @@ public class DefaultConvertersTest {
 
     @Convert(MyData.class)
     class MyConverter implements Converter<MyData> {
-        public MyData convert(String value, Class type, List<ValidationMessage> errors, ResourceBundle bundle) {
+        public MyData convert(String value, Class type, ResourceBundle bundle) {
             return null;
         }
     }
 
     @Convert(MyData.class)
     class MySecondConverter implements Converter<MyData> {
-        public MyData convert(String value, Class type, List<ValidationMessage> errors, ResourceBundle bundle) {
+        public MyData convert(String value, Class type, ResourceBundle bundle) {
             return null;
         }
     }

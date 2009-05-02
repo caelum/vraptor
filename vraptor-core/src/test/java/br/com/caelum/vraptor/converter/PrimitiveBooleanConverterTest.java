@@ -54,21 +54,21 @@ public class PrimitiveBooleanConverterTest {
     
     @Test
     public void shouldBeAbleToConvertNumbers(){
-        assertThat((Boolean) converter.convert("", boolean.class, errors, bundle), is(equalTo(false)));
-        assertThat((Boolean) converter.convert("false", boolean.class, errors, bundle), is(equalTo(false)));
-        assertThat((Boolean) converter.convert("weird-stuff", boolean.class, errors, bundle), is(equalTo(false)));
-        assertThat((Boolean) converter.convert("true", boolean.class, errors, bundle), is(equalTo(true)));
-        assertThat((Boolean) converter.convert("True", boolean.class, errors, bundle), is(equalTo(true)));
+        assertThat((Boolean) converter.convert("", boolean.class, bundle), is(equalTo(false)));
+        assertThat((Boolean) converter.convert("false", boolean.class, bundle), is(equalTo(false)));
+        assertThat((Boolean) converter.convert("weird-stuff", boolean.class, bundle), is(equalTo(false)));
+        assertThat((Boolean) converter.convert("true", boolean.class, bundle), is(equalTo(true)));
+        assertThat((Boolean) converter.convert("True", boolean.class, bundle), is(equalTo(true)));
     }
     
     @Test
     public void shouldConvertToZeroWhenNull() {
-    	assertThat((Boolean) converter.convert(null, boolean.class, errors, bundle), is(equalTo(false)));
+    	assertThat((Boolean) converter.convert(null, boolean.class, bundle), is(equalTo(false)));
     }
 
     @Test
     public void shouldConvertToZeroWhenEmpty() {
-    	assertThat((Boolean) converter.convert("", boolean.class, errors, bundle), is(equalTo(false)));
+    	assertThat((Boolean) converter.convert("", boolean.class, bundle), is(equalTo(false)));
     }
 
 }

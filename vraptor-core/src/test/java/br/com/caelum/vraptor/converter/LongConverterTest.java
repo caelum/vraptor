@@ -56,18 +56,18 @@ public class LongConverterTest {
     
     @Test
     public void shouldBeAbleToConvertNumbers(){
-        assertThat(converter.convert("2", long.class, errors, bundle), is(equalTo(2L)));
+        assertThat(converter.convert("2", long.class, bundle), is(equalTo(2L)));
     }
     
     @Test
     public void shouldComplainAboutInvalidNumber() {
-        converter.convert("---", long.class, errors, bundle);
+        converter.convert("---", long.class, bundle);
         assertThat(errors.get(0), is(VRaptorMatchers.error("", "--- is not a valid integer.")));
     }
     
     @Test
     public void shouldNotComplainAboutNull() {
-        assertThat(converter.convert(null, long.class, errors, bundle), is(nullValue()));
+        assertThat(converter.convert(null, long.class, bundle), is(nullValue()));
     }
 
 }

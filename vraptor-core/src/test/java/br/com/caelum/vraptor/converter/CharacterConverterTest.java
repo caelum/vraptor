@@ -56,19 +56,19 @@ public class CharacterConverterTest {
     
     @Test
     public void shouldBeAbleToConvertCharacters(){
-        assertThat(converter.convert("Z", Character.class, errors, bundle), is(equalTo(new Character('Z'))));
+        assertThat(converter.convert("Z", Character.class, bundle), is(equalTo(new Character('Z'))));
     }
     
     @Test
     public void shouldComplainAboutStringTooBig() {
-        converter.convert("---", Character.class, errors, bundle);
+        converter.convert("---", Character.class, bundle);
         assertThat(errors.get(0), is(VRaptorMatchers.error("", "--- is not a valid character.")));
     }
     
     @Test
     public void shouldNotComplainAboutNullAndEmpty() {
-        assertThat(converter.convert(null, Character.class, errors, bundle), is(nullValue()));
-        assertThat(converter.convert("", Character.class, errors, bundle), is(nullValue()));
+        assertThat(converter.convert(null, Character.class, bundle), is(nullValue()));
+        assertThat(converter.convert("", Character.class, bundle), is(nullValue()));
     }
 
 

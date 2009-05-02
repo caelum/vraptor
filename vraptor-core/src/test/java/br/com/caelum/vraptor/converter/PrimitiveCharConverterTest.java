@@ -36,38 +36,39 @@ import java.util.ResourceBundle;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
-
 public class PrimitiveCharConverterTest {
-    
-    private PrimitiveCharConverter converter;
+
+	private PrimitiveCharConverter converter;
 	private ResourceBundle bundle;
 
-    @Before
-    public void setup() {
-        this.converter = new PrimitiveCharConverter();
-        this.bundle = ResourceBundle.getBundle("messages");
-    }
-    
-    @Test
-    public void shouldBeAbleToConvertNumbers(){
-        assertThat(((Character) converter.convert("r", char.class, bundle)).charValue(), is(equalTo('r')));
-    }
-    
-    @Test
-    public void shouldComplainAboutInvalidNumber() {
-        converter.convert("---", char.class, bundle);
-        assertThat(errors.get(0), is(VRaptorMatchers.error("", "--- is not a valid character.")));
-    }
-    
-    @Test
-    public void shouldConvertToZeroWhenNull() {
-        assertThat(((Character) converter.convert(null, char.class, bundle)).charValue(), is(equalTo('\u0000')));
-    }
+	@Before
+	public void setup() {
+		this.converter = new PrimitiveCharConverter();
+		this.bundle = ResourceBundle.getBundle("messages");
+	}
 
-    @Test
-    public void shouldConvertToZeroWhenEmpty() {
-        assertThat(((Character) converter.convert("", char.class, bundle)).charValue(), is(equalTo('\u0000')));
-    }
+	@Test
+	public void shouldBeAbleToConvertNumbers() {
+		assertThat(((Character) converter.convert("r", char.class, bundle)).charValue(), is(equalTo('r')));
+	}
+
+	@Test
+	public void shouldComplainAboutInvalidNumber() {
+		try {
+			converter.convert("---", char.class, bundle);
+		} catch (ConversionError e) {
+			assertThat(e.getMessage(), is(equalTo("--- is not a valid character.")));
+		}
+	}
+
+	@Test
+	public void shouldConvertToZeroWhenNull() {
+		assertThat(((Character) converter.convert(null, char.class, bundle)).charValue(), is(equalTo('\u0000')));
+	}
+
+	@Test
+	public void shouldConvertToZeroWhenEmpty() {
+		assertThat(((Character) converter.convert("", char.class, bundle)).charValue(), is(equalTo('\u0000')));
+	}
 
 }

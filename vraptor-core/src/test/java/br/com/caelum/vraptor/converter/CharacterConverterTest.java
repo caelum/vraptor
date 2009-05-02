@@ -37,35 +37,35 @@ import java.util.ResourceBundle;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
-
 public class CharacterConverterTest {
-    
-    private CharacterConverter converter;
+
+	private CharacterConverter converter;
 	private ResourceBundle bundle;
 
-    @Before
-    public void setup() {
-        this.converter = new CharacterConverter();
-        this.bundle = ResourceBundle.getBundle("messages");
-    }
-    
-    @Test
-    public void shouldBeAbleToConvertCharacters(){
-        assertThat(converter.convert("Z", Character.class, bundle), is(equalTo(new Character('Z'))));
-    }
-    
-    @Test
-    public void shouldComplainAboutStringTooBig() {
-        converter.convert("---", Character.class, bundle);
-        assertThat(errors.get(0), is(VRaptorMatchers.error("", "--- is not a valid character.")));
-    }
-    
-    @Test
-    public void shouldNotComplainAboutNullAndEmpty() {
-        assertThat(converter.convert(null, Character.class, bundle), is(nullValue()));
-        assertThat(converter.convert("", Character.class, bundle), is(nullValue()));
-    }
+	@Before
+	public void setup() {
+		this.converter = new CharacterConverter();
+		this.bundle = ResourceBundle.getBundle("messages");
+	}
 
+	@Test
+	public void shouldBeAbleToConvertCharacters() {
+		assertThat(converter.convert("Z", Character.class, bundle), is(equalTo(new Character('Z'))));
+	}
+
+	@Test
+	public void shouldComplainAboutStringTooBig() {
+		try {
+			converter.convert("---", Character.class, bundle);
+		} catch (ConversionError e) {
+			assertThat(e.getMessage(), is(equalTo("--- is not a validcharacter.")));
+		}
+	}
+
+	@Test
+	public void shouldNotComplainAboutNullAndEmpty() {
+		assertThat(converter.convert(null, Character.class, bundle), is(nullValue()));
+		assertThat(converter.convert("", Character.class, bundle), is(nullValue()));
+	}
 
 }

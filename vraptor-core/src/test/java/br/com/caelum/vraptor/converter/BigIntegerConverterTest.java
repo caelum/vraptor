@@ -38,8 +38,6 @@ import java.util.ResourceBundle;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
-
 /**
  * VRaptor's BigInteger converter test.
  * 
@@ -63,8 +61,11 @@ public class BigIntegerConverterTest {
 
 	@Test
 	public void shouldComplainAboutNonIntegerNumbers() {
-		converter.convert("2.3", BigInteger.class, bundle);
-		assertThat(errors.get(0), is(VRaptorMatchers.error("", "2.3 is not a valid integer.")));
+		try {
+			converter.convert("2.3", BigInteger.class, bundle);
+		} catch (ConversionError e) {
+			assertThat(e.getMessage(), is(equalTo("2.3 is not a valid integer.")));
+		}
 	}
 
 	@Test

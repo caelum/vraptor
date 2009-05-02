@@ -36,38 +36,39 @@ import java.util.ResourceBundle;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
-
 public class PrimitiveFloatConverterTest {
-    
-    private PrimitiveFloatConverter converter;
+
+	private PrimitiveFloatConverter converter;
 	private ResourceBundle bundle;
 
-    @Before
-    public void setup() {
-        this.converter = new PrimitiveFloatConverter();
-        this.bundle = ResourceBundle.getBundle("messages");
-    }
-    
-    @Test
-    public void shouldBeAbleToConvertNumbers(){
-        assertThat((Float) converter.convert("2.2", float.class, bundle), is(equalTo(2.2f)));
-    }
-    
-    @Test
-    public void shouldComplainAboutInvalidNumber() {
-        converter.convert("---", float.class, bundle);
-        assertThat(errors.get(0), is(VRaptorMatchers.error("", "--- is not a valid number.")));
-    }
-    
-    @Test
-    public void shouldConvertToZeroWhenNull() {
-    	assertThat((Float) converter.convert(null, float.class, bundle), is(equalTo(0F)));
-    }
+	@Before
+	public void setup() {
+		this.converter = new PrimitiveFloatConverter();
+		this.bundle = ResourceBundle.getBundle("messages");
+	}
 
-    @Test
-    public void shouldConvertToZeroWhenEmpty() {
-    	assertThat((Float) converter.convert("", float.class, bundle), is(equalTo(0F)));
-    }
-    
+	@Test
+	public void shouldBeAbleToConvertNumbers() {
+		assertThat((Float) converter.convert("2.2", float.class, bundle), is(equalTo(2.2f)));
+	}
+
+	@Test
+	public void shouldComplainAboutInvalidNumber() {
+		try {
+			converter.convert("---", float.class, bundle);
+		} catch (ConversionError e) {
+			assertThat(e.getMessage(), is(equalTo("--- is not a valid number.")));
+		}
+	}
+
+	@Test
+	public void shouldConvertToZeroWhenNull() {
+		assertThat((Float) converter.convert(null, float.class, bundle), is(equalTo(0F)));
+	}
+
+	@Test
+	public void shouldConvertToZeroWhenEmpty() {
+		assertThat((Float) converter.convert("", float.class, bundle), is(equalTo(0F)));
+	}
+
 }

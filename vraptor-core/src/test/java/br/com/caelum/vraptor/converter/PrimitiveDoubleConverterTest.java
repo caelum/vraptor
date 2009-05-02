@@ -36,38 +36,39 @@ import java.util.ResourceBundle;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
-
 public class PrimitiveDoubleConverterTest {
-    
-    private PrimitiveDoubleConverter converter;
+
+	private PrimitiveDoubleConverter converter;
 	private ResourceBundle bundle;
 
-    @Before
-    public void setup() {
-        this.converter = new PrimitiveDoubleConverter();
-        this.bundle = ResourceBundle.getBundle("messages");
-    }
-    
-    @Test
-    public void shouldBeAbleToConvertNumbers(){
-        assertThat((Double) converter.convert("2.3", double.class, bundle), is(equalTo(2.3d)));
-    }
-    
-    @Test
-    public void shouldComplainAboutInvalidNumber() {
-        converter.convert("---", double.class, bundle);
-        assertThat(errors.get(0), is(VRaptorMatchers.error("", "--- is not a valid number.")));
-    }
-    
-    @Test
-    public void shouldConvertToZeroWhenNull() {
-    	assertThat((Double) converter.convert(null, double.class, bundle), is(equalTo(0D)));
-    }
+	@Before
+	public void setup() {
+		this.converter = new PrimitiveDoubleConverter();
+		this.bundle = ResourceBundle.getBundle("messages");
+	}
 
-    @Test
-    public void shouldConvertToZeroWhenEmpty() {
-    	assertThat((Double) converter.convert("", double.class, bundle), is(equalTo(0D)));
-    }
+	@Test
+	public void shouldBeAbleToConvertNumbers() {
+		assertThat((Double) converter.convert("2.3", double.class, bundle), is(equalTo(2.3d)));
+	}
+
+	@Test
+	public void shouldComplainAboutInvalidNumber() {
+		try {
+			converter.convert("---", double.class, bundle);
+		} catch (ConversionError e) {
+			assertThat(e.getMessage(), is(equalTo("--- is not a valid number.")));
+		}
+	}
+
+	@Test
+	public void shouldConvertToZeroWhenNull() {
+		assertThat((Double) converter.convert(null, double.class, bundle), is(equalTo(0D)));
+	}
+
+	@Test
+	public void shouldConvertToZeroWhenEmpty() {
+		assertThat((Double) converter.convert("", double.class, bundle), is(equalTo(0D)));
+	}
 
 }

@@ -24,6 +24,7 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.validator.ValidationMessage;
 import br.com.caelum.vraptor.view.jsp.PageResult;
 import br.com.caelum.vraptor.vraptor2.outject.Outjecter;
+import br.com.caelum.vraptor.vraptor2.outject.OutjectionInterceptor;
 
 public class ValidatorInterceptorTest {
 

@@ -16,6 +16,7 @@ import br.com.caelum.vraptor.ioc.ContainerProvider;
 import br.com.caelum.vraptor.ioc.GenericContainerTest;
 import br.com.caelum.vraptor.ioc.WhatToDo;
 import br.com.caelum.vraptor.test.HttpSessionMock;
+import br.com.caelum.vraptor.vraptor2.outject.OutjectionInterceptor;
 
 public class ProviderTest extends GenericContainerTest {
     private int counter;

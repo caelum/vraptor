@@ -4,6 +4,8 @@ import java.util.Enumeration;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+import br.com.caelum.vraptor.vraptor2.util.FallbackEnumeration;
+
 /**
  * A resource bundle which uses two different bundles to look for messages.
  * 

@@ -1,18 +1,14 @@
 - converter registering is causing many log messages
-- ListAccessorTest for if part
 
 
 
 
-- suppor for kung's register api
 - make client server redirect work with parameters, which ones?
 (MUST) - hibernate plugin
 (MUST) - json output support: three different options
 (MUST) - Map support
-- Set support
 - automatic REDIRECT depending on accepts
 	  onError().goTo("xpto");
-- start/stop:app/session/request support + @Listener, @Startup, @Shutdown/implements Listener 
 
 
 
@@ -24,13 +20,13 @@ ceci: integration test for vraptor-example project
 
 
 test and refactor:
+- ListAccessorTest for if part
 c) unit test for PicoContainersProvider... every scope should be tested
 - defaultpathresolver better test
 - new interceptor test 
 - DefaultResourceRegistry cache
 DefaultLogicResult should cache enhancers in order to create objects
 - JstlLocalization test
-- fallback enumeration, fallback local unit tests
 
 
 
@@ -76,7 +72,8 @@ kung help
 	- add a @Listener 
 	- delete is not working
 	- better exception handling everywhere (search for TODO within exceptions)
-
+	- Set support
+	- suppor for kung's register api
 
 
 

@@ -41,6 +41,7 @@ import br.com.caelum.vraptor.ioc.pico.PicoProvider;
 import br.com.caelum.vraptor.resource.ResourceParserRoutesCreator;
 import br.com.caelum.vraptor.view.PathResolver;
 import br.com.caelum.vraptor.view.jsp.PageResult;
+import br.com.caelum.vraptor.vraptor2.outject.OutjectionInterceptor;
 
 /**
  * Customized provider with support for both vraptor 2 and 3 components.

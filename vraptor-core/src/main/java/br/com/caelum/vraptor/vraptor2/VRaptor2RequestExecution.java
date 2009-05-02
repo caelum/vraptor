@@ -8,6 +8,7 @@ import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
 import br.com.caelum.vraptor.interceptor.InterceptorListPriorToExecutionExtractor;
 import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
 import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
+import br.com.caelum.vraptor.vraptor2.outject.OutjectionInterceptor;
 
 /**
  * A vraptor 2 request execution process.

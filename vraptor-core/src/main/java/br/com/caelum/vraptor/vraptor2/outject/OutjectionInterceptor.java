@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor.vraptor2;
+package br.com.caelum.vraptor.vraptor2.outject;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -10,7 +10,8 @@ import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Interceptor;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.vraptor2.outject.Outjecter;
+import br.com.caelum.vraptor.vraptor2.BeanHelper;
+import br.com.caelum.vraptor.vraptor2.ComponentInfoProvider;
 
 /**
  * Uses the designated outjecter to outjects all vraptor2 compatible get

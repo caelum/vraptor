@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor.vraptor2;
+package br.com.caelum.vraptor.vraptor2.outject;
 
 import java.io.IOException;
 
@@ -10,7 +10,9 @@ import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.VRaptorMockery;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.vraptor2.ComponentInfoProvider;
 import br.com.caelum.vraptor.vraptor2.outject.Outjecter;
+import br.com.caelum.vraptor.vraptor2.outject.OutjectionInterceptor;
 
 public class OutjectionInterceptorTest {
 

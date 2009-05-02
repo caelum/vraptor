@@ -48,6 +48,7 @@ import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.validator.ValidationMessage;
 import br.com.caelum.vraptor.view.jsp.PageResult;
+import br.com.caelum.vraptor.vraptor2.outject.OutjectionInterceptor;
 
 public class ValidatorInterceptor implements Interceptor {
 

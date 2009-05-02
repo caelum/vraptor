@@ -34,6 +34,7 @@ import static org.hamcrest.Matchers.is;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 import ognl.Ognl;
 import ognl.OgnlContext;
@@ -50,6 +51,7 @@ import br.com.caelum.vraptor.http.ognl.ArrayAccessor;
 import br.com.caelum.vraptor.http.ognl.EmptyElementsRemoval;
 import br.com.caelum.vraptor.http.ognl.ListAccessor;
 import br.com.caelum.vraptor.http.ognl.ReflectionBasedNullHandler;
+import br.com.caelum.vraptor.http.ognl.SetAccessor;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.validator.ValidationMessage;
 
@@ -94,16 +96,17 @@ public class OgnlGenericTypesSupportTest {
         OgnlRuntime.setNullHandler(Object.class, new ReflectionBasedNullHandler());
         OgnlRuntime.setPropertyAccessor(List.class, new ListAccessor());
         OgnlRuntime.setPropertyAccessor(Object[].class, new ArrayAccessor());
+        OgnlRuntime.setPropertyAccessor(Set.class, new SetAccessor());
         this.context = (OgnlContext) Ognl.createDefaultContext(myCat);
         context.setTraceEvaluations(true);
         context.put(Container.class, container);
-        // OgnlRuntime.setPropertyAccessor(Set.class, new SetAccessor());
         // OgnlRuntime.setPropertyAccessor(Map.class, new MapAccessor());
         Ognl.setTypeConverter(context, new OgnlToConvertersController(converters, errors, bundle));
     }
 
     public static class Cat {
         private List<String> legLength;
+        private Set<Long> favoriteNumbers;
 
         public void setLegLength(List<String> legLength) {
             this.legLength = legLength;
@@ -137,7 +140,15 @@ public class OgnlGenericTypesSupportTest {
             return eyeColorCode;
         }
 
-        private List<Leg> legs;
+        public void setFavoriteNumbers(Set<Long> favoriteNumbers) {
+			this.favoriteNumbers = favoriteNumbers;
+		}
+
+		public Set<Long> getFavoriteNumbers() {
+			return favoriteNumbers;
+		}
+
+		private List<Leg> legs;
         private Long[] ids;
         private List<Long> eyeColorCode;
     }
@@ -179,6 +190,15 @@ public class OgnlGenericTypesSupportTest {
         assertThat(myCat.eyeColorCode.get(0), is(equalTo(3L)));
         Ognl.setValue("eyeColorCode[1]", context, myCat, "5");
         assertThat(myCat.eyeColorCode.get(1), is(equalTo(5L)));
+        mockery.assertIsSatisfied();
+    }
+
+    @Test
+    public void canInstantiateAndPopulateASetOfWrappers() throws OgnlException {
+        Ognl.setValue("favoriteNumbers[1]", context, myCat, "3");
+        Ognl.setValue("favoriteNumbers[0]", context, myCat, "5");
+        assertThat(myCat.favoriteNumbers.contains(3L), is(equalTo(true)));
+        assertThat(myCat.favoriteNumbers.contains(5L), is(equalTo(true)));
         mockery.assertIsSatisfied();
     }
 

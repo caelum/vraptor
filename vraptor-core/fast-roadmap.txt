@@ -1,18 +1,12 @@
-- converter registering is causing many log messages
-- ListAccessorTest for if part
-
-
-
-
-- suppor for kung's register api
+- Set support
+- automatic REDIRECT depending on accepts
+	  onError().goTo("xpto");
 - make client server redirect work with parameters, which ones?
 (MUST) - hibernate plugin
 (MUST) - json output support: three different options
 (MUST) - Map support
-- Set support
-- automatic REDIRECT depending on accepts
-	  onError().goTo("xpto");
 - start/stop:app/session/request support + @Listener, @Startup, @Shutdown/implements Listener 
+- suppor for kung's register api
 
 
 
@@ -24,6 +18,8 @@ ceci: integration test for vraptor-example project
 
 
 test and refactor:
+- converter registering is causing many log messages
+- ListAccessorTest for if part
 c) unit test for PicoContainersProvider... every scope should be tested
 - defaultpathresolver better test
 - new interceptor test 

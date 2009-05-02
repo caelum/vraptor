@@ -40,6 +40,7 @@ import br.com.caelum.vraptor.http.asm.AsmBasedTypeCreator;
 import br.com.caelum.vraptor.http.ognl.EmptyElementsRemoval;
 import br.com.caelum.vraptor.http.route.DefaultRouter;
 import br.com.caelum.vraptor.http.route.NoRoutesConfiguration;
+import br.com.caelum.vraptor.http.route.PathAnnotationRoutesCreator;
 import br.com.caelum.vraptor.interceptor.DefaultInterceptorRegistry;
 import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
 import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
@@ -98,6 +99,7 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
         registerOn(beanFactory, ResourceFinder.class);
         registerOn(beanFactory, ResourceRegistrar.class);
         registerOn(beanFactory, NoRoutesConfiguration.class);
+        registerOn(beanFactory, PathAnnotationRoutesCreator.class);
     }
 
     private void registerRequestScopedComponentsOn(DefaultListableBeanFactory beanFactory) {

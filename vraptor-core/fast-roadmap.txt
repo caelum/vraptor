@@ -1,6 +1,3 @@
-- completely remove method lookupbuilder
-- add support to vraptor2 with our own routes
-@Component should not be web acessible, @Component from vraptor2 should...
 - if there is a conversion error, ognl should not set - conversion error should set the path variable 
 - conversion should log what is being set... use also an exception to do it
 - converter registering is causing many log messages

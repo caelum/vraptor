@@ -41,9 +41,6 @@ import br.com.caelum.vraptor.Head;
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.VRaptorMockery;
 import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor.http.route.DefaultRouter;
-import br.com.caelum.vraptor.http.route.Router;
-import br.com.caelum.vraptor.http.route.RoutesConfiguration;
 import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.Resource;
@@ -121,6 +118,7 @@ public class PathAnnotationRoutesCreatorTest {
 		mockery.assertIsSatisfied();
 	}
 
+    @br.com.caelum.vraptor.Resource
 	public static class Clients {
 		@Path("/move/*/child")
 		public void move() {

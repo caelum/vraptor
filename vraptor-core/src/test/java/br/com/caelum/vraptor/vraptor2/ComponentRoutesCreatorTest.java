@@ -62,11 +62,25 @@ public class ComponentRoutesCreatorTest {
         }
     }
 
+    @br.com.caelum.vraptor.Resource
+    class VRaptor3Component {
+        public void name() {
+        }
+    }
+
     @Test
     public void shouldUseVRaptor3AlgorithmIfNotAVRaptor2Component() throws SecurityException, NoSuchMethodException {
+        final Resource resource = mockery.resource(VRaptor3Component.class);
+        this.router.register(resource);
+        assertThat(router.parse("/VRaptor3Component/name", HttpMethod.POST, request), is(VRaptorMatchers.resourceMethod(VRaptor3Component.class.getMethod("name"))));
+        mockery.assertIsSatisfied();
+    }
+
+    @Test
+    public void shouldReturnNullIfNotFound() throws SecurityException, NoSuchMethodException {
         final Resource resource = mockery.resource(NonVRaptorComponent.class);
         this.router.register(resource);
-        assertThat(router.parse("/NonVRaptorComponent/name", HttpMethod.POST, request), is(VRaptorMatchers.resourceMethod(NonVRaptorComponent.class.getMethod("name"))));
+        assertThat(router.parse("/NonVRaptorComponent/name", HttpMethod.POST, request), is(nullValue()));
         mockery.assertIsSatisfied();
     }
 

@@ -40,6 +40,8 @@ import br.com.caelum.vraptor.resource.ResourceParserRoutesCreator;
 
 /**
  * The default parser routes creator uses the path annotation to create rules.
+ * Note that methods are only registered to be public accessible if the type is
+ * annotated with @Resource.
  * 
  * @author guilherme silveira
  */
@@ -87,7 +89,9 @@ public class PathAnnotationRoutesCreator implements ResourceParserRoutesCreator 
 	public List<Rule> rulesFor(Resource resource) {
 		List<Rule> rules = new ArrayList<Rule>();
 		Class<?> baseType = resource.getType();
-		registerRulesFor(baseType, baseType, rules);
+		if(baseType.isAnnotationPresent(br.com.caelum.vraptor.Resource.class)) {
+			registerRulesFor(baseType, baseType, rules);
+		}
 		return rules;
 	}
 

@@ -79,6 +79,7 @@ public class DefaultRouterTest {
 		}
 	}
 
+    @br.com.caelum.vraptor.Resource
 	public static class MyControl {
 		public void add(Dog object) {
 		}
@@ -229,6 +230,7 @@ public class DefaultRouterTest {
 	}
 
 
+    @br.com.caelum.vraptor.Resource
     class MyResource {
         public void notAnnotated() {
         }
@@ -242,6 +244,7 @@ public class DefaultRouterTest {
         }
     }
     
+    @br.com.caelum.vraptor.Resource
     class InheritanceExample extends MyResource {
     }
     

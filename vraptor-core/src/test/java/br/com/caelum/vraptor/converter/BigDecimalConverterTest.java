@@ -64,7 +64,7 @@ public class BigDecimalConverterTest {
 		try {
 			converter.convert("---", BigDecimal.class, bundle);
 		} catch (ConversionError e) {
-			assertThat(e.getMessage(), is(equalTo("--- is not a valid integer.")));
+			assertThat(e.getMessage(), is(equalTo("--- is not a valid number.")));
 		}
 	}
 

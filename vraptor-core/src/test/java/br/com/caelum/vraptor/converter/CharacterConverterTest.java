@@ -58,7 +58,7 @@ public class CharacterConverterTest {
 		try {
 			converter.convert("---", Character.class, bundle);
 		} catch (ConversionError e) {
-			assertThat(e.getMessage(), is(equalTo("--- is not a validcharacter.")));
+			assertThat(e.getMessage(), is(equalTo("--- is not a valid character.")));
 		}
 	}
 

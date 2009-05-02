@@ -50,76 +50,92 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
 import br.com.caelum.vraptor.validator.ValidationMessage;
 
 public class LocaleBasedDateConverterTest {
 
-    private LocaleBasedDateConverter converter;
-    private Mockery mockery;
-    private MutableRequest request;
-    private HttpSession session;
-    private ServletContext context;
+	private LocaleBasedDateConverter converter;
+	private Mockery mockery;
+	private MutableRequest request;
+	private HttpSession session;
+	private ServletContext context;
 	private ArrayList<ValidationMessage> errors;
 	private ResourceBundle bundle;
 
-    @Before
-    public void setup() {
-        this.mockery =new Mockery();
-        this.request = mockery.mock(MutableRequest.class);
-        this.session = mockery.mock(HttpSession.class);
-        this.context= mockery.mock(ServletContext.class);
-        final RequestInfo webRequest = new RequestInfo(context, request, null);
-        this.converter = new LocaleBasedDateConverter(webRequest);
-        this.errors = new ArrayList<ValidationMessage>();
-        this.bundle = ResourceBundle.getBundle("messages");
-    }
+	@Before
+	public void setup() {
+		this.mockery = new Mockery();
+		this.request = mockery.mock(MutableRequest.class);
+		this.session = mockery.mock(HttpSession.class);
+		this.context = mockery.mock(ServletContext.class);
+		final RequestInfo webRequest = new RequestInfo(context, request, null);
+		this.converter = new LocaleBasedDateConverter(webRequest);
+		this.errors = new ArrayList<ValidationMessage>();
+		this.bundle = ResourceBundle.getBundle("messages");
+	}
 
-    @Test
-    public void shouldBeAbleToConvert() throws ParseException {
-        mockery.checking(new Expectations() {{
-            exactly(2).of(request).getAttribute("javax.servlet.jsp.jstl.fmt.locale.request"); will(returnValue("pt_br"));
-        }});
-        assertThat(converter.convert("10/06/2008", Date.class, bundle), is(equalTo(new SimpleDateFormat("dd/MM/yyyy").parse("10/06/2008"))));
-        mockery.assertIsSatisfied();
-    }
+	@Test
+	public void shouldBeAbleToConvert() throws ParseException {
+		mockery.checking(new Expectations() {
+			{
+				exactly(2).of(request).getAttribute("javax.servlet.jsp.jstl.fmt.locale.request");
+				will(returnValue("pt_br"));
+			}
+		});
+		assertThat(converter.convert("10/06/2008", Date.class, bundle), is(equalTo(new SimpleDateFormat("dd/MM/yyyy")
+				.parse("10/06/2008"))));
+		mockery.assertIsSatisfied();
+	}
 
-    @Test
-    public void shouldUseTheDefaultLocale() throws ParseException {
-        mockery.checking(new Expectations() {{
-            one(request).getAttribute("javax.servlet.jsp.jstl.fmt.locale.request"); will(returnValue(null));
-            one(request).getSession(); will(returnValue(session));
-            one(session).getAttribute("javax.servlet.jsp.jstl.fmt.locale.session"); will(returnValue(null));
-            one(context).getAttribute("javax.servlet.jsp.jstl.fmt.locale.application"); will(returnValue(null));
-            one(context).getInitParameter("javax.servlet.jsp.jstl.fmt.locale"); will(returnValue(null));
-            one(request).getLocale(); will(returnValue(Locale.getDefault()));
-        }});
-        Date date = new SimpleDateFormat("dd/MM/yyyy").parse("10/05/2010");
-        String formattedToday = DateFormat.getDateInstance(DateFormat.SHORT).format(date);
-        assertThat(converter.convert(formattedToday, Date.class, bundle), is(equalTo(date)));
-        mockery.assertIsSatisfied();
-    }
+	@Test
+	public void shouldUseTheDefaultLocale() throws ParseException {
+		mockery.checking(new Expectations() {
+			{
+				one(request).getAttribute("javax.servlet.jsp.jstl.fmt.locale.request");
+				will(returnValue(null));
+				one(request).getSession();
+				will(returnValue(session));
+				one(session).getAttribute("javax.servlet.jsp.jstl.fmt.locale.session");
+				will(returnValue(null));
+				one(context).getAttribute("javax.servlet.jsp.jstl.fmt.locale.application");
+				will(returnValue(null));
+				one(context).getInitParameter("javax.servlet.jsp.jstl.fmt.locale");
+				will(returnValue(null));
+				one(request).getLocale();
+				will(returnValue(Locale.getDefault()));
+			}
+		});
+		Date date = new SimpleDateFormat("dd/MM/yyyy").parse("10/05/2010");
+		String formattedToday = DateFormat.getDateInstance(DateFormat.SHORT).format(date);
+		assertThat(converter.convert(formattedToday, Date.class, bundle), is(equalTo(date)));
+		mockery.assertIsSatisfied();
+	}
 
-    @Test
-    public void shouldBeAbleToConvertEmpty() {
-        assertThat(converter.convert("", Date.class, bundle), is(nullValue()));
-        mockery.assertIsSatisfied();
-    }
+	@Test
+	public void shouldBeAbleToConvertEmpty() {
+		assertThat(converter.convert("", Date.class, bundle), is(nullValue()));
+		mockery.assertIsSatisfied();
+	}
 
-    @Test
-    public void shouldBeAbleToConvertNull() {
-        assertThat(converter.convert(null, Date.class, bundle), is(nullValue()));
-        mockery.assertIsSatisfied();
-    }
+	@Test
+	public void shouldBeAbleToConvertNull() {
+		assertThat(converter.convert(null, Date.class, bundle), is(nullValue()));
+		mockery.assertIsSatisfied();
+	}
 
-
-    @Test
-    public void shouldThrowExceptionWhenUnableToParse() {
-        mockery.checking(new Expectations() {{
-            exactly(2).of(request).getAttribute("javax.servlet.jsp.jstl.fmt.locale.request"); will(returnValue("pt_br"));
-        }});
-        converter.convert("a,10/06/2008/a/b/c", Date.class, bundle);
-        assertThat(errors.get(0), is(VRaptorMatchers.error("", "a,10/06/2008/a/b/c is not a valid date.")));
-    }
+	@Test
+	public void shouldThrowExceptionWhenUnableToParse() {
+		mockery.checking(new Expectations() {
+			{
+				exactly(2).of(request).getAttribute("javax.servlet.jsp.jstl.fmt.locale.request");
+				will(returnValue("pt_br"));
+			}
+		});
+		try {
+			converter.convert("a,10/06/2008/a/b/c", Date.class, bundle);
+		} catch (ConversionError e) {
+			assertThat(e.getMessage(), is(equalTo("a,10/06/2008/a/b/c is not a valid date.")));
+		}
+	}
 
 }

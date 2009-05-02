@@ -1,8 +1,3 @@
-- converter registering is causing many log messages
-
-
-
-
 - make client server redirect work with parameters, which ones?
 (MUST) - hibernate plugin
 (MUST) - json output support: three different options
@@ -13,19 +8,8 @@
 
 
 
-
-ceci: integration test for vraptor-example project
-
-
-
-
-test and refactor:
-- ListAccessorTest for if part
-c) unit test for PicoContainersProvider... every scope should be tested
-- defaultpathresolver better test
-- new interceptor test 
-- DefaultResourceRegistry cache
-DefaultLogicResult should cache enhancers in order to create objects
+- ceci: integration test for vraptor-example project
+- converter registering is causing many log messages
 - JstlLocalization test
 
 
@@ -139,6 +123,11 @@ right before ANY release
 	- check all TODOS and do something about them
 
 ONLY AFTER RELEASE
+- DefaultLogicResult should cache enhancers in order to create objects
+- Everywhere there is an Enhacer should cache enhancers
+- AsmTypeCreator should cache instances
+- DefaultRouter cache with cacheable routes
+c) unit test for PicoContainersProvider... every scope should be tested
 - migrate some vraptor2 functionalities already supported @Components to be supported @Resources too
 3.0.1 - redirect to logic should work with parameter INJECTIon @ url also
 - routes should tell if they are cacheable or not (* --> sucks, too many strings)

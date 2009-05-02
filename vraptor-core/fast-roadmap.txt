@@ -1,4 +1,3 @@
-- if there is a conversion error, ognl should not set - conversion error should set the path variable 
 - converter registering is causing many log messages
 - ListAccessorTest for if part
 

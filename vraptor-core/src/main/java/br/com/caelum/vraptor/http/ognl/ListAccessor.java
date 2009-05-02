@@ -30,6 +30,7 @@
 package br.com.caelum.vraptor.http.ognl;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
@@ -40,7 +41,6 @@ import ognl.ListPropertyAccessor;
 import ognl.OgnlContext;
 import ognl.OgnlException;
 import br.com.caelum.vraptor.Converter;
-import br.com.caelum.vraptor.converter.OgnlToConvertersController;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.validator.ValidationMessage;
@@ -89,7 +89,12 @@ public class ListAccessor extends ListPropertyAccessor {
 				Method getter = ReflectionBasedNullHandler.findMethod(origin.getClass(), "get"
 						+ Info.capitalize(fieldName), origin.getClass(), null);
 				Type genericType = getter.getGenericReturnType();
-				Class type = OgnlToConvertersController.rawTypeOf(genericType);
+                Class type;
+                if (genericType instanceof ParameterizedType) {
+                    type = (Class) ((ParameterizedType) genericType).getActualTypeArguments()[0];
+                } else {
+                    type = (Class) genericType;
+                }
 				if (!type.equals(String.class)) {
 					// suckable ognl doesnt support dependency injection or
 					// anything alike... just that suckable context... therefore

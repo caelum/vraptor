@@ -28,7 +28,6 @@
 package br.com.caelum.vraptor.vraptor2;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 
@@ -42,10 +41,8 @@ import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.route.DefaultRouter;
 import br.com.caelum.vraptor.http.route.NoRoutesConfiguration;
 import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
-import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.Resource;
-import br.com.caelum.vraptor.resource.ResourceMethod;
 
 public class ComponentRoutesCreatorTest {
 
@@ -69,7 +66,7 @@ public class ComponentRoutesCreatorTest {
     public void shouldUseVRaptor3AlgorithmIfNotAVRaptor2Component() throws SecurityException, NoSuchMethodException {
         final Resource resource = mockery.resource(NonVRaptorComponent.class);
         this.router.register(resource);
-        assertThat(router.parse("/NonVRaptorComponent/name", HttpMethod.POST, request), is(equalTo((ResourceMethod)new DefaultResourceMethod(resource, NonVRaptorComponent.class.getMethod("name")))));
+        assertThat(router.parse("/NonVRaptorComponent/name", HttpMethod.POST, request), is(VRaptorMatchers.resourceMethod(NonVRaptorComponent.class.getMethod("name"))));
         mockery.assertIsSatisfied();
     }
 

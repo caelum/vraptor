@@ -9,7 +9,6 @@
 
 
 
-
 - better exception handling everywhere (search for TODO within exceptions)
 - suppor for kung's register api
 - make client server redirect work with parameters, which ones?
@@ -148,6 +147,7 @@ right before ANY release
 	- check all TODOS and do something about them
 
 ONLY AFTER RELEASE
+- migrate some vraptor2 functionalities already supported @Components to be supported @Resources too
 3.0.1 - redirect to logic should work with parameter INJECTIon @ url also
 - routes should tell if they are cacheable or not (* --> sucks, too many strings)
 3.0.1 - method return != string --> outject

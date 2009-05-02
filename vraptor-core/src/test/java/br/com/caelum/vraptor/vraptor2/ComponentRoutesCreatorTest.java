@@ -38,18 +38,26 @@ import org.vraptor.annotations.Component;
 
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.VRaptorMockery;
+import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor.http.route.DefaultRouter;
+import br.com.caelum.vraptor.http.route.NoRoutesConfiguration;
 import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
-import br.com.caelum.vraptor.resource.DefaultResourceAndMethodLookup;
+import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.Resource;
+import br.com.caelum.vraptor.resource.ResourceMethod;
 
-public class VRaptor2MethodLookupTest {
+public class ComponentRoutesCreatorTest {
 
     private VRaptorMockery mockery;
+	private DefaultRouter router;
+	private MutableRequest request;
 
     @Before
     public void setup() {
         this.mockery = new VRaptorMockery();
+        this.request = mockery.mock(MutableRequest.class);
+        this.router = new DefaultRouter(new NoRoutesConfiguration(), new ComponentRoutesCreator());
     }
 
     class NonVRaptorComponent {
@@ -58,11 +66,10 @@ public class VRaptor2MethodLookupTest {
     }
 
     @Test
-    public void shouldUseVRaptor3AlgorithmIfNotAVRaptor2Component() {
+    public void shouldUseVRaptor3AlgorithmIfNotAVRaptor2Component() throws SecurityException, NoSuchMethodException {
         final Resource resource = mockery.resource(NonVRaptorComponent.class);
-        VRaptor2MethodLookup lookup = new VRaptor2MethodLookup(resource);
-        assertThat(lookup.methodFor("id", HttpMethod.POST), is(equalTo(new DefaultResourceAndMethodLookup(resource).methodFor(
-                "id", HttpMethod.POST))));
+        this.router.register(resource);
+        assertThat(router.parse("id", HttpMethod.POST, request), is(equalTo((ResourceMethod)new DefaultResourceMethod(resource, NonVRaptorComponent.class.getMethod("id")))));
         mockery.assertIsSatisfied();
     }
 
@@ -82,32 +89,32 @@ public class VRaptor2MethodLookupTest {
     @Test
     public void ignoresNonPublicMethod() {
         final Resource resource = mockery.resource(MyResource.class);
-        VRaptor2MethodLookup lookup = new VRaptor2MethodLookup(resource);
-        assertThat(lookup.methodFor("/MyResource.ignorableStatic.logic", HttpMethod.POST), is(nullValue()));
+        this.router.register(resource);
+        assertThat(router.parse("/MyResource.ignorableStatic.logic", HttpMethod.POST, request), is(nullValue()));
         mockery.assertIsSatisfied();
     }
 
     @Test
     public void ignoresStaticMethod() {
         final Resource resource = mockery.resource(MyResource.class);
-        VRaptor2MethodLookup lookup = new VRaptor2MethodLookup(resource);
-        assertThat(lookup.methodFor("/MyResource.ignorableProtected.logic", HttpMethod.POST), is(nullValue()));
+        this.router.register(resource);
+        assertThat(router.parse("/MyResource.ignorableProtected.logic", HttpMethod.POST, request), is(nullValue()));
         mockery.assertIsSatisfied();
     }
 
     @Test
     public void returnsNullIfNothingFound() {
         final Resource resource = mockery.resource(MyResource.class);
-        VRaptor2MethodLookup lookup = new VRaptor2MethodLookup(resource);
-        assertThat(lookup.methodFor("/MyResource.unfindable.logic", HttpMethod.POST), is(nullValue()));
+        this.router.register(resource);
+        assertThat(router.parse("/MyResource.unfindable.logic", HttpMethod.POST, request), is(nullValue()));
         mockery.assertIsSatisfied();
     }
 
     @Test
     public void returnsTheCorrectDefaultResourceMethodIfFound() throws SecurityException, NoSuchMethodException {
         final Resource resource = mockery.resource(MyResource.class);
-        VRaptor2MethodLookup lookup = new VRaptor2MethodLookup(resource);
-        assertThat(lookup.methodFor("/MyResource.findable.logic", HttpMethod.POST), is(VRaptorMatchers.resourceMethod(MyResource.class.getMethod("findable"))));
+        this.router.register(resource);
+        assertThat(router.parse("/MyResource.findable.logic", HttpMethod.POST, request), is(VRaptorMatchers.resourceMethod(MyResource.class.getMethod("findable"))));
         mockery.assertIsSatisfied();
     }
 

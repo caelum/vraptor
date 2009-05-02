@@ -115,7 +115,7 @@ public class ComponentRoutesCreator implements ResourceParserRoutesCreator {
 			return;
 		}
         for (Method javaMethod : actualType.getDeclaredMethods()) {
-			if (isEligible(javaMethod)) {
+			if (!isEligible(javaMethod)) {
                 continue;
             }
 			String uri = getUriFor(javaMethod, baseType);

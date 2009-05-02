@@ -49,6 +49,11 @@ import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
+/**
+ * Should be used in one of two ways, either configure the type and invoke the method or pass the method (java reflection) object.
+ * @author guilherme silveira
+ *
+ */
 public class UriBasedRoute implements Rule {
 	private static final Logger logger = LoggerFactory.getLogger(UriBasedRoute.class);
 
@@ -147,7 +152,7 @@ public class UriBasedRoute implements Rule {
 		return this.resource.getResource();
 	}
 
-	protected void is(Class<?> type, Method method) {
+	public void is(Class<?> type, Method method) {
 		resource = new DefaultResourceMethod(new DefaultResource(type), method);
 	}
 

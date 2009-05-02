@@ -47,11 +47,6 @@ import br.com.caelum.vraptor.VRaptorMockery;
 import br.com.caelum.vraptor.http.ListOfRules;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.VRaptorRequest;
-import br.com.caelum.vraptor.http.route.DefaultRouter;
-import br.com.caelum.vraptor.http.route.NoRoutesConfiguration;
-import br.com.caelum.vraptor.http.route.Router;
-import br.com.caelum.vraptor.http.route.Rule;
-import br.com.caelum.vraptor.http.route.Rules;
 import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.NoRoutesCreator;
@@ -254,7 +249,8 @@ public class DefaultRouterTest {
 
     @Test
     public void usesAsteriskBothWays() throws NoSuchMethodException {
-		router.add(new PathAnnotationRoutesCreator(mockery.resource(MyResource.class)));
+		this.router = new DefaultRouter(new NoRoutesConfiguration(), new PathAnnotationRoutesCreator());
+		router.register(mockery.resource(MyResource.class));
         Method method = mockery.methodFor(MyResource.class, "starPath").getMethod();
         String url = router.urlFor(MyResource.class, method, new Object[] {});
         assertThat(router.parse(url, HttpMethod.POST, null).getMethod(), is(equalTo(method)));
@@ -263,8 +259,9 @@ public class DefaultRouterTest {
 
     @Test
     public void canTranslateAInheritedResourceBothWays() throws NoSuchMethodException {
-		router.add(new PathAnnotationRoutesCreator(mockery.resource(MyResource.class)));
-		router.add(new PathAnnotationRoutesCreator(mockery.resource(InheritanceExample.class)));
+		this.router = new DefaultRouter(new NoRoutesConfiguration(), new PathAnnotationRoutesCreator());
+		router.register(mockery.resource(MyResource.class));
+		router.register(mockery.resource(InheritanceExample.class));
         Method method = mockery.methodFor(MyResource.class, "notAnnotated").getMethod();
         String url = router.urlFor(InheritanceExample.class, method, new Object[] {});
         assertThat(router.parse(url, HttpMethod.POST, null).getMethod(), is(equalTo(method)));
@@ -273,7 +270,8 @@ public class DefaultRouterTest {
 
     @Test
     public void canTranslateAnnotatedMethodBothWays() throws NoSuchMethodException {
-		router.add(new PathAnnotationRoutesCreator(mockery.resource(MyResource.class)));
+		this.router = new DefaultRouter(new NoRoutesConfiguration(), new PathAnnotationRoutesCreator());
+		router.register(mockery.resource(MyResource.class));
         Method method = mockery.methodFor(MyResource.class, "customizedPath").getMethod();
         String url = router.urlFor(MyResource.class, method, new Object[] {});
         assertThat(router.parse(url, HttpMethod.POST, null).getMethod(), is(equalTo(method)));

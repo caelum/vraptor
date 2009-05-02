@@ -14,6 +14,7 @@ import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.route.DefaultRouter;
 import br.com.caelum.vraptor.http.route.NoRoutesConfiguration;
+import br.com.caelum.vraptor.resource.NoRoutesCreator;
 
 public class PicoBasedContainerTest {
 
@@ -40,7 +41,7 @@ public class PicoBasedContainerTest {
         final HttpServletResponse webResponse = mockery.mock(HttpServletResponse.class);
         final RequestInfo request = new RequestInfo(null, webRequest, webResponse);
         this.picoContainer = new PicoBuilder().withCaching().build();
-        this.container = new PicoBasedContainer(picoContainer, request, new DefaultRouter(new NoRoutesConfiguration()));
+        this.container = new PicoBasedContainer(picoContainer, request, new DefaultRouter(new NoRoutesConfiguration(), new NoRoutesCreator()));
     }
 
     @Test

@@ -1,12 +1,10 @@
 - if there is a conversion error, ognl should not set - conversion error should set the path variable 
-- conversion should log what is being set... use also an exception to do it
 - converter registering is causing many log messages
 - ListAccessorTest for if part
 
 
 
 
-- better exception handling everywhere (search for TODO within exceptions)
 - suppor for kung's register api
 - make client server redirect work with parameters, which ones?
 (MUST) - hibernate plugin
@@ -76,8 +74,9 @@ site docs (prior to release)
 
 kung help
 	- known bug: accessing / when its /index.html.... if its a dir containing an index.html it doesnt work, but if your url is /clients/ it works...
-	- add a @PostConstruct @PreDestroy test for providers 
+	- add a @Listener 
 	- delete is not working
+	- better exception handling everywhere (search for TODO within exceptions)
 
 
 

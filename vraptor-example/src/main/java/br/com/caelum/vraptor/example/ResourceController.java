@@ -27,23 +27,28 @@
  */
 package br.com.caelum.vraptor.example;
 
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+
+import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.http.route.Router;
-import br.com.caelum.vraptor.http.route.RoutesConfiguration;
-import br.com.caelum.vraptor.http.route.Rules;
-import br.com.caelum.vraptor.ioc.ApplicationScoped;
+import br.com.caelum.vraptor.view.jsp.PageResult;
 
-/**
- * Custom rules only to show how to create your own routes.
- * @author guilherme silveira
- *
- */
-@ApplicationScoped
-public class CustomRoutes implements RoutesConfiguration{
+@Resource
+public class ResourceController {
+    
+    private final Router registry;
+    private final PageResult result;
 
-	public void config(Router router) {
-		router.add(new Rules() {{
-			routeFor("/").is(ClientsController.class).list();
-		}});
-	}
+    public ResourceController(Router registry, PageResult result) {
+        this.registry = registry;
+        this.result = result;
+    }
+    
+    public void list() throws ServletException, IOException {
+        result.include("resources", registry.all());
+        result.forward("ok");
+    }
 
 }

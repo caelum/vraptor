@@ -76,7 +76,7 @@ public class OgnlToConvertersController implements TypeConverter {
         if (member instanceof Field) {
             return extractFieldType(member);
         } else if (member instanceof Method) {
-            return extractMethodType(target, member);
+            return extractSetterMethodType(target, member);
         } else if (member == null && target.getClass().isArray()) {
             return extractArrayType(target);
         }
@@ -86,7 +86,7 @@ public class OgnlToConvertersController implements TypeConverter {
     }
 
     @SuppressWarnings("unchecked")
-    private Class rawTypeOf(Type genericType) {
+    public static Class rawTypeOf(Type genericType) {
         if (genericType instanceof ParameterizedType) {
             return (Class) ((ParameterizedType) genericType).getRawType();
         }
@@ -101,8 +101,7 @@ public class OgnlToConvertersController implements TypeConverter {
         return ((Field)member).getGenericType();
     }
 
-    private Type extractMethodType(Object target, Member member) {
-        Type genericType;
+    private Type extractSetterMethodType(Object target, Member member) {
         Method method = (Method) member;
         Type[] parameterTypes = method.getGenericParameterTypes();
         if (parameterTypes.length != 1) {
@@ -110,8 +109,7 @@ public class OgnlToConvertersController implements TypeConverter {
             throw new IllegalArgumentException("Vraptor can only navigate through setters with one parameter, not "
                     + member + " from " + target.getClass().getName());
         }
-        genericType = parameterTypes[0];
-        return genericType;
+        return parameterTypes[0];
     }
 
 }

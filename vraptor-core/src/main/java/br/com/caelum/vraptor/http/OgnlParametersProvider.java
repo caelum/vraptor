@@ -46,6 +46,7 @@ import ognl.OgnlRuntime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import br.com.caelum.vraptor.converter.ConversionError;
 import br.com.caelum.vraptor.converter.OgnlToConvertersController;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.http.ognl.ArrayAccessor;
@@ -105,6 +106,8 @@ public class OgnlParametersProvider implements ParametersProvider {
                         logger.debug("Applying " + key + " with " + Arrays.toString(values));
                     }
                     Ognl.setValue(key, context,root, values.length==1 ? values[0] : values);
+                } catch (ConversionError ex) {
+                	errors.add(new ValidationMessage(ex.getMessage(), key));
                 } catch (NoSuchPropertyException ex) {
                     // TODO optimization: be able to ignore or not
                     if(logger.isDebugEnabled()) {

@@ -36,7 +36,6 @@ import java.util.ResourceBundle;
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
-import br.com.caelum.vraptor.validator.ValidationMessage;
 
 /**
  * VRaptor's primitive int converter. 
@@ -55,8 +54,7 @@ public class PrimitiveIntConverter implements Converter {
         try {
             return Integer.parseInt(value);
         } catch (NumberFormatException e) {
-			errors.add(new ValidationMessage(MessageFormat.format(bundle.getString("is_not_a_valid_integer"), value), ""));
-			return null;
+        	throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_integer"), value));
         }
     }
     

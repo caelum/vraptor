@@ -25,25 +25,17 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package br.com.caelum.vraptor.example;
-
-import br.com.caelum.vraptor.http.route.Router;
-import br.com.caelum.vraptor.http.route.RoutesConfiguration;
-import br.com.caelum.vraptor.http.route.Rules;
-import br.com.caelum.vraptor.ioc.ApplicationScoped;
+package br.com.caelum.vraptor.converter;
 
 /**
- * Custom rules only to show how to create your own routes.
+ * A conversion error. The message should already be i18n.
+ * 
  * @author guilherme silveira
- *
  */
-@ApplicationScoped
-public class CustomRoutes implements RoutesConfiguration{
+public class ConversionError extends Error {
 
-	public void config(Router router) {
-		router.add(new Rules() {{
-			routeFor("/").is(ClientsController.class).list();
-		}});
+	public ConversionError(String msg) {
+		super(msg);
 	}
 
 }

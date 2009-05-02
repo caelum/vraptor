@@ -45,12 +45,10 @@ import org.junit.Test;
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.VRaptorMockery;
 import br.com.caelum.vraptor.http.ListOfRules;
-import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.VRaptorRequest;
 import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.NoRoutesCreator;
-import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.resource.VRaptorInfo;
 
@@ -164,16 +162,7 @@ public class DefaultRouterTest {
 	@Test
 	public void usesTheFirstRegisteredRuleIfDifferentCreatorsWereUsed() throws SecurityException, NoSuchMethodException {
 		final ResourceMethod resourceMethod = mockery.mock(ResourceMethod.class);
-		final Rule customRule = new Rule() {
-
-			public ResourceMethod matches(String uri, HttpMethod method, MutableRequest request) {
-				return resourceMethod;
-			}
-
-			public Resource getResource() {
-				return null;
-			}
-		};
+		final Rule customRule = new RuleForMethod(resourceMethod);
 		router.add(new ListOfRules() {
 			public List<Rule> getRules() {
 				return Arrays.asList(customRule);

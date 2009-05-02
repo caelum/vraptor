@@ -32,33 +32,28 @@ import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
-/**
- * An specific route rule.
- * 
- * @author Guilherme Silveira
- */
-public interface Rule {
+public class RuleForMethod implements Rule {
 
-	/**
-	 * Returns the resource method for this specifig rule. Also applies the
-	 * required parameters to this vraptor request.
-	 */
-	ResourceMethod matches(String uri, HttpMethod method, MutableRequest request);
+	private final ResourceMethod method;
 
-	/**
-	 * Returns the resource related to this rule.
-	 */
-	Resource getResource();
+	public RuleForMethod(ResourceMethod method) {
+		this.method = method;
+	}
 
-	/**
-	 * Returns the resource method which will be invoked through the use of this
-	 * rule.
-	 */
-	ResourceMethod getResourceMethod();
+	public Resource getResource() {
+		return null;
+	}
 
-	/**
-	 * Returns the url which invokes this rule with these parameters.
-	 */
-	String urlFor(Object... params);
+	public ResourceMethod getResourceMethod() {
+		return method;
+	}
+
+	public ResourceMethod matches(String uri, HttpMethod method, MutableRequest request) {
+		return this.method;
+	}
+
+	public String urlFor(Object... params) {
+		return null;
+	}
 
 }

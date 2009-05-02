@@ -34,7 +34,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.http.ListOfRules;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
@@ -107,13 +106,12 @@ public class DefaultRouter implements Router {
 	}
 
 	public <T> String urlFor(Class<T> type, Method method, Object... params) {
-        Path path = method.getAnnotation(Path.class);
-        if (path != null) {
-            String value = path.value();
-            value = value.replaceAll("\\*", "");
-            return value;
-        }
-        return "/" + type.getSimpleName() + "/" + method.getName();
+		for (Rule rule : rules) {
+			if(rule.getResource().getType().equals(type) && rule.getResourceMethod().getMethod().equals(method)) {
+				return rule.urlFor(params);
+			}
+		}
+		throw new RouteNotFoundException("The selected route is invalid for redirection: " + type.getName() + "." + method.getName());
 	}
 
 }

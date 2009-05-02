@@ -27,38 +27,19 @@
  */
 package br.com.caelum.vraptor.http.route;
 
-import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor.resource.HttpMethod;
-import br.com.caelum.vraptor.resource.Resource;
-import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.VRaptorException;
 
 /**
- * An specific route rule.
+ * A route was not found for the specified parameters.
  * 
- * @author Guilherme Silveira
+ * @author guilherme silveira
  */
-public interface Rule {
+public class RouteNotFoundException extends VRaptorException {
 
-	/**
-	 * Returns the resource method for this specifig rule. Also applies the
-	 * required parameters to this vraptor request.
-	 */
-	ResourceMethod matches(String uri, HttpMethod method, MutableRequest request);
+	public RouteNotFoundException(String msg) {
+		super(msg);
+	}
 
-	/**
-	 * Returns the resource related to this rule.
-	 */
-	Resource getResource();
-
-	/**
-	 * Returns the resource method which will be invoked through the use of this
-	 * rule.
-	 */
-	ResourceMethod getResourceMethod();
-
-	/**
-	 * Returns the url which invokes this rule with these parameters.
-	 */
-	String urlFor(Object... params);
+	private static final long serialVersionUID = 606801838930057251L;
 
 }

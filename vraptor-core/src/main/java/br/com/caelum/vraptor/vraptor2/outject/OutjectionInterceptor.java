@@ -44,7 +44,7 @@ public class OutjectionInterceptor implements Interceptor {
         stack.next(method, resourceInstance);
     }
 
-    void outject(Object resourceInstance, Class<?> type) throws InterceptionException {
+    public void outject(Object resourceInstance, Class<?> type) throws InterceptionException {
         Method[] methods = type.getDeclaredMethods();
         for (Method outject : methods) {
             if (outject.getName().length() < 3

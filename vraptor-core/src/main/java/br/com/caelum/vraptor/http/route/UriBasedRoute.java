@@ -50,9 +50,10 @@ import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**
- * Should be used in one of two ways, either configure the type and invoke the method or pass the method (java reflection) object.
+ * Should be used in one of two ways, either configure the type and invoke the
+ * method or pass the method (java reflection) object.
+ * 
  * @author guilherme silveira
- *
  */
 public class UriBasedRoute implements Rule {
 	private static final Logger logger = LoggerFactory.getLogger(UriBasedRoute.class);
@@ -61,9 +62,11 @@ public class UriBasedRoute implements Rule {
 
 	private final Set<HttpMethod> supportedMethods = new HashSet<HttpMethod>();
 
-	private Pattern pattern;
-	
+	private final Pattern pattern;
+
 	private final List<String> parameters = new ArrayList<String>();
+
+	private final String patternUri;
 
 	public UriBasedRoute(String uri) {
 		uri = uri.replaceAll("\\*", ".\\*");
@@ -91,11 +94,14 @@ public class UriBasedRoute implements Rule {
 				paramName += uri.charAt(i);
 			}
 		}
+		this.patternUri = patternUri;
 		this.pattern = Pattern.compile(patternUri);
 	}
 
 	/**
-	 * Accepts also this http method request. If this method is not invoked, any http method is supported, otherwise all parameters passed are supported.
+	 * Accepts also this http method request. If this method is not invoked, any
+	 * http method is supported, otherwise all parameters passed are supported.
+	 * 
 	 * @param method
 	 * @return
 	 */
@@ -110,9 +116,10 @@ public class UriBasedRoute implements Rule {
 		e.setCallback(new MethodInterceptor() {
 
 			public Object intercept(Object instance, Method method, Object[] args, MethodProxy proxy) throws Throwable {
-				if(resource!=null) {
+				if (resource != null) {
 					// you are either invoking a second method
-					// or the virtual machine might be invoking the finalize method (or anything similar)
+					// or the virtual machine might be invoking the finalize
+					// method (or anything similar)
 					// therefore we should ignore this emthod invocation
 					return null;
 				}
@@ -124,7 +131,7 @@ public class UriBasedRoute implements Rule {
 	}
 
 	public ResourceMethod matches(String uri, HttpMethod method, MutableRequest request) {
-		if(!methodMatches(method)) {
+		if (!methodMatches(method)) {
 			return null;
 		}
 		return uriMatches(uri, request);
@@ -132,11 +139,11 @@ public class UriBasedRoute implements Rule {
 
 	private DefaultResourceMethod uriMatches(String uri, MutableRequest request) {
 		Matcher m = pattern.matcher(uri);
-		if(!m.matches()) {
+		if (!m.matches()) {
 			return null;
 		}
-		for(int i=1;i<=m.groupCount();i++) {
-			request.setParameter(parameters.get(i-1), m.group(i));
+		for (int i = 1; i <= m.groupCount(); i++) {
+			request.setParameter(parameters.get(i - 1), m.group(i));
 		}
 		return resource;
 	}
@@ -146,14 +153,23 @@ public class UriBasedRoute implements Rule {
 	}
 
 	public Resource getResource() {
-		if(resource==null) {
-			throw new IllegalStateException("You forgot to invoke a method to let the rule know which method it is suposed to invoke.");
+		if (resource == null) {
+			throw new IllegalStateException(
+					"You forgot to invoke a method to let the rule know which method it is suposed to invoke.");
 		}
 		return this.resource.getResource();
 	}
 
 	public void is(Class<?> type, Method method) {
 		resource = new DefaultResourceMethod(new DefaultResource(type), method);
+	}
+
+	public ResourceMethod getResourceMethod() {
+		return resource;
+	}
+
+	public String urlFor(Object... params) {
+		return patternUri.replaceAll("\\*", "");
 	}
 
 }

@@ -25,7 +25,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package br.com.caelum.vraptor.http;
+package br.com.caelum.vraptor.http.route;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -35,10 +35,13 @@ import java.util.List;
 import java.util.Set;
 
 import br.com.caelum.vraptor.Path;
+import br.com.caelum.vraptor.http.ListOfRules;
+import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.resource.ResourceParserRoutesCreator;
 import br.com.caelum.vraptor.resource.VRaptorInfo;
 
 /**
@@ -53,11 +56,13 @@ public class DefaultRouter implements Router {
 
 	private final List<Rule> rules = new ArrayList<Rule>();
     private final Set<Resource> resources = new HashSet<Resource>();
+	private final ResourceParserRoutesCreator resourceRoutesCreator;
 
-    public DefaultRouter(RoutesConfiguration config) {
-        // this resource should be kept here so it doesnt matter whether
+    public DefaultRouter(RoutesConfiguration config, ResourceParserRoutesCreator resourceRoutesCreator) {
+        this.resourceRoutesCreator = resourceRoutesCreator;
+		// this resource should be kept here so it doesnt matter whether
         // the user uses a custom routes config
-    	UriBasedRule rule = new UriBasedRule("/is_using_vraptor");
+    	UriBasedRoute rule = new UriBasedRoute("/is_using_vraptor");
     	try {
 			rule.is(VRaptorInfo.class).info();
 		} catch (IOException e) {
@@ -69,6 +74,10 @@ public class DefaultRouter implements Router {
 
 	public void add(ListOfRules rulesToAdd) {
 		List<Rule> rules = rulesToAdd.getRules();
+		add(rules);
+	}
+
+	private void add(List<Rule> rules) {
 		for(Rule r : rules) {
 			add(r);
 		}
@@ -94,7 +103,7 @@ public class DefaultRouter implements Router {
 	}
 
 	public void register(Resource resource) {
-		add(new PathAnnotationRules(resource));
+		add(this.resourceRoutesCreator.rulesFor(resource));
 	}
 
 	public <T> String urlFor(Class<T> type, Method method, Object... params) {

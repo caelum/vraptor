@@ -13,7 +13,7 @@ import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.http.Router;
+import br.com.caelum.vraptor.http.route.Router;
 
 public class DefaultLogicResultTest {
 

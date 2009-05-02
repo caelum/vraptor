@@ -25,7 +25,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package br.com.caelum.vraptor.http;
+package br.com.caelum.vraptor.http.route;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -40,12 +40,17 @@ import br.com.caelum.vraptor.Delete;
 import br.com.caelum.vraptor.Head;
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.VRaptorMockery;
+import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor.http.PathAnnotationRoutesCreator;
+import br.com.caelum.vraptor.http.route.DefaultRouter;
+import br.com.caelum.vraptor.http.route.Router;
+import br.com.caelum.vraptor.http.route.RoutesConfiguration;
 import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
-public class PathAnnotationRulesTest {
+public class PathAnnotationRoutesCreatorTest {
 
 	private VRaptorMockery mockery;
 	private Resource resource;
@@ -59,9 +64,9 @@ public class PathAnnotationRulesTest {
 		this.request = mockery.mock(MutableRequest.class);
 		this.router = new DefaultRouter(new RoutesConfiguration() {
 			public void config(Router router) {
-				router.add(new PathAnnotationRules(resource));
 			}
-		});
+		}, new PathAnnotationRoutesCreator());
+		router.register(resource);
 	}
 
 	@Test

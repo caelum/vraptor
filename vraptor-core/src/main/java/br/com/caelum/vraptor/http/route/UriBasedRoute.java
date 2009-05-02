@@ -25,7 +25,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package br.com.caelum.vraptor.http;
+package br.com.caelum.vraptor.http.route;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -42,14 +42,15 @@ import net.sf.cglib.proxy.MethodProxy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.resource.DefaultResource;
 import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
-public class UriBasedRule implements Rule {
-	private static final Logger logger = LoggerFactory.getLogger(UriBasedRule.class);
+public class UriBasedRoute implements Rule {
+	private static final Logger logger = LoggerFactory.getLogger(UriBasedRoute.class);
 
 	private DefaultResourceMethod resource;
 
@@ -59,7 +60,7 @@ public class UriBasedRule implements Rule {
 	
 	private final List<String> parameters = new ArrayList<String>();
 
-	public UriBasedRule(String uri) {
+	public UriBasedRoute(String uri) {
 		uri = uri.replaceAll("\\*", ".\\*");
 		String finalUri = "";
 		String patternUri = "";
@@ -93,7 +94,7 @@ public class UriBasedRule implements Rule {
 	 * @param method
 	 * @return
 	 */
-	public UriBasedRule with(HttpMethod method) {
+	public UriBasedRoute with(HttpMethod method) {
 		this.supportedMethods.add(method);
 		return this;
 	}

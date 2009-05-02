@@ -25,38 +25,24 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package br.com.caelum.vraptor.ioc.pico;
+package br.com.caelum.vraptor.resource;
 
-import java.lang.annotation.Annotation;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import br.com.caelum.vraptor.http.route.Router;
-import br.com.caelum.vraptor.ioc.Stereotype;
-import br.com.caelum.vraptor.resource.DefaultResource;
+import br.com.caelum.vraptor.http.route.Rule;
 
 /**
- * Whenever it finds some resources, registers it in this rules object.
- * 
+ * Generates no routes for any resource. Only allows configurarion through the use of custom routes.
  * @author guilherme silveira
+ *
  */
-public class ResourceAcceptor implements Acceptor {
+public class NoRoutesCreator implements ResourceParserRoutesCreator {
 
-	private static final Logger logger = LoggerFactory.getLogger(ResourceAcceptor.class);
-	private final Router router;
+	private static final List<Rule> EMPTY = new ArrayList<Rule>();
 
-	public ResourceAcceptor(Router router) {
-		this.router = router;
-	}
-
-	public void analyze(Class<?> type) {
-		for (Annotation annotation : type.getAnnotations()) {
-			if (annotation.annotationType().isAnnotationPresent(Stereotype.class)) {
-				logger.debug("Found resource for " + type);
-				router.register(new DefaultResource(type));
-			}
-		}
+	public List<Rule> rulesFor(Resource resource) {
+		return EMPTY;
 	}
 
 }

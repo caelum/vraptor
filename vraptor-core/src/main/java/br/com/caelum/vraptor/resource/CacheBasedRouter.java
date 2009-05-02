@@ -36,7 +36,7 @@ import java.util.Set;
 
 import br.com.caelum.vraptor.http.ListOfRules;
 import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor.http.Router;
+import br.com.caelum.vraptor.http.route.Router;
 
 /**
  * A cached resource registry that avoids iterating over the entire set just in

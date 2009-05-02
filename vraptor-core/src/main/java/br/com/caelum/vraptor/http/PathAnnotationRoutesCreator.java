@@ -33,36 +33,37 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.caelum.vraptor.Path;
+import br.com.caelum.vraptor.http.route.Rule;
+import br.com.caelum.vraptor.http.route.UriBasedRoute;
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.Resource;
+import br.com.caelum.vraptor.resource.ResourceParserRoutesCreator;
 
-public class PathAnnotationRules implements ListOfRules {
+/**
+ * The default parser routes creator uses the path annotation to create rules.
+ * 
+ * @author guilherme silveira
+ */
+public class PathAnnotationRoutesCreator implements ResourceParserRoutesCreator {
 
-	private final List<Rule> rules = new ArrayList<Rule>();
-
-	public PathAnnotationRules(Resource resource) {
-		Class<?> baseType = resource.getType();
-		registerRulesFor(baseType, baseType);
-	}
-
-	public List<Rule> getRules() {
-		return rules;
-	}
-
-	private void registerRulesFor(Class<?> actualType, Class<?> baseType) {
+	private void registerRulesFor(Class<?> actualType, Class<?> baseType, List<Rule> rules) {
+		if (actualType.equals(Object.class)) {
+			return;
+		}
 		for (Method javaMethod : actualType.getDeclaredMethods()) {
 			if (isEligible(javaMethod)) {
 				String uri = getUriFor(javaMethod, baseType);
-				UriBasedRule rule = new UriBasedRule(uri);
+				UriBasedRoute rule = new UriBasedRoute(uri);
 				for (HttpMethod m : HttpMethod.values()) {
 					if (javaMethod.isAnnotationPresent(m.getAnnotation())) {
 						rule.with(m);
 					}
 				}
 				rule.is(baseType, javaMethod);
-				this.rules.add(rule);
+				rules.add(rule);
 			}
 		}
+		registerRulesFor(actualType.getSuperclass(), baseType, rules);
 	}
 
 	private String getUriFor(Method javaMethod, Class<?> type) {
@@ -81,6 +82,13 @@ public class PathAnnotationRules implements ListOfRules {
 
 	private boolean isEligible(Method javaMethod) {
 		return Modifier.isPublic(javaMethod.getModifiers()) && !Modifier.isStatic(javaMethod.getModifiers());
+	}
+
+	public List<Rule> rulesFor(Resource resource) {
+		List<Rule> rules = new ArrayList<Rule>();
+		Class<?> baseType = resource.getType();
+		registerRulesFor(baseType, baseType, rules);
+		return rules;
 	}
 
 }

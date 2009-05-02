@@ -36,7 +36,7 @@ import javax.servlet.http.HttpServletResponse;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
-import br.com.caelum.vraptor.http.Router;
+import br.com.caelum.vraptor.http.route.Router;
 
 /**
  * The default implementation of LogicResult.<br>

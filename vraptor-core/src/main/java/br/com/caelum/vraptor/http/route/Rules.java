@@ -25,19 +25,30 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package br.com.caelum.vraptor.http;
+package br.com.caelum.vraptor.http.route;
 
-import br.com.caelum.vraptor.VRaptorException;
+import java.util.ArrayList;
+import java.util.List;
+
+import br.com.caelum.vraptor.http.ListOfRules;
 
 /**
- * An invalid resource was loaded.
- * @author guilherme silveira
- *
+ * Rules for resource localization.
+ * 
+ * @author Guilherme Silveira
  */
-public class InvalidResourceException extends VRaptorException {
+public class Rules implements ListOfRules {
 
-	public InvalidResourceException(String msg) {
-		super(msg);
+	private final List<Rule> rules = new ArrayList<Rule>();
+
+	public UriBasedRoute routeFor(String uri) {
+		UriBasedRoute rule = new UriBasedRoute(uri);
+		this.rules.add(rule);
+		return rule;
+	}
+
+	public List<Rule> getRules() {
+		return this.rules;
 	}
 
 }

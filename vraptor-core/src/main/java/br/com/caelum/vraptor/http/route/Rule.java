@@ -25,14 +25,29 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package br.com.caelum.vraptor.http;
+package br.com.caelum.vraptor.http.route;
+
+import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor.resource.HttpMethod;
+import br.com.caelum.vraptor.resource.Resource;
+import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**
- * Configs your routes for your application.
- * @author guilherme silveira
+ * An specific route rule.
+ * 
+ * @author Guilherme Silveira
  */
-public interface RoutesConfiguration {
+public interface Rule {
 
-	void config(Router router);
+	/**
+	 * Returns the resource method for this specifig rule. Also applies the
+	 * required parameters to this vraptor request.
+	 */
+	ResourceMethod matches(String uri, HttpMethod method,MutableRequest request);
+
+	/**
+	 * Returns the resource related to this rule.
+	 */
+	Resource getResource();
 
 }

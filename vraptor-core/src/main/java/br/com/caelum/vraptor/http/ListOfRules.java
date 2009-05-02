@@ -29,6 +29,8 @@ package br.com.caelum.vraptor.http;
 
 import java.util.List;
 
+import br.com.caelum.vraptor.http.route.Rule;
+
 /**
  * A list of rules to add to a router.
  * 

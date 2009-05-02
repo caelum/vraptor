@@ -11,9 +11,9 @@ import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.PicoBuilder;
 
 import br.com.caelum.vraptor.core.RequestInfo;
-import br.com.caelum.vraptor.http.DefaultRouter;
 import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor.http.NoRoutesConfiguration;
+import br.com.caelum.vraptor.http.route.DefaultRouter;
+import br.com.caelum.vraptor.http.route.NoRoutesConfiguration;
 
 public class PicoBasedContainerTest {
 

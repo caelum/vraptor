@@ -25,7 +25,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package br.com.caelum.vraptor.http;
+package br.com.caelum.vraptor.http.route;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -33,8 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.caelum.vraptor.Path;
-import br.com.caelum.vraptor.http.route.Rule;
-import br.com.caelum.vraptor.http.route.UriBasedRoute;
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceParserRoutesCreator;
@@ -44,6 +43,7 @@ import br.com.caelum.vraptor.resource.ResourceParserRoutesCreator;
  * 
  * @author guilherme silveira
  */
+@ApplicationScoped
 public class PathAnnotationRoutesCreator implements ResourceParserRoutesCreator {
 
 	private void registerRulesFor(Class<?> actualType, Class<?> baseType, List<Rule> rules) {

@@ -30,30 +30,48 @@ package br.com.caelum.vraptor.vraptor2;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.vraptor.annotations.In;
 import org.vraptor.annotations.Logic;
 import org.vraptor.annotations.Out;
 import org.vraptor.annotations.Parameter;
 import org.vraptor.plugin.hibernate.Validate;
 
+import br.com.caelum.vraptor.http.route.PathAnnotationRoutesCreator;
+import br.com.caelum.vraptor.http.route.Rule;
+import br.com.caelum.vraptor.http.route.UriBasedRoute;
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
+import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.Resource;
-import br.com.caelum.vraptor.resource.ResourceAndMethodLookup;
+import br.com.caelum.vraptor.resource.ResourceParserRoutesCreator;
 
 /**
- * A vraptor 2 compatible method lookup builder.
+ * A vraptor 2 and 3 compatible routes creator.
  * 
  * @author Guilherme Silveira
  */
-public class VRaptor2MethodLookupBuilder implements MethodLookupBuilder {
+@ApplicationScoped
+public class ComponentRoutesCreator implements ResourceParserRoutesCreator {
+	
+	private final PathAnnotationRoutesCreator delegate = new PathAnnotationRoutesCreator();
+	
+	private static final Logger logger = LoggerFactory.getLogger(ComponentRoutesCreator.class);
     
-    public ResourceAndMethodLookup lookupFor(Resource resource) {
-        Class<?> type = resource.getType();
-        if(Info.isOldComponent(resource)) {
-            logger.warn("Old component found, remember to migrate to vraptor3: " + type.getName());
+	public List<Rule> rulesFor(Resource resource) {
+		List<Rule> rules = new ArrayList<Rule>();
+		Class<?> type = resource.getType();
+        if(!Info.isOldComponent(resource)) {
+        	return delegate.rulesFor(resource);
         }
+        logger.warn("Old component found, remember to migrate to vraptor3: " + type.getName());
+		registerRulesFor(type, type, rules);
         parse(type, type);
-        return new VRaptor2MethodLookup(resource);
+		return rules;
     }
 
     private void parse(Class<?> type, Class<?> originalType) {
@@ -90,5 +108,38 @@ public class VRaptor2MethodLookupBuilder implements MethodLookupBuilder {
         }
         parse(type.getSuperclass(), type);
     }
+
+
+	private void registerRulesFor(Class<?> actualType, Class<?> baseType, List<Rule> rules) {
+		if (actualType.equals(Object.class)) {
+			return;
+		}
+        for (Method javaMethod : actualType.getDeclaredMethods()) {
+			if (isEligible(javaMethod)) {
+                continue;
+            }
+			String uri = getUriFor(javaMethod, baseType);
+			UriBasedRoute rule = new UriBasedRoute(uri);
+			for (HttpMethod m : HttpMethod.values()) {
+				if (javaMethod.isAnnotationPresent(m.getAnnotation())) {
+					rule.with(m);
+				}
+			}
+			rule.is(baseType, javaMethod);
+			rules.add(rule);
+        }
+		registerRulesFor(actualType.getSuperclass(), baseType, rules);
+	}
+
+	private String getUriFor(Method javaMethod, Class<?> type) {
+        String componentName = Info.getComponentName(type);
+        String logicName = Info.getLogicName(javaMethod);
+        String entireName = "/" + componentName + "." + logicName + ".logic";
+		return entireName;
+	}
+
+	private boolean isEligible(Method javaMethod) {
+		return Modifier.isPublic(javaMethod.getModifiers()) && !Modifier.isStatic(javaMethod.getModifiers());
+	}
 
 }

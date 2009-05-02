@@ -32,42 +32,39 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
-import br.com.caelum.vraptor.validator.ValidationMessage;
-
 public class ShortConverterTest {
-    
-    private ShortConverter converter;
-	private ArrayList<ValidationMessage> errors;
+
+	private ShortConverter converter;
 	private ResourceBundle bundle;
 
-    @Before
-    public void setup() {
-        this.converter = new ShortConverter();
-        this.errors = new ArrayList<ValidationMessage>();
-        this.bundle = ResourceBundle.getBundle("messages");
-    }
-    
-    @Test
-    public void shouldBeAbleToConvertNumbers(){
-        assertThat(converter.convert("2", Short.class, bundle), is(equalTo((short)2)));
-    }
-    
-    @Test
-    public void shouldComplainAboutInvalidNumber() {
-        converter.convert("---", Short.class, bundle);
-        assertThat(errors.get(0), is(VRaptorMatchers.error("", "--- is not a valid integer.")));
-    }
-    
-    @Test
-    public void shouldComplainAboutNull() {
-        assertThat(converter.convert(null, Short.class, bundle), is(nullValue()));
-    }
+	@Before
+	public void setup() {
+		this.converter = new ShortConverter();
+		this.bundle = ResourceBundle.getBundle("messages");
+	}
+
+	@Test
+	public void shouldBeAbleToConvertNumbers() {
+		assertThat(converter.convert("2", Short.class, bundle), is(equalTo((short) 2)));
+	}
+
+	@Test
+	public void shouldComplainAboutInvalidNumber() {
+		try {
+			converter.convert("---", Short.class, bundle);
+		} catch (ConversionError e) {
+			assertThat(e.getMessage(), is(equalTo("--- is not a valid integer.")));
+		}
+	}
+
+	@Test
+	public void shouldComplainAboutNull() {
+		assertThat(converter.convert(null, Short.class, bundle), is(nullValue()));
+	}
 
 }

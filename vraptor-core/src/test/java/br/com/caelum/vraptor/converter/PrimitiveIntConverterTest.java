@@ -31,47 +31,44 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
-import br.com.caelum.vraptor.validator.ValidationMessage;
-
 public class PrimitiveIntConverterTest {
-    
-    private PrimitiveIntConverter converter;
-	private ArrayList<ValidationMessage> errors;
+
+	private PrimitiveIntConverter converter;
 	private ResourceBundle bundle;
 
-    @Before
-    public void setup() {
-        this.converter = new PrimitiveIntConverter();
-        this.errors = new ArrayList<ValidationMessage>();
-        this.bundle = ResourceBundle.getBundle("messages");
-    }
-    
-    @Test
-    public void shouldBeAbleToConvertNumbers(){
-        assertThat((Integer) converter.convert("2", int.class, bundle), is(equalTo(2)));
-    }
-    
-    @Test
-    public void shouldComplainAboutInvalidNumber() {
-        converter.convert("---", int.class, bundle);
-        assertThat(errors.get(0), is(VRaptorMatchers.error("", "--- is not a valid integer.")));
-    }
-    
-    @Test
-    public void shouldConvertToZeroWhenNull() {
-        assertThat((Integer) converter.convert(null, int.class, bundle), is(equalTo(0)));
-    }
+	@Before
+	public void setup() {
+		this.converter = new PrimitiveIntConverter();
+		this.bundle = ResourceBundle.getBundle("messages");
+	}
 
-    @Test
-    public void shouldConvertToZeroWhenEmpty() {
-        assertThat((Integer) converter.convert("", int.class, bundle), is(equalTo(0)));
-    }
+	@Test
+	public void shouldBeAbleToConvertNumbers() {
+		assertThat((Integer) converter.convert("2", int.class, bundle), is(equalTo(2)));
+	}
+
+	@Test
+	public void shouldComplainAboutInvalidNumber() {
+		try {
+			converter.convert("---", int.class, bundle);
+		} catch (ConversionError e) {
+			assertThat(e.getMessage(), is(equalTo("--- is not a valid integer.")));
+		}
+	}
+
+	@Test
+	public void shouldConvertToZeroWhenNull() {
+		assertThat((Integer) converter.convert(null, int.class, bundle), is(equalTo(0)));
+	}
+
+	@Test
+	public void shouldConvertToZeroWhenEmpty() {
+		assertThat((Integer) converter.convert("", int.class, bundle), is(equalTo(0)));
+	}
 
 }

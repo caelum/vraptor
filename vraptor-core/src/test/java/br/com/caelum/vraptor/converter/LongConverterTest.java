@@ -32,25 +32,19 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
-import br.com.caelum.vraptor.validator.ValidationMessage;
-
 public class LongConverterTest {
     
     private LongConverter converter;
-	private ArrayList<ValidationMessage> errors;
 	private ResourceBundle bundle;
 
     @Before
     public void setup() {
         this.converter = new LongConverter();
-        this.errors = new ArrayList<ValidationMessage>();
         this.bundle = ResourceBundle.getBundle("messages");
     }
     
@@ -61,8 +55,11 @@ public class LongConverterTest {
     
     @Test
     public void shouldComplainAboutInvalidNumber() {
-        converter.convert("---", long.class, bundle);
-        assertThat(errors.get(0), is(VRaptorMatchers.error("", "--- is not a valid integer.")));
+        try {
+			converter.convert("---", long.class, bundle);
+		} catch (ConversionError e) {
+			assertThat(e.getMessage(), is(equalTo("--- is not a valid integer.")));
+		}
     }
     
     @Test

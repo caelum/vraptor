@@ -31,47 +31,44 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
-import br.com.caelum.vraptor.validator.ValidationMessage;
-
 public class PrimitiveByteConverterTest {
-    
-    private PrimitiveByteConverter converter;
-	private ArrayList<ValidationMessage> errors;
+
+	private PrimitiveByteConverter converter;
 	private ResourceBundle bundle;
 
-    @Before
-    public void setup() {
-        this.converter = new PrimitiveByteConverter();
-        this.errors = new ArrayList<ValidationMessage>();
-        this.bundle = ResourceBundle.getBundle("messages");
-    }
-    
-    @Test
-    public void shouldBeAbleToConvertNumbers(){
-        assertThat((Byte) converter.convert("7", byte.class, bundle), is(equalTo((byte)7)));
-    }
-    
-    @Test
-    public void shouldComplainAboutInvalidNumber() {
-        converter.convert("---", byte.class, bundle);
-        assertThat(errors.get(0), is(VRaptorMatchers.error("", "--- is not a valid integer.")));
-    }
-    
-    @Test
-    public void shouldConvertToZeroWhenNull() {
-    	assertThat((Byte) converter.convert(null, byte.class, bundle), is(equalTo((byte) 0)));
-    }
+	@Before
+	public void setup() {
+		this.converter = new PrimitiveByteConverter();
+		this.bundle = ResourceBundle.getBundle("messages");
+	}
 
-    @Test
-    public void shouldConvertToZeroWhenEmpty() {
-    	assertThat((Byte) converter.convert("", byte.class, bundle), is(equalTo((byte) 0)));
-    }
+	@Test
+	public void shouldBeAbleToConvertNumbers() {
+		assertThat((Byte) converter.convert("7", byte.class, bundle), is(equalTo((byte) 7)));
+	}
+
+	@Test
+	public void shouldComplainAboutInvalidNumber() {
+		try {
+			converter.convert("---", byte.class, bundle);
+		} catch (ConversionError e) {
+			assertThat(e.getMessage(), is(equalTo("--- is not a valid integer.")));
+		}
+	}
+
+	@Test
+	public void shouldConvertToZeroWhenNull() {
+		assertThat((Byte) converter.convert(null, byte.class, bundle), is(equalTo((byte) 0)));
+	}
+
+	@Test
+	public void shouldConvertToZeroWhenEmpty() {
+		assertThat((Byte) converter.convert("", byte.class, bundle), is(equalTo((byte) 0)));
+	}
 
 }

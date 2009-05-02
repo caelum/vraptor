@@ -31,24 +31,19 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.validator.ValidationMessage;
-
 public class PrimitiveBooleanConverterTest {
     
     private PrimitiveBooleanConverter converter;
-	private ArrayList<ValidationMessage> errors;
 	private ResourceBundle bundle;
 
     @Before
     public void setup() {
         this.converter = new PrimitiveBooleanConverter();
-        this.errors = new ArrayList<ValidationMessage>();
         this.bundle = ResourceBundle.getBundle("messages");
     }
     

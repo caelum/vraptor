@@ -54,7 +54,8 @@ public class OgnlToConvertersControllerTest {
     private Converters converters;
     private OgnlToConvertersController controller;
     private Cat myCat;
-    private Converter converter;
+    @SuppressWarnings("unchecked")
+	private Converter converter;
 	private ArrayList<ValidationMessage> errors;
 	private ResourceBundle bundle;
 

@@ -30,19 +30,10 @@ package br.com.caelum.vraptor.http.route;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-import ognl.OgnlRuntime;
 
-import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.http.ognl.ReflectionBasedNullHandler;
-
 public class UriBasedRouteTest {
-	
-	@Before
-	public void setup() {
-		OgnlRuntime.setNullHandler(Object.class, new ReflectionBasedNullHandler());
-	}
 	
 	class Client {
 		private Long id;

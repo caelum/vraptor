@@ -125,6 +125,7 @@ right before ANY release
 	- check all TODOS and do something about them
 
 ONLY AFTER RELEASE
+3.0.1 - cache all method lookup algorithms (getDeclaredMethod())
 - routes with support to withParam()
 - Hibernate.validate(Object instance, String ... fields)
 - Hibernate.validate(Object instance) : Proxy.getFirst(), Proxy.getSecond() will hibernate validate those fields

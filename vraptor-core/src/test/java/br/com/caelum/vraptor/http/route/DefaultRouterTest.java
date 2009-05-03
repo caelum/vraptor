@@ -62,7 +62,7 @@ public class DefaultRouterTest {
 	public void setup() {
 		this.mockery = new VRaptorMockery();
 		this.request = new VRaptorRequest(mockery.mock(HttpServletRequest.class));
-		this.router = new DefaultRouter(new NoRoutesConfiguration(), new NoRoutesCreator());
+		this.router = new DefaultRouter(new NoRoutesConfiguration(), new NoRoutesCreator(), null,null);
 	}
 
 	class Dog {
@@ -241,7 +241,7 @@ public class DefaultRouterTest {
 
     @Test
     public void usesAsteriskBothWays() throws NoSuchMethodException {
-		this.router = new DefaultRouter(new NoRoutesConfiguration(), new PathAnnotationRoutesCreator());
+		this.router = new DefaultRouter(new NoRoutesConfiguration(), new PathAnnotationRoutesCreator(), null,null);
 		router.register(mockery.resource(MyResource.class));
         Method method = mockery.methodFor(MyResource.class, "starPath").getMethod();
         String url = router.urlFor(MyResource.class, method, new Object[] {});
@@ -251,7 +251,7 @@ public class DefaultRouterTest {
 
     @Test
     public void canTranslateAInheritedResourceBothWays() throws NoSuchMethodException {
-		this.router = new DefaultRouter(new NoRoutesConfiguration(), new PathAnnotationRoutesCreator());
+		this.router = new DefaultRouter(new NoRoutesConfiguration(), new PathAnnotationRoutesCreator(), null,null);
 		router.register(mockery.resource(MyResource.class));
 		router.register(mockery.resource(InheritanceExample.class));
         Method method = mockery.methodFor(MyResource.class, "notAnnotated").getMethod();
@@ -262,7 +262,7 @@ public class DefaultRouterTest {
 
     @Test
     public void canTranslateAnnotatedMethodBothWays() throws NoSuchMethodException {
-		this.router = new DefaultRouter(new NoRoutesConfiguration(), new PathAnnotationRoutesCreator());
+		this.router = new DefaultRouter(new NoRoutesConfiguration(), new PathAnnotationRoutesCreator(), null,null);
 		router.register(mockery.resource(MyResource.class));
         Method method = mockery.methodFor(MyResource.class, "customizedPath").getMethod();
         String url = router.urlFor(MyResource.class, method, new Object[] {});

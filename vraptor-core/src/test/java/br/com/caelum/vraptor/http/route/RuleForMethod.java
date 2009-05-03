@@ -52,7 +52,7 @@ public class RuleForMethod implements Rule {
 		return this.method;
 	}
 
-	public String urlFor(Object... params) {
+	public String urlFor(Object params) {
 		return null;
 	}
 

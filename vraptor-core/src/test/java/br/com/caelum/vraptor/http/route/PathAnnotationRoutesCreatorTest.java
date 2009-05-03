@@ -61,7 +61,7 @@ public class PathAnnotationRoutesCreatorTest {
 		this.router = new DefaultRouter(new RoutesConfiguration() {
 			public void config(Router router) {
 			}
-		}, new PathAnnotationRoutesCreator());
+		}, new PathAnnotationRoutesCreator(), null, null);
 		router.register(resource);
 	}
 

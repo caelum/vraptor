@@ -1,8 +1,3 @@
-- make client server redirect work with parameters, which ones?
-EvaluatorTest
-
-
-
 (MUST) - json output support: three different options
 - automatic REDIRECT depending on accepts
 	  onError().goTo("xpto");
@@ -125,6 +120,7 @@ right before ANY release
 	- check all TODOS and do something about them
 
 ONLY AFTER RELEASE
+- make client server redirect work with proxied parameters
 3.0.1 - cache all method lookup algorithms (getDeclaredMethod())
 - routes with support to withParam()
 - Hibernate.validate(Object instance, String ... fields)
@@ -372,3 +368,4 @@ support HibernateValidator with i18n messages
 - Router support
 - ClientsController --> clients.list
 - path annotation and routes with support to value injection
+- client side and server side redirect works with parameters from Route system

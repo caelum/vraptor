@@ -110,7 +110,7 @@ public class ClientsController {
 	public void random() {
 		ArrayList<Client> all = new ArrayList<Client>(database.all());
 		Client client = all.get((int) (Math.random() * all.size()));
-		result.use(Results.logic()).redirectServerTo(ClientsController.class).view(client);
+		result.use(Results.logic()).redirectClientTo(ClientsController.class).view(client);
 	}
 
 }

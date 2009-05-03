@@ -25,42 +25,8 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package br.com.caelum.vraptor.http.route;
+package br.com.caelum.vraptor.eval;
 
-import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor.resource.HttpMethod;
-import br.com.caelum.vraptor.resource.Resource;
-import br.com.caelum.vraptor.resource.ResourceMethod;
-
-/**
- * An specific route rule.
- * 
- * @author Guilherme Silveira
- */
-public interface Rule {
-
-	/**
-	 * Returns the resource method for this specifig rule. Also applies the
-	 * required parameters to this vraptor request.
-	 */
-	ResourceMethod matches(String uri, HttpMethod method, MutableRequest request);
-
-	/**
-	 * Returns the resource related to this rule.
-	 */
-	Resource getResource();
-
-	/**
-	 * Returns the resource method which will be invoked through the use of this
-	 * rule.
-	 */
-	ResourceMethod getResourceMethod();
-
-	/**
-	 * Returns the url which invokes this rule with values extracted from this
-	 * parameter object. The object contains getters representing each method's
-	 * parameter.
-	 */
-	String urlFor(Object params);
+public class EvaluatorTest {
 
 }

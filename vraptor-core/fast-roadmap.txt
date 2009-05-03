@@ -1,4 +1,8 @@
 - make client server redirect work with parameters, which ones?
+EvaluatorTest
+
+
+
 (MUST) - json output support: three different options
 - automatic REDIRECT depending on accepts
 	  onError().goTo("xpto");

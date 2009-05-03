@@ -42,6 +42,7 @@ import net.sf.cglib.proxy.MethodProxy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import br.com.caelum.vraptor.eval.Evaluator;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.resource.DefaultResource;
 import br.com.caelum.vraptor.resource.DefaultResourceMethod;
@@ -68,8 +69,11 @@ public class UriBasedRoute implements Rule {
 
 	private final String patternUri;
 
+	private final String originalUri;
+
 	public UriBasedRoute(String uri) {
 		uri = uri.replaceAll("\\*", ".\\*");
+		this.originalUri = uri;
 		String finalUri = "";
 		String patternUri = "";
 		String paramName = "";
@@ -168,8 +172,13 @@ public class UriBasedRoute implements Rule {
 		return resource;
 	}
 
-	public String urlFor(Object... params) {
-		return patternUri.replaceAll("\\.\\*", "");
+	public String urlFor(Object params) {
+		String base = originalUri.replaceAll("\\.\\*", "");
+		for (String key : parameters) {
+			Object result = new Evaluator().get(params, key);
+			base = base.replace("{" + key + "}", result==null? "" : result.toString());
+		}
+		return base;
 	}
 
 }

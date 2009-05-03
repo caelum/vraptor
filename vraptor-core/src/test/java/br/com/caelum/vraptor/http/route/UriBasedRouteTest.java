@@ -30,19 +30,18 @@ package br.com.caelum.vraptor.http.route;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import ognl.OgnlRuntime;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.VRaptorMockery;
+import br.com.caelum.vraptor.http.ognl.ReflectionBasedNullHandler;
 
 public class UriBasedRouteTest {
 	
-	private VRaptorMockery mockery;
-
 	@Before
 	public void setup() {
-		this.mockery = new VRaptorMockery();
+		OgnlRuntime.setNullHandler(Object.class, new ReflectionBasedNullHandler());
 	}
 	
 	class Client {
@@ -59,28 +58,42 @@ public class UriBasedRouteTest {
 		}
 	}
 	
+	class TypeCreated {
+		private Client client;
+		public TypeCreated(Client c) {
+			this.client = c;
+		}
+		public Client getClient() {
+			return client;
+		}
+	}
+	
 	@Test
 	public void shouldTranslateAsteriskAsEmpty() {
 		UriBasedRoute route = new UriBasedRoute("/clients/*");
-		assertThat(route.urlFor(new Client(3L)), is(equalTo("/clients/")));
+		assertThat(route.urlFor(client(3L)), is(equalTo("/clients/")));
 	}
 	
 	@Test
 	public void shouldTranslatePatternArgs() {
 		UriBasedRoute route = new UriBasedRoute("/clients/{client.id}");
-		assertThat(route.urlFor(new Client(3L)), is(equalTo("/clients/3")));
+		assertThat(route.urlFor(client(3L)), is(equalTo("/clients/3")));
 	}
 	
 	@Test
 	public void shouldTranslatePatternArgNullAsEmpty() {
 		UriBasedRoute route = new UriBasedRoute("/clients/{client.id}");
-		assertThat(route.urlFor(new Client(null)), is(equalTo("/clients/")));
+		assertThat(route.urlFor(client(null)), is(equalTo("/clients/")));
 	}
 
 	@Test
 	public void shouldTranslatePatternArgInternalNullAsEmpty() {
 		UriBasedRoute route = new UriBasedRoute("/clients/{client.child.id}");
-		assertThat(route.urlFor(new Client(null)), is(equalTo("/clients/")));
+		assertThat(route.urlFor(client(null)), is(equalTo("/clients/")));
+	}
+
+	private TypeCreated client(Long id) {
+		return new TypeCreated(new Client(id));
 	}
 
 }

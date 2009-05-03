@@ -34,19 +34,23 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import br.com.caelum.vraptor.VRaptorException;
 import br.com.caelum.vraptor.http.ListOfRules;
 import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor.http.ParameterNameProvider;
+import br.com.caelum.vraptor.http.TypeCreator;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.resource.ResourceParserRoutesCreator;
 import br.com.caelum.vraptor.resource.VRaptorInfo;
+import br.com.caelum.vraptor.vraptor2.Info;
 
 /**
- * The default implementation of resource localization rules.
- * It also uses a Path annotation to discover path->method
- * mappings using the supplied ResourceAndMethodLookup.
+ * The default implementation of resource localization rules. It also uses a
+ * Path annotation to discover path->method mappings using the supplied
+ * ResourceAndMethodLookup.
  * 
  * @author Guilherme Silveira
  */
@@ -54,22 +58,27 @@ import br.com.caelum.vraptor.resource.VRaptorInfo;
 public class DefaultRouter implements Router {
 
 	private final List<Rule> rules = new ArrayList<Rule>();
-    private final Set<Resource> resources = new HashSet<Resource>();
+	private final Set<Resource> resources = new HashSet<Resource>();
 	private final ResourceParserRoutesCreator resourceRoutesCreator;
+	private final ParameterNameProvider provider;
+	private final TypeCreator creator;
 
-    public DefaultRouter(RoutesConfiguration config, ResourceParserRoutesCreator resourceRoutesCreator) {
-        this.resourceRoutesCreator = resourceRoutesCreator;
+	public DefaultRouter(RoutesConfiguration config, ResourceParserRoutesCreator resourceRoutesCreator,
+			ParameterNameProvider provider, TypeCreator creator) {
+		this.resourceRoutesCreator = resourceRoutesCreator;
+		this.provider = provider;
+		this.creator = creator;
 		// this resource should be kept here so it doesnt matter whether
-        // the user uses a custom routes config
-    	UriBasedRoute rule = new UriBasedRoute("/is_using_vraptor");
-    	try {
+		// the user uses a custom routes config
+		UriBasedRoute rule = new UriBasedRoute("/is_using_vraptor");
+		try {
 			rule.is(VRaptorInfo.class).info();
 		} catch (IOException e) {
 			// ignorable
 		}
-    	add(rule);
-        config.config(this);
-    }
+		add(rule);
+		config.config(this);
+	}
 
 	public void add(ListOfRules rulesToAdd) {
 		List<Rule> rules = rulesToAdd.getRules();
@@ -77,7 +86,7 @@ public class DefaultRouter implements Router {
 	}
 
 	private void add(List<Rule> rules) {
-		for(Rule r : rules) {
+		for (Rule r : rules) {
 			add(r);
 		}
 	}
@@ -94,7 +103,7 @@ public class DefaultRouter implements Router {
 				return value;
 			}
 		}
-        return null;
+		return null;
 	}
 
 	public Set<Resource> all() {
@@ -107,11 +116,36 @@ public class DefaultRouter implements Router {
 
 	public <T> String urlFor(Class<T> type, Method method, Object... params) {
 		for (Rule rule : rules) {
-			if(rule.getResource().getType().equals(type) && rule.getResourceMethod().getMethod().equals(method)) {
-				return rule.urlFor(params);
+			if (rule.getResource().getType().equals(type) && rule.getResourceMethod().getMethod().equals(method)) {
+				String[] names = provider.parameterNamesFor(method);
+				Class<?> parameterType = creator.typeFor(rule.getResourceMethod());
+				try {
+					Object root = parameterType.getConstructor().newInstance();
+					for (int i = 0; i < names.length; i++) {
+						Method setter = findSetter(parameterType, "set" + Info.capitalize(names[i]));
+						setter.invoke(root, params[i]);
+					}
+					return rule.urlFor(root);
+				} catch (Exception e) {
+					throw new VRaptorException("The selected route is invalid for redirection: " + type.getName() + "."
+							+ method.getName(), e);
+				}
 			}
 		}
-		throw new RouteNotFoundException("The selected route is invalid for redirection: " + type.getName() + "." + method.getName());
+		throw new RouteNotFoundException("The selected route is invalid for redirection: " + type.getName() + "."
+				+ method.getName());
+	}
+
+	private Method findSetter(Class<?> parameterType, String methodName) {
+		for (Method m : parameterType.getDeclaredMethods()) {
+			if (m.getName().equals(methodName)) {
+				return m;
+			}
+		}
+		throw new VRaptorException(
+				"Unable to redirect using route as setter method for parameter setting was not created. "
+						+ "Thats probably a bug on your type creator. "
+						+ "If you are using the default type creator, notify VRaptor.");
 	}
 
 }

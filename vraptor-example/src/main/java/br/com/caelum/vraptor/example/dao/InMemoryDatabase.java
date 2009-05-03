@@ -27,9 +27,9 @@
  */
 package br.com.caelum.vraptor.example.dao;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
@@ -39,34 +39,37 @@ import org.slf4j.LoggerFactory;
 import br.com.caelum.vraptor.example.Client;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
+/**
+ * A simple implementation of in memory database.
+ * 
+ * @author guilherme silveira
+ */
 @ApplicationScoped
 public class InMemoryDatabase implements Database {
 
-    private final List<Client> clients = new ArrayList<Client>();
-    
-    private static final Logger logger = LoggerFactory.getLogger(InMemoryDatabase.class);
+	private final Map<Long, Client> clients = new HashMap<Long, Client>();
 
-    public void add(Client c) {
-        clients.add(c);
-    }
+	private static final Logger logger = LoggerFactory.getLogger(InMemoryDatabase.class);
 
-    public List<Client> all() {
-        return clients;
-    }
-    
-    @PostConstruct
-    public void startup() {
-        logger.info("Starting up the database... configuration should be done here");
-    }
+	public void add(Client c) {
+		clients.put(c.getId(), c);
+	}
+
+	public Collection<Client> all() {
+		return clients.values();
+	}
+
+	@PostConstruct
+	public void startup() {
+		logger.info("Starting up the database... configuration should be done here");
+	}
 
 	public void remove(Client client) {
-		for (Iterator<Client> iterator = clients.iterator(); iterator.hasNext();) {
-			Client actual = iterator.next();
-			if(actual.getId().equals(client.getId())) {
-				iterator.remove();
-				return;
-			}
-		}
+		clients.remove(client.getId());
+	}
+
+	public Client find(Long id) {
+		return clients.get(id);
 	}
 
 }

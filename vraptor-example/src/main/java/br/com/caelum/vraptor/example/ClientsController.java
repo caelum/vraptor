@@ -31,6 +31,8 @@ package br.com.caelum.vraptor.example;
 
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.notNullValue;
+import br.com.caelum.vraptor.Delete;
+import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
@@ -83,18 +85,21 @@ public class ClientsController {
         result.use(Results.logic()).redirectClientTo(ClientsController.class).list();
     }
     
-    @Path("/clients/delete/{client.id}")
+    @Path("/clients/{client.id}")
+    @Delete
     public void delete(Client client) {
     	database.remove(client);
     	result.use(Results.logic()).redirectClientTo(ClientsController.class).list();
+    }
+
+    @Path("/clients/{client.id}")
+    @Get
+    public void view(Client client) {
+    	result.include("client", database.find(client.getId()));
     }
 
     public void sendEmail() {
         result.use(EmptyResult.class);
     }
 
-    @Path("/clients/fake")
-    public void redirect() {
-        result.use(Results.logic()).redirectServerTo(ClientsController.class).list();
-    }
 }

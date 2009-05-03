@@ -27,7 +27,7 @@
  */
 package br.com.caelum.vraptor.example.dao;
 
-import java.util.List;
+import java.util.Collection;
 
 import br.com.caelum.vraptor.example.Client;
 
@@ -38,10 +38,12 @@ import br.com.caelum.vraptor.example.Client;
  */
 public interface Database {
 
-    List<Client> all();
+    Collection<Client> all();
 
     void add(Client c);
 
 	void remove(Client client);
+
+	Client find(Long id);
 
 }

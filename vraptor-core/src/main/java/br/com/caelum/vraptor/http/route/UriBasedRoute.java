@@ -169,7 +169,7 @@ public class UriBasedRoute implements Rule {
 	}
 
 	public String urlFor(Object... params) {
-		return patternUri.replaceAll("\\*", "");
+		return patternUri.replaceAll("\\.\\*", "");
 	}
 
 }

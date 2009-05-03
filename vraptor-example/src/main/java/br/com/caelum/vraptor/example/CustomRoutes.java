@@ -43,6 +43,7 @@ public class CustomRoutes implements RoutesConfiguration{
 	public void config(Router router) {
 		router.add(new Rules() {{
 			routeFor("/").is(ClientsController.class).list();
+			routeFor("/clients/random").is(ClientsController.class).random();
 		}});
 	}
 

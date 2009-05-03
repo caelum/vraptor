@@ -25,58 +25,62 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package br.com.caelum.vraptor.example.dao;
+package br.com.caelum.vraptor.http.route;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 
-import javax.annotation.PostConstruct;
+import org.junit.Before;
+import org.junit.Test;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import br.com.caelum.vraptor.VRaptorMockery;
 
-import br.com.caelum.vraptor.example.Client;
-import br.com.caelum.vraptor.ioc.ApplicationScoped;
-
-/**
- * A simple implementation of in memory database.
- * 
- * @author guilherme silveira
- */
-@ApplicationScoped
-public class InMemoryDatabase implements Database {
-
-	private final Map<Long, Client> clients = new HashMap<Long, Client>();
+public class UriBasedRouteTest {
 	
-	private static final Logger logger = LoggerFactory.getLogger(InMemoryDatabase.class);
+	private VRaptorMockery mockery;
 
-	public void add(Client c) {
-		clients.put(c.getId(), c);
+	@Before
+	public void setup() {
+		this.mockery = new VRaptorMockery();
+	}
+	
+	class Client {
+		private Long id;
+		private Client child;
+		public Client(Long id) {
+			this.id = id;
+		}
+		public Client getChild() {
+			return child;
+		}
+		public Long getId() {
+			return id;
+		}
+	}
+	
+	@Test
+	public void shouldTranslateAsteriskAsEmpty() {
+		UriBasedRoute route = new UriBasedRoute("/clients/*");
+		assertThat(route.urlFor(new Client(3L)), is(equalTo("/clients/")));
+	}
+	
+	@Test
+	public void shouldTranslatePatternArgs() {
+		UriBasedRoute route = new UriBasedRoute("/clients/{client.id}");
+		assertThat(route.urlFor(new Client(3L)), is(equalTo("/clients/3")));
+	}
+	
+	@Test
+	public void shouldTranslatePatternArgNullAsEmpty() {
+		UriBasedRoute route = new UriBasedRoute("/clients/{client.id}");
+		assertThat(route.urlFor(new Client(null)), is(equalTo("/clients/")));
 	}
 
-	public Collection<Client> all() {
-		return clients.values();
-	}
-
-	@PostConstruct
-	public void startup() {
-		logger.info("Starting up the database... configuration should be done here");
-		Client guilherme = new Client();
-		guilherme.setId(1L);
-		guilherme.setName("Guilherme Silveira");
-		guilherme.setEmails(Arrays.asList("guilherme.silveira@caelum.com.br"));
-		guilherme.setAge(27);
-		add(guilherme);
-	}
-
-	public void remove(Client client) {
-		clients.remove(client.getId());
-	}
-
-	public Client find(Long id) {
-		return clients.get(id);
+	@Test
+	public void shouldTranslatePatternArgInternalNullAsEmpty() {
+		UriBasedRoute route = new UriBasedRoute("/clients/{client.child.id}");
+		assertThat(route.urlFor(new Client(null)), is(equalTo("/clients/")));
 	}
 
 }

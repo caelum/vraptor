@@ -48,6 +48,8 @@ site docs (prior to release)
 - migration tutorial on every documented topic of vraptor2
 	- might find useful things to support
 - containers now can be @Request, @Session, @App scoped
+- doc server side redirect with args:
+	- pattern args always works
 
 kung help
 	- suppor for kung's register api

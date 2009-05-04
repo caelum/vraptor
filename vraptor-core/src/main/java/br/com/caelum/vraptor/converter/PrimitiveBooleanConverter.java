@@ -37,8 +37,8 @@ import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
 /**
- * VRaptor's primitive boolean converter. 
- * 
+ * VRaptor's primitive boolean converter.
+ *
  * @author Cecilia Fernandes
  */
 @Convert(boolean.class)
@@ -46,7 +46,7 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
 public class PrimitiveBooleanConverter implements Converter {
 
     public Object convert(String value, Class type, ResourceBundle bundle) {
-        if (value == null || value=="") {
+        if (value == null || "".equals(value)) {
         	return false;
         }
         return Boolean.parseBoolean(value);

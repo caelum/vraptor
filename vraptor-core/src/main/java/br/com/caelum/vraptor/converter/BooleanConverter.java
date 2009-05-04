@@ -29,27 +29,43 @@
  */
 package br.com.caelum.vraptor.converter;
 
-
+import java.text.MessageFormat;
 import java.util.ResourceBundle;
+import java.util.regex.Pattern;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
 /**
- * VRaptor's Boolean converter. 
- * 
+ * VRaptor's Boolean converter.
+ *
+ * Supports boolean-like values.
+ * Converts to TRUE the following strings : true, 1, yes, y, on
+ * Converts to FALSE the following strings: false, 0, no, n, off
+ *
  * @author Guilherme Silveira
  */
 @Convert(Boolean.class)
 @ApplicationScoped
 public class BooleanConverter implements Converter<Boolean> {
+    private static final Pattern IS_TRUE  = Pattern.compile("true|1|yes|y|on" , Pattern.CASE_INSENSITIVE);
+    private static final Pattern IS_FALSE = Pattern.compile("false|0|no|n|off", Pattern.CASE_INSENSITIVE);
 
     public Boolean convert(String value, Class type, ResourceBundle bundle) {
-        if (value == null) {
-            return null;
-        }
-        return Boolean.valueOf(value);
+	if (value == null) {
+	    return null;
+	}
+	if (matches(IS_TRUE, value)) {
+	    return true;
+	} else if (matches(IS_FALSE, value)) {
+	    return false;
+	}
+	throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_boolean"), value));
+    }
+
+    private boolean matches(Pattern p, String value) {
+	return p.matcher(value).matches();
     }
 
 }

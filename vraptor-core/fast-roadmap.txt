@@ -12,7 +12,7 @@
 
 
 
-
+FILIPE ROX: boolean converter agora suporta também "1", "0", "on", "off", "yes", "no", "y", "n"
 
 
 

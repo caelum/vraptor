@@ -44,12 +44,13 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
 @Convert(boolean.class)
 @ApplicationScoped
 public class PrimitiveBooleanConverter implements Converter {
+	private BooleanConverter booleanConverter = new BooleanConverter();
 
     public Object convert(String value, Class type, ResourceBundle bundle) {
         if (value == null || "".equals(value)) {
         	return false;
         }
-        return Boolean.parseBoolean(value);
+        return booleanConverter.convert(value, type, bundle);
     }
 
 }

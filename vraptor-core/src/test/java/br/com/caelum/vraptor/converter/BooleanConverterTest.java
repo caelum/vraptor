@@ -34,6 +34,7 @@ import static org.hamcrest.Matchers.nullValue;
 
 import java.util.ResourceBundle;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -83,8 +84,13 @@ public class BooleanConverterTest {
     	assertThat(converter.convert("oFf", Boolean.class, bundle), is(equalTo(false)));
     }
 
-    @Test(expected=ConversionError.class)
+    @Test
     public void shouldThrowExceptionForInvalidString() {
-    	assertThat(converter.convert("not a boolean!", Boolean.class, bundle), is(equalTo(false)));
+    	try {
+    		converter.convert("not a boolean!", Boolean.class, bundle);
+    		Assert.assertTrue(false);
+    	} catch(ConversionError e) {
+    		assertThat(e.getMessage(), is(equalTo("NOT A BOOLEAN! is not a valid boolean. Please use true/false, yes/no, y/n or on/off")));
+    	}
     }
 }

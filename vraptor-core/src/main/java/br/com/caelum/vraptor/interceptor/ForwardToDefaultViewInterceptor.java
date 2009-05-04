@@ -27,11 +27,13 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package br.com.caelum.vraptor.core;
+package br.com.caelum.vraptor.interceptor;
 
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Interceptor;
 import br.com.caelum.vraptor.Result;
+import br.com.caelum.vraptor.core.InterceptorStack;
+import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.view.Results;
 

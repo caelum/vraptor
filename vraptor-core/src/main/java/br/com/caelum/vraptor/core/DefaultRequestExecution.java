@@ -31,6 +31,7 @@ package br.com.caelum.vraptor.core;
 
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
+import br.com.caelum.vraptor.interceptor.ForwardToDefaultViewInterceptor;
 import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
 import br.com.caelum.vraptor.interceptor.InterceptorListPriorToExecutionExtractor;
 import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;

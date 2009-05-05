@@ -57,6 +57,7 @@ public class SpringProviderTest {
     public void shouldLoadInitParameterForBasePackages() {
         mockery.checking(new Expectations() {{
             one(servletContext).getInitParameter(SpringProvider.BASE_PACKAGES_PARAMETER_NAME);
+            will(returnValue("br.com.caelum.vraptor.ioc.spring.components.registrar"));
         }});
         SpringProvider provider = new SpringProvider();
         provider.start(servletContext);

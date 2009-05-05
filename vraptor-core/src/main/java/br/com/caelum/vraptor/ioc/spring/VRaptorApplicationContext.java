@@ -104,7 +104,6 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
 
     private void registerRequestScopedComponentsOn(DefaultListableBeanFactory beanFactory) {
         registerOn(beanFactory, ParametersInstantiatorInterceptor.class);
-        registerOn(beanFactory, DefaultMethodInfo.class);
         registerOn(beanFactory, InterceptorListPriorToExecutionExtractor.class);
         registerOn(beanFactory, URLParameterExtractorInterceptor.class);
         registerOn(beanFactory, DefaultInterceptorStack.class);
@@ -141,7 +140,7 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
     private void registerOn(BeanDefinitionRegistry registry, Class<?> type, boolean customComponent) {
         AnnotatedGenericBeanDefinition definition = new AnnotatedGenericBeanDefinition(type);
         definition.setLazyInit(true);
-        definition.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE);
+        definition.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_NO);
         if (customComponent) {
             definition.setPrimary(true);
             definition.setRole(BeanDefinition.ROLE_APPLICATION);

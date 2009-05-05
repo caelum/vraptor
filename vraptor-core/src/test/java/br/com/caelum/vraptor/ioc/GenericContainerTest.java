@@ -79,13 +79,12 @@ public abstract class GenericContainerTest {
     @Test
     public void canProvideAllRequestScopedComponents() {
         checkAvailabilityFor(false, HttpServletRequest.class, HttpServletResponse.class, RequestInfo.class,
-                HttpSession.class, ParametersInstantiatorInterceptor.class, MethodInfo.class,
-                InterceptorListPriorToExecutionExtractor.class,
-                URLParameterExtractorInterceptor.class, InterceptorStack.class, RequestExecution.class,
-                ResourceLookupInterceptor.class, InstantiateInterceptor.class, Result.class,
-                ExecuteMethodInterceptor.class, PageResult.class, ParametersProvider.class, MethodInfo.class,
-                Validator.class, PathResolver.class, ForwardToDefaultViewInterceptor.class, LogicResult.class,
-                ResourceNotFoundHandler.class);
+                HttpSession.class, ParametersInstantiatorInterceptor.class,
+                InterceptorListPriorToExecutionExtractor.class, URLParameterExtractorInterceptor.class,
+                InterceptorStack.class, RequestExecution.class, ResourceLookupInterceptor.class,
+                InstantiateInterceptor.class, Result.class, ExecuteMethodInterceptor.class, PageResult.class,
+                ParametersProvider.class, MethodInfo.class, Validator.class, PathResolver.class,
+                ForwardToDefaultViewInterceptor.class, LogicResult.class, ResourceNotFoundHandler.class);
         mockery.assertIsSatisfied();
     }
 

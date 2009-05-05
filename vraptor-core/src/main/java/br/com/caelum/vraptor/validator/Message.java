@@ -1,6 +1,6 @@
 package br.com.caelum.vraptor.validator;
 
-public interface SimpleMessage {
+public interface Message {
 	
 	String getMessage();
 	

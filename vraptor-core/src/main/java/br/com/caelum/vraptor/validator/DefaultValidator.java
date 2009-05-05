@@ -46,7 +46,7 @@ public class DefaultValidator implements Validator {
     }
 
     public void checking(Validations validations) {
-        List<ValidationMessage> errors = validations.getErrors();
+        List<Message> errors = validations.getErrors();
         if (!errors.isEmpty()) {
             result.include("errors", errors);
             result.forward("invalid");

@@ -44,15 +44,16 @@ import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.validator.ValidationMessage;
+import br.com.caelum.vraptor.validator.Message;
 
 @RequestScoped
 public class OgnlToConvertersController implements TypeConverter {
 
     private final Converters converters;
 	private final ResourceBundle bundle;
-	private final List<ValidationMessage> errors;
+	private final List<Message> errors;
 
-    public OgnlToConvertersController(Converters converters, List<ValidationMessage> errors, ResourceBundle bundle) {
+    public OgnlToConvertersController(Converters converters, List<Message> errors, ResourceBundle bundle) {
         this.converters = converters;
 		this.errors = errors;
 		this.bundle = bundle;

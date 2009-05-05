@@ -34,6 +34,7 @@ import java.util.ResourceBundle;
 
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.validator.ValidationMessage;
+import br.com.caelum.vraptor.validator.Message;
 
 /**
  * Provides all parameters required to invoke an specific java method.
@@ -42,6 +43,6 @@ import br.com.caelum.vraptor.validator.ValidationMessage;
  */
 public interface ParametersProvider {
 
-    Object[] getParametersFor(ResourceMethod method, List<ValidationMessage> errors, ResourceBundle bundle);
+    Object[] getParametersFor(ResourceMethod method, List<Message> errors, ResourceBundle bundle);
 
 }

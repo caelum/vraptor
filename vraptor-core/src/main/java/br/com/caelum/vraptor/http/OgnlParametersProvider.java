@@ -57,6 +57,7 @@ import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.validator.ValidationMessage;
+import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.vraptor2.Info;
 
 @RequestScoped
@@ -88,7 +89,7 @@ public class OgnlParametersProvider implements ParametersProvider {
         OgnlRuntime.setPropertyAccessor(Object[].class, new ArrayAccessor());
     }
 
-    public Object[] getParametersFor(ResourceMethod method, List<ValidationMessage> errors, ResourceBundle bundle) {
+    public Object[] getParametersFor(ResourceMethod method, List<Message> errors, ResourceBundle bundle) {
         try {
             Class<?> type = creator.typeFor(method);
             Object root = type.getDeclaredConstructor().newInstance();

@@ -47,6 +47,7 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.validator.ValidationError;
 import br.com.caelum.vraptor.validator.ValidationMessage;
 import br.com.caelum.vraptor.validator.Validations;
+import br.com.caelum.vraptor.validator.Message;
 
 /**
  * An interceptor which instantiates parameters and provide them to the stack.
@@ -79,13 +80,13 @@ public class ParametersInstantiatorInterceptor implements Interceptor {
 
 	public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
 			throws InterceptionException {
-		final List<ValidationMessage> errors = new ArrayList<ValidationMessage>();
+		final List<Message> errors = new ArrayList<Message>();
 		Object[] values = provider.getParametersFor(method, errors, localization.getBundle());
 		if (!errors.isEmpty()) {
 			try {
 				validator.checking(new Validations() {
 					@Override
-					public List<ValidationMessage> getErrors() {
+					public List<Message> getErrors() {
 						return errors;
 					}
 				});

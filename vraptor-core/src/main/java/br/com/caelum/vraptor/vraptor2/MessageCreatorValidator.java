@@ -1,7 +1,7 @@
 /***
- * 
+ *
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  * 1. Redistributions of source code must retain the above copyright notice,
@@ -12,7 +12,7 @@
  * copyright holders nor the names of its contributors may be used to endorse or
  * promote products derived from this software without specific prior written
  * permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -27,16 +27,15 @@
  */
 package br.com.caelum.vraptor.vraptor2;
 
-import java.util.List;
-
+import br.com.caelum.vraptor.Validator;
+import br.com.caelum.vraptor.validator.Message;
+import br.com.caelum.vraptor.validator.ValidationError;
+import br.com.caelum.vraptor.validator.Validations;
+import br.com.caelum.vraptor.view.jsp.PageResult;
 import org.vraptor.i18n.FixedMessage;
 import org.vraptor.validator.ValidationErrors;
 
-import br.com.caelum.vraptor.Validator;
-import br.com.caelum.vraptor.validator.ValidationError;
-import br.com.caelum.vraptor.validator.ValidationMessage;
-import br.com.caelum.vraptor.validator.Validations;
-import br.com.caelum.vraptor.view.jsp.PageResult;
+import java.util.List;
 
 /**
  * The vraptor2 compatible messages creator.
@@ -54,9 +53,9 @@ public class MessageCreatorValidator implements Validator {
     }
 
     public void checking(Validations validations) {
-        List<ValidationMessage> messages = validations.getErrors();
+        List<Message> messages = validations.getErrors();
         if (!messages.isEmpty()) {
-            for (ValidationMessage s : messages) {
+            for (Message s : messages) {
                 this.errors.add(new FixedMessage(s.getCategory(), s.getMessage(), s.getCategory()));
             }
             result.include("errors", this.errors);

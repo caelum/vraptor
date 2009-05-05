@@ -42,13 +42,13 @@ public class ValidationError extends Error {
      */
     private static final long serialVersionUID = -1069844446293479183L;
 
-    private final List<ValidationMessage> errors;
+    private final List<Message> errors;
 
-    public ValidationError(List<ValidationMessage> errors) {
+    public ValidationError(List<Message> errors) {
         this.errors = errors;
     }
 
-    public List<ValidationMessage> getErrors() {
+    public List<Message> getErrors() {
         return errors;
     }
 

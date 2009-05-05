@@ -47,6 +47,7 @@ import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.VRaptorMockery;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.validator.ValidationMessage;
+import br.com.caelum.vraptor.validator.Message;
 
 public class OgnlToConvertersControllerTest {
 
@@ -56,14 +57,14 @@ public class OgnlToConvertersControllerTest {
     private Cat myCat;
     @SuppressWarnings("unchecked")
 	private Converter converter;
-	private ArrayList<ValidationMessage> errors;
+	private ArrayList<Message> errors;
 	private ResourceBundle bundle;
 
     @Before
     public void setup() {
         this.mockery = new VRaptorMockery();
         this.converters = mockery.mock(Converters.class);
-        this.errors = new ArrayList<ValidationMessage>();
+        this.errors = new ArrayList<Message>();
         this.bundle = ResourceBundle.getBundle("messages");
         this.controller = new OgnlToConvertersController(converters, errors, bundle);
         this.converter = mockery.mock(Converter.class);

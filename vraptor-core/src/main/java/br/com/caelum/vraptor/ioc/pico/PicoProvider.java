@@ -65,6 +65,7 @@ import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
 import br.com.caelum.vraptor.interceptor.InterceptorListPriorToExecutionExtractor;
 import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
 import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
+import br.com.caelum.vraptor.interceptor.multipart.MultipartInterceptor;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
 import br.com.caelum.vraptor.resource.DefaultResourceNotFoundHandler;
 import br.com.caelum.vraptor.validator.DefaultValidator;
@@ -78,7 +79,7 @@ import br.com.caelum.vraptor.view.jsp.PageResult;
  * Managing internal components by using pico container.<br>
  * There is an extension point through the registerComponents method, which
  * allows one to give a customized container.
- * 
+ *
  * @author Guilherme Silveira
  */
 public class PicoProvider implements ContainerProvider {
@@ -105,7 +106,7 @@ public class PicoProvider implements ContainerProvider {
 	protected void registerComponents(ComponentRegistry container) {
 		logger.debug("Registering base pico container related implementation components");
 		for (Class<?> type : new Class[] { StupidTranslator.class, DefaultRouter.class,
-				DefaultResourceNotFoundHandler.class, DefaultDirScanner.class, 
+				DefaultResourceNotFoundHandler.class, DefaultDirScanner.class,
 				DefaultInterceptorRegistry.class, DefaultPathResolver.class,
 				ParanamerNameProvider.class, DefaultConverters.class, DefaultMethodInfo.class,
 				DefaultInterceptorStack.class, DefaultRequestExecution.class,
@@ -120,8 +121,8 @@ public class PicoProvider implements ContainerProvider {
 		container.register(TypeCreator.class, AsmBasedTypeCreator.class);
 		container.register(EmptyElementsRemoval.class, EmptyElementsRemoval.class);
 		container.register(ParametersInstantiatorInterceptor.class, ParametersInstantiatorInterceptor.class);
-		container.register(InterceptorListPriorToExecutionExtractor.class,
-				InterceptorListPriorToExecutionExtractor.class);
+		container.register(InterceptorListPriorToExecutionExtractor.class, InterceptorListPriorToExecutionExtractor.class);
+		container.register(MultipartInterceptor.class, MultipartInterceptor.class);
 		container.register(URLParameterExtractorInterceptor.class, URLParameterExtractorInterceptor.class);
 		container.register(ResourceLookupInterceptor.class, ResourceLookupInterceptor.class);
 		container.register(InstantiateInterceptor.class, InstantiateInterceptor.class);

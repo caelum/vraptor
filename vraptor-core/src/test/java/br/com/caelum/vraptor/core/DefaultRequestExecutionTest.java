@@ -14,6 +14,7 @@ import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
 import br.com.caelum.vraptor.interceptor.InterceptorListPriorToExecutionExtractor;
 import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
 import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
+import br.com.caelum.vraptor.interceptor.multipart.MultipartInterceptor;
 
 public class DefaultRequestExecutionTest {
 
@@ -39,6 +40,7 @@ public class DefaultRequestExecutionTest {
                 one(stack).add(URLParameterExtractorInterceptor.class);
                 inSequence(sequence);
                 one(stack).add(InterceptorListPriorToExecutionExtractor.class); inSequence(sequence);
+                one(stack).add(MultipartInterceptor.class); inSequence(sequence);
                 one(stack).add(instantiator); inSequence(sequence);
                 one(stack).add(ParametersInstantiatorInterceptor.class);
                 inSequence(sequence);

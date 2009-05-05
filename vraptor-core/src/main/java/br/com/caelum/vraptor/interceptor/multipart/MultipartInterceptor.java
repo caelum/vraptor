@@ -7,10 +7,10 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.fileupload.servlet.ServletRequestContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,7 +24,7 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  * An interceptor which handles multipart requests.<br>
  * Provided parameters are injected through RequestParameters.set and uploaded
  * files are made available through
- * 
+ *
  * @author Guilherme Silveira
  */
 public class MultipartInterceptor implements Interceptor {
@@ -88,9 +88,8 @@ public class MultipartInterceptor implements Interceptor {
         return factory;
     }
 
-    @SuppressWarnings("deprecation")
     public boolean accepts(ResourceMethod method) {
-        return FileUploadBase.isMultipartContent(request);
+        return ServletFileUpload.isMultipartContent(new ServletRequestContext(request));
     }
 
 }

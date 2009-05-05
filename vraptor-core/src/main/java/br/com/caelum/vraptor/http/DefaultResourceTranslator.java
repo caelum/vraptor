@@ -47,8 +47,6 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 @ApplicationScoped
 public class DefaultResourceTranslator implements UrlToResourceTranslator {
 	
-	criar test
-
     private final Router registry;
 
     private static final Logger logger = LoggerFactory.getLogger(DefaultResourceTranslator.class);

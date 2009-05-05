@@ -45,14 +45,16 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  * @author Guilherme Silveira
  */
 @ApplicationScoped
-public class StupidTranslator implements UrlToResourceTranslator {
+public class DefaultResourceTranslator implements UrlToResourceTranslator {
+	
+	criar test
 
     private final Router registry;
 
-    private static final Logger logger = LoggerFactory.getLogger(StupidTranslator.class);
+    private static final Logger logger = LoggerFactory.getLogger(DefaultResourceTranslator.class);
     static final String INCLUDE_REQUEST_URI = "javax.servlet.include.request_uri";
 
-    public StupidTranslator(Router registry) {
+    public DefaultResourceTranslator(Router registry) {
         this.registry = registry;
     }
 

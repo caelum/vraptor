@@ -1,18 +1,37 @@
-(MUST) - json output support: three different options
-- automatic REDIRECT depending on accepts
-	  onError().goTo("xpto");
-- delete support "_method" parameter, accept support "_accept" parameter
-
-
-
-- ceci: integration test for vraptor-example project
-- converter registering is causing many log messages
+- delete support "_method" parameter, priorize parameter
+- accept support "_format" parameter
+- json support
+- json support through "Accepts", priorize _format
+- json outjecter outjects
+- onError().goTo("xpto"); on validation, with support to ajax
 - JstlLocalization test
+- ceci: integration test for vraptor-example project e vraptor-spring-example
+- router extra support
+	router.for("/(*)").is(type(""),method(""));
+- support to method return != string --> outject
 
 
 
 
-FILIPE ROX: boolean converter agora suporta também "1", "0", "on", "off", "yes", "no", "y", "n"
+- extrair o register de componentes genericos (independente de pico ou spring)
+- @Component em outros componentes e fazer funcionar com pico sem gritar do log
+	- converter registering is causing many log messages
+	- meu problema eh queo webinfocontextblablabla pode ser customizado, ver se facilita se nao customiza-lo
+	- no lookp do webinf, joga em um container bobo primeiro
+	- ai depois disso, joga no cara que eh o Router q pode ter sido customizado, tirando dessa lista
+- containerprovider padrao: spring
+- ver com o spring se tudo bem de registrar depois do cara ja ter usado o cara
+welcome file list:
+	- testar se da para try/catch 404 e ver o que acontece... passar um response wrapped??? sendError
+	- known bug: accessing / when its /index.html.... if its a dir containing an index.html it doesnt work, but if your url is /clients/ it works...
+- Map support
+	map[ENUM]-->
+	map["a"]-->
+	map[1]-->
+	map[custom tambem]
+	map[id==2]="por favor"
+	map[id==2].nome="por favor"
+	(map[id==2] eh o lado direito!!!)
 
 
 
@@ -49,16 +68,16 @@ site docs (prior to release)
 - containers now can be @Request, @Session, @App scoped
 - doc server side redirect with args:
 	- pattern args always works
+- hibernate plugin: aplicacoes de exemplo e documentacao
+- Set support
+	set[id==0].nome="guilherme"
+	set[id==2].nome="guilherme"
+	isso eh um mapa!
 
 kung help
-	- suppor for kung's register api
-	- known bug: accessing / when its /index.html.... if its a dir containing an index.html it doesnt work, but if your url is /clients/ it works...
 	- add a @Listener 
-	- better exception handling everywhere (search for TODO within exceptions)
-	- hibernate plugin, how?
-	maybe:
-	- Set support
-	- Map support
+
+
 
 
 
@@ -70,6 +89,7 @@ kung help
 
 
 right before release
+	- better exception handling everywhere (search for TODO within exceptions): look at all new VRaptor and try to group them in new types
 	- check all TODOS and do something about them
 	go through every request component and check if it really needs to be request based
 	verify org.apache.log4j logs -> sl4j
@@ -121,6 +141,8 @@ right before ANY release
 
 ONLY AFTER RELEASE
 - MultipartInterceptor.accepts() is never called, so it throws an exception everytime a request which isn't an multipart one is made
+UserAgentInterceptor que permite usar isso: documentacao
+SessionFormatInterceptor que seta na session: documentacao
 - make client server redirect work with proxied parameters
 3.0.1 - cache all method lookup algorithms (getDeclaredMethod())
 - routes with support to withParam()

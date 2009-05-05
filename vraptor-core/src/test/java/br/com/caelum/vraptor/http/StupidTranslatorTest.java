@@ -19,7 +19,7 @@ public class StupidTranslatorTest {
 	
 	private Mockery mockery;
 	private Router registry;
-	private StupidTranslator translator;
+	private DefaultResourceTranslator translator;
 	private HttpServletRequest request;
 	private VRaptorRequest webRequest;
 
@@ -27,7 +27,7 @@ public class StupidTranslatorTest {
 	public void setup() {
 		this.mockery = new Mockery();
 		this.registry = mockery.mock(Router.class);
-		this.translator = new StupidTranslator(registry);
+		this.translator = new DefaultResourceTranslator(registry);
 		this.request = mockery.mock(HttpServletRequest.class);
         this.webRequest = new VRaptorRequest(request);
 	}
@@ -38,7 +38,7 @@ public class StupidTranslatorTest {
         final ResourceMethod expected = mockery.mock(ResourceMethod.class);
         
         mockery.checking(new Expectations(){{
-            exactly(2).of(request).getAttribute(StupidTranslator.INCLUDE_REQUEST_URI); will(returnValue("/url"));
+            exactly(2).of(request).getAttribute(DefaultResourceTranslator.INCLUDE_REQUEST_URI); will(returnValue("/url"));
             one(request).getMethod(); will(returnValue("POST"));
             one(registry).parse("/url", HttpMethod.POST, webRequest); will(returnValue(expected));
         }});
@@ -54,7 +54,7 @@ public class StupidTranslatorTest {
 		final ResourceMethod expected = mockery.mock(ResourceMethod.class);
 		
 		mockery.checking(new Expectations(){{
-		    one(request).getAttribute(StupidTranslator.INCLUDE_REQUEST_URI); will(returnValue(null));
+		    one(request).getAttribute(DefaultResourceTranslator.INCLUDE_REQUEST_URI); will(returnValue(null));
 			one(request).getRequestURI(); will(returnValue("/url"));
 			one(request).getMethod(); will(returnValue("POST"));
 			one(registry).parse("/url", HttpMethod.POST,webRequest); will(returnValue(expected));
@@ -71,7 +71,7 @@ public class StupidTranslatorTest {
 		final ResourceMethod expected = mockery.mock(ResourceMethod.class);
 		
 		mockery.checking(new Expectations(){{
-            one(request).getAttribute(StupidTranslator.INCLUDE_REQUEST_URI); will(returnValue(null));
+            one(request).getAttribute(DefaultResourceTranslator.INCLUDE_REQUEST_URI); will(returnValue(null));
 			one(request).getRequestURI(); will(returnValue("/url"));
 			one(request).getMethod(); will(returnValue("GET"));
 			one(registry).parse("/url", HttpMethod.GET,webRequest); will(returnValue(expected));
@@ -89,7 +89,7 @@ public class StupidTranslatorTest {
 		final ResourceMethod expected = mockery.mock(ResourceMethod.class);
 		
 		mockery.checking(new Expectations(){{
-            one(request).getAttribute(StupidTranslator.INCLUDE_REQUEST_URI); will(returnValue(null));
+            one(request).getAttribute(DefaultResourceTranslator.INCLUDE_REQUEST_URI); will(returnValue(null));
 			one(request).getRequestURI(); will(returnValue("/custom_context/url"));
 			one(request).getMethod(); will(returnValue("GET"));
 			one(registry).parse("/url", HttpMethod.GET,webRequest); will(returnValue(expected));
@@ -107,7 +107,7 @@ public class StupidTranslatorTest {
 		final ResourceMethod expected = mockery.mock(ResourceMethod.class);
 		
 		mockery.checking(new Expectations(){{
-            one(request).getAttribute(StupidTranslator.INCLUDE_REQUEST_URI); will(returnValue(null));
+            one(request).getAttribute(DefaultResourceTranslator.INCLUDE_REQUEST_URI); will(returnValue(null));
 			one(request).getRequestURI(); will(returnValue("/"));
 			one(request).getMethod(); will(returnValue("GET"));
 			one(registry).parse("/", HttpMethod.GET,webRequest); will(returnValue(expected));
@@ -125,7 +125,7 @@ public class StupidTranslatorTest {
 		final ResourceMethod expected = mockery.mock(ResourceMethod.class);
 		
 		mockery.checking(new Expectations(){{
-            one(request).getAttribute(StupidTranslator.INCLUDE_REQUEST_URI); will(returnValue(null));
+            one(request).getAttribute(DefaultResourceTranslator.INCLUDE_REQUEST_URI); will(returnValue(null));
 			one(request).getRequestURI(); will(returnValue("/custom_context/"));
 			one(request).getMethod(); will(returnValue("GET"));
 			one(registry).parse("/", HttpMethod.GET,webRequest); will(returnValue(expected));

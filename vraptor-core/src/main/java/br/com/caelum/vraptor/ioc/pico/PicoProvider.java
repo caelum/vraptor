@@ -49,9 +49,9 @@ import br.com.caelum.vraptor.core.Execution;
 import br.com.caelum.vraptor.core.JstlLocalization;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.core.URLParameterExtractorInterceptor;
+import br.com.caelum.vraptor.http.DefaultResourceTranslator;
 import br.com.caelum.vraptor.http.OgnlParametersProvider;
 import br.com.caelum.vraptor.http.ParanamerNameProvider;
-import br.com.caelum.vraptor.http.StupidTranslator;
 import br.com.caelum.vraptor.http.TypeCreator;
 import br.com.caelum.vraptor.http.asm.AsmBasedTypeCreator;
 import br.com.caelum.vraptor.http.ognl.EmptyElementsRemoval;
@@ -105,7 +105,7 @@ public class PicoProvider implements ContainerProvider {
 	 */
 	protected void registerComponents(ComponentRegistry container) {
 		logger.debug("Registering base pico container related implementation components");
-		for (Class<?> type : new Class[] { StupidTranslator.class, DefaultRouter.class,
+		for (Class<?> type : new Class[] { DefaultResourceTranslator.class, DefaultRouter.class,
 				DefaultResourceNotFoundHandler.class, DefaultDirScanner.class,
 				DefaultInterceptorRegistry.class, DefaultPathResolver.class,
 				ParanamerNameProvider.class, DefaultConverters.class, DefaultMethodInfo.class,

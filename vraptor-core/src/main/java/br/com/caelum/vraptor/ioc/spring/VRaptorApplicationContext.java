@@ -34,7 +34,7 @@ import br.com.caelum.vraptor.core.JstlLocalization;
 import br.com.caelum.vraptor.core.URLParameterExtractorInterceptor;
 import br.com.caelum.vraptor.http.OgnlParametersProvider;
 import br.com.caelum.vraptor.http.ParanamerNameProvider;
-import br.com.caelum.vraptor.http.StupidTranslator;
+import br.com.caelum.vraptor.http.DefaultResourceTranslator;
 import br.com.caelum.vraptor.http.asm.AsmBasedTypeCreator;
 import br.com.caelum.vraptor.http.ognl.EmptyElementsRemoval;
 import br.com.caelum.vraptor.http.route.DefaultRouter;
@@ -88,7 +88,7 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
 
     private void registerApplicationScopedComponentsOn(DefaultListableBeanFactory beanFactory) {
         registerOn(beanFactory, DefaultRouter.class);
-        registerOn(beanFactory, StupidTranslator.class);
+        registerOn(beanFactory, DefaultResourceTranslator.class);
         registerOn(beanFactory, DefaultInterceptorRegistry.class);
         registerOn(beanFactory, AsmBasedTypeCreator.class);
         registerOn(beanFactory, DefaultPathResolver.class);

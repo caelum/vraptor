@@ -13,7 +13,7 @@ import br.com.caelum.vraptor.http.MutableRequest;
 
 /**
  * Processes all elements in a multipart request.
- * 
+ *
  * @author Guilherme Silveira
  * @author Paulo Silveira
  */
@@ -44,7 +44,7 @@ public class MultipartItemsProcessor {
                     UploadedFile fileInformation = new DefaultUploadedFile(file, item.getName(),
                             item.getContentType());
                     parameters.setParameter(item.getFieldName(), new String[] { file.getAbsolutePath() });
-                    request.setAttribute(item.getFieldName(), fileInformation);
+                    request.setAttribute(file.getAbsolutePath(), fileInformation);
                     logger.info("Uploaded file: " + item.getFieldName() + " with " + fileInformation);
                 } catch (Exception e) {
                     logger.error("Nasty uploaded file " + item.getName(), e);

@@ -120,6 +120,7 @@ right before ANY release
 	- check all TODOS and do something about them
 
 ONLY AFTER RELEASE
+- MultipartInterceptor.accepts() is never called, so it throws an exception everytime a request which isn't an multipart one is made
 - make client server redirect work with proxied parameters
 3.0.1 - cache all method lookup algorithms (getDeclaredMethod())
 - routes with support to withParam()

@@ -10,7 +10,6 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
-import br.com.caelum.vraptor.interceptor.ForwardToDefaultViewInterceptor;
 import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
 import br.com.caelum.vraptor.interceptor.InterceptorListPriorToExecutionExtractor;
 import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
@@ -46,7 +45,6 @@ public class DefaultRequestExecutionTest {
                 one(stack).add(ParametersInstantiatorInterceptor.class);
                 inSequence(sequence);
                 one(stack).add(ExecuteMethodInterceptor.class); inSequence(sequence);
-                one(stack).add(ForwardToDefaultViewInterceptor.class); inSequence(sequence);
                 one(stack).next(null, null); inSequence(sequence);
             }
         });

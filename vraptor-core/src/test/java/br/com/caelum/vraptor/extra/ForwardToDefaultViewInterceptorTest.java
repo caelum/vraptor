@@ -25,7 +25,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package br.com.caelum.vraptor.core;
+package br.com.caelum.vraptor.extra;
 
 import org.jmock.Expectations;
 import org.junit.Before;
@@ -33,7 +33,8 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.VRaptorMockery;
-import br.com.caelum.vraptor.interceptor.ForwardToDefaultViewInterceptor;
+import br.com.caelum.vraptor.core.MethodInfo;
+import br.com.caelum.vraptor.extra.ForwardToDefaultViewInterceptor;
 
 public class ForwardToDefaultViewInterceptorTest {
 

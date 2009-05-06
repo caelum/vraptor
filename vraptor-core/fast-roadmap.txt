@@ -1,15 +1,21 @@
+- allow it through a custom component, doc it and use it in vraptor2 compatibility mode, pack it under EXTRA
+- router extra support
+	router.for("/(*)").is(type(""),method(""));
+- support to method return != string --> outject
+- make StupidTranslator work with jsessionid
+
+
+
 - accept support "_format" parameter
 - json support
 - json support through "Accepts", priorize _format
 - json outjecter outjects
 - onError().goTo("xpto"); on validation, with support to ajax
+
+help:
 - JstlLocalization test
 - ceci: integration test for vraptor-example project e vraptor-spring-example
-- router extra support
-	router.for("/(*)").is(type(""),method(""));
-- support to method return != string --> outject
 - MultipartInterceptor is only added if jar is found on classpath
-- make StupidTranslator work with jsessionid
 
 
 
@@ -73,6 +79,7 @@ site docs (prior to release)
 	set[id==0].nome="guilherme"
 	set[id==2].nome="guilherme"
 	isso eh um mapa!
+- doc: if you want default redirect, add the ForwardToDefaultViewInterceptor to your itnerceptor stack
 
 kung help
 	- add a @Listener 

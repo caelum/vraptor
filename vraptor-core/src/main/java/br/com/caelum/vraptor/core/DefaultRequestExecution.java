@@ -31,7 +31,6 @@ package br.com.caelum.vraptor.core;
 
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
-import br.com.caelum.vraptor.interceptor.ForwardToDefaultViewInterceptor;
 import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
 import br.com.caelum.vraptor.interceptor.InterceptorListPriorToExecutionExtractor;
 import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
@@ -61,7 +60,6 @@ public class DefaultRequestExecution implements RequestExecution {
         interceptorStack.add(instantiator);
         interceptorStack.add(ParametersInstantiatorInterceptor.class);
         interceptorStack.add(ExecuteMethodInterceptor.class);
-        interceptorStack.add(ForwardToDefaultViewInterceptor.class);
         interceptorStack.next(null, null);
     }
 }

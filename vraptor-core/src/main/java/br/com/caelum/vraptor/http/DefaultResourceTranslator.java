@@ -46,37 +46,42 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  */
 @ApplicationScoped
 public class DefaultResourceTranslator implements UrlToResourceTranslator {
-	
-    private final Router registry;
 
-    private static final Logger logger = LoggerFactory.getLogger(DefaultResourceTranslator.class);
-    static final String INCLUDE_REQUEST_URI = "javax.servlet.include.request_uri";
+	private final Router registry;
 
-    public DefaultResourceTranslator(Router registry) {
-        this.registry = registry;
-    }
+	private static final Logger logger = LoggerFactory.getLogger(DefaultResourceTranslator.class);
+	static final String INCLUDE_REQUEST_URI = "javax.servlet.include.request_uri";
 
-    public ResourceMethod translate(MutableRequest request) {
-        String resourceName = getURI(request);
-        if (logger.isDebugEnabled()) {
-            logger.debug("trying to access " + resourceName);
-        }
-        if (resourceName.length() > 1 && resourceName.indexOf('/', 1) != -1) {
-            resourceName = resourceName.substring(resourceName.indexOf('/', 1));
-        }
-        String methodName = request.getMethod();
-        ResourceMethod resource = registry.parse(resourceName, HttpMethod.valueOf(methodName), request);
-        if (logger.isDebugEnabled()) {
-            logger.debug("found resource " + resource);
-        }
-        return resource;
-    }
+	private static final String METHOD_PARAMETER = "_method";
 
-    private String getURI(HttpServletRequest request) {
-        if (request.getAttribute(INCLUDE_REQUEST_URI) != null) {
-            return (String) request.getAttribute(INCLUDE_REQUEST_URI);
-        }
-        return request.getRequestURI();
-    }
+	public DefaultResourceTranslator(Router registry) {
+		this.registry = registry;
+	}
+
+	public ResourceMethod translate(MutableRequest request) {
+		String resourceName = getURI(request);
+		if (logger.isDebugEnabled()) {
+			logger.debug("trying to access " + resourceName);
+		}
+		if (resourceName.length() > 1 && resourceName.indexOf('/', 1) != -1) {
+			resourceName = resourceName.substring(resourceName.indexOf('/', 1));
+		}
+		String methodName = request.getParameter(METHOD_PARAMETER);
+		if (methodName == null) {
+			methodName = request.getMethod();
+		}
+		ResourceMethod resource = registry.parse(resourceName, HttpMethod.valueOf(methodName), request);
+		if (logger.isDebugEnabled()) {
+			logger.debug("found resource " + resource);
+		}
+		return resource;
+	}
+
+	private String getURI(HttpServletRequest request) {
+		if (request.getAttribute(INCLUDE_REQUEST_URI) != null) {
+			return (String) request.getAttribute(INCLUDE_REQUEST_URI);
+		}
+		return request.getRequestURI();
+	}
 
 }

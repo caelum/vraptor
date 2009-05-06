@@ -1,4 +1,3 @@
-- delete support "_method" parameter, priorize parameter
 - accept support "_format" parameter
 - json support
 - json support through "Accepts", priorize _format
@@ -9,7 +8,8 @@
 - router extra support
 	router.for("/(*)").is(type(""),method(""));
 - support to method return != string --> outject
-
+- MultipartInterceptor is only added if jar is found on classpath
+- make StupidTranslator work with jsessionid
 
 
 
@@ -392,3 +392,4 @@ support HibernateValidator with i18n messages
 - ClientsController --> clients.list
 - path annotation and routes with support to value injection
 - client side and server side redirect works with parameters from Route system
+- supports "_method" parameter due to browser and xhtml nature

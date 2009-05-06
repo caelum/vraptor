@@ -17,7 +17,7 @@
 <br />
 <a href="<c:url value="/clients/${client.id }"/>">view</a>
 |
-<a href="<c:url value="/clients/${client.id }"/>?_method=delete">delete</a>
+<a href="<c:url value="/clients/${client.id }"/>?_method=DELETE">delete</a>
 |
 <a href="<c:url value="/clients"/>">list</a>
 

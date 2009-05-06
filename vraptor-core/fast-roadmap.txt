@@ -1,4 +1,3 @@
-- allow it through a custom component, doc it and use it in vraptor2 compatibility mode, pack it under EXTRA
 - router extra support
 	router.for("/(*)").is(type(""),method(""));
 - support to method return != string --> outject

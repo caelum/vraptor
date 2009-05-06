@@ -34,6 +34,7 @@ import static org.hamcrest.Matchers.notNullValue;
 
 import java.util.ArrayList;
 
+import br.com.caelum.vraptor.Delete;
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
@@ -89,6 +90,8 @@ public class ClientsController {
 		database.add(client);
 	}
 
+	@Path("/clients/{client.id}")
+	@Delete
 	public void delete(Client client) {
 		database.remove(client);
 		result.use(Results.logic()).redirectClientTo(ClientsController.class).list();

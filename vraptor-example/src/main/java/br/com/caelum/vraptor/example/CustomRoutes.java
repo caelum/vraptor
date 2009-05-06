@@ -31,7 +31,6 @@ import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.http.route.RoutesConfiguration;
 import br.com.caelum.vraptor.http.route.Rules;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
-import br.com.caelum.vraptor.resource.HttpMethod;
 
 /**
  * Custom rules only to show how to create your own routes.
@@ -45,7 +44,6 @@ public class CustomRoutes implements RoutesConfiguration{
 		router.add(new Rules() {{
 			routeFor("/").is(ClientsController.class).list();
 			routeFor("/clients/random").is(ClientsController.class).random();
-			routeFor("/clients/{client.id}").with(HttpMethod.DELETE).is(ClientsController.class).delete(null);
 		}});
 	}
 

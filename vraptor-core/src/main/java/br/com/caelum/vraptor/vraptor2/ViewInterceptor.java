@@ -34,6 +34,11 @@ import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.view.jsp.PageResult;
 
+/**
+ * The vraptor 2 compatible view interceptor
+ * 
+ * @author guilherme silveira
+ */
 public class ViewInterceptor implements Interceptor {
 
 	private MethodInfo reqResult;
@@ -52,8 +57,12 @@ public class ViewInterceptor implements Interceptor {
 
 	public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
 			throws InterceptionException {
-		if (info.shouldShowView(method)) {
-			this.result.forward(reqResult.getResult().toString());
+		if(Info.isOldComponent(method.getResource())) {
+			if ( info.shouldShowView(method)) {
+				this.result.forward(reqResult.getResult().toString());
+			}
+		} else {
+			stack.next(method, resourceInstance);
 		}
 	}
 

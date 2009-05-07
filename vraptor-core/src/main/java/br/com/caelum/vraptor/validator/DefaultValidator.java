@@ -64,6 +64,7 @@ public class DefaultValidator implements Validator {
 	public void checking(Validations validations) {
 		List<Message> errors = validations.getErrors();
 		if (!errors.isEmpty()) {
+			result.include("errors", errors);
 			if (method != null) {
 				Object instance = logic.redirectServerTo(typeToUse);
 				try {
@@ -72,7 +73,6 @@ public class DefaultValidator implements Validator {
 					throw new ResultException(e);
 				}
 			} else {
-				result.include("errors", errors);
 				result.forward("invalid");
 			}
 			// finished just fine

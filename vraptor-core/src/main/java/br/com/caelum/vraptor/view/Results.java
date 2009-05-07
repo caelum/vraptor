@@ -29,7 +29,6 @@
  */
 package br.com.caelum.vraptor.view;
 
-
 /**
  * Some common results for most web based logics.
  * 

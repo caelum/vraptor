@@ -73,6 +73,7 @@ public class MessageCreatorValidator implements Validator {
 	public void checking(Validations validations) {
 		List<Message> messages = validations.getErrors();
 		if (!messages.isEmpty()) {
+			result.include("errors", this.errors);
 			if (method != null) {
 				Object instance = logic.redirectServerTo(typeToUse);
 				try {
@@ -84,7 +85,6 @@ public class MessageCreatorValidator implements Validator {
 				for (Message s : messages) {
 					this.errors.add(new FixedMessage(s.getCategory(), s.getMessage(), s.getCategory()));
 				}
-				result.include("errors", this.errors);
 				result.forward("invalid");
 				// finished just fine
 			}

@@ -39,42 +39,40 @@ import br.com.caelum.vraptor.validator.ValidationError;
 
 public class ExecuteAndViewInterceptor implements Interceptor {
 
-    private final MethodInfo info;
+	private final MethodInfo info;
 
-    public ExecuteAndViewInterceptor(MethodInfo info) {
-        this.info = info;
-    }
+	public ExecuteAndViewInterceptor(MethodInfo info) {
+		this.info = info;
+	}
 
-    public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
-            throws InterceptionException {
-        try {
-            Method reflectionMethod = method.getMethod();
-            Object[] parameters = this.info.getParameters();
-            Object result = reflectionMethod.invoke(resourceInstance, parameters);
-            if (Info.isOldComponent(method.getResource())) {
-                if (result == null) {
-                    this.info.setResult("ok");
-                } else {
-                    this.info.setResult(result);
-                }
-            }
-            stack.next(method, resourceInstance);
-        } catch (IllegalArgumentException e) {
-            throw new InterceptionException(e);
-        } catch (IllegalAccessException e) {
-            throw new InterceptionException(e);
-        } catch (InvocationTargetException e) {
-            Throwable cause = e.getCause();
-            if(cause instanceof ValidationError) {
-                // fine... already parsed
-            } else {
-                throw new InterceptionException(cause);
-            }
-        }
-    }
+	public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
+			throws InterceptionException {
+		try {
+			Method reflectionMethod = method.getMethod();
+			Object[] parameters = this.info.getParameters();
+			Object result = reflectionMethod.invoke(resourceInstance, parameters);
+			if (result == null) {
+				this.info.setResult("ok");
+			} else {
+				this.info.setResult(result);
+			}
+			stack.next(method, resourceInstance);
+		} catch (IllegalArgumentException e) {
+			throw new InterceptionException(e);
+		} catch (IllegalAccessException e) {
+			throw new InterceptionException(e);
+		} catch (InvocationTargetException e) {
+			Throwable cause = e.getCause();
+			if (cause instanceof ValidationError) {
+				// fine... already parsed
+			} else {
+				throw new InterceptionException(cause);
+			}
+		}
+	}
 
-    public boolean accepts(ResourceMethod method) {
-        return true;
-    }
+	public boolean accepts(ResourceMethod method) {
+		return true;
+	}
 
 }

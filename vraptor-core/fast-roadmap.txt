@@ -399,3 +399,4 @@ support HibernateValidator with i18n messages
 - path annotation and routes with support to value injection
 - client side and server side redirect works with parameters from Route system
 - supports "_method" parameter due to browser and xhtml nature
+- redirectresult allows you to redirect straight to another page/server

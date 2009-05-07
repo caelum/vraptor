@@ -31,7 +31,8 @@ import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.ValidationError;
 import br.com.caelum.vraptor.validator.Validations;
-import br.com.caelum.vraptor.view.jsp.PageResult;
+import br.com.caelum.vraptor.view.PageResult;
+
 import org.vraptor.i18n.FixedMessage;
 import org.vraptor.validator.ValidationErrors;
 

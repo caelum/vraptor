@@ -29,7 +29,6 @@
  */
 package br.com.caelum.vraptor.view;
 
-import br.com.caelum.vraptor.view.jsp.PageResult;
 
 /**
  * Some common results for most web based logics.

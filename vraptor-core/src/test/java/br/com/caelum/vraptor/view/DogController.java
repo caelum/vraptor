@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor.view.jsp;
+package br.com.caelum.vraptor.view;
 
 import java.util.List;
 

@@ -13,9 +13,9 @@ import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.view.PageResult;
 import br.com.caelum.vraptor.view.PathResolver;
 import br.com.caelum.vraptor.view.ResultException;
-import br.com.caelum.vraptor.view.jsp.PageResult;
 
 public class ViewsPropertiesPageResult implements PageResult {
 

@@ -27,7 +27,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package br.com.caelum.vraptor.view.jsp;
+package br.com.caelum.vraptor.view;
 
 import java.io.IOException;
 
@@ -38,8 +38,6 @@ import javax.servlet.http.HttpServletResponse;
 import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.view.PathResolver;
-import br.com.caelum.vraptor.view.ResultException;
 
 /**
  * Default page result implementation.

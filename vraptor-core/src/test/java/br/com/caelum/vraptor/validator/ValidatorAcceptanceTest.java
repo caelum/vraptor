@@ -12,7 +12,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.view.jsp.PageResult;
+import br.com.caelum.vraptor.view.PageResult;
 
 public class ValidatorAcceptanceTest {
     private PageResult result;

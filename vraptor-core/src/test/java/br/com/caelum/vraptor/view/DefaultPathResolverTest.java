@@ -38,7 +38,6 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.view.jsp.DogController;
 
 public class DefaultPathResolverTest {
 

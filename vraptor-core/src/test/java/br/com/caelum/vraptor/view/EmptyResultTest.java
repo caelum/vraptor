@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor.view.jsp;
+package br.com.caelum.vraptor.view;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -9,6 +9,8 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.lib.legacy.ClassImposteriser;
 import org.junit.Test;
+
+import br.com.caelum.vraptor.view.EmptyResult;
 
 public class EmptyResultTest {
 	@Test

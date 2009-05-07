@@ -27,32 +27,36 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package br.com.caelum.vraptor.view.jsp;
+package br.com.caelum.vraptor.view;
 
-import java.io.IOException;
-
-import javax.servlet.http.HttpServletResponse;
-
-import br.com.caelum.vraptor.VRaptorException;
 import br.com.caelum.vraptor.View;
 
 /**
- * TODO describe
- *
- * @author Filipe Sabella
+ * A common forward/redirect/include page result.
+ * 
+ * @author Guilherme Silveira
  */
-public class EmptyResult implements View {
-	private final HttpServletResponse response;
+public interface PageResult extends View {
 
-	public EmptyResult(HttpServletResponse response) {
-		this.response = response;
-	}
+    /**
+     * Server side forwarding to a result.
+     */
+    public abstract void forward(String result);
 
-	public void doNothing() {
-		try {
-			response.getWriter().write("");
-		} catch (IOException e) {
-			throw new VRaptorException(e);
-		}
-	}
+    /**
+     * Server side include a result.
+     */
+    public abstract void include(String result);
+
+    /**
+     * Includes an object in your result.
+     */
+    public abstract void include(String key, Object value);
+    
+    /**
+     * Client side redirect to an specific url.
+     * @param url
+     */
+    void redirect(String url);
+
 }

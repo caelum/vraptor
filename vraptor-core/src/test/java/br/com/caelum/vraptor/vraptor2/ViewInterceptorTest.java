@@ -38,7 +38,7 @@ import br.com.caelum.vraptor.VRaptorMockery;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.view.jsp.PageResult;
+import br.com.caelum.vraptor.view.PageResult;
 
 public class ViewInterceptorTest {
 

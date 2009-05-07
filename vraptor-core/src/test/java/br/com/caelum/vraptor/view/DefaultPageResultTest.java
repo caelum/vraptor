@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor.view.jsp;
+package br.com.caelum.vraptor.view;
 
 import java.io.IOException;
 
@@ -15,6 +15,7 @@ import org.junit.Test;
 import br.com.caelum.vraptor.core.DefaultMethodInfo;
 import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.view.DefaultPageResult;
 import br.com.caelum.vraptor.view.PathResolver;
 
 public class DefaultPageResultTest {
@@ -58,6 +59,7 @@ public class DefaultPageResultTest {
         view.forward("ok");
         mockery.assertIsSatisfied();
     }
+
 
     @Test
     public void shouldAllowCustomPathResolverWhileIncluding() throws ServletException, IOException {

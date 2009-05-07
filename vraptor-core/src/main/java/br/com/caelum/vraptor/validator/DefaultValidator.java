@@ -30,7 +30,7 @@ package br.com.caelum.vraptor.validator;
 import java.util.List;
 
 import br.com.caelum.vraptor.Validator;
-import br.com.caelum.vraptor.view.jsp.PageResult;
+import br.com.caelum.vraptor.view.PageResult;
 
 /**
  * The default validator implementation.

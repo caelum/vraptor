@@ -165,6 +165,7 @@ public class UriBasedRoute implements Rule {
 	}
 
 	public void is(Class<?> type, Method method) {
+		logger.debug("created rule for path " + patternUri + " --> " + type.getName() + "." + method.getName());
 		resource = new DefaultResourceMethod(new DefaultResource(type), method);
 	}
 

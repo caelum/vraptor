@@ -73,6 +73,9 @@ public class MessageCreatorValidator implements Validator {
 	public void checking(Validations validations) {
 		List<Message> messages = validations.getErrors();
 		if (!messages.isEmpty()) {
+			for (Message s : messages) {
+				this.errors.add(new FixedMessage(s.getCategory(), s.getMessage(), s.getCategory()));
+			}
 			result.include("errors", this.errors);
 			if (method != null) {
 				Object instance = logic.redirectServerTo(typeToUse);
@@ -82,9 +85,6 @@ public class MessageCreatorValidator implements Validator {
 					throw new ResultException(e);
 				}
 			} else {
-				for (Message s : messages) {
-					this.errors.add(new FixedMessage(s.getCategory(), s.getMessage(), s.getCategory()));
-				}
 				result.forward("invalid");
 				// finished just fine
 			}
@@ -102,8 +102,10 @@ public class MessageCreatorValidator implements Validator {
 		enhancer.setSuperclass(type);
 		enhancer.setCallback(new MethodInterceptor() {
 			public Object intercept(Object instance, Method method, Object[] args, MethodProxy proxy) throws Throwable {
-				MessageCreatorValidator.this.argsToUse = args;
-				MessageCreatorValidator.this.method = method;
+				if (MessageCreatorValidator.this.method == null) {
+					MessageCreatorValidator.this.argsToUse = args;
+					MessageCreatorValidator.this.method = method;
+				}
 				return null;
 			}
 		});

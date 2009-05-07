@@ -90,8 +90,10 @@ public class DefaultValidator implements Validator {
 		enhancer.setSuperclass(type);
 		enhancer.setCallback(new MethodInterceptor() {
 			public Object intercept(Object instance, Method method, Object[] args, MethodProxy proxy) throws Throwable {
-				DefaultValidator.this.argsToUse = args;
-				DefaultValidator.this.method = method;
+				if (DefaultValidator.this.method == null) {
+					DefaultValidator.this.argsToUse = args;
+					DefaultValidator.this.method = method;
+				}
 				return null;
 			}
 		});

@@ -115,7 +115,7 @@ public class ComponentRoutesCreator implements ResourceParserRoutesCreator {
 			return;
 		}
         for (Method javaMethod : actualType.getDeclaredMethods()) {
-			if (!isEligible(javaMethod)) {
+			if (!isEligible(javaMethod) || isGetter(javaMethod)) {
                 continue;
             }
 			String uri = getUriFor(javaMethod, baseType);
@@ -129,6 +129,10 @@ public class ComponentRoutesCreator implements ResourceParserRoutesCreator {
 			rules.add(rule);
         }
 		registerRulesFor(actualType.getSuperclass(), baseType, rules);
+	}
+
+	private boolean isGetter(Method javaMethod) {
+		return javaMethod.getName().startsWith("get") || javaMethod.getName().startsWith("is");
 	}
 
 	private String getUriFor(Method javaMethod, Class<?> type) {

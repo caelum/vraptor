@@ -95,6 +95,9 @@ public class ComponentRoutesCreatorTest {
         @Path("/findable")
         public void findable() {
         }
+        public String getValue() {
+        	return "";
+        }
     }
 
     @Test
@@ -102,6 +105,14 @@ public class ComponentRoutesCreatorTest {
         final Resource resource = mockery.resource(MyResource.class);
         this.router.register(resource);
         assertThat(router.parse("/MyResource.ignorableStatic.logic", HttpMethod.POST, request), is(nullValue()));
+        mockery.assertIsSatisfied();
+    }
+
+    @Test
+    public void ignoresGetters() {
+        final Resource resource = mockery.resource(MyResource.class);
+        this.router.register(resource);
+        assertThat(router.parse("/MyResource.getValue.logic", HttpMethod.POST, request), is(nullValue()));
         mockery.assertIsSatisfied();
     }
 

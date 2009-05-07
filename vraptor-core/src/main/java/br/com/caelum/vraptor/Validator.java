@@ -38,5 +38,9 @@ import br.com.caelum.vraptor.validator.Validations;
 public interface Validator {
     
     void checking(Validations rules);
+    
+    Validator onError();
+
+	<T> T goTo(Class<T> type);
 
 }

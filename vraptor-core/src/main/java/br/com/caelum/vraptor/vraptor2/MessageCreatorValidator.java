@@ -27,43 +27,87 @@
  */
 package br.com.caelum.vraptor.vraptor2;
 
-import br.com.caelum.vraptor.Validator;
-import br.com.caelum.vraptor.validator.Message;
-import br.com.caelum.vraptor.validator.ValidationError;
-import br.com.caelum.vraptor.validator.Validations;
-import br.com.caelum.vraptor.view.PageResult;
+import java.lang.reflect.Method;
+import java.util.List;
+
+import net.sf.cglib.proxy.Enhancer;
+import net.sf.cglib.proxy.MethodInterceptor;
+import net.sf.cglib.proxy.MethodProxy;
 
 import org.vraptor.i18n.FixedMessage;
 import org.vraptor.validator.ValidationErrors;
 
-import java.util.List;
+import br.com.caelum.vraptor.Validator;
+import br.com.caelum.vraptor.ioc.RequestScoped;
+import br.com.caelum.vraptor.validator.Message;
+import br.com.caelum.vraptor.validator.ValidationError;
+import br.com.caelum.vraptor.validator.Validations;
+import br.com.caelum.vraptor.view.LogicResult;
+import br.com.caelum.vraptor.view.PageResult;
+import br.com.caelum.vraptor.view.ResultException;
 
 /**
  * The vraptor2 compatible messages creator.
- *
+ * 
  * @author Guilherme Silveira
  */
+@RequestScoped
 public class MessageCreatorValidator implements Validator {
 
-    private final PageResult result;
-    private final ValidationErrors errors;
+	private final PageResult result;
+	private final ValidationErrors errors;
 
-    public MessageCreatorValidator(PageResult result, ValidationErrors errors) {
-        this.result = result;
-        this.errors = errors;
-    }
+	private Object[] argsToUse;
+	private Method method;
 
-    public void checking(Validations validations) {
-        List<Message> messages = validations.getErrors();
-        if (!messages.isEmpty()) {
-            for (Message s : messages) {
-                this.errors.add(new FixedMessage(s.getCategory(), s.getMessage(), s.getCategory()));
-            }
-            result.include("errors", this.errors);
-            result.forward("invalid");
-            // finished just fine
-            throw new ValidationError(messages);
-        }
-    }
+	private final LogicResult logic;
+
+	private Class<?> typeToUse;
+
+	public MessageCreatorValidator(PageResult result, ValidationErrors errors, LogicResult logic) {
+		this.result = result;
+		this.errors = errors;
+		this.logic = logic;
+	}
+
+	public void checking(Validations validations) {
+		List<Message> messages = validations.getErrors();
+		if (!messages.isEmpty()) {
+			if (method != null) {
+				Object instance = logic.redirectServerTo(typeToUse);
+				try {
+					method.invoke(instance, argsToUse);
+				} catch (Exception e) {
+					throw new ResultException(e);
+				}
+			} else {
+				for (Message s : messages) {
+					this.errors.add(new FixedMessage(s.getCategory(), s.getMessage(), s.getCategory()));
+				}
+				result.include("errors", this.errors);
+				result.forward("invalid");
+				// finished just fine
+			}
+			throw new ValidationError(messages);
+		}
+	}
+
+	public Validator onError() {
+		return this;
+	}
+
+	public <T> T goTo(Class<T> type) {
+		this.typeToUse = type;
+		Enhancer enhancer = new Enhancer();
+		enhancer.setSuperclass(type);
+		enhancer.setCallback(new MethodInterceptor() {
+			public Object intercept(Object instance, Method method, Object[] args, MethodProxy proxy) throws Throwable {
+				MessageCreatorValidator.this.argsToUse = args;
+				MessageCreatorValidator.this.method = method;
+				return null;
+			}
+		});
+		return (T) enhancer.create();
+	}
 
 }

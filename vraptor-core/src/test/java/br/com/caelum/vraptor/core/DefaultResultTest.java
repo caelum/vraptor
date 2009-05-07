@@ -27,6 +27,10 @@
  */
 package br.com.caelum.vraptor.core;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.hamcrest.MatcherAssert;
@@ -37,6 +41,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.View;
+import br.com.caelum.vraptor.http.route.UriBasedRoute;
 import br.com.caelum.vraptor.ioc.Container;
 
 public class DefaultResultTest {
@@ -82,5 +87,12 @@ public class DefaultResultTest {
         result.include("my_key", "my_value");
         mockery.assertIsSatisfied();
     }
+
+	@Test
+	public void shouldAllowGroupsToBeUsedWhenDefiningTheTypeByString() {
+		UriBasedRoute route = new UriBasedRoute("/(*)/(*)");
+		route.is(V,"");
+		assertThat(route.urlFor(client(null)), is(equalTo("/clients/")));
+	}
 
 }

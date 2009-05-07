@@ -1,10 +1,17 @@
 - router extra support
 	router.for("/(*)").is(type(""),method(""));
+
+
+
+
+
+
+
+
+
+
 - support to method return != string --> outject
 - make StupidTranslator work with jsessionid
-
-
-
 - accept support "_format" parameter
 - json support
 - json support through "Accepts", priorize _format

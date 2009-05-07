@@ -31,12 +31,14 @@ package br.com.caelum.vraptor.resource;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import br.com.caelum.vraptor.http.ListOfRules;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.route.Router;
+import br.com.caelum.vraptor.http.route.Rule;
 
 /**
  * A cached resource registry that avoids iterating over the entire set just in
@@ -79,6 +81,10 @@ public class CacheBasedRouter implements Router {
 
 	public <T> String urlFor(Class<T> type, Method method, Object... params) {
 		return delegate.urlFor(type, method, params);
+	}
+
+	public List<Rule> allRoutes() {
+		return delegate.allRoutes();
 	}
 
 }

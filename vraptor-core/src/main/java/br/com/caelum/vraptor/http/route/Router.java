@@ -28,6 +28,7 @@
 package br.com.caelum.vraptor.http.route;
 
 import java.lang.reflect.Method;
+import java.util.List;
 import java.util.Set;
 
 import br.com.caelum.vraptor.http.ListOfRules;
@@ -58,5 +59,10 @@ public interface Router {
 	 * Retrieves a single url to access the desired method.
 	 */
 	<T> String urlFor(Class<T> type, Method method, Object... params);
+	
+	/**
+	 * Returns a list with all routes
+	 */
+	List<Rule> allRoutes();
 
 }

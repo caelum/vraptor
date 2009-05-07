@@ -57,7 +57,7 @@ import br.com.caelum.vraptor.vraptor2.Info;
 @ApplicationScoped
 public class DefaultRouter implements Router {
 
-	private final List<Rule> rules = new ArrayList<Rule>();
+	private final List<Rule> routes = new ArrayList<Rule>();
 	private final Set<Resource> resources = new HashSet<Resource>();
 	private final ResourceParserRoutesCreator resourceRoutesCreator;
 	private final ParameterNameProvider provider;
@@ -91,13 +91,16 @@ public class DefaultRouter implements Router {
 		}
 	}
 
-	private void add(Rule r) {
+	/**
+	 * You can override this method to get notified by all added routes.
+	 */
+	protected void add(Rule r) {
 		resources.add(r.getResource());
-		this.rules.add(r);
+		this.routes.add(r);
 	}
 
 	public ResourceMethod parse(String uri, HttpMethod method, MutableRequest request) {
-		for (Rule rule : rules) {
+		for (Rule rule : routes) {
 			ResourceMethod value = rule.matches(uri, method, request);
 			if (value != null) {
 				return value;
@@ -115,7 +118,7 @@ public class DefaultRouter implements Router {
 	}
 
 	public <T> String urlFor(Class<T> type, Method method, Object... params) {
-		for (Rule rule : rules) {
+		for (Rule rule : routes) {
 			if (rule.getResource().getType().equals(type) && rule.getResourceMethod().getMethod().equals(method)) {
 				String[] names = provider.parameterNamesFor(method);
 				Class<?> parameterType = creator.typeFor(rule.getResourceMethod());
@@ -146,6 +149,10 @@ public class DefaultRouter implements Router {
 				"Unable to redirect using route as setter method for parameter setting was not created. "
 						+ "Thats probably a bug on your type creator. "
 						+ "If you are using the default type creator, notify VRaptor.");
+	}
+
+	public List<Rule> allRoutes() {
+		return routes;
 	}
 
 }

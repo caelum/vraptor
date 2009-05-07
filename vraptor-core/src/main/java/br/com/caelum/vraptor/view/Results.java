@@ -29,7 +29,6 @@
  */
 package br.com.caelum.vraptor.view;
 
-import br.com.caelum.vraptor.view.jsp.DefaultPageResult;
 import br.com.caelum.vraptor.view.jsp.PageResult;
 
 /**
@@ -45,7 +44,7 @@ public class Results {
      * achieve the server-redirect-hell (f5 problem) issue.
      */
     public static Class<? extends PageResult> page() {
-        return DefaultPageResult.class;
+        return PageResult.class;
     }
 
     /**

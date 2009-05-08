@@ -41,6 +41,7 @@ import javax.servlet.http.HttpServletRequest;
 import ognl.NoSuchPropertyException;
 import ognl.Ognl;
 import ognl.OgnlContext;
+import ognl.OgnlException;
 import ognl.OgnlRuntime;
 
 import org.slf4j.Logger;
@@ -56,80 +57,92 @@ import br.com.caelum.vraptor.http.ognl.ReflectionBasedNullHandler;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.validator.ValidationMessage;
 import br.com.caelum.vraptor.validator.Message;
+import br.com.caelum.vraptor.validator.ValidationMessage;
 import br.com.caelum.vraptor.vraptor2.Info;
 
+/**
+ * Provides parameters using ognl to parse expression values into parameter
+ * values.
+ * 
+ * @author guilherme silveira
+ */
 @RequestScoped
 public class OgnlParametersProvider implements ParametersProvider {
 
-    private final TypeCreator creator;
+	private final TypeCreator creator;
 
-    private final Container container;
+	private final Container container;
 
-    private final Converters converters;
+	private final Converters converters;
 
-    private final ParameterNameProvider provider;
-    
-    private static final Logger logger = LoggerFactory.getLogger(OgnlParametersProvider.class);
+	private final ParameterNameProvider provider;
 
-    private final HttpServletRequest parameters;
+	private static final Logger logger = LoggerFactory.getLogger(OgnlParametersProvider.class);
 
-    private final EmptyElementsRemoval removal; 
+	private final HttpServletRequest parameters;
 
-    public OgnlParametersProvider(TypeCreator creator, Container container, Converters converters, ParameterNameProvider provider, HttpServletRequest parameters, EmptyElementsRemoval removal) {
-        this.creator = creator;
-        this.container = container;
-        this.converters = converters;
-        this.provider = provider;
-        this.parameters = parameters;
-        this.removal = removal;
-        OgnlRuntime.setNullHandler(Object.class, new ReflectionBasedNullHandler());
-        OgnlRuntime.setPropertyAccessor(List.class, new ListAccessor());
-        OgnlRuntime.setPropertyAccessor(Object[].class, new ArrayAccessor());
-    }
+	private final EmptyElementsRemoval removal;
 
-    public Object[] getParametersFor(ResourceMethod method, List<Message> errors, ResourceBundle bundle) {
-        try {
-            Class<?> type = creator.typeFor(method);
-            Object root = type.getDeclaredConstructor().newInstance();
-            OgnlContext context = (OgnlContext) Ognl.createDefaultContext(root);
-            context.setTraceEvaluations(true);
-            context.put(Container.class,this.container);
-            
-			OgnlToConvertersController controller = new OgnlToConvertersController(converters, errors, bundle);
-            Ognl.setTypeConverter(context, controller);
-            for(Enumeration enumeration = parameters.getParameterNames(); enumeration.hasMoreElements();) {
-            	String key = (String) enumeration.nextElement();
-                String[] values = parameters.getParameterValues(key);
-                try {
-                    if(logger.isDebugEnabled()) {
-                        logger.debug("Applying " + key + " with " + Arrays.toString(values));
-                    }
-                    Ognl.setValue(key, context,root, values.length==1 ? values[0] : values);
-                } catch (ConversionError ex) {
-                	errors.add(new ValidationMessage(ex.getMessage(), key));
-                } catch (NoSuchPropertyException ex) {
-                    // TODO optimization: be able to ignore or not
-                    if(logger.isDebugEnabled()) {
-                        logger.debug("Ignoring exception", ex);
-                    }
-                }
-            }
-            removal.removeExtraElements();
-            Type[] types = method.getMethod().getGenericParameterTypes();
-            Object[] result = new Object[types.length];
-            String[] names = provider.parameterNamesFor(method.getMethod());
-            for (int i = 0; i < types.length; i++) {
-                result[i] = root.getClass().getMethod("get" + Info.capitalize(names[i])).invoke(root);
-            }
-            return result;
-        } catch (InvocationTargetException e) {
-            // TODO validation exception?
-            throw new IllegalArgumentException("unable to compile expression",e.getCause());
-        } catch (Exception e) {
-            // TODO validation exception?
-            throw new IllegalArgumentException("unable to compile expression",e);
-        }
-    }
+	public OgnlParametersProvider(TypeCreator creator, Container container, Converters converters,
+			ParameterNameProvider provider, HttpServletRequest parameters, EmptyElementsRemoval removal) {
+		this.creator = creator;
+		this.container = container;
+		this.converters = converters;
+		this.provider = provider;
+		this.parameters = parameters;
+		this.removal = removal;
+		OgnlRuntime.setNullHandler(Object.class, new ReflectionBasedNullHandler());
+		OgnlRuntime.setPropertyAccessor(List.class, new ListAccessor());
+		OgnlRuntime.setPropertyAccessor(Object[].class, new ArrayAccessor());
+	}
+
+	public Object[] getParametersFor(ResourceMethod method, List<Message> errors, ResourceBundle bundle) {
+		Class<?> type = creator.typeFor(method);
+		Object root;
+		try {
+			root = type.getDeclaredConstructor().newInstance();
+		} catch (Exception ex) {
+			throw new InvalidParameterException("unable to instantiate type" + type.getName(), ex);
+		}
+		OgnlContext context = (OgnlContext) Ognl.createDefaultContext(root);
+		context.setTraceEvaluations(true);
+		context.put(Container.class, this.container);
+
+		OgnlToConvertersController controller = new OgnlToConvertersController(converters, errors, bundle);
+		Ognl.setTypeConverter(context, controller);
+		for (Enumeration enumeration = parameters.getParameterNames(); enumeration.hasMoreElements();) {
+			String key = (String) enumeration.nextElement();
+			String[] values = parameters.getParameterValues(key);
+			try {
+				if (logger.isDebugEnabled()) {
+					logger.debug("Applying " + key + " with " + Arrays.toString(values));
+				}
+				Ognl.setValue(key, context, root, values.length == 1 ? values[0] : values);
+			} catch (ConversionError ex) {
+				errors.add(new ValidationMessage(ex.getMessage(), key));
+			} catch (NoSuchPropertyException ex) {
+				// TODO optimization: be able to ignore or not
+				if (logger.isDebugEnabled()) {
+					logger.debug("Ignoring exception", ex);
+				}
+			} catch (OgnlException e) {
+				throw new InvalidParameterException("unable to parse expression '" + key + "'", e);
+			}
+		}
+		removal.removeExtraElements();
+		Type[] types = method.getMethod().getGenericParameterTypes();
+		Object[] result = new Object[types.length];
+		String[] names = provider.parameterNamesFor(method.getMethod());
+		for (int i = 0; i < types.length; i++) {
+			try {
+				result[i] = root.getClass().getMethod("get" + Info.capitalize(names[i])).invoke(root);
+			} catch (InvocationTargetException e) {
+				throw new InvalidParameterException("unable to retrieve values to invoke method", e.getCause());
+			} catch (Exception e) {
+				throw new InvalidParameterException("unable to retrieve values to invoke method", e);
+			}
+		}
+		return result;
+	}
 }

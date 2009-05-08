@@ -29,6 +29,7 @@
  */
 package br.com.caelum.vraptor.http.ognl;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
@@ -64,7 +65,9 @@ public class ListNullHandler {
 					+ listSetter.getName());
 		}
 		Class typeToInstantiate = (Class) ((ParameterizedType) type).getActualTypeArguments()[0];
-		Object instance = typeToInstantiate.getConstructor().newInstance();
+		Constructor constructor = typeToInstantiate.getConstructor();
+		constructor.setAccessible(true);
+		Object instance = constructor.newInstance();
 
 		// setting the position
 		int position = (Integer) property;

@@ -1,14 +1,14 @@
-
-
-
-
-
-
-
-
-
-
+parameters are being outjected twice
 - support to method return != string --> outject
+	- do not do it if @Component vrraptor2
+
+
+
+
+
+
+
+
 - make StupidTranslator work with jsessionid
 - accept support "_format" parameter
 - json support

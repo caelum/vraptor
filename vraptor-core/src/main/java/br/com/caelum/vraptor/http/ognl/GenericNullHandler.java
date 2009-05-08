@@ -29,6 +29,7 @@
  */
 package br.com.caelum.vraptor.http.ognl;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -78,7 +79,9 @@ public class GenericNullHandler {
             }
             typeToInstantiate = CONCRETE_TYPES.get(baseType);
         }
-        instance = typeToInstantiate.getConstructor().newInstance();
+        Constructor<?> constructor = typeToInstantiate.getDeclaredConstructor();
+        constructor.setAccessible(true);
+		instance = constructor.newInstance();
         if(Collection.class.isAssignableFrom(typeToInstantiate)) {
 	        EmptyElementsRemoval removal = container.instanceFor(EmptyElementsRemoval.class);
         	removal.add((Collection)instance);

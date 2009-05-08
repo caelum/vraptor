@@ -25,54 +25,63 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package br.com.caelum.vraptor.vraptor2;
+package br.com.caelum.vraptor.interceptor;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.Collection;
 
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Interceptor;
+import br.com.caelum.vraptor.Resource;
+import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodInfo;
+import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.validator.ValidationError;
+import br.com.caelum.vraptor.vraptor2.Info;
 
-public class ExecuteAndViewInterceptor implements Interceptor {
+/**
+ * Outjects the result of the method invocation to the desired result
+ * 
+ * @author guilherme silveira
+ */
+@RequestScoped
+public class OutjectResult implements Interceptor {
 
+	private final Result result;
 	private final MethodInfo info;
 
-	public ExecuteAndViewInterceptor(MethodInfo info) {
+	public OutjectResult(Result result, MethodInfo info) {
+		this.result = result;
 		this.info = info;
+	}
+
+	public boolean accepts(ResourceMethod method) {
+		return method.getResource().getType().isAnnotationPresent(Resource.class);
 	}
 
 	public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
 			throws InterceptionException {
-		try {
-			Method reflectionMethod = method.getMethod();
-			Object[] parameters = this.info.getParameters();
-			Object result = reflectionMethod.invoke(resourceInstance, parameters);
-			if (result == null) {
-				this.info.setResult("ok");
-			} else {
-				this.info.setResult(result);
-			}
-			stack.next(method, resourceInstance);
-		} catch (IllegalArgumentException e) {
-			throw new InterceptionException(e);
-		} catch (IllegalAccessException e) {
-			throw new InterceptionException(e);
-		} catch (InvocationTargetException e) {
-			Throwable cause = e.getCause();
-			if (cause instanceof ValidationError) {
-				// fine... already parsed
-			} else {
-				throw new InterceptionException(cause);
-			}
+		Type returnType = method.getMethod().getGenericReturnType();
+		if (!returnType.equals(void.class)) {
+			result.include(nameFor(returnType), this.info.getResult());
 		}
+		stack.next(method, resourceInstance);
 	}
 
-	public boolean accepts(ResourceMethod method) {
-		return true;
+	@SuppressWarnings("unchecked")
+	private String nameFor(Type generic) {
+		if (generic instanceof ParameterizedType) {
+			ParameterizedType type = (ParameterizedType) generic;
+			Class raw = (Class) type.getRawType();
+			if (Collection.class.isAssignableFrom(raw)) {
+				return nameFor(type.getActualTypeArguments()[0]) + "List";
+			}
+			return nameFor(raw);
+		}
+		Class raw = (Class) generic;
+		return Info.decapitalize(raw.getSimpleName());
 	}
 
 }

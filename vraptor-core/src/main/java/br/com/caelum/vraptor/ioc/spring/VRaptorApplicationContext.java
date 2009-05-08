@@ -45,6 +45,7 @@ import br.com.caelum.vraptor.interceptor.DefaultInterceptorRegistry;
 import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
 import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
 import br.com.caelum.vraptor.interceptor.InterceptorListPriorToExecutionExtractor;
+import br.com.caelum.vraptor.interceptor.OutjectResult;
 import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
 import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
 import br.com.caelum.vraptor.resource.DefaultResourceNotFoundHandler;
@@ -127,6 +128,7 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
         registerOn(beanFactory, HttpServletRequestProvider.class, true);
         registerOn(beanFactory, HttpServletResponseProvider.class, true);
         registerOn(beanFactory, HttpSessionProvider.class, true);
+        registerOn(beanFactory, OutjectResult.class);
         registerOn(beanFactory, JstlLocalization.class);
         registerOn(beanFactory, EmptyResult.class);
 

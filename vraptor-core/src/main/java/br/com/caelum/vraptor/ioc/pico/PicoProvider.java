@@ -40,8 +40,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.ComponentRegistry;
-import br.com.caelum.vraptor.proxy.DefaultProxifier;
-import br.com.caelum.vraptor.http.ognl.OgnlParametersProvider;
 import br.com.caelum.vraptor.core.DefaultConverters;
 import br.com.caelum.vraptor.core.DefaultInterceptorStack;
 import br.com.caelum.vraptor.core.DefaultMethodInfo;
@@ -53,17 +51,19 @@ import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.core.URLParameterExtractorInterceptor;
 import br.com.caelum.vraptor.extra.ForwardToDefaultViewInterceptor;
 import br.com.caelum.vraptor.http.DefaultResourceTranslator;
+import br.com.caelum.vraptor.http.OgnlParametersProvider;
 import br.com.caelum.vraptor.http.ParanamerNameProvider;
 import br.com.caelum.vraptor.http.TypeCreator;
 import br.com.caelum.vraptor.http.asm.AsmBasedTypeCreator;
 import br.com.caelum.vraptor.http.ognl.EmptyElementsRemoval;
 import br.com.caelum.vraptor.http.route.DefaultRouter;
 import br.com.caelum.vraptor.http.route.NoRoutesConfiguration;
-import br.com.caelum.vraptor.http.route.PathAnnotationRoutesParser;
+import br.com.caelum.vraptor.http.route.PathAnnotationRoutesCreator;
 import br.com.caelum.vraptor.interceptor.DefaultInterceptorRegistry;
 import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
 import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
 import br.com.caelum.vraptor.interceptor.InterceptorListPriorToExecutionExtractor;
+import br.com.caelum.vraptor.interceptor.OutjectResult;
 import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
 import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
 import br.com.caelum.vraptor.interceptor.multipart.MultipartInterceptor;
@@ -113,8 +113,8 @@ public class PicoProvider implements ContainerProvider {
 				ParanamerNameProvider.class, DefaultConverters.class, DefaultMethodInfo.class,
 				DefaultInterceptorStack.class, DefaultRequestExecution.class,
 				DefaultResult.class, OgnlParametersProvider.class, DefaultMethodInfo.class, DefaultValidator.class,
-				JstlLocalization.class, NoRoutesConfiguration.class,WebInfClassesScanner.class, PathAnnotationRoutesParser.class, PathAnnotationRoutesParser.class,
-				EmptyResult.class}) {
+				JstlLocalization.class, NoRoutesConfiguration.class,WebInfClassesScanner.class, PathAnnotationRoutesCreator.class,PathAnnotationRoutesCreator.class,
+				EmptyResult.class, OutjectResult.class}) {
 			singleInterfaceRegister(type, container);
 		}
 

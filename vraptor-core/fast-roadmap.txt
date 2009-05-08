@@ -1,4 +1,3 @@
-parameters are being outjected twice
 - support to method return != string --> outject
 	- do not do it if @Component vrraptor2
 
@@ -41,6 +40,7 @@ welcome file list:
 	map[id==2]="por favor"
 	map[id==2].nome="por favor"
 	(map[id==2] eh o lado direito!!!)
+- parameters are being set twice
 
 
 

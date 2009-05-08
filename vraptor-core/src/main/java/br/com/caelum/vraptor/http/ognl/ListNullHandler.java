@@ -65,7 +65,7 @@ class ListNullHandler {
 					+ listSetter.getName());
 		}
 		Class typeToInstantiate = (Class) ((ParameterizedType) type).getActualTypeArguments()[0];
-		Constructor constructor = typeToInstantiate.getConstructor();
+		Constructor constructor = typeToInstantiate.getDeclaredConstructor();
 		constructor.setAccessible(true);
 		Object instance = constructor.newInstance();
 

@@ -1,5 +1,3 @@
-- router extra support
-	router.for("/(*)").is(type(""),method(""));
 
 
 
@@ -406,3 +404,5 @@ support HibernateValidator with i18n messages
 - path annotation and routes with support to value injection
 - client side and server side redirect works with parameters from Route system
 - supports "_method" parameter due to browser and xhtml nature
+- router extra support
+	routeFor("/(*)").is(type(""),method(""));

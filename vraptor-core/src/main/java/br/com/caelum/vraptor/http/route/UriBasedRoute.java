@@ -182,4 +182,8 @@ public class UriBasedRoute implements Rule {
 		return base;
 	}
 
+	public void is(PatternBasedType type, PatternBasedType method) {
+		
+	}
+
 }

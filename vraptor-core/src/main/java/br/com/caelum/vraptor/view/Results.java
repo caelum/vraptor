@@ -51,5 +51,12 @@ public class Results {
     public static Class<LogicResult> logic() {
         return LogicResult.class;
     }
+    
+    /**
+     * Uses an empty page.
+     */
+    public static Class<EmptyResult> nothing() {
+    	return EmptyResult.class;
+    }
 
 }

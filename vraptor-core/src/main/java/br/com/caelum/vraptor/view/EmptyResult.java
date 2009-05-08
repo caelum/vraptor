@@ -29,30 +29,15 @@
  */
 package br.com.caelum.vraptor.view;
 
-import java.io.IOException;
-
-import javax.servlet.http.HttpServletResponse;
-
-import br.com.caelum.vraptor.VRaptorException;
 import br.com.caelum.vraptor.View;
+import br.com.caelum.vraptor.ioc.RequestScoped;
 
 /**
- * TODO describe
- *
+ * Does nothing
+ * 
  * @author Filipe Sabella
+ * @author Guilherme Silveira
  */
+@RequestScoped
 public class EmptyResult implements View {
-	private final HttpServletResponse response;
-
-	public EmptyResult(HttpServletResponse response) {
-		this.response = response;
-	}
-
-	public void doNothing() {
-		try {
-			response.getWriter().write("");
-		} catch (IOException e) {
-			throw new VRaptorException(e);
-		}
-	}
 }

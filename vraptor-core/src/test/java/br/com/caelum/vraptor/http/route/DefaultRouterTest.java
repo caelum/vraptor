@@ -297,4 +297,18 @@ public class DefaultRouterTest {
 		mockery.assertIsSatisfied();
 	}
 
+	@Test
+	public void canAccessGenericTypeAndMethodRoute() throws NoSuchMethodException {
+		this.router = new DefaultRouter(new NoRoutesConfiguration(), new PathAnnotationRoutesCreator(), provider,
+				creator);
+		router.add(new Rules() {{
+			routeFor("--(*)--(*)").is(type("br.com.caelum.vraptor.http.route.DefaultRouterTest{1}"), method("{2}"));
+		}});
+		ResourceMethod resourceMethod = router.parse("--MyResource--notAnnotated", HttpMethod.GET, request);
+		assertThat(resourceMethod.getMethod(), is(equalTo(MyResource.class.getDeclaredMethod("notAnnotated"))));
+		// String url = router.urlFor(MyResource.class, method, new Object[] {});
+		//assertThat(router.parse(url, HttpMethod.POST, null).getMethod(), is(equalTo(method)));
+		mockery.assertIsSatisfied();
+	}
+
 }

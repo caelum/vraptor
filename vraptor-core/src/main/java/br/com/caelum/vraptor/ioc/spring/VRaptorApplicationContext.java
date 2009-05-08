@@ -33,9 +33,9 @@ import br.com.caelum.vraptor.core.DefaultResult;
 import br.com.caelum.vraptor.core.JstlLocalization;
 import br.com.caelum.vraptor.core.URLParameterExtractorInterceptor;
 import br.com.caelum.vraptor.extra.ForwardToDefaultViewInterceptor;
+import br.com.caelum.vraptor.http.DefaultResourceTranslator;
 import br.com.caelum.vraptor.http.OgnlParametersProvider;
 import br.com.caelum.vraptor.http.ParanamerNameProvider;
-import br.com.caelum.vraptor.http.DefaultResourceTranslator;
 import br.com.caelum.vraptor.http.asm.AsmBasedTypeCreator;
 import br.com.caelum.vraptor.http.ognl.EmptyElementsRemoval;
 import br.com.caelum.vraptor.http.route.DefaultRouter;
@@ -52,6 +52,7 @@ import br.com.caelum.vraptor.validator.DefaultValidator;
 import br.com.caelum.vraptor.view.DefaultLogicResult;
 import br.com.caelum.vraptor.view.DefaultPageResult;
 import br.com.caelum.vraptor.view.DefaultPathResolver;
+import br.com.caelum.vraptor.view.EmptyResult;
 
 /**
  * @author Fabio Kung
@@ -125,6 +126,7 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
         registerOn(beanFactory, HttpServletResponseProvider.class, true);
         registerOn(beanFactory, HttpSessionProvider.class, true);
         registerOn(beanFactory, JstlLocalization.class);
+        registerOn(beanFactory, EmptyResult.class);
 
         beanFactory.registerSingleton(SpringBasedContainer.class.getName(), container);
     }

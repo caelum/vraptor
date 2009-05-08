@@ -50,5 +50,13 @@ public class Rules implements ListOfRules {
 	public List<Rule> getRules() {
 		return this.rules;
 	}
+	
+	public PatternBasedType type(String pattern) {
+		return new PatternBasedType(pattern);
+	}
+
+	public PatternBasedType method(String pattern) {
+		return new PatternBasedType(pattern);
+	}
 
 }

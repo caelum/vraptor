@@ -31,6 +31,9 @@ package br.com.caelum.vraptor.ioc.pico;
 
 import java.io.File;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.resource.Resource;
 
@@ -41,6 +44,8 @@ import br.com.caelum.vraptor.resource.Resource;
  */
 @ApplicationScoped
 public class DefaultDirScanner implements DirScanner<Resource> {
+	
+	private static final Logger logger = LoggerFactory.getLogger(DefaultDirScanner.class);
 
     public void scan(File baseDirectory, Acceptor acceptor) {
         search(baseDirectory, "", acceptor);
@@ -65,8 +70,10 @@ public class DefaultDirScanner implements DirScanner<Resource> {
                 try {
                     Class<?> type = Class.forName(typeName, false, this.getClass().getClassLoader());
                     acceptor.analyze(type);
+                } catch (NoClassDefFoundError e) {
+                	logger.error("Unable to find some class while trying to load " + typeName, e);
                 } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
+                	logger.error("Unable to find some class while trying to load " + typeName, e);
                 }
             }
         }

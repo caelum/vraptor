@@ -33,7 +33,7 @@ import javax.servlet.ServletException;
 
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.http.route.Router;
-import br.com.caelum.vraptor.view.jsp.PageResult;
+import br.com.caelum.vraptor.view.PageResult;
 
 @Resource
 public class ResourceController {

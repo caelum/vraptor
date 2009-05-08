@@ -14,13 +14,6 @@
 - default being web/controllerName/resouceMethod.jsp for format=html
 - change Validator action when error occurs.
 
-help:
-- JstlLocalization test
-- ceci: integration test for vraptor-example project e vraptor-spring-example
-- MultipartInterceptor is only added if jar is found on classpath
-
-
-
 - extrair o register de componentes genericos (independente de pico ou spring)
 - @Component em outros componentes e fazer funcionar com pico sem gritar do log
 	- converter registering is causing many log messages
@@ -41,6 +34,13 @@ welcome file list:
 	map[id==2].nome="por favor"
 	(map[id==2] eh o lado direito!!!)
 - parameters are being set twice
+
+
+help:
+- JstlLocalization test
+- MultipartInterceptor is only added if jar is found on classpath
+- make StupidTranslator work with jsessionid
+- ceci: integration test for vraptor-example project e vraptor-spring-example
 
 
 
@@ -407,3 +407,5 @@ support HibernateValidator with i18n messages
 - supports "_method" parameter due to browser and xhtml nature
 - router extra support
 	routeFor("/(*)").is(type(""),method(""));
+- support to method return != string --> outject
+	

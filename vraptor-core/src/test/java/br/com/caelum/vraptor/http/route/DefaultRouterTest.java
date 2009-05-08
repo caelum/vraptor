@@ -306,8 +306,8 @@ public class DefaultRouterTest {
 		}});
 		ResourceMethod resourceMethod = router.parse("--MyResource--notAnnotated", HttpMethod.GET, request);
 		assertThat(resourceMethod.getMethod(), is(equalTo(MyResource.class.getDeclaredMethod("notAnnotated"))));
-		// String url = router.urlFor(MyResource.class, method, new Object[] {});
-		//assertThat(router.parse(url, HttpMethod.POST, null).getMethod(), is(equalTo(method)));
+		String url = router.urlFor(MyResource.class, resourceMethod.getMethod(), new Object[] {});
+		assertThat(router.parse(url, HttpMethod.POST, null).getMethod(), is(equalTo(resourceMethod.getMethod())));
 		mockery.assertIsSatisfied();
 	}
 

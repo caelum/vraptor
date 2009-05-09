@@ -29,16 +29,16 @@
  */
 package br.com.caelum.vraptor.converter;
 
-import java.text.MessageFormat;
-import java.util.ResourceBundle;
-
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
+import java.text.MessageFormat;
+import java.util.ResourceBundle;
+
 /**
- * VRaptor's primitive char converter. 
- * 
+ * VRaptor's primitive char converter.
+ *
  * @author Cecilia Fernandes
  */
 @Convert(char.class)
@@ -46,11 +46,11 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
 public class PrimitiveCharConverter implements Converter {
 
     public Object convert(String value, Class type, ResourceBundle bundle) {
-        if(value==null || value=="") {
-        	return '\u0000';
+        if (value == null || value.equals("")) {
+            return '\u0000';
         }
-        if(value.length()!=1) {
-			throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_character"), value));
+        if (value.length() != 1) {
+            throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_character"), value));
         }
         return value.charAt(0);
     }

@@ -36,6 +36,7 @@ import org.junit.Test;
 import org.vraptor.annotations.Component;
 
 import br.com.caelum.vraptor.Path;
+import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.test.VRaptorMockery;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.route.DefaultRouter;
@@ -49,11 +50,13 @@ public class ComponentRoutesCreatorTest {
     private VRaptorMockery mockery;
 	private DefaultRouter router;
 	private MutableRequest request;
+    private Proxifier proxifier;
 
     @Before
     public void setup() {
         this.mockery = new VRaptorMockery();
         this.request = mockery.mock(MutableRequest.class);
+        this.proxifier = mockery.mock(Proxifier.class);
         this.router = new DefaultRouter(new NoRoutesConfiguration(), new ComponentRoutesCreator(proxifier), null, null);
     }
 

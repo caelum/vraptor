@@ -41,16 +41,19 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.view.LogicResult;
 import br.com.caelum.vraptor.view.PageResult;
+import br.com.caelum.vraptor.proxy.Proxifier;
 
 public class ValidatorAcceptanceTest {
     private PageResult result;
     private Mockery mockery;
 	private LogicResult logic;
+    private Proxifier proxifier;
 
     @Before
     public void setupMocks() {
         mockery = new Mockery();
         result = mockery.mock(PageResult.class);
+        proxifier = mockery.mock(Proxifier.class);
     }
 
     class Student {

@@ -44,6 +44,7 @@ import org.jmock.Expectations;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.Path;
+import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.test.VRaptorMockery;
 import br.com.caelum.vraptor.http.ListOfRules;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
@@ -62,14 +63,16 @@ public class DefaultRouterTest {
 	private VRaptorRequest request;
 	private ParameterNameProvider provider;
 	private TypeCreator creator;
+    private Proxifier proxifier;
 
-	@org.junit.Before
+    @org.junit.Before
 	public void setup() {
 		this.mockery = new VRaptorMockery();
 		this.request = new VRaptorRequest(mockery.mock(HttpServletRequest.class));
 		this.provider = mockery.mock(ParameterNameProvider.class);
 		this.creator = mockery.mock(TypeCreator.class);
-		this.router = new DefaultRouter(new NoRoutesConfiguration(), new NoRoutesCreator(), provider, creator);
+        this.proxifier = mockery.mock(Proxifier.class);
+        this.router = new DefaultRouter(new NoRoutesConfiguration(), new NoRoutesCreator(), provider, creator);
 	}
 
 	class Dog {

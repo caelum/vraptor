@@ -1,7 +1,7 @@
 /***
- * 
+ *
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  * 1. Redistributions of source code must retain the above copyright notice,
@@ -12,7 +12,7 @@
  * copyright holders nor the names of its contributors may be used to endorse or
  * promote products derived from this software without specific prior written
  * permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -27,20 +27,19 @@
  */
 package br.com.caelum.vraptor.view;
 
-import java.io.IOException;
+import br.com.caelum.vraptor.http.route.Router;
+import br.com.caelum.vraptor.proxy.Proxifier;
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.junit.Before;
+import org.junit.Test;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.junit.Before;
-import org.junit.Test;
-
-import br.com.caelum.vraptor.http.route.Router;
+import java.io.IOException;
 
 public class DefaultLogicResultTest {
 
@@ -50,6 +49,7 @@ public class DefaultLogicResultTest {
     private HttpServletResponse response;
     private ServletContext context;
     private HttpServletRequest request;
+    private Proxifier proxifier;
 
     public static class MyComponent {
         public void base() {
@@ -63,6 +63,7 @@ public class DefaultLogicResultTest {
         this.response = mockery.mock(HttpServletResponse.class);
         this.request = mockery.mock(HttpServletRequest.class);
         this.context = mockery.mock(ServletContext.class);
+        this.proxifier = mockery.mock(Proxifier.class);
         this.logicResult = new DefaultLogicResult(proxifier, router, context, request, response);
     }
 
@@ -82,13 +83,14 @@ public class DefaultLogicResultTest {
         logicResult.redirectServerTo(MyComponent.class).base();
         mockery.assertIsSatisfied();
     }
-    
+
     @Test
     public void clientRedirectingWillRedirectToTranslatedUrl() throws NoSuchMethodException, IOException {
         final String url = "custom_url";
         mockery.checking(new Expectations() {
             {
-                one(context).getContextPath(); will(returnValue("/context"));
+                one(context).getContextPath();
+                will(returnValue("/context"));
                 one(router).urlFor(MyComponent.class, MyComponent.class.getDeclaredMethod("base"));
                 will(returnValue(url));
                 one(response).sendRedirect("/context" + url);
@@ -97,5 +99,5 @@ public class DefaultLogicResultTest {
         logicResult.redirectClientTo(MyComponent.class).base();
         mockery.assertIsSatisfied();
     }
-    
+
 }

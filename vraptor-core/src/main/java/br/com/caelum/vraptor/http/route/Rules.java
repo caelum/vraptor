@@ -42,7 +42,7 @@ public class Rules implements ListOfRules {
 	private final List<Rule> rules = new ArrayList<Rule>();
 
 	public UriBasedRoute routeFor(String uri) {
-		UriBasedRoute rule = new UriBasedRoute(uri);
+		UriBasedRoute rule = new UriBasedRoute(null, uri);
 		this.rules.add(rule);
 		return rule;
 	}

@@ -35,6 +35,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.Resource;
+import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.test.VRaptorMockery;
 import br.com.caelum.vraptor.view.LogicResult;
 import br.com.caelum.vraptor.view.PageResult;
@@ -46,8 +47,9 @@ public class DefaultValidatorTest {
 	private DefaultValidator validator;
 	private MyLogicResult logicResult;
 	private MyComponent instance;
+    private Proxifier proxifier;
 
-	class MyLogicResult implements LogicResult{
+    class MyLogicResult implements LogicResult{
 
 		private Class<?> to;
 
@@ -67,6 +69,7 @@ public class DefaultValidatorTest {
 		this.result = mockery.mock(PageResult.class);
 		this.logicResult = new MyLogicResult();
 		this.instance = new MyComponent();
+        this.proxifier = mockery.mock(Proxifier.class);
 		this.validator = new DefaultValidator(proxifier, result, logicResult);
 	}
 

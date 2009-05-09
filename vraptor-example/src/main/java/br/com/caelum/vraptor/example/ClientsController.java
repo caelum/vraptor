@@ -41,7 +41,7 @@ import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
-import br.com.caelum.vraptor.example.dao.Database;
+import br.com.caelum.vraptor.example.dao.Repository;
 import br.com.caelum.vraptor.validator.Hibernate;
 import br.com.caelum.vraptor.validator.Validations;
 import br.com.caelum.vraptor.view.Results;
@@ -51,24 +51,24 @@ public class ClientsController {
 
 	private final Result result;
 
-	private final Database database;
+	private final Repository repository;
 
 	private final Validator validator;
 
-	public ClientsController() {
+    public ClientsController() {
 		this(null, null, null);
 	}
 
-	public ClientsController(Result result, Database database, Validator validator) {
+	public ClientsController(Result result, Repository repository, Validator validator) {
 		this.result = result;
-		this.database = database;
+		this.repository = repository;
 		this.validator = validator;
 	}
 
 	@Path("/clients")
 	@Get
 	public void list() {
-		result.include("clients", database.all());
+		result.include("clients", repository.all());
 	}
 
 	@Path("/clients")
@@ -87,20 +87,20 @@ public class ClientsController {
 				and(Hibernate.validate(client));
 			}
 		});
-		database.add(client);
+		repository.add(client);
 	}
 
 	@Path("/clients/{client.id}")
 	@Delete
 	public void delete(Client client) {
-		database.remove(client);
+		repository.remove(client);
 		result.use(Results.logic()).redirectClientTo(ClientsController.class).list();
 	}
 
 	@Path("/clients/{client.id}")
 	@Get
 	public void view(Client client) {
-		result.include("client", database.find(client.getId()));
+		result.include("client", repository.find(client.getId()));
 	}
 
 	public void sendEmail() {
@@ -108,7 +108,7 @@ public class ClientsController {
 	}
 
 	public void random() {
-		ArrayList<Client> all = new ArrayList<Client>(database.all());
+		ArrayList<Client> all = new ArrayList<Client>(repository.all());
 		Client client = all.get((int) (Math.random() * all.size()));
 		result.use(Results.logic()).redirectClientTo(ClientsController.class).view(client);
 	}

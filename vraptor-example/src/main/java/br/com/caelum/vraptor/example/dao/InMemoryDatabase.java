@@ -46,7 +46,7 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
  * @author guilherme silveira
  */
 @ApplicationScoped
-public class InMemoryDatabase implements Database {
+public class InMemoryDatabase implements Repository {
 
 	private final Map<Long, Client> clients = new HashMap<Long, Client>();
 	

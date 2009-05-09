@@ -36,7 +36,7 @@ import br.com.caelum.vraptor.example.Client;
  * @author guilherme silveira
  *
  */
-public interface Database {
+public interface Repository {
 
     Collection<Client> all();
 

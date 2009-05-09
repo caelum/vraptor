@@ -37,28 +37,35 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
+/**
+ * A registry filled with interceptors to intercept requests.<br/>
+ * Interceptors are queried wether they want to intercept a request through
+ * their accepts method.
+ * 
+ * @author guilherme silveira
+ */
 @ApplicationScoped
-public class DefaultInterceptorRegistry implements InterceptorRegistry{
-    
-    private final List<Class<? extends Interceptor>> interceptors = new ArrayList<Class<? extends Interceptor>>();
-    
-    public Interceptor[] interceptorsFor(ResourceMethod method, Container container) {
-        List<Interceptor> list = new ArrayList<Interceptor>();
-        for (Class<? extends Interceptor> type : interceptors) {
-            Interceptor instance = container.instanceFor(type);
-            if(instance.accepts(method)) {
-                list.add(instance);
-            }
-        }
-        return list.toArray(new Interceptor[list.size()]);
-    }
+public class DefaultInterceptorRegistry implements InterceptorRegistry {
 
-    public void register(List<Class<? extends Interceptor>> interceptors) {
-        this.interceptors.addAll(interceptors);
-    }
+	private final List<Class<? extends Interceptor>> interceptors = new ArrayList<Class<? extends Interceptor>>();
 
-    public List<Class<? extends Interceptor>> all() {
-        return interceptors;
-    }
+	public Interceptor[] interceptorsFor(ResourceMethod method, Container container) {
+		List<Interceptor> list = new ArrayList<Interceptor>();
+		for (Class<? extends Interceptor> type : interceptors) {
+			Interceptor instance = container.instanceFor(type);
+			if (instance.accepts(method)) {
+				list.add(instance);
+			}
+		}
+		return list.toArray(new Interceptor[list.size()]);
+	}
+
+	public void register(List<Class<? extends Interceptor>> interceptors) {
+		this.interceptors.addAll(interceptors);
+	}
+
+	public List<Class<? extends Interceptor>> all() {
+		return interceptors;
+	}
 
 }

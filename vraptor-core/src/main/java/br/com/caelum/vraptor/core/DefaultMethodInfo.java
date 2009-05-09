@@ -1,5 +1,6 @@
 package br.com.caelum.vraptor.core;
 
+import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**
@@ -8,6 +9,7 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  * @author Guilherme Silveira
  * @author Fabio Kung
  */
+@RequestScoped
 public class DefaultMethodInfo implements MethodInfo {
 	private ResourceMethod resourceMethod;
 	private Object[] parameters;

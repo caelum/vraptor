@@ -14,7 +14,6 @@
 - default being web/controllerName/resouceMethod.jsp for format=html
 - change Validator action when error occurs.
 
-- extrair o register de componentes genericos (independente de pico ou spring)
 - @Component em outros componentes e fazer funcionar com pico sem gritar do log
 	- converter registering is causing many log messages
 	- meu problema eh queo webinfocontextblablabla pode ser customizado, ver se facilita se nao customiza-lo
@@ -152,6 +151,7 @@ right before ANY release
 	- check all TODOS and do something about them
 
 ONLY AFTER RELEASE
+- All common components should be located at BaseComponents, not only the ones pico can register so easily
 - MultipartInterceptor.accepts() is never called, so it throws an exception everytime a request which isn't an multipart one is made
 UserAgentInterceptor que permite usar isso: documentacao
 SessionFormatInterceptor que seta na session: documentacao

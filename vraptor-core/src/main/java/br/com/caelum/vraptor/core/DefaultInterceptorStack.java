@@ -35,8 +35,15 @@ import java.util.List;
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Interceptor;
 import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
+/**
+ * Default implmentation of a interceptor stack.
+ * @author guilherme silveira
+ *
+ */
+@RequestScoped
 public class DefaultInterceptorStack implements InterceptorStack {
 
     private final List<InterceptorHandler> interceptors = new ArrayList<InterceptorHandler>();

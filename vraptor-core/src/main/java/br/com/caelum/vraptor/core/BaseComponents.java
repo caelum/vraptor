@@ -25,33 +25,37 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package br.com.caelum.vraptor.ioc.spring;
+package br.com.caelum.vraptor.core;
 
-import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.beans.factory.FactoryBean;
-
-import br.com.caelum.vraptor.ioc.ApplicationScoped;
+import br.com.caelum.vraptor.http.DefaultResourceTranslator;
+import br.com.caelum.vraptor.http.OgnlParametersProvider;
+import br.com.caelum.vraptor.http.ParanamerNameProvider;
+import br.com.caelum.vraptor.http.route.DefaultRouter;
+import br.com.caelum.vraptor.http.route.NoRoutesConfiguration;
+import br.com.caelum.vraptor.http.route.PathAnnotationRoutesCreator;
+import br.com.caelum.vraptor.interceptor.DefaultInterceptorRegistry;
+import br.com.caelum.vraptor.resource.DefaultResourceNotFoundHandler;
+import br.com.caelum.vraptor.validator.DefaultValidator;
+import br.com.caelum.vraptor.view.DefaultPathResolver;
 
 /**
- * Provides the current javax.servlet.http.HttpServletResponse object, provided that Spring has registered it for the
- * current Thread.
- *
- * @author Fabio Kung
- * @see org.springframework.web.context.request.ServletWebRequest
+ * List of base components to vraptor.<br/>
+ * Those components should be available with any chosen ioc implementation.
+ * 
+ * @author guilherme silveira
  */
-@ApplicationScoped
-class HttpServletResponseProvider implements FactoryBean {
+public class BaseComponents {
 
-    public Object getObject() throws Exception {
-        return VRaptorRequestHolder.currentRequest().getResponse();
-    }
+	public static Class<?>[] getApplicationScoped() {
+		return new Class[] { DefaultResourceTranslator.class, DefaultRouter.class,
+				DefaultResourceNotFoundHandler.class, DefaultInterceptorRegistry.class, ParanamerNameProvider.class,
+				DefaultConverters.class, NoRoutesConfiguration.class, PathAnnotationRoutesCreator.class };
+	}
 
-    public Class getObjectType() {
-        return HttpServletResponse.class;
-    }
+	public static Class<?>[] getRequestScoped() {
+		return new Class[] { DefaultPathResolver.class, DefaultMethodInfo.class, DefaultInterceptorStack.class,
+				DefaultRequestExecution.class, DefaultResult.class, OgnlParametersProvider.class,
+				DefaultMethodInfo.class, DefaultValidator.class, JstlLocalization.class};
+	}
 
-    public boolean isSingleton() {
-        return false;
-    }
 }

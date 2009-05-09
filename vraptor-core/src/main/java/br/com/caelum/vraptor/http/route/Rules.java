@@ -1,7 +1,7 @@
 /***
- * 
+ *
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  * 1. Redistributions of source code must retain the above copyright notice,
@@ -12,7 +12,7 @@
  * copyright holders nor the names of its contributors may be used to endorse or
  * promote products derived from this software without specific prior written
  * permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -27,36 +27,48 @@
  */
 package br.com.caelum.vraptor.http.route;
 
+import br.com.caelum.vraptor.http.ListOfRules;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.caelum.vraptor.http.ListOfRules;
-
 /**
  * Rules for resource localization.
- * 
+ *
  * @author Guilherme Silveira
  */
-public class Rules implements ListOfRules {
+public abstract class Rules {
+    private final Router router;
+    private final List<Rule> rules = new ArrayList<Rule>();
 
-	private final List<Rule> rules = new ArrayList<Rule>();
+    public Rules(Router router) {
+        this.router = router;
+        routes();
+        router.add(new ListOfRules() {
+            public List<Rule> getRules() {
+                return rules;
+            }
+        });
+    }
 
-	public UriBasedRoute routeFor(String uri) {
-		UriBasedRoute rule = new UriBasedRoute(null, uri);
-		this.rules.add(rule);
-		return rule;
-	}
+    public abstract void routes();
 
-	public List<Rule> getRules() {
-		return this.rules;
-	}
-	
-	public PatternBasedType type(String pattern) {
-		return new PatternBasedType(pattern);
-	}
+    protected final UriBasedRoute routeFor(String uri) {
+        UriBasedRoute rule = new UriBasedRoute(router.getProxifier(), uri);
+        this.rules.add(rule);
+        return rule;
+    }
 
-	public PatternBasedType method(String pattern) {
-		return new PatternBasedType(pattern);
-	}
+    public final List<Rule> getRules() {
+        return this.rules;
+    }
+
+    protected final PatternBasedType type(String pattern) {
+        return new PatternBasedType(pattern);
+    }
+
+    protected final PatternBasedType method(String pattern) {
+        return new PatternBasedType(pattern);
+    }
 
 }

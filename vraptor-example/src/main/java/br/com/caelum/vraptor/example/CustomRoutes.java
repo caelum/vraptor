@@ -1,7 +1,7 @@
 /***
- * 
+ *
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  * 1. Redistributions of source code must retain the above copyright notice,
@@ -12,7 +12,7 @@
  * copyright holders nor the names of its contributors may be used to endorse or
  * promote products derived from this software without specific prior written
  * permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -34,18 +34,23 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
 /**
  * Custom rules only to show how to create your own routes.
- * @author guilherme silveira
  *
+ * @author guilherme silveira
  */
 @ApplicationScoped
-public class CustomRoutes implements RoutesConfiguration{
+public class CustomRoutes implements RoutesConfiguration {
 
-	public void config(Router router) {
-		router.add(new Rules() {{
-			routeFor("/").is(ClientsController.class).list();
-			routeFor("/clients/random").is(ClientsController.class).random();
-			routeFor("/(*)").is(type(""), method(""));
-		}});
-	}
+    public void config(Router router) {
+        new Rules(router) {
+            public void routes() {
+                routeFor("/").is(ClientsController.class).list();
+                routeFor("/clients/random").is(ClientsController.class).random();
+                routeFor("/(*)").is(type(""), method(""));
+            }
+        };
+
+        // ListOfRoutes routes = ...;
+        // router.add(routes);
+    }
 
 }

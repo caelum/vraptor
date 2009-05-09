@@ -57,7 +57,7 @@ public class ComponentRoutesCreatorTest {
         this.mockery = new VRaptorMockery();
         this.request = mockery.mock(MutableRequest.class);
         this.proxifier = mockery.mock(Proxifier.class);
-        this.router = new DefaultRouter(new NoRoutesConfiguration(), new ComponentRoutesCreator(proxifier), null, null);
+        this.router = new DefaultRouter(new NoRoutesConfiguration(), new ComponentRoutesCreator(proxifier), null, proxifier, null);
     }
 
     class NonVRaptorComponent {

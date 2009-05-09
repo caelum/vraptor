@@ -1,7 +1,7 @@
 /***
- * 
+ *
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  * 1. Redistributions of source code must retain the above copyright notice,
@@ -12,7 +12,7 @@
  * copyright holders nor the names of its contributors may be used to endorse or
  * promote products derived from this software without specific prior written
  * permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -27,291 +27,286 @@
  */
 package br.com.caelum.vraptor.http.route;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
-
-import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.hamcrest.Matchers;
-import org.hamcrest.TypeSafeMatcher;
-import org.jmock.Expectations;
-import org.junit.Test;
-
 import br.com.caelum.vraptor.Path;
-import br.com.caelum.vraptor.proxy.Proxifier;
-import br.com.caelum.vraptor.test.VRaptorMockery;
+import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.http.ListOfRules;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.TypeCreator;
 import br.com.caelum.vraptor.http.VRaptorRequest;
-import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
+import static br.com.caelum.vraptor.interceptor.VRaptorMatchers.resourceMethod;
+import br.com.caelum.vraptor.proxy.DefaultProxifier;
+import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.NoRoutesCreator;
 import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.resource.VRaptorInfo;
+import br.com.caelum.vraptor.test.VRaptorMockery;
+import static org.hamcrest.MatcherAssert.assertThat;
+import org.hamcrest.Matchers;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
+import org.jmock.Expectations;
+import org.junit.Before;
+import org.junit.Test;
+
+import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.List;
 
 public class DefaultRouterTest {
 
-	private Router router;
-	private VRaptorMockery mockery;
-	private VRaptorRequest request;
-	private ParameterNameProvider provider;
-	private TypeCreator creator;
+    private Router router;
+    private VRaptorMockery mockery;
+    private VRaptorRequest request;
+    private ParameterNameProvider provider;
+    private TypeCreator creator;
     private Proxifier proxifier;
 
-    @org.junit.Before
-	public void setup() {
-		this.mockery = new VRaptorMockery();
-		this.request = new VRaptorRequest(mockery.mock(HttpServletRequest.class));
-		this.provider = mockery.mock(ParameterNameProvider.class);
-		this.creator = mockery.mock(TypeCreator.class);
-        this.proxifier = mockery.mock(Proxifier.class);
-        this.router = new DefaultRouter(new NoRoutesConfiguration(), new NoRoutesCreator(), provider, creator);
-	}
+    @Before
+    public void setup() {
+        this.mockery = new VRaptorMockery();
+        this.request = new VRaptorRequest(mockery.mock(HttpServletRequest.class));
+        this.provider = mockery.mock(ParameterNameProvider.class);
+        this.creator = mockery.mock(TypeCreator.class);
+        this.router = new DefaultRouter(new NoRoutesConfiguration(), new NoRoutesCreator(), provider, new DefaultProxifier(), creator);
+    }
 
-	class Dog {
-		private Long id;
+    class Dog {
+        private Long id;
 
-		public void setId(Long id) {
-			this.id = id;
-		}
+        public void setId(Long id) {
+            this.id = id;
+        }
 
-		public Long getId() {
-			return id;
-		}
-	}
+        public Long getId() {
+            return id;
+        }
+    }
 
-	@br.com.caelum.vraptor.Resource
-	public static class MyControl {
-		public void add(Dog object) {
-		}
+    @Resource
+    public static class MyControl {
+        public void add(Dog object) {
+        }
 
-		public void unknownMethod() {
-		}
+        public void unknownMethod() {
+        }
 
-		public void list() {
-		}
+        public void list() {
+        }
 
-		public void show(Dog dog) {
-		}
-	}
+        public void show(Dog dog) {
+        }
+    }
 
-	@Test
-	public void acceptsASingleMappingRule() throws SecurityException, NoSuchMethodException {
-		router.add(new Rules() {
-			{
-				routeFor("/clients/add").is(MyControl.class).add(null);
-			}
-		});
-		assertThat(router.parse("/clients/add", HttpMethod.POST, request), is(VRaptorMatchers.resourceMethod(method(
-				"add", Dog.class))));
-		mockery.assertIsSatisfied();
-	}
+    @Test
+    public void acceptsASingleMappingRule() throws SecurityException, NoSuchMethodException {
+        new Rules(router) {
+            public void routes() {
+                routeFor("/clients/add").is(MyControl.class).add(null);
+            }
+        };
+        assertThat(router.parse("/clients/add", HttpMethod.POST, request), is(resourceMethod(method("add", Dog.class))));
+        mockery.assertIsSatisfied();
+    }
 
-	@SuppressWarnings("unchecked")
-	private Method method(String name, Class... types) throws SecurityException, NoSuchMethodException {
-		return MyControl.class.getDeclaredMethod(name, types);
-	}
+    @SuppressWarnings("unchecked")
+    private Method method(String name, Class... types) throws SecurityException, NoSuchMethodException {
+        return MyControl.class.getDeclaredMethod(name, types);
+    }
 
-	@Test
-	public void usesTheFirstRegisteredRuleMatchingThePattern() throws SecurityException, NoSuchMethodException {
-		router.add(new Rules() {
-			{
-				routeFor("/clients/add").is(MyControl.class).add(null);
-				routeFor("/clients/add").is(MyControl.class).list();
-			}
-		});
-		assertThat(router.parse("/clients/add", HttpMethod.POST, request), is(VRaptorMatchers.resourceMethod(method(
-				"add", Dog.class))));
-		mockery.assertIsSatisfied();
-	}
+    @Test
+    public void usesTheFirstRegisteredRuleMatchingThePattern() throws SecurityException, NoSuchMethodException {
+        new Rules(router) {
+            public void routes() {
+                routeFor("/clients/add").is(MyControl.class).add(null);
+                routeFor("/clients/add").is(MyControl.class).list();
+            }
+        };
+        assertThat(router.parse("/clients/add", HttpMethod.POST, request), is(resourceMethod(method(
+                "add", Dog.class))));
+        mockery.assertIsSatisfied();
+    }
 
-	@Test
-	public void acceptsAnHttpMethodLimitedMappingRule() throws NoSuchMethodException {
-		router.add(new Rules() {
-			{
-				routeFor("/clients/add").with(HttpMethod.POST).is(MyControl.class).add(null);
-			}
-		});
-		assertThat(router.parse("/clients/add", HttpMethod.POST, request), is(VRaptorMatchers.resourceMethod(method(
-				"add", Dog.class))));
-		mockery.assertIsSatisfied();
-	}
+    @Test
+    public void acceptsAnHttpMethodLimitedMappingRule() throws NoSuchMethodException {
+        new Rules(router) {
+            public void routes() {
+                routeFor("/clients/add").with(HttpMethod.POST).is(MyControl.class).add(null);
+            }
+        };
+        assertThat(router.parse("/clients/add", HttpMethod.POST, request), is(resourceMethod(method(
+                "add", Dog.class))));
+        mockery.assertIsSatisfied();
+    }
 
-	@Test
-	public void acceptsAnHttpMethodLimitedMappingRuleWithBothMethods() throws NoSuchMethodException {
-		router.add(new Rules() {
-			{
-				routeFor("/clients/add").with(HttpMethod.POST).with(HttpMethod.GET).is(MyControl.class).add(null);
-			}
-		});
-		assertThat(router.parse("/clients/add", HttpMethod.POST, request), is(VRaptorMatchers.resourceMethod(method(
-				"add", Dog.class))));
-		assertThat(router.parse("/clients/add", HttpMethod.GET, request), is(VRaptorMatchers.resourceMethod(method(
-				"add", Dog.class))));
-		mockery.assertIsSatisfied();
-	}
+    @Test
+    public void acceptsAnHttpMethodLimitedMappingRuleWithBothMethods() throws NoSuchMethodException {
+        new Rules(router) {
+            public void routes() {
+                routeFor("/clients/add").with(HttpMethod.POST).with(HttpMethod.GET).is(MyControl.class).add(null);
+            }
+        };
+        assertThat(router.parse("/clients/add", HttpMethod.POST, request), is(resourceMethod(method(
+                "add", Dog.class))));
+        assertThat(router.parse("/clients/add", HttpMethod.GET, request), is(resourceMethod(method(
+                "add", Dog.class))));
+        mockery.assertIsSatisfied();
+    }
 
-	@Test
-	public void ignoresAnHttpMethodLimitedMappingRule() throws NoSuchMethodException {
-		router.add(new Rules() {
-			{
-				routeFor("/clients/add").with(HttpMethod.GET).is(MyControl.class).add(null);
-			}
-		});
-		assertThat(router.parse("/clients/add", HttpMethod.POST, request), is(nullValue()));
-		mockery.assertIsSatisfied();
-	}
+    @Test
+    public void ignoresAnHttpMethodLimitedMappingRule() throws NoSuchMethodException {
+        new Rules(router) {
+            public void routes() {
+                routeFor("/clients/add").with(HttpMethod.GET).is(MyControl.class).add(null);
+            }
+        };
+        assertThat(router.parse("/clients/add", HttpMethod.POST, request), is(nullValue()));
+        mockery.assertIsSatisfied();
+    }
 
-	@Test
-	public void usesTheFirstRegisteredRuleIfDifferentCreatorsWereUsed() throws SecurityException, NoSuchMethodException {
-		final ResourceMethod resourceMethod = mockery.mock(ResourceMethod.class);
-		final Rule customRule = new RuleForMethod(resourceMethod);
-		router.add(new ListOfRules() {
-			public List<Rule> getRules() {
-				return Arrays.asList(customRule);
-			}
-		});
-		router.add(new Rules() {
-			{
-				routeFor("/clients").is(MyControl.class).list(); // if not
-				// defined, any http method is allowed
-			}
-		});
-		assertThat(router.parse("/clients", HttpMethod.POST, request), is(equalTo(resourceMethod)));
-		mockery.assertIsSatisfied();
-	}
+    @Test
+    public void usesTheFirstRegisteredRuleIfDifferentCreatorsWereUsed() throws SecurityException, NoSuchMethodException {
+        final ResourceMethod resourceMethod = mockery.mock(ResourceMethod.class);
+        final Rule customRule = new RuleForMethod(resourceMethod);
+        router.add(new ListOfRules() {
+            public List<Rule> getRules() {
+                return Arrays.asList(customRule);
+            }
+        });
+        new Rules(router) {
+            public void routes() {
+                routeFor("/clients").is(MyControl.class).list();
+                // if not defined, any http method is allowed
+            }
+        };
+        assertThat(router.parse("/clients", HttpMethod.POST, request), is(equalTo(resourceMethod)));
+        mockery.assertIsSatisfied();
+    }
 
-	@Test
-	public void registerExtraParametersFromAcessedUrl() throws SecurityException, NoSuchMethodException {
-		router.add(new Rules() {
-			{
-				routeFor("/clients/{dog.id}").is(MyControl.class).show(null);
-			}
-		});
-		ResourceMethod method = router.parse("/clients/45", HttpMethod.POST, request);
-		assertThat(request.getParameter("dog.id"), is(equalTo("45")));
-		assertThat(method, is(VRaptorMatchers.resourceMethod(method("show", Dog.class))));
-		mockery.assertIsSatisfied();
-	}
+    @Test
+    public void registerExtraParametersFromAcessedUrl() throws SecurityException, NoSuchMethodException {
+        new Rules(router) {
+            public void routes() {
+                routeFor("/clients/{dog.id}").is(MyControl.class).show(null);
+            }
+        };
+        ResourceMethod method = router.parse("/clients/45", HttpMethod.POST, request);
+        assertThat(request.getParameter("dog.id"), is(equalTo("45")));
+        assertThat(method, is(resourceMethod(method("show", Dog.class))));
+        mockery.assertIsSatisfied();
+    }
 
-	@Test
-	public void worksWithBasicRegexEvaluation() throws SecurityException, NoSuchMethodException {
-		router.add(new Rules() {
-			{
-				routeFor("/clients*").with(HttpMethod.POST).is(MyControl.class).unknownMethod();
-			}
-		});
-		assertThat(router.parse("/clientsWhatever", HttpMethod.POST, request), is(VRaptorMatchers
-				.resourceMethod(method("unknownMethod"))));
-		mockery.assertIsSatisfied();
-	}
+    @Test
+    public void worksWithBasicRegexEvaluation() throws SecurityException, NoSuchMethodException {
+        new Rules(router) {
+            public void routes() {
+                routeFor("/clients*").with(HttpMethod.POST).is(MyControl.class).unknownMethod();
+            }
+        };
+        assertThat(router.parse("/clientsWhatever", HttpMethod.POST, request), is(
+                resourceMethod(method("unknownMethod"))));
+        mockery.assertIsSatisfied();
+    }
 
-	@Test
-	public void testReturnsNullIfResourceNotFound() {
-		ResourceMethod method = router.parse("unknown_id", HttpMethod.POST, null);
-		assertThat(method, is(Matchers.nullValue()));
-		mockery.assertIsSatisfied();
-	}
+    @Test
+    public void testReturnsNullIfResourceNotFound() {
+        ResourceMethod method = router.parse("unknown_id", HttpMethod.POST, null);
+        assertThat(method, is(Matchers.nullValue()));
+        mockery.assertIsSatisfied();
+    }
 
-	@Test
-	public void shouldRegisterVRaptorInfoByDefault() throws SecurityException, NoSuchMethodException {
-		ResourceMethod methodFound = router.parse("/is_using_vraptor", HttpMethod.GET, null);
-		TypeSafeMatcher<ResourceMethod> expectedMethod = VRaptorMatchers.resourceMethod(VRaptorInfo.class
-				.getMethod("info"));
-		assertThat(methodFound, is(expectedMethod));
-		mockery.assertIsSatisfied();
-	}
+    @Resource
+    class MyResource {
+        public void notAnnotated() {
+        }
 
-	@br.com.caelum.vraptor.Resource
-	class MyResource {
-		public void notAnnotated() {
-		}
+        @Path("/myPath")
+        public void customizedPath() {
+        }
 
-		@Path("/myPath")
-		public void customizedPath() {
-		}
+        @Path("/*/customPath")
+        public void starPath() {
+        }
+    }
 
-		@Path("/*/customPath")
-		public void starPath() {
-		}
-	}
+    @Resource
+    class InheritanceExample extends MyResource {
+    }
 
-	@br.com.caelum.vraptor.Resource
-	class InheritanceExample extends MyResource {
-	}
+    @Test
+    public void usesAsteriskBothWays() throws NoSuchMethodException {
+        this.router = new DefaultRouter(new NoRoutesConfiguration(), new PathAnnotationRoutesCreator(proxifier), provider,
+                proxifier, creator);
+        router.register(mockery.resource(MyResource.class));
+        final ResourceMethod resourceMethod = mockery.methodFor(MyResource.class, "starPath");
+        final Method method = resourceMethod.getMethod();
+        mockery.checking(new Expectations() {
+            {
+                one(provider).parameterNamesFor(method);
+                will(returnValue(new String[]{}));
+                one(creator).typeFor(with(resourceMethod(method)));
+                will(returnValue(Object.class));
+            }
+        });
+        String url = router.urlFor(MyResource.class, method, new Object[]{});
+        assertThat(router.parse(url, HttpMethod.POST, null).getMethod(), is(equalTo(method)));
+        mockery.assertIsSatisfied();
+    }
 
-	@Test
-	public void usesAsteriskBothWays() throws NoSuchMethodException {
-		this.router = new DefaultRouter(new NoRoutesConfiguration(), new PathAnnotationRoutesCreator(proxifier), provider,
-				creator);
-		router.register(mockery.resource(MyResource.class));
-		final ResourceMethod resourceMethod = mockery.methodFor(MyResource.class, "starPath");
-		final Method method = resourceMethod.getMethod();
-		mockery.checking(new Expectations() {
-			{
-				one(provider).parameterNamesFor(method); will(returnValue(new String[] {}));
-				one(creator).typeFor(with(VRaptorMatchers.resourceMethod(method))); will(returnValue(Object.class));
-			}
-		});
-		String url = router.urlFor(MyResource.class, method, new Object[] {});
-		assertThat(router.parse(url, HttpMethod.POST, null).getMethod(), is(equalTo(method)));
-		mockery.assertIsSatisfied();
-	}
+    @Test
+    public void canTranslateAInheritedResourceBothWays() throws NoSuchMethodException {
+        this.router = new DefaultRouter(new NoRoutesConfiguration(), new PathAnnotationRoutesCreator(proxifier), provider,
+                proxifier, creator);
+        router.register(mockery.resource(MyResource.class));
+        router.register(mockery.resource(InheritanceExample.class));
+        final Method method = mockery.methodFor(MyResource.class, "notAnnotated").getMethod();
+        mockery.checking(new Expectations() {
+            {
+                one(provider).parameterNamesFor(method);
+                will(returnValue(new String[]{}));
+                one(creator).typeFor(with(resourceMethod(method)));
+                will(returnValue(Object.class));
+            }
+        });
+        String url = router.urlFor(InheritanceExample.class, method, new Object[]{});
+        assertThat(router.parse(url, HttpMethod.POST, null).getMethod(), is(equalTo(method)));
+        mockery.assertIsSatisfied();
+    }
 
-	@Test
-	public void canTranslateAInheritedResourceBothWays() throws NoSuchMethodException {
-		this.router = new DefaultRouter(new NoRoutesConfiguration(), new PathAnnotationRoutesCreator(proxifier), provider,
-				creator);
-		router.register(mockery.resource(MyResource.class));
-		router.register(mockery.resource(InheritanceExample.class));
-		final Method method = mockery.methodFor(MyResource.class, "notAnnotated").getMethod();
-		mockery.checking(new Expectations() {
-			{
-				one(provider).parameterNamesFor(method); will(returnValue(new String[] {}));
-				one(creator).typeFor(with(VRaptorMatchers.resourceMethod(method))); will(returnValue(Object.class));
-			}
-		});
-		String url = router.urlFor(InheritanceExample.class, method, new Object[] {});
-		assertThat(router.parse(url, HttpMethod.POST, null).getMethod(), is(equalTo(method)));
-		mockery.assertIsSatisfied();
-	}
+    @Test
+    public void canTranslateAnnotatedMethodBothWays() throws NoSuchMethodException {
+        this.router = new DefaultRouter(new NoRoutesConfiguration(), new PathAnnotationRoutesCreator(proxifier), provider,
+                proxifier, creator);
+        router.register(mockery.resource(MyResource.class));
+        final Method method = mockery.methodFor(MyResource.class, "customizedPath").getMethod();
+        mockery.checking(new Expectations() {
+            {
+                one(provider).parameterNamesFor(method);
+                will(returnValue(new String[]{}));
+                one(creator).typeFor(with(resourceMethod(method)));
+                will(returnValue(Object.class));
+            }
+        });
+        String url = router.urlFor(MyResource.class, method, new Object[]{});
+        assertThat(router.parse(url, HttpMethod.POST, null).getMethod(), is(equalTo(method)));
+        mockery.assertIsSatisfied();
+    }
 
-	@Test
-	public void canTranslateAnnotatedMethodBothWays() throws NoSuchMethodException {
-		this.router = new DefaultRouter(new NoRoutesConfiguration(), new PathAnnotationRoutesCreator(proxifier), provider,
-				creator);
-		router.register(mockery.resource(MyResource.class));
-		final Method method = mockery.methodFor(MyResource.class, "customizedPath").getMethod();
-		mockery.checking(new Expectations() {
-			{
-				one(provider).parameterNamesFor(method); will(returnValue(new String[] {}));
-				one(creator).typeFor(with(VRaptorMatchers.resourceMethod(method))); will(returnValue(Object.class));
-			}
-		});
-		String url = router.urlFor(MyResource.class, method, new Object[] {});
-		assertThat(router.parse(url, HttpMethod.POST, null).getMethod(), is(equalTo(method)));
-		mockery.assertIsSatisfied();
-	}
-
-	@Test
-	public void canAccessGenericTypeAndMethodRoute() throws NoSuchMethodException {
-		this.router = new DefaultRouter(new NoRoutesConfiguration(), new PathAnnotationRoutesCreator(proxifier), provider,
-				creator);
-		router.add(new Rules() {{
-			routeFor("--(*)--(*)").is(type("br.com.caelum.vraptor.http.route.DefaultRouterTest{1}"), method("{2}"));
-		}});
-		ResourceMethod resourceMethod = router.parse("--MyResource--notAnnotated", HttpMethod.GET, request);
-		assertThat(resourceMethod.getMethod(), is(equalTo(MyResource.class.getDeclaredMethod("notAnnotated"))));
-		String url = router.urlFor(MyResource.class, resourceMethod.getMethod(), new Object[] {});
-		assertThat(router.parse(url, HttpMethod.POST, null).getMethod(), is(equalTo(resourceMethod.getMethod())));
-		mockery.assertIsSatisfied();
-	}
+    @Test
+    public void canAccessGenericTypeAndMethodRoute() throws NoSuchMethodException {
+        this.router = new DefaultRouter(new NoRoutesConfiguration(), new PathAnnotationRoutesCreator(proxifier), provider,
+                proxifier, creator);
+        new Rules(router) {
+            public void routes() {
+                routeFor("--(*)--(*)").is(type("br.com.caelum.vraptor.http.route.DefaultRouterTest{1}"), method("{2}"));
+            }
+        };
+        ResourceMethod resourceMethod = router.parse("--MyResource--notAnnotated", HttpMethod.GET, request);
+        assertThat(resourceMethod.getMethod(), is(equalTo(MyResource.class.getDeclaredMethod("notAnnotated"))));
+        String url = router.urlFor(MyResource.class, resourceMethod.getMethod(), new Object[]{});
+        assertThat(router.parse(url, HttpMethod.POST, null).getMethod(), is(equalTo(resourceMethod.getMethod())));
+        mockery.assertIsSatisfied();
+    }
 
 }

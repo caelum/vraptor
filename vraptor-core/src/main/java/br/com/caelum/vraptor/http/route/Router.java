@@ -36,6 +36,7 @@ import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.proxy.Proxifier;
 
 /**
  * Handles different rules in order to translate urls into resource methods.
@@ -65,4 +66,5 @@ public interface Router {
 	 */
 	List<Rule> allRoutes();
 
+    Proxifier getProxifier();
 }

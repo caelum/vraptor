@@ -4,19 +4,19 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.jmock.Expectations;
-import org.junit.Before;
 import org.junit.Test;
 import org.vraptor.validator.ValidationErrors;
 
-import br.com.caelum.vraptor.core.VRaptorRequest;
+import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
 import br.com.caelum.vraptor.ioc.GenericContainerTest;
 import br.com.caelum.vraptor.ioc.WhatToDo;
 import br.com.caelum.vraptor.test.HttpSessionMock;
+import br.com.caelum.vraptor.vraptor2.outject.OutjectionInterceptor;
 
 public class ProviderTest extends GenericContainerTest {
     private int counter;
@@ -30,7 +30,7 @@ public class ProviderTest extends GenericContainerTest {
     public void canProvideVRaptor2SpecificRequestScopedComponents() {
         checkAvailabilityFor(false, ExecuteAndViewInterceptor.class, HibernateValidatorPluginInterceptor.class,
                 ValidatorInterceptor.class, ViewInterceptor.class, ComponentInfoProvider.class,
-                OutjectionInterceptor.class, RequestResult.class, AjaxInterceptor.class, ValidationErrors.class);
+                OutjectionInterceptor.class, AjaxInterceptor.class, ValidationErrors.class);
     }
 
     protected ContainerProvider getProvider() {
@@ -39,7 +39,7 @@ public class ProviderTest extends GenericContainerTest {
 
     protected <T> T executeInsideRequest(WhatToDo<T> execution) {
         final HttpSessionMock session = new HttpSessionMock(context, "session" + ++counter);
-        final HttpServletRequest request = mockery.mock(HttpServletRequest.class, "request" + ++counter);
+        final MutableRequest request = mockery.mock(MutableRequest.class, "request" + ++counter);
         mockery.checking(new Expectations() {
             {
                 allowing(request).getRequestURI(); will(returnValue("what.ever.request.uri"));
@@ -49,7 +49,7 @@ public class ProviderTest extends GenericContainerTest {
             }
         });
         HttpServletResponse response = mockery.mock(HttpServletResponse.class, "response" + counter);
-        VRaptorRequest webRequest = new VRaptorRequest(context, request, response);
+        RequestInfo webRequest = new RequestInfo(context, request, response);
         return execution.execute(webRequest, counter);
     }
 

@@ -42,10 +42,16 @@
            encoding="UTF-8" target="1.5" source="1.5">
       <compilerarg value="-Xlint:none"/>
     </javac>
+  	<copy todir="${tmp.classes.dir}">
+  		<fileset dir="${resources.dir}" includes="**/*" />
+  	</copy>
     <javac destdir="${tmp.test.classes.dir}" srcdir="${src.test.dir}" classpathref="test.classpath" debug="true"
            encoding="UTF-8" target="1.5" source="1.5">
       <compilerarg value="-Xlint:none"/>
     </javac>
+  	<copy todir="${tmp.test.classes.dir}">
+  		<fileset dir="${resources.test.dir}" includes="**/*" />
+  	</copy>
   </target>
 
   <target name="copy-resources" depends="compile" description="copy resourcesdo WEB-INF/classes">

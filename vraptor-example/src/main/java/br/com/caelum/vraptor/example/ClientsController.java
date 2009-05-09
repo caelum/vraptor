@@ -31,7 +31,13 @@ package br.com.caelum.vraptor.example;
 
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.notNullValue;
+
+import java.util.ArrayList;
+
+import br.com.caelum.vraptor.Delete;
+import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Path;
+import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
@@ -43,52 +49,68 @@ import br.com.caelum.vraptor.view.Results;
 @Resource
 public class ClientsController {
 
-    private final Result result;
+	private final Result result;
 
-    private final Database database;
+	private final Database database;
 
-    private final Validator validator;
-    
-    public ClientsController() {
-        this(null,null,null);
-    }
+	private final Validator validator;
 
-    public ClientsController(Result result, Database database, Validator validator) {
-        this.result = result;
-        this.database = database;
-        this.validator = validator;
-    }
+	public ClientsController() {
+		this(null, null, null);
+	}
 
-    @Path("/clients")
-    public void list() {
-        result.include("clients", database.all());
-    }
+	public ClientsController(Result result, Database database, Validator validator) {
+		this.result = result;
+		this.database = database;
+		this.validator = validator;
+	}
 
-    @Path("/clients/add")
-    public void add(final Client client) {
-        validator.checking(new Validations() {
-            {
-                // has the same result as:
-                // if(client!=null)
-                // but cuter?!
-                that(client).shouldBe(notNullValue()).otherwise(new Validations() {
-                    public void check() {
-                        that(client.getAge(), is(greaterThan(10)));
-                    }
-                });
-                and(Hibernate.validate(client));
-            }
-        });
-        database.add(client);
-        result.use(Results.logic()).redirectClientTo(ClientsController.class).list();
-    }
+	@Path("/clients")
+	@Get
+	public void list() {
+		result.include("clients", database.all());
+	}
 
-    public void sendEmail() {
-        result.use(EmptyResult.class);
-    }
+	@Path("/clients")
+	@Post
+	public void add(final Client client) {
+		validator.checking(new Validations() {
+			{
+				// has the same result as:
+				// if(client!=null)
+				// but cuter?!
+				that(client).shouldBe(notNullValue()).otherwise(new Validations() {
+					public void check() {
+						that(client.getAge(), is(greaterThan(10)));
+					}
+				});
+				and(Hibernate.validate(client));
+			}
+		});
+		database.add(client);
+	}
 
-    @Path("/clients/fake")
-    public void redirect() {
-        result.use(Results.logic()).redirectServerTo(ClientsController.class).list();
-    }
+	@Path("/clients/{client.id}")
+	@Delete
+	public void delete(Client client) {
+		database.remove(client);
+		result.use(Results.logic()).redirectClientTo(ClientsController.class).list();
+	}
+
+	@Path("/clients/{client.id}")
+	@Get
+	public void view(Client client) {
+		result.include("client", database.find(client.getId()));
+	}
+
+	public void sendEmail() {
+		result.use(EmptyResult.class);
+	}
+
+	public void random() {
+		ArrayList<Client> all = new ArrayList<Client>(database.all());
+		Client client = all.get((int) (Math.random() * all.size()));
+		result.use(Results.logic()).redirectClientTo(ClientsController.class).view(client);
+	}
+
 }

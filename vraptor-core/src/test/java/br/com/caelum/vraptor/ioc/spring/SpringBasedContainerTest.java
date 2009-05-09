@@ -1,6 +1,24 @@
 package br.com.caelum.vraptor.ioc.spring;
 
-import br.com.caelum.vraptor.core.VRaptorRequest;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.jmock.Mockery;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.http.UrlToResourceTranslator;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.spring.components.ConstructorInjection;
@@ -12,24 +30,6 @@ import br.com.caelum.vraptor.ioc.spring.components.RequestScopedContract;
 import br.com.caelum.vraptor.ioc.spring.components.SpecialImplementation;
 import br.com.caelum.vraptor.test.HttpServletRequestMock;
 import br.com.caelum.vraptor.test.HttpSessionMock;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import org.hamcrest.Matchers;
-import org.jmock.Mockery;
-import org.junit.After;
-import org.junit.Assert;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertThat;
-import org.junit.Before;
-import org.junit.Test;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-
-import javax.servlet.ServletContext;
-import javax.servlet.ServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author Fabio Kung
@@ -50,7 +50,7 @@ public class SpringBasedContainerTest {
         request = new HttpServletRequestMock(session);
         response = mockery.mock(HttpServletResponse.class);
 
-        VRaptorRequestHolder.setRequestForCurrentThread(new VRaptorRequest(servletContext, request, response));
+        VRaptorRequestHolder.setRequestForCurrentThread(new RequestInfo(servletContext, request, response));
         RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
         container = new SpringBasedContainer("br.com.caelum.vraptor.ioc.spring");
         container.start(servletContext);
@@ -92,7 +92,7 @@ public class SpringBasedContainerTest {
 
     @Test
     public void shouldProvideCurrentVRaptorRequest() {
-        VRaptorRequest vraptorRequest = container.instanceFor(VRaptorRequest.class);
+        RequestInfo vraptorRequest = container.instanceFor(RequestInfo.class);
         assertNotNull("can provide request", vraptorRequest);
     }
 

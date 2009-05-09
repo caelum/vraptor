@@ -5,7 +5,6 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.typeCompatibleWith;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.ResourceBundle;
 
 import org.jmock.Expectations;
@@ -19,7 +18,6 @@ import org.vraptor.converter.Converter;
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.validator.ValidationMessage;
 
 public class VRaptor2ConvertersTest {
 
@@ -42,7 +40,7 @@ public class VRaptor2ConvertersTest {
     @Convert(Integer.class)
     public static class VRaptor3BasedConverter implements br.com.caelum.vraptor.Converter<Integer>{
 
-        public Integer convert(String value, Class type, List<ValidationMessage> errors, ResourceBundle bundle) {
+        public Integer convert(String value, Class type, ResourceBundle bundle) {
             return null;
         }
         

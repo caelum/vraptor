@@ -1,8 +1,8 @@
 package br.com.caelum.vraptor.ioc.spring;
 
-import br.com.caelum.vraptor.ioc.ApplicationScoped;
-import br.com.caelum.vraptor.ioc.RequestScoped;
-import br.com.caelum.vraptor.ioc.SessionScoped;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.ScopeMetadata;
@@ -10,8 +10,9 @@ import org.springframework.context.annotation.ScopeMetadataResolver;
 import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
+import br.com.caelum.vraptor.ioc.RequestScoped;
+import br.com.caelum.vraptor.ioc.SessionScoped;
 
 /**
  * @author Fabio Kung

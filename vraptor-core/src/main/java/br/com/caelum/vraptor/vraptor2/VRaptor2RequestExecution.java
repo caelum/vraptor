@@ -1,7 +1,5 @@
 package br.com.caelum.vraptor.vraptor2;
 
-import java.io.IOException;
-
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.RequestExecution;
@@ -10,10 +8,12 @@ import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
 import br.com.caelum.vraptor.interceptor.InterceptorListPriorToExecutionExtractor;
 import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
 import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
+import br.com.caelum.vraptor.interceptor.multipart.MultipartInterceptor;
+import br.com.caelum.vraptor.vraptor2.outject.OutjectionInterceptor;
 
 /**
  * A vraptor 2 request execution process.
- * 
+ *
  * @author Guilherme Silveira
  */
 public class VRaptor2RequestExecution implements RequestExecution {
@@ -31,6 +31,7 @@ public class VRaptor2RequestExecution implements RequestExecution {
         interceptorStack.add(ResourceLookupInterceptor.class);
         interceptorStack.add(URLParameterExtractorInterceptor.class);
         interceptorStack.add(InterceptorListPriorToExecutionExtractor.class);
+        interceptorStack.add(MultipartInterceptor.class);
         interceptorStack.add(instantiator);
         interceptorStack.add(ParametersInstantiatorInterceptor.class);
         if(shouldRegisterHibernateValidator) {

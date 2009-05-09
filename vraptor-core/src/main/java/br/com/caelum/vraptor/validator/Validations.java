@@ -1,7 +1,7 @@
 /***
- * 
+ *
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  * 1. Redistributions of source code must retain the above copyright notice,
@@ -12,7 +12,7 @@
  * copyright holders nor the names of its contributors may be used to endorse or
  * promote products derived from this software without specific prior written
  * permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -27,70 +27,70 @@
  */
 package br.com.caelum.vraptor.validator;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.StringDescription;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Hamcrest based validation support.
- * 
+ *
  * @author Guilherme Silveira
  */
 public class Validations {
 
-	private final List<ValidationMessage> errors = new ArrayList<ValidationMessage>();
+    private final List<Message> errors = new ArrayList<Message>();
 
-	public <T> boolean that(T id, Matcher<T> matcher) {
-		return that("", null, id, matcher);
-	}
+    public <T> boolean that(T id, Matcher<T> matcher) {
+        return that("", null, id, matcher);
+    }
 
-	public <T> boolean that(String category, T id, Matcher<T> matcher) {
-		return that(category, null, id, matcher);
-	}
+    public <T> boolean that(String category, T id, Matcher<T> matcher) {
+        return that(category, null, id, matcher);
+    }
 
-	public <T> boolean that(String category, String reason, T actual, Matcher<? super T> matcher) {
-		if (!matcher.matches(actual)) {
-			if (reason != null) {
-				errors.add(new ValidationMessage(reason, category));
-			} else {
-				Description description = new StringDescription();
-				description.appendDescriptionOf(matcher);
-				errors.add(new ValidationMessage(description.toString(), category));
-			}
-			return false;
-		}
-		return true;
-	}
+    public <T> boolean that(String category, String reason, T actual, Matcher<? super T> matcher) {
+        if (!matcher.matches(actual)) {
+            if (reason != null) {
+                errors.add(new ValidationMessage(reason, category));
+            } else {
+                Description description = new StringDescription();
+                description.appendDescriptionOf(matcher);
+                errors.add(new ValidationMessage(description.toString(), category));
+            }
+            return false;
+        }
+        return true;
+    }
 
-	public void that(String category, String reason, boolean assertion) {
-		if (!assertion) {
-			errors.add(new ValidationMessage(reason, category));
-		}
-	}
+    public void that(String category, String reason, boolean assertion) {
+        if (!assertion) {
+            errors.add(new ValidationMessage(reason, category));
+        }
+    }
 
-	public List<ValidationMessage> getErrors() {
-		return errors;
-	}
+    public List<Message> getErrors() {
+        return errors;
+    }
 
-	public void and(List<ValidationMessage> errors) {
-		this.errors.addAll(errors);
-	}
+    public void and(List<Message> errors) {
+        this.errors.addAll(errors);
+    }
 
-	public <T> If<T> that(T instance) {
-		return new If<T>(instance, this);
-	}
+    public <T> If<T> that(T instance) {
+        return new If<T>(instance, this);
+    }
 
-	/**
-	 * Can be overriden to add extra validations processes.
-	 */
-	public void check() {
-	}
+    /**
+     * Can be overriden to add extra validations processes.
+     */
+    public void check() {
+    }
 
-	public static <T> org.hamcrest.Matcher<T> is(org.hamcrest.Matcher<T> matcher) {
-		return ShouldBe.<T> shouldBe(matcher);
-	}
+    public static <T> org.hamcrest.Matcher<T> is(org.hamcrest.Matcher<T> matcher) {
+        return ShouldBe.<T>shouldBe(matcher);
+    }
 
 }

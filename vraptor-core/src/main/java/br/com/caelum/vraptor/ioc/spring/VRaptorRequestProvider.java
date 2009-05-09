@@ -1,8 +1,9 @@
 package br.com.caelum.vraptor.ioc.spring;
 
-import br.com.caelum.vraptor.core.VRaptorRequest;
-import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import org.springframework.beans.factory.FactoryBean;
+
+import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
 /**
  * @author Fabio Kung
@@ -15,7 +16,7 @@ public class VRaptorRequestProvider implements FactoryBean {
     }
 
     public Class getObjectType() {
-        return VRaptorRequest.class;
+        return RequestInfo.class;
     }
 
     public boolean isSingleton() {

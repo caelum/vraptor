@@ -1,7 +1,7 @@
 /***
- * 
+ *
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  * 1. Redistributions of source code must retain the above copyright notice,
@@ -12,7 +12,7 @@
  * copyright holders nor the names of its contributors may be used to endorse or
  * promote products derived from this software without specific prior written
  * permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -27,34 +27,30 @@
  */
 package br.com.caelum.vraptor.converter;
 
+import br.com.caelum.vraptor.core.Converters;
+import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor.http.ognl.ArrayAccessor;
+import br.com.caelum.vraptor.http.ognl.ListAccessor;
+import br.com.caelum.vraptor.http.ognl.ReflectionBasedNullHandler;
+import br.com.caelum.vraptor.validator.Message;
+import ognl.Ognl;
+import ognl.OgnlContext;
+import ognl.OgnlException;
+import ognl.OgnlRuntime;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.ResourceBundle;
-
-import javax.servlet.http.HttpServletRequest;
-
-import ognl.Ognl;
-import ognl.OgnlContext;
-import ognl.OgnlException;
-import ognl.OgnlRuntime;
-
-import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.junit.Before;
-import org.junit.Test;
-
-import br.com.caelum.vraptor.core.Converters;
-import br.com.caelum.vraptor.core.VRaptorRequest;
-import br.com.caelum.vraptor.http.ognl.ArrayAccessor;
-import br.com.caelum.vraptor.http.ognl.ListAccessor;
-import br.com.caelum.vraptor.http.ognl.ReflectionBasedNullHandler;
-import br.com.caelum.vraptor.validator.ValidationMessage;
 
 /**
  * Unfortunately OGNL sucks so bad in its design that we had to create a "unit"
@@ -63,9 +59,8 @@ import br.com.caelum.vraptor.validator.ValidationMessage;
  * that tests are not thread safe. Summing up: OGNL api sucks, OGNL idea rulez.
  * Tests written here are "acceptance tests" for the Ognl support on http
  * parameters.
- * 
+ *
  * @author Guilherme Silveira
- * 
  */
 public class MiscOgnlSupportTest {
 
@@ -73,8 +68,8 @@ public class MiscOgnlSupportTest {
     private Converters converters;
     private OgnlContext context;
     private House house;
-	private ResourceBundle bundle;
-	private ArrayList<ValidationMessage> errors;
+    private ResourceBundle bundle;
+    private ArrayList<Message> errors;
 
     @Before
     public void setup() {
@@ -89,7 +84,7 @@ public class MiscOgnlSupportTest {
         // OgnlRuntime.setPropertyAccessor(Set.class, new SetAccessor());
         // OgnlRuntime.setPropertyAccessor(Map.class, new MapAccessor());
         this.bundle = ResourceBundle.getBundle("messages");
-        this.errors = new ArrayList<ValidationMessage>();
+        this.errors = new ArrayList<Message>();
         Ognl.setTypeConverter(context, new OgnlToConvertersController(converters, errors, bundle));
     }
 
@@ -125,7 +120,7 @@ public class MiscOgnlSupportTest {
             return birthDay;
         }
     }
-    
+
     public static class House {
         private Cat cat;
 
@@ -136,13 +131,14 @@ public class MiscOgnlSupportTest {
         public Cat getCat() {
             return cat;
         }
-        
+
     }
 
     @Test
     public void isCapableOfDealingWithEmptyParameterForInternalWrapperValue() throws OgnlException {
         mockery.checking(new Expectations() {{
-            one(converters).to(Integer.class, null); will(returnValue(new IntegerConverter()));
+            one(converters).to(Integer.class, null);
+            will(returnValue(new IntegerConverter()));
         }});
         Ognl.setValue("cat.firstLeg.id", context, house, "");
         assertThat(house.cat.firstLeg.id, is(equalTo(null)));
@@ -151,15 +147,17 @@ public class MiscOgnlSupportTest {
 
     @Test
     public void isCapableOfDealingWithEmptyParameterForInternalValueWhichNeedsAConverter() throws OgnlException {
-        final HttpServletRequest request = mockery.mock(HttpServletRequest.class);
-        final VRaptorRequest webRequest = new VRaptorRequest(null, request, null);
+        final MutableRequest request = mockery.mock(MutableRequest.class);
+        final RequestInfo webRequest = new RequestInfo(null, request, null);
         mockery.checking(new Expectations() {{
-            exactly(2).of(request).getAttribute("javax.servlet.jsp.jstl.fmt.locale.request"); will(returnValue("pt_br"));
-            one(converters).to(Calendar.class, null); will(returnValue(new LocaleBasedCalendarConverter(webRequest)));
+            exactly(2).of(request).getAttribute("javax.servlet.jsp.jstl.fmt.locale.request");
+            will(returnValue("pt_br"));
+            one(converters).to(Calendar.class, null);
+            will(returnValue(new LocaleBasedCalendarConverter(webRequest)));
         }});
         Ognl.setValue("cat.firstLeg.birthDay", context, house, "10/5/2010");
-        assertThat(house.cat.firstLeg.birthDay, is(equalTo((Calendar) new GregorianCalendar(2010,4,10))));
+        assertThat(house.cat.firstLeg.birthDay, is(equalTo((Calendar) new GregorianCalendar(2010, 4, 10))));
         mockery.assertIsSatisfied();
     }
-    
+
 }

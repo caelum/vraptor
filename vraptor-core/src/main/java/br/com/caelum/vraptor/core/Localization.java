@@ -29,7 +29,6 @@ package br.com.caelum.vraptor.core;
 
 import java.util.Locale;
 import java.util.ResourceBundle;
-import java.util.ResourceBundle;
 
 /**
  * A i18n messages provider.

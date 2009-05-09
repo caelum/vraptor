@@ -1,22 +1,20 @@
 package br.com.caelum.vraptor.ioc.pico;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.PicoBuilder;
 
-import br.com.caelum.vraptor.core.VRaptorRequest;
-import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
-import br.com.caelum.vraptor.resource.DefaultResourceRegistry;
-import br.com.caelum.vraptor.resource.MethodLookupBuilder;
-import br.com.caelum.vraptor.resource.VRaptorInfo;
+import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor.http.route.DefaultRouter;
+import br.com.caelum.vraptor.http.route.NoRoutesConfiguration;
+import br.com.caelum.vraptor.resource.NoRoutesCreator;
 
 public class PicoBasedContainerTest {
 
@@ -34,23 +32,16 @@ public class PicoBasedContainerTest {
 
     private Mockery mockery;
     private PicoBasedContainer container;
-    private MethodLookupBuilder builder;
     private MutablePicoContainer picoContainer;
 
     @Before
     public void setup() {
         this.mockery = new Mockery();
-        this.builder = mockery.mock(MethodLookupBuilder.class);
-        final HttpServletRequest webRequest = mockery.mock(HttpServletRequest.class);
+        final MutableRequest webRequest = mockery.mock(MutableRequest.class);
         final HttpServletResponse webResponse = mockery.mock(HttpServletResponse.class);
-        final VRaptorRequest request = new VRaptorRequest(null, webRequest, webResponse);
+        final RequestInfo request = new RequestInfo(null, webRequest, webResponse);
         this.picoContainer = new PicoBuilder().withCaching().build();
-        mockery.checking(new Expectations() {
-            {
-                one(builder).lookupFor(with(VRaptorMatchers.resource(VRaptorInfo.class)));
-            }
-        });
-        this.container = new PicoBasedContainer(picoContainer, request, new DefaultResourceRegistry(builder));
+        this.container = new PicoBasedContainer(picoContainer, request, new DefaultRouter(new NoRoutesConfiguration(), new NoRoutesCreator(), null, null));
     }
 
     @Test

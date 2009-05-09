@@ -31,47 +31,44 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
-import br.com.caelum.vraptor.validator.ValidationMessage;
-
 public class PrimitiveFloatConverterTest {
-    
-    private PrimitiveFloatConverter converter;
-	private ArrayList<ValidationMessage> errors;
+
+	private PrimitiveFloatConverter converter;
 	private ResourceBundle bundle;
 
-    @Before
-    public void setup() {
-        this.converter = new PrimitiveFloatConverter();
-        this.errors = new ArrayList<ValidationMessage>();
-        this.bundle = ResourceBundle.getBundle("messages");
-    }
-    
-    @Test
-    public void shouldBeAbleToConvertNumbers(){
-        assertThat((Float) converter.convert("2.2", float.class, errors, bundle), is(equalTo(2.2f)));
-    }
-    
-    @Test
-    public void shouldComplainAboutInvalidNumber() {
-        converter.convert("---", float.class, errors, bundle);
-        assertThat(errors.get(0), is(VRaptorMatchers.error("", "--- is not a valid number.")));
-    }
-    
-    @Test
-    public void shouldConvertToZeroWhenNull() {
-    	assertThat((Float) converter.convert(null, float.class, errors, bundle), is(equalTo(0F)));
-    }
+	@Before
+	public void setup() {
+		this.converter = new PrimitiveFloatConverter();
+		this.bundle = ResourceBundle.getBundle("messages");
+	}
 
-    @Test
-    public void shouldConvertToZeroWhenEmpty() {
-    	assertThat((Float) converter.convert("", float.class, errors, bundle), is(equalTo(0F)));
-    }
-    
+	@Test
+	public void shouldBeAbleToConvertNumbers() {
+		assertThat((Float) converter.convert("2.2", float.class, bundle), is(equalTo(2.2f)));
+	}
+
+	@Test
+	public void shouldComplainAboutInvalidNumber() {
+		try {
+			converter.convert("---", float.class, bundle);
+		} catch (ConversionError e) {
+			assertThat(e.getMessage(), is(equalTo("--- is not a valid number.")));
+		}
+	}
+
+	@Test
+	public void shouldConvertToZeroWhenNull() {
+		assertThat((Float) converter.convert(null, float.class, bundle), is(equalTo(0F)));
+	}
+
+	@Test
+	public void shouldConvertToZeroWhenEmpty() {
+		assertThat((Float) converter.convert("", float.class, bundle), is(equalTo(0F)));
+	}
+
 }

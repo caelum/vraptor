@@ -30,13 +30,11 @@
 package br.com.caelum.vraptor.converter;
 
 import java.text.MessageFormat;
-import java.util.List;
 import java.util.ResourceBundle;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
-import br.com.caelum.vraptor.validator.ValidationMessage;
 
 /**
  * VRaptor's primitive short converter. 
@@ -47,15 +45,14 @@ import br.com.caelum.vraptor.validator.ValidationMessage;
 @ApplicationScoped
 public class PrimitiveShortConverter implements Converter {
 
-    public Object convert(String value, Class type, List errors, ResourceBundle bundle) {
+    public Object convert(String value, Class type, ResourceBundle bundle) {
         if(value==null || value=="") {
             return (short) 0;
         }
         try {
             return Short.parseShort(value);
         } catch (NumberFormatException e) {
-			errors.add(new ValidationMessage(MessageFormat.format(bundle.getString("is_not_a_valid_integer"), value), ""));
-			return (short) 0;
+			throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_integer"), value));
         }
     }
     

@@ -6,7 +6,6 @@ import java.util.HashMap;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -16,8 +15,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.vraptor.annotations.Component;
 
+import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.core.RequestInfo;
-import br.com.caelum.vraptor.core.VRaptorRequest;
+import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.view.PathResolver;
@@ -28,7 +28,7 @@ public class ViewsPropertiesPageResultTest {
     private Mockery mockery;
     private ViewsPropertiesPageResult result;
     private Config config;
-    private HttpServletRequest request;
+    private MutableRequest request;
     private PathResolver resolver;
     private ResourceMethod method;
     private HttpServletResponse response;
@@ -36,17 +36,17 @@ public class ViewsPropertiesPageResultTest {
     private HttpSession session;
     private Resource resource;
     private RequestDispatcher dispatcher;
-    private RequestInfo requestInfo;
-	private VRaptorRequest webRequest;
+    private MethodInfo requestInfo;
+	private RequestInfo webRequest;
 
     @Before
     public void setup() {
         this.mockery = new Mockery();
-        this.request = mockery.mock(HttpServletRequest.class);
+        this.request = mockery.mock(MutableRequest.class);
         this.response = mockery.mock(HttpServletResponse.class);
         this.session = mockery.mock(HttpSession.class);
         this.method = mockery.mock(ResourceMethod.class);
-        this.requestInfo = mockery.mock(RequestInfo.class);
+        this.requestInfo = mockery.mock(MethodInfo.class);
         this.resource = mockery.mock(Resource.class);
         this.config = mockery.mock(Config.class);
         this.resolver = mockery.mock(PathResolver.class);
@@ -65,7 +65,7 @@ public class ViewsPropertiesPageResultTest {
                 will(returnValue(resource));
             }
         });
-        this.webRequest = new VRaptorRequest(context, request, response);
+        this.webRequest = new RequestInfo(context, request, response);
         this.result = new ViewsPropertiesPageResult(this.config, this.resolver, this.requestInfo, this.webRequest);
     }
 

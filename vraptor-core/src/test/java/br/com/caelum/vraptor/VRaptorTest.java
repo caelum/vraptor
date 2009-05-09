@@ -1,15 +1,10 @@
 package br.com.caelum.vraptor;
 
-import br.com.caelum.vraptor.config.BasicConfiguration;
-import br.com.caelum.vraptor.core.Execution;
-import br.com.caelum.vraptor.core.RequestExecution;
-import br.com.caelum.vraptor.core.StaticContentHandler;
-import br.com.caelum.vraptor.core.VRaptorRequest;
-import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.ioc.ContainerProvider;
-import org.jmock.Expectations;
-import org.junit.Before;
-import org.junit.Test;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+
+import java.io.IOException;
 
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -19,7 +14,18 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+
+import org.jmock.Expectations;
+import org.junit.Before;
+import org.junit.Test;
+
+import br.com.caelum.vraptor.config.BasicConfiguration;
+import br.com.caelum.vraptor.core.Execution;
+import br.com.caelum.vraptor.core.RequestExecution;
+import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.core.StaticContentHandler;
+import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor.ioc.ContainerProvider;
 
 public class VRaptorTest {
 
@@ -36,6 +42,7 @@ public class VRaptorTest {
         this.context = mockery.mock(ServletContext.class);
         this.container = mockery.mock(Container.class);
         this.execution = mockery.mock(RequestExecution.class);
+        started =stoped= false;
     }
 
     @Test(expected = ServletException.class)
@@ -76,21 +83,48 @@ public class VRaptorTest {
         mockery.assertIsSatisfied();
     }
 
+    @Test
+    public void shouldStopContainer() throws ServletException, IOException,
+            VRaptorException {
+        mockery.checking(new Expectations() {
+            {
+                one(config).getServletContext();
+                will(returnValue(context));
+                one(context).getInitParameter(BasicConfiguration.CONTAINER_PROVIDER);
+                will(returnValue(MyProvider.class.getName()));
+            }
+        });
+        VRaptor raptor = new VRaptor();
+        raptor.init(this.config);
+        assertThat(started, is(equalTo(true)));
+        assertThat(stoped, is(equalTo(false)));
+        raptor.destroy();
+        assertThat(started, is(equalTo(false)));
+        assertThat(stoped, is(equalTo(true)));
+        mockery.assertIsSatisfied();
+    }
+
+    private static boolean started;
+	private static boolean stoped;
     public static class MyProvider implements ContainerProvider {
-        public <T> T provideForRequest(VRaptorRequest vraptorRequest, Execution<T> execution) {
+
+		public <T> T provideForRequest(RequestInfo vraptorRequest, Execution<T> execution) {
             Container container = (Container) vraptorRequest.getServletContext().getAttribute("container");
             return execution.insideRequest(container);
         }
 
         public void start(ServletContext context) {
+        	started = true;
         }
 
         public void stop() {
+        	started= false;
+        	stoped = true;
         }
     }
 
     public static class DoNothingProvider implements ContainerProvider {
-        public <T> T provideForRequest(VRaptorRequest vraptorRequest, Execution<T> execution) {
+        public <T> T provideForRequest(RequestInfo vraptorRequest, Execution<T> execution) {
             return execution.insideRequest(null);
         }
 

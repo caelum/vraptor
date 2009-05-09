@@ -29,9 +29,6 @@
  */
 package br.com.caelum.vraptor.view;
 
-import br.com.caelum.vraptor.view.jsp.DefaultPageResult;
-import br.com.caelum.vraptor.view.jsp.PageResult;
-
 /**
  * Some common results for most web based logics.
  * 
@@ -45,7 +42,7 @@ public class Results {
      * achieve the server-redirect-hell (f5 problem) issue.
      */
     public static Class<? extends PageResult> page() {
-        return DefaultPageResult.class;
+        return PageResult.class;
     }
 
     /**
@@ -53,6 +50,13 @@ public class Results {
      */
     public static Class<LogicResult> logic() {
         return LogicResult.class;
+    }
+    
+    /**
+     * Uses an empty page.
+     */
+    public static Class<EmptyResult> nothing() {
+    	return EmptyResult.class;
     }
 
 }

@@ -42,39 +42,39 @@ import org.slf4j.LoggerFactory;
 import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.core.DefaultConverters;
 import br.com.caelum.vraptor.core.DefaultInterceptorStack;
-import br.com.caelum.vraptor.core.DefaultMethodParameters;
+import br.com.caelum.vraptor.core.DefaultMethodInfo;
 import br.com.caelum.vraptor.core.DefaultRequestExecution;
-import br.com.caelum.vraptor.core.DefaultRequestInfo;
 import br.com.caelum.vraptor.core.DefaultResult;
 import br.com.caelum.vraptor.core.Execution;
-import br.com.caelum.vraptor.core.ForwardToDefaultViewInterceptor;
 import br.com.caelum.vraptor.core.JstlLocalization;
+import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.core.URLParameterExtractorInterceptor;
-import br.com.caelum.vraptor.core.VRaptorRequest;
-import br.com.caelum.vraptor.http.DefaultRequestParameters;
-import br.com.caelum.vraptor.http.EmptyElementsRemoval;
+import br.com.caelum.vraptor.extra.ForwardToDefaultViewInterceptor;
+import br.com.caelum.vraptor.http.DefaultResourceTranslator;
 import br.com.caelum.vraptor.http.OgnlParametersProvider;
 import br.com.caelum.vraptor.http.ParanamerNameProvider;
-import br.com.caelum.vraptor.http.StupidTranslator;
 import br.com.caelum.vraptor.http.TypeCreator;
 import br.com.caelum.vraptor.http.asm.AsmBasedTypeCreator;
+import br.com.caelum.vraptor.http.ognl.EmptyElementsRemoval;
+import br.com.caelum.vraptor.http.route.DefaultRouter;
+import br.com.caelum.vraptor.http.route.NoRoutesConfiguration;
+import br.com.caelum.vraptor.http.route.PathAnnotationRoutesCreator;
 import br.com.caelum.vraptor.interceptor.DefaultInterceptorRegistry;
 import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
 import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
 import br.com.caelum.vraptor.interceptor.InterceptorListPriorToExecutionExtractor;
 import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
 import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
+import br.com.caelum.vraptor.interceptor.multipart.MultipartInterceptor;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
-import br.com.caelum.vraptor.resource.DefaultMethodLookupBuilder;
 import br.com.caelum.vraptor.resource.DefaultResourceNotFoundHandler;
-import br.com.caelum.vraptor.resource.DefaultResourceRegistry;
 import br.com.caelum.vraptor.validator.DefaultValidator;
 import br.com.caelum.vraptor.view.DefaultLogicResult;
+import br.com.caelum.vraptor.view.DefaultPageResult;
 import br.com.caelum.vraptor.view.DefaultPathResolver;
+import br.com.caelum.vraptor.view.EmptyResult;
 import br.com.caelum.vraptor.view.LogicResult;
-import br.com.caelum.vraptor.view.jsp.DefaultPageResult;
-import br.com.caelum.vraptor.view.jsp.PageResult;
-import br.com.caelum.vraptor.vraptor2.RequestResult;
+import br.com.caelum.vraptor.view.PageResult;
 
 /**
  * Managing internal components by using pico container.<br>
@@ -85,87 +85,78 @@ import br.com.caelum.vraptor.vraptor2.RequestResult;
  */
 public class PicoProvider implements ContainerProvider {
 
-    private final MutablePicoContainer container;
+	private final MutablePicoContainer container;
 
-    private static final Logger logger = LoggerFactory.getLogger(PicoProvider.class);
+	private static final Logger logger = LoggerFactory.getLogger(PicoProvider.class);
 
-    public PicoProvider() {
-        this.container = new DefaultPicoContainer(new Caching(), new JavaEE5LifecycleStrategy(new NullComponentMonitor()), null);
-        PicoContainersProvider containersProvider = new PicoContainersProvider(this.container);
-        this.container.addComponent(containersProvider);
-        registerComponents(getContainers());
-        containersProvider.init();
-        // TODO: cache
-        // cache(CacheBasedResourceRegistry.class, ResourceRegistry.class);
-        // cache(CacheBasedTypeCreator.class, AsmBasedTypeCreator.class);
-    }
+	public PicoProvider() {
+		this.container = new DefaultPicoContainer(new Caching(), new JavaEE5LifecycleStrategy(
+				new NullComponentMonitor()), null);
+		PicoContainersProvider containersProvider = new PicoContainersProvider(this.container);
+		this.container.addComponent(containersProvider);
+		registerComponents(getContainers());
+		containersProvider.init();
+		// TODO: cache
+		// cache(CacheBasedRouter.class, Router.class);
+		// cache(CacheBasedTypeCreator.class, AsmBasedTypeCreator.class);
+	}
 
-    /**
-     * Register extra components that your app wants to.
-     */
-    protected void registerComponents(ComponentRegistry container) {
-        singleInterfaceRegister(StupidTranslator.class, container);
-        singleInterfaceRegister(DefaultResourceRegistry.class, container);
-        singleInterfaceRegister(DefaultResourceNotFoundHandler.class, container);
-        singleInterfaceRegister(DefaultDirScanner.class, container);
-        singleInterfaceRegister(WebInfClassesScanner.class, container);
-        singleInterfaceRegister(DefaultInterceptorRegistry.class, container);
-        singleInterfaceRegister(DefaultMethodLookupBuilder.class, container);
-        singleInterfaceRegister(DefaultPathResolver.class, container);
-        singleInterfaceRegister(ParanamerNameProvider.class, container);
-        singleInterfaceRegister(DefaultConverters.class, container);
-        singleInterfaceRegister(DefaultMethodParameters.class, container);
-        singleInterfaceRegister(DefaultRequestParameters.class, container);
-        singleInterfaceRegister(DefaultInterceptorStack.class, container);
-        singleInterfaceRegister(DefaultRequestExecution.class, container);
-        singleInterfaceRegister(DefaultResult.class, container);
-        singleInterfaceRegister(OgnlParametersProvider.class, container);
-        singleInterfaceRegister(DefaultRequestInfo.class, container);
-        singleInterfaceRegister(DefaultValidator.class, container);
-        singleInterfaceRegister(JstlLocalization.class, container);
+	/**
+	 * Register extra components that your app wants to.
+	 */
+	protected void registerComponents(ComponentRegistry container) {
+		logger.debug("Registering base pico container related implementation components");
+		for (Class<?> type : new Class[] { DefaultResourceTranslator.class, DefaultRouter.class,
+				DefaultResourceNotFoundHandler.class, DefaultDirScanner.class,
+				DefaultInterceptorRegistry.class, DefaultPathResolver.class,
+				ParanamerNameProvider.class, DefaultConverters.class, DefaultMethodInfo.class,
+				DefaultInterceptorStack.class, DefaultRequestExecution.class,
+				DefaultResult.class, OgnlParametersProvider.class, DefaultMethodInfo.class, DefaultValidator.class,
+				JstlLocalization.class, NoRoutesConfiguration.class,WebInfClassesScanner.class, PathAnnotationRoutesCreator.class,PathAnnotationRoutesCreator.class,
+				EmptyResult.class}) {
+			singleInterfaceRegister(type, container);
+		}
 
-        container.register(ForwardToDefaultViewInterceptor.class, ForwardToDefaultViewInterceptor.class);
-        container.register(LogicResult.class, DefaultLogicResult.class);
-        container.register(RequestResult.class, RequestResult.class);
-        container.register(PageResult.class, DefaultPageResult.class);
-        container.register(TypeCreator.class, AsmBasedTypeCreator.class);
-        container.register(EmptyElementsRemoval.class, EmptyElementsRemoval.class);
-        container.register(ParametersInstantiatorInterceptor.class, ParametersInstantiatorInterceptor.class);
-        container.register(InterceptorListPriorToExecutionExtractor.class, InterceptorListPriorToExecutionExtractor.class);
-        container.register(URLParameterExtractorInterceptor.class, URLParameterExtractorInterceptor.class);
-        container.register(ResourceLookupInterceptor.class, ResourceLookupInterceptor.class);
-        container.register(InstantiateInterceptor.class, InstantiateInterceptor.class);
-        container.register(ExecuteMethodInterceptor.class, ExecuteMethodInterceptor.class);
-    }
+		container.register(ForwardToDefaultViewInterceptor.class, ForwardToDefaultViewInterceptor.class);
+		container.register(LogicResult.class, DefaultLogicResult.class);
+		container.register(PageResult.class, DefaultPageResult.class);
+		container.register(TypeCreator.class, AsmBasedTypeCreator.class);
+		container.register(EmptyElementsRemoval.class, EmptyElementsRemoval.class);
+		container.register(ParametersInstantiatorInterceptor.class, ParametersInstantiatorInterceptor.class);
+		container.register(InterceptorListPriorToExecutionExtractor.class, InterceptorListPriorToExecutionExtractor.class);
+		container.register(MultipartInterceptor.class, MultipartInterceptor.class);
+		container.register(URLParameterExtractorInterceptor.class, URLParameterExtractorInterceptor.class);
+		container.register(ResourceLookupInterceptor.class, ResourceLookupInterceptor.class);
+		container.register(InstantiateInterceptor.class, InstantiateInterceptor.class);
+		container.register(ExecuteMethodInterceptor.class, ExecuteMethodInterceptor.class);
+	}
 
-    private void singleInterfaceRegister(Class<?> type, ComponentRegistry registry) {
-        Class<?>[] interfaces = type.getInterfaces();
-        if (interfaces.length != 1) {
-            throw new IllegalArgumentException(
-                    "Invalid registering of a type with more than one interface" +
-                            " being registered as a single interface component: "
-                            + type.getName());
-        }
-        registry.register(interfaces[0], type);
-    }
+	private void singleInterfaceRegister(Class<?> type, ComponentRegistry registry) {
+		Class<?>[] interfaces = type.getInterfaces();
+		if (interfaces.length != 1) {
+			throw new IllegalArgumentException("Invalid registering of a type with more than one interface"
+					+ " being registered as a single interface component: " + type.getName());
+		}
+		registry.register(interfaces[0], type);
+	}
 
-    public <T> T provideForRequest(VRaptorRequest request, Execution<T> execution) {
-        return execution.insideRequest(getContainers().provide(request));
-    }
+	public <T> T provideForRequest(RequestInfo request, Execution<T> execution) {
+		return execution.insideRequest(getContainers().provide(request));
+	}
 
-    public void start(ServletContext context) {
-        this.container.addComponent(context);
-        container.getComponent(ResourceLoader.class).loadAll();
-        container.start();
-    }
+	public void start(ServletContext context) {
+		this.container.addComponent(context);
+		this.container.getComponent(WebInfClassesScanner.class).loadAll();
+		container.start();
+	}
 
-    public void stop() {
-        container.stop();
-        container.dispose();
-    }
+	public void stop() {
+		container.stop();
+		container.dispose();
+	}
 
-    private PicoContainersProvider getContainers() {
-        return this.container.getComponent(PicoContainersProvider.class);
-    }
+	private PicoContainersProvider getContainers() {
+		return this.container.getComponent(PicoContainersProvider.class);
+	}
 
 }

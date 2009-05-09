@@ -3,11 +3,10 @@ package br.com.caelum.vraptor.http;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-
-import java.util.List;
-
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.List;
 
 public class ParanamerNameProviderTest {
 
@@ -17,16 +16,7 @@ public class ParanamerNameProviderTest {
     public void setup() {
         this.provider = new ParanamerNameProvider();
     }
-    
-    class Field {
-        
-    }
-    interface Horse {
-        void runThrough(Field f);
-        void rest(int hours);
-        void setLeg(int[] length);
-    }
-    
+
     @Test
     public void shouldNameObjectTypeAsItsSimpleName() throws SecurityException, NoSuchMethodException {
         assertThat(provider.parameterNamesFor(Horse.class.getMethod("runThrough", Field.class))[0], is(equalTo("f")));
@@ -46,9 +36,24 @@ public class ParanamerNameProviderTest {
     public void shouldNameGenericCollectionUsingOf() throws SecurityException, NoSuchMethodException {
         assertThat(provider.parameterNamesFor(Cat.class.getDeclaredMethod("fightWith", List.class))[0], is(equalTo("cats")));
     }
-    
-    static public interface Cat {
-        void fightWith(List<String> cats);
+
+    static class Field {
+    }
+
+    public static class Horse {
+        public void runThrough(Field f) {
+        }
+
+        public void rest(int hours) {
+        }
+
+        public void setLeg(int[] length) {
+        }
+    }
+
+    public static class Cat {
+        void fightWith(List<String> cats) {
+        }
     }
 
 

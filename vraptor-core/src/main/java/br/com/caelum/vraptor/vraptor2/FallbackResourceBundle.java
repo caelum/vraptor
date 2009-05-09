@@ -4,6 +4,8 @@ import java.util.Enumeration;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+import br.com.caelum.vraptor.vraptor2.util.FallbackEnumeration;
+
 /**
  * A resource bundle which uses two different bundles to look for messages.
  * 
@@ -20,7 +22,7 @@ public class FallbackResourceBundle extends ResourceBundle{
 	}
 
 	public Enumeration<String> getKeys() {
-		return new FallbackEnumeration(main, fallback);
+		return new FallbackEnumeration(main.getKeys(), fallback.getKeys());
 	}
 
 	protected Object handleGetObject(String key) {

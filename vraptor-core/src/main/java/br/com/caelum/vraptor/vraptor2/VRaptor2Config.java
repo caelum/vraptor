@@ -16,7 +16,7 @@ import javax.servlet.ServletContext;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.vraptor.plugin.VRaptorPlugin;
+
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
 /**

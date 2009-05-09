@@ -32,42 +32,39 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
-import br.com.caelum.vraptor.validator.ValidationMessage;
-
 public class IntegerConverterTest {
-    
-    private IntegerConverter converter;
-	private ArrayList<ValidationMessage> errors;
+
+	private IntegerConverter converter;
 	private ResourceBundle bundle;
 
-    @Before
-    public void setup() {
-        this.converter = new IntegerConverter();
-        this.errors = new ArrayList<ValidationMessage>();
-        this.bundle = ResourceBundle.getBundle("messages");
-    }
-    
-    @Test
-    public void shouldBeAbleToConvertNumbers(){
-        assertThat(converter.convert("2", Integer.class, errors, bundle), is(equalTo(2)));
-    }
-    
-    @Test
-    public void shouldComplainAboutInvalidNumber() {
-        converter.convert("---", Integer.class, errors, bundle);
-        assertThat(errors.get(0), is(VRaptorMatchers.error("", "--- is not a valid integer.")));
-    }
-    
-    @Test
-    public void shouldNotComplainAboutNull() {
-        assertThat(converter.convert(null, Integer.class, errors, bundle), is(nullValue()));
-    }
+	@Before
+	public void setup() {
+		this.converter = new IntegerConverter();
+		this.bundle = ResourceBundle.getBundle("messages");
+	}
+
+	@Test
+	public void shouldBeAbleToConvertNumbers() {
+		assertThat(converter.convert("2", Integer.class, bundle), is(equalTo(2)));
+	}
+
+	@Test
+	public void shouldComplainAboutInvalidNumber() {
+		try {
+			converter.convert("---", Integer.class, bundle);
+		} catch (ConversionError e) {
+			assertThat(e.getMessage(), is(equalTo("--- is not a valid integer.")));
+		}
+	}
+
+	@Test
+	public void shouldNotComplainAboutNull() {
+		assertThat(converter.convert(null, Integer.class, bundle), is(nullValue()));
+	}
 
 }

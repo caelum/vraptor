@@ -1,9 +1,10 @@
 package br.com.caelum.vraptor.config;
 
-import br.com.caelum.vraptor.core.Execution;
-import br.com.caelum.vraptor.core.VRaptorRequest;
-import br.com.caelum.vraptor.ioc.ContainerProvider;
-import br.com.caelum.vraptor.ioc.pico.PicoProvider;
+import java.io.IOException;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.jmock.Expectations;
@@ -12,9 +13,10 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import java.io.IOException;
+import br.com.caelum.vraptor.core.Execution;
+import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.ioc.ContainerProvider;
+import br.com.caelum.vraptor.ioc.pico.PicoProvider;
 
 public class BasicConfigurationTest {
 
@@ -46,7 +48,7 @@ public class BasicConfigurationTest {
         public void start(ServletContext context) {
         }
 
-        public <T> T provideForRequest(VRaptorRequest vraptorRequest, Execution<T> execution) {
+        public <T> T provideForRequest(RequestInfo vraptorRequest, Execution<T> execution) {
             return execution.insideRequest(null);
         }
 
@@ -72,7 +74,7 @@ public class BasicConfigurationTest {
             throw new IOException("");
         }
 
-        public <T> T provideForRequest(VRaptorRequest vraptorRequest, Execution<T> execution) {
+        public <T> T provideForRequest(RequestInfo vraptorRequest, Execution<T> execution) {
             return execution.insideRequest(null);
         }
 

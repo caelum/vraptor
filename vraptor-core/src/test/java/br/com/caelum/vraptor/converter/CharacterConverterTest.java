@@ -32,44 +32,40 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
-import br.com.caelum.vraptor.validator.ValidationMessage;
-
 public class CharacterConverterTest {
-    
-    private CharacterConverter converter;
-	private ArrayList<ValidationMessage> errors;
+
+	private CharacterConverter converter;
 	private ResourceBundle bundle;
 
-    @Before
-    public void setup() {
-        this.converter = new CharacterConverter();
-        this.errors = new ArrayList<ValidationMessage>();
-        this.bundle = ResourceBundle.getBundle("messages");
-    }
-    
-    @Test
-    public void shouldBeAbleToConvertCharacters(){
-        assertThat(converter.convert("Z", Character.class, errors, bundle), is(equalTo(new Character('Z'))));
-    }
-    
-    @Test
-    public void shouldComplainAboutStringTooBig() {
-        converter.convert("---", Character.class, errors, bundle);
-        assertThat(errors.get(0), is(VRaptorMatchers.error("", "--- is not a valid character.")));
-    }
-    
-    @Test
-    public void shouldNotComplainAboutNullAndEmpty() {
-        assertThat(converter.convert(null, Character.class, errors, bundle), is(nullValue()));
-        assertThat(converter.convert("", Character.class, errors, bundle), is(nullValue()));
-    }
+	@Before
+	public void setup() {
+		this.converter = new CharacterConverter();
+		this.bundle = ResourceBundle.getBundle("messages");
+	}
 
+	@Test
+	public void shouldBeAbleToConvertCharacters() {
+		assertThat(converter.convert("Z", Character.class, bundle), is(equalTo(new Character('Z'))));
+	}
+
+	@Test
+	public void shouldComplainAboutStringTooBig() {
+		try {
+			converter.convert("---", Character.class, bundle);
+		} catch (ConversionError e) {
+			assertThat(e.getMessage(), is(equalTo("--- is not a valid character.")));
+		}
+	}
+
+	@Test
+	public void shouldNotComplainAboutNullAndEmpty() {
+		assertThat(converter.convert(null, Character.class, bundle), is(nullValue()));
+		assertThat(converter.convert("", Character.class, bundle), is(nullValue()));
+	}
 
 }

@@ -32,7 +32,7 @@ package br.com.caelum.vraptor.validator;
  * 
  * @author Guilherme Silveira
  */
-public class ValidationMessage implements SimpleMessage {
+public class ValidationMessage implements Message {
 
 	private final String message, category;
 

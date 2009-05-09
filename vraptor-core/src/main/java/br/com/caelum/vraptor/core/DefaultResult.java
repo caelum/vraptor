@@ -29,11 +29,11 @@
  */
 package br.com.caelum.vraptor.core;
 
+import javax.servlet.http.HttpServletRequest;
+
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.ioc.Container;
-
-import javax.servlet.http.HttpServletRequest;
 
 public class DefaultResult implements Result {
 

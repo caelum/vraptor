@@ -47,6 +47,7 @@ import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.VRaptorMockery;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.validator.ValidationMessage;
+import br.com.caelum.vraptor.validator.Message;
 
 public class OgnlToConvertersControllerTest {
 
@@ -54,15 +55,16 @@ public class OgnlToConvertersControllerTest {
     private Converters converters;
     private OgnlToConvertersController controller;
     private Cat myCat;
-    private Converter converter;
-	private ArrayList<ValidationMessage> errors;
+    @SuppressWarnings("unchecked")
+	private Converter converter;
+	private ArrayList<Message> errors;
 	private ResourceBundle bundle;
 
     @Before
     public void setup() {
         this.mockery = new VRaptorMockery();
         this.converters = mockery.mock(Converters.class);
-        this.errors = new ArrayList<ValidationMessage>();
+        this.errors = new ArrayList<Message>();
         this.bundle = ResourceBundle.getBundle("messages");
         this.controller = new OgnlToConvertersController(converters, errors, bundle);
         this.converter = mockery.mock(Converter.class);
@@ -123,7 +125,7 @@ public class OgnlToConvertersControllerTest {
             {
                 one(converters).to(int.class, null);
                 will(returnValue(converter));
-                one(converter).convert("2", int.class, errors, bundle);
+                one(converter).convert("2", int.class, bundle);
                 will(returnValue(2));
             }
         });
@@ -140,7 +142,7 @@ public class OgnlToConvertersControllerTest {
             {
                 one(converters).to(Tail.class, null);
                 will(returnValue(converter));
-                one(converter).convert("15", Tail.class, errors, bundle);
+                one(converter).convert("15", Tail.class, bundle);
                 will(returnValue(new Tail(15)));
             }
         });

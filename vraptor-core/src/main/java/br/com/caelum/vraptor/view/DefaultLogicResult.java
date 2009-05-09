@@ -36,7 +36,7 @@ import javax.servlet.http.HttpServletResponse;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
-import br.com.caelum.vraptor.resource.MethodLookupBuilder;
+import br.com.caelum.vraptor.http.route.Router;
 
 /**
  * The default implementation of LogicResult.<br>
@@ -46,16 +46,16 @@ import br.com.caelum.vraptor.resource.MethodLookupBuilder;
  */
 public class DefaultLogicResult implements LogicResult {
 
-    private final MethodLookupBuilder builder;
     private final HttpServletResponse response;
     private final ServletContext context;
     private final HttpServletRequest request;
+	private final Router router;
 
-    public DefaultLogicResult(MethodLookupBuilder builder, HttpServletResponse response, ServletContext context, HttpServletRequest request) {
-        this.builder = builder;
+    public DefaultLogicResult( HttpServletResponse response, ServletContext context, HttpServletRequest request, Router router) {
         this.response = response;
         this.context = context;
         this.request = request;
+		this.router = router;
     }
 
     public <T> T redirectServerTo(final Class<T> type) {
@@ -63,7 +63,7 @@ public class DefaultLogicResult implements LogicResult {
         enhancer.setSuperclass(type);
         enhancer.setCallback(new MethodInterceptor() {
             public Object intercept(Object instance, Method method, Object[] args, MethodProxy proxy) throws Throwable {
-                String url = builder.urlFor(type, method, args);
+                String url = router.urlFor(type, method, args);
                 request.getRequestDispatcher(url).forward(request, response);
                 return null;
             }
@@ -78,7 +78,7 @@ public class DefaultLogicResult implements LogicResult {
         enhancer.setCallback(new MethodInterceptor() {
             public Object intercept(Object instance, Method method, Object[] args, MethodProxy proxy) throws Throwable {
                 String path = context.getContextPath();
-                String url = builder.urlFor(type, method, args);
+                String url = router.urlFor(type, method, args);
                 response.sendRedirect(path + url);
                 return null;
             }

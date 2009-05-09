@@ -29,50 +29,59 @@
  */
 package br.com.caelum.vraptor.http.ognl;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
-import java.util.Map;
 
-import ognl.OgnlContext;
-import br.com.caelum.vraptor.http.EmptyElementsRemoval;
+import ognl.Evaluation;
+import br.com.caelum.vraptor.VRaptorException;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.vraptor2.Info;
 
 /**
- * Capable of instantiating lists.
+ * Capable of instantiating lists. These are registered for later removal of
+ * null entitres.
  * 
  * @author Guilherme Silveira
  */
 public class ListNullHandler {
 
-    Object instantiate(Map context, Object target, Object property, OgnlContext ctx) throws InstantiationException,
-            IllegalAccessException, InvocationTargetException, NoSuchMethodException {
-        int position = (Integer) property;
-        Object listHolder = ctx.getCurrentEvaluation().getPrevious().getSource();
-        String listPropertyName = ctx.getCurrentEvaluation().getPrevious().getNode().toString();
-        Method listSetter = ReflectionBasedNullHandler.findMethod(listHolder.getClass(), "set"
-                + Info.capitalize(listPropertyName), target.getClass(), null);
-        Type[] types = listSetter.getGenericParameterTypes();
-        Type type = types[0];
-        if (!(type instanceof ParameterizedType)) {
-            // TODO better
-            throw new IllegalArgumentException("Vraptor does not support non-generic collection at "
-                    + listSetter.getName());
-        }
-        Class typeToInstantiate = (Class) ((ParameterizedType) type).getActualTypeArguments()[0];
-        Object instance = typeToInstantiate.getConstructor().newInstance();
-        List list = (List) target;
-        while (list.size() <= position) {
-            list.add(null);
-        }
-        Container container = (Container) context.get(Container.class);
-        EmptyElementsRemoval removal = container.instanceFor(EmptyElementsRemoval.class);
-        removal.add(list);
-        list.set(position, instance);
-        return instance;
-    }
+	@SuppressWarnings("unchecked")
+	Object instantiate(Container container, Object target, Object property, Evaluation evaluation)
+			throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+
+		// creating instance
+		Object listHolder = evaluation.getSource();
+		String listPropertyName = evaluation.getNode().toString();
+		Method listSetter = ReflectionBasedNullHandler.findMethod(listHolder.getClass(), "set"
+				+ Info.capitalize(listPropertyName), target.getClass(), null);
+		Type[] types = listSetter.getGenericParameterTypes();
+		Type type = types[0];
+		if (!(type instanceof ParameterizedType)) {
+			throw new VRaptorException("Vraptor does not support non-generic collection at "
+					+ listSetter.getName());
+		}
+		Class typeToInstantiate = (Class) ((ParameterizedType) type).getActualTypeArguments()[0];
+		Constructor constructor = typeToInstantiate.getConstructor();
+		constructor.setAccessible(true);
+		Object instance = constructor.newInstance();
+
+		// setting the position
+		int position = (Integer) property;
+		List list = (List) target;
+		while (list.size() <= position) {
+			list.add(null);
+		}
+		list.set(position, instance);
+
+		// registering for null entries removal
+		EmptyElementsRemoval removal = container.instanceFor(EmptyElementsRemoval.class);
+		removal.add(list);
+
+		return instance;
+	}
 
 }

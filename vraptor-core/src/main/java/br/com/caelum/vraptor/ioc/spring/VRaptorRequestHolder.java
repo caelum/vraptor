@@ -1,18 +1,18 @@
 package br.com.caelum.vraptor.ioc.spring;
 
-import br.com.caelum.vraptor.core.VRaptorRequest;
+import br.com.caelum.vraptor.core.RequestInfo;
 
 /**
  * @author Fabio Kung
  */
 public class VRaptorRequestHolder {
-    private static final ThreadLocal<VRaptorRequest> vraptorRequests = new ThreadLocal();
+    private static final ThreadLocal<RequestInfo> vraptorRequests = new ThreadLocal();
 
-    public static VRaptorRequest currentRequest() {
+    public static RequestInfo currentRequest() {
         return vraptorRequests.get();
     }
 
-    public static void setRequestForCurrentThread(VRaptorRequest request) {
+    public static void setRequestForCurrentThread(RequestInfo request) {
         vraptorRequests.set(request);
     }
 

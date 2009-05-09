@@ -29,7 +29,7 @@
  */
 package br.com.caelum.vraptor.converter;
 
-import java.util.List;
+
 import java.util.ResourceBundle;
 
 import br.com.caelum.vraptor.Convert;
@@ -37,19 +37,20 @@ import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
 /**
- * VRaptor's primitive boolean converter. 
- * 
+ * VRaptor's primitive boolean converter.
+ *
  * @author Cecilia Fernandes
  */
 @Convert(boolean.class)
 @ApplicationScoped
 public class PrimitiveBooleanConverter implements Converter {
+	private BooleanConverter booleanConverter = new BooleanConverter();
 
-    public Object convert(String value, Class type, List errors, ResourceBundle bundle) {
-        if (value == null || value=="") {
+    public Object convert(String value, Class type, ResourceBundle bundle) {
+        if (value == null || "".equals(value)) {
         	return false;
         }
-        return Boolean.parseBoolean(value);
+        return booleanConverter.convert(value, type, bundle);
     }
 
 }

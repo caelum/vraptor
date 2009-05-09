@@ -29,6 +29,7 @@
  */
 package br.com.caelum.vraptor.http.ognl;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -45,7 +46,6 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import br.com.caelum.vraptor.http.EmptyElementsRemoval;
 import br.com.caelum.vraptor.ioc.Container;
 
 /**
@@ -67,7 +67,7 @@ public class GenericNullHandler {
     }
 
     @SuppressWarnings("unchecked")
-    <T> T instantiate(Class<T> baseType, Map context) throws InstantiationException, IllegalAccessException,
+    <T> T instantiate(Class<T> baseType, Container container) throws InstantiationException, IllegalAccessException,
             InvocationTargetException, NoSuchMethodException {
         Object instance;
         Class<?> typeToInstantiate = baseType;
@@ -79,9 +79,10 @@ public class GenericNullHandler {
             }
             typeToInstantiate = CONCRETE_TYPES.get(baseType);
         }
-        instance = typeToInstantiate.getConstructor().newInstance();
+        Constructor<?> constructor = typeToInstantiate.getDeclaredConstructor();
+        constructor.setAccessible(true);
+		instance = constructor.newInstance();
         if(Collection.class.isAssignableFrom(typeToInstantiate)) {
-	        Container container = (Container) context.get(Container.class);
 	        EmptyElementsRemoval removal = container.instanceFor(EmptyElementsRemoval.class);
         	removal.add((Collection)instance);
         }

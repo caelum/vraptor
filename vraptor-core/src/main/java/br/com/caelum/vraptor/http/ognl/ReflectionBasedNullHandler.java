@@ -39,6 +39,7 @@ import java.util.Map;
 
 import ognl.ObjectNullHandler;
 import ognl.OgnlContext;
+import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.vraptor2.Info;
 
 /**
@@ -68,8 +69,9 @@ public class ReflectionBasedNullHandler extends ObjectNullHandler {
 
         try {
 
+            Container container = (Container) context.get(Container.class);
             if (target instanceof List) {
-                return list.instantiate(context, target, property, ctx);
+                return list.instantiate(container, target, property, ctx.getCurrentEvaluation().getPrevious());
             }
 
             String propertyCapitalized = Info.capitalize((String) property);
@@ -85,7 +87,7 @@ public class ReflectionBasedNullHandler extends ObjectNullHandler {
             if (baseType.isArray()) {
                 instance = instantiateArray(baseType);
             } else {
-                instance = generic.instantiate(baseType, ctx);
+                instance = generic.instantiate(baseType, container);
             }
             Method setter = findMethod(target.getClass(), "set" + propertyCapitalized, target.getClass(), getter.getReturnType());
             setter.invoke(target, instance);
@@ -113,7 +115,7 @@ public class ReflectionBasedNullHandler extends ObjectNullHandler {
         return Array.newInstance(baseType.getComponentType(), 0);
     }
 
-    static Method findMethod(Class<? extends Object> type, String name, Class<? extends Object> baseType, Class parameterType) {
+    static <P> Method findMethod(Class<? extends Object> type, String name, Class<? extends Object> baseType, Class<P> parameterType) {
         Method[] methods = type.getDeclaredMethods();
         for (Method method : methods) {
             if (method.getName().equals(name)) {

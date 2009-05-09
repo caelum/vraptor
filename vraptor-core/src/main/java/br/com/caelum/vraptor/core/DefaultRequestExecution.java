@@ -35,11 +35,12 @@ import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
 import br.com.caelum.vraptor.interceptor.InterceptorListPriorToExecutionExtractor;
 import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
 import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
+import br.com.caelum.vraptor.interceptor.multipart.MultipartInterceptor;
 
 /**
  * A request execution process. The default order is extremely important but
  * this behaviour can be change by providing your own RequestExecution.
- * 
+ *
  * @author Guilherme Silveira
  */
 public class DefaultRequestExecution implements RequestExecution {
@@ -55,10 +56,10 @@ public class DefaultRequestExecution implements RequestExecution {
         interceptorStack.add(ResourceLookupInterceptor.class);
         interceptorStack.add(URLParameterExtractorInterceptor.class);
         interceptorStack.add(InterceptorListPriorToExecutionExtractor.class);
+        interceptorStack.add(MultipartInterceptor.class);
         interceptorStack.add(instantiator);
         interceptorStack.add(ParametersInstantiatorInterceptor.class);
         interceptorStack.add(ExecuteMethodInterceptor.class);
-        interceptorStack.add(ForwardToDefaultViewInterceptor.class);
         interceptorStack.next(null, null);
     }
 }

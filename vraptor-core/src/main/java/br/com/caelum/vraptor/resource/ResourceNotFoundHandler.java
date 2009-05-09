@@ -27,7 +27,7 @@
  */
 package br.com.caelum.vraptor.resource;
 
-import br.com.caelum.vraptor.core.VRaptorRequest;
+import br.com.caelum.vraptor.core.RequestInfo;
 
 /**
  * A component capable of handling not found components.
@@ -36,5 +36,5 @@ import br.com.caelum.vraptor.core.VRaptorRequest;
  */
 public interface ResourceNotFoundHandler {
 
-	public void couldntFind (VRaptorRequest request);
+	public void couldntFind (RequestInfo request);
 }

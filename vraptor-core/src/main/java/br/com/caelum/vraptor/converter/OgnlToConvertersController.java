@@ -44,15 +44,16 @@ import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.validator.ValidationMessage;
+import br.com.caelum.vraptor.validator.Message;
 
 @RequestScoped
 public class OgnlToConvertersController implements TypeConverter {
 
     private final Converters converters;
 	private final ResourceBundle bundle;
-	private final List<ValidationMessage> errors;
+	private final List<Message> errors;
 
-    public OgnlToConvertersController(Converters converters, List<ValidationMessage> errors, ResourceBundle bundle) {
+    public OgnlToConvertersController(Converters converters, List<Message> errors, ResourceBundle bundle) {
         this.converters = converters;
 		this.errors = errors;
 		this.bundle = bundle;
@@ -69,14 +70,14 @@ public class OgnlToConvertersController implements TypeConverter {
             // TODO better, validation error?
             throw new IllegalArgumentException("Cannot instantiate a converter for type " + type.getName());
         }
-        return converter.convert((String) value, type, errors, bundle);
+        return converter.convert((String) value, type, bundle);
     }
 
     private Type genericTypeToConvert(Object target, Member member) {
         if (member instanceof Field) {
             return extractFieldType(member);
         } else if (member instanceof Method) {
-            return extractMethodType(target, member);
+            return extractSetterMethodType(target, member);
         } else if (member == null && target.getClass().isArray()) {
             return extractArrayType(target);
         }
@@ -86,7 +87,7 @@ public class OgnlToConvertersController implements TypeConverter {
     }
 
     @SuppressWarnings("unchecked")
-    private Class rawTypeOf(Type genericType) {
+    public static Class rawTypeOf(Type genericType) {
         if (genericType instanceof ParameterizedType) {
             return (Class) ((ParameterizedType) genericType).getRawType();
         }
@@ -101,8 +102,7 @@ public class OgnlToConvertersController implements TypeConverter {
         return ((Field)member).getGenericType();
     }
 
-    private Type extractMethodType(Object target, Member member) {
-        Type genericType;
+    private Type extractSetterMethodType(Object target, Member member) {
         Method method = (Method) member;
         Type[] parameterTypes = method.getGenericParameterTypes();
         if (parameterTypes.length != 1) {
@@ -110,8 +110,7 @@ public class OgnlToConvertersController implements TypeConverter {
             throw new IllegalArgumentException("Vraptor can only navigate through setters with one parameter, not "
                     + member + " from " + target.getClass().getName());
         }
-        genericType = parameterTypes[0];
-        return genericType;
+        return parameterTypes[0];
     }
 
 }

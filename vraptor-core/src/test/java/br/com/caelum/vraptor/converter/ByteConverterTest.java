@@ -32,47 +32,44 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
-import br.com.caelum.vraptor.validator.ValidationMessage;
-
 public class ByteConverterTest {
-    
-    private ByteConverter converter;
-	private ArrayList<ValidationMessage> errors;
+
+	private ByteConverter converter;
 	private ResourceBundle bundle;
 
-    @Before
-    public void setup() {
-        this.converter = new ByteConverter();
-        this.errors = new ArrayList<ValidationMessage>();
-        this.bundle = ResourceBundle.getBundle("messages");
-    }
-    
-    @Test
-    public void shouldBeAbleToConvertNumbers(){
-        assertThat(converter.convert("2", Byte.class, errors, bundle), is(equalTo((byte) 2)));
-    }
-    
-    @Test
-    public void shouldComplainAboutInvalidNumber() {
-        converter.convert("---", Byte.class, errors, bundle);
-        assertThat(errors.get(0), is(VRaptorMatchers.error("", "--- is not a valid integer.")));
-    }
-    
-    @Test
-    public void shouldNotComplainAboutNull() {
-        assertThat(converter.convert(null, Byte.class, errors, bundle), is(nullValue()));
-    }
+	@Before
+	public void setup() {
+		this.converter = new ByteConverter();
+		this.bundle = ResourceBundle.getBundle("messages");
+	}
 
-    @Test
-    public void shouldNotComplainAboutEmpty() {
-        assertThat(converter.convert("", Byte.class, errors, bundle), is(nullValue()));
-    }
+	@Test
+	public void shouldBeAbleToConvertNumbers() {
+		assertThat(converter.convert("2", Byte.class, bundle), is(equalTo((byte) 2)));
+	}
+
+	@Test
+	public void shouldComplainAboutInvalidNumber() {
+		try {
+			converter.convert("---", Byte.class, bundle);
+		} catch (ConversionError e) {
+			assertThat(e.getMessage(), is(equalTo("--- is not a valid integer.")));
+		}
+	}
+
+	@Test
+	public void shouldNotComplainAboutNull() {
+		assertThat(converter.convert(null, Byte.class, bundle), is(nullValue()));
+	}
+
+	@Test
+	public void shouldNotComplainAboutEmpty() {
+		assertThat(converter.convert("", Byte.class, bundle), is(nullValue()));
+	}
 
 }

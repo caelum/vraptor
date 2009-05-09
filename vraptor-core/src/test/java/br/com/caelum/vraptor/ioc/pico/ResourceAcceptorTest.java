@@ -1,23 +1,24 @@
 package br.com.caelum.vraptor.ioc.pico;
 
-import br.com.caelum.vraptor.Resource;
-import br.com.caelum.vraptor.resource.DefaultResource;
-import br.com.caelum.vraptor.resource.ResourceRegistry;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
 
+import br.com.caelum.vraptor.Resource;
+import br.com.caelum.vraptor.http.route.Router;
+import br.com.caelum.vraptor.resource.DefaultResource;
+
 public class ResourceAcceptorTest {
 
     private ResourceAcceptor acceptor;
     private Mockery mockery;
-    private ResourceRegistry registry;
+    private Router registry;
 
     @Before
     public void setup() {
         mockery = new Mockery();
-        registry = mockery.mock(ResourceRegistry.class);
+        registry = mockery.mock(Router.class);
         this.acceptor = new ResourceAcceptor(registry);
     }
 

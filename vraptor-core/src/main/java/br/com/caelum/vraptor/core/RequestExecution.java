@@ -29,8 +29,6 @@
  */
 package br.com.caelum.vraptor.core;
 
-import java.io.IOException;
-
 import br.com.caelum.vraptor.VRaptorException;
 
 /**

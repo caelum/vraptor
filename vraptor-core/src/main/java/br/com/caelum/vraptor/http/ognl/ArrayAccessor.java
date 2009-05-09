@@ -8,7 +8,6 @@ import java.util.Map;
 import ognl.ArrayPropertyAccessor;
 import ognl.OgnlContext;
 import ognl.OgnlException;
-import br.com.caelum.vraptor.http.EmptyElementsRemoval;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.vraptor2.Info;
 

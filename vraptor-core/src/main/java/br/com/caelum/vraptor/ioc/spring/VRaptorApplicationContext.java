@@ -1,34 +1,9 @@
 package br.com.caelum.vraptor.ioc.spring;
 
-import br.com.caelum.vraptor.core.DefaultConverters;
-import br.com.caelum.vraptor.core.DefaultInterceptorStack;
-import br.com.caelum.vraptor.core.DefaultMethodParameters;
-import br.com.caelum.vraptor.core.DefaultRequestExecution;
-import br.com.caelum.vraptor.core.DefaultRequestInfo;
-import br.com.caelum.vraptor.core.DefaultResult;
-import br.com.caelum.vraptor.core.ForwardToDefaultViewInterceptor;
-import br.com.caelum.vraptor.core.JstlLocalization;
-import br.com.caelum.vraptor.core.URLParameterExtractorInterceptor;
-import br.com.caelum.vraptor.http.DefaultRequestParameters;
-import br.com.caelum.vraptor.http.EmptyElementsRemoval;
-import br.com.caelum.vraptor.http.OgnlParametersProvider;
-import br.com.caelum.vraptor.http.ParanamerNameProvider;
-import br.com.caelum.vraptor.http.StupidTranslator;
-import br.com.caelum.vraptor.http.asm.AsmBasedTypeCreator;
-import br.com.caelum.vraptor.interceptor.DefaultInterceptorRegistry;
-import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
-import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
-import br.com.caelum.vraptor.interceptor.InterceptorListPriorToExecutionExtractor;
-import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
-import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
-import br.com.caelum.vraptor.resource.DefaultMethodLookupBuilder;
-import br.com.caelum.vraptor.resource.DefaultResourceNotFoundHandler;
-import br.com.caelum.vraptor.resource.DefaultResourceRegistry;
-import br.com.caelum.vraptor.validator.DefaultValidator;
-import br.com.caelum.vraptor.view.DefaultLogicResult;
-import br.com.caelum.vraptor.view.DefaultPathResolver;
-import br.com.caelum.vraptor.view.jsp.DefaultPageResult;
-import br.com.caelum.vraptor.vraptor2.RequestResult;
+import java.util.Map;
+
+import javax.servlet.ServletContext;
+
 import org.springframework.aop.config.AopConfigUtils;
 import org.springframework.aop.scope.ScopedProxyUtils;
 import org.springframework.beans.factory.BeanFactoryUtils;
@@ -50,8 +25,34 @@ import org.springframework.core.Ordered;
 import org.springframework.web.context.support.AbstractRefreshableWebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
-import javax.servlet.ServletContext;
-import java.util.Map;
+import br.com.caelum.vraptor.core.DefaultConverters;
+import br.com.caelum.vraptor.core.DefaultInterceptorStack;
+import br.com.caelum.vraptor.core.DefaultMethodInfo;
+import br.com.caelum.vraptor.core.DefaultRequestExecution;
+import br.com.caelum.vraptor.core.DefaultResult;
+import br.com.caelum.vraptor.core.JstlLocalization;
+import br.com.caelum.vraptor.core.URLParameterExtractorInterceptor;
+import br.com.caelum.vraptor.extra.ForwardToDefaultViewInterceptor;
+import br.com.caelum.vraptor.http.DefaultResourceTranslator;
+import br.com.caelum.vraptor.http.OgnlParametersProvider;
+import br.com.caelum.vraptor.http.ParanamerNameProvider;
+import br.com.caelum.vraptor.http.asm.AsmBasedTypeCreator;
+import br.com.caelum.vraptor.http.ognl.EmptyElementsRemoval;
+import br.com.caelum.vraptor.http.route.DefaultRouter;
+import br.com.caelum.vraptor.http.route.NoRoutesConfiguration;
+import br.com.caelum.vraptor.http.route.PathAnnotationRoutesCreator;
+import br.com.caelum.vraptor.interceptor.DefaultInterceptorRegistry;
+import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
+import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
+import br.com.caelum.vraptor.interceptor.InterceptorListPriorToExecutionExtractor;
+import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
+import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
+import br.com.caelum.vraptor.resource.DefaultResourceNotFoundHandler;
+import br.com.caelum.vraptor.validator.DefaultValidator;
+import br.com.caelum.vraptor.view.DefaultLogicResult;
+import br.com.caelum.vraptor.view.DefaultPageResult;
+import br.com.caelum.vraptor.view.DefaultPathResolver;
+import br.com.caelum.vraptor.view.EmptyResult;
 
 /**
  * @author Fabio Kung
@@ -87,11 +88,10 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
     }
 
     private void registerApplicationScopedComponentsOn(DefaultListableBeanFactory beanFactory) {
-        registerOn(beanFactory, DefaultResourceRegistry.class);
-        registerOn(beanFactory, StupidTranslator.class);
+        registerOn(beanFactory, DefaultRouter.class);
+        registerOn(beanFactory, DefaultResourceTranslator.class);
         registerOn(beanFactory, DefaultInterceptorRegistry.class);
         registerOn(beanFactory, AsmBasedTypeCreator.class);
-        registerOn(beanFactory, DefaultMethodLookupBuilder.class);
         registerOn(beanFactory, DefaultPathResolver.class);
         registerOn(beanFactory, ParanamerNameProvider.class);
         registerOn(beanFactory, DefaultConverters.class);
@@ -99,13 +99,12 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
         registerOn(beanFactory, ResourcesHolder.class);
         registerOn(beanFactory, ResourceFinder.class);
         registerOn(beanFactory, ResourceRegistrar.class);
+        registerOn(beanFactory, NoRoutesConfiguration.class);
+        registerOn(beanFactory, PathAnnotationRoutesCreator.class);
     }
 
     private void registerRequestScopedComponentsOn(DefaultListableBeanFactory beanFactory) {
-        registerOn(beanFactory, RequestResult.class);
         registerOn(beanFactory, ParametersInstantiatorInterceptor.class);
-        registerOn(beanFactory, DefaultMethodParameters.class);
-        registerOn(beanFactory, DefaultRequestParameters.class);
         registerOn(beanFactory, InterceptorListPriorToExecutionExtractor.class);
         registerOn(beanFactory, URLParameterExtractorInterceptor.class);
         registerOn(beanFactory, DefaultInterceptorStack.class);
@@ -118,7 +117,7 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
         registerOn(beanFactory, ForwardToDefaultViewInterceptor.class);
         registerOn(beanFactory, DefaultLogicResult.class);
         registerOn(beanFactory, OgnlParametersProvider.class);
-        registerOn(beanFactory, DefaultRequestInfo.class);
+        registerOn(beanFactory, DefaultMethodInfo.class);
         registerOn(beanFactory, DefaultValidator.class);
         registerOn(beanFactory, DefaultLogicResult.class);
         registerOn(beanFactory, DefaultResourceNotFoundHandler.class);
@@ -127,6 +126,7 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
         registerOn(beanFactory, HttpServletResponseProvider.class, true);
         registerOn(beanFactory, HttpSessionProvider.class, true);
         registerOn(beanFactory, JstlLocalization.class);
+        registerOn(beanFactory, EmptyResult.class);
 
         beanFactory.registerSingleton(SpringBasedContainer.class.getName(), container);
     }
@@ -142,7 +142,7 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
     private void registerOn(BeanDefinitionRegistry registry, Class<?> type, boolean customComponent) {
         AnnotatedGenericBeanDefinition definition = new AnnotatedGenericBeanDefinition(type);
         definition.setLazyInit(true);
-        definition.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE);
+        definition.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_NO);
         if (customComponent) {
             definition.setPrimary(true);
             definition.setRole(BeanDefinition.ROLE_APPLICATION);

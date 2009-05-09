@@ -1,10 +1,10 @@
 package br.com.caelum.vraptor.ioc;
 
-import br.com.caelum.vraptor.core.VRaptorRequest;
+import br.com.caelum.vraptor.core.RequestInfo;
 
 /**
  * @author Fabio Kung
  */
 public interface WhatToDo<T> {
-    T execute(VRaptorRequest request, int counter);
+    T execute(RequestInfo request, int counter);
 }

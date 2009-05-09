@@ -1,7 +1,7 @@
 /***
- * 
+ *
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  * 1. Redistributions of source code must retain the above copyright notice,
@@ -12,7 +12,7 @@
  * copyright holders nor the names of its contributors may be used to endorse or
  * promote products derived from this software without specific prior written
  * permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -27,31 +27,28 @@
  */
 package br.com.caelum.vraptor.converter;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
-
+import br.com.caelum.vraptor.core.Converters;
+import br.com.caelum.vraptor.http.ognl.ArrayAccessor;
+import br.com.caelum.vraptor.http.ognl.EmptyElementsRemoval;
+import br.com.caelum.vraptor.http.ognl.ListAccessor;
+import br.com.caelum.vraptor.http.ognl.ReflectionBasedNullHandler;
+import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor.validator.Message;
 import ognl.Ognl;
 import ognl.OgnlContext;
 import ognl.OgnlException;
 import ognl.OgnlRuntime;
-
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.core.Converters;
-import br.com.caelum.vraptor.http.EmptyElementsRemoval;
-import br.com.caelum.vraptor.http.ognl.ArrayAccessor;
-import br.com.caelum.vraptor.http.ognl.ListAccessor;
-import br.com.caelum.vraptor.http.ognl.ReflectionBasedNullHandler;
-import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.validator.ValidationMessage;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ResourceBundle;
 
 /**
  * Unfortunately OGNL sucks so bad in its design that we had to create a "unit"
@@ -60,9 +57,8 @@ import br.com.caelum.vraptor.validator.ValidationMessage;
  * that tests are not thread safe. Summing up: OGNL api sucks, OGNL idea rulez.
  * This test is here to ensure generic support through our implementation using
  * OGNL.
- * 
+ *
  * @author Guilherme Silveira
- * 
  */
 public class OgnlGenericTypesSupportTest {
 
@@ -72,8 +68,8 @@ public class OgnlGenericTypesSupportTest {
     private OgnlContext context;
     private Container container;
     private EmptyElementsRemoval removal;
-	private ResourceBundle bundle;
-	private ArrayList<ValidationMessage> errors;
+    private ResourceBundle bundle;
+    private ArrayList<Message> errors;
 
     @Before
     public void setup() {
@@ -82,12 +78,15 @@ public class OgnlGenericTypesSupportTest {
         this.container = mockery.mock(Container.class);
         this.removal = new EmptyElementsRemoval();
         this.bundle = ResourceBundle.getBundle("messages");
-        this.errors = new ArrayList<ValidationMessage>();
+        this.errors = new ArrayList<Message>();
         mockery.checking(new Expectations() {
             {
-                allowing(container).instanceFor(Converters.class); will(returnValue(converters));
-                allowing(converters).to(Long.class, container); will(returnValue(new LongConverter()));
-                allowing(container).instanceFor(EmptyElementsRemoval.class); will(returnValue(removal));
+                allowing(container).instanceFor(Converters.class);
+                will(returnValue(converters));
+                allowing(converters).to(Long.class, container);
+                will(returnValue(new LongConverter()));
+                allowing(container).instanceFor(EmptyElementsRemoval.class);
+                will(returnValue(removal));
             }
         });
         this.myCat = new Cat();

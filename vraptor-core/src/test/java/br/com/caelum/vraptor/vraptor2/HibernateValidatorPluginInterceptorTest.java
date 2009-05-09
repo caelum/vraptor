@@ -15,14 +15,14 @@ import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.VRaptorMockery;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.Localization;
-import br.com.caelum.vraptor.core.MethodParameters;
+import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 public class HibernateValidatorPluginInterceptorTest {
 
     private VRaptorMockery mockery;
-    private MethodParameters parameters;
+    private MethodInfo parameters;
     private HttpServletRequest request;
     private ParameterNameProvider provider;
     private ValidationErrors errors;

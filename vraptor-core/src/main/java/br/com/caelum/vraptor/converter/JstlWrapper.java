@@ -2,11 +2,11 @@ package br.com.caelum.vraptor.converter;
 
 import java.util.Locale;
 
-import br.com.caelum.vraptor.core.VRaptorRequest;
+import br.com.caelum.vraptor.core.RequestInfo;
 
 public class JstlWrapper {
 
-    public Object find(VRaptorRequest request, String name) {
+    public Object find(RequestInfo request, String name) {
         if (request.getRequest().getAttribute(name + ".request")!=null) {
             return request.getRequest().getAttribute(name + ".request");
         } else if (request.getRequest().getSession().getAttribute(name + ".session")!=null) {
@@ -17,7 +17,7 @@ public class JstlWrapper {
         return request.getServletContext().getInitParameter(name);
     }
 
-    public Locale findLocale(VRaptorRequest request) {
+    public Locale findLocale(RequestInfo request) {
         Object obj = find(request, "javax.servlet.jsp.jstl.fmt.locale");
         if(obj instanceof String) {
             return stringToLocale((String) obj);

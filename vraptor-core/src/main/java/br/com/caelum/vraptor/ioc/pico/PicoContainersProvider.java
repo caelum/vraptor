@@ -44,12 +44,12 @@ import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.Interceptor;
-import br.com.caelum.vraptor.core.VRaptorRequest;
+import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.SessionScoped;
-import br.com.caelum.vraptor.resource.ResourceRegistry;
 
 /**
  * Provides containers, controlling all scopes and registering all different
@@ -114,7 +114,7 @@ public class PicoContainersProvider implements ComponentRegistry {
 		return false;
 	}
 
-	public Container provide(VRaptorRequest request) {
+	public Container provide(RequestInfo request) {
 		HttpSession session = request.getRequest().getSession();
 		MutablePicoContainer sessionScope = (MutablePicoContainer) session.getAttribute(CONTAINER_SESSION_KEY);
 		if (sessionScope == null) {
@@ -134,7 +134,7 @@ public class PicoContainersProvider implements ComponentRegistry {
 		requestContainer.addComponent(request).addComponent(request.getRequest()).addComponent(request.getResponse());
 		// cache(CachedConverters.class, Converters.class);
 		PicoBasedContainer baseContainer = new PicoBasedContainer(requestContainer, request, this.appContainer
-				.getComponent(ResourceRegistry.class));
+				.getComponent(Router.class));
 		return baseContainer;
 	}
 

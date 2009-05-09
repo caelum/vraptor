@@ -10,20 +10,21 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.fileupload.servlet.ServletRequestContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Interceptor;
 import br.com.caelum.vraptor.core.InterceptorStack;
-import br.com.caelum.vraptor.http.RequestParameters;
+import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**
  * An interceptor which handles multipart requests.<br>
  * Provided parameters are injected through RequestParameters.set and uploaded
  * files are made available through
- * 
+ *
  * @author Guilherme Silveira
  */
 public class MultipartInterceptor implements Interceptor {
@@ -36,9 +37,9 @@ public class MultipartInterceptor implements Interceptor {
 
     private final HttpServletRequest request;
 
-    private final RequestParameters parameters;
+    private final MutableRequest parameters;
 
-    public MultipartInterceptor(HttpServletRequest request, RequestParameters parameters) throws IOException {
+    public MultipartInterceptor(HttpServletRequest request, MutableRequest parameters) throws IOException {
         this.request = request;
         this.parameters = parameters;
         this.sizeLimit = 2 * 1024 * 1024;
@@ -48,6 +49,11 @@ public class MultipartInterceptor implements Interceptor {
 
     @SuppressWarnings("unchecked")
     public void intercept(InterceptorStack stack, ResourceMethod method, Object instance) throws InterceptionException {
+    	// TODO ugly, just for now until next release
+		if(!accepts(method)) {
+			stack.next(method, instance);
+		    return;
+		}
 
         logger.debug("Trying to parse multipart request.");
 
@@ -87,9 +93,8 @@ public class MultipartInterceptor implements Interceptor {
         return factory;
     }
 
-    @SuppressWarnings("deprecation")
     public boolean accepts(ResourceMethod method) {
-        return ServletFileUpload.isMultipartContent(request);
+        return ServletFileUpload.isMultipartContent(new ServletRequestContext(request));
     }
 
 }

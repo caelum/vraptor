@@ -31,10 +31,10 @@ package br.com.caelum.vraptor.ioc.pico;
 
 import org.picocontainer.MutablePicoContainer;
 
-import br.com.caelum.vraptor.core.VRaptorRequest;
+import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.resource.Resource;
-import br.com.caelum.vraptor.resource.ResourceRegistry;
 
 /**
  * A pico container based implementation of a component providing container.
@@ -45,13 +45,13 @@ public class PicoBasedContainer implements Container {
 
     private final MutablePicoContainer container;
 
-    public PicoBasedContainer(MutablePicoContainer container, VRaptorRequest request, ResourceRegistry resources) {
+    public PicoBasedContainer(MutablePicoContainer container, RequestInfo request, Router routes) {
         this.container = container;
         // TODO try to remove addComponent(this) - InstantiateInterceptor and
         // InterceptorStack
         // needs to instantiate objects with dependency injection
         this.container.addComponent(this);
-        for (Resource resource : resources.all()) {
+        for (Resource resource : routes.all()) {
             this.container.addComponent(resource.getType());
         }
     }

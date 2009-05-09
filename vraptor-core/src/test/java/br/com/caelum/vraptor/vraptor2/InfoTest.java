@@ -4,18 +4,13 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
 import org.vraptor.annotations.Component;
 import org.vraptor.annotations.Logic;
-import org.vraptor.annotations.Viewless;
 
 import br.com.caelum.vraptor.VRaptorMockery;
 import br.com.caelum.vraptor.resource.Resource;
-import br.com.caelum.vraptor.resource.ResourceMethod;
 
 public class InfoTest {
 

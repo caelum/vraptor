@@ -29,8 +29,6 @@
  */
 package br.com.caelum.vraptor.http;
 
-import java.lang.reflect.Type;
-
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**
@@ -41,6 +39,10 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  */
 public interface TypeCreator {
 
-    Class<?> typeFor(ResourceMethod method);
+	/**
+	 * Returns a type including a field for each one of the parameters from this
+	 * method. It also includes a method which .
+	 */
+	Class<?> typeFor(ResourceMethod method);
 
 }

@@ -14,7 +14,6 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.VRaptorMockery;
 import br.com.caelum.vraptor.http.DefaultParameterNameProvider;
-import br.com.caelum.vraptor.http.asm.AsmBasedTypeCreator;
 import br.com.caelum.vraptor.interceptor.DogAlike;
 
 public class AsmBasedTypeCreatorTest {

@@ -1,31 +1,58 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <body>
-<form action="clients/add">Name: <input type="text"
-	name="client.name" value="" /><br />
-	<input type="text" name="client.balance" value="" /><br/>
-Street: <input type="text" name="client.addresses[0].street" value="" /><br />
-Number: <input type="text" name="client.addresses[0].number" value="" /><br />
-Id: <input type="text" name="client.id" value="" /><br />
-<input type="submit" /></form>
+
+<a href="<c:url value="/clients/random"/>">random pick</a>
+<br/><br/>
+
+<form action="<c:url value="/clients"/>" method="post">
 <table>
-<c:forEach var="client" items="${clients }">
-<tr>
-<td>
-Name: ${client.name} (id= ${client.id})
-<ul>
-		<c:forEach var="address" items="${client.addresses }">
-			<li>${address.street }, ${address.number }</li>
-		</c:forEach>
-	</ul>
-	<ul>
-		<c:forEach var="email" items="${client.emails }">
-			<li>${email }</li>
-		</c:forEach>
-	</ul>
-</c:forEach>
-</td>
-</tr>
+	<tr>
+		<td>Name:</td>
+		<td><input type="text" name="client.name" value="" /> (min length: 5)</td>
+	</tr>
+	<tr>
+		<td>Balance:</td>
+		<td><input type="text" name="client.balance" value="" /></td>
+	</tr>
+	<tr>
+		<td>Street:</td>
+		<td><input type="text" name="client.addresses[0].street" value="" /></td>
+	</tr>
+	<tr>
+		<td>Number:</td>
+		<td><input type="text" name="client.addresses[0].number" value="" /></td>
+	</tr>
+	<tr>
+		<td>Age:</td>
+		<td><input type="text" name="client.age" value="" /> (min: 10)</td>
+	</tr>
+	<tr>
+		<td>Id:</td>
+		<td><input type="text" name="client.id" value="" /><br /></td>
+	</tr>
+	<tr>
+		<td colspan="2"><input type="submit" /></td>
+	</tr>
 </table>
+</form>
+
+<table>
+	<tr>
+		<th>Id</th>
+		<th>Name</th>
+		<th>Actions</th>
+	</tr>
+	<c:forEach var="client" items="${clients }">
+		<tr>
+			<td>${client.id}</td>
+			<td>${client.name}</td>
+			<td><a href="<c:url value="/clients/${client.id }"/>">view</a> |
+			<a href="<c:url value="/clients/${client.id }"/>?_method=DELETE">delete</a>
+			</td>
+		</tr>
+	</c:forEach>
+</table>
+
 </body>
 </html>

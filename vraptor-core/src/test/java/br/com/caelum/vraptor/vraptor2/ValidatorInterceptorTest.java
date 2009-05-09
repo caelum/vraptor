@@ -1,29 +1,27 @@
 package br.com.caelum.vraptor.vraptor2;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.ResourceBundle;
-
-import javax.servlet.ServletException;
-
-import org.hamcrest.Description;
-import org.hamcrest.TypeSafeMatcher;
-import org.jmock.Expectations;
-import org.junit.Before;
-import org.junit.Test;
-import org.vraptor.i18n.FixedMessage;
-import org.vraptor.i18n.Message;
-import org.vraptor.validator.ValidationErrors;
-
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.VRaptorMockery;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.validator.ValidationMessage;
-import br.com.caelum.vraptor.view.jsp.PageResult;
+import br.com.caelum.vraptor.validator.Message;
+import br.com.caelum.vraptor.view.PageResult;
 import br.com.caelum.vraptor.vraptor2.outject.Outjecter;
+import br.com.caelum.vraptor.vraptor2.outject.OutjectionInterceptor;
+import org.hamcrest.Description;
+import org.hamcrest.TypeSafeMatcher;
+import org.jmock.Expectations;
+import org.junit.Before;
+import org.junit.Test;
+import org.vraptor.i18n.FixedMessage;
+import org.vraptor.validator.ValidationErrors;
+
+import javax.servlet.ServletException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.ResourceBundle;
 
 public class ValidatorInterceptorTest {
 
@@ -36,9 +34,9 @@ public class ValidatorInterceptorTest {
     private Outjecter outjecter;
     private OutjectionInterceptor interceptor;
     private ComponentInfoProvider info;
-	private Localization localization;
-	private ArrayList<ValidationMessage> listErrors;
-	private ResourceBundle bundle;
+    private Localization localization;
+    private ArrayList<Message> listErrors;
+    private ResourceBundle bundle;
 
     @Before
     public void setup() {
@@ -49,12 +47,14 @@ public class ValidatorInterceptorTest {
         this.outjecter = mockery.mock(Outjecter.class);
         this.info = mockery.mock(ComponentInfoProvider.class);
         this.localization = mockery.mock(Localization.class);
-        this.listErrors = new ArrayList<ValidationMessage>();
+        this.listErrors = new ArrayList<Message>();
         this.bundle = ResourceBundle.getBundle("messages");
         mockery.checking(new Expectations() {
             {
-                one(info).getOutjecter(); will(returnValue(outjecter));
-                allowing(localization).getBundle(); will(returnValue(bundle));
+                one(info).getOutjecter();
+                will(returnValue(outjecter));
+                allowing(localization).getBundle();
+                will(returnValue(bundle));
             }
         });
         this.interceptor = new OutjectionInterceptor(info);
@@ -96,7 +96,8 @@ public class ValidatorInterceptorTest {
         final ResourceMethod method = mockery.methodFor(MyComponent.class, "noValidation");
         mockery.checking(new Expectations() {
             {
-                one(errors).size(); will(returnValue(0));
+                one(errors).size();
+                will(returnValue(0));
                 one(stack).next(method, resourceInstance);
             }
         });
@@ -107,7 +108,7 @@ public class ValidatorInterceptorTest {
     @Test
     public void forwardToValidationPageWithErrorsIfSomeFound() throws NoSuchMethodException, InterceptionException,
             IOException, ServletException {
-        final Message message = new Message("", "is_not_a_valid_number");
+        final org.vraptor.i18n.Message message = new org.vraptor.i18n.Message("", "is_not_a_valid_number");
         final MyComponent resourceInstance = new MyComponent() {
             public void validateWithValidation(ValidationErrors errors) {
                 errors.add(message);
@@ -129,26 +130,27 @@ public class ValidatorInterceptorTest {
                 one(errors).add(with(fixedMessage("invalid")));
                 one(errors).size();
                 will(returnValue(1));
-                one(localization).getMessage("is_not_a_valid_number"); will(returnValue("invalid"));
+                one(localization).getMessage("is_not_a_valid_number");
+                will(returnValue("invalid"));
             }
 
-			private TypeSafeMatcher<FixedMessage> fixedMessage(final String key) {
-				return new TypeSafeMatcher<FixedMessage>() {
+            private TypeSafeMatcher<FixedMessage> fixedMessage(final String key) {
+                return new TypeSafeMatcher<FixedMessage>() {
 
-					protected void describeMismatchSafely(FixedMessage item, Description mismatchDescription) {
-						mismatchDescription.appendText(item.getKey());
-					}
+                    protected void describeMismatchSafely(FixedMessage item, Description mismatchDescription) {
+                        mismatchDescription.appendText(item.getKey());
+                    }
 
-					protected boolean matchesSafely(FixedMessage item) {
-						return item.getKey().equals(key);
-					}
+                    protected boolean matchesSafely(FixedMessage item) {
+                        return item.getKey().equals(key);
+                    }
 
-					public void describeTo(Description description) {
-						description.appendText(key);
-					}
-					
-				};
-			}
+                    public void describeTo(Description description) {
+                        description.appendText(key);
+                    }
+
+                };
+            }
         });
         validator.intercept(stack, method, resourceInstance);
         mockery.assertIsSatisfied();

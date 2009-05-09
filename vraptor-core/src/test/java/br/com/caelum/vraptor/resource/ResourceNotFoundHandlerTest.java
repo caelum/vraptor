@@ -12,20 +12,20 @@ import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.core.VRaptorRequest;
+import br.com.caelum.vraptor.core.RequestInfo;
 
 public class ResourceNotFoundHandlerTest {
 
 	private ResourceNotFoundHandler notFoundHandler;
 	private Mockery mockery;
 	private HttpServletResponse webResponse;
-	private VRaptorRequest request;
+	private RequestInfo request;
 
 	@Before
 	public void setUp() {
 		this.mockery = new Mockery();
 		this.webResponse = mockery.mock(HttpServletResponse.class);
-		this.request = new VRaptorRequest(null, null, webResponse);
+		this.request = new RequestInfo(null, null, webResponse);
 		this.notFoundHandler = new DefaultResourceNotFoundHandler();
 	}
 	

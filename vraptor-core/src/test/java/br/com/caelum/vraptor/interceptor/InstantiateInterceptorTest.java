@@ -14,7 +14,7 @@ import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.resource.DefaultResource;
 import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.view.jsp.DogController;
+import br.com.caelum.vraptor.view.DogController;
 
 public class InstantiateInterceptorTest {
 

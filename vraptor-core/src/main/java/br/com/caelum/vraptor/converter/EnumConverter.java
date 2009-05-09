@@ -30,13 +30,11 @@
 package br.com.caelum.vraptor.converter;
 
 import java.text.MessageFormat;
-import java.util.List;
 import java.util.ResourceBundle;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
-import br.com.caelum.vraptor.validator.ValidationMessage;
 
 /**
  * Accepts either the ordinal value or name. Null and empty strings are treated
@@ -48,38 +46,35 @@ import br.com.caelum.vraptor.validator.ValidationMessage;
 @ApplicationScoped
 public class EnumConverter implements Converter<Enum> {
 
-    public Enum convert(String value, Class type, List<ValidationMessage> errors, ResourceBundle bundle) {
+    public Enum convert(String value, Class type, ResourceBundle bundle) {
         if (value == null || value.equals("")) {
             return null;
         }
         Class<? extends Enum> enumType = type;
         if (Character.isDigit(value.charAt(0))) {
-            return resolveByOrdinal(value, enumType, errors, bundle);
+            return resolveByOrdinal(value, enumType, bundle);
         } else {
-            return resolveByName(value, enumType, errors, bundle);
+            return resolveByName(value, enumType, bundle);
         }
     }
 
-    private Enum resolveByName(String value, Class<? extends Enum> enumType, List<ValidationMessage> errors, ResourceBundle bundle) {
+    private Enum resolveByName(String value, Class<? extends Enum> enumType, ResourceBundle bundle) {
         try {
             return Enum.valueOf(enumType, value);
         } catch (IllegalArgumentException e) {
-			errors.add(new ValidationMessage(MessageFormat.format(bundle.getString("is_not_a_valid_enum_value"), value), ""));
-			return null;
+			throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_enum_value"), value));
         }
     }
 
-    private Enum resolveByOrdinal(String value, Class<? extends Enum> enumType, List<ValidationMessage> errors, ResourceBundle bundle) {
+    private Enum resolveByOrdinal(String value, Class<? extends Enum> enumType, ResourceBundle bundle) {
         try {
             int ordinal = Integer.parseInt(value);
             if (ordinal >= enumType.getEnumConstants().length) {
-    			errors.add(new ValidationMessage(MessageFormat.format(bundle.getString("is_not_a_valid_enum_value"), value), ""));
-    			return null;
+    			throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_enum_value"), value));
             }
             return enumType.getEnumConstants()[ordinal];
         } catch (NumberFormatException e) {
-			errors.add(new ValidationMessage(MessageFormat.format(bundle.getString("is_not_a_valid_enum_value"), value), ""));
-			return null;
+			throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_enum_value"), value));
         }
     }
 

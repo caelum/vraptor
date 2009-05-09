@@ -1,16 +1,17 @@
 package br.com.caelum.vraptor.ioc.spring;
 
-import br.com.caelum.vraptor.core.Execution;
-import br.com.caelum.vraptor.core.VRaptorRequest;
-import br.com.caelum.vraptor.ioc.ComponentRegistrar;
-import br.com.caelum.vraptor.ioc.ContainerProvider;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletRequestEvent;
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.RequestContextListener;
 
-import javax.servlet.ServletContext;
-import javax.servlet.ServletRequestEvent;
-import javax.servlet.http.HttpServletRequest;
+import br.com.caelum.vraptor.core.Execution;
+import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.ioc.ComponentRegistrar;
+import br.com.caelum.vraptor.ioc.ContainerProvider;
 
 /**
  * @author Fabio Kung
@@ -25,7 +26,7 @@ public class SpringProvider implements ContainerProvider {
      * Provides request scope support for Spring IoC Container when
      * org.springframework.web.context.request.RequestContextListener has not been called.
      */
-    public <T> T provideForRequest(VRaptorRequest request, Execution<T> execution) {
+    public <T> T provideForRequest(RequestInfo request, Execution<T> execution) {
         VRaptorRequestHolder.setRequestForCurrentThread(request);
         T result;
         if (springListenerAlreadyCalled()) {

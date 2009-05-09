@@ -32,47 +32,44 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
-import br.com.caelum.vraptor.validator.ValidationMessage;
-
 public class DoubleConverterTest {
-    
-    private DoubleConverter converter;
-	private ArrayList<ValidationMessage> errors;
+
+	private DoubleConverter converter;
 	private ResourceBundle bundle;
 
-    @Before
-    public void setup() {
-        this.converter = new DoubleConverter();
-        this.errors = new ArrayList<ValidationMessage>();
-        this.bundle = ResourceBundle.getBundle("messages");
-    }
-    
-    @Test
-    public void shouldBeAbleToConvertNumbers(){
-        assertThat(converter.convert("2.3", Double.class, errors, bundle), is(equalTo(2.3d)));
-    }
-    
-    @Test
-    public void shouldComplainAboutInvalidNumber() {
-        converter.convert("---", Double.class, errors, bundle);
-        assertThat(errors.get(0), is(VRaptorMatchers.error("", "--- is not a valid number.")));
-    }
-    
-    @Test
-    public void shouldNotComplainAboutNull() {
-        assertThat(converter.convert(null, Double.class, errors, bundle), is(nullValue()));
-    }
+	@Before
+	public void setup() {
+		this.converter = new DoubleConverter();
+		this.bundle = ResourceBundle.getBundle("messages");
+	}
 
-    @Test
-    public void shouldNotComplainAboutEmpty() {
-        assertThat(converter.convert("", Double.class, errors, bundle), is(nullValue()));
-    }
+	@Test
+	public void shouldBeAbleToConvertNumbers() {
+		assertThat(converter.convert("2.3", Double.class, bundle), is(equalTo(2.3d)));
+	}
+
+	@Test
+	public void shouldComplainAboutInvalidNumber() {
+		try {
+			converter.convert("---", Double.class, bundle);
+		} catch (ConversionError e) {
+			assertThat(e.getMessage(), is(equalTo("--- is not a valid number.")));
+		}
+	}
+
+	@Test
+	public void shouldNotComplainAboutNull() {
+		assertThat(converter.convert(null, Double.class, bundle), is(nullValue()));
+	}
+
+	@Test
+	public void shouldNotComplainAboutEmpty() {
+		assertThat(converter.convert("", Double.class, bundle), is(nullValue()));
+	}
 
 }

@@ -32,68 +32,72 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
-import br.com.caelum.vraptor.validator.ValidationMessage;
-
 public class EnumConverterTest {
 
-    private EnumConverter converter;
-	private ArrayList<ValidationMessage> errors;
+	private EnumConverter converter;
 	private ResourceBundle bundle;
 
-    @Before
-    public void setup() {
-        this.converter = new EnumConverter();
-        this.errors = new ArrayList<ValidationMessage>();
-        this.bundle = ResourceBundle.getBundle("messages");
-    }
+	@Before
+	public void setup() {
+		this.converter = new EnumConverter();
+		this.bundle = ResourceBundle.getBundle("messages");
+	}
 
-    @Test
-    public void shouldBeAbleToConvertByOrdinal() {
-        assertThat((MyCustomEnum) converter.convert("1", MyCustomEnum.class, errors, bundle), is(equalTo(MyCustomEnum.SECOND)));
-    }
+	@Test
+	public void shouldBeAbleToConvertByOrdinal() {
+		assertThat((MyCustomEnum) converter.convert("1", MyCustomEnum.class, bundle), is(equalTo(MyCustomEnum.SECOND)));
+	}
 
-    @Test
-    public void shouldBeAbleToConvertByName() {
-        assertThat((MyCustomEnum) converter.convert("FIRST", MyCustomEnum.class, errors, bundle), is(equalTo(MyCustomEnum.FIRST)));
-    }
+	@Test
+	public void shouldBeAbleToConvertByName() {
+		assertThat((MyCustomEnum) converter.convert("FIRST", MyCustomEnum.class, bundle),
+				is(equalTo(MyCustomEnum.FIRST)));
+	}
 
-    @Test
-    public void shouldConvertEmptyToNull() {
-        assertThat(converter.convert("", MyCustomEnum.class, errors, bundle), is(nullValue()));
-    }
+	@Test
+	public void shouldConvertEmptyToNull() {
+		assertThat(converter.convert("", MyCustomEnum.class, bundle), is(nullValue()));
+	}
 
-    @Test
-    public void shouldComplainAboutInvalidIndex() {
-        converter.convert("3200", MyCustomEnum.class, errors, bundle);
-        assertThat(errors.get(0), is(VRaptorMatchers.error("", "3200 is not a valid option.")));
-    }
+	@Test
+	public void shouldComplainAboutInvalidIndex() {
+		try {
+			converter.convert("3200", MyCustomEnum.class, bundle);
+		} catch (ConversionError e) {
+			assertThat(e.getMessage(), is(equalTo("3200 is not a valid option.")));
+		}
+	}
 
-    @Test
-    public void shouldComplainAboutInvalidNumber() {
-        converter.convert("32a00", MyCustomEnum.class, errors, bundle);
-        assertThat(errors.get(0), is(VRaptorMatchers.error("", "32a00 is not a valid option.")));
-    }
+	@Test
+	public void shouldComplainAboutInvalidNumber() {
+		try {
+			converter.convert("32a00", MyCustomEnum.class, bundle);
+		} catch (ConversionError e) {
+			assertThat(e.getMessage(), is(equalTo("32a00 is not a valid option.")));
+		}
+	}
 
-    @Test
-    public void shouldComplainAboutInvalidOrdinal() {
-        converter.convert("THIRD", MyCustomEnum.class, errors, bundle);
-        assertThat(errors.get(0), is(VRaptorMatchers.error("", "THIRD is not a valid option.")));
-    }
+	@Test
+	public void shouldComplainAboutInvalidOrdinal() {
+		try {
+			converter.convert("THIRD", MyCustomEnum.class, bundle);
+		} catch (ConversionError e) {
+			assertThat(e.getMessage(), is(equalTo("THIRD is not a valid option.")));
+		}
+	}
 
-    @Test
-    public void shouldAcceptNull() {
-        assertThat((MyCustomEnum) converter.convert(null, MyCustomEnum.class, errors, bundle), is(nullValue()));
-    }
+	@Test
+	public void shouldAcceptNull() {
+		assertThat((MyCustomEnum) converter.convert(null, MyCustomEnum.class, bundle), is(nullValue()));
+	}
 
-    enum MyCustomEnum {
-        FIRST, SECOND
-    }
+	enum MyCustomEnum {
+		FIRST, SECOND
+	}
 
 }

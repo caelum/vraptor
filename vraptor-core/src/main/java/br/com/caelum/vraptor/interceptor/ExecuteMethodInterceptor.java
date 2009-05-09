@@ -35,10 +35,9 @@ import java.lang.reflect.Method;
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Interceptor;
 import br.com.caelum.vraptor.core.InterceptorStack;
-import br.com.caelum.vraptor.core.MethodParameters;
+import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.validator.ValidationError;
-import br.com.caelum.vraptor.vraptor2.RequestResult;
 
 /**
  * Interceptor that executes the logic method.
@@ -47,24 +46,22 @@ import br.com.caelum.vraptor.vraptor2.RequestResult;
  */
 public class ExecuteMethodInterceptor implements Interceptor {
 
-    private final MethodParameters parameters;
-    private final RequestResult result;
+    private final MethodInfo info;
 
-    public ExecuteMethodInterceptor(RequestResult result, MethodParameters parameters) {
-        this.result = result;
-        this.parameters = parameters;
+	public ExecuteMethodInterceptor(MethodInfo info) {
+		this.info = info;
     }
 
     public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
             throws InterceptionException {
         try {
             Method reflectionMethod = method.getMethod();
-            Object[] parameters = this.parameters.getValues();
+            Object[] parameters = this.info.getParameters();
             Object result = reflectionMethod.invoke(resourceInstance, parameters);
             if (result == null) {
-                this.result.setValue("ok");
+                this.info.setResult("ok");
             } else {
-                this.result.setValue((String) result);
+                this.info.setResult(result);
             }
             stack.next(method, resourceInstance);
         } catch (IllegalArgumentException e) {

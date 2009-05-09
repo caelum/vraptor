@@ -27,32 +27,77 @@
  */
 package br.com.caelum.vraptor.validator;
 
+import java.lang.reflect.Method;
 import java.util.List;
 
+import net.sf.cglib.proxy.Enhancer;
+import net.sf.cglib.proxy.MethodInterceptor;
+import net.sf.cglib.proxy.MethodProxy;
 import br.com.caelum.vraptor.Validator;
-import br.com.caelum.vraptor.view.jsp.PageResult;
+import br.com.caelum.vraptor.ioc.RequestScoped;
+import br.com.caelum.vraptor.view.LogicResult;
+import br.com.caelum.vraptor.view.PageResult;
+import br.com.caelum.vraptor.view.ResultException;
 
 /**
  * The default validator implementation.
- *
+ * 
  * @author Guilherme Silveira
  */
+@RequestScoped
 public class DefaultValidator implements Validator {
 
-    private final PageResult result;
+	private final PageResult result;
 
-    public DefaultValidator(PageResult result) {
-        this.result = result;
-    }
+	private Object[] argsToUse;
+	private Method method;
 
-    public void checking(Validations validations) {
-        List<ValidationMessage> errors = validations.getErrors();
-        if (!errors.isEmpty()) {
-            result.include("errors", errors);
-            result.forward("invalid");
-            // finished just fine
-            throw new ValidationError(errors);
-        }
-    }
+	private final LogicResult logic;
+
+	private Class<?> typeToUse;
+
+	public DefaultValidator(PageResult result, LogicResult logic) {
+		this.result = result;
+		this.logic = logic;
+	}
+
+	public void checking(Validations validations) {
+		List<Message> errors = validations.getErrors();
+		if (!errors.isEmpty()) {
+			result.include("errors", errors);
+			if (method != null) {
+				Object instance = logic.redirectServerTo(typeToUse);
+				try {
+					method.invoke(instance, argsToUse);
+				} catch (Exception e) {
+					throw new ResultException(e);
+				}
+			} else {
+				result.forward("invalid");
+			}
+			// finished just fine
+			throw new ValidationError(errors);
+		}
+	}
+
+	public Validator onError() {
+		return this;
+	}
+
+	public <T> T goTo(Class<T> type) {
+		this.typeToUse = type;
+		Enhancer enhancer = new Enhancer();
+		enhancer.setSuperclass(type);
+		enhancer.setCallback(new MethodInterceptor() {
+			public Object intercept(Object instance, Method method, Object[] args, MethodProxy proxy) throws Throwable {
+				if (DefaultValidator.this.method == null) {
+					DefaultValidator.this.argsToUse = args;
+					DefaultValidator.this.method = method;
+				}
+				return null;
+			}
+		});
+		return (T) enhancer.create();
+	}
 
 }

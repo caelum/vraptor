@@ -9,3 +9,4 @@ build
 .settings
 cobertura.ser
 bin
+.DS_Store

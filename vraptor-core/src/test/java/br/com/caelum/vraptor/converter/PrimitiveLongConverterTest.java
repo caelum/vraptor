@@ -31,47 +31,44 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
-import br.com.caelum.vraptor.validator.ValidationMessage;
-
 public class PrimitiveLongConverterTest {
-    
-    private PrimitiveLongConverter converter;
-	private ArrayList<ValidationMessage> errors;
+
+	private PrimitiveLongConverter converter;
 	private ResourceBundle bundle;
 
-    @Before
-    public void setup() {
-        this.converter = new PrimitiveLongConverter();
-        this.errors = new ArrayList<ValidationMessage>();
-        this.bundle = ResourceBundle.getBundle("messages");
-    }
-    
-    @Test
-    public void shouldBeAbleToConvertNumbers(){
-        assertThat((Long) converter.convert("2", long.class, errors, bundle), is(equalTo(2L)));
-    }
-    
-    @Test
-    public void shouldComplainAboutInvalidNumber() {
-        converter.convert("---", long.class, errors, bundle);
-        assertThat(errors.get(0), is(VRaptorMatchers.error("", "--- is not a valid integer.")));
-    }
-    
-    @Test
-    public void shouldConvertToZeroWhenNull() {
-    	assertThat((Long) converter.convert(null, long.class, errors, bundle), is(equalTo(0L)));
-    }
+	@Before
+	public void setup() {
+		this.converter = new PrimitiveLongConverter();
+		this.bundle = ResourceBundle.getBundle("messages");
+	}
 
-    @Test
-    public void shouldConvertToZeroWhenEmpty() {
-    	assertThat((Long) converter.convert("", long.class, errors, bundle), is(equalTo(0L)));
-    }
-    
+	@Test
+	public void shouldBeAbleToConvertNumbers() {
+		assertThat((Long) converter.convert("2", long.class, bundle), is(equalTo(2L)));
+	}
+
+	@Test
+	public void shouldComplainAboutInvalidNumber() {
+		try {
+			converter.convert("---", long.class, bundle);
+		} catch (ConversionError e) {
+			assertThat(e.getMessage(), is(equalTo("--- is not a valid integer.")));
+		}
+	}
+
+	@Test
+	public void shouldConvertToZeroWhenNull() {
+		assertThat((Long) converter.convert(null, long.class, bundle), is(equalTo(0L)));
+	}
+
+	@Test
+	public void shouldConvertToZeroWhenEmpty() {
+		assertThat((Long) converter.convert("", long.class, bundle), is(equalTo(0L)));
+	}
+
 }

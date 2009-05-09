@@ -5,8 +5,8 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
-import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.ComponentRegistry;
+import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.core.DefaultConverters;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;

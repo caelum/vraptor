@@ -29,16 +29,7 @@
  */
 package br.com.caelum.vraptor;
 
-import br.com.caelum.vraptor.config.BasicConfiguration;
-import br.com.caelum.vraptor.core.DefaultStaticContentHandler;
-import br.com.caelum.vraptor.core.Execution;
-import br.com.caelum.vraptor.core.RequestExecution;
-import br.com.caelum.vraptor.core.StaticContentHandler;
-import br.com.caelum.vraptor.core.VRaptorRequest;
-import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.ioc.ContainerProvider;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.io.IOException;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -49,7 +40,19 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import br.com.caelum.vraptor.config.BasicConfiguration;
+import br.com.caelum.vraptor.core.DefaultStaticContentHandler;
+import br.com.caelum.vraptor.core.Execution;
+import br.com.caelum.vraptor.core.RequestExecution;
+import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.core.StaticContentHandler;
+import br.com.caelum.vraptor.http.VRaptorRequest;
+import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor.ioc.ContainerProvider;
 
 /**
  * VRaptor entry point.<br>
@@ -80,15 +83,17 @@ public class VRaptor implements Filter {
                     "VRaptor must be run inside a Servlet environment. Portlets and others aren't supported.");
         }
 
-        HttpServletRequest webRequest = (HttpServletRequest) req;
+        HttpServletRequest baseRequest = (HttpServletRequest) req;
         HttpServletResponse webResponse = (HttpServletResponse) res;
 
-        if (staticHandler.requestingStaticFile(webRequest)) {
-            staticHandler.deferProcessingToContainer(chain, webRequest, webResponse);
+        if (staticHandler.requestingStaticFile(baseRequest)) {
+            staticHandler.deferProcessingToContainer(chain, baseRequest, webResponse);
             return;
         }
-
-        VRaptorRequest request = new VRaptorRequest(servletContext, webRequest, webResponse);
+        
+        VRaptorRequest mutableRequest = new VRaptorRequest(baseRequest);
+        
+        RequestInfo request = new RequestInfo(servletContext, mutableRequest, webResponse);
         // TODO create ExecutionWithoutResult?
         provider.provideForRequest(request, new Execution<Object>() {
             public Object insideRequest(Container container) {

@@ -1,50 +1,47 @@
-TODO: 14
-(MUST) - niceurls with programmatic support
+parameters are being outjected twice
+- support to method return != string --> outject
+	- do not do it if @Component vrraptor2
 
 
 
 
-- if there is a conversion error, ognl should not set
-- conversion error should set the path variable
-- conversion should log what is being set
-- ClientsController --> clients.list
-- better exception handling everywhere (search for TODO within exceptions)
-- suppor for kung's register api
-- make client server redirect work with parameters, which ones?
-(MUST) - niceurls -> path support
-(MUST) - niceurls with file config support -> path support
-(MUST) - path annotation with support to value injection (niceurls?)
-(MUST) - hibernate plugin
-(MUST) - json output support: three different options
-(MUST) - Map support
-- Set support
-- automatic REDIRECT depending on accepts
-@Component should not be web acessible
-
-ceci: integration test for vraptor-example project
 
 
 
 
-test and refactor:
-a) caelumweb: use logicredirect that is most advanced
-a) test ListNullHandler, GenericNullHandler
-b) EERemoval test
-c) unit test for PicoContainersProvider... every scope should be tested
-- defaultpathresolver better test
-- new interceptor test 
-- ListAccessorTest for if part
-- DefaultResourceMethodLookup should cache methods so it doesnt query every time
-- DefaultResourceRegistry cache
-MethodLookupBuilder: rename
-DefaultLogicResult should cache enhancers in order to create objects
+- make StupidTranslator work with jsessionid
+- accept support "_format" parameter
+- json support
+- json support through "Accepts", priorize _format
+- json outjecter outjects
+- onError().goTo("xpto"); on validation, with support to ajax
+
+help:
 - JstlLocalization test
-- fallback enumeration, fallback local unit tests
+- ceci: integration test for vraptor-example project e vraptor-spring-example
+- MultipartInterceptor is only added if jar is found on classpath
 
 
 
-
-
+- extrair o register de componentes genericos (independente de pico ou spring)
+- @Component em outros componentes e fazer funcionar com pico sem gritar do log
+	- converter registering is causing many log messages
+	- meu problema eh queo webinfocontextblablabla pode ser customizado, ver se facilita se nao customiza-lo
+	- no lookp do webinf, joga em um container bobo primeiro
+	- ai depois disso, joga no cara que eh o Router q pode ter sido customizado, tirando dessa lista
+- containerprovider padrao: spring
+- ver com o spring se tudo bem de registrar depois do cara ja ter usado o cara
+welcome file list:
+	- testar se da para try/catch 404 e ver o que acontece... passar um response wrapped??? sendError
+	- known bug: accessing / when its /index.html.... if its a dir containing an index.html it doesnt work, but if your url is /clients/ it works...
+- Map support
+	map[ENUM]-->
+	map["a"]-->
+	map[1]-->
+	map[custom tambem]
+	map[id==2]="por favor"
+	map[id==2].nome="por favor"
+	(map[id==2] eh o lado direito!!!)
 
 
 
@@ -79,11 +76,18 @@ site docs (prior to release)
 - migration tutorial on every documented topic of vraptor2
 	- might find useful things to support
 - containers now can be @Request, @Session, @App scoped
+- doc server side redirect with args:
+	- pattern args always works
+- hibernate plugin: aplicacoes de exemplo e documentacao
+- Set support
+	set[id==0].nome="guilherme"
+	set[id==2].nome="guilherme"
+	isso eh um mapa!
+- doc: if you want default redirect, add the ForwardToDefaultViewInterceptor to your itnerceptor stack
 
 kung help
-	- known bug: accessing / when its /index.html.... if its a dir containing an index.html it doesnt work, but if your url is /clients/ it works...
-	- add a @PostConstruct @PreDestroy test for providers 
-	- support new provider style
+	- add a @Listener 
+
 
 
 
@@ -96,6 +100,7 @@ kung help
 
 
 right before release
+	- better exception handling everywhere (search for TODO within exceptions): look at all new VRaptor and try to group them in new types
 	- check all TODOS and do something about them
 	go through every request component and check if it really needs to be request based
 	verify org.apache.log4j logs -> sl4j
@@ -113,10 +118,6 @@ right before release
 	jira
 	forum
 	official support by caelum
-
-maybe
-- Hibernate.validate(Object instance, String ... fields)
-- Hibernate.validate(Object instance) : Proxy.getFirst(), Proxy.getSecond() will hibernate validate those fields
 
 
 
@@ -150,6 +151,28 @@ right before ANY release
 	- check all TODOS and do something about them
 
 ONLY AFTER RELEASE
+- MultipartInterceptor.accepts() is never called, so it throws an exception everytime a request which isn't an multipart one is made
+UserAgentInterceptor que permite usar isso: documentacao
+SessionFormatInterceptor que seta na session: documentacao
+- make client server redirect work with proxied parameters
+3.0.1 - cache all method lookup algorithms (getDeclaredMethod())
+- routes with support to withParam()
+- Hibernate.validate(Object instance, String ... fields)
+- Hibernate.validate(Object instance) : Proxy.getFirst(), Proxy.getSecond() will hibernate validate those fields
+- DefaultLogicResult should cache enhancers in order to create objects
+- Everywhere there is an Enhacer should cache enhancers
+- AsmTypeCreator should cache instances
+- DefaultRouter cache with cacheable routes
+c) unit test for PicoContainersProvider... every scope should be tested
+- migrate some vraptor2 functionalities already supported @Components to be supported @Resources too
+3.0.1 - redirect to logic should work with parameter INJECTIon @ url also
+- routes should tell if they are cacheable or not (* --> sucks, too many strings)
+3.0.1 - method return != string --> outject
+3.0.1 - method return == string --> default behaviour from vraptor 2
+- method routeFor should return an interface, not an instance
+- niceurls with file config support -> path support
+3.0.1 - support to @Path(priority=...)...
+3.0.1 - print out @Path priority (rules) debug info on startup
 3.0.1 - maybe a lista lready exists and i set the items.. i would still have to remove the nulls
 3.0.1 - nice url support as invoke(type).method(param("name1"),param("name2"))
 - support i18n messages on hamcrest based validations
@@ -376,3 +399,10 @@ done:
 - 404 component
 - i18n conversion messages
 support HibernateValidator with i18n messages
+- Router support
+- ClientsController --> clients.list
+- path annotation and routes with support to value injection
+- client side and server side redirect works with parameters from Route system
+- supports "_method" parameter due to browser and xhtml nature
+- router extra support
+	routeFor("/(*)").is(type(""),method(""));

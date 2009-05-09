@@ -43,7 +43,7 @@ public class Validations {
 
     private final List<Message> errors = new ArrayList<Message>();
 
-    public <T> boolean that(T id, Matcher<T> matcher) {
+    public <T> boolean that(T id, Matcher<? super T> matcher) {
         return that("", null, id, matcher);
     }
 

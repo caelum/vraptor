@@ -58,15 +58,16 @@ import br.com.caelum.vraptor.proxy.Proxifier;
  */
 @ApplicationScoped
 public class ComponentRoutesCreator implements ResourceParserRoutesCreator {
-	
-	private final PathAnnotationRoutesCreator delegate = new PathAnnotationRoutesCreator(proxifier);
 
     private final Proxifier proxifier;
-	
-	private static final Logger logger = LoggerFactory.getLogger(ComponentRoutesCreator.class);
+
+    private final PathAnnotationRoutesCreator delegate;
+
+    private static final Logger logger = LoggerFactory.getLogger(ComponentRoutesCreator.class);
 
     public ComponentRoutesCreator(Proxifier proxifier) {
         this.proxifier = proxifier;
+        delegate = new PathAnnotationRoutesCreator(proxifier);
     }
 
     public List<Rule> rulesFor(Resource resource) {

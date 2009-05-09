@@ -29,7 +29,6 @@ package br.com.caelum.vraptor.view;
 
 import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.proxy.DefaultProxifier;
-import br.com.caelum.vraptor.proxy.Proxifier;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Before;

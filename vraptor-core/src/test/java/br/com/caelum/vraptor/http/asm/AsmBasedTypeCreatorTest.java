@@ -75,9 +75,9 @@ public class AsmBasedTypeCreatorTest {
         Method setter = type.getDeclaredMethod("setInt", int[].class);
         
         Object instance = type.newInstance();
-        Integer[] array = new Integer[]{0,1};
+        int[] array = new int[]{0,1};
         setter.invoke(instance, array);
-        MatcherAssert.assertThat((Integer[])getter.invoke(instance), Matchers.is(Matchers.equalTo(array)));
+        MatcherAssert.assertThat((int[])getter.invoke(instance), Matchers.is(Matchers.equalTo(array)));
         mockery.assertIsSatisfied();
     }
 

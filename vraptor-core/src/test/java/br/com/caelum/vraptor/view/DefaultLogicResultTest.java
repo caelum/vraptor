@@ -28,6 +28,7 @@
 package br.com.caelum.vraptor.view;
 
 import br.com.caelum.vraptor.http.route.Router;
+import br.com.caelum.vraptor.proxy.DefaultProxifier;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -49,7 +50,6 @@ public class DefaultLogicResultTest {
     private HttpServletResponse response;
     private ServletContext context;
     private HttpServletRequest request;
-    private Proxifier proxifier;
 
     public static class MyComponent {
         public void base() {
@@ -63,8 +63,7 @@ public class DefaultLogicResultTest {
         this.response = mockery.mock(HttpServletResponse.class);
         this.request = mockery.mock(HttpServletRequest.class);
         this.context = mockery.mock(ServletContext.class);
-        this.proxifier = mockery.mock(Proxifier.class);
-        this.logicResult = new DefaultLogicResult(proxifier, router, context, request, response);
+        this.logicResult = new DefaultLogicResult(new DefaultProxifier(), router, context, request, response);
     }
 
     @Test

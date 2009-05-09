@@ -1,7 +1,7 @@
 /***
- * 
+ *
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  * 1. Redistributions of source code must retain the above copyright notice,
@@ -12,7 +12,7 @@
  * copyright holders nor the names of its contributors may be used to endorse or
  * promote products derived from this software without specific prior written
  * permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -27,99 +27,105 @@
  */
 package br.com.caelum.vraptor.validator;
 
-import java.util.ArrayList;
-
+import br.com.caelum.vraptor.Resource;
+import br.com.caelum.vraptor.proxy.DefaultProxifier;
+import br.com.caelum.vraptor.test.VRaptorMockery;
+import br.com.caelum.vraptor.view.LogicResult;
+import br.com.caelum.vraptor.view.PageResult;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.instanceOf;
 import org.jmock.Expectations;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.Resource;
-import br.com.caelum.vraptor.proxy.Proxifier;
-import br.com.caelum.vraptor.test.VRaptorMockery;
-import br.com.caelum.vraptor.view.LogicResult;
-import br.com.caelum.vraptor.view.PageResult;
+import java.util.ArrayList;
 
 public class DefaultValidatorTest {
 
-	private VRaptorMockery mockery;
-	private PageResult result;
-	private DefaultValidator validator;
-	private MyLogicResult logicResult;
-	private MyComponent instance;
-    private Proxifier proxifier;
+    private VRaptorMockery mockery;
+    private PageResult result;
+    private DefaultValidator validator;
+    private MyLogicResult logicResult;
+    private MyComponent instance;
 
-    class MyLogicResult implements LogicResult{
+    class MyLogicResult implements LogicResult {
 
-		private Class<?> to;
+        private Class<?> to;
 
-		public <T> T redirectClientTo(Class<T> type) {
-			return null;
-		}
+        public <T> T redirectClientTo(Class<T> type) {
+            return null;
+        }
 
-		public <T> T redirectServerTo(Class<T> type) {
-			this.to = type;
-			return (T) instance;
-		}
+        public <T> T redirectServerTo(Class<T> type) {
+            this.to = type;
+            return (T) instance;
+        }
 
-	}
-	@Before
-	public void setup() {
-		this.mockery = new VRaptorMockery();
-		this.result = mockery.mock(PageResult.class);
-		this.logicResult = new MyLogicResult();
-		this.instance = new MyComponent();
-        this.proxifier = mockery.mock(Proxifier.class);
-		this.validator = new DefaultValidator(proxifier, result, logicResult);
-	}
+    }
 
-	@Test
-	public void redirectsToStandardPageResultByDefault() {
-		mockery.checking(new Expectations() {
-			{
-				one(result).include((String)with(an(String.class)), with(an(ArrayList.class)));
-				one(result).forward("invalid");
-			}
-		});
-		try {
-			validator.checking(new Validations() {
-				{
-					that("", "", false);
-				}
-			});
-			Assert.fail("should stop flow");
-		} catch (ValidationError e) {
-			// ok, shoul still assert satisfied
-			mockery.assertIsSatisfied();
-		}
-	}
+    @Before
+    public void setup() {
+        this.mockery = new VRaptorMockery();
+        this.result = mockery.mock(PageResult.class);
+        this.logicResult = new MyLogicResult();
+        this.instance = new MyComponent();
+        this.validator = new DefaultValidator(new DefaultProxifier(), result, logicResult);
+    }
+
+    @Test
+    public void redirectsToStandardPageResultByDefault() {
+        mockery.checking(new Expectations() {
+            {
+                one(result).include((String) with(an(String.class)), with(an(ArrayList.class)));
+                one(result).forward("invalid");
+            }
+        });
+        try {
+            validator.checking(new Validations() {
+                {
+                    that("", "", false);
+                }
+            });
+            Assert.fail("should stop flow");
+        } catch (ValidationError e) {
+            // ok, shoul still assert satisfied
+            mockery.assertIsSatisfied();
+        }
+    }
 
 
-	@Test
-	public void redirectsToCustomOnErrorPage() {
-		try {
-			validator.onError().goTo(MyComponent.class).logic();
-			validator.checking(new Validations() {
-				{
-					that("", "", false);
-				}
-			});
-			Assert.fail("should stop flow");
-		} catch (ValidationError e) {
-			// ok, shoul still assert satisfied
-			Assert.assertEquals(this.logicResult.to, MyComponent.class);
-			Assert.assertEquals(this.instance.run, true);
-			mockery.assertIsSatisfied();
-		}
-	}
-	
-	@Resource
-	public static class MyComponent {
-		private boolean run;
+    @Test
+    public void redirectsToCustomOnErrorPage() {
+        mockery.checking(new Expectations() {
+            {
+                one(result).include(with(equal("errors")), with(hasItem(instanceOf(Message.class))));
+            }
+        });
 
-		public void logic() {
-			this.run = true;
-		}
-	}
+        try {
+            validator.onError().goTo(MyComponent.class).logic();
+            validator.checking(new Validations() {
+                {
+                    that("", "", false);
+                }
+            });
+            Assert.fail("should stop flow");
+        } catch (ValidationError e) {
+            // ok, shoul still assert satisfied
+            Assert.assertEquals(this.logicResult.to, MyComponent.class);
+            Assert.assertEquals(this.instance.run, true);
+            mockery.assertIsSatisfied();
+        }
+    }
+
+    @Resource
+    public static class MyComponent {
+        private boolean run;
+
+        public void logic() {
+            this.run = true;
+        }
+    }
 
 }

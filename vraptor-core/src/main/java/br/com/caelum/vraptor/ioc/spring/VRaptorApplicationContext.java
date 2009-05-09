@@ -53,6 +53,7 @@ import br.com.caelum.vraptor.view.DefaultLogicResult;
 import br.com.caelum.vraptor.view.DefaultPageResult;
 import br.com.caelum.vraptor.view.DefaultPathResolver;
 import br.com.caelum.vraptor.view.EmptyResult;
+import br.com.caelum.vraptor.proxy.DefaultProxifier;
 
 /**
  * @author Fabio Kung
@@ -92,6 +93,7 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
         registerOn(beanFactory, DefaultResourceTranslator.class);
         registerOn(beanFactory, DefaultInterceptorRegistry.class);
         registerOn(beanFactory, AsmBasedTypeCreator.class);
+        registerOn(beanFactory, DefaultProxifier.class);
         registerOn(beanFactory, DefaultPathResolver.class);
         registerOn(beanFactory, ParanamerNameProvider.class);
         registerOn(beanFactory, DefaultConverters.class);

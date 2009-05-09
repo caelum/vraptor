@@ -40,6 +40,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.ComponentRegistry;
+import br.com.caelum.vraptor.proxy.DefaultProxifier;
 import br.com.caelum.vraptor.http.ognl.OgnlParametersProvider;
 import br.com.caelum.vraptor.core.DefaultConverters;
 import br.com.caelum.vraptor.core.DefaultInterceptorStack;
@@ -108,7 +109,7 @@ public class PicoProvider implements ContainerProvider {
 		logger.debug("Registering base pico container related implementation components");
 		for (Class<?> type : new Class[] { DefaultResourceTranslator.class, DefaultRouter.class,
 				DefaultResourceNotFoundHandler.class, DefaultDirScanner.class,
-				DefaultInterceptorRegistry.class, DefaultPathResolver.class,
+				DefaultInterceptorRegistry.class, DefaultPathResolver.class, DefaultProxifier.class, 
 				ParanamerNameProvider.class, DefaultConverters.class, DefaultMethodInfo.class,
 				DefaultInterceptorStack.class, DefaultRequestExecution.class,
 				DefaultResult.class, OgnlParametersProvider.class, DefaultMethodInfo.class, DefaultValidator.class,

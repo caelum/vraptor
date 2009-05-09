@@ -27,7 +27,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package br.com.caelum.vraptor.http;
+package br.com.caelum.vraptor.http.ognl;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
@@ -48,12 +48,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.converter.ConversionError;
-import br.com.caelum.vraptor.converter.OgnlToConvertersController;
+import br.com.caelum.vraptor.http.ognl.VRaptorConvertersAdapter;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.http.ognl.ArrayAccessor;
 import br.com.caelum.vraptor.http.ognl.EmptyElementsRemoval;
 import br.com.caelum.vraptor.http.ognl.ListAccessor;
 import br.com.caelum.vraptor.http.ognl.ReflectionBasedNullHandler;
+import br.com.caelum.vraptor.http.ParametersProvider;
+import br.com.caelum.vraptor.http.TypeCreator;
+import br.com.caelum.vraptor.http.ParameterNameProvider;
+import br.com.caelum.vraptor.http.InvalidParameterException;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.resource.ResourceMethod;
@@ -109,8 +113,8 @@ public class OgnlParametersProvider implements ParametersProvider {
 		context.setTraceEvaluations(true);
 		context.put(Container.class, this.container);
 
-		OgnlToConvertersController controller = new OgnlToConvertersController(converters, errors, bundle);
-		Ognl.setTypeConverter(context, controller);
+		VRaptorConvertersAdapter adapter = new VRaptorConvertersAdapter(converters, bundle);
+		Ognl.setTypeConverter(context, adapter);
 		for (Enumeration enumeration = parameters.getParameterNames(); enumeration.hasMoreElements();) {
 			String key = (String) enumeration.nextElement();
 			String[] values = parameters.getParameterValues(key);

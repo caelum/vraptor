@@ -46,7 +46,7 @@ import br.com.caelum.vraptor.ioc.Stereotype;
 /**
  * @author Fabio Kung
  */
-public class ComponentTypeFilter implements TypeFilter {
+class ComponentTypeFilter implements TypeFilter {
 
     private final Collection<Class<? extends Annotation>> annotationTypes;
 

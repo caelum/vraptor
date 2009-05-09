@@ -20,7 +20,7 @@ import br.com.caelum.vraptor.resource.DefaultResource;
  * @author Fabio Kung
  */
 @ApplicationScoped
-public class ResourceFinder implements BeanFactoryPostProcessor, ApplicationContextAware {
+class ResourceFinder implements BeanFactoryPostProcessor, ApplicationContextAware {
     private static final Logger LOGGER = LoggerFactory.getLogger(ResourceFinder.class);
 
     private ApplicationContext applicationContext;

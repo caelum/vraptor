@@ -83,15 +83,13 @@ public class UriBasedRoute implements Rule {
 			if (uri.charAt(i) == '{') {
 				ignore = true;
 				patternUri += "(";
-				continue;
-			} else if (uri.charAt(i) == '}') {
+            } else if (uri.charAt(i) == '}') {
 				ignore = false;
 				finalUri += ".*";
 				patternUri += ".*)";
 				parameters.add(paramName);
 				paramName = "";
-				continue;
-			} else if (!ignore) {
+            } else if (!ignore) {
 				patternUri += uri.charAt(i);
 				finalUri += uri.charAt(i);
 			} else {
@@ -106,15 +104,16 @@ public class UriBasedRoute implements Rule {
 	 * Accepts also this http method request. If this method is not invoked, any
 	 * http method is supported, otherwise all parameters passed are supported.
 	 * 
-	 * @param method
-	 * @return
+	 * @param method to be supported
+	 * @return this
 	 */
 	public UriBasedRoute with(HttpMethod method) {
 		this.supportedMethods.add(method);
 		return this;
 	}
 
-	public <T> T is(final Class<T> type) {
+	@SuppressWarnings("unchecked")
+    public <T> T is(final Class<T> type) {
 		Enhancer e = new Enhancer();
 		e.setSuperclass(type);
 		e.setCallback(new MethodInterceptor() {
@@ -183,7 +182,8 @@ public class UriBasedRoute implements Rule {
 	}
 
 	public void is(PatternBasedType type, PatternBasedType method) {
-		
-	}
+        // TODO implement! it was empty
+        throw new UnsupportedOperationException();
+    }
 
 }

@@ -49,7 +49,7 @@ public class PrimitiveCharConverterTest {
 
 	@Test
 	public void shouldBeAbleToConvertNumbers() {
-		assertThat(((Character) converter.convert("r", char.class, bundle)).charValue(), is(equalTo('r')));
+		assertThat((Character) converter.convert("r", char.class, bundle), is(equalTo('r')));
 	}
 
 	@Test
@@ -63,12 +63,12 @@ public class PrimitiveCharConverterTest {
 
 	@Test
 	public void shouldConvertToZeroWhenNull() {
-		assertThat(((Character) converter.convert(null, char.class, bundle)).charValue(), is(equalTo('\u0000')));
+		assertThat((Character) converter.convert(null, char.class, bundle), is(equalTo('\u0000')));
 	}
 
 	@Test
 	public void shouldConvertToZeroWhenEmpty() {
-		assertThat(((Character) converter.convert("", char.class, bundle)).charValue(), is(equalTo('\u0000')));
+		assertThat((Character) converter.convert("", char.class, bundle), is(equalTo('\u0000')));
 	}
 
 }

@@ -34,7 +34,7 @@ import br.com.caelum.vraptor.core.JstlLocalization;
 import br.com.caelum.vraptor.core.URLParameterExtractorInterceptor;
 import br.com.caelum.vraptor.extra.ForwardToDefaultViewInterceptor;
 import br.com.caelum.vraptor.http.DefaultResourceTranslator;
-import br.com.caelum.vraptor.http.OgnlParametersProvider;
+import br.com.caelum.vraptor.http.ognl.OgnlParametersProvider;
 import br.com.caelum.vraptor.http.ParanamerNameProvider;
 import br.com.caelum.vraptor.http.asm.AsmBasedTypeCreator;
 import br.com.caelum.vraptor.http.ognl.EmptyElementsRemoval;
@@ -61,8 +61,8 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
     public static final String RESOURCES_LIST = "br.com.caelum.vraptor.resources.list";
 
     private final AnnotationBeanNameGenerator beanNameGenerator = new AnnotationBeanNameGenerator();
-    private String[] basePackages;
-    private SpringBasedContainer container;
+    private final String[] basePackages;
+    private final SpringBasedContainer container;
 
     public VRaptorApplicationContext(SpringBasedContainer container, String... basePackages) {
         this.container = container;

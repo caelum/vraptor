@@ -39,7 +39,7 @@ import org.junit.Test;
 import br.com.caelum.vraptor.Delete;
 import br.com.caelum.vraptor.Head;
 import br.com.caelum.vraptor.Path;
-import br.com.caelum.vraptor.VRaptorMockery;
+import br.com.caelum.vraptor.test.VRaptorMockery;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
 import br.com.caelum.vraptor.resource.HttpMethod;

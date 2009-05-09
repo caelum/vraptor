@@ -46,7 +46,7 @@ public class ResourceController {
         this.result = result;
     }
     
-    public void list() throws ServletException, IOException {
+    public void list() {
         result.include("resources", registry.all());
         result.forward("ok");
     }

@@ -17,13 +17,15 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpSession;
 
 import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor.IteratorToEnumerationAdapter;
 
 /**
  * @author Fabio Kung
  */
+@SuppressWarnings("deprecation")
 public class HttpServletRequestMock implements MutableRequest {
-    private Map<String, Object> attributes = new HashMap<String, Object>();
-    private Map<String, String[]> parameters = new HashMap<String, String[]>();
+    private final Map<String, Object> attributes = new HashMap<String, Object>();
+    private final Map<String, String[]> parameters = new HashMap<String, String[]>();
 
     private String authType;
     private Cookie[] cookies;
@@ -83,27 +85,32 @@ public class HttpServletRequestMock implements MutableRequest {
     }
 
     public long getDateHeader(String s) {
-        return 0;  //To change body of implemented methods use File | Settings | File Templates.
+        // TODO
+        return 0;
     }
 
     public String getHeader(String s) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        // TODO
+        return null;
     }
 
     public Enumeration getHeaders(String s) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        // TODO
+        return null;
     }
 
     public Enumeration getHeaderNames() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        // TODO
+        return null;
     }
 
     public int getIntHeader(String s) {
-        return 0;  //To change body of implemented methods use File | Settings | File Templates.
+        // TODO
+        return 0;
     }
 
     public String getMethod() {
-        return method;  //To change body of implemented methods use File | Settings | File Templates.
+        return method;
     }
 
     public void setMethod(String method) {
@@ -151,7 +158,8 @@ public class HttpServletRequestMock implements MutableRequest {
     }
 
     public boolean isUserInRole(String s) {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        // TODO
+        return false;
     }
 
     public Principal getUserPrincipal() {
@@ -239,7 +247,7 @@ public class HttpServletRequestMock implements MutableRequest {
     }
 
     public Enumeration getAttributeNames() {
-        return new IteratorToEnumerationAdapter(attributes.keySet().iterator());
+        return new IteratorToEnumerationAdapter<String>(attributes.keySet().iterator());
     }
 
     public String getCharacterEncoding() {
@@ -283,7 +291,7 @@ public class HttpServletRequestMock implements MutableRequest {
     }
 
     public Enumeration getParameterNames() {
-        return new IteratorToEnumerationAdapter(parameters.keySet().iterator());
+        return new IteratorToEnumerationAdapter<String>(parameters.keySet().iterator());
     }
 
     public String[] getParameterValues(String keys) {
@@ -368,7 +376,7 @@ public class HttpServletRequestMock implements MutableRequest {
 
     public Enumeration getLocales() {
         Iterator<Locale> localeIterator = Arrays.asList(Locale.getAvailableLocales()).iterator();
-        return new IteratorToEnumerationAdapter(localeIterator);
+        return new IteratorToEnumerationAdapter<Locale>(localeIterator);
     }
 
     public boolean isSecure() {

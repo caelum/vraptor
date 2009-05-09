@@ -12,7 +12,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.VRaptorMockery;
+import br.com.caelum.vraptor.test.VRaptorMockery;
 import br.com.caelum.vraptor.http.DefaultParameterNameProvider;
 import br.com.caelum.vraptor.interceptor.DogAlike;
 
@@ -58,7 +58,6 @@ public class AsmBasedTypeCreatorTest {
         Class<?> type = creator.typeFor(mockery.method(DogAlike.class.getDeclaredMethod("eat",List.class)));
         
         Method getter = type.getDeclaredMethod("getListOfString");
-        Method setter = type.getDeclaredMethod("setListOfString", List.class);
         Assert.assertTrue(getter.getGenericReturnType() instanceof ParameterizedType);
         ParameterizedType returnType = (ParameterizedType) getter.getGenericReturnType();
         Assert.assertTrue(List.class.isAssignableFrom((Class)returnType.getRawType()));
@@ -76,9 +75,9 @@ public class AsmBasedTypeCreatorTest {
         Method setter = type.getDeclaredMethod("setInt", int[].class);
         
         Object instance = type.newInstance();
-        int[] array = new int[]{0,1};
+        Integer[] array = new Integer[]{0,1};
         setter.invoke(instance, array);
-        MatcherAssert.assertThat((int[])getter.invoke(instance), Matchers.is(Matchers.equalTo(array)));
+        MatcherAssert.assertThat((Integer[])getter.invoke(instance), Matchers.is(Matchers.equalTo(array)));
         mockery.assertIsSatisfied();
     }
 

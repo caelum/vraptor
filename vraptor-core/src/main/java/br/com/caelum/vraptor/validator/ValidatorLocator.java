@@ -40,9 +40,9 @@ import org.slf4j.LoggerFactory;
  * 
  * @author Guilherme Silveira
  */
-public class ValidatorLocator {
+class ValidatorLocator {
 
-    private Map<Key, ClassValidator<?>> cache = new HashMap<Key, ClassValidator<?>>();
+    private final Map<Key, ClassValidator<?>> cache = new HashMap<Key, ClassValidator<?>>();
     
     private static final Logger logger = LoggerFactory.getLogger(ValidatorLocator.class);
 
@@ -61,9 +61,9 @@ public class ValidatorLocator {
 
     class Key {
 
-        private Class type;
+        private final Class type;
 
-        private ResourceBundle bundle;
+        private final ResourceBundle bundle;
 
         public Key(Class type, ResourceBundle bundle) {
             this.type = type;

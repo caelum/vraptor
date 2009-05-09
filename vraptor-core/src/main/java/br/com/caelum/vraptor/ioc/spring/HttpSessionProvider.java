@@ -14,7 +14,7 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
  * @see org.springframework.web.context.request.RequestContextHolder
  */
 @ApplicationScoped
-public class HttpSessionProvider implements FactoryBean {
+class HttpSessionProvider implements FactoryBean {
 
     public Object getObject() throws Exception {
         return VRaptorRequestHolder.currentRequest().getRequest().getSession();

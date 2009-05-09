@@ -25,14 +25,17 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package br.com.caelum.vraptor.converter;
+package br.com.caelum.vraptor.http.ognl;
 
+import br.com.caelum.vraptor.converter.IntegerConverter;
+import br.com.caelum.vraptor.converter.LocaleBasedCalendarConverter;
 import br.com.caelum.vraptor.core.Converters;
+import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.ognl.ArrayAccessor;
-import br.com.caelum.vraptor.http.ognl.EmptyElementsRemoval;
 import br.com.caelum.vraptor.http.ognl.ListAccessor;
 import br.com.caelum.vraptor.http.ognl.ReflectionBasedNullHandler;
-import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor.http.ognl.VRaptorConvertersAdapter;
 import br.com.caelum.vraptor.validator.Message;
 import ognl.Ognl;
 import ognl.OgnlContext;
@@ -47,6 +50,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -55,19 +60,17 @@ import java.util.ResourceBundle;
  * test which accesses more than a single class to test the ognl funcionality.
  * Even worse, OGNL sucks with its static configuration methods in such a way
  * that tests are not thread safe. Summing up: OGNL api sucks, OGNL idea rulez.
- * This test is here to ensure generic support through our implementation using
- * OGNL.
+ * Tests written here are "acceptance tests" for the Ognl support on http
+ * parameters.
  *
  * @author Guilherme Silveira
  */
-public class OgnlGenericTypesSupportTest {
+public class MiscOgnlSupportTest {
 
     private Mockery mockery;
-    private Cat myCat;
     private Converters converters;
     private OgnlContext context;
-    private Container container;
-    private EmptyElementsRemoval removal;
+    private House house;
     private ResourceBundle bundle;
     private ArrayList<Message> errors;
 
@@ -75,109 +78,88 @@ public class OgnlGenericTypesSupportTest {
     public void setup() {
         this.mockery = new Mockery();
         this.converters = mockery.mock(Converters.class);
-        this.container = mockery.mock(Container.class);
-        this.removal = new EmptyElementsRemoval();
-        this.bundle = ResourceBundle.getBundle("messages");
-        this.errors = new ArrayList<Message>();
-        mockery.checking(new Expectations() {
-            {
-                allowing(container).instanceFor(Converters.class);
-                will(returnValue(converters));
-                allowing(converters).to(Long.class, container);
-                will(returnValue(new LongConverter()));
-                allowing(container).instanceFor(EmptyElementsRemoval.class);
-                will(returnValue(removal));
-            }
-        });
-        this.myCat = new Cat();
+        this.house = new House();
         OgnlRuntime.setNullHandler(Object.class, new ReflectionBasedNullHandler());
         OgnlRuntime.setPropertyAccessor(List.class, new ListAccessor());
         OgnlRuntime.setPropertyAccessor(Object[].class, new ArrayAccessor());
-        this.context = (OgnlContext) Ognl.createDefaultContext(myCat);
+        this.context = (OgnlContext) Ognl.createDefaultContext(house);
         context.setTraceEvaluations(true);
-        context.put(Container.class, container);
         // OgnlRuntime.setPropertyAccessor(Set.class, new SetAccessor());
         // OgnlRuntime.setPropertyAccessor(Map.class, new MapAccessor());
-        Ognl.setTypeConverter(context, new OgnlToConvertersController(converters, errors, bundle));
+        this.bundle = ResourceBundle.getBundle("messages");
+        this.errors = new ArrayList<Message>();
+        Ognl.setTypeConverter(context, new VRaptorConvertersAdapter(converters, bundle));
     }
 
     public static class Cat {
-        private List<String> legLength;
+        private Leg firstLeg;
 
-        public void setLegLength(List<String> legLength) {
-            this.legLength = legLength;
+        public void setFirstLeg(Leg firstLeg) {
+            this.firstLeg = firstLeg;
         }
 
-        public List<String> getLegLength() {
-            return legLength;
+        public Leg getFirstLeg() {
+            return firstLeg;
         }
-
-        public void setLegs(List<Leg> legs) {
-            this.legs = legs;
-        }
-
-        public List<Leg> getLegs() {
-            return legs;
-        }
-
-        public void setIds(Long[] ids) {
-            this.ids = ids;
-        }
-
-        public Long[] getIds() {
-            return ids;
-        }
-
-        public void setEyeColorCode(List<Long> eyeColorCode) {
-            this.eyeColorCode = eyeColorCode;
-        }
-
-        public List<Long> getEyeColorCode() {
-            return eyeColorCode;
-        }
-
-        private List<Leg> legs;
-        private Long[] ids;
-        private List<Long> eyeColorCode;
     }
 
     public static class Leg {
-        private String color;
+        private Integer id;
+        private Calendar birthDay; // weird leg birthday!!
 
-        public void setColor(String color) {
-            this.color = color;
+        public void setId(Integer id) {
+            this.id = id;
         }
 
-        public String getColor() {
-            return color;
+        public Integer getId() {
+            return id;
+        }
+
+        public void setBirthDay(Calendar birthDay) {
+            this.birthDay = birthDay;
+        }
+
+        public Calendar getBirthDay() {
+            return birthDay;
         }
     }
 
+    public static class House {
+        private Cat cat;
+
+        public void setCat(Cat cat) {
+            this.cat = cat;
+        }
+
+        public Cat getCat() {
+            return cat;
+        }
+
+    }
+
     @Test
-    public void canInstantiatingStringsInAListSettingItsInternalValueWithoutInvokingConverters() throws OgnlException {
-        Ognl.setValue("legLength[0]", context, myCat, "small");
-        List<String> legs = myCat.legLength;
-        assertThat(legs.get(0), is(equalTo("small")));
-        Ognl.setValue("legLength[1]", context, myCat, "big");
-        assertThat(legs.get(1), is(equalTo("big")));
+    public void isCapableOfDealingWithEmptyParameterForInternalWrapperValue() throws OgnlException {
+        mockery.checking(new Expectations() {{
+            one(converters).to(Integer.class, null);
+            will(returnValue(new IntegerConverter()));
+        }});
+        Ognl.setValue("cat.firstLeg.id", context, house, "");
+        assertThat(house.cat.firstLeg.id, is(equalTo(null)));
         mockery.assertIsSatisfied();
     }
 
     @Test
-    public void canInstantiateAndPopulateAnArrayOfWrappers() throws OgnlException {
-        Ognl.setValue("ids[0]", context, myCat, "3");
-        assertThat(myCat.ids[0], is(equalTo(3L)));
-        Ognl.setValue("ids[1]", context, myCat, "5");
-        assertThat(myCat.ids[1], is(equalTo(5L)));
-        mockery.assertIsSatisfied();
-    }
-
-    @Test
-    public void canInstantiateAndPopulateAListOfWrappers() throws OgnlException {
-        Ognl.setValue("eyeColorCode[0]", context, myCat, "3");
-        assertThat(myCat.eyeColorCode.get(0), is(equalTo(3L)));
-        Ognl.setValue("eyeColorCode[1]", context, myCat, "5");
-        assertThat(myCat.eyeColorCode.get(1), is(equalTo(5L)));
+    public void isCapableOfDealingWithEmptyParameterForInternalValueWhichNeedsAConverter() throws OgnlException {
+        final MutableRequest request = mockery.mock(MutableRequest.class);
+        final RequestInfo webRequest = new RequestInfo(null, request, null);
+        mockery.checking(new Expectations() {{
+            exactly(2).of(request).getAttribute("javax.servlet.jsp.jstl.fmt.locale.request");
+            will(returnValue("pt_br"));
+            one(converters).to(Calendar.class, null);
+            will(returnValue(new LocaleBasedCalendarConverter(webRequest)));
+        }});
+        Ognl.setValue("cat.firstLeg.birthDay", context, house, "10/5/2010");
+        assertThat(house.cat.firstLeg.birthDay, is(equalTo((Calendar) new GregorianCalendar(2010, 4, 10))));
         mockery.assertIsSatisfied();
     }
 

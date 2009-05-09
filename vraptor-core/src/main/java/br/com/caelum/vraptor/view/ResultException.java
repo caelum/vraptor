@@ -6,6 +6,8 @@ import br.com.caelum.vraptor.VRaptorException;
  * @author Fabio Kung
  */
 public class ResultException extends VRaptorException {
+    private static final long serialVersionUID = 613016550272361973L;
+
     public ResultException(Throwable e) {
         super(e);
     }

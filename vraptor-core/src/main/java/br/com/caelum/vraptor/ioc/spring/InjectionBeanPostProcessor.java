@@ -40,7 +40,7 @@ import org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostP
  *
  * @author Fabio Kung
  */
-public class InjectionBeanPostProcessor extends AutowiredAnnotationBeanPostProcessor {
+class InjectionBeanPostProcessor extends AutowiredAnnotationBeanPostProcessor {
 
 
     //  in case we are required to change the injection annotation:

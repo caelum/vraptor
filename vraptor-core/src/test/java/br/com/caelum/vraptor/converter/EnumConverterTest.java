@@ -93,7 +93,7 @@ public class EnumConverterTest {
 
 	@Test
 	public void shouldAcceptNull() {
-		assertThat((MyCustomEnum) converter.convert(null, MyCustomEnum.class, bundle), is(nullValue()));
+		assertThat(converter.convert(null, MyCustomEnum.class, bundle), is(nullValue()));
 	}
 
 	enum MyCustomEnum {

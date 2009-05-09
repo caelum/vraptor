@@ -1,18 +1,20 @@
 package br.com.caelum.vraptor.test;
 
+import br.com.caelum.vraptor.IteratorToEnumerationAdapter;
+
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpSessionContext;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpSession;
-import javax.servlet.http.HttpSessionContext;
-
 /**
  * @author Fabio Kung
  */
+@SuppressWarnings("deprecation")
 public class HttpSessionMock implements HttpSession {
     private final ServletContext context;
     private final String id;
@@ -20,7 +22,7 @@ public class HttpSessionMock implements HttpSession {
     private long creationTime;
     private long lastAccessedTime;
     private int maxInactiveInterval;
-    private Map<String, Object> attributes = new HashMap<String, Object>();
+    private final Map<String, Object> attributes = new HashMap<String, Object>();
     private boolean isNew;
 
     public HttpSessionMock(ServletContext context, String id) {
@@ -93,7 +95,7 @@ public class HttpSessionMock implements HttpSession {
 
     public Enumeration getAttributeNames() {
         Iterator<String> names = attributes.keySet().iterator();
-        return new IteratorToEnumerationAdapter(names);
+        return new IteratorToEnumerationAdapter<String>(names);
     }
 
     public String[] getValueNames() {
@@ -113,6 +115,7 @@ public class HttpSessionMock implements HttpSession {
         attributes.remove(name);
     }
 
+    @Deprecated
     public void removeValue(String name) {
         removeAttribute(name);
     }

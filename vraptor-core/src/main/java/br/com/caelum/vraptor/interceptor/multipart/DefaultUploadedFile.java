@@ -3,17 +3,17 @@ package br.com.caelum.vraptor.interceptor.multipart;
 import java.io.File;
 
 public class DefaultUploadedFile implements UploadedFile {
-    private File file;
-
-    private String contentType;
-
-    private String fileName;
-
-    private String completeFileName;
-
     private static final String NOT_UNIX_LIKE_SEPARATOR = "\\";
 
     private static final String UNIX_LIKE_SEPARATOR = "/";
+
+    private final File file;
+
+    private final String contentType;
+
+    private final String fileName;
+
+    private final String completeFileName;
 
     public DefaultUploadedFile(File file, String completeFileName,
             String contentType) {

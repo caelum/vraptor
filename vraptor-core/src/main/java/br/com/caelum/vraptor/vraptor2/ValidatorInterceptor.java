@@ -82,9 +82,7 @@ public class ValidatorInterceptor implements Interceptor {
                 Object[] validationParameters = new Object[parameters.length + 1];
                 BasicValidationErrors newErrors = new BasicValidationErrors();
                 validationParameters[0] = newErrors;
-                for (int i = 0; i < parameters.length; i++) {
-                    validationParameters[i + 1] = parameters[i];
-                }
+                System.arraycopy(parameters, 0, validationParameters, 1, parameters.length);
                 try {
                     validationMethod.invoke(resourceInstance, validationParameters);
                 } catch (IllegalArgumentException e) {

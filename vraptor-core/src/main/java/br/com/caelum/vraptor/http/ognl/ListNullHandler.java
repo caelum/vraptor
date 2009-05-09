@@ -47,7 +47,7 @@ import br.com.caelum.vraptor.vraptor2.Info;
  * 
  * @author Guilherme Silveira
  */
-public class ListNullHandler {
+class ListNullHandler {
 
 	@SuppressWarnings("unchecked")
 	Object instantiate(Container container, Object target, Object property, Evaluation evaluation)

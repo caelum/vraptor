@@ -27,36 +27,31 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package br.com.caelum.vraptor.converter;
+package br.com.caelum.vraptor.http.ognl;
+
+import br.com.caelum.vraptor.Converter;
+import br.com.caelum.vraptor.core.Converters;
+import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor.ioc.RequestScoped;
+import ognl.TypeConverter;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import ognl.TypeConverter;
-import br.com.caelum.vraptor.Converter;
-import br.com.caelum.vraptor.core.Converters;
-import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.ioc.RequestScoped;
-import br.com.caelum.vraptor.validator.ValidationMessage;
-import br.com.caelum.vraptor.validator.Message;
-
 @RequestScoped
-public class OgnlToConvertersController implements TypeConverter {
+public class VRaptorConvertersAdapter implements TypeConverter {
 
     private final Converters converters;
-	private final ResourceBundle bundle;
-	private final List<Message> errors;
+    private final ResourceBundle bundle;
 
-    public OgnlToConvertersController(Converters converters, List<Message> errors, ResourceBundle bundle) {
+    public VRaptorConvertersAdapter(Converters converters, ResourceBundle bundle) {
         this.converters = converters;
-		this.errors = errors;
-		this.bundle = bundle;
+        this.bundle = bundle;
     }
 
     @SuppressWarnings("unchecked")
@@ -87,7 +82,7 @@ public class OgnlToConvertersController implements TypeConverter {
     }
 
     @SuppressWarnings("unchecked")
-    public static Class rawTypeOf(Type genericType) {
+    private static Class rawTypeOf(Type genericType) {
         if (genericType instanceof ParameterizedType) {
             return (Class) ((ParameterizedType) genericType).getRawType();
         }
@@ -99,7 +94,7 @@ public class OgnlToConvertersController implements TypeConverter {
     }
 
     private Type extractFieldType(Member member) {
-        return ((Field)member).getGenericType();
+        return ((Field) member).getGenericType();
     }
 
     private Type extractSetterMethodType(Object target, Member member) {

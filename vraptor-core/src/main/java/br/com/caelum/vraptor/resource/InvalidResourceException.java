@@ -35,8 +35,17 @@ import br.com.caelum.vraptor.VRaptorException;
  *
  */
 public class InvalidResourceException extends VRaptorException {
+    private static final long serialVersionUID = -981845067568509810L;
 
-	public InvalidResourceException(String msg) {
+    public InvalidResourceException(Throwable e) {
+        super(e);
+    }
+
+    public InvalidResourceException(String msg, Throwable e) {
+        super(msg, e);
+    }
+
+    public InvalidResourceException(String msg) {
 		super(msg);
 	}
 

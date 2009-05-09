@@ -50,7 +50,7 @@ public class CharacterConverterTest {
 
 	@Test
 	public void shouldBeAbleToConvertCharacters() {
-		assertThat(converter.convert("Z", Character.class, bundle), is(equalTo(new Character('Z'))));
+		assertThat(converter.convert("Z", Character.class, bundle), is(equalTo('Z')));
 	}
 
 	@Test

@@ -36,7 +36,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.InterceptionException;
-import br.com.caelum.vraptor.VRaptorMockery;
+import br.com.caelum.vraptor.test.VRaptorMockery;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.Localization;
@@ -63,7 +63,7 @@ public class ParametersInstantiatorInterceptorTest {
         this.parametersProvider = mockery.mock(ParametersProvider.class);
         this.validator = mockery.mock(Validator.class);
         this.localization = mockery.localization();
-        this.instantiator = new ParametersInstantiatorInterceptor(parametersProvider, params, provider, validator, localization);
+        this.instantiator = new ParametersInstantiatorInterceptor(parametersProvider, params, validator, localization);
     }
 
     class Component {

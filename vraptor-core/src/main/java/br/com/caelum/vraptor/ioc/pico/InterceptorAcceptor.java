@@ -2,6 +2,7 @@ package br.com.caelum.vraptor.ioc.pico;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import java.util.Arrays;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,9 +37,7 @@ public class InterceptorAcceptor implements Acceptor {
     private void parseSequence(Class<?> type) {
         try {
             InterceptorSequence sequence = InterceptorSequence.class.cast(type.getConstructor().newInstance());
-            for(Class<? extends Interceptor> internalType: sequence.getSequence()) {
-                interceptors.add(internalType);
-            }
+            interceptors.addAll(Arrays.asList(sequence.getSequence()));
         } catch (InvocationTargetException e) {
             logger.error("Problem ocurred while instantiating an interceptor sequence",e.getCause());
         } catch (Exception e) {

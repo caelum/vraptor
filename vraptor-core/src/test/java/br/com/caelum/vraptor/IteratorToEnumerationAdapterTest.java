@@ -25,7 +25,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package br.com.caelum.vraptor.http;
+package br.com.caelum.vraptor;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -38,8 +38,9 @@ import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
+import br.com.caelum.vraptor.IteratorToEnumerationAdapter;
 
-public class IteratorEnumerationTest {
+public class IteratorToEnumerationAdapterTest {
 	
 	@SuppressWarnings("unchecked")
 	@Test
@@ -49,7 +50,7 @@ public class IteratorEnumerationTest {
 		items.add("name");
 		items.add("is...");
 		Iterator<String> main = items.iterator();
-		Enumeration<String> enumeration = new IteratorEnumeration(items.iterator());
+		Enumeration<String> enumeration = new IteratorToEnumerationAdapter(items.iterator());
 		while(main.hasNext()) {
 			if(!enumeration.hasMoreElements()) {
 				Assert.fail("Iterator has more elements but enumeration doesnt.");

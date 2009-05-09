@@ -26,6 +26,7 @@ import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.core.StaticContentHandler;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
+import br.com.caelum.vraptor.test.VRaptorMockery;
 
 public class VRaptorTest {
 

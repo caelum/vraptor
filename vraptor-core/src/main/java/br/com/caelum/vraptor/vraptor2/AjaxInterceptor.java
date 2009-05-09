@@ -1,7 +1,7 @@
 /***
- * 
+ *
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  * 1. Redistributions of source code must retain the above copyright notice,
@@ -12,7 +12,7 @@
  * copyright holders nor the names of its contributors may be used to endorse or
  * promote products derived from this software without specific prior written
  * permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -27,72 +27,69 @@
  */
 package br.com.caelum.vraptor.vraptor2;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-
-import javax.servlet.http.HttpServletResponse;
-
-import org.vraptor.annotations.Remotable;
-import org.vraptor.annotations.Viewless;
-import org.vraptor.remote.json.JSONSerializer;
-
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Interceptor;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.vraptor2.outject.JsonOutjecter;
+import org.vraptor.annotations.Remotable;
+import org.vraptor.annotations.Viewless;
+import org.vraptor.remote.json.JSONSerializer;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 /**
  * VRaptor2 based ajax interceptor.<br>
  * Only outjects data if its not a viewless method.
- * 
+ *
  * @author Guilherme Silveira
  */
 public class AjaxInterceptor implements Interceptor {
 
-	private static final String UTF8 = "UTF-8";
+    private static final String UTF8 = "UTF-8";
 
-	private final ComponentInfoProvider info;
+    private final ComponentInfoProvider info;
 
-	private final HttpServletResponse response;
+    private final HttpServletResponse response;
 
-	public AjaxInterceptor(HttpServletResponse response, ComponentInfoProvider info) {
-		this.response = response;
-		this.info = info;
+    public AjaxInterceptor(HttpServletResponse response, ComponentInfoProvider info) {
+        this.response = response;
+        this.info = info;
 
-	}
+    }
 
-	public boolean accepts(ResourceMethod method) {
-		// TODO this is not invoked as automatically loaded thorugh
-		// RequestExecution
-		// it should be included on the ExtractorList so would not be invoked?
-		return info.isAjax();
-	}
+    public boolean accepts(ResourceMethod method) {
+        // TODO this is not invoked as automatically loaded thorugh
+        // RequestExecution
+        // it should be included on the ExtractorList so would not be invoked?
+        return info.isAjax();
+    }
 
-	public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
-			throws InterceptionException {
-		if (!method.getMethod().isAnnotationPresent(Viewless.class) && info.isAjax()) {
-			if (!method.getMethod().isAnnotationPresent(Remotable.class)) {
-				throw new InterceptionException("Unable to make an ajax result in a non-remotable method.");
-			}
-			int depth = method.getMethod().getAnnotation(Remotable.class).depth();
-			JsonOutjecter outjecter = (JsonOutjecter) info.getOutjecter();
-			CharSequence output = new JSONSerializer(depth).serialize(outjecter.contents());
-			response.setCharacterEncoding(UTF8);
-			response.setContentType("application/json");
+    public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
+            throws InterceptionException {
+        if (!method.getMethod().isAnnotationPresent(Viewless.class) && info.isAjax()) {
+            if (!method.getMethod().isAnnotationPresent(Remotable.class)) {
+                throw new InterceptionException("Unable to make an ajax result in a non-remotable method.");
+            }
+            int depth = method.getMethod().getAnnotation(Remotable.class).depth();
+            JsonOutjecter outjecter = (JsonOutjecter) info.getOutjecter();
+            CharSequence output = new JSONSerializer(depth).serialize(outjecter.contents());
+            response.setCharacterEncoding(UTF8);
+            response.setContentType("application/json");
 
-			PrintWriter writer = null;
-			try {
-				writer = response.getWriter();
-				writer.append(output);
-				writer.flush();
-				writer.close();
-			} catch (IOException e) {
-				throw new InterceptionException(e);
-			}
-		} else {
-			stack.next(method, resourceInstance);
-		}
-	}
+            try {
+                PrintWriter writer = response.getWriter();
+                writer.append(output);
+                writer.flush();
+                writer.close();
+            } catch (IOException e) {
+                throw new InterceptionException(e);
+            }
+        } else {
+            stack.next(method, resourceInstance);
+        }
+    }
 
 }

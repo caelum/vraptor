@@ -53,7 +53,7 @@ import br.com.caelum.vraptor.ioc.Container;
  *
  * @author Guilherme Silveira
  */
-public class GenericNullHandler {
+class GenericNullHandler {
 
     private static final Map<Class<?>, Class<?>> CONCRETE_TYPES = new HashMap<Class<?>, Class<?>>();
 

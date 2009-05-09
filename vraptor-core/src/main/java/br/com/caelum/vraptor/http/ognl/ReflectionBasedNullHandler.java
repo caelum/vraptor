@@ -116,7 +116,7 @@ public class ReflectionBasedNullHandler extends ObjectNullHandler {
         return Array.newInstance(baseType.getComponentType(), 0);
     }
 
-    static <P> Method findMethod(Class<? extends Object> type, String name, Class<? extends Object> baseType, Class<P> parameterType) {
+    static <P> Method findMethod(Class<?> type, String name, Class<?> baseType, Class<P> parameterType) {
         Method[] methods = type.getDeclaredMethods();
         for (Method method : methods) {
             if (method.getName().equals(name)) {

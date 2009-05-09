@@ -41,7 +41,7 @@ public class PicoBasedContainerTest {
         final HttpServletResponse webResponse = mockery.mock(HttpServletResponse.class);
         final RequestInfo request = new RequestInfo(null, webRequest, webResponse);
         this.picoContainer = new PicoBuilder().withCaching().build();
-        this.container = new PicoBasedContainer(picoContainer, request, new DefaultRouter(new NoRoutesConfiguration(), new NoRoutesCreator(), null, null));
+        this.container = new PicoBasedContainer(picoContainer, new DefaultRouter(new NoRoutesConfiguration(), new NoRoutesCreator(), null, null));
     }
 
     @Test

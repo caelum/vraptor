@@ -11,7 +11,7 @@ import br.com.caelum.vraptor.core.RequestInfo;
  * 
  * @author Guilherme Silveira
  */
-public class ExpressionEvaluator {
+class ExpressionEvaluator {
 
 	private final Map<String, Method> cache = new HashMap<String, Method>();
 
@@ -68,7 +68,7 @@ public class ExpressionEvaluator {
 
 	private Object invokeGetter(Object obj, String property) throws ExpressionEvaluationException {
 		property = "get" + Character.toUpperCase(property.charAt(0)) + property.substring(1);
-		String key = obj.getClass().getName().toString() + "." + property;
+		String key = obj.getClass().getName() + "." + property;
 		try {
 			if (!cache.containsKey(key)) {
 				cache.put(key, obj.getClass().getMethod(property));

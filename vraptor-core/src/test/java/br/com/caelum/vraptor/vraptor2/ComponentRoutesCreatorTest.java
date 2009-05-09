@@ -36,7 +36,7 @@ import org.junit.Test;
 import org.vraptor.annotations.Component;
 
 import br.com.caelum.vraptor.Path;
-import br.com.caelum.vraptor.VRaptorMockery;
+import br.com.caelum.vraptor.test.VRaptorMockery;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.route.DefaultRouter;
 import br.com.caelum.vraptor.http.route.NoRoutesConfiguration;

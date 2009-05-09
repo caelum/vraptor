@@ -52,8 +52,8 @@ public class EmptyElementsRemoval {
 	private final Map<SetValue, Object> arrays = new HashMap<SetValue, Object>();
 
 	class SetValue {
-		Method method;
-		Object instance;
+		private final Method method;
+		private final Object instance;
 
 		public SetValue(Object instance, Method setter) {
 			this.instance = instance;

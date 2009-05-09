@@ -46,15 +46,14 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
 @ApplicationScoped
 public class EnumConverter implements Converter<Enum> {
 
-    public Enum convert(String value, Class type, ResourceBundle bundle) {
+    public Enum convert(String value, Class<? extends Enum> type, ResourceBundle bundle) {
         if (value == null || value.equals("")) {
             return null;
         }
-        Class<? extends Enum> enumType = type;
         if (Character.isDigit(value.charAt(0))) {
-            return resolveByOrdinal(value, enumType, bundle);
+            return resolveByOrdinal(value, type, bundle);
         } else {
-            return resolveByName(value, enumType, bundle);
+            return resolveByName(value, type, bundle);
         }
     }
 

@@ -138,8 +138,7 @@ public class ComponentRoutesCreator implements ResourceParserRoutesCreator {
 	private String getUriFor(Method javaMethod, Class<?> type) {
         String componentName = Info.getComponentName(type);
         String logicName = Info.getLogicName(javaMethod);
-        String entireName = "/" + componentName + "." + logicName + ".logic";
-		return entireName;
+        return "/" + componentName + "." + logicName + ".logic";
 	}
 
 	private boolean isEligible(Method javaMethod) {

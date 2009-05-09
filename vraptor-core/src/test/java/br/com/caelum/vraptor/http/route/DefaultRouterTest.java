@@ -44,7 +44,7 @@ import org.jmock.Expectations;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.Path;
-import br.com.caelum.vraptor.VRaptorMockery;
+import br.com.caelum.vraptor.test.VRaptorMockery;
 import br.com.caelum.vraptor.http.ListOfRules;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.TypeCreator;

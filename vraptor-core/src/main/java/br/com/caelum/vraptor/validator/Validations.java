@@ -90,7 +90,7 @@ public class Validations {
     }
 
     public static <T> org.hamcrest.Matcher<T> is(org.hamcrest.Matcher<T> matcher) {
-        return ShouldBe.<T>shouldBe(matcher);
+        return ShouldBe.shouldBe(matcher);
     }
 
 }

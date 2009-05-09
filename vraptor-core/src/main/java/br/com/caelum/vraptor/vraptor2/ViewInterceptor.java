@@ -41,7 +41,7 @@ import br.com.caelum.vraptor.view.PageResult;
  */
 public class ViewInterceptor implements Interceptor {
 
-	private MethodInfo reqResult;
+	private final MethodInfo reqResult;
 	private final PageResult result;
 	private final ComponentInfoProvider info;
 

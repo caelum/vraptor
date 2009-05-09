@@ -55,7 +55,7 @@ public class ClientsController {
 
 	private final Validator validator;
 
-    public ClientsController() {
+    ClientsController() {
 		this(null, null, null);
 	}
 

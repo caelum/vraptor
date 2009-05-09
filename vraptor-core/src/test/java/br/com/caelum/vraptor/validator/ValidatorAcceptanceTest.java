@@ -66,7 +66,7 @@ public class ValidatorAcceptanceTest {
 
     @Test
     public void cheksThatValidationWorks() throws ServletException, IOException {
-        DefaultValidator validator = new DefaultValidator(result,logic);
+        DefaultValidator validator = new DefaultValidator(proxifier, result,logic);
         final Student guilherme = new Student();
         mockery.checking(new Expectations() {
             {
@@ -90,7 +90,7 @@ public class ValidatorAcceptanceTest {
 
     @Test
     public void validDataDoesntThrowException() {
-        DefaultValidator validator = new DefaultValidator(result,logic);
+        DefaultValidator validator = new DefaultValidator(proxifier, result,logic);
         final Student guilherme = new Student();
         guilherme.id = 15L;
         validator.checking(new Validations() {

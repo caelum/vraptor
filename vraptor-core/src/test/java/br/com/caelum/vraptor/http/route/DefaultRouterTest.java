@@ -246,7 +246,7 @@ public class DefaultRouterTest {
 
 	@Test
 	public void usesAsteriskBothWays() throws NoSuchMethodException {
-		this.router = new DefaultRouter(new NoRoutesConfiguration(), new PathAnnotationRoutesCreator(), provider,
+		this.router = new DefaultRouter(new NoRoutesConfiguration(), new PathAnnotationRoutesCreator(proxifier), provider,
 				creator);
 		router.register(mockery.resource(MyResource.class));
 		final ResourceMethod resourceMethod = mockery.methodFor(MyResource.class, "starPath");
@@ -264,7 +264,7 @@ public class DefaultRouterTest {
 
 	@Test
 	public void canTranslateAInheritedResourceBothWays() throws NoSuchMethodException {
-		this.router = new DefaultRouter(new NoRoutesConfiguration(), new PathAnnotationRoutesCreator(), provider,
+		this.router = new DefaultRouter(new NoRoutesConfiguration(), new PathAnnotationRoutesCreator(proxifier), provider,
 				creator);
 		router.register(mockery.resource(MyResource.class));
 		router.register(mockery.resource(InheritanceExample.class));
@@ -282,7 +282,7 @@ public class DefaultRouterTest {
 
 	@Test
 	public void canTranslateAnnotatedMethodBothWays() throws NoSuchMethodException {
-		this.router = new DefaultRouter(new NoRoutesConfiguration(), new PathAnnotationRoutesCreator(), provider,
+		this.router = new DefaultRouter(new NoRoutesConfiguration(), new PathAnnotationRoutesCreator(proxifier), provider,
 				creator);
 		router.register(mockery.resource(MyResource.class));
 		final Method method = mockery.methodFor(MyResource.class, "customizedPath").getMethod();
@@ -299,7 +299,7 @@ public class DefaultRouterTest {
 
 	@Test
 	public void canAccessGenericTypeAndMethodRoute() throws NoSuchMethodException {
-		this.router = new DefaultRouter(new NoRoutesConfiguration(), new PathAnnotationRoutesCreator(), provider,
+		this.router = new DefaultRouter(new NoRoutesConfiguration(), new PathAnnotationRoutesCreator(proxifier), provider,
 				creator);
 		router.add(new Rules() {{
 			routeFor("--(*)--(*)").is(type("br.com.caelum.vraptor.http.route.DefaultRouterTest{1}"), method("{2}"));

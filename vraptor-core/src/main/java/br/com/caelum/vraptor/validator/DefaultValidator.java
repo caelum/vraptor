@@ -1,7 +1,7 @@
 /***
- * 
+ *
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  * 1. Redistributions of source code must retain the above copyright notice,
@@ -12,7 +12,7 @@
  * copyright holders nor the names of its contributors may be used to endorse or
  * promote products derived from this software without specific prior written
  * permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -27,77 +27,74 @@
  */
 package br.com.caelum.vraptor.validator;
 
-import java.lang.reflect.Method;
-import java.util.List;
-
-import net.sf.cglib.proxy.Enhancer;
-import net.sf.cglib.proxy.MethodInterceptor;
-import net.sf.cglib.proxy.MethodProxy;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.ioc.RequestScoped;
+import br.com.caelum.vraptor.proxy.MethodInvocation;
+import br.com.caelum.vraptor.proxy.Proxifier;
+import br.com.caelum.vraptor.proxy.SuperMethod;
 import br.com.caelum.vraptor.view.LogicResult;
 import br.com.caelum.vraptor.view.PageResult;
 import br.com.caelum.vraptor.view.ResultException;
 
+import java.lang.reflect.Method;
+import java.util.List;
+
 /**
  * The default validator implementation.
- * 
+ *
  * @author Guilherme Silveira
  */
 @RequestScoped
 public class DefaultValidator implements Validator {
 
-	private final PageResult result;
+    private final Proxifier proxifier;
+    private final PageResult result;
+    private final LogicResult logic;
 
-	private Object[] argsToUse;
-	private Method method;
+    private Object[] argsToUse;
+    private Method method;
+    private Class<?> typeToUse;
 
-	private final LogicResult logic;
+    public DefaultValidator(Proxifier proxifier, PageResult result, LogicResult logic) {
+        this.proxifier = proxifier;
+        this.result = result;
+        this.logic = logic;
+    }
 
-	private Class<?> typeToUse;
+    public void checking(Validations validations) {
+        List<Message> errors = validations.getErrors();
+        if (!errors.isEmpty()) {
+            result.include("errors", errors);
+            if (method != null) {
+                Object instance = logic.redirectServerTo(typeToUse);
+                try {
+                    method.invoke(instance, argsToUse);
+                } catch (Exception e) {
+                    throw new ResultException(e);
+                }
+            } else {
+                result.forward("invalid");
+            }
+            // finished just fine
+            throw new ValidationError(errors);
+        }
+    }
 
-	public DefaultValidator(PageResult result, LogicResult logic) {
-		this.result = result;
-		this.logic = logic;
-	}
+    public Validator onError() {
+        return this;
+    }
 
-	public void checking(Validations validations) {
-		List<Message> errors = validations.getErrors();
-		if (!errors.isEmpty()) {
-			result.include("errors", errors);
-			if (method != null) {
-				Object instance = logic.redirectServerTo(typeToUse);
-				try {
-					method.invoke(instance, argsToUse);
-				} catch (Exception e) {
-					throw new ResultException(e);
-				}
-			} else {
-				result.forward("invalid");
-			}
-			// finished just fine
-			throw new ValidationError(errors);
-		}
-	}
-
-	public Validator onError() {
-		return this;
-	}
-
-	public <T> T goTo(Class<T> type) {
-		this.typeToUse = type;
-		Enhancer enhancer = new Enhancer();
-		enhancer.setSuperclass(type);
-		enhancer.setCallback(new MethodInterceptor() {
-			public Object intercept(Object instance, Method method, Object[] args, MethodProxy proxy) throws Throwable {
-				if (DefaultValidator.this.method == null) {
-					DefaultValidator.this.argsToUse = args;
-					DefaultValidator.this.method = method;
-				}
-				return null;
-			}
-		});
-		return (T) enhancer.create();
-	}
+    public <T> T goTo(Class<T> type) {
+        this.typeToUse = type;
+        return proxifier.proxify(type, new MethodInvocation<T>() {
+            public Object intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {
+                if (DefaultValidator.this.method == null) {
+                    DefaultValidator.this.argsToUse = args;
+                    DefaultValidator.this.method = method;
+                }
+                return null;
+            }
+        });
+    }
 
 }

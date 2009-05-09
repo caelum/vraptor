@@ -1,7 +1,7 @@
 /***
- * 
+ *
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  * 1. Redistributions of source code must retain the above copyright notice,
@@ -12,7 +12,7 @@
  * copyright holders nor the names of its contributors may be used to endorse or
  * promote products derived from this software without specific prior written
  * permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -27,6 +27,19 @@
  */
 package br.com.caelum.vraptor.http.route;
 
+import br.com.caelum.vraptor.eval.Evaluator;
+import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor.proxy.MethodInvocation;
+import br.com.caelum.vraptor.proxy.Proxifier;
+import br.com.caelum.vraptor.proxy.SuperMethod;
+import br.com.caelum.vraptor.resource.DefaultResource;
+import br.com.caelum.vraptor.resource.DefaultResourceMethod;
+import br.com.caelum.vraptor.resource.HttpMethod;
+import br.com.caelum.vraptor.resource.Resource;
+import br.com.caelum.vraptor.resource.ResourceMethod;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -35,153 +48,132 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import net.sf.cglib.proxy.Enhancer;
-import net.sf.cglib.proxy.MethodInterceptor;
-import net.sf.cglib.proxy.MethodProxy;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import br.com.caelum.vraptor.eval.Evaluator;
-import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor.resource.DefaultResource;
-import br.com.caelum.vraptor.resource.DefaultResourceMethod;
-import br.com.caelum.vraptor.resource.HttpMethod;
-import br.com.caelum.vraptor.resource.Resource;
-import br.com.caelum.vraptor.resource.ResourceMethod;
-
 /**
  * Should be used in one of two ways, either configure the type and invoke the
  * method or pass the method (java reflection) object.
- * 
+ *
  * @author Guilherme Silveira
  */
 public class UriBasedRoute implements Rule {
-	private static final Logger logger = LoggerFactory.getLogger(UriBasedRoute.class);
+    private static final Logger logger = LoggerFactory.getLogger(UriBasedRoute.class);
 
-	private DefaultResourceMethod resource;
+    private final Proxifier proxifier;
 
-	private final Set<HttpMethod> supportedMethods = new HashSet<HttpMethod>();
+    private DefaultResourceMethod resource;
 
-	private final Pattern pattern;
+    private final Set<HttpMethod> supportedMethods = new HashSet<HttpMethod>();
 
-	private final List<String> parameters = new ArrayList<String>();
+    private final Pattern pattern;
 
-	private final String patternUri;
+    private final List<String> parameters = new ArrayList<String>();
 
-	private final String originalUri;
+    private final String patternUri;
+    private final String originalUri;
 
-	public UriBasedRoute(String uri) {
-		uri = uri.replaceAll("\\*", ".\\*");
-		this.originalUri = uri;
-		String finalUri = "";
-		String patternUri = "";
-		String paramName = "";
-		// not using stringbuffer because this is only run in startup
-		boolean ignore = false;
-		for (int i = 0; i < uri.length(); i++) {
-			if (uri.charAt(i) == '{') {
-				ignore = true;
-				patternUri += "(";
+    public UriBasedRoute(Proxifier proxifier, String uri) {
+        this.proxifier = proxifier;
+        uri = uri.replaceAll("\\*", ".\\*");
+        this.originalUri = uri;
+        String patternUri = "";
+        String paramName = "";
+        // not using stringbuffer because this is only run in startup
+        boolean ignore = false;
+        for (int i = 0; i < uri.length(); i++) {
+            if (uri.charAt(i) == '{') {
+                ignore = true;
+                patternUri += "(";
             } else if (uri.charAt(i) == '}') {
-				ignore = false;
-				finalUri += ".*";
-				patternUri += ".*)";
-				parameters.add(paramName);
-				paramName = "";
+                ignore = false;
+                patternUri += ".*)";
+                parameters.add(paramName);
+                paramName = "";
             } else if (!ignore) {
-				patternUri += uri.charAt(i);
-				finalUri += uri.charAt(i);
-			} else {
-				paramName += uri.charAt(i);
-			}
-		}
-		this.patternUri = patternUri;
-		this.pattern = Pattern.compile(patternUri);
-	}
+                patternUri += uri.charAt(i);
+            } else {
+                paramName += uri.charAt(i);
+            }
+        }
+        this.patternUri = patternUri;
+        this.pattern = Pattern.compile(patternUri);
+    }
 
-	/**
-	 * Accepts also this http method request. If this method is not invoked, any
-	 * http method is supported, otherwise all parameters passed are supported.
-	 * 
-	 * @param method to be supported
-	 * @return this
-	 */
-	public UriBasedRoute with(HttpMethod method) {
-		this.supportedMethods.add(method);
-		return this;
-	}
+    /**
+     * Accepts also this http method request. If this method is not invoked, any
+     * http method is supported, otherwise all parameters passed are supported.
+     *
+     * @param method to be supported
+     * @return this
+     */
+    public UriBasedRoute with(HttpMethod method) {
+        this.supportedMethods.add(method);
+        return this;
+    }
 
-	@SuppressWarnings("unchecked")
     public <T> T is(final Class<T> type) {
-		Enhancer e = new Enhancer();
-		e.setSuperclass(type);
-		e.setCallback(new MethodInterceptor() {
+        return proxifier.proxify(type, new MethodInvocation<T>() {
+            public Object intercept(Object proxy, Method method, Object[] args, SuperMethod superMethod) {
+                if (resource != null) {
+                    // you are either invoking a second method
+                    // or the virtual machine might be invoking the finalize
+                    // method (or anything similar)
+                    // therefore we should ignore this emthod invocation
+                    return null;
+                }
+                is(type, method);
+                return null;
+            }
+        });
+    }
 
-			public Object intercept(Object instance, Method method, Object[] args, MethodProxy proxy) throws Throwable {
-				if (resource != null) {
-					// you are either invoking a second method
-					// or the virtual machine might be invoking the finalize
-					// method (or anything similar)
-					// therefore we should ignore this emthod invocation
-					return null;
-				}
-				is(type, method);
-				return null;
-			}
-		});
-		return (T) e.create();
-	}
+    public ResourceMethod matches(String uri, HttpMethod method, MutableRequest request) {
+        if (!methodMatches(method)) {
+            return null;
+        }
+        return uriMatches(uri, request);
+    }
 
-	public ResourceMethod matches(String uri, HttpMethod method, MutableRequest request) {
-		if (!methodMatches(method)) {
-			return null;
-		}
-		return uriMatches(uri, request);
-	}
+    private DefaultResourceMethod uriMatches(String uri, MutableRequest request) {
+        Matcher m = pattern.matcher(uri);
+        if (!m.matches()) {
+            return null;
+        }
+        for (int i = 1; i <= m.groupCount(); i++) {
+            request.setParameter(parameters.get(i - 1), m.group(i));
+        }
+        return resource;
+    }
 
-	private DefaultResourceMethod uriMatches(String uri, MutableRequest request) {
-		Matcher m = pattern.matcher(uri);
-		if (!m.matches()) {
-			return null;
-		}
-		for (int i = 1; i <= m.groupCount(); i++) {
-			request.setParameter(parameters.get(i - 1), m.group(i));
-		}
-		return resource;
-	}
+    private boolean methodMatches(HttpMethod method) {
+        return (this.supportedMethods.isEmpty() || this.supportedMethods.contains(method));
+    }
 
-	private boolean methodMatches(HttpMethod method) {
-		return (this.supportedMethods.isEmpty() || this.supportedMethods.contains(method));
-	}
+    public Resource getResource() {
+        if (resource == null) {
+            throw new IllegalStateException(
+                    "You forgot to invoke a method to let the rule know which method it is suposed to invoke.");
+        }
+        return this.resource.getResource();
+    }
 
-	public Resource getResource() {
-		if (resource == null) {
-			throw new IllegalStateException(
-					"You forgot to invoke a method to let the rule know which method it is suposed to invoke.");
-		}
-		return this.resource.getResource();
-	}
+    public void is(Class<?> type, Method method) {
+        logger.debug("created rule for path " + patternUri + " --> " + type.getName() + "." + method.getName());
+        resource = new DefaultResourceMethod(new DefaultResource(type), method);
+    }
 
-	public void is(Class<?> type, Method method) {
-		logger.debug("created rule for path " + patternUri + " --> " + type.getName() + "." + method.getName());
-		resource = new DefaultResourceMethod(new DefaultResource(type), method);
-	}
+    public ResourceMethod getResourceMethod() {
+        return resource;
+    }
 
-	public ResourceMethod getResourceMethod() {
-		return resource;
-	}
+    public String urlFor(Object params) {
+        String base = originalUri.replaceAll("\\.\\*", "");
+        for (String key : parameters) {
+            Object result = new Evaluator().get(params, key);
+            base = base.replace("{" + key + "}", result == null ? "" : result.toString());
+        }
+        return base;
+    }
 
-	public String urlFor(Object params) {
-		String base = originalUri.replaceAll("\\.\\*", "");
-		for (String key : parameters) {
-			Object result = new Evaluator().get(params, key);
-			base = base.replace("{" + key + "}", result==null? "" : result.toString());
-		}
-		return base;
-	}
-
-	public void is(PatternBasedType type, PatternBasedType method) {
+    public void is(PatternBasedType type, PatternBasedType method) {
         // TODO implement! it was empty
         throw new UnsupportedOperationException();
     }

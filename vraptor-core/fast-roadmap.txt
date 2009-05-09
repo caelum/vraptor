@@ -84,6 +84,8 @@ site docs (prior to release)
 	set[id==2].nome="guilherme"
 	isso eh um mapa!
 - doc: if you want default redirect, add the ForwardToDefaultViewInterceptor to your itnerceptor stack
+- proxy creation: support also classes with non-default constructors, but will try to invoke all of them until one works.
+
 
 kung help
 	- add a @Listener 

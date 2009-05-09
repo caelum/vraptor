@@ -1,7 +1,7 @@
 /***
- * 
+ *
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  * 1. Redistributions of source code must retain the above copyright notice,
@@ -12,7 +12,7 @@
  * copyright holders nor the names of its contributors may be used to endorse or
  * promote products derived from this software without specific prior written
  * permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -27,72 +27,79 @@
  */
 package br.com.caelum.vraptor.http.route;
 
+import br.com.caelum.vraptor.Path;
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
+import br.com.caelum.vraptor.proxy.Proxifier;
+import br.com.caelum.vraptor.resource.HttpMethod;
+import br.com.caelum.vraptor.resource.Resource;
+import br.com.caelum.vraptor.resource.ResourceParserRoutesCreator;
+
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.caelum.vraptor.Path;
-import br.com.caelum.vraptor.ioc.ApplicationScoped;
-import br.com.caelum.vraptor.resource.HttpMethod;
-import br.com.caelum.vraptor.resource.Resource;
-import br.com.caelum.vraptor.resource.ResourceParserRoutesCreator;
-
 /**
  * The default parser routes creator uses the path annotation to create rules.
  * Note that methods are only registered to be public accessible if the type is
  * annotated with @Resource.
- * 
+ *
  * @author guilherme silveira
  */
 @ApplicationScoped
 public class PathAnnotationRoutesCreator implements ResourceParserRoutesCreator {
 
-	private void registerRulesFor(Class<?> actualType, Class<?> baseType, List<Rule> rules) {
-		if (actualType.equals(Object.class)) {
-			return;
-		}
-		for (Method javaMethod : actualType.getDeclaredMethods()) {
-			if (isEligible(javaMethod)) {
-				String uri = getUriFor(javaMethod, baseType);
-				UriBasedRoute rule = new UriBasedRoute(uri);
-				for (HttpMethod m : HttpMethod.values()) {
-					if (javaMethod.isAnnotationPresent(m.getAnnotation())) {
-						rule.with(m);
-					}
-				}
-				rule.is(baseType, javaMethod);
-				rules.add(rule);
-			}
-		}
-		registerRulesFor(actualType.getSuperclass(), baseType, rules);
-	}
+    private final Proxifier proxifier;
 
-	private String getUriFor(Method javaMethod, Class<?> type) {
-		if (javaMethod.isAnnotationPresent(Path.class)) {
-			return javaMethod.getAnnotation(Path.class).value();
-		}
-		return extractControllerFromName(type.getSimpleName()) + "/" + javaMethod.getName();
-	}
+    public PathAnnotationRoutesCreator(Proxifier proxifier) {
+        this.proxifier = proxifier;
+    }
 
-	private String extractControllerFromName(String baseName) {
-		if (baseName.endsWith("Controller")) {
-			return "/" + baseName.substring(0, baseName.lastIndexOf("Controller"));
-		}
-		return "/" + baseName;
-	}
+    private void registerRulesFor(Class<?> actualType, Class<?> baseType, List<Rule> rules) {
+        if (actualType.equals(Object.class)) {
+            return;
+        }
+        for (Method javaMethod : actualType.getDeclaredMethods()) {
+            if (isEligible(javaMethod)) {
+                String uri = getUriFor(javaMethod, baseType);
+                UriBasedRoute rule = new UriBasedRoute(proxifier, uri);
+                for (HttpMethod m : HttpMethod.values()) {
+                    if (javaMethod.isAnnotationPresent(m.getAnnotation())) {
+                        rule.with(m);
+                    }
+                }
+                rule.is(baseType, javaMethod);
+                rules.add(rule);
+            }
+        }
+        registerRulesFor(actualType.getSuperclass(), baseType, rules);
+    }
 
-	private boolean isEligible(Method javaMethod) {
-		return Modifier.isPublic(javaMethod.getModifiers()) && !Modifier.isStatic(javaMethod.getModifiers());
-	}
+    private String getUriFor(Method javaMethod, Class<?> type) {
+        if (javaMethod.isAnnotationPresent(Path.class)) {
+            return javaMethod.getAnnotation(Path.class).value();
+        }
+        return extractControllerFromName(type.getSimpleName()) + "/" + javaMethod.getName();
+    }
 
-	public List<Rule> rulesFor(Resource resource) {
-		List<Rule> rules = new ArrayList<Rule>();
-		Class<?> baseType = resource.getType();
-		if(baseType.isAnnotationPresent(br.com.caelum.vraptor.Resource.class)) {
-			registerRulesFor(baseType, baseType, rules);
-		}
-		return rules;
-	}
+    private String extractControllerFromName(String baseName) {
+        if (baseName.endsWith("Controller")) {
+            return "/" + baseName.substring(0, baseName.lastIndexOf("Controller"));
+        }
+        return "/" + baseName;
+    }
+
+    private boolean isEligible(Method javaMethod) {
+        return Modifier.isPublic(javaMethod.getModifiers()) && !Modifier.isStatic(javaMethod.getModifiers());
+    }
+
+    public List<Rule> rulesFor(Resource resource) {
+        List<Rule> rules = new ArrayList<Rule>();
+        Class<?> baseType = resource.getType();
+        if (baseType.isAnnotationPresent(br.com.caelum.vraptor.Resource.class)) {
+            registerRulesFor(baseType, baseType, rules);
+        }
+        return rules;
+    }
 
 }

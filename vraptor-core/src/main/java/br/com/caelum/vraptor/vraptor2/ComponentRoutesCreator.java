@@ -49,6 +49,7 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceParserRoutesCreator;
+import br.com.caelum.vraptor.proxy.Proxifier;
 
 /**
  * A vraptor 2 and 3 compatible routes creator.
@@ -58,11 +59,17 @@ import br.com.caelum.vraptor.resource.ResourceParserRoutesCreator;
 @ApplicationScoped
 public class ComponentRoutesCreator implements ResourceParserRoutesCreator {
 	
-	private final PathAnnotationRoutesCreator delegate = new PathAnnotationRoutesCreator();
+	private final PathAnnotationRoutesCreator delegate = new PathAnnotationRoutesCreator(proxifier);
+
+    private final Proxifier proxifier;
 	
 	private static final Logger logger = LoggerFactory.getLogger(ComponentRoutesCreator.class);
-    
-	public List<Rule> rulesFor(Resource resource) {
+
+    public ComponentRoutesCreator(Proxifier proxifier) {
+        this.proxifier = proxifier;
+    }
+
+    public List<Rule> rulesFor(Resource resource) {
 		List<Rule> rules = new ArrayList<Rule>();
 		Class<?> type = resource.getType();
         if(!Info.isOldComponent(resource)) {
@@ -119,7 +126,7 @@ public class ComponentRoutesCreator implements ResourceParserRoutesCreator {
                 continue;
             }
 			String uri = getUriFor(javaMethod, baseType);
-			UriBasedRoute rule = new UriBasedRoute(uri);
+			UriBasedRoute rule = new UriBasedRoute(proxifier, uri);
 			for (HttpMethod m : HttpMethod.values()) {
 				if (javaMethod.isAnnotationPresent(m.getAnnotation())) {
 					rule.with(m);

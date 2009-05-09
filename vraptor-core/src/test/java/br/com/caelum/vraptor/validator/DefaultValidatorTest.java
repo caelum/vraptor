@@ -59,7 +59,7 @@ public class DefaultValidatorTest {
 			this.to = type;
 			return (T) instance;
 		}
-		
+
 	}
 	@Before
 	public void setup() {
@@ -67,7 +67,7 @@ public class DefaultValidatorTest {
 		this.result = mockery.mock(PageResult.class);
 		this.logicResult = new MyLogicResult();
 		this.instance = new MyComponent();
-		this.validator = new DefaultValidator(result, logicResult);
+		this.validator = new DefaultValidator(proxifier, result, logicResult);
 	}
 
 	@Test

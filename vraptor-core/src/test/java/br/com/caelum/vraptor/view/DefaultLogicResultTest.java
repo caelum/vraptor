@@ -63,7 +63,7 @@ public class DefaultLogicResultTest {
         this.response = mockery.mock(HttpServletResponse.class);
         this.request = mockery.mock(HttpServletRequest.class);
         this.context = mockery.mock(ServletContext.class);
-        this.logicResult = new DefaultLogicResult(response, context, request,router);
+        this.logicResult = new DefaultLogicResult(proxifier, router, context, request, response);
     }
 
     @Test

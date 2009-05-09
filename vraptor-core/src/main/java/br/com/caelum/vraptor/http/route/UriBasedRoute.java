@@ -54,7 +54,7 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  * Should be used in one of two ways, either configure the type and invoke the
  * method or pass the method (java reflection) object.
  * 
- * @author guilherme silveira
+ * @author Guilherme Silveira
  */
 public class UriBasedRoute implements Rule {
 	private static final Logger logger = LoggerFactory.getLogger(UriBasedRoute.class);

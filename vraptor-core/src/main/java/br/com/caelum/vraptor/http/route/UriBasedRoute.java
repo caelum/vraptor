@@ -60,7 +60,7 @@ public class UriBasedRoute implements Route {
 
 
     private final Proxifier proxifier;
-private final Logger logger = LoggerFactory.getLogger(UriBasedRoute.class);
+	private final Logger logger = LoggerFactory.getLogger(UriBasedRoute.class);
 
     private ResourceMethod resourceMethod;
 
@@ -71,6 +71,8 @@ private final Logger logger = LoggerFactory.getLogger(UriBasedRoute.class);
 	private final String patternUri;
 
 	private final String originalUri;
+	
+	private RouteStrategy strategy = new NoStrategy();
 
 	public UriBasedRoute(Proxifier proxifier, String uri) {
         this.proxifier = proxifier;
@@ -124,11 +126,9 @@ private final Logger logger = LoggerFactory.getLogger(UriBasedRoute.class);
 	public <T> T is(final Class<T> type) {
         return proxifier.proxify(type, new MethodInvocation<T>() {
             public Object intercept(Object proxy, Method method, Object[] args, SuperMethod superMethod) {
-                if (resourceMethod != null) {
-                    // you are either invoking a second method
-                    // or the virtual machine might be invoking the finalize
-                    // method (or anything similar)
-                    // therefore we should ignore this emthod invocation
+				boolean alreadySetTheStrategy = !strategy.getClass().equals(NoStrategy.class);
+				if (alreadySetTheStrategy) {
+					// the virtual machine might be invoking the finalize
                     return null;
                 }
                 is(type, method);
@@ -138,7 +138,7 @@ private final Logger logger = LoggerFactory.getLogger(UriBasedRoute.class);
     }
 
 	public void is(PatternBasedType type, PatternBasedType method) {
-		
+		this.strategy = new PatternBasedStrategy(type, method);
 	}
 
 	public ResourceMethod matches(String uri, HttpMethod method, MutableRequest request) {
@@ -168,7 +168,20 @@ private final Logger logger = LoggerFactory.getLogger(UriBasedRoute.class);
 		for (int i = 1; i <= m.groupCount(); i++) {
 			request.setParameter(parameters.get(i - 1), m.group(i));
 		}
-		return resourceMethod;
+		return this.strategy.getResourceMethod();
+	}
+
+	public Resource getResource() {
+		return this.strategy.getResourceMethod().getResource();
+	}
+
+	public void is(Class<?> type, Method method) {
+		this.strategy = new FixedMethodStrategy(type, method);
+		logger.debug("created rule for path " + patternUri + " --> " + type.getName() + "." + method.getName());
+	}
+
+	public ResourceMethod getResourceMethod() {
+		return this.strategy.getResourceMethod();
 	}
 
 	public String urlFor(Object params) {
@@ -191,5 +204,4 @@ private final Logger logger = LoggerFactory.getLogger(UriBasedRoute.class);
 		this.supportedMethods.add(method);
 		return this;
 	}
-
 }

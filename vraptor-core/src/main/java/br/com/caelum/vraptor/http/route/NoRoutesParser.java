@@ -30,7 +30,7 @@ package br.com.caelum.vraptor.http.route;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.caelum.vraptor.http.route.Rule;
+import br.com.caelum.vraptor.http.route.Route;
 import br.com.caelum.vraptor.http.route.RoutesParser;
 import br.com.caelum.vraptor.resource.Resource;
 
@@ -41,9 +41,9 @@ import br.com.caelum.vraptor.resource.Resource;
  */
 public class NoRoutesParser implements RoutesParser {
 
-	private static final List<Rule> EMPTY = new ArrayList<Rule>();
+	private static final List<Route> EMPTY = new ArrayList<Route>();
 
-	public List<Rule> rulesFor(Resource resource) {
+	public List<Route> rulesFor(Resource resource) {
 		return EMPTY;
 	}
 

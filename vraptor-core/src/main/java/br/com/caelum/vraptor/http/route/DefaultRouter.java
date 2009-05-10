@@ -59,7 +59,7 @@ public class DefaultRouter implements Router {
 
     private final Logger logger = LoggerFactory.getLogger(DefaultRouter.class);
 
-    private final List<Rule> routes = new ArrayList<Rule>();
+    private final List<Route> routes = new ArrayList<Route>();
     private final Set<Resource> resources = new HashSet<Resource>();
     private final RoutesParser routesParser;
     private final ParameterNameProvider provider;
@@ -76,12 +76,12 @@ public class DefaultRouter implements Router {
     }
 
     public void add(ListOfRules rulesToAdd) {
-        List<Rule> rules = rulesToAdd.getRules();
-        add(rules);
+        List<Route> routes = rulesToAdd.getRules();
+        add(routes);
     }
 
-    private void add(List<Rule> rules) {
-        for (Rule r : rules) {
+    private void add(List<Route> routes) {
+        for (Route r : routes) {
             add(r);
         }
     }
@@ -89,14 +89,14 @@ public class DefaultRouter implements Router {
     /**
      * You can override this method to get notified by all added routes.
      */
-    protected void add(Rule r) {
+    protected void add(Route r) {
         resources.add(r.getResource());
         this.routes.add(r);
     }
 
     public ResourceMethod parse(String uri, HttpMethod method, MutableRequest request) {
-        for (Rule rule : routes) {
-            ResourceMethod value = rule.matches(uri, method, request);
+        for (Route route : routes) {
+            ResourceMethod value = route.matches(uri, method, request);
             if (value != null) {
                 return value;
             }
@@ -109,23 +109,23 @@ public class DefaultRouter implements Router {
     }
 
     public void register(Resource resource) {
-        List<Rule> rules = routesParser.rulesFor(resource);
-        logger.debug(String.format("registering rules for resource: %s. Rules: %s", resource, rules));
-        add(rules);
+        List<Route> routes = routesParser.rulesFor(resource);
+        logger.debug(String.format("registering routes for resource: %s. Rules: %s", resource, routes));
+        add(routes);
     }
 
     public <T> String urlFor(Class<T> type, Method method, Object... params) {
-        for (Rule rule : routes) {
-            if (rule.getResource().getType().equals(type) && rule.getResourceMethod().getMethod().equals(method)) {
+        for (Route route : routes) {
+            if (route.getResource().getType().equals(type) && route.getResourceMethod().getMethod().equals(method)) {
                 String[] names = provider.parameterNamesFor(method);
-                Class<?> parameterType = creator.typeFor(rule.getResourceMethod());
+                Class<?> parameterType = creator.typeFor(route.getResourceMethod());
                 try {
                     Object root = parameterType.getConstructor().newInstance();
                     for (int i = 0; i < names.length; i++) {
                         Method setter = findSetter(parameterType, "set" + Info.capitalize(names[i]));
                         setter.invoke(root, params[i]);
                     }
-                    return rule.urlFor(root);
+                    return route.urlFor(root);
                 } catch (Exception e) {
                     throw new VRaptorException("The selected route is invalid for redirection: " + type.getName() + "."
                             + method.getName(), e);
@@ -148,7 +148,7 @@ public class DefaultRouter implements Router {
                         + "If you are using the default type creator, notify VRaptor.");
     }
 
-    public List<Rule> allRoutes() {
+    public List<Route> allRoutes() {
         return routes;
     }
 

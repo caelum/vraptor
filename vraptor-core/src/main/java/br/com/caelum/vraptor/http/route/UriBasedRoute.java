@@ -54,7 +54,7 @@ import java.util.regex.Pattern;
  *
  * @author Guilherme Silveira
  */
-public class UriBasedRoute implements Rule {
+public class UriBasedRoute implements Route {
     private static final Logger logger = LoggerFactory.getLogger(UriBasedRoute.class);
 
     private final Proxifier proxifier;

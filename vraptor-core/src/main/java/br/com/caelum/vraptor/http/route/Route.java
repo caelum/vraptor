@@ -37,7 +37,7 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  * 
  * @author Guilherme Silveira
  */
-public interface Rule {
+public interface Route {
 
 	/**
 	 * Returns the resource method for this specifig rule. Also applies the

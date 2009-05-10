@@ -38,6 +38,6 @@ import java.util.List;
  */
 public interface RoutesParser {
 
-    List<Rule> rulesFor(Resource resource);
+    List<Route> rulesFor(Resource resource);
 
 }

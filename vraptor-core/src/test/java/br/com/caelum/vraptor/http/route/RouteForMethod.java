@@ -32,16 +32,16 @@ import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
-public class RuleForMethod implements Rule {
+public class RouteForMethod implements Route {
 
 	private final ResourceMethod method;
 
-	public RuleForMethod(ResourceMethod method) {
+	public RouteForMethod(ResourceMethod method) {
 		this.method = method;
 	}
 
 	public Resource getResource() {
-		return null;
+		return method.getResource();
 	}
 
 	public ResourceMethod getResourceMethod() {

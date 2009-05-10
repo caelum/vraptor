@@ -39,14 +39,14 @@ import java.util.List;
  */
 public abstract class Rules {
     private final Router router;
-    private final List<Rule> rules = new ArrayList<Rule>();
+    private final List<Route> routes = new ArrayList<Route>();
 
     public Rules(Router router) {
         this.router = router;
         routes();
         router.add(new ListOfRules() {
-            public List<Rule> getRules() {
-                return rules;
+            public List<Route> getRules() {
+                return routes;
             }
         });
     }
@@ -55,12 +55,12 @@ public abstract class Rules {
 
     protected final UriBasedRoute routeFor(String uri) {
         UriBasedRoute rule = new UriBasedRoute(router.getProxifier(), uri);
-        this.rules.add(rule);
+        this.routes.add(rule);
         return rule;
     }
 
-    public final List<Rule> getRules() {
-        return this.rules;
+    public final List<Route> getRules() {
+        return this.routes;
     }
 
     protected final PatternBasedType type(String pattern) {

@@ -43,7 +43,7 @@ import org.vraptor.annotations.Parameter;
 import org.vraptor.plugin.hibernate.Validate;
 
 import br.com.caelum.vraptor.http.route.PathAnnotationRoutesParser;
-import br.com.caelum.vraptor.http.route.Rule;
+import br.com.caelum.vraptor.http.route.Route;
 import br.com.caelum.vraptor.http.route.UriBasedRoute;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.resource.HttpMethod;
@@ -70,16 +70,16 @@ public class ComponentRoutesParser implements RoutesParser {
         delegate = new PathAnnotationRoutesParser(proxifier);
     }
 
-    public List<Rule> rulesFor(Resource resource) {
-		List<Rule> rules = new ArrayList<Rule>();
+    public List<Route> rulesFor(Resource resource) {
+		List<Route> routes = new ArrayList<Route>();
 		Class<?> type = resource.getType();
         if(!Info.isOldComponent(resource)) {
         	return delegate.rulesFor(resource);
         }
         logger.warn("Old component found, remember to migrate to vraptor3: " + type.getName());
-		registerRulesFor(type, type, rules);
+		registerRulesFor(type, type, routes);
         parse(type, type);
-		return rules;
+		return routes;
     }
 
     private void parse(Class<?> type, Class<?> originalType) {
@@ -118,7 +118,7 @@ public class ComponentRoutesParser implements RoutesParser {
     }
 
 
-	private void registerRulesFor(Class<?> actualType, Class<?> baseType, List<Rule> rules) {
+	private void registerRulesFor(Class<?> actualType, Class<?> baseType, List<Route> routes) {
 		if (actualType.equals(Object.class)) {
 			return;
 		}
@@ -134,9 +134,9 @@ public class ComponentRoutesParser implements RoutesParser {
 				}
 			}
 			rule.is(baseType, javaMethod);
-			rules.add(rule);
+			routes.add(rule);
         }
-		registerRulesFor(actualType.getSuperclass(), baseType, rules);
+		registerRulesFor(actualType.getSuperclass(), baseType, routes);
 	}
 
 	private boolean isGetter(Method javaMethod) {

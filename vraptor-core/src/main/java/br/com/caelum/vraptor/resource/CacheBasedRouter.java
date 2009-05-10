@@ -32,7 +32,7 @@ package br.com.caelum.vraptor.resource;
 import br.com.caelum.vraptor.http.ListOfRules;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.route.Router;
-import br.com.caelum.vraptor.http.route.Rule;
+import br.com.caelum.vraptor.http.route.Route;
 import br.com.caelum.vraptor.proxy.Proxifier;
 
 import java.lang.reflect.Method;
@@ -84,7 +84,7 @@ public class CacheBasedRouter implements Router {
         return delegate.urlFor(type, method, params);
     }
 
-    public List<Rule> allRoutes() {
+    public List<Route> allRoutes() {
         return delegate.allRoutes();
     }
 

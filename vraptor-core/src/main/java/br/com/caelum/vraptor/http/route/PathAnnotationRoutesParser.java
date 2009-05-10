@@ -54,14 +54,14 @@ public class PathAnnotationRoutesParser implements RoutesParser {
         this.proxifier = proxifier;
     }
 
-    public List<Rule> rulesFor(Resource resource) {
-        List<Rule> rules = new ArrayList<Rule>();
+    public List<Route> rulesFor(Resource resource) {
+        List<Route> routes = new ArrayList<Route>();
         Class<?> baseType = resource.getType();
-        registerRulesFor(baseType, baseType, rules);
-        return rules;
+        registerRulesFor(baseType, baseType, routes);
+        return routes;
     }
 
-    private void registerRulesFor(Class<?> actualType, Class<?> baseType, List<Rule> rules) {
+    private void registerRulesFor(Class<?> actualType, Class<?> baseType, List<Route> routes) {
         if (actualType.equals(Object.class)) {
             return;
         }
@@ -75,10 +75,10 @@ public class PathAnnotationRoutesParser implements RoutesParser {
                     }
                 }
                 rule.is(baseType, javaMethod);
-                rules.add(rule);
+                routes.add(rule);
             }
         }
-        registerRulesFor(actualType.getSuperclass(), baseType, rules);
+        registerRulesFor(actualType.getSuperclass(), baseType, routes);
     }
 
     private boolean isEligible(Method javaMethod) {

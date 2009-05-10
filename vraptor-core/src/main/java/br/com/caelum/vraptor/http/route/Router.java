@@ -64,7 +64,7 @@ public interface Router {
 	/**
 	 * Returns a list with all routes
 	 */
-	List<Rule> allRoutes();
+	List<Route> allRoutes();
 
     Proxifier getProxifier();
 }

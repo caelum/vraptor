@@ -167,10 +167,10 @@ public class DefaultRouterTest {
     @Test
     public void usesTheFirstRegisteredRuleIfDifferentCreatorsWereUsed() throws SecurityException, NoSuchMethodException {
         final ResourceMethod resourceMethod = mockery.mock(ResourceMethod.class);
-        final Rule customRule = new RuleForMethod(resourceMethod);
+        final Route customRoute = new RouteForMethod(resourceMethod);
         router.add(new ListOfRules() {
-            public List<Rule> getRules() {
-                return Arrays.asList(customRule);
+            public List<Route> getRules() {
+                return Arrays.asList(customRoute);
             }
         });
         new Rules(router) {

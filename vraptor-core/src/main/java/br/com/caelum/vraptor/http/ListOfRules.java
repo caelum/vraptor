@@ -29,7 +29,7 @@ package br.com.caelum.vraptor.http;
 
 import java.util.List;
 
-import br.com.caelum.vraptor.http.route.Rule;
+import br.com.caelum.vraptor.http.route.Route;
 
 /**
  * A list of rules to add to a router.
@@ -38,6 +38,6 @@ import br.com.caelum.vraptor.http.route.Rule;
  */
 public interface ListOfRules {
 
-	List<Rule> getRules();
+	List<Route> getRules();
 
 }

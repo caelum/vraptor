@@ -27,89 +27,83 @@
  */
 package br.com.caelum.vraptor.vraptor2;
 
-import java.lang.reflect.Method;
-import java.util.List;
-
-import net.sf.cglib.proxy.Enhancer;
-import net.sf.cglib.proxy.MethodInterceptor;
-import net.sf.cglib.proxy.MethodProxy;
-
-import org.vraptor.i18n.FixedMessage;
-import org.vraptor.validator.ValidationErrors;
-
+import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.ioc.RequestScoped;
+import br.com.caelum.vraptor.proxy.MethodInvocation;
+import br.com.caelum.vraptor.proxy.Proxifier;
+import br.com.caelum.vraptor.proxy.SuperMethod;
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.ValidationError;
 import br.com.caelum.vraptor.validator.Validations;
-import br.com.caelum.vraptor.view.LogicResult;
-import br.com.caelum.vraptor.view.PageResult;
 import br.com.caelum.vraptor.view.ResultException;
+import br.com.caelum.vraptor.view.Results;
+import org.vraptor.i18n.FixedMessage;
+import org.vraptor.validator.ValidationErrors;
+
+import java.lang.reflect.Method;
+import java.util.List;
 
 /**
  * The vraptor2 compatible messages creator.
- * 
+ *
  * @author Guilherme Silveira
  */
 @RequestScoped
 public class MessageCreatorValidator implements Validator {
 
-	private final PageResult result;
-	private final ValidationErrors errors;
+    private final Proxifier proxifier;
+    private final Result result;
+    private final ValidationErrors errors;
 
-	private Object[] argsToUse;
-	private Method method;
+    private Object[] argsToUse;
 
-	private final LogicResult logic;
+    private Method method;
+    private Class<?> typeToUse;
 
-	private Class<?> typeToUse;
+    public MessageCreatorValidator(Proxifier proxifier, Result result, ValidationErrors errors) {
+        this.proxifier = proxifier;
+        this.result = result;
+        this.errors = errors;
+    }
 
-	public MessageCreatorValidator(PageResult result, ValidationErrors errors, LogicResult logic) {
-		this.result = result;
-		this.errors = errors;
-		this.logic = logic;
-	}
+    public void checking(Validations validations) {
+        List<Message> messages = validations.getErrors();
+        if (!messages.isEmpty()) {
+            for (Message s : messages) {
+                this.errors.add(new FixedMessage(s.getCategory(), s.getMessage(), s.getCategory()));
+            }
+            result.include("errors", this.errors);
+            if (method != null) {
+                Object instance = result.use(Results.logic()).forwardTo(typeToUse);
+                try {
+                    method.invoke(instance, argsToUse);
+                } catch (Exception e) {
+                    throw new ResultException(e);
+                }
+            } else {
+                result.use(Results.page()).forward("invalid");
+                // finished just fine
+            }
+            throw new ValidationError(messages);
+        }
+    }
 
-	public void checking(Validations validations) {
-		List<Message> messages = validations.getErrors();
-		if (!messages.isEmpty()) {
-			for (Message s : messages) {
-				this.errors.add(new FixedMessage(s.getCategory(), s.getMessage(), s.getCategory()));
-			}
-			result.include("errors", this.errors);
-			if (method != null) {
-				Object instance = logic.redirectServerTo(typeToUse);
-				try {
-					method.invoke(instance, argsToUse);
-				} catch (Exception e) {
-					throw new ResultException(e);
-				}
-			} else {
-				result.forward("invalid");
-				// finished just fine
-			}
-			throw new ValidationError(messages);
-		}
-	}
+    public Validator onError() {
+        return this;
+    }
 
-	public Validator onError() {
-		return this;
-	}
-
-	public <T> T goTo(Class<T> type) {
-		this.typeToUse = type;
-		Enhancer enhancer = new Enhancer();
-		enhancer.setSuperclass(type);
-		enhancer.setCallback(new MethodInterceptor() {
-			public Object intercept(Object instance, Method method, Object[] args, MethodProxy proxy) throws Throwable {
-				if (MessageCreatorValidator.this.method == null) {
-					MessageCreatorValidator.this.argsToUse = args;
-					MessageCreatorValidator.this.method = method;
-				}
-				return null;
-			}
-		});
-		return (T) enhancer.create();
-	}
+    public <T> T goTo(Class<T> type) {
+        this.typeToUse = type;
+        return proxifier.proxify(type, new MethodInvocation<T>() {
+            public Object intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {
+                if (MessageCreatorValidator.this.method == null) {
+                    MessageCreatorValidator.this.argsToUse = args;
+                    MessageCreatorValidator.this.method = method;
+                }
+                return null;
+            }
+        });
+    }
 
 }

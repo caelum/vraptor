@@ -47,15 +47,14 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 @ApplicationScoped
 public class DefaultResourceTranslator implements UrlToResourceTranslator {
 
-	private final Router registry;
+    private static final Logger logger = LoggerFactory.getLogger(DefaultResourceTranslator.class);
+    private static final String METHOD_PARAMETER = "_method";
+    static final String INCLUDE_REQUEST_URI = "javax.servlet.include.request_uri";
 
-	private static final Logger logger = LoggerFactory.getLogger(DefaultResourceTranslator.class);
-	static final String INCLUDE_REQUEST_URI = "javax.servlet.include.request_uri";
+    private final Router router;
 
-	private static final String METHOD_PARAMETER = "_method";
-
-	public DefaultResourceTranslator(Router registry) {
-		this.registry = registry;
+    public DefaultResourceTranslator(Router router) {
+		this.router = router;
 	}
 
 	public ResourceMethod translate(MutableRequest request) {
@@ -71,7 +70,7 @@ public class DefaultResourceTranslator implements UrlToResourceTranslator {
 			methodName = request.getMethod();
 		}
         HttpMethod requestMethod = HttpMethod.valueOf(methodName.toUpperCase());
-        ResourceMethod resource = registry.parse(resourceName, requestMethod, request);
+        ResourceMethod resource = router.parse(resourceName, requestMethod, request);
 		if (logger.isDebugEnabled()) {
 			logger.debug("found resource " + resource);
 		}

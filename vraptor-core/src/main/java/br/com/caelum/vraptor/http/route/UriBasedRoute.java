@@ -166,9 +166,11 @@ public class UriBasedRoute implements Route {
 			return null;
 		}
 		for (int i = 1; i <= m.groupCount(); i++) {
-			request.setParameter(parameters.get(i - 1), m.group(i));
+			String name = parameters.get(i - 1);
+			if its called _resource or _method, doesnt use it
+			request.setParameter(name, m.group(i));
 		}
-		return this.strategy.getResourceMethod();
+		return this.strategy.getResourceMethod(m, request);
 	}
 
 	public Resource getResource() {

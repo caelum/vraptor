@@ -28,10 +28,12 @@
 package br.com.caelum.vraptor.http.route;
 
 import java.lang.reflect.Method;
+import java.util.regex.Matcher;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.resource.DefaultResource;
 import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.resource.Resource;
@@ -56,7 +58,12 @@ public class FixedMethodStrategy implements RouteStrategy {
 		this.resourceMethod = new DefaultResourceMethod(new DefaultResource(type), method);
 	}
 	
-	public ResourceMethod getResourceMethod() {
+	public ResourceMethod getResourceMethod(Matcher m, MutableRequest request) {
+		for (int i = 1; i <= m.groupCount(); i++) {
+			String name = parameters.get(i - 1);
+			if its an integer, then use it 
+			request.setParameter(name, m.group(i));
+		}
 		return this.resourceMethod;
 	}
 

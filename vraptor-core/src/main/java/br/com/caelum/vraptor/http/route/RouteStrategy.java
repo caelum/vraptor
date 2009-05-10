@@ -27,6 +27,7 @@
  */
 package br.com.caelum.vraptor.http.route;
 
+import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
@@ -38,7 +39,7 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  */
 public interface RouteStrategy {
 
-	ResourceMethod getResourceMethod();
+	ResourceMethod getResourceMethod(MutableRequest request);
 
 	Resource getResource();
 

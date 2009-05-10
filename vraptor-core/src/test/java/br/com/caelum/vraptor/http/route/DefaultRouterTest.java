@@ -57,7 +57,6 @@ import br.com.caelum.vraptor.test.VRaptorMockery;
 public class DefaultRouterTest {
 
     private DefaultProxifier proxifier;
-=======
 	private Router router;
 	private VRaptorMockery mockery;
 	private VRaptorRequest request;
@@ -304,7 +303,7 @@ public class DefaultRouterTest {
 		this.router = new DefaultRouter(new NoRoutesConfiguration(), new PathAnnotationRoutesCreator(), provider,
 				creator);
 		router.add(new Routes() {{
-			routeFor("--(*)--(*)").is(type("br.com.caelum.vraptor.http.route.DefaultRouterTest{1}"), method("{2}"));
+			routeFor("--(*)--(*)").is(type("br.com.caelum.vraptor.http.route.{1}"), method("{2}"));
 		}});
 		ResourceMethod resourceMethod = router.parse("--MyResource--notAnnotated", HttpMethod.GET, request);
 		assertThat(resourceMethod.getMethod(), is(equalTo(MyResource.class.getDeclaredMethod("notAnnotated"))));
@@ -312,6 +311,5 @@ public class DefaultRouterTest {
 		assertThat(router.parse(url, HttpMethod.POST, null).getMethod(), is(equalTo(resourceMethod.getMethod())));
 		mockery.assertIsSatisfied();
 	}
->>>>>>> rule --> route:vraptor-core/src/test/java/br/com/caelum/vraptor/http/route/DefaultRouterTest.java
 
 }

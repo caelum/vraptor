@@ -27,6 +27,16 @@
  */
 package br.com.caelum.vraptor.http.route;
 
+import java.io.IOException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import br.com.caelum.vraptor.VRaptorException;
 import br.com.caelum.vraptor.http.ListOfRules;
 import br.com.caelum.vraptor.http.MutableRequest;
@@ -37,15 +47,8 @@ import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.resource.VRaptorInfo;
 import br.com.caelum.vraptor.vraptor2.Info;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 /**
  * The default implementation of resource localization rules. It also uses a
@@ -58,102 +61,108 @@ import java.util.Set;
 public class DefaultRouter implements Router {
 
     private final Logger logger = LoggerFactory.getLogger(DefaultRouter.class);
-
-    private final List<Route> routes = new ArrayList<Route>();
-    private final Set<Resource> resources = new HashSet<Resource>();
-    private final RoutesParser routesParser;
-    private final ParameterNameProvider provider;
-    private final TypeCreator creator;
     private final Proxifier proxifier;
 
-    public DefaultRouter(RoutesConfiguration config, RoutesParser routesParser, ParameterNameProvider provider,
-            Proxifier proxifier, TypeCreator creator) {
-        this.routesParser = routesParser;
-        this.provider = provider;
-        this.proxifier = proxifier;
-        this.creator = creator;
-        config.config(this);
-    }
-
-    public void add(ListOfRules rulesToAdd) {
-        List<Route> routes = rulesToAdd.getRules();
-        add(routes);
-    }
-
-    private void add(List<Route> routes) {
-        for (Route r : routes) {
-            add(r);
-        }
-    }
-
-    /**
-     * You can override this method to get notified by all added routes.
-     */
-    protected void add(Route r) {
-        resources.add(r.getResource());
-        this.routes.add(r);
-    }
-
-    public ResourceMethod parse(String uri, HttpMethod method, MutableRequest request) {
-        for (Route route : routes) {
-            ResourceMethod value = route.matches(uri, method, request);
-            if (value != null) {
-                return value;
-            }
-        }
-        return null;
-    }
-
-    public Set<Resource> all() {
-        return resources;
-    }
-
-    public void register(Resource resource) {
-        List<Route> routes = routesParser.rulesFor(resource);
-        logger.debug(String.format("registering routes for resource: %s. Rules: %s", resource, routes));
-        add(routes);
-    }
-
-    public <T> String urlFor(Class<T> type, Method method, Object... params) {
-        for (Route route : routes) {
-            if (route.getResource().getType().equals(type) && route.getResourceMethod().getMethod().equals(method)) {
-                String[] names = provider.parameterNamesFor(method);
-                Class<?> parameterType = creator.typeFor(route.getResourceMethod());
-                try {
-                    Object root = parameterType.getConstructor().newInstance();
-                    for (int i = 0; i < names.length; i++) {
-                        Method setter = findSetter(parameterType, "set" + Info.capitalize(names[i]));
-                        setter.invoke(root, params[i]);
-                    }
-                    return route.urlFor(root);
-                } catch (Exception e) {
-                    throw new VRaptorException("The selected route is invalid for redirection: " + type.getName() + "."
-                            + method.getName(), e);
-                }
-            }
-        }
-        throw new RouteNotFoundException("The selected route is invalid for redirection: " + type.getName() + "."
-                + method.getName());
-    }
-
-    private Method findSetter(Class<?> parameterType, String methodName) {
-        for (Method m : parameterType.getDeclaredMethods()) {
-            if (m.getName().equals(methodName)) {
-                return m;
-            }
-        }
-        throw new VRaptorException(
-                "Unable to redirect using route as setter method for parameter setting was not created. "
-                        + "Thats probably a bug on your type creator. "
-                        + "If you are using the default type creator, notify VRaptor.");
-    }
-
-    public List<Route> allRoutes() {
-        return routes;
-    }
-
     public Proxifier getProxifier() {
-        return proxifier;
-    }
+    return proxifier;
+}
+	private final List<Route> routes = new ArrayList<Route>();
+	private final Set<Resource> resources = new HashSet<Resource>();
+	private final ResourceParserRoutesCreator resourceRoutesCreator;
+	private final ParameterNameProvider provider;
+	private final TypeCreator creator;
+
+	public DefaultRouter(RoutesConfiguration config, ResourceParserRoutesCreator resourceRoutesCreator,
+			ParameterNameProvider provider, Proxifier proxifier, TypeCreator creator) {
+		this.resourceRoutesCreator = resourceRoutesCreator;
+		this.provider = provider;
+		this.creator = creator;
+		// this resource should be kept here so it doesnt matter whether
+		// the user uses a custom routes config
+		UriBasedRoute rule = new UriBasedRoute("/is_using_vraptor");
+		try {
+			rule.is(VRaptorInfo.class).info();
+		} catch (IOException e) {
+			// ignorable
+		}
+		add(rule);
+		config.config(this);
+	}
+
+	public void add(ListOfRules rulesToAdd) {
+		List<Route> rules = rulesToAdd.getRules();
+		add(rules);
+	}
+
+	private void add(List<Route> rules) {
+		for (Route r : rules) {
+			add(r);
+		}
+	}
+
+	/**
+	 * You can override this method to get notified by all added routes.
+	 */
+	protected void add(Route r) {
+		resources.add(r.getResource());
+		this.routes.add(r);
+	}
+
+	public ResourceMethod parse(String uri, HttpMethod method, MutableRequest request) {
+		for (Route rule : routes) {
+			ResourceMethod value = rule.matches(uri, method, request);
+			if (value != null) {
+				return value;
+			}
+		}
+		return null;
+	}
+
+	public Set<Resource> all() {
+		return resources;
+	}
+
+	public void register(Resource resource) {
+		add(this.resourceRoutesCreator.rulesFor(resource));
+	}
+
+	public <T> String urlFor(Class<T> type, Method method, Object... params) {
+		for (Route rule : routes) {
+			if (rule.getResource().getType().equals(type) && rule.getResourceMethod().getMethod().equals(method)) {
+				String[] names = provider.parameterNamesFor(method);
+				Class<?> parameterType = creator.typeFor(rule.getResourceMethod());
+				try {
+					Object root = parameterType.getConstructor().newInstance();
+					for (int i = 0; i < names.length; i++) {
+						Method setter = findSetter(parameterType, "set" + Info.capitalize(names[i]));
+						setter.invoke(root, params[i]);
+					}
+					return rule.urlFor(root);
+				} catch (Exception e) {
+					throw new VRaptorException("The selected route is invalid for redirection: " + type.getName() + "."
+							+ method.getName(), e);
+				}
+			}
+		}
+		throw new RouteNotFoundException("The selected route is invalid for redirection: " + type.getName() + "."
+				+ method.getName());
+	}
+
+	private Method findSetter(Class<?> parameterType, String methodName) {
+		for (Method m : parameterType.getDeclaredMethods()) {
+			if (m.getName().equals(methodName)) {
+				return m;
+			}
+		}
+		throw new VRaptorException(
+				"Unable to redirect using route as setter method for parameter setting was not created. "
+						+ "Thats probably a bug on your type creator. "
+						+ "If you are using the default type creator, notify VRaptor.");
+	}
+
+	public List<Route> allRoutes() {
+		return routes;
+	}
+>>>>>>> rule --> route:vraptor-core/src/main/java/br/com/caelum/vraptor/http/route/DefaultRouter.java
 
 }

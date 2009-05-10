@@ -29,7 +29,11 @@ package br.com.caelum.vraptor.example.dao;
 
 import java.util.Collection;
 
+<<<<<<< HEAD:vraptor-example/src/main/java/br/com/caelum/vraptor/example/dao/Repository.java
 import br.com.caelum.vraptor.example.Client;
+=======
+import br.com.caelum.vraptor.http.route.Route;
+>>>>>>> rule --> route:vraptor-core/src/main/java/br/com/caelum/vraptor/resource/ResourceParserRoutesCreator.java
 
 /**
  * A simple interface for stored data.
@@ -44,6 +48,10 @@ public interface Repository {
 
 	void remove(Client client);
 
+<<<<<<< HEAD:vraptor-example/src/main/java/br/com/caelum/vraptor/example/dao/Repository.java
 	Client find(Long id);
+=======
+	List<Route> rulesFor(Resource resource);
+>>>>>>> rule --> route:vraptor-core/src/main/java/br/com/caelum/vraptor/resource/ResourceParserRoutesCreator.java
 
 }

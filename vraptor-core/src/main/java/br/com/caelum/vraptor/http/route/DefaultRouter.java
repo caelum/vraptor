@@ -37,7 +37,7 @@ import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.resource.ResourceParserRoutesCreator;
+import br.com.caelum.vraptor.http.route.RoutesParser;
 import br.com.caelum.vraptor.vraptor2.Info;
 
 import java.lang.reflect.Method;
@@ -45,6 +45,9 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The default implementation of resource localization rules. It also uses a
@@ -56,16 +59,18 @@ import java.util.Set;
 @ApplicationScoped
 public class DefaultRouter implements Router {
 
+    private final Logger logger = LoggerFactory.getLogger(DefaultRouter.class);
+
     private final List<Rule> routes = new ArrayList<Rule>();
     private final Set<Resource> resources = new HashSet<Resource>();
-    private final ResourceParserRoutesCreator resourceRoutesCreator;
+    private final RoutesParser routesParser;
     private final ParameterNameProvider provider;
     private final TypeCreator creator;
     private final Proxifier proxifier;
 
-    public DefaultRouter(RoutesConfiguration config, ResourceParserRoutesCreator resourceRoutesCreator,
-            ParameterNameProvider provider, Proxifier proxifier, TypeCreator creator) {
-        this.resourceRoutesCreator = resourceRoutesCreator;
+    public DefaultRouter(RoutesConfiguration config, RoutesParser routesParser, ParameterNameProvider provider,
+            Proxifier proxifier, TypeCreator creator) {
+        this.routesParser = routesParser;
         this.provider = provider;
         this.proxifier = proxifier;
         this.creator = creator;
@@ -106,7 +111,9 @@ public class DefaultRouter implements Router {
     }
 
     public void register(Resource resource) {
-        add(this.resourceRoutesCreator.rulesFor(resource));
+        List<Rule> rules = routesParser.rulesFor(resource);
+        logger.debug(String.format("registering rules for resource: %s. Rules: %s", resource, rules));
+        add(rules);
     }
 
     public <T> String urlFor(Class<T> type, Method method, Object... params) {

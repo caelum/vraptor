@@ -59,7 +59,7 @@ public class UriBasedRoute implements Rule {
 
     private final Proxifier proxifier;
 
-    private DefaultResourceMethod resource;
+    private DefaultResourceMethod resourceMethod;
 
     private final Set<HttpMethod> supportedMethods = new HashSet<HttpMethod>();
 
@@ -72,8 +72,8 @@ public class UriBasedRoute implements Rule {
 
     public UriBasedRoute(Proxifier proxifier, String uri) {
         this.proxifier = proxifier;
-        uri = uri.replaceAll("\\*", ".\\*");
         this.originalUri = uri;
+        uri = uri.replaceAll("\\*", ".\\*");
         String patternUri = "";
         String paramName = "";
         // not using stringbuffer because this is only run in startup
@@ -112,7 +112,7 @@ public class UriBasedRoute implements Rule {
     public <T> T is(final Class<T> type) {
         return proxifier.proxify(type, new MethodInvocation<T>() {
             public Object intercept(Object proxy, Method method, Object[] args, SuperMethod superMethod) {
-                if (resource != null) {
+                if (resourceMethod != null) {
                     // you are either invoking a second method
                     // or the virtual machine might be invoking the finalize
                     // method (or anything similar)
@@ -126,10 +126,10 @@ public class UriBasedRoute implements Rule {
     }
 
     public ResourceMethod matches(String uri, HttpMethod method, MutableRequest request) {
-        if (!methodMatches(method)) {
-            return null;
+        if (methodMatches(method)) {
+            return uriMatches(uri, request);
         }
-        return uriMatches(uri, request);
+        return null;
     }
 
     private DefaultResourceMethod uriMatches(String uri, MutableRequest request) {
@@ -140,7 +140,7 @@ public class UriBasedRoute implements Rule {
         for (int i = 1; i <= m.groupCount(); i++) {
             request.setParameter(parameters.get(i - 1), m.group(i));
         }
-        return resource;
+        return resourceMethod;
     }
 
     private boolean methodMatches(HttpMethod method) {
@@ -148,20 +148,20 @@ public class UriBasedRoute implements Rule {
     }
 
     public Resource getResource() {
-        if (resource == null) {
+        if (resourceMethod == null) {
             throw new IllegalStateException(
                     "You forgot to invoke a method to let the rule know which method it is suposed to invoke.");
         }
-        return this.resource.getResource();
+        return this.resourceMethod.getResource();
     }
 
     public void is(Class<?> type, Method method) {
         logger.debug("created rule for path " + patternUri + " --> " + type.getName() + "." + method.getName());
-        resource = new DefaultResourceMethod(new DefaultResource(type), method);
+        resourceMethod = new DefaultResourceMethod(new DefaultResource(type), method);
     }
 
     public ResourceMethod getResourceMethod() {
-        return resource;
+        return resourceMethod;
     }
 
     public String urlFor(Object params) {
@@ -178,4 +178,11 @@ public class UriBasedRoute implements Rule {
         throw new UnsupportedOperationException();
     }
 
+    @Override
+    public String toString() {
+        if (supportedMethods.isEmpty()) {
+            return String.format("<< Route: %s => %s >>", originalUri, resourceMethod);
+        }
+        return String.format("<< Route: %s %s=> %s >>", originalUri, supportedMethods, resourceMethod);
+    }
 }

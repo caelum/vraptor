@@ -42,13 +42,13 @@ import org.vraptor.annotations.Out;
 import org.vraptor.annotations.Parameter;
 import org.vraptor.plugin.hibernate.Validate;
 
-import br.com.caelum.vraptor.http.route.PathAnnotationRoutesCreator;
+import br.com.caelum.vraptor.http.route.PathAnnotationRoutesParser;
 import br.com.caelum.vraptor.http.route.Rule;
 import br.com.caelum.vraptor.http.route.UriBasedRoute;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.Resource;
-import br.com.caelum.vraptor.resource.ResourceParserRoutesCreator;
+import br.com.caelum.vraptor.http.route.RoutesParser;
 import br.com.caelum.vraptor.proxy.Proxifier;
 
 /**
@@ -57,17 +57,17 @@ import br.com.caelum.vraptor.proxy.Proxifier;
  * @author Guilherme Silveira
  */
 @ApplicationScoped
-public class ComponentRoutesCreator implements ResourceParserRoutesCreator {
+public class ComponentRoutesParser implements RoutesParser {
 
     private final Proxifier proxifier;
 
-    private final PathAnnotationRoutesCreator delegate;
+    private final PathAnnotationRoutesParser delegate;
 
-    private static final Logger logger = LoggerFactory.getLogger(ComponentRoutesCreator.class);
+    private static final Logger logger = LoggerFactory.getLogger(ComponentRoutesParser.class);
 
-    public ComponentRoutesCreator(Proxifier proxifier) {
+    public ComponentRoutesParser(Proxifier proxifier) {
         this.proxifier = proxifier;
-        delegate = new PathAnnotationRoutesCreator(proxifier);
+        delegate = new PathAnnotationRoutesParser(proxifier);
     }
 
     public List<Rule> rulesFor(Resource resource) {

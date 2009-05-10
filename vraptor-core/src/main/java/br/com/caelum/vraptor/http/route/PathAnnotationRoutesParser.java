@@ -32,7 +32,6 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.Resource;
-import br.com.caelum.vraptor.resource.ResourceParserRoutesCreator;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -47,11 +46,11 @@ import java.util.List;
  * @author guilherme silveira
  */
 @ApplicationScoped
-public class PathAnnotationRoutesCreator implements ResourceParserRoutesCreator {
+public class PathAnnotationRoutesParser implements RoutesParser {
 
     private final Proxifier proxifier;
 
-    public PathAnnotationRoutesCreator(Proxifier proxifier) {
+    public PathAnnotationRoutesParser(Proxifier proxifier) {
         this.proxifier = proxifier;
     }
 

@@ -1,7 +1,7 @@
 /***
- * 
+ *
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  * 1. Redistributions of source code must retain the above copyright notice,
@@ -12,7 +12,7 @@
  * copyright holders nor the names of its contributors may be used to endorse or
  * promote products derived from this software without specific prior written
  * permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -25,24 +25,19 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package br.com.caelum.vraptor.resource;
+package br.com.caelum.vraptor.http.route;
 
-import java.util.ArrayList;
+import br.com.caelum.vraptor.resource.Resource;
+
 import java.util.List;
 
-import br.com.caelum.vraptor.http.route.Rule;
-
 /**
- * Generates no routes for any resource. Only allows configurarion through the use of custom routes.
- * @author guilherme silveira
+ * Extracts all possible routes for this specific resource.
  *
+ * @author guilherme silveira
  */
-public class NoRoutesCreator implements ResourceParserRoutesCreator {
+public interface RoutesParser {
 
-	private static final List<Rule> EMPTY = new ArrayList<Rule>();
-
-	public List<Rule> rulesFor(Resource resource) {
-		return EMPTY;
-	}
+    List<Rule> rulesFor(Resource resource);
 
 }

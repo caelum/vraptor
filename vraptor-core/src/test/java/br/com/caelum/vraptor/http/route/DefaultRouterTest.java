@@ -35,9 +35,7 @@ import br.com.caelum.vraptor.http.TypeCreator;
 import br.com.caelum.vraptor.http.VRaptorRequest;
 import static br.com.caelum.vraptor.interceptor.VRaptorMatchers.resourceMethod;
 import br.com.caelum.vraptor.proxy.DefaultProxifier;
-import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.resource.HttpMethod;
-import br.com.caelum.vraptor.resource.NoRoutesCreator;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.test.VRaptorMockery;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -70,7 +68,7 @@ public class DefaultRouterTest {
         this.provider = mockery.mock(ParameterNameProvider.class);
         this.creator = mockery.mock(TypeCreator.class);
         this.proxifier = new DefaultProxifier();
-        this.router = new DefaultRouter(new NoRoutesConfiguration(), new NoRoutesCreator(), provider, proxifier, creator);
+        this.router = new DefaultRouter(new NoRoutesConfiguration(), new NoRoutesParser(), provider, proxifier, creator);
     }
 
     class Dog {
@@ -237,7 +235,7 @@ public class DefaultRouterTest {
 
     @Test
     public void usesAsteriskBothWays() throws NoSuchMethodException {
-        this.router = new DefaultRouter(new NoRoutesConfiguration(), new PathAnnotationRoutesCreator(proxifier), provider,
+        this.router = new DefaultRouter(new NoRoutesConfiguration(), new PathAnnotationRoutesParser(proxifier), provider,
                 proxifier, creator);
         router.register(mockery.resource(MyResource.class));
         final ResourceMethod resourceMethod = mockery.methodFor(MyResource.class, "starPath");
@@ -257,7 +255,7 @@ public class DefaultRouterTest {
 
     @Test
     public void canTranslateAInheritedResourceBothWays() throws NoSuchMethodException {
-        this.router = new DefaultRouter(new NoRoutesConfiguration(), new PathAnnotationRoutesCreator(proxifier), provider,
+        this.router = new DefaultRouter(new NoRoutesConfiguration(), new PathAnnotationRoutesParser(proxifier), provider,
                 proxifier, creator);
         router.register(mockery.resource(MyResource.class));
         router.register(mockery.resource(InheritanceExample.class));
@@ -277,7 +275,7 @@ public class DefaultRouterTest {
 
     @Test
     public void canTranslateAnnotatedMethodBothWays() throws NoSuchMethodException {
-        this.router = new DefaultRouter(new NoRoutesConfiguration(), new PathAnnotationRoutesCreator(proxifier), provider,
+        this.router = new DefaultRouter(new NoRoutesConfiguration(), new PathAnnotationRoutesParser(proxifier), provider,
                 proxifier, creator);
         router.register(mockery.resource(MyResource.class));
         final Method method = mockery.methodFor(MyResource.class, "customizedPath").getMethod();
@@ -296,7 +294,7 @@ public class DefaultRouterTest {
 
     @Test
     public void canAccessGenericTypeAndMethodRoute() throws NoSuchMethodException {
-        this.router = new DefaultRouter(new NoRoutesConfiguration(), new PathAnnotationRoutesCreator(proxifier), provider,
+        this.router = new DefaultRouter(new NoRoutesConfiguration(), new PathAnnotationRoutesParser(proxifier), provider,
                 proxifier, creator);
         new Rules(router) {
             public void routes() {

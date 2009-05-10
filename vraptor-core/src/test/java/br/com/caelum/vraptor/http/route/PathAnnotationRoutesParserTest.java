@@ -45,7 +45,7 @@ import static org.hamcrest.Matchers.nullValue;
 import org.junit.Before;
 import org.junit.Test;
 
-public class PathAnnotationRoutesCreatorTest {
+public class PathAnnotationRoutesParserTest {
 
     private VRaptorMockery mockery;
     private Resource resource;
@@ -62,7 +62,7 @@ public class PathAnnotationRoutesCreatorTest {
         this.router = new DefaultRouter(new RoutesConfiguration() {
             public void config(Router router) {
             }
-        }, new PathAnnotationRoutesCreator(proxifier), null, proxifier, null);
+        }, new PathAnnotationRoutesParser(proxifier), null, proxifier, null);
         router.register(resource);
     }
 

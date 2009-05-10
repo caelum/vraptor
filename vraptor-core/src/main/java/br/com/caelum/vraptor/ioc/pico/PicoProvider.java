@@ -59,7 +59,7 @@ import br.com.caelum.vraptor.http.asm.AsmBasedTypeCreator;
 import br.com.caelum.vraptor.http.ognl.EmptyElementsRemoval;
 import br.com.caelum.vraptor.http.route.DefaultRouter;
 import br.com.caelum.vraptor.http.route.NoRoutesConfiguration;
-import br.com.caelum.vraptor.http.route.PathAnnotationRoutesCreator;
+import br.com.caelum.vraptor.http.route.PathAnnotationRoutesParser;
 import br.com.caelum.vraptor.interceptor.DefaultInterceptorRegistry;
 import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
 import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
@@ -113,7 +113,7 @@ public class PicoProvider implements ContainerProvider {
 				ParanamerNameProvider.class, DefaultConverters.class, DefaultMethodInfo.class,
 				DefaultInterceptorStack.class, DefaultRequestExecution.class,
 				DefaultResult.class, OgnlParametersProvider.class, DefaultMethodInfo.class, DefaultValidator.class,
-				JstlLocalization.class, NoRoutesConfiguration.class,WebInfClassesScanner.class, PathAnnotationRoutesCreator.class,PathAnnotationRoutesCreator.class,
+				JstlLocalization.class, NoRoutesConfiguration.class,WebInfClassesScanner.class, PathAnnotationRoutesParser.class, PathAnnotationRoutesParser.class,
 				EmptyResult.class}) {
 			singleInterfaceRegister(type, container);
 		}

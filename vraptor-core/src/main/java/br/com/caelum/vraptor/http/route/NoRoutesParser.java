@@ -25,19 +25,26 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package br.com.caelum.vraptor.resource;
+package br.com.caelum.vraptor.http.route;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import br.com.caelum.vraptor.http.route.Rule;
+import br.com.caelum.vraptor.http.route.RoutesParser;
+import br.com.caelum.vraptor.resource.Resource;
 
 /**
- * Extracts all possible routes for this specific resource.
- * 
+ * Generates no routes for any resource. Only allows configurarion through the use of custom routes.
  * @author guilherme silveira
+ *
  */
-public interface ResourceParserRoutesCreator {
+public class NoRoutesParser implements RoutesParser {
 
-	List<Rule> rulesFor(Resource resource);
+	private static final List<Rule> EMPTY = new ArrayList<Rule>();
+
+	public List<Rule> rulesFor(Resource resource) {
+		return EMPTY;
+	}
 
 }

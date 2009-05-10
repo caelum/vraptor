@@ -4,11 +4,7 @@ parameters are being outjected twice
 
 
 
-
-
-
-
-
+- refactor PathAnnotationRoutesParser to extract uri from resource.getName() and resourceMethod.getName()
 - make StupidTranslator work with jsessionid
 - accept support "_format" parameter
 - json support

@@ -27,14 +27,25 @@
  */
 package br.com.caelum.vraptor.core;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+
 import br.com.caelum.vraptor.http.DefaultResourceTranslator;
 import br.com.caelum.vraptor.http.OgnlParametersProvider;
+import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParanamerNameProvider;
+import br.com.caelum.vraptor.http.UrlToResourceTranslator;
 import br.com.caelum.vraptor.http.route.DefaultRouter;
 import br.com.caelum.vraptor.http.route.NoRoutesConfiguration;
 import br.com.caelum.vraptor.http.route.PathAnnotationRoutesCreator;
+import br.com.caelum.vraptor.http.route.Router;
+import br.com.caelum.vraptor.http.route.RoutesConfiguration;
 import br.com.caelum.vraptor.interceptor.DefaultInterceptorRegistry;
+import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
 import br.com.caelum.vraptor.resource.DefaultResourceNotFoundHandler;
+import br.com.caelum.vraptor.resource.ResourceNotFoundHandler;
+import br.com.caelum.vraptor.resource.ResourceParserRoutesCreator;
 import br.com.caelum.vraptor.validator.DefaultValidator;
 import br.com.caelum.vraptor.view.DefaultPathResolver;
 
@@ -45,14 +56,30 @@ import br.com.caelum.vraptor.view.DefaultPathResolver;
  * @author guilherme silveira
  */
 public class BaseComponents {
-
-	public static Class<?>[] getApplicationScoped() {
-		return new Class[] { DefaultResourceTranslator.class, DefaultRouter.class,
-				DefaultResourceNotFoundHandler.class, DefaultInterceptorRegistry.class, ParanamerNameProvider.class,
-				DefaultConverters.class, NoRoutesConfiguration.class, PathAnnotationRoutesCreator.class };
+	
+	@SuppressWarnings("unchecked")
+	private final static Map<Class,Class> DEFAULT_IMPLEMENTATIONS = new HashMap<Class,Class>();
+	
+	static {
+		DEFAULT_IMPLEMENTATIONS.put(UrlToResourceTranslator.class,DefaultResourceTranslator.class);
+		DEFAULT_IMPLEMENTATIONS.put(Router.class,DefaultRouter.class);
+		DEFAULT_IMPLEMENTATIONS.put(ResourceNotFoundHandler.class,DefaultResourceNotFoundHandler.class);
+		DEFAULT_IMPLEMENTATIONS.put(InterceptorRegistry.class,DefaultInterceptorRegistry.class);
+		DEFAULT_IMPLEMENTATIONS.put(ParameterNameProvider.class,ParanamerNameProvider.class);
+		DEFAULT_IMPLEMENTATIONS.put(Converters.class,DefaultConverters.class);
+		DEFAULT_IMPLEMENTATIONS.put(RoutesConfiguration.class,NoRoutesConfiguration.class);
+		DEFAULT_IMPLEMENTATIONS.put(ResourceParserRoutesCreator.class,PathAnnotationRoutesCreator.class);
+	}
+	
+	public static Collection<Class> getApplicationScoped() {
+		return DEFAULT_IMPLEMENTATIONS.values();
+	}
+	
+	public static Collection<Class> getAppScopedInterfaces() {
+		return DEFAULT_IMPLEMENTATIONS.keySet();
 	}
 
-	public static Class<?>[] getRequestScoped() {
+	public static Class[] getRequestScoped() {
 		return new Class[] { DefaultPathResolver.class, DefaultMethodInfo.class, DefaultInterceptorStack.class,
 				DefaultRequestExecution.class, DefaultResult.class, OgnlParametersProvider.class,
 				DefaultMethodInfo.class, DefaultValidator.class, JstlLocalization.class};

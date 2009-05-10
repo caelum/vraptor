@@ -70,7 +70,8 @@ public class DefaultResourceTranslator implements UrlToResourceTranslator {
 		if (methodName == null) {
 			methodName = request.getMethod();
 		}
-		ResourceMethod resource = registry.parse(resourceName, HttpMethod.valueOf(methodName), request);
+        HttpMethod requestMethod = HttpMethod.valueOf(methodName.toUpperCase());
+        ResourceMethod resource = registry.parse(resourceName, requestMethod, request);
 		if (logger.isDebugEnabled()) {
 			logger.debug("found resource " + resource);
 		}

@@ -45,7 +45,7 @@ public class CustomRoutes implements RoutesConfiguration {
             public void routes() {
                 routeFor("/").is(ClientsController.class).list();
                 routeFor("/clients/random").is(ClientsController.class).random();
-                routeFor("/(*)").is(type(""), method(""));
+                // routeFor("/(*)").is(type(""), method(""));
             }
         };
 

@@ -167,6 +167,13 @@ public class DefaultRouterTest {
     @Test
     public void usesTheFirstRegisteredRuleIfDifferentCreatorsWereUsed() throws SecurityException, NoSuchMethodException {
         final ResourceMethod resourceMethod = mockery.mock(ResourceMethod.class);
+        final br.com.caelum.vraptor.resource.Resource resource = mockery.mock(br.com.caelum.vraptor.resource.Resource.class);
+        mockery.checking(new Expectations() {
+            {
+                allowing(resourceMethod).getResource(); will(returnValue(resource));
+            }
+        });
+
         final Route customRoute = new RouteForMethod(resourceMethod);
         router.add(new ListOfRules() {
             public List<Route> getRules() {

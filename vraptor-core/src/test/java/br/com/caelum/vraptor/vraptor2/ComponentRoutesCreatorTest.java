@@ -75,7 +75,7 @@ public class ComponentRoutesCreatorTest {
     public void shouldUseVRaptor3AlgorithmIfNotAVRaptor2Component() throws SecurityException, NoSuchMethodException {
         final Resource resource = mockery.resource(VRaptor3Component.class);
         this.router.register(resource);
-        assertThat(router.parse("/VRaptor3Component/name", HttpMethod.POST, request), is(VRaptorMatchers.resourceMethod(VRaptor3Component.class.getMethod("name"))));
+        assertThat(router.parse("/vRaptor3Component/name", HttpMethod.POST, request), is(VRaptorMatchers.resourceMethod(VRaptor3Component.class.getMethod("name"))));
         mockery.assertIsSatisfied();
     }
 

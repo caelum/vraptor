@@ -34,6 +34,7 @@ import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.resource.DefaultResource;
 import br.com.caelum.vraptor.resource.DefaultResourceMethod;
+import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**
@@ -57,6 +58,10 @@ public class FixedMethodStrategy implements RouteStrategy {
 	
 	public ResourceMethod getResourceMethod() {
 		return this.resourceMethod;
+	}
+
+	public Resource getResource() {
+		return this.resourceMethod.getResource();
 	}
 
 }

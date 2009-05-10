@@ -104,7 +104,10 @@ public class DefaultRouter implements Router {
 	 * You can override this method to get notified by all added routes.
 	 */
 	protected void add(Route r) {
-		resources.add(r.getResource());
+		Resource resource = r.getResource();
+		if (resource != null) {
+			resources.add(resource);
+		}
 		this.routes.add(r);
 	}
 

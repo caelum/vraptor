@@ -27,6 +27,7 @@
  */
 package br.com.caelum.vraptor.http.route;
 
+import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**
@@ -38,6 +39,10 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 public class NoStrategy implements RouteStrategy {
 
 	public ResourceMethod getResourceMethod() {
+		throw new IllegalRouteException("You have created a route, but did not specify any method to be invoked.");
+	}
+
+	public Resource getResource() {
 		throw new IllegalRouteException("You have created a route, but did not specify any method to be invoked.");
 	}
 

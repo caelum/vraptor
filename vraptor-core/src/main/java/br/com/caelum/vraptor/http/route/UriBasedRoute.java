@@ -172,7 +172,7 @@ public class UriBasedRoute implements Route {
 	}
 
 	public Resource getResource() {
-		return this.strategy.getResourceMethod().getResource();
+		return this.strategy.getResource();
 	}
 
 	public void is(Class<?> type, Method method) {

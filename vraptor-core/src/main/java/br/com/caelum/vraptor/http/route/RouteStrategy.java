@@ -27,15 +27,19 @@
  */
 package br.com.caelum.vraptor.http.route;
 
+import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**
- * A route strategy.
+ * A route strategy. Because the same route might be used for different methods
+ * and resources, methods depend on the url being acessed.
  * 
  * @author guilherme silveira
  */
 public interface RouteStrategy {
 
 	ResourceMethod getResourceMethod();
+
+	Resource getResource();
 
 }

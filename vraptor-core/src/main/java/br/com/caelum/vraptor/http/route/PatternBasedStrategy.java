@@ -27,6 +27,7 @@
  */
 package br.com.caelum.vraptor.http.route;
 
+import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**
@@ -45,6 +46,10 @@ public class PatternBasedStrategy implements RouteStrategy {
 	}
 
 	public ResourceMethod getResourceMethod() {
+		return null;
+	}
+
+	public Resource getResource() {
 		return null;
 	}
 

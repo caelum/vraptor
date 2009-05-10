@@ -47,7 +47,7 @@ import java.io.IOException;
 public class ValidatorAcceptanceTest {
     private PageResult pageResult;
     private Mockery mockery;
-    private LogicResult logicResult;
+	private LogicResult logicResult;
     private Proxifier proxifier;
     private Result result;
 
@@ -64,10 +64,8 @@ public class ValidatorAcceptanceTest {
         this.proxifier = mockery.mock(Proxifier.class);
         mockery.checking(new Expectations() {
             {
-                allowing(result).use(Results.page());
-                will(returnValue(pageResult));
-                allowing(result).use(Results.logic());
-                will(returnValue(logicResult));
+                allowing(result).use(Results.page()); will(returnValue(pageResult));
+                allowing(result).use(Results.logic()); will(returnValue(logicResult));
             }
         });
     }
@@ -85,7 +83,7 @@ public class ValidatorAcceptanceTest {
         try {
             validator.checking(new Validations() {
                 {
-                    that("id", guilherme.id, is(notNullValue()));
+                    that("id",guilherme.id, is(notNullValue()));
                 }
             });
             Assert.fail();

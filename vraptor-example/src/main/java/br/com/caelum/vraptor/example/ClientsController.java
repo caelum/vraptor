@@ -55,10 +55,6 @@ public class ClientsController {
 
 	private final Validator validator;
 
-    ClientsController() {
-		this(null, null, null);
-	}
-
 	public ClientsController(Result result, Repository repository, Validator validator) {
 		this.result = result;
 		this.repository = repository;

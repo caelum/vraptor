@@ -11,6 +11,8 @@ parameters are being outjected twice
 - json support through "Accepts", priorize _format
 - json outjecter outjects
 - onError().goTo("xpto"); on validation, with support to ajax
+- remove String result from resourceMethods: convention for result pages are: web/controllerName/resourceMethod.format.jsp
+- default being web/controllerName/resouceMethod.jsp for format=html
 
 help:
 - JstlLocalization test

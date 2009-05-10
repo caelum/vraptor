@@ -1,7 +1,7 @@
 /***
- * 
+ *
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  * 1. Redistributions of source code must retain the above copyright notice,
@@ -12,7 +12,7 @@
  * copyright holders nor the names of its contributors may be used to endorse or
  * promote products derived from this software without specific prior written
  * permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -27,37 +27,29 @@
  */
 package br.com.caelum.vraptor.validator;
 
+import br.com.caelum.vraptor.Result;
+import br.com.caelum.vraptor.proxy.Proxifier;
+import br.com.caelum.vraptor.view.LogicResult;
+import br.com.caelum.vraptor.view.PageResult;
+import br.com.caelum.vraptor.view.Results;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.notNullValue;
-
-import java.io.IOException;
-
-import javax.servlet.ServletException;
-
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.view.LogicResult;
-import br.com.caelum.vraptor.view.PageResult;
-import br.com.caelum.vraptor.view.Results;
-import br.com.caelum.vraptor.proxy.Proxifier;
-import br.com.caelum.vraptor.Result;
+import javax.servlet.ServletException;
+import java.io.IOException;
 
 public class ValidatorAcceptanceTest {
     private PageResult pageResult;
     private Mockery mockery;
-	private LogicResult logicResult;
+    private LogicResult logicResult;
     private Proxifier proxifier;
     private Result result;
-
-    @Before
-    public void setupMocks() {
-        mockery = new Mockery();
-        pageResult = mockery.mock(PageResult.class);
-        proxifier = mockery.mock(Proxifier.class);
-    }
 
     class Student {
         private Long id;
@@ -69,28 +61,31 @@ public class ValidatorAcceptanceTest {
         this.result = mockery.mock(Result.class);
         this.pageResult = mockery.mock(PageResult.class);
         this.logicResult = mockery.mock(LogicResult.class);
+        this.proxifier = mockery.mock(Proxifier.class);
         mockery.checking(new Expectations() {
             {
-                allowing(result).use(Results.page()); will(returnValue(pageResult));
-                allowing(result).use(Results.logic()); will(returnValue(logicResult));
+                allowing(result).use(Results.page());
+                will(returnValue(pageResult));
+                allowing(result).use(Results.logic());
+                will(returnValue(logicResult));
             }
         });
     }
 
     @Test
     public void cheksThatValidationWorks() throws ServletException, IOException {
-        DefaultValidator validator = new DefaultValidator(proxifier, result);
-        final Student guilherme = new Student();
         mockery.checking(new Expectations() {
             {
-                one(result).include((String) with(an(String.class)), with(an(Object.class)));
+                one(result).include(with(any(String.class)), with(hasItem(instanceOf(Message.class))));
                 one(pageResult).forward("invalid");
             }
         });
+        DefaultValidator validator = new DefaultValidator(proxifier, result);
+        final Student guilherme = new Student();
         try {
             validator.checking(new Validations() {
                 {
-                    that("id",guilherme.id, is(notNullValue()));
+                    that("id", guilherme.id, is(notNullValue()));
                 }
             });
             Assert.fail();

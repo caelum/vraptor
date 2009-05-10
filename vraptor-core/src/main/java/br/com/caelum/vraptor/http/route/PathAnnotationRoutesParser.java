@@ -95,9 +95,7 @@ public class PathAnnotationRoutesParser implements RoutesParser {
     public List<Rule> rulesFor(Resource resource) {
         List<Rule> rules = new ArrayList<Rule>();
         Class<?> baseType = resource.getType();
-        if (baseType.isAnnotationPresent(br.com.caelum.vraptor.Resource.class)) {
-            registerRulesFor(baseType, baseType, rules);
-        }
+        registerRulesFor(baseType, baseType, rules);
         return rules;
     }
 

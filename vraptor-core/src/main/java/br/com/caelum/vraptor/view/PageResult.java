@@ -41,18 +41,13 @@ public interface PageResult extends View {
     /**
      * Server side forwarding to a result.
      */
-    public abstract void forward(String result);
+    void forward(String result);
 
     /**
      * Server side include a result.
      */
-    public abstract void include(String result);
+    void include(String result);
 
-    /**
-     * Includes an object in your result.
-     */
-    public abstract void include(String key, Object value);
-    
     /**
      * Client side redirect to an specific url.
      * @param url

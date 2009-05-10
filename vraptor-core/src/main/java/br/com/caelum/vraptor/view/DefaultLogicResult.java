@@ -63,7 +63,7 @@ public class DefaultLogicResult implements LogicResult {
         this.router = router;
     }
 
-    public <T> T redirectServerTo(final Class<T> type) {
+    public <T> T forwardTo(final Class<T> type) {
         return proxifier.proxify(type, new MethodInvocation<T>() {
             public Object intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {
                 try {
@@ -79,7 +79,7 @@ public class DefaultLogicResult implements LogicResult {
         });
     }
 
-    public <T> T redirectClientTo(final Class<T> type) {
+    public <T> T redirectTo(final Class<T> type) {
         return proxifier.proxify(type, new MethodInvocation<T>() {
             public Object intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {
                 try {

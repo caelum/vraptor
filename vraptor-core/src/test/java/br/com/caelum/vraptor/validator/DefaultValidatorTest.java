@@ -28,10 +28,12 @@
 package br.com.caelum.vraptor.validator;
 
 import br.com.caelum.vraptor.Resource;
+import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.proxy.DefaultProxifier;
 import br.com.caelum.vraptor.test.VRaptorMockery;
 import br.com.caelum.vraptor.view.LogicResult;
 import br.com.caelum.vraptor.view.PageResult;
+import br.com.caelum.vraptor.view.Results;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.instanceOf;
 import org.jmock.Expectations;
@@ -44,20 +46,21 @@ import java.util.ArrayList;
 public class DefaultValidatorTest {
 
     private VRaptorMockery mockery;
-    private PageResult result;
+    private PageResult pageResult;
     private DefaultValidator validator;
     private MyLogicResult logicResult;
     private MyComponent instance;
+    private Result result;
 
     class MyLogicResult implements LogicResult {
 
         private Class<?> to;
 
-        public <T> T redirectClientTo(Class<T> type) {
+        public <T> T redirectTo(Class<T> type) {
             return null;
         }
 
-        public <T> T redirectServerTo(Class<T> type) {
+        public <T> T forwardTo(Class<T> type) {
             this.to = type;
             return (T) instance;
         }
@@ -67,10 +70,17 @@ public class DefaultValidatorTest {
     @Before
     public void setup() {
         this.mockery = new VRaptorMockery();
-        this.result = mockery.mock(PageResult.class);
+        this.result = mockery.mock(Result.class);
+        this.pageResult = mockery.mock(PageResult.class);
         this.logicResult = new MyLogicResult();
+        mockery.checking(new Expectations() {
+            {
+                allowing(result).use(Results.page()); will(returnValue(pageResult));
+                allowing(result).use(Results.logic()); will(returnValue(logicResult));
+            }
+        });
         this.instance = new MyComponent();
-        this.validator = new DefaultValidator(new DefaultProxifier(), result, logicResult);
+        this.validator = new DefaultValidator(new DefaultProxifier(), result);
     }
 
     @Test
@@ -78,7 +88,7 @@ public class DefaultValidatorTest {
         mockery.checking(new Expectations() {
             {
                 one(result).include((String) with(an(String.class)), with(an(ArrayList.class)));
-                one(result).forward("invalid");
+                one(pageResult).forward("invalid");
             }
         });
         try {

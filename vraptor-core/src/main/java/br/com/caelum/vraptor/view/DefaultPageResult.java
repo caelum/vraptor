@@ -79,10 +79,6 @@ public class DefaultPageResult implements View, PageResult {
         }
     }
 
-    public void include(String key, Object value) {
-        request.setAttribute(key, value);
-    }
-
     public void redirect(String url) {
         try {
             response.sendRedirect(url);

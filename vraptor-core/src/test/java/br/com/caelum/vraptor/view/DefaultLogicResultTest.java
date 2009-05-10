@@ -78,7 +78,7 @@ public class DefaultLogicResultTest {
                 one(dispatcher).forward(request, response);
             }
         });
-        logicResult.redirectServerTo(MyComponent.class).base();
+        logicResult.forwardTo(MyComponent.class).base();
         mockery.assertIsSatisfied();
     }
 
@@ -94,7 +94,7 @@ public class DefaultLogicResultTest {
                 one(response).sendRedirect("/context" + url);
             }
         });
-        logicResult.redirectClientTo(MyComponent.class).base();
+        logicResult.redirectTo(MyComponent.class).base();
         mockery.assertIsSatisfied();
     }
 

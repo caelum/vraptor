@@ -29,13 +29,13 @@ package br.com.caelum.vraptor.vraptor2;
 
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Interceptor;
+import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.validator.ValidationMessage;
 import br.com.caelum.vraptor.validator.Message;
-import br.com.caelum.vraptor.view.PageResult;
+import br.com.caelum.vraptor.view.Results;
 import br.com.caelum.vraptor.vraptor2.outject.OutjectionInterceptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,14 +52,14 @@ import java.util.ResourceBundle;
 public class ValidatorInterceptor implements Interceptor {
 
     private final ParametersProvider provider;
-    private final PageResult result;
+    private final Result result;
 
     private static final Logger logger = LoggerFactory.getLogger(ValidatorInterceptor.class);
     private final ValidationErrors errors;
     private final OutjectionInterceptor outjection;
     private final Localization localization;
 
-    public ValidatorInterceptor(ParametersProvider provider, PageResult result, ValidationErrors errors, OutjectionInterceptor outjection, Localization localization) {
+    public ValidatorInterceptor(ParametersProvider provider, Result result, ValidationErrors errors, OutjectionInterceptor outjection, Localization localization) {
         this.provider = provider;
         this.result = result;
         this.errors = errors;
@@ -110,7 +110,7 @@ public class ValidatorInterceptor implements Interceptor {
             if (errors.size() != 0) {
                 this.outjection.outject(resourceInstance, type);
                 this.result.include("errors", errors);
-                this.result.forward("invalid");
+                this.result.use(Results.page()).forward("invalid");
                 return;
             }
         }

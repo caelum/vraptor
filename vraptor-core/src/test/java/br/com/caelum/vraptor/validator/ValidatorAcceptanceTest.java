@@ -41,18 +41,21 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.view.LogicResult;
 import br.com.caelum.vraptor.view.PageResult;
+import br.com.caelum.vraptor.view.Results;
 import br.com.caelum.vraptor.proxy.Proxifier;
+import br.com.caelum.vraptor.Result;
 
 public class ValidatorAcceptanceTest {
-    private PageResult result;
+    private PageResult pageResult;
     private Mockery mockery;
-	private LogicResult logic;
+	private LogicResult logicResult;
     private Proxifier proxifier;
+    private Result result;
 
     @Before
     public void setupMocks() {
         mockery = new Mockery();
-        result = mockery.mock(PageResult.class);
+        pageResult = mockery.mock(PageResult.class);
         proxifier = mockery.mock(Proxifier.class);
     }
 
@@ -63,18 +66,25 @@ public class ValidatorAcceptanceTest {
     @Before
     public void setup() {
         this.mockery = new Mockery();
-        this.result = mockery.mock(PageResult.class, "result");
-        this.logic = mockery.mock(LogicResult.class);
+        this.result = mockery.mock(Result.class);
+        this.pageResult = mockery.mock(PageResult.class);
+        this.logicResult = mockery.mock(LogicResult.class);
+        mockery.checking(new Expectations() {
+            {
+                allowing(result).use(Results.page()); will(returnValue(pageResult));
+                allowing(result).use(Results.logic()); will(returnValue(logicResult));
+            }
+        });
     }
 
     @Test
     public void cheksThatValidationWorks() throws ServletException, IOException {
-        DefaultValidator validator = new DefaultValidator(proxifier, result,logic);
+        DefaultValidator validator = new DefaultValidator(proxifier, result);
         final Student guilherme = new Student();
         mockery.checking(new Expectations() {
             {
                 one(result).include((String) with(an(String.class)), with(an(Object.class)));
-                one(result).forward("invalid");
+                one(pageResult).forward("invalid");
             }
         });
         try {
@@ -93,7 +103,7 @@ public class ValidatorAcceptanceTest {
 
     @Test
     public void validDataDoesntThrowException() {
-        DefaultValidator validator = new DefaultValidator(proxifier, result,logic);
+        DefaultValidator validator = new DefaultValidator(proxifier, result);
         final Student guilherme = new Student();
         guilherme.id = 15L;
         validator.checking(new Validations() {

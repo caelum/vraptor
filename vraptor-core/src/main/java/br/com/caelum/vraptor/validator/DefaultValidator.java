@@ -27,14 +27,14 @@
  */
 package br.com.caelum.vraptor.validator;
 
+import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.proxy.MethodInvocation;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.SuperMethod;
-import br.com.caelum.vraptor.view.LogicResult;
-import br.com.caelum.vraptor.view.PageResult;
 import br.com.caelum.vraptor.view.ResultException;
+import br.com.caelum.vraptor.view.Results;
 
 import java.lang.reflect.Method;
 import java.util.List;
@@ -48,32 +48,32 @@ import java.util.List;
 public class DefaultValidator implements Validator {
 
     private final Proxifier proxifier;
-    private final PageResult result;
-    private final LogicResult logic;
+    private final Result result;
 
     private Object[] argsToUse;
     private Method method;
     private Class<?> typeToUse;
 
-    public DefaultValidator(Proxifier proxifier, PageResult result, LogicResult logic) {
+    public DefaultValidator(Proxifier proxifier, Result result) {
         this.proxifier = proxifier;
         this.result = result;
-        this.logic = logic;
     }
 
+    // TODO: do not use String consequences anymore
+    // TODO: on error action should be defined by the onError method
     public void checking(Validations validations) {
         List<Message> errors = validations.getErrors();
         if (!errors.isEmpty()) {
             result.include("errors", errors);
             if (method != null) {
-                Object instance = logic.redirectServerTo(typeToUse);
+                Object instance = result.use(Results.logic()).forwardTo(typeToUse);
                 try {
                     method.invoke(instance, argsToUse);
                 } catch (Exception e) {
                     throw new ResultException(e);
                 }
             } else {
-                result.forward("invalid");
+                result.use(Results.page()).forward("invalid");
             }
             // finished just fine
             throw new ValidationError(errors);

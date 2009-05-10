@@ -13,6 +13,7 @@ parameters are being outjected twice
 - onError().goTo("xpto"); on validation, with support to ajax
 - remove String result from resourceMethods: convention for result pages are: web/controllerName/resourceMethod.format.jsp
 - default being web/controllerName/resouceMethod.jsp for format=html
+- change Validator action when error occurs.
 
 help:
 - JstlLocalization test

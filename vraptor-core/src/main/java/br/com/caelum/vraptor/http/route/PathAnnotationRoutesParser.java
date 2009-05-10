@@ -54,6 +54,13 @@ public class PathAnnotationRoutesParser implements RoutesParser {
         this.proxifier = proxifier;
     }
 
+    public List<Rule> rulesFor(Resource resource) {
+        List<Rule> rules = new ArrayList<Rule>();
+        Class<?> baseType = resource.getType();
+        registerRulesFor(baseType, baseType, rules);
+        return rules;
+    }
+
     private void registerRulesFor(Class<?> actualType, Class<?> baseType, List<Rule> rules) {
         if (actualType.equals(Object.class)) {
             return;
@@ -74,6 +81,10 @@ public class PathAnnotationRoutesParser implements RoutesParser {
         registerRulesFor(actualType.getSuperclass(), baseType, rules);
     }
 
+    private boolean isEligible(Method javaMethod) {
+        return Modifier.isPublic(javaMethod.getModifiers()) && !Modifier.isStatic(javaMethod.getModifiers());
+    }
+
     private String getUriFor(Method javaMethod, Class<?> type) {
         if (javaMethod.isAnnotationPresent(Path.class)) {
             return javaMethod.getAnnotation(Path.class).value();
@@ -82,21 +93,15 @@ public class PathAnnotationRoutesParser implements RoutesParser {
     }
 
     private String extractControllerFromName(String baseName) {
+        baseName = lowerFirstCharacter(baseName);
         if (baseName.endsWith("Controller")) {
             return "/" + baseName.substring(0, baseName.lastIndexOf("Controller"));
         }
         return "/" + baseName;
     }
 
-    private boolean isEligible(Method javaMethod) {
-        return Modifier.isPublic(javaMethod.getModifiers()) && !Modifier.isStatic(javaMethod.getModifiers());
-    }
-
-    public List<Rule> rulesFor(Resource resource) {
-        List<Rule> rules = new ArrayList<Rule>();
-        Class<?> baseType = resource.getType();
-        registerRulesFor(baseType, baseType, rules);
-        return rules;
+    private String lowerFirstCharacter(String baseName) {
+        return baseName.toLowerCase().substring(0, 1) + baseName.substring(1, baseName.length());
     }
 
 }

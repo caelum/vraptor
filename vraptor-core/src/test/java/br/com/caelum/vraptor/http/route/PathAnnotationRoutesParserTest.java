@@ -155,9 +155,9 @@ public class PathAnnotationRoutesParserTest {
     }
 
     @Test
-    public void shouldFindAPublicNonStaticNonAnnotatedMethodWithTheSameNameAsTheGivenId() throws SecurityException,
-            NoSuchMethodException {
-        ResourceMethod method = router.parse("/Clients/add", HttpMethod.POST, request);
+    public void shouldFindNonAnnotatedNonStaticPublicMethodWithComponentNameInVariableCamelCaseConventionAsURI()
+            throws Exception {
+        ResourceMethod method = router.parse("/clients/add", HttpMethod.POST, request);
         assertThat(method, is(VRaptorMatchers.resourceMethod(Clients.class.getMethod("add"))));
         mockery.assertIsSatisfied();
     }
@@ -179,9 +179,11 @@ public class PathAnnotationRoutesParserTest {
     static class NiceClients extends Clients {
     }
 
+    @Test
     public void findsInheritedMethodsWithDefaultNames() throws SecurityException, NoSuchMethodException {
-        this.resource = mockery.resource(NiceClients.class);
-        ResourceMethod method = router.parse("/NiceClients/toInherit", HttpMethod.POST, request);
+        Resource childResource = mockery.resource(NiceClients.class);
+        router.register(childResource);
+        ResourceMethod method = router.parse("/niceClients/toInherit", HttpMethod.POST, request);
         assertThat(method, is(VRaptorMatchers.resourceMethod(Clients.class.getMethod("toInherit"))));
         mockery.assertIsSatisfied();
     }

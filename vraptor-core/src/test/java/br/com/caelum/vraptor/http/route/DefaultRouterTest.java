@@ -61,7 +61,7 @@ public class DefaultRouterTest {
     private VRaptorRequest request;
     private ParameterNameProvider provider;
     private TypeCreator creator;
-    private Proxifier proxifier;
+    private DefaultProxifier proxifier;
 
     @Before
     public void setup() {
@@ -69,7 +69,8 @@ public class DefaultRouterTest {
         this.request = new VRaptorRequest(mockery.mock(HttpServletRequest.class));
         this.provider = mockery.mock(ParameterNameProvider.class);
         this.creator = mockery.mock(TypeCreator.class);
-        this.router = new DefaultRouter(new NoRoutesConfiguration(), new NoRoutesCreator(), provider, new DefaultProxifier(), creator);
+        this.proxifier = new DefaultProxifier();
+        this.router = new DefaultRouter(new NoRoutesConfiguration(), new NoRoutesCreator(), provider, proxifier, creator);
     }
 
     class Dog {

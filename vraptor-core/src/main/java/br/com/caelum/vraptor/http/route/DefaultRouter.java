@@ -44,6 +44,8 @@ import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.TypeCreator;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.proxy.Proxifier;
+import br.com.caelum.vraptor.resource.DefaultResource;
+import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceMethod;
@@ -132,17 +134,17 @@ public class DefaultRouter implements Router {
 	}
 
 	public <T> String urlFor(Class<T> type, Method method, Object... params) {
-		for (Route rule : routes) {
-			if (rule.getResource().getType().equals(type) && rule.getResourceMethod().getMethod().equals(method)) {
+		for (Route route : routes) {
+			if(route.canHandle(type, method)) {
 				String[] names = provider.parameterNamesFor(method);
-				Class<?> parameterType = creator.typeFor(rule.getResourceMethod());
+				Class<?> parameterType = creator.typeFor(new DefaultResourceMethod(new DefaultResource(type), method));
 				try {
 					Object root = parameterType.getConstructor().newInstance();
 					for (int i = 0; i < names.length; i++) {
 						Method setter = findSetter(parameterType, "set" + Info.capitalize(names[i]));
 						setter.invoke(root, params[i]);
 					}
-					return rule.urlFor(root);
+					return route.urlFor(root);
 				} catch (Exception e) {
 					throw new VRaptorException("The selected route is invalid for redirection: " + type.getName() + "."
 							+ method.getName(), e);

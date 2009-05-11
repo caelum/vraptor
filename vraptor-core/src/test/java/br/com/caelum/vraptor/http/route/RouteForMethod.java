@@ -27,11 +27,18 @@
  */
 package br.com.caelum.vraptor.http.route;
 
+import java.lang.reflect.Method;
+
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
+/**
+ * A route for a specific method.
+ * 
+ * @author guilherme silveira
+ */
 public class RouteForMethod implements Route {
 
 	private final ResourceMethod method;
@@ -54,6 +61,10 @@ public class RouteForMethod implements Route {
 
 	public String urlFor(Object params) {
 		return null;
+	}
+
+	public boolean canHandle(Class<?> type, Method method) {
+		return type.equals(this.method.getResource().getType()) && method.equals(this.method.getMethod());
 	}
 
 }

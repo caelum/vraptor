@@ -27,6 +27,8 @@
  */
 package br.com.caelum.vraptor.http.route;
 
+import java.lang.reflect.Method;
+
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.Resource;
@@ -52,16 +54,15 @@ public interface Route {
 	Resource getResource();
 
 	/**
-	 * Returns the resource method which will be invoked through the use of this
-	 * rule.
-	 */
-	ResourceMethod getResourceMethod();
-
-	/**
 	 * Returns the url which invokes this rule with values extracted from this
 	 * parameter object. The object contains getters representing each method's
 	 * parameter.
 	 */
 	String urlFor(Object params);
+	
+	/**
+	 * Returns true if this route is able to redirect to this method.
+	 */
+	boolean canHandle(Class<?> type, Method method);
 
 }

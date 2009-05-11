@@ -60,15 +60,34 @@ public class FixedMethodStrategy implements RouteStrategy {
 	
 	public ResourceMethod getResourceMethod(Matcher m, MutableRequest request) {
 		for (int i = 1; i <= m.groupCount(); i++) {
-			String name = parameters.get(i - 1);
-			if its an integer, then use it 
+			// String name = parameters.get(i - 1);
+			String name = "";
+			if(name.equals("_resource") || name.equals("_method")) {
+				continue;
+			}
+			if(!isInteger(name)) {
+				continue;
+			}
 			request.setParameter(name, m.group(i));
 		}
 		return this.resourceMethod;
 	}
 
+	private boolean isInteger(String name) {
+		for(int i=0;i<name.length();i++) {
+			if(Character.isDigit(name.charAt(i))) {
+				return false;
+			}
+		}
+		return name.length()>0;
+	}
+
 	public Resource getResource() {
 		return this.resourceMethod.getResource();
+	}
+
+	public boolean canHandle(Class<?> type, Method method) {
+		return type.equals(this.resourceMethod.getResource().getType()) && method.equals(this.resourceMethod.getMethod());
 	}
 
 }

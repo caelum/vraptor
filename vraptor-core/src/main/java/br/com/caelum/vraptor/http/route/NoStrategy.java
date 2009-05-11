@@ -27,6 +27,10 @@
  */
 package br.com.caelum.vraptor.http.route;
 
+import java.lang.reflect.Method;
+import java.util.regex.Matcher;
+
+import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
@@ -38,12 +42,16 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  */
 public class NoStrategy implements RouteStrategy {
 
-	public ResourceMethod getResourceMethod() {
+	public Resource getResource() {
 		throw new IllegalRouteException("You have created a route, but did not specify any method to be invoked.");
 	}
 
-	public Resource getResource() {
+	public ResourceMethod getResourceMethod(Matcher m, MutableRequest request) {
 		throw new IllegalRouteException("You have created a route, but did not specify any method to be invoked.");
+	}
+
+	public boolean canHandle(Class<?> type, Method method) {
+		return false;
 	}
 
 }

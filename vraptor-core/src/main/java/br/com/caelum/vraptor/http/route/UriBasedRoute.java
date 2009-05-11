@@ -43,8 +43,6 @@ import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.proxy.MethodInvocation;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.SuperMethod;
-import br.com.caelum.vraptor.resource.DefaultResource;
-import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceMethod;
@@ -135,9 +133,9 @@ public class UriBasedRoute implements Route {
 	@Override
     public String toString() {
         if (supportedMethods.isEmpty()) {
-            return String.format("<< Route: %s => %s >>", originalUri, resourceMethod);
+            return String.format("<< Route: %s => %s >>", originalUri, this.strategy.toString());
         }
-        return String.format("<< Route: %s %s=> %s >>", originalUri, supportedMethods, resourceMethod);
+        return String.format("<< Route: %s %s=> %s >>", originalUri, supportedMethods, this.strategy.toString());
     }
 
 	private ResourceMethod uriMatches(String uri, MutableRequest request) {
@@ -147,23 +145,17 @@ public class UriBasedRoute implements Route {
 		}
 		for (int i = 1; i <= m.groupCount(); i++) {
 			String name = parameters.get(i - 1);
-			if its called _resource or _method, doesnt use it
+			if(name.equals("_resource") || name.equals("_method")) {
+				continue;
+			}
 			request.setParameter(name, m.group(i));
 		}
 		return this.strategy.getResourceMethod(m, request);
 	}
 
-	public Resource getResource() {
-		return this.strategy.getResource();
-	}
-
 	public void is(Class<?> type, Method method) {
 		this.strategy = new FixedMethodStrategy(type, method);
 		logger.debug("created rule for path " + patternUri + " --> " + type.getName() + "." + method.getName());
-	}
-
-	public ResourceMethod getResourceMethod(MutableRequest request) {
-		return this.strategy.getResourceMethod(request);
 	}
 
 	public String urlFor(Object params) {
@@ -186,4 +178,13 @@ public class UriBasedRoute implements Route {
 		this.supportedMethods.add(method);
 		return this;
 	}
+
+	public Resource getResource() {
+		return null;
+	}
+
+	public boolean canHandle(Class<?> type, Method method) {
+		return this.strategy.canHandle(type, method);
+	}
+
 }

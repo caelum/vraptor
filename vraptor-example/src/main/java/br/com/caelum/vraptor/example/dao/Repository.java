@@ -25,24 +25,25 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package br.com.caelum.vraptor.resource;
+package br.com.caelum.vraptor.example.dao;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 
-import br.com.caelum.vraptor.http.route.Rule;
+import br.com.caelum.vraptor.example.Client;
 
 /**
- * Generates no routes for any resource. Only allows configurarion through the use of custom routes.
+ * A simple interface for stored data.
  * @author guilherme silveira
  *
  */
-public class NoRoutesCreator implements ResourceParserRoutesCreator {
+public interface Repository {
 
-	private static final List<Rule> EMPTY = new ArrayList<Rule>();
+    Collection<Client> all();
 
-	public List<Rule> rulesFor(Resource resource) {
-		return EMPTY;
-	}
+    void add(Client c);
+
+	void remove(Client client);
+
+	Client find(Long id);
 
 }

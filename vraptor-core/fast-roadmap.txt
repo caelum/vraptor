@@ -4,17 +4,16 @@ parameters are being outjected twice
 
 
 
-
-
-
-
-
+- refactor PathAnnotationRoutesParser to extract uri from resource.getName() and resourceMethod.getName()
 - make StupidTranslator work with jsessionid
 - accept support "_format" parameter
 - json support
 - json support through "Accepts", priorize _format
 - json outjecter outjects
 - onError().goTo("xpto"); on validation, with support to ajax
+- remove String result from resourceMethods: convention for result pages are: web/controllerName/resourceMethod.format.jsp
+- default being web/controllerName/resouceMethod.jsp for format=html
+- change Validator action when error occurs.
 
 help:
 - JstlLocalization test
@@ -84,6 +83,8 @@ site docs (prior to release)
 	set[id==2].nome="guilherme"
 	isso eh um mapa!
 - doc: if you want default redirect, add the ForwardToDefaultViewInterceptor to your itnerceptor stack
+- proxy creation: support also classes with non-default constructors, but will try to invoke all of them until one works.
+
 
 kung help
 	- add a @Listener 

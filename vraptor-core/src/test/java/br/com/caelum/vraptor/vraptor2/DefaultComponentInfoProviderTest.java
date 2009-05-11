@@ -12,7 +12,7 @@ import org.junit.Test;
 import org.vraptor.annotations.Component;
 import org.vraptor.annotations.Viewless;
 
-import br.com.caelum.vraptor.VRaptorMockery;
+import br.com.caelum.vraptor.test.VRaptorMockery;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 public class DefaultComponentInfoProviderTest {

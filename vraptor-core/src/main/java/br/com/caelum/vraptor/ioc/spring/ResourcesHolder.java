@@ -16,10 +16,10 @@ import br.com.caelum.vraptor.resource.Resource;
  */
 @ApplicationScoped
 @Component(VRaptorApplicationContext.RESOURCES_LIST)
-public class ResourcesHolder {
+class ResourcesHolder {
     private static final Logger LOGGER = LoggerFactory.getLogger(ResourcesHolder.class);
 
-    private Collection<Resource> resources = new HashSet<Resource>();
+    private final Collection<Resource> resources = new HashSet<Resource>();
 
     public void add(Resource resource) {
         resources.add(resource);

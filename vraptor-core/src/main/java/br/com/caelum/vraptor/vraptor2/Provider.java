@@ -37,8 +37,8 @@ import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.core.RequestExecution;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
+import br.com.caelum.vraptor.http.route.RoutesParser;
 import br.com.caelum.vraptor.ioc.pico.PicoProvider;
-import br.com.caelum.vraptor.resource.ResourceParserRoutesCreator;
 import br.com.caelum.vraptor.view.PageResult;
 import br.com.caelum.vraptor.view.PathResolver;
 import br.com.caelum.vraptor.vraptor2.outject.OutjectionInterceptor;
@@ -52,7 +52,7 @@ public class Provider extends PicoProvider {
 
     protected void registerComponents(ComponentRegistry container) {
         super.registerComponents(container);
-        container.register(ResourceParserRoutesCreator.class, ComponentRoutesCreator.class);
+        container.register(RoutesParser.class, ComponentRoutesParser.class);
         container.register(PathResolver.class, VRaptor2PathResolver.class);
         container.register(Config.class, VRaptor2Config.class);
         container.register(ParameterNameProvider.class, LogicAnnotationWithParanamerParameterNameProvider.class);

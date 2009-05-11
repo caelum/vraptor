@@ -36,7 +36,8 @@ import org.junit.Test;
 import org.vraptor.annotations.Component;
 
 import br.com.caelum.vraptor.Path;
-import br.com.caelum.vraptor.VRaptorMockery;
+import br.com.caelum.vraptor.proxy.Proxifier;
+import br.com.caelum.vraptor.test.VRaptorMockery;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.route.DefaultRouter;
 import br.com.caelum.vraptor.http.route.NoRoutesConfiguration;
@@ -49,12 +50,14 @@ public class ComponentRoutesCreatorTest {
     private VRaptorMockery mockery;
 	private DefaultRouter router;
 	private MutableRequest request;
+    private Proxifier proxifier;
 
     @Before
     public void setup() {
         this.mockery = new VRaptorMockery();
         this.request = mockery.mock(MutableRequest.class);
-        this.router = new DefaultRouter(new NoRoutesConfiguration(), new ComponentRoutesCreator(), null, null);
+        this.proxifier = mockery.mock(Proxifier.class);
+        this.router = new DefaultRouter(new NoRoutesConfiguration(), new ComponentRoutesParser(proxifier), null, proxifier, null);
     }
 
     class NonVRaptorComponent {
@@ -72,7 +75,7 @@ public class ComponentRoutesCreatorTest {
     public void shouldUseVRaptor3AlgorithmIfNotAVRaptor2Component() throws SecurityException, NoSuchMethodException {
         final Resource resource = mockery.resource(VRaptor3Component.class);
         this.router.register(resource);
-        assertThat(router.parse("/VRaptor3Component/name", HttpMethod.POST, request), is(VRaptorMatchers.resourceMethod(VRaptor3Component.class.getMethod("name"))));
+        assertThat(router.parse("/vRaptor3Component/name", HttpMethod.POST, request), is(VRaptorMatchers.resourceMethod(VRaptor3Component.class.getMethod("name"))));
         mockery.assertIsSatisfied();
     }
 

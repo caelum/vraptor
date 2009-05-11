@@ -29,16 +29,16 @@
  */
 package br.com.caelum.vraptor.converter;
 
-import java.text.MessageFormat;
-import java.util.ResourceBundle;
-
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
+import java.text.MessageFormat;
+import java.util.ResourceBundle;
+
 /**
- * VRaptor's primitive short converter. 
- * 
+ * VRaptor's primitive short converter.
+ *
  * @author Cecilia Fernandes
  */
 @Convert(short.class)
@@ -46,14 +46,14 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
 public class PrimitiveShortConverter implements Converter {
 
     public Object convert(String value, Class type, ResourceBundle bundle) {
-        if(value==null || value=="") {
+        if (value == null || value.equals("")) {
             return (short) 0;
         }
         try {
             return Short.parseShort(value);
         } catch (NumberFormatException e) {
-			throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_integer"), value));
+            throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_integer"), value));
         }
     }
-    
+
 }

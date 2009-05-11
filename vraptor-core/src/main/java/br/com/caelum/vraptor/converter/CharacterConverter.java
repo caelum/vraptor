@@ -52,7 +52,7 @@ public class CharacterConverter implements Converter<Character> {
         if(value.length()!=1) {
 			throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_character"), value));
         }
-        return Character.valueOf(value.charAt(0));
+        return value.charAt(0);
     }
 
 }

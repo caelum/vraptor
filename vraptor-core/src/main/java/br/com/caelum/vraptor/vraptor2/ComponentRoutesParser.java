@@ -42,13 +42,14 @@ import org.vraptor.annotations.Out;
 import org.vraptor.annotations.Parameter;
 import org.vraptor.plugin.hibernate.Validate;
 
-import br.com.caelum.vraptor.http.route.PathAnnotationRoutesCreator;
-import br.com.caelum.vraptor.http.route.Rule;
+import br.com.caelum.vraptor.http.route.PathAnnotationRoutesParser;
+import br.com.caelum.vraptor.http.route.Route;
 import br.com.caelum.vraptor.http.route.UriBasedRoute;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.Resource;
-import br.com.caelum.vraptor.resource.ResourceParserRoutesCreator;
+import br.com.caelum.vraptor.http.route.RoutesParser;
+import br.com.caelum.vraptor.proxy.Proxifier;
 
 /**
  * A vraptor 2 and 3 compatible routes creator.
@@ -56,22 +57,29 @@ import br.com.caelum.vraptor.resource.ResourceParserRoutesCreator;
  * @author Guilherme Silveira
  */
 @ApplicationScoped
-public class ComponentRoutesCreator implements ResourceParserRoutesCreator {
-	
-	private final PathAnnotationRoutesCreator delegate = new PathAnnotationRoutesCreator();
-	
-	private static final Logger logger = LoggerFactory.getLogger(ComponentRoutesCreator.class);
-    
-	public List<Rule> rulesFor(Resource resource) {
-		List<Rule> rules = new ArrayList<Rule>();
+public class ComponentRoutesParser implements RoutesParser {
+
+    private final Proxifier proxifier;
+
+    private final PathAnnotationRoutesParser delegate;
+
+    private static final Logger logger = LoggerFactory.getLogger(ComponentRoutesParser.class);
+
+    public ComponentRoutesParser(Proxifier proxifier) {
+        this.proxifier = proxifier;
+        delegate = new PathAnnotationRoutesParser(proxifier);
+    }
+
+    public List<Route> rulesFor(Resource resource) {
+		List<Route> routes = new ArrayList<Route>();
 		Class<?> type = resource.getType();
         if(!Info.isOldComponent(resource)) {
         	return delegate.rulesFor(resource);
         }
         logger.warn("Old component found, remember to migrate to vraptor3: " + type.getName());
-		registerRulesFor(type, type, rules);
+		registerRulesFor(type, type, routes);
         parse(type, type);
-		return rules;
+		return routes;
     }
 
     private void parse(Class<?> type, Class<?> originalType) {
@@ -110,7 +118,7 @@ public class ComponentRoutesCreator implements ResourceParserRoutesCreator {
     }
 
 
-	private void registerRulesFor(Class<?> actualType, Class<?> baseType, List<Rule> rules) {
+	private void registerRulesFor(Class<?> actualType, Class<?> baseType, List<Route> routes) {
 		if (actualType.equals(Object.class)) {
 			return;
 		}
@@ -119,16 +127,16 @@ public class ComponentRoutesCreator implements ResourceParserRoutesCreator {
                 continue;
             }
 			String uri = getUriFor(javaMethod, baseType);
-			UriBasedRoute rule = new UriBasedRoute(uri);
+			UriBasedRoute rule = new UriBasedRoute(proxifier, uri);
 			for (HttpMethod m : HttpMethod.values()) {
 				if (javaMethod.isAnnotationPresent(m.getAnnotation())) {
 					rule.with(m);
 				}
 			}
 			rule.is(baseType, javaMethod);
-			rules.add(rule);
+			routes.add(rule);
         }
-		registerRulesFor(actualType.getSuperclass(), baseType, rules);
+		registerRulesFor(actualType.getSuperclass(), baseType, routes);
 	}
 
 	private boolean isGetter(Method javaMethod) {
@@ -138,8 +146,7 @@ public class ComponentRoutesCreator implements ResourceParserRoutesCreator {
 	private String getUriFor(Method javaMethod, Class<?> type) {
         String componentName = Info.getComponentName(type);
         String logicName = Info.getLogicName(javaMethod);
-        String entireName = "/" + componentName + "." + logicName + ".logic";
-		return entireName;
+        return "/" + componentName + "." + logicName + ".logic";
 	}
 
 	private boolean isEligible(Method javaMethod) {

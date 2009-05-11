@@ -19,6 +19,7 @@ import org.junit.Test;
 import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
+import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.core.Execution;
 import br.com.caelum.vraptor.core.InterceptorStack;
@@ -70,7 +71,7 @@ public abstract class GenericContainerTest {
     @Test
     public void canProvideAllApplicationScopedComponents() {
         Class<?>[] components = new Class[] { ServletContext.class, UrlToResourceTranslator.class,
-                Router.class, TypeCreator.class, InterceptorRegistry.class, 
+                Router.class, TypeCreator.class, InterceptorRegistry.class, Proxifier.class,
                 ParameterNameProvider.class, Converters.class, EmptyElementsRemoval.class, NoRoutesConfiguration.class };
         checkAvailabilityFor(true, components);
         mockery.assertIsSatisfied();

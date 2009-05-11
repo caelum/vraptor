@@ -35,7 +35,7 @@ import org.springframework.context.annotation.ClassPathBeanDefinitionScanner;
 /**
  * @author Fabio Kung
  */
-public class ComponentScanner extends ClassPathBeanDefinitionScanner {
+class ComponentScanner extends ClassPathBeanDefinitionScanner {
     public ComponentScanner(BeanDefinitionRegistry registry) {
         super(registry, false);
         addIncludeFilter(new ComponentTypeFilter());

@@ -22,8 +22,7 @@ public class VRaptorMatchers {
     public static TypeSafeMatcher<ResourceMethod> resourceMethod(final Method method) {
         return new TypeSafeMatcher<ResourceMethod>() {
 
-            public boolean matchesSafely(ResourceMethod item) {
-                ResourceMethod other = item;
+            public boolean matchesSafely(ResourceMethod other) {
                 return other.getMethod().equals(method);
             }
 
@@ -65,11 +64,8 @@ public class VRaptorMatchers {
 			}
 
 			protected boolean matchesSafely(ValidationMessage m) {
-				if(message.equals(m.getMessage()) && category.equals(m.getCategory())) {
-					return true;
-				}
-				return false;
-			}
+                return message.equals(m.getMessage()) && category.equals(m.getCategory());
+            }
 
 			public void describeTo(Description description) {
 				description.appendText(" validation message='" +message + "', category = '"+category+"'");

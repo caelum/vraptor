@@ -27,12 +27,13 @@
  */
 package br.com.caelum.vraptor.validator;
 
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
-import org.hamcrest.StringDescription;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
+
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.ResourceBundleDescription;
 
 /**
  * Hamcrest based validation support.
@@ -42,8 +43,17 @@ import java.util.List;
 public class Validations {
 
     private final List<Message> errors = new ArrayList<Message>();
+	private final ResourceBundle bundle;
+    
+    public Validations(ResourceBundle bundle) {
+		this.bundle = bundle;
+	}
+    
+    public Validations() {
+    	this(ResourceBundle.getBundle("messages"));
+    }
 
-    public <T> boolean that(T id, Matcher<T> matcher) {
+    public <T> boolean that(T id, Matcher<? super T> matcher) {
         return that("", null, id, matcher);
     }
 
@@ -56,7 +66,7 @@ public class Validations {
             if (reason != null) {
                 errors.add(new ValidationMessage(reason, category));
             } else {
-                Description description = new StringDescription();
+                Description description = new ResourceBundleDescription(bundle);
                 description.appendDescriptionOf(matcher);
                 errors.add(new ValidationMessage(description.toString(), category));
             }
@@ -90,7 +100,7 @@ public class Validations {
     }
 
     public static <T> org.hamcrest.Matcher<T> is(org.hamcrest.Matcher<T> matcher) {
-        return ShouldBe.<T>shouldBe(matcher);
+        return ShouldBe.shouldBe(matcher);
     }
 
 }

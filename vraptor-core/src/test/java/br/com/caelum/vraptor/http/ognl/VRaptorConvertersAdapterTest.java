@@ -25,7 +25,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package br.com.caelum.vraptor.converter;
+package br.com.caelum.vraptor.http.ognl;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -44,16 +44,16 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.Converter;
-import br.com.caelum.vraptor.VRaptorMockery;
+import br.com.caelum.vraptor.http.ognl.VRaptorConvertersAdapter;
+import br.com.caelum.vraptor.test.VRaptorMockery;
 import br.com.caelum.vraptor.core.Converters;
-import br.com.caelum.vraptor.validator.ValidationMessage;
 import br.com.caelum.vraptor.validator.Message;
 
-public class OgnlToConvertersControllerTest {
+public class VRaptorConvertersAdapterTest {
 
     private VRaptorMockery mockery;
     private Converters converters;
-    private OgnlToConvertersController controller;
+    private VRaptorConvertersAdapter adapter;
     private Cat myCat;
     @SuppressWarnings("unchecked")
 	private Converter converter;
@@ -66,7 +66,7 @@ public class OgnlToConvertersControllerTest {
         this.converters = mockery.mock(Converters.class);
         this.errors = new ArrayList<Message>();
         this.bundle = ResourceBundle.getBundle("messages");
-        this.controller = new OgnlToConvertersController(converters, errors, bundle);
+        this.adapter = new VRaptorConvertersAdapter(converters, bundle);
         this.converter = mockery.mock(Converter.class);
         this.myCat = new Cat();
     }
@@ -130,7 +130,7 @@ public class OgnlToConvertersControllerTest {
             }
         });
         Map context = Ognl.createDefaultContext(myCat);
-        Ognl.setTypeConverter(context, controller);
+        Ognl.setTypeConverter(context, adapter);
         Ognl.setValue("length", context, myCat, "2");
         assertThat(myCat.length, is(equalTo(2)));
         mockery.assertIsSatisfied();
@@ -147,7 +147,7 @@ public class OgnlToConvertersControllerTest {
             }
         });
         Map context = Ognl.createDefaultContext(myCat);
-        Ognl.setTypeConverter(context, controller);
+        Ognl.setTypeConverter(context, adapter);
         Ognl.setValue("tail", context, myCat, "15");
         assertThat(myCat.tail.length, is(equalTo(15)));
         mockery.assertIsSatisfied();
@@ -163,7 +163,7 @@ public class OgnlToConvertersControllerTest {
             }
         });
         Map context = Ognl.createDefaultContext(myCat);
-        Ognl.setTypeConverter(context, controller);
+        Ognl.setTypeConverter(context, adapter);
         try {
             Ognl.setValue("tail", context, myCat, "15");
         } catch (OgnlException e) {

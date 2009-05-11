@@ -50,7 +50,7 @@ public class VRaptor2Config implements Config {
         void content(String line) throws ConfigException;
     }
 
-    private void parseVRaptor(File file) throws FileNotFoundException, IOException, ConfigException {
+    private void parseVRaptor(File file) throws IOException, ConfigException {
         if (!file.exists()) {
             return;
         }
@@ -90,7 +90,7 @@ public class VRaptor2Config implements Config {
         reader.close();
     }
 
-    private void parseViews(File file) throws FileNotFoundException, IOException {
+    private void parseViews(File file) throws IOException {
         if (!file.exists()) {
             return;
         }

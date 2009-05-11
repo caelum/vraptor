@@ -1,10 +1,12 @@
 package br.com.caelum.vraptor.vraptor2;
 
-import java.text.MessageFormat;
-import java.util.ResourceBundle;
-
-import javax.servlet.http.HttpServletRequest;
-
+import br.com.caelum.vraptor.InterceptionException;
+import br.com.caelum.vraptor.Interceptor;
+import br.com.caelum.vraptor.core.InterceptorStack;
+import br.com.caelum.vraptor.core.Localization;
+import br.com.caelum.vraptor.core.MethodInfo;
+import br.com.caelum.vraptor.http.ParameterNameProvider;
+import br.com.caelum.vraptor.resource.ResourceMethod;
 import org.vraptor.i18n.FixedMessage;
 import org.vraptor.i18n.Message;
 import org.vraptor.plugin.hibernate.HibernateLogicMethod;
@@ -14,13 +16,9 @@ import org.vraptor.reflection.GettingException;
 import org.vraptor.validator.BasicValidationErrors;
 import org.vraptor.validator.ValidationErrors;
 
-import br.com.caelum.vraptor.InterceptionException;
-import br.com.caelum.vraptor.Interceptor;
-import br.com.caelum.vraptor.core.InterceptorStack;
-import br.com.caelum.vraptor.core.Localization;
-import br.com.caelum.vraptor.core.MethodInfo;
-import br.com.caelum.vraptor.http.ParameterNameProvider;
-import br.com.caelum.vraptor.resource.ResourceMethod;
+import javax.servlet.http.HttpServletRequest;
+import java.text.MessageFormat;
+import java.util.ResourceBundle;
 
 /**
  * Support to vraptor2 hibernate validator plugin.<br>
@@ -37,7 +35,7 @@ public class HibernateValidatorPluginInterceptor implements Interceptor {
     // existence first...
     private final static ValidatorLocator locator = new ValidatorLocator();
     private final MethodInfo parameters;
-	private final Localization localization;
+    private final Localization localization;
 
     public HibernateValidatorPluginInterceptor(ValidationErrors errors, ParameterNameProvider provider,
             HttpServletRequest request, MethodInfo parameters, Localization localization) {
@@ -45,7 +43,7 @@ public class HibernateValidatorPluginInterceptor implements Interceptor {
         this.provider = provider;
         this.request = request;
         this.parameters = parameters;
-		this.localization = localization;
+        this.localization = localization;
     }
 
     public boolean accepts(ResourceMethod method) {
@@ -65,19 +63,19 @@ public class HibernateValidatorPluginInterceptor implements Interceptor {
                     Object object = paramFor(names, path, paramValues);
                     BasicValidationErrors newErrors = new BasicValidationErrors();
                     HibernateLogicMethod.validateParam(locator, request, bundle, newErrors, object, path);
-                    for(org.vraptor.i18n.ValidationMessage msg : newErrors) {
-                    	if(msg instanceof FixedMessage) {
-                    		FixedMessage m = (FixedMessage) msg;
-                    		String content = bundle.getString(m.getKey());
-                    		errors.add(new FixedMessage(msg.getPath(), content, msg.getCategory()));
-                    	} else if (msg instanceof Message){
-                    		Message m = (Message) msg;
-                    		String content = bundle.getString(m.getKey());
-                    		content = MessageFormat.format(content, m.getParameters());
-                    		errors.add(new FixedMessage(msg.getPath(), content, msg.getCategory()));
-                    	} else {
-                    		throw new IllegalArgumentException("Unsupported validation message type: " + msg.getClass().getName());
-                    	}
+                    for (org.vraptor.i18n.ValidationMessage msg : newErrors) {
+                        if (msg instanceof FixedMessage) {
+                            FixedMessage m = (FixedMessage) msg;
+                            String content = bundle.getString(m.getKey());
+                            errors.add(new FixedMessage(msg.getPath(), content, msg.getCategory()));
+                        } else if (msg instanceof Message) {
+                            Message m = (Message) msg;
+                            String content = bundle.getString(m.getKey());
+                            content = MessageFormat.format(content, new Object[]{m.getParameters()});
+                            errors.add(new FixedMessage(msg.getPath(), content, msg.getCategory()));
+                        } else {
+                            throw new IllegalArgumentException("Unsupported validation message type: " + msg.getClass().getName());
+                        }
                     }
                 } catch (GettingException e) {
                     throw new InterceptionException(
@@ -93,7 +91,7 @@ public class HibernateValidatorPluginInterceptor implements Interceptor {
         if (param.indexOf(".") != -1) {
             param = param.substring(param.indexOf("."));
         }
-        param= Info.capitalize(param);
+        param = Info.capitalize(param);
         for (int i = 0; i < names.length; i++) {
             if (names[i].equals(param)) {
                 return values[i];

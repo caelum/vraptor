@@ -17,7 +17,7 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 
 public class DefaultInterceptorStackTest {
 
-    int count;
+    private int count;
     private Mockery mockery;
 
     @Before

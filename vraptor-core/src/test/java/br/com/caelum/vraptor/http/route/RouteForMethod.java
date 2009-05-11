@@ -25,32 +25,35 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package br.com.caelum.vraptor.http;
+package br.com.caelum.vraptor.http.route;
 
-import java.util.Enumeration;
-import java.util.Iterator;
+import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor.resource.HttpMethod;
+import br.com.caelum.vraptor.resource.Resource;
+import br.com.caelum.vraptor.resource.ResourceMethod;
 
-/**
- * An enumeration backed by an itearator.
- * 
- * @author guilherme silveira
- * 
- * @param <T>
- */
-public class IteratorEnumeration<T> implements Enumeration<T> {
+public class RouteForMethod implements Route {
 
-	private final Iterator<T> iterator;
+	private final ResourceMethod method;
 
-	public IteratorEnumeration(Iterator<T> iterator) {
-		this.iterator = iterator;
+	public RouteForMethod(ResourceMethod method) {
+		this.method = method;
 	}
 
-	public boolean hasMoreElements() {
-		return iterator.hasNext();
+	public Resource getResource() {
+		return method.getResource();
 	}
 
-	public T nextElement() {
-		return iterator.next();
+	public ResourceMethod getResourceMethod() {
+		return method;
+	}
+
+	public ResourceMethod matches(String uri, HttpMethod method, MutableRequest request) {
+		return this.method;
+	}
+
+	public String urlFor(Object params) {
+		return null;
 	}
 
 }

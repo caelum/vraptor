@@ -27,40 +27,24 @@
  */
 package br.com.caelum.vraptor.http.route;
 
-import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor.resource.HttpMethod;
+import java.util.ArrayList;
+import java.util.List;
+
+import br.com.caelum.vraptor.http.route.Route;
+import br.com.caelum.vraptor.http.route.RoutesParser;
 import br.com.caelum.vraptor.resource.Resource;
-import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**
- * An specific route rule.
- * 
- * @author Guilherme Silveira
+ * Generates no routes for any resource. Only allows configurarion through the use of custom routes.
+ * @author guilherme silveira
+ *
  */
-public interface Rule {
+public class NoRoutesParser implements RoutesParser {
 
-	/**
-	 * Returns the resource method for this specifig rule. Also applies the
-	 * required parameters to this vraptor request.
-	 */
-	ResourceMethod matches(String uri, HttpMethod method, MutableRequest request);
+	private static final List<Route> EMPTY = new ArrayList<Route>();
 
-	/**
-	 * Returns the resource related to this rule.
-	 */
-	Resource getResource();
-
-	/**
-	 * Returns the resource method which will be invoked through the use of this
-	 * rule.
-	 */
-	ResourceMethod getResourceMethod();
-
-	/**
-	 * Returns the url which invokes this rule with values extracted from this
-	 * parameter object. The object contains getters representing each method's
-	 * parameter.
-	 */
-	String urlFor(Object params);
+	public List<Route> rulesFor(Resource resource) {
+		return EMPTY;
+	}
 
 }

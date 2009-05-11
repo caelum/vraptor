@@ -25,25 +25,42 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package br.com.caelum.vraptor.example.dao;
+package br.com.caelum.vraptor.http.route;
 
-import java.util.Collection;
-
-import br.com.caelum.vraptor.example.Client;
+import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor.resource.HttpMethod;
+import br.com.caelum.vraptor.resource.Resource;
+import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**
- * A simple interface for stored data.
- * @author guilherme silveira
- *
+ * An specific route rule.
+ * 
+ * @author Guilherme Silveira
  */
-public interface Database {
+public interface Route {
 
-    Collection<Client> all();
+	/**
+	 * Returns the resource method for this specifig rule. Also applies the
+	 * required parameters to this vraptor request.
+	 */
+	ResourceMethod matches(String uri, HttpMethod method, MutableRequest request);
 
-    void add(Client c);
+	/**
+	 * Returns the resource related to this rule.
+	 */
+	Resource getResource();
 
-	void remove(Client client);
+	/**
+	 * Returns the resource method which will be invoked through the use of this
+	 * rule.
+	 */
+	ResourceMethod getResourceMethod();
 
-	Client find(Long id);
+	/**
+	 * Returns the url which invokes this rule with values extracted from this
+	 * parameter object. The object contains getters representing each method's
+	 * parameter.
+	 */
+	String urlFor(Object params);
 
 }

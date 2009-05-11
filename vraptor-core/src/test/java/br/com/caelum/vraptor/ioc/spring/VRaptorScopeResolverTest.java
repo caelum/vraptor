@@ -49,8 +49,7 @@ public class VRaptorScopeResolverTest {
     private ScopeMetadata readScopeMetadata(Class componentType) {
         VRaptorScopeResolver resolver = new VRaptorScopeResolver();
         AnnotatedGenericBeanDefinition definition = new AnnotatedGenericBeanDefinition(componentType);
-        ScopeMetadata scopeMetadata = resolver.resolveScopeMetadata(definition);
-        return scopeMetadata;
+        return resolver.resolveScopeMetadata(definition);
     }
 }
 

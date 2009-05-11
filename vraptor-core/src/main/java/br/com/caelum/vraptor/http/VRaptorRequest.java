@@ -38,6 +38,7 @@ import javax.servlet.http.HttpServletRequestWrapper;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import br.com.caelum.vraptor.IteratorToEnumerationAdapter;
 
 /**
  * A request capable of adding new parameters.
@@ -70,7 +71,7 @@ public class VRaptorRequest extends HttpServletRequestWrapper implements Mutable
 	@SuppressWarnings("unchecked")
 	@Override
 	public Enumeration getParameterNames() {
-		return new IteratorEnumeration(getParameterMap().keySet().iterator());
+		return new IteratorToEnumerationAdapter(getParameterMap().keySet().iterator());
 	}
 	
 	@Override
@@ -90,7 +91,7 @@ public class VRaptorRequest extends HttpServletRequestWrapper implements Mutable
 	}
 
 	public void setParameter(String key, String... value) {
-		logger.debug("Setting " + key + " with " + value);
+		logger.debug("Setting " + key + " with " + Arrays.toString(value));
 		this.extraParameters.put(key,value);
 	}
 

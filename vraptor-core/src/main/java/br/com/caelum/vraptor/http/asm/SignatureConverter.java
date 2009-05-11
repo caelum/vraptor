@@ -40,9 +40,9 @@ import java.util.Map;
  * 
  * @author Guilherme Silveira
  */
-public class SignatureConverter {
+class SignatureConverter {
 
-    private static Map<Class<?>, String> WRAPPERS = new HashMap<Class<?>, String>();
+    private static final Map<Class<?>, String> WRAPPERS = new HashMap<Class<?>, String>();
     static {
         WRAPPERS.put(boolean.class, "Z");
         WRAPPERS.put(int.class, "I");

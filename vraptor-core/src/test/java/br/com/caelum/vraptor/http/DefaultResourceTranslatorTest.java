@@ -1,7 +1,7 @@
 /***
- * 
+ *
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  * 1. Redistributions of source code must retain the above copyright notice,
@@ -12,7 +12,7 @@
  * copyright holders nor the names of its contributors may be used to endorse or
  * promote products derived from this software without specific prior written
  * permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -43,7 +43,7 @@ import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 public class DefaultResourceTranslatorTest {
-	
+
 	private Mockery mockery;
 	private Router registry;
 	private DefaultResourceTranslator translator;
@@ -61,27 +61,27 @@ public class DefaultResourceTranslatorTest {
 
     @Test
     public void handlesInclude() {
-        
+
         final ResourceMethod expected = mockery.mock(ResourceMethod.class);
-        
+
         mockery.checking(new Expectations(){{
             exactly(2).of(request).getAttribute(DefaultResourceTranslator.INCLUDE_REQUEST_URI); will(returnValue("/url"));
             one(request).getMethod(); will(returnValue("POST"));
             one(registry).parse("/url", HttpMethod.POST, webRequest); will(returnValue(expected));
 			one(request).getParameter("_method"); will(returnValue(null));
         }});
-        
+
         ResourceMethod resource = translator.translate(webRequest);
         assertThat(resource, is(equalTo(expected)));
         mockery.assertIsSatisfied();
-        
+
     }
-    
+
 	@Test
 	public void canHandleTheCorrectMethod() {
-		
+
 		final ResourceMethod expected = mockery.mock(ResourceMethod.class);
-		
+
 		mockery.checking(new Expectations(){{
 		    one(request).getAttribute(DefaultResourceTranslator.INCLUDE_REQUEST_URI); will(returnValue(null));
 			one(request).getRequestURI(); will(returnValue("/url"));
@@ -89,36 +89,69 @@ public class DefaultResourceTranslatorTest {
 			one(registry).parse("/url", HttpMethod.POST,webRequest); will(returnValue(expected));
 			one(request).getParameter("_method"); will(returnValue(null));
 		}});
-		
+
 		ResourceMethod resource = translator.translate(webRequest);
 		assertThat(resource, is(equalTo(expected)));
 		mockery.assertIsSatisfied();
-		
+
 	}
 
+    @Test
+    public void shouldAcceptCaseInsensitiveRequestMethods() {
+        final ResourceMethod expected = mockery.mock(ResourceMethod.class);
+
+        mockery.checking(new Expectations(){{
+            one(request).getAttribute(DefaultResourceTranslator.INCLUDE_REQUEST_URI); will(returnValue(null));
+            one(request).getRequestURI(); will(returnValue("/url"));
+            one(request).getMethod(); will(returnValue("pOsT"));
+            one(registry).parse("/url", HttpMethod.POST, webRequest); will(returnValue(expected));
+            one(request).getParameter("_method"); will(returnValue(null));
+        }});
+
+        ResourceMethod resource = translator.translate(webRequest);
+        assertThat(resource, is(equalTo(expected)));
+        mockery.assertIsSatisfied();
+    }
+
+    @Test
+    public void shouldAcceptCaseInsensitiveGetRequestUsingThe_methodParameter() {
+        final ResourceMethod expected = mockery.mock(ResourceMethod.class);
+
+        mockery.checking(new Expectations(){{
+            one(request).getAttribute(DefaultResourceTranslator.INCLUDE_REQUEST_URI); will(returnValue(null));
+            one(request).getRequestURI(); will(returnValue("/url"));
+            one(request).getParameter("_method"); will(returnValue("gEt"));
+            one(registry).parse("/url", HttpMethod.GET, webRequest); will(returnValue(expected));
+        }});
+
+        ResourceMethod resource = translator.translate(webRequest);
+        assertThat(resource, is(equalTo(expected)));
+        mockery.assertIsSatisfied();
+    }
+
 	@Test
-	public void canOverrideTheHttpMethodByUsingThe_methodParameter() {
-		
+	public void shouldOverrideTheHttpMethodByUsingThe_methodParameter() {
+
 		final ResourceMethod expected = mockery.mock(ResourceMethod.class);
-		
+
 		mockery.checking(new Expectations(){{
 		    one(request).getAttribute(DefaultResourceTranslator.INCLUDE_REQUEST_URI); will(returnValue(null));
 			one(request).getRequestURI(); will(returnValue("/url"));
 			one(request).getParameter("_method"); will(returnValue("DELETE"));
 			one(registry).parse("/url", HttpMethod.DELETE,webRequest); will(returnValue(expected));
 		}});
-		
+
 		ResourceMethod resource = translator.translate(webRequest);
 		assertThat(resource, is(equalTo(expected)));
 		mockery.assertIsSatisfied();
-		
+
 	}
-	
+
 	@Test
 	public void canHandleUrlIfRootContext() {
-		
+
 		final ResourceMethod expected = mockery.mock(ResourceMethod.class);
-		
+
 		mockery.checking(new Expectations(){{
             one(request).getAttribute(DefaultResourceTranslator.INCLUDE_REQUEST_URI); will(returnValue(null));
 			one(request).getRequestURI(); will(returnValue("/url"));
@@ -126,18 +159,18 @@ public class DefaultResourceTranslatorTest {
 			one(registry).parse("/url", HttpMethod.GET,webRequest); will(returnValue(expected));
 			one(request).getParameter("_method"); will(returnValue(null));
 		}});
-		
+
 		ResourceMethod resource = translator.translate(webRequest);
 		assertThat(resource, is(equalTo(expected)));
 		mockery.assertIsSatisfied();
-		
+
 	}
-	
+
 	@Test
 	public void canHandleUrlIfNonRootContext() {
-		
+
 		final ResourceMethod expected = mockery.mock(ResourceMethod.class);
-		
+
 		mockery.checking(new Expectations(){{
             one(request).getAttribute(DefaultResourceTranslator.INCLUDE_REQUEST_URI); will(returnValue(null));
 			one(request).getRequestURI(); will(returnValue("/custom_context/url"));
@@ -145,18 +178,18 @@ public class DefaultResourceTranslatorTest {
 			one(registry).parse("/url", HttpMethod.GET,webRequest); will(returnValue(expected));
 			one(request).getParameter("_method"); will(returnValue(null));
 		}});
-		
+
 		ResourceMethod resource = translator.translate(webRequest);
 		assertThat(resource, is(equalTo(expected)));
 		mockery.assertIsSatisfied();
-		
+
 	}
-	
+
 	@Test
 	public void canHandleUrlIfPlainRootContext() {
-		
+
 		final ResourceMethod expected = mockery.mock(ResourceMethod.class);
-		
+
 		mockery.checking(new Expectations(){{
             one(request).getAttribute(DefaultResourceTranslator.INCLUDE_REQUEST_URI); will(returnValue(null));
 			one(request).getRequestURI(); will(returnValue("/"));
@@ -164,18 +197,18 @@ public class DefaultResourceTranslatorTest {
 			one(registry).parse("/", HttpMethod.GET,webRequest); will(returnValue(expected));
 			one(request).getParameter("_method"); will(returnValue(null));
 		}});
-		
+
 		ResourceMethod resource = translator.translate(webRequest);
 		assertThat(resource, is(equalTo(expected)));
 		mockery.assertIsSatisfied();
-		
+
 	}
-	
+
 	@Test
 	public void canHandleUrlIfNonRootContextButPlainRequest() {
-		
+
 		final ResourceMethod expected = mockery.mock(ResourceMethod.class);
-		
+
 		mockery.checking(new Expectations(){{
             one(request).getAttribute(DefaultResourceTranslator.INCLUDE_REQUEST_URI); will(returnValue(null));
 			one(request).getRequestURI(); will(returnValue("/custom_context/"));
@@ -183,11 +216,11 @@ public class DefaultResourceTranslatorTest {
 			one(registry).parse("/", HttpMethod.GET,webRequest); will(returnValue(expected));
 			one(request).getParameter("_method"); will(returnValue(null));
 		}});
-		
+
 		ResourceMethod resource = translator.translate(webRequest);
 		assertThat(resource, is(equalTo(expected)));
 		mockery.assertIsSatisfied();
-		
+
 	}
-	
+
 }

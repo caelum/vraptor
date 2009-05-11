@@ -40,7 +40,7 @@ public class DefaultStaticContentHandlerTest {
             }
         });
         boolean result = new DefaultStaticContentHandler(context).requestingStaticFile(request);
-        assertThat(Boolean.valueOf(result), is(equalTo(true)));
+        assertThat(result, is(equalTo(true)));
         mockery.assertIsSatisfied();
     }
 
@@ -57,7 +57,7 @@ public class DefaultStaticContentHandlerTest {
             }
         });
         boolean result = new DefaultStaticContentHandler(context).requestingStaticFile(request);
-        assertThat(Boolean.valueOf(result), is(equalTo(false)));
+        assertThat(result, is(equalTo(false)));
         mockery.assertIsSatisfied();
     }
 

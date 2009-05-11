@@ -19,7 +19,7 @@ import br.com.caelum.vraptor.vraptor2.outject.OutjectionInterceptor;
 public class VRaptor2RequestExecution implements RequestExecution {
     private final InterceptorStack interceptorStack;
     private final InstantiateInterceptor instantiator;
-    private boolean shouldRegisterHibernateValidator;
+    private final boolean shouldRegisterHibernateValidator;
 
     public VRaptor2RequestExecution(InterceptorStack interceptorStack, InstantiateInterceptor instantiator, Config config) {
         this.interceptorStack = interceptorStack;

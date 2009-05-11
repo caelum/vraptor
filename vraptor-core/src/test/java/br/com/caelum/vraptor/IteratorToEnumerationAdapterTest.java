@@ -25,35 +25,40 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package br.com.caelum.vraptor.http.route;
+package br.com.caelum.vraptor;
 
-import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor.resource.HttpMethod;
-import br.com.caelum.vraptor.resource.Resource;
-import br.com.caelum.vraptor.resource.ResourceMethod;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 
-public class RuleForMethod implements Rule {
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.List;
 
-	private final ResourceMethod method;
+import org.junit.Assert;
+import org.junit.Test;
+import br.com.caelum.vraptor.IteratorToEnumerationAdapter;
 
-	public RuleForMethod(ResourceMethod method) {
-		this.method = method;
-	}
-
-	public Resource getResource() {
-		return null;
-	}
-
-	public ResourceMethod getResourceMethod() {
-		return method;
-	}
-
-	public ResourceMethod matches(String uri, HttpMethod method, MutableRequest request) {
-		return this.method;
-	}
-
-	public String urlFor(Object params) {
-		return null;
+public class IteratorToEnumerationAdapterTest {
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void usesAllItems() {
+		List<String> items = new ArrayList<String>();
+		items.add("my");
+		items.add("name");
+		items.add("is...");
+		Iterator<String> main = items.iterator();
+		Enumeration<String> enumeration = new IteratorToEnumerationAdapter(items.iterator());
+		while(main.hasNext()) {
+			if(!enumeration.hasMoreElements()) {
+				Assert.fail("Iterator has more elements but enumeration doesnt.");
+			}
+			String mainElement = main.next();
+			String enumElement = enumeration.nextElement();
+			assertThat(enumElement, is(equalTo(mainElement)));
+		}
 	}
 
 }

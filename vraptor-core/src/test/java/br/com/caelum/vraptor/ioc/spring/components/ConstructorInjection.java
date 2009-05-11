@@ -7,7 +7,7 @@ import br.com.caelum.vraptor.ioc.Component;
  */
 @Component
 public class ConstructorInjection {
-    private DummyComponent dependecy;
+    private final DummyComponent dependecy;
 
     public ConstructorInjection(DummyComponent dependecy) {
         this.dependecy = dependecy;

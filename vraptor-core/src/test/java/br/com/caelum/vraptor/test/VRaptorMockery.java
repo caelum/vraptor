@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor;
+package br.com.caelum.vraptor.test;
 
 import java.lang.reflect.Method;
 import java.util.ResourceBundle;
@@ -23,7 +23,7 @@ public class VRaptorMockery {
 
 	private int count = 0;
 
-	private Mockery mockery;
+	private final Mockery mockery;
 
 	public VRaptorMockery() {
 		this(false);

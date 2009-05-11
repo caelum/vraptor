@@ -29,20 +29,14 @@ public class DefaultComponentInfoProvider implements ComponentInfoProvider {
      * request.
      */
     public boolean shouldShowView(ResourceMethod method) {
-        if(method.getMethod().isAnnotationPresent(Viewless.class)) {
-            return false;
-        }
-        return !isAjax();
+        return !method.getMethod().isAnnotationPresent(Viewless.class) && !isAjax();
     }
 
     /**
      * This is non-final so you can configure your own ajax discovery algorithm.
      */
     public boolean isAjax() {
-        if(request.getRequestURI().contains(".ajax.") || "ajax".equals(request.getParameter("view"))) {
-            return true;
-        }
-        return false;
+        return request.getRequestURI().contains(".ajax.") || "ajax".equals(request.getParameter("view"));
     }
 
     public Outjecter getOutjecter() {

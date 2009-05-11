@@ -4,7 +4,7 @@ import java.util.Locale;
 
 import br.com.caelum.vraptor.core.RequestInfo;
 
-public class JstlWrapper {
+class JstlWrapper {
 
     public Object find(RequestInfo request, String name) {
         if (request.getRequest().getAttribute(name + ".request")!=null) {

@@ -33,6 +33,9 @@ import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.notNullValue;
 
+import java.util.ResourceBundle;
+
+import org.junit.Before;
 import org.junit.Test;
 
 public class ValidationsTest {
@@ -47,10 +50,18 @@ public class ValidationsTest {
         }
     }
 
+	private ResourceBundle bundle;
+	private Validations validations;
+    
+	@Before
+    public void setup() {
+    	this.bundle = ResourceBundle.getBundle("messages");
+    	this.validations = new Validations(bundle);
+	}
+
     @Test
     public void canHandleTheSingleCheck() {
         Client guilherme = new Client();
-        Validations validations = new Validations();
         validations.that(guilherme).shouldBe(notNullValue());
         assertThat(validations.getErrors(), hasSize(0));
     }
@@ -58,7 +69,6 @@ public class ValidationsTest {
     @Test
     public void canHandleTheSingleCheckWhenProblematic() {
         Client guilherme = null;
-        Validations validations = new Validations();
         validations.that(guilherme).shouldBe(notNullValue());
         assertThat(validations.getErrors(), hasSize(1));
     }
@@ -67,7 +77,6 @@ public class ValidationsTest {
     public void canHandleInternalPrimitiveValidation() {
         Client guilherme = new Client();
         guilherme.age = 22;
-        Validations validations = new Validations();
         validations.that(guilherme.getAge()).shouldBe(greaterThan(17));
         assertThat(validations.getErrors(), hasSize(0));
     }
@@ -75,7 +84,6 @@ public class ValidationsTest {
     @Test
     public void canIgnoreInternalPrimitiveValidationIfAlreadyNull() {
         final Client guilherme = null;
-        Validations validations = new Validations();
         validations.that(guilherme).shouldBe(notNullValue()).otherwise(new Validations() {
             public void check(){
                 that(guilherme.getAge()).shouldBe(greaterThan(17));
@@ -89,7 +97,6 @@ public class ValidationsTest {
     public void executesInternalValidationIfSuccessful() {
         final Client guilherme = new Client();
         guilherme.age = 10;
-        Validations validations = new Validations();
         validations.that(guilherme).shouldBe(notNullValue()).otherwise(new Validations() {
             public void check(){
                 that(guilherme.getAge()).shouldBe(greaterThan(17));
@@ -103,7 +110,6 @@ public class ValidationsTest {
     public void complainsAboutInternalPrimitiveValidation() {
         Client guilherme = new Client();
         guilherme.age = 15;
-        Validations validations = new Validations();
         validations.that(guilherme.getAge()).shouldBe(greaterThan(17));
         assertThat(validations.getErrors(), hasSize(1));
     }

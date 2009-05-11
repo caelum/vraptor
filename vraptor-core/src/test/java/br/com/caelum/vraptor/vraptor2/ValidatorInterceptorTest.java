@@ -1,13 +1,15 @@
 package br.com.caelum.vraptor.vraptor2;
 
 import br.com.caelum.vraptor.InterceptionException;
-import br.com.caelum.vraptor.VRaptorMockery;
+import br.com.caelum.vraptor.Result;
+import br.com.caelum.vraptor.test.VRaptorMockery;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.view.PageResult;
+import br.com.caelum.vraptor.view.Results;
 import br.com.caelum.vraptor.vraptor2.outject.Outjecter;
 import br.com.caelum.vraptor.vraptor2.outject.OutjectionInterceptor;
 import org.hamcrest.Description;
@@ -27,7 +29,8 @@ public class ValidatorInterceptorTest {
 
     private VRaptorMockery mockery;
     private ValidatorInterceptor validator;
-    private PageResult result;
+    private Result result;
+    private PageResult pageResult;
     private ParametersProvider provider;
     private InterceptorStack stack;
     private ValidationErrors errors;
@@ -41,7 +44,8 @@ public class ValidatorInterceptorTest {
     @Before
     public void setup() {
         this.mockery = new VRaptorMockery();
-        this.result = mockery.mock(PageResult.class);
+        this.result = mockery.mock(Result.class);
+        this.pageResult = mockery.mock(PageResult.class);
         this.provider = mockery.mock(ParametersProvider.class);
         this.errors = mockery.mock(ValidationErrors.class);
         this.outjecter = mockery.mock(Outjecter.class);
@@ -55,10 +59,11 @@ public class ValidatorInterceptorTest {
                 will(returnValue(outjecter));
                 allowing(localization).getBundle();
                 will(returnValue(bundle));
+                allowing(result).use(Results.page()); will(returnValue(pageResult));
             }
         });
         this.interceptor = new OutjectionInterceptor(info);
-        this.validator = new ValidatorInterceptor(this.provider, this.result, errors, interceptor, localization);
+        this.validator = new ValidatorInterceptor(provider, result, errors, interceptor, localization);
         this.stack = mockery.mock(InterceptorStack.class);
     }
 
@@ -126,7 +131,7 @@ public class ValidatorInterceptorTest {
                 one(provider).getParametersFor(method, listErrors, bundle);
                 will(returnValue(new Object[0]));
                 one(result).include(with(equal("errors")), with(an(ValidationErrors.class)));
-                one(result).forward("invalid");
+                one(pageResult).forward("invalid");
                 one(errors).add(with(fixedMessage("invalid")));
                 one(errors).size();
                 will(returnValue(1));

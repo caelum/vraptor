@@ -46,7 +46,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.VRaptorException;
-import br.com.caelum.vraptor.VRaptorMockery;
+import br.com.caelum.vraptor.test.VRaptorMockery;
 import br.com.caelum.vraptor.ioc.Container;
 
 public class ListNullHandlerTest {

@@ -17,7 +17,7 @@ import br.com.caelum.vraptor.ioc.SessionScoped;
 /**
  * @author Fabio Kung
  */
-public class VRaptorScopeResolver implements ScopeMetadataResolver {
+class VRaptorScopeResolver implements ScopeMetadataResolver {
     private final Map<String, String> scopes = new LinkedHashMap<String, String>();
 
     public VRaptorScopeResolver() {

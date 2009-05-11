@@ -9,7 +9,7 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
  * @author Fabio Kung
  */
 @ApplicationScoped
-public class VRaptorRequestProvider implements FactoryBean {
+class VRaptorRequestProvider implements FactoryBean {
 
     public Object getObject() throws Exception {
         return VRaptorRequestHolder.currentRequest();

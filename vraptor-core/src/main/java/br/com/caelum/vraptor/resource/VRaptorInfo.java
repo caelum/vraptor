@@ -49,7 +49,7 @@ public class VRaptorInfo {
 
 	private final HttpServletResponse response;
 
-	protected VRaptorInfo() {
+	VRaptorInfo() {
 		this(null);
 	}
 

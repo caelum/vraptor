@@ -49,7 +49,7 @@ public class SpringProvider implements ContainerProvider {
     public void start(ServletContext context) {
         String packagesParameter = context.getInitParameter(BASE_PACKAGES_PARAMETER_NAME);
 
-        String[] packages = null;
+        String[] packages;
         if (packagesParameter == null) {
             throw new MissingConfigurationException(BASE_PACKAGES_PARAMETER_NAME + " context-param not found in web.xml");
         } else {
@@ -58,9 +58,10 @@ public class SpringProvider implements ContainerProvider {
 
         container = new SpringBasedContainer(packages);
         container.start(context);
-        ComponentRegistrar registrar = null;
+
+        // TODO not needed, as custom components are registered with @Component
         try {
-            registrar = container.instanceFor(ComponentRegistrar.class);
+            ComponentRegistrar registrar = container.instanceFor(ComponentRegistrar.class);
             registrar.register(container);
         } catch (NoSuchBeanDefinitionException e) {
             // there isn't any ComponentRegistrar, so custom components won't be registered.

@@ -11,7 +11,7 @@ import br.com.caelum.vraptor.vraptor2.util.FallbackEnumeration;
  * 
  * @author Guilherme Silveira
  */
-public class FallbackResourceBundle extends ResourceBundle{
+class FallbackResourceBundle extends ResourceBundle{
 
 	private final ResourceBundle main;
 	private final ResourceBundle fallback;

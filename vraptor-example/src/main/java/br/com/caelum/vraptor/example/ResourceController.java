@@ -1,7 +1,7 @@
 /***
- * 
+ *
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  * 1. Redistributions of source code must retain the above copyright notice,
@@ -12,7 +12,7 @@
  * copyright holders nor the names of its contributors may be used to endorse or
  * promote products derived from this software without specific prior written
  * permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -27,28 +27,25 @@
  */
 package br.com.caelum.vraptor.example;
 
-import java.io.IOException;
-
-import javax.servlet.ServletException;
-
 import br.com.caelum.vraptor.Resource;
+import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.http.route.Router;
-import br.com.caelum.vraptor.view.PageResult;
+import br.com.caelum.vraptor.view.Results;
 
 @Resource
 public class ResourceController {
-    
-    private final Router registry;
-    private final PageResult result;
 
-    public ResourceController(Router registry, PageResult result) {
+    private final Router registry;
+    private final Result result;
+
+    public ResourceController(Router registry, Result result) {
         this.registry = registry;
         this.result = result;
     }
-    
-    public void list() throws ServletException, IOException {
+
+    public void list() {
         result.include("resources", registry.all());
-        result.forward("ok");
+        result.use(Results.page()).forward("ok");
     }
 
 }

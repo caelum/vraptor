@@ -137,14 +137,14 @@ public class AsmBasedTypeCreator implements TypeCreator, Opcodes {
 			String fieldName) {
 		String definition = CONVERTER.extractTypeDefinition((Class<?>) type.getRawType());
 		String genericDefinition = CONVERTER.extractTypeDefinition(type);
-		parse(cw, valueLists, newTypeName, definition, genericDefinition, fieldName, ALOAD, ARETURN);
+		parse(cw, newTypeName, definition, genericDefinition, fieldName, ALOAD, ARETURN);
 		if (valueLists.length() != 0) {
 			valueLists.append(',');
 		}
-		valueLists.append(fieldName + "_");
+        valueLists.append(fieldName).append("_");
 	}
 
-	private void parse(ClassWriter cw, StringBuilder valueLists, String newTypeName, String definition,
+	private void parse(ClassWriter cw, String newTypeName, String definition,
 			String genericDefinition, String fieldName, int loadKey, int returnKey) {
 		if (logger.isDebugEnabled()) {
 			logger.debug("Method for field '" + fieldName + "' being defined for type " + definition);
@@ -180,7 +180,7 @@ public class AsmBasedTypeCreator implements TypeCreator, Opcodes {
 	private void parse(ClassWriter cw, Class<?> type, StringBuilder valueLists, String newTypeName, String fieldName) {
 		String definition = CONVERTER.extractTypeDefinition(type);
 		String genericDefinition = null;
-		parse(cw, valueLists, newTypeName, definition, genericDefinition, fieldName, loadFor(type), returnFor(type));
+		parse(cw, newTypeName, definition, genericDefinition, fieldName, loadFor(type), returnFor(type));
 
 		if (valueLists.length() != 0) {
 			valueLists.append(',');
@@ -188,7 +188,7 @@ public class AsmBasedTypeCreator implements TypeCreator, Opcodes {
 		if (type.isPrimitive()) {
 			valueLists.append(wrapperCodeFor(type, fieldName + "_"));
 		} else {
-			valueLists.append(fieldName + "_");
+            valueLists.append(fieldName).append("_");
 		}
 	}
 

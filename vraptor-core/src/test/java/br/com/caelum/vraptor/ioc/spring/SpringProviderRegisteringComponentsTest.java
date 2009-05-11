@@ -1,28 +1,28 @@
 package br.com.caelum.vraptor.ioc.spring;
 
-import javax.servlet.ServletRequestEvent;
-import javax.servlet.http.HttpServletResponse;
-
-import org.jmock.Expectations;
-import org.springframework.web.context.request.RequestContextListener;
-
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
 import br.com.caelum.vraptor.ioc.GenericContainerTest;
 import br.com.caelum.vraptor.ioc.WhatToDo;
 import br.com.caelum.vraptor.test.HttpServletRequestMock;
 import br.com.caelum.vraptor.test.HttpSessionMock;
+import org.jmock.Expectations;
+import org.springframework.web.context.request.RequestContextListener;
+
+import javax.servlet.ServletRequestEvent;
+import javax.servlet.http.HttpServletResponse;
 
 public class SpringProviderRegisteringComponentsTest extends GenericContainerTest {
     private int counter;
-    
+
     protected ContainerProvider getProvider() {
         return new SpringProvider();
     }
 
+    @SuppressWarnings({"SynchronizationOnLocalVariableOrMethodParameter", "unchecked"})
     protected <T> T executeInsideRequest(final WhatToDo<T> execution) {
         final Object[] holder = new Object[1];
-        Object lock = new Object();
+        final Object lock = new Object();
         holder[0] = lock;
         new Thread(new Runnable() {
             public void run() {

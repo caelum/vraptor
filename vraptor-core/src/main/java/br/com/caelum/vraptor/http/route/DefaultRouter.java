@@ -78,9 +78,10 @@ public class DefaultRouter implements Router {
 		this.routesParser = resourceRoutesCreator;
 		this.provider = provider;
 		this.creator = creator;
+		this.proxifier = proxifier;
 		// this resource should be kept here so it doesnt matter whether
 		// the user uses a custom routes config
-		UriBasedRoute rule = new UriBasedRoute("/is_using_vraptor");
+		UriBasedRoute rule = new UriBasedRoute(proxifier, "/is_using_vraptor");
 		try {
 			rule.is(VRaptorInfo.class).info();
 		} catch (IOException e) {

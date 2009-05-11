@@ -42,7 +42,7 @@ import org.vraptor.annotations.Out;
 import org.vraptor.annotations.Parameter;
 import org.vraptor.plugin.hibernate.Validate;
 
-import br.com.caelum.vraptor.http.route.PathAnnotationRoutesCreator;
+import br.com.caelum.vraptor.http.route.PathAnnotationRoutesParser;
 import br.com.caelum.vraptor.http.route.Route;
 import br.com.caelum.vraptor.http.route.RoutesParser;
 import br.com.caelum.vraptor.http.route.UriBasedRoute;
@@ -61,12 +61,13 @@ public class ComponentRoutesParser implements RoutesParser {
 
     private final Proxifier proxifier;
 
-	private final PathAnnotationRoutesCreator delegate = new PathAnnotationRoutesCreator();
+	private final RoutesParser delegate;
 	
 	private final Logger logger = LoggerFactory.getLogger(ComponentRoutesParser.class);
 
     public ComponentRoutesParser(Proxifier proxifier) {
         this.proxifier = proxifier;
+        this.delegate = new PathAnnotationRoutesParser(proxifier);
     }
 
 	public List<Route> rulesFor(Resource resource) {

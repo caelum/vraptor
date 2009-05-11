@@ -58,11 +58,8 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 public class UriBasedRoute implements Route {
     private final Set<HttpMethod> supportedMethods = new HashSet<HttpMethod>();
 
-
     private final Proxifier proxifier;
 	private final Logger logger = LoggerFactory.getLogger(UriBasedRoute.class);
-
-    private ResourceMethod resourceMethod;
 
     private final Pattern pattern;
 
@@ -104,23 +101,6 @@ public class UriBasedRoute implements Route {
 		}
 		this.patternUri = patternUri;
 		this.pattern = Pattern.compile(patternUri);
-	}
-
-	public Resource getResource() {
-		if (resourceMethod == null) {
-			throw new IllegalStateException(
-					"You forgot to invoke a method to let the rule know which method it is suposed to invoke.");
-		}
-		return this.resourceMethod.getResource();
-	}
-
-    public ResourceMethod getResourceMethod() {
-		return resourceMethod;
-	}
-
-	public void is(Class<?> type, Method method) {
-		logger.debug("created rule for path " + patternUri + " --> " + type.getName() + "." + method.getName());
-		resourceMethod = new DefaultResourceMethod(new DefaultResource(type), method);
 	}
 
 	public <T> T is(final Class<T> type) {
@@ -182,8 +162,8 @@ public class UriBasedRoute implements Route {
 		logger.debug("created rule for path " + patternUri + " --> " + type.getName() + "." + method.getName());
 	}
 
-	public ResourceMethod getResourceMethod() {
-		return this.strategy.getResourceMethod();
+	public ResourceMethod getResourceMethod(MutableRequest request) {
+		return this.strategy.getResourceMethod(request);
 	}
 
 	public String urlFor(Object params) {

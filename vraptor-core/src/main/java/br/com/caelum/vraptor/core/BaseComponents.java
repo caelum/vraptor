@@ -32,20 +32,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 import br.com.caelum.vraptor.http.DefaultResourceTranslator;
-import br.com.caelum.vraptor.http.OgnlParametersProvider;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParanamerNameProvider;
 import br.com.caelum.vraptor.http.UrlToResourceTranslator;
+import br.com.caelum.vraptor.http.ognl.OgnlParametersProvider;
 import br.com.caelum.vraptor.http.route.DefaultRouter;
 import br.com.caelum.vraptor.http.route.NoRoutesConfiguration;
-import br.com.caelum.vraptor.http.route.PathAnnotationRoutesCreator;
+import br.com.caelum.vraptor.http.route.PathAnnotationRoutesParser;
 import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.http.route.RoutesConfiguration;
+import br.com.caelum.vraptor.http.route.RoutesParser;
 import br.com.caelum.vraptor.interceptor.DefaultInterceptorRegistry;
 import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
 import br.com.caelum.vraptor.resource.DefaultResourceNotFoundHandler;
 import br.com.caelum.vraptor.resource.ResourceNotFoundHandler;
-import br.com.caelum.vraptor.resource.ResourceParserRoutesCreator;
 import br.com.caelum.vraptor.validator.DefaultValidator;
 import br.com.caelum.vraptor.view.DefaultPathResolver;
 
@@ -68,7 +68,7 @@ public class BaseComponents {
 		DEFAULT_IMPLEMENTATIONS.put(ParameterNameProvider.class,ParanamerNameProvider.class);
 		DEFAULT_IMPLEMENTATIONS.put(Converters.class,DefaultConverters.class);
 		DEFAULT_IMPLEMENTATIONS.put(RoutesConfiguration.class,NoRoutesConfiguration.class);
-		DEFAULT_IMPLEMENTATIONS.put(ResourceParserRoutesCreator.class,PathAnnotationRoutesCreator.class);
+		DEFAULT_IMPLEMENTATIONS.put(RoutesParser.class,PathAnnotationRoutesParser.class);
 	}
 	
 	public static Collection<Class> getApplicationScoped() {

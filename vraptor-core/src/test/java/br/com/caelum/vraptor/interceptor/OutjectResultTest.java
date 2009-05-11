@@ -34,10 +34,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.VRaptorMockery;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.test.VRaptorMockery;
 
 public class OutjectResultTest {
 

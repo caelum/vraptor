@@ -54,27 +54,28 @@ import br.com.caelum.vraptor.vraptor2.Info;
  * The default implementation of resource localization rules. It also uses a
  * Path annotation to discover path->method mappings using the supplied
  * ResourceAndMethodLookup.
- *
+ * 
  * @author Guilherme Silveira
  */
 @ApplicationScoped
 public class DefaultRouter implements Router {
 
-    private final Logger logger = LoggerFactory.getLogger(DefaultRouter.class);
-    private final Proxifier proxifier;
+	private final Logger logger = LoggerFactory.getLogger(DefaultRouter.class);
+	private final Proxifier proxifier;
 
-    public Proxifier getProxifier() {
-    return proxifier;
-}
+	public Proxifier getProxifier() {
+		return proxifier;
+	}
+
 	private final List<Route> routes = new ArrayList<Route>();
 	private final Set<Resource> resources = new HashSet<Resource>();
-	private final ResourceParserRoutesCreator resourceRoutesCreator;
+	private final RoutesParser routesParser;
 	private final ParameterNameProvider provider;
 	private final TypeCreator creator;
 
-	public DefaultRouter(RoutesConfiguration config, ResourceParserRoutesCreator resourceRoutesCreator,
+	public DefaultRouter(RoutesConfiguration config, RoutesParser resourceRoutesCreator,
 			ParameterNameProvider provider, Proxifier proxifier, TypeCreator creator) {
-		this.resourceRoutesCreator = resourceRoutesCreator;
+		this.routesParser = resourceRoutesCreator;
 		this.provider = provider;
 		this.creator = creator;
 		// this resource should be kept here so it doesnt matter whether
@@ -126,7 +127,7 @@ public class DefaultRouter implements Router {
 	}
 
 	public void register(Resource resource) {
-		add(this.resourceRoutesCreator.rulesFor(resource));
+		add(this.routesParser.rulesFor(resource));
 	}
 
 	public <T> String urlFor(Class<T> type, Method method, Object... params) {
@@ -166,6 +167,5 @@ public class DefaultRouter implements Router {
 	public List<Route> allRoutes() {
 		return routes;
 	}
->>>>>>> rule --> route:vraptor-core/src/main/java/br/com/caelum/vraptor/http/route/DefaultRouter.java
 
 }

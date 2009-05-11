@@ -2,6 +2,7 @@ package br.com.caelum.vraptor.vraptor2.outject;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,7 +48,7 @@ public class OutjectionInterceptor implements Interceptor {
     public void outject(Object resourceInstance, Class<?> type) throws InterceptionException {
         Method[] methods = type.getDeclaredMethods();
         for (Method outject : methods) {
-            if (outject.getName().length() < 3
+            if (Modifier.isPublic(outject.getModifiers()) &&  outject.getName().length() < 3
                     || !(outject.getName().startsWith(IS) || outject.getName().startsWith(GET))) {
                 continue;
             }

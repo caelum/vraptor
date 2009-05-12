@@ -97,6 +97,9 @@ public class RouteBuilder {
 	}
 
 	public Route build() {
+		if(strategy instanceof NoStrategy) {
+			throw new IllegalRouteException("You have created a route, but did not specify any method to be invoked: " + originalUri);
+		}
 		return strategy;
 	}
 

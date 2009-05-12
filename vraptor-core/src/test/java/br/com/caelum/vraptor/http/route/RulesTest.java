@@ -53,7 +53,7 @@ public class RulesTest {
 		});
 	}
 
-	@Test
+	@Test(expected=IllegalRouteException.class)
 	public void allowsAdditionOfRouteBuildersByDefaultWithNoStrategy() {
 		Rules r = new Rules(router) {
 			public void routes() {

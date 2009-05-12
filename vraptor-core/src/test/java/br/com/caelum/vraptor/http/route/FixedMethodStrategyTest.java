@@ -28,7 +28,6 @@
 package br.com.caelum.vraptor.http.route;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
 import java.lang.reflect.Method;
@@ -47,35 +46,6 @@ import br.com.caelum.vraptor.test.VRaptorMockery;
 
 public class FixedMethodStrategyTest {
 
-	class Client {
-		private Long id;
-		private Client child;
-
-		public Client(Long id) {
-			this.id = id;
-		}
-
-		public Client getChild() {
-			return child;
-		}
-
-		public Long getId() {
-			return id;
-		}
-	}
-
-	class TypeCreated {
-		private Client client;
-
-		public TypeCreated(Client c) {
-			this.client = c;
-		}
-
-		public Client getClient() {
-			return client;
-		}
-	}
-
 	private VRaptorMockery mockery;
 	private MutableRequest request;
 	private ParametersControl control;
@@ -85,34 +55,6 @@ public class FixedMethodStrategyTest {
 		this.mockery = new VRaptorMockery();
 		this.request = mockery.mock(MutableRequest.class);
 		this.control = mockery.mock(ParametersControl.class);
-	}
-
-	@Test
-	public void shouldTranslateAsteriskAsEmpty() {
-		FixedMethodStrategy strategy = new FixedMethodStrategy("/clients/.*", null, null, null, control);
-		assertThat(strategy.urlFor(client(3L)), is(equalTo("/clients/")));
-	}
-
-	@Test
-	public void shouldTranslatePatternArgs() {
-		FixedMethodStrategy strategy = new FixedMethodStrategy("/clients/{client.id}", null, null, null, control);
-		assertThat(strategy.urlFor(client(3L)), is(equalTo("/clients/3")));
-	}
-
-	@Test
-	public void shouldTranslatePatternArgNullAsEmpty() {
-		FixedMethodStrategy strategy = new FixedMethodStrategy("/clients/{client.id}", null, null, null, control);
-		assertThat(strategy.urlFor(client(null)), is(equalTo("/clients/")));
-	}
-
-	@Test
-	public void shouldTranslatePatternArgInternalNullAsEmpty() {
-		FixedMethodStrategy strategy = new FixedMethodStrategy("/clients/{client.child.id}", null, null, null, control);
-		assertThat(strategy.urlFor(client(null)), is(equalTo("/clients/")));
-	}
-
-	private TypeCreated client(Long id) {
-		return new TypeCreated(new Client(id));
 	}
 
 	@Test
@@ -128,9 +70,8 @@ public class FixedMethodStrategyTest {
 		return new HashSet(Arrays.asList(method));
 	}
 
-
 	@SuppressWarnings("unchecked")
-	private Method method(String name, Class... types)  {
+	private Method method(String name, Class... types) {
 		try {
 			return MyControl.class.getDeclaredMethod(name, types);
 		} catch (SecurityException e) {

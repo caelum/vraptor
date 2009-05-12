@@ -75,4 +75,63 @@ public class DefaultParametersControlTest {
 		mockery.assertIsSatisfied();
 	}
 
+
+	class Client {
+		private Long id;
+		private Client child;
+
+		public Client(Long id) {
+			this.id = id;
+		}
+
+		public Client getChild() {
+			return child;
+		}
+
+		public Long getId() {
+			return id;
+		}
+	}
+
+	class TypeCreated {
+		private Client client;
+
+		public TypeCreated(Client c) {
+			this.client = c;
+		}
+
+		public Client getClient() {
+			return client;
+		}
+	}
+
+	@Test
+	public void shouldTranslateAsteriskAsEmpty() {
+		String uri = new DefaultParametersControl("/clients/.*").fillUri(client(3L));
+		assertThat(uri, is(equalTo("/clients/")));
+	}
+
+	@Test
+	public void shouldTranslatePatternArgs() {
+		String uri = new DefaultParametersControl("/clients/{client.id}").fillUri(client(3L));
+		assertThat(uri, is(equalTo("/clients/3")));
+	}
+
+	@Test
+	public void shouldTranslatePatternArgNullAsEmpty() {
+		String uri = new DefaultParametersControl("/clients/{client.id}").fillUri(client(null));
+		assertThat(uri, is(equalTo("/clients/")));
+	}
+
+	@Test
+	public void shouldTranslatePatternArgInternalNullAsEmpty() {
+		String uri = new DefaultParametersControl("/clients/{client.child.id}") .fillUri(client(null));
+		assertThat(uri, is(equalTo("/clients/")));
+	}
+
+	private TypeCreated client(Long id) {
+		return new TypeCreated(new Client(id));
+	}
+
+
 }

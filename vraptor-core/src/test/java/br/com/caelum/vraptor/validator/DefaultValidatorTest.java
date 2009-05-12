@@ -47,40 +47,18 @@ public class DefaultValidatorTest {
 	private VRaptorMockery mockery;
 	private Result result;
 	private DefaultValidator validator;
-	private MyLogicResult logicResult;
+	private LogicResult logicResult;
 	private MyComponent instance;
 	private Proxifier proxifier;
 	private PageResult pageResult;
 
-	class MyLogicResult implements LogicResult {
-
-		private Class<?> to;
-
-		public <T> T redirectClientTo(Class<T> type) {
-			return null;
-		}
-
-		public <T> T redirectServerTo(Class<T> type) {
-			this.to = type;
-			return (T) instance;
-		}
-
-		public <T> T forwardTo(Class<T> type) {
-			return null;
-		}
-
-		public <T> T redirectTo(Class<T> type) {
-			return null;
-		}
-
-	}
 
 	@Before
 	public void setup() {
 		this.mockery = new VRaptorMockery();
 		this.proxifier = new DefaultProxifier();
 		this.result = mockery.mock(Result.class);
-		this.logicResult = new MyLogicResult();
+		this.logicResult = mockery.mock(LogicResult.class);
 		this.instance = new MyComponent();
 		this.validator = new DefaultValidator(proxifier, result);
 		this.pageResult = mockery.mock(PageResult.class);
@@ -115,6 +93,8 @@ public class DefaultValidatorTest {
 			mockery.checking(new Expectations() {
 				{
 					one(result).include((String) with(an(String.class)), with(an(ArrayList.class)));
+					one(result).use(LogicResult.class); will(returnValue(logicResult));
+					one(logicResult).forwardTo(MyComponent.class); will(returnValue(instance));
 				}
 			});
 			validator.onError().goTo(MyComponent.class).logic();
@@ -126,7 +106,6 @@ public class DefaultValidatorTest {
 			Assert.fail("should stop flow");
 		} catch (ValidationError e) {
 			// ok, shoul still assert satisfied
-			Assert.assertEquals(this.logicResult.to, MyComponent.class);
 			Assert.assertEquals(this.instance.run, true);
 			mockery.assertIsSatisfied();
 		}

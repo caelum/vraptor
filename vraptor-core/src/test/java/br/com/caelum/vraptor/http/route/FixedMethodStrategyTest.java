@@ -35,6 +35,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -61,8 +62,13 @@ public class FixedMethodStrategyTest {
 	public void canTranslate() {
 		FixedMethodStrategy strategy = new FixedMethodStrategy("/clients/add", MyControl.class, method("list"),
 				methods(HttpMethod.POST), control);
+		mockery.checking(new Expectations() {
+			{
+				one(control).match("/clients/add"); will(returnValue(true));
+			}
+		});
 		ResourceMethod match = strategy.matches("/clients/add", HttpMethod.POST, request);
-		assertThat(match, is(VRaptorMatchers.resourceMethod(method("list", MyControl.class))));
+		assertThat(match, is(VRaptorMatchers.resourceMethod(method("list"))));
 	}
 
 	@SuppressWarnings("unchecked")

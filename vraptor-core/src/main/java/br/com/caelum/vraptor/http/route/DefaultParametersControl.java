@@ -67,6 +67,9 @@ public class DefaultParametersControl implements ParametersControl {
 				paramName += uri.charAt(i);
 			}
 		}
+		if(ignore) {
+			throw new IllegalRouteException("Illegal route contains invalid pattern: " + originalUri);
+		}
 		this.patternUri = patternUri;
 		this.pattern = Pattern.compile(patternUri);
 	}

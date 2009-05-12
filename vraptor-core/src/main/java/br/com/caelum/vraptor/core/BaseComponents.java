@@ -44,6 +44,8 @@ import br.com.caelum.vraptor.http.route.RoutesConfiguration;
 import br.com.caelum.vraptor.http.route.RoutesParser;
 import br.com.caelum.vraptor.interceptor.DefaultInterceptorRegistry;
 import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
+import br.com.caelum.vraptor.proxy.DefaultProxifier;
+import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.resource.DefaultResourceNotFoundHandler;
 import br.com.caelum.vraptor.resource.ResourceNotFoundHandler;
 import br.com.caelum.vraptor.validator.DefaultValidator;
@@ -69,6 +71,7 @@ public class BaseComponents {
 		DEFAULT_IMPLEMENTATIONS.put(Converters.class,DefaultConverters.class);
 		DEFAULT_IMPLEMENTATIONS.put(RoutesConfiguration.class,NoRoutesConfiguration.class);
 		DEFAULT_IMPLEMENTATIONS.put(RoutesParser.class,PathAnnotationRoutesParser.class);
+		DEFAULT_IMPLEMENTATIONS.put(Proxifier.class,DefaultProxifier.class);
 	}
 	
 	public static Collection<Class> getApplicationScoped() {

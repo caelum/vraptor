@@ -62,7 +62,7 @@ public class RouteBuilder {
 	}
 
 	public <T> T is(final Class<T> type) {
-        return proxifier.proxify(type, new MethodInvocation<T>() {
+        MethodInvocation<T> handler = new MethodInvocation<T>() {
             public Object intercept(Object proxy, Method method, Object[] args, SuperMethod superMethod) {
 				boolean alreadySetTheStrategy = !strategy.getClass().equals(NoStrategy.class);
 				if (alreadySetTheStrategy) {
@@ -72,7 +72,8 @@ public class RouteBuilder {
                 is(type, method);
                 return null;
             }
-        });
+        };
+		return proxifier.proxify(type, handler);
     }
 
 	public void is(PatternBasedType type, PatternBasedType method) {

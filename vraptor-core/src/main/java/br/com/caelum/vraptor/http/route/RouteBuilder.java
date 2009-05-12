@@ -80,7 +80,7 @@ public class RouteBuilder {
 	}
 
 	public void is(Class<?> type, Method method) {
-		this.strategy = new FixedMethodStrategy(originalUri, type, method, this.supportedMethods);
+		this.strategy = new FixedMethodStrategy(originalUri, type, method, this.supportedMethods, new DefaultParametersControl(originalUri));
 		logger.debug("created rule for path " + originalUri + " --> " + type.getName() + "." + method.getName());
 	}
 

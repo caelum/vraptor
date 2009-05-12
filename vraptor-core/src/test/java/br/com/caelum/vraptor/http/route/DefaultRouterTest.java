@@ -51,6 +51,10 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.resource.VRaptorInfo;
 import br.com.caelum.vraptor.test.VRaptorMockery;
 
+/**
+ * Those are more likely to be acceptance than unit tests.
+ * @author guilherme silveira
+ */
 public class DefaultRouterTest {
 
 	private DefaultProxifier proxifier;

@@ -28,6 +28,7 @@
 package br.com.caelum.vraptor.http.route;
 
 import java.lang.reflect.Method;
+import java.util.Set;
 import java.util.regex.Matcher;
 
 import org.slf4j.Logger;
@@ -36,6 +37,7 @@ import org.slf4j.LoggerFactory;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.resource.DefaultResource;
 import br.com.caelum.vraptor.resource.DefaultResourceMethod;
+import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
@@ -44,7 +46,7 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  * 
  * @author guilherme silveira
  */
-public class FixedMethodStrategy implements RouteStrategy {
+public class FixedMethodStrategy implements Route {
 	
 	private final Logger logger = LoggerFactory.getLogger(FixedMethodStrategy.class);
 
@@ -52,9 +54,18 @@ public class FixedMethodStrategy implements RouteStrategy {
 	private final Method method;
 	private final ResourceMethod resourceMethod;
 
-	public FixedMethodStrategy(Class<?> type, Method method) {
+	private final Set<HttpMethod> methods;
+
+	private final String originalUri;
+	
+	private final ParametersControl parameters;
+
+	public FixedMethodStrategy(String originalUri, Class<?> type, Method method, Set<HttpMethod> methods) {
+		this.originalUri = originalUri;
 		this.type = type;
 		this.method = method;
+		this.methods = methods;
+		this.parameters = new ParametersControl(originalUri);
 		this.resourceMethod = new DefaultResourceMethod(new DefaultResource(type), method);
 	}
 	
@@ -88,6 +99,14 @@ public class FixedMethodStrategy implements RouteStrategy {
 
 	public boolean canHandle(Class<?> type, Method method) {
 		return type.equals(this.resourceMethod.getResource().getType()) && method.equals(this.resourceMethod.getMethod());
+	}
+
+	public ResourceMethod matches(String uri, HttpMethod method, MutableRequest request) {
+		return null;
+	}
+
+	public String urlFor(Object params) {
+		return parameters.fillUri(params);
 	}
 
 }

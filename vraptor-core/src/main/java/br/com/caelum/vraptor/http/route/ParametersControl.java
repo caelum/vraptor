@@ -27,25 +27,58 @@
  */
 package br.com.caelum.vraptor.http.route;
 
-import java.lang.reflect.Method;
-import java.util.regex.Matcher;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Pattern;
 
-import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor.resource.Resource;
-import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.eval.Evaluator;
 
-/**
- * A route strategy. Because the same route might be used for different methods
- * and resources, methods depend on the url being acessed.
- * 
- * @author guilherme silveira
- */
-public interface RouteStrategy {
+public class ParametersControl {
 
-	ResourceMethod getResourceMethod(Matcher m, MutableRequest request);
+	private final List<String> parameters = new ArrayList<String>();
+	private final String patternUri;
+	private final Pattern pattern;
+	private final String originalUri;
+	
+	public ParametersControl(String uri) {
+		this.originalUri = uri;
+		String finalUri = "";
+		String patternUri = "";
+		String paramName = "";
+		// not using stringbuffer because this is only run in startup
+		boolean ignore = false;
+		for (int i = 0; i < uri.length(); i++) {
+			if (uri.charAt(i) == '{') {
+				ignore = true;
+				patternUri += "(";
+				continue;
+			} else if (uri.charAt(i) == '}') {
+				ignore = false;
+				finalUri += ".*";
+				patternUri += ".*)";
+				parameters.add(paramName);
+				paramName = "";
+				continue;
+			} else if (!ignore) {
+				patternUri += uri.charAt(i);
+				finalUri += uri.charAt(i);
+			} else {
+				paramName += uri.charAt(i);
+			}
+		}
+		this.patternUri = patternUri;
+		this.pattern = Pattern.compile(patternUri);
+	}
 
-	Resource getResource();
+	public String fillUri(Object params) {
+		String base = originalUri.replaceAll("\\.\\*", "");
+		for (String key : parameters) {
+			Object result = new Evaluator().get(params, key);
+			base = base.replace("{" + key + "}", result==null? "" : result.toString());
+		}
+		return base;
+	}
 
-	boolean canHandle(Class<?> type, Method method);
+
 
 }

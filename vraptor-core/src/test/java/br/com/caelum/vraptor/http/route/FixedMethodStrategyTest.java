@@ -27,35 +27,65 @@
  */
 package br.com.caelum.vraptor.http.route;
 
-import java.lang.reflect.Method;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 
-import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor.resource.HttpMethod;
-import br.com.caelum.vraptor.resource.Resource;
-import br.com.caelum.vraptor.resource.ResourceMethod;
+import org.junit.Test;
 
-/**
- * A route strategy which is basically invalid in order to force users to not
- * forget to decide a route strategy.
- * 
- * @author guilherme silveira
- */
-public class NoStrategy implements Route {
+public class FixedMethodStrategyTest {
 
-	public ResourceMethod matches(String uri, HttpMethod method, MutableRequest request) {
-		throw new IllegalRouteException("You have created a route, but did not specify any method to be invoked.");
+	class Client {
+		private Long id;
+		private Client child;
+		public Client(Long id) {
+			this.id = id;
+		}
+		public Client getChild() {
+			return child;
+		}
+		public Long getId() {
+			return id;
+		}
+	}
+	
+	class TypeCreated {
+		private Client client;
+		public TypeCreated(Client c) {
+			this.client = c;
+		}
+		public Client getClient() {
+			return client;
+		}
+	}
+	
+	@Test
+	public void shouldTranslateAsteriskAsEmpty() {
+		FixedMethodStrategy strategy = new FixedMethodStrategy("/clients/.*", null, null, null);
+		assertThat(strategy.urlFor(client(3L)), is(equalTo("/clients/")));
+	}
+	
+	@Test
+	public void shouldTranslatePatternArgs() {
+		FixedMethodStrategy strategy = new FixedMethodStrategy("/clients/{client.id}", null, null, null);
+		assertThat(strategy.urlFor(client(3L)), is(equalTo("/clients/3")));
+	}
+	
+	@Test
+	public void shouldTranslatePatternArgNullAsEmpty() {
+		FixedMethodStrategy strategy = new FixedMethodStrategy( "/clients/{client.id}", null, null, null);
+		assertThat(strategy.urlFor(client(null)), is(equalTo("/clients/")));
 	}
 
-	public String urlFor(Object params) {
-		return "nothing";
+	@Test
+	public void shouldTranslatePatternArgInternalNullAsEmpty() {
+		FixedMethodStrategy strategy = new FixedMethodStrategy("/clients/{client.child.id}", null, null, null);
+		assertThat(strategy.urlFor(client(null)), is(equalTo("/clients/")));
 	}
 
-	public boolean canHandle(Class<?> type, Method method) {
-		return false;
+	private TypeCreated client(Long id) {
+		return new TypeCreated(new Client(id));
 	}
 
-	public Resource getResource() {
-		return null;
-	}
 
 }

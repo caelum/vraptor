@@ -68,7 +68,7 @@ public class PathAnnotationRoutesParser implements RoutesParser {
         for (Method javaMethod : actualType.getDeclaredMethods()) {
             if (isEligible(javaMethod)) {
                 String uri = getUriFor(javaMethod, baseType);
-                UriBasedRoute rule = new UriBasedRoute(proxifier, uri);
+                RouteBuilder rule = new RouteBuilder(proxifier, uri);
                 for (HttpMethod m : HttpMethod.values()) {
                     if (javaMethod.isAnnotationPresent(m.getAnnotation())) {
                         rule.with(m);

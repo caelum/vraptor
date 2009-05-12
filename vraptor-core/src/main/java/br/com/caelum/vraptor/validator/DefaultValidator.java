@@ -27,6 +27,9 @@
  */
 package br.com.caelum.vraptor.validator;
 
+import java.lang.reflect.Method;
+import java.util.List;
+
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.ioc.RequestScoped;
@@ -35,9 +38,6 @@ import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.SuperMethod;
 import br.com.caelum.vraptor.view.ResultException;
 import br.com.caelum.vraptor.view.Results;
-
-import java.lang.reflect.Method;
-import java.util.List;
 
 /**
  * The default validator implementation.

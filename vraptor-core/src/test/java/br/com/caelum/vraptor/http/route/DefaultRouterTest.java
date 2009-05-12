@@ -33,8 +33,6 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -44,7 +42,6 @@ import org.jmock.Expectations;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.Path;
-import br.com.caelum.vraptor.http.ListOfRules;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.TypeCreator;
 import br.com.caelum.vraptor.http.VRaptorRequest;
@@ -170,19 +167,14 @@ public class DefaultRouterTest {
 
 	@Test
 	public void usesTheFirstRegisteredRuleIfDifferentCreatorsWereUsed() throws SecurityException, NoSuchMethodException {
-		final ResourceMethod resourceMethod = mockery.mock(ResourceMethod.class);
-		final Route customRule = new RouteForMethod(resourceMethod);
-		router.add(new ListOfRules() {
-			public List<Route> getRules() {
-				return Arrays.asList(customRule);
-			}
-		});
 		new Rules(router) {
 			public void routes() {
 				routeFor("/clients").is(MyControl.class).list();
+				routeFor("/clients").is(MyControl.class).show(null);
 			}
 		};
-		assertThat(router.parse("/clients", HttpMethod.POST, request), is(equalTo(resourceMethod)));
+		Method found = router.parse("/clients", HttpMethod.POST, request).getMethod();
+		assertThat(found, is(equalTo(MyControl.class.getMethod("list"))));
 		mockery.assertIsSatisfied();
 	}
 

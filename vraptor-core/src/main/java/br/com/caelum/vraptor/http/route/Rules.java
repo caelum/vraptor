@@ -30,8 +30,6 @@ package br.com.caelum.vraptor.http.route;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.caelum.vraptor.http.ListOfRules;
-
 /**
  * Rules for resource localization.
  *
@@ -39,28 +37,22 @@ import br.com.caelum.vraptor.http.ListOfRules;
  */
 public abstract class Rules {
     private final Router router;
-    private final List<Route> routes = new ArrayList<Route>();
+	private final List<RouteBuilder> routesToBuild = new ArrayList<RouteBuilder>();
 
     public Rules(Router router) {
         this.router = router;
         routes();
-        router.add(new ListOfRules() {
-            public List<Route> getRules() {
-                return routes;
-            }
-        });
+        for(RouteBuilder builder : routesToBuild) {
+            router.add(builder.build());
+        }
     }
 
     public abstract void routes();
 
-    protected final UriBasedRoute routeFor(String uri) {
-        UriBasedRoute rule = new UriBasedRoute(router.getProxifier(), uri);
-        this.routes.add(rule);
+    protected final RouteBuilder routeFor(String uri) {
+        RouteBuilder rule = new RouteBuilder(router.getProxifier(), uri);
+        this.routesToBuild.add(rule);
         return rule;
-    }
-
-    public final List<Route> getRules() {
-        return this.routes;
     }
 
     protected final PatternBasedType type(String pattern) {

@@ -28,9 +28,10 @@
 package br.com.caelum.vraptor.http.route;
 
 import java.lang.reflect.Method;
-import java.util.regex.Matcher;
+import java.util.Set;
 
 import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
@@ -39,29 +40,32 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  * 
  * @author guilherme silveira
  */
-public class PatternBasedStrategy implements RouteStrategy {
+public class PatternBasedStrategy implements Route {
 
 	private final PatternBasedType type;
 	private final PatternBasedType method;
+	private final Set<HttpMethod> methods;
 
-	public PatternBasedStrategy(PatternBasedType type, PatternBasedType method) {
+	public PatternBasedStrategy(PatternBasedType type, PatternBasedType method, Set<HttpMethod> methods) {
 		this.type = type;
 		this.method = method;
+		this.methods = methods;
 	}
 
-	public ResourceMethod getResourceMethod(Matcher m, MutableRequest request) {
-		//if(name.equals("_resource") || name.equals("_method")) {
-			//continue;
-		//}
+	public boolean canHandle(Class<?> type, Method method) {
+		return false;
+	}
+
+	public ResourceMethod matches(String uri, HttpMethod method, MutableRequest request) {
+		return null;
+	}
+
+	public String urlFor(Object params) {
 		return null;
 	}
 
 	public Resource getResource() {
 		return null;
-	}
-
-	public boolean canHandle(Class<?> type, Method method) {
-		return false;
 	}
 
 }

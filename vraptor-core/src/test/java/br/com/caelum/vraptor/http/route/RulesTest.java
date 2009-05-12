@@ -27,44 +27,40 @@
  */
 package br.com.caelum.vraptor.http.route;
 
-import java.lang.reflect.Method;
+import org.jmock.Expectations;
+import org.junit.Before;
+import org.junit.Test;
 
-import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor.resource.HttpMethod;
-import br.com.caelum.vraptor.resource.Resource;
-import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.proxy.Proxifier;
+import br.com.caelum.vraptor.test.VRaptorMockery;
 
-/**
- * A route for a specific method.
- * 
- * @author guilherme silveira
- */
-public class RouteForMethod implements Route {
+public class RulesTest {
 
-	private final ResourceMethod method;
+	private VRaptorMockery mockery;
+	private Router router;
+	private Proxifier proxifier;
 
-	public RouteForMethod(ResourceMethod method) {
-		this.method = method;
+	@Before
+	public void setup() {
+		this.mockery = new VRaptorMockery();
+		this.router = mockery.mock(Router.class);
+		this.proxifier = mockery.mock(Proxifier.class);
+		mockery.checking(new Expectations() {
+			{
+				one(router).getProxifier();
+				will(returnValue(proxifier));
+			}
+		});
 	}
 
-	public Resource getResource() {
-		return method.getResource();
-	}
-
-	public ResourceMethod getResourceMethod() {
-		return method;
-	}
-
-	public ResourceMethod matches(String uri, HttpMethod method, MutableRequest request) {
-		return this.method;
-	}
-
-	public String urlFor(Object params) {
-		return null;
-	}
-
-	public boolean canHandle(Class<?> type, Method method) {
-		return type.equals(this.method.getResource().getType()) && method.equals(this.method.getMethod());
+	@Test
+	public void allowsAdditionOfRouteBuildersByDefaultWithNoStrategy() {
+		Rules r = new Rules(router) {
+			public void routes() {
+				routeFor("");
+			}
+		};
+		mockery.assertIsSatisfied();
 	}
 
 }

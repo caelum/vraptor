@@ -27,23 +27,52 @@
  */
 package br.com.caelum.vraptor.http.route;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+
+import org.jmock.Expectations;
+import org.junit.Before;
+import org.junit.Test;
+
 import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor.test.VRaptorMockery;
 
-public interface ParametersControl {
+public class DefaultParametersControlTest {
 
-	/**
-	 * wether the uri matches this uri
-	 */
-	boolean match(String uri);
+	private VRaptorMockery mockery;
+	private MutableRequest request;
 
-	/**
-	 * creates a uri based on those parameter values
-	 */
-	String fillUri(Object params);
+	@Before
+	public void setup() {
+		this.mockery = new VRaptorMockery();
+		this.request = mockery.mock(MutableRequest.class);
+	}
 
-	/**
-	 * Inserts parameters extracted from the uri into the request parameters.
-	 */
-	void fillIntoRequest(String uri, MutableRequest request);
+	@Test
+	public void registerExtraParametersFromAcessedUrl() throws SecurityException, NoSuchMethodException {
+		DefaultParametersControl control = new DefaultParametersControl("/clients/{dog.id}");
+		mockery.checking(new Expectations() {
+			{
+				one(request).setParameter("dog.id", new String[] {"45"});
+			}
+		});
+		control.fillIntoRequest("/clients/45", request);
+		mockery.assertIsSatisfied();
+	}
+
+	@Test
+	public void worksAsRegexWhenUsingParameters() throws SecurityException, NoSuchMethodException {
+		DefaultParametersControl control = new DefaultParametersControl("/clients/{dog.id}");
+		assertThat(control.match("/clients/15"), is(equalTo(true)));
+		mockery.assertIsSatisfied();
+	}
+
+	@Test
+	public void worksWithBasicRegexEvaluation() throws SecurityException, NoSuchMethodException {
+		DefaultParametersControl control = new DefaultParametersControl("/clients.*");
+		assertThat(control.match("/clientsWhatever"), is(equalTo(true)));
+		mockery.assertIsSatisfied();
+	}
 
 }

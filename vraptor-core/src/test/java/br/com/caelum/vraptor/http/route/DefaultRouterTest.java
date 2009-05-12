@@ -72,32 +72,6 @@ public class DefaultRouterTest {
 		this.router = new DefaultRouter(new NoRoutesConfiguration(), new NoRoutesParser(), provider, proxifier, creator);
 	}
 
-	class Dog {
-		private Long id;
-
-		public void setId(Long id) {
-			this.id = id;
-		}
-
-		public Long getId() {
-			return id;
-		}
-	}
-
-	@br.com.caelum.vraptor.Resource
-	public static class MyControl {
-		public void add(Dog object) {
-		}
-
-		public void unknownMethod() {
-		}
-
-		public void list() {
-		}
-
-		public void show(Dog dog) {
-		}
-	}
 
 	@Test
 	public void acceptsASingleMappingRule() throws SecurityException, NoSuchMethodException {
@@ -148,11 +122,6 @@ public class DefaultRouterTest {
 
 	
 	
-
-	@SuppressWarnings("unchecked")
-	private Method method(String name, Class... types) throws SecurityException, NoSuchMethodException {
-		return MyControl.class.getDeclaredMethod(name, types);
-	}
 
 	@Test
 	public void testReturnsNullIfResourceNotFound() {

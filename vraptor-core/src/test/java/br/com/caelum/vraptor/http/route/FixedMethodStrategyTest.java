@@ -31,13 +31,19 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
+import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.http.route.DefaultRouterTest.Dog;
-import br.com.caelum.vraptor.http.route.DefaultRouterTest.MyControl;
+import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.test.VRaptorMockery;
 
 public class FixedMethodStrategyTest {
 
@@ -70,27 +76,38 @@ public class FixedMethodStrategyTest {
 		}
 	}
 
+	private VRaptorMockery mockery;
+	private MutableRequest request;
+	private ParametersControl control;
+
+	@Before
+	public void setup() {
+		this.mockery = new VRaptorMockery();
+		this.request = mockery.mock(MutableRequest.class);
+		this.control = mockery.mock(ParametersControl.class);
+	}
+
 	@Test
 	public void shouldTranslateAsteriskAsEmpty() {
-		FixedMethodStrategy strategy = new FixedMethodStrategy("/clients/.*", null, null, null);
+		FixedMethodStrategy strategy = new FixedMethodStrategy("/clients/.*", null, null, null, control);
 		assertThat(strategy.urlFor(client(3L)), is(equalTo("/clients/")));
 	}
 
 	@Test
 	public void shouldTranslatePatternArgs() {
-		FixedMethodStrategy strategy = new FixedMethodStrategy("/clients/{client.id}", null, null, null);
+		FixedMethodStrategy strategy = new FixedMethodStrategy("/clients/{client.id}", null, null, null, control);
 		assertThat(strategy.urlFor(client(3L)), is(equalTo("/clients/3")));
 	}
 
 	@Test
 	public void shouldTranslatePatternArgNullAsEmpty() {
-		FixedMethodStrategy strategy = new FixedMethodStrategy("/clients/{client.id}", null, null, null);
+		FixedMethodStrategy strategy = new FixedMethodStrategy("/clients/{client.id}", null, null, null, control);
 		assertThat(strategy.urlFor(client(null)), is(equalTo("/clients/")));
 	}
 
 	@Test
 	public void shouldTranslatePatternArgInternalNullAsEmpty() {
-		FixedMethodStrategy strategy = new FixedMethodStrategy("/clients/{client.child.id}", null, null, null);
+		FixedMethodStrategy strategy = new FixedMethodStrategy("/clients/{client.child.id}", null, null, null, control);
 		assertThat(strategy.urlFor(client(null)), is(equalTo("/clients/")));
 	}
 
@@ -100,43 +117,54 @@ public class FixedMethodStrategyTest {
 
 	@Test
 	public void canTranslate() {
+		FixedMethodStrategy strategy = new FixedMethodStrategy("/clients/add", MyControl.class, method("list"),
+				methods(HttpMethod.POST), control);
+		ResourceMethod match = strategy.matches("/clients/add", HttpMethod.POST, request);
+		assertThat(match, is(VRaptorMatchers.resourceMethod(method("list", MyControl.class))));
+	}
 
-		new Rules(router) {
-			public void routes() {
-				routeFor("/clients/add").is(MyControl.class).add(null);
-			}
-		};
-		assertThat(router.parse("/clients/add", HttpMethod.POST, request), is(VRaptorMatchers.resourceMethod(method(
-				"add", Dog.class))));
-
+	@SuppressWarnings("unchecked")
+	private Set<HttpMethod> methods(HttpMethod method) {
+		return new HashSet(Arrays.asList(method));
 	}
 
 
-	@Test
-	public void registerExtraParametersFromAcessedUrl() throws SecurityException, NoSuchMethodException {
-		new Rules(router) {
-			public void routes() {
-				routeFor("/clients/{dog.id}").is(MyControl.class).show(null);
-			}
-		};
-		ResourceMethod method = router.parse("/clients/45", HttpMethod.POST, request);
-		assertThat(request.getParameter("dog.id"), is(equalTo("45")));
-		assertThat(method, is(VRaptorMatchers.resourceMethod(method("show", Dog.class))));
-		mockery.assertIsSatisfied();
+	@SuppressWarnings("unchecked")
+	private Method method(String name, Class... types)  {
+		try {
+			return MyControl.class.getDeclaredMethod(name, types);
+		} catch (SecurityException e) {
+			throw new RuntimeException(e);
+		} catch (NoSuchMethodException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
-	@Test
-	public void worksWithBasicRegexEvaluation() throws SecurityException, NoSuchMethodException {
-		new Rules(router) {
-			public void routes() {
-				{
-					routeFor("/clients*").with(HttpMethod.POST).is(MyControl.class).unknownMethod();
-				}
-			}
-		};
-		assertThat(router.parse("/clientsWhatever", HttpMethod.POST, request), is(VRaptorMatchers
-				.resourceMethod(method("unknownMethod"))));
-		mockery.assertIsSatisfied();
+	class Dog {
+		private Long id;
+
+		public void setId(Long id) {
+			this.id = id;
+		}
+
+		public Long getId() {
+			return id;
+		}
+	}
+
+	@br.com.caelum.vraptor.Resource
+	public static class MyControl {
+		public void add(Dog object) {
+		}
+
+		public void unknownMethod() {
+		}
+
+		public void list() {
+		}
+
+		public void show(Dog dog) {
+		}
 	}
 
 }

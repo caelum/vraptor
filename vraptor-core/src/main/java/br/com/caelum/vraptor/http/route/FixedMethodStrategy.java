@@ -29,10 +29,6 @@ package br.com.caelum.vraptor.http.route;
 
 import java.lang.reflect.Method;
 import java.util.Set;
-import java.util.regex.Matcher;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.resource.DefaultResource;
@@ -48,51 +44,18 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  */
 public class FixedMethodStrategy implements Route {
 	
-	private final Logger logger = LoggerFactory.getLogger(FixedMethodStrategy.class);
-
-	private final Class<?> type;
-	private final Method method;
 	private final ResourceMethod resourceMethod;
 
 	private final Set<HttpMethod> methods;
 
-	private final String originalUri;
-	
 	private final ParametersControl parameters;
 
-	public FixedMethodStrategy(String originalUri, Class<?> type, Method method, Set<HttpMethod> methods) {
-		this.originalUri = originalUri;
-		this.type = type;
-		this.method = method;
+	public FixedMethodStrategy(String originalUri, Class<?> type, Method method, Set<HttpMethod> methods, ParametersControl control) {
 		this.methods = methods;
-		this.parameters = new ParametersControl(originalUri);
+		this.parameters = control;
 		this.resourceMethod = new DefaultResourceMethod(new DefaultResource(type), method);
 	}
 	
-	public ResourceMethod getResourceMethod(Matcher m, MutableRequest request) {
-		for (int i = 1; i <= m.groupCount(); i++) {
-			// String name = parameters.get(i - 1);
-			String name = "";
-			if(name.equals("_resource") || name.equals("_method")) {
-				continue;
-			}
-			if(!isInteger(name)) {
-				continue;
-			}
-			request.setParameter(name, m.group(i));
-		}
-		return this.resourceMethod;
-	}
-
-	private boolean isInteger(String name) {
-		for(int i=0;i<name.length();i++) {
-			if(Character.isDigit(name.charAt(i))) {
-				return false;
-			}
-		}
-		return name.length()>0;
-	}
-
 	public Resource getResource() {
 		return this.resourceMethod.getResource();
 	}
@@ -103,7 +66,8 @@ public class FixedMethodStrategy implements Route {
 
 	public ResourceMethod matches(String uri, HttpMethod method, MutableRequest request) {
 		boolean acceptMethod = this.methods.isEmpty() || this.methods.contains(method);
-		return originalUri.equals(uri) && acceptMethod ? this.resourceMethod : null;
+		boolean uriMatches = parameters.match(uri);
+		return uriMatches && acceptMethod ? this.resourceMethod : null;
 	}
 
 	public String urlFor(Object params) {

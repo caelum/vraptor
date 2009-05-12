@@ -78,33 +78,7 @@ public class RouteBuilder {
 	public void is(PatternBasedType type, PatternBasedType method) {
 		this.strategy = new PatternBasedStrategy(type, method, this.supportedMethods);
 	}
-/*
-	public ResourceMethod matches(String uri, HttpMethod method, MutableRequest request) {
-		if (!methodMatches(method)) {
-			return null;
-		}
-		return uriMatches(uri, request);
-	}
 
-	private boolean methodMatches(HttpMethod method) {
-		return (this.supportedMethods.isEmpty() || this.supportedMethods.contains(method));
-	}
-
-	private ResourceMethod uriMatches(String uri, MutableRequest request) {
-		Matcher m = pattern.matcher(uri);
-		if (!m.matches()) {
-			return null;
-		}
-		for (int i = 1; i <= m.groupCount(); i++) {
-			String name = parameters.get(i - 1);
-			if(name.equals("_resource") || name.equals("_method")) {
-				continue;
-			}
-			request.setParameter(name, m.group(i));
-		}
-		return this.strategy.getResourceMethod(m, request);
-	}
-*/
 	public void is(Class<?> type, Method method) {
 		this.strategy = new FixedMethodStrategy(originalUri, type, method, this.supportedMethods);
 		logger.debug("created rule for path " + originalUri + " --> " + type.getName() + "." + method.getName());

@@ -33,47 +33,57 @@ import static org.hamcrest.Matchers.is;
 
 import org.junit.Test;
 
+import br.com.caelum.vraptor.http.route.DefaultRouterTest.Dog;
+import br.com.caelum.vraptor.http.route.DefaultRouterTest.MyControl;
+import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
+import br.com.caelum.vraptor.resource.HttpMethod;
+
 public class FixedMethodStrategyTest {
 
 	class Client {
 		private Long id;
 		private Client child;
+
 		public Client(Long id) {
 			this.id = id;
 		}
+
 		public Client getChild() {
 			return child;
 		}
+
 		public Long getId() {
 			return id;
 		}
 	}
-	
+
 	class TypeCreated {
 		private Client client;
+
 		public TypeCreated(Client c) {
 			this.client = c;
 		}
+
 		public Client getClient() {
 			return client;
 		}
 	}
-	
+
 	@Test
 	public void shouldTranslateAsteriskAsEmpty() {
 		FixedMethodStrategy strategy = new FixedMethodStrategy("/clients/.*", null, null, null);
 		assertThat(strategy.urlFor(client(3L)), is(equalTo("/clients/")));
 	}
-	
+
 	@Test
 	public void shouldTranslatePatternArgs() {
 		FixedMethodStrategy strategy = new FixedMethodStrategy("/clients/{client.id}", null, null, null);
 		assertThat(strategy.urlFor(client(3L)), is(equalTo("/clients/3")));
 	}
-	
+
 	@Test
 	public void shouldTranslatePatternArgNullAsEmpty() {
-		FixedMethodStrategy strategy = new FixedMethodStrategy( "/clients/{client.id}", null, null, null);
+		FixedMethodStrategy strategy = new FixedMethodStrategy("/clients/{client.id}", null, null, null);
 		assertThat(strategy.urlFor(client(null)), is(equalTo("/clients/")));
 	}
 
@@ -87,5 +97,17 @@ public class FixedMethodStrategyTest {
 		return new TypeCreated(new Client(id));
 	}
 
+	@Test
+	public void canTranslate() {
+
+		new Rules(router) {
+			public void routes() {
+				routeFor("/clients/add").is(MyControl.class).add(null);
+			}
+		};
+		assertThat(router.parse("/clients/add", HttpMethod.POST, request), is(VRaptorMatchers.resourceMethod(method(
+				"add", Dog.class))));
+
+	}
 
 }

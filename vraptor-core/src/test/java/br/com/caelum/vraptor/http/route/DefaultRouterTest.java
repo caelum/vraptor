@@ -60,6 +60,7 @@ public class DefaultRouterTest {
 	private VRaptorRequest request;
 	private ParameterNameProvider provider;
 	private TypeCreator creator;
+	private ResourceMethod method;
 
 	@org.junit.Before
 	public void setup() {
@@ -68,6 +69,7 @@ public class DefaultRouterTest {
 		this.provider = mockery.mock(ParameterNameProvider.class);
 		this.creator = mockery.mock(TypeCreator.class);
 		this.proxifier = new DefaultProxifier();
+		this.method = mockery.mock(ResourceMethod.class);
 		this.router = new DefaultRouter(new NoRoutesConfiguration(), new NoRoutesParser(), provider, proxifier, creator);
 	}
 
@@ -100,13 +102,15 @@ public class DefaultRouterTest {
 
 	@Test
 	public void acceptsASingleMappingRule() throws SecurityException, NoSuchMethodException {
-		new Rules(router) {
-			public void routes() {
-				routeFor("/clients/add").is(MyControl.class).add(null);
-			}
-		};
-		assertThat(router.parse("/clients/add", HttpMethod.POST, request), is(VRaptorMatchers.resourceMethod(method(
-				"add", Dog.class))));
+		final Route route = mockery.mock(Route.class);
+		mockery.checking(new Expectations() {{
+			one(route).matches("/clients/add", HttpMethod.POST, request);
+			will(returnValue(method));
+			one(route).getResource(); will(returnValue(null));
+		}});
+		router.add(route);
+		ResourceMethod found = router.parse("/clients/add", HttpMethod.POST, request);
+		assertThat(found, is(equalTo(method)));
 		mockery.assertIsSatisfied();
 	}
 

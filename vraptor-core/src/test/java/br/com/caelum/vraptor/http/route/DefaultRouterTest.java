@@ -113,23 +113,31 @@ public class DefaultRouterTest {
 		assertThat(found, is(equalTo(method)));
 		mockery.assertIsSatisfied();
 	}
+	
+	@Test
+	public void usesTheFirstRegisteredRuleMatchingThePattern() throws SecurityException, NoSuchMethodException {
+		final Route route = mockery.mock(Route.class);
+		final Route second = mockery.mock(Route.class, "second");
+		mockery.checking(new Expectations() {{
+			one(route).matches("/clients/add", HttpMethod.POST, request);
+			will(returnValue(method));
+			one(route).getResource(); will(returnValue(null));
+			one(second).getResource(); will(returnValue(null));
+		}});
+		router.add(route);
+		router.add(second);
+		ResourceMethod found = router.parse("/clients/add", HttpMethod.POST, request);
+		assertThat(found, is(equalTo(method)));
+		mockery.assertIsSatisfied();
+	}
+
+
+	
+	
 
 	@SuppressWarnings("unchecked")
 	private Method method(String name, Class... types) throws SecurityException, NoSuchMethodException {
 		return MyControl.class.getDeclaredMethod(name, types);
-	}
-
-	@Test
-	public void usesTheFirstRegisteredRuleMatchingThePattern() throws SecurityException, NoSuchMethodException {
-		new Rules(router) {
-			public void routes() {
-				routeFor("/clients/add").is(MyControl.class).add(null);
-				routeFor("/clients/add").is(MyControl.class).list();
-			}
-		};
-		assertThat(router.parse("/clients/add", HttpMethod.POST, request), is(VRaptorMatchers.resourceMethod(method(
-				"add", Dog.class))));
-		mockery.assertIsSatisfied();
 	}
 
 	@Test
@@ -166,19 +174,6 @@ public class DefaultRouterTest {
 			}
 		};
 		assertThat(router.parse("/clients/add", HttpMethod.POST, request), is(nullValue()));
-		mockery.assertIsSatisfied();
-	}
-
-	@Test
-	public void usesTheFirstRegisteredRuleIfDifferentCreatorsWereUsed() throws SecurityException, NoSuchMethodException {
-		new Rules(router) {
-			public void routes() {
-				routeFor("/clients").is(MyControl.class).list();
-				routeFor("/clients").is(MyControl.class).show(null);
-			}
-		};
-		Method found = router.parse("/clients", HttpMethod.POST, request).getMethod();
-		assertThat(found, is(equalTo(MyControl.class.getMethod("list"))));
 		mockery.assertIsSatisfied();
 	}
 

@@ -147,4 +147,11 @@ public class VRaptorMockery {
 		return mockery.mock(HttpServletRequest.class);
 	}
 
+	/**
+	 * Mocks a type and says its local name for better error output.
+	 */
+	public <T> T mock(Class<T> type, String name) {
+		return mockery.mock(type,name);
+	}
+
 }

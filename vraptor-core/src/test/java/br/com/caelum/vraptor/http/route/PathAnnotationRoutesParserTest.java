@@ -27,23 +27,26 @@
  */
 package br.com.caelum.vraptor.http.route;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
+
+import org.hamcrest.Matchers;
+import org.junit.Before;
+import org.junit.Test;
+
 import br.com.caelum.vraptor.Delete;
 import br.com.caelum.vraptor.Head;
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
+import br.com.caelum.vraptor.proxy.DefaultProxifier;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.test.VRaptorMockery;
-import static org.hamcrest.MatcherAssert.assertThat;
-import org.hamcrest.Matchers;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
-import org.junit.Before;
-import org.junit.Test;
 
 public class PathAnnotationRoutesParserTest {
 
@@ -58,7 +61,7 @@ public class PathAnnotationRoutesParserTest {
         this.mockery = new VRaptorMockery();
         this.resource = mockery.resource(Clients.class);
         this.request = mockery.mock(MutableRequest.class);
-        this.proxifier = mockery.mock(Proxifier.class);
+        this.proxifier = new DefaultProxifier();
         this.router = new DefaultRouter(new RoutesConfiguration() {
             public void config(Router router) {
             }

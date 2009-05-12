@@ -67,4 +67,8 @@ public class ShouldBe<T> implements Matcher<T> {
 	public void _dont_implement_Matcher___instead_extend_BaseMatcher_() {
 		
 	}
+
+	public void describeMismatch(Object item, Description description) {
+    	matcher.describeMismatch(item, description);
+	}
 }

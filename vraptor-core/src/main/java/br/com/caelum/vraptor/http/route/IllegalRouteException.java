@@ -27,44 +27,18 @@
  */
 package br.com.caelum.vraptor.http.route;
 
-import java.lang.reflect.Method;
-
-import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor.resource.HttpMethod;
-import br.com.caelum.vraptor.resource.Resource;
-import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.VRaptorException;
 
 /**
- * A route for a specific method.
+ * Illegal routes might be created under different situations. THe most common
+ * is to invoke the is() method but forgetting to invoke the attached method.
  * 
  * @author guilherme silveira
  */
-public class RouteForMethod implements Route {
+public class IllegalRouteException extends VRaptorException {
 
-	private final ResourceMethod method;
-
-	public RouteForMethod(ResourceMethod method) {
-		this.method = method;
-	}
-
-	public Resource getResource() {
-		return method.getResource();
-	}
-
-	public ResourceMethod getResourceMethod() {
-		return method;
-	}
-
-	public ResourceMethod matches(String uri, HttpMethod method, MutableRequest request) {
-		return this.method;
-	}
-
-	public String urlFor(Object params) {
-		return null;
-	}
-
-	public boolean canHandle(Class<?> type, Method method) {
-		return type.equals(this.method.getResource().getType()) && method.equals(this.method.getMethod());
+	public IllegalRouteException(String msg) {
+		super(msg);
 	}
 
 }

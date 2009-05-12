@@ -27,10 +27,10 @@
  */
 package br.com.caelum.vraptor.http.route;
 
-import br.com.caelum.vraptor.http.ListOfRules;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import br.com.caelum.vraptor.http.ListOfRules;
 
 /**
  * Rules for resource localization.

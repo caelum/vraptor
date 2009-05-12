@@ -27,6 +27,16 @@
  */
 package br.com.caelum.vraptor.http.route;
 
+import java.io.IOException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import br.com.caelum.vraptor.VRaptorException;
 import br.com.caelum.vraptor.http.ListOfRules;
 import br.com.caelum.vraptor.http.MutableRequest;
@@ -34,126 +44,131 @@ import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.TypeCreator;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.proxy.Proxifier;
+import br.com.caelum.vraptor.resource.DefaultResource;
+import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.resource.VRaptorInfo;
 import br.com.caelum.vraptor.vraptor2.Info;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 /**
  * The default implementation of resource localization rules. It also uses a
  * Path annotation to discover path->method mappings using the supplied
  * ResourceAndMethodLookup.
- *
+ * 
  * @author Guilherme Silveira
  */
 @ApplicationScoped
 public class DefaultRouter implements Router {
 
-    private final Logger logger = LoggerFactory.getLogger(DefaultRouter.class);
+	private final Logger logger = LoggerFactory.getLogger(DefaultRouter.class);
+	private final Proxifier proxifier;
 
-    private final List<Route> routes = new ArrayList<Route>();
-    private final Set<Resource> resources = new HashSet<Resource>();
-    private final RoutesParser routesParser;
-    private final ParameterNameProvider provider;
-    private final TypeCreator creator;
-    private final Proxifier proxifier;
+	public Proxifier getProxifier() {
+		return proxifier;
+	}
 
-    public DefaultRouter(RoutesConfiguration config, RoutesParser routesParser, ParameterNameProvider provider,
-            Proxifier proxifier, TypeCreator creator) {
-        this.routesParser = routesParser;
-        this.provider = provider;
-        this.proxifier = proxifier;
-        this.creator = creator;
-        config.config(this);
-    }
+	private final List<Route> routes = new ArrayList<Route>();
+	private final Set<Resource> resources = new HashSet<Resource>();
+	private final RoutesParser routesParser;
+	private final ParameterNameProvider provider;
+	private final TypeCreator creator;
 
-    public void add(ListOfRules rulesToAdd) {
-        List<Route> routes = rulesToAdd.getRules();
-        add(routes);
-    }
+	public DefaultRouter(RoutesConfiguration config, RoutesParser resourceRoutesCreator,
+			ParameterNameProvider provider, Proxifier proxifier, TypeCreator creator) {
+		this.routesParser = resourceRoutesCreator;
+		this.provider = provider;
+		this.creator = creator;
+		this.proxifier = proxifier;
+		// this resource should be kept here so it doesnt matter whether
+		// the user uses a custom routes config
+		UriBasedRoute rule = new UriBasedRoute(proxifier, "/is_using_vraptor");
+		try {
+			rule.is(VRaptorInfo.class).info();
+		} catch (IOException e) {
+			// ignorable
+		}
+		add(rule);
+		config.config(this);
+	}
 
-    private void add(List<Route> routes) {
-        for (Route r : routes) {
-            add(r);
-        }
-    }
+	public void add(ListOfRules rulesToAdd) {
+		List<Route> rules = rulesToAdd.getRules();
+		add(rules);
+	}
 
-    /**
-     * You can override this method to get notified by all added routes.
-     */
-    protected void add(Route r) {
-        resources.add(r.getResource());
-        this.routes.add(r);
-    }
+	private void add(List<Route> rules) {
+		for (Route r : rules) {
+			add(r);
+		}
+	}
 
-    public ResourceMethod parse(String uri, HttpMethod method, MutableRequest request) {
-        for (Route route : routes) {
-            ResourceMethod value = route.matches(uri, method, request);
-            if (value != null) {
-                return value;
-            }
-        }
-        return null;
-    }
+	/**
+	 * You can override this method to get notified by all added routes.
+	 */
+	protected void add(Route r) {
+		Resource resource = r.getResource();
+		if (resource != null) {
+			resources.add(resource);
+		}
+		this.routes.add(r);
+	}
 
-    public Set<Resource> all() {
-        return resources;
-    }
+	public ResourceMethod parse(String uri, HttpMethod method, MutableRequest request) {
+		for (Route rule : routes) {
+			ResourceMethod value = rule.matches(uri, method, request);
+			if (value != null) {
+				return value;
+			}
+		}
+		return null;
+	}
 
-    public void register(Resource resource) {
-        List<Route> routes = routesParser.rulesFor(resource);
-        logger.debug(String.format("registering routes for resource: %s. Rules: %s", resource, routes));
-        add(routes);
-    }
+	public Set<Resource> all() {
+		return resources;
+	}
 
-    public <T> String urlFor(Class<T> type, Method method, Object... params) {
-        for (Route route : routes) {
-            if (route.getResource().getType().equals(type) && route.getResourceMethod().getMethod().equals(method)) {
-                String[] names = provider.parameterNamesFor(method);
-                Class<?> parameterType = creator.typeFor(route.getResourceMethod());
-                try {
-                    Object root = parameterType.getConstructor().newInstance();
-                    for (int i = 0; i < names.length; i++) {
-                        Method setter = findSetter(parameterType, "set" + Info.capitalize(names[i]));
-                        setter.invoke(root, params[i]);
-                    }
-                    return route.urlFor(root);
-                } catch (Exception e) {
-                    throw new VRaptorException("The selected route is invalid for redirection: " + type.getName() + "."
-                            + method.getName(), e);
-                }
-            }
-        }
-        throw new RouteNotFoundException("The selected route is invalid for redirection: " + type.getName() + "."
-                + method.getName());
-    }
+	public void register(Resource resource) {
+		add(this.routesParser.rulesFor(resource));
+	}
 
-    private Method findSetter(Class<?> parameterType, String methodName) {
-        for (Method m : parameterType.getDeclaredMethods()) {
-            if (m.getName().equals(methodName)) {
-                return m;
-            }
-        }
-        throw new VRaptorException(
-                "Unable to redirect using route as setter method for parameter setting was not created. "
-                        + "Thats probably a bug on your type creator. "
-                        + "If you are using the default type creator, notify VRaptor.");
-    }
+	public <T> String urlFor(Class<T> type, Method method, Object... params) {
+		for (Route route : routes) {
+			if(route.canHandle(type, method)) {
+				String[] names = provider.parameterNamesFor(method);
+				Class<?> parameterType = creator.typeFor(new DefaultResourceMethod(new DefaultResource(type), method));
+				try {
+					Object root = parameterType.getConstructor().newInstance();
+					for (int i = 0; i < names.length; i++) {
+						Method setter = findSetter(parameterType, "set" + Info.capitalize(names[i]));
+						setter.invoke(root, params[i]);
+					}
+					return route.urlFor(root);
+				} catch (Exception e) {
+					throw new VRaptorException("The selected route is invalid for redirection: " + type.getName() + "."
+							+ method.getName(), e);
+				}
+			}
+		}
+		throw new RouteNotFoundException("The selected route is invalid for redirection: " + type.getName() + "."
+				+ method.getName());
+	}
 
-    public List<Route> allRoutes() {
-        return routes;
-    }
+	private Method findSetter(Class<?> parameterType, String methodName) {
+		for (Method m : parameterType.getDeclaredMethods()) {
+			if (m.getName().equals(methodName)) {
+				return m;
+			}
+		}
+		throw new VRaptorException(
+				"Unable to redirect using route as setter method for parameter setting was not created. "
+						+ "Thats probably a bug on your type creator. "
+						+ "If you are using the default type creator, notify VRaptor.");
+	}
 
-    public Proxifier getProxifier() {
-        return proxifier;
-    }
+	public List<Route> allRoutes() {
+		return routes;
+	}
 
 }

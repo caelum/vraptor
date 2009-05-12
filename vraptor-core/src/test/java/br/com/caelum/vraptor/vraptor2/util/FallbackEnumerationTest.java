@@ -43,11 +43,10 @@ public class FallbackEnumerationTest {
 		v1.add("guilherme");
 		Vector<String> v2 = new Vector<String>();
 		v2.add("silveira");
-		Enumeration<String> enumeration = new FallbackEnumeration(v1.elements(),v2.elements());
+		Enumeration<String> enumeration = new FallbackEnumeration(v1.elements(), v2.elements());
 		assertThat(enumeration.hasMoreElements(), is(equalTo(true)));
 		assertThat(enumeration.nextElement(), is(equalTo(v1.get(0))));
 		assertThat(enumeration.hasMoreElements(), is(equalTo(true)));
 		assertThat(enumeration.nextElement(), is(equalTo(v2.get(0))));
 	}
-
 }

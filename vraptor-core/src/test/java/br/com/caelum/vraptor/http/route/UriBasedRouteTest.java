@@ -88,4 +88,5 @@ public class UriBasedRouteTest {
 		return new TypeCreated(new Client(id));
 	}
 
+
 }

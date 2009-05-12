@@ -81,12 +81,25 @@ public class Validations {
         }
     }
 
+    /**
+     * Returns the list of errors.
+     */
     public List<Message> getErrors() {
         return errors;
     }
 
+    /**
+     * Adds a list of errors to the error list.
+     */
     public void and(List<Message> errors) {
         this.errors.addAll(errors);
+    }
+
+    /**
+     * Adds a single error message to the error list.
+     */
+    public void and(Message error) {
+        this.errors.add(error);
     }
 
     public <T> If<T> that(T instance) {

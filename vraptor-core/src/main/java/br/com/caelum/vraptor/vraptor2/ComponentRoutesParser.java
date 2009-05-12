@@ -44,12 +44,12 @@ import org.vraptor.plugin.hibernate.Validate;
 
 import br.com.caelum.vraptor.http.route.PathAnnotationRoutesParser;
 import br.com.caelum.vraptor.http.route.Route;
+import br.com.caelum.vraptor.http.route.RoutesParser;
 import br.com.caelum.vraptor.http.route.UriBasedRoute;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
+import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.Resource;
-import br.com.caelum.vraptor.http.route.RoutesParser;
-import br.com.caelum.vraptor.proxy.Proxifier;
 
 /**
  * A vraptor 2 and 3 compatible routes creator.
@@ -61,16 +61,16 @@ public class ComponentRoutesParser implements RoutesParser {
 
     private final Proxifier proxifier;
 
-    private final PathAnnotationRoutesParser delegate;
-
-    private static final Logger logger = LoggerFactory.getLogger(ComponentRoutesParser.class);
+	private final RoutesParser delegate;
+	
+	private final Logger logger = LoggerFactory.getLogger(ComponentRoutesParser.class);
 
     public ComponentRoutesParser(Proxifier proxifier) {
         this.proxifier = proxifier;
-        delegate = new PathAnnotationRoutesParser(proxifier);
+        this.delegate = new PathAnnotationRoutesParser(proxifier);
     }
 
-    public List<Route> rulesFor(Resource resource) {
+	public List<Route> rulesFor(Resource resource) {
 		List<Route> routes = new ArrayList<Route>();
 		Class<?> type = resource.getType();
         if(!Info.isOldComponent(resource)) {

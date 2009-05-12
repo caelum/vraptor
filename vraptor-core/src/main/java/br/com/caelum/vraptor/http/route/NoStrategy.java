@@ -25,54 +25,33 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package br.com.caelum.vraptor.vraptor2;
+package br.com.caelum.vraptor.http.route;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.regex.Matcher;
 
-import br.com.caelum.vraptor.InterceptionException;
-import br.com.caelum.vraptor.Interceptor;
-import br.com.caelum.vraptor.core.InterceptorStack;
-import br.com.caelum.vraptor.core.MethodInfo;
+import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.validator.ValidationError;
 
-public class ExecuteAndViewInterceptor implements Interceptor {
+/**
+ * A route strategy which is basically invalid in order to force users to not
+ * forget to decide a route strategy.
+ * 
+ * @author guilherme silveira
+ */
+public class NoStrategy implements RouteStrategy {
 
-	private final MethodInfo info;
-
-	public ExecuteAndViewInterceptor(MethodInfo info) {
-		this.info = info;
+	public Resource getResource() {
+		throw new IllegalRouteException("You have created a route, but did not specify any method to be invoked.");
 	}
 
-	public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
-			throws InterceptionException {
-		try {
-			Method reflectionMethod = method.getMethod();
-			Object[] parameters = this.info.getParameters();
-			Object result = reflectionMethod.invoke(resourceInstance, parameters);
-			if (result == null) {
-				this.info.setResult("ok");
-			} else {
-				this.info.setResult(result);
-			}
-			stack.next(method, resourceInstance);
-		} catch (IllegalArgumentException e) {
-			throw new InterceptionException(e);
-		} catch (IllegalAccessException e) {
-			throw new InterceptionException(e);
-		} catch (InvocationTargetException e) {
-			Throwable cause = e.getCause();
-			if (cause instanceof ValidationError) {
-				// fine... already parsed
-			} else {
-				throw new InterceptionException(cause);
-			}
-		}
+	public ResourceMethod getResourceMethod(Matcher m, MutableRequest request) {
+		throw new IllegalRouteException("You have created a route, but did not specify any method to be invoked.");
 	}
 
-	public boolean accepts(ResourceMethod method) {
-		return true;
+	public boolean canHandle(Class<?> type, Method method) {
+		return false;
 	}
 
 }

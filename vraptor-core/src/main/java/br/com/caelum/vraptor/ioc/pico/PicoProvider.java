@@ -40,39 +40,24 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.ComponentRegistry;
-import br.com.caelum.vraptor.proxy.DefaultProxifier;
-import br.com.caelum.vraptor.http.ognl.OgnlParametersProvider;
-import br.com.caelum.vraptor.core.DefaultConverters;
-import br.com.caelum.vraptor.core.DefaultInterceptorStack;
-import br.com.caelum.vraptor.core.DefaultMethodInfo;
-import br.com.caelum.vraptor.core.DefaultRequestExecution;
-import br.com.caelum.vraptor.core.DefaultResult;
+import br.com.caelum.vraptor.core.BaseComponents;
 import br.com.caelum.vraptor.core.Execution;
-import br.com.caelum.vraptor.core.JstlLocalization;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.core.URLParameterExtractorInterceptor;
 import br.com.caelum.vraptor.extra.ForwardToDefaultViewInterceptor;
-import br.com.caelum.vraptor.http.DefaultResourceTranslator;
-import br.com.caelum.vraptor.http.ParanamerNameProvider;
 import br.com.caelum.vraptor.http.TypeCreator;
 import br.com.caelum.vraptor.http.asm.AsmBasedTypeCreator;
 import br.com.caelum.vraptor.http.ognl.EmptyElementsRemoval;
-import br.com.caelum.vraptor.http.route.DefaultRouter;
-import br.com.caelum.vraptor.http.route.NoRoutesConfiguration;
-import br.com.caelum.vraptor.http.route.PathAnnotationRoutesParser;
-import br.com.caelum.vraptor.interceptor.DefaultInterceptorRegistry;
 import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
 import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
 import br.com.caelum.vraptor.interceptor.InterceptorListPriorToExecutionExtractor;
+import br.com.caelum.vraptor.interceptor.OutjectResult;
 import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
 import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
 import br.com.caelum.vraptor.interceptor.multipart.MultipartInterceptor;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
-import br.com.caelum.vraptor.resource.DefaultResourceNotFoundHandler;
-import br.com.caelum.vraptor.validator.DefaultValidator;
 import br.com.caelum.vraptor.view.DefaultLogicResult;
 import br.com.caelum.vraptor.view.DefaultPageResult;
-import br.com.caelum.vraptor.view.DefaultPathResolver;
 import br.com.caelum.vraptor.view.EmptyResult;
 import br.com.caelum.vraptor.view.LogicResult;
 import br.com.caelum.vraptor.view.PageResult;
@@ -81,7 +66,7 @@ import br.com.caelum.vraptor.view.PageResult;
  * Managing internal components by using pico container.<br>
  * There is an extension point through the registerComponents method, which
  * allows one to give a customized container.
- *
+ * 
  * @author Guilherme Silveira
  */
 public class PicoProvider implements ContainerProvider {
@@ -98,8 +83,6 @@ public class PicoProvider implements ContainerProvider {
 		registerComponents(getContainers());
 		containersProvider.init();
 		// TODO: cache
-		// cache(CacheBasedRouter.class, Router.class);
-		// cache(CacheBasedTypeCreator.class, AsmBasedTypeCreator.class);
 	}
 
 	/**
@@ -107,24 +90,26 @@ public class PicoProvider implements ContainerProvider {
 	 */
 	protected void registerComponents(ComponentRegistry container) {
 		logger.debug("Registering base pico container related implementation components");
-		for (Class<?> type : new Class[] { DefaultResourceTranslator.class, DefaultRouter.class,
-				DefaultResourceNotFoundHandler.class, DefaultDirScanner.class,
-				DefaultInterceptorRegistry.class, DefaultPathResolver.class, DefaultProxifier.class, 
-				ParanamerNameProvider.class, DefaultConverters.class, DefaultMethodInfo.class,
-				DefaultInterceptorStack.class, DefaultRequestExecution.class,
-				DefaultResult.class, OgnlParametersProvider.class, DefaultMethodInfo.class, DefaultValidator.class,
-				JstlLocalization.class, NoRoutesConfiguration.class,WebInfClassesScanner.class, PathAnnotationRoutesParser.class, PathAnnotationRoutesParser.class,
-				EmptyResult.class}) {
+		for (Class<?> type : BaseComponents.getApplicationScoped()) {
+			singleInterfaceRegister(type, container);
+		}
+		for (Class<?> type : BaseComponents.getRequestScoped()) {
+			singleInterfaceRegister(type, container);
+		}
+		for (Class<?> type : new Class[] { DefaultDirScanner.class, WebInfClassesScanner.class }) {
 			singleInterfaceRegister(type, container);
 		}
 
 		container.register(ForwardToDefaultViewInterceptor.class, ForwardToDefaultViewInterceptor.class);
 		container.register(LogicResult.class, DefaultLogicResult.class);
 		container.register(PageResult.class, DefaultPageResult.class);
+		container.register(EmptyResult.class, EmptyResult.class);
+		container.register(OutjectResult.class, OutjectResult.class);
 		container.register(TypeCreator.class, AsmBasedTypeCreator.class);
 		container.register(EmptyElementsRemoval.class, EmptyElementsRemoval.class);
 		container.register(ParametersInstantiatorInterceptor.class, ParametersInstantiatorInterceptor.class);
-		container.register(InterceptorListPriorToExecutionExtractor.class, InterceptorListPriorToExecutionExtractor.class);
+		container.register(InterceptorListPriorToExecutionExtractor.class,
+				InterceptorListPriorToExecutionExtractor.class);
 		container.register(MultipartInterceptor.class, MultipartInterceptor.class);
 		container.register(URLParameterExtractorInterceptor.class, URLParameterExtractorInterceptor.class);
 		container.register(ResourceLookupInterceptor.class, ResourceLookupInterceptor.class);

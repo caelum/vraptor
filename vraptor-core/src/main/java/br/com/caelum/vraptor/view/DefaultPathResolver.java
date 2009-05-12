@@ -34,6 +34,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**
@@ -42,6 +43,7 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  *
  * @author Guilherme Silveira
  */
+@RequestScoped
 public class DefaultPathResolver implements PathResolver {
     
     private final HttpServletRequest request;

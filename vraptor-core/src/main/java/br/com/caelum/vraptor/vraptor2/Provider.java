@@ -58,7 +58,6 @@ public class Provider extends PicoProvider {
         container.register(ParameterNameProvider.class, LogicAnnotationWithParanamerParameterNameProvider.class);
         container.register(RequestExecution.class, VRaptor2RequestExecution.class);
         container.register(PageResult.class, ViewsPropertiesPageResult.class);
-        container.register(ExecuteAndViewInterceptor.class, ExecuteAndViewInterceptor.class);
         container.register(HibernateValidatorPluginInterceptor.class,HibernateValidatorPluginInterceptor.class);
         container.register(Converters.class, VRaptor2Converters.class);
         container.register(ValidatorInterceptor.class,ValidatorInterceptor.class);

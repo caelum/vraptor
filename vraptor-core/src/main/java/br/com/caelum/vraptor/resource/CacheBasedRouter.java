@@ -29,17 +29,17 @@
  */
 package br.com.caelum.vraptor.resource;
 
-import br.com.caelum.vraptor.http.ListOfRules;
-import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor.http.route.Router;
-import br.com.caelum.vraptor.http.route.Route;
-import br.com.caelum.vraptor.proxy.Proxifier;
-
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import br.com.caelum.vraptor.http.ListOfRules;
+import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor.http.route.Route;
+import br.com.caelum.vraptor.http.route.Router;
+import br.com.caelum.vraptor.proxy.Proxifier;
 
 /**
  * A cached resource registry that avoids iterating over the entire set just in

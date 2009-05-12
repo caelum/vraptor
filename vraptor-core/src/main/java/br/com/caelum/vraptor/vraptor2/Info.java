@@ -68,4 +68,11 @@ public class Info {
         return string;
     }
 
+	public static String decapitalize(String name) {
+        if (name.length() == 1) {
+            return name.toLowerCase();
+        }
+        return Character.toLowerCase(name.charAt(0)) + name.substring(1);
+	}
+
 }

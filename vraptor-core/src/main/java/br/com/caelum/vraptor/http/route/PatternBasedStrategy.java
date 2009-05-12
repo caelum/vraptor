@@ -28,43 +28,40 @@
 package br.com.caelum.vraptor.http.route;
 
 import java.lang.reflect.Method;
+import java.util.regex.Matcher;
 
 import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**
- * A route for a specific method.
+ * A strategy which returns the resource method based on a url pattern.
  * 
  * @author guilherme silveira
  */
-public class RouteForMethod implements Route {
+public class PatternBasedStrategy implements RouteStrategy {
 
-	private final ResourceMethod method;
+	private final PatternBasedType type;
+	private final PatternBasedType method;
 
-	public RouteForMethod(ResourceMethod method) {
+	public PatternBasedStrategy(PatternBasedType type, PatternBasedType method) {
+		this.type = type;
 		this.method = method;
 	}
 
+	public ResourceMethod getResourceMethod(Matcher m, MutableRequest request) {
+		//if(name.equals("_resource") || name.equals("_method")) {
+			//continue;
+		//}
+		return null;
+	}
+
 	public Resource getResource() {
-		return method.getResource();
-	}
-
-	public ResourceMethod getResourceMethod() {
-		return method;
-	}
-
-	public ResourceMethod matches(String uri, HttpMethod method, MutableRequest request) {
-		return this.method;
-	}
-
-	public String urlFor(Object params) {
 		return null;
 	}
 
 	public boolean canHandle(Class<?> type, Method method) {
-		return type.equals(this.method.getResource().getType()) && method.equals(this.method.getMethod());
+		return false;
 	}
 
 }

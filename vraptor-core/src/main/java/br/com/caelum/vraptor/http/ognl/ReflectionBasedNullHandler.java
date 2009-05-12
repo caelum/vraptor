@@ -39,6 +39,7 @@ import java.util.Map;
 
 import ognl.ObjectNullHandler;
 import ognl.OgnlContext;
+import br.com.caelum.vraptor.http.InvalidParameterException;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.vraptor2.Info;
 
@@ -106,8 +107,7 @@ public class ReflectionBasedNullHandler extends ObjectNullHandler {
             // TODO better
             throw new IllegalArgumentException(e);
         } catch (NoSuchMethodException e) {
-            // TODO better
-            throw new IllegalArgumentException(e);
+            throw new InvalidParameterException("Unable to find the correct constructor",e);
         }
     }
 

@@ -27,115 +27,102 @@
  */
 package br.com.caelum.vraptor.validator;
 
-import br.com.caelum.vraptor.Resource;
-import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.proxy.DefaultProxifier;
-import br.com.caelum.vraptor.test.VRaptorMockery;
-import br.com.caelum.vraptor.view.LogicResult;
-import br.com.caelum.vraptor.view.PageResult;
-import br.com.caelum.vraptor.view.Results;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.instanceOf;
+import java.util.ArrayList;
+
 import org.jmock.Expectations;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
+import br.com.caelum.vraptor.Resource;
+import br.com.caelum.vraptor.test.VRaptorMockery;
+import br.com.caelum.vraptor.view.LogicResult;
+import br.com.caelum.vraptor.view.PageResult;
 
 public class DefaultValidatorTest {
 
-    private VRaptorMockery mockery;
-    private PageResult pageResult;
-    private DefaultValidator validator;
-    private MyLogicResult logicResult;
-    private MyComponent instance;
-    private Result result;
 
-    class MyLogicResult implements LogicResult {
+	private VRaptorMockery mockery;
+	private PageResult result;
+	private DefaultValidator validator;
+	private MyLogicResult logicResult;
+	private MyComponent instance;
 
-        private Class<?> to;
+	class MyLogicResult implements LogicResult {
 
-        public <T> T redirectTo(Class<T> type) {
-            return null;
-        }
+		private Class<?> to;
 
-        public <T> T forwardTo(Class<T> type) {
-            this.to = type;
-            return (T) instance;
-        }
+		public <T> T redirectClientTo(Class<T> type) {
+			return null;
+		}
 
-    }
+		public <T> T redirectServerTo(Class<T> type) {
+			this.to = type;
+			return (T) instance;
+		}
 
-    @Before
-    public void setup() {
-        this.mockery = new VRaptorMockery();
-        this.result = mockery.mock(Result.class);
-        this.pageResult = mockery.mock(PageResult.class);
-        this.logicResult = new MyLogicResult();
-        mockery.checking(new Expectations() {
-            {
-                allowing(result).use(Results.page()); will(returnValue(pageResult));
-                allowing(result).use(Results.logic()); will(returnValue(logicResult));
-            }
-        });
-        this.instance = new MyComponent();
-        this.validator = new DefaultValidator(new DefaultProxifier(), result);
-    }
+	}
 
-    @Test
-    public void redirectsToStandardPageResultByDefault() {
-        mockery.checking(new Expectations() {
-            {
-                one(result).include((String) with(an(String.class)), with(an(ArrayList.class)));
-                one(pageResult).forward("invalid");
-            }
-        });
-        try {
-            validator.checking(new Validations() {
-                {
-                    that("", "", false);
-                }
-            });
-            Assert.fail("should stop flow");
-        } catch (ValidationError e) {
-            // ok, shoul still assert satisfied
-            mockery.assertIsSatisfied();
-        }
-    }
+	@Before
+	public void setup() {
+		this.mockery = new VRaptorMockery();
+		this.result = mockery.mock(PageResult.class);
+		this.logicResult = new MyLogicResult();
+		this.instance = new MyComponent();
+		this.validator = new DefaultValidator(result, logicResult);
+	}
 
+	@Test
+	public void redirectsToStandardPageResultByDefault() {
+		mockery.checking(new Expectations() {
+			{
+				one(result).include((String) with(an(String.class)), with(an(ArrayList.class)));
+				one(result).forward("invalid");
+			}
+		});
+		try {
+			validator.checking(new Validations() {
+				{
+					that("", "", false);
+				}
+			});
+			Assert.fail("should stop flow");
+		} catch (ValidationError e) {
+			// ok, shoul still assert satisfied
+			mockery.assertIsSatisfied();
+		}
+	}
 
-    @Test
-    public void redirectsToCustomOnErrorPage() {
-        mockery.checking(new Expectations() {
-            {
-                one(result).include(with(equal("errors")), with(hasItem(instanceOf(Message.class))));
-            }
-        });
+	@Test
+	public void redirectsToCustomOnErrorPage() {
+		try {
+			validator.onError().goTo(MyComponent.class).logic();
+			mockery.checking(new Expectations() {
+				{
+					one(result).include((String)with(an(String.class)), with(an(ArrayList.class)));
+				}
+			});
+			validator.checking(new Validations() {
+				{
+					that("", "", false);
+				}
+			});
+			Assert.fail("should stop flow");
+		} catch (ValidationError e) {
+			// ok, shoul still assert satisfied
+			Assert.assertEquals(this.logicResult.to, MyComponent.class);
+			Assert.assertEquals(this.instance.run, true);
+			mockery.assertIsSatisfied();
+		}
+	}
 
-        try {
-            validator.onError().goTo(MyComponent.class).logic();
-            validator.checking(new Validations() {
-                {
-                    that("", "", false);
-                }
-            });
-            Assert.fail("should stop flow");
-        } catch (ValidationError e) {
-            // ok, shoul still assert satisfied
-            Assert.assertEquals(this.logicResult.to, MyComponent.class);
-            Assert.assertEquals(this.instance.run, true);
-            mockery.assertIsSatisfied();
-        }
-    }
+	@Resource
+	public static class MyComponent {
+		private boolean run;
 
-    @Resource
-    public static class MyComponent {
-        private boolean run;
-
-        public void logic() {
-            this.run = true;
-        }
-    }
+		public void logic() {
+			this.run = true;
+		}
+	}
 
 }

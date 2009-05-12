@@ -28,43 +28,66 @@
 package br.com.caelum.vraptor.http.route;
 
 import java.lang.reflect.Method;
+import java.util.regex.Matcher;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor.resource.HttpMethod;
+import br.com.caelum.vraptor.resource.DefaultResource;
+import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**
- * A route for a specific method.
+ * A route strategy which invokes a fixed type's method.
  * 
  * @author guilherme silveira
  */
-public class RouteForMethod implements Route {
+public class FixedMethodStrategy implements RouteStrategy {
+	
+	private final Logger logger = LoggerFactory.getLogger(FixedMethodStrategy.class);
 
-	private final ResourceMethod method;
+	private final Class<?> type;
+	private final Method method;
+	private final ResourceMethod resourceMethod;
 
-	public RouteForMethod(ResourceMethod method) {
+	public FixedMethodStrategy(Class<?> type, Method method) {
+		this.type = type;
 		this.method = method;
+		this.resourceMethod = new DefaultResourceMethod(new DefaultResource(type), method);
+	}
+	
+	public ResourceMethod getResourceMethod(Matcher m, MutableRequest request) {
+		for (int i = 1; i <= m.groupCount(); i++) {
+			// String name = parameters.get(i - 1);
+			String name = "";
+			if(name.equals("_resource") || name.equals("_method")) {
+				continue;
+			}
+			if(!isInteger(name)) {
+				continue;
+			}
+			request.setParameter(name, m.group(i));
+		}
+		return this.resourceMethod;
+	}
+
+	private boolean isInteger(String name) {
+		for(int i=0;i<name.length();i++) {
+			if(Character.isDigit(name.charAt(i))) {
+				return false;
+			}
+		}
+		return name.length()>0;
 	}
 
 	public Resource getResource() {
-		return method.getResource();
-	}
-
-	public ResourceMethod getResourceMethod() {
-		return method;
-	}
-
-	public ResourceMethod matches(String uri, HttpMethod method, MutableRequest request) {
-		return this.method;
-	}
-
-	public String urlFor(Object params) {
-		return null;
+		return this.resourceMethod.getResource();
 	}
 
 	public boolean canHandle(Class<?> type, Method method) {
-		return type.equals(this.method.getResource().getType()) && method.equals(this.method.getMethod());
+		return type.equals(this.resourceMethod.getResource().getType()) && method.equals(this.resourceMethod.getMethod());
 	}
 
 }

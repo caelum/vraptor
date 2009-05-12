@@ -102,7 +102,8 @@ public class FixedMethodStrategy implements Route {
 	}
 
 	public ResourceMethod matches(String uri, HttpMethod method, MutableRequest request) {
-		return null;
+		boolean acceptMethod = this.methods.isEmpty() || this.methods.contains(method);
+		return originalUri.equals(uri) && acceptMethod ? this.resourceMethod : null;
 	}
 
 	public String urlFor(Object params) {

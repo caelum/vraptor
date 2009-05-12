@@ -30,7 +30,6 @@ package br.com.caelum.vraptor.http.route;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
 
 import java.lang.reflect.Method;
 
@@ -55,7 +54,7 @@ import br.com.caelum.vraptor.test.VRaptorMockery;
 public class DefaultRouterTest {
 
 	private DefaultProxifier proxifier;
-	private Router router;
+	private DefaultRouter router;
 	private VRaptorMockery mockery;
 	private VRaptorRequest request;
 	private ParameterNameProvider provider;
@@ -114,6 +113,21 @@ public class DefaultRouterTest {
 		mockery.assertIsSatisfied();
 	}
 	
+
+	@Test
+	public void passesTheWebMethod() throws SecurityException, NoSuchMethodException {
+		final HttpMethod delete = HttpMethod.DELETE;
+		final Route route = mockery.mock(Route.class);
+		mockery.checking(new Expectations() {{
+			one(route).matches("/clients/add", delete, request);
+			will(returnValue(method));
+			one(route).getResource(); will(returnValue(null));
+		}});
+		router.add(route);
+		ResourceMethod found = router.parse("/clients/add", delete, request);
+		assertThat(found, is(equalTo(method)));
+		mockery.assertIsSatisfied();
+	}
 	@Test
 	public void usesTheFirstRegisteredRuleMatchingThePattern() throws SecurityException, NoSuchMethodException {
 		final Route route = mockery.mock(Route.class);
@@ -138,70 +152,6 @@ public class DefaultRouterTest {
 	@SuppressWarnings("unchecked")
 	private Method method(String name, Class... types) throws SecurityException, NoSuchMethodException {
 		return MyControl.class.getDeclaredMethod(name, types);
-	}
-
-	@Test
-	public void acceptsAnHttpMethodLimitedMappingRule() throws NoSuchMethodException {
-		new Rules(router) {
-			public void routes() {
-				routeFor("/clients/add").with(HttpMethod.POST).is(MyControl.class).add(null);
-			}
-		};
-		assertThat(router.parse("/clients/add", HttpMethod.POST, request), is(VRaptorMatchers.resourceMethod(method(
-				"add", Dog.class))));
-		mockery.assertIsSatisfied();
-	}
-
-	@Test
-	public void acceptsAnHttpMethodLimitedMappingRuleWithBothMethods() throws NoSuchMethodException {
-		new Rules(router) {
-			public void routes() {
-				routeFor("/clients/add").with(HttpMethod.POST).with(HttpMethod.GET).is(MyControl.class).add(null);
-			}
-		};
-		assertThat(router.parse("/clients/add", HttpMethod.POST, request), is(VRaptorMatchers.resourceMethod(method(
-				"add", Dog.class))));
-		assertThat(router.parse("/clients/add", HttpMethod.GET, request), is(VRaptorMatchers.resourceMethod(method(
-				"add", Dog.class))));
-		mockery.assertIsSatisfied();
-	}
-
-	@Test
-	public void ignoresAnHttpMethodLimitedMappingRule() throws NoSuchMethodException {
-		new Rules(router) {
-			public void routes() {
-				routeFor("/clients/add").with(HttpMethod.GET).is(MyControl.class).add(null);
-			}
-		};
-		assertThat(router.parse("/clients/add", HttpMethod.POST, request), is(nullValue()));
-		mockery.assertIsSatisfied();
-	}
-
-	@Test
-	public void registerExtraParametersFromAcessedUrl() throws SecurityException, NoSuchMethodException {
-		new Rules(router) {
-			public void routes() {
-				routeFor("/clients/{dog.id}").is(MyControl.class).show(null);
-			}
-		};
-		ResourceMethod method = router.parse("/clients/45", HttpMethod.POST, request);
-		assertThat(request.getParameter("dog.id"), is(equalTo("45")));
-		assertThat(method, is(VRaptorMatchers.resourceMethod(method("show", Dog.class))));
-		mockery.assertIsSatisfied();
-	}
-
-	@Test
-	public void worksWithBasicRegexEvaluation() throws SecurityException, NoSuchMethodException {
-		new Rules(router) {
-			public void routes() {
-				{
-					routeFor("/clients*").with(HttpMethod.POST).is(MyControl.class).unknownMethod();
-				}
-			}
-		};
-		assertThat(router.parse("/clientsWhatever", HttpMethod.POST, request), is(VRaptorMatchers
-				.resourceMethod(method("unknownMethod"))));
-		mockery.assertIsSatisfied();
 	}
 
 	@Test

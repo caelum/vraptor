@@ -27,16 +27,16 @@
  */
 package br.com.caelum.vraptor.http.route;
 
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.List;
+
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.Resource;
-
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * The default parser routes creator uses the path annotation to create rules.
@@ -75,7 +75,7 @@ public class PathAnnotationRoutesParser implements RoutesParser {
                     }
                 }
                 rule.is(baseType, javaMethod);
-                routes.add(rule);
+                routes.add(rule.build());
             }
         }
         registerRulesFor(actualType.getSuperclass(), baseType, routes);

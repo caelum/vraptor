@@ -37,6 +37,7 @@ import br.com.caelum.vraptor.http.route.DefaultRouterTest.Dog;
 import br.com.caelum.vraptor.http.route.DefaultRouterTest.MyControl;
 import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
 import br.com.caelum.vraptor.resource.HttpMethod;
+import br.com.caelum.vraptor.resource.ResourceMethod;
 
 public class FixedMethodStrategyTest {
 
@@ -108,6 +109,34 @@ public class FixedMethodStrategyTest {
 		assertThat(router.parse("/clients/add", HttpMethod.POST, request), is(VRaptorMatchers.resourceMethod(method(
 				"add", Dog.class))));
 
+	}
+
+
+	@Test
+	public void registerExtraParametersFromAcessedUrl() throws SecurityException, NoSuchMethodException {
+		new Rules(router) {
+			public void routes() {
+				routeFor("/clients/{dog.id}").is(MyControl.class).show(null);
+			}
+		};
+		ResourceMethod method = router.parse("/clients/45", HttpMethod.POST, request);
+		assertThat(request.getParameter("dog.id"), is(equalTo("45")));
+		assertThat(method, is(VRaptorMatchers.resourceMethod(method("show", Dog.class))));
+		mockery.assertIsSatisfied();
+	}
+
+	@Test
+	public void worksWithBasicRegexEvaluation() throws SecurityException, NoSuchMethodException {
+		new Rules(router) {
+			public void routes() {
+				{
+					routeFor("/clients*").with(HttpMethod.POST).is(MyControl.class).unknownMethod();
+				}
+			}
+		};
+		assertThat(router.parse("/clientsWhatever", HttpMethod.POST, request), is(VRaptorMatchers
+				.resourceMethod(method("unknownMethod"))));
+		mockery.assertIsSatisfied();
 	}
 
 }

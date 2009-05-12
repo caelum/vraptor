@@ -90,14 +90,6 @@ public class RouteBuilder {
 		return (this.supportedMethods.isEmpty() || this.supportedMethods.contains(method));
 	}
 
-	@Override
-    public String toString() {
-        if (supportedMethods.isEmpty()) {
-            return String.format("<< Route: %s => %s >>", originalUri, this.strategy.toString());
-        }
-        return String.format("<< Route: %s %s=> %s >>", originalUri, supportedMethods, this.strategy.toString());
-    }
-
 	private ResourceMethod uriMatches(String uri, MutableRequest request) {
 		Matcher m = pattern.matcher(uri);
 		if (!m.matches()) {
@@ -133,5 +125,12 @@ public class RouteBuilder {
 	public Route build() {
 		return strategy;
 	}
+
+    public String toString() {
+        if (supportedMethods.isEmpty()) {
+            return String.format("<< Route: %s => %s >>", originalUri, this.strategy.toString());
+        }
+        return String.format("<< Route: %s %s=> %s >>", originalUri, supportedMethods, this.strategy.toString());
+    }
 
 }

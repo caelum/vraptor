@@ -32,8 +32,6 @@ import static org.hamcrest.Matchers.is;
 
 import org.junit.Test;
 
-import br.com.caelum.vraptor.http.route.DefaultRouterTest.Dog;
-import br.com.caelum.vraptor.http.route.DefaultRouterTest.MyControl;
 import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
 import br.com.caelum.vraptor.resource.HttpMethod;
 
@@ -64,6 +62,34 @@ public class RouteBuilderTest {
 		assertThat(router.parse("/clients/add", HttpMethod.GET, request), is(VRaptorMatchers.resourceMethod(method(
 				"add", Dog.class))));
 		mockery.assertIsSatisfied();
+	}
+
+
+	class Dog {
+		private Long id;
+
+		public void setId(Long id) {
+			this.id = id;
+		}
+
+		public Long getId() {
+			return id;
+		}
+	}
+
+	@br.com.caelum.vraptor.Resource
+	public static class MyControl {
+		public void add(Dog object) {
+		}
+
+		public void unknownMethod() {
+		}
+
+		public void list() {
+		}
+
+		public void show(Dog dog) {
+		}
 	}
 
 }

@@ -124,6 +124,68 @@ public class DefaultRouterTest {
 	}
 
 
+
+	@Test
+	public void acceptsAnHttpMethodLimitedMappingRule() throws NoSuchMethodException {
+		new Rules(router) {
+			public void routes() {
+				routeFor("/clients/add").with(HttpMethod.POST).is(MyControl.class).add(null);
+			}
+		};
+		assertThat(router.parse("/clients/add", HttpMethod.POST, request), is(VRaptorMatchers.resourceMethod(method(
+				"add", Dog.class))));
+		mockery.assertIsSatisfied();
+	}
+
+	private Method method(String methodName, Class... params) throws SecurityException, NoSuchMethodException {
+		return MyControl.class.getDeclaredMethod(methodName, params);
+	}
+
+
+	@Test
+	public void acceptsAnHttpMethodLimitedMappingRuleWithBothMethods() throws NoSuchMethodException {
+		new Rules(router) {
+			public void routes() {
+				routeFor("/clients/add").with(HttpMethod.POST).with(HttpMethod.GET).is(MyControl.class).add(null);
+			}
+		};
+		assertThat(router.parse("/clients/add", HttpMethod.POST, request), is(VRaptorMatchers.resourceMethod(method(
+				"add", Dog.class))));
+		assertThat(router.parse("/clients/add", HttpMethod.GET, request), is(VRaptorMatchers.resourceMethod(method(
+				"add", Dog.class))));
+		mockery.assertIsSatisfied();
+	}
+
+
+	class Dog {
+		private Long id;
+
+		public void setId(Long id) {
+			this.id = id;
+		}
+
+		public Long getId() {
+			return id;
+		}
+	}
+
+	@br.com.caelum.vraptor.Resource
+	public static class MyControl {
+		public void add(Dog object) {
+		}
+
+		public void unknownMethod() {
+		}
+
+		public void list() {
+		}
+
+		public void show(Dog dog) {
+		}
+	}
+
+	
+	
 	
 	
 

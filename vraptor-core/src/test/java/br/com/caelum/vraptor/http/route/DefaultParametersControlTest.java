@@ -64,14 +64,14 @@ public class DefaultParametersControlTest {
 	@Test
 	public void worksAsRegexWhenUsingParameters() throws SecurityException, NoSuchMethodException {
 		DefaultParametersControl control = new DefaultParametersControl("/clients/{dog.id}");
-		assertThat(control.match("/clients/15"), is(equalTo(true)));
+		assertThat(control.matches("/clients/15"), is(equalTo(true)));
 		mockery.assertIsSatisfied();
 	}
 
 	@Test
 	public void worksWithBasicRegexEvaluation() throws SecurityException, NoSuchMethodException {
 		DefaultParametersControl control = new DefaultParametersControl("/clients.*");
-		assertThat(control.match("/clientsWhatever"), is(equalTo(true)));
+		assertThat(control.matches("/clientsWhatever"), is(equalTo(true)));
 		mockery.assertIsSatisfied();
 	}
 

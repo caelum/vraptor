@@ -34,7 +34,7 @@ public interface ParametersControl {
 	/**
 	 * wether the uri matches this uri
 	 */
-	boolean match(String uri);
+	boolean matches(String uri);
 
 	/**
 	 * creates a uri based on those parameter values

@@ -27,7 +27,54 @@
  */
 package br.com.caelum.vraptor.http.route;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor.test.VRaptorMockery;
+
 
 public class PatternBasedStrategyTest {
+	
+
+	private VRaptorMockery mockery;
+	private MutableRequest request;
+	private ParametersControl control;
+
+	@Before
+	public void setup() {
+		this.mockery = new VRaptorMockery();
+		this.request = mockery.mock(MutableRequest.class);
+		this.control = mockery.mock(ParametersControl.class);
+	}
+	
+	@Test
+	public void canHandleTypesWhichAreAvailableThroughItsPattern() throws SecurityException, NoSuchMethodException {
+		PatternBasedStrategy strategy = new PatternBasedStrategy(new PatternBasedType(MyComponent.class.getPackage().getName()+".{_logic}"), new PatternBasedType("list"), null);
+		assertThat(strategy.canHandle(MyComponent.class, MyComponent.class.getDeclaredMethod("list")), is(equalTo(true)));
+	}
+	
+	@Test
+	public void cannotHandleTypeWhenItsAnotherType() throws SecurityException, NoSuchMethodException {
+		PatternBasedStrategy strategy = new PatternBasedStrategy(new PatternBasedType("Another"), new PatternBasedType("list"), null);
+		assertThat(strategy.canHandle(MyComponent.class, MyComponent.class.getDeclaredMethod("list")), is(equalTo(false)));
+	}
+
+	@Test
+	public void cannotHandleTypeWhenItsAnotherMethod() throws SecurityException, NoSuchMethodException {
+		PatternBasedStrategy strategy = new PatternBasedStrategy(new PatternBasedType(MyComponent.class.getName()), new PatternBasedType("other"), null);
+		assertThat(strategy.canHandle(MyComponent.class, MyComponent.class.getDeclaredMethod("list")), is(equalTo(false)));
+	}
+	
+	class MyComponent {
+		public void list() {
+		}
+		public void other() {
+		}
+	}
 
 }

@@ -66,7 +66,7 @@ public class FixedMethodStrategy implements Route {
 
 	public ResourceMethod matches(String uri, HttpMethod method, MutableRequest request) {
 		boolean acceptMethod = this.methods.isEmpty() || this.methods.contains(method);
-		boolean uriMatches = parameters.match(uri);
+		boolean uriMatches = parameters.matches(uri);
 		return uriMatches && acceptMethod ? this.resourceMethod : null;
 	}
 

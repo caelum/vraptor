@@ -37,23 +37,22 @@ import br.com.caelum.vraptor.http.MutableRequest;
 public class DefaultParametersControl implements ParametersControl {
 
 	private final List<String> parameters = new ArrayList<String>();
-//	private final String patternUri;
 	private final Pattern pattern;
-	private final String originalUri;
-
-	public DefaultParametersControl(String uri) {
-		this.originalUri = uri;
+	private final String originalPattern;
+	
+	public DefaultParametersControl(String originalPattern) {
+		this.originalPattern = originalPattern;
 		String finalUri = "";
 		String patternUri = "";
 		String paramName = "";
 		// not using stringbuffer because this is only run in startup
 		boolean ignore = false;
-		for (int i = 0; i < uri.length(); i++) {
-			if (uri.charAt(i) == '{') {
+		for (int i = 0; i < originalPattern.length(); i++) {
+			if (originalPattern.charAt(i) == '{') {
 				ignore = true;
 				patternUri += "(";
 				continue;
-			} else if (uri.charAt(i) == '}') {
+			} else if (originalPattern.charAt(i) == '}') {
 				ignore = false;
 				finalUri += ".*";
 				patternUri += ".*)";
@@ -61,21 +60,21 @@ public class DefaultParametersControl implements ParametersControl {
 				paramName = "";
 				continue;
 			} else if (!ignore) {
-				patternUri += uri.charAt(i);
-				finalUri += uri.charAt(i);
+				patternUri += originalPattern.charAt(i);
+				finalUri += originalPattern.charAt(i);
 			} else {
-				paramName += uri.charAt(i);
+				paramName += originalPattern.charAt(i);
 			}
 		}
 		if(ignore) {
-			throw new IllegalRouteException("Illegal route contains invalid pattern: " + originalUri);
+			throw new IllegalRouteException("Illegal route contains invalid pattern: " + this.originalPattern);
 		}
 //		this.patternUri = patternUri;
 		this.pattern = Pattern.compile(patternUri);
 	}
 
 	public String fillUri(Object params) {
-		String base = originalUri.replaceAll("\\.\\*", "");
+		String base = originalPattern.replaceAll("\\.\\*", "");
 		for (String key : parameters) {
 			Object result = new Evaluator().get(params, key);
 			base = base.replace("{" + key + "}", result==null? "" : result.toString());
@@ -83,12 +82,8 @@ public class DefaultParametersControl implements ParametersControl {
 		return base;
 	}
 
-	public boolean match(String uri) {
-		Matcher m = pattern.matcher(uri);
-		if (!m.matches()) {
-			return false;
-		}
-		return true;
+	public boolean matches(String uri) {
+		return pattern.matcher(uri).matches();
 	}
 
 	public void fillIntoRequest(String uri, MutableRequest request) {

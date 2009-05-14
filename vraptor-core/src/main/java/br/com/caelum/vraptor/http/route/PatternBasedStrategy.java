@@ -31,6 +31,8 @@ import java.lang.reflect.Method;
 import java.util.Set;
 
 import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor.resource.DefaultResource;
+import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceMethod;
@@ -42,21 +44,36 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  */
 public class PatternBasedStrategy implements Route {
 
-//	private final PatternBasedType type;
-//	private final PatternBasedType method;
-//	private final Set<HttpMethod> methods;
+	private final PatternBasedType type;
+	private final PatternBasedType method;
+	private final Set<HttpMethod> methods;
+	private final ParametersControl control;
 
-	public PatternBasedStrategy(PatternBasedType type, PatternBasedType method, Set<HttpMethod> methods) {
-//		this.type = type;
-//		this.method = method;
-//		this.methods = methods;
+	public PatternBasedStrategy(PatternBasedType type, PatternBasedType method, Set<HttpMethod> methods, ParametersControl control) {
+		this.type = type;
+		this.method = method;
+		this.methods = methods;
+		this.control = control;
 	}
 
 	public boolean canHandle(Class<?> type, Method method) {
-		return false;
+		return this.type.matches(type.getName()) && this.method.matches(method.getName());
 	}
 
 	public ResourceMethod matches(String uri, HttpMethod method, MutableRequest request) {
+		boolean acceptMethod = this.methods.isEmpty() || this.methods.contains(method);
+		boolean acceptUri = control.matches(uri);
+		if(acceptUri && acceptMethod){
+			String webLogic = request.getParameter("_webLogic");
+			String webMethod = request.getParameter("_webMethod");
+			DefaultResource resource = new DefaultResource(Class.forName(type.apply("webLogic",webLogic)));
+			Method resourceMethod = method(resource.getType(), this.method.apply("webMethod", webMethod));
+			return new DefaultResourceMethod(resource, resourceMethod);
+		}
+		return null;
+	}
+
+	private Method method(Class<?> type, String methodName) {
 		return null;
 	}
 

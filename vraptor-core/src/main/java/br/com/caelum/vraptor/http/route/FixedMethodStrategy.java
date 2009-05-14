@@ -28,14 +28,12 @@
 package br.com.caelum.vraptor.http.route;
 
 import java.lang.reflect.Method;
-import java.util.regex.Matcher;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.Set;
 
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.resource.DefaultResource;
 import br.com.caelum.vraptor.resource.DefaultResourceMethod;
+import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
@@ -44,50 +42,36 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  * 
  * @author guilherme silveira
  */
-public class FixedMethodStrategy implements RouteStrategy {
+public class FixedMethodStrategy implements Route {
 	
-	private final Logger logger = LoggerFactory.getLogger(FixedMethodStrategy.class);
-
-	private final Class<?> type;
-	private final Method method;
 	private final ResourceMethod resourceMethod;
 
-	public FixedMethodStrategy(Class<?> type, Method method) {
-		this.type = type;
-		this.method = method;
+	private final Set<HttpMethod> methods;
+
+	private final ParametersControl parameters;
+
+	public FixedMethodStrategy(String originalUri, Class<?> type, Method method, Set<HttpMethod> methods, ParametersControl control) {
+		this.methods = methods;
+		this.parameters = control;
 		this.resourceMethod = new DefaultResourceMethod(new DefaultResource(type), method);
 	}
 	
-	public ResourceMethod getResourceMethod(Matcher m, MutableRequest request) {
-		for (int i = 1; i <= m.groupCount(); i++) {
-			// String name = parameters.get(i - 1);
-			String name = "";
-			if(name.equals("_resource") || name.equals("_method")) {
-				continue;
-			}
-			if(!isInteger(name)) {
-				continue;
-			}
-			request.setParameter(name, m.group(i));
-		}
-		return this.resourceMethod;
-	}
-
-	private boolean isInteger(String name) {
-		for(int i=0;i<name.length();i++) {
-			if(Character.isDigit(name.charAt(i))) {
-				return false;
-			}
-		}
-		return name.length()>0;
-	}
-
 	public Resource getResource() {
 		return this.resourceMethod.getResource();
 	}
 
 	public boolean canHandle(Class<?> type, Method method) {
 		return type.equals(this.resourceMethod.getResource().getType()) && method.equals(this.resourceMethod.getMethod());
+	}
+
+	public ResourceMethod matches(String uri, HttpMethod method, MutableRequest request) {
+		boolean acceptMethod = this.methods.isEmpty() || this.methods.contains(method);
+		boolean uriMatches = parameters.match(uri);
+		return uriMatches && acceptMethod ? this.resourceMethod : null;
+	}
+
+	public String urlFor(Object params) {
+		return parameters.fillUri(params);
 	}
 
 }

@@ -27,25 +27,40 @@
  */
 package br.com.caelum.vraptor.http.route;
 
-import java.lang.reflect.Method;
-import java.util.regex.Matcher;
+import org.jmock.Expectations;
+import org.junit.Before;
+import org.junit.Test;
 
-import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor.resource.Resource;
-import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.proxy.Proxifier;
+import br.com.caelum.vraptor.test.VRaptorMockery;
 
-/**
- * A route strategy. Because the same route might be used for different methods
- * and resources, methods depend on the url being acessed.
- * 
- * @author guilherme silveira
- */
-public interface RouteStrategy {
+public class RulesTest {
 
-	ResourceMethod getResourceMethod(Matcher m, MutableRequest request);
+	private VRaptorMockery mockery;
+	private Router router;
+	private Proxifier proxifier;
 
-	Resource getResource();
+	@Before
+	public void setup() {
+		this.mockery = new VRaptorMockery();
+		this.router = mockery.mock(Router.class);
+		this.proxifier = mockery.mock(Proxifier.class);
+		mockery.checking(new Expectations() {
+			{
+				one(router).getProxifier();
+				will(returnValue(proxifier));
+			}
+		});
+	}
 
-	boolean canHandle(Class<?> type, Method method);
+	@Test(expected=IllegalRouteException.class)
+	public void allowsAdditionOfRouteBuildersByDefaultWithNoStrategy() {
+		Rules r = new Rules(router) {
+			public void routes() {
+				routeFor("");
+			}
+		};
+		mockery.assertIsSatisfied();
+	}
 
 }

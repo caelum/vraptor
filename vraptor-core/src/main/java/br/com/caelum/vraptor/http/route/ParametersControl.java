@@ -27,44 +27,23 @@
  */
 package br.com.caelum.vraptor.http.route;
 
-import java.lang.reflect.Method;
-
 import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor.resource.HttpMethod;
-import br.com.caelum.vraptor.resource.Resource;
-import br.com.caelum.vraptor.resource.ResourceMethod;
 
-/**
- * A route for a specific method.
- * 
- * @author guilherme silveira
- */
-public class RouteForMethod implements Route {
+public interface ParametersControl {
 
-	private final ResourceMethod method;
+	/**
+	 * wether the uri matches this uri
+	 */
+	boolean match(String uri);
 
-	public RouteForMethod(ResourceMethod method) {
-		this.method = method;
-	}
+	/**
+	 * creates a uri based on those parameter values
+	 */
+	String fillUri(Object params);
 
-	public Resource getResource() {
-		return method.getResource();
-	}
-
-	public ResourceMethod getResourceMethod() {
-		return method;
-	}
-
-	public ResourceMethod matches(String uri, HttpMethod method, MutableRequest request) {
-		return this.method;
-	}
-
-	public String urlFor(Object params) {
-		return null;
-	}
-
-	public boolean canHandle(Class<?> type, Method method) {
-		return type.equals(this.method.getResource().getType()) && method.equals(this.method.getMethod());
-	}
+	/**
+	 * Inserts parameters extracted from the uri into the request parameters.
+	 */
+	void fillIntoRequest(String uri, MutableRequest request);
 
 }

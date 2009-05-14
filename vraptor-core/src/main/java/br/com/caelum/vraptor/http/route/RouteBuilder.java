@@ -28,24 +28,16 @@
 package br.com.caelum.vraptor.http.route;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import br.com.caelum.vraptor.eval.Evaluator;
-import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.proxy.MethodInvocation;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.SuperMethod;
 import br.com.caelum.vraptor.resource.HttpMethod;
-import br.com.caelum.vraptor.resource.Resource;
-import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**
  * Should be used in one of two ways, either configure the type and invoke the
@@ -53,56 +45,24 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  *
  * @author Guilherme Silveira
  */
-public class UriBasedRoute implements Route {
+public class RouteBuilder {
     private final Set<HttpMethod> supportedMethods = new HashSet<HttpMethod>();
 
     private final Proxifier proxifier;
-	private final Logger logger = LoggerFactory.getLogger(UriBasedRoute.class);
-
-    private final Pattern pattern;
-
-	private final List<String> parameters = new ArrayList<String>();
-
-	private final String patternUri;
+	private final Logger logger = LoggerFactory.getLogger(RouteBuilder.class);
 
 	private final String originalUri;
 	
-	private RouteStrategy strategy = new NoStrategy();
+	private Route strategy = new NoStrategy();
 
-	public UriBasedRoute(Proxifier proxifier, String uri) {
+	public RouteBuilder(Proxifier proxifier, String uri) {
         this.proxifier = proxifier;
 		uri = uri.replaceAll("\\*", ".\\*");
 		this.originalUri = uri;
-		String finalUri = "";
-		String patternUri = "";
-		String paramName = "";
-		// not using stringbuffer because this is only run in startup
-		boolean ignore = false;
-		for (int i = 0; i < uri.length(); i++) {
-			if (uri.charAt(i) == '{') {
-				ignore = true;
-				patternUri += "(";
-				continue;
-			} else if (uri.charAt(i) == '}') {
-				ignore = false;
-				finalUri += ".*";
-				patternUri += ".*)";
-				parameters.add(paramName);
-				paramName = "";
-				continue;
-			} else if (!ignore) {
-				patternUri += uri.charAt(i);
-				finalUri += uri.charAt(i);
-			} else {
-				paramName += uri.charAt(i);
-			}
-		}
-		this.patternUri = patternUri;
-		this.pattern = Pattern.compile(patternUri);
 	}
 
 	public <T> T is(final Class<T> type) {
-        return proxifier.proxify(type, new MethodInvocation<T>() {
+        MethodInvocation<T> handler = new MethodInvocation<T>() {
             public Object intercept(Object proxy, Method method, Object[] args, SuperMethod superMethod) {
 				boolean alreadySetTheStrategy = !strategy.getClass().equals(NoStrategy.class);
 				if (alreadySetTheStrategy) {
@@ -112,59 +72,17 @@ public class UriBasedRoute implements Route {
                 is(type, method);
                 return null;
             }
-        });
+        };
+		return proxifier.proxify(type, handler);
     }
 
 	public void is(PatternBasedType type, PatternBasedType method) {
-		this.strategy = new PatternBasedStrategy(type, method);
-	}
-
-	public ResourceMethod matches(String uri, HttpMethod method, MutableRequest request) {
-		if (!methodMatches(method)) {
-			return null;
-		}
-		return uriMatches(uri, request);
-	}
-
-	private boolean methodMatches(HttpMethod method) {
-		return (this.supportedMethods.isEmpty() || this.supportedMethods.contains(method));
-	}
-
-	@Override
-    public String toString() {
-        if (supportedMethods.isEmpty()) {
-            return String.format("<< Route: %s => %s >>", originalUri, this.strategy.toString());
-        }
-        return String.format("<< Route: %s %s=> %s >>", originalUri, supportedMethods, this.strategy.toString());
-    }
-
-	private ResourceMethod uriMatches(String uri, MutableRequest request) {
-		Matcher m = pattern.matcher(uri);
-		if (!m.matches()) {
-			return null;
-		}
-		for (int i = 1; i <= m.groupCount(); i++) {
-			String name = parameters.get(i - 1);
-			if(name.equals("_resource") || name.equals("_method")) {
-				continue;
-			}
-			request.setParameter(name, m.group(i));
-		}
-		return this.strategy.getResourceMethod(m, request);
+		this.strategy = new PatternBasedStrategy(type, method, this.supportedMethods);
 	}
 
 	public void is(Class<?> type, Method method) {
-		this.strategy = new FixedMethodStrategy(type, method);
-		logger.debug("created rule for path " + patternUri + " --> " + type.getName() + "." + method.getName());
-	}
-
-	public String urlFor(Object params) {
-		String base = originalUri.replaceAll("\\.\\*", "");
-		for (String key : parameters) {
-			Object result = new Evaluator().get(params, key);
-			base = base.replace("{" + key + "}", result==null? "" : result.toString());
-		}
-		return base;
+		this.strategy = new FixedMethodStrategy(originalUri, type, method, this.supportedMethods, new DefaultParametersControl(originalUri));
+		logger.debug("created rule for path " + originalUri + " --> " + type.getName() + "." + method.getName());
 	}
 
 	/**
@@ -174,17 +92,23 @@ public class UriBasedRoute implements Route {
 	 * @param method
 	 * @return
 	 */
-	public UriBasedRoute with(HttpMethod method) {
+	public RouteBuilder with(HttpMethod method) {
 		this.supportedMethods.add(method);
 		return this;
 	}
 
-	public Resource getResource() {
-		return null;
+	public Route build() {
+		if(strategy instanceof NoStrategy) {
+			throw new IllegalRouteException("You have created a route, but did not specify any method to be invoked: " + originalUri);
+		}
+		return strategy;
 	}
 
-	public boolean canHandle(Class<?> type, Method method) {
-		return this.strategy.canHandle(type, method);
-	}
+    public String toString() {
+        if (supportedMethods.isEmpty()) {
+            return String.format("<< Route: %s => %s >>", originalUri, this.strategy.toString());
+        }
+        return String.format("<< Route: %s %s=> %s >>", originalUri, supportedMethods, this.strategy.toString());
+    }
 
 }

@@ -95,14 +95,14 @@ public class VRaptorMockery {
 
 	public <T> ResourceMethod methodFor(final Class<T> type, final String methodName, final Class<?>... params)
 			throws NoSuchMethodException {
-		final Resource resource = mockery.mock(Resource.class);
+		final Resource resource = mockery.mock(Resource.class, "resource" + type.getSimpleName());
 		mockery.checking(new Expectations() {
 			{
 				allowing(resource).getType();
 				will(returnValue(type));
 			}
 		});
-		final ResourceMethod method = mockery.mock(ResourceMethod.class);
+		final ResourceMethod method = mockery.mock(ResourceMethod.class, "method"  + methodName);
 		checking(new Expectations() {
 			{
 				allowing(method).getResource();
@@ -145,6 +145,13 @@ public class VRaptorMockery {
 
 	public HttpServletRequest request() {
 		return mockery.mock(HttpServletRequest.class);
+	}
+
+	/**
+	 * Mocks a type and says its local name for better error output.
+	 */
+	public <T> T mock(Class<T> type, String name) {
+		return mockery.mock(type,name);
 	}
 
 }

@@ -44,8 +44,8 @@ import org.vraptor.plugin.hibernate.Validate;
 
 import br.com.caelum.vraptor.http.route.PathAnnotationRoutesParser;
 import br.com.caelum.vraptor.http.route.Route;
+import br.com.caelum.vraptor.http.route.RouteBuilder;
 import br.com.caelum.vraptor.http.route.RoutesParser;
-import br.com.caelum.vraptor.http.route.UriBasedRoute;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.resource.HttpMethod;
@@ -127,14 +127,14 @@ public class ComponentRoutesParser implements RoutesParser {
                 continue;
             }
 			String uri = getUriFor(javaMethod, baseType);
-			UriBasedRoute rule = new UriBasedRoute(proxifier, uri);
+			RouteBuilder builder = new RouteBuilder(proxifier, uri);
 			for (HttpMethod m : HttpMethod.values()) {
 				if (javaMethod.isAnnotationPresent(m.getAnnotation())) {
-					rule.with(m);
+					builder.with(m);
 				}
 			}
-			rule.is(baseType, javaMethod);
-			routes.add(rule);
+			builder.is(baseType, javaMethod);
+			routes.add(builder.build());
         }
 		registerRulesFor(actualType.getSuperclass(), baseType, routes);
 	}

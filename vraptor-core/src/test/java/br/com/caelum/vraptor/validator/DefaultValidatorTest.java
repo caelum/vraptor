@@ -35,41 +35,33 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.Resource;
+import br.com.caelum.vraptor.Result;
+import br.com.caelum.vraptor.proxy.DefaultProxifier;
+import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.test.VRaptorMockery;
 import br.com.caelum.vraptor.view.LogicResult;
 import br.com.caelum.vraptor.view.PageResult;
 
 public class DefaultValidatorTest {
 
-
 	private VRaptorMockery mockery;
-	private PageResult result;
+	private Result result;
 	private DefaultValidator validator;
-	private MyLogicResult logicResult;
+	private LogicResult logicResult;
 	private MyComponent instance;
+	private Proxifier proxifier;
+	private PageResult pageResult;
 
-	class MyLogicResult implements LogicResult {
-
-		private Class<?> to;
-
-		public <T> T redirectClientTo(Class<T> type) {
-			return null;
-		}
-
-		public <T> T redirectServerTo(Class<T> type) {
-			this.to = type;
-			return (T) instance;
-		}
-
-	}
 
 	@Before
 	public void setup() {
 		this.mockery = new VRaptorMockery();
-		this.result = mockery.mock(PageResult.class);
-		this.logicResult = new MyLogicResult();
+		this.proxifier = new DefaultProxifier();
+		this.result = mockery.mock(Result.class);
+		this.logicResult = mockery.mock(LogicResult.class);
 		this.instance = new MyComponent();
-		this.validator = new DefaultValidator(result, logicResult);
+		this.validator = new DefaultValidator(proxifier, result);
+		this.pageResult = mockery.mock(PageResult.class);
 	}
 
 	@Test
@@ -77,7 +69,9 @@ public class DefaultValidatorTest {
 		mockery.checking(new Expectations() {
 			{
 				one(result).include((String) with(an(String.class)), with(an(ArrayList.class)));
-				one(result).forward("invalid");
+				one(result).use(PageResult.class);
+				will(returnValue(pageResult));
+				one(pageResult).forward("invalid");
 			}
 		});
 		try {
@@ -96,12 +90,14 @@ public class DefaultValidatorTest {
 	@Test
 	public void redirectsToCustomOnErrorPage() {
 		try {
-			validator.onError().goTo(MyComponent.class).logic();
 			mockery.checking(new Expectations() {
 				{
-					one(result).include((String)with(an(String.class)), with(an(ArrayList.class)));
+					one(result).include((String) with(an(String.class)), with(an(ArrayList.class)));
+					one(result).use(LogicResult.class); will(returnValue(logicResult));
+					one(logicResult).forwardTo(MyComponent.class); will(returnValue(instance));
 				}
 			});
+			validator.onError().goTo(MyComponent.class).logic();
 			validator.checking(new Validations() {
 				{
 					that("", "", false);
@@ -110,7 +106,6 @@ public class DefaultValidatorTest {
 			Assert.fail("should stop flow");
 		} catch (ValidationError e) {
 			// ok, shoul still assert satisfied
-			Assert.assertEquals(this.logicResult.to, MyComponent.class);
 			Assert.assertEquals(this.instance.run, true);
 			mockery.assertIsSatisfied();
 		}

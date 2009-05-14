@@ -31,12 +31,11 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Set;
 
-import br.com.caelum.vraptor.http.ListOfRules;
 import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.proxy.Proxifier;
 
 /**
  * Handles different rules in order to translate urls into resource methods.
@@ -45,7 +44,7 @@ import br.com.caelum.vraptor.proxy.Proxifier;
  */
 public interface Router {
 
-	void add(ListOfRules rules);
+	void add(Route route);
 
 	ResourceMethod parse(String uri, HttpMethod method, MutableRequest request);
 

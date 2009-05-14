@@ -35,7 +35,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import br.com.caelum.vraptor.http.ListOfRules;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.route.Route;
 import br.com.caelum.vraptor.http.route.Router;
@@ -76,10 +75,6 @@ public class CacheBasedRouter implements Router {
         delegate.register(resource);
     }
 
-    public void add(ListOfRules rules) {
-        delegate.add(rules);
-    }
-
     public <T> String urlFor(Class<T> type, Method method, Object... params) {
         return delegate.urlFor(type, method, params);
     }
@@ -91,5 +86,9 @@ public class CacheBasedRouter implements Router {
     public Proxifier getProxifier() {
         return delegate.getProxifier();
     }
+
+	public void add(Route route) {
+		delegate.add(route);
+	}
 
 }

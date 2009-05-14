@@ -38,7 +38,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.VRaptorException;
-import br.com.caelum.vraptor.http.ListOfRules;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.TypeCreator;
@@ -83,19 +82,14 @@ public class DefaultRouter implements Router {
 		this.proxifier = proxifier;
 		// this resource should be kept here so it doesnt matter whether
 		// the user uses a custom routes config
-		UriBasedRoute rule = new UriBasedRoute(proxifier, "/is_using_vraptor");
+		RouteBuilder rule = new RouteBuilder(proxifier, "/is_using_vraptor");
 		try {
 			rule.is(VRaptorInfo.class).info();
+			add(rule.build());
 		} catch (IOException e) {
 			// ignorable
 		}
-		add(rule);
 		config.config(this);
-	}
-
-	public void add(ListOfRules rulesToAdd) {
-		List<Route> rules = rulesToAdd.getRules();
-		add(rules);
 	}
 
 	private void add(List<Route> rules) {
@@ -107,7 +101,7 @@ public class DefaultRouter implements Router {
 	/**
 	 * You can override this method to get notified by all added routes.
 	 */
-	protected void add(Route r) {
+	public void add(Route r) {
 		Resource resource = r.getResource();
 		if (resource != null) {
 			resources.add(resource);

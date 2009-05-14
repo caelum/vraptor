@@ -27,66 +27,7 @@
  */
 package br.com.caelum.vraptor.http.route;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
 
-import org.junit.Test;
-import br.com.caelum.vraptor.proxy.DefaultProxifier;
-
-public class UriBasedRouteTest {
-	
-	class Client {
-		private Long id;
-		private Client child;
-		public Client(Long id) {
-			this.id = id;
-		}
-		public Client getChild() {
-			return child;
-		}
-		public Long getId() {
-			return id;
-		}
-	}
-	
-	class TypeCreated {
-		private Client client;
-		public TypeCreated(Client c) {
-			this.client = c;
-		}
-		public Client getClient() {
-			return client;
-		}
-	}
-	
-	@Test
-	public void shouldTranslateAsteriskAsEmpty() {
-		UriBasedRoute route = new UriBasedRoute(new DefaultProxifier(), "/clients/*");
-		assertThat(route.urlFor(client(3L)), is(equalTo("/clients/")));
-	}
-	
-	@Test
-	public void shouldTranslatePatternArgs() {
-		UriBasedRoute route = new UriBasedRoute(new DefaultProxifier(), "/clients/{client.id}");
-		assertThat(route.urlFor(client(3L)), is(equalTo("/clients/3")));
-	}
-	
-	@Test
-	public void shouldTranslatePatternArgNullAsEmpty() {
-		UriBasedRoute route = new UriBasedRoute(new DefaultProxifier(), "/clients/{client.id}");
-		assertThat(route.urlFor(client(null)), is(equalTo("/clients/")));
-	}
-
-	@Test
-	public void shouldTranslatePatternArgInternalNullAsEmpty() {
-		UriBasedRoute route = new UriBasedRoute(new DefaultProxifier(), "/clients/{client.child.id}");
-		assertThat(route.urlFor(client(null)), is(equalTo("/clients/")));
-	}
-
-	private TypeCreated client(Long id) {
-		return new TypeCreated(new Client(id));
-	}
-
+public class PatternBasedStrategyTest {
 
 }

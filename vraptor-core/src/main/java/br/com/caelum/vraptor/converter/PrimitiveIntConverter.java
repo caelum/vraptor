@@ -37,16 +37,16 @@ import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
 /**
- * VRaptor's primitive int converter. 
- * 
+ * VRaptor's primitive int converter.
+ *
  * @author Guilherme Silveira
  * @author Cecilia Fernandes
  */
 @Convert(int.class)
 @ApplicationScoped
-public class PrimitiveIntConverter implements Converter {
+public class PrimitiveIntConverter implements Converter<Integer> {
 
-    public Object convert(String value, Class type, ResourceBundle bundle) {
+    public Integer convert(String value, Class<? extends Integer> type, ResourceBundle bundle) {
         if(value==null || value.equals("")) {
             return 0;
         }
@@ -56,5 +56,5 @@ public class PrimitiveIntConverter implements Converter {
         	throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_integer"), value));
         }
     }
-    
+
 }

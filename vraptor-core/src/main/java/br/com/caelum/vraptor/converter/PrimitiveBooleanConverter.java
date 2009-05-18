@@ -43,10 +43,10 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
  */
 @Convert(boolean.class)
 @ApplicationScoped
-public class PrimitiveBooleanConverter implements Converter {
+public class PrimitiveBooleanConverter implements Converter<Boolean> {
 	private final BooleanConverter booleanConverter = new BooleanConverter();
 
-    public Object convert(String value, Class type, ResourceBundle bundle) {
+    public Boolean convert(String value, Class<? extends Boolean> type, ResourceBundle bundle) {
         if (value == null || "".equals(value)) {
         	return false;
         }

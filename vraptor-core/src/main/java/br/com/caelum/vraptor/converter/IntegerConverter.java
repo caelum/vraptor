@@ -37,15 +37,15 @@ import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
 /**
- * VRaptor's Integer converter. 
- * 
+ * VRaptor's Integer converter.
+ *
  * @author Guilherme Silveira
  */
 @Convert(Integer.class)
 @ApplicationScoped
 public class IntegerConverter implements Converter<Integer> {
 
-    public Integer convert(String value, Class type, ResourceBundle bundle) {
+    public Integer convert(String value, Class<? extends Integer> type, ResourceBundle bundle) {
         if (value == null || value.equals("")) {
             return null;
         }

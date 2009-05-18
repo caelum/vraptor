@@ -39,7 +39,7 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
 /**
  * Accepts either the ordinal value or name. Null and empty strings are treated
  * as null.
- * 
+ *
  * @author Guilherme Silveira
  */
 @Convert(Enum.class)

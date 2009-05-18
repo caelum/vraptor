@@ -37,15 +37,15 @@ import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
 /**
- * VRaptor's Byte converter. 
- * 
+ * VRaptor's Byte converter.
+ *
  * @author Guilherme Silveira
  */
 @Convert(Byte.class)
 @ApplicationScoped
 public class ByteConverter implements Converter<Byte> {
 
-    public Byte convert(String value, Class type, ResourceBundle bundle) {
+    public Byte convert(String value, Class<? extends Byte> type, ResourceBundle bundle) {
         if (value == null || value.equals("")) {
             return null;
         }

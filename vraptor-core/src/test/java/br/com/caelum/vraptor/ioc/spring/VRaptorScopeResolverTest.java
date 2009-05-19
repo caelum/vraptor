@@ -46,7 +46,7 @@ public class VRaptorScopeResolverTest {
         Assert.assertEquals(BeanDefinition.SCOPE_SINGLETON, scopeMetadata.getScopeName());
     }
 
-    private ScopeMetadata readScopeMetadata(Class componentType) {
+    private ScopeMetadata readScopeMetadata(Class<?> componentType) {
         VRaptorScopeResolver resolver = new VRaptorScopeResolver();
         AnnotatedGenericBeanDefinition definition = new AnnotatedGenericBeanDefinition(componentType);
         return resolver.resolveScopeMetadata(definition);

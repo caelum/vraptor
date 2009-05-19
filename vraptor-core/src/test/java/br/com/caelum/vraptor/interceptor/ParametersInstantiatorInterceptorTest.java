@@ -1,7 +1,7 @@
 /***
- * 
+ *
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  * 1. Redistributions of source code must retain the above copyright notice,
@@ -12,7 +12,7 @@
  * copyright holders nor the names of its contributors may be used to endorse or
  * promote products derived from this software without specific prior written
  * permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -36,21 +36,20 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.InterceptionException;
-import br.com.caelum.vraptor.test.VRaptorMockery;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.core.MethodInfo;
-import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.test.VRaptorMockery;
+import br.com.caelum.vraptor.validator.Message;
 
 public class ParametersInstantiatorInterceptorTest {
 
     private VRaptorMockery mockery;
     private ParametersInstantiatorInterceptor instantiator;
     private MethodInfo params;
-    private ParameterNameProvider provider;
     private ParametersProvider parametersProvider;
 	private Validator validator;
 	private Localization localization;
@@ -59,7 +58,6 @@ public class ParametersInstantiatorInterceptorTest {
     public void setup() {
         this.mockery = new VRaptorMockery();
         this.params = mockery.mock(MethodInfo.class);
-        this.provider = mockery.mock(ParameterNameProvider.class);
         this.parametersProvider = mockery.mock(ParametersProvider.class);
         this.validator = mockery.mock(Validator.class);
         this.localization = mockery.localization();
@@ -78,7 +76,7 @@ public class ParametersInstantiatorInterceptorTest {
         final ResourceBundle bundle = localization.getBundle();
         mockery.checking(new Expectations() {
             {
-                one(parametersProvider).getParametersFor(method, new ArrayList(), bundle);
+                one(parametersProvider).getParametersFor(method, new ArrayList<Message>(), bundle);
                 Object[] values = new Object[] { new Object() };
                 will(returnValue(values));
                 one(stack).next(method, null);

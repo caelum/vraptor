@@ -13,10 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.core.DefaultMethodInfo;
-import br.com.caelum.vraptor.resource.Resource;
 import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.view.DefaultPageResult;
-import br.com.caelum.vraptor.view.PathResolver;
 
 public class DefaultPageResultTest {
 
@@ -25,7 +22,6 @@ public class DefaultPageResultTest {
     private HttpServletResponse response;
     private RequestDispatcher dispatcher;
     private ResourceMethod method;
-    private Resource resource;
     private PathResolver fixedResolver;
     private DefaultMethodInfo requestInfo;
 
@@ -38,7 +34,6 @@ public class DefaultPageResultTest {
         method = mockery.mock(ResourceMethod.class);
         requestInfo = new DefaultMethodInfo();
         requestInfo.setResourceMethod(method);
-        resource = mockery.mock(Resource.class);
         fixedResolver = new PathResolver() {
             public String pathFor(ResourceMethod method, String result) {
                 return "fixed";

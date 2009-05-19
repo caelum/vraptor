@@ -2,8 +2,6 @@ package br.com.caelum.vraptor.interceptor;
 
 import java.io.IOException;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Before;
@@ -19,13 +17,11 @@ import br.com.caelum.vraptor.view.DogController;
 public class InstantiateInterceptorTest {
 
     private Mockery mockery;
-    private HttpServletRequest request;
     private Container container;
 
     @Before
     public void setup() {
         this.mockery = new Mockery();
-        this.request = mockery.mock(HttpServletRequest.class);
         this.container = mockery.mock(Container.class);
     }
 

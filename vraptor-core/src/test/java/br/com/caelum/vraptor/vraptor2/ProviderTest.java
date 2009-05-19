@@ -74,7 +74,7 @@ public class ProviderTest extends GenericContainerTest {
             {
                 allowing(request).getRequestURI(); will(returnValue("what.ever.request.uri"));
                 allowing(request).getSession(); will(returnValue(session));
-                allowing(request).getParameterMap(); will(returnValue(new HashMap()));
+                allowing(request).getParameterMap(); will(returnValue(new HashMap<Object, Object>()));
                 allowing(request).getParameter("view"); will(returnValue(null));
             }
         });

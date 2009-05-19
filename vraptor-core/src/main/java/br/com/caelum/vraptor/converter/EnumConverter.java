@@ -46,6 +46,10 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
 @ApplicationScoped
 public class EnumConverter<T extends Enum<T>> implements Converter<T> {
 
+	/**
+	 * Enums are always final, so I can suppress this warning safely
+	 */
+	@SuppressWarnings("unchecked")
     public T convert(String value, Class<? extends T> type, ResourceBundle bundle) {
         if (value == null || value.equals("")) {
             return null;

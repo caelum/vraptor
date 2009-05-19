@@ -9,12 +9,12 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 
 public class URLParameterExtractorInterceptor implements Interceptor {
 
-    private final HttpServletRequest request;
+//    private final HttpServletRequest request;
 
     public URLParameterExtractorInterceptor(HttpServletRequest request) {
-        this.request = request;
+//        this.request = request;
     }
-    
+
     public boolean accepts(ResourceMethod method) {
         return true;
     }

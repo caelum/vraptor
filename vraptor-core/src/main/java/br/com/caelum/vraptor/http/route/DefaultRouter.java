@@ -34,9 +34,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import br.com.caelum.vraptor.VRaptorException;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
@@ -55,13 +52,12 @@ import br.com.caelum.vraptor.vraptor2.Info;
  * The default implementation of resource localization rules. It also uses a
  * Path annotation to discover path->method mappings using the supplied
  * ResourceAndMethodLookup.
- * 
+ *
  * @author Guilherme Silveira
  */
 @ApplicationScoped
 public class DefaultRouter implements Router {
 
-	private final Logger logger = LoggerFactory.getLogger(DefaultRouter.class);
 	private final Proxifier proxifier;
 
 	public Proxifier getProxifier() {

@@ -27,7 +27,7 @@ public class DefaultParameterNameProvider implements ParameterNameProvider{
         if(type instanceof ParameterizedType) {
             return extractName((ParameterizedType) type);
         }
-        return extractName((Class) type);
+        return extractName((Class<?>) type);
     }
 
     public String[] parameterNamesFor(Method method) {

@@ -29,9 +29,6 @@
  */
 package br.com.caelum.vraptor.core;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Interceptor;
 import br.com.caelum.vraptor.ioc.Container;
@@ -39,15 +36,13 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**
  * Instantiates the interceptor on the fly and executes its method.
- * 
+ *
  * @author Guilherme Silveira
  */
 public class ToInstantiateInterceptorHandler implements InterceptorHandler {
 
     private final Container container;
     private final Class<?> type;
-    
-    private static final Logger logger = LoggerFactory.getLogger(ToInstantiateInterceptorHandler.class);
 
     public ToInstantiateInterceptorHandler(Container container, Class<?> type) {
         this.container = container;

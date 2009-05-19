@@ -48,7 +48,9 @@ class InjectionBeanPostProcessor extends AutowiredAnnotationBeanPostProcessor {
     //      this.setAutowiredAnnotationType(In.class);
     //  }
 
-    public Constructor[] determineCandidateConstructors(Class beanClass, String beanName) throws BeansException {
+    @Override
+	@SuppressWarnings("unchecked")
+	public Constructor[] determineCandidateConstructors(Class beanClass, String beanName) throws BeansException {
         Constructor[] candidates = super.determineCandidateConstructors(beanClass, beanName);
         if (candidates == null) {
             Constructor constructor = checkIfThereIsOnlyOneNonDefaultConstructor(beanClass);
@@ -59,7 +61,8 @@ class InjectionBeanPostProcessor extends AutowiredAnnotationBeanPostProcessor {
         return candidates;
     }
 
-    private Constructor checkIfThereIsOnlyOneNonDefaultConstructor(Class beanClass) {
+    @SuppressWarnings("unchecked")
+	private Constructor checkIfThereIsOnlyOneNonDefaultConstructor(Class beanClass) {
         Constructor[] constructors = beanClass.getDeclaredConstructors();
         if (constructors.length == 1) {
             if (constructors[0].getParameterTypes().length > 0) {

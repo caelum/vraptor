@@ -6,7 +6,7 @@ import br.com.caelum.vraptor.core.RequestInfo;
  * @author Fabio Kung
  */
 public class VRaptorRequestHolder {
-    private static final ThreadLocal<RequestInfo> vraptorRequests = new ThreadLocal();
+    private static final ThreadLocal<RequestInfo> vraptorRequests = new ThreadLocal<RequestInfo>();
 
     public static RequestInfo currentRequest() {
         return vraptorRequests.get();

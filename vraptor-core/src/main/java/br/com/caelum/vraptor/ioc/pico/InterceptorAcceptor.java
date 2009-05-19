@@ -1,8 +1,8 @@
 package br.com.caelum.vraptor.ioc.pico;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.List;
 import java.util.Arrays;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +20,8 @@ public class InterceptorAcceptor implements Acceptor {
         this.interceptors = interceptors;
     }
 
-    public void analyze(Class<?> type) {
+    @SuppressWarnings("unchecked")
+	public void analyze(Class<?> type) {
         if (type.isAnnotationPresent(Intercepts.class)) {
             if (Interceptor.class.isAssignableFrom(type)) {
                 logger.debug("Found interceptor for " + type);

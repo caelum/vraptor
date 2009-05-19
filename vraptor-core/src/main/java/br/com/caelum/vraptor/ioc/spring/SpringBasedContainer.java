@@ -29,10 +29,10 @@
  */
 package br.com.caelum.vraptor.ioc.spring;
 
+import javax.servlet.ServletContext;
+
 import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.ioc.Container;
-
-import javax.servlet.ServletContext;
 
 /**
  * @author Fabio Kung
@@ -48,11 +48,10 @@ public class SpringBasedContainer implements Container, ComponentRegistry {
         applicationContext = new VRaptorApplicationContext(this, packages);
     }
 
-    public void register(Class requiredType, Class componentType) {
+    public void register(Class<?> requiredType, Class<?> componentType) {
         applicationContext.register(componentType);
     }
 
-    @SuppressWarnings("unchecked")
     public <T> T instanceFor(Class<T> type) {
         return applicationContext.getBean(type);
     }

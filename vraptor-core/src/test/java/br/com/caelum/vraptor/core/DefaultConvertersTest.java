@@ -8,8 +8,8 @@ import static org.hamcrest.Matchers.typeCompatibleWith;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Map.Entry;
 
 import org.jmock.Expectations;
 import org.junit.Before;
@@ -64,7 +64,7 @@ public class DefaultConvertersTest {
     @SuppressWarnings("unchecked")
 	@Test
     public void shouldRegisterConvertersForAllDefaultTypes() {
-        final HashMap<Class<?>, Class<? extends Converter<?>>> EXPECTED_CONVERTERS = new HashMap<Class<?>, Class<? extends Converter<?>>>() {
+        final HashMap<Class, Class<? extends Converter>> EXPECTED_CONVERTERS = new HashMap<Class, Class<? extends Converter>>() {
             {
                 put(int.class, PrimitiveIntConverter.class);
                 put(long.class, PrimitiveLongConverter.class);
@@ -82,7 +82,7 @@ public class DefaultConvertersTest {
                 put(Boolean.class, BooleanConverter.class);
                 put(Calendar.class, LocaleBasedCalendarConverter.class);
                 put(Date.class, LocaleBasedDateConverter.class);
-                put(Enum.class, (Class<? extends Converter<?>>) EnumConverter.class);
+                put(Enum.class, EnumConverter.class);
                 put(UploadedFile.class, UploadedFileConverter.class);
             }
             private static final long serialVersionUID = 8559316558416038474L;
@@ -90,7 +90,7 @@ public class DefaultConvertersTest {
 
         mockery.checking(new Expectations() {
             {
-                for (Class<? extends Converter<?>> converterType : EXPECTED_CONVERTERS.values()) {
+                for (Class<? extends Converter> converterType : EXPECTED_CONVERTERS.values()) {
                     Converter<?> expected = mockery.mock(converterType);
                     one(componentRegistry).register(converterType, converterType);
                     one(container).instanceFor(converterType);
@@ -99,9 +99,9 @@ public class DefaultConvertersTest {
             }
         });
 
-        for (Map.Entry<Class<?>, Class<? extends Converter<?>>> entry : EXPECTED_CONVERTERS.entrySet()) {
+        for (Entry<Class, Class<? extends Converter>> entry : EXPECTED_CONVERTERS.entrySet()) {
             Class<?> typeFor = entry.getKey();
-            Class<? extends Converter<?>> converterType = entry.getValue();
+            Class<? extends Converter> converterType = entry.getValue();
             Converter<?> converter = converters.to(typeFor, container);
             assertThat(converter, is(instanceOf(converterType)));
         }

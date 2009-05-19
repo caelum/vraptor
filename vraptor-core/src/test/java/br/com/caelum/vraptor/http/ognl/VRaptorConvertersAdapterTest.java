@@ -1,7 +1,7 @@
 /***
- * 
+ *
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  * 1. Redistributions of source code must retain the above copyright notice,
@@ -12,7 +12,7 @@
  * copyright holders nor the names of its contributors may be used to endorse or
  * promote products derived from this software without specific prior written
  * permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -44,10 +44,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.Converter;
-import br.com.caelum.vraptor.http.ognl.VRaptorConvertersAdapter;
-import br.com.caelum.vraptor.test.VRaptorMockery;
 import br.com.caelum.vraptor.core.Converters;
-import br.com.caelum.vraptor.validator.Message;
+import br.com.caelum.vraptor.test.VRaptorMockery;
 
 public class VRaptorConvertersAdapterTest {
 
@@ -57,14 +55,12 @@ public class VRaptorConvertersAdapterTest {
     private Cat myCat;
     @SuppressWarnings("unchecked")
 	private Converter converter;
-	private ArrayList<Message> errors;
 	private ResourceBundle bundle;
 
     @Before
     public void setup() {
         this.mockery = new VRaptorMockery();
         this.converters = mockery.mock(Converters.class);
-        this.errors = new ArrayList<Message>();
         this.bundle = ResourceBundle.getBundle("messages");
         this.adapter = new VRaptorConvertersAdapter(converters, bundle);
         this.converter = mockery.mock(Converter.class);
@@ -104,7 +100,7 @@ public class VRaptorConvertersAdapterTest {
 
     public static class Leg {
         @SuppressWarnings("unused")
-        private int length;
+        private final int length;
 
         public Leg(int length) {
             this.length = length;
@@ -116,10 +112,11 @@ public class VRaptorConvertersAdapterTest {
             length = l;
         }
 
-        private int length;
+        private final int length;
     }
 
-    @Test
+	@Test
+	@SuppressWarnings("unchecked")
     public void shouldInvokePrimitiveConverter() throws OgnlException {
         mockery.checking(new Expectations() {
             {
@@ -129,14 +126,15 @@ public class VRaptorConvertersAdapterTest {
                 will(returnValue(2));
             }
         });
-        Map context = Ognl.createDefaultContext(myCat);
+        Map<?,?> context = Ognl.createDefaultContext(myCat);
         Ognl.setTypeConverter(context, adapter);
         Ognl.setValue("length", context, myCat, "2");
         assertThat(myCat.length, is(equalTo(2)));
         mockery.assertIsSatisfied();
     }
 
-    @Test
+    @SuppressWarnings("unchecked")
+	@Test
     public void shouldInvokeCustomTypeConverter() throws OgnlException {
         mockery.checking(new Expectations() {
             {
@@ -146,13 +144,13 @@ public class VRaptorConvertersAdapterTest {
                 will(returnValue(new Tail(15)));
             }
         });
-        Map context = Ognl.createDefaultContext(myCat);
+        Map<?,?> context = Ognl.createDefaultContext(myCat);
         Ognl.setTypeConverter(context, adapter);
         Ognl.setValue("tail", context, myCat, "15");
         assertThat(myCat.tail.length, is(equalTo(15)));
         mockery.assertIsSatisfied();
     }
-    
+
     @SuppressWarnings("unchecked")
     @Test(expected=IllegalArgumentException.class)
     public void shouldThrowExceptionIfNoConverterIsFound() throws Throwable {

@@ -46,8 +46,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.VRaptorException;
-import br.com.caelum.vraptor.test.VRaptorMockery;
 import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor.test.VRaptorMockery;
 
 public class ListNullHandlerTest {
 
@@ -59,7 +59,7 @@ public class ListNullHandlerTest {
 	private EmptyElementsRemoval removal;
 
 	public static class Client {
-		@SuppressWarnings( { "unused", "unchecked" })
+		@SuppressWarnings( { "unchecked" })
 		private List nonGeneric = new ArrayList();
 
 		@SuppressWarnings("unchecked")

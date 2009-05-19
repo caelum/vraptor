@@ -27,30 +27,26 @@
  */
 package br.com.caelum.vraptor.http.ognl;
 
-import br.com.caelum.vraptor.core.Converters;
-import br.com.caelum.vraptor.http.ognl.ArrayAccessor;
-import br.com.caelum.vraptor.http.ognl.EmptyElementsRemoval;
-import br.com.caelum.vraptor.http.ognl.ListAccessor;
-import br.com.caelum.vraptor.http.ognl.ReflectionBasedNullHandler;
-import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.validator.Message;
-import br.com.caelum.vraptor.http.ognl.VRaptorConvertersAdapter;
-import br.com.caelum.vraptor.converter.LongConverter;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+
+import java.util.List;
+import java.util.ResourceBundle;
+
 import ognl.Ognl;
 import ognl.OgnlContext;
 import ognl.OgnlException;
 import ognl.OgnlRuntime;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
+
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
+import br.com.caelum.vraptor.converter.LongConverter;
+import br.com.caelum.vraptor.core.Converters;
+import br.com.caelum.vraptor.ioc.Container;
 
 /**
  * Unfortunately OGNL sucks so bad in its design that we had to create a "unit"
@@ -71,7 +67,6 @@ public class OgnlGenericTypesSupportTest {
     private Container container;
     private EmptyElementsRemoval removal;
     private ResourceBundle bundle;
-    private ArrayList<Message> errors;
 
     @Before
     public void setup() {
@@ -80,7 +75,6 @@ public class OgnlGenericTypesSupportTest {
         this.container = mockery.mock(Container.class);
         this.removal = new EmptyElementsRemoval();
         this.bundle = ResourceBundle.getBundle("messages");
-        this.errors = new ArrayList<Message>();
         mockery.checking(new Expectations() {
             {
                 allowing(container).instanceFor(Converters.class);

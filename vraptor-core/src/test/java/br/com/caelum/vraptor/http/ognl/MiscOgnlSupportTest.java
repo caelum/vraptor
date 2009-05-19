@@ -27,33 +27,30 @@
  */
 package br.com.caelum.vraptor.http.ognl;
 
-import br.com.caelum.vraptor.converter.IntegerConverter;
-import br.com.caelum.vraptor.converter.LocaleBasedCalendarConverter;
-import br.com.caelum.vraptor.core.Converters;
-import br.com.caelum.vraptor.core.RequestInfo;
-import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor.http.ognl.ArrayAccessor;
-import br.com.caelum.vraptor.http.ognl.ListAccessor;
-import br.com.caelum.vraptor.http.ognl.ReflectionBasedNullHandler;
-import br.com.caelum.vraptor.http.ognl.VRaptorConvertersAdapter;
-import br.com.caelum.vraptor.validator.Message;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.ResourceBundle;
+
 import ognl.Ognl;
 import ognl.OgnlContext;
 import ognl.OgnlException;
 import ognl.OgnlRuntime;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
+
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.ResourceBundle;
+import br.com.caelum.vraptor.converter.IntegerConverter;
+import br.com.caelum.vraptor.converter.LocaleBasedCalendarConverter;
+import br.com.caelum.vraptor.core.Converters;
+import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.http.MutableRequest;
 
 /**
  * Unfortunately OGNL sucks so bad in its design that we had to create a "unit"
@@ -72,7 +69,6 @@ public class MiscOgnlSupportTest {
     private OgnlContext context;
     private House house;
     private ResourceBundle bundle;
-    private ArrayList<Message> errors;
 
     @Before
     public void setup() {
@@ -87,7 +83,6 @@ public class MiscOgnlSupportTest {
         // OgnlRuntime.setPropertyAccessor(Set.class, new SetAccessor());
         // OgnlRuntime.setPropertyAccessor(Map.class, new MapAccessor());
         this.bundle = ResourceBundle.getBundle("messages");
-        this.errors = new ArrayList<Message>();
         Ognl.setTypeConverter(context, new VRaptorConvertersAdapter(converters, bundle));
     }
 

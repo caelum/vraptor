@@ -1,7 +1,7 @@
 /***
- * 
+ *
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  * 1. Redistributions of source code must retain the above copyright notice,
@@ -12,7 +12,7 @@
  * copyright holders nor the names of its contributors may be used to endorse or
  * promote products derived from this software without specific prior written
  * permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -35,7 +35,6 @@ import static org.hamcrest.Matchers.nullValue;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -52,7 +51,6 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor.validator.ValidationMessage;
 
 public class LocaleBasedCalendarConverterTest {
 
@@ -61,7 +59,6 @@ public class LocaleBasedCalendarConverterTest {
 	private MutableRequest request;
 	private HttpSession session;
 	private ServletContext context;
-	private ArrayList<ValidationMessage> errors;
 	private ResourceBundle bundle;
 
 	@Before
@@ -72,7 +69,6 @@ public class LocaleBasedCalendarConverterTest {
 		this.context = mockery.mock(ServletContext.class);
 		final RequestInfo webRequest = new RequestInfo(context, request, null);
 		this.converter = new LocaleBasedCalendarConverter(webRequest);
-		this.errors = new ArrayList<ValidationMessage>();
 		this.bundle = ResourceBundle.getBundle("messages");
 	}
 

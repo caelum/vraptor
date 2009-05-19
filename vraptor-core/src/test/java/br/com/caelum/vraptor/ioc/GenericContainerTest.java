@@ -1,7 +1,7 @@
 /***
- * 
+ *
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  * 1. Redistributions of source code must retain the above copyright notice,
@@ -12,7 +12,7 @@
  * copyright holders nor the names of its contributors may be used to endorse or
  * promote products derived from this software without specific prior written
  * permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -81,7 +81,7 @@ import br.com.caelum.vraptor.view.PathResolver;
 /**
  * Acceptance test that checks if the container is capable of giving all
  * required components.
- * 
+ *
  * @author Guilherme Silveira
  */
 @Ignore
@@ -99,26 +99,28 @@ public abstract class GenericContainerTest {
 
 	protected abstract void configureExpectations();
 
+	@SuppressWarnings("unchecked")
 	@Test
 	public void canProvideAllApplicationScopedComponents() {
-		List<Class> components = Arrays.asList(new Class[] { ServletContext.class, UrlToResourceTranslator.class,
+		List<Class<?>> components = Arrays.asList(ServletContext.class, UrlToResourceTranslator.class,
 				Router.class, TypeCreator.class, InterceptorRegistry.class, ParameterNameProvider.class,
 				Converters.class, EmptyElementsRemoval.class, NoRoutesConfiguration.class,
-				ResourceNotFoundHandler.class });
+				ResourceNotFoundHandler.class);
 		checkAvailabilityFor(true, components);
 		checkAvailabilityFor(true, BaseComponents.getApplicationScoped());
 		mockery.assertIsSatisfied();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Test
 	public void canProvideAllRequestScopedComponents() {
-		List<Class> components = Arrays.asList(new Class[] {HttpServletRequest.class, HttpServletResponse.class, RequestInfo.class,
+		List<Class<?>> components = Arrays.asList(HttpServletRequest.class, HttpServletResponse.class, RequestInfo.class,
 				HttpSession.class, ParametersInstantiatorInterceptor.class,
 				InterceptorListPriorToExecutionExtractor.class, URLParameterExtractorInterceptor.class,
 				InterceptorStack.class, RequestExecution.class, ResourceLookupInterceptor.class,
 				InstantiateInterceptor.class, Result.class, ExecuteMethodInterceptor.class, PageResult.class,
 				ParametersProvider.class, MethodInfo.class, Validator.class, PathResolver.class,
-				ForwardToDefaultViewInterceptor.class, LogicResult.class});
+				ForwardToDefaultViewInterceptor.class, LogicResult.class);
 		checkAvailabilityFor(false, components);
 		mockery.assertIsSatisfied();
 	}
@@ -226,7 +228,7 @@ public abstract class GenericContainerTest {
 		}
 	}
 
-	protected void checkAvailabilityFor(boolean shouldBeTheSame, Collection<Class> components) {
+	protected void checkAvailabilityFor(boolean shouldBeTheSame, Collection<Class<?>> components) {
 		for (Class<?> component : components) {
 			checkAvailabilityFor(shouldBeTheSame, component, null);
 		}

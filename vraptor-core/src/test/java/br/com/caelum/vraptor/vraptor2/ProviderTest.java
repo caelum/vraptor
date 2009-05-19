@@ -1,7 +1,7 @@
 /***
- * 
+ *
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  * 1. Redistributions of source code must retain the above copyright notice,
@@ -12,7 +12,7 @@
  * copyright holders nor the names of its contributors may be used to endorse or
  * promote products derived from this software without specific prior written
  * permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -51,21 +51,23 @@ public class ProviderTest extends GenericContainerTest {
 
     @Test
     public void canProvideVRaptor2SpecificApplicationScopedComponents() {
-        checkAvailabilityFor(true, Arrays.asList(new Class[] {Config.class}));
+        checkAvailabilityFor(true, Arrays.<Class<?>>asList(Config.class));
     }
 
     @Test
     public void canProvideVRaptor2SpecificRequestScopedComponents() {
-        checkAvailabilityFor(false, Arrays.asList(new Class[]{HibernateValidatorPluginInterceptor.class,
+        checkAvailabilityFor(false, Arrays.<Class<?>>asList(HibernateValidatorPluginInterceptor.class,
                 ValidatorInterceptor.class, ViewInterceptor.class, ComponentInfoProvider.class,
-                OutjectionInterceptor.class, AjaxInterceptor.class, ValidationErrors.class}));
+                OutjectionInterceptor.class, AjaxInterceptor.class, ValidationErrors.class));
     }
 
-    protected ContainerProvider getProvider() {
+    @Override
+	protected ContainerProvider getProvider() {
         return new Provider();
     }
 
-    protected <T> T executeInsideRequest(WhatToDo<T> execution) {
+    @Override
+	protected <T> T executeInsideRequest(WhatToDo<T> execution) {
         final HttpSessionMock session = new HttpSessionMock(context, "session" + ++counter);
         final MutableRequest request = mockery.mock(MutableRequest.class, "request" + ++counter);
         mockery.checking(new Expectations() {

@@ -3,7 +3,6 @@ package br.com.caelum.vraptor.vraptor2;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -24,7 +23,7 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
  * Only this basic configuration is automatically supported. This way we can
  * support vraptor2 most important features. We do not really parse the xml file
  * as it would be a little bit too much for the information that we require.
- * 
+ *
  * @author Guilherme Silveira
  */
 @ApplicationScoped

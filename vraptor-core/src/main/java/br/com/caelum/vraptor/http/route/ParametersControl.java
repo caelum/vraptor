@@ -46,4 +46,11 @@ public interface ParametersControl {
 	 */
 	void fillIntoRequest(String uri, MutableRequest request);
 
+	/**
+	 * Applies a list of values to 
+	 * @param values
+	 * @return
+	 */
+	String apply(String[] values);
+
 }

@@ -3,9 +3,6 @@
 
 - support to method return != string --> outject
 	- do not do it if @Component vrraptor2
-
-
-
 - refactor PathAnnotationRoutesParser to extract uri from resource.getName() and resourceMethod.getName()
 - make StupidTranslator work with jsessionid
 - accept support "_format" parameter
@@ -411,4 +408,4 @@ support HibernateValidator with i18n messages
 - router extra support
 	routeFor("/(*)").is(type(""),method(""));
 - support to method return != string --> outject
-	
+- support to niceurls with {webLogic} and {webMethod}

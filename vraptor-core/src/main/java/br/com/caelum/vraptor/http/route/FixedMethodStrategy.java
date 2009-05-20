@@ -70,7 +70,7 @@ public class FixedMethodStrategy implements Route {
 		return uriMatches && acceptMethod ? this.resourceMethod : null;
 	}
 
-	public String urlFor(Object params) {
+	public String urlFor(Class<?> type, Method m, Object params) {
 		return parameters.fillUri(params);
 	}
 

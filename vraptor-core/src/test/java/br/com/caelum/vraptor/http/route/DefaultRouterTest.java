@@ -306,8 +306,8 @@ public class DefaultRouterTest {
 				will(returnValue(Object.class));
 			}
 		});
-		String url = router.urlFor(MyResource.class, javaMethodFound, new Object[] {});
-		assertThat(router.parse(url, HttpMethod.POST, null).getMethod(), is(equalTo(javaMethodFound)));
+		String url = router.urlFor(MyCustomResource.class, javaMethodFound, new Object[] {});
+		assertThat(router.parse(url, HttpMethod.GET, request).getMethod(), is(equalTo(javaMethodFound)));
 		mockery.assertIsSatisfied();
 	}
 

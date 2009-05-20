@@ -39,6 +39,7 @@ public class DefaultParametersControl implements ParametersControl {
 	private final List<String> parameters = new ArrayList<String>();
 	private final Pattern pattern;
 	private final String originalPattern;
+	private final String patternUri;
 	
 	public DefaultParametersControl(String originalPattern) {
 		this.originalPattern = originalPattern;
@@ -69,8 +70,8 @@ public class DefaultParametersControl implements ParametersControl {
 		if(ignore) {
 			throw new IllegalRouteException("Illegal route contains invalid pattern: " + this.originalPattern);
 		}
-//		this.patternUri = patternUri;
 		this.pattern = Pattern.compile(patternUri);
+		this.patternUri = patternUri;
 	}
 
 	public String fillUri(Object params) {
@@ -95,6 +96,15 @@ public class DefaultParametersControl implements ParametersControl {
 		}
 	}
 
-
+	public String apply(String[] values) {
+		Pattern regex = Pattern.compile("\\{.*?\\}"); // the pattern object is NOT thread safe
+		Matcher matcher = regex.matcher(this.originalPattern);
+		StringBuffer result = new StringBuffer();
+		for(int i=0;i<values.length;i++) {
+			matcher.find();
+			matcher.appendReplacement(result, values[i].replaceAll("\\$","\\\\\\$"));
+		}
+		return result.toString();
+	}
 
 }

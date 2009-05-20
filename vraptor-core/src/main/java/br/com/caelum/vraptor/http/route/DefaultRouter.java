@@ -134,7 +134,7 @@ public class DefaultRouter implements Router {
 						Method setter = findSetter(parameterType, "set" + Info.capitalize(names[i]));
 						setter.invoke(root, params[i]);
 					}
-					return route.urlFor(root);
+					return route.urlFor(type, method, root);
 				} catch (Exception e) {
 					throw new VRaptorException("The selected route is invalid for redirection: " + type.getName() + "."
 							+ method.getName(), e);

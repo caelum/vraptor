@@ -28,7 +28,11 @@
 package br.com.caelum.vraptor.http.route;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.Set;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.resource.DefaultResource;
@@ -43,17 +47,20 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  * @author guilherme silveira
  */
 public class PatternBasedStrategy implements Route {
+	
+	private final Logger logger = LoggerFactory.getLogger(PatternBasedStrategy.class);
 
 	private final PatternBasedType type;
 	private final PatternBasedType method;
 	private final Set<HttpMethod> methods;
+
 	private final ParametersControl control;
 
-	public PatternBasedStrategy(PatternBasedType type, PatternBasedType method, Set<HttpMethod> methods, ParametersControl control) {
+	public PatternBasedStrategy(ParametersControl control, PatternBasedType type, PatternBasedType method, Set<HttpMethod> methods) {
+		this.control = control;
 		this.type = type;
 		this.method = method;
 		this.methods = methods;
-		this.control = control;
 	}
 
 	public boolean canHandle(Class<?> type, Method method) {
@@ -64,17 +71,37 @@ public class PatternBasedStrategy implements Route {
 		boolean acceptMethod = this.methods.isEmpty() || this.methods.contains(method);
 		boolean acceptUri = control.matches(uri);
 		if(acceptUri && acceptMethod){
-			String webLogic = request.getParameter("_webLogic");
-			String webMethod = request.getParameter("_webMethod");
-			DefaultResource resource = new DefaultResource(Class.forName(type.apply("webLogic",webLogic)));
-			Method resourceMethod = method(resource.getType(), this.method.apply("webMethod", webMethod));
-			return new DefaultResourceMethod(resource, resourceMethod);
+			control.fillIntoRequest(uri, request);
+			String webLogic = request.getParameter("webLogic");
+			String webMethod = request.getParameter("webMethod");
+			String typeName = type.apply("webLogic",webLogic);
+			try {
+				DefaultResource resource = new DefaultResource(Class.forName(typeName));
+				Method resourceMethod = method(resource.getType(), this.method.apply("webMethod", webMethod));
+				return new DefaultResourceMethod(resource, resourceMethod);
+			} catch (ClassNotFoundException e) {
+				logger.debug("Unable to find type " + typeName + " for strategy " + this);
+				return null;
+			}
 		}
 		return null;
 	}
 
 	private Method method(Class<?> type, String methodName) {
-		return null;
+		Method[] methods = type.getDeclaredMethods();
+		for(Method m :methods) {
+			if(m.getName().equals(methodName) && isEligible(m)) {
+				return m;
+			}
+		}
+		if(type.getSuperclass().equals(Object.class)) {
+			return null;
+		}
+		return method(type.getSuperclass(), methodName);
+	}
+
+	private boolean isEligible(Method m) {
+		return Modifier.isPublic(m.getModifiers()) && !Modifier.isStatic(m.getModifiers());
 	}
 
 	public String urlFor(Object params) {

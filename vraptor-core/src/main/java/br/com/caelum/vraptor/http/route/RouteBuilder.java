@@ -77,7 +77,7 @@ public class RouteBuilder {
     }
 
 	public void is(PatternBasedType type, PatternBasedType method) {
-		this.strategy = new PatternBasedStrategy(type, method, this.supportedMethods);
+		this.strategy = new PatternBasedStrategy(new DefaultParametersControl(originalUri),type, method, this.supportedMethods);
 	}
 
 	public void is(Class<?> type, Method method) {

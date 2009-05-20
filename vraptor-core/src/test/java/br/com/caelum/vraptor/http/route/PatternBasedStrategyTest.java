@@ -54,19 +54,19 @@ public class PatternBasedStrategyTest {
 	
 	@Test
 	public void canHandleTypesWhichAreAvailableThroughItsPattern() throws SecurityException, NoSuchMethodException {
-		PatternBasedStrategy strategy = new PatternBasedStrategy(new PatternBasedType(MyComponent.class.getPackage().getName()+".{_logic}"), new PatternBasedType("list"), null);
+		PatternBasedStrategy strategy = new PatternBasedStrategy(control, new PatternBasedType(MyComponent.class.getPackage().getName()+".{_logic}"), new PatternBasedType("list"), null);
 		assertThat(strategy.canHandle(MyComponent.class, MyComponent.class.getDeclaredMethod("list")), is(equalTo(true)));
 	}
 	
 	@Test
 	public void cannotHandleTypeWhenItsAnotherType() throws SecurityException, NoSuchMethodException {
-		PatternBasedStrategy strategy = new PatternBasedStrategy(new PatternBasedType("Another"), new PatternBasedType("list"), null);
+		PatternBasedStrategy strategy = new PatternBasedStrategy(control, new PatternBasedType("Another"), new PatternBasedType("list"), null);
 		assertThat(strategy.canHandle(MyComponent.class, MyComponent.class.getDeclaredMethod("list")), is(equalTo(false)));
 	}
 
 	@Test
 	public void cannotHandleTypeWhenItsAnotherMethod() throws SecurityException, NoSuchMethodException {
-		PatternBasedStrategy strategy = new PatternBasedStrategy(new PatternBasedType(MyComponent.class.getName()), new PatternBasedType("other"), null);
+		PatternBasedStrategy strategy = new PatternBasedStrategy(control, new PatternBasedType(MyComponent.class.getName()), new PatternBasedType("other"), null);
 		assertThat(strategy.canHandle(MyComponent.class, MyComponent.class.getDeclaredMethod("list")), is(equalTo(false)));
 	}
 	

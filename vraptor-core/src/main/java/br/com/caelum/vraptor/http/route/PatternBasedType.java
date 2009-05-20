@@ -29,7 +29,6 @@ package br.com.caelum.vraptor.http.route;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class PatternBasedType {
@@ -77,14 +76,7 @@ public class PatternBasedType {
 	}
 
 	public String apply(String key, String value) {
-		Matcher matcher = pattern.matcher(key);
-		matcher.matches();
-		for (int i = 1; i <= matcher.groupCount(); i++) {
-			parameters.indexOf(key);
-			String name = parameters.get(i - 1);
-			request.setParameter(name, matcher.group(i));
-		}
-		return null;
+		return originalPattern.replace("{"+key+"}", value);
 	}
 
 }

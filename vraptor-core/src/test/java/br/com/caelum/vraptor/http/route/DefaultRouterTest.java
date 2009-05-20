@@ -208,7 +208,7 @@ public class DefaultRouterTest {
 	}
 
 	@br.com.caelum.vraptor.Resource
-	class MyResource {
+	public static class MyResource {
 		public void notAnnotated() {
 		}
 
@@ -285,20 +285,34 @@ public class DefaultRouterTest {
 	}
 
 	@Test
-	public void canAccessGenericTypeAndMethodRoute() throws NoSuchMethodException {
+	public void canAccessGenericTypeAndMethodRoute() throws NoSuchMethodException, ClassNotFoundException {
+		Class.forName(DefaultRouterTest.class.getPackage().getName() + ".MyCustomResource");
 		this.router = new DefaultRouter(new NoRoutesConfiguration(), new PathAnnotationRoutesParser(proxifier),
 				provider, proxifier, creator);
 		new Rules(router) {
 			@Override
 			public void routes() {
-				routeFor("--(*)--(*)").is(type("br.com.caelum.vraptor.http.route.{1}"), method("{2}"));
+				routeFor("--{webLogic}--{webMethod}").is(type(DefaultRouterTest.class.getPackage().getName() + ".{webLogic}"), method("{webMethod}"));
 			}
 		};
-		ResourceMethod resourceMethod = router.parse("--MyResource--notAnnotated", HttpMethod.GET, request);
-		assertThat(resourceMethod.getMethod(), is(equalTo(MyResource.class.getDeclaredMethod("notAnnotated"))));
-		String url = router.urlFor(MyResource.class, resourceMethod.getMethod(), new Object[] {});
-		assertThat(router.parse(url, HttpMethod.POST, null).getMethod(), is(equalTo(resourceMethod.getMethod())));
+		ResourceMethod resourceMethod = router.parse("--" + MyCustomResource.class.getSimpleName() + "--notAnnotated", HttpMethod.GET, request);
+		final Method javaMethodFound = resourceMethod.getMethod();
+		assertThat(javaMethodFound, is(equalTo(MyCustomResource.class.getDeclaredMethod("notAnnotated"))));
+		mockery.checking(new Expectations() {
+			{
+				one(provider).parameterNamesFor(javaMethodFound);
+				will(returnValue(new String[] {}));
+				one(creator).typeFor(with(VRaptorMatchers.resourceMethod(javaMethodFound)));
+				will(returnValue(Object.class));
+			}
+		});
+		String url = router.urlFor(MyResource.class, javaMethodFound, new Object[] {});
+		assertThat(router.parse(url, HttpMethod.POST, null).getMethod(), is(equalTo(javaMethodFound)));
 		mockery.assertIsSatisfied();
 	}
 
+}
+class MyCustomResource {
+	public void notAnnotated() {
+	}
 }

@@ -48,16 +48,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.converter.ConversionError;
-import br.com.caelum.vraptor.http.ognl.VRaptorConvertersAdapter;
 import br.com.caelum.vraptor.core.Converters;
-import br.com.caelum.vraptor.http.ognl.ArrayAccessor;
-import br.com.caelum.vraptor.http.ognl.EmptyElementsRemoval;
-import br.com.caelum.vraptor.http.ognl.ListAccessor;
-import br.com.caelum.vraptor.http.ognl.ReflectionBasedNullHandler;
+import br.com.caelum.vraptor.http.InvalidParameterException;
+import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.http.TypeCreator;
-import br.com.caelum.vraptor.http.ParameterNameProvider;
-import br.com.caelum.vraptor.http.InvalidParameterException;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.resource.ResourceMethod;
@@ -68,7 +63,7 @@ import br.com.caelum.vraptor.vraptor2.Info;
 /**
  * Provides parameters using ognl to parse expression values into parameter
  * values.
- * 
+ *
  * @author guilherme silveira
  */
 @RequestScoped
@@ -115,7 +110,7 @@ public class OgnlParametersProvider implements ParametersProvider {
 
 		VRaptorConvertersAdapter adapter = new VRaptorConvertersAdapter(converters, bundle);
 		Ognl.setTypeConverter(context, adapter);
-		for (Enumeration enumeration = parameters.getParameterNames(); enumeration.hasMoreElements();) {
+		for (Enumeration<?> enumeration = parameters.getParameterNames(); enumeration.hasMoreElements();) {
 			String key = (String) enumeration.nextElement();
 			String[] values = parameters.getParameterValues(key);
 			try {

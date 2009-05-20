@@ -37,15 +37,15 @@ import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
 /**
- * VRaptor's Double converter. 
- * 
+ * VRaptor's Double converter.
+ *
  * @author Guilherme Silveira
  */
 @Convert(Double.class)
 @ApplicationScoped
 public class DoubleConverter implements Converter<Double> {
 
-    public Double convert(String value, Class type, ResourceBundle bundle) {
+    public Double convert(String value, Class<? extends Double> type, ResourceBundle bundle) {
         if (value == null || value.equals("")) {
             return null;
         }

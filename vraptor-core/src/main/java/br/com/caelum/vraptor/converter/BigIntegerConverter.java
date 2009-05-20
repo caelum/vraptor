@@ -9,15 +9,15 @@ import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
 /**
- * VRaptor's BigInteger converter. 
- * 
+ * VRaptor's BigInteger converter.
+ *
  * @author Cecilia Fernandes
  */
 @Convert(BigInteger.class)
 @ApplicationScoped
 public class BigIntegerConverter implements Converter<BigInteger>{
 
-	public BigInteger convert(String value, Class type, ResourceBundle bundle) {
+	public BigInteger convert(String value, Class<? extends BigInteger> type, ResourceBundle bundle) {
 		if (value == null || value.equals("")) {
 			return null;
 		}
@@ -26,7 +26,7 @@ public class BigIntegerConverter implements Converter<BigInteger>{
 		} catch (NumberFormatException e) {
 			throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_integer"), value));
 		}
-		
+
 	}
 
 }

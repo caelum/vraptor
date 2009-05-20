@@ -1,7 +1,7 @@
 /***
- * 
+ *
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  * 1. Redistributions of source code must retain the above copyright notice,
@@ -12,7 +12,7 @@
  * copyright holders nor the names of its contributors may be used to endorse or
  * promote products derived from this software without specific prior written
  * permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -37,19 +37,19 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**
  * A strategy which returns the resource method based on a url pattern.
- * 
+ *
  * @author guilherme silveira
  */
 public class PatternBasedStrategy implements Route {
 
-	private final PatternBasedType type;
-	private final PatternBasedType method;
-	private final Set<HttpMethod> methods;
+//	private final PatternBasedType type;
+//	private final PatternBasedType method;
+//	private final Set<HttpMethod> methods;
 
 	public PatternBasedStrategy(PatternBasedType type, PatternBasedType method, Set<HttpMethod> methods) {
-		this.type = type;
-		this.method = method;
-		this.methods = methods;
+//		this.type = type;
+//		this.method = method;
+//		this.methods = methods;
 	}
 
 	public boolean canHandle(Class<?> type, Method method) {

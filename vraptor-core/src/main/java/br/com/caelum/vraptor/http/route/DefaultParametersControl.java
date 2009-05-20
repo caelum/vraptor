@@ -1,6 +1,6 @@
 /***
- * 
- * 
+ *
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  * 1. Redistributions of source code must retain the above copyright notice,
@@ -11,7 +11,7 @@
  * copyright holders nor the names of its contributors may be used to endorse or
  * promote products derived from this software without specific prior written
  * permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -37,10 +37,10 @@ import br.com.caelum.vraptor.http.MutableRequest;
 public class DefaultParametersControl implements ParametersControl {
 
 	private final List<String> parameters = new ArrayList<String>();
-	private final String patternUri;
+//	private final String patternUri;
 	private final Pattern pattern;
 	private final String originalUri;
-	
+
 	public DefaultParametersControl(String uri) {
 		this.originalUri = uri;
 		String finalUri = "";
@@ -70,7 +70,7 @@ public class DefaultParametersControl implements ParametersControl {
 		if(ignore) {
 			throw new IllegalRouteException("Illegal route contains invalid pattern: " + originalUri);
 		}
-		this.patternUri = patternUri;
+//		this.patternUri = patternUri;
 		this.pattern = Pattern.compile(patternUri);
 	}
 

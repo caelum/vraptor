@@ -43,7 +43,6 @@ import ognl.OgnlException;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.validator.ValidationMessage;
 import br.com.caelum.vraptor.vraptor2.Info;
 
 /**
@@ -51,12 +50,13 @@ import br.com.caelum.vraptor.vraptor2.Info;
  * size.<br>
  * Compatibility issues might arrive (in previous vraptor versions, the object
  * was instantiated instead of null being set).
- * 
+ *
  * @author Guilherme Silveira
- * 
+ *
  */
 public class ListAccessor extends ListPropertyAccessor {
 
+	@Override
 	@SuppressWarnings("unchecked")
 	public Object getProperty(Map context, Object target, Object value) throws OgnlException {
 		try {
@@ -66,6 +66,7 @@ public class ListAccessor extends ListPropertyAccessor {
 		}
 	}
 
+	@Override
 	@SuppressWarnings("unchecked")
 	public void setProperty(Map context, Object target, Object key, Object value) throws OgnlException {
 		// code comments by Guilherme Silveira in a moment of rage agains ognl

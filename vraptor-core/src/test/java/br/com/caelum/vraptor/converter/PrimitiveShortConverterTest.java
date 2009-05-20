@@ -1,7 +1,7 @@
 /***
- * 
+ *
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  * 1. Redistributions of source code must retain the above copyright notice,
@@ -12,7 +12,7 @@
  * copyright holders nor the names of its contributors may be used to endorse or
  * promote products derived from this software without specific prior written
  * permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -31,32 +31,27 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.validator.ValidationMessage;
-
 public class PrimitiveShortConverterTest {
-    
+
     private PrimitiveShortConverter converter;
-	private ArrayList<ValidationMessage> errors;
 	private ResourceBundle bundle;
 
     @Before
     public void setup() {
         this.converter = new PrimitiveShortConverter();
-        this.errors = new ArrayList<ValidationMessage>();
         this.bundle = ResourceBundle.getBundle("messages");
     }
-    
+
     @Test
     public void shouldBeAbleToConvertNumbers(){
-        assertThat((Short) converter.convert("5", short.class, bundle), is(equalTo((short) 5)));
+        assertThat(converter.convert("5", short.class, bundle), is(equalTo((short) 5)));
     }
-    
+
     @Test
     public void shouldComplainAboutInvalidNumber() {
     	try {
@@ -65,15 +60,15 @@ public class PrimitiveShortConverterTest {
 			assertThat(e.getMessage(), is(equalTo("--- is not a valid integer.")));
 		}
     }
-    
+
     @Test
     public void shouldConvertToZeroWhenNull() {
-    	assertThat((Short) converter.convert(null, short.class, bundle), is(equalTo((short) 0)));
+    	assertThat(converter.convert(null, short.class, bundle), is(equalTo((short) 0)));
     }
 
     @Test
     public void shouldConvertToZeroWhenEmpty() {
-    	assertThat((Short) converter.convert("", short.class, bundle), is(equalTo((short) 0)));
+    	assertThat(converter.convert("", short.class, bundle), is(equalTo((short) 0)));
     }
 
 }

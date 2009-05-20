@@ -9,15 +9,15 @@ import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
 /**
- * VRaptor's BigDecimal converter. 
- * 
+ * VRaptor's BigDecimal converter.
+ *
  * @author Cecilia Fernandes
  */
 @Convert(BigDecimal.class)
 @ApplicationScoped
 public class BigDecimalConverter implements Converter<BigDecimal>{
 
-	public BigDecimal convert(String value, Class type, ResourceBundle bundle) {
+	public BigDecimal convert(String value, Class<? extends BigDecimal> type, ResourceBundle bundle) {
 		if (value == null || value.equals("")) {
 			return null;
 		}
@@ -26,7 +26,8 @@ public class BigDecimalConverter implements Converter<BigDecimal>{
 		} catch (NumberFormatException e) {
 			throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_number"), value));
 		}
-		
+
 	}
+
 
 }

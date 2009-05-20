@@ -29,12 +29,12 @@
  */
 package br.com.caelum.vraptor.converter;
 
+import java.text.MessageFormat;
+import java.util.ResourceBundle;
+
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
-
-import java.text.MessageFormat;
-import java.util.ResourceBundle;
 
 /**
  * VRaptor's primitive short converter.
@@ -43,9 +43,9 @@ import java.util.ResourceBundle;
  */
 @Convert(short.class)
 @ApplicationScoped
-public class PrimitiveShortConverter implements Converter {
+public class PrimitiveShortConverter implements Converter<Short> {
 
-    public Object convert(String value, Class type, ResourceBundle bundle) {
+    public Short convert(String value, Class<? extends Short> type, ResourceBundle bundle) {
         if (value == null || value.equals("")) {
             return (short) 0;
         }

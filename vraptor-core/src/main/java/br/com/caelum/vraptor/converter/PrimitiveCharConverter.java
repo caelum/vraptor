@@ -29,12 +29,12 @@
  */
 package br.com.caelum.vraptor.converter;
 
+import java.text.MessageFormat;
+import java.util.ResourceBundle;
+
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
-
-import java.text.MessageFormat;
-import java.util.ResourceBundle;
 
 /**
  * VRaptor's primitive char converter.
@@ -43,9 +43,9 @@ import java.util.ResourceBundle;
  */
 @Convert(char.class)
 @ApplicationScoped
-public class PrimitiveCharConverter implements Converter {
+public class PrimitiveCharConverter implements Converter<Character> {
 
-    public Object convert(String value, Class type, ResourceBundle bundle) {
+    public Character convert(String value, Class<? extends Character> type, ResourceBundle bundle) {
         if (value == null || value.equals("")) {
             return '\u0000';
         }

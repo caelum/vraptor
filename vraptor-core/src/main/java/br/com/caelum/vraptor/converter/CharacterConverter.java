@@ -37,15 +37,15 @@ import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
 /**
- * VRaptor's Character converter. 
- * 
+ * VRaptor's Character converter.
+ *
  * @author Guilherme Silveira
  */
 @Convert(Character.class)
 @ApplicationScoped
 public class CharacterConverter implements Converter<Character> {
 
-    public Character convert(String value, Class type, ResourceBundle bundle) {
+    public Character convert(String value, Class<? extends Character> type, ResourceBundle bundle) {
         if (value == null || value.length()==0) {
             return null;
         }

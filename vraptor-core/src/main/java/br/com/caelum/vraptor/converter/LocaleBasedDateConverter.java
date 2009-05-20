@@ -7,9 +7,6 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.core.RequestInfo;
@@ -17,24 +14,22 @@ import br.com.caelum.vraptor.ioc.RequestScoped;
 
 /**
  * Locale based date converter.
- * 
+ *
  * @author Guilherme Silveira
  */
 @Convert(Date.class)
 @RequestScoped
 public class LocaleBasedDateConverter implements Converter<Date> {
-    
+
     private final JstlWrapper jstlWrapper = new JstlWrapper();
 
-    private static final Logger logger = LoggerFactory.getLogger(LocaleBasedDateConverter.class);
-    
     private final RequestInfo request;
-    
+
     public LocaleBasedDateConverter(RequestInfo request) {
         this.request = request;
     }
 
-    public Date convert(String value, Class type, ResourceBundle bundle) {
+    public Date convert(String value, Class<? extends Date> type, ResourceBundle bundle) {
         if (value == null || value.equals("")) {
             return null;
         }

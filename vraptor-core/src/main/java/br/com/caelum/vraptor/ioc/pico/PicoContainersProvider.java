@@ -29,14 +29,11 @@
  */
 package br.com.caelum.vraptor.ioc.pico;
 
-import br.com.caelum.vraptor.ComponentRegistry;
-import br.com.caelum.vraptor.Interceptor;
-import br.com.caelum.vraptor.core.RequestInfo;
-import br.com.caelum.vraptor.http.route.Router;
-import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
-import br.com.caelum.vraptor.ioc.ApplicationScoped;
-import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.ioc.SessionScoped;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.http.HttpSession;
+
 import org.picocontainer.DefaultPicoContainer;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.behaviors.Caching;
@@ -45,9 +42,14 @@ import org.picocontainer.monitors.NullComponentMonitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.http.HttpSession;
-import java.util.HashMap;
-import java.util.Map;
+import br.com.caelum.vraptor.ComponentRegistry;
+import br.com.caelum.vraptor.Interceptor;
+import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.http.route.Router;
+import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
+import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor.ioc.SessionScoped;
 
 /**
  * Provides containers, controlling all scopes and registering all different
@@ -102,7 +104,6 @@ public class PicoContainersProvider implements ComponentRegistry {
         }
     }
 
-    @SuppressWarnings("unchecked")
     private boolean alreadyRegistered(Class<?> interfaceType) {
         for (Map<Class<?>, Class<?>> scope : new Map[]{applicationScoped, sessionScoped, requestScoped}) {
             if (scope.containsKey(interfaceType)) {

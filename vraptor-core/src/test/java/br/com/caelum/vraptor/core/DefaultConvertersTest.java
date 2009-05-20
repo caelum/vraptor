@@ -8,8 +8,8 @@ import static org.hamcrest.Matchers.typeCompatibleWith;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Map.Entry;
 
 import org.jmock.Expectations;
 import org.junit.Before;
@@ -18,7 +18,6 @@ import org.junit.Test;
 import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
-import br.com.caelum.vraptor.test.VRaptorMockery;
 import br.com.caelum.vraptor.converter.BooleanConverter;
 import br.com.caelum.vraptor.converter.ByteConverter;
 import br.com.caelum.vraptor.converter.DoubleConverter;
@@ -39,6 +38,7 @@ import br.com.caelum.vraptor.converter.ShortConverter;
 import br.com.caelum.vraptor.interceptor.multipart.UploadedFile;
 import br.com.caelum.vraptor.interceptor.multipart.UploadedFileConverter;
 import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor.test.VRaptorMockery;
 
 public class DefaultConvertersTest {
 
@@ -54,14 +54,15 @@ public class DefaultConvertersTest {
         this.componentRegistry = mockery.mock(ComponentRegistry.class);
         mockery.checking(new Expectations() {
             {
-                allowing(componentRegistry).register((Class) with(an(Class.class)), (Class) with(an(Class.class)));
+                allowing(componentRegistry).register((Class<?>) with(an(Class.class)), (Class<?>) with(an(Class.class)));
             }
         });
         this.converters = new DefaultConverters(componentRegistry);
         this.converters.init();
     }
 
-    @Test
+    @SuppressWarnings("unchecked")
+	@Test
     public void shouldRegisterConvertersForAllDefaultTypes() {
         final HashMap<Class, Class<? extends Converter>> EXPECTED_CONVERTERS = new HashMap<Class, Class<? extends Converter>>() {
             {
@@ -90,7 +91,7 @@ public class DefaultConvertersTest {
         mockery.checking(new Expectations() {
             {
                 for (Class<? extends Converter> converterType : EXPECTED_CONVERTERS.values()) {
-                    Converter expected = mockery.mock(converterType);
+                    Converter<?> expected = mockery.mock(converterType);
                     one(componentRegistry).register(converterType, converterType);
                     one(container).instanceFor(converterType);
                     will(returnValue(expected));
@@ -98,10 +99,10 @@ public class DefaultConvertersTest {
             }
         });
 
-        for (Map.Entry<Class, Class<? extends Converter>> entry : EXPECTED_CONVERTERS.entrySet()) {
-            Class typeFor = entry.getKey();
+        for (Entry<Class, Class<? extends Converter>> entry : EXPECTED_CONVERTERS.entrySet()) {
+            Class<?> typeFor = entry.getKey();
             Class<? extends Converter> converterType = entry.getValue();
-            Converter converter = converters.to(typeFor, container);
+            Converter<?> converter = converters.to(typeFor, container);
             assertThat(converter, is(instanceOf(converterType)));
         }
     }
@@ -118,7 +119,7 @@ public class DefaultConvertersTest {
 
     class WrongConverter implements Converter<String> {
 
-        public String convert(String value, Class type, ResourceBundle bundle) {
+        public String convert(String value, Class<? extends String> type, ResourceBundle bundle) {
             // TODO Auto-generated method stub
             return null;
         }
@@ -129,14 +130,14 @@ public class DefaultConvertersTest {
 
     @Convert(MyData.class)
     class MyConverter implements Converter<MyData> {
-        public MyData convert(String value, Class type, ResourceBundle bundle) {
+        public MyData convert(String value, Class<? extends MyData> type, ResourceBundle bundle) {
             return null;
         }
     }
 
     @Convert(MyData.class)
     class MySecondConverter implements Converter<MyData> {
-        public MyData convert(String value, Class type, ResourceBundle bundle) {
+        public MyData convert(String value, Class<? extends MyData> type, ResourceBundle bundle) {
             return null;
         }
     }

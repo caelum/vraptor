@@ -1,7 +1,7 @@
 /***
- * 
+ *
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  * 1. Redistributions of source code must retain the above copyright notice,
@@ -12,7 +12,7 @@
  * copyright holders nor the names of its contributors may be used to endorse or
  * promote products derived from this software without specific prior written
  * permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -53,7 +53,7 @@ public class VRaptorRequestTest {
 	public void setup() {
 		this.mockery = new Mockery();
 		this.request = mockery.mock(HttpServletRequest.class);
-		final Hashtable t = new Hashtable();
+		final Hashtable<String, String> t = new Hashtable<String, String>();
 		t.put("name", "guilherme");
 		t.put("age", "27");
 		mockery.checking(new Expectations() {
@@ -109,7 +109,7 @@ public class VRaptorRequestTest {
 	public void returnsAllNamesOnlyOnce() {
 		vraptor.setParameter("name", "silveira");
 		vraptor.setParameter("size", "m");
-		Enumeration enumeration = vraptor.getParameterNames();
+		Enumeration<?> enumeration = vraptor.getParameterNames();
 		boolean nameFound = false;
 		boolean ageFound = false;
 		boolean sizeFound = false;
@@ -133,7 +133,7 @@ public class VRaptorRequestTest {
 	public void returnsBothMapsWithFirstOverridingSecond() {
 		vraptor.setParameter("name", "silveira");
 		vraptor.setParameter("size", "m");
-		Map<String,Object> map = vraptor.getParameterMap();
+		Map<?,?> map = vraptor.getParameterMap();
 		assertThat((String[])map.get("name"), is(equalTo(new String[] {"silveira"})));
 		assertThat((String[])map.get("size"), is(equalTo(new String[] {"m"})));
 		assertThat((String)map.get("age"), is(equalTo("27")));

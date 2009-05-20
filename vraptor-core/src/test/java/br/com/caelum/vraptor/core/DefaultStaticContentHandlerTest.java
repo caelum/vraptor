@@ -31,12 +31,12 @@ public class DefaultStaticContentHandlerTest {
     public void returnsTrueForRealStaticResources() throws Exception {
         mockery.checking(new Expectations() {
             {
-                one(request).getRequestURI(); 
+                one(request).getRequestURI();
                 File file = File.createTempFile("_test", ".xml");
                 String key = file.getAbsolutePath();
                 will(returnValue("/contextName/" +key));
                 one(request).getContextPath(); will(returnValue("/contextName/"));
-                one(context).getResource(key); will(returnValue(file.toURL()));
+                one(context).getResource(key); will(returnValue(file.toURI().toURL()));
             }
         });
         boolean result = new DefaultStaticContentHandler(context).requestingStaticFile(request);
@@ -50,7 +50,7 @@ public class DefaultStaticContentHandlerTest {
             {
                 File file = new File("_test_unknown.xml");
                 String key = file.getAbsolutePath();
-                one(request).getRequestURI(); 
+                one(request).getRequestURI();
                 will(returnValue("/contextName/" +key));
                 one(request).getContextPath(); will(returnValue("/contextName/"));
                 one(context).getResource(key); will(returnValue(null));

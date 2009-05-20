@@ -29,7 +29,6 @@
  */
 package br.com.caelum.vraptor.core;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 
 import javax.annotation.PostConstruct;
@@ -77,7 +76,7 @@ public final class DefaultConverters implements Converters {
         this.container = container;
         this.types = new LinkedList<Class<? extends Converter>>();
     }
-    
+
     @PostConstruct
     public void init() {
         for (Class<? extends Converter<?>> type : DEFAULTS) {
@@ -95,7 +94,6 @@ public final class DefaultConverters implements Converters {
         container.register(converterType, converterType);
     }
 
-    @SuppressWarnings("unchecked")
     public Converter to(Class<?> type, Container container) {
         for (Class<? extends Converter> converterType : types) {
             Class boundType = converterType.getAnnotation(Convert.class).value();

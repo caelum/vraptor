@@ -90,7 +90,7 @@ public class DefaultRouterTest {
 		assertThat(found, is(equalTo(method)));
 		mockery.assertIsSatisfied();
 	}
-	
+
 
 	@Test
 	public void passesTheWebMethod() throws SecurityException, NoSuchMethodException {
@@ -128,6 +128,7 @@ public class DefaultRouterTest {
 	@Test
 	public void acceptsAnHttpMethodLimitedMappingRule() throws NoSuchMethodException {
 		new Rules(router) {
+			@Override
 			public void routes() {
 				routeFor("/clients/add").with(HttpMethod.POST).is(MyControl.class).add(null);
 			}
@@ -137,7 +138,7 @@ public class DefaultRouterTest {
 		mockery.assertIsSatisfied();
 	}
 
-	private Method method(String methodName, Class... params) throws SecurityException, NoSuchMethodException {
+	private Method method(String methodName, Class<?>... params) throws SecurityException, NoSuchMethodException {
 		return MyControl.class.getDeclaredMethod(methodName, params);
 	}
 
@@ -145,6 +146,7 @@ public class DefaultRouterTest {
 	@Test
 	public void acceptsAnHttpMethodLimitedMappingRuleWithBothMethods() throws NoSuchMethodException {
 		new Rules(router) {
+			@Override
 			public void routes() {
 				routeFor("/clients/add").with(HttpMethod.POST).with(HttpMethod.GET).is(MyControl.class).add(null);
 			}
@@ -184,10 +186,10 @@ public class DefaultRouterTest {
 		}
 	}
 
-	
-	
-	
-	
+
+
+
+
 
 	@Test
 	public void testReturnsNullIfResourceNotFound() {
@@ -287,6 +289,7 @@ public class DefaultRouterTest {
 		this.router = new DefaultRouter(new NoRoutesConfiguration(), new PathAnnotationRoutesParser(proxifier),
 				provider, proxifier, creator);
 		new Rules(router) {
+			@Override
 			public void routes() {
 				routeFor("--(*)--(*)").is(type("br.com.caelum.vraptor.http.route.{1}"), method("{2}"));
 			}

@@ -29,12 +29,12 @@
  */
 package br.com.caelum.vraptor.converter;
 
+import java.text.MessageFormat;
+import java.util.ResourceBundle;
+
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
-
-import java.text.MessageFormat;
-import java.util.ResourceBundle;
 
 /**
  * VRaptor's primitive byte converter.
@@ -44,9 +44,9 @@ import java.util.ResourceBundle;
  */
 @Convert(byte.class)
 @ApplicationScoped
-public class PrimitiveByteConverter implements Converter {
+public class PrimitiveByteConverter implements Converter<Byte> {
 
-    public Object convert(String value, Class type, ResourceBundle bundle) {
+    public Byte convert(String value, Class<? extends Byte> type, ResourceBundle bundle) {
         if (value == null || value.equals("")) {
             return (byte) 0;
         }

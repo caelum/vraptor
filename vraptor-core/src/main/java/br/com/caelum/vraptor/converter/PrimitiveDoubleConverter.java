@@ -29,12 +29,12 @@
  */
 package br.com.caelum.vraptor.converter;
 
+import java.text.MessageFormat;
+import java.util.ResourceBundle;
+
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
-
-import java.text.MessageFormat;
-import java.util.ResourceBundle;
 
 /**
  * VRaptor's primitive double converter.
@@ -43,9 +43,9 @@ import java.util.ResourceBundle;
  */
 @Convert(double.class)
 @ApplicationScoped
-public class PrimitiveDoubleConverter implements Converter {
+public class PrimitiveDoubleConverter implements Converter<Double> {
 
-    public Object convert(String value, Class type, ResourceBundle bundle) {
+    public Double convert(String value, Class<? extends Double> type, ResourceBundle bundle) {
         if (value == null || value.equals("")) {
             return 0d;
         }

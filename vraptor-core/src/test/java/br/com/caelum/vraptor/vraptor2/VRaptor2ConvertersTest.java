@@ -24,7 +24,7 @@ public class VRaptor2ConvertersTest {
     private Mockery mockery;
     private Config config;
     private Container container;
-    
+
     public static class VRaptor2BasedConverter implements Converter{
 
         public Object convert(String value, Class<?> type, LogicRequest context) throws ConversionException {
@@ -34,16 +34,16 @@ public class VRaptor2ConvertersTest {
         public Class<?>[] getSupportedTypes() {
             return new Class<?>[]{Integer.class};
         }
-        
+
     }
 
     @Convert(Integer.class)
     public static class VRaptor3BasedConverter implements br.com.caelum.vraptor.Converter<Integer>{
 
-        public Integer convert(String value, Class type, ResourceBundle bundle) {
+        public Integer convert(String value, Class<? extends Integer> type, ResourceBundle bundle) {
             return null;
         }
-        
+
     }
 
     @Before

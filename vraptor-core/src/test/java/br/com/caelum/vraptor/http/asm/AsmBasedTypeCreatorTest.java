@@ -1,19 +1,20 @@
 package br.com.caelum.vraptor.http.asm;
 
-import br.com.caelum.vraptor.http.DefaultParameterNameProvider;
-import br.com.caelum.vraptor.interceptor.DogAlike;
-import br.com.caelum.vraptor.test.VRaptorMockery;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.List;
+
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.List;
+import br.com.caelum.vraptor.http.DefaultParameterNameProvider;
+import br.com.caelum.vraptor.interceptor.DogAlike;
+import br.com.caelum.vraptor.test.VRaptorMockery;
 
 public class AsmBasedTypeCreatorTest {
 
@@ -59,9 +60,9 @@ public class AsmBasedTypeCreatorTest {
         Method getter = type.getDeclaredMethod("getListOfString");
         Assert.assertTrue(getter.getGenericReturnType() instanceof ParameterizedType);
         ParameterizedType returnType = (ParameterizedType) getter.getGenericReturnType();
-        Assert.assertTrue(List.class.isAssignableFrom((Class) returnType.getRawType()));
+        Assert.assertTrue(List.class.isAssignableFrom((Class<?>) returnType.getRawType()));
         Type firstType = returnType.getActualTypeArguments()[0];
-        Assert.assertTrue(String.class.isAssignableFrom((Class) firstType));
+        Assert.assertTrue(String.class.isAssignableFrom((Class<?>) firstType));
 
         mockery.assertIsSatisfied();
     }

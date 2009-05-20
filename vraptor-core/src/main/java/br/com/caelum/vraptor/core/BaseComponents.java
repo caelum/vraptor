@@ -1,7 +1,7 @@
 /***
- * 
+ *
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  * 1. Redistributions of source code must retain the above copyright notice,
@@ -12,7 +12,7 @@
  * copyright holders nor the names of its contributors may be used to endorse or
  * promote products derived from this software without specific prior written
  * permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -54,14 +54,13 @@ import br.com.caelum.vraptor.view.DefaultPathResolver;
 /**
  * List of base components to vraptor.<br/>
  * Those components should be available with any chosen ioc implementation.
- * 
+ *
  * @author guilherme silveira
  */
 public class BaseComponents {
-	
-	@SuppressWarnings("unchecked")
-	private final static Map<Class,Class> DEFAULT_IMPLEMENTATIONS = new HashMap<Class,Class>();
-	
+
+	private final static Map<Class<?>,Class<?>> DEFAULT_IMPLEMENTATIONS = new HashMap<Class<?>,Class<?>>();
+
 	static {
 		DEFAULT_IMPLEMENTATIONS.put(UrlToResourceTranslator.class,DefaultResourceTranslator.class);
 		DEFAULT_IMPLEMENTATIONS.put(Router.class,DefaultRouter.class);
@@ -73,15 +72,16 @@ public class BaseComponents {
 		DEFAULT_IMPLEMENTATIONS.put(RoutesParser.class,PathAnnotationRoutesParser.class);
 		DEFAULT_IMPLEMENTATIONS.put(Proxifier.class,DefaultProxifier.class);
 	}
-	
-	public static Collection<Class> getApplicationScoped() {
+
+	public static Collection<Class<?>> getApplicationScoped() {
 		return DEFAULT_IMPLEMENTATIONS.values();
 	}
-	
-	public static Collection<Class> getAppScopedInterfaces() {
+
+	public static Collection<Class<?>> getAppScopedInterfaces() {
 		return DEFAULT_IMPLEMENTATIONS.keySet();
 	}
 
+	@SuppressWarnings("unchecked")
 	public static Class[] getRequestScoped() {
 		return new Class[] { DefaultPathResolver.class, DefaultMethodInfo.class, DefaultInterceptorStack.class,
 				DefaultRequestExecution.class, DefaultResult.class, OgnlParametersProvider.class,

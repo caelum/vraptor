@@ -39,25 +39,29 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
 /**
  * Accepts either the ordinal value or name. Null and empty strings are treated
  * as null.
- * 
+ *
  * @author Guilherme Silveira
  */
 @Convert(Enum.class)
 @ApplicationScoped
-public class EnumConverter implements Converter<Enum> {
+public class EnumConverter<T extends Enum<T>> implements Converter<T> {
 
-    public Enum convert(String value, Class<? extends Enum> type, ResourceBundle bundle) {
+	/**
+	 * Enums are always final, so I can suppress this warning safely
+	 */
+	@SuppressWarnings("unchecked")
+    public T convert(String value, Class<? extends T> type, ResourceBundle bundle) {
         if (value == null || value.equals("")) {
             return null;
         }
         if (Character.isDigit(value.charAt(0))) {
-            return resolveByOrdinal(value, type, bundle);
+            return resolveByOrdinal(value, (Class<T>) type, bundle);
         } else {
-            return resolveByName(value, type, bundle);
+            return resolveByName(value, (Class<T>) type, bundle);
         }
     }
 
-    private Enum resolveByName(String value, Class<? extends Enum> enumType, ResourceBundle bundle) {
+    private T resolveByName(String value, Class<T> enumType, ResourceBundle bundle) {
         try {
             return Enum.valueOf(enumType, value);
         } catch (IllegalArgumentException e) {
@@ -65,7 +69,7 @@ public class EnumConverter implements Converter<Enum> {
         }
     }
 
-    private Enum resolveByOrdinal(String value, Class<? extends Enum> enumType, ResourceBundle bundle) {
+    private T resolveByOrdinal(String value, Class<T> enumType, ResourceBundle bundle) {
         try {
             int ordinal = Integer.parseInt(value);
             if (ordinal >= enumType.getEnumConstants().length) {

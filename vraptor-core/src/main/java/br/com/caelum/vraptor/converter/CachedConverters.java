@@ -45,17 +45,17 @@ public class CachedConverters implements Converters {
 
     private final Converters delegate;
     private final Map<Class<?>, Class<?>> cache = new HashMap<Class<?>, Class<?>>();
-    
+
     private static final Logger logger = LoggerFactory.getLogger(CachedConverters.class);
 
     public CachedConverters(Converters converters) {
         this.delegate = converters;
     }
 
-    public Converter to(Class<?> type, Container container) {
+    public Converter<?> to(Class<?> type, Container container) {
         if(cache.containsKey(type)) {
             Class<?> converterType = cache.get(type);
-            return (Converter) container.instanceFor(converterType);
+            return (Converter<?>) container.instanceFor(converterType);
         }
         logger.debug("Caching converter " + type.getName());
         Converter<?> converter = delegate.to(type, container);

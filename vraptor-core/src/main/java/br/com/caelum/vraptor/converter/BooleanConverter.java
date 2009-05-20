@@ -53,7 +53,7 @@ public class BooleanConverter implements Converter<Boolean> {
 	private static final Set<String> IS_TRUE  = new HashSet<String>(Arrays.asList("TRUE", "1", "YES", "Y", "ON"));
 	private static final Set<String> IS_FALSE = new HashSet<String>(Arrays.asList("FALSE", "0", "NO", "N", "OFF"));
 
-	public Boolean convert(String value, Class type, ResourceBundle bundle) {
+	public Boolean convert(String value, Class<? extends Boolean> type, ResourceBundle bundle) {
 		if (value == null) {
 			return null;
 		}

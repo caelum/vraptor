@@ -47,7 +47,7 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 @ApplicationScoped
 public class DefaultResourceTranslator implements UrlToResourceTranslator {
 
-    private static final Logger logger = LoggerFactory.getLogger(DefaultResourceTranslator.class);
+    private final Logger logger = LoggerFactory.getLogger(DefaultResourceTranslator.class);
     private static final String METHOD_PARAMETER = "_method";
     static final String INCLUDE_REQUEST_URI = "javax.servlet.include.request_uri";
 

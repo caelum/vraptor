@@ -1,29 +1,29 @@
 - Create example about how to create a VRaptor3 converter
 
 
-- support to method return != string --> outject
-	- do not do it if @Component vrraptor2
-- refactor PathAnnotationRoutesParser to extract uri from resource.getName() and resourceMethod.getName()
-- make StupidTranslator work with jsessionid
+- if you return OutputStream, i will grab all the data and close it and try to set the content-type if not yet set
+
 - accept support "_format" parameter
 - json support
 - json support through "Accepts", priorize _format
 - json outjecter outjects
+
 - onError().goTo("xpto"); on validation, with support to ajax
+
 - remove String result from resourceMethods: convention for result pages are: web/controllerName/resourceMethod.format.jsp
-- default being web/controllerName/resouceMethod.jsp for format=html
-- change Validator action when error occurs.
+	- default being web/controllerName/resouceMethod.jsp for format=html
+	- change Validator action when error occurs.
+
+
 
 - @Component em outros componentes e fazer funcionar com pico sem gritar do log
 	- converter registering is causing many log messages
 	- meu problema eh queo webinfocontextblablabla pode ser customizado, ver se facilita se nao customiza-lo
 	- no lookp do webinf, joga em um container bobo primeiro
 	- ai depois disso, joga no cara que eh o Router q pode ter sido customizado, tirando dessa lista
-- containerprovider padrao: spring
-- ver com o spring se tudo bem de registrar depois do cara ja ter usado o cara
-welcome file list:
-	- testar se da para try/catch 404 e ver o que acontece... passar um response wrapped??? sendError
-	- known bug: accessing / when its /index.html.... if its a dir containing an index.html it doesnt work, but if your url is /clients/ it works...
+
+- containerprovider padrao: spring e ver com o spring se tudo bem de registrar depois do cara ja ter usado o cara
+
 - Map support
 	map[ENUM]-->
 	map["a"]-->
@@ -32,14 +32,13 @@ welcome file list:
 	map[id==2]="por favor"
 	map[id==2].nome="por favor"
 	(map[id==2] eh o lado direito!!!)
-- parameters are being set twice
-
 
 help:
+- bug: parameters are being set twice?
 - JstlLocalization test
-- MultipartInterceptor is only added if jar is found on classpath
-- make StupidTranslator work with jsessionid
-- ceci: integration test for vraptor-example project e vraptor-spring-example
+- MultipartInterceptor should be added only if jar is found on classpath
+- make DefaultResourceTranslator work with jsessionid
+- integration test for vraptor-example project e vraptor-spring-example
 
 
 
@@ -151,6 +150,9 @@ right before ANY release
 	- check all TODOS and do something about them
 
 ONLY AFTER RELEASE
+welcome file list:
+	- testar se da para try/catch 404 e ver o que acontece... passar um response wrapped??? sendError
+	- known bug: accessing / when its /index.html.... if its a dir containing an index.html it doesnt work, but if your url is /clients/ it works...
 - All common components should be located at BaseComponents, not only the ones pico can register so easily
 - MultipartInterceptor.accepts() is never called, so it throws an exception everytime a request which isn't an multipart one is made
 UserAgentInterceptor que permite usar isso: documentacao
@@ -241,6 +243,8 @@ converters:
 - path annotation with support to dynamic logic and component lookup (niceurls?)
 - custom converters for specified method parameters
 - v2: support for session scoped components for constructor injection
+- support to method return != string --> outject
+	- do not do it if @Component vrraptor2
 
 OgnlGenericTypesSupportTest:
     @Test
@@ -409,3 +413,4 @@ support HibernateValidator with i18n messages
 	routeFor("/(*)").is(type(""),method(""));
 - support to method return != string --> outject
 - support to niceurls with {webLogic} and {webMethod}
+- support to method return != string --> outject

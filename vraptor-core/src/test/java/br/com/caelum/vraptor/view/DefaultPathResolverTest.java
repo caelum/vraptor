@@ -63,9 +63,9 @@ public class DefaultPathResolverTest {
                 one(resource).getType(); will(returnValue(DogController.class));
             }
         });
-        DefaultPathResolver resolver = new DefaultPathResolver(request);
-        String result = resolver.pathFor(method, "ok");
-        MatcherAssert.assertThat(result, Matchers.is(Matchers.equalTo("/DogController/bark.ok.jsp")));
+        DefaultPathResolver resolver = new DefaultPathResolver();
+        String result = resolver.pathFor(method);
+        MatcherAssert.assertThat(result, Matchers.is(Matchers.equalTo("/DogController/bark.jsp")));
         mockery.assertIsSatisfied();
     }
 }

@@ -29,6 +29,8 @@ package br.com.caelum.vraptor.validator;
 
 import java.util.ArrayList;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.jmock.Expectations;
 import org.junit.Assert;
 import org.junit.Before;
@@ -51,6 +53,7 @@ public class DefaultValidatorTest {
 	private MyComponent instance;
 	private Proxifier proxifier;
 	private PageResult pageResult;
+	private HttpServletRequest request;
 
 
 	@Before
@@ -60,7 +63,8 @@ public class DefaultValidatorTest {
 		this.result = mockery.mock(Result.class);
 		this.logicResult = mockery.mock(LogicResult.class);
 		this.instance = new MyComponent();
-		this.validator = new DefaultValidator(proxifier, result);
+		this.request = mockery.mock(HttpServletRequest.class);
+		this.validator = new DefaultValidator(proxifier, result,request);
 		this.pageResult = mockery.mock(PageResult.class);
 	}
 
@@ -68,10 +72,12 @@ public class DefaultValidatorTest {
 	public void redirectsToStandardPageResultByDefault() {
 		mockery.checking(new Expectations() {
 			{
+				String referer = "google.com";
+				one(request).getRequestURI(); will(returnValue(referer));
 				one(result).include((String) with(an(String.class)), with(an(ArrayList.class)));
 				one(result).use(PageResult.class);
 				will(returnValue(pageResult));
-				one(pageResult).forward("invalid");
+				one(pageResult).forward(referer);
 			}
 		});
 		try {

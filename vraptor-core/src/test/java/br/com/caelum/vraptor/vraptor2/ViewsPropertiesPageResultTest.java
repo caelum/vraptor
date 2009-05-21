@@ -36,8 +36,8 @@ public class ViewsPropertiesPageResultTest {
     private HttpSession session;
     private Resource resource;
     private RequestDispatcher dispatcher;
-    private MethodInfo requestInfo;
 	private RequestInfo webRequest;
+	private MethodInfo info;
 
     @Before
     public void setup() {
@@ -46,11 +46,11 @@ public class ViewsPropertiesPageResultTest {
         this.response = mockery.mock(HttpServletResponse.class);
         this.session = mockery.mock(HttpSession.class);
         this.method = mockery.mock(ResourceMethod.class);
-        this.requestInfo = mockery.mock(MethodInfo.class);
         this.resource = mockery.mock(Resource.class);
         this.config = mockery.mock(Config.class);
         this.resolver = mockery.mock(PathResolver.class);
         this.dispatcher = mockery.mock(RequestDispatcher.class);
+        this.info = mockery.mock(MethodInfo.class);
         mockery.checking(new Expectations() {
             {
                 allowing(request).getParameterMap();
@@ -59,14 +59,15 @@ public class ViewsPropertiesPageResultTest {
                 will(returnValue(session));
                 allowing(session).getAttribute("org.vraptor.scope.ScopeType_FLASH");
                 will(returnValue(new HashMap<String, Object>()));
-                allowing(requestInfo).getResourceMethod();
+                allowing(info).getResourceMethod();
                 will(returnValue(method));
                 allowing(method).getResource();
                 will(returnValue(resource));
+                allowing(info).getResult(); will(returnValue("ok"));
             }
         });
         this.webRequest = new RequestInfo(context, request, response);
-        this.result = new ViewsPropertiesPageResult(this.config, this.resolver, this.requestInfo, this.webRequest);
+        this.result = new ViewsPropertiesPageResult(this.config, this.resolver, this.info, this.webRequest, info);
     }
 
     @Component
@@ -85,14 +86,14 @@ public class ViewsPropertiesPageResultTest {
                 will(returnValue(CommonComponentOld.class.getMethod("base")));
                 one(config).getForwardFor("CommonComponentOld.base.ok");
                 will(returnValue(null));
-                one(resolver).pathFor(method, "ok");
+                one(resolver).pathFor(method);
                 will(returnValue("defaultPath"));
                 one(request).getRequestDispatcher("defaultPath");
                 will(returnValue(dispatcher));
                 one(dispatcher).forward(request, response);
             }
         });
-        this.result.forward("ok");
+        this.result.forward();
         mockery.assertIsSatisfied();
     }
 
@@ -109,7 +110,7 @@ public class ViewsPropertiesPageResultTest {
                 one(response).sendRedirect("clientSide");
             }
         });
-        this.result.forward("ok");
+        this.result.forward();
         mockery.assertIsSatisfied();
     }
 
@@ -126,14 +127,14 @@ public class ViewsPropertiesPageResultTest {
                 will(returnValue(NewResource.class));
                 allowing(method).getMethod();
                 will(returnValue(NewResource.class.getMethod("base")));
-                one(resolver).pathFor(method, "ok");
+                one(resolver).pathFor(method);
                 will(returnValue("MyPath"));
                 one(request).getRequestDispatcher("MyPath");
                 will(returnValue(dispatcher));
                 one(dispatcher).forward(request, response);
             }
         });
-        this.result.forward("ok");
+        this.result.forward();
         mockery.assertIsSatisfied();
     }
 
@@ -152,7 +153,7 @@ public class ViewsPropertiesPageResultTest {
                 one(dispatcher).forward(request, response);
             }
         });
-        this.result.forward("ok");
+        this.result.forward();
         mockery.assertIsSatisfied();
     }
 
@@ -169,7 +170,7 @@ public class ViewsPropertiesPageResultTest {
                 exactly(2).of(request).getAttribute("client"); will(returnValue(new CommonComponentOld()));
             }
         });
-        this.result.forward("ok");
+        this.result.forward();
         mockery.assertIsSatisfied();
     }
 
@@ -181,14 +182,14 @@ public class ViewsPropertiesPageResultTest {
                 will(returnValue(CommonComponentOld.class));
                 allowing(method).getMethod();
                 will(returnValue(CommonComponentOld.class.getMethod("base")));
-                one(resolver).pathFor(method, "ok");
+                one(resolver).pathFor(method);
                 will(returnValue("defaultPath"));
                 one(request).getRequestDispatcher("defaultPath");
                 will(returnValue(dispatcher));
                 one(dispatcher).include(request, response);
             }
         });
-        this.result.include("ok");
+        this.result.include();
         mockery.assertIsSatisfied();
     }
 }

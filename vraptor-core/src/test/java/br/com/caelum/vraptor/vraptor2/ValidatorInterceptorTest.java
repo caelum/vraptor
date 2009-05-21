@@ -1,17 +1,11 @@
 package br.com.caelum.vraptor.vraptor2;
 
-import br.com.caelum.vraptor.InterceptionException;
-import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.test.VRaptorMockery;
-import br.com.caelum.vraptor.core.InterceptorStack;
-import br.com.caelum.vraptor.core.Localization;
-import br.com.caelum.vraptor.http.ParametersProvider;
-import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.validator.Message;
-import br.com.caelum.vraptor.view.PageResult;
-import br.com.caelum.vraptor.view.Results;
-import br.com.caelum.vraptor.vraptor2.outject.Outjecter;
-import br.com.caelum.vraptor.vraptor2.outject.OutjectionInterceptor;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.ResourceBundle;
+
+import javax.servlet.ServletException;
+
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 import org.jmock.Expectations;
@@ -20,10 +14,19 @@ import org.junit.Test;
 import org.vraptor.i18n.FixedMessage;
 import org.vraptor.validator.ValidationErrors;
 
-import javax.servlet.ServletException;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.ResourceBundle;
+import br.com.caelum.vraptor.InterceptionException;
+import br.com.caelum.vraptor.Result;
+import br.com.caelum.vraptor.core.InterceptorStack;
+import br.com.caelum.vraptor.core.Localization;
+import br.com.caelum.vraptor.core.MethodInfo;
+import br.com.caelum.vraptor.http.ParametersProvider;
+import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.test.VRaptorMockery;
+import br.com.caelum.vraptor.validator.Message;
+import br.com.caelum.vraptor.view.PageResult;
+import br.com.caelum.vraptor.view.Results;
+import br.com.caelum.vraptor.vraptor2.outject.Outjecter;
+import br.com.caelum.vraptor.vraptor2.outject.OutjectionInterceptor;
 
 public class ValidatorInterceptorTest {
 
@@ -40,6 +43,7 @@ public class ValidatorInterceptorTest {
     private Localization localization;
     private ArrayList<Message> listErrors;
     private ResourceBundle bundle;
+	private MethodInfo methodInfo;
 
     @Before
     public void setup() {
@@ -53,6 +57,7 @@ public class ValidatorInterceptorTest {
         this.localization = mockery.mock(Localization.class);
         this.listErrors = new ArrayList<Message>();
         this.bundle = ResourceBundle.getBundle("messages");
+        this.methodInfo = mockery.mock(MethodInfo.class);
         mockery.checking(new Expectations() {
             {
                 one(info).getOutjecter();
@@ -63,7 +68,7 @@ public class ValidatorInterceptorTest {
             }
         });
         this.interceptor = new OutjectionInterceptor(info);
-        this.validator = new ValidatorInterceptor(provider, result, errors, interceptor, localization);
+        this.validator = new ValidatorInterceptor(provider, result, errors, interceptor, localization, methodInfo);
         this.stack = mockery.mock(InterceptorStack.class);
     }
 
@@ -131,7 +136,8 @@ public class ValidatorInterceptorTest {
                 one(provider).getParametersFor(method, listErrors, bundle);
                 will(returnValue(new Object[0]));
                 one(result).include(with(equal("errors")), with(an(ValidationErrors.class)));
-                one(pageResult).forward("invalid");
+                one(methodInfo).setResult("invalid");
+                one(pageResult).forward();
                 one(errors).add(with(fixedMessage("invalid")));
                 one(errors).size();
                 will(returnValue(1));

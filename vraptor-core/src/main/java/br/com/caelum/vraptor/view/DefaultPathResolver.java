@@ -29,8 +29,6 @@
  */
 package br.com.caelum.vraptor.view;
 
-import javax.servlet.http.HttpServletRequest;
-
 import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
@@ -43,20 +41,8 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 @RequestScoped
 public class DefaultPathResolver implements PathResolver {
 
-//    private final HttpServletRequest request;
-
-    public DefaultPathResolver(HttpServletRequest request) {
-//        this.request = request;
-    }
-
-    public String pathFor(ResourceMethod method, String result) {
-        /*Enumeration accepts = request.getHeaders("Accept");
-        while(accepts.hasMoreElements()) {
-            Object value = accepts.nextElement();
-            logger.debug("Accepts: " + value);
-        }*/
-        return "/" + method.getResource().getType().getSimpleName() + "/" + method.getMethod().getName() + "." + result
-                + ".jsp";
+    public String pathFor(ResourceMethod method) {
+        return "/" + method.getResource().getType().getSimpleName() + "/" + method.getMethod().getName() + ".jsp";
     }
 
 }

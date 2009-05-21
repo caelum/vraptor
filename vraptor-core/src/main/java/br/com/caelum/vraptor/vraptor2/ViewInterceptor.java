@@ -30,24 +30,21 @@ package br.com.caelum.vraptor.vraptor2;
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Interceptor;
 import br.com.caelum.vraptor.core.InterceptorStack;
-import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.view.PageResult;
 
 /**
- * The vraptor 2 compatible view interceptor
+ * The vraptor 2 compatible view interceptor.
  * 
  * @author guilherme silveira
  */
 public class ViewInterceptor implements Interceptor {
 
-	private final MethodInfo reqResult;
 	private final PageResult result;
 	private final ComponentInfoProvider info;
 
-	public ViewInterceptor(PageResult result, MethodInfo reqResult, ComponentInfoProvider info) {
+	public ViewInterceptor(PageResult result, ComponentInfoProvider info) {
 		this.result = result;
-		this.reqResult = reqResult;
 		this.info = info;
 	}
 
@@ -57,9 +54,10 @@ public class ViewInterceptor implements Interceptor {
 
 	public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
 			throws InterceptionException {
-		if(Info.isOldComponent(method.getResource())) {
-			if ( info.shouldShowView(method)) {
-				this.result.forward(reqResult.getResult().toString());
+		boolean vraptor2 = Info.isOldComponent(method.getResource());
+		if(vraptor2) {
+			if (info.shouldShowView(method)) {
+				this.result.forward();
 			}
 		} else {
 			stack.next(method, resourceInstance);

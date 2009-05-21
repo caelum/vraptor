@@ -29,6 +29,10 @@
  */
 package br.com.caelum.vraptor.example;
 
+import static br.com.caelum.vraptor.view.Results.logic;
+
+import java.util.ArrayList;
+
 import br.com.caelum.vraptor.Delete;
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Path;
@@ -39,73 +43,68 @@ import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.example.dao.Repository;
 import br.com.caelum.vraptor.validator.Hibernate;
 import br.com.caelum.vraptor.validator.Validations;
-import static br.com.caelum.vraptor.view.Results.logic;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.notNullValue;
-
-import java.util.ArrayList;
 
 @Resource
 public class ClientsController {
 
-    private final Result result;
+	private final Result result;
 
-    private final Repository repository;
+	private final Repository repository;
 
-    private final Validator validator;
+	private final Validator validator;
 
-    public ClientsController(Result result, Repository repository, Validator validator) {
-        this.result = result;
-        this.repository = repository;
-        this.validator = validator;
-    }
+	public ClientsController(Result result, Repository repository, Validator validator) {
+		this.result = result;
+		this.repository = repository;
+		this.validator = validator;
+	}
+	
+	@Path("/clients/form")
+	public void form() {
+	}
 
-    @Get
-    @Path("/clients")
-    public void list() {
-        result.include("clients", repository.all());
-    }
+	@Get
+	@Path("/clients")
+	public void list() {
+		result.include("clients", repository.all());
+	}
 
-    @Post
-    @Path("/clients")
-    public void add(final Client client) {
-        validator.checking(new Validations() {
-            {
-                // has the same result as:
-                // if(client!=null)
-                // but cuter?!
-                that(client).shouldBe(notNullValue()).otherwise(new Validations() {
-                    public void check() {
-                        that(client.getAge(), is(greaterThan(10)));
-                    }
-                });
-                and(Hibernate.validate(client));
-            }
-        });
-        repository.add(client);
-    }
+	@Post
+	@Path("/clients")
+	public void add(final Client client) {
+		validator.onError().goTo(ClientsController.class).form();
+		validator.checking(new Validations() {{
+			that("client", "should_not_be_null", client != null);
 
-    @Delete
-    @Path("/clients/{client.id}")
-    public void delete(Client client) {
-        repository.remove(client);
-        result.use(logic()).redirectTo(ClientsController.class).list();
-    }
+			if(client != null) {
+				that("client", "should_not_be_null", client.getAge() > 10);
+			}
+			and(Hibernate.validate(client));
+		}});
+		repository.add(client);
+	}
 
-    @Get
-    @Path("/clients/{client.id}")
-    public void view(Client client) {
-        result.include("client", repository.find(client.getId()));
-    }
+	@Delete
+	@Path("/clients/{client.id}")
+	public void delete(Client client) {
+		repository.remove(client);
+		result.use(logic()).redirectTo(ClientsController.class).list();
+	}
 
-    public void sendEmail() {
-        result.use(EmptyResult.class);
-    }
+	@Get
+	@Path("/clients/{client.id}")
+	public void view(Client client) {
+		result.include("client", repository.find(client.getId()));
+	}
 
-    public void random() {
-        ArrayList<Client> all = new ArrayList<Client>(repository.all());
-        Client client = all.get((int) (Math.random() * all.size()));
-        result.use(logic()).redirectTo(ClientsController.class).view(client);
-    }
+	public void sendEmail() {
+		result.use(EmptyResult.class);
+	}
+
+	public void random() {
+		ArrayList<Client> all = new ArrayList<Client>(repository.all());
+		Client client = all.get((int) (Math.random() * all.size()));
+		result.use(logic()).redirectTo(ClientsController.class).view(client);
+	}
 
 }

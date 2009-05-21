@@ -34,16 +34,14 @@ import org.vraptor.annotations.Component;
 
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Resource;
-import br.com.caelum.vraptor.test.VRaptorMockery;
 import br.com.caelum.vraptor.core.InterceptorStack;
-import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.test.VRaptorMockery;
 import br.com.caelum.vraptor.view.PageResult;
 
 public class ViewInterceptorTest {
 
     private VRaptorMockery mockery;
-    private MethodInfo requestResult;
     private PageResult result;
     private ViewInterceptor interceptor;
     private ComponentInfoProvider info;
@@ -63,11 +61,10 @@ public class ViewInterceptorTest {
     @Before
     public void setup() {
         this.mockery = new VRaptorMockery();
-        this.requestResult = mockery.mock(MethodInfo.class);
         this.result = mockery.mock(PageResult.class);
         this.info = mockery.mock(ComponentInfoProvider.class);
         this.stack = mockery.mock(InterceptorStack.class);
-        this.interceptor = new ViewInterceptor(result, requestResult, info);
+        this.interceptor = new ViewInterceptor(result, info);
     }
 
     @Test
@@ -75,9 +72,8 @@ public class ViewInterceptorTest {
         this.method = mockery.methodFor(VRaptor2Component.class, "method");
         mockery.checking(new Expectations() {
             {
-            	one(requestResult).getResult(); will(returnValue("ok"));
                 one(info).shouldShowView(method); will(returnValue(true));
-                one(result).forward("ok");
+                one(result).forward();
             }
         });
         interceptor.intercept(null, this.method, null);

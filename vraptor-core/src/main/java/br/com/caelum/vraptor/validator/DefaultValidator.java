@@ -30,6 +30,8 @@ package br.com.caelum.vraptor.validator;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.ioc.RequestScoped;
@@ -53,10 +55,12 @@ public class DefaultValidator implements Validator {
     private Object[] argsToUse;
     private Method method;
     private Class<?> typeToUse;
+	private final HttpServletRequest request;
 
-    public DefaultValidator(Proxifier proxifier, Result result) {
+    public DefaultValidator(Proxifier proxifier, Result result, HttpServletRequest request) {
         this.proxifier = proxifier;
         this.result = result;
+		this.request = request;
     }
 
     // TODO: do not use String consequences anymore
@@ -73,7 +77,7 @@ public class DefaultValidator implements Validator {
                     throw new ResultException(e);
                 }
             } else {
-                result.use(Results.page()).forward("invalid");
+            	result.use(Results.page()).forward(request.getRequestURI());
             }
             // finished just fine
             throw new ValidationError(errors);

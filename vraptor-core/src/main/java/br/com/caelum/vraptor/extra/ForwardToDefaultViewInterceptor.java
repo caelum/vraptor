@@ -61,7 +61,7 @@ public class ForwardToDefaultViewInterceptor implements Interceptor {
         if (result.used()) {
             return;
         }
-        result.use(Results.page()).forward(methodInfo.getResult().toString());
+        result.use(Results.page()).forward();
     }
 
 }

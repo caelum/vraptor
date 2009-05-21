@@ -38,20 +38,26 @@ import br.com.caelum.vraptor.View;
  */
 public interface PageResult extends View {
 
-    /**
-     * Server side forwarding to a result.
-     */
-    void forward(String result);
+	/**
+	 * Server side forwarding to a result.
+	 */
+	void forward();
 
-    /**
-     * Server side include a result.
-     */
-    void include(String result);
+	/**
+	 * Server side forwarding to a specific url.
+	 */
+	void forward(String url);
 
-    /**
-     * Client side redirect to an specific url.
-     * @param url
-     */
-    void redirect(String url);
+	/**
+	 * Server side include a result.
+	 */
+	void include();
+
+	/**
+	 * Client side redirect to an specific url.
+	 * 
+	 * @param url
+	 */
+	void redirect(String url);
 
 }

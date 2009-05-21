@@ -90,16 +90,19 @@ public class Validations {
 
     /**
      * Adds a list of errors to the error list.
+     * @return 
      */
-    public void and(List<Message> errors) {
+    public Validations and(List<Message> errors) {
         this.errors.addAll(errors);
+        return this;
     }
 
     /**
      * Adds a single error message to the error list.
      */
-    public void and(Message error) {
+    public Validations and(Message error) {
         this.errors.add(error);
+        return this;
     }
 
     public <T> If<T> that(T instance) {

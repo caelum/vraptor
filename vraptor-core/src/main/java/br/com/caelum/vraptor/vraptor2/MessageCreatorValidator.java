@@ -27,22 +27,27 @@
  */
 package br.com.caelum.vraptor.vraptor2;
 
+import java.lang.reflect.Method;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.vraptor.i18n.FixedMessage;
+import org.vraptor.validator.ValidationErrors;
+
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
+import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.proxy.MethodInvocation;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.SuperMethod;
+import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.ValidationError;
 import br.com.caelum.vraptor.validator.Validations;
 import br.com.caelum.vraptor.view.ResultException;
 import br.com.caelum.vraptor.view.Results;
-import org.vraptor.i18n.FixedMessage;
-import org.vraptor.validator.ValidationErrors;
-
-import java.lang.reflect.Method;
-import java.util.List;
 
 /**
  * The vraptor2 compatible messages creator.
@@ -60,11 +65,17 @@ public class MessageCreatorValidator implements Validator {
 
     private Method method;
     private Class<?> typeToUse;
+	private final ResourceMethod resource;
+	private final HttpServletRequest request;
+	private final MethodInfo info;
 
-    public MessageCreatorValidator(Proxifier proxifier, Result result, ValidationErrors errors) {
+    public MessageCreatorValidator(Proxifier proxifier, Result result, ValidationErrors errors, ResourceMethod resource, HttpServletRequest request, MethodInfo info) {
         this.proxifier = proxifier;
         this.result = result;
         this.errors = errors;
+		this.resource = resource;
+		this.request = request;
+		this.info = info;
     }
 
     public void checking(Validations validations) {
@@ -82,9 +93,14 @@ public class MessageCreatorValidator implements Validator {
                     throw new ResultException(e);
                 }
             } else {
-                result.use(Results.page()).forward("invalid");
-                // finished just fine
+            	if(Info.isOldComponent(resource.getResource())) {
+            		info.setResult("invalid");
+            		result.use(Results.page()).forward();
+            	} else {
+                	result.use(Results.page()).forward(request.getRequestURI());
+            	}
             }
+            // finished just fine
             throw new ValidationError(messages);
         }
     }

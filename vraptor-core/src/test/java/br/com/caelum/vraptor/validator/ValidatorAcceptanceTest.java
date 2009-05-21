@@ -27,22 +27,26 @@
  */
 package br.com.caelum.vraptor.validator;
 
-import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.proxy.Proxifier;
-import br.com.caelum.vraptor.view.LogicResult;
-import br.com.caelum.vraptor.view.PageResult;
-import br.com.caelum.vraptor.view.Results;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.notNullValue;
+
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import javax.servlet.ServletException;
-import java.io.IOException;
+import br.com.caelum.vraptor.Result;
+import br.com.caelum.vraptor.proxy.Proxifier;
+import br.com.caelum.vraptor.view.LogicResult;
+import br.com.caelum.vraptor.view.PageResult;
+import br.com.caelum.vraptor.view.Results;
 
 public class ValidatorAcceptanceTest {
     private PageResult pageResult;
@@ -50,6 +54,7 @@ public class ValidatorAcceptanceTest {
 	private LogicResult logicResult;
     private Proxifier proxifier;
     private Result result;
+	private HttpServletRequest request;
 
     class Student {
         private Long id;
@@ -62,6 +67,7 @@ public class ValidatorAcceptanceTest {
         this.pageResult = mockery.mock(PageResult.class);
         this.logicResult = mockery.mock(LogicResult.class);
         this.proxifier = mockery.mock(Proxifier.class);
+        this.request = mockery.mock(HttpServletRequest.class);
         mockery.checking(new Expectations() {
             {
                 allowing(result).use(Results.page()); will(returnValue(pageResult));
@@ -71,14 +77,16 @@ public class ValidatorAcceptanceTest {
     }
 
     @Test
-    public void cheksThatValidationWorks() throws ServletException, IOException {
+    public void cheksThatValidationWorksGoToReferer() throws ServletException, IOException {
         mockery.checking(new Expectations() {
             {
+            	String referer = "www.disney.com";
+            	one(request).getRequestURI(); will(returnValue(referer));
                 one(result).include(with(any(String.class)), with(hasItem(instanceOf(Message.class))));
-                one(pageResult).forward("invalid");
+                one(pageResult).forward(referer);
             }
         });
-        DefaultValidator validator = new DefaultValidator(proxifier, result);
+        DefaultValidator validator = new DefaultValidator(proxifier, result, request);
         final Student guilherme = new Student();
         try {
             validator.checking(new Validations() {
@@ -96,7 +104,7 @@ public class ValidatorAcceptanceTest {
 
     @Test
     public void validDataDoesntThrowException() {
-        DefaultValidator validator = new DefaultValidator(proxifier, result);
+        DefaultValidator validator = new DefaultValidator(proxifier, result, request);
         final Student guilherme = new Student();
         guilherme.id = 15L;
         validator.checking(new Validations() {

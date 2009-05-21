@@ -59,9 +59,9 @@ public class DefaultPageResult implements View, PageResult {
         this.resolver = resolver;
     }
 
-    public void forward(String result) {
+    public void forward() {
         try {
-            request.getRequestDispatcher(resolver.pathFor(method, result)).forward(request, response);
+            request.getRequestDispatcher(resolver.pathFor(method)).forward(request, response);
         } catch (ServletException e) {
             throw new ResultException(e);
         } catch (IOException e) {
@@ -69,9 +69,9 @@ public class DefaultPageResult implements View, PageResult {
         }
     }
 
-    public void include(String result) {
+    public void include() {
         try {
-            request.getRequestDispatcher(resolver.pathFor(method, result)).include(request, response);
+            request.getRequestDispatcher(resolver.pathFor(method)).include(request, response);
         } catch (ServletException e) {
             throw new ResultException(e);
         } catch (IOException e) {
@@ -86,5 +86,15 @@ public class DefaultPageResult implements View, PageResult {
             throw new ResultException(e);
         }
     }
+
+	public void forward(String url) {
+        try {
+            request.getRequestDispatcher(url).forward(request, response);
+        } catch (ServletException e) {
+            throw new ResultException(e);
+        } catch (IOException e) {
+            throw new ResultException(e);
+        }
+	}
 
 }

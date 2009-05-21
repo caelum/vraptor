@@ -60,22 +60,26 @@ public class ViewsPropertiesPageResult implements PageResult {
 
 	private static final Logger logger = LoggerFactory.getLogger(ViewsPropertiesPageResult.class);
 	private final RequestInfo webRequest;
+	private final MethodInfo info;
 
 	public ViewsPropertiesPageResult(Config config, PathResolver resolver, MethodInfo requestInfo,
-			RequestInfo webRequest) {
+			RequestInfo webRequest, MethodInfo info) {
 		this.config = config;
 		this.webRequest = webRequest;
+		this.info = info;
 		this.request = webRequest.getRequest();
 		this.resolver = resolver;
 		this.method = requestInfo.getResourceMethod();
 		this.response = webRequest.getResponse();
 	}
 
-	public void forward(String result) {
+	public void forward() {
 		try {
+			String result = info.getResult().toString();
 			Resource resource = method.getResource();
-			if (!Info.isOldComponent(resource)) {
-				String forwardPath = resolver.pathFor(method, result);
+			boolean vraptor3 = !Info.isOldComponent(resource);
+			if (vraptor3) {
+				String forwardPath = resolver.pathFor(method);
 				request.getRequestDispatcher(forwardPath).forward(request, response);
 				return;
 			}
@@ -85,7 +89,7 @@ public class ViewsPropertiesPageResult implements PageResult {
 			String path = config.getForwardFor(key);
 
 			if (path == null) {
-				String forwardPath = resolver.pathFor(method, result);
+				String forwardPath = resolver.pathFor(method);
 				request.getRequestDispatcher(forwardPath).forward(request, response);
 			} else {
 				try {
@@ -109,9 +113,9 @@ public class ViewsPropertiesPageResult implements PageResult {
 		}
 	}
 
-	public void include(String result) {
+	public void include() {
 		try {
-			request.getRequestDispatcher(resolver.pathFor(method, result)).include(request, response);
+			request.getRequestDispatcher(resolver.pathFor(method)).include(request, response);
 		} catch (ServletException e) {
 			throw new ResultException(e);
 		} catch (IOException e) {
@@ -129,6 +133,16 @@ public class ViewsPropertiesPageResult implements PageResult {
 		} catch (IOException e) {
 			throw new ResultException(e);
 		}
+	}
+
+	public void forward(String url) {
+        try {
+            request.getRequestDispatcher(url).forward(request, response);
+        } catch (ServletException e) {
+            throw new ResultException(e);
+        } catch (IOException e) {
+            throw new ResultException(e);
+        }
 	}
 
 }

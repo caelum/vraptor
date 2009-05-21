@@ -27,28 +27,35 @@
  */
 package br.com.caelum.vraptor.vraptor2;
 
-import br.com.caelum.vraptor.InterceptionException;
-import br.com.caelum.vraptor.Interceptor;
-import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.core.InterceptorStack;
-import br.com.caelum.vraptor.core.Localization;
-import br.com.caelum.vraptor.http.ParametersProvider;
-import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.validator.Message;
-import br.com.caelum.vraptor.view.Results;
-import br.com.caelum.vraptor.vraptor2.outject.OutjectionInterceptor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.vraptor.i18n.FixedMessage;
-import org.vraptor.validator.BasicValidationErrors;
-import org.vraptor.validator.ValidationErrors;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.vraptor.i18n.FixedMessage;
+import org.vraptor.validator.BasicValidationErrors;
+import org.vraptor.validator.ValidationErrors;
+
+import br.com.caelum.vraptor.InterceptionException;
+import br.com.caelum.vraptor.Interceptor;
+import br.com.caelum.vraptor.Result;
+import br.com.caelum.vraptor.core.InterceptorStack;
+import br.com.caelum.vraptor.core.Localization;
+import br.com.caelum.vraptor.core.MethodInfo;
+import br.com.caelum.vraptor.http.ParametersProvider;
+import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.validator.Message;
+import br.com.caelum.vraptor.view.Results;
+import br.com.caelum.vraptor.vraptor2.outject.OutjectionInterceptor;
+
+/**
+ * Interceptor which invokes vraptor2-like validation methods.
+ * @author guilherme silveira
+ *
+ */
 public class ValidatorInterceptor implements Interceptor {
 
     private final ParametersProvider provider;
@@ -58,13 +65,15 @@ public class ValidatorInterceptor implements Interceptor {
     private final ValidationErrors errors;
     private final OutjectionInterceptor outjection;
     private final Localization localization;
+	private final MethodInfo info;
 
-    public ValidatorInterceptor(ParametersProvider provider, Result result, ValidationErrors errors, OutjectionInterceptor outjection, Localization localization) {
+    public ValidatorInterceptor(ParametersProvider provider, Result result, ValidationErrors errors, OutjectionInterceptor outjection, Localization localization, MethodInfo info) {
         this.provider = provider;
         this.result = result;
         this.errors = errors;
         this.outjection = outjection;
         this.localization = localization;
+		this.info = info;
     }
 
     public boolean accepts(ResourceMethod method) {
@@ -110,7 +119,8 @@ public class ValidatorInterceptor implements Interceptor {
             if (errors.size() != 0) {
                 this.outjection.outject(resourceInstance, type);
                 this.result.include("errors", errors);
-                this.result.use(Results.page()).forward("invalid");
+                this.info.setResult("invalid");
+                this.result.use(Results.page()).forward();
                 return;
             }
         }

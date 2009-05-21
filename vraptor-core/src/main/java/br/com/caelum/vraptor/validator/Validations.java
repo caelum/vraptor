@@ -44,11 +44,11 @@ public class Validations {
 
     private final List<Message> errors = new ArrayList<Message>();
 	private final ResourceBundle bundle;
-    
+
     public Validations(ResourceBundle bundle) {
 		this.bundle = bundle;
 	}
-    
+
     public Validations() {
     	this(ResourceBundle.getBundle("messages"));
     }
@@ -64,7 +64,7 @@ public class Validations {
     public <T> boolean that(String category, String reason, T actual, Matcher<? super T> matcher) {
         if (!matcher.matches(actual)) {
             if (reason != null) {
-                errors.add(new ValidationMessage(reason, category));
+                errors.add(new ValidationMessage(bundle.getString(reason), category));
             } else {
                 Description description = new ResourceBundleDescription(bundle);
                 description.appendDescriptionOf(matcher);
@@ -77,7 +77,7 @@ public class Validations {
 
     public void that(String category, String reason, boolean assertion) {
         if (!assertion) {
-            errors.add(new ValidationMessage(reason, category));
+            errors.add(new ValidationMessage(bundle.getString(reason), category));
         }
     }
 

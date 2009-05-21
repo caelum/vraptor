@@ -1,3 +1,4 @@
+- make @Path's without parameters have higher priority than the ones who have them (/clients/new > /clients/{client.id})
 - if you return OutputStream, i will grab all the data and close it and try to set the content-type if not yet set
 - file list zips it
 

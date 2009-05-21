@@ -29,6 +29,7 @@ package br.com.caelum.vraptor.validator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 import org.hamcrest.Description;
@@ -64,7 +65,7 @@ public class Validations {
     public <T> boolean that(String category, String reason, T actual, Matcher<? super T> matcher) {
         if (!matcher.matches(actual)) {
             if (reason != null) {
-                errors.add(new ValidationMessage(bundle.getString(reason), category));
+                errors.add(new ValidationMessage(getString(reason), category));
             } else {
                 Description description = new ResourceBundleDescription(bundle);
                 description.appendDescriptionOf(matcher);
@@ -77,8 +78,16 @@ public class Validations {
 
     public void that(String category, String reason, boolean assertion) {
         if (!assertion) {
-            errors.add(new ValidationMessage(bundle.getString(reason), category));
+            errors.add(new ValidationMessage(getString(reason), category));
         }
+    }
+    
+    public String getString(String key) {
+    	try {
+    		return bundle.getString(key);
+    	} catch(MissingResourceException e) {
+    		return "???" + key + "???";
+    	}
     }
 
     /**

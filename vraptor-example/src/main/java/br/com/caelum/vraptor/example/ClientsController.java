@@ -58,7 +58,7 @@ public class ClientsController {
 		this.repository = repository;
 		this.validator = validator;
 	}
-	
+
 	@Path("/clients/form")
 	public void form() {
 	}

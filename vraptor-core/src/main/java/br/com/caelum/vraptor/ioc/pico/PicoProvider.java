@@ -54,6 +54,7 @@ import br.com.caelum.vraptor.interceptor.InterceptorListPriorToExecutionExtracto
 import br.com.caelum.vraptor.interceptor.OutjectResult;
 import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
 import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
+import br.com.caelum.vraptor.interceptor.download.DownloadInterceptor;
 import br.com.caelum.vraptor.interceptor.multipart.MultipartInterceptor;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
 import br.com.caelum.vraptor.view.DefaultLogicResult;
@@ -66,7 +67,7 @@ import br.com.caelum.vraptor.view.PageResult;
  * Managing internal components by using pico container.<br>
  * There is an extension point through the registerComponents method, which
  * allows one to give a customized container.
- * 
+ *
  * @author Guilherme Silveira
  */
 public class PicoProvider implements ContainerProvider {
@@ -110,6 +111,7 @@ public class PicoProvider implements ContainerProvider {
 		container.register(ParametersInstantiatorInterceptor.class, ParametersInstantiatorInterceptor.class);
 		container.register(InterceptorListPriorToExecutionExtractor.class,
 				InterceptorListPriorToExecutionExtractor.class);
+		container.register(DownloadInterceptor.class, DownloadInterceptor.class);
 		container.register(MultipartInterceptor.class, MultipartInterceptor.class);
 		container.register(URLParameterExtractorInterceptor.class, URLParameterExtractorInterceptor.class);
 		container.register(ResourceLookupInterceptor.class, ResourceLookupInterceptor.class);

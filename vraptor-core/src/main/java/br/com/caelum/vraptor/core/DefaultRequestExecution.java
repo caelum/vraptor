@@ -37,6 +37,7 @@ import br.com.caelum.vraptor.interceptor.InterceptorListPriorToExecutionExtracto
 import br.com.caelum.vraptor.interceptor.OutjectResult;
 import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
 import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
+import br.com.caelum.vraptor.interceptor.download.DownloadInterceptor;
 import br.com.caelum.vraptor.interceptor.multipart.MultipartInterceptor;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 
@@ -65,6 +66,7 @@ public class DefaultRequestExecution implements RequestExecution {
         interceptorStack.add(ParametersInstantiatorInterceptor.class);
         interceptorStack.add(ExecuteMethodInterceptor.class);
         interceptorStack.add(OutjectResult.class);
+        interceptorStack.add(DownloadInterceptor.class);
         interceptorStack.add(ForwardToDefaultViewInterceptor.class);
         interceptorStack.next(null, null);
     }

@@ -37,7 +37,7 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 /**
  * The default vraptor3 path resolver uses the type and method name as
  * "/TypeName/methodName.result.jsp".
- * 
+ *
  * @author Guilherme Silveira
  */
 @RequestScoped
@@ -55,8 +55,21 @@ public class DefaultPathResolver implements PathResolver {
 		if (format != null && !format.equals("html")) {
 			suffix = "." + format;
 		}
-		return "/" + method.getResource().getType().getSimpleName() + "/" + method.getMethod().getName() + suffix
+        String name = method.getResource().getType().getSimpleName();
+        String folderName = extractControllerFromName(name);
+		return "/" + folderName + "/" + method.getMethod().getName() + suffix
 				+ ".jsp";
 	}
 
+    private String extractControllerFromName(String baseName) {
+        baseName = lowerFirstCharacter(baseName);
+        if (baseName.endsWith("Controller")) {
+            return "/" + baseName.substring(0, baseName.lastIndexOf("Controller"));
+        }
+        return "/" + baseName;
+    }
+
+    private String lowerFirstCharacter(String baseName) {
+        return baseName.toLowerCase().substring(0, 1) + baseName.substring(1, baseName.length());
+    }
 }

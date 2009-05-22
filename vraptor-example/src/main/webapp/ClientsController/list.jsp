@@ -2,7 +2,7 @@
 <html>
 <body>
 
-<a href="<c:url value="/clients/random"/>">random pick</a>
+<a href="${pageContext.request.contextPath}/clients/random"/>">random pick</a>
 <br/><br/>
 
 <table>

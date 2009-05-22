@@ -1,6 +1,4 @@
-- make @Path's without parameters have higher priority than the ones who have them (/clients/new > /clients/{client.id})
 - if you return OutputStream, i will grab all the data and close it and try to set the content-type if not yet set
-- file list zips it
 
 - Create example about how to create a VRaptor3 converter
 
@@ -11,11 +9,8 @@
 
 - onError().goTo("xpto"); on validation, with support to ajax
 
-- remove String result from resourceMethods: convention for result pages are: web/controllerName/resourceMethod.format.jsp
+- add a String format to result: web/controllerName/resourceMethod.format.jsp
 	- default being web/controllerName/resouceMethod.jsp for format=html
-	- change Validator action when error occurs.
-
-
 
 - @Component em outros componentes e fazer funcionar com pico sem gritar do log
 	- converter registering is causing many log messages
@@ -34,7 +29,10 @@
 	map[id==2].nome="por favor"
 	(map[id==2] eh o lado direito!!!)
 
+- make @Path's without parameters have higher priority than the ones who have them (/clients/new > /clients/{client.id})
+
 help:
+- file list zips it
 - bug: parameters are being set twice?
 - JstlLocalization test
 - MultipartInterceptor should be added only if jar is found on classpath

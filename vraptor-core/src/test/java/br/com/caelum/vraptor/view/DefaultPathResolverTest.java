@@ -85,4 +85,20 @@ public class DefaultPathResolverTest {
         MatcherAssert.assertThat(result, Matchers.is(Matchers.equalTo("/DogController/bark.json.jsp")));
         mockery.assertIsSatisfied();
     }
+    
+    @Test
+    public void shouldIgnoreHtmlFormat() throws NoSuchMethodException {
+        mockery.checking(new Expectations() {
+            {
+                one(method).getResource(); will(returnValue(resource));
+                one(method).getMethod(); will(returnValue(DogController.class.getDeclaredMethod("bark")));
+                one(resource).getType(); will(returnValue(DogController.class));
+                one(request).getParameter("_format"); will(returnValue("html"));
+            }
+        });
+        DefaultPathResolver resolver = new DefaultPathResolver(request);
+        String result = resolver.pathFor(method);
+        MatcherAssert.assertThat(result, Matchers.is(Matchers.equalTo("/DogController/bark.jsp")));
+        mockery.assertIsSatisfied();
+    }
 }

@@ -29,20 +29,34 @@
  */
 package br.com.caelum.vraptor.view;
 
+import javax.servlet.http.HttpServletRequest;
+
 import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**
  * The default vraptor3 path resolver uses the type and method name as
  * "/TypeName/methodName.result.jsp".
- *
+ * 
  * @author Guilherme Silveira
  */
 @RequestScoped
 public class DefaultPathResolver implements PathResolver {
 
-    public String pathFor(ResourceMethod method) {
-        return "/" + method.getResource().getType().getSimpleName() + "/" + method.getMethod().getName() + ".jsp";
-    }
+	private final HttpServletRequest request;
+
+	public DefaultPathResolver(HttpServletRequest request) {
+		this.request = request;
+	}
+
+	public String pathFor(ResourceMethod method) {
+		String format = request.getParameter("_format");
+		String suffix = "";
+		if (format != null && !format.equals("html")) {
+			suffix = "." + format;
+		}
+		return "/" + method.getResource().getType().getSimpleName() + "/" + method.getMethod().getName() + suffix
+				+ ".jsp";
+	}
 
 }

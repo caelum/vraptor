@@ -61,11 +61,28 @@ public class DefaultPathResolverTest {
                 one(method).getResource(); will(returnValue(resource));
                 one(method).getMethod(); will(returnValue(DogController.class.getDeclaredMethod("bark")));
                 one(resource).getType(); will(returnValue(DogController.class));
+                one(request).getParameter("_format"); will(returnValue(null));
             }
         });
-        DefaultPathResolver resolver = new DefaultPathResolver();
+        DefaultPathResolver resolver = new DefaultPathResolver(request);
         String result = resolver.pathFor(method);
         MatcherAssert.assertThat(result, Matchers.is(Matchers.equalTo("/DogController/bark.jsp")));
+        mockery.assertIsSatisfied();
+    }
+    
+    @Test
+    public void shouldUseTheFormatParameterIfSupplied() throws NoSuchMethodException {
+        mockery.checking(new Expectations() {
+            {
+                one(method).getResource(); will(returnValue(resource));
+                one(method).getMethod(); will(returnValue(DogController.class.getDeclaredMethod("bark")));
+                one(resource).getType(); will(returnValue(DogController.class));
+                one(request).getParameter("_format"); will(returnValue("json"));
+            }
+        });
+        DefaultPathResolver resolver = new DefaultPathResolver(request);
+        String result = resolver.pathFor(method);
+        MatcherAssert.assertThat(result, Matchers.is(Matchers.equalTo("/DogController/bark.json.jsp")));
         mockery.assertIsSatisfied();
     }
 }

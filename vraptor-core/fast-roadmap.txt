@@ -1,14 +1,6 @@
-- Create example about how to create a VRaptor3 converter
-
-- accept support "_format" parameter
 - json support
-- json support through "Accepts", priorize _format
 - json outjecter outjects
-
 - onError().goTo("xpto"); on validation, with support to ajax
-
-- add a String format to result: web/controllerName/resourceMethod.format.jsp
-	- default being web/controllerName/resouceMethod.jsp for format=html
 
 - @Component em outros componentes e fazer funcionar com pico sem gritar do log
 	- converter registering is causing many log messages
@@ -18,24 +10,16 @@
 
 - containerprovider padrao: spring e ver com o spring se tudo bem de registrar depois do cara ja ter usado o cara
 
-- Map support
-	map[ENUM]-->
-	map["a"]-->
-	map[1]-->
-	map[custom tambem]
-	map[id==2]="por favor"
-	map[id==2].nome="por favor"
-	(map[id==2] eh o lado direito!!!)
 
-- make @Path's without parameters have higher priority than the ones who have them (/clients/new > /clients/{client.id})
+
 
 help:
+- Create example about how to create a VRaptor3 converter
 - file list zips it
 - bug: parameters are being set twice?
 - JstlLocalization test
 - MultipartInterceptor should be added only if jar is found on classpath
 - make DefaultResourceTranslator work with jsessionid
-- integration test for vraptor-example project e vraptor-spring-example
 
 
 
@@ -147,6 +131,17 @@ right before ANY release
 	- check all TODOS and do something about them
 
 ONLY AFTER RELEASE
+- decide @Path priority
+- Map support
+	map[ENUM]-->
+	map["a"]-->
+	map[1]-->
+	map[custom tambem]
+	map[id==2]="por favor"
+	map[id==2].nome="por favor"
+	(map[id==2] eh o lado direito!!!)
+- integration test for vraptor-example project e vraptor-spring-example
+- json support through "Accepts", priorize _format
 - returning InputStream could guess the result stream type
 - refactor download interceptor: instead of 3 ifs, Map.contains, Map.get
 welcome file list:
@@ -412,3 +407,7 @@ support HibernateValidator with i18n messages
 - support to method return != string --> outject
 - support to niceurls with {webLogic} and {webMethod}
 - support to method return != string --> outject
+- accept support "_format" parameter
+- support return File, InputStream, Download
+- add a String format to result: web/controllerName/resourceMethod.format.jsp
+	- default being web/controllerName/resouceMethod.jsp for format=html

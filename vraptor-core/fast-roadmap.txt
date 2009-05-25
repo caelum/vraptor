@@ -1,18 +1,3 @@
-- json support
-- json outjecter outjects
-- onError().goTo("xpto"); on validation, with support to ajax
-
-- @Component em outros componentes e fazer funcionar com pico sem gritar do log
-	- converter registering is causing many log messages
-	- meu problema eh queo webinfocontextblablabla pode ser customizado, ver se facilita se nao customiza-lo
-	- no lookp do webinf, joga em um container bobo primeiro
-	- ai depois disso, joga no cara que eh o Router q pode ter sido customizado, tirando dessa lista
-
-- containerprovider padrao: spring e ver com o spring se tudo bem de registrar depois do cara ja ter usado o cara
-
-
-
-
 help:
 - Create example about how to create a VRaptor3 converter
 - file list zips it
@@ -20,6 +5,11 @@ help:
 - JstlLocalization test
 - MultipartInterceptor should be added only if jar is found on classpath
 - make DefaultResourceTranslator work with jsessionid
+
+
+
+
+
 
 
 
@@ -131,6 +121,8 @@ right before ANY release
 	- check all TODOS and do something about them
 
 ONLY AFTER RELEASE
+- json outjecter from vraptor 2
+- json outjecter with proxy support
 - decide @Path priority
 - Map support
 	map[ENUM]-->

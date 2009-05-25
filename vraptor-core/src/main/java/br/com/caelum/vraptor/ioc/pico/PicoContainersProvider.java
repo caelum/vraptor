@@ -54,113 +54,111 @@ import br.com.caelum.vraptor.ioc.SessionScoped;
 /**
  * Provides containers, controlling all scopes and registering all different
  * components on their respective areas.
- *
+ * 
  * @author Guilherme Silveira
  * @author Adriano Almeida
  */
 public class PicoContainersProvider implements ComponentRegistry {
 
-    public static final String CONTAINER_SESSION_KEY = PicoContainersProvider.class.getName() + ".session";
+	public static final String CONTAINER_SESSION_KEY = PicoContainersProvider.class.getName() + ".session";
 
-    private static final Logger logger = LoggerFactory.getLogger(PicoContainersProvider.class);
+	private static final Logger logger = LoggerFactory.getLogger(PicoContainersProvider.class);
 
-    private final Map<Class<?>, Class<?>> applicationScoped = new HashMap<Class<?>, Class<?>>();
-    private final Map<Class<?>, Class<?>> sessionScoped = new HashMap<Class<?>, Class<?>>();
-    private final Map<Class<?>, Class<?>> requestScoped = new HashMap<Class<?>, Class<?>>();
-    private final MutablePicoContainer appContainer;
-    private boolean initialized = false;
+	private final Map<Class<?>, Class<?>> applicationScoped = new HashMap<Class<?>, Class<?>>();
+	private final Map<Class<?>, Class<?>> sessionScoped = new HashMap<Class<?>, Class<?>>();
+	private final Map<Class<?>, Class<?>> requestScoped = new HashMap<Class<?>, Class<?>>();
+	private final MutablePicoContainer appContainer;
+	private boolean initialized = false;
 
-    public PicoContainersProvider(MutablePicoContainer container) {
-        this.appContainer = container;
-    }
+	public PicoContainersProvider(MutablePicoContainer container) {
+		this.appContainer = container;
+	}
 
-    @SuppressWarnings("unchecked")
-    public void register(Class requiredType, Class type) {
-        if (initialized) {
-            logger
-                    .error("VRaptor was already initialized and the contexts were created but you are trying to register a new component. This is nasty. Do not do it: " + requiredType.getName());
-        }
-        boolean overriding = alreadyRegistered(requiredType);
-        if (overriding) {
-            logger.debug("Overriding interface " + requiredType.getName() + " with " + type.getName());
-        }
-        if (type.isAnnotationPresent(ApplicationScoped.class)) {
-            logger.debug("Registering " + type.getName() + " as an application component");
-            this.applicationScoped.put(requiredType, type);
-            if (initialized) {
-                if (overriding) {
-                    logger
-                            .error("That is really a bad idea. That app scoped component could have been already initialized and used in other components. If so, this is entirely your fault: "
-                                    + type.getName() + ".");
-                }
-                this.appContainer.addComponent(type);
-            }
-        } else if (type.isAnnotationPresent(SessionScoped.class)) {
-            logger.debug("Registering " + type.getName() + " a an session component");
-            this.sessionScoped.put(requiredType, type);
-        } else {
-            logger.debug("Registering " + type.getName() + " as a request component");
-            this.requestScoped.put(requiredType, type);
-        }
-    }
+	@SuppressWarnings("unchecked")
+	public void register(Class requiredType, Class type) {
+		boolean overriding = alreadyRegistered(requiredType);
+		if (overriding) {
+			logger.debug("Overriding interface " + requiredType.getName() + " with " + type.getName());
+		}
+		if (type.isAnnotationPresent(ApplicationScoped.class)) {
+			logger.debug("Registering " + type.getName() + " as an application component");
+			this.applicationScoped.put(requiredType, type);
+			if (initialized) {
+				if (initialized) {
+					logger
+							.warn("VRaptor was already initialized, the contexts were created but you are registering a component."
+									+ "This is nasty. The original component might already be in use."
+									+ "Avoid doing it: "
+									+ requiredType.getName());
+				}
+				this.appContainer.addComponent(type);
+			}
+		} else if (type.isAnnotationPresent(SessionScoped.class)) {
+			logger.debug("Registering " + type.getName() + " a an session component");
+			this.sessionScoped.put(requiredType, type);
+		} else {
+			logger.debug("Registering " + type.getName() + " as a request component");
+			this.requestScoped.put(requiredType, type);
+		}
+	}
 
-    private boolean alreadyRegistered(Class<?> interfaceType) {
-        for (Map<Class<?>, Class<?>> scope : new Map[]{applicationScoped, sessionScoped, requestScoped}) {
-            if (scope.containsKey(interfaceType)) {
-                scope.remove(interfaceType);
-                return true;
-            }
-        }
-        return false;
-    }
+	private boolean alreadyRegistered(Class<?> interfaceType) {
+		for (Map<Class<?>, Class<?>> scope : new Map[] { applicationScoped, sessionScoped, requestScoped }) {
+			if (scope.containsKey(interfaceType)) {
+				scope.remove(interfaceType);
+				return true;
+			}
+		}
+		return false;
+	}
 
-    public Container provide(RequestInfo request) {
-        HttpSession session = request.getRequest().getSession();
-        MutablePicoContainer sessionScope = (MutablePicoContainer) session.getAttribute(CONTAINER_SESSION_KEY);
-        if (sessionScope == null) {
-            sessionScope = createSessionContainer(session);
-        }
-        if (logger.isDebugEnabled()) {
-            logger.debug("Request components are " + requestScoped);
-        }
-        MutablePicoContainer requestContainer = new DefaultPicoContainer(new Caching(), new JavaEE5LifecycleStrategy(
-                new NullComponentMonitor()), sessionScope);
-        for (Class<?> requiredType : requestScoped.keySet()) {
-            requestContainer.addComponent(requestScoped.get(requiredType));
-        }
-        for (Class<? extends Interceptor> type : this.appContainer.getComponent(InterceptorRegistry.class).all()) {
-            requestContainer.addComponent(type);
-        }
-        requestContainer.addComponent(request).addComponent(request.getRequest()).addComponent(request.getResponse());
-        return new PicoBasedContainer(requestContainer, this.appContainer.getComponent(Router.class));
-    }
+	public Container provide(RequestInfo request) {
+		HttpSession session = request.getRequest().getSession();
+		MutablePicoContainer sessionScope = (MutablePicoContainer) session.getAttribute(CONTAINER_SESSION_KEY);
+		if (sessionScope == null) {
+			sessionScope = createSessionContainer(session);
+		}
+		if (logger.isDebugEnabled()) {
+			logger.debug("Request components are " + requestScoped);
+		}
+		MutablePicoContainer requestContainer = new DefaultPicoContainer(new Caching(), new JavaEE5LifecycleStrategy(
+				new NullComponentMonitor()), sessionScope);
+		for (Class<?> requiredType : requestScoped.keySet()) {
+			requestContainer.addComponent(requestScoped.get(requiredType));
+		}
+		for (Class<? extends Interceptor> type : this.appContainer.getComponent(InterceptorRegistry.class).all()) {
+			requestContainer.addComponent(type);
+		}
+		requestContainer.addComponent(request).addComponent(request.getRequest()).addComponent(request.getResponse());
+		return new PicoBasedContainer(requestContainer, this.appContainer.getComponent(Router.class));
+	}
 
-    private MutablePicoContainer createSessionContainer(HttpSession session) {
-        MutablePicoContainer sessionContainer = new DefaultPicoContainer(new Caching(), new JavaEE5LifecycleStrategy(
-                new NullComponentMonitor()), this.appContainer);
-        sessionContainer.addComponent(HttpSession.class, session);
-        session.setAttribute(CONTAINER_SESSION_KEY, sessionContainer);
-        if (logger.isDebugEnabled()) {
-            logger.debug("Session components are " + sessionScoped);
-        }
-        for (Class<?> requiredType : sessionScoped.keySet()) {
-            sessionContainer.addComponent(sessionScoped.get(requiredType));
-        }
-        return sessionContainer;
-    }
+	private MutablePicoContainer createSessionContainer(HttpSession session) {
+		MutablePicoContainer sessionContainer = new DefaultPicoContainer(new Caching(), new JavaEE5LifecycleStrategy(
+				new NullComponentMonitor()), this.appContainer);
+		sessionContainer.addComponent(HttpSession.class, session);
+		session.setAttribute(CONTAINER_SESSION_KEY, sessionContainer);
+		if (logger.isDebugEnabled()) {
+			logger.debug("Session components are " + sessionScoped);
+		}
+		for (Class<?> requiredType : sessionScoped.keySet()) {
+			sessionContainer.addComponent(sessionScoped.get(requiredType));
+		}
+		return sessionContainer;
+	}
 
-    /**
-     * Registers all application scoped elements into the container.
-     */
-    public void init() {
-        for (Class<?> requiredType : applicationScoped.keySet()) {
-            Class<?> type = applicationScoped.get(requiredType);
-            logger.debug("Initializing application scope with " + type);
-            this.appContainer.addComponent(type);
-        }
-        logger.debug("Session components to initialize: " + sessionScoped.keySet());
-        logger.debug("Requets components to initialize: " + requestScoped.keySet());
-        this.initialized = true;
-    }
+	/**
+	 * Registers all application scoped elements into the container.
+	 */
+	public void init() {
+		for (Class<?> requiredType : applicationScoped.keySet()) {
+			Class<?> type = applicationScoped.get(requiredType);
+			logger.debug("Initializing application scope with " + type);
+			this.appContainer.addComponent(type);
+		}
+		logger.debug("Session components to initialize: " + sessionScoped.keySet());
+		logger.debug("Requets components to initialize: " + requestScoped.keySet());
+		this.initialized = true;
+	}
 
 }

@@ -6,25 +6,30 @@
 
 	<description>VRaptor 3 Root Buildfile</description>
 
-  <target name="core-tests" description="core module tests">
-    <ant dir="vraptor-core" target="test" />
-  </target>
+	<target name="core-tests" description="core module tests">
+		<ant dir="vraptor-core" target="test" />
+	</target>
 
-  <target name="core" description="core module build">
-    <ant dir="vraptor-core" />
-  </target>
+	<target name="core" description="core module build">
+		<ant dir="vraptor-core" />
+	</target>
 
-  <target name="deploy-to-examples" description="copy the vraptor build to examples lib dir" depends="core">
-    <property file="vraptor-core/build.properties"/>
-    <delete file="vraptor-example/src/main/webapp/WEB-INF/lib/vraptor3-*.jar" />
-    <delete file="vraptor-example-compatibility/src/main/webapp/WEB-INF/lib/vraptor3-*.jar" />
-    <delete file="vraptor-spring-example/src/main/webapp/WEB-INF/lib/vraptor3-*.jar" />
-    <copy file="vraptor-core/${jar.file}" todir="vraptor-example/src/main/webapp/WEB-INF/lib" />
-    <copy file="vraptor-core/${jar.file}" todir="vraptor-example-compatibility/src/main/webapp/WEB-INF/lib" />
-    <copy file="vraptor-core/${jar.file}" todir="vraptor-spring-example/src/main/webapp/WEB-INF/lib" />
-  </target>
+	<target name="site" description="site module">
+		<ant dir="vraptor-site" />
+	</target>
 
-  <target name="test" depends="core-tests" />
-  <target name="all" depends="deploy-to-examples" />
+	<target name="deploy-to-examples" description="copy the vraptor build to examples lib dir" depends="core">
+		<property file="vraptor-core/build.properties" />
+		<delete file="vraptor-example/src/main/webapp/WEB-INF/lib/vraptor3-*.jar" />
+		<delete file="vraptor-example-compatibility/src/main/webapp/WEB-INF/lib/vraptor3-*.jar" />
+		<delete file="vraptor-spring-example/src/main/webapp/WEB-INF/lib/vraptor3-*.jar" />
+		<copy file="vraptor-core/${jar.file}" todir="vraptor-example/src/main/webapp/WEB-INF/lib" />
+		<copy file="vraptor-core/${jar.file}" todir="vraptor-example-compatibility/src/main/webapp/WEB-INF/lib" />
+		<copy file="vraptor-core/${jar.file}" todir="vraptor-spring-example/src/main/webapp/WEB-INF/lib" />
+	</target>
+
+	<target name="test" depends="core-tests" />
+
+	<target name="all" depends="deploy-to-examples" />
 
 </project>

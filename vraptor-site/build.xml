@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== 
+	VRaptor 3 site module build
+	====================================================================== -->
+<project name="VRaptor 3" default="site" basedir=".">
+
+	<description>VRaptor 3 site module build</description>
+
+	<path id="libs.classpath" path=".">
+		<fileset dir="lib">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+	<taskdef name="xsite" classname="org.codehaus.xsite.ant.XSiteTask">
+		<classpath refid="libs.classpath" />
+	</taskdef>
+	<target name="site">
+		<mkdir dir="target/site"/>
+		<xsite sourceDirectoryPath="${basedir}/src/site" sitemapPath="src/content/sitemap.xml" skinPath="src/templates/skin.html" resourcePaths="src/resources" outputDirectoryPath="${basedir}/target/site" />
+	</target>
+
+</project>

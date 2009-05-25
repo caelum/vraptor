@@ -1,0 +1,21 @@
+<sitemap>
+    <section>
+        <name>About XSite</name>
+        <page>index.html</page>
+        <page>license.html</page>
+        <page>download.html</page>
+    </section>
+    <section>
+        <name>Using XSite</name>
+        <page>faq.html</page>
+        <link title="JavaDoc">javadoc/index.html</link>
+        <link title="Reporting Issues">http://jira.codehaus.org/browse/XSITE</link>
+    </section>
+    <section>
+        <name>Developing XSite</name>
+        <page>mailing-lists.html</page>
+        <page>team.html</page>
+        <page>repository.html</page>
+    </section>
+</sitemap>
+

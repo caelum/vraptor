@@ -6,61 +6,8 @@ help:
 - MultipartInterceptor should be added only if jar is found on classpath
 - make DefaultResourceTranslator work with jsessionid
 
-
-
-
-
-
-
-
-
-
-
-
-right before release
-	- better exception handling everywhere (search for TODO within exceptions): look at all new VRaptor and try to group them in new types
-	go through every request component and check if it really needs to be request based
-	verify org.apache.log4j logs -> sl4j
-	copyright in all files check
-	- read ALL todos
-	vraptor2 release with customized code
-		the org.vraptor.Component annotation was modified
-		vraptor2 bug found: HibernateLogicMethod: params with more than one dot does not work: modified
-			HibernateLogicMethod
-			RecursiveFieldValidation
-			EntireFieldValidation
-			its interface
-		class ExpressionEvaluator
-				throw new ExpressionEvaluationException("Invalid redirection using: " + redirection);
-	jira
-	forum
-	official support by caelum
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+jira
+forum
 
 
 
@@ -262,6 +209,3 @@ OgnlParametersProviderTest:
 	- niceurl cache (so the previous thing is not a problem)
 	- (optimization) internal component cache limits (due to niceurl which might be huge)
 	- log when trying to register a component with no interface 
-
-
-done:

@@ -1,4 +1,5 @@
 site docs (prior to release)
+- official support by caelum
 - migration tutorial
 - doc how to change the PathResolver algorithm
 - doc how to use PageResult directly

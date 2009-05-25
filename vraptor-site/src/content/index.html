@@ -1,0 +1,105 @@
+<html>
+<body>
+
+<h2>Why VRaptor?</h2>
+<p>
+VRaptor is a refactor-friendly web framework where the authors try to implement RESTFul support.<br/>
+Why would you use it rather than A, B or C?<br/>
+VRaptor allows you to programmatic configure routes, validation rules and more in such a way that refactor does not break
+compatibility with the uris which identify your resources.<br/>
+<br/>
+In the future, vraptor might be fully (level 3) RESTFul compatbile as it has been called, with support to hypermedia links, although this can
+be currently implemented by vraptor users in their own projects using the functionalities provided by VRaptor.  
+</p>
+
+<h2>What is new in VRaptor 3.0.0-beta-1?</h2>
+<p>
+This is the first public release of VRaptor 3.0.0-beta, that's why we have a huge list of features already implemented:
+<ul>
+<li> better than vraptor2: support for inheritance</li>
+<li> support for client side redirect to logic with refactoring support! all you need is an accessible non-args constructor</li>
+<li> support @Path</li>
+<li> ant build run tests</li>
+<li> cobertura report</li>
+<li> spring support</li>
+<li> invoke method</li>
+<li> support @Post, @...</li>
+<li> support Result with include</li>
+<li> vraptor info component</li>
+<li> support Result with custom views</li>
+<li> customizable strategies for PathResolver</li>
+<li> default strategy: resourceclass + resourcemethod</li>
+<li> sl4j usage</li>
+<li> interceptor support</li>
+<li> type converters</li>
+<li> ognl support</li>
+<li> vraptor2: @Component lookup</li>
+<li> validation support</li>
+<li> pico: STARTABLE/STOPABLE COMPONENTS with @PostConstruct, @PreDestroy</li>
+<li> vraptor2: public method lookup (old algo)</li>
+<li> vraptor2: converter without request/session/context access support</li>
+	<li> v2: view interceptor</li>
+	<li> vraptor2 path resolver</li>
+	<li> vraptor2 component instantiation</li>
+	<li> vraptor2 interceptor instantiation</li>
+	<li> vraptor2 regex view manager support</li>
+	<li> vraptor2: pathresolver support on vraptor.xml based info</li>
+	<li> v2: support to validate method (improved: complain about method with wrong number of args)</li>
+	<li> v2: support for views.properties</li>
+	<li> method invocation without parameters</li>
+	<li> custom vraptor2 converters through custom Converters implementation</li>
+	<li> v2: instantiate with injection</li>
+	<li> v2: better clarifying messages on common mistakes (i.e. logic getter which receives a parameter)</li>
+	<li> v2: getters for outjection</li>
+	<li> v2: method invocation with parameters</li>
+	<li> v2: @Logic (parameters=...) support</li>
+	<li> v2: default Logic,Action and so on key removal</li>
+	<li> v2: constructor injection only</li>
+<li> automatic redirect</li>
+<li> hibernate validator</li>
+<li> converters
+	primitive
+	wrappers
+	calendar
+	date
+	bigdecimal
+	File
+	enum
+	primitive</li>
+<li> paranamer support</li>
+<li> Collection, List, Set, Calendar, SortedSet, Queue interface support</li>
+<li> path annotation default value (without annotation)</li>
+<li> path annotation with support to regex (niceurls?)</li>
+<li> interceptor sequence support</li>
+<li> support for redirect on Result</li>
+<li> support to viewless</li>
+<li> support server side redirect to a random url</li>
+<li> cute validation methods</li>
+<li> cute validation should methods</li>
+<li> server forward based on Logic result</li>
+<li> client redirect based on Logic result</li>
+<li> server forward/include based on url</li>
+<li> client redirect based on url</li>
+<li> biginteger,bigdecimal converters</li>
+<li> 404 component</li>
+<li> i18n conversion messages</li>
+<li>support HibernateValidator with i18n messages</li>
+<li> Router support</li>
+<li> ClientsController -- clients.list</li>
+<li> path annotation and routes with support to value injection</li>
+<li> client side and server side redirect works with parameters from Route system</li>
+<li> supports "_method" parameter due to browser and xhtml nature</li>
+<li> router extra support</li>
+<li> routeFor("/(*)").is(type(""),method(""));</li>
+<li> support to method return != string -- outject</li>
+<li> support to niceurls with {webLogic} and {webMethod}</li>
+<li> support to method return != string -- outject</li>
+<li> accept support "_format" parameter</li>
+<li> support return File, InputStream, Download</li>
+<li> add a String format to result: web/controllerName/resourceMethod.format.jsp</li>
+	<li> default being web/controllerName/resouceMethod.jsp for format=html</li>
+</ul>
+</p>
+
+</body>
+</html>

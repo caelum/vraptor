@@ -5,8 +5,6 @@ help:
 - MultipartInterceptor should be added only if jar is found on classpath
 - make DefaultResourceTranslator work with jsessionid
 
-forum
-
 
 
 ONLY AFTER RELEASE

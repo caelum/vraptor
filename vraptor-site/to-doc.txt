@@ -1,0 +1,33 @@
+site docs (prior to release)
+- doc how to change the PathResolver algorithm
+- doc how to use PageResult directly
+- doc how to configure log
+- faq xxx doesnt work: activate log
+- note on converter lookup (injection system)... note that it might change???
+- component are annotated by @Stereotyped annotations: right now: Resource and vraptor2 component
+- better than vraptor2:
+	- method parameters: list of custom type supported
+	- enum converter: private enums (usually only locally used) supported
+- migration
+	- Provider config
+	- plugins not supported
+	- converters without access to LogicRequest automatically supported through vraptor.xml
+- calendar support: either birthday or birthday.time
+- BigDecimal, BigInteger converter
+- paranamer
+- vraptor2 with paranamer by default
+- vraptor2 without paranamer: how to
+- vraptor2 default LogicParameterAnnotationWithParanamerFallback: how to migrate when not using paranamer and annotation
+- migration tutorial on every documented topic of vraptor2
+	- might find useful things to support
+- containers now can be @Request, @Session, @App scoped
+- doc server side redirect with args:
+	- pattern args always works
+- hibernate plugin: aplicacoes de exemplo e documentacao
+- Set support
+	set[id==0].nome="guilherme"
+	set[id==2].nome="guilherme"
+	isso eh um mapa!
+- doc: if you want default redirect, add the ForwardToDefaultViewInterceptor to your itnerceptor stack
+- proxy creation: support also classes with non-default constructors, but will try to invoke all of them until one works.
+

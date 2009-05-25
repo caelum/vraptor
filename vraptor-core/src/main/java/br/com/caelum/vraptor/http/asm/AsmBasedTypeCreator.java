@@ -128,8 +128,7 @@ public class AsmBasedTypeCreator implements TypeCreator, Opcodes {
 			}
 			return found;
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			throw new IllegalArgumentException("unable to compile class", e);
+			throw new IllegalArgumentException("unable to create type to inject values", e);
 		}
 	}
 

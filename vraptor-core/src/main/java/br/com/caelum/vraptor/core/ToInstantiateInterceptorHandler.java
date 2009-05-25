@@ -47,7 +47,6 @@ public class ToInstantiateInterceptorHandler implements InterceptorHandler {
     public ToInstantiateInterceptorHandler(Container container, Class<?> type) {
         this.container = container;
         this.type = type;
-        // TODO check if this is a real interceptor
     }
 
     public void execute(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws InterceptionException {

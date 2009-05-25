@@ -50,7 +50,6 @@ public class DefaultInterceptorStack implements InterceptorStack {
     private final Container container;
 
     public DefaultInterceptorStack(Container container) {
-        // TODO here the component factory would be enough
         this.container = container;
     }
 

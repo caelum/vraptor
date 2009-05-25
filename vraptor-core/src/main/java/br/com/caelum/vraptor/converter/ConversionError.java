@@ -32,7 +32,6 @@ package br.com.caelum.vraptor.converter;
  *
  * @author guilherme silveira
  */
-// TODO shouldnt we extend RuntimeException? why Error?
 public class ConversionError extends Error {
 
 	/**

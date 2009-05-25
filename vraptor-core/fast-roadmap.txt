@@ -1,6 +1,5 @@
 help:
 - Create example about how to create a VRaptor3 converter
-- file list zips it
 - bug: parameters are being set twice?
 - JstlLocalization test
 - MultipartInterceptor should be added only if jar is found on classpath
@@ -13,7 +12,8 @@ forum
 
 ONLY AFTER RELEASE
 - 42 TODOs
-	- add a @Listener 
+- add a @Listener 
+- DOWNLOAD: return a List<File> zips it
 - decide @Path priority
 - Map support
 	map[ENUM]-->

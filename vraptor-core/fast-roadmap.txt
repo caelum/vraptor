@@ -5,16 +5,15 @@ help:
 - MultipartInterceptor should be added only if jar is found on classpath
 - make DefaultResourceTranslator work with jsessionid
 
-jira
 forum
 
 
 
 ONLY AFTER RELEASE
 - 42 TODOs
-- add a @Listener 
-- DOWNLOAD: return a List<File> zips it
 - decide @Path priority
+3.0.1 - support to @Path(priority=...)...
+3.0.1 - print out @Path priority (rules) debug info on startup
 - Map support
 	map[ENUM]-->
 	map["a"]-->
@@ -30,7 +29,6 @@ ONLY AFTER RELEASE
 welcome file list:
 	- testar se da para try/catch 404 e ver o que acontece... passar um response wrapped??? sendError
 	- known bug: accessing / when its /index.html.... if its a dir containing an index.html it doesnt work, but if your url is /clients/ it works...
-- All common components should be located at BaseComponents, not only the ones pico can register so easily
 - MultipartInterceptor.accepts() is never called, so it throws an exception everytime a request which isn't an multipart one is made
 UserAgentInterceptor que permite usar isso: documentacao
 SessionFormatInterceptor que seta na session: documentacao
@@ -47,12 +45,8 @@ c) unit test for PicoContainersProvider... every scope should be tested
 - migrate some vraptor2 functionalities already supported @Components to be supported @Resources too
 3.0.1 - redirect to logic should work with parameter INJECTIon @ url also
 - routes should tell if they are cacheable or not (* --> sucks, too many strings)
-3.0.1 - method return != string --> outject
-3.0.1 - method return == string --> default behaviour from vraptor 2
 - method routeFor should return an interface, not an instance
 - niceurls with file config support -> path support
-3.0.1 - support to @Path(priority=...)...
-3.0.1 - print out @Path priority (rules) debug info on startup
 3.0.1 - maybe a lista lready exists and i set the items.. i would still have to remove the nulls
 3.0.1 - nice url support as invoke(type).method(param("name1"),param("name2"))
 - support i18n messages on hamcrest based validations
@@ -65,16 +59,7 @@ FileDownload support:
 3.0.1 - extract VRaptor Validator
 - Question: RequestResult should contain an Object so logics could execute a totally custom method???
 3.0.1 - Register other caches
-3.0.1 -  warn on views.properties redirect --> teach how to use the logicresult
 ResourceMethod: two methods with the same name: Log.error
-(3.0.1)ceci: time converters (igual ao Date e ao Calendar, so que usa Time.SHORT, ou pattern hh:mm, ver no vraptor2...)
-	- nao cadastra-los por padrao
-converters: jodatime (ver no vraptor2)
-	- se o arquivo jodatime.jar estiver no classpath (use Class.forName com catch exception), loada automatico
-	- se estiver no classpath, tem que adicionar os conversores atraves de reflection, nao pode referenciar nenhuma classe diretamente que referencia joda
-converters:
-	- localebased and fixed pattern version for decimal numbers, biginteger, bigdecimal and dates
-(3.0.1)ceci: support generic Set with ognl (look at MiscOgnlSupportTest for generic list support - you need to create a SetAccessor)
 (3.0.2) - xml output support
 (3.0.1) MultiPartInterceptor config
 - customizable error process on request execution

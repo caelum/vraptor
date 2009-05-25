@@ -1,4 +1,5 @@
 site docs (prior to release)
+- issues: http://github.com/caelum/vraptor
 - official support by caelum
 - migration tutorial
 - doc how to change the PathResolver algorithm
@@ -32,3 +33,4 @@ site docs (prior to release)
 	isso eh um mapa!
 - doc: if you want default redirect, add the ForwardToDefaultViewInterceptor to your itnerceptor stack
 - proxy creation: support also classes with non-default constructors, but will try to invoke all of them until one works.
+

@@ -36,6 +36,7 @@ import javax.annotation.PostConstruct;
 import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
+import br.com.caelum.vraptor.VRaptorException;
 import br.com.caelum.vraptor.converter.BooleanConverter;
 import br.com.caelum.vraptor.converter.ByteConverter;
 import br.com.caelum.vraptor.converter.DoubleConverter;
@@ -86,8 +87,7 @@ public final class DefaultConverters implements Converters {
 
     protected void register(Class<? extends Converter> converterType) {
         if (!converterType.isAnnotationPresent(Convert.class)) {
-            // TODO is this the correct one?
-            throw new IllegalArgumentException("The converter type " + converterType.getName()
+            throw new VRaptorException("The converter type " + converterType.getName()
                     + " should have the Convert annotation");
         }
         types.addFirst(converterType);
@@ -101,8 +101,7 @@ public final class DefaultConverters implements Converters {
                 return container.instanceFor(converterType);
             }
         }
-        // TODO improve
-        throw new IllegalArgumentException("Unable to find converter for " + type.getName());
+        throw new VRaptorException("Unable to find converter for " + type.getName());
     }
 
 }

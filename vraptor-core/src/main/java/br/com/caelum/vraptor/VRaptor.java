@@ -94,7 +94,6 @@ public class VRaptor implements Filter {
         VRaptorRequest mutableRequest = new VRaptorRequest(baseRequest);
         
         RequestInfo request = new RequestInfo(servletContext, mutableRequest, webResponse);
-        // TODO create ExecutionWithoutResult?
         provider.provideForRequest(request, new Execution<Object>() {
             public Object insideRequest(Container container) {
                 container.instanceFor(RequestExecution.class).execute();

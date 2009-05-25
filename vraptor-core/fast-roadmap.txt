@@ -19,7 +19,6 @@ help:
 
 right before release
 	- better exception handling everywhere (search for TODO within exceptions): look at all new VRaptor and try to group them in new types
-	- check all TODOS and do something about them
 	go through every request component and check if it really needs to be request based
 	verify org.apache.log4j logs -> sl4j
 	copyright in all files check
@@ -66,6 +65,7 @@ right before release
 
 
 ONLY AFTER RELEASE
+- 42 TODOs
 	- add a @Listener 
 - decide @Path priority
 - Map support

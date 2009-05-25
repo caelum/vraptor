@@ -11,9 +11,6 @@ forum
 
 ONLY AFTER RELEASE
 - 42 TODOs
-- decide @Path priority
-3.0.1 - support to @Path(priority=...)...
-3.0.1 - print out @Path priority (rules) debug info on startup
 - Map support
 	map[ENUM]-->
 	map["a"]-->

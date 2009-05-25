@@ -1,7 +1,4 @@
 site docs (prior to release)
-- issues: http://github.com/caelum/vraptor
-- official support by caelum
-- migration tutorial
 - doc how to change the PathResolver algorithm
 - doc how to use PageResult directly
 - doc how to configure log

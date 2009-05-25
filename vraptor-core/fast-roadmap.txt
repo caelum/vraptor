@@ -17,6 +17,13 @@ ONLY AFTER RELEASE
 	map[id==2]="por favor"
 	map[id==2].nome="por favor"
 	(map[id==2] eh o lado direito!!!)
+3.0.1 - cache all method lookup algorithms (getDeclaredMethod())
+3.0.1 - redirect to logic should work with parameter INJECTIon @ url also
+3.0.1 - nice url support as invoke(type).method(param("name1"),param("name2"))
+3.0.1 - vraptor quartz component 
+3.0.1 - extract VRaptor Validator
+3.0.1 - Register other caches
+(3.0.2) - xml output support
 - integration test for vraptor-example project e vraptor-spring-example
 - json support through "Accepts", priorize _format
 - returning InputStream could guess the result stream type
@@ -28,35 +35,18 @@ welcome file list:
 UserAgentInterceptor que permite usar isso: documentacao
 SessionFormatInterceptor que seta na session: documentacao
 - make client server redirect work with proxied parameters
-3.0.1 - cache all method lookup algorithms (getDeclaredMethod())
 - routes with support to withParam()
 - Hibernate.validate(Object instance, String ... fields)
 - Hibernate.validate(Object instance) : Proxy.getFirst(), Proxy.getSecond() will hibernate validate those fields
-- DefaultLogicResult should cache enhancers in order to create objects
-- Everywhere there is an Enhacer should cache enhancers
-- AsmTypeCreator should cache instances
 - DefaultRouter cache with cacheable routes
 c) unit test for PicoContainersProvider... every scope should be tested
 - migrate some vraptor2 functionalities already supported @Components to be supported @Resources too
-3.0.1 - redirect to logic should work with parameter INJECTIon @ url also
 - routes should tell if they are cacheable or not (* --> sucks, too many strings)
-- method routeFor should return an interface, not an instance
 - niceurls with file config support -> path support
-3.0.1 - maybe a lista lready exists and i set the items.. i would still have to remove the nulls
-3.0.1 - nice url support as invoke(type).method(param("name1"),param("name2"))
-- support i18n messages on hamcrest based validations
-FileDownload support:
-	- either return FileDownload
-	- result.use(FileDownload)
 - extract BUNDLEMESSAGE validation keys from converters
 - if you instanceFor returns null on pico --> log debug???
-3.0.1 - vraptor quartz component 
-3.0.1 - extract VRaptor Validator
 - Question: RequestResult should contain an Object so logics could execute a totally custom method???
-3.0.1 - Register other caches
 ResourceMethod: two methods with the same name: Log.error
-(3.0.2) - xml output support
-(3.0.1) MultiPartInterceptor config
 - customizable error process on request execution
 - each Provider should have a getComponentsToTest template method
 - common-fileupload is mandatory, make it optional by only registering the interceptor if on the classpath

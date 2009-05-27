@@ -71,11 +71,12 @@ public class MessageCreatorValidator implements Validator {
 	private final MethodInfo info;
 	private boolean containsErrors;
 
-    public MessageCreatorValidator(Proxifier proxifier, Result result, ValidationErrors errors, ResourceMethod resource, HttpServletRequest request, MethodInfo info) {
+    public MessageCreatorValidator(Proxifier proxifier, Result result, ValidationErrors errors,
+    		HttpServletRequest request, MethodInfo info) {
         this.proxifier = proxifier;
         this.result = result;
         this.errors = errors;
-		this.resource = resource;
+		this.resource = info.getResourceMethod();
 		this.request = request;
 		this.info = info;
     }

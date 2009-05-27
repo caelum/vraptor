@@ -1,12 +1,13 @@
 package br.com.caelum.vraptor.core;
 
-import br.com.caelum.vraptor.ioc.RequestScoped;
-
-import javax.servlet.jsp.jstl.core.Config;
 import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
+
+import javax.servlet.jsp.jstl.core.Config;
+
+import br.com.caelum.vraptor.ioc.RequestScoped;
 
 /**
  * The default implementation of bundle provider uses jstl's api to access user
@@ -102,7 +103,7 @@ public class JstlLocalization implements Localization {
     public String getMessage(String key, String... parameters) {
         try {
             String content = getBundle().getString(key);
-            return MessageFormat.format(content, new Object[]{parameters});
+            return MessageFormat.format(content, parameters);
         } catch (MissingResourceException e) {
             return "???" + key + "???";
         }

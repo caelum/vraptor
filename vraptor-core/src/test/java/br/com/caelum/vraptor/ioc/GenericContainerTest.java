@@ -72,6 +72,7 @@ import br.com.caelum.vraptor.interceptor.InterceptorListPriorToExecutionExtracto
 import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
 import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
 import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
+import br.com.caelum.vraptor.interceptor.multipart.MultipartInterceptor;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.resource.ResourceNotFoundHandler;
 import br.com.caelum.vraptor.view.LogicResult;
@@ -120,7 +121,7 @@ public abstract class GenericContainerTest {
 				InterceptorStack.class, RequestExecution.class, ResourceLookupInterceptor.class,
 				InstantiateInterceptor.class, Result.class, ExecuteMethodInterceptor.class, PageResult.class,
 				ParametersProvider.class, MethodInfo.class, Validator.class, PathResolver.class,
-				ForwardToDefaultViewInterceptor.class, LogicResult.class);
+				ForwardToDefaultViewInterceptor.class, LogicResult.class, MultipartInterceptor.class);
 		checkAvailabilityFor(false, components);
 		mockery.assertIsSatisfied();
 	}

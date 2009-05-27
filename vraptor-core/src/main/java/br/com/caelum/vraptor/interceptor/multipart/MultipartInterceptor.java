@@ -18,6 +18,7 @@ import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Interceptor;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**
@@ -27,6 +28,7 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  *
  * @author Guilherme Silveira
  */
+@RequestScoped
 public class MultipartInterceptor implements Interceptor {
 
     private static final Logger logger = LoggerFactory.getLogger(MultipartInterceptor.class);

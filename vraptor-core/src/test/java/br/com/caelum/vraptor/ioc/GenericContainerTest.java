@@ -72,6 +72,7 @@ import br.com.caelum.vraptor.interceptor.InterceptorListPriorToExecutionExtracto
 import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
 import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
 import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
+import br.com.caelum.vraptor.interceptor.download.DownloadInterceptor;
 import br.com.caelum.vraptor.interceptor.multipart.MultipartInterceptor;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.resource.ResourceNotFoundHandler;
@@ -115,13 +116,14 @@ public abstract class GenericContainerTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void canProvideAllRequestScopedComponents() {
-		List<Class<?>> components = Arrays.asList(HttpServletRequest.class, HttpServletResponse.class, RequestInfo.class,
-				HttpSession.class, ParametersInstantiatorInterceptor.class,
+		List<Class<?>> components = Arrays.asList(HttpServletRequest.class, HttpServletResponse.class, 
+				RequestInfo.class, HttpSession.class, ParametersInstantiatorInterceptor.class,
 				InterceptorListPriorToExecutionExtractor.class, URLParameterExtractorInterceptor.class,
 				InterceptorStack.class, RequestExecution.class, ResourceLookupInterceptor.class,
-				InstantiateInterceptor.class, Result.class, ExecuteMethodInterceptor.class, PageResult.class,
-				ParametersProvider.class, MethodInfo.class, Validator.class, PathResolver.class,
-				ForwardToDefaultViewInterceptor.class, LogicResult.class, MultipartInterceptor.class);
+				InstantiateInterceptor.class, Result.class, ExecuteMethodInterceptor.class, 
+				PageResult.class, ParametersProvider.class, MethodInfo.class, Validator.class, 
+				PathResolver.class, ForwardToDefaultViewInterceptor.class, LogicResult.class, 
+				MultipartInterceptor.class, DownloadInterceptor.class);
 		checkAvailabilityFor(false, components);
 		mockery.assertIsSatisfied();
 	}

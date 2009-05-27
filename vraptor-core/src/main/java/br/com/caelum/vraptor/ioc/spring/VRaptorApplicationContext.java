@@ -68,6 +68,7 @@ import br.com.caelum.vraptor.interceptor.InterceptorListPriorToExecutionExtracto
 import br.com.caelum.vraptor.interceptor.OutjectResult;
 import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
 import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
+import br.com.caelum.vraptor.interceptor.download.DownloadInterceptor;
 import br.com.caelum.vraptor.interceptor.multipart.MultipartInterceptor;
 import br.com.caelum.vraptor.proxy.DefaultProxifier;
 import br.com.caelum.vraptor.view.DefaultLogicResult;
@@ -147,6 +148,7 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
         registerOn(beanFactory, OutjectResult.class);
         registerOn(beanFactory, EmptyResult.class);
         registerOn(beanFactory, MultipartInterceptor.class);
+        registerOn(beanFactory, DownloadInterceptor.class);
 
         beanFactory.registerSingleton(SpringBasedContainer.class.getName(), container);
     }

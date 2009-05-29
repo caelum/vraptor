@@ -57,7 +57,7 @@ public class DefaultValidator implements Validator {
     private Method method;
     private Class<?> typeToUse;
 	private final HttpServletRequest request;
-	
+
 	private final List<Message> errors = new ArrayList<Message>();
 
     public DefaultValidator(Proxifier proxifier, Result result, HttpServletRequest request) {
@@ -105,11 +105,15 @@ public class DefaultValidator implements Validator {
                     throw new ResultException(e);
                 }
             } else {
-            	result.use(Results.page()).forward(request.getRequestURI());
+            	result.use(Results.page()).forward(uriWithoutContextPath());
             }
             // finished just fine
             throw new ValidationError(errors);
         }
+	}
+
+	private String uriWithoutContextPath() {
+		return request.getRequestURI().replaceFirst(request.getContextPath(), "");
 	}
 
 }

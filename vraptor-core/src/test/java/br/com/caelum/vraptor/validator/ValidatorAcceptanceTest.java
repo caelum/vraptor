@@ -82,6 +82,7 @@ public class ValidatorAcceptanceTest {
             {
             	String referer = "www.disney.com";
             	one(request).getRequestURI(); will(returnValue(referer));
+            	one(request).getContextPath(); will(returnValue(""));
                 one(result).include(with(any(String.class)), with(hasItem(instanceOf(Message.class))));
                 one(pageResult).forward(referer);
             }

@@ -74,6 +74,7 @@ public class DefaultValidatorTest {
 			{
 				String referer = "google.com";
 				one(request).getRequestURI(); will(returnValue(referer));
+				one(request).getContextPath(); will(returnValue(""));
 				one(result).include((String) with(an(String.class)), with(an(ArrayList.class)));
 				one(result).use(PageResult.class);
 				will(returnValue(pageResult));

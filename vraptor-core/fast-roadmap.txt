@@ -4,7 +4,9 @@ help:
 - JstlLocalization test
 - MultipartInterceptor should be added only if jar is found on classpath
 - make DefaultResourceTranslator work with jsessionid
-
+- when it creates a * from a Path, it should be .*?...
+- downloadinterceptor should use return object type and not method type (method cna return Object)
+- if two urls have the same value, one is @Get and the other one is @Post, the result.logic FORWARDTO seems not to work
 
 
 

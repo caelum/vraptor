@@ -18,6 +18,7 @@ import org.junit.Test;
 import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
+import br.com.caelum.vraptor.VRaptorException;
 import br.com.caelum.vraptor.converter.BooleanConverter;
 import br.com.caelum.vraptor.converter.ByteConverter;
 import br.com.caelum.vraptor.converter.DoubleConverter;
@@ -107,12 +108,12 @@ public class DefaultConvertersTest {
         }
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = VRaptorException.class)
     public void complainsIfNoConverterFound() {
         converters.to(DefaultConvertersTest.class, container);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = VRaptorException.class)
     public void convertingANonAnnotatedConverterEndsUpComplaining() {
         converters.register(WrongConverter.class);
     }

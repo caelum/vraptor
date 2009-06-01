@@ -65,6 +65,7 @@ public class FixedMethodStrategyTest {
 		mockery.checking(new Expectations() {
 			{
 				one(control).matches("/clients/add"); will(returnValue(true));
+				one(control).fillIntoRequest("/clients/add", request);
 			}
 		});
 		ResourceMethod match = strategy.matches("/clients/add", HttpMethod.POST, request);

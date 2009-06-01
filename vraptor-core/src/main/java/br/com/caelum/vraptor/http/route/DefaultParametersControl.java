@@ -34,13 +34,18 @@ import java.util.regex.Pattern;
 import br.com.caelum.vraptor.eval.Evaluator;
 import br.com.caelum.vraptor.http.MutableRequest;
 
+/**
+ * Default implmeentation of parameters control on uris.
+ * 
+ * @author guilherme silveira
+ */
 public class DefaultParametersControl implements ParametersControl {
 
 	private final List<String> parameters = new ArrayList<String>();
 	private final Pattern pattern;
 	private final String originalPattern;
 	private final String patternUri;
-	
+
 	public DefaultParametersControl(String originalPattern) {
 		this.originalPattern = originalPattern;
 		String finalUri = "";
@@ -55,8 +60,8 @@ public class DefaultParametersControl implements ParametersControl {
 				continue;
 			} else if (originalPattern.charAt(i) == '}') {
 				ignore = false;
-				finalUri += ".*";
-				patternUri += ".*)";
+				finalUri += ".*?";
+				patternUri += ".*?)";
 				parameters.add(paramName);
 				paramName = "";
 				continue;
@@ -67,7 +72,7 @@ public class DefaultParametersControl implements ParametersControl {
 				paramName += originalPattern.charAt(i);
 			}
 		}
-		if(ignore) {
+		if (ignore) {
 			throw new IllegalRouteException("Illegal route contains invalid pattern: " + this.originalPattern);
 		}
 		this.pattern = Pattern.compile(patternUri);
@@ -78,7 +83,7 @@ public class DefaultParametersControl implements ParametersControl {
 		String base = originalPattern.replaceAll("\\.\\*", "");
 		for (String key : parameters) {
 			Object result = new Evaluator().get(params, key);
-			base = base.replace("{" + key + "}", result==null? "" : result.toString());
+			base = base.replace("{" + key + "}", result == null ? "" : result.toString());
 		}
 		return base;
 	}
@@ -97,12 +102,13 @@ public class DefaultParametersControl implements ParametersControl {
 	}
 
 	public String apply(String[] values) {
-		Pattern regex = Pattern.compile("\\{.*?\\}"); // the pattern object is NOT thread safe
+		Pattern regex = Pattern.compile("\\{.*?\\}"); // the pattern object is
+														// NOT thread safe
 		Matcher matcher = regex.matcher(this.originalPattern);
 		StringBuffer result = new StringBuffer();
-		for(int i=0;i<values.length;i++) {
+		for (int i = 0; i < values.length; i++) {
 			matcher.find();
-			matcher.appendReplacement(result, values[i].replaceAll("\\$","\\\\\\$"));
+			matcher.appendReplacement(result, values[i].replaceAll("\\$", "\\\\\\$"));
 		}
 		return result.toString();
 	}

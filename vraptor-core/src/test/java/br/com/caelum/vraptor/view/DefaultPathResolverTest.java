@@ -66,7 +66,7 @@ public class DefaultPathResolverTest {
         });
         DefaultPathResolver resolver = new DefaultPathResolver(request);
         String result = resolver.pathFor(method);
-        MatcherAssert.assertThat(result, Matchers.is(Matchers.equalTo("/DogController/bark.jsp")));
+        MatcherAssert.assertThat(result, Matchers.is(Matchers.equalTo("/WEB-INF/jsp/dog/bark.jsp")));
         mockery.assertIsSatisfied();
     }
     
@@ -82,7 +82,7 @@ public class DefaultPathResolverTest {
         });
         DefaultPathResolver resolver = new DefaultPathResolver(request);
         String result = resolver.pathFor(method);
-        MatcherAssert.assertThat(result, Matchers.is(Matchers.equalTo("/DogController/bark.json.jsp")));
+        MatcherAssert.assertThat(result, Matchers.is(Matchers.equalTo("/WEB-INF/jsp/dog/bark.json.jsp")));
         mockery.assertIsSatisfied();
     }
     
@@ -98,7 +98,7 @@ public class DefaultPathResolverTest {
         });
         DefaultPathResolver resolver = new DefaultPathResolver(request);
         String result = resolver.pathFor(method);
-        MatcherAssert.assertThat(result, Matchers.is(Matchers.equalTo("/DogController/bark.jsp")));
+        MatcherAssert.assertThat(result, Matchers.is(Matchers.equalTo("/WEB-INF/jsp/dog/bark.jsp")));
         mockery.assertIsSatisfied();
     }
 }

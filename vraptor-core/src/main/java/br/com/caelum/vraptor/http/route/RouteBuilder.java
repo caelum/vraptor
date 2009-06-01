@@ -57,7 +57,7 @@ public class RouteBuilder {
 
 	public RouteBuilder(Proxifier proxifier, String uri) {
         this.proxifier = proxifier;
-		uri = uri.replaceAll("\\*", ".\\*");
+		uri = uri.replaceAll("\\*", ".\\*?");
 		this.originalUri = uri;
 	}
 

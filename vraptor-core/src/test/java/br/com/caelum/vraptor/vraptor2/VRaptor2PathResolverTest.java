@@ -52,10 +52,11 @@ public class VRaptor2PathResolverTest {
                 will(returnValue(DogController.class.getDeclaredMethod("bark")));
                 exactly(2).of(resource).getType();
                 will(returnValue(DogController.class));
+                one(request).getParameter("_format"); will(returnValue(null));
             }
         });
         String result = resolver.pathFor(method);
-        assertThat(result, is(equalTo("/DogController/bark.jsp")));
+        assertThat(result, is(equalTo("/WEB-INF/jsp/dog/bark.jsp")));
         mockery.assertIsSatisfied();
     }
 

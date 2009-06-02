@@ -1,3 +1,5 @@
+support Class converter
+
 help:
 - Create example about how to create a VRaptor3 converter
 - bug: parameters are being set twice?

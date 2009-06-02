@@ -1,0 +1,19 @@
+[chapter Resource]
+
+[section O que são Resources?]
+
+[section Escopos]
+SessionScoped, App e Req...
+
+[section Methods]
+
+[section @Component]
+
+comentar da similaridade dos @Component com escopo com o jsf
+
+[section Provider]
+
+[section Exemplos]
+
+Exemplos de uso de todos os casos aqui com codigo
+

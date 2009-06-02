@@ -1,0 +1,53 @@
+[chapter VRaptor3]
+
+MOSTRAR QUE O FOCO E SIMPLICIDADE
+
+Essa documentação inclue, portanto, exemplos de tarefas que não são as triviais, para tentar mostrar ao usuário que até mesmo o que fica fora do padrão crud
+trivial também é de simples implementação usando o vraptor3.
+
+[chapter exemplo de 1 minuto: upload]
+
+[code]
+@Resource
+public class PerfilController {
+
+	private final PerfilDao dao;
+
+	public PerfilController(PerfilDao dao) {
+		this.dao = dao;
+	}
+
+	public void atualizaFoto(Perfil perfil, java.util.File foto) {
+		dao.atribue(foto, perfil);
+	}
+}
+[/code]
+
+[section exemplo de 1 minuto: download]
+
+[code]
+@Resource
+public class PerfilController {
+
+	// dao ...
+
+	public File foto(Perfil perfil) {
+		return new File("/path/para/a/foto." + perfil.getId()+ ".jpg"); 
+	}
+}
+[/code]
+
+[section Um exemplo de create basico]
+
+[section Meus jsps]
+
+form e o view
+
+[section Validacao]
+
+on error goto form
+
+[section E agora?]
+
+link para download dos arquivos
+link para vraptor-example

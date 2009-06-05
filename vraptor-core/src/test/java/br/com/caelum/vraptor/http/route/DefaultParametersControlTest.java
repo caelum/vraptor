@@ -156,6 +156,20 @@ public class DefaultParametersControlTest {
 
 		assertThat(control.matches("/clients/my/path/to/file/"), is(true));
 	}
+	@Test
+	public void shouldNotBeGreedyAtPatternCompiling() throws Exception {
+		DefaultParametersControl control = new DefaultParametersControl("/clients/{client.id}/view/{filename*}");
+
+		assertThat(control.matches("/clients/1/view/my/path/to/file/"), is(true));
+		mockery.checking(new Expectations() {
+			{
+				one(request).setParameter("client.id", "1");
+				one(request).setParameter("filename", new String[] {"my/path/to/file/"});
+			}
+		});
+		control.fillIntoRequest("/clients/1/view/my/path/to/file/", request);
+		mockery.assertIsSatisfied();
+	}
 
 	@Test
 	public void registerExtraParametersFromAcessedUrlWithGreedyParameters() throws SecurityException, NoSuchMethodException {

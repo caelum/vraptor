@@ -48,8 +48,8 @@ public class DefaultParametersControl implements ParametersControl {
 	public DefaultParametersControl(String originalPattern) {
 		this.originalPattern = originalPattern;
 		String patternUri = originalPattern
-			.replaceAll("\\{(.+?)\\*\\}", "(.*)")
-			.replaceAll("\\{(.+?)\\}", "([^/]*)");
+			.replaceAll("\\{([^\\}]+?)\\*\\}", "(.*)")
+			.replaceAll("\\{([^\\}]+?)\\}", "([^/]*)");
 		Matcher matcher = Pattern.compile("\\{(.+?)\\}").matcher(originalPattern);
 		while(matcher.find()) {
 			parameters.add(matcher.group(1).replace("*", ""));

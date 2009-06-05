@@ -139,6 +139,13 @@ public class DefaultParametersControlTest {
 		assertThat(right.matches(uri), is(true));
 
 	}
+
+	@Test
+	public void shouldMatchMoreThanOneVariable() throws Exception {
+		DefaultParametersControl control = new DefaultParametersControl("/clients/{client.id}/subtask/{task.id}/");
+
+		assertThat(control.matches("/clients/3/subtask/5/"), is(true));
+	}
 	private TypeCreated client(Long id) {
 		return new TypeCreated(new Client(id));
 	}

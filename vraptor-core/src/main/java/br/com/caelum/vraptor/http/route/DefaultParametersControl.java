@@ -47,29 +47,10 @@ public class DefaultParametersControl implements ParametersControl {
 
 	public DefaultParametersControl(String originalPattern) {
 		this.originalPattern = originalPattern;
-		String patternUri = "";
-		String paramName = "";
-		// not using stringbuffer because this is only run in startup
-		boolean ignore = false;
-		for (int i = 0; i < originalPattern.length(); i++) {
-			if (originalPattern.charAt(i) == '{') {
-				ignore = true;
-				patternUri += "(";
-				continue;
-			} else if (originalPattern.charAt(i) == '}') {
-				ignore = false;
-				patternUri += "[^/]*)";
-				parameters.add(paramName);
-				paramName = "";
-				continue;
-			} else if (!ignore) {
-				patternUri += originalPattern.charAt(i);
-			} else {
-				paramName += originalPattern.charAt(i);
-			}
-		}
-		if (ignore) {
-			throw new IllegalRouteException("Illegal route contains invalid pattern: " + this.originalPattern);
+		String patternUri = originalPattern.replaceAll("\\{(.+?)\\}", "([^/]*)");
+		Matcher matcher = Pattern.compile("\\{(.+?)\\}").matcher(originalPattern);
+		while(matcher.find()) {
+			parameters.add(matcher.group(1));
 		}
 		this.pattern = Pattern.compile(patternUri);
 	}

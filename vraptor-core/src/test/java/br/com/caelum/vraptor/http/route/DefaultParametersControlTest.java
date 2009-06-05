@@ -150,5 +150,22 @@ public class DefaultParametersControlTest {
 		return new TypeCreated(new Client(id));
 	}
 
+	@Test
+	public void shouldBeGreedyWhenIPutAnAsteriskOnExpression() throws Exception {
+		DefaultParametersControl control = new DefaultParametersControl("/clients/{pathToFile*}");
 
+		assertThat(control.matches("/clients/my/path/to/file/"), is(true));
+	}
+
+	@Test
+	public void registerExtraParametersFromAcessedUrlWithGreedyParameters() throws SecurityException, NoSuchMethodException {
+		DefaultParametersControl control = new DefaultParametersControl("/clients/{pathToFile*}");
+		mockery.checking(new Expectations() {
+			{
+				one(request).setParameter("pathToFile", new String[] {"my/path/to/file"});
+			}
+		});
+		control.fillIntoRequest("/clients/my/path/to/file", request);
+		mockery.assertIsSatisfied();
+	}
 }

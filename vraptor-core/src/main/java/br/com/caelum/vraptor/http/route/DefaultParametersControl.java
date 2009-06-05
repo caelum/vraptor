@@ -50,7 +50,7 @@ public class DefaultParametersControl implements ParametersControl {
 		String patternUri = originalPattern
 			.replaceAll("\\{([^\\}]+?)\\*\\}", "(.*)")
 			.replaceAll("\\{([^\\}]+?)\\}", "([^/]*)");
-		Matcher matcher = Pattern.compile("\\{(.+?)\\}").matcher(originalPattern);
+		Matcher matcher = Pattern.compile("\\{([^\\}]+?)\\}").matcher(originalPattern);
 		while(matcher.find()) {
 			parameters.add(matcher.group(1).replace("*", ""));
 		}

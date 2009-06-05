@@ -158,16 +158,21 @@ public class DefaultParametersControlTest {
 	}
 	@Test
 	public void shouldNotBeGreedyAtPatternCompiling() throws Exception {
-		DefaultParametersControl control = new DefaultParametersControl("/clients/{client.id}/view/{filename*}");
+		DefaultParametersControl control = new DefaultParametersControl("/project/{project.name}/build/{buildId}/view/{filename*}");
 
-		assertThat(control.matches("/clients/1/view/my/path/to/file/"), is(true));
+		String uri = "/project/Vraptor3/build/12345/view/artifacts/vraptor.jar";
+		assertThat(control.matches(uri), is(true));
 		mockery.checking(new Expectations() {
 			{
-				one(request).setParameter("client.id", "1");
-				one(request).setParameter("filename", new String[] {"my/path/to/file/"});
+				one(request).setParameter("project.name", "Vraptor3");
+				one(request).setParameter("filename", new String[] {"artifacts/vraptor.jar"});
+				one(request).setParameter("buildId", new String[] {"12345"});
 			}
 		});
-		control.fillIntoRequest("/clients/1/view/my/path/to/file/", request);
+		control.fillIntoRequest(uri, request);
+
+		assertThat(control.apply(new String[] {"Vraptor3", "12345", "artifacts/vraptor.jar"}),
+				is(uri));
 		mockery.assertIsSatisfied();
 	}
 

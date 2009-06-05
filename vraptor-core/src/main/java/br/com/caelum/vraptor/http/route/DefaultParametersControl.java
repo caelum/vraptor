@@ -31,6 +31,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import br.com.caelum.vraptor.eval.Evaluator;
 import br.com.caelum.vraptor.http.MutableRequest;
 
@@ -41,6 +44,7 @@ import br.com.caelum.vraptor.http.MutableRequest;
  */
 public class DefaultParametersControl implements ParametersControl {
 
+	private final Logger logger = LoggerFactory.getLogger(DefaultParametersControl.class);
 	private final List<String> parameters = new ArrayList<String>();
 	private final Pattern pattern;
 	private final String originalPattern;
@@ -52,9 +56,11 @@ public class DefaultParametersControl implements ParametersControl {
 			.replaceAll("\\{([^\\}]+?)\\}", "([^/]*)");
 		Matcher matcher = Pattern.compile("\\{([^\\}]+?)\\}").matcher(originalPattern);
 		while(matcher.find()) {
-			parameters.add(matcher.group(1).replace("*", ""));
+			String value = matcher.group(1).replace("*", "");
+			parameters.add(value);
 		}
 		this.pattern = Pattern.compile(patternUri);
+		logger.debug("For " + originalPattern + " retrieved " + patternUri + " with "+ parameters);
 	}
 
 	public String fillUri(Object params) {
@@ -89,6 +95,12 @@ public class DefaultParametersControl implements ParametersControl {
 			matcher.appendReplacement(result, values[i].replaceAll("\\$", "\\\\\\$"));
 		}
 		return result.toString();
+	}
+	
+	public static void main(String[] args) {
+		System.out.println("/download/project/{project.name}/build/{buildId}/view/{filename*}"
+			.replaceAll("\\{([^\\}]+?)\\*\\}", "(.*)").replaceAll("\\{([^\\}]+?)\\}", "([^/]*)"));
+		//System.out.println(Pattern.matches("/download/project/([^/]*)/build/([^/]*)/view/([^/]*)")."/download/project/xpto/build/2/view/a/b/c");
 	}
 
 }

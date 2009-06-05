@@ -1,7 +1,7 @@
 /***
- * 
+ *
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  * 1. Redistributions of source code must retain the above copyright notice,
@@ -12,7 +12,7 @@
  * copyright holders nor the names of its contributors may be used to endorse or
  * promote products derived from this software without specific prior written
  * permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -77,7 +77,7 @@ public class DefaultParametersControlTest {
 
 
 	class Client {
-		private Long id;
+		private final Long id;
 		private Client child;
 
 		public Client(Long id) {
@@ -94,7 +94,7 @@ public class DefaultParametersControlTest {
 	}
 
 	class TypeCreated {
-		private Client client;
+		private final Client client;
 
 		public TypeCreated(Client c) {
 			this.client = c;
@@ -129,6 +129,23 @@ public class DefaultParametersControlTest {
 		assertThat(uri, is(equalTo("/clients/")));
 	}
 
+	@Test
+	public void shouldMatchPatternLazily() throws Exception {
+		DefaultParametersControl wrong = new DefaultParametersControl("/clients/{client.id}/");
+		DefaultParametersControl right = new DefaultParametersControl("/clients/{client.id}/subtask/");
+		String uri = "/clients/3/subtask/";
+
+		assertThat(wrong.matches(uri), is(false));
+		assertThat(right.matches(uri), is(true));
+
+	}
+
+	@Test
+	public void shouldMatchMoreThanOneVariable() throws Exception {
+		DefaultParametersControl control = new DefaultParametersControl("/clients/{client.id}/subtask/{task.id}/");
+
+		assertThat(control.matches("/clients/3/subtask/5/"), is(true));
+	}
 	private TypeCreated client(Long id) {
 		return new TypeCreated(new Client(id));
 	}

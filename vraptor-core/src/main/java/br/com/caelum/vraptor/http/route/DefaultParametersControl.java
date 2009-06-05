@@ -60,8 +60,8 @@ public class DefaultParametersControl implements ParametersControl {
 				continue;
 			} else if (originalPattern.charAt(i) == '}') {
 				ignore = false;
-				finalUri += ".*?";
-				patternUri += ".*?)";
+				finalUri += "[^/]+";
+				patternUri += "[^/]+)";
 				parameters.add(paramName);
 				paramName = "";
 				continue;

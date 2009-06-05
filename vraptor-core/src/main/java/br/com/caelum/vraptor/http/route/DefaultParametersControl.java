@@ -36,7 +36,7 @@ import br.com.caelum.vraptor.http.MutableRequest;
 
 /**
  * Default implmeentation of parameters control on uris.
- * 
+ *
  * @author guilherme silveira
  */
 public class DefaultParametersControl implements ParametersControl {
@@ -44,11 +44,9 @@ public class DefaultParametersControl implements ParametersControl {
 	private final List<String> parameters = new ArrayList<String>();
 	private final Pattern pattern;
 	private final String originalPattern;
-	private final String patternUri;
 
 	public DefaultParametersControl(String originalPattern) {
 		this.originalPattern = originalPattern;
-		String finalUri = "";
 		String patternUri = "";
 		String paramName = "";
 		// not using stringbuffer because this is only run in startup
@@ -60,14 +58,12 @@ public class DefaultParametersControl implements ParametersControl {
 				continue;
 			} else if (originalPattern.charAt(i) == '}') {
 				ignore = false;
-				finalUri += ".*?";
-				patternUri += ".*?)";
+				patternUri += "[^/]*)";
 				parameters.add(paramName);
 				paramName = "";
 				continue;
 			} else if (!ignore) {
 				patternUri += originalPattern.charAt(i);
-				finalUri += originalPattern.charAt(i);
 			} else {
 				paramName += originalPattern.charAt(i);
 			}
@@ -76,7 +72,6 @@ public class DefaultParametersControl implements ParametersControl {
 			throw new IllegalRouteException("Illegal route contains invalid pattern: " + this.originalPattern);
 		}
 		this.pattern = Pattern.compile(patternUri);
-		this.patternUri = patternUri;
 	}
 
 	public String fillUri(Object params) {

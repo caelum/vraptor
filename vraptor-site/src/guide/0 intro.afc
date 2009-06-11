@@ -1,11 +1,23 @@
 [chapter VRaptor3]
 
-MOSTRAR QUE O FOCO E SIMPLICIDADE
+O VRaptor 3 foca em simplicidade e, portanto, todas as funcionalidades que você verá tem como primeira meta resolver o problema do programador da
+maneira menos intrusiva possível em seu código.
 
-Essa documentação inclue, portanto, exemplos de tarefas que não são as triviais, para tentar mostrar ao usuário que até mesmo o que fica fora do padrão crud
-trivial também é de simples implementação usando o vraptor3.
+Sejam as clássicas lógicas de adicionar, remover, buscar e atualizar ou ainda
+funcionalidades que costumam ser mais complexas como upload e download de arquivos,
+resultados diferentes para formatos diferentes (xml, json, xhtml etc), tudo isso
+é feito através de funcionalidades simples do vraptor 3. 
+
+Essa documentação inclue, portanto, exemplos de tarefas que não são as triviais, para tentar mostrar ao usuário que até mesmo o que fica fora
+do padrão crud trivial também é de simples implementação usando o vraptor3.
+
+Claro, as funcionalidades simples ainda são fáceis de implementar, mas vemos ver
+dois exemplos clássicos que outros controladores não implementam de maneira tão simples
+assim.
 
 [chapter exemplo de 1 minuto: upload]
+
+O primeiro exemplo será baseado na funcionalidade de upload multipart.
 
 [code]
 @Resource
@@ -17,13 +29,17 @@ public class PerfilController {
 		this.dao = dao;
 	}
 
-	public void atualizaFoto(Perfil perfil, java.util.File foto) {
-		dao.atribue(foto, perfil);
+	public void atualizaFoto(Perfil perfil, UploadedFile foto) {
+		dao.atribue(foto.getFile(), perfil);
 	}
 }
 [/code]
 
 [section exemplo de 1 minuto: download]
+
+O exemplo a seguir mostra como disponibilizar o download para seu cliente.
+
+Note novamente a simplicidade na implementação: 
 
 [code]
 @Resource
@@ -37,9 +53,88 @@ public class PerfilController {
 }
 [/code]
 
-[section Um exemplo de create basico]
+[section Um exemplo de create básico]
+
+Agora que já passamos pelos exemplos que devem demonstram a simplicidade
+que o VRaptor permite que os programadores escrevam seu código mesmo em situações
+não triviais, vejamos um exemplo de inserção de dados:
+
+[code]
+@Resource
+public class PerfilController {
+
+	private final PerfilDao dao;
+
+	public PerfilController(PerfilDao dao) {
+		this.dao = dao;
+	}
+
+	public void adiciona(Perfil novoPerfil) {
+		dao.adiciona(novoPerfil);
+	}
+}
+[/code]
+
+Pronto. O VRaptor será capaz de, atraves de seu container de Injecao de Dependencias,
+passar o PerfilDao para seu construtor, e invocar o metodo adiciona com os parametros
+adequados de acordo com a requisicao.
+
+Se os parametros do request forem "novoPerfil.nome", "novoPerfil.usuario" e "novoPerfil.senha", os
+setters da variavel novoPerfil serão invocados.
+
+<Importante> notar que o vraptor utiliza o paranamer para descobrir os nomes de seus
+parâmetros (no exemplo, novoPerfil) - diferente de outras ferramentas, com o VRaptor
+você <<não>> precisa anotar suas variaveis de parametros, que ficariam extremamente poluídos.
+
+[section REST]
+
+Seguindo a idéia de que URIs devem identificar recursos na rede para então podermos
+fazer valer as diversas vantagens estruturais que o padrão http nos proporciona, 
+note o quão simples fica mapear diversos métodos http para a mesma uri. Novamente
+<<nenhuma>> anotação foi necessária para os parametros.
+
+[code]
+@Resource
+public class PerfilController {
+
+	// ...
+
+	@Post
+	@Path("/perfil")
+	public void adiciona(Perfil novoPerfil) {
+		dao.adiciona(novoPerfil);
+	}
+	
+	@Get
+	@Path("/perfil/{perfil.id}")
+	public Perfil visualiza(Perfil perfil) {
+		return dao.busca(perfil);
+	}
+	
+	@Delete
+	@Path("/perfil/{perfil.id}")
+	public void remove(Perfil perfil) {
+		dao.remove(perfil);
+	}
+	
+	@Put
+	@Path("/perfil/{perfil.id}")
+	public void atualiza(Perfil perfil) {
+		dao.atualiza(perfil);
+	}
+	
+}
+[/code]
+
+Isto é, cada método (exceto o adiciona) está mapeado para diferentes requisições
+http para o mesmo recurso. Para o perfil de id=3, basta acessar a uri /perfil/3.
+
+<Note> também o retorno do método <visualiza>, que automaticamente disponibiliza
+uma variável chamada <perfil> para sua camada de view (jsp, freemarker etc). 
 
 [section Meus jsps]
+
+O exemplo a seguir mostra
 
 form e o view
 

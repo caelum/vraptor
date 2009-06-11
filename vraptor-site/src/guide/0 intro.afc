@@ -106,6 +106,12 @@ public class PerfilController {
 	}
 	
 	@Get
+	@Path("/perfil")
+	public List<Perfil> lista() {
+		return dao.lista();
+	}
+	
+	@Get
 	@Path("/perfil/{perfil.id}")
 	public Perfil visualiza(Perfil perfil) {
 		return dao.busca(perfil);
@@ -134,11 +140,23 @@ uma variável chamada <perfil> para sua camada de view (jsp, freemarker etc).
 
 [section Meus jsps]
 
-O exemplo a seguir mostra
+Após a invocação do método visualiza do seu PerfilController, o arquivo <WEB-INF/jsp/perfil/visualiza.jsp>
+é automaticamente invocado, já disponibilizando o perfil retornado pelo método!
 
-form e o view
+O redirecionamento também é algo inovador e sem configuração em arquivos externos.
+Imagine que após a remoção desejamos redirecionar para a listagem:
 
-[section Validacao]
+[code]
+		dao.remove(perfil);
+		result.use(logic()).redirectTo(PerfilController.class).lista();
+[/code]
+
+Isto é, estamos dizendo que desejamos ir como resultado para a lógica lista.
+O VRaptor resolve a uri que deve ser enviada para o cliente fazer o client-side-redirect.
+Se por algum acaso você mudar a uri de mapeamento da lógica de listagem, o redirect
+continua funcionando!
+
+[section Validação]
 
 on error goto form
 

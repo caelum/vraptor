@@ -1,5 +1,102 @@
 [chapter Interceptadores]
 
+[section Para que interceptar]
+
+O uso de interceptadores é feito para executar alguma tarefa antes e/ou depois
+de uma lógica de negócios, sendo os usos mais comuns para validação de dados, 
+controle de conexão e transação do banco, log e criptografação/compactação de dados.
+
 [section Como interceptar]
 
+No VRaptor 3 utilizamos uma abordagem onde o interceptador define quem será interceptado,
+muito mais próxima a abordagens de interceptação que aparecem em sistemas baseados
+em AOP (programação orientada a aspectos) do que a abordagem da versão anterior do vraptor.
+
+Portanto, para interceptar uma requisição basta implementar a interface **Interceptor**
+e anotar a classe com a anotação **@Intercepts**.
+
+Assim como qualquer outro componente, você pode dizer em que escopo o interceptador
+será armazenado através das anotações de escopo.
+
+[java]
+public interface Interceptor {
+
+    void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws InterceptionException;
+
+    boolean accepts(ResourceMethod method);
+
+}
+[/java]
+
+[section Exemplo simples]
+
+A classe a seguir mostra um exemplo de como interceptar todas as requisoes em um escopo de
+sessão e e simplesmente mostrar na saída do console o que está sendo invocado.
+
+Lembre-se que o interceptador é um componente como qualquer outro e pode receber
+em seu construtor quaisquer dependencias atraves de Injecao de Dependencias. 
+ 
+[java]
+@Intercepts
+@SessionScoped
+public class Log implements Interceptor {
+
+	private final HttpServletRequest request;
+
+	public Log(HttpServletRequest request) {
+		this.request = request;
+	}
+
+    public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws InterceptionException {
+    	System.out.println("Interceptando " + request.getRequestURI());
+    	stack.next(method, resourceInstance);
+    }
+
+    public boolean accepts(ResourceMethod method) {
+    	return true;
+    }
+
+}
+[/java]
+
+
 [section Exemplo com Hibernate]
+
+
+
+
+[java]
+@RequestScoped
+@Intercepts
+public class DatabaseInterceptor implements br.com.caelum.vraptor.Interceptor {
+
+	private final Database controller;
+	private final Result result;
+	private final HttpServletRequest request;
+
+	public DatabaseInterceptor(Database controller, Result result, HttpServletRequest request) {
+		this.controller = controller;
+		this.result = result;
+		this.request = request;
+	}
+
+	public void intercept(InterceptorStack stack, ResourceMethod method, Object instance) throws InterceptionException {
+		result.include("contextPath", request.getContextPath());
+		try {
+			controller.beginTransaction();
+			stack.next(method, instance);
+			controller.commit();
+		} finally {
+			if (controller.hasTransaction()) {
+				controller.rollback();
+			}
+			controller.close();
+		}
+	}
+
+	public boolean accepts(ResourceMethod method) {
+		return true;
+	}
+
+}
+[/java]

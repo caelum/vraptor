@@ -5,6 +5,7 @@ out
 *.iws
 *.iml
 target
+classes
 build
 .settings
 cobertura.ser

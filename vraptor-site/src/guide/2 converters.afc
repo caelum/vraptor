@@ -1,9 +1,125 @@
 [chapter Conversores]
 
 [section Padrão]
+Por padrão o VRaptor já registra diversos conversores para o seu uso no dia a dia.
+
+[section Tipos primitivos]
+
+Todos os tipos primitivos (int, long etc) são suportados.
+
+Caso o parametro da requisição seja nulo ou a string vazia, variáveis de tipo primitivo
+serão alterados para o valor padrão como se essa variável fosse uma variável membro, isto é:
+[list]
+* boolean - false
+* short, int, long, double, float, byte - 0
+* char - caracter de código 0
+[/list]
+
+[section Wrappers de tipos primitivos]
+
+Todos os wrappers dos tipos primitivos (Integer, Long, Character, Boolean etc) são suportados.
+
+[section Enum]
+
+Todas as enumerações são suportadas através do nome do elemento ou de seu ordinal.
+No exemplo a seguir, tanto o valor 1 como o valor DEBITO são traduzidos para Tipo.DEBITO:
+
+[code]
+public enum Tipo {
+	CREDITO, DEBITO
+}
+[/code]
+
+[section BigInteger e BigDecimal]
+
+Ambos são suportados utilizando o padrão de localização da virtual machine que serve a sua aplicação.
+Para criar suporte a números decimais baseados no locale do usuário, basta olhar o funcionamento da classe LocaleBasedCalendarConverter.
+
+[section Calendar e Date]
+
+LocaleBasedCalendarConverter e LocaleBasedDateConverter utilizam o locale do usuário,
+definido seguindo o padrão do jstl para entender a formatação que foi utilizada no parâmetro.
+
+Por exemplo, se o locale é pt-br, o formato "18/09/1981" representa 18 de setembro de 1981
+enquanto para o locale en, o formato "09/18/1981" representa a mesma data.
 
 [section Interface]
 
-[section Registrando um novo]
+Todos os conversores devem implementar a interface Converter do vraptor.
+A classe concreta definirá o tipo que ela é capaz de converter, e será invocada
+com o valor do parâmetro do request, o tipo alvo e um bundle com as mensagens de
+internacionalização para que você possa retornar uma ConversionException no caso
+de algum erro de conversão.
+
+[code]
+public interface Converter<T> {
+    T convert(String value, Class<? extends T> type, ResourceBundle bundle);
+}
+[/code]
+
+Além disso, seu conversor deve ser anotado dizendo agora para o VRaptor (e não mais para o compilador
+java) qual o tipo que seu conversor é capaz de converter, para isso utilize a anotação @Convert:
+
+[code]
+@Convert(Long.class)
+public class LongConverter implements Converter<Long> {
+	// ...
+}
+[/code]
+
+Por fim, lembre-se de dizer se seu conversor pode ser instanciado em um escopo de Application, Session
+ou Request, assim como recursos e componentes quaisquer do VRaptor.
+Por exemplo, um conversor que não requer nenhuma informação do usuário logado pode ser registrado no escopo
+de Application e instanciado uma única vez:
+
+[code]
+@Convert(Long.class)
+@ApplicationScoped
+public class LongConverter implements Converter<Long> {
+	// ...
+}
+[/code]
+
+A seguir, a implementação de LongConverter mostra como tudo isso pode ser utilizado de maneira bem simples:
+
+[code]
+@Convert(Long.class)
+@ApplicationScoped
+public class LongConverter implements Converter<Long> {
+
+    public Long convert(String value, Class<? extends Long> type, ResourceBundle bundle) {
+        if (value == null || value.equals("")) {
+            return null;
+        }
+        try {
+            return Long.valueOf(value);
+        } catch (NumberFormatException e) {
+			throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_integer"), value));
+        }
+    }
+
+}
+[/code]
+
+[section Registrando um novo conversor]
+
+Após criar seu próprio conversor, não esqueça de registrá-lo como um componente customizado em seu Provider.
+Usando o pico container como seu provider, você pode fazer assim:
+
+[code]
+public class CustomProvider extends Provider {
+
+    @Override
+    protected void registerComponents(ComponentRegistry container) {
+        super.registerComponents(container);
+        
+        // outros components
+        
+        container.register(LongConverter.class, LongConverter.class);
+    }
+
+}
+[/code]
+
 
 [section Outros fora do padrão]

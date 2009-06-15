@@ -139,3 +139,14 @@ parâmetro _format, uma vez que o browser não suporta ainda tais requisições:
 
 [section @Path]
  
+[section @Component]
+
+ 
+comentar da similaridade dos @Component com escopo com o jsf
+ 
+[section Provider]
+ 
+[section Exemplos]
+ 
+Exemplos de uso de todos os casos aqui com codigo
+

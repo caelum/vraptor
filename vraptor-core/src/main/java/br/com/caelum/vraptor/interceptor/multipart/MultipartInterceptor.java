@@ -7,6 +7,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
@@ -41,12 +42,11 @@ public class MultipartInterceptor implements Interceptor {
 
     private final MutableRequest parameters;
 
-    public MultipartInterceptor(HttpServletRequest request, MutableRequest parameters) throws IOException {
+    public MultipartInterceptor(HttpServletRequest request, MutableRequest parameters, MultipartConfig config) throws IOException {
         this.request = request;
         this.parameters = parameters;
-        this.sizeLimit = 2 * 1024 * 1024;
-        // this directory must be configurable through the properties
-        this.temporaryDirectory = File.createTempFile("raptor.", ".upload").getParentFile();
+        this.sizeLimit = config.getSizeLimit();
+        this.temporaryDirectory = config.getDirectory();
     }
 
     @SuppressWarnings("unchecked")
@@ -96,7 +96,7 @@ public class MultipartInterceptor implements Interceptor {
     }
 
     public boolean accepts(ResourceMethod method) {
-        return ServletFileUpload.isMultipartContent(new ServletRequestContext(request));
+        return FileUploadBase.isMultipartContent(new ServletRequestContext(request));
     }
 
 }

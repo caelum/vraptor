@@ -55,6 +55,8 @@ import br.com.caelum.vraptor.interceptor.OutjectResult;
 import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
 import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
 import br.com.caelum.vraptor.interceptor.download.DownloadInterceptor;
+import br.com.caelum.vraptor.interceptor.multipart.DefaultMultipartConfig;
+import br.com.caelum.vraptor.interceptor.multipart.MultipartConfig;
 import br.com.caelum.vraptor.interceptor.multipart.MultipartInterceptor;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
 import br.com.caelum.vraptor.view.DefaultLogicResult;
@@ -100,6 +102,7 @@ public class PicoProvider implements ContainerProvider {
 		for (Class<?> type : new Class[] { DefaultDirScanner.class, WebInfClassesScanner.class }) {
 			singleInterfaceRegister(type, container);
 		}
+		container.register(MultipartConfig.class, DefaultMultipartConfig.class);
 
 		container.register(ForwardToDefaultViewInterceptor.class, ForwardToDefaultViewInterceptor.class);
 		container.register(LogicResult.class, DefaultLogicResult.class);

@@ -1,6 +1,15 @@
 [chapter Configuração básica]
+Como em qualquer framework web, é necessário fazer algumas configurações para que o controlador funcione corretamente.
+Uma das grandes vantagens do VRaptor2 e que foi mantida nessa nova versão é o baixo número de configurações necessárias. Na verdade,
+a única configuração obrigatória que você vai fazer é adicionar um filtro no web.xml
 
 [section web.xml]
+
+No web.xml precisamos liberar o filtro do VRaptor3, para isso, basta adicionarmos as seguintes linhas no arquivo:
+
+[code]
+
+[/code]
 
 [section Seu recurso]
 

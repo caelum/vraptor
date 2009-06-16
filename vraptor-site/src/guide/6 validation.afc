@@ -1,9 +1,95 @@
 [chapter Validação]
+O VRaptor3 suporta 2 estilos de validação. Clássico e fluente. A porta de entrada para ambos os estilos é o objeto Validator.
+Para que seu recurso tenha acesso ao Validator, basta recebê-lo no construtor do seu recurso:
+
+[code]
+import br.com.caelum.vraptor.Validator;
+...
+
+@Resource
+class FuncionarioController {
+	private Validator validator;
+	
+	public FuncionarioController(Validator validator) {
+		this.validator = validator;
+	}
+}
+[/code]
 
 [section Estilo clássico]
 
+A forma clássica é semelhante a forma como as validações eram feitas no VRaptor2.
+Dentro da sua lógica de negócios, basta fazer a verificação que deseja e caso haja um erro de validação, adicionar esse erro na lista
+de erros de validação.
+Por exemplo, para validar que o nome do funcionario deve ser Fulano, faça:
+
+[code]
+public void adiciona(Funcionario funcionario) {
+	if(! funcionario.getNome().equals("Fulano")) {
+		validator.add(new ValidationMessage("erro","nomeInvalido"));
+	}
+}
+[/code]
+
 [section Estilo fluente]
+
+No estilo fluente, a idéia é que o código para fazer a validação seja algo muito parecido com a linguagem natural.
+Por exemplo, caso queiramos obrigar que seja informado o nome do funcionario:
+
+[code]
+public adiciona(Funcionario funcionario) {
+	validator.checking(new Validations(){{
+		that("erro","nomeNaoInformado", !funcionario.getNome().isEmpty());
+	}})
+	
+	dao.adiciona(funcionario);
+}
+[/code]
+
+Você pode ler esse código como: "Validador, cheque as minhas validações. A primeira validação é que o nome do funcionário não pode ser vazio".
+Bem mais próximo a linguagem natural.
+
+Assim sendo, caso o nome do funcionario seja vazio, ele vai ser redirecionado novamente para a logica "formulario", que exibe o formulario para
+que o usuário adicione o funcionário novamente. Além disso, ele devolve para o formulario a mensagem de erro que aconteceu na validação.
 
 [section Hibernate validator]
 
+O VRaptor também suporta integração com o HibernateValidator. No exemplo anterior para validar o objeto Funcionario 
+usando o Hibernate Validator basta adicionar uma linha de código:
+
+public adiciona(Funcionario funcionario) {
+	validator.checking(new Validations(){{
+		that("erro","nomeNaoInformado", !funcionario.getNome().isEmpty());
+		
+		//Validação do Funcionario com Hibernate Validator
+		and(Hibernate.validate(funcionario));
+	}})
+	
+	dao.adiciona(funcionario);
+}
+
 [section Para onde redirecionar no caso de erro]
+
+Outro ponto importante que deve ser levado em consideração no momento de fazer validações é o redirecionamento quando ocorrer um erro. Como
+enviamos o usuário para outro recurso com o VRaptor3, caso haja erro na validação?
+
+Simples, apenas diga no seu código que quando correr um erro, é para o usuário ser enviado para algum recurso.
+Como no exemplo:
+
+[code]
+public adiciona(Funcionario funcionario) {
+	::validator.onError().goTo(FuncionarioController.class).formulario();::
+	
+	//Validação na forma fluente
+	validator.checking(new Validations(){{
+		that("erro","nomeNaoInformado", !funcionario.getNome().isEmpty());
+	}})
+	
+	//Validação na forma clássica
+	if(! funcionario.getNome().equals("Fulano")) {
+		validator.add(new ValidationMessage("erro","nomeInvalido"));
+	}
+	
+	dao.adiciona(funcionario);
+}
+[/code]

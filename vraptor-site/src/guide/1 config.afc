@@ -1,11 +1,11 @@
 [chapter Configuração básica]
-Como em qualquer framework web, precisamos fazer algumas configurações para que o controlador funcione corretamente.
+Como em qualquer framework web, precisamos fazer algumas configurações.
 Uma das grandes vantagens do VRaptor2 e que foi mantida nessa nova versão é o baixo número de configurações necessárias. Na verdade,
 a única configuração obrigatória que você vai fazer é adicionar um filtro no web.xml
 
 [section web.xml]
 
-No web.xml precisamos liberar o filtro do VRaptor3, para isso, basta adicionarmos as seguintes linhas no arquivo:
+No web.xml precisamos adicionar o filtro do VRaptor3, para isso, basta adicionarmos as seguintes linhas no arquivo:
 
 [code]
 <!-- declaracao do filtro -->
@@ -30,7 +30,7 @@ negócio que você definiu em sua aplicação.
 [section Seu recurso]
 
 Cada recurso no VRaptor3 funciona como uma classe na qual você escreve suas lógicas de negócio e que ficam acessíveis para o usuário a partir de
-uma determinada URI. Ao final da execução de cada lógica do seu recurso, usuário é enviado para uma página que exibe o resultado final do processo.
+uma determinada URI. Ao final da execução de cada lógica do seu recurso, o usuário é enviado para uma página que exibe o resultado final do processo.
 
 Para escrever um recurso simples no VRaptor3, nós não precisamos de muito esforço, basta criarmos uma classe e anotarmos essa classe com a anotação
 ::@Resource::
@@ -47,6 +47,8 @@ public class FuncionarioController {
 	}
 }
 [/code]
+
+No exemplo acima, FuncionarioController é um recurso, e os métodos listaTodos e adiciona são as lógicas.
 
 [section Arquivo de mensagens]
 

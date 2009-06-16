@@ -25,9 +25,28 @@ No web.xml precisamos liberar o filtro do VRaptor3, para isso, basta adicionarmo
 
 Essa configuração do filtro do VRaptor fará com que todas as requisições que chegarem para sua aplicação sejam interpretadas pelo próprio VRaptor,
 e dessa forma, ele poderá decidir para qual recurso o fluxo da sua aplicação será direcionado. E consequentemente, executando as lógicas de 
-negócio que você definir em sua aplicação. 
+negócio que você definiu em sua aplicação. 
 
 [section Seu recurso]
+
+Cada recurso no VRaptor3 funciona como uma classe na qual você escreve suas lógicas de negócio e que ficam acessíveis para o usuário a partir de
+uma determinada URI. Ao final da execução de cada lógica do seu recurso, usuário é enviado para uma página que exibe o resultado final do processo.
+
+Para escrever um recurso simples no VRaptor3, nós não precisamos de muito esforço, basta criarmos uma classe e anotarmos essa classe com a anotação
+::@Resource::
+
+[code]
+@Resource
+public class FuncionarioController {
+
+	public List<Funcionario> listaTodos() {
+		return ...
+	}
+	
+	public void adiciona(Funcionario funcionario) {
+	}
+}
+[/code]
 
 [section Arquivo de mensagens]
 

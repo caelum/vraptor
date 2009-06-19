@@ -8,7 +8,7 @@ funcionalidades que costumam ser mais complexas como upload e download de arquiv
 resultados diferentes para formatos diferentes (xml, json, xhtml etc), tudo isso
 é feito através de funcionalidades simples do vraptor 3. 
 
-Essa documentação inclue, portanto, exemplos de tarefas que não são as triviais, para tentar mostrar ao usuário que até mesmo o que fica fora
+Essa documentação inclui, portanto, exemplos de tarefas que não são as triviais, para tentar mostrar ao usuário que até mesmo o que fica fora
 do padrão crud trivial também é de simples implementação usando o vraptor3.
 
 Claro, as funcionalidades simples ainda são fáceis de implementar, mas vemos ver
@@ -55,7 +55,7 @@ public class PerfilController {
 
 [section Um exemplo de create básico]
 
-Agora que já passamos pelos exemplos que devem demonstram a simplicidade
+Agora que já passamos pelos exemplos que devem demonstrar a simplicidade
 que o VRaptor permite que os programadores escrevam seu código mesmo em situações
 não triviais, vejamos um exemplo de inserção de dados:
 

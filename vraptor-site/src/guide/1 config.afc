@@ -52,10 +52,10 @@ No exemplo acima, FuncionarioController é um recurso, e os métodos listaTodos 
 
 [section Arquivo de mensagens]
 
-Internacionalização (i18n) é um recurso poderoso, e que está presente em todos os frameworks web hoje em dia. E não é diferente no VRaptor3.
+Internacionalização (i18n) é um recurso poderoso, e que está presente em quase todos os frameworks web hoje em dia. E não é diferente no VRaptor3.
 Com i18n podemos fazer com que nossa aplicação suporte várias línguas (francês, português, espanhol, inglês etc) de uma maneira que não nos
 cause muito esforço, bastando apenas fazermos a tradução das mensagens da nossa aplicação.
-Para isso basta criarmos um arquivo chamado messages.properties e disponibiliza-lo no classpath da nossa aplicação ( WEB-INF/classes ).
+Para isso basta criarmos um arquivo chamado ::messages.properties:: e disponibiliza-lo no classpath da nossa aplicação ( WEB-INF/classes ).
 O conteúdo desse arquivo são várias linhas compostas por um conjunto de chave/valor, como por exemplo:
 
 [code]

@@ -31,7 +31,7 @@ public interface Interceptor {
 [section Exemplo simples]
 
 A classe a seguir mostra um exemplo de como interceptar todas as requisoes em um escopo de
-sessão e e simplesmente mostrar na saída do console o que está sendo invocado.
+sessão e simplesmente mostrar na saída do console o que está sendo invocado.
 
 Lembre-se que o interceptador é um componente como qualquer outro e pode receber
 em seu construtor quaisquer dependencias atraves de Injecao de Dependencias. 

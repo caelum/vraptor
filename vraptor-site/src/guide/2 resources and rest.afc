@@ -167,7 +167,7 @@ para a visualização de cada cliente.
 
 Isto é, se acessarmos a uri ::/cliente/2::, o método **visualiza** será invocado
 e o parâmetro ::cliente.id:: será setado para **2**. Caso a uri ::/cliente/1717:: seja
-acessada, o mesmo método será invocado com o valor **15**.
+acessada, o mesmo método será invocado com o valor **1717**.
 
 Dessa maneira criamos uris únicas para identificar recursos diferentes do nosso sistema.
 Veja o exemplo citado:

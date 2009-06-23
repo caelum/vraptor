@@ -15,7 +15,7 @@ em AOP (programação orientada a aspectos) do que a abordagem da versão anteri
 Portanto, para interceptar uma requisição basta implementar a interface **Interceptor**
 e anotar a classe com a anotação **@Intercepts**.
 
-Assim como qualquer outro componente, você pode dizer em que escopo o interceptador
+Assim como qualquer outro componente, você pode dizer em que escopo o interceptador,
 será armazenado através das anotações de escopo.
 
 [java]
@@ -30,7 +30,7 @@ public interface Interceptor {
 
 [section Exemplo simples]
 
-A classe a seguir mostra um exemplo de como interceptar todas as requisoes em um escopo de
+A classe a seguir mostra um exemplo de como interceptar todas as requisições em um escopo de
 sessão e simplesmente mostrar na saída do console o que está sendo invocado.
 
 Lembre-se que o interceptador é um componente como qualquer outro e pode receber
@@ -61,9 +61,12 @@ public class Log implements Interceptor {
 
 
 [section Exemplo com Hibernate]
+Provavelmente, um dos usos mais comuns do Interceptor é para a implementação do famigerado pattern Open Session In View, que
+fornece uma conexão com o banco de dados sempre que há uma requisição para sua aplicação. E ao fim dessa requisição, a
+conexão é liberada. O grande ganho disso é evitar exceções como LazyInitializationException no momento da renderização dos jsps.
 
-
-
+Abaixo, está um simples exemplo, que para todas as requisições abre uma transação com o banco de dados. E ao fim da execução da
+lógica e da exibição da página para o usuário, commita a transação e logo em seguida fecha a conexão com o banco.
 
 [java]
 @RequestScoped
@@ -98,5 +101,25 @@ public class DatabaseInterceptor implements br.com.caelum.vraptor.Interceptor {
 		return true;
 	}
 
+}
+[/java]
+
+Dessa forma, no seu Recurso, bastaria o seguinte código para utilizar a conexão disponível:
+
+[java]
+@Resource
+public class FuncionarioController {
+	
+	public FuncionarioController(Result result, Database controller) {
+		this.result = result;
+		this.controller = controller;
+	}
+	
+	@Post
+	@Path("/funcionario")
+	public void adiciona(Funcionario funcionario) {
+		controller.getFuncionarioDao().adiciona(funcionario);
+		...
+	}
 }
 [/java]

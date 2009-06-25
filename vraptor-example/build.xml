@@ -108,6 +108,7 @@
 		<attribute name="databasePort" default="9001" />
 		<sequential>
 			<echo message="Running jetty at @{port}" />
+			<echo message="Pleace access http://localhost:8080/vraptor-example" />
 			<delete dir="jetty_@{port}" />
 			<mkdir dir="jetty_@{port}" />
 			<java fork="true" spawn="true" classname="br.com.caelum.caelumweb2.tasks.JettyStartTask">

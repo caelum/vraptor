@@ -39,35 +39,38 @@ import br.com.caelum.vraptor.http.MutableRequest;
 
 /**
  * Default implmeentation of parameters control on uris.
- *
+ * 
  * @author guilherme silveira
  */
 public class DefaultParametersControl implements ParametersControl {
 
-	private final Logger logger = LoggerFactory.getLogger(DefaultParametersControl.class);
+	private final Logger logger = LoggerFactory
+			.getLogger(DefaultParametersControl.class);
 	private final List<String> parameters = new ArrayList<String>();
 	private final Pattern pattern;
 	private final String originalPattern;
 
 	public DefaultParametersControl(String originalPattern) {
 		this.originalPattern = originalPattern;
-		String patternUri = originalPattern
-			.replaceAll("\\{([^\\}]+?)\\*\\}", "(.*)")
-			.replaceAll("\\{([^\\}]+?)\\}", "([^/]*)");
-		Matcher matcher = Pattern.compile("\\{([^\\}]+?)\\}").matcher(originalPattern);
-		while(matcher.find()) {
+		String patternUri = originalPattern.replaceAll("\\{([^\\}]+?)\\*\\}",
+				"(.*)").replaceAll("\\{([^\\}]+?)\\}", "([^/]*)");
+		Matcher matcher = Pattern.compile("\\{([^\\}]+?)\\}").matcher(
+				originalPattern);
+		while (matcher.find()) {
 			String value = matcher.group(1).replace("*", "");
 			parameters.add(value);
 		}
 		this.pattern = Pattern.compile(patternUri);
-		logger.debug("For " + originalPattern + " retrieved " + patternUri + " with "+ parameters);
+		logger.debug("For " + originalPattern + " retrieved " + patternUri
+				+ " with " + parameters);
 	}
 
 	public String fillUri(Object params) {
 		String base = originalPattern.replaceAll("\\.\\*", "");
 		for (String key : parameters) {
 			Object result = new Evaluator().get(params, key);
-			base = base.replace("{" + key + "}", result == null ? "" : result.toString());
+			base = base.replace("{" + key + "}", result == null ? "" : result
+					.toString());
 		}
 		return base;
 	}
@@ -87,20 +90,15 @@ public class DefaultParametersControl implements ParametersControl {
 
 	public String apply(String[] values) {
 		Pattern regex = Pattern.compile("\\{.*?\\}"); // the pattern object is
-														// NOT thread safe
+		// NOT thread safe
 		Matcher matcher = regex.matcher(this.originalPattern);
 		StringBuffer result = new StringBuffer();
 		for (int i = 0; i < values.length; i++) {
 			matcher.find();
-			matcher.appendReplacement(result, values[i].replaceAll("\\$", "\\\\\\$"));
+			matcher.appendReplacement(result, values[i].replaceAll("\\$",
+					"\\\\\\$"));
 		}
 		return result.toString();
-	}
-	
-	public static void main(String[] args) {
-		System.out.println("/download/project/{project.name}/build/{buildId}/view/{filename*}"
-			.replaceAll("\\{([^\\}]+?)\\*\\}", "(.*)").replaceAll("\\{([^\\}]+?)\\}", "([^/]*)"));
-		//System.out.println(Pattern.matches("/download/project/([^/]*)/build/([^/]*)/view/([^/]*)")."/download/project/xpto/build/2/view/a/b/c");
 	}
 
 }

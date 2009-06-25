@@ -7,6 +7,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
@@ -64,7 +65,10 @@ public class MultipartInterceptor implements Interceptor {
 		logger.debug("Trying to parse multipart request.");
 
 		File temporaryDirectory = config.getDirectory();
-		DiskFileItemFactory factory = createFactoryForDiskBasedFileItems(temporaryDirectory);
+
+		// TODO: use memory if the uses wishes for, isntead of filesystem
+		// this is mandatory for Google App Engine
+		FileItemFactory factory = createFactoryForDiskBasedFileItems(temporaryDirectory);
 
 		ServletFileUpload fileUploadHandler = new ServletFileUpload(factory);
 
@@ -100,7 +104,7 @@ public class MultipartInterceptor implements Interceptor {
 
 	}
 
-	private static DiskFileItemFactory createFactoryForDiskBasedFileItems(
+	private static FileItemFactory createFactoryForDiskBasedFileItems(
 			File temporaryDirectory) {
 		DiskFileItemFactory factory = new DiskFileItemFactory(4096 * 16,
 				temporaryDirectory);

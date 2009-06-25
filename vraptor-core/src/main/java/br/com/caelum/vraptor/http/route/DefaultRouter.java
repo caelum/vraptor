@@ -52,7 +52,7 @@ import br.com.caelum.vraptor.vraptor2.Info;
  * The default implementation of resource localization rules. It also uses a
  * Path annotation to discover path->method mappings using the supplied
  * ResourceAndMethodLookup.
- *
+ * 
  * @author Guilherme Silveira
  */
 @ApplicationScoped
@@ -70,8 +70,9 @@ public class DefaultRouter implements Router {
 	private final ParameterNameProvider provider;
 	private final TypeCreator creator;
 
-	public DefaultRouter(RoutesConfiguration config, RoutesParser resourceRoutesCreator,
-			ParameterNameProvider provider, Proxifier proxifier, TypeCreator creator) {
+	public DefaultRouter(RoutesConfiguration config,
+			RoutesParser resourceRoutesCreator, ParameterNameProvider provider,
+			Proxifier proxifier, TypeCreator creator) {
 		this.routesParser = resourceRoutesCreator;
 		this.provider = provider;
 		this.creator = creator;
@@ -105,7 +106,8 @@ public class DefaultRouter implements Router {
 		this.routes.add(r);
 	}
 
-	public ResourceMethod parse(String uri, HttpMethod method, MutableRequest request) {
+	public ResourceMethod parse(String uri, HttpMethod method,
+			MutableRequest request) {
 		for (Route rule : routes) {
 			ResourceMethod value = rule.matches(uri, method, request);
 			if (value != null) {
@@ -116,6 +118,7 @@ public class DefaultRouter implements Router {
 	}
 
 	public Set<Resource> all() {
+		// TODO: defensive copy? (collections.unmodifiable)
 		return resources;
 	}
 
@@ -125,24 +128,30 @@ public class DefaultRouter implements Router {
 
 	public <T> String urlFor(Class<T> type, Method method, Object... params) {
 		for (Route route : routes) {
-			if(route.canHandle(type, method)) {
+			if (route.canHandle(type, method)) {
 				String[] names = provider.parameterNamesFor(method);
-				Class<?> parameterType = creator.typeFor(new DefaultResourceMethod(new DefaultResource(type), method));
+				Class<?> parameterType = creator
+						.typeFor(new DefaultResourceMethod(new DefaultResource(
+								type), method));
 				try {
 					Object root = parameterType.getConstructor().newInstance();
 					for (int i = 0; i < names.length; i++) {
-						Method setter = findSetter(parameterType, "set" + Info.capitalize(names[i]));
+						Method setter = findSetter(parameterType, "set"
+								+ Info.capitalize(names[i]));
 						setter.invoke(root, params[i]);
 					}
 					return route.urlFor(type, method, root);
 				} catch (Exception e) {
-					throw new VRaptorException("The selected route is invalid for redirection: " + type.getName() + "."
-							+ method.getName(), e);
+					throw new VRaptorException(
+							"The selected route is invalid for redirection: "
+									+ type.getName() + "." + method.getName(),
+							e);
 				}
 			}
 		}
-		throw new RouteNotFoundException("The selected route is invalid for redirection: " + type.getName() + "."
-				+ method.getName());
+		throw new RouteNotFoundException(
+				"The selected route is invalid for redirection: "
+						+ type.getName() + "." + method.getName());
 	}
 
 	private Method findSetter(Class<?> parameterType, String methodName) {

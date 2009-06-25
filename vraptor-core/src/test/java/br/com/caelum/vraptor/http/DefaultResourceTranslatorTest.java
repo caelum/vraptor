@@ -210,6 +210,46 @@ public class DefaultResourceTranslatorTest {
         mockery.assertIsSatisfied();
 
     }
+    
+    @Test
+    public void canHandleComposedUrlIfPlainRootContext() {
+
+        final ResourceMethod expected = mockery.mock(ResourceMethod.class);
+
+        mockery.checking(new Expectations(){{
+            one(request).getAttribute(DefaultResourceTranslator.INCLUDE_REQUEST_URI); will(returnValue(null));
+            one(request).getContextPath();   will(returnValue(""));
+            one(request).getRequestURI(); will(returnValue("/products/1"));
+            one(request).getMethod(); will(returnValue("GET"));
+            one(registry).parse("/products/1", HttpMethod.GET,webRequest); will(returnValue(expected));
+            one(request).getParameter("_method"); will(returnValue(null));
+        }});
+
+        ResourceMethod resource = translator.translate(webRequest);
+        assertThat(resource, is(equalTo(expected)));
+        mockery.assertIsSatisfied();
+
+    }
+    
+    @Test
+    public void canHandleComposedUrlIfNonRootContext() {
+
+        final ResourceMethod expected = mockery.mock(ResourceMethod.class);
+
+        mockery.checking(new Expectations(){{
+            one(request).getAttribute(DefaultResourceTranslator.INCLUDE_REQUEST_URI); will(returnValue(null));
+            one(request).getContextPath();   will(returnValue("/custom_context"));
+            one(request).getRequestURI(); will(returnValue("/custom_context/products/1"));
+            one(request).getMethod(); will(returnValue("GET"));
+            one(registry).parse("/products/1", HttpMethod.GET,webRequest); will(returnValue(expected));
+            one(request).getParameter("_method"); will(returnValue(null));
+        }});
+
+        ResourceMethod resource = translator.translate(webRequest);
+        assertThat(resource, is(equalTo(expected)));
+        mockery.assertIsSatisfied();
+
+    }
 
     @Test
     public void canHandleUrlIfNonRootContextButPlainRequest() {

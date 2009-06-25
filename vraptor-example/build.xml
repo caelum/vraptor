@@ -36,6 +36,8 @@
 		<mkdir dir="${reports.dir}/test-results" />
 		<mkdir dir="${tmp.classes.dir}" />
 		<mkdir dir="${tmp.test.classes.dir}" />
+		<mkdir dir="${src.test.dir}" />
+		<mkdir dir="${resources.test.dir}" />
 	</target>
 
 	<target name="compile" depends="prepare" description="--> compiles classes">

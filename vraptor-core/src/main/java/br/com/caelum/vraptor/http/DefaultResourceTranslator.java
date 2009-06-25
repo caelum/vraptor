@@ -43,6 +43,7 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  * Basic url to resource method translator.
  * 
  * @author Guilherme Silveira
+ * @author Leonardo Bessa
  */
 @ApplicationScoped
 public class DefaultResourceTranslator implements UrlToResourceTranslator {
@@ -54,34 +55,34 @@ public class DefaultResourceTranslator implements UrlToResourceTranslator {
     private final Router router;
 
     public DefaultResourceTranslator(Router router) {
-		this.router = router;
-	}
+        this.router = router;
+    }
 
-	public ResourceMethod translate(MutableRequest request) {
-		String resourceName = getURI(request);
-		if (logger.isDebugEnabled()) {
-			logger.debug("trying to access " + resourceName);
-		}
-		if (resourceName.length() > 1 && resourceName.indexOf('/', 1) != -1) {
-			resourceName = resourceName.substring(resourceName.indexOf('/', 1));
-		}
-		String methodName = request.getParameter(METHOD_PARAMETER);
-		if (methodName == null) {
-			methodName = request.getMethod();
-		}
+    public ResourceMethod translate(MutableRequest request) {
+        String resourceName = getResourceName(request);
+        if (logger.isDebugEnabled()) {
+            logger.debug("trying to access " + resourceName);
+        }
+        String methodName = request.getParameter(METHOD_PARAMETER);
+        if (methodName == null) {
+            methodName = request.getMethod();
+        }
         HttpMethod requestMethod = HttpMethod.valueOf(methodName.toUpperCase());
         ResourceMethod resource = router.parse(resourceName, requestMethod, request);
-		if (logger.isDebugEnabled()) {
-			logger.debug("found resource " + resource);
-		}
-		return resource;
-	}
+        if (logger.isDebugEnabled()) {
+            logger.debug("found resource " + resource);
+        }
+        return resource;
+    }
 
-	private String getURI(HttpServletRequest request) {
-		if (request.getAttribute(INCLUDE_REQUEST_URI) != null) {
-			return (String) request.getAttribute(INCLUDE_REQUEST_URI);
-		}
-		return request.getRequestURI();
-	}
+    private String getResourceName(HttpServletRequest request) {
+        if (request.getAttribute(INCLUDE_REQUEST_URI) != null) {
+            return (String) request.getAttribute(INCLUDE_REQUEST_URI);
+        }
+        String uri = request.getRequestURI();
+        String contextName = request.getContextPath();
+        uri = uri.replaceFirst(contextName, "");
+        return uri;
+    }
 
 }

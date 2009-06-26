@@ -57,6 +57,35 @@ desenvolvedores do VRaptor também participam no desenvolvimento do Paranamer.
 
 [TODO colocar exemplo completo aqui, com JSPs e com o DAO]
 
+[section para finalizar: o web.xml]
+
+No %%web.xml%% precisamos apenas adicionar o filtro do VRaptor3, da seguinte forma:
+
+[xml]
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app id="WebApp_ID" version="2.4"
+         xmlns="http://java.sun.com/xml/ns/j2ee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+
+	<!-- declaracao do filtro -->
+	<filter>
+		<filter-name>vraptor</filter-name>
+		<filter-class>br.com.caelum.vraptor.VRaptor</filter-class>
+	</filter>
+
+	<!-- mapeando o filtro para todas as requisicoes -->
+	<filter-mapping>
+		<filter-name>vraptor</filter-name>
+		<url-pattern>/*</url-pattern>
+		<dispatcher>FORWARD</dispatcher>
+		<dispatcher>REQUEST</dispatcher>
+	</filter-mapping>
+</web-app>
+[/xml]
+
+Pronto! Você já está apto a fazer o deploy da sua aplicação.
+
 [section Um pouco de REST]
 
 Seguindo a idéia de que %%URI%%s devem identificar recursos na rede para então podermos
@@ -127,7 +156,3 @@ a listagem de todas as músicas, invocando o método %%list%%.
 O VRaptor resolve a URI que deve ser enviada para o cliente fazer o ::client side
 redirect::. Se por algum acaso você mudar a URI de mapeamento desse método, o redirect
 continua funcionando!
-
-[section Validação]
-
-on error goto form

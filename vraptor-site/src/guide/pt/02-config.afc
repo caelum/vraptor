@@ -1,27 +1,35 @@
 [chapter Configuração básica]
-Como em qualquer framework web, precisamos fazer algumas configurações.
-Uma das grandes vantagens do VRaptor2 e que foi mantida nessa nova versão é o baixo número de configurações necessárias. Na verdade,
-a única configuração obrigatória que você vai fazer é adicionar um filtro no web.xml
+
+As configurações necessárias para usar o VRaptor 3 são mínimas, só é essencial a
+definição de um filtro no %%web.xml%%. Aqui veremos também algumas configurações
+extras, que são opcionais.
 
 [section web.xml]
 
-No web.xml precisamos adicionar o filtro do VRaptor3, para isso, basta adicionarmos as seguintes linhas no arquivo:
+No %%web.xml%% precisamos apenas adicionar o filtro do VRaptor3, da seguinte forma:
 
-[code]
-<!-- declaracao do filtro -->
-<filter>
-	<filter-name>vraptor</filter-name>
-	<filter-class>br.com.caelum.vraptor.VRaptor</filter-class>
-</filter>
+[xml]
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app id="WebApp_ID" version="2.4"
+         xmlns="http://java.sun.com/xml/ns/j2ee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 
-<!-- mapeando o filtro para todas as requisicoes -->
-<filter-mapping>
-	<filter-name>vraptor</filter-name>
-	<url-pattern>/*</url-pattern>
-	<dispatcher>FORWARD</dispatcher>
-	<dispatcher>REQUEST</dispatcher>
-</filter-mapping>
-[/code]
+	<!-- declaracao do filtro -->
+	<filter>
+		<filter-name>vraptor</filter-name>
+		<filter-class>br.com.caelum.vraptor.VRaptor</filter-class>
+	</filter>
+
+	<!-- mapeando o filtro para todas as requisicoes -->
+	<filter-mapping>
+		<filter-name>vraptor</filter-name>
+		<url-pattern>/*</url-pattern>
+		<dispatcher>FORWARD</dispatcher>
+		<dispatcher>REQUEST</dispatcher>
+	</filter-mapping>
+</web-app>
+[/xml]
 
 Essa configuração do filtro do VRaptor fará com que todas as requisições que chegarem para sua aplicação sejam interpretadas pelo próprio VRaptor,
 e dessa forma, ele poderá decidir para qual recurso o fluxo da sua aplicação será direcionado. E consequentemente, executando as lógicas de 

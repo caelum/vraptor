@@ -16,43 +16,6 @@ Claro, as funcionalidades simples ainda são fáceis de implementar, mas vemos v
 dois exemplos clássicos que outros controladores não implementam de maneira tão simples
 assim.
 
-[chapter exemplo de 1 minuto: upload]
-
-O primeiro exemplo será baseado na funcionalidade de upload multipart.
-
-[code]
-@Resource
-public class PerfilController {
-
-	private final PerfilDao dao;
-
-	public PerfilController(PerfilDao dao) {
-		this.dao = dao;
-	}
-
-	public void atualizaFoto(Perfil perfil, UploadedFile foto) {
-		dao.atribue(foto.getFile(), perfil);
-	}
-}
-[/code]
-
-[section exemplo de 1 minuto: download]
-
-O exemplo a seguir mostra como disponibilizar o download para seu cliente.
-
-Note novamente a simplicidade na implementação: 
-
-[code]
-@Resource
-public class PerfilController {
-
-	// dao ...
-
-	public File foto(Perfil perfil) {
-		return new File("/path/para/a/foto." + perfil.getId()+ ".jpg"); 
-	}
-}
-[/code]
 
 [section Um exemplo de create básico]
 

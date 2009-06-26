@@ -2,7 +2,7 @@
 <!-- ====================================================================== 
 	VRaptor 3 core module build
 	====================================================================== -->
-<project name="VRaptor 3" default="artifacts" basedir=".">
+<project name="VRaptor 3 Core" default="artifacts" basedir=".">
 
 	<description>VRaptor 3 core module build</description>
 

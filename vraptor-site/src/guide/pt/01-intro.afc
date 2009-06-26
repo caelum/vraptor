@@ -1,130 +1,129 @@
-[chapter VRaptor3]
+[chapter VRaptor3 - o guia de 5 minutos]
 
 O VRaptor 3 foca em simplicidade e, portanto, todas as funcionalidades que você verá 
-tem como primeira meta resolver o problema do programador da maneira menos intrusiva possível
-em seu código.
+tem como primeira meta resolver o problema do programador da maneira menos intrusiva 
+possível em seu código. 
 
-Sejam as clássicas lógicas de adicionar, remover, buscar e atualizar ou ainda
-funcionalidades que costumam ser mais complexas como upload e download de arquivos,
-resultados diferentes para formatos diferentes (xml, json, xhtml etc), tudo isso
-é feito através de funcionalidades simples do vraptor 3. 
+Tanto para saver, remover, buscar e atualizar ou ainda funcionalidades que 
+costumam ser mais complexas como upload e download de arquivos, resultados em 
+formatos diferentes (xml, json, xhtml etc), tudo isso é feito através de funcionalidades 
+simples do VRaptor 3, que sempre procuram encapsular %%HttpServletRequest%%,
+%%Response%%. %%Session%% e toda a api do %%javax.servlet%%. 
 
-Essa documentação inclui, portanto, exemplos de tarefas que não são as triviais, para tentar mostrar ao usuário que até mesmo o que fica fora
-do padrão crud trivial também é de simples implementação usando o vraptor3.
+[section Inserindo numa base de dados]
 
-Claro, as funcionalidades simples ainda são fáceis de implementar, mas vemos ver
-dois exemplos clássicos que outros controladores não implementam de maneira tão simples
-assim.
-
-
-[section Um exemplo de create básico]
-
-Agora que já passamos pelos exemplos que devem demonstrar a simplicidade
-que o VRaptor permite que os programadores escrevam seu código mesmo em situações
-não triviais, vejamos um exemplo de inserção de dados:
+Considere que para persistir dados de nosso catálogo de músicas em nossa base de dados
+temos uma classe que vai ser responsável a agir como um ::Controller:: entre
+a nossa camada de apresenção (um JSP) e nosso modelo (classe %%Music%% e um dao
+chamado %%MusicDao%%):
 
 [code]
 @Resource
-public class PerfilController {
+public class MusicController {
 
-	private final PerfilDao dao;
+	private MusicDao dao;
 
-	public PerfilController(PerfilDao dao) {
+	public MusicController(MusicDao dao) {
 		this.dao = dao;
 	}
 
-	public void adiciona(Perfil novoPerfil) {
-		dao.adiciona(novoPerfil);
+	public void add(Music music) {
+		dao.save(music);
 	}
 }
 [/code]
 
-Pronto. O VRaptor será capaz de, atraves de seu container de Injecao de Dependencias,
-passar o PerfilDao para seu construtor, e invocar o metodo adiciona com os parametros
-adequados de acordo com a requisicao.
+Utilizamos então a anotação %%@Resource%% para definir que essa classe
+poderá ser, de alguma forma, acessada via web.
 
-Se os parametros do request forem "novoPerfil.nome", "novoPerfil.usuario" e "novoPerfil.senha", os
-setters da variavel novoPerfil serão invocados.
+Pronto. O VRaptor será capaz de, através de seu container de Injecao de Dependencias,
+passar um %%MusicDao%% para seu construtor, e invocar o método %%add%% com os parâmetros
+adequados de acordo com o que estiver no %%HttpServletRequest%%.
 
-<Importante> notar que o vraptor utiliza o paranamer para descobrir os nomes de seus
-parâmetros (no exemplo, novoPerfil) - diferente de outras ferramentas, com o VRaptor
+Se os parâmetros do request forem %%music.name%%, %%music.artist%% e %%music.genre%%, os
+um objeto %%music%% será instanciado e seus respectivos ::setters:: invocados.
+
+[box Reflection no nome dos parâmetros]
+Vale notar que o vraptor utiliza o paranamer para descobrir os nomes de seus
+parâmetros (no exemplo, music) - diferente de outras ferramentas, com o VRaptor
 você <<não>> precisa anotar suas variaveis de parametros, que ficariam extremamente poluídos.
+[/box]
 
-[section REST]
+[TODO colocar exemplo completo aqui, com JSPs e com o DAO]
 
-Seguindo a idéia de que URIs devem identificar recursos na rede para então podermos
-fazer valer as diversas vantagens estruturais que o padrão http nos proporciona, 
-note o quão simples fica mapear diversos métodos http para a mesma uri. Novamente
-<<nenhuma>> anotação foi necessária para os parametros.
+[section Um pouco de REST]
+
+Seguindo a idéia de que %%URI%%s devem identificar recursos na rede para então podermos
+fazer valer as diversas vantagens estruturais que o protocolo HTTP nos proporciona, 
+note o quão simples fica mapear os diversos métodos HTTP para a mesma URI, e com
+isso invocar diferentes métodos:
 
 [code]
 @Resource
-public class PerfilController {
+public class MusicController {
 
 	// ...
 
 	@Post
-	@Path("/perfil")
-	public void adiciona(Perfil novoPerfil) {
-		dao.adiciona(novoPerfil);
+	@Path("/music")
+	public void add(Music music) {
+		dao.save(music);
 	}
 	
 	@Get
-	@Path("/perfil")
-	public List<Perfil> lista() {
-		return dao.lista();
+	@Path("/music")
+	public List<Music> list() {
+		return dao.findAll();
 	}
 	
 	@Get
-	@Path("/perfil/{perfil.id}")
-	public Perfil visualiza(Perfil perfil) {
-		return dao.busca(perfil);
+	@Path("/music/{music.id}")
+	public Music view(Music music) {
+		return dao.find(music);
 	}
 	
 	@Delete
-	@Path("/perfil/{perfil.id}")
-	public void remove(Perfil perfil) {
-		dao.remove(perfil);
+	@Path("/music/{music.id}")
+	public void remove(Music music) {
+		dao.remove(music);
 	}
 	
 	@Put
-	@Path("/perfil/{perfil.id}")
-	public void atualiza(Perfil perfil) {
-		dao.atualiza(perfil);
+	@Path("/music/{music.id}")
+	public void atualiza(Music music) {
+		dao.atualiza(music);
 	}
-	
 }
 [/code]
 
-Isto é, cada método (exceto o adiciona) está mapeado para diferentes requisições
-http para o mesmo recurso. Para o perfil de id=3, basta acessar a uri /perfil/3.
+Isto é, cada método (exceto o add) está mapeado para diferentes requisições
+http para o mesmo recurso. Para o perfil de id=3, basta acessar a uri /music/3.
 
-<Note> também o retorno do método <visualiza>, que automaticamente disponibiliza
-uma variável chamada <perfil> para sua camada de view (jsp, freemarker etc). 
+<Note> também o retorno do método <view>, que automaticamente disponibiliza
+uma variável chamada <music> para sua camada de view (jsp, freemarker etc). 
 
 [section Meus jsps]
 
-Após a invocação do método visualiza do seu PerfilController, o arquivo <WEB-INF/jsp/perfil/visualiza.jsp>
-é automaticamente invocado, já disponibilizando o perfil retornado pelo método!
+Após a invocação do método %%view%% do seu %%MusicController%%, será feito um
+dispatch para o arquivo %%WEB-INF/jsp/music/view.jsp%%, e o objeto %%music%% retornado
+pelo método estará exposto como um atributo do %%request%% (como quando você chama
+%%request.setAttribute("music", music)%%.
 
 O redirecionamento também é algo inovador e sem configuração em arquivos externos.
 Imagine que após a remoção desejamos redirecionar para a listagem:
 
 [code]
-		dao.remove(perfil);
-		result.use(logic()).redirectTo(PerfilController.class).lista();
+		dao.remove(music);
+		result.use(logic()).redirectTo(MusicController.class).list();
 [/code]
 
-Isto é, estamos dizendo que desejamos ir como resultado para a lógica lista.
-O VRaptor resolve a uri que deve ser enviada para o cliente fazer o client-side-redirect.
-Se por algum acaso você mudar a uri de mapeamento da lógica de listagem, o redirect
+Isto é, estamos dizendo que desejamos, ao término de uma remoção, redirecionar para
+a listagem de todas as músicas, invocando o método %%list%%.
+
+O VRaptor resolve a URI que deve ser enviada para o cliente fazer o ::client side
+redirect::. Se por algum acaso você mudar a URI de mapeamento desse método, o redirect
 continua funcionando!
 
 [section Validação]
 
 on error goto form
-
-[section E agora?]
-
-link para download dos arquivos
-link para vraptor-example

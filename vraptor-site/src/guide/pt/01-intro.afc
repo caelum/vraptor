@@ -1,4 +1,4 @@
-[chapter VRaptor3 - o guia de 5 minutos]
+[chapter VRaptor3 - o guia inicial de 5 minutos]
 
 O VRaptor 3 foca em simplicidade e, portanto, todas as funcionalidades que você verá 
 tem como primeira meta resolver o problema do programador da maneira menos intrusiva 
@@ -17,7 +17,7 @@ temos uma classe que vai ser responsável a agir como um ::Controller:: entre
 a nossa camada de apresenção (um JSP) e nosso modelo (classe %%Music%% e um dao
 chamado %%MusicDao%%):
 
-[code]
+[java]
 @Resource
 public class MusicController {
 
@@ -31,7 +31,7 @@ public class MusicController {
 		dao.save(music);
 	}
 }
-[/code]
+[/java]
 
 Utilizamos então a anotação %%@Resource%% para definir que essa classe
 poderá ser, de alguma forma, acessada via web.
@@ -44,9 +44,15 @@ Se os parâmetros do request forem %%music.name%%, %%music.artist%% e %%music.ge
 um objeto %%music%% será instanciado e seus respectivos ::setters:: invocados.
 
 [box Reflection no nome dos parâmetros]
-Vale notar que o vraptor utiliza o paranamer para descobrir os nomes de seus
-parâmetros (no exemplo, music) - diferente de outras ferramentas, com o VRaptor
-você <<não>> precisa anotar suas variaveis de parametros, que ficariam extremamente poluídos.
+Infelizmente o Java não realiza reflection em cima de parâmetros, esses dados não ficam
+dispíveis em bytecode (a não ser se compilado em debug mode, porém é algo opcional). Isso
+faz com que a maioria dos frameworks que precisam desse tipo de informção criem uma anotação
+própria para isso, o que polui muito o código (exemplo no JAX-WS, onde é comum encontrar um
+método como o acima com a assinatura  %%void add(@WebParam(name="music") Music music)%%.
+
+O VRaptor tira proveito do framework Paranamer, que consegue tirar essaa informação através
+de pré compilação ou dos dados de debug, evitando criar mais uma anotação. Alguns dos 
+desenvolvedores do VRaptor também participam no desenvolvimento do Paranamer.
 [/box]
 
 [TODO colocar exemplo completo aqui, com JSPs e com o DAO]
@@ -58,7 +64,7 @@ fazer valer as diversas vantagens estruturais que o protocolo HTTP nos proporcio
 note o quão simples fica mapear os diversos métodos HTTP para a mesma URI, e com
 isso invocar diferentes métodos:
 
-[code]
+[java]
 @Resource
 public class MusicController {
 
@@ -94,15 +100,9 @@ public class MusicController {
 		dao.atualiza(music);
 	}
 }
-[/code]
+[/java]
 
-Isto é, cada método (exceto o add) está mapeado para diferentes requisições
-http para o mesmo recurso. Para o perfil de id=3, basta acessar a uri /music/3.
-
-<Note> também o retorno do método <view>, que automaticamente disponibiliza
-uma variável chamada <music> para sua camada de view (jsp, freemarker etc). 
-
-[section Meus jsps]
+Para, por exemplo, acessar a música de %%id=3%%, basta acessar a URI %%/music/3%%.
 
 Após a invocação do método %%view%% do seu %%MusicController%%, será feito um
 dispatch para o arquivo %%WEB-INF/jsp/music/view.jsp%%, e o objeto %%music%% retornado
@@ -112,10 +112,14 @@ pelo método estará exposto como um atributo do %%request%% (como quando você 
 O redirecionamento também é algo inovador e sem configuração em arquivos externos.
 Imagine que após a remoção desejamos redirecionar para a listagem:
 
-[code]
+[java h=5]
+	@Delete
+	@Path("/music/{music.id}")
+	public void remove(Music music) {
 		dao.remove(music);
 		result.use(logic()).redirectTo(MusicController.class).list();
-[/code]
+	}
+[/java]
 
 Isto é, estamos dizendo que desejamos, ao término de uma remoção, redirecionar para
 a listagem de todas as músicas, invocando o método %%list%%.

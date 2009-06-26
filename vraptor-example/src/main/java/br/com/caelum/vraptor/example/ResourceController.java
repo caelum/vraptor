@@ -44,7 +44,7 @@ public class ResourceController {
     }
 
     public void list() {
-        result.include("resources", registry.all());
+        result.include("resources", registry.allResources());
         result.use(Results.page()).forward("ok");
     }
 

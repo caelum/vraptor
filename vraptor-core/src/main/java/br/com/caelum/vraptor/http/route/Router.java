@@ -34,11 +34,11 @@ import java.util.Set;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.resource.HttpMethod;
-import br.com.caelum.vraptor.resource.StereotypedClass;
 import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.resource.StereotypedClass;
 
 /**
- * Handles different rules in order to translate urls into resource methods.
+ * Handles different rules in order to translate urls into Resource methods.
  * 
  * @author Guilherme Silveira
  */
@@ -48,22 +48,23 @@ public interface Router {
 
 	ResourceMethod parse(String uri, HttpMethod method, MutableRequest request);
 
-    Set<StereotypedClass> all();
+	Set<StereotypedClass> allResources();
 
-    /**
-     * Registers this resource using the default algorithm for uri identification.
-     */
+	/**
+	 * Registers this resource using the default algorithm for uri
+	 * identification.
+	 */
 	void register(StereotypedClass resource);
 
 	/**
 	 * Retrieves a single url to access the desired method.
 	 */
 	<T> String urlFor(Class<T> type, Method method, Object... params);
-	
+
 	/**
 	 * Returns a list with all routes
 	 */
 	List<Route> allRoutes();
 
-    Proxifier getProxifier();
+	Proxifier getProxifier();
 }

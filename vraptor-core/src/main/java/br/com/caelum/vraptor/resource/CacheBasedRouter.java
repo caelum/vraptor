@@ -56,8 +56,8 @@ public class CacheBasedRouter implements Router {
         this.delegate = delegate;
     }
 
-    public Set<StereotypedClass> all() {
-        return delegate.all();
+    public Set<StereotypedClass> allResources() {
+        return delegate.allResources();
     }
 
     public ResourceMethod parse(String name, HttpMethod methodName, MutableRequest request) {

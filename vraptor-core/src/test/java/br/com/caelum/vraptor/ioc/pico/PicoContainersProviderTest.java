@@ -43,7 +43,7 @@ public class PicoContainersProviderTest {
         final HttpSession session = mockery.mock(HttpSession.class, "session");
         mockery.checking(new Expectations() {
             {
-                one(router).all(); will(returnValue(new HashSet<StereotypedClass>()));
+                one(router).allResources(); will(returnValue(new HashSet<StereotypedClass>()));
                 allowing(request).getSession(); will(returnValue(session));
                 allowing(session).getAttribute(with(any(String.class))); will(returnValue(null));
                 allowing(session).setAttribute(with(any(String.class)), with(any(String.class))); will(returnValue(null));

@@ -117,7 +117,7 @@ public class DefaultRouter implements Router {
 		return null;
 	}
 
-	public Set<StereotypedClass> all() {
+	public Set<StereotypedClass> allResources() {
 		// TODO: defensive copy? (collections.unmodifiable)
 		return resources;
 	}

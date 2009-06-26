@@ -48,7 +48,7 @@ public class PicoBasedContainer implements Container {
         // TODO try to remove addComponent(this) - InstantiateInterceptor and InterceptorStack
         // TODO needs to instantiate objects with dependency injection
         this.container.addComponent(this);
-        for (StereotypedClass resource : routes.all()) {
+        for (StereotypedClass resource : routes.allResources()) {
             this.container.addComponent(resource.getType());
         }
     }

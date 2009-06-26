@@ -44,16 +44,23 @@ import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
 /**
- * Searchs for resources in the web's web-inf classes directory.
+ * Searchs for Stereotyped types (resources and components) in the web's web-inf
+ * classes directory.
+ * 
+ * TODO: this should be refactored to use ASM or something like this to avoind
+ * unecessary class loading. It could also use another classloader just to check
+ * for the necessary classes and then use the current classloader to load only
+ * the needed ones.
  * 
  * @author Guilherme Silveira
+ * @author Paulo Silveira
  */
 @ApplicationScoped
-public class WebInfClassesScanner implements ResourceLoader {
+public class WebInfClassesScanner implements Loader {
 
 	private static final Logger logger = LoggerFactory.getLogger(WebInfClassesScanner.class);
 
-	private final File classes;
+	private final File classesDirectory;
 
 	private final DirScanner<?> scanner;
 
@@ -67,16 +74,17 @@ public class WebInfClassesScanner implements ResourceLoader {
 		this.router = router;
 		this.interceptors = interceptors;
 		String path = context.getRealPath("");
-		this.classes = new File(path, "WEB-INF/classes");
+		this.classesDirectory = new File(path, "WEB-INF/classes");
 		this.scanner = scanner;
 	}
 
 	public void loadAll() {
-		logger.info("Starting looking for " + classes.getAbsolutePath());
-		scanner.scan(classes, new StereotypedClassAcceptor(router));
+		logger.info("Looking for resources, classes and interceptors in " + classesDirectory.getAbsolutePath());
+		scanner.scan(classesDirectory, new StereotypedClassAcceptor(router));
 
 		List<Class<? extends Interceptor>> interceptors = new ArrayList<Class<? extends Interceptor>>();
-		scanner.scan(classes, new InterceptorAcceptor(interceptors));
+		scanner.scan(classesDirectory, new InterceptorAcceptor(interceptors));
+
 		this.interceptors.register(interceptors);
 	}
 

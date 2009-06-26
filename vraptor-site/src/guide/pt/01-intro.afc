@@ -1,7 +1,8 @@
 [chapter VRaptor3]
 
-O VRaptor 3 foca em simplicidade e, portanto, todas as funcionalidades que você verá tem como primeira meta resolver o problema do programador da
-maneira menos intrusiva possível em seu código.
+O VRaptor 3 foca em simplicidade e, portanto, todas as funcionalidades que você verá 
+tem como primeira meta resolver o problema do programador da maneira menos intrusiva possível
+em seu código.
 
 Sejam as clássicas lógicas de adicionar, remover, buscar e atualizar ou ainda
 funcionalidades que costumam ser mais complexas como upload e download de arquivos,

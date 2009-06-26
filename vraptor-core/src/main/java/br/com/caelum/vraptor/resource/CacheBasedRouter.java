@@ -56,7 +56,7 @@ public class CacheBasedRouter implements Router {
         this.delegate = delegate;
     }
 
-    public Set<Resource> all() {
+    public Set<StereotypedClass> all() {
         return delegate.all();
     }
 
@@ -71,7 +71,7 @@ public class CacheBasedRouter implements Router {
         return cachedMap.get(methodName);
     }
 
-    public void register(Resource resource) {
+    public void register(StereotypedClass resource) {
         delegate.register(resource);
     }
 

@@ -5,7 +5,7 @@ import java.lang.reflect.Method;
 import org.vraptor.annotations.Component;
 import org.vraptor.annotations.Logic;
 
-import br.com.caelum.vraptor.resource.Resource;
+import br.com.caelum.vraptor.resource.StereotypedClass;
 
 /**
  * VRaptor 2 util methods.
@@ -26,7 +26,7 @@ public class Info {
         return componentName;
     }
 
-    public static boolean isOldComponent(Resource resource) {
+    public static boolean isOldComponent(StereotypedClass resource) {
         Class<?> type = resource.getType();
         return type.isAnnotationPresent(Component.class);
     }

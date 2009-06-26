@@ -32,7 +32,7 @@ package br.com.caelum.vraptor.resource;
 import java.lang.reflect.Method;
 
 /**
- * An identifier for a resource and a web method.
+ * An identifier for a resource accesible web method.
  * 
  * @author guilherme silveira
  */
@@ -40,6 +40,6 @@ public interface ResourceMethod {
 
 	Method getMethod();
 
-	Resource getResource();
+	StereotypedClass getResource();
 
 }

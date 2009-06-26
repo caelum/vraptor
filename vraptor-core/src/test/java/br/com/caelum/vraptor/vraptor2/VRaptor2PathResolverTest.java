@@ -12,7 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.core.MethodInfo;
-import br.com.caelum.vraptor.resource.Resource;
+import br.com.caelum.vraptor.resource.StereotypedClass;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.view.DogController;
 
@@ -20,7 +20,7 @@ public class VRaptor2PathResolverTest {
 
     private Mockery mockery;
     private ResourceMethod method;
-    private Resource resource;
+    private StereotypedClass resource;
     private VRaptor2PathResolver resolver;
     private Config config;
     private HttpServletRequest request;
@@ -30,7 +30,7 @@ public class VRaptor2PathResolverTest {
     public void config() {
         this.mockery = new Mockery();
         this.method = mockery.mock(ResourceMethod.class);
-        this.resource = mockery.mock(Resource.class);
+        this.resource = mockery.mock(StereotypedClass.class);
         this.config = mockery.mock(Config.class);
         this.request = mockery.mock(HttpServletRequest.class);
         this.info =mockery.mock(MethodInfo.class); 

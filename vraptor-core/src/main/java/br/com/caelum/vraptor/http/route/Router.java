@@ -34,7 +34,7 @@ import java.util.Set;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.resource.HttpMethod;
-import br.com.caelum.vraptor.resource.Resource;
+import br.com.caelum.vraptor.resource.StereotypedClass;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**
@@ -48,12 +48,12 @@ public interface Router {
 
 	ResourceMethod parse(String uri, HttpMethod method, MutableRequest request);
 
-    Set<Resource> all();
+    Set<StereotypedClass> all();
 
     /**
      * Registers this resource using the default algorithm for uri identification.
      */
-	void register(Resource resource);
+	void register(StereotypedClass resource);
 
 	/**
 	 * Retrieves a single url to access the desired method.

@@ -31,7 +31,7 @@ package br.com.caelum.vraptor.ioc.pico;
 
 import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.resource.Resource;
+import br.com.caelum.vraptor.resource.StereotypedClass;
 import org.picocontainer.MutablePicoContainer;
 
 /**
@@ -48,7 +48,7 @@ public class PicoBasedContainer implements Container {
         // TODO try to remove addComponent(this) - InstantiateInterceptor and InterceptorStack
         // TODO needs to instantiate objects with dependency injection
         this.container.addComponent(this);
-        for (Resource resource : routes.all()) {
+        for (StereotypedClass resource : routes.all()) {
             this.container.addComponent(resource.getType());
         }
     }

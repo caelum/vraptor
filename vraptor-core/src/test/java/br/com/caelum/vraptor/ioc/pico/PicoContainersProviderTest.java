@@ -22,7 +22,7 @@ import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.interceptor.DefaultInterceptorRegistry;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.resource.Resource;
+import br.com.caelum.vraptor.resource.StereotypedClass;
 
 public class PicoContainersProviderTest {
 
@@ -43,7 +43,7 @@ public class PicoContainersProviderTest {
         final HttpSession session = mockery.mock(HttpSession.class, "session");
         mockery.checking(new Expectations() {
             {
-                one(router).all(); will(returnValue(new HashSet<Resource>()));
+                one(router).all(); will(returnValue(new HashSet<StereotypedClass>()));
                 allowing(request).getSession(); will(returnValue(session));
                 allowing(session).getAttribute(with(any(String.class))); will(returnValue(null));
                 allowing(session).setAttribute(with(any(String.class)), with(any(String.class))); will(returnValue(null));

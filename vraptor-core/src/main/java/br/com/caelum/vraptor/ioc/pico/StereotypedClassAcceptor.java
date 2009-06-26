@@ -34,27 +34,28 @@ import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.ioc.Stereotype;
-import br.com.caelum.vraptor.resource.DefaultResource;
+import br.com.caelum.vraptor.resource.DefaultStereotypedClass;
 
 /**
  * Whenever it finds some resources, registers it in this rules object.
  * 
  * @author guilherme silveira
  */
-public class ResourceAcceptor implements Acceptor {
+public class StereotypedClassAcceptor implements Acceptor {
 
-	private static final Logger logger = LoggerFactory.getLogger(ResourceAcceptor.class);
+	private static final Logger logger = LoggerFactory.getLogger(StereotypedClassAcceptor.class);
+
 	private final Router router;
 
-	public ResourceAcceptor(Router router) {
+	public StereotypedClassAcceptor(Router router) {
 		this.router = router;
 	}
 
 	public void analyze(Class<?> type) {
 		for (Annotation annotation : type.getAnnotations()) {
 			if (annotation.annotationType().isAnnotationPresent(Stereotype.class)) {
-				logger.debug("Found resource for " + type);
-				router.register(new DefaultResource(type));
+				logger.debug("Found stereotyped class: " + type);
+				router.register(new DefaultStereotypedClass(type));
 			}
 		}
 	}

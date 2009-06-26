@@ -44,14 +44,14 @@ import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
 import br.com.caelum.vraptor.proxy.DefaultProxifier;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.resource.HttpMethod;
-import br.com.caelum.vraptor.resource.Resource;
+import br.com.caelum.vraptor.resource.StereotypedClass;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.test.VRaptorMockery;
 
 public class PathAnnotationRoutesParserTest {
 
     private VRaptorMockery mockery;
-    private Resource resource;
+    private StereotypedClass resource;
     private DefaultRouter router;
     private MutableRequest request;
     private Proxifier proxifier;
@@ -184,7 +184,7 @@ public class PathAnnotationRoutesParserTest {
 
     @Test
     public void findsInheritedMethodsWithDefaultNames() throws SecurityException, NoSuchMethodException {
-        Resource childResource = mockery.resource(NiceClients.class);
+        StereotypedClass childResource = mockery.resource(NiceClients.class);
         router.register(childResource);
         ResourceMethod method = router.parse("/niceClients/toInherit", HttpMethod.POST, request);
         assertThat(method, is(VRaptorMatchers.resourceMethod(Clients.class.getMethod("toInherit"))));

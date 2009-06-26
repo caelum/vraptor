@@ -27,7 +27,7 @@
  */
 package br.com.caelum.vraptor.http.route;
 
-import br.com.caelum.vraptor.resource.Resource;
+import br.com.caelum.vraptor.resource.StereotypedClass;
 
 import java.util.List;
 
@@ -38,6 +38,6 @@ import java.util.List;
  */
 public interface RoutesParser {
 
-    List<Route> rulesFor(Resource resource);
+    List<Route> rulesFor(StereotypedClass resource);
 
 }

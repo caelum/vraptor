@@ -29,13 +29,34 @@
  */
 package br.com.caelum.vraptor.resource;
 
-/**
- * Represents a resource.
- * 
- * @author Guilherme Silveira
- */
-public interface Resource {
+public class DefaultStereotypedClass implements StereotypedClass {
 
-    public Class<?> getType();
+	private final Class<?> type;
+
+	public DefaultStereotypedClass(Class<?> type) {
+		this.type = type;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof DefaultStereotypedClass)) {
+			return false;
+		}
+		DefaultStereotypedClass resource = (DefaultStereotypedClass) obj;
+		return this.type.equals(resource.type);
+	}
+
+	@Override
+	public int hashCode() {
+		return type == null ? 0 : type.hashCode();
+	}
+
+	public String toString() {
+		return "{StereotypedClass " + type.getName() + "}";
+	}
+
+	public Class<?> getType() {
+		return type;
+	}
 
 }

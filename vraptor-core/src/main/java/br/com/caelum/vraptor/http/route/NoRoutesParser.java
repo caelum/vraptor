@@ -32,7 +32,7 @@ import java.util.List;
 
 import br.com.caelum.vraptor.http.route.Route;
 import br.com.caelum.vraptor.http.route.RoutesParser;
-import br.com.caelum.vraptor.resource.Resource;
+import br.com.caelum.vraptor.resource.StereotypedClass;
 
 /**
  * Generates no routes for any resource. Only allows configurarion through the use of custom routes.
@@ -43,7 +43,7 @@ public class NoRoutesParser implements RoutesParser {
 
 	private static final List<Route> EMPTY = new ArrayList<Route>();
 
-	public List<Route> rulesFor(Resource resource) {
+	public List<Route> rulesFor(StereotypedClass resource) {
 		return EMPTY;
 	}
 

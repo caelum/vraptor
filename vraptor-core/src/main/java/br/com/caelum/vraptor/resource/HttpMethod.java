@@ -39,15 +39,16 @@ import br.com.caelum.vraptor.Put;
 import br.com.caelum.vraptor.Trace;
 
 public enum HttpMethod {
-    GET(Get.class), POST(Post.class), PUT(Put.class), DELETE(Delete.class), TRACE(Trace.class), HEAD(Head.class);
+	// TODO: options?
+	GET(Get.class), POST(Post.class), PUT(Put.class), DELETE(Delete.class), TRACE(Trace.class), HEAD(Head.class);
 
-    private final Class<? extends Annotation> type;
+	private final Class<? extends Annotation> type;
 
-    HttpMethod(Class<? extends Annotation> type) {
-        this.type = type;
-    }
+	HttpMethod(Class<? extends Annotation> type) {
+		this.type = type;
+	}
 
-    public Class<? extends Annotation> getAnnotation() {
-        return type;
-    }
+	public Class<? extends Annotation> getAnnotation() {
+		return type;
+	}
 }

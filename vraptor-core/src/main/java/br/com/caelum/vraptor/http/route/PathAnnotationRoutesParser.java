@@ -36,7 +36,7 @@ import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.resource.HttpMethod;
-import br.com.caelum.vraptor.resource.Resource;
+import br.com.caelum.vraptor.resource.StereotypedClass;
 
 /**
  * The default parser routes creator uses the path annotation to create rules.
@@ -54,7 +54,7 @@ public class PathAnnotationRoutesParser implements RoutesParser {
         this.proxifier = proxifier;
     }
 
-    public List<Route> rulesFor(Resource resource) {
+    public List<Route> rulesFor(StereotypedClass resource) {
         List<Route> routes = new ArrayList<Route>();
         Class<?> baseType = resource.getType();
         registerRulesFor(baseType, baseType, routes);

@@ -40,10 +40,10 @@ import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.TypeCreator;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.proxy.Proxifier;
-import br.com.caelum.vraptor.resource.DefaultResource;
+import br.com.caelum.vraptor.resource.DefaultStereotypedClass;
 import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.resource.HttpMethod;
-import br.com.caelum.vraptor.resource.Resource;
+import br.com.caelum.vraptor.resource.StereotypedClass;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.resource.VRaptorInfo;
 import br.com.caelum.vraptor.vraptor2.Info;
@@ -65,7 +65,7 @@ public class DefaultRouter implements Router {
 	}
 
 	private final List<Route> routes = new ArrayList<Route>();
-	private final Set<Resource> resources = new HashSet<Resource>();
+	private final Set<StereotypedClass> resources = new HashSet<StereotypedClass>();
 	private final RoutesParser routesParser;
 	private final ParameterNameProvider provider;
 	private final TypeCreator creator;
@@ -99,7 +99,7 @@ public class DefaultRouter implements Router {
 	 * You can override this method to get notified by all added routes.
 	 */
 	public void add(Route r) {
-		Resource resource = r.getResource();
+		StereotypedClass resource = r.getResource();
 		if (resource != null) {
 			resources.add(resource);
 		}
@@ -117,12 +117,12 @@ public class DefaultRouter implements Router {
 		return null;
 	}
 
-	public Set<Resource> all() {
+	public Set<StereotypedClass> all() {
 		// TODO: defensive copy? (collections.unmodifiable)
 		return resources;
 	}
 
-	public void register(Resource resource) {
+	public void register(StereotypedClass resource) {
 		add(this.routesParser.rulesFor(resource));
 	}
 
@@ -131,7 +131,7 @@ public class DefaultRouter implements Router {
 			if (route.canHandle(type, method)) {
 				String[] names = provider.parameterNamesFor(method);
 				Class<?> parameterType = creator
-						.typeFor(new DefaultResourceMethod(new DefaultResource(
+						.typeFor(new DefaultResourceMethod(new DefaultStereotypedClass(
 								type), method));
 				try {
 					Object root = parameterType.getConstructor().newInstance();

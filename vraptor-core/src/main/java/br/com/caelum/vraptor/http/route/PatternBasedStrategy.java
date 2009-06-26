@@ -35,10 +35,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor.resource.DefaultResource;
+import br.com.caelum.vraptor.resource.DefaultStereotypedClass;
 import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.resource.HttpMethod;
-import br.com.caelum.vraptor.resource.Resource;
+import br.com.caelum.vraptor.resource.StereotypedClass;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**
@@ -76,7 +76,7 @@ public class PatternBasedStrategy implements Route {
 			String webMethod = request.getParameter("webMethod");
 			String typeName = type.apply("webLogic",webLogic);
 			try {
-				DefaultResource resource = new DefaultResource(Class.forName(typeName));
+				DefaultStereotypedClass resource = new DefaultStereotypedClass(Class.forName(typeName));
 				Method resourceMethod = method(resource.getType(), this.method.apply("webMethod", webMethod));
 				return new DefaultResourceMethod(resource, resourceMethod);
 			} catch (ClassNotFoundException e) {
@@ -108,7 +108,7 @@ public class PatternBasedStrategy implements Route {
 		return control.apply(new String[] {this.type.extract("webLogic", type.getName()), this.method.extract("webMethod", m.getName())});
 	}
 
-	public Resource getResource() {
+	public StereotypedClass getResource() {
 		return null;
 	}
 

@@ -33,10 +33,10 @@ import java.lang.reflect.Method;
 
 public class DefaultResourceMethod implements ResourceMethod {
 
-	private final Resource resource;
+	private final StereotypedClass resource;
 	private final Method method;
 
-	public DefaultResourceMethod(Resource resource, Method method) {
+	public DefaultResourceMethod(StereotypedClass resource, Method method) {
 		this.resource = resource;
 		this.method = method;
 	}
@@ -49,7 +49,7 @@ public class DefaultResourceMethod implements ResourceMethod {
 		return method;
 	}
 
-	public Resource getResource() {
+	public StereotypedClass getResource() {
 		return resource;
 	}
 

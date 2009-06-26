@@ -73,9 +73,10 @@ public class WebInfClassesScanner implements Loader {
 			InterceptorRegistry interceptors) {
 		this.router = router;
 		this.interceptors = interceptors;
+		this.scanner = scanner;
+
 		String path = context.getRealPath("");
 		this.classesDirectory = new File(path, "WEB-INF/classes");
-		this.scanner = scanner;
 	}
 
 	public void loadAll() {

@@ -37,7 +37,8 @@ import br.com.caelum.vraptor.ioc.Stereotype;
 import br.com.caelum.vraptor.resource.DefaultStereotypedClass;
 
 /**
- * Whenever it finds some resources, registers it in this rules object.
+ * Whenever it finds acceptable components and resources, registers it using the
+ * given router.
  * 
  * @author guilherme silveira
  */

@@ -38,14 +38,15 @@ import javax.servlet.ServletContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.Interceptor;
 import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
 /**
- * Searchs for Stereotyped types (resources and components) in the web's web-inf
- * classes directory.
+ * Searchs forresources and components in the web's web-inf
+ * classes directory. Also interceptors
  * 
  * TODO: this should be refactored to use ASM or something like this to avoind
  * unecessary class loading. It could also use another classloader just to check
@@ -67,13 +68,19 @@ public class WebInfClassesScanner implements Loader {
 	private final InterceptorRegistry interceptors;
 
 	private final Router router;
+	
+	private final ComponentRegistry registry;
+
+	private final ServletContext context;
 
 	@SuppressWarnings("unchecked")
 	public WebInfClassesScanner(ServletContext context, DirScanner scanner, Router router,
-			InterceptorRegistry interceptors) {
+			InterceptorRegistry interceptors, ComponentRegistry registry) {
+		this.context = context;
 		this.router = router;
 		this.interceptors = interceptors;
 		this.scanner = scanner;
+		this.registry = registry;
 
 		String path = context.getRealPath("");
 		this.classesDirectory = new File(path, "WEB-INF/classes");
@@ -82,6 +89,7 @@ public class WebInfClassesScanner implements Loader {
 	public void loadAll() {
 		logger.info("Looking for resources, classes and interceptors in " + classesDirectory.getAbsolutePath());
 		scanner.scan(classesDirectory, new ResourceAcceptor(router));
+		scanner.scan(classesDirectory, new ComponentAcceptor(registry));
 
 		List<Class<? extends Interceptor>> interceptors = new ArrayList<Class<? extends Interceptor>>();
 		scanner.scan(classesDirectory, new InterceptorAcceptor(interceptors));

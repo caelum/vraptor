@@ -27,27 +27,26 @@
  */
 package br.com.caelum.vraptor.ioc.pico;
 
-import br.com.caelum.vraptor.Resource;
-import br.com.caelum.vraptor.http.route.Router;
-import br.com.caelum.vraptor.resource.DefaultResourceClass;
+import br.com.caelum.vraptor.ComponentRegistry;
+import br.com.caelum.vraptor.ioc.Component;
 
 /**
- * Whenever it finds acceptable resources, registers it using the given router.
+ * Whenever it finds acceptable components, register using the provider
  * 
- * @author guilherme silveira
  * @author paulo silveira
  */
-public class ResourceAcceptor implements Acceptor {
+public class ComponentAcceptor implements Acceptor {
 
-	private final Router router;
 
-	public ResourceAcceptor(Router router) {
-		this.router = router;
+	private final ComponentRegistry registry;
+
+	public ComponentAcceptor(ComponentRegistry registry) {
+		this.registry = registry;
 	}
 
 	public void analyze(Class<?> type) {
-		if (type.isAnnotationPresent(Resource.class)) {
-			router.register(new DefaultResourceClass(type));
+		if (type.isAnnotationPresent(Component.class)) {
+			registry.register(type, type);
 		}
 	}
 

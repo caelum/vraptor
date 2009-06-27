@@ -31,7 +31,7 @@ import java.lang.reflect.Method;
 
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.resource.HttpMethod;
-import br.com.caelum.vraptor.resource.StereotypedClass;
+import br.com.caelum.vraptor.resource.ResourceClass;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**
@@ -54,7 +54,7 @@ public class NoStrategy implements Route {
 		return false;
 	}
 
-	public StereotypedClass getResource() {
+	public ResourceClass getResource() {
 		return null;
 	}
 

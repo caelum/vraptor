@@ -31,7 +31,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.ioc.RequestScoped;
-import br.com.caelum.vraptor.resource.StereotypedClass;
+import br.com.caelum.vraptor.resource.ResourceClass;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.view.DefaultPathResolver;
 import br.com.caelum.vraptor.view.PathResolver;
@@ -55,7 +55,7 @@ public class VRaptor2PathResolver implements PathResolver {
     }
 
     public String pathFor(ResourceMethod method) {
-        StereotypedClass resource = method.getResource();
+        ResourceClass resource = method.getResource();
         if (Info.isOldComponent(resource)) {
             String component = Info.getComponentName(resource.getType());
             String logicName = Info.getLogicName(method.getMethod());

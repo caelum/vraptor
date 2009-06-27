@@ -40,6 +40,6 @@ public interface ResourceMethod {
 
 	Method getMethod();
 
-	StereotypedClass getResource();
+	ResourceClass getResource();
 
 }

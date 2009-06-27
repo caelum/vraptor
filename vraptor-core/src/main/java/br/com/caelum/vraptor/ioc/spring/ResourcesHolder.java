@@ -36,7 +36,7 @@ import org.springframework.stereotype.Component;
 
 import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
-import br.com.caelum.vraptor.resource.StereotypedClass;
+import br.com.caelum.vraptor.resource.ResourceClass;
 
 /**
  * @author Fabio Kung
@@ -46,15 +46,15 @@ import br.com.caelum.vraptor.resource.StereotypedClass;
 class ResourcesHolder {
     private static final Logger LOGGER = LoggerFactory.getLogger(ResourcesHolder.class);
 
-    private final Collection<StereotypedClass> resources = new HashSet<StereotypedClass>();
+    private final Collection<ResourceClass> resources = new HashSet<ResourceClass>();
 
-    public void add(StereotypedClass resource) {
+    public void add(ResourceClass resource) {
         resources.add(resource);
     }
 
     public void registerAllOn(Router router) {
         LOGGER.info("registering all resources in Router: " + resources);
-        for(StereotypedClass r : resources) {
+        for(ResourceClass r : resources) {
             router.register(r);
         }
     }

@@ -43,7 +43,7 @@ import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
 import br.com.caelum.vraptor.proxy.DefaultProxifier;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.resource.HttpMethod;
-import br.com.caelum.vraptor.resource.StereotypedClass;
+import br.com.caelum.vraptor.resource.ResourceClass;
 import br.com.caelum.vraptor.test.VRaptorMockery;
 
 public class ComponentRoutesCreatorTest {
@@ -74,7 +74,7 @@ public class ComponentRoutesCreatorTest {
 
     @Test
     public void shouldUseVRaptor3AlgorithmIfNotAVRaptor2Component() throws SecurityException, NoSuchMethodException {
-        final StereotypedClass resource = mockery.resource(VRaptor3Component.class);
+        final ResourceClass resource = mockery.resource(VRaptor3Component.class);
         this.router.register(resource);
         assertThat(router.parse("/vRaptor3Component/name", HttpMethod.POST, request), is(VRaptorMatchers.resourceMethod(VRaptor3Component.class.getMethod("name"))));
         mockery.assertIsSatisfied();
@@ -82,7 +82,7 @@ public class ComponentRoutesCreatorTest {
 
     @Test
     public void shouldReturnNullIfNotFound() throws SecurityException, NoSuchMethodException {
-        final StereotypedClass resource = mockery.resource(NonVRaptorComponent.class);
+        final ResourceClass resource = mockery.resource(NonVRaptorComponent.class);
         this.router.register(resource);
         assertThat(router.parse("/NonVRaptorComponent/name", HttpMethod.POST, request), is(nullValue()));
         mockery.assertIsSatisfied();
@@ -106,7 +106,7 @@ public class ComponentRoutesCreatorTest {
 
     @Test
     public void ignoresNonPublicMethod() {
-        final StereotypedClass resource = mockery.resource(MyResource.class);
+        final ResourceClass resource = mockery.resource(MyResource.class);
         this.router.register(resource);
         assertThat(router.parse("/MyResource.ignorableStatic.logic", HttpMethod.POST, request), is(nullValue()));
         mockery.assertIsSatisfied();
@@ -114,7 +114,7 @@ public class ComponentRoutesCreatorTest {
 
     @Test
     public void ignoresGetters() {
-        final StereotypedClass resource = mockery.resource(MyResource.class);
+        final ResourceClass resource = mockery.resource(MyResource.class);
         this.router.register(resource);
         assertThat(router.parse("/MyResource.getValue.logic", HttpMethod.POST, request), is(nullValue()));
         mockery.assertIsSatisfied();
@@ -122,7 +122,7 @@ public class ComponentRoutesCreatorTest {
 
     @Test
     public void ignoresStaticMethod() {
-        final StereotypedClass resource = mockery.resource(MyResource.class);
+        final ResourceClass resource = mockery.resource(MyResource.class);
         this.router.register(resource);
         assertThat(router.parse("/MyResource.ignorableProtected.logic", HttpMethod.POST, request), is(nullValue()));
         mockery.assertIsSatisfied();
@@ -130,7 +130,7 @@ public class ComponentRoutesCreatorTest {
 
     @Test
     public void returnsNullIfNothingFound() {
-        final StereotypedClass resource = mockery.resource(MyResource.class);
+        final ResourceClass resource = mockery.resource(MyResource.class);
         this.router.register(resource);
         assertThat(router.parse("/MyResource.unfindable.logic", HttpMethod.POST, request), is(nullValue()));
         mockery.assertIsSatisfied();
@@ -138,7 +138,7 @@ public class ComponentRoutesCreatorTest {
 
     @Test
     public void returnsTheCorrectDefaultResourceMethodIfFound() throws SecurityException, NoSuchMethodException {
-        final StereotypedClass resource = mockery.resource(MyResource.class);
+        final ResourceClass resource = mockery.resource(MyResource.class);
         this.router.register(resource);
         assertThat(router.parse("/MyResource.findable.logic", HttpMethod.POST, request), is(VRaptorMatchers.resourceMethod(MyResource.class.getMethod("findable"))));
         mockery.assertIsSatisfied();

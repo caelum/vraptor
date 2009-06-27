@@ -40,10 +40,10 @@ import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.TypeCreator;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.proxy.Proxifier;
-import br.com.caelum.vraptor.resource.DefaultStereotypedClass;
+import br.com.caelum.vraptor.resource.DefaultResourceClass;
 import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.resource.HttpMethod;
-import br.com.caelum.vraptor.resource.StereotypedClass;
+import br.com.caelum.vraptor.resource.ResourceClass;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.resource.VRaptorInfo;
 import br.com.caelum.vraptor.vraptor2.Info;
@@ -59,20 +59,14 @@ import br.com.caelum.vraptor.vraptor2.Info;
 public class DefaultRouter implements Router {
 
 	private final Proxifier proxifier;
-
-	public Proxifier getProxifier() {
-		return proxifier;
-	}
-
 	private final List<Route> routes = new ArrayList<Route>();
-	private final Set<StereotypedClass> resources = new HashSet<StereotypedClass>();
+	private final Set<ResourceClass> resources = new HashSet<ResourceClass>();
 	private final RoutesParser routesParser;
 	private final ParameterNameProvider provider;
 	private final TypeCreator creator;
 
-	public DefaultRouter(RoutesConfiguration config,
-			RoutesParser resourceRoutesCreator, ParameterNameProvider provider,
-			Proxifier proxifier, TypeCreator creator) {
+	public DefaultRouter(RoutesConfiguration config, RoutesParser resourceRoutesCreator,
+			ParameterNameProvider provider, Proxifier proxifier, TypeCreator creator) {
 		this.routesParser = resourceRoutesCreator;
 		this.provider = provider;
 		this.creator = creator;
@@ -95,19 +89,22 @@ public class DefaultRouter implements Router {
 		}
 	}
 
+	public Proxifier getProxifier() {
+		return proxifier;
+	}
+
 	/**
 	 * You can override this method to get notified by all added routes.
 	 */
 	public void add(Route r) {
-		StereotypedClass resource = r.getResource();
+		ResourceClass resource = r.getResource();
 		if (resource != null) {
 			resources.add(resource);
 		}
 		this.routes.add(r);
 	}
 
-	public ResourceMethod parse(String uri, HttpMethod method,
-			MutableRequest request) {
+	public ResourceMethod parse(String uri, HttpMethod method, MutableRequest request) {
 		for (Route rule : routes) {
 			ResourceMethod value = rule.matches(uri, method, request);
 			if (value != null) {
@@ -117,12 +114,12 @@ public class DefaultRouter implements Router {
 		return null;
 	}
 
-	public Set<StereotypedClass> allResources() {
+	public Set<ResourceClass> allResources() {
 		// TODO: defensive copy? (collections.unmodifiable)
 		return resources;
 	}
 
-	public void register(StereotypedClass resource) {
+	public void register(ResourceClass resource) {
 		add(this.routesParser.rulesFor(resource));
 	}
 
@@ -130,28 +127,23 @@ public class DefaultRouter implements Router {
 		for (Route route : routes) {
 			if (route.canHandle(type, method)) {
 				String[] names = provider.parameterNamesFor(method);
-				Class<?> parameterType = creator
-						.typeFor(new DefaultResourceMethod(new DefaultStereotypedClass(
-								type), method));
+				Class<?> parameterType = creator.typeFor(new DefaultResourceMethod(new DefaultResourceClass(type),
+						method));
 				try {
 					Object root = parameterType.getConstructor().newInstance();
 					for (int i = 0; i < names.length; i++) {
-						Method setter = findSetter(parameterType, "set"
-								+ Info.capitalize(names[i]));
+						Method setter = findSetter(parameterType, "set" + Info.capitalize(names[i]));
 						setter.invoke(root, params[i]);
 					}
 					return route.urlFor(type, method, root);
 				} catch (Exception e) {
-					throw new VRaptorException(
-							"The selected route is invalid for redirection: "
-									+ type.getName() + "." + method.getName(),
-							e);
+					throw new VRaptorException("The selected route is invalid for redirection: " + type.getName() + "."
+							+ method.getName(), e);
 				}
 			}
 		}
-		throw new RouteNotFoundException(
-				"The selected route is invalid for redirection: "
-						+ type.getName() + "." + method.getName());
+		throw new RouteNotFoundException("The selected route is invalid for redirection: " + type.getName() + "."
+				+ method.getName());
 	}
 
 	private Method findSetter(Class<?> parameterType, String methodName) {

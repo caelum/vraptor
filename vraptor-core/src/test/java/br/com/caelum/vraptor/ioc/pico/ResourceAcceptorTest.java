@@ -8,7 +8,7 @@ import org.junit.Test;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.ioc.Component;
-import br.com.caelum.vraptor.resource.DefaultStereotypedClass;
+import br.com.caelum.vraptor.resource.DefaultResourceClass;
 
 public class ResourceAcceptorTest {
 
@@ -27,7 +27,7 @@ public class ResourceAcceptorTest {
     public void shouldAcceptResourcesAnnotatedWithResourceAnnotation() {
         mockery.checking(new Expectations() {
             {
-                one(registry).register(new DefaultStereotypedClass(ResourceAnnotated.class));
+                one(registry).register(new DefaultResourceClass(ResourceAnnotated.class));
             }
         });
         acceptor.analyze(ResourceAnnotated.class);

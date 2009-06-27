@@ -7,7 +7,7 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
-import br.com.caelum.vraptor.resource.StereotypedClass;
+import br.com.caelum.vraptor.resource.ResourceClass;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.validator.ValidationMessage;
 
@@ -38,14 +38,14 @@ public class VRaptorMatchers {
         };
     }
 
-    public static Matcher<StereotypedClass> resource(final Class<?> type) {
-        return new BaseMatcher<StereotypedClass>() {
+    public static Matcher<ResourceClass> resource(final Class<?> type) {
+        return new BaseMatcher<ResourceClass>() {
 
             public boolean matches(Object item) {
-                if (!(item instanceof StereotypedClass)) {
+                if (!(item instanceof ResourceClass)) {
                     return false;
                 }
-                StereotypedClass other = (StereotypedClass) item;
+                ResourceClass other = (ResourceClass) item;
                 return other.getType().equals(type);
             }
 

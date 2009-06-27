@@ -31,10 +31,10 @@ import java.lang.reflect.Method;
 import java.util.Set;
 
 import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor.resource.DefaultStereotypedClass;
+import br.com.caelum.vraptor.resource.DefaultResourceClass;
 import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.resource.HttpMethod;
-import br.com.caelum.vraptor.resource.StereotypedClass;
+import br.com.caelum.vraptor.resource.ResourceClass;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**
@@ -53,10 +53,10 @@ public class FixedMethodStrategy implements Route {
 	public FixedMethodStrategy(String originalUri, Class<?> type, Method method, Set<HttpMethod> methods, ParametersControl control) {
 		this.methods = methods;
 		this.parameters = control;
-		this.resourceMethod = new DefaultResourceMethod(new DefaultStereotypedClass(type), method);
+		this.resourceMethod = new DefaultResourceMethod(new DefaultResourceClass(type), method);
 	}
 	
-	public StereotypedClass getResource() {
+	public ResourceClass getResource() {
 		return this.resourceMethod.getResource();
 	}
 

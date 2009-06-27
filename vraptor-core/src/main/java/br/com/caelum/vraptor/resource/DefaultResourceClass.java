@@ -29,18 +29,34 @@
  */
 package br.com.caelum.vraptor.resource;
 
-/**
- * Represents a stereotyped class.
- * 
- * For example, Resource and Component annotations are annotated with
- * Stereotype, so any class annotated with Component or Resource will be
- * considered a Stereotyped one.
- * 
- * @author Guilherme Silveira
- * @author Paulo Silveira
- */
-public interface StereotypedClass {
+public class DefaultResourceClass implements ResourceClass {
 
-	public Class<?> getType();
+	private final Class<?> type;
+
+	public DefaultResourceClass(Class<?> type) {
+		this.type = type;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof DefaultResourceClass)) {
+			return false;
+		}
+		DefaultResourceClass resource = (DefaultResourceClass) obj;
+		return this.type.equals(resource.type);
+	}
+
+	@Override
+	public int hashCode() {
+		return type == null ? 0 : type.hashCode();
+	}
+
+	public String toString() {
+		return "{StereotypedClass " + type.getName() + "}";
+	}
+
+	public Class<?> getType() {
+		return type;
+	}
 
 }

@@ -18,7 +18,7 @@ import org.vraptor.annotations.Component;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor.resource.StereotypedClass;
+import br.com.caelum.vraptor.resource.ResourceClass;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.view.PathResolver;
 import br.com.caelum.vraptor.view.ResultException;
@@ -34,7 +34,7 @@ public class ViewsPropertiesPageResultTest {
     private HttpServletResponse response;
     private ServletContext context;
     private HttpSession session;
-    private StereotypedClass resource;
+    private ResourceClass resource;
     private RequestDispatcher dispatcher;
 	private RequestInfo webRequest;
 	private MethodInfo info;
@@ -46,7 +46,7 @@ public class ViewsPropertiesPageResultTest {
         this.response = mockery.mock(HttpServletResponse.class);
         this.session = mockery.mock(HttpSession.class);
         this.method = mockery.mock(ResourceMethod.class);
-        this.resource = mockery.mock(StereotypedClass.class);
+        this.resource = mockery.mock(ResourceClass.class);
         this.config = mockery.mock(Config.class);
         this.resolver = mockery.mock(PathResolver.class);
         this.dispatcher = mockery.mock(RequestDispatcher.class);

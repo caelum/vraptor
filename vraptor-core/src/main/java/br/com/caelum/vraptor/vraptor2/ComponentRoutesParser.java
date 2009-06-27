@@ -49,7 +49,7 @@ import br.com.caelum.vraptor.http.route.RoutesParser;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.resource.HttpMethod;
-import br.com.caelum.vraptor.resource.StereotypedClass;
+import br.com.caelum.vraptor.resource.ResourceClass;
 
 /**
  * A vraptor 2 and 3 compatible routes creator.
@@ -70,7 +70,7 @@ public class ComponentRoutesParser implements RoutesParser {
         this.delegate = new PathAnnotationRoutesParser(proxifier);
     }
 
-	public List<Route> rulesFor(StereotypedClass resource) {
+	public List<Route> rulesFor(ResourceClass resource) {
 		List<Route> routes = new ArrayList<Route>();
 		Class<?> type = resource.getType();
         if(!Info.isOldComponent(resource)) {

@@ -38,7 +38,7 @@ import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.core.RequestInfo;
-import br.com.caelum.vraptor.resource.StereotypedClass;
+import br.com.caelum.vraptor.resource.ResourceClass;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.view.PageResult;
 import br.com.caelum.vraptor.view.PathResolver;
@@ -76,7 +76,7 @@ public class ViewsPropertiesPageResult implements PageResult {
 	public void forward() {
 		try {
 			String result = info.getResult().toString();
-			StereotypedClass resource = method.getResource();
+			ResourceClass resource = method.getResource();
 			boolean vraptor3 = !Info.isOldComponent(resource);
 			if (vraptor3) {
 				String forwardPath = resolver.pathFor(method);

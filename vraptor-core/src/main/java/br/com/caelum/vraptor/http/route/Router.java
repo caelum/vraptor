@@ -35,7 +35,7 @@ import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.resource.StereotypedClass;
+import br.com.caelum.vraptor.resource.ResourceClass;
 
 /**
  * Handles different rules in order to translate urls into Resource methods.
@@ -48,13 +48,13 @@ public interface Router {
 
 	ResourceMethod parse(String uri, HttpMethod method, MutableRequest request);
 
-	Set<StereotypedClass> allResources();
+	Set<ResourceClass> allResources();
 
 	/**
 	 * Registers this resource using the default algorithm for uri
 	 * identification.
 	 */
-	void register(StereotypedClass resource);
+	void register(ResourceClass resource);
 
 	/**
 	 * Retrieves a single url to access the desired method.

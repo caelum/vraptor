@@ -35,7 +35,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
-import br.com.caelum.vraptor.resource.StereotypedClass;
+import br.com.caelum.vraptor.resource.ResourceClass;
 
 /**
  * Default DirScanner implementation which looks for annotated resources.
@@ -43,7 +43,7 @@ import br.com.caelum.vraptor.resource.StereotypedClass;
  * @author Guilherme Silveira
  */
 @ApplicationScoped
-public class DefaultDirScanner implements DirScanner<StereotypedClass> {
+public class DefaultDirScanner implements DirScanner<ResourceClass> {
 	
 	private static final Logger logger = LoggerFactory.getLogger(DefaultDirScanner.class);
 

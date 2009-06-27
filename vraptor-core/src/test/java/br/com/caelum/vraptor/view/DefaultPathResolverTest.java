@@ -36,14 +36,14 @@ import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.resource.StereotypedClass;
+import br.com.caelum.vraptor.resource.ResourceClass;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 public class DefaultPathResolverTest {
 
     private Mockery mockery;
     private ResourceMethod method;
-    private StereotypedClass resource;
+    private ResourceClass resource;
     private HttpServletRequest request;
 
     @Before
@@ -51,7 +51,7 @@ public class DefaultPathResolverTest {
         this.mockery = new Mockery();
         this.method = mockery.mock(ResourceMethod.class);
         this.request = mockery.mock(HttpServletRequest.class);
-        this.resource = mockery.mock(StereotypedClass.class);
+        this.resource = mockery.mock(ResourceClass.class);
     }
     
     @Test

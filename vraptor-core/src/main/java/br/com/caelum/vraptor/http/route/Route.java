@@ -31,7 +31,7 @@ import java.lang.reflect.Method;
 
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.resource.HttpMethod;
-import br.com.caelum.vraptor.resource.StereotypedClass;
+import br.com.caelum.vraptor.resource.ResourceClass;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**
@@ -51,7 +51,7 @@ public interface Route {
 	 * Returns the resource related to this rule. If no resource should be
 	 * registered while loading this rule, return null.
 	 */
-	StereotypedClass getResource();
+	ResourceClass getResource();
 
 	/**
 	 * Returns the url which invokes this rule with values extracted from this

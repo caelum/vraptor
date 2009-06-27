@@ -10,7 +10,7 @@ import org.junit.Test;
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.resource.DefaultStereotypedClass;
+import br.com.caelum.vraptor.resource.DefaultResourceClass;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.view.DogController;
 
@@ -36,7 +36,7 @@ public class InstantiateInterceptorTest {
                 one(container).instanceFor(DogController.class);
                 will(returnValue(myDog));
                 one(stack).next(method, myDog);
-                one(method).getResource(); will(returnValue(new DefaultStereotypedClass(DogController.class)));
+                one(method).getResource(); will(returnValue(new DefaultResourceClass(DogController.class)));
             }
         });
         interceptor.intercept(stack, method, null);

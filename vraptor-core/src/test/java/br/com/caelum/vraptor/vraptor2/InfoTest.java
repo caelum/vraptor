@@ -10,7 +10,7 @@ import org.vraptor.annotations.Component;
 import org.vraptor.annotations.Logic;
 
 import br.com.caelum.vraptor.test.VRaptorMockery;
-import br.com.caelum.vraptor.resource.StereotypedClass;
+import br.com.caelum.vraptor.resource.ResourceClass;
 
 public class InfoTest {
 
@@ -62,7 +62,7 @@ public class InfoTest {
 
     @Test
     public void shouldDetectAnOldComponent() {
-        StereotypedClass resource = mockery.resource(CustomComponent.class);
+        ResourceClass resource = mockery.resource(CustomComponent.class);
         assertThat(Info.isOldComponent(resource), is(equalTo(true)));
         mockery.assertIsSatisfied();
     }
@@ -73,7 +73,7 @@ public class InfoTest {
 
     @Test
     public void shouldDetectANewComponent() {
-        StereotypedClass resource = mockery.resource(DefaultResource.class);
+        ResourceClass resource = mockery.resource(DefaultResource.class);
         assertThat(Info.isOldComponent(resource), is(equalTo(false)));
         mockery.assertIsSatisfied();
     }

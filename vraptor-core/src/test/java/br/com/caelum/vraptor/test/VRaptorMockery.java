@@ -16,7 +16,7 @@ import org.jmock.lib.legacy.ClassImposteriser;
 
 import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.resource.StereotypedClass;
+import br.com.caelum.vraptor.resource.ResourceClass;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 public class VRaptorMockery {
@@ -59,8 +59,8 @@ public class VRaptorMockery {
 		return method;
 	}
 
-	public <T> StereotypedClass resource(final Class<T> type) {
-		final StereotypedClass resource = mockery.mock(StereotypedClass.class, "resource : " + type + (++count));
+	public <T> ResourceClass resource(final Class<T> type) {
+		final ResourceClass resource = mockery.mock(ResourceClass.class, "resource : " + type + (++count));
 		mockery.checking(new Expectations() {
 			{
 				allowing(resource).getType();
@@ -82,7 +82,7 @@ public class VRaptorMockery {
 	}
 
 	public <T> ResourceMethod methodForResource(Class<T> type) {
-		final StereotypedClass resource = resource(type);
+		final ResourceClass resource = resource(type);
 		final ResourceMethod method = mockery.mock(ResourceMethod.class);
 		checking(new Expectations() {
 			{
@@ -95,7 +95,7 @@ public class VRaptorMockery {
 
 	public <T> ResourceMethod methodFor(final Class<T> type, final String methodName, final Class<?>... params)
 			throws NoSuchMethodException {
-		final StereotypedClass resource = mockery.mock(StereotypedClass.class, "resource" + type.getSimpleName());
+		final ResourceClass resource = mockery.mock(ResourceClass.class, "resource" + type.getSimpleName());
 		mockery.checking(new Expectations() {
 			{
 				allowing(resource).getType();

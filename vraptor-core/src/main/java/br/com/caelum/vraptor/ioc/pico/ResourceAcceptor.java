@@ -27,15 +27,12 @@
  */
 package br.com.caelum.vraptor.ioc.pico;
 
-import java.lang.annotation.Annotation;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.http.route.Router;
-import br.com.caelum.vraptor.ioc.Stereotype;
-import br.com.caelum.vraptor.resource.DefaultStereotypedClass;
+import br.com.caelum.vraptor.resource.DefaultResourceClass;
 
 /**
  * Whenever it finds acceptable components and resources, registers it using the
@@ -45,8 +42,6 @@ import br.com.caelum.vraptor.resource.DefaultStereotypedClass;
  */
 public class ResourceAcceptor implements Acceptor {
 
-	private static final Logger logger = LoggerFactory.getLogger(ResourceAcceptor.class);
-
 	private final Router router;
 
 	public ResourceAcceptor(Router router) {
@@ -55,7 +50,7 @@ public class ResourceAcceptor implements Acceptor {
 
 	public void analyze(Class<?> type) {
 		if (type.isAnnotationPresent(Resource.class)) {
-			router.register(new DefaultStereotypedClass(type));
+			router.register(new DefaultResourceClass(type));
 		}
 	}
 

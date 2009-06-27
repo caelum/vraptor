@@ -42,47 +42,49 @@ import br.com.caelum.vraptor.resource.HttpMethod;
 /**
  * Should be used in one of two ways, either configure the type and invoke the
  * method or pass the method (java reflection) object.
- *
+ * 
  * @author Guilherme Silveira
  */
 public class RouteBuilder {
-    private final Set<HttpMethod> supportedMethods = new HashSet<HttpMethod>();
+	private final Set<HttpMethod> supportedMethods = new HashSet<HttpMethod>();
 
-    private final Proxifier proxifier;
+	private final Proxifier proxifier;
 	private final Logger logger = LoggerFactory.getLogger(RouteBuilder.class);
 
 	private final String originalUri;
-	
+
 	private Route strategy = new NoStrategy();
 
 	public RouteBuilder(Proxifier proxifier, String uri) {
-        this.proxifier = proxifier;
+		this.proxifier = proxifier;
 		uri = uri.replaceAll("\\*[^\\}]", ".\\*?");
 		this.originalUri = uri;
 	}
 
 	public <T> T is(final Class<T> type) {
-        MethodInvocation<T> handler = new MethodInvocation<T>() {
-            public Object intercept(Object proxy, Method method, Object[] args, SuperMethod superMethod) {
+		MethodInvocation<T> handler = new MethodInvocation<T>() {
+			public Object intercept(Object proxy, Method method, Object[] args, SuperMethod superMethod) {
 				boolean alreadySetTheStrategy = !strategy.getClass().equals(NoStrategy.class);
 				if (alreadySetTheStrategy) {
 					// the virtual machine might be invoking the finalize
-                    return null;
-                }
-                is(type, method);
-                return null;
-            }
-        };
+					return null;
+				}
+				is(type, method);
+				return null;
+			}
+		};
 		return proxifier.proxify(type, handler);
-    }
+	}
 
 	public void is(PatternBasedType type, PatternBasedType method) {
-		this.strategy = new PatternBasedStrategy(new DefaultParametersControl(originalUri),type, method, this.supportedMethods);
+		this.strategy = new PatternBasedStrategy(new DefaultParametersControl(originalUri), type, method,
+				this.supportedMethods);
 	}
 
 	public void is(Class<?> type, Method method) {
-		this.strategy = new FixedMethodStrategy(originalUri, type, method, this.supportedMethods, new DefaultParametersControl(originalUri));
-		logger.debug("created rule for path " + originalUri + " --> " + type.getName() + "." + method.getName());
+		this.strategy = new FixedMethodStrategy(originalUri, type, method, this.supportedMethods,
+				new DefaultParametersControl(originalUri));
+		logger.debug(originalUri + " --> " + type.getName() + "." + method);
 	}
 
 	/**
@@ -98,17 +100,18 @@ public class RouteBuilder {
 	}
 
 	public Route build() {
-		if(strategy instanceof NoStrategy) {
-			throw new IllegalRouteException("You have created a route, but did not specify any method to be invoked: " + originalUri);
+		if (strategy instanceof NoStrategy) {
+			throw new IllegalRouteException("You have created a route, but did not specify any method to be invoked: "
+					+ originalUri);
 		}
 		return strategy;
 	}
 
-    public String toString() {
-        if (supportedMethods.isEmpty()) {
-            return String.format("<< Route: %s => %s >>", originalUri, this.strategy.toString());
-        }
-        return String.format("<< Route: %s %s=> %s >>", originalUri, supportedMethods, this.strategy.toString());
-    }
+	public String toString() {
+		if (supportedMethods.isEmpty()) {
+			return String.format("<< Route: %s => %s >>", originalUri, this.strategy.toString());
+		}
+		return String.format("<< Route: %s %s=> %s >>", originalUri, supportedMethods, this.strategy.toString());
+	}
 
 }

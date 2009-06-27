@@ -27,26 +27,30 @@
  */
 package br.com.caelum.vraptor.ioc.pico;
 
+import java.lang.annotation.Annotation;
+
 import br.com.caelum.vraptor.ComponentRegistry;
-import br.com.caelum.vraptor.ioc.Component;
+import br.com.caelum.vraptor.ioc.Stereotype;
 
 /**
  * Whenever it finds acceptable components, register using the provider
  * 
  * @author paulo silveira
  */
-public class ComponentAcceptor implements Acceptor {
-
+public class StereotypedClassAcceptor implements Acceptor {
 
 	private final ComponentRegistry registry;
 
-	public ComponentAcceptor(ComponentRegistry registry) {
+	public StereotypedClassAcceptor(ComponentRegistry registry) {
 		this.registry = registry;
 	}
 
 	public void analyze(Class<?> type) {
-		if (type.isAnnotationPresent(Component.class)) {
-			registry.register(type, type);
+		for (Annotation a : type.getAnnotations()) {
+			if (a.annotationType().isAnnotationPresent(Stereotype.class)) {
+				registry.register(type, type);
+				break;
+			}
 		}
 	}
 

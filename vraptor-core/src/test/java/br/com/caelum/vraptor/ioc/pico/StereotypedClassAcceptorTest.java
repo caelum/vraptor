@@ -7,13 +7,11 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.Resource;
-import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.ioc.Component;
-import br.com.caelum.vraptor.resource.DefaultResourceClass;
 
-public class ComponentAcceptorTest {
+public class StereotypedClassAcceptorTest {
 
-    private ComponentAcceptor acceptor;
+    private StereotypedClassAcceptor acceptor;
     private Mockery mockery;
     private ComponentRegistry registry;
 
@@ -21,7 +19,7 @@ public class ComponentAcceptorTest {
     public void setup() {
         mockery = new Mockery();
         registry = mockery.mock(ComponentRegistry.class);
-        this.acceptor = new ComponentAcceptor(registry);
+        this.acceptor = new StereotypedClassAcceptor(registry);
     }
 
     @Test
@@ -36,13 +34,27 @@ public class ComponentAcceptorTest {
     }
 
     @Test
+    public void shouldAcceptComponentsAnnotatedWithResourceAnnotation() {
+        mockery.checking(new Expectations() {
+            {
+                one(registry).register(ResourceAnnotated.class, ResourceAnnotated.class);
+            }
+        });
+        acceptor.analyze(ResourceAnnotated.class);
+        mockery.assertIsSatisfied();
+    }
+
+    @Test
     public void ignoresNonAnnotatedComponents() {
         acceptor.analyze(ComponentNotAnnotated.class);
         mockery.assertIsSatisfied();
     }
 
-    @Resource
     class ComponentNotAnnotated {
+    }
+
+    @Resource
+    class ResourceAnnotated {
     }
 
     @Component

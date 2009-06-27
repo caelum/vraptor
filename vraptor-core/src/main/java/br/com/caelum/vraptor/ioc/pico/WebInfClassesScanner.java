@@ -89,7 +89,7 @@ public class WebInfClassesScanner implements Loader {
 	public void loadAll() {
 		logger.info("Looking for resources, classes and interceptors in " + classesDirectory.getAbsolutePath());
 		scanner.scan(classesDirectory, new ResourceAcceptor(router));
-		scanner.scan(classesDirectory, new ComponentAcceptor(registry));
+		scanner.scan(classesDirectory, new StereotypedClassAcceptor(registry));
 
 		List<Class<? extends Interceptor>> interceptors = new ArrayList<Class<? extends Interceptor>>();
 		scanner.scan(classesDirectory, new InterceptorAcceptor(interceptors));

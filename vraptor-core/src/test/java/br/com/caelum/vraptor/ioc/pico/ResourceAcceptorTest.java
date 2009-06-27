@@ -7,11 +7,12 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.http.route.Router;
+import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.resource.DefaultStereotypedClass;
 
 public class ResourceAcceptorTest {
 
-    private StereotypedClassAcceptor acceptor;
+    private ResourceAcceptor acceptor;
     private Mockery mockery;
     private Router registry;
 
@@ -19,7 +20,7 @@ public class ResourceAcceptorTest {
     public void setup() {
         mockery = new Mockery();
         registry = mockery.mock(Router.class);
-        this.acceptor = new StereotypedClassAcceptor(registry);
+        this.acceptor = new ResourceAcceptor(registry);
     }
 
     @Test
@@ -43,6 +44,7 @@ public class ResourceAcceptorTest {
     class ResourceAnnotated {
     }
 
+    @Component
     class ResourceNotAnnotated {
     }
 

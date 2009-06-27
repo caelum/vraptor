@@ -40,7 +40,7 @@ public class ResourceNotFoundHandlerTest {
             }
         });
 		notFoundHandler.couldntFind(request);
-        MatcherAssert.assertThat(writer.getBuffer().toString(), Matchers.is(Matchers.equalTo("resource not found\n")));
+        MatcherAssert.assertThat(writer.getBuffer().toString(), Matchers.is(Matchers.contains("resource not found")));
         mockery.assertIsSatisfied();
 	}
 }

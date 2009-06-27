@@ -39,6 +39,7 @@ import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.example.Client;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
+import br.com.caelum.vraptor.ioc.Component;
 
 /**
  * A simple implementation of in memory database.
@@ -46,11 +47,23 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
  * @author guilherme silveira
  */
 @ApplicationScoped
+@Component
 public class InMemoryDatabase implements Repository {
 
 	private final Map<Long, Client> clients = new HashMap<Long, Client>();
 	
 	private static final Logger logger = LoggerFactory.getLogger(InMemoryDatabase.class);
+
+	public InMemoryDatabase() {
+		logger.info("Starting up the database!");
+		
+		Client guilherme = new Client();
+		guilherme.setId(1L);
+		guilherme.setName("Guilherme Silveira");
+		guilherme.setEmails(Arrays.asList("guilherme.silveira@caelum.com.br"));
+		guilherme.setAge(27);
+		add(guilherme);
+	}
 
 	public void add(Client c) {
 		clients.put(c.getId(), c);
@@ -58,17 +71,6 @@ public class InMemoryDatabase implements Repository {
 
 	public Collection<Client> all() {
 		return clients.values();
-	}
-
-	@PostConstruct
-	public void startup() {
-		logger.info("Starting up the database... configuration should be done here");
-		Client guilherme = new Client();
-		guilherme.setId(1L);
-		guilherme.setName("Guilherme Silveira");
-		guilherme.setEmails(Arrays.asList("guilherme.silveira@caelum.com.br"));
-		guilherme.setAge(27);
-		add(guilherme);
 	}
 
 	public void remove(Client client) {

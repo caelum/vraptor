@@ -44,33 +44,29 @@ import br.com.caelum.vraptor.http.MutableRequest;
  */
 public class DefaultParametersControl implements ParametersControl {
 
-	private final Logger logger = LoggerFactory
-			.getLogger(DefaultParametersControl.class);
+	private final Logger logger = LoggerFactory.getLogger(DefaultParametersControl.class);
 	private final List<String> parameters = new ArrayList<String>();
 	private final Pattern pattern;
 	private final String originalPattern;
 
 	public DefaultParametersControl(String originalPattern) {
 		this.originalPattern = originalPattern;
-		String patternUri = originalPattern.replaceAll("\\{([^\\}]+?)\\*\\}",
-				"(.*)").replaceAll("\\{([^\\}]+?)\\}", "([^/]*)");
-		Matcher matcher = Pattern.compile("\\{([^\\}]+?)\\}").matcher(
-				originalPattern);
+		String patternUri = originalPattern.replaceAll("\\{([^\\}]+?)\\*\\}", "(.*)").replaceAll("\\{([^\\}]+?)\\}",
+				"([^/]*)");
+		Matcher matcher = Pattern.compile("\\{([^\\}]+?)\\}").matcher(originalPattern);
 		while (matcher.find()) {
 			String value = matcher.group(1).replace("*", "");
 			parameters.add(value);
 		}
 		this.pattern = Pattern.compile(patternUri);
-		logger.debug("For " + originalPattern + " retrieved " + patternUri
-				+ " with " + parameters);
+		logger.debug("For " + originalPattern + " retrieved " + patternUri + " with " + parameters);
 	}
 
 	public String fillUri(Object params) {
 		String base = originalPattern.replaceAll("\\.\\*", "");
 		for (String key : parameters) {
 			Object result = new Evaluator().get(params, key);
-			base = base.replace("{" + key + "}", result == null ? "" : result
-					.toString());
+			base = base.replace("{" + key + "}", result == null ? "" : result.toString());
 		}
 		return base;
 	}
@@ -95,8 +91,7 @@ public class DefaultParametersControl implements ParametersControl {
 		StringBuffer result = new StringBuffer();
 		for (int i = 0; i < values.length; i++) {
 			matcher.find();
-			matcher.appendReplacement(result, values[i].replaceAll("\\$",
-					"\\\\\\$"));
+			matcher.appendReplacement(result, values[i].replaceAll("\\$", "\\\\\\$"));
 		}
 		return result.toString();
 	}

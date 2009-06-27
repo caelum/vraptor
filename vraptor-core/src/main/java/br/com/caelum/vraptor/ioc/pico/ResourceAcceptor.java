@@ -32,6 +32,7 @@ import java.lang.annotation.Annotation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.ioc.Stereotype;
 import br.com.caelum.vraptor.resource.DefaultStereotypedClass;
@@ -42,22 +43,19 @@ import br.com.caelum.vraptor.resource.DefaultStereotypedClass;
  * 
  * @author guilherme silveira
  */
-public class StereotypedClassAcceptor implements Acceptor {
+public class ResourceAcceptor implements Acceptor {
 
-	private static final Logger logger = LoggerFactory.getLogger(StereotypedClassAcceptor.class);
+	private static final Logger logger = LoggerFactory.getLogger(ResourceAcceptor.class);
 
 	private final Router router;
 
-	public StereotypedClassAcceptor(Router router) {
+	public ResourceAcceptor(Router router) {
 		this.router = router;
 	}
 
 	public void analyze(Class<?> type) {
-		for (Annotation annotation : type.getAnnotations()) {
-			if (annotation.annotationType().isAnnotationPresent(Stereotype.class)) {
-				logger.debug("Found stereotyped class: " + type);
-				router.register(new DefaultStereotypedClass(type));
-			}
+		if (type.isAnnotationPresent(Resource.class)) {
+			router.register(new DefaultStereotypedClass(type));
 		}
 	}
 

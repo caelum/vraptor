@@ -85,7 +85,7 @@ public class RouteBuilder {
 	public void is(Class<?> type, Method method) {
 		this.strategy = new FixedMethodStrategy(originalUri, type, method, this.supportedMethods,
 				new DefaultParametersControl(originalUri));
-		logger.debug(originalUri + " --> " + method);
+		logger.info(originalUri + " --> " + method);
 	}
 
 	/**

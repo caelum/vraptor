@@ -99,7 +99,7 @@ public class DefaultRouter implements Router {
 	public void add(Route r) {
 		ResourceClass resource = r.getResource();
 		if (resource != null) {
-			resources.add(resource);
+			this.resources.add(resource);
 		}
 		this.routes.add(r);
 	}

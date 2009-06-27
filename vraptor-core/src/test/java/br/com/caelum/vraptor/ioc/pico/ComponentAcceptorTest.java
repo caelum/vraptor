@@ -9,9 +9,9 @@ import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.ioc.Component;
 
-public class StereotypedClassAcceptorTest {
+public class ComponentAcceptorTest {
 
-    private StereotypedClassAcceptor acceptor;
+    private ComponentAcceptor acceptor;
     private Mockery mockery;
     private ComponentRegistry registry;
 
@@ -19,7 +19,7 @@ public class StereotypedClassAcceptorTest {
     public void setup() {
         mockery = new Mockery();
         registry = mockery.mock(ComponentRegistry.class);
-        this.acceptor = new StereotypedClassAcceptor(registry);
+        this.acceptor = new ComponentAcceptor(registry);
     }
 
     @Test
@@ -34,12 +34,8 @@ public class StereotypedClassAcceptorTest {
     }
 
     @Test
-    public void shouldAcceptComponentsAnnotatedWithResourceAnnotation() {
-        mockery.checking(new Expectations() {
-            {
-                one(registry).register(ResourceAnnotated.class, ResourceAnnotated.class);
-            }
-        });
+    public void shouldNotAcceptComponentsAnnotatedWithResourceAnnotation() {
+        mockery.checking(new Expectations());
         acceptor.analyze(ResourceAnnotated.class);
         mockery.assertIsSatisfied();
     }

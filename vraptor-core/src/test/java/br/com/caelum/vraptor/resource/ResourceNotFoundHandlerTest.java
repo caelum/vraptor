@@ -9,6 +9,7 @@ import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -40,7 +41,7 @@ public class ResourceNotFoundHandlerTest {
             }
         });
 		notFoundHandler.couldntFind(request);
-        MatcherAssert.assertThat(writer.getBuffer().toString(), Matchers.is(Matchers.contains("resource not found")));
+		Assert.assertTrue(writer.getBuffer().toString().contains("resource not found"));
         mockery.assertIsSatisfied();
 	}
 }

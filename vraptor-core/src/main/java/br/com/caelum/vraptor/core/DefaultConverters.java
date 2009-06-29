@@ -62,46 +62,46 @@ import br.com.caelum.vraptor.ioc.Container;
 @ApplicationScoped
 public final class DefaultConverters implements Converters {
 
-    private final LinkedList<Class<? extends Converter>> types;
+	private final LinkedList<Class<? extends Converter>> classes;
 
-    public static final Class<? extends Converter<?>>[] DEFAULTS = new Class[] { PrimitiveIntConverter.class,
-            PrimitiveLongConverter.class, PrimitiveShortConverter.class, PrimitiveByteConverter.class,
-            PrimitiveDoubleConverter.class, PrimitiveFloatConverter.class, PrimitiveBooleanConverter.class,
-            IntegerConverter.class, LongConverter.class, ShortConverter.class, ByteConverter.class,
-            DoubleConverter.class, FloatConverter.class, BooleanConverter.class, LocaleBasedCalendarConverter.class,
-            LocaleBasedDateConverter.class, EnumConverter.class, UploadedFileConverter.class };
+	public static final Class<? extends Converter<?>>[] DEFAULTS = new Class[] { PrimitiveIntConverter.class,
+			PrimitiveLongConverter.class, PrimitiveShortConverter.class, PrimitiveByteConverter.class,
+			PrimitiveDoubleConverter.class, PrimitiveFloatConverter.class, PrimitiveBooleanConverter.class,
+			IntegerConverter.class, LongConverter.class, ShortConverter.class, ByteConverter.class,
+			DoubleConverter.class, FloatConverter.class, BooleanConverter.class, LocaleBasedCalendarConverter.class,
+			LocaleBasedDateConverter.class, EnumConverter.class, UploadedFileConverter.class };
 
-    private final ComponentRegistry container;
+	private final ComponentRegistry container;
 
-    public DefaultConverters(ComponentRegistry container) {
-        this.container = container;
-        this.types = new LinkedList<Class<? extends Converter>>();
-    }
+	public DefaultConverters(ComponentRegistry container) {
+		this.container = container;
+		this.classes = new LinkedList<Class<? extends Converter>>();
+	}
 
-    @PostConstruct
-    public void init() {
-        for (Class<? extends Converter<?>> type : DEFAULTS) {
-            register(type);
-        }
-    }
+	@PostConstruct
+	public void init() {
+		for (Class<? extends Converter<?>> clazz : DEFAULTS) {
+			register(clazz);
+		}
+	}
 
-    protected void register(Class<? extends Converter> converterType) {
-        if (!converterType.isAnnotationPresent(Convert.class)) {
-            throw new VRaptorException("The converter type " + converterType.getName()
-                    + " should have the Convert annotation");
-        }
-        types.addFirst(converterType);
-        container.register(converterType, converterType);
-    }
+	protected void register(Class<? extends Converter> converterClass) {
+		if (!converterClass.isAnnotationPresent(Convert.class)) {
+			throw new VRaptorException("The converter type " + converterClass.getName()
+					+ " should have the Convert annotation");
+		}
+		classes.addFirst(converterClass);
+		container.register(converterClass, converterClass);
+	}
 
-    public Converter to(Class<?> type, Container container) {
-        for (Class<? extends Converter> converterType : types) {
-            Class boundType = converterType.getAnnotation(Convert.class).value();
-            if (boundType.isAssignableFrom(type)) {
-                return container.instanceFor(converterType);
-            }
-        }
-        throw new VRaptorException("Unable to find converter for " + type.getName());
-    }
+	public Converter to(Class<?> clazz, Container container) {
+		for (Class<? extends Converter> converterType : classes) {
+			Class boundType = converterType.getAnnotation(Convert.class).value();
+			if (boundType.isAssignableFrom(clazz)) {
+				return container.instanceFor(converterType);
+			}
+		}
+		throw new VRaptorException("Unable to find converter for " + clazz.getName());
+	}
 
 }

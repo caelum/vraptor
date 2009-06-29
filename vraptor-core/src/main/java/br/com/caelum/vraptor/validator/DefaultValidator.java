@@ -106,15 +106,16 @@ public class DefaultValidator implements Validator {
                     throw new ResultException(e);
                 }
             } else {
-            	result.use(Results.page()).forward(uriWithoutContextPath());
+            	throw new ResultException("You must call goTo method in order to specify where to go");
+//            	result.use(Results.page()).forward(uriWithoutContextPath());
             }
             // finished just fine
             throw new ValidationError(errors);
         }
 	}
 
-	private String uriWithoutContextPath() {
-		return request.getRequestURI().replaceFirst(request.getContextPath(), "");
-	}
+//	private String uriWithoutContextPath() {
+//		return request.getRequestURI().replaceFirst(request.getContextPath(), "");
+//	}
 
 }

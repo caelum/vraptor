@@ -27,18 +27,26 @@
  */
 package br.com.caelum.vraptor.view;
 
+import java.io.IOException;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.List;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletResponse;
+
+import br.com.caelum.vraptor.Delete;
+import br.com.caelum.vraptor.Get;
+import br.com.caelum.vraptor.Post;
+import br.com.caelum.vraptor.Put;
+import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.proxy.MethodInvocation;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.ProxyInvocationException;
 import br.com.caelum.vraptor.proxy.SuperMethod;
-
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.lang.reflect.Method;
 
 /**
  * The default implementation of LogicResult.<br>
@@ -48,13 +56,15 @@ import java.lang.reflect.Method;
  */
 public class DefaultLogicResult implements LogicResult {
 
+	@SuppressWarnings("unchecked")
+	private static final List<Class<? extends Annotation>> HTTP_METHODS = Arrays.asList(Post.class, Get.class, Put.class, Delete.class);
     private final Proxifier proxifier;
     private final Router router;
     private final ServletContext context;
-    private final HttpServletRequest request;
+    private final MutableRequest request;
     private final HttpServletResponse response;
 
-    public DefaultLogicResult(Proxifier proxifier, Router router, ServletContext context, HttpServletRequest request,
+    public DefaultLogicResult(Proxifier proxifier, Router router, ServletContext context, MutableRequest request,
             HttpServletResponse response) {
         this.proxifier = proxifier;
         this.response = response;
@@ -62,12 +72,20 @@ public class DefaultLogicResult implements LogicResult {
         this.request = request;
         this.router = router;
     }
-
+    private void setHttpMethod(Method method) {
+    	for (Class<? extends Annotation> httpMethod : HTTP_METHODS) {
+        	if (method.isAnnotationPresent(httpMethod)) {
+        		request.setParameter("_method", httpMethod.getSimpleName().toUpperCase());
+        		return;
+        	}
+		}
+    }
     public <T> T forwardTo(final Class<T> type) {
         return proxifier.proxify(type, new MethodInvocation<T>() {
             public Object intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {
                 try {
                     String url = router.urlFor(type, method, args);
+                    setHttpMethod(method);
                     request.getRequestDispatcher(url).forward(request, response);
                     return null;
                 } catch (ServletException e) {

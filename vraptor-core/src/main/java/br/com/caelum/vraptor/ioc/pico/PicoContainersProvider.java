@@ -41,6 +41,7 @@ import org.picocontainer.lifecycle.JavaEE5LifecycleStrategy;
 import org.picocontainer.monitors.NullComponentMonitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.context.request.RequestScope;
 
 import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.Interceptor;
@@ -98,6 +99,9 @@ public class PicoContainersProvider implements ComponentRegistry {
 			this.sessionScoped.put(requiredType, type);
 		} else {
 			// default behaviour: even without @RequestScoped
+			if (!type.isAnnotationPresent(RequestScope.class)) {
+				logger.info("Class being registered as @RequestScope, since there is no Scope annotation " + type);
+			}
 			logger.debug("Registering " + type.getName() + " as a request component");
 			this.requestScoped.put(requiredType, type);
 		}

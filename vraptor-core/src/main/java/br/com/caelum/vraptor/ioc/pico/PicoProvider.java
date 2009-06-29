@@ -99,7 +99,7 @@ public class PicoProvider implements ContainerProvider {
 		for (Class<?> type : BaseComponents.getRequestScoped()) {
 			singleInterfaceRegister(type, container);
 		}
-		for (Class<?> type : new Class[] { DefaultDirScanner.class, WebInfClassesScanner.class }) {
+		for (Class<?> type : new Class[] { DefaultDirScanner.class }) {
 			singleInterfaceRegister(type, container);
 		}
 		container.register(MultipartConfig.class, DefaultMultipartConfig.class);

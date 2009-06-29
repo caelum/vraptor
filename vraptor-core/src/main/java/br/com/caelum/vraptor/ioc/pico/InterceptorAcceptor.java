@@ -27,22 +27,21 @@ public class InterceptorAcceptor implements Acceptor {
 
 	@SuppressWarnings("unchecked")
 	public void analyze(Class<?> type) {
-		List<Class<? extends Interceptor>> interceptors = new ArrayList<Class<? extends Interceptor>>();
 
 		if (type.isAnnotationPresent(Intercepts.class)) {
 			if (Interceptor.class.isAssignableFrom(type)) {
 				logger.debug("Found interceptor for " + type);
-				interceptors.add((Class<Interceptor>) type);
+				List<Class<? extends Interceptor>> list = new ArrayList<Class<? extends Interceptor>>();
+				list.add((Class<? extends Interceptor>) type);
+				registry.register(list);
 			} else if (InterceptorSequence.class.isAssignableFrom(type)) {
 				logger.debug("Found interceptor sequence for " + type);
-				interceptors.addAll(parseSequence(type));
+				registry.register(parseSequence(type));
 			} else {
 				logger.error("Annotation " + Intercepts.class + " found in " + type
 						+ " but this is neither an Interceptor nor an InterceptorSequence. Ignoring");
 			}
 		}
-		if (!interceptors.isEmpty())
-			registry.register(interceptors);
 	}
 
 	private static List<Class<? extends Interceptor>> parseSequence(Class<?> type) {

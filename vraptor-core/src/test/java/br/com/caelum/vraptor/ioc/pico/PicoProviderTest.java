@@ -45,55 +45,55 @@ import br.com.caelum.vraptor.test.HttpServletRequestMock;
 import br.com.caelum.vraptor.test.HttpSessionMock;
 
 public class PicoProviderTest extends GenericContainerTest {
-    private int counter;
+	private int counter;
 
-    @SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked")
 	@Test
-    public void canProvidePicoSpecificApplicationScopedComponents() {
-        List<Class<?>> components = Arrays.asList(DirScanner.class, Loader.class);
+	public void canProvidePicoSpecificApplicationScopedComponents() {
+		List<Class<?>> components = Arrays.asList(DirScanner.class, Loader.class);
 		checkAvailabilityFor(true, components);
-        mockery.assertIsSatisfied();
-    }
+		mockery.assertIsSatisfied();
+	}
 
-    @Override
+	@Override
 	protected ContainerProvider getProvider() {
-        return new PicoProvider();
-    }
+		return new PicoProvider();
+	}
 
-    @Override
+	@Override
 	protected <T> T executeInsideRequest(WhatToDo<T> execution) {
-        HttpSessionMock session = new HttpSessionMock(context, "session" + ++counter);
-        HttpServletRequestMock request = new HttpServletRequestMock(session);
-        HttpServletResponse response = mockery.mock(HttpServletResponse.class, "response" + counter);
-        configureExpectations(request);
-        RequestInfo webRequest = new RequestInfo(context, request, response);
-        return execution.execute(webRequest, counter);
-    }
+		HttpSessionMock session = new HttpSessionMock(context, "session" + ++counter);
+		HttpServletRequestMock request = new HttpServletRequestMock(session);
+		HttpServletResponse response = mockery.mock(HttpServletResponse.class, "response" + counter);
+		configureExpectations(request);
+		RequestInfo webRequest = new RequestInfo(context, request, response);
+		return execution.execute(webRequest, counter);
+	}
 
-    /**
-     * Children providers can set custom expectations on request.
-     */
-    protected void configureExpectations(HttpServletRequestMock request) {
-    }
+	/**
+	 * Children providers can set custom expectations on request.
+	 */
+	protected void configureExpectations(HttpServletRequestMock request) {
+	}
 
-    /**
-     * Children providers can set custom expectations.
-     */
-    @Override
-    protected void configureExpectations() {
-       try {
-            mockery.checking(new Expectations() {
-                {
-                    File tmpDir = File.createTempFile("tmp_", "_file").getParentFile();
-                    File tmp = new File(tmpDir, "_tmp_vraptor_test");
-                    tmp.mkdir();
-                    allowing(context).getRealPath("");
-                    will(returnValue(tmp.getAbsolutePath()));
-                }
-            });
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
+	/**
+	 * Children providers can set custom expectations.
+	 */
+	@Override
+	protected void configureExpectations() {
+		try {
+			mockery.checking(new Expectations() {
+				{
+					File tmpDir = File.createTempFile("tmp_", "_file").getParentFile();
+					File tmp = new File(tmpDir, "_tmp_vraptor_test");
+					tmp.mkdir();
+					allowing(context).getRealPath("");
+					will(returnValue(tmp.getAbsolutePath()));
+				}
+			});
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
 }

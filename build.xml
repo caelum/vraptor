@@ -24,9 +24,11 @@
 		<delete file="vraptor-example/src/main/webapp/WEB-INF/lib/vraptor3-*.jar" />
 		<delete file="vraptor-example-compatibility/src/main/webapp/WEB-INF/lib/vraptor3-*.jar" />
 		<delete file="vraptor-spring-example/src/main/webapp/WEB-INF/lib/vraptor3-*.jar" />
+		<delete file="vraptor-blank-project/WebContent/WEB-INF/lib/vraptor3-*.jar" />
 		<copy file="vraptor-core/${jar.file}" todir="vraptor-example/src/main/webapp/WEB-INF/lib" />
 		<copy file="vraptor-core/${jar.file}" todir="vraptor-example-compatibility/src/main/webapp/WEB-INF/lib" />
 		<copy file="vraptor-core/${jar.file}" todir="vraptor-spring-example/src/main/webapp/WEB-INF/lib" />
+		<copy file="vraptor-core/${jar.file}" todir="vraptor-blank-project/WebContent/WEB-INF/lib" />
 	</target>
 
 	<target name="test" depends="core-tests" />

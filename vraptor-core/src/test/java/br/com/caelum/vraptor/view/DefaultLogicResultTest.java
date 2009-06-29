@@ -27,19 +27,23 @@
  */
 package br.com.caelum.vraptor.view;
 
-import br.com.caelum.vraptor.http.route.Router;
-import br.com.caelum.vraptor.proxy.DefaultProxifier;
+import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletResponse;
+
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
 
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import br.com.caelum.vraptor.Get;
+import br.com.caelum.vraptor.Post;
+import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor.http.route.Router;
+import br.com.caelum.vraptor.proxy.DefaultProxifier;
 
 public class DefaultLogicResultTest {
 
@@ -48,10 +52,19 @@ public class DefaultLogicResultTest {
     private Router router;
     private HttpServletResponse response;
     private ServletContext context;
-    private HttpServletRequest request;
+    private MutableRequest request;
 
     public static class MyComponent {
         public void base() {
+        }
+
+        @Post
+        public void annotated() {
+
+        }
+        @Get
+        public void annotatedWithGet() {
+
         }
     }
 
@@ -60,7 +73,7 @@ public class DefaultLogicResultTest {
         this.mockery = new Mockery();
         this.router = mockery.mock(Router.class);
         this.response = mockery.mock(HttpServletResponse.class);
-        this.request = mockery.mock(HttpServletRequest.class);
+        this.request = mockery.mock(MutableRequest.class);
         this.context = mockery.mock(ServletContext.class);
         this.logicResult = new DefaultLogicResult(new DefaultProxifier(), router, context, request, response);
     }
@@ -98,4 +111,51 @@ public class DefaultLogicResultTest {
         mockery.assertIsSatisfied();
     }
 
+    @Test
+	public void forwardingToANonGetMethodChangesMethodParameterToTheCorrectHttpMethod() throws Exception {
+
+		mockery.checking(new Expectations() {
+			{
+				one(request).setParameter("_method", "POST");
+				ignoring(anything());
+			}
+		});
+
+		logicResult.forwardTo(MyComponent.class).annotated();
+		mockery.assertIsSatisfied();
+	}
+
+    @Test
+	public void canRedirectWhenLogicMethodIsNotAnnotatedWithHttpMethods() throws Exception {
+
+		mockery.checking(new Expectations() {
+			{
+				one(response).sendRedirect(with(any(String.class)));
+				ignoring(anything());
+			}
+		});
+    	logicResult.redirectTo(MyComponent.class).base();
+	}
+    @Test
+    public void canRedirectWhenLogicMethodIsAnnotatedWithHttpGetMethod() throws Exception {
+
+    	mockery.checking(new Expectations() {
+    		{
+    			one(response).sendRedirect(with(any(String.class)));
+    			ignoring(anything());
+    		}
+    	});
+    	logicResult.redirectTo(MyComponent.class).annotatedWithGet();
+    }
+    @Test(expected=IllegalArgumentException.class)
+    public void cannotRedirectWhenLogicMethodIsAnnotatedWithAnyHttpMethodButGet() throws Exception {
+
+    	mockery.checking(new Expectations() {
+    		{
+    			never(response).sendRedirect(with(any(String.class)));
+    			ignoring(anything());
+    		}
+    	});
+    	logicResult.redirectTo(MyComponent.class).annotated();
+    }
 }

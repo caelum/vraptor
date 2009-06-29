@@ -27,18 +27,21 @@
  */
 package br.com.caelum.vraptor.view;
 
+import java.io.IOException;
+import java.lang.reflect.Method;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletResponse;
+
+import br.com.caelum.vraptor.Get;
+import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.proxy.MethodInvocation;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.ProxyInvocationException;
 import br.com.caelum.vraptor.proxy.SuperMethod;
-
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.lang.reflect.Method;
+import br.com.caelum.vraptor.resource.HttpMethod;
 
 /**
  * The default implementation of LogicResult.<br>
@@ -51,10 +54,10 @@ public class DefaultLogicResult implements LogicResult {
     private final Proxifier proxifier;
     private final Router router;
     private final ServletContext context;
-    private final HttpServletRequest request;
+    private final MutableRequest request;
     private final HttpServletResponse response;
 
-    public DefaultLogicResult(Proxifier proxifier, Router router, ServletContext context, HttpServletRequest request,
+    public DefaultLogicResult(Proxifier proxifier, Router router, ServletContext context, MutableRequest request,
             HttpServletResponse response) {
         this.proxifier = proxifier;
         this.response = response;
@@ -62,12 +65,20 @@ public class DefaultLogicResult implements LogicResult {
         this.request = request;
         this.router = router;
     }
-
+    private void setHttpMethod(Method method) {
+    	for (HttpMethod httpMethod : HttpMethod.values()) {
+        	if (method.isAnnotationPresent(httpMethod.getAnnotation())) {
+        		request.setParameter("_method", httpMethod.name());
+        		return;
+        	}
+		}
+    }
     public <T> T forwardTo(final Class<T> type) {
         return proxifier.proxify(type, new MethodInvocation<T>() {
             public Object intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {
                 try {
                     String url = router.urlFor(type, method, args);
+                    setHttpMethod(method);
                     request.getRequestDispatcher(url).forward(request, response);
                     return null;
                 } catch (ServletException e) {
@@ -82,6 +93,9 @@ public class DefaultLogicResult implements LogicResult {
     public <T> T redirectTo(final Class<T> type) {
         return proxifier.proxify(type, new MethodInvocation<T>() {
             public Object intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {
+            	if (!acceptsHttpGet(method)) {
+            		throw new IllegalArgumentException("Your logic method must accept HTTP GET method if you want to redirect to it");
+            	}
                 try {
                     String path = context.getContextPath();
                     String url = router.urlFor(type, method, args);
@@ -91,7 +105,19 @@ public class DefaultLogicResult implements LogicResult {
                     throw new ProxyInvocationException(e);
                 }
             }
+
         });
+    }
+    private boolean acceptsHttpGet(Method method) {
+    	if (method.isAnnotationPresent(Get.class)) {
+			return true;
+		}
+    	for (HttpMethod httpMethod : HttpMethod.values()) {
+			if (method.isAnnotationPresent(httpMethod.getAnnotation())) {
+				return false;
+			}
+		}
+    	return true;
     }
 
 }

@@ -32,9 +32,9 @@ import java.util.ArrayList;
 import org.jmock.Expectations;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.http.MutableRequest;
@@ -43,6 +43,7 @@ import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.test.VRaptorMockery;
 import br.com.caelum.vraptor.view.LogicResult;
 import br.com.caelum.vraptor.view.PageResult;
+import br.com.caelum.vraptor.view.ResultException;
 
 public class DefaultValidatorTest {
 
@@ -69,6 +70,7 @@ public class DefaultValidatorTest {
 	}
 
 	@Test
+	@Ignore("I think this is not the case anymore")
 	public void redirectsToStandardPageResultByDefault() {
 		mockery.checking(new Expectations() {
 			{
@@ -94,6 +96,21 @@ public class DefaultValidatorTest {
 		}
 	}
 
+	@Test(expected=ResultException.class)
+	public void shouldThrowExceptionWhenYouDontSpecifyTheValidationPage() throws Exception {
+
+		mockery.checking(new Expectations() {
+			{
+				ignoring(anything());
+			}
+		});
+		validator.checking(new Validations() {
+			{
+				that("", "", false);
+			}
+		});
+	}
+
 	@Test
 	public void redirectsToCustomOnErrorPage() {
 		try {
@@ -102,8 +119,6 @@ public class DefaultValidatorTest {
 					one(result).include((String) with(an(String.class)), with(an(ArrayList.class)));
 					one(result).use(LogicResult.class); will(returnValue(logicResult));
 					one(logicResult).forwardTo(MyComponent.class); will(returnValue(instance));
-					one(request).getParameter("_method"); will(returnValue("POST"));
-					one(request).setParameter("_method", "POST");
 				}
 			});
 			validator.onError().goTo(MyComponent.class).logic();
@@ -120,20 +135,6 @@ public class DefaultValidatorTest {
 		}
 	}
 
-	@Test
-	public void changesHttpMethodParamOnValidationRedirection() throws Exception {
-
-		mockery.checking(new Expectations() {
-			{
-				one(request).setParameter("_method", "POST");
-			}
-		});
-
-		validator.onError().goTo(MyComponent.class).annotatedLogic();
-
-		mockery.assertIsSatisfied();
-	}
-
 	@Resource
 	public static class MyComponent {
 		private boolean run;
@@ -142,10 +143,6 @@ public class DefaultValidatorTest {
 			this.run = true;
 		}
 
-		@Post
-		public void annotatedLogic() {
-
-		}
 	}
 
 }

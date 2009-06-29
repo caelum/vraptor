@@ -27,14 +27,19 @@
  */
 package br.com.caelum.vraptor.validator;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
+import br.com.caelum.vraptor.Delete;
+import br.com.caelum.vraptor.Get;
+import br.com.caelum.vraptor.Post;
+import br.com.caelum.vraptor.Put;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
+import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.proxy.MethodInvocation;
 import br.com.caelum.vraptor.proxy.Proxifier;
@@ -56,11 +61,11 @@ public class DefaultValidator implements Validator {
     private Object[] argsToUse;
     private Method method;
     private Class<?> typeToUse;
-	private final HttpServletRequest request;
+	private final MutableRequest request;
 
 	private final List<Message> errors = new ArrayList<Message>();
 
-    public DefaultValidator(Proxifier proxifier, Result result, HttpServletRequest request) {
+    public DefaultValidator(Proxifier proxifier, Result result, MutableRequest request) {
         this.proxifier = proxifier;
         this.result = result;
 		this.request = request;
@@ -77,13 +82,24 @@ public class DefaultValidator implements Validator {
         return this;
     }
 
+    private static final List<Class<? extends Annotation>> HTTP_METHODS = Arrays.asList(Post.class, Get.class, Put.class, Delete.class);
+    private String getHttpMethod(Method method) {
+    	for (Class<? extends Annotation> httpMethod : HTTP_METHODS) {
+        	if (method.isAnnotationPresent(httpMethod)) {
+        		return httpMethod.getSimpleName().toUpperCase();
+        	}
+		}
+    	return request.getParameter("_method");
+    }
     public <T> T goTo(Class<T> type) {
         this.typeToUse = type;
         return proxifier.proxify(type, new MethodInvocation<T>() {
-            public Object intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {
+
+			public Object intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {
                 if (DefaultValidator.this.method == null) {
                     DefaultValidator.this.argsToUse = args;
                     DefaultValidator.this.method = method;
+                    DefaultValidator.this.request.setParameter("_method", getHttpMethod(method));
                 }
                 return null;
             }

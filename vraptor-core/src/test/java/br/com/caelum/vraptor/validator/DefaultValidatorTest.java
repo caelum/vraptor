@@ -29,15 +29,15 @@ package br.com.caelum.vraptor.validator;
 
 import java.util.ArrayList;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.jmock.Expectations;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
+import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.proxy.DefaultProxifier;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.test.VRaptorMockery;
@@ -53,7 +53,7 @@ public class DefaultValidatorTest {
 	private MyComponent instance;
 	private Proxifier proxifier;
 	private PageResult pageResult;
-	private HttpServletRequest request;
+	private MutableRequest request;
 
 
 	@Before
@@ -63,7 +63,7 @@ public class DefaultValidatorTest {
 		this.result = mockery.mock(Result.class);
 		this.logicResult = mockery.mock(LogicResult.class);
 		this.instance = new MyComponent();
-		this.request = mockery.mock(HttpServletRequest.class);
+		this.request = mockery.mock(MutableRequest.class);
 		this.validator = new DefaultValidator(proxifier, result,request);
 		this.pageResult = mockery.mock(PageResult.class);
 	}
@@ -102,6 +102,8 @@ public class DefaultValidatorTest {
 					one(result).include((String) with(an(String.class)), with(an(ArrayList.class)));
 					one(result).use(LogicResult.class); will(returnValue(logicResult));
 					one(logicResult).forwardTo(MyComponent.class); will(returnValue(instance));
+					one(request).getParameter("_method"); will(returnValue("POST"));
+					one(request).setParameter("_method", "POST");
 				}
 			});
 			validator.onError().goTo(MyComponent.class).logic();
@@ -118,12 +120,31 @@ public class DefaultValidatorTest {
 		}
 	}
 
+	@Test
+	public void changesHttpMethodParamOnValidationRedirection() throws Exception {
+
+		mockery.checking(new Expectations() {
+			{
+				one(request).setParameter("_method", "POST");
+			}
+		});
+
+		validator.onError().goTo(MyComponent.class).annotatedLogic();
+
+		mockery.assertIsSatisfied();
+	}
+
 	@Resource
 	public static class MyComponent {
 		private boolean run;
 
 		public void logic() {
 			this.run = true;
+		}
+
+		@Post
+		public void annotatedLogic() {
+
 		}
 	}
 

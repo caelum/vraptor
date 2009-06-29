@@ -39,6 +39,7 @@ import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
 
+import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.route.Router;
@@ -59,6 +60,10 @@ public class DefaultLogicResultTest {
 
         @Post
         public void annotated() {
+
+        }
+        @Get
+        public void annotatedWithGet() {
 
         }
     }
@@ -119,4 +124,38 @@ public class DefaultLogicResultTest {
 		logicResult.forwardTo(MyComponent.class).annotated();
 		mockery.assertIsSatisfied();
 	}
+
+    @Test
+	public void canRedirectWhenLogicMethodIsNotAnnotatedWithHttpMethods() throws Exception {
+
+		mockery.checking(new Expectations() {
+			{
+				one(response).sendRedirect(with(any(String.class)));
+				ignoring(anything());
+			}
+		});
+    	logicResult.redirectTo(MyComponent.class).base();
+	}
+    @Test
+    public void canRedirectWhenLogicMethodIsAnnotatedWithHttpGetMethod() throws Exception {
+
+    	mockery.checking(new Expectations() {
+    		{
+    			one(response).sendRedirect(with(any(String.class)));
+    			ignoring(anything());
+    		}
+    	});
+    	logicResult.redirectTo(MyComponent.class).annotatedWithGet();
+    }
+    @Test(expected=IllegalArgumentException.class)
+    public void cannotRedirectWhenLogicMethodIsAnnotatedWithAnyHttpMethodButGet() throws Exception {
+
+    	mockery.checking(new Expectations() {
+    		{
+    			never(response).sendRedirect(with(any(String.class)));
+    			ignoring(anything());
+    		}
+    	});
+    	logicResult.redirectTo(MyComponent.class).annotated();
+    }
 }

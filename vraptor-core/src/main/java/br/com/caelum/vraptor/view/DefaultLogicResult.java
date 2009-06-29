@@ -28,25 +28,20 @@
 package br.com.caelum.vraptor.view;
 
 import java.io.IOException;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 
-import br.com.caelum.vraptor.Delete;
 import br.com.caelum.vraptor.Get;
-import br.com.caelum.vraptor.Post;
-import br.com.caelum.vraptor.Put;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.proxy.MethodInvocation;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.ProxyInvocationException;
 import br.com.caelum.vraptor.proxy.SuperMethod;
+import br.com.caelum.vraptor.resource.HttpMethod;
 
 /**
  * The default implementation of LogicResult.<br>
@@ -56,8 +51,6 @@ import br.com.caelum.vraptor.proxy.SuperMethod;
  */
 public class DefaultLogicResult implements LogicResult {
 
-	@SuppressWarnings("unchecked")
-	private static final List<Class<? extends Annotation>> HTTP_METHODS = Arrays.asList(Post.class, Get.class, Put.class, Delete.class);
     private final Proxifier proxifier;
     private final Router router;
     private final ServletContext context;
@@ -73,9 +66,9 @@ public class DefaultLogicResult implements LogicResult {
         this.router = router;
     }
     private void setHttpMethod(Method method) {
-    	for (Class<? extends Annotation> httpMethod : HTTP_METHODS) {
-        	if (method.isAnnotationPresent(httpMethod)) {
-        		request.setParameter("_method", httpMethod.getSimpleName().toUpperCase());
+    	for (HttpMethod httpMethod : HttpMethod.values()) {
+        	if (method.isAnnotationPresent(httpMethod.getAnnotation())) {
+        		request.setParameter("_method", httpMethod.name());
         		return;
         	}
 		}
@@ -100,6 +93,9 @@ public class DefaultLogicResult implements LogicResult {
     public <T> T redirectTo(final Class<T> type) {
         return proxifier.proxify(type, new MethodInvocation<T>() {
             public Object intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {
+            	if (!acceptsHttpGet(method)) {
+            		throw new IllegalArgumentException("Your logic method must accept HTTP GET method if you want to redirect to it");
+            	}
                 try {
                     String path = context.getContextPath();
                     String url = router.urlFor(type, method, args);
@@ -109,7 +105,19 @@ public class DefaultLogicResult implements LogicResult {
                     throw new ProxyInvocationException(e);
                 }
             }
+
         });
+    }
+    private boolean acceptsHttpGet(Method method) {
+    	if (method.isAnnotationPresent(Get.class)) {
+			return true;
+		}
+    	for (HttpMethod httpMethod : HttpMethod.values()) {
+			if (method.isAnnotationPresent(httpMethod.getAnnotation())) {
+				return false;
+			}
+		}
+    	return true;
     }
 
 }

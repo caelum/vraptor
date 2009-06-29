@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== 
+	VRaptor 3 Blank Project Build
+	====================================================================== -->
+<project name="VRaptor 3 Blank Project Build" default="zip" basedir=".">
+
+	<description>VRaptor 3 Blank Project module build</description>
+	
+	<property name="zip_file" value="vraptor-blank-project.zip"/>
+	
+	<target name="zip" depends="clean" description="--> creates zip file">
+		<zip destfile="${zip_file}" basedir="../" includes="vraptor-blank-project/**/*" excludes="${zip_file}"/>
+	</target>
+
+	<target name="clean" description="--> delete build artifacts">
+		<delete file="${zip_file}" failonerror="false"/>
+	</target>
+</project>

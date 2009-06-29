@@ -30,7 +30,7 @@ public class ConverterAcceptorTest {
 
 		mockery.checking(new Expectations() {
 			{
-				never(converters).register((Class<? extends Converter<?>>) ConverterNotOk.class);
+				never(converters).register(with(any(Class.class)));
 			}
 		});
 		this.acceptor.analyze(ConverterNotOk.class);

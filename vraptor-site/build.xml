@@ -19,5 +19,19 @@
 		<mkdir dir="target/site"/>
 		<xsite sourceDirectoryPath="${basedir}/src/site" sitemapPath="src/content/sitemap.xml" skinPath="src/templates/skin.html" resourcePaths="src/resources" outputDirectoryPath="${basedir}/target/site" />
 	</target>
+	
+	<target name="doc">
+		<exec executable="bash">
+			<arg line="tubaina" />
+			<arg line="-html" />
+			<arg line="-i" />
+			<arg line="src/guide/pt/" />
+			<arg line="-o" />
+			<arg line="." />
+			<arg line="-n" />
+			<arg line="guide" />
+		</exec>
+	</target>
+		
 
 </project>

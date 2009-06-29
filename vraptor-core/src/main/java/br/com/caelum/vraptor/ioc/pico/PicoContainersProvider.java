@@ -97,6 +97,7 @@ public class PicoContainersProvider implements ComponentRegistry {
 			logger.debug("Registering " + type.getName() + " a an session component");
 			this.sessionScoped.put(requiredType, type);
 		} else {
+			// default behaviour: even without @RequestScoped
 			logger.debug("Registering " + type.getName() + " as a request component");
 			this.requestScoped.put(requiredType, type);
 		}

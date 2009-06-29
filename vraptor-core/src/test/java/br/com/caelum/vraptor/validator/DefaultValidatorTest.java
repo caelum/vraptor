@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import org.jmock.Expectations;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.Resource;
@@ -42,6 +43,7 @@ import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.test.VRaptorMockery;
 import br.com.caelum.vraptor.view.LogicResult;
 import br.com.caelum.vraptor.view.PageResult;
+import br.com.caelum.vraptor.view.ResultException;
 
 public class DefaultValidatorTest {
 
@@ -68,6 +70,7 @@ public class DefaultValidatorTest {
 	}
 
 	@Test
+	@Ignore("I think this is not the case anymore")
 	public void redirectsToStandardPageResultByDefault() {
 		mockery.checking(new Expectations() {
 			{
@@ -91,6 +94,21 @@ public class DefaultValidatorTest {
 			// ok, shoul still assert satisfied
 			mockery.assertIsSatisfied();
 		}
+	}
+
+	@Test(expected=ResultException.class)
+	public void shouldThrowExceptionWhenYouDontSpecifyTheValidationPage() throws Exception {
+
+		mockery.checking(new Expectations() {
+			{
+				ignoring(anything());
+			}
+		});
+		validator.checking(new Validations() {
+			{
+				that("", "", false);
+			}
+		});
 	}
 
 	@Test

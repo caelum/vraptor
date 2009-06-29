@@ -4,7 +4,9 @@ import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.VRaptorException;
 import br.com.caelum.vraptor.core.Converters;
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
+@ApplicationScoped
 public class ConverterAcceptor implements Acceptor {
 
 	private final Converters converters;

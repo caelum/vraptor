@@ -69,7 +69,7 @@ import br.com.caelum.vraptor.view.PageResult;
  * Managing internal components by using pico container.<br>
  * There is an extension point through the registerComponents method, which
  * allows one to give a customized container.
- * 
+ *
  * @author Guilherme Silveira
  */
 public class PicoProvider implements ContainerProvider {
@@ -120,6 +120,10 @@ public class PicoProvider implements ContainerProvider {
 		container.register(ResourceLookupInterceptor.class, ResourceLookupInterceptor.class);
 		container.register(InstantiateInterceptor.class, InstantiateInterceptor.class);
 		container.register(ExecuteMethodInterceptor.class, ExecuteMethodInterceptor.class);
+		container.register(ResourceAcceptor.class, ResourceAcceptor.class);
+		container.register(ComponentAcceptor.class, ComponentAcceptor.class);
+		container.register(InterceptorAcceptor.class, InterceptorAcceptor.class);
+		container.register(ConverterAcceptor.class, ConverterAcceptor.class);
 	}
 
 	private void singleInterfaceRegister(Class<?> type, ComponentRegistry registry) {
@@ -138,14 +142,14 @@ public class PicoProvider implements ContainerProvider {
 	public void start(ServletContext context) {
 		this.container.addComponent(context);
 
-		Acceptor[] acceptors = { container.getComponent(ResourceAcceptor.class),
+		container.start();
+
+		Acceptor[] acceptors = new Acceptor[] { container.getComponent(ResourceAcceptor.class),
 				container.getComponent(ComponentAcceptor.class), container.getComponent(InterceptorAcceptor.class),
 				container.getComponent(ConverterAcceptor.class) };
 
 		Loader loader = new WebInfClassesScanner(context, container.getComponent(DirScanner.class), acceptors);
 		loader.loadAll();
-
-		container.start();
 	}
 
 	public void stop() {

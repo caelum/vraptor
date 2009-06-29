@@ -15,7 +15,7 @@
 	<taskdef name="xsite" classname="org.codehaus.xsite.ant.XSiteTask">
 		<classpath refid="libs.classpath" />
 	</taskdef>
-	<target name="site">
+	<target name="site" depends="doc">
 		<mkdir dir="target/site"/>
 		<xsite sourceDirectoryPath="${basedir}/src/site" sitemapPath="src/content/sitemap.xml" skinPath="src/templates/skin.html" resourcePaths="src/resources" outputDirectoryPath="${basedir}/target/site" />
 	</target>

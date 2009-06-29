@@ -27,7 +27,6 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-		logger.info("Looking for resources, classes and interceptors in " + classesDirectory.getAbsolutePath());
 package br.com.caelum.vraptor.ioc.pico;
 
 import javax.servlet.ServletContext;
@@ -144,7 +143,7 @@ public class PicoProvider implements ContainerProvider {
 				container.getComponent(ConverterAcceptor.class) };
 
 		Loader loader = new WebInfClassesScanner(context, container.getComponent(DirScanner.class), acceptors);
-		loader.laodAll();
+		loader.loadAll();
 
 		container.start();
 	}

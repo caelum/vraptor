@@ -58,4 +58,9 @@ public class VRaptor2Converters implements Converters {
 		vraptor3.init();
 	}
 
+	public void register(Class<? extends Converter<?>> converterClass) {
+		throw new UnsupportedOperationException(
+				"cannot add vr3 converters in vr2 converters container (or should we delegate?");
+	}
+
 }

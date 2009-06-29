@@ -41,7 +41,8 @@ public class InterceptorAcceptor implements Acceptor {
 						+ " but this is neither an Interceptor nor an InterceptorSequence. Ignoring");
 			}
 		}
-		registry.register(interceptors);
+		if (!interceptors.isEmpty())
+			registry.register(interceptors);
 	}
 
 	private static List<Class<? extends Interceptor>> parseSequence(Class<?> type) {

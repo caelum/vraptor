@@ -85,7 +85,7 @@ public final class DefaultConverters implements Converters {
 		}
 	}
 
-	protected void register(Class<? extends Converter> converterClass) {
+	public void register(Class<? extends Converter<?>> converterClass) {
 		if (!converterClass.isAnnotationPresent(Convert.class)) {
 			throw new VRaptorException("The converter type " + converterClass.getName()
 					+ " should have the Convert annotation");

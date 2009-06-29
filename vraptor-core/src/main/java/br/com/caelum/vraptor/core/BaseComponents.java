@@ -52,25 +52,25 @@ import br.com.caelum.vraptor.validator.DefaultValidator;
 import br.com.caelum.vraptor.view.DefaultPathResolver;
 
 /**
- * List of base components to vraptor.<br/>
- * Those components should be available with any chosen ioc implementation.
- *
+ * List of base components to vraptor. Those components should be available with
+ * any chosen ioc implementation.
+ * 
  * @author guilherme silveira
  */
 public class BaseComponents {
 
-	private final static Map<Class<?>,Class<?>> DEFAULT_IMPLEMENTATIONS = new HashMap<Class<?>,Class<?>>();
+	private final static Map<Class<?>, Class<?>> DEFAULT_IMPLEMENTATIONS = new HashMap<Class<?>, Class<?>>();
 
 	static {
-		DEFAULT_IMPLEMENTATIONS.put(UrlToResourceTranslator.class,DefaultResourceTranslator.class);
-		DEFAULT_IMPLEMENTATIONS.put(Router.class,DefaultRouter.class);
-		DEFAULT_IMPLEMENTATIONS.put(ResourceNotFoundHandler.class,DefaultResourceNotFoundHandler.class);
-		DEFAULT_IMPLEMENTATIONS.put(InterceptorRegistry.class,DefaultInterceptorRegistry.class);
-		DEFAULT_IMPLEMENTATIONS.put(ParameterNameProvider.class,ParanamerNameProvider.class);
-		DEFAULT_IMPLEMENTATIONS.put(Converters.class,DefaultConverters.class);
-		DEFAULT_IMPLEMENTATIONS.put(RoutesConfiguration.class,NoRoutesConfiguration.class);
-		DEFAULT_IMPLEMENTATIONS.put(RoutesParser.class,PathAnnotationRoutesParser.class);
-		DEFAULT_IMPLEMENTATIONS.put(Proxifier.class,DefaultProxifier.class);
+		DEFAULT_IMPLEMENTATIONS.put(UrlToResourceTranslator.class, DefaultResourceTranslator.class);
+		DEFAULT_IMPLEMENTATIONS.put(Router.class, DefaultRouter.class);
+		DEFAULT_IMPLEMENTATIONS.put(ResourceNotFoundHandler.class, DefaultResourceNotFoundHandler.class);
+		DEFAULT_IMPLEMENTATIONS.put(InterceptorRegistry.class, DefaultInterceptorRegistry.class);
+		DEFAULT_IMPLEMENTATIONS.put(ParameterNameProvider.class, ParanamerNameProvider.class);
+		DEFAULT_IMPLEMENTATIONS.put(Converters.class, DefaultConverters.class);
+		DEFAULT_IMPLEMENTATIONS.put(RoutesConfiguration.class, NoRoutesConfiguration.class);
+		DEFAULT_IMPLEMENTATIONS.put(RoutesParser.class, PathAnnotationRoutesParser.class);
+		DEFAULT_IMPLEMENTATIONS.put(Proxifier.class, DefaultProxifier.class);
 	}
 
 	public static Collection<Class<?>> getApplicationScoped() {
@@ -85,7 +85,7 @@ public class BaseComponents {
 	public static Class[] getRequestScoped() {
 		return new Class[] { DefaultPathResolver.class, DefaultMethodInfo.class, DefaultInterceptorStack.class,
 				DefaultRequestExecution.class, DefaultResult.class, OgnlParametersProvider.class,
-				DefaultMethodInfo.class, DefaultValidator.class, JstlLocalization.class};
+				DefaultMethodInfo.class, DefaultValidator.class, JstlLocalization.class };
 	}
 
 }

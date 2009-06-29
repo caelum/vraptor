@@ -41,15 +41,17 @@ import br.com.caelum.vraptor.ioc.Container;
  */
 public interface Converters {
 
-    /**
-     * Extracts a converter for this specific type.
-     * 
-     * @param type
-     * @param container 
-     * @return
-     */
-    Converter<?> to(Class<?> type, Container container);
+	/**
+	 * Extracts a converter for this specific type.
+	 * 
+	 * @param type
+	 * @param container
+	 * @return
+	 */
+	Converter<?> to(Class<?> type, Container container);
 
-    void init();
+	void init();
+
+	void register(Class<? extends Converter<?>> converterClass);
 
 }

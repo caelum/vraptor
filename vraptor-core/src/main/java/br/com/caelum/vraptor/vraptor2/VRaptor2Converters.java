@@ -22,40 +22,40 @@ import br.com.caelum.vraptor.ioc.Container;
 @ApplicationScoped
 public class VRaptor2Converters implements Converters {
 
-    private final Converters vraptor3;
-    private final List<org.vraptor.converter.Converter> converterList = new ArrayList<org.vraptor.converter.Converter>();
+	private final Converters vraptor3;
+	private final List<org.vraptor.converter.Converter> converterList = new ArrayList<org.vraptor.converter.Converter>();
 
-    public VRaptor2Converters(Config config, ComponentRegistry container) throws ClassNotFoundException,
-            InstantiationException, IllegalAccessException {
-        this(config, new DefaultConverters(container));
-    }
-    
-    @SuppressWarnings("unchecked")
-    public VRaptor2Converters(Config config, Converters delegateConverters) throws InstantiationException,
-            IllegalAccessException, ClassNotFoundException {
-        this.vraptor3 = delegateConverters;
-        List<String> list = config.getConverters();
-        for (String l : list) {
-            Class<? extends org.vraptor.converter.Converter> converterType = (Class<? extends org.vraptor.converter.Converter>) Class
-                    .forName(l);
-            converterList.add(converterType.newInstance());
-        }
-    }
+	public VRaptor2Converters(Config config, ComponentRegistry container) throws ClassNotFoundException,
+			InstantiationException, IllegalAccessException {
+		this(config, new DefaultConverters(container));
+	}
 
-    public Converter<?> to(Class<?> type, Container container) {
-        for (org.vraptor.converter.Converter converter : converterList) {
-            for (Class<?> supported : converter.getSupportedTypes()) {
-                if (supported.isAssignableFrom(type)) {
-                    return new ConverterWrapper(converter);
-                }
-            }
-        }
-        return vraptor3.to(type, container);
-    }
+	@SuppressWarnings("unchecked")
+	public VRaptor2Converters(Config config, Converters delegateConverters) throws InstantiationException,
+			IllegalAccessException, ClassNotFoundException {
+		this.vraptor3 = delegateConverters;
+		List<String> list = config.getConverters();
+		for (String l : list) {
+			Class<? extends org.vraptor.converter.Converter> converterType = (Class<? extends org.vraptor.converter.Converter>) Class
+					.forName(l);
+			converterList.add(converterType.newInstance());
+		}
+	}
 
-    @PostConstruct
-    public void init() {
-        vraptor3.init();
-    }
+	public Converter<?> to(Class<?> type, Container container) {
+		for (org.vraptor.converter.Converter converter : converterList) {
+			for (Class<?> supported : converter.getSupportedTypes()) {
+				if (supported.isAssignableFrom(type)) {
+					return new ConverterWrapper(converter);
+				}
+			}
+		}
+		return vraptor3.to(type, container);
+	}
+
+	@PostConstruct
+	public void init() {
+		vraptor3.init();
+	}
 
 }

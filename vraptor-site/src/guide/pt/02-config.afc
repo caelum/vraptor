@@ -1,16 +1,18 @@
 [chapter Configuração básica]
 
-As configurações necessárias para usar o VRaptor 3 são mínimas, só é essencial a
+As configurações necessárias para usar o VRaptor 3 são mínimas. Só é essencial a
 definição de um filtro no %%web.xml%%. Aqui veremos também algumas configurações
 extras, que são opcionais.
 
 [section Seu recurso]
 
-Cada recurso no VRaptor3 funciona como uma classe na qual você escreve suas lógicas de negócio e que ficam acessíveis para o usuário a partir de
-uma determinada URI. Ao final da execução de cada lógica do seu recurso, o usuário é enviado para uma página que exibe o resultado final do processo.
+Cada recurso no VRaptor3 funciona como uma classe na qual você escreve suas lógicas 
+de negócio e que ficam acessíveis para o usuário a partir de uma determinada URI. Ao 
+final da execução de cada lógica do seu recurso, o usuário é enviado para uma página 
+que exibe o resultado final do processo.
 
-Para escrever um recurso simples no VRaptor3, nós não precisamos de muito esforço, basta criarmos uma classe e anotarmos essa classe com a anotação
-::@Resource::
+Para escrever um recurso simples no VRaptor3, nós não precisamos de muito esforço, basta 
+criarmos uma classe e anotarmos essa classe com a anotação %%@Resource%%.
 
 [code]
 @Resource
@@ -25,24 +27,29 @@ public class FuncionarioController {
 }
 [/code]
 
-No exemplo acima, FuncionarioController é um recurso, e os métodos listaTodos e adiciona são as lógicas.
+No exemplo acima, %%FuncionarioController%% é um recurso, e os métodos %%listaTodos%% e 
+%%adiciona%% são as lógicas.
 
 [section Arquivo de mensagens]
 
-Internacionalização (i18n) é um recurso poderoso, e que está presente em quase todos os frameworks web hoje em dia. E não é diferente no VRaptor3.
-Com i18n podemos fazer com que nossa aplicação suporte várias línguas (francês, português, espanhol, inglês etc) de uma maneira que não nos
-cause muito esforço, bastando apenas fazermos a tradução das mensagens da nossa aplicação.
-Para isso basta criarmos um arquivo chamado ::messages.properties:: e disponibiliza-lo no classpath da nossa aplicação ( WEB-INF/classes ).
-O conteúdo desse arquivo são várias linhas compostas por um conjunto de chave/valor, como por exemplo:
+Internacionalização (::i18n::) é um recurso poderoso, e que está presente em quase todos os frameworks 
+Web hoje em dia. E não é diferente no VRaptor3. Com i18n podemos fazer com que nossa aplicação suporte
+várias línguas (francês, português, espanhol, inglês etc) de uma maneira que não nos cause muito esforço, 
+bastando apenas fazermos a tradução das mensagens da nossa aplicação. 
+
+Para isso basta criarmos um arquivo chamado ::messages.properties:: e disponibilizá-lo no classpath da 
+nossa aplicação (%%WEB-INF/classes%%). O conteúdo desse arquivo são várias linhas compostas por um conjunto 
+de chave/valor, como por exemplo:
 
 [code]
 campo.nomeUsuario = Nome de Usuário
 campo.senha = Senha
 [/code]
 
-Até então está fácil, mas e se quisermos criar esses arquivos para várias linguas, como por exemplo, inglês? Simples, basta criarmos um outro arquivo
-.properties chamado messages_en.properties. Repare no sufixo ::_en:: no nome do arquivo. Isso indica que quando o usuário acessar sua aplicação
-através de uma máquina configurada com locale em inglês as mensagens desse arquivo serão utilizadas. O conteúdo desse arquivo então ficaria:
+Até então está fácil, mas e se quisermos criar esses arquivos para várias línguas, como por exemplo, inglês?
+Simples, basta criarmos um outro arquivo properties chamado %%messages_en.properties%%. Repare no sufixo 
+::_en:: no nome do arquivo. Isso indica que quando o usuário acessar sua aplicação através de uma máquina 
+configurada com locale em inglês as mensagens desse arquivo serão utilizadas. O conteúdo desse arquivo então ficaria:
 
 [code]
 campo.nomeUsuario = Username
@@ -51,7 +58,7 @@ campo.senha = Password
 
 Repare que as chaves são mantidas, mudando apenas o valor para a língua escolhida.
 
-Para usar essas mensagens em seus arquivos .jsp, você pode utilizar a JSTL. Dessa forma, o código ficaria:
+Para usar essas mensagens em seus arquivos JSP, você pode utilizar a JSTL. Dessa forma, o código ficaria:
 
 [code]
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>

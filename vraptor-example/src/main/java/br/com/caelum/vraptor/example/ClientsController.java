@@ -62,9 +62,6 @@ public class ClientsController {
 		this.validator = validator;
 	}
 
-	public void form() {
-	}
-
 	@Get
 	@Path("/clients")
 	public Collection<Client> list() {
@@ -74,7 +71,7 @@ public class ClientsController {
 	@Post
 	@Path("/clients")
 	public void add(final Client client) {
-		validator.onError().goTo(ClientsController.class).form();
+		validator.onError().goTo(ClientsController.class).list();
 		if(client.getName().equals("guilherme")) {
 			validator.add(new ValidationMessage("", "ha!"));
 		}

@@ -1,6 +1,7 @@
 package org.hamcrest;
 
 import java.io.IOException;
+import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 /**
@@ -57,7 +58,13 @@ public class ResourceBundleDescription extends BaseDescription {
 		}
 		String parsed = ((st > 0) || (len < text.length())) ? text.substring(st, len) : text;
 		if (parsed.length() != 0) {
-			super.appendText(bundle.getString(parsed.replace(' ', '_')));
+			String keyValue = parsed.replace(' ', '_');
+			try {
+				String value = bundle.getString(keyValue);
+				super.appendText(value);
+			} catch (MissingResourceException ex) {
+				super.appendText("???" + keyValue +"???");
+			}
 		}
 		while (len != text.length()) {
 			append(val[len++]);

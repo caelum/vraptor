@@ -1,21 +1,20 @@
 [chapter VRaptor3 - o guia inicial de 5 minutos]
 
 O VRaptor 3 foca em simplicidade e, portanto, todas as funcionalidades que você verá 
-tem como primeira meta resolver o problema do programador da maneira menos intrusiva 
+têm como primeira meta resolver o problema do programador da maneira menos intrusiva 
 possível em seu código. 
 
-Tanto para saver, remover, buscar e atualizar ou ainda funcionalidades que 
+Tanto para salvar, remover, buscar e atualizar ou ainda funcionalidades que 
 costumam ser mais complexas como upload e download de arquivos, resultados em 
 formatos diferentes (xml, json, xhtml etc), tudo isso é feito através de funcionalidades 
 simples do VRaptor 3, que sempre procuram encapsular %%HttpServletRequest%%,
-%%Response%%. %%Session%% e toda a api do %%javax.servlet%%. 
+%%Response%%, %%Session%% e toda a API do %%javax.servlet%%. 
 
 [section Inserindo numa base de dados]
 
-Considere que para persistir dados de nosso catálogo de músicas em nossa base de dados
-temos uma classe que vai ser responsável a agir como um ::Controller:: entre
-a nossa camada de apresenção (um JSP) e nosso modelo (classe %%Music%% e um dao
-chamado %%MusicDao%%):
+Considere que, para persistir dados de nosso catálogo de músicas em nossa base de dados,
+temos uma classe que vai agir como um ::Controller:: entre a nossa camada de apresenção 
+(um JSP) e nosso modelo (classe %%Music%% e um DAO chamado %%MusicDao%%):
 
 [java]
 @Resource
@@ -34,32 +33,32 @@ public class MusicController {
 [/java]
 
 Utilizamos então a anotação %%@Resource%% para definir que essa classe
-poderá ser, de alguma forma, acessada via web.
+poderá ser, de alguma forma, acessada via Web.
 
-Pronto. O VRaptor será capaz de, através de seu container de Injecao de Dependencias,
+Pronto. O VRaptor será capaz de, através de seu container de Injeção de Dependências,
 passar um %%MusicDao%% para seu construtor, e invocar o método %%add%% com os parâmetros
 adequados de acordo com o que estiver no %%HttpServletRequest%%.
 
-Se os parâmetros do request forem %%music.name%%, %%music.artist%% e %%music.genre%%, os
+Se os parâmetros do request forem %%music.name%%, %%music.artist%% e %%music.genre%%,
 um objeto %%music%% será instanciado e seus respectivos ::setters:: invocados.
 
 [box Reflection no nome dos parâmetros]
-Infelizmente o Java não realiza reflection em cima de parâmetros, esses dados não ficam
-dispíveis em bytecode (a não ser se compilado em debug mode, porém é algo opcional). Isso
+Infelizmente, o Java não realiza reflection em cima de parâmetros, esses dados não ficam
+disponíveis em bytecode (a não ser se compilado em debug mode, porém é algo opcional). Isso
 faz com que a maioria dos frameworks que precisam desse tipo de informção criem uma anotação
 própria para isso, o que polui muito o código (exemplo no JAX-WS, onde é comum encontrar um
 método como o acima com a assinatura  %%void add(@WebParam(name="music") Music music)%%.
 
-O VRaptor tira proveito do framework Paranamer, que consegue tirar essaa informação através
-de pré compilação ou dos dados de debug, evitando criar mais uma anotação. Alguns dos 
-desenvolvedores do VRaptor também participam no desenvolvimento do Paranamer.
+O VRaptor tira proveito do framework Paranamer (http://paranamer.codehaus.org), que consegue 
+tirar essaa informação através de pré compilação ou dos dados de debug, evitando criar mais uma 
+anotação. Alguns dos desenvolvedores do VRaptor também participam no desenvolvimento do Paranamer.
 [/box]
 
 [TODO colocar exemplo completo aqui, com JSPs e com o DAO]
 
 [section para finalizar: o web.xml]
 
-No %%web.xml%% precisamos apenas adicionar o filtro do VRaptor3, da seguinte forma:
+No %%web.xml%%, precisamos apenas adicionar o filtro do VRaptor3, da seguinte forma:
 
 [xml]
 <?xml version="1.0" encoding="UTF-8"?>

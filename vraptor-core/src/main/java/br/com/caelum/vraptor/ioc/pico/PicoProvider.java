@@ -161,4 +161,7 @@ public class PicoProvider implements ContainerProvider {
 		return this.container.getComponent(PicoContainersProvider.class);
 	}
 
+	protected MutablePicoContainer getContainer() {
+		return container;
+	}
 }

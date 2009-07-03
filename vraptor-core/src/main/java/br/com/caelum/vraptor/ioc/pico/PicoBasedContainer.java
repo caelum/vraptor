@@ -56,5 +56,9 @@ public class PicoBasedContainer implements Container {
     public <T> T instanceFor(Class<T> type) {
         return container.getComponent(type);
     }
+    
+    public MutablePicoContainer getContainer() {
+		return container;
+	}
 
 }

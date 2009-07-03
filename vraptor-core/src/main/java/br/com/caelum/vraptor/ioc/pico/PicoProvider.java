@@ -157,7 +157,7 @@ public class PicoProvider implements ContainerProvider {
 		container.dispose();
 	}
 
-	private PicoContainersProvider getContainers() {
+	protected PicoContainersProvider getContainers() {
 		return this.container.getComponent(PicoContainersProvider.class);
 	}
 

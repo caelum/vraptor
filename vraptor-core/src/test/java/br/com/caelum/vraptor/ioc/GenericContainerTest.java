@@ -29,6 +29,8 @@ package br.com.caelum.vraptor.ioc;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -40,12 +42,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
 import org.jmock.Mockery;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.*;
+import static org.junit.Assert.*;
 
 import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.Result;
@@ -89,152 +88,160 @@ import br.com.caelum.vraptor.view.PathResolver;
 @Ignore
 public abstract class GenericContainerTest {
 
-	protected Mockery mockery;
+    protected Mockery mockery;
 
-	protected ContainerProvider provider;
+    protected ContainerProvider provider;
 
-	protected ServletContext context;
+    protected ServletContext context;
 
-	protected abstract ContainerProvider getProvider();
+    protected abstract ContainerProvider getProvider();
 
-	protected abstract <T> T executeInsideRequest(WhatToDo<T> execution);
+    protected abstract <T> T executeInsideRequest(WhatToDo<T> execution);
 
-	protected abstract void configureExpectations();
+    protected abstract void configureExpectations();
 
-	@SuppressWarnings("unchecked")
-	@Test
-	public void canProvideAllApplicationScopedComponents() {
-		List<Class<?>> components = Arrays.asList(ServletContext.class, UrlToResourceTranslator.class,
-				Router.class, TypeCreator.class, InterceptorRegistry.class, ParameterNameProvider.class,
-				Converters.class, EmptyElementsRemoval.class, NoRoutesConfiguration.class,
-				ResourceNotFoundHandler.class);
-		checkAvailabilityFor(true, components);
-		checkAvailabilityFor(true, BaseComponents.getApplicationScoped());
-		mockery.assertIsSatisfied();
-	}
+    @SuppressWarnings("unchecked")
+    @Test
+    public void canProvideAllApplicationScopedComponents() {
+        List<Class<?>> components = Arrays.asList(ServletContext.class, UrlToResourceTranslator.class,
+                Router.class, TypeCreator.class, InterceptorRegistry.class, ParameterNameProvider.class,
+                Converters.class, EmptyElementsRemoval.class, NoRoutesConfiguration.class,
+                ResourceNotFoundHandler.class);
+        checkAvailabilityFor(true, components);
+        checkAvailabilityFor(true, BaseComponents.getApplicationScoped());
+        mockery.assertIsSatisfied();
+    }
 
-	@SuppressWarnings("unchecked")
-	@Test
-	public void canProvideAllRequestScopedComponents() {
-		List<Class<?>> components = Arrays.asList(HttpServletRequest.class, HttpServletResponse.class, 
-				RequestInfo.class, HttpSession.class, ParametersInstantiatorInterceptor.class,
-				InterceptorListPriorToExecutionExtractor.class, URLParameterExtractorInterceptor.class,
-				InterceptorStack.class, RequestExecution.class, ResourceLookupInterceptor.class,
-				InstantiateInterceptor.class, Result.class, ExecuteMethodInterceptor.class, 
-				PageResult.class, ParametersProvider.class, MethodInfo.class, Validator.class, 
-				PathResolver.class, ForwardToDefaultViewInterceptor.class, LogicResult.class, 
-				MultipartInterceptor.class, DownloadInterceptor.class);
-		checkAvailabilityFor(false, components);
-		mockery.assertIsSatisfied();
-	}
+    @SuppressWarnings("unchecked")
+    @Test
+    public void canProvideAllRequestScopedComponents() {
+        List<Class<?>> components = Arrays.asList(HttpServletRequest.class, HttpServletResponse.class,
+                RequestInfo.class, HttpSession.class, ParametersInstantiatorInterceptor.class,
+                InterceptorListPriorToExecutionExtractor.class, URLParameterExtractorInterceptor.class,
+                InterceptorStack.class, RequestExecution.class, ResourceLookupInterceptor.class,
+                InstantiateInterceptor.class, Result.class, ExecuteMethodInterceptor.class,
+                PageResult.class, ParametersProvider.class, MethodInfo.class, Validator.class,
+                PathResolver.class, ForwardToDefaultViewInterceptor.class, LogicResult.class,
+                MultipartInterceptor.class, DownloadInterceptor.class);
+        checkAvailabilityFor(false, components);
+        mockery.assertIsSatisfied();
+    }
 
-	@ApplicationScoped
-	public static class MyAppComponent {
+    @ApplicationScoped
+    public static class MyAppComponent {
 
-	}
+    }
 
-	@Test
-	public void processesCorrectlyAppBasedComponents() {
-		checkAvailabilityFor(true, MyAppComponent.class, MyAppComponent.class);
-		mockery.assertIsSatisfied();
-	}
+    @Test
+    public void processesCorrectlyAppBasedComponents() {
+        checkAvailabilityFor(true, MyAppComponent.class, MyAppComponent.class);
+        mockery.assertIsSatisfied();
+    }
 
-	@Component
-	public static class MyRequestComponent {
+    @Component
+    public static class MyRequestComponent {
 
-	}
+    }
 
-	@Test
-	public void processesCorrectlyRequestBasedComponents() {
-		checkAvailabilityFor(false, MyRequestComponent.class, MyRequestComponent.class);
-		mockery.assertIsSatisfied();
-	}
+    @Test
+    public void processesCorrectlyRequestBasedComponents() {
+        checkAvailabilityFor(false, MyRequestComponent.class, MyRequestComponent.class);
+        mockery.assertIsSatisfied();
+    }
 
-	@Before
-	public void setup() throws Exception {
-		this.mockery = new Mockery();
-		this.context = mockery.mock(ServletContext.class, "servlet context");
-		configureExpectations();
-		provider = getProvider();
-		try {
-			provider.start(context);
-		} catch (Exception e) {
-			// so there is no exception on shutdown
-			provider = null;
-			throw e;
-		}
-	}
+    @Test
+    public void supportsComponentFactoriesForCustomInstantiation() {
+        NeedsCustomInstantiation component = registerAndGetFromContainer(NeedsCustomInstantiation.class, TheComponentFactory.class);
+        assertThat(component, is(notNullValue()));
+    }
 
-	@After
-	public void tearDown() {
-		if (provider != null) {
-			provider.stop();
-			provider = null;
-		}
-	}
+    @Before
+    public void setup() throws Exception {
+        this.mockery = new Mockery();
+        this.context = mockery.mock(ServletContext.class, "servlet context");
+        configureExpectations();
+        provider = getProvider();
+        try {
+            provider.start(context);
+        } catch (Exception e) {
+            // so there is no exception on shutdown
+            provider = null;
+            throw e;
+        }
+    }
 
-	private <T> void checkAvailabilityFor(final boolean shouldBeTheSame, final Class<T> component,
-			final Class<? super T> componentToRegister) {
+    @After
+    public void tearDown() {
+        if (provider != null) {
+            provider.stop();
+            provider = null;
+        }
+    }
 
-		T firstInstance = executeInsideRequest(new WhatToDo<T>() {
-			public T execute(RequestInfo request, final int counter) {
+    private <T> void checkAvailabilityFor(final boolean shouldBeTheSame, final Class<T> component,
+                                          final Class<? super T> componentToRegister) {
 
-				return provider.provideForRequest(request, new Execution<T>() {
-					public T insideRequest(Container firstContainer) {
-						if (componentToRegister != null) {
-							ComponentRegistry registry = firstContainer.instanceFor(ComponentRegistry.class);
-							registry.register(componentToRegister, componentToRegister);
-						}
-						ResourceMethod firstMethod = mockery.mock(ResourceMethod.class, "rm" + counter);
-						firstContainer.instanceFor(MethodInfo.class).setResourceMethod(firstMethod);
-						return firstContainer.instanceFor(component);
-					}
-				});
+        T firstInstance = registerAndGetFromContainer(component, componentToRegister);
+        T secondInstance = executeInsideRequest(new WhatToDo<T>() {
+            public T execute(RequestInfo request, final int counter) {
 
-			}
-		});
+                return provider.provideForRequest(request, new Execution<T>() {
+                    public T insideRequest(Container secondContainer) {
+                        if (componentToRegister != null && !isAppScoped(secondContainer, componentToRegister)) {
+                            ComponentRegistry registry = secondContainer.instanceFor(ComponentRegistry.class);
+                            registry.register(componentToRegister, componentToRegister);
+                        }
 
-		T secondInstance = executeInsideRequest(new WhatToDo<T>() {
-			public T execute(RequestInfo request, final int counter) {
+                        ResourceMethod secondMethod = mockery.mock(ResourceMethod.class, "rm" + counter);
+                        secondContainer.instanceFor(MethodInfo.class).setResourceMethod(secondMethod);
+                        return secondContainer.instanceFor(component);
+                    }
+                });
 
-				return provider.provideForRequest(request, new Execution<T>() {
-					public T insideRequest(Container secondContainer) {
-						if (componentToRegister != null && !isAppScoped(secondContainer, componentToRegister)) {
-							ComponentRegistry registry = secondContainer.instanceFor(ComponentRegistry.class);
-							registry.register(componentToRegister, componentToRegister);
-						}
+            }
+        });
 
-						ResourceMethod secondMethod = mockery.mock(ResourceMethod.class, "rm" + counter);
-						secondContainer.instanceFor(MethodInfo.class).setResourceMethod(secondMethod);
-						return secondContainer.instanceFor(component);
-					}
-				});
+        checkSimilarity(component, shouldBeTheSame, firstInstance, secondInstance);
+    }
 
-			}
-		});
+    private <T> T registerAndGetFromContainer(final Class<T> component, final Class<?> componentToRegister) {
+        return executeInsideRequest(new WhatToDo<T>() {
+            public T execute(RequestInfo request, final int counter) {
 
-		checkSimilarity(component, shouldBeTheSame, firstInstance, secondInstance);
-	}
+                return provider.provideForRequest(request, new Execution<T>() {
+                    public T insideRequest(Container firstContainer) {
+                        if (componentToRegister != null) {
+                            ComponentRegistry registry = firstContainer.instanceFor(ComponentRegistry.class);
+                            registry.register(componentToRegister, componentToRegister);
+                        }
+                        ResourceMethod firstMethod = mockery.mock(ResourceMethod.class, "rm" + counter);
+                        firstContainer.instanceFor(MethodInfo.class).setResourceMethod(firstMethod);
+                        return firstContainer.instanceFor(component);
+                    }
+                });
 
-	private boolean isAppScoped(Container secondContainer, Class<?> componentToRegister) {
-		return secondContainer.instanceFor(componentToRegister) != null;
-	}
+            }
+        });
+    }
 
-	private void checkSimilarity(Class<?> component, boolean shouldBeTheSame, Object firstInstance,
-			Object secondInstance) {
-		if (shouldBeTheSame) {
-			MatcherAssert.assertThat("Should be the same instance for " + component.getName(), firstInstance, Matchers
-					.is(equalTo(secondInstance)));
-		} else {
-			MatcherAssert.assertThat("Should not be the same instance for " + component.getName(), firstInstance,
-					Matchers.is(not(equalTo(secondInstance))));
-		}
-	}
+    private boolean isAppScoped(Container secondContainer, Class<?> componentToRegister) {
+        return secondContainer.instanceFor(componentToRegister) != null;
+    }
 
-	protected void checkAvailabilityFor(boolean shouldBeTheSame, Collection<Class<?>> components) {
-		for (Class<?> component : components) {
-			checkAvailabilityFor(shouldBeTheSame, component, null);
-		}
-	}
+    private void checkSimilarity(Class<?> component, boolean shouldBeTheSame, Object firstInstance,
+                                 Object secondInstance) {
+        if (shouldBeTheSame) {
+            MatcherAssert.assertThat("Should be the same instance for " + component.getName(), firstInstance,
+                    is(equalTo(secondInstance)));
+        } else {
+            MatcherAssert.assertThat("Should not be the same instance for " + component.getName(), firstInstance,
+                    is(not(equalTo(secondInstance))));
+        }
+    }
 
+    protected void checkAvailabilityFor(boolean shouldBeTheSame, Collection<Class<?>> components) {
+        for (Class<?> component : components) {
+            checkAvailabilityFor(shouldBeTheSame, component, null);
+        }
+    }
 }

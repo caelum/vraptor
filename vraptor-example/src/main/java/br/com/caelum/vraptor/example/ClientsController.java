@@ -121,4 +121,7 @@ public class ClientsController {
 		return repository.find(client.getId()).getFile().getFile();
 	}
 
+    public void form() {
+        // TODO
+    }
 }

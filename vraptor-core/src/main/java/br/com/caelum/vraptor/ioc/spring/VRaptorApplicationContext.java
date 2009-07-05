@@ -1,7 +1,7 @@
 /***
- * 
+ *
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  * 1. Redistributions of source code must retain the above copyright notice,
@@ -12,7 +12,7 @@
  * copyright holders nor the names of its contributors may be used to endorse or
  * promote products derived from this software without specific prior written
  * permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -27,10 +27,31 @@
  */
 package br.com.caelum.vraptor.ioc.spring;
 
-import java.util.Map;
-
-import javax.servlet.ServletContext;
-
+import br.com.caelum.vraptor.core.BaseComponents;
+import br.com.caelum.vraptor.core.DefaultConverters;
+import br.com.caelum.vraptor.core.URLParameterExtractorInterceptor;
+import br.com.caelum.vraptor.extra.ForwardToDefaultViewInterceptor;
+import br.com.caelum.vraptor.http.DefaultResourceTranslator;
+import br.com.caelum.vraptor.http.ParanamerNameProvider;
+import br.com.caelum.vraptor.http.asm.AsmBasedTypeCreator;
+import br.com.caelum.vraptor.http.ognl.EmptyElementsRemoval;
+import br.com.caelum.vraptor.http.route.DefaultRouter;
+import br.com.caelum.vraptor.interceptor.DefaultInterceptorRegistry;
+import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
+import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
+import br.com.caelum.vraptor.interceptor.InterceptorListPriorToExecutionExtractor;
+import br.com.caelum.vraptor.interceptor.OutjectResult;
+import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
+import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
+import br.com.caelum.vraptor.interceptor.download.DownloadInterceptor;
+import br.com.caelum.vraptor.interceptor.multipart.DefaultMultipartConfig;
+import br.com.caelum.vraptor.interceptor.multipart.MultipartInterceptor;
+import br.com.caelum.vraptor.ioc.ComponentFactory;
+import br.com.caelum.vraptor.proxy.DefaultProxifier;
+import br.com.caelum.vraptor.view.DefaultLogicResult;
+import br.com.caelum.vraptor.view.DefaultPageResult;
+import br.com.caelum.vraptor.view.DefaultPathResolver;
+import br.com.caelum.vraptor.view.EmptyResult;
 import org.springframework.aop.config.AopConfigUtils;
 import org.springframework.aop.scope.ScopedProxyUtils;
 import org.springframework.beans.factory.BeanFactoryUtils;
@@ -52,30 +73,8 @@ import org.springframework.core.Ordered;
 import org.springframework.web.context.support.AbstractRefreshableWebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
-import br.com.caelum.vraptor.core.BaseComponents;
-import br.com.caelum.vraptor.core.DefaultConverters;
-import br.com.caelum.vraptor.core.URLParameterExtractorInterceptor;
-import br.com.caelum.vraptor.extra.ForwardToDefaultViewInterceptor;
-import br.com.caelum.vraptor.http.DefaultResourceTranslator;
-import br.com.caelum.vraptor.http.ParanamerNameProvider;
-import br.com.caelum.vraptor.http.asm.AsmBasedTypeCreator;
-import br.com.caelum.vraptor.http.ognl.EmptyElementsRemoval;
-import br.com.caelum.vraptor.http.route.DefaultRouter;
-import br.com.caelum.vraptor.interceptor.DefaultInterceptorRegistry;
-import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
-import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
-import br.com.caelum.vraptor.interceptor.InterceptorListPriorToExecutionExtractor;
-import br.com.caelum.vraptor.interceptor.OutjectResult;
-import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
-import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
-import br.com.caelum.vraptor.interceptor.download.DownloadInterceptor;
-import br.com.caelum.vraptor.interceptor.multipart.DefaultMultipartConfig;
-import br.com.caelum.vraptor.interceptor.multipart.MultipartInterceptor;
-import br.com.caelum.vraptor.proxy.DefaultProxifier;
-import br.com.caelum.vraptor.view.DefaultLogicResult;
-import br.com.caelum.vraptor.view.DefaultPageResult;
-import br.com.caelum.vraptor.view.DefaultPathResolver;
-import br.com.caelum.vraptor.view.EmptyResult;
+import javax.servlet.ServletContext;
+import java.util.Map;
 
 /**
  * @author Fabio Kung
@@ -119,9 +118,9 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
         registerOn(beanFactory, DefaultPathResolver.class);
         registerOn(beanFactory, ParanamerNameProvider.class);
         registerOn(beanFactory, DefaultConverters.class);
-		for (Class<?> type : BaseComponents.getApplicationScoped()) {
-			registerOn(beanFactory, type);
-		}
+        for (Class<?> type : BaseComponents.getApplicationScoped()) {
+            registerOn(beanFactory, type);
+        }
         registerOn(beanFactory, EmptyElementsRemoval.class);
         registerOn(beanFactory, ResourcesHolder.class);
         registerOn(beanFactory, ResourceFinder.class);
@@ -130,9 +129,9 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
     }
 
     private void registerRequestScopedComponentsOn(DefaultListableBeanFactory beanFactory) {
-		for (Class<?> type : BaseComponents.getRequestScoped()) {
-			registerOn(beanFactory, type);
-		}
+        for (Class<?> type : BaseComponents.getRequestScoped()) {
+            registerOn(beanFactory, type);
+        }
         registerOn(beanFactory, AsmBasedTypeCreator.class);
         registerOn(beanFactory, ParametersInstantiatorInterceptor.class);
         registerOn(beanFactory, InterceptorListPriorToExecutionExtractor.class);
@@ -155,8 +154,11 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
         beanFactory.registerSingleton(SpringBasedContainer.class.getName(), container);
     }
 
-    public void register(Class<?> type) {
+    public void register(final Class<?> type) {
         registerOn((BeanDefinitionRegistry) getBeanFactory(), type, true);
+        if (ComponentFactory.class.isAssignableFrom(type)) {
+            getBeanFactory().registerSingleton(type.getName(), new ComponentFactoryBean(container, type));
+        }
     }
 
     private void registerOn(BeanDefinitionRegistry registry, Class<?> type) {

@@ -85,14 +85,14 @@ public class ClientsController {
 		}});
 		repository.add(client);
 	}
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
 
 	@Delete
 	@Path("/clients/{client.id}")
@@ -101,21 +101,6 @@ public class ClientsController {
 		result.use(logic()).redirectTo(ClientsController.class).list();
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
 	@Get
 	@Path("/clients/{client.id}")
 	public void view(Client client) {

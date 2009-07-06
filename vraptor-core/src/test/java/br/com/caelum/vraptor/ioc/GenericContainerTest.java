@@ -149,9 +149,27 @@ public abstract class GenericContainerTest {
         mockery.assertIsSatisfied();
     }
 
+    @Component
+    public static class DependentOnSomethingFromComponentFactory {
+        private final NeedsCustomInstantiation dependency;
+        public DependentOnSomethingFromComponentFactory(NeedsCustomInstantiation dependency) {
+            this.dependency = dependency;
+        }
+    }
+
+
     @Test
     public void supportsComponentFactoriesForCustomInstantiation() {
-        NeedsCustomInstantiation component = registerAndGetFromContainer(NeedsCustomInstantiation.class, TheComponentFactory.class);
+        // TODO the registered component is only available in the next request with Pico. FIX IT!
+        registerAndGetFromContainer(Container.class, TheComponentFactory.class);
+        TheComponentFactory factory = registerAndGetFromContainer(TheComponentFactory.class, null);
+        assertThat(factory, is(notNullValue()));
+
+        DependentOnSomethingFromComponentFactory dependent =
+                registerAndGetFromContainer(DependentOnSomethingFromComponentFactory.class, null);
+        assertThat(dependent, is(notNullValue()));
+
+        NeedsCustomInstantiation component = registerAndGetFromContainer(NeedsCustomInstantiation.class, null);
         assertThat(component, is(notNullValue()));
     }
 

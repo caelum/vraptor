@@ -28,9 +28,10 @@
 package br.com.caelum.vraptor.ioc;
 
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertThat;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -43,8 +44,10 @@ import javax.servlet.http.HttpSession;
 
 import org.hamcrest.MatcherAssert;
 import org.jmock.Mockery;
-import org.junit.*;
-import static org.junit.Assert.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
 
 import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.Result;
@@ -161,16 +164,17 @@ public abstract class GenericContainerTest {
     @Test
     public void supportsComponentFactoriesForCustomInstantiation() {
         // TODO the registered component is only available in the next request with Pico. FIX IT!
-        registerAndGetFromContainer(Container.class, TheComponentFactory.class);
+        registerAndGetFromContainer(NeedsCustomInstantiation.class, TheComponentFactory.class);
         TheComponentFactory factory = registerAndGetFromContainer(TheComponentFactory.class, null);
         assertThat(factory, is(notNullValue()));
 
-        DependentOnSomethingFromComponentFactory dependent =
-                registerAndGetFromContainer(DependentOnSomethingFromComponentFactory.class, DependentOnSomethingFromComponentFactory.class);
-        assertThat(dependent, is(notNullValue()));
-
         NeedsCustomInstantiation component = registerAndGetFromContainer(NeedsCustomInstantiation.class, null);
         assertThat(component, is(notNullValue()));
+
+        registerAndGetFromContainer(DependentOnSomethingFromComponentFactory.class, DependentOnSomethingFromComponentFactory.class);
+        DependentOnSomethingFromComponentFactory dependent = registerAndGetFromContainer(DependentOnSomethingFromComponentFactory.class, null);
+        assertThat(dependent, is(notNullValue()));
+        assertThat(dependent.dependency, is(notNullValue()));
     }
 
     @Before
@@ -230,7 +234,7 @@ public abstract class GenericContainerTest {
                     public T insideRequest(Container firstContainer) {
                         if (componentToRegister != null) {
                             ComponentRegistry registry = firstContainer.instanceFor(ComponentRegistry.class);
-                            registry.register(componentToRegister, componentToRegister);
+                            registry.register(component, componentToRegister);
                         }
                         ResourceMethod firstMethod = mockery.mock(ResourceMethod.class, "rm" + counter);
                         firstContainer.instanceFor(MethodInfo.class).setResourceMethod(firstMethod);

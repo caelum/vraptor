@@ -146,9 +146,16 @@ public class PicoProvider implements ContainerProvider {
 
 		container.start();
 
-		Acceptor[] acceptors = { 
+		// TODO: hack, it should load everything during a single scan, marking the classes
+		// and then registering afterall.
+
+		logger.info("loading all @Components");
+		Loader componentLoader = new WebInfClassesScanner(context, container.getComponent(DirScanner.class), container.getComponent(ComponentAcceptor.class));
+ 		componentLoader.loadAll();
+
+		logger.info("loading other stereotyped classes (resources, interceptors, converters  and factories");
+		Acceptor[] acceptors = {
 				container.getComponent(ResourceAcceptor.class),
-				container.getComponent(ComponentAcceptor.class), 
 				container.getComponent(InterceptorAcceptor.class),
 				container.getComponent(ConverterAcceptor.class),
 				container.getComponent(ComponentFactoryAcceptor.class)

@@ -37,6 +37,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -279,6 +280,16 @@ public abstract class GenericContainerTest {
     		this.destroyed = true;
     	}
     }
+    
+    @Component
+    static public class StartableComponent {
+    	private boolean started;
+
+		@PostConstruct
+    	public void postConstruct() {
+    		this.started = true;
+    	}
+    }
 
 	@Test
 	public void shouldDisposeAfterRequest() {
@@ -286,4 +297,12 @@ public abstract class GenericContainerTest {
 		DisposableComponent comp = registerAndGetFromContainer(DisposableComponent.class, null);
 		assertThat(comp.destroyed, is(equalTo(true)));
 	}
+	
+	@Test
+	public void shouldStartBeforeRequestExecution() {
+		registerAndGetFromContainer(Container.class, StartableComponent.class);
+		StartableComponent comp = registerAndGetFromContainer(StartableComponent.class, null);
+		assertThat(comp.started, is(equalTo(true)));
+	}
+
 }

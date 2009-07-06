@@ -141,6 +141,7 @@ public class PicoProvider implements ContainerProvider {
 		PicoBasedContainer container = null;
 		try {
 			container = getContainers().provide(request);
+			container.getContainer().start();
 			return execution.insideRequest(container);
 		} finally {
 			if (container != null) {

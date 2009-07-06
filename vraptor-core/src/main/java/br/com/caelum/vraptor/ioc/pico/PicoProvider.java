@@ -124,6 +124,8 @@ public class PicoProvider implements ContainerProvider {
 		container.register(ComponentAcceptor.class, ComponentAcceptor.class);
 		container.register(InterceptorAcceptor.class, InterceptorAcceptor.class);
 		container.register(ConverterAcceptor.class, ConverterAcceptor.class);
+		container.register(ComponentFactoryRegistry.class, DefaultComponentFactoryRegistry.class);
+		container.register(ComponentFactoryAcceptor.class, ComponentFactoryAcceptor.class);
 	}
 
 	private void singleInterfaceRegister(Class<?> type, ComponentRegistry registry) {
@@ -144,9 +146,13 @@ public class PicoProvider implements ContainerProvider {
 
 		container.start();
 
-		Acceptor[] acceptors = new Acceptor[] { container.getComponent(ResourceAcceptor.class),
-				container.getComponent(ComponentAcceptor.class), container.getComponent(InterceptorAcceptor.class),
-				container.getComponent(ConverterAcceptor.class) };
+		Acceptor[] acceptors = { 
+				container.getComponent(ResourceAcceptor.class),
+				container.getComponent(ComponentAcceptor.class), 
+				container.getComponent(InterceptorAcceptor.class),
+				container.getComponent(ConverterAcceptor.class),
+				container.getComponent(ComponentFactoryAcceptor.class)
+		};
 
 		Loader loader = new WebInfClassesScanner(context, container.getComponent(DirScanner.class), acceptors);
 		loader.loadAll();

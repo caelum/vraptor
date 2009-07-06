@@ -49,6 +49,7 @@ import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
+import br.com.caelum.vraptor.ioc.ComponentFactory;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.SessionScoped;
 
@@ -58,6 +59,7 @@ import br.com.caelum.vraptor.ioc.SessionScoped;
  * 
  * @author Guilherme Silveira
  * @author Adriano Almeida
+ * @author Sérgio Lopes
  */
 public class PicoContainersProvider implements ComponentRegistry {
 
@@ -70,6 +72,8 @@ public class PicoContainersProvider implements ComponentRegistry {
 	private final Map<Class<?>, Class<?>> requestScoped = new HashMap<Class<?>, Class<?>>();
 	private final MutablePicoContainer appContainer;
 	private boolean initialized = false;
+
+	private ComponentFactoryRegistry componentFactoryRegistry;
 
 	public PicoContainersProvider(MutablePicoContainer container) {
 		this.appContainer = container;
@@ -87,11 +91,9 @@ public class PicoContainersProvider implements ComponentRegistry {
 			logger.debug("Registering " + type.getName() + " as an application component");
 			this.applicationScoped.put(requiredType, type);
 			if (initialized) {
-				logger
-						.warn("VRaptor was already initialized, the contexts were created but you are registering a component."
+				logger.warn("VRaptor was already initialized, the contexts were created but you are registering a component."
 								+ "This is nasty. The original component might already be in use."
-								+ "Avoid doing it: "
-								+ requiredType.getName());
+								+ "Avoid doing it: " + requiredType.getName());
 				this.appContainer.addComponent(type);
 			}
 		} else if (type.isAnnotationPresent(SessionScoped.class)) {
@@ -135,32 +137,53 @@ public class PicoContainersProvider implements ComponentRegistry {
 			requestContainer.addComponent(type);
 		}
 		requestContainer.addComponent(request).addComponent(request.getRequest()).addComponent(request.getResponse());
+		
+		registerComponentFactories(requestContainer, componentFactoryRegistry.getRequestScopedComponentFactoryMap());
+		
 		return new PicoBasedContainer(requestContainer, this.appContainer.getComponent(Router.class));
 	}
 
 	private MutablePicoContainer createSessionContainer(HttpSession session) {
 		MutablePicoContainer sessionContainer = new DefaultPicoContainer(new Caching(), new JavaEE5LifecycleStrategy(
 				new NullComponentMonitor()), this.appContainer);
+		
 		sessionContainer.addComponent(HttpSession.class, session);
 		session.setAttribute(CONTAINER_SESSION_KEY, sessionContainer);
+		
 		if (logger.isDebugEnabled()) {
 			logger.debug("Session components are " + sessionScoped);
 		}
+		
 		for (Class<?> requiredType : sessionScoped.keySet()) {
 			sessionContainer.addComponent(sessionScoped.get(requiredType));
 		}
+		
+		registerComponentFactories(sessionContainer, componentFactoryRegistry.getSessionScopedComponentFactoryMap());
+		
 		return sessionContainer;
+	}
+
+	private void registerComponentFactories(MutablePicoContainer container, Map<Class<?>, Class<? extends ComponentFactory<?>>> componentFactoryMap) {
+		for (Class<?> targetType : componentFactoryMap.keySet()) {
+			Class<? extends ComponentFactory<?>> componentFactoryClass = componentFactoryMap.get(targetType);
+			container.addAdapter(new PicoComponentAdapter(targetType, componentFactoryClass));
+		}
 	}
 
 	/**
 	 * Registers all application scoped elements into the container.
 	 */
 	public void init() {
+		
 		for (Class<?> requiredType : applicationScoped.keySet()) {
 			Class<?> type = applicationScoped.get(requiredType);
 			logger.debug("Initializing application scope with " + type);
 			this.appContainer.addComponent(type);
 		}
+		
+		componentFactoryRegistry = appContainer.getComponent(ComponentFactoryRegistry.class);
+		registerComponentFactories(appContainer, componentFactoryRegistry.getApplicationScopedComponentFactoryMap());
+		
 		logger.debug("Session components to initialize: " + sessionScoped.keySet());
 		logger.debug("Requets components to initialize: " + requestScoped.keySet());
 		this.initialized = true;

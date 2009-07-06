@@ -51,6 +51,8 @@ public class PicoContainersProviderTest {
         });
         this.webRequest = new RequestInfo(null, request, mockery.mock(HttpServletResponse.class));
         this.provider = new PicoContainersProvider(container);
+        this.provider.register(ComponentFactoryRegistry.class, DefaultComponentFactoryRegistry.class);
+        this.provider.init();
     }
 
     interface Base {
@@ -79,7 +81,6 @@ public class PicoContainersProviderTest {
     public void shouldRemovePreviouslyRegisteredComponentIfRegisteringAgainInAnotherScope() {
         provider.register(Base.class, MyFirstImplementation.class);
         provider.register(Base.class,AppImplementation.class);
-        provider.init();
         Container container = provider.provide(webRequest);
         Base instance = container.instanceFor(Base.class);
         assertThat(instance.getClass(), is(typeCompatibleWith(AppImplementation.class)));

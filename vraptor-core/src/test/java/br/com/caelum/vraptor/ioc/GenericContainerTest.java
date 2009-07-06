@@ -37,6 +37,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import javax.annotation.PreDestroy;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -268,4 +269,21 @@ public abstract class GenericContainerTest {
             checkAvailabilityFor(shouldBeTheSame, component, null);
         }
     }
+    
+    @Component
+    static public class DisposableComponent {
+    	private boolean destroyed;
+
+    	@PreDestroy
+    	public void preDestroy() {
+    		this.destroyed = true;
+    	}
+    }
+
+	@Test
+	public void shouldDisposeAfterRequest() {
+		registerAndGetFromContainer(Container.class, DisposableComponent.class);
+		DisposableComponent comp = registerAndGetFromContainer(DisposableComponent.class, null);
+		assertThat(comp.destroyed, is(equalTo(true)));
+	}
 }

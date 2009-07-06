@@ -123,7 +123,7 @@ public class PicoContainersProvider implements ComponentRegistry {
 		return false;
 	}
 
-	public Container provide(RequestInfo request) {
+	PicoBasedContainer provide(RequestInfo request) {
 		HttpSession session = request.getRequest().getSession();
 		MutablePicoContainer sessionScope = (MutablePicoContainer) session.getAttribute(CONTAINER_SESSION_KEY);
 		if (sessionScope == null) {

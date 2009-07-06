@@ -138,7 +138,15 @@ public class PicoProvider implements ContainerProvider {
 	}
 
 	public <T> T provideForRequest(RequestInfo request, Execution<T> execution) {
-		return execution.insideRequest(getContainers().provide(request));
+		PicoBasedContainer container = null;
+		try {
+			container = getContainers().provide(request);
+			return execution.insideRequest(container);
+		} finally {
+			if (container != null) {
+				container.getContainer().dispose();
+			}
+		}
 	}
 
 	public void start(ServletContext context) {

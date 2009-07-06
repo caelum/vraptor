@@ -166,7 +166,7 @@ public abstract class GenericContainerTest {
         assertThat(factory, is(notNullValue()));
 
         DependentOnSomethingFromComponentFactory dependent =
-                registerAndGetFromContainer(DependentOnSomethingFromComponentFactory.class, null);
+                registerAndGetFromContainer(DependentOnSomethingFromComponentFactory.class, DependentOnSomethingFromComponentFactory.class);
         assertThat(dependent, is(notNullValue()));
 
         NeedsCustomInstantiation component = registerAndGetFromContainer(NeedsCustomInstantiation.class, null);

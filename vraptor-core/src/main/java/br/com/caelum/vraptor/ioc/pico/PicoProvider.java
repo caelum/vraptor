@@ -145,7 +145,9 @@ public class PicoProvider implements ContainerProvider {
 			return execution.insideRequest(container);
 		} finally {
 			if (container != null) {
-				container.getContainer().dispose();
+				MutablePicoContainer picoContainer = container.getContainer();
+				picoContainer.stop();
+				picoContainer.dispose();
 			}
 		}
 	}

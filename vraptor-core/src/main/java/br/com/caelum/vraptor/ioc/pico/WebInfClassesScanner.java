@@ -39,11 +39,11 @@ import org.slf4j.LoggerFactory;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
 /**
- * Searchs forresources and components in the web's web-inf classes directory.
+ * Searchs for resources and components in the web's WEB-INF/classes directory.
  * Also interceptors
  * 
- * TODO: this should be refactored to use ASM or something like this to avoind
- * unecessary class loading. It could also use another classloader just to check
+ * TODO: this should be refactored to use ASM or something like this to avoid
+ * unnecessary class loading. It could also use another classloader just to check
  * for the necessary classes and then use the current classloader to load only
  * the needed ones.
  * 

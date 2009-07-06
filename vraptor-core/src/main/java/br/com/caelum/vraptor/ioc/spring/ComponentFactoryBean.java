@@ -3,6 +3,7 @@ package br.com.caelum.vraptor.ioc.spring;
 import br.com.caelum.vraptor.ioc.ComponentFactory;
 import br.com.caelum.vraptor.ioc.ComponentRegistrationException;
 import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor.ioc.ComponentFactoryIntrospector;
 import org.springframework.beans.factory.FactoryBean;
 
 import java.lang.reflect.ParameterizedType;
@@ -21,7 +22,7 @@ public class ComponentFactoryBean<T extends ComponentFactory> implements Factory
     public ComponentFactoryBean(Container container, Class<T> factoryType) {
         this.container = container;
         this.factoryType = factoryType;
-        this.targetType = targetTypeForComponentFactory(factoryType);
+        this.targetType = new ComponentFactoryIntrospector().targetTypeForComponentFactory(factoryType);
     }
 
     public Object getObject() {
@@ -35,28 +36,5 @@ public class ComponentFactoryBean<T extends ComponentFactory> implements Factory
     public boolean isSingleton() {
         return false;
     }
-
-    private Class targetTypeForComponentFactory(Class<?> type) {
-        Type[] interfaces = type.getGenericInterfaces();
-        for (Type implemented : interfaces) {
-            if (implemented instanceof ParameterizedType) {
-                Type rawType = ((ParameterizedType) implemented).getRawType();
-                Type[] typeArguments = ((ParameterizedType) implemented).getActualTypeArguments();
-                if (ComponentFactory.class.equals(rawType)) {
-                    if (typeArguments == null || typeArguments.length < 1) {
-                        throw new ComponentRegistrationException(
-                                "The class implementing ComponentFactory<T> must define the generic argument. Eg.: " +
-                                        "public class MyFactory implements ComponentFactory<MyComponent> { ... }");
-                    }
-                    return (Class) typeArguments[0];
-                }
-            }
-        }
-
-        throw new ComponentRegistrationException("Unable to determine target type, while trying to register " +
-                "the ComponentFactory: " + type + ". The class implementing ComponentFactory<T> must define the " +
-                "generic argument. Eg.: public class MyFactory implements ComponentFactory<MyComponent> { ... }");
-    }
-
 
 }

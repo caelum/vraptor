@@ -164,7 +164,8 @@ public abstract class GenericContainerTest {
     @Test
     public void supportsComponentFactoriesForCustomInstantiation() {
         // TODO the registered component is only available in the next request with Pico. FIX IT!
-        registerAndGetFromContainer(NeedsCustomInstantiation.class, TheComponentFactory.class);
+        registerAndGetFromContainer(Container.class, TheComponentFactory.class);
+        
         TheComponentFactory factory = registerAndGetFromContainer(TheComponentFactory.class, null);
         assertThat(factory, is(notNullValue()));
 
@@ -172,6 +173,7 @@ public abstract class GenericContainerTest {
         assertThat(component, is(notNullValue()));
 
         registerAndGetFromContainer(DependentOnSomethingFromComponentFactory.class, DependentOnSomethingFromComponentFactory.class);
+        
         DependentOnSomethingFromComponentFactory dependent = registerAndGetFromContainer(DependentOnSomethingFromComponentFactory.class, null);
         assertThat(dependent, is(notNullValue()));
         assertThat(dependent.dependency, is(notNullValue()));
@@ -226,7 +228,7 @@ public abstract class GenericContainerTest {
         checkSimilarity(component, shouldBeTheSame, firstInstance, secondInstance);
     }
 
-    private <T> T registerAndGetFromContainer(final Class<T> component, final Class<?> componentToRegister) {
+    private <T> T registerAndGetFromContainer(final Class<T> componentToBeRetrieved, final Class<?> componentToRegister) {
         return executeInsideRequest(new WhatToDo<T>() {
             public T execute(RequestInfo request, final int counter) {
 
@@ -234,11 +236,11 @@ public abstract class GenericContainerTest {
                     public T insideRequest(Container firstContainer) {
                         if (componentToRegister != null) {
                             ComponentRegistry registry = firstContainer.instanceFor(ComponentRegistry.class);
-                            registry.register(component, componentToRegister);
+                            registry.register(componentToRegister, componentToRegister);
                         }
                         ResourceMethod firstMethod = mockery.mock(ResourceMethod.class, "rm" + counter);
                         firstContainer.instanceFor(MethodInfo.class).setResourceMethod(firstMethod);
-                        return firstContainer.instanceFor(component);
+                        return firstContainer.instanceFor(componentToBeRetrieved);
                     }
                 });
 

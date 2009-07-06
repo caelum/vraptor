@@ -48,9 +48,7 @@ import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
-import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.ioc.ComponentFactory;
-import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.ioc.SessionScoped;
 
@@ -83,46 +81,8 @@ public class PicoContainersProvider implements ComponentRegistry {
 
 	@SuppressWarnings("unchecked")
 	public void register(Class<?> requiredType, Class<?> type) {
-		if (ComponentFactory.class.isAssignableFrom(type) && type.isAnnotationPresent(Component.class)) {
-			registerComponentFactory(requiredType, (Class<? extends ComponentFactory<?>>) type);
-		} else {
-			registerComponent(requiredType, type);
-		}
-	}
-
-	/**
-	 * Register a component factory 
-	 * @param requiredType
-	 * @param componentFactoryType.isAnnotationPresent(ApplicationScoped.class)
-	 */
-	private void registerComponentFactory(Class<?> requiredType, Class<? extends ComponentFactory<?>> componentFactoryType) {
-		if (componentFactoryType.isAnnotationPresent(ApplicationScoped.class)) {
-			Map<Class<?>, Class<? extends ComponentFactory<?>>> appComponentFactoryMap = componentFactoryRegistry.getApplicationScopedComponentFactoryMap();
-			if (appComponentFactoryMap.containsKey(requiredType)) {
-				logger.warn("VRaptor was already initialized, the contexts were created but you are registering a component."
-						+ "This is nasty. The original component might already be in use."
-						+ "Avoid doing it: " + requiredType.getName());
-			}
-			
-			registerComponent(componentFactoryType, componentFactoryType);
-			appComponentFactoryMap.put(requiredType, componentFactoryType);
-		} else if (componentFactoryType.isAnnotationPresent(ApplicationScoped.class)) {
-			registerComponent(componentFactoryType, componentFactoryType);
-			componentFactoryRegistry.getSessionScopedComponentFactoryMap().put(requiredType, componentFactoryType);
-		} else {
-			registerComponent(componentFactoryType, componentFactoryType);
-			componentFactoryRegistry.getRequestScopedComponentFactoryMap().put(requiredType, componentFactoryType);
-		}
-	}
-
-	/**
-	 * Normal component registration
-	 * @param requiredType
-	 * @param type
-	 */
-	private void registerComponent(Class<?> requiredType, Class<?> type) {
 		logger.debug("Registering " + requiredType.getName() + " with " + type.getName());
-
+		
 		boolean overriding = alreadyRegistered(requiredType);
 		if (overriding) {
 			logger.debug("Overriding interface " + requiredType.getName() + " with " + type.getName());
@@ -146,6 +106,10 @@ public class PicoContainersProvider implements ComponentRegistry {
 			}
 			logger.debug("Registering " + type.getName() + " as a request component");
 			this.requestScoped.put(requiredType, type);
+		}
+
+		if (ComponentFactory.class.isAssignableFrom(type)) {
+			componentFactoryRegistry.register((Class<? extends ComponentFactory<?>>) type);
 		}
 	}
 

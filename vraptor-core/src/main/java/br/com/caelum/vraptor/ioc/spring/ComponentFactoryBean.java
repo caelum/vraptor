@@ -45,7 +45,7 @@ public class ComponentFactoryBean<T extends ComponentFactory> implements Factory
                 if (ComponentFactory.class.equals(rawType)) {
                     if (typeArguments == null || typeArguments.length < 1) {
                         throw new ComponentRegistrationException(
-                                "The class implementing ComponentType<T> must define the generic argument. Eg.: " +
+                                "The class implementing ComponentFactory<T> must define the generic argument. Eg.: " +
                                         "public class MyFactory implements ComponentFactory<MyComponent> { ... }");
                     }
                     return (Class) typeArguments[0];
@@ -54,7 +54,7 @@ public class ComponentFactoryBean<T extends ComponentFactory> implements Factory
         }
 
         throw new ComponentRegistrationException("Unable to determine target type, while trying to register " +
-                "the ComponentFactory: " + type + ". The class implementing ComponentType<T> must define the " +
+                "the ComponentFactory: " + type + ". The class implementing ComponentFactory<T> must define the " +
                 "generic argument. Eg.: public class MyFactory implements ComponentFactory<MyComponent> { ... }");
     }
 

@@ -48,6 +48,18 @@ public class ComponentAcceptor implements Acceptor {
 	public void analyze(Class<?> type) {
 
 		if (type.isAnnotationPresent(Component.class)) {
+			Class<?> interfaceClass = type.getAnnotation(Component.class).value();
+			
+			if (!interfaceClass.equals(void.class)) {
+				
+				if (interfaceClass.isAssignableFrom(type)) {
+					registry.register(interfaceClass, type);
+				} else {
+					throw new IllegalArgumentException("Type " + type.getName() 
+							+" doesn't implement " + interfaceClass.getName());
+				}
+			}
+			
 			registry.register(type, type);
 		}
 

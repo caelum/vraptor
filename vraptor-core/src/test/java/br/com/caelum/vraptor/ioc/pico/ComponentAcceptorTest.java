@@ -45,6 +45,21 @@ public class ComponentAcceptorTest {
         acceptor.analyze(ComponentNotAnnotated.class);
         mockery.assertIsSatisfied();
     }
+    
+    @Test
+    public void shouldRegisterComponentUsingDefinedInterface() {
+        mockery.checking(new Expectations(){{
+            one(registry).register(Runnable.class, RunnableComponent.class);
+            one(registry).register(RunnableComponent.class, RunnableComponent.class);
+        }});
+        acceptor.analyze(RunnableComponent.class);
+        mockery.assertIsSatisfied();
+    }
+    
+    @Test(expected=IllegalArgumentException.class)
+    public void shouldNotRegisterComponentUsingAnUnimplementedInterface() {
+        acceptor.analyze(OtherRunnableComponent.class);
+    }
 
     class ComponentNotAnnotated {
     }
@@ -57,4 +72,13 @@ public class ComponentAcceptorTest {
     class ComponentAnnotated {
     }
 
+    @Component(Runnable.class)
+    class RunnableComponent implements Runnable {
+		public void run() {	}
+    }
+
+    @Component(Comparable.class)
+    class OtherRunnableComponent implements Runnable {
+		public void run() {	}
+    }
 }

@@ -43,4 +43,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Stereotype
 public @interface Component {
+	Class<?> value() default void.class;
 }

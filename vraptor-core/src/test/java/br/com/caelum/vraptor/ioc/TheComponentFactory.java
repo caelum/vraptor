@@ -8,8 +8,4 @@ public class TheComponentFactory implements ComponentFactory<NeedsCustomInstanti
     public NeedsCustomInstantiation getInstance() {
         return new NeedsCustomInstantiation();
     }
-
-    public Class<NeedsCustomInstantiation> getType() {
-        return NeedsCustomInstantiation.class;
-    }
 }

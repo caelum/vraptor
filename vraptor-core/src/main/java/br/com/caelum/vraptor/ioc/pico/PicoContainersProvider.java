@@ -104,10 +104,13 @@ public class PicoContainersProvider implements ComponentRegistry {
 						+ "Avoid doing it: " + requiredType.getName());
 			}
 			
+			registerComponent(componentFactoryType, componentFactoryType);
 			appComponentFactoryMap.put(requiredType, componentFactoryType);
 		} else if (componentFactoryType.isAnnotationPresent(ApplicationScoped.class)) {
+			registerComponent(componentFactoryType, componentFactoryType);
 			componentFactoryRegistry.getSessionScopedComponentFactoryMap().put(requiredType, componentFactoryType);
 		} else {
+			registerComponent(componentFactoryType, componentFactoryType);
 			componentFactoryRegistry.getRequestScopedComponentFactoryMap().put(requiredType, componentFactoryType);
 		}
 	}

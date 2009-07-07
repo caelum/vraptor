@@ -49,6 +49,7 @@ import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.ComponentFactory;
+import br.com.caelum.vraptor.ioc.ComponentFactoryIntrospector;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.ioc.SessionScoped;
 
@@ -61,7 +62,6 @@ import br.com.caelum.vraptor.ioc.SessionScoped;
  * @author Sérgio Lopes
  */
 public class PicoContainersProvider implements ComponentRegistry {
-
 
 	public static final String CONTAINER_SESSION_KEY = PicoContainersProvider.class.getName() + ".session";
 
@@ -94,7 +94,7 @@ public class PicoContainersProvider implements ComponentRegistry {
 				logger.warn("VRaptor was already initialized, the contexts were created but you are registering a component."
 								+ "This is nasty. The original component might already be in use."
 								+ "Avoid doing it: " + requiredType.getName());
-				this.appContainer.addComponent(requiredType, type);
+				this.appContainer.addComponent(type);
 			}
 		} else if (type.isAnnotationPresent(SessionScoped.class)) {
 			logger.debug("Registering " + type.getName() + " a an session component");
@@ -110,6 +110,16 @@ public class PicoContainersProvider implements ComponentRegistry {
 
 		if (ComponentFactory.class.isAssignableFrom(type)) {
 			componentFactoryRegistry.register((Class<? extends ComponentFactory<?>>) type);
+			
+			if (type.isAnnotationPresent(ApplicationScoped.class) && initialized) {
+				if (initialized) {
+					logger.warn("VRaptor was already initialized, the contexts were created but you are registering a component."
+									+ "This is nasty. The original component might already be in use."
+									+ "Avoid doing it: " + requiredType.getName());
+					Class<?> targetType = new ComponentFactoryIntrospector().targetTypeForComponentFactory(type);
+					this.appContainer.addAdapter(new PicoComponentAdapter(targetType, (Class<? extends ComponentFactory<?>>) type));
+				}
+			}
 		}
 	}
 
@@ -174,8 +184,7 @@ public class PicoContainersProvider implements ComponentRegistry {
 	 */
 	private void registerComponentFactories(MutablePicoContainer container, Map<Class<?>, Class<? extends ComponentFactory<?>>> componentFactoryMap) {
 		for (Class<?> targetType : componentFactoryMap.keySet()) {
-			Class<? extends ComponentFactory<?>> componentFactoryClass = componentFactoryMap.get(targetType);
-			container.addAdapter(new PicoComponentAdapter(targetType, componentFactoryClass));
+			container.addAdapter(new PicoComponentAdapter(targetType, (Class<? extends ComponentFactory<?>>) componentFactoryMap.get(targetType)));
 		}
 	}
 

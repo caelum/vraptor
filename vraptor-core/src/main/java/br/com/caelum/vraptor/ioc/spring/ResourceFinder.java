@@ -41,6 +41,7 @@ import org.springframework.core.type.AnnotationMetadata;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Stereotype;
 import br.com.caelum.vraptor.resource.DefaultResourceClass;
+import br.com.caelum.vraptor.Resource;
 
 /**
  * @author Fabio Kung
@@ -59,10 +60,10 @@ class ResourceFinder implements BeanFactoryPostProcessor, ApplicationContextAwar
                     ", to see if it is a Resource candidate");
             if (beanDefinition instanceof AnnotatedBeanDefinition) {
                 AnnotationMetadata metadata = ((AnnotatedBeanDefinition) beanDefinition).getMetadata();
-                if (metadata.hasMetaAnnotation(Stereotype.class.getName())) {
+                if (metadata.hasAnnotation(Resource.class.getName())) {
                     ResourcesHolder resourcesHolder = (ResourcesHolder)
                             applicationContext.getBean(VRaptorApplicationContext.RESOURCES_LIST);
-                    LOGGER.info("found annotated component or resource: " + beanDefinition.getBeanClassName());
+                    LOGGER.info("found component annotated with @Resource: " + beanDefinition.getBeanClassName());
                     resourcesHolder.add(new DefaultResourceClass(beanFactory.getType(name)));
                 }
             }

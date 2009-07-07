@@ -52,7 +52,7 @@ public class DefaultResourceClass implements ResourceClass {
 	}
 
 	public String toString() {
-		return "{StereotypedClass " + type.getName() + "}";
+		return "{ResourceClass " + type.getName() + "}";
 	}
 
 	public Class<?> getType() {

@@ -1,6 +1,6 @@
 package br.com.caelum.vraptor.http.iogi;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.Locale;
 

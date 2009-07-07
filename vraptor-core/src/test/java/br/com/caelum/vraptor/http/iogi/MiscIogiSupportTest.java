@@ -30,34 +30,26 @@ package br.com.caelum.vraptor.http.iogi;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-import iogi.Iogi;
-import iogi.parameters.Parameter;
-import iogi.reflection.Target;
-import iogi.spi.LocaleProvider;
-import iogi.util.DefaultLocaleProvider;
-import iogi.util.NullDependencyProvider;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import ognl.Ognl;
 import ognl.OgnlContext;
 import ognl.OgnlException;
-import ognl.OgnlRuntime;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
 
+import br.com.caelum.iogi.Iogi;
+import br.com.caelum.iogi.parameters.Parameter;
+import br.com.caelum.iogi.reflection.Target;
+import br.com.caelum.iogi.spi.LocaleProvider;
+import br.com.caelum.iogi.util.NullDependencyProvider;
 import br.com.caelum.vraptor.core.Converters;
-import br.com.caelum.vraptor.http.ognl.ArrayAccessor;
-import br.com.caelum.vraptor.http.ognl.ListAccessor;
-import br.com.caelum.vraptor.http.ognl.ReflectionBasedNullHandler;
-import br.com.caelum.vraptor.http.ognl.VRaptorConvertersAdapter;
 
 /**
  * Unfortunately OGNL sucks so bad in its design that we had to create a "unit"

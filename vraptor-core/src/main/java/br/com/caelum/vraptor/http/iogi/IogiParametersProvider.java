@@ -1,12 +1,5 @@
 package br.com.caelum.vraptor.http.iogi;
 
-import iogi.Iogi;
-import iogi.parameters.Parameter;
-import iogi.parameters.Parameters;
-import iogi.reflection.Target;
-import iogi.util.DefaultLocaleProvider;
-import iogi.util.NullDependencyProvider;
-
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -16,6 +9,12 @@ import java.util.ResourceBundle;
 
 import javax.servlet.http.HttpServletRequest;
 
+import br.com.caelum.iogi.Iogi;
+import br.com.caelum.iogi.parameters.Parameter;
+import br.com.caelum.iogi.parameters.Parameters;
+import br.com.caelum.iogi.reflection.Target;
+import br.com.caelum.iogi.util.DefaultLocaleProvider;
+import br.com.caelum.iogi.util.NullDependencyProvider;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.ioc.RequestScoped;

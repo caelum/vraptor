@@ -1,9 +1,8 @@
 package br.com.caelum.vraptor.http.iogi;
 
-import iogi.spi.LocaleProvider;
-
 import java.util.Locale;
 
+import br.com.caelum.iogi.spi.LocaleProvider;
 import br.com.caelum.vraptor.core.RequestInfo;
 
 public class JstlLocaleProvider implements LocaleProvider {

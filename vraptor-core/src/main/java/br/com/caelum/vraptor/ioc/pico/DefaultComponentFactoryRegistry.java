@@ -1,12 +1,15 @@
 package br.com.caelum.vraptor.ioc.pico;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.ComponentFactory;
 import br.com.caelum.vraptor.ioc.ComponentFactoryIntrospector;
 import br.com.caelum.vraptor.ioc.SessionScoped;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Registry to all ComponentRegistry classes
@@ -16,6 +19,8 @@ import java.util.Map;
 @ApplicationScoped
 public class DefaultComponentFactoryRegistry implements ComponentFactoryRegistry {
 
+	private static final Logger logger = LoggerFactory.getLogger(DefaultComponentFactoryRegistry.class);
+	
     /* maps from targetClass to componentFactoryClass */
     private final Map<Class<?>, Class<? extends ComponentFactory<?>>> applicationScoped =
             new HashMap<Class<?>, Class<? extends ComponentFactory<?>>>();
@@ -30,10 +35,16 @@ public class DefaultComponentFactoryRegistry implements ComponentFactoryRegistry
         Class<?> targetType = componentFactoryIntrospector.targetTypeForComponentFactory(componentFactoryClass);
 
         if (componentFactoryClass.isAnnotationPresent(ApplicationScoped.class)) {
+        	if (logger.isDebugEnabled())
+        		logger.debug("Registering a ComponentFactory for " + targetType.getName() + " in app scope");
             applicationScoped.put(targetType, componentFactoryClass);
         } else if (componentFactoryClass.isAnnotationPresent(SessionScoped.class)) {
+        	if (logger.isDebugEnabled())
+        		logger.debug("Registering a ComponentFactory for " + targetType.getName() + " in session scope");
             sessionScoped.put(targetType, componentFactoryClass);
         } else { // @RequestScoped
+        	if (logger.isDebugEnabled())
+        		logger.debug("Registering a ComponentFactory for " + targetType.getName() + " in request scope");
             requestScoped.put(targetType, componentFactoryClass);
         }
     }

@@ -94,7 +94,7 @@ public class PicoContainersProvider implements ComponentRegistry {
 				logger.warn("VRaptor was already initialized, the contexts were created but you are registering a component."
 								+ "This is nasty. The original component might already be in use."
 								+ "Avoid doing it: " + requiredType.getName());
-				this.appContainer.addComponent(type);
+				this.appContainer.addComponent(requiredType, type);
 			}
 		} else if (type.isAnnotationPresent(SessionScoped.class)) {
 			logger.debug("Registering " + type.getName() + " a an session component");
@@ -108,7 +108,7 @@ public class PicoContainersProvider implements ComponentRegistry {
 			this.requestScoped.put(requiredType, type);
 		}
 
-		if (ComponentFactory.class.isAssignableFrom(type)) {
+		if (ComponentFactory.class.isAssignableFrom(type) && !requiredType.equals(ComponentFactory.class)) {
 			componentFactoryRegistry.register((Class<? extends ComponentFactory<?>>) type);
 			
 			if (type.isAnnotationPresent(ApplicationScoped.class) && initialized) {
@@ -145,7 +145,7 @@ public class PicoContainersProvider implements ComponentRegistry {
 		MutablePicoContainer requestContainer = new DefaultPicoContainer(new Caching(), new JavaEE5LifecycleStrategy(
 				new NullComponentMonitor()), sessionScope);
 		for (Class<?> requiredType : requestScoped.keySet()) {
-			requestContainer.addComponent(requestScoped.get(requiredType));
+			requestContainer.addComponent(requiredType, requestScoped.get(requiredType));
 		}
 		for (Class<? extends Interceptor> type : this.appContainer.getComponent(InterceptorRegistry.class).all()) {
 			requestContainer.addComponent(type);
@@ -169,7 +169,7 @@ public class PicoContainersProvider implements ComponentRegistry {
 		}
 		
 		for (Class<?> requiredType : sessionScoped.keySet()) {
-			sessionContainer.addComponent(sessionScoped.get(requiredType));
+			sessionContainer.addComponent(requiredType, sessionScoped.get(requiredType));
 		}
 		
 		registerComponentFactories(sessionContainer, componentFactoryRegistry.getSessionScopedComponentFactoryMap());

@@ -27,9 +27,6 @@
  */
 package br.com.caelum.vraptor.ioc.pico;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Component;
@@ -50,15 +47,16 @@ public class ComponentAcceptor implements Acceptor {
 
 	public void analyze(Class<?> type) {
 		if (type.isAnnotationPresent(Component.class)) {
-
 			deepRegister(type, type);
 		}
 	}
 
 	private void deepRegister(Class<?> required, Class<?> component) {
-		if (required  == null  || required.equals(Object.class))
+		if (required == null || required.equals(Object.class))
 			return;
+		
 		registry.register(required, component);
+		
 		for (Class<?> c : required.getInterfaces()) {
 			deepRegister(c, component);
 		}

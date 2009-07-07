@@ -19,6 +19,9 @@ import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.ioc.Stereotype;
 
+/**
+ * @author Fabio Kung
+ */
 public class ComponentRegistrarTest {
 
     private ComponentRegistrar registrar;

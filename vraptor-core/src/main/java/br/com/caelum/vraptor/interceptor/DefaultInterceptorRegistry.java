@@ -29,43 +29,44 @@
  */
 package br.com.caelum.vraptor.interceptor;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.resource.ResourceMethod;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * A registry filled with interceptors to intercept requests.<br/>
  * Interceptors are queried wether they want to intercept a request through
  * their accepts method.
- * 
- * @author guilherme silveira
+ *
+ * @author Guilherme Silveira
+ * @author Fabio Kung
  */
 @ApplicationScoped
 public class DefaultInterceptorRegistry implements InterceptorRegistry {
 
-	private final List<Class<? extends Interceptor>> interceptors = new ArrayList<Class<? extends Interceptor>>();
+    private final List<Class<? extends Interceptor>> interceptors = new ArrayList<Class<? extends Interceptor>>();
 
-	public Interceptor[] interceptorsFor(ResourceMethod method, Container container) {
-		List<Interceptor> list = new ArrayList<Interceptor>();
-		for (Class<? extends Interceptor> type : interceptors) {
-			Interceptor instance = container.instanceFor(type);
-			if (instance.accepts(method)) {
-				list.add(instance);
-			}
-		}
-		return list.toArray(new Interceptor[list.size()]);
-	}
+    public Interceptor[] interceptorsFor(ResourceMethod method, Container container) {
+        List<Interceptor> list = new ArrayList<Interceptor>();
+        for (Class<? extends Interceptor> type : interceptors) {
+            Interceptor instance = container.instanceFor(type);
+            if (instance.accepts(method)) {
+                list.add(instance);
+            }
+        }
+        return list.toArray(new Interceptor[list.size()]);
+    }
 
-	public void register(List<Class<? extends Interceptor>> interceptors) {
-		this.interceptors.addAll(interceptors);
-	}
+    public void register(Class<? extends Interceptor>... interceptors) {
+        this.interceptors.addAll(Arrays.asList(interceptors));
+    }
 
-	public List<Class<? extends Interceptor>> all() {
-		return interceptors;
-	}
+    public List<Class<? extends Interceptor>> all() {
+        return interceptors;
+    }
 
 }

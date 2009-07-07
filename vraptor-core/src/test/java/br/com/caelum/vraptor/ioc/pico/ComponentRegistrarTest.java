@@ -1,23 +1,22 @@
 package br.com.caelum.vraptor.ioc.pico;
 
-import java.io.Serializable;
-import java.util.AbstractCollection;
-import java.util.AbstractList;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.RandomAccess;
-import java.util.Arrays;
-
+import br.com.caelum.vraptor.ComponentRegistry;
+import br.com.caelum.vraptor.Resource;
+import br.com.caelum.vraptor.ioc.Component;
+import br.com.caelum.vraptor.ioc.Stereotype;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.ComponentRegistry;
-import br.com.caelum.vraptor.Resource;
-import br.com.caelum.vraptor.ioc.Component;
-import br.com.caelum.vraptor.ioc.Stereotype;
+import java.io.Serializable;
+import java.util.AbstractCollection;
+import java.util.AbstractList;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.RandomAccess;
 
 /**
  * @author Fabio Kung
@@ -53,7 +52,7 @@ public class ComponentRegistrarTest {
 
     @Test
     public void shouldRegisterComponentAlsoUsingImplementedInterfaces() {
-        mockery.checking(new Expectations(){{
+        mockery.checking(new Expectations() {{
             one(scanner).getTypesWithMetaAnnotation(Stereotype.class);
             will(returnValue(Arrays.asList(RunnableComponent.class)));
 
@@ -66,22 +65,21 @@ public class ComponentRegistrarTest {
 
     @Test
     public void shouldRegisterComponentUsingAllPossibleSupertypes() {
-        mockery.checking(new Expectations(){{
+        mockery.checking(new Expectations() {{
             one(scanner).getTypesWithMetaAnnotation(Stereotype.class);
             will(returnValue(Arrays.asList(ArrayListSubclass.class)));
 
             one(registry).register(ArrayListSubclass.class, ArrayListSubclass.class);
             one(registry).register(ArrayList.class, ArrayListSubclass.class);
             one(registry).register(List.class, ArrayListSubclass.class);
-            one(registry).register(Collection.class, ArrayListSubclass.class);
-            one(registry).register(Iterable.class, ArrayListSubclass.class);
+            atLeast(1).of(registry).register(Collection.class, ArrayListSubclass.class);
+            atLeast(1).of(registry).register(Iterable.class, ArrayListSubclass.class);
             one(registry).register(Cloneable.class, ArrayListSubclass.class);
             one(registry).register(Serializable.class, ArrayListSubclass.class);
             one(registry).register(RandomAccess.class, ArrayListSubclass.class);
             one(registry).register(AbstractList.class, ArrayListSubclass.class);
             one(registry).register(AbstractCollection.class, ArrayListSubclass.class);
             one(registry).register(List.class, ArrayListSubclass.class);
-            one(registry).register(Collection.class, ArrayListSubclass.class);
         }});
         registrar.registerFrom(scanner);
         mockery.assertIsSatisfied();
@@ -97,12 +95,13 @@ public class ComponentRegistrarTest {
 
     @Component
     class RunnableComponent implements Runnable {
-		public void run() {	}
+        public void run() {
+        }
     }
-    
+
     @SuppressWarnings("serial")
-	@Component
+    @Component
     class ArrayListSubclass extends ArrayList<Object> {
-    	
+
     }
 }

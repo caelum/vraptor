@@ -30,6 +30,7 @@ package br.com.caelum.vraptor.ioc.pico;
 import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Stereotype;
+import br.com.caelum.vraptor.ioc.Component;
 
 import java.util.Collection;
 

@@ -10,42 +10,40 @@ import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.resource.DefaultResourceClass;
 
-public class ResourceAcceptorTest {
+import java.util.Arrays;
 
-    private ResourceAcceptor acceptor;
+/**
+ * @author Fabio Kung
+ */
+public class ResourceRegistrarTest {
+
     private Mockery mockery;
+    private ResourceRegistrar registrar;
     private Router registry;
+    private Scanner scanner;
 
     @Before
     public void setup() {
         mockery = new Mockery();
         registry = mockery.mock(Router.class);
-        this.acceptor = new ResourceAcceptor(registry);
+        scanner = mockery.mock(Scanner.class);
+        this.registrar = new ResourceRegistrar(registry);
     }
 
     @Test
-    public void shouldAcceptResourcesAnnotatedWithResourceAnnotation() {
+    public void shouldRegisterResourcesAnnotatedWithResource() {
         mockery.checking(new Expectations() {
             {
+                one(scanner).getTypesWithAnnotation(Resource.class);
+                will(returnValue(Arrays.asList(ResourceAnnotated.class)));
                 one(registry).register(new DefaultResourceClass(ResourceAnnotated.class));
             }
         });
-        acceptor.analyze(ResourceAnnotated.class);
-        mockery.assertIsSatisfied();
-    }
-
-    @Test
-    public void ignoresNonAnnotatedResources() {
-        acceptor.analyze(ResourceNotAnnotated.class);
+        registrar.registerFrom(scanner);
         mockery.assertIsSatisfied();
     }
 
     @Resource
     class ResourceAnnotated {
     }
-
-    @Component
-    class ResourceNotAnnotated {
-    }
-
 }

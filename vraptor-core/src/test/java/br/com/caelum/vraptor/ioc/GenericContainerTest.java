@@ -188,7 +188,7 @@ public abstract class GenericContainerTest {
 
     @After
     public void tearDown() {
-//        provider.stop();
+        provider.stop();
         provider = null;
     }
 

@@ -113,7 +113,6 @@ public class PicoProvider implements ContainerProvider {
         container.register(InstantiateInterceptor.class, InstantiateInterceptor.class);
         container.register(ExecuteMethodInterceptor.class, ExecuteMethodInterceptor.class);
         container.register(ResourceRegistrar.class, ResourceRegistrar.class);
-        container.register(ComponentRegistrar.class, ComponentRegistrar.class);
         container.register(InterceptorRegistrar.class, InterceptorRegistrar.class);
         container.register(ConverterRegistrar.class, ConverterRegistrar.class);
         container.register(ComponentFactoryRegistry.class, DefaultComponentFactoryRegistry.class);
@@ -145,12 +144,16 @@ public class PicoProvider implements ContainerProvider {
     }
 
     public void start(ServletContext context) {
-        registerBundledComponents(getContainers());
+        ComponentRegistry components = getContainers();
+        registerBundledComponents(components);
+
         this.container.addComponent(context);
-        getContainers().init();
 
         Scanner scanner = new ReflectionsScanner(context);
-        container.getComponent(ComponentRegistrar.class).registerFrom(scanner);
+        new ComponentRegistrar(components).registerFrom(scanner);
+
+        getContainers().init();
+
         container.getComponent(ResourceRegistrar.class).registerFrom(scanner);
         container.getComponent(InterceptorRegistrar.class).registerFrom(scanner);
         container.getComponent(ConverterRegistrar.class).registerFrom(scanner);

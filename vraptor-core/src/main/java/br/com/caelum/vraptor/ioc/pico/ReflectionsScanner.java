@@ -1,18 +1,23 @@
 package br.com.caelum.vraptor.ioc.pico;
 
-import br.com.caelum.vraptor.ioc.Stereotype;
-import br.com.caelum.vraptor.ioc.Component;
-import br.com.caelum.vraptor.ioc.ApplicationScoped;
-import org.reflections.Reflections;
-import org.reflections.scanners.ClassAnnotationsScanner;
-import org.reflections.scanners.SubTypesScanner;
-import org.reflections.util.AbstractConfiguration;
-import org.reflections.util.ClasspathHelper;
-
+import java.io.File;
 import java.lang.annotation.Annotation;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+
+import javax.servlet.ServletContext;
+
+import org.reflections.Reflections;
+import org.reflections.scanners.ClassAnnotationsScanner;
+import org.reflections.util.AbstractConfiguration;
+
+import br.com.caelum.vraptor.VRaptorException;
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
+import br.com.caelum.vraptor.ioc.Stereotype;
 
 /**
  * Scanner implementation using the nice Reflections project (http://code.google.com/p/reflections) to do classpath
@@ -24,10 +29,17 @@ import java.util.Set;
 public class ReflectionsScanner implements Scanner {
     private final Reflections reflections;
 
-    public ReflectionsScanner() {
+    public ReflectionsScanner(ServletContext context) {
+    	final URL webInfClasses;
+		try {
+			webInfClasses = new File(context.getRealPath("/WEB-INF/classes/")).toURL();
+		} catch (MalformedURLException e) {
+			throw new VRaptorException(e);
+		}
+		
         this.reflections = new Reflections(new AbstractConfiguration() {
             {
-                setUrls(ClasspathHelper.getUrlsForPackagePrefix("WEB-INF/classes"));
+            	setUrls(Arrays.asList(webInfClasses));
                 setScanners(new ClassAnnotationsScanner());
             }
         });

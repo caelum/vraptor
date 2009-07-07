@@ -81,9 +81,8 @@ public class BaseComponents {
 		return DEFAULT_IMPLEMENTATIONS.keySet();
 	}
 
-	@SuppressWarnings("unchecked")
-	public static Class[] getRequestScoped() {
-		return new Class[] { DefaultPathResolver.class, DefaultMethodInfo.class, DefaultInterceptorStack.class,
+	public static Class<?>[] getRequestScoped() {
+		return new Class<?>[] { DefaultPathResolver.class, DefaultMethodInfo.class, DefaultInterceptorStack.class,
 				DefaultRequestExecution.class, DefaultResult.class, OgnlParametersProvider.class,
 				DefaultMethodInfo.class, DefaultValidator.class, JstlLocalization.class };
 	}

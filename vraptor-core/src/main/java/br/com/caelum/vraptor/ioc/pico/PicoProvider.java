@@ -95,9 +95,6 @@ public class PicoProvider implements ContainerProvider {
         for (Class<?> type : BaseComponents.getRequestScoped()) {
             singleInterfaceRegister(type, container);
         }
-        for (Class<?> type : new Class[]{DefaultDirScanner.class}) {
-            singleInterfaceRegister(type, container);
-        }
         container.register(MultipartConfig.class, DefaultMultipartConfig.class);
         container.register(ForwardToDefaultViewInterceptor.class, ForwardToDefaultViewInterceptor.class);
         container.register(LogicResult.class, DefaultLogicResult.class);
@@ -151,15 +148,15 @@ public class PicoProvider implements ContainerProvider {
     public void start(ServletContext context) {
         registerBundledComponents(getContainers());
         this.container.addComponent(context);
-        Scanner scanner = container.getComponent(Scanner.class);
+        getContainers().init();
 
+        Scanner scanner = container.getComponent(Scanner.class);
         container.getComponent(ComponentRegistrar.class).registerFrom(scanner);
         container.getComponent(ResourceRegistrar.class).registerFrom(scanner);
         container.getComponent(InterceptorRegistrar.class).registerFrom(scanner);
         container.getComponent(ConverterRegistrar.class).registerFrom(scanner);
         container.getComponent(ComponentFactoryRegistrar.class).registerFrom(scanner);
 
-        getContainers().init();
         container.start();
     }
 

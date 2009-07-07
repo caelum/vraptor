@@ -96,8 +96,13 @@ public class ProviderTest extends GenericContainerTest {
                     File tmpDir = File.createTempFile("tmp_", "_file").getParentFile();
                     File tmp = new File(tmpDir, "_tmp_vraptor_test");
                     tmp.mkdir();
-                    allowing(context).getRealPath("");
-                    will(returnValue(tmp.getAbsolutePath()));
+                    File webInf = new File(tmp, "WEB-INF");
+                    webInf.mkdir();
+                    File webInfClasses = new File(webInf, "classes");
+                    webInfClasses.mkdir();
+
+                    allowing(context).getRealPath("/WEB-INF/classes/");
+                    will(returnValue(webInfClasses.getAbsolutePath()));
                 }
             });
         } catch (IOException e) {

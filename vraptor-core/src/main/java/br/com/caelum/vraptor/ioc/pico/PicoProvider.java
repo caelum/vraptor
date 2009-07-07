@@ -118,7 +118,6 @@ public class PicoProvider implements ContainerProvider {
         container.register(ConverterRegistrar.class, ConverterRegistrar.class);
         container.register(ComponentFactoryRegistry.class, DefaultComponentFactoryRegistry.class);
         container.register(ComponentFactoryRegistrar.class, ComponentFactoryRegistrar.class);
-        container.register(Scanner.class, ReflectionsScanner.class);
     }
 
     private void singleInterfaceRegister(Class<?> type, ComponentRegistry registry) {
@@ -150,7 +149,7 @@ public class PicoProvider implements ContainerProvider {
         this.container.addComponent(context);
         getContainers().init();
 
-        Scanner scanner = container.getComponent(Scanner.class);
+        Scanner scanner = new ReflectionsScanner(context);
         container.getComponent(ComponentRegistrar.class).registerFrom(scanner);
         container.getComponent(ResourceRegistrar.class).registerFrom(scanner);
         container.getComponent(InterceptorRegistrar.class).registerFrom(scanner);

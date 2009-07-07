@@ -77,14 +77,14 @@ public class PicoProvider implements ContainerProvider {
         this.container = new VRaptorPicoContainer(null);
         ComponentFactoryRegistry componentFactoryRegistry = new DefaultComponentFactoryRegistry();
         PicoContainersProvider containersProvider = new PicoContainersProvider(this.container, componentFactoryRegistry);
-        this.container.addComponent(containersProvider);
-        this.container.addComponent(componentFactoryRegistry);
+        this.container.addBundledComponent(containersProvider);
+        this.container.addBundledComponent(componentFactoryRegistry);
     }
 
     /**
      * Register extra components that your app wants to.
      */
-    protected void registerBundledComponents(ComponentRegistry container) {
+    protected void registerBundledComponents(PicoContainersProvider container) {
         logger.debug("Registering base pico container related implementation components");
         for (Class<?> type : BaseComponents.getApplicationScoped()) {
             singleInterfaceRegister(type, container);
@@ -92,36 +92,36 @@ public class PicoProvider implements ContainerProvider {
         for (Class<?> type : BaseComponents.getRequestScoped()) {
             singleInterfaceRegister(type, container);
         }
-        container.register(MultipartConfig.class, DefaultMultipartConfig.class);
-        container.register(ForwardToDefaultViewInterceptor.class, ForwardToDefaultViewInterceptor.class);
-        container.register(LogicResult.class, DefaultLogicResult.class);
-        container.register(PageResult.class, DefaultPageResult.class);
-        container.register(EmptyResult.class, EmptyResult.class);
-        container.register(OutjectResult.class, OutjectResult.class);
-        container.register(TypeCreator.class, AsmBasedTypeCreator.class);
-        container.register(EmptyElementsRemoval.class, EmptyElementsRemoval.class);
-        container.register(ParametersInstantiatorInterceptor.class, ParametersInstantiatorInterceptor.class);
+        container.register(MultipartConfig.class, DefaultMultipartConfig.class, true);
+        container.register(ForwardToDefaultViewInterceptor.class, ForwardToDefaultViewInterceptor.class, true);
+        container.register(LogicResult.class, DefaultLogicResult.class, true);
+        container.register(PageResult.class, DefaultPageResult.class, true);
+        container.register(EmptyResult.class, EmptyResult.class, true);
+        container.register(OutjectResult.class, OutjectResult.class, true);
+        container.register(TypeCreator.class, AsmBasedTypeCreator.class, true);
+        container.register(EmptyElementsRemoval.class, EmptyElementsRemoval.class, true);
+        container.register(ParametersInstantiatorInterceptor.class, ParametersInstantiatorInterceptor.class, true);
         container.register(InterceptorListPriorToExecutionExtractor.class,
-                InterceptorListPriorToExecutionExtractor.class);
-        container.register(DownloadInterceptor.class, DownloadInterceptor.class);
-        container.register(MultipartInterceptor.class, MultipartInterceptor.class);
-        container.register(URLParameterExtractorInterceptor.class, URLParameterExtractorInterceptor.class);
-        container.register(ResourceLookupInterceptor.class, ResourceLookupInterceptor.class);
-        container.register(InstantiateInterceptor.class, InstantiateInterceptor.class);
-        container.register(ExecuteMethodInterceptor.class, ExecuteMethodInterceptor.class);
-        container.register(ResourceRegistrar.class, ResourceRegistrar.class);
-        container.register(InterceptorRegistrar.class, InterceptorRegistrar.class);
-        container.register(ConverterRegistrar.class, ConverterRegistrar.class);
-        container.register(ComponentFactoryRegistrar.class, ComponentFactoryRegistrar.class);
+                InterceptorListPriorToExecutionExtractor.class, true);
+        container.register(DownloadInterceptor.class, DownloadInterceptor.class, true);
+        container.register(MultipartInterceptor.class, MultipartInterceptor.class, true);
+        container.register(URLParameterExtractorInterceptor.class, URLParameterExtractorInterceptor.class, true);
+        container.register(ResourceLookupInterceptor.class, ResourceLookupInterceptor.class, true);
+        container.register(InstantiateInterceptor.class, InstantiateInterceptor.class, true);
+        container.register(ExecuteMethodInterceptor.class, ExecuteMethodInterceptor.class, true);
+        container.register(ResourceRegistrar.class, ResourceRegistrar.class, true);
+        container.register(InterceptorRegistrar.class, InterceptorRegistrar.class, true);
+        container.register(ConverterRegistrar.class, ConverterRegistrar.class, true);
+        container.register(ComponentFactoryRegistrar.class, ComponentFactoryRegistrar.class, true);
     }
 
-    private void singleInterfaceRegister(Class<?> type, ComponentRegistry registry) {
+    private void singleInterfaceRegister(Class<?> type, PicoContainersProvider registry) {
         Class<?>[] interfaces = type.getInterfaces();
         if (interfaces.length != 1) {
             throw new IllegalArgumentException("Invalid registering of a type with more than one interface"
                     + " being registered as a single interface component: " + type.getName());
         }
-        registry.register(interfaces[0], type);
+        registry.register(interfaces[0], type, true);
     }
 
     public <T> T provideForRequest(RequestInfo request, Execution<T> execution) {
@@ -140,10 +140,10 @@ public class PicoProvider implements ContainerProvider {
     }
 
     public void start(ServletContext context) {
-        ComponentRegistry components = getContainers();
+        PicoContainersProvider components = getContainers();
         registerBundledComponents(components);
 
-        this.container.addComponent(context);
+        this.container.addBundledComponent(context);
 
         Scanner scanner = new ReflectionsScanner(context);
         new ComponentRegistrar(components).registerFrom(scanner);

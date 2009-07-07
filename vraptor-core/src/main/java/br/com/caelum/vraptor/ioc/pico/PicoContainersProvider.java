@@ -68,27 +68,38 @@ public class PicoContainersProvider implements ComponentRegistry {
     private final Map<Class<?>, Class<?>> applicationScoped = new HashMap<Class<?>, Class<?>>();
     private final Map<Class<?>, Class<?>> sessionScoped = new HashMap<Class<?>, Class<?>>();
     private final Map<Class<?>, Class<?>> requestScoped = new HashMap<Class<?>, Class<?>>();
-    private final MutablePicoContainer appContainer;
+    private final Map<Class<?>, Class<?>> bundledApplicationScoped = new HashMap<Class<?>, Class<?>>();
+    private final Map<Class<?>, Class<?>> bundledSessionScoped = new HashMap<Class<?>, Class<?>>();
+    private final Map<Class<?>, Class<?>> bundledRequestScoped = new HashMap<Class<?>, Class<?>>();
+    private final VRaptorPicoContainer appContainer;
     private boolean initialized = false;
 
     private final ComponentFactoryRegistry componentFactoryRegistry;
 
-    public PicoContainersProvider(MutablePicoContainer container, ComponentFactoryRegistry componentFactoryRegistry) {
+    public PicoContainersProvider(VRaptorPicoContainer container, ComponentFactoryRegistry componentFactoryRegistry) {
         this.appContainer = container;
         this.componentFactoryRegistry = componentFactoryRegistry;
     }
 
-    @SuppressWarnings("unchecked")
     public void register(Class<?> requiredType, Class<?> type) {
+        register(requiredType, type, false);
+    }
+
+    @SuppressWarnings("unchecked")
+    public void register(Class<?> requiredType, Class<?> type, boolean overridable) {
         logger.debug("Registering " + requiredType.getName() + " with " + type.getName());
 
-        boolean overriding = alreadyRegistered(requiredType);
-        if (overriding) {
+        if (alreadyRegistered(requiredType)) {
             logger.debug("Overriding interface " + requiredType.getName() + " with " + type.getName());
         }
+
         if (type.isAnnotationPresent(ApplicationScoped.class)) {
             logger.debug("Registering " + type.getName() + " as an application component");
-            this.applicationScoped.put(requiredType, type);
+            if (overridable) {
+                this.bundledApplicationScoped.put(requiredType, type);
+            } else {
+                this.applicationScoped.put(requiredType, type);
+            }
             if (initialized) {
                 logger.warn("VRaptor was already initialized, the contexts were created but you are registering a component."
                         + "This is nasty. The original component might already be in use."
@@ -97,14 +108,22 @@ public class PicoContainersProvider implements ComponentRegistry {
             }
         } else if (type.isAnnotationPresent(SessionScoped.class)) {
             logger.debug("Registering " + type.getName() + " a an session component");
-            this.sessionScoped.put(requiredType, type);
+            if (overridable) {
+                this.bundledSessionScoped.put(requiredType, type);
+            } else {
+                this.sessionScoped.put(requiredType, type);
+            }
         } else {
             // default behaviour: even without @RequestScoped
             if (!type.isAnnotationPresent(RequestScoped.class)) {
                 logger.info("Class being registered as @RequestScoped, since there is no Scope annotation " + type);
             }
             logger.debug("Registering " + type.getName() + " as a request component");
-            this.requestScoped.put(requiredType, type);
+            if (overridable) {
+                this.bundledRequestScoped.put(requiredType, type);
+            } else {
+                this.requestScoped.put(requiredType, type);
+            }
         }
 
         if (ComponentFactory.class.isAssignableFrom(type) && !requiredType.equals(ComponentFactory.class)) {
@@ -123,9 +142,8 @@ public class PicoContainersProvider implements ComponentRegistry {
     }
 
     private boolean alreadyRegistered(Class<?> interfaceType) {
-        for (Map<Class<?>, Class<?>> scope : new Map[]{applicationScoped, sessionScoped, requestScoped}) {
+        for (Map<Class<?>, Class<?>> scope : new Map[]{bundledApplicationScoped, bundledSessionScoped, bundledRequestScoped}) {
             if (scope.containsKey(interfaceType)) {
-                scope.remove(interfaceType);
                 return true;
             }
         }
@@ -141,25 +159,36 @@ public class PicoContainersProvider implements ComponentRegistry {
         if (logger.isDebugEnabled()) {
             logger.debug("Request components are " + requestScoped);
         }
-        MutablePicoContainer requestContainer = new VRaptorPicoContainer(sessionScope);
+        VRaptorPicoContainer requestContainer = new VRaptorPicoContainer(sessionScope);
+        for (Class<?> requiredType : bundledRequestScoped.keySet()) {
+            requestContainer.addBundledComponent(requiredType, bundledRequestScoped.get(requiredType));
+        }
         for (Class<?> requiredType : requestScoped.keySet()) {
             requestContainer.addComponent(requiredType, requestScoped.get(requiredType));
         }
-        requestContainer.addComponent(request).addComponent(request.getRequest()).addComponent(request.getResponse());
+        requestContainer.addBundledComponent(request);
+        requestContainer.addBundledComponent(request.getRequest());
+        requestContainer.addBundledComponent(request.getResponse());
 
         registerComponentFactories(requestContainer, componentFactoryRegistry.getRequestScopedComponentFactoryMap());
 
-        return new PicoBasedContainer(requestContainer, this.appContainer.getComponent(Router.class));
+        PicoBasedContainer adapter = new PicoBasedContainer(requestContainer, this.appContainer.getComponent(Router.class));
+        requestContainer.addBundledComponent(adapter);
+        return adapter;
     }
 
     private MutablePicoContainer createSessionContainer(HttpSession session) {
-        MutablePicoContainer sessionContainer = new VRaptorPicoContainer(this.appContainer);
+        VRaptorPicoContainer sessionContainer = new VRaptorPicoContainer(this.appContainer);
 
-        sessionContainer.addComponent(HttpSession.class, session);
+        sessionContainer.addBundledComponent(HttpSession.class, session);
         session.setAttribute(CONTAINER_SESSION_KEY, sessionContainer);
 
         if (logger.isDebugEnabled()) {
             logger.debug("Session components are " + sessionScoped);
+        }
+
+        for (Class<?> requiredType : bundledSessionScoped.keySet()) {
+            sessionContainer.addBundledComponent(requiredType, bundledSessionScoped.get(requiredType));
         }
 
         for (Class<?> requiredType : sessionScoped.keySet()) {
@@ -176,6 +205,12 @@ public class PicoContainersProvider implements ComponentRegistry {
      * Registers all application scoped elements into the container.
      */
     public void init() {
+
+        for (Class<?> requiredType : bundledApplicationScoped.keySet()) {
+            Class<?> type = bundledApplicationScoped.get(requiredType);
+            logger.debug("Initializing application scope with " + type);
+            this.appContainer.addBundledComponent(type);
+        }
 
         for (Class<?> requiredType : applicationScoped.keySet()) {
             Class<?> type = applicationScoped.get(requiredType);

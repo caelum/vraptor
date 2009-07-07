@@ -1,6 +1,6 @@
 package br.com.caelum.vraptor.interceptor;
 
-import br.com.caelum.vraptor.Interceptor;
+import br.com.caelum.vraptor.interceptor.Interceptor;
 
 /**
  * Implements an interceptor stack capable of defining the order in which

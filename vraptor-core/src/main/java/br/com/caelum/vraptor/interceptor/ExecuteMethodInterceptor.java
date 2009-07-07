@@ -33,7 +33,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import br.com.caelum.vraptor.InterceptionException;
-import br.com.caelum.vraptor.Interceptor;
+import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.resource.ResourceMethod;

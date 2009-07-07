@@ -32,7 +32,7 @@ package br.com.caelum.vraptor.interceptor;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.caelum.vraptor.Interceptor;
+import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.resource.ResourceMethod;

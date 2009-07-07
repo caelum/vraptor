@@ -35,7 +35,7 @@ import java.io.OutputStream;
 import javax.servlet.http.HttpServletResponse;
 
 import br.com.caelum.vraptor.InterceptionException;
-import br.com.caelum.vraptor.Interceptor;
+import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.ioc.RequestScoped;

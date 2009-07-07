@@ -31,7 +31,7 @@ package br.com.caelum.vraptor.interceptor;
 
 import java.util.List;
 
-import br.com.caelum.vraptor.Interceptor;
+import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
@@ -43,7 +43,7 @@ public interface InterceptorRegistry {
      */
     Interceptor[] interceptorsFor(ResourceMethod method, Container container);
 
-    void register(List<Class<? extends Interceptor>> interceptors);
+    void register(Class<? extends Interceptor> ... interceptors);
 
     List<Class<? extends Interceptor>> all();
 

@@ -40,7 +40,7 @@ import org.vraptor.validator.BasicValidationErrors;
 import org.vraptor.validator.ValidationErrors;
 
 import br.com.caelum.vraptor.InterceptionException;
-import br.com.caelum.vraptor.Interceptor;
+import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.Localization;

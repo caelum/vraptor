@@ -12,7 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.InterceptionException;
-import br.com.caelum.vraptor.Interceptor;
+import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 public class DefaultInterceptorStackTest {

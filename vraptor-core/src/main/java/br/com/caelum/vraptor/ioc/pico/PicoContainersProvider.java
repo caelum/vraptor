@@ -201,9 +201,9 @@ public class PicoContainersProvider implements ComponentRegistry {
      * @param container
      * @param componentFactoryMap
      */
-    private void registerComponentFactories(MutablePicoContainer container, Map<Class<?>, Class<? extends ComponentFactory<?>>> componentFactoryMap) {
+    private void registerComponentFactories(MutablePicoContainer container, Map<Class<?>, Class<? extends ComponentFactory>> componentFactoryMap) {
         for (Class<?> targetType : componentFactoryMap.keySet()) {
-            container.addAdapter(new PicoComponentAdapter(targetType, (Class<? extends ComponentFactory<?>>) componentFactoryMap.get(targetType)));
+            container.addAdapter(new PicoComponentAdapter(targetType, componentFactoryMap.get(targetType)));
         }
     }
 

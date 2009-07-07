@@ -27,73 +27,73 @@
  */
 package br.com.caelum.vraptor.ioc.pico;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-
-import javax.servlet.http.HttpServletResponse;
-
-import org.jmock.Expectations;
-import org.junit.Test;
-
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
 import br.com.caelum.vraptor.ioc.GenericContainerTest;
 import br.com.caelum.vraptor.ioc.WhatToDo;
 import br.com.caelum.vraptor.test.HttpServletRequestMock;
 import br.com.caelum.vraptor.test.HttpSessionMock;
+import org.jmock.Expectations;
+import org.junit.Test;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 public class PicoProviderTest extends GenericContainerTest {
-	private int counter;
+    private int counter;
 
-	@SuppressWarnings("unchecked")
-	@Test
-	public void canProvidePicoSpecificApplicationScopedComponents() {
-		List<Class<?>> components = Arrays.asList(DirScanner.class, Loader.class);
-		checkAvailabilityFor(true, components);
-		mockery.assertIsSatisfied();
-	}
+    @SuppressWarnings("unchecked")
+    @Test
+    public void canProvidePicoSpecificApplicationScopedComponents() {
+        List<Class<?>> components = Arrays.asList(Scanner.class, ComponentRegistrar.class,
+                ComponentFactoryRegistrar.class, InterceptorRegistrar.class, ConverterRegistrar.class,
+                ResourceRegistrar.class);
+        checkAvailabilityFor(true, components);
+        mockery.assertIsSatisfied();
+    }
 
-	@Override
-	protected ContainerProvider getProvider() {
-		return new PicoProvider();
-	}
+    @Override
+    protected ContainerProvider getProvider() {
+        return new PicoProvider();
+    }
 
-	@Override
-	protected <T> T executeInsideRequest(WhatToDo<T> execution) {
-		HttpSessionMock session = new HttpSessionMock(context, "session" + ++counter);
-		HttpServletRequestMock request = new HttpServletRequestMock(session);
-		HttpServletResponse response = mockery.mock(HttpServletResponse.class, "response" + counter);
-		configureExpectations(request);
-		RequestInfo webRequest = new RequestInfo(context, request, response);
-		return execution.execute(webRequest, counter);
-	}
+    @Override
+    protected <T> T executeInsideRequest(WhatToDo<T> execution) {
+        HttpSessionMock session = new HttpSessionMock(context, "session" + ++counter);
+        HttpServletRequestMock request = new HttpServletRequestMock(session);
+        HttpServletResponse response = mockery.mock(HttpServletResponse.class, "response" + counter);
+        configureExpectations(request);
+        RequestInfo webRequest = new RequestInfo(context, request, response);
+        return execution.execute(webRequest, counter);
+    }
 
-	/**
-	 * Children providers can set custom expectations on request.
-	 */
-	protected void configureExpectations(HttpServletRequestMock request) {
-	}
+    /**
+     * Children providers can set custom expectations on request.
+     */
+    protected void configureExpectations(HttpServletRequestMock request) {
+    }
 
-	/**
-	 * Children providers can set custom expectations.
-	 */
-	@Override
-	protected void configureExpectations() {
-		try {
-			mockery.checking(new Expectations() {
-				{
-					File tmpDir = File.createTempFile("tmp_", "_file").getParentFile();
-					File tmp = new File(tmpDir, "_tmp_vraptor_test");
-					tmp.mkdir();
-					allowing(context).getRealPath("");
-					will(returnValue(tmp.getAbsolutePath()));
-				}
-			});
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-	}
+    /**
+     * Children providers can set custom expectations.
+     */
+    @Override
+    protected void configureExpectations() {
+        try {
+            mockery.checking(new Expectations() {
+                {
+                    File tmpDir = File.createTempFile("tmp_", "_file").getParentFile();
+                    File tmp = new File(tmpDir, "_tmp_vraptor_test");
+                    tmp.mkdir();
+                    allowing(context).getRealPath("");
+                    will(returnValue(tmp.getAbsolutePath()));
+                }
+            });
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 }

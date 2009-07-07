@@ -27,30 +27,6 @@
  */
 package br.com.caelum.vraptor.ioc;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertThat;
-
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import org.hamcrest.MatcherAssert;
-import org.jmock.Mockery;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-
 import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
@@ -83,6 +59,25 @@ import br.com.caelum.vraptor.resource.ResourceNotFoundHandler;
 import br.com.caelum.vraptor.view.LogicResult;
 import br.com.caelum.vraptor.view.PageResult;
 import br.com.caelum.vraptor.view.PathResolver;
+import org.hamcrest.MatcherAssert;
+import static org.hamcrest.Matchers.*;
+import org.jmock.Mockery;
+import org.junit.After;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Acceptance test that checks if the container is capable of giving all
@@ -157,6 +152,7 @@ public abstract class GenericContainerTest {
     @Component
     public static class DependentOnSomethingFromComponentFactory {
         private final NeedsCustomInstantiation dependency;
+
         public DependentOnSomethingFromComponentFactory(NeedsCustomInstantiation dependency) {
             this.dependency = dependency;
         }
@@ -167,7 +163,7 @@ public abstract class GenericContainerTest {
     public void supportsComponentFactoriesForCustomInstantiation() {
         // TODO the registered component is only available in the next request with Pico. FIX IT!
         registerAndGetFromContainer(Container.class, TheComponentFactory.class);
-        
+
         TheComponentFactory factory = registerAndGetFromContainer(TheComponentFactory.class, null);
         assertThat(factory, is(notNullValue()));
 
@@ -175,7 +171,7 @@ public abstract class GenericContainerTest {
         assertThat(component, is(notNullValue()));
 
         registerAndGetFromContainer(DependentOnSomethingFromComponentFactory.class, DependentOnSomethingFromComponentFactory.class);
-        
+
         DependentOnSomethingFromComponentFactory dependent = registerAndGetFromContainer(DependentOnSomethingFromComponentFactory.class, null);
         assertThat(dependent, is(notNullValue()));
         assertThat(dependent.dependency, is(notNullValue()));
@@ -187,21 +183,13 @@ public abstract class GenericContainerTest {
         this.context = mockery.mock(ServletContext.class, "servlet context");
         configureExpectations();
         provider = getProvider();
-        try {
-            provider.start(context);
-        } catch (Exception e) {
-            // so there is no exception on shutdown
-            provider = null;
-            throw e;
-        }
+        provider.start(context);
     }
 
     @After
     public void tearDown() {
-        if (provider != null) {
-            provider.stop();
-            provider = null;
-        }
+        provider.stop();
+        provider = null;
     }
 
     private <T> void checkAvailabilityFor(final boolean shouldBeTheSame, final Class<T> component,
@@ -270,39 +258,39 @@ public abstract class GenericContainerTest {
             checkAvailabilityFor(shouldBeTheSame, component, null);
         }
     }
-    
+
     @Component
     static public class DisposableComponent {
-    	private boolean destroyed;
+        private boolean destroyed;
 
-    	@PreDestroy
-    	public void preDestroy() {
-    		this.destroyed = true;
-    	}
+        @PreDestroy
+        public void preDestroy() {
+            this.destroyed = true;
+        }
     }
-    
+
     @Component
     static public class StartableComponent {
-    	private boolean started;
+        private boolean started;
 
-		@PostConstruct
-    	public void postConstruct() {
-    		this.started = true;
-    	}
+        @PostConstruct
+        public void postConstruct() {
+            this.started = true;
+        }
     }
 
-	@Test
-	public void shouldDisposeAfterRequest() {
-		registerAndGetFromContainer(Container.class, DisposableComponent.class);
-		DisposableComponent comp = registerAndGetFromContainer(DisposableComponent.class, null);
-		assertThat(comp.destroyed, is(equalTo(true)));
-	}
-	
-	@Test
-	public void shouldStartBeforeRequestExecution() {
-		registerAndGetFromContainer(Container.class, StartableComponent.class);
-		StartableComponent comp = registerAndGetFromContainer(StartableComponent.class, null);
-		assertThat(comp.started, is(equalTo(true)));
-	}
+    @Test
+    public void shouldDisposeAfterRequest() {
+        registerAndGetFromContainer(Container.class, DisposableComponent.class);
+        DisposableComponent comp = registerAndGetFromContainer(DisposableComponent.class, null);
+        assertTrue(comp.destroyed);
+    }
+
+    @Test
+    public void shouldStartBeforeRequestExecution() {
+        registerAndGetFromContainer(Container.class, StartableComponent.class);
+        StartableComponent comp = registerAndGetFromContainer(StartableComponent.class, null);
+        assertTrue(comp.started);
+    }
 
 }

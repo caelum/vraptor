@@ -45,8 +45,6 @@ import org.slf4j.LoggerFactory;
 import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.http.route.Router;
-import br.com.caelum.vraptor.interceptor.Interceptor;
-import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.ComponentFactory;
 import br.com.caelum.vraptor.ioc.ComponentFactoryIntrospector;
@@ -147,9 +145,6 @@ public class PicoContainersProvider implements ComponentRegistry {
                 new NullComponentMonitor()), sessionScope);
         for (Class<?> requiredType : requestScoped.keySet()) {
             requestContainer.addComponent(requiredType, requestScoped.get(requiredType));
-        }
-        for (Class<? extends Interceptor> type : this.appContainer.getComponent(InterceptorRegistry.class).all()) {
-            requestContainer.addComponent(type);
         }
         requestContainer.addComponent(request).addComponent(request.getRequest()).addComponent(request.getResponse());
 

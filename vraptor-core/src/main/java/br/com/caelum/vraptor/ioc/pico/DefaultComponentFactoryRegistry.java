@@ -1,14 +1,15 @@
 package br.com.caelum.vraptor.ioc.pico;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.ComponentFactory;
 import br.com.caelum.vraptor.ioc.ComponentFactoryIntrospector;
 import br.com.caelum.vraptor.ioc.SessionScoped;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Registry to all ComponentRegistry classes

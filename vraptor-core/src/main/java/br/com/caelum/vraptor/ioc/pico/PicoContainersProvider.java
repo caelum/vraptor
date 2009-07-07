@@ -29,6 +29,19 @@
  */
 package br.com.caelum.vraptor.ioc.pico;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.http.HttpSession;
+
+import org.picocontainer.DefaultPicoContainer;
+import org.picocontainer.MutablePicoContainer;
+import org.picocontainer.behaviors.Caching;
+import org.picocontainer.lifecycle.JavaEE5LifecycleStrategy;
+import org.picocontainer.monitors.NullComponentMonitor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.http.route.Router;
@@ -39,17 +52,6 @@ import br.com.caelum.vraptor.ioc.ComponentFactory;
 import br.com.caelum.vraptor.ioc.ComponentFactoryIntrospector;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.ioc.SessionScoped;
-import org.picocontainer.DefaultPicoContainer;
-import org.picocontainer.MutablePicoContainer;
-import org.picocontainer.behaviors.Caching;
-import org.picocontainer.lifecycle.JavaEE5LifecycleStrategy;
-import org.picocontainer.monitors.NullComponentMonitor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.servlet.http.HttpSession;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Provides containers, controlling all scopes and registering all different
@@ -71,10 +73,11 @@ public class PicoContainersProvider implements ComponentRegistry {
     private final MutablePicoContainer appContainer;
     private boolean initialized = false;
 
-    private ComponentFactoryRegistry componentFactoryRegistry;
+    private final ComponentFactoryRegistry componentFactoryRegistry;
 
-    public PicoContainersProvider(MutablePicoContainer container) {
+    public PicoContainersProvider(MutablePicoContainer container, ComponentFactoryRegistry componentFactoryRegistry) {
         this.appContainer = container;
+        this.componentFactoryRegistry = componentFactoryRegistry;
     }
 
     @SuppressWarnings("unchecked")
@@ -187,7 +190,6 @@ public class PicoContainersProvider implements ComponentRegistry {
             this.appContainer.addComponent(type);
         }
 
-        componentFactoryRegistry = appContainer.getComponent(ComponentFactoryRegistry.class);
         registerComponentFactories(appContainer, componentFactoryRegistry.getApplicationScopedComponentFactoryMap());
 
         logger.debug("Session components to initialize: " + sessionScoped.keySet());

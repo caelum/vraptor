@@ -50,8 +50,7 @@ public class PicoContainersProviderTest {
             }
         });
         this.webRequest = new RequestInfo(null, request, mockery.mock(HttpServletResponse.class));
-        this.provider = new PicoContainersProvider(container);
-        this.provider.register(ComponentFactoryRegistry.class, DefaultComponentFactoryRegistry.class);
+        this.provider = new PicoContainersProvider(container, new DefaultComponentFactoryRegistry());
         this.provider.init();
     }
 

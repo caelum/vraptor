@@ -27,13 +27,16 @@
  */
 package br.com.caelum.vraptor.ioc.pico;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Component;
 
 /**
  * Whenever it finds acceptable components, register using the provider
- *
+ * 
  * @author paulo silveira
  */
 @ApplicationScoped
@@ -46,31 +49,21 @@ public class ComponentAcceptor implements Acceptor {
 	}
 
 	public void analyze(Class<?> type) {
-
 		if (type.isAnnotationPresent(Component.class)) {
-			Class<?> interfaceClass = type.getAnnotation(Component.class).value();
-			
-			if (!interfaceClass.equals(void.class)) {
-				
-				if (interfaceClass.isAssignableFrom(type)) {
-					registry.register(interfaceClass, type);
-				} else {
-					throw new IllegalArgumentException("Type " + type.getName() 
-							+" doesn't implement " + interfaceClass.getName());
-				}
-			}
-			
-			registry.register(type, type);
+
+			deepRegister(type, type);
+		}
+	}
+
+	private void deepRegister(Class<?> required, Class<?> component) {
+		if (required  == null  || required.equals(Object.class))
+			return;
+		registry.register(required, component);
+		for (Class<?> c : required.getInterfaces()) {
+			deepRegister(c, component);
 		}
 
-		/*
-		for (Annotation a : type.getAnnotations()) {
-			if (a.annotationType().isAnnotationPresent(Stereotype.class)) {
-				registry.register(type, type);
-				break;
-			}
-		}
-		*/
+		deepRegister(required.getSuperclass(), component);
 	}
 
 }

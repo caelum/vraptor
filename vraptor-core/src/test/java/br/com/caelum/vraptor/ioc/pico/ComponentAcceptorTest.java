@@ -1,5 +1,13 @@
 package br.com.caelum.vraptor.ioc.pico;
 
+import java.io.Serializable;
+import java.util.AbstractCollection;
+import java.util.AbstractList;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.RandomAccess;
+
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Before;
@@ -56,9 +64,24 @@ public class ComponentAcceptorTest {
         mockery.assertIsSatisfied();
     }
     
-    @Test(expected=IllegalArgumentException.class)
-    public void shouldNotRegisterComponentUsingAnUnimplementedInterface() {
-        acceptor.analyze(OtherRunnableComponent.class);
+    public void shouldRegisterForLotsOfInterfacesWhenArrayListAccepted() {
+        mockery.checking(new Expectations(){{
+        	
+        	
+            allowing(registry).register(ArrayListSubclass.class, ArrayListSubclass.class);
+            allowing(registry).register(ArrayList.class, ArrayListSubclass.class);
+            allowing(registry).register(List.class, ArrayListSubclass.class);
+            allowing(registry).register(Collection.class, ArrayListSubclass.class);
+            allowing(registry).register(Iterable.class, ArrayListSubclass.class);
+            allowing(registry).register(Cloneable.class, ArrayListSubclass.class);
+            allowing(registry).register(Serializable.class, ArrayListSubclass.class);
+            allowing(registry).register(RandomAccess.class, ArrayListSubclass.class);
+            allowing(registry).register(AbstractList.class, ArrayListSubclass.class);
+            allowing(registry).register(AbstractCollection.class, ArrayListSubclass.class);
+            allowing(registry).register(List.class, ArrayListSubclass.class);
+            allowing(registry).register(Collection.class, ArrayListSubclass.class);
+        }});
+        acceptor.analyze(ArrayListSubclass.class);
     }
 
     class ComponentNotAnnotated {
@@ -72,13 +95,14 @@ public class ComponentAcceptorTest {
     class ComponentAnnotated {
     }
 
-    @Component(Runnable.class)
+    @Component
     class RunnableComponent implements Runnable {
 		public void run() {	}
     }
-
-    @Component(Comparable.class)
-    class OtherRunnableComponent implements Runnable {
-		public void run() {	}
+    
+    @SuppressWarnings("serial")
+	@Component
+    class ArrayListSubclass extends ArrayList<Object> {
+    	
     }
 }

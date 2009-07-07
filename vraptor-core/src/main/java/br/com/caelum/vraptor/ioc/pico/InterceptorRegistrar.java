@@ -16,12 +16,12 @@ import br.com.caelum.vraptor.interceptor.InterceptorSequence;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
 @ApplicationScoped
-public class InterceptorAcceptor implements Acceptor {
+public class InterceptorRegistrar implements Registrar {
 
-	private static final Logger logger = LoggerFactory.getLogger(InterceptorAcceptor.class);
+	private static final Logger logger = LoggerFactory.getLogger(InterceptorRegistrar.class);
 	private final InterceptorRegistry registry;
 
-	public InterceptorAcceptor(InterceptorRegistry registry) {
+	public InterceptorRegistrar(InterceptorRegistry registry) {
 		this.registry = registry;
 	}
 

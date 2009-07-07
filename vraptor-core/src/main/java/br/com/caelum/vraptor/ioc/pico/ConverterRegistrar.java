@@ -27,41 +27,28 @@
  */
 package br.com.caelum.vraptor.ioc.pico;
 
-import br.com.caelum.vraptor.ComponentRegistry;
+import br.com.caelum.vraptor.Convert;
+import br.com.caelum.vraptor.Converter;
+import br.com.caelum.vraptor.VRaptorException;
+import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
-import br.com.caelum.vraptor.ioc.Component;
 
-/**
- * Whenever it finds acceptable components, register using the provider
- * 
- * @author paulo silveira
- */
 @ApplicationScoped
-public class ComponentAcceptor implements Acceptor {
+public class ConverterRegistrar implements Registrar {
 
-	private final ComponentRegistry registry;
+	private final Converters converters;
 
-	public ComponentAcceptor(ComponentRegistry registry) {
-		this.registry = registry;
+	public ConverterRegistrar(Converters converters) {
+		this.converters = converters;
 	}
 
+	@SuppressWarnings("unchecked")
 	public void analyze(Class<?> type) {
-		if (type.isAnnotationPresent(Component.class)) {
-			deepRegister(type, type);
+		if (type.isAnnotationPresent(Convert.class)) {
+			if (!Converter.class.isAssignableFrom(type)) {
+				throw new VRaptorException("converter does not implement Converter");
+			}
+			converters.register(Class.class.cast(type));
 		}
 	}
-
-	private void deepRegister(Class<?> required, Class<?> component) {
-		if (required == null || required.equals(Object.class))
-			return;
-		
-		registry.register(required, component);
-		
-		for (Class<?> c : required.getInterfaces()) {
-			deepRegister(c, component);
-		}
-
-		deepRegister(required.getSuperclass(), component);
-	}
-
 }

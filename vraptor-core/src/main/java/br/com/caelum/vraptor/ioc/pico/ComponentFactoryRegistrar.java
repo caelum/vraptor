@@ -13,12 +13,12 @@ import br.com.caelum.vraptor.ioc.ComponentFactory;
  * @author Sérgio Lopes
  */
 @ApplicationScoped
-public class ComponentFactoryAcceptor implements Acceptor {
+public class ComponentFactoryRegistrar implements Registrar {
 	
-	private static final Logger logger = LoggerFactory.getLogger(ComponentFactoryAcceptor.class);
+	private static final Logger logger = LoggerFactory.getLogger(ComponentFactoryRegistrar.class);
 	private final ComponentFactoryRegistry registry;
 
-	public ComponentFactoryAcceptor(ComponentFactoryRegistry registry) {
+	public ComponentFactoryRegistrar(ComponentFactoryRegistry registry) {
 		this.registry = registry;
 	}
 	

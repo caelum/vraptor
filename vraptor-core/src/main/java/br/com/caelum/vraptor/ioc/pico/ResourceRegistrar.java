@@ -39,11 +39,11 @@ import br.com.caelum.vraptor.resource.DefaultResourceClass;
  * @author paulo silveira
  */
 @ApplicationScoped
-public class ResourceAcceptor implements Acceptor {
+public class ResourceRegistrar implements Registrar {
 
 	private final Router router;
 
-	public ResourceAcceptor(Router router) {
+	public ResourceRegistrar(Router router) {
 		this.router = router;
 	}
 

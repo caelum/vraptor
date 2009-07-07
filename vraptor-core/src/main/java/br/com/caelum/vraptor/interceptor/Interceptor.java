@@ -27,10 +27,11 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package br.com.caelum.vraptor;
+package br.com.caelum.vraptor.interceptor;
 
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.InterceptionException;
 
 /**
  * Whenever an interceptor accepts a resource method, its intercept method is

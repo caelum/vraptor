@@ -1,6 +1,6 @@
 package br.com.caelum.vraptor.ioc.pico;
 
-public interface Acceptor {
+public interface Registrar {
 
     void analyze(Class<?> type);
 

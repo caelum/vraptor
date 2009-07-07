@@ -79,19 +79,16 @@ public class PicoProvider implements ContainerProvider {
 	private static final Logger logger = LoggerFactory.getLogger(PicoProvider.class);
 
 	public PicoProvider() {
-		this.container = new DefaultPicoContainer(new Caching(), new JavaEE5LifecycleStrategy(
-				new NullComponentMonitor()), null);
+		this.container = new DefaultPicoContainer(new Caching(),
+                new JavaEE5LifecycleStrategy(new NullComponentMonitor()), null);
 		PicoContainersProvider containersProvider = new PicoContainersProvider(this.container);
 		this.container.addComponent(containersProvider);
-		registerComponents(getContainers());
-		containersProvider.init();
-		// TODO: cache
 	}
 
 	/**
 	 * Register extra components that your app wants to.
 	 */
-	protected void registerComponents(ComponentRegistry container) {
+	protected void registerBundledComponents(ComponentRegistry container) {
 		logger.debug("Registering base pico container related implementation components");
 		for (Class<?> type : BaseComponents.getApplicationScoped()) {
 			singleInterfaceRegister(type, container);
@@ -103,7 +100,6 @@ public class PicoProvider implements ContainerProvider {
 			singleInterfaceRegister(type, container);
 		}
 		container.register(MultipartConfig.class, DefaultMultipartConfig.class);
-
 		container.register(ForwardToDefaultViewInterceptor.class, ForwardToDefaultViewInterceptor.class);
 		container.register(LogicResult.class, DefaultLogicResult.class);
 		container.register(PageResult.class, DefaultPageResult.class);
@@ -120,12 +116,13 @@ public class PicoProvider implements ContainerProvider {
 		container.register(ResourceLookupInterceptor.class, ResourceLookupInterceptor.class);
 		container.register(InstantiateInterceptor.class, InstantiateInterceptor.class);
 		container.register(ExecuteMethodInterceptor.class, ExecuteMethodInterceptor.class);
-		container.register(ResourceAcceptor.class, ResourceAcceptor.class);
-		container.register(ComponentAcceptor.class, ComponentAcceptor.class);
-		container.register(InterceptorAcceptor.class, InterceptorAcceptor.class);
-		container.register(ConverterAcceptor.class, ConverterAcceptor.class);
+		container.register(ResourceRegistrar.class, ResourceRegistrar.class);
+		container.register(ComponentRegistrar.class, ComponentRegistrar.class);
+		container.register(InterceptorRegistrar.class, InterceptorRegistrar.class);
+		container.register(ConverterRegistrar.class, ConverterRegistrar.class);
 		container.register(ComponentFactoryRegistry.class, DefaultComponentFactoryRegistry.class);
-		container.register(ComponentFactoryAcceptor.class, ComponentFactoryAcceptor.class);
+		container.register(ComponentFactoryRegistrar.class, ComponentFactoryRegistrar.class);
+        container.register(Scanner.class, ReflectionsScanner.class);
 	}
 
 	private void singleInterfaceRegister(Class<?> type, ComponentRegistry registry) {
@@ -153,27 +150,18 @@ public class PicoProvider implements ContainerProvider {
 	}
 
 	public void start(ServletContext context) {
-		this.container.addComponent(context);
+        registerBundledComponents(getContainers());
+        this.container.addComponent(context);
+        Scanner scanner = container.getComponent(Scanner.class);
 
+        container.getComponent(ComponentRegistrar.class).registerFrom(scanner);
+        container.getComponent(ResourceRegistrar.class).registerFrom(scanner);
+        container.getComponent(InterceptorRegistrar.class).registerFrom(scanner);
+        container.getComponent(ConverterRegistrar.class).registerFrom(scanner);
+		container.getComponent(ComponentFactoryRegistrar.class).registerFrom(scanner);
+
+        getContainers().init();
 		container.start();
-
-		// TODO: hack, it should load everything during a single scan, marking the classes
-		// and then registering afterall.
-
-		logger.info("loading all @Components");
-		Loader componentLoader = new WebInfClassesScanner(context, container.getComponent(DirScanner.class), container.getComponent(ComponentAcceptor.class));
- 		componentLoader.loadAll();
-
-		logger.info("loading other stereotyped classes (resources, interceptors, converters  and factories");
-		Acceptor[] acceptors = {
-				container.getComponent(ResourceAcceptor.class),
-				container.getComponent(InterceptorAcceptor.class),
-				container.getComponent(ConverterAcceptor.class),
-				container.getComponent(ComponentFactoryAcceptor.class)
-		};
-
-		Loader loader = new WebInfClassesScanner(context, container.getComponent(DirScanner.class), acceptors);
-		loader.loadAll();
 	}
 
 	public void stop() {

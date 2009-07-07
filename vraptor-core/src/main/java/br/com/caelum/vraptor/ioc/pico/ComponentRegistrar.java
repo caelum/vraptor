@@ -29,39 +29,52 @@ package br.com.caelum.vraptor.ioc.pico;
 
 import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
-import br.com.caelum.vraptor.ioc.Component;
+import br.com.caelum.vraptor.ioc.Stereotype;
+
+import java.util.Collection;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * Whenever it finds acceptable components, register using the provider
- * 
- * @author paulo silveira
+ * <p>Prepares all classes with meta-annotation @Stereotype to be used as VRaptor components. It means that any
+ * annotation which in turn is annotated with @Stereotype, serves to mark a component.</p>
+ * <p>The most common marker annotation for components is @Component (which is annotated with @Stereotype). Others that
+ * are also common include @Intercepts and @Convert.</p>
+ *
+ * @author Paulo Silveira
+ * @author Fabio Kung
  */
 @ApplicationScoped
 public class ComponentRegistrar implements Registrar {
+    private final Logger logger = LoggerFactory.getLogger(ComponentRegistrar.class);
 
-	private final ComponentRegistry registry;
+    private final ComponentRegistry registry;
 
-	public ComponentRegistrar(ComponentRegistry registry) {
-		this.registry = registry;
-	}
+    public ComponentRegistrar(ComponentRegistry registry) {
+        this.registry = registry;
+    }
 
-	public void analyze(Class<?> type) {
-		if (type.isAnnotationPresent(Component.class)) {
-			deepRegister(type, type);
-		}
-	}
+    public void registerFrom(Scanner scanner) {
+        logger.info("Registering all classes with stereotyped annotations (annotations annotated with @Stereotype)");
+        Collection<Class<?>> componentTypes = scanner.getTypesWithMetaAnnotation(Stereotype.class);
+        for (Class<?> componentType : componentTypes) {
+            logger.debug("found component: " + componentType);
+            deepRegister(componentType, componentType);
+        }
+    }
 
-	private void deepRegister(Class<?> required, Class<?> component) {
-		if (required == null || required.equals(Object.class))
-			return;
-		
-		registry.register(required, component);
-		
-		for (Class<?> c : required.getInterfaces()) {
-			deepRegister(c, component);
-		}
+    private void deepRegister(Class<?> required, Class<?> component) {
+        if (required == null || required.equals(Object.class))
+            return;
 
-		deepRegister(required.getSuperclass(), component);
-	}
+        registry.register(required, component);
+
+        for (Class<?> c : required.getInterfaces()) {
+            deepRegister(c, component);
+        }
+
+        deepRegister(required.getSuperclass(), component);
+    }
 
 }

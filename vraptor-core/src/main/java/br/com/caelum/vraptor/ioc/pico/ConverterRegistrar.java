@@ -32,23 +32,38 @@ import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.VRaptorException;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.util.Collection;
+
+/**
+ * Prepares all classes annotated with @Convert to be used as converters.
+ *
+ * @author Guilherme Silveira
+ * @author Fabio Kung
+ */
 @ApplicationScoped
 public class ConverterRegistrar implements Registrar {
 
-	private final Converters converters;
+    private final Logger logger = LoggerFactory.getLogger(ConverterRegistrar.class);
+    private final Converters converters;
 
-	public ConverterRegistrar(Converters converters) {
-		this.converters = converters;
-	}
+    public ConverterRegistrar(Converters converters) {
+        this.converters = converters;
+    }
 
-	@SuppressWarnings("unchecked")
-	public void analyze(Class<?> type) {
-		if (type.isAnnotationPresent(Convert.class)) {
-			if (!Converter.class.isAssignableFrom(type)) {
-				throw new VRaptorException("converter does not implement Converter");
-			}
-			converters.register(Class.class.cast(type));
-		}
-	}
+    @SuppressWarnings({"unchecked"})
+    public void registerFrom(Scanner scanner) {
+        logger.info("Registering all custom converters annotated with @Convert");
+        Collection<Class<?>> converterTypes = scanner.getTypesWithAnnotation(Convert.class);
+
+        for (Class<?> converterType : converterTypes) {
+            if (!Converter.class.isAssignableFrom(converterType)) {
+                throw new VRaptorException("converter does not implement Converter");
+            }
+            logger.debug("found converter: " + converterType);
+            converters.register((Class<? extends Converter<?>>) converterType);
+        }
+    }
 }

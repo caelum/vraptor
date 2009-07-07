@@ -31,26 +31,36 @@ import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.resource.DefaultResourceClass;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Collection;
 
 /**
- * Whenever it finds acceptable resources, registers it using the given router.
+ * Prepares special components annotated with @Resource to be reachable through web requests;
+ * i.e. adds them to the Router.
  *
- * @author guilherme silveira
- * @author paulo silveira
+ * @author Guilherme Silveira
+ * @author Paulo Silveira
+ * @author Fabio Kung
  */
 @ApplicationScoped
 public class ResourceRegistrar implements Registrar {
+    private final Logger logger = LoggerFactory.getLogger(ResourceRegistrar.class);
 
-	private final Router router;
+    private final Router router;
 
-	public ResourceRegistrar(Router router) {
-		this.router = router;
-	}
+    public ResourceRegistrar(Router router) {
+        this.router = router;
+    }
 
-	public void analyze(Class<?> type) {
-		if (type.isAnnotationPresent(Resource.class)) {
-			router.register(new DefaultResourceClass(type));
-		}
-	}
+    public void registerFrom(Scanner scanner) {
+        logger.info("Registering all resources annotated with @Resource");
+        Collection<Class<?>> resourceTypes = scanner.getTypesWithAnnotation(Resource.class);
+        for (Class<?> resourceType : resourceTypes) {
+            logger.debug("Found resource: " + resourceType);
+            router.register(new DefaultResourceClass(resourceType));
+        }
+    }
 
 }

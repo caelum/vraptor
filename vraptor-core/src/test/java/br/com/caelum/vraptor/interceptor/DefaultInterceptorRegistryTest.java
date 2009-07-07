@@ -1,23 +1,19 @@
 package br.com.caelum.vraptor.interceptor;
 
+import br.com.caelum.vraptor.InterceptionException;
+import br.com.caelum.vraptor.core.InterceptorStack;
+import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor.resource.ResourceMethod;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.InterceptionException;
-import br.com.caelum.vraptor.interceptor.Interceptor;
-import br.com.caelum.vraptor.core.InterceptorStack;
-import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.resource.ResourceMethod;
+import java.io.IOException;
+import java.util.List;
 
 public class DefaultInterceptorRegistryTest {
 
@@ -34,8 +30,6 @@ public class DefaultInterceptorRegistryTest {
         this.container = mockery.mock(Container.class);
         this.method = mockery.mock(ResourceMethod.class);
         this.registry = new DefaultInterceptorRegistry();
-        this.interceptors = new ArrayList<Class<? extends Interceptor>>();
-        this.interceptors.add(CustomInterceptor.class);
         this.interceptor = mockery.mock(Interceptor.class);
     }
 
@@ -53,11 +47,13 @@ public class DefaultInterceptorRegistryTest {
     public void shouldReturnAnInterceptorWhichAcceptsTheGivenResource() throws InterceptionException, IOException {
         mockery.checking(new Expectations() {
             {
-                one(container).instanceFor(CustomInterceptor.class); will(returnValue(interceptor));
-                one(interceptor).accepts(method); will(returnValue(true));
+                one(container).instanceFor(CustomInterceptor.class);
+                will(returnValue(interceptor));
+                one(interceptor).accepts(method);
+                will(returnValue(true));
             }
         });
-        registry.register(interceptors);
+        registry.register(CustomInterceptor.class);
         Interceptor[] types = registry.interceptorsFor(method, container);
         assertThat(types.length, is(1));
         assertThat(types[0], is(equalTo(interceptor)));
@@ -68,11 +64,13 @@ public class DefaultInterceptorRegistryTest {
     public void shouldNotReturnAnInterceptorWhichDoesNotAcceptTheGivenResource() {
         mockery.checking(new Expectations() {
             {
-                one(container).instanceFor(CustomInterceptor.class); will(returnValue(interceptor));
-                one(interceptor).accepts(method); will(returnValue(false));
+                one(container).instanceFor(CustomInterceptor.class);
+                will(returnValue(interceptor));
+                one(interceptor).accepts(method);
+                will(returnValue(false));
             }
         });
-        registry.register(interceptors);
+        registry.register(CustomInterceptor.class);
         Interceptor[] types = registry.interceptorsFor(method, container);
         assertThat(types.length, is(0));
         mockery.assertIsSatisfied();

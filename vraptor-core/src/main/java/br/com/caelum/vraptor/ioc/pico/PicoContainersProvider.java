@@ -141,8 +141,7 @@ public class PicoContainersProvider implements ComponentRegistry {
         if (logger.isDebugEnabled()) {
             logger.debug("Request components are " + requestScoped);
         }
-        MutablePicoContainer requestContainer = new DefaultPicoContainer(new Caching(), new JavaEE5LifecycleStrategy(
-                new NullComponentMonitor()), sessionScope);
+        MutablePicoContainer requestContainer = new VRaptorPicoContainer(sessionScope);
         for (Class<?> requiredType : requestScoped.keySet()) {
             requestContainer.addComponent(requiredType, requestScoped.get(requiredType));
         }
@@ -154,8 +153,7 @@ public class PicoContainersProvider implements ComponentRegistry {
     }
 
     private MutablePicoContainer createSessionContainer(HttpSession session) {
-        MutablePicoContainer sessionContainer = new DefaultPicoContainer(new Caching(), new JavaEE5LifecycleStrategy(
-                new NullComponentMonitor()), this.appContainer);
+        MutablePicoContainer sessionContainer = new VRaptorPicoContainer(this.appContainer);
 
         sessionContainer.addComponent(HttpSession.class, session);
         session.setAttribute(CONTAINER_SESSION_KEY, sessionContainer);

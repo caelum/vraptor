@@ -1,6 +1,8 @@
 package br.com.caelum.vraptor.ioc.pico;
 
 import br.com.caelum.vraptor.ioc.Stereotype;
+import br.com.caelum.vraptor.ioc.Component;
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import org.reflections.Reflections;
 import org.reflections.scanners.ClassAnnotationsScanner;
 import org.reflections.scanners.SubTypesScanner;
@@ -18,6 +20,7 @@ import java.util.Set;
  *
  * @author Fabio Kung
  */
+@ApplicationScoped
 public class ReflectionsScanner implements Scanner {
     private final Reflections reflections;
 

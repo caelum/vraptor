@@ -29,6 +29,16 @@
  */
 package br.com.caelum.vraptor.ioc.pico;
 
+import javax.servlet.ServletContext;
+
+import org.picocontainer.DefaultPicoContainer;
+import org.picocontainer.MutablePicoContainer;
+import org.picocontainer.behaviors.Caching;
+import org.picocontainer.lifecycle.JavaEE5LifecycleStrategy;
+import org.picocontainer.monitors.NullComponentMonitor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.core.BaseComponents;
 import br.com.caelum.vraptor.core.Execution;
@@ -54,11 +64,6 @@ import br.com.caelum.vraptor.view.DefaultPageResult;
 import br.com.caelum.vraptor.view.EmptyResult;
 import br.com.caelum.vraptor.view.LogicResult;
 import br.com.caelum.vraptor.view.PageResult;
-import org.picocontainer.MutablePicoContainer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.servlet.ServletContext;
 
 /**
  * Managing internal components by using pico container.<br>
@@ -69,14 +74,17 @@ import javax.servlet.ServletContext;
  */
 public class PicoProvider implements ContainerProvider {
 
-    private final VRaptorPicoContainer container;
+    private final MutablePicoContainer container;
 
     private static final Logger logger = LoggerFactory.getLogger(PicoProvider.class);
 
     public PicoProvider() {
-        this.container = new VRaptorPicoContainer(null);
+        this.container = new DefaultPicoContainer(new Caching(),
+                new JavaEE5LifecycleStrategy(new NullComponentMonitor()), null);
+        
         ComponentFactoryRegistry componentFactoryRegistry = new DefaultComponentFactoryRegistry();
         PicoContainersProvider containersProvider = new PicoContainersProvider(this.container, componentFactoryRegistry);
+        
         this.container.addComponent(containersProvider);
         this.container.addComponent(componentFactoryRegistry);
     }

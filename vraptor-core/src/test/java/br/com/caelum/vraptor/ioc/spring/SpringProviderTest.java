@@ -13,6 +13,7 @@ import org.jmock.Mockery;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.Ignore;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -63,20 +64,4 @@ public class SpringProviderTest {
         provider.start(servletContext);
     }
 
-    @Test
-    public void shouldRegisterCustomComponentsWithComponentRegistrar() {
-        mockery.checking(new Expectations() {{
-            one(servletContext).getInitParameter(SpringProvider.BASE_PACKAGES_PARAMETER_NAME);
-            will(returnValue("br.com.caelum.vraptor.ioc.spring.components.registrar"));
-        }});
-        SpringProvider provider = new SpringProvider();
-        provider.start(servletContext);
-        UrlToResourceTranslator translator = provider.provideForRequest(new RequestInfo(servletContext, request, response),
-                new Execution<UrlToResourceTranslator>() {
-                    public UrlToResourceTranslator insideRequest(Container container) {
-                        return container.instanceFor(UrlToResourceTranslator.class);
-                    }
-                });
-        assertThat(translator, is(instanceOf(CustomTranslator.class)));
-    }
 }

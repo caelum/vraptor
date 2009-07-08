@@ -83,9 +83,9 @@ public class PicoProvider implements ContainerProvider {
                 new JavaEE5LifecycleStrategy(new NullComponentMonitor()), null);
         
         ComponentFactoryRegistry componentFactoryRegistry = new DefaultComponentFactoryRegistry();
-        PicoContainersProvider containersProvider = new PicoContainersProvider(this.container, componentFactoryRegistry);
+        PicoComponentRegistry componentRegistry = new PicoComponentRegistry(this.container, componentFactoryRegistry);
         
-        this.container.addComponent(containersProvider);
+        this.container.addComponent(componentRegistry);
         this.container.addComponent(componentFactoryRegistry);
     }
 
@@ -135,7 +135,7 @@ public class PicoProvider implements ContainerProvider {
     public <T> T provideForRequest(RequestInfo request, Execution<T> execution) {
         PicoBasedContainer container = null;
         try {
-            container = getContainers().provide(request);
+            container = getContainers().provideRequestContainer(request);
             container.getContainer().start();
             return execution.insideRequest(container);
         } finally {
@@ -171,8 +171,8 @@ public class PicoProvider implements ContainerProvider {
         container.dispose();
     }
 
-    protected PicoContainersProvider getContainers() {
-        return this.container.getComponent(PicoContainersProvider.class);
+    protected PicoComponentRegistry getContainers() {
+        return this.container.getComponent(PicoComponentRegistry.class);
     }
 
     protected MutablePicoContainer getContainer() {

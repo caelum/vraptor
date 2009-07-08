@@ -24,11 +24,11 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.resource.ResourceClass;
 
-public class PicoContainersProviderTest {
+public class PicoComponentRegistryTest {
 
     private Mockery mockery;
     private MutablePicoContainer container;
-    private PicoContainersProvider provider;
+    private PicoComponentRegistry provider;
     private MutableRequest request;
     private RequestInfo webRequest;
 
@@ -50,7 +50,7 @@ public class PicoContainersProviderTest {
             }
         });
         this.webRequest = new RequestInfo(null, request, mockery.mock(HttpServletResponse.class));
-        this.provider = new PicoContainersProvider(container, new DefaultComponentFactoryRegistry());
+        this.provider = new PicoComponentRegistry(container, new DefaultComponentFactoryRegistry());
         this.provider.init();
     }
 
@@ -71,7 +71,7 @@ public class PicoContainersProviderTest {
     public void shouldRemovePreviouslyRegisteredComponentIfRegisteringAgain() {
         provider.register(Base.class, MyFirstImplementation.class);
         provider.register(Base.class,MySecondImplementation.class);
-        Container container = provider.provide(webRequest);
+        Container container = provider.provideRequestContainer(webRequest);
         Base instance = container.instanceFor(Base.class);
         assertThat(instance.getClass(), is(typeCompatibleWith(MySecondImplementation.class)));
     }
@@ -80,7 +80,7 @@ public class PicoContainersProviderTest {
     public void shouldRemovePreviouslyRegisteredComponentIfRegisteringAgainInAnotherScope() {
         provider.register(Base.class, MyFirstImplementation.class);
         provider.register(Base.class,AppImplementation.class);
-        Container container = provider.provide(webRequest);
+        Container container = provider.provideRequestContainer(webRequest);
         Base instance = container.instanceFor(Base.class);
         assertThat(instance.getClass(), is(typeCompatibleWith(AppImplementation.class)));
     }

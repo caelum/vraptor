@@ -59,11 +59,11 @@ import br.com.caelum.vraptor.ioc.SessionScoped;
  * @author Adriano Almeida
  * @author Sérgio Lopes
  */
-public class PicoContainersProvider implements ComponentRegistry {
+public class PicoComponentRegistry implements ComponentRegistry {
 
-    public static final String CONTAINER_SESSION_KEY = PicoContainersProvider.class.getName() + ".session";
+    public static final String CONTAINER_SESSION_KEY = PicoComponentRegistry.class.getName() + ".session";
 
-    private static final Logger logger = LoggerFactory.getLogger(PicoContainersProvider.class);
+    private static final Logger logger = LoggerFactory.getLogger(PicoComponentRegistry.class);
 
     private final Map<Class<?>, Class<?>> applicationScoped = new HashMap<Class<?>, Class<?>>();
     private final Map<Class<?>, Class<?>> sessionScoped = new HashMap<Class<?>, Class<?>>();
@@ -73,7 +73,7 @@ public class PicoContainersProvider implements ComponentRegistry {
 
     private final ComponentFactoryRegistry componentFactoryRegistry;
 
-    public PicoContainersProvider(MutablePicoContainer container, ComponentFactoryRegistry componentFactoryRegistry) {
+    public PicoComponentRegistry(MutablePicoContainer container, ComponentFactoryRegistry componentFactoryRegistry) {
         this.appContainer = container;
         this.componentFactoryRegistry = componentFactoryRegistry;
     }
@@ -122,6 +122,24 @@ public class PicoContainersProvider implements ComponentRegistry {
         }
     }
 
+    /**
+     * Registers all application scoped elements into the container.
+     */
+    public void init() {
+
+        for (Class<?> requiredType : applicationScoped.keySet()) {
+            Class<?> type = applicationScoped.get(requiredType);
+            logger.debug("Initializing application scope with " + type);
+            this.appContainer.addComponent(type);
+        }
+
+        registerComponentFactories(appContainer, componentFactoryRegistry.getApplicationScopedComponentFactoryMap());
+
+        logger.debug("Session components to initialize: " + sessionScoped.keySet());
+        logger.debug("Requets components to initialize: " + requestScoped.keySet());
+        this.initialized = true;
+    }
+
     private boolean alreadyRegistered(Class<?> interfaceType) {
         for (Map<Class<?>, Class<?>> scope : new Map[]{applicationScoped, sessionScoped, requestScoped}) {
             if (scope.containsKey(interfaceType)) {
@@ -132,7 +150,7 @@ public class PicoContainersProvider implements ComponentRegistry {
         return false;
     }
 
-    PicoBasedContainer provide(RequestInfo request) {
+    PicoBasedContainer provideRequestContainer(RequestInfo request) {
         HttpSession session = request.getRequest().getSession();
         MutablePicoContainer sessionScope = (MutablePicoContainer) session.getAttribute(CONTAINER_SESSION_KEY);
         if (sessionScope == null) {
@@ -172,24 +190,6 @@ public class PicoContainersProvider implements ComponentRegistry {
 
         sessionContainer.start();
         return sessionContainer;
-    }
-
-    /**
-     * Registers all application scoped elements into the container.
-     */
-    public void init() {
-
-        for (Class<?> requiredType : applicationScoped.keySet()) {
-            Class<?> type = applicationScoped.get(requiredType);
-            logger.debug("Initializing application scope with " + type);
-            this.appContainer.addComponent(type);
-        }
-
-        registerComponentFactories(appContainer, componentFactoryRegistry.getApplicationScopedComponentFactoryMap());
-
-        logger.debug("Session components to initialize: " + sessionScoped.keySet());
-        logger.debug("Requets components to initialize: " + requestScoped.keySet());
-        this.initialized = true;
     }
 
     /**

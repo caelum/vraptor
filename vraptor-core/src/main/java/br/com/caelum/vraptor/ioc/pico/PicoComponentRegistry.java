@@ -126,7 +126,7 @@ public class PicoComponentRegistry implements ComponentRegistry {
      * Registers all application scoped elements into the container.
      */
     public void init() {
-
+        logger.info("Initializing VRaptor IoC Container implementation based on PicoContainer");
         for (Map.Entry<Class<?>, Class<?>> entry : applicationScoped.entrySet()) {
             logger.debug("Initializing application scope with key: " + entry.getKey() + ", for component: " +
                     entry.getValue());

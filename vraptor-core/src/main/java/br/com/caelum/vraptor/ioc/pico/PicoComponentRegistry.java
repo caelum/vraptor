@@ -127,10 +127,10 @@ public class PicoComponentRegistry implements ComponentRegistry {
      */
     public void init() {
 
-        for (Class<?> requiredType : applicationScoped.keySet()) {
-            Class<?> type = applicationScoped.get(requiredType);
-            logger.debug("Initializing application scope with " + type);
-            this.appContainer.addComponent(type);
+        for (Map.Entry<Class<?>, Class<?>> entry : applicationScoped.entrySet()) {
+            logger.debug("Initializing application scope with key: " + entry.getKey() + ", for component: " +
+                    entry.getValue());
+            this.appContainer.addComponent(entry.getKey(), entry.getValue());
         }
 
         registerComponentFactories(appContainer, componentFactoryRegistry.getApplicationScopedComponentFactoryMap());
@@ -138,6 +138,30 @@ public class PicoComponentRegistry implements ComponentRegistry {
         logger.debug("Session components to initialize: " + sessionScoped.keySet());
         logger.debug("Requets components to initialize: " + requestScoped.keySet());
         this.initialized = true;
+    }
+
+    PicoBasedContainer provideRequestContainer(RequestInfo request) {
+        HttpSession session = request.getRequest().getSession();
+        MutablePicoContainer sessionScope = (MutablePicoContainer) session.getAttribute(CONTAINER_SESSION_KEY);
+        if (sessionScope == null) {
+            sessionScope = createSessionContainer(session);
+        }
+
+        if (logger.isDebugEnabled()) {
+            logger.debug("Request components are " + requestScoped);
+        }
+
+        MutablePicoContainer requestContainer = new DefaultPicoContainer(new Caching(), new JavaEE5LifecycleStrategy(
+                new NullComponentMonitor()), sessionScope);
+
+        for (Map.Entry<Class<?>, Class<?>> entry : requestScoped.entrySet()) {
+            requestContainer.addComponent(entry.getKey(), entry.getValue());
+        }
+        requestContainer.addComponent(request).addComponent(request.getRequest()).addComponent(request.getResponse());
+
+        registerComponentFactories(requestContainer, componentFactoryRegistry.getRequestScopedComponentFactoryMap());
+
+        return new PicoBasedContainer(requestContainer, this.appContainer.getComponent(Router.class));
     }
 
     private boolean alreadyRegistered(Class<?> interfaceType) {
@@ -150,27 +174,6 @@ public class PicoComponentRegistry implements ComponentRegistry {
         return false;
     }
 
-    PicoBasedContainer provideRequestContainer(RequestInfo request) {
-        HttpSession session = request.getRequest().getSession();
-        MutablePicoContainer sessionScope = (MutablePicoContainer) session.getAttribute(CONTAINER_SESSION_KEY);
-        if (sessionScope == null) {
-            sessionScope = createSessionContainer(session);
-        }
-        if (logger.isDebugEnabled()) {
-            logger.debug("Request components are " + requestScoped);
-        }
-        MutablePicoContainer requestContainer = new DefaultPicoContainer(new Caching(), new JavaEE5LifecycleStrategy(
-                new NullComponentMonitor()), sessionScope);
-        for (Class<?> requiredType : requestScoped.keySet()) {
-            requestContainer.addComponent(requiredType, requestScoped.get(requiredType));
-        }
-        requestContainer.addComponent(request).addComponent(request.getRequest()).addComponent(request.getResponse());
-
-        registerComponentFactories(requestContainer, componentFactoryRegistry.getRequestScopedComponentFactoryMap());
-
-        return new PicoBasedContainer(requestContainer, this.appContainer.getComponent(Router.class));
-    }
-
     private MutablePicoContainer createSessionContainer(HttpSession session) {
         MutablePicoContainer sessionContainer = new DefaultPicoContainer(new Caching(), new JavaEE5LifecycleStrategy(
                 new NullComponentMonitor()), this.appContainer);
@@ -181,9 +184,9 @@ public class PicoComponentRegistry implements ComponentRegistry {
         if (logger.isDebugEnabled()) {
             logger.debug("Session components are " + sessionScoped);
         }
-
-        for (Class<?> requiredType : sessionScoped.keySet()) {
-            sessionContainer.addComponent(requiredType, sessionScoped.get(requiredType));
+        
+        for (Map.Entry<Class<?>, Class<?>> entry : sessionScoped.entrySet()) {
+            sessionContainer.addComponent(entry.getKey(), entry.getValue());
         }
 
         registerComponentFactories(sessionContainer, componentFactoryRegistry.getSessionScopedComponentFactoryMap());

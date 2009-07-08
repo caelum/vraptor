@@ -3,6 +3,7 @@
 <!-- ====================================================================== 
 	VRaptor 3 full build
 	====================================================================== -->
+
 <project name="VRaptor 3" default="all">
 
 	<description>VRaptor 3 Root Buildfile</description>

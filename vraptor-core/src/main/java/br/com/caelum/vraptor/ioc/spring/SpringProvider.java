@@ -1,17 +1,14 @@
 package br.com.caelum.vraptor.ioc.spring;
 
-import javax.servlet.ServletContext;
-import javax.servlet.ServletRequestEvent;
-import javax.servlet.http.HttpServletRequest;
-
-import org.springframework.beans.factory.NoSuchBeanDefinitionException;
+import br.com.caelum.vraptor.core.Execution;
+import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.ioc.ContainerProvider;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.RequestContextListener;
 
-import br.com.caelum.vraptor.core.Execution;
-import br.com.caelum.vraptor.core.RequestInfo;
-import br.com.caelum.vraptor.ioc.ComponentRegistrar;
-import br.com.caelum.vraptor.ioc.ContainerProvider;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletRequestEvent;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author Fabio Kung
@@ -58,14 +55,6 @@ public class SpringProvider implements ContainerProvider {
 
         container = new SpringBasedContainer(packages);
         container.start(context);
-
-        // TODO not needed, as custom components are registered with @Component
-        try {
-            ComponentRegistrar registrar = container.instanceFor(ComponentRegistrar.class);
-            registrar.register(container);
-        } catch (NoSuchBeanDefinitionException e) {
-            // there isn't any ComponentRegistrar, so custom components won't be registered.
-        }
     }
 
     private boolean springListenerAlreadyCalled() {

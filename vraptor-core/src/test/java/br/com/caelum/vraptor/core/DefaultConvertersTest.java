@@ -58,8 +58,7 @@ public class DefaultConvertersTest {
                 allowing(componentRegistry).register((Class<?>) with(an(Class.class)), (Class<?>) with(an(Class.class)));
             }
         });
-        this.converters = new DefaultConverters(componentRegistry);
-        this.converters.init();
+        this.converters = new DefaultConverters();
     }
 
     @SuppressWarnings("unchecked")

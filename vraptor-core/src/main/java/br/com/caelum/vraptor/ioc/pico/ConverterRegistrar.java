@@ -30,6 +30,7 @@ package br.com.caelum.vraptor.ioc.pico;
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.VRaptorException;
+import br.com.caelum.vraptor.core.BaseComponents;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import org.slf4j.Logger;

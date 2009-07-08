@@ -50,8 +50,6 @@ public interface Converters {
 	 */
 	Converter<?> to(Class<?> type, Container container);
 
-	void init();
-
 	void register(Class<? extends Converter<?>> converterClass);
 
 }

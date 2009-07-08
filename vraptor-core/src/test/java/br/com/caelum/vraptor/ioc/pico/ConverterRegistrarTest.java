@@ -30,7 +30,7 @@ public class ConverterRegistrarTest {
         this.componentRegistry = mockery.mock(ComponentRegistry.class);
         this.converters = mockery.mock(Converters.class);
         this.scanner = mockery.mock(Scanner.class);
-        this.registrar = new ConverterRegistrar(componentRegistry, converters);
+        this.registrar = new ConverterRegistrar(converters);
     }
 
     @Test(expected = VRaptorException.class)

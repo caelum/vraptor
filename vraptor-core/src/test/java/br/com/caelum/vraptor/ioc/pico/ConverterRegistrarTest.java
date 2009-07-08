@@ -3,6 +3,7 @@ package br.com.caelum.vraptor.ioc.pico;
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.VRaptorException;
+import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.core.Converters;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -19,15 +20,17 @@ public class ConverterRegistrarTest {
 
     private Mockery mockery;
     private Registrar registrar;
+    private ComponentRegistry componentRegistry;
     private Converters converters;
     private Scanner scanner;
 
     @Before
     public void setUp() {
         this.mockery = new Mockery();
+        this.componentRegistry = mockery.mock(ComponentRegistry.class);
         this.converters = mockery.mock(Converters.class);
         this.scanner = mockery.mock(Scanner.class);
-        this.registrar = new ConverterRegistrar(converters);
+        this.registrar = new ConverterRegistrar(componentRegistry, converters);
     }
 
     @Test(expected = VRaptorException.class)

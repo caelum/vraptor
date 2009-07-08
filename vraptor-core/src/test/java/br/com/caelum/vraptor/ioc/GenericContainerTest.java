@@ -108,7 +108,7 @@ public abstract class GenericContainerTest {
                 Converters.class, EmptyElementsRemoval.class, NoRoutesConfiguration.class,
                 ResourceNotFoundHandler.class);
         checkAvailabilityFor(true, components);
-        checkAvailabilityFor(true, BaseComponents.getApplicationScoped());
+        checkAvailabilityFor(true, BaseComponents.getApplicationScoped().keySet());
         mockery.assertIsSatisfied();
     }
 
@@ -124,6 +124,7 @@ public abstract class GenericContainerTest {
                 PathResolver.class, ForwardToDefaultViewInterceptor.class, LogicResult.class,
                 MultipartInterceptor.class, DownloadInterceptor.class);
         checkAvailabilityFor(false, components);
+        checkAvailabilityFor(false, BaseComponents.getRequestScoped().keySet());
         mockery.assertIsSatisfied();
     }
 

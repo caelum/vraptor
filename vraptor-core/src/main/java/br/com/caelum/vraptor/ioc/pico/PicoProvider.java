@@ -29,8 +29,12 @@
  */
 package br.com.caelum.vraptor.ioc.pico;
 
-import javax.servlet.ServletContext;
-
+import br.com.caelum.vraptor.ComponentRegistry;
+import br.com.caelum.vraptor.Converter;
+import br.com.caelum.vraptor.core.BaseComponents;
+import br.com.caelum.vraptor.core.Execution;
+import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.ioc.ContainerProvider;
 import org.picocontainer.DefaultPicoContainer;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.behaviors.Caching;
@@ -39,32 +43,7 @@ import org.picocontainer.monitors.NullComponentMonitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import br.com.caelum.vraptor.ComponentRegistry;
-import br.com.caelum.vraptor.core.BaseComponents;
-import br.com.caelum.vraptor.core.Execution;
-import br.com.caelum.vraptor.core.RequestInfo;
-import br.com.caelum.vraptor.core.URLParameterExtractorInterceptor;
-import br.com.caelum.vraptor.extra.ForwardToDefaultViewInterceptor;
-import br.com.caelum.vraptor.http.TypeCreator;
-import br.com.caelum.vraptor.http.asm.AsmBasedTypeCreator;
-import br.com.caelum.vraptor.http.ognl.EmptyElementsRemoval;
-import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
-import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
-import br.com.caelum.vraptor.interceptor.InterceptorListPriorToExecutionExtractor;
-import br.com.caelum.vraptor.interceptor.OutjectResult;
-import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
-import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
-import br.com.caelum.vraptor.interceptor.download.DownloadInterceptor;
-import br.com.caelum.vraptor.interceptor.multipart.DefaultMultipartConfig;
-import br.com.caelum.vraptor.interceptor.multipart.MultipartConfig;
-import br.com.caelum.vraptor.interceptor.multipart.MultipartInterceptor;
-import br.com.caelum.vraptor.ioc.ContainerProvider;
-import br.com.caelum.vraptor.view.DefaultLogicResult;
-import br.com.caelum.vraptor.view.DefaultPageResult;
-import br.com.caelum.vraptor.view.EmptyResult;
-import br.com.caelum.vraptor.view.LogicResult;
-import br.com.caelum.vraptor.view.PageResult;
-
+import javax.servlet.ServletContext;
 import java.util.Map;
 
 /**
@@ -83,10 +62,10 @@ public class PicoProvider implements ContainerProvider {
     public PicoProvider() {
         this.container = new DefaultPicoContainer(new Caching(),
                 new JavaEE5LifecycleStrategy(new NullComponentMonitor()), null);
-        
+
         ComponentFactoryRegistry componentFactoryRegistry = new DefaultComponentFactoryRegistry();
         PicoComponentRegistry componentRegistry = new PicoComponentRegistry(this.container, componentFactoryRegistry);
-        
+
         this.container.addComponent(componentRegistry);
         this.container.addComponent(componentFactoryRegistry);
     }
@@ -102,20 +81,14 @@ public class PicoProvider implements ContainerProvider {
         for (Map.Entry<Class<?>, Class<?>> entry : BaseComponents.getRequestScoped().entrySet()) {
             container.register(entry.getKey(), entry.getValue());
         }
-        
+        for (Class<? extends Converter<?>> converterType : BaseComponents.getBundledConverters()) {
+            container.register(converterType, converterType);
+        }
+
         container.register(ResourceRegistrar.class, ResourceRegistrar.class);
         container.register(InterceptorRegistrar.class, InterceptorRegistrar.class);
         container.register(ConverterRegistrar.class, ConverterRegistrar.class);
         container.register(ComponentFactoryRegistrar.class, ComponentFactoryRegistrar.class);
-    }
-
-    private void singleInterfaceRegister(Class<?> type, ComponentRegistry registry) {
-        Class<?>[] interfaces = type.getInterfaces();
-        if (interfaces.length != 1) {
-            throw new IllegalArgumentException("Invalid registering of a type with more than one interface"
-                    + " being registered as a single interface component: " + type.getName());
-        }
-        registry.register(interfaces[0], type);
     }
 
     public <T> T provideForRequest(RequestInfo request, Execution<T> execution) {

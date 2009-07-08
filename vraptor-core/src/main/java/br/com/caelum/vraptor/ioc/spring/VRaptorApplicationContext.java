@@ -118,10 +118,9 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
         registerOn(beanFactory, DefaultPathResolver.class);
         registerOn(beanFactory, ParanamerNameProvider.class);
         registerOn(beanFactory, DefaultConverters.class);
-        for (Class<?> type : BaseComponents.getApplicationScoped()) {
+        for (Class<?> type : BaseComponents.getApplicationScoped().values()) {
             registerOn(beanFactory, type);
         }
-        registerOn(beanFactory, EmptyElementsRemoval.class);
         registerOn(beanFactory, ResourcesHolder.class);
         registerOn(beanFactory, ResourceFinder.class);
         registerOn(beanFactory, ResourceRegistrar.class);
@@ -129,7 +128,7 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
     }
 
     private void registerRequestScopedComponentsOn(DefaultListableBeanFactory beanFactory) {
-        for (Class<?> type : BaseComponents.getRequestScoped()) {
+        for (Class<?> type : BaseComponents.getRequestScoped().values()) {
             registerOn(beanFactory, type);
         }
         registerOn(beanFactory, AsmBasedTypeCreator.class);

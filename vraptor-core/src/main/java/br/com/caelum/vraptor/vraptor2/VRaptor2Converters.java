@@ -25,6 +25,11 @@ public class VRaptor2Converters implements Converters {
 	private final Converters vraptor3;
 	private final List<org.vraptor.converter.Converter> converterList = new ArrayList<org.vraptor.converter.Converter>();
 
+	public VRaptor2Converters(Config config, ComponentRegistry container) throws ClassNotFoundException,
+			InstantiationException, IllegalAccessException {
+		this(config, new DefaultConverters(container));
+	}
+
 	@SuppressWarnings("unchecked")
 	public VRaptor2Converters(Config config, Converters delegateConverters) throws InstantiationException,
 			IllegalAccessException, ClassNotFoundException {
@@ -48,6 +53,7 @@ public class VRaptor2Converters implements Converters {
 		return vraptor3.to(type, container);
 	}
 
+	@PostConstruct
 	public void init() {
 		vraptor3.init();
 	}

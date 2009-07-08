@@ -45,6 +45,7 @@ public class PicoBasedContainer implements Container {
 
     public PicoBasedContainer(MutablePicoContainer container, Router routes) {
         this.container = container;
+        this.container.addComponent(this);
     }
 
     public <T> T instanceFor(Class<T> type) {

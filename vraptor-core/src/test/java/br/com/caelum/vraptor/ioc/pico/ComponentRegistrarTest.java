@@ -10,7 +10,6 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.Ignore;
 
 import java.io.Serializable;
 import java.util.AbstractCollection;
@@ -131,7 +130,6 @@ public class ComponentRegistrarTest {
     }
 
     @Test
-    @Ignore("deepRegister is no more required")
     public void shouldRegisterComponentAlsoUsingImplementedInterfaces() {
         mockery.checking(new Expectations() {{
             one(scanner).getTypesWithAnnotation(Component.class);
@@ -150,7 +148,6 @@ public class ComponentRegistrarTest {
     }
 
     @Test
-    @Ignore("deepRegister is no more required")
     public void shouldRegisterComponentUsingAllPossibleSupertypes() {
         mockery.checking(new Expectations() {{
             one(scanner).getTypesWithAnnotation(Component.class);

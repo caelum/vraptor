@@ -38,6 +38,5 @@ import br.com.caelum.vraptor.ioc.RequestScoped;
  * @author Filipe Sabella
  * @author Guilherme Silveira
  */
-@RequestScoped
 public class EmptyResult implements View {
 }

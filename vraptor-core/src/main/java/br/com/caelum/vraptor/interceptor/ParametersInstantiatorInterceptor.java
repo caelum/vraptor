@@ -51,7 +51,6 @@ import java.util.List;
  *
  * @author Guilherme Silveira
  */
-@RequestScoped
 public class ParametersInstantiatorInterceptor implements Interceptor {
 
     private final ParametersProvider provider;

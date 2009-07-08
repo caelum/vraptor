@@ -46,7 +46,6 @@ import br.com.caelum.vraptor.vraptor2.Info;
  *
  * @author guilherme silveira
  */
-@RequestScoped
 public class OutjectResult implements Interceptor {
 
 	private final Result result;

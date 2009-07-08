@@ -65,6 +65,8 @@ import br.com.caelum.vraptor.view.EmptyResult;
 import br.com.caelum.vraptor.view.LogicResult;
 import br.com.caelum.vraptor.view.PageResult;
 
+import java.util.Map;
+
 /**
  * Managing internal components by using pico container.<br>
  * There is an extension point through the registerComponents method, which
@@ -94,29 +96,13 @@ public class PicoProvider implements ContainerProvider {
      */
     protected void registerBundledComponents(ComponentRegistry container) {
         logger.debug("Registering base pico container related implementation components");
-        for (Class<?> type : BaseComponents.getApplicationScoped()) {
-            singleInterfaceRegister(type, container);
+        for (Map.Entry<Class<?>, Class<?>> entry : BaseComponents.getApplicationScoped().entrySet()) {
+            container.register(entry.getKey(), entry.getValue());
         }
-        for (Class<?> type : BaseComponents.getRequestScoped()) {
-            singleInterfaceRegister(type, container);
+        for (Map.Entry<Class<?>, Class<?>> entry : BaseComponents.getRequestScoped().entrySet()) {
+            container.register(entry.getKey(), entry.getValue());
         }
-        container.register(MultipartConfig.class, DefaultMultipartConfig.class);
-        container.register(ForwardToDefaultViewInterceptor.class, ForwardToDefaultViewInterceptor.class);
-        container.register(LogicResult.class, DefaultLogicResult.class);
-        container.register(PageResult.class, DefaultPageResult.class);
-        container.register(EmptyResult.class, EmptyResult.class);
-        container.register(OutjectResult.class, OutjectResult.class);
-        container.register(TypeCreator.class, AsmBasedTypeCreator.class);
-        container.register(EmptyElementsRemoval.class, EmptyElementsRemoval.class);
-        container.register(ParametersInstantiatorInterceptor.class, ParametersInstantiatorInterceptor.class);
-        container.register(InterceptorListPriorToExecutionExtractor.class,
-                InterceptorListPriorToExecutionExtractor.class);
-        container.register(DownloadInterceptor.class, DownloadInterceptor.class);
-        container.register(MultipartInterceptor.class, MultipartInterceptor.class);
-        container.register(URLParameterExtractorInterceptor.class, URLParameterExtractorInterceptor.class);
-        container.register(ResourceLookupInterceptor.class, ResourceLookupInterceptor.class);
-        container.register(InstantiateInterceptor.class, InstantiateInterceptor.class);
-        container.register(ExecuteMethodInterceptor.class, ExecuteMethodInterceptor.class);
+        
         container.register(ResourceRegistrar.class, ResourceRegistrar.class);
         container.register(InterceptorRegistrar.class, InterceptorRegistrar.class);
         container.register(ConverterRegistrar.class, ConverterRegistrar.class);

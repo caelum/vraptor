@@ -156,14 +156,13 @@ public class ComponentRegistrarTest {
             one(registry).register(ArrayListSubclass.class, ArrayListSubclass.class);
             one(registry).register(ArrayList.class, ArrayListSubclass.class);
             one(registry).register(List.class, ArrayListSubclass.class);
-            atLeast(1).of(registry).register(Collection.class, ArrayListSubclass.class);
-            atLeast(1).of(registry).register(Iterable.class, ArrayListSubclass.class);
+            one(registry).register(Collection.class, ArrayListSubclass.class);
+            one(registry).register(Iterable.class, ArrayListSubclass.class);
             one(registry).register(Cloneable.class, ArrayListSubclass.class);
             one(registry).register(Serializable.class, ArrayListSubclass.class);
             one(registry).register(RandomAccess.class, ArrayListSubclass.class);
             one(registry).register(AbstractList.class, ArrayListSubclass.class);
             one(registry).register(AbstractCollection.class, ArrayListSubclass.class);
-            one(registry).register(List.class, ArrayListSubclass.class);
 
             allowing(scanner).getTypesWithAnnotation(Resource.class);
             allowing(scanner).getTypesWithAnnotation(Intercepts.class);

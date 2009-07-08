@@ -27,14 +27,6 @@
  */
 package br.com.caelum.vraptor.ioc.pico;
 
-import java.lang.annotation.Annotation;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Intercepts;
@@ -42,6 +34,15 @@ import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.ioc.Stereotype;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.lang.annotation.Annotation;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * <p>Prepares all classes with meta-annotation @Stereotype to be used as VRaptor components. It means that any
@@ -70,14 +71,30 @@ public class ComponentRegistrar implements Registrar {
             Collection<Class<?>> componentTypes = scanner.getTypesWithAnnotation(bundledStereotype);
             for (Class<?> componentType : componentTypes) {
                 logger.debug("found component: " + componentType + ", annotated with: " + bundledStereotype);
-                registry.register(componentType, componentType);
+                deepRegister(componentType, componentType, new HashSet<Class<?>>());
             }
         }
 
         Collection<Class<?>> componentTypes = scanner.getTypesWithMetaAnnotation(Stereotype.class);
         for (Class<?> componentType : componentTypes) {
             logger.debug("found component: " + componentType);
-            registry.register(componentType, componentType);
+            deepRegister(componentType, componentType, new HashSet<Class<?>>());
         }
+    }
+
+    private void deepRegister(Class<?> required, Class<?> component, Set<Class<?>> registeredKeys) {
+        if (required == null || required.equals(Object.class))
+            return;
+
+        if (!registeredKeys.contains(required)) {
+            registeredKeys.add(required);
+            registry.register(required, component);
+        }
+
+        for (Class<?> c : required.getInterfaces()) {
+            deepRegister(c, component, registeredKeys);
+        }
+
+        deepRegister(required.getSuperclass(), component, registeredKeys);
     }
 }

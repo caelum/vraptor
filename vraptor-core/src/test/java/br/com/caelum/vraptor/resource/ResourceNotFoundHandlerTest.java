@@ -4,6 +4,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletRequest;
 
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -14,19 +15,22 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.http.MutableRequest;
 
 public class ResourceNotFoundHandlerTest {
 
 	private ResourceNotFoundHandler notFoundHandler;
 	private Mockery mockery;
-	private HttpServletResponse webResponse;
-	private RequestInfo request;
+    private MutableRequest webRequest;
+    private HttpServletResponse webResponse;
+    private RequestInfo request;
 
-	@Before
+    @Before
 	public void setUp() {
 		this.mockery = new Mockery();
-		this.webResponse = mockery.mock(HttpServletResponse.class);
-		this.request = new RequestInfo(null, null, webResponse);
+        this.webRequest = mockery.mock(MutableRequest.class);
+        this.webResponse = mockery.mock(HttpServletResponse.class);
+        this.request = new RequestInfo(null, webRequest, webResponse);
 		this.notFoundHandler = new DefaultResourceNotFoundHandler();
 	}
 	
@@ -35,13 +39,17 @@ public class ResourceNotFoundHandlerTest {
         final StringWriter writer = new StringWriter();
         mockery.checking(new Expectations() {
             {
+                one(webRequest).getRequestURI();
+                will(returnValue("/some/requested/component"));
+
+
                 one(webResponse).setStatus(404);
                 one(webResponse).getWriter();
                 will(returnValue(new PrintWriter(writer)));
             }
         });
 		notFoundHandler.couldntFind(request);
-		Assert.assertTrue(writer.getBuffer().toString().contains("resource not found"));
+		Assert.assertTrue(writer.getBuffer().toString().contains("Nothing at URI: /some/requested/component"));
         mockery.assertIsSatisfied();
 	}
 }

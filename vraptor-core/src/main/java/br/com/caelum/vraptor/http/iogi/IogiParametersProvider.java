@@ -9,6 +9,7 @@ import java.util.ResourceBundle;
 
 import javax.servlet.http.HttpServletRequest;
 
+import br.com.caelum.iogi.Instantiator;
 import br.com.caelum.iogi.Iogi;
 import br.com.caelum.iogi.parameters.Parameter;
 import br.com.caelum.iogi.parameters.Parameters;
@@ -25,10 +26,12 @@ import br.com.caelum.vraptor.validator.Message;
 public class IogiParametersProvider implements ParametersProvider {
 	private final ParameterNameProvider nameProvider;
 	private final HttpServletRequest servletRequest;
+	private final Instantiator<Object> instantiator;
 
-	public IogiParametersProvider(ParameterNameProvider provider, HttpServletRequest parameters) {
+	public IogiParametersProvider(ParameterNameProvider provider, HttpServletRequest parameters, Instantiator<Object> instantiator) {
 		this.nameProvider = provider;
 		this.servletRequest = parameters;
+		this.instantiator = instantiator;
 	}
 	
 	@Override
@@ -45,9 +48,8 @@ public class IogiParametersProvider implements ParametersProvider {
 
 	private List<Object> instantiateParameters(Parameters parameters, List<Target<Object>> targets) {
 		List<Object> arguments = new ArrayList<Object>();
-		Iogi iogi = new Iogi(new NullDependencyProvider(), new DefaultLocaleProvider());
 		for (Target<Object> target : targets) {
-			Object newObject = iogi.instantiate(target, parameters);
+			Object newObject = instantiator.instantiate(target, parameters);
 			arguments.add(newObject);
 		}
 		return arguments;

@@ -43,13 +43,22 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.jmock.Expectations;
 import org.jmock.Sequence;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import br.com.caelum.iogi.Instantiator;
+import br.com.caelum.iogi.Iogi;
+import br.com.caelum.iogi.parameters.Parameter;
+import br.com.caelum.iogi.parameters.Parameters;
+import br.com.caelum.iogi.reflection.Target;
+import br.com.caelum.iogi.util.DefaultLocaleProvider;
+import br.com.caelum.iogi.util.NullDependencyProvider;
 import br.com.caelum.vraptor.converter.LongConverter;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.test.VRaptorMockery;
 import br.com.caelum.vraptor.validator.Message;
 
@@ -57,8 +66,8 @@ public class IogiParametersProviderTest {
     private VRaptorMockery mockery;
     private Converters converters;
     private IogiParametersProvider provider;
-    private ParameterNameProvider nameProvider;
-    private HttpServletRequest parameters;
+    private ParameterNameProvider mockNameProvider;
+    private HttpServletRequest mockHttpServletRequest;
     private ArrayList<Message> errors;
 
     @SuppressWarnings("unchecked")
@@ -66,9 +75,21 @@ public class IogiParametersProviderTest {
     public void setup() {
         this.mockery = new VRaptorMockery();
         this.converters = mockery.mock(Converters.class);
-        this.parameters = mockery.mock(HttpServletRequest.class);
-        this.nameProvider = mockery.mock(ParameterNameProvider.class);
-        this.provider = new IogiParametersProvider(nameProvider, parameters);
+        this.mockHttpServletRequest = mockery.mock(HttpServletRequest.class);
+        this.mockNameProvider = mockery.mock(ParameterNameProvider.class);
+        Instantiator<Object> instantiator = new Instantiator<Object>(){
+        	private Iogi iogi = new Iogi(new NullDependencyProvider(), new DefaultLocaleProvider());
+			@Override
+			public Object instantiate(Target<?> target, Parameters parameters) {
+				return iogi.instantiate(target, parameters);
+			}
+
+			@Override
+			public boolean isAbleToInstantiate(Target<?> arg0) {
+				return true;
+			}
+		};;
+		this.provider = new IogiParametersProvider(mockNameProvider, mockHttpServletRequest, instantiator );
         this.errors = new ArrayList<Message>();
         mockery.checking(new Expectations() {
             {
@@ -78,6 +99,11 @@ public class IogiParametersProviderTest {
         });
     }
 
+    @After
+    public void tearDown() {
+    	mockery.assertIsSatisfied();
+    }
+    
     public static class Cat {
         private String id;
 
@@ -136,6 +162,7 @@ public class IogiParametersProviderTest {
     class MyResource {
         void buyA(House house) {
         }
+        void doNothing() {}
     }
 
     public static class BuyASetter {
@@ -156,12 +183,12 @@ public class IogiParametersProviderTest {
         
         final Sequence nameProviderSequence = mockery.sequence("parameterNameProviderSequence");
         mockery.checking(new Expectations() {{
-            one(parameters).getParameterValues("house.cat.id");
+            one(mockHttpServletRequest).getParameterValues("house.cat.id");
             will(returnValue(new String[]{"guilherme"}));
-            one(parameters).getParameterNames();
-            will(returnValue(enumFor("house.cat.id")));
+            one(mockHttpServletRequest).getParameterNames();
+            will(returnValue(enumerationFor("house.cat.id")));
             
-            one(nameProvider).parameterNamesFor(method); 
+            one(mockNameProvider).parameterNamesFor(method); 
             inSequence(nameProviderSequence); 
             will(returnValue(new String[]{"house"})); 
         }});
@@ -178,11 +205,11 @@ public class IogiParametersProviderTest {
         final Method method = MyResource.class.getDeclaredMethod("buyA", House.class);
         mockery.checking(new Expectations() {
             {
-                one(parameters).getParameterValues("house.extraCats[1].id");
+                one(mockHttpServletRequest).getParameterValues("house.extraCats[1].id");
                 will(returnValue(new String[]{"guilherme"}));
-                one(parameters).getParameterNames();
-                will(returnValue(enumFor("house.extraCats[1].id")));
-                one(nameProvider).parameterNamesFor(method);
+                one(mockHttpServletRequest).getParameterNames();
+                will(returnValue(enumerationFor("house.extraCats[1].id")));
+                one(mockNameProvider).parameterNamesFor(method);
                 will(returnValue(new String[]{"house"}));
             }
         });
@@ -194,7 +221,7 @@ public class IogiParametersProviderTest {
     }
 
     @SuppressWarnings("unchecked")
-    private Enumeration enumFor(String... values) {
+    private Enumeration enumerationFor(String... values) {
         return new Vector(Arrays.asList(values)).elements();
     }
 
@@ -204,11 +231,11 @@ public class IogiParametersProviderTest {
         final Method method = MyResource.class.getDeclaredMethod("buyA", House.class);
         mockery.checking(new Expectations() {
             {
-                one(parameters).getParameterValues("house.ids[1]");
+                one(mockHttpServletRequest).getParameterValues("house.ids[1]");
                 will(returnValue(new String[]{"3"}));
-                one(parameters).getParameterNames();
-                will(returnValue(enumFor("house.ids[1]")));
-                one(nameProvider).parameterNamesFor(method);
+                one(mockHttpServletRequest).getParameterNames();
+                will(returnValue(enumerationFor("house.ids[1]")));
+                one(mockNameProvider).parameterNamesFor(method);
                 will(returnValue(new String[]{"house"}));
             }
         });
@@ -226,11 +253,11 @@ public class IogiParametersProviderTest {
         final Method method = MyResource.class.getDeclaredMethod("buyA", House.class);
         mockery.checking(new Expectations() {
             {
-                one(parameters).getParameterValues("house.owners[1]");
+                one(mockHttpServletRequest).getParameterValues("house.owners[1]");
                 will(returnValue(new String[]{"guilherme"}));
-                one(parameters).getParameterNames();
-                will(returnValue(enumFor("house.owners[1]")));
-                one(nameProvider).parameterNamesFor(method);
+                one(mockHttpServletRequest).getParameterNames();
+                will(returnValue(enumerationFor("house.owners[1]")));
+                one(mockNameProvider).parameterNamesFor(method);
                 will(returnValue(new String[]{"house"}));
             }
         });
@@ -242,4 +269,31 @@ public class IogiParametersProviderTest {
         mockery.assertIsSatisfied();
     }
 
+	@Test
+	public void willCreateAnIogiParameterForEachRequestParameterValue() throws Exception {
+		ResourceMethod anyMethod = mockery.methodFor(MyResource.class, "buyA", House.class);
+		
+		@SuppressWarnings("unchecked")
+		final Instantiator<Object> mockInstantiator = mockery.mock(Instantiator.class);
+		final String parameterName = "name";
+		final Parameters expectedParamters = new Parameters(
+				Arrays.asList(new Parameter(parameterName, "a"), new Parameter(parameterName, "b")));
+		
+		IogiParametersProvider iogiProvider = new IogiParametersProvider(mockNameProvider, mockHttpServletRequest, mockInstantiator);
+		
+		mockery.checking(new Expectations() {{
+			allowing(mockHttpServletRequest).getParameterNames();
+			will(returnValue(enumerationFor(parameterName)));
+			
+			allowing(mockHttpServletRequest).getParameterValues(parameterName);
+			will(returnValue(new String[] {"a", "b"}));
+			
+			allowing(mockNameProvider).parameterNamesFor(with(any(Method.class)));
+			will(returnValue(new String[] {parameterName}));
+			
+			one(mockInstantiator).instantiate(with(any(Target.class)), with(equal(expectedParamters)));
+		}});
+		
+		iogiProvider.getParametersFor(anyMethod, errors, null);
+	}
 }

@@ -44,6 +44,10 @@ import br.com.caelum.vraptor.resource.ResourceClass;
  */
 public interface Router {
 
+	/**
+	 * Add a new Route to this Router
+	 * @param route The route
+	 */
 	void add(Route route);
 
 	ResourceMethod parse(String uri, HttpMethod method, MutableRequest request);

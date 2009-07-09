@@ -35,7 +35,7 @@ public class ResourceNotFoundHandlerTest {
         final StringWriter writer = new StringWriter();
         mockery.checking(new Expectations() {
             {
-                one(webResponse).setStatus(404);
+                one(webResponse).sendError(404);
                 one(webResponse).getWriter();
                 will(returnValue(new PrintWriter(writer)));
             }

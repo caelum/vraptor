@@ -4,10 +4,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpServletRequest;
 
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Assert;
@@ -41,9 +38,7 @@ public class ResourceNotFoundHandlerTest {
             {
                 one(webRequest).getRequestURI();
                 will(returnValue("/some/requested/component"));
-
-
-                one(webResponse).setStatus(404);
+                one(webResponse).sendError(404);
                 one(webResponse).getWriter();
                 will(returnValue(new PrintWriter(writer)));
             }

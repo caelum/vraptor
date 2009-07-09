@@ -47,7 +47,9 @@ public class DefaultResourceNotFoundHandler implements ResourceNotFoundHandler {
 		try {
 			HttpServletResponse response = request.getResponse();
 			response.setStatus(404);
-			response.getWriter().println("resource not found");
+            // TODO read 404.html?
+            String message = "Nothing at URI: " + request.getRequest().getRequestURI() + "\n  - Wrong page location? Wrong @Path? Missing @Resource?";
+            response.getWriter().println(message);
 		} catch (IOException e) {
 			throw new InterceptionException(e);
 		}

@@ -39,18 +39,31 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  * "/TypeName/methodName.result.jsp".
  *
  * @author Guilherme Silveira
+ * @author Sérgio Lopes
+ * @author Jonas Abreu
  */
 @RequestScoped
 public class DefaultPathResolver implements PathResolver {
 
 	private final HttpServletRequest request;
+	private final AcceptHeaderToFormat acceptHeaderToFormat;
 
-	public DefaultPathResolver(HttpServletRequest request) {
+	public DefaultPathResolver(HttpServletRequest request, AcceptHeaderToFormat acceptHeaderToFormat) {
 		this.request = request;
+		this.acceptHeaderToFormat = acceptHeaderToFormat;
 	}
 
 	public String pathFor(ResourceMethod method) {
-		String format = request.getParameter("_format");
+		String acceptedHeader = request.getHeader("Accept");
+		String format = "html"; 
+		
+		if (acceptedHeader != null)
+			format = acceptHeaderToFormat.getFormat(acceptedHeader);
+		
+		String formatParam = request.getParameter("_format");
+		if (formatParam != null)
+			format = formatParam;
+		
 		String suffix = "";
 		if (format != null && !format.equals("html")) {
 			suffix = "." + format;

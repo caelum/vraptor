@@ -49,6 +49,7 @@ import br.com.caelum.vraptor.interceptor.multipart.MultipartInterceptor;
 import br.com.caelum.vraptor.ioc.ComponentFactory;
 import br.com.caelum.vraptor.proxy.DefaultProxifier;
 import br.com.caelum.vraptor.view.DefaultLogicResult;
+import br.com.caelum.vraptor.view.DefaultAcceptHeaderToFormat;
 import br.com.caelum.vraptor.view.DefaultPageResult;
 import br.com.caelum.vraptor.view.DefaultPathResolver;
 import br.com.caelum.vraptor.view.EmptyResult;
@@ -115,6 +116,7 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
         registerOn(beanFactory, DefaultInterceptorRegistry.class);
         registerOn(beanFactory, AsmBasedTypeCreator.class);
         registerOn(beanFactory, DefaultProxifier.class);
+        registerOn(beanFactory, DefaultAcceptHeaderToFormat.class);
         registerOn(beanFactory, DefaultPathResolver.class);
         registerOn(beanFactory, ParanamerNameProvider.class);
         registerOn(beanFactory, DefaultConverters.class);

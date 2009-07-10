@@ -82,10 +82,12 @@ import br.com.caelum.vraptor.resource.DefaultResourceNotFoundHandler;
 import br.com.caelum.vraptor.resource.ResourceNotFoundHandler;
 import br.com.caelum.vraptor.validator.DefaultValidator;
 import br.com.caelum.vraptor.view.DefaultLogicResult;
+import br.com.caelum.vraptor.view.DefaultAcceptHeaderToFormat;
 import br.com.caelum.vraptor.view.DefaultPageResult;
 import br.com.caelum.vraptor.view.DefaultPathResolver;
 import br.com.caelum.vraptor.view.EmptyResult;
 import br.com.caelum.vraptor.view.LogicResult;
+import br.com.caelum.vraptor.view.AcceptHeaderToFormat;
 import br.com.caelum.vraptor.view.PageResult;
 import br.com.caelum.vraptor.view.PathResolver;
 
@@ -115,7 +117,8 @@ public class BaseComponents {
             Proxifier.class, DefaultProxifier.class,
             MultipartConfig.class, DefaultMultipartConfig.class,
             TypeCreator.class, AsmBasedTypeCreator.class,
-            EmptyElementsRemoval.class, EmptyElementsRemoval.class
+            EmptyElementsRemoval.class, EmptyElementsRemoval.class,
+            AcceptHeaderToFormat.class, DefaultAcceptHeaderToFormat.class
     );
 
     private static final Map<Class<?>, Class<?>> REQUEST_COMPONENTS = classMap(

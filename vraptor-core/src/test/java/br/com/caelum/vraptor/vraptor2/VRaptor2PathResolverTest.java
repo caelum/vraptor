@@ -36,6 +36,7 @@ public class VRaptor2PathResolverTest {
         this.info =mockery.mock(MethodInfo.class); 
         mockery.checking(new Expectations() {
             {
+            	allowing(request).getHeader("Accept");
                 one(config).getViewPattern(); will(returnValue("/$component/$logic.$result.jsp"));
             }
         });

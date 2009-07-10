@@ -56,6 +56,11 @@ public class VRaptor2Converters implements Converters {
 	}
 
 	public Converter<?> to(Class<?> type, Container container) {
+		Converter<?> vraptor2Convterter = findVRaptor2Converter(type);
+		return vraptor2Convterter == null ? vraptor3.to(type, container) : vraptor2Convterter;
+	}
+
+	private Converter<?> findVRaptor2Converter(Class<?> type) {
 		for (org.vraptor.converter.Converter converter : converterList) {
 			for (Class<?> supported : converter.getSupportedTypes()) {
 				if (supported.isAssignableFrom(type)) {
@@ -63,11 +68,25 @@ public class VRaptor2Converters implements Converters {
 				}
 			}
 		}
-		return vraptor3.to(type, container);
+		return null;
 	}
 
 	public void register(Class<? extends Converter<?>> converterClass) {
-		vraptor3.register(converterClass);
+		throw new UnsupportedOperationException(
+				"cannot add vr3 converters in vr2 converters container (or should we delegate?");
+	}
+
+	@Override
+	public boolean existsFor(Class<?> type, Container container) {
+		return existsVRaptor2ConverterFor(type) || existsVRaptor3ConverterFor(type, container);
+	}
+
+	private boolean existsVRaptor3ConverterFor(Class<?> type, Container container) {
+		return vraptor3.existsFor(type, container);
+	}
+
+	private boolean existsVRaptor2ConverterFor(Class<?> type) {
+		return findVRaptor2Converter(type) != null;
 	}
 
 }

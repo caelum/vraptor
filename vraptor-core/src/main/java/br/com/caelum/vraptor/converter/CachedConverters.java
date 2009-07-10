@@ -54,4 +54,11 @@ public class CachedConverters implements Converters {
                 "cannot add vr3 converters in cached converters container (or should we delegate?");
     }
 
+	@Override
+	public boolean existsFor(Class<?> type, Container container) {
+		if (cache.containsKey(type))
+			return true;
+		return delegate.existsFor(type, container);
+	}
+    
 }

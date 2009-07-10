@@ -31,11 +31,11 @@ import br.com.caelum.vraptor.ioc.Container;
 @ApplicationScoped
 public final class DefaultConverters implements Converters {
 
-    private final LinkedList<Class<? extends Converter>> classes;
+    private final LinkedList<Class<? extends Converter<?>>> classes;
     private final Logger logger = LoggerFactory.getLogger(DefaultConverters.class);
 
     public DefaultConverters() {
-        this.classes = new LinkedList<Class<? extends Converter>>();
+        this.classes = new LinkedList<Class<? extends Converter<?>>>();
         logger.info("Registering bundled converters");
         for (Class<? extends Converter<?>> converterType : BaseComponents.getBundledConverters()) {
             logger.debug("bundled converter to be registered: " + converterType);
@@ -51,14 +51,26 @@ public final class DefaultConverters implements Converters {
         classes.addFirst(converterClass);
     }
 
-    public Converter to(Class<?> clazz, Container container) {
-        for (Class<? extends Converter> converterType : classes) {
-            Class boundType = converterType.getAnnotation(Convert.class).value();
+    public Converter<?> to(Class<?> clazz, Container container) {
+        Converter<?> foundConverter = findConverterFor(clazz, container);
+        if (foundConverter == null)
+        	throw new VRaptorException("Unable to find converter for " + clazz.getName());
+        return foundConverter;
+    }
+
+	private Converter<?> findConverterFor(Class<?> clazz, Container container) {
+		for (Class<? extends Converter<?>> converterType : classes) {
+            Class<?> boundType = converterType.getAnnotation(Convert.class).value();
             if (boundType.isAssignableFrom(clazz)) {
                 return container.instanceFor(converterType);
             }
         }
-        throw new VRaptorException("Unable to find converter for " + clazz.getName());
-    }
+		return null;
+	}
+
+	@Override
+	public boolean existsFor(Class<?> type, Container container) {
+		return findConverterFor(type, container) != null;
+	}
 
 }

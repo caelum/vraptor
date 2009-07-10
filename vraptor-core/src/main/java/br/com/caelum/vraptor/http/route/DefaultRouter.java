@@ -52,7 +52,13 @@ import br.com.caelum.vraptor.vraptor2.Info;
  * The default implementation of resource localization rules. It also uses a
  * Path annotation to discover path->method mappings using the supplied
  * ResourceAndMethodLookup.
- * 
+ *
+ * When parsing a uri, if no route matches this uri, we try again inserting
+ * or removing a / of the end of this uri:
+ * uri: /resource
+ * route: /resource/
+ * will match, and vice versa.
+ *
  * @author Guilherme Silveira
  */
 @ApplicationScoped
@@ -104,7 +110,30 @@ public class DefaultRouter implements Router {
 		this.routes.add(r);
 	}
 
+	/**
+	 *  When parsing a uri, if no route matches this uri, we try again inserting
+	 * or removing a / of the end of this uri:
+	 * uri: /resource
+	 * route: /resource/
+	 * will match, and vice versa.
+	 */
 	public ResourceMethod parse(String uri, HttpMethod method, MutableRequest request) {
+		ResourceMethod resourceMethod = parcialParse(uri, method, request);
+		if (resourceMethod == null) {
+			return parcialParse(toggleSlash(uri), method, request);
+		}
+		return resourceMethod;
+	}
+
+	private String toggleSlash(String uri) {
+		if (uri.endsWith("/")) {
+			return uri.substring(0, uri.length() - 1);
+		} else {
+			return uri + "/";
+		}
+	}
+
+	private ResourceMethod parcialParse(String uri, HttpMethod method, MutableRequest request) {
 		for (Route rule : routes) {
 			ResourceMethod value = rule.matches(uri, method, request);
 			if (value != null) {

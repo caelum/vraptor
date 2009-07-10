@@ -31,6 +31,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.*;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -65,7 +66,7 @@ import br.com.caelum.vraptor.validator.Message;
 public class IogiParametersProviderTest {
     private VRaptorMockery mockery;
     private Converters converters;
-    private IogiParametersProvider provider;
+    private IogiParametersProvider iogiProvider;
     private ParameterNameProvider mockNameProvider;
     private HttpServletRequest mockHttpServletRequest;
     private ArrayList<Message> errors;
@@ -89,7 +90,7 @@ public class IogiParametersProviderTest {
 				return true;
 			}
 		};;
-		this.provider = new IogiParametersProvider(mockNameProvider, mockHttpServletRequest, instantiator );
+		this.iogiProvider = new IogiParametersProvider(mockNameProvider, mockHttpServletRequest, instantiator );
         this.errors = new ArrayList<Message>();
         mockery.checking(new Expectations() {
             {
@@ -193,7 +194,7 @@ public class IogiParametersProviderTest {
             will(returnValue(new String[]{"house"})); 
         }});
 
-        Object[] params = provider.getParametersFor(mockery.methodFor(MyResource.class, "buyA", House.class), errors,
+        Object[] params = iogiProvider.getParametersFor(mockery.methodFor(MyResource.class, "buyA", House.class), errors,
                 null);
         House house = (House) params[0];
         assertThat(house.cat.id, is(equalTo("guilherme")));
@@ -213,7 +214,7 @@ public class IogiParametersProviderTest {
                 will(returnValue(new String[]{"house"}));
             }
         });
-        Object[] params = provider.getParametersFor(mockery.methodFor(MyResource.class, "buyA", House.class), errors, null);
+        Object[] params = iogiProvider.getParametersFor(mockery.methodFor(MyResource.class, "buyA", House.class), errors, null);
         House house = (House) params[0];
         assertThat(house.extraCats, hasSize(1));
         assertThat(house.extraCats.get(0).id, is(equalTo("guilherme")));
@@ -239,7 +240,7 @@ public class IogiParametersProviderTest {
                 will(returnValue(new String[]{"house"}));
             }
         });
-        Object[] params = provider.getParametersFor(mockery.methodFor(MyResource.class, "buyA", House.class), errors,
+        Object[] params = iogiProvider.getParametersFor(mockery.methodFor(MyResource.class, "buyA", House.class), errors,
                 null);
         House house = (House) params[0];
         assertThat(house.ids.length, is(equalTo(1)));
@@ -261,14 +262,30 @@ public class IogiParametersProviderTest {
                 will(returnValue(new String[]{"house"}));
             }
         });
-        Object[] params = provider.getParametersFor(mockery.methodFor(MyResource.class, "buyA", House.class), errors,
+        Object[] params = iogiProvider.getParametersFor(mockery.methodFor(MyResource.class, "buyA", House.class), errors,
                 null);
         House house = (House) params[0];
         assertThat(house.owners, hasSize(1));
         assertThat(house.owners.get(0), is(equalTo("guilherme")));
         mockery.assertIsSatisfied();
     }
+    
+    @Test
+	public void returnsAnEmptyObjectArrayForZeroArityMethods() throws Exception {
+        final ResourceMethod method = mockery.methodFor(MyResource.class, "doNothing");
+        
+        mockery.checking(new Expectations() {
+            {
+                ignoring(mockHttpServletRequest);
+                ignoring(mockNameProvider);
+            }
+        });
+        Object[] params = iogiProvider.getParametersFor(method, errors, null);
+        
+        assertArrayEquals(new Object[] {}, params);
+    }
 
+    //---------- The Following tests mock iogi to unit test the ParametersProvider impl. 
 	@Test
 	public void willCreateAnIogiParameterForEachRequestParameterValue() throws Exception {
 		ResourceMethod anyMethod = mockery.methodFor(MyResource.class, "buyA", House.class);
@@ -296,4 +313,26 @@ public class IogiParametersProviderTest {
 		
 		iogiProvider.getParametersFor(anyMethod, errors, null);
 	}
+	
+	@Test
+	public void willCreateATargerForEachFormalParameterDeclaredByTheMethod() throws Exception {
+		final ResourceMethod buyAHouse = mockery.methodFor(MyResource.class, "buyA", House.class);
+		
+		@SuppressWarnings("unchecked")
+		final Instantiator<Object> mockInstantiator = mockery.mock(Instantiator.class);
+		IogiParametersProvider iogiProvider = new IogiParametersProvider(mockNameProvider, mockHttpServletRequest, mockInstantiator);
+		final Target<House> expectedTarget = Target.create(House.class, "house");
+		
+		mockery.checking(new Expectations() {{
+			ignoring(mockHttpServletRequest);
+			
+			allowing(mockNameProvider).parameterNamesFor(with(any(Method.class)));
+			will(returnValue(new String[] {"house"}));
+			
+			one(mockInstantiator).instantiate(with(equal(expectedTarget)), with(any(Parameters.class)));
+		}});
+		
+		iogiProvider.getParametersFor(buyAHouse, errors, null);
+	}
+	//----------
 }

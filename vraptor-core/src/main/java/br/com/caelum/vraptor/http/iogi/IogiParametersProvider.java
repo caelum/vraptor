@@ -10,12 +10,9 @@ import java.util.ResourceBundle;
 import javax.servlet.http.HttpServletRequest;
 
 import br.com.caelum.iogi.Instantiator;
-import br.com.caelum.iogi.Iogi;
 import br.com.caelum.iogi.parameters.Parameter;
 import br.com.caelum.iogi.parameters.Parameters;
 import br.com.caelum.iogi.reflection.Target;
-import br.com.caelum.iogi.util.DefaultLocaleProvider;
-import br.com.caelum.iogi.util.NullDependencyProvider;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.ioc.RequestScoped;

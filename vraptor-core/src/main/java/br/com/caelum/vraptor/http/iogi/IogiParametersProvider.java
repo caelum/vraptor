@@ -86,6 +86,3 @@ public class IogiParametersProvider implements ParametersProvider {
 	}
 
 }
-/*
- OBS: pass nameProvider to Iogi
- */

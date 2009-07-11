@@ -34,6 +34,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.Assert.assertArrayEquals;
 
+import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,7 +45,6 @@ import java.util.Vector;
 import javax.servlet.http.HttpServletRequest;
 
 import org.jmock.Expectations;
-import org.jmock.Sequence;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -74,7 +74,7 @@ public class IogiParametersProviderTest {
 
     @SuppressWarnings("unchecked")
     @Before
-    public void setup() {
+    public void setup() throws Exception {
         this.mockery = new VRaptorMockery();
         this.converters = mockery.mock(Converters.class);
         this.mockHttpServletRequest = mockery.mock(HttpServletRequest.class);
@@ -83,7 +83,7 @@ public class IogiParametersProviderTest {
         mockContainer = mockery.mock(Container.class);
 		final Localization localization = mockery.mock(Localization.class);
 	
-		Instantiator<Object> instantiator = new VRaptorInstantiator(new DefaultConverters(), mockContainer, localization);
+		Instantiator<Object> instantiator = new VRaptorInstantiator(new DefaultConverters(), mockContainer, localization, mockNameProvider);
 		
 		this.iogiProvider = new IogiParametersProvider(mockNameProvider, mockHttpServletRequest, instantiator);
         this.errors = new ArrayList<Message>();
@@ -95,6 +95,16 @@ public class IogiParametersProviderTest {
                 ignoring(localization);
             }
         });
+        
+        mockery.checking(new Expectations() {{
+            final AccessibleObject houseConstructor = House.class.getConstructor();
+			allowing(mockNameProvider).parameterNamesFor(houseConstructor);
+            will(returnValue(new String[] {}));
+            
+            AccessibleObject catConstructor = Cat.class.getConstructor();
+			allowing(mockNameProvider).parameterNamesFor(catConstructor);
+            will(returnValue(new String[] {}));
+        }});
     }
 
     @After
@@ -196,7 +206,6 @@ public class IogiParametersProviderTest {
     public void isCapableOfDealingWithEmptyParameterForInternalWrapperValue() throws Exception {
         final Method method = MyResource.class.getDeclaredMethod("buyA", House.class);
         
-        final Sequence nameProviderSequence = mockery.sequence("parameterNameProviderSequence");
         mockery.checking(new Expectations() {{
             one(mockHttpServletRequest).getParameterValues("house.cat.id");
             will(returnValue(new String[]{"guilherme"}));
@@ -204,8 +213,8 @@ public class IogiParametersProviderTest {
             will(returnValue(enumerationFor("house.cat.id")));
             
             one(mockNameProvider).parameterNamesFor(method); 
-            inSequence(nameProviderSequence); 
             will(returnValue(new String[]{"house"})); 
+            
         }});
 
         Object[] params = iogiProvider.getParametersFor(mockery.methodFor(MyResource.class, "buyA", House.class), errors,

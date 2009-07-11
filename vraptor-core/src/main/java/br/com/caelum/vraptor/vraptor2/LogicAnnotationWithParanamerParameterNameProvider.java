@@ -16,7 +16,7 @@
  */
 package br.com.caelum.vraptor.vraptor2;
 
-import java.lang.reflect.Method;
+import java.lang.reflect.AccessibleObject;
 
 import org.vraptor.annotations.Logic;
 
@@ -44,7 +44,7 @@ public class LogicAnnotationWithParanamerParameterNameProvider implements Parame
         this.delegate = delegate;
     }
 
-    public String[] parameterNamesFor(Method method) {
+    public String[] parameterNamesFor(AccessibleObject method) {
         if (method.isAnnotationPresent(Logic.class)) {
             return method.getAnnotation(Logic.class).parameters();
         }

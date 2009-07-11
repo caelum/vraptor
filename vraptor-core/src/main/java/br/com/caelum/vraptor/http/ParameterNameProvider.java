@@ -16,7 +16,7 @@
  */
 package br.com.caelum.vraptor.http;
 
-import java.lang.reflect.Method;
+import java.lang.reflect.AccessibleObject;
 
 /**
  * Provides all parameter names for an specific java method.
@@ -25,6 +25,6 @@ import java.lang.reflect.Method;
  */
 public interface ParameterNameProvider {
 
-    String[] parameterNamesFor(Method method);
+    String[] parameterNamesFor(AccessibleObject methodOrConstructor);
 
 }

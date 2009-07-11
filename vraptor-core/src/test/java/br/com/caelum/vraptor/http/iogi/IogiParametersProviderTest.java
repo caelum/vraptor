@@ -31,6 +31,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.Assert.assertArrayEquals;
 
 import java.lang.reflect.Method;
@@ -161,6 +162,23 @@ public class IogiParametersProviderTest {
         }
         void doNothing() {}
     }
+    
+    static class NeedsMyResource {
+    	private final MyResource myResource;
+
+		public NeedsMyResource(MyResource myResource) {
+			this.myResource = myResource;
+		}
+		
+		public MyResource getMyResource() {
+			return myResource;
+		}
+    }
+    
+    class OtherResource {
+    	void logic(NeedsMyResource param) {
+    	}
+    }
 
     public static class BuyASetter {
         private House House_;
@@ -284,6 +302,26 @@ public class IogiParametersProviderTest {
         
         assertArrayEquals(new Object[] {}, params);
     }
+    
+	@Test
+	public void canInjectADependencyProvidedByVraptor() throws Exception {
+    	ResourceMethod resourceMethod = mockery.methodFor(OtherResource.class, "logic", NeedsMyResource.class);
+    	final MyResource providedInstance = new MyResource();
+    	
+    	mockery.checking(new Expectations() {{
+    		allowing(mockHttpServletRequest).getParameterNames();
+    		will(returnValue(enumerationFor()));
+    		
+    		allowing(mockNameProvider).parameterNamesFor(with(any(Method.class)));
+    		will(returnValue(new String[] {"param"}));
+    		
+    		allowing(mockContainer).instanceFor(MyResource.class);
+    		will(returnValue(providedInstance));
+    	}});
+    	
+    	Object[] params = iogiProvider.getParametersFor(resourceMethod, errors, null);
+		assertThat(((NeedsMyResource)params[0]).getMyResource(), is(sameInstance(providedInstance)));
+	}
 
     //---------- The Following tests mock iogi to unit test the ParametersProvider impl. 
 	@Test

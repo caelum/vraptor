@@ -12,7 +12,6 @@ import br.com.caelum.iogi.conversion.TypeConverter;
 import br.com.caelum.iogi.parameters.Parameters;
 import br.com.caelum.iogi.reflection.Target;
 import br.com.caelum.iogi.spi.DependencyProvider;
-import br.com.caelum.iogi.util.NullDependencyProvider;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.core.Localization;
@@ -23,14 +22,22 @@ import com.google.common.collect.ImmutableList;
 public class VRaptorInstantiator implements Instantiator<Object> {
 	private final Converters converters;
 	private final Container container;
-	private final DependencyProvider dependencyProvider;
 	private final Localization localization;
+	private MultiInstantiator multiInstantiator;
 	
 	public VRaptorInstantiator(Converters converters, Container container, Localization localization) {
 		this.converters = converters;
 		this.container = container;
 		this.localization = localization;
-		this.dependencyProvider = new NullDependencyProvider();
+		DependencyProvider dependencyProvider = new VRaptorDependencyProvider();
+		List<Instantiator<?>> instantiatorList = new ImmutableList.Builder<Instantiator<?>>()
+			.add(new VRaptorConvertersInstantiator())
+			.add(new StringConverter())
+			.add(new ArrayInstantiator(this))
+			.add(new ListInstantiator(this))
+			.add(new ObjectInstantiator(this, dependencyProvider))
+			.build();
+		multiInstantiator = new MultiInstantiator(instantiatorList);
 	}
 	
 	@Override
@@ -40,17 +47,7 @@ public class VRaptorInstantiator implements Instantiator<Object> {
 
 	@Override
 	public Object instantiate(Target<?> target, Parameters parameters) {
-		final List<Instantiator<?>>  all = new ImmutableList.Builder<Instantiator<?>>()
-			.add(new VRaptorConvertersInstantiator())
-			.add(new StringConverter())
-			.add(new ArrayInstantiator(this))
-			.add(new ListInstantiator(this))
-			.add(new ObjectInstantiator(this, dependencyProvider))
-			.build();
-		
-		MultiInstantiator allInstantiators = new MultiInstantiator(all);
-
-		return allInstantiators.instantiate(target, parameters);
+		return multiInstantiator.instantiate(target, parameters);
 	}
 	
 	private final class VRaptorConvertersInstantiator extends TypeConverter<Object> {
@@ -68,5 +65,17 @@ public class VRaptorInstantiator implements Instantiator<Object> {
 		private Converter<Object> converterForTarget(Target<?> target) {
 			return (Converter<Object>) converters.to(target.getClassType(), container);
 		}		
+	}
+	
+	private final class VRaptorDependencyProvider implements DependencyProvider {
+		@Override
+		public boolean canProvide(Target<?> target) {
+			return container.instanceFor(target.getClassType()) != null;
+		}
+
+		@Override
+		public Object provide(Target<?> target) {
+			return container.instanceFor(target.getClassType());
+		}
 	}
 }

@@ -87,7 +87,5 @@ public class IogiParametersProvider implements ParametersProvider {
 
 }
 /*
- Q: Localization.getLocale() or JstlWrapper.findLocale()? PS: C&P code from converters.JstlWrapper in JstlLocaleProvider.
  OBS: pass nameProvider to Iogi
- OBS: integrar DI do VRAptor
  */

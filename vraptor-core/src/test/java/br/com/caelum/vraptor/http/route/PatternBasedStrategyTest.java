@@ -1,7 +1,7 @@
 /***
- * 
+ *
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  * 1. Redistributions of source code must retain the above copyright notice,
@@ -12,7 +12,7 @@
  * copyright holders nor the names of its contributors may be used to endorse or
  * promote products derived from this software without specific prior written
  * permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -39,7 +39,7 @@ import br.com.caelum.vraptor.test.VRaptorMockery;
 
 
 public class PatternBasedStrategyTest {
-	
+
 
 	private VRaptorMockery mockery;
 	private MutableRequest request;
@@ -51,25 +51,25 @@ public class PatternBasedStrategyTest {
 		this.request = mockery.mock(MutableRequest.class);
 		this.control = mockery.mock(ParametersControl.class);
 	}
-	
+
 	@Test
 	public void canHandleTypesWhichAreAvailableThroughItsPattern() throws SecurityException, NoSuchMethodException {
-		PatternBasedStrategy strategy = new PatternBasedStrategy(control, new PatternBasedType(MyComponent.class.getPackage().getName()+".{_logic}"), new PatternBasedType("list"), null);
+		PatternBasedStrategy strategy = new PatternBasedStrategy(control, new PatternBasedType(MyComponent.class.getPackage().getName()+".{_logic}"), new PatternBasedType("list"), null, 0);
 		assertThat(strategy.canHandle(MyComponent.class, MyComponent.class.getDeclaredMethod("list")), is(equalTo(true)));
 	}
-	
+
 	@Test
 	public void cannotHandleTypeWhenItsAnotherType() throws SecurityException, NoSuchMethodException {
-		PatternBasedStrategy strategy = new PatternBasedStrategy(control, new PatternBasedType("Another"), new PatternBasedType("list"), null);
+		PatternBasedStrategy strategy = new PatternBasedStrategy(control, new PatternBasedType("Another"), new PatternBasedType("list"), null, 0);
 		assertThat(strategy.canHandle(MyComponent.class, MyComponent.class.getDeclaredMethod("list")), is(equalTo(false)));
 	}
 
 	@Test
 	public void cannotHandleTypeWhenItsAnotherMethod() throws SecurityException, NoSuchMethodException {
-		PatternBasedStrategy strategy = new PatternBasedStrategy(control, new PatternBasedType(MyComponent.class.getName()), new PatternBasedType("other"), null);
+		PatternBasedStrategy strategy = new PatternBasedStrategy(control, new PatternBasedType(MyComponent.class.getName()), new PatternBasedType("other"), null, 0);
 		assertThat(strategy.canHandle(MyComponent.class, MyComponent.class.getDeclaredMethod("list")), is(equalTo(false)));
 	}
-	
+
 	class MyComponent {
 		public void list() {
 		}

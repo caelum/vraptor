@@ -42,7 +42,7 @@ import br.com.caelum.vraptor.resource.HttpMethod;
 /**
  * Should be used in one of two ways, either configure the type and invoke the
  * method or pass the method (java reflection) object.
- * 
+ *
  * @author Guilherme Silveira
  */
 public class RouteBuilder {
@@ -54,6 +54,8 @@ public class RouteBuilder {
 	private final String originalUri;
 
 	private Route strategy = new NoStrategy();
+
+	private int priority = Integer.MAX_VALUE;
 
 	public RouteBuilder(Proxifier proxifier, String uri) {
 		this.proxifier = proxifier;
@@ -78,20 +80,20 @@ public class RouteBuilder {
 
 	public void is(PatternBasedType type, PatternBasedType method) {
 		this.strategy = new PatternBasedStrategy(new DefaultParametersControl(originalUri), type, method,
-				this.supportedMethods);
-		
+				this.supportedMethods, priority);
+
 	}
 
 	public void is(Class<?> type, Method method) {
 		this.strategy = new FixedMethodStrategy(originalUri, type, method, this.supportedMethods,
-				new DefaultParametersControl(originalUri));
+				new DefaultParametersControl(originalUri), priority);
 		logger.info(originalUri + " --> " + method);
 	}
 
 	/**
 	 * Accepts also this http method request. If this method is not invoked, any
 	 * http method is supported, otherwise all parameters passed are supported.
-	 * 
+	 *
 	 * @param method
 	 * @return
 	 */
@@ -99,6 +101,17 @@ public class RouteBuilder {
 		this.supportedMethods.add(method);
 		return this;
 	}
+
+	/**
+	 * Changes Route priority
+	 * @param priority
+	 * @return
+	 */
+	public RouteBuilder withPriority(int priority) {
+		this.priority = priority;
+		return this;
+	}
+
 
 	public Route build() {
 		if (strategy instanceof NoStrategy) {
@@ -108,6 +121,7 @@ public class RouteBuilder {
 		return strategy;
 	}
 
+	@Override
 	public String toString() {
 		if (supportedMethods.isEmpty()) {
 			return String.format("<< Route: %s => %s >>", originalUri, this.strategy.toString());

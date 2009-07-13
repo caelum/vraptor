@@ -47,7 +47,7 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  * @author guilherme silveira
  */
 public class PatternBasedStrategy implements Route {
-	
+
 	private final Logger logger = LoggerFactory.getLogger(PatternBasedStrategy.class);
 
 	private final PatternBasedType type;
@@ -56,11 +56,14 @@ public class PatternBasedStrategy implements Route {
 
 	private final ParametersControl control;
 
-	public PatternBasedStrategy(ParametersControl control, PatternBasedType type, PatternBasedType method, Set<HttpMethod> methods) {
+	private final int priority;
+
+	public PatternBasedStrategy(ParametersControl control, PatternBasedType type, PatternBasedType method, Set<HttpMethod> methods, int priority) {
 		this.control = control;
 		this.type = type;
 		this.method = method;
 		this.methods = methods;
+		this.priority = priority;
 	}
 
 	public boolean canHandle(Class<?> type, Method method) {
@@ -112,4 +115,8 @@ public class PatternBasedStrategy implements Route {
 		return null;
 	}
 
+	@Override
+	public int getPriority() {
+		return this.priority;
+	}
 }

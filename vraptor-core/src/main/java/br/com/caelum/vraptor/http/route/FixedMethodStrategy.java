@@ -1,7 +1,7 @@
 /***
- * 
+ *
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  * 1. Redistributions of source code must retain the above copyright notice,
@@ -12,7 +12,7 @@
  * copyright holders nor the names of its contributors may be used to endorse or
  * promote products derived from this software without specific prior written
  * permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -39,23 +39,26 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**
  * A route strategy which invokes a fixed type's method.
- * 
+ *
  * @author guilherme silveira
  */
 public class FixedMethodStrategy implements Route {
-	
+
 	private final ResourceMethod resourceMethod;
 
 	private final Set<HttpMethod> methods;
 
 	private final ParametersControl parameters;
 
-	public FixedMethodStrategy(String originalUri, Class<?> type, Method method, Set<HttpMethod> methods, ParametersControl control) {
+	private final int priority;
+
+	public FixedMethodStrategy(String originalUri, Class<?> type, Method method, Set<HttpMethod> methods, ParametersControl control, int priority) {
 		this.methods = methods;
 		this.parameters = control;
 		this.resourceMethod = new DefaultResourceMethod(new DefaultResourceClass(type), method);
+		this.priority = priority;
 	}
-	
+
 	public ResourceClass getResource() {
 		return this.resourceMethod.getResource();
 	}
@@ -78,4 +81,8 @@ public class FixedMethodStrategy implements Route {
 		return parameters.fillUri(params);
 	}
 
+	@Override
+	public int getPriority() {
+		return this.priority;
+	}
 }

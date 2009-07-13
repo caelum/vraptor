@@ -30,6 +30,8 @@ package br.com.caelum.vraptor.http.route;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -65,7 +67,7 @@ import br.com.caelum.vraptor.vraptor2.Info;
 public class DefaultRouter implements Router {
 
 	private final Proxifier proxifier;
-	private final List<Route> routes = new ArrayList<Route>();
+	private final Collection<Route> routes = new PriorityRoutesList();
 	private final Set<ResourceClass> resources = new HashSet<ResourceClass>();
 	private final RoutesParser routesParser;
 	private final ParameterNameProvider provider;
@@ -188,7 +190,7 @@ public class DefaultRouter implements Router {
 	}
 
 	public List<Route> allRoutes() {
-		return routes;
+		return Collections.unmodifiableList(new ArrayList<Route>(routes));
 	}
 
 }

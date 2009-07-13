@@ -14,6 +14,8 @@ import javax.servlet.ServletContext;
 import org.reflections.Reflections;
 import org.reflections.scanners.ClassAnnotationsScanner;
 import org.reflections.util.AbstractConfiguration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.VRaptorException;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
@@ -27,12 +29,13 @@ import br.com.caelum.vraptor.ioc.Stereotype;
  */
 @ApplicationScoped
 public class ReflectionsScanner implements Scanner {
-    private final Reflections reflections;
+    private static final Logger LOGGER = LoggerFactory.getLogger(ReflectionsScanner.class);
+	private final Reflections reflections;
 
     public ReflectionsScanner(ServletContext context) {
     	final URL webInfClasses;
 		try {
-			webInfClasses = new File(context.getRealPath("/WEB-INF/classes/")).toURL();
+			webInfClasses = new File(context.getRealPath("/WEB-INF/classes/")).toURI().toURL();
 		} catch (MalformedURLException e) {
 			throw new VRaptorException(e);
 		}
@@ -52,6 +55,10 @@ public class ReflectionsScanner implements Scanner {
     @SuppressWarnings({"unchecked"})
     public Collection<Class<?>> getTypesWithMetaAnnotation(Class<? extends Annotation> metaAnnotationType) {
         Set<Class<?>> stereotypeAnnotations = reflections.getTypesAnnotatedWith(Stereotype.class);
+        
+        if (LOGGER.isDebugEnabled())
+        	LOGGER.debug("Found the following sterotyped annotations: " + stereotypeAnnotations.toString());
+        
         Set<Class<?>> componentTypes = new HashSet<Class<?>>();
         for (Class<?> stereotypeAnnotation : stereotypeAnnotations) {
             Set<Class<?>> annotatedComponents = reflections.getTypesAnnotatedWith(

@@ -39,6 +39,7 @@ import br.com.caelum.vraptor.core.RequestExecution;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.route.RoutesParser;
 import br.com.caelum.vraptor.ioc.pico.PicoProvider;
+import br.com.caelum.vraptor.ioc.pico.Scanner;
 import br.com.caelum.vraptor.view.PageResult;
 import br.com.caelum.vraptor.view.PathResolver;
 import br.com.caelum.vraptor.vraptor2.outject.OutjectionInterceptor;
@@ -49,7 +50,6 @@ import br.com.caelum.vraptor.vraptor2.outject.OutjectionInterceptor;
  * @author Guilherme Silveira
  */
 public class Provider extends PicoProvider {
-
     protected void registerBundledComponents(ComponentRegistry container) {
         super.registerBundledComponents(container);
         container.register(RoutesParser.class, ComponentRoutesParser.class);
@@ -68,4 +68,11 @@ public class Provider extends PicoProvider {
         container.register(Validator.class, MessageCreatorValidator.class);
         container.register(ValidationErrors.class, BasicValidationErrors.class);
     }
+    
+    @Override
+    public void registerCustomComponents(ComponentRegistry components, Scanner scanner) {
+    	super.registerCustomComponents(components, scanner);
+    	new VRaptor2ComponentRegistrar(components).registerFrom(scanner);
+    }
+    
 }

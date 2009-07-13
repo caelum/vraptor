@@ -106,23 +106,28 @@ public class PicoProvider implements ContainerProvider {
         }
     }
 
-    public void start(ServletContext context) {
+    public final void start(ServletContext context) {
         ComponentRegistry components = getContainers();
         registerBundledComponents(components);
 
         this.container.addComponent(context);
 
         Scanner scanner = new ReflectionsScanner(context);
+
         new ComponentRegistrar(components).registerFrom(scanner);
-
+        
         getContainers().init();
-
-        container.getComponent(ResourceRegistrar.class).registerFrom(scanner);
+        
+        this.registerCustomComponents(components, scanner);
+        
+        container.start();
+    }
+    
+    public void registerCustomComponents(ComponentRegistry components, Scanner scanner) {
+    	container.getComponent(ResourceRegistrar.class).registerFrom(scanner);
         container.getComponent(InterceptorRegistrar.class).registerFrom(scanner);
         container.getComponent(ConverterRegistrar.class).registerFrom(scanner);
         container.getComponent(ComponentFactoryRegistrar.class).registerFrom(scanner);
-
-        container.start();
     }
 
     public void stop() {

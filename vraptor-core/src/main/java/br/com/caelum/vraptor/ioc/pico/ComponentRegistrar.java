@@ -27,6 +27,16 @@
  */
 package br.com.caelum.vraptor.ioc.pico;
 
+import java.lang.annotation.Annotation;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Intercepts;
@@ -34,15 +44,6 @@ import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.ioc.Stereotype;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.lang.annotation.Annotation;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 /**
  * <p>Prepares all classes with meta-annotation @Stereotype to be used as VRaptor components. It means that any

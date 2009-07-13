@@ -29,6 +29,7 @@
  */
 package br.com.caelum.vraptor.vraptor2;
 
+import org.picocontainer.PicoContainer;
 import org.vraptor.validator.BasicValidationErrors;
 import org.vraptor.validator.ValidationErrors;
 
@@ -67,12 +68,13 @@ public class Provider extends PicoProvider {
         container.register(AjaxInterceptor.class, AjaxInterceptor.class);
         container.register(Validator.class, MessageCreatorValidator.class);
         container.register(ValidationErrors.class, BasicValidationErrors.class);
+        container.register(VRaptor2ComponentRegistrar.class, VRaptor2ComponentRegistrar.class);
     }
     
     @Override
-    public void registerCustomComponents(ComponentRegistry components, Scanner scanner) {
-    	super.registerCustomComponents(components, scanner);
-    	new VRaptor2ComponentRegistrar(components).registerFrom(scanner);
+    public void registerCustomComponents(PicoContainer container, Scanner scanner) {
+    	super.registerCustomComponents(container, scanner);
+    	container.getComponent(VRaptor2ComponentRegistrar.class).registerFrom(scanner);
     }
     
 }

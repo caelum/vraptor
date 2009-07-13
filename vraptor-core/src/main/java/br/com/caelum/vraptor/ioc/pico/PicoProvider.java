@@ -37,6 +37,7 @@ import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
 import org.picocontainer.DefaultPicoContainer;
 import org.picocontainer.MutablePicoContainer;
+import org.picocontainer.PicoContainer;
 import org.picocontainer.behaviors.Caching;
 import org.picocontainer.lifecycle.JavaEE5LifecycleStrategy;
 import org.picocontainer.monitors.NullComponentMonitor;
@@ -118,12 +119,12 @@ public class PicoProvider implements ContainerProvider {
         
         getContainers().init();
         
-        this.registerCustomComponents(components, scanner);
+        this.registerCustomComponents(container, scanner);
         
         container.start();
     }
     
-    public void registerCustomComponents(ComponentRegistry components, Scanner scanner) {
+    public void registerCustomComponents(PicoContainer container, Scanner scanner) {
     	container.getComponent(ResourceRegistrar.class).registerFrom(scanner);
         container.getComponent(InterceptorRegistrar.class).registerFrom(scanner);
         container.getComponent(ConverterRegistrar.class).registerFrom(scanner);

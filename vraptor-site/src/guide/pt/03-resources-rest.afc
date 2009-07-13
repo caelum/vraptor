@@ -245,13 +245,56 @@ você deve utilizar o padrão {...*}:
 public class ClienteController {
 
   @Get
-  @Path("/cliente/{cliente.id}/download/{path}")  
+  @Path("/cliente/{cliente.id}/download/{path*}")  
   public File download(Cliente cliente, String path) {
     return ...
   }
   
 }
 [/java]
+
+[title Definindo prioridades para seus paths]
+
+É possível que algumas das nossas URIs possa ser tratada por mais de um método da classe:
+
+[java]
+@Resource
+public class PostController {
+
+  @Get
+  @Path("/post/{post.id}")
+  public void mostra(Post post) { ... }
+
+  @Get
+  @Path("/post/atual")
+  public void atual() { ... }
+}
+[/java]
+
+A uri %%/post/atual%% pode ser tratada tanto pelo método %%mostra%, quanto pelo %%atual%%.
+Mas não faz sentido eu passar essa URL para o método mostra, já que %%post.id%% deveria
+ser um número. O que eu quero é que o VRaptor teste primeiro o path do método %%atual%%,
+para não correr o risco de cair no método %%mostra%%.
+
+Para fazer isso, podemos definir prioridades para os %%@Path%%s, assim o VRaptor vai testar
+primeiro os paths com maior prioridade, ou seja, valor menor de prioridade:
+
+[java]
+@Resource
+public class PostController {
+
+  @Get
+  @Path(priority = 2, value = "/post/{post.id}")
+  public void mostra(Post post) { ... }
+
+  @Get
+  @Path(priority = 1, value = "/post/atual")
+  public void atual() { ... }
+}
+[/java]
+
+Assim, o path "/post/atual" vai ser testado antes do "/post/{post.id}", e o VRaptor vai fazer
+o que a gente gostaria que ele fizesse.
 
 [section RoutesConfiguration]
 

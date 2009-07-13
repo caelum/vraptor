@@ -74,6 +74,9 @@ public class PathAnnotationRoutesParser implements RoutesParser {
                         rule.with(m);
                     }
                 }
+                if (javaMethod.isAnnotationPresent(Path.class)) {
+                	rule.withPriority(javaMethod.getAnnotation(Path.class).priority());
+                }
                 rule.is(baseType, javaMethod);
                 routes.add(rule.build());
             }

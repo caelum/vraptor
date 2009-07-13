@@ -51,6 +51,7 @@ public abstract class Rules {
 
     protected final RouteBuilder routeFor(String uri) {
         RouteBuilder rule = new RouteBuilder(router.getProxifier(), uri);
+        rule.withPriority(Integer.MIN_VALUE);
         this.routesToBuild.add(rule);
         return rule;
     }

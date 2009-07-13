@@ -39,9 +39,11 @@ import javax.servlet.http.HttpServletRequest;
 import org.hamcrest.Matchers;
 import org.hamcrest.TypeSafeMatcher;
 import org.jmock.Expectations;
+import org.jmock.Sequence;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.Path;
+import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.TypeCreator;
 import br.com.caelum.vraptor.http.VRaptorRequest;
@@ -78,6 +80,37 @@ public class DefaultRouterTest {
 	}
 
 	@Test
+	public void shouldObeyPriorityOfRoutes() throws Exception {
+		final Route first = mockery.mock(Route.class, "first");
+		final Route second = mockery.mock(Route.class, "second");
+		final Route third = mockery.mock(Route.class, "third");
+
+		final Sequence invocation = mockery.sequence("invocation");
+
+		mockery.checking(new Expectations() {
+			{
+				allowing(first).getPriority(); will(returnValue(1));
+				allowing(second).getPriority(); will(returnValue(2));
+				allowing(third).getPriority(); will(returnValue(3));
+
+				one(first).matches(with(any(String.class)), with(any(HttpMethod.class)), with(any(MutableRequest.class))); will(returnValue(null));
+				inSequence(invocation);
+				one(second).matches(with(any(String.class)), with(any(HttpMethod.class)), with(any(MutableRequest.class))); will(returnValue(null));
+				inSequence(invocation);
+				one(third).matches(with(any(String.class)), with(any(HttpMethod.class)), with(any(MutableRequest.class))); will(returnValue(null));
+				inSequence(invocation);
+
+				ignoring(anything());
+			}
+		});
+		router.add(third);
+		router.add(first);
+		router.add(second);
+
+		router.parse("anything", HttpMethod.GET, request);
+		mockery.assertIsSatisfied();
+	}
+	@Test
 	public void tryToUseUriWithAndWithoutSlashAtTheEnd() throws Exception {
 		final Route route = mockery.mock(Route.class);
 		mockery.checking(new Expectations() {
@@ -106,6 +139,7 @@ public class DefaultRouterTest {
 			one(route).matches("/clients/add", HttpMethod.POST, request);
 			will(returnValue(method));
 			one(route).getResource(); will(returnValue(null));
+			allowing(route).getPriority();
 		}});
 		router.add(route);
 		ResourceMethod found = router.parse("/clients/add", HttpMethod.POST, request);
@@ -122,6 +156,8 @@ public class DefaultRouterTest {
 			one(route).matches("/clients/add", delete, request);
 			will(returnValue(method));
 			one(route).getResource(); will(returnValue(null));
+
+			allowing(route).getPriority();
 		}});
 		router.add(route);
 		ResourceMethod found = router.parse("/clients/add", delete, request);
@@ -137,6 +173,9 @@ public class DefaultRouterTest {
 			will(returnValue(method));
 			one(route).getResource(); will(returnValue(null));
 			one(second).getResource(); will(returnValue(null));
+
+			allowing(route).getPriority();
+			allowing(second).getPriority();
 		}});
 		router.add(route);
 		router.add(second);

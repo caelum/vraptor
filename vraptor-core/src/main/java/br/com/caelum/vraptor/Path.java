@@ -54,6 +54,6 @@ public @interface Path {
      * so on.
      * @return
      */
-    int priority() default Integer.MAX_VALUE;
+    int priority() default Integer.MAX_VALUE - 1;
 
 }

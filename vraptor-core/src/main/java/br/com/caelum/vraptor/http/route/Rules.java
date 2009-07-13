@@ -33,6 +33,9 @@ import java.util.List;
 /**
  * Rules for resource localization.
  *
+ * By default, Routes added by this class will have higher priority (will have
+ * lower value of priority), so will be tested first at Router.parse method.
+ *
  * @author Guilherme Silveira
  */
 public abstract class Rules {

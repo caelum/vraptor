@@ -43,6 +43,8 @@ import br.com.caelum.vraptor.resource.HttpMethod;
  * Should be used in one of two ways, either configure the type and invoke the
  * method or pass the method (java reflection) object.
  *
+ * If not specified, the built route will have the lowest priority (higher value of priority),
+ * so will be the last to be used.
  * @author Guilherme Silveira
  */
 public class RouteBuilder {

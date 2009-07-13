@@ -61,6 +61,9 @@ import br.com.caelum.vraptor.vraptor2.Info;
  * route: /resource/
  * will match, and vice versa.
  *
+ * Routes will be tested on parse methods according to their priorities.
+ * Routes with lower value of priority will be tested first.
+ *
  * @author Guilherme Silveira
  */
 @ApplicationScoped

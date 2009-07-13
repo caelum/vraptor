@@ -8,6 +8,11 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.Map.Entry;
 
+/**
+ * Order Routes by priority
+ * @author Lucas Cavalcanti
+ *
+ */
 public class PriorityRoutesList implements Collection<Route> {
 
 	private final SortedMap<Integer,List<Route>> map;

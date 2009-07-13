@@ -115,7 +115,6 @@ public class PatternBasedStrategy implements Route {
 		return null;
 	}
 
-	@Override
 	public int getPriority() {
 		return this.priority;
 	}

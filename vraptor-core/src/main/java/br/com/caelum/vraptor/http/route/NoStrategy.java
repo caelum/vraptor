@@ -58,7 +58,6 @@ public class NoStrategy implements Route {
 		return null;
 	}
 
-	@Override
 	public int getPriority() {
 		return 0;
 	}

@@ -81,7 +81,6 @@ public class FixedMethodStrategy implements Route {
 		return parameters.fillUri(params);
 	}
 
-	@Override
 	public int getPriority() {
 		return this.priority;
 	}

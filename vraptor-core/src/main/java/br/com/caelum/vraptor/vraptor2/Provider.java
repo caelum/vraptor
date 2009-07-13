@@ -51,6 +51,7 @@ import br.com.caelum.vraptor.vraptor2.outject.OutjectionInterceptor;
  * @author Guilherme Silveira
  */
 public class Provider extends PicoProvider {
+	@Override
     protected void registerBundledComponents(ComponentRegistry container) {
         super.registerBundledComponents(container);
         container.register(RoutesParser.class, ComponentRoutesParser.class);

@@ -6,10 +6,12 @@ import org.vraptor.annotations.Component;
 
 import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.http.route.Router;
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.pico.Registrar;
 import br.com.caelum.vraptor.ioc.pico.Scanner;
 import br.com.caelum.vraptor.resource.DefaultResourceClass;
 
+@ApplicationScoped
 public class VRaptor2ComponentRegistrar implements Registrar {
 	private final ComponentRegistry components;
 	private final Router router;

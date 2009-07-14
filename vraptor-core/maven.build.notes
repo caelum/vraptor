@@ -4,5 +4,10 @@ mvn install:install-file -DgroupId=org.vraptor -DartifactId=vraptor2 -Dversion=2
 
 mvn install:install-file -DgroupId=org.hamcrest -DartifactId=hamcrest-all -Dversion=1.2RC3 -Dpackaging=jar -Dfile=lib/hamcrest-all-1.2RC3.jar
 
-mvn install:install-file -DgroupId=org.reflections -DartifactId=reflections -Dversion=0.9.2 -Dpackaging=jar -Dfile=lib/reflections-0.9.2.jar
+svn checkout http://reflections.googlecode.com/svn/trunk reflections -r 20
+cp reflections.pom.xml reflections/reflections/pom.xml
+cd reflections/reflections
+mvn clean install
+cd ../..
+rm -fr reflections
 

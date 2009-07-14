@@ -10,7 +10,7 @@ import br.com.caelum.iogi.ObjectInstantiator;
 import br.com.caelum.iogi.collections.ArrayInstantiator;
 import br.com.caelum.iogi.collections.ListInstantiator;
 import br.com.caelum.iogi.conversion.StringConverter;
-import br.com.caelum.iogi.conversion.TypeConverter;
+import br.com.caelum.iogi.parameters.Parameter;
 import br.com.caelum.iogi.parameters.Parameters;
 import br.com.caelum.iogi.reflection.Target;
 import br.com.caelum.iogi.spi.DependencyProvider;
@@ -59,21 +59,23 @@ public class VRaptorInstantiator implements Instantiator<Object> {
 		return multiInstantiator.instantiate(target, parameters);
 	}
 	
-	private final class VRaptorTypeConverter extends TypeConverter<Object> {
+	private final class VRaptorTypeConverter implements Instantiator<Object> {
 		@Override
 		public boolean isAbleToInstantiate(Target<?> target) {
 			return converters.existsFor(target.getClassType(), container);
 		}
 
 		@Override
-		protected Object convert(String stringValue, Target<?> to) throws Exception {
-			return converterForTarget(to).convert(stringValue, to.getClassType(), localization.getBundle());
-		}
-
+		public Object instantiate(Target<?> target, Parameters parameters) {
+			Parameter parameter = parameters.namedAfter(target);
+			final String stringValue = parameter != null ? parameter.getValue() : null;
+			return converterForTarget(target).convert(stringValue, target.getClassType(), localization.getBundle());
+		}		
+		
 		@SuppressWarnings("unchecked")
 		private Converter<Object> converterForTarget(Target<?> target) {
 			return (Converter<Object>) converters.to(target.getClassType(), container);
-		}		
+		}
 	}
 	
 	private final class VRaptorDependencyProvider implements DependencyProvider {

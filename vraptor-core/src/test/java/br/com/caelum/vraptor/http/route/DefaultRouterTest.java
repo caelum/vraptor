@@ -30,7 +30,6 @@ package br.com.caelum.vraptor.http.route;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
 
 import java.lang.reflect.Method;
 
@@ -110,27 +109,6 @@ public class DefaultRouterTest {
 		router.parse("anything", HttpMethod.GET, request);
 		mockery.assertIsSatisfied();
 	}
-	@Test
-	public void tryToUseUriWithAndWithoutSlashAtTheEnd() throws Exception {
-		final Route route = mockery.mock(Route.class);
-		mockery.checking(new Expectations() {
-			{
-				allowing(route).matches("/no-slash", HttpMethod.GET, request);
-				will(returnValue(method));
-
-				allowing(route).matches("/slash/", HttpMethod.GET, request);
-				will(returnValue(method));
-
-				ignoring(route);
-			}
-		});
-		router.add(route);
-
-		assertThat(router.parse("/slash", HttpMethod.GET, request), is(notNullValue()));
-		assertThat(router.parse("/no-slash/", HttpMethod.GET, request), is(notNullValue()));
-
-		mockery.assertIsSatisfied();
-	}
 
 	@Test
 	public void acceptsASingleMappingRule() throws SecurityException, NoSuchMethodException {
@@ -183,6 +161,8 @@ public class DefaultRouterTest {
 		assertThat(found, is(equalTo(method)));
 		mockery.assertIsSatisfied();
 	}
+
+
 
 	@Test
 	public void acceptsAnHttpMethodLimitedMappingRule() throws NoSuchMethodException {

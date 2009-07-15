@@ -43,7 +43,7 @@ public class VRaptorInstantiator implements Instantiator<Object> {
 			.add(new VRaptorTypeConverter())
 			.add(new StringConverter())
 			.add(new ArrayInstantiator(this))
-			.add(new ListInstantiator(this))
+			.add(new NullDecorator(new ListInstantiator(this)))
 			.add(new ObjectInstantiator(this, dependencyProvider, parameterNamesProvider))
 			.build();
 		multiInstantiator = new MultiInstantiator(instantiatorList);
@@ -97,5 +97,25 @@ public class VRaptorInstantiator implements Instantiator<Object> {
 			return Arrays.asList(parameterNameProvider.parameterNamesFor(methodOrConstructor));
 		}
 		
+	}
+	
+	private final class NullDecorator implements Instantiator<Object> {
+		private final Instantiator<?> delegateInstantiator;
+
+		public NullDecorator(Instantiator<?> delegateInstantiator) {
+			this.delegateInstantiator = delegateInstantiator;
+		}
+
+		@Override
+		public boolean isAbleToInstantiate(Target<?> target) {
+			return delegateInstantiator.isAbleToInstantiate(target);
+		}
+		
+		@Override
+		public Object instantiate(Target<?> target, Parameters parameters) {
+			if (!parameters.hasRelatedTo(target)) 
+				return null;
+			return delegateInstantiator.instantiate(target, parameters);
+		}
 	}
 }

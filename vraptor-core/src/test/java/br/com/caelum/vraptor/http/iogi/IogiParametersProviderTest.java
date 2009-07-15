@@ -171,7 +171,9 @@ public class IogiParametersProviderTest {
         void buyA(House house) {
         }
         void doNothing() {}
+        void kill(List<Cat> kittens) {}
     }
+    
     
     static class NeedsMyResource {
     	private final MyResource myResource;
@@ -310,6 +312,22 @@ public class IogiParametersProviderTest {
         Object[] params = iogiProvider.getParametersFor(method, errors, null);
         
         assertArrayEquals(new Object[] {}, params);
+    }
+    
+    @Test
+    public void returnsNullWhenInstantiatingAListForWhichThereAreNoParameters() throws Exception {
+    	final ResourceMethod method = mockery.methodFor(MyResource.class, "kill", List.class);
+    	
+    	mockery.checking(new Expectations() {
+    		{
+    			ignoring(mockHttpServletRequest);
+    			allowing(mockNameProvider).parameterNamesFor(with(any(Method.class)));
+    			will(returnValue(new String[] {"kittens"}));
+    		}
+    	});
+    	Object[] params = iogiProvider.getParametersFor(method, errors, null);
+    	
+    	assertArrayEquals(new Object[] {null}, params);
     }
     
 	@Test

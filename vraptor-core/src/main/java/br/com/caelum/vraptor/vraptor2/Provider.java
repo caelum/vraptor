@@ -52,30 +52,30 @@ import br.com.caelum.vraptor.vraptor2.outject.OutjectionInterceptor;
  */
 public class Provider extends PicoProvider {
 	@Override
-    protected void registerBundledComponents(ComponentRegistry container) {
-        super.registerBundledComponents(container);
-        container.register(RoutesParser.class, ComponentRoutesParser.class);
-        container.register(PathResolver.class, VRaptor2PathResolver.class);
-        container.register(Config.class, VRaptor2Config.class);
-        container.register(ParameterNameProvider.class, LogicAnnotationWithParanamerParameterNameProvider.class);
-        container.register(RequestExecution.class, VRaptor2RequestExecution.class);
-        container.register(PageResult.class, ViewsPropertiesPageResult.class);
-        container.register(HibernateValidatorPluginInterceptor.class,HibernateValidatorPluginInterceptor.class);
-        container.register(Converters.class, VRaptor2Converters.class);
-        container.register(ValidatorInterceptor.class,ValidatorInterceptor.class);
-        container.register(ViewInterceptor.class,ViewInterceptor.class);
-        container.register(ComponentInfoProvider.class, DefaultComponentInfoProvider.class);
-        container.register(OutjectionInterceptor.class,OutjectionInterceptor.class);
-        container.register(AjaxInterceptor.class, AjaxInterceptor.class);
-        container.register(Validator.class, MessageCreatorValidator.class);
-        container.register(ValidationErrors.class, BasicValidationErrors.class);
-        container.register(VRaptor2ComponentRegistrar.class, VRaptor2ComponentRegistrar.class);
+    protected void registerBundledComponents(ComponentRegistry registry) {
+        super.registerBundledComponents(registry);
+        registry.register(RoutesParser.class, ComponentRoutesParser.class);
+        registry.register(PathResolver.class, VRaptor2PathResolver.class);
+        registry.register(Config.class, VRaptor2Config.class);
+        registry.register(ParameterNameProvider.class, LogicAnnotationWithParanamerParameterNameProvider.class);
+        registry.register(RequestExecution.class, VRaptor2RequestExecution.class);
+        registry.register(PageResult.class, ViewsPropertiesPageResult.class);
+        registry.register(HibernateValidatorPluginInterceptor.class,HibernateValidatorPluginInterceptor.class);
+        registry.register(Converters.class, VRaptor2Converters.class);
+        registry.register(ValidatorInterceptor.class,ValidatorInterceptor.class);
+        registry.register(ViewInterceptor.class,ViewInterceptor.class);
+        registry.register(ComponentInfoProvider.class, DefaultComponentInfoProvider.class);
+        registry.register(OutjectionInterceptor.class,OutjectionInterceptor.class);
+        registry.register(AjaxInterceptor.class, AjaxInterceptor.class);
+        registry.register(Validator.class, MessageCreatorValidator.class);
+        registry.register(ValidationErrors.class, BasicValidationErrors.class);
+        registry.register(VRaptor2ComponentRegistrar.class, VRaptor2ComponentRegistrar.class);
     }
     
     @Override
-    protected void registerCustomComponents(PicoContainer container, Scanner scanner) {
-    	super.registerCustomComponents(container, scanner);
-    	container.getComponent(VRaptor2ComponentRegistrar.class).registerFrom(scanner);
+    protected void registerCustomComponents(PicoContainer picoContainer, Scanner scanner) {
+    	super.registerCustomComponents(picoContainer, scanner);
+    	picoContainer.getComponent(VRaptor2ComponentRegistrar.class).registerFrom(scanner);
     }
     
 }

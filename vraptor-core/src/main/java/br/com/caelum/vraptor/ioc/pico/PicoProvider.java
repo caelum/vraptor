@@ -56,46 +56,46 @@ import java.util.Map;
  */
 public class PicoProvider implements ContainerProvider {
 
-    private final MutablePicoContainer container;
+    private final MutablePicoContainer picoContainer;
 
     private static final Logger logger = LoggerFactory.getLogger(PicoProvider.class);
 
     public PicoProvider() {
-        this.container = new DefaultPicoContainer(new Caching(),
+        this.picoContainer = new DefaultPicoContainer(new Caching(),
                 new JavaEE5LifecycleStrategy(new NullComponentMonitor()), null);
 
         ComponentFactoryRegistry componentFactoryRegistry = new DefaultComponentFactoryRegistry();
-        PicoComponentRegistry componentRegistry = new PicoComponentRegistry(this.container, componentFactoryRegistry);
+        PicoComponentRegistry componentRegistry = new PicoComponentRegistry(this.picoContainer, componentFactoryRegistry);
 
-        this.container.addComponent(componentRegistry);
-        this.container.addComponent(componentFactoryRegistry);
+        this.picoContainer.addComponent(componentRegistry);
+        this.picoContainer.addComponent(componentFactoryRegistry);
     }
 
     /**
      * Register extra components that your app wants to.
      */
-    protected void registerBundledComponents(ComponentRegistry container) {
+    protected void registerBundledComponents(ComponentRegistry registry) {
         logger.debug("Registering base pico container related implementation components");
         for (Map.Entry<Class<?>, Class<?>> entry : BaseComponents.getApplicationScoped().entrySet()) {
-            container.register(entry.getKey(), entry.getValue());
+            registry.register(entry.getKey(), entry.getValue());
         }
         for (Map.Entry<Class<?>, Class<?>> entry : BaseComponents.getRequestScoped().entrySet()) {
-            container.register(entry.getKey(), entry.getValue());
+            registry.register(entry.getKey(), entry.getValue());
         }
         for (Class<? extends Converter<?>> converterType : BaseComponents.getBundledConverters()) {
-            container.register(converterType, converterType);
+            registry.register(converterType, converterType);
         }
 
-        container.register(ResourceRegistrar.class, ResourceRegistrar.class);
-        container.register(InterceptorRegistrar.class, InterceptorRegistrar.class);
-        container.register(ConverterRegistrar.class, ConverterRegistrar.class);
-        container.register(ComponentFactoryRegistrar.class, ComponentFactoryRegistrar.class);
+        registry.register(ResourceRegistrar.class, ResourceRegistrar.class);
+        registry.register(InterceptorRegistrar.class, InterceptorRegistrar.class);
+        registry.register(ConverterRegistrar.class, ConverterRegistrar.class);
+        registry.register(ComponentFactoryRegistrar.class, ComponentFactoryRegistrar.class);
     }
 
     public <T> T provideForRequest(RequestInfo request, Execution<T> execution) {
         PicoBasedContainer container = null;
         try {
-            container = getContainers().provideRequestContainer(request);
+            container = getComponentRegistry().provideRequestContainer(request);
             container.getContainer().start();
             return execution.insideRequest(container);
         } finally {
@@ -108,39 +108,39 @@ public class PicoProvider implements ContainerProvider {
     }
 
     public final void start(ServletContext context) {
-        ComponentRegistry components = getContainers();
-        registerBundledComponents(components);
+        ComponentRegistry componentRegistry = getComponentRegistry();
+        registerBundledComponents(componentRegistry);
 
-        this.container.addComponent(context);
+        this.picoContainer.addComponent(context);
 
         Scanner scanner = new ReflectionsScanner(context);
 
-        new ComponentRegistrar(components).registerFrom(scanner);
+        new ComponentRegistrar(componentRegistry).registerFrom(scanner);
         
-        getContainers().init();
+        getComponentRegistry().init();
         
-        this.registerCustomComponents(container, scanner);
+        this.registerCustomComponents(picoContainer, scanner);
         
-        container.start();
+        picoContainer.start();
     }
     
-    protected void registerCustomComponents(PicoContainer container, Scanner scanner) {
-    	container.getComponent(ResourceRegistrar.class).registerFrom(scanner);
-        container.getComponent(InterceptorRegistrar.class).registerFrom(scanner);
-        container.getComponent(ConverterRegistrar.class).registerFrom(scanner);
-        container.getComponent(ComponentFactoryRegistrar.class).registerFrom(scanner);
+    protected void registerCustomComponents(PicoContainer picoContainer, Scanner scanner) {
+    	picoContainer.getComponent(ResourceRegistrar.class).registerFrom(scanner);
+        picoContainer.getComponent(InterceptorRegistrar.class).registerFrom(scanner);
+        picoContainer.getComponent(ConverterRegistrar.class).registerFrom(scanner);
+        picoContainer.getComponent(ComponentFactoryRegistrar.class).registerFrom(scanner);
     }
 
     public void stop() {
-        container.stop();
-        container.dispose();
+        picoContainer.stop();
+        picoContainer.dispose();
     }
 
-    protected PicoComponentRegistry getContainers() {
-        return this.container.getComponent(PicoComponentRegistry.class);
+    protected PicoComponentRegistry getComponentRegistry() {
+        return this.picoContainer.getComponent(PicoComponentRegistry.class);
     }
 
-    protected MutablePicoContainer getContainer() {
-        return container;
+    protected MutablePicoContainer getPicoContainer() {
+        return picoContainer;
     }
 }

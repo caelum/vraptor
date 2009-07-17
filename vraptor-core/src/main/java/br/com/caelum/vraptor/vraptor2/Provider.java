@@ -73,7 +73,7 @@ public class Provider extends PicoProvider {
     }
     
     @Override
-    public void registerCustomComponents(PicoContainer container, Scanner scanner) {
+    protected void registerCustomComponents(PicoContainer container, Scanner scanner) {
     	super.registerCustomComponents(container, scanner);
     	container.getComponent(VRaptor2ComponentRegistrar.class).registerFrom(scanner);
     }

@@ -124,7 +124,7 @@ public class PicoProvider implements ContainerProvider {
         container.start();
     }
     
-    public void registerCustomComponents(PicoContainer container, Scanner scanner) {
+    protected void registerCustomComponents(PicoContainer container, Scanner scanner) {
     	container.getComponent(ResourceRegistrar.class).registerFrom(scanner);
         container.getComponent(InterceptorRegistrar.class).registerFrom(scanner);
         container.getComponent(ConverterRegistrar.class).registerFrom(scanner);

@@ -27,32 +27,10 @@
  */
 package br.com.caelum.vraptor.ioc.spring;
 
-import br.com.caelum.vraptor.core.BaseComponents;
-import br.com.caelum.vraptor.core.DefaultConverters;
-import br.com.caelum.vraptor.core.URLParameterExtractorInterceptor;
-import br.com.caelum.vraptor.extra.ForwardToDefaultViewInterceptor;
-import br.com.caelum.vraptor.http.DefaultResourceTranslator;
-import br.com.caelum.vraptor.http.ParanamerNameProvider;
-import br.com.caelum.vraptor.http.asm.AsmBasedTypeCreator;
-import br.com.caelum.vraptor.http.ognl.EmptyElementsRemoval;
-import br.com.caelum.vraptor.http.route.DefaultRouter;
-import br.com.caelum.vraptor.interceptor.DefaultInterceptorRegistry;
-import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
-import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
-import br.com.caelum.vraptor.interceptor.InterceptorListPriorToExecutionExtractor;
-import br.com.caelum.vraptor.interceptor.OutjectResult;
-import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
-import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
-import br.com.caelum.vraptor.interceptor.download.DownloadInterceptor;
-import br.com.caelum.vraptor.interceptor.multipart.DefaultMultipartConfig;
-import br.com.caelum.vraptor.interceptor.multipart.MultipartInterceptor;
-import br.com.caelum.vraptor.ioc.ComponentFactory;
-import br.com.caelum.vraptor.proxy.DefaultProxifier;
-import br.com.caelum.vraptor.view.DefaultLogicResult;
-import br.com.caelum.vraptor.view.DefaultAcceptHeaderToFormat;
-import br.com.caelum.vraptor.view.DefaultPageResult;
-import br.com.caelum.vraptor.view.DefaultPathResolver;
-import br.com.caelum.vraptor.view.EmptyResult;
+import java.util.Map;
+
+import javax.servlet.ServletContext;
+
 import org.springframework.aop.config.AopConfigUtils;
 import org.springframework.aop.scope.ScopedProxyUtils;
 import org.springframework.beans.factory.BeanFactoryUtils;
@@ -74,8 +52,31 @@ import org.springframework.core.Ordered;
 import org.springframework.web.context.support.AbstractRefreshableWebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
-import javax.servlet.ServletContext;
-import java.util.Map;
+import br.com.caelum.vraptor.core.BaseComponents;
+import br.com.caelum.vraptor.core.DefaultConverters;
+import br.com.caelum.vraptor.core.URLParameterExtractorInterceptor;
+import br.com.caelum.vraptor.extra.ForwardToDefaultViewInterceptor;
+import br.com.caelum.vraptor.http.DefaultResourceTranslator;
+import br.com.caelum.vraptor.http.ParanamerNameProvider;
+import br.com.caelum.vraptor.http.asm.AsmBasedTypeCreator;
+import br.com.caelum.vraptor.http.route.DefaultRouter;
+import br.com.caelum.vraptor.interceptor.DefaultInterceptorRegistry;
+import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
+import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
+import br.com.caelum.vraptor.interceptor.InterceptorListPriorToExecutionExtractor;
+import br.com.caelum.vraptor.interceptor.OutjectResult;
+import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
+import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
+import br.com.caelum.vraptor.interceptor.download.DownloadInterceptor;
+import br.com.caelum.vraptor.interceptor.multipart.DefaultMultipartConfig;
+import br.com.caelum.vraptor.interceptor.multipart.MultipartInterceptor;
+import br.com.caelum.vraptor.ioc.ComponentFactory;
+import br.com.caelum.vraptor.proxy.DefaultProxifier;
+import br.com.caelum.vraptor.view.DefaultAcceptHeaderToFormat;
+import br.com.caelum.vraptor.view.DefaultLogicResult;
+import br.com.caelum.vraptor.view.DefaultPageResult;
+import br.com.caelum.vraptor.view.DefaultPathResolver;
+import br.com.caelum.vraptor.view.EmptyResult;
 
 /**
  * @author Fabio Kung

@@ -29,6 +29,7 @@ package br.com.caelum.vraptor.ioc.spring;
 
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextRefreshedEvent;
 
 import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
@@ -48,7 +49,7 @@ public class ResourceRegistrar implements ApplicationListener {
 
 	@Override
 	public void onApplicationEvent(ApplicationEvent event) {
-		if (event instanceof org.springframework.context.event.ContextRefreshedEvent)
+		if (event instanceof ContextRefreshedEvent)
 			resourcesHolder.registerAllOn(resourceRegistry);
 	}
 }

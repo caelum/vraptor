@@ -27,8 +27,8 @@
  */
 package br.com.caelum.vraptor.ioc.spring;
 
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.context.ApplicationEvent;
+import org.springframework.context.ApplicationListener;
 
 import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
@@ -37,25 +37,18 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
  * @author Fabio Kung
  */
 @ApplicationScoped
-public class ResourceRegistrar implements BeanPostProcessor {
+public class ResourceRegistrar implements ApplicationListener {
     private final ResourcesHolder resourcesHolder;
     private final Router resourceRegistry;
-    private boolean run;
 
     public ResourceRegistrar(ResourcesHolder resourcesHolder, Router resourceRegistry) {
         this.resourcesHolder = resourcesHolder;
         this.resourceRegistry = resourceRegistry;
     }
 
-    public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
-        if (!run) {
-            run = true;
-            resourcesHolder.registerAllOn(resourceRegistry);
-        }
-        return bean;
-    }
-
-    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-        return bean;
-    }
+	@Override
+	public void onApplicationEvent(ApplicationEvent event) {
+		if (event instanceof org.springframework.context.event.ContextRefreshedEvent)
+		resourcesHolder.registerAllOn(resourceRegistry);
+	}
 }

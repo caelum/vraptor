@@ -40,6 +40,8 @@ import org.springframework.core.type.AnnotationMetadata;
 
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
+import br.com.caelum.vraptor.ioc.ResourceHandler;
+import br.com.caelum.vraptor.ioc.StereotypeHandler;
 import br.com.caelum.vraptor.resource.DefaultResourceClass;
 
 /**
@@ -52,6 +54,7 @@ class ResourceFinder implements BeanFactoryPostProcessor, ApplicationContextAwar
     private ApplicationContext applicationContext;
 
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
+    	StereotypeHandler stereotypeHandler = new ResourceHandler(null);
         String[] definitionNames = beanFactory.getBeanDefinitionNames();
         for (String name : definitionNames) {
             BeanDefinition beanDefinition = beanFactory.getBeanDefinition(name);
@@ -59,7 +62,7 @@ class ResourceFinder implements BeanFactoryPostProcessor, ApplicationContextAwar
                     ", to see if it is a Resource candidate");
             if (beanDefinition instanceof AnnotatedBeanDefinition) {
                 AnnotationMetadata metadata = ((AnnotatedBeanDefinition) beanDefinition).getMetadata();
-                if (metadata.hasAnnotation(Resource.class.getName())) {
+                if (metadata.hasAnnotation(stereotypeHandler.stereotype().getName())) {
                     ResourcesHolder resourcesHolder = (ResourcesHolder)
                             applicationContext.getBean(VRaptorApplicationContext.RESOURCES_LIST);
                     LOGGER.info("found component annotated with @Resource: " + beanDefinition.getBeanClassName());

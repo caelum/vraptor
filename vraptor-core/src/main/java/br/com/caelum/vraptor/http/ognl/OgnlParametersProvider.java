@@ -37,6 +37,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import ognl.NoSuchPropertyException;
 import ognl.Ognl;
@@ -58,6 +59,7 @@ import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.ValidationMessage;
+import br.com.caelum.vraptor.view.DefaultLogicResult;
 import br.com.caelum.vraptor.vraptor2.Info;
 
 /**
@@ -79,17 +81,17 @@ public class OgnlParametersProvider implements ParametersProvider {
 
 	private static final Logger logger = LoggerFactory.getLogger(OgnlParametersProvider.class);
 
-	private final HttpServletRequest parameters;
+	private final HttpServletRequest request;
 
 	private final EmptyElementsRemoval removal;
 
 	public OgnlParametersProvider(TypeCreator creator, Container container, Converters converters,
-			ParameterNameProvider provider, HttpServletRequest parameters, EmptyElementsRemoval removal) {
+			ParameterNameProvider provider, HttpServletRequest request, EmptyElementsRemoval removal) {
 		this.creator = creator;
 		this.container = container;
 		this.converters = converters;
 		this.provider = provider;
-		this.parameters = parameters;
+		this.request = request;
 		this.removal = removal;
 		OgnlRuntime.setNullHandler(Object.class, new ReflectionBasedNullHandler());
 		OgnlRuntime.setPropertyAccessor(List.class, new ListAccessor());
@@ -97,6 +99,36 @@ public class OgnlParametersProvider implements ParametersProvider {
 	}
 
 	public Object[] getParametersFor(ResourceMethod method, List<Message> errors, ResourceBundle bundle) {
+		Object root = createRoot(method, errors, bundle);
+		removal.removeExtraElements();
+		Type[] types = method.getMethod().getGenericParameterTypes();
+		Object[] result = new Object[types.length];
+		String[] names = provider.parameterNamesFor(method.getMethod());
+		for (int i = 0; i < types.length; i++) {
+			try {
+				result[i] = root.getClass().getMethod("get" + Info.capitalize(names[i])).invoke(root);
+			} catch (InvocationTargetException e) {
+				throw new InvalidParameterException("unable to retrieve values to invoke method", e.getCause());
+			} catch (Exception e) {
+				throw new InvalidParameterException("unable to retrieve values to invoke method", e);
+			}
+		}
+		return result;
+	}
+
+	private Object createRoot(ResourceMethod method, List<Message> errors, ResourceBundle bundle) {
+		HttpSession session = request.getSession();
+		Object parameters = session.getAttribute(DefaultLogicResult.FLASH_PARAMETERS);
+		if (parameters != null) {
+			session.removeAttribute(DefaultLogicResult.FLASH_PARAMETERS);
+			return parameters;
+		} else {
+			return createViaOgnl(method, errors, bundle);
+		}
+	}
+
+	private Object createViaOgnl(ResourceMethod method, List<Message> errors,
+			ResourceBundle bundle) {
 		Class<?> type = creator.typeFor(method);
 		Object root;
 		try {
@@ -110,9 +142,9 @@ public class OgnlParametersProvider implements ParametersProvider {
 
 		VRaptorConvertersAdapter adapter = new VRaptorConvertersAdapter(converters, bundle);
 		Ognl.setTypeConverter(context, adapter);
-		for (Enumeration<?> enumeration = parameters.getParameterNames(); enumeration.hasMoreElements();) {
+		for (Enumeration<?> enumeration = request.getParameterNames(); enumeration.hasMoreElements();) {
 			String key = (String) enumeration.nextElement();
-			String[] values = parameters.getParameterValues(key);
+			String[] values = request.getParameterValues(key);
 			try {
 				if (logger.isDebugEnabled()) {
 					logger.debug("Applying " + key + " with " + Arrays.toString(values));
@@ -129,19 +161,6 @@ public class OgnlParametersProvider implements ParametersProvider {
 				throw new InvalidParameterException("unable to parse expression '" + key + "'", e);
 			}
 		}
-		removal.removeExtraElements();
-		Type[] types = method.getMethod().getGenericParameterTypes();
-		Object[] result = new Object[types.length];
-		String[] names = provider.parameterNamesFor(method.getMethod());
-		for (int i = 0; i < types.length; i++) {
-			try {
-				result[i] = root.getClass().getMethod("get" + Info.capitalize(names[i])).invoke(root);
-			} catch (InvocationTargetException e) {
-				throw new InvalidParameterException("unable to retrieve values to invoke method", e.getCause());
-			} catch (Exception e) {
-				throw new InvalidParameterException("unable to retrieve values to invoke method", e);
-			}
-		}
-		return result;
+		return root;
 	}
 }

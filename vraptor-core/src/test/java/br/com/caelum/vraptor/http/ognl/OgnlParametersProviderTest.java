@@ -27,34 +27,38 @@
  */
 package br.com.caelum.vraptor.http.ognl;
 
-import br.com.caelum.vraptor.test.VRaptorMockery;
-import br.com.caelum.vraptor.http.ognl.OgnlParametersProvider;
-import br.com.caelum.vraptor.converter.LongConverter;
-import br.com.caelum.vraptor.core.Converters;
-import br.com.caelum.vraptor.http.ognl.EmptyElementsRemoval;
-import br.com.caelum.vraptor.http.TypeCreator;
-import br.com.caelum.vraptor.http.ParameterNameProvider;
-import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
-import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.validator.Message;
-import ognl.OgnlException;
-import org.hamcrest.Matcher;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import org.jmock.Expectations;
-import org.junit.Before;
-import org.junit.Test;
 
-import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Vector;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import ognl.OgnlException;
+
+import org.hamcrest.Matcher;
+import org.jmock.Expectations;
+import org.junit.Before;
+import org.junit.Test;
+
+import br.com.caelum.vraptor.converter.LongConverter;
+import br.com.caelum.vraptor.core.Converters;
+import br.com.caelum.vraptor.http.ParameterNameProvider;
+import br.com.caelum.vraptor.http.TypeCreator;
+import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
+import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.test.VRaptorMockery;
+import br.com.caelum.vraptor.validator.Message;
+import br.com.caelum.vraptor.view.DefaultLogicResult;
 
 public class OgnlParametersProviderTest {
 
@@ -160,9 +164,50 @@ public class OgnlParametersProviderTest {
         }
     }
 
+    private void ignoreSession() {
+		mockery.checking(new Expectations() {
+			{
+				HttpSession session = mockery.mock(HttpSession.class);
+				allowing(parameters).getSession(); will(returnValue(session));
+				allowing(session).getAttribute(with(any(String.class)));
+				will(returnValue(null));
+			}
+		});
+    }
+
+    @Test
+	public void shouldUseOriginalRequestParametersWhenThereIsAnyOnSession() throws Exception {
+    	final House house = new House();
+    	final Method method = MyResource.class.getDeclaredMethod("buyA", House.class);
+    	mockery.checking(new Expectations() {
+			{
+				HttpSession session = mockery.mock(HttpSession.class);
+				allowing(parameters).getSession(); will(returnValue(session));
+
+				BuyASetter result = new BuyASetter();
+				result.setHouse(house);
+
+				one(session).getAttribute(DefaultLogicResult.FLASH_PARAMETERS);
+				will(returnValue(result));
+
+				one(session).removeAttribute(DefaultLogicResult.FLASH_PARAMETERS);
+
+				one(nameProvider).parameterNamesFor(method);
+                will(returnValue(new String[]{"House"}));
+			}
+		});
+
+    	Object[] params = provider.getParametersFor(mockery.methodFor(MyResource.class, "buyA", House.class), errors,
+                null);
+        House provided = (House) params[0];
+		assertThat(provided, is(house));
+
+
+	}
     @Test
     public void isCapableOfDealingWithEmptyParameterForInternalWrapperValue() throws OgnlException,
             NoSuchMethodException {
+    	ignoreSession();
         final Method method = MyResource.class.getDeclaredMethod("buyA", House.class);
         final Matcher<ResourceMethod> resourceMethod = VRaptorMatchers.resourceMethod(method);
         mockery.checking(new Expectations() {
@@ -188,6 +233,7 @@ public class OgnlParametersProviderTest {
     @Test
     public void removeFromTheCollectionIfAnElementIsCreatedWithinACollectionButNoFieldIsSet() throws SecurityException,
             NoSuchMethodException {
+    	ignoreSession();
         final Method method = MyResource.class.getDeclaredMethod("buyA", House.class);
         final Matcher<ResourceMethod> resourceMethod = VRaptorMatchers.resourceMethod(method);
         mockery.checking(new Expectations() {
@@ -219,6 +265,7 @@ public class OgnlParametersProviderTest {
     @Test
     public void removeFromTheCollectionIfAnElementIsCreatedWithinAnArrayButNoFieldIsSet() throws SecurityException,
             NoSuchMethodException {
+    	ignoreSession();
         final Method method = MyResource.class.getDeclaredMethod("buyA", House.class);
         final Matcher<ResourceMethod> resourceMethod = VRaptorMatchers.resourceMethod(method);
         mockery.checking(new Expectations() {
@@ -246,6 +293,7 @@ public class OgnlParametersProviderTest {
     @Test
     public void removeFromTheCollectionIfAnElementIsCreatedWithinACollectionButNoFieldIsSetAppartFromTheValueItselfNotAChild()
             throws SecurityException, NoSuchMethodException {
+    	ignoreSession();
         final Method method = MyResource.class.getDeclaredMethod("buyA", House.class);
         final Matcher<ResourceMethod> resourceMethod = VRaptorMatchers.resourceMethod(method);
         mockery.checking(new Expectations() {

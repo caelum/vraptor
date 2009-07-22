@@ -48,7 +48,6 @@ import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.ResourceClass;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.resource.VRaptorInfo;
-import br.com.caelum.vraptor.vraptor2.Info;
 
 /**
  * The default implementation of resource localization rules. It also uses a
@@ -128,16 +127,9 @@ public class DefaultRouter implements Router {
 	public <T> String urlFor(Class<T> type, Method method, Object... params) {
 		for (Route route : routes) {
 			if (route.canHandle(type, method)) {
-				String[] names = provider.parameterNamesFor(method);
-				Class<?> parameterType = creator.typeFor(new DefaultResourceMethod(new DefaultResourceClass(type),
-						method));
 				try {
-					Object root = parameterType.getConstructor().newInstance();
-					for (int i = 0; i < names.length; i++) {
-						Method setter = findSetter(parameterType, "set" + Info.capitalize(names[i]));
-						setter.invoke(root, params[i]);
-					}
-					return route.urlFor(type, method, root);
+					DefaultResourceMethod resourceMethod = new DefaultResourceMethod(new DefaultResourceClass(type), method);
+					return route.urlFor(type, method, creator.instanceWithParameters(resourceMethod, params));
 				} catch (Exception e) {
 					throw new VRaptorException("The selected route is invalid for redirection: " + type.getName() + "."
 							+ method.getName(), e);
@@ -146,18 +138,6 @@ public class DefaultRouter implements Router {
 		}
 		throw new RouteNotFoundException("The selected route is invalid for redirection: " + type.getName() + "."
 				+ method.getName());
-	}
-
-	private Method findSetter(Class<?> parameterType, String methodName) {
-		for (Method m : parameterType.getDeclaredMethods()) {
-			if (m.getName().equals(methodName)) {
-				return m;
-			}
-		}
-		throw new VRaptorException(
-				"Unable to redirect using route as setter method for parameter setting was not created. "
-						+ "Thats probably a bug on your type creator. "
-						+ "If you are using the default type creator, notify VRaptor.");
 	}
 
 	public List<Route> allRoutes() {

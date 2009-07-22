@@ -38,10 +38,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.type.AnnotationMetadata;
 
-import br.com.caelum.vraptor.ioc.ApplicationScoped;
-import br.com.caelum.vraptor.ioc.Stereotype;
-import br.com.caelum.vraptor.resource.DefaultResourceClass;
 import br.com.caelum.vraptor.Resource;
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
+import br.com.caelum.vraptor.resource.DefaultResourceClass;
 
 /**
  * @author Fabio Kung

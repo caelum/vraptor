@@ -27,8 +27,10 @@
  */
 package br.com.caelum.vraptor.ioc.spring;
 
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.isIn;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
@@ -47,14 +49,18 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.http.UrlToResourceTranslator;
+import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.spring.components.ConstructorInjection;
 import br.com.caelum.vraptor.ioc.spring.components.CustomTranslator;
 import br.com.caelum.vraptor.ioc.spring.components.DummyComponent;
 import br.com.caelum.vraptor.ioc.spring.components.DummyImplementation;
+import br.com.caelum.vraptor.ioc.spring.components.DummyResource;
 import br.com.caelum.vraptor.ioc.spring.components.RequestScopedComponent;
 import br.com.caelum.vraptor.ioc.spring.components.RequestScopedContract;
 import br.com.caelum.vraptor.ioc.spring.components.SpecialImplementation;
+import br.com.caelum.vraptor.resource.DefaultResourceClass;
+import br.com.caelum.vraptor.resource.ResourceClass;
 import br.com.caelum.vraptor.test.HttpServletRequestMock;
 import br.com.caelum.vraptor.test.HttpSessionMock;
 
@@ -148,5 +154,16 @@ public class SpringBasedContainerTest {
         UrlToResourceTranslator translator = this.container.instanceFor(UrlToResourceTranslator.class);
         assertThat(translator, is(notNullValue()));
         assertThat(translator, is(instanceOf(CustomTranslator.class)));
+
+    }
+    
+    @Test
+    public void shoudRegisterResourcesWithRouter() {
+    	DummyResource res = container.instanceFor(DummyResource.class);
+    	res.toString();
+    	
+    	Router router = container.instanceFor(Router.class);
+    	ResourceClass dummyResourceClass = new DefaultResourceClass(DummyResource.class);
+    	assertThat(dummyResourceClass, isIn(router.allResources()));
     }
 }

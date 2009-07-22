@@ -27,14 +27,14 @@
  */
 package br.com.caelum.vraptor.ioc.pico;
 
-import br.com.caelum.vraptor.Resource;
-import br.com.caelum.vraptor.http.route.Router;
-import br.com.caelum.vraptor.ioc.ApplicationScoped;
-import br.com.caelum.vraptor.resource.DefaultResourceClass;
+import java.util.Collection;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collection;
+import br.com.caelum.vraptor.http.route.Router;
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
+import br.com.caelum.vraptor.ioc.ResourceHandler;
 
 /**
  * Prepares special components annotated with @Resource to be reachable through web requests;
@@ -48,19 +48,17 @@ import java.util.Collection;
 public class ResourceRegistrar implements Registrar {
     private final Logger logger = LoggerFactory.getLogger(ResourceRegistrar.class);
 
-    private final Router router;
+	private ResourceHandler resourceHandler;
 
     public ResourceRegistrar(Router router) {
-        this.router = router;
+        resourceHandler = new ResourceHandler(router);
     }
 
     public void registerFrom(Scanner scanner) {
         logger.info("Registering all resources annotated with @Resource");
-        Collection<Class<?>> resourceTypes = scanner.getTypesWithAnnotation(Resource.class);
+        Collection<Class<?>> resourceTypes = scanner.getTypesWithAnnotation(resourceHandler.stereotype());
         for (Class<?> resourceType : resourceTypes) {
-            logger.debug("Found resource: " + resourceType);
-            router.register(new DefaultResourceClass(resourceType));
+        	resourceHandler.handle(resourceType);
         }
     }
-
 }

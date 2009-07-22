@@ -40,7 +40,12 @@ public class DefaultResourceMethod implements ResourceMethod {
 		this.resource = resource;
 		this.method = method;
 	}
-	
+
+	public static ResourceMethod instanceFor(Class<?> type, Method method) {
+		return new DefaultResourceMethod(new DefaultResourceClass(type), method);
+	}
+
+	@Override
 	public String toString() {
 		return "{DefaultResourceMethod: " + method.getDeclaringClass().getName() + "." + method.getName() + "}";
 	}

@@ -42,6 +42,7 @@ import org.junit.Test;
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor.http.TypeCreator;
 import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.proxy.DefaultProxifier;
 
@@ -53,6 +54,7 @@ public class DefaultLogicResultTest {
     private HttpServletResponse response;
     private ServletContext context;
     private MutableRequest request;
+	private TypeCreator creator;
 
     public static class MyComponent {
         public void base() {
@@ -75,7 +77,8 @@ public class DefaultLogicResultTest {
         this.response = mockery.mock(HttpServletResponse.class);
         this.request = mockery.mock(MutableRequest.class);
         this.context = mockery.mock(ServletContext.class);
-        this.logicResult = new DefaultLogicResult(new DefaultProxifier(), router, context, request, response);
+        this.creator = mockery.mock(TypeCreator.class);
+        this.logicResult = new DefaultLogicResult(new DefaultProxifier(), router, context, request, response, creator);
     }
 
     @Test

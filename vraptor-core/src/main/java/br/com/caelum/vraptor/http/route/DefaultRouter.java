@@ -42,7 +42,6 @@ import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.TypeCreator;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.proxy.Proxifier;
-import br.com.caelum.vraptor.resource.DefaultResourceClass;
 import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.ResourceClass;
@@ -128,7 +127,7 @@ public class DefaultRouter implements Router {
 		for (Route route : routes) {
 			if (route.canHandle(type, method)) {
 				try {
-					DefaultResourceMethod resourceMethod = new DefaultResourceMethod(new DefaultResourceClass(type), method);
+					ResourceMethod resourceMethod = DefaultResourceMethod.instanceFor(type, method);
 					return route.urlFor(type, method, creator.instanceWithParameters(resourceMethod, params));
 				} catch (Exception e) {
 					throw new VRaptorException("The selected route is invalid for redirection: " + type.getName() + "."

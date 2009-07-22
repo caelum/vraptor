@@ -271,17 +271,19 @@ public class DefaultRouterTest {
 		router.register(mockery.resource(MyResource.class));
 		final ResourceMethod resourceMethod = mockery.methodFor(MyResource.class, "starPath");
 		final Method method = resourceMethod.getMethod();
-		mockery.checking(new Expectations() {
-			{
-				one(provider).parameterNamesFor(method);
-				will(returnValue(new String[] {}));
-				one(creator).typeFor(with(VRaptorMatchers.resourceMethod(method)));
-				will(returnValue(Object.class));
-			}
-		});
+		allowParametersCreation(method);
 		String url = router.urlFor(MyResource.class, method, new Object[] {});
 		assertThat(router.parse(url, HttpMethod.POST, null).getMethod(), is(equalTo(method)));
 		mockery.assertIsSatisfied();
+	}
+
+	private void allowParametersCreation(final Method method) {
+		mockery.checking(new Expectations() {
+			{
+				one(creator).instanceWithParameters(with(VRaptorMatchers.resourceMethod(method)), with(any(Object[].class)));
+				will(returnValue(new Object()));
+			}
+		});
 	}
 
 	@Test
@@ -291,14 +293,7 @@ public class DefaultRouterTest {
 		router.register(mockery.resource(MyResource.class));
 		router.register(mockery.resource(InheritanceExample.class));
 		final Method method = mockery.methodFor(MyResource.class, "notAnnotated").getMethod();
-		mockery.checking(new Expectations() {
-			{
-				one(provider).parameterNamesFor(method);
-				will(returnValue(new String[] {}));
-				one(creator).typeFor(with(VRaptorMatchers.resourceMethod(method)));
-				will(returnValue(Object.class));
-			}
-		});
+		allowParametersCreation(method);
 		String url = router.urlFor(InheritanceExample.class, method, new Object[] {});
 		assertThat(router.parse(url, HttpMethod.POST, null).getMethod(), is(equalTo(method)));
 		mockery.assertIsSatisfied();
@@ -310,14 +305,7 @@ public class DefaultRouterTest {
 				provider, proxifier, creator);
 		router.register(mockery.resource(MyResource.class));
 		final Method method = mockery.methodFor(MyResource.class, "customizedPath").getMethod();
-		mockery.checking(new Expectations() {
-			{
-				one(provider).parameterNamesFor(method);
-				will(returnValue(new String[] {}));
-				one(creator).typeFor(with(VRaptorMatchers.resourceMethod(method)));
-				will(returnValue(Object.class));
-			}
-		});
+		allowParametersCreation(method);
 		String url = router.urlFor(MyResource.class, method, new Object[] {});
 		assertThat(router.parse(url, HttpMethod.POST, null).getMethod(), is(equalTo(method)));
 		mockery.assertIsSatisfied();
@@ -337,14 +325,7 @@ public class DefaultRouterTest {
 		ResourceMethod resourceMethod = router.parse("--" + MyCustomResource.class.getSimpleName() + "--notAnnotated", HttpMethod.GET, request);
 		final Method javaMethodFound = resourceMethod.getMethod();
 		assertThat(javaMethodFound, is(equalTo(MyCustomResource.class.getDeclaredMethod("notAnnotated"))));
-		mockery.checking(new Expectations() {
-			{
-				one(provider).parameterNamesFor(javaMethodFound);
-				will(returnValue(new String[] {}));
-				one(creator).typeFor(with(VRaptorMatchers.resourceMethod(javaMethodFound)));
-				will(returnValue(Object.class));
-			}
-		});
+		allowParametersCreation(javaMethodFound);
 		String url = router.urlFor(MyCustomResource.class, javaMethodFound, new Object[] {});
 		assertThat(router.parse(url, HttpMethod.GET, request).getMethod(), is(equalTo(javaMethodFound)));
 		mockery.assertIsSatisfied();

@@ -49,6 +49,6 @@ public class ResourceRegistrar implements ApplicationListener {
 	@Override
 	public void onApplicationEvent(ApplicationEvent event) {
 		if (event instanceof org.springframework.context.event.ContextRefreshedEvent)
-		resourcesHolder.registerAllOn(resourceRegistry);
+			resourcesHolder.registerAllOn(resourceRegistry);
 	}
 }

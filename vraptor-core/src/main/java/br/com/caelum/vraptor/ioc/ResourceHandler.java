@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package br.com.caelum.vraptor.ioc;
 
@@ -18,18 +18,16 @@ import br.com.caelum.vraptor.resource.DefaultResourceClass;
 public class ResourceHandler implements StereotypeHandler {
 	private final Logger logger = LoggerFactory.getLogger(ResourceRegistrar.class);
 	private final Router router;
-	
+
 	public ResourceHandler(Router router) {
 		this.router = router;
 	}
 
-	@Override
 	public void handle(Class<?> annotatedType) {
 		logger.debug("Found resource: " + annotatedType);
 		router.register(new DefaultResourceClass(annotatedType));
 	}
 
-	@Override
 	public Class<? extends Annotation> stereotype() {
 		return Resource.class;
 	}

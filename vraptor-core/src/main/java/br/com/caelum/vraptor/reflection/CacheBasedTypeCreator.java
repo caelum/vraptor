@@ -41,13 +41,14 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 /**
  * A type creator which caches its classes so it doesnt keep generating classes
  * between every call.
- * 
+ *
  * @author Guilherme Silveira
  */
 public class CacheBasedTypeCreator implements TypeCreator {
 
     private static final Logger logger = LoggerFactory.getLogger(CacheBasedTypeCreator.class);
     private final Map<ResourceMethod, Class<?>> cache = new HashMap<ResourceMethod, Class<?>>();
+    private final Map<ResourceMethod, Object> instanceCache = new HashMap<ResourceMethod, Object>();
     private final TypeCreator creator;
 
     public CacheBasedTypeCreator(TypeCreator creator) {
@@ -61,5 +62,13 @@ public class CacheBasedTypeCreator implements TypeCreator {
         }
         return cache.get(method);
     }
+
+	public Object instanceWithParameters(ResourceMethod method, Object... parameters) {
+        if (!instanceCache.containsKey(method)) {
+            instanceCache.put(method, creator.instanceWithParameters(method, parameters));
+            logger.debug("cached generic type for method " + method);
+        }
+        return instanceCache.get(method);
+	}
 
 }

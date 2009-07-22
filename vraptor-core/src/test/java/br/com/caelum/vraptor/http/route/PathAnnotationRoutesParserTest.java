@@ -65,7 +65,7 @@ public class PathAnnotationRoutesParserTest {
         this.router = new DefaultRouter(new RoutesConfiguration() {
             public void config(Router router) {
             }
-        }, new PathAnnotationRoutesParser(proxifier), null, proxifier, null);
+        }, new PathAnnotationRoutesParser(proxifier), proxifier, null);
         router.register(resource);
     }
 

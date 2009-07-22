@@ -75,7 +75,7 @@ public class DefaultRouterTest {
 		this.creator = mockery.mock(TypeCreator.class);
 		this.proxifier = new DefaultProxifier();
 		this.method = mockery.mock(ResourceMethod.class);
-		this.router = new DefaultRouter(new NoRoutesConfiguration(), new NoRoutesParser(), provider, proxifier, creator);
+		this.router = new DefaultRouter(new NoRoutesConfiguration(), new NoRoutesParser(), proxifier, creator);
 	}
 
 	@Test
@@ -266,8 +266,7 @@ public class DefaultRouterTest {
 
 	@Test
 	public void usesAsteriskBothWays() throws NoSuchMethodException {
-		this.router = new DefaultRouter(new NoRoutesConfiguration(), new PathAnnotationRoutesParser(proxifier), provider,proxifier,
-				creator);
+		this.router = new DefaultRouter(new NoRoutesConfiguration(), new PathAnnotationRoutesParser(proxifier), proxifier,creator);
 		router.register(mockery.resource(MyResource.class));
 		final ResourceMethod resourceMethod = mockery.methodFor(MyResource.class, "starPath");
 		final Method method = resourceMethod.getMethod();
@@ -288,8 +287,7 @@ public class DefaultRouterTest {
 
 	@Test
 	public void canTranslateAInheritedResourceBothWays() throws NoSuchMethodException {
-		this.router = new DefaultRouter(new NoRoutesConfiguration(), new PathAnnotationRoutesParser(proxifier), provider,proxifier,
-				creator);
+		this.router = new DefaultRouter(new NoRoutesConfiguration(), new PathAnnotationRoutesParser(proxifier), proxifier,creator);
 		router.register(mockery.resource(MyResource.class));
 		router.register(mockery.resource(InheritanceExample.class));
 		final Method method = mockery.methodFor(MyResource.class, "notAnnotated").getMethod();
@@ -302,7 +300,7 @@ public class DefaultRouterTest {
 	@Test
 	public void canTranslateAnnotatedMethodBothWays() throws NoSuchMethodException {
 		this.router = new DefaultRouter(new NoRoutesConfiguration(), new PathAnnotationRoutesParser(proxifier),
-				provider, proxifier, creator);
+				proxifier, creator);
 		router.register(mockery.resource(MyResource.class));
 		final Method method = mockery.methodFor(MyResource.class, "customizedPath").getMethod();
 		allowParametersCreation(method);
@@ -315,7 +313,7 @@ public class DefaultRouterTest {
 	public void canAccessGenericTypeAndMethodRoute() throws NoSuchMethodException, ClassNotFoundException {
 		Class.forName(DefaultRouterTest.class.getPackage().getName() + ".MyCustomResource");
 		this.router = new DefaultRouter(new NoRoutesConfiguration(), new PathAnnotationRoutesParser(proxifier),
-				provider, proxifier, creator);
+				proxifier, creator);
 		new Rules(router) {
 			@Override
 			public void routes() {

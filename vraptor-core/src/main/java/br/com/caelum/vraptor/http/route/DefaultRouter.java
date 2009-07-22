@@ -38,7 +38,6 @@ import java.util.Set;
 
 import br.com.caelum.vraptor.VRaptorException;
 import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.TypeCreator;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.proxy.Proxifier;
@@ -62,13 +61,11 @@ public class DefaultRouter implements Router {
 	private final Collection<Route> routes = new PriorityRoutesList();
 	private final Set<ResourceClass> resources = new HashSet<ResourceClass>();
 	private final RoutesParser routesParser;
-	private final ParameterNameProvider provider;
 	private final TypeCreator creator;
 
 	public DefaultRouter(RoutesConfiguration config, RoutesParser resourceRoutesCreator,
-			ParameterNameProvider provider, Proxifier proxifier, TypeCreator creator) {
+			Proxifier proxifier, TypeCreator creator) {
 		this.routesParser = resourceRoutesCreator;
-		this.provider = provider;
 		this.creator = creator;
 		this.proxifier = proxifier;
 		// this resource should be kept here so it doesnt matter whether

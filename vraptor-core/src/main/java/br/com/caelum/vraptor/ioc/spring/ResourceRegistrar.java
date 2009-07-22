@@ -42,8 +42,6 @@ import org.springframework.core.type.AnnotationMetadata;
 import br.com.caelum.vraptor.VRaptorException;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.StereotypeHandler;
-import br.com.caelum.vraptor.resource.DefaultResourceClass;
-import br.com.caelum.vraptor.resource.ResourceClass;
 
 /**
  * @author Fabio Kung

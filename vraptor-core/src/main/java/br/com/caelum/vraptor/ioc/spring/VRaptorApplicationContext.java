@@ -126,9 +126,7 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
             registerOn(beanFactory, type);
         }
         registerOn(beanFactory, ResourceHandler.class);
-        
         registerOn(beanFactory, ResourceRegistrar.class);
-        
         registerOn(beanFactory, DefaultMultipartConfig.class);
     }
 

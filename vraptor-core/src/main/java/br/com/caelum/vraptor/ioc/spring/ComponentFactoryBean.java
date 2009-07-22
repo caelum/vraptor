@@ -1,13 +1,10 @@
 package br.com.caelum.vraptor.ioc.spring;
 
-import br.com.caelum.vraptor.ioc.ComponentFactory;
-import br.com.caelum.vraptor.ioc.ComponentRegistrationException;
-import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.ioc.ComponentFactoryIntrospector;
 import org.springframework.beans.factory.FactoryBean;
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
+import br.com.caelum.vraptor.ioc.ComponentFactory;
+import br.com.caelum.vraptor.ioc.ComponentFactoryIntrospector;
+import br.com.caelum.vraptor.ioc.Container;
 
 /**
  * @author: Fabio Kung

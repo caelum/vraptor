@@ -21,7 +21,6 @@ public class VRaptor2ComponentRegistrar implements Registrar {
 		this.router = router;
 	}
 
-	@Override
 	public void registerFrom(Scanner scanner) {
 		Collection<Class<?>> componentTypes = scanner.getTypesWithAnnotation(Component.class);
 		for (Class<?> type : componentTypes) {

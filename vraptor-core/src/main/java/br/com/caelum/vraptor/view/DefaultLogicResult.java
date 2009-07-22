@@ -51,6 +51,8 @@ import br.com.caelum.vraptor.resource.HttpMethod;
  */
 public class DefaultLogicResult implements LogicResult {
 
+	public static final String FLASH_PARAMETERS = "_vraptor_flash_parameters";
+
     private final Proxifier proxifier;
     private final Router router;
     private final ServletContext context;

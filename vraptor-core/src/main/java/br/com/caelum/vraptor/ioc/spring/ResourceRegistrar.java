@@ -27,29 +27,77 @@
  */
 package br.com.caelum.vraptor.ioc.spring;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.core.type.AnnotationMetadata;
 
-import br.com.caelum.vraptor.http.route.Router;
+import br.com.caelum.vraptor.VRaptorException;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
+import br.com.caelum.vraptor.ioc.StereotypeHandler;
+import br.com.caelum.vraptor.resource.DefaultResourceClass;
+import br.com.caelum.vraptor.resource.ResourceClass;
 
 /**
  * @author Fabio Kung
  */
 @ApplicationScoped
 public class ResourceRegistrar implements ApplicationListener {
-    private final ResourcesHolder resourcesHolder;
-    private final Router resourceRegistry;
+    private static final Logger LOGGER = LoggerFactory.getLogger(ResourceRegistrar.class);
+	private final StereotypeHandler stereotypeHandler;
 
-    public ResourceRegistrar(ResourcesHolder resourcesHolder, Router resourceRegistry) {
-        this.resourcesHolder = resourcesHolder;
-        this.resourceRegistry = resourceRegistry;
+    public ResourceRegistrar(StereotypeHandler stereotypeHandler) {
+		this.stereotypeHandler = stereotypeHandler;
     }
 
 	@Override
 	public void onApplicationEvent(ApplicationEvent event) {
-		if (event instanceof ContextRefreshedEvent)
-			resourcesHolder.registerAllOn(resourceRegistry);
+		if (event instanceof ContextRefreshedEvent) {
+			ContextRefreshedEvent contextRefreshedEvent = (ContextRefreshedEvent) event;
+			ConfigurableListableBeanFactory applicationContext = extractBeanFactory(contextRefreshedEvent);
+			handleRefresh(applicationContext);
+		}
+	}
+
+	private ConfigurableListableBeanFactory extractBeanFactory(ContextRefreshedEvent contextRefreshedEvent) {
+		ApplicationContext applicationContext = contextRefreshedEvent.getApplicationContext();
+		
+		if (!(applicationContext instanceof ConfigurableApplicationContext))
+			throw new VRaptorException("VRaptorApplicationContext must be a ConfigurableApplicationContext");
+			
+		ConfigurableApplicationContext configurableApplicationContext = 
+			(ConfigurableApplicationContext) applicationContext;
+		
+		return configurableApplicationContext.getBeanFactory();
+	}
+
+	private void handleRefresh(ConfigurableListableBeanFactory applicationContext) {
+		String[] beanDefinitionNames = applicationContext.getBeanDefinitionNames();
+		for (String name : beanDefinitionNames) {
+			BeanDefinition beanDefinition = applicationContext.getBeanDefinition(name);
+			if (isAResource(beanDefinition)) 
+				stereotypeHandler.handle(applicationContext.getType(name));
+			
+		}
+	}
+	
+	private boolean isAResource(BeanDefinition beanDefinition) {
+		LOGGER.debug("scanning definition: " + beanDefinition + ", to see if it is a Resource candidate");
+		if (!(beanDefinition instanceof AnnotatedBeanDefinition))
+			return false;
+
+		AnnotationMetadata metadata = ((AnnotatedBeanDefinition) beanDefinition).getMetadata();
+		if (!metadata.hasAnnotation(stereotypeHandler.stereotype().getName()))
+			return false;
+		
+		LOGGER.info("found component annotated with @Resource: " + beanDefinition.getBeanClassName());
+		return true;
 	}
 }

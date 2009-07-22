@@ -125,11 +125,9 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
         for (Class<?> type : BaseComponents.getApplicationScoped().values()) {
             registerOn(beanFactory, type);
         }
-        registerOn(beanFactory, ResourcesHolder.class);
-        registerOn(beanFactory, ResourceFinder.class);
-        registerOn(beanFactory, ResourceRegistrar.class);
-        
         registerOn(beanFactory, ResourceHandler.class);
+        
+        registerOn(beanFactory, ResourceRegistrar.class);
         
         registerOn(beanFactory, DefaultMultipartConfig.class);
     }

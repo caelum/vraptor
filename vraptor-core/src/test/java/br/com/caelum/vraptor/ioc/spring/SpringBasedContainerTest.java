@@ -27,6 +27,7 @@
  */
 package br.com.caelum.vraptor.ioc.spring;
 
+import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isIn;
@@ -39,6 +40,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.hamcrest.Matchers;
 import org.jmock.Mockery;
 import org.junit.After;
 import org.junit.Before;
@@ -158,11 +160,10 @@ public class SpringBasedContainerTest {
     
     @Test
     public void shoudRegisterResourcesWithRouter() {
-    	DummyResource res = container.instanceFor(DummyResource.class);
-    	res.toString();
+    	container.instanceFor(DummyResource.class);
     	
     	Router router = container.instanceFor(Router.class);
     	ResourceClass dummyResourceClass = new DefaultResourceClass(DummyResource.class);
-    	assertThat(dummyResourceClass, isIn(router.allResources()));
+    	assertThat(router.allResources(), hasItem(dummyResourceClass));
     }
 }

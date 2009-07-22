@@ -13,6 +13,8 @@ import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.ioc.pico.ResourceRegistrar;
 import br.com.caelum.vraptor.resource.DefaultResourceClass;
 
+@ApplicationScoped
+@org.springframework.stereotype.Component("stereotypeHandler")
 public class ResourceHandler implements StereotypeHandler {
 	private final Logger logger = LoggerFactory.getLogger(ResourceRegistrar.class);
 	private final Router router;

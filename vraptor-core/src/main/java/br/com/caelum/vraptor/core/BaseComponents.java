@@ -87,7 +87,9 @@ import br.com.caelum.vraptor.interceptor.multipart.MultipartInterceptor;
 import br.com.caelum.vraptor.interceptor.multipart.UploadedFileConverter;
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.ioc.ConverterHandler;
+import br.com.caelum.vraptor.ioc.InterceptorStereotypeHandler;
 import br.com.caelum.vraptor.ioc.ResourceHandler;
+import br.com.caelum.vraptor.ioc.StereotypeHandler;
 import br.com.caelum.vraptor.proxy.DefaultProxifier;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.resource.DefaultResourceNotFoundHandler;
@@ -162,9 +164,10 @@ public class BaseComponents {
 
     
     @SuppressWarnings("unchecked")
-	private static final Class<? extends Annotation>[] STEREOTYPE_HANDLERS = new Class[] {
+	private static final Class<? extends StereotypeHandler>[] STEREOTYPE_HANDLERS = new Class[] {
 		ResourceHandler.class,
 		ConverterHandler.class,
+		InterceptorStereotypeHandler.class
 	};
     
     @SuppressWarnings("unchecked")
@@ -190,7 +193,7 @@ public class BaseComponents {
     	return STEREOTYPES;
     }
     
-    public static Class<? extends Annotation>[] getStereotypeHandlers() {
+    public static Class<? extends StereotypeHandler>[] getStereotypeHandlers() {
     	return STEREOTYPE_HANDLERS;
     }
 

@@ -51,12 +51,14 @@ import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.http.UrlToResourceTranslator;
 import br.com.caelum.vraptor.http.route.Router;
+import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.spring.components.ConstructorInjection;
 import br.com.caelum.vraptor.ioc.spring.components.CustomTranslator;
 import br.com.caelum.vraptor.ioc.spring.components.DummyComponent;
 import br.com.caelum.vraptor.ioc.spring.components.DummyConverter;
 import br.com.caelum.vraptor.ioc.spring.components.DummyImplementation;
+import br.com.caelum.vraptor.ioc.spring.components.DummyInterceptor;
 import br.com.caelum.vraptor.ioc.spring.components.DummyResource;
 import br.com.caelum.vraptor.ioc.spring.components.Foo;
 import br.com.caelum.vraptor.ioc.spring.components.RequestScopedComponent;
@@ -161,16 +163,22 @@ public class SpringBasedContainerTest {
     }
     
     @Test
-    public void shoudRegisterResourcesWithRouter() {
+    public void shoudRegisterResourcesInRouter() {
     	Router router = container.instanceFor(Router.class);
     	ResourceClass dummyResourceClass = new DefaultResourceClass(DummyResource.class);
     	assertThat(router.allResources(), hasItem(dummyResourceClass));
     }
     
     @Test
-    public void shoudRegisterConvertersWithRouter() {
+    public void shoudRegisterConvertersInConverters() {
     	Converters converters = container.instanceFor(Converters.class);
     	Converter<?> converter = converters.to(Foo.class, container);
 		assertThat(converter, is(instanceOf(DummyConverter.class)));
+    }
+    
+    @Test
+    public void shoudRegisterInterceptorsInInterceptorRegistry() {
+    	InterceptorRegistry registry = container.instanceFor(InterceptorRegistry.class);
+    	assertThat(registry.all(), hasItem(DummyInterceptor.class));
     }
 }

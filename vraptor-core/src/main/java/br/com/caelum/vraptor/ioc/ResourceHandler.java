@@ -3,12 +3,9 @@
  */
 package br.com.caelum.vraptor.ioc;
 
-import java.lang.annotation.Annotation;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.ioc.pico.ResourceRegistrar;

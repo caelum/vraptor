@@ -27,7 +27,7 @@ public class ConverterHandler implements StereotypeHandler {
 	}
 
 	@Override
-	public Class<? extends Annotation> stereotype() {
-		return Convert.class;
+	public boolean canHandle(Class<?> candidate) {
+		return candidate.isAnnotationPresent(Convert.class);
 	}
 }

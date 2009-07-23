@@ -32,6 +32,7 @@ import java.util.Collection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.ResourceHandler;
@@ -56,7 +57,7 @@ public class ResourceRegistrar implements Registrar {
 
     public void registerFrom(Scanner scanner) {
         logger.info("Registering all resources annotated with @Resource");
-        Collection<Class<?>> resourceTypes = scanner.getTypesWithAnnotation(resourceHandler.stereotype());
+        Collection<Class<?>> resourceTypes = scanner.getTypesWithAnnotation(Resource.class);
         for (Class<?> resourceType : resourceTypes) {
         	resourceHandler.handle(resourceType);
         }

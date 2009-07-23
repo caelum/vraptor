@@ -61,46 +61,21 @@ public class StereotypedBeansRegistrar implements ApplicationListener {
 	public void onApplicationEvent(ApplicationEvent event) {
 		if (event instanceof ContextRefreshedEvent) {
 			ContextRefreshedEvent contextRefreshedEvent = (ContextRefreshedEvent) event;
-			ConfigurableListableBeanFactory applicationContext = extractBeanFactory(contextRefreshedEvent);
-			handleRefresh(applicationContext);
+			handleRefresh(contextRefreshedEvent.getApplicationContext());
 		}
 	}
 
-	private ConfigurableListableBeanFactory extractBeanFactory(ContextRefreshedEvent contextRefreshedEvent) {
-		ApplicationContext applicationContext = contextRefreshedEvent.getApplicationContext();
-		
-		if (!(applicationContext instanceof ConfigurableApplicationContext))
-			throw new VRaptorException("VRaptorApplicationContext must be a ConfigurableApplicationContext");
-			
-		ConfigurableApplicationContext configurableApplicationContext = 
-			(ConfigurableApplicationContext) applicationContext;
-		
-		return configurableApplicationContext.getBeanFactory();
-	}
-
-	private void handleRefresh(ConfigurableListableBeanFactory beanFactory) {
+	private void handleRefresh(ApplicationContext beanFactory) {
 		String[] beanDefinitionNames = beanFactory.getBeanDefinitionNames();
 		for (String name : beanDefinitionNames) {
-			BeanDefinition beanDefinition = beanFactory.getBeanDefinition(name);
-			
-			LOGGER.debug("scanning definition: " + beanDefinition + ", to see if it is a candidate");
+			Class<?> beanType = beanFactory.getType(name);
+			LOGGER.debug("scanning bean with type: " + beanType + ", to see if it is a component candidate");
 			
 			for (StereotypeHandler handler : stereotypeHandlers) {
-				if (beanCanBeHandledBy(beanDefinition, handler))
-					handler.handle(beanFactory.getType(name));
+				if (handler.canHandle(beanType)) {
+					handler.handle(beanType);
+				}
 			}
 		}
-	}
-	
-	private boolean beanCanBeHandledBy(BeanDefinition beanDefinition, StereotypeHandler stereotypeHandler) {
-		if (!(beanDefinition instanceof AnnotatedBeanDefinition))
-			return false;
-
-		AnnotationMetadata metadata = ((AnnotatedBeanDefinition) beanDefinition).getMetadata();
-		if (!metadata.hasAnnotation(stereotypeHandler.stereotype().getName()))
-			return false;
-		
-		LOGGER.info("found component annotated with @" + stereotypeHandler.stereotype()  + ": " + beanDefinition.getBeanClassName());
-		return true;
 	}
 }

@@ -49,11 +49,11 @@ import br.com.caelum.vraptor.ioc.StereotypeHandler;
  * @author Fabio Kung
  */
 @ApplicationScoped
-public class ResourceRegistrar implements ApplicationListener {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ResourceRegistrar.class);
+public class StereotypedBeansRegistrar implements ApplicationListener {
+    private static final Logger LOGGER = LoggerFactory.getLogger(StereotypedBeansRegistrar.class);
 	private final List<StereotypeHandler> stereotypeHandlers;
 
-    public ResourceRegistrar(List<StereotypeHandler> stereotypeHandlers) {
+    public StereotypedBeansRegistrar(List<StereotypeHandler> stereotypeHandlers) {
 		this.stereotypeHandlers = stereotypeHandlers;
     }
 

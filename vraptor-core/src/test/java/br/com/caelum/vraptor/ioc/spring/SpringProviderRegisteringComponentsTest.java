@@ -27,6 +27,13 @@
  */
 package br.com.caelum.vraptor.ioc.spring;
 
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
 import br.com.caelum.vraptor.ioc.GenericContainerTest;
@@ -48,45 +55,35 @@ public class SpringProviderRegisteringComponentsTest extends GenericContainerTes
 
     @SuppressWarnings({"SynchronizationOnLocalVariableOrMethodParameter", "unchecked"})
     protected <T> T executeInsideRequest(final WhatToDo<T> execution) {
-        final Object[] holder = new Object[1];
-        final Object lock = new Object();
-        holder[0] = lock;
-        new Thread(new Runnable() {
-            public void run() {
-                T result = null;
-                try {
-                    HttpSessionMock session = new HttpSessionMock(context, "session" + ++counter);
-                    HttpServletRequestMock httpRequest = new HttpServletRequestMock(session);
-                    HttpServletResponse response = mockery.mock(HttpServletResponse.class, "response" + counter);
+        Callable<T> task = new Callable<T>(){
+			@Override
+			public T call() throws Exception {
+				T result = null;
+				HttpSessionMock session = new HttpSessionMock(context, "session" + ++counter);
+				HttpServletRequestMock httpRequest = new HttpServletRequestMock(session);
+				HttpServletResponse response = mockery.mock(HttpServletResponse.class, "response" + counter);
 
-                    RequestInfo request = new RequestInfo(context, httpRequest, response);
-                    VRaptorRequestHolder.setRequestForCurrentThread(request);
+				RequestInfo request = new RequestInfo(context, httpRequest, response);
+				VRaptorRequestHolder.setRequestForCurrentThread(request);
 
-                    RequestContextListener contextListener = new RequestContextListener();
-                    contextListener.requestInitialized(new ServletRequestEvent(context, httpRequest));
-                    result = execution.execute(request, counter);
-                    contextListener.requestDestroyed(new ServletRequestEvent(context, httpRequest));
+				RequestContextListener contextListener = new RequestContextListener();
+				contextListener.requestInitialized(new ServletRequestEvent(context, httpRequest));
+				result = execution.execute(request, counter);
+				contextListener.requestDestroyed(new ServletRequestEvent(context, httpRequest));
 
-                    VRaptorRequestHolder.resetRequestForCurrentThread();
-                } finally {
-                    synchronized (holder) {
-                        holder[0] = result;
-                        holder.notifyAll();
-                    }
-                }
-            }
-        }).start();
+				VRaptorRequestHolder.resetRequestForCurrentThread();
+				return result;
+			}
+		};
+        
+		Future<T> future = Executors.newSingleThreadExecutor().submit(task);
 
-        while (holder[0] == lock) {
-            try {
-                synchronized (holder) {
-                    holder.wait(1000);
-                }
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        return (T) holder[0];
+		try {
+			return future.get(1, TimeUnit.MINUTES);
+		} 
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
     }
 
     @Override

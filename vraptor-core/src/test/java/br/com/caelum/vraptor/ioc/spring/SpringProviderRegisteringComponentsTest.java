@@ -28,11 +28,15 @@
 package br.com.caelum.vraptor.ioc.spring;
 
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
+
+import javax.servlet.ServletRequestEvent;
+import javax.servlet.http.HttpServletResponse;
+
+import org.jmock.Expectations;
+import org.springframework.web.context.request.RequestContextListener;
 
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
@@ -40,11 +44,6 @@ import br.com.caelum.vraptor.ioc.GenericContainerTest;
 import br.com.caelum.vraptor.ioc.WhatToDo;
 import br.com.caelum.vraptor.test.HttpServletRequestMock;
 import br.com.caelum.vraptor.test.HttpSessionMock;
-import org.jmock.Expectations;
-import org.springframework.web.context.request.RequestContextListener;
-
-import javax.servlet.ServletRequestEvent;
-import javax.servlet.http.HttpServletResponse;
 
 public class SpringProviderRegisteringComponentsTest extends GenericContainerTest {
     private int counter;
@@ -53,7 +52,6 @@ public class SpringProviderRegisteringComponentsTest extends GenericContainerTes
         return new SpringProvider();
     }
 
-    @SuppressWarnings({"SynchronizationOnLocalVariableOrMethodParameter", "unchecked"})
     protected <T> T executeInsideRequest(final WhatToDo<T> execution) {
         Callable<T> task = new Callable<T>(){
 			@Override

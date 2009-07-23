@@ -9,7 +9,7 @@ import br.com.caelum.vraptor.ioc.Container;
 /**
  * @author: Fabio Kung
  */
-public class ComponentFactoryBean<T extends ComponentFactory> implements FactoryBean {
+public class ComponentFactoryBean<T extends ComponentFactory<Object>> implements FactoryBean {
 
     private Container container;
 
@@ -26,7 +26,7 @@ public class ComponentFactoryBean<T extends ComponentFactory> implements Factory
         return container.instanceFor(factoryType).getInstance();
     }
 
-    public Class getObjectType() {
+    public Class<?> getObjectType() {
         return targetType;
     }
 

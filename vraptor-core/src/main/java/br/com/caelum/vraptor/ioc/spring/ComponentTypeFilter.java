@@ -39,8 +39,7 @@ import org.springframework.core.type.classreading.MetadataReader;
 import org.springframework.core.type.classreading.MetadataReaderFactory;
 import org.springframework.core.type.filter.TypeFilter;
 
-import br.com.caelum.vraptor.Resource;
-import br.com.caelum.vraptor.ioc.Component;
+import br.com.caelum.vraptor.core.BaseComponents;
 import br.com.caelum.vraptor.ioc.Stereotype;
 
 /**
@@ -52,8 +51,9 @@ class ComponentTypeFilter implements TypeFilter {
 
     public ComponentTypeFilter() {
         this.annotationTypes = new ArrayList<Class<? extends Annotation>>();
-        this.annotationTypes.add(Component.class);
-        this.annotationTypes.add(Resource.class);
+        for (Class<? extends Annotation> stereotype : BaseComponents.getStereotypes()) {
+			this.annotationTypes.add(stereotype);
+		}
     }
 
     public boolean match(MetadataReader metadataReader, MetadataReaderFactory metadataReaderFactory) throws IOException {

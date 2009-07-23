@@ -1,7 +1,7 @@
 /***
- *
+ * 
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource All rights reserved.
- *
+ * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  * 1. Redistributions of source code must retain the above copyright notice,
@@ -12,7 +12,7 @@
  * copyright holders nor the names of its contributors may be used to endorse or
  * promote products derived from this software without specific prior written
  * permission.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 package br.com.caelum.vraptor.ioc.spring;
+
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,12 +51,13 @@ import br.com.caelum.vraptor.ioc.StereotypeHandler;
 @ApplicationScoped
 public class ResourceRegistrar implements ApplicationListener {
     private static final Logger LOGGER = LoggerFactory.getLogger(ResourceRegistrar.class);
-	private final StereotypeHandler stereotypeHandler;
+	private final List<StereotypeHandler> stereotypeHandlers;
 
-    public ResourceRegistrar(StereotypeHandler stereotypeHandler) {
-		this.stereotypeHandler = stereotypeHandler;
+    public ResourceRegistrar(List<StereotypeHandler> stereotypeHandlers) {
+		this.stereotypeHandlers = stereotypeHandlers;
     }
 
+	@Override
 	public void onApplicationEvent(ApplicationEvent event) {
 		if (event instanceof ContextRefreshedEvent) {
 			ContextRefreshedEvent contextRefreshedEvent = (ContextRefreshedEvent) event;
@@ -65,40 +68,39 @@ public class ResourceRegistrar implements ApplicationListener {
 
 	private ConfigurableListableBeanFactory extractBeanFactory(ContextRefreshedEvent contextRefreshedEvent) {
 		ApplicationContext applicationContext = contextRefreshedEvent.getApplicationContext();
-
-		if (!(applicationContext instanceof ConfigurableApplicationContext)) {
+		
+		if (!(applicationContext instanceof ConfigurableApplicationContext))
 			throw new VRaptorException("VRaptorApplicationContext must be a ConfigurableApplicationContext");
-		}
-
-		ConfigurableApplicationContext configurableApplicationContext =
+			
+		ConfigurableApplicationContext configurableApplicationContext = 
 			(ConfigurableApplicationContext) applicationContext;
-
+		
 		return configurableApplicationContext.getBeanFactory();
 	}
 
-	private void handleRefresh(ConfigurableListableBeanFactory applicationContext) {
-		String[] beanDefinitionNames = applicationContext.getBeanDefinitionNames();
+	private void handleRefresh(ConfigurableListableBeanFactory beanFactory) {
+		String[] beanDefinitionNames = beanFactory.getBeanDefinitionNames();
 		for (String name : beanDefinitionNames) {
-			BeanDefinition beanDefinition = applicationContext.getBeanDefinition(name);
-			if (isAResource(beanDefinition)) {
-				stereotypeHandler.handle(applicationContext.getType(name));
+			BeanDefinition beanDefinition = beanFactory.getBeanDefinition(name);
+			
+			LOGGER.debug("scanning definition: " + beanDefinition + ", to see if it is a candidate");
+			
+			for (StereotypeHandler handler : stereotypeHandlers) {
+				if (beanCanBeHandledBy(beanDefinition, handler))
+					handler.handle(beanFactory.getType(name));
 			}
-
 		}
 	}
-
-	private boolean isAResource(BeanDefinition beanDefinition) {
-		LOGGER.debug("scanning definition: " + beanDefinition + ", to see if it is a Resource candidate");
-		if (!(beanDefinition instanceof AnnotatedBeanDefinition)) {
+	
+	private boolean beanCanBeHandledBy(BeanDefinition beanDefinition, StereotypeHandler stereotypeHandler) {
+		if (!(beanDefinition instanceof AnnotatedBeanDefinition))
 			return false;
-		}
 
 		AnnotationMetadata metadata = ((AnnotatedBeanDefinition) beanDefinition).getMetadata();
-		if (!metadata.hasAnnotation(stereotypeHandler.stereotype().getName())) {
+		if (!metadata.hasAnnotation(stereotypeHandler.stereotype().getName()))
 			return false;
-		}
-
-		LOGGER.info("found component annotated with @Resource: " + beanDefinition.getBeanClassName());
+		
+		LOGGER.info("found component annotated with @" + stereotypeHandler.stereotype()  + ": " + beanDefinition.getBeanClassName());
 		return true;
 	}
 }

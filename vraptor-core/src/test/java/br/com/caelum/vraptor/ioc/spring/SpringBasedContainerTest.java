@@ -30,7 +30,6 @@ package br.com.caelum.vraptor.ioc.spring;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.isIn;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
@@ -40,7 +39,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.hamcrest.Matchers;
 import org.jmock.Mockery;
 import org.junit.After;
 import org.junit.Before;
@@ -48,6 +46,8 @@ import org.junit.Test;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import br.com.caelum.vraptor.Converter;
+import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.http.UrlToResourceTranslator;
 import br.com.caelum.vraptor.http.route.Router;
@@ -55,8 +55,10 @@ import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.spring.components.ConstructorInjection;
 import br.com.caelum.vraptor.ioc.spring.components.CustomTranslator;
 import br.com.caelum.vraptor.ioc.spring.components.DummyComponent;
+import br.com.caelum.vraptor.ioc.spring.components.DummyConverter;
 import br.com.caelum.vraptor.ioc.spring.components.DummyImplementation;
 import br.com.caelum.vraptor.ioc.spring.components.DummyResource;
+import br.com.caelum.vraptor.ioc.spring.components.Foo;
 import br.com.caelum.vraptor.ioc.spring.components.RequestScopedComponent;
 import br.com.caelum.vraptor.ioc.spring.components.RequestScopedContract;
 import br.com.caelum.vraptor.ioc.spring.components.SpecialImplementation;
@@ -160,10 +162,15 @@ public class SpringBasedContainerTest {
     
     @Test
     public void shoudRegisterResourcesWithRouter() {
-    	container.instanceFor(DummyResource.class);
-    	
     	Router router = container.instanceFor(Router.class);
     	ResourceClass dummyResourceClass = new DefaultResourceClass(DummyResource.class);
     	assertThat(router.allResources(), hasItem(dummyResourceClass));
+    }
+    
+    @Test
+    public void shoudRegisterConvertersWithRouter() {
+    	Converters converters = container.instanceFor(Converters.class);
+    	Converter<?> converter = converters.to(Foo.class, container);
+		assertThat(converter, is(instanceOf(DummyConverter.class)));
     }
 }

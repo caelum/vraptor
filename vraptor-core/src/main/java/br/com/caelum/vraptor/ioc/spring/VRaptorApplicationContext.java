@@ -71,6 +71,7 @@ import br.com.caelum.vraptor.interceptor.download.DownloadInterceptor;
 import br.com.caelum.vraptor.interceptor.multipart.DefaultMultipartConfig;
 import br.com.caelum.vraptor.interceptor.multipart.MultipartInterceptor;
 import br.com.caelum.vraptor.ioc.ComponentFactory;
+import br.com.caelum.vraptor.ioc.ConverterHandler;
 import br.com.caelum.vraptor.ioc.ResourceHandler;
 import br.com.caelum.vraptor.proxy.DefaultProxifier;
 import br.com.caelum.vraptor.view.DefaultAcceptHeaderToFormat;
@@ -125,7 +126,10 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
         for (Class<?> type : BaseComponents.getApplicationScoped().values()) {
             registerOn(beanFactory, type);
         }
+        
         registerOn(beanFactory, ResourceHandler.class);
+        registerOn(beanFactory, ConverterHandler.class);
+        
         registerOn(beanFactory, ResourceRegistrar.class);
         registerOn(beanFactory, DefaultMultipartConfig.class);
     }

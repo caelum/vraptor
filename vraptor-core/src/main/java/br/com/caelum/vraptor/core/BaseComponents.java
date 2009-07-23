@@ -27,7 +27,16 @@
  */
 package br.com.caelum.vraptor.core;
 
+import java.lang.annotation.Annotation;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
+import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
+import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.converter.BooleanConverter;
@@ -76,26 +85,23 @@ import br.com.caelum.vraptor.interceptor.multipart.DefaultMultipartConfig;
 import br.com.caelum.vraptor.interceptor.multipart.MultipartConfig;
 import br.com.caelum.vraptor.interceptor.multipart.MultipartInterceptor;
 import br.com.caelum.vraptor.interceptor.multipart.UploadedFileConverter;
+import br.com.caelum.vraptor.ioc.Component;
+import br.com.caelum.vraptor.ioc.ConverterHandler;
+import br.com.caelum.vraptor.ioc.ResourceHandler;
 import br.com.caelum.vraptor.proxy.DefaultProxifier;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.resource.DefaultResourceNotFoundHandler;
 import br.com.caelum.vraptor.resource.ResourceNotFoundHandler;
 import br.com.caelum.vraptor.validator.DefaultValidator;
-import br.com.caelum.vraptor.view.DefaultLogicResult;
+import br.com.caelum.vraptor.view.AcceptHeaderToFormat;
 import br.com.caelum.vraptor.view.DefaultAcceptHeaderToFormat;
+import br.com.caelum.vraptor.view.DefaultLogicResult;
 import br.com.caelum.vraptor.view.DefaultPageResult;
 import br.com.caelum.vraptor.view.DefaultPathResolver;
 import br.com.caelum.vraptor.view.EmptyResult;
 import br.com.caelum.vraptor.view.LogicResult;
-import br.com.caelum.vraptor.view.AcceptHeaderToFormat;
 import br.com.caelum.vraptor.view.PageResult;
 import br.com.caelum.vraptor.view.PathResolver;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 
 /**
  * List of base components to vraptor. Those components should be available with
@@ -154,6 +160,20 @@ public class BaseComponents {
             LocaleBasedCalendarConverter.class, LocaleBasedDateConverter.class, EnumConverter.class,
             UploadedFileConverter.class};
 
+    
+    @SuppressWarnings("unchecked")
+	private static final Class<? extends Annotation>[] STEREOTYPE_HANDLERS = new Class[] {
+		ResourceHandler.class,
+		ConverterHandler.class,
+	};
+    
+    @SuppressWarnings("unchecked")
+    private static final Class<? extends Annotation>[] STEREOTYPES = new Class[] {
+    	Resource.class,
+    	Convert.class,
+    	Component.class
+    };
+
     public static Map<Class<?>, Class<?>> getApplicationScoped() {
         return APPLICATION_COMPONENTS;
     }
@@ -164,6 +184,14 @@ public class BaseComponents {
 
     public static Class<? extends Converter<?>>[] getBundledConverters() {
         return BUNDLED_CONVERTERS;
+    }
+    
+    public static Class<? extends Annotation>[] getStereotypes() {
+    	return STEREOTYPES;
+    }
+    
+    public static Class<? extends Annotation>[] getStereotypeHandlers() {
+    	return STEREOTYPE_HANDLERS;
     }
 
     private static Map<Class<?>, Class<?>> classMap(Class<?>... items) {

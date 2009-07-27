@@ -89,7 +89,7 @@ public class SpringProviderRegisteringComponentsTest extends GenericContainerTes
         mockery.checking(new Expectations() {
             {
                 allowing(context).getInitParameter(SpringProvider.BASE_PACKAGES_PARAMETER_NAME);
-                will(returnValue("no.packages"));
+                will(returnValue("br.com.caelum.vraptor.ioc.fixture"));
             }
         });
     }

@@ -27,6 +27,33 @@
  */
 package br.com.caelum.vraptor.ioc;
 
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.hamcrest.MatcherAssert;
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
+
 import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
@@ -54,30 +81,12 @@ import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
 import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
 import br.com.caelum.vraptor.interceptor.download.DownloadInterceptor;
 import br.com.caelum.vraptor.interceptor.multipart.MultipartInterceptor;
+import br.com.caelum.vraptor.ioc.fixture.CustomComponentInTheClasspath;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.resource.ResourceNotFoundHandler;
 import br.com.caelum.vraptor.view.LogicResult;
 import br.com.caelum.vraptor.view.PageResult;
 import br.com.caelum.vraptor.view.PathResolver;
-import org.hamcrest.MatcherAssert;
-import static org.hamcrest.Matchers.*;
-import org.jmock.Mockery;
-import org.junit.After;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
 
 /**
  * Acceptance test that checks if the container is capable of giving all
@@ -293,5 +302,9 @@ public abstract class GenericContainerTest {
         StartableComponent comp = registerAndGetFromContainer(StartableComponent.class, null);
         assertTrue(comp.started);
     }
-
+    
+    @Test
+	public void canProvideComponentsInTheClasspath() throws Exception {
+    	checkAvailabilityFor(false, Collections.<Class<?>>singleton(CustomComponentInTheClasspath.class));
+	}
 }

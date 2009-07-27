@@ -61,7 +61,7 @@ public class ConverterRegistrar implements Registrar {
 
         for (Class<?> converterType : converterTypes) {
             if (!Converter.class.isAssignableFrom(converterType)) {
-                throw new VRaptorException("converter does not implement Converter");
+                throw new VRaptorException("converter " + converterType + "does not implement Converter");
             }
             logger.debug("found converter: " + converterType);
             converters.register((Class<? extends Converter<?>>) converterType);

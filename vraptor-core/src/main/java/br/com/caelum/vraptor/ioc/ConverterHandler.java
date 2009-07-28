@@ -1,5 +1,7 @@
 package br.com.caelum.vraptor.ioc;
 
+import java.lang.annotation.Annotation;
+
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.VRaptorException;
@@ -25,7 +27,7 @@ public class ConverterHandler implements StereotypeHandler {
 	}
 
 	@Override
-	public boolean canHandle(Class<?> candidate) {
-		return candidate.isAnnotationPresent(Convert.class);
+	public Class<? extends Annotation> stereotype() {
+		return Convert.class;
 	}
 }

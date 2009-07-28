@@ -66,7 +66,7 @@ public class StereotypedBeansRegistrar implements ApplicationListener {
 			LOGGER.debug("scanning bean with type: " + beanType + ", to see if it is a component candidate");
 			
 			for (StereotypeHandler handler : stereotypeHandlers) {
-				if (handler.canHandle(beanType)) {
+				if (beanType.isAnnotationPresent(handler.stereotype())) {
 					handler.handle(beanType);
 				}
 			}

@@ -6,6 +6,8 @@ import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.ioc.Stereotype;
+import br.com.caelum.vraptor.ioc.StereotypeHandler;
+
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Before;
@@ -17,6 +19,7 @@ import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.RandomAccess;
 
@@ -25,7 +28,7 @@ import java.util.RandomAccess;
  */
 public class ComponentRegistrarTest {
 
-    private ComponentRegistrar registrar;
+    private StereotypedComponentRegistrar registrar;
     private Mockery mockery;
     private ComponentRegistry registry;
     private Scanner scanner;
@@ -35,7 +38,7 @@ public class ComponentRegistrarTest {
         mockery = new Mockery();
         registry = mockery.mock(ComponentRegistry.class);
         scanner = mockery.mock(Scanner.class);
-        this.registrar = new ComponentRegistrar(registry);
+        this.registrar = new StereotypedComponentRegistrar(registry, Collections.<StereotypeHandler>emptyList());
     }
 
     @Test

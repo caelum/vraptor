@@ -1,5 +1,7 @@
 package br.com.caelum.vraptor.ioc;
 
+import java.lang.annotation.Annotation;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,12 +21,8 @@ public class InterceptorStereotypeHandler implements StereotypeHandler {
 	}
 
 	@Override
-	public boolean canHandle(Class<?> type) {
-		boolean hasInterceptsAnnotation = type.isAnnotationPresent(Intercepts.class);
-		boolean isAnInterceptor = Interceptor.class.isAssignableFrom(type);
-		boolean isAnInterceptorSequence = InterceptorSequence.class.isAssignableFrom(type);
-		
-		return hasInterceptsAnnotation && (isAnInterceptor || isAnInterceptorSequence);
+	public Class<? extends Annotation> stereotype() {
+		return Intercepts.class;
 	}
 
 	@Override

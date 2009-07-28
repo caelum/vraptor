@@ -3,6 +3,8 @@
  */
 package br.com.caelum.vraptor.ioc;
 
+import java.lang.annotation.Annotation;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,7 +30,7 @@ public class ResourceHandler implements StereotypeHandler {
 	}
 
 	@Override
-	public boolean canHandle(Class<?> candidate) {
-		return candidate.isAnnotationPresent(Resource.class);
+	public Class<? extends Annotation> stereotype() {
+		return Resource.class;
 	}
 }

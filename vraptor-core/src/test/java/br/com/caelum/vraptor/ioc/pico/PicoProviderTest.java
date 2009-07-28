@@ -96,21 +96,10 @@ public class PicoProviderTest extends GenericContainerTest {
         try {
             mockery.checking(new Expectations() {
                 {
-                    File tmpDir = File.createTempFile("tmp_", "_file").getParentFile();
-                    File tmp = new File(tmpDir, "_tmp_vraptor_test");
-                    tmp.mkdir();
-                    File webInf = new File(tmp, "WEB-INF");
-                    webInf.mkdir();
-                    File webInfClasses = new File(webInf, "classes");
-                    webInfClasses.mkdir();
-
-//                    URL url = ClasspathHelper.getUrlForClass(br.com.caelum.vraptor.ioc.fixture.CustomComponentInTheClasspath.class);
-                    
-                    allowing(context).getRealPath("/WEB-INF/classes/");
-//					String classpath = new File(new URI(url.toString())).getAbsolutePath();
-					String classpath = "/home/rafaelf/vraptor/caelum/vraptor/vraptor-core/lib/test-fixture.jar";
-					System.out.println("CLASSPATH: " + classpath);
-					will(returnValue(classpath));
+					URL fixtureJarURL = GenericContainerTest.class.getResource("test-fixture.jar");
+					File fixtureJarFile = new File(new URI(fixtureJarURL.toString()));
+					allowing(context).getRealPath("/WEB-INF/classes/");
+					will(returnValue(fixtureJarFile.getAbsolutePath()));
                 }
             });
         } catch (Exception e) {

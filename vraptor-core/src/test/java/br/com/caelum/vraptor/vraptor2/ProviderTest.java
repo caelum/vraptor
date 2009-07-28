@@ -29,6 +29,8 @@ package br.com.caelum.vraptor.vraptor2;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.HashMap;
 
@@ -93,19 +95,13 @@ public class ProviderTest extends GenericContainerTest {
                     allowing(context).getRealPath("/WEB-INF/classes/views.properties");
                     will(returnValue("views.properties"));
 
-                    File tmpDir = File.createTempFile("tmp_", "_file").getParentFile();
-                    File tmp = new File(tmpDir, "_tmp_vraptor_test");
-                    tmp.mkdir();
-                    File webInf = new File(tmp, "WEB-INF");
-                    webInf.mkdir();
-                    File webInfClasses = new File(webInf, "classes");
-                    webInfClasses.mkdir();
-
-                    allowing(context).getRealPath("/WEB-INF/classes/");
-                    will(returnValue(webInfClasses.getAbsolutePath()));
+                	URL fixtureJarURL = GenericContainerTest.class.getResource("test-fixture.jar");
+					File fixtureJarFile = new File(new URI(fixtureJarURL.toString()));
+					allowing(context).getRealPath("/WEB-INF/classes/");
+					will(returnValue(fixtureJarFile.getAbsolutePath()));               
                 }
             });
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }

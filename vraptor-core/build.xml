@@ -35,6 +35,7 @@
 		<mkdir dir="${reports.dir}/test-results" />
 		<mkdir dir="${tmp.classes.dir}" />
 		<mkdir dir="${tmp.test.classes.dir}" />
+		<mkdir dir="${tmp.fixture.classes.dir}" />
 	</target>
 
 	<target name="compile" depends="prepare" description="--> compiles classes">
@@ -47,9 +48,9 @@
 		<javac destdir="${tmp.test.classes.dir}" srcdir="${src.test.dir}" classpathref="test.classpath" debug="true" encoding="UTF-8" target="1.5" source="1.5">
 			<compilerarg value="-Xlint:none" />
 		</javac>
-	  	<copy todir="${tmp.test.classes.dir}">
-	  		<fileset dir="${resources.test.dir}" includes="**/*" />
-	  	</copy>
+		<copy todir="${tmp.test.classes.dir}">
+			<fileset dir="${resources.test.dir}" includes="**/*" />
+		</copy>
 	</target>
 
 	<target name="test" depends="compile">
@@ -64,7 +65,7 @@
 
 			<formatter type="brief" usefile="false" />
 			<formatter type="xml" />
-  			
+
 			<batchtest fork="yes" todir="${reports.dir}/test-results">
 				<fileset refid="unittests.fileset" />
 			</batchtest>
@@ -124,6 +125,15 @@
 	<target name="clean" description="--> delete build artifacts">
 		<delete file="${jar.file}" />
 		<delete dir="${tmp.dir}" />
+	</target>
+
+	<target name="genTestFixtures" depends="compile">
+		<javac destdir="${tmp.fixture.classes.dir}" 
+			classpathref="test.classpath" 
+			srcdir="${src.test.dir}"
+			includes="br/com/caelum/vraptor/ioc/fixture/**"
+			debug="on"/>
+		<jar basedir="${tmp.fixture.classes.dir}" destfile="${fixture.jar.file}" />
 	</target>
 
 </project>

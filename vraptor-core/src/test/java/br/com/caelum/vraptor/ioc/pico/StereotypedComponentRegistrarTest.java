@@ -1,18 +1,5 @@
 package br.com.caelum.vraptor.ioc.pico;
 
-import br.com.caelum.vraptor.ComponentRegistry;
-import br.com.caelum.vraptor.Resource;
-import br.com.caelum.vraptor.Convert;
-import br.com.caelum.vraptor.Intercepts;
-import br.com.caelum.vraptor.ioc.Component;
-import br.com.caelum.vraptor.ioc.Stereotype;
-import br.com.caelum.vraptor.ioc.StereotypeHandler;
-
-import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.junit.Before;
-import org.junit.Test;
-
 import java.io.Serializable;
 import java.util.AbstractCollection;
 import java.util.AbstractList;
@@ -22,6 +9,20 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.RandomAccess;
+
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.junit.Before;
+import org.junit.Test;
+
+import br.com.caelum.vraptor.ComponentRegistry;
+import br.com.caelum.vraptor.Convert;
+import br.com.caelum.vraptor.Intercepts;
+import br.com.caelum.vraptor.Resource;
+import br.com.caelum.vraptor.core.ComponentHandler;
+import br.com.caelum.vraptor.ioc.Component;
+import br.com.caelum.vraptor.ioc.Stereotype;
+import br.com.caelum.vraptor.ioc.StereotypeHandler;
 
 /**
  * @author Fabio Kung
@@ -33,17 +34,19 @@ public class StereotypedComponentRegistrarTest {
     private ComponentRegistry registry;
     private Scanner scanner;
 
-    @Before
+    @SuppressWarnings("unchecked")
+	@Before
     public void setup() {
         mockery = new Mockery();
         registry = mockery.mock(ComponentRegistry.class);
         scanner = mockery.mock(Scanner.class);
         Arrays.asList(Component.class, Intercepts.class, Convert.class, Resource.class);
         
-        this.registrar = new StereotypedComponentRegistrar(registry, Collections.<StereotypeHandler>emptyList());
+        this.registrar = new StereotypedComponentRegistrar(registry, Collections.<StereotypeHandler>singletonList(new ComponentHandler()));
     }
 
-    @Test
+    @SuppressWarnings("unchecked")
+	@Test
     public void shouldRegisterComponentsAnnotatedWithAnyStereotypedAnnotations() {
         mockery.checking(new Expectations() {
             {
@@ -67,7 +70,7 @@ public class StereotypedComponentRegistrarTest {
         mockery.checking(new Expectations() {
             {
                 one(scanner).getTypesWithAnnotation(Component.class);
-                will(returnValue(Arrays.asList(ComponentAnnotated.class)));
+                will(returnValue(Collections.singletonList(ComponentAnnotated.class)));
                 one(registry).register(ComponentAnnotated.class, ComponentAnnotated.class);
 
                 allowing(scanner).getTypesWithAnnotation(Resource.class);
@@ -81,64 +84,10 @@ public class StereotypedComponentRegistrarTest {
     }
 
     @Test
-    public void shouldRegisterComponentsAnnotatedWithResource() {
-        mockery.checking(new Expectations() {
-            {
-                one(scanner).getTypesWithAnnotation(Resource.class);
-                will(returnValue(Arrays.asList(ResourceAnnotated.class)));
-                one(registry).register(ResourceAnnotated.class, ResourceAnnotated.class);
-
-                allowing(scanner).getTypesWithAnnotation(Component.class);
-                allowing(scanner).getTypesWithAnnotation(Intercepts.class);
-                allowing(scanner).getTypesWithAnnotation(Convert.class);
-                allowing(scanner).getTypesWithMetaAnnotation(Stereotype.class);
-            }
-        });
-        registrar.registerFrom(scanner);
-        mockery.assertIsSatisfied();
-    }
-
-    @Test
-    public void shouldRegisterComponentsAnnotatedWithConvert() {
-        mockery.checking(new Expectations() {
-            {
-                one(scanner).getTypesWithAnnotation(Convert.class);
-                will(returnValue(Arrays.asList(ConvertAnnotated.class)));
-                one(registry).register(ConvertAnnotated.class, ConvertAnnotated.class);
-
-                allowing(scanner).getTypesWithAnnotation(Component.class);
-                allowing(scanner).getTypesWithAnnotation(Resource.class);
-                allowing(scanner).getTypesWithAnnotation(Intercepts.class);
-                allowing(scanner).getTypesWithMetaAnnotation(Stereotype.class);
-            }
-        });
-        registrar.registerFrom(scanner);
-        mockery.assertIsSatisfied();
-    }
-
-    @Test
-    public void shouldRegisterComponentsAnnotatedWithIntercepts() {
-        mockery.checking(new Expectations() {
-            {
-                one(scanner).getTypesWithAnnotation(Intercepts.class);
-                will(returnValue(Arrays.asList(InterceptsAnnotated.class)));
-                one(registry).register(InterceptsAnnotated.class, InterceptsAnnotated.class);
-
-                allowing(scanner).getTypesWithAnnotation(Component.class);
-                allowing(scanner).getTypesWithAnnotation(Resource.class);
-                allowing(scanner).getTypesWithAnnotation(Convert.class);
-                allowing(scanner).getTypesWithMetaAnnotation(Stereotype.class);
-            }
-        });
-        registrar.registerFrom(scanner);
-        mockery.assertIsSatisfied();
-    }
-
-    @Test
     public void shouldRegisterComponentAlsoUsingImplementedInterfaces() {
         mockery.checking(new Expectations() {{
             one(scanner).getTypesWithAnnotation(Component.class);
-            will(returnValue(Arrays.asList(RunnableComponent.class)));
+            will(returnValue(Collections.singletonList(RunnableComponent.class)));
 
             one(registry).register(Runnable.class, RunnableComponent.class);
             one(registry).register(RunnableComponent.class, RunnableComponent.class);
@@ -156,7 +105,7 @@ public class StereotypedComponentRegistrarTest {
     public void shouldRegisterComponentUsingAllPossibleSupertypes() {
         mockery.checking(new Expectations() {{
             one(scanner).getTypesWithAnnotation(Component.class);
-            will(returnValue(Arrays.asList(ArrayListSubclass.class)));
+            will(returnValue(Collections.singletonList(ArrayListSubclass.class)));
 
             one(registry).register(ArrayListSubclass.class, ArrayListSubclass.class);
             one(registry).register(ArrayList.class, ArrayListSubclass.class);

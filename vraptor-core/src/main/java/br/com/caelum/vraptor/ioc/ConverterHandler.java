@@ -15,7 +15,6 @@ public class ConverterHandler implements StereotypeHandler {
 		this.converters = converters;
 	}
 
-	@Override
 	public void handle(Class<?> annotatedType) {
 		if (!(Converter.class.isAssignableFrom(annotatedType)))
 			throw new VRaptorException("converter does not implement Converter");
@@ -26,7 +25,6 @@ public class ConverterHandler implements StereotypeHandler {
 		converters.register(converterType);
 	}
 
-	@Override
 	public Class<? extends Annotation> stereotype() {
 		return Convert.class;
 	}

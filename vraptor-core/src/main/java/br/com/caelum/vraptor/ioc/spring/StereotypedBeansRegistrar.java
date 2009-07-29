@@ -51,7 +51,6 @@ public class StereotypedBeansRegistrar implements ApplicationListener {
 		this.stereotypeHandlers = stereotypeHandlers;
     }
 
-	@Override
 	public void onApplicationEvent(ApplicationEvent event) {
 		if (event instanceof ContextRefreshedEvent) {
 			ContextRefreshedEvent contextRefreshedEvent = (ContextRefreshedEvent) event;

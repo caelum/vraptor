@@ -167,7 +167,8 @@ public class BaseComponents {
 	private static final Class<? extends StereotypeHandler>[] STEREOTYPE_HANDLERS = new Class[] {
 		ResourceHandler.class,
 		ConverterHandler.class,
-		InterceptorStereotypeHandler.class
+		InterceptorStereotypeHandler.class,
+		ComponentHandler.class
 	};
     
     @SuppressWarnings("unchecked")

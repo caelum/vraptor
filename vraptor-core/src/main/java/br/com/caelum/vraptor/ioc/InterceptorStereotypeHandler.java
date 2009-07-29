@@ -20,12 +20,10 @@ public class InterceptorStereotypeHandler implements StereotypeHandler {
 		this.registry = registry;
 	}
 
-	@Override
 	public Class<? extends Annotation> stereotype() {
 		return Intercepts.class;
 	}
 
-	@Override
 	public void handle(Class<?> type) {
 		if (Interceptor.class.isAssignableFrom(type)) {
             registerInterceptor(type);

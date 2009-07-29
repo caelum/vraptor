@@ -29,13 +29,9 @@
  */
 package br.com.caelum.vraptor.ioc.pico;
 
-import br.com.caelum.vraptor.ComponentRegistry;
-import br.com.caelum.vraptor.Converter;
-import br.com.caelum.vraptor.core.BaseComponents;
-import br.com.caelum.vraptor.core.Execution;
-import br.com.caelum.vraptor.core.RequestInfo;
-import br.com.caelum.vraptor.ioc.ContainerProvider;
-import br.com.caelum.vraptor.ioc.StereotypeHandler;
+import java.util.Map;
+
+import javax.servlet.ServletContext;
 
 import org.picocontainer.DefaultPicoContainer;
 import org.picocontainer.MutablePicoContainer;
@@ -46,10 +42,13 @@ import org.picocontainer.monitors.NullComponentMonitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.ServletContext;
-
-import java.util.Collections;
-import java.util.Map;
+import br.com.caelum.vraptor.ComponentRegistry;
+import br.com.caelum.vraptor.Converter;
+import br.com.caelum.vraptor.core.BaseComponents;
+import br.com.caelum.vraptor.core.Execution;
+import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.ioc.ContainerProvider;
+import br.com.caelum.vraptor.ioc.StereotypeHandler;
 
 /**
  * Managing internal components by using pico container.<br>
@@ -122,10 +121,11 @@ public class PicoProvider implements ContainerProvider {
 
         Scanner scanner = new ReflectionsScanner(context);
 
-        new StereotypedComponentRegistrar(componentRegistry, Collections.<StereotypeHandler>emptyList()).registerFrom(scanner);
-//        picoContainer.getComponent(StereotypedComponentRegistrar)
-        
         getComponentRegistry().init();
+        
+        picoContainer.addComponent(StereotypedComponentRegistrar.class);
+        StereotypedComponentRegistrar componentRegistrar = picoContainer.getComponent(StereotypedComponentRegistrar.class);
+        componentRegistrar.registerFrom(scanner);
         
         this.registerCustomComponents(picoContainer, scanner);
         

@@ -23,13 +23,11 @@ public class ResourceHandler implements StereotypeHandler {
 		this.router = router;
 	}
 
-	@Override
 	public void handle(Class<?> annotatedType) {
 		logger.debug("Found resource: " + annotatedType);
 		router.register(new DefaultResourceClass(annotatedType));
 	}
 
-	@Override
 	public Class<? extends Annotation> stereotype() {
 		return Resource.class;
 	}

@@ -9,16 +9,12 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 @Intercepts()
 public class DummyInterceptor implements Interceptor {
 
-	@Override
 	public boolean accepts(ResourceMethod method) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
-	@Override
 	public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
 			throws InterceptionException {
-		// TODO Auto-generated method stub
 		
 	}
 

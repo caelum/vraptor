@@ -54,7 +54,6 @@ public class SpringProviderRegisteringComponentsTest extends GenericContainerTes
 
     protected <T> T executeInsideRequest(final WhatToDo<T> execution) {
         Callable<T> task = new Callable<T>(){
-			@Override
 			public T call() throws Exception {
 				T result = null;
 				HttpSessionMock session = new HttpSessionMock(context, "session" + ++counter);
@@ -77,7 +76,7 @@ public class SpringProviderRegisteringComponentsTest extends GenericContainerTes
 		Future<T> future = Executors.newSingleThreadExecutor().submit(task);
 
 		try {
-			return future.get(1, TimeUnit.MINUTES);
+			return future.get(60, TimeUnit.SECONDS);
 		} 
 		catch (Exception e) {
 			throw new RuntimeException(e);

@@ -27,8 +27,6 @@
  */
 package br.com.caelum.vraptor.ioc.pico;
 
-import java.lang.annotation.Annotation;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -38,11 +36,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.ComponentRegistry;
-import br.com.caelum.vraptor.Convert;
-import br.com.caelum.vraptor.Intercepts;
-import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
-import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.ioc.Stereotype;
 import br.com.caelum.vraptor.ioc.StereotypeHandler;
 
@@ -59,9 +53,9 @@ import br.com.caelum.vraptor.ioc.StereotypeHandler;
 public class StereotypedComponentRegistrar implements Registrar {
     private final Logger logger = LoggerFactory.getLogger(StereotypedComponentRegistrar.class);
     
-    @SuppressWarnings("unchecked")
-    private List<Class<? extends Annotation>> bundledStereotypes =
-            Arrays.asList(Component.class, Intercepts.class, Convert.class, Resource.class);
+//    @SuppressWarnings("unchecked")
+//    private List<Class<? extends Annotation>> bundledStereotypes =
+//            Arrays.asList(Component.class, Intercepts.class, Convert.class, Resource.class);
 
     private final ComponentRegistry registry;
 	private final List<StereotypeHandler> handlers;
@@ -73,13 +67,21 @@ public class StereotypedComponentRegistrar implements Registrar {
 
     public void registerFrom(Scanner scanner) {
         logger.info("Registering all classes with stereotyped annotations (annotations annotated with @Stereotype)");
-        for (Class<? extends Annotation> bundledStereotype : bundledStereotypes) {
-            Collection<Class<?>> componentTypes = scanner.getTypesWithAnnotation(bundledStereotype);
+//        for (Class<? extends Annotation> bundledStereotype : bundledStereotypes) {
+//            Collection<Class<?>> componentTypes = scanner.getTypesWithAnnotation(bundledStereotype);
+//            for (Class<?> componentType : componentTypes) {
+//                logger.debug("found component: " + componentType + ", annotated with: " + bundledStereotype);
+//                deepRegister(componentType, componentType, new HashSet<Class<?>>());
+//            }
+//        }
+        
+        for (StereotypeHandler handler : handlers) {
+            Collection<Class<?>> componentTypes = scanner.getTypesWithAnnotation(handler.stereotype());
             for (Class<?> componentType : componentTypes) {
-                logger.debug("found component: " + componentType + ", annotated with: " + bundledStereotype);
+                logger.debug("found component: " + componentType + ", annotated with: " + handler.stereotype());
                 deepRegister(componentType, componentType, new HashSet<Class<?>>());
             }
-        }
+		}
 
         Collection<Class<?>> componentTypes = scanner.getTypesWithMetaAnnotation(Stereotype.class);
         for (Class<?> componentType : componentTypes) {

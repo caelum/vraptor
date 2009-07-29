@@ -79,5 +79,16 @@ public class VRaptor2ConvertersTest {
         assertThat(converters.to(Integer.class, container).getClass(), is(typeCompatibleWith(VRaptor3BasedConverter.class)));
         mockery.assertIsSatisfied();
     }
-
+    
+    @Test
+	public void registeringAConverterWillDelegateToTheVRaptor3Converter() throws Exception {
+    	final Converters delegate = mockery.mock(Converters.class);
+    	mockery.checking(new Expectations() {{
+    		allowing(config).getConverters(); will(returnValue(Arrays.asList(new String[0])));
+    		one(delegate).register(VRaptor3BasedConverter.class);
+    	}});
+    	final VRaptor2Converters converters = new VRaptor2Converters(config, delegate);
+    	converters.register(VRaptor3BasedConverter.class);
+    	mockery.assertIsSatisfied();
+	}
 }

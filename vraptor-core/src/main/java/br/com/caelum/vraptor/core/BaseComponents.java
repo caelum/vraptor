@@ -168,7 +168,6 @@ public class BaseComponents {
 		ResourceHandler.class,
 		ConverterHandler.class,
 		InterceptorStereotypeHandler.class,
-		ComponentHandler.class
 	};
     
     @SuppressWarnings("unchecked")

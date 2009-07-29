@@ -36,7 +36,6 @@ import java.util.HashMap;
 import javax.servlet.http.HttpServletResponse;
 
 import org.jmock.Expectations;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.vraptor.validator.ValidationErrors;
 
@@ -48,7 +47,6 @@ import br.com.caelum.vraptor.ioc.WhatToDo;
 import br.com.caelum.vraptor.test.HttpSessionMock;
 import br.com.caelum.vraptor.vraptor2.outject.OutjectionInterceptor;
 
-@Ignore
 public class ProviderTest extends GenericContainerTest {
     private int counter;
 

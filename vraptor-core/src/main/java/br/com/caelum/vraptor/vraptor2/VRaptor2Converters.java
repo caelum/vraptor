@@ -3,9 +3,6 @@ package br.com.caelum.vraptor.vraptor2;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
-
-import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.core.DefaultConverters;
@@ -54,8 +51,7 @@ public class VRaptor2Converters implements Converters {
 	}
 
 	public void register(Class<? extends Converter<?>> converterClass) {
-		throw new UnsupportedOperationException(
-				"cannot add vr3 converters in vr2 converters container (or should we delegate?");
+		vraptor3.register(converterClass);
 	}
 
 }

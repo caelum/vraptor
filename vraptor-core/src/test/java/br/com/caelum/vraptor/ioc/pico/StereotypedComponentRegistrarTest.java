@@ -19,7 +19,6 @@ import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.Resource;
-import br.com.caelum.vraptor.core.ComponentHandler;
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.ioc.Stereotype;
 import br.com.caelum.vraptor.ioc.StereotypeHandler;

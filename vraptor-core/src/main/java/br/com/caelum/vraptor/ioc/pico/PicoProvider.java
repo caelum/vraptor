@@ -100,6 +100,7 @@ public class PicoProvider implements ContainerProvider {
 	    for (Class<? extends StereotypeHandler> entry : BaseComponents.getStereotypeHandlers()) {
 			registry.register(entry, entry);
 		}
+	    registry.register(ComponentHandler.class, ComponentHandler.class);
 	    for (Map.Entry<Class<?>, Class<?>> entry : BaseComponents.getApplicationScoped().entrySet()) {
 	        registry.register(entry.getKey(), entry.getValue());
 	    }
@@ -114,6 +115,7 @@ public class PicoProvider implements ContainerProvider {
 	    registry.register(InterceptorRegistrar.class, InterceptorRegistrar.class);
 	    registry.register(ConverterRegistrar.class, ConverterRegistrar.class);
 	    registry.register(ComponentFactoryRegistrar.class, ComponentFactoryRegistrar.class);
+	    registry.register(StereotypedComponentRegistrar.class, StereotypedComponentRegistrar.class);
 	}
 
 	protected void registerCustomComponents(PicoContainer picoContainer, Scanner scanner) {

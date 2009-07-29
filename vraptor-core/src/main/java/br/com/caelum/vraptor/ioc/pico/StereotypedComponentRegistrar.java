@@ -53,10 +53,6 @@ import br.com.caelum.vraptor.ioc.StereotypeHandler;
 public class StereotypedComponentRegistrar implements Registrar {
     private final Logger logger = LoggerFactory.getLogger(StereotypedComponentRegistrar.class);
     
-//    @SuppressWarnings("unchecked")
-//    private List<Class<? extends Annotation>> bundledStereotypes =
-//            Arrays.asList(Component.class, Intercepts.class, Convert.class, Resource.class);
-
     private final ComponentRegistry registry;
 	private final List<StereotypeHandler> handlers;
 
@@ -67,19 +63,13 @@ public class StereotypedComponentRegistrar implements Registrar {
 
     public void registerFrom(Scanner scanner) {
         logger.info("Registering all classes with stereotyped annotations (annotations annotated with @Stereotype)");
-//        for (Class<? extends Annotation> bundledStereotype : bundledStereotypes) {
-//            Collection<Class<?>> componentTypes = scanner.getTypesWithAnnotation(bundledStereotype);
-//            for (Class<?> componentType : componentTypes) {
-//                logger.debug("found component: " + componentType + ", annotated with: " + bundledStereotype);
-//                deepRegister(componentType, componentType, new HashSet<Class<?>>());
-//            }
-//        }
         
         for (StereotypeHandler handler : handlers) {
             Collection<Class<?>> componentTypes = scanner.getTypesWithAnnotation(handler.stereotype());
             for (Class<?> componentType : componentTypes) {
                 logger.debug("found component: " + componentType + ", annotated with: " + handler.stereotype());
-                deepRegister(componentType, componentType, new HashSet<Class<?>>());
+                handler.handle(componentType);
+        		deepRegister(componentType, componentType, new HashSet<Class<?>>());
             }
 		}
 

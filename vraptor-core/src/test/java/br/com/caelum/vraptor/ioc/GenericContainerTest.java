@@ -52,6 +52,7 @@ import org.hamcrest.MatcherAssert;
 import org.jmock.Mockery;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.ComponentRegistry;
@@ -100,6 +101,7 @@ import br.com.caelum.vraptor.view.PathResolver;
  *
  * @author Guilherme Silveira
  */
+@Ignore
 public abstract class GenericContainerTest {
 
     protected Mockery mockery;

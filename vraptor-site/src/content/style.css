@@ -132,7 +132,7 @@ div#box01 {
 	height: 245px;
 	left: 0px;
 	top: 0px;
-	background-image: url(images/bg_roxo.png);
+	background-image: url(images/bg_verde.png);
 	overflow: hidden;
 }
 div#box02 {
@@ -142,7 +142,7 @@ div#box02 {
 	height: 245px;
 	left: 297px;
 	top: 0px;
-	background-image: url(images/bg_verde.png);
+	background-image: url(images/bg_roxo.png);
 	overflow: hidden;
 }
 div#box03 {

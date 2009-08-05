@@ -21,7 +21,8 @@ será armazenado através das anotações de escopo.
 [java]
 public interface Interceptor {
 
-    void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws InterceptionException;
+    void intercept(InterceptorStack stack, ResourceMethod method, 
+					Object resourceInstance) throws InterceptionException;
 
     boolean accepts(ResourceMethod method);
 
@@ -47,7 +48,8 @@ public class Log implements Interceptor {
 		this.request = request;
 	}
 
-    public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws InterceptionException {
+    public void intercept(InterceptorStack stack, ResourceMethod method, 
+						Object resourceInstance) throws InterceptionException {
     	System.out.println("Interceptando " + request.getRequestURI());
     	stack.next(method, resourceInstance);
     }
@@ -83,7 +85,8 @@ public class DatabaseInterceptor implements br.com.caelum.vraptor.Interceptor {
 		this.request = request;
 	}
 
-	public void intercept(InterceptorStack stack, ResourceMethod method, Object instance) throws InterceptionException {
+	public void intercept(InterceptorStack stack, ResourceMethod method, 
+							Object instance) throws InterceptionException {
 		result.include("contextPath", request.getContextPath());
 		try {
 			controller.beginTransaction();

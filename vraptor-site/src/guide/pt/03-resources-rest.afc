@@ -337,5 +337,7 @@ Por fim, você pode escolher o nome da classe e o nome do método em tempo de ex
 que permite criar rotas extremamente genéricas:
 
 [java]
-    routeFor("/{webResource}/facaAlgo/{webMethod}").is(type("br.com.caelum.nomedoprojeto.{webResource}"), method("{webMethod}"));
+    routeFor("/{webResource}/facaAlgo/{webMethod}").is(
+		type("br.com.caelum.nomedoprojeto.{webResource}"), 
+		method("{webMethod}"));
 [/java]

@@ -1,0 +1,253 @@
+body {
+	margin: 0;
+	padding: 0;
+	background-color: #F2F2F2;
+}
+a:link {
+	color: #2A2948;
+	text-decoration: none;
+}
+a:visited {
+	text-decoration: none;
+	color: #2A2948;
+}
+a:hover {
+	text-decoration: none;
+	color: #818285;
+}
+a:active {
+	text-decoration: none;
+	color: #818285;
+}
+
+#all {
+	background-color: #FFFFFF;
+	margin: 0 auto;
+	width: 900px;
+	border: 1px solid #CCCCCC;
+}
+
+#header {
+	width: 900px;
+	height: 150px;
+}
+
+#logo {
+	float: none;
+	width: 900px;
+	height: 100px;
+	text-align: center;
+	margin-top: 0px;
+	margin-right: auto;
+	margin-bottom: 0;
+	margin-left: auto;
+}
+
+#centeredmenu {
+	float:left;
+	width:100%;
+	position:relative;
+	font-family: Tahoma;
+	font-size: 11pt;
+	color: #2A2948;
+}
+#centeredmenu ul {
+	clear:left;
+	float:left;
+	list-style:none;
+	margin:0;
+	position:relative;
+	left:50%;
+	text-align:center;
+	color: #2A2948;
+	padding: 0;
+}
+#centeredmenu ul li {
+	display:block;
+	float:left;
+	list-style:none;
+	margin:0;
+	position:relative;
+	right:50%;
+	color: #2A2948;
+	padding-top: 0;
+	padding-right: 2px;
+	padding-bottom: 0;
+	padding-left: 2px;
+}
+#centeredmenu ul li a {
+	display:block;
+	color:#2A2948;
+	text-decoration:none;
+	margin-top: 0;
+	margin-right: 0;
+	margin-bottom: 0;
+	margin-left: 0px;
+	padding: 0px;
+}
+#centeredmenu ul li a:hover {
+	color:#818285;
+}
+#centeredmenu ul li a.active,
+#centeredmenu ul li a.active:hover {
+}
+
+#wrapper {
+}
+
+#conteudo {
+	width: 900px;
+	background-color: #FFFFFF;
+	text-align: left;
+	margin-top: 0;
+	margin-right: auto;
+	margin-bottom: 0;
+	margin-left: auto;
+}
+
+#banner {
+	width: 880px;
+	height: 200px;
+	margin-top: 0px;
+	margin-right: 10px;
+	margin-bottom: 0px;
+	margin-left: 10px;
+	background-color: #2A2948;
+}
+
+#boxes {
+	width: 880px;
+	margin-top: 10px;
+	margin-right: 10px;
+	margin-bottom: 0px;
+	margin-left: 10px;
+	position: relative;
+	height: 245px;
+}
+
+div#box01 {
+	width:287px;
+	position: absolute;
+	z-index: 10;
+	height: 245px;
+	left: 0px;
+	top: 0px;
+	background-image: url(images/bg_roxo.png);
+	overflow: hidden;
+}
+div#box02 {
+	width:287px;
+	position: absolute;
+	z-index: 10;
+	height: 245px;
+	left: 297px;
+	top: 0px;
+	background-image: url(images/bg_verde.png);
+	overflow: hidden;
+}
+div#box03 {
+	width:287px;
+	position: absolute;
+	z-index: 10;
+	height: 245px;
+	left: 593px;
+	top: 0px;
+	background-image: url(images/bg_amarelo.png);
+	overflow: hidden;
+}
+
+.box_texto {
+	font-family: Tahoma;
+	font-size: 9pt;
+	color: #FFFFFF;
+	padding-top: 55px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+}
+
+.texto {
+	font-family: Tahoma;
+	font-size: 9pt;
+	padding-right: 10px;
+	padding-left: 10px;
+}
+
+
+#titulo {
+	width: 850px;
+	height: 40px;
+	margin-top: 0px;
+	margin-right: 25px;
+	margin-bottom: 0px;
+	margin-left: 25px;
+}
+
+#texto_01 {
+	width: 850px;
+	background-color: #FFFFFF;
+	font-family: Tahoma;
+	color: #2A2948;
+	font-size: 11pt;
+	text-align: left;
+	padding: 0px;
+	margin-top: 15px;
+	margin-right: 25px;
+	margin-bottom: 15px;
+	margin-left: 25px;
+}
+
+
+#footer {
+	width: 900px;
+	height: 30px;
+	background-color: #FFFFFF;
+	font-size: 10pt;
+	text-align: center;
+	font-family: Tahoma;
+	margin-top: 0;
+	margin-right: auto;
+	margin-bottom: 0;
+	margin-left: auto;
+	padding-right: 0;
+	padding-bottom: 15px;
+	padding-left: 0;
+	padding-top: 15px;
+}
+#texto_02 {
+	width: 675px;
+	background-color: #FFFFFF;
+	font-family: Tahoma;
+	color: #2A2948;
+	font-size: 11pt;
+	text-align: left;
+	padding: 0px;
+	margin-top: 15px;
+	margin-right: 25px;
+	margin-bottom: 15px;
+	margin-left: 25px;
+	position: relative;
+	left: 175px;
+	top: -190px;
+	list-style-image: url(images/imagem_icon.jpg);
+	list-style-position: inside;
+	list-style-type: none;
+}
+#imagem_lateral {
+	width: 150px;
+	background-color: #FFFFFF;
+	font-family: Tahoma;
+	color: #2A2948;
+	font-size: 11pt;
+	text-align: left;
+	padding: 0px;
+	margin-top: 0px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+	margin-left: 0px;
+	position: relative;
+	height: 200px;
+	left: 25px;
+	top: 25px;
+	vertical-align: top;
+}

@@ -1,110 +1,90 @@
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
-	<title>VRaptor</title>
-	<link rel="stylesheet" type="text/css" media="all" href="css/vraptor.css" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>VRaptor - Powered by Caelum</title>
+<meta name="keywords" content="" />
+<meta name="Small Window " content="" />
+<link href="style.css" rel="stylesheet" type="text/css" media="screen" />
 </head>
 <body>
 
-<h2>Why VRaptor?</h2>
-<p>
-VRaptor is a refactor-friendly web framework where the authors try to implement RESTFul support.<br/>
-Why would you use it rather than A, B or C?<br/>
-VRaptor allows you to programmatic configure routes, validation rules and more in such a way that refactor does not break
-compatibility with the uris which identify your resources.<br/>
-<br/>
-In the future, vraptor might be fully (level 3) RESTFul compatbile as it has been called, with support to hypermedia links, although this can
-be currently implemented by vraptor users in their own projects using the functionalities provided by VRaptor.  
-</p>
+<!-- start header -->
+<div id="all">
+<div id="header">
+<div id="logo"><img src="images/marca.png" alt="VRaptor" width="300" height="100" border="0"></div>
 
-<h2>What is new in VRaptor 3.0.0-beta-1?</h2>
-<p>
-This is the first public release of VRaptor 3.0.0-beta, that's why we have a huge list of features already implemented:
+<div id="centeredmenu">
 <ul>
-<li> better than vraptor2: support for inheritance</li>
-<li> support for client side redirect to logic with refactoring support! all you need is an accessible non-args constructor</li>
-<li> support @Path</li>
-<li> ant build run tests</li>
-<li> cobertura report</li>
-<li> spring support</li>
-<li> invoke method</li>
-<li> support @Post, @...</li>
-<li> support Result with include</li>
-<li> vraptor info component</li>
-<li> support Result with custom views</li>
-<li> customizable strategies for PathResolver</li>
-<li> default strategy: resourceclass + resourcemethod</li>
-<li> sl4j usage</li>
-<li> interceptor support</li>
-<li> type converters</li>
-<li> ognl support</li>
-<li> vraptor2: @Component lookup</li>
-<li> validation support</li>
-<li> pico: STARTABLE/STOPABLE COMPONENTS with @PostConstruct, @PreDestroy</li>
-<li> vraptor2: public method lookup (old algo)</li>
-<li> vraptor2: converter without request/session/context access support</li>
-	<li> v2: view interceptor</li>
-	<li> vraptor2 path resolver</li>
-	<li> vraptor2 component instantiation</li>
-	<li> vraptor2 interceptor instantiation</li>
-	<li> vraptor2 regex view manager support</li>
-	<li> vraptor2: pathresolver support on vraptor.xml based info</li>
-	<li> v2: support to validate method (improved: complain about method with wrong number of args)</li>
-	<li> v2: support for views.properties</li>
-	<li> method invocation without parameters</li>
-	<li> custom vraptor2 converters through custom Converters implementation</li>
-	<li> v2: instantiate with injection</li>
-	<li> v2: better clarifying messages on common mistakes (i.e. logic getter which receives a parameter)</li>
-	<li> v2: getters for outjection</li>
-	<li> v2: method invocation with parameters</li>
-	<li> v2: @Logic (parameters=...) support</li>
-	<li> v2: default Logic,Action and so on key removal</li>
-	<li> v2: constructor injection only</li>
-<li> automatic redirect</li>
-<li> hibernate validator</li>
-<li> converters
-	primitive
-	wrappers
-	calendar
-	date
-	bigdecimal
-	File
-	enum
-	primitive</li>
-<li> paranamer support</li>
-<li> Collection, List, Set, Calendar, SortedSet, Queue interface support</li>
-<li> path annotation default value (without annotation)</li>
-<li> path annotation with support to regex (niceurls?)</li>
-<li> interceptor sequence support</li>
-<li> support for redirect on Result</li>
-<li> support to viewless</li>
-<li> support server side redirect to a random url</li>
-<li> cute validation methods</li>
-<li> cute validation should methods</li>
-<li> server forward based on Logic result</li>
-<li> client redirect based on Logic result</li>
-<li> server forward/include based on url</li>
-<li> client redirect based on url</li>
-<li> biginteger,bigdecimal converters</li>
-<li> 404 component</li>
-<li> i18n conversion messages</li>
-<li>support HibernateValidator with i18n messages</li>
-<li> Router support</li>
-<li> ClientsController -- clients.list</li>
-<li> path annotation and routes with support to value injection</li>
-<li> client side and server side redirect works with parameters from Route system</li>
-<li> supports "_method" parameter due to browser and xhtml nature</li>
-<li> router extra support</li>
-<li> routeFor("/(*)").is(type(""),method(""));</li>
-<li> support to method return != string -- outject</li>
-<li> support to niceurls with {webLogic} and {webMethod}</li>
-<li> support to method return != string -- outject</li>
-<li> accept support "_format" parameter</li>
-<li> support return File, InputStream, Download</li>
-<li> add a String format to result: web/controllerName/resourceMethod.format.jsp</li>
-	<li> default being web/controllerName/resouceMethod.jsp for format=html</li>
+		<li><a href="index.html">Home</a></li>
+        <li>|</li>
+		<li><a href="download.html">Download</a></li>
+		<li>|</li>  
+        <li><a href="vantagens.html">Vantagens</a></li>
+		<li>|</li>
+        <li><a href="depoimentos.html">Depoimentos</a></li>
+		<li>|</li>
+        <li><a href="equipe.html">Equipe</a></li>
+		<li>|</li>
+    	<li><a href="documentacao.html"><b>Documentação</b></a></li>
 </ul>
-</p>
+</div>
 
+</div>
+<!-- finish header -->
+
+<!-- start conteudo -->
+
+<div id="wrapper">
+<div id="conteudo">
+
+<div id="titulo"><img src="images/hea_vraptor.jpg" alt="Título" width="850" height="40"></div>
+
+<div id="texto_01">
+<p><strong>O que é o VRaptor?</strong></p>
+  <p><strong>
+    </strong>VRaptor é um controlador MVC para web focado no desenvolvimento ágil. Através da inversão de controle e injeção de depêndencias ele corta drasticamente o tempo de trabalho que seria perdido com o código repetitivo: validações, conversões, direcionamentos e lookups. Ele se adequa perfeitamente para trabalhar com o JSP na camada de apresentação e com Hibernate na persistência, mas mesmo assim a escolha e sua: você pode utilizar EntityBeans+Velocity, ou OJB+FreeMarker.<br />
+  </p>
+  <p>Ele está totalmente baseado em anotações do java 5.0. O resultado? Uma maneira mais simples de trabalhar com programação para a web. Suas lógicas de negócio não entram em contato com a api javax.servlet, com muito menos configuração do que outros controladores web.<br />
+  </p>
+  <p>O VRaptor prioriza convenções em vez de configurações, uma vez que a configuração em arquivos xml, properties ou mesmo anotações podem se tornar extensivas e repetitivas.<br />
+  </p>
+  <p>A maior parte da configuração é feita em classes Java simples (POJOs) ou simplesmente não é feita, permitindo seguir um padrão onde quase nada precisa ser configurado.<br />
+  </p>
+</div>
+
+<div id="boxes">
+<div id="box01">
+		<ul class="box_texto">
+			<li>baseado em anotações</li>
+	        <li>favorece convenções e minimiza configurações</li>
+	        <li>nada de complexas estruturas de configuração</li>
+	        <li>curva de aprendizado rápida</li>
+	        <li>lógica implementada em POJOs (favorece a reutilização)</li>
+	  	</ul>
+  </div>
+  <div id="box02">
+    <p class="box_texto">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ullamcorper gravida elit vel auctor. Mauris nibh augue, adipiscing sit amet vehicula ac, tempor sit amet justo. Curabitur sed massa dui, nec fermentum elit.<br />
+      <br />
+    Aliquam nec nisi id ligula congue auctor ut non purus. Curabitur at velit vel ante consectetur imperdiet sed sit amet sem.<br />
+    <br />
+    Saiba mai</p>
+  </div>
+  <div id="box03"><p class="box_texto">em ipsum dolor sit amet, consectetur adipiscing elit. Donec ullamcorper gravida elit vel auctor. Mauris nibh augue, adipiscing sit amet vehicula ac, tempor sit amet justo. Curabitur sed massa dui, nec fermentum elit.<br />
+      <br />
+    Aliquam nec nisi id ligula congue auctor ut non purus. Curabitur at velit vel ante consectetur imperdiet sed sit amet sem.<br />
+    <br />
+    Saiba mais</p>
+  </div>
+</div>  
+
+</div>
+</div>
+
+
+<div id="footer">
+	<p><a href="http://www.caelum.com.br" target="_blank">VRaptor ©2009 Caelum - Ensino e Inovação</a></p>
+</div>
+</div>
 </body>
 </html>

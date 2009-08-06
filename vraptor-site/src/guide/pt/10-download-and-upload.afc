@@ -19,7 +19,7 @@ public class PerfilController {
 [/code]
 
 
-[chapter exemplo de 1 minuto: upload]
+[section exemplo de 1 minuto: upload]
 
 O primeiro exemplo será baseado na funcionalidade de upload multipart.
 

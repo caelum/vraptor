@@ -1,0 +1,184 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>VRaptor - Powered by Caelum | Resources-Rest 
+			
+				-> @Path
+
+</title>
+<meta name="keywords" content="" />
+<meta name="Small Window " content="" />
+<link href="../../includes/css/style.css" rel="stylesheet" type="text/css" media="screen" />
+</head>
+<body>
+
+<!-- start header -->
+<div id="all">
+<div id="header">
+
+<div id="logo"><img src="../../includes/images/marca.png" alt="VRaptor" width="300" height="100" border="0"></div>
+
+<div id="centeredmenu">
+<ul>
+		<li><a href="../../../../index.html">Home</a></li>
+        <li>|</li>
+		<li><a href="../../../../download.html">Download</a></li>
+		<li>|</li>  
+        <li><a href="../../../../vantagens.html">Vantagens</a></li>
+		<li>|</li>
+        <li><a href="../../../../depoimentos.html">Depoimentos</a></li>
+		<li>|</li>
+        <li><a href="../../../../equipe.html">Equipe</a></li>
+		<li>|</li>
+    	<li><a href="../../../../documentacao.html"><b>Documentação</b></a></li>
+</ul>
+</div>
+
+</div>
+<!-- finish header -->
+
+<!-- start conteudo -->
+
+<div id="wrapper">
+<div id="conteudo">
+
+<div id="titulo"><img src="../../includes/images/hea_documentacao.jpg" alt="Título" width="850" height="40"></div>
+
+<div id="texto_01">
+<h2 class="section">@Path</h2>
+	    	<span class="paragraph">A anota&ccedil;&atilde;o <code class="inlineCode">@Path</code> permite que voc&ecirc; customize as URIs de acesso a seus m&eacute;todos.
+O uso b&aacute;sico dessa anota&ccedil;&atilde;o &eacute; feito atrav&eacute;s de uma URI fixa. O exemplo a seguir mostra
+a customiza&ccedil;&atilde;o de uma URI para um m&eacute;todo, que somente receber&aacute; requisi&ccedil;&otilde;es do tipo
+<em class="italic">POST</em> na URI <strong class="definition">/cliente</strong>:</span>
+	    	<div class="java"><code class="java">
+<span class="java16">@Resource<br />
+</span><span class="java4">public class </span><span class="java10">ClienteController </span><span class="java8">{<br />
+<br />
+&nbsp; </span><span class="java16">@Path</span><span class="java8">(</span><span class="java5">&#34;/cliente&#34;</span><span class="java8">)<br />
+&nbsp; </span><span class="java16">@Post <br />
+&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">adiciona</span><span class="java8">(</span><span class="java10">Cliente cliente</span><span class="java8">) {<br />
+&nbsp; }<br />
+&nbsp;&nbsp;&nbsp; <br />
+}</span></code></div>
+	    	<span class="paragraph"><strong class="title">Path com inje&ccedil;&atilde;o de vari&aacute;veis</strong></span>
+	    	<span class="paragraph">Em diversos casos desejamos que a <em class="italic">uri</em> que identifica meu recurso tenha
+como parte de seu valor, por exemplo, o identificador &uacute;nico de meu recurso.</span>
+	    	<span class="paragraph">Suponha o exemplo de um controle de clientes onde meu identificador &uacute;nico (chave
+prim&aacute;ria) &eacute; um n&uacute;mero, podemos ent&atilde;o mapear as uris <em class="italic">/cliente/{cliente.id}</em>
+para a visualiza&ccedil;&atilde;o de cada cliente.</span>
+	    	<span class="paragraph">Isto &eacute;, se acessarmos a uri <em class="italic">/cliente/2</em>, o m&eacute;todo <strong class="definition">visualiza</strong> ser&aacute; invocado
+e o par&acirc;metro <em class="italic">cliente.id</em> ser&aacute; setado para <strong class="definition">2</strong>. Caso a uri <em class="italic">/cliente/1717</em> seja
+acessada, o mesmo m&eacute;todo ser&aacute; invocado com o valor <strong class="definition">1717</strong>.</span>
+	    	<span class="paragraph">Dessa maneira criamos uris &uacute;nicas para identificar recursos diferentes do nosso sistema.
+Veja o exemplo citado:</span>
+	    	<div class="java"><code class="java">
+<span class="java16">@Resource<br />
+</span><span class="java4">public class </span><span class="java10">ClienteController </span><span class="java8">{<br />
+<br />
+&nbsp; </span><span class="java16">@Get<br />
+&nbsp; @Path</span><span class="java8">(</span><span class="java5">&#34;/cliente/{cliente.id}&#34;</span><span class="java8">)&nbsp; <br />
+&nbsp; </span><span class="java4">public </span><span class="java10">Cliente visualiza</span><span class="java8">(</span><span class="java10">Cliente cliente</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">return </span><span class="java10">...<br />
+&nbsp; </span><span class="java8">}<br />
+&nbsp; <br />
+}</span></code></div>
+	    	<span class="paragraph">Voc&ecirc; pode ir al&eacute;m e setar diversos par&acirc;metros atrav&eacute;s da uri:</span>
+	    	<div class="java"><code class="java">
+<span class="java16">@Resource<br />
+</span><span class="java4">public class </span><span class="java10">ClienteController </span><span class="java8">{<br />
+<br />
+&nbsp; </span><span class="java16">@Get<br />
+&nbsp; @Path</span><span class="java8">(</span><span class="java5">&#34;/cliente/{cliente.id}/visualiza/{secao}&#34;</span><span class="java8">)&nbsp; <br />
+&nbsp; </span><span class="java4">public </span><span class="java10">Cliente visualiza</span><span class="java8">(</span><span class="java10">Cliente cliente, String secao</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">return </span><span class="java10">...<br />
+&nbsp; </span><span class="java8">}<br />
+&nbsp; <br />
+}</span></code></div>
+	    	<span class="paragraph"><strong class="title">Paths com *</strong></span>
+	    	<span class="paragraph">Voc&ecirc; tamb&eacute;m pode utilizar o * como m&eacute;todo de sele&ccedil;&atilde;o para a sua uri. O exemplo a
+seguir ignora qualquer coisa ap&oacute;s a palavra <em class="italic">foto/</em> :</span>
+	    	<div class="java"><code class="java">
+<span class="java16">@Resource<br />
+</span><span class="java4">public class </span><span class="java10">ClienteController </span><span class="java8">{<br />
+<br />
+&nbsp; </span><span class="java16">@Get<br />
+&nbsp; @Path</span><span class="java8">(</span><span class="java5">&#34;/cliente/{cliente.id}/foto/*&#34;</span><span class="java8">)&nbsp; <br />
+&nbsp; </span><span class="java4">public </span><span class="java10">File foto</span><span class="java8">(</span><span class="java10">Cliente cliente</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">return </span><span class="java10">...<br />
+&nbsp; </span><span class="java8">}<br />
+&nbsp; <br />
+}</span></code></div>
+	    	<span class="paragraph">E agora o mesmo c&oacute;digo, mas utilizado para baixar uma foto espec&iacute;fica de um cliente:</span>
+	    	<div class="java"><code class="java">
+<span class="java16">@Resource<br />
+</span><span class="java4">public class </span><span class="java10">ClienteController </span><span class="java8">{<br />
+<br />
+&nbsp; </span><span class="java16">@Get<br />
+&nbsp; @Path</span><span class="java8">(</span><span class="java5">&#34;/cliente/{cliente.id}/foto/{foto.id}&#34;</span><span class="java8">)&nbsp; <br />
+&nbsp; </span><span class="java4">public </span><span class="java10">File foto</span><span class="java8">(</span><span class="java10">Cliente cliente, Foto foto</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">return </span><span class="java10">...<br />
+&nbsp; </span><span class="java8">}<br />
+&nbsp; <br />
+}</span></code></div>
+	    	<span class="paragraph">Por vezes voc&ecirc; deseja que o par&acirc;metro a ser setado inclua tamb&eacute;m <strong class="definition">/</strong>s. Para isso
+voc&ecirc; deve utilizar o padr&atilde;o {...*}:</span>
+	    	<div class="java"><code class="java">
+<span class="java16">@Resource<br />
+</span><span class="java4">public class </span><span class="java10">ClienteController </span><span class="java8">{<br />
+<br />
+&nbsp; </span><span class="java16">@Get<br />
+&nbsp; @Path</span><span class="java8">(</span><span class="java5">&#34;/cliente/{cliente.id}/download/{path*}&#34;</span><span class="java8">)&nbsp; <br />
+&nbsp; </span><span class="java4">public </span><span class="java10">File download</span><span class="java8">(</span><span class="java10">Cliente cliente, String path</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">return </span><span class="java10">...<br />
+&nbsp; </span><span class="java8">}<br />
+&nbsp; <br />
+}</span></code></div>
+	    	<span class="paragraph"><strong class="title">Definindo prioridades para seus paths</strong></span>
+	    	<span class="paragraph">&Eacute; poss&iacute;vel que algumas das nossas URIs possa ser tratada por mais de um m&eacute;todo da classe:</span>
+	    	<div class="java"><code class="java">
+<span class="java16">@Resource<br />
+</span><span class="java4">public class </span><span class="java10">PostController </span><span class="java8">{<br />
+<br />
+&nbsp; </span><span class="java16">@Get<br />
+&nbsp; @Path</span><span class="java8">(</span><span class="java5">&#34;/post/{post.id}&#34;</span><span class="java8">)<br />
+&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">mostra</span><span class="java8">(</span><span class="java10">Post post</span><span class="java8">) { </span><span class="java10">... </span><span class="java8">}<br />
+<br />
+&nbsp; </span><span class="java16">@Get<br />
+&nbsp; @Path</span><span class="java8">(</span><span class="java5">&#34;/post/atual&#34;</span><span class="java8">)<br />
+&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">atual</span><span class="java8">() { </span><span class="java10">... </span><span class="java8">}<br />
+}</span></code></div>
+	    	<span class="paragraph">A uri <code class="inlineCode">/post/atual</code> pode ser tratada tanto pelo m&eacute;todo <code class="inlineCode">mostra%, quanto pelo </code>atual<code class="inlineCode">.
+Mas n&atilde;o faz sentido eu passar essa URL para o m&eacute;todo mostra, j&aacute; que </code>post.id<code class="inlineCode"> deveria
+ser um n&uacute;mero. O que eu quero &eacute; que o VRaptor teste primeiro o path do m&eacute;todo </code>atual<code class="inlineCode">,
+para n&atilde;o correr o risco de cair no m&eacute;todo </code>mostra%%.</span>
+	    	<span class="paragraph">Para fazer isso, podemos definir prioridades para os <code class="inlineCode">@Path</code>s, assim o VRaptor vai testar
+primeiro os paths com maior prioridade, ou seja, valor menor de prioridade:</span>
+	    	<div class="java"><code class="java">
+<span class="java16">@Resource<br />
+</span><span class="java4">public class </span><span class="java10">PostController </span><span class="java8">{<br />
+<br />
+&nbsp; </span><span class="java16">@Get<br />
+&nbsp; @Path</span><span class="java8">(</span><span class="java10">priority = </span><span class="java7">2</span><span class="java10">, value = </span><span class="java5">&#34;/post/{post.id}&#34;</span><span class="java8">)<br />
+&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">mostra</span><span class="java8">(</span><span class="java10">Post post</span><span class="java8">) { </span><span class="java10">... </span><span class="java8">}<br />
+<br />
+&nbsp; </span><span class="java16">@Get<br />
+&nbsp; @Path</span><span class="java8">(</span><span class="java10">priority = </span><span class="java7">1</span><span class="java10">, value = </span><span class="java5">&#34;/post/atual&#34;</span><span class="java8">)<br />
+&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">atual</span><span class="java8">() { </span><span class="java10">... </span><span class="java8">}<br />
+}</span></code></div>
+	    	<span class="paragraph">Assim, o path "/post/atual" vai ser testado antes do "/post/{post.id}", e o VRaptor vai fazer
+o que a gente gostaria que ele fizesse.</span>
+		
+
+	</div>
+</div>
+</div>
+
+
+<div id="footer">
+	<p><a href="http://www.caelum.com.br" target="_blank">VRaptor ©2009 Caelum - Ensino e Inovação</a></p>
+</div>
+</div>
+</body>
+</html>

@@ -27,9 +27,9 @@
 			<arg line="-i" />
 			<arg line="src/guide/pt/" />
 			<arg line="-o" />
-			<arg line="src/content/documentacao" />
+			<arg line="src/content/" />
 			<arg line="-n" />
-			<arg line="guide" />
+			<arg line="documentacao" />
 			<arg line="-t"/>
 			<arg line="src/templates"/>
 		</exec>

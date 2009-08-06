@@ -122,17 +122,16 @@ a:active {
 	margin-bottom: 0px;
 	margin-left: 10px;
 	position: relative;
-	height: 245px;
+	height: 260px;
 }
 
 div#box01 {
-	width:287px;
+	width:292px;
 	position: absolute;
 	z-index: 10;
-	height: 245px;
+	height: 270px;
 	left: 0px;
 	top: 0px;
-	background-image: url(images/bg_verde.png);
 	overflow: hidden;
 }
 div#box02 {
@@ -142,8 +141,12 @@ div#box02 {
 	height: 245px;
 	left: 297px;
 	top: 0px;
-	background-image: url(images/bg_roxo.png);
 	overflow: hidden;
+	background-image: url(images/bg_amarelo.png);
+}
+div#box0 {
+	left: 10000000px;
+	top: 0px;
 }
 div#box03 {
 	width:287px;
@@ -152,7 +155,7 @@ div#box03 {
 	height: 245px;
 	left: 593px;
 	top: 0px;
-	background-image: url(images/bg_amarelo.png);
+	background-image: url(images/bg_roxo.png);
 	overflow: hidden;
 }
 

@@ -1,0 +1,96 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>VRaptor - Powered by Caelum | VRaptor3 - o guia inicial de 5 minutos 
+			
+				-> Inserindo numa base de dados
+
+</title>
+<meta name="keywords" content="" />
+<meta name="Small Window " content="" />
+<link href="../../includes/css/style.css" rel="stylesheet" type="text/css" media="screen" />
+</head>
+<body>
+
+<!-- start header -->
+<div id="all">
+<div id="header">
+
+<div id="logo"><img src="../../includes/images/marca.png" alt="VRaptor" width="300" height="100" border="0"></div>
+
+<div id="centeredmenu">
+<ul>
+		<li><a href="../../../../index.html">Home</a></li>
+        <li>|</li>
+		<li><a href="../../../../download.html">Download</a></li>
+		<li>|</li>  
+        <li><a href="../../../../vantagens.html">Vantagens</a></li>
+		<li>|</li>
+        <li><a href="../../../../depoimentos.html">Depoimentos</a></li>
+		<li>|</li>
+        <li><a href="../../../../equipe.html">Equipe</a></li>
+		<li>|</li>
+    	<li><a href="../../../../documentacao.html"><b>Documentação</b></a></li>
+</ul>
+</div>
+
+</div>
+<!-- finish header -->
+
+<!-- start conteudo -->
+
+<div id="wrapper">
+<div id="conteudo">
+
+<div id="titulo"><img src="../../includes/images/hea_documentacao.jpg" alt="Título" width="850" height="40"></div>
+
+<div id="texto_01">
+<h2 class="section">Inserindo numa base de dados</h2>
+	    	<span class="paragraph">Considere que, para persistir dados de nosso cat&aacute;logo de m&uacute;sicas em nossa base de dados,
+temos uma classe que vai agir como um <em class="italic">Controller</em> entre a nossa camada de apresen&ccedil;&atilde;o 
+(um JSP) e nosso modelo (classe <code class="inlineCode">Music</code> e um DAO chamado <code class="inlineCode">MusicDao</code>):</span>
+	    	<div class="java"><code class="java">
+<span class="java16">@Resource<br />
+</span><span class="java4">public class </span><span class="java10">MusicController </span><span class="java8">{<br />
+<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">private </span><span class="java10">MusicDao dao;<br />
+<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">MusicController</span><span class="java8">(</span><span class="java10">MusicDao dao</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">this</span><span class="java10">.dao = dao;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">add</span><span class="java8">(</span><span class="java10">Music music</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">dao.save</span><span class="java8">(</span><span class="java10">music</span><span class="java8">)</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+}</span></code></div>
+	    	<span class="paragraph">Utilizamos ent&atilde;o a anota&ccedil;&atilde;o <code class="inlineCode">@Resource</code> para definir que essa classe
+poder&aacute; ser, de alguma forma, acessada via Web.</span>
+	    	<span class="paragraph">Pronto. O VRaptor ser&aacute; capaz de, atrav&eacute;s de seu container de Inje&ccedil;&atilde;o de Depend&ecirc;ncias,
+passar um <code class="inlineCode">MusicDao</code> para seu construtor, e invocar o m&eacute;todo <code class="inlineCode">add</code> com os par&acirc;metros
+adequados de acordo com o que estiver no <code class="inlineCode">HttpServletRequest</code>.</span>
+	    	<span class="paragraph">Se os par&acirc;metros do request forem <code class="inlineCode">music.name</code>, <code class="inlineCode">music.artist</code> e <code class="inlineCode">music.genre</code>,
+um objeto <code class="inlineCode">music</code> ser&aacute; instanciado e seus respectivos <em class="italic">setters</em> invocados.</span>
+	    	<div class="box"><h3>Reflection no nome dos par&acirc;metros</h3>
+<span class="paragraph">Infelizmente, o Java n&atilde;o realiza reflection em cima de par&acirc;metros, esses dados n&atilde;o ficam
+dispon&iacute;veis em bytecode (a n&atilde;o ser se compilado em debug mode, por&eacute;m &eacute; algo opcional). Isso
+faz com que a maioria dos frameworks que precisam desse tipo de inform&ccedil;&atilde;o criem uma anota&ccedil;&atilde;o
+pr&oacute;pria para isso, o que polui muito o c&oacute;digo (exemplo no JAX-WS, onde &eacute; comum encontrar um
+m&eacute;todo como o acima com a assinatura  <code class="inlineCode">void add(@WebParam(name="music") Music music)</code>.</span><span class="paragraph">O VRaptor tira proveito do framework Paranamer (<a class="link" target="_blank" href="http://paranamer.codehaus.org">http://paranamer.codehaus.org</a>), que consegue 
+tirar essaa informa&ccedil;&atilde;o atrav&eacute;s de pr&eacute; compila&ccedil;&atilde;o ou dos dados de debug, evitando criar mais uma 
+anota&ccedil;&atilde;o. Alguns dos desenvolvedores do VRaptor tamb&eacute;m participam no desenvolvimento do Paranamer.</span></div>
+	    	
+		
+
+	</div>
+</div>
+</div>
+
+
+<div id="footer">
+	<p><a href="http://www.caelum.com.br" target="_blank">VRaptor ©2009 Caelum - Ensino e Inovação</a></p>
+</div>
+</div>
+</body>
+</html>

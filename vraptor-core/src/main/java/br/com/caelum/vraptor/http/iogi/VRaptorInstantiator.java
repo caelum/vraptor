@@ -39,13 +39,12 @@ public class VRaptorInstantiator implements Instantiator<Object> {
 		DependencyProvider dependencyProvider = new VRaptorDependencyProvider();
 		VRaptorParameterNamesProvider parameterNamesProvider = new VRaptorParameterNamesProvider();
 		
-		List<Instantiator<?>> instantiatorList = new ImmutableList.Builder<Instantiator<?>>()
-			.add(new VRaptorTypeConverter())
-			.add(new StringConverter())
-			.add(new ArrayInstantiator(this))
-			.add(new NullDecorator(new ListInstantiator(this))) //NOTE: NullDecorator is here to preserve existing behaviour. Don't know if it is the ideal one, though.
-			.add(new ObjectInstantiator(this, dependencyProvider, parameterNamesProvider))
-			.build();
+		List<Instantiator<?>> instantiatorList = ImmutableList.of( 
+			new VRaptorTypeConverter(),
+			new StringConverter(),
+			new ArrayInstantiator(this),
+			new NullDecorator(new ListInstantiator(this)), //NOTE: NullDecorator is here to preserve existing behaviour. Don't know if it is the ideal one, though.
+			new ObjectInstantiator(this, dependencyProvider, parameterNamesProvider));
 		multiInstantiator = new MultiInstantiator(instantiatorList);
 	}
 	

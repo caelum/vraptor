@@ -31,6 +31,7 @@ import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.http.route.RoutesConfiguration;
 import br.com.caelum.vraptor.http.route.Rules;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
+import br.com.caelum.vraptor.ioc.Component;
 
 /**
  * Custom rules only to show how to create your own routes.
@@ -38,6 +39,7 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
  * @author guilherme silveira
  */
 @ApplicationScoped
+@BaseComponent
 public class CustomRoutes implements RoutesConfiguration {
 
     public void config(Router router) {

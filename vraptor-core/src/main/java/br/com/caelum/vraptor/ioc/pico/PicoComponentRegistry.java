@@ -133,7 +133,7 @@ public class PicoComponentRegistry implements ComponentRegistry {
             this.appContainer.addComponent(entry.getKey(), entry.getValue());
         }
 
-        registerComponentFactories(appContainer, componentFactoryRegistry.getApplicationScopedComponentFactoryMap());
+        registerComponentFactories(appContainer, componentFactoryRegistry.getApplicationMap());
 
         logger.debug("Session components to initialize: " + sessionScoped.keySet());
         logger.debug("Requets components to initialize: " + requestScoped.keySet());
@@ -159,7 +159,7 @@ public class PicoComponentRegistry implements ComponentRegistry {
         }
         requestContainer.addComponent(request).addComponent(request.getRequest()).addComponent(request.getResponse());
 
-        registerComponentFactories(requestContainer, componentFactoryRegistry.getRequestScopedComponentFactoryMap());
+        registerComponentFactories(requestContainer, componentFactoryRegistry.getRequestMap());
 
         return new PicoBasedContainer(requestContainer, this.appContainer.getComponent(Router.class));
     }
@@ -189,7 +189,7 @@ public class PicoComponentRegistry implements ComponentRegistry {
             sessionContainer.addComponent(entry.getKey(), entry.getValue());
         }
 
-        registerComponentFactories(sessionContainer, componentFactoryRegistry.getSessionScopedComponentFactoryMap());
+        registerComponentFactories(sessionContainer, componentFactoryRegistry.getSessionMap());
 
         sessionContainer.start();
         return sessionContainer;

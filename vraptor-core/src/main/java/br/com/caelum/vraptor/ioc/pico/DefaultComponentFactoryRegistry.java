@@ -49,15 +49,15 @@ public class DefaultComponentFactoryRegistry implements ComponentFactoryRegistry
         }
     }
 
-    public Map<Class<?>, Class<? extends ComponentFactory>> getApplicationScopedComponentFactoryMap() {
+    public Map<Class<?>, Class<? extends ComponentFactory>> getApplicationMap() {
         return applicationScoped;
     }
 
-    public Map<Class<?>, Class<? extends ComponentFactory>> getSessionScopedComponentFactoryMap() {
+    public Map<Class<?>, Class<? extends ComponentFactory>> getSessionMap() {
         return sessionScoped;
     }
 
-    public Map<Class<?>, Class<? extends ComponentFactory>> getRequestScopedComponentFactoryMap() {
+    public Map<Class<?>, Class<? extends ComponentFactory>> getRequestMap() {
         return requestScoped;
     }
 }

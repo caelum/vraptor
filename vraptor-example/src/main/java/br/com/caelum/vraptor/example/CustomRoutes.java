@@ -39,7 +39,7 @@ import br.com.caelum.vraptor.ioc.Component;
  * @author guilherme silveira
  */
 @ApplicationScoped
-@BaseComponent
+@Component
 public class CustomRoutes implements RoutesConfiguration {
 
     public void config(Router router) {

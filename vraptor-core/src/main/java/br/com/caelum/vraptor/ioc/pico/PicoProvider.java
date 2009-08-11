@@ -93,7 +93,7 @@ public class PicoProvider implements ContainerProvider {
 	}
 
 	/**
-	 * Register extra components that your app wants to.
+	 * Register default vraptor-pico implementation components.
 	 */
 	protected void registerBundledComponents(ComponentRegistry registry) {
 	    logger.debug("Registering base pico container related implementation components");

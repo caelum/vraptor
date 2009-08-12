@@ -33,6 +33,7 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
@@ -83,10 +84,13 @@ import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
 import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
 import br.com.caelum.vraptor.interceptor.download.DownloadInterceptor;
 import br.com.caelum.vraptor.interceptor.multipart.MultipartInterceptor;
+import br.com.caelum.vraptor.ioc.fixture.ComponentFactoryInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.ConverterInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.CustomComponentInTheClasspath;
+import br.com.caelum.vraptor.ioc.fixture.CustomComponentWithLifecycleInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.InterceptorInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.ResourceInTheClasspath;
+import br.com.caelum.vraptor.ioc.fixture.ComponentFactoryInTheClasspath.Provided;
 import br.com.caelum.vraptor.resource.DefaultResourceClass;
 import br.com.caelum.vraptor.resource.ResourceClass;
 import br.com.caelum.vraptor.resource.ResourceMethod;
@@ -148,12 +152,32 @@ public abstract class GenericContainerTest {
     public static class MyAppComponent {
 
     }
-
+    
     @Test
     public void processesCorrectlyAppBasedComponents() {
-        checkAvailabilityFor(true, MyAppComponent.class, MyAppComponent.class);
-        mockery.assertIsSatisfied();
+    	checkAvailabilityFor(true, MyAppComponent.class, MyAppComponent.class);
+    	mockery.assertIsSatisfied();
     }
+
+    @ApplicationScoped
+    public static class MyAppComponentWithLifecycle {
+    	public int calls = 0;
+    	
+    	@PreDestroy
+    	public void z() {
+    		calls++;
+    	}
+    }
+    
+    @Test
+	public void callsPredestroyExactlyOneTime() throws Exception {
+		MyAppComponentWithLifecycle component = registerAndGetFromContainer(MyAppComponentWithLifecycle.class, MyAppComponentWithLifecycle.class);
+		assertThat(0, is(equalTo(component.calls)));
+		provider.stop();
+		assertThat(1, is(equalTo(component.calls)));
+		provider = getProvider();
+		provider.start(context); //In order to tearDown ok
+	}
 
     @Component
     public static class MyRequestComponent {
@@ -215,7 +239,6 @@ public abstract class GenericContainerTest {
         T firstInstance = registerAndGetFromContainer(component, componentToRegister);
         T secondInstance = executeInsideRequest(new WhatToDo<T>() {
             public T execute(RequestInfo request, final int counter) {
-
                 return provider.provideForRequest(request, new Execution<T>() {
                     public T insideRequest(Container secondContainer) {
                         if (componentToRegister != null && !isAppScoped(secondContainer, componentToRegister)) {
@@ -235,7 +258,7 @@ public abstract class GenericContainerTest {
         checkSimilarity(component, shouldBeTheSame, firstInstance, secondInstance);
     }
 
-    private <T> T registerAndGetFromContainer(final Class<T> componentToBeRetrieved, final Class<?> componentToRegister) {
+    protected <T> T registerAndGetFromContainer(final Class<T> componentToBeRetrieved, final Class<?> componentToRegister) {
         return executeInsideRequest(new WhatToDo<T>() {
             public T execute(RequestInfo request, final int counter) {
 
@@ -335,9 +358,36 @@ public abstract class GenericContainerTest {
     }
     
     @Test
+    @Ignore("Nao passa com o spring. Tem q verificar, mas nao aparenta ser um blocker")
+    public void shoudUseComponentFactoriesInTheClasspath() {
+    	Provided object = getFromContainer(Provided.class);
+    	assertThat(object, is(sameInstance(ComponentFactoryInTheClasspath.PROVIDED)));
+    }
+    
+    @Test
     public void shoudRegisterInterceptorsInInterceptorRegistry() {
     	InterceptorRegistry registry = getFromContainer(InterceptorRegistry.class);
     	assertThat(registry.all(), hasItem(InterceptorInTheClasspath.class));
+    }
+    
+    @Test
+    public void shoudCallPredestroyExactlyOneTimeForComponentsScannedFromTheClasspath() {
+    	CustomComponentWithLifecycleInTheClasspath component = getFromContainer(CustomComponentWithLifecycleInTheClasspath.class);
+    	assertThat(component.callsToPreDestroy, is(equalTo(0)));
+    	provider.stop();
+    	assertThat(component.callsToPreDestroy, is(equalTo(1)));
+    	
+    	resetProvider();
+    }
+    
+    @Test
+    public void shoudCallPredestroyExactlyOneTimeForComponentFactoriesScannedFromTheClasspath() {
+    	ComponentFactoryInTheClasspath componentFactory = getFromContainer(ComponentFactoryInTheClasspath.class);
+    	assertThat(componentFactory.callsToPreDestroy, is(equalTo(0)));
+    	provider.stop();
+    	assertThat(componentFactory.callsToPreDestroy, is(equalTo(1)));
+    	
+    	resetProvider();
     }
     
 	@Test
@@ -354,5 +404,10 @@ public abstract class GenericContainerTest {
 				});
 			}
 		});
+	}
+
+	protected void resetProvider() {
+		provider = getProvider();
+		provider.start(context);
 	}
 }

@@ -27,6 +27,7 @@
  */
 package br.com.caelum.vraptor.ioc;
 
+import static br.com.caelum.vraptor.VRaptorMatchers.hasOneCopyOf;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.instanceOf;
@@ -367,7 +368,7 @@ public abstract class GenericContainerTest {
     @Test
     public void shoudRegisterInterceptorsInInterceptorRegistry() {
     	InterceptorRegistry registry = getFromContainer(InterceptorRegistry.class);
-    	assertThat(registry.all(), hasItem(InterceptorInTheClasspath.class));
+    	assertThat(registry.all(), hasOneCopyOf(InterceptorInTheClasspath.class));
     }
     
     @Test

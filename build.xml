@@ -36,22 +36,27 @@
 
 	<target name="all" depends="deploy-to-examples" />
 	
+	<target name="zips-site">
+		<zip destfile="vraptor-3.0.0-site-1.zip">
+			<fileset dir="vraptor-site/src/content/"/>			
+		</zip>
+	</target>
 	
 	<target name="zips-vraptor">
-		<zip destfile="vraptor-beta.zip">
+		<zip destfile="vraptor-3.0.0-beta-1.zip">
 			<zipfileset dir="vraptor-site/src/content/html/documentacao" prefix="docs"/>			
 			<fileset file="vraptor-core/target/vraptor3-3.0.0-SNAPSHOT.jar"/>
 			<zipfileset dir="vraptor-core/src" prefix="src"/>
 			<zipfileset dir="vraptor-core/lib" prefix="lib"/>
 		</zip>
-	</target>	
+	</target>
 	
 	<target name="zips-blank-project">
-		<zip destfile="vraptor-blank-project.zip">
-			<fileset dir="vraptor-blank-project/vraptor-blank-project"/>
+		<zip destfile="vraptor-3.0.0-blank-project-beta-1.zip">
+			<fileset dir="vraptor-blank-project/" excludes="*.zip"/>
 		</zip>
 	</target>
 	
-	<target name="zips" depends="zips-vraptor,zips-blank-project"/>
+	<target name="zips" depends="zips-vraptor,zips-blank-project,zips-site"/>
 
 </project>

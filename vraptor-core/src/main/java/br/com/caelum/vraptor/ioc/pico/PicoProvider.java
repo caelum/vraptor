@@ -119,10 +119,12 @@ public class PicoProvider implements ContainerProvider {
 	}
 
 	protected void registerCustomComponents(PicoContainer picoContainer, Scanner scanner) {
-		picoContainer.getComponent(ResourceRegistrar.class).registerFrom(scanner);
-	    picoContainer.getComponent(InterceptorRegistrar.class).registerFrom(scanner);
-	    picoContainer.getComponent(ConverterRegistrar.class).registerFrom(scanner);
-	    picoContainer.getComponent(ComponentFactoryRegistrar.class).registerFrom(scanner);
+		/* TODO: For now, this is an empty hook method to enable subclasses to use
+		 * the scanner and register their specific components.
+		 * 
+		 * In the future, if we scan the classpath for StereotypeHandlers, we can
+		 * eliminate this hook.
+		 */
 	}
 
 	public void stop() {

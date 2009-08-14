@@ -27,32 +27,23 @@
  */
 package br.com.caelum.vraptor.ioc.pico;
 
-import static org.junit.Assert.*;
+import java.io.File;
+import java.net.URI;
+import java.net.URL;
+import java.util.Arrays;
+import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
+
+import org.jmock.Expectations;
+import org.junit.Test;
+
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
 import br.com.caelum.vraptor.ioc.GenericContainerTest;
 import br.com.caelum.vraptor.ioc.WhatToDo;
 import br.com.caelum.vraptor.test.HttpServletRequestMock;
 import br.com.caelum.vraptor.test.HttpSessionMock;
-import org.jmock.Expectations;
-import org.junit.Test;
-import org.reflections.util.ClasspathHelper;
-
-import com.google.common.collect.Iterators;
-import com.google.common.collect.UnmodifiableIterator;
-
-import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class PicoProviderTest extends GenericContainerTest {
     private int counter;

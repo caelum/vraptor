@@ -29,6 +29,7 @@
  */
 package br.com.caelum.vraptor.ioc.spring;
 
+import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.context.annotation.ClassPathBeanDefinitionScanner;
 
@@ -39,6 +40,13 @@ class ComponentScanner extends ClassPathBeanDefinitionScanner {
     public ComponentScanner(BeanDefinitionRegistry registry) {
         super(registry, false);
         addIncludeFilter(new ComponentTypeFilter());
+
         setScopeMetadataResolver(new VRaptorScopeResolver());
+    }
+
+    @Override
+    protected void postProcessBeanDefinition(AbstractBeanDefinition beanDefinition, String beanName) {
+    	super.postProcessBeanDefinition(beanDefinition, beanName);
+    	beanDefinition.setPrimary(true);
     }
 }

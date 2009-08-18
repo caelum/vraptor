@@ -42,9 +42,9 @@ import org.picocontainer.monitors.NullComponentMonitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.http.route.Router;
+import br.com.caelum.vraptor.ioc.AbstractComponentRegistry;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.ComponentFactory;
 import br.com.caelum.vraptor.ioc.ComponentFactoryIntrospector;
@@ -59,7 +59,7 @@ import br.com.caelum.vraptor.ioc.SessionScoped;
  * @author Adriano Almeida
  * @author Sérgio Lopes
  */
-public class PicoComponentRegistry implements ComponentRegistry {
+public class PicoComponentRegistry extends AbstractComponentRegistry {
 
     public static final String CONTAINER_SESSION_KEY = PicoComponentRegistry.class.getName() + ".session";
 
@@ -184,7 +184,7 @@ public class PicoComponentRegistry implements ComponentRegistry {
         if (logger.isDebugEnabled()) {
             logger.debug("Session components are " + sessionScoped);
         }
-        
+
         for (Map.Entry<Class<?>, Class<?>> entry : sessionScoped.entrySet()) {
             sessionContainer.addComponent(entry.getKey(), entry.getValue());
         }

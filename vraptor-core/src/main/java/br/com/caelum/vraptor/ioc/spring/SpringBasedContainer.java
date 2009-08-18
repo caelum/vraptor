@@ -31,13 +31,13 @@ package br.com.caelum.vraptor.ioc.spring;
 
 import javax.servlet.ServletContext;
 
-import br.com.caelum.vraptor.ComponentRegistry;
+import br.com.caelum.vraptor.ioc.AbstractComponentRegistry;
 import br.com.caelum.vraptor.ioc.Container;
 
 /**
  * @author Fabio Kung
  */
-public class SpringBasedContainer implements Container, ComponentRegistry {
+public class SpringBasedContainer extends AbstractComponentRegistry implements Container {
     private VRaptorApplicationContext applicationContext;
 
     public SpringBasedContainer(String... basePackages) {

@@ -45,4 +45,11 @@ public interface ComponentRegistry {
      */
     public void register(Class<?> requiredType, Class<?> componentType);
 
+    /**
+     * Registers a component to be used when the required type is the component, or
+     * any of their interfaces and superclasses.
+     * @param componentType the component type
+     */
+    public void deepRegister(Class<?> componentType);
+
 }

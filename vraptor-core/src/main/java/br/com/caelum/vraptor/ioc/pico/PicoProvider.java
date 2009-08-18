@@ -77,18 +77,18 @@ public class PicoProvider implements ContainerProvider {
     public final void start(ServletContext context) {
 	    ComponentRegistry componentRegistry = getComponentRegistry();
 	    registerBundledComponents(componentRegistry);
-	
+
 	    this.picoContainer.addComponent(context);
-	
+
 	    Scanner scanner = new ReflectionsScanner(context);
-	
+
 	    getComponentRegistry().init();
-	    
+
 	    StereotypedComponentRegistrar componentRegistrar = picoContainer.getComponent(StereotypedComponentRegistrar.class);
 	    componentRegistrar.registerFrom(scanner);
-	    
+
 	    registerCustomComponents(picoContainer, scanner);
-	    
+
 	    picoContainer.start();
 	}
 
@@ -110,7 +110,7 @@ public class PicoProvider implements ContainerProvider {
 	    for (Class<? extends Converter<?>> converterType : BaseComponents.getBundledConverters()) {
 	        registry.register(converterType, converterType);
 	    }
-	
+
 	    registry.register(ResourceRegistrar.class, ResourceRegistrar.class);
 	    registry.register(InterceptorRegistrar.class, InterceptorRegistrar.class);
 	    registry.register(ConverterRegistrar.class, ConverterRegistrar.class);
@@ -121,7 +121,7 @@ public class PicoProvider implements ContainerProvider {
 	protected void registerCustomComponents(PicoContainer picoContainer, Scanner scanner) {
 		/* TODO: For now, this is an empty hook method to enable subclasses to use
 		 * the scanner and register their specific components.
-		 * 
+		 *
 		 * In the future, if we scan the classpath for StereotypeHandlers, we can
 		 * eliminate this hook.
 		 */

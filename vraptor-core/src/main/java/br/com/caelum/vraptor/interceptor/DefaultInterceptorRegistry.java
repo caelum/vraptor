@@ -29,13 +29,13 @@
  */
 package br.com.caelum.vraptor.interceptor;
 
-import br.com.caelum.vraptor.ioc.ApplicationScoped;
-import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.resource.ResourceMethod;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
+import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**
  * A registry filled with interceptors to intercept requests.<br/>

@@ -12,12 +12,12 @@ import org.vraptor.plugin.hibernate.Validate;
 import org.vraptor.validator.ValidationErrors;
 
 import br.com.caelum.vraptor.InterceptionException;
-import br.com.caelum.vraptor.test.VRaptorMockery;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.test.VRaptorMockery;
 
 public class HibernateValidatorPluginInterceptorTest {
 

@@ -30,8 +30,6 @@ package br.com.caelum.vraptor.http.route;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.caelum.vraptor.http.route.Route;
-import br.com.caelum.vraptor.http.route.RoutesParser;
 import br.com.caelum.vraptor.resource.ResourceClass;
 
 /**

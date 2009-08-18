@@ -34,8 +34,8 @@ import java.util.Set;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.resource.HttpMethod;
-import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.resource.ResourceClass;
+import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**
  * Handles different rules in order to translate urls into Resource methods.

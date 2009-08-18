@@ -1,19 +1,21 @@
 package br.com.caelum.vraptor.interceptor;
 
-import br.com.caelum.vraptor.InterceptionException;
-import br.com.caelum.vraptor.core.InterceptorStack;
-import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.resource.ResourceMethod;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+
+import java.io.IOException;
+import java.util.List;
+
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.IOException;
-import java.util.List;
+import br.com.caelum.vraptor.InterceptionException;
+import br.com.caelum.vraptor.core.InterceptorStack;
+import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor.resource.ResourceMethod;
 
 public class DefaultInterceptorRegistryTest {
 

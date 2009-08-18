@@ -27,7 +27,6 @@
  */
 package br.com.caelum.vraptor.ioc.spring;
 
-import java.lang.annotation.Annotation;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
@@ -72,8 +71,6 @@ import br.com.caelum.vraptor.interceptor.download.DownloadInterceptor;
 import br.com.caelum.vraptor.interceptor.multipart.DefaultMultipartConfig;
 import br.com.caelum.vraptor.interceptor.multipart.MultipartInterceptor;
 import br.com.caelum.vraptor.ioc.ComponentFactory;
-import br.com.caelum.vraptor.ioc.ConverterHandler;
-import br.com.caelum.vraptor.ioc.ResourceHandler;
 import br.com.caelum.vraptor.ioc.StereotypeHandler;
 import br.com.caelum.vraptor.proxy.DefaultProxifier;
 import br.com.caelum.vraptor.view.DefaultAcceptHeaderToFormat;

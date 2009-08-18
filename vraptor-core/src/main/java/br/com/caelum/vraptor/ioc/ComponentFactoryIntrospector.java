@@ -1,7 +1,7 @@
 package br.com.caelum.vraptor.ioc;
 
-import java.lang.reflect.Type;
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 
 /**
  * @author Fabio Kung

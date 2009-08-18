@@ -27,9 +27,9 @@
  */
 package br.com.caelum.vraptor.http.route;
 
-import br.com.caelum.vraptor.resource.ResourceClass;
-
 import java.util.List;
+
+import br.com.caelum.vraptor.resource.ResourceClass;
 
 /**
  * Extracts all possible routes for this specific resource.

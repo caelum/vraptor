@@ -1,8 +1,8 @@
 package br.com.caelum.vraptor.ioc.pico;
 
-import br.com.caelum.vraptor.ioc.ComponentFactory;
-
 import java.util.Map;
+
+import br.com.caelum.vraptor.ioc.ComponentFactory;
 
 public interface ComponentFactoryRegistry {
     public void register(Class<? extends ComponentFactory> componentFactoryClass);

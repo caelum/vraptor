@@ -29,9 +29,9 @@
  */
 package br.com.caelum.vraptor.interceptor;
 
+import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.InterceptionException;
 
 /**
  * Whenever an interceptor accepts a resource method, its intercept method is

@@ -16,8 +16,8 @@ import javax.servlet.ServletInputStream;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpSession;
 
-import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.IteratorToEnumerationAdapter;
+import br.com.caelum.vraptor.http.MutableRequest;
 
 /**
  * @author Fabio Kung

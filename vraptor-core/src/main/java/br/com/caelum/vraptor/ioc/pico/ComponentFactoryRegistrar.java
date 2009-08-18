@@ -1,12 +1,13 @@
 package br.com.caelum.vraptor.ioc.pico;
 
-import br.com.caelum.vraptor.ioc.ApplicationScoped;
-import br.com.caelum.vraptor.ioc.ComponentFactory;
-import br.com.caelum.vraptor.ioc.Stereotype;
+import java.util.Collection;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collection;
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
+import br.com.caelum.vraptor.ioc.ComponentFactory;
+import br.com.caelum.vraptor.ioc.Stereotype;
 
 /**
  * Prepares all components implementing br.com.caelum.vraptor.ioc.ComponentFactory to be used as Pico ComponentAdapters.

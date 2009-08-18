@@ -28,8 +28,8 @@
 package br.com.caelum.vraptor.core;
 
 import br.com.caelum.vraptor.InterceptionException;
-import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.Path;
+import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 public class URLParameterExtractorInterceptor implements Interceptor {

@@ -33,8 +33,8 @@ import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.resource.ResourceClass;
 import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.view.DefaultPathResolver;
 import br.com.caelum.vraptor.view.AcceptHeaderToFormat;
+import br.com.caelum.vraptor.view.DefaultPathResolver;
 import br.com.caelum.vraptor.view.PathResolver;
 
 /**

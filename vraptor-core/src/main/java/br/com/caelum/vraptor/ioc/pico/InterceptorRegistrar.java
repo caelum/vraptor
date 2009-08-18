@@ -1,15 +1,16 @@
 package br.com.caelum.vraptor.ioc.pico;
 
+import java.util.Collection;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.VRaptorException;
 import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
 import br.com.caelum.vraptor.interceptor.InterceptorSequence;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.Collection;
 
 /**
  * <p>Prepares all classes annotated with @Intercepts to be used as VRaptor's interceptors.</p>

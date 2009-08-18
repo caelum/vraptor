@@ -1,9 +1,5 @@
 package br.com.caelum.vraptor.ioc.spring;
 
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
-
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -13,15 +9,9 @@ import org.jmock.Mockery;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.Ignore;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import br.com.caelum.vraptor.core.Execution;
-import br.com.caelum.vraptor.core.RequestInfo;
-import br.com.caelum.vraptor.http.UrlToResourceTranslator;
-import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.ioc.spring.components.CustomTranslator;
 import br.com.caelum.vraptor.test.HttpServletRequestMock;
 import br.com.caelum.vraptor.test.HttpSessionMock;
 

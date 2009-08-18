@@ -1,5 +1,7 @@
 package br.com.caelum.vraptor.ioc.pico;
 
+import java.util.Arrays;
+
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Before;
@@ -7,10 +9,7 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.http.route.Router;
-import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.resource.DefaultResourceClass;
-
-import java.util.Arrays;
 
 /**
  * @author Fabio Kung

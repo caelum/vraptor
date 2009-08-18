@@ -29,12 +29,6 @@
  */
 package br.com.caelum.vraptor.http.ognl;
 
-import br.com.caelum.vraptor.Converter;
-import br.com.caelum.vraptor.core.Converters;
-import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.ioc.RequestScoped;
-import ognl.TypeConverter;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
@@ -42,6 +36,12 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.ResourceBundle;
+
+import ognl.TypeConverter;
+import br.com.caelum.vraptor.Converter;
+import br.com.caelum.vraptor.core.Converters;
+import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor.ioc.RequestScoped;
 
 @RequestScoped
 public class VRaptorConvertersAdapter implements TypeConverter {

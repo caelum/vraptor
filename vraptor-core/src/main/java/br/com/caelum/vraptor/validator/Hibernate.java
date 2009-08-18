@@ -27,11 +27,11 @@
  */
 package br.com.caelum.vraptor.validator;
 
-import org.hibernate.validator.ClassValidator;
-import org.hibernate.validator.InvalidValue;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.hibernate.validator.ClassValidator;
+import org.hibernate.validator.InvalidValue;
 
 /**
  * Uses hibernate's validator api to check for error messages.

@@ -8,9 +8,9 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.interceptor.Interceptor;
-import br.com.caelum.vraptor.test.VRaptorMockery;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.test.VRaptorMockery;
 
 public class ToInstantiateInterceptorHandlerTest {
 

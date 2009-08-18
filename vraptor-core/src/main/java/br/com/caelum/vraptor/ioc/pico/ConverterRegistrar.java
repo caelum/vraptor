@@ -27,16 +27,16 @@
  */
 package br.com.caelum.vraptor.ioc.pico;
 
-import br.com.caelum.vraptor.Convert;
-import br.com.caelum.vraptor.Converter;
-import br.com.caelum.vraptor.VRaptorException;
-import br.com.caelum.vraptor.core.BaseComponents;
-import br.com.caelum.vraptor.core.Converters;
-import br.com.caelum.vraptor.ioc.ApplicationScoped;
+import java.util.Collection;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collection;
+import br.com.caelum.vraptor.Convert;
+import br.com.caelum.vraptor.Converter;
+import br.com.caelum.vraptor.VRaptorException;
+import br.com.caelum.vraptor.core.Converters;
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
 /**
  * Prepares all classes annotated with @Convert to be used as converters.

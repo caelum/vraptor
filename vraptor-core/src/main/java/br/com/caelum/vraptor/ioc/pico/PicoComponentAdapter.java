@@ -1,13 +1,14 @@
 package br.com.caelum.vraptor.ioc.pico;
 
-import br.com.caelum.vraptor.ioc.ComponentFactory;
+import java.lang.reflect.Type;
+
 import org.picocontainer.PicoCompositionException;
 import org.picocontainer.PicoContainer;
 import org.picocontainer.adapters.AbstractAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.reflect.Type;
+import br.com.caelum.vraptor.ioc.ComponentFactory;
 
 /**
  * Pico's ComponentAdapter wrapping VRaptor's ComponentFactory

@@ -1,6 +1,7 @@
 package br.com.caelum.vraptor.ioc;
 
 import static org.junit.Assert.assertEquals;
+
 import org.junit.Test;
 
 /**

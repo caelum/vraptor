@@ -40,12 +40,12 @@ import org.vraptor.validator.BasicValidationErrors;
 import org.vraptor.validator.ValidationErrors;
 
 import br.com.caelum.vraptor.InterceptionException;
-import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.http.ParametersProvider;
+import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.view.Results;

@@ -1,15 +1,16 @@
 package br.com.caelum.vraptor.test;
 
-import br.com.caelum.vraptor.IteratorToEnumerationAdapter;
-
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpSession;
-import javax.servlet.http.HttpSessionContext;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpSessionContext;
+
+import br.com.caelum.vraptor.IteratorToEnumerationAdapter;
 
 /**
  * @author Fabio Kung

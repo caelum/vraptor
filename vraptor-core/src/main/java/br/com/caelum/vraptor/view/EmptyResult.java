@@ -30,7 +30,6 @@
 package br.com.caelum.vraptor.view;
 
 import br.com.caelum.vraptor.View;
-import br.com.caelum.vraptor.ioc.RequestScoped;
 
 /**
  * Does nothing

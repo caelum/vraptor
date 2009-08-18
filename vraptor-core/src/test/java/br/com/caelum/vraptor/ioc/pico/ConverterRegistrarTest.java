@@ -1,17 +1,19 @@
 package br.com.caelum.vraptor.ioc.pico;
 
-import br.com.caelum.vraptor.Convert;
-import br.com.caelum.vraptor.Converter;
-import br.com.caelum.vraptor.VRaptorException;
-import br.com.caelum.vraptor.ComponentRegistry;
-import br.com.caelum.vraptor.core.Converters;
+import static java.util.Arrays.asList;
+
+import java.util.ResourceBundle;
+
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
 
-import static java.util.Arrays.asList;
-import java.util.ResourceBundle;
+import br.com.caelum.vraptor.ComponentRegistry;
+import br.com.caelum.vraptor.Convert;
+import br.com.caelum.vraptor.Converter;
+import br.com.caelum.vraptor.VRaptorException;
+import br.com.caelum.vraptor.core.Converters;
 
 /**
  * @author Fabio Kung

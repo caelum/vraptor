@@ -29,14 +29,15 @@
  */
 package br.com.caelum.vraptor.converter;
 
-import br.com.caelum.vraptor.Converter;
-import br.com.caelum.vraptor.core.Converters;
-import br.com.caelum.vraptor.ioc.Container;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
-import java.util.Map;
+import br.com.caelum.vraptor.Converter;
+import br.com.caelum.vraptor.core.Converters;
+import br.com.caelum.vraptor.ioc.Container;
 
 public class CachedConverters implements Converters {
 

@@ -1,14 +1,16 @@
 package br.com.caelum.vraptor.interceptor.multipart;
 
-import br.com.caelum.vraptor.http.InvalidParameterException;
-import br.com.caelum.vraptor.http.MutableRequest;
+import java.io.File;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.fileupload.FileItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.util.List;
+import br.com.caelum.vraptor.http.InvalidParameterException;
+import br.com.caelum.vraptor.http.MutableRequest;
 
 /**
  * Processes all elements in a multipart request.

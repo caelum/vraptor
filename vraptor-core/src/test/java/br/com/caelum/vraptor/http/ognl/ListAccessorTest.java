@@ -40,8 +40,8 @@ import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.test.VRaptorMockery;
 import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor.test.VRaptorMockery;
 
 public class ListAccessorTest {
 

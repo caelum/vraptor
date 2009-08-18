@@ -9,8 +9,8 @@ import org.junit.Test;
 import org.vraptor.annotations.Component;
 import org.vraptor.annotations.Logic;
 
-import br.com.caelum.vraptor.test.VRaptorMockery;
 import br.com.caelum.vraptor.resource.ResourceClass;
+import br.com.caelum.vraptor.test.VRaptorMockery;
 
 public class InfoTest {
 

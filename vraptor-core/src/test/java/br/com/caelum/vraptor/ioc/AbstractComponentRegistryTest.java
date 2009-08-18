@@ -15,6 +15,11 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.ComponentRegistry;
 
+/**
+ *
+ * @author Lucas Cavalcanti
+ *
+ */
 public class AbstractComponentRegistryTest {
 
 

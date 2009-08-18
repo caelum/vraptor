@@ -29,6 +29,7 @@
  */
 package br.com.caelum.vraptor.ioc.pico;
 
+import java.util.Collection;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
@@ -47,6 +48,7 @@ import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.core.BaseComponents;
 import br.com.caelum.vraptor.core.Execution;
 import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
 import br.com.caelum.vraptor.ioc.StereotypeHandler;
 
@@ -82,6 +84,8 @@ public class PicoProvider implements ContainerProvider {
 
 	    Scanner scanner = new ReflectionsScanner(context);
 
+	    registerAnnotatedComponents(scanner, componentRegistry);
+
 	    getComponentRegistry().init();
 
 	    StereotypedComponentRegistrar componentRegistrar = picoContainer.getComponent(StereotypedComponentRegistrar.class);
@@ -92,6 +96,13 @@ public class PicoProvider implements ContainerProvider {
 	    picoContainer.start();
 	}
 
+	private void registerAnnotatedComponents(Scanner scanner, ComponentRegistry componentRegistry) {
+		Collection<Class<?>> collection = scanner.getTypesWithAnnotation(Component.class);
+		for (Class<?> componentType : collection) {
+			componentRegistry.deepRegister(componentType);
+		}
+	}
+
 	/**
 	 * Register default vraptor-pico implementation components.
 	 */
@@ -100,7 +111,7 @@ public class PicoProvider implements ContainerProvider {
 	    for (Class<? extends StereotypeHandler> entry : BaseComponents.getStereotypeHandlers()) {
 			registry.register(entry, entry);
 		}
-	    registry.register(ComponentHandler.class, ComponentHandler.class);
+//	    registry.register(ComponentHandler.class, ComponentHandler.class);
 	    for (Map.Entry<Class<?>, Class<?>> entry : BaseComponents.getApplicationScoped().entrySet()) {
 	        registry.register(entry.getKey(), entry.getValue());
 	    }

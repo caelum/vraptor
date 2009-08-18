@@ -1,0 +1,40 @@
+[chapter Downloading]
+
+[section 1 minute example: download]
+
+The following example shows how to expose the file to be downloaded to its client.
+
+Again, see how simple this code is:
+
+[code]
+@Resource
+public class ProfileController {
+
+	// dao ...
+
+	public File picture(Profile profile) {
+		return new File("/path/to/the/picture." + profile.getId()+ ".jpg"); 
+	}
+}
+[/code]
+
+
+[section 1 minute example: upload]
+
+The first example is based on the multipart upload feature.
+
+[code]
+@Resource
+public class ProfileController {
+
+	private final ProfileDao dao;
+
+	public ProfileController(ProfileDao dao) {
+		this.dao = dao;
+	}
+
+	public void updatePicture(Profile profile, UploadedFile picture) {
+		dao.update(picture.getFile(), profile);
+	}
+}
+[/code]

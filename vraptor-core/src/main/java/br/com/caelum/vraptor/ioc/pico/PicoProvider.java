@@ -49,6 +49,7 @@ import br.com.caelum.vraptor.core.BaseComponents;
 import br.com.caelum.vraptor.core.Execution;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.ioc.Component;
+import br.com.caelum.vraptor.ioc.ComponentFactory;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
 import br.com.caelum.vraptor.ioc.StereotypeHandler;
 
@@ -99,7 +100,17 @@ public class PicoProvider implements ContainerProvider {
 	private void registerAnnotatedComponents(Scanner scanner, ComponentRegistry componentRegistry) {
 		Collection<Class<?>> collection = scanner.getTypesWithAnnotation(Component.class);
 		for (Class<?> componentType : collection) {
-			componentRegistry.deepRegister(componentType);
+			if (ComponentFactory.class.isAssignableFrom(componentType)) {
+				if(logger.isDebugEnabled()) {
+					logger.debug("Registering found component factory " + componentType);
+				}
+				componentRegistry.register(componentType, componentType);
+			} else {
+				if(logger.isDebugEnabled()) {
+					logger.debug("Deeply registering found component " + componentType);
+				}
+				componentRegistry.deepRegister(componentType);
+			}
 		}
 	}
 

@@ -105,7 +105,7 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
         registerApplicationScopedComponentsOn(beanFactory);
         registerRequestScopedComponentsOn(beanFactory);
 
-        new ComponentScanner(beanFactory).scan(basePackages);
+        new ComponentScanner(beanFactory, container).scan(basePackages);
 
         AnnotationConfigUtils.registerAnnotationConfigProcessors(beanFactory);
         AopConfigUtils.registerAspectJAnnotationAutoProxyCreatorIfNecessary(beanFactory);

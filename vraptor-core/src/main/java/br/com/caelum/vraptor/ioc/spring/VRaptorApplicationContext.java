@@ -99,7 +99,8 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
         WebApplicationContextUtils.registerWebApplicationScopes(beanFactory);
     }
 
-    protected void loadBeanDefinitions(DefaultListableBeanFactory beanFactory) {
+    @Override
+	protected void loadBeanDefinitions(DefaultListableBeanFactory beanFactory) {
         beanFactory.registerSingleton(ServletContext.class.getName(), getServletContext());
         beanFactory.ignoreDependencyType(ServletContext.class);
         registerApplicationScopedComponentsOn(beanFactory);
@@ -110,9 +111,16 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
         AnnotationConfigUtils.registerAnnotationConfigProcessors(beanFactory);
         AopConfigUtils.registerAspectJAnnotationAutoProxyCreatorIfNecessary(beanFactory);
         registerCustomInjectionProcessor(beanFactory);
+        registerCachedComponentsOn(beanFactory);
     }
 
-    private void registerApplicationScopedComponentsOn(DefaultListableBeanFactory beanFactory) {
+    private void registerCachedComponentsOn(DefaultListableBeanFactory beanFactory) {
+        for (Class<?> cachedComponent : BaseComponents.getCachedComponents().values()) {
+			registerOn(beanFactory, cachedComponent, true);
+		}
+	}
+
+	private void registerApplicationScopedComponentsOn(DefaultListableBeanFactory beanFactory) {
         registerOn(beanFactory, DefaultRouter.class);
         registerOn(beanFactory, DefaultResourceTranslator.class);
         registerOn(beanFactory, DefaultInterceptorRegistry.class);
@@ -125,11 +133,11 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
         for (Class<?> type : BaseComponents.getApplicationScoped().values()) {
             registerOn(beanFactory, type);
         }
-        
+
         for (Class<? extends StereotypeHandler> handlerType : BaseComponents.getStereotypeHandlers()) {
 			registerOn(beanFactory, handlerType);
 		}
-        
+
         registerOn(beanFactory, StereotypedBeansRegistrar.class);
         registerOn(beanFactory, DefaultMultipartConfig.class);
     }
@@ -172,7 +180,7 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
     }
 
     private void registerOn(BeanDefinitionRegistry registry, Class<?> type, boolean customComponent) {
-        AnnotatedGenericBeanDefinition definition = new AnnotatedGenericBeanDefinition(type);
+		AnnotatedGenericBeanDefinition definition = new AnnotatedGenericBeanDefinition(type);
         definition.setLazyInit(true);
         definition.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_NO);
         if (customComponent) {
@@ -182,6 +190,7 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
             definition.setPrimary(false);
             definition.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
         }
+
         String name = beanNameGenerator.generateBeanName(definition, registry);
         BeanDefinitionHolder definitionHolder = new BeanDefinitionHolder(definition, name);
 
@@ -190,7 +199,7 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
         definitionHolder = applyScopeOn(registry, definitionHolder, scopeMetadata);
 
         BeanDefinitionReaderUtils.registerBeanDefinition(definitionHolder, registry);
-    }
+	}
 
     /**
      * From org.springframework.context.annotation.ClassPathBeanDefinitionScanner#applyScope()

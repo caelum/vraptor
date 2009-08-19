@@ -92,6 +92,7 @@ import br.com.caelum.vraptor.ioc.fixture.CustomComponentWithLifecycleInTheClassp
 import br.com.caelum.vraptor.ioc.fixture.InterceptorInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.ResourceInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.ComponentFactoryInTheClasspath.Provided;
+import br.com.caelum.vraptor.reflection.CacheBasedTypeCreator;
 import br.com.caelum.vraptor.resource.DefaultResourceClass;
 import br.com.caelum.vraptor.resource.ResourceClass;
 import br.com.caelum.vraptor.resource.ResourceMethod;
@@ -153,23 +154,30 @@ public abstract class GenericContainerTest {
     public static class MyAppComponent {
 
     }
-    
+
     @Test
     public void processesCorrectlyAppBasedComponents() {
     	checkAvailabilityFor(true, MyAppComponent.class, MyAppComponent.class);
     	mockery.assertIsSatisfied();
     }
 
+
+    @Test
+	public void shouldProvideCachedComponents() throws Exception {
+    	TypeCreator creator = getFromContainer(TypeCreator.class);
+    	assertThat(creator, is(instanceOf(CacheBasedTypeCreator.class)));
+	}
+
     @ApplicationScoped
     public static class MyAppComponentWithLifecycle {
     	public int calls = 0;
-    	
+
     	@PreDestroy
     	public void z() {
     		calls++;
     	}
     }
-    
+
     @Test
 	public void callsPredestroyExactlyOneTime() throws Exception {
 		MyAppComponentWithLifecycle component = registerAndGetFromContainer(MyAppComponentWithLifecycle.class, MyAppComponentWithLifecycle.class);
@@ -278,7 +286,7 @@ public abstract class GenericContainerTest {
             }
         });
     }
-    
+
     public <T> T getFromContainer(final Class<T> componentToBeRetrieved) {
     	return executeInsideRequest(new WhatToDo<T>() {
             public T execute(RequestInfo request, final int counter) {
@@ -345,52 +353,52 @@ public abstract class GenericContainerTest {
         StartableComponent comp = registerAndGetFromContainer(StartableComponent.class, null);
         assertTrue(comp.started);
     }
-    
+
     @Test
 	public void canProvideComponentsInTheClasspath() throws Exception {
     	checkAvailabilityFor(false, Collections.<Class<?>>singleton(CustomComponentInTheClasspath.class));
 	}
-    
+
     @Test
     public void shoudRegisterResourcesInRouter() {
     	Router router = getFromContainer(Router.class);
     	ResourceClass dummyResourceClass = new DefaultResourceClass(ResourceInTheClasspath.class);
     	assertThat(router.allResources(), hasItem(dummyResourceClass));
     }
-    
+
     @Test
     @Ignore("Nao passa com o spring. Tem q verificar, mas nao aparenta ser um blocker")
     public void shoudUseComponentFactoriesInTheClasspath() {
     	Provided object = getFromContainer(Provided.class);
     	assertThat(object, is(sameInstance(ComponentFactoryInTheClasspath.PROVIDED)));
     }
-    
+
     @Test
     public void shoudRegisterInterceptorsInInterceptorRegistry() {
     	InterceptorRegistry registry = getFromContainer(InterceptorRegistry.class);
     	assertThat(registry.all(), hasOneCopyOf(InterceptorInTheClasspath.class));
     }
-    
+
     @Test
     public void shoudCallPredestroyExactlyOneTimeForComponentsScannedFromTheClasspath() {
     	CustomComponentWithLifecycleInTheClasspath component = getFromContainer(CustomComponentWithLifecycleInTheClasspath.class);
     	assertThat(component.callsToPreDestroy, is(equalTo(0)));
     	provider.stop();
     	assertThat(component.callsToPreDestroy, is(equalTo(1)));
-    	
+
     	resetProvider();
     }
-    
+
     @Test
     public void shoudCallPredestroyExactlyOneTimeForComponentFactoriesScannedFromTheClasspath() {
     	ComponentFactoryInTheClasspath componentFactory = getFromContainer(ComponentFactoryInTheClasspath.class);
     	assertThat(componentFactory.callsToPreDestroy, is(equalTo(0)));
     	provider.stop();
     	assertThat(componentFactory.callsToPreDestroy, is(equalTo(1)));
-    	
+
     	resetProvider();
     }
-    
+
 	@Test
 	public void shoudRegisterConvertersInConverters() {
 		executeInsideRequest(new WhatToDo<Converters>() {

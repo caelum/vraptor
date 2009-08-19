@@ -38,19 +38,18 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import br.com.caelum.vraptor.VRaptorException;
 import br.com.caelum.vraptor.asm.ClassWriter;
 import br.com.caelum.vraptor.asm.FieldVisitor;
 import br.com.caelum.vraptor.asm.MethodVisitor;
 import br.com.caelum.vraptor.asm.Opcodes;
+import br.com.caelum.vraptor.http.AbstractTypeCreator;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
-import br.com.caelum.vraptor.http.TypeCreator;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.vraptor2.Info;
 
 @ApplicationScoped
-public class AsmBasedTypeCreator implements TypeCreator, Opcodes {
+public class AsmBasedTypeCreator extends AbstractTypeCreator implements Opcodes {
 
 	private static final Logger logger = LoggerFactory.getLogger(AsmBasedTypeCreator.class);
 
@@ -66,33 +65,8 @@ public class AsmBasedTypeCreator implements TypeCreator, Opcodes {
 	private final ParameterNameProvider provider;
 
 	public AsmBasedTypeCreator(ParameterNameProvider provider) {
+		super(provider);
 		this.provider = provider;
-	}
-
-	public Object instanceWithParameters(ResourceMethod method, Object... parameters) {
-		String[] names = provider.parameterNamesFor(method.getMethod());
-		Class<?> parameterType = typeFor(method);
-		try {
-			Object root = parameterType.getConstructor().newInstance();
-			for (int i = 0; i < names.length; i++) {
-				Method setter = findSetter(parameterType, "set" + Info.capitalize(names[i]));
-				setter.invoke(root, parameters[i]);
-			}
-			return root;
-		} catch (Exception e) {
-			throw new VRaptorException(e);
-		}
-	}
-	private Method findSetter(Class<?> parameterType, String methodName) {
-		for (Method m : parameterType.getDeclaredMethods()) {
-			if (m.getName().equals(methodName)) {
-				return m;
-			}
-		}
-		throw new VRaptorException(
-				"Unable to instanciate parameters as setter method for parameter setting was not created. "
-						+ "Thats probably a bug on your type creator. "
-						+ "If you are using the default type creator, notify VRaptor.");
 	}
 
 	public Class<?> typeFor(ResourceMethod resourceMethod) {

@@ -34,7 +34,7 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 /**
  * Creates a dynamic class with fields representing parameter methods for the
  * selected method.
- *
+ * @see AbstractTypeCreator
  * @author Guilherme Silveira
  */
 public interface TypeCreator {

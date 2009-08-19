@@ -68,7 +68,7 @@ public class PicoComponentRegistry extends AbstractComponentRegistry {
     private final Map<Class<?>, Class<?>> applicationScoped = new HashMap<Class<?>, Class<?>>();
     private final Map<Class<?>, Class<?>> sessionScoped = new HashMap<Class<?>, Class<?>>();
     private final Map<Class<?>, Class<?>> requestScoped = new HashMap<Class<?>, Class<?>>();
-    private final MutablePicoContainer appContainer;
+    private MutablePicoContainer appContainer;
     private boolean initialized = false;
 
     private final ComponentFactoryRegistry componentFactoryRegistry;
@@ -76,6 +76,11 @@ public class PicoComponentRegistry extends AbstractComponentRegistry {
     public PicoComponentRegistry(MutablePicoContainer container, ComponentFactoryRegistry componentFactoryRegistry) {
         this.appContainer = container;
         this.componentFactoryRegistry = componentFactoryRegistry;
+    }
+
+    MutablePicoContainer makeChildContainer() {
+    	this.appContainer = appContainer.makeChildContainer();
+    	return appContainer;
     }
 
     @SuppressWarnings("unchecked")

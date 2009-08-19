@@ -31,6 +31,7 @@ package br.com.caelum.vraptor.ioc.pico;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.servlet.ServletContext;
 
@@ -63,6 +64,7 @@ import br.com.caelum.vraptor.ioc.StereotypeHandler;
 public class PicoProvider implements ContainerProvider {
 
     private final MutablePicoContainer picoContainer;
+    private MutablePicoContainer childContainer;
 
     private static final Logger logger = LoggerFactory.getLogger(PicoProvider.class);
 
@@ -95,6 +97,24 @@ public class PicoProvider implements ContainerProvider {
 	    registerCustomComponents(picoContainer, scanner);
 
 	    picoContainer.start();
+
+	    registerCacheComponents();
+	}
+
+    /**
+     * Create a child container, and register cached components. This way, Cached components will use registered implementations
+     * for their types, and will be used on dependency injection
+     */
+	private void registerCacheComponents() {
+		PicoComponentRegistry registry = getComponentRegistry();
+		this.childContainer = registry.makeChildContainer();
+
+		Map<Class<?>, Class<?>> cachedComponents = BaseComponents.getCachedComponents();
+		for (Entry<Class<?>, Class<?>> entry : cachedComponents.entrySet()) {
+			registry.register(entry.getKey(), entry.getValue());
+		}
+
+		this.childContainer.start();
 	}
 
 	private void registerAnnotatedComponents(Scanner scanner, ComponentRegistry componentRegistry) {
@@ -170,6 +190,6 @@ public class PicoProvider implements ContainerProvider {
     }
 
     protected PicoComponentRegistry getComponentRegistry() {
-        return this.picoContainer.getComponent(PicoComponentRegistry.class);
+    	return this.picoContainer.getComponent(PicoComponentRegistry.class);
     }
 }

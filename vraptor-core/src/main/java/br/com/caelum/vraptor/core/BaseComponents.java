@@ -92,6 +92,7 @@ import br.com.caelum.vraptor.ioc.ResourceHandler;
 import br.com.caelum.vraptor.ioc.StereotypeHandler;
 import br.com.caelum.vraptor.proxy.DefaultProxifier;
 import br.com.caelum.vraptor.proxy.Proxifier;
+import br.com.caelum.vraptor.reflection.CacheBasedTypeCreator;
 import br.com.caelum.vraptor.resource.DefaultResourceNotFoundHandler;
 import br.com.caelum.vraptor.resource.ResourceNotFoundHandler;
 import br.com.caelum.vraptor.validator.DefaultValidator;
@@ -129,6 +130,10 @@ public class BaseComponents {
             AcceptHeaderToFormat.class, DefaultAcceptHeaderToFormat.class
     );
 
+    private final static Map<Class<?>, Class<?>> CACHED_COMPONENTS = classMap(
+    		TypeCreator.class, CacheBasedTypeCreator.class
+    );
+
     private static final Map<Class<?>, Class<?>> REQUEST_COMPONENTS = classMap(
             PathResolver.class, DefaultPathResolver.class,
             MethodInfo.class, DefaultMethodInfo.class,
@@ -162,20 +167,24 @@ public class BaseComponents {
             LocaleBasedCalendarConverter.class, LocaleBasedDateConverter.class, EnumConverter.class,
             UploadedFileConverter.class};
 
-    
+
     @SuppressWarnings("unchecked")
 	private static final Class<? extends StereotypeHandler>[] STEREOTYPE_HANDLERS = new Class[] {
 		ResourceHandler.class,
 		ConverterHandler.class,
 		InterceptorStereotypeHandler.class,
 	};
-    
+
     @SuppressWarnings("unchecked")
     private static final Class<? extends Annotation>[] STEREOTYPES = new Class[] {
     	Resource.class,
     	Convert.class,
     	Component.class
     };
+
+    public static Map<Class<?>, Class<?>> getCachedComponents() {
+		return CACHED_COMPONENTS;
+	}
 
     public static Map<Class<?>, Class<?>> getApplicationScoped() {
         return APPLICATION_COMPONENTS;
@@ -188,11 +197,11 @@ public class BaseComponents {
     public static Class<? extends Converter<?>>[] getBundledConverters() {
         return BUNDLED_CONVERTERS;
     }
-    
+
     public static Class<? extends Annotation>[] getStereotypes() {
     	return STEREOTYPES;
     }
-    
+
     public static Class<? extends StereotypeHandler>[] getStereotypeHandlers() {
     	return STEREOTYPE_HANDLERS;
     }

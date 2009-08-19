@@ -1,14 +1,14 @@
 package br.com.caelum.vraptor.reflection;
 
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.TypeCreator;
+import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 public class CacheBasedTypeCreatorTest {
@@ -23,19 +23,14 @@ public class CacheBasedTypeCreatorTest {
         this.mockery = new Mockery();
         this.method = mockery.mock(ResourceMethod.class);
         this.delegate = mockery.mock(TypeCreator.class);
-        this.creator = new CacheBasedTypeCreator(delegate);
-    }
+        this.creator = new CacheBasedTypeCreator(delegate, mockery.mock(ParameterNameProvider.class));
 
-    @SuppressWarnings("unchecked")
-    @Test
-    public void shouldUseTheDelegatedInstance() {
-        mockery.checking(new Expectations() {
-            {
-                one(delegate).typeFor(method); will(returnValue(String.class));
-            }
-        });
-        MatcherAssert.assertThat((Class<String>)creator.typeFor(method), Matchers.is(Matchers.equalTo(String.class)));
-        mockery.assertIsSatisfied();
+		mockery.checking(new Expectations() {
+			{
+				allowing(method).getMethod();
+				will(returnValue(TypeCreator.class.getMethods()[0]));
+			}
+		});
     }
 
     @Test
@@ -46,7 +41,7 @@ public class CacheBasedTypeCreatorTest {
             }
         });
         Class<?> firstResult = creator.typeFor(method);
-        Class<?> secondResult = creator.typeFor(method);
+        Class<?> secondResult = creator.typeFor(DefaultResourceMethod.instanceFor(TypeCreator.class, TypeCreator.class.getMethods()[0]));
         Assert.assertEquals(firstResult, secondResult);
         mockery.assertIsSatisfied();
     }

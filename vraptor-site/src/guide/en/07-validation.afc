@@ -56,6 +56,7 @@ Also, the error message is sent back to the form.
 
 VRaptor 3 also supports HibernateValidator integration. In the example above, to validate the employee object using HibernateValidator, just add one line to your code:
 
+[code]
 public add(Employee employee) {
 	validator.checking(new Validations(){{
 		that("error","nameIsRequired", !employee.getName().isEmpty());
@@ -66,6 +67,7 @@ public add(Employee employee) {
 	
 	dao.add(employee);
 }
+[/code]
 
 [section Where to redirect in case of errors]
 

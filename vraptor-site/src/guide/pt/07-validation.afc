@@ -54,6 +54,7 @@ que o usuário adicione o funcionário novamente. Além disso, ele devolve para 
 
 [section Hibernate validator]
 
+[code]
 O VRaptor também suporta integração com o HibernateValidator. No exemplo anterior para validar o objeto Funcionario 
 usando o Hibernate Validator basta adicionar uma linha de código:
 
@@ -67,6 +68,7 @@ public adiciona(Funcionario funcionario) {
 	
 	dao.adiciona(funcionario);
 }
+[/code]
 
 [section Para onde redirecionar no caso de erro]
 

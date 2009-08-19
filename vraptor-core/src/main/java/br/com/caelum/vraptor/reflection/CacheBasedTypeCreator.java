@@ -66,7 +66,7 @@ public class CacheBasedTypeCreator extends AbstractTypeCreator {
             cache.put(method.getMethod(), creator.typeFor(method));
             logger.debug("cached generic type for method " + method);
         }
-        return cache.get(method);
+        return cache.get(method.getMethod());
     }
 
 }

@@ -1,0 +1,93 @@
+[chapter Validação]
+VRaptor3 supports two different validation styles: classic and fluent. The starting point to both styles is the Validator object.
+In order to access the Validator, your resource must receive it in the constructor:
+
+[code]
+import br.com.caelum.vraptor.Validator;
+...
+
+@Resource
+class EmployeeController {
+	private Validator validator;
+	
+	public EmployeeController(Validator validator) {
+		this.validator = validator;
+	}
+}
+[/code]
+
+[section Classic style]
+
+The classic style is very similar to VRaptor2's validation.
+Inside your business logic, all you have to do is check the data you want, and if you find any validation errors, add them to the errors list.
+For example, to validate that employee name is 'John Doe':
+
+[code]
+public void add(Employee employee) {
+	if (!employee.getName().equals("John Doe")) {
+		validator.add(new ValidationMessage("error","invalidName"));
+	}
+}
+[/code]
+
+[section Fluent style]
+
+The goal of fluent style is to write the validation code in such way that it feels natural.
+For example, if we want the employee name to be required:
+
+[code]
+public add(Employee employee) {
+	validator.checking(new Validations(){{
+		that("error","nameIsRequired", !employee.getName().isEmpty());
+	}})
+	
+	dao.add(employee);
+}
+[/code]
+
+You can read the code above like this: "Validator, check my validations. First one is that employee name cannot be empty".
+Much closer to natural language.
+
+So, if employee name is empty, the flow will be redirected to the "form" logic,
+which shows the user a form to insert employee data again.
+Also, the error message is sent back to the form.
+
+[section Hibernate validator]
+
+VRaptor 3 also supports HibernateValidator integration. In the example above, to validate the employee object using HibernateValidator, just add one line to your code:
+
+public add(Employee employee) {
+	validator.checking(new Validations(){{
+		that("error","nameIsRequired", !employee.getName().isEmpty());
+		
+		//Validation with Hibernate Validator
+		and(Hibernate.validate(employee));
+	}})
+	
+	dao.add(employee);
+}
+
+[section Where to redirect in case of errors]
+
+Another issue that one must consider when validating data is where to redirect
+when an error occurs. How do one redirect the user to another resource using VRaptor3 in case of validation errors?
+
+Easy, just tell your validator to do just that: when you find any validation error, send the user to the specified resource. See the example:
+
+[code]
+public add(Employee employee) {
+	::validator.onError().goTo(EmployeeController.class).form();::
+	
+	//Fluent validation
+	validator.checking(new Validations(){{
+		that("error","nameIsRequired", !employee.getName().isEmpty());
+	}})
+	
+	//Classic validation
+	if (!employee.getName().equals("John Doe")) {
+		validator.add(new ValidationMessage("error","invalidName"));
+	}
+	
+	dao.add(employee);
+}
+[/code]

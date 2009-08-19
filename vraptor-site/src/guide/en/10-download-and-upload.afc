@@ -13,7 +13,7 @@ public class ProfileController {
 	// dao ...
 
 	public File picture(Profile profile) {
-		return new File("/path/to/the/picture." + profile.getId()+ ".jpg"); 
+		return new File("/path/to/the/picture." + profile.getId()+ ".jpg");
 	}
 }
 [/code]

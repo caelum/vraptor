@@ -40,7 +40,7 @@ sempre que precisar instanciá-lo. Vale lembrar que o VRaptor honrará o escopo 
 Por exemplo, se ClienteDao fosse de escopo Session (@SessionScoped), seria criada uma única instância desse
 componente por sessão. (note que é provavelmente errado usar um dao no escopo de session, isto é um mero exemplo).
 
-[section Adapters]
+[section ComponentFactory]
 
 Em diversos momentos queremos que nossos componentes recebam componentes de outras bibliotecas.
 Nesse caso não temos como alterar o código fonte da biblioteca para adicionar a anotação @Component (além de possíveis

@@ -122,11 +122,11 @@ a:active {
 	margin-bottom: 0px;
 	margin-left: 10px;
 	position: relative;
-	height: 260px;
+	height: 285px;
 }
 
 div#box01 {
-	width:292px;
+	width:380px;
 	position: absolute;
 	z-index: 10;
 	height: 270px;
@@ -134,15 +134,14 @@ div#box01 {
 	top: 0px;
 	overflow: hidden;
 }
-div#box02 {
+div#boxvideo {
 	width:287px;
 	position: absolute;
 	z-index: 10;
 	height: 245px;
-	left: 297px;
+	left: 420px;
 	top: 0px;
 	overflow: hidden;
-	background-image: url(images/bg_amarelo.png);
 }
 div#box0 {
 	left: 10000000px;

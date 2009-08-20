@@ -29,7 +29,7 @@
 		<li>|</li>
         <li><a href="${menu}equipe.html">Equipe</a></li>
 		<li>|</li>
-    	<li><a href="${menu}documentacao.html"><b>Documentação</b></a></li>
+    	<li><a href="${menu}htmlflat/documentacao/"><b>Documentação</b></a></li>
 </ul>
 </div>
 

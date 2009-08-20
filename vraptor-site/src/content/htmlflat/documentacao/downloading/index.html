@@ -1,0 +1,127 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>VRaptor - Powered by Caelum | Downloading
+
+</title>
+<meta name="keywords" content="" />
+<meta name="Small Window " content="" />
+<link href="../includes/css/style.css" rel="stylesheet" type="text/css" media="screen" />
+</head>
+<body>
+
+<!-- start header -->
+<div id="all">
+<div id="header">
+
+<div id="logo"><img src="../includes/images/marca.png" alt="VRaptor" width="300" height="100" border="0"></div>
+
+<div id="centeredmenu">
+<ul>
+		<li><a href="../../../index.html">Home</a></li>
+        <li>|</li>
+		<li><a href="../../../download.html">Download</a></li>
+		<li>|</li>  
+        <li><a href="../../../vantagens.html">Vantagens</a></li>
+		<li>|</li>
+        <li><a href="../../../depoimentos.html">Depoimentos</a></li>
+		<li>|</li>
+        <li><a href="../../../equipe.html">Equipe</a></li>
+		<li>|</li>
+    	<li><a href="../../../htmlflat/documentacao/"><b>Documentação</b></a></li>
+</ul>
+</div>
+
+</div>
+<!-- finish header -->
+
+<!-- start conteudo -->
+
+<div id="wrapper">
+<div id="conteudo">
+
+<div id="titulo"><img src="../includes/images/hea_documentacao.jpg" alt="Ttulo" width="850" height="40"></div>
+
+<div id="texto_01">
+	
+
+		<h1 class="chapter">Downloading</h1>
+
+		
+		
+<h2 class="section">exemplo de 1 minuto: download</h2>
+	    	<span class="paragraph">O exemplo a seguir mostra como disponibilizar o download para seu cliente.</span>
+	    	<span class="paragraph">Note novamente a simplicidade na implementa&ccedil;&atilde;o:</span>
+	    	<div class="java"><code class="java">@Resource<br />
+public&nbsp;class&nbsp;PerfilController&nbsp;{<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;dao&nbsp;...<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;public&nbsp;File&nbsp;foto(Perfil&nbsp;perfil)&nbsp;{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;new&nbsp;File("/path/para/a/foto."&nbsp;+&nbsp;perfil.getId()+&nbsp;".jpg");&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}<br />
+}</code></div>
+		
+<h2 class="section">exemplo de 1 minuto: upload</h2>
+	    	<span class="paragraph">O primeiro exemplo ser&aacute; baseado na funcionalidade de upload multipart.</span>
+	    	<div class="java"><code class="java">@Resource<br />
+public&nbsp;class&nbsp;PerfilController&nbsp;{<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;private&nbsp;final&nbsp;PerfilDao&nbsp;dao;<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;public&nbsp;PerfilController(PerfilDao&nbsp;dao)&nbsp;{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this.dao&nbsp;=&nbsp;dao;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;public&nbsp;void&nbsp;atualizaFoto(Perfil&nbsp;perfil,&nbsp;UploadedFile&nbsp;foto)&nbsp;{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dao.atribue(foto.getFile(),&nbsp;perfil);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}<br />
+}</code></div>
+		
+
+
+<h2 class="section">exemplo de 1 minuto: download</h2>
+	    	<span class="paragraph">O exemplo a seguir mostra como disponibilizar o download para seu cliente.</span>
+	    	<span class="paragraph">Note novamente a simplicidade na implementa&ccedil;&atilde;o:</span>
+	    	<div class="java"><code class="java">@Resource<br />
+public&nbsp;class&nbsp;PerfilController&nbsp;{<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;dao&nbsp;...<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;public&nbsp;File&nbsp;foto(Perfil&nbsp;perfil)&nbsp;{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;new&nbsp;File("/path/para/a/foto."&nbsp;+&nbsp;perfil.getId()+&nbsp;".jpg");&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}<br />
+}</code></div>
+		
+
+<h2 class="section">exemplo de 1 minuto: upload</h2>
+	    	<span class="paragraph">O primeiro exemplo ser&aacute; baseado na funcionalidade de upload multipart.</span>
+	    	<div class="java"><code class="java">@Resource<br />
+public&nbsp;class&nbsp;PerfilController&nbsp;{<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;private&nbsp;final&nbsp;PerfilDao&nbsp;dao;<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;public&nbsp;PerfilController(PerfilDao&nbsp;dao)&nbsp;{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this.dao&nbsp;=&nbsp;dao;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;public&nbsp;void&nbsp;atualizaFoto(Perfil&nbsp;perfil,&nbsp;UploadedFile&nbsp;foto)&nbsp;{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dao.atribue(foto.getFile(),&nbsp;perfil);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}<br />
+}</code></div>
+		
+
+
+	</div>
+</div>
+</div>
+
+
+<div id="footer">
+	<p><a href="http://www.caelum.com.br" target="_blank">VRaptor ©2009 Caelum - Ensino e Inovação</a></p>
+</div>
+</div>
+</body>
+</html>

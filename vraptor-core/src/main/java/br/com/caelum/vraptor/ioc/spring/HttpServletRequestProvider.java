@@ -27,10 +27,9 @@
  */
 package br.com.caelum.vraptor.ioc.spring;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.FactoryBean;
 
+import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
 /**
@@ -48,7 +47,7 @@ class HttpServletRequestProvider implements FactoryBean {
     }
 
     public Class<?> getObjectType() {
-        return HttpServletRequest.class;
+        return MutableRequest.class;
     }
 
     public boolean isSingleton() {

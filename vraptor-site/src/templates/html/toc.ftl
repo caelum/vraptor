@@ -1,16 +1,17 @@
+<#assign relative = ".">
+<#assign menu = "../../">
+<#include "header.ftl">
 
 <!-- left bar -->
 <div class="linkBar">
 
 	<#assign curdir = 1>
 	<#list chapters as chapter>
-		<h2 class="chapterLink"><a href="../${dirTree[curdir]}/">${chapter.title}</a></h2>
+		<h3 class="chapterLink"><a class="link_toc" href="../${dirTree[curdir]}/">${chapter_index + 1}. ${chapter.title}</a></h3>
 		<#assign curdir = curdir + 1>
 		
-		<#list chapter.sections as section>
-			<h3 class="sectionLink"><a href="../${dirTree[curdir]}/">${section.title}</a></h3>		
-			<#assign curdir = curdir + 1>
-		</#list>
 	</#list>
 	
 </div>
+
+<#include "footer.ftl">

@@ -197,6 +197,20 @@ div#box03 {
 	margin-left: 25px;
 }
 
+.link_toc {
+	width: 850px;
+	background-color: #FFFFFF;
+	font-family: Tahoma;
+	color: #2A2948;
+	font-size: 11pt;
+	text-align: left;
+	padding: 0px;
+	margin-top: 15px;
+	margin-right: 25px;
+	margin-bottom: 15px;
+	margin-left: 25px;
+}
+
 
 #footer {
 	width: 900px;
@@ -251,3 +265,4 @@ div#box03 {
 	top: 25px;
 	vertical-align: top;
 }
+

@@ -78,30 +78,22 @@ public class DefaultLogicResult implements LogicResult {
 		this.container = container;
 		this.resolver = resolver;
     }
-//    private void setHttpMethod(Method method) {
-//    	for (HttpMethod httpMethod : HttpMethod.values()) {
-//        	if (method.isAnnotationPresent(httpMethod.getAnnotation())) {
-//        		request.setParameter("_method", httpMethod.name());
-//        		return;
-//        	}
-//		}
-//    }
+
+    /**
+     * This implementation don't actually use request dispatcher for the forwarding.
+     * It runs forwarding logic, and renders its <b>default</b> view.
+     */
     public <T> T forwardTo(final Class<T> type) {
         return proxifier.proxify(type, new MethodInvocation<T>() {
             public Object intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {
                 try {
-//                    String url = router.urlFor(type, method, args);
-//                    setHttpMethod(method);
-//                    includeParametersInFlash(type, method, args);
                     method.invoke(container.instanceFor(type), args);
                     request.getRequestDispatcher(resolver.pathFor(DefaultResourceMethod.instanceFor(type, method))).forward(request, response);
-//                    request.getRequestDispatcher(url).forward(request, response);
                     return null;
                 } catch (Exception e) {
                     throw new ProxyInvocationException(e);
 				}
             }
-
         });
     }
 

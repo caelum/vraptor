@@ -30,6 +30,7 @@
 package br.com.caelum.vraptor.example;
 
 import static br.com.caelum.vraptor.view.Results.logic;
+import static org.hamcrest.Matchers.notNullValue;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -86,21 +87,13 @@ public class ClientsController {
 		repository.add(client);
 	}
 
-
-
-
-
-
-
-
-
 	@Delete
 	@Path("/clients/{client.id}")
 	public void delete(Client client) {
 		repository.remove(client);
 		result.use(logic()).redirectTo(ClientsController.class).list();
 	}
-	
+
 	@Get
 	@Path("/clients/{client.id}")
 	public void view(Client client) {
@@ -118,7 +111,12 @@ public class ClientsController {
 	}
 
 	public File download(Client client) {
-		return repository.find(client.getId()).getFile().getFile();
+		final Client found = repository.find(client.getId());
+		validator.onError().goTo(ClientsController.class).view(client);
+		validator.checking(new Validations() {{
+			that(found.getFile()).shouldBe("download", "client_without_file", notNullValue());
+		}});
+		return found.getFile().getFile();
 	}
 
     public void form() {

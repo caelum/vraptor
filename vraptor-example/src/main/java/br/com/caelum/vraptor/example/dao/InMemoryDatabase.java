@@ -1,7 +1,7 @@
 /***
- * 
+ *
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  * 1. Redistributions of source code must retain the above copyright notice,
@@ -12,7 +12,7 @@
  * copyright holders nor the names of its contributors may be used to endorse or
  * promote products derived from this software without specific prior written
  * permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -32,8 +32,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.annotation.PostConstruct;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,7 +41,7 @@ import br.com.caelum.vraptor.ioc.Component;
 
 /**
  * A simple implementation of in memory database.
- * 
+ *
  * @author guilherme silveira
  */
 @ApplicationScoped
@@ -51,12 +49,12 @@ import br.com.caelum.vraptor.ioc.Component;
 public class InMemoryDatabase implements Repository {
 
 	private final Map<Long, Client> clients = new HashMap<Long, Client>();
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(InMemoryDatabase.class);
 
 	public InMemoryDatabase() {
 		logger.info("Starting up the database!");
-		
+
 		Client guilherme = new Client();
 		guilherme.setId(1L);
 		guilherme.setName("Guilherme Silveira");

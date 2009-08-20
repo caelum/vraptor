@@ -1,11 +1,16 @@
 package br.com.caelum.vraptor.core;
 
+import java.io.IOException;
+import java.io.StringReader;
 import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.MissingResourceException;
+import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 
 import javax.servlet.jsp.jstl.core.Config;
+
+import org.apache.log4j.Logger;
 
 import br.com.caelum.vraptor.ioc.RequestScoped;
 
@@ -17,6 +22,9 @@ import br.com.caelum.vraptor.ioc.RequestScoped;
  */
 @RequestScoped
 public class JstlLocalization implements Localization {
+
+
+	private static final Logger logger = Logger.getLogger(JstlLocalization.class);
 
     private static final String DEFAULT_BUNDLE_NAME = "messages";
 
@@ -35,10 +43,24 @@ public class JstlLocalization implements Localization {
             if (baseName == null) {
                 baseName = DEFAULT_BUNDLE_NAME;
             }
-            this.bundle = ResourceBundle.getBundle(baseName, locale);
+            try {
+				this.bundle = ResourceBundle.getBundle(baseName, locale);
+			} catch (MissingResourceException e) {
+				logger.warn("couldn't find message bundle, creating an empty one", e);
+				this.bundle = createEmptyBundle();
+			}
         }
         return this.bundle;
     }
+
+	private ResourceBundle createEmptyBundle() {
+		try {
+			return new PropertyResourceBundle(new StringReader(""));
+		} catch (IOException e) {
+			logger.warn("It shouldn't happen. Please report this bug", e);
+			return null;
+		}
+	}
 
     public Locale getLocale() {
         return localeFor(Config.FMT_LOCALE);

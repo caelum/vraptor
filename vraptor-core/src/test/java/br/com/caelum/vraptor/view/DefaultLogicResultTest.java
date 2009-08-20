@@ -81,7 +81,7 @@ public class DefaultLogicResultTest {
         this.context = mockery.mock(ServletContext.class);
         this.creator = mockery.mock(TypeCreator.class);
 
-        this.logicResult = new DefaultLogicResult(new DefaultProxifier(), router, context, request, response, creator);
+        this.logicResult = new DefaultLogicResult(new DefaultProxifier(), router, context, request, response, creator, null, null);
     }
 
 	private void ignoreFlashScope() {

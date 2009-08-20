@@ -31,13 +31,13 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 
 import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.TypeCreator;
 import br.com.caelum.vraptor.http.route.Router;
+import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.proxy.MethodInvocation;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.ProxyInvocationException;
@@ -63,37 +63,43 @@ public class DefaultLogicResult implements LogicResult {
 
 	private final TypeCreator creator;
 
+	private final Container container;
+
+	private final PathResolver resolver;
+
     public DefaultLogicResult(Proxifier proxifier, Router router, ServletContext context, MutableRequest request,
-            HttpServletResponse response, TypeCreator creator) {
+            HttpServletResponse response, TypeCreator creator, Container container, PathResolver resolver) {
         this.proxifier = proxifier;
         this.response = response;
         this.context = context;
         this.request = request;
         this.router = router;
 		this.creator = creator;
+		this.container = container;
+		this.resolver = resolver;
     }
-    private void setHttpMethod(Method method) {
-    	for (HttpMethod httpMethod : HttpMethod.values()) {
-        	if (method.isAnnotationPresent(httpMethod.getAnnotation())) {
-        		request.setParameter("_method", httpMethod.name());
-        		return;
-        	}
-		}
-    }
+//    private void setHttpMethod(Method method) {
+//    	for (HttpMethod httpMethod : HttpMethod.values()) {
+//        	if (method.isAnnotationPresent(httpMethod.getAnnotation())) {
+//        		request.setParameter("_method", httpMethod.name());
+//        		return;
+//        	}
+//		}
+//    }
     public <T> T forwardTo(final Class<T> type) {
         return proxifier.proxify(type, new MethodInvocation<T>() {
             public Object intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {
                 try {
-                    String url = router.urlFor(type, method, args);
-                    setHttpMethod(method);
-                    includeParametersInFlash(type, method, args);
-                    request.getRequestDispatcher(url).forward(request, response);
+//                    String url = router.urlFor(type, method, args);
+//                    setHttpMethod(method);
+//                    includeParametersInFlash(type, method, args);
+                    method.invoke(container.instanceFor(type), args);
+                    request.getRequestDispatcher(resolver.pathFor(DefaultResourceMethod.instanceFor(type, method))).forward(request, response);
+//                    request.getRequestDispatcher(url).forward(request, response);
                     return null;
-                } catch (ServletException e) {
+                } catch (Exception e) {
                     throw new ProxyInvocationException(e);
-                } catch (IOException e) {
-                    throw new ProxyInvocationException(e);
-                }
+				}
             }
 
         });

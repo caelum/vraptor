@@ -52,6 +52,7 @@ import org.springframework.core.Ordered;
 import org.springframework.web.context.support.AbstractRefreshableWebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
+import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.core.BaseComponents;
 import br.com.caelum.vraptor.core.DefaultConverters;
 import br.com.caelum.vraptor.core.URLParameterExtractorInterceptor;
@@ -146,6 +147,11 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
         for (Class<?> type : BaseComponents.getRequestScoped().values()) {
             registerOn(beanFactory, type);
         }
+
+        for (Class<? extends Converter<?>> converterType : BaseComponents.getBundledConverters()) {
+	        registerOn(beanFactory, converterType);
+	    }
+
         registerOn(beanFactory, AsmBasedTypeCreator.class);
         registerOn(beanFactory, ParametersInstantiatorInterceptor.class);
         registerOn(beanFactory, InterceptorListPriorToExecutionExtractor.class);

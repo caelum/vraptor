@@ -23,7 +23,7 @@
 	<target name="doc">
 		<exec executable="bash">
 			<arg line="tubaina" />
-			<arg line="-html" />
+			<arg line="-htmlflat" />
 			<arg line="-i" />
 			<arg line="src/guide/pt/" />
 			<arg line="-o" />

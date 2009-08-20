@@ -2,11 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>VRaptor - Powered by Caelum | ${chapter_name} 
-			
-			<#if section_name != "none">
-				-> ${section_name}
-			</#if>
+<title>VRaptor - Powered by Caelum | ${chapter_name?if_exists}
 
 </title>
 <meta name="keywords" content="" />
@@ -33,7 +29,7 @@
 		<li>|</li>
         <li><a href="${menu}equipe.html">Equipe</a></li>
 		<li>|</li>
-    	<li><a href="${menu}documentacao.html"><b>Documentação</b></a></li>
+    	<li><a href="${menu}htmlflat/documentacao/"><b>Documenta√ß√£o</b></a></li>
 </ul>
 </div>
 
@@ -45,6 +41,6 @@
 <div id="wrapper">
 <div id="conteudo">
 
-<div id="titulo"><img src="${relative}/includes/images/hea_documentacao.jpg" alt="Título" width="850" height="40"></div>
+<div id="titulo"><img src="${relative}/includes/images/hea_documentacao.jpg" alt="T¬ítulo" width="850" height="40"></div>
 
 <div id="texto_01">

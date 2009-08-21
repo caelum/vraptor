@@ -43,7 +43,7 @@
 	</target>
 	
 	<target name="zips-vraptor">
-		<zip destfile="target/vraptor-3.0.0-beta-1.zip">
+		<zip destfile="target/vraptor-3.0.0-beta-2.zip">
 			<zipfileset dir="vraptor-site/src/content/html/documentacao" prefix="docs"/>			
 			<fileset file="vraptor-core/target/vraptor3-3.0.0-SNAPSHOT.jar"/>
 			<zipfileset dir="vraptor-core/src" prefix="src"/>
@@ -52,7 +52,7 @@
 	</target>
 	
 	<target name="zips-blank-project">
-		<zip destfile="target/vraptor-3.0.0-blank-project-beta-1.zip">
+		<zip destfile="target/vraptor-3.0.0-blank-project-beta2.zip">
 			<fileset dir="vraptor-blank-project/" excludes="*.zip"/>
 		</zip>
 	</target>

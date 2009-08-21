@@ -5,6 +5,11 @@
 	id="WebApp_ID" version="2.5">
 	<display-name>vraptor-blank-project</display-name>
 
+	<context-param>
+        <param-name>br.com.caelum.vraptor.spring.packages</param-name>
+        <param-value>br.com.caelum.vraptor.blank</param-value>
+    </context-param>
+    
 	<filter>
 		<filter-name>vraptor</filter-name>
 		<filter-class>br.com.caelum.vraptor.VRaptor</filter-class>

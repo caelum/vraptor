@@ -28,8 +28,6 @@
 		<li>|</li>
         <li><a href="../../../depoimentos.html">Depoimentos</a></li>
 		<li>|</li>
-        <li><a href="../../../equipe.html">Equipe</a></li>
-		<li>|</li>
     	<li><a href="../../../htmlflat/documentacao/"><b>Documentação</b></a></li>
 </ul>
 </div>
@@ -57,18 +55,44 @@
 	    	<span class="paragraph">SessionScoped, App e Req...</span>
 		
 <h2 class="section">Redirecionamento e forward</h2>
-	    	<span class="paragraph">cliente x servidor</span>
+	    	<span class="paragraph">cliente x servidor, explicar quando e por que</span>
+		
+<h2 class="section">Accepts</h2>
+	    	<span class="paragraph">Accepts define se &eacute; para devolver json, xml, html etc</span>
 		
 <h2 class="section">_format parameter</h2>
+	    	<span class="paragraph">?_format sobrescreve o Accepts</span>
 		
 <h2 class="section">Sem view nenhuma</h2>
 		
-<h2 class="section">Download</h2>
-	    	<span class="paragraph">link para download</span>
-		
 <h2 class="section">Ajax: construindo na view</h2>
+	    	<div class="xml"><code class="xml">{&nbsp;nome:&nbsp;'${cliente.nome}',&nbsp;id:&nbsp;'${cliente.id}'&nbsp;}</code></div>
+	    	<div class="java"><code class="java">
+<span class="java10">Exemplo de componente que inclue o cliente para isso</span></code></div>
 		
 <h2 class="section">Ajax: construindo programaticamente</h2>
+		
+<h2 class="section">Resource not found</h2>
+	    	<div class="java"><code class="java">
+<span class="java16">@ApplicationScoped<br />
+</span><span class="java4">public class </span><span class="java10">DefaultResourceNotFoundHandler </span><span class="java4">implements </span><span class="java10">ResourceNotFoundHandler</span><span class="java8">{<br />
+&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">private static final </span><span class="java10">Logger logger = LoggerFactory<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; .getLogger</span><span class="java8">(</span><span class="java10">DefaultResourceNotFoundHandler.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">couldntFind</span><span class="java8">(</span><span class="java10">RequestInfo request</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">try </span><span class="java8">{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">logger.error</span><span class="java8">(</span><span class="java5">&#34;404 page not found: &#34; </span><span class="java10">+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; request.getRequest</span><span class="java8">()</span><span class="java10">.getRequestURI</span><span class="java8">())</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; request.getRequest</span><span class="java8">()</span><span class="java10">.getRequestDispatcher</span><span class="java8">(</span><span class="java5">&#34;../notFound.jsp&#34;</span><span class="java8">)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">.forward</span><span class="java8">(</span><span class="java10">request.getRequest</span><span class="java8">()</span><span class="java10">,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; request.getResponse</span><span class="java8">())</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java8">} </span><span class="java4">catch </span><span class="java8">(</span><span class="java10">IOException e</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">e.printStackTrace</span><span class="java8">()</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java8">} </span><span class="java4">catch </span><span class="java8">(</span><span class="java10">ServletException e</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">e.printStackTrace</span><span class="java8">()</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+&nbsp;&nbsp;&nbsp; }<br />
+}</span></code></div>
 		
 
 
@@ -80,23 +104,50 @@
 		
 
 <h2 class="section">Redirecionamento e forward</h2>
-	    	<span class="paragraph">cliente x servidor</span>
+	    	<span class="paragraph">cliente x servidor, explicar quando e por que</span>
+		
+
+<h2 class="section">Accepts</h2>
+	    	<span class="paragraph">Accepts define se &eacute; para devolver json, xml, html etc</span>
 		
 
 <h2 class="section">_format parameter</h2>
+	    	<span class="paragraph">?_format sobrescreve o Accepts</span>
 		
 
 <h2 class="section">Sem view nenhuma</h2>
 		
 
-<h2 class="section">Download</h2>
-	    	<span class="paragraph">link para download</span>
-		
-
 <h2 class="section">Ajax: construindo na view</h2>
+	    	<div class="xml"><code class="xml">{&nbsp;nome:&nbsp;'${cliente.nome}',&nbsp;id:&nbsp;'${cliente.id}'&nbsp;}</code></div>
+	    	<div class="java"><code class="java">
+<span class="java10">Exemplo de componente que inclue o cliente para isso</span></code></div>
 		
 
 <h2 class="section">Ajax: construindo programaticamente</h2>
+		
+
+<h2 class="section">Resource not found</h2>
+	    	<div class="java"><code class="java">
+<span class="java16">@ApplicationScoped<br />
+</span><span class="java4">public class </span><span class="java10">DefaultResourceNotFoundHandler </span><span class="java4">implements </span><span class="java10">ResourceNotFoundHandler</span><span class="java8">{<br />
+&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">private static final </span><span class="java10">Logger logger = LoggerFactory<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; .getLogger</span><span class="java8">(</span><span class="java10">DefaultResourceNotFoundHandler.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">couldntFind</span><span class="java8">(</span><span class="java10">RequestInfo request</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">try </span><span class="java8">{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">logger.error</span><span class="java8">(</span><span class="java5">&#34;404 page not found: &#34; </span><span class="java10">+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; request.getRequest</span><span class="java8">()</span><span class="java10">.getRequestURI</span><span class="java8">())</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; request.getRequest</span><span class="java8">()</span><span class="java10">.getRequestDispatcher</span><span class="java8">(</span><span class="java5">&#34;../notFound.jsp&#34;</span><span class="java8">)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">.forward</span><span class="java8">(</span><span class="java10">request.getRequest</span><span class="java8">()</span><span class="java10">,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; request.getResponse</span><span class="java8">())</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java8">} </span><span class="java4">catch </span><span class="java8">(</span><span class="java10">IOException e</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">e.printStackTrace</span><span class="java8">()</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java8">} </span><span class="java4">catch </span><span class="java8">(</span><span class="java10">ServletException e</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">e.printStackTrace</span><span class="java8">()</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+&nbsp;&nbsp;&nbsp; }<br />
+}</span></code></div>
 		
 
 

@@ -122,23 +122,22 @@ a:active {
 	margin-bottom: 0px;
 	margin-left: 10px;
 	position: relative;
-	height: 285px;
+	height: 340px;
 }
 
 div#box01 {
 	width:380px;
 	position: absolute;
 	z-index: 10;
-	height: 270px;
+	height: 340px;
 	left: 0px;
 	top: 0px;
 	overflow: hidden;
 }
 div#boxvideo {
-	width:287px;
 	position: absolute;
 	z-index: 10;
-	height: 245px;
+	height: 340px;
 	left: 420px;
 	top: 0px;
 	overflow: hidden;
@@ -197,6 +196,7 @@ div#box03 {
 	margin-right: 25px;
 	margin-bottom: 15px;
 	margin-left: 25px;
+	width: 330px;
 }
 
 

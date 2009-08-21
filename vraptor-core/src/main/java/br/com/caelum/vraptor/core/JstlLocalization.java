@@ -1,7 +1,7 @@
 package br.com.caelum.vraptor.core;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.StringReader;
 import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.MissingResourceException;
@@ -55,7 +55,7 @@ public class JstlLocalization implements Localization {
 
 	private ResourceBundle createEmptyBundle() {
 		try {
-			return new PropertyResourceBundle(new StringReader(""));
+			return new PropertyResourceBundle(new ByteArrayInputStream(new byte[0]));
 		} catch (IOException e) {
 			logger.warn("It shouldn't happen. Please report this bug", e);
 			return null;

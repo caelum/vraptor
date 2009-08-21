@@ -35,11 +35,11 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
 import br.com.caelum.vraptor.ioc.ContainerProvider;
-import br.com.caelum.vraptor.ioc.pico.PicoProvider;
+import br.com.caelum.vraptor.ioc.spring.SpringProvider;
 
 /**
  * VRaptors servlet context init parameter configuration reader.
- * 
+ *
  * @author Guilherme Silveira
  */
 public class BasicConfiguration {
@@ -55,7 +55,7 @@ public class BasicConfiguration {
     public ContainerProvider getProvider() throws ServletException {
         String provider = servletContext.getInitParameter(CONTAINER_PROVIDER);
         if (provider == null) {
-            provider = PicoProvider.class.getName();
+            provider = SpringProvider.class.getName();
         }
         try {
             return (ContainerProvider) Class.forName(provider).getDeclaredConstructor().newInstance();

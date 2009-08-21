@@ -59,68 +59,6 @@ class&nbsp;FuncionarioController&nbsp;{<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this.validator&nbsp;=&nbsp;validator;<br />
 &nbsp;&nbsp;&nbsp;&nbsp;}<br />
 }</code></div>
-		
-<h2 class="section">Estilo clássico</h2>
-	    	<span class="paragraph">A forma cl&aacute;ssica &eacute; semelhante a forma como as valida&ccedil;&otilde;es eram feitas no VRaptor2.
-Dentro da sua l&oacute;gica de neg&oacute;cios, basta fazer a verifica&ccedil;&atilde;o que deseja e caso haja um erro de valida&ccedil;&atilde;o, adicionar esse erro na lista
-de erros de valida&ccedil;&atilde;o.
-Por exemplo, para validar que o nome do funcionario deve ser Fulano, fa&ccedil;a:</span>
-	    	<div class="java"><code class="java">public&nbsp;void&nbsp;adiciona(Funcionario&nbsp;funcionario)&nbsp;{<br />
-&nbsp;&nbsp;&nbsp;&nbsp;if(!&nbsp;funcionario.getNome().equals("Fulano"))&nbsp;{<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;validator.add(new&nbsp;ValidationMessage("erro","nomeInvalido"));<br />
-&nbsp;&nbsp;&nbsp;&nbsp;}<br />
-}</code></div>
-		
-<h2 class="section">Estilo fluente</h2>
-	    	<span class="paragraph">No estilo fluente, a id&eacute;ia &eacute; que o c&oacute;digo para fazer a valida&ccedil;&atilde;o seja algo muito parecido com a linguagem natural.
-Por exemplo, caso queiramos obrigar que seja informado o nome do funcionario:</span>
-	    	<div class="java"><code class="java">public&nbsp;adiciona(Funcionario&nbsp;funcionario)&nbsp;{<br />
-&nbsp;&nbsp;&nbsp;&nbsp;validator.checking(new&nbsp;Validations(){{<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;that("erro","nomeNaoInformado",&nbsp;!funcionario.getNome().isEmpty());<br />
-&nbsp;&nbsp;&nbsp;&nbsp;}})<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<br />
-&nbsp;&nbsp;&nbsp;&nbsp;dao.adiciona(funcionario);<br />
-}</code></div>
-	    	<span class="paragraph">Voc&ecirc; pode ler esse c&oacute;digo como: "Validador, cheque as minhas valida&ccedil;&otilde;es. A primeira valida&ccedil;&atilde;o &eacute; que o nome do funcion&aacute;rio n&atilde;o pode ser vazio".
-Bem mais pr&oacute;ximo a linguagem natural.</span>
-	    	<span class="paragraph">Assim sendo, caso o nome do funcionario seja vazio, ele vai ser redirecionado novamente para a logica "formulario", que exibe o formulario para
-que o usu&aacute;rio adicione o funcion&aacute;rio novamente. Al&eacute;m disso, ele devolve para o formulario a mensagem de erro que aconteceu na valida&ccedil;&atilde;o.</span>
-		
-<h2 class="section">Hibernate validator</h2>
-	    	<span class="paragraph">O VRaptor tamb&eacute;m suporta integra&ccedil;&atilde;o com o HibernateValidator. No exemplo anterior para validar o objeto Funcionario 
-usando o Hibernate Validator basta adicionar uma linha de c&oacute;digo:</span>
-	    	<div class="java"><code class="java">public&nbsp;adiciona(Funcionario&nbsp;funcionario)&nbsp;{<br />
-&nbsp;&nbsp;&nbsp;&nbsp;validator.checking(new&nbsp;Validations(){{<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;that("erro","nomeNaoInformado",&nbsp;!funcionario.getNome().isEmpty());<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//Valida&ccedil;&atilde;o&nbsp;do&nbsp;Funcionario&nbsp;com&nbsp;Hibernate&nbsp;Validator<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and(Hibernate.validate(funcionario));<br />
-&nbsp;&nbsp;&nbsp;&nbsp;}})<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<br />
-&nbsp;&nbsp;&nbsp;&nbsp;dao.adiciona(funcionario);<br />
-}</code></div>
-		
-<h2 class="section">Para onde redirecionar no caso de erro</h2>
-	    	<span class="paragraph">Outro ponto importante que deve ser levado em considera&ccedil;&atilde;o no momento de fazer valida&ccedil;&otilde;es &eacute; o redirecionamento quando ocorrer um erro. Como
-enviamos o usu&aacute;rio para outro recurso com o VRaptor3, caso haja erro na valida&ccedil;&atilde;o?</span>
-	    	<span class="paragraph">Simples, apenas diga no seu c&oacute;digo que quando correr um erro, &eacute; para o usu&aacute;rio ser enviado para algum recurso.
-Como no exemplo:</span>
-	    	<div class="java"><code class="java">public&nbsp;adiciona(Funcionario&nbsp;funcionario)&nbsp;{<br />
-&nbsp;&nbsp;&nbsp;&nbsp;::validator.onError().goTo(FuncionarioController.class).formulario();::<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<br />
-&nbsp;&nbsp;&nbsp;&nbsp;//Valida&ccedil;&atilde;o&nbsp;na&nbsp;forma&nbsp;fluente<br />
-&nbsp;&nbsp;&nbsp;&nbsp;validator.checking(new&nbsp;Validations(){{<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;that("erro","nomeNaoInformado",&nbsp;!funcionario.getNome().isEmpty());<br />
-&nbsp;&nbsp;&nbsp;&nbsp;}})<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<br />
-&nbsp;&nbsp;&nbsp;&nbsp;//Valida&ccedil;&atilde;o&nbsp;na&nbsp;forma&nbsp;cl&aacute;ssica<br />
-&nbsp;&nbsp;&nbsp;&nbsp;if(!&nbsp;funcionario.getNome().equals("Fulano"))&nbsp;{<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;validator.add(new&nbsp;ValidationMessage("erro","nomeInvalido"));<br />
-&nbsp;&nbsp;&nbsp;&nbsp;}<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<br />
-&nbsp;&nbsp;&nbsp;&nbsp;dao.adiciona(funcionario);<br />
-}</code></div>
-		
 
 
 <h2 class="section">Estilo clássico</h2>

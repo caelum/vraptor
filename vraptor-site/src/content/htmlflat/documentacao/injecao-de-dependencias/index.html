@@ -72,55 +72,6 @@ essa necessidade:</span><div class="java"><code class="java">
 sempre que precisar instanci&aacute;-lo. Vale lembrar que o VRaptor honrar&aacute; o escopo de cada componente.
 Por exemplo, se ClienteDao fosse de escopo Session (@SessionScoped), seria criada uma &uacute;nica inst&acirc;ncia desse
 componente por sess&atilde;o. (note que &eacute; provavelmente errado usar um dao no escopo de session, isto &eacute; um mero exemplo).</span>
-		
-<h2 class="section">ComponentFactory</h2>
-	    	<span class="paragraph">Em diversos momentos queremos que nossos componentes recebam componentes de outras bibliotecas.
-Nesse caso n&atilde;o temos como alterar o c&oacute;digo fonte da biblioteca para adicionar a anota&ccedil;&atilde;o @Component (al&eacute;m de poss&iacute;veis
-altera&ccedil;&otilde;es requeridas na biblioteca).</span>
-	    	<span class="paragraph">O exemplo mais famoso envolve adquirir uma Session do Hibernate. Nesses casos precisamos criar um componente
-que possui um &uacute;nico papel: fornecer inst&acirc;ncias de Session para os componentes que precisam dela.</span>
-	    	<span class="paragraph">O VRaptor possui uma interface chamada ComponentFactory que permite que suas classes possuam tal responsabilidade.
-Implementa&ccedil;&otilde;es dessa interface definem um &uacute;nico m&eacute;todo. Veja o exemplo a seguir, que inicializa o Hibernate na constru&ccedil;&atilde;o
-e utiliza essa configura&ccedil;&atilde;o para fornecer sess&otilde;es para nosso projeto:</span>
-	    	<div class="java"><code class="java">
-<span class="java16">@Component<br />
-@ApplicationScoped </span><span class="java3">// ou outro escopo desejado<br />
-</span><span class="java4">public class </span><span class="java10">SessionProvider </span><span class="java4">implements </span><span class="java10">ComponentFactory&lt;Session&gt; </span><span class="java8">{<br />
-<br />
-&nbsp;&nbsp;&nbsp; </span><span class="java4">private final </span><span class="java10">SessionFactory factory;<br />
-&nbsp;&nbsp;&nbsp; <br />
-&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">SessionProvider</span><span class="java8">() {<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">factory = </span><span class="java4">new </span><span class="java10">AnnotationConfiguration</span><span class="java8">()</span><span class="java10">.configure</span><span class="java8">()</span><span class="java10">;<br />
-&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
-&nbsp;&nbsp;&nbsp; <br />
-&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">Session getInstance</span><span class="java8">() {<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java3">// voce poderia usar aqui as ferramentas de ThreadLocal do hibernate<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return </span><span class="java10">factory.openSession</span><span class="java8">()</span><span class="java10">;<br />
-&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
-&nbsp;&nbsp;&nbsp; <br />
-}</span></code></div>
-		
-<h2 class="section">Providers</h2>
-	    	<span class="paragraph">Por tr&aacute;s dos panos, o VRaptor utiliza um provider de DI espec&iacute;fico. Por padr&atilde;o o vraptor v&ecirc;m com suporte ao uso interno
-do Picocontainer ou do Spring DI.</span>
-	    	<span class="paragraph">Cada implementa&ccedil;&atilde;o disponibiliza tudo o que voc&ecirc; encontra na documenta&ccedil;&atilde;o do vraptor, mas acaba por fornecer tamb&eacute;m pontos de extens&atilde;o diferentes, claro.</span>
-		
-<h2 class="section">Pico Container</h2>
-	    	<span class="paragraph">Ao utilizar o Picocontainer por baixo do VRaptor, voc&ecirc; poder&aacute; acessar o pico diretamente para fazer configura&ccedil;&otilde;es avan&ccedil;adas que desejar.</span>
-	    	<span class="paragraph">Para utilizar o Picocontainer como provider de sua aplica&ccedil;&atilde;o, basta colocar no seu arquivo web.xml:</span>
-	    	<span class="paragraph">???????????</span>
-		
-<h2 class="section">Spring</h2>
-	    	<span class="paragraph">Ao utilizar o Spring, voc&ecirc; ganha todas as caracter&icirc;sticas e componentes prontos do Spring para uso dentro do VRaptor, isto &eacute;, todos os componentes que funcionam com o Spring DI/Ioc, funcionam com o VRaptor. Nesse caso, todas as anota&ccedil;&otilde;es.</span>
-	    	<span class="paragraph">Para utilizar o Spring como provider de sua aplica&ccedil;&atilde;o, basta colocar no seu arquivo web.xml:</span>
-	    	<span class="paragraph">???????????</span>
-		
-<h2 class="section">Spring exemplo com Hibernate dele</h2>
-	    	<span class="paragraph">???????????</span>
-		
-<h2 class="section">Seu próprio provider</h2>
-	    	<span class="paragraph">Voc&ecirc; tamb&eacute;m pode criar seu pr&oacute;prio Provider, seja para adicionar novas caracter&iacute;sticas avan&ccedil;adas a implementa&ccedil;&atilde;o do Picocontainer ou do Spring, ou ainda para se basear em outro cont&acirc;iner de DI que seja de sua prefer&ecirc;ncia.</span>
-		
 
 
 <h2 class="section">ComponentFactory</h2>

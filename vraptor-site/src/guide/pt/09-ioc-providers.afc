@@ -86,7 +86,12 @@ Para utilizar o Picocontainer como provider de sua aplicação, basta colocar no
 
 
 
-???????????
+[xml]
+		<context-param>
+        <param-name>br.com.caelum.vraptor.provider</param-name>
+        <param-value>br.com.caelum.vraptor.ioc.pico.PicoProvider</param-value>
+    </context-param>
+[/xml]
 
 
 
@@ -97,9 +102,17 @@ Ao utilizar o Spring, você ganha todas as caracterîsticas e componentes pronto
 Para utilizar o Spring como provider de sua aplicação, basta colocar no seu arquivo web.xml:
 
 
+[xml]
+		<context-param>
+        <param-name>br.com.caelum.vraptor.provider</param-name>
+        <param-value>br.com.caelum.vraptor.ioc.spring.SpringProvider</param-value>
+    </context-param>
 
-???????????
-
+    <context-param>
+        <param-name>br.com.caelum.vraptor.spring.packages</param-name>
+        <param-value>br.com.pacote.do.seu.projeto</param-value>
+    </context-param>
+[/xml]
 
 
 [section Spring exemplo com Hibernate dele]

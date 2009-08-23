@@ -36,7 +36,7 @@ public class Migrator {
 
 	public Migrations getMigrationsToApply() {
 		Set<String> applied = new HashSet(provider.getAppliedMigrations());
-		List<Migration> toApply = new ArrayList<Migration>(migrations.all());
+		List<Migration> toApply = new ArrayList<Migration>(migrations.all().getAll());
 		for (Iterator it = toApply.iterator(); it.hasNext();) {
 			Migration migration = (Migration) it.next();
 			if (applied.contains(migration.getId())) {

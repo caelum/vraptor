@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -15,7 +16,6 @@ public class MigratorTest {
 
 	private Mockery mockery;
 	private ConnectionProvider provider;
-	private Migrations migrations;
 	private Migrator migrator;
 	private Migration first;
 	private Migration second;
@@ -24,10 +24,10 @@ public class MigratorTest {
 	public void setup() {
 		this.mockery = new Mockery();
 		this.provider = mockery.mock(ConnectionProvider.class);
-		this.migrations = new Migrations();
-		this.migrator = new Migrator(provider, migrations);
 		this.first = mockery.mock(Migration.class, "first");
 		this.second = mockery.mock(Migration.class, "second");
+		List<Migration> list = Arrays.asList(this.first, this.second);
+		this.migrator = new Migrator(provider, new ArrayBasedMigrationProvider(list));
 		mockery.checking(new Expectations() {
 			{
 				allowing(first).getId();
@@ -36,8 +36,6 @@ public class MigratorTest {
 				will(returnValue("second"));
 			}
 		});
-		migrations.add(first);
-		migrations.add(second);
 	}
 
 	@Test

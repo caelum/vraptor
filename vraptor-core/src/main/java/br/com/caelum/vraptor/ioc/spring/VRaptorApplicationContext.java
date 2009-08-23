@@ -54,31 +54,8 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.core.BaseComponents;
-import br.com.caelum.vraptor.core.DefaultConverters;
-import br.com.caelum.vraptor.core.URLParameterExtractorInterceptor;
-import br.com.caelum.vraptor.extra.ForwardToDefaultViewInterceptor;
-import br.com.caelum.vraptor.http.DefaultResourceTranslator;
-import br.com.caelum.vraptor.http.ParanamerNameProvider;
-import br.com.caelum.vraptor.http.asm.AsmBasedTypeCreator;
-import br.com.caelum.vraptor.http.route.DefaultRouter;
-import br.com.caelum.vraptor.interceptor.DefaultInterceptorRegistry;
-import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
-import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
-import br.com.caelum.vraptor.interceptor.InterceptorListPriorToExecutionExtractor;
-import br.com.caelum.vraptor.interceptor.OutjectResult;
-import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
-import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
-import br.com.caelum.vraptor.interceptor.download.DownloadInterceptor;
-import br.com.caelum.vraptor.interceptor.multipart.DefaultMultipartConfig;
-import br.com.caelum.vraptor.interceptor.multipart.MultipartInterceptor;
 import br.com.caelum.vraptor.ioc.ComponentFactory;
 import br.com.caelum.vraptor.ioc.StereotypeHandler;
-import br.com.caelum.vraptor.proxy.DefaultProxifier;
-import br.com.caelum.vraptor.view.DefaultAcceptHeaderToFormat;
-import br.com.caelum.vraptor.view.DefaultLogicResult;
-import br.com.caelum.vraptor.view.DefaultPageResult;
-import br.com.caelum.vraptor.view.DefaultPathResolver;
-import br.com.caelum.vraptor.view.EmptyResult;
 
 /**
  * @author Fabio Kung
@@ -122,15 +99,6 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
 	}
 
 	private void registerApplicationScopedComponentsOn(DefaultListableBeanFactory beanFactory) {
-        registerOn(beanFactory, DefaultRouter.class);
-        registerOn(beanFactory, DefaultResourceTranslator.class);
-        registerOn(beanFactory, DefaultInterceptorRegistry.class);
-        registerOn(beanFactory, AsmBasedTypeCreator.class);
-        registerOn(beanFactory, DefaultProxifier.class);
-        registerOn(beanFactory, DefaultAcceptHeaderToFormat.class);
-        registerOn(beanFactory, DefaultPathResolver.class);
-        registerOn(beanFactory, ParanamerNameProvider.class);
-        registerOn(beanFactory, DefaultConverters.class);
         for (Class<?> type : BaseComponents.getApplicationScoped().values()) {
             registerOn(beanFactory, type);
         }
@@ -140,7 +108,6 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
 		}
 
         registerOn(beanFactory, StereotypedBeansRegistrar.class);
-        registerOn(beanFactory, DefaultMultipartConfig.class);
     }
 
     private void registerRequestScopedComponentsOn(DefaultListableBeanFactory beanFactory) {
@@ -152,24 +119,10 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
 	        registerOn(beanFactory, converterType);
 	    }
 
-        registerOn(beanFactory, AsmBasedTypeCreator.class);
-        registerOn(beanFactory, ParametersInstantiatorInterceptor.class);
-        registerOn(beanFactory, InterceptorListPriorToExecutionExtractor.class);
-        registerOn(beanFactory, URLParameterExtractorInterceptor.class);
-        registerOn(beanFactory, ResourceLookupInterceptor.class);
-        registerOn(beanFactory, InstantiateInterceptor.class);
-        registerOn(beanFactory, ExecuteMethodInterceptor.class);
-        registerOn(beanFactory, DefaultPageResult.class);
-        registerOn(beanFactory, ForwardToDefaultViewInterceptor.class);
-        registerOn(beanFactory, DefaultLogicResult.class);
         registerOn(beanFactory, VRaptorRequestProvider.class, true);
         registerOn(beanFactory, HttpServletRequestProvider.class, true);
         registerOn(beanFactory, HttpServletResponseProvider.class, true);
         registerOn(beanFactory, HttpSessionProvider.class, true);
-        registerOn(beanFactory, OutjectResult.class);
-        registerOn(beanFactory, EmptyResult.class);
-        registerOn(beanFactory, MultipartInterceptor.class);
-        registerOn(beanFactory, DownloadInterceptor.class);
 
         beanFactory.registerSingleton(SpringBasedContainer.class.getName(), container);
     }

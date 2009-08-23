@@ -28,6 +28,7 @@
 package br.com.caelum.vraptor.interceptor;
 
 import java.io.File;
+
 import java.io.InputStream;
 
 import javax.servlet.http.HttpServletResponse;

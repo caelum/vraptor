@@ -101,6 +101,7 @@ public class VRaptor2Config implements Config {
             results.put((String) key, p.getProperty((String) key));
             logger.debug("Mapped: " + key + " to " + p.getProperty((String) key));
         }
+        logger.warn("[MIGRATION] You still have to migrate " + p.size() + " forwards found at " + file.getAbsolutePath());
         stream.close();
     }
 

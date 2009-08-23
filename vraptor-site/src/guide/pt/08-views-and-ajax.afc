@@ -37,11 +37,15 @@ Exemplo de componente que inclue o cliente para isso
 @ApplicationScoped
 public class DefaultResourceNotFoundHandler implements ResourceNotFoundHandler{
 	
-	private static final Logger logger = LoggerFactory.getLogger(DefaultResourceNotFoundHandler.class);
+	private static final Logger logger = LoggerFactory
+		.getLogger(DefaultResourceNotFoundHandler.class);
 	public void couldntFind(RequestInfo request) {
 		try {
-			logger.error("404 page not found: " + request.getRequest().getRequestURI());
-			request.getRequest().getRequestDispatcher("../notFound.jsp").forward(request.getRequest(), request.getResponse());
+			logger.error("404 page not found: " +
+				request.getRequest().getRequestURI());
+			request.getRequest().getRequestDispatcher("../notFound.jsp")
+			.forward(request.getRequest(),
+				request.getResponse());
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ServletException e) {

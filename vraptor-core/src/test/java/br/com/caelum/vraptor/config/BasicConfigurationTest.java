@@ -1,5 +1,8 @@
 package br.com.caelum.vraptor.config;
 
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.typeCompatibleWith;
+
 import java.io.IOException;
 
 import javax.servlet.ServletContext;
@@ -16,7 +19,7 @@ import org.junit.Test;
 import br.com.caelum.vraptor.core.Execution;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
-import br.com.caelum.vraptor.ioc.pico.PicoProvider;
+import br.com.caelum.vraptor.ioc.spring.SpringProvider;
 
 public class BasicConfigurationTest {
 
@@ -32,15 +35,14 @@ public class BasicConfigurationTest {
     }
 
     @Test
-    public void shouldUsePicoContainerAsDefaultProvider() throws ServletException {
+    public void shouldUseSpringContainerAsDefaultProvider() throws ServletException {
         mockery.checking(new Expectations() {
             {
                 one(context).getInitParameter(BasicConfiguration.CONTAINER_PROVIDER);
                 will(returnValue(null));
             }
         });
-        MatcherAssert.assertThat(config.getProvider().getClass(), Matchers.is(Matchers
-                .typeCompatibleWith(PicoProvider.class)));
+        MatcherAssert.assertThat(config.getProvider().getClass(), is(typeCompatibleWith(SpringProvider.class)));
         mockery.assertIsSatisfied();
     }
 

@@ -12,6 +12,9 @@ import net.sf.cglib.proxy.NoOp;
 
 import org.objenesis.ObjenesisStd;
 
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
+
+@ApplicationScoped
 public class ObjenesisProxifier implements Proxifier {
 
     private static final CallbackFilter IGNORE_BRIDGE_METHODS = new CallbackFilter() {

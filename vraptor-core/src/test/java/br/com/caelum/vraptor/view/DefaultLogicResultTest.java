@@ -27,11 +27,13 @@
  */
 package br.com.caelum.vraptor.view;
 
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
+
 import java.io.IOException;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -45,6 +47,7 @@ import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.TypeCreator;
 import br.com.caelum.vraptor.http.route.Router;
+import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.proxy.DefaultProxifier;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
@@ -57,9 +60,13 @@ public class DefaultLogicResultTest {
     private ServletContext context;
     private MutableRequest request;
 	private TypeCreator creator;
+	private Container container;
+	private PathResolver resolver;
 
     public static class MyComponent {
+    	int calls = 0;
         public void base() {
+        	calls++;
         }
 
         @Post
@@ -81,7 +88,10 @@ public class DefaultLogicResultTest {
         this.context = mockery.mock(ServletContext.class);
         this.creator = mockery.mock(TypeCreator.class);
 
-        this.logicResult = new DefaultLogicResult(new DefaultProxifier(), router, context, request, response, creator);
+        container = mockery.mock(Container.class);
+		resolver = mockery.mock(PathResolver.class);
+
+		this.logicResult = new DefaultLogicResult(new DefaultProxifier(), router, context, request, response, creator, container, resolver);
     }
 
 	private void ignoreFlashScope() {
@@ -97,10 +107,26 @@ public class DefaultLogicResultTest {
 	}
 
 	@Test
-	public void shouldPutParametersOnFlashScopeOnForward() throws Exception {
+	public void shouldExecuteTheLogicAndRedirectToItsViewOnForward() throws Exception {
+		final MyComponent component = new MyComponent();
+		mockery.checking(new Expectations() {
+			{
+				one(container).instanceFor(MyComponent.class);
+				will(returnValue(component));
 
-		shouldPutOnFlashScope();
+				one(resolver).pathFor(with(any(ResourceMethod.class)));
+				will(returnValue("Abc123"));
+
+				one(request).getRequestDispatcher("Abc123");
+				RequestDispatcher dispatcher = mockery.mock(RequestDispatcher.class);
+                will(returnValue(dispatcher));
+                one(dispatcher).forward(request, response);
+			}
+		});
+		assertThat(component.calls, is(0));
 		logicResult.forwardTo(MyComponent.class).base();
+		assertThat(component.calls, is(1));
+
 		mockery.assertIsSatisfied();
 	}
 	@Test
@@ -123,23 +149,6 @@ public class DefaultLogicResultTest {
 			}
 		});
 	}
-    @Test
-    public void instantiatesUsingTheContainerAndAddsTheExecutionInterceptors() throws NoSuchMethodException, IOException, ServletException {
-    	ignoreFlashScope();
-        final String url = "custom_url";
-        mockery.checking(new Expectations() {
-            {
-                one(router).urlFor(MyComponent.class, MyComponent.class.getDeclaredMethod("base"));
-                will(returnValue(url));
-                one(request).getRequestDispatcher(url);
-                RequestDispatcher dispatcher = mockery.mock(RequestDispatcher.class);
-                will(returnValue(dispatcher));
-                one(dispatcher).forward(request, response);
-            }
-        });
-        logicResult.forwardTo(MyComponent.class).base();
-        mockery.assertIsSatisfied();
-    }
 
     @Test
     public void clientRedirectingWillRedirectToTranslatedUrl() throws NoSuchMethodException, IOException {
@@ -158,20 +167,6 @@ public class DefaultLogicResultTest {
         logicResult.redirectTo(MyComponent.class).base();
         mockery.assertIsSatisfied();
     }
-
-    @Test
-	public void forwardingToANonGetMethodChangesMethodParameterToTheCorrectHttpMethod() throws Exception {
-
-		mockery.checking(new Expectations() {
-			{
-				one(request).setParameter("_method", "POST");
-				ignoring(anything());
-			}
-		});
-
-		logicResult.forwardTo(MyComponent.class).annotated();
-		mockery.assertIsSatisfied();
-	}
 
     @Test
 	public void canRedirectWhenLogicMethodIsNotAnnotatedWithHttpMethods() throws Exception {

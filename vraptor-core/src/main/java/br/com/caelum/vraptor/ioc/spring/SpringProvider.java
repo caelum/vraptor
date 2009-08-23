@@ -27,16 +27,22 @@ public class SpringProvider implements ContainerProvider {
     public <T> T provideForRequest(RequestInfo request, Execution<T> execution) {
         VRaptorRequestHolder.setRequestForCurrentThread(request);
         T result;
-        if (springListenerAlreadyCalled()) {
-            result = execution.insideRequest(container);
-        } else {
-            ServletContext context = request.getServletContext();
-            HttpServletRequest webRequest = request.getRequest();
-            requestListener.requestInitialized(new ServletRequestEvent(context, webRequest));
-            result = execution.insideRequest(container);
-            requestListener.requestDestroyed(new ServletRequestEvent(context, webRequest));
+        try {
+	        if (springListenerAlreadyCalled()) {
+	            result = execution.insideRequest(container);
+	        } else {
+	            ServletContext context = request.getServletContext();
+	            HttpServletRequest webRequest = request.getRequest();
+	            requestListener.requestInitialized(new ServletRequestEvent(context, webRequest));
+	            try {
+	            	result = execution.insideRequest(container);
+	            } finally {
+	            	requestListener.requestDestroyed(new ServletRequestEvent(context, webRequest));
+	            }
+	        }
+        } finally {
+        	VRaptorRequestHolder.resetRequestForCurrentThread();
         }
-        VRaptorRequestHolder.resetRequestForCurrentThread();
         return result;
     }
 

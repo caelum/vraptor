@@ -106,7 +106,7 @@ public class VRaptor implements Filter {
     public void init(FilterConfig cfg) throws ServletException {
         servletContext = cfg.getServletContext();
         BasicConfiguration config = new BasicConfiguration(servletContext);
-        init(config.getProvider(), new CachedStaticContentHandler(new DefaultStaticContentHandler(servletContext)));
+        init(config.getProvider(), new DefaultStaticContentHandler(servletContext));
         logger.info("VRaptor 3 successfuly initialized");
     }
 

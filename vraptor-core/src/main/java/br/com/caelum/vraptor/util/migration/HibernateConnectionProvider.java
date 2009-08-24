@@ -4,8 +4,6 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
-
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -18,7 +16,7 @@ import br.com.caelum.vraptor.ioc.ContainerProvider;
 /**
  * Provides connections and database metadata based on a hibernate session
  * factory.
- * 
+ *
  * @author Guilherme Silveira
  */
 @Component

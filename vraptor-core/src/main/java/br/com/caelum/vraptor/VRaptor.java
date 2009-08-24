@@ -45,7 +45,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.config.BasicConfiguration;
-import br.com.caelum.vraptor.core.CachedStaticContentHandler;
 import br.com.caelum.vraptor.core.DefaultStaticContentHandler;
 import br.com.caelum.vraptor.core.Execution;
 import br.com.caelum.vraptor.core.RequestExecution;
@@ -91,9 +90,9 @@ public class VRaptor implements Filter {
             staticHandler.deferProcessingToContainer(chain, baseRequest, webResponse);
             return;
         }
-        
+
         VRaptorRequest mutableRequest = new VRaptorRequest(baseRequest);
-        
+
         RequestInfo request = new RequestInfo(servletContext, mutableRequest, webResponse);
         provider.provideForRequest(request, new Execution<Object>() {
             public Object insideRequest(Container container) {

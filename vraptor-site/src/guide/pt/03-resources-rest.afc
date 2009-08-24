@@ -304,6 +304,7 @@ Por fim, a maneira mais avançada de configurar rotas de acesso aos seus recurso
 Esse componente deve ser configurado no escopo de aplicação e implementar o método config:
 
 [java]
+@Component
 @ApplicationScoped
 public class CustomRoutes implements RoutesConfiguration {
 
@@ -318,6 +319,7 @@ melhor de tudo, é que a configuração é refactor-friendly, isto é, se você 
 o nome de um método, a configuração também altera, mas mantem a mesma ::uri:: :
 
 [java]
+@Component
 @ApplicationScoped
 public class CustomRoutes implements RoutesConfiguration {
 

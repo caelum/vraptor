@@ -63,6 +63,7 @@ Sendo assim, os dois exemplos anteriores permitem que qualquer um de seus recurs
 um ClienteDao em seu construtor, por exemplo:
 
 [java]
+@Resource
 public class ClienteController {
 	private final ClienteDao dao;
 	

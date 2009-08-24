@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import javax.annotation.PostConstruct;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,7 +47,8 @@ public class Migrator {
 		}
 		return new Migrations(toApply);
 	}
-	
+
+	@PostConstruct
 	public void startup() {
 		logger.info("Starting the Migrator");
 		Migrations migrations = getMigrationsToApply();

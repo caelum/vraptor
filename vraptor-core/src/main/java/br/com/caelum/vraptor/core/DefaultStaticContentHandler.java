@@ -13,35 +13,47 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Handles default content if the request corresponds to static content.
+ * 
+ * @author guilherme silveira
+ * @author unknown - based on vraptor2
+ */
 public class DefaultStaticContentHandler implements StaticContentHandler {
-    
-    private static final Logger logger = LoggerFactory.getLogger(DefaultStaticContentHandler.class);
-    
-    private final ServletContext context;
 
-    public DefaultStaticContentHandler(ServletContext context) {
-        this.context = context;
-    }
+	private static final Logger logger = LoggerFactory
+			.getLogger(DefaultStaticContentHandler.class);
 
-    public boolean requestingStaticFile(HttpServletRequest request) throws MalformedURLException {
-        URL resourceUrl = context.getResource(uriRelativeToContextRoot(request));
-        return resourceUrl != null && isAFile(resourceUrl);
-    }
+	private final ServletContext context;
 
-    private String uriRelativeToContextRoot(HttpServletRequest request) {
-        return request.getRequestURI().substring(request.getContextPath().length());
-    }
+	public DefaultStaticContentHandler(ServletContext context) {
+		this.context = context;
+	}
 
-    private boolean isAFile(URL resourceUrl) {
-        return !resourceUrl.toString().endsWith("/");
-    }
+	public boolean requestingStaticFile(HttpServletRequest request)
+			throws MalformedURLException {
+		URL resourceUrl = context
+				.getResource(uriRelativeToContextRoot(request));
+		return resourceUrl != null && isAFile(resourceUrl);
+	}
 
-    public void deferProcessingToContainer(FilterChain filterChain, HttpServletRequest request,
-            HttpServletResponse response) throws IOException, ServletException {
-        if (logger.isDebugEnabled()) {
-            logger.debug("deferring URI to container: " + request.getRequestURI());
-        }
-        filterChain.doFilter(request, response);
-    }
+	private String uriRelativeToContextRoot(HttpServletRequest request) {
+		return request.getRequestURI().substring(
+				request.getContextPath().length());
+	}
+
+	private boolean isAFile(URL resourceUrl) {
+		return !resourceUrl.toString().endsWith("/");
+	}
+
+	public void deferProcessingToContainer(FilterChain filterChain,
+			HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
+		if (logger.isDebugEnabled()) {
+			logger.debug("deferring URI to container: "
+					+ request.getRequestURI());
+		}
+		filterChain.doFilter(request, response);
+	}
 
 }

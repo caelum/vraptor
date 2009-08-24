@@ -1,0 +1,236 @@
+[chapter Migrating from VRaptor2 to VRaptor3]
+
+[section web.xml]
+	In order to migrate, in small steps, you'll only need to put on your web.xml:
+
+[xml]
+	<context-param>
+		<param-name>br.com.caelum.vraptor.provider</param-name>
+		<param-value>br.com.caelum.vraptor.vraptor2.Provider</param-value>
+	</context-param>
+
+	<filter>
+		<filter-name>vraptor</filter-name>
+		<filter-class>br.com.caelum.vraptor.VRaptor</filter-class>
+	</filter>
+	
+	<filter-mapping>
+		<filter-name>vraptor</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+[/xml]
+
+  Don't forget to remove the old VRaptorServlet declaration from VRaptor2, and its
+  respective servlet-mapping.
+
+[section Migration from @org.vraptor.annotations.Component to @br.com.caelum.vraptor.Resource]
+
+VRaptor2's @Component correspondent in VRaptor3 is @Resource. Therefore, in order to
+make logic classes accessible, just annotate them with @Resource (removing the @Component).
+
+The conventions used are slightly different:
+
+In VRaptor2:
+[java]
+@Component
+public class ClientsLogic {
+	
+	public void form() {
+	
+	}
+	
+}
+[/java]
+
+In VRaptor 3:
+[java]
+@Resource
+public class ClientsController {
+
+   public void form() {
+   
+   }
+}
+[/java]
+
+The form method will be accessible from the URI: "/clients/form", and the default view
+will be %%WEB-INF/jsp/clients/form.jsp%%.
+
+Which means, the suffix %%Controller%% is removed from the class name and there is no more
+.logic at the end of the URI. Also, the result jsp doesn't have either "ok" or "invalid" on
+its name.
+
+[section @In]
+VRaptor3 manages the dependencies for you, so, what you were used to annotate with @In on
+VRaptor2, you'll only need to receive as constructor arguments:
+
+In VRaptor 2:
+[java]
+@Component
+public class ClientsLogic {
+	@In
+	private ClientDao dao;
+		
+	public void form() {
+	
+	}
+	
+}
+[/java]
+
+In VRaptor 3:
+[java]
+@Resource
+public class ClientsController {
+
+	private final ClientDao dao;
+	public ClientsController(ClientDao dao) {
+		this.dao = dao;
+	}
+	
+	public void form() {
+   
+	}
+}
+[/java]
+
+In order for this to work, you only need that your ClientDao is annotated with VRaptor3's 
+@br.com.caelum.vraptor.ioc.Component.
+
+[section @Out and getters]
+In VRaptor2 you used either the @Out annotation or a getter method to make and object accessible
+to the view. In VRaptor3 you only need to return the specified object, if it's only one, or
+make use of a special object which exposes your objects to the view. This object is the Result.
+
+In VRaptor 2:
+[java]
+@Component
+public class ClientsLogic {
+	private Collection<Client> list;
+	
+	public void list() {
+		this.list = dao.list();
+	}
+	
+	public Collection<Client> getClientList() {
+		return this.list;
+	}
+
+	@Out
+	private Client client;
+	
+	public void show(Long id) {
+		this.client = dao.load(id);
+	}
+	
+}
+[/java]
+
+In VRaptor 3:
+[java]
+@Resource
+public class ClientsController {
+
+	private final ClientDao dao;
+	private final Result result;
+	
+	public ClientsController(ClientDao dao, Result result) {
+		this.dao = dao;
+		this.result = result;
+	}
+	
+	public Collection<Client> list() {
+		return dao.list(); // the name will be "clientList"
+	}
+	
+	public void listaDiferente() {
+		result.include("clients", dao.list());
+	}
+	
+	public Client show(Long id) {
+		return dao.load(id); // the name will be "client"
+	}
+}
+[/java]
+
+When your method's return type isn't void, VRaptor uses that type to find out which
+will be the object's name on the view. 
+When not using the Result object, the name of the exposed object depends on the method's return type.
+If the return type is a Collection, the object name will be the name of the 
+object contained by the Collection followed by the word List. In the above example, the object would be named 'clientList'.
+Otherwise, if the return type is a single object, the exposed object's name will be the name of the class
+with lowercase characters. 
+
+[section views.properties]
+
+In VRaptor3 there's no views.properties file, although it is supported when using VRaptor3's
+compatibility mode. Thus, all redirections are made on the underlying logic, using the Result object.
+
+[java]
+@Resource
+public class ClientsController {
+
+	private final ClientDao dao;
+	private final Result result;
+	
+	public ClientsController(ClientDao dao, Result result) {
+		this.dao = dao;
+		this.result = result;
+	}
+
+	public Collection<Client> list() {
+		return dao.list();
+	}
+
+	public void save(Client client) {
+		dao.save(client);
+		
+		result.use(Results.logic()).redirectTo(ClientsController.class).list();
+	}
+}
+[/java]
+
+If it's redirection to a logic, you can refer to it directly, and the given parameters will be passed to
+the called logic.
+
+If you want to forward to a JSP page, you can use: 
+[java]
+  result.use(Results.page()).forward("/WEB-INF/jsp/clients/save.ok.jsp");
+[/java]
+
+[section Validation]
+
+You don't need to create a method called validateLogicName in order to do the validation,
+you only need to receive the br.com.caelum.vraptor.Validator object in your logic's
+constructor, and use it to do your validation, specifying which logic to go when
+your validation fails. 
+
+[java]
+@Resource
+public class ClientsController {
+
+	private final ClientDao dao;
+	private final Result result;
+	private final Validator validator;
+	
+	public ClientsController(ClientDao dao, Result result, Validator validator) {
+		this.dao = dao;
+		this.result = result;
+		this.validator = validator;
+	}
+
+	public void form() {
+	
+	}
+	
+	public void save(Client client) {
+		validator.onError().goTo(ClientsController.class).form();
+		if (client.getName() == null) {
+			validator.add(new ValidationMessage("error","invalidName"));
+		}
+		dao.save(client);
+	}
+}
+[/java]
+

@@ -21,6 +21,7 @@ import br.com.caelum.vraptor.ioc.Component;
  */
 @Component
 @ApplicationScoped
+@SuppressWarnings("unchecked")
 public class HibernateConnectionProvider implements ConnectionProvider {
 
 	private final SessionFactory factory;
@@ -52,7 +53,6 @@ public class HibernateConnectionProvider implements ConnectionProvider {
 		session.save(new MigrationInfo(migration.getId()));
 	}
 
-	@SuppressWarnings("unchecked")
 	public List<String> getAppliedMigrations() {
 		Session session = factory.openSession();
 		try {

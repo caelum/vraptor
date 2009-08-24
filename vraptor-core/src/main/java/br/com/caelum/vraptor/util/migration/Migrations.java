@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+@SuppressWarnings("unchecked")
 public class Migrations {
 
 	private final Set<Migration> migrations;

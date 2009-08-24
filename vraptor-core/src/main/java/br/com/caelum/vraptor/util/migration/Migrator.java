@@ -12,18 +12,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
-import br.com.caelum.vraptor.ioc.Component;
 
 /**
  * A component responsible for migrating your database settings to a new
  * situation.<br/>
  * Upon server startup it will check which migrations were not applied (by id)
  * and apply them to the current database.
- * 
+ *
  * @author guilherme silveira
- * 
+ *
  */
-@Component
 @ApplicationScoped
 public class Migrator {
 
@@ -37,10 +35,10 @@ public class Migrator {
 	}
 
 	public Migrations getMigrationsToApply() {
-		Set<String> applied = new HashSet(provider.getAppliedMigrations());
+		Set<String> applied = new HashSet<String>(provider.getAppliedMigrations());
 		List<Migration> toApply = new ArrayList<Migration>(migrations.all().getAll());
-		for (Iterator it = toApply.iterator(); it.hasNext();) {
-			Migration migration = (Migration) it.next();
+		for (Iterator<Migration> it = toApply.iterator(); it.hasNext();) {
+			Migration migration = it.next();
 			if (applied.contains(migration.getId())) {
 				it.remove();
 			}

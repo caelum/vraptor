@@ -87,6 +87,8 @@ public class PicoProvider implements ContainerProvider {
 
 	    Scanner scanner = new ReflectionsScanner(context);
 
+	    this.picoContainer.addComponent(scanner);
+
 	    registerAnnotatedComponents(scanner, componentRegistry);
 
 	    getComponentRegistry().init();

@@ -1,0 +1,20 @@
+[chapter Componentes Utilitários]
+
+[section Hibernate Session e SessionFactory]
+
+Se você precisa de Session's e SessionFactory nos seus componentes, você geralmente
+vai precisar de um ComponentFactory para criá-los. Se você usa entidades anotadas,
+e o hibernate.cfg.xml na raiz do WEB-INF/classes, você pode usar as ComponentFactory's para
+isso que já vêm com o VRaptor. O que você precisa fazer é colocar no seu CustomProvider:
+
+[java]
+public class CustomProvider extends PicoProvider {
+	
+	@Override
+	public void registerBundledComponents(ComponentRegistry registry) {
+		super.registerBundledComponents(registry);
+		registry.register(SessionCreator.class, SessionCreator.class);
+		registry.register(SessionFactoryCreator.class, SessionFactoryCreator.class);
+	}
+}
+[/java]

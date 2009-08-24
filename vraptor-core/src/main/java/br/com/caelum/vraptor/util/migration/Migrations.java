@@ -2,13 +2,16 @@ package br.com.caelum.vraptor.util.migration;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class Migrations {
 	
-	private final List<Migration> migrations;
+	private final Set<Migration> migrations;
 
 	Migrations(List<Migration> migrations) {
-		this.migrations = migrations;
+		this.migrations = new TreeSet(new MigrationComparator());
+		this.migrations.addAll(migrations);
 	}
 	
 	Migrations() {
@@ -19,16 +22,12 @@ public class Migrations {
 		this.migrations.add(migration);
 	}
 
-	public List<Migration> getAll() {
+	public Set<Migration> getAll() {
 		return migrations;
 	}
 
 	Integer size() {
 		return migrations.size();
-	}
-
-	Migration get(int i) {
-		return migrations.get(i);
 	}
 	
 	@Override

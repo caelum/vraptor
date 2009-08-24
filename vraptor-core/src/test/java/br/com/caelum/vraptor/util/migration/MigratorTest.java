@@ -61,7 +61,7 @@ public class MigratorTest {
 		});
 		Migrations migrationsToApply = migrator.getMigrationsToApply();
 		assertThat(migrationsToApply.size(), is(equalTo(1)));
-		assertThat(migrationsToApply.get(0), is(equalTo(second)));
+		assertThat(migrationsToApply.getAll().iterator().next(), is(equalTo(second)));
 		mockery.assertIsSatisfied();
 	}
 

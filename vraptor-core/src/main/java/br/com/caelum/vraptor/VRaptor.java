@@ -45,6 +45,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.config.BasicConfiguration;
+import br.com.caelum.vraptor.core.CachedStaticContentHandler;
 import br.com.caelum.vraptor.core.DefaultStaticContentHandler;
 import br.com.caelum.vraptor.core.Execution;
 import br.com.caelum.vraptor.core.RequestExecution;
@@ -105,7 +106,7 @@ public class VRaptor implements Filter {
     public void init(FilterConfig cfg) throws ServletException {
         servletContext = cfg.getServletContext();
         BasicConfiguration config = new BasicConfiguration(servletContext);
-        init(config.getProvider(), new DefaultStaticContentHandler(servletContext));
+        init(config.getProvider(), new CachedStaticContentHandler(new DefaultStaticContentHandler(servletContext)));
         logger.info("VRaptor 3 successfuly initialized");
     }
 

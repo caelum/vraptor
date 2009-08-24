@@ -7,9 +7,9 @@ package br.com.caelum.vraptor.util.migration;
  *
  * @param <T> the database api access object
  */
-public interface Migration {
+public interface Migration<T> {
 	
-	<T> void execute(T control);
+	void execute(T control);
 	
 	String getId();
 

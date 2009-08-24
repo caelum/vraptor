@@ -6,14 +6,14 @@ import java.util.Set;
 import java.util.TreeSet;
 
 public class Migrations {
-	
+
 	private final Set<Migration> migrations;
 
 	Migrations(List<Migration> migrations) {
-		this.migrations = new TreeSet(new MigrationComparator());
+		this.migrations = new TreeSet<Migration>(new MigrationComparator());
 		this.migrations.addAll(migrations);
 	}
-	
+
 	Migrations() {
 		this(new ArrayList<Migration>());
 	}
@@ -29,7 +29,7 @@ public class Migrations {
 	Integer size() {
 		return migrations.size();
 	}
-	
+
 	@Override
 	public String toString() {
 		return "[Migrations: " + migrations + "]";

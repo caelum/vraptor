@@ -7,6 +7,7 @@ import org.hibernate.Transaction;
 import org.hibernate.classic.Session;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -49,9 +50,6 @@ public class HibernateConnectionProviderTest {
 				one(session).save(new MigrationInfo("1"));
 				one(session).save(new MigrationInfo("2"));
 
-				allowing(session).beginTransaction();
-				will(returnValue(mockery.mock(Transaction.class)));
-
 				ignoring(anything());
 
 			}
@@ -61,6 +59,47 @@ public class HibernateConnectionProviderTest {
 		provider.apply(migrations);
 
 		mockery.assertIsSatisfied();
+	}
+
+	@Test
+	public void shouldRollbackIfAMigrationFails() throws Exception {
+		final Migration migration = mockery.mock(Migration.class, "a migration");
+		final Migration otherMigration = mockery.mock(Migration.class, "other migration");
+
+
+		mockery.checking(new Expectations() {
+			{
+				allowing(migration).getId(); will(returnValue("1"));
+				allowing(otherMigration).getId(); will(returnValue("2"));
+
+				one(migration).execute(session); will(throwException(new RuntimeException()));
+				never(otherMigration).execute(session);
+
+				never(session).save(new MigrationInfo("1"));
+				never(session).save(new MigrationInfo("2"));
+
+				Transaction transaction = mockery.mock(Transaction.class);
+
+				allowing(session).beginTransaction();
+				will(returnValue(transaction));
+
+				one(transaction).rollback();
+				one(transaction).wasCommitted(); will(returnValue(false));
+
+				ignoring(anything());
+
+			}
+		});
+
+		Migrations migrations = new Migrations(Arrays.asList(migration, otherMigration));
+		try {
+			provider.apply(migrations);
+			Assert.fail("Expected exception");
+		} catch (RuntimeException e) {
+			//expected
+			mockery.assertIsSatisfied();
+		}
+
 	}
 
 }

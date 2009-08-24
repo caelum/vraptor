@@ -1,16 +1,231 @@
-[chapter Resource]
+[chapter Migrando do VRaptor2 para o VRaptor3]
 
-[section O que são Resources?]
+[section web.xml]
+	Para migrar aos poucos, basta colocar no seu web.xml:
 
-[section Escopos]
-SessionScoped, App e Req...
+[xml]
+	<context-param>
+		<param-name>br.com.caelum.vraptor.provider</param-name>
+		<param-value>br.com.caelum.vraptor.vraptor2.Provider</param-value>
+	</context-param>
 
-[section @Component]
+	<filter>
+		<filter-name>vraptor</filter-name>
+		<filter-class>br.com.caelum.vraptor.VRaptor</filter-class>
+	</filter>
+	
+	<filter-mapping>
+		<filter-name>vraptor</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
 
-comentar da similaridade dos @Component com escopo com o jsf
+[/xml]
 
-[section Provider]
+  Lembre-se de tirar a declaração antiga do VRaptorServlet do vraptor2, e o seu 
+  respectivo mapping.
 
-[section Exemplos]
+[section migrando de @org.vraptor.annotations.Component para @br.com.caelum.vraptor.Resource]
 
-Exemplos de uso de todos os casos aqui com codigo
+O correspondente ao @Component do VRaptor2 é o @Resource do VRaptor3. Portanto, para disponibilizar
+os métodos de uma classe como lógicas é só anotá-las com @Resource (removendo o @Component).
+
+As convenções usadas são um pouco diferentes:
+
+No VRaptor 2:
+[java]
+@Component
+public class ClientsLogic {
+	
+	public void form() {
+	
+	}
+	
+}
+[/java]
+
+No VRaptor 3:
+[java]
+@Resource
+public class ClientsController {
+
+   public void form() {
+   
+   }
+}
+[/java]
+
+O método form estará acessível pela uri: "/clients/form", e a view padrão será a
+%%WEB-INF/jsp/clients/form.jsp%%.
+Ou seja, o sufixo %%Controller%% é removido do nome da classe e não tem mais o sufixo
+.logic na uri. Não é colocado o resultado "ok" ou "invalid" no nome do jsp.
+
+[section @In]
+O VRaptor3 gerencia as dependências para você, logo o que você usava como @In no vraptor2,
+basta receber pelo construtor:
+
+No VRaptor 2:
+[java]
+@Component
+public class ClientsLogic {
+	@In
+	private ClientDao dao;
+		
+	public void form() {
+	
+	}
+	
+}
+[/java]
+
+No VRaptor 3:
+[java]
+@Resource
+public class ClientsController {
+
+	private final ClientDao dao;
+	public ClientsController(ClientDao dao) {
+		this.dao = dao;
+	}
+	
+	public void form() {
+   
+	}
+}
+[/java]
+
+E para que isso funcione você só precisa que o seu ClientDao esteja anotado com o 
+@br.com.caelum.vraptor.ioc.Component do VRaptor3.
+
+[section @Out e getters]
+No VRaptor2 você usava a anotação @Out ou um getter para disponibilizar um objeto para a
+view. No VRaptor3 basta retornar o objeto, se for um só, ou usar um objeto especial para
+expôr os objetos para a view. Este objeto é o Result:
+
+No VRaptor 2:
+[java]
+@Component
+public class ClientsLogic {
+	private Collection<Client> list;
+	
+	public void list() {
+		this.list = dao.list();
+	}
+	
+	public Collection<Client> getClientList() {
+		return this.list;
+	}
+
+	@Out
+	private Client client;
+	
+	public void show(Long id) {
+		this.client = dao.load(id);
+	}
+	
+}
+[/java]
+
+No VRaptor 3:
+[java]
+@Resource
+public class ClientsController {
+
+	private final ClientDao dao;
+	private final Result result;
+	
+	public ClientsController(ClientDao dao, Result result) {
+		this.dao = dao;
+		this.result = result;
+	}
+	
+	public Collection<Client> list() {
+		return dao.list(); // o nome será clientList
+	}
+	
+	public void listaDiferente() {
+		result.include("clients", dao.list());
+	}
+	
+	public Client show(Long id) {
+		return dao.load(id); // o nome será "client"
+	}
+}
+[/java]
+
+Quando você usa o retorno do método, o vraptor usa o tipo do retorno para determinar
+qual vai ser o seu nome na view. No caso de uma classe normal, o nome do objeto será
+o nome da classe com a primeira letra minúscula. No caso de ser uma Collection, o
+nome será o nome da classe, com a primeira minuscula, seguido da palavra List.
+
+[section views.properties]
+
+No VRaptor3 não existe o arquivo views.properties, embora ele seja suportado no modo de
+compatibilidade com o vraptor2, todos os redirecionamentos são feitos na própria lógica,
+usando o Result:
+
+[java]
+@Resource
+public class ClientsController {
+
+	private final ClientDao dao;
+	private final Result result;
+	
+	public ClientsController(ClientDao dao, Result result) {
+		this.dao = dao;
+		this.result = result;
+	}
+
+	public Collection<Client> list() {
+		return dao.list();
+	}
+
+	public void save(Client client) {
+		dao.save(client);
+		
+		result.use(Results.logic()).redirectTo(ClientsController.class).list();
+	}
+}
+[/java]
+
+Se o redirecionamento for para uma lógica, você pode referenciá-la diretamente, e os parâmetros passados
+para o método serão usados para chamar a lógica.
+
+Se for para uma jsp direto você pode usar:
+[java]
+  result.use(Results.page()).forward("/WEB-INF/jsp/clients/save.ok.jsp");
+[/java]
+
+[section Validação]
+
+Você não precisa criar um método validateNomeDaLogica para fazer a validação, basta
+receber no construtor um objeto do tipo br.com.caelum.vraptor.Validator, e usá-lo para
+sua validação, especificando qual é a lógica para usar quando a validação dá errado:
+
+[java]
+@Resource
+public class ClientsController {
+
+	private final ClientDao dao;
+	private final Result result;
+	private final Validator validator;
+	
+	public ClientsController(ClientDao dao, Result result, Validator validator) {
+		this.dao = dao;
+		this.result = result;
+		this.validator = validator;
+	}
+
+	public void form() {
+	
+	}
+	
+	public void save(Client client) {
+		validator.onError().goTo(ClientsController.class).form();
+		if (client.getName() == null) {
+			validator.add(new ValidationMessage("erro","nomeInvalido"));
+		}
+		dao.save(client);
+	}
+}
+[/java]
+

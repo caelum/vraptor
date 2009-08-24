@@ -6,7 +6,7 @@ utilizar dessa idéia para juntar seus componentes internos.
 O conceito básico por trás de Dependency Injection (DI) é que você não deve buscar aquilo que deseja acessar
 mas tudo o que deseja acessar deve ser fornecido para você.
 
-Isso se traduz, no Java contemporaneo, a passagem de componentes através do construtor de seus controladores.
+Isso se traduz, no Java contemporâneo, a passagem de componentes através do construtor de seus controladores.
 Imagine que seu controlador de clientes necessita acessar um Dao de clientes. Sendo assim, especifique claramente
 essa necessidade:
 
@@ -55,8 +55,8 @@ e utiliza essa configuração para fornecer sessões para nosso projeto:
 
 [java]
 @Component
-@ApplicationScoped // ou outro escopo desejado
-public class SessionProvider implements ComponentFactory<Session> {
+@ApplicationScoped
+public class SessionFactoryProvider implements ComponentFactory<SessionFactory> {
 
 	private final SessionFactory factory;
 	
@@ -64,8 +64,23 @@ public class SessionProvider implements ComponentFactory<Session> {
 		factory = new AnnotationConfiguration().configure();
 	}
 	
+	public SessionFactory getInstance() {
+		return factory;
+	}
+	
+}
+
+@Component
+@RequestScoped
+public class SessionProvider implements ComponentFactory<Session> {
+
+	private final SessionFactory factory;
+	
+	public SessionProvider(SessionFactory factory) {
+		this.factory = factory;
+	}
+	
 	public Session getInstance() {
-		// voce poderia usar aqui as ferramentas de ThreadLocal do hibernate
 		return factory.openSession();
 	}
 	
@@ -84,8 +99,6 @@ Ao utilizar o Picocontainer por baixo do VRaptor, você poderá acessar o pico d
 
 Para utilizar o Picocontainer como provider de sua aplicação, basta colocar no seu arquivo web.xml:
 
-
-
 [xml]
 		<context-param>
         <param-name>br.com.caelum.vraptor.provider</param-name>
@@ -97,9 +110,10 @@ Para utilizar o Picocontainer como provider de sua aplicação, basta colocar no
 
 [section Spring]
 
-Ao utilizar o Spring, você ganha todas as caracterîsticas e componentes prontos do Spring para uso dentro do VRaptor, isto é, todos os componentes que funcionam com o Spring DI/Ioc, funcionam com o VRaptor. Nesse caso, todas as anotações.
+Ao utilizar o Spring, você ganha todas as características e componentes prontos do Spring para uso dentro do VRaptor, isto é, todos os componentes que funcionam com o Spring DI/Ioc, funcionam com o VRaptor. Nesse caso, todas as anotações.
 
-Para utilizar o Spring como provider de sua aplicação, basta colocar no seu arquivo web.xml:
+Para utilizar o Spring como provider de sua aplicação, basta colocar no seu arquivo web.xml, lembrando
+que se você não especificar nenhum Provider o Spring é o padrão:
 
 
 [xml]

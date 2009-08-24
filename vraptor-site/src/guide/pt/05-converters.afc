@@ -104,23 +104,7 @@ public class LongConverter implements Converter<Long> {
 
 [section Registrando um novo conversor]
 
-Após criar seu próprio conversor, não esqueça de registrá-lo como um componente customizado em seu Provider.
-Usando o pico container como seu provider, você pode fazer assim:
-
-[code]
-public class CustomProvider extends Provider {
-
-    @Override
-    protected void registerComponents(ComponentRegistry container) {
-        super.registerComponents(container);
-        
-        // outros components
-        
-        container.register(LongConverter.class, LongConverter.class);
-    }
-
-}
-[/code]
-
+Não é necessária nenhuma configuração além do @Convert e implementar a interface Converter
+para que o conversor seja registrado no Container do VRaptor.
 
 [section Outros fora do padrão]

@@ -75,8 +75,8 @@ Para usar essas mensagens em seus arquivos JSP, você pode utilizar a JSTL. Dess
 </html>
 [/code]
 
-[section WEB-INF/lib]
-
 [section blank-project]
+As dependências mínimas e a configuração mínima para o VRaptor funcionar
+estão no vraptor-blank-project que pode ser baixado no site:
+http://github.com/caelum/vraptor/downloads
 
-temos que ter um blank-project que e' so descompactar

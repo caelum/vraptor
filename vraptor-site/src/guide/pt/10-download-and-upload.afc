@@ -18,6 +18,25 @@ public class PerfilController {
 }
 [/code]
 
+[section Adicionando mais informações no download]
+
+Se você quiser adicionar mais informações ao download você pode retornar
+um FileDownload:
+
+@Resource
+public class PerfilController {
+
+	// dao ...
+
+	public Download foto(Perfil perfil) {
+		File file = new File("/path/para/a/foto." + perfil.getId()+ ".jpg");
+		String contentType = "image/jpg";
+		String filename = perfil.getNome() + ".jpg";
+		
+		return new FileDownload(file, contentType, filename); 
+	}
+}
+
 
 [section exemplo de 1 minuto: upload]
 

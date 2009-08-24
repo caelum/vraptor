@@ -52,6 +52,20 @@ Bem mais próximo a linguagem natural.
 Assim sendo, caso o nome do funcionario seja vazio, ele vai ser redirecionado novamente para a logica "formulario", que exibe o formulario para
 que o usuário adicione o funcionário novamente. Além disso, ele devolve para o formulario a mensagem de erro que aconteceu na validação.
 
+[session Validação usando matchers do Hamcrest]
+Você pode também usar matchers do Hamcrest para deixar a validação mais legível, e ganhar
+a vantagem da composição de matchers e da criação de novos matchers que o Hamcrest te oferece:
+[code]
+public adiciona(Funcionario funcionario) {
+	validator.checking(new Validations(){{
+		that("erro","nomeNaoInformado", funcionario.getNome(), not(emptyString()));
+	}})
+	
+	dao.adiciona(funcionario);
+}
+[/code]
+
+
 [section Hibernate validator]
 
 O VRaptor também suporta integração com o HibernateValidator. No exemplo anterior para validar o objeto Funcionario 

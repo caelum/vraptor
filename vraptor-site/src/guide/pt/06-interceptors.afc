@@ -32,14 +32,14 @@ public interface Interceptor {
 [section Exemplo simples]
 
 A classe a seguir mostra um exemplo de como interceptar todas as requisições em um escopo de
-sessão e simplesmente mostrar na saída do console o que está sendo invocado.
+requisição e simplesmente mostrar na saída do console o que está sendo invocado.
 
 Lembre-se que o interceptador é um componente como qualquer outro e pode receber
 em seu construtor quaisquer dependencias atraves de Injecao de Dependencias. 
  
 [java]
 @Intercepts
-@SessionScoped
+@RequestScoped
 public class Log implements Interceptor {
 
 	private final HttpServletRequest request;
@@ -76,18 +76,12 @@ lógica e da exibição da página para o usuário, commita a transação e logo
 public class DatabaseInterceptor implements br.com.caelum.vraptor.Interceptor {
 
 	private final Database controller;
-	private final Result result;
-	private final HttpServletRequest request;
 
-	public DatabaseInterceptor(Database controller, Result result, HttpServletRequest request) {
+	public DatabaseInterceptor(Database controller) {
 		this.controller = controller;
-		this.result = result;
-		this.request = request;
 	}
 
-	public void intercept(InterceptorStack stack, ResourceMethod method, 
-							Object instance) throws InterceptionException {
-		result.include("contextPath", request.getContextPath());
+	public void intercept(InterceptorStack stack, ResourceMethod method, Object instance) throws InterceptionException {
 		try {
 			controller.beginTransaction();
 			stack.next(method, instance);

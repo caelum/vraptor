@@ -41,7 +41,7 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**
  * Basic url to resource method translator.
- * 
+ *
  * @author Guilherme Silveira
  * @author Leonardo Bessa
  */
@@ -79,7 +79,7 @@ public class DefaultResourceTranslator implements UrlToResourceTranslator {
         if (request.getAttribute(INCLUDE_REQUEST_URI) != null) {
             return (String) request.getAttribute(INCLUDE_REQUEST_URI);
         }
-        String uri = request.getRequestURI();
+        String uri = request.getRequestURI().replaceFirst("(?i);jsessionid=.*$", "");
         String contextName = request.getContextPath();
         uri = uri.replaceFirst(contextName, "");
         return uri;

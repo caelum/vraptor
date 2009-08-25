@@ -210,7 +210,7 @@ public class DefaultResourceTranslatorTest {
         mockery.assertIsSatisfied();
 
     }
-    
+
     @Test
     public void canHandleComposedUrlIfPlainRootContext() {
 
@@ -230,7 +230,7 @@ public class DefaultResourceTranslatorTest {
         mockery.assertIsSatisfied();
 
     }
-    
+
     @Test
     public void canHandleComposedUrlIfNonRootContext() {
 
@@ -248,6 +248,29 @@ public class DefaultResourceTranslatorTest {
         ResourceMethod resource = translator.translate(webRequest);
         assertThat(resource, is(equalTo(expected)));
         mockery.assertIsSatisfied();
+
+    }
+    @Test
+    public void canHandleUrlWithAppendedJSessionID() {
+
+    	final ResourceMethod expected = mockery.mock(ResourceMethod.class);
+
+    	mockery.checking(new Expectations(){{
+    		allowing(request).getAttribute(DefaultResourceTranslator.INCLUDE_REQUEST_URI); will(returnValue(null));
+    		allowing(request).getContextPath();   will(returnValue("/custom_context"));
+    		one(request).getRequestURI(); will(returnValue("/custom_context/products/1;jsessionid=aslfasfaslkj22234lkjsdfaklsf"));
+    		one(request).getRequestURI(); will(returnValue("/custom_context/products/1;JSESSIONID=aslfasfaslkj22234lkjsdfaklsf"));
+    		one(request).getRequestURI(); will(returnValue("/custom_context/products/1;jsessionID=aslfasfaslkj22234lkjsdfaklsf"));
+    		allowing(request).getMethod(); will(returnValue("GET"));
+    		allowing(registry).parse("/products/1", HttpMethod.GET,webRequest); will(returnValue(expected));
+    		allowing(request).getParameter("_method"); will(returnValue(null));
+    	}});
+
+    	assertThat(translator.translate(webRequest), is(equalTo(expected)));
+    	assertThat(translator.translate(webRequest), is(equalTo(expected)));
+    	assertThat(translator.translate(webRequest), is(equalTo(expected)));
+
+    	mockery.assertIsSatisfied();
 
     }
 

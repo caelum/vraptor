@@ -13,6 +13,7 @@ import javax.servlet.ServletContext;
 
 import org.reflections.Reflections;
 import org.reflections.scanners.ClassAnnotationsScanner;
+import org.reflections.scanners.SubTypesScanner;
 import org.reflections.util.AbstractConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,7 +44,7 @@ public class ReflectionsScanner implements Scanner {
         this.reflections = new Reflections(new AbstractConfiguration() {
             {
             	setUrls(Arrays.asList(webInfClasses));
-                setScanners(new ClassAnnotationsScanner());
+                setScanners(new ClassAnnotationsScanner(), new SubTypesScanner());
             }
         });
     }

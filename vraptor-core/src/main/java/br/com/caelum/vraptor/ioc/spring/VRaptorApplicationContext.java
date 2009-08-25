@@ -29,6 +29,7 @@ package br.com.caelum.vraptor.ioc.spring;
 
 import java.util.Map;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 
 import org.springframework.aop.config.AopConfigUtils;
@@ -72,6 +73,11 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
         this.basePackages = basePackages;
     }
 
+    @Override
+    public void setServletConfig(ServletConfig servletConfig) {
+    	super.setServletConfig(servletConfig);
+    	setParent(WebApplicationContextUtils.getWebApplicationContext(servletConfig.getServletContext()));
+    }
     @Override
     protected void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) {
         WebApplicationContextUtils.registerWebApplicationScopes(beanFactory);

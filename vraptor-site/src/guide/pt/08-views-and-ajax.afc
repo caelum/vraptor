@@ -1,56 +1,123 @@
-[chapter View and Ajax]
+[chapter View e Ajax]
+
+[section Custom PathResolver]
+Por padrão o VRaptor para renderizar suas views segue a convenção:
+
+[java]
+	public class ClientsController {
+		public void list() {
+			//...
+		}
+	}
+[/java]
+
+Esse método acima renderizará a view %%/WEB-INF/jsp/clients/list.jsp%%.
+
+No entanto, nem sempre queremos esse comportamento, e precisamos usar algum template engine,
+como por exemplo, Freemarker ou Velocity, e precisamos mudar essa convenção.
+
+Um jeito fácil de mudar essa convenção é estendendo a classe DefaultPathResolver:
+
+[java]
+	@Component
+	public class FreemarkerPathResolver extends DefaultPathResolver {
+		protected String getPrefix() {
+			return "/WEB-INF/freemarker/";
+		}
+		
+		protected String getExtension() {
+			return "ftl";
+		}
+	}
+[/java]
+
+Desse jeito, a lógica iria renderizar a view %%/WEB-INF/freemarker/clients/list.ftl%%.
+Se ainda assim isso não for o suficiente você pode implementar a interface PathResolver
+e fazer qualquer convenção que você queira, não esquecendo de anotar a classe com @Component.
 
 [section View]
 
-[section Custom PathResolver]
-SessionScoped, App e Req...
+Se você quiser mudar a view de alguma lógica específica você pode usar o objeto Result:
+
+[java]
+	@Resource
+	public class ClientsController {
+		
+		private final Result result;
+		
+		public ClientsController(Result result) {
+			this.result = result;
+		}
+		
+		public void list() {}
+		
+		public void save(Client client) {
+			//...
+			this.result.use(Results.logic()).redirectTo(ClientsController.class).list();
+		}
+	}
+[/java]
+
+Por padrão existem três tipos de views implementadas:
+
+[list]
+	* Results.logic(), que vai redirecionar para uma outra lógica qualquer do sistema
+	* Results.page(), que vai redirecionar diretamente para uma página, podendo ser um
+	jsp, um html, ou qualquer uri relativa ao web application dir, ou ao contexto da aplicação.
+	* Results.nothing(), apenas retorna o código de sucesso (HTTP 200 OK).
+[/list]
 
 [section Redirecionamento e forward]
 
-cliente x servidor, explicar quando e por que
+No VRaptor3, podemos tanto redirecionar ou fazermos um forward do usuário para uma outra lógica ou um jsp.
+A grande diferença entre fazer um redirecionamento (redirect) e um forward é que o redirecionamento acontece
+no lado do cliente, e o forward acontece no lado do servidor.
 
-[section Accepts]
+Um bom exemplo de uso do redirect, é o padrão redirect-on-post, por exemplo, quando você adiciona um cliente,
+e quer retornar para a listagem dos clientes, porém, não quer permitir que o usuário atualize a página (F5) e 
+reenvie toda a requisição, acarretando em dados duplicados.
 
-Accepts define se é para devolver json, xml, html etc
+No caso do forward, um exemplo de uso é quando você possui uma validação e essa validação falhou, geralmente
+o usuário é continue na mesma tela do formulário com os dados da requisição preenchidos.
 
-[section _format parameter]
+[section Accepts e o parâmetro _format]
 
-?_format sobrescreve o Accepts
+Muitas vezes precisamos renderizar formatos diferentes para uma mesma lógica. Por exemplo queremos
+retornar um json, ao invés de um html.
+Para fazer isso, podemos definir o Header Accepts da requisição para que aceite o tipo desejado, ou
+colocar um parâmetro _format na requisição.
 
-[section Sem view nenhuma]
+Se o formato for json, a view renderizada por padrão será: %%/WEB-INF/jsp/{controller}/{logic}.json.jsp%%,
+ou seja, em geral será renderizada a view: %%/WEB-INF/jsp/{controller}/{logic}.{formato}.jsp%%.
+Se o formato for html você não precisa colocá-lo no nome do arquivo.
+
+O parâmetro _format tem prioridade sobre o header Accepts.
 
 [section Ajax: construindo na view]
 
-[xml]
-{ nome: '${cliente.nome}', id: '${cliente.id}' }
-[/xml]
+Para devolver um json na sua view, basta que sua lógica disponibilize o objeto para a view, e
+dentro da view você forme o json como desejar. Como no exemplo, o seu %%/WEB-INF/jsp/clients/load.json.jsp%%:
+ 
+[code]
+{ nome: '${client.name}', id: '${client.id}' }
+[/code]
+
+E na lógica:
 
 [java]
-Exemplo de componente que inclue o cliente para isso
-[/java]
-
-[section Ajax: construindo programaticamente]
-
-[section Resource not found]
-
-[java]
-@ApplicationScoped
-public class DefaultResourceNotFoundHandler implements ResourceNotFoundHandler{
-	
-	private static final Logger logger = LoggerFactory
-		.getLogger(DefaultResourceNotFoundHandler.class);
-	public void couldntFind(RequestInfo request) {
-		try {
-			logger.error("404 page not found: " +
-				request.getRequest().getRequestURI());
-			request.getRequest().getRequestDispatcher("../notFound.jsp")
-			.forward(request.getRequest(),
-				request.getResponse());
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (ServletException e) {
-			e.printStackTrace();
+	@Resource
+	public class ClientsController {
+		
+		private final Result result;
+		private final ClientDao dao;
+		
+		public ClientsController(Result result, ClientDao dao) {
+			this.result = result;
+			this.dao = dao;
+		}
+		
+		public void load(Client client) {
+			result.include("client", dao.load(client));
 		}
 	}
-}
 [/java]

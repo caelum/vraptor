@@ -10,6 +10,8 @@ import java.util.Collection;
  */
 public interface Scanner {
 
+	<T> Collection<Class<? extends T>> getSubtypesOf(Class<T> type);
+
     Collection<Class<?>> getTypesWithAnnotation(Class<? extends Annotation> annotationType);
 
     Collection<Class<?>> getTypesWithMetaAnnotation(Class<? extends Annotation> metaAnnotationType);

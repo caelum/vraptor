@@ -39,7 +39,7 @@ public class ReflectionsScanner implements Scanner {
 		} catch (MalformedURLException e) {
 			throw new VRaptorException(e);
 		}
-		
+
         this.reflections = new Reflections(new AbstractConfiguration() {
             {
             	setUrls(Arrays.asList(webInfClasses));
@@ -55,10 +55,11 @@ public class ReflectionsScanner implements Scanner {
     @SuppressWarnings({"unchecked"})
     public Collection<Class<?>> getTypesWithMetaAnnotation(Class<? extends Annotation> metaAnnotationType) {
         Set<Class<?>> stereotypeAnnotations = reflections.getTypesAnnotatedWith(Stereotype.class);
-        
-        if (LOGGER.isDebugEnabled())
-        	LOGGER.debug("Found the following sterotyped annotations: " + stereotypeAnnotations.toString());
-        
+
+        if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Found the following sterotyped annotations: " + stereotypeAnnotations.toString());
+		}
+
         Set<Class<?>> componentTypes = new HashSet<Class<?>>();
         for (Class<?> stereotypeAnnotation : stereotypeAnnotations) {
             Set<Class<?>> annotatedComponents = reflections.getTypesAnnotatedWith(
@@ -91,5 +92,9 @@ public class ReflectionsScanner implements Scanner {
             }
         }
         return subtypes;
+    }
+
+    public <T> Collection<Class<? extends T>> getSubtypesOf(Class<T> type) {
+    	return reflections.getSubTypesOf(type);
     }
 }

@@ -1,0 +1,336 @@
+[chapter Resources-Rest]
+ 
+[section What are Resources?]
+Resources are anything that can be accessed by our clients.
+
+In a VRaptor-based Web application, a resource must be annotated with %%@Resource%%.
+If you annotate a class with %%@Resource%%, all its public methods become accessible
+through GET requests to specific URIs.
+
+The following example shows a resource called %%ClienteController%%, which provides
+several operations over clients.
+
+Creating the class below with all its methods instantly make the URIs **/client/add**,
+**/client/list**, **/client/show**, **/client/remove** and **/client/update**
+available, each one invoking the respective method.
+
+[java]
+@Resource
+public class ClientController {
+ 
+  public void add(Client client) {
+    ...
+  }
+  
+  public List<Client> list() {
+    return ...
+  }
+  
+  public Client show(Client profile) {
+    return ...
+  }
+ 
+  public void remove(Client client) {
+    ...
+  }
+
+  public void update(Client client) {
+    ...
+  }
+  
+}
+[/java]
+
+[section Scopes]
+Sometimes you want to share a component among all users, or through all requests from
+the same user or one instance for each user request.
+
+To specify in which scope your component will live, use the annotations
+%%@ApplicationScoped%%, %%@SessionScoped%% and %%@RequestScoped%%.
+
+If you don't specify a scope for your component, VRaptor assumes the request scope,
+meaning a fresh instance will be created for each request.
+ 
+[section Http Methods]
+The best practice when using HTTP Methods is to specify a different URI for each method,
+like GET, POST, PUT etc.
+
+In order to accomplish that, we use annotations %%@Get%%, %%@Post%%, %%@Delete%% etc,
+in conjunction with the %%@Path%% annotation, which allows us to configure a custom URI.
+
+The following example changes the default URIs for %%ClienteController%%.
+Now we specify two different URIs for different HTTP methods:
+
+[java]
+@Resource
+public class ClientController {
+
+  @Path("/client")
+  @Post
+  public void add(Client client) {
+  }
+  
+  @Path("/")
+  public List<Client> list() {
+    return ...
+  }
+
+  @Get
+  @Path("/client")
+  public Client show(Client client) {
+    return ...
+  }
+ 
+  @Delete
+  @Path("/client")
+  public void remove(Client client) {
+    ...
+  }
+  
+  @Put
+  @Path("/client")
+  public void update(Client client) {
+    ...
+  }
+  
+}
+[/java]
+
+As you can see, we used HTTP methods + a specific URI to identify each method
+in our Java class.
+
+We must be **very careful** when creating hyperlinks and HTML forms, because web browsers
+currently support only ::POST:: and ::GET:: methods.
+
+For that reason, requests for methods ::DELETE::, ::PUT:: etc should be created
+through JavaScript, or by adding an extra parameter called **_format**.
+
+This parameter will overwrite the real HTTP method being invoked.
+
+The following example creates a link to show one client's data:
+
+[xml]
+<a href="/client?client.id=5">show client 5</a>
+[/xml]
+
+Now an example on how to invoke the method to add a client:
+
+[xml]
+<form action="/client" method="post">
+	<input name="client.name" />
+	<input type="submit" />
+</form>
+[/xml]
+
+Notice that if we want to remove a cliente using the ::DELETE:: HTTP method, we have
+to use the %%_format%% parameter, since browsers still don't support that kind
+of requests:
+
+[xml]
+<form action="/client" method="post">
+	<input name="_format" value="DELETE" type="hidden" />
+	<input name="client.id" value="5" type="hidden" />
+	<input type="remove client 5" />
+</form>
+[/xml]
+
+[section @Path]
+The %%@Path%% annotation allows you to specify custom access URIs to your controller methods.
+The basic usage of the annotation is to specify a fixed URI. The following example shows
+how to customize the access URI for a method that accepts ::POST:: requests only. The URI
+we want to specify is **/client**:
+
+[java]
+@Resource
+public class ClientController {
+
+  @Path("/client")
+  @Post 
+  public void add(Client client) {
+  }
+    
+}
+[/java]
+
+[title Path with variable injection]
+Sometimes we want the ::uri:: to include, for example, the unique identifier of
+my resource.
+
+Suppose a client controller application where the client's unique identifier (primary key)
+is a number. We can map our URIs as ::/client/{client.id}::, so we can visualize each client.
+
+That is, if we access the URI ::/client/2::, the **show** method will be invoked
+and the ::client.id:: parameter will be set to **2**. If the URI ::/client/1717:: is
+accessed, the same method will be invoked with the **1717** value.
+
+That way we can create unique URIs to identify different resources in our application.
+See the mentioned example:
+
+[java]
+@Resource
+public class ClientController {
+
+  @Get
+  @Path("/client/{client.id}")  
+  public Cliente show(Client client) {
+    return ...
+  }
+  
+}
+[/java]
+
+You can go further and set several parameters through the URI:
+
+[java]
+@Resource
+public class ClientController {
+
+  @Get
+  @Path("/client/{client.id}/show/{section}")  
+  public Client show(Client client, String section) {
+    return ...
+  }
+  
+}
+[/java]
+
+[title Paths with wildcards]
+
+You can also use the * wildcard as a selection method for your URI. The following
+example ignores anything that comes after the word ::photo/:: :
+
+[java]
+@Resource
+public class ClientController {
+
+  @Get
+  @Path("/client/{client.id}/photo/*")  
+  public File photo(Client client) {
+    return ...
+  }
+  
+}
+[/java]
+
+And now a similar code, but used to download a specific photo from a client:
+
+[java]
+@Resource
+public class ClientController {
+
+  @Get
+  @Path("/client/{client.id}/photo/{photo.id}")  
+  public File photo(Client client, Photo photo) {
+    return ...
+  }
+  
+}
+[/java]
+
+Sometimes you want the parameter to include the **/** character. In that case,
+you should use the pattern {...*}:
+
+[java]
+@Resource
+public class ClientController {
+
+  @Get
+  @Path("/client/{client.id}/download/{path*}")  
+  public File download(Client client, String path) {
+    return ...
+  }
+  
+}
+[/java]
+
+[title Specifying priorities for your paths]
+
+It is possible for some URIs to be handled by more than one method in our class:
+
+[java]
+@Resource
+public class PostController {
+
+  @Get
+  @Path("/post/{post.id}")
+  public void show(Post post) { ... }
+
+  @Get
+  @Path("/post/current")
+  public void current() { ... }
+}
+[/java]
+
+The URI %%/post/current%% can be handled by both %%show%% and %%current%% methods.
+But it doesn't make sense to invoke the %%show%% method with that URI, since %%post.id%%
+is expected to be a number, not a string. What I want is VRaptor to test the %%current%%
+path first, avoiding the invocation of the %%show%% method.
+
+In order to do that, we can define priorities for %%@Path%%s, so VRaptor will first
+test paths with higher priority, in other words, paths with lower priority values.
+
+[java]
+@Resource
+public class PostController {
+
+  @Get
+  @Path(priority = 2, value = "/post/{post.id}")
+  public void show(Post post) { ... }
+
+  @Get
+  @Path(priority = 1, value = "/post/current")
+  public void current() { ... }
+}
+[/java]
+
+This way, the "/post/current" path will be tested before "/post/{post.id}" by VRaptor,
+solving our problem.
+
+[section RoutesConfiguration]
+
+Finally, the most advanced way to configure access routes for your resources is
+using a **RoutesConfiguration**.
+
+This component must be configured as application scoped and must implement the
+::config:: method:
+
+[java]
+@Component
+@ApplicationScoped
+public class CustomRoutes implements RoutesConfiguration {
+
+    public void config(Router router) {
+    }
+
+}
+[/java]
+
+Having access to a **Router**, you can define access routes to methods. And the best
+part is that the configuration is refactor-friendly, that is, if you change a method's name,
+the configuration reflects the change, but the ::uri:: stays the same:
+
+[java]
+@Component
+@ApplicationScoped
+public class CustomRoutes implements RoutesConfiguration {
+
+    public void config(Router router) {
+        new Rules(router) {
+            public void routes() {
+                routeFor("/").is(ClientController.class).list();
+                routeFor("/client/random").is(ClientController.class).random();
+            }
+        };
+    }
+
+}
+[/java]
+
+At last, you can choose the class and the method names in runtime, allowing us to
+create extremely generic routes:
+
+[java]
+    routeFor("/{webResource}/doSomething/{webMethod}").is(
+		type("br.com.caelum.projectname.{webResource}"), 
+		method("{webMethod}"));
+[/java]

@@ -1,7 +1,7 @@
 [chapter View e Ajax]
 
 [section Custom PathResolver]
-Por padrão o VRaptor para renderizar suas views segue a convenção:
+Por padrão, para renderizar suas views, o VRaptor segue a convenção:
 
 [java]
 	public class ClientsController {
@@ -11,12 +11,12 @@ Por padrão o VRaptor para renderizar suas views segue a convenção:
 	}
 [/java]
 
-Esse método acima renderizará a view %%/WEB-INF/jsp/clients/list.jsp%%.
+Este método acima renderizará a view %%/WEB-INF/jsp/clients/list.jsp%%.
 
 No entanto, nem sempre queremos esse comportamento, e precisamos usar algum template engine,
 como por exemplo, Freemarker ou Velocity, e precisamos mudar essa convenção.
 
-Um jeito fácil de mudar essa convenção é estendendo a classe DefaultPathResolver:
+Um jeito fácil de mudar essa convenção é estendendo a classe %%DefaultPathResolver%%:
 
 [java]
 	@Component
@@ -32,7 +32,7 @@ Um jeito fácil de mudar essa convenção é estendendo a classe DefaultPathReso
 [/java]
 
 Desse jeito, a lógica iria renderizar a view %%/WEB-INF/freemarker/clients/list.ftl%%.
-Se ainda assim isso não for o suficiente você pode implementar a interface PathResolver
+Se ainda assim isso não for o suficiente você pode implementar a interface %%PathResolver%%
 e fazer qualquer convenção que você queira, não esquecendo de anotar a classe com @Component.
 
 [section View]
@@ -73,30 +73,30 @@ No VRaptor3, podemos tanto redirecionar ou fazermos um forward do usuário para 
 A grande diferença entre fazer um redirecionamento (redirect) e um forward é que o redirecionamento acontece
 no lado do cliente, e o forward acontece no lado do servidor.
 
-Um bom exemplo de uso do redirect, é o padrão redirect-on-post, por exemplo, quando você adiciona um cliente,
+Um bom exemplo de uso do redirect, é o padrão 'redirect-after-post', por exemplo, quando você adiciona um cliente,
 e quer retornar para a listagem dos clientes, porém, não quer permitir que o usuário atualize a página (F5) e 
 reenvie toda a requisição, acarretando em dados duplicados.
 
 No caso do forward, um exemplo de uso é quando você possui uma validação e essa validação falhou, geralmente
-o usuário é continue na mesma tela do formulário com os dados da requisição preenchidos.
+você quer que o usuário continue na mesma tela do formulário com os dados da requisição preenchidos.
 
 [section Accepts e o parâmetro _format]
 
 Muitas vezes precisamos renderizar formatos diferentes para uma mesma lógica. Por exemplo queremos
-retornar um json, ao invés de um html.
+retornar um JSON, ao invés de um HTML.
 Para fazer isso, podemos definir o Header Accepts da requisição para que aceite o tipo desejado, ou
-colocar um parâmetro _format na requisição.
+colocar um parâmetro %%_format%% na requisição.
 
-Se o formato for json, a view renderizada por padrão será: %%/WEB-INF/jsp/{controller}/{logic}.json.jsp%%,
+Se o formato for JSON, a view renderizada por padrão será: %%/WEB-INF/jsp/{controller}/{logic}.json.jsp%%,
 ou seja, em geral será renderizada a view: %%/WEB-INF/jsp/{controller}/{logic}.{formato}.jsp%%.
-Se o formato for html você não precisa colocá-lo no nome do arquivo.
+Se o formato for HTML você não precisa colocá-lo no nome do arquivo.
 
-O parâmetro _format tem prioridade sobre o header Accepts.
+O parâmetro %%_format%% tem prioridade sobre o header Accepts.
 
 [section Ajax: construindo na view]
 
-Para devolver um json na sua view, basta que sua lógica disponibilize o objeto para a view, e
-dentro da view você forme o json como desejar. Como no exemplo, o seu %%/WEB-INF/jsp/clients/load.json.jsp%%:
+Para devolver um JSON na sua view, basta que sua lógica disponibilize o objeto para a view, e
+dentro da view você forme o JSON como desejar. Como no exemplo, o seu %%/WEB-INF/jsp/clients/load.json.jsp%%:
  
 [code]
 { nome: '${client.name}', id: '${client.id}' }

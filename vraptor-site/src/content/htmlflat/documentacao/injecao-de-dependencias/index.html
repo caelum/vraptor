@@ -49,7 +49,7 @@
 
 		<span class="paragraph">O Vraptor est&aacute; fortemente baseado no conceito de inje&ccedil;&atilde;o de depend&ecirc;ncias uma vez que chega at&eacute; mesmo a
 utilizar dessa id&eacute;ia para juntar seus componentes internos.</span><span class="paragraph">O conceito b&aacute;sico por tr&aacute;s de Dependency Injection (DI) &eacute; que voc&ecirc; n&atilde;o deve buscar aquilo que deseja acessar
-mas tudo o que deseja acessar deve ser fornecido para voc&ecirc;.</span><span class="paragraph">Isso se traduz, no Java contemporaneo, a passagem de componentes atrav&eacute;s do construtor de seus controladores.
+mas tudo o que deseja acessar deve ser fornecido para voc&ecirc;.</span><span class="paragraph">Isso se traduz, no Java contempor&acirc;neo, a passagem de componentes atrav&eacute;s do construtor de seus controladores.
 Imagine que seu controlador de clientes necessita acessar um Dao de clientes. Sendo assim, especifique claramente
 essa necessidade:</span><div class="java"><code class="java">
 <span class="java16">@Component<br />
@@ -85,8 +85,8 @@ Implementa&ccedil;&otilde;es dessa interface definem um &uacute;nico m&eacute;to
 e utiliza essa configura&ccedil;&atilde;o para fornecer sess&otilde;es para nosso projeto:</span>
 	    	<div class="java"><code class="java">
 <span class="java16">@Component<br />
-@ApplicationScoped </span><span class="java3">// ou outro escopo desejado<br />
-</span><span class="java4">public class </span><span class="java10">SessionProvider </span><span class="java4">implements </span><span class="java10">ComponentFactory&lt;Session&gt; </span><span class="java8">{<br />
+@ApplicationScoped<br />
+</span><span class="java4">public class </span><span class="java10">SessionFactoryProvider </span><span class="java4">implements </span><span class="java10">ComponentFactory&lt;SessionFactory&gt; </span><span class="java8">{<br />
 <br />
 &nbsp;&nbsp;&nbsp; </span><span class="java4">private final </span><span class="java10">SessionFactory factory;<br />
 &nbsp;&nbsp;&nbsp; <br />
@@ -94,8 +94,23 @@ e utiliza essa configura&ccedil;&atilde;o para fornecer sess&otilde;es para noss
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">factory = </span><span class="java4">new </span><span class="java10">AnnotationConfiguration</span><span class="java8">()</span><span class="java10">.configure</span><span class="java8">()</span><span class="java10">;<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
 &nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">SessionFactory getInstance</span><span class="java8">() {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return </span><span class="java10">factory;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+&nbsp;&nbsp;&nbsp; <br />
+}<br />
+<br />
+</span><span class="java16">@Component<br />
+@RequestScoped<br />
+</span><span class="java4">public class </span><span class="java10">SessionProvider </span><span class="java4">implements </span><span class="java10">ComponentFactory&lt;Session&gt; </span><span class="java8">{<br />
+<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">private final </span><span class="java10">SessionFactory factory;<br />
+&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">SessionProvider</span><span class="java8">(</span><span class="java10">SessionFactory factory</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">this</span><span class="java10">.factory = factory;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+&nbsp;&nbsp;&nbsp; <br />
 &nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">Session getInstance</span><span class="java8">() {<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java3">// voce poderia usar aqui as ferramentas de ThreadLocal do hibernate<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return </span><span class="java10">factory.openSession</span><span class="java8">()</span><span class="java10">;<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
 &nbsp;&nbsp;&nbsp; <br />
@@ -111,13 +126,25 @@ do Picocontainer ou do Spring DI.</span>
 <h2 class="section">Pico Container</h2>
 	    	<span class="paragraph">Ao utilizar o Picocontainer por baixo do VRaptor, voc&ecirc; poder&aacute; acessar o pico diretamente para fazer configura&ccedil;&otilde;es avan&ccedil;adas que desejar.</span>
 	    	<span class="paragraph">Para utilizar o Picocontainer como provider de sua aplica&ccedil;&atilde;o, basta colocar no seu arquivo web.xml:</span>
-	    	<span class="paragraph">???????????</span>
+	    	<div class="xml"><code class="xml"><span class="textag">&lt;context-param&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-name&gt;</span><span class="texnormal">br.com.caelum.vraptor.provider</span><span class="textag">&lt;/param-name&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-value&gt;</span><span class="texnormal">br.com.caelum.vraptor.ioc.pico.PicoProvider</span><span class="textag">&lt;/param-value&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal"></span><span class="textag">&lt;/context-param&gt;</span></code></div>
 		
 
 <h2 class="section">Spring</h2>
-	    	<span class="paragraph">Ao utilizar o Spring, voc&ecirc; ganha todas as caracter&icirc;sticas e componentes prontos do Spring para uso dentro do VRaptor, isto &eacute;, todos os componentes que funcionam com o Spring DI/Ioc, funcionam com o VRaptor. Nesse caso, todas as anota&ccedil;&otilde;es.</span>
-	    	<span class="paragraph">Para utilizar o Spring como provider de sua aplica&ccedil;&atilde;o, basta colocar no seu arquivo web.xml:</span>
-	    	<span class="paragraph">???????????</span>
+	    	<span class="paragraph">Ao utilizar o Spring, voc&ecirc; ganha todas as caracter&iacute;sticas e componentes prontos do Spring para uso dentro do VRaptor, isto &eacute;, todos os componentes que funcionam com o Spring DI/Ioc, funcionam com o VRaptor. Nesse caso, todas as anota&ccedil;&otilde;es.</span>
+	    	<span class="paragraph">Para utilizar o Spring como provider de sua aplica&ccedil;&atilde;o, basta colocar no seu arquivo web.xml, lembrando
+que se voc&ecirc; n&atilde;o especificar nenhum Provider o Spring &eacute; o padr&atilde;o:</span>
+	    	<div class="xml"><code class="xml"><span class="textag">&lt;context-param&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-name&gt;</span><span class="texnormal">br.com.caelum.vraptor.provider</span><span class="textag">&lt;/param-name&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-value&gt;</span><span class="texnormal">br.com.caelum.vraptor.ioc.spring.SpringProvider</span><span class="textag">&lt;/param-value&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal"></span><span class="textag">&lt;/context-param&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal"><br /></span>
+<span class="texnormal"></span><span class="textag">&lt;context-param&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-name&gt;</span><span class="texnormal">br.com.caelum.vraptor.spring.packages</span><span class="textag">&lt;/param-name&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-value&gt;</span><span class="texnormal">br.com.pacote.do.seu.projeto</span><span class="textag">&lt;/param-value&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal"></span><span class="textag">&lt;/context-param&gt;</span></code></div>
 		
 
 <h2 class="section">Spring exemplo com Hibernate dele</h2>

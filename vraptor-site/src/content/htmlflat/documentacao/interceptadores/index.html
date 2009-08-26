@@ -77,12 +77,12 @@ ser&aacute; armazenado atrav&eacute;s das anota&ccedil;&otilde;es de escopo.</sp
 
 <h2 class="section">Exemplo simples</h2>
 	    	<span class="paragraph">A classe a seguir mostra um exemplo de como interceptar todas as requisi&ccedil;&otilde;es em um escopo de
-sess&atilde;o e simplesmente mostrar na sa&iacute;da do console o que est&aacute; sendo invocado.</span>
+requisi&ccedil;&atilde;o e simplesmente mostrar na sa&iacute;da do console o que est&aacute; sendo invocado.</span>
 	    	<span class="paragraph">Lembre-se que o interceptador &eacute; um componente como qualquer outro e pode receber
 em seu construtor quaisquer dependencias atraves de Injecao de Dependencias.</span>
 	    	<div class="java"><code class="java">
 <span class="java16">@Intercepts<br />
-@SessionScoped<br />
+@RequestScoped<br />
 </span><span class="java4">public class </span><span class="java10">Log </span><span class="java4">implements </span><span class="java10">Interceptor </span><span class="java8">{<br />
 <br />
 &nbsp;&nbsp;&nbsp; </span><span class="java4">private final </span><span class="java10">HttpServletRequest request;<br />
@@ -116,18 +116,13 @@ l&oacute;gica e da exibi&ccedil;&atilde;o da p&aacute;gina para o usu&aacute;rio
 </span><span class="java4">public class </span><span class="java10">DatabaseInterceptor </span><span class="java4">implements </span><span class="java10">br.com.caelum.vraptor.Interceptor </span><span class="java8">{<br />
 <br />
 &nbsp;&nbsp;&nbsp; </span><span class="java4">private final </span><span class="java10">Database controller;<br />
-&nbsp;&nbsp;&nbsp; </span><span class="java4">private final </span><span class="java10">Result result;<br />
-&nbsp;&nbsp;&nbsp; </span><span class="java4">private final </span><span class="java10">HttpServletRequest request;<br />
 <br />
-&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">DatabaseInterceptor</span><span class="java8">(</span><span class="java10">Database controller, Result result, HttpServletRequest request</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">DatabaseInterceptor</span><span class="java8">(</span><span class="java10">Database controller</span><span class="java8">) {<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">this</span><span class="java10">.controller = controller;<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">this</span><span class="java10">.result = result;<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">this</span><span class="java10">.request = request;<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
 <br />
-&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">intercept</span><span class="java8">(</span><span class="java10">InterceptorStack stack, ResourceMethod method, <br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Object instance</span><span class="java8">) </span><span class="java4">throws </span><span class="java10">InterceptionException </span><span class="java8">{<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">result.include</span><span class="java8">(</span><span class="java5">&#34;contextPath&#34;</span><span class="java10">, request.getContextPath</span><span class="java8">())</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">intercept</span><span class="java8">(</span><span class="java10">InterceptorStack stack, ResourceMethod method, Object instance</span><span class="java8">)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">throws </span><span class="java10">InterceptionException </span><span class="java8">{<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">try </span><span class="java8">{<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">controller.beginTransaction</span><span class="java8">()</span><span class="java10">;<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; stack.next</span><span class="java8">(</span><span class="java10">method, instance</span><span class="java8">)</span><span class="java10">;<br />

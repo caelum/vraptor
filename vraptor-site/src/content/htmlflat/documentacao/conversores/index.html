@@ -130,20 +130,8 @@ public&nbsp;class&nbsp;LongConverter&nbsp;implements&nbsp;Converter&lt;Long&gt;&
 		
 
 <h2 class="section">Registrando um novo conversor</h2>
-	    	<span class="paragraph">Ap&oacute;s criar seu pr&oacute;prio conversor, n&atilde;o esque&ccedil;a de registr&aacute;-lo como um componente customizado em seu Provider.
-Usando o pico container como seu provider, voc&ecirc; pode fazer assim:</span>
-	    	<div class="java"><code class="java">public&nbsp;class&nbsp;CustomProvider&nbsp;extends&nbsp;Provider&nbsp;{<br />
-<br />
-&nbsp;&nbsp;&nbsp;&nbsp;@Override<br />
-&nbsp;&nbsp;&nbsp;&nbsp;protected&nbsp;void&nbsp;registerComponents(ComponentRegistry&nbsp;container)&nbsp;{<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;super.registerComponents(container);<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;outros&nbsp;components<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;container.register(LongConverter.class,&nbsp;LongConverter.class);<br />
-&nbsp;&nbsp;&nbsp;&nbsp;}<br />
-<br />
-}</code></div>
+	    	<span class="paragraph">N&atilde;o &eacute; necess&aacute;ria nenhuma configura&ccedil;&atilde;o al&eacute;m do @Convert e implementar a interface Converter
+para que o conversor seja registrado no Container do VRaptor.</span>
 		
 
 <h2 class="section">Outros fora do padrão</h2>

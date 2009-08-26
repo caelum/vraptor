@@ -81,7 +81,8 @@ public class DatabaseInterceptor implements br.com.caelum.vraptor.Interceptor {
 		this.controller = controller;
 	}
 
-	public void intercept(InterceptorStack stack, ResourceMethod method, Object instance) throws InterceptionException {
+	public void intercept(InterceptorStack stack, ResourceMethod method, Object instance)
+		throws InterceptionException {
 		try {
 			controller.beginTransaction();
 			stack.next(method, instance);

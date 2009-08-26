@@ -103,7 +103,8 @@ uma vez por contexto:</span>
 	    	<span class="paragraph">Sendo assim, os dois exemplos anteriores permitem que qualquer um de seus recursos ou compeonenten receba
 um ClienteDao em seu construtor, por exemplo:</span>
 	    	<div class="java"><code class="java">
-<span class="java4">public class </span><span class="java10">ClienteController </span><span class="java8">{<br />
+<span class="java16">@Resource<br />
+</span><span class="java4">public class </span><span class="java10">ClienteController </span><span class="java8">{<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java4">private final </span><span class="java10">ClienteDao dao;<br />
 &nbsp;&nbsp;&nbsp; <br />
 &nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">ClienteController</span><span class="java8">(</span><span class="java10">ClienteDao dao</span><span class="java8">) {<br />

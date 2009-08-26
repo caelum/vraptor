@@ -294,7 +294,8 @@ o que a gente gostaria que ele fizesse.</span>
 &eacute; atrav&eacute;s de um <strong class="definition">RoutesConfiguration</strong>.</span>
 	    	<span class="paragraph">Esse componente deve ser configurado no escopo de aplica&ccedil;&atilde;o e implementar o m&eacute;todo config:</span>
 	    	<div class="java"><code class="java">
-<span class="java16">@ApplicationScoped<br />
+<span class="java16">@Component<br />
+@ApplicationScoped<br />
 </span><span class="java4">public class </span><span class="java10">CustomRoutes </span><span class="java4">implements </span><span class="java10">RoutesConfiguration </span><span class="java8">{<br />
 <br />
 &nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">config</span><span class="java8">(</span><span class="java10">Router router</span><span class="java8">) {<br />
@@ -305,7 +306,8 @@ o que a gente gostaria que ele fizesse.</span>
 melhor de tudo, &eacute; que a configura&ccedil;&atilde;o &eacute; refactor-friendly, isto &eacute;, se voc&ecirc; alterar
 o nome de um m&eacute;todo, a configura&ccedil;&atilde;o tamb&eacute;m altera, mas mantem a mesma <em class="italic">uri</em> :</span>
 	    	<div class="java"><code class="java">
-<span class="java16">@ApplicationScoped<br />
+<span class="java16">@Component<br />
+@ApplicationScoped<br />
 </span><span class="java4">public class </span><span class="java10">CustomRoutes </span><span class="java4">implements </span><span class="java10">RoutesConfiguration </span><span class="java8">{<br />
 <br />
 &nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">config</span><span class="java8">(</span><span class="java10">Router router</span><span class="java8">) {<br />

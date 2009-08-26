@@ -87,6 +87,16 @@ Por exemplo, caso queiramos obrigar que seja informado o nome do funcionario:</s
 Bem mais pr&oacute;ximo a linguagem natural.</span>
 	    	<span class="paragraph">Assim sendo, caso o nome do funcionario seja vazio, ele vai ser redirecionado novamente para a logica "formulario", que exibe o formulario para
 que o usu&aacute;rio adicione o funcion&aacute;rio novamente. Al&eacute;m disso, ele devolve para o formulario a mensagem de erro que aconteceu na valida&ccedil;&atilde;o.</span>
+	    	<span class="paragraph">[session Valida&ccedil;&atilde;o usando matchers do Hamcrest]
+Voc&ecirc; pode tamb&eacute;m usar matchers do Hamcrest para deixar a valida&ccedil;&atilde;o mais leg&iacute;vel, e ganhar
+a vantagem da composi&ccedil;&atilde;o de matchers e da cria&ccedil;&atilde;o de novos matchers que o Hamcrest te oferece:</span>
+	    	<div class="java"><code class="java">public&nbsp;adiciona(Funcionario&nbsp;funcionario)&nbsp;{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;validator.checking(new&nbsp;Validations(){{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;that("erro","nomeNaoInformado",&nbsp;funcionario.getNome(),&nbsp;not(emptyString()));<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}})<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;dao.adiciona(funcionario);<br />
+}</code></div>
 		
 
 <h2 class="section">Hibernate validator</h2>

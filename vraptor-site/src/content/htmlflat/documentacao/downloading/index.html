@@ -64,6 +64,21 @@ public&nbsp;class&nbsp;PerfilController&nbsp;{<br />
 }</code></div>
 		
 
+<h2 class="section">Adicionando mais informações no download</h2>
+	    	<span class="paragraph">Se voc&ecirc; quiser adicionar mais informa&ccedil;&otilde;es ao download voc&ecirc; pode retornar
+um FileDownload:</span>
+	    	<span class="paragraph">@Resource
+public class PerfilController {</span>
+	    	<span class="paragraph">// dao ...</span>
+	    	<span class="paragraph">public Download foto(Perfil perfil) {
+		File file = new File("/path/para/a/foto." + perfil.getId()+ ".jpg");
+		String contentType = "image/jpg";
+		String filename = perfil.getNome() + ".jpg";</span>
+	    	<span class="paragraph">return new FileDownload(file, contentType, filename); 
+	}
+}</span>
+		
+
 <h2 class="section">exemplo de 1 minuto: upload</h2>
 	    	<span class="paragraph">O primeiro exemplo ser&aacute; baseado na funcionalidade de upload multipart.</span>
 	    	<div class="java"><code class="java">@Resource<br />

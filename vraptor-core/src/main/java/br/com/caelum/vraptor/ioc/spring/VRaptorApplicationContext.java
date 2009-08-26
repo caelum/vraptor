@@ -29,7 +29,6 @@ package br.com.caelum.vraptor.ioc.spring;
 
 import java.util.Map;
 
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 
 import org.springframework.aop.config.AopConfigUtils;
@@ -49,6 +48,7 @@ import org.springframework.context.annotation.AnnotationBeanNameGenerator;
 import org.springframework.context.annotation.AnnotationConfigUtils;
 import org.springframework.context.annotation.ScopeMetadata;
 import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.core.Ordered;
 import org.springframework.web.context.support.AbstractRefreshableWebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -71,13 +71,11 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
     public VRaptorApplicationContext(SpringBasedContainer container, String... basePackages) {
         this.container = container;
         this.basePackages = basePackages;
+        if (VRaptorApplicationContext.class.getResource("/applicationContext.xml") != null) {
+			setParent(new ClassPathXmlApplicationContext("classpath:applicationContext.xml"));
+		}
     }
 
-    @Override
-    public void setServletConfig(ServletConfig servletConfig) {
-    	super.setServletConfig(servletConfig);
-    	setParent(WebApplicationContextUtils.getWebApplicationContext(servletConfig.getServletContext()));
-    }
     @Override
     protected void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) {
         WebApplicationContextUtils.registerWebApplicationScopes(beanFactory);

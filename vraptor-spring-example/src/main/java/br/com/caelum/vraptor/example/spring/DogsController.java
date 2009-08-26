@@ -1,7 +1,5 @@
 package br.com.caelum.vraptor.example.spring;
 
-import java.util.Arrays;
-
 import org.springframework.beans.factory.annotation.Autowired;
 
 import br.com.caelum.vraptor.Path;
@@ -17,9 +15,12 @@ public class DogsController {
     @Autowired
     private Result result;
 
+    @Autowired
+    private DogsRepository repository;
+
     @Path("/dogs")
     public void list() {
-        result.include("dogs", Arrays.asList("lulu", "pluto"));
+        result.include("dogs", repository.getDogs());
     }
 
 }

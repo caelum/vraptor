@@ -1,0 +1,144 @@
+[chapter Dependency injection]
+VRaptor is strongly based on Dependency Injection, since all its internal components are
+managed using this technique.
+
+Tha basic concept behind Dependency Injection (DI) says you should not look for
+what you want to access. Instead, it should be provided for you somehow.
+
+In Java, this is accomplished by passing components to your controller's constructor.
+Suppose your clients controller needs to access a clients Dao. Specify that need in your code:
+
+[java]
+@Component
+public class ClientController {
+	private final ClientDao dao;
+	
+	public ClientController(ClientDao dao) {
+		this.dao = dao;
+	}
+
+	@Post
+	public void add(Client client) {
+		this.dao.add(client);
+	}
+	
+}
+[/java]
+
+And annotate the ClientDao component as a VRaptor %%@Component%%:
+
+[java]
+@Component
+public class ClientDao {
+}
+[/java]
+
+From now on, VRaptor will provide your %%ClientController%% with an instance of %%ClientDao%%
+when needed. Remember that VRaptor will honor the scope specified by the component.
+For example, if %%ClientDao%% had specified Session scope (%%@SessionScoped%%),
+only one instance of that component would be created per session. (Note that it is
+probably wrong to specify session scope for a Dao, it is only a simple example).
+
+[section ComponentFactory]
+
+Sometimes we want our components to receive other libraries' components.
+In that case we are unable to change the libraries's source code in order to
+annotate its components with %%@Component%% (and any other changes we may need to do).
+
+The most common example is acquiring a Hibernate Session. We need to create a component
+that is responsible for providing Session instances for other components that depend on it.
+
+VRaptor has an interface called %%ComponentFactory%% which allows your classes to
+provide components.
+
+Classes implementing that interface define a single method. See the following example,
+which starts Hibernate when the component is built and uses that configuration to provide
+Session instances for our application:
+
+[java]
+@Component
+@ApplicationScoped
+public class SessionFactoryProvider implements ComponentFactory<SessionFactory> {
+
+	private final SessionFactory factory;
+	
+	public SessionProvider() {
+		factory = new AnnotationConfiguration().configure();
+	}
+	
+	public SessionFactory getInstance() {
+		return factory;
+	}
+	
+}
+
+@Component
+@RequestScoped
+public class SessionProvider implements ComponentFactory<Session> {
+
+	private final SessionFactory factory;
+	
+	public SessionProvider(SessionFactory factory) {
+		this.factory = factory;
+	}
+	
+	public Session getInstance() {
+		return factory.openSession();
+	}
+	
+}
+[/java]
+
+[section Providers]
+Behind the curtains, VRaptor uses a specific DI provider and has out-of-the-box support for PicoContainer or Spring DI.
+
+Each implementation give you all you can find in VRaptor's documentation, but also different
+extension points.
+
+[section Pico Container]
+
+When using PicoContainer with VRaptor, you will be able to access Pico directly in order
+to do advanced configurations.
+
+If you want PicoContainer to be your application's DI provider, put the following entries
+in your web.xml descriptor:
+
+[xml]
+	<context-param>
+        <param-name>br.com.caelum.vraptor.provider</param-name>
+        <param-value>br.com.caelum.vraptor.ioc.pico.PicoProvider</param-value>
+    </context-param>
+[/xml]
+
+
+
+[section Spring]
+
+When using Spring, you gain all its features and built-in components to use with VRaptor.
+In other words, all components that work with Sprint DI/IoC, also work with VRaptor.
+In that case, all the annotations.
+
+If you want Spring to be your application's DI provider, put the following entries in your
+web.xml. Remember that if you do not specify a Provider, Spring is VRaptor's default choice:
+
+[xml]
+	<context-param>
+        <param-name>br.com.caelum.vraptor.provider</param-name>
+        <param-value>br.com.caelum.vraptor.ioc.spring.SpringProvider</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>br.com.caelum.vraptor.spring.packages</param-name>
+        <param-value>br.com.pacote.do.seu.projeto</param-value>
+    </context-param>
+[/xml]
+
+
+[section Spring with its own Hibernate example]
+
+
+???????????
+
+[section Your custom provider]
+
+You can also create your own Provider, either to extend the default implementations with PicoContainer or Spring, or to base your implementation in another DI container you may prefer.

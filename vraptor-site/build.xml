@@ -33,6 +33,7 @@
 			<arg line="-t"/>
 			<arg line="src/templates"/>
 		</exec>
+		<move file="src/content/htmlflat/" tofile="src/content" />
 	</target>
 		
 

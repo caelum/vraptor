@@ -27,7 +27,7 @@
 		<li>|</li>
         <li><a href="${menu}depoimentos.html">Depoimentos</a></li>
 		<li>|</li>
-    	<li><a href="${menu}htmlflat/documentacao/"><b>Documentação</b></a></li>
+    	<li><a href="${menu}documentacao/"><b>Documentação</b></a></li>
 </ul>
 </div>
 

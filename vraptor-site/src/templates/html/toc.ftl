@@ -1,5 +1,5 @@
 <#assign relative = ".">
-<#assign menu = "../../">
+<#assign menu = "../">
 <#include "header.ftl">
 
 <!-- left bar -->

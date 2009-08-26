@@ -46,7 +46,7 @@
 	<target name="zips-vraptor">
 		<mkdir dir="target"/>
 		<zip destfile="target/vraptor-3.0.0-beta-2.zip">
-			<zipfileset dir="vraptor-site/src/content/htmlflat/documentacao" prefix="docs"/>			
+			<zipfileset dir="vraptor-site/src/content/documentacao" prefix="docs"/>			
 			<fileset file="vraptor-core/target/vraptor3-3.0.0-SNAPSHOT.jar"/>
 			<zipfileset dir="vraptor-core/src" prefix="src"/>
 			<zipfileset dir="vraptor-core/lib" prefix="lib"/>

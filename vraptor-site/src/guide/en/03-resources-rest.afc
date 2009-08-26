@@ -103,7 +103,7 @@ We must be **very careful** when creating hyperlinks and HTML forms, because web
 currently support only ::POST:: and ::GET:: methods.
 
 For that reason, requests for methods ::DELETE::, ::PUT:: etc should be created
-through JavaScript, or by adding an extra parameter called **_format**.
+through JavaScript, or by adding an extra parameter called **_method**.
 
 This parameter will overwrite the real HTTP method being invoked.
 
@@ -123,12 +123,12 @@ Now an example on how to invoke the method to add a client:
 [/xml]
 
 Notice that if we want to remove a cliente using the ::DELETE:: HTTP method, we have
-to use the %%_format%% parameter, since browsers still don't support that kind
+to use the %%_method%% parameter, since browsers still don't support that kind
 of requests:
 
 [xml]
 <form action="/client" method="post">
-	<input name="_format" value="DELETE" type="hidden" />
+	<input name="_method" value="DELETE" type="hidden" />
 	<input name="client.id" value="5" type="hidden" />
 	<input type="remove client 5" />
 </form>

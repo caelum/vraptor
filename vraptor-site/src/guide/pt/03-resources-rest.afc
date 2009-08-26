@@ -111,7 +111,7 @@ importante** pois os browsers só dão suporte aos métodos ::POST:: e ::GET:: a
 de formulários hoje em dia.
 
 Por isso, você deverá criar as requisições para métodos do tipo ::DELETE::, ::PUT:: etc
-através de JavaScript ou passando um parâmetro extra, chamado **_format**.
+através de JavaScript ou passando um parâmetro extra, chamado **_method**.
 
 Esse parâmetro sobrescreverá o método HTTP real sendo invocado.
 
@@ -131,11 +131,11 @@ Agora um exemplo de como invocar o método de adicionar um cliente:
 [/xml]
 
 E, note que para permitir a remoção através do método ::DELETE::, temos que usar o 
-parâmetro %%_format%%, uma vez que o browser não suporta ainda tais requisições:
+parâmetro %%_method%%, uma vez que o browser não suporta ainda tais requisições:
 
 [xml]
 <form action="/cliente" method="post">
-	<input name="_format" value="DELETE" type="hidden" />
+	<input name="_method" value="DELETE" type="hidden" />
 	<input name="cliente.id" value="5" type="hidden" />
 	<input type="remover cliente 5" />
 </form>

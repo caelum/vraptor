@@ -14,7 +14,7 @@ que exibe o resultado final do processo.
 Para escrever um recurso simples no VRaptor3, nós não precisamos de muito esforço, basta 
 criarmos uma classe e anotarmos essa classe com a anotação %%@Resource%%.
 
-[code]
+[java]
 @Resource
 public class FuncionarioController {
 
@@ -25,7 +25,7 @@ public class FuncionarioController {
 	public void adiciona(Funcionario funcionario) {
 	}
 }
-[/code]
+[/java]
 
 No exemplo acima, %%FuncionarioController%% é um recurso, e os métodos %%listaTodos%% e 
 %%adiciona%% são as lógicas.

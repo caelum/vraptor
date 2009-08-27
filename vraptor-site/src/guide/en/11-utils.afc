@@ -1,0 +1,20 @@
+[chapter Utility Components]
+
+[section Hibernate Session and SessionFactory]
+
+If your components need Hibernate Session and SessionFactory, you will need
+a ComponentFactory to create them for you. If you use annotated entities, and
+you have a hibernate.cfg.xml in the root of WEB-INF/classes, you can use VRaptor's
+built-in ComponentFactory. All you have to do is add them to your CustomProvider:
+
+[java]
+public class CustomProvider extends PicoProvider {
+	
+	@Override
+	public void registerBundledComponents(ComponentRegistry registry) {
+		super.registerBundledComponents(registry);
+		registry.register(SessionCreator.class, SessionCreator.class);
+		registry.register(SessionFactoryCreator.class, SessionFactoryCreator.class);
+	}
+}
+[/java]

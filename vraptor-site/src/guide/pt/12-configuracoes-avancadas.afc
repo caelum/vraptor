@@ -1,0 +1,26 @@
+[chapter Configurações avancadas: sobrescrevendo as convenções e comportamento do VRaptor]
+
+[section Mudando a view renderizada por padrão]
+
+Se você precisa mudar a view renderizada por padrão, ou mudar o local em que ela é procurada,
+basta criar a seguinte classe:
+
+[java]
+	@Component
+	public class CustomPathResolver extends DefaultPathResolver {
+		
+		@Override
+		protected String getPrefix() {
+			return "/pasta/raiz/";
+		}
+		
+		@Override
+		protected String getExtension() {
+			return "ftl"; // ou qualquer outra extensão
+		}
+	}
+[/java]
+
+Se você precisa mudar mais ainda a convenção basta implementar a interface PathResolver.
+
+

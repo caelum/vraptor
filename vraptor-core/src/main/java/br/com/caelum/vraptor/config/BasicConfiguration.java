@@ -45,6 +45,7 @@ import br.com.caelum.vraptor.ioc.spring.SpringProvider;
 public class BasicConfiguration {
 
     public static final String CONTAINER_PROVIDER = "br.com.caelum.vraptor.provider";
+    public static final String APPLICATION_ENCODING = "br.com.caelum.vraptor.encoding";
 
     private final ServletContext servletContext;
 
@@ -64,6 +65,14 @@ public class BasicConfiguration {
         } catch (Exception e) {
             throw new ServletException(e);
         }
+    }
+
+    public String getEncoding() {
+    	String encoding = servletContext.getInitParameter(APPLICATION_ENCODING);
+    	if (encoding == null) {
+    		encoding = "UTF-8";
+    	}
+    	return encoding;
     }
 
 }

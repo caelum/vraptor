@@ -128,6 +128,7 @@ que se você não especificar nenhum Provider o Spring é o padrão:
     </context-param>
 [/xml]
 
+Se você tiver um applicationContext.xml no classpath o VRaptor vai aproveitar suas configurações.
 
 [section Spring exemplo com Hibernate dele]
 

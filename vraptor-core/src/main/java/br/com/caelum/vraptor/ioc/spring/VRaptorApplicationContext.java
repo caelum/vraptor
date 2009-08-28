@@ -48,6 +48,7 @@ import org.springframework.context.annotation.AnnotationBeanNameGenerator;
 import org.springframework.context.annotation.AnnotationConfigUtils;
 import org.springframework.context.annotation.ScopeMetadata;
 import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.core.Ordered;
 import org.springframework.web.context.support.AbstractRefreshableWebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -70,6 +71,9 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
     public VRaptorApplicationContext(SpringBasedContainer container, String... basePackages) {
         this.container = container;
         this.basePackages = basePackages;
+        if (VRaptorApplicationContext.class.getResource("/applicationContext.xml") != null) {
+			setParent(new ClassPathXmlApplicationContext("classpath:applicationContext.xml"));
+		}
     }
 
     @Override

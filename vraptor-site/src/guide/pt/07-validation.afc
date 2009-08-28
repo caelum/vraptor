@@ -19,8 +19,7 @@ class FuncionarioController {
 [section Estilo clássico]
 
 A forma clássica é semelhante a forma como as validações eram feitas no VRaptor2.
-Dentro da sua lógica de negócios, basta fazer a verificação que deseja e caso haja um erro de validação, adicionar esse erro na lista
-de erros de validação.
+Dentro da sua lógica de negócios, basta fazer a verificação que deseja e caso haja um erro de validação, adicionar esse erro na lista de erros de validação.
 Por exemplo, para validar que o nome do funcionario deve ser Fulano, faça:
 
 [code]
@@ -28,8 +27,13 @@ public void adiciona(Funcionario funcionario) {
 	if(! funcionario.getNome().equals("Fulano")) {
 		validator.add(new ValidationMessage("erro","nomeInvalido"));
 	}
+	validator.validate();
+	dao.adiciona(funcionario);
 }
 [/code]
+
+Nesse estilo, você precisa chamar o validator.validate(), para que o VRaptor pare a execução se aconteceu algum
+erro até aquele momento, ou seja, para dizer que os testes de validação acabaram.
 
 [section Estilo fluente]
 

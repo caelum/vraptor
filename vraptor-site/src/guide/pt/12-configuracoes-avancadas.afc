@@ -1,0 +1,47 @@
+[chapter Configurações avancadas: sobrescrevendo as convenções e comportamento do VRaptor]
+
+[section Mudando a view renderizada por padrão]
+
+Se você precisa mudar a view renderizada por padrão, ou mudar o local em que ela é procurada,
+basta criar a seguinte classe:
+
+[java]
+	@Component
+	public class CustomPathResolver extends DefaultPathResolver {
+		
+		@Override
+		protected String getPrefix() {
+			return "/pasta/raiz/";
+		}
+		
+		@Override
+		protected String getExtension() {
+			return "ftl"; // ou qualquer outra extensão
+		}
+	}
+[/java]
+
+Se você precisa mudar mais ainda a convenção basta implementar a interface PathResolver.
+
+[section Mudando o character encoding]
+
+O caracter encoding padrão do VRaptor é o UTF-8. Para mudá-lo, por exemplo pra ISO-8859-1, basta colocar no seu web.xml:
+
+[xml]
+<context-param>
+    <param-name>br.com.caelum.vraptor.encoding</param-name>
+    <param-value>ISO-8859-1</param-value>
+</context-param>
+[/xml]
+
+[section Mudando o IoC provider]
+
+O IoC provider padrão é o spring. Para mudá-lo basta colocar no web.xml:
+<context-param>
+    <param-name>br.com.caelum.vraptor.provider</param-name>
+    <param-value>br.com.classe.do.seu.provider.Preferido</param-value>
+</context-param>
+
+Entre os padrão existem: br.com.caelum.vraptor.ioc.spring.SpringProvider e br.com.caelum.vraptor.ioc.pico.PicoProvider.
+Você pode ainda estender alguma dessas duas classes e usar seu próprio provider.
+

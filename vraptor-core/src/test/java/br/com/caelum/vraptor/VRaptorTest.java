@@ -58,18 +58,23 @@ public class VRaptorTest {
     public void shouldExecuteARequestUsingTheSpecifiedContainer() throws ServletException, IOException,
             VRaptorException {
         final HttpServletRequest request = mockery.mock(HttpServletRequest.class);
+        final ServletResponse response = mockery.mock(HttpServletResponse.class);
         mockery.checking(new Expectations() {
             {
                 one(request).getRequestURI();
                 will(returnValue("/unknown_file"));
                 one(request).getContextPath();
                 will(returnValue(""));
+                one(request).setCharacterEncoding("UTF-8");
+                one(response).setCharacterEncoding("UTF-8");
                 one(context).getResource("/unknown_file");
                 will(returnValue(null));
                 one(config).getServletContext();
                 will(returnValue(context));
                 one(context).getInitParameter(BasicConfiguration.CONTAINER_PROVIDER);
                 will(returnValue(MyProvider.class.getName()));
+                one(context).getInitParameter(BasicConfiguration.APPLICATION_ENCODING);
+                will(returnValue(null));
                 one(context).getAttribute("container");
                 will(returnValue(container));
                 one(container).instanceFor(RequestExecution.class);
@@ -77,7 +82,6 @@ public class VRaptorTest {
                 one(execution).execute();
             }
         });
-        ServletResponse response = mockery.mock(HttpServletResponse.class);
         VRaptor raptor = new VRaptor();
         raptor.init(this.config);
         raptor.doFilter(request, response, null);
@@ -93,6 +97,8 @@ public class VRaptorTest {
                 will(returnValue(context));
                 one(context).getInitParameter(BasicConfiguration.CONTAINER_PROVIDER);
                 will(returnValue(MyProvider.class.getName()));
+                one(context).getInitParameter(BasicConfiguration.APPLICATION_ENCODING);
+                will(returnValue(null));
             }
         });
         VRaptor raptor = new VRaptor();
@@ -148,9 +154,11 @@ public class VRaptorTest {
                 one(handler).requestingStaticFile(request);
                 will(returnValue(true));
                 one(handler).deferProcessingToContainer(chain, request, response);
+                allowing(request).setCharacterEncoding("UTF-8");
+                allowing(response).setCharacterEncoding("UTF-8");
             }
         });
-        raptor.init(new DoNothingProvider(), handler);
+        raptor.init(new DoNothingProvider(), handler, "UTF-8");
         raptor.doFilter(request, response, chain);
         mockery.assertIsSatisfied();
     }

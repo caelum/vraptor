@@ -5,6 +5,7 @@ import java.lang.annotation.Annotation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.VRaptorException;
 import br.com.caelum.vraptor.interceptor.Interceptor;
@@ -15,9 +16,11 @@ import br.com.caelum.vraptor.interceptor.InterceptorSequence;
 public class InterceptorStereotypeHandler implements StereotypeHandler {
 	private static final Logger logger = LoggerFactory.getLogger(InterceptorStereotypeHandler.class);
 	private final InterceptorRegistry registry;
+	private final ComponentRegistry componentRegistry;
 
-	public InterceptorStereotypeHandler(InterceptorRegistry registry) {
+	public InterceptorStereotypeHandler(InterceptorRegistry registry, ComponentRegistry componentRegistry) {
 		this.registry = registry;
+		this.componentRegistry = componentRegistry;
 	}
 
 	public Class<? extends Annotation> stereotype() {
@@ -41,7 +44,7 @@ public class InterceptorStereotypeHandler implements StereotypeHandler {
 		Class<? extends Interceptor> interceptorType = (Class<? extends Interceptor>) type;
 		registry.register(interceptorType);
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	private void registerInterceptorSequence(Class<?> type) {
 		logger.debug("Found interceptor sequence for " + type);
@@ -52,7 +55,11 @@ public class InterceptorStereotypeHandler implements StereotypeHandler {
 	private Class<? extends Interceptor>[] parseSequence(Class<? extends InterceptorSequence> type) {
 		try {
 			InterceptorSequence sequence = type.getConstructor().newInstance();
-			return sequence.getSequence();
+			Class<? extends Interceptor>[] interceptors = sequence.getSequence();
+			for (Class<? extends Interceptor> interceptor : interceptors) {
+				componentRegistry.deepRegister(interceptor);
+			}
+			return interceptors;
 		} catch (Exception e) {
 			throw new VRaptorException("Problem ocurred while instantiating an interceptor sequence", e);
 		}

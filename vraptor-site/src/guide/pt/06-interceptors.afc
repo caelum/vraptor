@@ -121,3 +121,18 @@ public class FuncionarioController {
 	}
 }
 [/java]
+
+[section Como garantir ordem: InterceptorSequence]
+Se você precisa garantir a ordem em que os interceptors são executados, basta implementar
+a interface InterceptorSequence e passar a ordem em que você deseja executar os interceptors:
+
+[java]
+@Intercepts
+public class MinhaSequencia implements InterceptorSequence {
+	public Class<? extends Interceptor>[] getSequence() {
+		return new Class[] { PrimeiroInterceptor.class, SegundoInterceptor.class };
+	}
+}
+[/java]
+
+Você não deve anotar os interceptors retornados pela InterceptorSequence com @Intercepts.

@@ -1,7 +1,7 @@
 /***
- * 
+ *
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  * 1. Redistributions of source code must retain the above copyright notice,
@@ -12,7 +12,7 @@
  * copyright holders nor the names of its contributors may be used to endorse or
  * promote products derived from this software without specific prior written
  * permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -39,6 +39,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.After;
 import org.junit.Before;
@@ -84,6 +85,14 @@ public class SpringBasedContainerTest {
     public void initContainer() {
         mockery = new Mockery();
         servletContext = mockery.mock(ServletContext.class);
+
+		mockery.checking(new Expectations() {
+			{
+				allowing(servletContext).getAttribute("org.springframework.web.context.WebApplicationContext.ROOT");
+				will(returnValue(null));
+			}
+		});
+
         session = new HttpSessionMock(servletContext, "session");
         request = new HttpServletRequestMock(session);
         response = mockery.mock(HttpServletResponse.class);
@@ -161,21 +170,21 @@ public class SpringBasedContainerTest {
         assertThat(translator, is(instanceOf(CustomTranslator.class)));
 
     }
-    
+
     @Test
     public void shoudRegisterResourcesInRouter() {
     	Router router = container.instanceFor(Router.class);
     	ResourceClass dummyResourceClass = new DefaultResourceClass(DummyResource.class);
     	assertThat(router.allResources(), hasItem(dummyResourceClass));
     }
-    
+
     @Test
     public void shoudRegisterConvertersInConverters() {
     	Converters converters = container.instanceFor(Converters.class);
     	Converter<?> converter = converters.to(Foo.class, container);
 		assertThat(converter, is(instanceOf(DummyConverter.class)));
     }
-    
+
     @Test
     public void shoudRegisterInterceptorsInInterceptorRegistry() {
     	InterceptorRegistry registry = container.instanceFor(InterceptorRegistry.class);

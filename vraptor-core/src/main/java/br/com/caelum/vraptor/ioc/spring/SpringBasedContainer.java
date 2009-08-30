@@ -60,6 +60,8 @@ public class SpringBasedContainer extends AbstractComponentRegistry implements C
         applicationContext.setServletContext(context);
         applicationContext.refresh();
         applicationContext.start();
+        applicationContext.setParent(instanceFor(SpringLocator.class).getApplicationContext(context));
+        applicationContext.refresh();
     }
 
     public void stop() {

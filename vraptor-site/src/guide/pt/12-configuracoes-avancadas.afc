@@ -45,3 +45,23 @@ O IoC provider padrão é o spring. Para mudá-lo basta colocar no web.xml:
 Entre os padrão existem: br.com.caelum.vraptor.ioc.spring.SpringProvider e br.com.caelum.vraptor.ioc.pico.PicoProvider.
 Você pode ainda estender alguma dessas duas classes e usar seu próprio provider.
 
+[section Mudando ApplicationContext base do Spring]
+
+Caso o VRaptor não esteja usando o seu ApplicationContext como base, basta implementar a interface:
+
+[java]
+	@Component
+	@ApplicationScoped
+	public class MySpringLocator implements SpringLocator {
+	
+		public ApplicationContext getApplicationContext(ServletContext context) {
+			ApplicationContext applicationContext = //lógica pra criar o applicationContext
+			return applicationContext;
+		}
+	}
+[/java]
+
+Por padrão o VRaptor tenta procurar o applicationContext via 
+%%WebApplicationContextUtils.getWebApplicationContext(servletContext);%% ou carregando do applicationContext.xml
+que está no classpath.
+

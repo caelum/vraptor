@@ -60,8 +60,8 @@ public class FixedMethodStrategyTest {
 
 	@Test
 	public void canTranslate() {
-		FixedMethodStrategy strategy = new FixedMethodStrategy(MyControl.class, method("list"), methods(HttpMethod.POST),
-				control, 0);
+		FixedMethodStrategy strategy = new FixedMethodStrategy("abc", MyControl.class, method("list"),
+				methods(HttpMethod.POST), control, 0);
 		mockery.checking(new Expectations() {
 			{
 				one(control).matches("/clients/add"); will(returnValue(true));

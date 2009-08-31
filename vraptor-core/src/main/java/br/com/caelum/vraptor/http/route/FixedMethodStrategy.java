@@ -51,7 +51,10 @@ public class FixedMethodStrategy implements Route {
 
 	private final int priority;
 
-	public FixedMethodStrategy(Class<?> type, Method method, Set<HttpMethod> methods, ParametersControl control, int priority) {
+	private final String originalUri;
+
+	public FixedMethodStrategy(String originalUri, Class<?> type, Method method, Set<HttpMethod> methods, ParametersControl control, int priority) {
+		this.originalUri = originalUri;
 		this.methods = methods;
 		this.parameters = control;
 		this.resourceMethod = new DefaultResourceMethod(new DefaultResourceClass(type), method);
@@ -82,5 +85,10 @@ public class FixedMethodStrategy implements Route {
 
 	public int getPriority() {
 		return this.priority;
+	}
+
+	@Override
+	public String toString() {
+		return "[FixedMethodStrategy: uri " + originalUri + " methods " + methods + "]";
 	}
 }

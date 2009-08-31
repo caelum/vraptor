@@ -116,7 +116,7 @@ public class DefaultRouter implements Router {
 			Route otherRoute = matches.next();
 			if (otherRoute.getPriority() == route.getPriority()) {
 				throw new VRaptorException(
-						MessageFormat.format("There are two rules that matches the uri '{0}' with method {1}: {2} with same priority." +
+						MessageFormat.format("There are two rules that matches the uri ''{0}'' with method {1}: {2} with same priority." +
 								" Consider using @Path priority attribute.",
 								uri, method, Arrays.asList(route, otherRoute)));
 			}

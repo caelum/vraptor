@@ -48,15 +48,25 @@ public class Log implements Interceptor {
 		this.request = request;
 	}
 
-    public void intercept(InterceptorStack stack, ResourceMethod method, 
-						Object resourceInstance) throws InterceptionException {
-    	System.out.println("Interceptando " + request.getRequestURI());
-    	stack.next(method, resourceInstance);
-    }
+	/*
+	 * Este interceptor deve interceptar o method dado? Neste caso vai interceptar
+	 * todos os métodos.
+	 * method.getMethod() retorna o método java que está sendo executado
+	 * method.getResourceClass().getType() retorna a classe que está sendo executada
+	 */
+	public boolean accepts(ResourceMethod method) {
+		return true; 
+	}
 
-    public boolean accepts(ResourceMethod method) {
-    	return true;
-    }
+	public void intercept(InterceptorStack stack, ResourceMethod method, 
+						Object resourceInstance) throws InterceptionException {
+		System.out.println("Interceptando " + request.getRequestURI());
+		// código a ser executado antes da lógica
+		
+		stack.next(method, resourceInstance); // continua a execução
+		
+		// código a ser executádo depois da lógica
+	}
 
 }
 [/java]
@@ -121,3 +131,18 @@ public class FuncionarioController {
 	}
 }
 [/java]
+
+[section Como garantir ordem: InterceptorSequence]
+Se você precisa garantir a ordem em que os interceptors são executados, basta implementar
+a interface InterceptorSequence e passar a ordem em que você deseja executar os interceptors:
+
+[java]
+@Intercepts
+public class MinhaSequencia implements InterceptorSequence {
+	public Class<? extends Interceptor>[] getSequence() {
+		return new Class[] { PrimeiroInterceptor.class, SegundoInterceptor.class };
+	}
+}
+[/java]
+
+Você não deve anotar os interceptors retornados pela InterceptorSequence com @Intercepts.

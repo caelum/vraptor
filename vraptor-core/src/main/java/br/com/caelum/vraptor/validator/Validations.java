@@ -62,10 +62,10 @@ public class Validations {
         return that(category, null, id, matcher);
     }
 
-    public <T> boolean that(String category, String reason, T actual, Matcher<? super T> matcher) {
+    public <T> boolean that(String category, String reason, T actual, Matcher<? super T> matcher, Object... messageParameters) {
         if (!matcher.matches(actual)) {
             if (reason != null) {
-                errors.add(new ValidationMessage(getString(reason), category));
+                errors.add(new ValidationMessage(getString(reason), category, messageParameters));
             } else {
                 Description description = new ResourceBundleDescription(bundle);
                 description.appendDescriptionOf(matcher);
@@ -81,7 +81,7 @@ public class Validations {
             errors.add(new ValidationMessage(getString(reason), category));
         }
     }
-    
+
     public String getString(String key) {
     	try {
     		return bundle.getString(key);
@@ -99,7 +99,7 @@ public class Validations {
 
     /**
      * Adds a list of errors to the error list.
-     * @return 
+     * @return
      */
     public Validations and(List<Message> errors) {
         this.errors.addAll(errors);

@@ -1,7 +1,7 @@
 /***
- * 
+ *
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  * 1. Redistributions of source code must retain the above copyright notice,
@@ -12,7 +12,7 @@
  * copyright holders nor the names of its contributors may be used to endorse or
  * promote products derived from this software without specific prior written
  * permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -48,11 +48,13 @@ import br.com.caelum.vraptor.test.HttpSessionMock;
 public class SpringProviderRegisteringComponentsTest extends GenericContainerTest {
     private int counter;
 
-    protected ContainerProvider getProvider() {
+    @Override
+	protected ContainerProvider getProvider() {
         return new SpringProvider();
     }
 
-    protected <T> T executeInsideRequest(final WhatToDo<T> execution) {
+    @Override
+	protected <T> T executeInsideRequest(final WhatToDo<T> execution) {
         Callable<T> task = new Callable<T>(){
 			public T call() throws Exception {
 				T result = null;
@@ -72,12 +74,12 @@ public class SpringProviderRegisteringComponentsTest extends GenericContainerTes
 				return result;
 			}
 		};
-        
+
 		Future<T> future = Executors.newSingleThreadExecutor().submit(task);
 
 		try {
 			return future.get(60, TimeUnit.SECONDS);
-		} 
+		}
 		catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -89,6 +91,9 @@ public class SpringProviderRegisteringComponentsTest extends GenericContainerTes
             {
                 allowing(context).getInitParameter(SpringProvider.BASE_PACKAGES_PARAMETER_NAME);
                 will(returnValue("br.com.caelum.vraptor.ioc.fixture"));
+
+				allowing(context).getAttribute("org.springframework.web.context.WebApplicationContext.ROOT");
+				will(returnValue(null));
             }
         });
     }

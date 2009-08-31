@@ -28,9 +28,11 @@
 package br.com.caelum.vraptor.validator;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
 import java.util.ResourceBundle;
@@ -48,6 +50,10 @@ public class ValidationsTest {
         public int getAge() {
             return age;
         }
+
+        public String getName() {
+            return name;
+        }
     }
 
 	private ResourceBundle bundle;
@@ -55,7 +61,7 @@ public class ValidationsTest {
 
 	@Before
     public void setup() {
-    	this.bundle = ResourceBundle.getBundle("messages");
+	    this.bundle = ResourceBundle.getBundle("messages");
     	this.validations = new Validations(bundle);
 	}
 
@@ -114,6 +120,14 @@ public class ValidationsTest {
         guilherme.age = 15;
         validations.that(guilherme.getAge()).shouldBe(greaterThan(17));
         assertThat(validations.getErrors(), hasSize(1));
+    }
+
+    @Test
+    public void formatsParameterizedValidationMessagesWhenUsingMatchers() {
+        final Client caio = new Client();
+        validations.that("error", "required_field", caio.getName(), is(notNullValue()), "Name");
+        assertThat(validations.getErrors(), hasSize(1));
+        assertThat(validations.getErrors().get(0).getMessage(), is(equalTo("Name is a required field")));
     }
 
 }

@@ -40,6 +40,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.hamcrest.Matcher;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.After;
@@ -52,6 +53,7 @@ import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.http.UrlToResourceTranslator;
+import br.com.caelum.vraptor.http.route.Route;
 import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
 import br.com.caelum.vraptor.ioc.Container;
@@ -173,7 +175,8 @@ public class SpringBasedContainerTest {
     @Test
     public void shoudRegisterResourcesInRouter() {
     	Router router = container.instanceFor(Router.class);
-    	assertThat(router.allRoutes(), hasItem(canHandle(DummyResource.class, DummyResource.class.getDeclaredMethods()[0])));
+    	Matcher<Iterable<? super Route>> hasItem = hasItem(canHandle(DummyResource.class, DummyResource.class.getDeclaredMethods()[0]));
+		assertThat(router.allRoutes(), hasItem);
     }
 
     @Test

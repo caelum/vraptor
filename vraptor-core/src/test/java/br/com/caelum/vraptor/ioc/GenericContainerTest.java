@@ -51,6 +51,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
 import org.jmock.Mockery;
 import org.junit.After;
@@ -77,6 +78,7 @@ import br.com.caelum.vraptor.http.TypeCreator;
 import br.com.caelum.vraptor.http.UrlToResourceTranslator;
 import br.com.caelum.vraptor.http.ognl.EmptyElementsRemoval;
 import br.com.caelum.vraptor.http.route.NoRoutesConfiguration;
+import br.com.caelum.vraptor.http.route.Route;
 import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
 import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
@@ -361,7 +363,8 @@ public abstract class GenericContainerTest {
     @Test
     public void shoudRegisterResourcesInRouter() {
     	Router router = getFromContainer(Router.class);
-    	assertThat(router.allRoutes(), hasItem(canHandle(ResourceInTheClasspath.class, ResourceInTheClasspath.class.getDeclaredMethods()[0])));
+    	Matcher<Iterable<? super Route>> hasItem = hasItem(canHandle(ResourceInTheClasspath.class, ResourceInTheClasspath.class.getDeclaredMethods()[0]));
+		assertThat(router.allRoutes(), hasItem);
     }
 
     @Test

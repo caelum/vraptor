@@ -39,10 +39,11 @@ import org.hamcrest.Matchers;
 import org.hamcrest.TypeSafeMatcher;
 import org.jmock.Expectations;
 import org.jmock.Sequence;
+import org.junit.Assert;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.Path;
-import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor.VRaptorException;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.TypeCreator;
 import br.com.caelum.vraptor.http.VRaptorRequest;
@@ -92,11 +93,11 @@ public class DefaultRouterTest {
 				allowing(second).getPriority(); will(returnValue(2));
 				allowing(third).getPriority(); will(returnValue(3));
 
-				one(first).matches(with(any(String.class)), with(any(HttpMethod.class)), with(any(MutableRequest.class))); will(returnValue(null));
+				one(first).canHandle(with(any(String.class)), with(any(HttpMethod.class))); will(returnValue(false));
 				inSequence(invocation);
-				one(second).matches(with(any(String.class)), with(any(HttpMethod.class)), with(any(MutableRequest.class))); will(returnValue(null));
+				one(second).canHandle(with(any(String.class)), with(any(HttpMethod.class))); will(returnValue(false));
 				inSequence(invocation);
-				one(third).matches(with(any(String.class)), with(any(HttpMethod.class)), with(any(MutableRequest.class))); will(returnValue(null));
+				one(third).canHandle(with(any(String.class)), with(any(HttpMethod.class))); will(returnValue(false));
 				inSequence(invocation);
 
 				ignoring(anything());
@@ -114,9 +115,12 @@ public class DefaultRouterTest {
 	public void acceptsASingleMappingRule() throws SecurityException, NoSuchMethodException {
 		final Route route = mockery.mock(Route.class);
 		mockery.checking(new Expectations() {{
+			one(route).canHandle("/clients/add", HttpMethod.POST);
+			will(returnValue(true));
+
 			one(route).matches("/clients/add", HttpMethod.POST, request);
 			will(returnValue(method));
-			one(route).getResource(); will(returnValue(null));
+
 			allowing(route).getPriority();
 		}});
 		router.add(route);
@@ -131,9 +135,11 @@ public class DefaultRouterTest {
 		final HttpMethod delete = HttpMethod.DELETE;
 		final Route route = mockery.mock(Route.class);
 		mockery.checking(new Expectations() {{
+			one(route).canHandle("/clients/add", delete);
+			will(returnValue(true));
+
 			one(route).matches("/clients/add", delete, request);
 			will(returnValue(method));
-			one(route).getResource(); will(returnValue(null));
 
 			allowing(route).getPriority();
 		}});
@@ -147,19 +153,40 @@ public class DefaultRouterTest {
 		final Route route = mockery.mock(Route.class);
 		final Route second = mockery.mock(Route.class, "second");
 		mockery.checking(new Expectations() {{
+			one(route).canHandle("/clients/add", HttpMethod.POST); will(returnValue(true));
+			one(second).canHandle("/clients/add", HttpMethod.POST);	will(returnValue(true));
+
 			one(route).matches("/clients/add", HttpMethod.POST, request);
 			will(returnValue(method));
-			one(route).getResource(); will(returnValue(null));
-			one(second).getResource(); will(returnValue(null));
 
-			allowing(route).getPriority();
-			allowing(second).getPriority();
+			allowing(route).getPriority(); will(returnValue(1));
+			allowing(second).getPriority(); will(returnValue(2));
 		}});
 		router.add(route);
 		router.add(second);
 		ResourceMethod found = router.parse("/clients/add", HttpMethod.POST, request);
 		assertThat(found, is(equalTo(method)));
 		mockery.assertIsSatisfied();
+	}
+	@Test
+	public void throwsExceptionIfMoreThanOneUriMatchesWithSamePriority() {
+		final Route route = mockery.mock(Route.class);
+		final Route second = mockery.mock(Route.class, "second");
+		mockery.checking(new Expectations() {{
+			one(route).canHandle("/clients/add", HttpMethod.POST); will(returnValue(true));
+			one(second).canHandle("/clients/add", HttpMethod.POST);	will(returnValue(true));
+
+			allowing(route).getPriority(); will(returnValue(1));
+			allowing(second).getPriority(); will(returnValue(1));
+		}});
+		router.add(route);
+		router.add(second);
+		try {
+			router.parse("/clients/add", HttpMethod.POST, request);
+			Assert.fail("Exception expected");
+		} catch (VRaptorException e) {
+			mockery.assertIsSatisfied();
+		}
 	}
 
 

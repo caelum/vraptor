@@ -31,7 +31,6 @@ import java.lang.reflect.Method;
 
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.resource.HttpMethod;
-import br.com.caelum.vraptor.resource.ResourceClass;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**
@@ -48,10 +47,9 @@ public interface Route {
 	ResourceMethod matches(String uri, HttpMethod method, MutableRequest request);
 
 	/**
-	 * Returns the resource related to this rule. If no resource should be
-	 * registered while loading this rule, return null.
+	 * Returns if this route can handle this request
 	 */
-	ResourceClass getResource();
+	boolean canHandle(String uri, HttpMethod method);
 
 	/**
 	 * Returns the url which invokes this rule with values extracted from this

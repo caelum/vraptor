@@ -29,12 +29,13 @@ package br.com.caelum.vraptor.http.route;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import br.com.caelum.vraptor.VRaptorException;
 import br.com.caelum.vraptor.http.MutableRequest;
@@ -46,6 +47,9 @@ import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.ResourceClass;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.resource.VRaptorInfo;
+import br.com.caelum.vraptor.util.collections.Filters;
+
+import com.google.common.collect.Iterators;
 
 /**
  * The default implementation of resource localization rules. It also uses a
@@ -59,7 +63,6 @@ public class DefaultRouter implements Router {
 
 	private final Proxifier proxifier;
 	private final Collection<Route> routes = new PriorityRoutesList();
-	private final Set<ResourceClass> resources = new HashSet<ResourceClass>();
 	private final RoutesParser routesParser;
 	private final TypeCreator creator;
 
@@ -94,26 +97,30 @@ public class DefaultRouter implements Router {
 	 * You can override this method to get notified by all added routes.
 	 */
 	public void add(Route r) {
-		ResourceClass resource = r.getResource();
-		if (resource != null) {
-			this.resources.add(resource);
-		}
 		this.routes.add(r);
 	}
 
 	public ResourceMethod parse(String uri, HttpMethod method, MutableRequest request) {
-		for (Route rule : routes) {
-			ResourceMethod value = rule.matches(uri, method, request);
-			if (value != null) {
-				return value;
-			}
+		Iterator<Route> matches = Iterators.filter(routes.iterator(), Filters.canHandle(uri, method));
+		if (matches.hasNext()) {
+			Route route = matches.next();
+			checkIfThereIsAnotherRoute(uri, method, matches, route);
+			return route.matches(uri, method, request);
 		}
 		return null;
 	}
 
-	public Set<ResourceClass> allResources() {
-		// TODO: defensive copy? (collections.unmodifiable)
-		return resources;
+	private void checkIfThereIsAnotherRoute(String uri, HttpMethod method,
+			Iterator<Route> matches, Route route) {
+		if (matches.hasNext()) {
+			Route otherRoute = matches.next();
+			if (otherRoute.getPriority() == route.getPriority()) {
+				throw new VRaptorException(
+						MessageFormat.format("There are two rules that matches the uri '{0}' with method {1}: {2} with same priority." +
+								" Consider using @Path priority attribute.",
+								uri, method, Arrays.asList(route, otherRoute)));
+			}
+		}
 	}
 
 	public void register(ResourceClass resource) {
@@ -121,15 +128,14 @@ public class DefaultRouter implements Router {
 	}
 
 	public <T> String urlFor(Class<T> type, Method method, Object... params) {
-		for (Route route : routes) {
-			if (route.canHandle(type, method)) {
-				try {
-					ResourceMethod resourceMethod = DefaultResourceMethod.instanceFor(type, method);
-					return route.urlFor(type, method, creator.instanceWithParameters(resourceMethod, params));
-				} catch (Exception e) {
-					throw new VRaptorException("The selected route is invalid for redirection: " + type.getName() + "."
-							+ method.getName(), e);
-				}
+		Iterator<Route> matches = Iterators.filter(routes.iterator(), Filters.canHandle(type, method));
+		if (matches.hasNext()) {
+			try {
+				ResourceMethod resourceMethod = DefaultResourceMethod.instanceFor(type, method);
+				return matches.next().urlFor(type, method, creator.instanceWithParameters(resourceMethod, params));
+			} catch (Exception e) {
+				throw new VRaptorException("The selected route is invalid for redirection: " + type.getName() + "."
+						+ method.getName(), e);
 			}
 		}
 		throw new RouteNotFoundException("The selected route is invalid for redirection: " + type.getName() + "."

@@ -27,6 +27,7 @@
  */
 package br.com.caelum.vraptor.ioc;
 
+import static br.com.caelum.vraptor.VRaptorMatchers.canHandle;
 import static br.com.caelum.vraptor.VRaptorMatchers.hasOneCopyOf;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItem;
@@ -93,8 +94,6 @@ import br.com.caelum.vraptor.ioc.fixture.InterceptorInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.ResourceInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.ComponentFactoryInTheClasspath.Provided;
 import br.com.caelum.vraptor.reflection.CacheBasedTypeCreator;
-import br.com.caelum.vraptor.resource.DefaultResourceClass;
-import br.com.caelum.vraptor.resource.ResourceClass;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.resource.ResourceNotFoundHandler;
 import br.com.caelum.vraptor.view.LogicResult;
@@ -362,8 +361,7 @@ public abstract class GenericContainerTest {
     @Test
     public void shoudRegisterResourcesInRouter() {
     	Router router = getFromContainer(Router.class);
-    	ResourceClass dummyResourceClass = new DefaultResourceClass(ResourceInTheClasspath.class);
-    	assertThat(router.allResources(), hasItem(dummyResourceClass));
+    	assertThat(router.allRoutes(), hasItem(canHandle(ResourceInTheClasspath.class, ResourceInTheClasspath.class.getDeclaredMethods()[0])));
     }
 
     @Test

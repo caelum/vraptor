@@ -53,6 +53,8 @@ import org.springframework.web.context.support.AbstractRefreshableWebApplication
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import br.com.caelum.vraptor.Converter;
+import br.com.caelum.vraptor.converter.jodatime.LocalDateConverter;
+import br.com.caelum.vraptor.converter.jodatime.LocalTimeConverter;
 import br.com.caelum.vraptor.core.BaseComponents;
 import br.com.caelum.vraptor.ioc.ComponentFactory;
 import br.com.caelum.vraptor.ioc.StereotypeHandler;
@@ -126,6 +128,14 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
         registerOn(beanFactory, HttpSessionProvider.class, true);
 
         beanFactory.registerSingleton(SpringBasedContainer.class.getName(), container);
+
+        try {
+			Class.forName("org.joda.time.LocalDate");
+			registerOn(beanFactory, LocalDateConverter.class);
+			registerOn(beanFactory, LocalTimeConverter.class);
+		} catch (ClassNotFoundException e) {
+			//OK, only register jodatime converters if jodatime is imported
+		}
     }
 
     public void register(final Class<?> type) {

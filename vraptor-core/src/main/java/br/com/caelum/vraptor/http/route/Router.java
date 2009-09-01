@@ -1,7 +1,7 @@
 /***
- * 
+ *
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  * 1. Redistributions of source code must retain the above copyright notice,
@@ -12,7 +12,7 @@
  * copyright holders nor the names of its contributors may be used to endorse or
  * promote products derived from this software without specific prior written
  * permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -29,7 +29,6 @@ package br.com.caelum.vraptor.http.route;
 
 import java.lang.reflect.Method;
 import java.util.List;
-import java.util.Set;
 
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.proxy.Proxifier;
@@ -39,7 +38,7 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**
  * Handles different rules in order to translate urls into Resource methods.
- * 
+ *
  * @author Guilherme Silveira
  */
 public interface Router {
@@ -51,8 +50,6 @@ public interface Router {
 	void add(Route route);
 
 	ResourceMethod parse(String uri, HttpMethod method, MutableRequest request);
-
-	Set<ResourceClass> allResources();
 
 	/**
 	 * Registers this resource using the default algorithm for uri

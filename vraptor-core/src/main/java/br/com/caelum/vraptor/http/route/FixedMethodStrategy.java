@@ -34,7 +34,6 @@ import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.resource.DefaultResourceClass;
 import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.resource.HttpMethod;
-import br.com.caelum.vraptor.resource.ResourceClass;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**
@@ -52,15 +51,14 @@ public class FixedMethodStrategy implements Route {
 
 	private final int priority;
 
+	private final String originalUri;
+
 	public FixedMethodStrategy(String originalUri, Class<?> type, Method method, Set<HttpMethod> methods, ParametersControl control, int priority) {
+		this.originalUri = originalUri;
 		this.methods = methods;
 		this.parameters = control;
 		this.resourceMethod = new DefaultResourceMethod(new DefaultResourceClass(type), method);
 		this.priority = priority;
-	}
-
-	public ResourceClass getResource() {
-		return this.resourceMethod.getResource();
 	}
 
 	public boolean canHandle(Class<?> type, Method method) {
@@ -68,13 +66,17 @@ public class FixedMethodStrategy implements Route {
 	}
 
 	public ResourceMethod matches(String uri, HttpMethod method, MutableRequest request) {
-		boolean acceptMethod = this.methods.isEmpty() || this.methods.contains(method);
-		boolean uriMatches = parameters.matches(uri);
-		boolean matches = uriMatches && acceptMethod;
+		boolean matches = canHandle(uri, method);
 		if(matches) {
 			parameters.fillIntoRequest(uri, request);
 		}
 		return matches ? this.resourceMethod : null;
+	}
+
+	public boolean canHandle(String uri, HttpMethod method) {
+		boolean acceptMethod = this.methods.isEmpty() || this.methods.contains(method);
+		boolean uriMatches = parameters.matches(uri);
+		return uriMatches && acceptMethod;
 	}
 
 	public String urlFor(Class<?> type, Method m, Object params) {
@@ -83,5 +85,10 @@ public class FixedMethodStrategy implements Route {
 
 	public int getPriority() {
 		return this.priority;
+	}
+
+	@Override
+	public String toString() {
+		return "[FixedMethodStrategy: uri " + originalUri + " methods " + methods + "]";
 	}
 }

@@ -38,7 +38,6 @@ import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.resource.DefaultResourceClass;
 import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.resource.HttpMethod;
-import br.com.caelum.vraptor.resource.ResourceClass;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**
@@ -71,9 +70,7 @@ public class PatternBasedStrategy implements Route {
 	}
 
 	public ResourceMethod matches(String uri, HttpMethod method, MutableRequest request) {
-		boolean acceptMethod = this.methods.isEmpty() || this.methods.contains(method);
-		boolean acceptUri = control.matches(uri);
-		if(acceptUri && acceptMethod){
+		if(canHandle(uri, method)){
 			control.fillIntoRequest(uri, request);
 			String webLogic = request.getParameter("webLogic");
 			String webMethod = request.getParameter("webMethod");
@@ -88,6 +85,12 @@ public class PatternBasedStrategy implements Route {
 			}
 		}
 		return null;
+	}
+
+	public boolean canHandle(String uri, HttpMethod method) {
+		boolean acceptMethod = this.methods.isEmpty() || this.methods.contains(method);
+		boolean acceptUri = control.matches(uri);
+		return acceptUri && acceptMethod;
 	}
 
 	private Method method(Class<?> type, String methodName) {
@@ -109,10 +112,6 @@ public class PatternBasedStrategy implements Route {
 
 	public String urlFor(Class<?> type, Method m, Object params) {
 		return control.apply(new String[] {this.type.extract("webLogic", type.getName()), this.method.extract("webMethod", m.getName())});
-	}
-
-	public ResourceClass getResource() {
-		return null;
 	}
 
 	public int getPriority() {

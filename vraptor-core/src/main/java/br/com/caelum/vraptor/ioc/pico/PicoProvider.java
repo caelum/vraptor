@@ -46,6 +46,8 @@ import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.Converter;
+import br.com.caelum.vraptor.converter.jodatime.LocalDateConverter;
+import br.com.caelum.vraptor.converter.jodatime.LocalTimeConverter;
 import br.com.caelum.vraptor.core.BaseComponents;
 import br.com.caelum.vraptor.core.Execution;
 import br.com.caelum.vraptor.core.RequestInfo;
@@ -160,6 +162,14 @@ public class PicoProvider implements ContainerProvider {
 	    registry.register(ConverterRegistrar.class, ConverterRegistrar.class);
 	    registry.register(ComponentFactoryRegistrar.class, ComponentFactoryRegistrar.class);
 	    registry.register(StereotypedComponentRegistrar.class, StereotypedComponentRegistrar.class);
+
+	    try {
+			Class.forName("org.joda.time.LocalDate");
+			registry.register(LocalDateConverter.class, LocalDateConverter.class);
+			registry.register(LocalTimeConverter.class, LocalTimeConverter.class);
+		} catch (ClassNotFoundException e) {
+			//OK, only register jodatime converters if jodatime is imported
+		}
 	}
 
 	protected void registerCustomComponents(PicoContainer picoContainer, Scanner scanner) {

@@ -30,7 +30,6 @@
 package br.com.caelum.vraptor;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -67,7 +66,6 @@ public class VRaptor implements Filter {
     private ServletContext servletContext;
 
     private StaticContentHandler staticHandler;
-	private String encoding;
 
     private static final Logger logger = LoggerFactory.getLogger(VRaptor.class);
 
@@ -88,8 +86,6 @@ public class VRaptor implements Filter {
         HttpServletRequest baseRequest = (HttpServletRequest) req;
         HttpServletResponse webResponse = (HttpServletResponse) res;
 
-        setEncoding(baseRequest, webResponse);
-
         if (staticHandler.requestingStaticFile(baseRequest)) {
             staticHandler.deferProcessingToContainer(chain, baseRequest, webResponse);
             return;
@@ -106,22 +102,16 @@ public class VRaptor implements Filter {
         });
     }
 
-	private void setEncoding(ServletRequest req, ServletResponse res) throws UnsupportedEncodingException {
-		req.setCharacterEncoding(encoding);
-        res.setCharacterEncoding(encoding);
-	}
-
     public void init(FilterConfig cfg) throws ServletException {
         servletContext = cfg.getServletContext();
         BasicConfiguration config = new BasicConfiguration(servletContext);
-        init(config.getProvider(), new DefaultStaticContentHandler(servletContext), config.getEncoding());
+        init(config.getProvider(), new DefaultStaticContentHandler(servletContext));
         logger.info("VRaptor 3 successfuly initialized");
     }
 
-    void init(ContainerProvider provider, StaticContentHandler handler, String encoding) {
+    void init(ContainerProvider provider, StaticContentHandler handler) {
         this.provider = provider;
         this.staticHandler = handler;
-		this.encoding = encoding;
         this.provider.start(servletContext);
     }
 

@@ -33,7 +33,6 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.route.Route;
@@ -54,10 +53,6 @@ public class CacheBasedRouter implements Router {
 
     public CacheBasedRouter(Router delegate) {
         this.delegate = delegate;
-    }
-
-    public Set<ResourceClass> allResources() {
-        return delegate.allResources();
     }
 
     public ResourceMethod parse(String name, HttpMethod methodName, MutableRequest request) {

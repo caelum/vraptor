@@ -76,9 +76,9 @@ public class Validations {
         return true;
     }
 
-    public void that(String category, String reason, boolean assertion) {
+    public void that(String category, String reason, boolean assertion, Object... messageParameters) {
         if (!assertion) {
-            errors.add(new ValidationMessage(getString(reason), category));
+            errors.add(new ValidationMessage(getString(reason), category, messageParameters));
         }
     }
 

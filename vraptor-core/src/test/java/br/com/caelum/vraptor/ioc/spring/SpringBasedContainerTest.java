@@ -27,6 +27,7 @@
  */
 package br.com.caelum.vraptor.ioc.spring;
 
+import static br.com.caelum.vraptor.VRaptorMatchers.canHandle;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
@@ -39,6 +40,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.hamcrest.Matcher;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.After;
@@ -51,6 +53,7 @@ import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.http.UrlToResourceTranslator;
+import br.com.caelum.vraptor.http.route.Route;
 import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
 import br.com.caelum.vraptor.ioc.Container;
@@ -65,8 +68,6 @@ import br.com.caelum.vraptor.ioc.spring.components.Foo;
 import br.com.caelum.vraptor.ioc.spring.components.RequestScopedComponent;
 import br.com.caelum.vraptor.ioc.spring.components.RequestScopedContract;
 import br.com.caelum.vraptor.ioc.spring.components.SpecialImplementation;
-import br.com.caelum.vraptor.resource.DefaultResourceClass;
-import br.com.caelum.vraptor.resource.ResourceClass;
 import br.com.caelum.vraptor.test.HttpServletRequestMock;
 import br.com.caelum.vraptor.test.HttpSessionMock;
 
@@ -174,8 +175,8 @@ public class SpringBasedContainerTest {
     @Test
     public void shoudRegisterResourcesInRouter() {
     	Router router = container.instanceFor(Router.class);
-    	ResourceClass dummyResourceClass = new DefaultResourceClass(DummyResource.class);
-    	assertThat(router.allResources(), hasItem(dummyResourceClass));
+    	Matcher<Iterable<? super Route>> hasItem = hasItem(canHandle(DummyResource.class, DummyResource.class.getDeclaredMethods()[0]));
+		assertThat(router.allRoutes(), hasItem);
     }
 
     @Test

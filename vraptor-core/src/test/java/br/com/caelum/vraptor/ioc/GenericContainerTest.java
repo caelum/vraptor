@@ -27,6 +27,7 @@
  */
 package br.com.caelum.vraptor.ioc;
 
+import static br.com.caelum.vraptor.VRaptorMatchers.canHandle;
 import static br.com.caelum.vraptor.VRaptorMatchers.hasOneCopyOf;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItem;
@@ -50,6 +51,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
 import org.jmock.Mockery;
 import org.junit.After;
@@ -76,6 +78,7 @@ import br.com.caelum.vraptor.http.TypeCreator;
 import br.com.caelum.vraptor.http.UrlToResourceTranslator;
 import br.com.caelum.vraptor.http.ognl.EmptyElementsRemoval;
 import br.com.caelum.vraptor.http.route.NoRoutesConfiguration;
+import br.com.caelum.vraptor.http.route.Route;
 import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
 import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
@@ -93,8 +96,6 @@ import br.com.caelum.vraptor.ioc.fixture.InterceptorInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.ResourceInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.ComponentFactoryInTheClasspath.Provided;
 import br.com.caelum.vraptor.reflection.CacheBasedTypeCreator;
-import br.com.caelum.vraptor.resource.DefaultResourceClass;
-import br.com.caelum.vraptor.resource.ResourceClass;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.resource.ResourceNotFoundHandler;
 import br.com.caelum.vraptor.view.LogicResult;
@@ -362,8 +363,8 @@ public abstract class GenericContainerTest {
     @Test
     public void shoudRegisterResourcesInRouter() {
     	Router router = getFromContainer(Router.class);
-    	ResourceClass dummyResourceClass = new DefaultResourceClass(ResourceInTheClasspath.class);
-    	assertThat(router.allResources(), hasItem(dummyResourceClass));
+    	Matcher<Iterable<? super Route>> hasItem = hasItem(canHandle(ResourceInTheClasspath.class, ResourceInTheClasspath.class.getDeclaredMethods()[0]));
+		assertThat(router.allRoutes(), hasItem);
     }
 
     @Test

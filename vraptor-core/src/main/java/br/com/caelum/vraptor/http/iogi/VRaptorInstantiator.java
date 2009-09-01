@@ -34,10 +34,11 @@ public class VRaptorInstantiator implements Instantiator<Object> {
 		this.converters = converters;
 		this.container = container;
 		this.localization = localization;
-		this.parameterNameProvider = parameterNameProvider;
+		this.parameterNameProvider = new UncapitalizingParameterNamesProvider(parameterNameProvider);
 		
 		DependencyProvider dependencyProvider = new VRaptorDependencyProvider();
-		VRaptorParameterNamesProvider parameterNamesProvider = new VRaptorParameterNamesProvider();
+		ParameterNamesProvider parameterNamesProvider = 
+			new VRaptorParameterNamesProvider();
 		
 		List<Instantiator<?>> instantiatorList = ImmutableList.of( 
 			new VRaptorTypeConverter(),
@@ -90,12 +91,10 @@ public class VRaptorInstantiator implements Instantiator<Object> {
 	}
 	
 	private final class VRaptorParameterNamesProvider implements ParameterNamesProvider {
-
 		@Override
 		public List<String> lookupParameterNames(AccessibleObject methodOrConstructor) {
 			return Arrays.asList(parameterNameProvider.parameterNamesFor(methodOrConstructor));
 		}
-		
 	}
 	
 	private final class NullDecorator implements Instantiator<Object> {

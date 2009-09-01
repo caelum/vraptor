@@ -23,17 +23,6 @@ basta criar a seguinte classe:
 
 Se você precisa mudar mais ainda a convenção basta implementar a interface PathResolver.
 
-[section Mudando o character encoding]
-
-O caracter encoding padrão do VRaptor é o UTF-8. Para mudá-lo, por exemplo pra ISO-8859-1, basta colocar no seu web.xml:
-
-[xml]
-<context-param>
-    <param-name>br.com.caelum.vraptor.encoding</param-name>
-    <param-value>ISO-8859-1</param-value>
-</context-param>
-[/xml]
-
 [section Mudando o IoC provider]
 
 O IoC provider padrão é o spring. Para mudá-lo basta colocar no web.xml:

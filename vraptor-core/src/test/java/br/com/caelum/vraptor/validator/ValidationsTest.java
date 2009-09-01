@@ -51,6 +51,10 @@ public class ValidationsTest {
             return age;
         }
 
+        public void setAge(int age) {
+            this.age = age;
+        }
+
         public String getName() {
             return name;
         }
@@ -128,6 +132,15 @@ public class ValidationsTest {
         validations.that("error", "required_field", caio.getName(), is(notNullValue()), "Name");
         assertThat(validations.getErrors(), hasSize(1));
         assertThat(validations.getErrors().get(0).getMessage(), is(equalTo("Name is a required field")));
+    }
+
+    @Test
+    public void formatsParameterizedValidationMessagesWithSeveralParameters() {
+        final Client client = new Client();
+        client.setAge(-1);
+        validations.that("error", "between_field", client.getAge() > 0 && client.getAge() < 100, "Age", 0, 100);
+        assertThat(validations.getErrors(), hasSize(1));
+        assertThat(validations.getErrors().get(0).getMessage(), is(equalTo("Age should be a value between 0 and 100")));
     }
 
 }

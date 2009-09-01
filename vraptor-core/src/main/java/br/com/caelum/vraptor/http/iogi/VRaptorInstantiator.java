@@ -44,7 +44,7 @@ public class VRaptorInstantiator implements Instantiator<Object> {
 			new StringConverter(),
 			new ArrayInstantiator(this),
 			new NullDecorator(new ListInstantiator(this)), //NOTE: NullDecorator is here to preserve existing behaviour. Don't know if it is the ideal one, though.
-			new NullDecorator(new ObjectInstantiator(this, dependencyProvider, parameterNamesProvider)));
+			new ObjectInstantiator(this, dependencyProvider, parameterNamesProvider));
 		multiInstantiator = new MultiInstantiator(instantiatorList);
 	}
 	

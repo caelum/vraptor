@@ -29,6 +29,7 @@ package br.com.caelum.vraptor.validator;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -93,6 +94,10 @@ public class DefaultValidator implements Validator {
 
 	public void add(Message message) {
 		this.errors.add(message);
+	}
+	
+	public void add(Collection<Message> message) {
+		this.errors.addAll(message);
 	}
 
 	// runs the validation

@@ -46,7 +46,4 @@ public interface Validator {
 	
 	void add(Message message);
 	
-	void validate();
-
-	
 }

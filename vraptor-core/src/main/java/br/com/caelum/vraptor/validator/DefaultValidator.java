@@ -70,7 +70,6 @@ public class DefaultValidator implements Validator {
     // TODO: on error action should be defined by the onError method
     public void checking(Validations validations) {
         this.errors.addAll(validations.getErrors());
-        validate();
     }
 
     public Validator onError() {
@@ -86,6 +85,7 @@ public class DefaultValidator implements Validator {
                     DefaultValidator.this.argsToUse = args;
                     DefaultValidator.this.method = method;
                 }
+                validate();
                 return null;
             }
         });
@@ -95,7 +95,8 @@ public class DefaultValidator implements Validator {
 		this.errors.add(message);
 	}
 
-	public void validate() {
+	// runs the validation
+	private void validate() {
         if (!errors.isEmpty()) {
             result.include("errors", errors);
             if (method != null) {

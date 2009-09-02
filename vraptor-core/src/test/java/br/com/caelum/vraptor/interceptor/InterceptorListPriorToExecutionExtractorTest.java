@@ -1,14 +1,17 @@
 package br.com.caelum.vraptor.interceptor;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
+import org.hamcrest.Description;
 import org.jmock.Expectations;
+import org.jmock.Sequence;
+import org.jmock.api.Action;
+import org.jmock.api.Invocation;
 import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.InterceptionException;
+import br.com.caelum.vraptor.core.DefaultInterceptorStack;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.resource.ResourceMethod;
@@ -33,10 +36,25 @@ public class InterceptorListPriorToExecutionExtractorTest {
         this.stack = mockery.mock(InterceptorStack.class);
     }
 
+    public static class FirstInterceptor implements Interceptor {
+		public boolean accepts(ResourceMethod method) {
+			return false;
+		}
+		public void intercept(InterceptorStack stack, ResourceMethod method,
+				Object resourceInstance) throws InterceptionException {
+		}
+    }
+    public static class SecondInterceptor implements Interceptor {
+    	public boolean accepts(ResourceMethod method) {
+    		return false;
+    	}
+    	public void intercept(InterceptorStack stack, ResourceMethod method,
+    			Object resourceInstance) throws InterceptionException {
+    	}
+    }
     @Test
     public void shouldAddTheListOfInterceptorsAsFollowingInterceptors() throws InterceptionException, IOException {
-        final List<Interceptor> interceptors = new ArrayList<Interceptor>();
-        final Interceptor[] array = interceptors.toArray(new Interceptor[interceptors.size()]);
+        final Interceptor[] array = {new FirstInterceptor(), new SecondInterceptor()};
         mockery.checking(new Expectations() {
             {
                 one(registry).interceptorsFor(method, container);
@@ -51,4 +69,41 @@ public class InterceptorListPriorToExecutionExtractorTest {
         mockery.assertIsSatisfied();
     }
 
+    @Test
+	public void shouldExecuteInterceptorsInOrder() throws Exception {
+    	final Interceptor first = mockery.mock(Interceptor.class, "first");
+		final Interceptor second = mockery.mock(Interceptor.class, "second");
+		final Interceptor[] array = {first, second};
+		final DefaultInterceptorStack stack = new DefaultInterceptorStack(container);
+        mockery.checking(new Expectations() {
+            {
+                one(registry).interceptorsFor(method, container);
+                will(returnValue(array));
+
+                Sequence sequence = mockery.sequence("interceptors");
+                one(first).intercept(stack, method, null);
+                will(continueStack(stack)); inSequence(sequence);
+
+                one(second).intercept(stack, method, null);
+                will(continueStack(stack)); inSequence(sequence);
+
+            }
+        });
+        extractor.intercept(stack, method, null);
+
+
+        mockery.assertIsSatisfied();
+	}
+
+    private Action continueStack(final DefaultInterceptorStack stack) {
+		return new Action() {
+			public Object invoke(Invocation invocation) throws Throwable {
+				stack.next(method, null);
+				return null;
+			}
+			public void describeTo(Description description) {
+				description.appendText("continue stack");
+			}
+		};
+	}
 }

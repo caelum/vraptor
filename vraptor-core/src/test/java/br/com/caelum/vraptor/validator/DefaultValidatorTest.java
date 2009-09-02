@@ -68,19 +68,14 @@ public class DefaultValidatorTest {
 		this.pageResult = mockery.mock(PageResult.class);
 	}
 
-	@Test(expected=ResultException.class)
-	public void shouldThrowExceptionWhenYouDontSpecifyTheValidationPage() throws Exception {
-
-		mockery.checking(new Expectations() {
-			{
+	@Test
+	public void shouldDoNothingWhenYouDontSpecifyTheValidationPage() throws Exception {
+		mockery.checking(new Expectations() {{
 				ignoring(anything());
-			}
-		});
-		validator.checking(new Validations() {
-			{
+		}});
+		validator.checking(new Validations() {{
 				that("", "", false);
-			}
-		});
+		}});
 	}
 
 	@Test
@@ -93,12 +88,12 @@ public class DefaultValidatorTest {
 					one(logicResult).forwardTo(MyComponent.class); will(returnValue(instance));
 				}
 			});
-			validator.onError().goTo(MyComponent.class).logic();
 			validator.checking(new Validations() {
 				{
 					that("", "", false);
 				}
 			});
+			validator.onError().goTo(MyComponent.class).logic();
 			Assert.fail("should stop flow");
 		} catch (ValidationError e) {
 			// ok, shoul still assert satisfied

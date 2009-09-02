@@ -137,7 +137,6 @@ public class DefaultValidatorTest {
 		public void logic() {
 			this.run = true;
 		}
-
 	}
 
 }

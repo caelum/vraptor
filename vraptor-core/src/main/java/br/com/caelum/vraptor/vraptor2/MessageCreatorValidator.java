@@ -144,5 +144,4 @@ public class MessageCreatorValidator implements Validator {
 	public boolean hasErrors() {
 		return containsErrors;
 	}
-
 }

@@ -28,6 +28,7 @@
 package br.com.caelum.vraptor.validator;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.jmock.Expectations;
 import org.junit.Assert;
@@ -93,6 +94,34 @@ public class DefaultValidatorTest {
 					that("", "", false);
 				}
 			});
+			validator.onError().goTo(MyComponent.class).logic();
+			Assert.fail("should stop flow");
+		} catch (ValidationError e) {
+			// ok, shoul still assert satisfied
+			Assert.assertEquals(this.instance.run, true);
+			mockery.assertIsSatisfied();
+		}
+	}
+	
+	@Test
+	public void testThatValidatorGoToRedirectsToTheErrorPageImmediatellyAndNotBeforeThis() {
+		try {
+			// call all other validation methods and don't expect them to redirect
+			validator.add(new ValidationMessage("test", "test"));
+			validator.add(Arrays.asList(new ValidationMessage("test", "test")));
+			validator.checking(new Validations(){{
+				that("", "", false);
+			}});
+			validator.onError();
+			validator.goTo(MyComponent.class); // call goTo but don't call logic method
+
+			// now we expect the redirection
+			mockery.checking(new Expectations() {{
+				one(result).include((String) with(an(String.class)), with(an(ArrayList.class)));
+				one(result).use(LogicResult.class); will(returnValue(logicResult));
+				one(logicResult).forwardTo(MyComponent.class); will(returnValue(instance));
+			}});
+
 			validator.onError().goTo(MyComponent.class).logic();
 			Assert.fail("should stop flow");
 		} catch (ValidationError e) {

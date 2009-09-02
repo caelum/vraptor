@@ -96,7 +96,7 @@ public class DefaultValidator implements Validator {
 		this.errors.add(message);
 	}
 	
-	public void add(Collection<Message> message) {
+	public void add(Collection<? extends Message> message) {
 		this.errors.addAll(message);
 	}
 

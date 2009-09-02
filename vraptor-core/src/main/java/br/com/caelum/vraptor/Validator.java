@@ -48,5 +48,5 @@ public interface Validator {
 	
 	void add(Message message);
 	
-	void add(Collection<Message> message);
+	void add(Collection<? extends Message> message);
 }

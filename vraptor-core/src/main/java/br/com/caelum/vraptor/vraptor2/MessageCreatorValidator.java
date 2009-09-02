@@ -135,7 +135,7 @@ public class MessageCreatorValidator implements Validator {
         }
 	}
 
-	public void add(Collection<Message> messages) {
+	public void add(Collection<? extends Message> messages) {
 		for (Message message : messages) {
 			this.add(message);
 		}

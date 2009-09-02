@@ -29,8 +29,10 @@ package br.com.caelum.vraptor.http.ognl;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -57,6 +59,7 @@ import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.test.VRaptorMockery;
+import br.com.caelum.vraptor.validator.DefaultValidationException;
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.view.DefaultLogicResult;
 
@@ -147,8 +150,20 @@ public class OgnlParametersProviderTest {
 
     }
 
+    public static class AngryCat {
+        public void setId(String id) {
+        	throw new DefaultValidationException("AngryCat Exception");
+        }
+
+        public String getId() {
+        	throw new DefaultValidationException("AngryCat Exception");
+        }
+    }
+    
     class MyResource {
         void buyA(House house) {
+        }
+        void kick(AngryCat angryCat) {
         }
     }
 
@@ -164,6 +179,18 @@ public class OgnlParametersProviderTest {
         }
     }
 
+    public static class KickSetter {
+    	private AngryCat AngryCat_;
+    	
+    	public void setAngryCat(AngryCat angryCat) {
+			AngryCat_ = angryCat;
+		}
+    	
+    	public AngryCat getAngryCat() {
+			return AngryCat_;
+		}
+    }
+    
     private void ignoreSession() {
 		mockery.checking(new Expectations() {
 			{
@@ -317,5 +344,29 @@ public class OgnlParametersProviderTest {
         assertThat(house.owners.get(0), is(equalTo("guilherme")));
         mockery.assertIsSatisfied();
     }
+    
+    @Test
+    public void addsValidationMessageWhenSetterFailsWithAValidationException() throws Exception {
+    	ignoreSession();
+    	
+        final Method method = MyResource.class.getDeclaredMethod("kick", AngryCat.class);
+        final Matcher<ResourceMethod> resourceMethod = VRaptorMatchers.resourceMethod(method);
+        
+        mockery.checking(new Expectations() {
+            {
+                one(parameters).getParameterValues("angryCat.id");
+                will(returnValue(new String[]{"guilherme"}));
+                one(parameters).getParameterNames();
+                will(returnValue(enumFor("angryCat.id")));
+                one(creator).typeFor(with(resourceMethod));
+                will(returnValue(KickSetter.class));
+                one(nameProvider).parameterNamesFor(method);
+                will(returnValue(new String[]{"AngryCat"}));
+            }
+        });
 
+        provider.getParametersFor(mockery.methodFor(MyResource.class, "kick", AngryCat.class), errors,null);
+        assertThat(errors.size(), is(greaterThan(0)));
+        mockery.assertIsSatisfied();
+    }
 }

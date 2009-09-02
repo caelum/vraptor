@@ -39,6 +39,7 @@ import java.util.ResourceBundle;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import ognl.MethodFailedException;
 import ognl.NoSuchPropertyException;
 import ognl.Ognl;
 import ognl.OgnlContext;
@@ -58,6 +59,7 @@ import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.validator.Message;
+import br.com.caelum.vraptor.validator.ValidationException;
 import br.com.caelum.vraptor.validator.ValidationMessage;
 import br.com.caelum.vraptor.view.DefaultLogicResult;
 import br.com.caelum.vraptor.vraptor2.Info;
@@ -152,6 +154,15 @@ public class OgnlParametersProvider implements ParametersProvider {
 				Ognl.setValue(key, context, root, values.length == 1 ? values[0] : values);
 			} catch (ConversionError ex) {
 				errors.add(new ValidationMessage(ex.getMessage(), key));
+			} catch (MethodFailedException e) { // setter threw an exception
+				
+				Throwable cause = e.getCause();
+				if (cause.getClass().isAnnotationPresent(ValidationException.class)) {
+					errors.add(new ValidationMessage(cause.getLocalizedMessage(), key));
+				} else {
+					throw new InvalidParameterException("unable to parse expression '" + key + "'", e);
+				}
+
 			} catch (NoSuchPropertyException ex) {
 				// TODO optimization: be able to ignore or not
 				if (logger.isDebugEnabled()) {

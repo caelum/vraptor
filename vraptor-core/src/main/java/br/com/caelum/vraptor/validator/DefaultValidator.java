@@ -32,8 +32,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.ioc.RequestScoped;
@@ -57,14 +55,12 @@ public class DefaultValidator implements Validator {
     private Object[] argsToUse;
     private Method method;
     private Class<?> typeToUse;
-	private final HttpServletRequest request;
 
 	private final List<Message> errors = new ArrayList<Message>();
 
-    public DefaultValidator(Proxifier proxifier, Result result, HttpServletRequest request) {
+    public DefaultValidator(Proxifier proxifier, Result result) {
         this.proxifier = proxifier;
         this.result = result;
-		this.request = request;
     }
 
     // TODO: do not use String consequences anymore

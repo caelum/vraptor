@@ -98,7 +98,7 @@ public class DefaultValidator implements Validator {
 
 	// runs the validation
 	private void validate() {
-        if (!errors.isEmpty()) {
+        if (hasErrors()) {
             result.include("errors", errors);
             if (method != null) {
                 Object instance = result.use(Results.logic()).forwardTo(typeToUse);
@@ -114,6 +114,10 @@ public class DefaultValidator implements Validator {
             // finished just fine
             throw new ValidationError(errors);
         }
+	}
+
+	public boolean hasErrors() {
+		return !errors.isEmpty();
 	}
 
 //	private String uriWithoutContextPath() {

@@ -71,7 +71,7 @@ public class ValidatorAcceptanceTest {
 
     @Test
     public void validDataDoesntThrowException() {
-        DefaultValidator validator = new DefaultValidator(proxifier, result, request);
+        DefaultValidator validator = new DefaultValidator(proxifier, result);
         final Student guilherme = new Student();
         guilherme.id = 15L;
         validator.checking(new Validations() {

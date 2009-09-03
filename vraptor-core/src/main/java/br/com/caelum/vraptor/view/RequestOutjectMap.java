@@ -1,0 +1,152 @@
+package br.com.caelum.vraptor.view;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
+
+import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
+
+/**
+ * The super-incredible MagicMap that exposes every request parameter in a map
+ * chain that never ends! Useful for invalid forms to display input data.
+ * 
+ * TODO is this class efficient?
+ * 
+ * @see ParametersInstantiatorInterceptor
+ */
+public class RequestOutjectMap implements Map<String, Object> {
+
+	private final List<Object> objectChain;
+	private final Map<Object, Object> myObjects = new HashMap<Object, Object>();
+	private final HttpServletRequest request;
+
+	public RequestOutjectMap(String base, HttpServletRequest request) {
+		this(new ArrayList<Object>(), request);
+
+		objectChain.add(base);
+
+		// prevent improper injection
+		if (request.getAttribute(base) == null)
+			request.setAttribute(base, this);
+	}
+
+	RequestOutjectMap(List<Object> objects, HttpServletRequest request) {
+		this.objectChain = objects;
+		this.request = request;
+	}
+
+	public Object get(Object key) {
+		if (!myObjects.containsKey(key)) {
+			List<Object> nl = new ArrayList<Object>(objectChain);
+			nl.add(key);
+			myObjects.put(key, new RequestOutjectMap(nl, request));
+		}
+		return myObjects.get(key);
+	}
+
+	public String toParameterName() {
+		StringBuilder sb = new StringBuilder();
+
+		Object atual = null, anterior = null;
+		Iterator<Object> it = objectChain.iterator();
+
+		while (it.hasNext()) {
+			anterior = atual;
+			atual = it.next();
+
+			if (anterior == null) {
+				sb.append(atual.toString());
+			}
+
+			if (anterior != null && atual instanceof String) {
+				sb.append('.').append(atual);
+			}
+
+			if (anterior instanceof String && atual instanceof Long) {
+				sb.append('[').append(atual).append(']');
+			}
+
+		}
+		return sb.toString();
+	}
+
+	@Override
+	public String toString() {
+		return request.getParameter(toParameterName());
+	}
+
+	public boolean containsKey(Object key) {
+		return true;
+	}
+
+	public boolean isEmpty() {
+		return false;
+	}
+
+	public int size() {
+		String thisName = toParameterName();
+		HashSet<String> aux = new HashSet<String>();
+
+		@SuppressWarnings("unchecked")
+		Set<String> paramNames = request.getParameterMap().keySet();
+
+		for (String p : paramNames) {
+			if (p.startsWith(thisName)) {
+				String s = p.substring(thisName.length());
+
+				int indexOf = s.indexOf('.');
+				if (indexOf > 0)
+					s = s.substring(0, indexOf);
+
+				indexOf = s.indexOf(']');
+				if (indexOf > 0)
+					s = s.substring(0, indexOf);
+
+				aux.add(s);
+			}
+		}
+
+		return aux.size();
+	}
+
+	/** FAKE METHODS **/
+	public void clear() {
+		throw new RuntimeException();
+	}
+
+	public boolean containsValue(Object value) {
+		throw new RuntimeException();
+	}
+
+	public Set<Map.Entry<String, Object>> entrySet() {
+		return Collections.emptySet();
+	}
+
+	public Set<String> keySet() {
+		throw new RuntimeException();
+	}
+
+	public Object put(String key, Object value) {
+		throw new RuntimeException();
+	}
+
+	public void putAll(Map<? extends String, ? extends Object> t) {
+		throw new RuntimeException();
+	}
+
+	public Object remove(Object key) {
+		throw new RuntimeException();
+	}
+
+	public Collection<Object> values() {
+		throw new RuntimeException();
+	}
+} // end MagicMap

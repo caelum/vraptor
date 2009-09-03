@@ -153,8 +153,7 @@ public class ParametersInstantiatorInterceptorTest {
         instantiator.intercept(stack, method, null);
         mockery.assertIsSatisfied();
     }
-    
-
+   
     private Action addErrorsToList(final String... messages) {
     	return new Action() {
 			public void describeTo(Description description) {

@@ -50,7 +50,6 @@ class MultipartItemsProcessor {
                     item.write(file);
 
                 	// TODO if(item.isInMemory), should create InMemoryUploadedFile
-
                     UploadedFile fileInformation = new DefaultUploadedFile(file, item.getName(), item.getContentType());
                     parameters.setParameter(item.getFieldName(), file.getAbsolutePath());
                     request.setAttribute(file.getAbsolutePath(), fileInformation);

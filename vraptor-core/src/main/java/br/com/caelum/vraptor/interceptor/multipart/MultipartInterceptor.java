@@ -93,10 +93,9 @@ public class MultipartInterceptor implements Interceptor {
 	}
 
 	private static FileItemFactory createFactoryForDiskBasedFileItems(File temporaryDirectory) {
-		// TODO: may use all memory (Integer.MAX_VALUE), based on a config!
+		// TODO: may create MemoryFileItemFactory, based on a config!
 		// this is mandatory for environments as Google App Engine
-		int thresholdForUsingDiskInsteadOfMemory = 1024 * 10;
-		DiskFileItemFactory factory = new DiskFileItemFactory(thresholdForUsingDiskInsteadOfMemory, temporaryDirectory);
+		DiskFileItemFactory factory = new DiskFileItemFactory(4096 * 16, temporaryDirectory);
 		logger.debug("Using repository [" + factory.getRepository() + "] for file upload");
 		return factory;
 	}

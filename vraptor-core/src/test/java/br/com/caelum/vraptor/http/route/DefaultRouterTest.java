@@ -76,7 +76,7 @@ public class DefaultRouterTest {
 		this.creator = mockery.mock(TypeCreator.class);
 		this.proxifier = new DefaultProxifier();
 		this.method = mockery.mock(ResourceMethod.class);
-		this.router = new DefaultRouter(new NoRoutesConfiguration(), new NoRoutesParser(), proxifier, creator, null);
+		this.router = new DefaultRouter(new NoRoutesConfiguration(), new PathAnnotationRoutesParser(proxifier, null), proxifier, creator, null);
 	}
 
 	@Test

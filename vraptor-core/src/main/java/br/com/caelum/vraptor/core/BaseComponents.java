@@ -67,11 +67,13 @@ import br.com.caelum.vraptor.http.asm.AsmBasedTypeCreator;
 import br.com.caelum.vraptor.http.ognl.EmptyElementsRemoval;
 import br.com.caelum.vraptor.http.ognl.OgnlParametersProvider;
 import br.com.caelum.vraptor.http.route.DefaultRouter;
+import br.com.caelum.vraptor.http.route.DefaultTypeFinder;
 import br.com.caelum.vraptor.http.route.NoRoutesConfiguration;
 import br.com.caelum.vraptor.http.route.PathAnnotationRoutesParser;
 import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.http.route.RoutesConfiguration;
 import br.com.caelum.vraptor.http.route.RoutesParser;
+import br.com.caelum.vraptor.http.route.TypeFinder;
 import br.com.caelum.vraptor.interceptor.DefaultInterceptorRegistry;
 import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
 import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
@@ -127,6 +129,7 @@ public class BaseComponents {
             RoutesConfiguration.class, 		NoRoutesConfiguration.class,
             Proxifier.class, 				ObjenesisProxifier.class,
             ParameterNameProvider.class, 	ParanamerNameProvider.class,
+            TypeFinder.class, 				DefaultTypeFinder.class,
             RoutesParser.class, 			PathAnnotationRoutesParser.class
     );
 

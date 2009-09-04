@@ -49,9 +49,11 @@ import br.com.caelum.vraptor.resource.ResourceClass;
 public class PathAnnotationRoutesParser implements RoutesParser {
 
     private final Proxifier proxifier;
+	private final TypeFinder finder;
 
-    public PathAnnotationRoutesParser(Proxifier proxifier) {
+    public PathAnnotationRoutesParser(Proxifier proxifier, TypeFinder finder) {
         this.proxifier = proxifier;
+		this.finder = finder;
     }
 
     public List<Route> rulesFor(ResourceClass resource) {
@@ -68,7 +70,7 @@ public class PathAnnotationRoutesParser implements RoutesParser {
         for (Method javaMethod : actualType.getDeclaredMethods()) {
             if (isEligible(javaMethod)) {
                 String uri = getUriFor(javaMethod, baseType);
-                RouteBuilder rule = new RouteBuilder(proxifier, uri);
+                RouteBuilder rule = new RouteBuilder(proxifier, finder, uri);
                 for (HttpMethod m : HttpMethod.values()) {
                     if (javaMethod.isAnnotationPresent(m.getAnnotation())) {
                         rule.with(m);

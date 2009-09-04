@@ -1,7 +1,7 @@
 /***
- * 
+ *
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  * 1. Redistributions of source code must retain the above copyright notice,
@@ -12,7 +12,7 @@
  * copyright holders nor the names of its contributors may be used to endorse or
  * promote products derived from this software without specific prior written
  * permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -46,6 +46,7 @@ import br.com.caelum.vraptor.http.route.PathAnnotationRoutesParser;
 import br.com.caelum.vraptor.http.route.Route;
 import br.com.caelum.vraptor.http.route.RouteBuilder;
 import br.com.caelum.vraptor.http.route.RoutesParser;
+import br.com.caelum.vraptor.http.route.TypeFinder;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.resource.HttpMethod;
@@ -53,7 +54,7 @@ import br.com.caelum.vraptor.resource.ResourceClass;
 
 /**
  * A vraptor 2 and 3 compatible routes creator.
- * 
+ *
  * @author Guilherme Silveira
  */
 @ApplicationScoped
@@ -62,12 +63,15 @@ public class ComponentRoutesParser implements RoutesParser {
     private final Proxifier proxifier;
 
 	private final RoutesParser delegate;
-	
+
 	private final Logger logger = LoggerFactory.getLogger(ComponentRoutesParser.class);
 
-    public ComponentRoutesParser(Proxifier proxifier) {
+	private final TypeFinder finder;
+
+    public ComponentRoutesParser(Proxifier proxifier, TypeFinder finder) {
         this.proxifier = proxifier;
-        this.delegate = new PathAnnotationRoutesParser(proxifier);
+		this.finder = finder;
+        this.delegate = new PathAnnotationRoutesParser(proxifier, finder);
     }
 
 	public List<Route> rulesFor(ResourceClass resource) {
@@ -127,7 +131,7 @@ public class ComponentRoutesParser implements RoutesParser {
                 continue;
             }
 			String uri = getUriFor(javaMethod, baseType);
-			RouteBuilder builder = new RouteBuilder(proxifier, uri);
+			RouteBuilder builder = new RouteBuilder(proxifier, finder, uri);
 			for (HttpMethod m : HttpMethod.values()) {
 				if (javaMethod.isAnnotationPresent(m.getAnnotation())) {
 					builder.with(m);

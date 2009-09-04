@@ -65,15 +65,17 @@ public class DefaultRouter implements Router {
 	private final Collection<Route> routes = new PriorityRoutesList();
 	private final RoutesParser routesParser;
 	private final TypeCreator creator;
+	private final TypeFinder finder;
 
 	public DefaultRouter(RoutesConfiguration config, RoutesParser resourceRoutesCreator,
-			Proxifier proxifier, TypeCreator creator) {
+			Proxifier proxifier, TypeCreator creator, TypeFinder finder) {
 		this.routesParser = resourceRoutesCreator;
 		this.creator = creator;
 		this.proxifier = proxifier;
+		this.finder = finder;
 		// this resource should be kept here so it doesnt matter whether
 		// the user uses a custom routes config
-		RouteBuilder rule = new RouteBuilder(proxifier, "/is_using_vraptor");
+		RouteBuilder rule = new RouteBuilder(proxifier, finder, "/is_using_vraptor");
 		try {
 			rule.is(VRaptorInfo.class).info();
 			add(rule.build());
@@ -89,6 +91,9 @@ public class DefaultRouter implements Router {
 		}
 	}
 
+	public RouteBuilder builderFor(String uri) {
+		return new RouteBuilder(proxifier, finder, uri);
+	}
 	public Proxifier getProxifier() {
 		return proxifier;
 	}

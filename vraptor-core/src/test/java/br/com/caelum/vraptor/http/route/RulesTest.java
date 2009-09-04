@@ -47,8 +47,8 @@ public class RulesTest {
 		this.proxifier = mockery.mock(Proxifier.class);
 		mockery.checking(new Expectations() {
 			{
-				one(router).getProxifier();
-				will(returnValue(proxifier));
+				one(router).builderFor("");
+				will(returnValue(new RouteBuilder(proxifier, null, "")));
 			}
 		});
 	}
@@ -56,6 +56,7 @@ public class RulesTest {
 	@Test(expected=IllegalRouteException.class)
 	public void allowsAdditionOfRouteBuildersByDefaultWithNoStrategy() {
 		new Rules(router) {
+			@Override
 			public void routes() {
 				routeFor("");
 			}

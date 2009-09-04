@@ -1,7 +1,7 @@
 /***
- * 
+ *
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  * 1. Redistributions of source code must retain the above copyright notice,
@@ -12,7 +12,7 @@
  * copyright holders nor the names of its contributors may be used to endorse or
  * promote products derived from this software without specific prior written
  * permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -39,6 +39,7 @@ import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.route.DefaultRouter;
 import br.com.caelum.vraptor.http.route.NoRoutesConfiguration;
+import br.com.caelum.vraptor.http.route.TypeFinder;
 import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
 import br.com.caelum.vraptor.proxy.DefaultProxifier;
 import br.com.caelum.vraptor.proxy.Proxifier;
@@ -52,13 +53,15 @@ public class ComponentRoutesCreatorTest {
 	private DefaultRouter router;
 	private MutableRequest request;
     private Proxifier proxifier;
+	private TypeFinder finder;
 
     @Before
     public void setup() {
         this.mockery = new VRaptorMockery();
         this.request = mockery.mock(MutableRequest.class);
         this.proxifier = new DefaultProxifier();
-        this.router = new DefaultRouter(new NoRoutesConfiguration(), new ComponentRoutesParser(proxifier), proxifier, null);
+        this.finder = mockery.mock(TypeFinder.class);
+        this.router = new DefaultRouter(new NoRoutesConfiguration(), new ComponentRoutesParser(proxifier, finder), proxifier, null, null);
     }
 
     class NonVRaptorComponent {

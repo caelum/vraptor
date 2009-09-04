@@ -36,8 +36,8 @@ import java.util.Map;
 
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.route.Route;
+import br.com.caelum.vraptor.http.route.RouteBuilder;
 import br.com.caelum.vraptor.http.route.Router;
-import br.com.caelum.vraptor.proxy.Proxifier;
 
 /**
  * A cached resource registry that avoids iterating over the entire set just in
@@ -78,10 +78,9 @@ public class CacheBasedRouter implements Router {
         return delegate.allRoutes();
     }
 
-    public Proxifier getProxifier() {
-        return delegate.getProxifier();
+    public RouteBuilder builderFor(String uri) {
+    	return delegate.builderFor(uri);
     }
-
 	public void add(Route route) {
 		delegate.add(route);
 	}

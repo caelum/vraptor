@@ -63,8 +63,11 @@ public class RouteBuilder {
 
 	private final ParameterControlBuilder builder;
 
-	public RouteBuilder(Proxifier proxifier, String uri) {
+	private final TypeFinder finder;
+
+	public RouteBuilder(Proxifier proxifier, TypeFinder finder, String uri) {
 		this.proxifier = proxifier;
+		this.finder = finder;
 		uri = uri.replaceAll("\\*[^\\}]", ".\\*?");
 		this.originalUri = uri;
 		builder = new ParameterControlBuilder();
@@ -115,9 +118,23 @@ public class RouteBuilder {
 	}
 
 	public void is(Class<?> type, Method method) {
+		String[] parameters = extractParameters(originalUri);
 		this.strategy = new FixedMethodStrategy(originalUri, type, method, this.supportedMethods,
 				builder.build(), priority);
 		logger.info(originalUri + " --> " + method);
+	}
+
+	private String[] extractParameters(String uri) {
+		String startUntilOpenBraces = "^[^\\{]*\\{";
+		String or = "|";
+		String betweenBraces = "\\}[^\\{]*\\{";
+		String closeBracesUntilEnd = "\\}[^\\{]*$";
+
+		return uri.split(startUntilOpenBraces +
+				or +
+				betweenBraces +
+				or +
+				closeBracesUntilEnd);
 	}
 
 	/**

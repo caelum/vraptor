@@ -31,7 +31,6 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.ResourceClass;
 import br.com.caelum.vraptor.resource.ResourceMethod;
@@ -67,5 +66,5 @@ public interface Router {
 	 */
 	List<Route> allRoutes();
 
-	Proxifier getProxifier();
+	RouteBuilder builderFor(String uri);
 }

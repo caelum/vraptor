@@ -43,20 +43,22 @@ class MultipartItemsProcessor {
                     File file = File.createTempFile("raptor.", ".upload");
                     file.deleteOnExit();
                     item.write(file);
+
                     UploadedFile fileInformation = new DefaultUploadedFile(file, item.getName(), item.getContentType());
                     parameters.setParameter(item.getFieldName(), file.getAbsolutePath());
                     request.setAttribute(file.getAbsolutePath(), fileInformation);
-                    logger.info("Uploaded file: " + item.getFieldName() + " with " + fileInformation);
+
+                    logger.debug("Uploaded file: " + item.getFieldName() + " with " + fileInformation);
                 } catch (Exception e) {
-                    throw new InvalidParameterException("Nasty uploaded file " + item.getName(), e);
+                    throw new InvalidParameterException("Cant parse uploaded file " + item.getName(), e);
                 }
             } else {
-                logger.info("A file field was empy: " + item.getFieldName());
+                logger.debug("A file field was empty: " + item.getFieldName());
             }
         }
     }
 
-    private boolean notEmpty(FileItem item) {
+    private static boolean notEmpty(FileItem item) {
         return !item.getName().trim().equals("");
     }
 }

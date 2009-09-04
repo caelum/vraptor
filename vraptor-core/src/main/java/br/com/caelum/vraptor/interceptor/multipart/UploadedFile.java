@@ -4,7 +4,7 @@ import java.io.File;
 
 /**
  * An interface which represents the information of an uploaded file.
- * 
+ *
  * @author Guilherme Silveira
  * @author Paulo Silveira
  */
@@ -21,15 +21,15 @@ public interface UploadedFile {
     File getFile();
 
     /**
-     * 
-     * @return Returns the fileName.
+     *
+     * @return Returns the fileName as in the filesystem.
      */
     String getFileName();
 
     /**
      * The complete file name from this file, as it was uploaded from the
      * client.
-     * 
+     *
      * @return Returns the fileName.
      */
     String getCompleteFileName();

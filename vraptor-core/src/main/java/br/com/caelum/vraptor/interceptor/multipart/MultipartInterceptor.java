@@ -27,7 +27,7 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  * An interceptor which handles multipart requests.<br>
  * Provided parameters are injected through RequestParameters.set and uploaded
  * files are made available through
- * 
+ *
  * @author Guilherme Silveira
  */
 @RequestScoped
@@ -113,6 +113,10 @@ public class MultipartInterceptor implements Interceptor {
 		return factory;
 	}
 
+	/**
+	 * Will intercept the request if apache file upload
+	 * says that this request is multipart
+	 */
 	public boolean accepts(ResourceMethod method) {
 		return FileUploadBase.isMultipartContent(new ServletRequestContext(
 				request));

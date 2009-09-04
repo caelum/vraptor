@@ -36,7 +36,7 @@ public class DefaultUploadedFile implements UploadedFile {
     public String toString() {
         return "[uploadedFile location=" + this.file + " uploadedCompleteName="
                 + this.completeFileName + " uploadedName=" + this.fileName
-                + " contentType=" + this.contentType + "";
+                + " contentType=" + this.contentType + "]";
     }
 
     public String getContentType() {

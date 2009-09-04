@@ -28,7 +28,9 @@
 package br.com.caelum.vraptor.http.route;
 
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -59,10 +61,36 @@ public class RouteBuilder {
 
 	private int priority = Integer.MAX_VALUE;
 
+	private final ParameterControlBuilder builder;
+
 	public RouteBuilder(Proxifier proxifier, String uri) {
 		this.proxifier = proxifier;
 		uri = uri.replaceAll("\\*[^\\}]", ".\\*?");
 		this.originalUri = uri;
+		builder = new ParameterControlBuilder();
+	}
+
+	public class ParameterControlBuilder {
+		private final Map<String, String> parameters = new HashMap<String, String>();
+		private String name;
+
+		private void withParameter(String name) {
+			this.name = name;
+		}
+
+		public RouteBuilder matching(String regex) {
+			parameters.put(name, regex);
+			return RouteBuilder.this;
+		}
+
+		private ParametersControl build() {
+			return new DefaultParametersControl(originalUri, parameters);
+		}
+	}
+
+	public ParameterControlBuilder withParameter(String name) {
+		builder.withParameter(name);
+		return builder;
 	}
 
 	public <T> T is(final Class<T> type) {
@@ -81,14 +109,14 @@ public class RouteBuilder {
 	}
 
 	public void is(PatternBasedType type, PatternBasedType method) {
-		this.strategy = new PatternBasedStrategy(new DefaultParametersControl(originalUri), type, method,
+		this.strategy = new PatternBasedStrategy(builder.build(), type, method,
 				this.supportedMethods, priority);
 
 	}
 
 	public void is(Class<?> type, Method method) {
 		this.strategy = new FixedMethodStrategy(originalUri, type, method, this.supportedMethods,
-				new DefaultParametersControl(originalUri), priority);
+				builder.build(), priority);
 		logger.info(originalUri + " --> " + method);
 	}
 

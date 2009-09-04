@@ -27,7 +27,11 @@
 package br.com.caelum.vraptor.http.route;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -39,7 +43,7 @@ import br.com.caelum.vraptor.http.MutableRequest;
 
 /**
  * Default implmeentation of parameters control on uris.
- * 
+ *
  * @author guilherme silveira
  */
 public class DefaultParametersControl implements ParametersControl {
@@ -49,17 +53,32 @@ public class DefaultParametersControl implements ParametersControl {
 	private final Pattern pattern;
 	private final String originalPattern;
 
-	public DefaultParametersControl(String originalPattern) {
+	public DefaultParametersControl(String originalPattern, Map<String, String> parameterPatterns) {
 		this.originalPattern = originalPattern;
-		String patternUri = originalPattern.replaceAll("\\{([^\\}]+?)\\*\\}", "(.*)").replaceAll("\\{([^\\}]+?)\\}",
-				"([^/]*)");
+		this.pattern = compilePattern(originalPattern, parameterPatterns);
+	}
+
+	public DefaultParametersControl(String originalPattern) {
+		this(originalPattern, Collections.<String, String>emptyMap());
+	}
+
+	private Pattern compilePattern(String originalPattern, Map<String, String> parameterPatterns) {
+		Map<String, String> parameters = new HashMap<String, String>(parameterPatterns);
 		Matcher matcher = Pattern.compile("\\{([^\\}]+?)\\}").matcher(originalPattern);
 		while (matcher.find()) {
-			String value = matcher.group(1).replace("*", "");
-			parameters.add(value);
+			String value = matcher.group(1);
+			String defaultPattern = value.endsWith("*")? ".*" : "[^/]*";
+			if (!parameters.containsKey(value)) {
+				parameters.put(value, defaultPattern);
+			}
+			this.parameters.add(value.replace("*", ""));
 		}
-		this.pattern = Pattern.compile(patternUri);
+		String patternUri = originalPattern;
+		for (Entry<String, String> parameter : parameters.entrySet()) {
+			patternUri = patternUri.replace("{" + parameter.getKey() + "}", "(" + parameter.getValue() + ")");
+		}
 		logger.debug("For " + originalPattern + " retrieved " + patternUri + " with " + parameters);
+		return Pattern.compile(patternUri);
 	}
 
 	public String fillUri(Object params) {
@@ -85,13 +104,10 @@ public class DefaultParametersControl implements ParametersControl {
 	}
 
 	public String apply(String[] values) {
-		Pattern regex = Pattern.compile("\\{.*?\\}"); // the pattern object is
-		// NOT thread safe
-		Matcher matcher = regex.matcher(this.originalPattern);
-		StringBuffer result = new StringBuffer();
+		String regex = "\\{.*?\\}";
+		String result = this.originalPattern;
 		for (int i = 0; i < values.length; i++) {
-			matcher.find();
-			matcher.appendReplacement(result, values[i].replaceAll("\\$", "\\\\\\$"));
+			result = result.replaceFirst(regex, values[i].replaceAll("\\$", "\\\\\\$"));
 		}
 		return result.toString();
 	}

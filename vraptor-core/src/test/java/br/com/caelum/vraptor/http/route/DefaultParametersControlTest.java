@@ -30,6 +30,10 @@ package br.com.caelum.vraptor.http.route;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import java.util.Collections;
 
 import org.jmock.Expectations;
 import org.junit.Before;
@@ -37,6 +41,8 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.test.VRaptorMockery;
+
+import com.google.common.collect.ImmutableMap;
 
 public class DefaultParametersControlTest {
 
@@ -185,6 +191,38 @@ public class DefaultParametersControlTest {
 			}
 		});
 		control.fillIntoRequest("/clients/my/path/to/file", request);
+		mockery.assertIsSatisfied();
+	}
+
+	@Test
+	public void whenNoParameterPatternsAreGivenShouldMatchAnything() throws Exception {
+		ParametersControl control = new DefaultParametersControl("/any/{aParameter}/what", Collections.<String,String>emptyMap());
+		assertTrue(control.matches("/any/ICanPutAnythingInHere/what"));
+	}
+	@Test
+	public void whenParameterPatternsAreGivenShouldMatchAccordingToGivenPatterns() throws Exception {
+		ParametersControl control = new DefaultParametersControl("/any/{aParameter}/what",
+				new ImmutableMap.Builder<String, String>().put("aParameter", "aaa\\d{3}bbb").build());
+		assertFalse(control.matches("/any/ICantPutAnythingInHere/what"));
+		assertFalse(control.matches("/any/aaa12bbb/what"));
+		assertTrue(control.matches("/any/aaa123bbb/what"));
+	}
+
+	@Test
+	public void shouldFillRequestWhenAPatternIsSpecified() throws Exception {
+		DefaultParametersControl control = new DefaultParametersControl("/project/{project.id}/build/",
+				new ImmutableMap.Builder<String, String>().put("project.id", "\\d+").build());
+
+		String uri = "/project/15/build/";
+		assertThat(control.matches(uri), is(true));
+		mockery.checking(new Expectations() {
+			{
+				one(request).setParameter("project.id", "15");
+			}
+		});
+		control.fillIntoRequest(uri, request);
+
+		assertThat(control.apply(new String[] {"15"}),is(uri));
 		mockery.assertIsSatisfied();
 	}
 }

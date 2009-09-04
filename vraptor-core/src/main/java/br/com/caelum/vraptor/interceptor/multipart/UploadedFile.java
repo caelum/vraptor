@@ -16,13 +16,16 @@ public interface UploadedFile {
     String getContentType();
 
     /**
+     * @throw {@link IllegalArgumentException} if file is in memory
      * @return Returns the file.
      */
     File getFile();
 
     /**
+     * TODO: redundant? same as getFile().getName() ?
      *
-     * @return Returns the fileName as in the filesystem.
+     * @throw {@link IllegalArgumentException} if file is in memory
+     * @return Returns the fileName as in the server filesystem.
      */
     String getFileName();
 
@@ -34,4 +37,6 @@ public interface UploadedFile {
      */
     String getCompleteFileName();
 
+    // TODO: byte[] getContent
+    // TODO: boolean isInMemory
 }

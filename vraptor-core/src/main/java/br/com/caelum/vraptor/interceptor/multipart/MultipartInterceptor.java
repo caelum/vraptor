@@ -33,8 +33,7 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 @RequestScoped
 public class MultipartInterceptor implements Interceptor {
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(MultipartInterceptor.class);
+	private static final Logger logger = LoggerFactory.getLogger(MultipartInterceptor.class);
 
 	private final long sizeLimit;
 
@@ -44,8 +43,7 @@ public class MultipartInterceptor implements Interceptor {
 
 	private final MultipartConfig config;
 
-	public MultipartInterceptor(HttpServletRequest request,
-			MutableRequest parameters, MultipartConfig config)
+	public MultipartInterceptor(HttpServletRequest request, MutableRequest parameters, MultipartConfig config)
 			throws IOException {
 		this.request = request;
 		this.parameters = parameters;
@@ -54,8 +52,7 @@ public class MultipartInterceptor implements Interceptor {
 	}
 
 	@SuppressWarnings("unchecked")
-	public void intercept(InterceptorStack stack, ResourceMethod method,
-			Object instance) throws InterceptionException {
+	public void intercept(InterceptorStack stack, ResourceMethod method, Object instance) throws InterceptionException {
 		// TODO ugly, just for now until next release
 		if (!accepts(method)) {
 			stack.next(method, instance);
@@ -66,8 +63,6 @@ public class MultipartInterceptor implements Interceptor {
 
 		File temporaryDirectory = config.getDirectory();
 
-		// TODO: use memory if the uses wishes for, isntead of filesystem
-		// this is mandatory for Google App Engine
 		FileItemFactory factory = createFactoryForDiskBasedFileItems(temporaryDirectory);
 
 		ServletFileUpload fileUploadHandler = new ServletFileUpload(factory);
@@ -78,20 +73,14 @@ public class MultipartInterceptor implements Interceptor {
 		try {
 			fileItems = fileUploadHandler.parseRequest(request);
 		} catch (FileUploadException e) {
-			logger
-					.warn(
-							"There was some problem parsing this multipart request, "
-									+ "or someone is not sending a RFC1867 compatible multipart request.",
-							e);
+			logger.warn("There was some problem parsing this multipart request, "
+					+ "or someone is not sending a RFC1867 compatible multipart request.", e);
 			stack.next(method, instance);
 			return;
 		}
 
 		if (logger.isDebugEnabled()) {
-			logger
-					.debug("Found ["
-							+ fileItems.size()
-							+ "] attributes in the multipart form submission. Parsing them.");
+			logger.debug("Found [" + fileItems.size() + "] attributes in the multipart form submission. Parsing them.");
 		}
 
 		new MultipartItemsProcessor(fileItems, request, parameters).process();
@@ -99,27 +88,24 @@ public class MultipartInterceptor implements Interceptor {
 		stack.next(method, instance);
 
 		// TODO should we delete the temporary files afterwards or onExit as
-		// done by
-		// now?maybe also a config in .properties
+		// done by now? maybe also a config in .properties
 
 	}
 
-	private static FileItemFactory createFactoryForDiskBasedFileItems(
-			File temporaryDirectory) {
-		DiskFileItemFactory factory = new DiskFileItemFactory(4096 * 16,
-				temporaryDirectory);
-		logger.debug("Using repository [" + factory.getRepository()
-				+ "] for file upload");
+	private static FileItemFactory createFactoryForDiskBasedFileItems(File temporaryDirectory) {
+		// TODO: may create MemoryFileItemFactory, based on a config!
+		// this is mandatory for environments as Google App Engine
+		DiskFileItemFactory factory = new DiskFileItemFactory(4096 * 16, temporaryDirectory);
+		logger.debug("Using repository [" + factory.getRepository() + "] for file upload");
 		return factory;
 	}
 
 	/**
-	 * Will intercept the request if apache file upload
-	 * says that this request is multipart
+	 * Will intercept the request if apache file upload says that this request
+	 * is multipart
 	 */
 	public boolean accepts(ResourceMethod method) {
-		return FileUploadBase.isMultipartContent(new ServletRequestContext(
-				request));
+		return FileUploadBase.isMultipartContent(new ServletRequestContext(request));
 	}
 
 }

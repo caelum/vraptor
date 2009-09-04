@@ -1,0 +1,23 @@
+[chapter Spring, Joda Time, Hibernate e Google App Engine]
+
+[section Integração com Hibernate]
+Como injetar Session, tratar transacoes e rollbacks, configurar o hibernate
+
+[section Integração com JPA]
+
+Como injetar um EntityManager e similares ao hibernate
+
+[section Integração com Spring]
+
+usando o seu application-context.xml, usando anotacoes, 
+
+[section Conversores para Joda Time]
+falar de LocalDate e LocalTime, link para o fonte se alguem quiser
+fazer conversor de algum dos outros tipos
+
+[section Rodando o VRaptor3 no Google App Engine]
+
+ja deixar o xml do GAE no DEMO do app engine, de forma que as pessoas
+possam testar o demo no GAE apenas copiando o war!
+
+

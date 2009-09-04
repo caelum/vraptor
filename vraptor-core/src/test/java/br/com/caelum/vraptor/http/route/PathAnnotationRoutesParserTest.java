@@ -62,10 +62,8 @@ public class PathAnnotationRoutesParserTest {
         this.resource = mockery.resource(Clients.class);
         this.request = mockery.mock(MutableRequest.class);
         this.proxifier = new DefaultProxifier();
-        this.router = new DefaultRouter(new RoutesConfiguration() {
-            public void config(Router router) {
-            }
-        }, new PathAnnotationRoutesParser(proxifier, new NoTypeFinder()), proxifier, null, new NoTypeFinder());
+        this.router = new DefaultRouter(new NoRoutesConfiguration(), new PathAnnotationRoutesParser(proxifier, new NoTypeFinder()),
+        		proxifier, null, new NoTypeFinder());
         router.register(resource);
     }
 

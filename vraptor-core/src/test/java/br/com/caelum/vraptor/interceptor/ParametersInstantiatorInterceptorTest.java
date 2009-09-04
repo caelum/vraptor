@@ -91,6 +91,8 @@ public class ParametersInstantiatorInterceptorTest {
     class Component {
         void method() {
         }
+        void otherMethod(int oneParam){
+        }
     }
 
     @Test
@@ -113,7 +115,7 @@ public class ParametersInstantiatorInterceptorTest {
     
     @Test
     public void shouldValidateParameters() throws Exception {
-        final ResourceMethod method = mockery.methodFor(Component.class, "method");
+        final ResourceMethod method = mockery.methodFor(Component.class, "otherMethod", int.class);
         
         mockery.checking(new Expectations() {{
         	Object[] values = new Object[]{new Object()};
@@ -123,7 +125,7 @@ public class ParametersInstantiatorInterceptorTest {
             
         	one(validator).add(errors);
             one(stack).next(method, null);
-            one(params).setParameters(new Object[]{null});
+            one(params).setParameters(new Object[]{0});
             
             Map<String, String> params = new HashMap<String, String>();
             params.put("param1.id", "value1");

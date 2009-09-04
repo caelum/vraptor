@@ -42,7 +42,7 @@ import br.com.caelum.vraptor.eval.Evaluator;
 import br.com.caelum.vraptor.http.MutableRequest;
 
 /**
- * Default implmeentation of parameters control on uris.
+ * Default implementation of parameters control on uris.
  *
  * @author guilherme silveira
  */

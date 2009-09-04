@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
 /**
- * Used to create proxy instances for Classes. It will decide wether to use CGLib or DynamicProxies only based on the
+ * Used to create proxy instances for Classes. It will decide whether to use CGLib or DynamicProxies only based on the
  * class to be proxified.
  *
  * @author Fabio Kung

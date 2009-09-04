@@ -39,7 +39,7 @@ import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.route.DefaultRouter;
 import br.com.caelum.vraptor.http.route.NoRoutesConfiguration;
-import br.com.caelum.vraptor.http.route.TypeFinder;
+import br.com.caelum.vraptor.http.route.NoTypeFinder;
 import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
 import br.com.caelum.vraptor.proxy.DefaultProxifier;
 import br.com.caelum.vraptor.proxy.Proxifier;
@@ -53,15 +53,13 @@ public class ComponentRoutesCreatorTest {
 	private DefaultRouter router;
 	private MutableRequest request;
     private Proxifier proxifier;
-	private TypeFinder finder;
 
     @Before
     public void setup() {
         this.mockery = new VRaptorMockery();
         this.request = mockery.mock(MutableRequest.class);
         this.proxifier = new DefaultProxifier();
-        this.finder = mockery.mock(TypeFinder.class);
-        this.router = new DefaultRouter(new NoRoutesConfiguration(), new ComponentRoutesParser(proxifier, finder), proxifier, null, null);
+        this.router = new DefaultRouter(new NoRoutesConfiguration(), new ComponentRoutesParser(proxifier, new NoTypeFinder()), proxifier, null, new NoTypeFinder());
     }
 
     class NonVRaptorComponent {

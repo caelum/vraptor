@@ -38,6 +38,7 @@ import org.picocontainer.PicoBuilder;
 import br.com.caelum.vraptor.http.route.DefaultRouter;
 import br.com.caelum.vraptor.http.route.NoRoutesConfiguration;
 import br.com.caelum.vraptor.http.route.NoRoutesParser;
+import br.com.caelum.vraptor.http.route.NoTypeFinder;
 import br.com.caelum.vraptor.proxy.DefaultProxifier;
 
 public class PicoBasedContainerTest {
@@ -62,7 +63,7 @@ public class PicoBasedContainerTest {
     public void setup() {
         this.mockery = new Mockery();
         this.picoContainer = new PicoBuilder().withCaching().build();
-        this.container = new PicoBasedContainer(picoContainer, new DefaultRouter(new NoRoutesConfiguration(), new NoRoutesParser(), new DefaultProxifier(), null, null));
+        this.container = new PicoBasedContainer(picoContainer, new DefaultRouter(new NoRoutesConfiguration(), new NoRoutesParser(), new DefaultProxifier(), null, new NoTypeFinder()));
     }
 
     @Test

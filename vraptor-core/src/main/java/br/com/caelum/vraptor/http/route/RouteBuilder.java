@@ -28,10 +28,14 @@
 package br.com.caelum.vraptor.http.route;
 
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,6 +44,8 @@ import br.com.caelum.vraptor.proxy.MethodInvocation;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.SuperMethod;
 import br.com.caelum.vraptor.resource.HttpMethod;
+
+import com.google.common.base.Join;
 
 /**
  * Should be used in one of two ways, either configure the type and invoke the
@@ -77,8 +83,28 @@ public class RouteBuilder {
 		private final Map<String, String> parameters = new HashMap<String, String>();
 		private String name;
 
-		private void withParameter(String name) {
+		private ParameterControlBuilder withParameter(String name) {
 			this.name = name;
+			return this;
+		}
+
+		public RouteBuilder ofType(Class<?> type) {
+			parameters.put(name, regexFor(type));
+			return RouteBuilder.this;
+		}
+
+		private String regexFor(Class<?> type) {
+			if (Arrays.asList(Integer.class, Long.class, int.class, long.class, BigInteger.class, char.class, Character.class, Short.class, short.class)
+						.contains(type)) {
+				return "\\d+";
+			} else if (Arrays.asList(Double.class, BigDecimal.class, double.class, Float.class, float.class).contains(type)) {
+				return "\\d+(\\.\\d+)?";
+			} else if (Arrays.asList(Boolean.class, boolean.class).contains(type)){
+				return "true|false";
+			} else if (Enum.class.isAssignableFrom(type)) {
+				return Join.join("|", type.getEnumConstants());
+			}
+			return "[^/]+";
 		}
 
 		public RouteBuilder matching(String regex) {
@@ -92,8 +118,7 @@ public class RouteBuilder {
 	}
 
 	public ParameterControlBuilder withParameter(String name) {
-		builder.withParameter(name);
-		return builder;
+		return builder.withParameter(name);
 	}
 
 	public <T> T is(final Class<T> type) {
@@ -118,10 +143,20 @@ public class RouteBuilder {
 	}
 
 	public void is(Class<?> type, Method method) {
-		String[] parameters = extractParameters(originalUri);
+		addParametersInfo(method);
 		this.strategy = new FixedMethodStrategy(originalUri, type, method, this.supportedMethods,
 				builder.build(), priority);
 		logger.info(originalUri + " --> " + method);
+	}
+
+	private void addParametersInfo(Method method) {
+		String[] parameters = extractParameters(originalUri);
+		Map<String, Class<?>> types = finder.getParameterTypes(method, parameters);
+		for (Entry<String, Class<?>> entry : types.entrySet()) {
+			if (!builder.parameters.containsKey(entry.getKey())) {
+				builder.withParameter(entry.getKey()).ofType(entry.getValue());
+			}
+		}
 	}
 
 	private String[] extractParameters(String uri) {

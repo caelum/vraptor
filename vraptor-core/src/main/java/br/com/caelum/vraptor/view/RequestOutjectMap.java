@@ -82,7 +82,12 @@ public class RequestOutjectMap implements Map<String, Object> {
 	public String toString() {
 		return request.getParameter(toParameterName());
 	}
-
+	
+	// to use in EL
+	public String getAsString() {
+		return toString();
+	}
+	
 	public boolean containsKey(Object key) {
 		return true;
 	}

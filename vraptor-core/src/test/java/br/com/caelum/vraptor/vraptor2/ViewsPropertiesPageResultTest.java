@@ -67,7 +67,7 @@ public class ViewsPropertiesPageResultTest {
             }
         });
         this.webRequest = new RequestInfo(context, request, response);
-        this.result = new ViewsPropertiesPageResult(this.config, this.resolver, this.info, this.webRequest, info);
+        this.result = new ViewsPropertiesPageResult(this.config, this.resolver, this.info, this.webRequest, info, null);
     }
 
     @Component

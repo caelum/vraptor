@@ -30,13 +30,18 @@
 package br.com.caelum.vraptor.view;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.core.MethodInfo;
+import br.com.caelum.vraptor.proxy.MethodInvocation;
+import br.com.caelum.vraptor.proxy.Proxifier;
+import br.com.caelum.vraptor.proxy.ProxyInvocationException;
+import br.com.caelum.vraptor.proxy.SuperMethod;
+import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**
@@ -44,17 +49,19 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  *
  * @author Guilherme Silveira
  */
-public class DefaultPageResult implements View, PageResult {
+public class DefaultPageResult implements PageResult {
 
     private final HttpServletRequest request;
     private final HttpServletResponse response;
     private final ResourceMethod method;
     private final PathResolver resolver;
+	private final Proxifier proxifier;
 
     public DefaultPageResult(HttpServletRequest req, HttpServletResponse res, MethodInfo requestInfo,
-            PathResolver resolver) {
+            PathResolver resolver, Proxifier proxifier) {
         this.request = req;
         this.response = res;
+		this.proxifier = proxifier;
         this.method = requestInfo.getResourceMethod();
         this.resolver = resolver;
     }
@@ -95,6 +102,19 @@ public class DefaultPageResult implements View, PageResult {
         } catch (IOException e) {
             throw new ResultException(e);
         }
+	}
+
+	public <T> T of(final Class<T> controllerType) {
+		return proxifier.proxify(controllerType, new MethodInvocation<T>() {
+            public Object intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {
+                try {
+                    request.getRequestDispatcher(resolver.pathFor(DefaultResourceMethod.instanceFor(controllerType, method))).forward(request, response);
+                    return null;
+                } catch (Exception e) {
+                    throw new ProxyInvocationException(e);
+				}
+            }
+        });
 	}
 
 }

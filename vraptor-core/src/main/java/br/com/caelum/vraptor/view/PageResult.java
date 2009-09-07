@@ -33,7 +33,7 @@ import br.com.caelum.vraptor.View;
 
 /**
  * A common forward/redirect/include page result.
- * 
+ *
  * @author Guilherme Silveira
  */
 public interface PageResult extends View {
@@ -55,9 +55,16 @@ public interface PageResult extends View {
 
 	/**
 	 * Client side redirect to an specific url.
-	 * 
+	 *
 	 * @param url
 	 */
 	void redirect(String url);
+
+	/**
+	 * Render the default view of given logic, without executing the logic.
+	 * Ex: result.use(page()).of(ClientsController.class).list();
+	 * will render the view /WEB-INF/jsp/clients/list.jsp without calling list method.
+	 */
+	<T> T of(Class<T> controllerType);
 
 }

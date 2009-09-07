@@ -10,7 +10,8 @@ import java.util.ResourceBundle;
 
 import javax.servlet.jsp.jstl.core.Config;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.ioc.RequestScoped;
 
@@ -24,7 +25,7 @@ import br.com.caelum.vraptor.ioc.RequestScoped;
 public class JstlLocalization implements Localization {
 
 
-	private static final Logger logger = Logger.getLogger(JstlLocalization.class);
+	private static final Logger logger = LoggerFactory.getLogger(JstlLocalization.class);
 
     private static final String DEFAULT_BUNDLE_NAME = "messages";
 

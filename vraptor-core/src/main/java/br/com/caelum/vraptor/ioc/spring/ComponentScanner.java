@@ -29,7 +29,8 @@
  */
 package br.com.caelum.vraptor.ioc.spring;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.annotation.ClassPathBeanDefinitionScanner;
@@ -43,7 +44,7 @@ import br.com.caelum.vraptor.ioc.Container;
 class ComponentScanner extends ClassPathBeanDefinitionScanner {
 
 
-	private static final Logger logger = Logger.getLogger(ComponentScanner.class);
+	private static final Logger logger = LoggerFactory.getLogger(ComponentScanner.class);
 
 	private final DefaultListableBeanFactory registry;
 	private final Container container;

@@ -91,6 +91,12 @@ public class PathAnnotationRoutesParserTest {
         assertThat(method.getMethod(), is(equalTo(Clients.class.getMethod("list"))));
         mockery.assertIsSatisfied();
     }
+    @Test
+    public void addsASlashWhenUserForgotIt() throws SecurityException,  NoSuchMethodException {
+    	ResourceMethod method = router.parse("/noSlash", HttpMethod.POST, request);
+    	assertThat(method.getMethod(), is(equalTo(Clients.class.getMethod("noSlash"))));
+    	mockery.assertIsSatisfied();
+    }
 
     @Test
     public void matchesWhenUsingAWildcard() throws SecurityException, NoSuchMethodException {
@@ -125,6 +131,11 @@ public class PathAnnotationRoutesParserTest {
         @Path("/move/*/child")
         public void move() {
         }
+
+        @Path("noSlash")
+        public void noSlash() {
+        }
+
 
         @Path("/clients")
         public void list() {

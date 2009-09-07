@@ -32,6 +32,9 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.proxy.Proxifier;
@@ -47,6 +50,8 @@ import br.com.caelum.vraptor.resource.ResourceClass;
  */
 @ApplicationScoped
 public class PathAnnotationRoutesParser implements RoutesParser {
+
+	private static final Logger logger = LoggerFactory.getLogger(PathAnnotationRoutesParser.class);
 
     private final Proxifier proxifier;
 	private final TypeFinder finder;
@@ -92,7 +97,12 @@ public class PathAnnotationRoutesParser implements RoutesParser {
 
     private String getUriFor(Method javaMethod, Class<?> type) {
         if (javaMethod.isAnnotationPresent(Path.class)) {
-            return javaMethod.getAnnotation(Path.class).value();
+            String uri = javaMethod.getAnnotation(Path.class).value();
+            if (!uri.startsWith("/")) {
+            	logger.warn("All uris from @Path must start with a '/'. Please change it on " + javaMethod);
+            	uri = "/" + uri;
+            }
+			return uri;
         }
         return extractControllerFromName(type.getSimpleName()) + "/" + javaMethod.getName();
     }

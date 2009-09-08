@@ -105,6 +105,9 @@ public class DefaultPageResultTest {
     			one(request).getRequestDispatcher("/any/url");
                 will(returnValue(dispatcher));
                 one(dispatcher).forward(request, response);
+
+                one(request).getParameter("_method");
+                will(returnValue("GET"));
     		}
     	});
 
@@ -137,6 +140,9 @@ public class DefaultPageResultTest {
     			will(returnValue(method));
 
     			never(request).getRequestDispatcher("/any/url");
+
+                one(request).getParameter("_method");
+                will(returnValue("GET"));
     		}
     	});
 

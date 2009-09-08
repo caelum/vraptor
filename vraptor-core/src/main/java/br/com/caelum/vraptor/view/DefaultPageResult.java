@@ -92,15 +92,15 @@ public class DefaultPageResult implements PageResult {
 
     public void redirect(String url) {
         try {
-        	checkForLogic(url);
+        	checkForLogic(url, HttpMethod.GET); // redirect only makes sense with GET method
             response.sendRedirect(url);
         } catch (IOException e) {
             throw new ResultException(e);
         }
     }
 
-	private void checkForLogic(String url) {
-		ResourceMethod method = router.parse(url, HttpMethod.GET, request);
+	private void checkForLogic(String url, HttpMethod httpMethod) {
+		ResourceMethod method = router.parse(url, httpMethod, request);
 		if (method != null) {
 			throw new ResultException("Given uri " + url + " responds to method: " + method.getMethod() + ".\n" +
 					"Use result.use(logic()).redirectTo(" + method.getResource().getType().getSimpleName() + ".class)."
@@ -110,7 +110,7 @@ public class DefaultPageResult implements PageResult {
 
 	public void forward(String url) {
         try {
-        	checkForLogic(url);
+        	checkForLogic(url, HttpMethod.of(request)); // keep http method
             request.getRequestDispatcher(url).forward(request, response);
         } catch (ServletException e) {
             throw new ResultException(e);

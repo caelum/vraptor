@@ -27,9 +27,6 @@
  */
 package br.com.caelum.vraptor.ioc.pico;
 
-import java.io.File;
-import java.net.URI;
-import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 
@@ -42,6 +39,7 @@ import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
 import br.com.caelum.vraptor.ioc.GenericContainerTest;
 import br.com.caelum.vraptor.ioc.WhatToDo;
+import br.com.caelum.vraptor.ioc.spring.SpringProvider;
 import br.com.caelum.vraptor.test.HttpServletRequestMock;
 import br.com.caelum.vraptor.test.HttpSessionMock;
 
@@ -87,10 +85,8 @@ public class PicoProviderTest extends GenericContainerTest {
         try {
             mockery.checking(new Expectations() {
                 {
-					URL fixtureJarURL = GenericContainerTest.class.getResource("test-fixture.jar");
-					File fixtureJarFile = new File(new URI(fixtureJarURL.toString()));
-					allowing(context).getRealPath("/WEB-INF/classes/");
-					will(returnValue(fixtureJarFile.getAbsolutePath()));
+                	allowing(context).getInitParameter(SpringProvider.BASE_PACKAGES_PARAMETER_NAME);
+					will(returnValue("br.com.caelum.vraptor.ioc.fixture"));
                 }
             });
         } catch (Exception e) {

@@ -45,7 +45,7 @@ import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.SuperMethod;
 import br.com.caelum.vraptor.resource.HttpMethod;
 
-import com.google.common.base.Join;
+import com.google.common.base.Joiner;
 
 /**
  * Should be used in one of two ways, either configure the type and invoke the
@@ -102,7 +102,7 @@ public class RouteBuilder {
 			} else if (Arrays.asList(Boolean.class, boolean.class).contains(type)){
 				return "true|false";
 			} else if (Enum.class.isAssignableFrom(type)) {
-				return Join.join("|", type.getEnumConstants());
+				return Joiner.on("|").join(type.getEnumConstants());
 			}
 			return "[^/]+";
 		}

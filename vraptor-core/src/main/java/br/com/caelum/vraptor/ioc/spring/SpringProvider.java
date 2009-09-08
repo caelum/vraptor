@@ -15,7 +15,7 @@ import br.com.caelum.vraptor.ioc.ContainerProvider;
  * @author Fabio Kung
  */
 public class SpringProvider implements ContainerProvider {
-    public static final String BASE_PACKAGES_PARAMETER_NAME = "br.com.caelum.vraptor.spring.packages";
+    public static final String BASE_PACKAGES_PARAMETER_NAME = "br.com.caelum.vraptor.packages";
 
     private final RequestContextListener requestListener = new RequestContextListener();
     private SpringBasedContainer container;

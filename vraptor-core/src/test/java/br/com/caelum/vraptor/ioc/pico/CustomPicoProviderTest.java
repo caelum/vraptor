@@ -32,9 +32,6 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
-import java.io.File;
-import java.net.URI;
-import java.net.URL;
 import java.util.Arrays;
 import java.util.HashMap;
 
@@ -53,6 +50,7 @@ import br.com.caelum.vraptor.ioc.ContainerProvider;
 import br.com.caelum.vraptor.ioc.GenericContainerTest;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.ioc.WhatToDo;
+import br.com.caelum.vraptor.ioc.spring.SpringProvider;
 import br.com.caelum.vraptor.test.HttpSessionMock;
 
 public class CustomPicoProviderTest extends GenericContainerTest {
@@ -71,14 +69,14 @@ public class CustomPicoProviderTest extends GenericContainerTest {
 
     @ApplicationScoped
     public static class MyAppComponent {
-    	
+
     }
-    
+
     @RequestScoped
     public static class MyRequestComponent {
-    	
+
     }
-    
+
 	@ApplicationScoped
 	public static class MyFactory implements ComponentFactory<Void> {
 		public int calls = 0;
@@ -92,34 +90,34 @@ public class CustomPicoProviderTest extends GenericContainerTest {
 			return null;
 		}
 	}
-    
+
     @ApplicationScoped
     public static class MyAppComponentWithLifecycle {
     	public int calls = 0;
-    	
+
     	@PreDestroy
     	public void z() {
     		calls++;
     	}
     }
-    
+
     @Test
 	public void callsPredestroyExactlyOneTimeForAppScopedComponents() throws Exception {
 		MyAppComponentWithLifecycle component = getFromContainer(MyAppComponentWithLifecycle.class);
 		assertThat(0, is(equalTo(component.calls)));
 		provider.stop();
 		assertThat(1, is(equalTo(component.calls)));
-		
+
 		resetProvider();
 	}
-    
+
     @Test
     public void callsPredestroyExactlyOneTimeForAppScopedComponentFactories() throws Exception {
     	MyFactory component = getFromContainer(MyFactory.class);
     	assertThat(0, is(equalTo(component.calls)));
     	provider.stop();
     	assertThat(1, is(equalTo(component.calls)));
-    	
+
     	resetProvider();
     }
 
@@ -166,10 +164,8 @@ public class CustomPicoProviderTest extends GenericContainerTest {
                     allowing(context).getRealPath("/WEB-INF/classes/views.properties");
                     will(returnValue("views.properties"));
 
-                	URL fixtureJarURL = GenericContainerTest.class.getResource("test-fixture.jar");
-					File fixtureJarFile = new File(new URI(fixtureJarURL.toString()));
-					allowing(context).getRealPath("/WEB-INF/classes/");
-					will(returnValue(fixtureJarFile.getAbsolutePath()));               
+                    allowing(context).getInitParameter(SpringProvider.BASE_PACKAGES_PARAMETER_NAME);
+					will(returnValue("br.com.caelum.vraptor.ioc.fixture"));
                 }
             });
         } catch (Exception e) {

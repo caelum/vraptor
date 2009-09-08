@@ -1,10 +1,6 @@
 package br.com.caelum.vraptor.ioc.pico;
 
-import java.io.File;
 import java.lang.annotation.Annotation;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -14,13 +10,13 @@ import javax.servlet.ServletContext;
 import org.reflections.Reflections;
 import org.reflections.scanners.ClassAnnotationsScanner;
 import org.reflections.scanners.SubTypesScanner;
-import org.reflections.util.AbstractConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import br.com.caelum.vraptor.VRaptorException;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Stereotype;
+import br.com.caelum.vraptor.ioc.spring.MissingConfigurationException;
+import br.com.caelum.vraptor.ioc.spring.SpringProvider;
 
 /**
  * Scanner implementation using the nice Reflections project (http://code.google.com/p/reflections) to do classpath
@@ -34,19 +30,12 @@ public class ReflectionsScanner implements Scanner {
 	private final Reflections reflections;
 
     public ReflectionsScanner(ServletContext context) {
-    	final URL webInfClasses;
-		try {
-			webInfClasses = new File(context.getRealPath("/WEB-INF/classes/")).toURI().toURL();
-		} catch (MalformedURLException e) {
-			throw new VRaptorException(e);
+    	String packages = context.getInitParameter(SpringProvider.BASE_PACKAGES_PARAMETER_NAME);
+    	if (packages == null) {
+			throw new MissingConfigurationException(SpringProvider.BASE_PACKAGES_PARAMETER_NAME + " context-param not found in web.xml");
 		}
 
-        this.reflections = new Reflections(new AbstractConfiguration() {
-            {
-            	setUrls(Arrays.asList(webInfClasses));
-                setScanners(new ClassAnnotationsScanner(), new SubTypesScanner());
-            }
-        });
+        this.reflections = new Reflections(packages, new ClassAnnotationsScanner(), new SubTypesScanner());
     }
 
     public Collection<Class<?>> getTypesWithAnnotation(Class<? extends Annotation> annotationType) {

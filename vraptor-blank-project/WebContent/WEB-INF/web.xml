@@ -6,7 +6,7 @@
 	<display-name>vraptor-blank-project</display-name>
 
 	<context-param>
-        <param-name>br.com.caelum.vraptor.spring.packages</param-name>
+        <param-name>br.com.caelum.vraptor.packages</param-name>
         <param-value>br.com.caelum.vraptor.blank</param-value>
     </context-param>
     

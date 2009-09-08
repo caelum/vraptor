@@ -27,9 +27,6 @@
  */
 package br.com.caelum.vraptor.vraptor2;
 
-import java.io.File;
-import java.net.URI;
-import java.net.URL;
 import java.util.Arrays;
 import java.util.HashMap;
 
@@ -44,6 +41,7 @@ import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
 import br.com.caelum.vraptor.ioc.GenericContainerTest;
 import br.com.caelum.vraptor.ioc.WhatToDo;
+import br.com.caelum.vraptor.ioc.spring.SpringProvider;
 import br.com.caelum.vraptor.test.HttpSessionMock;
 import br.com.caelum.vraptor.vraptor2.outject.OutjectionInterceptor;
 
@@ -94,10 +92,8 @@ public class ProviderTest extends GenericContainerTest {
                     allowing(context).getRealPath("/WEB-INF/classes/views.properties");
                     will(returnValue("views.properties"));
 
-                	URL fixtureJarURL = GenericContainerTest.class.getResource("test-fixture.jar");
-					File fixtureJarFile = new File(new URI(fixtureJarURL.toString()));
-					allowing(context).getRealPath("/WEB-INF/classes/");
-					will(returnValue(fixtureJarFile.getAbsolutePath()));               
+					allowing(context).getInitParameter(SpringProvider.BASE_PACKAGES_PARAMETER_NAME);
+					will(returnValue("br.com.caelum.vraptor.ioc.fixture"));
                 }
             });
         } catch (Exception e) {

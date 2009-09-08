@@ -10,6 +10,11 @@
 		<param-value>br.com.caelum.vraptor.vraptor2.Provider</param-value>
 	</context-param>
 
+	<context-param>
+        <param-name>br.com.caelum.vraptor.packages</param-name>
+        <param-value>br.com.caelum.vraptor.example</param-value>
+    </context-param>
+    
 	<filter>
 		<filter-name>vraptor</filter-name>
 		<filter-class>br.com.caelum.vraptor.VRaptor</filter-class>

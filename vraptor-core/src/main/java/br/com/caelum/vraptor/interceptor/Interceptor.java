@@ -41,6 +41,8 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  * constraint checks, database session (open session in view) opening and much
  * more.
  *
+ * If you have an interceptor A which depends on an interceptor B, i.e, interceptor
+ * B must be executed before interceptor A, use {@link InterceptorSequence}
  * @author Guilherme Silveira
  */
 public interface Interceptor {

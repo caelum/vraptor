@@ -46,6 +46,7 @@ import br.com.caelum.vraptor.proxy.SuperMethod;
 import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.resource.ResourceClass;
 import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.view.DefaultPageResult;
 import br.com.caelum.vraptor.view.PageResult;
 import br.com.caelum.vraptor.view.PathResolver;
 import br.com.caelum.vraptor.view.ResultException;
@@ -68,6 +69,7 @@ public class ViewsPropertiesPageResult implements PageResult {
 	private final RequestInfo webRequest;
 	private final MethodInfo info;
 	private final Proxifier proxifier;
+	private final DefaultPageResult delegate;
 
 	public ViewsPropertiesPageResult(Config config, PathResolver resolver, MethodInfo requestInfo,
 			RequestInfo webRequest, MethodInfo info, Proxifier proxifier) {
@@ -79,11 +81,12 @@ public class ViewsPropertiesPageResult implements PageResult {
 		this.resolver = resolver;
 		this.method = requestInfo.getResourceMethod();
 		this.response = webRequest.getResponse();
+		this.delegate = new DefaultPageResult(request, response, requestInfo, resolver, proxifier);
 	}
 
 	public void forward() {
 		try {
-			forwardTo(this.method);
+			forward(this.method);
 		} catch (ServletException e) {
 			throw new ResultException(e);
 		} catch (IOException e) {
@@ -91,16 +94,19 @@ public class ViewsPropertiesPageResult implements PageResult {
 		}
 	}
 
-	private void forwardTo(ResourceMethod method) throws ServletException,
+	private void forward(ResourceMethod method) throws ServletException, IOException {
+		if (Info.isOldComponent(method.getResource())) {
+			vraptor2Forward(method);
+		} else {
+			delegate.forward();
+		}
+	}
+
+	private void vraptor2Forward(ResourceMethod method) throws ServletException,
 			IOException {
 		String result = info.getResult().toString();
 		ResourceClass resource = method.getResource();
-		boolean vraptor3 = !Info.isOldComponent(resource);
-		if (vraptor3) {
-			String forwardPath = resolver.pathFor(method);
-			request.getRequestDispatcher(forwardPath).forward(request, response);
-			return;
-		}
+
 		String key = Info.getComponentName(resource.getType()) + "." + Info.getLogicName(method.getMethod()) + "."
 				+ result;
 
@@ -131,7 +137,7 @@ public class ViewsPropertiesPageResult implements PageResult {
             public Object intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {
                 try {
                     ResourceMethod resourceMethod = DefaultResourceMethod.instanceFor(controllerType, method);
-                    forwardTo(resourceMethod);
+                    forward(resourceMethod);
                     return null;
                 } catch (Exception e) {
                     throw new ProxyInvocationException(e);
@@ -141,35 +147,15 @@ public class ViewsPropertiesPageResult implements PageResult {
 	}
 
 	public void include() {
-		try {
-			request.getRequestDispatcher(resolver.pathFor(method)).include(request, response);
-		} catch (ServletException e) {
-			throw new ResultException(e);
-		} catch (IOException e) {
-			throw new ResultException(e);
-		}
-	}
-
-	public void include(String key, Object value) {
-		request.setAttribute(key, value);
+		delegate.include();
 	}
 
 	public void redirect(String url) {
-		try {
-			response.sendRedirect(url);
-		} catch (IOException e) {
-			throw new ResultException(e);
-		}
+		delegate.redirect(url);
 	}
 
 	public void forward(String url) {
-        try {
-            request.getRequestDispatcher(url).forward(request, response);
-        } catch (ServletException e) {
-            throw new ResultException(e);
-        } catch (IOException e) {
-            throw new ResultException(e);
-        }
+        delegate.forward(url);
 	}
 
 }

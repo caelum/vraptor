@@ -27,14 +27,15 @@
  */
 package br.com.caelum.vraptor.util.test;
 
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 
-import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.lib.legacy.ClassImposteriser;
-
 import br.com.caelum.vraptor.Validator;
+import br.com.caelum.vraptor.proxy.MethodInvocation;
+import br.com.caelum.vraptor.proxy.ObjenesisProxifier;
+import br.com.caelum.vraptor.proxy.Proxifier;
+import br.com.caelum.vraptor.proxy.SuperMethod;
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.ValidationError;
 import br.com.caelum.vraptor.validator.Validations;
@@ -42,7 +43,11 @@ import br.com.caelum.vraptor.validator.Validations;
 public class MockValidator implements Validator {
 
 	private List<Message> errors;
+	private final Proxifier proxifier;
 
+	public MockValidator() {
+		proxifier = new ObjenesisProxifier();
+	}
 	public void checking(Validations validations) {
 		this.errors = validations.getErrors();
 		if(!this.errors.isEmpty()) {
@@ -51,19 +56,12 @@ public class MockValidator implements Validator {
 	}
 
 	public <T> T goTo(Class<T> type) {
-		Mockery mockery = new Mockery() {
-			{
-				setImposteriser(ClassImposteriser.INSTANCE);
-			}
-		};
-		final T mock = mockery.mock(type);
+		return proxifier.proxify(type, new MethodInvocation<T>() {
 
-		mockery.checking(new Expectations() {
-			{
-				ignoring(mock);
+			public Object intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {
+				return null;
 			}
 		});
-		return type.cast(mock);
 	}
 
 	public Validator onError() {

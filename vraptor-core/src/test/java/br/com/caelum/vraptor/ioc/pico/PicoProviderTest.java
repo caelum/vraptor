@@ -35,11 +35,11 @@ import javax.servlet.http.HttpServletResponse;
 import org.jmock.Expectations;
 import org.junit.Test;
 
+import br.com.caelum.vraptor.config.BasicConfiguration;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
 import br.com.caelum.vraptor.ioc.GenericContainerTest;
 import br.com.caelum.vraptor.ioc.WhatToDo;
-import br.com.caelum.vraptor.ioc.spring.SpringProvider;
 import br.com.caelum.vraptor.test.HttpServletRequestMock;
 import br.com.caelum.vraptor.test.HttpSessionMock;
 
@@ -85,7 +85,7 @@ public class PicoProviderTest extends GenericContainerTest {
         try {
             mockery.checking(new Expectations() {
                 {
-                	allowing(context).getInitParameter(SpringProvider.BASE_PACKAGES_PARAMETER_NAME);
+                	allowing(context).getInitParameter(BasicConfiguration.BASE_PACKAGES_PARAMETER_NAME);
 					will(returnValue("br.com.caelum.vraptor.ioc.fixture"));
                 }
             });

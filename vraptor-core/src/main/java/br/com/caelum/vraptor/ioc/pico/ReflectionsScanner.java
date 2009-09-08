@@ -13,10 +13,9 @@ import org.reflections.scanners.SubTypesScanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import br.com.caelum.vraptor.config.BasicConfiguration;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Stereotype;
-import br.com.caelum.vraptor.ioc.spring.MissingConfigurationException;
-import br.com.caelum.vraptor.ioc.spring.SpringProvider;
 
 /**
  * Scanner implementation using the nice Reflections project (http://code.google.com/p/reflections) to do classpath
@@ -30,11 +29,7 @@ public class ReflectionsScanner implements Scanner {
 	private final Reflections reflections;
 
     public ReflectionsScanner(ServletContext context) {
-    	String packages = context.getInitParameter(SpringProvider.BASE_PACKAGES_PARAMETER_NAME);
-    	if (packages == null) {
-			throw new MissingConfigurationException(SpringProvider.BASE_PACKAGES_PARAMETER_NAME + " context-param not found in web.xml");
-		}
-
+    	String packages = new BasicConfiguration(context).getBasePackages();
         this.reflections = new Reflections(packages, new ClassAnnotationsScanner(), new SubTypesScanner());
     }
 

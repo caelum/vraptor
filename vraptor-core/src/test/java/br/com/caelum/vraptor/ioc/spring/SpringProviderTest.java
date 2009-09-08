@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import br.com.caelum.vraptor.config.BasicConfiguration;
 import br.com.caelum.vraptor.test.HttpServletRequestMock;
 import br.com.caelum.vraptor.test.HttpSessionMock;
 
@@ -47,7 +48,7 @@ public class SpringProviderTest {
     @Test
     public void shouldLoadInitParameterForBasePackages() {
         mockery.checking(new Expectations() {{
-            one(servletContext).getInitParameter(SpringProvider.BASE_PACKAGES_PARAMETER_NAME);
+            one(servletContext).getInitParameter(BasicConfiguration.BASE_PACKAGES_PARAMETER_NAME);
             will(returnValue("br.com.caelum.vraptor.ioc.spring.components.registrar"));
             allowing(servletContext);will(returnValue(null));
         }});

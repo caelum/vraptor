@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.RequestContextListener;
 
+import br.com.caelum.vraptor.config.BasicConfiguration;
 import br.com.caelum.vraptor.core.Execution;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
@@ -15,8 +16,6 @@ import br.com.caelum.vraptor.ioc.ContainerProvider;
  * @author Fabio Kung
  */
 public class SpringProvider implements ContainerProvider {
-    public static final String BASE_PACKAGES_PARAMETER_NAME = "br.com.caelum.vraptor.packages";
-
     private final RequestContextListener requestListener = new RequestContextListener();
     private SpringBasedContainer container;
 
@@ -51,14 +50,9 @@ public class SpringProvider implements ContainerProvider {
     }
 
     public void start(ServletContext context) {
-        String packagesParameter = context.getInitParameter(BASE_PACKAGES_PARAMETER_NAME);
+        String packagesParameter = new BasicConfiguration(context).getBasePackages();
 
-        String[] packages;
-        if (packagesParameter == null) {
-            throw new MissingConfigurationException(BASE_PACKAGES_PARAMETER_NAME + " context-param not found in web.xml");
-        } else {
-            packages = packagesParameter.split(",");
-        }
+        String[] packages = packagesParameter.split(",");
 
         container = new SpringBasedContainer(packages);
         container.start(context);

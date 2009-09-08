@@ -42,6 +42,7 @@ import org.jmock.Expectations;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.ComponentRegistry;
+import br.com.caelum.vraptor.config.BasicConfiguration;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
@@ -50,7 +51,6 @@ import br.com.caelum.vraptor.ioc.ContainerProvider;
 import br.com.caelum.vraptor.ioc.GenericContainerTest;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.ioc.WhatToDo;
-import br.com.caelum.vraptor.ioc.spring.SpringProvider;
 import br.com.caelum.vraptor.test.HttpSessionMock;
 
 public class CustomPicoProviderTest extends GenericContainerTest {
@@ -164,7 +164,7 @@ public class CustomPicoProviderTest extends GenericContainerTest {
                     allowing(context).getRealPath("/WEB-INF/classes/views.properties");
                     will(returnValue("views.properties"));
 
-                    allowing(context).getInitParameter(SpringProvider.BASE_PACKAGES_PARAMETER_NAME);
+                    allowing(context).getInitParameter(BasicConfiguration.BASE_PACKAGES_PARAMETER_NAME);
 					will(returnValue("br.com.caelum.vraptor.ioc.fixture"));
                 }
             });

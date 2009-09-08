@@ -38,6 +38,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.jmock.Expectations;
 import org.springframework.web.context.request.RequestContextListener;
 
+import br.com.caelum.vraptor.config.BasicConfiguration;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
 import br.com.caelum.vraptor.ioc.GenericContainerTest;
@@ -89,7 +90,7 @@ public class SpringProviderRegisteringComponentsTest extends GenericContainerTes
     protected void configureExpectations() {
         mockery.checking(new Expectations() {
             {
-                allowing(context).getInitParameter(SpringProvider.BASE_PACKAGES_PARAMETER_NAME);
+                allowing(context).getInitParameter(BasicConfiguration.BASE_PACKAGES_PARAMETER_NAME);
                 will(returnValue("br.com.caelum.vraptor.ioc.fixture"));
 
 				allowing(context).getAttribute("org.springframework.web.context.WebApplicationContext.ROOT");

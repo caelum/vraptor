@@ -31,34 +31,41 @@ import java.io.IOException;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.core.DefaultMethodInfo;
+import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor.http.route.Router;
+import br.com.caelum.vraptor.proxy.Proxifier;
+import br.com.caelum.vraptor.resource.DefaultResourceMethod;
+import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 public class DefaultPageResultTest {
 
     private Mockery mockery;
-    private HttpServletRequest request;
+    private MutableRequest request;
     private HttpServletResponse response;
     private RequestDispatcher dispatcher;
     private ResourceMethod method;
     private PathResolver fixedResolver;
     private DefaultMethodInfo requestInfo;
+	private DefaultPageResult view;
+	private Router router;
 
     @Before
     public void setup() {
         this.mockery = new Mockery();
-        request = mockery.mock(HttpServletRequest.class);
+        request = mockery.mock(MutableRequest.class);
         response = mockery.mock(HttpServletResponse.class);
         dispatcher = mockery.mock(RequestDispatcher.class);
-        method = mockery.mock(ResourceMethod.class);
+        method = DefaultResourceMethod.instanceFor(AnyResource.class, AnyResource.class.getDeclaredMethods()[0]);
         requestInfo = new DefaultMethodInfo();
         requestInfo.setResourceMethod(method);
         fixedResolver = new PathResolver() {
@@ -66,11 +73,82 @@ public class DefaultPageResultTest {
                 return "fixed";
             }
         };
+        router = mockery.mock(Router.class);
+		view = new DefaultPageResult(request, response, requestInfo, fixedResolver, mockery.mock(Proxifier.class), router);
     }
 
+    public static class AnyResource {
+    	public void method() {
+    	}
+    }
+    @Test
+	public void shouldRedirectWhenUriDoesntBelongToAnyLogic() throws Exception {
+		mockery.checking(new Expectations() {
+			{
+				one(router).parse("/any/url", HttpMethod.GET, request);
+				will(returnValue(null));
+
+				one(response).sendRedirect("/any/url");
+			}
+		});
+
+		view.redirect("/any/url");
+		mockery.assertIsSatisfied();
+	}
+    @Test
+    public void shouldForwardWhenUriDoesntBelongToAnyLogic() throws Exception {
+    	mockery.checking(new Expectations() {
+    		{
+				one(router).parse("/any/url", HttpMethod.GET, request);
+				will(returnValue(null));
+
+    			one(request).getRequestDispatcher("/any/url");
+                will(returnValue(dispatcher));
+                one(dispatcher).forward(request, response);
+    		}
+    	});
+
+    	view.forward("/any/url");
+    	mockery.assertIsSatisfied();
+    }
+    @Test
+    public void shouldThrowExceptionWhenUriDoesntBelongToAnyLogicOnRedirect() throws Exception {
+    	mockery.checking(new Expectations() {
+    		{
+    			one(router).parse("/any/url", HttpMethod.GET, request);
+    			will(returnValue(method));
+
+    			never(response).sendRedirect("/any/url");
+    		}
+    	});
+
+    	try {
+			view.redirect("/any/url");
+			Assert.fail("Should throw exception");
+		} catch (ResultException e) {
+			mockery.assertIsSatisfied();
+		}
+    }
+    @Test
+    public void shouldThrowExceptionWhenUriDoesntBelongToAnyLogicOnForward() throws Exception {
+    	mockery.checking(new Expectations() {
+    		{
+    			one(router).parse("/any/url", HttpMethod.GET, request);
+    			will(returnValue(method));
+
+    			never(request).getRequestDispatcher("/any/url");
+    		}
+    	});
+
+    	try {
+    		view.forward("/any/url");
+    		Assert.fail("Should throw exception");
+    	} catch (ResultException e) {
+    		mockery.assertIsSatisfied();
+    	}
+    }
     @Test
     public void shouldAllowCustomPathResolverWhileForwarding() throws ServletException, IOException {
-        DefaultPageResult view = new DefaultPageResult(request, response, requestInfo, fixedResolver, null);
         mockery.checking(new Expectations() {
             {
                 one(request).getRequestDispatcher("fixed");
@@ -85,7 +163,6 @@ public class DefaultPageResultTest {
 
     @Test
     public void shouldAllowCustomPathResolverWhileIncluding() throws ServletException, IOException {
-        DefaultPageResult view = new DefaultPageResult(request, response, requestInfo, fixedResolver, null);
         mockery.checking(new Expectations() {
             {
                 one(request).getRequestDispatcher("fixed");

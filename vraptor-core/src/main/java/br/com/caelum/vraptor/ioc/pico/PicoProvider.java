@@ -149,9 +149,11 @@ public class PicoProvider implements ContainerProvider {
 //	    registry.register(ComponentHandler.class, ComponentHandler.class);
 	    for (Map.Entry<Class<?>, Class<?>> entry : BaseComponents.getApplicationScoped().entrySet()) {
 	        registry.register(entry.getKey(), entry.getValue());
+	        registry.register(entry.getValue(), entry.getValue());
 	    }
 	    for (Map.Entry<Class<?>, Class<?>> entry : BaseComponents.getRequestScoped().entrySet()) {
 	        registry.register(entry.getKey(), entry.getValue());
+	        registry.register(entry.getValue(), entry.getValue());
 	    }
 	    for (Class<? extends Converter<?>> converterType : BaseComponents.getBundledConverters()) {
 	        registry.register(converterType, converterType);

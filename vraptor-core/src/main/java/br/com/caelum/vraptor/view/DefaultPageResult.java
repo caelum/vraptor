@@ -33,15 +33,17 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import br.com.caelum.vraptor.core.MethodInfo;
+import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.proxy.MethodInvocation;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.ProxyInvocationException;
 import br.com.caelum.vraptor.proxy.SuperMethod;
 import br.com.caelum.vraptor.resource.DefaultResourceMethod;
+import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**
@@ -51,17 +53,19 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  */
 public class DefaultPageResult implements PageResult {
 
-    private final HttpServletRequest request;
+    private final MutableRequest request;
     private final HttpServletResponse response;
     private final ResourceMethod method;
     private final PathResolver resolver;
 	private final Proxifier proxifier;
+	private final Router router;
 
-    public DefaultPageResult(HttpServletRequest req, HttpServletResponse res, MethodInfo requestInfo,
-            PathResolver resolver, Proxifier proxifier) {
+    public DefaultPageResult(MutableRequest req, HttpServletResponse res, MethodInfo requestInfo,
+            PathResolver resolver, Proxifier proxifier, Router router) {
         this.request = req;
         this.response = res;
 		this.proxifier = proxifier;
+		this.router = router;
         this.method = requestInfo.getResourceMethod();
         this.resolver = resolver;
     }
@@ -88,14 +92,25 @@ public class DefaultPageResult implements PageResult {
 
     public void redirect(String url) {
         try {
+        	checkForLogic(url);
             response.sendRedirect(url);
         } catch (IOException e) {
             throw new ResultException(e);
         }
     }
 
+	private void checkForLogic(String url) {
+		ResourceMethod method = router.parse(url, HttpMethod.GET, request);
+		if (method != null) {
+			throw new ResultException("Given uri " + url + " responds to method: " + method.getMethod() + ".\n" +
+					"Use result.use(logic()).redirectTo(" + method.getResource().getType().getSimpleName() + ".class)."
+					 + method.getMethod().getName() + "() instead.");
+		}
+	}
+
 	public void forward(String url) {
         try {
+        	checkForLogic(url);
             request.getRequestDispatcher(url).forward(request, response);
         } catch (ServletException e) {
             throw new ResultException(e);

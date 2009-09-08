@@ -20,6 +20,7 @@ import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.resource.ResourceClass;
 import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.view.DefaultPageResult;
 import br.com.caelum.vraptor.view.PathResolver;
 import br.com.caelum.vraptor.view.ResultException;
 
@@ -67,7 +68,8 @@ public class ViewsPropertiesPageResultTest {
             }
         });
         this.webRequest = new RequestInfo(context, request, response);
-        this.result = new ViewsPropertiesPageResult(this.config, this.resolver, this.info, this.webRequest, info, null);
+        DefaultPageResult delegate = new DefaultPageResult(request, response, info, resolver, null, null);
+        this.result = new ViewsPropertiesPageResult(this.config, this.resolver, this.info, this.webRequest, info, null, delegate);
     }
 
     @Component

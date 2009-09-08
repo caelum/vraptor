@@ -72,7 +72,7 @@ public class ViewsPropertiesPageResult implements PageResult {
 	private final DefaultPageResult delegate;
 
 	public ViewsPropertiesPageResult(Config config, PathResolver resolver, MethodInfo requestInfo,
-			RequestInfo webRequest, MethodInfo info, Proxifier proxifier) {
+			RequestInfo webRequest, MethodInfo info, Proxifier proxifier, DefaultPageResult delegate) {
 		this.config = config;
 		this.webRequest = webRequest;
 		this.info = info;
@@ -81,7 +81,7 @@ public class ViewsPropertiesPageResult implements PageResult {
 		this.resolver = resolver;
 		this.method = requestInfo.getResourceMethod();
 		this.response = webRequest.getResponse();
-		this.delegate = new DefaultPageResult(request, response, requestInfo, resolver, proxifier);
+		this.delegate = delegate;
 	}
 
 	public void forward() {

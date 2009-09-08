@@ -68,7 +68,7 @@ public class MockResult implements Result {
 	 * @param key
 	 * @return the value if it was included
 	 */
-	public Object included(String key) {
-		return values.get(key);
+	public <T> T included(String key) {
+		return (T) values.get(key);
 	}
 }

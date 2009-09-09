@@ -27,19 +27,11 @@
  */
 package br.com.caelum.vraptor.validator;
 
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.notNullValue;
-
-import java.io.IOException;
-
-import javax.servlet.ServletException;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;
-import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.Result;
@@ -75,34 +67,6 @@ public class ValidatorAcceptanceTest {
                 allowing(result).use(Results.logic()); will(returnValue(logicResult));
             }
         });
-    }
-
-    @Test
-    @Ignore("I think this is not the case anymore")
-    public void cheksThatValidationWorksGoToReferer() throws ServletException, IOException {
-        mockery.checking(new Expectations() {
-            {
-            	String referer = "www.disney.com";
-            	one(request).getRequestURI(); will(returnValue(referer));
-            	one(request).getContextPath(); will(returnValue(""));
-                one(result).include(with(any(String.class)), with(hasItem(instanceOf(Message.class))));
-                one(pageResult).forward(referer);
-            }
-        });
-        DefaultValidator validator = new DefaultValidator(proxifier, result, request);
-        final Student guilherme = new Student();
-        try {
-            validator.checking(new Validations() {
-                {
-                    that("id",guilherme.id, is(notNullValue()));
-                }
-            });
-            Assert.fail();
-        } catch (ValidationError e) {
-            // should be here to check mockery values
-            // DO NOT use (expected=...)
-            mockery.assertIsSatisfied();
-        }
     }
 
     @Test

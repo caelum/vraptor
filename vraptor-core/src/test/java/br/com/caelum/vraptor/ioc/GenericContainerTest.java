@@ -368,7 +368,6 @@ public abstract class GenericContainerTest {
     }
 
     @Test
-    @Ignore("Nao passa com o spring. Tem q verificar, mas nao aparenta ser um blocker")
     public void shoudUseComponentFactoriesInTheClasspath() {
     	Provided object = getFromContainer(Provided.class);
     	assertThat(object, is(sameInstance(ComponentFactoryInTheClasspath.PROVIDED)));

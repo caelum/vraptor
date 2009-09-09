@@ -32,7 +32,6 @@ import java.util.ArrayList;
 import org.jmock.Expectations;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.Resource;
@@ -67,33 +66,6 @@ public class DefaultValidatorTest {
 		this.request = mockery.mock(MutableRequest.class);
 		this.validator = new DefaultValidator(proxifier, result,request);
 		this.pageResult = mockery.mock(PageResult.class);
-	}
-
-	@Test
-	@Ignore("I think this is not the case anymore")
-	public void redirectsToStandardPageResultByDefault() {
-		mockery.checking(new Expectations() {
-			{
-				String referer = "google.com";
-				one(request).getRequestURI(); will(returnValue(referer));
-				one(request).getContextPath(); will(returnValue(""));
-				one(result).include((String) with(an(String.class)), with(an(ArrayList.class)));
-				one(result).use(PageResult.class);
-				will(returnValue(pageResult));
-				one(pageResult).forward(referer);
-			}
-		});
-		try {
-			validator.checking(new Validations() {
-				{
-					that("", "", false);
-				}
-			});
-			Assert.fail("should stop flow");
-		} catch (ValidationError e) {
-			// ok, shoul still assert satisfied
-			mockery.assertIsSatisfied();
-		}
 	}
 
 	@Test(expected=ResultException.class)

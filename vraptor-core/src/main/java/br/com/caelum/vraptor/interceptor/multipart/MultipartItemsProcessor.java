@@ -1,6 +1,7 @@
 package br.com.caelum.vraptor.interceptor.multipart;
 
 import java.io.File;
+import java.util.Collection;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,6 +12,9 @@ import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.http.InvalidParameterException;
 import br.com.caelum.vraptor.http.MutableRequest;
+
+import com.google.common.collect.LinkedListMultimap;
+import com.google.common.collect.Multimap;
 
 /**
  * Processes all elements in a multipart request.
@@ -32,9 +36,10 @@ class MultipartItemsProcessor {
     }
 
     public void process() {
+    	Multimap<String, String> params = LinkedListMultimap.create();
         for (FileItem item : items) {
             if (item.isFormField()) {
-                parameters.setParameter(item.getFieldName(), item.getString());
+                params.put(item.getFieldName(), item.getString());
                 continue;
             }
             if (notEmpty(item)) {
@@ -57,6 +62,10 @@ class MultipartItemsProcessor {
                 logger.debug("A file field was empty: " + item.getFieldName());
             }
         }
+        for (String paramName : params.keySet()) {
+			Collection<String> paramValues = params.get(paramName);
+			parameters.setParameter(paramName, paramValues.toArray(new String[paramValues.size()]));
+		}
     }
 
     private static boolean notEmpty(FileItem item) {

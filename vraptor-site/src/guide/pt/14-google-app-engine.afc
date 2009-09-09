@@ -1,0 +1,19 @@
+[chapter Google App Engine]
+
+O VRaptor 3 funciona no Google App Engine, mas você precisa trocar a
+implementação de um dos componentes, que usa recursos privados da VM
+e que não estão disponíveis no GAE. Para fazer isso basta escrever a
+seguinte classe:
+
+[java]
+@Component
+@ApplicationScoped
+public class MyProxifier extends DefaultProxifier {
+	//delegate constructor here
+}
+[/java]
+
+Esta classe não usa recursos privados da VM, mas instancia as classes
+proxificadas passando null para todos os argumentos do construtor.
+Logo você vai ter que prevenir Null Pointer Access em todos os construtores
+dos Controllers.

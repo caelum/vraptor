@@ -22,11 +22,6 @@
 	
 	<dependencies>
 		<dependency>
-		    <groupId>com.google.collections</groupId>
-		    <artifactId>google-collections</artifactId>
-		    <version>1.0-rc2</version>
-		</dependency>
-		<dependency>
 		    <groupId>org.aspectj</groupId>
 		    <artifactId>aspectjrt</artifactId>
 		    <version>1.6.0</version>
@@ -42,10 +37,16 @@
 		    <version>1.1</version>
 		</dependency>
 		<dependency>
-		    <groupId>org.hamcrest</groupId>
-		    <artifactId>hamcrest-all</artifactId>
-		    <version>1.1</version>
-		</dependency> 
+            <groupId>commons-vfs</groupId>
+            <artifactId>commons-vfs</artifactId>
+            <version>1.0</version>
+        </dependency>
+		<dependency>
+		    <groupId>org.hibernate</groupId>
+		    <artifactId>hibernate-annotations</artifactId>
+		    <version>3.4.0.GA</version>
+		    <optional>true</optional>
+		</dependency>
 		<dependency>
 		    <groupId>org.hibernate</groupId>
 		    <artifactId>hibernate</artifactId>
@@ -120,19 +121,9 @@
 		    <version>2.5.5</version>
 		</dependency>
 		<dependency>
-		    <groupId>org.vraptor</groupId>
-		    <artifactId>vraptor</artifactId>
-		    <version>2.6.0</version>
-		</dependency>
-		<dependency>
 		    <groupId>javax.servlet</groupId>
 		    <artifactId>servlet-api</artifactId>
 		    <version>2.5</version>
-		</dependency>
-		<dependency>
-			<groupId>org.reflections</groupId>
-			<artifactId>reflections</artifactId>
-			<version>0.9.2</version>
 		</dependency>
 		<dependency>
     		<groupId>joda-time</groupId>
@@ -160,6 +151,27 @@
 		    <artifactId>jmock</artifactId>
 		    <version>2.4.0</version>
 		    <scope>test</scope>
+		</dependency>
+		<!-- out of mvn repo -->
+		<dependency>
+		    <groupId>com.google.collections</groupId>
+		    <artifactId>google-collections</artifactId>
+		    <version>1.0-rc2</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.hamcrest</groupId>
+		    <artifactId>hamcrest-all</artifactId>
+		    <version>1.2RC3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.reflections</groupId>
+			<artifactId>reflections</artifactId>
+			<version>0.9.4</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.vraptor</groupId>
+		    <artifactId>vraptor</artifactId>
+		    <version>2.6.2</version>
 		</dependency>
 	</dependencies>
 

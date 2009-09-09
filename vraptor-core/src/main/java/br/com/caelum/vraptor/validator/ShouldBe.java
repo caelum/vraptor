@@ -1,7 +1,7 @@
 /***
- * 
+ *
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  * 1. Redistributions of source code must retain the above copyright notice,
@@ -12,7 +12,7 @@
  * copyright holders nor the names of its contributors may be used to endorse or
  * promote products derived from this software without specific prior written
  * permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -30,11 +30,12 @@ package br.com.caelum.vraptor.validator;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 
+import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
 
-public class ShouldBe<T> implements Matcher<T> {
+public class ShouldBe<T> extends BaseMatcher<T> {
 	private final Matcher<T> matcher;
 
 	public ShouldBe(Matcher<T> matcher) {
@@ -48,7 +49,7 @@ public class ShouldBe<T> implements Matcher<T> {
 	public void describeTo(Description description) {
 		description.appendText("should be ").appendDescriptionOf(matcher);
 	}
-	
+
 	@Factory
 	public static <T> Matcher<T> shouldBe(Matcher<T> matcher) {
 		return new ShouldBe<T>(matcher);
@@ -64,11 +65,4 @@ public class ShouldBe<T> implements Matcher<T> {
 		return shouldBe(instanceOf(type));
 	}
 
-	public void _dont_implement_Matcher___instead_extend_BaseMatcher_() {
-		
-	}
-
-	public void describeMismatch(Object item, Description description) {
-    	matcher.describeMismatch(item, description);
-	}
 }

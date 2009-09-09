@@ -28,7 +28,9 @@
 package br.com.caelum.vraptor.util.test;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import br.com.caelum.vraptor.Validator;
@@ -72,7 +74,12 @@ public class MockValidator implements Validator {
 		throw new ValidationError(Arrays.asList(message));
 	}
 
-	public void validate() {
+	public void add(Collection<? extends Message> messages) {
+		throw new ValidationError(new ArrayList<Message>(messages));
+	}
+	
+	public boolean hasErrors() {
+		return false;
 	}
 
 }

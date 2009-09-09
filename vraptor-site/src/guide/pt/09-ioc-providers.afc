@@ -1,6 +1,6 @@
 [chapter Injeção de dependências]
 
-O Vraptor está fortemente baseado no conceito de injeção de dependências uma vez que chega até mesmo a
+O VRaptor está fortemente baseado no conceito de injeção de dependências uma vez que chega até mesmo a
 utilizar dessa idéia para juntar seus componentes internos.
 
 O conceito básico por trás de Dependency Injection (DI) é que você não deve buscar aquilo que deseja acessar
@@ -120,11 +120,6 @@ que se você não especificar nenhum Provider o Spring é o padrão:
 		<context-param>
         <param-name>br.com.caelum.vraptor.provider</param-name>
         <param-value>br.com.caelum.vraptor.ioc.spring.SpringProvider</param-value>
-    </context-param>
-
-    <context-param>
-        <param-name>br.com.caelum.vraptor.spring.packages</param-name>
-        <param-value>br.com.pacote.do.seu.projeto</param-value>
     </context-param>
 [/xml]
 

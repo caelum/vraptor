@@ -137,7 +137,7 @@ parâmetro %%_method%%, uma vez que o browser não suporta ainda tais requisiç�
 <form action="/cliente" method="post">
 	<input name="_method" value="DELETE" type="hidden" />
 	<input name="cliente.id" value="5" type="hidden" />
-	<input type="remover cliente 5" />
+	<input type="submit" value="remover cliente 5" />
 </form>
 [/xml]
 
@@ -262,7 +262,7 @@ public class ClienteController {
 public class PostController {
 
   @Get
-  @Path("/post/{post.id}")
+  @Path("/post/{post.autor}")
   public void mostra(Post post) { ... }
 
   @Get
@@ -272,8 +272,8 @@ public class PostController {
 [/java]
 
 A uri %%/post/atual%% pode ser tratada tanto pelo método %%mostra%, quanto pelo %%atual%%.
-Mas não faz sentido eu passar essa URL para o método mostra, já que %%post.id%% deveria
-ser um número. O que eu quero é que o VRaptor teste primeiro o path do método %%atual%%,
+Mas eu quero que quando seja exatamente %%/post/atual%% o método executado seja o atual. 
+O que eu quero é que o VRaptor teste primeiro o path do método %%atual%%,
 para não correr o risco de cair no método %%mostra%%.
 
 Para fazer isso, podemos definir prioridades para os %%@Path%%s, assim o VRaptor vai testar
@@ -284,7 +284,7 @@ primeiro os paths com maior prioridade, ou seja, valor menor de prioridade:
 public class PostController {
 
   @Get
-  @Path(priority = 2, value = "/post/{post.id}")
+  @Path(priority = 2, value = "/post/{post.autor}")
   public void mostra(Post post) { ... }
 
   @Get
@@ -293,8 +293,11 @@ public class PostController {
 }
 [/java]
 
-Assim, o path "/post/atual" vai ser testado antes do "/post/{post.id}", e o VRaptor vai fazer
+Assim, o path "/post/atual" vai ser testado antes do "/post/{post.autor}", e o VRaptor vai fazer
 o que a gente gostaria que ele fizesse.
+
+Você não precisa definir prioridades se tivermos as uris: %%/post/{post.id}%% e %%/post/atual%%,
+pois na %%/post/{post.id}%% o vraptor só vai aceitar números.
 
 [section RoutesConfiguration]
 

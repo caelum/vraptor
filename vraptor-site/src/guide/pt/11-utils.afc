@@ -18,3 +18,20 @@ public class CustomProvider extends PicoProvider {
 	}
 }
 [/java]
+
+Ou criar as classes:
+
+[java]
+@Component
+public class MeuSessionCreator extends SessionCreator {
+	// delegate constructor
+}
+[/java]
+
+[java]
+@Component
+@ApplicationScoped
+public class MeuSessionFactoryCreator extends SessionFactoryCreator {
+	// delegate constructor
+}
+[/java]

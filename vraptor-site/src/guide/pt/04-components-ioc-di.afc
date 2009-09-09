@@ -54,9 +54,9 @@ public class HibernateControl {
 }
 [/java]
 
-[section Injecao de dependencias]
+[section Injeção de dependências]
 
-O Vraptor utiliza um de seus provedores de injeção de dependências para controlar o que
+O VRaptor utiliza um de seus provedores de injeção de dependências para controlar o que
 é necessário para instanciar cada um de seus componentes e recursos.
 
 Sendo assim, os dois exemplos anteriores permitem que qualquer um de seus recursos ou compeonenten receba

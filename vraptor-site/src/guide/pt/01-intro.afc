@@ -72,7 +72,11 @@ http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 		<filter-name>vraptor</filter-name>
 		<filter-class>br.com.caelum.vraptor.VRaptor</filter-class>
 	</filter>
-
+	<context-param>
+		<param-name>br.com.caelum.vraptor.packages</param-name>
+		<param-value>br.com.pacote.base.do.seu.projeto</param-value>
+	</context-param>
+	
 	<!-- mapeando o filtro para todas as requisicoes -->
 	<filter-mapping>
 		<filter-name>vraptor</filter-name>

@@ -43,6 +43,10 @@ definido seguindo o padrão do jstl para entender a formatação que foi utiliza
 Por exemplo, se o locale é pt-br, o formato "18/09/1981" representa 18 de setembro de 1981
 enquanto para o locale en, o formato "09/18/1981" representa a mesma data.
 
+[section LocalDate e LocalTime do joda-time]
+Existem conversores para esses dois tipos no VRaptor e eles só serão carregados se você tiver
+o joda-time.jar no seu classpath
+
 [section Interface]
 
 Todos os conversores devem implementar a interface Converter do vraptor.

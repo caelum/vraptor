@@ -1,8 +1,8 @@
 [chapter Configuração básica]
 
 As configurações necessárias para usar o VRaptor 3 são mínimas. Só é essencial a
-definição de um filtro no %%web.xml%%. Aqui veremos também algumas configurações
-extras, que são opcionais.
+definição de um filtro no %%web.xml%% e dizer qual é o seu pacote base. 
+Aqui veremos também algumas configurações extras, que são opcionais.
 
 [section Seu recurso]
 

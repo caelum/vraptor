@@ -27,17 +27,12 @@
  */
 package br.com.caelum.vraptor.util.test;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
 import br.com.caelum.vraptor.Validator;
-import br.com.caelum.vraptor.proxy.MethodInvocation;
-import br.com.caelum.vraptor.proxy.ObjenesisProxifier;
-import br.com.caelum.vraptor.proxy.Proxifier;
-import br.com.caelum.vraptor.proxy.SuperMethod;
+import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.ValidationError;
 import br.com.caelum.vraptor.validator.Validations;
@@ -45,39 +40,22 @@ import br.com.caelum.vraptor.validator.Validations;
 public class MockValidator implements Validator {
 
 	private List<Message> errors;
-	private final Proxifier proxifier;
 
-	public MockValidator() {
-		proxifier = new ObjenesisProxifier();
-	}
 	public void checking(Validations validations) {
 		this.errors = validations.getErrors();
+	}
+
+	public <T extends View> T onErrorUse(Class<T> view) {
 		if(!this.errors.isEmpty()) {
 			throw new ValidationError(errors);
 		}
-	}
-
-	public <T> T goTo(Class<T> type) {
-		return proxifier.proxify(type, new MethodInvocation<T>() {
-
-			public Object intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {
-				return null;
-			}
-		});
-	}
-
-	public Validator onError() {
-		return this;
-	}
-
-	public void add(Message message) {
-		throw new ValidationError(Arrays.asList(message));
+		return new MockResult().use(view);
 	}
 
 	public void add(Collection<? extends Message> messages) {
 		throw new ValidationError(new ArrayList<Message>(messages));
 	}
-	
+
 	public boolean hasErrors() {
 		return false;
 	}

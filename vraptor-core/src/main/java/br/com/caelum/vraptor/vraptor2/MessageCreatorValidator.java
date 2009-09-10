@@ -27,29 +27,25 @@
  */
 package br.com.caelum.vraptor.vraptor2;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.vraptor.i18n.FixedMessage;
 import org.vraptor.validator.ValidationErrors;
 
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
+import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.ioc.RequestScoped;
-import br.com.caelum.vraptor.proxy.MethodInvocation;
-import br.com.caelum.vraptor.proxy.Proxifier;
-import br.com.caelum.vraptor.proxy.SuperMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.util.test.MockResult;
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.ValidationError;
 import br.com.caelum.vraptor.validator.Validations;
-import br.com.caelum.vraptor.view.ResultException;
 import br.com.caelum.vraptor.view.Results;
+import br.com.caelum.vraptor.view.ValidationViewsFactory;
 
 /**
  * The vraptor2 compatible messages creator.
@@ -59,80 +55,46 @@ import br.com.caelum.vraptor.view.Results;
 @RequestScoped
 public class MessageCreatorValidator implements Validator {
 
-    private final Proxifier proxifier;
     private final Result result;
     private final ValidationErrors errors;
 
-    private Object[] argsToUse;
-
-    private Method method;
-    private Class<?> typeToUse;
 	private final ResourceMethod resource;
-	private final HttpServletRequest request;
 	private final MethodInfo info;
 	private boolean containsErrors;
+	private final ValidationViewsFactory viewsFactory;
 
-    public MessageCreatorValidator(Proxifier proxifier, Result result, ValidationErrors errors,
-    		HttpServletRequest request, MethodInfo info) {
-        this.proxifier = proxifier;
+    public MessageCreatorValidator(Result result, ValidationErrors errors, MethodInfo info, ValidationViewsFactory viewsFactory) {
         this.result = result;
         this.errors = errors;
+		this.viewsFactory = viewsFactory;
 		this.resource = info.getResourceMethod();
-		this.request = request;
 		this.info = info;
     }
 
     public void checking(Validations validations) {
         List<Message> messages = validations.getErrors();
-            for (Message s : messages) {
-            	add(s);
-            }
-            validate();
+        for (Message s : messages) {
+        	add(s);
+        }
     }
 
-    public Validator onError() {
-        return this;
+    public <T extends View> T onErrorUse(Class<T> view) {
+    	if (!hasErrors()) {
+    		return new MockResult().use(view); //ignore anything, no errors occurred
+    	}
+    	result.include("errors", errors);
+    	if(Info.isOldComponent(resource.getResource())) {
+    		info.setResult("invalid");
+    		result.use(Results.page()).forward();
+    		throw new ValidationError(new ArrayList<Message>());
+    	} else {
+    		return viewsFactory.instanceFor(view, new ArrayList<Message>());
+    	}
     }
 
-    public <T> T goTo(Class<T> type) {
-        this.typeToUse = type;
-        return proxifier.proxify(type, new MethodInvocation<T>() {
-            public Object intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {
-                if (MessageCreatorValidator.this.method == null) {
-                    MessageCreatorValidator.this.argsToUse = args;
-                    MessageCreatorValidator.this.method = method;
-                }
-                return null;
-            }
-        });
-    }
-
-	public void add(Message message) {
+    private void add(Message message) {
 		containsErrors = true;
         this.errors.add(new FixedMessage(message.getCategory(), message.getMessage(), message.getCategory()));
-	}
-
-	public void validate() {
-        if (containsErrors) {
-            result.include("errors", this.errors);
-            if (method != null) {
-                Object instance = result.use(Results.logic()).forwardTo(typeToUse);
-                try {
-                    method.invoke(instance, argsToUse);
-                } catch (Exception e) {
-                    throw new ResultException(e);
-                }
-            } else {
-            	if(Info.isOldComponent(resource.getResource())) {
-            		info.setResult("invalid");
-            		result.use(Results.page()).forward();
-            	} else {
-                	result.use(Results.page()).forward(request.getRequestURI());
-            	}
-            }
-            // finished just fine
-            throw new ValidationError(new ArrayList<Message>());
-        }
 	}
 
 	public void add(Collection<? extends Message> messages) {

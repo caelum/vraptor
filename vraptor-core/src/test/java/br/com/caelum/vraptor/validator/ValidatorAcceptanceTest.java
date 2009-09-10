@@ -28,6 +28,7 @@
 package br.com.caelum.vraptor.validator;
 
 import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertFalse;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -40,6 +41,7 @@ import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.view.LogicResult;
 import br.com.caelum.vraptor.view.PageResult;
 import br.com.caelum.vraptor.view.Results;
+import br.com.caelum.vraptor.view.ValidationViewsFactory;
 
 public class ValidatorAcceptanceTest {
     private PageResult pageResult;
@@ -71,7 +73,7 @@ public class ValidatorAcceptanceTest {
 
     @Test
     public void validDataDoesntThrowException() {
-        DefaultValidator validator = new DefaultValidator(proxifier, result);
+        DefaultValidator validator = new DefaultValidator(result, mockery.mock(ValidationViewsFactory.class));
         final Student guilherme = new Student();
         guilherme.id = 15L;
         validator.checking(new Validations() {
@@ -80,6 +82,7 @@ public class ValidatorAcceptanceTest {
                 that("id", guilherme.id, is(notNullValue()));
             }
         });
+        assertFalse(validator.hasErrors());
         mockery.assertIsSatisfied();
     }
 

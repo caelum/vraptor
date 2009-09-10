@@ -43,6 +43,8 @@ import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.test.VRaptorMockery;
 import br.com.caelum.vraptor.view.LogicResult;
 import br.com.caelum.vraptor.view.PageResult;
+import br.com.caelum.vraptor.view.Results;
+import br.com.caelum.vraptor.view.ValidationViewsFactory;
 
 public class DefaultValidatorTest {
 
@@ -64,7 +66,7 @@ public class DefaultValidatorTest {
 		this.logicResult = mockery.mock(LogicResult.class);
 		this.instance = new MyComponent();
 		this.request = mockery.mock(MutableRequest.class);
-		this.validator = new DefaultValidator(proxifier, result);
+		this.validator = new DefaultValidator(result, mockery.mock(ValidationViewsFactory.class));
 		this.pageResult = mockery.mock(PageResult.class);
 	}
 
@@ -93,7 +95,7 @@ public class DefaultValidatorTest {
 					that("", "", false);
 				}
 			});
-			validator.onError().goTo(MyComponent.class).logic();
+			validator.onErrorUse(Results.page()).of(MyComponent.class).logic();
 			Assert.fail("should stop flow");
 		} catch (ValidationError e) {
 			// ok, shoul still assert satisfied
@@ -101,18 +103,16 @@ public class DefaultValidatorTest {
 			mockery.assertIsSatisfied();
 		}
 	}
-	
+
 	@Test
 	public void testThatValidatorGoToRedirectsToTheErrorPageImmediatellyAndNotBeforeThis() {
 		try {
 			// call all other validation methods and don't expect them to redirect
-			validator.add(new ValidationMessage("test", "test"));
 			validator.add(Arrays.asList(new ValidationMessage("test", "test")));
 			validator.checking(new Validations(){{
 				that("", "", false);
 			}});
-			validator.onError();
-			validator.goTo(MyComponent.class); // call goTo but don't call logic method
+			validator.onErrorUse(Results.page()).of(MyComponent.class); // call onErrorUse but don't call logic method
 
 			// now we expect the redirection
 			mockery.checking(new Expectations() {{
@@ -121,7 +121,7 @@ public class DefaultValidatorTest {
 				one(logicResult).forwardTo(MyComponent.class); will(returnValue(instance));
 			}});
 
-			validator.onError().goTo(MyComponent.class).logic();
+			validator.onErrorUse(Results.page()).of(MyComponent.class).logic();
 			Assert.fail("should stop flow");
 		} catch (ValidationError e) {
 			// ok, shoul still assert satisfied

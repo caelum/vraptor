@@ -50,7 +50,7 @@ public class ValidationPageResult implements PageResult {
 	private final PageResult delegate;
 	private final Proxifier proxifier;
 
-	public ValidationPageResult(Proxifier proxifier, PageResult delegate, List<Message> errors) {
+	public ValidationPageResult(PageResult delegate, Proxifier proxifier, List<Message> errors) {
 		this.proxifier = proxifier;
 		this.delegate = delegate;
 		this.errors = errors;

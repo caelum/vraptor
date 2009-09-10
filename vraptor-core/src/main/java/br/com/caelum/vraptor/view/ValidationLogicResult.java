@@ -9,6 +9,11 @@ import br.com.caelum.vraptor.proxy.SuperMethod;
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.ValidationError;
 
+/**
+ * Validation implementation for Logic Result
+ * @author Lucas Cavalcanti
+ * @author Pedro Matiello
+ */
 public class ValidationLogicResult implements LogicResult {
 
 	private final Proxifier proxifier;

@@ -27,6 +27,7 @@
  */
 package br.com.caelum.vraptor.validator;
 
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertFalse;
 
@@ -73,7 +74,7 @@ public class ValidatorAcceptanceTest {
         validator.checking(new Validations() {
             {
                 // this is the Assertion itself
-                that("id", guilherme.id, is(notNullValue()));
+                that(guilherme.id, is(notNullValue()), "id");
             }
         });
         assertFalse(validator.hasErrors());

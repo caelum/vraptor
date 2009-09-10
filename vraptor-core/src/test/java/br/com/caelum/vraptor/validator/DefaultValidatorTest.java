@@ -73,7 +73,7 @@ public class DefaultValidatorTest {
 				ignoring(anything());
 		}});
 		validator.checking(new Validations() {{
-				that("", "", false);
+				that(false, "", "");
 		}});
 	}
 
@@ -89,7 +89,7 @@ public class DefaultValidatorTest {
 			});
 			validator.checking(new Validations() {
 				{
-					that("", "", false);
+					that(false, "", "");
 				}
 			});
 			validator.onErrorUse(Results.logic()).forwardTo(MyComponent.class).logic();
@@ -107,7 +107,7 @@ public class DefaultValidatorTest {
 			// call all other validation methods and don't expect them to redirect
 			validator.add(Arrays.asList(new ValidationMessage("test", "test")));
 			validator.checking(new Validations(){{
-				that("", "", false);
+				that(false, "", "");
 			}});
 
 			// now we expect the redirection

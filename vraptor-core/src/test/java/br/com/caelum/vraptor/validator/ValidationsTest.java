@@ -72,14 +72,14 @@ public class ValidationsTest {
     @Test
     public void canHandleTheSingleCheck() {
         Client guilherme = new Client();
-        validations.that(guilherme).shouldBe(notNullValue());
+        validations.that(guilherme, notNullValue());
         assertThat(validations.getErrors(), hasSize(0));
     }
 
     @Test
     public void canHandleTheSingleCheckWhenProblematic() {
         Client guilherme = null;
-        validations.that(guilherme).shouldBe(notNullValue());
+        validations.that(guilherme, notNullValue());
         assertThat(validations.getErrors(), hasSize(1));
     }
 
@@ -87,20 +87,17 @@ public class ValidationsTest {
     public void canHandleInternalPrimitiveValidation() {
         Client guilherme = new Client();
         guilherme.age = 22;
-        validations.that(guilherme.getAge()).shouldBe(greaterThan(17));
+        validations.that(guilherme.getAge(), greaterThan(17));
         assertThat(validations.getErrors(), hasSize(0));
     }
 
     @Test
     public void canIgnoreInternalPrimitiveValidationIfAlreadyNull() {
         final Client guilherme = null;
-        validations.that(guilherme).shouldBe(notNullValue()).otherwise(new Validations() {
-            @Override
-			public void check(){
-                that(guilherme.getAge()).shouldBe(greaterThan(17));
-                that(guilherme.getAge()).shouldBe(greaterThanOrEqualTo(12));
-            }
-        });
+        if (validations.that(guilherme, notNullValue())) {
+            validations.that(guilherme.getAge(), greaterThan(17));
+            validations.that(guilherme.getAge(), greaterThanOrEqualTo(12));
+        }
         assertThat(validations.getErrors(), hasSize(1));
     }
 
@@ -108,13 +105,10 @@ public class ValidationsTest {
     public void executesInternalValidationIfSuccessful() {
         final Client guilherme = new Client();
         guilherme.age = 10;
-        validations.that(guilherme).shouldBe(notNullValue()).otherwise(new Validations() {
-            @Override
-			public void check(){
-                that(guilherme.getAge()).shouldBe(greaterThan(17));
-                that(guilherme.getAge()).shouldBe(greaterThanOrEqualTo(12));
-            }
-        });
+        if (validations.that(guilherme, notNullValue())) {
+            validations.that(guilherme.getAge(), greaterThan(17));
+            validations.that(guilherme.getAge(), greaterThanOrEqualTo(12));
+        }
         assertThat(validations.getErrors(), hasSize(2));
     }
 
@@ -122,14 +116,14 @@ public class ValidationsTest {
     public void complainsAboutInternalPrimitiveValidation() {
         Client guilherme = new Client();
         guilherme.age = 15;
-        validations.that(guilherme.getAge()).shouldBe(greaterThan(17));
+        validations.that(guilherme.getAge(), greaterThan(17));
         assertThat(validations.getErrors(), hasSize(1));
     }
 
     @Test
     public void formatsParameterizedValidationMessagesWhenUsingMatchers() {
         final Client caio = new Client();
-        validations.that("error", "required_field", caio.getName(), is(notNullValue()), "Name");
+        validations.that(caio.getName(), is(notNullValue()), "error", "required_field", "Name");
         assertThat(validations.getErrors(), hasSize(1));
         assertThat(validations.getErrors().get(0).getMessage(), is(equalTo("Name is a required field")));
     }
@@ -138,7 +132,7 @@ public class ValidationsTest {
     public void formatsParameterizedValidationMessagesWithSeveralParameters() {
         final Client client = new Client();
         client.setAge(-1);
-        validations.that("error", "between_field", client.getAge() > 0 && client.getAge() < 100, "Age", 0, 100);
+        validations.that(client.getAge() > 0 && client.getAge() < 100, "error", "between_field",  "Age", 0, 100);
         assertThat(validations.getErrors(), hasSize(1));
         assertThat(validations.getErrors().get(0).getMessage(), is(equalTo("Age should be a value between 0 and 100")));
     }

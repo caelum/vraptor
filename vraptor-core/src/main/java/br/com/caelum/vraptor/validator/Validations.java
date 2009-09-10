@@ -55,14 +55,14 @@ public class Validations {
     }
 
     public <T> boolean that(T id, Matcher<? super T> matcher) {
-        return that("", null, id, matcher);
+        return that(id, matcher, "", null);
     }
 
-    public <T> boolean that(String category, T id, Matcher<T> matcher) {
-        return that(category, null, id, matcher);
+    public <T> boolean that(T id, Matcher<? super T> matcher, String category) {
+        return that(id, matcher, category, null);
     }
 
-    public <T> boolean that(String category, String reason, T actual, Matcher<? super T> matcher, Object... messageParameters) {
+    public <T> boolean that(T actual, Matcher<? super T> matcher, String category, String reason, Object... messageParameters) {
         if (!matcher.matches(actual)) {
             if (reason != null) {
                 errors.add(new ValidationMessage(getString(reason), category, messageParameters));
@@ -76,13 +76,14 @@ public class Validations {
         return true;
     }
 
-    public void that(String category, String reason, boolean assertion, Object... messageParameters) {
+    public boolean that(boolean assertion, String category, String reason, Object... messageParameters) {
         if (!assertion) {
             errors.add(new ValidationMessage(getString(reason), category, messageParameters));
         }
+        return assertion;
     }
 
-    public String getString(String key) {
+    private String getString(String key) {
     	try {
     		return bundle.getString(key);
     	} catch(MissingResourceException e) {
@@ -114,18 +115,9 @@ public class Validations {
         return this;
     }
 
-    public <T> If<T> that(T instance) {
-        return new If<T>(instance, this);
-    }
-
     /**
      * Can be overriden to add extra validations processes.
      */
     public void check() {
     }
-
-    public static <T> org.hamcrest.Matcher<T> is(org.hamcrest.Matcher<T> matcher) {
-        return ShouldBe.shouldBe(matcher);
-    }
-
 }

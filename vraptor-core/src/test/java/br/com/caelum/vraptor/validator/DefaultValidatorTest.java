@@ -37,7 +37,6 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.proxy.DefaultProxifier;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.test.VRaptorMockery;
@@ -55,7 +54,6 @@ public class DefaultValidatorTest {
 	private MyComponent instance;
 	private Proxifier proxifier;
 	private PageResult pageResult;
-	private MutableRequest request;
 
 
 	@Before
@@ -65,7 +63,6 @@ public class DefaultValidatorTest {
 		this.result = mockery.mock(Result.class);
 		this.logicResult = mockery.mock(LogicResult.class);
 		this.instance = new MyComponent();
-		this.request = mockery.mock(MutableRequest.class);
 		this.validator = new DefaultValidator(result, new DefaultValidationViewsFactory(result, proxifier));
 		this.pageResult = mockery.mock(PageResult.class);
 	}

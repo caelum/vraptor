@@ -220,10 +220,10 @@ public class ClientsController {
 	}
 	
 	public void save(Client client) {
-		validator.onError().goTo(ClientsController.class).form();
 		if (client.getName() == null) {
 			validator.add(new ValidationMessage("erro","nomeInvalido"));
 		}
+		validator.onErrorUse(Results.page()).of(ClientsController.class).form();
 		dao.save(client);
 	}
 }

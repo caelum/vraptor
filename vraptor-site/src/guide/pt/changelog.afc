@@ -1,5 +1,18 @@
 [chapter ChangeLog]
 
+[section 3.0.0-beta-5]
+- Novo jeito de fazer validações:
+  [java]
+  	public void visualiza(Cliente cliente) {
+  		validator.checking(new Validations() {{
+  			that(cliente.getId() != null, "id", "id.deve.ser.preenchido");
+  		}});
+  		validator.onErrorUse(page()).of(ClientesController.class).list();
+  		
+  		//continua o metodo
+  	}
+  [/java]
+  
 [section 3.0.0-beta-4]
 - Novo result: result.use(page()).of(MeuController.class).minhaLogica() renderiza a view
 	padrão (/WEB-INF/jsp/meu/minhaLogica.jsp) sem executar a minhaLogica.

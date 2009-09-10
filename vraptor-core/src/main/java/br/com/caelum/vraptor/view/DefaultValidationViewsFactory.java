@@ -10,6 +10,17 @@ import br.com.caelum.vraptor.validator.ValidationError;
 
 /**
  * Default implementation for ValidationViewsFactory
+ *
+ * If you want to extend this behavior use:
+ * @Component
+ * public class MyValidatorViewsFactory extends DefaultValidationViewsFactory {
+ * 		//delegate constructor
+ * 		@Override
+ * 		public <T extends View> T instanceFor(Class<T> view, List<Message> errors) {
+ * 			//return my own Validation view version or
+ * 			return super.instanceFor(view, errors);
+ * 		}
+ * }
  * @author Lucas Cavalcanti
  * @author Pedro Matiello
  */

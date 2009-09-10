@@ -36,8 +36,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.view.LogicResult;
 import br.com.caelum.vraptor.view.PageResult;
 import br.com.caelum.vraptor.view.Results;
@@ -47,9 +45,7 @@ public class ValidatorAcceptanceTest {
     private PageResult pageResult;
     private Mockery mockery;
 	private LogicResult logicResult;
-    private Proxifier proxifier;
     private Result result;
-	private MutableRequest request;
 
     class Student {
         private Long id;
@@ -61,8 +57,6 @@ public class ValidatorAcceptanceTest {
         this.result = mockery.mock(Result.class);
         this.pageResult = mockery.mock(PageResult.class);
         this.logicResult = mockery.mock(LogicResult.class);
-        this.proxifier = mockery.mock(Proxifier.class);
-        this.request = mockery.mock(MutableRequest.class);
         mockery.checking(new Expectations() {
             {
                 allowing(result).use(Results.page()); will(returnValue(pageResult));

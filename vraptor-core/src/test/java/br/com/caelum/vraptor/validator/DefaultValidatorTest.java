@@ -41,10 +41,10 @@ import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.proxy.DefaultProxifier;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.test.VRaptorMockery;
+import br.com.caelum.vraptor.view.DefaultValidationViewsFactory;
 import br.com.caelum.vraptor.view.LogicResult;
 import br.com.caelum.vraptor.view.PageResult;
 import br.com.caelum.vraptor.view.Results;
-import br.com.caelum.vraptor.view.ValidationViewsFactory;
 
 public class DefaultValidatorTest {
 
@@ -66,7 +66,7 @@ public class DefaultValidatorTest {
 		this.logicResult = mockery.mock(LogicResult.class);
 		this.instance = new MyComponent();
 		this.request = mockery.mock(MutableRequest.class);
-		this.validator = new DefaultValidator(result, mockery.mock(ValidationViewsFactory.class));
+		this.validator = new DefaultValidator(result, new DefaultValidationViewsFactory(result, proxifier));
 		this.pageResult = mockery.mock(PageResult.class);
 	}
 
@@ -95,7 +95,7 @@ public class DefaultValidatorTest {
 					that("", "", false);
 				}
 			});
-			validator.onErrorUse(Results.page()).of(MyComponent.class).logic();
+			validator.onErrorUse(Results.logic()).forwardTo(MyComponent.class).logic();
 			Assert.fail("should stop flow");
 		} catch (ValidationError e) {
 			// ok, shoul still assert satisfied
@@ -112,13 +112,15 @@ public class DefaultValidatorTest {
 			validator.checking(new Validations(){{
 				that("", "", false);
 			}});
-			validator.onErrorUse(Results.page()).of(MyComponent.class); // call onErrorUse but don't call logic method
 
 			// now we expect the redirection
 			mockery.checking(new Expectations() {{
 				one(result).include((String) with(an(String.class)), with(an(ArrayList.class)));
-				one(result).use(LogicResult.class); will(returnValue(logicResult));
-				one(logicResult).forwardTo(MyComponent.class); will(returnValue(instance));
+
+				one(result).use(PageResult.class);
+				will(returnValue(pageResult));
+
+				one(pageResult).of(MyComponent.class); will(returnValue(instance));
 			}});
 
 			validator.onErrorUse(Results.page()).of(MyComponent.class).logic();

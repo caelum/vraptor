@@ -83,7 +83,11 @@ public class ValidationPageResult implements PageResult {
 	public <T> T of(final Class<T> controllerType) {
 		return proxifier.proxify(controllerType, new MethodInvocation<T>() {
             public T intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {
-            	superMethod.invoke(delegate.of(controllerType), args);
+            	try {
+					method.invoke(delegate.of(controllerType), args);
+				} catch (Exception e) {
+					throw new ResultException(e);
+				}
             	throw new ValidationError(errors);
             }
         });

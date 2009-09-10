@@ -28,7 +28,11 @@ public class ValidationLogicResult implements LogicResult {
 	public <T> T forwardTo(final Class<T> type) {
 		return proxifier.proxify(type, new MethodInvocation<T>() {
 			public Object intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {
-				superMethod.invoke(delegate.forwardTo(type), args);
+				try {
+					method.invoke(delegate.forwardTo(type), args);
+				} catch (Exception e) {
+					throw new ResultException(e);
+				}
 				throw new ValidationError(errors);
 			}
 		});
@@ -37,7 +41,11 @@ public class ValidationLogicResult implements LogicResult {
 	public <T> T redirectTo(final Class<T> type) {
 		return proxifier.proxify(type, new MethodInvocation<T>() {
 			public Object intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {
-				superMethod.invoke(delegate.redirectTo(type), args);
+				try {
+					method.invoke(delegate.redirectTo(type), args);
+				} catch (Exception e) {
+					throw new ResultException(e);
+				}
 				throw new ValidationError(errors);
 			}
 		});

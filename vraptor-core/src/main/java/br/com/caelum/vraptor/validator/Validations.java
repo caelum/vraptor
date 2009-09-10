@@ -39,7 +39,18 @@ import org.hamcrest.ResourceBundleDescription;
 /**
  * Hamcrest based validation support.
  *
+ * Uses:
+ * validator.checking(new Validations() {{
+ * 		if (that(user, is(notNullValue())) { // that will return if the match was successful
+ *	 		that(user.getAge() > 17, "user.age", "user.is.underage"); // boolean assertions
+ * 			that(user.getRoles(), hasItem("ADMIN"), "user.roles", "user.is.not.admin"); // hamcrest assertions
+ * 		}
+ * }});
+ *
+ * You can use any hamcrest Matcher. Some helpful matchers can be found on org.hamcrest.Matchers.
+ *
  * @author Guilherme Silveira
+ * @author Lucas Cavalcanti
  */
 public class Validations {
 
@@ -115,9 +126,4 @@ public class Validations {
         return this;
     }
 
-    /**
-     * Can be overriden to add extra validations processes.
-     */
-    public void check() {
-    }
 }

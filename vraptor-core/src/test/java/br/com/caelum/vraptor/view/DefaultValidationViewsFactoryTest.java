@@ -81,4 +81,15 @@ public class DefaultValidationViewsFactoryTest {
 		});
 		factory.instanceFor(PageResult.class, errors).forward("any uri");
 	}
+	@Test(expected=ValidationError.class)
+	public void shouldUseValidationVersionOfEmptyResult() throws Exception {
+
+		mockery.checking(new Expectations() {
+			{
+				one(result).use(EmptyResult.class);
+				will(returnValue(new EmptyResult()));
+			}
+		});
+		factory.instanceFor(EmptyResult.class, errors);
+	}
 }

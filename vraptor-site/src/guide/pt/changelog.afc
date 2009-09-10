@@ -1,0 +1,40 @@
+[chapter ChangeLog]
+
+[section 3.0.0-beta-4]
+- Novo result: result.use(page()).of(MeuController.class).minhaLogica() renderiza a view
+	padrão (/WEB-INF/jsp/meu/minhaLogica.jsp) sem executar a minhaLogica.
+-	Classes Mocks para testes: MockResult e MockValidator, para facilitar testes unitários
+	das lógicas. Eles ignoram a maioria das chamadas e guardam parâmetros incluídos no result
+	e erros de validação.
+-	As URIs passadas para result.use(page()).forward(uri) e result.use(page()).redirect(uri)
+	não podem ser URIs de lógicas, usem os forwards e redirects do result.use(logic())
+-	Os parâmetros passados para as URIs agora aceitam pattern-matching:
+	- Automático: se temos a URI /clients/{client.id} e client.id é um Long, o parâmetro {client.id} 
+		só vai casar com números, ou seja, a URI /clients/42 casa, mas a uri /clients/random não casa.
+		Isso funciona para todos os tipos numéricos, booleanos e enums, o vraptor vai restringir para
+		os valores possíveis.
+	- Manual: no CustomRoutes você vai poder fazer:
+		routeFor("/clients/{client.id}").withParameter("client.id").matching("\\d{1,4}")
+  			.is(ClienteController.class).mostra(null);
+  	ou seja, pode restringir os valores para o determinado parâmetro via expressões regulares
+  	no método matching.
+- Converters para LocalDate e LocalTime do joda-time já vêm por padrão.
+- Quando o Spring é usado como IoC Provider, o VRaptor tenta buscar o spring da aplicação para
+	usar como container pai. A busca é feita por padrão em um dos dois jeitos:
+	- WebApplicationContextUtils.getWebApplicationContext(servletContext), para o caso em que você
+		tem os listeners do Spring configurados.
+	- applicationContext.xml dentro do classpath
+	Se isso não for o suficiente você pode implementar a interface SpringLocator e disponbilizar
+	o ApplicationContext do spring usado pela sua aplicação.
+-	Utils:
+	- SessionCreator e SessionFactoryCreator para disponbilizar a Session e o SessionFactory do hibernate
+		para os componentes registrados.
+	- EncodingInterceptor, para mudar o encoding da sua aplicação.
+- correção de vários bugs e melhorias na documentação.
+
+[section 3.0.0-beta-3]
+- O Spring é o Provider de IoC padrão
+- o applicationContext.xml no classpath é usado como configuração incial do spring, caso exista.
+- a documentação http://vraptor.caelum.com.br/documentacao está mais completa e atualizada
+- pequenos bugs e otimizações
+

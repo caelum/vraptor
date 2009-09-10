@@ -345,7 +345,7 @@ parâmetros do método. Você pode ainda adicionar restrições para esses parâ
 	// O método mostra recebe um Cliente que tem um id
   routeFor("/cliente/{cliente.id}").is(ClienteController.class).mostra(null);
   // Se eu quiser garantir que o parametro seja um número:
-  routeFor("/cliente/{cliente.id}").withParameter("client.id").matching("\\d+")
+  routeFor("/cliente/{cliente.id}").withParameter("cliente.id").matching("\\d+")
   			.is(ClienteController.class).mostra(null);
 [/java]
 Por fim, você pode escolher o nome da classe e o nome do método em tempo de execução,

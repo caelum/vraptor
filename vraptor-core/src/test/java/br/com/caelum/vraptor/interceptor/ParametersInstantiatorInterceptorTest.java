@@ -27,10 +27,6 @@
  */
 package br.com.caelum.vraptor.interceptor;
 
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertThat;
-
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -119,46 +115,19 @@ public class ParametersInstantiatorInterceptorTest {
         mockery.assertIsSatisfied();
     }
 
-	@Test
-	public void shouldNullifyAllParametersIfThereAreConversionErrors() throws Exception {
-		final ResourceMethod method = mockery.methodFor(Component.class, "oneMoreMethod", String.class);
-
-		final Object[] values = new Object[] { "asdfasdfas" };
-		final ValidationMessage message = new ValidationMessage("a", "b");
-		mockery.checking(new Expectations() {
-			{
-				one(parametersProvider).getParametersFor(method, errors, bundle);
-				will(returnValue(values));
-
-				one(stack).next(method, null);
-				one(params).setParameters(values);
-
-				ignoring(anything());
-			}
-		});
-		errors.add(message);
-
-		instantiator.intercept(stack, method, null);
-
-		assertThat(values[0], is(nullValue()));
-
-		mockery.assertIsSatisfied();
-
-	}
-
     @Test
     public void shouldValidateParameters() throws Exception {
         final ResourceMethod method = mockery.methodFor(Component.class, "otherMethod", int.class);
 
         mockery.checking(new Expectations() {{
-        	Object[] values = new Object[]{new Object()};
+        	Object[] values = new Object[]{0};
 
         	one(parametersProvider).getParametersFor(method, errors, bundle);
         	will(doAll(addErrorsToList("error1"),returnValue(values)));
 
         	one(validator).add(errors);
             one(stack).next(method, null);
-            one(params).setParameters(new Object[]{0});
+            one(params).setParameters(values);
 
             Map<String, String> params = new HashMap<String, String>();
             params.put("param1.id", "value1");

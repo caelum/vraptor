@@ -77,11 +77,10 @@ public class ParametersInstantiatorInterceptor implements Interceptor {
     }
 
     public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws InterceptionException {
-        
+
         Object[] values = provider.getParametersFor(method, errors, localization.getBundle());
-        
+
         if (!errors.isEmpty()) {
-        	removeParamValues(values, method); // everything should be null
     		validator.add(errors);
 			prepareOutjectMap();
         }
@@ -89,46 +88,15 @@ public class ParametersInstantiatorInterceptor implements Interceptor {
         if (logger.isDebugEnabled()) {
             logger.debug("Parameter values for " + method + " are " + Arrays.asList(values));
         }
-        
+
         parameters.setParameters(values);
         stack.next(method, resourceInstance);
     }
 
-	private void removeParamValues(Object[] values, ResourceMethod method) {
-		Class<?>[] types = method.getMethod().getParameterTypes();
-		for (int i = 0; i < values.length; i++) {
-			Class<?> type = types[i];
-			if (type.isPrimitive()) {
-				// very ugly switch
-				if (type == Byte.TYPE)
-					values[i] = (byte) 0;
-				else if (type == Short.TYPE)
-					values[i] = (short) 0;
-				else if (type == Character.TYPE)
-					values[i] = (char) 0;
-				else if (type == Integer.TYPE)
-					values[i] = (int) 0;
-				else if (type == Long.TYPE)
-					values[i] = 0L;
-				else if (type == Float.TYPE)
-					values[i] = 0.0F;
-				else if (type == Double.TYPE)
-					values[i] = 0.0D;
-				else if (type == Boolean.TYPE)
-					values[i] = Boolean.FALSE;
-				else
-					throw new IllegalStateException("Did we forget some primitive type?");
-			} else {
-				values[i] = null;
-			}
-		}
-			
-	}
-
 	void prepareOutjectMap() {
 		@SuppressWarnings("unchecked")
 		Set<String> paramNames = request.getParameterMap().keySet();
-		
+
 		for (String paramName : paramNames) {
 			paramName = extractBaseParamName(paramName);
 			new RequestOutjectMap(paramName, request);
@@ -138,7 +106,7 @@ public class ParametersInstantiatorInterceptor implements Interceptor {
 	private String extractBaseParamName(String paramName) {
 		int indexOf = paramName.indexOf('.');
 		paramName = paramName.substring(0, indexOf != -1 ? indexOf : paramName.length());
-		
+
 		indexOf = paramName.indexOf('[');
 		paramName = paramName.substring(0, indexOf != -1 ? indexOf : paramName.length());
 		return paramName;

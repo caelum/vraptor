@@ -92,12 +92,12 @@ public class MessageCreatorValidator implements Validator {
     	}
     }
 
-    private void add(Message message) {
+    public void add(Message message) {
 		containsErrors = true;
         this.errors.add(new FixedMessage(message.getCategory(), message.getMessage(), message.getCategory()));
 	}
 
-	public void add(Collection<? extends Message> messages) {
+	public void addAll(Collection<? extends Message> messages) {
 		for (Message message : messages) {
 			this.add(message);
 		}

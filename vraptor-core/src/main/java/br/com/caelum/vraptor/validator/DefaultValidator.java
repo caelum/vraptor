@@ -59,7 +59,7 @@ public class DefaultValidator implements Validator {
     // TODO: do not use String consequences anymore
     // TODO: on error action should be defined by the onError method
     public void checking(Validations validations) {
-        add(validations.getErrors());
+        addAll(validations.getErrors());
     }
 
 
@@ -71,9 +71,13 @@ public class DefaultValidator implements Validator {
     	return viewsFactory.instanceFor(view, errors);
     }
 
-    public void add(Collection<? extends Message> message) {
+    public void addAll(Collection<? extends Message> message) {
 		this.errors.addAll(message);
 	}
+
+    public void add(Message message) {
+    	this.errors.add(message);
+    }
 
 	public boolean hasErrors() {
 		return !errors.isEmpty();

@@ -44,7 +44,9 @@ public interface Validator {
 
 	<T extends View> T onErrorUse(Class<T> view);
 
-	void add(Collection<? extends Message> message);
+	void addAll(Collection<? extends Message> message);
+
+	void add(Message message);
 
 	boolean hasErrors();
 

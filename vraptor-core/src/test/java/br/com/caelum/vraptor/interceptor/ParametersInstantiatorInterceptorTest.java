@@ -125,7 +125,7 @@ public class ParametersInstantiatorInterceptorTest {
         	one(parametersProvider).getParametersFor(method, errors, bundle);
         	will(doAll(addErrorsToList("error1"),returnValue(values)));
 
-        	one(validator).add(errors);
+        	one(validator).addAll(errors);
             one(stack).next(method, null);
             one(params).setParameters(values);
 

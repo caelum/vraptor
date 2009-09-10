@@ -105,7 +105,7 @@ public class DefaultValidatorTest {
 	public void testThatValidatorGoToRedirectsToTheErrorPageImmediatellyAndNotBeforeThis() {
 		try {
 			// call all other validation methods and don't expect them to redirect
-			validator.add(Arrays.asList(new ValidationMessage("test", "test")));
+			validator.addAll(Arrays.asList(new ValidationMessage("test", "test")));
 			validator.checking(new Validations(){{
 				that(false, "", "");
 			}});

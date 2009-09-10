@@ -81,7 +81,7 @@ public class ParametersInstantiatorInterceptor implements Interceptor {
         Object[] values = provider.getParametersFor(method, errors, localization.getBundle());
 
         if (!errors.isEmpty()) {
-    		validator.add(errors);
+    		validator.addAll(errors);
 			prepareOutjectMap();
         }
 

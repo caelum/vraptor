@@ -28,6 +28,7 @@
 package br.com.caelum.vraptor.util.test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -52,10 +53,13 @@ public class MockValidator implements Validator {
 		return new MockResult().use(view);
 	}
 
-	public void add(Collection<? extends Message> messages) {
+	public void addAll(Collection<? extends Message> messages) {
 		throw new ValidationError(new ArrayList<Message>(messages));
 	}
 
+	public void add(Message message) {
+		throw new ValidationError(Arrays.asList(message));
+	}
 	public boolean hasErrors() {
 		return false;
 	}

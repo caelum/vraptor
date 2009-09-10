@@ -65,6 +65,18 @@ isso que j&aacute; v&ecirc;m com o VRaptor. O que voc&ecirc; precisa fazer &eacu
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; registry.register</span><span class="java8">(</span><span class="java10">SessionFactoryCreator.class, SessionFactoryCreator.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">;<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
 }</span></code></div>
+	    	<span class="paragraph">Ou criar as classes:</span>
+	    	<div class="java"><code class="java">
+<span class="java16">@Component<br />
+</span><span class="java4">public class </span><span class="java10">MeuSessionCreator </span><span class="java4">extends </span><span class="java10">SessionCreator </span><span class="java8">{<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java3">// delegate constructor<br />
+</span><span class="java8">}</span></code></div>
+	    	<div class="java"><code class="java">
+<span class="java16">@Component<br />
+@ApplicationScoped<br />
+</span><span class="java4">public class </span><span class="java10">MeuSessionFactoryCreator </span><span class="java4">extends </span><span class="java10">SessionFactoryCreator </span><span class="java8">{<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java3">// delegate constructor<br />
+</span><span class="java8">}</span></code></div>
 		
 
 

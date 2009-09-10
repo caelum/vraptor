@@ -48,8 +48,8 @@
 		<h1 class="chapter">Configuração básica</h1>
 
 		<span class="paragraph">As configura&ccedil;&otilde;es necess&aacute;rias para usar o VRaptor 3 s&atilde;o m&iacute;nimas. S&oacute; &eacute; essencial a
-defini&ccedil;&atilde;o de um filtro no <code class="inlineCode">web.xml</code>. Aqui veremos tamb&eacute;m algumas configura&ccedil;&otilde;es
-extras, que s&atilde;o opcionais.</span>
+defini&ccedil;&atilde;o de um filtro no <code class="inlineCode">web.xml</code> e dizer qual &eacute; o seu pacote base. 
+Aqui veremos tamb&eacute;m algumas configura&ccedil;&otilde;es extras, que s&atilde;o opcionais.</span>
 
 
 <h2 class="section">Seu recurso</h2>
@@ -59,16 +59,17 @@ final da execu&ccedil;&atilde;o de cada l&oacute;gica do seu recurso, o usu&aacu
 que exibe o resultado final do processo.</span>
 	    	<span class="paragraph">Para escrever um recurso simples no VRaptor3, n&oacute;s n&atilde;o precisamos de muito esfor&ccedil;o, basta 
 criarmos uma classe e anotarmos essa classe com a anota&ccedil;&atilde;o <code class="inlineCode">@Resource</code>.</span>
-	    	<div class="java"><code class="java">@Resource<br />
-public&nbsp;class&nbsp;FuncionarioController&nbsp;{<br />
+	    	<div class="java"><code class="java">
+<span class="java16">@Resource<br />
+</span><span class="java4">public class </span><span class="java10">FuncionarioController </span><span class="java8">{<br />
 <br />
-&nbsp;&nbsp;&nbsp;&nbsp;public&nbsp;List&lt;Funcionario&gt;&nbsp;listaTodos()&nbsp;{<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;...<br />
-&nbsp;&nbsp;&nbsp;&nbsp;}<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<br />
-&nbsp;&nbsp;&nbsp;&nbsp;public&nbsp;void&nbsp;adiciona(Funcionario&nbsp;funcionario)&nbsp;{<br />
-&nbsp;&nbsp;&nbsp;&nbsp;}<br />
-}</code></div>
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">List&lt;Funcionario&gt; listaTodos</span><span class="java8">() {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return </span><span class="java10">...<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">adiciona</span><span class="java8">(</span><span class="java10">Funcionario funcionario</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp; }<br />
+}</span></code></div>
 	    	<span class="paragraph">No exemplo acima, <code class="inlineCode">FuncionarioController</code> &eacute; um recurso, e os m&eacute;todos <code class="inlineCode">listaTodos</code> e 
 <code class="inlineCode">adiciona</code> s&atilde;o as l&oacute;gicas.</span>
 		

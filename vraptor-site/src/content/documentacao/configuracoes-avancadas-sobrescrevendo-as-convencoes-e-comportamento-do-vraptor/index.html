@@ -1,0 +1,111 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>VRaptor - Powered by Caelum | Configurações avancadas: sobrescrevendo as convenções e comportamento do VRaptor
+
+</title>
+<meta name="keywords" content="" />
+<meta name="Small Window " content="" />
+<link href="../includes/css/style.css" rel="stylesheet" type="text/css" media="screen" />
+</head>
+<body>
+
+<!-- start header -->
+<div id="all">
+<div id="header">
+
+<div id="logo"><img src="../includes/images/marca.png" alt="VRaptor" width="300" height="100" border="0"></div>
+
+<div id="centeredmenu">
+<ul>
+		<li><a href="../../index.html">Home</a></li>
+        <li>|</li>
+		<li><a href="../../download.html">Download</a></li>
+		<li>|</li>  
+        <li><a href="../../vantagens.html">Vantagens</a></li>
+		<li>|</li>
+        <li><a href="../../depoimentos.html">Depoimentos</a></li>
+		<li>|</li>
+    	<li><a href="../../documentacao/"><b>Documentação</b></a></li>
+</ul>
+</div>
+
+</div>
+<!-- finish header -->
+
+<!-- start conteudo -->
+
+<div id="wrapper">
+<div id="conteudo">
+
+<div id="titulo"><img src="../includes/images/hea_documentacao.jpg" alt="Ttulo" width="850" height="40"></div>
+
+<div id="texto_01">
+	
+
+		<h1 class="chapter">Configurações avancadas: sobrescrevendo as convenções e comportamento do VRaptor</h1>
+
+		
+
+
+<h2 class="section">Mudando a view renderizada por padrão</h2>
+	    	<span class="paragraph">Se voc&ecirc; precisa mudar a view renderizada por padr&atilde;o, ou mudar o local em que ela &eacute; procurada,
+basta criar a seguinte classe:</span>
+	    	<div class="java"><code class="java">
+<span class="java16">@Component<br />
+</span><span class="java4">public class </span><span class="java10">CustomPathResolver </span><span class="java4">extends </span><span class="java10">DefaultPathResolver </span><span class="java8">{<br />
+&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java16">@Override<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">protected </span><span class="java10">String getPrefix</span><span class="java8">() {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return </span><span class="java5">&#34;/pasta/raiz/&#34;</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java16">@Override<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">protected </span><span class="java10">String getExtension</span><span class="java8">() {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return </span><span class="java5">&#34;ftl&#34;</span><span class="java10">; </span><span class="java3">// ou qualquer outra extensão<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+}</span></code></div>
+	    	<span class="paragraph">Se voc&ecirc; precisa mudar mais ainda a conven&ccedil;&atilde;o basta implementar a interface PathResolver.</span>
+		
+
+<h2 class="section">Mudando o IoC provider</h2>
+	    	<span class="paragraph">O IoC provider padr&atilde;o &eacute; o spring. Para mud&aacute;-lo basta colocar no web.xml:
+&lt;context-param&gt;
+    &lt;param-name&gt;br.com.caelum.vraptor.provider&lt;/param-name&gt;
+    &lt;param-value&gt;br.com.classe.do.seu.provider.Preferido&lt;/param-value&gt;
+&lt;/context-param&gt;</span>
+	    	<span class="paragraph">Entre os padr&atilde;o existem: br.com.caelum.vraptor.ioc.spring.SpringProvider e br.com.caelum.vraptor.ioc.pico.PicoProvider.
+Voc&ecirc; pode ainda estender alguma dessas duas classes e usar seu pr&oacute;prio provider.</span>
+		
+
+<h2 class="section">Mudando ApplicationContext base do Spring</h2>
+	    	<span class="paragraph">Caso o VRaptor n&atilde;o esteja usando o seu ApplicationContext como base, basta implementar a interface:</span>
+	    	<div class="java"><code class="java">
+<span class="java16">@Component<br />
+@ApplicationScoped<br />
+</span><span class="java4">public class </span><span class="java10">MySpringLocator </span><span class="java4">implements </span><span class="java10">SpringLocator </span><span class="java8">{<br />
+<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">ApplicationContext getApplicationContext</span><span class="java8">(</span><span class="java10">ServletContext context</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">ApplicationContext applicationContext = </span><span class="java3">//l&oacute;gica pra criar o applicationContext<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return </span><span class="java10">applicationContext;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+}</span></code></div>
+	    	<span class="paragraph">Por padr&atilde;o o VRaptor tenta procurar o applicationContext via 
+<code class="inlineCode">WebApplicationContextUtils.getWebApplicationContext(servletContext);</code> ou carregando do applicationContext.xml
+que est&aacute; no classpath.</span>
+		
+
+
+	</div>
+</div>
+</div>
+
+
+<div id="footer">
+	<p><a href="http://www.caelum.com.br" target="_blank">VRaptor ©2009 Caelum - Ensino e Inovação</a></p>
+</div>
+</div>
+</body>
+</html>

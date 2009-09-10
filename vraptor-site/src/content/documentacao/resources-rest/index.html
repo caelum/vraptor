@@ -147,7 +147,7 @@ identificar cada um dos m&eacute;todos de minha classe Java.</span>
 importante</strong> pois os browsers s&oacute; d&atilde;o suporte aos m&eacute;todos <em class="italic">POST</em> e <em class="italic">GET</em> atrav&eacute;s 
 de formul&aacute;rios hoje em dia.</span>
 	    	<span class="paragraph">Por isso, voc&ecirc; dever&aacute; criar as requisi&ccedil;&otilde;es para m&eacute;todos do tipo <em class="italic">DELETE</em>, <em class="italic">PUT</em> etc
-atrav&eacute;s de JavaScript ou passando um par&acirc;metro extra, chamado <strong class="definition">_format</strong>.</span>
+atrav&eacute;s de JavaScript ou passando um par&acirc;metro extra, chamado <strong class="definition">_method</strong>.</span>
 	    	<span class="paragraph">Esse par&acirc;metro sobrescrever&aacute; o m&eacute;todo HTTP real sendo invocado.</span>
 	    	<span class="paragraph">O exemplo a seguir mostra um link para o m&eacute;todo visualiza de cliente:</span>
 	    	<div class="xml"><code class="xml"><span class="textag">&lt;a</span>&nbsp;<span class="texattrib">href=</span><span class="texvalue">"/cliente?cliente.id=5"</span><span class="textag">&gt;</span><span class="texnormal">ver&nbsp;cliente&nbsp;5</span><span class="textag">&lt;/a&gt;</span></code></div>
@@ -157,11 +157,11 @@ atrav&eacute;s de JavaScript ou passando um par&acirc;metro extra, chamado <stro
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;input</span>&nbsp;<span class="texattrib">type=</span><span class="texvalue">"submit"</span>&nbsp;<span class="textag">/&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal"></span><span class="textag">&lt;/form&gt;</span></code></div>
 	    	<span class="paragraph">E, note que para permitir a remo&ccedil;&atilde;o atrav&eacute;s do m&eacute;todo <em class="italic">DELETE</em>, temos que usar o 
-par&acirc;metro <code class="inlineCode">_format</code>, uma vez que o browser n&atilde;o suporta ainda tais requisi&ccedil;&otilde;es:</span>
+par&acirc;metro <code class="inlineCode">_method</code>, uma vez que o browser n&atilde;o suporta ainda tais requisi&ccedil;&otilde;es:</span>
 	    	<div class="xml"><code class="xml"><span class="textag">&lt;form</span>&nbsp;<span class="texattrib">action=</span><span class="texvalue">"/cliente"</span>&nbsp;<span class="texattrib">method=</span><span class="texvalue">"post"</span><span class="textag">&gt;</span><span class="texnormal"><br /></span>
-<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;input</span>&nbsp;<span class="texattrib">name=</span><span class="texvalue">"_format"</span>&nbsp;<span class="texattrib">value=</span><span class="texvalue">"DELETE"</span>&nbsp;<span class="texattrib">type=</span><span class="texvalue">"hidden"</span>&nbsp;<span class="textag">/&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;input</span>&nbsp;<span class="texattrib">name=</span><span class="texvalue">"_method"</span>&nbsp;<span class="texattrib">value=</span><span class="texvalue">"DELETE"</span>&nbsp;<span class="texattrib">type=</span><span class="texvalue">"hidden"</span>&nbsp;<span class="textag">/&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;input</span>&nbsp;<span class="texattrib">name=</span><span class="texvalue">"cliente.id"</span>&nbsp;<span class="texattrib">value=</span><span class="texvalue">"5"</span>&nbsp;<span class="texattrib">type=</span><span class="texvalue">"hidden"</span>&nbsp;<span class="textag">/&gt;</span><span class="texnormal"><br /></span>
-<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;input</span>&nbsp;<span class="texattrib">type=</span><span class="texvalue">"remover&nbsp;cliente&nbsp;5"</span>&nbsp;<span class="textag">/&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;input</span>&nbsp;<span class="texattrib">type=</span><span class="texvalue">"submit"</span>&nbsp;<span class="texattrib">value=</span><span class="texvalue">"remover&nbsp;cliente&nbsp;5"</span>&nbsp;<span class="textag">/&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal"></span><span class="textag">&lt;/form&gt;</span></code></div>
 		
 
@@ -260,7 +260,7 @@ voc&ecirc; deve utilizar o padr&atilde;o {...*}:</span>
 </span><span class="java4">public class </span><span class="java10">PostController </span><span class="java8">{<br />
 <br />
 &nbsp; </span><span class="java16">@Get<br />
-&nbsp; @Path</span><span class="java8">(</span><span class="java5">&#34;/post/{post.id}&#34;</span><span class="java8">)<br />
+&nbsp; @Path</span><span class="java8">(</span><span class="java5">&#34;/post/{post.autor}&#34;</span><span class="java8">)<br />
 &nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">mostra</span><span class="java8">(</span><span class="java10">Post post</span><span class="java8">) { </span><span class="java10">... </span><span class="java8">}<br />
 <br />
 &nbsp; </span><span class="java16">@Get<br />
@@ -268,8 +268,8 @@ voc&ecirc; deve utilizar o padr&atilde;o {...*}:</span>
 &nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">atual</span><span class="java8">() { </span><span class="java10">... </span><span class="java8">}<br />
 }</span></code></div>
 	    	<span class="paragraph">A uri <code class="inlineCode">/post/atual</code> pode ser tratada tanto pelo m&eacute;todo <code class="inlineCode">mostra%, quanto pelo </code>atual<code class="inlineCode">.
-Mas n&atilde;o faz sentido eu passar essa URL para o m&eacute;todo mostra, j&aacute; que </code>post.id<code class="inlineCode"> deveria
-ser um n&uacute;mero. O que eu quero &eacute; que o VRaptor teste primeiro o path do m&eacute;todo </code>atual<code class="inlineCode">,
+Mas eu quero que quando seja exatamente </code>/post/atual<code class="inlineCode"> o m&eacute;todo executado seja o atual. 
+O que eu quero &eacute; que o VRaptor teste primeiro o path do m&eacute;todo </code>atual<code class="inlineCode">,
 para n&atilde;o correr o risco de cair no m&eacute;todo </code>mostra%%.</span>
 	    	<span class="paragraph">Para fazer isso, podemos definir prioridades para os <code class="inlineCode">@Path</code>s, assim o VRaptor vai testar
 primeiro os paths com maior prioridade, ou seja, valor menor de prioridade:</span>
@@ -278,15 +278,17 @@ primeiro os paths com maior prioridade, ou seja, valor menor de prioridade:</spa
 </span><span class="java4">public class </span><span class="java10">PostController </span><span class="java8">{<br />
 <br />
 &nbsp; </span><span class="java16">@Get<br />
-&nbsp; @Path</span><span class="java8">(</span><span class="java10">priority = </span><span class="java7">2</span><span class="java10">, value = </span><span class="java5">&#34;/post/{post.id}&#34;</span><span class="java8">)<br />
+&nbsp; @Path</span><span class="java8">(</span><span class="java10">priority = </span><span class="java7">2</span><span class="java10">, value = </span><span class="java5">&#34;/post/{post.autor}&#34;</span><span class="java8">)<br />
 &nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">mostra</span><span class="java8">(</span><span class="java10">Post post</span><span class="java8">) { </span><span class="java10">... </span><span class="java8">}<br />
 <br />
 &nbsp; </span><span class="java16">@Get<br />
 &nbsp; @Path</span><span class="java8">(</span><span class="java10">priority = </span><span class="java7">1</span><span class="java10">, value = </span><span class="java5">&#34;/post/atual&#34;</span><span class="java8">)<br />
 &nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">atual</span><span class="java8">() { </span><span class="java10">... </span><span class="java8">}<br />
 }</span></code></div>
-	    	<span class="paragraph">Assim, o path "/post/atual" vai ser testado antes do "/post/{post.id}", e o VRaptor vai fazer
+	    	<span class="paragraph">Assim, o path "/post/atual" vai ser testado antes do "/post/{post.autor}", e o VRaptor vai fazer
 o que a gente gostaria que ele fizesse.</span>
+	    	<span class="paragraph">Voc&ecirc; n&atilde;o precisa definir prioridades se tivermos as uris: <code class="inlineCode">/post/{post.id}</code> e <code class="inlineCode">/post/atual</code>,
+pois na <code class="inlineCode">/post/{post.id}</code> o vraptor s&oacute; vai aceitar n&uacute;meros.</span>
 		
 
 <h2 class="section">RoutesConfiguration</h2>
@@ -320,6 +322,14 @@ o nome de um m&eacute;todo, a configura&ccedil;&atilde;o tamb&eacute;m altera, m
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
 <br />
 }</span></code></div>
+	    	<span class="paragraph">Voc&ecirc; pode tamb&eacute;m colocar par&acirc;metros na uri e eles v&atilde;o ser populados diretamente nos
+par&acirc;metros do m&eacute;todo. Voc&ecirc; pode ainda adicionar restri&ccedil;&otilde;es para esses par&acirc;metros:</span>
+	    	<div class="java"><code class="java">
+<span class="java3">// O m&eacute;todo mostra recebe um Cliente que tem um id<br />
+</span><span class="java10">routeFor</span><span class="java8">(</span><span class="java5">&#34;/cliente/{cliente.id}&#34;</span><span class="java8">)</span><span class="java10">.is</span><span class="java8">(</span><span class="java10">ClienteController.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">.mostra</span><span class="java8">(</span><span class="java4">null</span><span class="java8">)</span><span class="java10">;<br />
+</span><span class="java3">// Se eu quiser garantir que o parametro seja um n&uacute;mero:<br />
+</span><span class="java10">routeFor</span><span class="java8">(</span><span class="java5">&#34;/cliente/{cliente.id}&#34;</span><span class="java8">)</span><span class="java10">.withParameter</span><span class="java8">(</span><span class="java5">&#34;cliente.id&#34;</span><span class="java8">)</span><span class="java10">.matching</span><span class="java8">(</span><span class="java5">&#34;\\d+&#34;</span><span class="java8">)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">.is</span><span class="java8">(</span><span class="java10">ClienteController.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">.mostra</span><span class="java8">(</span><span class="java4">null</span><span class="java8">)</span><span class="java10">;</span></code></div>
 	    	<span class="paragraph">Por fim, voc&ecirc; pode escolher o nome da classe e o nome do m&eacute;todo em tempo de execu&ccedil;&atilde;o,
 que permite criar rotas extremamente gen&eacute;ricas:</span>
 	    	<div class="java"><code class="java">

@@ -47,7 +47,7 @@
 
 		<h1 class="chapter">Injeção de dependências</h1>
 
-		<span class="paragraph">O Vraptor est&aacute; fortemente baseado no conceito de inje&ccedil;&atilde;o de depend&ecirc;ncias uma vez que chega at&eacute; mesmo a
+		<span class="paragraph">O VRaptor est&aacute; fortemente baseado no conceito de inje&ccedil;&atilde;o de depend&ecirc;ncias uma vez que chega at&eacute; mesmo a
 utilizar dessa id&eacute;ia para juntar seus componentes internos.</span><span class="paragraph">O conceito b&aacute;sico por tr&aacute;s de Dependency Injection (DI) &eacute; que voc&ecirc; n&atilde;o deve buscar aquilo que deseja acessar
 mas tudo o que deseja acessar deve ser fornecido para voc&ecirc;.</span><span class="paragraph">Isso se traduz, no Java contempor&acirc;neo, a passagem de componentes atrav&eacute;s do construtor de seus controladores.
 Imagine que seu controlador de clientes necessita acessar um Dao de clientes. Sendo assim, especifique claramente
@@ -139,12 +139,8 @@ que se voc&ecirc; n&atilde;o especificar nenhum Provider o Spring &eacute; o pad
 	    	<div class="xml"><code class="xml"><span class="textag">&lt;context-param&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-name&gt;</span><span class="texnormal">br.com.caelum.vraptor.provider</span><span class="textag">&lt;/param-name&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-value&gt;</span><span class="texnormal">br.com.caelum.vraptor.ioc.spring.SpringProvider</span><span class="textag">&lt;/param-value&gt;</span><span class="texnormal"><br /></span>
-<span class="texnormal"></span><span class="textag">&lt;/context-param&gt;</span><span class="texnormal"><br /></span>
-<span class="texnormal"><br /></span>
-<span class="texnormal"></span><span class="textag">&lt;context-param&gt;</span><span class="texnormal"><br /></span>
-<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-name&gt;</span><span class="texnormal">br.com.caelum.vraptor.spring.packages</span><span class="textag">&lt;/param-name&gt;</span><span class="texnormal"><br /></span>
-<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-value&gt;</span><span class="texnormal">br.com.pacote.do.seu.projeto</span><span class="textag">&lt;/param-value&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal"></span><span class="textag">&lt;/context-param&gt;</span></code></div>
+	    	<span class="paragraph">Se voc&ecirc; tiver um applicationContext.xml no classpath o VRaptor vai aproveitar suas configura&ccedil;&otilde;es.</span>
 		
 
 <h2 class="section">Spring exemplo com Hibernate dele</h2>

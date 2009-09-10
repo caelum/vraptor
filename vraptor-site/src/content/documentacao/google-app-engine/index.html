@@ -1,0 +1,75 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>VRaptor - Powered by Caelum | Google App Engine
+
+</title>
+<meta name="keywords" content="" />
+<meta name="Small Window " content="" />
+<link href="../includes/css/style.css" rel="stylesheet" type="text/css" media="screen" />
+</head>
+<body>
+
+<!-- start header -->
+<div id="all">
+<div id="header">
+
+<div id="logo"><img src="../includes/images/marca.png" alt="VRaptor" width="300" height="100" border="0"></div>
+
+<div id="centeredmenu">
+<ul>
+		<li><a href="../../index.html">Home</a></li>
+        <li>|</li>
+		<li><a href="../../download.html">Download</a></li>
+		<li>|</li>  
+        <li><a href="../../vantagens.html">Vantagens</a></li>
+		<li>|</li>
+        <li><a href="../../depoimentos.html">Depoimentos</a></li>
+		<li>|</li>
+    	<li><a href="../../documentacao/"><b>Documentação</b></a></li>
+</ul>
+</div>
+
+</div>
+<!-- finish header -->
+
+<!-- start conteudo -->
+
+<div id="wrapper">
+<div id="conteudo">
+
+<div id="titulo"><img src="../includes/images/hea_documentacao.jpg" alt="Ttulo" width="850" height="40"></div>
+
+<div id="texto_01">
+	
+
+		<h1 class="chapter">Google App Engine</h1>
+
+		<span class="paragraph">O VRaptor 3 funciona no Google App Engine, mas voc&ecirc; precisa trocar a
+implementa&ccedil;&atilde;o de um dos componentes, que usa recursos privados da VM
+e que n&atilde;o est&atilde;o dispon&iacute;veis no GAE. Para fazer isso basta escrever a
+seguinte classe:</span><div class="java"><code class="java">
+<span class="java16">@Component<br />
+@ApplicationScoped<br />
+</span><span class="java4">public class </span><span class="java10">MyProxifier </span><span class="java4">extends </span><span class="java10">DefaultProxifier </span><span class="java8">{<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java3">//delegate constructor here<br />
+</span><span class="java8">}</span></code></div><span class="paragraph">Esta classe n&atilde;o usa recursos privados da VM, mas instancia as classes
+proxificadas passando null para todos os argumentos do construtor.
+Logo voc&ecirc; vai ter que prevenir Null Pointer Access em todos os construtores
+dos Controllers.</span>
+
+
+
+	</div>
+</div>
+</div>
+
+
+<div id="footer">
+	<p><a href="http://www.caelum.com.br" target="_blank">VRaptor ©2009 Caelum - Ensino e Inovação</a></p>
+</div>
+</div>
+</body>
+</html>

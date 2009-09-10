@@ -91,14 +91,24 @@ em seu construtor quaisquer dependencias atraves de Injecao de Dependencias.</sp
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">this</span><span class="java10">.request = request;<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
 <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java2">/*<br />
+&nbsp;&nbsp;&nbsp;&nbsp; * Este interceptor deve interceptar o method dado? Neste caso vai interceptar<br />
+&nbsp;&nbsp;&nbsp;&nbsp; * todos os m&eacute;todos.<br />
+&nbsp;&nbsp;&nbsp;&nbsp; * method.getMethod() retorna o m&eacute;todo java que est&aacute; sendo executado<br />
+&nbsp;&nbsp;&nbsp;&nbsp; * method.getResourceClass().getType() retorna a classe que est&aacute; sendo executada<br />
+&nbsp;&nbsp;&nbsp;&nbsp; */<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">boolean </span><span class="java10">accepts</span><span class="java8">(</span><span class="java10">ResourceMethod method</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return true</span><span class="java10">; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">intercept</span><span class="java8">(</span><span class="java10">InterceptorStack stack, ResourceMethod method, <br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Object resourceInstance</span><span class="java8">) </span><span class="java4">throws </span><span class="java10">InterceptionException </span><span class="java8">{<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">System.out.println</span><span class="java8">(</span><span class="java5">&#34;Interceptando &#34; </span><span class="java10">+ request.getRequestURI</span><span class="java8">())</span><span class="java10">;<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; stack.next</span><span class="java8">(</span><span class="java10">method, resourceInstance</span><span class="java8">)</span><span class="java10">;<br />
-&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
-<br />
-&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">boolean </span><span class="java10">accepts</span><span class="java8">(</span><span class="java10">ResourceMethod method</span><span class="java8">) {<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return true</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java3">// c&oacute;digo a ser executado antes da l&oacute;gica<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">stack.next</span><span class="java8">(</span><span class="java10">method, resourceInstance</span><span class="java8">)</span><span class="java10">; </span><span class="java3">// continua a execu&ccedil;ão<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // c&oacute;digo a ser execut&aacute;do depois da l&oacute;gica<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
 <br />
 }</span></code></div>
@@ -157,6 +167,19 @@ l&oacute;gica e da exibi&ccedil;&atilde;o da p&aacute;gina para o usu&aacute;rio
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ...<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
 }</span></code></div>
+		
+
+<h2 class="section">Como garantir ordem: InterceptorSequence</h2>
+	    	<span class="paragraph">Se voc&ecirc; precisa garantir a ordem em que os interceptors s&atilde;o executados, basta implementar
+a interface InterceptorSequence e passar a ordem em que voc&ecirc; deseja executar os interceptors:</span>
+	    	<div class="java"><code class="java">
+<span class="java16">@Intercepts<br />
+</span><span class="java4">public class </span><span class="java10">MinhaSequencia </span><span class="java4">implements </span><span class="java10">InterceptorSequence </span><span class="java8">{<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">Class&lt;? </span><span class="java4">extends </span><span class="java10">Interceptor&gt;</span><span class="java8">[] </span><span class="java10">getSequence</span><span class="java8">() {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return new </span><span class="java10">Class</span><span class="java8">[] { </span><span class="java10">PrimeiroInterceptor.class, SegundoInterceptor.</span><span class="java4">class </span><span class="java8">}</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+}</span></code></div>
+	    	<span class="paragraph">Voc&ecirc; n&atilde;o deve anotar os interceptors retornados pela InterceptorSequence com @Intercepts.</span>
 		
 
 

@@ -63,14 +63,17 @@ class&nbsp;FuncionarioController&nbsp;{<br />
 
 <h2 class="section">Estilo clássico</h2>
 	    	<span class="paragraph">A forma cl&aacute;ssica &eacute; semelhante a forma como as valida&ccedil;&otilde;es eram feitas no VRaptor2.
-Dentro da sua l&oacute;gica de neg&oacute;cios, basta fazer a verifica&ccedil;&atilde;o que deseja e caso haja um erro de valida&ccedil;&atilde;o, adicionar esse erro na lista
-de erros de valida&ccedil;&atilde;o.
+Dentro da sua l&oacute;gica de neg&oacute;cios, basta fazer a verifica&ccedil;&atilde;o que deseja e caso haja um erro de valida&ccedil;&atilde;o, adicionar esse erro na lista de erros de valida&ccedil;&atilde;o.
 Por exemplo, para validar que o nome do funcionario deve ser Fulano, fa&ccedil;a:</span>
 	    	<div class="java"><code class="java">public&nbsp;void&nbsp;adiciona(Funcionario&nbsp;funcionario)&nbsp;{<br />
 &nbsp;&nbsp;&nbsp;&nbsp;if(!&nbsp;funcionario.getNome().equals("Fulano"))&nbsp;{<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;validator.add(new&nbsp;ValidationMessage("erro","nomeInvalido"));<br />
 &nbsp;&nbsp;&nbsp;&nbsp;}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;validator.validate();<br />
+&nbsp;&nbsp;&nbsp;&nbsp;dao.adiciona(funcionario);<br />
 }</code></div>
+	    	<span class="paragraph">Nesse estilo, voc&ecirc; precisa chamar o validator.validate(), para que o VRaptor pare a execu&ccedil;&atilde;o se aconteceu algum
+erro at&eacute; aquele momento, ou seja, para dizer que os testes de valida&ccedil;&atilde;o acabaram.</span>
 		
 
 <h2 class="section">Estilo fluente</h2>

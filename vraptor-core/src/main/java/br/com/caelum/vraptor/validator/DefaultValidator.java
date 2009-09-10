@@ -34,10 +34,10 @@ import java.util.List;
 
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
+import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.ioc.RequestScoped;
-import br.com.caelum.vraptor.proxy.MethodInvocation;
 import br.com.caelum.vraptor.proxy.Proxifier;
-import br.com.caelum.vraptor.proxy.SuperMethod;
+import br.com.caelum.vraptor.util.test.MockResult;
 import br.com.caelum.vraptor.view.ResultException;
 import br.com.caelum.vraptor.view.Results;
 
@@ -66,40 +66,25 @@ public class DefaultValidator implements Validator {
     // TODO: do not use String consequences anymore
     // TODO: on error action should be defined by the onError method
     public void checking(Validations validations) {
-        this.errors.addAll(validations.getErrors());
+        add(validations.getErrors());
     }
 
-    public Validator onError() {
-        return this;
+
+    public <T extends View> T onErrorUse(Class<T> view) {
+    	if (!hasErrors()) {
+    		return new MockResult().use(view); //ignore anything
+    	}
+    	result.include("errors", errors);
+    	return result.use(view);
     }
 
-    public <T> T goTo(Class<T> type) {
-        this.typeToUse = type;
-        return proxifier.proxify(type, new MethodInvocation<T>() {
-
-			public Object intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {
-                if (DefaultValidator.this.method == null) {
-                    DefaultValidator.this.argsToUse = args;
-                    DefaultValidator.this.method = method;
-                }
-                validate();
-                return null;
-            }
-        });
-    }
-
-	public void add(Message message) {
-		this.errors.add(message);
-	}
-	
-	public void add(Collection<? extends Message> message) {
+    public void add(Collection<? extends Message> message) {
 		this.errors.addAll(message);
 	}
 
 	// runs the validation
 	private void validate() {
         if (hasErrors()) {
-            result.include("errors", errors);
             if (method != null) {
                 Object instance = result.use(Results.logic()).forwardTo(typeToUse);
                 try {

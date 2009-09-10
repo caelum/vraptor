@@ -107,6 +107,8 @@ import br.com.caelum.vraptor.view.EmptyResult;
 import br.com.caelum.vraptor.view.LogicResult;
 import br.com.caelum.vraptor.view.PageResult;
 import br.com.caelum.vraptor.view.PathResolver;
+import br.com.caelum.vraptor.view.ValidationLogicResult;
+import br.com.caelum.vraptor.view.ValidationPageResult;
 
 /**
  * List of base components to vraptor. Those components should be available with
@@ -142,6 +144,8 @@ public class BaseComponents {
             MethodInfo.class, 								DefaultMethodInfo.class,
             LogicResult.class, 								DefaultLogicResult.class,
             PageResult.class, 								DefaultPageResult.class,
+            ValidationPageResult.class, 					ValidationPageResult.class,
+            ValidationLogicResult.class, 					ValidationLogicResult.class,
             PathResolver.class, 							DefaultPathResolver.class,
             RequestExecution.class, 						DefaultRequestExecution.class,
             Result.class, 									DefaultResult.class,

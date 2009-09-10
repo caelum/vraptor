@@ -1,7 +1,7 @@
 /***
- * 
+ *
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  * 1. Redistributions of source code must retain the above copyright notice,
@@ -12,7 +12,7 @@
  * copyright holders nor the names of its contributors may be used to endorse or
  * promote products derived from this software without specific prior written
  * permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -35,20 +35,17 @@ import br.com.caelum.vraptor.validator.Validations;
 /**
  * A validator interface for vraptor3.<br>
  * Based on hamcrest, it allows you to assert for specific situations.
- * 
+ *
  * @author Guilherme Silveira
  */
 public interface Validator {
-    
-    void checking(Validations rules);
-    
-    Validator onError();
 
-	<T> T goTo(Class<T> type);
-	
-	void add(Message message);
-	
+    void checking(Validations rules);
+
+	<T extends View> T onErrorUse(Class<T> view);
+
 	void add(Collection<? extends Message> message);
-	
+
 	boolean hasErrors();
+
 }

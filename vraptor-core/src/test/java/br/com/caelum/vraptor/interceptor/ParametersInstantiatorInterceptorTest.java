@@ -27,9 +27,12 @@
  */
 package br.com.caelum.vraptor.interceptor;
 
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertThat;
+
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,7 +45,6 @@ import org.jmock.Expectations;
 import org.jmock.api.Action;
 import org.jmock.api.Invocation;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.InterceptionException;
@@ -82,10 +84,10 @@ public class ParametersInstantiatorInterceptorTest {
         this.instantiator = new ParametersInstantiatorInterceptor(parametersProvider, params, validator, localization, request);
         this.stack = mockery.mock(InterceptorStack.class);
         this.bundle = localization.getBundle();
-        
+
         Field errorsField = ParametersInstantiatorInterceptor.class.getDeclaredField("errors");
         errorsField.setAccessible(true);
-		this.errors = (List<Message>) errorsField.get(this.instantiator); 
+		this.errors = (List<Message>) errorsField.get(this.instantiator);
     }
 
     class Component {
@@ -93,67 +95,98 @@ public class ParametersInstantiatorInterceptorTest {
         }
         void otherMethod(int oneParam){
         }
+
+        void oneMoreMethod(String a) {
+
+        }
     }
 
     @Test
     public void shouldUseTheProvidedParameters() throws InterceptionException, IOException, NoSuchMethodException {
         final ResourceMethod method = mockery.methodFor(Component.class, "method");
-        
+
         mockery.checking(new Expectations() {{
         	Object[] values = new Object[] { new Object() };
 
         	one(parametersProvider).getParametersFor(method, errors, bundle);
             will(returnValue(values));
-            
+
             one(stack).next(method, null);
             one(params).setParameters(values);
         }});
-        
+
         instantiator.intercept(stack, method, null);
         mockery.assertIsSatisfied();
     }
-    
+
+	@Test
+	public void shouldNullifyAllParametersIfThereAreConversionErrors() throws Exception {
+		final ResourceMethod method = mockery.methodFor(Component.class, "oneMoreMethod", String.class);
+
+		final Object[] values = new Object[] { "asdfasdfas" };
+		final ValidationMessage message = new ValidationMessage("a", "b");
+		mockery.checking(new Expectations() {
+			{
+				one(parametersProvider).getParametersFor(method, errors, bundle);
+				will(returnValue(values));
+
+				one(stack).next(method, null);
+				one(params).setParameters(values);
+
+				ignoring(anything());
+			}
+		});
+		errors.add(message);
+
+		instantiator.intercept(stack, method, null);
+
+		assertThat(values[0], is(nullValue()));
+
+		mockery.assertIsSatisfied();
+
+	}
+
     @Test
     public void shouldValidateParameters() throws Exception {
         final ResourceMethod method = mockery.methodFor(Component.class, "otherMethod", int.class);
-        
+
         mockery.checking(new Expectations() {{
         	Object[] values = new Object[]{new Object()};
 
         	one(parametersProvider).getParametersFor(method, errors, bundle);
         	will(doAll(addErrorsToList("error1"),returnValue(values)));
-            
+
         	one(validator).add(errors);
             one(stack).next(method, null);
             one(params).setParameters(new Object[]{0});
-            
+
             Map<String, String> params = new HashMap<String, String>();
             params.put("param1.id", "value1");
             params.put("param2.id", "value2");
             one(request).getParameterMap();will(returnValue(params));
-            
+
             allowing(request).getAttribute("param1");will(returnValue("originalValue1"));
             allowing(request).getAttribute("param2");will(returnValue(null));
             allowing(request).setAttribute(with(equal("param2")), with(any(RequestOutjectMap.class)));
         }});
-        
+
         instantiator.intercept(stack, method, null);
         mockery.assertIsSatisfied();
     }
-    
+
     @Test(expected=RuntimeException.class)
     public void shouldThrowException() throws Exception {
         final ResourceMethod method = mockery.methodFor(Component.class, "method");
-        
+
         mockery.checking(new Expectations() {{
         	one(parametersProvider).getParametersFor(method, errors, bundle);
         	will(throwException(new RuntimeException()));
         }});
-        
+
         instantiator.intercept(stack, method, null);
         mockery.assertIsSatisfied();
     }
-   
+
     private Action addErrorsToList(final String... messages) {
     	return new Action() {
 			public void describeTo(Description description) {
@@ -161,11 +194,12 @@ public class ParametersInstantiatorInterceptorTest {
 		    }
 
 			public Object invoke(Invocation invocation) throws Throwable {
-				for (String message : messages)
+				for (String message : messages) {
 					errors.add(new ValidationMessage(message, "test"));
+				}
 				return null;
 			}
-			
+
 		};
     }
 }

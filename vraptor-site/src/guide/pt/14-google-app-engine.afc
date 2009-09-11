@@ -1,5 +1,7 @@
 [chapter Google App Engine]
 
+[section Configurando o VRaptor 3]
+
 O VRaptor 3 funciona no Google App Engine, mas você precisa trocar a
 implementação de um dos componentes, que usa recursos privados da VM
 e que não estão disponíveis no GAE. Para fazer isso basta escrever a
@@ -17,3 +19,36 @@ Esta classe não usa recursos privados da VM, mas instancia as classes
 proxificadas passando null para todos os argumentos do construtor.
 Logo você vai ter que prevenir Null Pointer Access em todos os construtores
 dos Controllers.
+
+[section Configurando o Spring para funcionar no GAE]
+
+TODO IMPORTNATE: Falar dos Jars do Spring
+
+e falar que isso é ineretne do spring+gae, nao exatamente do vraptor
+colocar link pra onde o GAE fala isso
+
+[section Dicas gerais para o uso do JSP, JSTL e EL no GAE]
+
+falar que isso tambem é independente do vraptor!!! mas deixar documentado
+pois é de uso de todos
+
+TODO IMPORTANTE 2: Falar da configuracao para expression language, baseado na info do gui:
+
+
+It seems that JSP Api+JSTL does not work out of the box at appengine
+as it says here http://groups.google.com/group/google-appengine-java/web/will-it-play-in-app-engine
+Is there any way to update the above link?
+
+Some posts on the list mention that EL was ignored by default (due to
+the jasper compiled being configured this way). The following is a
+list of "tasks" one can and can not do to make it work:
+
+a) <jsp-config/jsp-proprerty-group/el-ignored> tag is unsupported,
+therefore
+b) all your jsp files should contain @page isElIgnored="false"
+c) all your tag files should contain @tag isElIgnored="false"
+d) there is no need to add the jstl jar file to your WEB-INF/lib dir
+
+Although there are some mails saying that (d) would not work if you
+add it, it seems to me that it depends on the version that you add to
+the classpath so... do not add it.

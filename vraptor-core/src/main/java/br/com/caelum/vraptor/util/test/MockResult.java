@@ -27,11 +27,15 @@
  */
 package br.com.caelum.vraptor.util.test;
 
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.View;
+import br.com.caelum.vraptor.proxy.MethodInvocation;
+import br.com.caelum.vraptor.proxy.ObjenesisProxifier;
+import br.com.caelum.vraptor.proxy.SuperMethod;
 import br.com.caelum.vraptor.view.Results;
 
 /**
@@ -56,7 +60,15 @@ public class MockResult implements Result {
 		if (view.equals(Results.nothing())) {
 			return null;
 		}
-		return view.cast(new MockedLogic());
+		if (view.equals(Results.logic())) {
+		    return view.cast(new MockedLogic());
+		}
+		return new ObjenesisProxifier().proxify(view, new MethodInvocation<T>() {
+            @Override
+            public Object intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {
+                return null;
+            }
+        });
 	}
 
 	public boolean used() {

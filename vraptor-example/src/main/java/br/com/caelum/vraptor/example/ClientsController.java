@@ -30,6 +30,8 @@
 package br.com.caelum.vraptor.example;
 
 import static br.com.caelum.vraptor.view.Results.logic;
+import static br.com.caelum.vraptor.view.Results.nothing;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
 import java.io.File;
@@ -72,18 +74,16 @@ public class ClientsController {
 	@Post
 	@Path("/clients")
 	public void add(final Client client) {
-		validator.onError().goTo(ClientsController.class).list();
 		if(client.getName().equals("guilherme")) {
 			validator.add(new ValidationMessage("", "ha!"));
 		}
-		validator.validate();
 		validator.checking(new Validations() {{
-			that("client", "should_not_be_null", client != null);
-			if(client != null) {
-				that("client", "should_not_be_null", client.getAge() > 10);
+			if(that(client != null, "client", "should_not_be_null")) {
+				that(client.getAge() > 10, "client", "should_not_be_null");
 			}
 			and(Hibernate.validate(client));
 		}});
+		validator.onErrorUse(logic()).forwardTo(ClientsController.class).list();
 		repository.add(client);
 	}
 
@@ -101,7 +101,7 @@ public class ClientsController {
 	}
 
 	public void sendEmail() {
-		result.use(EmptyResult.class);
+		result.use(nothing());
 	}
 
 	public void random() {
@@ -112,10 +112,10 @@ public class ClientsController {
 
 	public File download(Client client) {
 		final Client found = repository.find(client.getId());
-		validator.onError().goTo(ClientsController.class).view(client);
 		validator.checking(new Validations() {{
-			that(found.getFile()).shouldBe("download", "client_without_file", notNullValue());
+			that(found.getFile(), is(notNullValue()), "download", "client_without_file");
 		}});
+		validator.onErrorUse(logic()).forwardTo(ClientsController.class).view(client);
 		return found.getFile().getFile();
 	}
 

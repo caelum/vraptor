@@ -51,43 +51,52 @@
 
 
 <h2 class="section">3.0.0-beta-4</h2>
-	    	<span class="paragraph">- Novo result: result.use(page()).of(MeuController.class).minhaLogica() renderiza a view
+<ul>
+<li>Novo result: result.use(page()).of(MeuController.class).minhaLogica() renderiza a view
 	padr&atilde;o (/WEB-INF/jsp/meu/minhaLogica.jsp) sem executar a minhaLogica.
--	Classes Mocks para testes: MockResult e MockValidator, para facilitar testes unit&aacute;rios
+</li><li>Classes Mocks para testes: MockResult e MockValidator, para facilitar testes unit&aacute;rios
 	das l&oacute;gicas. Eles ignoram a maioria das chamadas e guardam par&acirc;metros inclu&iacute;dos no result
 	e erros de valida&ccedil;&atilde;o.
--	As URIs passadas para result.use(page()).forward(uri) e result.use(page()).redirect(uri)
+</li><li>As URIs passadas para result.use(page()).forward(uri) e result.use(page()).redirect(uri)
 	n&atilde;o podem ser URIs de l&oacute;gicas, usem os forwards e redirects do result.use(logic())
--	Os par&acirc;metros passados para as URIs agora aceitam pattern-matching:
-	- Autom&aacute;tico: se temos a URI /clients/{client.id} e client.id &eacute; um Long, o par&acirc;metro {client.id} 
+</li><li>Os par&acirc;metros passados para as URIs agora aceitam pattern-matching:
+	<ul>
+	<li>Autom&aacute;tico: se temos a URI /clients/{client.id} e client.id &eacute; um Long, o par&acirc;metro {client.id} 
 		s&oacute; vai casar com n&uacute;meros, ou seja, a URI /clients/42 casa, mas a uri /clients/random n&atilde;o casa.
 		Isso funciona para todos os tipos num&eacute;ricos, booleanos e enums, o vraptor vai restringir para
 		os valores poss&iacute;veis.
-	- Manual: no CustomRoutes voc&ecirc; vai poder fazer:
+	</li><li>Manual: no CustomRoutes voc&ecirc; vai poder fazer:
 		routeFor("/clients/{client.id}").withParameter("client.id").matching("\\d{1,4}")
   			.is(ClienteController.class).mostra(null);
   	ou seja, pode restringir os valores para o determinado par&acirc;metro via express&otilde;es regulares
-  	no m&eacute;todo matching.
-- Converters para LocalDate e LocalTime do joda-time j&aacute; v&ecirc;m por padr&atilde;o.
-- Quando o Spring &eacute; usado como IoC Provider, o VRaptor tenta buscar o spring da aplica&ccedil;&atilde;o para
+  	no m&eacute;todo matching.</li>
+  </ul>
+</li><li>Converters para LocalDate e LocalTime do joda-time j&aacute; v&ecirc;m por padr&atilde;o.
+</li><li>Quando o Spring &eacute; usado como IoC Provider, o VRaptor tenta buscar o spring da aplica&ccedil;&atilde;o para
 	usar como container pai. A busca &eacute; feita por padr&atilde;o em um dos dois jeitos:
-	- WebApplicationContextUtils.getWebApplicationContext(servletContext), para o caso em que voc&ecirc;
+	<ul>
+	<li>WebApplicationContextUtils.getWebApplicationContext(servletContext), para o caso em que voc&ecirc;
 		tem os listeners do Spring configurados.
-	- applicationContext.xml dentro do classpath
+	</li><li>applicationContext.xml dentro do classpath</li>
+	</ul>
 	Se isso n&atilde;o for o suficiente voc&ecirc; pode implementar a interface SpringLocator e disponbilizar
 	o ApplicationContext do spring usado pela sua aplica&ccedil;&atilde;o.
--	Utils:
-	- SessionCreator e SessionFactoryCreator para disponbilizar a Session e o SessionFactory do hibernate
+</li><li>	Utils:
+	<ul>
+	<li>SessionCreator e SessionFactoryCreator para disponbilizar a Session e o SessionFactory do hibernate
 		para os componentes registrados.
-	- EncodingInterceptor, para mudar o encoding da sua aplica&ccedil;&atilde;o.
-- corre&ccedil;&atilde;o de v&aacute;rios bugs e melhorias na documenta&ccedil;&atilde;o.</span>
-		
+	</li><li>EncodingInterceptor, para mudar o encoding da sua aplica&ccedil;&atilde;o.</li>
+	</ul>
+</li><li>corre&ccedil;&atilde;o de v&aacute;rios bugs e melhorias na documenta&ccedil;&atilde;o.</li>
+</ul>		
 
 <h2 class="section">3.0.0-beta-3</h2>
-	    	<span class="paragraph">- O Spring &eacute; o Provider de IoC padr&atilde;o
-- o applicationContext.xml no classpath &eacute; usado como configura&ccedil;&atilde;o incial do spring, caso exista.
-- a documenta&ccedil;&atilde;o <a class="link" target="_blank" href="http://vraptor.caelum.com.br/documentacao">http://vraptor.caelum.com.br/documentacao</a> est&aacute; mais completa e atualizada
-- pequenos bugs e otimiza&ccedil;&otilde;es</span>
+<ul>
+<li>O Spring &eacute; o Provider de IoC padr&atilde;o</li>
+<li>o applicationContext.xml no classpath &eacute; usado como configura&ccedil;&atilde;o incial do spring, caso exista.</li>
+<li>a documenta&ccedil;&atilde;o <a class="link" target="_blank" href="http://vraptor.caelum.com.br/documentacao">http://vraptor.caelum.com.br/documentacao</a> est&aacute; mais completa e atualizada</li>
+<li>pequenos bugs e otimiza&ccedil;&otilde;es</li>
+</ul>
 		
 
 

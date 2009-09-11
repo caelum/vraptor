@@ -229,3 +229,41 @@ public class ClientsController {
 }
 [/java]
 
+[section Colocando objetos na sessão]
+No VRaptor2 bastava colocar um @Out(ScopeType.SESSION) para que o objeto fosse colocado
+na sessão. Isso não funciona no VRaptor3, pois você perde totalmente o controle sobre
+as variáveis que estão anotadas desse jeito.
+
+Para colocar objetos na sessão no VRaptor3 você deve fazer uma das duas coisas:
+[list]
+* O objeto vai ser acessível apenas por lógicas e componentes da aplicação, não pelos jsps:
+	[java]
+		@Component
+		@SessionScoped
+		public class MeuObjetoWrapper {
+			private MeuObjeto meuObjeto;
+			//getter e setter para meuObjeto
+		}
+	[/java]
+	E nas classes onde você precisa do MeuObjeto basta receber no construtor o MeuObjetoWrapper e usar o
+	getter e setter pra manipular o MeuObjeto.
+
+* O objeto vai ser acessível nos jsps também:
+	[java]
+		@Component
+		@SessionScoped
+		public class MeuObjetoWrapper {
+			private HttpSession session;
+			public MeuObjetoWrapper(HttpSession session) {
+				this.session = session;
+			}
+			public void setMeuObjeto(MeuObjeto objeto) {
+				this.session.setAttribute("objeto", objeto);
+			}
+			public MeuObjeto getMeuObjeto() {
+				return this.session.getAttribute("objeto");
+			}
+		}
+	[/java]
+	E nas classes basta receber o MeuObjetoWrapper no construtor e usar o getter e o setter.
+[/list]

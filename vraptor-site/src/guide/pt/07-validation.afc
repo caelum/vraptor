@@ -57,6 +57,20 @@ Bem mais próximo a linguagem natural.
 Assim sendo, caso o nome do funcionario seja vazio, ele vai ser redirecionado novamente para a logica "formulario", 
 que exibe o formulario para que o usuário adicione o funcionário novamente. Além disso, ele devolve para o formulario a mensagem de erro que aconteceu na validação.
 
+Muitas vezes algumas validações só precisam acontecer se uma outra deu certo, por exemplo, eu só vou
+checar a idade do usuário se o usuário não for null. O método that retorna um boolean dizendo se o que
+foi passado pra ele é válido ou não:
+
+[java]
+	validator.checking(new Validations(){{
+		if (that(usuario != null, "usuario", "usuario.nulo")) {
+			that(usuario.getIdade() >= 18, "usuario.idade", "usuario.menor.de.idade");
+		}
+	}})
+[/java]
+
+Desse jeito a segunda validação só acontece se a primeira não falhou.
+
 [session Validação usando matchers do Hamcrest]
 Você pode também usar matchers do Hamcrest para deixar a validação mais legível, e ganhar
 a vantagem da composição de matchers e da criação de novos matchers que o Hamcrest te oferece:

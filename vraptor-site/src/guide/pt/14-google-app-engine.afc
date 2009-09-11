@@ -4,8 +4,8 @@
 
 O VRaptor 3 funciona no Google App Engine, mas você precisa trocar a
 implementação de um dos componentes, que usa recursos privados da VM
-e que não estão disponíveis no GAE. Para fazer isso basta escrever a
-seguinte classe:
+e que não estão disponíveis no GAE (através da biblioteca Objenesis).
+Para fazer isso basta escrever aseguinte classe:
 
 [java]
 @Component
@@ -16,9 +16,13 @@ public class MyProxifier extends DefaultProxifier {
 [/java]
 
 Esta classe não usa recursos privados da VM, mas instancia as classes
-proxificadas passando null para todos os argumentos do construtor.
+proxificadas passando %%null%% para todos os argumentos do construtor.
 Logo você vai ter que prevenir Null Pointer Access em todos os construtores
-dos Controllers.
+dos seus Controllers.
+
+Futuramente podemos estudar a possibilidade de usar um outro ClassLoader que 
+injete um construtor default a mais nessas classes, apenas para o uso
+do Proxifier, evitando a necessidade do Objenesis.
 
 [section Configurando o Spring para funcionar no GAE]
 

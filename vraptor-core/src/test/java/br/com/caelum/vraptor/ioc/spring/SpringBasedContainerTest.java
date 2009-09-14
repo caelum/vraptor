@@ -68,6 +68,7 @@ import br.com.caelum.vraptor.ioc.spring.components.DummyResource;
 import br.com.caelum.vraptor.ioc.spring.components.Foo;
 import br.com.caelum.vraptor.ioc.spring.components.RequestScopedComponent;
 import br.com.caelum.vraptor.ioc.spring.components.RequestScopedContract;
+import br.com.caelum.vraptor.ioc.spring.components.SameName;
 import br.com.caelum.vraptor.ioc.spring.components.SpecialImplementation;
 import br.com.caelum.vraptor.test.HttpServletRequestMock;
 import br.com.caelum.vraptor.test.HttpSessionMock;
@@ -115,6 +116,13 @@ public class SpringBasedContainerTest {
         VRaptorRequestHolder.resetRequestForCurrentThread();
     }
 
+    @Test
+	public void twoClassesWithSameNameButDifferentPackages() throws Exception {
+		SameName instance1 = container.instanceFor(SameName.class);
+		br.com.caelum.vraptor.ioc.spring.components.sub.SameName instance2 = container.instanceFor(br.com.caelum.vraptor.ioc.spring.components.sub.SameName.class);
+		assertNotNull(instance1);
+		assertNotNull(instance2);
+	}
     @Test
     public void shouldScanAndRegisterAnnotatedBeans() {
         DummyComponent component = container.instanceFor(DummyComponent.class);

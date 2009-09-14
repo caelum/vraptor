@@ -1,5 +1,6 @@
 package br.com.caelum.vraptor.util.hibernate;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import org.hibernate.SessionFactory;
@@ -16,9 +17,11 @@ import br.com.caelum.vraptor.ioc.ComponentFactory;
  */
 @ApplicationScoped
 public class SessionFactoryCreator implements ComponentFactory<SessionFactory> {
-	private final SessionFactory factory;
 
-	public SessionFactoryCreator() {
+	private SessionFactory factory;
+
+	@PostConstruct
+	public void create() {
 		factory = new AnnotationConfiguration().configure().buildSessionFactory();
 	}
 

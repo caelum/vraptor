@@ -1,6 +1,5 @@
 package br.com.caelum.vraptor.interceptor.multipart;
 
-import java.io.File;
 import java.util.Collection;
 import java.util.List;
 
@@ -44,15 +43,9 @@ class MultipartItemsProcessor {
             }
             if (notEmpty(item)) {
                 try {
-                    // TODO concurrency issues?
-                    File file = File.createTempFile("raptor.", ".upload");
-                    file.deleteOnExit();
-                    item.write(file);
-
-                	// TODO if(item.isInMemory), should create InMemoryUploadedFile
-                    UploadedFile fileInformation = new DefaultUploadedFile(file, item.getName(), item.getContentType());
-                    parameters.setParameter(item.getFieldName(), file.getAbsolutePath());
-                    request.setAttribute(file.getAbsolutePath(), fileInformation);
+                    UploadedFile fileInformation = new DefaultUploadedFile(item.getInputStream(), item.getName(), item.getContentType());
+                    parameters.setParameter(item.getFieldName(), item.getName());
+                    request.setAttribute(item.getName(), fileInformation);
 
                     logger.debug("Uploaded file: " + item.getFieldName() + " with " + fileInformation);
                 } catch (Exception e) {

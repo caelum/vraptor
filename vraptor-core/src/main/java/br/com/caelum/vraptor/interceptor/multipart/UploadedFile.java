@@ -1,12 +1,13 @@
 package br.com.caelum.vraptor.interceptor.multipart;
 
-import java.io.File;
+import java.io.InputStream;
 
 /**
  * An interface which represents the information of an uploaded file.
  *
  * @author Guilherme Silveira
  * @author Paulo Silveira
+ * @author Lucas Cavalcanti
  */
 public interface UploadedFile {
 
@@ -16,27 +17,14 @@ public interface UploadedFile {
     String getContentType();
 
     /**
-     * @throw {@link IllegalArgumentException} if file is in memory
-     * @return Returns the file.
+     * @return Returns the contents of uploaded file.
      */
-    File getFile();
+    InputStream getFile();
 
     /**
-     * TODO: redundant? same as getFile().getName() ?
-     *
-     * @throw {@link IllegalArgumentException} if file is in memory
-     * @return Returns the fileName as in the server filesystem.
+     * @return Returns the fileName of the uploaded as it was uploaded from the
+     * client
      */
     String getFileName();
 
-    /**
-     * The complete file name from this file, as it was uploaded from the
-     * client.
-     *
-     * @return Returns the fileName.
-     */
-    String getCompleteFileName();
-
-    // TODO: byte[] getContent
-    // TODO: boolean isInMemory
 }

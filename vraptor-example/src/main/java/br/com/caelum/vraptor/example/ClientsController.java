@@ -34,7 +34,7 @@ import static br.com.caelum.vraptor.view.Results.nothing;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
-import java.io.File;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -110,7 +110,7 @@ public class ClientsController {
 		result.use(logic()).redirectTo(ClientsController.class).view(client);
 	}
 
-	public File download(Client client) {
+	public InputStream download(Client client) {
 		final Client found = repository.find(client.getId());
 		validator.checking(new Validations() {{
 			that(found.getFile(), is(notNullValue()), "download", "client_without_file");

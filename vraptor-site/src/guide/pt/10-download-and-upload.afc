@@ -42,7 +42,7 @@ public class PerfilController {
 
 O primeiro exemplo será baseado na funcionalidade de upload multipart.
 
-[code]
+[java]
 @Resource
 public class PerfilController {
 
@@ -53,7 +53,20 @@ public class PerfilController {
 	}
 
 	public void atualizaFoto(Perfil perfil, UploadedFile foto) {
-		dao.atribue(foto.getFile(), perfil);
+		dao.atribui(foto.getFile(), perfil);
 	}
 }
-[/code]
+[/java]
+
+[section Mais sobre Upload]
+
+O UploadedFile retorna o arquivo como um InputStream. Se você quiser copiar para
+um arquivo no disco facilmente, basta usar o %%IOUtils%% do %%commons-io%%, que já é dependência do
+VRaptor:
+[java]
+	public void atualizaFoto(Perfil perfil, UploadedFile foto) {
+		File fotoSalva = new File();	
+		IOUtils.copy(foto.getFile(), new PrintWriter(fotoSalva));
+		dao.atribui(fotoSalva, perfil);
+	}
+[/java]

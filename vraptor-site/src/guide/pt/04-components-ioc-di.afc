@@ -16,12 +16,12 @@ O exemplo a seguir mostra um componente a ser gerenciado pelo vraptor:
 public class ClienteDao {
  
   private final Session session;
-  public ClienteDao(HibernateControl controle) {
-  	this.session = controle.getSession()
+  public ClienteDao(Session session) {
+  	this.session = session;
   }
   
   public void adiciona(Cliente cliente) {
-	session.save(cliente);
+		session.save(cliente);
   }
   
 }
@@ -54,12 +54,51 @@ public class HibernateControl {
 }
 [/java]
 
+[section ComponentFactory]
+
+Muitas vezes você quer receber como dependência da sua classe alguma classe que não é do
+seu projeto, como por exemplo uma Session do hibernate ou um EntityManager da JPA.
+
+Para poder fazer isto, basta criar um ComponentFactory:
+
+[java]
+@Component
+public class SessionCreator implements ComponentFactory<Session> {
+
+	private final SessionFactory factory;
+	private Session session;
+
+	public SessionCreator(SessionFactory factory) {
+		this.factory = factory;
+	}
+
+	@PostConstruct
+	public void create() {
+		this.session = factory.openSession();
+	}
+
+	public Session getInstance() {
+		return session;
+	}
+
+	@PreDestroy
+	public void destroy() {
+		this.session.close();
+	}
+
+}
+[/java]
+
+Note que você pode adicionar os listeners @PostConstruct e @PreDestroy para controlar
+a criação e destruição dos recursos que você usa. Isso funciona para qualquer componente
+que você registrar no VRaptor.
+
 [section Injeção de dependências]
 
 O VRaptor utiliza um de seus provedores de injeção de dependências para controlar o que
 é necessário para instanciar cada um de seus componentes e recursos.
 
-Sendo assim, os dois exemplos anteriores permitem que qualquer um de seus recursos ou compeonenten receba
+Sendo assim, os dois exemplos anteriores permitem que qualquer um de seus recursos ou componentes receba
 um ClienteDao em seu construtor, por exemplo:
 
 [java]

@@ -13,6 +13,10 @@
   		//continua o metodo
   	}
   [/java]
+* UploadedFile.getFile() agora retorna InputStream.
+* EntityManagerCreator e EntityManagerFactoryCreator
+* bugfixes
+
 [/list]
 [section 3.0.0-beta-4]
 [list]

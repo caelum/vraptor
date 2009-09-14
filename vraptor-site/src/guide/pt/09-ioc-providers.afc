@@ -56,11 +56,12 @@ e utiliza essa configuração para fornecer sessões para nosso projeto:
 [java]
 @Component
 @ApplicationScoped
-public class SessionFactoryProvider implements ComponentFactory<SessionFactory> {
+public class SessionFactoryCreator implements ComponentFactory<SessionFactory> {
 
-	private final SessionFactory factory;
+	private SessionFactory factory;
 	
-	public SessionProvider() {
+	@PostConstruct
+	public void create() {
 		factory = new AnnotationConfiguration().configure();
 	}
 	
@@ -68,21 +69,38 @@ public class SessionFactoryProvider implements ComponentFactory<SessionFactory> 
 		return factory;
 	}
 	
+	@PreDestroy
+	public void destroy() {
+		factory.close();
+	}
+	
 }
 
 @Component
 @RequestScoped
-public class SessionProvider implements ComponentFactory<Session> {
+public class SessionCreator implements ComponentFactory<Session> {
 
 	private final SessionFactory factory;
-	
-	public SessionProvider(SessionFactory factory) {
+	private Session session;
+
+	public SessionCreator(SessionFactory factory) {
 		this.factory = factory;
 	}
-	
-	public Session getInstance() {
-		return factory.openSession();
+
+	@PostConstruct
+	public void create() {
+		this.session = factory.openSession();
 	}
+
+	public Session getInstance() {
+		return session;
+	}
+
+	@PreDestroy
+	public void destroy() {
+		this.session.close();
+	}
+	
 	
 }
 [/java]

@@ -8,7 +8,7 @@
 
 	<description>VRaptor 3 Root Buildfile</description>
 
-	<property name="vraptor.version" value="3.0.0-beta-4" />
+	<property name="vraptor.version" value="3.0.0-beta-5" />
 	<target name="core-tests" description="core module tests">
 		<ant dir="vraptor-core" target="test" />
 	</target>

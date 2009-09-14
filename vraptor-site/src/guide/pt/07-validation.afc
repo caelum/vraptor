@@ -33,7 +33,7 @@ public void adiciona(Funcionario funcionario) {
 [/java]
 
 Ao chamar o validator.onErrorUse, se existirem erros de validação, o VRaptor para a execução e redireciona a
-lógica para onde você disse. O redirecionamento é do mesmo jeito que você faria no result.use(..).
+página que você indicou. O redirecionamento funciona da mesma forma que o result.use(..).
 
 [section Estilo fluente]
 
@@ -51,7 +51,8 @@ public adiciona(Funcionario funcionario) {
 }
 [/java]
 
-Você pode ler esse código como: "Validador, cheque as minhas validações. A primeira validação é que o nome do funcionário não pode ser vazio".
+Você pode ler esse código como: "Validador, cheque as minhas validações. 
+A primeira validação é que o nome do funcionário não pode ser vazio".
 Bem mais próximo a linguagem natural.
 
 Assim sendo, caso o nome do funcionario seja vazio, ele vai ser redirecionado novamente para a logica "formulario", 

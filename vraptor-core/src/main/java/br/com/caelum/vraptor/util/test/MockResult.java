@@ -64,7 +64,6 @@ public class MockResult implements Result {
 		    return view.cast(new MockedLogic());
 		}
 		return new ObjenesisProxifier().proxify(view, new MethodInvocation<T>() {
-            @Override
             public Object intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {
                 return null;
             }

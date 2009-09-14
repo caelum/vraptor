@@ -48,7 +48,7 @@ public class SpringProviderTest {
     @Test
     public void shouldLoadInitParameterForBasePackages() {
         mockery.checking(new Expectations() {{
-            one(servletContext).getInitParameter(BasicConfiguration.BASE_PACKAGES_PARAMETER_NAME);
+            atLeast(1).of(servletContext).getInitParameter(BasicConfiguration.BASE_PACKAGES_PARAMETER_NAME);
             will(returnValue("br.com.caelum.vraptor.ioc.spring.components.registrar"));
             allowing(servletContext);will(returnValue(null));
         }});

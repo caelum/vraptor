@@ -50,6 +50,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import br.com.caelum.vraptor.Converter;
+import br.com.caelum.vraptor.config.BasicConfiguration;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.http.UrlToResourceTranslator;
@@ -91,6 +92,8 @@ public class SpringBasedContainerTest {
 			{
 				allowing(servletContext).getAttribute("org.springframework.web.context.WebApplicationContext.ROOT");
 				will(returnValue(null));
+
+				allowing(servletContext).getInitParameter(BasicConfiguration.BASE_PACKAGES_PARAMETER_NAME);
 			}
 		});
 

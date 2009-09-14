@@ -155,7 +155,7 @@ public class OgnlParametersProvider implements ParametersProvider {
 			} catch (ConversionError ex) {
 				errors.add(new ValidationMessage(ex.getMessage(), key));
 			} catch (MethodFailedException e) { // setter threw an exception
-				
+
 				Throwable cause = e.getCause();
 				if (cause.getClass().isAnnotationPresent(ValidationException.class)) {
 					errors.add(new ValidationMessage(cause.getLocalizedMessage(), key));
@@ -169,7 +169,10 @@ public class OgnlParametersProvider implements ParametersProvider {
 					logger.debug("Ignoring exception", ex);
 				}
 			} catch (OgnlException e) {
-				throw new InvalidParameterException("unable to parse expression '" + key + "'", e);
+				// TODO it fails when parameter name is not a valid java identifier... ignoring by now
+				if (logger.isWarnEnabled()) {
+					logger.warn("unable to parse expression '" + key + "'", e);
+				}
 			}
 		}
 		return root;

@@ -47,19 +47,54 @@
 
 		<h1 class="chapter">Google App Engine</h1>
 
-		<span class="paragraph">O VRaptor 3 funciona no Google App Engine, mas voc&ecirc; precisa trocar a
+		
+
+
+<h2 class="section">Configurando o VRaptor 3</h2>
+	    	<span class="paragraph">O VRaptor 3 funciona no Google App Engine, mas voc&ecirc; precisa trocar a
 implementa&ccedil;&atilde;o de um dos componentes, que usa recursos privados da VM
-e que n&atilde;o est&atilde;o dispon&iacute;veis no GAE. Para fazer isso basta escrever a
-seguinte classe:</span><div class="java"><code class="java">
+e que n&atilde;o est&atilde;o dispon&iacute;veis no GAE (atrav&eacute;s da biblioteca Objenesis).
+Para fazer isso basta escrever aseguinte classe:</span>
+	    	<div class="java"><code class="java">
 <span class="java16">@Component<br />
 @ApplicationScoped<br />
 </span><span class="java4">public class </span><span class="java10">MyProxifier </span><span class="java4">extends </span><span class="java10">DefaultProxifier </span><span class="java8">{<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java3">//delegate constructor here<br />
-</span><span class="java8">}</span></code></div><span class="paragraph">Esta classe n&atilde;o usa recursos privados da VM, mas instancia as classes
-proxificadas passando null para todos os argumentos do construtor.
+</span><span class="java8">}</span></code></div>
+	    	<span class="paragraph">Esta classe n&atilde;o usa recursos privados da VM, mas instancia as classes
+proxificadas passando <code class="inlineCode">null</code> para todos os argumentos do construtor.
 Logo voc&ecirc; vai ter que prevenir Null Pointer Access em todos os construtores
-dos Controllers.</span>
+dos seus Controllers.</span>
+	    	<span class="paragraph">Futuramente podemos estudar a possibilidade de usar um outro ClassLoader que 
+injete um construtor default a mais nessas classes, apenas para o uso
+do Proxifier, evitando a necessidade do Objenesis.</span>
+		
 
+<h2 class="section">Configurando o Spring para funcionar no GAE</h2>
+	    	<span class="paragraph">TODO IMPORTNATE: Falar dos Jars do Spring</span>
+	    	<span class="paragraph">e falar que isso &eacute; ineretne do spring+gae, nao exatamente do vraptor
+colocar link pra onde o GAE fala isso</span>
+		
+
+<h2 class="section">Dicas gerais para o uso do JSP, JSTL e EL no GAE</h2>
+	    	<span class="paragraph">falar que isso tambem &eacute; independente do vraptor!!! mas deixar documentado
+pois &eacute; de uso de todos</span>
+	    	<span class="paragraph">TODO IMPORTANTE 2: Falar da configuracao para expression language, baseado na info do gui:</span>
+	    	<span class="paragraph">It seems that JSP Api+JSTL does not work out of the box at appengine
+as it says here <a class="link" target="_blank" href="http://groups.google.com/group/google-appengine-java/web/will-it-play-in-app-engine">http://groups.google.com/group/google-appengine-java/web/will-it-play-in-app-engine</a>
+Is there any way to update the above link?</span>
+	    	<span class="paragraph">Some posts on the list mention that EL was ignored by default (due to
+the jasper compiled being configured this way). The following is a
+list of "tasks" one can and can not do to make it work:</span>
+	    	<span class="paragraph">a) &lt;jsp-config/jsp-proprerty-group/el-ignored&gt; tag is unsupported,
+therefore
+b) all your jsp files should contain @page isElIgnored="false"
+c) all your tag files should contain @tag isElIgnored="false"
+d) there is no need to add the jstl jar file to your WEB-INF/lib dir</span>
+	    	<span class="paragraph">Although there are some mails saying that (d) would not work if you
+add it, it seems to me that it depends on the version that you add to
+the classpath so... do not add it.</span>
+		
 
 
 	</div>

@@ -86,11 +86,12 @@ e utiliza essa configura&ccedil;&atilde;o para fornecer sess&otilde;es para noss
 	    	<div class="java"><code class="java">
 <span class="java16">@Component<br />
 @ApplicationScoped<br />
-</span><span class="java4">public class </span><span class="java10">SessionFactoryProvider </span><span class="java4">implements </span><span class="java10">ComponentFactory&lt;SessionFactory&gt; </span><span class="java8">{<br />
+</span><span class="java4">public class </span><span class="java10">SessionFactoryCreator </span><span class="java4">implements </span><span class="java10">ComponentFactory&lt;SessionFactory&gt; </span><span class="java8">{<br />
 <br />
-&nbsp;&nbsp;&nbsp; </span><span class="java4">private final </span><span class="java10">SessionFactory factory;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">private </span><span class="java10">SessionFactory factory;<br />
 &nbsp;&nbsp;&nbsp; <br />
-&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">SessionProvider</span><span class="java8">() {<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java16">@PostConstruct<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">create</span><span class="java8">() {<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">factory = </span><span class="java4">new </span><span class="java10">AnnotationConfiguration</span><span class="java8">()</span><span class="java10">.configure</span><span class="java8">()</span><span class="java10">;<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
 &nbsp;&nbsp;&nbsp; <br />
@@ -98,21 +99,38 @@ e utiliza essa configura&ccedil;&atilde;o para fornecer sess&otilde;es para noss
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return </span><span class="java10">factory;<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
 &nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java16">@PreDestroy<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">destroy</span><span class="java8">() {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">factory.close</span><span class="java8">()</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+&nbsp;&nbsp;&nbsp; <br />
 }<br />
 <br />
 </span><span class="java16">@Component<br />
 @RequestScoped<br />
-</span><span class="java4">public class </span><span class="java10">SessionProvider </span><span class="java4">implements </span><span class="java10">ComponentFactory&lt;Session&gt; </span><span class="java8">{<br />
+</span><span class="java4">public class </span><span class="java10">SessionCreator </span><span class="java4">implements </span><span class="java10">ComponentFactory&lt;Session&gt; </span><span class="java8">{<br />
 <br />
 &nbsp;&nbsp;&nbsp; </span><span class="java4">private final </span><span class="java10">SessionFactory factory;<br />
-&nbsp;&nbsp;&nbsp; <br />
-&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">SessionProvider</span><span class="java8">(</span><span class="java10">SessionFactory factory</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">private </span><span class="java10">Session session;<br />
+<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">SessionCreator</span><span class="java8">(</span><span class="java10">SessionFactory factory</span><span class="java8">) {<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">this</span><span class="java10">.factory = factory;<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
-&nbsp;&nbsp;&nbsp; <br />
-&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">Session getInstance</span><span class="java8">() {<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return </span><span class="java10">factory.openSession</span><span class="java8">()</span><span class="java10">;<br />
+<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java16">@PostConstruct<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">create</span><span class="java8">() {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">this</span><span class="java10">.session = factory.openSession</span><span class="java8">()</span><span class="java10">;<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">Session getInstance</span><span class="java8">() {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return </span><span class="java10">session;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java16">@PreDestroy<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">destroy</span><span class="java8">() {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">this</span><span class="java10">.session.close</span><span class="java8">()</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+&nbsp;&nbsp;&nbsp; <br />
 &nbsp;&nbsp;&nbsp; <br />
 }</span></code></div>
 		

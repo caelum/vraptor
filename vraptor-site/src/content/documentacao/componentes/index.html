@@ -62,12 +62,12 @@ Dessa maneira seu c&oacute;digo tamb&eacute;m fica mais f&aacute;cil de testar u
 </span><span class="java4">public class </span><span class="java10">ClienteDao </span><span class="java8">{<br />
  <br />
 &nbsp; </span><span class="java4">private final </span><span class="java10">Session session;<br />
-&nbsp; </span><span class="java4">public </span><span class="java10">ClienteDao</span><span class="java8">(</span><span class="java10">HibernateControl controle</span><span class="java8">) {<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">this</span><span class="java10">.session = controle.getSession</span><span class="java8">()<br />
-&nbsp; }<br />
+&nbsp; </span><span class="java4">public </span><span class="java10">ClienteDao</span><span class="java8">(</span><span class="java10">Session session</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">this</span><span class="java10">.session = session;<br />
+&nbsp; </span><span class="java8">}<br />
 &nbsp; <br />
 &nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">adiciona</span><span class="java8">(</span><span class="java10">Cliente cliente</span><span class="java8">) {<br />
-&nbsp;&nbsp;&nbsp; </span><span class="java10">session.save</span><span class="java8">(</span><span class="java10">cliente</span><span class="java8">)</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">session.save</span><span class="java8">(</span><span class="java10">cliente</span><span class="java8">)</span><span class="java10">;<br />
 &nbsp; </span><span class="java8">}<br />
 &nbsp; <br />
 }</span></code></div>
@@ -97,10 +97,45 @@ uma vez por contexto:</span>
 }</span></code></div>
 		
 
+<h2 class="section">ComponentFactory</h2>
+	    	<span class="paragraph">Muitas vezes voc&ecirc; quer receber como depend&ecirc;ncia da sua classe alguma classe que n&atilde;o &eacute; do
+seu projeto, como por exemplo uma Session do hibernate ou um EntityManager da JPA.</span>
+	    	<span class="paragraph">Para poder fazer isto, basta criar um ComponentFactory:</span>
+	    	<div class="java"><code class="java">
+<span class="java16">@Component<br />
+</span><span class="java4">public class </span><span class="java10">SessionCreator </span><span class="java4">implements </span><span class="java10">ComponentFactory&lt;Session&gt; </span><span class="java8">{<br />
+<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">private final </span><span class="java10">SessionFactory factory;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">private </span><span class="java10">Session session;<br />
+<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">SessionCreator</span><span class="java8">(</span><span class="java10">SessionFactory factory</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">this</span><span class="java10">.factory = factory;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java16">@PostConstruct<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">create</span><span class="java8">() {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">this</span><span class="java10">.session = factory.openSession</span><span class="java8">()</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">Session getInstance</span><span class="java8">() {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return </span><span class="java10">session;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java16">@PreDestroy<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">destroy</span><span class="java8">() {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">this</span><span class="java10">.session.close</span><span class="java8">()</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+<br />
+}</span></code></div>
+	    	<span class="paragraph">Note que voc&ecirc; pode adicionar os listeners @PostConstruct e @PreDestroy para controlar
+a cria&ccedil;&atilde;o e destrui&ccedil;&atilde;o dos recursos que voc&ecirc; usa. Isso funciona para qualquer componente
+que voc&ecirc; registrar no VRaptor.</span>
+		
+
 <h2 class="section">Injeção de dependências</h2>
 	    	<span class="paragraph">O VRaptor utiliza um de seus provedores de inje&ccedil;&atilde;o de depend&ecirc;ncias para controlar o que
 &eacute; necess&aacute;rio para instanciar cada um de seus componentes e recursos.</span>
-	    	<span class="paragraph">Sendo assim, os dois exemplos anteriores permitem que qualquer um de seus recursos ou compeonenten receba
+	    	<span class="paragraph">Sendo assim, os dois exemplos anteriores permitem que qualquer um de seus recursos ou componentes receba
 um ClienteDao em seu construtor, por exemplo:</span>
 	    	<div class="java"><code class="java">
 <span class="java16">@Resource<br />

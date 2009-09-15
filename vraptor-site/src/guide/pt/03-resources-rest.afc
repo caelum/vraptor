@@ -271,7 +271,7 @@ public class PostController {
 }
 [/java]
 
-A uri %%/post/atual%% pode ser tratada tanto pelo método %%mostra%, quanto pelo %%atual%%.
+A uri %%/post/atual%% pode ser tratada tanto pelo método %%mostra%%, quanto pelo %%atual%%.
 Mas eu quero que quando seja exatamente %%/post/atual%% o método executado seja o atual. 
 O que eu quero é que o VRaptor teste primeiro o path do método %%atual%%,
 para não correr o risco de cair no método %%mostra%%.

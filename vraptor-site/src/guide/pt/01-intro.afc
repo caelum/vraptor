@@ -149,7 +149,7 @@ Imagine que após a remoção desejamos redirecionar para a listagem:
 	@Path("/music/{music.id}")
 	public void remove(Music music) {
 		dao.remove(music);
-		result.use(logic()).redirectTo(MusicController.class).list();
+		result.use(Results.logic()).redirectTo(MusicController.class).list();
 	}
 [/java]
 

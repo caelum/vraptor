@@ -34,7 +34,7 @@ public class VRaptorInstantiator implements Instantiator<Object> {
 		this.converters = converters;
 		this.container = container;
 		this.localization = localization;
-		this.parameterNameProvider = new UncapitalizingParameterNamesProvider(parameterNameProvider);
+		this.parameterNameProvider = parameterNameProvider;
 		
 		DependencyProvider dependencyProvider = new VRaptorDependencyProvider();
 		ParameterNamesProvider parameterNamesProvider = 

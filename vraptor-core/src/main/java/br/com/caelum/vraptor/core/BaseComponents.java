@@ -39,8 +39,11 @@ import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
+import br.com.caelum.vraptor.converter.BigDecimalConverter;
+import br.com.caelum.vraptor.converter.BigIntegerConverter;
 import br.com.caelum.vraptor.converter.BooleanConverter;
 import br.com.caelum.vraptor.converter.ByteConverter;
+import br.com.caelum.vraptor.converter.CharacterConverter;
 import br.com.caelum.vraptor.converter.DoubleConverter;
 import br.com.caelum.vraptor.converter.EnumConverter;
 import br.com.caelum.vraptor.converter.FloatConverter;
@@ -50,6 +53,7 @@ import br.com.caelum.vraptor.converter.LocaleBasedDateConverter;
 import br.com.caelum.vraptor.converter.LongConverter;
 import br.com.caelum.vraptor.converter.PrimitiveBooleanConverter;
 import br.com.caelum.vraptor.converter.PrimitiveByteConverter;
+import br.com.caelum.vraptor.converter.PrimitiveCharConverter;
 import br.com.caelum.vraptor.converter.PrimitiveDoubleConverter;
 import br.com.caelum.vraptor.converter.PrimitiveFloatConverter;
 import br.com.caelum.vraptor.converter.PrimitiveIntConverter;
@@ -165,13 +169,29 @@ public class BaseComponents {
     );
 
     @SuppressWarnings("unchecked")
-    private static final Class<? extends Converter<?>>[] BUNDLED_CONVERTERS = new Class[]{
-            PrimitiveIntConverter.class, PrimitiveLongConverter.class, PrimitiveShortConverter.class,
-            PrimitiveByteConverter.class, PrimitiveDoubleConverter.class, PrimitiveFloatConverter.class,
-            PrimitiveBooleanConverter.class, IntegerConverter.class, LongConverter.class, ShortConverter.class,
-            ByteConverter.class, DoubleConverter.class, FloatConverter.class, BooleanConverter.class,
-            LocaleBasedCalendarConverter.class, LocaleBasedDateConverter.class, EnumConverter.class,
-            UploadedFileConverter.class};
+	private static final Class<? extends Converter<?>>[] BUNDLED_CONVERTERS = new Class[] {
+    		BigDecimalConverter.class,
+    		BigIntegerConverter.class,
+    		BooleanConverter.class,
+    		ByteConverter.class,
+    		CharacterConverter.class,
+    		DoubleConverter.class,
+    		EnumConverter.class,
+    		FloatConverter.class,
+    		IntegerConverter.class,
+    		LocaleBasedCalendarConverter.class,
+    		LocaleBasedDateConverter.class,
+    		LongConverter.class,
+    		PrimitiveBooleanConverter.class,
+    		PrimitiveByteConverter.class,
+    		PrimitiveCharConverter.class,
+    		PrimitiveDoubleConverter.class,
+    		PrimitiveFloatConverter.class,
+			PrimitiveIntConverter.class,
+			PrimitiveLongConverter.class,
+			PrimitiveShortConverter.class,
+			ShortConverter.class,
+			UploadedFileConverter.class };
 
 
     @SuppressWarnings("unchecked")

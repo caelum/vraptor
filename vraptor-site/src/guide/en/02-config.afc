@@ -1,21 +1,21 @@
 [chapter Basic Configuration]
 
-The configurations needed in order to use VRaptor are minimal. The only required configuration is
-defining a filter in your %%web.xml%% descriptor.
-Here, we’ll also see some extras configurations, which are optional.
+The necessary configurations for using VRaptor are minimal. The only required 
+configurations are defining a filter and the application base package in your %%web.xml%%.
+Here, we’ll also see some extra configurations, which are optional.
 
 [section Your Resource]
 
-Each resource in VRaptor works like a class where you write your business logic and it is available
-for the user through a specific URI. In the end of each logic execution, the user is sent to a page
-that shows the process' final result.
+Each resource in VRaptor consists of a class where you write your business logics. It is
+made available for the user through a specific URI. After the logic execution, the user 
+is redirected to a page that shows the process' final result.
 
-To write a simple resource in VRaptor, you don’t need much effort, just create a class annotated with
-%%@Resource%%.
+You don’t need much effort to write a simple resource in VRaptor: just create a new class 
+annotated with %%@Resource%%.
 
 [java]
 @Resource 
-public class EmployeeController { 
+public class EmployeesController { 
  
     public List<Employee> listAll () { 
         return ... 
@@ -26,55 +26,59 @@ public class EmployeeController {
 }
 [/java]
 
-In the above example, %%EmployeeController%% is a resource, and the methods %%listAll%% and %%add%%
-are the logics.
+In the above example, %%EmployeesController%% is a resource and the methods %%listAll%% 
+and %%add%% are the logics.
 
 [section Message bundle File]
 
-Internationalization (i18n) is a powerful resource that is present on almost all Web frameworks nowadays.
-And it’s no different with VRaptor3. With i18n you can make your applications support several different
-languages (like French, Portuguese, Spanish, English etc) in such a way that little effort is needed,
-just translating the application messages.
+Internationalization (i18n) is a powerful feature present in almost all Web frameworks 
+nowadays. And it’s no different with VRaptor3. With i18n you can make your applications 
+support several different languages (such as French, Portuguese, Spanish, English, etc) 
+in a very easy way: simply translating the application messages.
 
-In order to support i18n, you must create a file called %%messages.properties%% and make it available in
-your application classpath (%%WEB-INF/classes%%). That file contains lines which are a set of key/value,
-for example:
+In order to support i18n, you must create a file called %%messages.properties%% and make 
+it available in your application classpath (%%WEB-INF/classes%%). That file contains 
+lines which are a set of key/value entries, for example:
 
-[code]
-field.userName = Username 
-field.password = Password
+[code properties]
+	field.userName = Username 
+	field.password = Password
 [/code]
 
-It’s easy so far, but what if you want to create files containing messages in other languages,
-for example, Portuguese? Easy, you just need to create another properties file called
-%%messages_pt_BR.properties%%. Notice the suffix ::_pt_BR:: on the file name. It indicates that when
-the user access your application from his computer configured with Brazilian Portuguese locale,
-the messages in this file will be used. The file contents would be:
+So far, it’s easy, but what if you want to create files containing messages in other 
+languages, for example, Portuguese? Also easy. You just need to create another properties 
+file called %%messages_pt_BR.properties%%. Notice the suffix ::_pt_BR:: on the file name. 
+It indicates that when the user access your application from his computer configured with 
+Brazilian Portuguese locale, the messages in this file will be used. The file contents 
+would be:
 
-[code]
+[code properties]
 field.userName = Nome do Usuário
 field.password = Senha
 [/code]
 
-Notice that the keys are the same in both files, what changes is the value to the specific language.
+Notice that the keys are the same in both files, what changes is the value to the specific 
+language.
 
-In order to use those messages in your JSP files, you could use JSTL. The code would go as follows:
+In order to use those messages in your JSP files, you could use JSTL. The code would go 
+as follows:
 
 [code]
 <html> 
-    <body> 
-        <fmt:message key="campo.usuario" /> <input name="usuario.nomeUsuario" /> 
+	<body> 
+		<fmt:message key="field.userName" /> <input name="user.userName" /> 
          
-        <br /> 
-         
-        <fmt:message key="campo.senha" /> <input type="password" name="usuario.senha" /> 
-         
-        <input type="submit" /> 
-    </body> 
+		<br /> 
+		
+		<fmt:message key="field.password" /> <input type="password" name="user.password" /> 
+		
+		<input type="submit" /> 
+	</body> 
 </html>
 [/code]
 
 [section blank-project]
-The minimal dependencies and configurations for VRaptor to work are available in
-vraptor-blank-project, which can be downloaded from:
+The minimal dependencies and configurations necessary for VRaptor to work are available 
+in vraptor-blank-project, and can be downloaded at:
+
 http://github.com/caelum/vraptor/downloads

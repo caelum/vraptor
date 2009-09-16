@@ -34,14 +34,14 @@ No exemplo acima, %%FuncionarioController%% é um recurso, e os métodos %%lista
 
 Internacionalização (::i18n::) é um recurso poderoso, e que está presente em quase todos os frameworks 
 Web hoje em dia. E não é diferente no VRaptor3. Com i18n podemos fazer com que nossa aplicação suporte
-várias línguas (francês, português, espanhol, inglês etc) de uma maneira que não nos cause muito esforço, 
+várias línguas (francês, português, espanhol, inglês, etc) de uma maneira que não nos cause muito esforço, 
 bastando apenas fazermos a tradução das mensagens da nossa aplicação. 
 
-Para isso basta criarmos um arquivo chamado ::messages.properties:: e disponibilizá-lo no classpath da 
+Para isso é só criarmos um arquivo chamado ::messages.properties:: e disponibilizá-lo no classpath da 
 nossa aplicação (%%WEB-INF/classes%%). O conteúdo desse arquivo são várias linhas compostas por um conjunto 
-de chave/valor, como por exemplo:
+de chaves/valor, como por exemplo:
 
-[code]
+[code properties]
 campo.nomeUsuario = Nome de Usuário
 campo.senha = Senha
 [/code]
@@ -51,7 +51,7 @@ Simples, basta criarmos um outro arquivo properties chamado %%messages_en.proper
 ::_en:: no nome do arquivo. Isso indica que quando o usuário acessar sua aplicação através de uma máquina 
 configurada com locale em inglês as mensagens desse arquivo serão utilizadas. O conteúdo desse arquivo então ficaria:
 
-[code]
+[code properties]
 campo.nomeUsuario = Username
 campo.senha = Password
 [/code]
@@ -78,5 +78,5 @@ Para usar essas mensagens em seus arquivos JSP, você pode utilizar a JSTL. Dess
 [section blank-project]
 As dependências mínimas e a configuração mínima para o VRaptor funcionar
 estão no vraptor-blank-project que pode ser baixado no site:
-http://github.com/caelum/vraptor/downloads
 
+http://github.com/caelum/vraptor/downloads

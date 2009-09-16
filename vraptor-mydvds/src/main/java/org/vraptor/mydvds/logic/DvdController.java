@@ -11,6 +11,7 @@ import org.vraptor.mydvds.interceptor.UserInfo;
 import org.vraptor.mydvds.model.Dvd;
 import org.vraptor.mydvds.model.User;
 
+import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
@@ -21,8 +22,8 @@ import br.com.caelum.vraptor.validator.Validations;
 import br.com.caelum.vraptor.view.Results;
 
 /**
- * O <code>MultipartRequestInterceptor</code> vem com VRaptor e serve para facilitar o upload de arquivos.
- * Verifique o tutorial sobre o upload.
+ * The resource <code>DvdController</code> handles all Dvd operations,
+ * such as adding new Dvds, listing all Dvds, and so on.
  */
 @Resource
 public class DvdController {
@@ -35,12 +36,12 @@ public class DvdController {
     private final UserInfo userInfo;
 
 	/**
-	 * Cria o componente e injeta a fábrica de daos pelo construtor.
+	 * Receives dependencies through the constructor.
 	 *
-	 * Podemos usar injeção pelo construtor por causa do
-	 * <code>DaoInterceptor.class</code> que cria e ejeta a fábrica.
-	 *
-	 * @param factory fábrica de daos
+	 * @param result VRaptor result handler.
+	 * @param validator VRaptor validator.
+	 * @param factory dao factory.
+	 * @param userInfo info on the logged user.
 	 */
 	public DvdController(Result result, Validator validator, DaoFactory factory, UserInfo userInfo) {
 		this.result = result;
@@ -49,7 +50,17 @@ public class DvdController {
         this.userInfo = userInfo;
 	}
 
-	@Path("/dvd/search")
+	/**
+	 * Accepts HTTP GET requests.
+	 * URL:  /dvds/search
+	 * View: /WEB-INF/jsp/dvd/search.jsp
+	 *
+	 * This method searches for dvds based on a title.
+	 *
+	 * @param dvd
+	 */
+	@Path("/dvds/search")
+	@Get
 	public void search(Dvd dvd) {
         if (dvd.getTitle() == null) {
             dvd.setTitle("");
@@ -60,14 +71,22 @@ public class DvdController {
     }
 
 	/**
-	 * URL: 			/dvd
-	 * View ok:			add.jsp
+	 * Accepts HTTP POST requests.
+	 * URL:  /dvds
+	 * View: /WEB-INF/jsp/dvd/add.jsp
 	 *
 	 * The method adds a new dvd and updates the user.
+	 *
+	 * The <code>UploadedFile</code> is automatically handled
+	 * by VRaptor's <code>MultipartInterceptor</code>.
 	 */
-	@Path("/dvd")
+	@Path("/dvds")
 	@Post
 	public void add(Dvd dvd, UploadedFile file) {
+	    if (dvd == null) {
+	        return;
+	    }
+
 	    validateAdd(dvd);
 
 		// is there a file?
@@ -82,34 +101,27 @@ public class DvdController {
 		factory.getDvdDao().add(dvd);
 		factory.getUserDao().update(user);
 
-		result.include("dvd", dvd);
+		result.use(Results.logic()).redirectTo(DvdController.class).show(dvd);
 	}
 
 	/**
-	 * Validates dvd data.
+	 * Shows the page with information when a Dvd is successfully added.
 	 */
-	private void validateAdd(final Dvd dvd) {
-	    validator.checking(new Validations() {{
-	        that(dvd.getTitle(), is(notEmpty()), "login", "invalid_title");
-	        that(dvd.getType(), is(notNullValue()), "name", "invalid_type");
-	        that(dvd.getDescription(), is(notEmpty()), "description", "invalid_description");
-	        that(dvd.getDescription().length() >= 6, "description", "invalid_description");
-	    }});
-
-	    redirectOnError();
+	@Path("/dvds/{dvd.id}")
+	@Get
+	public void show(Dvd dvd) {
+	    result.include("dvd", dvd);
 	}
-
-	/**
-	 * Redirects to home if there are validation errors.
-	 */
-    private void redirectOnError() {
-        validator.onErrorUse(Results.page()).forward("/WEB-INF/jsp/user/home.jsp");
-    }
 
     /**
+     * Accepts HTTP POST requests.
+     * URL:  /dvds/addToList/id (for example, /dvd/addToList/3 adds the dvd with id 3 to the user's collection)
+     * View: redirects to user's home
+     *
      * This method adds a dvd to a user's collection.
      */
-    @Path("/dvd/addToList/{dvd.id}")
+    @Path("/dvds/addToList/{dvd.id}")
+    @Post
 	public void addToMyList(Dvd dvd) {
 	    User user = refreshUser();
 	    validateAddToMyList(dvd, user);
@@ -120,23 +132,50 @@ public class DvdController {
 		redirectToHome();
 	}
 
+    /**
+     * Validates dvd data.
+     */
+    private void validateAdd(final Dvd dvd) {
+        validator.checking(new Validations() {{
+            that(dvd.getTitle(), is(notEmpty()), "login", "invalid_title");
+            that(dvd.getType(), is(notNullValue()), "name", "invalid_type");
+            that(dvd.getDescription(), is(notEmpty()), "description", "invalid_description");
+            that(dvd.getDescription().length() >= 6, "description", "invalid_description");
+        }});
+
+        redirectOnError();
+    }
+
+    /**
+     * Checks if the user already has the added dvd
+     * @param dvd
+     * @param user
+     */
+    private void validateAddToMyList(final Dvd dvd, final User user) {
+        validator.checking(new Validations() {{
+            that(user.getDvds().contains(dvd), is(equalTo(false)), "dvd", "you_already_have_this_dvd");
+        }});
+
+        redirectOnError();
+    }
+
+    /**
+     * Redirects to home if there are validation errors.
+     */
+    private void redirectOnError() {
+        validator.onErrorUse(Results.page()).of(UserController.class).home();
+    }
+
+    /**
+     * Redirects to home.
+     */
     private void redirectToHome() {
         result.use(Results.logic()).redirectTo(UserController.class).home();
     }
 
 	/**
-	 * Checks if the user already has the added dvd
-	 * @param dvd
-	 * @param user
+	 * Refreshes user data from database.
 	 */
-	private void validateAddToMyList(final Dvd dvd, final User user) {
-	    validator.checking(new Validations() {{
-	        that(user.getDvds().contains(dvd), is(equalTo(false)), "dvd", "you_already_have_this_dvd");
-	    }});
-
-	    redirectOnError();
-	}
-
     private User refreshUser() {
         User user = userInfo.getUser();
 		factory.getUserDao().refresh(user);

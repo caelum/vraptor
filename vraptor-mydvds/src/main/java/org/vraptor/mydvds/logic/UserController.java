@@ -18,8 +18,8 @@ import br.com.caelum.vraptor.validator.Validations;
 import br.com.caelum.vraptor.view.Results;
 
 /**
- * A classe NewUser, nome do componente "user". Será interceptada pelo <code>DaoInterceptor</code> e
- * <code>TransactionInterceptor</code> .
+ * The resource <code>UserController</code> handles all user operations,
+ * such as adding new users, listing all users, and so on.
  */
 @Resource
 public class UserController {
@@ -30,26 +30,41 @@ public class UserController {
     private final UserInfo userInfo;
 
 	/**
-	 * Cria o componente e injeta a fábrica de daos pelo construtor.
+	 * Receives dependencies through the constructor.
 	 *
-	 * Podemos usar injeção pelo construtor por causa do
-	 * <code>DaoInterceptor.class</code> que cria e ejeta a fábrica.
-	 *
-	 * @param factory fábrica de daos
+	 * @param result VRaptor result handler.
+     * @param validator VRaptor validator.
+     * @param factory dao factory.
+     * @param userInfo info on the logged user.
 	 */
-	public UserController(Result result, DaoFactory factory, Validator validator, UserInfo userInfo) {
+	public UserController(Result result, Validator validator, DaoFactory factory, UserInfo userInfo) {
 		this.result = result;
+		this.validator = validator;
         this.factory = factory;
-        this.validator = validator;
         this.userInfo = userInfo;
 	}
 
+	/**
+	 * Accepts HTTP GET requests.
+	 * URL:  /home
+	 * View: /WEB-INF/jsp/user/home.jsp
+	 *
+	 * Shows user's home page containing his Dvd collection.
+	 */
+	@Path("/home")
 	@Get
 	public void home() {
 	    factory.getUserDao().refresh(userInfo.getUser());
-	    result.use(Results.page()).forward();
 	}
 
+	/**
+     * Accepts HTTP GET requests.
+     * URL:  /users (only GET requests for this URL)
+     * View: /WEB-INF/jsp/user/list.jsp
+     *
+     * Lists all users.
+     */
+	@Path("/users")
 	@Get
 	public void list() {
         List<User> users = new ArrayList<User>();
@@ -67,40 +82,72 @@ public class UserController {
     }
 
 	/**
-	 * URL: 			/user
-	 * View ok:			add.jsp
+	 * Accepts HTTP POST requests.
+	 * URL:	 /users
+	 * View: /WEB-INF/jsp/user/add.jsp
 	 *
 	 * The "user" parameter will be populated with the request parameters, for example:
 	 *
 	 * 		/user?user.name="Nico"&user.login="555555"
 	 *
-	 * automatically populates the name and login parameters from the user object with values Nico and 555555
+	 * automatically populates the name and login parameters on the user object with values Nico and 555555.
 	 *
-	 * O método adiciona o usuário no banco de dados.
+	 * Adds new users to the database.
 	 */
-	@Path("/user")
+	@Path("/users")
 	@Post
 	public void add(User user) {
+	    if (user == null) {
+	        return;
+	    }
+
 	    result.include("user", user);
 	    validateAdd(user);
 
 		this.factory.getUserDao().add(user);
-		result.use(Results.page()).forward();
+		result.use(Results.logic()).redirectTo(UserController.class).userAdded(user);
 	}
 
 	/**
-	 * Validation with VRaptor.
+	 * Shows the page with information when a user is successfully added.
 	 */
-	public void validateAdd(final User user) {
+	@Get
+	public void userAdded(User user) {
+	    result.include("user", user);
+	}
+
+	/**
+	 * Accepts HTTP GET requests.
+	 * URL:  /users/id (for example, /users/42 shows information on the user with id 42)
+	 * View: /WEB-INF/jsp/user/view.jsp
+	 *
+	 * Shows information on the specified user.
+	 * @param user
+	 */
+	@Path("/users/{user.id}")
+	@Get
+	public void view(User user) {
+	    this.factory.getUserDao().refresh(user);
+	    result.include("user", user);
+	}
+
+    /**
+	 * Validation with VRaptor.
+	 * Validates user data.
+	 */
+	private void validateAdd(final User user) {
 		validator.checking(new Validations() {{
 		    // checks if there is already an user with the specified login
-		    that(!factory.getUserDao().containsUserWithLogin(user.getLogin()), "login", "login_already_exists");
+		    boolean loginDoesNotExist = !factory.getUserDao().containsUserWithLogin(user.getLogin());
 
-		    // calls Hibernate Validator for the user object
+            that(loginDoesNotExist, "login", "login_already_exists");
+
+		    // calls Hibernate Validator for the user instance
 		    and(Hibernate.validate(user));
 		}});
 
-		validator.onErrorUse(Results.page()).forward("index.jsp");
+		// redirects to the index page if any validation errors occur.
+		validator.onErrorUse(Results.page()).of(LoginController.class).index();
 	}
 
 }

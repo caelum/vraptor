@@ -4,21 +4,22 @@
 <script type="text/javascript" src="js/autocomplete.js"></script>
 <script type="text/javascript" src="js/searchDvd.js"></script>
 
-<c:if test="${not empty errors}">
-	<div id="blue-box">
-	<h1><fmt:message key="errors"/></h1>
-	<hr/>
-	<c:forEach var="error" items="${errors.iterator}">
-		<fmt:message key="${error.key}"/><br/>
-	</c:forEach>
-	</div>
-</c:if>
-
 <div id="blue-box">
 <table>
 	<tr><td align="right"><a href="<c:url value="/logout" />"><fmt:message key="logout"/></a></td></tr>
 </table>
 </div>
+
+<c:if test="${not empty errors}">
+	<div id="blue-box">
+	<h1><fmt:message key="errors"/></h1>
+	<hr/>
+	<c:forEach var="error" items="${errors}">
+		${error.message}<br/>
+	</c:forEach>
+	</div>
+</c:if>
+
 
 <br/><br/>
 
@@ -38,7 +39,7 @@
 <div id="blue-box">
 <h1><fmt:message key="new_dvd"/></h1>
 <hr/>
-<w:form action="/dvd" type="table" enctype="multipart/form-data" method="post" border="0">
+<w:form action="/dvds" type="table" enctype="multipart/form-data" method="post" border="0">
 	<w:text name="dvd.title" />
 	<w:text name="dvd.description" />
 	<w:file name="file" label="sample_file" />
@@ -55,7 +56,7 @@
 <h1><fmt:message key="search_dvds"/></h1>
 <hr/>
 <table>
-<w:form action="/dvd/search" type="table">
+<w:form action="/dvds/search" type="table">
 	<w:text name="dvd.title" id="dvdTitle" autocomplete="off" />
 	<w:submit value="search"/>
 </w:form>
@@ -67,11 +68,8 @@
 <div id="blue-box">
 <h1><fmt:message key="list_users"/></h1>
 <hr/>
-<w:form action="/user/list">
+<w:form action="/users" method="get">
 	<w:submit value="search"/>
-</w:form>
-<w:form action="user.list.xml.logic">
-	<w:submit value="search_by_xml"/>
 </w:form>
 </div>
 

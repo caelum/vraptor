@@ -9,8 +9,8 @@
 	<div id="error-box">
 	<h1><fmt:message key="errors"/></h1>
 	<hr />
-	<c:forEach var="error" items="${errors.iterator}">
-   		<h3><fmt:message key="${error.category}"/> - (${error.key} / ${error.path})</h3>
+	<c:forEach var="error" items="${errors}">
+   		<h3><fmt:message key="${error.category}"/> - (${error.message})</h3>
    	</c:forEach>
 	</div>
 </c:if>
@@ -53,7 +53,7 @@
 
 <hr/>
 
-<w:form action="/user" type="table" method="post">
+<w:form action="/users" type="table" method="post">
 	<w:text name="user.name" label="name" />
 	<w:text name="user.login" label="login" />
 	<w:password name="user.password" label="password" />

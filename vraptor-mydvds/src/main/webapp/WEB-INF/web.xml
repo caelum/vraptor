@@ -13,11 +13,6 @@
 	</context-param>
 	
 	<context-param>
-        <param-name>br.com.caelum.vraptor.provider</param-name>
-        <param-value>org.vraptor.mydvds.provider.CustomProvider</param-value>
-    </context-param>
-	
-	<context-param>
         <param-name>br.com.caelum.vraptor.packages</param-name>
         <param-value>org.vraptor.mydvds</param-value>
     </context-param>
@@ -36,7 +31,7 @@
     
 	<error-page>
 		<exception-type>org.vraptor.mydvds.interceptor.AuthenticationException</exception-type>
-		<location>/index.jsp</location>
+		<location>index.jsp</location>
 	</error-page>
 
 </web-app>

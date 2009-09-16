@@ -175,3 +175,18 @@ ul#menu-right li {
 img {
     border: 0;
 }
+button {
+	padding: 0;
+	margin: 0;
+	border: 0;
+	background: none;
+	color: blue;
+	cursor: pointer;
+	text-decoration: underline;
+	overflow: visible;
+	width: auto;
+}
+.buttonForm {
+	padding: 0;
+	margin: 0;
+}

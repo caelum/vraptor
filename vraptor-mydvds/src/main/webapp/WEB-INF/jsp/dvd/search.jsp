@@ -13,7 +13,11 @@
 <table>
 <c:forEach var="dvd" items="${dvds}">
 <tr>
-	<td><a href="<c:url value="/dvd/addToList/${dvd.id}" />"><fmt:message key="add_to_my_list"/></a></td>
+    <td>
+        <form action="<c:url value="/dvds/addToList/${dvd.id}" />" method="post" class="buttonForm">
+            <button type="submit" class="link"><fmt:message key="add_to_my_list"/></button>
+        </form>
+	</td>
 	<td>${dvd.title}</td>
 	<td>${dvd.description}</td>
 	<td><fmt:message key="${dvd.type}"/></td>

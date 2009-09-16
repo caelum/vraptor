@@ -70,7 +70,7 @@ public class LoginController {
 	@Path("/logout")
 	public void logout() {
 	    userInfo.logout();
-	    result.use(Results.logic()).forwardTo(LoginController.class).index();
+	    result.use(Results.logic()).redirectTo(LoginController.class).index();
 	}
 
 	@Path("/")

@@ -37,7 +37,7 @@ public class AuthorizationInterceptor implements Interceptor {
     private boolean notNewUser(ResourceMethod method) {
         Method invokedMethod = method.getMethod();
         if (invokedMethod.getDeclaringClass().equals(UserController.class)) {
-            return !"add".equals(invokedMethod.getName());
+            return !"add".equals(invokedMethod.getName()) && !"userAdded".equals(invokedMethod.getName());
         }
         return true;
     }

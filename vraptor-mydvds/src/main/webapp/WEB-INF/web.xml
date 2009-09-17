@@ -14,7 +14,7 @@
 	
 	<context-param>
         <param-name>br.com.caelum.vraptor.packages</param-name>
-        <param-value>org.vraptor.mydvds</param-value>
+        <param-value>br.com.caelum.vraptor.mydvds</param-value>
     </context-param>
 
 	<filter>
@@ -30,7 +30,7 @@
     </filter-mapping>
     
 	<error-page>
-		<exception-type>org.vraptor.mydvds.interceptor.AuthenticationException</exception-type>
+		<exception-type>br.com.caelum.vraptor.mydvds.interceptor.AuthenticationException</exception-type>
 		<location>/index.jsp</location>
 	</error-page>
 

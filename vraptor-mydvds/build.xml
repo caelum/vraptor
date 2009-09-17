@@ -5,6 +5,10 @@
          - - - - - - - - - - - - - - - - - -->
     <target name="clean">
     	<delete file="mydvds*" failonerror="false"/>
+    	<delete file="mydvds.war" />
+    	<delete>
+    	    <fileset file="mydvdsDB.*" />
+	    </delete>
     </target>
 	
 	<!-- ================================= 

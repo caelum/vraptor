@@ -9,6 +9,11 @@
 	<description>VRaptor 3 Root Buildfile</description>
 
 	<property name="vraptor.version" value="3.0.0-beta-5" />
+	
+	<target name="clean" description="delete target directory">
+	    <delete dir="target" />
+	</target>
+	
 	<target name="core-tests" description="core module tests">
 		<ant dir="vraptor-core" target="test" />
 	</target>
@@ -63,7 +68,15 @@
 			<fileset dir="vraptor-blank-project/" excludes="*.zip"/>
 		</zip>
 	</target>
+	    
+	<target name="zips-mydvds">
+	    <ant dir="vraptor-mydvds" target="clean" />
+		<mkdir dir="target" />
+		<zip destfile="target/vraptor-mydvds-${vraptor.version}.zip">
+			<fileset dir="vraptor-mydvds/" excludes="*.zip,*.war"/>
+		</zip>
+	</target>
 	
-	<target name="zips" depends="zips-vraptor,zips-blank-project,zips-site"/>
+	<target name="zips" depends="clean,deploy-to-examples,zips-vraptor,zips-blank-project,zips-site,zips-mydvds"/>
 
 </project>

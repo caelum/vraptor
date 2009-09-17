@@ -88,7 +88,7 @@ public class UserController {
 	 *
 	 * The "user" parameter will be populated with the request parameters, for example:
 	 *
-	 * 		/user?user.name="Nico"&user.login="555555"
+	 * 		/user?user.name=Nico&user.login=555555
 	 *
 	 * automatically populates the name and login parameters on the user object with values Nico and 555555.
 	 *
@@ -97,13 +97,7 @@ public class UserController {
 	@Path("/users")
 	@Post
 	public void add(User user) {
-	    if (user == null) {
-	        return;
-	    }
-
-	    result.include("user", user);
 	    validateAdd(user);
-
 		this.factory.getUserDao().add(user);
 		result.use(Results.logic()).redirectTo(UserController.class).userAdded(user);
 	}

@@ -31,7 +31,7 @@
     
 	<error-page>
 		<exception-type>org.vraptor.mydvds.interceptor.AuthenticationException</exception-type>
-		<location>index.jsp</location>
+		<location>/index.jsp</location>
 	</error-page>
 
 </web-app>

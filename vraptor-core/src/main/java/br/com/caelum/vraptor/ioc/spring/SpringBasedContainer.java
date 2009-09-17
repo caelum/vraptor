@@ -29,6 +29,9 @@
  */
 package br.com.caelum.vraptor.ioc.spring;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.ServletContext;
 
 import org.springframework.context.ApplicationContext;
@@ -43,6 +46,8 @@ public class SpringBasedContainer extends AbstractComponentRegistry implements C
 
     private VRaptorApplicationContext applicationContext;
 
+    private final List<Class<?>> toRegister = new ArrayList<Class<?>>();
+
     public SpringBasedContainer(ApplicationContext parentContext, String... basePackages) {
 		String[] packages = {"br.com.caelum.vraptor"};
         if (basePackages.length > 0) {
@@ -53,8 +58,16 @@ public class SpringBasedContainer extends AbstractComponentRegistry implements C
     }
 
     public void register(Class<?> requiredType, Class<?> componentType) {
-        applicationContext.register(componentType);
+    	if (applicationContext.isActive()) {
+			applicationContext.register(componentType);
+		} else {
+			toRegister.add(componentType);
+		}
     }
+
+    public List<Class<?>> getToRegister() {
+		return toRegister;
+	}
 
     public <T> T instanceFor(Class<T> type) {
         return applicationContext.getBean(type);

@@ -85,6 +85,7 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
         beanFactory.ignoreDependencyType(ServletContext.class);
         registerApplicationScopedComponentsOn(beanFactory);
         registerRequestScopedComponentsOn(beanFactory);
+        registerCustomComponentsOn(beanFactory);
 
         new ComponentScanner(beanFactory, container).scan(basePackages);
 
@@ -94,7 +95,13 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
         registerCachedComponentsOn(beanFactory);
     }
 
-    private void registerCachedComponentsOn(DefaultListableBeanFactory beanFactory) {
+    private void registerCustomComponentsOn(DefaultListableBeanFactory beanFactory) {
+    	for (Class<?> type : container.getToRegister()) {
+			register(type, beanFactory);
+		}
+	}
+
+	private void registerCachedComponentsOn(DefaultListableBeanFactory beanFactory) {
         for (Class<?> cachedComponent : BaseComponents.getCachedComponents().values()) {
 			registerOn(beanFactory, cachedComponent, true);
 		}
@@ -138,11 +145,14 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
 		}
     }
 
-    public void register(final Class<?> type) {
-        registerOn((BeanDefinitionRegistry) getBeanFactory(), type, true);
+    private void register(final Class<?> type, ConfigurableListableBeanFactory beanFactory) {
+        registerOn((BeanDefinitionRegistry) beanFactory, type, true);
         if (ComponentFactory.class.isAssignableFrom(type)) {
-            getBeanFactory().registerSingleton(type.getName(), new ComponentFactoryBean(container, type));
+            beanFactory.registerSingleton(type.getName(), new ComponentFactoryBean(container, type));
         }
+    }
+    public void register(Class<?> type) {
+    	register(type, getBeanFactory());
     }
 
     private void registerOn(BeanDefinitionRegistry registry, Class<?> type) {

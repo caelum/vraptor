@@ -17,8 +17,8 @@
 		<property name="hibernate.hbm2ddl.auto">update</property>
 		<property name="hibernate.cache.provider_class">org.hibernate.cache.HashtableCacheProvider</property>
 
- 		<mapping class="org.vraptor.mydvds.model.Dvd" />
- 		<mapping class="org.vraptor.mydvds.model.User" />
+ 		<mapping class="br.com.caelum.vraptor.mydvds.model.Dvd" />
+ 		<mapping class="br.com.caelum.vraptor.mydvds.model.User" />
 
 	</session-factory>
 

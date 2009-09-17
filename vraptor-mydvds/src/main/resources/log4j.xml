@@ -17,10 +17,6 @@
 	        <priority value="ERROR" />
 	        <appender-ref ref="stdout" />
 	    </category>
-        <category name="org.vraptor">
-                <priority value="DEBUG" />
-                <appender-ref ref="stdout" />
-        </category>
 
         <category name="org.hibernate">
                 <priority value="WARN" />

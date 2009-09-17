@@ -1,11 +1,7 @@
-package org.vraptor.mydvds.logic;
+package br.com.caelum.vraptor.mydvds.logic;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import org.vraptor.mydvds.dao.DaoFactory;
-import org.vraptor.mydvds.interceptor.UserInfo;
-import org.vraptor.mydvds.model.User;
 
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Path;
@@ -13,6 +9,9 @@ import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
+import br.com.caelum.vraptor.mydvds.dao.DaoFactory;
+import br.com.caelum.vraptor.mydvds.interceptor.UserInfo;
+import br.com.caelum.vraptor.mydvds.model.User;
 import br.com.caelum.vraptor.validator.Hibernate;
 import br.com.caelum.vraptor.validator.Validations;
 import br.com.caelum.vraptor.view.Results;

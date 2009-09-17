@@ -1,4 +1,4 @@
-package org.vraptor.mydvds.validation;
+package br.com.caelum.vraptor.mydvds.validation;
 
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;

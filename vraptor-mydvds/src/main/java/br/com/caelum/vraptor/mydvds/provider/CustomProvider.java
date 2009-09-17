@@ -1,4 +1,4 @@
-package org.vraptor.mydvds.provider;
+package br.com.caelum.vraptor.mydvds.provider;
 
 import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.util.hibernate.SessionCreator;

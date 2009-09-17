@@ -1,4 +1,4 @@
-package org.vraptor.mydvds.util;
+package br.com.caelum.vraptor.mydvds.util;
 
 import org.hibernate.SessionFactory;
 

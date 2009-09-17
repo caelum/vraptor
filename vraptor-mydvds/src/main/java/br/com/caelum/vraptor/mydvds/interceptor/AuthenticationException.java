@@ -1,4 +1,4 @@
-package org.vraptor.mydvds.interceptor;
+package br.com.caelum.vraptor.mydvds.interceptor;
 
 public class AuthenticationException extends RuntimeException {
 

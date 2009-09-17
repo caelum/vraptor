@@ -1,4 +1,4 @@
-package org.vraptor.mydvds.model;
+package br.com.caelum.vraptor.mydvds.model;
 
 public enum DvdType {
 

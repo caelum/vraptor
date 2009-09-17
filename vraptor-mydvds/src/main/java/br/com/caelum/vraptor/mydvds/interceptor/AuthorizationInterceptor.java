@@ -1,18 +1,17 @@
-package org.vraptor.mydvds.interceptor;
+package br.com.caelum.vraptor.mydvds.interceptor;
 
 import java.lang.reflect.Method;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.vraptor.mydvds.logic.LoginController;
-import org.vraptor.mydvds.logic.UserController;
-import org.vraptor.mydvds.model.User;
-
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.interceptor.Interceptor;
+import br.com.caelum.vraptor.mydvds.logic.LoginController;
+import br.com.caelum.vraptor.mydvds.logic.UserController;
+import br.com.caelum.vraptor.mydvds.model.User;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**

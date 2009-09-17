@@ -1,17 +1,19 @@
-package org.vraptor.mydvds.dao;
+package br.com.caelum.vraptor.mydvds.dao;
 
 import java.util.List;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
-import org.vraptor.mydvds.model.User;
+
+import br.com.caelum.vraptor.mydvds.model.User;
 
 /**
  * Data Access Object referente a entidade User.
  */
 public class UserDao {
 
-	private Session session;
+	private final Session session;
 
 	/**
 	 * Cria um novo UserDao.

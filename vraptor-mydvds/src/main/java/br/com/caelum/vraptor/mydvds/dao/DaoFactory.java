@@ -1,4 +1,4 @@
-package org.vraptor.mydvds.dao;
+package br.com.caelum.vraptor.mydvds.dao;
 
 import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;

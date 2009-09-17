@@ -1,10 +1,11 @@
-package org.vraptor.mydvds.dao;
+package br.com.caelum.vraptor.mydvds.dao;
 
 import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
-import org.vraptor.mydvds.model.Dvd;
+
+import br.com.caelum.vraptor.mydvds.model.Dvd;
 
 /**
  * Data Access Object for the Dvd entity.
@@ -12,7 +13,7 @@ import org.vraptor.mydvds.model.Dvd;
 public class DvdDao {
 
 	// current hibernate session
-	private Session session;
+	private final Session session;
 
 	/**
 	 * Creates a new DvdDao.

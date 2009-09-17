@@ -1,15 +1,11 @@
-package org.vraptor.mydvds.logic;
+package br.com.caelum.vraptor.mydvds.logic;
 
+import static br.com.caelum.vraptor.mydvds.validation.CustomMatchers.notEmpty;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.vraptor.mydvds.validation.CustomMatchers.notEmpty;
 
 import org.apache.log4j.Logger;
-import org.vraptor.mydvds.dao.DaoFactory;
-import org.vraptor.mydvds.interceptor.UserInfo;
-import org.vraptor.mydvds.model.Dvd;
-import org.vraptor.mydvds.model.User;
 
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Path;
@@ -18,6 +14,10 @@ import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.interceptor.multipart.UploadedFile;
+import br.com.caelum.vraptor.mydvds.dao.DaoFactory;
+import br.com.caelum.vraptor.mydvds.interceptor.UserInfo;
+import br.com.caelum.vraptor.mydvds.model.Dvd;
+import br.com.caelum.vraptor.mydvds.model.User;
 import br.com.caelum.vraptor.validator.Validations;
 import br.com.caelum.vraptor.view.Results;
 
@@ -30,7 +30,7 @@ public class DvdController {
 
 	private static final Logger LOG = Logger.getLogger(DvdController.class);
 
-	private DaoFactory factory;
+	private final DaoFactory factory;
     private final Result result;
     private final Validator validator;
     private final UserInfo userInfo;

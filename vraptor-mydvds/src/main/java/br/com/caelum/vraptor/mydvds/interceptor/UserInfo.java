@@ -1,11 +1,10 @@
-package org.vraptor.mydvds.interceptor;
+package br.com.caelum.vraptor.mydvds.interceptor;
 
 import javax.servlet.http.HttpSession;
 
-import org.vraptor.mydvds.model.User;
-
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.ioc.SessionScoped;
+import br.com.caelum.vraptor.mydvds.model.User;
 
 /**
  * Represents the user logged in the system.

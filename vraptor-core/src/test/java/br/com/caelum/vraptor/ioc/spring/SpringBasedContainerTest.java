@@ -104,7 +104,7 @@ public class SpringBasedContainerTest {
 
         VRaptorRequestHolder.setRequestForCurrentThread(new RequestInfo(servletContext, request, response));
         RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
-        container = new SpringBasedContainer("br.com.caelum.vraptor.ioc.spring");
+        container = new SpringBasedContainer(null, "br.com.caelum.vraptor.ioc.spring");
         container.start(servletContext);
     }
 

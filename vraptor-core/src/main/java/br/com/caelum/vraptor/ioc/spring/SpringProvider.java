@@ -4,9 +4,11 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletRequestEvent;
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.RequestContextListener;
 
+import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.config.BasicConfiguration;
 import br.com.caelum.vraptor.core.Execution;
 import br.com.caelum.vraptor.core.RequestInfo;
@@ -54,8 +56,30 @@ public class SpringProvider implements ContainerProvider {
 
         String[] packages = packagesParameter.split(",");
 
-        container = new SpringBasedContainer(packages);
+        container = new SpringBasedContainer(getParentApplicationContext(context), packages);
+        registerCustomComponents(container);
         container.start(context);
+    }
+
+    /**
+     * you can override this method for registering custom components, or
+     * use optional vraptor components, like hibernate session and session factory creators:
+     *
+     * registry.register(SessionCreator.class, SessionCreator.class);
+     * registry.register(SessionFactoryCreator.class, SessionFactoryCreator.class);
+     *
+     * @param registry
+     */
+    protected void registerCustomComponents(ComponentRegistry registry) {
+
+    }
+
+    /**
+     * You can override this method for providing your own Spring ApplicationContext
+     * @return your spring application context
+     */
+    protected ApplicationContext getParentApplicationContext(ServletContext context) {
+    	return new DefaultSpringLocator().getApplicationContext(context);
     }
 
     private boolean springListenerAlreadyCalled() {

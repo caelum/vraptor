@@ -31,29 +31,25 @@ package br.com.caelum.vraptor.ioc.spring;
 
 import javax.servlet.ServletContext;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 
 import br.com.caelum.vraptor.ioc.AbstractComponentRegistry;
 import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.ioc.pico.ReflectionsScanner;
 
 /**
  * @author Fabio Kung
  */
 public class SpringBasedContainer extends AbstractComponentRegistry implements Container {
 
-	private static final Logger logger = LoggerFactory.getLogger(SpringBasedContainer.class);
-
     private VRaptorApplicationContext applicationContext;
 
-    public SpringBasedContainer(String... basePackages) {
+    public SpringBasedContainer(ApplicationContext parentContext, String... basePackages) {
 		String[] packages = {"br.com.caelum.vraptor"};
         if (basePackages.length > 0) {
             packages = basePackages;
         }
         applicationContext = new VRaptorApplicationContext(this, packages);
+        applicationContext.setParent(parentContext);
     }
 
     public void register(Class<?> requiredType, Class<?> componentType) {
@@ -66,22 +62,9 @@ public class SpringBasedContainer extends AbstractComponentRegistry implements C
 
     public void start(ServletContext context) {
         applicationContext.setServletContext(context);
-        applicationContext.setParent(createParent(context));
         applicationContext.refresh();
         applicationContext.start();
     }
-
-	private ApplicationContext createParent(ServletContext context) {
-		for (Class<? extends SpringLocator> type : new ReflectionsScanner(context).getSubtypesOf(SpringLocator.class)) {
-			try {
-				SpringLocator locator = type.getConstructor().newInstance();
-				return locator.getApplicationContext(context);
-			} catch (Exception e) {
-				logger.warn("Couldn't instatiate " + type + ". Provide a default constructor.");
-			}
-		}
-		return new DefaultSpringLocator().getApplicationContext(context);
-	}
 
     public void stop() {
         applicationContext.stop();

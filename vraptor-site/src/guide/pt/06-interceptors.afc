@@ -4,7 +4,7 @@
 
 O uso de interceptadores é feito para executar alguma tarefa antes e/ou depois
 de uma lógica de negócios, sendo os usos mais comuns para validação de dados, 
-controle de conexão e transação do banco, log e criptografação/compactação de dados.
+controle de conexão e transação do banco, log e criptografia/compactação de dados.
 
 [section Como interceptar]
 

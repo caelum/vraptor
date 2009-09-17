@@ -1,5 +1,22 @@
 [chapter ChangeLog]
 
+[section 3.0.0-rc-1]
+* aplicação de exemplo: mydvds
+* novo jeito de adicionar os componentes opcionais do VRaptor:
+[java]
+public class CustomProvider extends SpringProvider {
+	
+	@Override
+	protected void registerCustomComponents(ComponentRegistry registry) {
+		registry.registry(ComponenteOpcional.class, ComponenteOpcional.class);
+	}
+}
+[/java]
+
+* Utils: HibernateTransactionInterceptor e JPATransactionInterceptor
+* Um exemplo completo de aplicação na documentação.
+* Docs em inglês
+
 [section 3.0.0-beta-5]
 [list]
 * Novo jeito de fazer validações:

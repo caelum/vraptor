@@ -53,7 +53,7 @@ própria para isso, o que polui muito o código (exemplo no JAX-WS, onde é comu
 método como o acima com a assinatura  %%void add(@WebParam(name="cliente") Cliente cliente)%%.
 
 O VRaptor tira proveito do framework Paranamer (http://paranamer.codehaus.org), que consegue 
-tirar essaa informação através de pré compilação ou dos dados de debug, evitando criar mais uma 
+tirar essa informação através de pré compilação ou dos dados de debug, evitando criar mais uma 
 anotação. Alguns dos desenvolvedores do VRaptor também participam no desenvolvimento do Paranamer.
 [/box]
 

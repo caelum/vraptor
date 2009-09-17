@@ -1,4 +1,40 @@
-[chapter Componentes Utilitários]
+[chapter Componentes Utilitários Opcionais]
+
+[section Registrando um componente opcional]
+O VRaptor possui alguns componentes opcionais, que estão no pacote br.com.caelum.vraptor.util.
+Para registrá-los você pode fazer o seguinte:
+
+[list]
+* Crie uma classe filha do Provider que você está usando:
+[java]
+package br.com.nomedaempresa.nomedoprojeto;
+
+public class CustomProvider extends SpringProvider {
+	
+}
+[/java]
+* Registre essa classe como provider no web.xml:
+[xml]
+<context-param>
+    <param-name>br.com.caelum.vraptor.provider</param-name>
+    <param-value>br.com.nomedaempresa.nomedoprojeto.CustomProvider</param-value>
+</context-param>
+[/xml]
+
+* Sobrescreva o método registerCustomComponents e adicione os componentes opcionais:
+[java]
+package br.com.nomedaempresa.nomedoprojeto;
+
+public class CustomProvider extends SpringProvider {
+	
+	@Override
+	protected void registerCustomComponents(ComponentRegistry registry) {
+		registry.registry(ComponenteOpcional.class, ComponenteOpcional.class);
+	}
+}
+[/java]
+
+[/list]
 
 [section Hibernate Session e SessionFactory]
 
@@ -8,17 +44,39 @@ e o hibernate.cfg.xml na raiz do WEB-INF/classes, você pode usar as ComponentFa
 isso que já vêm com o VRaptor. O que você precisa fazer é:
 
 [java]
-@Component
-public class MeuSessionCreator extends SessionCreator implements ComponentFactory<Session>{
-	// delegate constructor
-}
+	@Override
+	protected void registerCustomComponents(ComponentRegistry registry) {
+		registry.registry(SessionCreator.class, SessionCreator.class);
+		registry.registry(SessionFactoryCreator.class, SessionFactoryCreator.class);
+	}
 [/java]
 
+Inclusive você pode habilitar um interceptor que controla a transação do Hibernate:
 [java]
-@Component
-@ApplicationScoped
-public class MeuSessionFactoryCreator extends SessionFactoryCreator implements ComponentFactory<SessionFactory> {
-	// delegate constructor
-}
+	@Override
+	protected void registerCustomComponents(ComponentRegistry registry) {
+		registry.registry(HibernateTransactionInterceptor.class, HibernateTransactionInterceptor.class);
+	}
+[/java]
+
+[section JPA EntityManager e EntityManagerFactory]
+
+Se você tiver um persistence.xml com o persistence-unit chamado "default", você pode usar
+os ComponentFactories para criar EntityManager e EntityManagerFactory já disponíveis no 
+vraptor:
+[java]
+	@Override
+	protected void registerCustomComponents(ComponentRegistry registry) {
+		registry.registry(EntityManagerCreator.class, EntityManagerCreator.class);
+		registry.registry(EntityManagerFactoryCreator.class, EntityManagerFactoryCreator.class);
+	}
+[/java]
+
+Inclusive você pode habilitar um interceptor que controla a transação da JPA:
+[java]
+	@Override
+	protected void registerCustomComponents(ComponentRegistry registry) {
+		registry.registry(JPATransactionInterceptor.class, JPATransactionInterceptor.class);
+	}
 [/java]
 

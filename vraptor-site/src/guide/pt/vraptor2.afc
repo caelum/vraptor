@@ -9,6 +9,11 @@
 		<param-value>br.com.caelum.vraptor.vraptor2.Provider</param-value>
 	</context-param>
 
+	<context-param>
+		<param-name>br.com.caelum.vraptor.packages</param-name>
+		<param-value>br.com.pacote.base.do.seu.projeto</param-value>
+	</context-param>
+	
 	<filter>
 		<filter-name>vraptor</filter-name>
 		<filter-class>br.com.caelum.vraptor.VRaptor</filter-class>
@@ -160,7 +165,7 @@ nome será o nome da classe, com a primeira minuscula, seguido da palavra List.
 [section views.properties]
 
 No VRaptor3 não existe o arquivo views.properties, embora ele seja suportado no modo de
-compatibilidade com o vraptor2, todos os redirecionamentos são feitos na própria lógica,
+compatibilidade com o vraptor2. Todos os redirecionamentos são feitos na própria lógica,
 usando o Result:
 
 [java]
@@ -240,21 +245,21 @@ Para colocar objetos na sessão no VRaptor3 você deve fazer uma das duas coisas
 	[java]
 		@Component
 		@SessionScoped
-		public class MeuObjetoWrapper {
+		public class MeuObjetoNaSessao {
 			private MeuObjeto meuObjeto;
 			//getter e setter para meuObjeto
 		}
 	[/java]
-	E nas classes onde você precisa do MeuObjeto basta receber no construtor o MeuObjetoWrapper e usar o
+	E nas classes onde você precisa do MeuObjeto basta receber no construtor o MeuObjetoNaSessao e usar o
 	getter e setter pra manipular o MeuObjeto.
 
 * O objeto vai ser acessível nos jsps também:
 	[java]
 		@Component
 		@SessionScoped
-		public class MeuObjetoWrapper {
+		public class MeuObjetoNaSessao {
 			private HttpSession session;
-			public MeuObjetoWrapper(HttpSession session) {
+			public MeuObjetoNaSessao(HttpSession session) {
 				this.session = session;
 			}
 			public void setMeuObjeto(MeuObjeto objeto) {
@@ -265,5 +270,5 @@ Para colocar objetos na sessão no VRaptor3 você deve fazer uma das duas coisas
 			}
 		}
 	[/java]
-	E nas classes basta receber o MeuObjetoWrapper no construtor e usar o getter e o setter.
+	E nas classes basta receber o MeuObjetoNaSessao no construtor e usar o getter e o setter.
 [/list]

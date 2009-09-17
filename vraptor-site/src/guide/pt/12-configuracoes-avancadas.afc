@@ -36,19 +36,26 @@ Você pode ainda estender alguma dessas duas classes e usar seu próprio provide
 
 [section Mudando ApplicationContext base do Spring]
 
-Caso o VRaptor não esteja usando o seu ApplicationContext como base, basta implementar a interface:
+Caso o VRaptor não esteja usando o seu ApplicationContext como base, basta estender o SpringProvider
+e implementar o método getParentApplicationContext, passando o ApplicationContext da sua aplicação:
 
 [java]
-	@Component
-	@ApplicationScoped
-	public class MySpringLocator implements SpringLocator {
-	
-		public ApplicationContext getApplicationContext(ServletContext context) {
+	package br.com.nomedaempresa.nomedoprojeto;
+	public class CustomProvider extends SpringProvider {
+		public ApplicationContext getParentApplicationContext(ServletContext context) {
 			ApplicationContext applicationContext = //lógica pra criar o applicationContext
 			return applicationContext;
 		}
 	}
 [/java]
+
+e mudar o provider no web.xml:
+[xml]
+<context-param>
+    <param-name>br.com.caelum.vraptor.provider</param-name>
+    <param-value>br.com.nomedaempresa.nomedoprojeto.CustomProvider</param-value>
+</context-param>
+[/xml]
 
 Por padrão o VRaptor tenta procurar o applicationContext via 
 %%WebApplicationContextUtils.getWebApplicationContext(servletContext);%% ou carregando do applicationContext.xml

@@ -76,11 +76,11 @@ Desse jeito a segunda validação só acontece se a primeira não falhou.
 Você pode também usar matchers do Hamcrest para deixar a validação mais legível, e ganhar
 a vantagem da composição de matchers e da criação de novos matchers que o Hamcrest te oferece:
 [java]
-public adiciona(Funcionario funcionario) {
+public admin(Funcionario funcionario) {
 	validator.checking(new Validations(){{
-		that(funcionario.getNome(), not(emptyString()), "erro","nomeNaoInformado");
+		that(funcionario.getRoles(), hasItem("ADMIN"), "admin","funcionario.nao.eh.admin");
 	}})
-	validator.onErrorUse(page()).of(FuncionarioController.class).formulario();	
+	validator.onErrorUse(page()).of(LoginController.class).login();	
 	dao.adiciona(funcionario);
 }
 [/java]
@@ -93,11 +93,11 @@ usando o Hibernate Validator basta adicionar uma linha de código:
 
 [java]
 public adiciona(Funcionario funcionario) {
+	//Validação do Funcionario com Hibernate Validator
+	validator.add(Hibernate.validate(funcionario));
+
 	validator.checking(new Validations(){{
 		that(!funcionario.getNome().isEmpty(), "erro","nomeNaoInformado");
-		
-		//Validação do Funcionario com Hibernate Validator
-		and(Hibernate.validate(funcionario));
 	}})
 	
 	dao.adiciona(funcionario);
@@ -113,7 +113,7 @@ caso haja erro na validação?
 Simples, apenas diga no seu código que quando correr um erro, é para o usuário ser enviado para algum recurso.
 Como no exemplo:
 
-[java]
+[java h=10]
 public adiciona(Funcionario funcionario) {
 	//Validação na forma fluente
 	validator.checking(new Validations(){{
@@ -123,7 +123,7 @@ public adiciona(Funcionario funcionario) {
 	if(! funcionario.getNome().equals("Fulano")) {
 		validator.add(new ValidationMessage("erro","nomeInvalido"));
 	}
-	::validator.onErrorUse(page()).of(FuncionarioController.class).formulario();::
+	validator.onErrorUse(page()).of(FuncionarioController.class).formulario();
 	
 	dao.adiciona(funcionario);
 }

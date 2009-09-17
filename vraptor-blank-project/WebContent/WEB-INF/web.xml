@@ -7,7 +7,7 @@
 
 	<context-param>
         <param-name>br.com.caelum.vraptor.packages</param-name>
-        <!-- Change this parameter with your app base package -->
+        <!-- Change this parameter to your app base package -->
         <param-value>br.com.caelum.vraptor.blank</param-value>
     </context-param>
     

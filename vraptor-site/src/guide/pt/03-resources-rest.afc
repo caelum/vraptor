@@ -45,6 +45,18 @@ public class ClienteController {
 }
 [/java]
 
+[box Reflection no nome dos parâmetros]
+Infelizmente, o Java não realiza reflection em cima de parâmetros, esses dados não ficam
+disponíveis em bytecode (a não ser se compilado em debug mode, porém é algo opcional). Isso
+faz com que a maioria dos frameworks que precisam desse tipo de informção criem uma anotação
+própria para isso, o que polui muito o código (exemplo no JAX-WS, onde é comum encontrar um
+método como o acima com a assinatura  %%void add(@WebParam(name="cliente") Cliente cliente)%%.
+
+O VRaptor tira proveito do framework Paranamer (http://paranamer.codehaus.org), que consegue 
+tirar essaa informação através de pré compilação ou dos dados de debug, evitando criar mais uma 
+anotação. Alguns dos desenvolvedores do VRaptor também participam no desenvolvimento do Paranamer.
+[/box]
+
 [section Escopos]
 
 Por vezes você deseja compartilhar um componente entre todos os usuários,

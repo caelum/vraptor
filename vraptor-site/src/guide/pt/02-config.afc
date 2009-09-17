@@ -2,6 +2,34 @@
 
 As configurações necessárias para usar o VRaptor 3 são mínimas. Só é essencial a
 definição de um filtro no %%web.xml%% e dizer qual é o seu pacote base. 
+
+[xml]
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app id="WebApp_ID" version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee 
+http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+
+	<!-- declaracao do filtro -->
+	<filter>
+		<filter-name>vraptor</filter-name>
+		<filter-class>br.com.caelum.vraptor.VRaptor</filter-class>
+	</filter>
+	<context-param>
+		<param-name>br.com.caelum.vraptor.packages</param-name>
+		<param-value>br.com.pacote.base.do.seu.projeto</param-value>
+	</context-param>
+	
+	<!-- mapeando o filtro para todas as requisicoes -->
+	<filter-mapping>
+		<filter-name>vraptor</filter-name>
+		<url-pattern>/*</url-pattern>
+		<dispatcher>FORWARD</dispatcher>
+		<dispatcher>REQUEST</dispatcher>
+	</filter-mapping>
+</web-app>
+[/xml]
+
 Aqui veremos também algumas configurações extras, que são opcionais.
 
 [section Seu recurso]

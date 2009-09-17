@@ -8,6 +8,11 @@ import javax.persistence.Persistence;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.ComponentFactory;
 
+/**
+ * An example of how to create EntityManagerFactory's for your components
+ * @author Lucas Cavalcanti
+ *
+ */
 @ApplicationScoped
 public class EntityManagerFactoryCreator implements ComponentFactory<EntityManagerFactory>{
 

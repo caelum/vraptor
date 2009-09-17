@@ -7,6 +7,11 @@ import javax.persistence.EntityManagerFactory;
 
 import br.com.caelum.vraptor.ioc.ComponentFactory;
 
+/**
+ * An example of how to create EntityManager's for your components
+ * @author Lucas Cavalcanti
+ *
+ */
 public class EntityManagerCreator implements ComponentFactory<EntityManager>{
 
 	private final EntityManagerFactory factory;

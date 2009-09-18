@@ -1,8 +1,9 @@
-[chapter Validação]
-VRaptor3 supports two different validation styles: classic and fluent. The starting point to both styles is the Validator object.
+[chapter Validation]
+VRaptor3 supports two different validation styles: classic and fluent. The starting point to both styles is the Validator
+interface.
 In order to access the Validator, your resource must receive it in the constructor:
 
-[code]
+[java]
 import br.com.caelum.vraptor.Validator;
 ...
 
@@ -14,7 +15,7 @@ class EmployeeController {
 		this.validator = validator;
 	}
 }
-[/code]
+[/java]
 
 [section Classic style]
 
@@ -22,28 +23,35 @@ The classic style is very similar to VRaptor2's validation.
 Inside your business logic, all you have to do is check the data you want, and if you find any validation errors, add them to the errors list.
 For example, to validate that employee name is 'John Doe':
 
-[code]
+[java]
 public void add(Employee employee) {
 	if (!employee.getName().equals("John Doe")) {
 		validator.add(new ValidationMessage("error","invalidName"));
 	}
+	validator.onErrorUse(page()).of(EmployeeController.class).form();
+	
+	dao.add(employee);
 }
-[/code]
+[/java]
+
+When you call validator.onErrorUse, if there are any validation errors, VRaptor will stop execution and redirect
+to the page you specified. This redirect has the same behavior as the result.use(..) redirects.
 
 [section Fluent style]
 
 The goal of fluent style is to write the validation code in such way that it feels natural.
 For example, if we want the employee name to be required:
 
-[code]
+[java]
 public add(Employee employee) {
 	validator.checking(new Validations(){{
-		that("error","nameIsRequired", !employee.getName().isEmpty());
-	}})
+		that(!employee.getName().isEmpty(), "error","nameIsRequired");
+	}});
+	validator.onErrorUse(page()).of(EmployeeController.class).form();
 	
 	dao.add(employee);
 }
-[/code]
+[/java]
 
 You can read the code above like this: "Validator, check my validations. First one is that employee name cannot be empty".
 Much closer to natural language.
@@ -52,22 +60,51 @@ So, if employee name is empty, the flow will be redirected to the "form" logic,
 which shows the user a form to insert employee data again.
 Also, the error message is sent back to the form.
 
+There are validations that may occur only if other validation succeeded, for instance I will check
+user age only if the user is not null. The that method will return a boolean that represents the success
+of the validation:
+
+[java]
+	validator.checking(new Validations(){{
+		if (that(user != null, "user", "null.user")) {
+			that(user.getAge() >= 18, "user.age", "user.is.underage");
+		}
+	}})
+[/java]
+
+So the second validation will execute only if the first didn't fail.
+
+[section Validation using Hamcrest Matchers]
+You can use Hamcrest matchers for making validation even more fluent and readable,
+with the advantage of matcher composition and the creation of new matchers that
+Hamcrest allows:
+[java]
+public admin(Employee employee) {
+	validator.checking(new Validations(){{
+		that(employee.getRoles(), hasItem("ADMIN"), "admin","employee.is.not.admin");
+	}})
+	validator.onErrorUse(page()).of(LoginController.class).login();	
+	dao.add(employee);
+}
+[/java]
+
 [section Hibernate validator]
 
 VRaptor 3 also supports HibernateValidator integration. In the example above, to validate the employee object using HibernateValidator, just add one line to your code:
 
-[code]
+[java]
 public add(Employee employee) {
-	validator.checking(new Validations(){{
-		that("error","nameIsRequired", !employee.getName().isEmpty());
-		
-		//Validation with Hibernate Validator
-		and(Hibernate.validate(employee));
-	}})
+	//Validation with Hibernate Validator
+	validator.add(Hibernate.validate(employee));
 	
+	validator.checking(new Validations(){{
+		that(!employee.getName().isEmpty(), "error","nameIsRequired");
+	}})
+	validator.onErrorUse(page()).of(EmployeeController.class).form();
+		
 	dao.add(employee);
 }
-[/code]
+[/java]
 
 [section Where to redirect in case of errors]
 
@@ -76,20 +113,23 @@ when an error occurs. How do one redirect the user to another resource using VRa
 
 Easy, just tell your validator to do just that: when you find any validation error, send the user to the specified resource. See the example:
 
-[code]
+[java h=12]
 public add(Employee employee) {
-	::validator.onError().goTo(EmployeeController.class).form();::
 	
 	//Fluent validation
 	validator.checking(new Validations(){{
-		that("error","nameIsRequired", !employee.getName().isEmpty());
-	}})
+		that(!employee.getName().isEmpty(), "error","nameIsRequired");
+	}});
 	
 	//Classic validation
 	if (!employee.getName().equals("John Doe")) {
 		validator.add(new ValidationMessage("error","invalidName"));
 	}
+	validator.onErrorUse(page()).of(EmployeeController.class).form();
 	
 	dao.add(employee);
 }
-[/code]
+[/java]
+
+If your logic may add any validation error you **must** specify where to go in case of error.
+Validator.onErrorUse works just like result.use: you can use any view from Results class.

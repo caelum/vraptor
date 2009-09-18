@@ -123,3 +123,18 @@ public class EmployeeController {
 	}
 }
 [/java]
+
+[section How to ensure ordering: InterceptorSequence]
+If you want to ensure order of the execution of a set of interceptors, you can implement
+the interface InterceptorSequence and return the order you want to execute the interceptors:
+
+[java]
+@Intercepts
+public class MySequence implements InterceptorSequence {
+	public Class<? extends Interceptor>[] getSequence() {
+		return new Class[] { FirstInterceptor.class, SecondInterceptor.class };
+	}
+}
+[/java]
+
+You should not annotate the interceptors returned by InterceptorSequence.getSequence() with @Intercepts.

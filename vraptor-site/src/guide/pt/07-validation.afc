@@ -1,5 +1,5 @@
 [chapter Validação]
-O VRaptor3 suporta 2 estilos de validação. Clássico e fluente. A porta de entrada para ambos os estilos é o objeto Validator.
+O VRaptor3 suporta 2 estilos de validação. Clássico e fluente. A porta de entrada para ambos os estilos é a interface Validator.
 Para que seu recurso tenha acesso ao Validator, basta recebê-lo no construtor do seu recurso:
 
 [java]
@@ -33,7 +33,7 @@ public void adiciona(Funcionario funcionario) {
 [/java]
 
 Ao chamar o validator.onErrorUse, se existirem erros de validação, o VRaptor para a execução e redireciona a
-página que você indicou. O redirecionamento funciona da mesma forma que o result.use(..).
+página que você indicou. O redirecionamento funciona da mesma forma que o result.use(..).ed
 
 [section Estilo fluente]
 
@@ -72,7 +72,7 @@ foi passado pra ele é válido ou não:
 
 Desse jeito a segunda validação só acontece se a primeira não falhou.
 
-[session Validação usando matchers do Hamcrest]
+[section Validação usando matchers do Hamcrest]
 Você pode também usar matchers do Hamcrest para deixar a validação mais legível, e ganhar
 a vantagem da composição de matchers e da criação de novos matchers que o Hamcrest te oferece:
 [java]
@@ -118,7 +118,7 @@ public adiciona(Funcionario funcionario) {
 	//Validação na forma fluente
 	validator.checking(new Validations(){{
 		that("erro","nomeNaoInformado", !funcionario.getNome().isEmpty());
-	}})
+	}});
 	//Validação na forma clássica
 	if(! funcionario.getNome().equals("Fulano")) {
 		validator.add(new ValidationMessage("erro","nomeInvalido"));

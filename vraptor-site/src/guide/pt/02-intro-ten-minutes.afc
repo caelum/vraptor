@@ -1,16 +1,6 @@
 [chapter VRaptor3 - o guia inicial de 10 minutos]
 
-O VRaptor 3 foca em simplicidade e, portanto, todas as funcionalidades que você verá 
-têm como primeira meta resolver o problema do programador da maneira menos intrusiva 
-possível em seu código. 
-
-Tanto para salvar, remover, buscar e atualizar ou ainda funcionalidades que 
-costumam ser mais complexas como upload e download de arquivos, resultados em 
-formatos diferentes (xml, json, xhtml etc), tudo isso é feito através de funcionalidades 
-simples do VRaptor 3, que sempre procuram encapsular %%HttpServletRequest%%,
-%%Response%%, %%Session%% e toda a API do %%javax.servlet%%. 
-
-[section Começando o projeto: uma loja virtual]
+soxml[section Começando o projeto: uma loja virtual]
 Vamos começar baixando o ::vraptor-blank-project::, do site http://vraptor.caelum.com.br/download.html.
 Esse blank-project já possui a configuração no web.xml e os jars no WEB-INF/lib necessários para começar
 a desenvolver no VRaptor. E você pode, ainda, importar esse projeto diretamente no Eclipse.
@@ -69,7 +59,7 @@ public class ProdutosController {
 [/java]
 
 Ao colocar essa anotação na classe, todos os métodos públicos dela serão acessíveis via web. Por
-exemplo, se tivermos um método %%lista%% na classe produtos:
+exemplo, se tivermos um método %%lista%% na classe:
 
 [java h=1]
 @Resource

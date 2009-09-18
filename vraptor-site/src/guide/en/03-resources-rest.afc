@@ -40,7 +40,18 @@ public class ClientController {
   
 }
 [/java]
+[box Reflection on parameter names]
+Unfortunately Java can't reflect parameters names, these data don't stay in bytecode
+(unless you compile your code in debug mode, but that is optional). It causes that most
+frameworks that need this kind of information end up creating annotations, which makes
+a very ugly code (like JAX-WS, where its very common to find methods with signature like:
+%%void add(@WebParam(name="client") Client client)%%).
 
+VRaptor uses the Paranamer framework (http://paranamer.codehaus.org), which can get parameter
+names information through pre compilation or debug data, avoiding the creation of annotations
+for this purpose. Some VRaptor developers also participate in Paranamer development.
+
+[/box]
 [section Scopes]
 Sometimes you want to share a component among all users, or through all requests from
 the same user or one instance for each user request.
@@ -252,7 +263,7 @@ It is possible for some URIs to be handled by more than one method in our class:
 public class PostController {
 
   @Get
-  @Path("/post/{post.id}")
+  @Path("/post/{post.author}")
   public void show(Post post) { ... }
 
   @Get
@@ -262,8 +273,8 @@ public class PostController {
 [/java]
 
 The URI %%/post/current%% can be handled by both %%show%% and %%current%% methods.
-But it doesn't make sense to invoke the %%show%% method with that URI, since %%post.id%%
-is expected to be a number, not a string. What I want is VRaptor to test the %%current%%
+But I don't want to invoke the %%show%% method with that URI, 
+what I want is VRaptor to test the %%current%%
 path first, avoiding the invocation of the %%show%% method.
 
 In order to do that, we can define priorities for %%@Path%%s, so VRaptor will first
@@ -274,7 +285,7 @@ test paths with higher priority, in other words, paths with lower priority value
 public class PostController {
 
   @Get
-  @Path(priority = 2, value = "/post/{post.id}")
+  @Path(priority = 2, value = "/post/{post.author}")
   public void show(Post post) { ... }
 
   @Get
@@ -283,7 +294,7 @@ public class PostController {
 }
 [/java]
 
-This way, the "/post/current" path will be tested before "/post/{post.id}" by VRaptor,
+This way, the "/post/current" path will be tested before "/post/{post.author}" by VRaptor,
 solving our problem.
 
 [section RoutesConfiguration]
@@ -324,6 +335,17 @@ public class CustomRoutes implements RoutesConfiguration {
     }
 
 }
+[/java]
+
+You can also put parameters on the uri and they will be set directly on the method
+parameters. You can also add restrictions to these parameters:
+
+[java]
+	// show method receives a Client that has an id
+  routeFor("/client/{client.id}").is(ClientController.class).show(null);
+  // If I want to ensure that the parameter is a number:
+  routeFor("/client/{client.id}").withParameter("client.id").matching("\\d+")
+  			.is(ClientController.class).show(null);
 [/java]
 
 At last, you can choose the class and the method names in runtime, allowing us to

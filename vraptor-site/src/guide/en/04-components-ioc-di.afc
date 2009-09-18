@@ -54,6 +54,45 @@ public class HibernateControl {
 }
 [/java]
 
+[section ComponentFactory]
+
+It can happen that one of your class dependencies doesn't belong to your project, like 
+the Session from Hibernate or EntityManager from JPA.
+
+In order to do that you can create a ComponentFactory:
+
+[java]
+@Component
+public class SessionCreator implements ComponentFactory<Session> {
+
+	private final SessionFactory factory;
+	private Session session;
+
+	public SessionCreator(SessionFactory factory) {
+		this.factory = factory;
+	}
+
+	@PostConstruct
+	public void create() {
+		this.session = factory.openSession();
+	}
+
+	public Session getInstance() {
+		return session;
+	}
+
+	@PreDestroy
+	public void destroy() {
+		this.session.close();
+	}
+
+}
+[/java]
+
+Note that you can add listeners like @PostConstruct and @PreDestroy to manage creation
+and destruction of you factory resources. You can use these listeners on any component
+that you register on VRaptor.
+
 [section Dependency injection]
 
 VRaptor uses one of its own dependency injection providers to control what it needs 

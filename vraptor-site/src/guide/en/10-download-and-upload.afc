@@ -6,24 +6,39 @@ The following example shows how to expose the file to be downloaded to its clien
 
 Again, see how simple this code is:
 
-[code]
+[java]
 @Resource
 public class ProfileController {
-
-	// dao ...
 
 	public File picture(Profile profile) {
 		return new File("/path/to/the/picture." + profile.getId()+ ".jpg");
 	}
 }
-[/code]
+[/java]
 
+[section Adding more info to download]
+
+If you want to add more information to download, you can return a FileDownload:
+
+[java]
+@Resource
+public class ProfileController {
+
+	public Download picture(Profile profile) {
+		File file = new File("/path/to/the/picture." + profile.getId()+ ".jpg");
+		String contentType = "image/jpg";
+		String filename = profile.getName() + ".jpg";
+		
+		return new FileDownload(file, contentType, filename); 
+	}
+}
+[/java]
 
 [section 1 minute example: upload]
 
 The first example is based on the multipart upload feature.
 
-[code]
+[java]
 @Resource
 public class ProfileController {
 
@@ -37,4 +52,16 @@ public class ProfileController {
 		dao.update(picture.getFile(), profile);
 	}
 }
-[/code]
+[/java]
+
+[section More about Upload]
+
+UploadedFile returns the file content as a InputStream. If you want to save this file on disk in an 
+easy way, you can use the %%commons-io IOUtils%%, that is already a VRaptor dependency:
+[java]
+	public void updatePicture(Profile profile, UploadedFile picture) {
+		File pictureOnDisk = new File();	
+		IOUtils.copy(picture.getFile(), new PrintWriter(pictureOnDisk));
+		dao.atribui(pictureOnDisk, profile);
+	}
+[/java]

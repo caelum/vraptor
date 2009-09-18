@@ -58,11 +58,12 @@ Session instances for our application:
 [java]
 @Component
 @ApplicationScoped
-public class SessionFactoryProvider implements ComponentFactory<SessionFactory> {
+public class SessionFactoryCreator implements ComponentFactory<SessionFactory> {
 
-	private final SessionFactory factory;
+	private SessionFactory factory;
 	
-	public SessionProvider() {
+	@PostConstruct
+	public void create() {
 		factory = new AnnotationConfiguration().configure();
 	}
 	
@@ -70,30 +71,61 @@ public class SessionFactoryProvider implements ComponentFactory<SessionFactory> 
 		return factory;
 	}
 	
+	@PreDestroy
+	public void destroy() {
+		factory.close();
+	}
+	
 }
 
 @Component
 @RequestScoped
-public class SessionProvider implements ComponentFactory<Session> {
+public class SessionCreator implements ComponentFactory<Session> {
 
 	private final SessionFactory factory;
-	
-	public SessionProvider(SessionFactory factory) {
+	private Session session;
+
+	public SessionCreator(SessionFactory factory) {
 		this.factory = factory;
 	}
-	
-	public Session getInstance() {
-		return factory.openSession();
+
+	@PostConstruct
+	public void create() {
+		this.session = factory.openSession();
 	}
+
+	public Session getInstance() {
+		return session;
+	}
+
+	@PreDestroy
+	public void destroy() {
+		this.session.close();
+	}
+	
 	
 }
 [/java]
 
+These implementations are already on VRaptor3. Utils chapter will show you how to use them.
+ 
 [section Providers]
 Behind the curtains, VRaptor uses a specific DI provider and has out-of-the-box support for PicoContainer or Spring DI.
 
 Each implementation give you all you can find in VRaptor's documentation, but also different
 extension points.
+
+[section Spring]
+
+When using Spring, you gain all its features and built-in components to use with VRaptor.
+In other words, all components that work with Sprint DI/IoC, also work with VRaptor.
+In that case, all the annotations.
+
+You don't have to configure anything, since Spring is the default container.
+
+VRaptor will use your Spring configurations, if you have it already configured in your project
+(Context listeners and applicationContext.xml). If VRaptor can't find your Spring configuration
+you can configure it, as you can see on Advanced Configurations Chapter.
 
 [section Pico Container]
 
@@ -110,34 +142,6 @@ in your web.xml descriptor:
     </context-param>
 [/xml]
 
-
-
-[section Spring]
-
-When using Spring, you gain all its features and built-in components to use with VRaptor.
-In other words, all components that work with Sprint DI/IoC, also work with VRaptor.
-In that case, all the annotations.
-
-If you want Spring to be your application's DI provider, put the following entries in your
-web.xml. Remember that if you do not specify a Provider, Spring is VRaptor's default choice:
-
-[xml]
-	<context-param>
-        <param-name>br.com.caelum.vraptor.provider</param-name>
-        <param-value>br.com.caelum.vraptor.ioc.spring.SpringProvider</param-value>
-    </context-param>
-
-    <context-param>
-        <param-name>br.com.caelum.vraptor.spring.packages</param-name>
-        <param-value>br.com.pacote.do.seu.projeto</param-value>
-    </context-param>
-[/xml]
-
-
-[section Spring with its own Hibernate example]
-
-
-???????????
 
 [section Your custom provider]
 

@@ -6,23 +6,22 @@ O exemplo a seguir mostra como disponibilizar o download para seu cliente.
 
 Note novamente a simplicidade na implementação: 
 
-[code]
+[java]
 @Resource
 public class PerfilController {
-
-	// dao ...
 
 	public File foto(Perfil perfil) {
 		return new File("/path/para/a/foto." + perfil.getId()+ ".jpg"); 
 	}
 }
-[/code]
+[/java]
 
 [section Adicionando mais informações no download]
 
 Se você quiser adicionar mais informações ao download você pode retornar
 um FileDownload:
 
+[java]
 @Resource
 public class PerfilController {
 
@@ -36,7 +35,7 @@ public class PerfilController {
 		return new FileDownload(file, contentType, filename); 
 	}
 }
-
+[/java]
 
 [section exemplo de 1 minuto: upload]
 

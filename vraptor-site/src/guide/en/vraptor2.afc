@@ -9,6 +9,11 @@
 		<param-value>br.com.caelum.vraptor.vraptor2.Provider</param-value>
 	</context-param>
 
+	<context-param>
+		<param-name>br.com.caelum.vraptor.packages</param-name>
+		<!-- Your base package here -->
+		<param-value>com.companyname.projectname</param-value>
+	</context-param>
 	<filter>
 		<filter-name>vraptor</filter-name>
 		<filter-class>br.com.caelum.vraptor.VRaptor</filter-class>
@@ -225,12 +230,47 @@ public class ClientsController {
 	}
 	
 	public void save(Client client) {
-		validator.onError().goTo(ClientsController.class).form();
 		if (client.getName() == null) {
 			validator.add(new ValidationMessage("error","invalidName"));
 		}
+		validator.onErrorUse(Results.page()).of(ClientsController.class).form();
 		dao.save(client);
 	}
 }
 [/java]
 
+[section Putting objects on Session]
+On VRaptor2 it was enough an @Out(ScopeType.SESSION) for putting an object on HttpSession.
+It doesn't work on VRaptor3, because this way you lose control on your variables.
+So in VRaptor3 you have to do one of this two approaches:
+[list]
+* Your object will be accessed only by components and controllers, not by jsps:
+	[java]
+		@Component
+		@SessionScoped
+		public class SessionMyObject {
+			private MyObject myobject;
+			//getter and setter
+		}
+	[/java]
+	And you receive on your classes constructors a SessionMyObject, and use getters and setters to
+	handle the MyObject on session.
+
+* The object will be accessed in jsps too:
+	[java]
+		@Component
+		@SessionScoped
+		public class SessionMyObject {
+			private HttpSession session;
+			public SessionMyObject(HttpSession session) {
+				this.session = session;
+			}
+			public void setMyObject(MyObject object) {
+				this.session.setAttribute("object", object);
+			}
+			public MeuObjeto getMeuObjeto() {
+				return this.session.getAttribute("objeto");
+			}
+		}
+	[/java]
+[/list]

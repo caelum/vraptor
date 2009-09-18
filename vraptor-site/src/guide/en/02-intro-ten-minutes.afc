@@ -433,47 +433,50 @@ ter o id populado com 5.
 
 Mais informações sobre isso no capítulo de Resources-REST.
 
-[section Arquivo de mensagens]
+[section Message bundle File]
 
-Internacionalização (::i18n::) é um recurso poderoso, e que está presente em quase todos os frameworks 
-Web hoje em dia. E não é diferente no VRaptor3. Com i18n podemos fazer com que nossa aplicação suporte
-várias línguas (francês, português, espanhol, inglês, etc) de uma maneira que não nos cause muito esforço, 
-bastando apenas fazermos a tradução das mensagens da nossa aplicação. 
+Internationalization (i18n) is a powerful feature present in almost all Web frameworks 
+nowadays. And it’s no different with VRaptor3. With i18n you can make your applications 
+support several different languages (such as French, Portuguese, Spanish, English, etc) 
+in a very easy way: simply translating the application messages.
 
-Para isso é só criarmos um arquivo chamado ::messages.properties:: e disponibilizá-lo no classpath da 
-nossa aplicação (%%WEB-INF/classes%%). O conteúdo desse arquivo são várias linhas compostas por um conjunto 
-de chaves/valor, como por exemplo:
-
-[code properties]
-campo.nomeUsuario = Nome de Usuário
-campo.senha = Senha
-[/code]
-
-Até então está fácil, mas e se quisermos criar esses arquivos para várias línguas, como por exemplo, inglês?
-Simples, basta criarmos um outro arquivo properties chamado %%messages_en.properties%%. Repare no sufixo 
-::_en:: no nome do arquivo. Isso indica que quando o usuário acessar sua aplicação através de uma máquina 
-configurada com locale em inglês as mensagens desse arquivo serão utilizadas. O conteúdo desse arquivo então ficaria:
+In order to support i18n, you must create a file called %%messages.properties%% and make 
+it available in your application classpath (%%WEB-INF/classes%%). That file contains 
+lines which are a set of key/value entries, for example:
 
 [code properties]
-campo.nomeUsuario = Username
-campo.senha = Password
+	field.userName = Username 
+	field.password = Password
 [/code]
 
-Repare que as chaves são mantidas, mudando apenas o valor para a língua escolhida.
+So far, it’s easy, but what if you want to create files containing messages in other 
+languages, for example, Portuguese? Also easy. You just need to create another properties 
+file called %%messages_pt_BR.properties%%. Notice the suffix ::_pt_BR:: on the file name. 
+It indicates that when the user access your application from his computer configured with 
+Brazilian Portuguese locale, the messages in this file will be used. The file contents 
+would be:
 
-Para usar essas mensagens em seus arquivos JSP, você pode utilizar a JSTL. Dessa forma, o código ficaria:
+[code properties]
+field.userName = Nome do Usuário
+field.password = Senha
+[/code]
+
+Notice that the keys are the same in both files, what changes is the value to the specific 
+language.
+
+In order to use those messages in your JSP files, you could use JSTL. The code would go 
+as follows:
 
 [code]
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-<html>
-	<body>
-		<fmt:message key="campo.usuario" /> <input name="usuario.nomeUsuario" />
+<html> 
+	<body> 
+		<fmt:message key="field.userName" /> <input name="user.userName" /> 
+         
+		<br /> 
 		
-		<br />
+		<fmt:message key="field.password" /> <input type="password" name="user.password" /> 
 		
-		<fmt:message key="campo.senha" /> <input type="password" name="usuario.senha" />
-		
-		<input type="submit" />
-	</body>
+		<input type="submit" /> 
+	</body> 
 </html>
 [/code]

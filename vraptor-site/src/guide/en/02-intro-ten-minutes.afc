@@ -231,18 +231,19 @@ public class ProductsController {
 	}
 }
 [/java]
-E para redirecionar para a listagem basta usar o result:
+In order to redirect to the listing, you can use the result object:
+
 [java]
-	result.use(Results.logic()).redirectTo(ProductsController.class).lista();
+	result.use(Results.logic()).redirectTo(ProductsController.class).list();
 [/java]
 
-Podemos ler esse código como: ::Como resultado, use uma lógica, redirecionando para o
-método lista do ProductsController::. A configuração de redirecionamento é 100% java,
-sem strings envolvidas! Fica explícito no seu código que o resultado da sua lógica não
-é o padrão, e qual resultado você está usando! Você não precisa ficar se preocupando com
-arquivos de configuração! Mais ainda, se eu quiser mudar o nome do método %%lista%%, eu não preciso
-ficar rodando o sistema inteiro procurando onde estão redirecionando pra esse método, basta
-usar o refactor do eclipse, por exemplo, e tudo continua funcionando!
+This code snippet can be read as: ::As a result, use a logic, redirecting to the 
+list method in ProductsController::. All redirect configuration is 100% java code, 
+with no strings involved! It's clear from the code that the result from your logic
+is not the default, and which one you're using. There is no need to worry about 
+configuration files. Furthermore, if you need to rename the %%list%% method, there
+is no need to go through your entire application looking for redirects to this method,
+just use your usual refactoring IDE to do the rename.
 
 Então nosso método %%adiciona%% ficaria:
 [java]

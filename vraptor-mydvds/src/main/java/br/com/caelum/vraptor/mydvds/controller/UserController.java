@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor.mydvds.logic;
+package br.com.caelum.vraptor.mydvds.controller;
 
 import java.util.ArrayList;
 import java.util.List;

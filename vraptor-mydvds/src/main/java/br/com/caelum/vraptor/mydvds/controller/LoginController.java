@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor.mydvds.logic;
+package br.com.caelum.vraptor.mydvds.controller;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;

@@ -9,8 +9,8 @@ import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.interceptor.Interceptor;
-import br.com.caelum.vraptor.mydvds.logic.LoginController;
-import br.com.caelum.vraptor.mydvds.logic.UserController;
+import br.com.caelum.vraptor.mydvds.controller.LoginController;
+import br.com.caelum.vraptor.mydvds.controller.UserController;
 import br.com.caelum.vraptor.mydvds.model.User;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 

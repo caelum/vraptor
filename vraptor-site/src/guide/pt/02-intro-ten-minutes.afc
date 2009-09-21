@@ -265,7 +265,7 @@ public class ProdutosController {
 	public void adiciona(Produto produto) {
 		validator.checking(new Validations() {{
 			that(!produto.getNome().isEmpty(), "produto.nome", "nome.vazio");
-			that(produto.getPreco() > 0, "produto.nome", "preco.invalido");
+			that(produto.getPreco() > 0, "produto.preco", "preco.invalido");
 		}});
 		validator.onErrorUse(Results.page()).of(ProdutosController.class).form();
 		

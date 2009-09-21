@@ -34,6 +34,19 @@
 			<arg line="src/templates"/>
 		</exec>
 		<move file="src/content/htmlflat/" tofile="src/content" />
+		<exec executable="bash">
+			<arg line="tubaina" />
+			<arg line="-htmlflat" />
+			<arg line="-i" />
+			<arg line="src/guide/en/" />
+			<arg line="-o" />
+			<arg line="src/content/documentacao" />
+			<arg line="-n" />
+			<arg line="en" />
+			<arg line="-t"/>
+			<arg line="src/templates"/>
+		</exec>
+		<move file="src/content/documentacao/en/htmlflat/" tofile="src/content/documentacao/en/" />
 	</target>
 		
 

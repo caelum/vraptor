@@ -10,7 +10,7 @@ import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.mydvds.model.User;
 
 /**
- * Data Access Object referente a entidade User.
+ * Data Access Object of User entity.
  */
 @Component
 public class UserDao {
@@ -18,20 +18,22 @@ public class UserDao {
 	private final Session session;
 
 	/**
-	 * Cria um novo UserDao.
-	 * @param session sessão do hibernate
+	 * Creates a new UserDao. You can receive dependencies through constructor,
+	 * because this class is annotated with @Component. This class can be used
+	 * as dependency of another class, as well.
+	 * @param session Hibernate's Session.
 	 */
 	public UserDao(Session session) {
 		this.session = session;
 	}
 
 	/**
-	 * Devolve o usuario encontrado pelo login e senha.
+	 * Finds an user by login and password.
 	 *
 	 * @param login
-	 * @param password a senha
-	 * @return usuario encontrado (único)
-	 * @throws HibernateException, se encontrar mais do que um usuário
+	 * @param password
+	 * @return found user if it is unique
+	 * @throws HibernateException, if there are more than one user
 	 */
 	public User search(String login, String password) {
 		//procura um usuario usando criteria,
@@ -42,7 +44,7 @@ public class UserDao {
 	}
 
 	/**
-	 * Adiciona o usuário no banco de dados.
+	 * Adds the user on database
 	 *
 	 * @param user
 	 */
@@ -51,9 +53,8 @@ public class UserDao {
 	}
 
 	/**
-	 * Lê o usuario do banco de dados e sincroniza o estado do
-	 * usuário. Qualquer alteração no objeto usuário, que não foi salvo antes,
-	 * será sobrescrita.
+	 * Synchronize the user data with the database. Any not saved modification on user will be
+	 * overwritten.
 	 *
 	 * @param user
 	 */
@@ -62,8 +63,7 @@ public class UserDao {
 	}
 
 	/**
-	 * Atualiza o usuário no banco de dados.
-	 *
+	 * Update the user on database.
 	 * @param user
 	 */
 	public void update(User user) {
@@ -71,7 +71,7 @@ public class UserDao {
 	}
 
 	/**
-	 * Devolve todos os usuários.
+	 * Retrieves all users from database.
 	 *
 	 * @return
 	 */
@@ -81,10 +81,10 @@ public class UserDao {
 	}
 
 	/**
-	 * Verifique se já existe um usuário com o login.
+	 * Checks if there is already an user with given login.
 	 *
-	 * @param login o login para verificar
-	 * @return true se já existe uma usuário com login
+	 * @param login
+	 * @return true if there exists a user
 	 */
 	public boolean containsUserWithLogin(String login) {
 		//cria uma query HQL para verificar,

@@ -43,15 +43,20 @@ a:active {
 	margin-left: auto;
 }
 
+#languages {
+	float: right;
+}
 #centeredmenu {
 	float:left;
 	width:100%;
+}
+#centeredmenu, #languages {
 	position:relative;
 	font-family: Tahoma;
 	font-size: 11pt;
 	color: #2A2948;
 }
-#centeredmenu ul {
+#centeredmenu ul, #languages ul {
 	clear:left;
 	float:left;
 	list-style:none;
@@ -62,7 +67,7 @@ a:active {
 	color: #2A2948;
 	padding: 0;
 }
-#centeredmenu ul li {
+#centeredmenu ul li, #languages ul li {
 	display:block;
 	float:left;
 	list-style:none;
@@ -75,7 +80,7 @@ a:active {
 	padding-bottom: 0;
 	padding-left: 2px;
 }
-#centeredmenu ul li a {
+#centeredmenu ul li a, #languages ul li a {
 	display:block;
 	color:#2A2948;
 	text-decoration:none;
@@ -85,7 +90,7 @@ a:active {
 	margin-left: 0px;
 	padding: 0px;
 }
-#centeredmenu ul li a:hover {
+#centeredmenu ul li a:hover, #centeredmenu ul li a:hover {
 	color:#818285;
 }
 #centeredmenu ul li a.active,

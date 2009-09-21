@@ -56,7 +56,8 @@ You can also enable the interceptor that manages Hibernate transactions:
 [java]
 	@Override
 	protected void registerCustomComponents(ComponentRegistry registry) {
-		registry.registry(HibernateTransactionInterceptor.class, HibernateTransactionInterceptor.class);
+		registry.registry(HibernateTransactionInterceptor.class,
+							HibernateTransactionInterceptor.class);
 	}
 [/java]
 
@@ -68,7 +69,8 @@ VRaptor3 built-in ComponentFactories for EntityManager and EntityManagerFactory:
 	@Override
 	protected void registerCustomComponents(ComponentRegistry registry) {
 		registry.registry(EntityManagerCreator.class, EntityManagerCreator.class);
-		registry.registry(EntityManagerFactoryCreator.class, EntityManagerFactoryCreator.class);
+		registry.registry(EntityManagerFactoryCreator.class, 
+							EntityManagerFactoryCreator.class);
 	}
 [/java]
 
@@ -76,6 +78,7 @@ You can also enable the interceptor that manages JPA transactions:
 [java]
 	@Override
 	protected void registerCustomComponents(ComponentRegistry registry) {
-		registry.registry(JPATransactionInterceptor.class, JPATransactionInterceptor.class);
+		registry.registry(JPATransactionInterceptor.class, 
+							JPATransactionInterceptor.class);
 	}
 [/java]

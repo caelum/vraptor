@@ -1,8 +1,8 @@
 [chapter Componentes Utilitários Opcionais]
 
 [section Registrando um componente opcional]
-O VRaptor possui alguns componentes opcionais, que estão no pacote br.com.caelum.vraptor.util.
-Para registrá-los você pode fazer o seguinte:
+O VRaptor possui alguns componentes opcionais, que estão no pacote 
+%%br.com.caelum.vraptor.util%%. Para registrá-los você pode fazer o seguinte:
 
 [list]
 * Crie uma classe filha do Provider que você está usando:
@@ -55,7 +55,8 @@ Inclusive você pode habilitar um interceptor que controla a transação do Hibe
 [java]
 	@Override
 	protected void registerCustomComponents(ComponentRegistry registry) {
-		registry.registry(HibernateTransactionInterceptor.class, HibernateTransactionInterceptor.class);
+		registry.registry(HibernateTransactionInterceptor.class, 
+							HibernateTransactionInterceptor.class);
 	}
 [/java]
 
@@ -68,7 +69,8 @@ vraptor:
 	@Override
 	protected void registerCustomComponents(ComponentRegistry registry) {
 		registry.registry(EntityManagerCreator.class, EntityManagerCreator.class);
-		registry.registry(EntityManagerFactoryCreator.class, EntityManagerFactoryCreator.class);
+		registry.registry(EntityManagerFactoryCreator.class, 
+							EntityManagerFactoryCreator.class);
 	}
 [/java]
 
@@ -76,7 +78,8 @@ Inclusive você pode habilitar um interceptor que controla a transação da JPA:
 [java]
 	@Override
 	protected void registerCustomComponents(ComponentRegistry registry) {
-		registry.registry(JPATransactionInterceptor.class, JPATransactionInterceptor.class);
+		registry.registry(JPATransactionInterceptor.class, 
+							JPATransactionInterceptor.class);
 	}
 [/java]
 

@@ -24,8 +24,8 @@ Um controller simples seria:
 
 [java]
 /*
- * anotando seu controller com @Resource, seus métodos públicos ficarão disponíveis para receber
- * requisições web.
+ * anotando seu controller com @Resource, seus métodos públicos ficarão disponíveis 
+ * para receber requisições web.
  */
 @Resource
 public class ClientsController {
@@ -33,9 +33,10 @@ public class ClientsController {
 	private ClientDao dao;
 	
 	/*
-	 * Você pode receber as dependências da sua classe no construtor, e o VRaptor vai se encarregar
-	 * de criar ou localizar essas dependências pra você e usá-las pra criar o seu controller.
-	 * Para que o VRaptor saiba como criar o ClientDao você deve anotá-lo com @Component.
+	 * Você pode receber as dependências da sua classe no construtor, e o VRaptor vai 
+	 * se encarregar de criar ou localizar essas dependências pra você e usá-las pra 
+	 * criar o seu controller. Para que o VRaptor saiba como criar o ClientDao você 
+	 * deve anotá-lo com @Component.
 	 */
 	public ClientsController(ClientDao dao) {
 		this.dao = dao;	
@@ -74,9 +75,9 @@ public class ClientsController {
 	}
 	
 	/*
-	 * Se o retorno for um tipo simples, o nome da variável exportada será o nome da classe
-	 * com a primeira letra minúscula. Nesse caso, como retornou um Client, a variável na jsp
-	 * será ${client}.
+	 * Se o retorno for um tipo simples, o nome da variável exportada será o nome da 
+	 * classe com a primeira letra minúscula. Nesse caso, como retornou um Client, a 
+	 * variável na jsp será ${client}.
 	 * Devemos ter um parâmetro da requisição id=5 por exemplo, e o VRaptor vai
 	 * fazer a conversão do parâmetro em Long, e passar como parâmetro do método.
 	 * URI: /clients/view

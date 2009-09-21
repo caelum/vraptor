@@ -1,11 +1,13 @@
 [chapter VRaptor3 - Ten minutes guide]
 
 [section Starting a project: a on-line store]
-Let's start by downloading the ::vraptor-blank-project:: from http://vraptor.caelum.com.br/download.html.
-This blank-project has the required configuration on web.xml and the dependencies on WEB-INF/lib that is
-needed to start using VRaptor. You can also import this project on Eclipse.
+Let's start by downloading the ::vraptor-blank-project:: from 
+http://vraptor.caelum.com.br/download.html. This blank-project has the required configuration on 
+%%web.xml%% and the dependencies on %%WEB-INF/lib%% that are needed to start using VRaptor. You 
+can also import this project on Eclipse.
 
-We need to change the base package on this config at web.xml:
+We need to change the base package using this config at %%web.xml%%:
+
 [xml h=3]
 <context-param>
     <param-name>br.com.caelum.vraptor.packages</param-name>
@@ -13,9 +15,9 @@ We need to change the base package on this config at web.xml:
 </context-param>
 [/xml]
 
-All classes from your application **must** be in a child package of %%com.companyname.projectname%%,
-so VRaptor can find your components and manage your dependencies. In this example project the base
-package will be:
+On the example, all classes from your application **must** be in a subpackage of 
+%%com.companyname.projectname%%, so VRaptor can find your components and manage your dependencies. 
+In this example project the base package will be:
 
 [xml h=3]
 <context-param>
@@ -46,7 +48,7 @@ public class Product {
 }
 [/java]
 
-We need also a class that will ::control:: the registry of products, handling web requests.
+We also need a class that will ::control:: the products' register, handling web requests.
 This class will be the Products %%Controller%%:
 
 [java]
@@ -75,7 +77,7 @@ public class ProductsController {
 }
 [/java]
 
-than VRaptor will automatically redirect all requests to the URI %%/products/list%% to this method.
+Then, VRaptor will automatically redirect all requests to the URI %%/products/list%% to this method.
 The convention for URIs is: %%/<controller_name>/<method_name>%%.
 
 At the end of method execution, VRaptor will %%dispatch%% the request to the jsp at
@@ -87,6 +89,7 @@ the method return value will be exported to the jsp by request attributes. In th
 the name of the exported attribute will be %%productList%%, holding the method returned value:
 
 list.jsp
+
 [xml]
 <ul>
 <c:forEach items="${productList}" var="product">
@@ -100,14 +103,13 @@ the name will be %%<collection_type>List%%; if it is any other type, the name wi
 with the first letter in lowercase, i.e, if the type is %%Product%%, the name will be %%product%%.
 
 [section Creating ProductDao: Dependency Injection]
-VRaptor widely use the Dependency Injection and Inversion of Control concept.
-The whole idea is simple: if you need a resource, you won't create it, 
-it will be given to you when you ask for it. You can get more information about it
-on the Dependency Injection chapter.
+VRaptor widely uses the Dependency Injection and Inversion of Control concept.
+The whole idea is simple: if you need a resource, you won't create it, but will have it ready for 
+you when you ask for it. You can get more information about it on the Dependency Injection chapter.
 
 We are returning a hard coded empty list on our list method. It would be more helpful if we
 return a real list, for example all of registered products of the system. In order to do that,
-let's create a product Dao, for listing the products:
+let's create a product DAO, for listing the products:
 
 [java]
 public class ProductDao {
@@ -162,7 +164,7 @@ public class ProductsController {
 [/java]
 
 [section Add form: redirecting the request]
-We have a Products listing, but no way to register products. Thus let's create a
+We have a Products listing, but no way to register products. Thus, let's create a
 form for adding products. Since it is not a good idea to access the jsps directly,
 let's create an empty method that only redirects to a jsp:
 
@@ -245,22 +247,23 @@ configuration files. Furthermore, if you need to rename the %%list%% method, the
 is no need to go through your entire application looking for redirects to this method,
 just use your usual refactoring IDE to do the rename.
 
-Então nosso método %%adiciona%% ficaria:
+Our %%add%% method would look like this:
+
 [java]
-	public void adiciona(Product product) {
-		dao.adiciona(product);
-		result.use(Results.logic()).redirectTo(ProductsController.class).lista();
+	public void add(Product product) {
+		dao.add(product);
+		result.use(Results.logic()).redirectTo(ProductsController.class).list();
 	}
 [/java]
 
-Mais informações sobre o Result no capítulo Views e Ajax.
+You can get more info on %%Result%% at the Views and Ajax chapter.
 
-[section Validação]
-Não faz muito sentido adicionar um product sem nome no sistema, nem um product com preço negativo.
-Antes de adicionar o product, precisamos verificar se é um product válido, com nome e preço positivo,
-e caso não seja válido voltamos para o formulário com mensagens de erro. Para fazermos isso, podemos
-usar um componente do VRaptor: o Validator. Você pode recebê-lo no construtor do seu Controller, e
-usá-lo da seguinte maneira:
+[section Validation]
+It wouldn't make sense adding a nameless product in the system, nor a negative value for it's price.
+Before adding the product, we need to check if it is a valid product - which has a name and a positive price. In case it's not valid, we want to get back to the form and show error messages.
+
+In order to do that, we can use a VRaptor component: the Validator. You can get it in your Controller's constructor and use it like this:
+
 [java h=9,10,11,12,13]
 @Resource
 public class ProductsController {
@@ -269,43 +272,39 @@ public class ProductsController {
 		this.validator = validator;
 	}
 	
-	public void adiciona(Product product) {
+	public void add(Product product) {
 		validator.checking(new Validations() {{
-			that(!product.getNome().isEmpty(), "product.nome", "nome.vazio");
-			that(product.getPreco() > 0, "product.nome", "preco.invalido");
+			that(!product.getName().isEmpty(), "product.name", "nome.empty");
+			that(product.getPrice() > 0, "product.price", "price.invalid");
 		}});
 		validator.onErrorUse(Results.page()).of(ProductsController.class).form();
 		
-		dao.adiciona(product);
-		result.use(Results.logic()).redirectTo(ProductsController.class).lista();
+		dao.add(product);
+		result.use(Results.logic()).redirectTo(ProductsController.class).list();
 	}
 }
 [/java]
 
-Podemos ler as validações da seguinte maneira: ::Valide que o nome do product não é vazio e
-que o preço do product é maior que zero. Se acontecer um erro, use como resultado a página
-do form do ProductsController::. Ou seja, se por exemplo o nome do product for vazio, vai
-ser adicionada a mensagem de erro para o campo "product.nome", com a mensagem "nome.vazio"
-internacionalizada. Se acontecer algum erro, o sistema vai voltar pra página do formulário,
-com os campos preenchidos e com mensagens de erro que podem ser acessadas da seguinte maneira:
-
+we can read the validation code as ::Validate that the name of the product is not empty and that
+the product's price is bigger than zero. If an error occur, use the ProductsController form page as 
+the result::. Therefore, if the product name is empty, the "name.empty" internationalized message will be added to the "product.name" field. If any error occurs, the system will get the user back to the form page, with all fields set, and error messages that can be accessed like this:
+ 
 [xml]
 <c:forEach var="error" items="${errors}">
 	${error.category}  ${error.message}<br />
 </c:forEach>
 [/xml]
 
-Mais informações sobre o Validator no capítulo de Validações.
+More information on Validation on, well, Validations chapter.
 
-Com o que foi visto até agora você já consegue fazer 90% da sua aplicação! As próximas sessões
-desse tutorial mostram a solução para alguns problemas frequentes que estão nos outros 10% da
-sua aplicação.
+If you learnt what we said so far, you're able to make 90% of your application. Next sessions on 
+this tutorial show the solution for some of the most frequent problems that lay on that 10% left.
 
-[section Usando o Hibernate para guardar os Products]
+[sectin Using Hibernate to store Products]
 
-Agora vamos fazer uma implementação de verdade do ProductDao, usando o Hibernate para
-persistir os products. Para isso nosso ProductDao precisa de uma Session. Como o VRaptor
-usa injeção de dependências, basta receber uma Session no construtor!
+Let's make a real implementation of ProductDao, now, using Hibernate to persist products. You'll 
+need a Session in your ProductDao. Using injection of dependencies, you'll have to declare you'll 
+receive a Session in your constructor.
 
 [java]
 @Component
@@ -317,77 +316,78 @@ public class ProductDao {
 		this.session = session;
 	}
 
-	public void adiciona(Product product) {
+	public void add(Product product) {
 		session.save(product);
 	}
 	//...
 }
 [/java]
 
-Mas peraí, para o VRaptor precisa saber como criar essa Session, e eu não posso simplesmente
-colocar um @Component na Session pois é uma classe do Hibernate! Para isso existe a interface
-ComponentFactory, que você pode usar pra criar uma Session. Mais informações de como fazer
-ComponentFactories no capítulo de Componentes. Você pode ainda usar os ComponentFactories que
-já estão disponíveis para isso no VRaptor, como mostra o capítulo de Utils.
+But, wait, for VRaptor to know how to create that Session, and I can't simply put a @Component on 
+the Session class because it is a Hibernate class. That's the reason why the ComponentFactory 
+interface was created. More info on creating your own ComponentFactories can be found in Components 
+chapter. You can also use the ComponentFactories available in VRaptor, as shown in the Utils 
+chapter.
 
-[section Controlando transações: Interceptors]
-Muitas vezes queremos interceptar todas as requisições (ou uma parte delas) e executar alguma
-lógica, como acontece com o controle de transações. Para isso existem os Interceptor's no
-VRaptor. Saiba mais sobre eles no capítulo de Interceptors. Existe um TransactionInterceptor
-já implementado no VRaptor, saiba como usá-lo no capítulo de Utils.
+[section Controlling transactions: Interceptors]
 
-[section Carrinho de compras: Componentes na sessão]
-Se quisermos criar um carrinho de compras no nosso sistema, precisamos de alguma forma manter os
-itens do carrinho na Sessão do usuário. Para fazer isso, podemos criar um componente que está no
-escopo de sessão, ou seja, ele vai ser único na sessão do usuário. Para isso basta criar um
-componente anotado com @SessionScoped:
+We often want to intercept as requests (or some of them) and execute a business logic, such as in a 
+transaction control. That why VRaptor has interceptors. Learn more about them on the Interceptors' 
+chapter. There is also an implemented TransactionInterceptor in VRaptor - learn how to use it on the Utils chapter.
+
+[section Shopping Cart: session components]
+
+If we want to make a shopping cart in our system, we need some way to keep cart items in the user's 
+session. In order to do it, we can create a session scoped component, i.e., a component that will 
+last as long as the user session last. For that, simply create a component and annotate it with 
+@SessionScoped:
+
 [java]
 @Component
 @SessionScoped
-public class CarrinhoDeCompras {
-	private List<Product> itens = new ArrayList<Product>();
+public class ShoppingCart {
+	private List<Product> items = new ArrayList<Product>();
 	
-	public List<Product> getTodosOsItens() {
-		return itens;
+	public List<Product> getAllItems() {
+		return items;
 	}
 	
-	public void adicionaItem(Product item) {
-		itens.add(item);
+	public void addItem(Product item) {
+		items.add(item);
 	}
 }
 [/java]
 
-Como esse carrinho de compras é um componente, podemos recebê-lo no construtor do controller que
-vai cuidar do carrinho de compras:
+As this shopping cart is a component, we can receive it on the shopping cart's Controller's 
+constructor:
 
 [java]
 @Resource
-public class CarrinhoController {
+public class ShoppingCartController {
 
-	public CarrinhoController(CarrinhoDeCompras carrinho) {
-		this.carrinho = carrinho;
+	public ShoppingCartController(ShoppingCart cart) {
+		this.cart = cart;
 	}
 
-	public void adiciona(Product product) {
-		carrinho.adicionaItem(product);
+	public void add(Product product) {
+		cart.addItem(product);
 	}
 	
-	public List<Product> listaItens() {
-		return carrinho.getTodosOsItens();
+	public List<Product> listItems() {
+		return cart.getAllItems();
 	}
 }
 [/java]
 
-Além do escopo de sessão existe o escopo de Aplicação com a anotação @ApplicationScoped.
-Os componentes anotados com @ApplicationScoped serão criados apenas uma vez em toda a aplicação. 
+Besides session scope, there is also the application scope and the @ApplicationScoped annotation.
+Components annotated with @ApplicationScoped will be created only once for the whole application.
 
-[section Um pouco de REST]
+[section A bit of REST]
 
-Seguindo a idéia REST de que %%URI%%s devem identificar recursos na rede para então podermos
-fazer valer as diversas vantagens estruturais que o protocolo HTTP nos proporciona, 
-note o quão simples fica mapear os diversos métodos HTTP para a mesma URI, e com
-isso invocar diferentes métodos, por exemplo queremos usar as seguintes URIs para o
-cadastro de products:
+On REST's ideal of URIs identifying resources on the web to make good use of the structural 
+advantages the HTTP protocol provides us, observe how simple it is, in VRaptor, mapping the 
+different HTTP methods in the same URI to invoke different Controllers' methods. Suppose we 
+want to use the following URIs on the products' crud:
 
 [code]
 	GET /products - lista todos os products
@@ -397,11 +397,11 @@ cadastro de products:
 	DELETE /products/{id} - remove o product com o id passado
 [/code]
 
-Para criar esse comportamento REST no VRaptor podemos usar as anotações @Path
-- que muda qual é a uri que vai acessar o determinado método, e as anotações
-com os nomes dos métodos HTTP @Get, @Post, @Delete, @Put, que indicam que o método
-anotado só pode ser acessado se a requisição estiver com o método HTTP indicado.
-Então uma versão REST do nosso ProductsController seria:
+In order to create a REST behaviour in VRaptor, we can use the @Path annotations - that changes
+the URI to access a given method. Also, we use the annotations that indicate which HTTP methods 
+are allowed to call that logic - @Get, @Post, @Delete and @Put.
+
+A REST version of our %%ProductsControler%% would be something like that:
 
 [java]
 public class ProductsController {
@@ -409,19 +409,19 @@ public class ProductsController {
 	
 	@Get
 	@Path("/products")
-	public List<Product> lista() {...}
+	public List<Product> list() {...}
 	
 	@Post
 	@Path("/products")
-	public void adiciona(Product product) {...}
+	public void add(Product product) {...}
 
 	@Get
 	@Path("/products/{product.id}")
-	public void visualiza(Product product) {...}
+	public void view(Product product) {...}
 	
 	@Put
 	@Path("/products/{product.id}")
-	public void atualiza(Product product) {...}
+	public void update(Product product) {...}
 	
 	@Delete
 	@Path("/products/{product.id}")
@@ -430,11 +430,10 @@ public class ProductsController {
 }
 [/java]
 
-Note que podemos receber parâmetros nas URIs. Por exemplo se chamarmos a URI
-**GET /products/5**, o método visualiza será invocado, e o parâmetro product vai
-ter o id populado com 5.
+Note we can receive parameters on the URIs. For instance, if we can the **GET /products/5** URI, 
+the %%view%% method will be invoked and the %%product%% parameter will have its id set as %%5%%.
 
-Mais informações sobre isso no capítulo de Resources-REST.
+More info on that are on the REST Resources chapter.
 
 [section Message bundle File]
 

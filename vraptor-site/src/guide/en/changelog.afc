@@ -1,0 +1,81 @@
+[chapter ChangeLog]
+
+[section 3.0.0-rc-1]
+* example application: mydvds
+* new way to add options components into VRaptor:
+[java]
+public class CustomProvider extends SpringProvider {
+	
+	@Override
+	protected void registerCustomComponents(ComponentRegistry registry) {
+		registry.registry(OptionComponent.class, OptionComponent.class);
+	}
+}
+[/java]
+
+* Utils: HibernateTransactionInterceptor and JPATransactionInterceptor
+* Full application example inside the docs
+* English docs
+
+[section 3.0.0-beta-5]
+[list]
+* New way to do validations:
+  [java]
+  	public void visualiza(Client client) {
+  		validator.checking(new Validations() {{
+  			that(client.getId() != null, "id", "id.should.be.filled");
+  		}});
+  		validator.onErrorUse(page()).of(ClientsController.class).list();
+  		
+  		//continua o metodo
+  	}
+  [/java]
+* UploadedFile.getFile() now returns InputStream.
+* EntityManagerCreator and EntityManagerFactoryCreator
+* bugfixes
+
+[/list]
+[section 3.0.0-beta-4]
+[list]
+* New result: result.use(page()).of(MyController.class).myLogic() renders the default view
+	(/WEB-INF/jsp/meu/myLogica.jsp) without execting the logic.
+*	Mock classes for testing: MockResult e MockValidator, to make easier to unit test your logics.
+	They ignores the fluent interface calls and keep the parameters included under the result and
+	the validation errors.
+*	The URIs passed to result.use(page()).forward(uri) and result.use(page()).redirect(uri)
+	can't be logic URIs. Use forwards or redirects from result.use(logic()) instead.
+*	Parameters passed to URI's now accepts pattern-matching:
+	[list]
+	* Automatic: if we have the URI /clients/{client.id} and client.id is a Long, the {client.id} parameter 
+		will only match numbers, so, the URI /clients/42 matches, but the /clients/random doesn't matches.
+		This works for all numeric types, booleans and enums. VRaptor will restrict the possible values.
+	* Manual: in your CustomRoutes you can do:
+		routeFor("/clients/{client.id}").withParameter("client.id").matching("\\d{1,4}")
+  			.is(ClienteController.class).mostra(null);
+  	which means you can restrict values for the parameters you want by regexes at the matching method.
+  [/list]
+* Converters for joda-times's LocalDate and LocalTime comes by default.
+* When Spring is the IoC provider, VRaptor tries to find your application's spring to use as
+	a father container. This search is made by one of the following two ways:
+	[list]
+	* WebApplicationContextUtils.getWebApplicationContext(servletContext), when you have Spring's listeners
+	configured.
+	* applicationContext.xml inside the classpath
+	[/list]
+	If it's not enough, you can implements the SpringLocator interface and enable the Spring's ApplicationContext
+	used by your application. 
+*	Utils:
+	[list]
+	* SessionCreator and SessionFactoryCreator to create Hibernate's Session and SessionFactory 
+	to your registered components.
+	* EncodingInterceptor, to change you default encoding.
+	[/list]
+* several bugfixes and docs improvements.
+[/list]
+[section 3.0.0-beta-3]
+[list]
+* Spring becomes the default IoC provider
+* the applicationContext.xml under the classpath is used as Spring initial configuration, if it exists.
+* improved docs at http://vraptor.caelum.com.br/documentacao
+* small bugfixes and optimizations
+[/list]

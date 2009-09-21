@@ -162,9 +162,9 @@ public class ProductsController {
 [/java]
 
 [section Add form: redirecting the request]
-Temos uma listagem de Products, mas ainda não temos como cadastrá-los. Vamos então criar
-um formulário de adição de products. Para não ter que acessar o jsp diretamente, vamos
-criar uma lógica vazia que só redireciona pro jsp:
+We have a Products listing, but no way to register products. Thus let's create a
+form for adding products. Since it is not a good idea to access the jsps directly,
+let's create an empty method that only redirects to a jsp:
 
 [java]
 @Resource
@@ -175,51 +175,53 @@ public class ProductsController {
 }
 [/java]
 
-Podemos acessar o formulário pela URI %%/products/form%%, e o formulário estará em
+So we can access the form by URI %%/products/form%%, and the form will be at
 %%/WEB-INF/jsp/products/form.jsp%%:
 [xml]
 <form action="<c:url value="/products/adiciona"/>">
-	Nome: 			<input type="text" name="product.nome" /><br/>
-	Descrição:	<input type="text" name="product.descricao" /><br/>
-	Preço:			<input type="text" name="product.preco" /><br/>
-	<input type="submit" value="Salvar" />
+	Name: 			<input type="text" name="product.name" /><br/>
+	Description:<input type="text" name="product.description" /><br/>
+	Price:			<input type="text" name="product.price" /><br/>
+	<input type="submit" value="Save" />
 </form>
 [/xml]
 
-O formulário vai salvar o Product pela URI %%/products/adiciona%%, então precisamos criar
-esse método no nosso controller:
+This form will save a product using the URI %%/products/add%%, so we must create
+this method on the controller:
 
 [java]
 @Resource
 public class ProductsController {
 	//...
-	public void adiciona() {
+	public void add() {
 	}
 }
 [/java]
 
-Repare nos nomes dos nossos inputs: **product.nome**, **product.descricao** e **product.preco**.
-Se recebermos um %%Product%% no método %%adiciona%% com o nome **product**, o VRaptor vai popular
-os seus campos **nome**, **descricao** e **preco**, usando os seus setters no Product, 
-com os valores digitados nos inputs. Inclusive o campo **preco**, vai ser convertido para Double
-antes de ser setado no product. Veja mais sobre isso no capítulo de converters.
+Look at the input names: **product.name**, **product.description** and **product.price**.
+If we receive a %%Product%% named %%product%% as parameter on add method, VRaptor will 
+set the fields **name**, **description** and **price** with the input values, using
+the corresponding setters on Product. The **product.price** parameter will also be converted
+into Double before being set on the product. More information on Converters chapter.
 
-Então, usando os nomes corretamente nos inputs do form, basta criar seu método adiciona:
+Thus, having the correct names on the form inputs, we can create the add method:
 [java]
 @Resource
 public class ProductsController {
 	//...
-	public void adiciona(Product product) {
-		dao.adiciona(product);
+	public void add(Product product) {
+		dao.save(product);
 	}
 }
 [/java]
 
-Geralmente depois de adicionar algo no sistema queremos voltar para a sua listagem, ou para o
-formulário novamente. No nosso caso, queremos voltar pra listagem de products ao adicionar um
-product novo. Para isso existe um componente do VRaptor: o **%%Result%%**. Ele é responsável por
-adicionar atributos na requisição, e por mudar a view a ser carregada. Se eu quiser uma instância
-de Result, basta recebê-lo no construtor:
+
+Right after saving something on a form we usually want to be redirected to the listing
+or back to the form. In this case we want to be redirected to the products listing.
+For this purpose there is a VRaptor component: the %%Result%%. It is responsible for 
+adding attributes on the request, and for dispatching to a different view. To get a Result
+instance you must receive it as a constructor parameter:
+
 [java]
 @Resource
 public class ProductsController {

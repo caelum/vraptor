@@ -28,6 +28,8 @@
         <li><a href="${menu}depoimentos.html">Depoimentos</a></li>
 		<li>|</li>
     	<li><a href="${menu}documentacao/"><b>Documentação</b></a></li>
+    <li>|</li>        
+			<li><a href="${menu}vraptor2.html"><b>VRaptor 2</b></a></li>
 </ul>
 </div>
 

@@ -51,6 +51,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import junit.framework.Assert;
+
 import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
 import org.jmock.Mockery;
@@ -419,4 +421,24 @@ public abstract class GenericContainerTest {
 		provider = getProvider();
 		provider.start(context);
 	}
+
+
+
+
+	class XX implements ComponentFactory<String> {
+		public String getInstance() {
+			return "abc";
+		}
+	}
+
+	class XX2 extends XX {}
+
+    @Test
+    public void shoudRegisterSubclassesOfComponenetFactoryImplementations() {
+    	// problema no metodo targetTypeForComponentFactory, ver no componentfactorybean!
+    	registerAndGetFromContainer(XX2.class, XX2.class);
+    	Assert.assertEquals("abc",getFromContainer(String.class));
+    }
+
+
 }

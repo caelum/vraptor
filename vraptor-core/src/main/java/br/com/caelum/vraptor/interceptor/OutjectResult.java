@@ -68,7 +68,7 @@ public class OutjectResult implements Interceptor {
 	}
 
 	@SuppressWarnings("unchecked")
-	private String nameFor(Type generic) {
+	String nameFor(Type generic) {
 		if (generic instanceof ParameterizedType) {
 			ParameterizedType type = (ParameterizedType) generic;
 			Class raw = (Class) type.getRawType();
@@ -79,6 +79,11 @@ public class OutjectResult implements Interceptor {
 		}
 
 		Class raw = (Class) generic;
+
+		if (raw.isArray()) {
+			return nameFor(raw.getComponentType()) + "List";
+		}
+
 		return Info.decapitalize(raw.getSimpleName());
 	}
 

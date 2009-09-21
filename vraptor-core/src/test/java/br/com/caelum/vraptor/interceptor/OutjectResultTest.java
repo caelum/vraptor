@@ -1,7 +1,7 @@
 /***
- * 
+ *
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  * 1. Redistributions of source code must retain the above copyright notice,
@@ -12,7 +12,7 @@
  * copyright holders nor the names of its contributors may be used to endorse or
  * promote products derived from this software without specific prior written
  * permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -27,10 +27,19 @@
  */
 package br.com.caelum.vraptor.interceptor;
 
+import java.lang.reflect.Type;
+import java.math.BigDecimal;
+import java.net.URLClassLoader;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Vector;
+
+import junit.framework.Assert;
 
 import org.jmock.Expectations;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.Result;
@@ -64,7 +73,7 @@ public class OutjectResultTest {
 			}
 		});
 	}
-	
+
 	interface MyComponent {
 		String returnsAString();
 		List<String> returnsStrings();
@@ -108,6 +117,47 @@ public class OutjectResultTest {
 		});
 		interceptor.intercept(stack, method, instance);
 		mockery.assertIsSatisfied();
+	}
+
+
+
+	static class AClass {}
+
+	@Test
+	public void shouldDecapitalizeSomeCharsUntilItFindsOneUppercased() throws NoSuchMethodException {
+		Assert.assertEquals("urlClassLoader",interceptor.nameFor(URLClassLoader.class));
+		Assert.assertEquals("bigDecimal",interceptor.nameFor(BigDecimal.class));
+		Assert.assertEquals("string",interceptor.nameFor(String.class));
+		Assert.assertEquals("aClass",interceptor.nameFor(AClass.class));
+	}
+
+
+	ArrayList<URLClassLoader> urls;
+	HashSet<BigDecimal> bigs;
+	HashSet<? extends BigDecimal> bigsLimited;
+	HashSet bigsOld;
+	Vector<String> strings;
+	Class<String> clazz;
+
+	@Test
+	public void shouldDecapitalizeSomeCharsUntilItFindsOneUppercasedForListsAndArrays() throws NoSuchMethodException, SecurityException, NoSuchFieldException {
+		Assert.assertEquals("stringList",interceptor.nameFor(getField("strings")));
+		Assert.assertEquals("bigDecimalList",interceptor.nameFor(getField("bigs")));
+		Assert.assertEquals("hashSet",interceptor.nameFor(getField("bigsOld")));
+		Assert.assertEquals("class",interceptor.nameFor(getField("clazz")));
+		Assert.assertEquals("aClassList",interceptor.nameFor(AClass[].class));
+		Assert.assertEquals("urlClassLoaderList",interceptor.nameFor(getField("urls")));
+	}
+
+	@Test
+	@Ignore
+	public void shouldDecapitalizeSomeCharsUntilItFindsOneUppercasedForListsAndArraysForBoundedGenericElements() throws NoSuchMethodException, SecurityException, NoSuchFieldException {
+		Assert.assertEquals("bigDecimalList",interceptor.nameFor(getField("bigsLimited")));
+	}
+
+
+	private Type getField(String string) throws SecurityException, NoSuchFieldException {
+		return this.getClass().getDeclaredField(string).getGenericType();
 	}
 
 }

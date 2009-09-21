@@ -9,7 +9,11 @@ import br.com.caelum.vraptor.util.hibernate.SessionFactoryCreator;
  * You can extend SpringProvider (or PicoProvider) in order to register
  * optional components, like the Hibernate Session and SessionFactory
  * Component Factories.
- *
+ * Don't forget to register it on your web.xml:
+ * <context-param>
+ *      <param-name>br.com.caelum.vraptor.provider</param-name>
+ *      <param-value>br.com.caelum.vraptor.mydvds.provider.CustomProvider</param-value>
+ * </context-param>
  * @author Lucas Cavalcanti
  *
  */

@@ -73,7 +73,6 @@ public class LoginController {
 
 	@Path("/")
 	public void index() {
-	    result.use(Results.page()).redirect("index.jsp");
 	}
 
 }

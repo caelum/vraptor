@@ -1,5 +1,5 @@
 
-<%@ include file="header.jsp" %> 
+<%@ include file="../../../header.jsp" %> 
 
 <c:if test="${not empty param.language}">
 	<fmt:setLocale value="${param.language}" scope="session"/>
@@ -18,9 +18,9 @@
 <div id="blue-box">
 <h1><fmt:message key="change_language"/></h1>
 <hr/>
-<a href="index.jsp?language=de"><img src="images/de.gif" border="0"/></a> | 
-<a href="index.jsp?language=en"><img src="images/en.gif" border="0"/></a> | 
-<a href="index.jsp?language=pt_br"><img src="images/br.gif" border="0"/></a>
+<a href="?language=de"><img src="images/de.gif" border="0"/></a> | 
+<a href="?language=en"><img src="images/en.gif" border="0"/></a> | 
+<a href="?language=pt_br"><img src="images/br.gif" border="0"/></a>
 
 </div>
 
@@ -61,4 +61,4 @@
 </w:form>
 </div>
 
-<%@ include file="footer.jsp" %> 
+<%@ include file="../../../footer.jsp" %> 

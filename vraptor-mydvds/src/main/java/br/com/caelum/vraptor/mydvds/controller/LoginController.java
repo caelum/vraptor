@@ -7,7 +7,7 @@ import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
-import br.com.caelum.vraptor.mydvds.dao.DaoFactory;
+import br.com.caelum.vraptor.mydvds.dao.UserDao;
 import br.com.caelum.vraptor.mydvds.interceptor.UserInfo;
 import br.com.caelum.vraptor.mydvds.model.User;
 import br.com.caelum.vraptor.validator.Validations;
@@ -23,10 +23,10 @@ import br.com.caelum.vraptor.view.Results;
 @Resource
 public class LoginController {
 
-	private final DaoFactory factory;
     private final Result result;
     private final Validator validator;
     private final UserInfo userInfo;
+	private final UserDao dao;
 
 	/**
 	 * Cria o componente e injeta a fábrica de daos pelo construtor.
@@ -36,10 +36,10 @@ public class LoginController {
 	 *
 	 * @param factory
 	 */
-	public LoginController(Result result, Validator validator, DaoFactory factory, UserInfo userInfo) {
-	    this.result = result;
+	public LoginController(UserDao dao, UserInfo userInfo, Result result, Validator validator) {
+	    this.dao = dao;
+		this.result = result;
 	    this.validator = validator;
-		this.factory = factory;
         this.userInfo = userInfo;
 	}
 
@@ -50,7 +50,7 @@ public class LoginController {
 	@Post
 	public void login(String login, String password) {
 		// search for the user in the database
-		final User currentUser = factory.getUserDao().search(login, password);
+		final User currentUser = dao.search(login, password);
 
 		// if no user is found, adds an error message to the validator
 		// "invalid_login_or_password" is the message key from messages.properties,
@@ -58,7 +58,7 @@ public class LoginController {
 		validator.checking(new Validations() {{
 		    that(currentUser, is(notNullValue()), "login", "invalid_login_or_password");
 		}});
-		validator.onErrorUse(Results.page()).forward("index.jsp");
+		validator.onErrorUse(Results.page()).of(LoginController.class).index();
 
 		// the login was valid, add user to session
 		userInfo.login(currentUser);

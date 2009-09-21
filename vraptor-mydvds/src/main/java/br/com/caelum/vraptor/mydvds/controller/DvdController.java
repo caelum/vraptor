@@ -14,7 +14,8 @@ import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.interceptor.multipart.UploadedFile;
-import br.com.caelum.vraptor.mydvds.dao.DaoFactory;
+import br.com.caelum.vraptor.mydvds.dao.DvdDao;
+import br.com.caelum.vraptor.mydvds.dao.UserDao;
 import br.com.caelum.vraptor.mydvds.interceptor.UserInfo;
 import br.com.caelum.vraptor.mydvds.model.Dvd;
 import br.com.caelum.vraptor.mydvds.model.User;
@@ -30,23 +31,25 @@ public class DvdController {
 
 	private static final Logger LOG = Logger.getLogger(DvdController.class);
 
-	private final DaoFactory factory;
     private final Result result;
     private final Validator validator;
     private final UserInfo userInfo;
+	private final DvdDao dao;
+
+	private final UserDao userDao;
 
 	/**
 	 * Receives dependencies through the constructor.
-	 *
-	 * @param result VRaptor result handler.
-	 * @param validator VRaptor validator.
 	 * @param factory dao factory.
 	 * @param userInfo info on the logged user.
+	 * @param result VRaptor result handler.
+	 * @param validator VRaptor validator.
 	 */
-	public DvdController(Result result, Validator validator, DaoFactory factory, UserInfo userInfo) {
+	public DvdController(DvdDao dao, UserDao userDao, UserInfo userInfo, Result result, Validator validator) {
+		this.dao = dao;
+		this.userDao = userDao;
 		this.result = result;
         this.validator = validator;
-        this.factory = factory;
         this.userInfo = userInfo;
 	}
 
@@ -66,7 +69,7 @@ public class DvdController {
             dvd.setTitle("");
         }
 
-        result.include("dvds", this.factory.getDvdDao().searchSimilarTitle(dvd.getTitle()));
+        result.include("dvds", this.dao.searchSimilarTitle(dvd.getTitle()));
         result.use(Results.page()).forward();
     }
 
@@ -98,8 +101,8 @@ public class DvdController {
 		User user = refreshUser();
 		user.getDvds().add(dvd);
 
-		factory.getDvdDao().add(dvd);
-		factory.getUserDao().update(user);
+		dao.add(dvd);
+		userDao.update(user);
 
 		result.use(Results.logic()).redirectTo(DvdController.class).show(dvd);
 	}
@@ -127,7 +130,7 @@ public class DvdController {
 	    validateAddToMyList(dvd, user);
 
 		user.getDvds().add(dvd);
-		factory.getUserDao().update(user);
+		userDao.update(user);
 
 		redirectToHome();
 	}
@@ -178,7 +181,7 @@ public class DvdController {
 	 */
     private User refreshUser() {
         User user = userInfo.getUser();
-		factory.getUserDao().refresh(user);
+		userDao.refresh(user);
         return user;
     }
 

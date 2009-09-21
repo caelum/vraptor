@@ -5,11 +5,13 @@ import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 
+import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.mydvds.model.Dvd;
 
 /**
  * Data Access Object for the Dvd entity.
  */
+@Component
 public class DvdDao {
 
 	// current hibernate session
@@ -20,7 +22,7 @@ public class DvdDao {
 	 *
 	 * @param session hibernate session.
 	 */
-	DvdDao(Session session) {
+	public DvdDao(Session session) {
 		this.session = session;
 	}
 

@@ -9,7 +9,7 @@ import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
-import br.com.caelum.vraptor.mydvds.dao.DaoFactory;
+import br.com.caelum.vraptor.mydvds.dao.UserDao;
 import br.com.caelum.vraptor.mydvds.interceptor.UserInfo;
 import br.com.caelum.vraptor.mydvds.model.User;
 import br.com.caelum.vraptor.validator.Hibernate;
@@ -23,23 +23,22 @@ import br.com.caelum.vraptor.view.Results;
 @Resource
 public class UserController {
 
-	private final DaoFactory factory;
     private final Validator validator;
     private final Result result;
     private final UserInfo userInfo;
+	private final UserDao dao;
 
 	/**
 	 * Receives dependencies through the constructor.
-	 *
+	 * @param factory dao factory.
+	 * @param userInfo info on the logged user.
 	 * @param result VRaptor result handler.
-     * @param validator VRaptor validator.
-     * @param factory dao factory.
-     * @param userInfo info on the logged user.
+	 * @param validator VRaptor validator.
 	 */
-	public UserController(Result result, Validator validator, DaoFactory factory, UserInfo userInfo) {
+	public UserController(UserDao dao, UserInfo userInfo, Result result, Validator validator) {
+		this.dao = dao;
 		this.result = result;
 		this.validator = validator;
-        this.factory = factory;
         this.userInfo = userInfo;
 	}
 
@@ -53,7 +52,7 @@ public class UserController {
 	@Path("/home")
 	@Get
 	public void home() {
-	    factory.getUserDao().refresh(userInfo.getUser());
+	    dao.refresh(userInfo.getUser());
 	}
 
 	/**
@@ -68,7 +67,7 @@ public class UserController {
 	public void list() {
         List<User> users = new ArrayList<User>();
         // search by hand example
-        List<User> usersFromDatabase = this.factory.getUserDao().listAll();
+        List<User> usersFromDatabase = this.dao.listAll();
         for (User user : usersFromDatabase) {
             User newUser = new User();
             newUser.setId(user.getId());
@@ -97,7 +96,7 @@ public class UserController {
 	@Post
 	public void add(User user) {
 	    validateAdd(user);
-		this.factory.getUserDao().add(user);
+		this.dao.add(user);
 		result.use(Results.logic()).redirectTo(UserController.class).userAdded(user);
 	}
 
@@ -120,7 +119,7 @@ public class UserController {
 	@Path("/users/{user.id}")
 	@Get
 	public void view(User user) {
-	    this.factory.getUserDao().refresh(user);
+	    this.dao.refresh(user);
 	    result.include("user", user);
 	}
 
@@ -131,7 +130,7 @@ public class UserController {
 	private void validateAdd(final User user) {
 		validator.checking(new Validations() {{
 		    // checks if there is already an user with the specified login
-		    boolean loginDoesNotExist = !factory.getUserDao().containsUserWithLogin(user.getLogin());
+		    boolean loginDoesNotExist = !dao.containsUserWithLogin(user.getLogin());
 
             that(loginDoesNotExist, "login", "login_already_exists");
 

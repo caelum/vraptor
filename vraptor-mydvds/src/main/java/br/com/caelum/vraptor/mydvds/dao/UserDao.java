@@ -6,11 +6,13 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 
+import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.mydvds.model.User;
 
 /**
  * Data Access Object referente a entidade User.
  */
+@Component
 public class UserDao {
 
 	private final Session session;
@@ -19,7 +21,7 @@ public class UserDao {
 	 * Cria um novo UserDao.
 	 * @param session sessão do hibernate
 	 */
-	UserDao(Session session) {
+	public UserDao(Session session) {
 		this.session = session;
 	}
 

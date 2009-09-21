@@ -1,0 +1,97 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>VRaptor - Powered by Caelum | Migrating from VRaptor2 to VRaptor3
+
+</title>
+<meta name="keywords" content="" />
+<meta name="Small Window " content="" />
+<link href="../../includes/css/style.css" rel="stylesheet" type="text/css" media="screen" />
+</head>
+<body>
+
+<!-- start header -->
+<div id="all">
+<div id="header">
+
+<div id="logo"><img src="../../includes/images/marca.png" alt="VRaptor" width="300" height="100" border="0"></div>
+
+<div id="centeredmenu">
+<ul>
+		<li><a href="../../../../index.html">Home</a></li>
+        <li>|</li>
+		<li><a href="../../../../download.html">Download</a></li>
+		<li>|</li>  
+        <li><a href="../../../../vantagens.html">Vantagens</a></li>
+		<li>|</li>
+        <li><a href="../../../../depoimentos.html">Depoimentos</a></li>
+		<li>|</li>
+    	<li><a href="../../../../documentacao/"><b>Documentação</b></a></li>
+    <li>|</li>        
+			<li><a href="../../../../vraptor2.html"><b>VRaptor 2</b></a></li>
+</ul>
+</div>
+
+<div id="languages">
+	<ul>
+		<li><a href="../../">PT</a></li>
+		<li>|</li>
+		<li><a href="../../en/">EN</a></li>
+	<ul>
+</div>
+
+</div>
+<!-- finish header -->
+
+<!-- start conteudo -->
+
+<div id="wrapper">
+<div id="conteudo">
+
+<div id="titulo"><img src="../../includes/images/hea_documentacao.jpg" alt="Ttulo" width="850" height="40"></div>
+
+<div id="texto_01">
+
+<h2 class="section">Migration from @org.vraptor.annotations.Component to @br.com.caelum.vraptor.Resource</h2>
+	    	<span class="paragraph">VRaptor2's @Component correspondent in VRaptor3 is @Resource. Therefore, in order to
+make logic classes accessible, just annotate them with @Resource (removing the @Component).</span>
+	    	<span class="paragraph">The conventions used are slightly different:</span>
+	    	<span class="paragraph">In VRaptor2:</span>
+	    	<div class="java"><code class="java">
+<span class="java16">@Component<br />
+</span><span class="java4">public class </span><span class="java10">ClientsLogic </span><span class="java8">{<br />
+&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">form</span><span class="java8">() {<br />
+&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; }<br />
+&nbsp;&nbsp;&nbsp; <br />
+}</span></code></div>
+	    	<span class="paragraph">In VRaptor 3:</span>
+	    	<div class="java"><code class="java">
+<span class="java16">@Resource<br />
+</span><span class="java4">public class </span><span class="java10">ClientsController </span><span class="java8">{<br />
+<br />
+&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">form</span><span class="java8">() {<br />
+&nbsp;&nbsp; <br />
+&nbsp;&nbsp; }<br />
+}</span></code></div>
+	    	<span class="paragraph">The form method will be accessible from the URI: "/clients/form", and the default view
+will be <code class="inlineCode">WEB-INF/jsp/clients/form.jsp</code>.</span>
+	    	<span class="paragraph">Which means, the suffix <code class="inlineCode">Controller</code> is removed from the class name and there is no more
+.logic at the end of the URI. Also, the result jsp doesn't have either "ok" or "invalid" on
+its name.</span>
+		
+
+	</div>
+</div>
+</div>
+
+
+<div id="footer">
+	<p><a href="http://www.caelum.com.br" target="_blank">VRaptor ©2009 Caelum - Ensino e Inovação</a></p>
+</div>
+</div>
+</body>
+</html>

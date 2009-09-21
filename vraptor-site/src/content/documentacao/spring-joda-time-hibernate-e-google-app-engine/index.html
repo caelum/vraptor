@@ -20,16 +20,26 @@
 
 <div id="centeredmenu">
 <ul>
-		<li><a href="../../index.html">Home</a></li>
+		<li><a href="../../../index.html">Home</a></li>
         <li>|</li>
-		<li><a href="../../download.html">Download</a></li>
+		<li><a href="../../../download.html">Download</a></li>
 		<li>|</li>  
-        <li><a href="../../vantagens.html">Vantagens</a></li>
+        <li><a href="../../../vantagens.html">Vantagens</a></li>
 		<li>|</li>
-        <li><a href="../../depoimentos.html">Depoimentos</a></li>
+        <li><a href="../../../depoimentos.html">Depoimentos</a></li>
 		<li>|</li>
-    	<li><a href="../../documentacao/"><b>Documentação</b></a></li>
+    	<li><a href="../../../documentacao/"><b>Documentação</b></a></li>
+    <li>|</li>        
+			<li><a href="../../../vraptor2.html"><b>VRaptor 2</b></a></li>
 </ul>
+</div>
+
+<div id="languages">
+	<ul>
+		<li><a href="../">PT</a></li>
+		<li>|</li>
+		<li><a href="../en/">EN</a></li>
+	<ul>
 </div>
 
 </div>
@@ -48,25 +58,24 @@
 		<h1 class="chapter">Spring, Joda Time, Hibernate e Google App Engine</h1>
 
 		
-
-
-<h2 class="section">Integração com Hibernate</h2>
-	    	<span class="paragraph">Como injetar Session, tratar transacoes e rollbacks, configurar o hibernate</span>
 		
-
-<h2 class="section">Integração com JPA</h2>
-	    	<span class="paragraph">Como injetar um EntityManager e similares ao hibernate</span>
+<h2 class="section">Integração com Hibernate ou JPA</h2>
+	    	<span class="paragraph">Existem ComponentFactories implementadas para Session, SessionFactory, EntityManager e EntityManagerFactory.
+Voc&ecirc; pode us&aacute;-las ou se basear nelas para criar sua pr&oacute;pria ComponentFactory para essas classes.</span>
+	    	<span class="paragraph">Al&eacute;m disso existem interceptors implementados que controlam as transa&ccedil;&otilde;es tanto na JPA quanto com o Hibernate.</span>
+	    	<span class="paragraph">Para saber como fazer usar esses componentes veja o cap&iacute;tulo de utils.</span>
 		
-
 <h2 class="section">Integração com Spring</h2>
-	    	<span class="paragraph">usando o seu application-context.xml, usando anotacoes,</span>
+	    	<span class="paragraph">O VRaptor roda dentro do Spring, e usa o ApplicationContext da sua aplica&ccedil;&atilde;o como parent do ApplicationContext
+do VRaptor. Logo todas as funcionalidades e m&oacute;dulos do Spring funcionam com o VRaptor sem nenhuma configura&ccedil;&atilde;o 
+da parte do VRaptor!</span>
 		
-
 <h2 class="section">Conversores para Joda Time</h2>
-	    	<span class="paragraph">falar de LocalDate e LocalTime, link para o fonte se alguem quiser
-fazer conversor de algum dos outros tipos</span>
+	    	<span class="paragraph">A api de datas do Java &eacute; bem ruim, e por esse motivo existe o projeto joda-time (<a class="link" target="_blank" href="http://joda-time.sourceforge.net/">http://joda-time.sourceforge.net/</a>)
+que tem uma api bem mais agrad&aacute;vel para trabalhar com datas. Se o jar do joda-time estiver no classpath,
+o VRaptor registra automaticamente os conversores para os tipos LocalDate e LocalTime, logo voc&ecirc; pode
+receb&ecirc;-los como par&acirc;metro sem problemas.</span>
 		
-
 <h2 class="section">Rodando o VRaptor3 no Google App Engine</h2>
 	    	<span class="paragraph">ja deixar o xml do GAE no DEMO do app engine, de forma que as pessoas
 possam testar o demo no GAE apenas copiando o war!</span>

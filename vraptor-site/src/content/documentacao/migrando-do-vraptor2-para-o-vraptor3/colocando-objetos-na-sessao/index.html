@@ -1,0 +1,96 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>VRaptor - Powered by Caelum | Migrando do VRaptor2 para o VRaptor3
+
+</title>
+<meta name="keywords" content="" />
+<meta name="Small Window " content="" />
+<link href="../../includes/css/style.css" rel="stylesheet" type="text/css" media="screen" />
+</head>
+<body>
+
+<!-- start header -->
+<div id="all">
+<div id="header">
+
+<div id="logo"><img src="../../includes/images/marca.png" alt="VRaptor" width="300" height="100" border="0"></div>
+
+<div id="centeredmenu">
+<ul>
+		<li><a href="../../../../index.html">Home</a></li>
+        <li>|</li>
+		<li><a href="../../../../download.html">Download</a></li>
+		<li>|</li>  
+        <li><a href="../../../../vantagens.html">Vantagens</a></li>
+		<li>|</li>
+        <li><a href="../../../../depoimentos.html">Depoimentos</a></li>
+		<li>|</li>
+    	<li><a href="../../../../documentacao/"><b>Documentação</b></a></li>
+    <li>|</li>        
+			<li><a href="../../../../vraptor2.html"><b>VRaptor 2</b></a></li>
+</ul>
+</div>
+
+<div id="languages">
+	<ul>
+		<li><a href="../../">PT</a></li>
+		<li>|</li>
+		<li><a href="../../en/">EN</a></li>
+	<ul>
+</div>
+
+</div>
+<!-- finish header -->
+
+<!-- start conteudo -->
+
+<div id="wrapper">
+<div id="conteudo">
+
+<div id="titulo"><img src="../../includes/images/hea_documentacao.jpg" alt="Ttulo" width="850" height="40"></div>
+
+<div id="texto_01">
+
+<h2 class="section">Colocando objetos na sessão</h2>
+	    	<span class="paragraph">No VRaptor2 bastava colocar um @Out(ScopeType.SESSION) para que o objeto fosse colocado
+na sess&atilde;o. Isso n&atilde;o funciona no VRaptor3, pois voc&ecirc; perde totalmente o controle sobre
+as vari&aacute;veis que est&atilde;o anotadas desse jeito.</span>
+	    	<span class="paragraph">Para colocar objetos na sess&atilde;o no VRaptor3 voc&ecirc; deve fazer uma das duas coisas:</span>
+	    	<ul class="list"><li><span class="paragraph">O objeto vai ser acess&iacute;vel apenas por l&oacute;gicas e componentes da aplica&ccedil;&atilde;o, n&atilde;o pelos jsps:</span><div class="java"><code class="java">
+<span class="java16">@Component<br />
+@SessionScoped<br />
+</span><span class="java4">public class </span><span class="java10">MeuObjetoNaSessao </span><span class="java8">{<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">private </span><span class="java10">MeuObjeto meuObjeto;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java3">//getter e setter para meuObjeto<br />
+</span><span class="java8">}</span></code></div><span class="paragraph">E nas classes onde voc&ecirc; precisa do MeuObjeto basta receber no construtor o MeuObjetoNaSessao e usar o
+	getter e setter pra manipular o MeuObjeto.</span></li><li><span class="paragraph">O objeto vai ser acess&iacute;vel nos jsps tamb&eacute;m:</span><div class="java"><code class="java">
+<span class="java16">@Component<br />
+@SessionScoped<br />
+</span><span class="java4">public class </span><span class="java10">MeuObjetoNaSessao </span><span class="java8">{<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">private </span><span class="java10">HttpSession session;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">MeuObjetoNaSessao</span><span class="java8">(</span><span class="java10">HttpSession session</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">this</span><span class="java10">.session = session;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">setMeuObjeto</span><span class="java8">(</span><span class="java10">MeuObjeto objeto</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">this</span><span class="java10">.session.setAttribute</span><span class="java8">(</span><span class="java5">&#34;objeto&#34;</span><span class="java10">, objeto</span><span class="java8">)</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">MeuObjeto getMeuObjeto</span><span class="java8">() {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return this</span><span class="java10">.session.getAttribute</span><span class="java8">(</span><span class="java5">&#34;objeto&#34;</span><span class="java8">)</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+}</span></code></div><span class="paragraph">E nas classes basta receber o MeuObjetoNaSessao no construtor e usar o getter e o setter.</span></li></ul>
+		
+
+	</div>
+</div>
+</div>
+
+
+<div id="footer">
+	<p><a href="http://www.caelum.com.br" target="_blank">VRaptor ©2009 Caelum - Ensino e Inovação</a></p>
+</div>
+</div>
+</body>
+</html>

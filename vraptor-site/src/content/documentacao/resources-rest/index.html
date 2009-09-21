@@ -20,16 +20,26 @@
 
 <div id="centeredmenu">
 <ul>
-		<li><a href="../../index.html">Home</a></li>
+		<li><a href="../../../index.html">Home</a></li>
         <li>|</li>
-		<li><a href="../../download.html">Download</a></li>
+		<li><a href="../../../download.html">Download</a></li>
 		<li>|</li>  
-        <li><a href="../../vantagens.html">Vantagens</a></li>
+        <li><a href="../../../vantagens.html">Vantagens</a></li>
 		<li>|</li>
-        <li><a href="../../depoimentos.html">Depoimentos</a></li>
+        <li><a href="../../../depoimentos.html">Depoimentos</a></li>
 		<li>|</li>
-    	<li><a href="../../documentacao/"><b>Documentação</b></a></li>
+    	<li><a href="../../../documentacao/"><b>Documentação</b></a></li>
+    <li>|</li>        
+			<li><a href="../../../vraptor2.html"><b>VRaptor 2</b></a></li>
 </ul>
+</div>
+
+<div id="languages">
+	<ul>
+		<li><a href="../">PT</a></li>
+		<li>|</li>
+		<li><a href="../en/">EN</a></li>
+	<ul>
 </div>
 
 </div>
@@ -48,8 +58,7 @@
 		<h1 class="chapter">Resources-Rest</h1>
 
 		
-
-
+		
 <h2 class="section">O que são Resources?</h2>
 	    	<span class="paragraph">Resources s&atilde;o o que poder&iacute;amos pensar como recursos a serem disponibilizados para 
 acesso pelos nossos clientes.</span>
@@ -89,8 +98,15 @@ sejam disponibilizadas, cada uma invocando o respectivo m&eacute;todo em sua cla
 &nbsp; </span><span class="java8">}<br />
 &nbsp; <br />
 }</span></code></div>
+	    	<div class="box"><h3>Reflection no nome dos par&acirc;metros</h3>
+<span class="paragraph">Infelizmente, o Java n&atilde;o realiza reflection em cima de par&acirc;metros, esses dados n&atilde;o ficam
+dispon&iacute;veis em bytecode (a n&atilde;o ser se compilado em debug mode, por&eacute;m &eacute; algo opcional). Isso
+faz com que a maioria dos frameworks que precisam desse tipo de inform&ccedil;&atilde;o criem uma anota&ccedil;&atilde;o
+pr&oacute;pria para isso, o que polui muito o c&oacute;digo (exemplo no JAX-WS, onde &eacute; comum encontrar um
+m&eacute;todo como o acima com a assinatura  <code class="inlineCode">void add(@WebParam(name="cliente") Cliente cliente)</code>.</span><span class="paragraph">O VRaptor tira proveito do framework Paranamer (<a class="link" target="_blank" href="http://paranamer.codehaus.org">http://paranamer.codehaus.org</a>), que consegue 
+tirar essa informa&ccedil;&atilde;o atrav&eacute;s de pr&eacute; compila&ccedil;&atilde;o ou dos dados de debug, evitando criar mais uma 
+anota&ccedil;&atilde;o. Alguns dos desenvolvedores do VRaptor tamb&eacute;m participam no desenvolvimento do Paranamer.</span></div>
 		
-
 <h2 class="section">Escopos</h2>
 	    	<span class="paragraph">Por vezes voc&ecirc; deseja compartilhar um componente entre todos os usu&aacute;rios,
 entre todas as requisi&ccedil;&otilde;es de um mesmo usu&aacute;rio ou a cada requisi&ccedil;&atilde;o de um usu&aacute;rio.</span>
@@ -99,7 +115,6 @@ entre todas as requisi&ccedil;&otilde;es de um mesmo usu&aacute;rio ou a cada re
 	    	<span class="paragraph">Caso nenhuma anota&ccedil;&atilde;o seja utilizada, o VRaptor assume que seu componente ficar&aacute;
 no escopo de request, isto &eacute;, voc&ecirc; ter&aacute; um novo componente a cada nova requisi&ccedil;&atilde;o.</span>
 		
-
 <h2 class="section">Http Methods</h2>
 	    	<span class="paragraph">O ideal &eacute; definir uma URI espec&iacute;fica para diversos m&eacute;todos HTTP diferentes, como
 GET, POST, PUT etc.</span>
@@ -164,7 +179,6 @@ par&acirc;metro <code class="inlineCode">_method</code>, uma vez que o browser n
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;input</span>&nbsp;<span class="texattrib">type=</span><span class="texvalue">"submit"</span>&nbsp;<span class="texattrib">value=</span><span class="texvalue">"remover&nbsp;cliente&nbsp;5"</span>&nbsp;<span class="textag">/&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal"></span><span class="textag">&lt;/form&gt;</span></code></div>
 		
-
 <h2 class="section">@Path</h2>
 	    	<span class="paragraph">A anota&ccedil;&atilde;o <code class="inlineCode">@Path</code> permite que voc&ecirc; customize as URIs de acesso a seus m&eacute;todos.
 O uso b&aacute;sico dessa anota&ccedil;&atilde;o &eacute; feito atrav&eacute;s de uma URI fixa. O exemplo a seguir mostra
@@ -267,10 +281,10 @@ voc&ecirc; deve utilizar o padr&atilde;o {...*}:</span>
 &nbsp; @Path</span><span class="java8">(</span><span class="java5">&#34;/post/atual&#34;</span><span class="java8">)<br />
 &nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">atual</span><span class="java8">() { </span><span class="java10">... </span><span class="java8">}<br />
 }</span></code></div>
-	    	<span class="paragraph">A uri <code class="inlineCode">/post/atual</code> pode ser tratada tanto pelo m&eacute;todo <code class="inlineCode">mostra%, quanto pelo </code>atual<code class="inlineCode">.
-Mas eu quero que quando seja exatamente </code>/post/atual<code class="inlineCode"> o m&eacute;todo executado seja o atual. 
-O que eu quero &eacute; que o VRaptor teste primeiro o path do m&eacute;todo </code>atual<code class="inlineCode">,
-para n&atilde;o correr o risco de cair no m&eacute;todo </code>mostra%%.</span>
+	    	<span class="paragraph">A uri <code class="inlineCode">/post/atual</code> pode ser tratada tanto pelo m&eacute;todo <code class="inlineCode">mostra</code>, quanto pelo <code class="inlineCode">atual</code>.
+Mas eu quero que quando seja exatamente <code class="inlineCode">/post/atual</code> o m&eacute;todo executado seja o atual. 
+O que eu quero &eacute; que o VRaptor teste primeiro o path do m&eacute;todo <code class="inlineCode">atual</code>,
+para n&atilde;o correr o risco de cair no m&eacute;todo <code class="inlineCode">mostra</code>.</span>
 	    	<span class="paragraph">Para fazer isso, podemos definir prioridades para os <code class="inlineCode">@Path</code>s, assim o VRaptor vai testar
 primeiro os paths com maior prioridade, ou seja, valor menor de prioridade:</span>
 	    	<div class="java"><code class="java">
@@ -290,7 +304,6 @@ o que a gente gostaria que ele fizesse.</span>
 	    	<span class="paragraph">Voc&ecirc; n&atilde;o precisa definir prioridades se tivermos as uris: <code class="inlineCode">/post/{post.id}</code> e <code class="inlineCode">/post/atual</code>,
 pois na <code class="inlineCode">/post/{post.id}</code> o vraptor s&oacute; vai aceitar n&uacute;meros.</span>
 		
-
 <h2 class="section">RoutesConfiguration</h2>
 	    	<span class="paragraph">Por fim, a maneira mais avan&ccedil;ada de configurar rotas de acesso aos seus recursos
 &eacute; atrav&eacute;s de um <strong class="definition">RoutesConfiguration</strong>.</span>
@@ -330,7 +343,8 @@ par&acirc;metros do m&eacute;todo. Voc&ecirc; pode ainda adicionar restri&ccedil
 </span><span class="java3">// Se eu quiser garantir que o parametro seja um n&uacute;mero:<br />
 </span><span class="java10">routeFor</span><span class="java8">(</span><span class="java5">&#34;/cliente/{cliente.id}&#34;</span><span class="java8">)</span><span class="java10">.withParameter</span><span class="java8">(</span><span class="java5">&#34;cliente.id&#34;</span><span class="java8">)</span><span class="java10">.matching</span><span class="java8">(</span><span class="java5">&#34;\\d+&#34;</span><span class="java8">)<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">.is</span><span class="java8">(</span><span class="java10">ClienteController.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">.mostra</span><span class="java8">(</span><span class="java4">null</span><span class="java8">)</span><span class="java10">;</span></code></div>
-	    	<span class="paragraph">Por fim, voc&ecirc; pode escolher o nome da classe e o nome do m&eacute;todo em tempo de execu&ccedil;&atilde;o,
+	    	<span class="paragraph">_name
+Por fim, voc&ecirc; pode escolher o nome da classe e o nome do m&eacute;todo em tempo de execu&ccedil;&atilde;o,
 que permite criar rotas extremamente gen&eacute;ricas:</span>
 	    	<div class="java"><code class="java">
 <span class="java10">routeFor</span><span class="java8">(</span><span class="java5">&#34;/{webResource}/facaAlgo/{webMethod}&#34;</span><span class="java8">)</span><span class="java10">.is</span><span class="java8">(<br />

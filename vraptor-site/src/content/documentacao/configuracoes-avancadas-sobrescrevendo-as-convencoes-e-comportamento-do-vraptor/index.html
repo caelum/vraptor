@@ -20,16 +20,26 @@
 
 <div id="centeredmenu">
 <ul>
-		<li><a href="../../index.html">Home</a></li>
+		<li><a href="../../../index.html">Home</a></li>
         <li>|</li>
-		<li><a href="../../download.html">Download</a></li>
+		<li><a href="../../../download.html">Download</a></li>
 		<li>|</li>  
-        <li><a href="../../vantagens.html">Vantagens</a></li>
+        <li><a href="../../../vantagens.html">Vantagens</a></li>
 		<li>|</li>
-        <li><a href="../../depoimentos.html">Depoimentos</a></li>
+        <li><a href="../../../depoimentos.html">Depoimentos</a></li>
 		<li>|</li>
-    	<li><a href="../../documentacao/"><b>Documentação</b></a></li>
+    	<li><a href="../../../documentacao/"><b>Documentação</b></a></li>
+    <li>|</li>        
+			<li><a href="../../../vraptor2.html"><b>VRaptor 2</b></a></li>
 </ul>
+</div>
+
+<div id="languages">
+	<ul>
+		<li><a href="../">PT</a></li>
+		<li>|</li>
+		<li><a href="../en/">EN</a></li>
+	<ul>
 </div>
 
 </div>
@@ -48,8 +58,7 @@
 		<h1 class="chapter">Configurações avancadas: sobrescrevendo as convenções e comportamento do VRaptor</h1>
 
 		
-
-
+		
 <h2 class="section">Mudando a view renderizada por padrão</h2>
 	    	<span class="paragraph">Se voc&ecirc; precisa mudar a view renderizada por padr&atilde;o, ou mudar o local em que ela &eacute; procurada,
 basta criar a seguinte classe:</span>
@@ -69,7 +78,6 @@ basta criar a seguinte classe:</span>
 }</span></code></div>
 	    	<span class="paragraph">Se voc&ecirc; precisa mudar mais ainda a conven&ccedil;&atilde;o basta implementar a interface PathResolver.</span>
 		
-
 <h2 class="section">Mudando o IoC provider</h2>
 	    	<span class="paragraph">O IoC provider padr&atilde;o &eacute; o spring. Para mud&aacute;-lo basta colocar no web.xml:
 &lt;context-param&gt;
@@ -79,19 +87,22 @@ basta criar a seguinte classe:</span>
 	    	<span class="paragraph">Entre os padr&atilde;o existem: br.com.caelum.vraptor.ioc.spring.SpringProvider e br.com.caelum.vraptor.ioc.pico.PicoProvider.
 Voc&ecirc; pode ainda estender alguma dessas duas classes e usar seu pr&oacute;prio provider.</span>
 		
-
 <h2 class="section">Mudando ApplicationContext base do Spring</h2>
-	    	<span class="paragraph">Caso o VRaptor n&atilde;o esteja usando o seu ApplicationContext como base, basta implementar a interface:</span>
+	    	<span class="paragraph">Caso o VRaptor n&atilde;o esteja usando o seu ApplicationContext como base, basta estender o SpringProvider
+e implementar o m&eacute;todo getParentApplicationContext, passando o ApplicationContext da sua aplica&ccedil;&atilde;o:</span>
 	    	<div class="java"><code class="java">
-<span class="java16">@Component<br />
-@ApplicationScoped<br />
-</span><span class="java4">public class </span><span class="java10">MySpringLocator </span><span class="java4">implements </span><span class="java10">SpringLocator </span><span class="java8">{<br />
-<br />
-&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">ApplicationContext getApplicationContext</span><span class="java8">(</span><span class="java10">ServletContext context</span><span class="java8">) {<br />
+<span class="java4">package </span><span class="java10">br.com.nomedaempresa.nomedoprojeto;<br />
+</span><span class="java4">public class </span><span class="java10">CustomProvider </span><span class="java4">extends </span><span class="java10">SpringProvider </span><span class="java8">{<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">ApplicationContext getParentApplicationContext</span><span class="java8">(</span><span class="java10">ServletContext context</span><span class="java8">) {<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">ApplicationContext applicationContext = </span><span class="java3">//l&oacute;gica pra criar o applicationContext<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return </span><span class="java10">applicationContext;<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
 }</span></code></div>
+	    	<span class="paragraph">e mudar o provider no web.xml:</span>
+	    	<div class="xml"><code class="xml"><span class="textag">&lt;context-param&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-name&gt;</span><span class="texnormal">br.com.caelum.vraptor.provider</span><span class="textag">&lt;/param-name&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-value&gt;</span><span class="texnormal">br.com.nomedaempresa.nomedoprojeto.CustomProvider</span><span class="textag">&lt;/param-value&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal"></span><span class="textag">&lt;/context-param&gt;</span></code></div>
 	    	<span class="paragraph">Por padr&atilde;o o VRaptor tenta procurar o applicationContext via 
 <code class="inlineCode">WebApplicationContextUtils.getWebApplicationContext(servletContext);</code> ou carregando do applicationContext.xml
 que est&aacute; no classpath.</span>

@@ -1,0 +1,84 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>VRaptor - Powered by Caelum | Validation
+
+</title>
+<meta name="keywords" content="" />
+<meta name="Small Window " content="" />
+<link href="../../includes/css/style.css" rel="stylesheet" type="text/css" media="screen" />
+</head>
+<body>
+
+<!-- start header -->
+<div id="all">
+<div id="header">
+
+<div id="logo"><img src="../../includes/images/marca.png" alt="VRaptor" width="300" height="100" border="0"></div>
+
+<div id="centeredmenu">
+<ul>
+		<li><a href="../../../../index.html">Home</a></li>
+        <li>|</li>
+		<li><a href="../../../../download.html">Download</a></li>
+		<li>|</li>  
+        <li><a href="../../../../vantagens.html">Vantagens</a></li>
+		<li>|</li>
+        <li><a href="../../../../depoimentos.html">Depoimentos</a></li>
+		<li>|</li>
+    	<li><a href="../../../../documentacao/"><b>Documentação</b></a></li>
+    <li>|</li>        
+			<li><a href="../../../../vraptor2.html"><b>VRaptor 2</b></a></li>
+</ul>
+</div>
+
+<div id="languages">
+	<ul>
+		<li><a href="../../">PT</a></li>
+		<li>|</li>
+		<li><a href="../../en/">EN</a></li>
+	<ul>
+</div>
+
+</div>
+<!-- finish header -->
+
+<!-- start conteudo -->
+
+<div id="wrapper">
+<div id="conteudo">
+
+<div id="titulo"><img src="../../includes/images/hea_documentacao.jpg" alt="Ttulo" width="850" height="40"></div>
+
+<div id="texto_01">
+
+<h2 class="section">Classic style</h2>
+	    	<span class="paragraph">The classic style is very similar to VRaptor2's validation.
+Inside your business logic, all you have to do is check the data you want, and if you find any validation errors, add them to the errors list.
+For example, to validate that employee name is 'John Doe':</span>
+	    	<div class="java"><code class="java">
+<span class="java4">public </span><span class="java9">void </span><span class="java10">add</span><span class="java8">(</span><span class="java10">Employee employee</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">if </span><span class="java8">(</span><span class="java10">!employee.getName</span><span class="java8">()</span><span class="java10">.equals</span><span class="java8">(</span><span class="java5">&#34;John Doe&#34;</span><span class="java8">)) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">validator.add</span><span class="java8">(</span><span class="java4">new </span><span class="java10">ValidationMessage</span><span class="java8">(</span><span class="java5">&#34;error&#34;</span><span class="java10">,</span><span class="java5">&#34;invalidName&#34;</span><span class="java8">))</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java10">validator.onErrorUse</span><span class="java8">(</span><span class="java10">page</span><span class="java8">())</span><span class="java10">.of</span><span class="java8">(</span><span class="java10">EmployeeController.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">.form</span><span class="java8">()</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; dao.add</span><span class="java8">(</span><span class="java10">employee</span><span class="java8">)</span><span class="java10">;<br />
+</span><span class="java8">}</span></code></div>
+	    	<span class="paragraph">When you call validator.onErrorUse, if there are any validation errors, VRaptor will stop execution and redirect
+to the page you specified. This redirect has the same behavior as the result.use(..) redirects.</span>
+		
+
+	</div>
+</div>
+</div>
+
+
+<div id="footer">
+	<p><a href="http://www.caelum.com.br" target="_blank">VRaptor ©2009 Caelum - Ensino e Inovação</a></p>
+</div>
+</div>
+</body>
+</html>

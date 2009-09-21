@@ -20,16 +20,26 @@
 
 <div id="centeredmenu">
 <ul>
-		<li><a href="../../index.html">Home</a></li>
+		<li><a href="../../../index.html">Home</a></li>
         <li>|</li>
-		<li><a href="../../download.html">Download</a></li>
+		<li><a href="../../../download.html">Download</a></li>
 		<li>|</li>  
-        <li><a href="../../vantagens.html">Vantagens</a></li>
+        <li><a href="../../../vantagens.html">Vantagens</a></li>
 		<li>|</li>
-        <li><a href="../../depoimentos.html">Depoimentos</a></li>
+        <li><a href="../../../depoimentos.html">Depoimentos</a></li>
 		<li>|</li>
-    	<li><a href="../../documentacao/"><b>Documentação</b></a></li>
+    	<li><a href="../../../documentacao/"><b>Documentação</b></a></li>
+    <li>|</li>        
+			<li><a href="../../../vraptor2.html"><b>VRaptor 2</b></a></li>
 </ul>
+</div>
+
+<div id="languages">
+	<ul>
+		<li><a href="../">PT</a></li>
+		<li>|</li>
+		<li><a href="../en/">EN</a></li>
+	<ul>
 </div>
 
 </div>
@@ -48,8 +58,7 @@
 		<h1 class="chapter">Componentes</h1>
 
 		
-
-
+		
 <h2 class="section">O que são componentes?</h2>
 	    	<span class="paragraph">Componentes s&atilde;o inst&acirc;ncias de classes que seu projeto precisa para executar tarefas ou armazenar estados
 em diferentes situa&ccedil;&otilde;es.</span>
@@ -72,7 +81,6 @@ Dessa maneira seu c&oacute;digo tamb&eacute;m fica mais f&aacute;cil de testar u
 &nbsp; <br />
 }</span></code></div>
 		
-
 <h2 class="section">Escopos</h2>
 	    	<span class="paragraph">Assim como os recursos, os componentes vivem em um escopo espec&iacute;fico e seguem
 as mesmas regras, por padr&atilde;o pertencendo ao escopo de requisic&atilde;o, isto &eacute;, a cada
@@ -96,7 +104,6 @@ uma vez por contexto:</span>
 &nbsp; <br />
 }</span></code></div>
 		
-
 <h2 class="section">ComponentFactory</h2>
 	    	<span class="paragraph">Muitas vezes voc&ecirc; quer receber como depend&ecirc;ncia da sua classe alguma classe que n&atilde;o &eacute; do
 seu projeto, como por exemplo uma Session do hibernate ou um EntityManager da JPA.</span>
@@ -131,7 +138,6 @@ seu projeto, como por exemplo uma Session do hibernate ou um EntityManager da JP
 a cria&ccedil;&atilde;o e destrui&ccedil;&atilde;o dos recursos que voc&ecirc; usa. Isso funciona para qualquer componente
 que voc&ecirc; registrar no VRaptor.</span>
 		
-
 <h2 class="section">Injeção de dependências</h2>
 	    	<span class="paragraph">O VRaptor utiliza um de seus provedores de inje&ccedil;&atilde;o de depend&ecirc;ncias para controlar o que
 &eacute; necess&aacute;rio para instanciar cada um de seus componentes e recursos.</span>

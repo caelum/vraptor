@@ -1,0 +1,108 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>VRaptor - Powered by Caelum | VRaptor3 - Ten minutes guide
+
+</title>
+<meta name="keywords" content="" />
+<meta name="Small Window " content="" />
+<link href="../../includes/css/style.css" rel="stylesheet" type="text/css" media="screen" />
+</head>
+<body>
+
+<!-- start header -->
+<div id="all">
+<div id="header">
+
+<div id="logo"><img src="../../includes/images/marca.png" alt="VRaptor" width="300" height="100" border="0"></div>
+
+<div id="centeredmenu">
+<ul>
+		<li><a href="../../../../index.html">Home</a></li>
+        <li>|</li>
+		<li><a href="../../../../download.html">Download</a></li>
+		<li>|</li>  
+        <li><a href="../../../../vantagens.html">Vantagens</a></li>
+		<li>|</li>
+        <li><a href="../../../../depoimentos.html">Depoimentos</a></li>
+		<li>|</li>
+    	<li><a href="../../../../documentacao/"><b>Documentação</b></a></li>
+    <li>|</li>        
+			<li><a href="../../../../vraptor2.html"><b>VRaptor 2</b></a></li>
+</ul>
+</div>
+
+<div id="languages">
+	<ul>
+		<li><a href="../../">PT</a></li>
+		<li>|</li>
+		<li><a href="../../en/">EN</a></li>
+	<ul>
+</div>
+
+</div>
+<!-- finish header -->
+
+<!-- start conteudo -->
+
+<div id="wrapper">
+<div id="conteudo">
+
+<div id="titulo"><img src="../../includes/images/hea_documentacao.jpg" alt="Ttulo" width="850" height="40"></div>
+
+<div id="texto_01">
+
+<h2 class="section">Shopping Cart: session components</h2>
+	    	<span class="paragraph">If we want to make a shopping cart in our system, we need some way to keep cart items in the user's 
+session. In order to do it, we can create a session scoped component, i.e., a component that will 
+last as long as the user session last. For that, simply create a component and annotate it with 
+@SessionScoped:</span>
+	    	<div class="java"><code class="java">
+<span class="java16">@Component<br />
+@SessionScoped<br />
+</span><span class="java4">public class </span><span class="java10">ShoppingCart </span><span class="java8">{<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">private </span><span class="java10">List&lt;Product&gt; items = </span><span class="java4">new </span><span class="java10">ArrayList&lt;Product&gt;</span><span class="java8">()</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">List&lt;Product&gt; getAllItems</span><span class="java8">() {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return </span><span class="java10">items;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">addItem</span><span class="java8">(</span><span class="java10">Product item</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">items.add</span><span class="java8">(</span><span class="java10">item</span><span class="java8">)</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+}</span></code></div>
+	    	<span class="paragraph">As this shopping cart is a component, we can receive it on the shopping cart's Controller's 
+constructor:</span>
+	    	<div class="java"><code class="java">
+<span class="java16">@Resource<br />
+</span><span class="java4">public class </span><span class="java10">ShoppingCartController </span><span class="java8">{<br />
+<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">ShoppingCartController</span><span class="java8">(</span><span class="java10">ShoppingCart cart</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">this</span><span class="java10">.cart = cart;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">add</span><span class="java8">(</span><span class="java10">Product product</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">cart.addItem</span><span class="java8">(</span><span class="java10">product</span><span class="java8">)</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">List&lt;Product&gt; listItems</span><span class="java8">() {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return </span><span class="java10">cart.getAllItems</span><span class="java8">()</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+}</span></code></div>
+	    	<span class="paragraph">Besides session scope, there is also the application scope and the @ApplicationScoped annotation.
+Components annotated with @ApplicationScoped will be created only once for the whole application.</span>
+		
+
+	</div>
+</div>
+</div>
+
+
+<div id="footer">
+	<p><a href="http://www.caelum.com.br" target="_blank">VRaptor ©2009 Caelum - Ensino e Inovação</a></p>
+</div>
+</div>
+</body>
+</html>

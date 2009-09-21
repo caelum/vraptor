@@ -19,4 +19,5 @@ vraptor-blank-project/WebContent/WEB-INF/lib/vraptor3-*.jar
 vraptor-site/todo.log
 vraptor-mydvds/mydvds.war
 vraptor-mydvds/mydvdsDB.*
+vraptor-mydvds/src/main/webapp/WEB-INF/lib/vraptor3-*.jar
 *~

@@ -1,0 +1,120 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>VRaptor - Powered by Caelum | VRaptor3 - Ten minutes guide
+
+</title>
+<meta name="keywords" content="" />
+<meta name="Small Window " content="" />
+<link href="../../includes/css/style.css" rel="stylesheet" type="text/css" media="screen" />
+</head>
+<body>
+
+<!-- start header -->
+<div id="all">
+<div id="header">
+
+<div id="logo"><img src="../../includes/images/marca.png" alt="VRaptor" width="300" height="100" border="0"></div>
+
+<div id="centeredmenu">
+<ul>
+		<li><a href="../../../../index.html">Home</a></li>
+        <li>|</li>
+		<li><a href="../../../../download.html">Download</a></li>
+		<li>|</li>  
+        <li><a href="../../../../vantagens.html">Vantagens</a></li>
+		<li>|</li>
+        <li><a href="../../../../depoimentos.html">Depoimentos</a></li>
+		<li>|</li>
+    	<li><a href="../../../../documentacao/"><b>Documentação</b></a></li>
+    <li>|</li>        
+			<li><a href="../../../../vraptor2.html"><b>VRaptor 2</b></a></li>
+</ul>
+</div>
+
+<div id="languages">
+	<ul>
+		<li><a href="../../">PT</a></li>
+		<li>|</li>
+		<li><a href="../../en/">EN</a></li>
+	<ul>
+</div>
+
+</div>
+<!-- finish header -->
+
+<!-- start conteudo -->
+
+<div id="wrapper">
+<div id="conteudo">
+
+<div id="titulo"><img src="../../includes/images/hea_documentacao.jpg" alt="Ttulo" width="850" height="40"></div>
+
+<div id="texto_01">
+
+<h2 class="section">Creating ProductDao: Dependency Injection</h2>
+	    	<span class="paragraph">VRaptor widely uses the Dependency Injection and Inversion of Control concept.
+The whole idea is simple: if you need a resource, you won't create it, but will have it ready for 
+you when you ask for it. You can get more information about it on the Dependency Injection chapter.</span>
+	    	<span class="paragraph">We are returning a hard coded empty list on our list method. It would be more helpful if we
+return a real list, for example all of registered products of the system. In order to do that,
+let's create a product DAO, for listing the products:</span>
+	    	<div class="java"><code class="java">
+<span class="java4">public class </span><span class="java10">ProductDao </span><span class="java8">{<br />
+<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">List&lt;Product&gt; listAll</span><span class="java8">() {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return new </span><span class="java10">ArrayList&lt;Product&gt;</span><span class="java8">()</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+&nbsp;&nbsp;&nbsp; <br />
+}</span></code></div>
+	    	<span class="paragraph">And in the ProductsController we might use the dao for listing products:</span>
+	    	<div class="java"><code class="java">
+<span class="java16">@Resource<br />
+</span><span class="java4">public class </span><span class="java10">ProductsController </span><span class="java8">{<br />
+&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">private </span><span class="java10">ProductDao dao;<br />
+&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">List&lt;Product&gt; list</span><span class="java8">() {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return </span><span class="java10">dao.listAll</span><span class="java8">()</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+&nbsp;&nbsp;&nbsp; <br />
+}</span></code></div>
+	    	<span class="paragraph">We could create a new ProductDao inside the controller, but we can simply loose coupling by
+receiving it on the class constructor, and letting VRaptor do its Dependency Management Magic
+and provide an instance of ProductDao when creating our controller! And for enabling this
+behavior we only have to annotate the ProductDao class with @Component:</span>
+	    	<div class="java"><code class="java">
+<strong><span class="java16">@Component<br /></strong>
+</span><span class="java4">public class </span><span class="java10">ProductDao </span><span class="java8">{<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java3">//...<br />
+</span><span class="java8">}<br />
+<br />
+</span><span class="java16">@Resource<br />
+</span><span class="java4">public class </span><span class="java10">ProductsController </span><span class="java8">{<br />
+&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">private </span><span class="java10">ProductDao dao;<br />
+<br />
+<strong>&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">ProductsController</span><span class="java8">(</span><span class="java10">ProductDao dao</span><span class="java8">) {<br /></strong>
+<strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">this</span><span class="java10">.dao = dao;<br /></strong>
+<strong>&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br /></strong>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">List&lt;Product&gt; list</span><span class="java8">() {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return </span><span class="java10">dao.listAll</span><span class="java8">()</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+&nbsp;&nbsp;&nbsp; <br />
+}</span></code></div>
+		
+
+	</div>
+</div>
+</div>
+
+
+<div id="footer">
+	<p><a href="http://www.caelum.com.br" target="_blank">VRaptor ©2009 Caelum - Ensino e Inovação</a></p>
+</div>
+</div>
+</body>
+</html>

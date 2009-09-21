@@ -1,0 +1,108 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>VRaptor - Powered by Caelum | VRaptor3 - o guia inicial de 10 minutos
+
+</title>
+<meta name="keywords" content="" />
+<meta name="Small Window " content="" />
+<link href="../../includes/css/style.css" rel="stylesheet" type="text/css" media="screen" />
+</head>
+<body>
+
+<!-- start header -->
+<div id="all">
+<div id="header">
+
+<div id="logo"><img src="../../includes/images/marca.png" alt="VRaptor" width="300" height="100" border="0"></div>
+
+<div id="centeredmenu">
+<ul>
+		<li><a href="../../../../index.html">Home</a></li>
+        <li>|</li>
+		<li><a href="../../../../download.html">Download</a></li>
+		<li>|</li>  
+        <li><a href="../../../../vantagens.html">Vantagens</a></li>
+		<li>|</li>
+        <li><a href="../../../../depoimentos.html">Depoimentos</a></li>
+		<li>|</li>
+    	<li><a href="../../../../documentacao/"><b>Documentação</b></a></li>
+    <li>|</li>        
+			<li><a href="../../../../vraptor2.html"><b>VRaptor 2</b></a></li>
+</ul>
+</div>
+
+<div id="languages">
+	<ul>
+		<li><a href="../../">PT</a></li>
+		<li>|</li>
+		<li><a href="../../en/">EN</a></li>
+	<ul>
+</div>
+
+</div>
+<!-- finish header -->
+
+<!-- start conteudo -->
+
+<div id="wrapper">
+<div id="conteudo">
+
+<div id="titulo"><img src="../../includes/images/hea_documentacao.jpg" alt="Ttulo" width="850" height="40"></div>
+
+<div id="texto_01">
+
+<h2 class="section">Carrinho de compras: Componentes na sessão</h2>
+	    	<span class="paragraph">Se quisermos criar um carrinho de compras no nosso sistema, precisamos de alguma forma manter os
+itens do carrinho na Sess&atilde;o do usu&aacute;rio. Para fazer isso, podemos criar um componente que est&aacute; no
+escopo de sess&atilde;o, ou seja, ele vai ser &uacute;nico na sess&atilde;o do usu&aacute;rio. Para isso basta criar um
+componente anotado com @SessionScoped:</span>
+	    	<div class="java"><code class="java">
+<span class="java16">@Component<br />
+@SessionScoped<br />
+</span><span class="java4">public class </span><span class="java10">CarrinhoDeCompras </span><span class="java8">{<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">private </span><span class="java10">List&lt;Produto&gt; itens = </span><span class="java4">new </span><span class="java10">ArrayList&lt;Produto&gt;</span><span class="java8">()</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">List&lt;Produto&gt; getTodosOsItens</span><span class="java8">() {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return </span><span class="java10">itens;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">adicionaItem</span><span class="java8">(</span><span class="java10">Produto item</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">itens.add</span><span class="java8">(</span><span class="java10">item</span><span class="java8">)</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+}</span></code></div>
+	    	<span class="paragraph">Como esse carrinho de compras &eacute; um componente, podemos receb&ecirc;-lo no construtor do controller que
+vai cuidar do carrinho de compras:</span>
+	    	<div class="java"><code class="java">
+<span class="java16">@Resource<br />
+</span><span class="java4">public class </span><span class="java10">CarrinhoController </span><span class="java8">{<br />
+<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">CarrinhoController</span><span class="java8">(</span><span class="java10">CarrinhoDeCompras carrinho</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">this</span><span class="java10">.carrinho = carrinho;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">adiciona</span><span class="java8">(</span><span class="java10">Produto produto</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">carrinho.adicionaItem</span><span class="java8">(</span><span class="java10">produto</span><span class="java8">)</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">List&lt;Produto&gt; listaItens</span><span class="java8">() {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return </span><span class="java10">carrinho.getTodosOsItens</span><span class="java8">()</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+}</span></code></div>
+	    	<span class="paragraph">Al&eacute;m do escopo de sess&atilde;o existe o escopo de Aplica&ccedil;&atilde;o com a anota&ccedil;&atilde;o @ApplicationScoped.
+Os componentes anotados com @ApplicationScoped ser&atilde;o criados apenas uma vez em toda a aplica&ccedil;&atilde;o.</span>
+		
+
+	</div>
+</div>
+</div>
+
+
+<div id="footer">
+	<p><a href="http://www.caelum.com.br" target="_blank">VRaptor ©2009 Caelum - Ensino e Inovação</a></p>
+</div>
+</div>
+</body>
+</html>

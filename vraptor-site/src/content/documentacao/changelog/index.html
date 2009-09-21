@@ -20,16 +20,26 @@
 
 <div id="centeredmenu">
 <ul>
-		<li><a href="../../index.html">Home</a></li>
+		<li><a href="../../../index.html">Home</a></li>
         <li>|</li>
-		<li><a href="../../download.html">Download</a></li>
+		<li><a href="../../../download.html">Download</a></li>
 		<li>|</li>  
-        <li><a href="../../vantagens.html">Vantagens</a></li>
+        <li><a href="../../../vantagens.html">Vantagens</a></li>
 		<li>|</li>
-        <li><a href="../../depoimentos.html">Depoimentos</a></li>
+        <li><a href="../../../depoimentos.html">Depoimentos</a></li>
 		<li>|</li>
-    	<li><a href="../../documentacao/"><b>Documentação</b></a></li>
+    	<li><a href="../../../documentacao/"><b>Documentação</b></a></li>
+    <li>|</li>        
+			<li><a href="../../../vraptor2.html"><b>VRaptor 2</b></a></li>
 </ul>
+</div>
+
+<div id="languages">
+	<ul>
+		<li><a href="../">PT</a></li>
+		<li>|</li>
+		<li><a href="../en/">EN</a></li>
+	<ul>
 </div>
 
 </div>
@@ -48,8 +58,22 @@
 		<h1 class="chapter">ChangeLog</h1>
 
 		
-
-
+		
+<h2 class="section">3.0.0-rc-1</h2>
+	    	<span class="paragraph">* aplica&ccedil;&atilde;o de exemplo: mydvds
+* novo jeito de adicionar os componentes opcionais do VRaptor:</span>
+	    	<div class="java"><code class="java">
+<span class="java4">public class </span><span class="java10">CustomProvider </span><span class="java4">extends </span><span class="java10">SpringProvider </span><span class="java8">{<br />
+&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java16">@Override<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">protected </span><span class="java9">void </span><span class="java10">registerCustomComponents</span><span class="java8">(</span><span class="java10">ComponentRegistry registry</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">registry.registry</span><span class="java8">(</span><span class="java10">ComponenteOpcional.class, ComponenteOpcional.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+}</span></code></div>
+	    	<span class="paragraph">* Utils: HibernateTransactionInterceptor e JPATransactionInterceptor
+* Um exemplo completo de aplica&ccedil;&atilde;o na documenta&ccedil;&atilde;o.
+* Docs em ingl&ecirc;s</span>
+		
 <h2 class="section">3.0.0-beta-5</h2>
 	    	<ul class="list"><li><span class="paragraph">Novo jeito de fazer valida&ccedil;&otilde;es:</span><div class="java"><code class="java">
 <span class="java4">public </span><span class="java9">void </span><span class="java10">visualiza</span><span class="java8">(</span><span class="java10">Cliente cliente</span><span class="java8">) {<br />
@@ -61,7 +85,6 @@
 &nbsp;&nbsp;&nbsp; </span><span class="java3">//continua o metodo<br />
 </span><span class="java8">}</span></code></div></li><li><span class="paragraph">UploadedFile.getFile() agora retorna InputStream.</span></li><li><span class="paragraph">EntityManagerCreator e EntityManagerFactoryCreator</span></li><li><span class="paragraph">bugfixes</span></li></ul>
 		
-
 <h2 class="section">3.0.0-beta-4</h2>
 	    	<ul class="list"><li><span class="paragraph">Novo result: result.use(page()).of(MeuController.class).minhaLogica() renderiza a view
 	padr&atilde;o (/WEB-INF/jsp/meu/minhaLogica.jsp) sem executar a minhaLogica.</span></li><li><span class="paragraph">Classes Mocks para testes: MockResult e MockValidator, para facilitar testes unit&aacute;rios
@@ -80,7 +103,6 @@
 	o ApplicationContext do spring usado pela sua aplica&ccedil;&atilde;o.</span></li><li><span class="paragraph">Utils:</span><ul class="list"><li><span class="paragraph">SessionCreator e SessionFactoryCreator para disponbilizar a Session e o SessionFactory do hibernate
 		para os componentes registrados.</span></li><li><span class="paragraph">EncodingInterceptor, para mudar o encoding da sua aplica&ccedil;&atilde;o.</span></li></ul></li><li><span class="paragraph">corre&ccedil;&atilde;o de v&aacute;rios bugs e melhorias na documenta&ccedil;&atilde;o.</span></li></ul>
 		
-
 <h2 class="section">3.0.0-beta-3</h2>
 	    	<ul class="list"><li><span class="paragraph">O Spring &eacute; o Provider de IoC padr&atilde;o</span></li><li><span class="paragraph">o applicationContext.xml no classpath &eacute; usado como configura&ccedil;&atilde;o incial do spring, caso exista.</span></li><li><span class="paragraph">a documenta&ccedil;&atilde;o <a class="link" target="_blank" href="http://vraptor.caelum.com.br/documentacao">http://vraptor.caelum.com.br/documentacao</a> est&aacute; mais completa e atualizada</span></li><li><span class="paragraph">pequenos bugs e otimiza&ccedil;&otilde;es</span></li></ul>
 		

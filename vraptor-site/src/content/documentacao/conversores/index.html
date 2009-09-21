@@ -20,16 +20,26 @@
 
 <div id="centeredmenu">
 <ul>
-		<li><a href="../../index.html">Home</a></li>
+		<li><a href="../../../index.html">Home</a></li>
         <li>|</li>
-		<li><a href="../../download.html">Download</a></li>
+		<li><a href="../../../download.html">Download</a></li>
 		<li>|</li>  
-        <li><a href="../../vantagens.html">Vantagens</a></li>
+        <li><a href="../../../vantagens.html">Vantagens</a></li>
 		<li>|</li>
-        <li><a href="../../depoimentos.html">Depoimentos</a></li>
+        <li><a href="../../../depoimentos.html">Depoimentos</a></li>
 		<li>|</li>
-    	<li><a href="../../documentacao/"><b>Documentação</b></a></li>
+    	<li><a href="../../../documentacao/"><b>Documentação</b></a></li>
+    <li>|</li>        
+			<li><a href="../../../vraptor2.html"><b>VRaptor 2</b></a></li>
 </ul>
+</div>
+
+<div id="languages">
+	<ul>
+		<li><a href="../">PT</a></li>
+		<li>|</li>
+		<li><a href="../en/">EN</a></li>
+	<ul>
 </div>
 
 </div>
@@ -48,23 +58,19 @@
 		<h1 class="chapter">Conversores</h1>
 
 		
-
-
+		
 <h2 class="section">Padrão</h2>
 	    	<span class="paragraph">Por padr&atilde;o o VRaptor j&aacute; registra diversos conversores para o seu uso no dia a dia.</span>
 		
-
 <h2 class="section">Tipos primitivos</h2>
 	    	<span class="paragraph">Todos os tipos primitivos (int, long etc) s&atilde;o suportados.</span>
 	    	<span class="paragraph">Caso o parametro da requisi&ccedil;&atilde;o seja nulo ou a string vazia, vari&aacute;veis de tipo primitivo
 ser&atilde;o alterados para o valor padr&atilde;o como se essa vari&aacute;vel fosse uma vari&aacute;vel membro, isto &eacute;:</span>
 	    	<ul class="list"><li><span class="paragraph">boolean - false</span></li><li><span class="paragraph">short, int, long, double, float, byte - 0</span></li><li><span class="paragraph">char - caracter de c&oacute;digo 0</span></li></ul>
 		
-
 <h2 class="section">Wrappers de tipos primitivos</h2>
 	    	<span class="paragraph">Todos os wrappers dos tipos primitivos (Integer, Long, Character, Boolean etc) s&atilde;o suportados.</span>
 		
-
 <h2 class="section">Enum</h2>
 	    	<span class="paragraph">Todas as enumera&ccedil;&otilde;es s&atilde;o suportadas atrav&eacute;s do nome do elemento ou de seu ordinal.
 No exemplo a seguir, tanto o valor 1 como o valor DEBITO s&atilde;o traduzidos para Tipo.DEBITO:</span>
@@ -72,24 +78,20 @@ No exemplo a seguir, tanto o valor 1 como o valor DEBITO s&atilde;o traduzidos p
 &nbsp;&nbsp;&nbsp;&nbsp;CREDITO,&nbsp;DEBITO<br />
 }</code></div>
 		
-
 <h2 class="section">BigInteger e BigDecimal</h2>
 	    	<span class="paragraph">Ambos s&atilde;o suportados utilizando o padr&atilde;o de localiza&ccedil;&atilde;o da virtual machine que serve a sua aplica&ccedil;&atilde;o.
 Para criar suporte a n&uacute;meros decimais baseados no locale do usu&aacute;rio, basta olhar o funcionamento da classe LocaleBasedCalendarConverter.</span>
 		
-
 <h2 class="section">Calendar e Date</h2>
 	    	<span class="paragraph">LocaleBasedCalendarConverter e LocaleBasedDateConverter utilizam o locale do usu&aacute;rio,
 definido seguindo o padr&atilde;o do jstl para entender a formata&ccedil;&atilde;o que foi utilizada no par&acirc;metro.</span>
 	    	<span class="paragraph">Por exemplo, se o locale &eacute; pt-br, o formato "18/09/1981" representa 18 de setembro de 1981
 enquanto para o locale en, o formato "09/18/1981" representa a mesma data.</span>
 		
-
 <h2 class="section">LocalDate e LocalTime do joda-time</h2>
 	    	<span class="paragraph">Existem conversores para esses dois tipos no VRaptor e eles s&oacute; ser&atilde;o carregados se voc&ecirc; tiver
 o joda-time.jar no seu classpath</span>
 		
-
 <h2 class="section">Interface</h2>
 	    	<span class="paragraph">Todos os conversores devem implementar a interface Converter do vraptor.
 A classe concreta definir&aacute; o tipo que ela &eacute; capaz de converter, e ser&aacute; invocada
@@ -133,12 +135,10 @@ public&nbsp;class&nbsp;LongConverter&nbsp;implements&nbsp;Converter&lt;Long&gt;&
 <br />
 }</code></div>
 		
-
 <h2 class="section">Registrando um novo conversor</h2>
 	    	<span class="paragraph">N&atilde;o &eacute; necess&aacute;ria nenhuma configura&ccedil;&atilde;o al&eacute;m do @Convert e implementar a interface Converter
 para que o conversor seja registrado no Container do VRaptor.</span>
 		
-
 <h2 class="section">Outros fora do padrão</h2>
 		
 

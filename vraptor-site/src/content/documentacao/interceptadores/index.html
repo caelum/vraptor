@@ -20,16 +20,26 @@
 
 <div id="centeredmenu">
 <ul>
-		<li><a href="../../index.html">Home</a></li>
+		<li><a href="../../../index.html">Home</a></li>
         <li>|</li>
-		<li><a href="../../download.html">Download</a></li>
+		<li><a href="../../../download.html">Download</a></li>
 		<li>|</li>  
-        <li><a href="../../vantagens.html">Vantagens</a></li>
+        <li><a href="../../../vantagens.html">Vantagens</a></li>
 		<li>|</li>
-        <li><a href="../../depoimentos.html">Depoimentos</a></li>
+        <li><a href="../../../depoimentos.html">Depoimentos</a></li>
 		<li>|</li>
-    	<li><a href="../../documentacao/"><b>Documentação</b></a></li>
+    	<li><a href="../../../documentacao/"><b>Documentação</b></a></li>
+    <li>|</li>        
+			<li><a href="../../../vraptor2.html"><b>VRaptor 2</b></a></li>
 </ul>
+</div>
+
+<div id="languages">
+	<ul>
+		<li><a href="../">PT</a></li>
+		<li>|</li>
+		<li><a href="../en/">EN</a></li>
+	<ul>
 </div>
 
 </div>
@@ -48,14 +58,12 @@
 		<h1 class="chapter">Interceptadores</h1>
 
 		
-
-
+		
 <h2 class="section">Para que interceptar</h2>
 	    	<span class="paragraph">O uso de interceptadores &eacute; feito para executar alguma tarefa antes e/ou depois
 de uma l&oacute;gica de neg&oacute;cios, sendo os usos mais comuns para valida&ccedil;&atilde;o de dados, 
-controle de conex&atilde;o e transa&ccedil;&atilde;o do banco, log e criptografa&ccedil;&atilde;o/compacta&ccedil;&atilde;o de dados.</span>
+controle de conex&atilde;o e transa&ccedil;&atilde;o do banco, log e criptografia/compacta&ccedil;&atilde;o de dados.</span>
 		
-
 <h2 class="section">Como interceptar</h2>
 	    	<span class="paragraph">No VRaptor 3 utilizamos uma abordagem onde o interceptador define quem ser&aacute; interceptado,
 muito mais pr&oacute;xima a abordagens de intercepta&ccedil;&atilde;o que aparecem em sistemas baseados
@@ -74,7 +82,6 @@ ser&aacute; armazenado atrav&eacute;s das anota&ccedil;&otilde;es de escopo.</sp
 <br />
 </span><span class="java8">}</span></code></div>
 		
-
 <h2 class="section">Exemplo simples</h2>
 	    	<span class="paragraph">A classe a seguir mostra um exemplo de como interceptar todas as requisi&ccedil;&otilde;es em um escopo de
 requisi&ccedil;&atilde;o e simplesmente mostrar na sa&iacute;da do console o que est&aacute; sendo invocado.</span>
@@ -113,7 +120,6 @@ em seu construtor quaisquer dependencias atraves de Injecao de Dependencias.</sp
 <br />
 }</span></code></div>
 		
-
 <h2 class="section">Exemplo com Hibernate</h2>
 	    	<span class="paragraph">Provavelmente, um dos usos mais comuns do Interceptor &eacute; para a implementa&ccedil;&atilde;o do famigerado pattern Open Session In View, que
 fornece uma conex&atilde;o com o banco de dados sempre que h&aacute; uma requisi&ccedil;&atilde;o para sua aplica&ccedil;&atilde;o. E ao fim dessa requisi&ccedil;&atilde;o, a
@@ -168,7 +174,6 @@ l&oacute;gica e da exibi&ccedil;&atilde;o da p&aacute;gina para o usu&aacute;rio
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
 }</span></code></div>
 		
-
 <h2 class="section">Como garantir ordem: InterceptorSequence</h2>
 	    	<span class="paragraph">Se voc&ecirc; precisa garantir a ordem em que os interceptors s&atilde;o executados, basta implementar
 a interface InterceptorSequence e passar a ordem em que voc&ecirc; deseja executar os interceptors:</span>

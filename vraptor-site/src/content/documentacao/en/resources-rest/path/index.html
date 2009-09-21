@@ -1,0 +1,190 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>VRaptor - Powered by Caelum | Resources-Rest
+
+</title>
+<meta name="keywords" content="" />
+<meta name="Small Window " content="" />
+<link href="../../includes/css/style.css" rel="stylesheet" type="text/css" media="screen" />
+</head>
+<body>
+
+<!-- start header -->
+<div id="all">
+<div id="header">
+
+<div id="logo"><img src="../../includes/images/marca.png" alt="VRaptor" width="300" height="100" border="0"></div>
+
+<div id="centeredmenu">
+<ul>
+		<li><a href="../../../../index.html">Home</a></li>
+        <li>|</li>
+		<li><a href="../../../../download.html">Download</a></li>
+		<li>|</li>  
+        <li><a href="../../../../vantagens.html">Vantagens</a></li>
+		<li>|</li>
+        <li><a href="../../../../depoimentos.html">Depoimentos</a></li>
+		<li>|</li>
+    	<li><a href="../../../../documentacao/"><b>Documentação</b></a></li>
+    <li>|</li>        
+			<li><a href="../../../../vraptor2.html"><b>VRaptor 2</b></a></li>
+</ul>
+</div>
+
+<div id="languages">
+	<ul>
+		<li><a href="../../">PT</a></li>
+		<li>|</li>
+		<li><a href="../../en/">EN</a></li>
+	<ul>
+</div>
+
+</div>
+<!-- finish header -->
+
+<!-- start conteudo -->
+
+<div id="wrapper">
+<div id="conteudo">
+
+<div id="titulo"><img src="../../includes/images/hea_documentacao.jpg" alt="Ttulo" width="850" height="40"></div>
+
+<div id="texto_01">
+
+<h2 class="section">@Path</h2>
+	    	<span class="paragraph">The <code class="inlineCode">@Path</code> annotation allows you to specify custom access URIs to your controller methods.
+The basic usage of the annotation is to specify a fixed URI. The following example shows
+how to customize the access URI for a method that accepts <em class="italic">POST</em> requests only. The URI
+we want to specify is <strong class="definition">/client</strong>:</span>
+	    	<div class="java"><code class="java">
+<span class="java16">@Resource<br />
+</span><span class="java4">public class </span><span class="java10">ClientController </span><span class="java8">{<br />
+<br />
+&nbsp; </span><span class="java16">@Path</span><span class="java8">(</span><span class="java5">&#34;/client&#34;</span><span class="java8">)<br />
+&nbsp; </span><span class="java16">@Post <br />
+&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">add</span><span class="java8">(</span><span class="java10">Client client</span><span class="java8">) {<br />
+&nbsp; }<br />
+&nbsp;&nbsp;&nbsp; <br />
+}</span></code></div>
+	    	<span class="paragraph"><strong class="title">Path with variable injection</strong>
+Sometimes we want the <em class="italic">uri</em> to include, for example, the unique identifier of
+my resource.</span>
+	    	<span class="paragraph">Suppose a client controller application where the client's unique identifier (primary key)
+is a number. We can map our URIs as <em class="italic">/client/{client.id}</em>, so we can visualize each client.</span>
+	    	<span class="paragraph">That is, if we access the URI <em class="italic">/client/2</em>, the <strong class="definition">show</strong> method will be invoked
+and the <em class="italic">client.id</em> parameter will be set to <strong class="definition">2</strong>. If the URI <em class="italic">/client/1717</em> is
+accessed, the same method will be invoked with the <strong class="definition">1717</strong> value.</span>
+	    	<span class="paragraph">That way we can create unique URIs to identify different resources in our application.
+See the mentioned example:</span>
+	    	<div class="java"><code class="java">
+<span class="java16">@Resource<br />
+</span><span class="java4">public class </span><span class="java10">ClientController </span><span class="java8">{<br />
+<br />
+&nbsp; </span><span class="java16">@Get<br />
+&nbsp; @Path</span><span class="java8">(</span><span class="java5">&#34;/client/{client.id}&#34;</span><span class="java8">)&nbsp; <br />
+&nbsp; </span><span class="java4">public </span><span class="java10">Cliente show</span><span class="java8">(</span><span class="java10">Client client</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">return </span><span class="java10">...<br />
+&nbsp; </span><span class="java8">}<br />
+&nbsp; <br />
+}</span></code></div>
+	    	<span class="paragraph">You can go further and set several parameters through the URI:</span>
+	    	<div class="java"><code class="java">
+<span class="java16">@Resource<br />
+</span><span class="java4">public class </span><span class="java10">ClientController </span><span class="java8">{<br />
+<br />
+&nbsp; </span><span class="java16">@Get<br />
+&nbsp; @Path</span><span class="java8">(</span><span class="java5">&#34;/client/{client.id}/show/{section}&#34;</span><span class="java8">)&nbsp; <br />
+&nbsp; </span><span class="java4">public </span><span class="java10">Client show</span><span class="java8">(</span><span class="java10">Client client, String section</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">return </span><span class="java10">...<br />
+&nbsp; </span><span class="java8">}<br />
+&nbsp; <br />
+}</span></code></div>
+	    	<span class="paragraph"><strong class="title">Paths with wildcards</strong></span>
+	    	<span class="paragraph">You can also use the * wildcard as a selection method for your URI. The following
+example ignores anything that comes after the word <em class="italic">photo/</em> :</span>
+	    	<div class="java"><code class="java">
+<span class="java16">@Resource<br />
+</span><span class="java4">public class </span><span class="java10">ClientController </span><span class="java8">{<br />
+<br />
+&nbsp; </span><span class="java16">@Get<br />
+&nbsp; @Path</span><span class="java8">(</span><span class="java5">&#34;/client/{client.id}/photo/*&#34;</span><span class="java8">)&nbsp; <br />
+&nbsp; </span><span class="java4">public </span><span class="java10">File photo</span><span class="java8">(</span><span class="java10">Client client</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">return </span><span class="java10">...<br />
+&nbsp; </span><span class="java8">}<br />
+&nbsp; <br />
+}</span></code></div>
+	    	<span class="paragraph">And now a similar code, but used to download a specific photo from a client:</span>
+	    	<div class="java"><code class="java">
+<span class="java16">@Resource<br />
+</span><span class="java4">public class </span><span class="java10">ClientController </span><span class="java8">{<br />
+<br />
+&nbsp; </span><span class="java16">@Get<br />
+&nbsp; @Path</span><span class="java8">(</span><span class="java5">&#34;/client/{client.id}/photo/{photo.id}&#34;</span><span class="java8">)&nbsp; <br />
+&nbsp; </span><span class="java4">public </span><span class="java10">File photo</span><span class="java8">(</span><span class="java10">Client client, Photo photo</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">return </span><span class="java10">...<br />
+&nbsp; </span><span class="java8">}<br />
+&nbsp; <br />
+}</span></code></div>
+	    	<span class="paragraph">Sometimes you want the parameter to include the <strong class="definition">/</strong> character. In that case,
+you should use the pattern {...*}:</span>
+	    	<div class="java"><code class="java">
+<span class="java16">@Resource<br />
+</span><span class="java4">public class </span><span class="java10">ClientController </span><span class="java8">{<br />
+<br />
+&nbsp; </span><span class="java16">@Get<br />
+&nbsp; @Path</span><span class="java8">(</span><span class="java5">&#34;/client/{client.id}/download/{path*}&#34;</span><span class="java8">)&nbsp; <br />
+&nbsp; </span><span class="java4">public </span><span class="java10">File download</span><span class="java8">(</span><span class="java10">Client client, String path</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">return </span><span class="java10">...<br />
+&nbsp; </span><span class="java8">}<br />
+&nbsp; <br />
+}</span></code></div>
+	    	<span class="paragraph"><strong class="title">Specifying priorities for your paths</strong></span>
+	    	<span class="paragraph">It is possible for some URIs to be handled by more than one method in our class:</span>
+	    	<div class="java"><code class="java">
+<span class="java16">@Resource<br />
+</span><span class="java4">public class </span><span class="java10">PostController </span><span class="java8">{<br />
+<br />
+&nbsp; </span><span class="java16">@Get<br />
+&nbsp; @Path</span><span class="java8">(</span><span class="java5">&#34;/post/{post.author}&#34;</span><span class="java8">)<br />
+&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">show</span><span class="java8">(</span><span class="java10">Post post</span><span class="java8">) { </span><span class="java10">... </span><span class="java8">}<br />
+<br />
+&nbsp; </span><span class="java16">@Get<br />
+&nbsp; @Path</span><span class="java8">(</span><span class="java5">&#34;/post/current&#34;</span><span class="java8">)<br />
+&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">current</span><span class="java8">() { </span><span class="java10">... </span><span class="java8">}<br />
+}</span></code></div>
+	    	<span class="paragraph">The URI <code class="inlineCode">/post/current</code> can be handled by both <code class="inlineCode">show</code> and <code class="inlineCode">current</code> methods.
+But I don't want to invoke the <code class="inlineCode">show</code> method with that URI, 
+what I want is VRaptor to test the <code class="inlineCode">current</code>
+path first, avoiding the invocation of the <code class="inlineCode">show</code> method.</span>
+	    	<span class="paragraph">In order to do that, we can define priorities for <code class="inlineCode">@Path</code>s, so VRaptor will first
+test paths with higher priority, in other words, paths with lower priority values.</span>
+	    	<div class="java"><code class="java">
+<span class="java16">@Resource<br />
+</span><span class="java4">public class </span><span class="java10">PostController </span><span class="java8">{<br />
+<br />
+&nbsp; </span><span class="java16">@Get<br />
+&nbsp; @Path</span><span class="java8">(</span><span class="java10">priority = </span><span class="java7">2</span><span class="java10">, value = </span><span class="java5">&#34;/post/{post.author}&#34;</span><span class="java8">)<br />
+&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">show</span><span class="java8">(</span><span class="java10">Post post</span><span class="java8">) { </span><span class="java10">... </span><span class="java8">}<br />
+<br />
+&nbsp; </span><span class="java16">@Get<br />
+&nbsp; @Path</span><span class="java8">(</span><span class="java10">priority = </span><span class="java7">1</span><span class="java10">, value = </span><span class="java5">&#34;/post/current&#34;</span><span class="java8">)<br />
+&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">current</span><span class="java8">() { </span><span class="java10">... </span><span class="java8">}<br />
+}</span></code></div>
+	    	<span class="paragraph">This way, the "/post/current" path will be tested before "/post/{post.author}" by VRaptor,
+solving our problem.</span>
+		
+
+	</div>
+</div>
+</div>
+
+
+<div id="footer">
+	<p><a href="http://www.caelum.com.br" target="_blank">VRaptor ©2009 Caelum - Ensino e Inovação</a></p>
+</div>
+</div>
+</body>
+</html>

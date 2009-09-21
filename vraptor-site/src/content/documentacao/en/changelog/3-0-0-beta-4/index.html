@@ -1,0 +1,84 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>VRaptor - Powered by Caelum | ChangeLog
+
+</title>
+<meta name="keywords" content="" />
+<meta name="Small Window " content="" />
+<link href="../../includes/css/style.css" rel="stylesheet" type="text/css" media="screen" />
+</head>
+<body>
+
+<!-- start header -->
+<div id="all">
+<div id="header">
+
+<div id="logo"><img src="../../includes/images/marca.png" alt="VRaptor" width="300" height="100" border="0"></div>
+
+<div id="centeredmenu">
+<ul>
+		<li><a href="../../../../index.html">Home</a></li>
+        <li>|</li>
+		<li><a href="../../../../download.html">Download</a></li>
+		<li>|</li>  
+        <li><a href="../../../../vantagens.html">Vantagens</a></li>
+		<li>|</li>
+        <li><a href="../../../../depoimentos.html">Depoimentos</a></li>
+		<li>|</li>
+    	<li><a href="../../../../documentacao/"><b>Documentação</b></a></li>
+    <li>|</li>        
+			<li><a href="../../../../vraptor2.html"><b>VRaptor 2</b></a></li>
+</ul>
+</div>
+
+<div id="languages">
+	<ul>
+		<li><a href="../../">PT</a></li>
+		<li>|</li>
+		<li><a href="../../en/">EN</a></li>
+	<ul>
+</div>
+
+</div>
+<!-- finish header -->
+
+<!-- start conteudo -->
+
+<div id="wrapper">
+<div id="conteudo">
+
+<div id="titulo"><img src="../../includes/images/hea_documentacao.jpg" alt="Ttulo" width="850" height="40"></div>
+
+<div id="texto_01">
+
+<h2 class="section">3.0.0-beta-4</h2>
+	    	<ul class="list"><li><span class="paragraph">New result: result.use(page()).of(MyController.class).myLogic() renders the default view
+	(/WEB-INF/jsp/meu/myLogica.jsp) without execting the logic.</span></li><li><span class="paragraph">Mock classes for testing: MockResult e MockValidator, to make easier to unit test your logics.
+	They ignores the fluent interface calls and keep the parameters included under the result and
+	the validation errors.</span></li><li><span class="paragraph">The URIs passed to result.use(page()).forward(uri) and result.use(page()).redirect(uri)
+	can't be logic URIs. Use forwards or redirects from result.use(logic()) instead.</span></li><li><span class="paragraph">Parameters passed to URI's now accepts pattern-matching:</span><ul class="list"><li><span class="paragraph">Automatic: if we have the URI /clients/{client.id} and client.id is a Long, the {client.id} parameter 
+		will only match numbers, so, the URI /clients/42 matches, but the /clients/random doesn't matches.
+		This works for all numeric types, booleans and enums. VRaptor will restrict the possible values.</span></li><li><span class="paragraph">Manual: in your CustomRoutes you can do:
+		routeFor("/clients/{client.id}").withParameter("client.id").matching("\\d{1,4}")
+  			.is(ClienteController.class).mostra(null);
+  	which means you can restrict values for the parameters you want by regexes at the matching method.</span></li></ul></li><li><span class="paragraph">Converters for joda-times's LocalDate and LocalTime comes by default.</span></li><li><span class="paragraph">When Spring is the IoC provider, VRaptor tries to find your application's spring to use as
+	a father container. This search is made by one of the following two ways:</span><ul class="list"><li><span class="paragraph">WebApplicationContextUtils.getWebApplicationContext(servletContext), when you have Spring's listeners
+	configured.</span></li><li><span class="paragraph">applicationContext.xml inside the classpath</span></li></ul><span class="paragraph">If it's not enough, you can implements the SpringLocator interface and enable the Spring's ApplicationContext
+	used by your application.</span></li><li><span class="paragraph">Utils:</span><ul class="list"><li><span class="paragraph">SessionCreator and SessionFactoryCreator to create Hibernate's Session and SessionFactory 
+	to your registered components.</span></li><li><span class="paragraph">EncodingInterceptor, to change you default encoding.</span></li></ul></li><li><span class="paragraph">several bugfixes and docs improvements.</span></li></ul>
+		
+
+	</div>
+</div>
+</div>
+
+
+<div id="footer">
+	<p><a href="http://www.caelum.com.br" target="_blank">VRaptor ©2009 Caelum - Ensino e Inovação</a></p>
+</div>
+</div>
+</body>
+</html>

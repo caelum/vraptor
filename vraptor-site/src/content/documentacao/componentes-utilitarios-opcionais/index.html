@@ -1,0 +1,134 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>VRaptor - Powered by Caelum | Componentes Utilitários Opcionais
+
+</title>
+<meta name="keywords" content="" />
+<meta name="Small Window " content="" />
+<link href="../includes/css/style.css" rel="stylesheet" type="text/css" media="screen" />
+</head>
+<body>
+
+<!-- start header -->
+<div id="all">
+<div id="header">
+
+<div id="logo"><img src="../includes/images/marca.png" alt="VRaptor" width="300" height="100" border="0"></div>
+
+<div id="centeredmenu">
+<ul>
+		<li><a href="../../../index.html">Home</a></li>
+        <li>|</li>
+		<li><a href="../../../download.html">Download</a></li>
+		<li>|</li>  
+        <li><a href="../../../vantagens.html">Vantagens</a></li>
+		<li>|</li>
+        <li><a href="../../../depoimentos.html">Depoimentos</a></li>
+		<li>|</li>
+    	<li><a href="../../../documentacao/"><b>Documentação</b></a></li>
+    <li>|</li>        
+			<li><a href="../../../vraptor2.html"><b>VRaptor 2</b></a></li>
+</ul>
+</div>
+
+<div id="languages">
+	<ul>
+		<li><a href="../">PT</a></li>
+		<li>|</li>
+		<li><a href="../en/">EN</a></li>
+	<ul>
+</div>
+
+</div>
+<!-- finish header -->
+
+<!-- start conteudo -->
+
+<div id="wrapper">
+<div id="conteudo">
+
+<div id="titulo"><img src="../includes/images/hea_documentacao.jpg" alt="Ttulo" width="850" height="40"></div>
+
+<div id="texto_01">
+	
+
+		<h1 class="chapter">Componentes Utilitários Opcionais</h1>
+
+		
+		
+<h2 class="section">Registrando um componente opcional</h2>
+	    	<span class="paragraph">O VRaptor possui alguns componentes opcionais, que est&atilde;o no pacote 
+<code class="inlineCode">br.com.caelum.vraptor.util</code>. Para registr&aacute;-los voc&ecirc; pode fazer o seguinte:</span>
+	    	<ul class="list"><li><span class="paragraph">Crie uma classe filha do Provider que voc&ecirc; est&aacute; usando:</span><div class="java"><code class="java">
+<span class="java4">package </span><span class="java10">br.com.nomedaempresa.nomedoprojeto;<br />
+<br />
+</span><span class="java4">public class </span><span class="java10">CustomProvider </span><span class="java4">extends </span><span class="java10">SpringProvider </span><span class="java8">{<br />
+&nbsp;&nbsp;&nbsp; <br />
+}</span></code></div></li><li><span class="paragraph">Registre essa classe como provider no web.xml:</span><div class="xml"><code class="xml"><span class="textag">&lt;context-param&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-name&gt;</span><span class="texnormal">br.com.caelum.vraptor.provider</span><span class="textag">&lt;/param-name&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-value&gt;</span><span class="texnormal">br.com.nomedaempresa.nomedoprojeto.CustomProvider</span><span class="textag">&lt;/param-value&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal"></span><span class="textag">&lt;/context-param&gt;</span></code></div></li><li><span class="paragraph">Sobrescreva o m&eacute;todo registerCustomComponents e adicione os componentes opcionais:</span><div class="java"><code class="java">
+<span class="java4">package </span><span class="java10">br.com.nomedaempresa.nomedoprojeto;<br />
+<br />
+</span><span class="java4">public class </span><span class="java10">CustomProvider </span><span class="java4">extends </span><span class="java10">SpringProvider </span><span class="java8">{<br />
+&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java16">@Override<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">protected </span><span class="java9">void </span><span class="java10">registerCustomComponents</span><span class="java8">(</span><span class="java10">ComponentRegistry registry</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">registry.registry</span><span class="java8">(</span><span class="java10">ComponenteOpcional.class, ComponenteOpcional.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+}</span></code></div></li></ul>
+		
+<h2 class="section">Hibernate Session e SessionFactory</h2>
+	    	<span class="paragraph">Se voc&ecirc; precisa de Session's e SessionFactory nos seus componentes, voc&ecirc; geralmente
+vai precisar de um ComponentFactory para cri&aacute;-los. Se voc&ecirc; usa entidades anotadas,
+e o hibernate.cfg.xml na raiz do WEB-INF/classes, voc&ecirc; pode usar as ComponentFactory's para
+isso que j&aacute; v&ecirc;m com o VRaptor. O que voc&ecirc; precisa fazer &eacute;:</span>
+	    	<div class="java"><code class="java">
+<span class="java16">@Override<br />
+</span><span class="java4">protected </span><span class="java9">void </span><span class="java10">registerCustomComponents</span><span class="java8">(</span><span class="java10">ComponentRegistry registry</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java10">registry.registry</span><span class="java8">(</span><span class="java10">SessionCreator.class, SessionCreator.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; registry.registry</span><span class="java8">(</span><span class="java10">SessionFactoryCreator.class, SessionFactoryCreator.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">;<br />
+</span><span class="java8">}</span></code></div>
+	    	<span class="paragraph">Inclusive voc&ecirc; pode habilitar um interceptor que controla a transa&ccedil;&atilde;o do Hibernate:</span>
+	    	<div class="java"><code class="java">
+<span class="java16">@Override<br />
+</span><span class="java4">protected </span><span class="java9">void </span><span class="java10">registerCustomComponents</span><span class="java8">(</span><span class="java10">ComponentRegistry registry</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java10">registry.registry</span><span class="java8">(</span><span class="java10">HibernateTransactionInterceptor.class, <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; HibernateTransactionInterceptor.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">;<br />
+</span><span class="java8">}</span></code></div>
+		
+<h2 class="section">JPA EntityManager e EntityManagerFactory</h2>
+	    	<span class="paragraph">Se voc&ecirc; tiver um persistence.xml com o persistence-unit chamado "default", voc&ecirc; pode usar
+os ComponentFactories para criar EntityManager e EntityManagerFactory j&aacute; dispon&iacute;veis no 
+vraptor:</span>
+	    	<div class="java"><code class="java">
+<span class="java16">@Override<br />
+</span><span class="java4">protected </span><span class="java9">void </span><span class="java10">registerCustomComponents</span><span class="java8">(</span><span class="java10">ComponentRegistry registry</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java10">registry.registry</span><span class="java8">(</span><span class="java10">EntityManagerCreator.class, EntityManagerCreator.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; registry.registry</span><span class="java8">(</span><span class="java10">EntityManagerFactoryCreator.class, <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; EntityManagerFactoryCreator.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">;<br />
+</span><span class="java8">}</span></code></div>
+	    	<span class="paragraph">Inclusive voc&ecirc; pode habilitar um interceptor que controla a transa&ccedil;&atilde;o da JPA:</span>
+	    	<div class="java"><code class="java">
+<span class="java16">@Override<br />
+</span><span class="java4">protected </span><span class="java9">void </span><span class="java10">registerCustomComponents</span><span class="java8">(</span><span class="java10">ComponentRegistry registry</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java10">registry.registry</span><span class="java8">(</span><span class="java10">JPATransactionInterceptor.class, <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; JPATransactionInterceptor.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">;<br />
+</span><span class="java8">}</span></code></div>
+		
+
+
+	</div>
+</div>
+</div>
+
+
+<div id="footer">
+	<p><a href="http://www.caelum.com.br" target="_blank">VRaptor ©2009 Caelum - Ensino e Inovação</a></p>
+</div>
+</div>
+</body>
+</html>

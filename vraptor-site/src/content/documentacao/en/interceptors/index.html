@@ -1,0 +1,193 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>VRaptor - Powered by Caelum | Interceptors
+
+</title>
+<meta name="keywords" content="" />
+<meta name="Small Window " content="" />
+<link href="../includes/css/style.css" rel="stylesheet" type="text/css" media="screen" />
+</head>
+<body>
+
+<!-- start header -->
+<div id="all">
+<div id="header">
+
+<div id="logo"><img src="../includes/images/marca.png" alt="VRaptor" width="300" height="100" border="0"></div>
+
+<div id="centeredmenu">
+<ul>
+		<li><a href="../../../index.html">Home</a></li>
+        <li>|</li>
+		<li><a href="../../../download.html">Download</a></li>
+		<li>|</li>  
+        <li><a href="../../../vantagens.html">Vantagens</a></li>
+		<li>|</li>
+        <li><a href="../../../depoimentos.html">Depoimentos</a></li>
+		<li>|</li>
+    	<li><a href="../../../documentacao/"><b>Documentação</b></a></li>
+    <li>|</li>        
+			<li><a href="../../../vraptor2.html"><b>VRaptor 2</b></a></li>
+</ul>
+</div>
+
+<div id="languages">
+	<ul>
+		<li><a href="../">PT</a></li>
+		<li>|</li>
+		<li><a href="../en/">EN</a></li>
+	<ul>
+</div>
+
+</div>
+<!-- finish header -->
+
+<!-- start conteudo -->
+
+<div id="wrapper">
+<div id="conteudo">
+
+<div id="titulo"><img src="../includes/images/hea_documentacao.jpg" alt="Ttulo" width="850" height="40"></div>
+
+<div id="texto_01">
+	
+
+		<h1 class="chapter">Interceptors</h1>
+
+		
+		
+<h2 class="section">Why intercept</h2>
+	    	<span class="paragraph">Interceptors are implemented in order to execute tasks before and/or after the execution
+of a business logic, being data validation, database connection and transaction control, logging and data cryptography/compression the most common use cases.</span>
+		
+<h2 class="section">How to intercept</h2>
+	    	<span class="paragraph">In VRaptor 3 we adopted an approach in which the interceptor defines who will be intercepted. This is closer to the intercepting style used in systems based on AOP (Aspect Oriented Programming) than the one that was implemented in VRaptor's previous version.</span>
+	    	<span class="paragraph">Therefore, to intercept a request, just implement the <strong class="definition">Interceptor</strong> interface and annotate
+the class with <strong class="definition">@Intercepts</strong>.</span>
+	    	<span class="paragraph">Just like any other component, you can specify the interceptor's scope using the scope annotations.</span>
+	    	<div class="java"><code class="java">
+<span class="java4">public interface </span><span class="java10">Interceptor </span><span class="java8">{<br />
+<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java9">void </span><span class="java10">intercept</span><span class="java8">(</span><span class="java10">InterceptorStack stack, ResourceMethod method, <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Object resourceInstance</span><span class="java8">) </span><span class="java4">throws </span><span class="java10">InterceptionException;<br />
+<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java9">boolean </span><span class="java10">accepts</span><span class="java8">(</span><span class="java10">ResourceMethod method</span><span class="java8">)</span><span class="java10">;<br />
+<br />
+</span><span class="java8">}</span></code></div>
+		
+<h2 class="section">Simple example</h2>
+	    	<span class="paragraph">The following class shows an example of how to intercept all requests using session scope and simply print the invocation to default output.</span>
+	    	<span class="paragraph">Remember that the interceptor is a component just like any other, so it can receive its
+dependencies in the constructor through Dependency Injection.</span>
+	    	<div class="java"><code class="java">
+<span class="java16">@Intercepts<br />
+@SessionScoped<br />
+</span><span class="java4">public class </span><span class="java10">Log </span><span class="java4">implements </span><span class="java10">Interceptor </span><span class="java8">{<br />
+<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">private final </span><span class="java10">HttpServletRequest request;<br />
+<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">Log</span><span class="java8">(</span><span class="java10">HttpServletRequest request</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">this</span><span class="java10">.request = request;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">intercept</span><span class="java8">(</span><span class="java10">InterceptorStack stack, ResourceMethod method, <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Object resourceInstance</span><span class="java8">) </span><span class="java4">throws </span><span class="java10">InterceptionException </span><span class="java8">{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">System.out.println</span><span class="java8">(</span><span class="java5">&#34;Intercepting &#34; </span><span class="java10">+ request.getRequestURI</span><span class="java8">())</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; stack.next</span><span class="java8">(</span><span class="java10">method, resourceInstance</span><span class="java8">)</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">boolean </span><span class="java10">accepts</span><span class="java8">(</span><span class="java10">ResourceMethod method</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return true</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+<br />
+}</span></code></div>
+		
+<h2 class="section">Example using Hibernate</h2>
+	    	<span class="paragraph">Probably one of the most common uses of an Interceptor is to implement the Open Session In View pattern,
+which provides a database connection whenever a request is made to your application.
+And in the end of that request, the connection is disposed.
+This is specially useful to avoid exceptions like LazyInitializationException when rendering JSPs.</span>
+	    	<span class="paragraph">Here is a simple example that starts a database transaction in every request, and when
+the logic execution ends and the page is rendered, it commits the transaction and 
+closes the database connection.</span>
+	    	<div class="java"><code class="java">
+<span class="java16">@RequestScoped<br />
+@Intercepts<br />
+</span><span class="java4">public class </span><span class="java10">DatabaseInterceptor </span><span class="java4">implements </span><span class="java10">br.com.caelum.vraptor.Interceptor </span><span class="java8">{<br />
+<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">private final </span><span class="java10">Database controller;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">private final </span><span class="java10">Result result;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">private final </span><span class="java10">HttpServletRequest request;<br />
+<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">DatabaseInterceptor</span><span class="java8">(</span><span class="java10">Database controller, Result result, HttpServletRequest request</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">this</span><span class="java10">.controller = controller;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">this</span><span class="java10">.result = result;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">this</span><span class="java10">.request = request;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">intercept</span><span class="java8">(</span><span class="java10">InterceptorStack stack, ResourceMethod method, <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Object instance</span><span class="java8">) </span><span class="java4">throws </span><span class="java10">InterceptionException </span><span class="java8">{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">result.include</span><span class="java8">(</span><span class="java5">&#34;contextPath&#34;</span><span class="java10">, request.getContextPath</span><span class="java8">())</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">try </span><span class="java8">{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">controller.beginTransaction</span><span class="java8">()</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; stack.next</span><span class="java8">(</span><span class="java10">method, instance</span><span class="java8">)</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; controller.commit</span><span class="java8">()</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java8">} </span><span class="java4">finally </span><span class="java8">{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">if </span><span class="java8">(</span><span class="java10">controller.hasTransaction</span><span class="java8">()) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">controller.rollback</span><span class="java8">()</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">controller.close</span><span class="java8">()</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+&nbsp;&nbsp;&nbsp; }<br />
+<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">boolean </span><span class="java10">accepts</span><span class="java8">(</span><span class="java10">ResourceMethod method</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return true</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+<br />
+}</span></code></div>
+	    	<span class="paragraph">This way, to use the available connection in your Resource, the following code would apply:</span>
+	    	<div class="java"><code class="java">
+<span class="java16">@Resource<br />
+</span><span class="java4">public class </span><span class="java10">EmployeeController </span><span class="java8">{<br />
+&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">EmployeeController</span><span class="java8">(</span><span class="java10">Result result, Database controller</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">this</span><span class="java10">.result = result;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">this</span><span class="java10">.controller = controller;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java16">@Post<br />
+&nbsp;&nbsp;&nbsp; @Path</span><span class="java8">(</span><span class="java5">&#34;/employee&#34;</span><span class="java8">)<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">add</span><span class="java8">(</span><span class="java10">Employee employee</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">controller.getEmployeeDao</span><span class="java8">()</span><span class="java10">.add</span><span class="java8">(</span><span class="java10">employee</span><span class="java8">)</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ...<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+}</span></code></div>
+		
+<h2 class="section">How to ensure ordering: InterceptorSequence</h2>
+	    	<span class="paragraph">If you want to ensure order of the execution of a set of interceptors, you can implement
+the interface InterceptorSequence and return the order you want to execute the interceptors:</span>
+	    	<div class="java"><code class="java">
+<span class="java16">@Intercepts<br />
+</span><span class="java4">public class </span><span class="java10">MySequence </span><span class="java4">implements </span><span class="java10">InterceptorSequence </span><span class="java8">{<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">Class&lt;? </span><span class="java4">extends </span><span class="java10">Interceptor&gt;</span><span class="java8">[] </span><span class="java10">getSequence</span><span class="java8">() {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return new </span><span class="java10">Class</span><span class="java8">[] { </span><span class="java10">FirstInterceptor.class, SecondInterceptor.</span><span class="java4">class </span><span class="java8">}</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+}</span></code></div>
+	    	<span class="paragraph">You should not annotate the interceptors returned by InterceptorSequence.getSequence() with @Intercepts.</span>
+		
+
+
+	</div>
+</div>
+</div>
+
+
+<div id="footer">
+	<p><a href="http://www.caelum.com.br" target="_blank">VRaptor ©2009 Caelum - Ensino e Inovação</a></p>
+</div>
+</div>
+</body>
+</html>

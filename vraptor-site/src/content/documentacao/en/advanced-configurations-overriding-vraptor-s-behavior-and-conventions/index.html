@@ -1,0 +1,124 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>VRaptor - Powered by Caelum | Advanced configurations: overriding VRaptor's behavior and conventions
+
+</title>
+<meta name="keywords" content="" />
+<meta name="Small Window " content="" />
+<link href="../includes/css/style.css" rel="stylesheet" type="text/css" media="screen" />
+</head>
+<body>
+
+<!-- start header -->
+<div id="all">
+<div id="header">
+
+<div id="logo"><img src="../includes/images/marca.png" alt="VRaptor" width="300" height="100" border="0"></div>
+
+<div id="centeredmenu">
+<ul>
+		<li><a href="../../../index.html">Home</a></li>
+        <li>|</li>
+		<li><a href="../../../download.html">Download</a></li>
+		<li>|</li>  
+        <li><a href="../../../vantagens.html">Vantagens</a></li>
+		<li>|</li>
+        <li><a href="../../../depoimentos.html">Depoimentos</a></li>
+		<li>|</li>
+    	<li><a href="../../../documentacao/"><b>Documentação</b></a></li>
+    <li>|</li>        
+			<li><a href="../../../vraptor2.html"><b>VRaptor 2</b></a></li>
+</ul>
+</div>
+
+<div id="languages">
+	<ul>
+		<li><a href="../">PT</a></li>
+		<li>|</li>
+		<li><a href="../en/">EN</a></li>
+	<ul>
+</div>
+
+</div>
+<!-- finish header -->
+
+<!-- start conteudo -->
+
+<div id="wrapper">
+<div id="conteudo">
+
+<div id="titulo"><img src="../includes/images/hea_documentacao.jpg" alt="Ttulo" width="850" height="40"></div>
+
+<div id="texto_01">
+	
+
+		<h1 class="chapter">Advanced configurations: overriding VRaptor's behavior and conventions</h1>
+
+		
+		
+<h2 class="section">Changing the default rendered view</h2>
+	    	<span class="paragraph">If you need to change the default rendered view, or change the place where it'll be look for,
+you'll only need to create the following class:</span>
+	    	<div class="java"><code class="java">
+<span class="java16">@Component<br />
+</span><span class="java4">public class </span><span class="java10">CustomPathResolver </span><span class="java4">extends </span><span class="java10">DefaultPathResolver </span><span class="java8">{<br />
+&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java16">@Override<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">protected </span><span class="java10">String getPrefix</span><span class="java8">() {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return </span><span class="java5">&#34;/root/directory/&#34;</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java16">@Override<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">protected </span><span class="java10">String getExtension</span><span class="java8">() {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return </span><span class="java5">&#34;ftl&#34;</span><span class="java10">; </span><span class="java3">// or any other extension<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+}</span></code></div>
+	    	<span class="paragraph">If you still need to change more conventions, just implements the PathResolver interface.</span>
+		
+<h2 class="section">Changing IoC provider</h2>
+	    	<span class="paragraph">VRaptor's default IoC provider is Spring. In order to change, just add the following to your
+web.xml:
+&lt;context-param&gt;
+    &lt;param-name&gt;br.com.caelum.vraptor.provider&lt;/param-name&gt;
+    &lt;param-value&gt;com.package.from.your.PrefferedProviderClass&lt;/param-value&gt;
+&lt;/context-param&gt;</span>
+	    	<span class="paragraph">VRaptor comes with built-in support to both Spring (br.com.caelum.vraptor.ioc.spring.SpringProvider) and PicoContainer
+(br.com.caelum.vraptor.ioc.pico.PicoProvider).
+You still have the option to extend any of these classes and use your own provider.</span>
+		
+<h2 class="section">Changing Spring's base ApplicationContext</h2>
+	    	<span class="paragraph">If VRaptor isn't using your ApplicationContext as base, just extend SpringProvider and implement the
+getParentApplicationContext method, giving it your application's ApplicationContext:</span>
+	    	<div class="java"><code class="java">
+<span class="java4">package </span><span class="java10">br.com.apackage.aproject;<br />
+</span><span class="java4">public class </span><span class="java10">CustomProvider </span><span class="java4">extends </span><span class="java10">SpringProvider </span><span class="java8">{<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">ApplicationContext getParentApplicationContext</span><span class="java8">(</span><span class="java10">ServletContext context</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">ApplicationContext applicationContext = </span><span class="java3">//your own logic to create your applicationContext<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return </span><span class="java10">applicationContext;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+}</span></code></div>
+	    	<span class="paragraph">and change the provider at your web.xml:</span>
+	    	<div class="xml"><code class="xml"><span class="textag">&lt;context-param&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-name&gt;</span><span class="texnormal">br.com.caelum.vraptor.provider</span><span class="textag">&lt;/param-name&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-value&gt;</span><span class="texnormal">br.com.apackage.aproject.CustomProvider</span><span class="textag">&lt;/param-value&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal"></span><span class="textag">&lt;/context-param&gt;</span></code></div>
+	    	<span class="paragraph">By default, VRaptor try to find the applicationContext via
+<code class="inlineCode">WebApplicationContextUtils.getWebApplicationContext(servletContext);</code> or loading the applicationContext.xml
+that is on your classpath.</span>
+		
+
+
+	</div>
+</div>
+</div>
+
+
+<div id="footer">
+	<p><a href="http://www.caelum.com.br" target="_blank">VRaptor ©2009 Caelum - Ensino e Inovação</a></p>
+</div>
+</div>
+</body>
+</html>

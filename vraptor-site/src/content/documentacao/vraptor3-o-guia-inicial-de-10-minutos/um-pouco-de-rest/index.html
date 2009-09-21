@@ -1,0 +1,114 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>VRaptor - Powered by Caelum | VRaptor3 - o guia inicial de 10 minutos
+
+</title>
+<meta name="keywords" content="" />
+<meta name="Small Window " content="" />
+<link href="../../includes/css/style.css" rel="stylesheet" type="text/css" media="screen" />
+</head>
+<body>
+
+<!-- start header -->
+<div id="all">
+<div id="header">
+
+<div id="logo"><img src="../../includes/images/marca.png" alt="VRaptor" width="300" height="100" border="0"></div>
+
+<div id="centeredmenu">
+<ul>
+		<li><a href="../../../../index.html">Home</a></li>
+        <li>|</li>
+		<li><a href="../../../../download.html">Download</a></li>
+		<li>|</li>  
+        <li><a href="../../../../vantagens.html">Vantagens</a></li>
+		<li>|</li>
+        <li><a href="../../../../depoimentos.html">Depoimentos</a></li>
+		<li>|</li>
+    	<li><a href="../../../../documentacao/"><b>Documentação</b></a></li>
+    <li>|</li>        
+			<li><a href="../../../../vraptor2.html"><b>VRaptor 2</b></a></li>
+</ul>
+</div>
+
+<div id="languages">
+	<ul>
+		<li><a href="../../">PT</a></li>
+		<li>|</li>
+		<li><a href="../../en/">EN</a></li>
+	<ul>
+</div>
+
+</div>
+<!-- finish header -->
+
+<!-- start conteudo -->
+
+<div id="wrapper">
+<div id="conteudo">
+
+<div id="titulo"><img src="../../includes/images/hea_documentacao.jpg" alt="Ttulo" width="850" height="40"></div>
+
+<div id="texto_01">
+
+<h2 class="section">Um pouco de REST</h2>
+	    	<span class="paragraph">Seguindo a id&eacute;ia REST de que <code class="inlineCode">URI</code>s devem identificar recursos na rede para ent&atilde;o podermos
+fazer valer as diversas vantagens estruturais que o protocolo HTTP nos proporciona, 
+note o qu&atilde;o simples fica mapear os diversos m&eacute;todos HTTP para a mesma URI, e com
+isso invocar diferentes m&eacute;todos, por exemplo queremos usar as seguintes URIs para o
+cadastro de produtos:</span>
+	    	<div class="java"><code class="java">GET&nbsp;/produtos&nbsp;-&nbsp;lista&nbsp;todos&nbsp;os&nbsp;produtos<br />
+POST&nbsp;/produtos&nbsp;-&nbsp;adiciona&nbsp;um&nbsp;produto<br />
+GET&nbsp;/produtos/{id}&nbsp;-&nbsp;visualiza&nbsp;o&nbsp;produto&nbsp;com&nbsp;o&nbsp;id&nbsp;passado<br />
+PUT&nbsp;/produtos/{id}&nbsp;-&nbsp;atualiza&nbsp;as&nbsp;informa&ccedil;&otilde;es&nbsp;do&nbsp;produto&nbsp;com&nbsp;o&nbsp;id&nbsp;passado<br />
+DELETE&nbsp;/produtos/{id}&nbsp;-&nbsp;remove&nbsp;o&nbsp;produto&nbsp;com&nbsp;o&nbsp;id&nbsp;passado</code></div>
+	    	<span class="paragraph">Para criar esse comportamento REST no VRaptor podemos usar as anota&ccedil;&otilde;es @Path
+- que muda qual &eacute; a uri que vai acessar o determinado m&eacute;todo, e as anota&ccedil;&otilde;es
+com os nomes dos m&eacute;todos HTTP @Get, @Post, @Delete, @Put, que indicam que o m&eacute;todo
+anotado s&oacute; pode ser acessado se a requisi&ccedil;&atilde;o estiver com o m&eacute;todo HTTP indicado.
+Ent&atilde;o uma vers&atilde;o REST do nosso ProdutosController seria:</span>
+	    	<div class="java"><code class="java">
+<span class="java4">public class </span><span class="java10">ProdutosController </span><span class="java8">{<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java3">//...<br />
+&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java16">@Get<br />
+&nbsp;&nbsp;&nbsp; @Path</span><span class="java8">(</span><span class="java5">&#34;/produtos&#34;</span><span class="java8">)<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">List&lt;Produto&gt; lista</span><span class="java8">() {</span><span class="java10">...</span><span class="java8">}<br />
+&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java16">@Post<br />
+&nbsp;&nbsp;&nbsp; @Path</span><span class="java8">(</span><span class="java5">&#34;/produtos&#34;</span><span class="java8">)<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">adiciona</span><span class="java8">(</span><span class="java10">Produto produto</span><span class="java8">) {</span><span class="java10">...</span><span class="java8">}<br />
+<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java16">@Get<br />
+&nbsp;&nbsp;&nbsp; @Path</span><span class="java8">(</span><span class="java5">&#34;/produtos/{produto.id}&#34;</span><span class="java8">)<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">visualiza</span><span class="java8">(</span><span class="java10">Produto produto</span><span class="java8">) {</span><span class="java10">...</span><span class="java8">}<br />
+&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java16">@Put<br />
+&nbsp;&nbsp;&nbsp; @Path</span><span class="java8">(</span><span class="java5">&#34;/produtos/{produto.id}&#34;</span><span class="java8">)<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">atualiza</span><span class="java8">(</span><span class="java10">Produto produto</span><span class="java8">) {</span><span class="java10">...</span><span class="java8">}<br />
+&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java16">@Delete<br />
+&nbsp;&nbsp;&nbsp; @Path</span><span class="java8">(</span><span class="java5">&#34;/produtos/{produto.id}&#34;</span><span class="java8">)<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">remove</span><span class="java8">(</span><span class="java10">Produto produto</span><span class="java8">) {</span><span class="java10">...</span><span class="java8">}<br />
+&nbsp;&nbsp;&nbsp; <br />
+}</span></code></div>
+	    	<span class="paragraph">Note que podemos receber par&acirc;metros nas URIs. Por exemplo se chamarmos a URI
+<strong class="definition">GET /produtos/5</strong>, o m&eacute;todo visualiza ser&aacute; invocado, e o par&acirc;metro produto vai
+ter o id populado com 5.</span>
+	    	<span class="paragraph">Mais informa&ccedil;&otilde;es sobre isso no cap&iacute;tulo de Resources-REST.</span>
+		
+
+	</div>
+</div>
+</div>
+
+
+<div id="footer">
+	<p><a href="http://www.caelum.com.br" target="_blank">VRaptor ©2009 Caelum - Ensino e Inovação</a></p>
+</div>
+</div>
+</body>
+</html>

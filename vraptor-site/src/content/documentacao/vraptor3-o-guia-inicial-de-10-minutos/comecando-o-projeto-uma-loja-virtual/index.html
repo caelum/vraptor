@@ -1,0 +1,86 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>VRaptor - Powered by Caelum | VRaptor3 - o guia inicial de 10 minutos
+
+</title>
+<meta name="keywords" content="" />
+<meta name="Small Window " content="" />
+<link href="../../includes/css/style.css" rel="stylesheet" type="text/css" media="screen" />
+</head>
+<body>
+
+<!-- start header -->
+<div id="all">
+<div id="header">
+
+<div id="logo"><img src="../../includes/images/marca.png" alt="VRaptor" width="300" height="100" border="0"></div>
+
+<div id="centeredmenu">
+<ul>
+		<li><a href="../../../../index.html">Home</a></li>
+        <li>|</li>
+		<li><a href="../../../../download.html">Download</a></li>
+		<li>|</li>  
+        <li><a href="../../../../vantagens.html">Vantagens</a></li>
+		<li>|</li>
+        <li><a href="../../../../depoimentos.html">Depoimentos</a></li>
+		<li>|</li>
+    	<li><a href="../../../../documentacao/"><b>Documentação</b></a></li>
+    <li>|</li>        
+			<li><a href="../../../../vraptor2.html"><b>VRaptor 2</b></a></li>
+</ul>
+</div>
+
+<div id="languages">
+	<ul>
+		<li><a href="../../">PT</a></li>
+		<li>|</li>
+		<li><a href="../../en/">EN</a></li>
+	<ul>
+</div>
+
+</div>
+<!-- finish header -->
+
+<!-- start conteudo -->
+
+<div id="wrapper">
+<div id="conteudo">
+
+<div id="titulo"><img src="../../includes/images/hea_documentacao.jpg" alt="Ttulo" width="850" height="40"></div>
+
+<div id="texto_01">
+
+<h2 class="section">Começando o projeto: uma loja virtual</h2>
+	    	<span class="paragraph">Vamos come&ccedil;ar baixando o <em class="italic">vraptor-blank-project</em>, do site <a class="link" target="_blank" href="http://vraptor.caelum.com.br/download.html.">http://vraptor.caelum.com.br/download.html.</a>
+Esse blank-project j&aacute; possui a configura&ccedil;&atilde;o no web.xml e os jars no WEB-INF/lib necess&aacute;rios para come&ccedil;ar
+a desenvolver no VRaptor. E voc&ecirc; pode, ainda, importar esse projeto diretamente no Eclipse.</span>
+	    	<span class="paragraph">Da configura&ccedil;&atilde;o padr&atilde;o, vamos apenas mudar o pacote base da configura&ccedil;&atilde;o, no web.xml:</span>
+	    	<div class="xml"><code class="xml"><span class="textag">&lt;context-param&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-name&gt;</span><span class="texnormal">br.com.caelum.vraptor.packages</span><span class="textag">&lt;/param-name&gt;</span><span class="texnormal"><br /></span>
+<strong><span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-value&gt;</span><span class="texnormal">br.com.nomedaempresa.nomedoprojeto</span><span class="textag">&lt;/param-value&gt;</span><span class="texnormal"><br /></span></strong>
+<span class="texnormal"></span><span class="textag">&lt;/context-param&gt;</span></code></div>
+	    	<span class="paragraph">Desse modo, toda a sua aplica&ccedil;&atilde;o <strong class="definition">deve</strong> estar abaixo do pacote <code class="inlineCode">br.com.nomedaempresa.nomedoprojeto</code>,
+para que o VRaptor consiga encontrar seus componentes e gerenciar suas depend&ecirc;ncias. No nosso caso ser&aacute;:</span>
+	    	<div class="xml"><code class="xml"><span class="textag">&lt;context-param&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-name&gt;</span><span class="texnormal">br.com.caelum.vraptor.packages</span><span class="textag">&lt;/param-name&gt;</span><span class="texnormal"><br /></span>
+<strong><span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-value&gt;</span><span class="texnormal">br.com.caelum.lojavirtual</span><span class="textag">&lt;/param-value&gt;</span><span class="texnormal"><br /></span></strong>
+<span class="texnormal"></span><span class="textag">&lt;/context-param&gt;</span></code></div>
+	    	<span class="paragraph">Supondo que o contexto web da aplica&ccedil;&atilde;o foi mudado para <code class="inlineCode">/lojavirtual</code>, se voc&ecirc; rodar o exemplo e
+acessar a URI <code class="inlineCode"><a class="link" target="_blank" href="http://localhost:8080/lojavirtual</code>">http://localhost:8080/lojavirtual%%</a> voc&ecirc; deve ver um <strong class="definition">It works!</strong> na tela.</span>
+		
+
+	</div>
+</div>
+</div>
+
+
+<div id="footer">
+	<p><a href="http://www.caelum.com.br" target="_blank">VRaptor ©2009 Caelum - Ensino e Inovação</a></p>
+</div>
+</div>
+</body>
+</html>

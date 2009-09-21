@@ -20,16 +20,26 @@
 
 <div id="centeredmenu">
 <ul>
-		<li><a href="../../index.html">Home</a></li>
+		<li><a href="../../../index.html">Home</a></li>
         <li>|</li>
-		<li><a href="../../download.html">Download</a></li>
+		<li><a href="../../../download.html">Download</a></li>
 		<li>|</li>  
-        <li><a href="../../vantagens.html">Vantagens</a></li>
+        <li><a href="../../../vantagens.html">Vantagens</a></li>
 		<li>|</li>
-        <li><a href="../../depoimentos.html">Depoimentos</a></li>
+        <li><a href="../../../depoimentos.html">Depoimentos</a></li>
 		<li>|</li>
-    	<li><a href="../../documentacao/"><b>Documentação</b></a></li>
+    	<li><a href="../../../documentacao/"><b>Documentação</b></a></li>
+    <li>|</li>        
+			<li><a href="../../../vraptor2.html"><b>VRaptor 2</b></a></li>
 </ul>
+</div>
+
+<div id="languages">
+	<ul>
+		<li><a href="../">PT</a></li>
+		<li>|</li>
+		<li><a href="../en/">EN</a></li>
+	<ul>
 </div>
 
 </div>
@@ -48,37 +58,37 @@
 		<h1 class="chapter">Downloading</h1>
 
 		
-
-
+		
 <h2 class="section">exemplo de 1 minuto: download</h2>
 	    	<span class="paragraph">O exemplo a seguir mostra como disponibilizar o download para seu cliente.</span>
 	    	<span class="paragraph">Note novamente a simplicidade na implementa&ccedil;&atilde;o:</span>
-	    	<div class="java"><code class="java">@Resource<br />
-public&nbsp;class&nbsp;PerfilController&nbsp;{<br />
+	    	<div class="java"><code class="java">
+<span class="java16">@Resource<br />
+</span><span class="java4">public class </span><span class="java10">PerfilController </span><span class="java8">{<br />
 <br />
-&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;dao&nbsp;...<br />
-<br />
-&nbsp;&nbsp;&nbsp;&nbsp;public&nbsp;File&nbsp;foto(Perfil&nbsp;perfil)&nbsp;{<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;new&nbsp;File("/path/para/a/foto."&nbsp;+&nbsp;perfil.getId()+&nbsp;".jpg");&nbsp;<br />
-&nbsp;&nbsp;&nbsp;&nbsp;}<br />
-}</code></div>
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">File foto</span><span class="java8">(</span><span class="java10">Perfil perfil</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return new </span><span class="java10">File</span><span class="java8">(</span><span class="java5">&#34;/path/para/a/foto.&#34; </span><span class="java10">+ perfil.getId</span><span class="java8">()</span><span class="java10">+ </span><span class="java5">&#34;.jpg&#34;</span><span class="java8">)</span><span class="java10">; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+}</span></code></div>
 		
-
 <h2 class="section">Adicionando mais informações no download</h2>
 	    	<span class="paragraph">Se voc&ecirc; quiser adicionar mais informa&ccedil;&otilde;es ao download voc&ecirc; pode retornar
 um FileDownload:</span>
-	    	<span class="paragraph">@Resource
-public class PerfilController {</span>
-	    	<span class="paragraph">// dao ...</span>
-	    	<span class="paragraph">public Download foto(Perfil perfil) {
-		File file = new File("/path/para/a/foto." + perfil.getId()+ ".jpg");
-		String contentType = "image/jpg";
-		String filename = perfil.getNome() + ".jpg";</span>
-	    	<span class="paragraph">return new FileDownload(file, contentType, filename); 
-	}
-}</span>
+	    	<div class="java"><code class="java">
+<span class="java16">@Resource<br />
+</span><span class="java4">public class </span><span class="java10">PerfilController </span><span class="java8">{<br />
+<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java3">// dao ...<br />
+<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">Download foto</span><span class="java8">(</span><span class="java10">Perfil perfil</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">File file = </span><span class="java4">new </span><span class="java10">File</span><span class="java8">(</span><span class="java5">&#34;/path/para/a/foto.&#34; </span><span class="java10">+ perfil.getId</span><span class="java8">()</span><span class="java10">+ </span><span class="java5">&#34;.jpg&#34;</span><span class="java8">)</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String contentType = </span><span class="java5">&#34;image/jpg&#34;</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String filename = perfil.getNome</span><span class="java8">() </span><span class="java10">+ </span><span class="java5">&#34;.jpg&#34;</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return new </span><span class="java10">FileDownload</span><span class="java8">(</span><span class="java10">file, contentType, filename</span><span class="java8">)</span><span class="java10">; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+}</span></code></div>
 		
-
 <h2 class="section">exemplo de 1 minuto: upload</h2>
 	    	<span class="paragraph">O primeiro exemplo ser&aacute; baseado na funcionalidade de upload multipart.</span>
 	    	<div class="java"><code class="java">
@@ -96,7 +106,6 @@ public class PerfilController {</span>
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
 }</span></code></div>
 		
-
 <h2 class="section">Mais sobre Upload</h2>
 	    	<span class="paragraph">O UploadedFile retorna o arquivo como um InputStream. Se voc&ecirc; quiser copiar para
 um arquivo no disco facilmente, basta usar o <code class="inlineCode">IOUtils</code> do <code class="inlineCode">commons-io</code>, que j&aacute; &eacute; depend&ecirc;ncia do

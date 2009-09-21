@@ -20,16 +20,26 @@
 
 <div id="centeredmenu">
 <ul>
-		<li><a href="../../index.html">Home</a></li>
+		<li><a href="../../../index.html">Home</a></li>
         <li>|</li>
-		<li><a href="../../download.html">Download</a></li>
+		<li><a href="../../../download.html">Download</a></li>
 		<li>|</li>  
-        <li><a href="../../vantagens.html">Vantagens</a></li>
+        <li><a href="../../../vantagens.html">Vantagens</a></li>
 		<li>|</li>
-        <li><a href="../../depoimentos.html">Depoimentos</a></li>
+        <li><a href="../../../depoimentos.html">Depoimentos</a></li>
 		<li>|</li>
-    	<li><a href="../../documentacao/"><b>Documentação</b></a></li>
+    	<li><a href="../../../documentacao/"><b>Documentação</b></a></li>
+    <li>|</li>        
+			<li><a href="../../../vraptor2.html"><b>VRaptor 2</b></a></li>
 </ul>
+</div>
+
+<div id="languages">
+	<ul>
+		<li><a href="../">PT</a></li>
+		<li>|</li>
+		<li><a href="../en/">EN</a></li>
+	<ul>
 </div>
 
 </div>
@@ -48,8 +58,7 @@
 		<h1 class="chapter">View e Ajax</h1>
 
 		
-
-
+		
 <h2 class="section">Custom PathResolver</h2>
 	    	<span class="paragraph">Por padr&atilde;o, para renderizar suas views, o VRaptor segue a conven&ccedil;&atilde;o:</span>
 	    	<div class="java"><code class="java">
@@ -77,7 +86,6 @@ como por exemplo, Freemarker ou Velocity, e precisamos mudar essa conven&ccedil;
 Se ainda assim isso n&atilde;o for o suficiente voc&ecirc; pode implementar a interface <code class="inlineCode">PathResolver</code>
 e fazer qualquer conven&ccedil;&atilde;o que voc&ecirc; queira, n&atilde;o esquecendo de anotar a classe com @Component.</span>
 		
-
 <h2 class="section">View</h2>
 	    	<span class="paragraph">Se voc&ecirc; quiser mudar a view de alguma l&oacute;gica espec&iacute;fica voc&ecirc; pode usar o objeto Result:</span>
 	    	<div class="java"><code class="java">
@@ -101,7 +109,6 @@ e fazer qualquer conven&ccedil;&atilde;o que voc&ecirc; queira, n&atilde;o esque
 	    	<ul class="list"><li><span class="paragraph">Results.logic(), que vai redirecionar para uma outra l&oacute;gica qualquer do sistema</span></li><li><span class="paragraph">Results.page(), que vai redirecionar diretamente para uma p&aacute;gina, podendo ser um
 	jsp, um html, ou qualquer uri relativa ao web application dir, ou ao contexto da aplica&ccedil;&atilde;o.</span></li><li><span class="paragraph">Results.nothing(), apenas retorna o c&oacute;digo de sucesso (HTTP 200 OK).</span></li></ul>
 		
-
 <h2 class="section">Redirecionamento e forward</h2>
 	    	<span class="paragraph">No VRaptor3, podemos tanto redirecionar ou fazermos um forward do usu&aacute;rio para uma outra l&oacute;gica ou um jsp.
 A grande diferen&ccedil;a entre fazer um redirecionamento (redirect) e um forward &eacute; que o redirecionamento acontece
@@ -112,7 +119,6 @@ reenvie toda a requisi&ccedil;&atilde;o, acarretando em dados duplicados.</span>
 	    	<span class="paragraph">No caso do forward, um exemplo de uso &eacute; quando voc&ecirc; possui uma valida&ccedil;&atilde;o e essa valida&ccedil;&atilde;o falhou, geralmente
 voc&ecirc; quer que o usu&aacute;rio continue na mesma tela do formul&aacute;rio com os dados da requisi&ccedil;&atilde;o preenchidos.</span>
 		
-
 <h2 class="section">Accepts e o parâmetro _format</h2>
 	    	<span class="paragraph">Muitas vezes precisamos renderizar formatos diferentes para uma mesma l&oacute;gica. Por exemplo queremos
 retornar um JSON, ao inv&eacute;s de um HTML.
@@ -123,7 +129,6 @@ ou seja, em geral ser&aacute; renderizada a view: <code class="inlineCode">/WEB-
 Se o formato for HTML voc&ecirc; n&atilde;o precisa coloc&aacute;-lo no nome do arquivo.</span>
 	    	<span class="paragraph">O par&acirc;metro <code class="inlineCode">_format</code> tem prioridade sobre o header Accepts.</span>
 		
-
 <h2 class="section">Ajax: construindo na view</h2>
 	    	<span class="paragraph">Para devolver um JSON na sua view, basta que sua l&oacute;gica disponibilize o objeto para a view, e
 dentro da view voc&ecirc; forme o JSON como desejar. Como no exemplo, o seu <code class="inlineCode">/WEB-INF/jsp/clients/load.json.jsp</code>:</span>

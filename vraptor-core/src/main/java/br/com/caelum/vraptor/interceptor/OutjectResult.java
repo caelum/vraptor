@@ -29,6 +29,7 @@ package br.com.caelum.vraptor.interceptor;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.lang.reflect.WildcardType;
 import java.util.Collection;
 
 import br.com.caelum.vraptor.InterceptionException;
@@ -78,7 +79,16 @@ public class OutjectResult implements Interceptor {
 			return nameFor(raw);
 		}
 
+		if (generic instanceof WildcardType) {
+			WildcardType wild = (WildcardType) generic;
+			if ((wild.getLowerBounds().length != 0)) {
+				return nameFor(wild.getLowerBounds()[0]);
+			}
+			else return nameFor(wild.getUpperBounds()[0]);
+		}
+
 		Class raw = (Class) generic;
+
 
 		if (raw.isArray()) {
 			return nameFor(raw.getComponentType()) + "List";

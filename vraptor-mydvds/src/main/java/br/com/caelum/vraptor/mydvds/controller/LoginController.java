@@ -60,7 +60,7 @@ public class LoginController {
 	@Path("/login")
 	public void login(String login, String password) {
 		// search for the user in the database
-		final User currentUser = dao.search(login, password);
+		final User currentUser = dao.find(login, password);
 
 		// if no user is found, adds an error message to the validator
 		// "invalid_login_or_password" is the message key from messages.properties,

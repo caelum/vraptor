@@ -35,7 +35,7 @@ public class UserDao {
 	 * @return found user if it is unique
 	 * @throws HibernateException, if there are more than one user
 	 */
-	public User search(String login, String password) {
+	public User find(String login, String password) {
 		String hql = "from User u where u.login = :login and u.password = :password";
 
 		Query query = session.createQuery(hql)
@@ -89,12 +89,10 @@ public class UserDao {
 	 * @return true if there exists a user
 	 */
 	public boolean containsUserWithLogin(String login) {
-		//cria uma query HQL para verificar,
-		//HQL: "from User as user where user.login = :login"
-		//query devolve uma lista e
-		//verifique se a lista está vazía
-		return !session.createQuery("from User user where user.login = :login")
-				.setParameter("login", login).list().isEmpty();
+		String hql = "from User user where user.login = :login";
+		Query query = session.createQuery(hql).setParameter("login", login);
+
+		return !query.list().isEmpty();
 	}
 
 }

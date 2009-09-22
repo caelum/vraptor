@@ -1,7 +1,10 @@
 package br.com.caelum.vraptor.mydvds.dao;
 
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 import org.hibernate.cfg.AnnotationConfiguration;
 import org.hibernate.classic.Session;
@@ -27,12 +30,29 @@ public class UserDaoTest {
 	@Test
 	public void shouldFindUsersByLoginAndPassword() throws Exception {
 		User user = new User();
+		user.setName("Test Boy");
 		user.setLogin("myLogin");
 		user.setPassword("secret!");
 		dao.add(user);
 
-		assertThat(dao.search("myLogin", "secret!"), is(user));
+		assertThat(dao.find("myLogin", "secret!"), is(user));
+		assertThat(dao.find("mispelledLogin", "secret!"), is(nullValue()));
+		assertThat(dao.find("myLogin", "wrongPassword"), is(nullValue()));
 	}
+
+	@Test
+	public void checkingIfThereIsAUserWithAGivenLogin() throws Exception {
+		User user = new User();
+		user.setName("Test Boy");
+		user.setLogin("myLogin");
+		user.setPassword("secret!");
+		dao.add(user);
+
+		assertTrue(dao.containsUserWithLogin("myLogin"));
+		assertFalse(dao.containsUserWithLogin("mispelledLogin"));
+
+	}
+
 	/**
 	 * Getting a real Hibernate Session, from a memory database.
 	 */

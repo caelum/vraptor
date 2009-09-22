@@ -141,7 +141,7 @@ public class UserController {
 		}});
 
 		// redirects to the index page if any validation errors occur.
-		validator.onErrorUse(Results.page()).of(LoginController.class).index();
+		validator.onErrorUse(Results.page()).of(HomeController.class).index();
 	}
 
 }

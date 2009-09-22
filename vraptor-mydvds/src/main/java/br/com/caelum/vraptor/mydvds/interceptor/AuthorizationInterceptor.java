@@ -9,7 +9,7 @@ import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.interceptor.Interceptor;
-import br.com.caelum.vraptor.mydvds.controller.LoginController;
+import br.com.caelum.vraptor.mydvds.controller.HomeController;
 import br.com.caelum.vraptor.mydvds.controller.UserController;
 import br.com.caelum.vraptor.mydvds.model.User;
 import br.com.caelum.vraptor.resource.ResourceMethod;
@@ -42,7 +42,7 @@ public class AuthorizationInterceptor implements Interceptor {
     }
 
     private boolean notLogin(ResourceMethod method) {
-        return !method.getMethod().getDeclaringClass().equals(LoginController.class);
+        return !method.getMethod().getDeclaringClass().equals(HomeController.class);
     }
 
     /**

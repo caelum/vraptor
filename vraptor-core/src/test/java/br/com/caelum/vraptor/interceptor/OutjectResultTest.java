@@ -29,6 +29,7 @@ package br.com.caelum.vraptor.interceptor;
 
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
+import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -128,6 +129,7 @@ public class OutjectResultTest {
 		Assert.assertEquals("bigDecimal",interceptor.nameFor(BigDecimal.class));
 		Assert.assertEquals("string",interceptor.nameFor(String.class));
 		Assert.assertEquals("aClass",interceptor.nameFor(AClass.class));
+		Assert.assertEquals("url",interceptor.nameFor(URL.class));
 	}
 
 

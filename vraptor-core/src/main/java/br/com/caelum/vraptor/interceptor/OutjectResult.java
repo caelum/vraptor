@@ -68,6 +68,10 @@ public class OutjectResult implements Interceptor {
 		stack.next(method, resourceInstance);
 	}
 
+	/*
+	 * TODO: externalize as an application Component
+	 * and maybe use a cache.
+	 */
 	@SuppressWarnings("unchecked")
 	String nameFor(Type generic) {
 		if (generic instanceof ParameterizedType) {
@@ -94,7 +98,22 @@ public class OutjectResult implements Interceptor {
 			return nameFor(raw.getComponentType()) + "List";
 		}
 
-		return Info.decapitalize(raw.getSimpleName());
+		String name = raw.getSimpleName();
+
+		// common case: SomeClass -> someClass
+		if(Character.isLowerCase(name.charAt(1))) {
+			return Info.decapitalize(name);
+		}
+
+		// different case: URLClassLoader -> urlClassLoader
+		for (int i = 1; i < name.length(); i++) {
+			if(Character.isLowerCase(name.charAt(i))) {
+				return name.substring(0, i-1).toLowerCase()+name.substring(i-1, name.length());
+			}
+		}
+
+		// all uppercase: URL -> url
+		return name.toLowerCase();
 	}
 
 }

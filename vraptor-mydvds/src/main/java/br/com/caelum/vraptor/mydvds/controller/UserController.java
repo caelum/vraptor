@@ -97,11 +97,12 @@ public class UserController {
 	@Post
 	public void add(final User user) {
 		// calls Hibernate Validator for the user instance
-		validator.addAll(Hibernate.validate(user)); // will return all errors in a collection
 	    validator.checking(new Validations() {{
 		    // checks if there is already an user with the specified login
 		    boolean loginDoesNotExist = !dao.containsUserWithLogin(user.getLogin());
 		    that(loginDoesNotExist, "login", "login_already_exists");
+
+		    and(Hibernate.validate(user));// will return all errors in a collection
 		}});
 
 		// redirects to the index page if any validation errors occur.

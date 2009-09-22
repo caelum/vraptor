@@ -20,6 +20,7 @@ import br.com.caelum.vraptor.mydvds.interceptor.UserInfo;
 import br.com.caelum.vraptor.mydvds.model.User;
 import br.com.caelum.vraptor.util.test.MockResult;
 import br.com.caelum.vraptor.util.test.MockValidator;
+import br.com.caelum.vraptor.validator.ValidationError;
 
 /**
  * Test class for UserController
@@ -80,6 +81,80 @@ public class UserControllerTest {
 		assertThat(users.get(0).getPassword(), is(nullValue()));
 		assertThat(users.get(0).getId(), is(1l));
 		assertThat(users.get(0).getName(), is("John"));
+	}
+
+	@Test
+	public void addingAValidUserWillHappenWithoutErrors() throws Exception {
+		User user = new User();
+		user.setLogin("myLogin");
+		user.setPassword("myPassword");
+		user.setName("Testing");
+
+		ifTheUserWithThisLoginDoesntExist("myLogin");
+		willAddTheUser(user);
+
+		controller.add(user);
+	}
+	@Test(expected=ValidationError.class)
+	public void addingAUserWithHibernateValidationErrors() throws Exception {
+		User user = new User();
+		user.setLogin("myLogin");
+		user.setPassword("short");
+		user.setName("Testing");
+
+		ifTheUserWithThisLoginDoesntExist("myLogin");
+		willNotAddTheUser(user);
+
+		controller.add(user);
+	}
+	@Test(expected=ValidationError.class)
+	public void addingAUserWithAnUnavailableLogin() throws Exception {
+		User user = new User();
+		user.setLogin("myLogin");
+		user.setPassword("myPassword");
+		user.setName("Testing");
+
+		ifTheUserWithThisLoginExists("myLogin");
+		willNotAddTheUser(user);
+
+		controller.add(user);
+	}
+
+
+	private void ifTheUserWithThisLoginExists(final String login) {
+		mockery.checking(new Expectations() {
+			{
+				one(dao).containsUserWithLogin(login);
+				will(returnValue(true));
+			}
+		});
+	}
+
+	private void willNotAddTheUser(final User user) {
+		mockery.checking(new Expectations() {
+			{
+				never(dao).add(user);
+			}
+		});
+	}
+
+	private void ifTheUserWithThisLoginDoesntExist(final String login) {
+
+		mockery.checking(new Expectations() {
+			{
+				one(dao).containsUserWithLogin(login);
+				will(returnValue(false));
+			}
+		});
+	}
+
+	private void willAddTheUser(final User user) {
+
+		mockery.checking(new Expectations() {
+			{
+				one(dao).add(user);
+			}
+		});
 	}
 
 	private void userListingWillContain(final User user) {

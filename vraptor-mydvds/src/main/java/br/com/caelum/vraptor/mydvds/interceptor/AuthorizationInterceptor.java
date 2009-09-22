@@ -3,7 +3,6 @@ package br.com.caelum.vraptor.mydvds.interceptor;
 import java.lang.reflect.Method;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Intercepts;
@@ -11,7 +10,6 @@ import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.mydvds.controller.HomeController;
 import br.com.caelum.vraptor.mydvds.controller.UserController;
-import br.com.caelum.vraptor.mydvds.model.User;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**
@@ -22,10 +20,10 @@ public class AuthorizationInterceptor implements Interceptor {
 
 
 	private final HttpServletResponse response;
-    private final HttpSession session;
+	private final UserInfo info;
 
-	public AuthorizationInterceptor(HttpSession session, HttpServletResponse response) {
-		this.session = session;
+	public AuthorizationInterceptor(UserInfo info, HttpServletResponse response) {
+		this.info = info;
         this.response = response;
 	}
 
@@ -50,12 +48,8 @@ public class AuthorizationInterceptor implements Interceptor {
      */
     public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
             throws InterceptionException {
-        /*
-         * Gets the user in the current session.
-         */
-        User user = (User) session.getAttribute("currentUser");
 
-        if (user == null) {
+        if (info.getUser() == null) {
             this.response.setHeader("SessionTimeOut", "The Session has expired");
             throw new InterceptionException(new AuthenticationException("The Session has expired"));
         } else {

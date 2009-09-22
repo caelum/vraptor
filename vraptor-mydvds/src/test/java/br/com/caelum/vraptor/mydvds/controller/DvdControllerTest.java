@@ -16,6 +16,7 @@ import br.com.caelum.vraptor.mydvds.model.DvdType;
 import br.com.caelum.vraptor.mydvds.model.User;
 import br.com.caelum.vraptor.util.test.MockResult;
 import br.com.caelum.vraptor.util.test.MockValidator;
+import br.com.caelum.vraptor.validator.ValidationError;
 
 /**
  * Test class for DvdController.
@@ -72,6 +73,26 @@ public class DvdControllerTest {
 
 		controller.add(dvd, null);
 
+	}
+	@Test(expected=ValidationError.class)
+	public void addingAnInvalidDvd() throws Exception {
+		Dvd dvd = new Dvd();
+		dvd.setDescription("short");
+		dvd.setTitle("Once upon a time");
+		dvd.setType(DvdType.VIDEO);
+
+		willNotAddTheDvd(dvd);
+
+		controller.add(dvd, null);
+
+	}
+
+	private void willNotAddTheDvd(final Dvd dvd) {
+		mockery.checking(new Expectations() {
+			{
+				never(dao).add(dvd);
+			}
+		});
 	}
 
 	private void willAddTheDvd(final Dvd dvd) {

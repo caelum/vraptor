@@ -76,7 +76,6 @@ public class UserController {
         }
 
         result.include("users", users);
-        result.use(Results.page()).forward();
     }
 
 	/**
@@ -96,8 +95,17 @@ public class UserController {
 	 */
 	@Path("/users")
 	@Post
-	public void add(User user) {
-	    validateAdd(user);
+	public void add(final User user) {
+		// calls Hibernate Validator for the user instance
+		validator.addAll(Hibernate.validate(user)); // will return all errors in a collection
+	    validator.checking(new Validations() {{
+		    // checks if there is already an user with the specified login
+		    boolean loginDoesNotExist = !dao.containsUserWithLogin(user.getLogin());
+		    that(loginDoesNotExist, "login", "login_already_exists");
+		}});
+
+		// redirects to the index page if any validation errors occur.
+		validator.onErrorUse(Results.page()).of(HomeController.class).index();
 		this.dao.add(user);
 		result.use(Results.logic()).redirectTo(UserController.class).userAdded(user);
 	}
@@ -123,25 +131,6 @@ public class UserController {
 	public void view(User user) {
 	    this.dao.refresh(user);
 	    result.include("user", user);
-	}
-
-    /**
-	 * Validation with VRaptor.
-	 * Validates user data.
-	 */
-	private void validateAdd(final User user) {
-		validator.checking(new Validations() {{
-		    // checks if there is already an user with the specified login
-		    boolean loginDoesNotExist = !dao.containsUserWithLogin(user.getLogin());
-
-            that(loginDoesNotExist, "login", "login_already_exists");
-
-		    // calls Hibernate Validator for the user instance
-		    and(Hibernate.validate(user));
-		}});
-
-		// redirects to the index page if any validation errors occur.
-		validator.onErrorUse(Results.page()).of(HomeController.class).index();
 	}
 
 }

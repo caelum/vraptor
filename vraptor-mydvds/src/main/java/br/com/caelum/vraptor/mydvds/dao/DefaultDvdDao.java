@@ -9,7 +9,12 @@ import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.mydvds.model.Dvd;
 
 /**
- * Default implementation for DvdDao
+ * Default implementation for DvdDao.
+ *
+ * Annotating this class with @Component we have the dependency injection
+ * support either on this class and on other classes that depend on
+ * DvdDao or DefaultDvdDao
+ *
  * @author Lucas Cavalcanti
  */
 @Component

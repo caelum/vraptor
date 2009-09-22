@@ -3,8 +3,8 @@ package br.com.caelum.vraptor.mydvds.dao;
 import java.util.List;
 
 import org.hibernate.HibernateException;
+import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.criterion.Restrictions;
 
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.mydvds.model.User;
@@ -36,11 +36,13 @@ public class UserDao {
 	 * @throws HibernateException, if there are more than one user
 	 */
 	public User search(String login, String password) {
-		//procura um usuario usando criteria,
-		//adiciona dois restricçõs nessa critéria, login e senha,
-		return (User) session.createCriteria(User.class).add(
-				Restrictions.eq("login", login)).add(
-				Restrictions.eq("password", password)).uniqueResult();
+		String hql = "from User u where u.login = :login and u.password = :password";
+
+		Query query = session.createQuery(hql)
+			.setParameter("login", login)
+			.setParameter("password", password);
+
+		return (User) query.uniqueResult();
 	}
 
 	/**
@@ -91,10 +93,8 @@ public class UserDao {
 		//HQL: "from User as user where user.login = :login"
 		//query devolve uma lista e
 		//verifique se a lista está vazía
-		return !session.createQuery(
-				"from " + User.class.getName()
-						+ " as user where user.login = :login").setString(
-				"login", login).list().isEmpty();
+		return !session.createQuery("from User user where user.login = :login")
+				.setParameter("login", login).list().isEmpty();
 	}
 
 }

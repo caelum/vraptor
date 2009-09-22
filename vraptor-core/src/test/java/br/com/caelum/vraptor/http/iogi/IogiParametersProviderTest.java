@@ -350,28 +350,6 @@ public class IogiParametersProviderTest {
 		assertThat(((NeedsMyResource)params[0]).getMyResource(), is(sameInstance(providedInstance)));
 	}
 	
-	@SuppressWarnings("unchecked")
-	@Test
-	public void nameProviderWillIgnoreTheCaseForTheFirstLetter() throws Exception {
-		ResourceMethod resourceMethod = mockery.methodFor(House.class, "setCat", Cat.class);
-		
-		mockery.checking(new Expectations() {{
-			allowing(mockHttpServletRequest).getParameterNames();
-			will(returnValue(enumerationFor("cat.id")));
-			
-			allowing(mockHttpServletRequest).getParameterValues("cat.id");
-			will(returnValue(new String[] {"fizzble"}));
-			
-			allowing(mockNameProvider).parameterNamesFor(with(any(Method.class)));
-			will(returnValue(new String[] {"Cat"}));
-			
-			ignoring(mockContainer).instanceFor(with(any(Class.class)));
-		}});
-		
-		Object[] params = iogiProvider.getParametersFor(resourceMethod, errors, null);
-		assertThat(((Cat)params[0]).id, is(equalTo("fizzble")));
-	}
-
     //---------- The Following tests mock iogi to unit test the ParametersProvider impl. 
 	@Test
 	public void willCreateAnIogiParameterForEachRequestParameterValue() throws Exception {

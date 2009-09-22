@@ -30,7 +30,7 @@ public class IogiParametersProvider implements ParametersProvider {
 	private final Instantiator<Object> instantiator;
 
 	public IogiParametersProvider(ParameterNameProvider provider, HttpServletRequest parameters, Instantiator<Object> instantiator) {
-		this.nameProvider = new UncapitalizingParameterNamesProvider(provider);
+		this.nameProvider = provider;
 		this.servletRequest = parameters;
 		this.instantiator = instantiator;
 		LOGGER.info("IogiParametersProvider is up");

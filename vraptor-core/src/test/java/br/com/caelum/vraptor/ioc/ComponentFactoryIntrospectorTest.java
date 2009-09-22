@@ -32,37 +32,37 @@ public class ComponentFactoryIntrospectorTest {
 		new ComponentFactoryIntrospector().targetTypeForComponentFactory(FactoryWithoutTargetType.class);
 	}
 
-	class XX implements ComponentFactory<String> {
+	class SuperClassThatImplementsCF implements ComponentFactory<String> {
 		public String getInstance() {
 			return "abc";
 		}
 	}
 
-	class XX2 extends XX {
+	class ClassThatImplementsCFExtending extends SuperClassThatImplementsCF {
 	}
 
 	@Test
 	public void shoudWorkWithSubclassesOfComponenetFactoryImplementations() {
-		Class<?> c = new ComponentFactoryIntrospector().targetTypeForComponentFactory((XX2.class));
+		Class<?> c = new ComponentFactoryIntrospector().targetTypeForComponentFactory((ClassThatImplementsCFExtending.class));
 		Assert.assertEquals(String.class, c);
 	}
 
 	@Test
 	public void shoudWorkWithImplementationsOfComponenetFactorySubinterfacesImplementations() {
-		Class<?> c = new ComponentFactoryIntrospector().targetTypeForComponentFactory((YY2.class));
+		Class<?> c = new ComponentFactoryIntrospector().targetTypeForComponentFactory((ClassThatImplementsCFIndirectly.class));
 		Assert.assertEquals(String.class, c);
 	}
 
-	interface YY extends ComponentFactory<String> {
+	interface InterfaceThatExtendCF extends ComponentFactory<String> {
 	}
 
-	class YY2 implements YY {
+	class ClassThatImplementsCFIndirectly implements InterfaceThatExtendCF {
 		public String getInstance() {
 			return "def";
 		}
 	}
 
-	class ZZ {
+	class ClassThatIsNotCFAtAll {
 		public String getInstance() {
 			return "def";
 		}
@@ -70,6 +70,6 @@ public class ComponentFactoryIntrospectorTest {
 
 	@Test(expected = ComponentRegistrationException.class)
 	public void shoudNotWorkWithClassesThatDoesNotImplementComponentFactory() {
-		Class<?> c = new ComponentFactoryIntrospector().targetTypeForComponentFactory((ZZ.class));
+		Class<?> c = new ComponentFactoryIntrospector().targetTypeForComponentFactory((ClassThatIsNotCFAtAll.class));
 	}
 }

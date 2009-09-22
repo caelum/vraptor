@@ -11,6 +11,7 @@ import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.ioc.ComponentFactory;
+import br.com.caelum.vraptor.mydvds.dao.DefaultUserDao;
 import br.com.caelum.vraptor.mydvds.dao.UserDao;
 import br.com.caelum.vraptor.mydvds.interceptor.UserInfo;
 import br.com.caelum.vraptor.mydvds.model.User;
@@ -37,7 +38,7 @@ public class HomeController {
 	 * You can receive any dependency on constructor. If VRaptor knows all dependencies, this
 	 * class will be created with no problem. You can use as dependencies:
 	 * - all VRaptor components, e.g {@link Result} and {@link Validator}
-	 * - all of your classes annotated with @Component, e.g {@link UserDao}
+	 * - all of your classes annotated with @Component, e.g {@link DefaultUserDao}
 	 * - all of the classes that have a {@link ComponentFactory}, e.g {@link Session} or {@link SessionFactory}
 	 */
 	public HomeController(UserDao dao, UserInfo userInfo, Result result, Validator validator) {
@@ -76,6 +77,8 @@ public class HomeController {
 		// the login was valid, add user to session
 		userInfo.login(currentUser);
 
+		// we don't want to go to default page (/WEB-INF/jsp/home/login.jsp)
+		// we want to redirect to the user's home
 		result.use(Results.logic()).redirectTo(UserController.class).home();
 	}
 
@@ -85,6 +88,7 @@ public class HomeController {
 	 */
 	public void logout() {
 	    userInfo.logout();
+	    // after logging out, we want to be redirected to home index.
 	    result.use(Results.logic()).redirectTo(HomeController.class).index();
 	}
 

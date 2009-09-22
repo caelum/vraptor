@@ -8,13 +8,13 @@ import br.com.caelum.vraptor.mydvds.model.User;
 
 /**
  * Represents the user logged in the system.
- * Provides
+ * @author Caio Filipini
  */
 @Component
 @SessionScoped
 public class UserInfo {
 
-    private static final String CURRENT_USER = "currentUser";
+    public static final String CURRENT_USER = "currentUser";
     private final HttpSession session;
     private User user;
 
@@ -38,6 +38,7 @@ public class UserInfo {
 
     public void logout() {
         session.setAttribute(CURRENT_USER, null);
+        this.user = null;
     }
 
 }

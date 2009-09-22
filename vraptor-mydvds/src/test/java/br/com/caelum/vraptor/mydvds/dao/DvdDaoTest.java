@@ -42,7 +42,7 @@ public class DvdDaoTest {
 		cfg.configure().setProperty("hibernate.connection.url", "jdbc:hsqldb:mem:mydvdsDB");
 		session = cfg.buildSessionFactory().openSession();
 		session.beginTransaction();
-		dao = new DvdDao(session);
+		dao = new DefaultDvdDao(session);
 	}
 
 

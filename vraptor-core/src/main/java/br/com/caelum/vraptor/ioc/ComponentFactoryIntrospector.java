@@ -3,7 +3,6 @@ package br.com.caelum.vraptor.ioc;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
-
 /**
  * @author Fabio Kung
  */
@@ -12,9 +11,8 @@ public class ComponentFactoryIntrospector {
 	public Class<?> targetTypeForComponentFactory(Class<?> type) {
 
 		Class<?> c = targetTypeForComponentFactory0(type);
-		if(c == null) {
-			throw new ComponentRegistrationException(
-					"Class does not implements ComponentFactory " + type);
+		if (c == null) {
+			throw new ComponentRegistrationException("Class does not implements ComponentFactory " + type);
 		}
 		return c;
 	}
@@ -48,6 +46,16 @@ public class ComponentFactoryIntrospector {
 					return c;
 			}
 		}
+
+		// maybe a interface extends it:
+		{
+			for (Class<?> clazz : type.getInterfaces()) {
+				Class<?> c = targetTypeForComponentFactory0(clazz);
+				if (c != null)
+					return c;
+			}
+		}
+
 		return null;
 	}
 

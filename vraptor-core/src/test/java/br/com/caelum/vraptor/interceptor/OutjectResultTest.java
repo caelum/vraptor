@@ -135,6 +135,7 @@ public class OutjectResultTest {
 	HashSet<BigDecimal> bigs;
 	HashSet<? extends BigDecimal> bigsLimited;
 	HashSet<? super BigDecimal> bigsLimited2;
+	HashSet<?> objects;
 	HashSet bigsOld;
 	Vector<String> strings;
 	Class<String> clazz;
@@ -153,6 +154,7 @@ public class OutjectResultTest {
 	public void shouldDecapitalizeSomeCharsUntilItFindsOneUppercasedForListsAndArraysForBoundedGenericElements() throws NoSuchMethodException, SecurityException, NoSuchFieldException {
 		Assert.assertEquals("bigDecimalList",interceptor.nameFor(getField("bigsLimited")));
 		Assert.assertEquals("bigDecimalList",interceptor.nameFor(getField("bigsLimited2")));
+		Assert.assertEquals("objectList",interceptor.nameFor(getField("objects")));
 	}
 
 

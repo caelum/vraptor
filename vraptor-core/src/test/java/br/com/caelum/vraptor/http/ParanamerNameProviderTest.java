@@ -53,6 +53,17 @@ public class ParanamerNameProviderTest {
     public void shouldNameGenericCollectionUsingOf() throws SecurityException, NoSuchMethodException {
         assertThat(provider.parameterNamesFor(Cat.class.getDeclaredMethod("fightWith", List.class))[0], is(equalTo("cats")));
     }
+    
+    @Test
+	public void shouldIgnoreChangesToTheReturnedArrayInSubsequentCalls() throws Exception {
+    	String[] resultOfFirstCall = provider.parameterNamesFor(Horse.class.getMethod("setLeg", int[].class));
+		assertThat(resultOfFirstCall[0], is(equalTo("length")));
+		
+		resultOfFirstCall[0] = "ASDF";
+		
+		String[] resultOfSecondCall = provider.parameterNamesFor(Horse.class.getMethod("setLeg", int[].class));
+		assertThat(resultOfSecondCall[0], is(equalTo("length")));
+	}
 
     static class Field {
     }

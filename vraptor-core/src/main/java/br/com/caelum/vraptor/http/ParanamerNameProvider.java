@@ -49,7 +49,9 @@ public class ParanamerNameProvider implements ParameterNameProvider {
             if (logger.isDebugEnabled()) {
                 logger.debug("Found parameter names with paranamer for " + method + " as " + Arrays.toString(parameterNames));
             }
-            return parameterNames;
+            
+            String[] defensiveCopy = Arrays.copyOf(parameterNames, parameterNames.length);
+            return defensiveCopy;
         } catch (ParameterNamesNotFoundException e) {
             return delegate.parameterNamesFor(method);
         }

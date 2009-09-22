@@ -51,8 +51,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import junit.framework.Assert;
-
 import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
 import org.jmock.Mockery;
@@ -113,293 +111,296 @@ import br.com.caelum.vraptor.view.PathResolver;
 @Ignore
 public abstract class GenericContainerTest {
 
-    protected Mockery mockery;
+	protected Mockery mockery;
 
-    protected ContainerProvider provider;
+	protected ContainerProvider provider;
 
-    protected ServletContext context;
+	protected ServletContext context;
 
-    protected abstract ContainerProvider getProvider();
+	protected abstract ContainerProvider getProvider();
 
-    protected abstract <T> T executeInsideRequest(WhatToDo<T> execution);
+	protected abstract <T> T executeInsideRequest(WhatToDo<T> execution);
 
-    protected abstract void configureExpectations();
+	protected abstract void configureExpectations();
 
-    @SuppressWarnings("unchecked")
-    @Test
-    public void canProvideAllApplicationScopedComponents() {
-        List<Class<?>> components = Arrays.asList(ServletContext.class, UrlToResourceTranslator.class,
-                Router.class, TypeCreator.class, InterceptorRegistry.class, ParameterNameProvider.class,
-                Converters.class, EmptyElementsRemoval.class, NoRoutesConfiguration.class,
-                ResourceNotFoundHandler.class);
-        checkAvailabilityFor(true, components);
-        checkAvailabilityFor(true, BaseComponents.getApplicationScoped().keySet());
-        mockery.assertIsSatisfied();
-    }
-
-    @SuppressWarnings("unchecked")
-    @Test
-    public void canProvideAllRequestScopedComponents() {
-        List<Class<?>> components = Arrays.asList(HttpServletRequest.class, HttpServletResponse.class,
-                RequestInfo.class, HttpSession.class, ParametersInstantiatorInterceptor.class,
-                InterceptorListPriorToExecutionExtractor.class, URLParameterExtractorInterceptor.class,
-                InterceptorStack.class, RequestExecution.class, ResourceLookupInterceptor.class,
-                InstantiateInterceptor.class, Result.class, ExecuteMethodInterceptor.class,
-                PageResult.class, ParametersProvider.class, MethodInfo.class, Validator.class,
-                PathResolver.class, ForwardToDefaultViewInterceptor.class, LogicResult.class,
-                MultipartInterceptor.class, DownloadInterceptor.class);
-        checkAvailabilityFor(false, components);
-        checkAvailabilityFor(false, BaseComponents.getRequestScoped().keySet());
-        mockery.assertIsSatisfied();
-    }
-
-    @ApplicationScoped
-    public static class MyAppComponent {
-
-    }
-
-    @Test
-    public void processesCorrectlyAppBasedComponents() {
-    	checkAvailabilityFor(true, MyAppComponent.class, MyAppComponent.class);
-    	mockery.assertIsSatisfied();
-    }
-
-
-    @Test
-	public void shouldProvideCachedComponents() throws Exception {
-    	TypeCreator creator = getFromContainer(TypeCreator.class);
-    	assertThat(creator, is(instanceOf(CacheBasedTypeCreator.class)));
+	@SuppressWarnings("unchecked")
+	@Test
+	public void canProvideAllApplicationScopedComponents() {
+		List<Class<?>> components = Arrays.asList(ServletContext.class, UrlToResourceTranslator.class, Router.class,
+				TypeCreator.class, InterceptorRegistry.class, ParameterNameProvider.class, Converters.class,
+				EmptyElementsRemoval.class, NoRoutesConfiguration.class, ResourceNotFoundHandler.class);
+		checkAvailabilityFor(true, components);
+		checkAvailabilityFor(true, BaseComponents.getApplicationScoped().keySet());
+		mockery.assertIsSatisfied();
 	}
 
-    @ApplicationScoped
-    public static class MyAppComponentWithLifecycle {
-    	public int calls = 0;
+	@SuppressWarnings("unchecked")
+	@Test
+	public void canProvideAllRequestScopedComponents() {
+		List<Class<?>> components = Arrays.asList(HttpServletRequest.class, HttpServletResponse.class,
+				RequestInfo.class, HttpSession.class, ParametersInstantiatorInterceptor.class,
+				InterceptorListPriorToExecutionExtractor.class, URLParameterExtractorInterceptor.class,
+				InterceptorStack.class, RequestExecution.class, ResourceLookupInterceptor.class,
+				InstantiateInterceptor.class, Result.class, ExecuteMethodInterceptor.class, PageResult.class,
+				ParametersProvider.class, MethodInfo.class, Validator.class, PathResolver.class,
+				ForwardToDefaultViewInterceptor.class, LogicResult.class, MultipartInterceptor.class,
+				DownloadInterceptor.class);
+		checkAvailabilityFor(false, components);
+		checkAvailabilityFor(false, BaseComponents.getRequestScoped().keySet());
+		mockery.assertIsSatisfied();
+	}
 
-    	@PreDestroy
-    	public void z() {
-    		calls++;
-    	}
-    }
+	@ApplicationScoped
+	public static class MyAppComponent {
 
-    @Test
+	}
+
+	@Test
+	public void processesCorrectlyAppBasedComponents() {
+		checkAvailabilityFor(true, MyAppComponent.class, MyAppComponent.class);
+		mockery.assertIsSatisfied();
+	}
+
+	@Test
+	public void shouldProvideCachedComponents() throws Exception {
+		TypeCreator creator = getFromContainer(TypeCreator.class);
+		assertThat(creator, is(instanceOf(CacheBasedTypeCreator.class)));
+	}
+
+	@ApplicationScoped
+	public static class MyAppComponentWithLifecycle {
+		public int calls = 0;
+
+		@PreDestroy
+		public void z() {
+			calls++;
+		}
+	}
+
+	@Test
 	public void callsPredestroyExactlyOneTime() throws Exception {
-		MyAppComponentWithLifecycle component = registerAndGetFromContainer(MyAppComponentWithLifecycle.class, MyAppComponentWithLifecycle.class);
+		MyAppComponentWithLifecycle component = registerAndGetFromContainer(MyAppComponentWithLifecycle.class,
+				MyAppComponentWithLifecycle.class);
 		assertThat(0, is(equalTo(component.calls)));
 		provider.stop();
 		assertThat(1, is(equalTo(component.calls)));
 		provider = getProvider();
-		provider.start(context); //In order to tearDown ok
+		provider.start(context); // In order to tearDown ok
 	}
 
-    @Component
-    public static class MyRequestComponent {
+	@Component
+	public static class MyRequestComponent {
 
-    }
+	}
 
-    @Test
-    public void processesCorrectlyRequestBasedComponents() {
-        checkAvailabilityFor(false, MyRequestComponent.class, MyRequestComponent.class);
-        mockery.assertIsSatisfied();
-    }
+	@Test
+	public void processesCorrectlyRequestBasedComponents() {
+		checkAvailabilityFor(false, MyRequestComponent.class, MyRequestComponent.class);
+		mockery.assertIsSatisfied();
+	}
 
-    @Component
-    public static class DependentOnSomethingFromComponentFactory {
-        private final NeedsCustomInstantiation dependency;
+	@Component
+	public static class DependentOnSomethingFromComponentFactory {
+		private final NeedsCustomInstantiation dependency;
 
-        public DependentOnSomethingFromComponentFactory(NeedsCustomInstantiation dependency) {
-            this.dependency = dependency;
-        }
-    }
+		public DependentOnSomethingFromComponentFactory(NeedsCustomInstantiation dependency) {
+			this.dependency = dependency;
+		}
+	}
 
+	@Test
+	public void supportsComponentFactoriesForCustomInstantiation() {
+		// TODO the registered component is only available in the next request
+		// with Pico. FIX IT!
+		registerAndGetFromContainer(Container.class, TheComponentFactory.class);
 
-    @Test
-    public void supportsComponentFactoriesForCustomInstantiation() {
-        // TODO the registered component is only available in the next request with Pico. FIX IT!
-        registerAndGetFromContainer(Container.class, TheComponentFactory.class);
+		TheComponentFactory factory = registerAndGetFromContainer(TheComponentFactory.class, null);
+		assertThat(factory, is(notNullValue()));
 
-        TheComponentFactory factory = registerAndGetFromContainer(TheComponentFactory.class, null);
-        assertThat(factory, is(notNullValue()));
+		NeedsCustomInstantiation component = registerAndGetFromContainer(NeedsCustomInstantiation.class, null);
+		assertThat(component, is(notNullValue()));
 
-        NeedsCustomInstantiation component = registerAndGetFromContainer(NeedsCustomInstantiation.class, null);
-        assertThat(component, is(notNullValue()));
+		registerAndGetFromContainer(DependentOnSomethingFromComponentFactory.class,
+				DependentOnSomethingFromComponentFactory.class);
 
-        registerAndGetFromContainer(DependentOnSomethingFromComponentFactory.class, DependentOnSomethingFromComponentFactory.class);
+		DependentOnSomethingFromComponentFactory dependent = registerAndGetFromContainer(
+				DependentOnSomethingFromComponentFactory.class, null);
+		assertThat(dependent, is(notNullValue()));
+		assertThat(dependent.dependency, is(notNullValue()));
+	}
 
-        DependentOnSomethingFromComponentFactory dependent = registerAndGetFromContainer(DependentOnSomethingFromComponentFactory.class, null);
-        assertThat(dependent, is(notNullValue()));
-        assertThat(dependent.dependency, is(notNullValue()));
-    }
+	@Before
+	public void setup() throws Exception {
+		this.mockery = new Mockery();
+		this.context = mockery.mock(ServletContext.class, "servlet context");
+		configureExpectations();
+		provider = getProvider();
+		provider.start(context);
+	}
 
-    @Before
-    public void setup() throws Exception {
-        this.mockery = new Mockery();
-        this.context = mockery.mock(ServletContext.class, "servlet context");
-        configureExpectations();
-        provider = getProvider();
-        provider.start(context);
-    }
+	@After
+	public void tearDown() {
+		provider.stop();
+		provider = null;
+	}
 
-    @After
-    public void tearDown() {
-        provider.stop();
-        provider = null;
-    }
+	private <T> void checkAvailabilityFor(final boolean shouldBeTheSame, final Class<T> component,
+			final Class<? super T> componentToRegister) {
 
-    private <T> void checkAvailabilityFor(final boolean shouldBeTheSame, final Class<T> component,
-                                          final Class<? super T> componentToRegister) {
+		T firstInstance = registerAndGetFromContainer(component, componentToRegister);
+		T secondInstance = executeInsideRequest(new WhatToDo<T>() {
+			public T execute(RequestInfo request, final int counter) {
+				return provider.provideForRequest(request, new Execution<T>() {
+					public T insideRequest(Container secondContainer) {
+						if (componentToRegister != null && !isAppScoped(secondContainer, componentToRegister)) {
+							ComponentRegistry registry = secondContainer.instanceFor(ComponentRegistry.class);
+							registry.register(componentToRegister, componentToRegister);
+						}
 
-        T firstInstance = registerAndGetFromContainer(component, componentToRegister);
-        T secondInstance = executeInsideRequest(new WhatToDo<T>() {
-            public T execute(RequestInfo request, final int counter) {
-                return provider.provideForRequest(request, new Execution<T>() {
-                    public T insideRequest(Container secondContainer) {
-                        if (componentToRegister != null && !isAppScoped(secondContainer, componentToRegister)) {
-                            ComponentRegistry registry = secondContainer.instanceFor(ComponentRegistry.class);
-                            registry.register(componentToRegister, componentToRegister);
-                        }
+						ResourceMethod secondMethod = mockery.mock(ResourceMethod.class, "rm" + counter);
+						secondContainer.instanceFor(MethodInfo.class).setResourceMethod(secondMethod);
+						return secondContainer.instanceFor(component);
+					}
+				});
 
-                        ResourceMethod secondMethod = mockery.mock(ResourceMethod.class, "rm" + counter);
-                        secondContainer.instanceFor(MethodInfo.class).setResourceMethod(secondMethod);
-                        return secondContainer.instanceFor(component);
-                    }
-                });
+			}
+		});
 
-            }
-        });
+		checkSimilarity(component, shouldBeTheSame, firstInstance, secondInstance);
+	}
 
-        checkSimilarity(component, shouldBeTheSame, firstInstance, secondInstance);
-    }
+	protected <T> T registerAndGetFromContainer(final Class<T> componentToBeRetrieved,
+			final Class<?> componentToRegister) {
+		return executeInsideRequest(new WhatToDo<T>() {
+			public T execute(RequestInfo request, final int counter) {
 
-    protected <T> T registerAndGetFromContainer(final Class<T> componentToBeRetrieved, final Class<?> componentToRegister) {
-        return executeInsideRequest(new WhatToDo<T>() {
-            public T execute(RequestInfo request, final int counter) {
+				return provider.provideForRequest(request, new Execution<T>() {
+					public T insideRequest(Container firstContainer) {
+						if (componentToRegister != null) {
+							ComponentRegistry registry = firstContainer.instanceFor(ComponentRegistry.class);
+							registry.register(componentToRegister, componentToRegister);
+						}
+						ResourceMethod firstMethod = mockery.mock(ResourceMethod.class, "rm" + counter);
+						firstContainer.instanceFor(MethodInfo.class).setResourceMethod(firstMethod);
+						return firstContainer.instanceFor(componentToBeRetrieved);
+					}
+				});
 
-                return provider.provideForRequest(request, new Execution<T>() {
-                    public T insideRequest(Container firstContainer) {
-                        if (componentToRegister != null) {
-                            ComponentRegistry registry = firstContainer.instanceFor(ComponentRegistry.class);
-                            registry.register(componentToRegister, componentToRegister);
-                        }
-                        ResourceMethod firstMethod = mockery.mock(ResourceMethod.class, "rm" + counter);
-                        firstContainer.instanceFor(MethodInfo.class).setResourceMethod(firstMethod);
-                        return firstContainer.instanceFor(componentToBeRetrieved);
-                    }
-                });
+			}
+		});
+	}
 
-            }
-        });
-    }
+	public <T> T getFromContainer(final Class<T> componentToBeRetrieved) {
+		return executeInsideRequest(new WhatToDo<T>() {
+			public T execute(RequestInfo request, final int counter) {
+				return provider.provideForRequest(request, new Execution<T>() {
+					public T insideRequest(Container firstContainer) {
+						return firstContainer.instanceFor(componentToBeRetrieved);
+					}
+				});
+			}
+		});
+	}
 
-    public <T> T getFromContainer(final Class<T> componentToBeRetrieved) {
-    	return executeInsideRequest(new WhatToDo<T>() {
-            public T execute(RequestInfo request, final int counter) {
-                return provider.provideForRequest(request, new Execution<T>() {
-                    public T insideRequest(Container firstContainer) {
-                        return firstContainer.instanceFor(componentToBeRetrieved);
-                    }
-                });
-            }
-        });
-    }
+	private boolean isAppScoped(Container secondContainer, Class<?> componentToRegister) {
+		return secondContainer.instanceFor(componentToRegister) != null;
+	}
 
-    private boolean isAppScoped(Container secondContainer, Class<?> componentToRegister) {
-        return secondContainer.instanceFor(componentToRegister) != null;
-    }
+	private void checkSimilarity(Class<?> component, boolean shouldBeTheSame, Object firstInstance,
+			Object secondInstance) {
+		if (shouldBeTheSame) {
+			MatcherAssert.assertThat("Should be the same instance for " + component.getName(), firstInstance,
+					is(equalTo(secondInstance)));
+		} else {
+			MatcherAssert.assertThat("Should not be the same instance for " + component.getName(), firstInstance,
+					is(not(equalTo(secondInstance))));
+		}
+	}
 
-    private void checkSimilarity(Class<?> component, boolean shouldBeTheSame, Object firstInstance,
-                                 Object secondInstance) {
-        if (shouldBeTheSame) {
-            MatcherAssert.assertThat("Should be the same instance for " + component.getName(), firstInstance,
-                    is(equalTo(secondInstance)));
-        } else {
-            MatcherAssert.assertThat("Should not be the same instance for " + component.getName(), firstInstance,
-                    is(not(equalTo(secondInstance))));
-        }
-    }
+	protected void checkAvailabilityFor(boolean shouldBeTheSame, Collection<Class<?>> components) {
+		for (Class<?> component : components) {
+			checkAvailabilityFor(shouldBeTheSame, component, null);
+		}
+	}
 
-    protected void checkAvailabilityFor(boolean shouldBeTheSame, Collection<Class<?>> components) {
-        for (Class<?> component : components) {
-            checkAvailabilityFor(shouldBeTheSame, component, null);
-        }
-    }
+	@Component
+	static public class DisposableComponent {
+		private boolean destroyed;
 
-    @Component
-    static public class DisposableComponent {
-        private boolean destroyed;
+		@PreDestroy
+		public void preDestroy() {
+			this.destroyed = true;
+		}
+	}
 
-        @PreDestroy
-        public void preDestroy() {
-            this.destroyed = true;
-        }
-    }
+	@Component
+	static public class StartableComponent {
+		private boolean started;
 
-    @Component
-    static public class StartableComponent {
-        private boolean started;
+		@PostConstruct
+		public void postConstruct() {
+			this.started = true;
+		}
+	}
 
-        @PostConstruct
-        public void postConstruct() {
-            this.started = true;
-        }
-    }
+	@Test
+	public void shouldDisposeAfterRequest() {
+		registerAndGetFromContainer(Container.class, DisposableComponent.class);
+		DisposableComponent comp = registerAndGetFromContainer(DisposableComponent.class, null);
+		assertTrue(comp.destroyed);
+	}
 
-    @Test
-    public void shouldDisposeAfterRequest() {
-        registerAndGetFromContainer(Container.class, DisposableComponent.class);
-        DisposableComponent comp = registerAndGetFromContainer(DisposableComponent.class, null);
-        assertTrue(comp.destroyed);
-    }
+	@Test
+	public void shouldStartBeforeRequestExecution() {
+		registerAndGetFromContainer(Container.class, StartableComponent.class);
+		StartableComponent comp = registerAndGetFromContainer(StartableComponent.class, null);
+		assertTrue(comp.started);
+	}
 
-    @Test
-    public void shouldStartBeforeRequestExecution() {
-        registerAndGetFromContainer(Container.class, StartableComponent.class);
-        StartableComponent comp = registerAndGetFromContainer(StartableComponent.class, null);
-        assertTrue(comp.started);
-    }
-
-    @Test
+	@Test
 	public void canProvideComponentsInTheClasspath() throws Exception {
-    	checkAvailabilityFor(false, Collections.<Class<?>>singleton(CustomComponentInTheClasspath.class));
+		checkAvailabilityFor(false, Collections.<Class<?>> singleton(CustomComponentInTheClasspath.class));
 	}
 
-    @Test
-    public void shoudRegisterResourcesInRouter() {
-    	Router router = getFromContainer(Router.class);
-    	Matcher<Iterable<? super Route>> hasItem = hasItem(canHandle(ResourceInTheClasspath.class, ResourceInTheClasspath.class.getDeclaredMethods()[0]));
+	@Test
+	public void shoudRegisterResourcesInRouter() {
+		Router router = getFromContainer(Router.class);
+		Matcher<Iterable<? super Route>> hasItem = hasItem(canHandle(ResourceInTheClasspath.class,
+				ResourceInTheClasspath.class.getDeclaredMethods()[0]));
 		assertThat(router.allRoutes(), hasItem);
-    }
+	}
 
-    @Test
-    public void shoudUseComponentFactoriesInTheClasspath() {
-    	Provided object = getFromContainer(Provided.class);
-    	assertThat(object, is(sameInstance(ComponentFactoryInTheClasspath.PROVIDED)));
-    }
+	@Test
+	public void shoudUseComponentFactoriesInTheClasspath() {
+		Provided object = getFromContainer(Provided.class);
+		assertThat(object, is(sameInstance(ComponentFactoryInTheClasspath.PROVIDED)));
+	}
 
-    @Test
-    public void shoudRegisterInterceptorsInInterceptorRegistry() {
-    	InterceptorRegistry registry = getFromContainer(InterceptorRegistry.class);
-    	assertThat(registry.all(), hasOneCopyOf(InterceptorInTheClasspath.class));
-    }
+	@Test
+	public void shoudRegisterInterceptorsInInterceptorRegistry() {
+		InterceptorRegistry registry = getFromContainer(InterceptorRegistry.class);
+		assertThat(registry.all(), hasOneCopyOf(InterceptorInTheClasspath.class));
+	}
 
-    @Test
-    public void shoudCallPredestroyExactlyOneTimeForComponentsScannedFromTheClasspath() {
-    	CustomComponentWithLifecycleInTheClasspath component = getFromContainer(CustomComponentWithLifecycleInTheClasspath.class);
-    	assertThat(component.callsToPreDestroy, is(equalTo(0)));
-    	provider.stop();
-    	assertThat(component.callsToPreDestroy, is(equalTo(1)));
+	@Test
+	public void shoudCallPredestroyExactlyOneTimeForComponentsScannedFromTheClasspath() {
+		CustomComponentWithLifecycleInTheClasspath component = getFromContainer(CustomComponentWithLifecycleInTheClasspath.class);
+		assertThat(component.callsToPreDestroy, is(equalTo(0)));
+		provider.stop();
+		assertThat(component.callsToPreDestroy, is(equalTo(1)));
 
-    	resetProvider();
-    }
+		resetProvider();
+	}
 
-    @Test
-    public void shoudCallPredestroyExactlyOneTimeForComponentFactoriesScannedFromTheClasspath() {
-    	ComponentFactoryInTheClasspath componentFactory = getFromContainer(ComponentFactoryInTheClasspath.class);
-    	assertThat(componentFactory.callsToPreDestroy, is(equalTo(0)));
-    	provider.stop();
-    	assertThat(componentFactory.callsToPreDestroy, is(equalTo(1)));
+	@Test
+	public void shoudCallPredestroyExactlyOneTimeForComponentFactoriesScannedFromTheClasspath() {
+		ComponentFactoryInTheClasspath componentFactory = getFromContainer(ComponentFactoryInTheClasspath.class);
+		assertThat(componentFactory.callsToPreDestroy, is(equalTo(0)));
+		provider.stop();
+		assertThat(componentFactory.callsToPreDestroy, is(equalTo(1)));
 
-    	resetProvider();
-    }
+		resetProvider();
+	}
 
 	@Test
 	public void shoudRegisterConvertersInConverters() {
@@ -422,23 +423,6 @@ public abstract class GenericContainerTest {
 		provider.start(context);
 	}
 
-
-
-
-	class XX implements ComponentFactory<String> {
-		public String getInstance() {
-			return "abc";
-		}
-	}
-
-	class XX2 extends XX {}
-
-    @Test
-    public void shoudRegisterSubclassesOfComponenetFactoryImplementations() {
-    	// problema no metodo targetTypeForComponentFactory, ver no componentfactorybean!
-    	registerAndGetFromContainer(XX2.class, XX2.class);
-    	Assert.assertEquals("abc",getFromContainer(String.class));
-    }
 
 
 }

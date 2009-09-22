@@ -84,18 +84,4 @@ public class Dvd {
 		this.users = users;
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		return obj instanceof Dvd
-		&& getId().equals(((Dvd) obj).getId());
-	}
-
-	@Override
-	public int hashCode() {
-		if (this.id == null) {
-			return 0;
-		}
-		return this.id.hashCode() * 31;
-	}
-
 }

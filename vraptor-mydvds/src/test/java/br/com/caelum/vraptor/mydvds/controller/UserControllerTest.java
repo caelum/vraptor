@@ -45,11 +45,13 @@ public class UserControllerTest {
 		dao = mockery.mock(UserDao.class);
 		session = mockery.mock(HttpSession.class);
 
-		//ignoring first invocation of session.getAttribute
+		//ignoring http session
 		mockery.checking(new Expectations() {
 			{
-				one(session).getAttribute(UserInfo.CURRENT_USER);
+				allowing(session).getAttribute(UserInfo.CURRENT_USER);
 				will(returnValue(null));
+				
+				ignoring(session);
 			}
 		});
 

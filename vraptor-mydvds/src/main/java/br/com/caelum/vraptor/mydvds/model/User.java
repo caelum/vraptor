@@ -1,5 +1,6 @@
 package br.com.caelum.vraptor.mydvds.model;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Entity;
@@ -54,6 +55,9 @@ public class User {
 	private Set<Dvd> dvds;
 
 	public Set<Dvd> getDvds() {
+		if (dvds == null) {
+			dvds = new HashSet<Dvd>();
+		}
 		return dvds;
 	}
 

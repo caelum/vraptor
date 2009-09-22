@@ -52,11 +52,27 @@ public class ComponentFactoryIntrospectorTest {
 		}
 	}
 
+	class ZZ {
+		public String getInstance() {
+			return "def";
+		}
+	}
+
 	@Test
-	public void shoudRegisterSubclassesOfComponenetFactoryImplementations() {
-		// problema no metodo targetTypeForComponentFactory, ver no
-		// componentfactorybean!
+	public void shoudWorkWithSubclassesOfComponenetFactoryImplementations() {
 		Class<?> c = new ComponentFactoryIntrospector().targetTypeForComponentFactory((XX2.class));
+		Assert.assertEquals(String.class, c);
+	}
+
+	@Test
+	public void shoudWorkWithImplementationsOfComponenetFactorySubinterfacesImplementations() {
+		Class<?> c = new ComponentFactoryIntrospector().targetTypeForComponentFactory((YY2.class));
+		Assert.assertEquals(String.class, c);
+	}
+
+	@Test(expected=ComponentRegistrationException.class)
+	public void shoudNotWorkWithClassesThatDoesNotImplementComponentFactory() {
+		Class<?> c = new ComponentFactoryIntrospector().targetTypeForComponentFactory((ZZ.class));
 		Assert.assertEquals(String.class, c);
 	}
 }

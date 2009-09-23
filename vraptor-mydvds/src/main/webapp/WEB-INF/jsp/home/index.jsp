@@ -32,7 +32,7 @@
 
 <hr/>
 
-<w:form action="/login" type="table" method="post" border="0">
+<w:form action="/login" type="table" method="post" border="0" name="loginForm">
 	<w:text name="login" />
 	<w:password name="password" />
 	<w:submit id="submit" value="send"/>
@@ -53,7 +53,7 @@
 
 <hr/>
 
-<w:form action="/users" type="table" method="post">
+<w:form action="/users" type="table" name="registerForm" method="post">
 	<w:text name="user.name" label="name" />
 	<w:text name="user.login" label="login" />
 	<w:password name="user.password" label="password" />

@@ -8,6 +8,22 @@ public class UserRegistrationTest extends IntegrationTestCase {
 
 	@Test
 	public void registeringAnInvalidUser() throws Exception {
-		openRootPage();
+		openRootPage()
+			.fillRegisterForm()
+				.withName("I am")
+				.withLogin("too")
+				.withPassword("short")
+				.andSubmit();
+		assertContainsErrors();
+	}
+
+	@Test
+	public void logginInWithAnInvalidUser() throws Exception {
+		openRootPage()
+			.fillRegisterForm()
+				.withLogin("doesnt")
+				.withPassword("exist")
+				.andSubmit();
+		assertContainsErrors();
 	}
 }

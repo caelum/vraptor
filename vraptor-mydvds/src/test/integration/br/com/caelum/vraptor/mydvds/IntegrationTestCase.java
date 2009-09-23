@@ -1,5 +1,7 @@
 package br.com.caelum.vraptor.mydvds;
 
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Before;
 
 import br.com.caelum.seleniumdsl.Browser;
@@ -20,4 +22,7 @@ public abstract class IntegrationTestCase {
 		return new RootPage(browser);
 	}
 
+	public void assertContainsErrors() {
+		assertTrue("There is no erros", browser.currentPage().div("error-box").exists());
+	}
 }

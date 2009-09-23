@@ -282,6 +282,7 @@ public class IogiParametersProviderTest {
                 one(mockNameProvider).parameterNamesFor(method);
                 will(returnValue(new String[]{"house"}));
                 
+                ignoring(mockLocalization);
             }
         });
         Object[] params = iogiProvider.getParametersFor(mockery.methodFor(MyResource.class, "buyA", House.class), errors,

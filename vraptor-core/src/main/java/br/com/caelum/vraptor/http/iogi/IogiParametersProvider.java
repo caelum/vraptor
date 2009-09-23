@@ -16,11 +16,15 @@ import br.com.caelum.iogi.Instantiator;
 import br.com.caelum.iogi.parameters.Parameter;
 import br.com.caelum.iogi.parameters.Parameters;
 import br.com.caelum.iogi.reflection.Target;
+import br.com.caelum.vraptor.converter.ConversionError;
+import br.com.caelum.vraptor.http.InvalidParameterException;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.validator.Message;
+import br.com.caelum.vraptor.validator.ValidationException;
+import br.com.caelum.vraptor.validator.ValidationMessage;
 
 @RequestScoped
 public class IogiParametersProvider implements ParametersProvider {
@@ -43,22 +47,39 @@ public class IogiParametersProvider implements ParametersProvider {
 		Parameters parameters = parseParameters(servletRequest);
 		List<Target<Object>> targets = createTargets(javaMethod);
 
-		List<Object> arguments = instantiateParameters(parameters, targets);
+		List<Object> arguments = instantiateParameters(parameters, targets, errors);
 		
 		return arguments.toArray();
 	}
 
-	private List<Object> instantiateParameters(Parameters parameters, List<Target<Object>> targets) {
+	private List<Object> instantiateParameters(Parameters parameters, List<Target<Object>> targets, List<Message> errors) {
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("getParametersFor() called with parameters " + parameters + " and targets " +
 					targets + ".");
 		
 		List<Object> arguments = new ArrayList<Object>();
 		for (Target<Object> target : targets) {
-			Object newObject = instantiator.instantiate(target, parameters);
+			Object newObject = instantiateOrAddError(parameters, errors, target);
 			arguments.add(newObject);
 		}
 		return arguments;
+	}
+
+	private Object instantiateOrAddError(Parameters parameters, List<Message> errors, Target<Object> target) {
+		Object newObject = null;
+		try {
+			newObject  = instantiator.instantiate(target, parameters);
+		} catch (ConversionError ex) {
+			errors.add(new ValidationMessage(ex.getMessage(), target.getName()));
+		} catch (Exception e) { // setter threw an exception
+			if (e.getClass().isAnnotationPresent(ValidationException.class)) {
+				errors.add(new ValidationMessage(e.getLocalizedMessage(), target.getName()));
+			} else {
+				throw new InvalidParameterException("Exception when trying to instantiate " + target, e);
+			}
+
+		}
+		return newObject;
 	}
 
 	private List<Target<Object>> createTargets(Method javaMethod) {

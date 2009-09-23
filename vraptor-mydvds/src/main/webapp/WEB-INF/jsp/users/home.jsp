@@ -9,7 +9,7 @@
 </div>
 
 <c:if test="${not empty errors}">
-	<div class="blue-box">
+	<div id="error-box">
 	<h1><fmt:message key="errors"/></h1>
 	<hr/>
 	<c:forEach var="error" items="${errors}">
@@ -37,7 +37,7 @@
 <div class="blue-box">
 <h1><fmt:message key="new_dvd"/></h1>
 <hr/>
-<w:form action="/dvds" type="table" enctype="multipart/form-data" method="post" border="0">
+<w:form action="/dvds" type="table" enctype="multipart/form-data" name="dvdRegister" method="post" border="0">
 	<w:text name="dvd.title" />
 	<w:text name="dvd.description" />
 	<w:file name="file" label="sample_file" />

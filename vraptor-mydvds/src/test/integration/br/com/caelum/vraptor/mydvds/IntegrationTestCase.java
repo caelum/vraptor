@@ -8,6 +8,7 @@ import org.junit.Before;
 
 import br.com.caelum.seleniumdsl.Browser;
 import br.com.caelum.seleniumdsl.htmlunit.HtmlUnitBrowser;
+import br.com.caelum.vraptor.mydvds.pages.HomePage;
 import br.com.caelum.vraptor.mydvds.pages.RootPage;
 
 /**
@@ -51,5 +52,14 @@ public abstract class IntegrationTestCase {
 
 	public void assertLoggedUserIs(String name) {
 		assertThat(browser.currentPage().div("user").innerHTML(), containsString(name));
+	}
+
+	public HomePage loginAs(String name) {
+		thereIsAUserNamed(name);
+		openRootPage().fillLoginForm()
+			.withLogin(name)
+			.withPassword(name)
+			.andSubmit();
+		return new HomePage(browser);
 	}
 }

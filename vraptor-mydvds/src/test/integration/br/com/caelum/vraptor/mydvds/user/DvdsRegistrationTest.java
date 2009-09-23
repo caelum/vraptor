@@ -1,5 +1,7 @@
 package br.com.caelum.vraptor.mydvds.user;
 
+import org.junit.Test;
+
 import br.com.caelum.vraptor.mydvds.IntegrationTestCase;
 
 /**
@@ -10,5 +12,13 @@ import br.com.caelum.vraptor.mydvds.IntegrationTestCase;
  */
 public class DvdsRegistrationTest extends IntegrationTestCase {
 
-
+	@Test
+	public void registeringAnInvalidDvd() throws Exception {
+		loginAs("vraptorguy")
+			.fillRegisterDvdForm()
+				.withTitle("")
+				.withDescription("")
+				.andSend();
+		assertContainsErrors();
+	}
 }

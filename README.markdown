@@ -1,4 +1,4 @@
 VRaptor 3
 =========
 
-Simple Web MVC Framework
+A web MVC framework for fast and maintainable development.

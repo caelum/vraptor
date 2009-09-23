@@ -1,5 +1,5 @@
 
-<div id="blue-box">
+<div class="blue-box">
 	<table>
 	    <tr>
 	        <td align="right">

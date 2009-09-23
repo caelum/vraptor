@@ -38,7 +38,7 @@ body {
        border: solid #fff 1px;
 }
 
-#blue-box {
+.blue-box {
        background: #92B2CC;
        color: #FFF;
        float: left;
@@ -48,32 +48,32 @@ body {
        width: 500px;
        font-size: 10px;
 }
-#blue-box select {
+.blue-box select {
        width: 200px;
        font-size: 11px;
 }
-#blue-box input {
+.blue-box input {
        width: 200px;
        font-size: 11px;
 }
-#blue-box h1 {
+.blue-box h1 {
        margin: 5px 5px;
        padding: 0;
        font-size: 18px;
        color: #FFF;
        vertical-align: middle;
 }
-#blue-box hr {
+.blue-box hr {
        border: solid #fff 1px;
 }
-#blue-box td {
+.blue-box td {
        border: 0 solid white;
 }
-#blue-box table {
+.blue-box table {
        border: 0 solid white;
        width: 500px;
 }
-#blue-box tr {
+.blue-box tr {
        border: 1px solid white;
        color: #FFF;
        margin: 10px 0;

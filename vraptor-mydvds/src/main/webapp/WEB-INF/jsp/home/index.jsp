@@ -15,7 +15,7 @@
 	</div>
 </c:if>
 
-<div id="blue-box">
+<div class="blue-box">
 <h1><fmt:message key="change_language"/></h1>
 <hr/>
 <a href="?language=de"><img src="images/de.gif" border="0"/></a> | 
@@ -26,7 +26,7 @@
 
 <br/><br/>
 
-<div id="blue-box">
+<div class="blue-box">
 
 <h1><fmt:message key="welcome"/></h1>
 
@@ -41,7 +41,7 @@
 
 <br/><br/>
 
-<div id="blue-box">
+<div class="blue-box">
 
 <c:if test="${not empty user}">
 	<h1>${user.name}: <fmt:message key="user_added"/></h1>

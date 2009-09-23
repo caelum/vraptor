@@ -1,12 +1,12 @@
 <%@ include file="/header.jsp" %> 
 
-<div id="blue-box">
+<div class="blue-box">
 <table>
 	<tr><td align="right"><a href="user.logout.logic"><fmt:message key="logout"/></a></td></tr>
 </table>
 </div>
 
-<div id="blue-box">
+<div class="blue-box">
 <h1><fmt:message key="search_results"/></h1>
 <hr/>
 

@@ -2,14 +2,14 @@
 
 <script type="text/javascript" src="<c:url value="/"/>js/jquery.js"></script>
 
-<div id="blue-box">
+<div class="blue-box">
 <table id="user">
 	<tr><td align="right">${currentUser.name} - <a href="<c:url value="/home/logout" />"><fmt:message key="logout"/></a></td></tr>
 </table>
 </div>
 
 <c:if test="${not empty errors}">
-	<div id="blue-box">
+	<div class="blue-box">
 	<h1><fmt:message key="errors"/></h1>
 	<hr/>
 	<c:forEach var="error" items="${errors}">
@@ -21,7 +21,7 @@
 
 <br/><br/>
 
-<div id="blue-box">
+<div class="blue-box">
 <h1>${currentUser.name}: <fmt:message key="your_dvds"/></h1>
 <hr/>
 
@@ -34,7 +34,7 @@
 
 <br/><br/>
 
-<div id="blue-box">
+<div class="blue-box">
 <h1><fmt:message key="new_dvd"/></h1>
 <hr/>
 <w:form action="/dvds" type="table" enctype="multipart/form-data" method="post" border="0">
@@ -50,7 +50,7 @@
 
 <br/><br/>
 
-<div id="blue-box">
+<div class="blue-box">
 <h1><fmt:message key="search_dvds"/></h1>
 <hr/>
 <table>
@@ -63,7 +63,7 @@
 
 <br/><br/>
 
-<div id="blue-box">
+<div class="blue-box">
 <h1><fmt:message key="list_users"/></h1>
 <hr/>
 <w:form action="/users" method="get">

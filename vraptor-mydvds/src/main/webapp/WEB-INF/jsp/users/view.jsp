@@ -1,5 +1,5 @@
 <%@ include file="/header.jsp" %> 
-<div id="blue-box">
+<div class="blue-box">
 <h1>${user.name}</h1>
 <hr/>
 <table>

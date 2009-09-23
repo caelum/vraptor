@@ -10,6 +10,15 @@ import br.com.caelum.seleniumdsl.Browser;
 import br.com.caelum.seleniumdsl.htmlunit.HtmlUnitBrowser;
 import br.com.caelum.vraptor.mydvds.pages.RootPage;
 
+/**
+ * Base class for integration tests.
+ * It uses SeleniumDSL with HtmlUnit for simulating the browser using the system.
+ *
+ * You'll need a MyDVDs running on a server on the port 8080 and context vraptor-mydvds
+ *
+ * @author Lucas Cavalcanti
+ *
+ */
 public abstract class IntegrationTestCase {
 
 	protected Browser browser;

@@ -3,6 +3,12 @@ package br.com.caelum.vraptor.mydvds.pages;
 import br.com.caelum.seleniumdsl.Browser;
 import br.com.caelum.seleniumdsl.Form;
 
+/**
+ * Page object that represents root page
+ *
+ * @author Lucas Cavalcanti
+ *
+ */
 public class RootPage {
 
 	private final Browser browser;

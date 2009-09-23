@@ -4,6 +4,16 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.mydvds.IntegrationTestCase;
 
+/**
+ * Integration tests for user registration and logging in.
+ *
+ * It is very important that the integration tests be as readable as possible.
+ * So all infrastructure for the integration tests will be on IntegrationTestCase
+ * or in the Page Objects.
+ *
+ * @author Lucas Cavalcanti
+ *
+ */
 public class UserRegistrationTest extends IntegrationTestCase {
 
 	@Test

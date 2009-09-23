@@ -40,6 +40,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
@@ -54,6 +55,7 @@ import br.com.caelum.iogi.parameters.Parameter;
 import br.com.caelum.iogi.parameters.Parameters;
 import br.com.caelum.iogi.reflection.Target;
 import br.com.caelum.vraptor.converter.LongConverter;
+import br.com.caelum.vraptor.converter.PrimitiveIntConverter;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.core.DefaultConverters;
 import br.com.caelum.vraptor.core.Localization;
@@ -71,19 +73,20 @@ public class IogiParametersProviderTest {
     private HttpServletRequest mockHttpServletRequest;
     private ArrayList<Message> errors;
 	private Container mockContainer;
+	private Localization mockLocalization;
 
     @SuppressWarnings("unchecked")
     @Before
     public void setup() throws Exception {
-        this.mockery = new VRaptorMockery();
+        this.mockery = new VRaptorMockery(true);
         this.converters = mockery.mock(Converters.class);
         this.mockHttpServletRequest = mockery.mock(HttpServletRequest.class);
         this.mockNameProvider = mockery.mock(ParameterNameProvider.class);
         
         mockContainer = mockery.mock(Container.class);
-		final Localization localization = mockery.mock(Localization.class);
+		mockLocalization = mockery.mock(Localization.class);
 	
-		Instantiator<Object> instantiator = new VRaptorInstantiator(new DefaultConverters(), mockContainer, localization, mockNameProvider);
+		Instantiator<Object> instantiator = new VRaptorInstantiator(new DefaultConverters(), mockContainer, mockLocalization, mockNameProvider);
 		
 		this.iogiProvider = new IogiParametersProvider(mockNameProvider, mockHttpServletRequest, instantiator);
         this.errors = new ArrayList<Message>();
@@ -92,7 +95,7 @@ public class IogiParametersProviderTest {
                 allowing(converters).to((Class) with(an(Class.class)), with(any(Container.class)));
                 will(returnValue(new LongConverter()));
                 
-                ignoring(localization);
+//                ignoring(mockLocalization);
             }
         });
         
@@ -110,6 +113,18 @@ public class IogiParametersProviderTest {
     @After
     public void tearDown() {
     	mockery.assertIsSatisfied();
+    }
+    
+    public static class Dog {
+    	private int id;
+
+		public int getId() {
+			return id;
+		}
+
+		public void setId(int id) {
+			this.id = id;
+		}
     }
     
     public static class Cat {
@@ -247,7 +262,7 @@ public class IogiParametersProviderTest {
     }
 
     @SuppressWarnings("unchecked")
-    private Enumeration enumerationFor(String... values) {
+	public Enumeration enumerationFor(String... values) {
         return new Vector(Arrays.asList(values)).elements();
     }
 
@@ -398,6 +413,34 @@ public class IogiParametersProviderTest {
 		}});
 		
 		iogiProvider.getParametersFor(buyAHouse, errors, null);
+	}
+	
+	@Test
+	public void willAddValidationMessagesForConversionErrors() throws Exception {
+		ResourceMethod setId = mockery.methodFor(Dog.class, "setId", int.class);
+		
+		final ResourceBundle resourceBundle = 
+			mockery.stubResourceBundle(this, "is_not_a_valid_integer", "is_not_a_valid_integer");
+		
+		mockery.checking(new Expectations() {{
+			allowing(mockHttpServletRequest).getParameterNames();
+			will(returnValue(enumerationFor("id")));
+			
+			allowing(mockHttpServletRequest).getParameterValues("id");
+			will(returnValue(new String[] {"asdf"}));
+			
+			allowing(mockNameProvider).parameterNamesFor(with(any(Method.class)));
+			will(returnValue(new String [] {"id"}));
+			
+			allowing(mockContainer).instanceFor(PrimitiveIntConverter.class);
+			will(returnValue(new PrimitiveIntConverter()));
+			
+			allowing(mockLocalization).getBundle();
+			will(returnValue(resourceBundle));
+		}});
+		
+		iogiProvider.getParametersFor(setId, errors, resourceBundle);
+		assertThat(errors.size(), is(equalTo(1)));
 	}
 	//----------
 }

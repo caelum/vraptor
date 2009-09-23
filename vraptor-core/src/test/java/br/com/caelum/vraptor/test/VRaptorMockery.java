@@ -17,6 +17,7 @@
 package br.com.caelum.vraptor.test;
 
 import java.lang.reflect.Method;
+import java.util.Enumeration;
 import java.util.ResourceBundle;
 
 import javax.servlet.http.HttpServletRequest;
@@ -32,6 +33,7 @@ import org.jmock.internal.ExpectationBuilder;
 import org.jmock.lib.legacy.ClassImposteriser;
 
 import br.com.caelum.vraptor.core.Localization;
+import br.com.caelum.vraptor.http.iogi.IogiParametersProviderTest;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.resource.ResourceClass;
 import br.com.caelum.vraptor.resource.ResourceMethod;
@@ -176,6 +178,19 @@ public class VRaptorMockery {
 	 */
 	public <T> T mock(Class<T> type, String name) {
 		return mockery.mock(type,name);
+	}
+
+	public ResourceBundle stubResourceBundle(final IogiParametersProviderTest iogiParametersProviderTest, final String key, final String value) {
+		return new ResourceBundle(){
+			@Override
+			protected Object handleGetObject(String key) {
+				return value;
+			}
+			@Override
+			public Enumeration<String> getKeys() {
+				return iogiParametersProviderTest.enumerationFor(key);
+			}
+		};
 	}
 
 }

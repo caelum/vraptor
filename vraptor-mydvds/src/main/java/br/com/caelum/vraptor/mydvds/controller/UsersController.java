@@ -17,11 +17,11 @@ import br.com.caelum.vraptor.validator.Validations;
 import br.com.caelum.vraptor.view.Results;
 
 /**
- * The resource <code>UserController</code> handles all user operations,
+ * The resource <code>UsersController</code> handles all user operations,
  * such as adding new users, listing all users, and so on.
  */
 @Resource
-public class UserController {
+public class UsersController {
 
     private final Validator validator;
     private final Result result;
@@ -35,7 +35,7 @@ public class UserController {
 	 * @param result VRaptor result handler.
 	 * @param validator VRaptor validator.
 	 */
-	public UserController(UserDao dao, UserInfo userInfo, Result result, Validator validator) {
+	public UsersController(UserDao dao, UserInfo userInfo, Result result, Validator validator) {
 		this.dao = dao;
 		this.result = result;
 		this.validator = validator;
@@ -108,7 +108,7 @@ public class UserController {
 		// redirects to the index page if any validation errors occur.
 		validator.onErrorUse(Results.page()).of(HomeController.class).index();
 		this.dao.add(user);
-		result.use(Results.logic()).redirectTo(UserController.class).userAdded(user);
+		result.use(Results.logic()).redirectTo(UsersController.class).userAdded(user);
 	}
 
 	/**

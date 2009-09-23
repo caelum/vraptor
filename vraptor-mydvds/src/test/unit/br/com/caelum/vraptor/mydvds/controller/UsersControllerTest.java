@@ -28,14 +28,14 @@ import br.com.caelum.vraptor.validator.ValidationError;
  * @author Lucas Cavalcanti
  *
  */
-public class UserControllerTest {
+public class UsersControllerTest {
 
 
 	private Mockery mockery;
 	private UserDao dao;
 	private HttpSession session;
 	private UserInfo userInfo;
-	private UserController controller;
+	private UsersController controller;
 	private MockResult result;
 
 	@Before
@@ -60,7 +60,7 @@ public class UserControllerTest {
 		result = new MockResult();
 		Validator validator = new MockValidator();
 
-		controller = new UserController(dao, userInfo, result, validator);
+		controller = new UsersController(dao, userInfo, result, validator);
 	}
 
 	@Test

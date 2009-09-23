@@ -35,9 +35,9 @@ import br.com.caelum.vraptor.view.Results;
  *
  */
 @Resource
-public class DvdController {
+public class DvdsController {
 
-	private static final Logger LOG = Logger.getLogger(DvdController.class);
+	private static final Logger LOG = Logger.getLogger(DvdsController.class);
 
     private final Result result;
     private final Validator validator;
@@ -52,7 +52,7 @@ public class DvdController {
 	 * @param result VRaptor result handler.
 	 * @param validator VRaptor validator.
 	 */
-	public DvdController(DvdDao dao, UserDao userDao, UserInfo userInfo, Result result, Validator validator) {
+	public DvdsController(DvdDao dao, UserDao userDao, UserInfo userInfo, Result result, Validator validator) {
 		this.dao = dao;
 		this.userDao = userDao;
 		this.result = result;
@@ -81,7 +81,7 @@ public class DvdController {
 		    that(dvd.getDescription().length() >= 6, "description", "invalid_description");
 		}});
 
-		validator.onErrorUse(Results.page()).of(UserController.class).home();
+		validator.onErrorUse(Results.page()).of(UsersController.class).home();
 
 		// is there a file?
 		if (file != null) {
@@ -95,7 +95,7 @@ public class DvdController {
 		dao.add(dvd);
 		userDao.update(user);
 
-		result.use(Results.logic()).redirectTo(DvdController.class).show(dvd);
+		result.use(Results.logic()).redirectTo(DvdsController.class).show(dvd);
 	}
 
 	/**
@@ -134,12 +134,12 @@ public class DvdController {
 		    that(user.getDvds(), not(hasItem(dvd)), "dvd", "you_already_have_this_dvd");
 		}});
 
-		validator.onErrorUse(Results.page()).of(UserController.class).home();
+		validator.onErrorUse(Results.page()).of(UsersController.class).home();
 
 		user.getDvds().add(dvd);
 		userDao.update(user);
 
-		result.use(Results.logic()).redirectTo(UserController.class).home();
+		result.use(Results.logic()).redirectTo(UsersController.class).home();
 	}
 
     /**

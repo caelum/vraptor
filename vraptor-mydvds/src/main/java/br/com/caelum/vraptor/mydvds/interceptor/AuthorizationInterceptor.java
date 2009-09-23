@@ -9,7 +9,7 @@ import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.mydvds.controller.HomeController;
-import br.com.caelum.vraptor.mydvds.controller.UserController;
+import br.com.caelum.vraptor.mydvds.controller.UsersController;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**
@@ -33,7 +33,7 @@ public class AuthorizationInterceptor implements Interceptor {
 
     private boolean notNewUser(ResourceMethod method) {
         Method invokedMethod = method.getMethod();
-        if (invokedMethod.getDeclaringClass().equals(UserController.class)) {
+        if (invokedMethod.getDeclaringClass().equals(UsersController.class)) {
             return !"add".equals(invokedMethod.getName()) && !"userAdded".equals(invokedMethod.getName());
         }
         return true;

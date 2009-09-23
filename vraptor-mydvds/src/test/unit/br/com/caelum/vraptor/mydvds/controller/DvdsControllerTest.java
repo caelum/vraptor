@@ -23,7 +23,7 @@ import br.com.caelum.vraptor.validator.ValidationError;
  * @author Lucas Cavalcanti
  *
  */
-public class DvdControllerTest {
+public class DvdsControllerTest {
 
 
 	private Mockery mockery;
@@ -32,7 +32,7 @@ public class DvdControllerTest {
 	private UserInfo userInfo;
 	private MockResult result;
 	private DvdDao dao;
-	private DvdController controller;
+	private DvdsController controller;
 
 	@Before
 	public void setUp() throws Exception {
@@ -59,7 +59,7 @@ public class DvdControllerTest {
 		result = new MockResult();
 		Validator validator = new MockValidator();
 
-		controller = new DvdController(dao, userDao, userInfo, result, validator);
+		controller = new DvdsController(dao, userDao, userInfo, result, validator);
 	}
 
 	@Test

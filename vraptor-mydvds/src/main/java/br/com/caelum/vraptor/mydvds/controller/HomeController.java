@@ -79,7 +79,7 @@ public class HomeController {
 
 		// we don't want to go to default page (/WEB-INF/jsp/home/login.jsp)
 		// we want to redirect to the user's home
-		result.use(Results.logic()).redirectTo(UserController.class).home();
+		result.use(Results.logic()).redirectTo(UsersController.class).home();
 	}
 
 	/**

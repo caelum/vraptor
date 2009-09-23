@@ -7,6 +7,7 @@ public class RootPage {
 
 	private final Browser browser;
 	private Form form;
+	private String prefix;
 
 	public RootPage(Browser browser) {
 		this.browser = browser;
@@ -14,10 +15,12 @@ public class RootPage {
 
 	public RootPage fillRegisterForm() {
 		form = browser.currentPage().form("registerForm");
+		prefix = "user.";
 		return this;
 	}
 	public RootPage fillLoginForm() {
 		form = browser.currentPage().form("loginForm");
+		prefix = "";
 		return this;
 	}
 
@@ -26,11 +29,11 @@ public class RootPage {
 		return this;
 	}
 	public RootPage withLogin(String login) {
-		form.field("user.login").type(login);
+		form.field(prefix + "login").type(login);
 		return this;
 	}
 	public RootPage withPassword(String password) {
-		form.field("user.password").type(password);
+		form.field(prefix + "password").type(password);
 		return this;
 	}
 	public void andSubmit() {

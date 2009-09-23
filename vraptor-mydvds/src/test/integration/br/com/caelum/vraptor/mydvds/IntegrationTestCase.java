@@ -1,5 +1,7 @@
 package br.com.caelum.vraptor.mydvds;
 
+import static org.hamcrest.Matchers.containsString;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
@@ -24,5 +26,21 @@ public abstract class IntegrationTestCase {
 
 	public void assertContainsErrors() {
 		assertTrue("There is no erros", browser.currentPage().div("error-box").exists());
+	}
+
+	public void assertContainsMessage(String message) {
+		assertThat(browser.currentPage().div("site").innerHTML(), containsString(message));
+	}
+
+	public void thereIsAUserNamed(String name) {
+		openRootPage().fillRegisterForm()
+			.withLogin(name)
+			.withName(name)
+			.withPassword(name)
+			.andSubmit();
+	}
+
+	public void assertLoggedUserIs(String name) {
+		assertThat(browser.currentPage().div("user").innerHTML(), containsString(name));
 	}
 }

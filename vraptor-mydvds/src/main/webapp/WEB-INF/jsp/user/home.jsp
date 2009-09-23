@@ -1,12 +1,10 @@
 <%@ include file="/header.jsp" %> 
 
-<script type="text/javascript" src="js/jquery.js"></script>
-<script type="text/javascript" src="js/autocomplete.js"></script>
-<script type="text/javascript" src="js/searchDvd.js"></script>
+<script type="text/javascript" src="<c:url value="/"/>js/jquery.js"></script>
 
 <div id="blue-box">
-<table>
-	<tr><td align="right"><a href="<c:url value="/logout" />"><fmt:message key="logout"/></a></td></tr>
+<table id="user">
+	<tr><td align="right">${currentUser.name} - <a href="<c:url value="/home/logout" />"><fmt:message key="logout"/></a></td></tr>
 </table>
 </div>
 

@@ -21,4 +21,13 @@ public class DvdsRegistrationTest extends IntegrationTestCase {
 				.andSend();
 		assertContainsErrors();
 	}
+	@Test
+	public void registeringAValidDvd() throws Exception {
+		loginAs("vraptorguy")
+			.fillRegisterDvdForm()
+				.withTitle("A Song")
+				.withDescription("You should listen to this")
+				.andSend();
+		assertContainsMessage("A Song dvd added");
+	}
 }

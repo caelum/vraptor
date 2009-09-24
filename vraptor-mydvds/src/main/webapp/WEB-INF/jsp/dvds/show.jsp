@@ -6,7 +6,7 @@
 </table>
 </div>
 
-<div class="blue-box">
+<div class="blue-box" id="message">
 <h1>${dvd.title} <fmt:message key="dvd_added"/></h1>
 <hr/>
 <a href="<c:url value="/home" />"><fmt:message key="home"/></a>

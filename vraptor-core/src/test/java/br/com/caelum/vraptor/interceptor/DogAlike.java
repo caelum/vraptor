@@ -11,4 +11,5 @@ public interface DogAlike {
     abstract void recurse(DogAlike[] dogs);
     abstract void jump(long times);
     abstract void dig(double amount);
+    abstract void dig(float amount);
 }

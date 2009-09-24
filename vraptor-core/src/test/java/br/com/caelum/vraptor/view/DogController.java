@@ -30,4 +30,7 @@ public class DogController implements DogAlike {
 	public void dig(double amount) {
 	}
 
+	public void dig(float amount) {
+	}
+
 }

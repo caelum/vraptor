@@ -12,7 +12,6 @@ import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.http.DefaultParameterNameProvider;
@@ -98,7 +97,6 @@ public class AsmBasedTypeCreatorTest {
         mockery.assertIsSatisfied();
     }
     @Test
-    @Ignore("Doesn't work!")
     public void shouldHandlePrimitiveLong() throws SecurityException, NoSuchMethodException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
     	Class<?> type = creator.typeFor(mockery.method(DogAlike.class.getDeclaredMethod("jump", long.class)));
 
@@ -112,7 +110,6 @@ public class AsmBasedTypeCreatorTest {
     	mockery.assertIsSatisfied();
     }
     @Test
-    @Ignore("Doesn't work!")
     public void shouldHandlePrimitiveDouble() throws SecurityException, NoSuchMethodException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
     	Class<?> type = creator.typeFor(mockery.method(DogAlike.class.getDeclaredMethod("dig", double.class)));
 
@@ -123,6 +120,19 @@ public class AsmBasedTypeCreatorTest {
     	double d = 1.0;
     	setter.invoke(instance, d);
     	assertEquals(getter.invoke(instance), d);
+    	mockery.assertIsSatisfied();
+    }
+    @Test
+    public void shouldHandlePrimitiveFloat() throws SecurityException, NoSuchMethodException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+    	Class<?> type = creator.typeFor(mockery.method(DogAlike.class.getDeclaredMethod("dig", float.class)));
+
+    	Method getter = type.getDeclaredMethod("getFloat");
+    	Method setter = type.getDeclaredMethod("setFloat", float.class);
+
+    	Object instance = type.newInstance();
+    	float f = 1.0f;
+    	setter.invoke(instance, f);
+    	assertEquals(getter.invoke(instance), f);
     	mockery.assertIsSatisfied();
     }
 

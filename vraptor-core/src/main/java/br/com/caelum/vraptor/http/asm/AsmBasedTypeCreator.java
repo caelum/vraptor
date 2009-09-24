@@ -76,7 +76,7 @@ public class AsmBasedTypeCreator extends AbstractTypeCreator implements Opcodes 
 				+ method.getName() + "$" + Math.abs(method.hashCode()) + "$" + (++classLoadCounter);
 		logger.debug("Trying to make class for " + newTypeName);
 
-		ClassWriter cw = new ClassWriter(0);
+		ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
 
 		cw.visit(V1_5, ACC_PUBLIC + ACC_SUPER, newTypeName, null, "java/lang/Object", null);
 
@@ -163,7 +163,7 @@ public class AsmBasedTypeCreator extends AbstractTypeCreator implements Opcodes 
 			mv.visitVarInsn(loadKey, 1);
 			mv.visitFieldInsn(PUTFIELD, newTypeName, fieldName + "_", definition);
 			mv.visitInsn(RETURN);
-			mv.visitMaxs(2, 2);
+			mv.visitMaxs(3, 3);
 			mv.visitEnd();
 		}
 		{
@@ -216,12 +216,18 @@ public class AsmBasedTypeCreator extends AbstractTypeCreator implements Opcodes 
 		if (type.equals(long.class)) {
 			return LRETURN;
 		}
+		if (type.equals(float.class)) {
+			return FRETURN;
+		}
 		return type.isPrimitive() ? IRETURN : ARETURN;
 	}
 
 	private int loadFor(Class<?> type) {
 		if (type.equals(double.class)) {
 			return DLOAD;
+		}
+		if (type.equals(float.class)) {
+			return FLOAD;
 		}
 		if (type.equals(long.class)) {
 			return LLOAD;

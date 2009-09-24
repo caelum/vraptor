@@ -37,15 +37,23 @@
 <div class="blue-box">
 <h1><fmt:message key="new_dvd"/></h1>
 <hr/>
-<w:form action="/dvds" type="table" enctype="multipart/form-data" name="dvdRegister" method="post" border="0">
-	<w:text name="dvd.title" />
-	<w:text name="dvd.description" />
-	<w:file name="file" label="sample_file" />
-	<w:selectTokens name="dvd.type" tokens="MUSIC,MUSIC,VIDEO,VIDEO,GAME,GAME" var="type">
-		<fmt:message key="${type}" />
-	</w:selectTokens>
-	<w:submit value="send"/>
-</w:form>
+<form action="<c:url value="/dvds"/>" enctype="multipart/form-data" name="dvdRegister">
+	<table>
+		<tr><td><fmt:message key="dvd.title"/></td>
+			<td><input type="text" name="dvd.title" value="${dvd.title }"/></td></tr>
+		<tr><td><fmt:message key="dvd.description"/></td>
+			<td><input type="text" name="dvd.description" value="${dvd.description }"/></td></tr>
+		<tr><td><fmt:message key="sample_file"/></td>
+			<td><input type="file" name="file"/></td></tr>
+		<tr><td><fmt:message key="dvd.type"/></td>
+			<td><select name="dvd.type">
+				<c:forEach items="${dvdTypes}" var="type">
+					<option value="${type }"><fmt:message key="${type }"/></option>
+				</c:forEach>
+			</select></td></tr>
+		<tr><td><input type="submit" value="send"/></td></tr>
+	</table>
+</form>
 </div>
 
 <br/><br/>
@@ -53,12 +61,13 @@
 <div class="blue-box">
 <h1><fmt:message key="search_dvds"/></h1>
 <hr/>
-<table>
-<w:form action="/dvds/search" type="table">
-	<w:text name="dvd.title" id="dvdTitle" autocomplete="off" />
-	<w:submit value="search"/>
-</w:form>
-</table>
+<form action="<c:url value="/dvds/search"/>">
+	<table>
+		<tr><td><fmt:message key="dvd.title"/></td>
+			<td><input type="text" name="${dvd.title }"/></td></tr>
+		<tr><td><input type="submit" value="search"/></td></tr>		
+	</table>
+</form>
 </div>
 
 <br/><br/>
@@ -66,9 +75,7 @@
 <div class="blue-box">
 <h1><fmt:message key="list_users"/></h1>
 <hr/>
-<w:form action="/users" method="get">
-	<w:submit value="search"/>
-</w:form>
+<a href="<c:url value="/users"/>"><fmt:message key="search"/></a>
 </div>
 
 <%@ include file="/footer.jsp" %> 

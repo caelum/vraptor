@@ -12,7 +12,7 @@
 <table>
 <c:forEach var="user" items="${users}">
 	<tr>
-		<td><a href="<c:url value="/users/${user.id}" />"><fmt:message key="view"/></a></td>
+		<td><a href="<c:url value="/users/${user.login}" />"><fmt:message key="view"/></a></td>
 		<td>${user.name}</td>
 	</tr>
 </c:forEach>

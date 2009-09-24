@@ -32,11 +32,15 @@
 
 <hr/>
 
-<w:form action="/home/login" type="table" method="post" border="0" name="loginForm">
-	<w:text name="login" />
-	<w:password name="password" />
-	<w:submit id="submit" value="send"/>
-</w:form>
+<form action="<c:url value="/home/login"/>" name="loginForm">
+	<table>
+		<tr><td><fmt:message key="login" /></td>
+			<td><input type="text" name="login" /></td></tr>	
+		<tr><td><fmt:message key="password" /></td>
+			<td><input type="text" name="password" /></td></tr>
+		<tr><td><input type="submit" value="send"/></td></tr>	
+	</table>
+</form>
 </div>
 
 <br/><br/>
@@ -53,12 +57,16 @@
 
 <hr/>
 
-<w:form action="/users" type="table" name="registerForm" method="post">
-	<w:text name="user.name" label="name" />
-	<w:text name="user.login" label="login" />
-	<w:password name="user.password" label="password" />
-	<w:submit value="send" />
-</w:form>
+<form action="<c:url value="/users" />" name="registerForm">
+	<table>
+		<tr><td><fmt:message key="name" /></td>
+			<td><input type="text" name="user.name" value="${user.name }"/></td></tr>
+		<tr><td><fmt:message key="login" /></td>
+			<td><input type="text" name="user.login" value="${user.login }"/></td></tr>
+		<tr><td><fmt:message key="password" /></td>
+			<td><input type="text" name="user.password" value="${user.password }"/></td></tr>
+	</table>
+</form>
 </div>
 
 <%@ include file="../../../footer.jsp" %> 

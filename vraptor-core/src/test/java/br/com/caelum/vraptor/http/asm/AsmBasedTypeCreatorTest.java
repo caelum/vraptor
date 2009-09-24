@@ -1,5 +1,7 @@
 package br.com.caelum.vraptor.http.asm;
 
+import static org.junit.Assert.assertEquals;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
@@ -10,6 +12,7 @@ import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.http.DefaultParameterNameProvider;
@@ -93,6 +96,34 @@ public class AsmBasedTypeCreatorTest {
         setter.invoke(instance, new Object[]{array});
         MatcherAssert.assertThat((DogAlike[]) getter.invoke(instance), Matchers.is(Matchers.equalTo(array)));
         mockery.assertIsSatisfied();
+    }
+    @Test
+    @Ignore("Doesn't work!")
+    public void shouldHandlePrimitiveLong() throws SecurityException, NoSuchMethodException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+    	Class<?> type = creator.typeFor(mockery.method(DogAlike.class.getDeclaredMethod("jump", long.class)));
+
+    	Method getter = type.getDeclaredMethod("getLong");
+    	Method setter = type.getDeclaredMethod("setLong", long.class);
+
+    	Object instance = type.newInstance();
+    	long l = 0l;
+    	setter.invoke(instance, l);
+    	assertEquals(getter.invoke(instance), l);
+    	mockery.assertIsSatisfied();
+    }
+    @Test
+    @Ignore("Doesn't work!")
+    public void shouldHandlePrimitiveDouble() throws SecurityException, NoSuchMethodException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+    	Class<?> type = creator.typeFor(mockery.method(DogAlike.class.getDeclaredMethod("dig", double.class)));
+
+    	Method getter = type.getDeclaredMethod("getDouble");
+    	Method setter = type.getDeclaredMethod("setDouble", double.class);
+
+    	Object instance = type.newInstance();
+    	double d = 1.0;
+    	setter.invoke(instance, d);
+    	assertEquals(getter.invoke(instance), d);
+    	mockery.assertIsSatisfied();
     }
 
 }

@@ -24,4 +24,10 @@ public class DogController implements DogAlike {
     public void recurse(DogAlike[] dogs) {
     }
 
+	public void jump(long times) {
+	}
+
+	public void dig(double amount) {
+	}
+
 }

@@ -9,4 +9,6 @@ public interface DogAlike {
     abstract void eat(List<String> portions);
     abstract void dropDead(int[] positions);
     abstract void recurse(DogAlike[] dogs);
+    abstract void jump(long times);
+    abstract void dig(double amount);
 }

@@ -210,10 +210,22 @@ public class AsmBasedTypeCreator extends AbstractTypeCreator implements Opcodes 
 	}
 
 	private int returnFor(Class<?> type) {
+		if (type.equals(double.class)) {
+			return DRETURN;
+		}
+		if (type.equals(long.class)) {
+			return LRETURN;
+		}
 		return type.isPrimitive() ? IRETURN : ARETURN;
 	}
 
 	private int loadFor(Class<?> type) {
+		if (type.equals(double.class)) {
+			return DLOAD;
+		}
+		if (type.equals(long.class)) {
+			return LLOAD;
+		}
 		return type.isPrimitive() ? ILOAD : ALOAD;
 	}
 

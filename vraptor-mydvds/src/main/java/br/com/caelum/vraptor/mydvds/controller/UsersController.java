@@ -121,13 +121,14 @@ public class UsersController {
 
 	/**
 	 * Accepts HTTP GET requests.
-	 * URL:  /users/id (for example, /users/42 shows information on the user with id 42)
+	 * URL:  /users/{login} (for example, /users/john shows information
+	 * of the user with login john)
 	 * View: /WEB-INF/jsp/user/view.jsp
 	 *
 	 * Shows information on the specified user.
 	 * @param user
 	 */
-	@Path("/users/{user.id}")
+	@Path("/users/{user.login}")
 	@Get
 	public void view(User user) {
 	    this.dao.refresh(user);

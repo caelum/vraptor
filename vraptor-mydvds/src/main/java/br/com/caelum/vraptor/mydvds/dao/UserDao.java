@@ -23,6 +23,15 @@ public interface UserDao {
 	User find(String login, String password);
 
 	/**
+	 * Finds an user by login
+	 *
+	 * @param login
+	 * @return found user if it is unique
+	 * @throws HibernateException, if there are more than one user
+	 */
+	User find(String login);
+
+	/**
 	 * Adds the user on database
 	 *
 	 * @param user

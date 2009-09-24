@@ -39,6 +39,17 @@ public class UserDaoTest {
 		assertThat(dao.find("mispelledLogin", "secret!"), is(nullValue()));
 		assertThat(dao.find("myLogin", "wrongPassword"), is(nullValue()));
 	}
+	@Test
+	public void shouldFindUsersByLogin() throws Exception {
+		User user = new User();
+		user.setName("Test Boy");
+		user.setLogin("myLogin");
+		user.setPassword("secret!");
+		dao.add(user);
+
+		assertThat(dao.find("myLogin"), is(user));
+		assertThat(dao.find("mispelledLogin"), is(nullValue()));
+	}
 
 	@Test
 	public void checkingIfThereIsAUserWithAGivenLogin() throws Exception {

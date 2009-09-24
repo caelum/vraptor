@@ -41,6 +41,15 @@ public class DefaultUserDao implements UserDao {
 		return (User) query.uniqueResult();
 	}
 
+	@Override
+	public User find(String login) {
+		String hql = "from User u where u.login = :login";
+
+		Query query = session.createQuery(hql).setParameter("login", login);
+
+		return (User) query.uniqueResult();
+
+	}
 	/* (non-Javadoc)
 	 * @see br.com.caelum.vraptor.mydvds.dao.UserDao#add(br.com.caelum.vraptor.mydvds.model.User)
 	 */

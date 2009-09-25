@@ -104,11 +104,13 @@ import br.com.caelum.vraptor.resource.ResourceNotFoundHandler;
 import br.com.caelum.vraptor.validator.DefaultValidator;
 import br.com.caelum.vraptor.view.AcceptHeaderToFormat;
 import br.com.caelum.vraptor.view.DefaultAcceptHeaderToFormat;
+import br.com.caelum.vraptor.view.DefaultHttpResult;
 import br.com.caelum.vraptor.view.DefaultLogicResult;
 import br.com.caelum.vraptor.view.DefaultPageResult;
 import br.com.caelum.vraptor.view.DefaultPathResolver;
 import br.com.caelum.vraptor.view.DefaultValidationViewsFactory;
 import br.com.caelum.vraptor.view.EmptyResult;
+import br.com.caelum.vraptor.view.HttpResult;
 import br.com.caelum.vraptor.view.LogicResult;
 import br.com.caelum.vraptor.view.PageResult;
 import br.com.caelum.vraptor.view.PathResolver;
@@ -148,6 +150,7 @@ public class BaseComponents {
             MethodInfo.class, 								DefaultMethodInfo.class,
             LogicResult.class, 								DefaultLogicResult.class,
             PageResult.class, 								DefaultPageResult.class,
+            HttpResult.class, 								DefaultHttpResult.class,
             PathResolver.class, 							DefaultPathResolver.class,
             RequestExecution.class, 						DefaultRequestExecution.class,
             ValidationViewsFactory.class,					DefaultValidationViewsFactory.class,

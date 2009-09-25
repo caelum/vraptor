@@ -18,6 +18,14 @@ you'll only need to create the following class:
 		protected String getExtension() {
 			return "ftl"; // or any other extension
 		}
+
+		@Override
+		protected String extractControllerFromName(String baseName) {
+			return //your convention here
+			       //ex.: If you want to redirect UserController to 'userResource' instead of 'user'
+			       //ex.2: If you override the convention for Controllers name to ***Resource
+			//and still want to redirect to 'user' and not to 'userResource'
+		}
 	}
 [/java]
 

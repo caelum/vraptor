@@ -18,6 +18,16 @@ basta criar a seguinte classe:
 		protected String getExtension() {
 			return "ftl"; // ou qualquer outra extensÃ£o
 		}
+
+		@Override
+		protected String extractControllerFromName(String baseName) {
+			return //sua convenção aqui
+			       //ex.: Ao invés de redirecionar UserController para 'user'
+			       //você quer redirecionar para 'userResource'
+			       //ex.2: Se você sobrescreveu a conveção para nome dos Controllers para ***Resource
+			       //e quer continuar redirecionando para 'user' e não para 'userResource'
+		}
+
 	}
 [/java]
 

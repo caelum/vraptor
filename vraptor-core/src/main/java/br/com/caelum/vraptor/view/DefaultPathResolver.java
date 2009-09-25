@@ -82,7 +82,7 @@ public class DefaultPathResolver implements PathResolver {
 		return "jsp";
 	}
 
-    private String extractControllerFromName(String baseName) {
+    protected String extractControllerFromName(String baseName) {
         baseName = lowerFirstCharacter(baseName);
         if (baseName.endsWith("Controller")) {
             return baseName.substring(0, baseName.lastIndexOf("Controller"));

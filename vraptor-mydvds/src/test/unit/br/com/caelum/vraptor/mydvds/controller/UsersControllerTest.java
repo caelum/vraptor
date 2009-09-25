@@ -86,11 +86,11 @@ public class UsersControllerTest {
 	@Test
 	public void addingAValidUserWillHappenWithoutErrors() throws Exception {
 		User user = new User();
-		user.setLogin("myLogin");
+		user.setLogin("mylogin");
 		user.setPassword("myPassword");
 		user.setName("Testing");
 
-		ifTheUserWithThisLoginDoesntExist("myLogin");
+		ifTheUserWithThisLoginDoesntExist("mylogin");
 		willAddTheUser(user);
 
 		controller.add(user);
@@ -103,6 +103,18 @@ public class UsersControllerTest {
 		user.setName("Testing");
 
 		ifTheUserWithThisLoginDoesntExist("myLogin");
+		willNotAddTheUser(user);
+
+		controller.add(user);
+	}
+	@Test(expected=ValidationError.class)
+	public void addingAUserWithInvalidLogin() throws Exception {
+		User user = new User();
+		user.setLogin("It's invalid");
+		user.setPassword("short");
+		user.setName("Testing");
+
+		ifTheUserWithThisLoginDoesntExist("It's invalid");
 		willNotAddTheUser(user);
 
 		controller.add(user);

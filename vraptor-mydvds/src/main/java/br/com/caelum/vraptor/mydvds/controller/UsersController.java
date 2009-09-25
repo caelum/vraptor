@@ -103,8 +103,8 @@ public class UsersController {
 		    // checks if there is already an user with the specified login
 		    boolean loginDoesNotExist = !dao.containsUserWithLogin(user.getLogin());
 		    that(loginDoesNotExist, "login", "login_already_exists");
-
 		    and(Hibernate.validate(user));// will return all errors in a collection
+		    that(user.getLogin().matches("[a-z0-9_]+"), "login", "invalid_login");
 		}});
 
 		// redirects to the index page if any validation errors occur.

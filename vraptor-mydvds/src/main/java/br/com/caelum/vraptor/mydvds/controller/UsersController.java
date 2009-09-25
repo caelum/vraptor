@@ -72,7 +72,7 @@ public class UsersController {
         List<User> usersFromDatabase = this.dao.listAll();
         for (User user : usersFromDatabase) {
             User newUser = new User();
-            newUser.setId(user.getId());
+            newUser.setLogin(user.getLogin());
             newUser.setName(user.getName());
             users.add(newUser);
         }

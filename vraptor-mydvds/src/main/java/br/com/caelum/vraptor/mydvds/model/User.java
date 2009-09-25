@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
@@ -32,12 +31,8 @@ import com.google.common.collect.Collections2;
 @SessionScoped
 public class User {
 
-	// primary key
-	@Id
-	@GeneratedValue
-	private Long id;
-
 	// Hibernate validator's annnotations/rules
+	@Id
 	@NotNull
 	@Length(min = 3, max = 20)
 	private String login;
@@ -77,13 +72,6 @@ public class User {
 				return copy.getDvd();
 			}
 		}));
-	}
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	public String getLogin() {

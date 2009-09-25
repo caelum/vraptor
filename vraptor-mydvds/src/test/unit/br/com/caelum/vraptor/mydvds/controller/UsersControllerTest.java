@@ -50,7 +50,7 @@ public class UsersControllerTest {
 			{
 				allowing(session).getAttribute(UserInfo.CURRENT_USER);
 				will(returnValue(null));
-				
+
 				ignoring(session);
 			}
 		});
@@ -66,7 +66,6 @@ public class UsersControllerTest {
 	@Test
 	public void listingAllUsersWillNotExposeTheirLoginAndPassword() throws Exception {
 		User user = new User();
-		user.setId(1l);
 		user.setName("John");
 		user.setLogin("john");
 		user.setPassword("youwontknow");
@@ -79,9 +78,8 @@ public class UsersControllerTest {
 		// we can assign without casting, because of generic return
 		List<User> users = result.included("users");
 		assertThat(users.size(), is(1));
-		assertThat(users.get(0).getLogin(), is(nullValue()));
+		assertThat(users.get(0).getLogin(), is("john"));
 		assertThat(users.get(0).getPassword(), is(nullValue()));
-		assertThat(users.get(0).getId(), is(1l));
 		assertThat(users.get(0).getName(), is("John"));
 	}
 

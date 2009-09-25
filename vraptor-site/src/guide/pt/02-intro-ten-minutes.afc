@@ -1,6 +1,6 @@
 [chapter VRaptor3 - o guia inicial de 10 minutos]
 
-soxml[section Começando o projeto: uma loja virtual]
+[section Começando o projeto: uma loja virtual]
 Vamos começar baixando o ::vraptor-blank-project::, do site http://vraptor.caelum.com.br/download.html.
 Esse blank-project já possui a configuração no web.xml e os jars no WEB-INF/lib necessários para começar
 a desenvolver no VRaptor. E você pode, ainda, importar esse projeto diretamente no Eclipse.

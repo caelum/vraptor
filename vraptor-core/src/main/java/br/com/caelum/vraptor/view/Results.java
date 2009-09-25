@@ -31,7 +31,7 @@ package br.com.caelum.vraptor.view;
 
 /**
  * Some common results for most web based logics.
- * 
+ *
  * @author Guilherme Silveira
  */
 public class Results {
@@ -51,12 +51,20 @@ public class Results {
     public static Class<LogicResult> logic() {
         return LogicResult.class;
     }
-    
+
     /**
      * Uses an empty page.
      */
     public static Class<EmptyResult> nothing() {
     	return EmptyResult.class;
+    }
+
+    /**
+     * Sends information through the HTTP protocol, like
+     * status codes and header
+     */
+    public static Class<HttpResult> http() {
+    	return HttpResult.class;
     }
 
 }

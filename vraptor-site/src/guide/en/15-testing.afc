@@ -1,0 +1,59 @@
+[chapter Testing components and controllers]
+
+VRaptor3 manages your class dependencies, so there is no need to worry about
+instantiating your components and controllers, you can just receive your dependencies
+on the constructor and VRaptor3 will locate them and instantiate your class.
+
+You can take advantage of dependency injection when testing your classes:
+you can instantiate your class with fake implementations and unit test the class.
+
+Nevertheless, there are two VRaptor3 components that are dependencies of most of your 
+controllers: %%Result%% and %%Validator%%. Their fluent interfaces makes it difficult to
+create fake implementations or mocks. Therefore there are fake implementations for
+these components on VRaptor3: %%MockResult%% e %%MockValidator%%.
+
+[section MockResult]
+
+MockResult ignores all redirects, and stores the included objects, so you can inspect
+them and make assertions.
+
+This snippet shows you how you can use MockResult:
+
+[java]
+MockResult result = new MockResult();
+ClientController controller = new ClientController(..., result);
+controller.list(); // will call result.include("clients", something);
+List<Client> clients = result.included("clients"); // the cast is implicit
+Assert.assertNotNull(clients);
+// more assertions
+[/java]
+
+Any calls to result.use(...) will be ignored.
+
+[section MockValidator]
+
+MockValidator will store generated errors, so if there is any error when 
+validator.onErrorUse is called, a ValidationError will be thrown. Therefore
+you can inspect the added errors, or simply check if there is any error.
+
+[java]
+@Test(expected=ValidationError.class)
+public void testThatAValidationErrorOccurs() {
+	ClientController controller = new ClientController(..., new MockValidator());
+	controller.add(new Client());
+}
+[/java]
+ou
+[java]
+@Test
+public void testThatAValidationErrorOccurs() {
+	ClientController controller = new ClientController(..., new MockValidator());
+	try {
+		controller.add(new Cliente());
+		Assert.fail();
+	} catch (ValidationError e) {
+		List<Message> errors = e.getErrors();
+		//assertions on errors
+	}
+}
+[/java]

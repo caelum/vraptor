@@ -6,13 +6,16 @@ import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 import org.hibernate.validator.Length;
 import org.hibernate.validator.NotNull;
 
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.ioc.SessionScoped;
+
+import com.google.common.base.Function;
+import com.google.common.collect.Collections2;
 
 /**
  * User entity.
@@ -50,21 +53,28 @@ public class User {
 	private String name;
 
 	// user to dvd mapping,
-	// strong side
-	@ManyToMany
-	private Set<Dvd> dvds;
+	@OneToMany(mappedBy="owner")
+	private Set<DvdCopy> copies;
+
+	public Set<DvdCopy> getCopies() {
+		if (copies == null) {
+			copies = new HashSet<DvdCopy>();
+		}
+		return copies;
+	}
+
+	public void setCopies(Set<DvdCopy> dvds) {
+		this.copies = dvds;
+	}
+
 
 	public Set<Dvd> getDvds() {
-		if (dvds == null) {
-			dvds = new HashSet<Dvd>();
-		}
-		return dvds;
+		return new HashSet<Dvd>(Collections2.transform(copies, new Function<DvdCopy, Dvd>() {
+			public Dvd apply(DvdCopy copy) {
+				return copy.getDvd();
+			}
+		}));
 	}
-
-	public void setDvds(Set<Dvd> dvds) {
-		this.dvds = dvds;
-	}
-
 	public Long getId() {
 		return id;
 	}

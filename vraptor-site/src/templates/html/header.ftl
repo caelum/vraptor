@@ -35,9 +35,9 @@
 
 <div id="languages">
 	<ul>
-		<li><a href="${menu}documentacao/">PT</a></li>
+		<li><a href="${menu}documentacao/">portuguese</a></li>
 		<li>|</li>
-		<li><a href="${menu}documentacao/en/">EN</a></li>
+		<li><a href="${menu}documentacao/en/">english</a></li>
 	<ul>
 </div>
 

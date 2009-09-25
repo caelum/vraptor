@@ -7,6 +7,7 @@ import org.hibernate.criterion.Restrictions;
 
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.mydvds.model.Dvd;
+import br.com.caelum.vraptor.mydvds.model.DvdCopy;
 
 /**
  * Default implementation for DvdDao.
@@ -39,6 +40,10 @@ public class DefaultDvdDao implements DvdDao {
 		session.save(dvd);
 	}
 
+	@Override
+	public void add(DvdCopy copy) {
+		session.save(copy);
+	}
 	/* (non-Javadoc)
 	 * @see br.com.caelum.vraptor.mydvds.dao.DvdDao#searchSimilarTitle(java.lang.String)
 	 */

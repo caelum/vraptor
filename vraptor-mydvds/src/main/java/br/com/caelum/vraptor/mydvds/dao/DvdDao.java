@@ -3,6 +3,7 @@ package br.com.caelum.vraptor.mydvds.dao;
 import java.util.List;
 
 import br.com.caelum.vraptor.mydvds.model.Dvd;
+import br.com.caelum.vraptor.mydvds.model.DvdCopy;
 
 /**
  * Data Access Object for the Dvd entity.
@@ -17,6 +18,11 @@ public interface DvdDao {
 	 * @param dvd
 	 */
 	void add(Dvd dvd);
+
+	/**
+	 * Adds a copy of the dvd
+	 */
+	void add(DvdCopy copy);
 
 	/**
 	 * Returns a list of DVDs containing the specified title.

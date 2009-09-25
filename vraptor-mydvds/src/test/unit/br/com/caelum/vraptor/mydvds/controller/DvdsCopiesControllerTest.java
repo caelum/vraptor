@@ -23,7 +23,7 @@ import br.com.caelum.vraptor.validator.ValidationError;
  * @author Lucas Cavalcanti
  *
  */
-public class DvdsControllerTest {
+public class DvdsCopiesControllerTest {
 
 
 	private Mockery mockery;

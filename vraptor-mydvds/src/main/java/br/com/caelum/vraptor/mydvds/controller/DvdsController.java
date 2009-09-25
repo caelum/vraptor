@@ -1,9 +1,7 @@
 package br.com.caelum.vraptor.mydvds.controller;
 
 import static br.com.caelum.vraptor.mydvds.validation.CustomMatchers.notEmpty;
-import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 
 import org.apache.log4j.Logger;
@@ -16,10 +14,9 @@ import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.interceptor.multipart.UploadedFile;
 import br.com.caelum.vraptor.mydvds.dao.DvdDao;
-import br.com.caelum.vraptor.mydvds.dao.UserDao;
 import br.com.caelum.vraptor.mydvds.interceptor.UserInfo;
 import br.com.caelum.vraptor.mydvds.model.Dvd;
-import br.com.caelum.vraptor.mydvds.model.User;
+import br.com.caelum.vraptor.mydvds.model.DvdCopy;
 import br.com.caelum.vraptor.validator.Validations;
 import br.com.caelum.vraptor.view.Results;
 
@@ -43,18 +40,16 @@ public class DvdsController {
     private final Validator validator;
     private final UserInfo userInfo;
 	private final DvdDao dao;
-	private final UserDao userDao;
 
 	/**
 	 * Receives dependencies through the constructor.
-	 * @param factory dao factory.
 	 * @param userInfo info on the logged user.
 	 * @param result VRaptor result handler.
 	 * @param validator VRaptor validator.
+	 * @param factory dao factory.
 	 */
-	public DvdsController(DvdDao dao, UserDao userDao, UserInfo userInfo, Result result, Validator validator) {
+	public DvdsController(DvdDao dao, UserInfo userInfo, Result result, Validator validator) {
 		this.dao = dao;
-		this.userDao = userDao;
 		this.result = result;
         this.validator = validator;
         this.userInfo = userInfo;
@@ -89,11 +84,8 @@ public class DvdsController {
 			LOG.info("Uploaded file: " + file.getFileName());
 		}
 
-		User user = refreshUser();
-		user.getDvds().add(dvd);
-
 		dao.add(dvd);
-		userDao.update(user);
+		dao.add(new DvdCopy(userInfo.getUser(), dvd));
 
 		result.use(Results.logic()).redirectTo(DvdsController.class).show(dvd);
 	}
@@ -120,29 +112,6 @@ public class DvdsController {
 	}
 
     /**
-     * Accepts HTTP POST requests.
-     * URL:  /dvds/addToList/id (for example, /dvd/addToList/3 adds the dvd with id 3 to the user's collection)
-     * View: redirects to user's home
-     *
-     * This method adds a dvd to a user's collection.
-     */
-    @Path("/dvds/addToList/{dvd.id}")
-    @Post
-	public void addToMyList(final Dvd dvd) {
-	    final User user = refreshUser();
-	    validator.checking(new Validations() {{
-		    that(user.getDvds(), not(hasItem(dvd)), "dvd", "you_already_have_this_dvd");
-		}});
-
-		validator.onErrorUse(Results.page()).of(UsersController.class).home();
-
-		user.getDvds().add(dvd);
-		userDao.update(user);
-
-		result.use(Results.logic()).redirectTo(UsersController.class).home();
-	}
-
-    /**
 	 * Accepts HTTP GET requests.
 	 * URL:  /dvds/search
 	 * View: /WEB-INF/jsp/dvd/search.jsp
@@ -160,15 +129,6 @@ public class DvdsController {
         }
 
         result.include("dvds", this.dao.searchSimilarTitle(dvd.getTitle()));
-    }
-
-    /**
-	 * Refreshes user data from database.
-	 */
-    private User refreshUser() {
-        User user = userInfo.getUser();
-		userDao.refresh(user);
-        return user;
     }
 
 }

@@ -23,6 +23,9 @@ public class DvdCopy {
 		this.dvd = dvd;
 	}
 
+	public DvdCopy() {
+	}
+
 	public Long getId() {
 		return id;
 	}

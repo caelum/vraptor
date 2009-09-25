@@ -69,6 +69,9 @@ public class User {
 
 
 	public Set<Dvd> getDvds() {
+		if (copies == null) {
+			return null;
+		}
 		return new HashSet<Dvd>(Collections2.transform(copies, new Function<DvdCopy, Dvd>() {
 			public Dvd apply(DvdCopy copy) {
 				return copy.getDvd();

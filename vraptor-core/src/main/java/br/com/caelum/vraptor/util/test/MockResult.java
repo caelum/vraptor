@@ -39,9 +39,14 @@ import br.com.caelum.vraptor.proxy.SuperMethod;
 import br.com.caelum.vraptor.view.Results;
 
 /**
- * A result helper which acumulates data so you can read what hapenned.
  *
- * @author guilherme silveira
+ * A mocked Result for testing your controllers.
+ *
+ * It will ignore redirections and accumulates included objects,
+ * so you can use result.included() for inspect included objects.
+ *
+ * @author Lucas Cavalcanti
+ * @author Suilherme Silveira
  */
 public class MockResult implements Result {
 
@@ -79,6 +84,7 @@ public class MockResult implements Result {
 	 * @param key
 	 * @return the value if it was included
 	 */
+	@SuppressWarnings("unchecked")
 	public <T> T included(String key) {
 		return (T) values.get(key);
 	}

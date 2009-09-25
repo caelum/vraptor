@@ -28,7 +28,6 @@
 package br.com.caelum.vraptor.util.test;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -38,12 +37,34 @@ import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.ValidationError;
 import br.com.caelum.vraptor.validator.Validations;
 
+/**
+ * Mocked Validator for testing your controllers.
+ *
+ * You can use the idiom:
+ * MockValidator validator = new MockValidator();
+ * MyController controller = new MyController(..., validator);
+ *
+ * try {
+ * 		controller.method();
+ * 		Assert.fail();
+ * } catch (ValidationError e) {
+ * 		List<Message> errors = e.getErrors();
+ * 		// asserts
+ * }
+ *
+ * or
+ *
+ * @Test(expected=ValidationError.class)
+ *
+ * @author Lucas Cavalcanti
+ *
+ */
 public class MockValidator implements Validator {
 
-	private List<Message> errors;
+	private final List<Message> errors = new ArrayList<Message>();
 
 	public void checking(Validations validations) {
-		this.errors = validations.getErrors();
+		this.errors.addAll(validations.getErrors());
 	}
 
 	public <T extends View> T onErrorUse(Class<T> view) {
@@ -54,14 +75,15 @@ public class MockValidator implements Validator {
 	}
 
 	public void addAll(Collection<? extends Message> messages) {
-		throw new ValidationError(new ArrayList<Message>(messages));
+		this.errors.addAll(messages);
 	}
 
 	public void add(Message message) {
-		throw new ValidationError(Arrays.asList(message));
+		this.errors.add(message);
 	}
+
 	public boolean hasErrors() {
-		return false;
+		return !this.errors.isEmpty();
 	}
 
 }

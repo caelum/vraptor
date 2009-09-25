@@ -46,7 +46,20 @@ import br.com.caelum.vraptor.resource.ResourceClass;
  * Note that methods are only registered to be public accessible if the type is
  * annotated with @Resource.
  *
- * @author guilherme silveira
+ * If you want to override the convention for default URI, you can create a class like:
+ *
+ * public class MyRoutesParser extends PathAnnotationRoutesParser {
+ * 		//delegate constructor
+ * 		protected String extractControllerNameFrom(Class<?> type) {
+ * 			return //your convention here
+ * 		}
+ *
+ * 		protected String defaultUriFor(String controllerName, String methodName) {
+ * 			return //your convention here
+ * 		}
+ * }
+ * @author Guilherme Silveira
+ * @author Lucas Cavalcanti
  */
 @ApplicationScoped
 public class PathAnnotationRoutesParser implements RoutesParser {
@@ -104,15 +117,27 @@ public class PathAnnotationRoutesParser implements RoutesParser {
             }
 			return uri;
         }
-        return extractControllerFromName(type.getSimpleName()) + "/" + javaMethod.getName();
+        return defaultUriFor(extractControllerNameFrom(type), javaMethod.getName());
     }
 
-    private String extractControllerFromName(String baseName) {
-        baseName = lowerFirstCharacter(baseName);
+    /**
+     * You can override this method for use a different convention for
+     * your controller name, given a type
+     */
+    protected String extractControllerNameFrom(Class<?> type) {
+        String baseName = lowerFirstCharacter(type.getSimpleName());
         if (baseName.endsWith("Controller")) {
             return "/" + baseName.substring(0, baseName.lastIndexOf("Controller"));
         }
         return "/" + baseName;
+    }
+
+    /**
+     * You can override this method for use a different convention for
+     * your default URI, given a controller name and a method name
+     */
+    protected String defaultUriFor(String controllerName, String methodName) {
+    	return controllerName + "/" + methodName;
     }
 
     private String lowerFirstCharacter(String baseName) {

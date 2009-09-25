@@ -21,7 +21,28 @@ you'll only need to create the following class:
 	}
 [/java]
 
-If you still need to change more conventions, just implements the PathResolver interface.
+If you need a more complex convention, just implement the PathResolver interface.
+
+[section Mudando a URI padrão]
+
+The default URI for ClientsController.list() is /clients/list, i.e, controller_name/method_name.
+If you want to override this convention, you can create a class like:
+[java]
+@Component
+@ApplicationScoped
+public class MyRoutesParser extends PathAnnotationRoutesParser {
+	//delegate constructor
+	protected String extractControllerNameFrom(Class<?> type) {
+		return //your convention here
+	}
+
+ 	protected String defaultUriFor(String controllerName, String methodName) {
+		return //your convention here
+	}
+}
+[/java]
+
+If you need a more complex convention, just implement the RoutesParser interface.
 
 [section Changing IoC provider]
 

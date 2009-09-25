@@ -23,6 +23,27 @@ basta criar a seguinte classe:
 
 Se você precisa mudar mais ainda a convenção basta implementar a interface PathResolver.
 
+[section Mudando a URI padrão]
+
+Por padrão, a URI para o método ClientesController.lista() é /clientes/lista, ou seja,
+nome_do_controller/nome_do_metodo. Para sobrescrever essa convenção, basta criar a classe:
+[java]
+@Component
+@ApplicationScoped
+public class MeuRoutesParser extends PathAnnotationRoutesParser {
+	//delegate constructor
+	protected String extractControllerNameFrom(Class<?> type) {
+		return //sua convenção aqui
+	}
+
+ 	protected String defaultUriFor(String controllerName, String methodName) {
+		return //sua convenção aqui
+	}
+}
+[/java]
+
+Se você precisa mudar mais ainda a convenção basta implementar a interface RoutesParser.
+
 [section Mudando o IoC provider]
 
 O IoC provider padrão é o spring. Para mudá-lo basta colocar no web.xml:

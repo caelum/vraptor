@@ -11,6 +11,7 @@ import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.mydvds.dao.UserDao;
 import br.com.caelum.vraptor.mydvds.interceptor.UserInfo;
+import br.com.caelum.vraptor.mydvds.model.DvdType;
 import br.com.caelum.vraptor.mydvds.model.User;
 import br.com.caelum.vraptor.validator.Hibernate;
 import br.com.caelum.vraptor.validator.Validations;
@@ -53,6 +54,7 @@ public class UsersController {
 	@Get
 	public void home() {
 	    dao.refresh(userInfo.getUser());
+	    result.include("dvdTypes", DvdType.values());
 	}
 
 	/**
@@ -115,6 +117,7 @@ public class UsersController {
 	 * Shows the page with information when a user is successfully added.
 	 */
 	@Get
+	@Path("/userAdded")
 	public void userAdded(User user) {
 	    result.include("user", user);
 	}

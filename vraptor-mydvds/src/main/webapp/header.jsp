@@ -1,4 +1,3 @@
-<%@ taglib uri="http://waffle.codehaus.org" prefix="w" %> 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>

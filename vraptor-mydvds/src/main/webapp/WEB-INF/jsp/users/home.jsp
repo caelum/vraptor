@@ -37,7 +37,7 @@
 <div class="blue-box">
 <h1><fmt:message key="new_dvd"/></h1>
 <hr/>
-<form action="<c:url value="/dvds"/>" enctype="multipart/form-data" name="dvdRegister">
+<form action="<c:url value="/dvds"/>" enctype="multipart/form-data" name="dvdRegister" method="post">
 	<table>
 		<tr><td><fmt:message key="dvd.title"/></td>
 			<td><input type="text" name="dvd.title" value="${dvd.title }"/></td></tr>

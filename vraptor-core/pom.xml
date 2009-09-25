@@ -4,7 +4,7 @@
 	<groupId>br.com.caelum</groupId>
 	<artifactId>vraptor</artifactId>
 	<version>3.0.0-rc1-SNAPSHOT</version>
-	<name>Vraptor</name>
+	<name>VRaptor3</name>
 	<packaging>jar</packaging>
 
 	<organization>
@@ -19,7 +19,9 @@
 			<url>http://apache.org/licenses/LICENSE-2.0.txt</url>
 		</license>
 	</licenses>
-	
+	<scm>
+		<url>http://shell.sourceforge.net/home/groups/v/vr/vraptor2/htdocs/maven</url>
+	</scm>
 	<dependencies>
 		<dependency>
 		    <groupId>org.aspectj</groupId>

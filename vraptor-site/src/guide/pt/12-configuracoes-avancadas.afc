@@ -21,11 +21,11 @@ basta criar a seguinte classe:
 
 		@Override
 		protected String extractControllerFromName(String baseName) {
-			return //sua convenção aqui
-			       //ex.: Ao invés de redirecionar UserController para 'user'
-			       //você quer redirecionar para 'userResource'
-			       //ex.2: Se você sobrescreveu a conveção para nome dos Controllers para ***Resource
-			       //e quer continuar redirecionando para 'user' e não para 'userResource'
+			return //sua convenÃ§Ã£o aqui
+			       //ex.: Ao invÃ©s de redirecionar UserController para 'user'
+			       //vocÃª quer redirecionar para 'userResource'
+			       //ex.2: Se vocÃª sobrescreveu a conveÃ§Ã£o para nome dos Controllers para XXXResource
+			       //e quer continuar redirecionando para 'user' e nÃ£o para 'userResource'
 		}
 
 	}

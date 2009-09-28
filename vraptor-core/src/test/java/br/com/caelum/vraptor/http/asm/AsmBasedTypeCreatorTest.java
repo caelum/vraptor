@@ -1,7 +1,10 @@
 package br.com.caelum.vraptor.http.asm;
 
+import static org.hamcrest.Matchers.typeCompatibleWith;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
+import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
@@ -40,6 +43,11 @@ public class AsmBasedTypeCreatorTest {
         setter.invoke(instance, "MESSAGE");
         MatcherAssert.assertThat((String) getter.invoke(instance), Matchers.is(Matchers.equalTo("MESSAGE")));
         mockery.assertIsSatisfied();
+    }
+    @Test
+    public void createdTypeShouldBeSerializable() throws Exception {
+    	Class<?> type = creator.typeFor(mockery.methodFor(DogAlike.class, "bark", String.class));
+    	assertThat(type, typeCompatibleWith(Serializable.class));
     }
 
     @Test

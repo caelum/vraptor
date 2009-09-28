@@ -78,7 +78,7 @@ public class AsmBasedTypeCreator extends AbstractTypeCreator implements Opcodes 
 
 		ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
 
-		cw.visit(V1_5, ACC_PUBLIC + ACC_SUPER, newTypeName, null, "java/lang/Object", null);
+		cw.visit(V1_5, ACC_PUBLIC + ACC_SUPER, newTypeName, null, "java/lang/Object", new String[] {"java/io/Serializable"});
 
 		{
 			MethodVisitor mv = cw.visitMethod(ACC_PUBLIC, "<init>", "()V", null, null);

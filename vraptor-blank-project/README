@@ -1,2 +1,9 @@
-Rename classpath-example to .classpath and project-example to .project
-for importing this project on eclipse.
+VRAPTOR BLANK PROJECT
+--------------------------------------------------------------------------------
+
+IMPORTING THIS PROJECT ON ECLIPSE
+
+In order to import this project on Eclipse, you'll need to rename:
+	* classpath-example to .classpath
+	* project-example to .project
+

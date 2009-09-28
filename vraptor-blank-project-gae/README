@@ -1,3 +1,12 @@
-Rename classpath-example to .classpath, project-example to .project and settings-example to .settings to importing this project on eclipse.
+VRAPTOR BLANK PROJECT FOR GOOGLE APP ENGINE
+--------------------------------------------------------------------------------
 
-You will need Google Plugin for Eclipse too: http://code.google.com/appengine/docs/java/tools/eclipse.html
+IMPORTING THIS PROJECT ON ECLIPSE
+
+In order to import this project on Eclipse, you'll need to rename:
+	* classpath-example to .classpath
+	* project-example to .project
+	* settings-example to .settings
+
+You may want Google Plugin for Eclipse too:
+	* http://code.google.com/appengine/docs/java/tools/eclipse.html

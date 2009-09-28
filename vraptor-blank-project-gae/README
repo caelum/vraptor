@@ -1,0 +1,3 @@
+Rename classpath-example to .classpath, project-example to .project and settings-example to .settings to importing this project on eclipse.
+
+You will need Google Plugin for Eclipse too: http://code.google.com/appengine/docs/java/tools/eclipse.html

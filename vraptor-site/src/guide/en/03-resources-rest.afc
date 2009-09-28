@@ -40,6 +40,36 @@ public class ClientController {
   
 }
 [/java]
+
+[section Parâmetros dos métodos]
+You can receive parameters on your controller methods, and if those parameters
+follow the java beans convention (getters and setters for class fields), 
+you can use dots for browsing through the fields. For instance, on method:
+[java]
+public void update(Client client) {
+   //...
+}
+[java]
+you can receive on the request parameters:
+[code]
+client.id=3
+client.name=John Doe
+client.user.login=johndoe
+[/code]
+
+and the respective fields will be set, browsing through getters and setters starting
+from client.
+
+If an object field or a method parameter is a list (List<> or array), you can receive
+several request parameters, using square brackets and indexes:
+[code]
+client.phones[0]=+55 11 5571-2751 #if it is a string list
+client.relatives[0].id=1 #if it is an arbitrary object, you can continue to browse
+client.relatives[3].id=1 #indexes don't need to be sequential
+client.relatives[0].name=Mary Doe #using the same index, it will be set on same object
+clients[1].id=23 #it works if you receive a client list as method parameter
+[/code]
+
 [box Reflection on parameter names]
 Unfortunately Java can't reflect parameters names, these data don't stay in bytecode
 (unless you compile your code in debug mode, but that is optional). It causes that most

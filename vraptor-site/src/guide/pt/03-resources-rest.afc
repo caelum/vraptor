@@ -45,6 +45,34 @@ public class ClienteController {
 }
 [/java]
 
+[section Parâmetros dos métodos]
+Você pode receber parâmetros nos métodos dos seus controllers, e se o objeto
+usar a convenção de java beans (getters e setters para os atributos da classe),
+você pode usar pontos para navegar entre os atributos. Por exemplo, no método:
+[java]
+public void atualiza(Cliente cliente) {
+   //...
+}
+[java]
+você pode passar como parâmetro na requisição:
+[code]
+cliente.id=3
+cliente.nome=Fulano
+cliente.usuario.login=fulano
+[/code]
+e os campos correspondentes, navegando via getters e setters a partir do cliente,
+serão setados.
+
+Se um atributo do objeto ou parâmetro do método for uma lista (List<> ou array), você
+pode passar vários parâmetros usando colchetes e índices:
+[code]
+cliente.telefones[0]=(11) 5571-2751 #no caso de ser uma lista de String
+cliente.dependentes[0].id=1 #no caso de ser qualquer objeto, você pode continuar a navegação
+cliente.dependentes[3].id=1 #os índices não precisam ser sequenciais
+cliente.dependentes[0].nome=Cicrano #se usar o mesmo índice, vai ser setado no mesmo objeto
+clientes[1].id=23 #funciona se você receber uma lista de clientes no método
+[/code]
+
 [box Reflection no nome dos parâmetros]
 Infelizmente, o Java não realiza reflection em cima de parâmetros, esses dados não ficam
 disponíveis em bytecode (a não ser se compilado em debug mode, porém é algo opcional). Isso

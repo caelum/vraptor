@@ -25,4 +25,23 @@ public interface HttpResult extends View {
 
 	HttpResult addDateHeader(String name, long date);
 
+
+	/**
+	 * Send redirect with Moved Permanently Header
+	 * Example:
+	 * result.use(http()).movedPermanentlyTo("/clients");
+	 * will move to /<contextPath>/clients
+	 *
+	 * @param uri absolute uri to redirect
+	 */
+	void movedPermanentlyTo(String url);
+
+	/**
+	 * same as movedPermanentlyTo(String), but will use
+	 * the url for controller.method(args);
+	 *
+	 * Example:
+	 * result.use(http()).movedPermanentlyTo(ClientsController.class).list();
+	 */
+	<T> T movedPermanentlyTo(Class<T> controller);
 }

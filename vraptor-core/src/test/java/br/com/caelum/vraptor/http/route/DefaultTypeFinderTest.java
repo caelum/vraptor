@@ -5,6 +5,8 @@ import static org.junit.Assert.assertEquals;
 import java.lang.reflect.Method;
 import java.util.Map;
 
+import net.vidageek.mirror.dsl.Mirror;
+
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Test;
@@ -43,7 +45,7 @@ public class DefaultTypeFinderTest {
 		Mockery mockery = new Mockery();
 		final ParameterNameProvider provider = mockery.mock(ParameterNameProvider.class);
 
-		final Method method = AController.class.getDeclaredMethods()[0];
+		final Method method = new Mirror().on(AController.class).reflect().method("aMethod").withArgs(Bean.class, String.class);
 		mockery.checking(new Expectations() {
 			{
 				one(provider).parameterNamesFor(method);
@@ -61,7 +63,7 @@ public class DefaultTypeFinderTest {
 		Mockery mockery = new Mockery();
 		final ParameterNameProvider provider = mockery.mock(ParameterNameProvider.class);
 
-		final Method method = AController.class.getDeclaredMethods()[1];
+		final Method method = new Mirror().on(AController.class).reflect().method("otherMethod").withArgs(BeanExtended.class);
 		mockery.checking(new Expectations() {
 			{
 				one(provider).parameterNamesFor(method);

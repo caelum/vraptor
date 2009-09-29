@@ -27,7 +27,6 @@
  */
 package br.com.caelum.vraptor.http.route;
 
-import java.io.IOException;
 import java.lang.reflect.Method;
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -46,7 +45,6 @@ import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.ResourceClass;
 import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.resource.VRaptorInfo;
 import br.com.caelum.vraptor.util.collections.Filters;
 
 import com.google.common.collect.Iterators;
@@ -73,15 +71,7 @@ public class DefaultRouter implements Router {
 		this.creator = creator;
 		this.proxifier = proxifier;
 		this.finder = finder;
-		// this resource should be kept here so it doesnt matter whether
-		// the user uses a custom routes config
-		RouteBuilder rule = new RouteBuilder(proxifier, finder, "/is_using_vraptor");
-		try {
-			rule.is(VRaptorInfo.class).info();
-			add(rule.build());
-		} catch (IOException e) {
-			// ignorable
-		}
+
 		config.config(this);
 	}
 

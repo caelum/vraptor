@@ -36,7 +36,6 @@ import java.lang.reflect.Method;
 import javax.servlet.http.HttpServletRequest;
 
 import org.hamcrest.Matchers;
-import org.hamcrest.TypeSafeMatcher;
 import org.jmock.Expectations;
 import org.jmock.Sequence;
 import org.junit.Assert;
@@ -44,14 +43,12 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.VRaptorException;
-import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.TypeCreator;
 import br.com.caelum.vraptor.http.VRaptorRequest;
 import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
 import br.com.caelum.vraptor.proxy.DefaultProxifier;
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.resource.VRaptorInfo;
 import br.com.caelum.vraptor.test.VRaptorMockery;
 
 /**
@@ -64,7 +61,6 @@ public class DefaultRouterTest {
 	private DefaultRouter router;
 	private VRaptorMockery mockery;
 	private VRaptorRequest request;
-	private ParameterNameProvider provider;
 	private TypeCreator creator;
 	private ResourceMethod method;
 
@@ -72,7 +68,6 @@ public class DefaultRouterTest {
 	public void setup() {
 		this.mockery = new VRaptorMockery();
 		this.request = new VRaptorRequest(mockery.mock(HttpServletRequest.class));
-		this.provider = mockery.mock(ParameterNameProvider.class);
 		this.creator = mockery.mock(TypeCreator.class);
 		this.proxifier = new DefaultProxifier();
 		this.method = mockery.mock(ResourceMethod.class);
@@ -253,24 +248,10 @@ public class DefaultRouterTest {
 		}
 	}
 
-
-
-
-
-
 	@Test
 	public void testReturnsNullIfResourceNotFound() {
 		ResourceMethod method = router.parse("unknown_id", HttpMethod.POST, null);
 		assertThat(method, is(Matchers.nullValue()));
-		mockery.assertIsSatisfied();
-	}
-
-	@Test
-	public void shouldRegisterVRaptorInfoByDefault() throws SecurityException, NoSuchMethodException {
-		ResourceMethod methodFound = router.parse("/is_using_vraptor", HttpMethod.GET, null);
-		TypeSafeMatcher<ResourceMethod> expectedMethod = VRaptorMatchers.resourceMethod(VRaptorInfo.class
-				.getMethod("info"));
-		assertThat(methodFound, is(expectedMethod));
 		mockery.assertIsSatisfied();
 	}
 

@@ -21,7 +21,7 @@ recebê-los como parâmetro sem problemas.
 
 [section Rodando o VRaptor3 no Google App Engine]
 
-ja deixar o xml do GAE no DEMO do app engine, de forma que as pessoas
-possam testar o demo no GAE apenas copiando o war!
-
+Para rodar no Google App Engine(GAE), você precisa fazer algumas mudanças no VRaptor3 por causa
+das limitações que o GAE te traz. Existe um blank-project para rodar uma aplicação com VRaptor3
+no GAE.
 

@@ -387,7 +387,7 @@ parâmetros do método. Você pode ainda adicionar restrições para esses parâ
   // Se eu quiser garantir que o parametro seja um número:
   routeFor("/cliente/{cliente.id}").withParameter("cliente.id").matching("\\d+")
   			.is(ClienteController.class).mostra(null);
-[/java]_name
+[/java]
 Por fim, você pode escolher o nome da classe e o nome do método em tempo de execução,
 que permite criar rotas extremamente genéricas:
 

@@ -24,11 +24,11 @@ Todos os wrappers dos tipos primitivos (Integer, Long, Character, Boolean etc) s
 Todas as enumerações são suportadas através do nome do elemento ou de seu ordinal.
 No exemplo a seguir, tanto o valor 1 como o valor DEBITO são traduzidos para Tipo.DEBITO:
 
-[code]
+[java]
 public enum Tipo {
 	CREDITO, DEBITO
 }
-[/code]
+[/java]
 
 [section BigInteger e BigDecimal]
 
@@ -55,38 +55,38 @@ com o valor do parâmetro do request, o tipo alvo e um bundle com as mensagens d
 internacionalização para que você possa retornar uma ConversionException no caso
 de algum erro de conversão.
 
-[code]
+[java]
 public interface Converter<T> {
     T convert(String value, Class<? extends T> type, ResourceBundle bundle);
 }
-[/code]
+[/java]
 
 Além disso, seu conversor deve ser anotado dizendo agora para o VRaptor (e não mais para o compilador
 java) qual o tipo que seu conversor é capaz de converter, para isso utilize a anotação @Convert:
 
-[code]
+[java]
 @Convert(Long.class)
 public class LongConverter implements Converter<Long> {
 	// ...
 }
-[/code]
+[/java]
 
 Por fim, lembre-se de dizer se seu conversor pode ser instanciado em um escopo de Application, Session
 ou Request, assim como recursos e componentes quaisquer do VRaptor.
 Por exemplo, um conversor que não requer nenhuma informação do usuário logado pode ser registrado no escopo
 de Application e instanciado uma única vez:
 
-[code]
+[java]
 @Convert(Long.class)
 @ApplicationScoped
 public class LongConverter implements Converter<Long> {
 	// ...
 }
-[/code]
+[/java]
 
 A seguir, a implementação de LongConverter mostra como tudo isso pode ser utilizado de maneira bem simples:
 
-[code]
+[java]
 @Convert(Long.class)
 @ApplicationScoped
 public class LongConverter implements Converter<Long> {
@@ -98,17 +98,16 @@ public class LongConverter implements Converter<Long> {
         try {
             return Long.valueOf(value);
         } catch (NumberFormatException e) {
-			throw new 
-	ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_integer"), value));
+					throw new ConversionError(MessageFormat
+						.format(bundle.getString("is_not_a_valid_integer"), value));
         }
     }
 
 }
-[/code]
+[/java]
 
 [section Registrando um novo conversor]
 
 Não é necessária nenhuma configuração além do @Convert e implementar a interface Converter
 para que o conversor seja registrado no Container do VRaptor.
 
-[section Outros fora do padrão]

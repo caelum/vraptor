@@ -8,7 +8,7 @@
 
 	<description>VRaptor 3 Root Buildfile</description>
 
-	<property name="vraptor.version" value="3.0.0-rc-1" />
+	<property name="vraptor.version" value="3.0.0-rc-2" />
 	
 	<target name="clean" description="delete target directory">
 	    <delete dir="target" />
@@ -64,7 +64,12 @@
 			<fileset dir="vraptor-blank-project/" excludes="*.zip"/>
 		</zip>
 	</target>
-	    
+	<target name="zips-blank-project-gae">
+		<mkdir dir="target"/>
+		<zip destfile="target/vraptor-blank-project-gae-${vraptor.version}.zip">
+			<fileset dir="vraptor-blank-project-gae/" excludes="*.zip"/>
+		</zip>
+	</target>
 	<target name="zips-mydvds">
 	    <ant dir="vraptor-mydvds" target="clean" />
 		<mkdir dir="target" />
@@ -73,6 +78,6 @@
 		</zip>
 	</target>
 	
-	<target name="zips" depends="clean,deploy-to-examples,zips-vraptor,zips-blank-project,zips-site,zips-mydvds"/>
+	<target name="zips" depends="clean,deploy-to-examples,zips-vraptor,zips-blank-project,zips-site,zips-mydvds,zips-blank-project-gae"/>
 
 </project>

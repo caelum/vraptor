@@ -108,14 +108,17 @@ public class SessionCreator implements ComponentFactory<Session> {
 Essas implementações já estão disponíveis no código do VRaptor. Para usá-la veja o capítulo de utils.
 
 [section Providers]
-Por trás dos panos, o VRaptor utiliza um provider de DI específico. Por padrão o vraptor vêm com suporte ao uso interno
-do Picocontainer ou do Spring IoC.
+Por trás dos panos, o VRaptor utiliza um provider de DI específico. Por padrão o vraptor vêm com suporte 
+ao uso interno do Picocontainer ou do Spring IoC.
 
-Cada implementação disponibiliza tudo o que você encontra na documentação do vraptor, mas acaba por fornecer também pontos de extensão diferentes, claro.
+Cada implementação disponibiliza tudo o que você encontra na documentação do vraptor, mas acaba por fornecer
+também pontos de extensão diferentes, claro.
 
 [section Spring]
 
-Ao utilizar o Spring, você ganha todas as características e componentes prontos do Spring para uso dentro do VRaptor, isto é, todos os componentes que funcionam com o Spring DI/Ioc, funcionam com o VRaptor. Nesse caso, todas as anotações.
+Ao utilizar o Spring, você ganha todas as características e componentes prontos do Spring para uso dentro do
+VRaptor, isto é, todos os componentes que funcionam com o Spring DI/Ioc, funcionam com o VRaptor. Nesse caso,
+todas as anotações.
 
 Você não precisa fazer nada para usar o Spring, pois é o container padrão.
 
@@ -125,7 +128,8 @@ o capítulo de configurações avançadas.
 
 [section Pico Container]
 
-Ao utilizar o Picocontainer por baixo do VRaptor, você poderá acessar o pico diretamente para fazer configurações avançadas que desejar.
+Ao utilizar o Picocontainer por baixo do VRaptor, você poderá acessar o pico diretamente para fazer 
+configurações avançadas que desejar.
 
 Para utilizar o Picocontainer como provider de sua aplicação, basta colocar no seu arquivo web.xml:
 

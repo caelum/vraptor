@@ -98,7 +98,7 @@ public class RouteBuilder {
 						.contains(type)) {
 				return "\\d+";
 			} else if (Arrays.asList(Double.class, BigDecimal.class, double.class, Float.class, float.class).contains(type)) {
-				return "\\d+(\\.\\d+)?";
+				return "\\d+|\\d+\\.\\d+|\\d+\\,\\d+";
 			} else if (Arrays.asList(Boolean.class, boolean.class).contains(type)){
 				return "true|false";
 			} else if (Enum.class.isAssignableFrom(type)) {

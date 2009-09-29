@@ -9,4 +9,9 @@ public class IndexController {
 	@Path("/")
 	public void index() {
 	}
+
+	@Path("/teste/{d}")
+	public void teste(Double d) {
+		System.out.println(d);
+	}
 }

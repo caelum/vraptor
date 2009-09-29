@@ -11,14 +11,19 @@ simples do VRaptor 3, que sempre procuram encapsular %%HttpServletRequest%%,
 %%Response%%, %%Session%% e toda a API do %%javax.servlet%%.
 
 [section Começando um projeto]
-Você pode começar seu projeto a partir do vraptor-blank-project, que contém as dependências
-necessárias e a configuração no web.xml para começar seu projeto. Ele pode ser baixado em:
+Você pode começar seu projeto a partir do %%vraptor-blank-project%%, que contem as dependências
+necessárias e a configuração no %%web.xml%%. Ele pode ser baixado em:
+
 http://vraptor.caelum.com.br/download.html
 
-[section Um controller simples]
+[section Um Controller simples]
 
-Com o VRaptor configurado no seu web.xml, basta criar os seus controllers para receber as requisições
-e começar a construir seu sistema.
+Chamaremos de **Controller** as classes contendo a lógica de negócio do seu sistema. 
+São as classes que alguns frameworks podem vir a chamar de actions ou services, apesar
+de não significarem exatamente a mesma coisa.
+ 
+Com o VRaptor configurado no seu %%web.xml%%, basta criar os seus controllers para receber
+as requisições e começar a construir seu sistema.
 
 Um controller simples seria:
 
@@ -42,14 +47,6 @@ public class ClientsController {
 		this.dao = dao;	
 	}
 	
-	/*
-	 * Todos os métodos públicos do controller serão acessíveis via web.
-	 * Neste caso, o método form estará acessível pela URI /clients/form,
-	 * e a view padrão será /WEB-INF/jsp/clients/form.jsp
-	 */
-	public void form() {
-	}
-
 	/*
 	 * Você pode receber parâmetros no seu método, e o VRaptor vai tentar popular os
 	 * campos dos parâmetro de acordo com a requisição. Se houver na requisição:
@@ -89,4 +86,18 @@ public class ClientsController {
 }
 [/java]
 
-Para uma introdução mais detalhada, veja o Guia inicial de 10 minutos.
+Repare como essa classe está completamente independente da API de %%javax.servlet%%. 
+O código também está extremamente simples e fácil de ser testado como unidade.
+O VRaptor já faz várias associações para as URIs como default:
+
+[code]
+/client/add    invoca add(Client) populando o objeto para passar como argumento
+/clients/list  invoca list() e devolve ${clientList} ao JSP
+/clients/view?id=3  invoca view(3) e devolve ${client} ao JSP
+[/code]
+
+Mais para a frente veremos como é fácil trocar a URI %%/clients/view?id=3%% para
+%%/clients/view/3%%, deixando a URI mais elegante.
+
+O ClientDao será injetado pelo VRaptor, como também veremos adiante.
+Você já pode passar para o Guia inicial de 10 minutos.

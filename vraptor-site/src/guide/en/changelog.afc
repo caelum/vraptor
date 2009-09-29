@@ -1,6 +1,12 @@
 [chapter ChangeLog]
+[list]
+* result.use(Results.http()) for setting headers and status codes of HTTP protocol
+* bug fixes
+* documentation
 
+[/list]
 [section 3.0.0-rc-1]
+[list]
 * example application: mydvds
 * new way to add options components into VRaptor:
 [java]
@@ -16,7 +22,7 @@ public class CustomProvider extends SpringProvider {
 * Utils: HibernateTransactionInterceptor and JPATransactionInterceptor
 * Full application example inside the docs
 * English docs
-
+[/list]
 [section 3.0.0-beta-5]
 [list]
 * New way to do validations:

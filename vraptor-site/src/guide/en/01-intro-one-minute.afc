@@ -48,6 +48,7 @@ public class ClientsController {
 	 * and will render the view /WEB-INF/jsp/clients/form.jsp
 	 */
 	public void form() {
+		// code that loads data for checkboxes, selects, etc
 	}
 
 	/*
@@ -90,4 +91,19 @@ public class ClientsController {
 }
 [/java]
 
-For a more detailed introduction, see the Ten minutes guide.
+Note this class is independent of %%javax.servlet%% API. The code is also very
+simple and can be unit tested easily. VRaptor will make associations with these
+URIs by default:
+
+[code]
+/client/form   invokes form()
+/client/add    invokes add(client) populating the client with request parameters
+/clients/list  invokes list() and returns ${clientList} to JSP
+/clients/view?id=3  invokes view(3l) and returns ${client} to JSP
+[/code]
+
+We'll see later how easy it is to change the URI %%/clients/view?id=3%% to
+the more elegant %%/clients/view/3%%.
+
+ClientDao will also be injected by VRaptor, as we'll see.
+You can see now the Ten minutes guide.

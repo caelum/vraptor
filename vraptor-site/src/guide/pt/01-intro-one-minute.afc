@@ -48,6 +48,15 @@ public class ClientsController {
 	}
 	
 	/*
+	 * Todos os métodos públicos do seu controller estarão acessíveis via web.
+	 * Por exemplo, o método form pode ser acessado pela URI /clients/form e
+	 * vai redirecionar para a jsp /WEB-INF/jsp/clients/form.jsp
+	 */
+	public void form() {
+		// código que carrega dados para checkboxes, selects, etc
+	}
+	
+	/*
 	 * Você pode receber parâmetros no seu método, e o VRaptor vai tentar popular os
 	 * campos dos parâmetro de acordo com a requisição. Se houver na requisição:
 	 * custom.name=Lucas
@@ -91,9 +100,10 @@ O código também está extremamente simples e fácil de ser testado como unidad
 O VRaptor já faz várias associações para as URIs como default:
 
 [code]
-/client/add    invoca add(Client) populando o objeto para passar como argumento
+/client/form   invoca form()
+/client/add    invoca add(client) populando o objeto client com os parâmetros da requisição
 /clients/list  invoca list() e devolve ${clientList} ao JSP
-/clients/view?id=3  invoca view(3) e devolve ${client} ao JSP
+/clients/view?id=3  invoca view(3l) e devolve ${client} ao JSP
 [/code]
 
 Mais para a frente veremos como é fácil trocar a URI %%/clients/view?id=3%% para

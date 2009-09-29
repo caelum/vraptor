@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.vidageek.mirror.dsl.Mirror;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 /**
@@ -22,6 +23,7 @@ public class DefaultTypeFinder implements TypeFinder {
 	public Map<String, Class<?>> getParameterTypes(Method method, String[] parameterPaths) {
 		Map<String,Class<?>> result = new HashMap<String, Class<?>>();
 		String[] parameterNamesFor = provider.parameterNamesFor(method);
+		Mirror mirror = new Mirror();
 		for (String path : parameterPaths) {
 			for (int i = 0; i < parameterNamesFor.length; i++) {
 				String name = parameterNamesFor[i];
@@ -31,7 +33,7 @@ public class DefaultTypeFinder implements TypeFinder {
 					for (int j = 1; j < items.length; j++) {
 						String item = items[j];
 						try {
-							type = type.getDeclaredMethod("get" + upperFirst(item)).getReturnType();
+							type = mirror.on(type).reflect().method("get" + upperFirst(item)).withoutArgs().getReturnType();
 						} catch (Exception e) {
 							throw new IllegalArgumentException("Parameters paths are invalid: " + Arrays.toString(parameterPaths) + " for method " + method);
 						}

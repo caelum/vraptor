@@ -18,6 +18,9 @@ public class DefaultTypeFinderTest {
 		public void aMethod(Bean bean, String path) {
 
 		}
+		public void otherMethod(BeanExtended extended) {
+
+		}
 	}
 
 	public static class Bean {
@@ -27,6 +30,9 @@ public class DefaultTypeFinderTest {
 		}
 	}
 
+	public static class BeanExtended extends Bean2 {
+
+	}
 	public static class Bean2 {
 		public Integer getId() {
 			return 1;
@@ -49,5 +55,22 @@ public class DefaultTypeFinderTest {
 
 		assertEquals(Integer.class, types.get("bean.bean2.id"));
 		assertEquals(String.class, types.get("path"));
+	}
+	@Test
+	public void shouldGetTypesCorrectlyOnInheritance() throws Exception {
+		Mockery mockery = new Mockery();
+		final ParameterNameProvider provider = mockery.mock(ParameterNameProvider.class);
+
+		final Method method = AController.class.getDeclaredMethods()[1];
+		mockery.checking(new Expectations() {
+			{
+				one(provider).parameterNamesFor(method);
+				will(returnValue(new String[] {"extended"}));
+			}
+		});
+		DefaultTypeFinder finder = new DefaultTypeFinder(provider);
+		Map<String, Class<?>> types = finder.getParameterTypes(method, new String[] {"extended.id"});
+
+		assertEquals(Integer.class, types.get("extended.id"));
 	}
 }

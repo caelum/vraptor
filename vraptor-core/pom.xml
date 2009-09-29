@@ -24,6 +24,11 @@
 	</scm>
 	<dependencies>
 		<dependency>
+	        <groupId>net.vidageek</groupId>
+	        <artifactId>mirror</artifactId>
+	        <version>1.5</version>
+	    </dependency>
+		<dependency>
 		    <groupId>org.aspectj</groupId>
 		    <artifactId>aspectjrt</artifactId>
 		    <version>1.6.0</version>

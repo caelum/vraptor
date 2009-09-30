@@ -50,7 +50,7 @@ public class RouteBuilderTest {
 		Route route = builder.build();
 
 		assertTrue("valid uri", route.canHandle("/abc/AnythingHere/def/123/ghi/123.45", HttpMethod.GET));
-		assertTrue("valid uri", route.canHandle("/abc/AnythingHere/def/123/ghi/123,45", HttpMethod.GET));
+		assertTrue("valid uri", route.canHandle("/abc/AnythingHere/def/-123/ghi/-1", HttpMethod.GET));
 		assertTrue("valid uri with integer decimal", route.canHandle("/abc/AnythingHere/def/123/ghi/123", HttpMethod.GET));
 		assertFalse("invalid integer", route.canHandle("/abc/AnythingHere/def/Duh/ghi/123", HttpMethod.GET));
 		assertFalse("invalid decimal", route.canHandle("/abc/AnythingHere/def/123/ghi/kkk", HttpMethod.GET));

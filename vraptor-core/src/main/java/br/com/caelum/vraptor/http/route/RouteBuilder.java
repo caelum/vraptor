@@ -96,9 +96,9 @@ public class RouteBuilder {
 		private String regexFor(Class<?> type) {
 			if (Arrays.asList(Integer.class, Long.class, int.class, long.class, BigInteger.class, char.class, Character.class, Short.class, short.class)
 						.contains(type)) {
-				return "\\d+";
+				return "-?\\d+";
 			} else if (Arrays.asList(Double.class, BigDecimal.class, double.class, Float.class, float.class).contains(type)) {
-				return "\\d+|\\d+\\.\\d+|\\d+\\,\\d+";
+				return "-?\\d*\\.?\\d+";
 			} else if (Arrays.asList(Boolean.class, boolean.class).contains(type)){
 				return "true|false";
 			} else if (Enum.class.isAssignableFrom(type)) {

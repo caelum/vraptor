@@ -8,7 +8,7 @@
 
 	<description>VRaptor 3 Root Buildfile</description>
 
-	<property name="vraptor.version" value="3.0.0-rc-2" />
+	<property name="vraptor.version" value="3.0.0" />
 	
 	<target name="clean" description="delete target directory">
 	    <delete dir="target" />
@@ -55,6 +55,7 @@
 			<fileset file="target/vraptor-${vraptor.version}.jar" />
 			<zipfileset dir="vraptor-core/src" prefix="src"/>
 			<zipfileset dir="vraptor-core/lib" prefix="lib"/>
+			<zipfileset file="LICENSE" />
 		</zip>
 	</target>
 	

@@ -1,5 +1,5 @@
 <div id="footer">
-	<p><a href="http://www.caelum.com.br" target="_blank">VRaptor ©2009 Caelum - Ensino e Inovação</a></p>
+	<p><a href="http://www.caelum.com.br" target="_blank">VRaptor Â©2009 Caelum - Ensino e InovaÃ§Ã£o</a></p>
 </div>
 </div>
 </body>

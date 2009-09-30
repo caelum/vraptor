@@ -24,7 +24,7 @@
 	<li>|</li>
 	<li><a href="suporte.jsp">Suporte</a></li>
 	<li>|</li>
-    <li><a href="documentacao/"><b>Documentação</b></a></li>
+    <li><a href="documentacao/"><b>DocumentaÃ§Ã£o</b></a></li>
 	<li>|</li>        
 	<li><a href="vraptor2.jsp"><b>VRaptor 2</b></a></li>
 </ul>

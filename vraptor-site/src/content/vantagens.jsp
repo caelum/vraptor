@@ -1,45 +1,4 @@
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>VRaptor</title>
-<meta name="keywords" content="" />
-<meta name="Small Window " content="" />
-<link href="style.css" rel="stylesheet" type="text/css" media="screen" />
-</head>
-<body>
-
-<!-- start header -->
-<div id="all">
-<div id="header">
-<div id="logo"><img src="images/marca.png" alt="VRaptor" width="300" height="100" border="0"></div>
-<div id="centeredmenu">
-<ul>
-	<li><a href="index.html">Home</a></li>
-    <li>|</li>
-	<li><a href="download.html">Download</a></li>
-	<li>|</li>  
-    <li><a href="vantagens.html">Vantagens</a></li>
-	<li>|</li>
-    <li><a href="depoimentos.html">Depoimentos</a></li>
-	<li>|</li>
-	<li><a href="suporte.html">Suporte</a></li>
-	<li>|</li>
-    <li><a href="documentacao/index.html"><b>Documentação</b></a></li>
-	<li>|</li>        
-	<li><a href="vraptor2.html"><b>VRaptor 2</b></a></li>
-</ul>
-</div>
-<div id="languages">
-	<ul>
-		<li><a href="./">portuguese</a></li>
-		<li>|</li>
-		<li><a href="documentacao/en/index.html">english</a></li>
-	</ul>
-</div>
-
-</div>
-<!-- finish header -->
-
+<%@include file="/header.jsp" %>
 <!-- start conteudo -->
 
 <div id="wrapper">
@@ -74,10 +33,4 @@
 </div>
 </div>
 
-
-<div id="footer">
-	<p><a href="http://www.caelum.com.br" target="_blank">VRaptor ©2009 Caelum - Ensino e Inovação</a></p>
-</div>
-</div>
-</body>
-</html>
+<%@include file="/footer.jsp" %>

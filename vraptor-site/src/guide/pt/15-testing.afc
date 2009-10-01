@@ -45,7 +45,7 @@ for chamado, vai lançar um ValidationError caso haja algum erro. Desse jeito
 você pode inspecionar os erros adicionados, ou simplesmente ver se deu algum erro:
 
 [java]
-@Test(expected=ValidationError.class)
+@Test(expected=ValidationException.class)
 public void testaQueVaiDarErroDeValidacao() {
 	ClienteController controller = new ClienteController(..., new MockValidator());
 	controller.adiciona(new Cliente());
@@ -59,7 +59,7 @@ public void testaQueVaiDarErroDeValidacao() {
 	try {
 		controller.adiciona(new Cliente());
 		Assert.fail();
-	} catch (ValidationError e) {
+	} catch (ValidationException e) {
 		List<Message> errors = e.getErrors();
 		//asserts nos erros
 	}

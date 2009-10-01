@@ -37,7 +37,7 @@ validator.onErrorUse is called, a ValidationError will be thrown. Therefore
 you can inspect the added errors, or simply check if there is any error.
 
 [java]
-@Test(expected=ValidationError.class)
+@Test(expected=ValidationException.class)
 public void testThatAValidationErrorOccurs() {
 	ClientController controller = new ClientController(..., new MockValidator());
 	controller.add(new Client());
@@ -51,7 +51,7 @@ public void testThatAValidationErrorOccurs() {
 	try {
 		controller.add(new Cliente());
 		Assert.fail();
-	} catch (ValidationError e) {
+	} catch (ValidationException e) {
 		List<Message> errors = e.getErrors();
 		//assertions on errors
 	}

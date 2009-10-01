@@ -17,7 +17,7 @@
 								<#assign curdir = 1>
 								<#list book.chapters as ch>
 									<li><a class="link_toc" href="../${relative}/${dirTree[curdir]}/">${ch_index + 1}. ${ch.title}</a></li>
-									<#assign curdir = curdir + 1>
+									<#assign curdir = curdir + ch.sections.size() + 1>
 		
 								</#list>
                 </ol>

@@ -89,8 +89,8 @@
 				#vraptor2Btn:hover{background-position:-951px -629px;}
 
 #subMenuDoc{
-	position:fixed;
-	left:0px; top:315px;
+	position:absolute;
+	left:0px; top:165px;
 	width:333px;
 	height:auto;
 	margin-bottom:10px;}

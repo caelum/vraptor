@@ -53,7 +53,7 @@ você pode usar pontos para navegar entre os atributos. Por exemplo, no método:
 public void atualiza(Cliente cliente) {
    //...
 }
-[java]
+[/java]
 você pode passar como parâmetro na requisição:
 [code]
 cliente.id=3

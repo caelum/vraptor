@@ -37,7 +37,7 @@ import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.test.VRaptorMockery;
 import br.com.caelum.vraptor.validator.Message;
-import br.com.caelum.vraptor.validator.ValidationError;
+import br.com.caelum.vraptor.validator.ValidationException;
 
 public class ExecuteMethodInterceptorTest {
 
@@ -120,7 +120,7 @@ public class ExecuteMethodInterceptorTest {
     	mockery.checking(new Expectations() {
     		{
     			one(info).getParameters(); will(returnValue(new Object[0]));
-    			one(validator).onErrorUse(nothing()); will(throwException(new ValidationError(Collections.<Message>emptyList())));
+    			one(validator).onErrorUse(nothing()); will(throwException(new ValidationException(Collections.<Message>emptyList())));
     			allowing(validator).hasErrors(); will(returnValue(true));
     		}
     	});

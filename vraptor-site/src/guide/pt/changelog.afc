@@ -2,9 +2,11 @@
 
 [section 3.0.0]
 [list]
+* ValidationError foi renomeado para ValidationException
 * result.use(Results.http()) para setar headers e status codes do protocolo HTTP
 * Correção de bugs
 * documentação
+* novo site
 [/list]
 
 [section 3.0.0-rc-1]

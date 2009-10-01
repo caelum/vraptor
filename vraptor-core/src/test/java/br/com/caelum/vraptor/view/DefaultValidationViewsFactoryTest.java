@@ -30,7 +30,7 @@ import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.util.test.MockedLogic;
 import br.com.caelum.vraptor.util.test.MockedPage;
 import br.com.caelum.vraptor.validator.Message;
-import br.com.caelum.vraptor.validator.ValidationError;
+import br.com.caelum.vraptor.validator.ValidationException;
 
 public class DefaultValidationViewsFactoryTest {
 
@@ -57,7 +57,7 @@ public class DefaultValidationViewsFactoryTest {
 
 		}
 	}
-	@Test(expected=ValidationError.class)
+	@Test(expected=ValidationException.class)
 	public void shouldUseValidationVersionOfLogicResult() throws Exception {
 
 		mockery.checking(new Expectations() {
@@ -86,7 +86,7 @@ public class DefaultValidationViewsFactoryTest {
 
 		mockery.assertIsSatisfied();
 	}
-	@Test(expected=ValidationError.class)
+	@Test(expected=ValidationException.class)
 	public void shouldUseValidationVersionOfPageResult() throws Exception {
 
 		mockery.checking(new Expectations() {
@@ -97,7 +97,7 @@ public class DefaultValidationViewsFactoryTest {
 		});
 		factory.instanceFor(PageResult.class, errors).forward("any uri");
 	}
-	@Test(expected=ValidationError.class)
+	@Test(expected=ValidationException.class)
 	public void shouldUseValidationVersionOfEmptyResult() throws Exception {
 
 		mockery.checking(new Expectations() {

@@ -32,7 +32,7 @@ import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.util.test.MockResult;
 import br.com.caelum.vraptor.validator.Message;
-import br.com.caelum.vraptor.validator.ValidationError;
+import br.com.caelum.vraptor.validator.ValidationException;
 import br.com.caelum.vraptor.validator.Validations;
 import br.com.caelum.vraptor.view.Results;
 import br.com.caelum.vraptor.view.ValidationViewsFactory;
@@ -76,7 +76,7 @@ public class MessageCreatorValidator implements Validator {
     	if(Info.isOldComponent(resource.getResource())) {
     		info.setResult("invalid");
     		result.use(Results.page()).forward();
-    		throw new ValidationError(new ArrayList<Message>());
+    		throw new ValidationException(new ArrayList<Message>());
     	} else {
     		return viewsFactory.instanceFor(view, new ArrayList<Message>());
     	}

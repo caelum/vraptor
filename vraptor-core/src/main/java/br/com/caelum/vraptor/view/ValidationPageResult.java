@@ -24,7 +24,7 @@ import br.com.caelum.vraptor.proxy.MethodInvocation;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.SuperMethod;
 import br.com.caelum.vraptor.validator.Message;
-import br.com.caelum.vraptor.validator.ValidationError;
+import br.com.caelum.vraptor.validator.ValidationException;
 
 /**
  * Default page result implementation.
@@ -49,8 +49,8 @@ public class ValidationPageResult implements PageResult {
     	throwException();
     }
 
-	private void throwException() throws ValidationError {
-		throw new ValidationError(errors);
+	private void throwException() throws ValidationException {
+		throw new ValidationException(errors);
 	}
 
     public void include() {
@@ -76,7 +76,7 @@ public class ValidationPageResult implements PageResult {
 				} catch (Exception e) {
 					throw new ResultException(e);
 				}
-            	throw new ValidationError(errors);
+            	throw new ValidationException(errors);
             }
         });
 	}

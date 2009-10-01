@@ -25,7 +25,7 @@ import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.validator.ValidationError;
+import br.com.caelum.vraptor.validator.ValidationException;
 
 /**
  * Interceptor that executes the logic method.
@@ -66,7 +66,7 @@ public class ExecuteMethodInterceptor implements Interceptor {
             throw new InterceptionException(e);
         } catch (InvocationTargetException e) {
             Throwable cause = e.getCause();
-            if(cause instanceof ValidationError) {
+            if(cause instanceof ValidationException) {
                 // fine... already parsed
             } else {
                 throw new InterceptionException(cause);

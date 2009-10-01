@@ -1,8 +1,10 @@
 [chapter ChangeLog]
 [list]
+* ValidationError renamed to ValidationException
 * result.use(Results.http()) for setting headers and status codes of HTTP protocol
 * bug fixes
 * documentation
+* new site
 
 [/list]
 [section 3.0.0-rc-1]

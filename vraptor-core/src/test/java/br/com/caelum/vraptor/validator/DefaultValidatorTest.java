@@ -84,7 +84,7 @@ public class DefaultValidatorTest {
 			});
 			validator.onErrorUse(Results.logic()).forwardTo(MyComponent.class).logic();
 			Assert.fail("should stop flow");
-		} catch (ValidationError e) {
+		} catch (ValidationException e) {
 			// ok, shoul still assert satisfied
 			Assert.assertEquals(this.instance.run, true);
 			mockery.assertIsSatisfied();
@@ -112,7 +112,7 @@ public class DefaultValidatorTest {
 
 			validator.onErrorUse(Results.page()).of(MyComponent.class).logic();
 			Assert.fail("should stop flow");
-		} catch (ValidationError e) {
+		} catch (ValidationException e) {
 			// ok, shoul still assert satisfied
 			Assert.assertEquals(this.instance.run, true);
 			mockery.assertIsSatisfied();

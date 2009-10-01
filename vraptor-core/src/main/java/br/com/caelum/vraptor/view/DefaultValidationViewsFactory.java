@@ -22,7 +22,7 @@ import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.validator.Message;
-import br.com.caelum.vraptor.validator.ValidationError;
+import br.com.caelum.vraptor.validator.ValidationException;
 
 /**
  * Default implementation for ValidationViewsFactory
@@ -59,7 +59,7 @@ public class DefaultValidationViewsFactory implements ValidationViewsFactory {
 			return view.cast(new ValidationPageResult((PageResult) viewInstance, proxifier, errors));
 		}
 		if (view.equals(EmptyResult.class)) {
-			throw new ValidationError(errors);
+			throw new ValidationException(errors);
 		}
 		throw new ResultException("There is no validation version of " + view);
 	}

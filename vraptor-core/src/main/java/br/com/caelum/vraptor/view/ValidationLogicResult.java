@@ -23,7 +23,7 @@ import br.com.caelum.vraptor.proxy.MethodInvocation;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.SuperMethod;
 import br.com.caelum.vraptor.validator.Message;
-import br.com.caelum.vraptor.validator.ValidationError;
+import br.com.caelum.vraptor.validator.ValidationException;
 
 /**
  * Validation implementation for Logic Result
@@ -49,7 +49,7 @@ public class ValidationLogicResult implements LogicResult {
 				} catch (Exception e) {
 					throw new ResultException(e);
 				}
-				throw new ValidationError(errors);
+				throw new ValidationException(errors);
 			}
 		});
 	}
@@ -62,7 +62,7 @@ public class ValidationLogicResult implements LogicResult {
 				} catch (Exception e) {
 					throw new ResultException(e);
 				}
-				throw new ValidationError(errors);
+				throw new ValidationException(errors);
 			}
 		});
 	}

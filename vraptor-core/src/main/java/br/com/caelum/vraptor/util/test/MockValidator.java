@@ -24,7 +24,7 @@ import java.util.List;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.validator.Message;
-import br.com.caelum.vraptor.validator.ValidationError;
+import br.com.caelum.vraptor.validator.ValidationException;
 import br.com.caelum.vraptor.validator.Validations;
 
 /**
@@ -59,7 +59,7 @@ public class MockValidator implements Validator {
 
 	public <T extends View> T onErrorUse(Class<T> view) {
 		if(!this.errors.isEmpty()) {
-			throw new ValidationError(errors);
+			throw new ValidationException(errors);
 		}
 		return new MockResult().use(view);
 	}

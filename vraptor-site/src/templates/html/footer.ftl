@@ -1,11 +1,47 @@
-	</div>
-</div>
-</div>
+   
+    <div id="footerWrap">
+    	<div id="footerContent">
+        	<div id="treinamentoFooter">
+            	<a href="#.html" class="moreIcon" title="Saiba Mais"><span>+</span></a><h3>Treinamento</h3>
+                <p>Conheça os nossos planos de suporte e saiba como resolver os seus problemas sem ter que aguardar por novas atualização na documentação.</p>
+            </div><!--treinamento-->
+            <div id="consultoriaFooter">
+           		<a href="#.html" class="moreIcon" title="Saiba Mais"><span>+</span></a><h3>Consultoria</h3>
+                <p>Conheça os nossos planos de suporte e saiba como resolver os seus problemas sem ter que aguardar por novas atualização na documentação.</p>            
+            </div><!-- consultoria-->
+            <div id="suporteFooter">
+	           	<a href="#.html" class="moreIcon" title="Saiba Mais"><span>+</span></a><h3>Suporte</h3>
+                <p>Conheça os nossos planos de suporte e saiba como resolver os seus problemas sem ter que aguardar por novas atualização na documentação.</p>            
+            </div><!-- suporte-->
+            <div class="footbar">
+            	<img class="logoFooter" src="images/logoCaelumGray-trans.png" alt="vraptor logo" />
+                <ul>
+                	<li>site map:</li>
+                    <li><a href="#.html">home</a></li>
+                    <li>|</li>
+                    <li><a href="#.html">download</a></li>
+                    <li>|</li>
+                    <li><a href="#.html">documentação</a></li>
+                    <li>|</li>
+                    <li><a href="#.html">suporte</a></li>
+                    <li>|</li>
+                    <li><a href="#.html">vraptor2</a></li>
+                </ul>
+                <p><a href="#.html">licença de uso</a> - VRaptor ©2009 Caelum - Ensino e Inovação</p>
+            </div><!-- footnote-->
+        </div><!-- footer content -->
+    </div><!-- footer wrap-->
+<script type="text/javascript">
+	var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+	document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
 
-
-<div id="footer">
-	<p><a href="http://www.caelum.com.br" target="_blank">VRaptor ©2009 Caelum - Ensino e Inovação</a></p>
-</div>
-</div>
+<script type="text/javascript">
+	try {
+	var pageTracker = _gat._getTracker("UA-270161-11");
+	pageTracker._trackPageview();
+	} catch(err) {}
+ </script>
+    
 </body>
 </html>

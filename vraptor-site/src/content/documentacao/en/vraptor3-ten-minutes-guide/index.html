@@ -2,64 +2,89 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>VRaptor - Powered by Caelum | VRaptor3 - Ten minutes guide
-
-</title>
-<meta name="keywords" content="" />
-<meta name="Small Window " content="" />
-<link href="../includes/css/style.css" rel="stylesheet" type="text/css" media="screen" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>v|raptor</title>
+	<link href="../includes/css/screen.css" rel="stylesheet" type="text/css" media="screen" />
+		<link href="../includes/css/java.css" rel="stylesheet" type="text/css" media="screen" />
+    <link href="../includes/css/menu.css" rel="stylesheet" type="text/css" media="screen" />
+    <!--[if lt IE 7]>
+    <script src="http://ie7-js.googlecode.com/svn/version/2.0(beta3)/IE7.js" type="text/javascript"></script>
+    <![endif]-->
 </head>
+
 <body>
-
-<!-- start header -->
-<div id="all">
-<div id="header">
-
-<div id="logo"><img src="../includes/images/marca.png" alt="VRaptor" width="300" height="100" border="0"></div>
-
-<div id="centeredmenu">
-<ul>
-		<li><a href="../../../index.html">Home</a></li>
-        <li>|</li>
-		<li><a href="../../../download.html">Download</a></li>
-		<li>|</li>  
-        <li><a href="../../../vantagens.html">Vantagens</a></li>
-		<li>|</li>
-        <li><a href="../../../depoimentos.html">Depoimentos</a></li>
-		<li>|</li>
-    	<li><a href="../../../documentacao/"><b>Documentação</b></a></li>
-    <li>|</li>        
-			<li><a href="../../../vraptor2.html"><b>VRaptor 2</b></a></li>
-</ul>
-</div>
-
-<div id="languages">
-	<ul>
-		<li><a href="../">PT</a></li>
-		<li>|</li>
-		<li><a href="../en/">EN</a></li>
-	<ul>
-</div>
-
-</div>
-<!-- finish header -->
-
-<!-- start conteudo -->
-
-<div id="wrapper">
-<div id="conteudo">
-
-<div id="titulo"><img src="../includes/images/hea_documentacao.jpg" alt="Ttulo" width="850" height="40"></div>
-
-<div id="texto_01">
+	<div id="headerWrap">
+    	<div id="headerContent">
+        	<h1 id="logoVraptor"><span>v|raptor</span></h1><!-- vraptorlogo-->
+            
+            <ul id="langMenu">
+            	<li><a id="engBtn" href="../../documentacao/en"><span>ENGLISH</span></a></li>
+                <li><a id="ptBtn" href="../../documentacao/"><span>PORTUGUES</span></a></li>
+            </ul><!-- langMenu-->            
+        </div><!-- header content -->
+    </div><!-- header wrap-->
+    
+    <div id="menuWrap">
+    	<ul id="menuElements">
+        	<li><a id="homeBtn" href="../../index.jsp"><span>home</span></a></li>
+        	<li><a id="downloadBtn" href="../../download.jsp"><span>download</span></a></li>
+        	<li><a id="documentacaoBtn" href="../../documentacao.jsp"><span>documentação</span></a></li>
+        	<li><a id="beneficiosBtn" href="../../beneficios.jsp"><span>benefícios</span></a></li>
+        	<li><a id="suporteBtn" href="../../suporte.jsp"><span>suporte</span></a></li>
+        	<li><a id="vraptor2Btn" href="../../vraptor2.jsp"><span>vraptor2</span></a></li>
+        </ul><!-- menuElements-->
+    </div><!-- menuWrap-->
+           
+<div id="contentWrap">
+    	<div id="contentDocumentacao">
+        	<h2><span>documentação</span></h2>
+            <h3>documentação toda em português, configuração, migração e utilização.</h3>
+            
+            <div id="subMenuDoc">
+            	<img id="positionTop" src="../includes/images/subMenuTop-trans.png" />
+                <img id="positionBottom" src="../includes/images/subMenuBottom-trans.png" />
+            	<ol type="1">
+									<li><a class="link_toc" href="../../en/vraptor3-one-minute-guide/">1. VRaptor3 - One minute guide</a></li>
+		
+									<li><a class="link_toc" href="../../en/vraptor3-one-minute-guide/#starting-up/">2. VRaptor3 - Ten minutes guide</a></li>
+		
+									<li><a class="link_toc" href="../../en/vraptor3-one-minute-guide/#a-simple-controller/">3. Resources-Rest</a></li>
+		
+									<li><a class="link_toc" href="../../en/vraptor3-ten-minutes-guide/">4. Components</a></li>
+		
+									<li><a class="link_toc" href="../../en/vraptor3-ten-minutes-guide/#starting-a-project-a-on-line-store/">5. Converters</a></li>
+		
+									<li><a class="link_toc" href="../../en/vraptor3-ten-minutes-guide/#product-registry/">6. Interceptors</a></li>
+		
+									<li><a class="link_toc" href="../../en/vraptor3-ten-minutes-guide/#creating-productdao-dependency-injection/">7. Validation</a></li>
+		
+									<li><a class="link_toc" href="../../en/vraptor3-ten-minutes-guide/#add-form-redirecting-the-request/">8. View and Ajax</a></li>
+		
+									<li><a class="link_toc" href="../../en/vraptor3-ten-minutes-guide/#validation/">9. Dependency injection</a></li>
+		
+									<li><a class="link_toc" href="../../en/vraptor3-ten-minutes-guide/#controlling-transactions-interceptors/">10. Downloading</a></li>
+		
+									<li><a class="link_toc" href="../../en/vraptor3-ten-minutes-guide/#shopping-cart-session-components/">11. Utility Components</a></li>
+		
+									<li><a class="link_toc" href="../../en/vraptor3-ten-minutes-guide/#a-bit-of-rest/">12. Advanced configurations: overriding VRaptor's behavior and conventions</a></li>
+		
+									<li><a class="link_toc" href="../../en/vraptor3-ten-minutes-guide/#message-bundle-file/">13. Testing components and controllers</a></li>
+		
+									<li><a class="link_toc" href="../../en/resources-rest/">14. ChangeLog</a></li>
+		
+									<li><a class="link_toc" href="../../en/resources-rest/#what-are-resources/">15. Migrating from VRaptor2 to VRaptor3</a></li>
+		
+                </ol>
+            </div><!-- submenu-->
+                        
+            <div id="textoCapitulo">
 	
-
-		<h1 class="chapter">VRaptor3 - Ten minutes guide</h1>
+		<h2 class="chapter">VRaptor3 - Ten minutes guide</h2>
 
 		
-		
-<h2 class="section">Starting a project: a on-line store</h2>
+
+
+<h3 class="section">Starting a project: a on-line store</h3>
 	    	<span class="paragraph">Let's start by downloading the <em class="italic">vraptor-blank-project</em> from 
 <a class="link" target="_blank" href="http://vraptor.caelum.com.br/download.html.">http://vraptor.caelum.com.br/download.html.</a> This blank-project has the required configuration on 
 <code class="inlineCode">web.xml</code> and the dependencies on <code class="inlineCode">WEB-INF/lib</code> that are needed to start using VRaptor. You 
@@ -80,7 +105,8 @@ In this example project the base package will be:</span>
 this example you should be able to access <code class="inlineCode"><a class="link" target="_blank" href="http://localhost:8080/onlinestore</code>">http://localhost:8080/onlinestore%%</a> and see
 an <strong class="definition">It works!</strong> on screen.</span>
 		
-<h2 class="section">Product registry</h2>
+
+<h3 class="section">Product registry</h3>
 	    	<span class="paragraph">Let's start the system with a products registry. We need a class that will represent the products,
 and we'll use it to persist products on the database, with Hibernate:</span>
 	    	<div class="java"><code class="java">
@@ -133,7 +159,8 @@ the name of the exported attribute will be <code class="inlineCode">productList<
 the name will be <code class="inlineCode">&lt;collection_type&gt;List</code>; if it is any other type, the name will be the class name
 with the first letter in lowercase, i.e, if the type is <code class="inlineCode">Product</code>, the name will be <code class="inlineCode">product</code>.</span>
 		
-<h2 class="section">Creating ProductDao: Dependency Injection</h2>
+
+<h3 class="section">Creating ProductDao: Dependency Injection</h3>
 	    	<span class="paragraph">VRaptor widely uses the Dependency Injection and Inversion of Control concept.
 The whole idea is simple: if you need a resource, you won't create it, but will have it ready for 
 you when you ask for it. You can get more information about it on the Dependency Injection chapter.</span>
@@ -185,7 +212,8 @@ behavior we only have to annotate the ProductDao class with @Component:</span>
 &nbsp;&nbsp;&nbsp; <br />
 }</span></code></div>
 		
-<h2 class="section">Add form: redirecting the request</h2>
+
+<h3 class="section">Add form: redirecting the request</h3>
 	    	<span class="paragraph">We have a Products listing, but no way to register products. Thus, let's create a
 form for adding products. Since it is not a good idea to access the jsps directly,
 let's create an empty method that only redirects to a jsp:</span>
@@ -258,7 +286,8 @@ just use your usual refactoring IDE to do the rename.</span>
 </span><span class="java8">}</span></code></div>
 	    	<span class="paragraph">You can get more info on <code class="inlineCode">Result</code> at the Views and Ajax chapter.</span>
 		
-<h2 class="section">Validation</h2>
+
+<h3 class="section">Validation</h3>
 	    	<span class="paragraph">It wouldn't make sense adding a nameless product in the system, nor a negative value for it's price.
 Before adding the product, we need to check if it is a valid product - which has a name and a positive price. In case it's not valid, we want to get back to the form and show error messages.</span>
 	    	<span class="paragraph">In order to do that, we can use a VRaptor component: the Validator. You can get it in your Controller's constructor and use it like this:</span>
@@ -315,12 +344,14 @@ interface was created. More info on creating your own ComponentFactories can be 
 chapter. You can also use the ComponentFactories available in VRaptor, as shown in the Utils 
 chapter.</span>
 		
-<h2 class="section">Controlling transactions: Interceptors</h2>
+
+<h3 class="section">Controlling transactions: Interceptors</h3>
 	    	<span class="paragraph">We often want to intercept as requests (or some of them) and execute a business logic, such as in a 
 transaction control. That why VRaptor has interceptors. Learn more about them on the Interceptors' 
 chapter. There is also an implemented TransactionInterceptor in VRaptor - learn how to use it on the Utils chapter.</span>
 		
-<h2 class="section">Shopping Cart: session components</h2>
+
+<h3 class="section">Shopping Cart: session components</h3>
 	    	<span class="paragraph">If we want to make a shopping cart in our system, we need some way to keep cart items in the user's 
 session. In order to do it, we can create a session scoped component, i.e., a component that will 
 last as long as the user session last. For that, simply create a component and annotate it with 
@@ -360,7 +391,8 @@ constructor:</span>
 	    	<span class="paragraph">Besides session scope, there is also the application scope and the @ApplicationScoped annotation.
 Components annotated with @ApplicationScoped will be created only once for the whole application.</span>
 		
-<h2 class="section">A bit of REST</h2>
+
+<h3 class="section">A bit of REST</h3>
 	    	<span class="paragraph">On REST's ideal of URIs identifying resources on the web to make good use of the structural 
 advantages the HTTP protocol provides us, observe how simple it is, in VRaptor, mapping the 
 different HTTP methods in the same URI to invoke different Controllers' methods. Suppose we 
@@ -403,7 +435,8 @@ are allowed to call that logic - @Get, @Post, @Delete and @Put.</span>
 the <code class="inlineCode">view</code> method will be invoked and the <code class="inlineCode">product</code> parameter will have its id set as <code class="inlineCode">5</code>.</span>
 	    	<span class="paragraph">More info on that are on the REST Resources chapter.</span>
 		
-<h2 class="section">Message bundle File</h2>
+
+<h3 class="section">Message bundle File</h3>
 	    	<span class="paragraph">Internationalization (i18n) is a powerful feature present in almost all Web frameworks 
 nowadays. And it’s no different with VRaptor3. With i18n you can make your applications 
 support several different languages (such as French, Portuguese, Spanish, English, etc) 
@@ -438,15 +471,55 @@ as follows:</span>
 &lt;/html&gt;</code></div>
 		
 
+</div><!-- content -->
+            
+        </div><!-- content cnt -->
+    </div><!-- content wrap-->
+    
+   
+    <div id="footerWrap">
+    	<div id="footerContent">
+        	<div id="treinamentoFooter">
+            	<a href="#.html" class="moreIcon" title="Saiba Mais"><span>+</span></a><h3>Treinamento</h3>
+                <p>Conheça os nossos planos de suporte e saiba como resolver os seus problemas sem ter que aguardar por novas atualização na documentação.</p>
+            </div><!--treinamento-->
+            <div id="consultoriaFooter">
+           		<a href="#.html" class="moreIcon" title="Saiba Mais"><span>+</span></a><h3>Consultoria</h3>
+                <p>Conheça os nossos planos de suporte e saiba como resolver os seus problemas sem ter que aguardar por novas atualização na documentação.</p>            
+            </div><!-- consultoria-->
+            <div id="suporteFooter">
+	           	<a href="#.html" class="moreIcon" title="Saiba Mais"><span>+</span></a><h3>Suporte</h3>
+                <p>Conheça os nossos planos de suporte e saiba como resolver os seus problemas sem ter que aguardar por novas atualização na documentação.</p>            
+            </div><!-- suporte-->
+            <div class="footbar">
+            	<img class="logoFooter" src="images/logoCaelumGray-trans.png" alt="vraptor logo" />
+                <ul>
+                	<li>site map:</li>
+                    <li><a href="#.html">home</a></li>
+                    <li>|</li>
+                    <li><a href="#.html">download</a></li>
+                    <li>|</li>
+                    <li><a href="#.html">documentação</a></li>
+                    <li>|</li>
+                    <li><a href="#.html">suporte</a></li>
+                    <li>|</li>
+                    <li><a href="#.html">vraptor2</a></li>
+                </ul>
+                <p><a href="#.html">licença de uso</a> - VRaptor ©2009 Caelum - Ensino e Inovação</p>
+            </div><!-- footnote-->
+        </div><!-- footer content -->
+    </div><!-- footer wrap-->
+<script type="text/javascript">
+	var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+	document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
 
-	</div>
-</div>
-</div>
-
-
-<div id="footer">
-	<p><a href="http://www.caelum.com.br" target="_blank">VRaptor ©2009 Caelum - Ensino e Inovação</a></p>
-</div>
-</div>
+<script type="text/javascript">
+	try {
+	var pageTracker = _gat._getTracker("UA-270161-11");
+	pageTracker._trackPageview();
+	} catch(err) {}
+ </script>
+    
 </body>
 </html>

@@ -2,93 +2,124 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>VRaptor - Powered by Caelum | Converters
-
-</title>
-<meta name="keywords" content="" />
-<meta name="Small Window " content="" />
-<link href="../includes/css/style.css" rel="stylesheet" type="text/css" media="screen" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>v|raptor</title>
+	<link href="../includes/css/screen.css" rel="stylesheet" type="text/css" media="screen" />
+		<link href="../includes/css/java.css" rel="stylesheet" type="text/css" media="screen" />
+    <link href="../includes/css/menu.css" rel="stylesheet" type="text/css" media="screen" />
+    <!--[if lt IE 7]>
+    <script src="http://ie7-js.googlecode.com/svn/version/2.0(beta3)/IE7.js" type="text/javascript"></script>
+    <![endif]-->
 </head>
+
 <body>
-
-<!-- start header -->
-<div id="all">
-<div id="header">
-
-<div id="logo"><img src="../includes/images/marca.png" alt="VRaptor" width="300" height="100" border="0"></div>
-
-<div id="centeredmenu">
-<ul>
-		<li><a href="../../../index.html">Home</a></li>
-        <li>|</li>
-		<li><a href="../../../download.html">Download</a></li>
-		<li>|</li>  
-        <li><a href="../../../vantagens.html">Vantagens</a></li>
-		<li>|</li>
-        <li><a href="../../../depoimentos.html">Depoimentos</a></li>
-		<li>|</li>
-    	<li><a href="../../../documentacao/"><b>Documentação</b></a></li>
-    <li>|</li>        
-			<li><a href="../../../vraptor2.html"><b>VRaptor 2</b></a></li>
-</ul>
-</div>
-
-<div id="languages">
-	<ul>
-		<li><a href="../">PT</a></li>
-		<li>|</li>
-		<li><a href="../en/">EN</a></li>
-	<ul>
-</div>
-
-</div>
-<!-- finish header -->
-
-<!-- start conteudo -->
-
-<div id="wrapper">
-<div id="conteudo">
-
-<div id="titulo"><img src="../includes/images/hea_documentacao.jpg" alt="Ttulo" width="850" height="40"></div>
-
-<div id="texto_01">
+	<div id="headerWrap">
+    	<div id="headerContent">
+        	<h1 id="logoVraptor"><span>v|raptor</span></h1><!-- vraptorlogo-->
+            
+            <ul id="langMenu">
+            	<li><a id="engBtn" href="../../documentacao/en"><span>ENGLISH</span></a></li>
+                <li><a id="ptBtn" href="../../documentacao/"><span>PORTUGUES</span></a></li>
+            </ul><!-- langMenu-->            
+        </div><!-- header content -->
+    </div><!-- header wrap-->
+    
+    <div id="menuWrap">
+    	<ul id="menuElements">
+        	<li><a id="homeBtn" href="../../index.jsp"><span>home</span></a></li>
+        	<li><a id="downloadBtn" href="../../download.jsp"><span>download</span></a></li>
+        	<li><a id="documentacaoBtn" href="../../documentacao.jsp"><span>documentação</span></a></li>
+        	<li><a id="beneficiosBtn" href="../../beneficios.jsp"><span>benefícios</span></a></li>
+        	<li><a id="suporteBtn" href="../../suporte.jsp"><span>suporte</span></a></li>
+        	<li><a id="vraptor2Btn" href="../../vraptor2.jsp"><span>vraptor2</span></a></li>
+        </ul><!-- menuElements-->
+    </div><!-- menuWrap-->
+           
+<div id="contentWrap">
+    	<div id="contentDocumentacao">
+        	<h2><span>documentação</span></h2>
+            <h3>documentação toda em português, configuração, migração e utilização.</h3>
+            
+            <div id="subMenuDoc">
+            	<img id="positionTop" src="../includes/images/subMenuTop-trans.png" />
+                <img id="positionBottom" src="../includes/images/subMenuBottom-trans.png" />
+            	<ol type="1">
+									<li><a class="link_toc" href="../../en/vraptor3-one-minute-guide/">1. VRaptor3 - One minute guide</a></li>
+		
+									<li><a class="link_toc" href="../../en/vraptor3-one-minute-guide/#starting-up/">2. VRaptor3 - Ten minutes guide</a></li>
+		
+									<li><a class="link_toc" href="../../en/vraptor3-one-minute-guide/#a-simple-controller/">3. Resources-Rest</a></li>
+		
+									<li><a class="link_toc" href="../../en/vraptor3-ten-minutes-guide/">4. Components</a></li>
+		
+									<li><a class="link_toc" href="../../en/vraptor3-ten-minutes-guide/#starting-a-project-a-on-line-store/">5. Converters</a></li>
+		
+									<li><a class="link_toc" href="../../en/vraptor3-ten-minutes-guide/#product-registry/">6. Interceptors</a></li>
+		
+									<li><a class="link_toc" href="../../en/vraptor3-ten-minutes-guide/#creating-productdao-dependency-injection/">7. Validation</a></li>
+		
+									<li><a class="link_toc" href="../../en/vraptor3-ten-minutes-guide/#add-form-redirecting-the-request/">8. View and Ajax</a></li>
+		
+									<li><a class="link_toc" href="../../en/vraptor3-ten-minutes-guide/#validation/">9. Dependency injection</a></li>
+		
+									<li><a class="link_toc" href="../../en/vraptor3-ten-minutes-guide/#controlling-transactions-interceptors/">10. Downloading</a></li>
+		
+									<li><a class="link_toc" href="../../en/vraptor3-ten-minutes-guide/#shopping-cart-session-components/">11. Utility Components</a></li>
+		
+									<li><a class="link_toc" href="../../en/vraptor3-ten-minutes-guide/#a-bit-of-rest/">12. Advanced configurations: overriding VRaptor's behavior and conventions</a></li>
+		
+									<li><a class="link_toc" href="../../en/vraptor3-ten-minutes-guide/#message-bundle-file/">13. Testing components and controllers</a></li>
+		
+									<li><a class="link_toc" href="../../en/resources-rest/">14. ChangeLog</a></li>
+		
+									<li><a class="link_toc" href="../../en/resources-rest/#what-are-resources/">15. Migrating from VRaptor2 to VRaptor3</a></li>
+		
+                </ol>
+            </div><!-- submenu-->
+                        
+            <div id="textoCapitulo">
 	
-
-		<h1 class="chapter">Converters</h1>
+		<h2 class="chapter">Converters</h2>
 
 		
-		
-<h2 class="section">Default</h2>
+
+
+<h3 class="section">Default</h3>
 	    	<span class="paragraph">VRaptor registers a default set of converters for your day-to-day use.</span>
 		
-<h2 class="section">Primitive types</h2>
+
+<h3 class="section">Primitive types</h3>
 	    	<span class="paragraph">All primitive types (int, long etc) are supported.</span>
 	    	<span class="paragraph">If the request parameter is empty or null, primitive type variables will be set to its default
 value, as if it was a class attribute. In general:</span>
 	    	<ul class="list"><li><span class="paragraph">boolean - false</span></li><li><span class="paragraph">short, int, long, double, float, byte - 0</span></li><li><span class="paragraph">char - caracter de c&oacute;digo 0</span></li></ul>
 		
-<h2 class="section">Primitive type wrappers</h2>
+
+<h3 class="section">Primitive type wrappers</h3>
 	    	<span class="paragraph">All primitive type wrappers (Integer, Long, Character, Boolean etc) are supported.</span>
 		
-<h2 class="section">Enum</h2>
+
+<h3 class="section">Enum</h3>
 	    	<span class="paragraph">Enums are also supported using the element's name or ordinal value.
 In the following example, either 1 or DEBIT values are converted to Type.DEBIT:</span>
 	    	<div class="java"><code class="java">public&nbsp;enum&nbsp;Type&nbsp;{<br />
 &nbsp;&nbsp;&nbsp;&nbsp;CREDIT,&nbsp;DEBIT<br />
 }</code></div>
 		
-<h2 class="section">BigInteger and BigDecimal</h2>
+
+<h3 class="section">BigInteger and BigDecimal</h3>
 	    	<span class="paragraph">Both are supported using your JVM's default locale.
 To enable decimal values based on the user's locale, you can check how the class LocaleBasedCalendarConverter works.</span>
 		
-<h2 class="section">Calendar and Date</h2>
+
+<h3 class="section">Calendar and Date</h3>
 	    	<span class="paragraph">Both LocaleBasedCalendarConverter and LocaleBasedDateConverter are based on the user's locale,
 defined using JSTL pattern to understand the parameter's format.</span>
 	    	<span class="paragraph">For example, if the locale is pt-br, then "18/09/1981" stands for September 18th 1981.
 On the other hand, if the locale is en, the same date is formatted as "09/18/1981".</span>
 		
-<h2 class="section">Interface</h2>
+
+<h3 class="section">Interface</h3>
 	    	<span class="paragraph">All converters must implement VRaptor's Converter interface.
 The concrete class will define which type it is able to convert, and will be invoked
 with a request parameter, the target type and a resource bundle containing i18n messages,
@@ -127,22 +158,64 @@ public&nbsp;class&nbsp;LongConverter&nbsp;implements&nbsp;Converter&lt;Long&gt;&
 <br />
 }</code></div>
 		
-<h2 class="section">Registering a new converter</h2>
+
+<h3 class="section">Registering a new converter</h3>
 	    	<span class="paragraph">No further configuration is needed except implementing the Converter interface and annotating
 the converter class with @Convert for your custom converter to be registered in VRaptor's container.</span>
 		
-<h2 class="section">More complex converters</h2>
+
+<h3 class="section">More complex converters</h3>
 		
 
+</div><!-- content -->
+            
+        </div><!-- content cnt -->
+    </div><!-- content wrap-->
+    
+   
+    <div id="footerWrap">
+    	<div id="footerContent">
+        	<div id="treinamentoFooter">
+            	<a href="#.html" class="moreIcon" title="Saiba Mais"><span>+</span></a><h3>Treinamento</h3>
+                <p>Conheça os nossos planos de suporte e saiba como resolver os seus problemas sem ter que aguardar por novas atualização na documentação.</p>
+            </div><!--treinamento-->
+            <div id="consultoriaFooter">
+           		<a href="#.html" class="moreIcon" title="Saiba Mais"><span>+</span></a><h3>Consultoria</h3>
+                <p>Conheça os nossos planos de suporte e saiba como resolver os seus problemas sem ter que aguardar por novas atualização na documentação.</p>            
+            </div><!-- consultoria-->
+            <div id="suporteFooter">
+	           	<a href="#.html" class="moreIcon" title="Saiba Mais"><span>+</span></a><h3>Suporte</h3>
+                <p>Conheça os nossos planos de suporte e saiba como resolver os seus problemas sem ter que aguardar por novas atualização na documentação.</p>            
+            </div><!-- suporte-->
+            <div class="footbar">
+            	<img class="logoFooter" src="images/logoCaelumGray-trans.png" alt="vraptor logo" />
+                <ul>
+                	<li>site map:</li>
+                    <li><a href="#.html">home</a></li>
+                    <li>|</li>
+                    <li><a href="#.html">download</a></li>
+                    <li>|</li>
+                    <li><a href="#.html">documentação</a></li>
+                    <li>|</li>
+                    <li><a href="#.html">suporte</a></li>
+                    <li>|</li>
+                    <li><a href="#.html">vraptor2</a></li>
+                </ul>
+                <p><a href="#.html">licença de uso</a> - VRaptor ©2009 Caelum - Ensino e Inovação</p>
+            </div><!-- footnote-->
+        </div><!-- footer content -->
+    </div><!-- footer wrap-->
+<script type="text/javascript">
+	var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+	document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
 
-	</div>
-</div>
-</div>
-
-
-<div id="footer">
-	<p><a href="http://www.caelum.com.br" target="_blank">VRaptor ©2009 Caelum - Ensino e Inovação</a></p>
-</div>
-</div>
+<script type="text/javascript">
+	try {
+	var pageTracker = _gat._getTracker("UA-270161-11");
+	pageTracker._trackPageview();
+	} catch(err) {}
+ </script>
+    
 </body>
 </html>

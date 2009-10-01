@@ -2,64 +2,89 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>VRaptor - Powered by Caelum | Resources-Rest
-
-</title>
-<meta name="keywords" content="" />
-<meta name="Small Window " content="" />
-<link href="../includes/css/style.css" rel="stylesheet" type="text/css" media="screen" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>v|raptor</title>
+	<link href="../includes/css/screen.css" rel="stylesheet" type="text/css" media="screen" />
+		<link href="../includes/css/java.css" rel="stylesheet" type="text/css" media="screen" />
+    <link href="../includes/css/menu.css" rel="stylesheet" type="text/css" media="screen" />
+    <!--[if lt IE 7]>
+    <script src="http://ie7-js.googlecode.com/svn/version/2.0(beta3)/IE7.js" type="text/javascript"></script>
+    <![endif]-->
 </head>
+
 <body>
-
-<!-- start header -->
-<div id="all">
-<div id="header">
-
-<div id="logo"><img src="../includes/images/marca.png" alt="VRaptor" width="300" height="100" border="0"></div>
-
-<div id="centeredmenu">
-<ul>
-		<li><a href="../../../index.html">Home</a></li>
-        <li>|</li>
-		<li><a href="../../../download.html">Download</a></li>
-		<li>|</li>  
-        <li><a href="../../../vantagens.html">Vantagens</a></li>
-		<li>|</li>
-        <li><a href="../../../depoimentos.html">Depoimentos</a></li>
-		<li>|</li>
-    	<li><a href="../../../documentacao/"><b>Documentação</b></a></li>
-    <li>|</li>        
-			<li><a href="../../../vraptor2.html"><b>VRaptor 2</b></a></li>
-</ul>
-</div>
-
-<div id="languages">
-	<ul>
-		<li><a href="../">PT</a></li>
-		<li>|</li>
-		<li><a href="../en/">EN</a></li>
-	<ul>
-</div>
-
-</div>
-<!-- finish header -->
-
-<!-- start conteudo -->
-
-<div id="wrapper">
-<div id="conteudo">
-
-<div id="titulo"><img src="../includes/images/hea_documentacao.jpg" alt="Ttulo" width="850" height="40"></div>
-
-<div id="texto_01">
+	<div id="headerWrap">
+    	<div id="headerContent">
+        	<h1 id="logoVraptor"><span>v|raptor</span></h1><!-- vraptorlogo-->
+            
+            <ul id="langMenu">
+            	<li><a id="engBtn" href="../../documentacao/en"><span>ENGLISH</span></a></li>
+                <li><a id="ptBtn" href="../../documentacao/"><span>PORTUGUES</span></a></li>
+            </ul><!-- langMenu-->            
+        </div><!-- header content -->
+    </div><!-- header wrap-->
+    
+    <div id="menuWrap">
+    	<ul id="menuElements">
+        	<li><a id="homeBtn" href="../../index.jsp"><span>home</span></a></li>
+        	<li><a id="downloadBtn" href="../../download.jsp"><span>download</span></a></li>
+        	<li><a id="documentacaoBtn" href="../../documentacao.jsp"><span>documentação</span></a></li>
+        	<li><a id="beneficiosBtn" href="../../beneficios.jsp"><span>benefícios</span></a></li>
+        	<li><a id="suporteBtn" href="../../suporte.jsp"><span>suporte</span></a></li>
+        	<li><a id="vraptor2Btn" href="../../vraptor2.jsp"><span>vraptor2</span></a></li>
+        </ul><!-- menuElements-->
+    </div><!-- menuWrap-->
+           
+<div id="contentWrap">
+    	<div id="contentDocumentacao">
+        	<h2><span>documentação</span></h2>
+            <h3>documentação toda em português, configuração, migração e utilização.</h3>
+            
+            <div id="subMenuDoc">
+            	<img id="positionTop" src="../includes/images/subMenuTop-trans.png" />
+                <img id="positionBottom" src="../includes/images/subMenuBottom-trans.png" />
+            	<ol type="1">
+									<li><a class="link_toc" href="../../en/vraptor3-one-minute-guide/">1. VRaptor3 - One minute guide</a></li>
+		
+									<li><a class="link_toc" href="../../en/vraptor3-one-minute-guide/#starting-up/">2. VRaptor3 - Ten minutes guide</a></li>
+		
+									<li><a class="link_toc" href="../../en/vraptor3-one-minute-guide/#a-simple-controller/">3. Resources-Rest</a></li>
+		
+									<li><a class="link_toc" href="../../en/vraptor3-ten-minutes-guide/">4. Components</a></li>
+		
+									<li><a class="link_toc" href="../../en/vraptor3-ten-minutes-guide/#starting-a-project-a-on-line-store/">5. Converters</a></li>
+		
+									<li><a class="link_toc" href="../../en/vraptor3-ten-minutes-guide/#product-registry/">6. Interceptors</a></li>
+		
+									<li><a class="link_toc" href="../../en/vraptor3-ten-minutes-guide/#creating-productdao-dependency-injection/">7. Validation</a></li>
+		
+									<li><a class="link_toc" href="../../en/vraptor3-ten-minutes-guide/#add-form-redirecting-the-request/">8. View and Ajax</a></li>
+		
+									<li><a class="link_toc" href="../../en/vraptor3-ten-minutes-guide/#validation/">9. Dependency injection</a></li>
+		
+									<li><a class="link_toc" href="../../en/vraptor3-ten-minutes-guide/#controlling-transactions-interceptors/">10. Downloading</a></li>
+		
+									<li><a class="link_toc" href="../../en/vraptor3-ten-minutes-guide/#shopping-cart-session-components/">11. Utility Components</a></li>
+		
+									<li><a class="link_toc" href="../../en/vraptor3-ten-minutes-guide/#a-bit-of-rest/">12. Advanced configurations: overriding VRaptor's behavior and conventions</a></li>
+		
+									<li><a class="link_toc" href="../../en/vraptor3-ten-minutes-guide/#message-bundle-file/">13. Testing components and controllers</a></li>
+		
+									<li><a class="link_toc" href="../../en/resources-rest/">14. ChangeLog</a></li>
+		
+									<li><a class="link_toc" href="../../en/resources-rest/#what-are-resources/">15. Migrating from VRaptor2 to VRaptor3</a></li>
+		
+                </ol>
+            </div><!-- submenu-->
+                        
+            <div id="textoCapitulo">
 	
-
-		<h1 class="chapter">Resources-Rest</h1>
+		<h2 class="chapter">Resources-Rest</h2>
 
 		
-		
-<h2 class="section">What are Resources?</h2>
+
+
+<h3 class="section">What are Resources?</h3>
 	    	<span class="paragraph">Resources are anything that can be accessed by our clients.</span>
 	    	<span class="paragraph">In a VRaptor-based Web application, a resource must be annotated with <code class="inlineCode">@Resource</code>.
 If you annotate a class with <code class="inlineCode">@Resource</code>, all its public methods become accessible
@@ -94,6 +119,29 @@ available, each one invoking the respective method.</span>
 &nbsp; </span><span class="java8">}<br />
 &nbsp; <br />
 }</span></code></div>
+		
+
+<h3 class="section">Parâmetros dos métodos</h3>
+	    	<span class="paragraph">You can receive parameters on your controller methods, and if those parameters
+follow the java beans convention (getters and setters for class fields), 
+you can use dots for browsing through the fields. For instance, on method:</span>
+	    	<div class="java"><code class="java">
+<span class="java4">public </span><span class="java9">void </span><span class="java10">update</span><span class="java8">(</span><span class="java10">Client client</span><span class="java8">) {<br />
+&nbsp;&nbsp; </span><span class="java3">//...<br />
+</span><span class="java8">}</span></code></div>
+	    	<span class="paragraph">you can receive on the request parameters:</span>
+	    	<div class="java"><code class="java">client.id=3<br />
+client.name=John&nbsp;Doe<br />
+client.user.login=johndoe</code></div>
+	    	<span class="paragraph">and the respective fields will be set, browsing through getters and setters starting
+from client.</span>
+	    	<span class="paragraph">If an object field or a method parameter is a list (List&lt;&gt; or array), you can receive
+several request parameters, using square brackets and indexes:</span>
+	    	<div class="java"><code class="java">client.phones[0]=+55&nbsp;11&nbsp;5571-2751&nbsp;#if&nbsp;it&nbsp;is&nbsp;a&nbsp;string&nbsp;list<br />
+client.relatives[0].id=1&nbsp;#if&nbsp;it&nbsp;is&nbsp;an&nbsp;arbitrary&nbsp;object,&nbsp;you&nbsp;can&nbsp;continue&nbsp;to&nbsp;browse<br />
+client.relatives[3].id=1&nbsp;#indexes&nbsp;don't&nbsp;need&nbsp;to&nbsp;be&nbsp;sequential<br />
+client.relatives[0].name=Mary&nbsp;Doe&nbsp;#using&nbsp;the&nbsp;same&nbsp;index,&nbsp;it&nbsp;will&nbsp;be&nbsp;set&nbsp;on&nbsp;same&nbsp;object<br />
+clients[1].id=23&nbsp;#it&nbsp;works&nbsp;if&nbsp;you&nbsp;receive&nbsp;a&nbsp;client&nbsp;list&nbsp;as&nbsp;method&nbsp;parameter</code></div>
 	    	<div class="box"><h3>Reflection on parameter names</h3>
 <span class="paragraph">Unfortunately Java can't reflect parameters names, these data don't stay in bytecode
 (unless you compile your code in debug mode, but that is optional). It causes that most
@@ -103,7 +151,8 @@ a very ugly code (like JAX-WS, where its very common to find methods with signat
 names information through pre compilation or debug data, avoiding the creation of annotations
 for this purpose. Some VRaptor developers also participate in Paranamer development.</span></div>
 		
-<h2 class="section">Scopes</h2>
+
+<h3 class="section">Scopes</h3>
 	    	<span class="paragraph">Sometimes you want to share a component among all users, or through all requests from
 the same user or one instance for each user request.</span>
 	    	<span class="paragraph">To specify in which scope your component will live, use the annotations
@@ -111,7 +160,8 @@ the same user or one instance for each user request.</span>
 	    	<span class="paragraph">If you don't specify a scope for your component, VRaptor assumes the request scope,
 meaning a fresh instance will be created for each request.</span>
 		
-<h2 class="section">Http Methods</h2>
+
+<h3 class="section">Http Methods</h3>
 	    	<span class="paragraph">The best practice when using HTTP Methods is to specify a different URI for each method,
 like GET, POST, PUT etc.</span>
 	    	<span class="paragraph">In order to accomplish that, we use annotations <code class="inlineCode">@Get</code>, <code class="inlineCode">@Post</code>, <code class="inlineCode">@Delete</code> etc,
@@ -174,7 +224,8 @@ of requests:</span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;input</span>&nbsp;<span class="texattrib">type=</span><span class="texvalue">"remove&nbsp;client&nbsp;5"</span>&nbsp;<span class="textag">/&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal"></span><span class="textag">&lt;/form&gt;</span></code></div>
 		
-<h2 class="section">@Path</h2>
+
+<h3 class="section">@Path</h3>
 	    	<span class="paragraph">The <code class="inlineCode">@Path</code> annotation allows you to specify custom access URIs to your controller methods.
 The basic usage of the annotation is to specify a fixed URI. The following example shows
 how to customize the access URI for a method that accepts <em class="italic">POST</em> requests only. The URI
@@ -296,7 +347,8 @@ test paths with higher priority, in other words, paths with lower priority value
 	    	<span class="paragraph">This way, the "/post/current" path will be tested before "/post/{post.author}" by VRaptor,
 solving our problem.</span>
 		
-<h2 class="section">RoutesConfiguration</h2>
+
+<h3 class="section">RoutesConfiguration</h3>
 	    	<span class="paragraph">Finally, the most advanced way to configure access routes for your resources is
 using a <strong class="definition">RoutesConfiguration</strong>.</span>
 	    	<span class="paragraph">This component must be configured as application scoped and must implement the
@@ -344,15 +396,55 @@ create extremely generic routes:</span>
 &nbsp;&nbsp;&nbsp; method</span><span class="java8">(</span><span class="java5">&#34;{webMethod}&#34;</span><span class="java8">))</span><span class="java10">;</span></code></div>
 		
 
+</div><!-- content -->
+            
+        </div><!-- content cnt -->
+    </div><!-- content wrap-->
+    
+   
+    <div id="footerWrap">
+    	<div id="footerContent">
+        	<div id="treinamentoFooter">
+            	<a href="#.html" class="moreIcon" title="Saiba Mais"><span>+</span></a><h3>Treinamento</h3>
+                <p>Conheça os nossos planos de suporte e saiba como resolver os seus problemas sem ter que aguardar por novas atualização na documentação.</p>
+            </div><!--treinamento-->
+            <div id="consultoriaFooter">
+           		<a href="#.html" class="moreIcon" title="Saiba Mais"><span>+</span></a><h3>Consultoria</h3>
+                <p>Conheça os nossos planos de suporte e saiba como resolver os seus problemas sem ter que aguardar por novas atualização na documentação.</p>            
+            </div><!-- consultoria-->
+            <div id="suporteFooter">
+	           	<a href="#.html" class="moreIcon" title="Saiba Mais"><span>+</span></a><h3>Suporte</h3>
+                <p>Conheça os nossos planos de suporte e saiba como resolver os seus problemas sem ter que aguardar por novas atualização na documentação.</p>            
+            </div><!-- suporte-->
+            <div class="footbar">
+            	<img class="logoFooter" src="images/logoCaelumGray-trans.png" alt="vraptor logo" />
+                <ul>
+                	<li>site map:</li>
+                    <li><a href="#.html">home</a></li>
+                    <li>|</li>
+                    <li><a href="#.html">download</a></li>
+                    <li>|</li>
+                    <li><a href="#.html">documentação</a></li>
+                    <li>|</li>
+                    <li><a href="#.html">suporte</a></li>
+                    <li>|</li>
+                    <li><a href="#.html">vraptor2</a></li>
+                </ul>
+                <p><a href="#.html">licença de uso</a> - VRaptor ©2009 Caelum - Ensino e Inovação</p>
+            </div><!-- footnote-->
+        </div><!-- footer content -->
+    </div><!-- footer wrap-->
+<script type="text/javascript">
+	var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+	document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
 
-	</div>
-</div>
-</div>
-
-
-<div id="footer">
-	<p><a href="http://www.caelum.com.br" target="_blank">VRaptor ©2009 Caelum - Ensino e Inovação</a></p>
-</div>
-</div>
+<script type="text/javascript">
+	try {
+	var pageTracker = _gat._getTracker("UA-270161-11");
+	pageTracker._trackPageview();
+	} catch(err) {}
+ </script>
+    
 </body>
 </html>

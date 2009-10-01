@@ -46,7 +46,7 @@
 			<arg line="-t"/>
 			<arg line="src/templates"/>
 		</exec>
-		<move file="src/content/documentacao/en/htmlflat/" tofile="src/content/documentacao/en/" />
+		<move file="src/content/documentacao/htmlflat/en" tofile="src/content/documentacao/en/" />
 	</target>
 		
 

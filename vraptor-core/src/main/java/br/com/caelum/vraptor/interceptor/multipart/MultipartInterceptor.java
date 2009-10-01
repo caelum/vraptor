@@ -2,17 +2,17 @@
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource
  * All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); 
- * you may not use this file except in compliance with the License. 
- * You may obtain a copy of the License at 
- * 
- * 	http://www.apache.org/licenses/LICENSE-2.0 
- * 
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an "AS IS" BASIS, 
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
- * See the License for the specific language governing permissions and 
- * limitations under the License. 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * 	http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package br.com.caelum.vraptor.interceptor.multipart;
 
@@ -108,10 +108,10 @@ public class MultipartInterceptor implements Interceptor {
 
 	}
 
-	private static FileItemFactory createFactoryForDiskBasedFileItems(File temporaryDirectory) {
+	protected FileItemFactory createFactoryForDiskBasedFileItems(File temporaryDirectory) {
 		// TODO: may use all memory (Integer.MAX_VALUE), based on a config!
 		// this is mandatory for environments as Google App Engine
-		int thresholdForUsingDiskInsteadOfMemory = 1024 * 10;
+		int thresholdForUsingDiskInsteadOfMemory = (int) sizeLimit;
 		DiskFileItemFactory factory = new DiskFileItemFactory(thresholdForUsingDiskInsteadOfMemory, temporaryDirectory);
 		logger.debug("Using repository [" + factory.getRepository() + "] for file upload");
 		return factory;

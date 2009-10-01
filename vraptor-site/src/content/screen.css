@@ -140,10 +140,14 @@ body{
 				#contentHome #quickFeatures .featuresBox a h3 {font-size:21px; color:#293049; text-transform:uppercase;}
 				#contentHome #quickFeatures .featuresBox a p {font-size:11px; color:#353535;}
 				
-				#contentHome #quickFeatures div.featuresBox a#produtividadeFB {	background-position:0px -575px;}					
-				#contentHome #quickFeatures div.featuresBox a#aprendizadoFB {	background-position:0px 0px;}
-				#contentHome #quickFeatures div.featuresBox a#testabilidadeFB {	background-position:0px -680px;}
-				#contentHome #quickFeatures div.featuresBox a#economiaFB {	background-position:0px -100px;}				
+				#produtividadeFB {background-position:0px -585px;}					
+				#aprendizadoFB {background-position:0px 0px;}
+				#testabilidadeFB {background-position:0px -690px;}
+				#economiaFB {background-position:0px -100px;}
+				#soaFB{background-position:0px -824px;}
+				#flexibleFB{background-position:0px -221px;}
+				#documentacaoFB{background-position:0px -336px;}
+				#melhoresFB{background-position:0px -450px;}
 		
 		/*video box*/
 		#contentHome #boxvideo {
@@ -222,7 +226,7 @@ body{
 			
 			#contentDownload #passo1 p a:hover, #contentDownload #passo2 p a:hover, #contentDownload #passo3 p a:hover{color:#333399;}
 		
-		/*tags específicas para cada tag passo*/
+		/*tags específicas para cada tag passo1,passo2,passo3*/
 		#contentDownload #passo1{ background-position:0px -120px; margin-left:20px; margin-bottom:20px;}
 			#contentDownload #passo1 p { background-position:-1011px -75px;	width:auto;	margin:15px 0px 0px 10px;}
 				#contentDownload #passo1 p a{padding:25px 0px 25px 60px;}
@@ -250,7 +254,31 @@ body{
 	#contentBeneficios{ width:918px;	margin:0px auto; display:block;	height:auto; text-align:left;}
 		#contentBeneficios h2{ color:#2a2948;	font-size:42px;	display:block;	text-transform:uppercase;	margin-top:40px; margin-left:20px; font-weight:bold;}		
 		#contentBeneficios h3{ color:#747488;	font-size:18px;	display:block;	text-transform:uppercase; font-weight:normal; margin-left:20px; margin-bottom:40px;}			
+		
+		.benefitsBox {
+			display:block; 
+			float:left;
+			width:322px;
+			margin-bottom:20px;
+			margin-left:20px;
+			padding-bottom:10px;
+			padding-left:105px;
+			border-bottom:solid 1px #999999;
+			background-image:url(images/vraptorSprites2-trans.png);
+			background-repeat:no-repeat;}
 				
+			.benefitsBox h4{font-size:21px; color:#293049; text-transform:uppercase;}
+			.benefitsBox p{font-size:11px; color:#353535; text-align:justify;}
+	
+		/*depoimentos*/
+			.depoimentoClientes { display:block; width:100%; border-bottom:solid 1px #999999; padding-bottom:10px; overflow:auto; margin-bottom:10px; padding-left:20px; }
+				
+			.depoimentoClientes em{display:block; float:left; width:15%; font-weight:bold; font-size:11px;}
+			.depoimentoClientes em a{color:#1a1679; text-decoration:none;}
+			.depoimentoClientes em a:hover{text-decoration:underline;}
+			.depoimentoClientes p{float:right; width:80%; display:block; font-size:12px; text-align:justify;}
+		
+	
 /*footer css*/
 #footerWrap{
 	display:block; 

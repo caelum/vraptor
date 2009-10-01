@@ -2,6 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	${metaRedirect!""}
 	<title>v|raptor</title>
 	<link href="${relative}/includes/css/screen.css" rel="stylesheet" type="text/css" media="screen" />
 		<link href="${relative}/includes/css/java.css" rel="stylesheet" type="text/css" media="screen" />
@@ -26,9 +27,9 @@
     
     <div id="menuWrap">
     	<ul id="menuElements">
-        	<li><a id="homeBtn" href="${menu}index.jsp"><span>home</span></a></li>
+        	<li><a id="homeBtn" href="${menu}"><span>home</span></a></li>
         	<li><a id="downloadBtn" href="${menu}download.jsp"><span>download</span></a></li>
-        	<li><a id="documentacaoBtn" href="${menu}documentacao.jsp"><span>documentação</span></a></li>
+        	<li><a id="documentacaoBtn" href="${menu}documentacao/"><span>documentação</span></a></li>
         	<li><a id="beneficiosBtn" href="${menu}beneficios.jsp"><span>benefícios</span></a></li>
         	<li><a id="suporteBtn" href="${menu}suporte.jsp"><span>suporte</span></a></li>
         	<li><a id="vraptor2Btn" href="${menu}vraptor2.jsp"><span>vraptor2</span></a></li>

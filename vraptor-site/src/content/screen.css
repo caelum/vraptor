@@ -7,7 +7,7 @@ body{
 
 /*header structure*/
 #headerWrap{
-	background-image:url(../images/bgHeader.png);
+	background-image:url(images/bgHeader.png);
 	background-position:left top;
 	background-repeat:repeat;
 	background-color:#0CF;
@@ -27,7 +27,7 @@ body{
 			display:block;
 			width:302px;
 			height:92px;
-			background-image:url(../images/vraptorSprites-trans.png);
+			background-image:url(images/vraptorSprites-trans.png);
 			background-position:-6px 0px;
 			background-repeat:no-repeat;
 			position:absolute;
@@ -40,7 +40,7 @@ body{
 
 /*banner css configuration*/
 #bannerWrap{
-	background-image:url(../images/bgHeader.png);
+	background-image:url(images/bgHeader.png);
 	background-position:0 -158px;
 	background-repeat:repeat;
 	display:block; 
@@ -67,7 +67,7 @@ body{
 		}
 		
 		 #banner #floatBoxBanner #downloadBtn2{
-			background-image:url(../images/vraptorSprites-trans.png);
+			background-image:url(images/vraptorSprites-trans.png);
 			background-repeat:no-repeat;
 			background-position:-767px -56px;
 			margin-top:15px;
@@ -84,7 +84,7 @@ body{
 		#banner #floatBoxBanner ul {color:#FFF; font-size:16px; list-style-type:none; width:500px;}
 		 #banner #floatBoxBanner ul li {
 			padding:4px 0px 4px 25px;
-			background-image:url(../images/vraptorSprites-trans.png);
+			background-image:url(images/vraptorSprites-trans.png);
 			background-repeat:no-repeat;
 			background-position:-1054px -478px;}
 			
@@ -102,7 +102,7 @@ body{
 	position:relative;
 	overflow:auto;
 	background-color:#FFF;
-	background-image:url(../images/bgHeader.png);
+	background-image:url(images/bgHeader.png);
 	background-position:0px -461px;
 	background-repeat:repeat-x;}
 	
@@ -117,7 +117,7 @@ body{
 			float:left;}
 			
 			.grayBarHome{
-				background-image:url(../images/bgBarHome-trans.png);
+				background-image:url(images/bgBarHome-trans.png);
 				background-repeat:no-repeat;
 				background-position:left bottom;}
 			
@@ -126,7 +126,7 @@ body{
 				height:90px;}
 				
 				#contentHome #quickFeatures .featuresBox a{
-					background-image:url(../images/vraptorSprites2-trans.png);
+					background-image:url(images/vraptorSprites2-trans.png);
 					background-repeat:no-repeat;
 					text-decoration:none;
 					display:block;
@@ -147,7 +147,7 @@ body{
 		
 		/*video box*/
 		#contentHome #boxvideo {
-			background-image:url(../images/vraptorSprites-trans.png); 
+			background-image:url(images/vraptorSprites-trans.png); 
 			background-repeat:no-repeat; 
 			background-position: -582px -120px; 
 			margin-top:40px;
@@ -166,7 +166,7 @@ body{
 			
 			#contentHome #twitterBox ul{list-style-type:none;}
 				#contentHome #twitterBox ul li {
-					background-image:url(../images/vraptorSprites-trans.png); 
+					background-image:url(images/vraptorSprites-trans.png); 
 					background-position:-1024px -407px; 
 					background-repeat:no-repeat; 			
 					padding-left:60px;
@@ -184,7 +184,7 @@ body{
 		#contentDownload h3{ color:#747488;	font-size:18px;	display:block;	text-transform:uppercase; font-weight:normal; margin-left:20px; margin-bottom:40px;}
 		
 		#contentDownload a.downloadBtn3{
-			background-image:url(../images/vraptorSprites-trans.png);
+			background-image:url(images/vraptorSprites-trans.png);
 			background-position:-1022px -218px;
 			background-repeat:no-repeat;
 			display:block;
@@ -199,7 +199,7 @@ body{
 		
 		/*Como tags para 3 passos */
 		#contentDownload #passo1, #contentDownload #passo2, #contentDownload #passo3{
-			background-image:url(../images/vraptorSprites-trans.png);
+			background-image:url(images/vraptorSprites-trans.png);
 			background-repeat:no-repeat;	
 			overflow:hidden;			
 			display:block;
@@ -207,7 +207,7 @@ body{
 			width:582px;}	
 			
 		#contentDownload #passo1 p, #contentDownload #passo2 p, #contentDownload #passo3 p{
-			background-image:url(../images/vraptorSprites-trans.png);
+			background-image:url(images/vraptorSprites-trans.png);
 			background-repeat:no-repeat;
 			display:block;
 			float:left;}
@@ -285,7 +285,7 @@ body{
 			font-weight:normal;
 			padding-bottom:15px;
 			padding-left:25px;
-			background-image:url(../images/vraptorSprites-trans.png);
+			background-image:url(images/vraptorSprites-trans.png);
 			background-repeat:no-repeat;
 			background-position:-1054px -481px;}
 
@@ -297,7 +297,7 @@ body{
 			padding-right:20px;}
 			
 			div#footerContent a.moreIcon{
-				background-image:url(../images/vraptorSprites-trans.png);
+				background-image:url(images/vraptorSprites-trans.png);
 				background-repeat:no-repeat;
 				background-position: -958px 0px;
 				height:26px;

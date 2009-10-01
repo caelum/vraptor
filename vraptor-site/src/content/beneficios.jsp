@@ -1,6 +1,8 @@
 <%@include file="/header.jsp" %>
 <div id="contentWrap">
+	<ul id="subMenu"><li><a href="#beneficios">Beneficios</a></li><li>|</li><li><a href="#depoimentos">Depoimentos</a></li></ul>
     	<div id="contentBeneficios">
+    		<a rel="nofollow" name="beneficios"></a>
         	<h2><span>Benefícios</span></h2>
             <h3>conheça os benefícios e testemunhos de quem usa o vraptor3</h3>
                       
@@ -43,7 +45,7 @@
              	<h4>documentação em português</h4>
                 <p>Se você precisa usar um controlador e sua equipe deve produzir código com boa qualidade, o VRaptor é uma das suas opções.Se você precisa usar um controlador e sua equipe deve produzir logo código com boa qualidade.</p>
              </div><!-- benefits box-->                                                                                                                                                     
-			
+			<a rel="nofollow" name="depoimentos"></a>
             <h3>Depoimentos</h3>
             
             <div class="depoimentoClientes">

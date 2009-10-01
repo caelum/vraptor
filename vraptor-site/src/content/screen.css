@@ -107,7 +107,7 @@ body{
 	background-repeat:repeat-x;}
 	
 	/*css home*/
-	#contentHome{ width:918px;	margin:0px auto; display:block;	height:auto; text-align:left;}		
+	#contentHome{ width:918px;	margin:0px auto; display:block;	height:auto; text-align:left; position:relative;}
 		#contentHome h2{ color:#2a2948;	font-size:24px;	display:block; width:475px;	text-transform:uppercase; margin-top:40px; margin-bottom:30px; font-weight:bold; float:left;}
 		
 		/*quickfeatures*/
@@ -183,7 +183,7 @@ body{
 					#contentHome #twitterBox ul li p span {font-weight:normal;}
 
 	/*css dowload*/	
-	#contentDownload{ width:918px;	margin:0px auto; display:block;	height:auto; text-align:left;}
+	#contentDownload{ width:918px;	margin:0px auto; display:block;	height:auto; text-align:left; position:relative;}
 		#contentDownload h2{ color:#2a2948;	font-size:42px;	display:block;	text-transform:uppercase;	margin-top:40px; margin-left:20px; font-weight:bold;}		
 		#contentDownload h3{ color:#747488;	font-size:18px;	display:block;	text-transform:uppercase; font-weight:normal; margin-left:20px; margin-bottom:40px;}
 		
@@ -240,7 +240,7 @@ body{
 				#contentDownload #passo3 p a{padding:20px 0px 20px 60px;}				
 
 	/*css documentacao*/	
-	#contentDocumentacao{ width:100%; margin:0px auto; display:block; height:auto; text-align:left;}
+	#contentDocumentacao{ width:100%; margin:0px auto; display:block; height:auto; text-align:left;position:relative;}
 		#contentDocumentacao h2{ color:#2a2948;	font-size:42px;	display:block;	text-transform:uppercase;	margin-top:40px; margin-left:20px; font-weight:bold;}		
 		#contentDocumentacao h3{ color:#747488;	font-size:18px;	display:block;	text-transform:uppercase; font-weight:normal; margin-left:20px; margin-bottom:40px;}
 		
@@ -251,7 +251,7 @@ body{
 			#textoCapitulo pre {font-size:11px; color:#625696; font-family:"Courier New", Courier, monospace; margin-bottom:10px;}
 			
 	/*css beneficios*/	
-	#contentBeneficios{ width:918px;	margin:0px auto; display:block;	height:auto; text-align:left;}
+	#contentBeneficios{ width:918px;	margin:0px auto; display:block;	height:auto; text-align:left;position:relative;}
 		#contentBeneficios h2{ color:#2a2948;	font-size:42px;	display:block;	text-transform:uppercase;	margin-top:40px; margin-left:20px; font-weight:bold;}		
 		#contentBeneficios h3{ color:#747488;	font-size:18px;	display:block;	text-transform:uppercase; font-weight:normal; margin-left:20px; margin-bottom:40px;}			
 		

@@ -19,7 +19,7 @@
 			#engBtn{
 				background-image:url(../images/vraptorSprites-trans.png);
 				background-repeat:no-repeat;
-				background-position:-317px 0px;
+				background-position:-317px 1px;
 				position:absolute;
 				top:0;
 				width:96px;
@@ -30,7 +30,7 @@
 			#ptBtn{
 				background-image:url(../images/vraptorSprites-trans.png);
 				background-repeat:no-repeat;
-				background-position:-414px 0px;
+				background-position:-414px 1px;
 				position:absolute;
 				top:0;				
 				width:127px;
@@ -88,9 +88,14 @@
 			#vraptor2Btn{background-position:-951px -570px;	left:712px;	width:126px;}
 				#vraptor2Btn:hover{background-position:-951px -629px;}
 
+#subMenu{position:absolute; left:50%; top:0px; font-size:12px; font-weight:bold; margin-left:-440px; cursor:pointer; width:880px; }
+#subMenu li{display:block; float:left; padding:10px 5px;}
+#subMenu li a{display:block; color:#333; text-decoration:none; text-transform:uppercase;}
+#subMenu li a:hover{color:#03C;}
+
 #subMenuDoc{
 	position:absolute;
-	left:0px; top:165px;
+	left:0px; top:125px;
 	width:333px;
 	height:auto;
 	margin-bottom:10px;}

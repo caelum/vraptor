@@ -19,7 +19,7 @@
 			#engBtn{
 				background-image:url(images/vraptorSprites-trans.png);
 				background-repeat:no-repeat;
-				background-position:-317px 0px;
+				background-position:-317px 1px;
 				position:absolute;
 				top:0;
 				width:96px;
@@ -30,7 +30,7 @@
 			#ptBtn{
 				background-image:url(images/vraptorSprites-trans.png);
 				background-repeat:no-repeat;
-				background-position:-414px 0px;
+				background-position:-414px 1px;
 				position:absolute;
 				top:0;				
 				width:127px;

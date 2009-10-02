@@ -1,7 +1,8 @@
 @charset "UTF-8";
 /* CSS Document */
-*{margin:0px; padding:0px; font-family:Arial, Helvetica, sans-serif;}
+*{margin:0px; padding:0px; }
 body{
+	font-family:Arial, Helvetica, sans-serif;
 	background-color:#2a2948; 
 	text-align:center;}
 
@@ -81,12 +82,12 @@ body{
 			#banner #floatBoxBanner p a {color:#FFF;}
 			#banner #floatBoxBanner p a:hover{color:#FF0;}
 		
-		#banner #floatBoxBanner ul {color:#FFF; font-size:16px; list-style-type:none; width:500px;}
+		#banner #floatBoxBanner ul {color:#FFF; font-size:16px; list-style-type:none; width:450px;}
 		 #banner #floatBoxBanner ul li {
 			padding:4px 0px 4px 25px;
 			background-image:url(../images/vraptorSprites-trans.png);
 			background-repeat:no-repeat;
-			background-position:-1054px -478px;}
+			background-position:-569px -443px;}
 			
 		 #banner #floatBoxBanner #openSourceIcon {
 			position:absolute; 
@@ -107,7 +108,7 @@ body{
 	background-repeat:repeat-x;}
 	
 	/*css home*/
-	#contentHome{ width:918px;	margin:0px auto; display:block;	height:auto; text-align:left;}		
+	#contentHome{ width:918px;	margin:0px auto; display:block;	height:auto; text-align:left; position:relative;}		
 		#contentHome h2{ color:#2a2948;	font-size:24px;	display:block; width:475px;	text-transform:uppercase; margin-top:40px; margin-bottom:30px; font-weight:bold; float:left;}
 		
 		/*quickfeatures*/
@@ -140,10 +141,14 @@ body{
 				#contentHome #quickFeatures .featuresBox a h3 {font-size:21px; color:#293049; text-transform:uppercase;}
 				#contentHome #quickFeatures .featuresBox a p {font-size:11px; color:#353535;}
 				
-				#contentHome #quickFeatures div.featuresBox a#produtividadeFB {	background-position:0px -575px;}					
-				#contentHome #quickFeatures div.featuresBox a#aprendizadoFB {	background-position:0px 0px;}
-				#contentHome #quickFeatures div.featuresBox a#testabilidadeFB {	background-position:0px -680px;}
-				#contentHome #quickFeatures div.featuresBox a#economiaFB {	background-position:0px -100px;}				
+				#produtividadeFB {background-position:0px -585px;}					
+				#aprendizadoFB {background-position:0px 0px;}
+				#testabilidadeFB {background-position:0px -690px;}
+				#economiaFB {background-position:0px -100px;}
+				#soaFB{background-position:0px -824px;}
+				#flexibleFB{background-position:0px -221px;}
+				#documentacaoFB{background-position:0px -336px;}
+				#melhoresFB{background-position:0px -450px;}
 		
 		/*video box*/
 		#contentHome #boxvideo {
@@ -179,7 +184,7 @@ body{
 					#contentHome #twitterBox ul li p span {font-weight:normal;}
 
 	/*css dowload*/	
-	#contentDownload{ width:918px;	margin:0px auto; display:block;	height:auto; text-align:left;}
+	#contentDownload{ width:918px;	margin:0px auto; display:block;	height:auto; text-align:left; position:relative;}
 		#contentDownload h2{ color:#2a2948;	font-size:42px;	display:block;	text-transform:uppercase;	margin-top:40px; margin-left:20px; font-weight:bold;}		
 		#contentDownload h3{ color:#747488;	font-size:18px;	display:block;	text-transform:uppercase; font-weight:normal; margin-left:20px; margin-bottom:40px;}
 		
@@ -222,7 +227,7 @@ body{
 			
 			#contentDownload #passo1 p a:hover, #contentDownload #passo2 p a:hover, #contentDownload #passo3 p a:hover{color:#333399;}
 		
-		/*tags específicas para cada tag passo*/
+		/*tags específicas para cada tag passo1,passo2,passo3*/
 		#contentDownload #passo1{ background-position:0px -120px; margin-left:20px; margin-bottom:20px;}
 			#contentDownload #passo1 p { background-position:-1011px -75px;	width:auto;	margin:15px 0px 0px 10px;}
 				#contentDownload #passo1 p a{padding:25px 0px 25px 60px;}
@@ -236,7 +241,7 @@ body{
 				#contentDownload #passo3 p a{padding:20px 0px 20px 60px;}				
 
 	/*css documentacao*/	
-	#contentDocumentacao{ width:100%; margin:0px auto; display:block; height:auto; text-align:left;}
+	#contentDocumentacao{ width:100%; margin:0px auto; display:block; height:auto; text-align:left; position:relative;}
 		#contentDocumentacao h2{ color:#2a2948;	font-size:42px;	display:block;	text-transform:uppercase;	margin-top:40px; margin-left:20px; font-weight:bold;}		
 		#contentDocumentacao h3{ color:#747488;	font-size:18px;	display:block;	text-transform:uppercase; font-weight:normal; margin-left:20px; margin-bottom:40px;}
 		
@@ -247,10 +252,95 @@ body{
 			#textoCapitulo pre {font-size:11px; color:#625696; font-family:"Courier New", Courier, monospace; margin-bottom:10px;}
 			
 	/*css beneficios*/	
-	#contentBeneficios{ width:918px;	margin:0px auto; display:block;	height:auto; text-align:left;}
+	#contentBeneficios{ width:918px; margin:0px auto; display:block; height:auto; text-align:left; position:relative;}
 		#contentBeneficios h2{ color:#2a2948;	font-size:42px;	display:block;	text-transform:uppercase;	margin-top:40px; margin-left:20px; font-weight:bold;}		
 		#contentBeneficios h3{ color:#747488;	font-size:18px;	display:block;	text-transform:uppercase; font-weight:normal; margin-left:20px; margin-bottom:40px;}			
+		
+		.benefitsBox {
+			display:block; 
+			float:left;
+			width:322px;
+			margin-bottom:20px;
+			margin-left:20px;
+			padding-bottom:10px;
+			padding-left:105px;
+			border-bottom:solid 1px #999999;
+			background-image:url(../images/vraptorSprites2-trans.png);
+			background-repeat:no-repeat;}
 				
+			.benefitsBox h4{font-size:21px; color:#293049; text-transform:uppercase;}
+			.benefitsBox p{font-size:11px; color:#353535; text-align:justify;}
+	
+		/*depoimentos*/
+			.depoimentoClientes { display:block; width:100%; border-bottom:solid 1px #999999; padding-bottom:10px; overflow:auto; margin-bottom:10px; padding-left:20px; }
+				
+			.depoimentoClientes em{display:block; float:left; width:15%; font-weight:bold; font-size:11px;}
+			.depoimentoClientes em a{color:#1a1679; text-decoration:none;}
+			.depoimentoClientes em a:hover{text-decoration:underline;}
+			.depoimentoClientes p{float:right; width:80%; display:block; font-size:12px; text-align:justify; font-family:Georgia, "Times New Roman", Times, serif;}
+	
+	/*suporte css*/
+		#contentSuporte{ width:918px;	margin:0px auto; display:block;	height:auto; text-align:left; position:relative;}
+		#contentSuporte h2{ color:#2a2948;	font-size:42px;	display:block;	text-transform:uppercase;	margin-top:40px; margin-left:20px; font-weight:bold;}		
+		#contentSuporte h3{ color:#747488;	font-size:18px;	display:block;	text-transform:uppercase; font-weight:normal; margin-left:20px; margin-bottom:40px;}
+			#contentSuporte .suporteBox{
+				width:292px; 
+				display:block; 
+				float:left; 
+				text-align:left;
+				margin-bottom:40px;
+				margin-left:10px;}
+				
+				#contentSuporte .suporteBox h4 {
+					display:block;
+					background-image:url(../images/vraptorSprites-trans.png);
+					background-repeat:no-repeat;
+					background-position:-240px -403px;
+					width:292px;
+					height:91px;
+					position:relative;
+				}
+				
+				#contentSuporte .suporteBox ul li {list-style-type:none; border-bottom:solid 1px #666; display:block; padding:10px 0px;}
+				#contentSuporte .suporteBox ul li a{text-decoration:none; display:block;}
+				#contentSuporte .suporteBox ul li a:hover{text-decoration:underline; color:#F90;}
+				#contentSuporte .suporteBox ul li a em{font-family:Arial, Helvetica, sans-serif; font-weight:bold; font-style:normal; font-size:14px; color:#152063; text-transform:uppercase;}
+				#contentSuporte .suporteBox ul li a span{font-size:12px; color:#747488;}
+				#contentSuporte .suporteBox ul li a span img {float:left; border:none; margin-right:10px;}
+				
+				#suporteGrayBox span, #treinamentoGrayBox span, #consultoriaGrayBox span{
+					background-repeat:no-repeat;
+					display:block;
+					padding:35px 10px 10px 10px;
+					font-size:18px;
+					color:#152063;
+					text-transform:uppercase;
+					text-align:left;}
+				
+				#suporteGrayBox span {background-image:url(../images/suportForum-trans.png); background-position:220px 25px;}
+				#consultoriaGrayBox span{background-image:url(../images/suportConsultoria-trans.png); background-position:230px 25px;}
+				#treinamentoGrayBox span{background-image:url(../images/suportTreinamento-trans.png); background-position:235px 25px;}
+					
+	
+	/*Vraptro 2*/	
+	#contentVraptor2{ width:918px;	margin:0px auto; display:block;	height:auto; text-align:left; position:relative;}
+		#contentVraptor2 h2{ color:#2a2948;	font-size:42px;	display:block;	text-transform:uppercase;	margin-top:40px; margin-left:20px; font-weight:bold;}		
+		#contentVraptor2 h3{ color:#747488;	font-size:18px;	display:block;	text-transform:uppercase; font-weight:normal; margin-left:20px; margin-bottom:40px;}
+		
+		#contentVraptor2 dl{display:block; margin-left:20px; margin-bottom:20px;}
+		#contentVraptor2 dl dt {
+			font-size:14px; 
+			font-weight:bold; 
+			margin-top:20px; 
+			text-transform:uppercase;
+			padding-left:18px;
+			background-image:url(../images/vraptorSprites-trans.png);
+			background-repeat:no-repeat;
+			background-position:-989px -528px;}
+		#contentVraptor2 dl dd a {padding-left:18px; text-decoration:none; color:#625696; font-weight:bold;}
+		#contentVraptor2 dl dd a:hover{color:#C60; font-weight:bold;}
+		
+	
 /*footer css*/
 #footerWrap{
 	display:block; 
@@ -287,7 +377,7 @@ body{
 			padding-left:25px;
 			background-image:url(../images/vraptorSprites-trans.png);
 			background-repeat:no-repeat;
-			background-position:-1054px -481px;}
+			background-position:-569px -445px;}
 
 		#footerContent div#suporteFooter p, #footerContent div#consultoriaFooter p, #footerContent div#treinamentoFooter p{
 			color:#f0f0f0;
@@ -331,3 +421,5 @@ body{
 			div.footbar p{font-size:11px; padding:5px 20px; display:block; color:#576296; float:left; width:685px; border-top:solid 1px #576296;}
 			div.footbar p a{color:#aaafc6; text-decoration:none;}
 
+#signature { background-image:url(../images/ldl-trans.png); background-repeat:no-repeat; background-position:left top; position:absolute; display:block; bottom:0px; left:10px; font-family:Georgia, "Times New Roman", Times, serif; font-size:10px; color:#FFF; padding:5px 0px 15px 30px; text-decoration:none;}
+a#signature:hover{color:#C90;}

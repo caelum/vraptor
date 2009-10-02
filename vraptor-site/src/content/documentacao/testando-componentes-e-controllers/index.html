@@ -119,7 +119,7 @@ controller.list</span><span class="java8">()</span><span class="java10">; </span
 for chamado, vai lan&ccedil;ar um ValidationError caso haja algum erro. Desse jeito
 voc&ecirc; pode inspecionar os erros adicionados, ou simplesmente ver se deu algum erro:</span>
 	    	<div class="java"><code class="java">
-<span class="java16">@Test</span><span class="java8">(</span><span class="java10">expected=ValidationError.</span><span class="java4">class</span><span class="java8">)<br />
+<span class="java16">@Test</span><span class="java8">(</span><span class="java10">expected=ValidationException.</span><span class="java4">class</span><span class="java8">)<br />
 </span><span class="java4">public </span><span class="java9">void </span><span class="java10">testaQueVaiDarErroDeValidacao</span><span class="java8">() {<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java10">ClienteController controller = </span><span class="java4">new </span><span class="java10">ClienteController</span><span class="java8">(</span><span class="java10">..., </span><span class="java4">new </span><span class="java10">MockValidator</span><span class="java8">())</span><span class="java10">;<br />
 &nbsp;&nbsp;&nbsp; controller.adiciona</span><span class="java8">(</span><span class="java4">new </span><span class="java10">Cliente</span><span class="java8">())</span><span class="java10">;<br />
@@ -132,7 +132,7 @@ voc&ecirc; pode inspecionar os erros adicionados, ou simplesmente ver se deu alg
 &nbsp;&nbsp;&nbsp; </span><span class="java4">try </span><span class="java8">{<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">controller.adiciona</span><span class="java8">(</span><span class="java4">new </span><span class="java10">Cliente</span><span class="java8">())</span><span class="java10">;<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Assert.fail</span><span class="java8">()</span><span class="java10">;<br />
-&nbsp;&nbsp;&nbsp; </span><span class="java8">} </span><span class="java4">catch </span><span class="java8">(</span><span class="java10">ValidationError e</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">} </span><span class="java4">catch </span><span class="java8">(</span><span class="java10">ValidationException e</span><span class="java8">) {<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">List&lt;Message&gt; errors = e.getErrors</span><span class="java8">()</span><span class="java10">;<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java3">//asserts nos erros<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
@@ -163,19 +163,20 @@ voc&ecirc; pode inspecionar os erros adicionados, ou simplesmente ver se deu alg
             	<img class="logoFooter" src="images/logoCaelumGray-trans.png" alt="vraptor logo" />
                 <ul>
                 	<li>site map:</li>
-                    <li><a href="#.html">home</a></li>
+                    <li><a href="../../">home</a></li>
                     <li>|</li>
-                    <li><a href="#.html">download</a></li>
+                    <li><a href="../../download.jsp">download</a></li>
                     <li>|</li>
-                    <li><a href="#.html">documentação</a></li>
+                    <li><a href="../../documentacao/">documentação</a></li>
                     <li>|</li>
-                    <li><a href="#.html">suporte</a></li>
+                    <li><a href="../../suporte.jsp">suporte</a></li>
                     <li>|</li>
-                    <li><a href="#.html">vraptor2</a></li>
+                    <li><a href="../../vraptor2.jsp">vraptor2</a></li>
                 </ul>
-                <p><a href="#.html">licença de uso</a> - VRaptor ©2009 Caelum - Ensino e Inovação</p>
+                <p><a href="http://www.apache.org/licenses/LICENSE-2.0">Licença Apache 2.0</a> - VRaptor ©2009 Caelum - Ensino e Inovação</p>
             </div><!-- footnote-->
         </div><!-- footer content -->
+        <a id="signature" href="mailto:lokidg@gmail.com">loki|design</a>
     </div><!-- footer wrap-->
 <script type="text/javascript">
 	var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");

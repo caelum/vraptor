@@ -27,7 +27,7 @@
              </div><!-- benefits box--> 
              
              <div class="benefitsBox" id="soaFB">
-             	<h4>Soa e Rest - Reday</h4>
+             	<h4>Soa e Rest - Ready</h4>
                 <p>Se você precisa usar um controlador e sua equipe deve produzir código com boa qualidade, o VRaptor é uma das suas opções.Se você precisa usar um controlador e sua equipe deve produzir logo código com boa qualidade.</p>
              </div><!-- benefits box-->                          
                                          

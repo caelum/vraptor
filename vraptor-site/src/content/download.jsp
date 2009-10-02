@@ -6,17 +6,17 @@
 
 			<div id="passo1">
                 <a class="downloadBtn3"><span>Download Now</span></a>            
-            	<p><a href="https://sourceforge.net/projects/vraptor2/files/">vraptor3-x.zip contém a documentação, código fonte e binários.</a></p>
+            	<p><a href="http://code.google.com/p/vraptor3/">vraptor3-x.zip contém a documentação, código fonte e binários.</a></p>
             </div><!-- passo 1 -->
             
 			<div id="passo2">
                 <a class="downloadBtn3"><span>Download Now</span></a>            
-            	<p><a href="https://sourceforge.net/projects/vraptor2/files/">vraptor3-blank-project-x.zip contém um projeto em branco, pronto para ser importado no seu Eclipse com WTP.</a></p>
+            	<p><a href="http://code.google.com/p/vraptor3/">vraptor3-blank-project-x.zip contém um projeto em branco, pronto para ser importado no seu Eclipse com WTP.</a></p>
             </div><!-- passo 2 -->
             
 			<div id="passo3">
                 <a class="downloadBtn3"><span>Download Now</span></a>            
-            	<p><a href="https://sourceforge.net/projects/vraptor2/files/">vraptor3-mydvds-x.zip contém um projeto de exemplo, usando várias das funcionalidades do VRaptor3.</a></p>
+            	<p><a href="http://code.google.com/p/vraptor3/">vraptor3-mydvds-x.zip contém um projeto de exemplo, usando várias das funcionalidades do VRaptor3.</a></p>
             </div><!-- passo 2 -->                        
                                          
         </div><!-- contentDownload -->

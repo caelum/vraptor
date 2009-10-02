@@ -17,19 +17,20 @@
             	<img class="logoFooter" src="images/logoCaelumGray-trans.png" alt="vraptor logo" />
                 <ul>
                 	<li>site map:</li>
-                    <li><a href="#.html">home</a></li>
+                    <li><a href="${menu}">home</a></li>
                     <li>|</li>
-                    <li><a href="#.html">download</a></li>
+                    <li><a href="${menu}download.jsp">download</a></li>
                     <li>|</li>
-                    <li><a href="#.html">documentação</a></li>
+                    <li><a href="${menu}documentacao/">documentação</a></li>
                     <li>|</li>
-                    <li><a href="#.html">suporte</a></li>
+                    <li><a href="${menu}suporte.jsp">suporte</a></li>
                     <li>|</li>
-                    <li><a href="#.html">vraptor2</a></li>
+                    <li><a href="${menu}vraptor2.jsp">vraptor2</a></li>
                 </ul>
-                <p><a href="#.html">licença de uso</a> - VRaptor ©2009 Caelum - Ensino e Inovação</p>
+                <p><a href="http://www.apache.org/licenses/LICENSE-2.0">Licença Apache 2.0</a> - VRaptor ©2009 Caelum - Ensino e Inovação</p>
             </div><!-- footnote-->
         </div><!-- footer content -->
+        <a id="signature" href="mailto:lokidg@gmail.com">loki|design</a>
     </div><!-- footer wrap-->
 <script type="text/javascript">
 	var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");

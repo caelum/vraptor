@@ -36,14 +36,14 @@
             	<div class="featuresBox grayBarHome">
                 	<a id="produtividadeFB" href="beneficios.html">
                 		<h3>alta produtividade</h3>
-                    	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris rutrum ultricies Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris rutrum ultricies.</p>
+                    	<p>Se você precisa usar um controlador e sua equipe deve produzir código com boa qualidade, o VRaptor é uma das suas opções.Se você precisa usar um controlador e sua equipe deve produzir logo código com boa qualidade.</p>
                 	</a>
                 </div><!-- features box-->
                 
             	<div class="featuresBox grayBarHome">
                 	<a id="aprendizadoFB" href="beneficios.html">
                 		<h3>curva de aprendizado</h3>
-                    	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris rutrum ultricies Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris rutrum ultricies.</p>
+                    	<p>Se você precisa usar um controlador e sua equipe deve produzir código com boa qualidade, o VRaptor é uma das suas opções.Se você precisa usar um controlador e sua equipe deve produzir logo código com boa qualidade.</p>
                 	</a>
                 </div><!-- features box--> 
                 

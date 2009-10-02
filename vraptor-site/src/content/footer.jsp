@@ -1,17 +1,17 @@
     <div id="footerWrap">
     	<div id="footerContent">
-        	<div id="treinamentoFooter">
-            	<a href="#.html" class="moreIcon" title="Saiba Mais"><span>+</span></a><h3>Treinamento</h3>
-                <p>Conheça os nossos planos de suporte e saiba como resolver os seus problemas sem ter que aguardar por novas atualização na documentação.</p>
-            </div><!--treinamento-->
-            <div id="consultoriaFooter">
-           		<a href="#.html" class="moreIcon" title="Saiba Mais"><span>+</span></a><h3>Consultoria</h3>
-                <p>Conheça os nossos planos de suporte e saiba como resolver os seus problemas sem ter que aguardar por novas atualização na documentação.</p>            
-            </div><!-- consultoria-->
             <div id="suporteFooter">
-	           	<a href="#.html" class="moreIcon" title="Saiba Mais"><span>+</span></a><h3>Suporte</h3>
-                <p>Conheça os nossos planos de suporte e saiba como resolver os seus problemas sem ter que aguardar por novas atualização na documentação.</p>            
-            </div><!-- suporte-->
+	           	<a href="#.html" class="moreIcon" title="Saiba Mais"><span>+</span></a><h3><a href="#.html">Suporte</a></h3>
+                <p><a href="#.html">Conheça os nossos planos de suporte e saiba como resolver os seus problemas sem ter que aguardar por novas atualização na documentação.</a></p>            
+            </div><!-- suporte-->   
+            <div id="consultoriaFooter">
+           		<a href="#.html" class="moreIcon" title="Saiba Mais"><span>+</span></a><h3><a href="#.html">Consultoria</a></h3>
+                <p><a href="#.html">Conheça os nossos planos de suporte e saiba como resolver os seus problemas sem ter que aguardar por novas atualização na documentação.</a></p>            
+            </div><!-- consultoria-->                 
+        	<div id="treinamentoFooter">
+            	<a href="#.html" class="moreIcon" title="Saiba Mais"><span>+</span></a><h3><a href="#.html">Treinamento</a></h3>
+                <p><a href="#.htm">Conheça os nossos planos de suporte e saiba como resolver os seus problemas sem ter que aguardar por novas atualização na documentação.</a></p>
+            </div><!--treinamento-->
             <div class="footbar">
             	<img class="logoFooter" src="images/logoCaelumGray-trans.png" alt="vraptor logo" />
                 <ul>

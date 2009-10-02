@@ -84,14 +84,14 @@ body{
 		#banner #floatBoxBanner ul {color:#FFF; font-size:16px; list-style-type:none; width:450px;}
 		 #banner #floatBoxBanner ul li {
 			padding:4px 0px 4px 25px;
-			background-image:url(images/vraptorSprites-trans.png);
+			background-image:url(images/yellowArrow-trans.png);
 			background-repeat:no-repeat;
-			background-position:-569px -443px;}
+			background-position:2px 5px;}
 			
 		 #banner #floatBoxBanner #openSourceIcon {
 			position:absolute; 
-			top:100px;
-			right:30px;}
+			top:120px;
+			right:60px;}
 		
 
 /*content css*/
@@ -231,11 +231,11 @@ body{
 			#contentDownload #passo1 p { background-position:-1011px -75px;	width:auto;	margin:15px 0px 0px 10px;}
 				#contentDownload #passo1 p a{padding:25px 0px 25px 60px;}
 					
-		#contentDownload #passo2{ background-position:0px -211px; margin-left:20px;	margin-bottom:20px;}
+		#contentDownload #passo2{ background-position:0px -210px; margin-left:20px;	margin-bottom:20px;}
 			#contentDownload #passo2 p { background-position:-1015px 0px; width:490px; margin:13px 0px 0px 10px;}	
 				#contentDownload #passo2 p a{padding:20px 0px 20px 60px;}
 				
-		#contentDownload #passo3{ background-position:0px -302px; margin-left:20px;	margin-bottom:20px;}
+		#contentDownload #passo3{ background-position:0px -301px; margin-left:20px;	margin-bottom:20px;}
 			#contentDownload #passo3 p { background-position:-1015px -151px; width:490px; margin:13px 0px 0px 10px;}	
 				#contentDownload #passo3 p a{padding:20px 0px 20px 60px;}				
 
@@ -368,22 +368,28 @@ body{
 				border-right:solid 1px #fff;
 			}
 			
-		#footerContent div#suporteFooter h3, #footerContent div#consultoriaFooter h3, #footerContent div#treinamentoFooter h3{
+		#footerContent div#suporteFooter h3 a, #footerContent div#consultoriaFooter h3 a, #footerContent div#treinamentoFooter h3 a{
 			color:#fffc01;
 			font-size:18px;
 			font-weight:normal;
 			padding-bottom:15px;
 			padding-left:25px;
-			background-image:url(images/vraptorSprites-trans.png);
+			background-image:url(images/yellowArrow-trans.png);
 			background-repeat:no-repeat;
-			background-position:-569px -445px;}
+			background-position:2px 2px;
+			text-decoration:none;
+			cursor:pointer;
+			display:block;}
 
-		#footerContent div#suporteFooter p, #footerContent div#consultoriaFooter p, #footerContent div#treinamentoFooter p{
+		#footerContent div#suporteFooter p a, #footerContent div#consultoriaFooter p a, #footerContent div#treinamentoFooter p a{
 			color:#f0f0f0;
 			font-size:12px;
 			font-weight:normal;
 			padding-left:25px;
-			padding-right:20px;}
+			padding-right:20px;
+			text-decoration:none;
+			display:block;
+			cursor:pointer;}
 			
 			div#footerContent a.moreIcon{
 				background-image:url(images/vraptorSprites-trans.png);
@@ -409,8 +415,7 @@ body{
 			text-transform:uppercase;
 			text-align:left;
 			padding-top:5px;
-			margin-top:10px;
-			border-top:solid 1px #576296;}
+			margin-top:10px;}
 			
 			div.footbar img.logoFooter{float:right;}
 			div.footbar a:hover{color:#FF0; text-decoration:underline;}			

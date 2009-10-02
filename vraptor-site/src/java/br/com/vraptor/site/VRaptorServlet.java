@@ -33,6 +33,8 @@ public class VRaptorServlet extends HttpServlet {
 
 		response.setLocale(uri.startsWith("/en")? Locale.ENGLISH : PT_BR);
 		request.setAttribute("contextPath", path);
+
+		request.getRequestDispatcher(uri).forward(request, response);
 	}
 
 }

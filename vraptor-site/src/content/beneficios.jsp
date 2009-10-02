@@ -1,6 +1,6 @@
 <%@include file="/header.jsp" %>
 <div id="contentWrap">
-	<ul id="subMenu"><li><a href="#beneficios">Beneficios</a></li><li>|</li><li><a href="#depoimentos">Depoimentos</a></li></ul>
+	<ul id="subMenu"><li><a ref="nofollow" href="#beneficios">Beneficios</a></li><li>|</li><li><a ref="nofollow" href="#depoimentos">Depoimentos</a></li></ul>
     	<div id="contentBeneficios">
     		<a rel="nofollow" name="beneficios"></a>
         	<h2><span>Benefícios</span></h2>

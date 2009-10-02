@@ -15,14 +15,13 @@
     <welcome-file>default.htm</welcome-file>
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
-  <servlet>
-    <description></description>
-    <display-name>VRaptorServlet</display-name>
-    <servlet-name>VRaptorServlet</servlet-name>
-    <servlet-class>br.com.vraptor.site.VRaptorServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>VRaptorServlet</servlet-name>
+  <filter>
+    <display-name>LocaleFilter</display-name>
+    <filter-name>LocaleFilter</filter-name>
+    <filter-class>br.com.caelum.vraptor.site.LocaleFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>LocaleFilter</filter-name>
     <url-pattern>/*</url-pattern>
-  </servlet-mapping>
+  </filter-mapping>
 </web-app>

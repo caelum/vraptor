@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<title>v|raptor</title>
+	<title>V|Raptor - Alta produtividade no Desenvolvimento Web em Java</title>
 	<link href="screen.css" rel="stylesheet" type="text/css" media="screen" />
     <link href="menu.css" rel="stylesheet" type="text/css" media="screen" />
     <!--[if lt IE 7]>
@@ -13,11 +13,11 @@
 <body>
 	<div id="headerWrap">
     	<div id="headerContent">
-        	<h1 id="logoVraptor"><span>v|raptor</span></h1><!-- vraptorlogo-->
+        	<h1 id="logoVraptor"><span>V|Raptor</span></h1><!-- vraptorlogo-->
             
             <ul id="langMenu">
             	<li><a id="engBtn" href="#.html"><span>ENGLISH</span></a></li>
-                <li><a id="ptBtn" href="#.html"><span>PORTUGUES</span></a></li>
+                <li><a id="ptBtn" href="#.html"><span>PORTUGUÊS</span></a></li>
             </ul><!-- langMenu-->            
         </div><!-- header content -->
     </div><!-- header wrap-->

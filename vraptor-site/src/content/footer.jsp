@@ -1,30 +1,30 @@
     <div id="footerWrap">
-    	<div id="footerContent">
-            <div id="suporteFooter">
-	           	<a href="#.html" class="moreIcon" title="Saiba Mais"><span>+</span></a><h3><a href="#.html">Suporte</a></h3>
-                <p><a href="#.html">Conheça os nossos planos de suporte e saiba como resolver os seus problemas sem ter que aguardar por novas atualização na documentação.</a></p>            
-            </div><!-- suporte-->   
-            <div id="consultoriaFooter">
-           		<a href="#.html" class="moreIcon" title="Saiba Mais"><span>+</span></a><h3><a href="#.html">Consultoria</a></h3>
-                <p><a href="#.html">Conheça os nossos planos de suporte e saiba como resolver os seus problemas sem ter que aguardar por novas atualização na documentação.</a></p>            
-            </div><!-- consultoria-->                 
+    	<div id="footerContent">              
         	<div id="treinamentoFooter">
-            	<a href="#.html" class="moreIcon" title="Saiba Mais"><span>+</span></a><h3><a href="#.html">Treinamento</a></h3>
-                <p><a href="#.htm">Conheça os nossos planos de suporte e saiba como resolver os seus problemas sem ter que aguardar por novas atualização na documentação.</a></p>
+            	<a href="http://www.caelum.com.br/curso/fj-28-vraptor-hibernate-ajax/" class="moreIcon" title="Saiba Mais"><span>+</span></a><h3>Treinamento</h3>
+                <p>A Caelum oferece treinamento oficial de VRaptor, com Hibernate e Ajax, focando nas melhores práticas com VRaptor. Clique e saiba mais.</p>
             </div><!--treinamento-->
-            <div class="footbar">
+            <div id="consultoriaFooter">
+           		<a href="http://www.caelum.com.br/servicos/consultoria/" class="moreIcon" title="Saiba Mais"><span>+</span></a><h3>Consultoria</h3>
+                <p>A equipe que desenvolveu o VRaptor está disponível para auxiliar a sua equipe de desenvolvimento. Conheça nossos planos de consultoria.</p>            
+            </div><!-- consultoria-->
+            <div id="suporteFooter">
+	           	<a href="http://www.caelum.com.br/contato/" class="moreIcon" title="Saiba Mais"><span>+</span></a><h3>Suporte</h3>
+                <p>Conheça os nossos planos de suporte online, e tenha a confiança de ter suas dúvidas e problemas rapidamente solucionados.</p>            
+            </div><!-- suporte-->
+     <div class="footbar">
             	<img class="logoFooter" src="images/logoCaelumGray-trans.png" alt="vraptor logo" />
                 <ul>
                 	<li>site map:</li>
-                    <li><a href="./">home</a></li>
+                    <li><a href="/">home</a></li>
                     <li>|</li>
-                    <li><a href="download.jsp">download</a></li>
+                    <li><a href="/download.jsp">download</a></li>
                     <li>|</li>
-                    <li><a href="documentacao/">documentação</a></li>
+                    <li><a href="/documentacao/">documentação</a></li>
                     <li>|</li>
-                    <li><a href="suporte.jsp">suporte</a></li>
+                    <li><a href="/suporte.jsp">suporte</a></li>
                     <li>|</li>
-                    <li><a href="vraptor2.jsp">vraptor2</a></li>
+                    <li><a href="/vraptor2.jsp">vraptor2</a></li>
                 </ul>
                 <p><a href="http://www.apache.org/licenses/LICENSE-2.0">Licença Apache 2.0</a> - VRaptor ©2009 Caelum - Ensino e Inovação</p>
             </div><!-- footnote-->

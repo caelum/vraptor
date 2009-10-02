@@ -8,43 +8,46 @@
                       
              <div class="benefitsBox" id="produtividadeFB">
              	<h4>Alta Produtividade</h4>
-                <p>Se você precisa usar um controlador e sua equipe deve produzir código com boa qualidade, o VRaptor é uma das suas opções.Se você precisa usar um controlador e sua equipe deve produzir logo código com boa qualidade.</p>
+                <p>Usar o VRaptor 3 é simples e intuitivo. 
+                   Você atingirá níveis altíssimos de produtividade com Java para Web.
+              	</p>
              </div><!-- benefits box-->
              
              <div class="benefitsBox" id="aprendizadoFB">
              	<h4>Curva de Aprendizado</h4>
-                <p>Se você precisa usar um controlador e sua equipe deve produzir código com boa qualidade, o VRaptor é uma das suas opções.Se você precisa usar um controlador e sua equipe deve produzir logo código com boa qualidade.</p>
+                <p>Em pouco tempo você conseguirá aprender tudo o que é necessário para desenvolver suas aplicações com o VRaptor.</p>
              </div><!-- benefits box-->
              
              <div class="benefitsBox" id="testabilidadeFB">
              	<h4>Testabilidade</h4>
-                <p>Se você precisa usar um controlador e sua equipe deve produzir código com boa qualidade, o VRaptor é uma das suas opções.Se você precisa usar um controlador e sua equipe deve produzir logo código com boa qualidade.</p>
+                <p>Escreva código modularizado e desacoplado do VRaptor. Sua aplicação fica altamente testável e de fácil manutenção.</p>
              </div><!-- benefits box-->
              
              <div class="benefitsBox" id="economiaFB">
              	<h4>Economia</h4>
-                <p>Se você precisa usar um controlador e sua equipe deve produzir código com boa qualidade, o VRaptor é uma das suas opções.Se você precisa usar um controlador e sua equipe deve produzir logo código com boa qualidade.</p>
+                <p>Economize muitas horas de trabalho com a alta produtividade do VRaptor, a facilidade em treinar a sua equipe e a qualidade final do seu projeto.</p>
              </div><!-- benefits box--> 
+             
+             <div class="benefitsBox" id="flexibleFB">
+             	<h4>Flexibilidade</h4>
+                <p>Integre o seu projeto com qualquer framework de sua preferência. Você não estará preso a nenhuma tecnologia específica.</p>
+             </div><!-- benefits box-->                                         
              
              <div class="benefitsBox" id="soaFB">
              	<h4>Soa e Rest - Ready</h4>
-                <p>Se você precisa usar um controlador e sua equipe deve produzir código com boa qualidade, o VRaptor é uma das suas opções.Se você precisa usar um controlador e sua equipe deve produzir logo código com boa qualidade.</p>
+                <p>Faça aplicações RESTful ou orientadas a serviço sem complicações, como se estivesse fazendo aplicações Web normais.</p>
              </div><!-- benefits box-->                          
-                                         
-             <div class="benefitsBox" id="flexibleFB">
-             	<h4>Flexibilidade</h4>
-                <p>Se você precisa usar um controlador e sua equipe deve produzir código com boa qualidade, o VRaptor é uma das suas opções.Se você precisa usar um controlador e sua equipe deve produzir logo código com boa qualidade.</p>
-             </div><!-- benefits box-->                                         
-             
+
              <div class="benefitsBox" id="melhoresFB">
-             	<h4>melhores praticas de desenvolvimento</h4>
-                <p>Se você precisa usar um controlador e sua equipe deve produzir código com boa qualidade, o VRaptor é uma das suas opções.Se você precisa usar um controlador e sua equipe deve produzir logo código com boa qualidade.</p>
+             	<h4>Melhores práticas de desenvolvimento</h4>
+                <p>Utilizando os conceitos de Injeção de Dependência, Inversão de Controle e POJOs, seu código fica simples e testável.</p>
              </div><!-- benefits box-->
              
              <div class="benefitsBox" id="documentacaoFB">
-             	<h4>documentação em português</h4>
-                <p>Se você precisa usar um controlador e sua equipe deve produzir código com boa qualidade, o VRaptor é uma das suas opções.Se você precisa usar um controlador e sua equipe deve produzir logo código com boa qualidade.</p>
-             </div><!-- benefits box-->                                                                                                                                                     
+             	<h4>Documentação em Português</h4>
+                <p>Aprenda tudo sobre VRaptor 3 contando com uma ampla documentação, fóruns e listas de discussão em português.</p>
+             </div><!-- benefits box-->      
+                                                                                                                                                            
 			<a rel="nofollow" name="depoimentos"></a>
             <h3>Depoimentos</h3>
             

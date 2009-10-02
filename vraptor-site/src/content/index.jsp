@@ -4,14 +4,14 @@
             
             <div id="floatBoxBanner">
             	<img src="images/iconOpenSource-trans.png" id="openSourceIcon" />
-	            <h1>Experimente o novo vraptor 3.0!</h1>
+	            <h1>Experimente o novo vraptor 3</h1>
 	            <ul>
-	            	<li>Framework MVC para web focado no desenvolvimento ágil.</li>
-					<li>Projeto desenvolvido em conjunto com o Centro de Competência em Software Livre da USP</li>
-	            	<li>Framework MVC para web focado no desenvolvimento ágil.</li>                    
+	            	<li>Framework MVC Java para Web focado em desenvolvimento rápido</li>
+	            	<li>Grande comunidade de usuários e desenvolvedores</li>
+	            	<li>Ampla documentação disponível em Português</li>
     	        </ul>
-       	     	<a href="#.html" id="downloadBtn2"><span>Download</span></a>
-                <p><a href="#.html">Quer saber mais sobre o vraptor</a> ou</p>
+       	     	<a href="download.jsp" id="downloadBtn2"><span>Download</span></a>
+                <p><a href="documentacao/">Saiba mais sobre o vraptor</a> </p>
 			</div><!-- content-float -->
             <img src="images/boxVraptor-trans.png" />
             
@@ -20,7 +20,7 @@
 
 	<div id="contentWrap">
     	<div id="contentHome">
-        	<h2><span>Por que utilizar o VRaptor</span></h2>
+        	<h2><span>Porque utilizar o VRaptor:</span></h2>
 
 			<div id="boxvideo">
 				<object width="400" height="300">
@@ -65,20 +65,24 @@
             
             <div id="twitterBox">
             	<h3><a href="http://twitter.com/vraptor3" target="_blank">Siga-nos no Twitter</a></h3>
-                <ul>
-                	<li><p>Por causa de instabilidades no SourceForge, os downloads do VRaptor3 foram movidos para: 
-                        <a href="http://code.google.com/p/vr" target="_blank">http://code.google.com/p/vr...</a><br />
-                        <span>about 22 hours ago from Echofon</span>
-                    </p></li>
-                    
-                	<li><p>Por causa de instabilidades no SourceForge, os downloads do VRaptor3 foram movidos para: 
-                        <a href="http://code.google.com/p/vr" target="_blank">http://code.google.com/p/vr...</a><br />
-                        <span>about 22 hours ago from Echofon</span>
-                    </p></li>                    
-                </ul>
+                <div id="tweets">
+                	<p>carregando tweets...</p>                    
+                </div>
             </div><!-- twitterBox-->
 
         </div><!-- content cnt -->
     </div><!-- content wrap-->
-  
+<script src="http://twitterjs.googlecode.com/svn/trunk/src/twitter.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+  //<![CDATA[
+  getTwitters('tweets', { 
+	  id: 'vraptor3', 
+	  count: 2, 
+	  enableLinks: true, 
+	  ignoreReplies: true, 
+	  clearContents: true,
+	  template: '<p>%text%<br/><span><a href="http://twitter.com/%user_screen_name%/statuses/%id%/">%time%</a></span></p>'
+	});
+  //]]>
+</script>  
 <%@include file="/footer.jsp" %>

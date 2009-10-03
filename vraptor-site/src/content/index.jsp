@@ -3,24 +3,24 @@
     	<div id="banner">
             
             <div id="floatBoxBanner">
-            	<img src="images/iconOpenSource-trans.png" id="openSourceIcon" />
-	            <h1>Experimente o novo vraptor 3</h1>
+            	<img src="${path }/images/iconOpenSource-trans.png" id="openSourceIcon" />
+	            <h1><fmt:message key="experimente.vraptor"/></h1>
 	            <ul>
-	            	<li>Framework MVC Java para Web focado em desenvolvimento rápido</li>
-	            	<li>Grande comunidade de usuários e desenvolvedores</li>
-	            	<li>Ampla documentação disponível em Português</li>
+	            	<li><fmt:message key="experimente.vraptor.motivo1"/></li>
+	            	<li><fmt:message key="experimente.vraptor.motivo2"/></li>
+	            	<li><fmt:message key="experimente.vraptor.motivo3"/></li>
     	        </ul>
        	     	<a href="download.jsp" id="downloadBtn2"><span>Download</span></a>
-                <p><a href="documentacao/">Saiba mais sobre o vraptor</a> </p>
+                <p><a href="documentacao/"><fmt:message key="saiba.mais"/></a> </p>
 			</div><!-- content-float -->
-            <img src="images/boxVraptor-trans.png" />
+            <img src="${path }/images/boxVraptor-trans.png" />
             
         </div><!--banner-->
     </div><!--bannerWrap--> 
 
 	<div id="contentWrap">
     	<div id="contentHome">
-        	<h2><span>Porque utilizar o VRaptor:</span></h2>
+        	<h2><span><fmt:message key="porque.utilizar"/>:</span></h2>
 
 			<div id="boxvideo">
 				<object width="400" height="300">
@@ -34,39 +34,39 @@
             <div id="quickFeatures">
             
             	<div class="featuresBox grayBarHome">
-                	<a id="produtividadeFB" href="beneficios.html">
-                		<h3>alta produtividade</h3>
-                    	<p>Se você precisa usar um controlador e sua equipe deve produzir código com boa qualidade, o VRaptor é uma das suas opções.Se você precisa usar um controlador e sua equipe deve produzir logo código com boa qualidade.</p>
+                	<a id="produtividadeFB" href="${path }/<fmt:message key="beneficios.link"/>">
+                		<h3><fmt:message key="alta.produtividade"/></h3>
+                    	<p><fmt:message key="alta.produtividade.text"/></p>
                 	</a>
                 </div><!-- features box-->
                 
             	<div class="featuresBox grayBarHome">
-                	<a id="aprendizadoFB" href="beneficios.html">
-                		<h3>curva de aprendizado</h3>
-                    	<p>Se você precisa usar um controlador e sua equipe deve produzir código com boa qualidade, o VRaptor é uma das suas opções.Se você precisa usar um controlador e sua equipe deve produzir logo código com boa qualidade.</p>
+                	<a id="aprendizadoFB" href="${path }/<fmt:message key="beneficios.link"/>">
+                		<h3><fmt:message key="curva.de.aprendizado"/></h3>
+                    	<p><fmt:message key="curva.de.aprendizado.link"/></p>
                 	</a>
                 </div><!-- features box--> 
                 
             	<div class="featuresBox grayBarHome">
-                	<a id="testabilidadeFB" href="beneficios.html">
-                		<h3>Testabilidade</h3>
-                    	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris rutrum ultricies Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris rutrum ultricies.</p>
+                	<a id="testabilidadeFB" href="${path }/<fmt:message key="beneficios.link"/>">
+                		<h3><fmt:message key="testabilidade"/></h3>
+                    	<p><fmt:message key="testabilidade.text"/></p>
                 	</a>
                 </div><!-- features box-->
                 
              	<div class="featuresBox grayBarHome">
-                	<a id="economiaFB" href="beneficios.html">
-                		<h3>Economia</h3>
-                    	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris rutrum ultricies Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris rutrum ultricies.</p>
+                	<a id="economiaFB" href="${path }/<fmt:message key="beneficios.link"/>">
+                		<h3><fmt:message key="economia"/></h3>
+                    	<p><fmt:message key="economia.text"/></p>
                 	</a>
                 </div><!-- features box-->                                               
             
             </div><!--quickFeatures-->
             
             <div id="twitterBox">
-            	<h3><a href="http://twitter.com/vraptor3" target="_blank">Siga-nos no Twitter</a></h3>
+            	<h3><a href="http://twitter.com/vraptor3" target="_blank"><fmt:message key="siga.nos"/></a></h3>
                 <div id="tweets">
-                	<p>carregando tweets...</p>                    
+                	<p><fmt:message key="carregando.tweets"/></p>
                 </div>
             </div><!-- twitterBox-->
 

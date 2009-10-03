@@ -9,9 +9,9 @@
 	<meta name="author" content="Design"/>
 	<meta name="reply-to" content="lokidg@gmail.com"/>
 	${param.extras}
-	<meta name="description" content="VRaptor 3 - um framework java para web focado em desenvolvimento rápido"/>
-	<meta name="keywords" content="sites, web, desenvolvimento, java, opensource"/>
-	<title>V|Raptor - Alta produtividade no Desenvolvimento Web em Java</title>
+	<meta name="description" content="<fmt:message key="meta.description"/>"/>
+	<meta name="keywords" content="sites, web, desenvolvimento, development, java, opensource"/>
+	<title>V|Raptor - <fmt:message key="title.slogan"/></title>
 	<link href="${path }/screen.css" rel="stylesheet" type="text/css" media="screen" />
     <link href="${path }/menu.css" rel="stylesheet" type="text/css" media="screen" />
     <!--[if lt IE 7]>
@@ -35,9 +35,9 @@
     	<ul id="menuElements">
         	<li><a id="homeBtn" href="${path }/<fmt:message key='home.link'/>"><span>home</span></a></li>
         	<li><a id="downloadBtn" href="${path }/<fmt:message key='download.link'/>"><span>download</span></a></li>
-        	<li><a id="documentacaoBtn" href="${path }/<fmt:message key='documentacao.link'/>"><span>documentação</span></a></li>
-        	<li><a id="beneficiosBtn" href="${path }/<fmt:message key='beneficios.link'/>"><span>benefícios</span></a></li>
-        	<li><a id="suporteBtn" href="${path }/<fmt:message key='suporte.link'/>"><span>suporte</span></a></li>
+        	<li><a id="documentacaoBtn" href="${path }/<fmt:message key='documentacao.link'/>"><span><fmt:message key="documentacao"/></span></a></li>
+        	<li><a id="beneficiosBtn" href="${path }/<fmt:message key='beneficios.link'/>"><span><fmt:message key="beneficios"/></span></a></li>
+        	<li><a id="suporteBtn" href="${path }/<fmt:message key='suporte.link'/>"><span><fmt:message key="suporte"/></span></a></li>
         	<li><a id="vraptor2Btn" href="${path }/<fmt:message key='vraptor2.link'/>"><span>vraptor2</span></a></li>
         </ul><!-- menuElements-->
     </div><!-- menuWrap-->

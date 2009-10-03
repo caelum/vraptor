@@ -18,15 +18,17 @@
             	<img class="logoFooter" src="images/logoCaelumGray-trans.png" alt="vraptor logo" />
                 <ul>
                 	<li>site map:</li>
-                    <li><a href="${contextPath }/">home</a></li>
+                    <li><a href="${path }/<fmt:message key='home.link'/>">home</a></li>
                     <li>|</li>
-                    <li><a href="${contextPath }/download.jsp">download</a></li>
+                    <li><a href="${path }/<fmt:message key='download.link'/>">download</a></li>
                     <li>|</li>
-                    <li><a href="${contextPath }/documentacao/"><fmt:message key="documentacao"/></a></li>
+                    <li><a href="${path }/<fmt:message key='documentacao.link'/>"><fmt:message key="documentacao"/></a></li>
                     <li>|</li>
-                    <li><a href="${contextPath }/suporte.jsp"><fmt:message key="suporte"/></a></li>
+                    <li><a href="${path }/<fmt:message key='beneficios.link'/>"><fmt:message key="beneficios"/></a></li>
                     <li>|</li>
-                    <li><a href="${contextPath }/vraptor2.jsp">vraptor2</a></li>
+                    <li><a href="${path }/<fmt:message key='suporte.link'/>"><fmt:message key="suporte"/></a></li>
+                    <li>|</li>
+                    <li><a href="${path }/<fmt:message key='vraptor2.link'/>">vraptor2</a></li>
                 </ul>
                 <p><a href="http://www.apache.org/licenses/LICENSE-2.0"><fmt:message key="license"/></a> - VRaptor ©2009 Caelum - Ensino e Inovação</p>
             </div><!-- footnote-->

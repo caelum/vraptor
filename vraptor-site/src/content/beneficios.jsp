@@ -1,55 +1,57 @@
 <%@include file="/header.jsp" %>
 <div id="contentWrap">
-	<ul id="subMenu"><li><a ref="nofollow" href="#beneficios">Beneficios</a></li><li>|</li><li><a ref="nofollow" href="#depoimentos">Depoimentos</a></li></ul>
+	<ul id="subMenu">
+		<li><a ref="nofollow" href="#beneficios"><fmt:message key="beneficios"/></a></li>
+		<li>|</li>
+		<li><a ref="nofollow" href="#depoimentos"><fmt:message key="depoimentos"/></a></li>
+	</ul>
     	<div id="contentBeneficios">
     		<a rel="nofollow" name="beneficios"></a>
-        	<h2><span>Benefícios</span></h2>
-            <h3>conheça os benefícios e testemunhos de quem usa o vraptor3</h3>
+        	<h2><span><fmt:message key="beneficios"/></span></h2>
+            <h3><fmt:message key="beneficios.head"/></h3>
                       
              <div class="benefitsBox" id="produtividadeFB">
-             	<h4>Alta Produtividade</h4>
-                <p>Usar o VRaptor 3 é simples e intuitivo. 
-                   Você atingirá níveis altíssimos de produtividade com Java para Web.
-              	</p>
+             	<h4><fmt:message key="alta.produtividade"/></h4>
+                <p><fmt:message key="alta.produtividade.text"/></p>
              </div><!-- benefits box-->
              
              <div class="benefitsBox" id="aprendizadoFB">
-             	<h4>Curva de Aprendizado</h4>
-                <p>Em pouco tempo você conseguirá aprender tudo o que é necessário para desenvolver suas aplicações com o VRaptor.</p>
+             	<h4><fmt:message key="curva.de.aprendizado"/></h4>
+                <p><fmt:message key="curva.de.aprendizado.text"/></p>
              </div><!-- benefits box-->
              
              <div class="benefitsBox" id="testabilidadeFB">
-             	<h4>Testabilidade</h4>
-                <p>Escreva código modularizado e desacoplado do VRaptor. Sua aplicação fica altamente testável e de fácil manutenção.</p>
+             	<h4><fmt:message key="testabilidade"/></h4>
+                <p><fmt:message key="testabilidade.text"/></p>
              </div><!-- benefits box-->
              
              <div class="benefitsBox" id="economiaFB">
-             	<h4>Economia</h4>
-                <p>Economize muitas horas de trabalho com a alta produtividade do VRaptor, a facilidade em treinar a sua equipe e a qualidade final do seu projeto.</p>
+             	<h4><fmt:message key="economia"/></h4>
+                <p><fmt:message key="economia.text"/></p>
              </div><!-- benefits box--> 
              
              <div class="benefitsBox" id="flexibleFB">
-             	<h4>Flexibilidade</h4>
-                <p>Integre o seu projeto com qualquer framework de sua preferência. Você não estará preso a nenhuma tecnologia específica.</p>
+             	<h4><fmt:message key="flexibilidade"/></h4>
+                <p><fmt:message key="flexibilidade.text"/></p>
              </div><!-- benefits box-->                                         
              
              <div class="benefitsBox" id="soaFB">
-             	<h4>Soa e Rest - Ready</h4>
-                <p>Faça aplicações RESTful ou orientadas a serviço sem complicações, como se estivesse fazendo aplicações Web normais.</p>
+             	<h4><fmt:message key="rest.ready"/></h4>
+                <p><fmt:message key="rest.ready.text"/></p>
              </div><!-- benefits box-->                          
 
              <div class="benefitsBox" id="melhoresFB">
-             	<h4>Melhores práticas de desenvolvimento</h4>
-                <p>Utilizando os conceitos de Injeção de Dependência, Inversão de Controle e POJOs, seu código fica simples e testável.</p>
+             	<h4><fmt:message key="melhores.praticas"/></h4>
+                <p><fmt:message key="melhores.praticas.text"/></p>
              </div><!-- benefits box-->
              
              <div class="benefitsBox" id="documentacaoFB">
-             	<h4>Documentação em Português</h4>
-                <p>Aprenda tudo sobre VRaptor 3 contando com uma ampla documentação, fóruns e listas de discussão em português.</p>
+             	<h4><fmt:message key="documentacao.portugues"/></h4>
+                <p><fmt:message key="documentacao.portugues.text"/></p>
              </div><!-- benefits box-->      
                                                                                                                                                             
 			<a rel="nofollow" name="depoimentos"></a>
-            <h3>Depoimentos</h3>
+            <h3><fmt:message key="depoimentos"/></h3>
             
             <div class="depoimentoClientes">
             	<p>Pouco depois de entrar na equipe de Produtos de Telecomunicações da Locaweb, começamos a discutir novas ferramentas para o desenvolvimento de um pacote de novas funcionalidades para o Painel de Administração do PABX Virtual. Sugeri que usássemos o VRaptor, porém o nosso time pediu uma apresentação do framework classificado como "fantástico" por mim. Saí do escritório no final da tarde e na manhã seguinte já tinha uma apresentação capaz de empolgar os nossos desenvolvedores. Tudo sem muito esforço ou trauma, porque contei com a ajuda da documentação do site, do projeto exemplo e da apostila do curso FJ-28 da Caelum. Desde então, estamos felizes por poder testar facilmente as nossas lógicas e por escrever menos código de configuração. A cada lógica que migramos para o VRaptor, aumentamos a elegância e a simplicidade do nosso projeto. E estamos adorando isto.</p>

@@ -43,7 +43,7 @@
             	<div class="featuresBox grayBarHome">
                 	<a id="aprendizadoFB" href="${path }/<fmt:message key="beneficios.link"/>">
                 		<h3><fmt:message key="curva.de.aprendizado"/></h3>
-                    	<p><fmt:message key="curva.de.aprendizado.link"/></p>
+                    	<p><fmt:message key="curva.de.aprendizado.text"/></p>
                 	</a>
                 </div><!-- features box--> 
                 

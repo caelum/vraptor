@@ -1,4 +1,5 @@
 
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <jsp:include page="/header.jsp">
 	<jsp:param name="extras" value='
 		<link href="../includes/css/java.css" rel="stylesheet" type="text/css" media="screen" />

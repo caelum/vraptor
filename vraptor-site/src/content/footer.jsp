@@ -15,7 +15,7 @@
                 <p><a href="http://www.caelum.com.br/curso/fj-28-vraptor-hibernate-ajax/"><fmt:message key="treinamento.head"/></a></p>
             </div><!--treinamento-->
      <div class="footbar">
-            	<img class="logoFooter" src="images/logoCaelumGray-trans.png" alt="vraptor logo" />
+            	<img class="logoFooter" src="${path }/images/logoCaelumGray-trans.png" alt="vraptor logo" />
                 <ul>
                 	<li>site map:</li>
                     <li><a href="${path }/<fmt:message key='home.link'/>">home</a></li>

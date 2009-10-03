@@ -15,6 +15,10 @@
     <welcome-file>default.htm</welcome-file>
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
+  <context-param>
+		<param-name>javax.servlet.jsp.jstl.fmt.localizationContext</param-name>
+		<param-value>messages</param-value>
+	</context-param>
   <filter>
     <display-name>LocaleFilter</display-name>
     <filter-name>LocaleFilter</filter-name>
@@ -22,6 +26,7 @@
   </filter>
   <filter-mapping>
     <filter-name>LocaleFilter</filter-name>
-    <url-pattern>/*</url-pattern>
+	<url-pattern>/*</url-pattern>
+	<dispatcher>REQUEST</dispatcher>
   </filter-mapping>
 </web-app>

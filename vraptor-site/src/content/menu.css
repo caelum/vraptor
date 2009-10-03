@@ -94,8 +94,8 @@
 #subMenu li a:hover{color:#03C;}
 
 #subMenuDoc{
-	position:fixed;
-	left:0px; top:315px;
+	position: absolute;
+	left:0px; top:125px;
 	width:333px;
 	height:auto;
 	margin-bottom:10px;}

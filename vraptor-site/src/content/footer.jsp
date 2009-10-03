@@ -18,15 +18,15 @@
             	<img class="logoFooter" src="images/logoCaelumGray-trans.png" alt="vraptor logo" />
                 <ul>
                 	<li>site map:</li>
-                    <li><a href="/">home</a></li>
+                    <li><a href="${contextPath }/">home</a></li>
                     <li>|</li>
-                    <li><a href="/download.jsp">download</a></li>
+                    <li><a href="${contextPath }/download.jsp">download</a></li>
                     <li>|</li>
-                    <li><a href="/documentacao/">documentação</a></li>
+                    <li><a href="${contextPath }/documentacao/">documentação</a></li>
                     <li>|</li>
-                    <li><a href="/suporte.jsp">suporte</a></li>
+                    <li><a href="${contextPath }/suporte.jsp">suporte</a></li>
                     <li>|</li>
-                    <li><a href="/vraptor2.jsp">vraptor2</a></li>
+                    <li><a href="${contextPath }/vraptor2.jsp">vraptor2</a></li>
                 </ul>
                 <p><a href="http://www.apache.org/licenses/LICENSE-2.0">Licença Apache 2.0</a> - VRaptor ©2009 Caelum - Ensino e Inovação</p>
             </div><!-- footnote-->

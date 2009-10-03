@@ -110,7 +110,7 @@ of the validation:</span>
 &nbsp;&nbsp;&nbsp; </span><span class="java4">if </span><span class="java8">(</span><span class="java10">that</span><span class="java8">(</span><span class="java10">user != null, </span><span class="java5">&#34;user&#34;</span><span class="java10">, </span><span class="java5">&#34;null.user&#34;</span><span class="java8">)) {<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">that</span><span class="java8">(</span><span class="java10">user.getAge</span><span class="java8">() </span><span class="java10">&gt;= </span><span class="java7">18</span><span class="java10">, </span><span class="java5">&#34;user.age&#34;</span><span class="java10">, </span><span class="java5">&#34;user.is.underage&#34;</span><span class="java8">)</span><span class="java10">;<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
-}})</span></code></div>
+}})</span><span class="java10">;</span></code></div>
 	    	<span class="paragraph">So the second validation will execute only if the first didn't fail.</span>
 		
 
@@ -122,8 +122,8 @@ Hamcrest allows:</span>
 <span class="java4">public </span><span class="java10">admin</span><span class="java8">(</span><span class="java10">Employee employee</span><span class="java8">) {<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java10">validator.checking</span><span class="java8">(</span><span class="java4">new </span><span class="java10">Validations</span><span class="java8">(){{<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">that</span><span class="java8">(</span><span class="java10">employee.getRoles</span><span class="java8">()</span><span class="java10">, hasItem</span><span class="java8">(</span><span class="java5">&#34;ADMIN&#34;</span><span class="java8">)</span><span class="java10">, </span><span class="java5">&#34;admin&#34;</span><span class="java10">,</span><span class="java5">&#34;employee.is.not.admin&#34;</span><span class="java8">)</span><span class="java10">;<br />
-&nbsp;&nbsp;&nbsp; </span><span class="java8">}})<br />
-&nbsp;&nbsp;&nbsp; </span><span class="java10">validator.onErrorUse</span><span class="java8">(</span><span class="java10">page</span><span class="java8">())</span><span class="java10">.of</span><span class="java8">(</span><span class="java10">LoginController.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">.login</span><span class="java8">()</span><span class="java10">;&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}})</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; validator.onErrorUse</span><span class="java8">(</span><span class="java10">page</span><span class="java8">())</span><span class="java10">.of</span><span class="java8">(</span><span class="java10">LoginController.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">.login</span><span class="java8">()</span><span class="java10">;&nbsp;&nbsp;&nbsp; <br />
 &nbsp;&nbsp;&nbsp; dao.add</span><span class="java8">(</span><span class="java10">employee</span><span class="java8">)</span><span class="java10">;<br />
 </span><span class="java8">}</span></code></div>
 		
@@ -137,8 +137,8 @@ Hamcrest allows:</span>
 &nbsp;&nbsp;&nbsp; <br />
 &nbsp;&nbsp;&nbsp; validator.checking</span><span class="java8">(</span><span class="java4">new </span><span class="java10">Validations</span><span class="java8">(){{<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">that</span><span class="java8">(</span><span class="java10">!employee.getName</span><span class="java8">()</span><span class="java10">.isEmpty</span><span class="java8">()</span><span class="java10">, </span><span class="java5">&#34;error&#34;</span><span class="java10">,</span><span class="java5">&#34;nameIsRequired&#34;</span><span class="java8">)</span><span class="java10">;<br />
-&nbsp;&nbsp;&nbsp; </span><span class="java8">}})<br />
-&nbsp;&nbsp;&nbsp; </span><span class="java10">validator.onErrorUse</span><span class="java8">(</span><span class="java10">page</span><span class="java8">())</span><span class="java10">.of</span><span class="java8">(</span><span class="java10">EmployeeController.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">.form</span><span class="java8">()</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}})</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; validator.onErrorUse</span><span class="java8">(</span><span class="java10">page</span><span class="java8">())</span><span class="java10">.of</span><span class="java8">(</span><span class="java10">EmployeeController.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">.form</span><span class="java8">()</span><span class="java10">;<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
 &nbsp;&nbsp;&nbsp; dao.add</span><span class="java8">(</span><span class="java10">employee</span><span class="java8">)</span><span class="java10">;<br />
 </span><span class="java8">}</span></code></div>

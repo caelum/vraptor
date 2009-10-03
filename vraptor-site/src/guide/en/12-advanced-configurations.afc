@@ -56,11 +56,12 @@ If you need a more complex convention, just implement the RoutesParser interface
 
 VRaptor's default IoC provider is Spring. In order to change, just add the following to your
 web.xml:
+[xml]
 <context-param>
     <param-name>br.com.caelum.vraptor.provider</param-name>
     <param-value>com.package.from.your.PrefferedProviderClass</param-value>
 </context-param>
-
+[/xml]
 VRaptor comes with built-in support to both Spring (br.com.caelum.vraptor.ioc.spring.SpringProvider) and PicoContainer
 (br.com.caelum.vraptor.ioc.pico.PicoProvider).
 You still have the option to extend any of these classes and use your own provider.

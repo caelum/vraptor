@@ -51,7 +51,7 @@ public void update(Client client) {
 }
 [/java]
 you can receive on the request parameters:
-[code]
+[code properties]
 client.id=3
 client.name=John Doe
 client.user.login=johndoe
@@ -62,7 +62,7 @@ from client.
 
 If an object field or a method parameter is a list (List<> or array), you can receive
 several request parameters, using square brackets and indexes:
-[code]
+[code properties]
 client.phones[0]=+55 11 5571-2751 #if it is a string list
 client.relatives[0].id=1 #if it is an arbitrary object, you can continue to browse
 client.relatives[3].id=1 #indexes don't need to be sequential

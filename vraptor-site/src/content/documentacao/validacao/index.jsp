@@ -92,8 +92,8 @@ Por exemplo, caso queiramos obrigar que seja informado o nome do funcionario:</s
 <span class="java4">public </span><span class="java10">adiciona</span><span class="java8">(</span><span class="java10">Funcionario funcionario</span><span class="java8">) {<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java10">validator.checking</span><span class="java8">(</span><span class="java4">new </span><span class="java10">Validations</span><span class="java8">(){{<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">that</span><span class="java8">(</span><span class="java10">!funcionario.getNome</span><span class="java8">()</span><span class="java10">.isEmpty</span><span class="java8">()</span><span class="java10">, </span><span class="java5">&#34;erro&#34;</span><span class="java10">,</span><span class="java5">&#34;nomeNaoInformado&#34;</span><span class="java8">)</span><span class="java10">;<br />
-&nbsp;&nbsp;&nbsp; </span><span class="java8">}})<br />
-&nbsp;&nbsp;&nbsp; </span><span class="java10">validator.onErrorUse</span><span class="java8">(</span><span class="java10">page</span><span class="java8">())</span><span class="java10">.of</span><span class="java8">(</span><span class="java10">FuncionarioController.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">.formulario</span><span class="java8">()</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}})</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; validator.onErrorUse</span><span class="java8">(</span><span class="java10">page</span><span class="java8">())</span><span class="java10">.of</span><span class="java8">(</span><span class="java10">FuncionarioController.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">.formulario</span><span class="java8">()</span><span class="java10">;<br />
 &nbsp;&nbsp;&nbsp; <br />
 &nbsp;&nbsp;&nbsp; dao.adiciona</span><span class="java8">(</span><span class="java10">funcionario</span><span class="java8">)</span><span class="java10">;<br />
 </span><span class="java8">}</span></code></div>
@@ -110,7 +110,7 @@ foi passado pra ele &eacute; v&aacute;lido ou n&atilde;o:</span>
 &nbsp;&nbsp;&nbsp; </span><span class="java4">if </span><span class="java8">(</span><span class="java10">that</span><span class="java8">(</span><span class="java10">usuario != null, </span><span class="java5">&#34;usuario&#34;</span><span class="java10">, </span><span class="java5">&#34;usuario.nulo&#34;</span><span class="java8">)) {<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">that</span><span class="java8">(</span><span class="java10">usuario.getIdade</span><span class="java8">() </span><span class="java10">&gt;= </span><span class="java7">18</span><span class="java10">, </span><span class="java5">&#34;usuario.idade&#34;</span><span class="java10">, </span><span class="java5">&#34;usuario.menor.de.idade&#34;</span><span class="java8">)</span><span class="java10">;<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
-}})</span></code></div>
+}})</span><span class="java10">;</span></code></div>
 	    	<span class="paragraph">Desse jeito a segunda valida&ccedil;&atilde;o s&oacute; acontece se a primeira n&atilde;o falhou.</span>
 		
 
@@ -121,8 +121,8 @@ a vantagem da composi&ccedil;&atilde;o de matchers e da cria&ccedil;&atilde;o de
 <span class="java4">public </span><span class="java10">admin</span><span class="java8">(</span><span class="java10">Funcionario funcionario</span><span class="java8">) {<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java10">validator.checking</span><span class="java8">(</span><span class="java4">new </span><span class="java10">Validations</span><span class="java8">(){{<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">that</span><span class="java8">(</span><span class="java10">funcionario.getRoles</span><span class="java8">()</span><span class="java10">, hasItem</span><span class="java8">(</span><span class="java5">&#34;ADMIN&#34;</span><span class="java8">)</span><span class="java10">, </span><span class="java5">&#34;admin&#34;</span><span class="java10">,</span><span class="java5">&#34;funcionario.nao.eh.admin&#34;</span><span class="java8">)</span><span class="java10">;<br />
-&nbsp;&nbsp;&nbsp; </span><span class="java8">}})<br />
-&nbsp;&nbsp;&nbsp; </span><span class="java10">validator.onErrorUse</span><span class="java8">(</span><span class="java10">page</span><span class="java8">())</span><span class="java10">.of</span><span class="java8">(</span><span class="java10">LoginController.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">.login</span><span class="java8">()</span><span class="java10">;&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}})</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; validator.onErrorUse</span><span class="java8">(</span><span class="java10">page</span><span class="java8">())</span><span class="java10">.of</span><span class="java8">(</span><span class="java10">LoginController.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">.login</span><span class="java8">()</span><span class="java10">;&nbsp;&nbsp;&nbsp; <br />
 &nbsp;&nbsp;&nbsp; dao.adiciona</span><span class="java8">(</span><span class="java10">funcionario</span><span class="java8">)</span><span class="java10">;<br />
 </span><span class="java8">}</span></code></div>
 		
@@ -137,9 +137,9 @@ usando o Hibernate Validator basta adicionar uma linha de c&oacute;digo:</span>
 <br />
 &nbsp;&nbsp;&nbsp; validator.checking</span><span class="java8">(</span><span class="java4">new </span><span class="java10">Validations</span><span class="java8">(){{<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">that</span><span class="java8">(</span><span class="java10">!funcionario.getNome</span><span class="java8">()</span><span class="java10">.isEmpty</span><span class="java8">()</span><span class="java10">, </span><span class="java5">&#34;erro&#34;</span><span class="java10">,</span><span class="java5">&#34;nomeNaoInformado&#34;</span><span class="java8">)</span><span class="java10">;<br />
-&nbsp;&nbsp;&nbsp; </span><span class="java8">}})<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}})</span><span class="java10">;<br />
 &nbsp;&nbsp;&nbsp; <br />
-&nbsp;&nbsp;&nbsp; </span><span class="java10">dao.adiciona</span><span class="java8">(</span><span class="java10">funcionario</span><span class="java8">)</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; dao.adiciona</span><span class="java8">(</span><span class="java10">funcionario</span><span class="java8">)</span><span class="java10">;<br />
 </span><span class="java8">}</span></code></div>
 		
 

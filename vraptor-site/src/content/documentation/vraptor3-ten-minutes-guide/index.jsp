@@ -429,17 +429,17 @@ field.password&nbsp;<span class="texvalue">=&nbsp;Senha</span></code></div>
 language.</span>
 	    	<span class="paragraph">In order to use those messages in your JSP files, you could use JSTL. The code would go 
 as follows:</span>
-	    	<div class="java"><code class="java">&lt;html&gt;&nbsp;<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&lt;body&gt;&nbsp;<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fmt:message&nbsp;key="field.userName"&nbsp;/&gt;&nbsp;&lt;input&nbsp;name="user.userName"&nbsp;/&gt;&nbsp;<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;br&nbsp;/&gt;&nbsp;<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fmt:message&nbsp;key="field.password"&nbsp;/&gt;&nbsp;&lt;input&nbsp;type="password"&nbsp;name="user.password"&nbsp;/&gt;&nbsp;<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;input&nbsp;type="submit"&nbsp;/&gt;&nbsp;<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&lt;/body&gt;&nbsp;<br />
-&lt;/html&gt;</code></div>
+	    	<div class="xml"><code class="xml"><span class="textag">&lt;html&gt;</span><span class="texnormal">&nbsp;<br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;body&gt;</span><span class="texnormal">&nbsp;<br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;fmt:message</span>&nbsp;<span class="texattrib">key=</span><span class="texvalue">"field.userName"</span>&nbsp;<span class="textag">/&gt;</span><span class="texnormal">&nbsp;</span><span class="textag">&lt;input</span>&nbsp;<span class="texattrib">name=</span><span class="texvalue">"user.userName"</span>&nbsp;<span class="textag">/&gt;</span><span class="texnormal">&nbsp;<br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;br</span>&nbsp;<span class="textag">/&gt;</span><span class="texnormal">&nbsp;<br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;fmt:message</span>&nbsp;<span class="texattrib">key=</span><span class="texvalue">"field.password"</span>&nbsp;<span class="textag">/&gt;</span><span class="texnormal">&nbsp;</span><span class="textag">&lt;input</span>&nbsp;<span class="texattrib">type=</span><span class="texvalue">"password"</span>&nbsp;<span class="texattrib">name=</span><span class="texvalue">"user.password"</span>&nbsp;<span class="textag">/&gt;</span><span class="texnormal">&nbsp;<br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;input</span>&nbsp;<span class="texattrib">type=</span><span class="texvalue">"submit"</span>&nbsp;<span class="textag">/&gt;</span><span class="texnormal">&nbsp;<br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;/body&gt;</span><span class="texnormal">&nbsp;<br /></span>
+<span class="texnormal"></span><span class="textag">&lt;/html&gt;</span></code></div>
 		
 
 </div><!-- content -->

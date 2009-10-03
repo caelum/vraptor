@@ -55,7 +55,7 @@ public void atualiza(Cliente cliente) {
 }
 [/java]
 você pode passar como parâmetro na requisição:
-[code]
+[code properties]
 cliente.id=3
 cliente.nome=Fulano
 cliente.usuario.login=fulano
@@ -65,7 +65,7 @@ serão setados.
 
 Se um atributo do objeto ou parâmetro do método for uma lista (List<> ou array), você
 pode passar vários parâmetros usando colchetes e índices:
-[code]
+[code properties]
 cliente.telefones[0]=(11) 5571-2751 #no caso de ser uma lista de String
 cliente.dependentes[0].id=1 #no caso de ser qualquer objeto, você pode continuar a navegação
 cliente.dependentes[3].id=1 #os índices não precisam ser sequenciais

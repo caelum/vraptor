@@ -469,7 +469,7 @@ language.
 In order to use those messages in your JSP files, you could use JSTL. The code would go 
 as follows:
 
-[code]
+[xml]
 <html> 
 	<body> 
 		<fmt:message key="field.userName" /> <input name="user.userName" /> 
@@ -481,4 +481,4 @@ as follows:
 		<input type="submit" /> 
 	</body> 
 </html>
-[/code]
+[/xml]

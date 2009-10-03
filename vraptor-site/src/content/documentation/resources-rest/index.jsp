@@ -101,18 +101,18 @@ you can use dots for browsing through the fields. For instance, on method:</span
 &nbsp;&nbsp; </span><span class="java3">//...<br />
 </span><span class="java8">}</span></code></div>
 	    	<span class="paragraph">you can receive on the request parameters:</span>
-	    	<div class="java"><code class="java">client.id=3<br />
-client.name=John&nbsp;Doe<br />
-client.user.login=johndoe</code></div>
+	    	<div class="java"><code class="java">client.id=<span class="texvalue">3<br /></span>
+client.name=John&nbsp;<span class="texvalue">Doe<br /></span>
+client.user.login=<span class="texvalue">johndoe</span></code></div>
 	    	<span class="paragraph">and the respective fields will be set, browsing through getters and setters starting
 from client.</span>
 	    	<span class="paragraph">If an object field or a method parameter is a list (List&lt;&gt; or array), you can receive
 several request parameters, using square brackets and indexes:</span>
-	    	<div class="java"><code class="java">client.phones[0]=+55&nbsp;11&nbsp;5571-2751&nbsp;#if&nbsp;it&nbsp;is&nbsp;a&nbsp;string&nbsp;list<br />
-client.relatives[0].id=1&nbsp;#if&nbsp;it&nbsp;is&nbsp;an&nbsp;arbitrary&nbsp;object,&nbsp;you&nbsp;can&nbsp;continue&nbsp;to&nbsp;browse<br />
-client.relatives[3].id=1&nbsp;#indexes&nbsp;don't&nbsp;need&nbsp;to&nbsp;be&nbsp;sequential<br />
-client.relatives[0].name=Mary&nbsp;Doe&nbsp;#using&nbsp;the&nbsp;same&nbsp;index,&nbsp;it&nbsp;will&nbsp;be&nbsp;set&nbsp;on&nbsp;same&nbsp;object<br />
-clients[1].id=23&nbsp;#it&nbsp;works&nbsp;if&nbsp;you&nbsp;receive&nbsp;a&nbsp;client&nbsp;list&nbsp;as&nbsp;method&nbsp;parameter</code></div>
+	    	<div class="java"><code class="java">client.phones[0]=+55&nbsp;<span class="texvalue">11&nbsp;5571-2751&nbsp;<span class="texcomment">#if&nbsp;it&nbsp;is&nbsp;a&nbsp;string&nbsp;list<br /></span></span>
+client.relatives[0].id=1&nbsp;<span class="texvalue"><span class="texcomment">#if&nbsp;it&nbsp;is&nbsp;an&nbsp;arbitrary&nbsp;object,&nbsp;you&nbsp;can&nbsp;continue&nbsp;to&nbsp;browse<br /></span></span>
+client.relatives[3].id=1&nbsp;<span class="texvalue"><span class="texcomment">#indexes&nbsp;don't&nbsp;need&nbsp;to&nbsp;be&nbsp;sequential<br /></span></span>
+client.relatives[0].name=Mary&nbsp;<span class="texvalue">Doe&nbsp;<span class="texcomment">#using&nbsp;the&nbsp;same&nbsp;index,&nbsp;it&nbsp;will&nbsp;be&nbsp;set&nbsp;on&nbsp;same&nbsp;object<br /></span></span>
+clients[1].id=23&nbsp;<span class="texvalue"><span class="texcomment">#it&nbsp;works&nbsp;if&nbsp;you&nbsp;receive&nbsp;a&nbsp;client&nbsp;list&nbsp;as&nbsp;method&nbsp;parameter</span></span></code></div>
 	    	<div class="box"><h3>Reflection on parameter names</h3>
 <span class="paragraph">Unfortunately Java can't reflect parameters names, these data don't stay in bytecode
 (unless you compile your code in debug mode, but that is optional). It causes that most

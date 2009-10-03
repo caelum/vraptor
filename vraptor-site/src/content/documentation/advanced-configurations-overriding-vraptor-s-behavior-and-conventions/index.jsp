@@ -104,11 +104,11 @@ If you want to override this convention, you can create a class like:</span>
 
 <h3 class="section">Changing IoC provider</h3>
 	    	<span class="paragraph">VRaptor's default IoC provider is Spring. In order to change, just add the following to your
-web.xml:
-&lt;context-param&gt;
-    &lt;param-name&gt;br.com.caelum.vraptor.provider&lt;/param-name&gt;
-    &lt;param-value&gt;com.package.from.your.PrefferedProviderClass&lt;/param-value&gt;
-&lt;/context-param&gt;</span>
+web.xml:</span>
+	    	<div class="xml"><code class="xml"><span class="textag">&lt;context-param&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-name&gt;</span><span class="texnormal">br.com.caelum.vraptor.provider</span><span class="textag">&lt;/param-name&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-value&gt;</span><span class="texnormal">com.package.from.your.PrefferedProviderClass</span><span class="textag">&lt;/param-value&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal"></span><span class="textag">&lt;/context-param&gt;</span></code></div>
 	    	<span class="paragraph">VRaptor comes with built-in support to both Spring (br.com.caelum.vraptor.ioc.spring.SpringProvider) and PicoContainer
 (br.com.caelum.vraptor.ioc.pico.PicoProvider).
 You still have the option to extend any of these classes and use your own provider.</span>

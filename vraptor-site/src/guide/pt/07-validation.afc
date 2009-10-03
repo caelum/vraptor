@@ -44,7 +44,7 @@ Por exemplo, caso queiramos obrigar que seja informado o nome do funcionario:
 public adiciona(Funcionario funcionario) {
 	validator.checking(new Validations(){{
 		that(!funcionario.getNome().isEmpty(), "erro","nomeNaoInformado");
-	}})
+	}});
 	validator.onErrorUse(page()).of(FuncionarioController.class).formulario();
 	
 	dao.adiciona(funcionario);
@@ -67,7 +67,7 @@ foi passado pra ele é válido ou não:
 		if (that(usuario != null, "usuario", "usuario.nulo")) {
 			that(usuario.getIdade() >= 18, "usuario.idade", "usuario.menor.de.idade");
 		}
-	}})
+	}});
 [/java]
 
 Desse jeito a segunda validação só acontece se a primeira não falhou.
@@ -79,7 +79,7 @@ a vantagem da composição de matchers e da criação de novos matchers que o Ha
 public admin(Funcionario funcionario) {
 	validator.checking(new Validations(){{
 		that(funcionario.getRoles(), hasItem("ADMIN"), "admin","funcionario.nao.eh.admin");
-	}})
+	}});
 	validator.onErrorUse(page()).of(LoginController.class).login();	
 	dao.adiciona(funcionario);
 }
@@ -98,7 +98,7 @@ public adiciona(Funcionario funcionario) {
 
 	validator.checking(new Validations(){{
 		that(!funcionario.getNome().isEmpty(), "erro","nomeNaoInformado");
-	}})
+	}});
 	
 	dao.adiciona(funcionario);
 }

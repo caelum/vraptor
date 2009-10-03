@@ -107,18 +107,18 @@ voc&ecirc; pode usar pontos para navegar entre os atributos. Por exemplo, no m&e
 &nbsp;&nbsp; </span><span class="java3">//...<br />
 </span><span class="java8">}</span></code></div>
 	    	<span class="paragraph">voc&ecirc; pode passar como par&acirc;metro na requisi&ccedil;&atilde;o:</span>
-	    	<div class="java"><code class="java">cliente.id=3<br />
-cliente.nome=Fulano<br />
-cliente.usuario.login=fulano</code></div>
+	    	<div class="java"><code class="java">cliente.id=<span class="texvalue">3<br /></span>
+cliente.nome=<span class="texvalue">Fulano<br /></span>
+cliente.usuario.login=<span class="texvalue">fulano</span></code></div>
 	    	<span class="paragraph">e os campos correspondentes, navegando via getters e setters a partir do cliente,
 ser&atilde;o setados.</span>
 	    	<span class="paragraph">Se um atributo do objeto ou par&acirc;metro do m&eacute;todo for uma lista (List&lt;&gt; ou array), voc&ecirc;
 pode passar v&aacute;rios par&acirc;metros usando colchetes e &iacute;ndices:</span>
-	    	<div class="java"><code class="java">cliente.telefones[0]=(11)&nbsp;5571-2751&nbsp;#no&nbsp;caso&nbsp;de&nbsp;ser&nbsp;uma&nbsp;lista&nbsp;de&nbsp;String<br />
-cliente.dependentes[0].id=1&nbsp;#no&nbsp;caso&nbsp;de&nbsp;ser&nbsp;qualquer&nbsp;objeto,&nbsp;voc&ecirc;&nbsp;pode&nbsp;continuar&nbsp;a&nbsp;navega&ccedil;&atilde;o<br />
-cliente.dependentes[3].id=1&nbsp;#os&nbsp;&iacute;ndices&nbsp;n&atilde;o&nbsp;precisam&nbsp;ser&nbsp;sequenciais<br />
-cliente.dependentes[0].nome=Cicrano&nbsp;#se&nbsp;usar&nbsp;o&nbsp;mesmo&nbsp;&iacute;ndice,&nbsp;vai&nbsp;ser&nbsp;setado&nbsp;no&nbsp;mesmo&nbsp;objeto<br />
-clientes[1].id=23&nbsp;#funciona&nbsp;se&nbsp;voc&ecirc;&nbsp;receber&nbsp;uma&nbsp;lista&nbsp;de&nbsp;clientes&nbsp;no&nbsp;m&eacute;todo</code></div>
+	    	<div class="java"><code class="java">cliente.telefones[0]=(11)&nbsp;<span class="texvalue">5571-2751&nbsp;<span class="texcomment">#no&nbsp;caso&nbsp;de&nbsp;ser&nbsp;uma&nbsp;lista&nbsp;de&nbsp;String<br /></span></span>
+cliente.dependentes[0].id=1&nbsp;<span class="texvalue"><span class="texcomment">#no&nbsp;caso&nbsp;de&nbsp;ser&nbsp;qualquer&nbsp;objeto,&nbsp;voc&ecirc;&nbsp;pode&nbsp;continuar&nbsp;a&nbsp;navega&ccedil;&atilde;o<br /></span></span>
+cliente.dependentes[3].id=1&nbsp;<span class="texvalue"><span class="texcomment">#os&nbsp;&iacute;ndices&nbsp;n&atilde;o&nbsp;precisam&nbsp;ser&nbsp;sequenciais<br /></span></span>
+cliente.dependentes[0].nome=Cicrano&nbsp;<span class="texvalue"><span class="texcomment">#se&nbsp;usar&nbsp;o&nbsp;mesmo&nbsp;&iacute;ndice,&nbsp;vai&nbsp;ser&nbsp;setado&nbsp;no&nbsp;mesmo&nbsp;objeto<br /></span></span>
+clientes[1].id=23&nbsp;<span class="texvalue"><span class="texcomment">#funciona&nbsp;se&nbsp;voc&ecirc;&nbsp;receber&nbsp;uma&nbsp;lista&nbsp;de&nbsp;clientes&nbsp;no&nbsp;m&eacute;todo</span></span></code></div>
 	    	<div class="box"><h3>Reflection no nome dos par&acirc;metros</h3>
 <span class="paragraph">Infelizmente, o Java n&atilde;o realiza reflection em cima de par&acirc;metros, esses dados n&atilde;o ficam
 dispon&iacute;veis em bytecode (a n&atilde;o ser se compilado em debug mode, por&eacute;m &eacute; algo opcional). Isso

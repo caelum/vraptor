@@ -57,11 +57,12 @@ Se você precisa mudar mais ainda a convenção basta implementar a interface Ro
 [section Mudando o IoC provider]
 
 O IoC provider padrão é o spring. Para mudá-lo basta colocar no web.xml:
+[xml]
 <context-param>
     <param-name>br.com.caelum.vraptor.provider</param-name>
     <param-value>br.com.classe.do.seu.provider.Preferido</param-value>
 </context-param>
-
+[/xml]
 Entre os padrão existem: br.com.caelum.vraptor.ioc.spring.SpringProvider e br.com.caelum.vraptor.ioc.pico.PicoProvider.
 Você pode ainda estender alguma dessas duas classes e usar seu próprio provider.
 

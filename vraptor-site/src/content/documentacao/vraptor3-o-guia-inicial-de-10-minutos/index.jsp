@@ -438,18 +438,18 @@ configurada com locale em ingl&ecirc;s as mensagens desse arquivo ser&atilde;o u
 campo.senha&nbsp;<span class="texvalue">=&nbsp;Password</span></code></div>
 	    	<span class="paragraph">Repare que as chaves s&atilde;o mantidas, mudando apenas o valor para a l&iacute;ngua escolhida.</span>
 	    	<span class="paragraph">Para usar essas mensagens em seus arquivos JSP, voc&ecirc; pode utilizar a JSTL. Dessa forma, o c&oacute;digo ficaria:</span>
-	    	<div class="java"><code class="java">&lt;%@&nbsp;taglib&nbsp;uri="http://java.sun.com/jsp/jstl/fmt"&nbsp;prefix="fmt"&nbsp;%&gt;<br />
-&lt;html&gt;<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&lt;body&gt;<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fmt:message&nbsp;key="campo.usuario"&nbsp;/&gt;&nbsp;&lt;input&nbsp;name="usuario.nomeUsuario"&nbsp;/&gt;<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;br&nbsp;/&gt;<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fmt:message&nbsp;key="campo.senha"&nbsp;/&gt;&nbsp;&lt;input&nbsp;type="password"&nbsp;name="usuario.senha"&nbsp;/&gt;<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;input&nbsp;type="submit"&nbsp;/&gt;<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&lt;/body&gt;<br />
-&lt;/html&gt;</code></div>
+	    	<div class="xml"><code class="xml">&lt;%@&nbsp;taglib&nbsp;uri="http://java.sun.com/jsp/jstl/fmt"&nbsp;prefix="fmt"&nbsp;%&gt;<span class="texnormal"><br /></span>
+<span class="texnormal"></span><span class="textag">&lt;html&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;body&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;fmt:message</span>&nbsp;<span class="texattrib">key=</span><span class="texvalue">"campo.usuario"</span>&nbsp;<span class="textag">/&gt;</span><span class="texnormal">&nbsp;</span><span class="textag">&lt;input</span>&nbsp;<span class="texattrib">name=</span><span class="texvalue">"usuario.nomeUsuario"</span>&nbsp;<span class="textag">/&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;br</span>&nbsp;<span class="textag">/&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;fmt:message</span>&nbsp;<span class="texattrib">key=</span><span class="texvalue">"campo.senha"</span>&nbsp;<span class="textag">/&gt;</span><span class="texnormal">&nbsp;</span><span class="textag">&lt;input</span>&nbsp;<span class="texattrib">type=</span><span class="texvalue">"password"</span>&nbsp;<span class="texattrib">name=</span><span class="texvalue">"usuario.senha"</span>&nbsp;<span class="textag">/&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;input</span>&nbsp;<span class="texattrib">type=</span><span class="texvalue">"submit"</span>&nbsp;<span class="textag">/&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;/body&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal"></span><span class="textag">&lt;/html&gt;</span></code></div>
 		
 
 </div><!-- content -->

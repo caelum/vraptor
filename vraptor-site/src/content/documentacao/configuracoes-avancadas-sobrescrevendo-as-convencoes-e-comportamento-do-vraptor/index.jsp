@@ -107,11 +107,11 @@ nome_do_controller/nome_do_metodo. Para sobrescrever essa conven&ccedil;&atilde;
 		
 
 <h3 class="section">Mudando o IoC provider</h3>
-	    	<span class="paragraph">O IoC provider padr&atilde;o &eacute; o spring. Para mud&aacute;-lo basta colocar no web.xml:
-&lt;context-param&gt;
-    &lt;param-name&gt;br.com.caelum.vraptor.provider&lt;/param-name&gt;
-    &lt;param-value&gt;br.com.classe.do.seu.provider.Preferido&lt;/param-value&gt;
-&lt;/context-param&gt;</span>
+	    	<span class="paragraph">O IoC provider padr&atilde;o &eacute; o spring. Para mud&aacute;-lo basta colocar no web.xml:</span>
+	    	<div class="xml"><code class="xml"><span class="textag">&lt;context-param&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-name&gt;</span><span class="texnormal">br.com.caelum.vraptor.provider</span><span class="textag">&lt;/param-name&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-value&gt;</span><span class="texnormal">br.com.classe.do.seu.provider.Preferido</span><span class="textag">&lt;/param-value&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal"></span><span class="textag">&lt;/context-param&gt;</span></code></div>
 	    	<span class="paragraph">Entre os padr&atilde;o existem: br.com.caelum.vraptor.ioc.spring.SpringProvider e br.com.caelum.vraptor.ioc.pico.PicoProvider.
 Voc&ecirc; pode ainda estender alguma dessas duas classes e usar seu pr&oacute;prio provider.</span>
 		

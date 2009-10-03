@@ -459,7 +459,7 @@ Repare que as chaves são mantidas, mudando apenas o valor para a língua escolh
 
 Para usar essas mensagens em seus arquivos JSP, você pode utilizar a JSTL. Dessa forma, o código ficaria:
 
-[code]
+[xml]
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <html>
 	<body>
@@ -472,4 +472,4 @@ Para usar essas mensagens em seus arquivos JSP, você pode utilizar a JSTL. Dess
 		<input type="submit" />
 	</body>
 </html>
-[/code]
+[/xml]

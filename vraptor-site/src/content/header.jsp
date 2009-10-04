@@ -32,12 +32,12 @@
     </div><!-- header wrap-->
     
     <div id="menuWrap">
-    	<ul id="menuElements">
-        	<li><a id="homeBtn" href="${path }/<fmt:message key='home.link'/>"><span>home</span></a></li>
-        	<li><a id="downloadBtn" href="${path }/<fmt:message key='download.link'/>"><span>download</span></a></li>
-        	<li><a id="documentacaoBtn" href="${path }/<fmt:message key='documentacao.link'/>"><span><fmt:message key="documentacao"/></span></a></li>
-        	<li><a id="beneficiosBtn" href="${path }/<fmt:message key='beneficios.link'/>"><span><fmt:message key="beneficios"/></span></a></li>
-        	<li><a id="suporteBtn" href="${path }/<fmt:message key='suporte.link'/>"><span><fmt:message key="suporte"/></span></a></li>
-        	<li><a id="vraptor2Btn" href="${path }/<fmt:message key='vraptor2.link'/>"><span>vraptor2</span></a></li>
+    	<ul id="<fmt:message key='menu.id'/>">
+        	<li><a id="<fmt:message key='home.id'/>" href="${path }/<fmt:message key='home.link'/>"><span>home</span></a></li>
+        	<li><a id="<fmt:message key='download.id'/>" href="${path }/<fmt:message key='download.link'/>"><span>download</span></a></li>
+        	<li><a id="<fmt:message key='docs.id'/>" href="${path }/<fmt:message key='documentacao.link'/>"><span><fmt:message key="documentacao"/></span></a></li>
+        	<li><a id="<fmt:message key='beneficios.id'/>" href="${path }/<fmt:message key='beneficios.link'/>"><span><fmt:message key="beneficios"/></span></a></li>
+        	<li><a id="<fmt:message key='suporte.id'/>" href="${path }/<fmt:message key='suporte.link'/>"><span><fmt:message key="suporte"/></span></a></li>
+        	<li><a id="<fmt:message key='vraptor2.id'/>" href="${path }/<fmt:message key='vraptor2.link'/>"><span>vraptor2</span></a></li>
         </ul><!-- menuElements-->
     </div><!-- menuWrap-->

@@ -11,6 +11,14 @@
 			<include name="*.jar" />
 		</fileset>
 	</path>
+	<path id="compile.classpath" path=".">
+		<fileset dir="src/content/WEB-INF/lib">
+			<include name="*.jar" />
+		</fileset>
+		<fileset dir="../common">
+			<include name="*.jar" />
+		</fileset>
+	</path>
 
 	<taskdef name="xsite" classname="org.codehaus.xsite.ant.XSiteTask">
 		<classpath refid="libs.classpath" />
@@ -57,15 +65,19 @@
 		</exec>
 	</target>
 		
-
+	<target name="compile" description="--> compiles the classes">
+		<delete dir="src/content/WEB-INF/classes" includes="**/*"/>
+		<javac  destdir="src/content/WEB-INF/classes" srcdir="src/java" classpathref="compile.classpath" debug="true" encoding="UTF-8" />
+		<copy todir="src/content/WEB-INF/classes">
+			<fileset dir="src/resources" />
+		</copy>
+	</target>
 	<!-- ================================= 
 	          target: assembly              
 	         ================================= -->
-    <target name="assembly" description="--> assemblies the distribution">
-    	
+    <target name="assembly" depends="compile, doc" description="--> assemblies the distribution">
 		<war destfile="site.war" webxml="src/content/WEB-INF/web.xml">
         	<fileset dir="src/content" excludes="src/content/WEB-INF/web.xml"/>
     	</war>
-    	
     </target>
 </project>

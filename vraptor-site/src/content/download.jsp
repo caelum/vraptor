@@ -6,17 +6,17 @@
 
 			<div id="passo1">
                 <a class="downloadBtn3"><span>Download Now</span></a>            
-            	<p><a href="http://code.google.com/p/vraptor3/"><fmt:message key="vraptor.zip"/></a></p>
+            	<p><a href="http://code.google.com/p/vraptor3/downloads/list"><fmt:message key="vraptor.zip"/></a></p>
             </div><!-- passo 1 -->
             
 			<div id="passo2">
                 <a class="downloadBtn3"><span>Download Now</span></a>            
-            	<p><a href="http://code.google.com/p/vraptor3/"><fmt:message key="blank.project.zip"/></a></p>
+            	<p><a href="http://code.google.com/p/vraptor3/downloads/list"><fmt:message key="blank.project.zip"/></a></p>
             </div><!-- passo 2 -->
             
 			<div id="passo3">
                 <a class="downloadBtn3"><span>Download Now</span></a>            
-            	<p><a href="http://code.google.com/p/vraptor3/"><fmt:message key="mydvds.zip"/></a></p>
+            	<p><a href="http://code.google.com/p/vraptor3/downloads/list"><fmt:message key="mydvds.zip"/></a></p>
             </div><!-- passo 2 -->                        
                                          
         </div><!-- contentDownload -->

@@ -8,6 +8,9 @@ body{
 	background-color:#2a2948; 
 	text-align:center;}
 
+#contentSuporte .suporteBox ul li a em.bigger {
+	font-size: 14pt;
+}
 /*header structure*/
 #headerWrap{
 	background-image:url(images/bgHeader.png);

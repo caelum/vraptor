@@ -75,14 +75,17 @@
 			-webkit-border-radius: 5px;
 		}
 		a#homeBtnEn, a#downloadBtnEn, a#documentacaoBtnEn, a#beneficiosBtnEn, a#suporteBtnEn, a#vraptor2BtnEn {
-			font-size: 15pt;
+			font-size: 12pt;
 			text-transform: uppercase;
 			text-decoration: none;
 			font-weight: bold;
 			position:relative;
-			padding: 7px;
+			padding: 5px 12px;
 			color: white;
 			top: auto;
+		}
+		a#vraptor2BtnEn {
+			font-size: 10pt;
 		}
 			#homeBtn, #downloadBtn, #documentacaoBtn, #beneficiosBtn, #suporteBtn, #vraptor2Btn {
 				background-image:url(images/vraptorSprites-trans.png);

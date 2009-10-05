@@ -48,6 +48,7 @@ public class LocaleFilter implements Filter {
 	public void init(FilterConfig fConfig) throws ServletException {
 		en2pt = ImmutableBiMap.<String,String>builder()
 			.put("/", "/en/")
+			.put("/index.jsp", "/en")
 			.put("/download.jsp", "/en/download.jsp")
 			.put("/documentation/", "/documentation/")
 			.put("/beneficios.jsp", "/benefits.jsp")

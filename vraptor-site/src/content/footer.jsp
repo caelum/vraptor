@@ -1,3 +1,5 @@
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<fmt:setLocale value="${locale}"/>
     <div id="footerWrap">
     	<div id="footerContent">              
             <div id="suporteFooter">

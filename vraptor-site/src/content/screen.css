@@ -341,6 +341,9 @@ body{
 			background-image:url(images/vraptorSprites-trans.png);
 			background-repeat:no-repeat;
 			background-position:-989px -528px;}
+		#contentVraptor2 .oldForum {
+			font-size: 9px;
+		}
 		#contentVraptor2 dl dd a {padding-left:18px; text-decoration:none; color:#625696; font-weight:bold;}
 		#contentVraptor2 dl dd a:hover{color:#C60; font-weight:bold;}
 		

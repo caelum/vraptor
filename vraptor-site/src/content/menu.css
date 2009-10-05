@@ -73,6 +73,9 @@
 			background-color: #a29bc0;
 			-moz-border-radius: 5px;
 			-webkit-border-radius: 5px;
+			-khtml-border-radius: 5px;
+			-opera-border-radius: 5px;
+			border-radius: 5px;
 		}
 		a#homeBtnEn, a#downloadBtnEn, a#documentacaoBtnEn, a#beneficiosBtnEn, a#suporteBtnEn, a#vraptor2BtnEn {
 			font-size: 12pt;
@@ -80,7 +83,7 @@
 			text-decoration: none;
 			font-weight: bold;
 			position:relative;
-			padding: 5px 12px;
+			padding: 5px 15px;
 			color: white;
 			top: auto;
 		}

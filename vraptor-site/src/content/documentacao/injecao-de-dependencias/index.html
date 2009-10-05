@@ -1,0 +1,275 @@
+
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="author" content="Caelum"/>
+	<meta name="reply-to" content="contato@caelum.com.br"/>
+	<meta name="author" content="Design"/>
+	<meta name="reply-to" content="lokidg@gmail.com"/>
+	
+		<link href="/vraptor-site/documentacao/includes/css/java.css" rel="stylesheet" type="text/css" media="screen" />
+		<link href="/vraptor-site/documentacao/includes/css/xml2html.css" rel="stylesheet" type="text/css" media="screen" />
+		<link href="/vraptor-site/documentacao/includes/css/style.css" rel="stylesheet" type="text/css" media="screen" />
+	
+	<meta name="description" content="VRaptor 3 - um framework java para web focado em desenvolvimento rápido"/>
+	<meta name="keywords" content="sites, web, desenvolvimento, development, java, opensource"/>
+	<title>V|Raptor - Alta produtividade no Desenvolvimento Web em Java</title>
+	<link href="/vraptor-site/screen.css" rel="stylesheet" type="text/css" media="screen" />
+    <link href="/vraptor-site/menu.css" rel="stylesheet" type="text/css" media="screen" />
+    <!--[if lt IE 7]>
+    <script src="http://ie7-js.googlecode.com/svn/version/2.0(beta3)/IE7.js" type="text/javascript"></script>
+    <![endif]-->
+</head>
+
+<body>
+	<div id="headerWrap">
+    	<div id="headerContent">
+        	<h1 id="logoVraptor"><span>V|Raptor</span></h1><!-- vraptorlogo-->
+            
+            <ul id="langMenu">
+            	<li><a id="engBtn" href="/vraptor-site/en/"><span>ENGLISH</span></a></li>
+                <li><a id="ptBtn" href="/vraptor-site/"><span>PORTUGUÊS</span></a></li>
+            </ul><!-- langMenu-->            
+        </div><!-- header content -->
+    </div><!-- header wrap-->
+    
+    <div id="menuWrap">
+    	<ul id="menuElements">
+        	<li><a id="homeBtn" href="/vraptor-site/"><span>home</span></a></li>
+        	<li><a id="downloadBtn" href="/vraptor-site/download.jsp"><span>download</span></a></li>
+        	<li><a id="documentacaoBtn" href="/vraptor-site/documentacao/"><span>Documentação</span></a></li>
+        	<li><a id="beneficiosBtn" href="/vraptor-site/beneficios.jsp"><span>Benef&iacute;cios</span></a></li>
+        	<li><a id="suporteBtn" href="/vraptor-site/suporte.jsp"><span>Suporte</span></a></li>
+        	<li><a id="vraptor2Btn" href="/vraptor-site/vraptor2.jsp"><span>vraptor2</span></a></li>
+        </ul><!-- menuElements-->
+    </div><!-- menuWrap-->
+<div id="contentWrap">
+    	<div id="contentDocumentacao">
+        	<h2><span>documentação</span></h2>
+            <h3>documentação toda em português, configuração, migração e utilização.</h3>
+            
+            <div id="subMenuDoc">
+            	<img id="positionTop" src="../includes/images/subMenuTop-trans.png" />
+                <img id="positionBottom" src="../includes/images/subMenuBottom-trans.png" />
+            	<ol type="1">
+									<li><a class="link_toc" href="../../documentacao/vraptor3-guia-de-1-minuto/">1. VRaptor3 - Guia de 1 minuto</a></li>
+		
+									<li><a class="link_toc" href="../../documentacao/vraptor3-o-guia-inicial-de-10-minutos/">2. VRaptor3 - o guia inicial de 10 minutos</a></li>
+		
+									<li><a class="link_toc" href="../../documentacao/resources-rest/">3. Resources-Rest</a></li>
+		
+									<li><a class="link_toc" href="../../documentacao/componentes/">4. Componentes</a></li>
+		
+									<li><a class="link_toc" href="../../documentacao/conversores/">5. Conversores</a></li>
+		
+									<li><a class="link_toc" href="../../documentacao/interceptadores/">6. Interceptadores</a></li>
+		
+									<li><a class="link_toc" href="../../documentacao/validacao/">7. Validação</a></li>
+		
+									<li><a class="link_toc" href="../../documentacao/view-e-ajax/">8. View e Ajax</a></li>
+		
+									<li><a class="link_toc" href="../../documentacao/injecao-de-dependencias/">9. Injeção de dependências</a></li>
+		
+									<li><a class="link_toc" href="../../documentacao/downloading/">10. Downloading</a></li>
+		
+									<li><a class="link_toc" href="../../documentacao/componentes-utilitarios-opcionais/">11. Componentes Utilitários Opcionais</a></li>
+		
+									<li><a class="link_toc" href="../../documentacao/configuracoes-avancadas-sobrescrevendo-as-convencoes-e-comportamento-do-vraptor/">12. Configurações avancadas: sobrescrevendo as convenções e comportamento do VRaptor</a></li>
+		
+									<li><a class="link_toc" href="../../documentacao/spring-joda-time-hibernate-e-google-app-engine/">13. Spring, Joda Time, Hibernate e Google App Engine</a></li>
+		
+									<li><a class="link_toc" href="../../documentacao/testando-componentes-e-controllers/">14. Testando componentes e controllers</a></li>
+		
+									<li><a class="link_toc" href="../../documentacao/changelog/">15. ChangeLog</a></li>
+		
+									<li><a class="link_toc" href="../../documentacao/migrando-do-vraptor2-para-o-vraptor3/">16. Migrando do VRaptor2 para o VRaptor3</a></li>
+		
+                </ol>
+            </div><!-- submenu-->
+                        
+            <div id="textoCapitulo">
+	
+		<h2 class="chapter">Injeção de dependências</h2>
+
+		<span class="paragraph">O VRaptor est&aacute; fortemente baseado no conceito de inje&ccedil;&atilde;o de depend&ecirc;ncias uma vez que chega at&eacute; mesmo a
+utilizar dessa id&eacute;ia para juntar seus componentes internos.</span><span class="paragraph">O conceito b&aacute;sico por tr&aacute;s de Dependency Injection (DI) &eacute; que voc&ecirc; n&atilde;o deve buscar aquilo que deseja acessar
+mas tudo o que deseja acessar deve ser fornecido para voc&ecirc;.</span><span class="paragraph">Isso se traduz, por exemplo, na passagem de componentes atrav&eacute;s do construtor de seus controladores.
+Imagine que seu controlador de clientes necessita acessar um Dao de clientes. Sendo assim, especifique claramente
+essa necessidade:</span><div class="java"><code class="java">
+<span class="java16">@Component<br />
+</span><span class="java4">public class </span><span class="java10">ClienteController </span><span class="java8">{<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">private final </span><span class="java10">ClienteDao dao;<br />
+&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">ClienteController</span><span class="java8">(</span><span class="java10">ClienteDao dao</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">this</span><span class="java10">.dao = dao;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java16">@Post<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">adiciona</span><span class="java8">(</span><span class="java10">Cliente cliente</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">this</span><span class="java10">.dao.adiciona</span><span class="java8">(</span><span class="java10">cliente</span><span class="java8">)</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+&nbsp;&nbsp;&nbsp; <br />
+}</span></code></div><span class="paragraph">E anote tamb&eacute;m o componente ClienteDao como sendo controlado pelo vraptor:</span><div class="java"><code class="java">
+<span class="java16">@Component<br />
+</span><span class="java4">public class </span><span class="java10">ClienteDao </span><span class="java8">{<br />
+}</span></code></div><span class="paragraph">A partir desse instante, o vraptor fornecer&aacute; uma inst&acirc;ncia de ClienteDao para seu ClienteController
+sempre que precisar instanci&aacute;-lo. Vale lembrar que o VRaptor honrar&aacute; o escopo de cada componente.
+Por exemplo, se ClienteDao fosse de escopo Session (@SessionScoped), seria criada uma &uacute;nica inst&acirc;ncia desse
+componente por sess&atilde;o. (note que &eacute; provavelmente errado usar um dao no escopo de session, isto &eacute; um mero exemplo).</span>
+
+
+<h3 class="section">ComponentFactory</h3>
+	    	<span class="paragraph">Em diversos momentos queremos que nossos componentes recebam componentes de outras bibliotecas.
+Nesse caso n&atilde;o temos como alterar o c&oacute;digo fonte da biblioteca para adicionar a anota&ccedil;&atilde;o @Component (al&eacute;m de poss&iacute;veis
+altera&ccedil;&otilde;es requeridas na biblioteca).</span>
+	    	<span class="paragraph">O exemplo mais famoso envolve adquirir uma Session do Hibernate. Nesses casos precisamos criar um componente
+que possui um &uacute;nico papel: fornecer inst&acirc;ncias de Session para os componentes que precisam dela.</span>
+	    	<span class="paragraph">O VRaptor possui uma interface chamada ComponentFactory que permite que suas classes possuam tal responsabilidade.
+Implementa&ccedil;&otilde;es dessa interface definem um &uacute;nico m&eacute;todo. Veja o exemplo a seguir, que inicializa o Hibernate na constru&ccedil;&atilde;o
+e utiliza essa configura&ccedil;&atilde;o para fornecer sess&otilde;es para nosso projeto:</span>
+	    	<div class="java"><code class="java">
+<span class="java16">@Component<br />
+@ApplicationScoped<br />
+</span><span class="java4">public class </span><span class="java10">SessionFactoryCreator </span><span class="java4">implements </span><span class="java10">ComponentFactory&lt;SessionFactory&gt; </span><span class="java8">{<br />
+<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">private </span><span class="java10">SessionFactory factory;<br />
+&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java16">@PostConstruct<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">create</span><span class="java8">() {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">factory = </span><span class="java4">new </span><span class="java10">AnnotationConfiguration</span><span class="java8">()</span><span class="java10">.configure</span><span class="java8">()</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">SessionFactory getInstance</span><span class="java8">() {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return </span><span class="java10">factory;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java16">@PreDestroy<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">destroy</span><span class="java8">() {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">factory.close</span><span class="java8">()</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+&nbsp;&nbsp;&nbsp; <br />
+}<br />
+<br />
+</span><span class="java16">@Component<br />
+@RequestScoped<br />
+</span><span class="java4">public class </span><span class="java10">SessionCreator </span><span class="java4">implements </span><span class="java10">ComponentFactory&lt;Session&gt; </span><span class="java8">{<br />
+<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">private final </span><span class="java10">SessionFactory factory;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">private </span><span class="java10">Session session;<br />
+<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">SessionCreator</span><span class="java8">(</span><span class="java10">SessionFactory factory</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">this</span><span class="java10">.factory = factory;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java16">@PostConstruct<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">create</span><span class="java8">() {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">this</span><span class="java10">.session = factory.openSession</span><span class="java8">()</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">Session getInstance</span><span class="java8">() {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return </span><span class="java10">session;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java16">@PreDestroy<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">destroy</span><span class="java8">() {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">this</span><span class="java10">.session.close</span><span class="java8">()</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; <br />
+}</span></code></div>
+	    	<span class="paragraph">Essas implementa&ccedil;&otilde;es j&aacute; est&atilde;o dispon&iacute;veis no c&oacute;digo do VRaptor. Para us&aacute;-la veja o cap&iacute;tulo de utils.</span>
+		
+
+<h3 class="section">Providers</h3>
+	    	<span class="paragraph">Por tr&aacute;s dos panos, o VRaptor utiliza um provider de DI espec&iacute;fico. Por padr&atilde;o o vraptor v&ecirc;m com suporte 
+ao uso interno do Picocontainer ou do Spring IoC.</span>
+	    	<span class="paragraph">Cada implementa&ccedil;&atilde;o disponibiliza tudo o que voc&ecirc; encontra na documenta&ccedil;&atilde;o do vraptor, mas acaba por fornecer
+tamb&eacute;m pontos de extens&atilde;o diferentes, claro.</span>
+		
+
+<h3 class="section">Spring</h3>
+	    	<span class="paragraph">Ao utilizar o Spring, voc&ecirc; ganha todas as caracter&iacute;sticas e componentes prontos do Spring para uso dentro do
+VRaptor, isto &eacute;, todos os componentes que funcionam com o Spring DI/Ioc, funcionam com o VRaptor. Nesse caso,
+todas as anota&ccedil;&otilde;es.</span>
+	    	<span class="paragraph">Voc&ecirc; n&atilde;o precisa fazer nada para usar o Spring, pois &eacute; o container padr&atilde;o.</span>
+	    	<span class="paragraph">O VRaptor vai usar suas configura&ccedil;&otilde;es do Spring, caso voc&ecirc; j&aacute; o tenha configurado no seu projeto (
+os listeners e o applicationContext.xml). Caso o VRaptor n&atilde;o tenha encontrado sua configura&ccedil;&atilde;o, veja
+o cap&iacute;tulo de configura&ccedil;&otilde;es avan&ccedil;adas.</span>
+		
+
+<h3 class="section">Pico Container</h3>
+	    	<span class="paragraph">Ao utilizar o Picocontainer por baixo do VRaptor, voc&ecirc; poder&aacute; acessar o pico diretamente para fazer 
+configura&ccedil;&otilde;es avan&ccedil;adas que desejar.</span>
+	    	<span class="paragraph">Para utilizar o Picocontainer como provider de sua aplica&ccedil;&atilde;o, basta colocar no seu arquivo web.xml:</span>
+	    	<div class="xml"><code class="xml"><span class="textag">&lt;context-param&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-name&gt;</span><span class="texnormal">br.com.caelum.vraptor.provider</span><span class="textag">&lt;/param-name&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-value&gt;</span><span class="texnormal">br.com.caelum.vraptor.ioc.pico.PicoProvider</span><span class="textag">&lt;/param-value&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal"></span><span class="textag">&lt;/context-param&gt;</span></code></div>
+		
+
+<h3 class="section">Seu próprio provider</h3>
+	    	<span class="paragraph">Voc&ecirc; tamb&eacute;m pode criar seu pr&oacute;prio Provider, seja para adicionar novas caracter&iacute;sticas avan&ccedil;adas a implementa&ccedil;&atilde;o do Picocontainer ou do Spring, ou ainda para se basear em outro cont&acirc;iner de DI que seja de sua prefer&ecirc;ncia.</span>
+		
+
+</div><!-- content -->
+            
+        </div><!-- content cnt -->
+    </div><!-- content wrap-->
+    
+
+
+    <div id="footerWrap">
+    	<div id="footerContent">              
+            <div id="suporteFooter">
+	           	<a href="http://www.caelum.com.br/contato/" class="moreIcon" title="Saiba Mais"><span>+</span></a>
+	           	<h3><a href="http://www.caelum.com.br/contato/">Suporte</a></h3>
+                <p><a href="http://www.caelum.com.br/contato/">Conheça os nossos planos de suporte online, e tenha a confiança de ter suas dúvidas e problemas rapidamente solucionados.</a></p>            
+            </div><!-- suporte-->
+            <div id="consultoriaFooter">
+           		<a href="http://www.caelum.com.br/servicos/consultoria/" class="moreIcon" title="Saiba Mais"><span>+</span></a>
+           		<h3><a href="http://www.caelum.com.br/servicos/consultoria/">Consultoria</a></h3>
+                <p><a href="http://www.caelum.com.br/servicos/consultoria/">A equipe que desenvolveu o VRaptor está disponível para auxiliar a sua equipe de desenvolvimento. Conheça nossos planos de consultoria.</a></p>            
+            </div><!-- consultoria-->
+        	<div id="treinamentoFooter">
+            	<a href="http://www.caelum.com.br/curso/fj-28-vraptor-hibernate-ajax/" class="moreIcon" title="Saiba Mais"><span>+</span></a><h3><a href="http://www.caelum.com.br/curso/fj-28-vraptor-hibernate-ajax/">Treinamento</a></h3>
+                <p><a href="http://www.caelum.com.br/curso/fj-28-vraptor-hibernate-ajax/">A Caelum oferece treinamento oficial de VRaptor, com Hibernate e Ajax, focando nas melhores práticas com VRaptor. Clique e saiba mais.</a></p>
+            </div><!--treinamento-->
+     <div class="footbar">
+            	<img class="logoFooter" src="/vraptor-site/images/logoCaelumGray-trans.png" alt="vraptor logo" />
+                <ul>
+                	<li>site map:</li>
+                    <li><a href="/vraptor-site/">home</a></li>
+                    <li>|</li>
+                    <li><a href="/vraptor-site/download.jsp">download</a></li>
+                    <li>|</li>
+                    <li><a href="/vraptor-site/documentacao/">Documentação</a></li>
+                    <li>|</li>
+                    <li><a href="/vraptor-site/beneficios.jsp">Benef&iacute;cios</a></li>
+                    <li>|</li>
+                    <li><a href="/vraptor-site/suporte.jsp">Suporte</a></li>
+                    <li>|</li>
+                    <li><a href="/vraptor-site/vraptor2.jsp">vraptor2</a></li>
+                </ul>
+                <p><a href="http://www.apache.org/licenses/LICENSE-2.0">Licença Apache 2.0</a> - VRaptor ©2009 Caelum - Ensino e Inovação</p>
+            </div><!-- footnote-->
+        </div><!-- footer content -->
+        <a id="signature" href="mailto:lokidg@gmail.com">loki|design</a>
+    </div><!-- footer wrap-->
+<script type="text/javascript">
+	var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+	document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+<script type="text/javascript">
+	try {
+	var pageTracker = _gat._getTracker("UA-270161-11");
+	pageTracker._trackPageview();
+	} catch(err) {}
+ </script>
+    
+</body>
+</html>

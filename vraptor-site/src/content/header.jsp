@@ -1,4 +1,5 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <fmt:setLocale value="${locale}"/>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -8,7 +9,11 @@
 	<meta name="reply-to" content="contato@caelum.com.br"/>
 	<meta name="author" content="Design"/>
 	<meta name="reply-to" content="lokidg@gmail.com"/>
-	${param.extras}
+	<c:if test="${param.docs}">
+		<link href="${path }/documentacao/includes/css/java.css" rel="stylesheet" type="text/css" media="screen" />
+		<link href="${path }/documentacao/includes/css/xml2html.css" rel="stylesheet" type="text/css" media="screen" />
+		<link href="${path }/documentacao/includes/css/style.css" rel="stylesheet" type="text/css" media="screen" />
+	</c:if>
 	<meta name="description" content="<fmt:message key="meta.description"/>"/>
 	<meta name="keywords" content="sites, web, desenvolvimento, development, java, opensource"/>
 	<title>V|Raptor - <fmt:message key="title.slogan"/></title>

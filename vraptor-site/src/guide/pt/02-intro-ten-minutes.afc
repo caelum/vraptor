@@ -357,6 +357,8 @@ vai cuidar do carrinho de compras:
 @Resource
 public class CarrinhoController {
 
+	private final CarrinhoDeCompras carrinho;
+	
 	public CarrinhoController(CarrinhoDeCompras carrinho) {
 		this.carrinho = carrinho;
 	}

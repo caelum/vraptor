@@ -49,9 +49,9 @@
     </div><!-- menuWrap-->
 <div id="contentWrap">
     	<div id="contentDocumentacao">
+			<div class="download"><a href="../vraptor3.pdf">Download em PDF</a></div>
         	<h2><span>documentação</span></h2>
-            <h3>documentação toda em português, configuração, migração e utilização.</h3>
-            <div id="subMenuDoc">
+            <h3>documentação toda em português, configuração, migração e utilização.</h3>            <div id="subMenuDoc">
             	<img id="positionTop" src="../includes/images/subMenuTop-trans.png" />
                 <img id="positionBottom" src="../includes/images/subMenuBottom-trans.png" />
             	<ol type="1">
@@ -397,6 +397,8 @@ vai cuidar do carrinho de compras:</span>
 <span class="java16">@Resource<br />
 </span><span class="java4">public class </span><span class="java10">CarrinhoController </span><span class="java8">{<br />
 <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">private final </span><span class="java10">CarrinhoDeCompras carrinho;<br />
+&nbsp;&nbsp;&nbsp; <br />
 &nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">CarrinhoController</span><span class="java8">(</span><span class="java10">CarrinhoDeCompras carrinho</span><span class="java8">) {<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">this</span><span class="java10">.carrinho = carrinho;<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />

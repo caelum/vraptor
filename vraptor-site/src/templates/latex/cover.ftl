@@ -1,15 +1,13 @@
 \thispagestyle{empty}
 
-\vspace*{2.5cm}
-\large \centerline{\bf ${book.name}}
-
 \newsavebox{\logovraptor}
 \sbox{\logovraptor}{\includegraphics{marca.png}}
+\vspace*{2.5cm}
+\large \centerline{\bf \usebox{\logovraptor}}
 
 \large
 \vspace {1.3 cm}
-\centerline{\bf \usebox{\logovraptor}}
-\centerline{\bf Um framework MVC para desenvolvimento rápido e de fácil manutenção}
+\centerline{\bf ${book.name}}
 
 \normalsize
 \vspace{2 cm}

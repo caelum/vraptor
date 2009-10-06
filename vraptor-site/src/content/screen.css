@@ -248,6 +248,29 @@ body{
 	#contentDocumentacao{ width:100%; margin:0px auto; display:block; height:auto; text-align:left; position:relative;}
 		#contentDocumentacao h2{ color:#2a2948;	font-size:42px;	display:block;	text-transform:uppercase;	margin-top:40px; margin-left:20px; font-weight:bold;}		
 		#contentDocumentacao h3{ color:#747488;	font-size:18px;	display:block;	text-transform:uppercase; font-weight:normal; margin-left:20px; margin-bottom:40px;}
+		#contentDocumentacao .download { 
+			font-size:16px;	
+			display:block;	
+			text-transform:uppercase; 
+			font-weight: bold; 
+			margin-right:10px; 
+			margin-bottom:10px;
+			float: right;
+		}
+		
+		#contentDocumentacao .download a {
+			color:#003;	
+			padding: 10px;
+			background-color: #d5d5db;
+			text-decoration: none;
+			-moz-border-radius: 5px;
+			-webkit-border-radius: 5px;
+			border-radius: 5px; 
+		}
+		#contentDocumentacao .download a:hover {
+			color:#333399;
+		}
+		
 		
 		#textoCapitulo{width:auto; margin-right:10px; margin-left:360px; display:block; text-align:justify; margin-bottom:40px;}
 			#textoCapitulo h2 {font-size:30px; font-weight:bold; margin:0px 0px 10px 0px; padding:0px;}

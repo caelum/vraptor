@@ -81,7 +81,7 @@
 \renewcommand{\chaptermark}[1]{\markboth{\@chapapp\ \thechapter\ -\ #1}{}}
 \makeatother
 \renewcommand{\sectionmark}[1]{\markright{\ #1}{}}
-\rfoot{\footnotesize\nouppercase{\leftmark\ - \rightmark\ - Página \thepage}}
+\rfoot{\footnotesize\nouppercase{\leftmark\ - \rightmark\ -- \thepage}}
 
 
 

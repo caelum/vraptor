@@ -4,20 +4,25 @@
         	<h2><span>Download</span></h2>
             <h3><fmt:message key="download.head"/>:</h3>
 
-			<div id="passo1">
-                <a class="downloadBtn3" href="http://code.google.com/p/vraptor3/downloads/list"><span>Download Now</span></a>            
-            	<p><a href="http://code.google.com/p/vraptor3/downloads/list"><fmt:message key="vraptor.zip"/></a></p>
+			<div class="passo">
+                <a class="downloadBtn3" href="http://vraptor3.googlecode.com/files/vraptor-3.0.0.zip"><span>Download Now</span></a>            
+            	<p><a href="http://vraptor3.googlecode.com/files/vraptor-3.0.0.zip"><fmt:message key="vraptor.zip"/></a></p>
             </div><!-- passo 1 -->
             
-			<div id="passo2">
-                <a class="downloadBtn3" href="http://code.google.com/p/vraptor3/downloads/list"><span>Download Now</span></a>            
-            	<p><a href="http://code.google.com/p/vraptor3/downloads/list"><fmt:message key="blank.project.zip"/></a></p>
+			<div class="passo">
+                <a class="downloadBtn3" href="http://vraptor3.googlecode.com/files/vraptor-blank-project-3.0.0.zip"><span>Download Now</span></a>            
+            	<p><a href="http://vraptor3.googlecode.com/files/vraptor-blank-project-3.0.0.zip"><fmt:message key="blank.project.zip"/></a></p>
             </div><!-- passo 2 -->
             
-			<div id="passo3">
+			<div class="passo">
+                <a class="downloadBtn3" href="http://vraptor3.googlecode.com/files/vraptor-mydvds-3.0.0.zip"><span>Download Now</span></a>            
+            	<p><a href="http://vraptor3.googlecode.com/files/vraptor-mydvds-3.0.0.zip"><fmt:message key="mydvds.zip"/></a></p>
+            </div><!-- passo 2 -->
+
+			<div class="passo">
                 <a class="downloadBtn3" href="http://code.google.com/p/vraptor3/downloads/list"><span>Download Now</span></a>            
-            	<p><a href="http://code.google.com/p/vraptor3/downloads/list"><fmt:message key="mydvds.zip"/></a></p>
-            </div><!-- passo 2 -->                        
+            	<p><a href="http://code.google.com/p/vraptor3/downloads/list"><fmt:message key="other.downloads"/></a></p>
+            </div><!-- passo 2 -->
                                          
         </div><!-- contentDownload -->
     </div><!-- content wrap-->

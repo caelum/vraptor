@@ -10,15 +10,16 @@
 	<meta name="author" content="Design"/>
 	<meta name="reply-to" content="lokidg@gmail.com"/>
 	
-		<link href="/vraptor-site/documentacao/includes/css/java.css" rel="stylesheet" type="text/css" media="screen" />
-		<link href="/vraptor-site/documentacao/includes/css/xml2html.css" rel="stylesheet" type="text/css" media="screen" />
-		<link href="/vraptor-site/documentacao/includes/css/style.css" rel="stylesheet" type="text/css" media="screen" />
+		
+		<link href="../../documentacao/includes/css/java.css" rel="stylesheet" type="text/css" media="screen" />
+		<link href="../../documentacao/includes/css/xml2html.css" rel="stylesheet" type="text/css" media="screen" />
+		<link href="../../documentacao/includes/css/style.css" rel="stylesheet" type="text/css" media="screen" />
 	
 	<meta name="description" content="VRaptor 3 - a Java web framework focused on fast development"/>
 	<meta name="keywords" content="sites, web, desenvolvimento, development, java, opensource"/>
 	<title>V|Raptor - High productivity in Java web development</title>
-	<link href="/vraptor-site/screen.css" rel="stylesheet" type="text/css" media="screen" />
-    <link href="/vraptor-site/menu.css" rel="stylesheet" type="text/css" media="screen" />
+	<link href="../../screen.css" rel="stylesheet" type="text/css" media="screen" />
+    <link href="../../menu.css" rel="stylesheet" type="text/css" media="screen" />
     <!--[if lt IE 7]>
     <script src="http://ie7-js.googlecode.com/svn/version/2.0(beta3)/IE7.js" type="text/javascript"></script>
     <![endif]-->
@@ -30,19 +31,19 @@
         	<h1 id="logoVraptor"><span>V|Raptor</span></h1><!-- vraptorlogo-->
             
             <ul id="langMenu">
-            	<li><a id="engBtn" href="/vraptor-site/en/"><span>ENGLISH</span></a></li>
-                <li><a id="ptBtn" href="/vraptor-site/"><span>PORTUGUÊS</span></a></li>
+            	<li><a id="engBtn" href="../../en/"><span>ENGLISH</span></a></li>
+                <li><a id="ptBtn" href="../../"><span>PORTUGUÊS</span></a></li>
             </ul><!-- langMenu-->            
         </div><!-- header content -->
     </div><!-- header wrap-->
     
     <div id="menuWrap">
     	<ul id="menuElementsEn">
-        	<li><a id="homeBtnEn" href="/vraptor-site/en/"><span>home</span></a></li>
-        	<li><a id="downloadBtnEn" href="/vraptor-site/en/download.jsp"><span>download</span></a></li>
-        	<li><a id="documentacaoBtnEn" href="/vraptor-site/documentation/"><span>Documentation</span></a></li>
-        	<li><a id="beneficiosBtnEn" href="/vraptor-site/benefits.jsp"><span>Benefits</span></a></li>
-        	<li><a id="suporteBtnEn" href="/vraptor-site/support.jsp"><span>Support</span></a></li>
-        	<li><a id="vraptor2BtnEn" href="/vraptor-site/en/vraptor2.jsp"><span>vraptor2</span></a></li>
+        	<li><a id="homeBtnEn" href="../../en/"><span>home</span></a></li>
+        	<li><a id="downloadBtnEn" href="../../en/download.jsp"><span>download</span></a></li>
+        	<li><a id="documentacaoBtnEn" href="../../documentation/"><span>Documentation</span></a></li>
+        	<li><a id="beneficiosBtnEn" href="../../benefits.jsp"><span>Benefits</span></a></li>
+        	<li><a id="suporteBtnEn" href="../../support.jsp"><span>Support</span></a></li>
+        	<li><a id="vraptor2BtnEn" href="../../en/vraptor2.jsp"><span>vraptor2</span></a></li>
         </ul><!-- menuElements-->
     </div><!-- menuWrap-->

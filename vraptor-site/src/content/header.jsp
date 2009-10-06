@@ -10,6 +10,7 @@
 	<meta name="author" content="Design"/>
 	<meta name="reply-to" content="lokidg@gmail.com"/>
 	<c:if test="${param.docs}">
+		<c:set var="path">../..</c:set>
 		<link href="${path }/documentacao/includes/css/java.css" rel="stylesheet" type="text/css" media="screen" />
 		<link href="${path }/documentacao/includes/css/xml2html.css" rel="stylesheet" type="text/css" media="screen" />
 		<link href="${path }/documentacao/includes/css/style.css" rel="stylesheet" type="text/css" media="screen" />

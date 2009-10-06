@@ -207,7 +207,7 @@ body{
 		
 		
 		/*Como tags para 3 passos */
-		#contentDownload #passo1, #contentDownload #passo2, #contentDownload #passo3{
+		#contentDownload .passo {
 			background-image:url(images/vraptorSprites-trans.png);
 			background-repeat:no-repeat;	
 			overflow:hidden;			
@@ -215,12 +215,12 @@ body{
 			height:91px;
 			width:582px;}	
 			
-		#contentDownload #passo1 p, #contentDownload #passo2 p, #contentDownload #passo3 p{
+		#contentDownload .passo p {
 			background-repeat:no-repeat;
 			display:block;
 			float:left;}
 			
-		#contentDownload #passo1 p a, #contentDownload #passo2 p a, #contentDownload #passo3 p a{
+		#contentDownload .passo p a {
 			text-transform:uppercase;
 			text-decoration:none;
 			font-weight:bold;
@@ -228,21 +228,13 @@ body{
 			display:block;
 			color:#003;}	
 			
-			#contentDownload #passo1 p a:hover, #contentDownload #passo2 p a:hover, #contentDownload #passo3 p a:hover{color:#333399;}
+			#contentDownload .passo p a:hover {color:#333399;}
 		
 		/*tags específicas para cada tag passo1,passo2,passo3*/
-		#contentDownload #passo1{ background-position:0px -120px; margin-left:20px; margin-bottom:20px;}
-			#contentDownload #passo1 p { width:490px; margin:13px 0px 0px 10px;}
-				#contentDownload #passo1 p a{padding:25px 0px 25px 60px;}
+		#contentDownload .passo{ background-position:0px -120px; margin-left:20px; margin-bottom:20px;}
+			#contentDownload .passo p { width:490px; margin:13px 0px 0px 10px;}
+				#contentDownload .passo p a{padding:20px 0px 25px 60px;}
 					
-		#contentDownload #passo2{ background-position:0px -210px; margin-left:20px;	margin-bottom:20px;}
-			#contentDownload #passo2 p { width:490px; margin:13px 0px 0px 10px;}	
-				#contentDownload #passo2 p a{padding:20px 0px 20px 60px;}
-				
-		#contentDownload #passo3{ background-position:0px -301px; margin-left:20px;	margin-bottom:20px;}
-			#contentDownload #passo3 p { width:490px; margin:13px 0px 0px 10px;}	
-				#contentDownload #passo3 p a{padding:20px 0px 20px 60px;}				
-
 	/*css documentacao*/	
 	#contentDocumentacao{ width:100%; margin:0px auto; display:block; height:auto; text-align:left; position:relative;}
 		#contentDocumentacao h2{ color:#2a2948;	font-size:42px;	display:block;	text-transform:uppercase;	margin-top:40px; margin-left:20px; font-weight:bold;}		

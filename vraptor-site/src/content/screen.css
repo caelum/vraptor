@@ -216,7 +216,6 @@ body{
 			width:582px;}	
 			
 		#contentDownload #passo1 p, #contentDownload #passo2 p, #contentDownload #passo3 p{
-			background-image:url(images/vraptorSprites-trans.png);
 			background-repeat:no-repeat;
 			display:block;
 			float:left;}
@@ -233,22 +232,22 @@ body{
 		
 		/*tags específicas para cada tag passo1,passo2,passo3*/
 		#contentDownload #passo1{ background-position:0px -120px; margin-left:20px; margin-bottom:20px;}
-			#contentDownload #passo1 p { background-position:-1011px -75px;	width:auto;	margin:15px 0px 0px 10px;}
+			#contentDownload #passo1 p { width:490px; margin:13px 0px 0px 10px;}
 				#contentDownload #passo1 p a{padding:25px 0px 25px 60px;}
 					
 		#contentDownload #passo2{ background-position:0px -210px; margin-left:20px;	margin-bottom:20px;}
-			#contentDownload #passo2 p { background-position:-1015px 0px; width:490px; margin:13px 0px 0px 10px;}	
+			#contentDownload #passo2 p { width:490px; margin:13px 0px 0px 10px;}	
 				#contentDownload #passo2 p a{padding:20px 0px 20px 60px;}
 				
 		#contentDownload #passo3{ background-position:0px -301px; margin-left:20px;	margin-bottom:20px;}
-			#contentDownload #passo3 p { background-position:-1015px -151px; width:490px; margin:13px 0px 0px 10px;}	
+			#contentDownload #passo3 p { width:490px; margin:13px 0px 0px 10px;}	
 				#contentDownload #passo3 p a{padding:20px 0px 20px 60px;}				
 
 	/*css documentacao*/	
 	#contentDocumentacao{ width:100%; margin:0px auto; display:block; height:auto; text-align:left; position:relative;}
 		#contentDocumentacao h2{ color:#2a2948;	font-size:42px;	display:block;	text-transform:uppercase;	margin-top:40px; margin-left:20px; font-weight:bold;}		
 		#contentDocumentacao h3{ color:#747488;	font-size:18px;	display:block;	text-transform:uppercase; font-weight:normal; margin-left:20px; margin-bottom:40px;}
-		#contentDocumentacao .download { 
+		.download { 
 			font-size:16px;	
 			display:block;	
 			text-transform:uppercase; 
@@ -258,7 +257,7 @@ body{
 			float: right;
 		}
 		
-		#contentDocumentacao .download a {
+		.download a {
 			color:#003;	
 			padding: 10px;
 			background-color: #d5d5db;
@@ -267,7 +266,7 @@ body{
 			-webkit-border-radius: 5px;
 			border-radius: 5px; 
 		}
-		#contentDocumentacao .download a:hover {
+		.download a:hover {
 			color:#333399;
 		}
 		

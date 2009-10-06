@@ -72,7 +72,10 @@
             	<p>Um grande projeto pela frente e uma equipe formada por profissionais com conhecimentos super diferenciados: JSF, Struts 1.x, Wicket e Rails, esse era um de nossos desafios. Nós precisávamos decidir por um framework que nos desse facilidade de aprendizagem, agilidade e rapidez no desenvolvimento e que fosse propício a trabalhar aplicando fortemente práticas de TDD e BDD. Decidimos fazer uma prova de conceito com VRaptor 3 ainda antes da sua versão 'beta1' e o resultado foi surpreende, além de atender as expectativas técnicas encontramos uma comunidade viva e disposta a ajudar. Hoje já estamos com dois projetos em pleno funcionamento com VRaptor 3, com código saudável e com uma cobertura de testes sempre maior que 90% sem nenhuma dor ou trauma.</p>
             	<em>Paulo César M. Jeveaux, diretor de tecnologia da Giran e responsável pelo projeto técnico da <a href="http://wine.com.br/">Wine.com.br</a>, maior e-commerce de bebidas da América Latina.<a href="http://wine.com.br/"><img src="images/wine.com.png" border="0" /></a></em>                
             </div>                                      
-            <br />                             
+            <br />
+            <div class="download">
+            	<a href="mailto:contato@caelum.com.br?Subject=VRaptor">Envie-nos seu depoimento!</a> 
+            </div>
         </div><!-- contentDownload -->
     </div><!-- content wrap-->
 

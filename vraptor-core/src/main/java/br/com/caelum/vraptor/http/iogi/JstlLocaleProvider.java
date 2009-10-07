@@ -6,13 +6,12 @@ import br.com.caelum.iogi.spi.LocaleProvider;
 import br.com.caelum.vraptor.core.RequestInfo;
 
 public class JstlLocaleProvider implements LocaleProvider {
-	private RequestInfo request;
-	
+	private final RequestInfo request;
+
 	public JstlLocaleProvider(RequestInfo request) {
 		this.request = request;
 	}
 
-	@Override
 	public Locale getLocale() {
         Object obj = find(request, "javax.servlet.jsp.jstl.fmt.locale");
         if(obj instanceof String) {
@@ -22,7 +21,7 @@ public class JstlLocaleProvider implements LocaleProvider {
         } else {
             return request.getRequest().getLocale();
         }
-    }	
+    }
 	public Object find(RequestInfo request, String name) {
         if (request.getRequest().getAttribute(name + ".request")!=null) {
             return request.getRequest().getAttribute(name + ".request");

@@ -27,20 +27,20 @@ public class VRaptorInstantiator implements Instantiator<Object> {
 	private final Converters converters;
 	private final Container container;
 	private final Localization localization;
-	private MultiInstantiator multiInstantiator;
+	private final MultiInstantiator multiInstantiator;
 	private final ParameterNameProvider parameterNameProvider;
-	
+
 	public VRaptorInstantiator(Converters converters, Container container, Localization localization, ParameterNameProvider parameterNameProvider) {
 		this.converters = converters;
 		this.container = container;
 		this.localization = localization;
 		this.parameterNameProvider = parameterNameProvider;
-		
+
 		DependencyProvider dependencyProvider = new VRaptorDependencyProvider();
-		ParameterNamesProvider parameterNamesProvider = 
+		ParameterNamesProvider parameterNamesProvider =
 			new VRaptorParameterNamesProvider();
-		
-		List<Instantiator<?>> instantiatorList = ImmutableList.of( 
+
+		List<Instantiator<?>> instantiatorList = ImmutableList.of(
 			new VRaptorTypeConverter(),
 			new StringConverter(),
 			new ArrayInstantiator(this),
@@ -48,55 +48,48 @@ public class VRaptorInstantiator implements Instantiator<Object> {
 			new ObjectInstantiator(this, dependencyProvider, parameterNamesProvider));
 		multiInstantiator = new MultiInstantiator(instantiatorList);
 	}
-	
-	@Override
+
 	public boolean isAbleToInstantiate(Target<?> target) {
 		return true;
 	}
 
-	@Override
 	public Object instantiate(Target<?> target, Parameters parameters) {
 		return multiInstantiator.instantiate(target, parameters);
 	}
-	
+
 	private final class VRaptorTypeConverter implements Instantiator<Object> {
-		@Override
 		public boolean isAbleToInstantiate(Target<?> target) {
 			return converters.existsFor(target.getClassType(), container);
 		}
 
-		@Override
 		public Object instantiate(Target<?> target, Parameters parameters) {
 			Parameter parameter = parameters.namedAfter(target);
 			final String stringValue = parameter != null ? parameter.getValue() : null;
 			return converterForTarget(target).convert(stringValue, target.getClassType(), localization.getBundle());
-		}		
-		
+		}
+
 		@SuppressWarnings("unchecked")
 		private Converter<Object> converterForTarget(Target<?> target) {
 			return (Converter<Object>) converters.to(target.getClassType(), container);
 		}
 	}
-	
+
 	private final class VRaptorDependencyProvider implements DependencyProvider {
-		@Override
 		public boolean canProvide(Target<?> target) {
 			return container.instanceFor(target.getClassType()) != null;
 		}
 
-		@Override
 		public Object provide(Target<?> target) {
 			return container.instanceFor(target.getClassType());
 		}
 	}
-	
+
 	private final class VRaptorParameterNamesProvider implements ParameterNamesProvider {
-		@Override
 		public List<String> lookupParameterNames(AccessibleObject methodOrConstructor) {
 			return Arrays.asList(parameterNameProvider.parameterNamesFor(methodOrConstructor));
 		}
 	}
-	
+
 	private final class NullDecorator implements Instantiator<Object> {
 		private final Instantiator<?> delegateInstantiator;
 
@@ -104,15 +97,14 @@ public class VRaptorInstantiator implements Instantiator<Object> {
 			this.delegateInstantiator = delegateInstantiator;
 		}
 
-		@Override
 		public boolean isAbleToInstantiate(Target<?> target) {
 			return delegateInstantiator.isAbleToInstantiate(target);
 		}
-		
-		@Override
+
 		public Object instantiate(Target<?> target, Parameters parameters) {
-			if (!parameters.hasRelatedTo(target)) 
+			if (!parameters.hasRelatedTo(target)) {
 				return null;
+			}
 			return delegateInstantiator.instantiate(target, parameters);
 		}
 	}

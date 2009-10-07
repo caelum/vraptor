@@ -23,8 +23,8 @@ import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.validator.Message;
-import br.com.caelum.vraptor.validator.ValidationException;
 import br.com.caelum.vraptor.validator.ValidationMessage;
+import br.com.caelum.vraptor.validator.annotation.ValidationException;
 
 @RequestScoped
 public class IogiParametersProvider implements ParametersProvider {
@@ -39,24 +39,24 @@ public class IogiParametersProvider implements ParametersProvider {
 		this.instantiator = instantiator;
 		LOGGER.info("IogiParametersProvider is up");
 	}
-	
-	@Override
+
 	public Object[] getParametersFor(ResourceMethod method, List<Message> errors, ResourceBundle bundle) {
 		Method javaMethod = method.getMethod();
-		
+
 		Parameters parameters = parseParameters(servletRequest);
 		List<Target<Object>> targets = createTargets(javaMethod);
 
 		List<Object> arguments = instantiateParameters(parameters, targets, errors);
-		
+
 		return arguments.toArray();
 	}
 
 	private List<Object> instantiateParameters(Parameters parameters, List<Target<Object>> targets, List<Message> errors) {
-		if (LOGGER.isDebugEnabled())
+		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("getParametersFor() called with parameters " + parameters + " and targets " +
 					targets + ".");
-		
+		}
+
 		List<Object> arguments = new ArrayList<Object>();
 		for (Target<Object> target : targets) {
 			Object newObject = instantiateOrAddError(parameters, errors, target);
@@ -83,15 +83,15 @@ public class IogiParametersProvider implements ParametersProvider {
 	}
 
 	private List<Target<Object>> createTargets(Method javaMethod) {
-		List<Target<Object>> targets = new ArrayList<Target<Object>>(); 
-		
+		List<Target<Object>> targets = new ArrayList<Target<Object>>();
+
 		Type[] parameterTypes = javaMethod.getGenericParameterTypes();
 		String[] parameterNames = nameProvider.parameterNamesFor(javaMethod);
 		for (int i = 0; i < methodArity(javaMethod); i++) {
 			Target<Object> newTarget = new Target<Object>(parameterTypes[i], parameterNames[i]);
 			targets.add(newTarget);
 		}
-		
+
 		return targets;
 	}
 
@@ -101,7 +101,7 @@ public class IogiParametersProvider implements ParametersProvider {
 
 	private Parameters parseParameters(HttpServletRequest request) {
 		List<Parameter> parameterList = new ArrayList<Parameter>();
-		
+
 		Enumeration<?> enumeration = request.getParameterNames();
 		while (enumeration.hasMoreElements()) {
 			String parameterName = (String) enumeration.nextElement();
@@ -111,7 +111,7 @@ public class IogiParametersProvider implements ParametersProvider {
 				parameterList.add(newParameter);
 			}
 		}
-		
+
 		return new Parameters(parameterList);
 	}
 

@@ -71,11 +71,15 @@
             <div class="depoimentoClientes">
             	<p>Um grande projeto pela frente e uma equipe formada por profissionais com conhecimentos super diferenciados: JSF, Struts 1.x, Wicket e Rails, esse era um de nossos desafios. Nós precisávamos decidir por um framework que nos desse facilidade de aprendizagem, agilidade e rapidez no desenvolvimento e que fosse propício a trabalhar aplicando fortemente práticas de TDD e BDD. Decidimos fazer uma prova de conceito com VRaptor 3 ainda antes da sua versão 'beta1' e o resultado foi surpreende, além de atender as expectativas técnicas encontramos uma comunidade viva e disposta a ajudar. Hoje já estamos com dois projetos em pleno funcionamento com VRaptor 3, com código saudável e com uma cobertura de testes sempre maior que 90% sem nenhuma dor ou trauma.</p>
             	<em>Paulo César M. Jeveaux, diretor de tecnologia da Giran e responsável pelo projeto técnico da <a href="http://wine.com.br/">Wine.com.br</a>, maior e-commerce de bebidas da América Latina.<a href="http://wine.com.br/"><img src="images/wine.com.png" border="0" /></a></em>                
-            </div>                                      
+            </div>
             <div class="depoimentoClientes">
             	<p>Em 2008 fizemos um pequeno projeto em VRaptor para analisar a ferramenta. Chegamos a conclusão de que se trata de uma ferramenta produtiva que simplifica o desenvolvimento e que facilita a padronização a simplicidade e a manutenção do código. Este ano estamos iniciando um novo projeto de software comercial e de gestão, web, de médio porte. Com a experiência anterior decidimos usar o VRaptor como framework MVC do projeto. Não possuíamos uma equipe de desenvolvedores com experiência em java e mesmo mantendo a nossa pequena equipe, com o VRaptor estamos com uma curva de aprendizado rápida.  Aprendizado feito com a apostila fj28, o site, o curso FJ-21 da Caelum e o forum. O VRaptor3 veio como uma novidade animadora, melhorando ainda mais todos esses fatores, por isso já adotamos ele no novo projeto.</p>
-            	<em>Oriol Wiegerinck - Gerente TI - Rentalcenter</em>                
-            </div>                                      
+            	<em>Oriol Wiegerinck, Gerente TI da Rentalcenter</em>                
+            </div>
+            <div class="depoimentoClientes">
+            	<p>Utilizo e recomendo VRaptor em todos os aplicativos web criados em Java nos quais trabalho. Mesmo os envolvidos não conhecendo a tecnologia, o aprendizado é muito rápido e o ganho em produtividade fica indiscutível.</p>
+            	<em>Diego Carrion, Lider de Desenvolvimento da GoNow</em>                
+            </div>
             <br />
             <div class="download">
             	<a href="mailto:contato@caelum.com.br?Subject=VRaptor">Envie-nos seu depoimento!</a> 

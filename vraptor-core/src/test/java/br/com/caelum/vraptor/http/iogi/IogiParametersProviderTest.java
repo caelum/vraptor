@@ -31,6 +31,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.Assert.assertArrayEquals;
 
@@ -54,6 +56,7 @@ import br.com.caelum.iogi.Instantiator;
 import br.com.caelum.iogi.parameters.Parameter;
 import br.com.caelum.iogi.parameters.Parameters;
 import br.com.caelum.iogi.reflection.Target;
+import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.converter.LongConverter;
 import br.com.caelum.vraptor.converter.PrimitiveIntConverter;
 import br.com.caelum.vraptor.core.Converters;
@@ -74,6 +77,7 @@ public class IogiParametersProviderTest {
     private ArrayList<Message> errors;
 	private Container mockContainer;
 	private Localization mockLocalization;
+	private Validator mockValidator;
 
     @SuppressWarnings("unchecked")
     @Before
@@ -82,28 +86,29 @@ public class IogiParametersProviderTest {
         this.converters = mockery.mock(Converters.class);
         this.mockHttpServletRequest = mockery.mock(HttpServletRequest.class);
         this.mockNameProvider = mockery.mock(ParameterNameProvider.class);
-        
+
         mockContainer = mockery.mock(Container.class);
 		mockLocalization = mockery.mock(Localization.class);
-	
-		Instantiator<Object> instantiator = new VRaptorInstantiator(new DefaultConverters(), mockContainer, mockLocalization, mockNameProvider);
-		
+
+		mockValidator = mockery.mock(Validator.class);
+		Instantiator<Object> instantiator = new VRaptorInstantiator(new DefaultConverters(), mockContainer, mockLocalization, mockNameProvider, mockValidator );
+
 		this.iogiProvider = new IogiParametersProvider(mockNameProvider, mockHttpServletRequest, instantiator);
         this.errors = new ArrayList<Message>();
         mockery.checking(new Expectations() {
             {
                 allowing(converters).to((Class) with(an(Class.class)), with(any(Container.class)));
                 will(returnValue(new LongConverter()));
-                
+
 //                ignoring(mockLocalization);
             }
         });
-        
+
         mockery.checking(new Expectations() {{
             final AccessibleObject houseConstructor = House.class.getConstructor();
 			allowing(mockNameProvider).parameterNamesFor(houseConstructor);
             will(returnValue(new String[] {}));
-            
+
             AccessibleObject catConstructor = Cat.class.getConstructor();
 			allowing(mockNameProvider).parameterNamesFor(catConstructor);
             will(returnValue(new String[] {}));
@@ -114,7 +119,7 @@ public class IogiParametersProviderTest {
     public void tearDown() {
     	mockery.assertIsSatisfied();
     }
-    
+
     public static class Dog {
     	private int id;
 
@@ -126,9 +131,10 @@ public class IogiParametersProviderTest {
 			this.id = id;
 		}
     }
-    
+
     public static class Cat {
         private String id;
+        private Long lols;
 
         public void setId(String id) {
             this.id = id;
@@ -137,6 +143,14 @@ public class IogiParametersProviderTest {
         public String getId() {
             return id;
         }
+
+		public Long getLols() {
+			return lols;
+		}
+
+		public void setLols(Long lols) {
+			this.lols = lols;
+		}
     }
 
     public static class House {
@@ -188,20 +202,20 @@ public class IogiParametersProviderTest {
         void doNothing() {}
         void kill(List<Cat> kittens) {}
     }
-    
-    
+
+
     static class NeedsMyResource {
     	private final MyResource myResource;
 
 		public NeedsMyResource(MyResource myResource) {
 			this.myResource = myResource;
 		}
-		
+
 		public MyResource getMyResource() {
 			return myResource;
 		}
     }
-    
+
     class OtherResource {
     	void logic(NeedsMyResource param) {
     	}
@@ -222,16 +236,16 @@ public class IogiParametersProviderTest {
     @Test
     public void isCapableOfDealingWithEmptyParameterForInternalWrapperValue() throws Exception {
         final Method method = MyResource.class.getDeclaredMethod("buyA", House.class);
-        
+
         mockery.checking(new Expectations() {{
             one(mockHttpServletRequest).getParameterValues("house.cat.id");
             will(returnValue(new String[]{"guilherme"}));
             one(mockHttpServletRequest).getParameterNames();
             will(returnValue(enumerationFor("house.cat.id")));
-            
-            one(mockNameProvider).parameterNamesFor(method); 
-            will(returnValue(new String[]{"house"})); 
-            
+
+            one(mockNameProvider).parameterNamesFor(method);
+            will(returnValue(new String[]{"house"}));
+
         }});
 
         Object[] params = iogiProvider.getParametersFor(mockery.methodFor(MyResource.class, "buyA", House.class), errors,
@@ -274,14 +288,14 @@ public class IogiParametersProviderTest {
             {
             	allowing(mockContainer).instanceFor(LongConverter.class);
             	will(returnValue(new LongConverter()));
-            	
+
                 one(mockHttpServletRequest).getParameterValues("house.ids[1]");
                 will(returnValue(new String[]{"3"}));
                 one(mockHttpServletRequest).getParameterNames();
                 will(returnValue(enumerationFor("house.ids[1]")));
                 one(mockNameProvider).parameterNamesFor(method);
                 will(returnValue(new String[]{"house"}));
-                
+
                 ignoring(mockLocalization);
             }
         });
@@ -314,11 +328,11 @@ public class IogiParametersProviderTest {
         assertThat(house.owners.get(0), is(equalTo("guilherme")));
         mockery.assertIsSatisfied();
     }
-    
+
     @Test
 	public void returnsAnEmptyObjectArrayForZeroArityMethods() throws Exception {
         final ResourceMethod method = mockery.methodFor(MyResource.class, "doNothing");
-        
+
         mockery.checking(new Expectations() {
             {
                 ignoring(mockHttpServletRequest);
@@ -326,14 +340,14 @@ public class IogiParametersProviderTest {
             }
         });
         Object[] params = iogiProvider.getParametersFor(method, errors, null);
-        
+
         assertArrayEquals(new Object[] {}, params);
     }
-    
+
     @Test
     public void returnsNullWhenInstantiatingAListForWhichThereAreNoParameters() throws Exception {
     	final ResourceMethod method = mockery.methodFor(MyResource.class, "kill", List.class);
-    	
+
     	mockery.checking(new Expectations() {
     		{
     			ignoring(mockHttpServletRequest);
@@ -342,106 +356,139 @@ public class IogiParametersProviderTest {
     		}
     	});
     	Object[] params = iogiProvider.getParametersFor(method, errors, null);
-    	
+
     	assertArrayEquals(new Object[] {null}, params);
     }
-    
+
 	@Test
 	public void canInjectADependencyProvidedByVraptor() throws Exception {
     	ResourceMethod resourceMethod = mockery.methodFor(OtherResource.class, "logic", NeedsMyResource.class);
     	final MyResource providedInstance = new MyResource();
-    	
+
     	mockery.checking(new Expectations() {{
     		allowing(mockHttpServletRequest).getParameterNames();
     		will(returnValue(enumerationFor()));
-    		
+
     		allowing(mockNameProvider).parameterNamesFor(with(any(Method.class)));
     		will(returnValue(new String[] {"param"}));
-    		
+
     		allowing(mockContainer).instanceFor(MyResource.class);
     		will(returnValue(providedInstance));
     	}});
-    	
+
     	Object[] params = iogiProvider.getParametersFor(resourceMethod, errors, null);
 		assertThat(((NeedsMyResource)params[0]).getMyResource(), is(sameInstance(providedInstance)));
 	}
-	
-    //---------- The Following tests mock iogi to unit test the ParametersProvider impl. 
+
+    //---------- The Following tests mock iogi to unit test the ParametersProvider impl.
 	@Test
 	public void willCreateAnIogiParameterForEachRequestParameterValue() throws Exception {
 		ResourceMethod anyMethod = mockery.methodFor(MyResource.class, "buyA", House.class);
-		
+
 		@SuppressWarnings("unchecked")
 		final Instantiator<Object> mockInstantiator = mockery.mock(Instantiator.class);
 		final String parameterName = "name";
 		final Parameters expectedParamters = new Parameters(
 				Arrays.asList(new Parameter(parameterName, "a"), new Parameter(parameterName, "b")));
-		
+
 		IogiParametersProvider iogiProvider = new IogiParametersProvider(mockNameProvider, mockHttpServletRequest, mockInstantiator);
-		
+
 		mockery.checking(new Expectations() {{
 			allowing(mockHttpServletRequest).getParameterNames();
 			will(returnValue(enumerationFor(parameterName)));
-			
+
 			allowing(mockHttpServletRequest).getParameterValues(parameterName);
 			will(returnValue(new String[] {"a", "b"}));
-			
+
 			allowing(mockNameProvider).parameterNamesFor(with(any(Method.class)));
 			will(returnValue(new String[] {parameterName}));
-			
+
 			one(mockInstantiator).instantiate(with(any(Target.class)), with(equal(expectedParamters)));
 		}});
-		
+
 		iogiProvider.getParametersFor(anyMethod, errors, null);
 	}
-	
+
 	@Test
 	public void willCreateATargerForEachFormalParameterDeclaredByTheMethod() throws Exception {
 		final ResourceMethod buyAHouse = mockery.methodFor(MyResource.class, "buyA", House.class);
-		
+
 		@SuppressWarnings("unchecked")
 		final Instantiator<Object> mockInstantiator = mockery.mock(Instantiator.class);
 		IogiParametersProvider iogiProvider = new IogiParametersProvider(mockNameProvider, mockHttpServletRequest, mockInstantiator);
 		final Target<House> expectedTarget = Target.create(House.class, "house");
-		
+
 		mockery.checking(new Expectations() {{
 			ignoring(mockHttpServletRequest);
-			
+
 			allowing(mockNameProvider).parameterNamesFor(with(any(Method.class)));
 			will(returnValue(new String[] {"house"}));
-			
+
 			one(mockInstantiator).instantiate(with(equal(expectedTarget)), with(any(Parameters.class)));
 		}});
-		
+
 		iogiProvider.getParametersFor(buyAHouse, errors, null);
 	}
-	
+
 	@Test
 	public void willAddValidationMessagesForConversionErrors() throws Exception {
 		ResourceMethod setId = mockery.methodFor(Dog.class, "setId", int.class);
-		
-		final ResourceBundle resourceBundle = 
+
+		final ResourceBundle resourceBundle =
 			mockery.stubResourceBundle(this, "is_not_a_valid_integer", "is_not_a_valid_integer");
-		
+
 		mockery.checking(new Expectations() {{
 			allowing(mockHttpServletRequest).getParameterNames();
 			will(returnValue(enumerationFor("id")));
-			
+
 			allowing(mockHttpServletRequest).getParameterValues("id");
 			will(returnValue(new String[] {"asdf"}));
-			
+
 			allowing(mockNameProvider).parameterNamesFor(with(any(Method.class)));
 			will(returnValue(new String [] {"id"}));
-			
+
 			allowing(mockContainer).instanceFor(PrimitiveIntConverter.class);
 			will(returnValue(new PrimitiveIntConverter()));
-			
+
 			allowing(mockLocalization).getBundle();
 			will(returnValue(resourceBundle));
+
+			one(mockValidator).add(with(any(Message.class)));
 		}});
-		
+
 		iogiProvider.getParametersFor(setId, errors, resourceBundle);
-		assertThat(errors.size(), is(equalTo(1)));
+	}
+
+	@Test
+	public void inCaseOfConversionErrorsOnlyNullifyTheProblematicParameter() throws Exception {
+		ResourceMethod setId = mockery.methodFor(House.class, "setCat", Cat.class);
+
+		final ResourceBundle resourceBundle =
+			mockery.stubResourceBundle(this, "is_not_a_valid_integer", "is_not_a_valid_integer");
+
+		mockery.checking(new Expectations() {{
+			allowing(mockHttpServletRequest).getParameterNames();
+			will(returnValue(enumerationFor("cat.lols")));
+
+			allowing(mockHttpServletRequest).getParameterValues("cat.lols");
+			will(returnValue(new String[] {"sad kitten"}));
+
+			allowing(mockNameProvider).parameterNamesFor(with(any(Method.class)));
+			will(returnValue(new String [] {"cat"}));
+
+			allowing(mockContainer).instanceFor(LongConverter.class);
+			will(returnValue(new LongConverter()));
+
+			allowing(mockLocalization).getBundle();
+			will(returnValue(resourceBundle));
+
+			one(mockValidator).add(with(any(Message.class)));
+		}});
+
+		Object[] results = iogiProvider.getParametersFor(setId, errors, resourceBundle);
+		Cat cat = (Cat) results[0];
+		assertThat(cat, is(notNullValue()));
+		assertThat(cat.getLols(), is(nullValue()));
 	}
 	//----------
 }

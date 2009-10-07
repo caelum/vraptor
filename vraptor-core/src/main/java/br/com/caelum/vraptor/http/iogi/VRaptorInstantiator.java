@@ -16,10 +16,15 @@ import br.com.caelum.iogi.reflection.Target;
 import br.com.caelum.iogi.spi.DependencyProvider;
 import br.com.caelum.iogi.spi.ParameterNamesProvider;
 import br.com.caelum.vraptor.Converter;
+import br.com.caelum.vraptor.Validator;
+import br.com.caelum.vraptor.converter.ConversionError;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.core.Localization;
+import br.com.caelum.vraptor.http.InvalidParameterException;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor.validator.ValidationMessage;
+import br.com.caelum.vraptor.validator.annotation.ValidationException;
 
 import com.google.common.collect.ImmutableList;
 
@@ -29,12 +34,14 @@ public class VRaptorInstantiator implements Instantiator<Object> {
 	private final Localization localization;
 	private final MultiInstantiator multiInstantiator;
 	private final ParameterNameProvider parameterNameProvider;
+	private final Validator validator;
 
-	public VRaptorInstantiator(Converters converters, Container container, Localization localization, ParameterNameProvider parameterNameProvider) {
+	public VRaptorInstantiator(Converters converters, Container container, Localization localization, ParameterNameProvider parameterNameProvider, Validator validator) {
 		this.converters = converters;
 		this.container = container;
 		this.localization = localization;
 		this.parameterNameProvider = parameterNameProvider;
+		this.validator = validator;
 
 		DependencyProvider dependencyProvider = new VRaptorDependencyProvider();
 		ParameterNamesProvider parameterNamesProvider =
@@ -63,9 +70,22 @@ public class VRaptorInstantiator implements Instantiator<Object> {
 		}
 
 		public Object instantiate(Target<?> target, Parameters parameters) {
-			Parameter parameter = parameters.namedAfter(target);
-			final String stringValue = parameter != null ? parameter.getValue() : null;
-			return converterForTarget(target).convert(stringValue, target.getClassType(), localization.getBundle());
+			try {
+				Parameter parameter = parameters.namedAfter(target);
+				final String stringValue = parameter != null ? parameter.getValue() : null;
+				return converterForTarget(target).convert(stringValue, target.getClassType(), localization.getBundle());
+			}
+			catch (ConversionError ex) {
+				validator.add(new ValidationMessage(ex.getMessage(), target.getName()));
+			}
+			catch (Exception e) {
+				if (e.getClass().isAnnotationPresent(ValidationException.class)) {
+					validator.add(new ValidationMessage(e.getLocalizedMessage(), target.getName()));
+				} else {
+					throw new InvalidParameterException("Exception when trying to instantiate " + target, e);
+				}
+			}
+			return null;
 		}
 
 		@SuppressWarnings("unchecked")

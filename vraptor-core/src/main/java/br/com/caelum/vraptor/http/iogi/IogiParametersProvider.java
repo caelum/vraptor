@@ -16,15 +16,11 @@ import br.com.caelum.iogi.Instantiator;
 import br.com.caelum.iogi.parameters.Parameter;
 import br.com.caelum.iogi.parameters.Parameters;
 import br.com.caelum.iogi.reflection.Target;
-import br.com.caelum.vraptor.converter.ConversionError;
-import br.com.caelum.vraptor.http.InvalidParameterException;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.validator.Message;
-import br.com.caelum.vraptor.validator.ValidationMessage;
-import br.com.caelum.vraptor.validator.annotation.ValidationException;
 
 @RequestScoped
 public class IogiParametersProvider implements ParametersProvider {
@@ -66,20 +62,7 @@ public class IogiParametersProvider implements ParametersProvider {
 	}
 
 	private Object instantiateOrAddError(Parameters parameters, List<Message> errors, Target<Object> target) {
-		Object newObject = null;
-		try {
-			newObject  = instantiator.instantiate(target, parameters);
-		} catch (ConversionError ex) {
-			errors.add(new ValidationMessage(ex.getMessage(), target.getName()));
-		} catch (Exception e) { // setter threw an exception
-			if (e.getClass().isAnnotationPresent(ValidationException.class)) {
-				errors.add(new ValidationMessage(e.getLocalizedMessage(), target.getName()));
-			} else {
-				throw new InvalidParameterException("Exception when trying to instantiate " + target, e);
-			}
-
-		}
-		return newObject;
+		return instantiator.instantiate(target, parameters);
 	}
 
 	private List<Target<Object>> createTargets(Method javaMethod) {

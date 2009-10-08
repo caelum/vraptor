@@ -1,5 +1,9 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <fmt:setLocale value="${locale}"/>
+<c:if test="${param.docs}">
+		<c:set var="path">../..</c:set>
+</c:if>
     <div id="footerWrap">
     	<div id="footerContent">              
             <div id="suporteFooter">

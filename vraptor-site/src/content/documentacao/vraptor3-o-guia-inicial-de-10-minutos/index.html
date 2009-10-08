@@ -125,11 +125,11 @@ representar o produto, e vamos us&aacute;-la para guardar produtos no banco, usa
 </span><span class="java4">public class </span><span class="java10">Produto </span><span class="java8">{<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java16">@Id<br />
 &nbsp;&nbsp;&nbsp; @GeneratedValue<br />
-&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">Long id;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">private </span><span class="java10">Long id;<br />
 &nbsp;&nbsp;&nbsp; <br />
-&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">String nome;<br />
-&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">String descricao;<br />
-&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">Double preco;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">private </span><span class="java10">String nome;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">private </span><span class="java10">String descricao;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">private </span><span class="java10">Double preco;<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java3">//getter e setters<br />
 </span><span class="java8">}</span></code></div>
 	    	<span class="paragraph">Precisamos tamb&eacute;m de uma classe que vai <em class="italic">controlar</em> o cadastro de produtos, tratando requisi&ccedil;&otilde;es
@@ -502,6 +502,10 @@ campo.senha&nbsp;<span class="texvalue">=&nbsp;Password</span></code></div>
     
 
 
+
+
+		
+
     <div id="footerWrap">
     	<div id="footerContent">              
             <div id="suporteFooter">
@@ -519,20 +523,20 @@ campo.senha&nbsp;<span class="texvalue">=&nbsp;Password</span></code></div>
                 <p><a href="http://www.caelum.com.br/curso/fj-28-vraptor-hibernate-ajax/">A Caelum oferece treinamento oficial de VRaptor, com Hibernate e Ajax, focando nas melhores práticas com VRaptor. Clique e saiba mais.</a></p>
             </div><!--treinamento-->
      <div class="footbar">
-            	<img class="logoFooter" src="/vraptor-site/images/logoCaelumGray-trans.png" alt="vraptor logo" />
+            	<img class="logoFooter" src="../../images/logoCaelumGray-trans.png" alt="vraptor logo" />
                 <ul>
                 	<li>site map:</li>
-                    <li><a href="/vraptor-site/">home</a></li>
+                    <li><a href="../../">home</a></li>
                     <li>|</li>
-                    <li><a href="/vraptor-site/download.jsp">download</a></li>
+                    <li><a href="../../download.jsp">download</a></li>
                     <li>|</li>
-                    <li><a href="/vraptor-site/documentacao/">Documentação</a></li>
+                    <li><a href="../../documentacao/">Documentação</a></li>
                     <li>|</li>
-                    <li><a href="/vraptor-site/beneficios.jsp">Benef&iacute;cios</a></li>
+                    <li><a href="../../beneficios.jsp">Benef&iacute;cios</a></li>
                     <li>|</li>
-                    <li><a href="/vraptor-site/suporte.jsp">Suporte</a></li>
+                    <li><a href="../../suporte.jsp">Suporte</a></li>
                     <li>|</li>
-                    <li><a href="/vraptor-site/vraptor2.jsp">vraptor2</a></li>
+                    <li><a href="../../vraptor2.jsp">vraptor2</a></li>
                 </ul>
                 <p><a href="http://www.apache.org/licenses/LICENSE-2.0">Licença Apache 2.0</a> - VRaptor ©2009 Caelum - Ensino e Inovação</p>
             </div><!-- footnote-->

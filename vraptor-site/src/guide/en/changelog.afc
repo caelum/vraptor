@@ -1,4 +1,9 @@
 [chapter ChangeLog]
+
+[section 3.0.1]
+* paranamer upgraded to version 1.5 (Update your jar!)
+
+[section 3.0.0]
 [list]
 * ValidationError renamed to ValidationException
 * result.use(Results.http()) for setting headers and status codes of HTTP protocol

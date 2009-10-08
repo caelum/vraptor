@@ -365,6 +365,8 @@ constructor:
 @Resource
 public class ShoppingCartController {
 
+	private final ShoppingCart cart;
+	
 	public ShoppingCartController(ShoppingCart cart) {
 		this.cart = cart;
 	}

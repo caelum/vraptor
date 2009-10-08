@@ -30,9 +30,11 @@
 		<property file="vraptor-core/build.properties" />
 		<delete file="vraptor-example-compatibility/src/main/webapp/WEB-INF/lib/vraptor3-*.jar" />
 		<delete file="vraptor-blank-project/WebContent/WEB-INF/lib/vraptor3-*.jar" />
+		<delete file="vraptor-blank-project-gae/WebContent/WEB-INF/lib/vraptor3-*.jar" />
 		<delete file="vraptor-mydvds/src/main/webapp/WEB-INF/lib/vraptor3-*.jar" />
 		<copy file="vraptor-core/${jar.file}" todir="vraptor-example-compatibility/src/main/webapp/WEB-INF/lib" />
 		<copy file="vraptor-core/${jar.file}" todir="vraptor-blank-project/WebContent/WEB-INF/lib" />
+		<copy file="vraptor-core/${jar.file}" todir="vraptor-blank-project-gae/war/WEB-INF/lib" />
 		<copy file="vraptor-core/${jar.file}" todir="vraptor-mydvds/src/main/webapp/WEB-INF/lib" />
 	</target>
 
@@ -41,10 +43,9 @@
 	<target name="all" depends="deploy-to-examples" />
 	
 	<target name="zips-site">
+		<ant dir="vraptor-site" target="assembly"/>
 		<mkdir dir="target"/>
-		<zip destfile="target/vraptor-site-${vraptor.version}.zip">
-			<fileset dir="vraptor-site/src/content/"/>			
-		</zip>
+		<move file="vraptor-site/site.war" tofile="target/vraptor-site-${vraptor.version}.zip" />
 	</target>
 	
 	<target name="zips-vraptor">

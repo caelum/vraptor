@@ -14,7 +14,7 @@ simples do VRaptor 3, que sempre procuram encapsular %%HttpServletRequest%%,
 Você pode começar seu projeto a partir do %%vraptor-blank-project%%, que contem as dependências
 necessárias e a configuração no %%web.xml%%. Ele pode ser baixado em:
 
-http://vraptor.caelum.com.br/download.html
+http://vraptor.caelum.com.br/download.jsp
 
 [section Um Controller simples]
 

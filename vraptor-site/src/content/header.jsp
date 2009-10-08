@@ -1,4 +1,5 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <fmt:setLocale value="${locale}"/>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -8,7 +9,12 @@
 	<meta name="reply-to" content="contato@caelum.com.br"/>
 	<meta name="author" content="Design"/>
 	<meta name="reply-to" content="lokidg@gmail.com"/>
-	${param.extras}
+	<c:if test="${param.docs}">
+		<c:set var="path">../..</c:set>
+		<link href="${path }/documentacao/includes/css/java.css" rel="stylesheet" type="text/css" media="screen" />
+		<link href="${path }/documentacao/includes/css/xml2html.css" rel="stylesheet" type="text/css" media="screen" />
+		<link href="${path }/documentacao/includes/css/style.css" rel="stylesheet" type="text/css" media="screen" />
+	</c:if>
 	<meta name="description" content="<fmt:message key="meta.description"/>"/>
 	<meta name="keywords" content="sites, web, desenvolvimento, development, java, opensource"/>
 	<title>V|Raptor - <fmt:message key="title.slogan"/></title>
@@ -32,12 +38,12 @@
     </div><!-- header wrap-->
     
     <div id="menuWrap">
-    	<ul id="menuElements">
-        	<li><a id="homeBtn" href="${path }/<fmt:message key='home.link'/>"><span>home</span></a></li>
-        	<li><a id="downloadBtn" href="${path }/<fmt:message key='download.link'/>"><span>download</span></a></li>
-        	<li><a id="documentacaoBtn" href="${path }/<fmt:message key='documentacao.link'/>"><span><fmt:message key="documentacao"/></span></a></li>
-        	<li><a id="beneficiosBtn" href="${path }/<fmt:message key='beneficios.link'/>"><span><fmt:message key="beneficios"/></span></a></li>
-        	<li><a id="suporteBtn" href="${path }/<fmt:message key='suporte.link'/>"><span><fmt:message key="suporte"/></span></a></li>
-        	<li><a id="vraptor2Btn" href="${path }/<fmt:message key='vraptor2.link'/>"><span>vraptor2</span></a></li>
+    	<ul id="<fmt:message key='menu.id'/>">
+        	<li><a id="<fmt:message key='home.id'/>" href="${path }/<fmt:message key='home.link'/>"><span>home</span></a></li>
+        	<li><a id="<fmt:message key='download.id'/>" href="${path }/<fmt:message key='download.link'/>"><span>download</span></a></li>
+        	<li><a id="<fmt:message key='docs.id'/>" href="${path }/<fmt:message key='documentacao.link'/>"><span><fmt:message key="documentacao"/></span></a></li>
+        	<li><a id="<fmt:message key='beneficios.id'/>" href="${path }/<fmt:message key='beneficios.link'/>"><span><fmt:message key="beneficios"/></span></a></li>
+        	<li><a id="<fmt:message key='suporte.id'/>" href="${path }/<fmt:message key='suporte.link'/>"><span><fmt:message key="suporte"/></span></a></li>
+        	<li><a id="<fmt:message key='vraptor2.id'/>" href="${path }/<fmt:message key='vraptor2.link'/>"><span>vraptor2</span></a></li>
         </ul><!-- menuElements-->
     </div><!-- menuWrap-->

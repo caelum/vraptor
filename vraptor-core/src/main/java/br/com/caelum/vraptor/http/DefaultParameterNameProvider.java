@@ -16,6 +16,8 @@
  */
 package br.com.caelum.vraptor.http;
 
+import java.lang.reflect.AccessibleObject;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -46,13 +48,24 @@ public class DefaultParameterNameProvider implements ParameterNameProvider{
         return extractName((Class<?>) type);
     }
 
-    public String[] parameterNamesFor(Method method) {
-        Type[] parameterTypes = method.getGenericParameterTypes();
+    public String[] parameterNamesFor(AccessibleObject method) {
+        Type[] parameterTypes = parameterTypes(method);
         String[] names = new String[parameterTypes.length];
         for (int i = 0; i < names.length; i++) {
             names[i] = nameFor(parameterTypes[i]);
         }
         return names;
     }
+
+	@SuppressWarnings("unchecked")
+	private Type[] parameterTypes(AccessibleObject methodOrConstructor) {
+		if (methodOrConstructor instanceof Method)
+			return ((Method)methodOrConstructor).getGenericParameterTypes();
+		else if (methodOrConstructor instanceof Constructor<?>)
+			return ((Constructor)methodOrConstructor).getGenericParameterTypes();
+		else 
+			throw new IllegalArgumentException("Expecting a method or constructor, " +
+					"instead got " + methodOrConstructor);
+	}
 
 }

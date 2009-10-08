@@ -126,6 +126,7 @@
 		<delete file="${jar.file}" />
 		<delete dir="${tmp.dir}" />
 	</target>
+	
 
 	<target name="genTestFixtures" depends="compile">
 		<javac destdir="${tmp.fixture.classes.dir}" 

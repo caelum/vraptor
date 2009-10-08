@@ -1,0 +1,15 @@
+aspectjrt.jar                 Spring dependency
+cglib-nodep-2.1_3.jar         Used for creating proxies
+commons-fileupload-1.1.jar    Used to deal with multipart requests
+commons-logging.jar           Server runtime
+google-collect-1.0-rc2.jar    Improvement for Collections API
+javassist-3.8.0.GA.jar        OGNL dependency
+jstl.jar                      Server runtime
+log4j-1.2.15.jar              Default implementation for logging. You can change this.
+mirror-1.5.1.jar              DSL for Java Reflections API
+objenesis-1.1.jar             Used for creating proxies
+ognl-2.7.3.jar                Used for instantiate objects from request parameters
+paranamer-1.5.jar             Used for discovering method parameter names
+slf4j-api-1.5.6.jar           Facade for logging
+slf4j-log4j12-1.5.6.jar       Logging implementation. You can change this.
+spring-2.5.5.jar              Default DI provider. You can change this.

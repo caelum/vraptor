@@ -8,8 +8,7 @@
 	
 <div id="contentWrap">
     	<div id="contentDocumentacao">
-        	<h2><span>documentação</span></h2>
-            <h3>documentação toda em português, configuração, migração e utilização.</h3>
+        	<#include "chapter-title.ftl">
             
             <div id="subMenuDoc">
             	<img id="positionTop" src="${relative}/includes/images/subMenuTop-trans.png" />

@@ -1,5 +1,8 @@
 [chapter ChangeLog]
 
+[section 3.0.1]
+* paranamer atualizado para versão 1.5 (Atualize seu jar!)
+
 [section 3.0.0]
 [list]
 * ValidationError foi renomeado para ValidationException

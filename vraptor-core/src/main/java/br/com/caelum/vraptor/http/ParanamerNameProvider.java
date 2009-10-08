@@ -16,7 +16,7 @@
  */
 package br.com.caelum.vraptor.http;
 
-import java.lang.reflect.Method;
+import java.lang.reflect.AccessibleObject;
 import java.util.Arrays;
 
 import org.slf4j.Logger;
@@ -38,23 +38,20 @@ import com.thoughtworks.paranamer.Paranamer;
  */
 @ApplicationScoped
 public class ParanamerNameProvider implements ParameterNameProvider {
-
-    private static final String[] EMPTY_ARRAY = new String[0];
     private final ParameterNameProvider delegate = new DefaultParameterNameProvider();
     private final Paranamer info = new CachingParanamer(new BytecodeReadingParanamer());
 
     private static final Logger logger = LoggerFactory.getLogger(ParanamerNameProvider.class);
 
-    public String[] parameterNamesFor(Method method) {
-        if (method.getParameterTypes().length == 0) {
-            return EMPTY_ARRAY;
-        }
+    public String[] parameterNamesFor(AccessibleObject method) {
         try {
             String[] parameterNames = info.lookupParameterNames(method);
             if (logger.isDebugEnabled()) {
                 logger.debug("Found parameter names with paranamer for " + method + " as " + Arrays.toString(parameterNames));
             }
-            return parameterNames;
+            
+            String[] defensiveCopy = Arrays.copyOf(parameterNames, parameterNames.length);
+            return defensiveCopy;
         } catch (ParameterNamesNotFoundException e) {
             return delegate.parameterNamesFor(method);
         }

@@ -2,17 +2,17 @@
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource
  * All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); 
- * you may not use this file except in compliance with the License. 
- * You may obtain a copy of the License at 
- * 
- * 	http://www.apache.org/licenses/LICENSE-2.0 
- * 
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an "AS IS" BASIS, 
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
- * See the License for the specific language governing permissions and 
- * limitations under the License. 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * 	http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package br.com.caelum.vraptor.core;
@@ -31,11 +31,11 @@ import br.com.caelum.vraptor.ioc.Container;
 @ApplicationScoped
 public final class DefaultConverters implements Converters {
 
-    private final LinkedList<Class<? extends Converter>> classes;
+    private final LinkedList<Class<? extends Converter<?>>> classes;
     private final Logger logger = LoggerFactory.getLogger(DefaultConverters.class);
 
     public DefaultConverters() {
-        this.classes = new LinkedList<Class<? extends Converter>>();
+        this.classes = new LinkedList<Class<? extends Converter<?>>>();
         logger.info("Registering bundled converters");
         for (Class<? extends Converter<?>> converterType : BaseComponents.getBundledConverters()) {
             logger.debug("bundled converter to be registered: " + converterType);
@@ -51,14 +51,26 @@ public final class DefaultConverters implements Converters {
         classes.addFirst(converterClass);
     }
 
-    public Converter to(Class<?> clazz, Container container) {
-        for (Class<? extends Converter> converterType : classes) {
-            Class boundType = converterType.getAnnotation(Convert.class).value();
+    public Converter<?> to(Class<?> clazz, Container container) {
+        Converter<?> foundConverter = findConverterFor(clazz, container);
+        if (foundConverter == null) {
+			throw new VRaptorException("Unable to find converter for " + clazz.getName());
+		}
+        return foundConverter;
+    }
+
+	private Converter<?> findConverterFor(Class<?> clazz, Container container) {
+		for (Class<? extends Converter<?>> converterType : classes) {
+            Class<?> boundType = converterType.getAnnotation(Convert.class).value();
             if (boundType.isAssignableFrom(clazz)) {
                 return container.instanceFor(converterType);
             }
         }
-        throw new VRaptorException("Unable to find converter for " + clazz.getName());
-    }
+		return null;
+	}
+
+	public boolean existsFor(Class<?> type, Container container) {
+		return findConverterFor(type, container) != null;
+	}
 
 }

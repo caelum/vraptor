@@ -7,10 +7,10 @@
             <dl>
             	<dt><fmt:message key="vraptor2.docs"/></dt>
                 <dd><a href="http://vraptor.caelum.com.br/vraptor2">http://vraptor.caelum.com.br/vraptor2 »</a></dd>
- 				<dt><fmt:message key="vraptor2.forum"/></dt>
-                <dd><a href="http://vraptor.caelum.com.br/vraptor2-forum">http://vraptor.caelum.com.br/vraptor2-forum »</a></dd>
                 <dt><fmt:message key="vraptor2.guj"/></dt>
                 <dd><a href="http://www.guj.com.br/forums/show/23.java">http://www.guj.com.br/forums/show/23.java »</a></dd>
+                <dt class="oldForum"><fmt:message key="vraptor2.forum"/></dt>
+                <dd class="oldForum"><a href="http://vraptor.caelum.com.br/vraptor2-forum">http://vraptor.caelum.com.br/vraptor2-forum »</a></dd>
             </dl>
         </div><!-- contentDownload -->
     </div><!-- content wrap-->

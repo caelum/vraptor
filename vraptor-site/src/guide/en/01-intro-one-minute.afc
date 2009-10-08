@@ -12,7 +12,7 @@ have the control of all Web operations.
 [section Starting up]
 
 You can start your project based on vraptor-blank-project, available on 
-http://vraptor.caelum.com.br/download.html. It contains all required jar dependencies, and
+http://vraptor.caelum.com.br/download.jsp. It contains all required jar dependencies, and
 the minimal web.xml configuration for working with VRaptor.
 
 [section A simple controller]

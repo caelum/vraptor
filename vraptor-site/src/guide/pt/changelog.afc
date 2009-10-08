@@ -2,7 +2,9 @@
 
 [section 3.0.1]
 * paranamer atualizado para versão 1.5 (Atualize seu jar!)
-
+* jars separados em opcional e obrigatório no vraptor-core
+* dependencias estão explicadas no vraptor-core/libs/mandatory/dependencies.txt e no 
+  vraptor-core/libs/optional/dependencies.txt
 [section 3.0.0]
 [list]
 * ValidationError foi renomeado para ValidationException

@@ -39,11 +39,11 @@ and we'll use it to persist products on the database, with Hibernate:
 public class Product {
 	@Id
 	@GeneratedValue
-	public Long id;
+	private Long id;
 	
-	public String name;
-	public String description;
-	public Double price;
+	private String name;
+	private String description;
+	private Double price;
 	//getter and setters
 }
 [/java]

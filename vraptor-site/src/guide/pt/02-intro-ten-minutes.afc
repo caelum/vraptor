@@ -33,11 +33,11 @@ representar o produto, e vamos usá-la para guardar produtos no banco, usando o 
 public class Produto {
 	@Id
 	@GeneratedValue
-	public Long id;
+	private Long id;
 	
-	public String nome;
-	public String descricao;
-	public Double preco;
+	private String nome;
+	private String descricao;
+	private Double preco;
 	//getter e setters
 }
 [/java]

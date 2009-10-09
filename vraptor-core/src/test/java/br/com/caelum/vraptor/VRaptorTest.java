@@ -2,17 +2,17 @@
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource
  * All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); 
- * you may not use this file except in compliance with the License. 
- * You may obtain a copy of the License at 
- * 
- * 	http://www.apache.org/licenses/LICENSE-2.0 
- * 
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an "AS IS" BASIS, 
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
- * See the License for the specific language governing permissions and 
- * limitations under the License. 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * 	http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package br.com.caelum.vraptor;
 
@@ -40,6 +40,8 @@ import br.com.caelum.vraptor.core.Execution;
 import br.com.caelum.vraptor.core.RequestExecution;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.core.StaticContentHandler;
+import br.com.caelum.vraptor.http.EncodingHandler;
+import br.com.caelum.vraptor.http.NullEncodingHandler;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
 import br.com.caelum.vraptor.test.VRaptorMockery;
@@ -92,6 +94,9 @@ public class VRaptorTest {
                 one(container).instanceFor(RequestExecution.class);
                 will(returnValue(execution));
                 one(execution).execute();
+
+                one(container).instanceFor(EncodingHandler.class);
+                will(returnValue(new NullEncodingHandler()));
             }
         });
         VRaptor raptor = new VRaptor();

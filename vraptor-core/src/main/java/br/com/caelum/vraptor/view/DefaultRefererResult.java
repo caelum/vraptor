@@ -1,25 +1,36 @@
 package br.com.caelum.vraptor.view;
 
+import static br.com.caelum.vraptor.view.Results.logic;
 import static br.com.caelum.vraptor.view.Results.page;
+
+import java.util.ArrayList;
+
 import net.vidageek.mirror.dsl.Mirror;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.View;
+import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.util.test.MockResult;
+import br.com.caelum.vraptor.validator.Message;
 
 public class DefaultRefererResult implements RefererResult {
 
 	private final MutableRequest request;
 	private final Result result;
 	private final Router router;
+	private final ParametersProvider provider;
+	private final Localization localization;
 
-	public DefaultRefererResult(Result result, MutableRequest request, Router router) {
+	public DefaultRefererResult(Result result, MutableRequest request, Router router, ParametersProvider provider, Localization localization) {
 		this.result = result;
 		this.request = request;
 		this.router = router;
+		this.provider = provider;
+		this.localization = localization;
 	}
 	public FallbackResult forward() {
 		String referer = getReferer();
@@ -30,9 +41,9 @@ public class DefaultRefererResult implements RefererResult {
 		if (method == null) {
 			result.use(page()).forward(referer);
 		} else {
-			Object instance = result.use(page()).of(method.getResource().getType());
+			Object instance = result.use(logic()).forwardTo(method.getResource().getType());
 			new Mirror().on(instance).invoke().method(method.getMethod())
-				.withArgs(new Object[method.getMethod().getParameterTypes().length]);
+				.withArgs(provider.getParametersFor(method, new ArrayList<Message>(), localization.getBundle()));
 		}
 		return new NullFallbackResult();
 	}

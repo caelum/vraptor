@@ -64,7 +64,7 @@
 <form action="<c:url value="/dvds/search"/>">
 	<table>
 		<tr><td><fmt:message key="dvd.title"/></td>
-			<td><input type="text" name="${dvd.title }"/></td></tr>
+			<td><input type="text" name="dvd.title" value="${dvd.title }"/></td></tr>
 		<tr><td><input type="submit" value="search"/></td></tr>		
 	</table>
 </form>

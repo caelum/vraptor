@@ -33,7 +33,7 @@ public class IogiParametersProvider implements ParametersProvider {
 		this.nameProvider = provider;
 		this.servletRequest = parameters;
 		this.instantiator = instantiator;
-		LOGGER.info("IogiParametersProvider is up");
+		LOGGER.debug("IogiParametersProvider is up");
 	}
 
 	public Object[] getParametersFor(ResourceMethod method, List<Message> errors, ResourceBundle bundle) {

@@ -1,10 +1,14 @@
 [chapter ChangeLog]
 
 [section 3.0.1]
+[list]
 * paranamer atualizado para versão 1.5 (Atualize seu jar!)
 * jars separados em opcional e obrigatório no vraptor-core
-* dependencias estão explicadas no vraptor-core/libs/mandatory/dependencies.txt e no 
+* dependências estão explicadas no vraptor-core/libs/mandatory/dependencies.txt e no 
   vraptor-core/libs/optional/dependencies.txt
+* possibilidade de setar o character encoding da aplicação no web.xml através do context-param
+	br.com.caelum.vraptor.encoding
+[/list]
 [section 3.0.0]
 [list]
 * ValidationError foi renomeado para ValidationException

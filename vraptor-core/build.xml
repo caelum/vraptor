@@ -9,7 +9,7 @@
 	<property file="build.properties" />
 	<path id="libs.classpath" path=".">
 		<fileset dir="${libs.dir}">
-			<include name="*.jar" />
+			<include name="**/*.jar" />
 		</fileset>
 	</path>
 

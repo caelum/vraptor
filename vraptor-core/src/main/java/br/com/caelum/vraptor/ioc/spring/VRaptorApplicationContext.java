@@ -2,17 +2,17 @@
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource
  * All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); 
- * you may not use this file except in compliance with the License. 
- * You may obtain a copy of the License at 
- * 
- * 	http://www.apache.org/licenses/LICENSE-2.0 
- * 
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an "AS IS" BASIS, 
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
- * See the License for the specific language governing permissions and 
- * limitations under the License. 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * 	http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package br.com.caelum.vraptor.ioc.spring;
@@ -100,6 +100,7 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
 	private void registerApplicationScopedComponentsOn(DefaultListableBeanFactory beanFactory) {
         for (Class<?> type : BaseComponents.getApplicationScoped().values()) {
             registerOn(beanFactory, type);
+            registerFactory(type, beanFactory);
         }
 
         for (Class<? extends StereotypeHandler> handlerType : BaseComponents.getStereotypeHandlers()) {
@@ -113,6 +114,7 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
     private void registerRequestScopedComponentsOn(DefaultListableBeanFactory beanFactory) {
         for (Class<?> type : BaseComponents.getRequestScoped().values()) {
             registerOn(beanFactory, type);
+            registerFactory(type, beanFactory);
         }
 
         for (Class<? extends Converter<?>> converterType : BaseComponents.getBundledConverters()) {
@@ -137,10 +139,14 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
 
     private void register(final Class<?> type, ConfigurableListableBeanFactory beanFactory) {
         registerOn((BeanDefinitionRegistry) beanFactory, type, true);
-        if (ComponentFactory.class.isAssignableFrom(type)) {
+        registerFactory(type, beanFactory);
+    }
+
+	private void registerFactory(final Class<?> type, ConfigurableListableBeanFactory beanFactory) {
+		if (ComponentFactory.class.isAssignableFrom(type)) {
             beanFactory.registerSingleton(type.getName(), new ComponentFactoryBean(container, type));
         }
-    }
+	}
     public void register(Class<?> type) {
     	register(type, getBeanFactory());
     }

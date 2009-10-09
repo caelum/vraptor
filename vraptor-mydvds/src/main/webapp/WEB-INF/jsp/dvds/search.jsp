@@ -22,8 +22,8 @@
 	<td>${dvd.description}</td>
 	<td><fmt:message key="${dvd.type}"/></td>
 	<td>
-		<c:forEach var="user" items="${dvd.users}">
-			${user.name}<br/>
+		<c:forEach var="copy" items="${dvd.copies}">
+			${copy.owner.name}<br/>
 		</c:forEach>
 	</td>
 </tr>

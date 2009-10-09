@@ -92,3 +92,15 @@ and change the provider at your web.xml:
 By default, VRaptor try to find the applicationContext via
 %%WebApplicationContextUtils.getWebApplicationContext(servletContext);%% or loading the applicationContext.xml
 that is on your classpath.
+
+[section Changing the application character encoding]
+
+For using an arbitrary character encoding on all your requests and responses, avoiding
+encoding inconsistencies, you can set this parameter on your web.xml.
+[xml]
+<context-param>
+    <param-name>br.com.caelum.vraptor.encoding</param-name>
+    <param-value>UTF-8</param-value>
+</context-param>
+[/xml]
+This way all of your pages and form data will use the UTF-8.

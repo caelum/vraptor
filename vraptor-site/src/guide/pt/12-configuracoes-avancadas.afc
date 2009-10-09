@@ -90,6 +90,20 @@ e mudar o provider no web.xml:
 [/xml]
 
 Por padrão o VRaptor tenta procurar o applicationContext via 
-%%WebApplicationContextUtils.getWebApplicationContext(servletContext);%% ou carregando do applicationContext.xml
+%%WebApplicationContextUtils.getWebApplicationContext(servletContext);%% ou carregando do
+ applicationContext.xml
 que está no classpath.
 
+[section Mudando o encoding da sua aplicação]
+
+Se você quiser que todas as requisições da sua aplicação sejam de um encoding determinado,
+para evitar problemas de acentuação por exemplo, você pode colocar o seguinte parâmetro
+no seu web.xml:
+[xml]
+<context-param>
+    <param-name>br.com.caelum.vraptor.encoding</param-name>
+    <param-value>UTF-8</param-value>
+</context-param>
+[/xml]
+Assim todas as suas páginas e dados passados para formulário usarão o encoding UTF-8,
+evitando problemas de acentuação.

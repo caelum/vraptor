@@ -27,7 +27,7 @@ In this example project the base package will be:
 [/xml]
 
 Assuming that the context root of the application was changed to %%/onlinestore%%, if you run
-this example you should be able to access %%http://localhost:8080/onlinestore%% and see
+this example you should be able to access http://localhost:8080/onlinestore and see
 an **It works!** on screen.
 
 [section Product registry]

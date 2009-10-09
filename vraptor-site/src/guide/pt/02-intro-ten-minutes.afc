@@ -22,7 +22,7 @@ para que o VRaptor consiga encontrar seus componentes e gerenciar suas dependên
 [/xml]
 
 Supondo que o contexto web da aplicação foi mudado para %%/lojavirtual%%, se você rodar o exemplo e
-acessar a URI %%http://localhost:8080/lojavirtual%% você deve ver um **It works!** na tela.
+acessar a URI http://localhost:8080/lojavirtual você deve ver um **It works!** na tela.
 
 [section Um cadastro de produtos]
 Para começar o sistema, vamos começar com cadastro de produtos. Precisamos de uma classe que vai

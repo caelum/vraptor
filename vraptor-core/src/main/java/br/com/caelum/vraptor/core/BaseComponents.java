@@ -159,8 +159,7 @@ public class BaseComponents {
             ParametersProvider.class, 						OgnlParametersProvider.class,
             OutjectResult.class, 							OutjectResult.class,
             ParametersInstantiatorInterceptor.class, 		ParametersInstantiatorInterceptor.class,
-            ResourceLookupInterceptor.class, 				ResourceLookupInterceptor.class,
-            URLParameterExtractorInterceptor.class, 		URLParameterExtractorInterceptor.class
+            ResourceLookupInterceptor.class, 				ResourceLookupInterceptor.class
     );
 
     @SuppressWarnings("unchecked")

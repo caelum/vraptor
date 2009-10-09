@@ -2,7 +2,7 @@
 
 [section Starting a project: a on-line store]
 Let's start by downloading the ::vraptor-blank-project:: from 
-http://vraptor.caelum.com.br/download.html. This blank-project has the required configuration on 
+http://vraptor.caelum.com.br/download.jsp. This blank-project has the required configuration on 
 %%web.xml%% and the dependencies on %%WEB-INF/lib%% that are needed to start using VRaptor. You 
 can also import this project on Eclipse.
 

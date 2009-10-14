@@ -28,14 +28,11 @@
 	</target>
 
 	<target name="deploy-to-examples" description="copy the vraptor build to examples lib dir" depends="core">
-		<delete file="vraptor-example-compatibility/src/main/webapp/WEB-INF/lib/vraptor3-*.jar" />
-		<delete file="vraptor-blank-project/WebContent/WEB-INF/lib/vraptor3-*.jar" />
-		<delete file="vraptor-blank-project-gae/WebContent/WEB-INF/lib/vraptor3-*.jar" />
-		<delete file="vraptor-mydvds/src/main/webapp/WEB-INF/lib/vraptor3-*.jar" />
-		<copy file="vraptor-core/${jar.file}" todir="vraptor-example-compatibility/src/main/webapp/WEB-INF/lib" />
-		<copy file="vraptor-core/${jar.file}" todir="vraptor-blank-project/WebContent/WEB-INF/lib" />
-		<copy file="vraptor-core/${jar.file}" todir="vraptor-blank-project-gae/war/WEB-INF/lib" />
-		<copy file="vraptor-core/${jar.file}" todir="vraptor-mydvds/src/main/webapp/WEB-INF/lib" />
+		<ant dir="vraptor-core" target="artifacts"/>
+		<ant dir="vraptor-example-compatibility" target="update-jars"/>
+		<ant dir="vraptor-blank-project" target="update-jars"/>
+		<ant dir="vraptor-blank-project-gae" target="update-jars"/>
+		<ant dir="vraptor-mydvds" target="update-jars"/>
 	</target>
 
 	<target name="test" depends="core-tests" />

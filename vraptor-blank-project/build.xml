@@ -28,7 +28,6 @@
 			    <include name="*.jar"/>
 			</fileset>
     	</copy>
-    	<ant dir="${vraptor.core}" target="artifacts"/>
     	<copy todir="${webinf.lib.dir}" file="${vraptor.core}/${jar.file}"/>
     </target>
 

@@ -11,6 +11,68 @@ body{
 #contentSuporte .suporteBox ul li a em.bigger {
 	font-size: 14pt;
 }
+
+#formulario_inscricao {
+	text-align: left;	
+}
+/* tutorial.jsp */
+#formulario_inscricao label {
+	font-size: 11pt;
+}
+#formulario_inscricao button:hover {
+	color:#333399;
+	cursor: pointer;
+}
+#formulario_inscricao button {
+	color:#003;	
+	font-size:16px;	
+	text-transform:uppercase;
+	font-weight: bold; 
+	padding: 10px;
+	background-color: #d5d5db;
+}
+#formulario_inscricao label.required {
+	font-weight: bold;	
+}
+#formulario_inscricao label.error {
+	color: darkred;
+	display: inline;
+	padding-left: 10px;
+}
+#formulario_inscricao input, #formulario_inscricao label {
+	display: block;	
+	text-align: left;
+}
+#formulario_inscricao input:focus {
+	background-color: #FFF;
+}
+#formulario_inscricao input.error {
+	display: inline;
+	border: 1px solid red;	
+}
+#formulario_inscricao input {
+	width: 27em;
+	height: 1.5em;
+	border: 1px solid black;
+	padding: 2px;
+	background-color: #ececec;	
+}
+#formulario_inscricao fieldset.buttons {
+	border: none;
+}
+#formulario_inscricao legend {
+	border: 1px solid #ddaccc;
+	padding: 2px;
+	font-size: 14pt;
+	font-weight: bold;
+}
+#formulario_inscricao fieldset {
+	width: 650px;
+	margin: 0 auto;
+	margin-top: 10px;
+	border: 1px solid #ddaccc;
+	padding: 10px 20px;	
+}
 /*header structure*/
 #headerWrap{
 	background-image:url(images/bgHeader.png);

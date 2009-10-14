@@ -25,7 +25,8 @@ public class DefaultRefererResult implements RefererResult {
 	private final ParametersProvider provider;
 	private final Localization localization;
 
-	public DefaultRefererResult(Result result, MutableRequest request, Router router, ParametersProvider provider, Localization localization) {
+	public DefaultRefererResult(Result result, MutableRequest request, Router router,
+				ParametersProvider provider, Localization localization) {
 		this.result = result;
 		this.request = request;
 		this.router = router;

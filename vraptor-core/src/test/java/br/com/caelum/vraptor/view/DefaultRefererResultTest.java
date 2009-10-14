@@ -7,7 +7,9 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.View;
+import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.http.route.Router;
 
 public class DefaultRefererResultTest {
@@ -18,6 +20,8 @@ public class DefaultRefererResultTest {
 	private MutableRequest request;
 	private Router router;
 	private DefaultRefererResult refererResult;
+	private Localization localization;
+	private ParametersProvider provider;
 
 	@Before
 	public void setUp() throws Exception {
@@ -25,7 +29,9 @@ public class DefaultRefererResultTest {
 		result = mockery.mock(Result.class);
 		request = mockery.mock(MutableRequest.class);
 		router = mockery.mock(Router.class);
-		refererResult = new DefaultRefererResult(result, request, router);
+		provider = mockery.mock(ParametersProvider.class);
+		localization = mockery.mock(Localization.class);
+		refererResult = new DefaultRefererResult(result, request, router, provider, localization);
 	}
 
 	@Test

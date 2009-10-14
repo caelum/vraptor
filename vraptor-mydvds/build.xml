@@ -1,5 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project default="assembly">
 
+	<property file="../vraptor-core/build.properties" />
+		
+	<property name="vraptor.core" value="../vraptor-core"/>
+	<property name="mandatory.jars" value="${vraptor.core}/${libs.dir}/mandatory"/>
+	<property name="webinf.lib.dir" value="src/main/webapp/WEB-INF/lib"/>
+	<property name="extra.lib.dir" value="build-lib/extras"/>
+	
     <!-- - - - - - - - - - - - - - - - - - 
           target: clean                      
          - - - - - - - - - - - - - - - - - -->
@@ -22,6 +30,25 @@
     	<javac srcdir="src/main/java" destdir="src/main/webapp/WEB-INF/classes" classpathref="buildpath"/>
     	
     </target>
+	
+	<target name="update-jars">
+    	<delete>
+			<fileset dir="${webinf.lib.dir}">
+			    <include name="*.jar"/>
+			</fileset>
+		</delete>
+    	<copy todir="${webinf.lib.dir}">
+			<fileset dir="${mandatory.jars}">
+			    <include name="*.jar"/>
+			</fileset>
+			<fileset dir="${extra.lib.dir}">
+			    <include name="*.jar"/>
+			</fileset>
+    	</copy>
+    	<ant dir="${vraptor.core}" target="artifacts"/>
+    	<copy todir="${webinf.lib.dir}" file="${vraptor.core}/${jar.file}"/>
+    </target>
+
 	
 	<!-- ================================= 
           target: copy-resources              

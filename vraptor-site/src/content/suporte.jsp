@@ -1,8 +1,8 @@
 <%@include file="/header.jsp" %>
 <div id="contentWrap">
     	<div id="contentSuporte">
-        	<h2><span><fmt:message key="suporte"/></span></h2>
-            <h3><fmt:message key="suporte.text"/></h3>
+        	<h2 class="title"><span><fmt:message key="suporte"/></span></h2>
+            <h3 class="title"><fmt:message key="suporte.text"/></h3>
             
             <div class="suporteBox">
             	<h4 id="suporteGrayBox"><span><fmt:message key="suporte"/></span></h4>

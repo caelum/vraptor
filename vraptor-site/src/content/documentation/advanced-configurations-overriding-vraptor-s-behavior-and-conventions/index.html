@@ -51,8 +51,8 @@
 <div id="contentWrap">
     	<div id="contentDocumentacao">
         	<div class="download"><a href="../vraptor3.pdf">Download as PDF</a></div>
-        	<h2><span>documentation</span></h2>
-        	<h3>configuration, migration and utilization.</h3>            <div id="subMenuDoc">
+        	<h2 class="title"><span>documentation</span></h2>
+        	<h3 class="title">configuration, migration and utilization.</h3>            <div id="subMenuDoc">
             	<img id="positionTop" src="../includes/images/subMenuTop-trans.png" />
                 <img id="positionBottom" src="../includes/images/subMenuBottom-trans.png" />
             	<ol type="1">
@@ -174,6 +174,16 @@ getParentApplicationContext method, giving it your application's ApplicationCont
 	    	<span class="paragraph">By default, VRaptor try to find the applicationContext via
 <code class="inlineCode">WebApplicationContextUtils.getWebApplicationContext(servletContext);</code> or loading the applicationContext.xml
 that is on your classpath.</span>
+		
+
+<h3 class="section">Changing the application character encoding</h3>
+	    	<span class="paragraph">For using an arbitrary character encoding on all your requests and responses, avoiding
+encoding inconsistencies, you can set this parameter on your web.xml.</span>
+	    	<div class="xml"><code class="xml"><span class="textag">&lt;context-param&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-name&gt;</span><span class="texnormal">br.com.caelum.vraptor.encoding</span><span class="textag">&lt;/param-name&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-value&gt;</span><span class="texnormal">UTF-8</span><span class="textag">&lt;/param-value&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal"></span><span class="textag">&lt;/context-param&gt;</span></code></div>
+	    	<span class="paragraph">This way all of your pages and form data will use the UTF-8.</span>
 		
 
 </div><!-- content -->

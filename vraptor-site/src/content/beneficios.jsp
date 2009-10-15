@@ -7,8 +7,8 @@
 	</ul>
     	<div id="contentBeneficios">
     		<a rel="nofollow" name="beneficios"></a>
-        	<h2><span><fmt:message key="beneficios"/></span></h2>
-            <h3><fmt:message key="beneficios.head"/></h3>
+        	<h2 class="title"><span><fmt:message key="beneficios"/></span></h2>
+            <h3 class="title"><fmt:message key="beneficios.head"/></h3>
                       
              <div class="benefitsBox" id="produtividadeFB">
              	<h4><fmt:message key="alta.produtividade"/></h4>

@@ -1,6 +1,6 @@
 <%@include file="/header.jsp" %>
 <div id="contentWrap">
-	<h2>Formul&aacute;rio de inscri&ccedil;&atilde;o Tutorial</h2>
+	<h2 class="title">Formul&aacute;rio de inscri&ccedil;&atilde;o Tutorial</h2>
 	<form id="formulario_inscricao">
      	<input type="hidden" style="display: none;" name="turma.id" value="1129" id="turmaId"/>
 		<div class="erro_msg"><ul></ul></div>

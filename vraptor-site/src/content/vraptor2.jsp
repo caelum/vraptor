@@ -1,8 +1,8 @@
 <%@include file="/header.jsp" %>
 	<div id="contentWrap">
     	<div id="contentVraptor2">
-        	<h2><span>VRaptor 2</span></h2>
-            <h3><fmt:message key="vraptor2.head"/></h3>
+        	<h2 class="title"><span>VRaptor 2</span></h2>
+            <h3 class="title"><fmt:message key="vraptor2.head"/></h3>
              
             <dl>
             	<dt><fmt:message key="vraptor2.docs"/></dt>

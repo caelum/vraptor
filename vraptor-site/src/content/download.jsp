@@ -1,8 +1,8 @@
 <%@include file="/header.jsp" %>
 <div id="contentWrap">
     	<div id="contentDownload">
-        	<h2><span>Download</span></h2>
-            <h3><fmt:message key="download.head"/>:</h3>
+        	<h2 class="title"><span>Download</span></h2>
+            <h3 class="title"><fmt:message key="download.head"/>:</h3>
 
 			<div class="passo">
                 <a class="downloadBtn3" href="http://vraptor3.googlecode.com/files/vraptor-3.0.0.zip"><span>Download Now</span></a>            

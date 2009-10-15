@@ -51,8 +51,8 @@
 <div id="contentWrap">
     	<div id="contentDocumentacao">
 			<div class="download"><a href="../vraptor3.pdf">Download em PDF</a></div>
-        	<h2><span>documentação</span></h2>
-            <h3>documentação toda em português, configuração, migração e utilização.</h3>            <div id="subMenuDoc">
+        	<h2 class="title"><span>documentação</span></h2>
+            <h3 class="title">documentação toda em português, configuração, migração e utilização.</h3>            <div id="subMenuDoc">
             	<img id="positionTop" src="../includes/images/subMenuTop-trans.png" />
                 <img id="positionBottom" src="../includes/images/subMenuBottom-trans.png" />
             	<ol type="1">
@@ -174,8 +174,21 @@ e implementar o m&eacute;todo getParentApplicationContext, passando o Applicatio
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-value&gt;</span><span class="texnormal">br.com.nomedaempresa.nomedoprojeto.CustomProvider</span><span class="textag">&lt;/param-value&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal"></span><span class="textag">&lt;/context-param&gt;</span></code></div>
 	    	<span class="paragraph">Por padr&atilde;o o VRaptor tenta procurar o applicationContext via 
-<code class="inlineCode">WebApplicationContextUtils.getWebApplicationContext(servletContext);</code> ou carregando do applicationContext.xml
+<code class="inlineCode">WebApplicationContextUtils.getWebApplicationContext(servletContext);</code> ou carregando do
+ applicationContext.xml
 que est&aacute; no classpath.</span>
+		
+
+<h3 class="section">Mudando o encoding da sua aplicação</h3>
+	    	<span class="paragraph">Se voc&ecirc; quiser que todas as requisi&ccedil;&otilde;es da sua aplica&ccedil;&atilde;o sejam de um encoding determinado,
+para evitar problemas de acentua&ccedil;&atilde;o por exemplo, voc&ecirc; pode colocar o seguinte par&acirc;metro
+no seu web.xml:</span>
+	    	<div class="xml"><code class="xml"><span class="textag">&lt;context-param&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-name&gt;</span><span class="texnormal">br.com.caelum.vraptor.encoding</span><span class="textag">&lt;/param-name&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-value&gt;</span><span class="texnormal">UTF-8</span><span class="textag">&lt;/param-value&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal"></span><span class="textag">&lt;/context-param&gt;</span></code></div>
+	    	<span class="paragraph">Assim todas as suas p&aacute;ginas e dados passados para formul&aacute;rio usar&atilde;o o encoding UTF-8,
+evitando problemas de acentua&ccedil;&atilde;o.</span>
 		
 
 </div><!-- content -->

@@ -11,7 +11,7 @@
 	            	<li><fmt:message key="experimente.vraptor.motivo3"/></li>
     	        </ul>
        	     	<a href="download.jsp" id="downloadBtn2"><span>Download</span></a>
-                <p><a href="documentacao/"><fmt:message key="saiba.mais"/></a> </p>
+                <p><a href="<fmt:message key="saiba.mais.link"/>"><fmt:message key="saiba.mais"/></a> </p>
 			</div><!-- content-float -->
             <img src="${path }/images/boxVraptor-trans.png" />
             

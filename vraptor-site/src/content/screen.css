@@ -16,6 +16,11 @@ body{
 	text-align: left;	
 }
 /* tutorial.jsp */
+#contentTutorial {
+	width: 700px;
+	margin: 0 auto;
+	text-align: left;	
+}
 #formulario_inscricao label {
 	font-size: 11pt;
 }

@@ -1,6 +1,5 @@
 package br.com.caelum.vraptor.view;
 
-import br.com.caelum.vraptor.View;
 
 /**
  * Redirects or forwards to the Referer.
@@ -13,7 +12,12 @@ import br.com.caelum.vraptor.View;
  *
  * As Referer is not a mandatory header, you can specify a fallback result, to be used
  * when referrer is not specified:
- * result.use(referer()).redirect().or(logic()).redirectTo(AnyController.class).anyMethod();
+ * try {
+ * 	result.use(referer()).redirect();
+ * } catch (IllegalStateException e) {
+ * 	result.use(logic()).redirectTo(AnyController.class).anyMethod();
+ * }
+ *
  *
  * @author Lucas Cavalcanti
  *
@@ -22,23 +26,14 @@ public interface RefererResult {
 
 	/**
 	 * Forwards to Referer.
-	 * @return
+	 * @throws IllegalStateException when there is no Referer header on request
 	 */
-	FallbackResult forward();
+	void forward() throws IllegalStateException;
 
 	/**
 	 * Redirects to Referer.
-	 * @return
+	 * @throws IllegalStateException when there is no Referer header on request
 	 */
-	FallbackResult redirect();
+	void redirect() throws IllegalStateException;
 
-	interface FallbackResult {
-		/**
-		 * Use given view if Referer Header was not set.
-		 * @param <T>
-		 * @param view
-		 * @return
-		 */
-		<T extends View> T or(Class<T> view);
-	}
 }

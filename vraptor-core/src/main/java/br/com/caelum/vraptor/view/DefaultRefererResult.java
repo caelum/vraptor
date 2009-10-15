@@ -7,14 +7,12 @@ import java.util.ArrayList;
 
 import net.vidageek.mirror.dsl.Mirror;
 import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.util.test.MockResult;
 import br.com.caelum.vraptor.validator.Message;
 
 public class DefaultRefererResult implements RefererResult {
@@ -33,48 +31,41 @@ public class DefaultRefererResult implements RefererResult {
 		this.provider = provider;
 		this.localization = localization;
 	}
-	public FallbackResult forward() {
+
+	public void forward() throws IllegalStateException {
 		String referer = getReferer();
-		if (referer == null) {
-			return new DefaultFallbackResult();
-		}
+
 		ResourceMethod method = router.parse(referer, HttpMethod.GET, request);
 		if (method == null) {
 			result.use(page()).forward(referer);
 		} else {
-			Object instance = result.use(logic()).forwardTo(method.getResource().getType());
-			new Mirror().on(instance).invoke().method(method.getMethod())
-				.withArgs(provider.getParametersFor(method, new ArrayList<Message>(), localization.getBundle()));
+			executeMethod(method, result.use(logic()).forwardTo(method.getResource().getType()));
 		}
-		return new NullFallbackResult();
 	}
 
-	public FallbackResult redirect() {
+	private void executeMethod(ResourceMethod method, Object instance) {
+		new Mirror().on(instance).invoke().method(method.getMethod())
+			.withArgs(provider.getParametersFor(method, new ArrayList<Message>(), localization.getBundle()));
+	}
+
+	public void redirect() throws IllegalStateException {
 		String referer = getReferer();
-		if (referer == null) {
-			return new DefaultFallbackResult();
+		ResourceMethod method = router.parse(referer, HttpMethod.GET, request);
+		if (method == null) {
+			result.use(page()).redirect(referer);
+		} else {
+			executeMethod(method, result.use(logic()).redirectTo(method.getResource().getType()));
 		}
-		return new NullFallbackResult();
 	}
 
 	private String getReferer() {
 		String referer = request.getHeader("Referer");
 		if (referer == null) {
-			return null;
+			throw new IllegalStateException("The Referer header was not specified");
 		}
 
 		String path = request.getContextPath();
 		return referer.substring(referer.indexOf(path) + path.length());
 	}
 
-	private static class NullFallbackResult implements FallbackResult{
-		public <T extends View> T or(Class<T> view) {
-			return new MockResult().use(view);
-		}
-	}
-	private class DefaultFallbackResult implements FallbackResult {
-		public <T extends View> T or(Class<T> view) {
-			return result.use(view);
-		}
-	}
 }

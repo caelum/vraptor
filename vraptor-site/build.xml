@@ -43,6 +43,14 @@
 			<arg line="-n documentacao" />
 			<arg line="-t src/templates"/>
 		</exec>
+		<exec executable="bash">
+			<arg line="tubaina" />
+			<arg line="-htmlflat" />
+			<arg line="-i src/cookbook/pt" />
+			<arg line="-o src/content/" />
+			<arg line="-n cookbook" />
+			<arg line="-t src/templates"/>
+		</exec>
 		<exec executable="rm">
 			<arg line="-rf target/latex"/>
 		</exec>

@@ -1,0 +1,272 @@
+/*making styling easier*/
+/*chapter*/
+div.chapterNumber {
+	font-size: 3em;
+	text-align: right;
+	border-bottom-color: #802832;
+	border-bottom-style: solid;
+	border-bottom-width: 2px;
+	margin: 0px 10px 0px 10px;
+	padding: 0px;
+
+}
+
+span.chapterNumber {
+	color: #FFFFFF;
+	background-color: #802832;
+	font-size: 1.5em;
+	font-weight: bold;
+	margin: 0px 0px 0px 25px;
+}
+
+h1.chapter {
+	font-size: 2em;
+	font-weight: normal;
+	padding: 10px;
+}
+
+/*Quotation*/
+
+span.quoteAuthor {
+	display: block;
+	text-align: right;
+	margin-bottom: 15px;
+}
+
+span.quoteContent {
+	display: block;
+	text-align: right;
+	font-size: 1.2em;
+	font-style: italic; 
+}
+
+/*paragraph*/
+span.paragraph {
+	display: block;
+	text-indent: 1em;
+	line-height: 1.5em;
+	margin: 0px 10px 10px 10px;
+}
+
+
+/*lists and Exercises (they are lists)*/
+li span.paragraph {
+	display: inline;
+	text-indent: 0px;
+	margin: 0px;
+}
+
+ul.list li {
+	padding: 0px;
+}
+
+ul.list {
+	margin: 0px 10px 10px 30px;
+}
+
+ol.list li {
+	padding: 0px;
+}
+
+ol.list {
+	margin: 0px 10px 10px 30px;
+}
+
+ol.exercise li {
+	padding: 0px;
+}
+
+ol.exercise {
+	margin: 0px 10px 10px 30px;
+}
+/*contentBox*/
+
+div.contentBox {
+	background-color: #DDC7B7;
+	margin: 20px;
+	padding: 30px 10px 25px 10px;
+}
+
+div.contentBox  h2{
+	font-size: 1.3em;
+	margin: 0px 0px 15px 0px;
+}
+
+div.contentBox hr {
+	background-color: #FFFFFF;
+	height: 2px;
+	border-top: solid 1px #666666;
+	border-left: solid 1px #666666;
+	margin: 10px 0px 10px 0px;
+}
+
+/*indexSection*/
+h3.indexSection a {
+	font-size: 75%;
+	font-weight: bold;
+	margin: 4px 30px;
+	padding: 0px;
+	color: #333333;
+}
+
+/*indexChapter*/
+div.contentBox h2.indexChapter{
+	padding: 0px;
+	margin: 0px;
+}
+
+div.contentBox h2.indexChapter a{
+	color: #6C5353;	
+}
+
+/*footer*/
+div.footer {
+	background-color: #802832;
+	position: relative;
+	padding: 25px 0px 20px 20px;
+	height: 70px;
+}
+
+div.footer a.generator-sign {
+	position: absolute;;
+	left: 600px;
+	top: 80px;
+}
+
+/*section*/
+h1.sectionChapter {
+	font-weight: bold;
+	font-size: 125%;
+	margin-bottom: 10px;
+	text-align: right;
+}
+
+h2.section {
+	background-color: #802832;
+	border-top: thin solid black;
+	color: white;
+	font-size: 1.5em;
+	margin: 0px 10px 5px 10px;
+	padding: 10px 0px 5px 5px;
+	font-weight: normal;
+}
+
+/*Box*/
+
+div.box {
+	margin: 20px;
+	border-bottom: double 3px black;
+	background-color: #a29bc0;
+	padding: 0px;
+}
+
+div.box h3 {
+	border: 0px;
+	border-bottom: double 3px black;
+	border-top: double 3px black;
+	background-color: #2a2948;
+	color: white !important;
+	font-weight: bold;
+	font-size: 125%;
+	padding: 2px 0px 2px 10px;
+}
+
+/*image*/
+
+div.image {
+	text-align: center;
+}
+
+div.image span {
+	display: block;
+	text-align: center;
+}
+
+/*java, xml and code*/
+div.java {
+	margin: 0px 0px 12px 25px;	
+}
+
+div.java * {
+	padding: 0px;
+}
+
+/*definition*/
+strong.definition {
+	padding: 0px;
+}
+
+/*emphatize*/
+em.italic {
+	padding: 0px;
+}
+
+/*underlined */
+em.underlined {
+	text-decoration: underline;
+	padding: 0px;
+}
+
+/* links */
+a.link {
+	padding: 0px;
+}
+
+a.mail {
+	padding: 0px;
+}
+
+/* inline code */
+code.inlineCode {
+	padding: 0px;
+	font-family: monospace;
+}
+
+/*Title*/
+strong.title {
+	display: block;
+	border-bottom: solid black 2px;
+	margin: 10px 0px 0px 0px;
+	font-size: 125%;
+	padding: 0px;
+}
+
+/*answer*/
+div.answer {
+	display: none;
+	margin: 10px 15px 10px 15px;
+}
+
+a.answer {
+	display: block;
+	margin-top: 5px;
+	text-decoration: underline;
+}
+
+/*bookName*/
+h1.bookName {
+	font-size: 2em;
+}
+
+/*index*/
+h1.index {
+	font-size: 200%;
+	margin: 20px 0px 20px 0px;
+}
+
+a.index {
+	color: #802832;
+	margin: 0px 0px 0px 15px;
+}
+
+/*label*/
+label {
+	padding: 0px;
+}
+
+label span {
+	font-size: smaller;
+	vertical-align: super;
+	color: #FF0000;
+	padding: 0px;
+}

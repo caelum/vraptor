@@ -51,6 +51,7 @@
 <div id="contentWrap">
     	<div id="contentDocumentacao">
 			<div class="download"><a href="../vraptor3.pdf">Download em PDF</a></div>
+			<div class="download"><a href="../../cookbook">Livro de Receitas</a></div>
         	<h2 class="title"><span>documentação</span></h2>
             <h3 class="title">documentação toda em português, configuração, migração e utilização.</h3>            <div id="subMenuDoc">
             	<img id="positionTop" src="../includes/images/subMenuTop-trans.png" />
@@ -147,7 +148,7 @@ e fazer qualquer conven&ccedil;&atilde;o que voc&ecirc; queira, n&atilde;o esque
 }</span></code></div>
 	    	<span class="paragraph">Por padr&atilde;o existem estes tipos de views implementadas:</span>
 	    	<ul class="list"><li><span class="paragraph">Results.logic(), que vai redirecionar para uma outra l&oacute;gica qualquer do sistema</span></li><li><span class="paragraph">Results.page(), que vai redirecionar diretamente para uma p&aacute;gina, podendo ser um
-	jsp, um html, ou qualquer uri relativa ao web application dir, ou ao contexto da aplica&ccedil;&atilde;o.</span></li><li><span class="paragraph">Results.http(), que manda informa&ccedil;&otilde;es do protocolo HTTP como status codes e headers</span></li><li><span class="paragraph">Results.nothing(), apenas retorna o c&oacute;digo de sucesso (HTTP 200 OK).</span></li></ul>
+	jsp, um html, ou qualquer uri relativa ao web application dir, ou ao contexto da aplica&ccedil;&atilde;o.</span></li><li><span class="paragraph">Results.http(), que manda informa&ccedil;&otilde;es do protocolo HTTP como status codes e headers.</span></li><li><span class="paragraph">Results.referer(), que usa o header Referer para fazer redirects ou forwards.</span></li><li><span class="paragraph">Results.nothing(), apenas retorna o c&oacute;digo de sucesso (HTTP 200 OK).</span></li></ul>
 		
 
 <h3 class="section">Redirecionamento e forward</h3>

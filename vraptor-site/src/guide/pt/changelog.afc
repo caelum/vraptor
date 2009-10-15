@@ -1,6 +1,6 @@
 [chapter ChangeLog]
 
-[section 3.0.1]
+[section 3.0.1 (a ser lançado)]
 [list]
 * paranamer atualizado para versão 1.5 (Atualize seu jar!)
 * jars separados em opcional e obrigatório no vraptor-core
@@ -8,6 +8,9 @@
   vraptor-core/libs/optional/dependencies.txt
 * possibilidade de setar o character encoding da aplicação no web.xml através do context-param
 	br.com.caelum.vraptor.encoding
+* nova view: Referer view:
+  result.use(Results.referer()).redirect();
+  
 [/list]
 [section 3.0.0]
 [list]

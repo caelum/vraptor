@@ -1,0 +1,115 @@
+div.xml {
+
+}
+
+span.texspecial{
+  color: gray;
+}
+span.texcomment{
+  color: red;
+}
+span.texvalue{
+  color: green;
+}
+span.texnormal{
+  color: black;
+}
+span.texattrib{
+  color: blue;
+}
+span.textag{
+  color: blue;
+}
+/*
+	======================================================
+	
+	xml2html.xslt corresponding CSS.
+	
+	(c) 2005 Linkwerk.com, Stefan Mintert, All rights reserved.
+	Check www.linkwerk.com/pub/xml/xml2html/ for legal information.
+
+	$Revision: 1.5 $ $Date: 2007-09-21 20:50:35 $
+	======================================================
+*/
+
+/* ======================================================
+	Global and top level declarations
+   ====================================================== */
+.xml2html * { 
+				color:                  #000000; 
+				font-family:		sans-serif;
+}
+.xml2html { 
+				font-family: 		monospace; 
+				background: 		none; 		/* set to white if you have a dark bg */
+	}
+.xml2html div.xml2html {	
+				/*
+				border: 			solid thin white;
+				if you want to see div borders for debugging purposes,
+				uncomment this
+				*/
+				margin-left: 		0.5em;
+	 			/* color: 				#999999;*/		/* PCDATA content of elements */
+	 			margin-bottom: 		0mm;
+	 			margin-top: 		0mm;
+	}
+.xml2html .elementcontent {
+                                color:                          #999999;                /* PCDATA content of elements */
+}
+/* ======================================================
+	Comments
+   ====================================================== */
+.xml2html div.comment { 
+				white-space: 		pre;
+			  	color: 				#cc9999;
+	}
+/* ======================================================
+	Start and end tags
+   ====================================================== */
+.xml2html span.xml2html.starttag, .xml2html span.xml2html.endtag {	
+				color: 				maroon;
+				/* font-weight: 	bold; */
+	}
+.xml2html span.xml2html.starttag a, .xml2html span.xml2html.endtag a {	
+				color: 				inherit;
+				text-decoration: 	none;
+				border:			none;
+				/* font-weight: 	bold; */
+	}
+.xml2html span.xml2html.starttag a:hover, .xml2html span.xml2html.endtag a:hover {	
+				color: 				white;
+				background:			maroon;
+				font-weight: 		bold;
+				text-decoration: 	none;
+	}
+/* ======================================================
+	Attributes
+   ====================================================== */
+.xml2html span.xml2html.attributename {
+				font-weight: 		normal;
+				color: 				black;
+				/* font-style: 		italic; */
+	}
+.xml2html span.xml2html.attributevalue {
+				font-weight: 		normal;
+				font-style: 		italic;
+	 			color: 				#999999;		/* character content of attributes */	
+	}
+/* ======================================================
+	Misc
+   ====================================================== */
+.xml2html a, .xml2html a {	
+				color: 				maroon;
+				text-decoration: 	underline;
+				/* font-weight: 	bold; */
+	}
+.xml2html a:hover, .xml2html a:hover {	
+				color: 				white;
+				background:			maroon;
+				font-weight: 		bold;
+				text-decoration: 	none;
+	}
+.xml2html .copyright {
+				font-size:			80%;
+	}

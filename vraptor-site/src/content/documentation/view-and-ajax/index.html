@@ -145,7 +145,7 @@ Don't forget to annotate your new classe with <code class="inlineCode">@Componen
 }</span></code></div>
 	    	<span class="paragraph">By default, there are these view implementations:</span>
 	    	<ul class="list"><li><span class="paragraph">Results.logic(), redirects to any other logic in the application.</span></li><li><span class="paragraph">Results.page(), redirects directly to a page, that can be a jsp, an html, or any
-	URI relative to the web application directory or the application context.</span></li><li><span class="paragraph">Results.http(), sends HTTP protocol informations, like status codes and headers.</span></li><li><span class="paragraph">Results.nothing(), simply returns the HTTP success code (HTTP 200 OK).</span></li></ul>
+	URI relative to the web application directory or the application context.</span></li><li><span class="paragraph">Results.http(), sends HTTP protocol informations, like status codes and headers.</span></li><li><span class="paragraph">Results.referer(), uses Referer header to redirect or forward.</span></li><li><span class="paragraph">Results.nothing(), simply returns the HTTP success code (HTTP 200 OK).</span></li></ul>
 		
 
 <h3 class="section">Redirect and forward</h3>

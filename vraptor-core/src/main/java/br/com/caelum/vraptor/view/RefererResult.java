@@ -12,6 +12,7 @@ package br.com.caelum.vraptor.view;
  *
  * As Referer is not a mandatory header, you can specify a fallback result, to be used
  * when referrer is not specified:
+ *
  * try {
  * 	result.use(referer()).redirect();
  * } catch (IllegalStateException e) {

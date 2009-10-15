@@ -64,7 +64,8 @@ Por padrão existem estes tipos de views implementadas:
 	* Results.logic(), que vai redirecionar para uma outra lógica qualquer do sistema
 	* Results.page(), que vai redirecionar diretamente para uma página, podendo ser um
 	jsp, um html, ou qualquer uri relativa ao web application dir, ou ao contexto da aplicação.
-	* Results.http(), que manda informações do protocolo HTTP como status codes e headers
+	* Results.http(), que manda informações do protocolo HTTP como status codes e headers.
+	* Results.referer(), que usa o header Referer para fazer redirects ou forwards.
 	* Results.nothing(), apenas retorna o código de sucesso (HTTP 200 OK).
 [/list]
 

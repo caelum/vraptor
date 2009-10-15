@@ -14,7 +14,7 @@
 				
 				<dt>Local:</dt>
 				<dd><address>Espaço Cultural Japonês<br/>
-					Av.Lins de Vasconselhos, 3352 - Vila Mariana <br/>
+					Av.Lins de Vasconcelos, 3352 - Vila Mariana <br/>
 					Ao lado do metrô vila mariana</address></dd>
 				<dt>Informações:</dt> 
 				<dd>contato@caelum.com.br<br/>
@@ -24,6 +24,7 @@
 		<form id="formulario_inscricao">
 	     	<input type="hidden" style="display: none;" name="turma.id" value="1129" id="turmaId"/>
 			<div class="erro_msg"><ul></ul></div>
+			<div id="success">Cadastro efetuado com sucesso!</div>
 	
 			<fieldset>
 				<legend align="right">Dados Pessoais</legend>

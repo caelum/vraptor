@@ -30,7 +30,7 @@ public class CustomProvider extends SpringProvider {
 	
 	@Override
 	protected void registerCustomComponents(ComponentRegistry registry) {
-		registry.registry(OptionalComponent.class, OptionalComponent.class);
+		registry.register(OptionalComponent.class, OptionalComponent.class);
 	}
 }
 [/java]
@@ -47,8 +47,8 @@ built-in ComponentFactory. All you have to do is:
 [java]
 	@Override
 	protected void registerCustomComponents(ComponentRegistry registry) {
-		registry.registry(SessionCreator.class, SessionCreator.class);
-		registry.registry(SessionFactoryCreator.class, SessionFactoryCreator.class);
+		registry.register(SessionCreator.class, SessionCreator.class);
+		registry.register(SessionFactoryCreator.class, SessionFactoryCreator.class);
 	}
 [/java]
 
@@ -68,8 +68,8 @@ VRaptor3 built-in ComponentFactories for EntityManager and EntityManagerFactory:
 [java]
 	@Override
 	protected void registerCustomComponents(ComponentRegistry registry) {
-		registry.registry(EntityManagerCreator.class, EntityManagerCreator.class);
-		registry.registry(EntityManagerFactoryCreator.class, 
+		registry.register(EntityManagerCreator.class, EntityManagerCreator.class);
+		registry.register(EntityManagerFactoryCreator.class, 
 							EntityManagerFactoryCreator.class);
 	}
 [/java]
@@ -78,7 +78,7 @@ You can also enable the interceptor that manages JPA transactions:
 [java]
 	@Override
 	protected void registerCustomComponents(ComponentRegistry registry) {
-		registry.registry(JPATransactionInterceptor.class, 
+		registry.register(JPATransactionInterceptor.class, 
 							JPATransactionInterceptor.class);
 	}
 [/java]

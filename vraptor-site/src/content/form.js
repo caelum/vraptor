@@ -32,6 +32,7 @@ var caelum = {
 	
 	cadastra : function(){
 		$('#cadastrar').click(function() {
+			$('#success').fadeOut("slow");
 			if(!$(this.form).valid()){
 				return false;
 			}
@@ -42,7 +43,8 @@ var caelum = {
 			$.getJSON(url + "&callback=?", function(data){
 				if(data['data'] == "sucesso"){
 					$('.erro_msg').hide();
-					window.location = 'ok.html';
+					$('#success').fadeIn("slow");
+					$('#formulario_inscricao')[0].reset();
 				}else{
 					$('.erro_msg').show();
 					$('.erro_msg ul').append('<li id="serverError">Ocorreu um erro, contacte a Caelum.</li>');

@@ -23,6 +23,20 @@ body {
 
 
 /* tutorial.jsp */
+.erro_msg {
+	margin:10px 0px ; padding:0px; width:auto; background-color:#FFB9B3; border:solid 1px #8E0100;
+}
+.erro_msg ul {
+	list-style: none;
+}
+#success {
+	border:solid 1px green;
+	margin:10px 0px; 
+	padding-left: 10px; 
+	width:auto;
+	display: none;
+	background-color: lightGreen;
+}
 #informacoes dt {
 	float: left; clear: left; width: 120px; text-align: right; color: #2a2948;
 	font-weight: bold;

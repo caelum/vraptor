@@ -117,7 +117,7 @@
 &nbsp;&nbsp;&nbsp; <br />
 &nbsp;&nbsp;&nbsp; </span><span class="java16">@Override<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java4">protected </span><span class="java9">void </span><span class="java10">registerCustomComponents</span><span class="java8">(</span><span class="java10">ComponentRegistry registry</span><span class="java8">) {<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">registry.registry</span><span class="java8">(</span><span class="java10">ComponenteOpcional.class, ComponenteOpcional.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">registry.register</span><span class="java8">(</span><span class="java10">ComponenteOpcional.class, ComponenteOpcional.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">;<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
 }</span></code></div></li></ul>
 		
@@ -130,14 +130,14 @@ isso que j&aacute; v&ecirc;m com o VRaptor. O que voc&ecirc; precisa fazer &eacu
 	    	<div class="java"><code class="java">
 <span class="java16">@Override<br />
 </span><span class="java4">protected </span><span class="java9">void </span><span class="java10">registerCustomComponents</span><span class="java8">(</span><span class="java10">ComponentRegistry registry</span><span class="java8">) {<br />
-&nbsp;&nbsp;&nbsp; </span><span class="java10">registry.registry</span><span class="java8">(</span><span class="java10">SessionCreator.class, SessionCreator.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">;<br />
-&nbsp;&nbsp;&nbsp; registry.registry</span><span class="java8">(</span><span class="java10">SessionFactoryCreator.class, SessionFactoryCreator.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java10">registry.register</span><span class="java8">(</span><span class="java10">SessionCreator.class, SessionCreator.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; registry.register</span><span class="java8">(</span><span class="java10">SessionFactoryCreator.class, SessionFactoryCreator.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">;<br />
 </span><span class="java8">}</span></code></div>
 	    	<span class="paragraph">Inclusive voc&ecirc; pode habilitar um interceptor que controla a transa&ccedil;&atilde;o do Hibernate:</span>
 	    	<div class="java"><code class="java">
 <span class="java16">@Override<br />
 </span><span class="java4">protected </span><span class="java9">void </span><span class="java10">registerCustomComponents</span><span class="java8">(</span><span class="java10">ComponentRegistry registry</span><span class="java8">) {<br />
-&nbsp;&nbsp;&nbsp; </span><span class="java10">registry.registry</span><span class="java8">(</span><span class="java10">HibernateTransactionInterceptor.class, <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java10">registry.register</span><span class="java8">(</span><span class="java10">HibernateTransactionInterceptor.class, <br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; HibernateTransactionInterceptor.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">;<br />
 </span><span class="java8">}</span></code></div>
 		
@@ -149,15 +149,15 @@ vraptor:</span>
 	    	<div class="java"><code class="java">
 <span class="java16">@Override<br />
 </span><span class="java4">protected </span><span class="java9">void </span><span class="java10">registerCustomComponents</span><span class="java8">(</span><span class="java10">ComponentRegistry registry</span><span class="java8">) {<br />
-&nbsp;&nbsp;&nbsp; </span><span class="java10">registry.registry</span><span class="java8">(</span><span class="java10">EntityManagerCreator.class, EntityManagerCreator.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">;<br />
-&nbsp;&nbsp;&nbsp; registry.registry</span><span class="java8">(</span><span class="java10">EntityManagerFactoryCreator.class, <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java10">registry.register</span><span class="java8">(</span><span class="java10">EntityManagerCreator.class, EntityManagerCreator.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; registry.register</span><span class="java8">(</span><span class="java10">EntityManagerFactoryCreator.class, <br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; EntityManagerFactoryCreator.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">;<br />
 </span><span class="java8">}</span></code></div>
 	    	<span class="paragraph">Inclusive voc&ecirc; pode habilitar um interceptor que controla a transa&ccedil;&atilde;o da JPA:</span>
 	    	<div class="java"><code class="java">
 <span class="java16">@Override<br />
 </span><span class="java4">protected </span><span class="java9">void </span><span class="java10">registerCustomComponents</span><span class="java8">(</span><span class="java10">ComponentRegistry registry</span><span class="java8">) {<br />
-&nbsp;&nbsp;&nbsp; </span><span class="java10">registry.registry</span><span class="java8">(</span><span class="java10">JPATransactionInterceptor.class, <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java10">registry.register</span><span class="java8">(</span><span class="java10">JPATransactionInterceptor.class, <br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; JPATransactionInterceptor.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">;<br />
 </span><span class="java8">}</span></code></div>
 		

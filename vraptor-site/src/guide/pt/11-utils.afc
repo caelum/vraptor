@@ -29,7 +29,7 @@ public class CustomProvider extends SpringProvider {
 	
 	@Override
 	protected void registerCustomComponents(ComponentRegistry registry) {
-		registry.registry(ComponenteOpcional.class, ComponenteOpcional.class);
+		registry.register(ComponenteOpcional.class, ComponenteOpcional.class);
 	}
 }
 [/java]
@@ -46,8 +46,8 @@ isso que já vêm com o VRaptor. O que você precisa fazer é:
 [java]
 	@Override
 	protected void registerCustomComponents(ComponentRegistry registry) {
-		registry.registry(SessionCreator.class, SessionCreator.class);
-		registry.registry(SessionFactoryCreator.class, SessionFactoryCreator.class);
+		registry.register(SessionCreator.class, SessionCreator.class);
+		registry.register(SessionFactoryCreator.class, SessionFactoryCreator.class);
 	}
 [/java]
 
@@ -55,7 +55,7 @@ Inclusive você pode habilitar um interceptor que controla a transação do Hibe
 [java]
 	@Override
 	protected void registerCustomComponents(ComponentRegistry registry) {
-		registry.registry(HibernateTransactionInterceptor.class, 
+		registry.register(HibernateTransactionInterceptor.class, 
 							HibernateTransactionInterceptor.class);
 	}
 [/java]
@@ -68,8 +68,8 @@ vraptor:
 [java]
 	@Override
 	protected void registerCustomComponents(ComponentRegistry registry) {
-		registry.registry(EntityManagerCreator.class, EntityManagerCreator.class);
-		registry.registry(EntityManagerFactoryCreator.class, 
+		registry.register(EntityManagerCreator.class, EntityManagerCreator.class);
+		registry.register(EntityManagerFactoryCreator.class, 
 							EntityManagerFactoryCreator.class);
 	}
 [/java]
@@ -78,7 +78,7 @@ Inclusive você pode habilitar um interceptor que controla a transação da JPA:
 [java]
 	@Override
 	protected void registerCustomComponents(ComponentRegistry registry) {
-		registry.registry(JPATransactionInterceptor.class, 
+		registry.register(JPATransactionInterceptor.class, 
 							JPATransactionInterceptor.class);
 	}
 [/java]

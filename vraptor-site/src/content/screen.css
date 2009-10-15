@@ -20,14 +20,21 @@ body {
 	font-size: 14pt;
 }
 
+
+
 /* tutorial.jsp */
 #informacoes dt {
+	float: left; clear: left; width: 120px; text-align: right; color: #2a2948;
 	font-weight: bold;
-	font-size: 14pt;
-	margin-top: 10px;
+	margin-bottom: 10px;
+}
+#informacoes dd {
+	margin: 0 0 10px 140px; 
+	padding: 0 0 0.5em 0; 
 }
 
 #informacoes dl {
+	padding: 0.5em;
 	background-color: #d5d5db;
 	padding: 5px 20px 10px 20px;
 	-moz-border-radius: 5px;

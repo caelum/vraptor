@@ -1,0 +1,152 @@
+[chapter Gerando aplicação com VRaptor3 usando Maven]
+**::por Lucas H. G. Toniazzo no blog http://www.lucas.hgt.nom.br/wordpress/?p=107::**
+
+Algum tempo sem atualizar as coisas por aqui, resolvi tirar um tempo para me atualizar no framework que acompanho já faz algum tempo, VRAPTOR.
+
+Ultimamente tenho utilizado o Maven para controlar as dependências de Jar’s das aplicações que trabalho, e tem me ajudado bastante. Então resolvi tirar um tempo para gerar um POM para o VRaptor, já que na estrutura original dele esse arquivo não o acompanha.
+
+Utilizei o Eclipse com suporte ao Maven para gerar o projeto após ter gerado o POM do VRaptor.
+
+Alguns passos para se ter sucesso na criação da estrutura:
+
+[list number]
+* Faça o download do Vraptor e coloque o seu jar numa pasta qualquer.
+
+* Instale o Maven ou utilize o recurso que está disponível em sua IDE.
+
+* Execute o comando abaixo:
+
+[code]
+mvn install:install-file -DgroupId=br.com.caelum -DartifactId=vraptor 
+	-Dpackaging=jar -Dversion=3.0.0-SNAPSHOT 
+	-Dfile=LOCAL_ONDE_ESTA\vraptor3-3.0.0-SNAPSHOT.jar -DgeneratePom=true
+[/code]
+* Edite o pom.xml do VRaptor que deve estar no repositório local [$USER_HOME\.m2\Repository\br\com\caelum\vraptor] com o seguinte conteúdo:
+
+[xml]
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>br.com.caelum</groupId>
+	<artifactId>vraptor</artifactId>
+	<version>3.0.0-SNAPSHOT</version>
+	<description>POM was created from install:install-file</description>
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring</artifactId>
+			<version>2.5.5</version>
+		</dependency>
+		<dependency>
+			<groupId>com.thoughtworks.paranamer</groupId>
+			<artifactId>paranamer</artifactId>
+			<version>1.3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.objenesis</groupId>
+			<artifactId>objenesis</artifactId>
+			<version>1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.code.google-collections</groupId>
+			<artifactId>google-collect</artifactId>
+			<version>snapshot-20080530</version>
+		</dependency>
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjrt</artifactId>
+			<version>1.6.0</version>
+		</dependency>
+		<dependency>
+			<groupId>cglib</groupId>
+			<artifactId>cglib-nodep</artifactId>
+			<version>2.2</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>1.1</version>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-io</groupId>
+					<artifactId>commons-io</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>1.3.2</version>
+		</dependency>
+		<dependency>
+			<groupId>javassist</groupId>
+			<artifactId>javassist</artifactId>
+			<version>3.8.0.GA</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+			<version>1.1.2</version>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.12</version>
+		</dependency>
+		<dependency>
+			<groupId>net.vidageek</groupId>
+			<artifactId>mirror</artifactId>
+			<version>1.5.1</version>
+		</dependency>
+		<dependency>
+			<groupId>ognl</groupId>
+			<artifactId>ognl</artifactId>
+			<version>2.7.3</version>
+			<exclusions>
+				<exclusion>
+					<groupId>jboss</groupId>
+					<artifactId>javassist</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.5.6</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>1.5.6</version>
+		</dependency>
+	</dependencies>
+</project>
+[/xml]
+
+* Crie um projeto Maven.
+
+* Edite o pom.xml do mesmo com o seguinte conteúdo:
+[xml]
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>GERALMENTE_ESTRUTURA_DO_PACKAGE</groupId>
+	<artifactId>ARTIFACT_ID_QUE_DESEJAR</artifactId>
+	<packaging>war</packaging>
+	<name>NOME_QUE_DESEJAR</name>
+	<version>0.0.1-SNAPSHOT</version>
+	<dependencies>
+		<dependency>
+			<groupId>br.com.caelum</groupId>
+			<artifactId>vraptor</artifactId>
+			<version>3.0.0-SNAPSHOT</version>
+		</dependency>
+	</dependencies>
+</project>
+[/xml]
+
+* Clique com botão direito, opção Maven, update dependecies
+
+Pronto, libs adicionadas ao projeto, tudo organizado para iniciar as atividades.

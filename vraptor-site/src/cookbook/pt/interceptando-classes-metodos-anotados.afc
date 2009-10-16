@@ -1,3 +1,59 @@
 [chapter Usando anotações para interceptar classes]
 
-Os interceptors usam o método a
+Os interceptors usam o método accepts para decidir se vão interceptar ou não
+uma determinada lógica. Usar anotações para fazer essa decisão pode ajudar a
+tornar as coisas mais simples.
+
+Para usar anotações basta você criar a(s) anotação (ões):
+
+[java]
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.TYPE, ElementType.METHOD})
+public @interface NeedsTransaction {
+}
+[/java]
+
+Nesse caso a anotação pode ser usada tanto em cima de classes quanto de métodos.
+
+Depois de criar a anotação basta implementar o accepts do interceptor:
+
+[java]
+@Intercepts
+public class TransactionInterceptor implements Interceptor {
+	//...
+
+	/**
+	 * verifica se o método ou a classe que contém o método possuem a anotação
+	 */	
+	public boolean accepts(ResourceMethod method) {
+		return method.getMethod().isAnnotationPresent(NeedsTransaction.class)
+			|| method.getResource().getType().isAnnotationPresent(NeedsTransaction.class);
+	}
+
+}
+[/java]
+
+E então, todos os métodos das classes anotadas com @NeedsTransaction vão passar pelo interceptor,
+e todos os métodos anotados também.
+
+[java]
+@Resource
+@NeedsTransaction
+public class UmController {
+	// todos os métodos dessa classe vão passar pelo interceptor
+}
+
+@Resource
+public class OutroController {
+   
+   
+   @NeedsTransaction
+   public void umMetodo() {
+      // esse método vai passar pelo interceptor
+   }
+   
+   public void outroMetodo() {
+      // esse método não vai passar
+   }
+}
+[/java]

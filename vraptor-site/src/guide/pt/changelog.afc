@@ -10,6 +10,13 @@
 	br.com.caelum.vraptor.encoding
 * nova view: Referer view:
   result.use(Results.referer()).redirect();
+* Escopo Flash:
+  [java]
+  result.include("umaChave", umObjeto);
+  result.use(logic()).redirectTo(UmController.class).umMetodo();
+  [/java]
+  objetos incluidos no Result vão sobreviver até a próxima requisição quando acontecer um
+  redirect.
   
 [/list]
 [section 3.0.0]

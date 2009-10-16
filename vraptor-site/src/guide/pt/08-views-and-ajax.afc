@@ -82,6 +82,28 @@ reenvie toda a requisição, acarretando em dados duplicados.
 No caso do forward, um exemplo de uso é quando você possui uma validação e essa validação falhou, geralmente
 você quer que o usuário continue na mesma tela do formulário com os dados da requisição preenchidos.
 
+[box Escopo Flash automático]
+Se você adicionar objetos no Result e fizer um Redirect, esses objetos estarão disponíveis na
+próxima requisição.
+[java]
+public void adiciona(Cliente cliente) {
+	dao.adiciona(cliente);
+	result.include("mensagem", "Cliente adicionado com sucesso");
+	result.use(logic()).redirectTo(ClientesController.class).lista();
+}
+[/java]
+
+lista.jsp:
+[xml]
+...
+<div id="mensagem">
+   <h3>${mensagem}</h3>
+</div>
+...
+[/xml]
+
+[/box]
+
 [section Accepts e o parâmetro _format]
 
 Muitas vezes precisamos renderizar formatos diferentes para uma mesma lógica. Por exemplo queremos

@@ -40,6 +40,7 @@ import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.core.StaticContentHandler;
 import br.com.caelum.vraptor.http.EncodingHandler;
 import br.com.caelum.vraptor.http.VRaptorRequest;
+import br.com.caelum.vraptor.http.VRaptorResponse;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
 
@@ -73,19 +74,20 @@ public class VRaptor implements Filter {
         }
 
         final HttpServletRequest baseRequest = (HttpServletRequest) req;
-        final HttpServletResponse webResponse = (HttpServletResponse) res;
+        final HttpServletResponse baseResponse = (HttpServletResponse) res;
 
         if (staticHandler.requestingStaticFile(baseRequest)) {
-            staticHandler.deferProcessingToContainer(chain, baseRequest, webResponse);
+            staticHandler.deferProcessingToContainer(chain, baseRequest, baseResponse);
             return;
         }
 
         VRaptorRequest mutableRequest = new VRaptorRequest(baseRequest);
+        VRaptorResponse mutableResponse = new VRaptorResponse(baseResponse);
 
-        final RequestInfo request = new RequestInfo(servletContext, mutableRequest, webResponse);
+        final RequestInfo request = new RequestInfo(servletContext, mutableRequest, mutableResponse);
         provider.provideForRequest(request, new Execution<Object>() {
             public Object insideRequest(Container container) {
-            	container.instanceFor(EncodingHandler.class).setEncoding(baseRequest, webResponse);
+            	container.instanceFor(EncodingHandler.class).setEncoding(baseRequest, baseResponse);
                 container.instanceFor(RequestExecution.class).execute();
                 return null;
             }

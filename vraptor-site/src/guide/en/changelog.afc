@@ -10,6 +10,12 @@
 	br.com.caelum.vraptor.encoding
 * new view: Referer view:
   result.use(Results.referer()).redirect();
+* Flash scope:
+  [java]
+  result.include("aKey", anObject);
+  result.use(logic()).redirectTo(AController.class).aMethod();
+  [/java]
+  objects included on Result will survive until next request when a redirect happens.
   
 [/list]
 [section 3.0.0]

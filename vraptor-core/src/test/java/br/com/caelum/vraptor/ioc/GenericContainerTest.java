@@ -26,6 +26,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.sameInstance;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
@@ -44,6 +45,8 @@ import javax.servlet.http.HttpSession;
 import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
 import org.jmock.Mockery;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -53,6 +56,8 @@ import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
+import br.com.caelum.vraptor.converter.jodatime.LocalDateConverter;
+import br.com.caelum.vraptor.converter.jodatime.LocalTimeConverter;
 import br.com.caelum.vraptor.core.BaseComponents;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.core.Execution;
@@ -147,6 +152,22 @@ public abstract class GenericContainerTest {
 	@Test
 	public void processesCorrectlyAppBasedComponents() {
 		checkAvailabilityFor(true, MyAppComponent.class, MyAppComponent.class);
+		mockery.assertIsSatisfied();
+	}
+	@Test
+	public void canProvideJodaTimeConverters() {
+		assertNotNull(getFromContainer(LocalDateConverter.class));
+		assertNotNull(getFromContainer(LocalTimeConverter.class));
+		executeInsideRequest(new WhatToDo<String>() {
+
+			public String execute(RequestInfo request, int counter) {
+				Converters converters = getFromContainer(Converters.class);
+				assertTrue(converters.existsFor(LocalDate.class, getFromContainer(Container.class)));
+				assertTrue(converters.existsFor(LocalTime.class, getFromContainer(Container.class)));
+				return null;
+			}
+
+		});
 		mockery.assertIsSatisfied();
 	}
 

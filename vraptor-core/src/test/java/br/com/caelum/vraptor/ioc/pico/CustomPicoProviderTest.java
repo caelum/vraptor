@@ -26,7 +26,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 import javax.annotation.PreDestroy;
-import javax.servlet.http.HttpServletResponse;
 
 import org.jmock.Expectations;
 import org.junit.Test;
@@ -35,6 +34,7 @@ import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.config.BasicConfiguration;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor.http.MutableResponse;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.ComponentFactory;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
@@ -139,7 +139,7 @@ public class CustomPicoProviderTest extends GenericContainerTest {
                 allowing(request).getParameter("view"); will(returnValue(null));
             }
         });
-        HttpServletResponse response = mockery.mock(HttpServletResponse.class, "response" + counter);
+        MutableResponse response = mockery.mock(MutableResponse.class, "response" + counter);
         RequestInfo webRequest = new RequestInfo(context, request, response);
         return execution.execute(webRequest, counter);
     }

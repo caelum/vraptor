@@ -80,6 +80,30 @@ the user to accidentally resend all data by refreshing (F5) the page.
 An example of forwarding is when you have some data validation that fails, usually you
 want the user to remain on the form with all the previously filled data.
 
+[box Automatic Flash Scope]
+If you add objects on Result and redirects to another logic, these objects will be available
+on the next request.
+
+[java]
+public void add(Client client) {
+	dao.add(client);
+	result.include("notice", "Client successfully added");
+	result.use(logic()).redirectTo(ClientsController.class).list();
+}
+[/java]
+
+list.jsp:
+[xml]
+...
+<div id="notice">
+   <h3>${notice}</h3>
+</div>
+...
+[/xml]
+
+[/box]
+
+
 [section Accepts and the _format parameter]
 Many times you need to render different formats for the same logic. For example,
 we want to return a JSON object instead of an HTML page.

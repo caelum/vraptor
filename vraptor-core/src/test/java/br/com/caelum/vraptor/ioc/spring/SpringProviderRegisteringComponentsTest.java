@@ -23,13 +23,13 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 import javax.servlet.ServletRequestEvent;
-import javax.servlet.http.HttpServletResponse;
 
 import org.jmock.Expectations;
 import org.springframework.web.context.request.RequestContextListener;
 
 import br.com.caelum.vraptor.config.BasicConfiguration;
 import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.http.MutableResponse;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
 import br.com.caelum.vraptor.ioc.GenericContainerTest;
 import br.com.caelum.vraptor.ioc.WhatToDo;
@@ -51,7 +51,7 @@ public class SpringProviderRegisteringComponentsTest extends GenericContainerTes
 				T result = null;
 				HttpSessionMock session = new HttpSessionMock(context, "session" + ++counter);
 				HttpServletRequestMock httpRequest = new HttpServletRequestMock(session);
-				HttpServletResponse response = mockery.mock(HttpServletResponse.class, "response" + counter);
+				MutableResponse response = mockery.mock(MutableResponse.class, "response" + counter);
 
 				RequestInfo request = new RequestInfo(context, httpRequest, response);
 				VRaptorRequestHolder.setRequestForCurrentThread(request);

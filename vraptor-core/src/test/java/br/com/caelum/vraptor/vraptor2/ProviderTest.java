@@ -20,8 +20,6 @@ package br.com.caelum.vraptor.vraptor2;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import javax.servlet.http.HttpServletResponse;
-
 import org.jmock.Expectations;
 import org.junit.Test;
 import org.vraptor.validator.ValidationErrors;
@@ -29,6 +27,7 @@ import org.vraptor.validator.ValidationErrors;
 import br.com.caelum.vraptor.config.BasicConfiguration;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor.http.MutableResponse;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
 import br.com.caelum.vraptor.ioc.GenericContainerTest;
 import br.com.caelum.vraptor.ioc.WhatToDo;
@@ -67,7 +66,7 @@ public class ProviderTest extends GenericContainerTest {
                 allowing(request).getParameter("view"); will(returnValue(null));
             }
         });
-        HttpServletResponse response = mockery.mock(HttpServletResponse.class, "response" + counter);
+        MutableResponse response = mockery.mock(MutableResponse.class, "response" + counter);
         RequestInfo webRequest = new RequestInfo(context, request, response);
         return execution.execute(webRequest, counter);
     }

@@ -71,6 +71,7 @@ import br.com.caelum.vraptor.http.route.RoutesParser;
 import br.com.caelum.vraptor.http.route.TypeFinder;
 import br.com.caelum.vraptor.interceptor.DefaultInterceptorRegistry;
 import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
+import br.com.caelum.vraptor.interceptor.FlashInterceptor;
 import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
 import br.com.caelum.vraptor.interceptor.InterceptorListPriorToExecutionExtractor;
 import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
@@ -154,6 +155,7 @@ public class BaseComponents {
             DownloadInterceptor.class, 						DownloadInterceptor.class,
             EmptyResult.class, 								EmptyResult.class,
             ExecuteMethodInterceptor.class, 				ExecuteMethodInterceptor.class,
+            FlashInterceptor.class, 						FlashInterceptor.class,
             ForwardToDefaultViewInterceptor.class, 			ForwardToDefaultViewInterceptor.class,
             InstantiateInterceptor.class, 					InstantiateInterceptor.class,
             InterceptorListPriorToExecutionExtractor.class, InterceptorListPriorToExecutionExtractor.class,

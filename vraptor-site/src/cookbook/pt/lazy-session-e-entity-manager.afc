@@ -45,25 +45,12 @@ public class JITEntityManagerCreator implements ComponentFactory<EntityManager> 
 	 */
 	private static final Method FINALIZE = new Mirror().on(Object.class).reflect().method("finalize").withoutArgs();
 
-	/**
-	 * Guarda o JIT {@link EntityManager} Enhanced quer abrirá o manager real somente se necessário.
-	 */
 	private EntityManager proxy;
-
-	/**
-	 * Guarda o {@link EntityManager} de verdade.
-	 */
 	private EntityManager entityManager;
 
 	private final EntityManagerFactory factory;
 	private final Proxifier proxifier;
 
-	/**
-	 * Cria um {@link JITEntityManagerCreator} através da Injeção de uma {@link EntityManagerFactory}.<br>
-	 * <br>
-	 * @param factory uma {@link EntityManagerFactory} que é a responsável pela criação das implementações
-	 * 			reais do {@link EntityManager}.
-	 */
 	public JITEntityManagerCreator(EntityManagerFactory factory, Proxifier proxifier) {
 		this.factory = factory;
 		this.proxifier = proxifier;
@@ -97,24 +84,14 @@ public class JITEntityManagerCreator implements ComponentFactory<EntityManager> 
 		return entityManager;
 	}
 	/**
-	 * Recupera a instancia do JIT {@link EntityManager} deste {@link RequestScoped}, que invocará
-	 * adequadamente uma {@link EntityManager} real no momento mais oportuno, quando um método for invocado
-	 * no manager.
-	 * @return a Enchanced JIT {@link EntityManager}.
+	 * Recupera o proxy do EntityManager, para só criar um EntityManager de verdade quando ele for
+	 * realmente necessário 
 	 */
 	@Override
 	public EntityManager getInstance() {
 		return proxy;
 	}
 
-	/**
-	 * Destroi apropriadamente a {@link EntityManager}, no termino do escopo, verificando se a
-	 * {@link EntityManager} real foi realmente aberto, e sendo este o caso verifica se este ainda se encontra
-	 * aberto, e então o fecha.<br>
-	 * <br>
-	 * Para garantir o funcionamento da {@link EntityManager} para qualquer parte do escopo, não é permitdo a ninguem
-	 * fora este método fechar o {@link EntityManager} real ate o final do escopo.
-	 */
 	@PreDestroy
 	public void destroy() {
 		if (entityManager != null && entityManager.isOpen()) {
@@ -168,36 +145,22 @@ public class JITSessionCreatorFromSessionFactory implements ComponentFactory<Ses
 	private static final Method CLOSE = new Mirror().on(Session.class).reflect().method("close").withoutArgs();
 	/**
 	 * O método {@link Object#finalize()} que deve ser ignorado caso a {@link Session} real não tenha sido realmente criada.
-	 * @throws ExceptionInInitializerError  esta exceção não deveria nunca acontecer, ocorre caso o método não seja encontrada
-	 * 			na {@link Session}.
 	 */
 	private static final Method FINALIZE = new Mirror().on(Object.class).reflect().method("finalize").withoutArgs();
 
-
-	/**
-	 * Guarda a JIT {@link Session} Enhanced quer abrirá a session somente se necessário.
-	 */
 	private Session proxy;
-
 	private Session session;
 
 	private final Proxifier proxifier;
-
 	private final SessionFactory factory;
 
-	/**
-	 * Cria um {@link JITSessionCreatorFromSessionFactory} através da Injeção de uma
-	 * {@link SessionFactory}.
-	 * @param factory uma {@link SessionFactory} que é a responsável pela criação das implementações
-	 * 			reais das {@link Session}s.
-	 */
 	public JITSessionCreatorFromSessionFactory(SessionFactory factory, Proxifier proxifier) {
 		this.factory = factory;
 		this.proxifier = proxifier;
 	}
 
 	/**
-	 * Cria um proxy que só vai criar um {@link EntityManager} apenas quando for chamado algum método
+	 * Cria um proxy que só vai criar um {@link Session} apenas quando for chamado algum método
 	 * que não seja close nem finalize
 	 */
 	@PostConstruct
@@ -225,21 +188,14 @@ public class JITSessionCreatorFromSessionFactory implements ComponentFactory<Ses
 	}
 
 	/**
-	 * Recupera a instancia da JIT {@link Session} deste {@link RequestScoped}, que invocará adequadamente uma {@link Session}
-	 * real no momento mais oportuno, quando um método for invocado na sessão.
-	 * @return a Enchanced JIT {@link Session}.
+	 * Recupera o proxy da Session, para só criar um Session de verdade quando ele for
+	 * realmente necessário 
 	 */
 	@Override
 	public Session getInstance() {
 		return proxy;
 	}
-	/**
-	 * Destroi apropriadamente a {@link Session}, no termino do escopo, verificando se a {@link Session} real foi realmente
-	 * aberta, e sendo este o caso verifica se esta ainda se encontra aberta, e então a fecha.<br>
-	 * <br>
-	 * Para garantir o funcionamento da {@link Session} para qualquer parte do escopo, não é permitdo a ninguem fora este método
-	 * fechar a {@link Session} real ate o final do escopo.
-	 */
+
 	@PreDestroy
 	public void destroy() {
 		if (session != null && session.isOpen()) {

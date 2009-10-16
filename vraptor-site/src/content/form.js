@@ -36,20 +36,22 @@ var caelum = {
 			if(!$(this.form).valid()){
 				return false;
 			}
-			this.disabled = true;
+			this.disabled = "disabled";
+			this.innerHTML = "Cadastrando...";
+			var button = $(this);
 			var dataString = $(this.form).serialize();
-			var url = '';
-			url = "http://caelumweb.caelum.com.br/caelumweb/evento/aluno/" + this.form.turmaId.value + "/cadastra.snippet.logic?" + dataString;
+			var url = "http://caelumweb.caelum.com.br/caelumweb/evento/aluno/" + this.form.turmaId.value + "/cadastra.snippet.logic?" + dataString;
 			$.getJSON(url + "&callback=?", function(data){
 				if(data['data'] == "sucesso"){
 					$('.erro_msg').hide();
 					$('#success').fadeIn("slow");
-					$('#formulario_inscricao')[0].reset();
+					$('#formulario_inscricao').fadeOut("slow");
 				}else{
 					$('.erro_msg').show();
 					$('.erro_msg ul').append('<li id="serverError">Ocorreu um erro, contacte a Caelum.</li>');
-					$(this).removeAttr('disabled');
 				}
+				button.removeAttr('disabled');
+				button.html("Cadastro");
 			});
 			return false;
 		});

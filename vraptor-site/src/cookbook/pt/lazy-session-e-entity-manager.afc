@@ -1,0 +1,251 @@
+[chapter Como fazer uma Lazy Session ou Lazy EntityManager]
+**::por Tomaz Lavieri::**
+
+[java]
+/**
+ * <b>JIT (Just-in-Time) {@link EntityManager} Creator</b> fábrica para o componente {@link EntityManager}
+ * gerado de forma LAZY ou JIT(Just-in-Time) a partir de um {@link EntityManagerFactory}, que
+ * normalmente se encontra em um ecopo de aplicativo @{@link ApplicationScoped}.
+ * <br>
+ * Um JIT {@link EntityManager} não é propriamente uma implementação real do {@link EntityManager}, mas 
+ * transparece como sendo uma, o manager real só é realmente criada quando um método é invocado. Ao 
+ * Receber um JIT {@link EntityManager} injetado uma sessão com o banco não será aberta até o momento 
+ * que um dos seus métodos seja invocado.
+ * <br>
+ * Esta fábrica prove Enhanced {@link EntityManager} que só é aberto quando um de seus métodos for
+ * executado, salvo quando o método é close() ou finalize(), estes dois métodos são tratados
+ * de um maneira bem peculiar, conforme visto abaixo:<br>
+ * <br>
+ *  - Um JIT {@link EntityManager} ignora qualquer chamado ao método {@link EntityManager#close()},
+ * o tempo de vida do JIT {@link EntityManager} é controlado por está fabrica, e seu fechamento
+ * ocorrerá ao final de cada {@link RequestScoped}, culminando no fechamento do manager.<br>
+ * <br>
+ *  - Um JIT {@link EntityManager} ignora chamadas ao método {@link #finalize()} invocado pelo Garbage
+ * Collector caso o {@link EntityManager} real não tenha sido chamada, ou seja, nenhum método foi
+ * chamado previamente.<br>
+ * <br>
+ *  - Qualquer chamada a outro método do JIT {@link EntityManager} será tranferiada para o 
+ * {@link EntityManager} real, caso o manager real ainda não tenha sido criado um manager é instantanemante
+ * aberto.
+ * 
+ * @author Tomaz Lavieri
+ * @since 1.0
+ */
+@Component
+@RequestScoped
+public class JITEntityManagerCreator implements ComponentFactory<EntityManager> {
+	/**
+	 * O método {@link EntityManager#close()} que é ignorado nas invocações do JIT {@link EntityManager}, pois esta é
+	 * uma responsabilidade do {@link JITEntityManagerCreator} executada ao final do {@link RequestScoped}.
+	 */
+	private static final Method CLOSE = new Mirror().on(EntityManager.class).reflect().method("close").withoutArgs();
+
+	/**
+	 * O método {@link Object#finalize()} que deve ser ignorado caso o {@link EntityManager} real não tenha sido realmente criado.
+	 */
+	private static final Method FINALIZE = new Mirror().on(Object.class).reflect().method("finalize").withoutArgs();
+
+	/**
+	 * Guarda o JIT {@link EntityManager} Enhanced quer abrirá o manager real somente se necessário.
+	 */
+	private EntityManager proxy;
+
+	/**
+	 * Guarda o {@link EntityManager} de verdade.
+	 */
+	private EntityManager entityManager;
+
+	private final EntityManagerFactory factory;
+	private final Proxifier proxifier;
+
+	/**
+	 * Cria um {@link JITEntityManagerCreator} através da Injeção de uma {@link EntityManagerFactory}.<br>
+	 * <br>
+	 * @param factory uma {@link EntityManagerFactory} que é a responsável pela criação das implementações
+	 * 			reais do {@link EntityManager}.
+	 */
+	public JITEntityManagerCreator(EntityManagerFactory factory, Proxifier proxifier) {
+		this.factory = factory;
+		this.proxifier = proxifier;
+	}
+
+	/**
+	 * Cria um proxy que só vai criar um {@link EntityManager} apenas quando for chamado algum método
+	 * que não seja close nem finalize
+	 */
+	@PostConstruct
+	public void create() {
+		this.proxy = proxifier.proxify(EntityManager.class, new MethodInvocation<EntityManager>() {
+			@Override
+			public Object intercept(EntityManager proxy, Method method, Object[] args, SuperMethod superMethod) {
+				if (method.equals(CLOSE) || (method.equals(FINALIZE) && entityManager == null)) {
+					return null; //skip
+				}
+				return new Mirror().on(getEntityManager()).invoke().method(method).withArgs(args);
+			}
+		});
+	}
+
+	/**
+	 * Recupera o {@link EntityManager} real, criando um caso seja a primeira chamada a este método.
+	 * @return
+	 */
+	public EntityManager getEntityManager() {
+		if (entityManager == null) {
+			entityManager = factory.createEntityManager();
+		}
+		return entityManager;
+	}
+	/**
+	 * Recupera a instancia do JIT {@link EntityManager} deste {@link RequestScoped}, que invocará
+	 * adequadamente uma {@link EntityManager} real no momento mais oportuno, quando um método for invocado
+	 * no manager.
+	 * @return a Enchanced JIT {@link EntityManager}.
+	 */
+	@Override
+	public EntityManager getInstance() {
+		return proxy;
+	}
+
+	/**
+	 * Destroi apropriadamente a {@link EntityManager}, no termino do escopo, verificando se a
+	 * {@link EntityManager} real foi realmente aberto, e sendo este o caso verifica se este ainda se encontra
+	 * aberto, e então o fecha.<br>
+	 * <br>
+	 * Para garantir o funcionamento da {@link EntityManager} para qualquer parte do escopo, não é permitdo a ninguem
+	 * fora este método fechar o {@link EntityManager} real ate o final do escopo.
+	 */
+	@PreDestroy
+	public void destroy() {
+		if (entityManager != null && entityManager.isOpen()) {
+			entityManager.close();
+		}
+	}
+
+}
+[/java]
+
+[java]
+
+/**
+ * <b>JIT (Just-in-Time) Hibernate {@link Session} Creator from {@link SessionFactory}</b>, fabrica para 
+ * o componente {@link Session} gerado de forma lazy ou JIT (just-in-time) que é gerado a partir
+ * de uma {@link SessionFactory} que normalmente se encontra em um ecopo de 
+ * aplicativo @{@link ApplicationScoped}.<br>
+ * <br>
+ * Uma JIT {@link Session} não é propriamente uma sessão do Hibernate, mas transparece como sendo uma,
+ * a {@link Session} real só é realmente criada quando um método é invocado. Receber uma 
+ * JIT {@link Session} injetada não abrira a sessão com o hibernate até o momento que um dos seus
+ * métodos seja invocado.<br>
+ * <br>
+ * Esta fábrica prove Enhanced {@link Session} que só é aberta quando um de seus métodos for
+ * executado, salvo quando o método é close() ou finalize(), estes dois métodos são tratados
+ * de um maneira bem peculiar, conforme visto abaixo:<br>
+ * <br>
+ *  - Uma JIT {@link Session} ignora qualquer chamado ao método {@link Session#close()}, o tempo de
+ * vida da JIT {@link Session} é controlado por está fabrica, e seu fechamento ocorrerá ao final
+ * de cada {@link RequestScoped}.<br>
+ * <br>
+ *  - Uma JIT {@link Session} ignora chamadas ao método {@link #finalize()} invocado pelo Garbage
+ * Collector caso a {@link Session} real não tenha sido chamada, ou seja, nenhum método foi
+ * chamado previamente.<br>
+ * <br>
+ *  - Qualquer chamada a outro método da JIT {@link Session} será tranferiada para a {@link Session}
+ * real, caso a {@link Session} real ainda não tenha sido criada uma {@link Session} é instantanemante
+ * aberta.
+ * 
+ * @author Tomaz Lavieri
+ * @since 1.0
+ */
+@Component
+@RequestScoped
+public class JITSessionCreatorFromSessionFactory implements ComponentFactory<Session> {
+
+	/**
+	 * O método {@link Session#close()} que é ignorado nas invocações do JIT {@link Session}, pois esta é uma responsabilidade
+	 * do {@link JITSessionCreatorFromSessionFactory} executada ao final do {@link RequestScoped}.
+	 */
+	private static final Method CLOSE = new Mirror().on(Session.class).reflect().method("close").withoutArgs();
+	/**
+	 * O método {@link Object#finalize()} que deve ser ignorado caso a {@link Session} real não tenha sido realmente criada.
+	 * @throws ExceptionInInitializerError  esta exceção não deveria nunca acontecer, ocorre caso o método não seja encontrada
+	 * 			na {@link Session}.
+	 */
+	private static final Method FINALIZE = new Mirror().on(Object.class).reflect().method("finalize").withoutArgs();
+
+
+	/**
+	 * Guarda a JIT {@link Session} Enhanced quer abrirá a session somente se necessário.
+	 */
+	private Session proxy;
+
+	private Session session;
+
+	private final Proxifier proxifier;
+
+	private final SessionFactory factory;
+
+	/**
+	 * Cria um {@link JITSessionCreatorFromSessionFactory} através da Injeção de uma
+	 * {@link SessionFactory}.
+	 * @param factory uma {@link SessionFactory} que é a responsável pela criação das implementações
+	 * 			reais das {@link Session}s.
+	 */
+	public JITSessionCreatorFromSessionFactory(SessionFactory factory, Proxifier proxifier) {
+		this.factory = factory;
+		this.proxifier = proxifier;
+	}
+
+	/**
+	 * Cria um proxy que só vai criar um {@link EntityManager} apenas quando for chamado algum método
+	 * que não seja close nem finalize
+	 */
+	@PostConstruct
+	public void create() {
+		this.proxy = proxifier.proxify(Session.class, new MethodInvocation<Session>() {
+			@Override
+			public Object intercept(Session proxy, Method method, Object[] args, SuperMethod superMethod) {
+				if (method.equals(CLOSE) || (method.equals(FINALIZE) && session == null)) {
+					return null; //skip
+				}
+				return new Mirror().on(getSession()).invoke().method(method).withArgs(args);
+			}
+		});
+	}
+
+	/**
+	 * Recupera a {@link Session} real, criando uma caso seja a primeira chamada a este método.
+	 * @return
+	 */
+	public Session getSession() {
+		if (session == null) {
+			session = factory.openSession();
+		}
+		return session;
+	}
+
+	/**
+	 * Recupera a instancia da JIT {@link Session} deste {@link RequestScoped}, que invocará adequadamente uma {@link Session}
+	 * real no momento mais oportuno, quando um método for invocado na sessão.
+	 * @return a Enchanced JIT {@link Session}.
+	 */
+	@Override
+	public Session getInstance() {
+		return proxy;
+	}
+	/**
+	 * Destroi apropriadamente a {@link Session}, no termino do escopo, verificando se a {@link Session} real foi realmente
+	 * aberta, e sendo este o caso verifica se esta ainda se encontra aberta, e então a fecha.<br>
+	 * <br>
+	 * Para garantir o funcionamento da {@link Session} para qualquer parte do escopo, não é permitdo a ninguem fora este método
+	 * fechar a {@link Session} real ate o final do escopo.
+	 */
+	@PreDestroy
+	public void destroy() {
+		if (session != null && session.isOpen()) {
+			session.close();
+		}
+	}
+
+}
+[/java]

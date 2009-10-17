@@ -1,59 +1,177 @@
-[chapter Usando anotações para interceptar classes]
+[chapter Interceptando recursos anotados]
+**::por Tomaz Lavieri, no blog http://java-i9se.blogspot.com/2009/10/vraptor3-interceptando-recursos.html ::**
 
-Os interceptors usam o método accepts para decidir se vão interceptar ou não
-uma determinada lógica. Usar anotações para fazer essa decisão pode ajudar a
-tornar as coisas mais simples.
+Em primeira lugar, gostaria de tecer meus mais sinceros elogios a equipe VRaptor, 
+a versão 3 esta muito boa, bem mais intuitiva e fácil de usar que a 2.6
 
-Para usar anotações basta você criar a(s) anotação (ões):
+Neste artigo vou mostar como interceptar um método de um Resource especifico, 
+identificando-o a partir de uma anotação e executar ações antes do método executar, e após ele executar.
 
-[java]
-@Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.TYPE, ElementType.METHOD})
-public @interface NeedsTransaction {
-}
-[/java]
-
-Nesse caso a anotação pode ser usada tanto em cima de classes quanto de métodos.
-
-Depois de criar a anotação basta implementar o accepts do interceptor:
+Vamos supor que nós temos o seguinte Resource para adicionar produtos no nosso sistema
 
 [java]
-@Intercepts
-public class TransactionInterceptor implements Interceptor {
-	//...
-
-	/**
-	 * verifica se o método ou a classe que contém o método possuem a anotação
-	 */	
-	public boolean accepts(ResourceMethod method) {
-		return method.getMethod().isAnnotationPresent(NeedsTransaction.class)
-			|| method.getResource().getType().isAnnotationPresent(NeedsTransaction.class);
-	}
-
-}
+  @Resource
+  public class ProdutoController {
+          private final DaoFactory factory;
+          private final ProdutoDao dao;
+         
+          public ProdutoController(DaoFactory factory) {
+                  this.factory = factory;
+                  this.dao = factory.getProdutoDao();
+          }
+         
+          public List<Produto> listar() {
+                  return dao.list();
+          }
+         
+          public Produto atualizar(Produto produto) {
+                  try {
+                          factory.beginTransaction();
+                          produto = dao.update(produto);
+                          factory.commit();
+                          return produto;
+                  } catch (DaoException ex) {
+                          factory.rollback();
+                          throw ex;
+                  }
+          }
+         
+          public Produto adicionar(Produto produto) {
+                  try {
+                          factory.beginTransaction();
+                          produto = dao.store(produto);
+                          factory.commit();
+                          return produto;
+                  } catch (DaoException ex) {
+                          factory.rollback();
+                          throw ex;
+                  }
+          }
+  }
 [/java]
 
-E então, todos os métodos das classes anotadas com @NeedsTransaction vão passar pelo interceptor,
-e todos os métodos anotados também.
+Agora nos queremos que um interceptador intercepte meu recurso, e execute a lógica 
+dentro de um escopo transacional, como fazer isso? é só criar um interceptador assim.
 
 [java]
-@Resource
-@NeedsTransaction
-public class UmController {
-	// todos os métodos dessa classe vão passar pelo interceptor
-}
-
-@Resource
-public class OutroController {
+  import org.hibernate.Session;
+  import org.hibernate.Transaction;
    
+  import br.com.caelum.vraptor.Intercepts;
+  import br.com.caelum.vraptor.core.InterceptorStack;
+  import br.com.caelum.vraptor.interceptor.Interceptor;
+  import br.com.caelum.vraptor.resource.ResourceMethod;
    
-   @NeedsTransaction
-   public void umMetodo() {
-      // esse método vai passar pelo interceptor
-   }
-   
-   public void outroMetodo() {
-      // esse método não vai passar
-   }
-}
+  @Intercepts
+  public class TransactionInterceptor implements Interceptor {
+          private final Session session;
+          public HibernateTransactionInterceptor(Session session) {
+                  this.session = session;
+          }
+          public void intercept(InterceptorStack stack, ResourceMethod method, Object instance) {
+                  Transaction transaction = null;
+                  try {
+                          transaction = session.beginTransaction();
+                          stack.next(method, instance);
+                          transaction.commit();
+                  } finally {
+                          if (transaction.isActive()) {
+                                  transaction.rollback();
+                          }
+                  }
+          }
+          public boolean accepts(ResourceMethod method) {
+                  return true; //aceita todas as requisições
+          }
+  }
 [/java]
+
+
+Ok, o interceptador vai rodar e abrir transação antes e depois de executar a logica, 
+e os métodos transacionais da minha lógica irão se reduzir a isto
+
+[java]
+  public Produto atualizar(Produto produto) {
+          return dao.update(produto);
+  }
+   
+  public Produto adicionar(Produto produto) {
+          return dao.store(produto);
+  }
+[/java]
+
+Ok mas, neste caso temos o problema de que métodos que não exigem transação estão 
+abrindo e fechando transação a cada requisição sem necessidade.
+
+Como então selecionar apenas algumas lógicas para serem transacionais? 
+podem criar uma anotação para isto, desta forma:
+
+[java]
+  import java.lang.annotation.ElementType;
+  import java.lang.annotation.Retention;
+  import java.lang.annotation.RetentionPolicy;
+  import java.lang.annotation.Target;
+   
+  /**
+   * Usado para garantir que um determinado recurso interceptado seja executada em um
+   * escopo de transação.
+   * @author Tomaz Lavieri
+   * @since 1.0
+   */
+  @Retention(RetentionPolicy.RUNTIME)
+  @Target({ElementType.METHOD,ElementType.TYPE})
+  public @interface Transactional {}
+[/java]
+
+
+Agora precisamos marcar os pontos onde queremos que o escopo seja transacional com esta anotação.
+
+[java]
+  @Resource
+  public class ProdutoController {
+          private final ProdutoDao dao;
+         
+          public ProdutoController(ProdutoDao dao) {
+                  this.dao = dao;
+          }
+         
+          public List<Produto> listar() {
+                  return dao.list();
+          }
+         
+          @Transactional
+          public Produto atualizar(Produto produto) {
+                  return dao.update(produto);
+          }
+         
+          @Transactional
+          public Produto adicionar(Produto produto) {
+                  return dao.store(produto);
+          }
+  }
+[/java]
+
+
+Ok o código ficou bem mais enxuto, mas como interceptar apenas os métodos marcados 
+com esta anotação?? para tal basta no nosso accepts do TransactionInterceptor 
+verificarmos se a anotação esta presente no método, ou no proprio rescurso 
+(quando marcado no recurso todos os métodos do recurso seriam transacionais).
+
+A modificação do método ficaria assim
+
+[java]
+  public boolean accepts(ResourceMethod method) {
+          return  method
+                          .getMethod() //metodo anotado
+                          .isAnnotationPresent(Transactional.class)
+                  || method
+                          .getResource() //ou recurso anotado
+                          .getType()
+                          .isAnnotationPresent(Transactional.class);
+  }
+[/java]
+
+
+Pronto agora somente os métodos com a anotação @Transacional são executados em 
+escopo de transação e economisamos linhas e linhas de códigos 
+de %%try{commit}catch{rollback throw ex}%%

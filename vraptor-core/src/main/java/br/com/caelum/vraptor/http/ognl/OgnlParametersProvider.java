@@ -158,8 +158,8 @@ public class OgnlParametersProvider implements ParametersProvider {
 				}
 			} catch (OgnlException e) {
 				// TODO it fails when parameter name is not a valid java identifier... ignoring by now
-				if (logger.isWarnEnabled()) {
-					logger.warn("unable to parse expression '" + key + "'", e);
+				if (logger.isDebugEnabled()) {
+					logger.debug("unable to parse expression '" + key + "'", e);
 				}
 			}
 		}

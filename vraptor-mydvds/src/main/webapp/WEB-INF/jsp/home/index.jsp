@@ -1,20 +1,6 @@
 
 <%@ include file="../../../header.jsp" %> 
 
-<c:if test="${not empty param.language}">
-	<fmt:setLocale value="${param.language}" scope="session"/>
-</c:if>
-
-<c:if test="${not empty errors}">
-	<div id="error-box">
-	<h1><fmt:message key="errors"/></h1>
-	<hr />
-	<c:forEach var="error" items="${errors}">
-   		<h3><fmt:message key="${error.category}"/> - (${error.message})</h3>
-   	</c:forEach>
-	</div>
-</c:if>
-
 <div class="blue-box">
 <h1><fmt:message key="change_language"/></h1>
 <hr/>

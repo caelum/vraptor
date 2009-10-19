@@ -17,6 +17,7 @@
   [/java]
   objetos incluidos no Result vão sobreviver até a próxima requisição quando acontecer um
   redirect.
+* @Path suporta vários valores (String -> String[]) ex @Path({"/client", "/Client"})
   
 [/list]
 [section 3.0.0]

@@ -16,6 +16,7 @@
   result.use(logic()).redirectTo(AController.class).aMethod();
   [/java]
   objects included on Result will survive until next request when a redirect happens.
+* @Path annotation supports multiple values (String -> String[])
   
 [/list]
 [section 3.0.0]

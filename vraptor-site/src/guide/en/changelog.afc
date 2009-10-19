@@ -17,6 +17,7 @@
   [/java]
   objects included on Result will survive until next request when a redirect happens.
 * @Path annotation supports multiple values (String -> String[])
+* Result.include returns this to enable a fluent interface (result.include(...).include(...))
   
 [/list]
 [section 3.0.0]

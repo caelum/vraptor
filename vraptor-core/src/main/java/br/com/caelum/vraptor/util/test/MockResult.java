@@ -43,8 +43,9 @@ public class MockResult implements Result {
 	private final Map<String, Object> values = new HashMap<String, Object>();
 	private Class<?> typeToUse;
 
-	public void include(String key, Object value) {
+	public Result include(String key, Object value) {
 		this.values.put(key, value);
+		return this;
 	}
 
 	public <T extends View> T use(final Class<T> view) {

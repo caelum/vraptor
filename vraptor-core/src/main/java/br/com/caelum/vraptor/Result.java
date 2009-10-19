@@ -26,7 +26,7 @@ import java.util.Map;
  */
 public interface Result {
 
-    void include(String key, Object value);
+    Result include(String key, Object value);
 
 	<T extends View> T use(Class<T> view);
 

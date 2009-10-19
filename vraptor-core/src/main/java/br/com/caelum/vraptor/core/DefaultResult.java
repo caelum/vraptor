@@ -47,9 +47,10 @@ public class DefaultResult implements Result {
         return container.instanceFor(view);
     }
 
-    public void include(String key, Object value) {
+    public Result include(String key, Object value) {
     	includedAttributes.put(key, value);
         request.setAttribute(key, value);
+        return this;
     }
 
     public boolean used() {

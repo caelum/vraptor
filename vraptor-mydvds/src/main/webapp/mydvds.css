@@ -42,7 +42,8 @@ body{
 }
 
 #userInfo p {
-	text-align: right;	
+	text-align: right;
+	color: white;
 }
 /*language bar*/
 		#langMenu{

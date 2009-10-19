@@ -3,10 +3,6 @@
 
 <div class="blue-box">
 
-<h1><fmt:message key="welcome"/></h1>
-
-<hr/>
-
 <form action="<c:url value="/home/login"/>" name="loginForm" method="post">
 	<fieldset>
 		<legend>Sign In</legend>
@@ -22,16 +18,6 @@
 <br/><br/>
 
 <div class="blue-box">
-
-<c:if test="${not empty user}">
-	<h1>${user.name}: <fmt:message key="user_added"/></h1>
-</c:if>
-
-<c:if test="${empty user}">
-	<h1><fmt:message key="new_user_message"/></h1>
-</c:if>
-
-<hr/>
 
 <form action="<c:url value="/users" />" name="registerForm" method="post">
 	<fieldset>

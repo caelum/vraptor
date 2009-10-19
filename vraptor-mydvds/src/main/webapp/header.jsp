@@ -42,6 +42,7 @@
         	<li><a href="${path }"><span>home</span></a></li>
         	<li><a href="${path }professores/form"><span>Adiciona professor</span></a></li>
 		    <c:if test="${not empty userInfo.user}">
+		    	<li><a href="<c:url value="/users"/>"><fmt:message key="list_users"/></a></li>
 		    	<li><a href="${path }home/logout">Logout</a></li>
 		    </c:if>
         </ul><!-- menuElements-->

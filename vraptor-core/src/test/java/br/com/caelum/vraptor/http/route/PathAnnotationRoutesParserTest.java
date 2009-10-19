@@ -2,17 +2,17 @@
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource
  * All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); 
- * you may not use this file except in compliance with the License. 
- * You may obtain a copy of the License at 
- * 
- * 	http://www.apache.org/licenses/LICENSE-2.0 
- * 
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an "AS IS" BASIS, 
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
- * See the License for the specific language governing permissions and 
- * limitations under the License. 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * 	http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package br.com.caelum.vraptor.http.route;
@@ -148,6 +148,11 @@ public class PathAnnotationRoutesParserTest {
         protected void protectMe() {
         }
 
+        @Path({"/path1", "/path2"})
+        public void manyPaths() {
+        }
+
+
         @Path("/staticMe")
         public static void staticMe() {
         }
@@ -156,6 +161,24 @@ public class PathAnnotationRoutesParserTest {
         }
     }
 
+
+
+    @br.com.caelum.vraptor.Resource
+    public static class NoPath {
+
+        @Path( {})
+        public void noPaths() {
+        }
+
+    }
+    @Test(expected=IllegalArgumentException.class)
+    public void shouldThrowExceptionIfPathAnnotationHasEmptyArray()
+            throws Exception {
+        this.resource = mockery.resource(NoPath.class);
+        router.register(resource);
+    }
+
+
     @Test
     public void shouldFindNonAnnotatedNonStaticPublicMethodWithComponentNameInVariableCamelCaseConventionAsURI()
             throws Exception {
@@ -163,6 +186,19 @@ public class PathAnnotationRoutesParserTest {
         assertThat(method, is(VRaptorMatchers.resourceMethod(Clients.class.getMethod("add"))));
         mockery.assertIsSatisfied();
     }
+
+    @Test
+    public void shouldFindSeveralPathsForMethodWithManyValue()
+            throws Exception {
+        ResourceMethod method1 = router.parse("/path1", HttpMethod.POST, request);
+        assertThat(method1, is(VRaptorMatchers.resourceMethod(Clients.class.getMethod("manyPaths"))));
+        ResourceMethod method2 = router.parse("/path2", HttpMethod.GET, request);
+        assertThat(method2, is(VRaptorMatchers.resourceMethod(Clients.class.getMethod("manyPaths"))));
+        mockery.assertIsSatisfied();
+    }
+
+
+
 
     @Test
     public void shouldIgnoreAResourceWithTheWrongWebMethod() throws SecurityException {

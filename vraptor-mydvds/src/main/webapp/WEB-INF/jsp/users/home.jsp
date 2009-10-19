@@ -1,25 +1,10 @@
 <%@ include file="/header.jsp" %> 
 
-<script type="text/javascript" src="<c:url value="/"/>js/jquery.js"></script>
-
 <div class="blue-box">
 <table id="user">
 	<tr><td align="right">${currentUser.name} - <a href="<c:url value="/home/logout" />"><fmt:message key="logout"/></a></td></tr>
 </table>
 </div>
-
-<c:if test="${not empty errors}">
-	<div id="error-box">
-	<h1><fmt:message key="errors"/></h1>
-	<hr/>
-	<c:forEach var="error" items="${errors}">
-		${error.message}<br/>
-	</c:forEach>
-	</div>
-</c:if>
-
-
-<br/><br/>
 
 <div class="blue-box">
 <h1>${currentUser.name}: <fmt:message key="your_dvds"/></h1>

@@ -3,6 +3,7 @@
 input, label {
 	display: block;
 	text-align: left;
+	width: 27em;
 }
 fieldset {
 	width: 800px;
@@ -18,6 +19,43 @@ body{
 	background-color:#2a2948; 
 	text-align:center;}
 
+/*language bar*/
+		#langMenu{
+			display:block;
+			width:221px;
+			height:50px;
+			position:relative;
+			float:right;
+			margin:0px;}
+		
+			#langMenu li { list-style:none; }
+			
+			#langMenu li, #langMenu a{ height:50px; display:block;}
+			
+			#langMenu li a span{display:none;}
+			
+			#engBtn{
+				background-image:url(images/vraptorSprites-trans.png);
+				background-repeat:no-repeat;
+				background-position:-317px 1px;
+				position:absolute;
+				top:0;
+				width:96px;
+				left:0px;} 
+				
+				a#engBtn:hover{background-position:-317px -50px;}
+			
+			#ptBtn{
+				background-image:url(images/vraptorSprites-trans.png);
+				background-repeat:no-repeat;
+				background-position:-414px 1px;
+				position:absolute;
+				top:0;				
+				width:127px;
+				right:0px;}
+				
+				a#ptBtn:hover{background-position:-414px -50px;}
+				
 /* menu */
 #menuWrap input, #menuWrap button {
 	display: inline;

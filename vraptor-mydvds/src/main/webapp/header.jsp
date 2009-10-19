@@ -18,25 +18,24 @@
     <script src="http://ie7-js.googlecode.com/svn/version/2.0(beta3)/IE7.js" type="text/javascript"></script>
     <![endif]-->
 </head>
-
 <body>
+	<c:if test="${not empty param.language}">
+		<fmt:setLocale value="${param.language}" scope="session"/>
+	</c:if>
 	<div id="headerWrap">
     	<div id="headerContent">
         	<h1 id="logoVraptor"><span>V|Raptor</span></h1><!-- vraptorlogo-->
-            
+            <ul id="langMenu">
+            	<li><a id="engBtn" href="?language=en"><span>ENGLISH</span></a></li>
+                <li><a id="ptBtn" href="?language=pt_BR"><span>PORTUGUÊS</span></a></li>
+            </ul><!-- langMenu-->
         </div><!-- header content -->
     </div><!-- header wrap-->
     <c:set var="path"><c:url value="/"/></c:set>
     <div id="menuWrap">
-	    <form class="busca" action="<c:url value="/materias/busca"/>" method="get">
-	    	<ul id="menuElementsEn">
-	        	<li><a id="homeBtnEn" href="${path }"><span>home</span></a></li>
-	        	<li><a id="downloadBtnEn" href="${path }professores/form"><span>Adiciona professor</span></a></li>
-		        <li>
-		        <input type="text" name="materia" value="Digite uma matéria" onfocus="this.value='';" 
-		        		onblur="if (this.value == '') this.value='Digite uma matéria';"/>
-		        <button type="submit">Busca</button></li>
-	        </ul><!-- menuElements-->
-        </form>
+    	<ul id="menuElementsEn">
+        	<li><a id="homeBtnEn" href="${path }"><span>home</span></a></li>
+        	<li><a id="downloadBtnEn" href="${path }professores/form"><span>Adiciona professor</span></a></li>
+        </ul><!-- menuElements-->
     </div><!-- menuWrap-->
 	<div id="contentWrap">

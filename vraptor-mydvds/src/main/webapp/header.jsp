@@ -32,10 +32,18 @@
         </div><!-- header content -->
     </div><!-- header wrap-->
     <c:set var="path"><c:url value="/"/></c:set>
+    <c:if test="${not empty userInfo.user}">
+	    <div id="userInfo">
+	    	<p>${userInfo.user.name }</p>
+	    </div>
+    </c:if>
     <div id="menuWrap">
     	<ul id="menuElementsEn">
-        	<li><a id="homeBtnEn" href="${path }"><span>home</span></a></li>
-        	<li><a id="downloadBtnEn" href="${path }professores/form"><span>Adiciona professor</span></a></li>
+        	<li><a href="${path }"><span>home</span></a></li>
+        	<li><a href="${path }professores/form"><span>Adiciona professor</span></a></li>
+		    <c:if test="${not empty userInfo.user}">
+		    	<li><a href="${path }home/logout">Logout</a></li>
+		    </c:if>
         </ul><!-- menuElements-->
     </div><!-- menuWrap-->
 	<c:if test="${not empty errors}">

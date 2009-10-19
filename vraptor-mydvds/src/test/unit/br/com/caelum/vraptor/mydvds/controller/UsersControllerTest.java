@@ -23,8 +23,6 @@ import static org.junit.Assert.assertThat;
 import java.util.Collections;
 import java.util.List;
 
-import javax.servlet.http.HttpSession;
-
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Before;
@@ -49,7 +47,6 @@ public class UsersControllerTest {
 
 	private Mockery mockery;
 	private UserDao dao;
-	private HttpSession session;
 	private UserInfo userInfo;
 	private UsersController controller;
 	private MockResult result;
@@ -59,19 +56,8 @@ public class UsersControllerTest {
 		mockery = new Mockery();
 
 		dao = mockery.mock(UserDao.class);
-		session = mockery.mock(HttpSession.class);
 
-		//ignoring http session
-		mockery.checking(new Expectations() {
-			{
-				allowing(session).getAttribute(UserInfo.CURRENT_USER);
-				will(returnValue(null));
-
-				ignoring(session);
-			}
-		});
-
-		userInfo = new UserInfo(session);
+		userInfo = new UserInfo();
 
 		result = new MockResult();
 		Validator validator = new MockValidator();

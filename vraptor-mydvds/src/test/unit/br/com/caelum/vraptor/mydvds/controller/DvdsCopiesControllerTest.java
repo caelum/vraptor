@@ -16,8 +16,6 @@
  */
 package br.com.caelum.vraptor.mydvds.controller;
 
-import javax.servlet.http.HttpSession;
-
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Before;
@@ -43,7 +41,6 @@ public class DvdsCopiesControllerTest {
 
 
 	private Mockery mockery;
-	private HttpSession session;
 	private UserInfo userInfo;
 	private MockResult result;
 	private DvdDao dao;
@@ -56,20 +53,14 @@ public class DvdsCopiesControllerTest {
 
 		dao = mockery.mock(DvdDao.class);
 		userDao = mockery.mock(UserDao.class);
-		session = mockery.mock(HttpSession.class);
 
-		//ignoring session
 		mockery.checking(new Expectations() {
 			{
-				allowing(session).getAttribute(UserInfo.CURRENT_USER);
-				will(returnValue(null));
-
-				ignoring(session);
 				ignoring(userDao);
 			}
 		});
 
-		userInfo = new UserInfo(session);
+		userInfo = new UserInfo();
 		User user = new User();
 		userInfo.login(user);
 

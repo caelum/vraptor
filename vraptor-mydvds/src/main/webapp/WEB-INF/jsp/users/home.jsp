@@ -2,16 +2,16 @@
 
 <div class="blue-box">
 <table id="user">
-	<tr><td align="right">${currentUser.name} - <a href="<c:url value="/home/logout" />"><fmt:message key="logout"/></a></td></tr>
+	<tr><td align="right">${userInfo.user.name} - <a href="<c:url value="/home/logout" />"><fmt:message key="logout"/></a></td></tr>
 </table>
 </div>
 
 <div class="blue-box">
-<h1>${currentUser.name}: <fmt:message key="your_dvds"/></h1>
+<h1>${userInfo.user.name}: <fmt:message key="your_dvds"/></h1>
 <hr/>
 
 <table>
-<c:forEach var="dvd" items="${currentUser.dvds}">
+<c:forEach var="dvd" items="${userInfo.user.dvds}">
 	<tr><td>${dvd.title}</td><td>${dvd.description}</td><td><fmt:message key="${dvd.type}"/></td></tr>
 </c:forEach>
 </table>

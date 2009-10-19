@@ -20,8 +20,6 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
-import javax.servlet.http.HttpSession;
-
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Before;
@@ -50,7 +48,6 @@ public class HomeControllerTest {
 
 	private Mockery mockery;
 	private UserDao dao;
-	private HttpSession session;
 	private UserInfo userInfo;
 	private HomeController controller;
 
@@ -59,17 +56,8 @@ public class HomeControllerTest {
 		mockery = new Mockery();
 
 		dao = mockery.mock(UserDao.class);
-		session = mockery.mock(HttpSession.class);
 
-		//ignoring first invocation of session.getAttribute
-		mockery.checking(new Expectations() {
-			{
-				one(session).getAttribute(UserInfo.CURRENT_USER);
-				will(returnValue(null));
-			}
-		});
-
-		userInfo = new UserInfo(session);
+		userInfo = new UserInfo();
 
 		// for Result and Validator, there are helpful mocked implementations
 		// that you can use if you want to just ignore them or perform simple
@@ -84,12 +72,10 @@ public class HomeControllerTest {
 	public void logoutMustRemoveTheUserFromHttpSession() throws Exception {
 		User user = new User();
 
-		willSetCurrentUserTo(user);
 		userInfo.login(user);
+		assertThat(userInfo.getUser(), is(user));
 
-		willSetCurrentUserTo(null);
 		controller.logout();
-
 		assertThat(userInfo.getUser(), is(nullValue()));
 	}
 
@@ -98,7 +84,6 @@ public class HomeControllerTest {
 		User user = new User();
 
 		ifUserOnDaoIs(user);
-		willSetCurrentUserTo(user);
 
 		controller.login("valid", "user");
 		assertThat(userInfo.getUser(), is(user));
@@ -108,9 +93,9 @@ public class HomeControllerTest {
 	public void loginWithAnInvalidUserMustNotPutUserOnHttpSession() throws Exception {
 
 		ifUserOnDaoIs(null);
-		willNotSetCurrentUser();
 
 		controller.login("invalid", "user");
+		assertThat(userInfo.getUser(), is(nullValue()));
 	}
 
 	private void ifUserOnDaoIs(final User user) {
@@ -123,20 +108,4 @@ public class HomeControllerTest {
 		});
 	}
 
-	private void willSetCurrentUserTo(final User user) {
-
-		mockery.checking(new Expectations() {
-			{
-				one(session).setAttribute(UserInfo.CURRENT_USER, user);
-			}
-		});
-	}
-	private void willNotSetCurrentUser() {
-
-		mockery.checking(new Expectations() {
-			{
-				never(session).setAttribute(with(equal(UserInfo.CURRENT_USER)), with(anything()));
-			}
-		});
-	}
 }

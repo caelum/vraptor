@@ -41,6 +41,9 @@ body{
 	margin: 0 auto;
 }
 
+#userInfo p {
+	text-align: right;	
+}
 /*language bar*/
 		#langMenu{
 			display:block;
@@ -130,7 +133,7 @@ body{
 			-opera-border-radius: 5px;
 			border-radius: 5px;
 		}
-		a#homeBtnEn, a#downloadBtnEn, a#documentacaoBtnEn, a#beneficiosBtnEn, a#suporteBtnEn, a#vraptor2BtnEn {
+		#menuElementsEn li a {
 			font-size: 12pt;
 			text-transform: uppercase;
 			text-decoration: none;
@@ -140,33 +143,7 @@ body{
 			color: white;
 			top: auto;
 		}
-		a#vraptor2BtnEn {
-			font-size: 10pt;
-		}
-			#homeBtn, #downloadBtn, #documentacaoBtn, #beneficiosBtn, #suporteBtn, #vraptor2Btn {
-				background-image:url(images/vraptorSprites-trans.png);
-				background-repeat:no-repeat;}
-				
-			#homeBtn span, #downloadBtn span, #documentacaoBtn span, #beneficiosBtn span, #suporteBtn span, #vraptor2Btn span {display:none;}
-			
-        	#homeBtn{ background-position:-239px -570px; left:0px;	width:90px;}
-				#homeBtn:hover{background-position:-239px -629px;}
-				
-			#downloadBtn{background-position:-329px -570px;	left:90px;	width:144px;}
-				#downloadBtn:hover{background-position:-329px -629px;}
-				
-			#documentacaoBtn{background-position:-473px -570px;	left:234px;	width:187px;}
-				#documentacaoBtn:hover{background-position:-473px -629px;}
-				
-			#beneficiosBtn{background-position:-660px -570px;	left:421px;	width:165px;}
-				#beneficiosBtn:hover{background-position:-660px -629px;}
-				
-			#suporteBtn{background-position:-825px -570px;	left:586px;	width:126px;}
-				#suporteBtn:hover{background-position:-825px -629px;}
-				
-			#vraptor2Btn{background-position:-951px -570px;	left:712px;	width:126px;}
-				#vraptor2Btn:hover{background-position:-951px -629px;}
-
+		
 /*header structure*/
 #headerWrap{
 	background-image:url(images/bgHeader.png);

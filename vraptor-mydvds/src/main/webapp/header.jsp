@@ -38,4 +38,18 @@
         	<li><a id="downloadBtnEn" href="${path }professores/form"><span>Adiciona professor</span></a></li>
         </ul><!-- menuElements-->
     </div><!-- menuWrap-->
+	<c:if test="${not empty errors}">
+		<div id="errors">
+			<ul>
+				<c:forEach items="${errors }" var="error">
+					<li>${error.category } - ${error.message }</li>
+				</c:forEach>
+			</ul>
+		</div>
+	</c:if>
+	<c:if test="${not empty notice}">
+		<div id="notice">
+			<p>${notice }</p>
+		</div>
+	</c:if>
 	<div id="contentWrap">

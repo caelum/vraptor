@@ -19,6 +19,28 @@ body{
 	background-color:#2a2948; 
 	text-align:center;}
 
+/* errors and notice */
+
+#errors {
+	background-color: red;	
+}
+
+#notice {
+	background-color: yellow;
+	text-align: left;
+}
+#notice p {
+	margin: 0 auto;
+	width: 750px;
+}
+#errors li {
+	width: 750px;
+	color: white;
+	text-align: left;
+	list-style: none;
+	margin: 0 auto;
+}
+
 /*language bar*/
 		#langMenu{
 			display:block;

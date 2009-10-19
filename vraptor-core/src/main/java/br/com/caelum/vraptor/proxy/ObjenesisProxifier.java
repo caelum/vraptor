@@ -37,9 +37,9 @@ public class ObjenesisProxifier implements Proxifier {
 
 	private static final List<Method> OBJECT_METHODS = Arrays.asList(Object.class.getDeclaredMethods());
 
-    private static final CallbackFilter IGNORE_BRIDGE_METHODS = new CallbackFilter() {
+    private static final CallbackFilter IGNORE_BRIDGE_AND_OBJECT_METHODS = new CallbackFilter() {
         public int accept(Method method) {
-            return method.isBridge() ? 1 : 0;
+            return method.isBridge() || OBJECT_METHODS.contains(method) ? 1 : 0;
         }
     };
 
@@ -54,7 +54,7 @@ public class ObjenesisProxifier implements Proxifier {
 	private Enhancer enhanceTypeWithCGLib(Class type, final MethodInvocation handler) {
         Enhancer enhancer = new Enhancer();
         enhancer.setSuperclass(type);
-        enhancer.setCallbackFilter(IGNORE_BRIDGE_METHODS);
+        enhancer.setCallbackFilter(IGNORE_BRIDGE_AND_OBJECT_METHODS);
         enhancer.setCallbackTypes(new Class[] {MethodInterceptor.class, NoOp.class});
         return enhancer;
     }
@@ -62,24 +62,16 @@ public class ObjenesisProxifier implements Proxifier {
 	private MethodInterceptor cglibMethodInterceptor(final MethodInvocation handler) {
 		return new MethodInterceptor() {
             public Object intercept(Object proxy, Method method, Object[] args, final MethodProxy methodProxy) {
-            	if (OBJECT_METHODS.contains(method)) {
-            		try {
-						return methodProxy.invokeSuper(proxy, args);
-					} catch (Throwable e) {
-						throw new ProxyInvocationException(e);
-					}
-            	} else {
-					return handler.intercept(proxy, method, args, new SuperMethod() {
-					    public Object invoke(Object proxy, Object[] args) {
-					        try {
-					            return methodProxy.invokeSuper(proxy, args);
-					        } catch (Throwable throwable) {
-					            throw new ProxyInvocationException(throwable);
-					        }
-					    }
-					});
-				}
-            }
+				return handler.intercept(proxy, method, args, new SuperMethod() {
+				    public Object invoke(Object proxy, Object[] args) {
+				        try {
+				            return methodProxy.invokeSuper(proxy, args);
+				        } catch (Throwable throwable) {
+				            throw new ProxyInvocationException(throwable);
+				        }
+				    }
+				});
+			}
         };
 	}
 

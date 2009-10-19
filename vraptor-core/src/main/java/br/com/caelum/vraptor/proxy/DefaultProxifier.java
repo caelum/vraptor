@@ -23,9 +23,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import net.sf.cglib.proxy.Callback;
+import net.sf.cglib.proxy.CallbackFilter;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
+import net.sf.cglib.proxy.NoOp;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,6 +45,12 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
 public class DefaultProxifier implements Proxifier {
 	private static final List<Method> OBJECT_METHODS = Arrays.asList(Object.class.getDeclaredMethods());
     private final Logger logger = LoggerFactory.getLogger(DefaultProxifier.class);
+
+    private static final CallbackFilter IGNORE_BRIDGE_AND_OBJECT_METHODS = new CallbackFilter() {
+        public int accept(Method method) {
+            return method.isBridge() || OBJECT_METHODS.contains(method) ? 1 : 0;
+        }
+    };
 
     /**
      * Create a proxy for the given type using Java Dynamic Proxies if the type is an interface. Otherwise, proxies for
@@ -81,29 +90,27 @@ public class DefaultProxifier implements Proxifier {
     private Enhancer enhanceTypeWithCGLib(Class type, final MethodInvocation handler) {
         Enhancer enhancer = new Enhancer();
         enhancer.setSuperclass(type);
-        enhancer.setCallback(new MethodInterceptor() {
-            public Object intercept(Object proxy, Method method, Object[] args, final MethodProxy methodProxy) {
-            	if (OBJECT_METHODS.contains(method)) {
-            		try {
-            			return methodProxy.invokeSuper(proxy, args);
-            		} catch (Throwable e) {
-            			throw new ProxyInvocationException(e);
-            		}
-            	} else {
-	                return handler.intercept(proxy, method, args, new SuperMethod() {
-	                    public Object invoke(Object proxy, Object[] args) {
-	                        try {
-	                            return methodProxy.invokeSuper(proxy, args);
-	                        } catch (Throwable throwable) {
-	                            throw new ProxyInvocationException(throwable);
-	                        }
-	                    }
-	                });
-            	}
-            }
-        });
+        enhancer.setCallbackFilter(IGNORE_BRIDGE_AND_OBJECT_METHODS);
+        enhancer.setCallbackTypes(new Class[] {MethodInterceptor.class, NoOp.class});
+        enhancer.setCallbacks(new Callback[] {cglibMethodInterceptor(handler), NoOp.INSTANCE });
         return enhancer;
     }
+
+	private MethodInterceptor cglibMethodInterceptor(final MethodInvocation handler) {
+		return new MethodInterceptor() {
+            public Object intercept(Object proxy, Method method, Object[] args, final MethodProxy methodProxy) {
+                return handler.intercept(proxy, method, args, new SuperMethod() {
+                    public Object invoke(Object proxy, Object[] args) {
+                        try {
+                            return methodProxy.invokeSuper(proxy, args);
+                        } catch (Throwable throwable) {
+                            throw new ProxyInvocationException(throwable);
+                        }
+                    }
+                });
+        	}
+        };
+	}
 
     private Object useDefaultConstructor(Enhancer enhancer) {
         return enhancer.create();

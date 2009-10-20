@@ -20,6 +20,7 @@
 * @Path suporta vários valores (String -> String[]) ex @Path({"/client", "/Client"})
 * Result.include agora retorna this para uma interface fluente (result.include(...).include(....))
 * Melhor mensagem de exception quando não encontra o Http method requisitado  
+* File Download suporta outros parametros de header.
 [/list]
 
 [section 3.0.0]

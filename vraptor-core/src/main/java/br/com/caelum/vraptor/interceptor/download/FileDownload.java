@@ -24,8 +24,6 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpServletResponse;
 
-import br.com.caelum.vraptor.VRaptorException;
-
 /**
  * Reads bytes from a file into the result.
  *
@@ -44,7 +42,7 @@ public class FileDownload implements Download {
 			this.inputDownload = new InputStreamDownload(new FileInputStream(file), contentType, fileName, doDownload,
 					file.length());
 		} catch (FileNotFoundException e) {
-			throw new VRaptorException(e);
+			throw new IllegalArgumentException(e);
 		}
 	}
 

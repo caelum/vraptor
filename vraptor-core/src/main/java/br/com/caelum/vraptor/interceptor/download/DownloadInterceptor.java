@@ -21,7 +21,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.HashMap;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -66,7 +65,7 @@ public class DownloadInterceptor implements Interceptor {
 
 			if (result instanceof InputStream) {
 				InputStream input = (InputStream) result;
-				download = new FileDownload(input, 0, null, null, false, new HashMap<String, String>());
+				download = new InputStreamDownload(input, null, null);
 			} else if (result instanceof File) {
 				File file = (File) result;
 				download = new FileDownload(file, null, null);

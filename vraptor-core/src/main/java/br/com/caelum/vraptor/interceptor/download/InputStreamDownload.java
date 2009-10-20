@@ -19,7 +19,7 @@ package br.com.caelum.vraptor.interceptor.download;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
+import java.io.OutputStream;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -27,22 +27,54 @@ import javax.servlet.http.HttpServletResponse;
  * Handles download by reading from a input stream byte by byte.
  *
  * @author filipesabella
+ * @author Paulo Silveira
  *
- * @deprecated You should use FileDownload which has an InputStream construtor.
  */
-@Deprecated
 public class InputStreamDownload implements Download {
-	private final FileDownload download;
+	private final InputStream stream;
+	private final String contentType;
+	private final String fileName;
+	private final boolean doDownload;
+	private final long size;
 
 	public InputStreamDownload(InputStream input, String contentType, String fileName) {
-		download = new FileDownload(input, 0, contentType, fileName, false, new HashMap<String, String>());
+		this(input, contentType, fileName, false, 0);
 	}
 
-	public InputStreamDownload(InputStream input, String contentType, String fileName, boolean doDownload) {
-		download = new FileDownload(input, 0, contentType, fileName, doDownload, new HashMap<String, String>());
+	public InputStreamDownload(InputStream input, String contentType, String fileName, boolean doDownload, long size) {
+		this.stream = input;
+		this.size = size;
+		this.contentType = contentType;
+		this.fileName = fileName;
+		this.doDownload = doDownload;
 	}
 
 	public void write(HttpServletResponse response) throws IOException {
-		download.write(response);
+		writeDetails(response);
+
+		OutputStream out = response.getOutputStream();
+
+		int bufferSize = 1024 * 8;
+		byte[] buffer = new byte[bufferSize];
+		while (true) {
+			int read = stream.read(buffer);
+			if (read < 0)
+				break;
+			out.write(buffer, 0, read);
+		}
+		// TODO: close here? try catch here to do a good finally job?
+
+		stream.close();
 	}
+
+	void writeDetails(HttpServletResponse response) {
+		if (contentType != null) {
+			String header = String.format("%s; filename=%s", doDownload ? "attachment" : "inline", fileName);
+			response.setHeader("Content-disposition", header);
+		}
+		if (size > 0) {
+			response.setHeader("Content-Length", Long.toString(size));
+		}
+	}
+
 }

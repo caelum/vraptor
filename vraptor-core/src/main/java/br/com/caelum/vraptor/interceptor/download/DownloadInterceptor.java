@@ -53,6 +53,7 @@ public class DownloadInterceptor implements Interceptor {
 	}
 
 	public void intercept(InterceptorStack stack, ResourceMethod method, Object instance) throws InterceptionException {
+		// TODO: remove hack
 		if (!accepts(method)) {
 			stack.next(method, instance);
 			return;
@@ -61,8 +62,6 @@ public class DownloadInterceptor implements Interceptor {
 		Object result = info.getResult();
 
 		try {
-			OutputStream output = response.getOutputStream();
-
 			Download download = null;
 
 			if (result instanceof InputStream) {
@@ -75,6 +74,7 @@ public class DownloadInterceptor implements Interceptor {
 				download = (Download) result;
 			}
 
+			OutputStream output = response.getOutputStream();
 			download.write(response);
 
 			output.flush();

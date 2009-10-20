@@ -21,80 +21,34 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletResponse;
+
+import br.com.caelum.vraptor.VRaptorException;
 
 /**
  * Reads bytes from a file into the result.
  *
  * @author filipesabella
+ * @author Paulo Silveira
  */
 public class FileDownload implements Download {
-	private final InputStream stream;
-	private final String contentType;
-	private final String fileName;
-	private final boolean doDownload;
-	private final Map<String, String> headers;
-	private final long size;
+	private final InputStreamDownload inputDownload;
 
-	public FileDownload(File file, String contentType, String fileName) throws FileNotFoundException {
+	public FileDownload(File file, String contentType, String fileName) {
 		this(file, contentType, fileName, false);
 	}
 
-	public FileDownload(File file, String contentType, String fileName, boolean doDownload)
-			throws FileNotFoundException {
-		this(file, contentType, fileName, false, new HashMap<String, String>());
-	}
-
-	public FileDownload(File file, String contentType, String fileName, boolean doDownload, Map<String, String> headers)
-			throws FileNotFoundException {
-		this(new FileInputStream(file), file.length(), contentType, fileName, false, new HashMap<String, String>());
-	}
-
-	public FileDownload(InputStream stream, long size, String contentType, String fileName, boolean doDownload,
-			HashMap<String, String> headers) {
-
-		this.stream = stream;
-		this.size = size;
-		this.contentType = contentType;
-		this.fileName = fileName;
-		this.doDownload = doDownload;
-		this.headers = headers;
+	public FileDownload(File file, String contentType, String fileName, boolean doDownload) {
+		try {
+			this.inputDownload = new InputStreamDownload(new FileInputStream(file), contentType, fileName, doDownload,
+					file.length());
+		} catch (FileNotFoundException e) {
+			throw new VRaptorException(e);
+		}
 	}
 
 	public void write(HttpServletResponse response) throws IOException {
-		writeDetails(response);
-
-		OutputStream out = response.getOutputStream();
-
-		int bufferSize = 1024 * 8;
-		byte[] buffer = new byte[bufferSize];
-		while (true) {
-			int read = stream.read(buffer);
-			if (read < 0)
-				break;
-			out.write(buffer, 0, read);
-		}
-		// TODO: close here? try catch here to do a good finally job?
-
-		stream.close();
-	}
-
-	void writeDetails(HttpServletResponse response) {
-		if (contentType != null) {
-			String header = String.format("%s; filename=%s", doDownload ? "attachment" : "inline", fileName);
-			response.setHeader("Content-disposition", header);
-		}
-		if (!headers.containsKey("Content-Length") && size != 0) {
-			headers.put("Content-Length", Long.toString(size));
-		}
-		for (Entry<String, String> e : headers.entrySet()) {
-			headers.put(e.getKey(), e.getValue());
-		}
+		inputDownload.write(response);
 	}
 }

@@ -5,9 +5,22 @@
 <hr/>
 
 <table>
-<c:forEach var="dvd" items="${userInfo.user.dvds}">
-	<tr><td>${dvd.title}</td><td>${dvd.description}</td><td><fmt:message key="${dvd.type}"/></td></tr>
-</c:forEach>
+	<thead>
+		<tr>
+			<td>Title</td>
+			<td>Description</td>
+			<td>Type</td>
+		</tr>
+	</thead>
+	<tbody>
+		<c:forEach var="dvd" items="${userInfo.user.dvds}">
+			<tr>
+				<td>${dvd.title}</td>
+				<td>${dvd.description}</td>
+				<td><fmt:message key="${dvd.type}"/></td>
+			</tr>
+		</c:forEach>
+	</tbody>
 </table>
 </div>
 

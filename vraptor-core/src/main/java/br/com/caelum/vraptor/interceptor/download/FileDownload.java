@@ -19,7 +19,9 @@ package br.com.caelum.vraptor.interceptor.download;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.channels.Channels;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,22 +35,30 @@ import javax.servlet.http.HttpServletResponse;
  * @author filipesabella
  */
 public class FileDownload implements Download {
-	private final File file;
+	private final InputStream stream;
 	private final String contentType;
 	private final String fileName;
 	private final boolean doDownload;
 	private final Map<String, String> headers;
+	private final long size;
 
-	public FileDownload(File file, String contentType, String fileName) {
+	public FileDownload(File file, String contentType, String fileName) throws FileNotFoundException {
 		this(file, contentType, fileName, false);
 	}
 
-	public FileDownload(File file, String contentType, String fileName, boolean doDownload) {
+	public FileDownload(File file, String contentType, String fileName, boolean doDownload) throws FileNotFoundException {
 		this(file, contentType, fileName, false, new HashMap<String, String>());
 	}
 
-	public FileDownload(File file, String contentType, String fileName, boolean doDownload, Map<String, String> headers) {
-		this.file = file;
+	public FileDownload(File file, String contentType, String fileName, boolean doDownload, Map<String, String> headers) throws FileNotFoundException {
+		this(new FileInputStream(file), file.length(), contentType, fileName, false, new HashMap<String, String>());
+	}
+
+	public FileDownload(FileInputStream stream, long size, String contentType, String fileName, boolean doDownload,
+			HashMap<String, String> headers) {
+
+		this.stream = stream;
+		this.size = size;
 		this.contentType = contentType;
 		this.fileName = fileName;
 		this.doDownload = doDownload;
@@ -58,7 +68,7 @@ public class FileDownload implements Download {
 	public void write(HttpServletResponse response) throws IOException {
 		writeDetails(response);
 		// too much memory may be used!
-		new FileInputStream(file).getChannel().transferTo(0, file.length(),
+		stream.getChannel().transferTo(0, size,
 				Channels.newChannel(response.getOutputStream()));
 	}
 
@@ -67,8 +77,8 @@ public class FileDownload implements Download {
 			String header = String.format("%s; filename=%s", doDownload ? "attachment" : "inline", fileName);
 			response.setHeader("Content-disposition", header);
 		}
-		if (!headers.containsKey("Content-Length")) {
-			headers.put("Content-Length", Long.toString(file.length()));
+		if (!headers.containsKey("Content-Length") && size != 0) {
+			headers.put("Content-Length", Long.toString(size));
 		}
 		for (Entry<String, String> e : headers.entrySet()) {
 			headers.put(e.getKey(), e.getValue());

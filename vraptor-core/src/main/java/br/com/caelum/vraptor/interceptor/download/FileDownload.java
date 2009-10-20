@@ -22,7 +22,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.channels.Channels;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -46,15 +46,17 @@ public class FileDownload implements Download {
 		this(file, contentType, fileName, false);
 	}
 
-	public FileDownload(File file, String contentType, String fileName, boolean doDownload) throws FileNotFoundException {
+	public FileDownload(File file, String contentType, String fileName, boolean doDownload)
+			throws FileNotFoundException {
 		this(file, contentType, fileName, false, new HashMap<String, String>());
 	}
 
-	public FileDownload(File file, String contentType, String fileName, boolean doDownload, Map<String, String> headers) throws FileNotFoundException {
+	public FileDownload(File file, String contentType, String fileName, boolean doDownload, Map<String, String> headers)
+			throws FileNotFoundException {
 		this(new FileInputStream(file), file.length(), contentType, fileName, false, new HashMap<String, String>());
 	}
 
-	public FileDownload(FileInputStream stream, long size, String contentType, String fileName, boolean doDownload,
+	public FileDownload(InputStream stream, long size, String contentType, String fileName, boolean doDownload,
 			HashMap<String, String> headers) {
 
 		this.stream = stream;
@@ -67,9 +69,20 @@ public class FileDownload implements Download {
 
 	public void write(HttpServletResponse response) throws IOException {
 		writeDetails(response);
-		// too much memory may be used!
-		stream.getChannel().transferTo(0, size,
-				Channels.newChannel(response.getOutputStream()));
+
+		OutputStream out = response.getOutputStream();
+
+		int bufferSize = 1024 * 8;
+		byte[] buffer = new byte[bufferSize];
+		while (true) {
+			int read = stream.read(buffer);
+			if (read < 0)
+				break;
+			out.write(buffer, 0, read);
+		}
+		// TODO: close here? try catch here to do a good finally job?
+
+		stream.close();
 	}
 
 	void writeDetails(HttpServletResponse response) {

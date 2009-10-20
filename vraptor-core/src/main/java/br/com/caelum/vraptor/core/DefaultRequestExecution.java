@@ -48,9 +48,9 @@ public class DefaultRequestExecution implements RequestExecution {
 
     public void execute() throws InterceptionException {
         interceptorStack.add(ResourceLookupInterceptor.class);
+        interceptorStack.add(FlashInterceptor.class);
         interceptorStack.add(InterceptorListPriorToExecutionExtractor.class);
         interceptorStack.add(MultipartInterceptor.class);
-        interceptorStack.add(FlashInterceptor.class);
         interceptorStack.add(instantiator);
         interceptorStack.add(ParametersInstantiatorInterceptor.class);
         interceptorStack.add(ExecuteMethodInterceptor.class);

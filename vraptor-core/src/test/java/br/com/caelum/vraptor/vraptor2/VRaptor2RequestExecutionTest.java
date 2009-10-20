@@ -27,6 +27,7 @@ import org.junit.Test;
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
+import br.com.caelum.vraptor.interceptor.FlashInterceptor;
 import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
 import br.com.caelum.vraptor.interceptor.InterceptorListPriorToExecutionExtractor;
 import br.com.caelum.vraptor.interceptor.OutjectResult;
@@ -65,6 +66,8 @@ public class VRaptor2RequestExecutionTest {
         mockery.checking(new Expectations() {
             {
                 one(stack).add(ResourceLookupInterceptor.class);
+                inSequence(sequence);
+                one(stack).add(FlashInterceptor.class);
                 inSequence(sequence);
                 one(stack).add(InterceptorListPriorToExecutionExtractor.class);
                 inSequence(sequence);

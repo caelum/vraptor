@@ -20,6 +20,7 @@ import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.RequestExecution;
 import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
+import br.com.caelum.vraptor.interceptor.FlashInterceptor;
 import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
 import br.com.caelum.vraptor.interceptor.InterceptorListPriorToExecutionExtractor;
 import br.com.caelum.vraptor.interceptor.OutjectResult;
@@ -47,6 +48,7 @@ public class VRaptor2RequestExecution implements RequestExecution {
 
     public void execute() throws InterceptionException {
         interceptorStack.add(ResourceLookupInterceptor.class);
+        interceptorStack.add(FlashInterceptor.class);
         interceptorStack.add(InterceptorListPriorToExecutionExtractor.class);
         interceptorStack.add(DownloadInterceptor.class);
         interceptorStack.add(MultipartInterceptor.class);

@@ -7,7 +7,7 @@ input, label, select {
 }
 fieldset {
 	width: 300px;
-	margin: 0 auto;
+	margin: 15px auto 0;
 	border:1px solid #a29bc0;
 	padding: 10px;
 }
@@ -19,6 +19,33 @@ body{
 	background-color:#2a2948; 
 	text-align:center;}
 
+h1 {
+	width: 800px;
+	margin: 0 auto 20px;
+	text-align: left;
+	border-bottom: 1px black solid;
+}
+
+table {
+	width: 800px;
+	margin: 0 auto;
+	text-align: left;
+	border: 1px white solid;	
+}
+
+table thead {
+	background-color: #2a2948;
+	color: white;
+	font-weight: bold;
+}
+
+table thead td {
+	padding-left: 10px;	
+}
+
+table tbody tr.even {
+	background-color: #a29bc0;
+}
 /* errors and notice */
 
 #errors {
@@ -179,6 +206,7 @@ body{
 			background-position:-6px 0px;
 			background-repeat:no-repeat;
 			position:absolute;
+			border:none;
 			left:0px;
 			top:0px;}
 			

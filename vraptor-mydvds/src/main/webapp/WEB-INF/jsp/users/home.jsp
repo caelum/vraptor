@@ -11,8 +11,8 @@
 		</tr>
 	</thead>
 	<tbody>
-		<c:forEach var="dvd" items="${userInfo.user.dvds}">
-			<tr>
+		<c:forEach var="dvd" items="${userInfo.user.dvds}" varStatus="s">
+			<tr class="${s.count % 2 == 0? 'even': 'odd' }">
 				<td>${dvd.title}</td>
 				<td>${dvd.description}</td>
 				<td><fmt:message key="${dvd.type}"/></td>

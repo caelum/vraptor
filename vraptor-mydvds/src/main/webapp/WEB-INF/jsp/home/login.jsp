@@ -1,8 +1,6 @@
 
 <%@ include file="../../../header.jsp" %> 
 
-<div class="blue-box">
-
 <form action="<c:url value="/home/login"/>" name="loginForm" method="post">
 	<fieldset>
 		<legend>Sign In</legend>
@@ -13,11 +11,6 @@
 		<button type="submit"><fmt:message key="send"/></button>
 	</fieldset>
 </form>
-</div>
-
-<br/><br/>
-
-<div class="blue-box">
 
 <form action="<c:url value="/users" />" name="registerForm" method="post">
 	<fieldset>
@@ -31,6 +24,5 @@
 		<button type="submit"><fmt:message key="send"/></button>
 	</fieldset>
 </form>
-</div>
 
 <%@ include file="../../../footer.jsp" %> 

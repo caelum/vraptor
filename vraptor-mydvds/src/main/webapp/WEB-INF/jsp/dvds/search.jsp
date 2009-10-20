@@ -1,6 +1,5 @@
 <%@ include file="/header.jsp" %> 
 
-<div class="blue-box">
 <h1><fmt:message key="search_results"/></h1>
 <hr/>
 
@@ -23,6 +22,5 @@
 </tr>
 </c:forEach>
 </table>
-</div>
 
 <%@ include file="/footer.jsp" %> 

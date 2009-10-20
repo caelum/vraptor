@@ -1,8 +1,6 @@
 <%@ include file="/header.jsp" %> 
 
-<div class="blue-box">
 <h1>${userInfo.user.name}: <fmt:message key="your_dvds"/></h1>
-<hr/>
 
 <table>
 	<thead>
@@ -22,11 +20,7 @@
 		</c:forEach>
 	</tbody>
 </table>
-</div>
 
-<br/><br/>
-
-<div class="blue-box">
 <form action="<c:url value="/dvds"/>" enctype="multipart/form-data" name="dvdRegister" method="post">
 	<fieldset>
 		<legend><fmt:message key="new_dvd"/></legend>
@@ -45,6 +39,5 @@
 		<button type="submit"><fmt:message key="send"/></button>
 	</fieldset>
 </form>
-</div>
 
 <%@ include file="/footer.jsp" %> 

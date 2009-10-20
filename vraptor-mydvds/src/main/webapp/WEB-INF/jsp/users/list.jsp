@@ -1,8 +1,6 @@
 <%@ include file="/header.jsp" %> 
 
-<div class="blue-box">
 <h1><fmt:message key="list_users"/></h1>
-<hr/>
 <table>
 <c:forEach var="user" items="${users}">
 	<tr>
@@ -11,6 +9,5 @@
 	</tr>
 </c:forEach>
 </table>
-</div>
 
 <%@ include file="/footer.jsp" %> 

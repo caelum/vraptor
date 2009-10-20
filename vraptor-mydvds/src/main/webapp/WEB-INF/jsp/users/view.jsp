@@ -1,7 +1,5 @@
 <%@ include file="/header.jsp" %> 
-<div class="blue-box">
 <h1>${user.name}</h1>
-<hr/>
 <table>
 <c:forEach var="dvd" items="${user.dvds}">
 	<tr>
@@ -17,5 +15,4 @@
     </tr>
 </c:forEach>
 </table>
-</div>
 <%@ include file="/footer.jsp" %>

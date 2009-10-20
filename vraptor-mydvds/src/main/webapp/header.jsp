@@ -34,18 +34,22 @@
     <c:set var="path"><c:url value="/"/></c:set>
     <c:if test="${not empty userInfo.user}">
 	    <div id="userInfo">
-	    	<p>${userInfo.user.name }</p>
+	    	<p>${userInfo.user.name } - <a href="${path }home/logout">Logout</a></p>
 	    </div>
     </c:if>
     <div id="menuWrap">
-    	<ul id="menuElementsEn">
-        	<li><a href="${path }"><span>home</span></a></li>
-        	<li><a href="${path }professores/form"><span>Adiciona professor</span></a></li>
-		    <c:if test="${not empty userInfo.user}">
-		    	<li><a href="<c:url value="/users"/>"><fmt:message key="list_users"/></a></li>
-		    	<li><a href="${path }home/logout">Logout</a></li>
-		    </c:if>
-        </ul><!-- menuElements-->
+    	<form class="busca" action="${path }dvds/search" method="get">
+	    	<ul id="menuElementsEn">
+	        	<li><a href="${path }"><span>home</span></a></li>
+			    <c:if test="${not empty userInfo.user}">
+			    	<li><a href="<c:url value="/users"/>"><fmt:message key="list_users"/></a></li>
+			    	<li><input type="text" name="dvd.title" value="<fmt:message key="search.dvd"/>" 
+			    			onfocus="this.value='';" 
+		        			onblur="if (this.value == '') this.value='<fmt:message key="search.dvd"/>';"/>
+		        		<button type="submit"><fmt:message key="search"/></button></li>
+			    </c:if>
+	        </ul><!-- menuElements-->
+	    </form>
     </div><!-- menuWrap-->
 	<c:if test="${not empty errors}">
 		<div id="errors">

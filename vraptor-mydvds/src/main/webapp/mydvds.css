@@ -1,6 +1,6 @@
 @charset "UTF-8";
 /* CSS Document */
-input, label {
+input, label, select {
 	display: block;
 	text-align: left;
 	width: 27em;
@@ -44,6 +44,13 @@ body{
 #userInfo p {
 	text-align: right;
 	color: white;
+	padding: 3px;
+}
+#userInfo a {
+	color: white;	
+}
+#userInfo a:hover {
+	color: lightblue;	
 }
 /*language bar*/
 		#langMenu{
@@ -90,6 +97,7 @@ body{
 	-moz-border-radius: 5px;
 }
 #menuWrap input {
+	width: 15em;
 	color: #ababab;
 }
 #menuWrap input:focus {

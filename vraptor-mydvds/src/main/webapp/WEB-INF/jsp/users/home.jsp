@@ -6,7 +6,7 @@
 
 <table>
 <c:forEach var="dvd" items="${userInfo.user.dvds}">
-	<label>${dvd.title}</td><td>${dvd.description}</td><td><fmt:message key="${dvd.type}"/></td></tr>
+	<tr><td>${dvd.title}</td><td>${dvd.description}</td><td><fmt:message key="${dvd.type}"/></td></tr>
 </c:forEach>
 </table>
 </div>
@@ -30,19 +30,6 @@
 			</c:forEach>
 		</select>
 		<button type="submit"><fmt:message key="send"/></button>
-	</fieldset>
-</form>
-</div>
-
-<br/><br/>
-
-<div class="blue-box">
-<form action="<c:url value="/dvds/search"/>">
-	<fieldset>
-		<legend><fmt:message key="search_dvds"/></legend>
-		<label for="dvd.title"><fmt:message key="dvd.title"/></label>
-		<input type="text" name="dvd.title" id="dvd.title" value="${dvd.title }"/>
-		<button type="submit"><fmt:message key="search"/></button>		
 	</fieldset>
 </form>
 </div>

@@ -75,7 +75,7 @@ public class AuthorizationInterceptor implements Interceptor {
     	validator.checking(new Validations() {{
     		that(info.getUser() != null, "user", "user.is.not.logged.in");
     	}});
-    	validator.onErrorUse(logic()).redirectTo(HomeController.class).index();
+    	validator.onErrorUse(logic()).redirectTo(HomeController.class).login();
 
     	dao.refresh(info.getUser());
     	// continues execution

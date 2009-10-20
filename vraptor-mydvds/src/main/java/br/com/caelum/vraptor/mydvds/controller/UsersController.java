@@ -66,7 +66,7 @@ public class UsersController {
 	 *
 	 * Shows user's home page containing his Dvd collection.
 	 */
-	@Path("/home")
+	@Path("/")
 	@Get
 	public void home() {
 	    dao.refresh(userInfo.getUser());
@@ -124,13 +124,13 @@ public class UsersController {
 		}});
 
 		// redirects to the index page if any validation errors occur.
-		validator.onErrorUse(Results.page()).of(HomeController.class).index();
+		validator.onErrorUse(Results.page()).of(HomeController.class).login();
 		this.dao.add(user);
 
 		// you can add objects to result even in redirects. Added objects will
 		// survive one more request when redirecting.
 		result.include("notice", "User " + user.getName() + " successfully added");
-		result.use(Results.logic()).redirectTo(HomeController.class).index();
+		result.use(Results.logic()).redirectTo(HomeController.class).login();
 	}
 
 	/**

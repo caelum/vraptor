@@ -23,6 +23,9 @@
 * Solving issue 117: exposing null when null returned (was exposing "ok")
 * Solving issue 109: if you have a file %%/path/index.jsp%%, you can access it now through
 	%%/path/%%, unless you have a controller that handles this URI.
+* When there is a route that can handle the request URI, but doesn't allow the requested HTTP method,
+  VRaptor will send a 405 -> Method Not Allowed HTTP status code, instead of 404.
+* A big refactoring on Routes internal API.
 [/list]
 
 [section 3.0.0]

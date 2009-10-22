@@ -24,6 +24,9 @@
 * Bug 117 resolvido: expondo null quando retorna null (anter era "ok")
 * Bug 109 resolvido: se você tem um arquivo %%/caminho/index.jsp%%, você consegue acessá-lo agora via
 	%%/caminho/%%, a menos que exista algum controller que trata essa URI
+* Quando existe uma rota que consegue tratar a URI da requisição, mas que não aceita o HTTP method da requisição,
+  o VRaptor vai retornar um HTTP status code 405 -> Method Not Allowed, ao invés do 404.
+* Uma grande refatoração na API interna de rotas
 [/list]
 
 [section 3.0.0]

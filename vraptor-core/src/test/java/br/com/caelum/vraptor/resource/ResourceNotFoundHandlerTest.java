@@ -16,6 +16,8 @@
  */
 package br.com.caelum.vraptor.resource;
 
+import javax.servlet.FilterChain;
+
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Before;
@@ -32,21 +34,23 @@ public class ResourceNotFoundHandlerTest {
     private MutableRequest webRequest;
     private MutableResponse webResponse;
     private RequestInfo request;
+	private FilterChain chain;
 
     @Before
 	public void setUp() {
 		this.mockery = new Mockery();
         this.webRequest = mockery.mock(MutableRequest.class);
         this.webResponse = mockery.mock(MutableResponse.class);
-        this.request = new RequestInfo(null, webRequest, webResponse);
+        this.chain = mockery.mock(FilterChain.class);
+        this.request = new RequestInfo(null, chain, webRequest, webResponse);
 		this.notFoundHandler = new DefaultResourceNotFoundHandler();
 	}
 
 	@Test
-	public void couldntFindWritesResourceNotFoundOnTheResponse() throws Exception {
+	public void couldntFindDefersRequestToContainer() throws Exception {
         mockery.checking(new Expectations() {
             {
-                one(webResponse).sendError(404);
+                one(chain).doFilter(webRequest, webResponse);
             }
         });
 		notFoundHandler.couldntFind(request);

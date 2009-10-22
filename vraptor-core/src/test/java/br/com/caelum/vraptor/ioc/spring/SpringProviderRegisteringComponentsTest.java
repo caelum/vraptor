@@ -53,7 +53,7 @@ public class SpringProviderRegisteringComponentsTest extends GenericContainerTes
 				HttpServletRequestMock httpRequest = new HttpServletRequestMock(session);
 				MutableResponse response = mockery.mock(MutableResponse.class, "response" + counter);
 
-				RequestInfo request = new RequestInfo(context, httpRequest, response);
+				RequestInfo request = new RequestInfo(context, null, httpRequest, response);
 				VRaptorRequestHolder.setRequestForCurrentThread(request);
 
 				RequestContextListener contextListener = new RequestContextListener();

@@ -84,7 +84,7 @@ public class VRaptor implements Filter {
         VRaptorRequest mutableRequest = new VRaptorRequest(baseRequest);
         VRaptorResponse mutableResponse = new VRaptorResponse(baseResponse);
 
-        final RequestInfo request = new RequestInfo(servletContext, mutableRequest, mutableResponse);
+        final RequestInfo request = new RequestInfo(servletContext, chain, mutableRequest, mutableResponse);
         provider.provideForRequest(request, new Execution<Object>() {
             public Object insideRequest(Container container) {
             	container.instanceFor(EncodingHandler.class).setEncoding(baseRequest, baseResponse);

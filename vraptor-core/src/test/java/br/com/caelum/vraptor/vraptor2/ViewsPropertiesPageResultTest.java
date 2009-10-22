@@ -19,6 +19,7 @@ package br.com.caelum.vraptor.vraptor2;
 import java.io.IOException;
 import java.util.HashMap;
 
+import javax.servlet.FilterChain;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -83,7 +84,8 @@ public class ViewsPropertiesPageResultTest {
                 allowing(info).getResult(); will(returnValue("ok"));
             }
         });
-        this.webRequest = new RequestInfo(context, request, response);
+        FilterChain chain = mockery.mock(FilterChain.class);
+		this.webRequest = new RequestInfo(context, chain, request, response);
         DefaultPageResult delegate = new DefaultPageResult(request, response, info, resolver, null, null);
         this.result = new ViewsPropertiesPageResult(this.config, this.resolver, this.info, this.webRequest, info, null, delegate);
     }

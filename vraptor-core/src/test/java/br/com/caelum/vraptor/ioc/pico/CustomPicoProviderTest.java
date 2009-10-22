@@ -140,7 +140,7 @@ public class CustomPicoProviderTest extends GenericContainerTest {
             }
         });
         MutableResponse response = mockery.mock(MutableResponse.class, "response" + counter);
-        RequestInfo webRequest = new RequestInfo(context, request, response);
+        RequestInfo webRequest = new RequestInfo(context, null, request, response);
         return execution.execute(webRequest, counter);
     }
 

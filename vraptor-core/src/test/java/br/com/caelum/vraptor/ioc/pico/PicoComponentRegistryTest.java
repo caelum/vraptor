@@ -61,7 +61,7 @@ public class PicoComponentRegistryTest {
                 allowing(session).setAttribute(with(any(String.class)), with(any(String.class))); will(returnValue(null));
             }
         });
-        this.webRequest = new RequestInfo(null, request, mockery.mock(MutableResponse.class));
+        this.webRequest = new RequestInfo(null, null, request, mockery.mock(MutableResponse.class));
         this.provider = new PicoComponentRegistry(container, new DefaultComponentFactoryRegistry());
         this.provider.init();
     }

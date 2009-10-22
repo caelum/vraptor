@@ -26,6 +26,7 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import javax.servlet.FilterChain;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 
@@ -92,7 +93,8 @@ public class SpringBasedContainerTest {
         request = new HttpServletRequestMock(session);
         response = mockery.mock(MutableResponse.class);
 
-        VRaptorRequestHolder.setRequestForCurrentThread(new RequestInfo(servletContext, request, response));
+        FilterChain chain = mockery.mock(FilterChain.class);
+		VRaptorRequestHolder.setRequestForCurrentThread(new RequestInfo(servletContext, chain, request, response));
         RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
         container = new SpringBasedContainer(null, "br.com.caelum.vraptor.ioc.spring");
         container.start(servletContext);

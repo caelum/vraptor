@@ -50,7 +50,7 @@ public class ResourceLookupInterceptorTest {
         this.translator = mockery.mock(UrlToResourceTranslator.class);
         this.webRequest = mockery.mock(MutableRequest.class);
         this.webResponse = mockery.mock(MutableResponse.class);
-        this.request = new RequestInfo(null, webRequest, webResponse);
+        this.request = new RequestInfo(null, null, webRequest, webResponse);
         this.requestInfo = mockery.mock(MethodInfo.class);
         this.notFoundHandler = mockery.mock(ResourceNotFoundHandler.class);
         this.lookup = new ResourceLookupInterceptor(translator, requestInfo, notFoundHandler, request);

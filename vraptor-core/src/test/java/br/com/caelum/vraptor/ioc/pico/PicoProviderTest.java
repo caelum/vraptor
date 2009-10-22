@@ -56,7 +56,7 @@ public class PicoProviderTest extends GenericContainerTest {
         HttpServletRequestMock request = new HttpServletRequestMock(session);
         MutableResponse response = mockery.mock(MutableResponse.class, "response" + counter);
         configureExpectations(request);
-        RequestInfo webRequest = new RequestInfo(context, request, response);
+        RequestInfo webRequest = new RequestInfo(context, null, request, response);
         return execution.execute(webRequest, counter);
     }
 

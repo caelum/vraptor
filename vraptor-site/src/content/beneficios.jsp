@@ -55,7 +55,7 @@
             
             <div class="depoimentoClientes">
             	<p>Pouco depois de entrar na equipe de Produtos de Telecomunicações da Locaweb, começamos a discutir novas ferramentas para o desenvolvimento de um pacote de novas funcionalidades para o Painel de Administração do PABX Virtual. Sugeri que usássemos o VRaptor, porém o nosso time pediu uma apresentação do framework classificado como "fantástico" por mim. Saí do escritório no final da tarde e na manhã seguinte já tinha uma apresentação capaz de empolgar os nossos desenvolvedores. Tudo sem muito esforço ou trauma, porque contei com a ajuda da documentação do site, do projeto exemplo e da apostila do curso FJ-28 da Caelum. Desde então, estamos felizes por poder testar facilmente as nossas lógicas e por escrever menos código de configuração. A cada lógica que migramos para o VRaptor, aumentamos a elegância e a simplicidade do nosso projeto. E estamos adorando isto.</p>
-            	<em>Adolfo Sousa, líder de desenvolvimento da Locaweb Telecom - <a href="http://www.localweb.com.br" target="_blank">www.localweb.com.br</a><a href="http://www.localweb.com.br" target="_blank"><img src="images/localweb-trans.png" border="0"/></a></em>                
+            	<em>Adolfo Sousa, Líder de desenvolvimento da Locaweb Telecom - <a href="http://www.localweb.com.br" target="_blank">www.localweb.com.br</a><a href="http://www.localweb.com.br" target="_blank"><img src="images/localweb-trans.png" border="0"/></a></em>                
             </div>
             
             <div class="depoimentoClientes">            	
@@ -79,6 +79,10 @@
             <div class="depoimentoClientes">
             	<p>Utilizo e recomendo VRaptor em todos os aplicativos web criados em Java nos quais trabalho. Mesmo os envolvidos não conhecendo a tecnologia, o aprendizado é muito rápido e o ganho em produtividade fica indiscutível.</p>
             	<em>Diego Carrion, Lider de Desenvolvimento da GoNow</em>                
+            </div>
+            <div class="depoimentoClientes">
+            	<p>Em 2008 iniciamos o projeto de renovação do portal da Prefeitura Municipal de Uberaba (<a href="http://www.uberaba.mg.gov.br">http://www.uberaba.mg.gov.br</a>), depois de várias análises de frameworks escolhemos o VRaptor por sua simplicidade, produtividade e por sua menor curva de aprendizado. Atualmente o portal está funcionando perfeitamente, sendo a referência para o desenvolvimento de nossos novos projetos.</p>
+            	<em>Alberto Henrique Sousa, Líder de desenvolvimento de soluções para Internet da CODIUB - Companhia de Desenvolvimento de Informática de Uberaba</em>                
             </div>
             <br />
             <div class="download">

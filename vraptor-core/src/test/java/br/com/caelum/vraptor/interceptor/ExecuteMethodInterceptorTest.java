@@ -67,7 +67,7 @@ public class ExecuteMethodInterceptorTest {
 				one(info).getParameters();
 				will(returnValue(new Object[] {}));
 				one(stack).next(method, auau);
-				one(info).setResult(null);
+				one(info).setResult("ok");
 				allowing(validator);
 			}
 		});
@@ -109,7 +109,7 @@ public class ExecuteMethodInterceptorTest {
 				one(info).getParameters();
 				will(returnValue(new Object[] { 3 }));
 				one(stack).next(method, auau);
-				one(info).setResult(null);
+				one(info).setResult("ok");
 				allowing(validator);
 			}
 		});
@@ -120,6 +120,10 @@ public class ExecuteMethodInterceptorTest {
 	public static class XController {
 		public Object method(Object o) {
 			return o;
+		}
+
+		public void method() {
+
 		}
 	}
 
@@ -135,6 +139,43 @@ public class ExecuteMethodInterceptorTest {
 				will(returnValue(new Object[] { "string" }));
 				one(stack).next(method, x);
 				one(info).setResult("string");
+				allowing(validator);
+			}
+		});
+		interceptor.intercept(stack, method, x);
+		mockery.assertIsSatisfied();
+	}
+
+	@Test
+	public void shouldSetNullWhenNullReturnedFromInvokedMethod() throws SecurityException, NoSuchMethodException,
+			InterceptionException, IOException {
+		final ResourceMethod method = new DefaultResourceMethod(null, XController.class.getMethod("method",
+				Object.class));
+		final XController x = new XController();
+		mockery.checking(new Expectations() {
+			{
+				one(info).getParameters();
+				will(returnValue(new Object[] { null }));
+				one(stack).next(method, x);
+				one(info).setResult(null);
+				allowing(validator);
+			}
+		});
+		interceptor.intercept(stack, method, x);
+		mockery.assertIsSatisfied();
+	}
+
+	@Test
+	public void shouldSetOkWhenVoidReturnedFromInvokedMethod() throws SecurityException, NoSuchMethodException,
+			InterceptionException, IOException {
+		final ResourceMethod method = new DefaultResourceMethod(null, XController.class.getMethod("method"));
+		final XController x = new XController();
+		mockery.checking(new Expectations() {
+			{
+				one(info).getParameters();
+				will(returnValue(new Object[] {}));
+				one(stack).next(method, x);
+				one(info).setResult("ok");
 				allowing(validator);
 			}
 		});

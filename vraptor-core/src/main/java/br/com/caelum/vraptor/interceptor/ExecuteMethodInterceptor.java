@@ -49,7 +49,7 @@ public class ExecuteMethodInterceptor implements Interceptor {
 			Object[] parameters = this.info.getParameters();
 			Object result = reflectionMethod.invoke(resourceInstance, parameters);
 			if (validator.hasErrors()) { // method should have thrown
-											// ValidationError
+				// ValidationError
 				throw new InterceptionException(
 						"There are validation errors and you forgot to specify where to go. Please add in your method "
 								+ "something like:\n"
@@ -57,7 +57,11 @@ public class ExecuteMethodInterceptor implements Interceptor {
 								+ "or any view that you like.");
 			}
 
-			this.info.setResult(result);
+			if (reflectionMethod.getReturnType().equals(Void.TYPE)) {
+				this.info.setResult("ok");
+			} else {
+				this.info.setResult(result);
+			}
 			stack.next(method, resourceInstance);
 		} catch (IllegalArgumentException e) {
 			throw new InterceptionException(e);

@@ -160,6 +160,18 @@ e quer retornar para a listagem dos clientes, por&eacute;m, n&atilde;o quer perm
 reenvie toda a requisi&ccedil;&atilde;o, acarretando em dados duplicados.</span>
 	    	<span class="paragraph">No caso do forward, um exemplo de uso &eacute; quando voc&ecirc; possui uma valida&ccedil;&atilde;o e essa valida&ccedil;&atilde;o falhou, geralmente
 voc&ecirc; quer que o usu&aacute;rio continue na mesma tela do formul&aacute;rio com os dados da requisi&ccedil;&atilde;o preenchidos.</span>
+	    	<div class="box"><h3>Escopo Flash autom&aacute;tico</h3>
+<span class="paragraph">Se voc&ecirc; adicionar objetos no Result e fizer um Redirect, esses objetos estar&atilde;o dispon&iacute;veis na
+pr&oacute;xima requisi&ccedil;&atilde;o.</span><div class="java"><code class="java">
+<span class="java4">public </span><span class="java9">void </span><span class="java10">adiciona</span><span class="java8">(</span><span class="java10">Cliente cliente</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java10">dao.adiciona</span><span class="java8">(</span><span class="java10">cliente</span><span class="java8">)</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; result.include</span><span class="java8">(</span><span class="java5">&#34;mensagem&#34;</span><span class="java10">, </span><span class="java5">&#34;Cliente adicionado com sucesso&#34;</span><span class="java8">)</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; result.use</span><span class="java8">(</span><span class="java10">logic</span><span class="java8">())</span><span class="java10">.redirectTo</span><span class="java8">(</span><span class="java10">ClientesController.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">.lista</span><span class="java8">()</span><span class="java10">;<br />
+</span><span class="java8">}</span></code></div><span class="paragraph">lista.jsp:</span><div class="xml"><code class="xml">...<br />
+<span class="textag">&lt;div</span>&nbsp;<span class="texattrib">id=</span><span class="texvalue">"mensagem"</span><span class="textag">&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;h3&gt;</span><span class="texnormal">${mensagem}</span><span class="textag">&lt;/h3&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal"></span><span class="textag">&lt;/div&gt;</span><br />
+...</code></div></div>
 		
 
 <h3 class="section">Accepts e o parâmetro _format</h3>

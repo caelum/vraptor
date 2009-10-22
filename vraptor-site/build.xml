@@ -28,84 +28,77 @@
 		<xsite sourceDirectoryPath="${basedir}/src/site" sitemapPath="src/content/sitemap.xml" skinPath="src/templates/skin.html" resourcePaths="src/resources" outputDirectoryPath="${basedir}/target/site" />
 	</target>
 	
+	<macrodef name="tubaina">
+		<attribute name="src"/>
+		<attribute name="dest"/>
+		<attribute name="name"/>
+		<attribute name="title"/>
+		<sequential>
+			<exec executable="rm">
+				<arg line="-rf @{dest}/@{name}"/>
+			</exec>
+			<delete file="src/templates/html/chapter-title.ftl" />
+			<copy file="src/templates/html/@{title}" tofile="src/templates/html/chapter-title.ftl"/>
+			<exec executable="bash">
+				<arg line="tubaina" />
+				<arg line="-htmlflat" />
+				<arg line="-i @{src}" />
+				<arg line="-o @{dest}" />
+				<arg line="-n @{name}" />
+				<arg line="-t src/templates"/>
+			</exec>
+		</sequential>
+	</macrodef>
+	<macrodef name="tubaina-pdf">
+		<attribute name="src"/>
+		<attribute name="dest"/>
+		<attribute name="title"/>
+		<sequential>
+			<exec executable="rm">
+				<arg line="-rf target/latex"/>
+			</exec>
+			<exec executable="bash">
+				<arg line="tubaina" />
+				<arg line="-latex" />
+				<arg line="-i @{src}" />
+				<arg line="-o target" />
+				<arg line="-n '@{title}'" />
+				<arg line="-t src/templates"/>
+			</exec>
+			<exec executable="bash" dir="target/latex">
+				<arg line="latex.sh" />
+				<arg line="book" />
+			</exec>
+			<copy file="target/latex/book.pdf" tofile="@{dest}" />
+		</sequential>
+	</macrodef>
+	
 	<target name="doc">
-		<exec executable="rm">
-			<arg line="-rf src/content/documentacao"/>
-		</exec>
 		<get dest="src/templates/html/header.ftl" src="http://localhost:8080/vraptor-site/header.jsp?docs=true"/>
 		<get dest="src/templates/html/footer.ftl" src="http://localhost:8080/vraptor-site/footer.jsp?docs=true"/>
 		<copy file="src/templates/html/chapter-title-pt.ftl" tofile="src/templates/html/chapter-title.ftl"/>
-		<exec executable="bash">
-			<arg line="tubaina" />
-			<arg line="-htmlflat" />
-			<arg line="-i src/guide/pt/" />
-			<arg line="-o src/content/" />
-			<arg line="-n documentacao" />
-			<arg line="-t src/templates"/>
-		</exec>
-		<exec executable="bash">
-			<arg line="tubaina" />
-			<arg line="-htmlflat" />
-			<arg line="-i src/cookbook/pt" />
-			<arg line="-o src/content/" />
-			<arg line="-n cookbook" />
-			<arg line="-t src/templates"/>
-		</exec>
-		<exec executable="rm">
-			<arg line="-rf target/latex"/>
-		</exec>
-		<exec executable="bash">
-			<arg line="tubaina" />
-			<arg line="-latex" />
-			<arg line="-i src/guide/pt/" />
-			<arg line="-o target" />
-			<arg line="-n 'VRaptor 3 -- Um framework Java MVC de desenvolvimento rápido e fácil'" />
-			<arg line="-t src/templates"/>
-		</exec>
-		<exec executable="bash" dir="target/latex">
-			<arg line="latex.sh" />
-			<arg line="book" />
-		</exec>
-		<copy file="target/latex/book.pdf" tofile="src/content/documentacao/vraptor3.pdf" />
 		
+		<tubaina src="src/guide/pt/" dest="src/content" name="documentacao" title="chapter-title-pt.ftl"/>
+		<tubaina src="src/cookbook/pt/" dest="src/content" name="cookbook" title="chapter-title-cook-pt.ftl"/>
+		
+		<tubaina-pdf src="src/guide/pt/" dest="src/content/documentacao/vraptor3.pdf" 
+				title="VRaptor 3 -- Um framework Java MVC de desenvolvimento rápido e fácil"/>
+
+		<tubaina-pdf src="src/cookbook/pt/" dest="src/content/cookbook/vraptor3cookbook.pdf" 
+				title="VRaptor 3 -- Livro de receitas"/>
+
 		<exec executable="rm">
 			<arg line="-rf src/content/documentation"/>
 		</exec>
 		
 		<get dest="src/templates/html/header.ftl" src="http://localhost:8080/vraptor-site/en/header.jsp?docs=true"/>
 		<get dest="src/templates/html/footer.ftl" src="http://localhost:8080/vraptor-site/en/footer.jsp?docs=true"/>
-		<delete file="src/templates/html/chapter-title.ftl" />
-		<copy file="src/templates/html/chapter-title-en.ftl" tofile="src/templates/html/chapter-title.ftl"/>
-		<exec executable="bash">
-			<arg line="tubaina" />
-			<arg line="-htmlflat" />
-			<arg line="-i src/guide/en/" />
-			<arg line="-o src/content/" />
-			<arg line="-n documentation" />
-			<arg line="-t src/templates"/>
-		</exec>
-		<exec executable="rm">
-			<arg line="-rf target/latex"/>
-		</exec>
-		<exec executable="bash">
-			<arg line="tubaina" />
-			<arg line="-latex" />
-			<arg line="-i src/guide/en/" />
-			<arg line="-o target" />
-			<arg line="-n 'VRaptor 3 -- Java web MVC framework for fast and maintenable development'" />
-			<arg line="-t src/templates"/>
-		</exec>
-		<exec executable="bash" dir="target/latex">
-			<arg line="latex.sh" />
-			<arg line="book" />
-		</exec>
-		<copy file="target/latex/book.pdf" tofile="src/content/documentation/vraptor3.pdf" />
+		<tubaina src="src/guide/en/" dest="src/content" name="documentation" title="chapter-title-en.ftl"/>
+		<tubaina-pdf src="src/guide/en/" dest="src/content/documentation/vraptor3.pdf" 
+				title="VRaptor 3 -- Java web MVC framework for fast and maintenable development"/>
 		
 		<move file="src/content/htmlflat/" tofile="src/content" />
 		<delete file="src/templates/html/chapter-title.ftl" />
-		<!--exec executable="bash">
-			<arg line="rename.sh"/>
-		</exec-->
 	</target>
 		
 	<target name="compile" description="--> compiles the classes">

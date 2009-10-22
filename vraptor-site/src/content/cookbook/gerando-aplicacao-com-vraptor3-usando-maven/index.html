@@ -1,0 +1,270 @@
+
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="author" content="Caelum"/>
+	<meta name="reply-to" content="contato@caelum.com.br"/>
+	<meta name="author" content="Design"/>
+	<meta name="reply-to" content="lokidg@gmail.com"/>
+	
+		
+		<link href="../../documentacao/includes/css/java.css" rel="stylesheet" type="text/css" media="screen" />
+		<link href="../../documentacao/includes/css/xml2html.css" rel="stylesheet" type="text/css" media="screen" />
+		<link href="../../documentacao/includes/css/style.css" rel="stylesheet" type="text/css" media="screen" />
+	
+	<meta name="description" content="VRaptor 3 - um framework java para web focado em desenvolvimento rápido"/>
+	<meta name="keywords" content="sites, web, desenvolvimento, development, java, opensource"/>
+	<title>V|Raptor - Alta produtividade no Desenvolvimento Web em Java</title>
+	<link href="../../screen.css" rel="stylesheet" type="text/css" media="screen" />
+    <link href="../../menu.css" rel="stylesheet" type="text/css" media="screen" />
+    <!--[if lt IE 7]>
+    <script src="http://ie7-js.googlecode.com/svn/version/2.0(beta3)/IE7.js" type="text/javascript"></script>
+    <![endif]-->
+</head>
+
+<body>
+	<div id="headerWrap">
+    	<div id="headerContent">
+        	<h1 id="logoVraptor"><span>V|Raptor</span></h1><!-- vraptorlogo-->
+            
+            <ul id="langMenu">
+            	<li><a id="engBtn" href="../../en/"><span>ENGLISH</span></a></li>
+                <li><a id="ptBtn" href="../../"><span>PORTUGUÊS</span></a></li>
+            </ul><!-- langMenu-->            
+        </div><!-- header content -->
+    </div><!-- header wrap-->
+    
+    <div id="menuWrap">
+    	<ul id="menuElements">
+        	<li><a id="homeBtn" href="../../"><span>home</span></a></li>
+        	<li><a id="downloadBtn" href="../../download.jsp"><span>download</span></a></li>
+        	<li><a id="documentacaoBtn" href="../../documentacao/"><span>Documentação</span></a></li>
+        	<li><a id="beneficiosBtn" href="../../beneficios.jsp"><span>Benef&iacute;cios</span></a></li>
+        	<li><a id="suporteBtn" href="../../suporte.jsp"><span>Suporte</span></a></li>
+        	<li><a id="vraptor2Btn" href="../../vraptor2.jsp"><span>vraptor2</span></a></li>
+        </ul><!-- menuElements-->
+    </div><!-- menuWrap-->
+<div id="contentWrap">
+    	<div id="contentDocumentacao">
+			<div class="download"><a href="../vraptor3cookbook.pdf">Download em PDF</a></div>
+			<div class="download"><a href="../../documentacao">Documentação</a></div>
+        	<h2 class="title"><span>Livro de Receitas</span></h2>
+            <h3 class="title">Algumas soluções prontas e dicas para problemas comuns.</h3>            <div id="subMenuDoc">
+            	<img id="positionTop" src="../includes/images/subMenuTop-trans.png" />
+                <img id="positionBottom" src="../includes/images/subMenuBottom-trans.png" />
+            	<ol type="1">
+									<li><a class="link_toc" href="../../cookbook/colocando-objetos-na-sessao/">1. Colocando objetos na sessão</a></li>
+		
+									<li><a class="link_toc" href="../../cookbook/componentfactory-como-seletor-de-implementacoes/">2. ComponentFactory como seletor de implementações</a></li>
+		
+									<li><a class="link_toc" href="../../cookbook/gerando-aplicacao-com-vraptor3-usando-maven/">3. Gerando aplicação com VRaptor3 usando Maven</a></li>
+		
+									<li><a class="link_toc" href="../../cookbook/usando-tiles-com-vraptor3/">4. Usando tiles com vraptor3</a></li>
+		
+									<li><a class="link_toc" href="../../cookbook/interceptando-recursos-anotados/">5. Interceptando recursos anotados</a></li>
+		
+									<li><a class="link_toc" href="../../cookbook/poupando-recursos-lazy-dependency-injection/">6. Poupando recursos - LAZY Dependency Injection</a></li>
+		
+									<li><a class="link_toc" href="../../cookbook/evitando-que-o-browser-faca-cache-das-paginas/">7. Evitando que o browser faça cache das páginas</a></li>
+		
+									<li><a class="link_toc" href="../../cookbook/usando-o-header-referer-para-fazer-redirecionamentos/">8. Usando o Header Referer para fazer redirecionamentos</a></li>
+		
+                </ol>
+            </div><!-- submenu-->
+                        
+            <div id="textoCapitulo">
+	
+		<h2 class="chapter">Gerando aplicação com VRaptor3 usando Maven</h2>
+
+		<span class="paragraph"><strong class="definition"><em class="italic">por Lucas H. G. Toniazzo no blog <a class="link" target="_blank" href="http://www.lucas.hgt.nom.br/wordpress/?p=107">http://www.lucas.hgt.nom.br/wordpress/?p=107</a></em></strong></span><span class="paragraph">Algum tempo sem atualizar as coisas por aqui, resolvi tirar um tempo para me atualizar no 
+framework que acompanho j&aacute; faz algum tempo, VRAPTOR.</span><span class="paragraph">Ultimamente tenho utilizado o Maven para controlar as depend&ecirc;ncias de Jar’s das aplica&ccedil;&otilde;es 
+que trabalho, e tem me ajudado bastante. Ent&atilde;o resolvi tirar um tempo para gerar um POM para 
+o VRaptor, j&aacute; que na estrutura original dele esse arquivo n&atilde;o o acompanha.</span><span class="paragraph">Utilizei o Eclipse com suporte ao Maven para gerar o projeto ap&oacute;s ter gerado o POM do VRaptor.</span><span class="paragraph">Alguns passos para se ter sucesso na cria&ccedil;&atilde;o da estrutura:</span><ol class="list" type="1"><li><span class="paragraph">Fa&ccedil;a o download do Vraptor e coloque o seu jar numa pasta qualquer.</span></li><li><span class="paragraph">Instale o Maven ou utilize o recurso que est&aacute; dispon&iacute;vel em sua IDE.</span></li><li><span class="paragraph">Execute o comando abaixo:</span><div class="java"><code class="java">mvn&nbsp;install:install-file&nbsp;-DgroupId=br.com.caelum&nbsp;-DartifactId=vraptor&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;-Dpackaging=jar&nbsp;-Dversion=3.0.0-SNAPSHOT&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;-Dfile=LOCAL_ONDE_ESTA\vraptor3-3.0.0-SNAPSHOT.jar&nbsp;-DgeneratePom=true</code></div></li><li><span class="paragraph">Edite o pom.xml do VRaptor que deve estar no reposit&oacute;rio local 
+(<code class="inlineCode">$USER_HOME/.m2/Repository/br/com/caelum/vraptor</code>) com o seguinte conte&uacute;do:</span><div class="xml"><code class="xml"><span class="texspecial">&lt;?xml&nbsp;version="1.0"&nbsp;encoding="UTF-8"?&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal"></span><span class="textag">&lt;project<br />
+</span>&nbsp;&nbsp;&nbsp;&nbsp;xsi:<span class="texattrib">schemaLocation=</span><span class="texvalue">"http://maven.apache.org/POM/4.0.0&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;http://maven.apache.org/xsd/maven-4.0.0.xsd"</span><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="texattrib">xmlns=</span><span class="texvalue">"http://maven.apache.org/POM/4.0.0"</span>&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;xmlns:<span class="texattrib">xsi=</span><span class="texvalue">"http://www.w3.org/2001/XMLSchema-instance"</span><span class="textag">&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;modelVersion&gt;</span><span class="texnormal">4.0.0</span><span class="textag">&lt;/modelVersion&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;groupId&gt;</span><span class="texnormal">br.com.caelum</span><span class="textag">&lt;/groupId&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;artifactId&gt;</span><span class="texnormal">vraptor</span><span class="textag">&lt;/artifactId&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;version&gt;</span><span class="texnormal">3.0.0-SNAPSHOT</span><span class="textag">&lt;/version&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;description&gt;</span><span class="texnormal">POM&nbsp;was&nbsp;created&nbsp;from&nbsp;install:install-file</span><span class="textag">&lt;/description&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;dependencies&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;dependency&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;groupId&gt;</span><span class="texnormal">org.springframework</span><span class="textag">&lt;/groupId&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;artifactId&gt;</span><span class="texnormal">spring</span><span class="textag">&lt;/artifactId&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;version&gt;</span><span class="texnormal">2.5.5</span><span class="textag">&lt;/version&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;/dependency&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;dependency&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;groupId&gt;</span><span class="texnormal">com.thoughtworks.paranamer</span><span class="textag">&lt;/groupId&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;artifactId&gt;</span><span class="texnormal">paranamer</span><span class="textag">&lt;/artifactId&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;version&gt;</span><span class="texnormal">1.3</span><span class="textag">&lt;/version&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;/dependency&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;dependency&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;groupId&gt;</span><span class="texnormal">org.objenesis</span><span class="textag">&lt;/groupId&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;artifactId&gt;</span><span class="texnormal">objenesis</span><span class="textag">&lt;/artifactId&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;version&gt;</span><span class="texnormal">1.1</span><span class="textag">&lt;/version&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;/dependency&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;dependency&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;groupId&gt;</span><span class="texnormal">com.google.code.google-collections</span><span class="textag">&lt;/groupId&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;artifactId&gt;</span><span class="texnormal">google-collect</span><span class="textag">&lt;/artifactId&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;version&gt;</span><span class="texnormal">snapshot-20080530</span><span class="textag">&lt;/version&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;/dependency&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;dependency&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;groupId&gt;</span><span class="texnormal">org.aspectj</span><span class="textag">&lt;/groupId&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;artifactId&gt;</span><span class="texnormal">aspectjrt</span><span class="textag">&lt;/artifactId&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;version&gt;</span><span class="texnormal">1.6.0</span><span class="textag">&lt;/version&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;/dependency&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;dependency&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;groupId&gt;</span><span class="texnormal">cglib</span><span class="textag">&lt;/groupId&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;artifactId&gt;</span><span class="texnormal">cglib-nodep</span><span class="textag">&lt;/artifactId&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;version&gt;</span><span class="texnormal">2.2</span><span class="textag">&lt;/version&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;/dependency&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;dependency&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;groupId&gt;</span><span class="texnormal">commons-fileupload</span><span class="textag">&lt;/groupId&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;artifactId&gt;</span><span class="texnormal">commons-fileupload</span><span class="textag">&lt;/artifactId&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;version&gt;</span><span class="texnormal">1.1</span><span class="textag">&lt;/version&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;exclusions&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;exclusion&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;groupId&gt;</span><span class="texnormal">commons-io</span><span class="textag">&lt;/groupId&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;artifactId&gt;</span><span class="texnormal">commons-io</span><span class="textag">&lt;/artifactId&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;/exclusion&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;/exclusions&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;/dependency&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;dependency&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;groupId&gt;</span><span class="texnormal">org.apache.commons</span><span class="textag">&lt;/groupId&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;artifactId&gt;</span><span class="texnormal">commons-io</span><span class="textag">&lt;/artifactId&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;version&gt;</span><span class="texnormal">1.3.2</span><span class="textag">&lt;/version&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;/dependency&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;dependency&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;groupId&gt;</span><span class="texnormal">javassist</span><span class="textag">&lt;/groupId&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;artifactId&gt;</span><span class="texnormal">javassist</span><span class="textag">&lt;/artifactId&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;version&gt;</span><span class="texnormal">3.8.0.GA</span><span class="textag">&lt;/version&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;/dependency&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;dependency&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;groupId&gt;</span><span class="texnormal">javax.servlet</span><span class="textag">&lt;/groupId&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;artifactId&gt;</span><span class="texnormal">jstl</span><span class="textag">&lt;/artifactId&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;version&gt;</span><span class="texnormal">1.1.2</span><span class="textag">&lt;/version&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;/dependency&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;dependency&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;groupId&gt;</span><span class="texnormal">log4j</span><span class="textag">&lt;/groupId&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;artifactId&gt;</span><span class="texnormal">log4j</span><span class="textag">&lt;/artifactId&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;version&gt;</span><span class="texnormal">1.2.12</span><span class="textag">&lt;/version&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;/dependency&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;dependency&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;groupId&gt;</span><span class="texnormal">net.vidageek</span><span class="textag">&lt;/groupId&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;artifactId&gt;</span><span class="texnormal">mirror</span><span class="textag">&lt;/artifactId&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;version&gt;</span><span class="texnormal">1.5.1</span><span class="textag">&lt;/version&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;/dependency&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;dependency&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;groupId&gt;</span><span class="texnormal">ognl</span><span class="textag">&lt;/groupId&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;artifactId&gt;</span><span class="texnormal">ognl</span><span class="textag">&lt;/artifactId&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;version&gt;</span><span class="texnormal">2.7.3</span><span class="textag">&lt;/version&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;exclusions&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;exclusion&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;groupId&gt;</span><span class="texnormal">jboss</span><span class="textag">&lt;/groupId&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;artifactId&gt;</span><span class="texnormal">javassist</span><span class="textag">&lt;/artifactId&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;/exclusion&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;/exclusions&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;/dependency&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;dependency&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;groupId&gt;</span><span class="texnormal">org.slf4j</span><span class="textag">&lt;/groupId&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;artifactId&gt;</span><span class="texnormal">slf4j-api</span><span class="textag">&lt;/artifactId&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;version&gt;</span><span class="texnormal">1.5.6</span><span class="textag">&lt;/version&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;/dependency&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;dependency&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;groupId&gt;</span><span class="texnormal">org.slf4j</span><span class="textag">&lt;/groupId&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;artifactId&gt;</span><span class="texnormal">slf4j-log4j12</span><span class="textag">&lt;/artifactId&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;version&gt;</span><span class="texnormal">1.5.6</span><span class="textag">&lt;/version&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;/dependency&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;/dependencies&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal"></span><span class="textag">&lt;/project&gt;</span></code></div></li><li><span class="paragraph">Crie um projeto Maven.</span></li><li><span class="paragraph">Edite o pom.xml do mesmo com o seguinte conte&uacute;do:</span><div class="xml"><code class="xml"><span class="textag">&lt;project</span>&nbsp;<span class="texattrib">xmlns=</span><span class="texvalue">"http://maven.apache.org/POM/4.0.0"</span>&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlns:<span class="texattrib">xsi=</span><span class="texvalue">"http://www.w3.org/2001/XMLSchema-instance"</span><br />
+&nbsp;&nbsp;&nbsp;&nbsp;xsi:<span class="texattrib">schemaLocation=</span><span class="texvalue">"http://maven.apache.org/POM/4.0.0&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;http://maven.apache.org/maven-v4_0_0.xsd"</span><span class="textag">&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;modelVersion&gt;</span><span class="texnormal">4.0.0</span><span class="textag">&lt;/modelVersion&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;groupId&gt;</span><span class="texnormal">GERALMENTE_ESTRUTURA_DO_PACKAGE</span><span class="textag">&lt;/groupId&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;artifactId&gt;</span><span class="texnormal">ARTIFACT_ID_QUE_DESEJAR</span><span class="textag">&lt;/artifactId&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;packaging&gt;</span><span class="texnormal">war</span><span class="textag">&lt;/packaging&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;name&gt;</span><span class="texnormal">NOME_QUE_DESEJAR</span><span class="textag">&lt;/name&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;version&gt;</span><span class="texnormal">0.0.1-SNAPSHOT</span><span class="textag">&lt;/version&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;dependencies&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;dependency&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;groupId&gt;</span><span class="texnormal">br.com.caelum</span><span class="textag">&lt;/groupId&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;artifactId&gt;</span><span class="texnormal">vraptor</span><span class="textag">&lt;/artifactId&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;version&gt;</span><span class="texnormal">3.0.0-SNAPSHOT</span><span class="textag">&lt;/version&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;/dependency&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;/dependencies&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal"></span><span class="textag">&lt;/project&gt;</span></code></div></li><li><span class="paragraph">Clique com bot&atilde;o direito, op&ccedil;&atilde;o Maven, update dependecies</span></li></ol><span class="paragraph">Pronto, libs adicionadas ao projeto, tudo organizado para iniciar as atividades.</span>
+
+
+</div><!-- content -->
+            
+        </div><!-- content cnt -->
+    </div><!-- content wrap-->
+    
+
+
+
+
+		
+
+    <div id="footerWrap">
+    	<div id="footerContent">              
+            <div id="suporteFooter">
+	           	<a href="http://www.caelum.com.br/contato/" class="moreIcon" title="Saiba Mais"><span>+</span></a>
+	           	<h3><a href="http://www.caelum.com.br/contato/">Suporte</a></h3>
+                <p><a href="http://www.caelum.com.br/contato/">Conheça os nossos planos de suporte online, e tenha a confiança de ter suas dúvidas e problemas rapidamente solucionados.</a></p>            
+            </div><!-- suporte-->
+            <div id="consultoriaFooter">
+           		<a href="http://www.caelum.com.br/servicos/consultoria/" class="moreIcon" title="Saiba Mais"><span>+</span></a>
+           		<h3><a href="http://www.caelum.com.br/servicos/consultoria/">Consultoria</a></h3>
+                <p><a href="http://www.caelum.com.br/servicos/consultoria/">A equipe que desenvolveu o VRaptor está disponível para auxiliar a sua equipe de desenvolvimento. Conheça nossos planos de consultoria.</a></p>            
+            </div><!-- consultoria-->
+        	<div id="treinamentoFooter">
+            	<a href="http://www.caelum.com.br/curso/fj-28-vraptor-hibernate-ajax/" class="moreIcon" title="Saiba Mais"><span>+</span></a><h3><a href="http://www.caelum.com.br/curso/fj-28-vraptor-hibernate-ajax/">Treinamento</a></h3>
+                <p><a href="http://www.caelum.com.br/curso/fj-28-vraptor-hibernate-ajax/">A Caelum oferece treinamento oficial de VRaptor, com Hibernate e Ajax, focando nas melhores práticas com VRaptor. Clique e saiba mais.</a></p>
+            </div><!--treinamento-->
+     <div class="footbar">
+            	<img class="logoFooter" src="../../images/logoCaelumGray-trans.png" alt="vraptor logo" />
+                <ul>
+                	<li>site map:</li>
+                    <li><a href="../../">home</a></li>
+                    <li>|</li>
+                    <li><a href="../../download.jsp">download</a></li>
+                    <li>|</li>
+                    <li><a href="../../documentacao/">Documentação</a></li>
+                    <li>|</li>
+                    <li><a href="../../beneficios.jsp">Benef&iacute;cios</a></li>
+                    <li>|</li>
+                    <li><a href="../../suporte.jsp">Suporte</a></li>
+                    <li>|</li>
+                    <li><a href="../../vraptor2.jsp">vraptor2</a></li>
+                </ul>
+                <p><a href="http://www.apache.org/licenses/LICENSE-2.0">Licença Apache 2.0</a> - VRaptor ©2009 Caelum - Ensino e Inovação</p>
+            </div><!-- footnote-->
+        </div><!-- footer content -->
+        <a id="signature" href="mailto:lokidg@gmail.com">loki|design</a>
+    </div><!-- footer wrap-->
+<script type="text/javascript">
+	var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+	document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+<script type="text/javascript">
+	try {
+	var pageTracker = _gat._getTracker("UA-270161-11");
+	pageTracker._trackPageview();
+	} catch(err) {}
+ </script>
+    
+</body>
+</html>

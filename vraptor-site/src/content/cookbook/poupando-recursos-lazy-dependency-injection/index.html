@@ -1,0 +1,297 @@
+
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="author" content="Caelum"/>
+	<meta name="reply-to" content="contato@caelum.com.br"/>
+	<meta name="author" content="Design"/>
+	<meta name="reply-to" content="lokidg@gmail.com"/>
+	
+		
+		<link href="../../documentacao/includes/css/java.css" rel="stylesheet" type="text/css" media="screen" />
+		<link href="../../documentacao/includes/css/xml2html.css" rel="stylesheet" type="text/css" media="screen" />
+		<link href="../../documentacao/includes/css/style.css" rel="stylesheet" type="text/css" media="screen" />
+	
+	<meta name="description" content="VRaptor 3 - um framework java para web focado em desenvolvimento rápido"/>
+	<meta name="keywords" content="sites, web, desenvolvimento, development, java, opensource"/>
+	<title>V|Raptor - Alta produtividade no Desenvolvimento Web em Java</title>
+	<link href="../../screen.css" rel="stylesheet" type="text/css" media="screen" />
+    <link href="../../menu.css" rel="stylesheet" type="text/css" media="screen" />
+    <!--[if lt IE 7]>
+    <script src="http://ie7-js.googlecode.com/svn/version/2.0(beta3)/IE7.js" type="text/javascript"></script>
+    <![endif]-->
+</head>
+
+<body>
+	<div id="headerWrap">
+    	<div id="headerContent">
+        	<h1 id="logoVraptor"><span>V|Raptor</span></h1><!-- vraptorlogo-->
+            
+            <ul id="langMenu">
+            	<li><a id="engBtn" href="../../en/"><span>ENGLISH</span></a></li>
+                <li><a id="ptBtn" href="../../"><span>PORTUGUÊS</span></a></li>
+            </ul><!-- langMenu-->            
+        </div><!-- header content -->
+    </div><!-- header wrap-->
+    
+    <div id="menuWrap">
+    	<ul id="menuElements">
+        	<li><a id="homeBtn" href="../../"><span>home</span></a></li>
+        	<li><a id="downloadBtn" href="../../download.jsp"><span>download</span></a></li>
+        	<li><a id="documentacaoBtn" href="../../documentacao/"><span>Documentação</span></a></li>
+        	<li><a id="beneficiosBtn" href="../../beneficios.jsp"><span>Benef&iacute;cios</span></a></li>
+        	<li><a id="suporteBtn" href="../../suporte.jsp"><span>Suporte</span></a></li>
+        	<li><a id="vraptor2Btn" href="../../vraptor2.jsp"><span>vraptor2</span></a></li>
+        </ul><!-- menuElements-->
+    </div><!-- menuWrap-->
+<div id="contentWrap">
+    	<div id="contentDocumentacao">
+			<div class="download"><a href="../vraptor3cookbook.pdf">Download em PDF</a></div>
+			<div class="download"><a href="../../documentacao">Documentação</a></div>
+        	<h2 class="title"><span>Livro de Receitas</span></h2>
+            <h3 class="title">Algumas soluções prontas e dicas para problemas comuns.</h3>            <div id="subMenuDoc">
+            	<img id="positionTop" src="../includes/images/subMenuTop-trans.png" />
+                <img id="positionBottom" src="../includes/images/subMenuBottom-trans.png" />
+            	<ol type="1">
+									<li><a class="link_toc" href="../../cookbook/colocando-objetos-na-sessao/">1. Colocando objetos na sessão</a></li>
+		
+									<li><a class="link_toc" href="../../cookbook/componentfactory-como-seletor-de-implementacoes/">2. ComponentFactory como seletor de implementações</a></li>
+		
+									<li><a class="link_toc" href="../../cookbook/gerando-aplicacao-com-vraptor3-usando-maven/">3. Gerando aplicação com VRaptor3 usando Maven</a></li>
+		
+									<li><a class="link_toc" href="../../cookbook/usando-tiles-com-vraptor3/">4. Usando tiles com vraptor3</a></li>
+		
+									<li><a class="link_toc" href="../../cookbook/interceptando-recursos-anotados/">5. Interceptando recursos anotados</a></li>
+		
+									<li><a class="link_toc" href="../../cookbook/poupando-recursos-lazy-dependency-injection/">6. Poupando recursos - LAZY Dependency Injection</a></li>
+		
+									<li><a class="link_toc" href="../../cookbook/evitando-que-o-browser-faca-cache-das-paginas/">7. Evitando que o browser faça cache das páginas</a></li>
+		
+									<li><a class="link_toc" href="../../cookbook/usando-o-header-referer-para-fazer-redirecionamentos/">8. Usando o Header Referer para fazer redirecionamentos</a></li>
+		
+                </ol>
+            </div><!-- submenu-->
+                        
+            <div id="textoCapitulo">
+	
+		<h2 class="chapter">Poupando recursos - LAZY Dependency Injection</h2>
+
+		<span class="paragraph"><strong class="definition"><em class="italic">por Tomaz Lavieri no blog <a class="link" target="_blank" href="http://blog.tomazlavieri.com.br/2009/vraptor-3-poupando-recursos-lazy-dependence-injection/">http://blog.tomazlavieri.com.br/2009/vraptor-3-poupando-recursos-lazy-dependence-injection/</a> </em></strong></span><span class="paragraph">Objetivo: Ao final deste artigo espera-se que voc&ecirc; saiba como poupar recursos caros, trazendo 
+eles de forma <em class="italic">LAZY</em>, ou como prefiro chamar <em class="italic">Just-in-Time</em> (no momento certo).</span><span class="paragraph">No VRaptor3 a inje&ccedil;&atilde;o de depend&ecirc;ncia ficou bem mais f&aacute;cil, os interceptadores que 
+eram os respons&aacute;veis para injetar a depend&ecirc;ncia sumiram e agora fica tudo a cargo 
+do container, que pode ser o Spring ou o Pico.</span><span class="paragraph">A facilidade na inje&ccedil;&atilde;o de dependencia tem um custo, como n&atilde;o &eacute; mais controlado 
+pelo programador que cria o interceptor sempre que declaramos uma depend&ecirc;ncia no 
+construtor de um <code class="inlineCode">@Component</code>, <code class="inlineCode">@Resource</code> ou <code class="inlineCode">@Intercepts</code> ele &eacute; injetado no in&iacute;cio, 
+logo na constru&ccedil;&atilde;o, por&eacute;m &agrave;s vezes o fluxo de um requisi&ccedil;&atilde;o faz com que n&atilde;o usemos 
+algumas destas inje&ccedil;&otilde;es de depend&ecirc;ncia, disperdi&ccedil;ando recursos valiosos.</span><span class="paragraph">Por exemplo, vamos supor o seguinte <code class="inlineCode">@Resource</code> abaixo, que cadastra produtos</span><div class="java"><code class="java">
+<span class="java4">import </span><span class="java10">java.util.List;<br />
+</span><span class="java4">import </span><span class="java10">org.hibernate.Session;<br />
+</span><span class="java4">import </span><span class="java10">br.com.caelum.vraptor.Result;<br />
+</span><span class="java4">import </span><span class="java10">br.com.caelum.vraptor.view.Results;<br />
+<br />
+</span><span class="java16">@Resource<br />
+</span><span class="java4">public class </span><span class="java10">ProdutoController </span><span class="java8">{<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java14">/**<br />
+&nbsp;&nbsp;&nbsp;&nbsp; * O recurso que queremos poupar.<br />
+&nbsp;&nbsp;&nbsp;&nbsp; */<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">private final </span><span class="java10">Session session;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">private final </span><span class="java10">Result result;<br />
+&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">ProdutoController</span><span class="java8">(</span><span class="java4">final </span><span class="java10">Session session, </span><span class="java4">final </span><span class="java10">Result result</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">this</span><span class="java10">.session = session;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">this</span><span class="java10">.result = result;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java14">/**<br />
+&nbsp;&nbsp;&nbsp;&nbsp; * apenas renderiza o formul&aacute;rio<br />
+&nbsp;&nbsp;&nbsp;&nbsp; */<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">form</span><span class="java8">() {}<br />
+&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">List&lt;Produto&gt; listar</span><span class="java8">() {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return </span><span class="java10">session.createCriteria</span><span class="java8">(</span><span class="java10">Produto.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">.list</span><span class="java8">()</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">Produto adiciona</span><span class="java8">(</span><span class="java10">Produto produto</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">session.persist</span><span class="java8">(</span><span class="java10">produto</span><span class="java8">)</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; result.use</span><span class="java8">(</span><span class="java10">Results.logic</span><span class="java8">())</span><span class="java10">.redirectTo</span><span class="java8">(</span><span class="java10">getClass</span><span class="java8">())</span><span class="java10">.listar</span><span class="java8">()</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return </span><span class="java10">produto;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+}</span></code></div><span class="paragraph">Sempre que alguem faz uma requisi&ccedil;&atilde;o a qualquer l&oacute;gica dentro do recurso 
+<code class="inlineCode">ProdutoController</code> uma <code class="inlineCode">Session</code> &eacute; aberta, porem note que abrir o 
+formul&aacute;rio para adicionar produtos n&atilde;o requer sess&atilde;o com o banco, ele apenas 
+renderiza uma p&aacute;gina, cada vez que o formul&aacute;rio de produtos &eacute; aberto um 
+importante e caro recurso do sistema esta sendo requerido, e de forma totalmente ociosa.</span><div class="box"><h3>Nota do editor</h3>
+<span class="paragraph">&Eacute; criada no m&aacute;ximo uma Session por requisi&ccedil;&atilde;o. A mesma coisa para qualquer componente
+	Request scoped.</span></div><span class="paragraph">Como agir neste caso? Isolar o formul&aacute;rio poderia resolver este problema mais recairia 
+em outro, da mantenabilidade.</span><span class="paragraph">O ideal &eacute; que este recurso s&oacute; fosse realmente injetado no tempo certo 
+(<em class="italic">Just in Time</em>) como seria poss&iacute;vel fazer isso? A solu&ccedil;&atilde;o &eacute; usar proxies din&acirc;micos, 
+enviando uma <code class="inlineCode">Session</code> que s&oacute; realmente abrir&aacute; a conex&atilde;o com o banco quando um de 
+seus m&eacute;todos for invocado.</span><div class="java"><code class="java">
+<span class="java4">import </span><span class="java10">java.lang.reflect.Method;<br />
+</span><span class="java4">import </span><span class="java10">javax.annotation.PreDestroy;<br />
+</span><span class="java4">import </span><span class="java10">org.hibernate.classic.Session;<br />
+</span><span class="java4">import </span><span class="java10">org.hibernate.SessionFactory;<br />
+</span><span class="java4">import </span><span class="java10">net.vidageek.mirror.dsl.Mirror;<br />
+</span><span class="java4">import </span><span class="java10">br.com.caelum.vraptor.ioc.ApplicationScoped;<br />
+</span><span class="java4">import </span><span class="java10">br.com.caelum.vraptor.ioc.Component;<br />
+</span><span class="java4">import </span><span class="java10">br.com.caelum.vraptor.ioc.ComponentFactory;<br />
+</span><span class="java4">import </span><span class="java10">br.com.caelum.vraptor.ioc.RequestScoped;<br />
+</span><span class="java4">import </span><span class="java10">br.com.caelum.vraptor.proxy.MethodInvocation;<br />
+</span><span class="java4">import </span><span class="java10">br.com.caelum.vraptor.proxy.Proxifier;<br />
+</span><span class="java4">import </span><span class="java10">br.com.caelum.vraptor.proxy.SuperMethod;<br />
+ <br />
+</span><span class="java14">/**<br />
+ * </span><span class="java12">&lt;b&gt;</span><span class="java14">JIT (Just-in-Time) </span><span class="java13">{@link Session} </span><span class="java14">Creator</span><span class="java12">&lt;/b&gt; </span><span class="java14">f&aacute;brica para o <br />
+ * componente </span><span class="java13">{@link Session} </span><span class="java14">gerado de forma LAZY ou JIT(Just-in-Time) <br />
+ * a partir de uma </span><span class="java13">{@link SessionFactory}</span><span class="java14">, que normalmente se encontra <br />
+ * em um ecopo de aplicativo @</span><span class="java13">{@link ApplicationScoped}</span><span class="java14">.<br />
+ *<br />
+ * </span><span class="java11">@author </span><span class="java14">Tomaz Lavieri<br />
+ * </span><span class="java11">@since </span><span class="java14">1.0<br />
+ */<br />
+</span><span class="java16">@Component<br />
+@RequestScoped<br />
+</span><span class="java4">public class </span><span class="java10">JITSessionCreator </span><span class="java4">implements </span><span class="java10">ComponentFactory&lt;Session&gt; </span><span class="java8">{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">private static final </span><span class="java10">Method CLOSE = <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">new </span><span class="java10">Mirror</span><span class="java8">()</span><span class="java10">.on</span><span class="java8">(</span><span class="java10">Session.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">.reflect</span><span class="java8">()</span><span class="java10">.method</span><span class="java8">(</span><span class="java5">&#34;close&#34;</span><span class="java8">)</span><span class="java10">.withoutArgs</span><span class="java8">()</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">private static final </span><span class="java10">Method FINALIZE = <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">new </span><span class="java10">Mirror</span><span class="java8">()</span><span class="java10">.on</span><span class="java8">(</span><span class="java10">Object.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">.reflect</span><span class="java8">()</span><span class="java10">.method</span><span class="java8">(</span><span class="java5">&#34;finalize&#34;</span><span class="java8">)</span><span class="java10">.withoutArgs</span><span class="java8">()</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">private final </span><span class="java10">SessionFactory factory;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java14">/** Guarda a Proxy Session */<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">private final </span><span class="java10">Session proxy;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java14">/** Guarada a Session real. */<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">private </span><span class="java10">Session session;<br />
+&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">JITSessionCreator</span><span class="java8">(</span><span class="java10">SessionFactory factory, Proxifier proxifier</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">this</span><span class="java10">.factory = factory;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">this</span><span class="java10">.proxy = proxify</span><span class="java8">(</span><span class="java10">Session.class, proxifier</span><span class="java8">)</span><span class="java10">; </span><span class="java3">// *1*<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java14">/**<br />
+&nbsp;&nbsp;&nbsp;&nbsp; * Cria o JIT Session, que repassa a invoca&ccedil;ão de qualquer m&eacute;todo, exceto<br />
+&nbsp;&nbsp;&nbsp;&nbsp; * </span><span class="java13">{@link Object#finalize()} </span><span class="java14">e </span><span class="java13">{@link Session#close()}</span><span class="java14">, para uma session real, <br />
+&nbsp;&nbsp;&nbsp;&nbsp; * criando uma se necess&aacute;rio.<br />
+&nbsp;&nbsp;&nbsp;&nbsp; */<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">private </span><span class="java10">Session proxify</span><span class="java8">(</span><span class="java10">Class&lt;? </span><span class="java4">extends </span><span class="java10">Session&gt; target, Proxifier proxifier</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return </span><span class="java10">proxifier.proxify</span><span class="java8">(</span><span class="java10">target, </span><span class="java4">new </span><span class="java10">MethodInvocation&lt;Session&gt;</span><span class="java8">() {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java16">@Override </span><span class="java3">// *2*<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">Object intercept</span><span class="java8">(</span><span class="java10">Session proxy, Method method, Object</span><span class="java8">[] </span><span class="java10">args, <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SuperMethod superMethod</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">if </span><span class="java8">(</span><span class="java10">method.equals</span><span class="java8">(</span><span class="java10">CLOSE</span><span class="java8">) <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">|| </span><span class="java8">(</span><span class="java10">method.equals</span><span class="java8">(</span><span class="java10">FINALIZE</span><span class="java8">) </span><span class="java10">&amp;&amp; session == </span><span class="java4">null</span><span class="java8">)) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return null</span><span class="java10">; </span><span class="java3">//skip<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return new </span><span class="java10">Mirror</span><span class="java8">()</span><span class="java10">.on</span><span class="java8">(</span><span class="java10">getSession</span><span class="java8">())</span><span class="java10">.invoke</span><span class="java8">()</span><span class="java10">.method</span><span class="java8">(</span><span class="java10">method</span><span class="java8">)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">.withArgs</span><span class="java8">(</span><span class="java10">args</span><span class="java8">)</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; })</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">Session getSession</span><span class="java8">() {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">if </span><span class="java8">(</span><span class="java10">session == </span><span class="java4">null</span><span class="java8">) </span><span class="java3">// *3*<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">session = factory.openSession</span><span class="java8">()</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return </span><span class="java10">session;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java16">@Override<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">Session getInstance</span><span class="java8">() {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return </span><span class="java10">proxy; </span><span class="java3">// *4*<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java16">@PreDestroy<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">destroy</span><span class="java8">() { </span><span class="java3">// *5*<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">if </span><span class="java8">(</span><span class="java10">session != </span><span class="java4">null </span><span class="java10">&amp;&amp; session.isOpen</span><span class="java8">()) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">session.close</span><span class="java8">()</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+&nbsp;&nbsp;&nbsp; }<br />
+}</span></code></div><span class="paragraph">Explicando alguns pontos chaves, comentados com <code class="inlineCode">// *N*</code></span><ul class="list"><li><span class="paragraph">O <code class="inlineCode">Proxfier</code> &eacute; um objeto das libs do VRaptor que auxilia na cria&ccedil;&atilde;o de objetos 
+   	 proxys ele &eacute; respons&aacute;vel por escolher a biblioteca que implementa o proxy din&acirc;mico, 
+   	 e ent&atilde;o invocar via callback um m&eacute;todo interceptor, como falamos abaixo.</span></li><li><span class="paragraph">Neste ponto temos a implementa&ccedil;&atilde;o do nosso interceptor, sempre que um m&eacute;todo for 
+   	 invocado em nosso proxy, esse intereptor &eacute; invocado primeiro, ele filtra as chamadas 
+   	 ao m&eacute;todo <code class="inlineCode">finalize</code> caso a <code class="inlineCode">Session</code> real ainda n&atilde;o tenha sido criada, isso evita 
+   	 criar a <code class="inlineCode">Session</code> apenas para finaliza-la.
+     O m&eacute;todo <code class="inlineCode">close</code> tamb&eacute;m &eacute; filtrado, isso &eacute; feito para evitar criar uma session apenas 
+     para fech&aacute;-la, e tamb&eacute;m por que o nosso <code class="inlineCode">SessionCreator</code> &eacute; que &eacute; o responsavel por 
+     fechar a session ao final do scopo, quando a request acabar.
+     Todos os outros m&eacute;todos s&atilde;o repassados para uma session atrav&eacute;s do m&eacute;todo <code class="inlineCode">getSession()</code>
+     onde &eacute; realmente que acontece o <code class="inlineCode">LAZY</code> ou <code class="inlineCode">JIT</code>.</span></li><li><span class="paragraph">Aqui &eacute; onde acontece a m&aacute;gica, da primeira vez que <code class="inlineCode">getSession()</code> &eacute; invocado a sess&atilde;o 
+     &eacute; criada, e ent&atilde;o repassada, todas as outras chamadas a <code class="inlineCode">getSession()</code> repassam a 
+     sess&atilde;o anteriormente criada, assim, se <code class="inlineCode">getSession()</code> nunca for invocado, ou seja, 
+     se nenhum m&eacute;todo for invocado no proxy, <code class="inlineCode">getSession()</code> nunca ser&aacute; invocado, e a 
+     sess&atilde;o real n&atilde;o ser&aacute; criada.</span></li><li><span class="paragraph">O retorno desse <code class="inlineCode">ComponentFactory</code> &eacute; a <code class="inlineCode">Session</code> proxy, que s&oacute; criar&aacute; a session 
+     real se um de seus m&eacute;todos for invocado.</span></li><li><span class="paragraph">Ao final do escopo o <code class="inlineCode">destroy</code> &eacute; invocado, ele verifica se a session real existe, 
+     existindo verifica se esta ainda esta aberta, e estando ele fecha, desta forma &eacute; 
+     possivel garantir que o recurso ser&aacute; sempre liberado.</span></li></ul><span class="paragraph">Assim podemos agora pedir uma Session sempre que acharmos que vamos precisar de uma, 
+sabendo que o recurso s&oacute; ser&aacute; realmente solicitado quando formos usar um de seus m&eacute;todos, 
+salvando assim o recurso.</span><span class="paragraph">Esta mesma abordagem pode ser usada para outros recursos caros do sistema.</span><span class="paragraph">Os c&oacute;digos fonte para os <code class="inlineCode">ComponentFactory</code> de <code class="inlineCode">EntityManager</code> e <code class="inlineCode">Session</code> 
+que utilizo podem ser encontrados neste link: <a class="link" target="_blank" href="http://guj.com.br/posts/list/141500.java">http://guj.com.br/posts/list/141500.java</a></span>
+
+
+</div><!-- content -->
+            
+        </div><!-- content cnt -->
+    </div><!-- content wrap-->
+    
+
+
+
+
+		
+
+    <div id="footerWrap">
+    	<div id="footerContent">              
+            <div id="suporteFooter">
+	           	<a href="http://www.caelum.com.br/contato/" class="moreIcon" title="Saiba Mais"><span>+</span></a>
+	           	<h3><a href="http://www.caelum.com.br/contato/">Suporte</a></h3>
+                <p><a href="http://www.caelum.com.br/contato/">Conheça os nossos planos de suporte online, e tenha a confiança de ter suas dúvidas e problemas rapidamente solucionados.</a></p>            
+            </div><!-- suporte-->
+            <div id="consultoriaFooter">
+           		<a href="http://www.caelum.com.br/servicos/consultoria/" class="moreIcon" title="Saiba Mais"><span>+</span></a>
+           		<h3><a href="http://www.caelum.com.br/servicos/consultoria/">Consultoria</a></h3>
+                <p><a href="http://www.caelum.com.br/servicos/consultoria/">A equipe que desenvolveu o VRaptor está disponível para auxiliar a sua equipe de desenvolvimento. Conheça nossos planos de consultoria.</a></p>            
+            </div><!-- consultoria-->
+        	<div id="treinamentoFooter">
+            	<a href="http://www.caelum.com.br/curso/fj-28-vraptor-hibernate-ajax/" class="moreIcon" title="Saiba Mais"><span>+</span></a><h3><a href="http://www.caelum.com.br/curso/fj-28-vraptor-hibernate-ajax/">Treinamento</a></h3>
+                <p><a href="http://www.caelum.com.br/curso/fj-28-vraptor-hibernate-ajax/">A Caelum oferece treinamento oficial de VRaptor, com Hibernate e Ajax, focando nas melhores práticas com VRaptor. Clique e saiba mais.</a></p>
+            </div><!--treinamento-->
+     <div class="footbar">
+            	<img class="logoFooter" src="../../images/logoCaelumGray-trans.png" alt="vraptor logo" />
+                <ul>
+                	<li>site map:</li>
+                    <li><a href="../../">home</a></li>
+                    <li>|</li>
+                    <li><a href="../../download.jsp">download</a></li>
+                    <li>|</li>
+                    <li><a href="../../documentacao/">Documentação</a></li>
+                    <li>|</li>
+                    <li><a href="../../beneficios.jsp">Benef&iacute;cios</a></li>
+                    <li>|</li>
+                    <li><a href="../../suporte.jsp">Suporte</a></li>
+                    <li>|</li>
+                    <li><a href="../../vraptor2.jsp">vraptor2</a></li>
+                </ul>
+                <p><a href="http://www.apache.org/licenses/LICENSE-2.0">Licença Apache 2.0</a> - VRaptor ©2009 Caelum - Ensino e Inovação</p>
+            </div><!-- footnote-->
+        </div><!-- footer content -->
+        <a id="signature" href="mailto:lokidg@gmail.com">loki|design</a>
+    </div><!-- footer wrap-->
+<script type="text/javascript">
+	var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+	document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+<script type="text/javascript">
+	try {
+	var pageTracker = _gat._getTracker("UA-270161-11");
+	pageTracker._trackPageview();
+	} catch(err) {}
+ </script>
+    
+</body>
+</html>

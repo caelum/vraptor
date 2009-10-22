@@ -12,41 +12,41 @@ Vamos supor que nós temos o seguinte Resource para adicionar produtos no nosso 
 [java]
   @Resource
   public class ProdutoController {
-          private final DaoFactory factory;
-          private final ProdutoDao dao;
-         
-          public ProdutoController(DaoFactory factory) {
-                  this.factory = factory;
-                  this.dao = factory.getProdutoDao();
+      private final DaoFactory factory;
+      private final ProdutoDao dao;
+     
+      public ProdutoController(DaoFactory factory) {
+          this.factory = factory;
+          this.dao = factory.getProdutoDao();
+      }
+     
+      public List<Produto> listar() {
+          return dao.list();
+      }
+     
+      public Produto atualizar(Produto produto) {
+          try {
+              factory.beginTransaction();
+              produto = dao.update(produto);
+              factory.commit();
+              return produto;
+          } catch (DaoException ex) {
+              factory.rollback();
+              throw ex;
           }
-         
-          public List<Produto> listar() {
-                  return dao.list();
+      }
+     
+      public Produto adicionar(Produto produto) {
+          try {
+              factory.beginTransaction();
+              produto = dao.store(produto);
+              factory.commit();
+              return produto;
+          } catch (DaoException ex) {
+              factory.rollback();
+              throw ex;
           }
-         
-          public Produto atualizar(Produto produto) {
-                  try {
-                          factory.beginTransaction();
-                          produto = dao.update(produto);
-                          factory.commit();
-                          return produto;
-                  } catch (DaoException ex) {
-                          factory.rollback();
-                          throw ex;
-                  }
-          }
-         
-          public Produto adicionar(Produto produto) {
-                  try {
-                          factory.beginTransaction();
-                          produto = dao.store(produto);
-                          factory.commit();
-                          return produto;
-                  } catch (DaoException ex) {
-                          factory.rollback();
-                          throw ex;
-                  }
-          }
+      }
   }
 [/java]
 
@@ -66,22 +66,23 @@ dentro de um escopo transacional, como fazer isso? é só criar um interceptador
   public class TransactionInterceptor implements Interceptor {
           private final Session session;
           public HibernateTransactionInterceptor(Session session) {
-                  this.session = session;
+              this.session = session;
           }
-          public void intercept(InterceptorStack stack, ResourceMethod method, Object instance) {
-                  Transaction transaction = null;
-                  try {
-                          transaction = session.beginTransaction();
-                          stack.next(method, instance);
-                          transaction.commit();
-                  } finally {
-                          if (transaction.isActive()) {
-                                  transaction.rollback();
-                          }
+          public void intercept(InterceptorStack stack, ResourceMethod method, 
+          						Object instance) {
+              Transaction transaction = null;
+              try {
+                  transaction = session.beginTransaction();
+                  stack.next(method, instance);
+                  transaction.commit();
+              } finally {
+                  if (transaction.isActive()) {
+                      transaction.rollback();
                   }
+              }
           }
           public boolean accepts(ResourceMethod method) {
-                  return true; //aceita todas as requisições
+              return true; //aceita todas as requisições
           }
   }
 [/java]
@@ -92,11 +93,11 @@ e os métodos transacionais da minha lógica irão se reduzir a isto
 
 [java]
   public Produto atualizar(Produto produto) {
-          return dao.update(produto);
+      return dao.update(produto);
   }
    
   public Produto adicionar(Produto produto) {
-          return dao.store(produto);
+      return dao.store(produto);
   }
 [/java]
 
@@ -129,25 +130,25 @@ Agora precisamos marcar os pontos onde queremos que o escopo seja transacional c
 [java]
   @Resource
   public class ProdutoController {
-          private final ProdutoDao dao;
-         
-          public ProdutoController(ProdutoDao dao) {
-                  this.dao = dao;
-          }
-         
-          public List<Produto> listar() {
-                  return dao.list();
-          }
-         
-          @Transactional
-          public Produto atualizar(Produto produto) {
-                  return dao.update(produto);
-          }
-         
-          @Transactional
-          public Produto adicionar(Produto produto) {
-                  return dao.store(produto);
-          }
+      private final ProdutoDao dao;
+     
+      public ProdutoController(ProdutoDao dao) {
+          this.dao = dao;
+      }
+     
+      public List<Produto> listar() {
+          return dao.list();
+      }
+     
+      @Transactional
+      public Produto atualizar(Produto produto) {
+          return dao.update(produto);
+      }
+     
+      @Transactional
+      public Produto adicionar(Produto produto) {
+          return dao.store(produto);
+      }
   }
 [/java]
 
@@ -161,13 +162,13 @@ A modificação do método ficaria assim
 
 [java]
   public boolean accepts(ResourceMethod method) {
-          return  method
-                          .getMethod() //metodo anotado
-                          .isAnnotationPresent(Transactional.class)
-                  || method
-                          .getResource() //ou recurso anotado
-                          .getType()
-                          .isAnnotationPresent(Transactional.class);
+      return  method
+                  .getMethod() //metodo anotado
+                  .isAnnotationPresent(Transactional.class)
+              || method
+                  .getResource() //ou recurso anotado
+                  .getType()
+                  .isAnnotationPresent(Transactional.class);
   }
 [/java]
 

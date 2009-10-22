@@ -1,0 +1,232 @@
+
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="author" content="Caelum"/>
+	<meta name="reply-to" content="contato@caelum.com.br"/>
+	<meta name="author" content="Design"/>
+	<meta name="reply-to" content="lokidg@gmail.com"/>
+	
+		
+		<link href="../../documentacao/includes/css/java.css" rel="stylesheet" type="text/css" media="screen" />
+		<link href="../../documentacao/includes/css/xml2html.css" rel="stylesheet" type="text/css" media="screen" />
+		<link href="../../documentacao/includes/css/style.css" rel="stylesheet" type="text/css" media="screen" />
+	
+	<meta name="description" content="VRaptor 3 - um framework java para web focado em desenvolvimento rápido"/>
+	<meta name="keywords" content="sites, web, desenvolvimento, development, java, opensource"/>
+	<title>V|Raptor - Alta produtividade no Desenvolvimento Web em Java</title>
+	<link href="../../screen.css" rel="stylesheet" type="text/css" media="screen" />
+    <link href="../../menu.css" rel="stylesheet" type="text/css" media="screen" />
+    <!--[if lt IE 7]>
+    <script src="http://ie7-js.googlecode.com/svn/version/2.0(beta3)/IE7.js" type="text/javascript"></script>
+    <![endif]-->
+</head>
+
+<body>
+	<div id="headerWrap">
+    	<div id="headerContent">
+        	<h1 id="logoVraptor"><span>V|Raptor</span></h1><!-- vraptorlogo-->
+            
+            <ul id="langMenu">
+            	<li><a id="engBtn" href="../../en/"><span>ENGLISH</span></a></li>
+                <li><a id="ptBtn" href="../../"><span>PORTUGUÊS</span></a></li>
+            </ul><!-- langMenu-->            
+        </div><!-- header content -->
+    </div><!-- header wrap-->
+    
+    <div id="menuWrap">
+    	<ul id="menuElements">
+        	<li><a id="homeBtn" href="../../"><span>home</span></a></li>
+        	<li><a id="downloadBtn" href="../../download.jsp"><span>download</span></a></li>
+        	<li><a id="documentacaoBtn" href="../../documentacao/"><span>Documentação</span></a></li>
+        	<li><a id="beneficiosBtn" href="../../beneficios.jsp"><span>Benef&iacute;cios</span></a></li>
+        	<li><a id="suporteBtn" href="../../suporte.jsp"><span>Suporte</span></a></li>
+        	<li><a id="vraptor2Btn" href="../../vraptor2.jsp"><span>vraptor2</span></a></li>
+        </ul><!-- menuElements-->
+    </div><!-- menuWrap-->
+<div id="contentWrap">
+    	<div id="contentDocumentacao">
+			<div class="download"><a href="../vraptor3cookbook.pdf">Download em PDF</a></div>
+			<div class="download"><a href="../../documentacao">Documentação</a></div>
+        	<h2 class="title"><span>Livro de Receitas</span></h2>
+            <h3 class="title">Algumas soluções prontas e dicas para problemas comuns.</h3>            <div id="subMenuDoc">
+            	<img id="positionTop" src="../includes/images/subMenuTop-trans.png" />
+                <img id="positionBottom" src="../includes/images/subMenuBottom-trans.png" />
+            	<ol type="1">
+									<li><a class="link_toc" href="../../cookbook/colocando-objetos-na-sessao/">1. Colocando objetos na sessão</a></li>
+		
+									<li><a class="link_toc" href="../../cookbook/componentfactory-como-seletor-de-implementacoes/">2. ComponentFactory como seletor de implementações</a></li>
+		
+									<li><a class="link_toc" href="../../cookbook/gerando-aplicacao-com-vraptor3-usando-maven/">3. Gerando aplicação com VRaptor3 usando Maven</a></li>
+		
+									<li><a class="link_toc" href="../../cookbook/usando-tiles-com-vraptor3/">4. Usando tiles com vraptor3</a></li>
+		
+									<li><a class="link_toc" href="../../cookbook/interceptando-recursos-anotados/">5. Interceptando recursos anotados</a></li>
+		
+									<li><a class="link_toc" href="../../cookbook/poupando-recursos-lazy-dependency-injection/">6. Poupando recursos - LAZY Dependency Injection</a></li>
+		
+									<li><a class="link_toc" href="../../cookbook/evitando-que-o-browser-faca-cache-das-paginas/">7. Evitando que o browser faça cache das páginas</a></li>
+		
+									<li><a class="link_toc" href="../../cookbook/usando-o-header-referer-para-fazer-redirecionamentos/">8. Usando o Header Referer para fazer redirecionamentos</a></li>
+		
+                </ol>
+            </div><!-- submenu-->
+                        
+            <div id="textoCapitulo">
+	
+		<h2 class="chapter">Usando tiles com vraptor3</h2>
+
+		<span class="paragraph"><strong class="definition"><em class="italic">por Ot&aacute;vio Scherer Garcia</em></strong></span><span class="paragraph">Caso voc&ecirc; queira integrar Tiles 2 com VRaptor fazendo com que seja feito forward 
+diretamente para o tiles e n&atilde;o para o JSP (padr&atilde;o no VRaptor3), basta escrever uma 
+classe que implemente PathResolver com sua conven&ccedil;&atilde;o.</span><span class="paragraph">A primeira coisa a fazer &eacute; colocar o tiles para responder como servlet. Assim toda 
+requisi&ccedil;&atilde;o vinda por <code class="inlineCode">*.tiles</code> ser&aacute; redirecionada ao tiles, e n&atilde;o ao VRaptor. Lembre-se 
+de colocar a declara&ccedil;&atilde;o do tiles servlet antes do vraptor filter.</span><span class="paragraph">web.xml:</span><div class="xml"><code class="xml"><span class="texcomment">&lt;!--&nbsp;arquivo&nbsp;de&nbsp;defini&ccedil;&otilde;es&nbsp;do&nbsp;tiles&nbsp;--&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal"></span><span class="textag">&lt;context-param&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;</span><span class="textag">&lt;param-name&gt;</span><span class="texnormal">org.apache.tiles.impl.BasicTilesContainer.DEFINITIONS_CONFIG</span><span class="textag">&lt;/param-name&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;</span><span class="textag">&lt;param-value&gt;</span><span class="texnormal">/WEB-INF/classes/tiles.xml</span><span class="textag">&lt;/param-value&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal"></span><span class="textag">&lt;/context-param&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal"><br /></span>
+<span class="texnormal"></span><span class="texcomment">&lt;!--&nbsp;servlet&nbsp;de&nbsp;inicializa&ccedil;&atilde;o&nbsp;do&nbsp;tiles&nbsp;--&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal"></span><span class="textag">&lt;servlet&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;</span><span class="textag">&lt;servlet-name&gt;</span><span class="texnormal">TilesServlet</span><span class="textag">&lt;/servlet-name&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;</span><span class="textag">&lt;servlet-class&gt;</span><span class="texnormal">org.apache.tiles.web.startup.TilesServlet</span><span class="textag">&lt;/servlet-class&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;</span><span class="textag">&lt;load-on-startup&gt;</span><span class="texnormal">2</span><span class="textag">&lt;/load-on-startup&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal"></span><span class="textag">&lt;/servlet&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal"><br /></span>
+<span class="texnormal"></span><span class="texcomment">&lt;!--&nbsp;servlet&nbsp;que&nbsp;responde&nbsp;as&nbsp;requisi&ccedil;&otilde;es&nbsp;do&nbsp;tiles&nbsp;--&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal"></span><span class="textag">&lt;servlet&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;</span><span class="textag">&lt;servlet-name&gt;</span><span class="texnormal">TilesDispatchServlet</span><span class="textag">&lt;/servlet-name&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;</span><span class="textag">&lt;servlet-class&gt;</span><span class="texnormal">org.apache.tiles.web.util.TilesDispatchServlet</span><span class="textag">&lt;/servlet-class&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal"></span><span class="textag">&lt;/servlet&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal"><br /></span>
+<span class="texnormal"></span><span class="texcomment">&lt;!--&nbsp;o&nbsp;tiles&nbsp;responder&aacute;&nbsp;por&nbsp;toda&nbsp;requisi&ccedil;&atilde;o&nbsp;*.tiles&nbsp;--&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal"></span><span class="textag">&lt;servlet-mapping&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;</span><span class="textag">&lt;servlet-name&gt;</span><span class="texnormal">TilesDispatchServlet</span><span class="textag">&lt;/servlet-name&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;</span><span class="textag">&lt;url-pattern&gt;</span><span class="texnormal">*.tiles</span><span class="textag">&lt;/url-pattern&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal"></span><span class="textag">&lt;/servlet-mapping&gt;</span></code></div><span class="paragraph">No meu caso usei como padr&atilde;o para o tiles a conven&ccedil;&atilde;o /package.controller.metodo. 
+Sendo assim criei o seguinte path resolver.</span><div class="java"><code class="java">
+<span class="java16">@Component<br />
+</span><span class="java4">public class </span><span class="java10">TilesPathResolver<br />
+&nbsp; </span><span class="java4">implements </span><span class="java10">PathResolver </span><span class="java8">{<br />
+<br />
+&nbsp; </span><span class="java4">static final </span><span class="java10">String VIEW_SUFIX = </span><span class="java5">&#34;.tiles&#34;</span><span class="java10">;<br />
+&nbsp; </span><span class="java4">static final </span><span class="java10">String CLASS_SUFIX = </span><span class="java5">&#34;Controller&#34;</span><span class="java10">;<br />
+<br />
+&nbsp; </span><span class="java16">@Override<br />
+&nbsp; </span><span class="java4">public </span><span class="java10">String pathFor</span><span class="java8">(</span><span class="java10">ResourceMethod method</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">final </span><span class="java10">Class&lt;?&gt; clazz = method.getResource</span><span class="java8">()</span><span class="java10">.getType</span><span class="java8">()</span><span class="java10">;<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">final </span><span class="java10">StringBuilder s = </span><span class="java4">new </span><span class="java10">StringBuilder</span><span class="java8">()</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; s.append</span><span class="java8">(</span><span class="java5">&#34;/&#34;</span><span class="java8">)</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java3">// retorna apenas o nome do &uacute;ltimo pacote<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">s.append</span><span class="java8">(</span><span class="java10">StringUtils.substringAfterLast</span><span class="java8">(</span><span class="java10">clazz.getPackage</span><span class="java8">()</span><span class="java10">.getName</span><span class="java8">()</span><span class="java10">, </span><span class="java5">&#34;.&#34;</span><span class="java8">))</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; s.append</span><span class="java8">(</span><span class="java5">&#34;.&#34;</span><span class="java8">)</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java3">//remove o sufixo controller<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">s.append</span><span class="java8">(</span><span class="java10">StringUtils.substringBefore</span><span class="java8">(</span><span class="java10">clazz.getSimpleName</span><span class="java8">()</span><span class="java10">, CLASS_SUFIX</span><span class="java8">))</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; s.append</span><span class="java8">(</span><span class="java5">&#34;.&#34;</span><span class="java8">)</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; s.append</span><span class="java8">(</span><span class="java10">method.getMethod</span><span class="java8">()</span><span class="java10">.getName</span><span class="java8">())</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; s.append</span><span class="java8">(</span><span class="java10">VIEW_SUFIX</span><span class="java8">)</span><span class="java10">;<br />
+<br />
+&nbsp;&nbsp; </span><span class="java3">// defini&ccedil;ões do tile em minusculo, mas voc&ecirc; pode alterar isso<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return </span><span class="java10">s.toString</span><span class="java8">()</span><span class="java10">.toLowerCase</span><span class="java8">()</span><span class="java10">;<br />
+&nbsp; </span><span class="java8">}<br />
+}</span></code></div><span class="paragraph">Se voc&ecirc; n&atilde;o quiser utilizar a classe <code class="inlineCode">StringUtils</code> do projeto <code class="inlineCode">commons-lang</code>, 
+voc&ecirc; pode alterar o metodo para:</span><div class="java"><code class="java">
+<span class="java4">final </span><span class="java10">Class&lt;?&gt; clazz = method.getResource</span><span class="java8">()</span><span class="java10">.getType</span><span class="java8">()</span><span class="java10">;<br />
+String pkgname = clazz.getPackage</span><span class="java8">()</span><span class="java10">.getName</span><span class="java8">()</span><span class="java10">;<br />
+<br />
+</span><span class="java4">final </span><span class="java10">StringBuilder s = </span><span class="java4">new </span><span class="java10">StringBuilder</span><span class="java8">()</span><span class="java10">;<br />
+s.append</span><span class="java8">(</span><span class="java5">&#34;/&#34;</span><span class="java8">)</span><span class="java10">;<br />
+</span><span class="java3">// retorna apenas o nome do &uacute;ltimo pacote<br />
+</span><span class="java10">s.append</span><span class="java8">(</span><span class="java10">pkgname.substring</span><span class="java8">(</span><span class="java10">pkgname.lastIndexOf</span><span class="java8">(</span><span class="java5">&#34;.&#34;</span><span class="java8">) </span><span class="java10">+ </span><span class="java7">1</span><span class="java8">))</span><span class="java10">;<br />
+s.append</span><span class="java8">(</span><span class="java5">&#34;.&#34;</span><span class="java8">)</span><span class="java10">;<br />
+</span><span class="java3">//remove o sufixo controller<br />
+</span><span class="java10">s.append</span><span class="java8">(</span><span class="java10">clazz.getSimpleName</span><span class="java8">()</span><span class="java10">.substring</span><span class="java8">(</span><span class="java7">0</span><span class="java10">, clazz.getSimpleName</span><span class="java8">()</span><span class="java10">.indexOf</span><span class="java8">(</span><span class="java10">CLASS_SUFIX</span><span class="java8">)))</span><span class="java10">;<br />
+s.append</span><span class="java8">(</span><span class="java5">&#34;.&#34;</span><span class="java8">)</span><span class="java10">;<br />
+s.append</span><span class="java8">(</span><span class="java10">method.getMethod</span><span class="java8">()</span><span class="java10">.getName</span><span class="java8">())</span><span class="java10">;<br />
+s.append</span><span class="java8">(</span><span class="java10">VIEW_SUFIX</span><span class="java8">)</span><span class="java10">;<br />
+<br />
+</span><span class="java3">// defini&ccedil;ões do tile em minusculo, mas voc&ecirc; pode alterar isso<br />
+</span><span class="java4">return </span><span class="java10">s.toString</span><span class="java8">()</span><span class="java10">.toLowerCase</span><span class="java8">()</span><span class="java10">;</span></code></div><span class="paragraph">Nesse caso se voc&ecirc; tiver o controler <code class="inlineCode">CustomerController</code> e chamar o m&eacute;todo <code class="inlineCode">list</code>, 
+a view ser&aacute; redirecionada ao URI /admin.customer.list.tiles, que ser&aacute; executado pelo tiles servlet.</span><div class="java"><code class="java">
+<span class="java4">package </span><span class="java10">xpto.admin;<br />
+<br />
+</span><span class="java16">@Resource<br />
+</span><span class="java4">public class </span><span class="java10">CustomerController </span><span class="java8">{<br />
+&nbsp; </span><span class="java4">public </span><span class="java10">List&lt;Customer&gt; list</span><span class="java8">() {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return </span><span class="java10">myServiceClass.listAllCustomers</span><span class="java8">()</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java3">// ser&aacute; redirecionado para a defini&ccedil;ão admin.customer.list<br />
+&nbsp; </span><span class="java8">}<br />
+}</span></code></div><span class="paragraph">[/xml]
+&lt;definition name="admin.customer.list" extends="default"&gt;
+  &lt;put-attribute name="body" value="/WEB-INF/jspx/admin/customer.list.jspx" /&gt;
+&lt;/definition&gt;
+[/xml]</span><span class="paragraph">Refer&ecirc;ncias:</span><ul class="list"><li><span class="paragraph"><strong class="definition">Apache Tiles</strong>: <a class="link" target="_blank" href="http://tiles.apache.org/">http://tiles.apache.org/</a></span></li><li><span class="paragraph"><strong class="definition">VRaptor View e PathResolver</strong>: <a class="link" target="_blank" href="http://vraptor.caelum.com.br/documentacao/view-e-ajax/">http://vraptor.caelum.com.br/documentacao/view-e-ajax/</a></span></li></ul>
+
+
+</div><!-- content -->
+            
+        </div><!-- content cnt -->
+    </div><!-- content wrap-->
+    
+
+
+
+
+		
+
+    <div id="footerWrap">
+    	<div id="footerContent">              
+            <div id="suporteFooter">
+	           	<a href="http://www.caelum.com.br/contato/" class="moreIcon" title="Saiba Mais"><span>+</span></a>
+	           	<h3><a href="http://www.caelum.com.br/contato/">Suporte</a></h3>
+                <p><a href="http://www.caelum.com.br/contato/">Conheça os nossos planos de suporte online, e tenha a confiança de ter suas dúvidas e problemas rapidamente solucionados.</a></p>            
+            </div><!-- suporte-->
+            <div id="consultoriaFooter">
+           		<a href="http://www.caelum.com.br/servicos/consultoria/" class="moreIcon" title="Saiba Mais"><span>+</span></a>
+           		<h3><a href="http://www.caelum.com.br/servicos/consultoria/">Consultoria</a></h3>
+                <p><a href="http://www.caelum.com.br/servicos/consultoria/">A equipe que desenvolveu o VRaptor está disponível para auxiliar a sua equipe de desenvolvimento. Conheça nossos planos de consultoria.</a></p>            
+            </div><!-- consultoria-->
+        	<div id="treinamentoFooter">
+            	<a href="http://www.caelum.com.br/curso/fj-28-vraptor-hibernate-ajax/" class="moreIcon" title="Saiba Mais"><span>+</span></a><h3><a href="http://www.caelum.com.br/curso/fj-28-vraptor-hibernate-ajax/">Treinamento</a></h3>
+                <p><a href="http://www.caelum.com.br/curso/fj-28-vraptor-hibernate-ajax/">A Caelum oferece treinamento oficial de VRaptor, com Hibernate e Ajax, focando nas melhores práticas com VRaptor. Clique e saiba mais.</a></p>
+            </div><!--treinamento-->
+     <div class="footbar">
+            	<img class="logoFooter" src="../../images/logoCaelumGray-trans.png" alt="vraptor logo" />
+                <ul>
+                	<li>site map:</li>
+                    <li><a href="../../">home</a></li>
+                    <li>|</li>
+                    <li><a href="../../download.jsp">download</a></li>
+                    <li>|</li>
+                    <li><a href="../../documentacao/">Documentação</a></li>
+                    <li>|</li>
+                    <li><a href="../../beneficios.jsp">Benef&iacute;cios</a></li>
+                    <li>|</li>
+                    <li><a href="../../suporte.jsp">Suporte</a></li>
+                    <li>|</li>
+                    <li><a href="../../vraptor2.jsp">vraptor2</a></li>
+                </ul>
+                <p><a href="http://www.apache.org/licenses/LICENSE-2.0">Licença Apache 2.0</a> - VRaptor ©2009 Caelum - Ensino e Inovação</p>
+            </div><!-- footnote-->
+        </div><!-- footer content -->
+        <a id="signature" href="mailto:lokidg@gmail.com">loki|design</a>
+    </div><!-- footer wrap-->
+<script type="text/javascript">
+	var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+	document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+<script type="text/javascript">
+	try {
+	var pageTracker = _gat._getTracker("UA-270161-11");
+	pageTracker._trackPageview();
+	} catch(err) {}
+ </script>
+    
+</body>
+</html>

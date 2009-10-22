@@ -26,7 +26,8 @@ Este interceptor indica ao browser para não efetuar cache das páginas.
         }
 
         @Override
-        public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
+        public void intercept(InterceptorStack stack, ResourceMethod method, 
+        			Object resourceInstance)
             throws InterceptionException {
             // set the expires to past
             response.setHeader("Expires", "Wed, 31 Dec 1969 21:00:00 GMT");

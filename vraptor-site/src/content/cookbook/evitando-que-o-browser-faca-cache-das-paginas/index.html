@@ -78,35 +78,50 @@
                         
             <div id="textoCapitulo">
 	
-		<h2 class="chapter">Colocando objetos na sessão</h2>
+		<h2 class="chapter">Evitando que o browser faça cache das páginas</h2>
 
-		<span class="paragraph">Se voc&ecirc; precisa colocar algum objeto na Sess&atilde;o (e est&aacute; usando o Spring como DI provider)
-voc&ecirc; pode criar um componente Session scoped:</span><div class="java"><code class="java">
-<span class="java16">@Component<br />
-@SessionScoped<br />
-</span><span class="java4">public class </span><span class="java10">UserInfo </span><span class="java8">{<br />
+		<span class="paragraph"><strong class="definition"><em class="italic">por Ot&aacute;vio Scherer Garcia</em></strong></span><span class="paragraph">Este interceptor indica ao browser para n&atilde;o efetuar cache das p&aacute;ginas.</span><div class="java"><code class="java">
+<span class="java14">/**<br />
+ * Intercepts all requests and set a no-cache information.<br />
+ *<br />
+ * </span><span class="java11">@author </span><span class="java14">Ot&aacute;vio Scherer Garcia<br />
+ * </span><span class="java11">@version </span><span class="java14">$Revision$<br />
+ */<br />
+</span><span class="java16">@Intercepts<br />
+@RequestScoped<br />
+</span><span class="java4">public class </span><span class="java10">NoCacheInterceptor<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">implements </span><span class="java10">Interceptor </span><span class="java8">{<br />
 <br />
-&nbsp;&nbsp;&nbsp; </span><span class="java4">private </span><span class="java10">User user;<br />
-&nbsp;&nbsp;&nbsp; <br />
-&nbsp;&nbsp;&nbsp; </span><span class="java3">// getter e setter<br />
-</span><span class="java8">}</span></code></div><span class="paragraph">e se voc&ecirc; quiser usar ou colocar o usu&aacute;rio na sess&atilde;o, de dentro de algum Controller, por exemplo,
-voc&ecirc; pode receber essa classe que voc&ecirc; acabou de criar no construtor:</span><div class="java"><code class="java">
-<span class="java16">@Resource<br />
-</span><span class="java4">public class </span><span class="java10">LoginController </span><span class="java8">{<br />
-&nbsp;&nbsp;&nbsp; <br />
-&nbsp;&nbsp;&nbsp; </span><span class="java4">private </span><span class="java10">UserInfo info;<br />
-&nbsp;&nbsp;&nbsp; <br />
-&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">LoginController</span><span class="java8">(</span><span class="java10">UserInfo info</span><span class="java8">) {<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">this</span><span class="java10">.info = info;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">private final </span><span class="java10">HttpServletResponse response;<br />
+<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">NoCacheInterceptor</span><span class="java8">(</span><span class="java10">HttpServletResponse response</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">this</span><span class="java10">.response = response;<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
-&nbsp;&nbsp;&nbsp; <br />
-&nbsp;&nbsp;&nbsp; </span><span class="java3">//...<br />
-&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">login</span><span class="java8">(</span><span class="java10">User user</span><span class="java8">) {<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java3">//valida o usuario<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">this</span><span class="java10">.info.setUser</span><span class="java8">(</span><span class="java10">user</span><span class="java8">)</span><span class="java10">;<br />
+<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java16">@Override<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">boolean </span><span class="java10">accepts</span><span class="java8">(</span><span class="java10">ResourceMethod method</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return true</span><span class="java10">; </span><span class="java3">// allow all requests<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
-}</span></code></div><span class="paragraph">E para acessar esse usu&aacute;rio a partir da view, existe um atributo no HttpSession com o nome "userInfo",
-assim voc&ecirc; pode usar numa jsp:</span><div class="java"><code class="java">${userInfo.user}</code></div>
+<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java16">@Override<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">intercept</span><span class="java8">(</span><span class="java10">InterceptorStack stack, ResourceMethod method, <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Object resourceInstance</span><span class="java8">)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">throws </span><span class="java10">InterceptionException </span><span class="java8">{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java3">// set the expires to past<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">response.setHeader</span><span class="java8">(</span><span class="java5">&#34;Expires&#34;</span><span class="java10">, </span><span class="java5">&#34;Wed, 31 Dec 1969 21:00:00 GMT&#34;</span><span class="java8">)</span><span class="java10">;<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java3">// no-cache headers for HTTP/1.1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">response.setHeader</span><span class="java8">(</span><span class="java5">&#34;Cache-Control&#34;</span><span class="java10">, </span><span class="java5">&#34;no-store, no-cache, must-revalidate&#34;</span><span class="java8">)</span><span class="java10">;<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java3">// no-cache headers for HTTP/1.1 (IE)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">response.addHeader</span><span class="java8">(</span><span class="java5">&#34;Cache-Control&#34;</span><span class="java10">, </span><span class="java5">&#34;post-check=0, pre-check=0&#34;</span><span class="java8">)</span><span class="java10">;<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java3">// no-cache headers for HTTP/1.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">response.setHeader</span><span class="java8">(</span><span class="java5">&#34;Pragma&#34;</span><span class="java10">, </span><span class="java5">&#34;no-cache&#34;</span><span class="java8">)</span><span class="java10">;<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; stack.next</span><span class="java8">(</span><span class="java10">method, resourceInstance</span><span class="java8">)</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+}</span></code></div>
 
 
 </div><!-- content -->

@@ -1,5 +1,5 @@
 [chapter Poupando recursos - LAZY Dependency Injection]
-**::por Tomaz Lavieri no blog http://java-i9se.blogspot.com/2009/10/vratpro-3-poupando-recursos-lazy.html ::**
+**::por Tomaz Lavieri no blog http://blog.tomazlavieri.com.br/2009/vraptor-3-poupando-recursos-lazy-dependence-injection/ ::**
 Objetivo: Ao final deste artigo espera-se que você saiba como poupar recursos caros, trazendo 
 eles de forma ::LAZY::, ou como prefiro chamar ::Just-in-Time:: (no momento certo).
 

@@ -2,17 +2,17 @@
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource
  * All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); 
- * you may not use this file except in compliance with the License. 
- * You may obtain a copy of the License at 
- * 
- * 	http://www.apache.org/licenses/LICENSE-2.0 
- * 
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an "AS IS" BASIS, 
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
- * See the License for the specific language governing permissions and 
- * limitations under the License. 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * 	http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package br.com.caelum.vraptor.http.route;
@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
 
@@ -37,6 +38,7 @@ import br.com.caelum.vraptor.resource.ResourceClass;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.util.collections.Filters;
 
+import com.google.common.collect.Collections2;
 import com.google.common.collect.Iterators;
 
 /**
@@ -85,27 +87,49 @@ public class DefaultRouter implements Router {
 		this.routes.add(r);
 	}
 
-	public ResourceMethod parse(String uri, HttpMethod method, MutableRequest request) {
-		Iterator<Route> matches = Iterators.filter(routes.iterator(), Filters.canHandle(uri, method));
-		if (matches.hasNext()) {
-			Route route = matches.next();
-			checkIfThereIsAnotherRoute(uri, method, matches, route);
-			return route.matches(uri, method, request);
-		}
-		return null;
+	public ResourceMethod parse(String uri, HttpMethod method, MutableRequest request)
+						throws ResourceNotFoundException, MethodNotAllowedException{
+		Collection<Route> routesMatchingUriAndMethod = routesMatchingUriAndMethod(uri, method);
+
+		Iterator<Route> iterator = routesMatchingUriAndMethod.iterator();
+
+		Route route = iterator.next();
+		checkIfThereIsAnotherRoute(uri, method, iterator, route);
+
+		return route.matches(uri, method, request);
 	}
 
-	private void checkIfThereIsAnotherRoute(String uri, HttpMethod method,
-			Iterator<Route> matches, Route route) {
-		if (matches.hasNext()) {
-			Route otherRoute = matches.next();
-			if (otherRoute.getPriority() == route.getPriority()) {
-				throw new VRaptorException(
+	private void checkIfThereIsAnotherRoute(String uri, HttpMethod method, Iterator<Route> iterator, Route route) {
+		if (iterator.hasNext()) {
+			Route otherRoute = iterator.next();
+			if (route.getPriority() == otherRoute.getPriority()) {
+				throw new IllegalStateException(
 						MessageFormat.format("There are two rules that matches the uri ''{0}'' with method {1}: {2} with same priority." +
 								" Consider using @Path priority attribute.",
 								uri, method, Arrays.asList(route, otherRoute)));
 			}
 		}
+	}
+
+
+	private Collection<Route> routesMatchingUriAndMethod(String uri, HttpMethod method) {
+		Collection<Route> routesMatchingMethod = Collections2.filter(routesMatchingUri(uri), Filters.allow(method));
+		if (routesMatchingMethod.isEmpty()) {
+			EnumSet<HttpMethod> allowed = EnumSet.noneOf(HttpMethod.class);
+			for (Route route : routesMatchingUri(uri)) {
+				allowed.addAll(route.allowedMethods());
+			}
+			throw new MethodNotAllowedException(allowed, method);
+		}
+		return routesMatchingMethod;
+	}
+
+	private Collection<Route> routesMatchingUri(String uri) {
+		Collection<Route> routesMatchingURI = Collections2.filter(routes, Filters.canHandle(uri));
+		if (routesMatchingURI.isEmpty()) {
+			throw new ResourceNotFoundException();
+		}
+		return routesMatchingURI;
 	}
 
 	public void register(ResourceClass resource) {

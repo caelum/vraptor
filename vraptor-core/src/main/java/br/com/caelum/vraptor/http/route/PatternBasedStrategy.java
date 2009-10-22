@@ -2,23 +2,24 @@
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource
  * All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); 
- * you may not use this file except in compliance with the License. 
- * You may obtain a copy of the License at 
- * 
- * 	http://www.apache.org/licenses/LICENSE-2.0 
- * 
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an "AS IS" BASIS, 
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
- * See the License for the specific language governing permissions and 
- * limitations under the License. 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * 	http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package br.com.caelum.vraptor.http.route;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.EnumSet;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -41,17 +42,18 @@ public class PatternBasedStrategy implements Route {
 
 	private final PatternBasedType type;
 	private final PatternBasedType method;
-	private final Set<HttpMethod> methods;
+	private final EnumSet<HttpMethod> methods;
 
 	private final ParametersControl control;
 
 	private final int priority;
 
-	public PatternBasedStrategy(ParametersControl control, PatternBasedType type, PatternBasedType method, Set<HttpMethod> methods, int priority) {
+	public PatternBasedStrategy(ParametersControl control, PatternBasedType type, PatternBasedType method,
+				Set<HttpMethod> methods, int priority) {
 		this.control = control;
 		this.type = type;
 		this.method = method;
-		this.methods = methods;
+		this.methods = methods.isEmpty()? EnumSet.allOf(HttpMethod.class) : EnumSet.copyOf(methods);
 		this.priority = priority;
 	}
 
@@ -77,10 +79,15 @@ public class PatternBasedStrategy implements Route {
 		return null;
 	}
 
-	public boolean canHandle(String uri, HttpMethod method) {
-		boolean acceptMethod = this.methods.isEmpty() || this.methods.contains(method);
-		boolean acceptUri = control.matches(uri);
-		return acceptUri && acceptMethod;
+	public EnumSet<HttpMethod> allowedMethods() {
+		return methods;
+	}
+	public boolean canHandle(String uri) {
+		return control.matches(uri);
+	}
+
+	private boolean canHandle(String uri, HttpMethod method) {
+		return allowedMethods().contains(method) && canHandle(uri);
 	}
 
 	private Method method(Class<?> type, String methodName) {

@@ -2,17 +2,17 @@
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource
  * All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); 
- * you may not use this file except in compliance with the License. 
- * You may obtain a copy of the License at 
- * 
- * 	http://www.apache.org/licenses/LICENSE-2.0 
- * 
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an "AS IS" BASIS, 
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
- * See the License for the specific language governing permissions and 
- * limitations under the License. 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * 	http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package br.com.caelum.vraptor.http.route;
@@ -22,17 +22,18 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
 import java.lang.reflect.Method;
+import java.util.EnumSet;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.hamcrest.Matchers;
 import org.jmock.Expectations;
 import org.jmock.Sequence;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.Path;
-import br.com.caelum.vraptor.VRaptorException;
+import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.http.TypeCreator;
 import br.com.caelum.vraptor.http.VRaptorRequest;
 import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
@@ -54,7 +55,7 @@ public class DefaultRouterTest {
 	private TypeCreator creator;
 	private ResourceMethod method;
 
-	@org.junit.Before
+	@Before
 	public void setup() {
 		this.mockery = new VRaptorMockery();
 		this.request = new VRaptorRequest(mockery.mock(HttpServletRequest.class));
@@ -66,12 +67,59 @@ public class DefaultRouterTest {
 	}
 
 	@Test
+	public void shouldThrowResourceNotFoundExceptionWhenNoRoutesMatchTheURI() throws Exception {
+		final Route route = mockery.mock(Route.class);
+
+		mockery.checking(new Expectations() {
+			{
+				allowing(route).canHandle(with(any(String.class)));
+				will(returnValue(false));
+
+				ignoring(anything());
+			}
+		});
+
+		router.add(route);
+		try {
+			router.parse("any uri", HttpMethod.DELETE, request);
+			Assert.fail("ResourceNotFoundException is expected");
+		} catch (ResourceNotFoundException e) {
+			mockery.assertIsSatisfied();
+		}
+	}
+	@Test
+	public void shouldThrowMethodNotAllowedExceptionWhenNoRoutesMatchTheURIWithGivenHttpMethod() throws Exception {
+		final Route route = mockery.mock(Route.class);
+		mockery.checking(new Expectations() {
+			{
+				allowing(route).canHandle(with(any(String.class)));
+				will(returnValue(true));
+
+				allowing(route).allowedMethods();
+				will(returnValue(EnumSet.of(HttpMethod.GET)));
+
+				ignoring(anything());
+			}
+		});
+
+		router.add(route);
+		try {
+			router.parse("any uri", HttpMethod.DELETE, request);
+			Assert.fail("MethodNotAllowedException is expected");
+		} catch (MethodNotAllowedException e) {
+			assertThat(e.getAllowedMethods(), is(EnumSet.of(HttpMethod.GET)));
+			mockery.assertIsSatisfied();
+		}
+	}
+
+	@Test
 	public void shouldObeyPriorityOfRoutes() throws Exception {
 		final Route first = mockery.mock(Route.class, "first");
 		final Route second = mockery.mock(Route.class, "second");
 		final Route third = mockery.mock(Route.class, "third");
 
-		final Sequence invocation = mockery.sequence("invocation");
+		final Sequence handle = mockery.sequence("invocation");
+		final Sequence allowed = mockery.sequence("allowed");
 
 		mockery.checking(new Expectations() {
 			{
@@ -79,12 +127,21 @@ public class DefaultRouterTest {
 				allowing(second).getPriority(); will(returnValue(2));
 				allowing(third).getPriority(); will(returnValue(3));
 
-				one(first).canHandle(with(any(String.class)), with(any(HttpMethod.class))); will(returnValue(false));
-				inSequence(invocation);
-				one(second).canHandle(with(any(String.class)), with(any(HttpMethod.class))); will(returnValue(false));
-				inSequence(invocation);
-				one(third).canHandle(with(any(String.class)), with(any(HttpMethod.class))); will(returnValue(false));
-				inSequence(invocation);
+				allowing(first).canHandle(with(any(String.class))); will(returnValue(false));
+				inSequence(handle);
+				allowing(second).canHandle(with(any(String.class))); will(returnValue(false));
+				inSequence(handle);
+				allowing(third).canHandle(with(any(String.class))); will(returnValue(true));
+				inSequence(handle);
+
+				EnumSet<HttpMethod> get = EnumSet.of(HttpMethod.GET);
+
+				allowing(first).allowedMethods(); will(returnValue(get));
+				inSequence(allowed);
+				allowing(second).allowedMethods(); will(returnValue(get));
+				inSequence(allowed);
+				allowing(third).allowedMethods(); will(returnValue(get));
+				inSequence(allowed);
 
 				ignoring(anything());
 			}
@@ -101,10 +158,13 @@ public class DefaultRouterTest {
 	public void acceptsASingleMappingRule() throws SecurityException, NoSuchMethodException {
 		final Route route = mockery.mock(Route.class);
 		mockery.checking(new Expectations() {{
-			one(route).canHandle("/clients/add", HttpMethod.POST);
+			allowing(route).canHandle("/clients/add");
 			will(returnValue(true));
 
-			one(route).matches("/clients/add", HttpMethod.POST, request);
+			allowing(route).allowedMethods();
+			will(returnValue(EnumSet.of(HttpMethod.POST)));
+
+			allowing(route).matches("/clients/add", HttpMethod.POST, request);
 			will(returnValue(method));
 
 			allowing(route).getPriority();
@@ -121,10 +181,13 @@ public class DefaultRouterTest {
 		final HttpMethod delete = HttpMethod.DELETE;
 		final Route route = mockery.mock(Route.class);
 		mockery.checking(new Expectations() {{
-			one(route).canHandle("/clients/add", delete);
+			allowing(route).canHandle("/clients/add");
 			will(returnValue(true));
 
-			one(route).matches("/clients/add", delete, request);
+			allowing(route).allowedMethods();
+			will(returnValue(EnumSet.of(delete)));
+
+			allowing(route).matches("/clients/add", delete, request);
 			will(returnValue(method));
 
 			allowing(route).getPriority();
@@ -139,8 +202,13 @@ public class DefaultRouterTest {
 		final Route route = mockery.mock(Route.class);
 		final Route second = mockery.mock(Route.class, "second");
 		mockery.checking(new Expectations() {{
-			one(route).canHandle("/clients/add", HttpMethod.POST); will(returnValue(true));
-			one(second).canHandle("/clients/add", HttpMethod.POST);	will(returnValue(true));
+			allowing(route).canHandle("/clients/add"); will(returnValue(true));
+			allowing(second).canHandle("/clients/add");	will(returnValue(true));
+
+			EnumSet<HttpMethod> all = EnumSet.allOf(HttpMethod.class);
+
+			allowing(route).allowedMethods(); will(returnValue(all));
+			allowing(second).allowedMethods();	will(returnValue(all));
 
 			one(route).matches("/clients/add", HttpMethod.POST, request);
 			will(returnValue(method));
@@ -159,8 +227,13 @@ public class DefaultRouterTest {
 		final Route route = mockery.mock(Route.class);
 		final Route second = mockery.mock(Route.class, "second");
 		mockery.checking(new Expectations() {{
-			one(route).canHandle("/clients/add", HttpMethod.POST); will(returnValue(true));
-			one(second).canHandle("/clients/add", HttpMethod.POST);	will(returnValue(true));
+			allowing(route).canHandle("/clients/add"); will(returnValue(true));
+			allowing(second).canHandle("/clients/add");	will(returnValue(true));
+
+			EnumSet<HttpMethod> all = EnumSet.allOf(HttpMethod.class);
+
+			allowing(route).allowedMethods(); will(returnValue(all));
+			allowing(second).allowedMethods();	will(returnValue(all));
 
 			allowing(route).getPriority(); will(returnValue(1));
 			allowing(second).getPriority(); will(returnValue(1));
@@ -169,8 +242,8 @@ public class DefaultRouterTest {
 		router.add(second);
 		try {
 			router.parse("/clients/add", HttpMethod.POST, request);
-			Assert.fail("Exception expected");
-		} catch (VRaptorException e) {
+			Assert.fail("IllegalStateException expected");
+		} catch (IllegalStateException e) {
 			mockery.assertIsSatisfied();
 		}
 	}
@@ -238,14 +311,7 @@ public class DefaultRouterTest {
 		}
 	}
 
-	@Test
-	public void testReturnsNullIfResourceNotFound() {
-		ResourceMethod method = router.parse("unknown_id", HttpMethod.POST, null);
-		assertThat(method, is(Matchers.nullValue()));
-		mockery.assertIsSatisfied();
-	}
-
-	@br.com.caelum.vraptor.Resource
+	@Resource
 	public static class MyResource {
 		public void notAnnotated() {
 		}

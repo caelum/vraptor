@@ -99,8 +99,28 @@
 		
 		<move file="src/content/htmlflat/" tofile="src/content" />
 		<delete file="src/templates/html/chapter-title.ftl" />
-	</target>
 		
+	</target>
+	<!-- ================================= 
+          target: javadoc              
+         ================================= -->
+    <target name="javadoc" description="generates javadoc">
+    	<exec executable="rm">
+			<arg line="-rf src/content/javadoc"/>
+		</exec>
+    	<mkdir dir="src/content/javadoc"/>
+		<javadoc destdir="src/content/javadoc">
+			<classpath>
+				<fileset dir="../vraptor-core/lib">
+					<include name="**/*.jar" />
+				</fileset>
+			</classpath>
+			<fileset dir="../vraptor-core/src/main/java">
+				<include name="**/*.java"/>
+			</fileset>
+		</javadoc>
+    </target>
+
 	<target name="compile" description="--> compiles the classes">
 		<delete dir="src/content/WEB-INF/classes" includes="**/*"/>
 		<javac  destdir="src/content/WEB-INF/classes" srcdir="src/java" classpathref="compile.classpath" debug="true" encoding="UTF-8" />

@@ -8,7 +8,7 @@
 		<input type="text" name="login" id="login" />	
 		<label for="password"><fmt:message key="password" /></label>
 		<input type="password" name="password" id="password"/>
-		<button type="submit"><fmt:message key="send"/></button>
+		<button type="submit" id="submit"><fmt:message key="send"/></button>
 	</fieldset>
 </form>
 
@@ -21,7 +21,7 @@
 		<input type="text" name="user.login" value="${user.login }"/>
 		<label for="user.password"><fmt:message key="password" /></label>
 		<input type="password" name="user.password" value="${user.password }"/>
-		<button type="submit"><fmt:message key="send"/></button>
+		<button type="submit" id="user.submit"><fmt:message key="send"/></button>
 	</fieldset>
 </form>
 

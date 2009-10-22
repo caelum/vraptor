@@ -42,14 +42,15 @@
 	<target name="zips-site">
 		<ant dir="vraptor-site" target="assembly"/>
 		<mkdir dir="target"/>
-		<move file="vraptor-site/site.war" tofile="target/vraptor-site-${vraptor.version}.zip" />
+		<move file="vraptor-site/site.war" tofile="target/vraptor-site-${vraptor.version}.war" />
 	</target>
 	
 	<target name="zips-vraptor">
 		<mkdir dir="target"/>
-		<move file="vraptor-core/target/vraptor3-3.0.0-SNAPSHOT.jar" tofile="target/vraptor-${vraptor.version}.jar" />
+		<move file="vraptor-core/target/vraptor-${vraptor.version}.jar" tofile="target/vraptor-${vraptor.version}.jar" />
 		<zip destfile="target/vraptor-${vraptor.version}.zip">
 			<zipfileset dir="vraptor-site/src/content/documentacao" prefix="docs"/>			
+			<zipfileset dir="vraptor-site/src/content/javadoc" prefix="javadoc"/>			
 			<fileset file="target/vraptor-${vraptor.version}.jar" />
 			<zipfileset dir="vraptor-core/src" prefix="src"/>
 			<zipfileset dir="vraptor-core/lib" prefix="lib"/>

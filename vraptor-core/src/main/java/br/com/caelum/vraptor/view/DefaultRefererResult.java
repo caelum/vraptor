@@ -10,6 +10,8 @@ import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.ParametersProvider;
+import br.com.caelum.vraptor.http.route.MethodNotAllowedException;
+import br.com.caelum.vraptor.http.route.ResourceNotFoundException;
 import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
@@ -35,11 +37,13 @@ public class DefaultRefererResult implements RefererResult {
 	public void forward() throws IllegalStateException {
 		String referer = getReferer();
 
-		ResourceMethod method = router.parse(referer, HttpMethod.GET, request);
-		if (method == null) {
-			result.use(page()).forward(referer);
-		} else {
+		try {
+			ResourceMethod method = router.parse(referer, HttpMethod.GET, request);
 			executeMethod(method, result.use(logic()).forwardTo(method.getResource().getType()));
+		} catch (ResourceNotFoundException e) {
+			result.use(page()).forward(referer);
+		} catch (MethodNotAllowedException e) {
+			result.use(page()).forward(referer);
 		}
 	}
 
@@ -50,11 +54,13 @@ public class DefaultRefererResult implements RefererResult {
 
 	public void redirect() throws IllegalStateException {
 		String referer = getReferer();
-		ResourceMethod method = router.parse(referer, HttpMethod.GET, request);
-		if (method == null) {
-			result.use(page()).redirect(referer);
-		} else {
+		try {
+			ResourceMethod method = router.parse(referer, HttpMethod.GET, request);
 			executeMethod(method, result.use(logic()).redirectTo(method.getResource().getType()));
+		} catch (ResourceNotFoundException e) {
+			result.use(page()).redirect(referer);
+		} catch (MethodNotAllowedException e) {
+			result.use(page()).redirect(referer);
 		}
 	}
 

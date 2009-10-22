@@ -6,7 +6,7 @@
 
 <#include "header.ftl">
 <div id="contentWrap">
-    	<div id="contentDocumentacao">
+    	
 	<#include "chapter-title.ftl">            
             <div id="subMenuDoc">
             	<img id="positionTop" src="${relative}/includes/images/subMenuTop-trans.png" />

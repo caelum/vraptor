@@ -12,6 +12,7 @@ import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.ParametersProvider;
+import br.com.caelum.vraptor.http.route.ResourceNotFoundException;
 import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
@@ -84,7 +85,7 @@ public class DefaultRefererResultTest {
 				will(returnValue("/vraptor"));
 
 				one(router).parse("/no-controller", HttpMethod.GET, request);
-				will(returnValue(null));
+				will(throwException(new ResourceNotFoundException()));
 
 				PageResult page = mockery.mock(PageResult.class);
 
@@ -111,7 +112,7 @@ public class DefaultRefererResultTest {
 				will(returnValue("/vraptor"));
 
 				one(router).parse("/no-controller", HttpMethod.GET, request);
-				will(returnValue(null));
+				will(throwException(new ResourceNotFoundException()));
 
 				PageResult page = mockery.mock(PageResult.class);
 

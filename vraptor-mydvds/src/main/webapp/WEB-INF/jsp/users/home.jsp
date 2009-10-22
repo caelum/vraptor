@@ -36,7 +36,7 @@
 				<option value="${type }"><fmt:message key="${type }"/></option>
 			</c:forEach>
 		</select>
-		<button type="submit"><fmt:message key="send"/></button>
+		<button type="submit" id="send"><fmt:message key="send"/></button>
 	</fieldset>
 </form>
 

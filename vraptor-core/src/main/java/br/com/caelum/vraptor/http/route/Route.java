@@ -34,14 +34,19 @@ public interface Route {
 	/**
 	 * Returns the resource method for this specifig rule. Also applies the
 	 * required parameters to this vraptor request.
+	 * You must call {@link Route#canHandle(String)} method, and see if request
+	 * HTTP method is in {@link Route#allowedMethods()} before calling this method.
 	 */
-	ResourceMethod matches(String uri, HttpMethod method, MutableRequest request);
+	ResourceMethod resourceMethod(MutableRequest request, String uri);
 
 	/**
 	 * Returns if this route can handle this URI
 	 */
 	boolean canHandle(String uri);
 
+	/**
+	 * @return all allowed HTTP methods for this Route
+	 */
 	EnumSet<HttpMethod> allowedMethods();
 
 	/**

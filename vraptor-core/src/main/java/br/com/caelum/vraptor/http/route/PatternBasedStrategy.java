@@ -61,22 +61,19 @@ public class PatternBasedStrategy implements Route {
 		return this.type.matches(type.getName()) && this.method.matches(method.getName());
 	}
 
-	public ResourceMethod matches(String uri, HttpMethod method, MutableRequest request) {
-		if(canHandle(uri, method)){
-			control.fillIntoRequest(uri, request);
-			String webLogic = request.getParameter("webLogic");
-			String webMethod = request.getParameter("webMethod");
-			String typeName = type.apply("webLogic",webLogic);
-			try {
-				DefaultResourceClass resource = new DefaultResourceClass(Class.forName(typeName));
-				Method resourceMethod = method(resource.getType(), this.method.apply("webMethod", webMethod));
-				return new DefaultResourceMethod(resource, resourceMethod);
-			} catch (ClassNotFoundException e) {
-				logger.debug("Unable to find type " + typeName + " for strategy " + this);
-				return null;
-			}
+	public ResourceMethod resourceMethod(MutableRequest request, String uri) {
+		control.fillIntoRequest(uri, request);
+		String webLogic = request.getParameter("webLogic");
+		String webMethod = request.getParameter("webMethod");
+		String typeName = type.apply("webLogic",webLogic);
+		try {
+			DefaultResourceClass resource = new DefaultResourceClass(Class.forName(typeName));
+			Method resourceMethod = method(resource.getType(), this.method.apply("webMethod", webMethod));
+			return new DefaultResourceMethod(resource, resourceMethod);
+		} catch (ClassNotFoundException e) {
+			logger.debug("Unable to find type " + typeName + " for strategy " + this);
+			throw new IllegalStateException("You must call canHandle before calling this method");
 		}
-		return null;
 	}
 
 	public EnumSet<HttpMethod> allowedMethods() {
@@ -84,10 +81,6 @@ public class PatternBasedStrategy implements Route {
 	}
 	public boolean canHandle(String uri) {
 		return control.matches(uri);
-	}
-
-	private boolean canHandle(String uri, HttpMethod method) {
-		return allowedMethods().contains(method) && canHandle(uri);
 	}
 
 	private Method method(Class<?> type, String methodName) {

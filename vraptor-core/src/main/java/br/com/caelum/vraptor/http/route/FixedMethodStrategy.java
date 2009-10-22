@@ -56,12 +56,9 @@ public class FixedMethodStrategy implements Route {
 		return type.equals(this.resourceMethod.getResource().getType()) && method.equals(this.resourceMethod.getMethod());
 	}
 
-	public ResourceMethod matches(String uri, HttpMethod method, MutableRequest request) {
-		boolean matches = canHandle(uri, method);
-		if(matches) {
-			parameters.fillIntoRequest(uri, request);
-		}
-		return matches ? this.resourceMethod : null;
+	public ResourceMethod resourceMethod(MutableRequest request, String uri) {
+		parameters.fillIntoRequest(uri, request);
+		return this.resourceMethod;
 	}
 
 	public EnumSet<HttpMethod> allowedMethods() {
@@ -72,9 +69,6 @@ public class FixedMethodStrategy implements Route {
 		return parameters.matches(uri);
 	}
 
-	private boolean canHandle(String uri, HttpMethod method) {
-		return allowedMethods().contains(method) && canHandle(uri);
-	}
 
 	public String urlFor(Class<?> type, Method m, Object params) {
 		return parameters.fillUri(params);

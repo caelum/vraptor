@@ -37,7 +37,7 @@ public class Functions {
 	public static Function<Route, ResourceMethod> matches(final String uri, final HttpMethod method, final MutableRequest request) {
 		return new Function<Route, ResourceMethod>() {
 			public ResourceMethod apply(Route route) {
-				return route.matches(uri, method, request);
+				return route.resourceMethod(request, uri);
 			}
 		};
 	}

@@ -96,7 +96,7 @@ public class DefaultRouter implements Router {
 		Route route = iterator.next();
 		checkIfThereIsAnotherRoute(uri, method, iterator, route);
 
-		return route.matches(uri, method, request);
+		return route.resourceMethod(request, uri);
 	}
 
 	private void checkIfThereIsAnotherRoute(String uri, HttpMethod method, Iterator<Route> iterator, Route route) {

@@ -32,7 +32,7 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  */
 public class NoStrategy implements Route {
 
-	public ResourceMethod matches(String uri, HttpMethod method, MutableRequest request) {
+	public ResourceMethod resourceMethod(MutableRequest request, String uri) {
 		throw new IllegalRouteException("You have created a route, but did not specify any method to be invoked.");
 	}
 

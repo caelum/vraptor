@@ -164,7 +164,7 @@ public class DefaultRouterTest {
 			allowing(route).allowedMethods();
 			will(returnValue(EnumSet.of(HttpMethod.POST)));
 
-			allowing(route).matches("/clients/add", HttpMethod.POST, request);
+			allowing(route).resourceMethod(request, "/clients/add");
 			will(returnValue(method));
 
 			allowing(route).getPriority();
@@ -187,7 +187,7 @@ public class DefaultRouterTest {
 			allowing(route).allowedMethods();
 			will(returnValue(EnumSet.of(delete)));
 
-			allowing(route).matches("/clients/add", delete, request);
+			allowing(route).resourceMethod(request, "/clients/add");
 			will(returnValue(method));
 
 			allowing(route).getPriority();
@@ -210,7 +210,7 @@ public class DefaultRouterTest {
 			allowing(route).allowedMethods(); will(returnValue(all));
 			allowing(second).allowedMethods();	will(returnValue(all));
 
-			one(route).matches("/clients/add", HttpMethod.POST, request);
+			one(route).resourceMethod(request, "/clients/add");
 			will(returnValue(method));
 
 			allowing(route).getPriority(); will(returnValue(1));

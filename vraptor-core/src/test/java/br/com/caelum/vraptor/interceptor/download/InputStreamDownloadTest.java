@@ -1,9 +1,9 @@
 package br.com.caelum.vraptor.interceptor.download;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
@@ -14,9 +14,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-public class FileDownloadTest {
+public class InputStreamDownloadTest {
 
-	private File file;
+	private InputStream inputStream;
 	private byte[] bytes;
 	private Mockery mockery;
 	private HttpServletResponse response;
@@ -33,12 +33,8 @@ public class FileDownloadTest {
 			// just to have something not trivial
 			bytes[i] = (byte) (i % 100);
 		}
+		this.inputStream = new ByteArrayInputStream(bytes);
 		this.outputStream = new ByteArrayOutputStream();
-
-		this.file = File.createTempFile("test", "vraptor");
-		FileOutputStream fileStream = new FileOutputStream(file);
-		fileStream.write(bytes);
-		fileStream.close();
 
 		this.socketStream = new ServletOutputStream() {
 			public void write(int b) throws IOException {
@@ -49,8 +45,8 @@ public class FileDownloadTest {
 	}
 
 	@Test
-	public void shouldFlushWholeFileToHttpResponse() throws IOException {
-		FileDownload fd = new FileDownload(file, "type", "x.txt", false);
+	public void shouldFlushWholeStreamToHttpResponse() throws IOException {
+		InputStreamDownload fd = new InputStreamDownload(inputStream, "type", "x.txt");
 
 		mockery.checking(new Expectations() {
 			{

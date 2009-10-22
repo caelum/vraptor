@@ -17,11 +17,17 @@
 
 package br.com.caelum.vraptor.interceptor;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.http.UrlToResourceTranslator;
+import br.com.caelum.vraptor.http.route.MethodNotAllowedException;
+import br.com.caelum.vraptor.http.route.ResourceNotFoundException;
+import br.com.caelum.vraptor.resource.MethodNotAllowedHandler;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.resource.ResourceNotFoundHandler;
 
@@ -34,28 +40,37 @@ import br.com.caelum.vraptor.resource.ResourceNotFoundHandler;
  */
 public class ResourceLookupInterceptor implements Interceptor {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(ResourceLookupInterceptor.class);
 	private final UrlToResourceTranslator translator;
 	private final MethodInfo requestInfo;
 	private final RequestInfo request;
 	private final ResourceNotFoundHandler resourceNotFoundHandler;
+	private final MethodNotAllowedHandler methodNotAllowedHandler;
 
 	public ResourceLookupInterceptor(UrlToResourceTranslator translator, MethodInfo requestInfo,
-			ResourceNotFoundHandler resourceNotFoundHandler, RequestInfo request) {
+			ResourceNotFoundHandler resourceNotFoundHandler, MethodNotAllowedHandler methodNotAllowedHandler,
+			RequestInfo request) {
 		this.translator = translator;
 		this.requestInfo = requestInfo;
-		this.request = request;
+		this.methodNotAllowedHandler = methodNotAllowedHandler;
 		this.resourceNotFoundHandler = resourceNotFoundHandler;
+		this.request = request;
 	}
 
 	public void intercept(InterceptorStack invocation, ResourceMethod ignorableMethod, Object resourceInstance)
 			throws InterceptionException {
-		ResourceMethod method = translator.translate(request.getRequest());
-		if (method == null) {
+
+		try {
+			ResourceMethod method = translator.translate(request.getRequest());
+
+			requestInfo.setResourceMethod(method);
+			invocation.next(method, resourceInstance);
+		} catch (ResourceNotFoundException e) {
 			resourceNotFoundHandler.couldntFind(request);
-			return;
+		} catch (MethodNotAllowedException e) {
+			LOGGER.info(e.getMessage());
+			methodNotAllowedHandler.deny(request, e.getAllowedMethods());
 		}
-		requestInfo.setResourceMethod(method);
-		invocation.next(method, resourceInstance);
 	}
 
 	public boolean accepts(ResourceMethod method) {

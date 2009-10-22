@@ -91,7 +91,9 @@ import br.com.caelum.vraptor.ioc.StereotypeHandler;
 import br.com.caelum.vraptor.proxy.ObjenesisProxifier;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.reflection.CacheBasedTypeCreator;
+import br.com.caelum.vraptor.resource.DefaultMethodNotAllowedHandler;
 import br.com.caelum.vraptor.resource.DefaultResourceNotFoundHandler;
+import br.com.caelum.vraptor.resource.MethodNotAllowedHandler;
 import br.com.caelum.vraptor.resource.ResourceNotFoundHandler;
 import br.com.caelum.vraptor.validator.DefaultValidator;
 import br.com.caelum.vraptor.view.AcceptHeaderToFormat;
@@ -128,6 +130,7 @@ public class BaseComponents {
             UrlToResourceTranslator.class, 	DefaultResourceTranslator.class,
             Router.class, 					DefaultRouter.class,
             ResourceNotFoundHandler.class, 	DefaultResourceNotFoundHandler.class,
+            MethodNotAllowedHandler.class,	DefaultMethodNotAllowedHandler.class,
             EmptyElementsRemoval.class, 	EmptyElementsRemoval.class,
             RoutesConfiguration.class, 		NoRoutesConfiguration.class,
             Proxifier.class, 				ObjenesisProxifier.class,

@@ -17,6 +17,7 @@
 package br.com.caelum.vraptor.interceptor;
 
 import java.io.IOException;
+import java.util.EnumSet;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -30,6 +31,10 @@ import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.MutableResponse;
 import br.com.caelum.vraptor.http.UrlToResourceTranslator;
+import br.com.caelum.vraptor.http.route.MethodNotAllowedException;
+import br.com.caelum.vraptor.http.route.ResourceNotFoundException;
+import br.com.caelum.vraptor.resource.HttpMethod;
+import br.com.caelum.vraptor.resource.MethodNotAllowedHandler;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.resource.ResourceNotFoundHandler;
 
@@ -43,6 +48,7 @@ public class ResourceLookupInterceptorTest {
     private MutableResponse webResponse;
     private MethodInfo requestInfo;
 	private ResourceNotFoundHandler notFoundHandler;
+	private MethodNotAllowedHandler methodNotAllowedHandler;
 
     @Before
     public void config() {
@@ -53,7 +59,8 @@ public class ResourceLookupInterceptorTest {
         this.request = new RequestInfo(null, null, webRequest, webResponse);
         this.requestInfo = mockery.mock(MethodInfo.class);
         this.notFoundHandler = mockery.mock(ResourceNotFoundHandler.class);
-        this.lookup = new ResourceLookupInterceptor(translator, requestInfo, notFoundHandler, request);
+        this.methodNotAllowedHandler = mockery.mock(MethodNotAllowedHandler.class);
+        this.lookup = new ResourceLookupInterceptor(translator, requestInfo, notFoundHandler, methodNotAllowedHandler, request);
     }
 
     @Test
@@ -61,8 +68,23 @@ public class ResourceLookupInterceptorTest {
         mockery.checking(new Expectations() {
             {
                 one(translator).translate(webRequest);
-                will(returnValue(null));
+                will(throwException(new ResourceNotFoundException()));
                 one(notFoundHandler).couldntFind(request);
+            }
+        });
+        lookup.intercept(null, null, null);
+        mockery.assertIsSatisfied();
+    }
+
+    @Test
+    public void shouldHandle405() throws IOException, InterceptionException {
+        mockery.checking(new Expectations() {
+            {
+            	EnumSet<HttpMethod> allowedMethods = EnumSet.of(HttpMethod.GET);
+
+                one(translator).translate(webRequest);
+				will(throwException(new MethodNotAllowedException(allowedMethods, HttpMethod.POST)));
+                one(methodNotAllowedHandler).deny(request, allowedMethods);
             }
         });
         lookup.intercept(null, null, null);

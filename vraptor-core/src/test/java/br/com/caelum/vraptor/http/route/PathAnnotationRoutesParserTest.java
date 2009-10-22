@@ -20,9 +20,8 @@ package br.com.caelum.vraptor.http.route;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
 
-import org.hamcrest.Matchers;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -96,24 +95,33 @@ public class PathAnnotationRoutesParserTest {
     }
 
     @Test
-    public void returnsNullIfMethodNotFound() {
-        ResourceMethod method = router.parse("/projects", HttpMethod.POST, request);
-        assertThat(method, is(nullValue()));
-        mockery.assertIsSatisfied();
+    public void throwsExceptionWhenMethodIsNotFound() {
+        try {
+			router.parse("/projects", HttpMethod.POST, request);
+			Assert.fail("ResourceNotFoundException expected");
+		} catch (ResourceNotFoundException e) {
+			mockery.assertIsSatisfied();
+		}
     }
 
     @Test
-    public void returnsNullIfMethodIsNotPublic() {
-        ResourceMethod method = router.parse("/protectMe", HttpMethod.POST, request);
-        assertThat(method, is(nullValue()));
-        mockery.assertIsSatisfied();
+    public void throwsExceptionIfMethodIsNotPublic() {
+    	try {
+			router.parse("/protectMe", HttpMethod.POST, request);
+			Assert.fail("ResourceNotFoundException expected");
+		} catch (ResourceNotFoundException e) {
+			mockery.assertIsSatisfied();
+		}
     }
 
     @Test
     public void returnsNullIfMethodIsStatic() {
-        ResourceMethod method = router.parse("/staticMe", HttpMethod.POST, request);
-        assertThat(method, is(nullValue()));
-        mockery.assertIsSatisfied();
+    	try {
+			router.parse("/staticMe", HttpMethod.POST, request);
+			Assert.fail("ResourceNotFoundException expected");
+		} catch (ResourceNotFoundException e) {
+			mockery.assertIsSatisfied();
+		}
     }
 
     @br.com.caelum.vraptor.Resource
@@ -201,10 +209,13 @@ public class PathAnnotationRoutesParserTest {
 
 
     @Test
-    public void shouldIgnoreAResourceWithTheWrongWebMethod() throws SecurityException {
-        ResourceMethod method = router.parse("/clients/remove", HttpMethod.POST, request);
-        assertThat(method, is(Matchers.nullValue()));
-        mockery.assertIsSatisfied();
+    public void shouldThrowExceptionIfAResourceHasTheWrongWebMethod() throws SecurityException {
+    	try {
+			router.parse("/clients/remove", HttpMethod.POST, request);
+			Assert.fail("MethodNotAllowedException expected");
+		} catch (MethodNotAllowedException e) {
+			mockery.assertIsSatisfied();
+		}
     }
 
     @Test

@@ -2,34 +2,36 @@
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource
  * All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); 
- * you may not use this file except in compliance with the License. 
- * You may obtain a copy of the License at 
- * 
- * 	http://www.apache.org/licenses/LICENSE-2.0 
- * 
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an "AS IS" BASIS, 
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
- * See the License for the specific language governing permissions and 
- * limitations under the License. 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * 	http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package br.com.caelum.vraptor.vraptor2;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.vraptor.annotations.Component;
 
 import br.com.caelum.vraptor.Path;
+import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.route.DefaultRouter;
 import br.com.caelum.vraptor.http.route.NoRoutesConfiguration;
 import br.com.caelum.vraptor.http.route.NoTypeFinder;
+import br.com.caelum.vraptor.http.route.ResourceNotFoundException;
 import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
 import br.com.caelum.vraptor.proxy.DefaultProxifier;
 import br.com.caelum.vraptor.proxy.Proxifier;
@@ -57,7 +59,7 @@ public class ComponentRoutesCreatorTest {
         }
     }
 
-    @br.com.caelum.vraptor.Resource
+    @Resource
     class VRaptor3Component {
         public void name() {
         }
@@ -72,11 +74,15 @@ public class ComponentRoutesCreatorTest {
     }
 
     @Test
-    public void shouldReturnNullIfNotFound() throws SecurityException, NoSuchMethodException {
+    public void shouldThrowExceptionIfNotFound() throws SecurityException, NoSuchMethodException {
         final ResourceClass resource = mockery.resource(NonVRaptorComponent.class);
         this.router.register(resource);
-        assertThat(router.parse("/NonVRaptorComponent/name", HttpMethod.POST, request), is(nullValue()));
-        mockery.assertIsSatisfied();
+        try {
+			router.parse("/NonVRaptorComponent/name", HttpMethod.POST, request);
+			Assert.fail("ResourceNotFoundException expected");
+		} catch (ResourceNotFoundException e) {
+			mockery.assertIsSatisfied();
+		}
     }
 
     @Component
@@ -97,34 +103,50 @@ public class ComponentRoutesCreatorTest {
 
     @Test
     public void ignoresNonPublicMethod() {
-        final ResourceClass resource = mockery.resource(MyResource.class);
+    	final ResourceClass resource = mockery.resource(MyResource.class);
         this.router.register(resource);
-        assertThat(router.parse("/MyResource.ignorableStatic.logic", HttpMethod.POST, request), is(nullValue()));
-        mockery.assertIsSatisfied();
+        try {
+			router.parse("/MyResource.ignorableProtected.logic", HttpMethod.POST, request);
+			Assert.fail("ResourceNotFoundException expected");
+		} catch (ResourceNotFoundException e) {
+			mockery.assertIsSatisfied();
+		}
     }
 
     @Test
     public void ignoresGetters() {
-        final ResourceClass resource = mockery.resource(MyResource.class);
+    	final ResourceClass resource = mockery.resource(MyResource.class);
         this.router.register(resource);
-        assertThat(router.parse("/MyResource.getValue.logic", HttpMethod.POST, request), is(nullValue()));
-        mockery.assertIsSatisfied();
+        try {
+			router.parse("/MyResource.getValue.logic", HttpMethod.POST, request);
+			Assert.fail("ResourceNotFoundException expected");
+		} catch (ResourceNotFoundException e) {
+			mockery.assertIsSatisfied();
+		}
     }
 
     @Test
     public void ignoresStaticMethod() {
-        final ResourceClass resource = mockery.resource(MyResource.class);
+    	final ResourceClass resource = mockery.resource(MyResource.class);
         this.router.register(resource);
-        assertThat(router.parse("/MyResource.ignorableProtected.logic", HttpMethod.POST, request), is(nullValue()));
-        mockery.assertIsSatisfied();
+        try {
+			router.parse("/MyResource.ignorableStatic.logic", HttpMethod.POST, request);
+			Assert.fail("ResourceNotFoundException expected");
+		} catch (ResourceNotFoundException e) {
+			mockery.assertIsSatisfied();
+		}
     }
 
     @Test
     public void returnsNullIfNothingFound() {
-        final ResourceClass resource = mockery.resource(MyResource.class);
+    	final ResourceClass resource = mockery.resource(MyResource.class);
         this.router.register(resource);
-        assertThat(router.parse("/MyResource.unfindable.logic", HttpMethod.POST, request), is(nullValue()));
-        mockery.assertIsSatisfied();
+        try {
+			router.parse("/MyResource.iDontExist.logic", HttpMethod.POST, request);
+			Assert.fail("ResourceNotFoundException expected");
+		} catch (ResourceNotFoundException e) {
+			mockery.assertIsSatisfied();
+		}
     }
 
     @Test

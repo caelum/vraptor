@@ -21,6 +21,7 @@
 * Result.include agora retorna this para uma interface fluente (result.include(...).include(....))
 * Melhor mensagem de exception quando não encontra o Http method requisitado  
 * File Download registra automaticamente content-length.
+* Bug 117 resolvido: expondo null quando retorna null (anter era "ok")
 [/list]
 
 [section 3.0.0]

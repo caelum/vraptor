@@ -58,6 +58,7 @@ public class ExecuteMethodInterceptor implements Interceptor {
 			}
 
 			if (reflectionMethod.getReturnType().equals(Void.TYPE)) {
+				// vraptor2 compatibility
 				this.info.setResult("ok");
 			} else {
 				this.info.setResult(result);

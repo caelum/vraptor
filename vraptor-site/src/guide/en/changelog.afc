@@ -21,6 +21,8 @@
 * Better exception message when there is no such http method as requested  
 * FileDownload registers content-length
 * Solving issue 117: exposing null when null returned (was exposing "ok")
+* Solving issue 109: if you have a file %%/path/index.jsp%%, you can access it now through
+	%%/path/%%, unless you have a controller that handles this URI.
 [/list]
 
 [section 3.0.0]

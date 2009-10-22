@@ -22,6 +22,8 @@
 * Melhor mensagem de exception quando não encontra o Http method requisitado  
 * File Download registra automaticamente content-length.
 * Bug 117 resolvido: expondo null quando retorna null (anter era "ok")
+* Bug 109 resolvido: se você tem um arquivo %%/caminho/index.jsp%%, você consegue acessá-lo agora via
+	%%/caminho/%%, a menos que exista algum controller que trata essa URI
 [/list]
 
 [section 3.0.0]

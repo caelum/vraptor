@@ -1,4 +1,4 @@
-[chapter Spring, Joda Time, Hibernate e Google App Engine]
+[chapter Spring, Joda Time, Hibernate]
 
 [section Integração com Hibernate ou JPA]
 Existem ComponentFactories implementadas para Session, SessionFactory, EntityManager e EntityManagerFactory.

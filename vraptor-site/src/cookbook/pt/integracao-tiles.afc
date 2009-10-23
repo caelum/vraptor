@@ -108,7 +108,7 @@ public class CustomerController {
 }
 [/java]
 
-[/xml]
+[xml]
 <definition name="admin.customer.list" extends="default">
   <put-attribute name="body" value="/WEB-INF/jspx/admin/customer.list.jspx" />
 </definition>

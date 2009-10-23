@@ -12,7 +12,7 @@ nossa página de downloads.
 
 Um detalhe importante é que a injeção de dependências não funciona
 no redirecionamento para lógicas; o controlador é instanciado
-recebendo null em todos os seus parâmetros. Sendo assim, deve-se evitar
+recebendo %%null%% em todos os seus parâmetros. Sendo assim, deve-se evitar
 chamadas como:
 
 [java]

@@ -1,0 +1,41 @@
+[chapter Google App Engine]
+
+[section Starting a new project]
+
+Due to security restrictions on Google App Engine's sandbox,
+some of VRaptor3's components must be replaced, and a different
+selection of dependencies must be used. A version of the
+blank project featuring these modifications is available at
+our download page.
+
+[section Limitations]
+
+A relevant detais is that the dependency injection does not work
+when redirecting from one logic to another; the controller is
+instantiated by filling with %%null%% all of its arguments. This
+said, one should avoid call like:
+
+[java]
+	result.use(Results.logic()).redirectTo(SomeController.class).someMethod();
+	validator.onErrorUse(Results.logic()).of(SomeController.class).someMethod();
+[/java]
+
+using, instead, %%Results.page()%%. An alternative would be to
+prepare your controllers to expect %%null%% as construction
+arguments.
+
+
+[section Troubleshooting]
+
+App Engine's execution environment nor does enable support
+for Expression Language by default, nor supports the
+%%<jsp-config/jsp-proprerty-group/el-ignored>%% tag. In this
+situation, to enable the EL support, it's required to add
+the following line to your JSP files:
+
+%%<%@ page isELIgnored="false" %>%%
+
+For tag files, use:
+
+%%<%@ tag isELIgnored="false" %>%%
+

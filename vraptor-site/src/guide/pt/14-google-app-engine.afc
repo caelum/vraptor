@@ -3,7 +3,7 @@
 [section Começando um projeto]
 
 Devido às restrições de segurança na sandbox do Google App Engine,
-alguns componentes do VRaptor3 precisam ser substitídos e uma
+alguns componentes do VRaptor3 precisam ser substituídos e uma
 seleção diferente de dependências deve ser usada. Uma versão do
 blank project já contendo estas alterações está disponível em
 nossa página de downloads.
@@ -24,7 +24,7 @@ preferindo %%Results.page()%% — ou então escrever seus controllers
 de forma a esperar pelos valores nulos.
 
 
-[section Informações gerais]
+[section Problemas comuns]
 
 A ambiente de execução do App Engine não habilita o suporte a
 Expression Language por padrão, nem suporta a tag
@@ -37,3 +37,4 @@ linha nos arquivos JSP:
 No caso de arquivos de tags, deve-se adicionar:
 
 %%<%@ tag isELIgnored="false" %>%%
+

@@ -1,0 +1,39 @@
+[chapter Google App Engine]
+
+[section Começando um projeto]
+
+Devido às restrições de segurança na sandbox do Google App Engine,
+alguns componentes do VRaptor3 precisam ser substitídos e uma
+seleção diferente de dependências deve ser usada. Uma versão do
+blank project já contendo estas alterações está disponível em
+nossa página de downloads.
+
+[section Limitações]
+
+Um detalhe importante é que a injeção de dependências não funciona
+no redirecionamento para lógicas; o controlador é instanciado
+recebendo null em todos os seus parâmetros. Sendo assim, deve-se evitar
+chamadas como:
+
+[java]
+	result.use(Results.logic()).redirectTo(SomeController.class).someMethod();
+	validator.onErrorUse(Results.logic()).of(SomeController.class).someMethod();
+[/java]
+
+preferindo %%Results.page()%% — ou então escrever seus controllers
+de forma a esperar pelos valores nulos.
+
+
+[section Informações gerais]
+
+A ambiente de execução do App Engine não habilita o suporte a
+Expression Language por padrão, nem suporta a tag
+%%<jsp-config/jsp-proprerty-group/el-ignored>%%. Assim sendo,
+para habilitar o suporte a EL, é necessário adicionar a seguinte
+linha nos arquivos JSP:
+
+%%<%@ page isELIgnored="false" %>%%
+
+No caso de arquivos de tags, deve-se adicionar:
+
+%%<%@ tag isELIgnored="false" %>%%

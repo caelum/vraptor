@@ -18,10 +18,3 @@ A api de datas do Java é bem ruim, e por esse motivo existe o projeto joda-time
 que tem uma api bem mais agradável para trabalhar com datas. Se o jar do joda-time estiver no classpath,
 o VRaptor registra automaticamente os conversores para os tipos LocalDate e LocalTime, logo você pode
 recebê-los como parâmetro sem problemas.
-
-[section Rodando o VRaptor3 no Google App Engine]
-
-Para rodar no Google App Engine(GAE), você precisa fazer algumas mudanças no VRaptor3 por causa
-das limitações que o GAE te traz. Existe um blank-project para rodar uma aplicação com VRaptor3
-no GAE.
-

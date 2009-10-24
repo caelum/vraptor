@@ -10,8 +10,8 @@
 	            	<li><fmt:message key="experimente.vraptor.motivo2"/></li>
 	            	<li><fmt:message key="experimente.vraptor.motivo3"/></li>
     	        </ul>
-       	     	<!-- a href="<fmt:message key='download.link'/>" id="downloadBtn2"><span>Download</span></a-->
-                <p style="margin-right:200px;"><a href="<fmt:message key="saiba.mais.link"/>"><fmt:message key="saiba.mais"/></a> </p>
+       	     	<a href="<fmt:message key='download.link'/>" id="downloadBtn2"><span>Download</span></a>
+                <p><a href="<fmt:message key="saiba.mais.link"/>"><fmt:message key="saiba.mais"/></a> </p>
 			</div><!-- content-float -->
             <img src="${path }/images/boxVraptor-trans.png" />
             

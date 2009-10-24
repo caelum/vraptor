@@ -1,6 +1,12 @@
 [chapter ChangeLog]
 
-[section 3.0.1 (to be released))]
+[section 3.0.2 (to be released)]
+[list]
+* servlet 2.4 containers are now supported
+[/list]
+
+
+[section 3.0.1]
 [list]
 * paranamer upgraded to version 1.5 (Update your jar!)
 * jars split in optional and mandatory on vraptor-core

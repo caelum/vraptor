@@ -123,4 +123,30 @@ public class FlashInterceptorTest {
 
 		mockery.assertIsSatisfied();
 	}
+	@Test
+	public void shouldNotCrashWhenSessionIsInvalid() throws Exception {
+
+		mockery.checking(new Expectations() {
+			{
+				Map<String, Object> parameters = Collections.<String, Object>singletonMap("Abc", 1002);
+
+				one(result).included();
+				will(returnValue(parameters));
+
+				one(session).setAttribute(FlashInterceptor.FLASH_INCLUDED_PARAMETERS, parameters);
+				will(throwException(new IllegalStateException()));
+
+				allowing(session).getAttribute(FlashInterceptor.FLASH_INCLUDED_PARAMETERS);
+				will(returnValue(null));
+
+				ignoring(anything());
+			}
+		});
+
+		interceptor.intercept(stack, null, null);
+
+		response.sendRedirect("Anything");
+
+		mockery.assertIsSatisfied();
+	}
 }

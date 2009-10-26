@@ -298,6 +298,42 @@ h3.title {
 	background-repeat: repeat-x;
 }
 
+.content {
+	width: 918px;
+	margin: 0px auto;
+	display: block;
+	height: auto;
+	text-align: left;
+	position: relative;
+}
+/*css equipe*/
+dl.equipe
+{
+width: 41.1em;
+margin: 2em 0;
+padding: 0;
+}
+
+.equipe dt
+{
+width: 15em;
+float: left;
+margin: 0 0 0 0;
+padding: .5em;
+border-top: 1px solid #999;
+font-weight: bold;
+}
+
+.equipe dt { clear: both; }
+
+.equipe dd
+{
+float: left;
+width: 24em;
+margin: 0 0 0 0;
+padding: .5em;
+border-top: 1px solid #999;
+}
 /*css home*/
 #contentHome {
 	width: 918px;

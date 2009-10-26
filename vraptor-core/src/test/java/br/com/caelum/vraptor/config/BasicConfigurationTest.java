@@ -88,7 +88,7 @@ public class BasicConfigurationTest {
     }
 
     public static class DogProvider implements ContainerProvider {
-        DogProvider() throws IOException {
+        public DogProvider() throws IOException {
             throw new IOException("");
         }
 
@@ -115,7 +115,8 @@ public class BasicConfigurationTest {
             config.getProvider();
             Assert.fail();
         } catch (ServletException e) {
-            Assert.assertEquals(IOException.class, e.getCause().getClass());
+        	Assert.assertNotNull("Should have a cause", e.getRootCause());
+            Assert.assertEquals(IOException.class, e.getRootCause().getClass());
             mockery.assertIsSatisfied();
         }
     }

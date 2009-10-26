@@ -1,5 +1,7 @@
 package br.com.caelum.vraptor.view;
 
+import br.com.caelum.vraptor.View;
+
 
 /**
  * Redirects or forwards to the Referer.
@@ -23,7 +25,7 @@ package br.com.caelum.vraptor.view;
  * @author Lucas Cavalcanti
  *
  */
-public interface RefererResult {
+public interface RefererResult extends View {
 
 	/**
 	 * Forwards to Referer.

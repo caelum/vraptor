@@ -52,6 +52,7 @@ public class LocaleFilter implements Filter {
 			.put("/footer.jsp", "/en/footer.jsp")
 			.put("/index.jsp", "/en")
 			.put("/download.jsp", "/en/download.jsp")
+			.put("/equipe.jsp", "/team.jsp")
 			.put("/documentation/", "/documentation/")
 			.put("/beneficios.jsp", "/benefits.jsp")
 			.put("/suporte.jsp", "/support.jsp")

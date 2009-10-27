@@ -62,4 +62,24 @@ public class InputStreamDownloadTest {
 		Assert.assertArrayEquals(bytes, outputStream.toByteArray());
 	}
 
+	@Test
+	public void shouldUseHeadersToHttpResponse() throws IOException {
+		InputStreamDownload fd = new InputStreamDownload(inputStream, "type", "x.txt");
+
+		mockery.checking(new Expectations() {
+			{
+				one(response).getOutputStream();
+				will(returnValue(socketStream));
+
+				one(response).setHeader("Content-type", "type");
+
+				ignoring(anything());
+			}
+		});
+
+		fd.write(response);
+
+		Assert.assertArrayEquals(bytes, outputStream.toByteArray());
+	}
+
 }

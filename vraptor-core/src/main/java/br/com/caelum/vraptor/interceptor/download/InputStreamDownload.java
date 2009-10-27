@@ -69,8 +69,10 @@ public class InputStreamDownload implements Download {
 
 	void writeDetails(HttpServletResponse response) {
 		if (contentType != null) {
-			String header = String.format("%s; filename=%s", doDownload ? "attachment" : "inline", fileName);
-			response.setHeader("Content-disposition", header);
+			String contentDisposition = String
+					.format("%s; filename=%s", doDownload ? "attachment" : "inline", fileName);
+			response.setHeader("Content-disposition", contentDisposition);
+			response.setHeader("Content-type", contentType);
 		}
 		if (size > 0) {
 			response.setHeader("Content-Length", Long.toString(size));

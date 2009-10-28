@@ -16,7 +16,8 @@
 		<c:forEach var="dvd" items="${dvds}">
 			<tr class="${s.count % 2 == 0? 'even': 'odd' }">
 			    <td>
-			        <form action="<c:url value="/dvds/addToList/${dvd.id}" />" method="post" class="buttonForm">
+			        <form action="<c:url value="/users/${userInfo.user.login}/dvds/${dvd.id}" />" method="post" class="buttonForm">
+	       				<input type="hidden" name="_method" value="PUT"/>
 			            <button type="submit" class="link"><fmt:message key="add_to_my_list"/></button>
 			        </form>
 				</td>

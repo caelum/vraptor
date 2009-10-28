@@ -19,17 +19,18 @@ package br.com.caelum.vraptor.mydvds.interceptor;
 import static br.com.caelum.vraptor.view.Results.logic;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
 
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Intercepts;
-import br.com.caelum.vraptor.Validator;
+import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.mydvds.controller.HomeController;
 import br.com.caelum.vraptor.mydvds.controller.UsersController;
 import br.com.caelum.vraptor.mydvds.dao.UserDao;
 import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.validator.Validations;
+import br.com.caelum.vraptor.validator.ValidationMessage;
 
 /**
  * Interceptor to check if the user is in the session.
@@ -40,12 +41,12 @@ public class AuthorizationInterceptor implements Interceptor {
 
 	private final UserInfo info;
 	private final UserDao dao;
-	private final Validator validator;
+	private final Result result;
 
-	public AuthorizationInterceptor(UserInfo info, UserDao dao, Validator validator) {
+	public AuthorizationInterceptor(UserInfo info, UserDao dao, Result result) {
 		this.info = info;
 		this.dao = dao;
-		this.validator = validator;
+		this.result = result;
 	}
 
     public boolean accepts(ResourceMethod method) {
@@ -70,16 +71,17 @@ public class AuthorizationInterceptor implements Interceptor {
     public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
             throws InterceptionException {
     	/**
-    	 * You can use the validator even in interceptors.
+    	 * You can use the result even in interceptors.
     	 */
-    	validator.checking(new Validations() {{
-    		that(info.getUser() != null, "user", "user.is.not.logged.in");
-    	}});
-    	validator.onErrorUse(logic()).redirectTo(HomeController.class).login();
-
-    	dao.refresh(info.getUser());
-    	// continues execution
-    	stack.next(method, resourceInstance);
+    	if (info.getUser() == null) {
+    		// remember added parameters will survive one more request, when there is a redirect
+    		result.include("errors", Arrays.asList(new ValidationMessage("user is not logged in", "user")));
+    		result.use(logic()).redirectTo(HomeController.class).login();
+    	} else {
+	    	dao.refresh(info.getUser());
+	    	// continues execution
+	    	stack.next(method, resourceInstance);
+    	}
     }
 
 }

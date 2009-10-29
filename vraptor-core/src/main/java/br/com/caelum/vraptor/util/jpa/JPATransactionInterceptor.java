@@ -42,6 +42,7 @@ public class JPATransactionInterceptor implements Interceptor {
 		EntityTransaction transaction = null;
 		try {
 			transaction = manager.getTransaction();
+			transaction.begin();
 			stack.next(method, instance);
 			transaction.commit();
 		} finally {

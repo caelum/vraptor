@@ -5,6 +5,7 @@
 * servlet 2.4 containers are now supported
 * bugfix: Results.referer() now implements View
 * bugfix: content-type is now set when using File/InputStreamDownload
+* removed java 6 api calls
 [/list]
 
 

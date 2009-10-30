@@ -95,7 +95,9 @@ import br.com.caelum.vraptor.resource.DefaultMethodNotAllowedHandler;
 import br.com.caelum.vraptor.resource.DefaultResourceNotFoundHandler;
 import br.com.caelum.vraptor.resource.MethodNotAllowedHandler;
 import br.com.caelum.vraptor.resource.ResourceNotFoundHandler;
+import br.com.caelum.vraptor.validator.DefaultOutjector;
 import br.com.caelum.vraptor.validator.DefaultValidator;
+import br.com.caelum.vraptor.validator.Outjector;
 import br.com.caelum.vraptor.view.AcceptHeaderToFormat;
 import br.com.caelum.vraptor.view.DefaultAcceptHeaderToFormat;
 import br.com.caelum.vraptor.view.DefaultHttpResult;
@@ -155,6 +157,7 @@ public class BaseComponents {
             ValidationViewsFactory.class,					DefaultValidationViewsFactory.class,
             Result.class, 									DefaultResult.class,
             Validator.class, 								DefaultValidator.class,
+            Outjector.class, 								DefaultOutjector.class,
             DownloadInterceptor.class, 						DownloadInterceptor.class,
             EmptyResult.class, 								EmptyResult.class,
             ExecuteMethodInterceptor.class, 				ExecuteMethodInterceptor.class,

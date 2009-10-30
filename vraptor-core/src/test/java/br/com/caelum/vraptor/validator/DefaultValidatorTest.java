@@ -2,17 +2,17 @@
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource
  * All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); 
- * you may not use this file except in compliance with the License. 
- * You may obtain a copy of the License at 
- * 
- * 	http://www.apache.org/licenses/LICENSE-2.0 
- * 
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an "AS IS" BASIS, 
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
- * See the License for the specific language governing permissions and 
- * limitations under the License. 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * 	http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package br.com.caelum.vraptor.validator;
@@ -44,6 +44,7 @@ public class DefaultValidatorTest {
 	private MyComponent instance;
 	private Proxifier proxifier;
 	private PageResult pageResult;
+	private Outjector outjector;
 
 
 	@Before
@@ -52,18 +53,19 @@ public class DefaultValidatorTest {
 		this.proxifier = new DefaultProxifier();
 		this.result = mockery.mock(Result.class);
 		this.logicResult = mockery.mock(LogicResult.class);
+		this.outjector = mockery.mock(Outjector.class);
 		this.instance = new MyComponent();
-		this.validator = new DefaultValidator(result, new DefaultValidationViewsFactory(result, proxifier));
+		this.validator = new DefaultValidator(result, new DefaultValidationViewsFactory(result, proxifier), outjector);
 		this.pageResult = mockery.mock(PageResult.class);
 	}
 
 	@Test
 	public void shouldDoNothingWhenYouDontSpecifyTheValidationPage() throws Exception {
 		mockery.checking(new Expectations() {{
-				ignoring(anything());
+			ignoring(anything());
 		}});
 		validator.checking(new Validations() {{
-				that(false, "", "");
+			that(false, "", "");
 		}});
 	}
 
@@ -73,6 +75,7 @@ public class DefaultValidatorTest {
 			mockery.checking(new Expectations() {
 				{
 					one(result).include((String) with(an(String.class)), with(an(ArrayList.class)));
+					one(outjector).outjectRequestMap();
 					one(result).use(LogicResult.class); will(returnValue(logicResult));
 					one(logicResult).forwardTo(MyComponent.class); will(returnValue(instance));
 				}
@@ -103,7 +106,7 @@ public class DefaultValidatorTest {
 			// now we expect the redirection
 			mockery.checking(new Expectations() {{
 				one(result).include((String) with(an(String.class)), with(an(ArrayList.class)));
-
+				one(outjector).outjectRequestMap();
 				one(result).use(PageResult.class);
 				will(returnValue(pageResult));
 

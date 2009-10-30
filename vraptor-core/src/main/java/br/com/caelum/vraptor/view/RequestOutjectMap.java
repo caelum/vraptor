@@ -2,17 +2,17 @@
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource
  * All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); 
- * you may not use this file except in compliance with the License. 
- * You may obtain a copy of the License at 
- * 
- * 	http://www.apache.org/licenses/LICENSE-2.0 
- * 
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an "AS IS" BASIS, 
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
- * See the License for the specific language governing permissions and 
- * limitations under the License. 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * 	http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package br.com.caelum.vraptor.view;
 
@@ -33,9 +33,9 @@ import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
 /**
  * The super-incredible MagicMap that exposes every request parameter in a map
  * chain that never ends! Useful for invalid forms to display input data.
- * 
+ *
  * TODO is this class efficient?
- * 
+ *
  * @see ParametersInstantiatorInterceptor
  */
 public class RequestOutjectMap implements Map<String, Object> {
@@ -48,10 +48,6 @@ public class RequestOutjectMap implements Map<String, Object> {
 		this(new ArrayList<Object>(), request);
 
 		objectChain.add(base);
-
-		// prevent improper injection
-		if (request.getAttribute(base) == null)
-			request.setAttribute(base, this);
 	}
 
 	RequestOutjectMap(List<Object> objects, HttpServletRequest request) {
@@ -98,12 +94,12 @@ public class RequestOutjectMap implements Map<String, Object> {
 	public String toString() {
 		return request.getParameter(toParameterName());
 	}
-	
+
 	// to use in EL
 	public String getAsString() {
 		return toString();
 	}
-	
+
 	public boolean containsKey(Object key) {
 		return true;
 	}
@@ -124,12 +120,14 @@ public class RequestOutjectMap implements Map<String, Object> {
 				String s = p.substring(thisName.length());
 
 				int indexOf = s.indexOf('.');
-				if (indexOf > 0)
+				if (indexOf > 0) {
 					s = s.substring(0, indexOf);
+				}
 
 				indexOf = s.indexOf(']');
-				if (indexOf > 0)
+				if (indexOf > 0) {
 					s = s.substring(0, indexOf);
+				}
 
 				aux.add(s);
 			}

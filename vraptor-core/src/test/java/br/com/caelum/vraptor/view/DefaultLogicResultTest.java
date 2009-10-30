@@ -23,7 +23,6 @@ import static org.junit.Assert.assertThat;
 import java.io.IOException;
 
 import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -37,6 +36,7 @@ import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.TypeCreator;
 import br.com.caelum.vraptor.http.route.Router;
+import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.proxy.DefaultProxifier;
 import br.com.caelum.vraptor.resource.ResourceMethod;
@@ -47,11 +47,11 @@ public class DefaultLogicResultTest {
     private LogicResult logicResult;
     private Router router;
     private HttpServletResponse response;
-    private ServletContext context;
     private MutableRequest request;
 	private TypeCreator creator;
 	private Container container;
 	private PathResolver resolver;
+	private TypeNameExtractor extractor;
 
     public static class MyComponent {
     	int calls = 0;
@@ -67,6 +67,10 @@ public class DefaultLogicResultTest {
         public void annotatedWithGet() {
 
         }
+
+        public String returnsValue() {
+        	return "A value";
+        }
     }
 
     @Before
@@ -75,13 +79,14 @@ public class DefaultLogicResultTest {
         this.router = mockery.mock(Router.class);
         this.response = mockery.mock(HttpServletResponse.class);
         this.request = mockery.mock(MutableRequest.class);
-        this.context = mockery.mock(ServletContext.class);
         this.creator = mockery.mock(TypeCreator.class);
 
         container = mockery.mock(Container.class);
 		resolver = mockery.mock(PathResolver.class);
+		this.extractor = mockery.mock(TypeNameExtractor.class);
 
-		this.logicResult = new DefaultLogicResult(new DefaultProxifier(), router, context, request, response, creator, container, resolver);
+		this.logicResult = new DefaultLogicResult(new DefaultProxifier(), router, request, response,
+				creator, container, resolver, extractor);
     }
 
 	private void ignoreFlashScope() {
@@ -97,7 +102,7 @@ public class DefaultLogicResultTest {
 	}
 
 	@Test
-	public void shouldExecuteTheLogicAndRedirectToItsViewOnForward() throws Exception {
+	public void shouldIncludeReturnValueOnForward() throws Exception {
 		final MyComponent component = new MyComponent();
 		mockery.checking(new Expectations() {
 			{
@@ -111,6 +116,31 @@ public class DefaultLogicResultTest {
 				RequestDispatcher dispatcher = mockery.mock(RequestDispatcher.class);
                 will(returnValue(dispatcher));
                 one(dispatcher).forward(request, response);
+
+                one(extractor).nameFor(String.class); will(returnValue("string"));
+
+                one(request).setAttribute("string", "A value");
+			}
+		});
+		logicResult.forwardTo(MyComponent.class).returnsValue();
+
+		mockery.assertIsSatisfied();
+	}
+	@Test
+	public void shouldExecuteTheLogicAndRedirectToItsViewOnForward() throws Exception {
+		final MyComponent component = new MyComponent();
+		mockery.checking(new Expectations() {
+			{
+				one(container).instanceFor(MyComponent.class);
+				will(returnValue(component));
+
+				one(resolver).pathFor(with(any(ResourceMethod.class)));
+				will(returnValue("Abc123"));
+
+				one(request).getRequestDispatcher("Abc123");
+				RequestDispatcher dispatcher = mockery.mock(RequestDispatcher.class);
+				will(returnValue(dispatcher));
+				one(dispatcher).forward(request, response);
 			}
 		});
 		assertThat(component.calls, is(0));

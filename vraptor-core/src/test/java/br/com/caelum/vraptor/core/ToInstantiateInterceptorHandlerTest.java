@@ -2,17 +2,17 @@
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource
  * All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); 
- * you may not use this file except in compliance with the License. 
- * You may obtain a copy of the License at 
- * 
- * 	http://www.apache.org/licenses/LICENSE-2.0 
- * 
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an "AS IS" BASIS, 
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
- * See the License for the specific language governing permissions and 
- * limitations under the License. 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * 	http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package br.com.caelum.vraptor.core;
 
@@ -71,11 +71,33 @@ public class ToInstantiateInterceptorHandlerTest {
         Container container = mockery.container(Interceptor.class, interceptor);
         mockery.checking(new Expectations() {
             {
+            	one(interceptor).accepts(method); will(returnValue(true));
                 one(interceptor).intercept(stack, method, instance);
             }
         });
         ToInstantiateInterceptorHandler handler = new ToInstantiateInterceptorHandler(container, Interceptor.class);
         handler.execute(stack, method, instance);
+        mockery.assertIsSatisfied();
+    }
+    @Test
+    public void shouldNotInvokeInterceptorsMethodIfInterceptorDoesntAcceptsResource() throws InterceptionException, IOException {
+    	final Interceptor interceptor = mockery.mock(Interceptor.class);
+    	final InterceptorStack stack = mockery.mock(InterceptorStack.class);
+    	final ResourceMethod method = mockery.mock(ResourceMethod.class);
+    	final Object instance = new Object();
+    	Container container = mockery.container(Interceptor.class, interceptor);
+    	mockery.checking(new Expectations() {
+    		{
+    			one(interceptor).accepts(method); will(returnValue(false));
+
+    			never(interceptor).intercept(stack, method, instance);
+
+    			one(stack).next(method, instance);
+    		}
+    	});
+    	ToInstantiateInterceptorHandler handler = new ToInstantiateInterceptorHandler(container, Interceptor.class);
+    	handler.execute(stack, method, instance);
+    	mockery.assertIsSatisfied();
     }
 
 }

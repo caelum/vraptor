@@ -52,12 +52,6 @@ public class DownloadInterceptor implements Interceptor {
 	}
 
 	public void intercept(InterceptorStack stack, ResourceMethod method, Object instance) throws InterceptionException {
-		// TODO: remove hack
-		if (!accepts(method)) {
-			stack.next(method, instance);
-			return;
-		}
-
 		Object result = info.getResult();
 
 		try {

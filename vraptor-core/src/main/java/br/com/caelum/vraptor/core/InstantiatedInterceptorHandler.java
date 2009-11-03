@@ -37,7 +37,11 @@ public class InstantiatedInterceptorHandler implements InterceptorHandler {
 
 	public void execute(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
 			throws InterceptionException {
-		interceptor.intercept(stack, method, resourceInstance);
+		if (interceptor.accepts(method)) {
+			interceptor.intercept(stack, method, resourceInstance);
+		} else {
+			stack.next(method, resourceInstance);
+		}
 	}
 
 }

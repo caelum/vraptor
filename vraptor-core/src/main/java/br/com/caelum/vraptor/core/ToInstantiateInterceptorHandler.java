@@ -42,7 +42,11 @@ public class ToInstantiateInterceptorHandler implements InterceptorHandler {
         if (interceptor==null) {
             throw new InterceptionException("Unable to instantiate interceptor for " + type.getName() + ": the container returned null.");
         }
-        interceptor.intercept(stack, method, resourceInstance);
+        if (interceptor.accepts(method)) {
+			interceptor.intercept(stack, method, resourceInstance);
+		} else {
+			stack.next(method, resourceInstance);
+		}
     }
 
 }

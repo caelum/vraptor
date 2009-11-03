@@ -69,12 +69,6 @@ public class MultipartInterceptor implements Interceptor {
 
 	@SuppressWarnings("unchecked")
 	public void intercept(InterceptorStack stack, ResourceMethod method, Object instance) throws InterceptionException {
-		// TODO ugly, just for now until next release
-		if (!accepts(method)) {
-			stack.next(method, instance);
-			return;
-		}
-
 		logger.debug("Trying to parse multipart request.");
 
 		File temporaryDirectory = config.getDirectory();

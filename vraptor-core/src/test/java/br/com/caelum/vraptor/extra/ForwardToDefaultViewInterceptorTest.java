@@ -37,7 +37,7 @@ public class ForwardToDefaultViewInterceptorTest {
 		this.mockery = new VRaptorMockery(true);
 		this.pageResult = mockery.mock(MethodInfo.class);
 		this.result = mockery.mock(Result.class);
-		this.interceptor = new ForwardToDefaultViewInterceptor(result, pageResult);
+		this.interceptor = new ForwardToDefaultViewInterceptor(result);
 	}
 
 	@Test

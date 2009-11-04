@@ -16,6 +16,8 @@
  */
 package br.com.caelum.vraptor.blank;
 
+import java.util.List;
+
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Resource;
 
@@ -26,4 +28,12 @@ public class IndexController {
 	public void index() {
 	}
 
+	@Path("/teste")
+	public void teste(List<ABC> abc) {
+		System.out.println(abc);
+	}
+
+	public static enum ABC {
+		DEF, GHI
+	}
 }

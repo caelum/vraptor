@@ -60,6 +60,14 @@ Inclusive você pode habilitar um interceptor que controla a transação do Hibe
 	}
 [/java]
 
+Já existe um Provider que adiciona esses três componentes opcionais. Você pode apenas
+registrá-lo no seu web.xml:
+[xml]
+<context-param>
+	<param-name>br.com.caelum.vraptor.provider</param-name>
+	<param-value>br.com.caelum.vraptor.util.hibernate.HibernateCustomProvider</param-value>
+</context-param>
+[/xml]
 [section JPA EntityManager e EntityManagerFactory]
 
 Se você tiver um persistence.xml com o persistence-unit chamado "default", você pode usar
@@ -83,3 +91,11 @@ Inclusive você pode habilitar um interceptor que controla a transação da JPA:
 	}
 [/java]
 
+Já existe um Provider que adiciona esses três componentes opcionais. Você pode apenas
+registrá-lo no seu web.xml:
+[xml]
+<context-param>
+	<param-name>br.com.caelum.vraptor.provider</param-name>
+	<param-value>br.com.caelum.vraptor.util.jpa.JPACustomProvider</param-value>
+</context-param>
+[/xml]

@@ -18,6 +18,7 @@
 package br.com.caelum.vraptor.view;
 
 import static org.hamcrest.Matchers.is;
+
 import static org.junit.Assert.assertThat;
 
 import java.io.IOException;

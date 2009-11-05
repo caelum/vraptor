@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Map;
 
 import br.com.caelum.vraptor.ioc.Component;
-import br.com.caelum.vraptor.view.XmlSerializerTest.Order;
 
 /**
  * Basic xml serialization system.

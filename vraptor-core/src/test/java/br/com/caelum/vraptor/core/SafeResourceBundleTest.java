@@ -3,7 +3,7 @@ package br.com.caelum.vraptor.core;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
-import java.io.StringReader;
+import java.io.ByteArrayInputStream;
 import java.util.PropertyResourceBundle;
 
 import org.junit.Before;
@@ -16,7 +16,7 @@ public class SafeResourceBundleTest {
 
 	@Before
 	public void setUp() throws Exception {
-		PropertyResourceBundle delegate = new PropertyResourceBundle(new StringReader("abc=def"));
+		PropertyResourceBundle delegate = new PropertyResourceBundle(new ByteArrayInputStream("abc=def".getBytes()));
 		bundle = new SafeResourceBundle(delegate);
 	}
 

@@ -11,4 +11,8 @@ public class SerializationException extends RuntimeException {
 		super(string,e);
 	}
 
+	public SerializationException(String msg) {
+		super(msg);
+	}
+
 }

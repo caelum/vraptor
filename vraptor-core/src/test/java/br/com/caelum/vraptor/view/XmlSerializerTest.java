@@ -40,6 +40,9 @@ public class XmlSerializerTest {
 			this.price = price;
 			this.comments = comments;
 		}
+		public String nice() {
+			return "nice output";
+		}
 		
 	}
 	public static class AdvancedOrder extends Order{
@@ -87,6 +90,15 @@ public class XmlSerializerTest {
 		String expectedResult = "<order>\n  <comments>pack it nicely, please</comments>\n</order>";
 		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
 		serializer.from(order).exclude("price").serialize();
+		assertThat(result(), is(equalTo(expectedResult)));
+		mockery.assertIsSatisfied();
+	}
+
+	@Test
+	public void shouldOptionallyIncludeMethodReturn() {
+		String expectedResult = "<order>\n<nice>nice output</nice></order>";
+		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
+		serializer.from(order).exclude("price","comments").addMethod("nice").serialize();
 		assertThat(result(), is(equalTo(expectedResult)));
 		mockery.assertIsSatisfied();
 	}

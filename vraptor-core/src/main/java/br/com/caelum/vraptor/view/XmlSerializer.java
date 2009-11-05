@@ -5,6 +5,8 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +19,7 @@ public class XmlSerializer {
 	private final List<String> excludes = new ArrayList<String>();
 	private final Map<String, XmlSerializer> includes = new HashMap<String, XmlSerializer>();
 	private final XmlSerializer parent;
+	private final List<String> methods = new ArrayList<String>();
 
 	public XmlSerializer(OutputStream output) {
 		this(new OutputStreamWriter(output));
@@ -104,23 +107,46 @@ public class XmlSerializer {
 	}
 
 	private void serializeForReal() {
-		String name = simpleNameFor(analyzing.getClass().getSimpleName());
+		Class<? extends Object> baseType = analyzing.getClass();
+		String name = simpleNameFor(baseType.getSimpleName());
 		try {
 			writer.write("<" + name + ">\n");
-			parseFields(analyzing, analyzing.getClass());
+			parseFields(analyzing, baseType);
+			for(String methodName : this.methods) {
+				Method method = findMethod(baseType, methodName);
+				if(method==null) {
+					throw new SerializationException("Unable to find method " + methodName + " while inspecting " + analyzing);
+				}
+				writer.write(startTag(methodName) + method.invoke(analyzing) + endTag(methodName));
+			}
 			writer.write("</" + name + ">");
 			writer.flush();
-		} catch (SecurityException e) {
-			throw new SerializationException("Unable to serialize " + analyzing, e);
-		} catch (IOException e) {
+		} catch (Exception e) {
 			throw new SerializationException("Unable to serialize " + analyzing, e);
 		}
+	}
+
+	private Method findMethod(Class<? extends Object> type,
+			String name) {
+		// guilherme: careful, we want to later invoke this method with parameters to inject possible
+		// atom/hypermedia aware xml constructors
+		for(Method m : type.getDeclaredMethods()) {
+			if(m.getName().equals(name)) {
+				return m;
+			}
+		}
+		return null;
 	}
 
 	public XmlSerializer include(String fieldName) {
 		XmlSerializer serializer = new XmlSerializer(this, writer);
 		this.includes.put(fieldName, serializer);
 		return serializer;
+	}
+
+	public XmlSerializer addMethod(String methodName) {
+		this.methods.add(methodName);
+		return this;
 	}
 
 }

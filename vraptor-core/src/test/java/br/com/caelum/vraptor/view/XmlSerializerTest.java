@@ -70,6 +70,17 @@ public class XmlSerializerTest {
 		assertThat(result(), is(equalTo(expectedResult)));
 		mockery.assertIsSatisfied();
 	}
+	
+	public static class CamelCaseResource {
+	}
+
+	@Test
+	public void shouldUseUnderlineFromCamelcaseTypename() {
+		String expectedResult = "<camel_case_resource>\n</camel_case_resource>";
+		serializer.serialize(new CamelCaseResource());
+		assertThat(result(), is(equalTo(expectedResult)));
+		mockery.assertIsSatisfied();
+	}
 
 	private String result() {
 		return new String(stream.toByteArray());

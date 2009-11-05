@@ -21,7 +21,7 @@ import br.com.caelum.vraptor.ioc.Component;
 @Component
 public class XmlSerializer {
 	
-	private Writer writer;
+	private final Writer writer;
 	private Object analyzing;
 	private final List<String> excludes = new ArrayList<String>();
 	private final Map<String, XmlSerializer> includes = new HashMap<String, XmlSerializer>();

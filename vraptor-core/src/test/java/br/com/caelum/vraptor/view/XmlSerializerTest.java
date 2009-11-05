@@ -42,11 +42,30 @@ public class XmlSerializerTest {
 		}
 		
 	}
-	
+	public static class AdvancedOrder extends Order{
+
+		private String notes;
+
+		public AdvancedOrder(Client client, double price, String comments, String notes) {
+			super(client, price, comments);
+			this.notes = notes;
+		}
+		
+	}
+
 	@Test
 	public void shouldSerializeAllBasicFields() {
 		String expectedResult = "<order>\n  <price>15.0</price>\n  <comments>pack it nicely, please</comments>\n</order>";
 		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
+		serializer.serialize(order);
+		assertThat(result(), is(equalTo(expectedResult)));
+		mockery.assertIsSatisfied();
+	}
+
+	@Test
+	public void shouldSerializeParentFields() {
+		String expectedResult = "<advanced_order>\n  <notes>complex package</notes>\n  <price>15.0</price>\n  <comments>pack it nicely, please</comments>\n</advanced_order>";
+		Order order = new AdvancedOrder(new Client("guilherme silveira"), 15.0, "pack it nicely, please", "complex package");
 		serializer.serialize(order);
 		assertThat(result(), is(equalTo(expectedResult)));
 		mockery.assertIsSatisfied();

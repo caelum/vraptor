@@ -23,20 +23,7 @@ public class XmlSerializer {
 		String name = simpleNameFor(object.getClass().getSimpleName());
 		try {
 			writer.write("<" + name + ">\n");
-			Field[] fields = object.getClass().getDeclaredFields();
-			for (Field field : fields) {
-				field.setAccessible(true);
-				if(field.getType().isPrimitive() || field.getType().equals(String.class)) {
-					try {
-						Object result = field.get(object);
-						writer.write("  " + startTag(field.getName()) + result + endTag(field.getName()) + "\n");
-					} catch (IllegalArgumentException e) {
-						throw new SerializationException("Unable to serialize " + object, e);
-					} catch (IllegalAccessException e) {
-						throw new SerializationException("Unable to serialize " + object, e);
-					}
-				}
-			}
+			parseFields(object, object.getClass());
 			writer.write("</" + name + ">");
 			writer.flush();
 		} catch (SecurityException e) {
@@ -45,12 +32,43 @@ public class XmlSerializer {
 			throw new SerializationException("Unable to serialize " + object, e);
 		}
 	}
+	private <T> void parseFields(T object, Class<?> type) throws IOException {
+		if(type.equals(Object.class)) {
+			return;
+		}
+		Field[] fields = type.getDeclaredFields();
+		for (Field field : fields) {
+			field.setAccessible(true);
+			if(field.getType().isPrimitive() || field.getType().equals(String.class)) {
+				try {
+					Object result = field.get(object);
+					writer.write("  " + startTag(field.getName()) + result + endTag(field.getName()) + "\n");
+				} catch (IllegalArgumentException e) {
+					throw new SerializationException("Unable to serialize " + object, e);
+				} catch (IllegalAccessException e) {
+					throw new SerializationException("Unable to serialize " + object, e);
+				}
+			}
+		}
+		parseFields(object, type.getSuperclass());
+	}
 
 	private String simpleNameFor(String name) {
 		if(name.length()==1) {
 			return name.toLowerCase();
 		}
-		return Character.toLowerCase(name.charAt(0)) + name.substring(1);
+		StringBuilder content = new StringBuilder();
+		content.append(Character.toLowerCase(name.charAt(0)));
+		for(int i=1;i<name.length();i++) {
+			char c = name.charAt(i);
+			if(Character.isUpperCase(c)) {
+				content.append("_");
+				content.append(Character.toLowerCase(c));
+			} else {
+				content.append(c);
+			}
+		}
+		return content.toString();
 	}
 
 	private String endTag(String name) {

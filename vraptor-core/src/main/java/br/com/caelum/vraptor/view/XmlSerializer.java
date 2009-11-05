@@ -5,11 +5,14 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 public class XmlSerializer {
 	
-	
 	private Writer writer;
+	private Object analyzing;
+	private List<String> excludes = new ArrayList<String>();
 
 	public XmlSerializer(OutputStream output) {
 		this(new OutputStreamWriter(output));
@@ -19,27 +22,19 @@ public class XmlSerializer {
 		this.writer = writer;
 	}
 
-	public <T> void serialize(T object) {
-		String name = simpleNameFor(object.getClass().getSimpleName());
-		try {
-			writer.write("<" + name + ">\n");
-			parseFields(object, object.getClass());
-			writer.write("</" + name + ">");
-			writer.flush();
-		} catch (SecurityException e) {
-			throw new SerializationException("Unable to serialize " + object, e);
-		} catch (IOException e) {
-			throw new SerializationException("Unable to serialize " + object, e);
-		}
+	public <T> XmlSerializer from(T object) {
+		this.analyzing = object;
+		return this;
 	}
-	private <T> void parseFields(T object, Class<?> type) throws IOException {
+	private void parseFields(Object object, Class type) throws IOException {
 		if(type.equals(Object.class)) {
 			return;
 		}
 		Field[] fields = type.getDeclaredFields();
 		for (Field field : fields) {
 			field.setAccessible(true);
-			if(field.getType().isPrimitive() || field.getType().equals(String.class)) {
+			boolean shouldExclude = excludes.contains(field.getName());
+			if(!shouldExclude && (field.getType().isPrimitive() || field.getType().equals(String.class))) {
 				try {
 					Object result = field.get(object);
 					writer.write("  " + startTag(field.getName()) + result + endTag(field.getName()) + "\n");
@@ -77,6 +72,25 @@ public class XmlSerializer {
 
 	private String startTag(String name) {
 		return "<" + name + ">";
+	}
+
+	public XmlSerializer exclude(String fieldName) {
+		this.excludes .add(fieldName);
+		return this;
+	}
+
+	public void serialize() {
+		String name = simpleNameFor(analyzing.getClass().getSimpleName());
+		try {
+			writer.write("<" + name + ">\n");
+			parseFields(analyzing, analyzing.getClass());
+			writer.write("</" + name + ">");
+			writer.flush();
+		} catch (SecurityException e) {
+			throw new SerializationException("Unable to serialize " + analyzing, e);
+		} catch (IOException e) {
+			throw new SerializationException("Unable to serialize " + analyzing, e);
+		}
 	}
 
 }

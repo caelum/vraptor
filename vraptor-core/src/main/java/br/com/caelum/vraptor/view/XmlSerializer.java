@@ -7,6 +7,7 @@ import java.io.Writer;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -100,18 +101,29 @@ public class XmlSerializer {
 
 	private void serializeForReal() {
 		Class<? extends Object> baseType = analyzing.getClass();
+		if(Collection.class.isAssignableFrom(baseType)) {
+			Collection items = (Collection) analyzing;
+			for(Object object : items) {
+				serializeHimForReal(object, object.getClass());
+			}
+			return;
+		}
+		serializeHimForReal(analyzing, baseType);
+	}
+
+	private void serializeHimForReal(Object object, Class<? extends Object> baseType) {
 		String name = configuration.nameFor(baseType.getSimpleName());
 		try {
-			writer.write("<" + name + ">\n");
-			parseFields(analyzing, baseType);
+			writer.write(startTag(name)+"\n");
+			parseFields(object, baseType);
 			for(String methodName : this.methods) {
 				Method method = findMethod(baseType, methodName);
 				if(method==null) {
 					throw new SerializationException("Unable to find method " + methodName + " while inspecting " + analyzing);
 				}
-				writer.write(startTag(methodName) + method.invoke(analyzing) + endTag(methodName));
+				writer.write(startTag(methodName) + method.invoke(object) + endTag(methodName));
 			}
-			writer.write("</" + name + ">");
+			writer.write(endTag(name));
 			writer.flush();
 		} catch (Exception e) {
 			throw new SerializationException("Unable to serialize " + analyzing, e);

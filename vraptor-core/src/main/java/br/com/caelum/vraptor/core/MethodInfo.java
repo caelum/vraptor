@@ -32,4 +32,5 @@ public interface MethodInfo {
     Object[] getParameters();
     Object getResult();
     void setResult(Object result);
+	public abstract boolean parametersWereSet();
 }

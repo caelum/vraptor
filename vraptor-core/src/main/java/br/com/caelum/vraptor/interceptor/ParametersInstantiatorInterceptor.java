@@ -39,7 +39,6 @@ import br.com.caelum.vraptor.validator.Message;
  * @author Guilherme Silveira
  */
 public class ParametersInstantiatorInterceptor implements Interceptor {
-
     private final ParametersProvider provider;
     private final MethodInfo parameters;
 
@@ -57,11 +56,10 @@ public class ParametersInstantiatorInterceptor implements Interceptor {
     }
 
     public boolean accepts(ResourceMethod method) {
-        return true;
+        return !parameters.parametersWereSet();
     }
 
     public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws InterceptionException {
-
         Object[] values = provider.getParametersFor(method, errors, localization.getBundle());
 
         validator.addAll(errors);
@@ -73,5 +71,4 @@ public class ParametersInstantiatorInterceptor implements Interceptor {
         parameters.setParameters(values);
         stack.next(method, resourceInstance);
     }
-
 }

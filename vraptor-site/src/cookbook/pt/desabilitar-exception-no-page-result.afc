@@ -26,6 +26,7 @@ public class TesteController {
 Se você quiser desabilitar esta exceção, você pode criar a seguinte classe:
 
 [java]
+@Component
 public class MyPageResult extends DefaultPageResult {
 	// delega o construtor
 	@Override

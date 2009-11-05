@@ -30,6 +30,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.core.DefaultMethodInfo;
+import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.route.ResourceNotFoundException;
 import br.com.caelum.vraptor.http.route.Router;
@@ -46,7 +47,7 @@ public class DefaultPageResultTest {
     private RequestDispatcher dispatcher;
     private ResourceMethod method;
     private PathResolver fixedResolver;
-    private DefaultMethodInfo requestInfo;
+    private MethodInfo requestInfo;
 	private DefaultPageResult view;
 	private Router router;
 

@@ -6,20 +6,29 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class XmlSerializer {
 	
 	private Writer writer;
 	private Object analyzing;
-	private List<String> excludes = new ArrayList<String>();
+	private final List<String> excludes = new ArrayList<String>();
+	private final Map<String, XmlSerializer> includes = new HashMap<String, XmlSerializer>();
+	private final XmlSerializer parent;
 
 	public XmlSerializer(OutputStream output) {
 		this(new OutputStreamWriter(output));
 	}
+	
+	public XmlSerializer(XmlSerializer parent, Writer writer) {
+		this.parent = parent;
+		this.writer = writer;
+	}
 
 	public XmlSerializer(Writer writer) {
-		this.writer = writer;
+		this(null, writer);
 	}
 
 	public <T> XmlSerializer from(T object) {
@@ -31,19 +40,24 @@ public class XmlSerializer {
 			return;
 		}
 		Field[] fields = type.getDeclaredFields();
-		for (Field field : fields) {
-			field.setAccessible(true);
-			boolean shouldExclude = excludes.contains(field.getName());
-			if(!shouldExclude && (field.getType().isPrimitive() || field.getType().equals(String.class))) {
-				try {
-					Object result = field.get(object);
-					writer.write("  " + startTag(field.getName()) + result + endTag(field.getName()) + "\n");
-				} catch (IllegalArgumentException e) {
-					throw new SerializationException("Unable to serialize " + object, e);
-				} catch (IllegalAccessException e) {
-					throw new SerializationException("Unable to serialize " + object, e);
+		try {
+			for (Field field : fields) {
+				field.setAccessible(true);
+				XmlSerializer serializer = includes.get(field.getName());
+				if(serializer!=null) {
+					serializer.from(field.get(object)).serializeForReal();
+					continue;
+				}
+				boolean shouldExclude = excludes.contains(field.getName());
+				if(!shouldExclude && (field.getType().isPrimitive() || field.getType().equals(String.class))) {
+						Object result = field.get(object);
+						writer.write("  " + startTag(field.getName()) + result + endTag(field.getName()) + "\n");
 				}
 			}
+		} catch (IllegalArgumentException e) {
+			throw new SerializationException("Unable to serialize " + object, e);
+		} catch (IllegalAccessException e) {
+			throw new SerializationException("Unable to serialize " + object, e);
 		}
 		parseFields(object, type.getSuperclass());
 	}
@@ -80,6 +94,14 @@ public class XmlSerializer {
 	}
 
 	public void serialize() {
+		if(this.parent!=null) {
+			parent.serialize();
+			return;
+		}
+		serializeForReal();
+	}
+
+	private void serializeForReal() {
 		String name = simpleNameFor(analyzing.getClass().getSimpleName());
 		try {
 			writer.write("<" + name + ">\n");
@@ -91,6 +113,12 @@ public class XmlSerializer {
 		} catch (IOException e) {
 			throw new SerializationException("Unable to serialize " + analyzing, e);
 		}
+	}
+
+	public XmlSerializer include(String fieldName) {
+		XmlSerializer serializer = new XmlSerializer(this, writer);
+		this.includes.put(fieldName, serializer);
+		return serializer;
 	}
 
 }

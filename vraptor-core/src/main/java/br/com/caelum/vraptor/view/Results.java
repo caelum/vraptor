@@ -61,5 +61,12 @@ public class Results {
     public static Class<RefererResult> referer() {
     	return RefererResult.class;
     }
+    
+    /**
+     * Uses pure header status.
+     */
+    public static Class<Status> status() {
+    	return Status.class;
+    }
 
 }

@@ -13,13 +13,11 @@ import org.junit.Test;
 public class XmlSerializerTest {
 
 
-    private Mockery mockery;
 	private XmlSerializer serializer;
 	private ByteArrayOutputStream stream;
 
 	@Before
     public void setup() {
-        this.mockery = new Mockery();
         this.stream = new ByteArrayOutputStream();
         this.serializer = new XmlSerializer(stream);
     }
@@ -62,7 +60,6 @@ public class XmlSerializerTest {
 		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
 		serializer.from(order).serialize();
 		assertThat(result(), is(equalTo(expectedResult)));
-		mockery.assertIsSatisfied();
 	}
 
 	@Test
@@ -71,18 +68,6 @@ public class XmlSerializerTest {
 		Order order = new AdvancedOrder(new Client("guilherme silveira"), 15.0, "pack it nicely, please", "complex package");
 		serializer.from(order).serialize();
 		assertThat(result(), is(equalTo(expectedResult)));
-		mockery.assertIsSatisfied();
-	}
-	
-	public static class CamelCaseResource {
-	}
-
-	@Test
-	public void shouldUseUnderlineFromCamelcaseTypename() {
-		String expectedResult = "<camel_case_resource>\n</camel_case_resource>";
-		serializer.from(new CamelCaseResource()).serialize();
-		assertThat(result(), is(equalTo(expectedResult)));
-		mockery.assertIsSatisfied();
 	}
 
 	@Test
@@ -91,7 +76,6 @@ public class XmlSerializerTest {
 		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
 		serializer.from(order).exclude("price").serialize();
 		assertThat(result(), is(equalTo(expectedResult)));
-		mockery.assertIsSatisfied();
 	}
 
 	@Test
@@ -100,7 +84,6 @@ public class XmlSerializerTest {
 		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
 		serializer.from(order).exclude("price","comments").addMethod("nice").serialize();
 		assertThat(result(), is(equalTo(expectedResult)));
-		mockery.assertIsSatisfied();
 	}
 
 	@Test
@@ -109,7 +92,6 @@ public class XmlSerializerTest {
 		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
 		serializer.from(order).include("client").serialize();
 		assertThat(result(), is(equalTo(expectedResult)));
-		mockery.assertIsSatisfied();
 	}
 
 	@Test
@@ -118,7 +100,6 @@ public class XmlSerializerTest {
 		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
 		serializer.from(order).include("client").exclude("name").serialize();
 		assertThat(result(), is(equalTo(expectedResult)));
-		mockery.assertIsSatisfied();
 	}
 
 	private String result() {

@@ -20,6 +20,8 @@ public class XmlSerializer {
 	private final Map<String, XmlSerializer> includes = new HashMap<String, XmlSerializer>();
 	private final XmlSerializer parent;
 	private final List<String> methods = new ArrayList<String>();
+	
+	private final XmlConfiguration configuration = new DefaultXmlConfiguration();
 
 	public XmlSerializer(OutputStream output) {
 		this(new OutputStreamWriter(output));
@@ -65,23 +67,6 @@ public class XmlSerializer {
 		parseFields(object, type.getSuperclass());
 	}
 
-	private String simpleNameFor(String name) {
-		if(name.length()==1) {
-			return name.toLowerCase();
-		}
-		StringBuilder content = new StringBuilder();
-		content.append(Character.toLowerCase(name.charAt(0)));
-		for(int i=1;i<name.length();i++) {
-			char c = name.charAt(i);
-			if(Character.isUpperCase(c)) {
-				content.append("_");
-				content.append(Character.toLowerCase(c));
-			} else {
-				content.append(c);
-			}
-		}
-		return content.toString();
-	}
 
 	private String endTag(String name) {
 		return "</" + name + ">";
@@ -108,7 +93,7 @@ public class XmlSerializer {
 
 	private void serializeForReal() {
 		Class<? extends Object> baseType = analyzing.getClass();
-		String name = simpleNameFor(baseType.getSimpleName());
+		String name = configuration.nameFor(baseType.getSimpleName());
 		try {
 			writer.write("<" + name + ">\n");
 			parseFields(analyzing, baseType);

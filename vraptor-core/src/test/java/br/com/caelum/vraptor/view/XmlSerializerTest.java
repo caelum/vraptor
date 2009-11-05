@@ -85,6 +85,16 @@ public class XmlSerializerTest {
 	}
 
 	@Test
+	public void shouldSerializeCollectionWithPrefixTagAndNamespace() {
+		String expectedResult = "<o:order>\n  <o:price>15.0</o:price>\n  <o:comments>pack it nicely, please</o:comments>\n</o:order>";
+		expectedResult += expectedResult;
+		expectedResult = "<o:orders xmlns:o=\"http://www.caelum.com.br/order\">" + expectedResult + "</o:orders>";
+		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
+		serializer.from("orders", Arrays.asList(order, order)).namespace("http://www.caelum.com.br/order","o").serialize();
+		assertThat(result(), is(equalTo(expectedResult)));
+	}
+
+	@Test
 	public void shouldSerializeParentFields() {
 		String expectedResult = "<advanced_order>\n  <notes>complex package</notes>\n  <price>15.0</price>\n  <comments>pack it nicely, please</comments>\n</advanced_order>";
 		Order order = new AdvancedOrder(null, 15.0, "pack it nicely, please", "complex package");

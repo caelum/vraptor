@@ -119,10 +119,14 @@ public class XmlSerializer {
 			if(Collection.class.isAssignableFrom(baseType)) {
 				Collection items = (Collection) analyzing;
 				if(prefixTag!=null) {
-					writer.write(startTag(prefixTag));
+					if(namespaceUri !=null) {
+						writer.write("<" +  namespacePrefix + ":" + prefixTag + " " + "xmlns:" + namespacePrefix + "=\"" + namespaceUri +  "\">");
+					} else {
+						writer.write(startTag(prefixTag));
+					}
 				}
 				for(Object object : items) {
-					serializeHimForReal(object, object.getClass(), true);
+					serializeHimForReal(object, object.getClass(), false);
 				}
 				if(prefixTag!=null) {
 					writer.write(endTag(prefixTag));

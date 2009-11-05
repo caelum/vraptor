@@ -47,6 +47,9 @@ public enum HttpMethod {
 		String methodName = request.getParameter(METHOD_PARAMETER);
 		if (methodName == null) {
 			methodName = request.getMethod();
+		} else if ("GET".equalsIgnoreCase(request.getMethod())) {
+			throw new IllegalArgumentException("You can't use " + METHOD_PARAMETER + " " +
+					"parameter on a GET request. Use POST instead.");
 		}
 		try {
 			return valueOf(methodName.toUpperCase());

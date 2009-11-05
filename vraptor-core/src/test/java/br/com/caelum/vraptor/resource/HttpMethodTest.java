@@ -26,6 +26,8 @@ public class HttpMethodTest {
 			{
 				one(request).getParameter("_method");
 				will(returnValue("gEt"));
+
+				one(request).getMethod(); will(returnValue("POST"));
 			}
 		});
 		assertEquals(HttpMethod.GET, HttpMethod.of(request));
@@ -38,6 +40,20 @@ public class HttpMethodTest {
 			{
 				one(request).getParameter("_method");
 				will(returnValue("JUMP!"));
+
+				one(request).getMethod(); will(returnValue("POST"));
+			}
+		});
+		HttpMethod.of(request);
+
+	}
+	@Test(expected = IllegalArgumentException.class)
+	public void shouldThrowIllegalArgumentExceptionIf_methodIsUsedInGETRequests() throws Exception {
+		mockery.checking(new Expectations() {
+			{
+				one(request).getParameter("_method"); will(returnValue("DELETE"));
+
+				one(request).getMethod(); will(returnValue("GET"));
 			}
 		});
 		HttpMethod.of(request);
@@ -79,7 +95,7 @@ public class HttpMethodTest {
 		mockery.checking(new Expectations() {
 			{
 				one(request).getMethod();
-				will(returnValue("gEt"));
+				will(returnValue("dElEtE"));
 
 				one(request).getParameter("_method");
 				will(returnValue("post"));

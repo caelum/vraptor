@@ -99,6 +99,8 @@ public class DefaultPageResultTest {
 
                 one(request).getParameter("_method");
                 will(returnValue("GET"));
+
+                one(request).getMethod(); will(returnValue("POST"));
     		}
     	});
 
@@ -134,6 +136,8 @@ public class DefaultPageResultTest {
 
                 one(request).getParameter("_method");
                 will(returnValue("GET"));
+
+                one(request).getMethod(); will(returnValue("POST"));
     		}
     	});
 

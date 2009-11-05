@@ -6,6 +6,12 @@
 * bugfix: Results.referer() agora implementa View
 * bugfix: content-type agora é exposto pelo File/InputStream Download
 * removida chamadas a api de Java 6
+* novos providers, baseados no Spring: HibernateCustomProvider e JPACustomProvider. 
+  Esses providers já registram os componentes opcionais do Hibernate ou da JPA.
+* bugfix: os converters agora não jogam exceções quando não existe um ResourceBundle configurado.
+* bugfix: o retorno do método agora é incluido no result quando acontece um forward.
+* bugfix: os parâmetros da requisição são mantidos quando acontece um erro de validação. 
+
 [/list]
 
 [section 3.0.1]

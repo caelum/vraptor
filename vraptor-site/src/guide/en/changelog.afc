@@ -6,6 +6,11 @@
 * bugfix: Results.referer() now implements View
 * bugfix: content-type is now set when using File/InputStreamDownload
 * removed java 6 api calls
+* new providers, spring based: HibernateCustomProvider and JPACustomProvider. These providers
+  register optional Hibernate or JPA components.
+* bugfix: converters are not throwing exceptions when there is no ResourceBundle configured.
+* bugfix: method return values are now included on result when forwarding.
+
 [/list]
 
 

@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 import br.com.caelum.vraptor.ioc.Component;
+import br.com.caelum.vraptor.view.XmlSerializerTest.Order;
 
 /**
  * Basic xml serialization system.
@@ -30,6 +31,7 @@ public class XmlSerializer {
 	private final List<String> methods = new ArrayList<String>();
 	
 	private final XmlConfiguration configuration = new DefaultXmlConfiguration();
+	private String prefixTag = null;
 
 	public XmlSerializer(OutputStream output) {
 		this(new OutputStreamWriter(output));
@@ -96,19 +98,33 @@ public class XmlSerializer {
 			parent.serialize();
 			return;
 		}
-		serializeForReal();
+		try {
+			serializeForReal();
+		} catch (IOException e) {
+			throw new SerializationException("Unable to serialize " + analyzing, e);
+		}
 	}
 
-	private void serializeForReal() {
+	private void serializeForReal() throws IOException {
+		try {
 		Class<? extends Object> baseType = analyzing.getClass();
 		if(Collection.class.isAssignableFrom(baseType)) {
 			Collection items = (Collection) analyzing;
+			if(prefixTag!=null) {
+				writer.write(startTag(prefixTag));
+			}
 			for(Object object : items) {
 				serializeHimForReal(object, object.getClass());
+			}
+			if(prefixTag!=null) {
+				writer.write(endTag(prefixTag));
 			}
 			return;
 		}
 		serializeHimForReal(analyzing, baseType);
+		} finally {
+			writer.flush();
+		}
 	}
 
 	private void serializeHimForReal(Object object, Class<? extends Object> baseType) {
@@ -124,7 +140,6 @@ public class XmlSerializer {
 				writer.write(startTag(methodName) + method.invoke(object) + endTag(methodName));
 			}
 			writer.write(endTag(name));
-			writer.flush();
 		} catch (Exception e) {
 			throw new SerializationException("Unable to serialize " + analyzing, e);
 		}
@@ -150,6 +165,12 @@ public class XmlSerializer {
 
 	public XmlSerializer addMethod(String methodName) {
 		this.methods.add(methodName);
+		return this;
+	}
+
+	public XmlSerializer from(String prefix, Collection collection) {
+		this.prefixTag= prefix;
+		this.analyzing = collection;
 		return this;
 	}
 

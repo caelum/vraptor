@@ -5,11 +5,8 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
 import java.io.ByteArrayOutputStream;
-import java.lang.reflect.Array;
 import java.util.Arrays;
-import java.util.Collections;
 
-import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -69,17 +66,27 @@ public class XmlSerializerTest {
 	@Test
 	public void shouldSerializeCollection() {
 		String expectedResult = "<order>\n  <price>15.0</price>\n  <comments>pack it nicely, please</comments>\n</order>";
+		expectedResult += expectedResult;
 		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
-		serializer.from(order).serialize();
+		serializer.from(Arrays.asList(order, order)).serialize();
+		assertThat(result(), is(equalTo(expectedResult)));
+	}
+
+	@Test
+	public void shouldSerializeCollectionWithPrefixTag() {
+		String expectedResult = "<order>\n  <price>15.0</price>\n  <comments>pack it nicely, please</comments>\n</order>";
+		expectedResult += expectedResult;
+		expectedResult = "<orders>" + expectedResult + "</orders>";
+		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
+		serializer.from("orders", Arrays.asList(order, order)).serialize();
 		assertThat(result(), is(equalTo(expectedResult)));
 	}
 
 	@Test
 	public void shouldSerializeParentFields() {
-		String expectedResult = "<order>\n  <price>15.0</price>\n  <comments>pack it nicely, please</comments>\n</order>";
-		expectedResult += expectedResult;
-		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
-		serializer.from(Arrays.asList(order, order)).serialize();
+		String expectedResult = "<advanced_order>\n  <notes>complex package</notes>\n  <price>15.0</price>\n  <comments>pack it nicely, please</comments>\n</advanced_order>";
+		Order order = new AdvancedOrder(null, 15.0, "pack it nicely, please", "complex package");
+		serializer.from(order).serialize();
 		assertThat(result(), is(equalTo(expectedResult)));
 	}
 

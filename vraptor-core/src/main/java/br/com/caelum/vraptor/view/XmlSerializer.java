@@ -79,11 +79,19 @@ public class XmlSerializer {
 	}
 
 	private String endTag(String name) {
-		return "</" + name + ">";
+		if(namespacePrefix!=null) {
+			return "</" +  namespacePrefix + ":" + name + ">";
+		} else {
+			return "</" + name + ">";
+		}
 	}
 
 	private String startTag(String name) {
-		return "<" + name + ">";
+		if(namespacePrefix!=null) {
+			return "<" +  namespacePrefix + ":" + name + ">";
+		} else {
+			return "<" + name + ">";
+		}
 	}
 
 	public XmlSerializer exclude(String... names) {

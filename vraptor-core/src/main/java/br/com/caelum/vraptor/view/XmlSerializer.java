@@ -88,8 +88,10 @@ public class XmlSerializer {
 		return "<" + name + ">";
 	}
 
-	public XmlSerializer exclude(String fieldName) {
-		this.excludes .add(fieldName);
+	public XmlSerializer exclude(String... names) {
+		for(String fieldName : names) {
+			this.excludes .add(fieldName);
+		}
 		return this;
 	}
 

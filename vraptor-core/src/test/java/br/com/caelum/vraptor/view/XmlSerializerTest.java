@@ -100,6 +100,15 @@ public class XmlSerializerTest {
 		mockery.assertIsSatisfied();
 	}
 
+	@Test
+	public void shouldOptionallyExcludeChildField() {
+		String expectedResult = "<order>\n<client>\n</client>  <price>15.0</price>\n  <comments>pack it nicely, please</comments>\n</order>";
+		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
+		serializer.from(order).include("client").exclude("name").serialize();
+		assertThat(result(), is(equalTo(expectedResult)));
+		mockery.assertIsSatisfied();
+	}
+
 	private String result() {
 		return new String(stream.toByteArray());
 	}

@@ -39,7 +39,14 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 /**
  * Default page result implementation.
  *
+ * By default, if you try to redirect or forward to an URI that is matched
+ * by a route, an exception will be thrown.
+ *
+ * If you want to disable this exception, you can override the {@link DefaultPageResult#checkForLogic(String, HttpMethod)}
+ * method.
+ *
  * @author Guilherme Silveira
+ * @author Lucas Cavalcanti
  */
 public class DefaultPageResult implements PageResult {
 
@@ -89,7 +96,7 @@ public class DefaultPageResult implements PageResult {
         }
     }
 
-	private void checkForLogic(String url, HttpMethod httpMethod) {
+	protected void checkForLogic(String url, HttpMethod httpMethod) {
 		try {
 			ResourceMethod method = router.parse(url, httpMethod, request);
 			throw new ResultException("Given uri " + url + " responds to method: " + method.getMethod() + ".\n" +

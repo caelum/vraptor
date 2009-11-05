@@ -7,6 +7,8 @@ import static org.junit.Assert.assertThat;
 import java.io.ByteArrayOutputStream;
 import java.util.Arrays;
 
+import javax.xml.namespace.QName;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -119,6 +121,14 @@ public class XmlSerializerTest {
 		String expectedResult = "<order>\n<client>\n</client>  <price>15.0</price>\n  <comments>pack it nicely, please</comments>\n</order>";
 		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
 		serializer.from(order).include("client").exclude("name").serialize();
+		assertThat(result(), is(equalTo(expectedResult)));
+	}
+
+	@Test
+	public void shouldIncludeNamespaces() {
+		String expectedResult = "<o:order xmlns:o=\"http://www.caelum.com.br/order\">\n  <o:price>15.0</o:price>\n  <o:comments>pack it nicely, please</o:comments>\n</o:order>";
+		Order order = new Order(null, 15.0, "pack it nicely, please");
+		serializer.from(order).namespace("http://www.caelum.com.br/order","o").serialize();
 		assertThat(result(), is(equalTo(expectedResult)));
 	}
 

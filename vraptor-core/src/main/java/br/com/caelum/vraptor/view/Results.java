@@ -69,4 +69,11 @@ public class Results {
     	return Status.class;
     }
 
+    /**
+     * Uses data serialization.
+     */
+    public static Class<XmlSerialization> xml() {
+    	return XmlSerialization.class;
+    }
+
 }

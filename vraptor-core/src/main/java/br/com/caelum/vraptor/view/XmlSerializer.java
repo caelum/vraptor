@@ -31,6 +31,7 @@ public class XmlSerializer {
 	
 	private final XmlConfiguration configuration = new DefaultXmlConfiguration();
 	private String prefixTag = null;
+	private String namespaceUri, namespacePrefix;
 
 	public XmlSerializer(OutputStream output) {
 		this(new OutputStreamWriter(output));
@@ -49,6 +50,7 @@ public class XmlSerializer {
 		this.analyzing = object;
 		return this;
 	}
+	
 	private void parseFields(Object object, Class type) throws IOException {
 		if(type.equals(Object.class)) {
 			return;
@@ -75,7 +77,6 @@ public class XmlSerializer {
 		}
 		parseFields(object, type.getSuperclass());
 	}
-
 
 	private String endTag(String name) {
 		return "</" + name + ">";
@@ -106,30 +107,35 @@ public class XmlSerializer {
 
 	private void serializeForReal() throws IOException {
 		try {
-		Class<? extends Object> baseType = analyzing.getClass();
-		if(Collection.class.isAssignableFrom(baseType)) {
-			Collection items = (Collection) analyzing;
-			if(prefixTag!=null) {
-				writer.write(startTag(prefixTag));
+			Class<? extends Object> baseType = analyzing.getClass();
+			if(Collection.class.isAssignableFrom(baseType)) {
+				Collection items = (Collection) analyzing;
+				if(prefixTag!=null) {
+					writer.write(startTag(prefixTag));
+				}
+				for(Object object : items) {
+					serializeHimForReal(object, object.getClass(), true);
+				}
+				if(prefixTag!=null) {
+					writer.write(endTag(prefixTag));
+				}
+				return;
+			} else {
+				serializeHimForReal(analyzing, baseType, true);
 			}
-			for(Object object : items) {
-				serializeHimForReal(object, object.getClass());
-			}
-			if(prefixTag!=null) {
-				writer.write(endTag(prefixTag));
-			}
-			return;
-		}
-		serializeHimForReal(analyzing, baseType);
 		} finally {
 			writer.flush();
 		}
 	}
 
-	private void serializeHimForReal(Object object, Class<? extends Object> baseType) {
+	private void serializeHimForReal(Object object, Class<? extends Object> baseType, boolean addNamespaceDeclaration) {
 		String name = configuration.nameFor(baseType.getSimpleName());
 		try {
-			writer.write(startTag(name)+"\n");
+			if(addNamespaceDeclaration && namespacePrefix!=null) {
+				writer.write("<" +  namespacePrefix + ":" + name + " " + "xmlns:" + namespacePrefix + "=\"" + namespaceUri +  "\">\n");
+			}else {
+				writer.write(startTag(name) + "\n");
+			}
 			parseFields(object, baseType);
 			for(String methodName : this.methods) {
 				Method method = findMethod(baseType, methodName);
@@ -170,6 +176,12 @@ public class XmlSerializer {
 	public XmlSerializer from(String prefix, Collection collection) {
 		this.prefixTag= prefix;
 		this.analyzing = collection;
+		return this;
+	}
+
+	public XmlSerializer namespace(String uri, String prefix) {
+		this.namespaceUri = uri;
+		this.namespacePrefix = prefix;
 		return this;
 	}
 

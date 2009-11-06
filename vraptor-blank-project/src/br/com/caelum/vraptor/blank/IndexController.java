@@ -16,8 +16,11 @@
  */
 package br.com.caelum.vraptor.blank;
 
-import java.util.List;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
+import br.com.caelum.vraptor.Consumes;
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Resource;
 
@@ -28,12 +31,31 @@ public class IndexController {
 	public void index() {
 	}
 
-	@Path("/teste")
-	public void teste(List<ABC> abc) {
-		System.out.println(abc);
+
+	static class Dog {
+		private String name;
+		private Integer age;
+		@Override
+		public String toString() {
+			return name + " --- " + age;
+		}
+	}
+	@Consumes("application/xml")
+	public void teste(Dog dog) {
+		System.out.println(dog);
 	}
 
-	public static enum ABC {
-		DEF, GHI
+	public static void main(String[] args) throws Exception {
+		 URL url = new URL("http://localhost:8080/vraptor-blank-project/index/teste");
+         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+         connection.setDoOutput(true);
+         connection.setRequestMethod("POST");
+         connection.addRequestProperty("Content-Type",	"application/xml");
+         OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
+         writer.write("<dog><name>Brutus</name><age>7</age></dog>");
+         writer.close();
+
+         System.out.println(connection.getResponseCode());
+
 	}
 }

@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import br.com.caelum.vraptor.VRaptorException;
+import br.com.caelum.vraptor.core.BaseComponents;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Container;
 
@@ -32,6 +33,11 @@ public class DefaultDeserializers implements Deserializers {
 
 	private final Map<String, Class<? extends Deserializer>> deserializers = new HashMap<String, Class<? extends Deserializer>>();
 
+	public DefaultDeserializers() {
+		for (Class<? extends Deserializer> type : BaseComponents.getDeserializers()) {
+			register(type);
+		}
+	}
 	public Deserializer deserializerFor(String contentType, Container container) {
 		if (!deserializers.containsKey(contentType)) {
 			throw new VRaptorException("There is no deserializer for the content type " + contentType);

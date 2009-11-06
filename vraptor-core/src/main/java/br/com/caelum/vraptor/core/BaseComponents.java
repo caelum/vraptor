@@ -51,6 +51,7 @@ import br.com.caelum.vraptor.converter.PrimitiveLongConverter;
 import br.com.caelum.vraptor.converter.PrimitiveShortConverter;
 import br.com.caelum.vraptor.converter.ShortConverter;
 import br.com.caelum.vraptor.deserialization.DefaultDeserializers;
+import br.com.caelum.vraptor.deserialization.Deserializer;
 import br.com.caelum.vraptor.deserialization.Deserializers;
 import br.com.caelum.vraptor.deserialization.Deserializes;
 import br.com.caelum.vraptor.deserialization.DeserializesHandler;
@@ -227,6 +228,15 @@ public class BaseComponents {
     	Component.class,
     	Deserializes.class
     };
+    @SuppressWarnings("unchecked")
+    private static final Class<? extends Deserializer>[] DESERIALIZERS = new Class[] {
+    	XmlDeserializer.class
+    };
+
+
+    public static Class<? extends Deserializer>[] getDeserializers() {
+		return DESERIALIZERS;
+	}
 
     public static Map<Class<?>, Class<?>> getCachedComponents() {
 		return CACHED_COMPONENTS;

@@ -26,6 +26,7 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.extra.ForwardToDefaultViewInterceptor;
+import br.com.caelum.vraptor.interceptor.DeserializingInterceptor;
 import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
 import br.com.caelum.vraptor.interceptor.FlashInterceptor;
 import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
@@ -61,6 +62,7 @@ public class DefaultRequestExecutionTest {
                 one(stack).add(InterceptorListPriorToExecutionExtractor.class); inSequence(sequence);
                 one(stack).add(MultipartInterceptor.class); inSequence(sequence);
                 one(stack).add(instantiator); inSequence(sequence);
+                one(stack).add(DeserializingInterceptor.class); inSequence(sequence);
                 one(stack).add(ParametersInstantiatorInterceptor.class); inSequence(sequence);
                 one(stack).add(ExecuteMethodInterceptor.class); inSequence(sequence);
                 one(stack).add(OutjectResult.class); inSequence(sequence);

@@ -52,7 +52,10 @@ import br.com.caelum.vraptor.converter.PrimitiveShortConverter;
 import br.com.caelum.vraptor.converter.ShortConverter;
 import br.com.caelum.vraptor.deserialization.DefaultDeserializers;
 import br.com.caelum.vraptor.deserialization.Deserializers;
+import br.com.caelum.vraptor.deserialization.Deserializes;
 import br.com.caelum.vraptor.deserialization.DeserializesHandler;
+import br.com.caelum.vraptor.deserialization.XStreamXmlDeserializer;
+import br.com.caelum.vraptor.deserialization.XmlDeserializer;
 import br.com.caelum.vraptor.extra.ForwardToDefaultViewInterceptor;
 import br.com.caelum.vraptor.http.DefaultResourceTranslator;
 import br.com.caelum.vraptor.http.EncodingHandlerFactory;
@@ -146,6 +149,7 @@ public class BaseComponents {
             Proxifier.class, 				ObjenesisProxifier.class,
             ParameterNameProvider.class, 	ParanamerNameProvider.class,
             TypeFinder.class, 				DefaultTypeFinder.class,
+            XmlDeserializer.class,			XStreamXmlDeserializer.class,
             RoutesParser.class, 			PathAnnotationRoutesParser.class
     );
 
@@ -220,7 +224,8 @@ public class BaseComponents {
     private static final Class<? extends Annotation>[] STEREOTYPES = new Class[] {
     	Resource.class,
     	Convert.class,
-    	Component.class
+    	Component.class,
+    	Deserializes.class
     };
 
     public static Map<Class<?>, Class<?>> getCachedComponents() {
@@ -238,6 +243,8 @@ public class BaseComponents {
     public static Class<? extends Converter<?>>[] getBundledConverters() {
         return BUNDLED_CONVERTERS;
     }
+
+
 
     public static Class<? extends Annotation>[] getStereotypes() {
     	return STEREOTYPES;

@@ -12,7 +12,10 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.Consumes;
 import br.com.caelum.vraptor.core.InterceptorStack;
+import br.com.caelum.vraptor.core.MethodInfo;
+import br.com.caelum.vraptor.deserialization.Deserializer;
 import br.com.caelum.vraptor.deserialization.Deserializers;
+import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.test.VRaptorMockery;
@@ -28,6 +31,8 @@ public class DeserializingInterceptorTest {
 	private HttpResult result;
 	private InterceptorStack stack;
 	private Deserializers deserializers;
+	private MethodInfo methodInfo;
+	protected Container container;
 
 	@Before
 	public void setUp() throws Exception {
@@ -37,7 +42,9 @@ public class DeserializingInterceptorTest {
 		request = mockery.mock(HttpServletRequest.class);
 		result = mockery.mock(HttpResult.class);
 		deserializers = mockery.mock(Deserializers.class);
-		interceptor = new DeserializingInterceptor(request, result, deserializers);
+		methodInfo = mockery.mock(MethodInfo.class);
+		container = mockery.mock(Container.class);
+		interceptor = new DeserializingInterceptor(request, result, deserializers, methodInfo, container);
 		consumeXml = new DefaultResourceMethod(null, DummyResource.class.getDeclaredMethod("consumeXml"));
 		doesntConsume = new DefaultResourceMethod(null, DummyResource.class.getDeclaredMethod("doesntConsume"));
 	}
@@ -74,14 +81,26 @@ public class DeserializingInterceptorTest {
 	}
 
 	@Test
-	public void willCallDeserializeWithRequestInformation() throws Exception {
+	public void willSetMethodParametersWithDeserializationAndContinueStackAfterDeserialization() throws Exception {
 		mockery.checking(new Expectations() {{
 			allowing(request).getInputStream();
 
 			allowing(request).getContentType();
 			will(returnValue("application/xml"));
 
-			one(deserializers).deserialize(null, "application/xml", consumeXml);
+			Deserializer deserializer = mockery.mock(Deserializer.class);
+
+			one(deserializers).deserializerFor("application/xml", container);
+			will(returnValue(deserializer));
+
+			Object[] parameters = new Object[] {"abc", "def"};
+			one(deserializer).deserialize(null, consumeXml);
+			will(returnValue(parameters));
+
+			one(methodInfo).setParameters(parameters);
+
+			one(stack).next(consumeXml, null);
+
 		}});
 
 		interceptor.intercept(stack, consumeXml, null);

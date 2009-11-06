@@ -9,7 +9,10 @@ import javax.servlet.http.HttpServletRequest;
 import br.com.caelum.vraptor.Consumes;
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.core.InterceptorStack;
+import br.com.caelum.vraptor.core.MethodInfo;
+import br.com.caelum.vraptor.deserialization.Deserializer;
 import br.com.caelum.vraptor.deserialization.Deserializers;
+import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.view.HttpResult;
 
@@ -23,11 +26,16 @@ public class DeserializingInterceptor implements Interceptor {
 	private final HttpServletRequest request;
 	private final HttpResult result;
 	private final Deserializers deserializers;
+	private final MethodInfo methodInfo;
+	private final Container container;
 
-	public DeserializingInterceptor(HttpServletRequest servletRequest, HttpResult result, Deserializers deserializers) {
+	public DeserializingInterceptor(HttpServletRequest servletRequest, HttpResult result,
+			Deserializers deserializers, MethodInfo methodInfo, Container container) {
 		this.request = servletRequest;
 		this.result = result;
 		this.deserializers = deserializers;
+		this.methodInfo = methodInfo;
+		this.container = container;
 	}
 
 	public boolean accepts(ResourceMethod method) {
@@ -47,7 +55,12 @@ public class DeserializingInterceptor implements Interceptor {
 		}
 
 		try {
-			Object[] parameters = deserializers.deserialize(request.getInputStream(), contentType, method);
+			Deserializer deserializer = deserializers.deserializerFor(contentType, container);
+
+			Object[] parameters = deserializer.deserialize(request.getInputStream(), method);
+			methodInfo.setParameters(parameters);
+
+			stack.next(method, resourceInstance);
 		} catch (IOException e) {
 			throw new InterceptionException(e);
 		}

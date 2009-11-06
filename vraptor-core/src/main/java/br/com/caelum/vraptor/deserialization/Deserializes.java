@@ -15,17 +15,18 @@
  */
 package br.com.caelum.vraptor.deserialization;
 
-import br.com.caelum.vraptor.ioc.Container;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-/**
- *
- * @author Lucas Cavalcanti, Cecilia Fernandes
- *
- */
-public interface Deserializers {
+import br.com.caelum.vraptor.ioc.Stereotype;
 
-	Deserializer deserializerFor(String contentType, Container container);
-
-	void register(Class<? extends Deserializer> type);
-
+@Stereotype
+@Documented
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Deserializes {
+	String[] value();
 }

@@ -15,17 +15,17 @@
  */
 package br.com.caelum.vraptor.deserialization;
 
-import br.com.caelum.vraptor.ioc.Container;
+import java.io.InputStream;
+
+import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**
+ * Deserializes request body according to a given content type.
  *
- * @author Lucas Cavalcanti, Cecilia Fernandes
- *
+ * @author Lucas Cavalcanti, Ricardo Nakamura
  */
-public interface Deserializers {
+public interface Deserializer {
 
-	Deserializer deserializerFor(String contentType, Container container);
-
-	void register(Class<? extends Deserializer> type);
+	Object[] deserialize(InputStream inputStream, ResourceMethod method);
 
 }

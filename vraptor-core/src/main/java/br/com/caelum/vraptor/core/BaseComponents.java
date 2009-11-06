@@ -50,6 +50,9 @@ import br.com.caelum.vraptor.converter.PrimitiveIntConverter;
 import br.com.caelum.vraptor.converter.PrimitiveLongConverter;
 import br.com.caelum.vraptor.converter.PrimitiveShortConverter;
 import br.com.caelum.vraptor.converter.ShortConverter;
+import br.com.caelum.vraptor.deserialization.DefaultDeserializers;
+import br.com.caelum.vraptor.deserialization.Deserializers;
+import br.com.caelum.vraptor.deserialization.DeserializesHandler;
 import br.com.caelum.vraptor.extra.ForwardToDefaultViewInterceptor;
 import br.com.caelum.vraptor.http.DefaultResourceTranslator;
 import br.com.caelum.vraptor.http.EncodingHandlerFactory;
@@ -71,6 +74,7 @@ import br.com.caelum.vraptor.http.route.RoutesParser;
 import br.com.caelum.vraptor.http.route.TypeFinder;
 import br.com.caelum.vraptor.interceptor.DefaultInterceptorRegistry;
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
+import br.com.caelum.vraptor.interceptor.DeserializingInterceptor;
 import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
 import br.com.caelum.vraptor.interceptor.FlashInterceptor;
 import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
@@ -138,6 +142,7 @@ public class BaseComponents {
             MethodNotAllowedHandler.class,	DefaultMethodNotAllowedHandler.class,
             EmptyElementsRemoval.class, 	EmptyElementsRemoval.class,
             RoutesConfiguration.class, 		NoRoutesConfiguration.class,
+            Deserializers.class,			DefaultDeserializers.class,
             Proxifier.class, 				ObjenesisProxifier.class,
             ParameterNameProvider.class, 	ParanamerNameProvider.class,
             TypeFinder.class, 				DefaultTypeFinder.class,
@@ -167,6 +172,7 @@ public class BaseComponents {
             FlashInterceptor.class, 						FlashInterceptor.class,
             ForwardToDefaultViewInterceptor.class, 			ForwardToDefaultViewInterceptor.class,
             InstantiateInterceptor.class, 					InstantiateInterceptor.class,
+            DeserializingInterceptor.class, 				DeserializingInterceptor.class,
             InterceptorListPriorToExecutionExtractor.class, InterceptorListPriorToExecutionExtractor.class,
             Localization.class, 							JstlLocalization.class,
             MultipartInterceptor.class, 					MultipartInterceptor.class,
@@ -207,6 +213,7 @@ public class BaseComponents {
 		ResourceHandler.class,
 		ConverterHandler.class,
 		InterceptorStereotypeHandler.class,
+		DeserializesHandler.class
 	};
 
     @SuppressWarnings("unchecked")

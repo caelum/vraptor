@@ -27,6 +27,11 @@ import br.com.caelum.vraptor.ioc.Stereotype;
 @Documented
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
+/**
+ * Indicates that annotated class will deserialize specified content types
+ * @author Lucas Cavalcanti, Cecilia Fernandes
+ * @since 3.0.2
+ */
 public @interface Deserializes {
 	String[] value();
 }

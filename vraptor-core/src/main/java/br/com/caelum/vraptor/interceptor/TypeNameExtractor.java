@@ -21,6 +21,7 @@ import java.lang.reflect.Type;
  * Component that Extract the name of a generic type.
  *
  * @author Lucas Cavalcanti
+ * @since 3.0.2
  */
 public interface TypeNameExtractor {
 

@@ -23,6 +23,7 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  * Deserializes request body according to a given content type.
  *
  * @author Lucas Cavalcanti, Ricardo Nakamura
+ * @since 3.0.2
  */
 public interface Deserializer {
 

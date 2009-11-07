@@ -29,6 +29,7 @@ import br.com.caelum.vraptor.vraptor2.Info;
  * uses the decapitalized name of generic type plus 'List'.
  *
  * @author Lucas Cavalcanti
+ * @since 3.0.2
  */
 @ApplicationScoped
 public class DefaultTypeNameExtractor implements TypeNameExtractor {

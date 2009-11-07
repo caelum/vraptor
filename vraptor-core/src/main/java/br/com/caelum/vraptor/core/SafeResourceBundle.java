@@ -24,6 +24,7 @@ import java.util.ResourceBundle;
  * It only returns ??? + key + ??? when the key doesn't exist.
  *
  * @author Lucas Cavalcanti
+ * @since 3.0.2
  */
 public class SafeResourceBundle extends ResourceBundle {
 

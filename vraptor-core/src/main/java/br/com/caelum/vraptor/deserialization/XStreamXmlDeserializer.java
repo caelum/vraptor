@@ -27,7 +27,7 @@ import com.thoughtworks.xstream.XStream;
 /**
  * XStream based Xml Deserializer
  * @author Lucas Cavalcanti, Cecilia Fernandes
- *
+ * @since 3.0.2
  */
 @ApplicationScoped
 public class XStreamXmlDeserializer implements XmlDeserializer {

@@ -23,7 +23,7 @@ package br.com.caelum.vraptor.validator;
  * problematic form.
  *
  * @author Lucas Cavalcanti
- *
+ * @since 3.0.2
  */
 public interface Outjector {
 

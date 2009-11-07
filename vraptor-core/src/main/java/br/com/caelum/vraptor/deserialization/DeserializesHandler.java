@@ -24,6 +24,7 @@ import br.com.caelum.vraptor.ioc.StereotypeHandler;
  * Handles classes annotated with @Deserializes
  *
  * @author Lucas Cavalcanti, Cecilia Fernandes
+ * @since 3.0.2
  */
 @ApplicationScoped
 public class DeserializesHandler implements StereotypeHandler {

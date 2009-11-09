@@ -51,6 +51,10 @@ public class XmlSerializer {
 		return this;
 	}
 	
+	private boolean isBasicType(Class type) {
+		return type.isPrimitive() || type.equals(String.class) || Enum.class.isAssignableFrom(type);
+	}
+	
 	private void parseFields(Object object, Class type) throws IOException {
 		if(type.equals(Object.class)) {
 			return;
@@ -65,7 +69,7 @@ public class XmlSerializer {
 					continue;
 				}
 				boolean shouldExclude = excludes.contains(field.getName());
-				if(!shouldExclude && (field.getType().isPrimitive() || field.getType().equals(String.class))) {
+				if(!shouldExclude && isBasicType(field.getType())) {
 						Object result = field.get(object);
 						writer.write("  " + startTag(field.getName()) + result + endTag(field.getName()) + "\n");
 				}

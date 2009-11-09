@@ -63,6 +63,23 @@ public class XmlSerializerTest {
 		serializer.from(order).serialize();
 		assertThat(result(), is(equalTo(expectedResult)));
 	}
+	
+	public static enum Type { basic, advanced }
+	class BasicOrder extends Order {
+		public BasicOrder(Client client, double price, String comments, Type type) {
+			super(client, price, comments);
+			this.type = type;
+		}
+		private Type type;
+	}
+
+	@Test
+	public void shouldSerializeEnumFields() {
+		String expectedResult = "<basic_order>\n  <type>basic</type>\n  <price>15.0</price>\n  <comments>pack it nicely, please</comments>\n</basic_order>";
+		Order order = new BasicOrder(new Client("guilherme silveira"), 15.0, "pack it nicely, please", Type.basic);
+		serializer.from(order).serialize();
+		assertThat(result(), is(equalTo(expectedResult)));
+	}
 
 
 	@Test

@@ -12,7 +12,7 @@ import br.com.caelum.vraptor.proxy.Proxifier;
  */
 @Component
 public class DefaultRoutes implements Routes{
-	
+
 	private final Proxifier proxifier;
 	private final Router router;
 
@@ -20,7 +20,7 @@ public class DefaultRoutes implements Routes{
 		this.router = router;
 		this.proxifier = proxifier;
 	}
-	
+
 	private String uri;
 
 	public <T> T uriFor(final Class<T> type) {

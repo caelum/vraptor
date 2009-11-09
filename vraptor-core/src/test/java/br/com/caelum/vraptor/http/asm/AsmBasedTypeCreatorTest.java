@@ -2,17 +2,17 @@
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource
  * All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); 
- * you may not use this file except in compliance with the License. 
- * You may obtain a copy of the License at 
- * 
- * 	http://www.apache.org/licenses/LICENSE-2.0 
- * 
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an "AS IS" BASIS, 
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
- * See the License for the specific language governing permissions and 
- * limitations under the License. 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * 	http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package br.com.caelum.vraptor.http.asm;
 
@@ -34,6 +34,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.http.DefaultParameterNameProvider;
+import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor.interceptor.DogAlike;
 import br.com.caelum.vraptor.test.VRaptorMockery;
 
@@ -44,7 +45,7 @@ public class AsmBasedTypeCreatorTest {
 
     @Before
     public void setup() {
-        this.creator = new AsmBasedTypeCreator(new DefaultParameterNameProvider());
+        this.creator = new AsmBasedTypeCreator(new DefaultParameterNameProvider(new DefaultTypeNameExtractor()));
         this.mockery = new VRaptorMockery();
     }
 
@@ -83,7 +84,7 @@ public class AsmBasedTypeCreatorTest {
     public void shouldBeAbleToDealWithGenericCollection() throws SecurityException, NoSuchMethodException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         Class<?> type = creator.typeFor(mockery.method(DogAlike.class.getDeclaredMethod("eat", List.class)));
 
-        Method getter = type.getDeclaredMethod("getListOfString");
+        Method getter = type.getDeclaredMethod("getStringList");
         Assert.assertTrue(getter.getGenericReturnType() instanceof ParameterizedType);
         ParameterizedType returnType = (ParameterizedType) getter.getGenericReturnType();
         Assert.assertTrue(List.class.isAssignableFrom((Class<?>) returnType.getRawType()));
@@ -97,8 +98,8 @@ public class AsmBasedTypeCreatorTest {
     public void shouldHandleArraysOfPrimitive() throws SecurityException, NoSuchMethodException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         Class<?> type = creator.typeFor(mockery.method(DogAlike.class.getDeclaredMethod("dropDead", int[].class)));
 
-        Method getter = type.getDeclaredMethod("getInt");
-        Method setter = type.getDeclaredMethod("setInt", int[].class);
+        Method getter = type.getDeclaredMethod("getIntList");
+        Method setter = type.getDeclaredMethod("setIntList", int[].class);
 
         Object instance = type.newInstance();
         int[] array = new int[]{0, 1};
@@ -111,8 +112,8 @@ public class AsmBasedTypeCreatorTest {
     public void shouldHandleArraysOfType() throws SecurityException, NoSuchMethodException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         Class<?> type = creator.typeFor(mockery.method(DogAlike.class.getDeclaredMethod("recurse", DogAlike[].class)));
 
-        Method getter = type.getDeclaredMethod("getDogAlike");
-        Method setter = type.getDeclaredMethod("setDogAlike", DogAlike[].class);
+        Method getter = type.getDeclaredMethod("getDogAlikeList");
+        Method setter = type.getDeclaredMethod("setDogAlikeList", DogAlike[].class);
 
         Object instance = type.newInstance();
         DogAlike[] array = new DogAlike[]{mockery.mock(DogAlike.class)};

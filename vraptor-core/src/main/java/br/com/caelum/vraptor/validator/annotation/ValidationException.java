@@ -21,6 +21,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import br.com.caelum.vraptor.validator.DefaultValidationException;
+
 /**
  * A marked annotation to indicate that a certain exception class
  * should be used as a Validation Exception by VRaptor Validator.

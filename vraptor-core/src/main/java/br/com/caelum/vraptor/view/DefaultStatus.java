@@ -41,5 +41,10 @@ public class DefaultStatus implements Status {
 		header("Location", location);
 		created();
 	}
+	
+	public void ok() {
+		response.setStatus(HttpServletResponse.SC_OK);
+		result.use(Results.nothing());
+	}
 
 }

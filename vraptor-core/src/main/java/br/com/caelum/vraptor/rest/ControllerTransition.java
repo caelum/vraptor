@@ -41,7 +41,7 @@ public class ControllerTransition implements Transition {
 				}
 			}
 		}
-		return routes.getUri();
+		return routes.getApplicationPath() + routes.getUri();
 	}
 
 }

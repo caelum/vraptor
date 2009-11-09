@@ -6,6 +6,7 @@ import java.util.List;
 import br.com.caelum.vraptor.core.Routes;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Component;
+import br.com.caelum.vraptor.proxy.Proxifier;
 
 /**
  * Helper to create transitions and states when using restfulie.
@@ -21,9 +22,11 @@ public class DefaultRestfulie implements Restfulie {
 	private final List<TransitionBuilder> transitions = new ArrayList<TransitionBuilder>();
 	private final List<StateBuilder> states = new ArrayList<StateBuilder>();
 	private final Routes routes;
+	private final Proxifier proxifier;
 	
-	public DefaultRestfulie(Routes routes) {
+	public DefaultRestfulie(Routes routes, Proxifier proxifier) {
 		this.routes = routes;
+		this.proxifier = proxifier;
 	}
 	
 	public String getStatusField() {
@@ -31,7 +34,7 @@ public class DefaultRestfulie implements Restfulie {
 	}
 	
 	public TransitionBuilder transition(String name) {
-		TransitionBuilder builder = new TransitionBuilder(name, routes);
+		TransitionBuilder builder = new TransitionBuilder(name, routes, proxifier);
 		this.transitions.add(builder);
 		return builder;
 	}

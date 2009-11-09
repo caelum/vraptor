@@ -13,6 +13,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import br.com.caelum.vraptor.config.Configuration;
+import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.rest.Restfulie;
 import br.com.caelum.vraptor.rest.StateResource;
@@ -37,19 +39,21 @@ public class XmlSerializer {
 	private String prefixTag = null;
 	private String namespaceUri, namespacePrefix;
 	private final Restfulie restfulie;
+	private final Configuration config;
 
 	public XmlSerializer(OutputStream output) {
 		this(new OutputStreamWriter(output));
 	}
 	
-	public XmlSerializer(XmlSerializer parent, Writer writer, Restfulie restfulie) {
+	public XmlSerializer(XmlSerializer parent, Writer writer, Restfulie restfulie, Configuration config) {
 		this.parent = parent;
 		this.writer = writer;
 		this.restfulie = restfulie;
+		this.config = config;
 	}
 
 	public XmlSerializer(Writer writer) {
-		this(null, writer, null);
+		this(null, writer, null, null);
 	}
 
 	public <T> XmlSerializer from(T object) {
@@ -175,7 +179,7 @@ public class XmlSerializer {
 		StateResource resource = (StateResource) object;
 		List<Transition> transitions = resource.getFollowingTransitions(restfulie);
 		for(Transition transition:transitions) {
-			writer.write("  <atom:link href=\"" + transition.getUri() + "\" rel=\"" + transition.getName() + "\" xmlns:atom=\"http://www.w3.org/2005/Atom\" />");
+			writer.write("  <atom:link href=\"" + config.getApplicationPath() + transition.getUri() + "\" rel=\"" + transition.getName() + "\" xmlns:atom=\"http://www.w3.org/2005/Atom\" />");
 		}
 	}
 
@@ -204,7 +208,7 @@ public class XmlSerializer {
 	}
 
 	public XmlSerializer include(String fieldName) {
-		XmlSerializer serializer = new XmlSerializer(this, writer, restfulie);
+		XmlSerializer serializer = new XmlSerializer(this, writer, restfulie, config);
 		this.includes.put(fieldName, serializer);
 		return serializer;
 	}

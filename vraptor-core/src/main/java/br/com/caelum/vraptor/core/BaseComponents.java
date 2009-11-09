@@ -29,6 +29,8 @@ import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
+import br.com.caelum.vraptor.config.ApplicationConfiguration;
+import br.com.caelum.vraptor.config.Configuration;
 import br.com.caelum.vraptor.converter.BigDecimalConverter;
 import br.com.caelum.vraptor.converter.BigIntegerConverter;
 import br.com.caelum.vraptor.converter.BooleanConverter;
@@ -194,7 +196,8 @@ public class BaseComponents {
             ParametersInstantiatorInterceptor.class, 		ParametersInstantiatorInterceptor.class,
             ResourceLookupInterceptor.class, 				ResourceLookupInterceptor.class,
             Status.class,									DefaultStatus.class,
-            XmlSerialization.class,							DefaultXmlSerialization.class
+            XmlSerialization.class,							DefaultXmlSerialization.class,
+            Configuration.class,							ApplicationConfiguration.class
     );
 
     @SuppressWarnings("unchecked")

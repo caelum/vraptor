@@ -3,7 +3,7 @@ package br.com.caelum.vraptor.view;
 import javax.servlet.http.HttpServletResponse;
 
 import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.core.Routes;
+import br.com.caelum.vraptor.config.Configuration;
 import br.com.caelum.vraptor.ioc.Component;
 
 /**
@@ -17,10 +17,12 @@ public class DefaultStatus implements Status {
 
 	private final HttpServletResponse response;
 	private final Result result;
+	private final Configuration config;
 
-	public DefaultStatus(HttpServletResponse response, Result result, Routes routes) {
+	public DefaultStatus(HttpServletResponse response, Result result,  Configuration config) {
 		this.response = response;
 		this.result = result;
+		this.config = config;
 	}
 
 	public void notFound() {
@@ -38,7 +40,7 @@ public class DefaultStatus implements Status {
 	}
 
 	public void created(String location) {
-		header("Location", location);
+		header("Location", config.getApplicationPath() + location);
 		created();
 	}
 	

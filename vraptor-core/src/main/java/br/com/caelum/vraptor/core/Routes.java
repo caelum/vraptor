@@ -23,10 +23,4 @@ public interface Routes {
 	 */
 	public String getUri();
 
-	/**
-	 * Returns the application path, including the http protocol.<br>
-	 * One can implement this method to return a fixed http/ip prefix.
-	 */
-	public String getApplicationPath();
-
 }

@@ -16,6 +16,6 @@ public interface XmlSerialization extends View {
 	 * Serializes this object to the clients writer.
 	 * @throws IOException
 	 */
-	public <T> XmlSerializer from(T object) throws IOException;
+	public <T> XmlSerializer from(T object);
 
 }

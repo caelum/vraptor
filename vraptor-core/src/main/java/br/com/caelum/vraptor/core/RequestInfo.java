@@ -37,7 +37,7 @@ public class RequestInfo {
 	private final MutableResponse response;
 
 	private final FilterChain chain;
-
+	
 	public RequestInfo(ServletContext servletContext, FilterChain chain, MutableRequest request, MutableResponse response) {
 		this.servletContext = servletContext;
 		this.chain = chain;
@@ -60,4 +60,5 @@ public class RequestInfo {
 	public MutableResponse getResponse() {
 		return response;
 	}
+
 }

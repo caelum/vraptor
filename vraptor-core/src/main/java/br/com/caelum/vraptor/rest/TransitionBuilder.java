@@ -1,5 +1,7 @@
 package br.com.caelum.vraptor.rest;
 
+import br.com.caelum.vraptor.core.Routes;
+
 
 /**
  * Builder to help creating transitions.
@@ -13,11 +15,13 @@ public class TransitionBuilder {
 	private final String name;
 	private String resultingStatus;
 	private Class<?> controller;
+	private final Routes routes;
 
 	public TransitionBuilder(DefaultStateControl defaultStateControl,
-			String name) {
+			String name, Routes routes) {
 		this.defaultStateControl = defaultStateControl;
 		this.name = name;
+		this.routes = routes;
 	}
 
 	public TransitionBuilder resultsInStatus(String newStatus) {
@@ -36,7 +40,7 @@ public class TransitionBuilder {
 
 	public Transition build() {
 		if(controller!=null) {
-			return new ControllerTransition(controller, name);
+			return new ControllerTransition(controller, name, routes);
 		}
 		throw new IllegalStateException("Transition was not correctly created: '" + name + "'");
 	}

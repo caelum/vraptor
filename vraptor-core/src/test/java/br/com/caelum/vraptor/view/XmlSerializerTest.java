@@ -8,9 +8,12 @@ import java.io.ByteArrayOutputStream;
 import java.util.Arrays;
 import java.util.List;
 
+import org.jmock.Expectations;
+import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
 
+import br.com.caelum.vraptor.core.Routes;
 import br.com.caelum.vraptor.rest.DefaultStateControl;
 import br.com.caelum.vraptor.rest.Transition;
 
@@ -19,11 +22,13 @@ public class XmlSerializerTest {
 
 	private XmlSerializer serializer;
 	private ByteArrayOutputStream stream;
+	private Mockery mockery;
 
 	@Before
     public void setup() {
         this.stream = new ByteArrayOutputStream();
         this.serializer = new XmlSerializer(stream);
+        this.mockery = new Mockery();
     }
 	
 	
@@ -167,18 +172,22 @@ public class XmlSerializerTest {
 	
 	class Process implements StateResource {
 		private String status;
-		public Process(String status) {
+		private Routes routes;
+		public Process(String status, Routes routes) {
 			this.status = status;
+			this.routes = routes;
 		}
 		public List<Transition> getFollowingTransitions() {
-			DefaultStateControl control = new DefaultStateControl();
+			DefaultStateControl control = new DefaultStateControl(routes);
 			control.transition("initialize").uses(ProcessController.class);
 			return control.getTransitions();
 		}
 	}
 	
 	class ProcessController {
+		public boolean initialized;
 		public void initialize() {
+			this.initialized = true;
 		}
 	}
 	
@@ -188,10 +197,17 @@ public class XmlSerializerTest {
 	
 	@Test
 	public void shouldSerializeAtomLinksIfStateControlExists() {
-		String expectedResult = "<process>\n  <status>created</status>\n  <atom:link href=\"http://localhost:8080/initialize\" rel=\"initialize\" xmlns:atom=\"http://www.w3.org/2005/Atom\"></process>";
-		Process p = new Process("created");
+		final Routes routes = mockery.mock(Routes.class);
+		final ProcessController process = new ProcessController();
+		mockery.checking(new Expectations(){{
+			one(routes).uriFor(ProcessController.class); will(returnValue(process));
+			one(routes).getUri(); will(returnValue("/my_link"));
+		}});
+		String expectedResult = "<process>\n  <status>created</status>\n  <atom:link href=\"/my_link\" rel=\"initialize\" xmlns:atom=\"http://www.w3.org/2005/Atom\" /></process>";
+		Process p = new Process("created", routes);
 		serializer.from(p).serialize();
 		assertThat(result(), is(equalTo(expectedResult)));
+		assertThat(process.initialized, is(equalTo(true)));
 	}
 	
 

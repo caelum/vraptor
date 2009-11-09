@@ -3,6 +3,8 @@ package br.com.caelum.vraptor.rest;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.caelum.vraptor.core.Routes;
+
 /**
  * Helper to create transitions and states when using restfulie.
  * 
@@ -14,13 +16,18 @@ public class DefaultStateControl implements StateControl{
 	
 	private final List<TransitionBuilder> transitions = new ArrayList<TransitionBuilder>();
 	private final List<StateBuilder> states = new ArrayList<StateBuilder>();
+	private final Routes routes;
+	
+	public DefaultStateControl(Routes routes) {
+		this.routes = routes;
+	}
 	
 	public String getStatusField() {
 		return "status";
 	}
 	
 	public TransitionBuilder transition(String name) {
-		TransitionBuilder builder = new TransitionBuilder(this, name);
+		TransitionBuilder builder = new TransitionBuilder(this, name, routes);
 		this.transitions.add(builder);
 		return builder;
 	}

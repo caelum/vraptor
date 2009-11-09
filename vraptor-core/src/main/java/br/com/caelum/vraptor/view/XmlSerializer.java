@@ -172,7 +172,7 @@ public class XmlSerializer {
 		StateResource resource = (StateResource) object;
 		List<Transition> transitions = resource.getFollowingTransitions();
 		for(Transition transition:transitions) {
-			writer.write("  <atom:link href=\"" + transition.getUri() + "\" rel=\"" + transition.getName() + "\" xmlns:atom=\"http://www.w3.org/2005/Atom\"/>");
+			writer.write("  <atom:link href=\"" + transition.getUri() + "\" rel=\"" + transition.getName() + "\" xmlns:atom=\"http://www.w3.org/2005/Atom\" />");
 		}
 	}
 

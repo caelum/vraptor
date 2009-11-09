@@ -1,15 +1,12 @@
 package br.com.caelum.vraptor.view;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-
 import javax.servlet.http.HttpServletResponse;
 
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.ioc.Component;
 
 /**
- * Allows typical HEADER only results.
+ * Allows header related results.
  * 
  * @author guilherme silveira
  * @since 3.0.3
@@ -27,16 +24,6 @@ public class DefaultStatus implements Status {
 
 	public void notFound() {
 		response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-		result.use(Results.nothing());
-	}
-
-	public void internalServerError(Throwable e) throws IOException {
-		response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-		PrintWriter writer = response.getWriter();
-		while (e != null) {
-			e.printStackTrace(writer);
-			e = e.getCause();
-		}
 		result.use(Results.nothing());
 	}
 

@@ -115,6 +115,7 @@ import br.com.caelum.vraptor.view.DefaultLogicResult;
 import br.com.caelum.vraptor.view.DefaultPageResult;
 import br.com.caelum.vraptor.view.DefaultPathResolver;
 import br.com.caelum.vraptor.view.DefaultRefererResult;
+import br.com.caelum.vraptor.view.DefaultStatus;
 import br.com.caelum.vraptor.view.DefaultValidationViewsFactory;
 import br.com.caelum.vraptor.view.EmptyResult;
 import br.com.caelum.vraptor.view.HttpResult;
@@ -125,8 +126,8 @@ import br.com.caelum.vraptor.view.RefererResult;
 import br.com.caelum.vraptor.view.ValidationViewsFactory;
 
 /**
- * List of base components to vraptor. Those components should be available with
- * any chosen ioc implementation.
+ * List of base components to vraptor.<br/>
+ * Those components should be available with any chosen ioc implementation.
  *
  * @author guilherme silveira
  */
@@ -184,7 +185,8 @@ public class BaseComponents {
             ParametersProvider.class, 						OgnlParametersProvider.class,
             OutjectResult.class, 							OutjectResult.class,
             ParametersInstantiatorInterceptor.class, 		ParametersInstantiatorInterceptor.class,
-            ResourceLookupInterceptor.class, 				ResourceLookupInterceptor.class
+            ResourceLookupInterceptor.class, 				ResourceLookupInterceptor.class,
+            DefaultStatus.class
     );
 
     @SuppressWarnings("unchecked")

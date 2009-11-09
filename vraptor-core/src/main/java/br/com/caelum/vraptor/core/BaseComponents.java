@@ -155,7 +155,8 @@ public class BaseComponents {
             ParameterNameProvider.class, 	ParanamerNameProvider.class,
             TypeFinder.class, 				DefaultTypeFinder.class,
             XmlDeserializer.class,			XStreamXmlDeserializer.class,
-            RoutesParser.class, 			PathAnnotationRoutesParser.class
+            RoutesParser.class, 			PathAnnotationRoutesParser.class,
+            Routes.class,					DefaultRoutes.class
     );
 
     private final static Map<Class<?>, Class<?>> CACHED_COMPONENTS = classMap(

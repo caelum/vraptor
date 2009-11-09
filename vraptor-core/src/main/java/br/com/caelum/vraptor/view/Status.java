@@ -14,4 +14,6 @@ public interface Status {
 	
 	void created();
 
+	public void created(String location);
+
 }

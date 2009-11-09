@@ -20,6 +20,7 @@ import java.lang.reflect.Method;
 
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
+import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 import com.thoughtworks.xstream.XStream;
@@ -30,6 +31,7 @@ import com.thoughtworks.xstream.XStream;
  * @author Cecilia Fernandes
  * @since 3.0.2
  */
+@Component
 @ApplicationScoped
 public class XStreamXmlDeserializer implements XmlDeserializer {
 
@@ -52,6 +54,10 @@ public class XStreamXmlDeserializer implements XmlDeserializer {
 		return new Object[] {deserialized};
 	}
 
+	/**
+	 * Extension point to configure your xstream instance.
+	 * @return the configured xstream instance
+	 */
 	protected XStream getXStream() {
 		return new XStream();
 	}

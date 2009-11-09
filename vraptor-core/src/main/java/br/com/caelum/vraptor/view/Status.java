@@ -12,6 +12,10 @@ public interface Status {
 
 	public void notFound();
 
-	public void internalServerError(Throwable e) throws IOException;
+	void internalServerError(Throwable e) throws IOException;
+	
+	void header(String key, String value);
+	
+	void created();
 
 }

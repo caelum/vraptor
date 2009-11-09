@@ -26,18 +26,26 @@ public class DefaultStatus implements Status {
 	}
 
 	public void notFound() {
-		response.setStatus(404);
+		response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 		result.use(Results.nothing());
 	}
 
 	public void internalServerError(Throwable e) throws IOException {
-		response.setStatus(500);
+		response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 		PrintWriter writer = response.getWriter();
 		while (e != null) {
 			e.printStackTrace(writer);
 			e = e.getCause();
 		}
 		result.use(Results.nothing());
+	}
+
+	public void header(String key, String value) {
+		response.addHeader(key, value);
+	}
+
+	public void created() {
+		response.setStatus(HttpServletResponse.SC_CREATED);
 	}
 
 }

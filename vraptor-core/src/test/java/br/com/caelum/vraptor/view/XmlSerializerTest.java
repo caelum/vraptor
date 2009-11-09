@@ -6,11 +6,13 @@ import static org.junit.Assert.assertThat;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Arrays;
-
-import javax.xml.namespace.QName;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import br.com.caelum.vraptor.rest.DefaultStateControl;
+import br.com.caelum.vraptor.rest.Transition;
 
 public class XmlSerializerTest {
 
@@ -162,5 +164,35 @@ public class XmlSerializerTest {
 	private String result() {
 		return new String(stream.toByteArray());
 	}
+	
+	class Process implements StateResource {
+		private String status;
+		public Process(String status) {
+			this.status = status;
+		}
+		public List<Transition> getFollowingTransitions() {
+			DefaultStateControl control = new DefaultStateControl();
+			control.transition("initialize").uses(ProcessController.class);
+			return control.getTransitions();
+		}
+	}
+	
+	class ProcessController {
+		public void initialize() {
+		}
+	}
+	
+	interface StateResource {
+		public List<Transition> getFollowingTransitions();
+	}
+	
+	@Test
+	public void shouldSerializeAtomLinksIfStateControlExists() {
+		String expectedResult = "<process>\n  <status>created</status>\n  <atom:link href=\"http://localhost:8080/initialize\" rel=\"initialize\" xmlns:atom=\"http://www.w3.org/2005/Atom\"></process>";
+		Process p = new Process("created");
+		serializer.from(p).serialize();
+		assertThat(result(), is(equalTo(expectedResult)));
+	}
+	
 
 }

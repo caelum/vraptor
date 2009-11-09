@@ -5,6 +5,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -13,6 +14,8 @@ import java.util.List;
 import java.util.Map;
 
 import br.com.caelum.vraptor.ioc.Component;
+import br.com.caelum.vraptor.rest.Transition;
+import br.com.caelum.vraptor.view.XmlSerializerTest.StateResource;
 
 /**
  * Basic xml serialization system.
@@ -130,39 +133,58 @@ public class XmlSerializer {
 					}
 				}
 				for(Object object : items) {
-					serializeHimForReal(object, object.getClass(), false);
+					serializeSingleObjectForReal(object, object.getClass(), false);
 				}
 				if(prefixTag!=null) {
 					writer.write(endTag(prefixTag));
 				}
 				return;
 			} else {
-				serializeHimForReal(analyzing, baseType, true);
+				serializeSingleObjectForReal(analyzing, baseType, true);
 			}
 		} finally {
 			writer.flush();
 		}
 	}
 
-	private void serializeHimForReal(Object object, Class<? extends Object> baseType, boolean addNamespaceDeclaration) {
+	private void serializeSingleObjectForReal(Object object, Class<? extends Object> baseType, boolean addNamespaceDeclaration) {
 		String name = configuration.nameFor(baseType.getSimpleName());
 		try {
 			if(addNamespaceDeclaration && namespacePrefix!=null) {
-				writer.write("<" +  namespacePrefix + ":" + name + " " + "xmlns:" + namespacePrefix + "=\"" + namespaceUri +  "\">\n");
+			 	writer.write("<" +  namespacePrefix + ":" + name + " " + "xmlns:" + namespacePrefix + "=\"" + namespaceUri +  "\">\n");
 			}else {
 				writer.write(startTag(name) + "\n");
 			}
 			parseFields(object, baseType);
-			for(String methodName : this.methods) {
-				Method method = findMethod(baseType, methodName);
-				if(method==null) {
-					throw new SerializationException("Unable to find method " + methodName + " while inspecting " + analyzing);
-				}
-				writer.write(startTag(methodName) + method.invoke(object) + endTag(methodName));
-			}
+			parseTransitions(object, baseType);
+			parseMethods(object, baseType);
 			writer.write(endTag(name));
 		} catch (Exception e) {
 			throw new SerializationException("Unable to serialize " + analyzing, e);
+		}
+	}
+
+	private void parseTransitions(Object object,
+			Class<? extends Object> baseType) throws IOException {
+		if(!StateResource.class.isAssignableFrom(baseType)) {
+			return;
+		}
+		StateResource resource = (StateResource) object;
+		List<Transition> transitions = resource.getFollowingTransitions();
+		for(Transition transition:transitions) {
+			writer.write("  <atom:link href=\"" + transition.getUri() + "\" rel=\"" + transition.getName() + "\" xmlns:atom=\"http://www.w3.org/2005/Atom\"/>");
+		}
+	}
+
+	private void parseMethods(Object object, Class<? extends Object> baseType)
+			throws IOException, IllegalAccessException,
+			InvocationTargetException {
+		for(String methodName : this.methods) {
+			Method method = findMethod(baseType, methodName);
+			if(method==null) {
+				throw new SerializationException("Unable to find method " + methodName + " while inspecting " + analyzing);
+			}
+			writer.write(startTag(methodName) + method.invoke(object) + endTag(methodName));
 		}
 	}
 

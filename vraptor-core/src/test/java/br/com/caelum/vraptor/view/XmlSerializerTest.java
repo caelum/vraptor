@@ -11,6 +11,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import br.com.caelum.vraptor.rest.Restfulie;
 import br.com.caelum.vraptor.rest.StateResource;
 import br.com.caelum.vraptor.rest.Transition;
 
@@ -170,7 +171,7 @@ public class XmlSerializerTest {
 		public Process(Transition transition) {
 			this.transition = transition;
 		}
-		public List<Transition> getFollowingTransitions() {
+		public List<Transition> getFollowingTransitions(Restfulie restfulie) {
 			return Arrays.asList(transition);
 		}
 	}

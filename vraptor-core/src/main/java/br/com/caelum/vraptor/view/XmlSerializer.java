@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 import br.com.caelum.vraptor.ioc.Component;
+import br.com.caelum.vraptor.rest.Restfulie;
 import br.com.caelum.vraptor.rest.StateResource;
 import br.com.caelum.vraptor.rest.Transition;
 
@@ -35,18 +36,20 @@ public class XmlSerializer {
 	private final XmlConfiguration configuration = new DefaultXmlConfiguration();
 	private String prefixTag = null;
 	private String namespaceUri, namespacePrefix;
+	private final Restfulie restfulie;
 
 	public XmlSerializer(OutputStream output) {
 		this(new OutputStreamWriter(output));
 	}
 	
-	public XmlSerializer(XmlSerializer parent, Writer writer) {
+	public XmlSerializer(XmlSerializer parent, Writer writer, Restfulie restfulie) {
 		this.parent = parent;
 		this.writer = writer;
+		this.restfulie = restfulie;
 	}
 
 	public XmlSerializer(Writer writer) {
-		this(null, writer);
+		this(null, writer, null);
 	}
 
 	public <T> XmlSerializer from(T object) {
@@ -170,7 +173,7 @@ public class XmlSerializer {
 			return;
 		}
 		StateResource resource = (StateResource) object;
-		List<Transition> transitions = resource.getFollowingTransitions();
+		List<Transition> transitions = resource.getFollowingTransitions(restfulie);
 		for(Transition transition:transitions) {
 			writer.write("  <atom:link href=\"" + transition.getUri() + "\" rel=\"" + transition.getName() + "\" xmlns:atom=\"http://www.w3.org/2005/Atom\" />");
 		}
@@ -201,7 +204,7 @@ public class XmlSerializer {
 	}
 
 	public XmlSerializer include(String fieldName) {
-		XmlSerializer serializer = new XmlSerializer(this, writer);
+		XmlSerializer serializer = new XmlSerializer(this, writer, restfulie);
 		this.includes.put(fieldName, serializer);
 		return serializer;
 	}

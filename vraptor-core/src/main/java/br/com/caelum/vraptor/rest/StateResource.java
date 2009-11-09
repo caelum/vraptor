@@ -13,5 +13,5 @@ import java.util.List;
  * 
  */
 public interface StateResource {
-	public List<Transition> getFollowingTransitions();
+	public List<Transition> getFollowingTransitions(Restfulie control);
 }

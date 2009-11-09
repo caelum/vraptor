@@ -1,13 +1,10 @@
 package br.com.caelum.vraptor.rest;
 
-
 public class StateBuilder {
 
-	private final DefaultStateControl defaultStateControl;
 	private final String name;
 
-	public StateBuilder(DefaultStateControl defaultStateControl, String name) {
-		this.defaultStateControl = defaultStateControl;
+	public StateBuilder( String name) {
 		this.name = name;
 	}
 

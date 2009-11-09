@@ -105,6 +105,8 @@ import br.com.caelum.vraptor.resource.DefaultMethodNotAllowedHandler;
 import br.com.caelum.vraptor.resource.DefaultResourceNotFoundHandler;
 import br.com.caelum.vraptor.resource.MethodNotAllowedHandler;
 import br.com.caelum.vraptor.resource.ResourceNotFoundHandler;
+import br.com.caelum.vraptor.rest.DefaultRestfulie;
+import br.com.caelum.vraptor.rest.Restfulie;
 import br.com.caelum.vraptor.validator.DefaultOutjector;
 import br.com.caelum.vraptor.validator.DefaultValidator;
 import br.com.caelum.vraptor.validator.Outjector;
@@ -156,7 +158,8 @@ public class BaseComponents {
             TypeFinder.class, 				DefaultTypeFinder.class,
             XmlDeserializer.class,			XStreamXmlDeserializer.class,
             RoutesParser.class, 			PathAnnotationRoutesParser.class,
-            Routes.class,					DefaultRoutes.class
+            Routes.class,					DefaultRoutes.class,
+            Restfulie.class,				DefaultRestfulie.class
     );
 
     private final static Map<Class<?>, Class<?>> CACHED_COMPONENTS = classMap(

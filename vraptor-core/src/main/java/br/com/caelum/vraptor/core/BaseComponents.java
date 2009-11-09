@@ -186,7 +186,7 @@ public class BaseComponents {
             OutjectResult.class, 							OutjectResult.class,
             ParametersInstantiatorInterceptor.class, 		ParametersInstantiatorInterceptor.class,
             ResourceLookupInterceptor.class, 				ResourceLookupInterceptor.class,
-            DefaultStatus.class
+            Status.class,									DefaultStatus.class
     );
 
     @SuppressWarnings("unchecked")

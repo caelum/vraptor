@@ -15,6 +15,7 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.core.Routes;
 import br.com.caelum.vraptor.rest.DefaultStateControl;
+import br.com.caelum.vraptor.rest.StateResource;
 import br.com.caelum.vraptor.rest.Transition;
 
 public class XmlSerializerTest {
@@ -189,10 +190,6 @@ public class XmlSerializerTest {
 		public void initialize() {
 			this.initialized = true;
 		}
-	}
-	
-	interface StateResource {
-		public List<Transition> getFollowingTransitions();
 	}
 	
 	@Test

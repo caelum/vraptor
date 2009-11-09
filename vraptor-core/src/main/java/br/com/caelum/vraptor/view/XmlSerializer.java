@@ -14,8 +14,8 @@ import java.util.List;
 import java.util.Map;
 
 import br.com.caelum.vraptor.ioc.Component;
+import br.com.caelum.vraptor.rest.StateResource;
 import br.com.caelum.vraptor.rest.Transition;
-import br.com.caelum.vraptor.view.XmlSerializerTest.StateResource;
 
 /**
  * Basic xml serialization system.

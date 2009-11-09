@@ -24,7 +24,7 @@ public class DefaultXmlSerialization implements XmlSerialization {
 
 	public <T> XmlSerializer from(T object) throws IOException {
 		response.setContentType("application/xml");
-		XmlSerializer serializer = new XmlSerializer(response.getWriter());
+		XmlSerializer serializer = new XmlSerializer(response.getWriter()).from(object);
 		return serializer;
 	}
 

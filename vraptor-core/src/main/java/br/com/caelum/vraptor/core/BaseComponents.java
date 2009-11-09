@@ -117,6 +117,7 @@ import br.com.caelum.vraptor.view.DefaultPathResolver;
 import br.com.caelum.vraptor.view.DefaultRefererResult;
 import br.com.caelum.vraptor.view.DefaultStatus;
 import br.com.caelum.vraptor.view.DefaultValidationViewsFactory;
+import br.com.caelum.vraptor.view.DefaultXmlSerialization;
 import br.com.caelum.vraptor.view.EmptyResult;
 import br.com.caelum.vraptor.view.HttpResult;
 import br.com.caelum.vraptor.view.LogicResult;
@@ -125,6 +126,7 @@ import br.com.caelum.vraptor.view.PathResolver;
 import br.com.caelum.vraptor.view.RefererResult;
 import br.com.caelum.vraptor.view.Status;
 import br.com.caelum.vraptor.view.ValidationViewsFactory;
+import br.com.caelum.vraptor.view.XmlSerialization;
 
 /**
  * List of base components to vraptor.<br/>
@@ -187,7 +189,8 @@ public class BaseComponents {
             OutjectResult.class, 							OutjectResult.class,
             ParametersInstantiatorInterceptor.class, 		ParametersInstantiatorInterceptor.class,
             ResourceLookupInterceptor.class, 				ResourceLookupInterceptor.class,
-            Status.class,									DefaultStatus.class
+            Status.class,									DefaultStatus.class,
+            XmlSerialization.class,							DefaultXmlSerialization.class
     );
 
     @SuppressWarnings("unchecked")

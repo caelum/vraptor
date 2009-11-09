@@ -1,12 +1,16 @@
 package br.com.caelum.vraptor.rest;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
 import br.com.caelum.vraptor.core.Routes;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Component;
+import br.com.caelum.vraptor.proxy.MethodInvocation;
 import br.com.caelum.vraptor.proxy.Proxifier;
+import br.com.caelum.vraptor.proxy.SuperMethod;
 
 /**
  * Helper to create transitions and states when using restfulie.
@@ -61,6 +65,21 @@ public class DefaultRestfulie implements Restfulie {
 			states.add(builder.build());
 		}
 		return states;
+	}
+
+	public <T> T transition(final Class<T> type) {
+		return proxifier.proxify(type, new MethodInvocation<T>() {
+			public Object intercept(T proxy, Method method, Object[] args,
+					SuperMethod superMethod) {
+				T instance = transition(method.getName()).uses(type);
+				try {
+					method.invoke(instance, args);
+				} catch (Exception e) {
+					throw new IllegalArgumentException("Unable to create transition for " + method.getName() + " within " + type.getName(), e);
+				}
+				return null;
+			}
+		});
 	}
 
 }

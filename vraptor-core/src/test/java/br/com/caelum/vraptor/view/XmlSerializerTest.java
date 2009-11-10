@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
 import java.io.ByteArrayOutputStream;
+import java.io.OutputStreamWriter;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import br.com.caelum.vraptor.config.Configuration;
 import br.com.caelum.vraptor.rest.Restfulie;
 import br.com.caelum.vraptor.rest.StateResource;
 import br.com.caelum.vraptor.rest.Transition;
@@ -21,11 +23,17 @@ public class XmlSerializerTest {
 
 	private XmlSerializer serializer;
 	private ByteArrayOutputStream stream;
+	private Configuration config;
 
 	@Before
     public void setup() {
         this.stream = new ByteArrayOutputStream();
-        this.serializer = new XmlSerializer(stream);
+        this.config = new Configuration() {
+			public String getApplicationPath() {
+				return "http://localhost";
+			}
+        };
+        this.serializer = new XmlSerializer(null, new OutputStreamWriter(stream), null, config);
     }
 	
 	
@@ -191,7 +199,7 @@ public class XmlSerializerTest {
 			}
 		};
 		final Process p = new Process(transition);
-		String expectedResult = "<process>\n  <atom:link href=\"/my_link\" rel=\"initialize\" xmlns:atom=\"http://www.w3.org/2005/Atom\" /></process>";
+		String expectedResult = "<process>\n  <atom:link href=\"http://localhost/my_link\" rel=\"initialize\" xmlns:atom=\"http://www.w3.org/2005/Atom\" /></process>";
 		serializer.from(p).serialize();
 		assertThat(result(), is(equalTo(expectedResult)));
 	}

@@ -22,5 +22,7 @@ public interface Status {
 	void created(String location);
 	
 	void ok();
+	
+	void conflict();
 
 }

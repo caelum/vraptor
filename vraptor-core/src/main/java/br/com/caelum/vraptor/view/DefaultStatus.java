@@ -49,4 +49,9 @@ public class DefaultStatus implements Status {
 		result.use(Results.nothing());
 	}
 
+	public void conflict() {
+		response.setStatus(HttpServletResponse.SC_CONFLICT);
+		result.use(Results.nothing());
+	}
+
 }

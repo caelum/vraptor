@@ -10,7 +10,9 @@
   register optional Hibernate or JPA components.
 * bugfix: converters are not throwing exceptions when there is no ResourceBundle configured.
 * bugfix: method return values are now included on result when forwarding.
-* bugfix: request parameters are now kept when there is a validation error. 
+* bugfix: request parameters are now kept when there is a validation error.
+* bugfix: throwing exception when paranamer can't find parameters metadata, so you can recover
+for this problem. 
 [/list]
 
 

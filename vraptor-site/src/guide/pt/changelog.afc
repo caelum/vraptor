@@ -11,7 +11,8 @@
 * bugfix: os converters agora não jogam exceções quando não existe um ResourceBundle configurado.
 * bugfix: o retorno do método agora é incluido no result quando acontece um forward.
 * bugfix: os parâmetros da requisição são mantidos quando acontece um erro de validação. 
-
+* bugfix: lançando exceção quando o paranamer não consegue achar os metadados dos parâmetros,
+assim é possível se recuperar desse problema.
 [/list]
 
 [section 3.0.1]

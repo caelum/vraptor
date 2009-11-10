@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor.view;
+package br.com.caelum.vraptor.serialization;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -17,11 +17,12 @@ import br.com.caelum.vraptor.config.Configuration;
 import br.com.caelum.vraptor.rest.Restfulie;
 import br.com.caelum.vraptor.rest.StateResource;
 import br.com.caelum.vraptor.rest.Transition;
+import br.com.caelum.vraptor.serialization.DefaultXmlSerializer;
 
-public class XmlSerializerTest {
+public class DefaultXmlSerializerTest {
 
 
-	private XmlSerializer serializer;
+	private DefaultXmlSerializer serializer;
 	private ByteArrayOutputStream stream;
 	private Configuration config;
 
@@ -33,7 +34,7 @@ public class XmlSerializerTest {
 				return "http://localhost";
 			}
         };
-        this.serializer = new XmlSerializer(null, new OutputStreamWriter(stream), null, config);
+        this.serializer = new DefaultXmlSerializer(null, new OutputStreamWriter(stream), null, config);
     }
 	
 	

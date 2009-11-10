@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor.view;
+package br.com.caelum.vraptor.serialization;
 
 /**
  * Basic xml configuration for xml serialization.

@@ -109,6 +109,8 @@ import br.com.caelum.vraptor.resource.MethodNotAllowedHandler;
 import br.com.caelum.vraptor.resource.ResourceNotFoundHandler;
 import br.com.caelum.vraptor.rest.DefaultRestfulie;
 import br.com.caelum.vraptor.rest.Restfulie;
+import br.com.caelum.vraptor.serialization.DefaultXmlSerialization;
+import br.com.caelum.vraptor.serialization.XmlSerialization;
 import br.com.caelum.vraptor.validator.DefaultOutjector;
 import br.com.caelum.vraptor.validator.DefaultValidator;
 import br.com.caelum.vraptor.validator.Outjector;
@@ -121,7 +123,6 @@ import br.com.caelum.vraptor.view.DefaultPathResolver;
 import br.com.caelum.vraptor.view.DefaultRefererResult;
 import br.com.caelum.vraptor.view.DefaultStatus;
 import br.com.caelum.vraptor.view.DefaultValidationViewsFactory;
-import br.com.caelum.vraptor.view.DefaultXmlSerialization;
 import br.com.caelum.vraptor.view.EmptyResult;
 import br.com.caelum.vraptor.view.HttpResult;
 import br.com.caelum.vraptor.view.LogicResult;
@@ -130,7 +131,6 @@ import br.com.caelum.vraptor.view.PathResolver;
 import br.com.caelum.vraptor.view.RefererResult;
 import br.com.caelum.vraptor.view.Status;
 import br.com.caelum.vraptor.view.ValidationViewsFactory;
-import br.com.caelum.vraptor.view.XmlSerialization;
 
 /**
  * List of base components to vraptor.<br/>

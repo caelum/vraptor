@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor.view;
+package br.com.caelum.vraptor.serialization;
 
 import java.io.IOException;
 
@@ -8,6 +8,7 @@ import br.com.caelum.vraptor.config.Configuration;
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.rest.Restfulie;
+import br.com.caelum.vraptor.view.ResultException;
 
 /**
  * The default implementation of xml serialization.<br/>
@@ -33,7 +34,7 @@ public class DefaultXmlSerialization implements XmlSerialization {
 	public <T> XmlSerializer from(T object) {
 		response.setContentType("application/xml");
 		try {
-			XmlSerializer serializer = new XmlSerializer(null, response.getWriter(), restfulie, config).from(object);
+			XmlSerializer serializer = new DefaultXmlSerializer(null, response.getWriter(), restfulie, config).from(object);
 			return serializer;
 		} catch (IOException e) {
 			throw new ResultException("Unable to serialize data",e);

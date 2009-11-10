@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor.view;
+package br.com.caelum.vraptor.serialization;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 
 import br.com.caelum.vraptor.config.Configuration;
-import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.rest.Restfulie;
 import br.com.caelum.vraptor.rest.StateResource;
@@ -26,45 +25,48 @@ import br.com.caelum.vraptor.rest.Transition;
  * @since 3.0.2
  */
 @Component
-public class XmlSerializer {
-	
+public class DefaultXmlSerializer implements XmlSerializer {
+
 	private final Writer writer;
 	private Object analyzing;
 	private final List<String> excludes = new ArrayList<String>();
-	private final Map<String, XmlSerializer> includes = new HashMap<String, XmlSerializer>();
+	private final Map<String, DefaultXmlSerializer> includes = new HashMap<String, DefaultXmlSerializer>();
 	private final XmlSerializer parent;
 	private final List<String> methods = new ArrayList<String>();
-	
+
 	private final XmlConfiguration configuration = new DefaultXmlConfiguration();
 	private String prefixTag = null;
 	private String namespaceUri, namespacePrefix;
 	private final Restfulie restfulie;
 	private final Configuration config;
 
-	public XmlSerializer(OutputStream output) {
+	public DefaultXmlSerializer(OutputStream output) {
 		this(new OutputStreamWriter(output));
 	}
-	
-	public XmlSerializer(XmlSerializer parent, Writer writer, Restfulie restfulie, Configuration config) {
+
+	public DefaultXmlSerializer(XmlSerializer parent, Writer writer, Restfulie restfulie, Configuration config) {
 		this.parent = parent;
 		this.writer = writer;
 		this.restfulie = restfulie;
 		this.config = config;
 	}
 
-	public XmlSerializer(Writer writer) {
+	public DefaultXmlSerializer(Writer writer) {
 		this(null, writer, null, null);
 	}
 
-	public <T> XmlSerializer from(T object) {
+	/* (non-Javadoc)
+	 * @see br.com.caelum.vraptor.serialization.XmlSerializer#from(T)
+	 */
+	public <T> DefaultXmlSerializer from(T object) {
 		this.analyzing = object;
 		return this;
 	}
-	
+
 	private boolean isBasicType(Class type) {
 		return type.isPrimitive() || type.equals(String.class) || Enum.class.isAssignableFrom(type);
 	}
-	
+
 	private void parseFields(Object object, Class type) throws IOException {
 		if(type.equals(Object.class)) {
 			return;
@@ -73,7 +75,7 @@ public class XmlSerializer {
 		try {
 			for (Field field : fields) {
 				field.setAccessible(true);
-				XmlSerializer serializer = includes.get(field.getName());
+				DefaultXmlSerializer serializer = includes.get(field.getName());
 				if(serializer!=null) {
 					serializer.from(field.get(object)).serializeForReal();
 					continue;
@@ -108,6 +110,9 @@ public class XmlSerializer {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see br.com.caelum.vraptor.serialization.XmlSerializer#exclude(java.lang.String)
+	 */
 	public XmlSerializer exclude(String... names) {
 		for(String fieldName : names) {
 			this.excludes .add(fieldName);
@@ -115,6 +120,9 @@ public class XmlSerializer {
 		return this;
 	}
 
+	/* (non-Javadoc)
+	 * @see br.com.caelum.vraptor.serialization.XmlSerializer#serialize()
+	 */
 	public void serialize() {
 		if(this.parent!=null) {
 			parent.serialize();
@@ -210,23 +218,35 @@ public class XmlSerializer {
 		return null;
 	}
 
+	/* (non-Javadoc)
+	 * @see br.com.caelum.vraptor.serialization.XmlSerializer#include(java.lang.String)
+	 */
 	public XmlSerializer include(String fieldName) {
-		XmlSerializer serializer = new XmlSerializer(this, writer, restfulie, config);
+		DefaultXmlSerializer serializer = new DefaultXmlSerializer(this, writer, restfulie, config);
 		this.includes.put(fieldName, serializer);
 		return serializer;
 	}
 
+	/* (non-Javadoc)
+	 * @see br.com.caelum.vraptor.serialization.XmlSerializer#addMethod(java.lang.String)
+	 */
 	public XmlSerializer addMethod(String methodName) {
 		this.methods.add(methodName);
 		return this;
 	}
 
+	/* (non-Javadoc)
+	 * @see br.com.caelum.vraptor.serialization.XmlSerializer#from(java.lang.String, java.util.Collection)
+	 */
 	public XmlSerializer from(String prefix, Collection collection) {
 		this.prefixTag= prefix;
 		this.analyzing = collection;
 		return this;
 	}
 
+	/* (non-Javadoc)
+	 * @see br.com.caelum.vraptor.serialization.XmlSerializer#namespace(java.lang.String, java.lang.String)
+	 */
 	public XmlSerializer namespace(String uri, String prefix) {
 		this.namespaceUri = uri;
 		this.namespacePrefix = prefix;

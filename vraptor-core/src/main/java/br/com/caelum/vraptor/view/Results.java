@@ -17,6 +17,8 @@
 
 package br.com.caelum.vraptor.view;
 
+import br.com.caelum.vraptor.serialization.XmlSerialization;
+
 /**
  * Some common results for most web based logics.
  *

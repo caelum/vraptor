@@ -22,7 +22,6 @@ import java.util.Arrays;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
 import com.thoughtworks.paranamer.BytecodeReadingParanamer;
@@ -39,7 +38,6 @@ import com.thoughtworks.paranamer.Paranamer;
  */
 @ApplicationScoped
 public class ParanamerNameProvider implements ParameterNameProvider {
-	private final ParameterNameProvider delegate = new DefaultParameterNameProvider(new DefaultTypeNameExtractor());
 	private final Paranamer info = new CachingParanamer(new BytecodeReadingParanamer());
 
 	private static final Logger logger = LoggerFactory.getLogger(ParanamerNameProvider.class);
@@ -57,7 +55,9 @@ public class ParanamerNameProvider implements ParameterNameProvider {
 			System.arraycopy(parameterNames, 0, defensiveCopy, 0, parameterNames.length);
 			return defensiveCopy;
 		} catch (ParameterNamesNotFoundException e) {
-			return delegate.parameterNamesFor(method);
+			throw new IllegalStateException("Paranamer were not able to find your parameter names. " +
+					"You must compile your code with debug information (javac -g) or register another " +
+					"name provider. Try to use " + DefaultParameterNameProvider.class.getName() + " instead.");
 		}
 	}
 

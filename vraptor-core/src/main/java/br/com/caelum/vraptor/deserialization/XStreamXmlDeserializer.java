@@ -44,14 +44,33 @@ public class XStreamXmlDeserializer implements XmlDeserializer {
 	public Object[] deserialize(InputStream inputStream, ResourceMethod method) {
 		Method javaMethod = method.getMethod();
 		Class<?>[] types = javaMethod.getParameterTypes();
-		if (types.length != 1) {
+		if (types.length == 0) {
 			throw new IllegalArgumentException("Methods that consumes xml must receive just one argument: the xml root element");
 		}
 		XStream xStream = getXStream();
+
+		aliasParams(javaMethod, types, xStream);
+
+		Object[] params = new Object[types.length];
+
+		chooseParam(types, params, xStream.fromXML(inputStream));
+
+		return params;
+	}
+
+	private void chooseParam(Class<?>[] types, Object[] params, Object deserialized) {
+		for (int i = 0; i < types.length; i++) {
+			if (types[i].isInstance(deserialized)) {
+				params[i] = deserialized;
+			}
+		}
+	}
+
+	private void aliasParams(Method javaMethod, Class<?>[] types, XStream xStream) {
 		String[] names = provider.parameterNamesFor(javaMethod);
-		xStream.alias(names[0], types[0]);
-		Object deserialized = xStream.fromXML(inputStream);
-		return new Object[] {deserialized};
+		for (int i = 0; i < names.length; i++) {
+			xStream.alias(names[i], types[i]);
+		}
 	}
 
 	/**

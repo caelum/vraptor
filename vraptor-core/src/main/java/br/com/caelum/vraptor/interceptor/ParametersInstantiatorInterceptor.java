@@ -56,7 +56,7 @@ public class ParametersInstantiatorInterceptor implements Interceptor {
     }
 
     public boolean accepts(ResourceMethod method) {
-        return !parameters.parametersWereSet();
+        return true;
     }
 
     public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws InterceptionException {

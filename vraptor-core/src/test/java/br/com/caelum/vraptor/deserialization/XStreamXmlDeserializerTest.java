@@ -26,6 +26,7 @@ public class XStreamXmlDeserializerTest {
 	private ParameterNameProvider provider;
 	private ResourceMethod jump;
 	private DefaultResourceMethod woof;
+	private DefaultResourceMethod dropDead;
 
 	@Before
 	public void setUp() throws Exception {
@@ -38,7 +39,8 @@ public class XStreamXmlDeserializerTest {
 
 		woof = new DefaultResourceMethod(resourceClass, DogController.class.getDeclaredMethod("woof"));
 		bark = new DefaultResourceMethod(resourceClass, DogController.class.getDeclaredMethod("bark", Dog.class));
-		jump = new DefaultResourceMethod(resourceClass, DogController.class.getDeclaredMethod("jump", String.class, String.class));
+		jump = new DefaultResourceMethod(resourceClass, DogController.class.getDeclaredMethod("jump", Dog.class, Integer.class));
+		dropDead = new DefaultResourceMethod(resourceClass, DogController.class.getDeclaredMethod("dropDead", Integer.class, Dog.class));
 	}
 
 	static class Dog {
@@ -53,17 +55,16 @@ public class XStreamXmlDeserializerTest {
 		public void bark(Dog dog) {
 		}
 
-		public void jump(String from, String to) {
+		public void jump(Dog dog, Integer times) {
 		}
+		public void dropDead(Integer times, Dog dog) {
+		}
+
 	}
 
 	@Test(expected=IllegalArgumentException.class)
 	public void shouldNotAcceptMethodsWithoutArguments() throws Exception {
 		deserializer.deserialize(new ByteArrayInputStream(new byte[0]), woof);
-	}
-	@Test(expected=IllegalArgumentException.class)
-	public void shouldNotAcceptMethodsWithMoreThanOneArgument() throws Exception {
-		deserializer.deserialize(new ByteArrayInputStream(new byte[0]), jump);
 	}
 	@Test
 	public void shouldBeAbleToDeserializeADog() throws Exception {
@@ -81,6 +82,44 @@ public class XStreamXmlDeserializerTest {
 		assertThat(deserialized.length, is(1));
 		assertThat(deserialized[0], is(instanceOf(Dog.class)));
 		Dog dog = (Dog) deserialized[0];
+		assertThat(dog.name, is("Brutus"));
+		assertThat(dog.age, is(7));
+	}
+	@Test
+	public void shouldBeAbleToDeserializeADogWhenMethodHasMoreThanOneArgument() throws Exception {
+		InputStream stream = new ByteArrayInputStream("<dog><name>Brutus</name><age>7</age></dog>".getBytes());
+
+
+		mockery.checking(new Expectations() {
+			{
+				one(provider).parameterNamesFor(jump.getMethod());
+				will(returnValue(new String[] {"dog", "times"}));
+			}
+		});
+		Object[] deserialized = deserializer.deserialize(stream, jump);
+
+		assertThat(deserialized.length, is(2));
+		assertThat(deserialized[0], is(instanceOf(Dog.class)));
+		Dog dog = (Dog) deserialized[0];
+		assertThat(dog.name, is("Brutus"));
+		assertThat(dog.age, is(7));
+	}
+	@Test
+	public void shouldBeAbleToDeserializeADogWhenMethodHasMoreThanOneArgumentAndTheXmlIsTheLastOne() throws Exception {
+		InputStream stream = new ByteArrayInputStream("<dog><name>Brutus</name><age>7</age></dog>".getBytes());
+
+		mockery.checking(new Expectations() {
+			{
+				one(provider).parameterNamesFor(dropDead.getMethod());
+				will(returnValue(new String[] {"times", "dog"}));
+			}
+		});
+
+		Object[] deserialized = deserializer.deserialize(stream, dropDead);
+
+		assertThat(deserialized.length, is(2));
+		assertThat(deserialized[1], is(instanceOf(Dog.class)));
+		Dog dog = (Dog) deserialized[1];
 		assertThat(dog.name, is("Brutus"));
 		assertThat(dog.age, is(7));
 	}

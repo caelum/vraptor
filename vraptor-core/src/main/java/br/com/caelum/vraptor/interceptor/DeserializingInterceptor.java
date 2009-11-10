@@ -32,9 +32,10 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.view.HttpResult;
 
 /**
- * Important: this interceptor must precede the {@link ParametersInstantiatorInterceptor}
+ * Important: this interceptor must be after the {@link ParametersInstantiatorInterceptor}
  *
- * @author Lucas Cavalcanti, Rafael Ferreira
+ * @author Lucas Cavalcanti
+ * @author Rafael Ferreira
  * @since 3.0.2
  */
 public class DeserializingInterceptor implements Interceptor {
@@ -73,8 +74,14 @@ public class DeserializingInterceptor implements Interceptor {
 		try {
 			Deserializer deserializer = deserializers.deserializerFor(contentType, container);
 
-			Object[] parameters = deserializer.deserialize(request.getInputStream(), method);
-			methodInfo.setParameters(parameters);
+			Object[] deserialized = deserializer.deserialize(request.getInputStream(), method);
+			Object[] parameters = methodInfo.getParameters();
+
+			for (int i = 0; i < deserialized.length; i++) {
+				if (deserialized[i] != null) {
+					parameters[i] = deserialized[i];
+				}
+			}
 
 			stack.next(method, resourceInstance);
 		} catch (IOException e) {

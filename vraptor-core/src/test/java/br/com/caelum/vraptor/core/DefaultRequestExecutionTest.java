@@ -62,8 +62,8 @@ public class DefaultRequestExecutionTest {
                 one(stack).add(InterceptorListPriorToExecutionExtractor.class); inSequence(sequence);
                 one(stack).add(MultipartInterceptor.class); inSequence(sequence);
                 one(stack).add(instantiator); inSequence(sequence);
-                one(stack).add(DeserializingInterceptor.class); inSequence(sequence);
                 one(stack).add(ParametersInstantiatorInterceptor.class); inSequence(sequence);
+                one(stack).add(DeserializingInterceptor.class); inSequence(sequence);
                 one(stack).add(ExecuteMethodInterceptor.class); inSequence(sequence);
                 one(stack).add(OutjectResult.class); inSequence(sequence);
                 one(stack).add(DownloadInterceptor.class); inSequence(sequence);

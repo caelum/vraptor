@@ -17,9 +17,6 @@
 
 package br.com.caelum.vraptor.interceptor;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Collections;
@@ -84,25 +81,6 @@ public class ParametersInstantiatorInterceptorTest {
         }
     }
 
-    @Test
-	public void shouldAcceptOnlyWhenParametersWereNotSet() throws Exception {
-    	expectsParametersWereSet(true);
-    	assertFalse(instantiator.accepts(null));
-
-    	expectsParametersWereSet(false);
-    	assertTrue(instantiator.accepts(null));
-
-    	mockery.assertIsSatisfied();
-	}
-
-	private void expectsParametersWereSet(final boolean wereSet) {
-		mockery.checking(new Expectations() {
-			{
-				one(params).parametersWereSet();
-				will(returnValue(wereSet));
-			}
-		});
-	}
     @Test
     public void shouldUseTheProvidedParameters() throws InterceptionException, IOException, NoSuchMethodException {
         final ResourceMethod method = mockery.methodFor(Component.class, "method");

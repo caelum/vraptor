@@ -1,5 +1,6 @@
 package br.com.caelum.vraptor.interceptor;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -11,6 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.Consumes;
+import br.com.caelum.vraptor.core.DefaultMethodInfo;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.deserialization.Deserializer;
@@ -42,7 +44,7 @@ public class DeserializingInterceptorTest {
 		request = mockery.mock(HttpServletRequest.class);
 		result = mockery.mock(HttpResult.class);
 		deserializers = mockery.mock(Deserializers.class);
-		methodInfo = mockery.mock(MethodInfo.class);
+		methodInfo = new DefaultMethodInfo();
 		container = mockery.mock(Container.class);
 		interceptor = new DeserializingInterceptor(request, result, deserializers, methodInfo, container);
 		consumeXml = new DefaultResourceMethod(null, DummyResource.class.getDeclaredMethod("consumeXml"));
@@ -82,6 +84,7 @@ public class DeserializingInterceptorTest {
 
 	@Test
 	public void willSetMethodParametersWithDeserializationAndContinueStackAfterDeserialization() throws Exception {
+		methodInfo.setParameters(new Object[2]);
 		mockery.checking(new Expectations() {{
 			allowing(request).getInputStream();
 
@@ -93,17 +96,43 @@ public class DeserializingInterceptorTest {
 			one(deserializers).deserializerFor("application/xml", container);
 			will(returnValue(deserializer));
 
-			Object[] parameters = new Object[] {"abc", "def"};
 			one(deserializer).deserialize(null, consumeXml);
-			will(returnValue(parameters));
-
-			one(methodInfo).setParameters(parameters);
+			will(returnValue(new Object[] {"abc", "def"}));
 
 			one(stack).next(consumeXml, null);
 
 		}});
 
 		interceptor.intercept(stack, consumeXml, null);
+
+		assertEquals(methodInfo.getParameters()[0], "abc");
+		assertEquals(methodInfo.getParameters()[1], "def");
+	}
+	@Test
+	public void willSetOnlyNonNullParameters() throws Exception {
+		methodInfo.setParameters(new Object[] {"original1", "original2"});
+		mockery.checking(new Expectations() {{
+			allowing(request).getInputStream();
+
+			allowing(request).getContentType();
+			will(returnValue("application/xml"));
+
+			Deserializer deserializer = mockery.mock(Deserializer.class);
+
+			one(deserializers).deserializerFor("application/xml", container);
+			will(returnValue(deserializer));
+
+			one(deserializer).deserialize(null, consumeXml);
+			will(returnValue(new Object[] {null, "deserialized"}));
+
+			one(stack).next(consumeXml, null);
+
+		}});
+
+		interceptor.intercept(stack, consumeXml, null);
+
+		assertEquals(methodInfo.getParameters()[0], "original1");
+		assertEquals(methodInfo.getParameters()[1], "deserialized");
 	}
 
 }

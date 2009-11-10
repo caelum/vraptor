@@ -53,8 +53,8 @@ public class DefaultRequestExecution implements RequestExecution {
         interceptorStack.add(InterceptorListPriorToExecutionExtractor.class);
         interceptorStack.add(MultipartInterceptor.class);
         interceptorStack.add(instantiator);
-        interceptorStack.add(DeserializingInterceptor.class);
         interceptorStack.add(ParametersInstantiatorInterceptor.class);
+        interceptorStack.add(DeserializingInterceptor.class);
         interceptorStack.add(ExecuteMethodInterceptor.class);
         interceptorStack.add(OutjectResult.class);
         interceptorStack.add(DownloadInterceptor.class);

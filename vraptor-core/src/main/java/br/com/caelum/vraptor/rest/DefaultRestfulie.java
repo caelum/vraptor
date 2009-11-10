@@ -1,12 +1,10 @@
 package br.com.caelum.vraptor.rest;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
 import br.com.caelum.vraptor.core.Routes;
-import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.proxy.MethodInvocation;
 import br.com.caelum.vraptor.proxy.Proxifier;
@@ -19,7 +17,6 @@ import br.com.caelum.vraptor.proxy.SuperMethod;
  * @since 3.0.3
  *
  */
-@ApplicationScoped
 @Component
 public class DefaultRestfulie implements Restfulie {
 	

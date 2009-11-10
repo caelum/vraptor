@@ -1,18 +1,25 @@
 package br.com.caelum.vraptor.rest;
 
-import java.util.List;
 
 /**
  * Resources implementing this interface will be serialized with their links.
+ * 
  * @author guilherme silveira
  * @author caires vinicius
  * @since 3.0.3
- *
+ * 
  */
-public interface StateControl {
+public interface StateControl<T> {
 
-	public String getStateField();
+	/**
+	 * Returns a list of controllers to be intercepted.
+	 */
+	Class[] getControllers();
 
-	public List<Transition> getTransitions(Restfulie control);
+	/**
+	 * Given its id (retrieved from the request parameter %id%), returns an
+	 * element from the database or null if its not found.
+	 */
+	T retrieve(String id);
 
 }

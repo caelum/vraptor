@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
 import java.io.ByteArrayOutputStream;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 
@@ -184,6 +185,9 @@ public class XmlSerializerTest {
 			}
 			public String getUri() {
 				return "/my_link";
+			}
+			public boolean matches(Method method) {
+				return false;
 			}
 		};
 		final Process p = new Process(transition);

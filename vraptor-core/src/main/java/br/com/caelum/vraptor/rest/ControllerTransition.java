@@ -44,4 +44,8 @@ public class ControllerTransition implements Transition {
 		return routes.getUri();
 	}
 
+	public boolean matches(Method method) {
+		return this.method.equals(method);
+	}
+
 }

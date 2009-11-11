@@ -30,21 +30,35 @@ public class XStreamXmlSerializer implements XmlSerializer {
 		return (type.isPrimitive() || type.getName().startsWith("java") || type.isEnum()) &&
 			!Collection.class.isAssignableFrom(type);
 	}
-	public XmlSerializer addMethod(String methodName) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	public XmlSerializer exclude(String... names) {
 		for (String name : names) {
-			xstream.omitField(toSerialize.getClass(), name);
+			xstream.omitField(getTypeFor(name), getNameFor(name));
 		}
 		return this;
+	}
+
+	private String getNameFor(String name) {
+		String[] path = name.split("\\.");
+		return path[path.length-1];
+	}
+
+	private Class<?> getTypeFor(String name) {
+		Class<?> type = toSerialize.getClass();
+		String[] path = name.split("\\.");
+		for (int i = 0; i < path.length - 1; i++) {
+			type = new Mirror().on(type).reflect().field(path[i]).getType();
+		}
+		return type;
 	}
 
 	public <T> XmlSerializer from(T object) {
 		if (object == null) {
 			throw new NullPointerException("You can't serialize null objects");
+		}
+		if (Collection.class.isInstance(object)) {
+			throw new IllegalArgumentException("It's not possible to serialize colections yet. " +
+					"Create a class that wraps this collections by now.");
 		}
 		Class<?> type = object.getClass();
 		String name = extractor.nameFor(type);
@@ -62,19 +76,11 @@ public class XStreamXmlSerializer implements XmlSerializer {
 		}
 	}
 
-	public XmlSerializer from(String prefix, Collection collection) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public XmlSerializer include(String fieldName) {
-		excludes.remove(toSerialize.getClass(), fieldName);
+	public XmlSerializer include(String... fields) {
+		for (String field : fields) {
+			excludes.remove(toSerialize.getClass(), field);
+		}
 		return this;
-	}
-
-	public XmlSerializer namespace(String uri, String prefix) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	public void serialize() {
@@ -83,5 +89,6 @@ public class XStreamXmlSerializer implements XmlSerializer {
 		}
 		xstream.toXML(toSerialize, writer);
 	}
+
 
 }

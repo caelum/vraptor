@@ -113,7 +113,7 @@ public class DefaultXmlSerializer implements XmlSerializer {
 	/* (non-Javadoc)
 	 * @see br.com.caelum.vraptor.serialization.XmlSerializer#exclude(java.lang.String)
 	 */
-	public XmlSerializer exclude(String... names) {
+	public DefaultXmlSerializer exclude(String... names) {
 		for(String fieldName : names) {
 			this.excludes .add(fieldName);
 		}
@@ -221,16 +221,16 @@ public class DefaultXmlSerializer implements XmlSerializer {
 	/* (non-Javadoc)
 	 * @see br.com.caelum.vraptor.serialization.XmlSerializer#include(java.lang.String)
 	 */
-	public XmlSerializer include(String fieldName) {
+	public DefaultXmlSerializer include(String...fields) {
 		DefaultXmlSerializer serializer = new DefaultXmlSerializer(this, writer, restfulie, config);
-		this.includes.put(fieldName, serializer);
+		this.includes.put(fields[0], serializer);
 		return serializer;
 	}
 
 	/* (non-Javadoc)
 	 * @see br.com.caelum.vraptor.serialization.XmlSerializer#addMethod(java.lang.String)
 	 */
-	public XmlSerializer addMethod(String methodName) {
+	public DefaultXmlSerializer addMethod(String methodName) {
 		this.methods.add(methodName);
 		return this;
 	}
@@ -238,7 +238,7 @@ public class DefaultXmlSerializer implements XmlSerializer {
 	/* (non-Javadoc)
 	 * @see br.com.caelum.vraptor.serialization.XmlSerializer#from(java.lang.String, java.util.Collection)
 	 */
-	public XmlSerializer from(String prefix, Collection collection) {
+	public DefaultXmlSerializer from(String prefix, Collection collection) {
 		this.prefixTag= prefix;
 		this.analyzing = collection;
 		return this;
@@ -247,7 +247,7 @@ public class DefaultXmlSerializer implements XmlSerializer {
 	/* (non-Javadoc)
 	 * @see br.com.caelum.vraptor.serialization.XmlSerializer#namespace(java.lang.String, java.lang.String)
 	 */
-	public XmlSerializer namespace(String uri, String prefix) {
+	public DefaultXmlSerializer namespace(String uri, String prefix) {
 		this.namespaceUri = uri;
 		this.namespacePrefix = prefix;
 		return this;

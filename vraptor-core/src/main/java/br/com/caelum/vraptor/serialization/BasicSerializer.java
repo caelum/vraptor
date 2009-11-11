@@ -15,19 +15,22 @@
  */
 package br.com.caelum.vraptor.serialization;
 
+
 /**
- * Representation of problems during serialization
- * @author guilherme silveira
+ * Serializes given object, including and excluding fields.
+ *
+ * @author Lucas Cavalcanti
+ * @author Guilherme Silveira
  * @since 3.0.2
  */
-public class SerializationException extends RuntimeException {
+public interface BasicSerializer {
 
-	public SerializationException(String string, Throwable e) {
-		super(string,e);
-	}
+	<T> BasicSerializer from(T object);
 
-	public SerializationException(String msg) {
-		super(msg);
-	}
+	BasicSerializer exclude(String... names);
+
+	void serialize();
+
+	BasicSerializer include(String... names);
 
 }

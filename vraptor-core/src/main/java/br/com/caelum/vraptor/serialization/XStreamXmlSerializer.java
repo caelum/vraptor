@@ -1,3 +1,18 @@
+/***
+ * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
 package br.com.caelum.vraptor.serialization;
 
 import java.io.Writer;
@@ -12,7 +27,12 @@ import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
 import com.thoughtworks.xstream.XStream;
 
-public class XStreamXmlSerializer implements XmlSerializer {
+/**
+ * A Xml Serializer based on XStream
+ * @author Lucas Cavalcanti
+ * @since 3.0.2
+ */
+public class XStreamXmlSerializer implements BasicSerializer {
 
 	private final XStream xstream;
 	private final Writer writer;
@@ -31,7 +51,7 @@ public class XStreamXmlSerializer implements XmlSerializer {
 			!Collection.class.isAssignableFrom(type);
 	}
 
-	public XmlSerializer exclude(String... names) {
+	public BasicSerializer exclude(String... names) {
 		for (String name : names) {
 			xstream.omitField(getParentTypeFor(name), getNameFor(name));
 		}
@@ -52,7 +72,7 @@ public class XStreamXmlSerializer implements XmlSerializer {
 		return type;
 	}
 
-	public <T> XmlSerializer from(T object) {
+	public <T> BasicSerializer from(T object) {
 		if (object == null) {
 			throw new NullPointerException("You can't serialize null objects");
 		}
@@ -76,7 +96,7 @@ public class XStreamXmlSerializer implements XmlSerializer {
 		}
 	}
 
-	public XmlSerializer include(String... fields) {
+	public BasicSerializer include(String... fields) {
 		for (String field : fields) {
 			Class<?> parentType = getParentTypeFor(field);
 			String fieldName = getNameFor(field);

@@ -109,7 +109,9 @@ import br.com.caelum.vraptor.resource.MethodNotAllowedHandler;
 import br.com.caelum.vraptor.resource.ResourceNotFoundHandler;
 import br.com.caelum.vraptor.rest.DefaultRestfulie;
 import br.com.caelum.vraptor.rest.Restfulie;
-import br.com.caelum.vraptor.serialization.DefaultXmlSerialization;
+import br.com.caelum.vraptor.serialization.JsonSerialization;
+import br.com.caelum.vraptor.serialization.XStreamJsonSerialization;
+import br.com.caelum.vraptor.serialization.XStreamXmlSerialization;
 import br.com.caelum.vraptor.serialization.XmlSerialization;
 import br.com.caelum.vraptor.validator.DefaultOutjector;
 import br.com.caelum.vraptor.validator.DefaultValidator;
@@ -195,7 +197,8 @@ public class BaseComponents {
             ParametersInstantiatorInterceptor.class, 		ParametersInstantiatorInterceptor.class,
             ResourceLookupInterceptor.class, 				ResourceLookupInterceptor.class,
             Status.class,									DefaultStatus.class,
-            XmlSerialization.class,							DefaultXmlSerialization.class,
+            XmlSerialization.class,							XStreamXmlSerialization.class,
+            JsonSerialization.class,						XStreamJsonSerialization.class,
             Configuration.class,							ApplicationConfiguration.class,
             Restfulie.class,								DefaultRestfulie.class
     );

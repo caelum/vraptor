@@ -15,19 +15,22 @@
  */
 package br.com.caelum.vraptor.serialization;
 
+import java.io.IOException;
+
+import br.com.caelum.vraptor.View;
+
 /**
- * Representation of problems during serialization
- * @author guilherme silveira
- * @since 3.0.2
+ * Basic json serialization support using a Json Serializer.
+ *
+ * @author Lucas Cavalcanti
+ * @version 3.0.2
  */
-public class SerializationException extends RuntimeException {
+public interface JsonSerialization extends View {
 
-	public SerializationException(String string, Throwable e) {
-		super(string,e);
-	}
-
-	public SerializationException(String msg) {
-		super(msg);
-	}
+	/**
+	 * Serializes this object to the clients writer.
+	 * @throws IOException
+	 */
+	public <T> BasicSerializer from(T object);
 
 }

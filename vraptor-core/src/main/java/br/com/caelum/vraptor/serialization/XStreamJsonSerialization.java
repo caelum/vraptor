@@ -24,6 +24,7 @@ import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.view.ResultException;
 
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.json.JsonHierarchicalStreamDriver;
 
 /**
  * XStream implementation for XmlSerialization
@@ -32,18 +33,18 @@ import com.thoughtworks.xstream.XStream;
  * @since 3.0.2
  */
 @Component
-public class XStreamXmlSerialization implements XmlSerialization {
+public class XStreamJsonSerialization implements JsonSerialization {
 
 	private final HttpServletResponse response;
 	private final TypeNameExtractor extractor;
 
-	public XStreamXmlSerialization(HttpServletResponse response, TypeNameExtractor extractor) {
+	public XStreamJsonSerialization(HttpServletResponse response, TypeNameExtractor extractor) {
 		this.response = response;
 		this.extractor = extractor;
 	}
 
 	public <T> BasicSerializer from(T object) {
-		response.setContentType("application/xml");
+		response.setContentType("application/json");
 		try {
 			return new XStreamXmlSerializer(getXStream(), response.getWriter(), extractor).from(object);
 		} catch (IOException e) {
@@ -55,12 +56,7 @@ public class XStreamXmlSerialization implements XmlSerialization {
 	 * You can override this method for configuring XStream before serialization
 	 */
 	protected XStream getXStream() {
-		XStream xStream = new XStream();
-		return xStream;
-	}
-
-	public static void main(String[] args) {
-
+		return new XStream(new JsonHierarchicalStreamDriver());
 	}
 
 }

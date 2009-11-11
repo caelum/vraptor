@@ -128,6 +128,9 @@ public class XmlSerializer {
 	}
 
 	private void serializeForReal() throws IOException {
+		if(analyzing==null) {
+			return;
+		}
 		try {
 			Class<? extends Object> baseType = analyzing.getClass();
 			if(Collection.class.isAssignableFrom(baseType)) {

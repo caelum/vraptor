@@ -37,11 +37,21 @@ public class XStreamXmlSerializerTest {
         this.serializer = new XStreamXmlSerializer(new XStream(), new OutputStreamWriter(stream), new DefaultTypeNameExtractor());
     }
 
-
+	public static class Address {
+		String street;
+		public Address(String street) {
+			this.street = street;
+		}
+	}
 	public static class Client {
 		String name;
+		Address address;
 		public Client(String name) {
 			this.name = name;
+		}
+		public Client(String name, Address address) {
+			this.name = name;
+			this.address = address;
 		}
 	}
 	public static class Order {
@@ -145,11 +155,19 @@ public class XStreamXmlSerializerTest {
 	}
 
 	@Test
-	public void shouldOptionallyIncludeChildField() {
+	public void shouldOptionallyIncludeFieldAndNotItsNonPrimitiveFields() {
 //		String expectedResult = "<order>\n<client>\n  <name>guilherme silveira</name>\n </client>  <price>15.0</price>\n  <comments>pack it nicely, please</comments>\n</order>";
-		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
+		Order order = new Order(new Client("guilherme silveira", new Address("R. Vergueiro")), 15.0, "pack it nicely, please");
 		serializer.from(order).include("client").serialize();
 		assertThat(result(), containsString("<name>guilherme silveira</name>"));
+		assertThat(result(), not(containsString("R. Vergueiro")));
+	}
+	@Test
+	public void shouldOptionallyIncludeChildField() {
+//		String expectedResult = "<order>\n<client>\n  <name>guilherme silveira</name>\n </client>  <price>15.0</price>\n  <comments>pack it nicely, please</comments>\n</order>";
+		Order order = new Order(new Client("guilherme silveira", new Address("R. Vergueiro")), 15.0, "pack it nicely, please");
+		serializer.from(order).include("client", "client.address").serialize();
+		assertThat(result(), containsString("<street>R. Vergueiro</street>"));
 	}
 
 	@Test

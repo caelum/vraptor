@@ -33,7 +33,7 @@ public class XStreamXmlSerializer implements XmlSerializer {
 
 	public XmlSerializer exclude(String... names) {
 		for (String name : names) {
-			xstream.omitField(getTypeFor(name), getNameFor(name));
+			xstream.omitField(getParentTypeFor(name), getNameFor(name));
 		}
 		return this;
 	}
@@ -43,7 +43,7 @@ public class XStreamXmlSerializer implements XmlSerializer {
 		return path[path.length-1];
 	}
 
-	private Class<?> getTypeFor(String name) {
+	private Class<?> getParentTypeFor(String name) {
 		Class<?> type = toSerialize.getClass();
 		String[] path = name.split("\\.");
 		for (int i = 0; i < path.length - 1; i++) {
@@ -78,7 +78,14 @@ public class XStreamXmlSerializer implements XmlSerializer {
 
 	public XmlSerializer include(String... fields) {
 		for (String field : fields) {
-			excludes.remove(toSerialize.getClass(), field);
+			Class<?> parentType = getParentTypeFor(field);
+			String fieldName = getNameFor(field);
+			Class<?> fieldType = new Mirror().on(parentType).reflect().field(fieldName).getType();
+
+			if (!excludes.containsKey(fieldType)) {
+				excludeNonPrimitiveFields(fieldType);
+			}
+			excludes.remove(parentType, fieldName);
 		}
 		return this;
 	}

@@ -1,9 +1,13 @@
 package br.com.caelum.vraptor.core;
 
+import java.util.EnumSet;
+
 import br.com.caelum.vraptor.http.route.Router;
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.proxy.MethodInvocation;
 import br.com.caelum.vraptor.proxy.Proxifier;
+import br.com.caelum.vraptor.resource.HttpMethod;
 
 /**
  * Default implementation of route info extractor.
@@ -11,6 +15,7 @@ import br.com.caelum.vraptor.proxy.Proxifier;
  * @since 3.0.3
  */
 @Component
+@ApplicationScoped
 public class DefaultRoutes implements Routes{
 
 	private final Proxifier proxifier;
@@ -35,6 +40,10 @@ public class DefaultRoutes implements Routes{
 
 	public String getUri() {
 		return uri;
+	}
+
+	public EnumSet<HttpMethod> allowedMethodsFor(String uri) {
+		return router.allowedMethodsFor(uri);
 	}
 
 }

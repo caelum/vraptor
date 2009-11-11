@@ -38,6 +38,8 @@ public class RequestInfo {
 
 	private final FilterChain chain;
 	
+    public static final String INCLUDE_REQUEST_URI = "javax.servlet.include.request_uri";
+
 	public RequestInfo(ServletContext servletContext, FilterChain chain, MutableRequest request, MutableResponse response) {
 		this.servletContext = servletContext;
 		this.chain = chain;
@@ -60,5 +62,15 @@ public class RequestInfo {
 	public MutableResponse getResponse() {
 		return response;
 	}
+
+    public String getRequestedUri() {
+        if (request.getAttribute(INCLUDE_REQUEST_URI) != null) {
+            return (String) request.getAttribute(INCLUDE_REQUEST_URI);
+        }
+        String uri = request.getRequestURI().replaceFirst("(?i);jsessionid=.*$", "");
+        String contextName = request.getContextPath();
+        uri = uri.replaceFirst(contextName, "");
+        return uri;
+    }
 
 }

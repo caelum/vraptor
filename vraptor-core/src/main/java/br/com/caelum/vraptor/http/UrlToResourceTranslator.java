@@ -17,6 +17,7 @@
 
 package br.com.caelum.vraptor.http;
 
+import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.http.route.MethodNotAllowedException;
 import br.com.caelum.vraptor.http.route.ResourceNotFoundException;
 import br.com.caelum.vraptor.resource.ResourceMethod;
@@ -30,7 +31,7 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  */
 public interface UrlToResourceTranslator {
 
-	ResourceMethod translate(MutableRequest request)
+	ResourceMethod translate(RequestInfo info)
 			throws ResourceNotFoundException, MethodNotAllowedException;
 
 }

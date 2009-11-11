@@ -42,11 +42,11 @@ public class ResourceLookupInterceptorTest {
 
     private Mockery mockery;
     private UrlToResourceTranslator translator;
-    private RequestInfo request;
+    private RequestInfo info;
     private ResourceLookupInterceptor lookup;
     private MutableRequest webRequest;
     private MutableResponse webResponse;
-    private MethodInfo requestInfo;
+    private MethodInfo methodInfo;
 	private ResourceNotFoundHandler notFoundHandler;
 	private MethodNotAllowedHandler methodNotAllowedHandler;
 
@@ -56,20 +56,20 @@ public class ResourceLookupInterceptorTest {
         this.translator = mockery.mock(UrlToResourceTranslator.class);
         this.webRequest = mockery.mock(MutableRequest.class);
         this.webResponse = mockery.mock(MutableResponse.class);
-        this.request = new RequestInfo(null, null, webRequest, webResponse);
-        this.requestInfo = mockery.mock(MethodInfo.class);
+        this.info = new RequestInfo(null, null, webRequest, webResponse);
+        this.methodInfo = mockery.mock(MethodInfo.class);
         this.notFoundHandler = mockery.mock(ResourceNotFoundHandler.class);
         this.methodNotAllowedHandler = mockery.mock(MethodNotAllowedHandler.class);
-        this.lookup = new ResourceLookupInterceptor(translator, requestInfo, notFoundHandler, methodNotAllowedHandler, request);
+        this.lookup = new ResourceLookupInterceptor(translator, methodInfo, notFoundHandler, methodNotAllowedHandler, info);
     }
 
     @Test
     public void shouldHandle404() throws IOException, InterceptionException {
         mockery.checking(new Expectations() {
             {
-                one(translator).translate(webRequest);
+                one(translator).translate(info);
                 will(throwException(new ResourceNotFoundException()));
-                one(notFoundHandler).couldntFind(request);
+                one(notFoundHandler).couldntFind(info);
             }
         });
         lookup.intercept(null, null, null);
@@ -82,9 +82,9 @@ public class ResourceLookupInterceptorTest {
             {
             	EnumSet<HttpMethod> allowedMethods = EnumSet.of(HttpMethod.GET);
 
-                one(translator).translate(webRequest);
+                one(translator).translate(info);
 				will(throwException(new MethodNotAllowedException(allowedMethods, HttpMethod.POST)));
-                one(methodNotAllowedHandler).deny(request, allowedMethods);
+                one(methodNotAllowedHandler).deny(info, allowedMethods);
             }
         });
         lookup.intercept(null, null, null);
@@ -97,10 +97,10 @@ public class ResourceLookupInterceptorTest {
         final InterceptorStack stack = mockery.mock(InterceptorStack.class);
         mockery.checking(new Expectations() {
             {
-                one(translator).translate(webRequest);
+                one(translator).translate(info);
                 will(returnValue(method));
                 one(stack).next(method, null);
-                one(requestInfo).setResourceMethod(method);
+                one(methodInfo).setResourceMethod(method);
             }
         });
         lookup.intercept(stack, null, null);

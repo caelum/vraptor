@@ -1,10 +1,13 @@
 package br.com.caelum.vraptor.view;
 
+import java.util.EnumSet;
+
 import javax.servlet.http.HttpServletResponse;
 
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.config.Configuration;
 import br.com.caelum.vraptor.ioc.Component;
+import br.com.caelum.vraptor.resource.HttpMethod;
 
 /**
  * Allows header related results.
@@ -51,6 +54,13 @@ public class DefaultStatus implements Status {
 
 	public void conflict() {
 		response.setStatus(HttpServletResponse.SC_CONFLICT);
+		result.use(Results.nothing());
+	}
+
+	public void methodNotAllowed(EnumSet<HttpMethod> allowedMethods) {
+		response.addHeader(
+				"Allow", allowedMethods.toString().replaceAll("\\[|\\]", ""));
+		response.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
 		result.use(Results.nothing());
 	}
 

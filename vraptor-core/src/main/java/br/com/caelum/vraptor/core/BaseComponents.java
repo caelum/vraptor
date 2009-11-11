@@ -159,7 +159,8 @@ public class BaseComponents {
             ParameterNameProvider.class, 	ParanamerNameProvider.class,
             TypeFinder.class, 				DefaultTypeFinder.class,
             XmlDeserializer.class,			XStreamXmlDeserializer.class,
-            RoutesParser.class, 			PathAnnotationRoutesParser.class
+            RoutesParser.class, 			PathAnnotationRoutesParser.class,
+            Routes.class,					DefaultRoutes.class
     );
 
     private final static Map<Class<?>, Class<?>> CACHED_COMPONENTS = classMap(
@@ -196,8 +197,7 @@ public class BaseComponents {
             Status.class,									DefaultStatus.class,
             XmlSerialization.class,							DefaultXmlSerialization.class,
             Configuration.class,							ApplicationConfiguration.class,
-            Restfulie.class,								DefaultRestfulie.class,
-            Routes.class,									DefaultRoutes.class
+            Restfulie.class,								DefaultRestfulie.class
     );
 
     @SuppressWarnings("unchecked")

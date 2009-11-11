@@ -1,5 +1,9 @@
 package br.com.caelum.vraptor.view;
 
+import java.util.EnumSet;
+
+import br.com.caelum.vraptor.resource.HttpMethod;
+
 /**
  * Allows header related results.
  * 
@@ -24,5 +28,7 @@ public interface Status {
 	void ok();
 	
 	void conflict();
+	
+	void methodNotAllowed(EnumSet<HttpMethod> allowedMethods);
 
 }

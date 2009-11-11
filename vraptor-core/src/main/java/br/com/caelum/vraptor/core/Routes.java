@@ -1,5 +1,9 @@
 package br.com.caelum.vraptor.core;
 
+import java.util.EnumSet;
+
+import br.com.caelum.vraptor.resource.HttpMethod;
+
 /**
  * Allows easy access to detect any route information.<br>
  * In order to access the uri for a method, one should invoke
@@ -22,5 +26,10 @@ public interface Routes {
 	 * Returns the last analyzed uri.
 	 */
 	public String getUri();
+
+	/**
+	 * Returns an enumset of allowed methods for this specific uri. 
+	 */
+	EnumSet<HttpMethod> allowedMethodsFor(String uri);
 
 }

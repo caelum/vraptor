@@ -9,6 +9,11 @@ import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
+/**
+ * Default implementation which sets the header and send an error response.
+ * @author guilherme
+ *
+ */
 @ApplicationScoped
 public class DefaultMethodNotAllowedHandler implements MethodNotAllowedHandler {
 

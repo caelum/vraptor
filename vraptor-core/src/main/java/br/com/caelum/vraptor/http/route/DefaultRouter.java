@@ -115,13 +115,18 @@ public class DefaultRouter implements Router {
 	private Collection<Route> routesMatchingUriAndMethod(String uri, HttpMethod method) {
 		Collection<Route> routesMatchingMethod = Collections2.filter(routesMatchingUri(uri), Filters.allow(method));
 		if (routesMatchingMethod.isEmpty()) {
-			EnumSet<HttpMethod> allowed = EnumSet.noneOf(HttpMethod.class);
-			for (Route route : routesMatchingUri(uri)) {
-				allowed.addAll(route.allowedMethods());
-			}
+			EnumSet<HttpMethod> allowed = allowedMethodsFor(uri);
 			throw new MethodNotAllowedException(allowed, method);
 		}
 		return routesMatchingMethod;
+	}
+
+	public EnumSet<HttpMethod> allowedMethodsFor(String uri) {
+		EnumSet<HttpMethod> allowed = EnumSet.noneOf(HttpMethod.class);
+		for (Route route : routesMatchingUri(uri)) {
+			allowed.addAll(route.allowedMethods());
+		}
+		return allowed;
 	}
 
 	private Collection<Route> routesMatchingUri(String uri) {

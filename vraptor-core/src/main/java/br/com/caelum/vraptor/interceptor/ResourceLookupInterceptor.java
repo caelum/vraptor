@@ -42,8 +42,8 @@ public class ResourceLookupInterceptor implements Interceptor {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ResourceLookupInterceptor.class);
 	private final UrlToResourceTranslator translator;
-	private final MethodInfo requestInfo;
-	private final RequestInfo request;
+	private final MethodInfo methodInfo;
+	private final RequestInfo requestInfo;
 	private final ResourceNotFoundHandler resourceNotFoundHandler;
 	private final MethodNotAllowedHandler methodNotAllowedHandler;
 
@@ -51,25 +51,25 @@ public class ResourceLookupInterceptor implements Interceptor {
 			ResourceNotFoundHandler resourceNotFoundHandler, MethodNotAllowedHandler methodNotAllowedHandler,
 			RequestInfo request) {
 		this.translator = translator;
-		this.requestInfo = requestInfo;
+		this.methodInfo = requestInfo;
 		this.methodNotAllowedHandler = methodNotAllowedHandler;
 		this.resourceNotFoundHandler = resourceNotFoundHandler;
-		this.request = request;
+		this.requestInfo = request;
 	}
 
 	public void intercept(InterceptorStack invocation, ResourceMethod ignorableMethod, Object resourceInstance)
 			throws InterceptionException {
 
 		try {
-			ResourceMethod method = translator.translate(request.getRequest());
+			ResourceMethod method = translator.translate(requestInfo);
 
-			requestInfo.setResourceMethod(method);
+			methodInfo.setResourceMethod(method);
 			invocation.next(method, resourceInstance);
 		} catch (ResourceNotFoundException e) {
-			resourceNotFoundHandler.couldntFind(request);
+			resourceNotFoundHandler.couldntFind(requestInfo);
 		} catch (MethodNotAllowedException e) {
 			LOGGER.info(e.getMessage());
-			methodNotAllowedHandler.deny(request, e.getAllowedMethods());
+			methodNotAllowedHandler.deny(requestInfo, e.getAllowedMethods());
 		}
 	}
 

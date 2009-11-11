@@ -18,6 +18,7 @@
 package br.com.caelum.vraptor.http.route;
 
 import java.lang.reflect.Method;
+import java.util.EnumSet;
 import java.util.List;
 
 import br.com.caelum.vraptor.http.MutableRequest;
@@ -68,4 +69,6 @@ public interface Router {
 	List<Route> allRoutes();
 
 	RouteBuilder builderFor(String uri);
+
+	EnumSet<HttpMethod> allowedMethodsFor(String uri);
 }

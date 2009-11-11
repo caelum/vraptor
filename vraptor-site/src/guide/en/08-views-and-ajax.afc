@@ -66,6 +66,8 @@ By default, there are these view implementations:
 	* Results.http(), sends HTTP protocol informations, like status codes and headers.
 	* Results.referer(), uses Referer header to redirect or forward.
 	* Results.nothing(), simply returns the HTTP success code (HTTP 200 OK).
+	* Results.xml(), uses xml serialization.
+	* Results.json(), uses json serialization.
 [/list]
 
 [section Redirect and forward]
@@ -143,3 +145,75 @@ And in the controller:
 		}
 	}
 [/java]
+
+[section Ajax: Programatic version]
+
+If you want that VRaptor automatically serializes your objects into xml or json, you can use
+on your logic:
+[java]
+	import static br.com.caelum.vraptor.view.Results.*;
+	@Resource
+	public class ClientsController {
+		
+		private final Result result;
+		private final ClientDao dao;
+		
+		public ClientsController(Result result, ClientDao dao) {
+			this.result = result;
+			this.dao = dao;
+		}
+		
+		public void loadJson(Client client) {
+			result.use(json()).from(client).serialize();
+		}
+		public void loadXml(Client client) {
+			result.use(xml()).from(client).serialize();
+		}
+	}
+[/java]
+
+The results will be like:
+
+[code]
+{"client": {
+	"name": "John"
+}}
+[/code]
+[code]
+<client>
+	<name>John</name>
+</client>
+[/code]
+
+By default, only fields with primitive types will be serialized (String, numbers, enums, dates),
+if you want to include a field of a non-primitive type you must explicitly include it:
+
+[java]
+	result.use(json()).from(client).include("address").serialize();
+[/java]
+
+will result in something like:
+
+[code]
+{"client": {
+	"name": "John",
+	"address" {
+		"street": "First Avenue"
+	}
+}}
+[/code]
+
+You can also exclude primitive fields from serialization:
+[java]
+	result.use(json()).from(user).exclude("password").serialize();
+[/java]
+
+will result in something like:
+
+[code]
+{"user": {
+	"name": "John",
+	"login": "john"
+}}
+[/code]
+

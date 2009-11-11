@@ -13,6 +13,11 @@
 * bugfix: os parâmetros da requisição são mantidos quando acontece um erro de validação. 
 * bugfix: lançando exceção quando o paranamer não consegue achar os metadados dos parâmetros,
 assim é possível se recuperar desse problema.
+* serialização de objetos em xml e json:
+[java]
+  result.use(Results.json()).from(meuObjeto).include(...).exclude(...).serialize();
+  result.use(Results.xml()).from(meuObjeto).include(...).exclude(...).serialize();
+[/java]
 [/list]
 
 [section 3.0.1]

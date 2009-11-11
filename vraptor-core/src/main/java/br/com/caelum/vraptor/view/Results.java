@@ -17,6 +17,7 @@
 
 package br.com.caelum.vraptor.view;
 
+import br.com.caelum.vraptor.serialization.JsonSerialization;
 import br.com.caelum.vraptor.serialization.XmlSerialization;
 
 /**
@@ -63,7 +64,7 @@ public class Results {
     public static Class<RefererResult> referer() {
     	return RefererResult.class;
     }
-    
+
     /**
      * Uses pure header status.
      */
@@ -72,10 +73,16 @@ public class Results {
     }
 
     /**
-     * Uses data serialization.
+     * Uses xml serialization.
      */
     public static Class<XmlSerialization> xml() {
     	return XmlSerialization.class;
+    }
+    /**
+     * Uses json serialization.
+     */
+    public static Class<JsonSerialization> json() {
+    	return JsonSerialization.class;
     }
 
 }

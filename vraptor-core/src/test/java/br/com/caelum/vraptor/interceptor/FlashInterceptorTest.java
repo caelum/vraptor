@@ -32,6 +32,7 @@ public class FlashInterceptorTest {
 	private MutableResponse response;
 	private FlashInterceptor interceptor;
 	private InterceptorStack stack;
+	private HttpServletResponse mockResponse;
 
 	@Before
 	public void setUp() throws Exception {
@@ -40,7 +41,8 @@ public class FlashInterceptorTest {
 		result = mockery.mock(Result.class);
 		stack = mockery.mock(InterceptorStack.class);
 
-		response = new VRaptorResponse(mockery.mock(HttpServletResponse.class));
+		mockResponse = mockery.mock(HttpServletResponse.class);
+		response = new VRaptorResponse(mockResponse);
 
 		interceptor = new FlashInterceptor(session, result, response);
 	}
@@ -114,6 +116,32 @@ public class FlashInterceptorTest {
 				will(returnValue(null));
 
 				ignoring(anything());
+			}
+		});
+
+		interceptor.intercept(stack, null, null);
+
+		response.sendRedirect("Anything");
+
+		mockery.assertIsSatisfied();
+	}
+	@Test
+	public void shouldNotIncludeFlashParametersWhenThereIsNoIncludedParameter() throws Exception {
+
+		mockery.checking(new Expectations() {
+			{
+				Map<String, Object> parameters = Collections.emptyMap();
+
+				one(result).included();
+				will(returnValue(parameters));
+
+				never(session).setAttribute(with(any(String.class)), with(any(Object.class)));
+
+				allowing(session).getAttribute(FlashInterceptor.FLASH_INCLUDED_PARAMETERS);
+				will(returnValue(null));
+
+				ignoring(stack);
+				ignoring(mockResponse);
 			}
 		});
 

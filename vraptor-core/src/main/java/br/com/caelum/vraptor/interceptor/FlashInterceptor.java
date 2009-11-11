@@ -67,7 +67,10 @@ public class FlashInterceptor implements Interceptor {
 		response.addRedirectListener(new RedirectListener() {
 			public void beforeRedirect() {
 				try {
-					session.setAttribute(FLASH_INCLUDED_PARAMETERS, result.included());
+					Map<String, Object> included = result.included();
+					if (!included.isEmpty()) {
+						session.setAttribute(FLASH_INCLUDED_PARAMETERS, included);
+					}
 				} catch (IllegalStateException e) {
 					LOGGER.warn("HTTP Session was invalidated. It is not possible to include " +
 							"Result parameters on Flash Scope", e);

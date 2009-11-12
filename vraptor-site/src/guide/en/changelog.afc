@@ -13,7 +13,7 @@
 * bugfix: request parameters are now kept when there is a validation error.
 * bugfix: throwing exception when paranamer can't find parameters metadata, so you can recover
 for this problem.
-* xml and json serialization:
+* initial support to xml and json serialization:
 [java]
   result.use(Results.json()).from(myObject).include(...).exclude(...).serialize();
   result.use(Results.xml()).from(myObject).include(...).exclude(...).serialize();

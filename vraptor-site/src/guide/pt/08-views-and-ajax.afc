@@ -219,3 +219,19 @@ vai resultar em algo parecido com:
 }}
 [/code]
 
+A implementação padrão é baseada no XStream, então é possível configurar a serialização
+via anotações ou configurações diretas ao XStream, bastando criar a classe:
+[code]
+@Component
+public class CustomXMLSerialization extends XStreamXMLSerialization {
+//or public class CustomJSONSerialization extends XStreamJSONSerialization {
+	//delegate constructor
+	
+	@Override
+	protected XStream getXStream() {
+		XStream xStream = super.getXStream();
+		//suas configurações ao XStream aqui
+		return xStream;
+	}
+}
+[/code]

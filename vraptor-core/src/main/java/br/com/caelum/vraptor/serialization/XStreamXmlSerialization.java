@@ -42,7 +42,7 @@ public class XStreamXmlSerialization implements XmlSerialization {
 		this.extractor = extractor;
 	}
 
-	public <T> BasicSerializer from(T object) {
+	public <T> Serializer from(T object) {
 		response.setContentType("application/xml");
 		try {
 			return new XStreamXmlSerializer(getXStream(), response.getWriter(), extractor).from(object);

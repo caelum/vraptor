@@ -43,7 +43,7 @@ public class XStreamJsonSerialization implements JsonSerialization {
 		this.extractor = extractor;
 	}
 
-	public <T> BasicSerializer from(T object) {
+	public <T> Serializer from(T object) {
 		response.setContentType("application/json");
 		try {
 			return new XStreamXmlSerializer(getXStream(), response.getWriter(), extractor).from(object);

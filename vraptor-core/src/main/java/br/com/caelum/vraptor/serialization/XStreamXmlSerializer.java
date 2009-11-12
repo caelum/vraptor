@@ -34,7 +34,7 @@ import com.thoughtworks.xstream.XStream;
  * @author Lucas Cavalcanti
  * @since 3.0.2
  */
-public class XStreamXmlSerializer implements BasicSerializer {
+public class XStreamXmlSerializer implements Serializer {
 
 	private final XStream xstream;
 	private final Writer writer;
@@ -53,7 +53,7 @@ public class XStreamXmlSerializer implements BasicSerializer {
 			!Collection.class.isAssignableFrom(type);
 	}
 
-	public BasicSerializer exclude(String... names) {
+	public Serializer exclude(String... names) {
 		for (String name : names) {
 			xstream.omitField(getParentTypeFor(name), getNameFor(name));
 		}
@@ -74,7 +74,7 @@ public class XStreamXmlSerializer implements BasicSerializer {
 		return type;
 	}
 
-	public <T> BasicSerializer from(T object) {
+	public <T> Serializer from(T object) {
 		if (object == null) {
 			throw new NullPointerException("You can't serialize null objects");
 		}
@@ -98,7 +98,7 @@ public class XStreamXmlSerializer implements BasicSerializer {
 		}
 	}
 
-	public BasicSerializer include(String... fields) {
+	public Serializer include(String... fields) {
 		for (String field : fields) {
 			Class<?> parentType = getParentTypeFor(field);
 			String fieldName = getNameFor(field);

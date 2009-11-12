@@ -23,7 +23,7 @@ import com.thoughtworks.xstream.XStream;
 public class XStreamXmlSerializerTest {
 
 
-	private BasicSerializer serializer;
+	private Serializer serializer;
 	private ByteArrayOutputStream stream;
 
 	@Before

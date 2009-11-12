@@ -8,7 +8,9 @@ import static org.junit.Assert.assertThat;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -61,14 +63,25 @@ public class XStreamJSonSerializationTest {
 			this.address = address;
 		}
 	}
+	public static class Item {
+		String name;
+		double price;
+		public Item(String name, double price) {
+			this.name = name;
+			this.price = price;
+		}
+	}
 	public static class Order {
 		Client client;
 		double price;
 		String comments;
-		public Order(Client client, double price, String comments) {
+		List<Item> items;
+
+		public Order(Client client, double price, String comments, Item... items) {
 			this.client = client;
 			this.price = price;
 			this.comments = comments;
+			this.items = new ArrayList<Item>(Arrays.asList(items));
 		}
 		public String nice() {
 			return "nice output";
@@ -184,6 +197,27 @@ public class XStreamJSonSerializationTest {
 		serialization.from(order).include("client").exclude("client.name").serialize();
 		assertThat(result(), containsString("\"client\""));
 		assertThat(result(), not(containsString("guilherme silveira")));
+	}
+
+	@Test
+	public void shouldOptionallyIncludeListChildFields() {
+//		String expectedResult = "<order>\n<client>\n</client>  <price>15.0</price>\n  <comments>pack it nicely, please</comments>\n</order>";
+		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please",
+				new Item("any item", 12.99));
+		serialization.from(order).include("items").serialize();
+		assertThat(result(), containsString("\"items\""));
+		assertThat(result(), containsString("\"name\": \"any item\""));
+		assertThat(result(), containsString("\"price\": 12.99"));
+	}
+	@Test
+	public void shouldOptionallyExcludeFieldsFromIncludedListChildFields() {
+//		String expectedResult = "<order>\n<client>\n</client>  <price>15.0</price>\n  <comments>pack it nicely, please</comments>\n</order>";
+		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please",
+				new Item("any item", 12.99));
+		serialization.from(order).include("items").exclude("items.price").serialize();
+		assertThat(result(), containsString("\"items\""));
+		assertThat(result(), containsString("\"name\": \"any item\""));
+		assertThat(result(), not(containsString("12.99")));
 	}
 
 	private String result() {

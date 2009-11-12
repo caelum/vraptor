@@ -19,7 +19,9 @@ import java.io.Writer;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Map.Entry;
 
 import net.vidageek.mirror.dsl.Mirror;
@@ -49,8 +51,14 @@ public class XStreamXmlSerializer implements Serializer {
 	}
 
 	private boolean isPrimitive(Class<?> type) {
-		return (type.isPrimitive() || type.getName().startsWith("java") || type.isEnum()) &&
-			!Collection.class.isAssignableFrom(type);
+		return type.isPrimitive()
+			|| type.isEnum()
+			|| Number.class.isAssignableFrom(type)
+			|| type.equals(String.class)
+			|| Date.class.isAssignableFrom(type)
+			|| Calendar.class.isAssignableFrom(type)
+			|| Boolean.class.equals(type)
+			|| Character.class.equals(type);
 	}
 
 	public Serializer exclude(String... names) {

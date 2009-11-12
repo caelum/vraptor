@@ -59,8 +59,4 @@ public class XStreamXmlSerialization implements XmlSerialization {
 		return xStream;
 	}
 
-	public static void main(String[] args) {
-
-	}
-
 }

@@ -217,3 +217,19 @@ will result in something like:
 }}
 [/code]
 
+The default implementation is based on XStream, so you can configure the serialization
+with annotations and direct configuration on XStream. It is just creating a class like:
+[code]
+@Component
+public class CustomXMLSerialization extends XStreamXMLSerialization {
+//or public class CustomJSONSerialization extends XStreamJSONSerialization {
+	//delegate constructor
+	
+	@Override
+	protected XStream getXStream() {
+		XStream xStream = super.getXStream();
+		//your xStream setup here
+		return xStream;
+	}
+}
+[/code]

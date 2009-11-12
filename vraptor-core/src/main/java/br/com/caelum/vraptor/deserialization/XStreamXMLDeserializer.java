@@ -33,11 +33,11 @@ import com.thoughtworks.xstream.XStream;
  */
 @Component
 @ApplicationScoped
-public class XStreamXmlDeserializer implements XmlDeserializer {
+public class XStreamXMLDeserializer implements XMLDeserializer {
 
 	private final ParameterNameProvider provider;
 
-	public XStreamXmlDeserializer(ParameterNameProvider provider) {
+	public XStreamXMLDeserializer(ParameterNameProvider provider) {
 		this.provider = provider;
 	}
 

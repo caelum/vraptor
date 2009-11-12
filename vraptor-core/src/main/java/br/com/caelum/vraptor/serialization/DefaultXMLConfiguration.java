@@ -23,7 +23,7 @@ import br.com.caelum.vraptor.ioc.Component;
  * @since 3.0.2
  */
 @Component
-public class DefaultXmlConfiguration implements XmlConfiguration {
+public class DefaultXMLConfiguration implements XMLConfiguration {
 
 //	private static final List<Class<?>> PRIMITIVE_TYPES = Arrays.asList(
 //			String.class, Integer.class, BigInteger.class, BigDecimal.class,

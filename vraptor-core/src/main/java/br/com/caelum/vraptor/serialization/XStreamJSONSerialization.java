@@ -19,41 +19,44 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpServletResponse;
 
-import br.com.caelum.vraptor.config.Configuration;
+import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.ioc.Component;
-import br.com.caelum.vraptor.ioc.RequestScoped;
-import br.com.caelum.vraptor.rest.Restfulie;
 import br.com.caelum.vraptor.view.ResultException;
 
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.json.JsonHierarchicalStreamDriver;
+
 /**
- * The default implementation of xml serialization.<br/>
- * It will set the content type to application/xml by default.
+ * XStream implementation for JSONSerialization
  *
- * @author guilherme silveira
- * @since 3.0.3
+ * @author Lucas Cavalcanti
+ * @since 3.0.2
  */
 @Component
-@RequestScoped
-public class DefaultXmlSerialization implements XmlSerialization {
+public class XStreamJSONSerialization implements JSONSerialization {
 
 	private final HttpServletResponse response;
-	private final Restfulie restfulie;
-	private final Configuration config;
+	private final TypeNameExtractor extractor;
 
-	public DefaultXmlSerialization(HttpServletResponse response, Restfulie restfulie, Configuration config) {
+	public XStreamJSONSerialization(HttpServletResponse response, TypeNameExtractor extractor) {
 		this.response = response;
-		this.restfulie = restfulie;
-		this.config = config;
+		this.extractor = extractor;
 	}
 
 	public <T> Serializer from(T object) {
-		response.setContentType("application/xml");
+		response.setContentType("application/json");
 		try {
-			Serializer serializer = new DefaultXmlSerializer(null, response.getWriter(), restfulie, config).from(object);
-			return serializer;
+			return new XStreamXMLSerializer(getXStream(), response.getWriter(), extractor).from(object);
 		} catch (IOException e) {
 			throw new ResultException("Unable to serialize data",e);
 		}
+	}
+
+	/**
+	 * You can override this method for configuring XStream before serialization
+	 */
+	protected XStream getXStream() {
+		return new XStream(new JsonHierarchicalStreamDriver());
 	}
 
 }

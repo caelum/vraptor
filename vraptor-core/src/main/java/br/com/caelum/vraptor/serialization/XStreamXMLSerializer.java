@@ -36,7 +36,7 @@ import com.thoughtworks.xstream.XStream;
  * @author Lucas Cavalcanti
  * @since 3.0.2
  */
-public class XStreamXmlSerializer implements Serializer {
+public class XStreamXMLSerializer implements Serializer {
 
 	private final XStream xstream;
 	private final Writer writer;
@@ -44,7 +44,7 @@ public class XStreamXmlSerializer implements Serializer {
 	private final TypeNameExtractor extractor;
 	private final Multimap<Class<?>, String> excludes = LinkedListMultimap.create();
 
-	public XStreamXmlSerializer(XStream xstream, Writer writer, TypeNameExtractor extractor) {
+	public XStreamXMLSerializer(XStream xstream, Writer writer, TypeNameExtractor extractor) {
 		this.xstream = xstream;
 		this.writer = writer;
 		this.extractor = extractor;

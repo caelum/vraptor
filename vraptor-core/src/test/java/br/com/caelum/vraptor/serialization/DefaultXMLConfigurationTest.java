@@ -7,15 +7,15 @@ import static org.junit.Assert.assertThat;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.serialization.DefaultXmlConfiguration;
+import br.com.caelum.vraptor.serialization.DefaultXMLConfiguration;
 
-public class DefaultXmlConfigurationTest {
+public class DefaultXMLConfigurationTest {
 	
-	private DefaultXmlConfiguration config;
+	private DefaultXMLConfiguration config;
 
 	@Before
     public void setup() {
-		this.config = new DefaultXmlConfiguration();
+		this.config = new DefaultXMLConfiguration();
     }
 
 	@Test

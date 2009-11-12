@@ -19,44 +19,41 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpServletResponse;
 
-import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
+import br.com.caelum.vraptor.config.Configuration;
 import br.com.caelum.vraptor.ioc.Component;
+import br.com.caelum.vraptor.ioc.RequestScoped;
+import br.com.caelum.vraptor.rest.Restfulie;
 import br.com.caelum.vraptor.view.ResultException;
 
-import com.thoughtworks.xstream.XStream;
-
 /**
- * XStream implementation for XmlSerialization
+ * The default implementation of xml serialization.<br/>
+ * It will set the content type to application/xml by default.
  *
- * @author Lucas Cavalcanti
- * @since 3.0.2
+ * @author guilherme silveira
+ * @since 3.0.3
  */
 @Component
-public class XStreamXmlSerialization implements XmlSerialization {
+@RequestScoped
+public class DefaultXMLSerialization implements XMLSerialization {
 
 	private final HttpServletResponse response;
-	private final TypeNameExtractor extractor;
+	private final Restfulie restfulie;
+	private final Configuration config;
 
-	public XStreamXmlSerialization(HttpServletResponse response, TypeNameExtractor extractor) {
+	public DefaultXMLSerialization(HttpServletResponse response, Restfulie restfulie, Configuration config) {
 		this.response = response;
-		this.extractor = extractor;
+		this.restfulie = restfulie;
+		this.config = config;
 	}
 
 	public <T> Serializer from(T object) {
 		response.setContentType("application/xml");
 		try {
-			return new XStreamXmlSerializer(getXStream(), response.getWriter(), extractor).from(object);
+			Serializer serializer = new DefaultXMLSerializer(null, response.getWriter(), restfulie, config).from(object);
+			return serializer;
 		} catch (IOException e) {
 			throw new ResultException("Unable to serialize data",e);
 		}
-	}
-
-	/**
-	 * You can override this method for configuring XStream before serialization
-	 */
-	protected XStream getXStream() {
-		XStream xStream = new XStream();
-		return xStream;
 	}
 
 }

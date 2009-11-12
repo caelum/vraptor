@@ -21,7 +21,7 @@ public class XStreamXmlDeserializerTest {
 
 
 	private VRaptorMockery mockery;
-	private XStreamXmlDeserializer deserializer;
+	private XStreamXMLDeserializer deserializer;
 	private ResourceMethod bark;
 	private ParameterNameProvider provider;
 	private ResourceMethod jump;
@@ -34,7 +34,7 @@ public class XStreamXmlDeserializerTest {
 
 		provider = mockery.mock(ParameterNameProvider.class);
 
-		deserializer = new XStreamXmlDeserializer(provider);
+		deserializer = new XStreamXMLDeserializer(provider);
 		DefaultResourceClass resourceClass = new DefaultResourceClass(DogController.class);
 
 		woof = new DefaultResourceMethod(resourceClass, DogController.class.getDeclaredMethod("woof"));

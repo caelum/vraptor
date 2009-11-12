@@ -157,7 +157,7 @@ e fazer qualquer conven&ccedil;&atilde;o que voc&ecirc; queira, n&atilde;o esque
 }</span></code></div>
 	    	<span class="paragraph">Por padr&atilde;o existem estes tipos de views implementadas:</span>
 	    	<ul class="list"><li><span class="paragraph">Results.logic(), que vai redirecionar para uma outra l&oacute;gica qualquer do sistema</span></li><li><span class="paragraph">Results.page(), que vai redirecionar diretamente para uma p&aacute;gina, podendo ser um
-	jsp, um html, ou qualquer uri relativa ao web application dir, ou ao contexto da aplica&ccedil;&atilde;o.</span></li><li><span class="paragraph">Results.http(), que manda informa&ccedil;&otilde;es do protocolo HTTP como status codes e headers.</span></li><li><span class="paragraph">Results.referer(), que usa o header Referer para fazer redirects ou forwards.</span></li><li><span class="paragraph">Results.nothing(), apenas retorna o c&oacute;digo de sucesso (HTTP 200 OK).</span></li></ul>
+	jsp, um html, ou qualquer uri relativa ao web application dir, ou ao contexto da aplica&ccedil;&atilde;o.</span></li><li><span class="paragraph">Results.http(), que manda informa&ccedil;&otilde;es do protocolo HTTP como status codes e headers.</span></li><li><span class="paragraph">Results.referer(), que usa o header Referer para fazer redirects ou forwards.</span></li><li><span class="paragraph">Results.nothing(), apenas retorna o c&oacute;digo de sucesso (HTTP 200 OK).</span></li><li><span class="paragraph">Results.xml(), serializa objetos em xml.</span></li><li><span class="paragraph">Results.json(), serializa objetos em json.</span></li></ul>
 		
 
 <h3 class="section">Redirecionamento e forward</h3>
@@ -215,6 +215,71 @@ dentro da view voc&ecirc; forme o JSON como desejar. Como no exemplo, o seu <cod
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">result.include</span><span class="java8">(</span><span class="java5">&#34;client&#34;</span><span class="java10">, dao.load</span><span class="java8">(</span><span class="java10">client</span><span class="java8">))</span><span class="java10">;<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
 }</span></code></div>
+		
+
+<h3 class="section">Ajax: Versão programática</h3>
+	    	<span class="paragraph">Se voc&ecirc; quiser que o VRaptor serialize automaticamente seus objetos para xml ou json, voc&ecirc; pode
+escrever em sua l&oacute;gica:</span>
+	    	<div class="java"><code class="java">
+<span class="java4">import static </span><span class="java10">br.com.caelum.vraptor.view.Results.*;<br />
+</span><span class="java16">@Resource<br />
+</span><span class="java4">public class </span><span class="java10">ClientsController </span><span class="java8">{<br />
+&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">private final </span><span class="java10">Result result;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">private final </span><span class="java10">ClientDao dao;<br />
+&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">ClientsController</span><span class="java8">(</span><span class="java10">Result result, ClientDao dao</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">this</span><span class="java10">.result = result;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">this</span><span class="java10">.dao = dao;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">loadJson</span><span class="java8">(</span><span class="java10">Cliente cliente</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">result.use</span><span class="java8">(</span><span class="java10">json</span><span class="java8">())</span><span class="java10">.from</span><span class="java8">(</span><span class="java10">cliente</span><span class="java8">)</span><span class="java10">.serialize</span><span class="java8">()</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">loadXml</span><span class="java8">(</span><span class="java10">Cliente cliente</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">result.use</span><span class="java8">(</span><span class="java10">xml</span><span class="java8">())</span><span class="java10">.from</span><span class="java8">(</span><span class="java10">cliente</span><span class="java8">)</span><span class="java10">.serialize</span><span class="java8">()</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+}</span></code></div>
+	    	<span class="paragraph">Os resultados v&atilde;os ser parecidos com:</span>
+	    	<div class="java"><code class="java">{"cliente":&nbsp;{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;"nome":&nbsp;"Joao"<br />
+}}</code></div>
+	    	<div class="java"><code class="java">&lt;cliente&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;nome&gt;Joao&lt;/nome&gt;<br />
+&lt;/cliente&gt;</code></div>
+	    	<span class="paragraph">Por padr&atilde;o, apenas campos de tipos primitivos ser&atilde;o serializados (String, n&uacute;meros, enums, datas),
+se voc&ecirc; quiser incluir um campo de tipo n&atilde;o primitivo voc&ecirc; precisa inclu&iacute;-lo explicitamente:</span>
+	    	<div class="java"><code class="java">
+<span class="java10">result.use</span><span class="java8">(</span><span class="java10">json</span><span class="java8">())</span><span class="java10">.from</span><span class="java8">(</span><span class="java10">cliente</span><span class="java8">)</span><span class="java10">.include</span><span class="java8">(</span><span class="java5">&#34;endereco&#34;</span><span class="java8">)</span><span class="java10">.serialize</span><span class="java8">()</span><span class="java10">;</span></code></div>
+	    	<span class="paragraph">vai resultar em algo parecido com:</span>
+	    	<div class="java"><code class="java">{"cliente":&nbsp;{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;"nome":&nbsp;"Joao",<br />
+&nbsp;&nbsp;&nbsp;&nbsp;"endereco"&nbsp;{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"rua":&nbsp;"Vergueiro"<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}<br />
+}}</code></div>
+	    	<span class="paragraph">Voc&ecirc; pode tamb&eacute;m excluir os campos de tipo primitivo da serializa&ccedil;&atilde;o:</span>
+	    	<div class="java"><code class="java">
+<span class="java10">result.use</span><span class="java8">(</span><span class="java10">json</span><span class="java8">())</span><span class="java10">.from</span><span class="java8">(</span><span class="java10">usuario</span><span class="java8">)</span><span class="java10">.exclude</span><span class="java8">(</span><span class="java5">&#34;senha&#34;</span><span class="java8">)</span><span class="java10">.serialize</span><span class="java8">()</span><span class="java10">;</span></code></div>
+	    	<span class="paragraph">vai resultar em algo parecido com:</span>
+	    	<div class="java"><code class="java">{"usuario":&nbsp;{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;"nome":&nbsp;"Joao",<br />
+&nbsp;&nbsp;&nbsp;&nbsp;"login":&nbsp;"joao"<br />
+}}</code></div>
+	    	<span class="paragraph">A implementa&ccedil;&atilde;o padr&atilde;o &eacute; baseada no XStream, ent&atilde;o &eacute; poss&iacute;vel configurar a serializa&ccedil;&atilde;o
+via anota&ccedil;&otilde;es ou configura&ccedil;&otilde;es diretas ao XStream, bastando criar a classe:</span>
+	    	<div class="java"><code class="java">@Component<br />
+public&nbsp;class&nbsp;CustomXMLSerialization&nbsp;extends&nbsp;XStreamXMLSerialization&nbsp;{<br />
+//or&nbsp;public&nbsp;class&nbsp;CustomJSONSerialization&nbsp;extends&nbsp;XStreamJSONSerialization&nbsp;{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;//delegate&nbsp;constructor<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;@Override<br />
+&nbsp;&nbsp;&nbsp;&nbsp;protected&nbsp;XStream&nbsp;getXStream()&nbsp;{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XStream&nbsp;xStream&nbsp;=&nbsp;super.getXStream();<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//suas&nbsp;configura&ccedil;&otilde;es&nbsp;ao&nbsp;XStream&nbsp;aqui<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;xStream;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}<br />
+}</code></div>
 		
 
 </div><!-- content -->

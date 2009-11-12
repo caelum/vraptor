@@ -89,31 +89,13 @@
                         
             <div id="textoCapitulo">
 	
-		<h2 class="chapter">Usando o Header Referer para fazer redirecionamentos</h2>
+		<h2 class="chapter">Rodando o VRaptor3 no JBoss</h2>
 
-		<span class="paragraph">Geralmente quando voc&ecirc; clica em um link, ou submete um formul&aacute;rio, o browser
-envia uma requisi&ccedil;&atilde;o para o servidor da sua aplica&ccedil;&atilde;o, colocando um Header
-chamado Referer, que cont&eacute;m qual &eacute; a p&aacute;gina atual, que originou a requisi&ccedil;&atilde;o.</span><span class="paragraph">Voc&ecirc; pode usar esse Header com o VRaptor, para fazer os redirecionamentos:</span><div class="java"><code class="java">
-<span class="java4">import static </span><span class="java10">br.com.caelum.vraptor.view.Results.referer;<br />
-</span><span class="java16">@Resource<br />
-</span><span class="java4">public class </span><span class="java10">ShoppingController </span><span class="java8">{<br />
-&nbsp;&nbsp;&nbsp; </span><span class="java3">//...<br />
-&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">adicionaItem</span><span class="java8">(</span><span class="java10">Item item</span><span class="java8">) {<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">validator.checking</span><span class="java8">(</span><span class="java10">...</span><span class="java8">)</span><span class="java10">;<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; validator.onErrorUse</span><span class="java8">(</span><span class="java10">referer</span><span class="java8">())</span><span class="java10">.forward</span><span class="java8">()</span><span class="java10">;<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; dao.adiciona</span><span class="java8">(</span><span class="java10">item</span><span class="java8">)</span><span class="java10">;<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; result.use</span><span class="java8">(</span><span class="java10">referer</span><span class="java8">())</span><span class="java10">.redirect</span><span class="java8">()</span><span class="java10">;<br />
-&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
-}</span></code></div><span class="paragraph">O problema em usar o Referer &eacute; que ele n&atilde;o &eacute; obrigat&oacute;rio. Ent&atilde;o quando o Referer
-n&atilde;o vem na requisi&ccedil;&atilde;o, o VRaptor vai lan&ccedil;ar uma IllegalStateException, e assim voc&ecirc;
-pode especificar uma outra l&oacute;gica para ir caso o Referer n&atilde;o seja especificado:</span><div class="java"><code class="java">
-<span class="java4">try </span><span class="java8">{<br />
-&nbsp;&nbsp;&nbsp; </span><span class="java10">result.use</span><span class="java8">(</span><span class="java10">referer</span><span class="java8">())</span><span class="java10">.redirect</span><span class="java8">()</span><span class="java10">;<br />
-</span><span class="java8">} </span><span class="java4">catch </span><span class="java8">(</span><span class="java10">IllegalStateException e</span><span class="java8">) {<br />
-&nbsp;&nbsp;&nbsp; </span><span class="java10">result.use</span><span class="java8">(</span><span class="java10">logic</span><span class="java8">())</span><span class="java10">.redirectTo</span><span class="java8">(</span><span class="java10">HomeController.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">.index</span><span class="java8">()</span><span class="java10">;<br />
-</span><span class="java8">}</span></code></div>
+		<span class="paragraph">Existe um bug no Spring 2.5.x https://jira.jboss.org/jira/browse/SNOWDROP-4, usado por padr&atilde;o no VRaptor3, 
+que impede o escaneamento de classpath dentro do JBoss. Por isso, o VRaptor n&atilde;o consegue identificar as 
+classes da sua aplica&ccedil;&atilde;o. </span><span class="paragraph">Para corrigir isso, baixe a vers&atilde;o mais nova do Spring em <a class="link" target="_blank" href="http://www.springsource.com/download,">http://www.springsource.com/download,</a>
+que n&atilde;o cont&eacute;m esse bug.</span><span class="paragraph">Com a vers&atilde;o mais nova do spring em m&atilde;os, remova o spring-2.5.x.jar do seu WEB-INF/lib,
+e adicione os jars da nova vers&atilde;o do Spring.</span>
 
 
 </div><!-- content -->

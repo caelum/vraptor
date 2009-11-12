@@ -17,6 +17,8 @@ package br.com.caelum.vraptor.serialization;
 
 import java.io.Writer;
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.Map.Entry;
 
@@ -67,7 +69,7 @@ public class XStreamXmlSerializer implements BasicSerializer {
 		Class<?> type = toSerialize.getClass();
 		String[] path = name.split("\\.");
 		for (int i = 0; i < path.length - 1; i++) {
-			type = new Mirror().on(type).reflect().field(path[i]).getType();
+			type = getActualType(new Mirror().on(type).reflect().field(path[i]).getGenericType());
 		}
 		return type;
 	}
@@ -100,14 +102,35 @@ public class XStreamXmlSerializer implements BasicSerializer {
 		for (String field : fields) {
 			Class<?> parentType = getParentTypeFor(field);
 			String fieldName = getNameFor(field);
-			Class<?> fieldType = new Mirror().on(parentType).reflect().field(fieldName).getType();
-
+			Type genericType = new Mirror().on(parentType).reflect().field(fieldName).getGenericType();
+			Class<?> fieldType = getActualType(genericType);
+			if (isCollection(genericType)) {
+				xstream.alias(extractor.nameFor(fieldType), fieldType);
+			}
 			if (!excludes.containsKey(fieldType)) {
 				excludeNonPrimitiveFields(fieldType);
 			}
 			excludes.remove(parentType, fieldName);
 		}
 		return this;
+	}
+
+	private Class<?> getActualType(Type genericType) {
+		if (genericType instanceof ParameterizedType) {
+			ParameterizedType type = (ParameterizedType) genericType;
+			if (isCollection(type)) {
+				return (Class<?>) type.getActualTypeArguments()[0];
+			}
+		}
+		return (Class<?>) genericType;
+	}
+
+	private boolean isCollection(Type type) {
+		if (type instanceof ParameterizedType) {
+			ParameterizedType ptype = (ParameterizedType) type;
+			return Collection.class.isAssignableFrom((Class<?>) ptype.getRawType());
+		}
+		return Collection.class.isAssignableFrom((Class<?>) type);
 	}
 
 	public void serialize() {

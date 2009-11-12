@@ -13,24 +13,14 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package br.com.caelum.vraptor.serialization;
-
-import java.io.IOException;
-
-import br.com.caelum.vraptor.View;
+package br.com.caelum.vraptor.deserialization;
 
 /**
- * Basic xml serialization support using a xml BasicSerializer.
- *
- * @author guilherme silveira
- * @version 3.0.2
+ * Deserializes xml
+ * @author Lucas Cavalcanti, Cecilia Fernandes
+ * @since 3.0.2
  */
-public interface XmlSerialization extends View {
-
-	/**
-	 * Serializes this object to the clients writer.
-	 * @throws IOException
-	 */
-	public <T> Serializer from(T object);
+@Deserializes("application/xml")
+public interface XMLDeserializer extends Deserializer {
 
 }

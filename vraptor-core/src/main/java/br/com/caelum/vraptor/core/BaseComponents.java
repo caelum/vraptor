@@ -57,8 +57,8 @@ import br.com.caelum.vraptor.deserialization.Deserializer;
 import br.com.caelum.vraptor.deserialization.Deserializers;
 import br.com.caelum.vraptor.deserialization.Deserializes;
 import br.com.caelum.vraptor.deserialization.DeserializesHandler;
-import br.com.caelum.vraptor.deserialization.XStreamXmlDeserializer;
-import br.com.caelum.vraptor.deserialization.XmlDeserializer;
+import br.com.caelum.vraptor.deserialization.XStreamXMLDeserializer;
+import br.com.caelum.vraptor.deserialization.XMLDeserializer;
 import br.com.caelum.vraptor.extra.ForwardToDefaultViewInterceptor;
 import br.com.caelum.vraptor.http.DefaultResourceTranslator;
 import br.com.caelum.vraptor.http.EncodingHandlerFactory;
@@ -109,10 +109,10 @@ import br.com.caelum.vraptor.resource.MethodNotAllowedHandler;
 import br.com.caelum.vraptor.resource.ResourceNotFoundHandler;
 import br.com.caelum.vraptor.rest.DefaultRestfulie;
 import br.com.caelum.vraptor.rest.Restfulie;
-import br.com.caelum.vraptor.serialization.JsonSerialization;
-import br.com.caelum.vraptor.serialization.XStreamJsonSerialization;
-import br.com.caelum.vraptor.serialization.XStreamXmlSerialization;
-import br.com.caelum.vraptor.serialization.XmlSerialization;
+import br.com.caelum.vraptor.serialization.JSONSerialization;
+import br.com.caelum.vraptor.serialization.XStreamJSONSerialization;
+import br.com.caelum.vraptor.serialization.XStreamXMLSerialization;
+import br.com.caelum.vraptor.serialization.XMLSerialization;
 import br.com.caelum.vraptor.validator.DefaultOutjector;
 import br.com.caelum.vraptor.validator.DefaultValidator;
 import br.com.caelum.vraptor.validator.Outjector;
@@ -160,7 +160,7 @@ public class BaseComponents {
             Proxifier.class, 				ObjenesisProxifier.class,
             ParameterNameProvider.class, 	ParanamerNameProvider.class,
             TypeFinder.class, 				DefaultTypeFinder.class,
-            XmlDeserializer.class,			XStreamXmlDeserializer.class,
+            XMLDeserializer.class,			XStreamXMLDeserializer.class,
             RoutesParser.class, 			PathAnnotationRoutesParser.class,
             Routes.class,					DefaultRoutes.class
     );
@@ -197,8 +197,8 @@ public class BaseComponents {
             ParametersInstantiatorInterceptor.class, 		ParametersInstantiatorInterceptor.class,
             ResourceLookupInterceptor.class, 				ResourceLookupInterceptor.class,
             Status.class,									DefaultStatus.class,
-            XmlSerialization.class,							XStreamXmlSerialization.class,
-            JsonSerialization.class,						XStreamJsonSerialization.class,
+            XMLSerialization.class,							XStreamXMLSerialization.class,
+            JSONSerialization.class,						XStreamJSONSerialization.class,
             Configuration.class,							ApplicationConfiguration.class,
             Restfulie.class,								DefaultRestfulie.class
     );
@@ -246,7 +246,7 @@ public class BaseComponents {
     };
     @SuppressWarnings("unchecked")
     private static final Class<? extends Deserializer>[] DESERIALIZERS = new Class[] {
-    	XmlDeserializer.class
+    	XMLDeserializer.class
     };
 
 

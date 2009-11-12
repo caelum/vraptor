@@ -17,8 +17,8 @@
 
 package br.com.caelum.vraptor.view;
 
-import br.com.caelum.vraptor.serialization.JsonSerialization;
-import br.com.caelum.vraptor.serialization.XmlSerialization;
+import br.com.caelum.vraptor.serialization.JSONSerialization;
+import br.com.caelum.vraptor.serialization.XMLSerialization;
 
 /**
  * Some common results for most web based logics.
@@ -75,14 +75,14 @@ public class Results {
     /**
      * Uses xml serialization.
      */
-    public static Class<XmlSerialization> xml() {
-    	return XmlSerialization.class;
+    public static Class<XMLSerialization> xml() {
+    	return XMLSerialization.class;
     }
     /**
      * Uses json serialization.
      */
-    public static Class<JsonSerialization> json() {
-    	return JsonSerialization.class;
+    public static Class<JSONSerialization> json() {
+    	return JSONSerialization.class;
     }
 
 }

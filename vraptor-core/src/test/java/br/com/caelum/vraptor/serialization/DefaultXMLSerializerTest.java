@@ -19,12 +19,12 @@ import br.com.caelum.vraptor.config.Configuration;
 import br.com.caelum.vraptor.rest.Restfulie;
 import br.com.caelum.vraptor.rest.StateResource;
 import br.com.caelum.vraptor.rest.Transition;
-import br.com.caelum.vraptor.serialization.DefaultXmlSerializer;
+import br.com.caelum.vraptor.serialization.DefaultXMLSerializer;
 
-public class DefaultXmlSerializerTest {
+public class DefaultXMLSerializerTest {
 
 
-	private DefaultXmlSerializer serializer;
+	private DefaultXMLSerializer serializer;
 	private ByteArrayOutputStream stream;
 	private Configuration config;
 
@@ -36,7 +36,7 @@ public class DefaultXmlSerializerTest {
 				return "http://localhost";
 			}
         };
-        this.serializer = new DefaultXmlSerializer(null, new OutputStreamWriter(stream), null, config);
+        this.serializer = new DefaultXMLSerializer(null, new OutputStreamWriter(stream), null, config);
     }
 	
 	

@@ -15,12 +15,22 @@
  */
 package br.com.caelum.vraptor.serialization;
 
+import java.io.IOException;
+
+import br.com.caelum.vraptor.View;
+
 /**
- * Basic xml configuration for xml serialization.
+ * Basic xml serialization support using a xml BasicSerializer.
+ *
  * @author guilherme silveira
- * @since 3.0.2
+ * @version 3.0.2
  */
-public interface XmlConfiguration {
-	public String nameFor(String name);
+public interface XMLSerialization extends View {
+
+	/**
+	 * Serializes this object to the clients writer.
+	 * @throws IOException
+	 */
+	public <T> Serializer from(T object);
 
 }

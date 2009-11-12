@@ -105,7 +105,11 @@
 
 
 <h3 class="section">3.0.2 (to be released)</h3>
-	    	<ul class="list"><li><span class="paragraph">servlet 2.4 containers are now supported</span></li></ul>
+	    	<ul class="list"><li><span class="paragraph">servlet 2.4 containers are now supported</span></li><li><span class="paragraph">bugfix: Results.referer() now implements View</span></li><li><span class="paragraph">bugfix: content-type is now set when using File/InputStreamDownload</span></li><li><span class="paragraph">removed java 6 api calls</span></li><li><span class="paragraph">new providers, spring based: HibernateCustomProvider and JPACustomProvider. These providers
+  register optional Hibernate or JPA components.</span></li><li><span class="paragraph">bugfix: converters are not throwing exceptions when there is no ResourceBundle configured.</span></li><li><span class="paragraph">bugfix: method return values are now included on result when forwarding.</span></li><li><span class="paragraph">bugfix: request parameters are now kept when there is a validation error.</span></li><li><span class="paragraph">bugfix: throwing exception when paranamer can't find parameters metadata, so you can recover
+for this problem.</span></li><li><span class="paragraph">initial support to xml and json serialization:</span><div class="java"><code class="java">
+<span class="java10">result.use</span><span class="java8">(</span><span class="java10">Results.json</span><span class="java8">())</span><span class="java10">.from</span><span class="java8">(</span><span class="java10">myObject</span><span class="java8">)</span><span class="java10">.include</span><span class="java8">(</span><span class="java10">...</span><span class="java8">)</span><span class="java10">.exclude</span><span class="java8">(</span><span class="java10">...</span><span class="java8">)</span><span class="java10">.serialize</span><span class="java8">()</span><span class="java10">;<br />
+result.use</span><span class="java8">(</span><span class="java10">Results.xml</span><span class="java8">())</span><span class="java10">.from</span><span class="java8">(</span><span class="java10">myObject</span><span class="java8">)</span><span class="java10">.include</span><span class="java8">(</span><span class="java10">...</span><span class="java8">)</span><span class="java10">.exclude</span><span class="java8">(</span><span class="java10">...</span><span class="java8">)</span><span class="java10">.serialize</span><span class="java8">()</span><span class="java10">;</span></code></div></li></ul>
 		
 
 <h3 class="section">3.0.1</h3>

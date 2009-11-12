@@ -58,7 +58,7 @@ public class UserRegistrationTest extends IntegrationTestCase {
 		openRootPage()
 			.fillRegisterForm()
 				.withName("John Paul")
-				.withLogin("john")
+				.withLogin("johnpaul")
 				.withPassword("paulie")
 				.andSubmit();
 		assertContainsMessage("User John Paul successfully added");

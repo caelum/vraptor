@@ -46,10 +46,10 @@ public class DefaultXmlSerialization implements XmlSerialization {
 		this.config = config;
 	}
 
-	public <T> BasicSerializer from(T object) {
+	public <T> Serializer from(T object) {
 		response.setContentType("application/xml");
 		try {
-			BasicSerializer serializer = new DefaultXmlSerializer(null, response.getWriter(), restfulie, config).from(object);
+			Serializer serializer = new DefaultXmlSerializer(null, response.getWriter(), restfulie, config).from(object);
 			return serializer;
 		} catch (IOException e) {
 			throw new ResultException("Unable to serialize data",e);

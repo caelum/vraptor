@@ -23,14 +23,14 @@ package br.com.caelum.vraptor.serialization;
  * @author Guilherme Silveira
  * @since 3.0.2
  */
-public interface BasicSerializer {
+public interface Serializer {
 
-	<T> BasicSerializer from(T object);
+	<T> Serializer from(T object);
 
-	BasicSerializer exclude(String... names);
+	Serializer exclude(String... names);
 
 	void serialize();
 
-	BasicSerializer include(String... names);
+	Serializer include(String... names);
 
 }

@@ -40,13 +40,13 @@ import br.com.caelum.vraptor.rest.Transition;
  * @since 3.0.3
  */
 @Component
-public class DefaultXmlSerializer implements BasicSerializer {
+public class DefaultXmlSerializer implements Serializer {
 
 	private final Writer writer;
 	private Object analyzing;
 	private final List<String> excludes = new ArrayList<String>();
 	private final Map<String, DefaultXmlSerializer> includes = new HashMap<String, DefaultXmlSerializer>();
-	private final BasicSerializer parent;
+	private final Serializer parent;
 	private final List<String> methods = new ArrayList<String>();
 
 	private final XmlConfiguration configuration = new DefaultXmlConfiguration();
@@ -59,7 +59,7 @@ public class DefaultXmlSerializer implements BasicSerializer {
 		this(new OutputStreamWriter(output));
 	}
 
-	public DefaultXmlSerializer(BasicSerializer parent, Writer writer, Restfulie restfulie, Configuration config) {
+	public DefaultXmlSerializer(Serializer parent, Writer writer, Restfulie restfulie, Configuration config) {
 		this.parent = parent;
 		this.writer = writer;
 		this.restfulie = restfulie;

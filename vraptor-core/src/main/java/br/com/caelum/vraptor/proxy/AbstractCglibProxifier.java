@@ -10,6 +10,11 @@ import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 import net.sf.cglib.proxy.NoOp;
 
+/**
+ * Default proxifier implementation.<br>It uses cglib to ignore bridge and object methods.
+ * @author guilherme
+ *
+ */
 public abstract class AbstractCglibProxifier implements Proxifier {
 
 	private static final List<Method> OBJECT_METHODS = Arrays.asList(Object.class.getDeclaredMethods());

@@ -16,7 +16,6 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.config.Configuration;
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
 
 import com.thoughtworks.xstream.XStream;
@@ -26,16 +25,10 @@ public class XStreamXmlSerializerTest {
 
 	private BasicSerializer serializer;
 	private ByteArrayOutputStream stream;
-	private Configuration config;
 
 	@Before
     public void setup() {
         this.stream = new ByteArrayOutputStream();
-        this.config = new Configuration() {
-			public String getApplicationPath() {
-				return "http://localhost";
-			}
-        };
         this.serializer = new XStreamXmlSerializer(new XStream(), new OutputStreamWriter(stream), new DefaultTypeNameExtractor());
     }
 

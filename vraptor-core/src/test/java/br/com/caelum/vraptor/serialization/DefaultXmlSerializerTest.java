@@ -1,5 +1,7 @@
 package br.com.caelum.vraptor.serialization;
 
+import static org.hamcrest.Matchers.containsString;
+
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -94,15 +96,6 @@ public class DefaultXmlSerializerTest {
 		assertThat(result(), is(equalTo(expectedResult)));
 	}
 
-
-	@Test
-	public void shouldSerializeCollection() {
-		String expectedResult = "<order>\n  <price>15.0</price>\n  <comments>pack it nicely, please</comments>\n</order>";
-		expectedResult += expectedResult;
-		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
-		serializer.from(Arrays.asList(order, order)).serialize();
-		assertThat(result(), is(equalTo(expectedResult)));
-	}
 
 	@Test
 	public void shouldSerializeCollectionWithPrefixTag() {

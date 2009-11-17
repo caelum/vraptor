@@ -22,7 +22,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class DvdCopy {
+public class DvdRental {
 
 	@Id
 	@GeneratedValue
@@ -34,12 +34,12 @@ public class DvdCopy {
 	@ManyToOne
 	private Dvd dvd;
 
-	public DvdCopy(User owner, Dvd dvd) {
+	public DvdRental(User owner, Dvd dvd) {
 		this.owner = owner;
 		this.dvd = dvd;
 	}
 
-	public DvdCopy() {
+	public DvdRental() {
 	}
 
 	public Long getId() {
@@ -79,7 +79,7 @@ public class DvdCopy {
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
-		DvdCopy other = (DvdCopy) obj;
+		DvdRental other = (DvdRental) obj;
 		if (dvd == null) {
 			if (other.dvd != null) {
 				return false;

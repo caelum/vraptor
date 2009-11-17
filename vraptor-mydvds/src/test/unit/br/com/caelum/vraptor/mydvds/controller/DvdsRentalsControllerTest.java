@@ -26,7 +26,7 @@ import br.com.caelum.vraptor.mydvds.dao.DvdDao;
 import br.com.caelum.vraptor.mydvds.dao.UserDao;
 import br.com.caelum.vraptor.mydvds.interceptor.UserInfo;
 import br.com.caelum.vraptor.mydvds.model.Dvd;
-import br.com.caelum.vraptor.mydvds.model.DvdCopy;
+import br.com.caelum.vraptor.mydvds.model.DvdRental;
 import br.com.caelum.vraptor.mydvds.model.User;
 import br.com.caelum.vraptor.util.test.MockResult;
 import br.com.caelum.vraptor.util.test.MockValidator;
@@ -37,14 +37,14 @@ import br.com.caelum.vraptor.validator.ValidationException;
  * @author Lucas Cavalcanti
  *
  */
-public class DvdsCopiesControllerTest {
+public class DvdsRentalsControllerTest {
 
 
 	private Mockery mockery;
 	private UserInfo userInfo;
 	private MockResult result;
 	private DvdDao dao;
-	private DvdCopiesController controller;
+	private DvdRentalsController controller;
 	private UserDao userDao;
 
 	@Before
@@ -67,7 +67,7 @@ public class DvdsCopiesControllerTest {
 		result = new MockResult();
 		Validator validator = new MockValidator();
 
-		controller = new DvdCopiesController(dao, userDao, userInfo, result, validator);
+		controller = new DvdRentalsController(dao, userDao, userInfo, result, validator);
 	}
 
 	@Test
@@ -75,7 +75,7 @@ public class DvdsCopiesControllerTest {
 		Dvd dvd = new Dvd();
 		dvd.setId(2l);
 
-		willAddTheDvdCopy(dvd);
+		willAddTheDvdRental(dvd);
 
 		controller.addToMyList(userInfo.getUser(), dvd);
 
@@ -85,7 +85,7 @@ public class DvdsCopiesControllerTest {
 		Dvd dvd = new Dvd();
 		dvd.setId(2l);
 
-		willNotAddTheDvdCopy(dvd);
+		willNotAddTheDvdRental(dvd);
 
 		User user = new User();
 		user.setLogin("abbb");
@@ -93,18 +93,18 @@ public class DvdsCopiesControllerTest {
 
 	}
 
-	private void willNotAddTheDvdCopy(final Dvd dvd) {
+	private void willNotAddTheDvdRental(final Dvd dvd) {
 		mockery.checking(new Expectations() {
 			{
-				never(dao).add(with(any(DvdCopy.class)));
+				never(dao).add(with(any(DvdRental.class)));
 			}
 		});
 	}
 
-	private void willAddTheDvdCopy(final Dvd dvd) {
+	private void willAddTheDvdRental(final Dvd dvd) {
 		mockery.checking(new Expectations() {
 			{
-				one(dao).add(with(any(DvdCopy.class)));
+				one(dao).add(with(any(DvdRental.class)));
 			}
 		});
 	}

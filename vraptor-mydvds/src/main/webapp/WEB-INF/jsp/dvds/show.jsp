@@ -6,8 +6,8 @@
 
 <p><strong>Owners:</strong></p>
 <ul>
-	<c:forEach items="${dvd.copies}" var="copy">
-		<li>${copy.owner }</li>
+	<c:forEach items="${dvd.rents}" var="rent">
+		<li>${rent.owner }</li>
 	</c:forEach>
 </ul>
 

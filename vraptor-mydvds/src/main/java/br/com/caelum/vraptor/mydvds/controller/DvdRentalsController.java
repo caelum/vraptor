@@ -28,7 +28,7 @@ import br.com.caelum.vraptor.mydvds.dao.DvdDao;
 import br.com.caelum.vraptor.mydvds.dao.UserDao;
 import br.com.caelum.vraptor.mydvds.interceptor.UserInfo;
 import br.com.caelum.vraptor.mydvds.model.Dvd;
-import br.com.caelum.vraptor.mydvds.model.DvdCopy;
+import br.com.caelum.vraptor.mydvds.model.DvdRental;
 import br.com.caelum.vraptor.mydvds.model.User;
 import br.com.caelum.vraptor.validator.Validations;
 import br.com.caelum.vraptor.view.Results;
@@ -45,7 +45,7 @@ import br.com.caelum.vraptor.view.Results;
  *
  */
 @Resource
-public class DvdCopiesController {
+public class DvdRentalsController {
 
     private final Result result;
     private final Validator validator;
@@ -60,7 +60,7 @@ public class DvdCopiesController {
 	 * @param result VRaptor result handler.
 	 * @param validator VRaptor validator.
 	 */
-	public DvdCopiesController(DvdDao dao, UserDao userDao, UserInfo userInfo, Result result, Validator validator) {
+	public DvdRentalsController(DvdDao dao, UserDao userDao, UserInfo userInfo, Result result, Validator validator) {
 		this.dao = dao;
 		this.userDao = userDao;
 		this.result = result;
@@ -90,7 +90,7 @@ public class DvdCopiesController {
 
 		validator.onErrorUse(Results.page()).of(UsersController.class).home();
 
-		dao.add(new DvdCopy(user, dvd));
+		dao.add(new DvdRental(user, dvd));
 
 		result.use(Results.logic()).redirectTo(UsersController.class).home();
 	}

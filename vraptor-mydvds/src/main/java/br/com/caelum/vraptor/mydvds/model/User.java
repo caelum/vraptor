@@ -65,23 +65,23 @@ public class User {
 
 	// user to dvd mapping,
 	@OneToMany(mappedBy="owner")
-	private Set<DvdCopy> copies;
+	private Set<DvdRental> rents;
 
-	public Set<DvdCopy> getCopies() {
-		if (copies == null) {
-			copies = new HashSet<DvdCopy>();
+	public Set<DvdRental> getRents() {
+		if (rents == null) {
+			rents = new HashSet<DvdRental>();
 		}
-		return copies;
+		return rents;
 	}
 
-	public void setCopies(Set<DvdCopy> dvds) {
-		this.copies = dvds;
+	public void setRents(Set<DvdRental> dvds) {
+		this.rents = dvds;
 	}
 
 
 	public Set<Dvd> getDvds() {
-		return new HashSet<Dvd>(Collections2.transform(getCopies(), new Function<DvdCopy, Dvd>() {
-			public Dvd apply(DvdCopy copy) {
+		return new HashSet<Dvd>(Collections2.transform(getRents(), new Function<DvdRental, Dvd>() {
+			public Dvd apply(DvdRental copy) {
 				return copy.getDvd();
 			}
 		}));

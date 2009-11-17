@@ -32,7 +32,7 @@ import br.com.caelum.vraptor.interceptor.multipart.UploadedFile;
 import br.com.caelum.vraptor.mydvds.dao.DvdDao;
 import br.com.caelum.vraptor.mydvds.interceptor.UserInfo;
 import br.com.caelum.vraptor.mydvds.model.Dvd;
-import br.com.caelum.vraptor.mydvds.model.DvdCopy;
+import br.com.caelum.vraptor.mydvds.model.DvdRental;
 import br.com.caelum.vraptor.validator.Validations;
 import br.com.caelum.vraptor.view.Results;
 
@@ -101,7 +101,7 @@ public class DvdsController {
 		}
 
 		dao.add(dvd);
-		dao.add(new DvdCopy(userInfo.getUser(), dvd));
+		dao.add(new DvdRental(userInfo.getUser(), dvd));
 
 		// you can add objects to result even in redirects. Added objects will
 		// survive one more request when redirecting.

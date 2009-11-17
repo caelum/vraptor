@@ -25,7 +25,7 @@ import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.mydvds.dao.DvdDao;
 import br.com.caelum.vraptor.mydvds.interceptor.UserInfo;
 import br.com.caelum.vraptor.mydvds.model.Dvd;
-import br.com.caelum.vraptor.mydvds.model.DvdCopy;
+import br.com.caelum.vraptor.mydvds.model.DvdRental;
 import br.com.caelum.vraptor.mydvds.model.DvdType;
 import br.com.caelum.vraptor.mydvds.model.User;
 import br.com.caelum.vraptor.util.test.MockResult;
@@ -98,7 +98,7 @@ public class DvdsControllerTest {
 		mockery.checking(new Expectations() {
 			{
 				one(dao).add(dvd);
-				one(dao).add(new DvdCopy(userInfo.getUser(), dvd));
+				one(dao).add(new DvdRental(userInfo.getUser(), dvd));
 			}
 		});
 	}

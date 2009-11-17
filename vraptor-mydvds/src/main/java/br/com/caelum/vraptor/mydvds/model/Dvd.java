@@ -48,7 +48,7 @@ public class Dvd {
 
 	// dvd to user mapping
 	@OneToMany(mappedBy = "dvd")
-	private Set<DvdCopy> copies;
+	private Set<DvdRental> rents;
 
 	@Enumerated(EnumType.STRING)
 	private DvdType type;
@@ -85,12 +85,12 @@ public class Dvd {
 		this.type = type;
 	}
 
-	public Set<DvdCopy> getCopies() {
-		return copies;
+	public Set<DvdRental> getRents() {
+		return rents;
 	}
 
-	public void setCopies(Set<DvdCopy> copies) {
-		this.copies = copies;
+	public void setRents(Set<DvdRental> copies) {
+		this.rents = copies;
 	}
 
 	@Override

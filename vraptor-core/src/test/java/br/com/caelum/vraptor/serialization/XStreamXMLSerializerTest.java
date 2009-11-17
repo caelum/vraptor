@@ -29,7 +29,7 @@ public class XStreamXMLSerializerTest {
 	@Before
     public void setup() {
         this.stream = new ByteArrayOutputStream();
-        this.serializer = new XStreamXmlSerializer(new XStream(), new OutputStreamWriter(stream), new DefaultTypeNameExtractor());
+        this.serializer = new XStreamXMLSerializer(new XStream(), new OutputStreamWriter(stream), new DefaultTypeNameExtractor());
     }
 
 	public static class Address {

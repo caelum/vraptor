@@ -7,7 +7,7 @@
 	<name>VRaptor3</name>
 	<packaging>jar</packaging>
 	
-	<description>Java web MVC framework for fast and maintenable development</description>
+	<description>Java web MVC framework for fast and maintainable development</description>
 	<url>http://vraptor.caelum.com.br</url>
 	
 	<organization>

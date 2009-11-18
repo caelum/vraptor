@@ -3,14 +3,18 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>br.com.caelum</groupId>
 	<artifactId>vraptor</artifactId>
-	<version>3.0.0-rc1-SNAPSHOT</version>
+	<version>3.0.3-SNAPSHOT</version>
 	<name>VRaptor3</name>
 	<packaging>jar</packaging>
-
+	
+	<description>Java web MVC framework for fast and maintenable development</description>
+	<url>http://vraptor.caelum.com.br</url>
+	
 	<organization>
 		<name>Caelum</name>
 		<url>http://www.caelum.com.br</url>
 	</organization>
+	
 	
 	<licenses>
 		<license>
@@ -20,7 +24,7 @@
 		</license>
 	</licenses>
 	<scm>
-		<url>http://shell.sourceforge.net/home/groups/v/vr/vraptor2/htdocs/maven</url>
+		<url>scm:git:git://github.com/caelum/vraptor</url>
 	</scm>
 	<dependencies>
 		<!-- mandatory -->
@@ -166,7 +170,7 @@
 		    <groupId>javax.servlet.jsp</groupId>
 		    <artifactId>jsp-api</artifactId>
 		    <version>2.1</version>
-		    <optional>true</optional>
+		    <scope>provided</scope>
 		</dependency>
 		<dependency>
 		    <groupId>javax.annotation</groupId>
@@ -200,7 +204,7 @@
 		    <groupId>javax.servlet</groupId>
 		    <artifactId>servlet-api</artifactId>
 		    <version>2.4</version>
-			<optional>true</optional>
+			<scope>provided</scope>
 		</dependency>
 		
 		<dependency>
@@ -218,6 +222,13 @@
 		</dependency>
 	</dependencies>
 
+	<distributionManagement>
+		<repository>
+			<id>mvn-repository</id>
+			<url>scp://caelum.com.br/home/mavensync/repo</url>
+		</repository>
+	</distributionManagement>
+		
 	<build>
 		<plugins>
 			<plugin>

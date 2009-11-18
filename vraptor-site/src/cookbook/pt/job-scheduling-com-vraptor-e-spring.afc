@@ -135,3 +135,33 @@ public class MyResource {
     ...
 }
 [/java]
+
+[section O escopo Prototype]
+
+O Spring possui um escopo chamado prototype que define que o componente terá uma nova 
+instância sempre que for requisitada, este escopo ainda não existe no vRaptor3 mas será 
+implementado em breve. Este escopo servirá para definir compenentes utilizados por tasks 
+em escopo de application que naturalmente não são singletons, como DAO’s.
+
+Você não poderá receber a Session no construtor do seu DAO prototyped pois geralmente a 
+SessionFactory está em escopo de request, e o vRaptor ainda não possui suporte às 
+scoped-proxies do Spring. Então precisará fazer assim:
+
+[java]
+@Component
+@PrototypeScoped
+public class MyPrototypedDAO extends ... implements ... {
+ 
+    private Session session;
+ 
+    public MyPrototypedDAO(SessionFactory sessionFactory) {
+        this.session = sessionFactory.openSession();
+    }
+ 
+    ...
+}
+[/java]
+
+Deste modo, será criado uma instância do seu DAO para cada requisição de instância 
+(lê-se: sempre que você receber uma instância pelo construtor, será uma nova), assim 
+como uma Session separada.

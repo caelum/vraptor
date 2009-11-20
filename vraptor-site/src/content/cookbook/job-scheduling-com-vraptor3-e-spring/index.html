@@ -1,0 +1,308 @@
+
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="author" content="Caelum"/>
+	<meta name="reply-to" content="contato@caelum.com.br"/>
+	<meta name="author" content="Design"/>
+	<meta name="reply-to" content="lokidg@gmail.com"/>
+	
+		
+		<link href="../../documentacao/includes/css/java.css" rel="stylesheet" type="text/css" media="screen" />
+		<link href="../../documentacao/includes/css/xml2html.css" rel="stylesheet" type="text/css" media="screen" />
+		<link href="../../documentacao/includes/css/style.css" rel="stylesheet" type="text/css" media="screen" />
+	
+	<meta name="description" content="VRaptor 3 - um framework java para web focado em desenvolvimento rápido"/>
+	<meta name="keywords" content="sites, web, desenvolvimento, development, java, opensource"/>
+	<title>V|Raptor - Alta produtividade no Desenvolvimento Web em Java</title>
+	<link href="../../screen.css" rel="stylesheet" type="text/css" media="screen" />
+    <link href="../../menu.css" rel="stylesheet" type="text/css" media="screen" />
+    <!--[if lt IE 7]>
+    <script src="http://ie7-js.googlecode.com/svn/version/2.0(beta3)/IE7.js" type="text/javascript"></script>
+    <![endif]-->
+</head>
+
+<body>
+	<div id="headerWrap">
+    	<div id="headerContent">
+        	<h1 id="logoVraptor"><span>V|Raptor</span></h1><!-- vraptorlogo-->
+            
+            <ul id="langMenu">
+            	<li><a id="engBtn" href="../../en/"><span>ENGLISH</span></a></li>
+                <li><a id="ptBtn" href="../../"><span>PORTUGUÊS</span></a></li>
+            </ul><!-- langMenu-->            
+        </div><!-- header content -->
+    </div><!-- header wrap-->
+    
+    <div id="menuWrap">
+    	<ul id="menuElements">
+        	<li><a id="homeBtn" href="../../"><span>home</span></a></li>
+        	<li><a id="downloadBtn" href="../../download.jsp"><span>download</span></a></li>
+        	<li><a id="documentacaoBtn" href="../../documentacao/"><span>Documentação</span></a></li>
+        	<li><a id="beneficiosBtn" href="../../beneficios.jsp"><span>Benef&iacute;cios</span></a></li>
+        	<li><a id="suporteBtn" href="../../suporte.jsp"><span>Suporte</span></a></li>
+        	<li><a id="vraptor2Btn" href="../../vraptor2.jsp"><span>vraptor2</span></a></li>
+        </ul><!-- menuElements-->
+    </div><!-- menuWrap-->
+<div id="contentWrap">
+    	
+			<ul id="subMenu">
+				<li><a href="../../documentacao">Documentação</a></li>
+				<li>|</li>
+				<li><a href="../../javadoc">Javadoc</a></li>
+				<li>|</li>
+				<li><a href="../../equipe.jsp">Equipe</a></li>
+			</ul>
+		<div id="contentDocumentacao">
+			<div class="download"><a href="../vraptor3cookbook.pdf">Download em PDF</a></div>
+        	<h2 class="title"><span>Livro de Receitas</span></h2>
+            <h3 class="title">Algumas soluções prontas e dicas para problemas comuns.</h3>            <div id="subMenuDoc">
+            	<img id="positionTop" src="../includes/images/subMenuTop-trans.png" />
+                <img id="positionBottom" src="../includes/images/subMenuBottom-trans.png" />
+            	<ol type="1">
+									<li><a class="link_toc" href="../../cookbook/aceitando-urls-com-ou-sem-barra-no-final/">1. Aceitando URLs com ou sem barra no final</a></li>
+		
+									<li><a class="link_toc" href="../../cookbook/colocando-objetos-na-sessao/">2. Colocando objetos na sessão</a></li>
+		
+									<li><a class="link_toc" href="../../cookbook/componentfactory-como-seletor-de-implementacoes/">3. ComponentFactory como seletor de implementações</a></li>
+		
+									<li><a class="link_toc" href="../../cookbook/desabilitar-exception-do-page-result/">4. Desabilitar exception do Page Result</a></li>
+		
+									<li><a class="link_toc" href="../../cookbook/gerando-aplicacao-com-vraptor3-usando-maven/">5. Gerando aplicação com VRaptor3 usando Maven</a></li>
+		
+									<li><a class="link_toc" href="../../cookbook/usando-tiles-com-vraptor3/">6. Usando tiles com vraptor3</a></li>
+		
+									<li><a class="link_toc" href="../../cookbook/interceptando-recursos-anotados/">7. Interceptando recursos anotados</a></li>
+		
+									<li><a class="link_toc" href="../../cookbook/job-scheduling-com-vraptor3-e-spring/">8. Job Scheduling com vRaptor3 e Spring</a></li>
+		
+									<li><a class="link_toc" href="../../cookbook/poupando-recursos-lazy-dependency-injection/">9. Poupando recursos - LAZY Dependency Injection</a></li>
+		
+									<li><a class="link_toc" href="../../cookbook/evitando-que-o-browser-faca-cache-das-paginas/">10. Evitando que o browser faça cache das páginas</a></li>
+		
+									<li><a class="link_toc" href="../../cookbook/rodando-o-vraptor3-no-jboss/">11. Rodando o VRaptor3 no JBoss</a></li>
+		
+									<li><a class="link_toc" href="../../cookbook/usando-o-header-referer-para-fazer-redirecionamentos/">12. Usando o Header Referer para fazer redirecionamentos</a></li>
+		
+                </ol>
+            </div><!-- submenu-->
+                        
+            <div id="textoCapitulo">
+	
+		<h2 class="chapter">Job Scheduling com vRaptor3 e Spring</h2>
+
+		<span class="paragraph"><strong class="definition"><em class="italic">Por M&aacute;rio Peixoto no blog <a class="link" target="_blank" href="http://mariopeixoto.wordpress.com/2009/11/17/job-scheduling-com-vraptor3-e-spring3/">http://mariopeixoto.wordpress.com/2009/11/17/job-scheduling-com-vraptor3-e-spring3/</a> </em></strong></span><span class="paragraph">Este artigo tem como objetivo mostrar um caminho simples para fazer job scheduling no vRaptor3 
+quando o Spring for o seu container IoC sem que seja necess&aacute;rio o uso de XML para configura&ccedil;&atilde;o.</span><span class="paragraph">Vers&otilde;es utilizadas:</span><ul class="list"><li><span class="paragraph">vRaptor 3.0.2</span></li><li><span class="paragraph">Spring 3.0.0.RC2</span></li></ul>
+
+
+<h3 class="section">O Task Scheduler</h3>
+	    	<span class="paragraph">O Spring j&aacute; vem com suporte a task scheduling/executing, ele precisa apenas que uma implementa&ccedil;&atilde;o 
+de <code class="inlineCode">org.springframework.scheduling.TaskScheduler</code> esteja dispon&iacute;vel no escopo de aplica&ccedil;&atilde;o 
+(<em class="italic">singleton</em> no Spring). Para isso precisamos implementar um <code class="inlineCode">ComponentFactory</code>:</span>
+	    	<div class="java"><code class="java">
+<span class="java16">@Component<br />
+@ApplicationScoped<br />
+</span><span class="java4">public class </span><span class="java10">TaskSchedulerFactory </span><span class="java4">implements </span><span class="java10">ComponentFactory&lt;TaskScheduler&gt; </span><span class="java8">{<br />
+ <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">private </span><span class="java10">ThreadPoolTaskScheduler scheduler;<br />
+&nbsp;&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java16">@PostConstruct<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">create</span><span class="java8">() {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">scheduler = </span><span class="java4">new </span><span class="java10">ThreadPoolTaskScheduler</span><span class="java8">()</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; scheduler.initialize</span><span class="java8">()</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+&nbsp;&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">TaskScheduler getInstance</span><span class="java8">() {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return </span><span class="java10">scheduler;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+&nbsp;&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java16">@PreDestroy<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">destroy</span><span class="java8">() {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">scheduler.destroy</span><span class="java8">()</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+&nbsp;&nbsp;&nbsp;&nbsp; <br />
+}</span></code></div>
+	    	<span class="paragraph">Neste exemplo utilizaremos o <code class="inlineCode">ThreadPoolTaskScheduler</code> como implementa&ccedil;&atilde;o para o 
+<code class="inlineCode">TaskScheduler</code>, por&eacute;m v&aacute;rias outras classes vem com o Spring e podem ser usadas 
+da mesma maneira (documenta&ccedil;&atilde;o).</span>
+		
+
+<h3 class="section">As Tasks/Jobs</h3>
+	    	<span class="paragraph">Vamos criar interfaces para nossas tasks.</span>
+	    	<div class="java"><code class="java">
+<span class="java4">public interface </span><span class="java10">Task </span><span class="java4">extends </span><span class="java10">Runnable </span><span class="java8">{<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java9">void </span><span class="java10">schedule</span><span class="java8">(</span><span class="java10">TaskScheduler scheduler</span><span class="java8">)</span><span class="java10">;<br />
+</span><span class="java8">}<br />
+ <br />
+</span><span class="java4">public interface </span><span class="java10">ApplicationTask </span><span class="java4">extends </span><span class="java10">Task </span><span class="java8">{<br />
+}<br />
+ <br />
+</span><span class="java4">public interface </span><span class="java10">RequestTask </span><span class="java4">extends </span><span class="java10">Task </span><span class="java8">{<br />
+}</span></code></div>
+	    	<span class="paragraph">Registrando tasks em escopo de application</span>
+	    	<span class="paragraph">Para registrar esse tipo de task, precisaremos de um bean em escopo de application:</span>
+	    	<div class="java"><code class="java">
+<span class="java16">@Component<br />
+@ApplicationScoped<br />
+</span><span class="java4">public class </span><span class="java10">MyFirstApplicationTask </span><span class="java4">implements </span><span class="java10">ApplicationTask </span><span class="java8">{<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">MyFirstApplicationTask</span><span class="java8">(</span><span class="java10">TaskScheduler scheduler</span><span class="java8">) { <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java3">//Aqui voc&ecirc; poder&aacute; receber componentes que não estejam em <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //escopo de request ou session<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">...<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">this</span><span class="java10">.schedule</span><span class="java8">(</span><span class="java10">scheduler</span><span class="java8">)</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">schedule</span><span class="java8">(</span><span class="java10">TaskScheduler scheduler</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">scheduler.schedule</span><span class="java8">(</span><span class="java10">this, </span><span class="java4">new </span><span class="java10">CronTrigger</span><span class="java8">(</span><span class="java5">&#34;0 0 23 * * *&#34;</span><span class="java8">))</span><span class="java10">; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java3">//Neste caso, a task rodar&aacute; sempre &agrave;s 23h0min0s<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+}</span></code></div>
+	    	<span class="paragraph">Registrando tasks em escopo de request</span>
+	    	<span class="paragraph">Para registrar esse tipo de task, basta receber o scheduler no construtor do seu <code class="inlineCode">Resource</code>
+e registrar a task no m&eacute;todo adequado.</span>
+	    	<div class="java"><code class="java">
+<span class="java16">@Component<br />
+@RequestScoped<br />
+</span><span class="java4">public class </span><span class="java10">MyFirstRequestTask </span><span class="java4">implements </span><span class="java10">RequestTask </span><span class="java8">{<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">MyFirstApplicationTask</span><span class="java8">() { <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java3">//Aqui voc&ecirc; poder&aacute; receber qualquer componente que precisar<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">...<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">schedule</span><span class="java8">(</span><span class="java10">TaskScheduler schedule</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">Calendar now = GregorianCalendar.getInstance</span><span class="java8">()</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; now.add</span><span class="java8">(</span><span class="java10">Calendar.MINUTE,</span><span class="java7">5</span><span class="java8">)</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; scheduler.schedule</span><span class="java8">(</span><span class="java10">this, now.getTime</span><span class="java8">())</span><span class="java10">; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java3">//Neste caso, a task rodar&aacute; apenas uma vez, 5 min depois da <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //execu&ccedil;ão deste m&eacute;todo<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+}<br />
+</span><span class="java16">@Resource<br />
+</span><span class="java4">public class </span><span class="java10">MyResource </span><span class="java8">{<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">private </span><span class="java10">MyFirstRequestTask task;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">private </span><span class="java10">TaskScheduler scheduler;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">MyResource</span><span class="java8">(</span><span class="java10">MyFirstRequestTask task, TaskScheduler scheduler</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">this</span><span class="java10">.task = task;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">this</span><span class="java10">.scheduler = scheduler;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java10">...<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">taskInit</span><span class="java8">() {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">task.schedule</span><span class="java8">(</span><span class="java10">scheduler</span><span class="java8">)</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java10">...<br />
+</span><span class="java8">}</span></code></div>
+		
+
+<h3 class="section">Observações</h3>
+	    	<span class="paragraph">Criamos 3 interfaces, pois deste modo ficar&aacute; mais f&aacute;cil injetar diferentes tipos de tasks 
+no construtor, por exemplo podemos receber todas as tasks em escopo de request dentro de 
+um resource assim:</span>
+	    	<div class="java"><code class="java">
+<span class="java16">@Resource<br />
+</span><span class="java4">public class </span><span class="java10">MyResource </span><span class="java8">{<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">private </span><span class="java10">List&lt;RequestTask&gt; tasks;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">private </span><span class="java10">TaskScheduler scheduler;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">MyResource</span><span class="java8">(</span><span class="java10">List&lt;RequestTask&gt; tasks, TaskScheduler scheduler</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">this</span><span class="java10">.tasks = tasks;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">this</span><span class="java10">.scheduler = scheduler;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java10">...<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">tasksInit</span><span class="java8">() {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">for </span><span class="java8">(</span><span class="java10">RequestTask task : tasks</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">task.schedule</span><span class="java8">(</span><span class="java10">scheduler</span><span class="java8">)</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+&nbsp;&nbsp;&nbsp; }<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java10">...<br />
+</span><span class="java8">}</span></code></div>
+		
+
+<h3 class="section">O escopo Prototype</h3>
+	    	<span class="paragraph">O Spring possui um escopo chamado prototype que define que o componente ter&aacute; uma nova 
+inst&acirc;ncia sempre que for requisitada, este escopo ainda n&atilde;o existe no vRaptor3 mas ser&aacute; 
+implementado em breve. Este escopo servir&aacute; para definir compenentes utilizados por tasks 
+em escopo de application que naturalmente n&atilde;o s&atilde;o singletons, como DAO’s.</span>
+	    	<span class="paragraph">Voc&ecirc; n&atilde;o poder&aacute; receber a Session no construtor do seu DAO prototyped pois geralmente a 
+SessionFactory est&aacute; em escopo de request, e o vRaptor ainda n&atilde;o possui suporte &agrave;s 
+scoped-proxies do Spring. Ent&atilde;o precisar&aacute; fazer assim:</span>
+	    	<div class="java"><code class="java">
+<span class="java16">@Component<br />
+@PrototypeScoped<br />
+</span><span class="java4">public class </span><span class="java10">MyPrototypedDAO </span><span class="java4">extends </span><span class="java10">... </span><span class="java4">implements </span><span class="java10">... </span><span class="java8">{<br />
+ <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">private </span><span class="java10">Session session;<br />
+ <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">MyPrototypedDAO</span><span class="java8">(</span><span class="java10">SessionFactory sessionFactory</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">this</span><span class="java10">.session = sessionFactory.openSession</span><span class="java8">()</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+ <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java10">...<br />
+</span><span class="java8">}</span></code></div>
+	    	<span class="paragraph">Deste modo, ser&aacute; criado uma inst&acirc;ncia do seu DAO para cada requisi&ccedil;&atilde;o de inst&acirc;ncia 
+(l&ecirc;-se: sempre que voc&ecirc; receber uma inst&acirc;ncia pelo construtor, ser&aacute; uma nova), assim 
+como uma Session separada.</span>
+		
+
+</div><!-- content -->
+            
+        </div><!-- content cnt -->
+    </div><!-- content wrap-->
+    
+
+
+
+
+		
+
+    <div id="footerWrap">
+    	<div id="footerContent">              
+            <div id="suporteFooter">
+	           	<a href="http://www.caelum.com.br/contato/" class="moreIcon" title="Saiba Mais"><span>+</span></a>
+	           	<h3><a href="http://www.caelum.com.br/contato/">Suporte</a></h3>
+                <p><a href="http://www.caelum.com.br/contato/">Conheça os nossos planos de suporte online, e tenha a confiança de ter suas dúvidas e problemas rapidamente solucionados.</a></p>            
+            </div><!-- suporte-->
+            <div id="consultoriaFooter">
+           		<a href="http://www.caelum.com.br/servicos/consultoria/" class="moreIcon" title="Saiba Mais"><span>+</span></a>
+           		<h3><a href="http://www.caelum.com.br/servicos/consultoria/">Consultoria</a></h3>
+                <p><a href="http://www.caelum.com.br/servicos/consultoria/">A equipe que desenvolveu o VRaptor está disponível para auxiliar a sua equipe de desenvolvimento. Conheça nossos planos de consultoria.</a></p>            
+            </div><!-- consultoria-->
+        	<div id="treinamentoFooter">
+            	<a href="http://www.caelum.com.br/curso/fj-28-vraptor-hibernate-ajax/" class="moreIcon" title="Saiba Mais"><span>+</span></a><h3><a href="http://www.caelum.com.br/curso/fj-28-vraptor-hibernate-ajax/">Treinamento</a></h3>
+                <p><a href="http://www.caelum.com.br/curso/fj-28-vraptor-hibernate-ajax/">A Caelum oferece treinamento oficial de VRaptor, com Hibernate e Ajax, focando nas melhores práticas com VRaptor. Clique e saiba mais.</a></p>
+            </div><!--treinamento-->
+     <div class="footbar">
+            	<img class="logoFooter" src="../../images/logoCaelumGray-trans.png" alt="vraptor logo" />
+                <ul>
+                	<li>site map:</li>
+                    <li><a href="../../">home</a></li>
+                    <li>|</li>
+                    <li><a href="../../download.jsp">download</a></li>
+                    <li>|</li>
+                    <li><a href="../../documentacao/">Documentação</a></li>
+                    <li>|</li>
+                    <li><a href="../../beneficios.jsp">Benef&iacute;cios</a></li>
+                    <li>|</li>
+                    <li><a href="../../suporte.jsp">Suporte</a></li>
+                    <li>|</li>
+                    <li><a href="../../vraptor2.jsp">vraptor2</a></li>
+                </ul>
+                <p><a href="http://www.apache.org/licenses/LICENSE-2.0">Licença Apache 2.0</a> - VRaptor ©2009 Caelum - Ensino e Inovação</p>
+            </div><!-- footnote-->
+        </div><!-- footer content -->
+        <a id="signature" href="mailto:lokidg@gmail.com">loki|design</a>
+    </div><!-- footer wrap-->
+<script type="text/javascript">
+	var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+	document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+<script type="text/javascript">
+	try {
+	var pageTracker = _gat._getTracker("UA-270161-11");
+	pageTracker._trackPageview();
+	} catch(err) {}
+ </script>
+    
+</body>
+</html>

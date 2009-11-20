@@ -1,0 +1,206 @@
+
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="author" content="Caelum"/>
+	<meta name="reply-to" content="contato@caelum.com.br"/>
+	<meta name="author" content="Design"/>
+	<meta name="reply-to" content="lokidg@gmail.com"/>
+	
+		
+		<link href="../../documentacao/includes/css/java.css" rel="stylesheet" type="text/css" media="screen" />
+		<link href="../../documentacao/includes/css/xml2html.css" rel="stylesheet" type="text/css" media="screen" />
+		<link href="../../documentacao/includes/css/style.css" rel="stylesheet" type="text/css" media="screen" />
+	
+	<meta name="description" content="VRaptor 3 - um framework java para web focado em desenvolvimento rápido"/>
+	<meta name="keywords" content="sites, web, desenvolvimento, development, java, opensource"/>
+	<title>V|Raptor - Alta produtividade no Desenvolvimento Web em Java</title>
+	<link href="../../screen.css" rel="stylesheet" type="text/css" media="screen" />
+    <link href="../../menu.css" rel="stylesheet" type="text/css" media="screen" />
+    <!--[if lt IE 7]>
+    <script src="http://ie7-js.googlecode.com/svn/version/2.0(beta3)/IE7.js" type="text/javascript"></script>
+    <![endif]-->
+</head>
+
+<body>
+	<div id="headerWrap">
+    	<div id="headerContent">
+        	<h1 id="logoVraptor"><span>V|Raptor</span></h1><!-- vraptorlogo-->
+            
+            <ul id="langMenu">
+            	<li><a id="engBtn" href="../../en/"><span>ENGLISH</span></a></li>
+                <li><a id="ptBtn" href="../../"><span>PORTUGUÊS</span></a></li>
+            </ul><!-- langMenu-->            
+        </div><!-- header content -->
+    </div><!-- header wrap-->
+    
+    <div id="menuWrap">
+    	<ul id="menuElements">
+        	<li><a id="homeBtn" href="../../"><span>home</span></a></li>
+        	<li><a id="downloadBtn" href="../../download.jsp"><span>download</span></a></li>
+        	<li><a id="documentacaoBtn" href="../../documentacao/"><span>Documentação</span></a></li>
+        	<li><a id="beneficiosBtn" href="../../beneficios.jsp"><span>Benef&iacute;cios</span></a></li>
+        	<li><a id="suporteBtn" href="../../suporte.jsp"><span>Suporte</span></a></li>
+        	<li><a id="vraptor2Btn" href="../../vraptor2.jsp"><span>vraptor2</span></a></li>
+        </ul><!-- menuElements-->
+    </div><!-- menuWrap-->
+<div id="contentWrap">
+    	
+			<ul id="subMenu">
+				<li><a href="../../documentacao">Documentação</a></li>
+				<li>|</li>
+				<li><a href="../../javadoc">Javadoc</a></li>
+				<li>|</li>
+				<li><a href="../../equipe.jsp">Equipe</a></li>
+			</ul>
+		<div id="contentDocumentacao">
+			<div class="download"><a href="../vraptor3cookbook.pdf">Download em PDF</a></div>
+        	<h2 class="title"><span>Livro de Receitas</span></h2>
+            <h3 class="title">Algumas soluções prontas e dicas para problemas comuns.</h3>            <div id="subMenuDoc">
+            	<img id="positionTop" src="../includes/images/subMenuTop-trans.png" />
+                <img id="positionBottom" src="../includes/images/subMenuBottom-trans.png" />
+            	<ol type="1">
+									<li><a class="link_toc" href="../../cookbook/aceitando-urls-com-ou-sem-barra-no-final/">1. Aceitando URLs com ou sem barra no final</a></li>
+		
+									<li><a class="link_toc" href="../../cookbook/colocando-objetos-na-sessao/">2. Colocando objetos na sessão</a></li>
+		
+									<li><a class="link_toc" href="../../cookbook/componentfactory-como-seletor-de-implementacoes/">3. ComponentFactory como seletor de implementações</a></li>
+		
+									<li><a class="link_toc" href="../../cookbook/desabilitar-exception-do-page-result/">4. Desabilitar exception do Page Result</a></li>
+		
+									<li><a class="link_toc" href="../../cookbook/gerando-aplicacao-com-vraptor3-usando-maven/">5. Gerando aplicação com VRaptor3 usando Maven</a></li>
+		
+									<li><a class="link_toc" href="../../cookbook/usando-tiles-com-vraptor3/">6. Usando tiles com vraptor3</a></li>
+		
+									<li><a class="link_toc" href="../../cookbook/interceptando-recursos-anotados/">7. Interceptando recursos anotados</a></li>
+		
+									<li><a class="link_toc" href="../../cookbook/job-scheduling-com-vraptor3-e-spring/">8. Job Scheduling com vRaptor3 e Spring</a></li>
+		
+									<li><a class="link_toc" href="../../cookbook/poupando-recursos-lazy-dependency-injection/">9. Poupando recursos - LAZY Dependency Injection</a></li>
+		
+									<li><a class="link_toc" href="../../cookbook/evitando-que-o-browser-faca-cache-das-paginas/">10. Evitando que o browser faça cache das páginas</a></li>
+		
+									<li><a class="link_toc" href="../../cookbook/rodando-o-vraptor3-no-jboss/">11. Rodando o VRaptor3 no JBoss</a></li>
+		
+									<li><a class="link_toc" href="../../cookbook/usando-o-header-referer-para-fazer-redirecionamentos/">12. Usando o Header Referer para fazer redirecionamentos</a></li>
+		
+                </ol>
+            </div><!-- submenu-->
+                        
+            <div id="textoCapitulo">
+	
+		<h2 class="chapter">Aceitando URLs com ou sem barra no final</h2>
+
+		<span class="paragraph"><strong class="definition"><em class="italic">por Tomaz Lavieri</em></strong></span><span class="paragraph">Para quem teve dificuldade como eu em conseguir determinar urls como</span><div class="java"><code class="java">@Path("produto/{produto.id}")</code></div><span class="paragraph">quando digitava a URI "/produto/1/" e o link n&atilde;o funcionava, segue abaixo uma modifica&ccedil;&atilde;o 
+que corrige o problema.</span><div class="box"><h3>Nota do editor</h3>
+<span class="paragraph">Isso n&atilde;o &eacute; necessariamente um problema... a URL /abc &eacute; diferente da /abc/
+portanto o comportamento de dar 404 &eacute; o esperado. Mas se voc&ecirc; quiser que sejam urls equivalentes
+voc&ecirc; pode escrever a classe abaixo.</span></div><div class="java"><code class="java">
+<span class="java4">import </span><span class="java10">br.com.caelum.vraptor.Result;&nbsp; <br />
+</span><span class="java4">import </span><span class="java10">br.com.caelum.vraptor.core.RequestInfo;&nbsp; <br />
+</span><span class="java4">import </span><span class="java10">br.com.caelum.vraptor.http.route.ResourceNotFoundException;&nbsp; <br />
+</span><span class="java4">import </span><span class="java10">br.com.caelum.vraptor.http.route.Router;&nbsp; <br />
+</span><span class="java4">import </span><span class="java10">br.com.caelum.vraptor.ioc.Component;&nbsp; <br />
+</span><span class="java4">import </span><span class="java10">br.com.caelum.vraptor.ioc.RequestScoped;&nbsp; <br />
+</span><span class="java4">import </span><span class="java10">br.com.caelum.vraptor.resource.DefaultResourceNotFoundHandler;&nbsp; <br />
+</span><span class="java4">import </span><span class="java10">br.com.caelum.vraptor.resource.HttpMethod;&nbsp; <br />
+</span><span class="java4">import </span><span class="java10">br.com.caelum.vraptor.view.Results;&nbsp; <br />
+&nbsp; <br />
+</span><span class="java16">@Component&nbsp; <br />
+@RequestScoped&nbsp; <br />
+</span><span class="java4">public class </span><span class="java10">Error404 </span><span class="java4">extends </span><span class="java10">DefaultResourceNotFoundHandler&nbsp; </span><span class="java8">{&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">private final </span><span class="java10">Router router;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">private final </span><span class="java10">Result result;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">Error404</span><span class="java8">(</span><span class="java10">Router router, Result result</span><span class="java8">) {&nbsp; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">this</span><span class="java10">.router = router;&nbsp; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">this</span><span class="java10">.result = result;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}&nbsp; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java16">@Override&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">couldntFind</span><span class="java8">(</span><span class="java10">RequestInfo requestInfo</span><span class="java8">) {&nbsp; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">try </span><span class="java8">{&nbsp; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">String uri = requestInfo.getRequestedUri</span><span class="java8">()</span><span class="java10">;&nbsp; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">if </span><span class="java8">(</span><span class="java10">uri.endsWith</span><span class="java8">(</span><span class="java5">&#34;/&#34;</span><span class="java8">)) {&nbsp; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">tryMovePermanentlyTo</span><span class="java8">(</span><span class="java10">requestInfo, uri.substring</span><span class="java8">(</span><span class="java7">0</span><span class="java10">, uri.length</span><span class="java8">()</span><span class="java10">-</span><span class="java7">1</span><span class="java8">))</span><span class="java10">;&nbsp; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java8">} </span><span class="java4">else </span><span class="java8">{&nbsp; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">tryMovePermanentlyTo</span><span class="java8">(</span><span class="java10">requestInfo, uri + </span><span class="java5">&#34;/&#34;</span><span class="java8">)</span><span class="java10">;&nbsp; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java8">}&nbsp; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } </span><span class="java4">catch </span><span class="java8">(</span><span class="java10">ResourceNotFoundException ex</span><span class="java8">) {&nbsp; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">super</span><span class="java10">.couldntFind</span><span class="java8">(</span><span class="java10">requestInfo</span><span class="java8">)</span><span class="java10">;&nbsp; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java8">}&nbsp; <br />
+&nbsp;&nbsp;&nbsp; }&nbsp; <br />
+&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">private </span><span class="java9">void </span><span class="java10">tryMovePermanentlyTo</span><span class="java8">(</span><span class="java10">RequestInfo requestInfo, String newUri</span><span class="java8">) {&nbsp; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">router.parse</span><span class="java8">(</span><span class="java10">newUri, HttpMethod.of</span><span class="java8">(</span><span class="java10">requestInfo.getRequest</span><span class="java8">())</span><span class="java10">, <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; requestInfo.getRequest</span><span class="java8">())</span><span class="java10">;&nbsp; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; result.use</span><span class="java8">(</span><span class="java10">Results.http</span><span class="java8">())</span><span class="java10">.movedPermanentlyTo</span><span class="java8">(</span><span class="java10">newUri</span><span class="java8">)</span><span class="java10">;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}&nbsp; <br />
+}</span></code></div>
+
+
+</div><!-- content -->
+            
+        </div><!-- content cnt -->
+    </div><!-- content wrap-->
+    
+
+
+
+
+		
+
+    <div id="footerWrap">
+    	<div id="footerContent">              
+            <div id="suporteFooter">
+	           	<a href="http://www.caelum.com.br/contato/" class="moreIcon" title="Saiba Mais"><span>+</span></a>
+	           	<h3><a href="http://www.caelum.com.br/contato/">Suporte</a></h3>
+                <p><a href="http://www.caelum.com.br/contato/">Conheça os nossos planos de suporte online, e tenha a confiança de ter suas dúvidas e problemas rapidamente solucionados.</a></p>            
+            </div><!-- suporte-->
+            <div id="consultoriaFooter">
+           		<a href="http://www.caelum.com.br/servicos/consultoria/" class="moreIcon" title="Saiba Mais"><span>+</span></a>
+           		<h3><a href="http://www.caelum.com.br/servicos/consultoria/">Consultoria</a></h3>
+                <p><a href="http://www.caelum.com.br/servicos/consultoria/">A equipe que desenvolveu o VRaptor está disponível para auxiliar a sua equipe de desenvolvimento. Conheça nossos planos de consultoria.</a></p>            
+            </div><!-- consultoria-->
+        	<div id="treinamentoFooter">
+            	<a href="http://www.caelum.com.br/curso/fj-28-vraptor-hibernate-ajax/" class="moreIcon" title="Saiba Mais"><span>+</span></a><h3><a href="http://www.caelum.com.br/curso/fj-28-vraptor-hibernate-ajax/">Treinamento</a></h3>
+                <p><a href="http://www.caelum.com.br/curso/fj-28-vraptor-hibernate-ajax/">A Caelum oferece treinamento oficial de VRaptor, com Hibernate e Ajax, focando nas melhores práticas com VRaptor. Clique e saiba mais.</a></p>
+            </div><!--treinamento-->
+     <div class="footbar">
+            	<img class="logoFooter" src="../../images/logoCaelumGray-trans.png" alt="vraptor logo" />
+                <ul>
+                	<li>site map:</li>
+                    <li><a href="../../">home</a></li>
+                    <li>|</li>
+                    <li><a href="../../download.jsp">download</a></li>
+                    <li>|</li>
+                    <li><a href="../../documentacao/">Documentação</a></li>
+                    <li>|</li>
+                    <li><a href="../../beneficios.jsp">Benef&iacute;cios</a></li>
+                    <li>|</li>
+                    <li><a href="../../suporte.jsp">Suporte</a></li>
+                    <li>|</li>
+                    <li><a href="../../vraptor2.jsp">vraptor2</a></li>
+                </ul>
+                <p><a href="http://www.apache.org/licenses/LICENSE-2.0">Licença Apache 2.0</a> - VRaptor ©2009 Caelum - Ensino e Inovação</p>
+            </div><!-- footnote-->
+        </div><!-- footer content -->
+        <a id="signature" href="mailto:lokidg@gmail.com">loki|design</a>
+    </div><!-- footer wrap-->
+<script type="text/javascript">
+	var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+	document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+<script type="text/javascript">
+	try {
+	var pageTracker = _gat._getTracker("UA-270161-11");
+	pageTracker._trackPageview();
+	} catch(err) {}
+ </script>
+    
+</body>
+</html>

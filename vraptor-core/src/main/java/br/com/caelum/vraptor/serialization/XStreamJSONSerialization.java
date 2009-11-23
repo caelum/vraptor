@@ -49,11 +49,20 @@ public class XStreamJSONSerialization implements JSONSerialization {
 
 	public <T> Serializer from(T object) {
 		response.setContentType("application/json");
+		return getSerializer().from(object);
+	}
+
+	protected Serializer getSerializer() {
 		try {
-			return new XStreamXMLSerializer(getXStream(), response.getWriter(), extractor).from(object);
+			return new XStreamXMLSerializer(getXStream(), response.getWriter(), extractor);
 		} catch (IOException e) {
-			throw new ResultException("Unable to serialize data",e);
+			throw new ResultException("Unable to serialize data", e);
 		}
+	}
+
+	public <T> Serializer from(T object, String alias) {
+		response.setContentType("application/json");
+		return getSerializer().from(object, alias);
 	}
 
 	/**

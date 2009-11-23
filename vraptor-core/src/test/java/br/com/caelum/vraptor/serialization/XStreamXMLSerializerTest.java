@@ -92,6 +92,13 @@ public class XStreamXMLSerializerTest {
 		serializer.from(order).serialize();
 		assertThat(result(), is(equalTo(expectedResult)));
 	}
+	@Test
+	public void shouldUseAlias() {
+		String expectedResult = "<customOrder>\n  <price>15.0</price>\n  <comments>pack it nicely, please</comments>\n</customOrder>";
+		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
+		serializer.from(order, "customOrder").serialize();
+		assertThat(result(), is(equalTo(expectedResult)));
+	}
 
 	public static enum Type { basic, advanced }
 	class BasicOrder extends Order {
@@ -112,23 +119,22 @@ public class XStreamXMLSerializerTest {
 
 
 	@Test
-	@Ignore("It makes sense?")
 	public void shouldSerializeCollection() {
 		String expectedResult = "<order>\n  <price>15.0</price>\n  <comments>pack it nicely, please</comments>\n</order>";
 		expectedResult += expectedResult;
+		expectedResult = "<list>" + expectedResult + "</list>";
 		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
 		serializer.from(Arrays.asList(order, order)).serialize();
 		assertThat(result(), is(equalTo(expectedResult)));
 	}
 
 	@Test
-	@Ignore("not supported yet")
 	public void shouldSerializeCollectionWithPrefixTag() {
 		String expectedResult = "<order>\n  <price>15.0</price>\n  <comments>pack it nicely, please</comments>\n</order>";
 		expectedResult += expectedResult;
 		expectedResult = "<orders>" + expectedResult + "</orders>";
 		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
-		//serializer.from("orders", Arrays.asList(order, order)).serialize();
+		serializer.from(Arrays.asList(order, order), "orders").serialize();
 		assertThat(result(), is(equalTo(expectedResult)));
 	}
 

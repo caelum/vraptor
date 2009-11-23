@@ -82,20 +82,27 @@ public class XStreamXMLSerializer implements Serializer {
 		return type;
 	}
 
-	public <T> Serializer from(T object) {
+	public <T> Serializer from(T object, String alias) {
 		if (object == null) {
 			throw new NullPointerException("You can't serialize null objects");
 		}
 		if (Collection.class.isInstance(object)) {
 			throw new IllegalArgumentException("It's not possible to serialize colections yet. " +
-					"Create a class that wraps this collections by now.");
+				"Create a class that wraps this collections by now.");
+		} else {
+			Class<?> type = object.getClass();
+			xstream.alias(alias, type);
+			excludeNonPrimitiveFields(type);
 		}
-		Class<?> type = object.getClass();
-		String name = extractor.nameFor(type);
-		xstream.alias(name, type);
-		excludeNonPrimitiveFields(type);
 		this.toSerialize = object;
 		return this;
+	}
+
+	public <T> Serializer from(T object) {
+		if (object == null) {
+			throw new NullPointerException("You can't serialize null objects");
+		}
+		return from(object, extractor.nameFor(object.getClass()));
 	}
 
 	private void excludeNonPrimitiveFields(Class<?> type) {

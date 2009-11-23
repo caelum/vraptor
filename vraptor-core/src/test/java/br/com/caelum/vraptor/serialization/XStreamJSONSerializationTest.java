@@ -107,6 +107,14 @@ public class XStreamJSONSerializationTest {
 		assertThat(result(), is(equalTo(expectedResult)));
 	}
 
+	@Test
+	public void shouldUseAlias() {
+		String expectedResult = "{\"customOrder\": {\n  \"price\": 15.0,\n  \"comments\": \"pack it nicely, please\"\n}}";
+		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
+		serialization.from(order, "customOrder").serialize();
+		assertThat(result(), is(equalTo(expectedResult)));
+	}
+
 	public static enum Type { basic, advanced }
 	class BasicOrder extends Order {
 		public BasicOrder(Client client, double price, String comments, Type type) {

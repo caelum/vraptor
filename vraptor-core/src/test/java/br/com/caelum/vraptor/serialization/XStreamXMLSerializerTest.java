@@ -104,7 +104,6 @@ public class XStreamXMLSerializerTest {
 
 	@Test
 	public void shouldSerializeEnumFields() {
-//		String expectedResult = "<basicOrder>\n  <type>basic</type>\n  <price>15.0</price>\n  <comments>pack it nicely, please</comments>\n</basicOrder>";
 		Order order = new BasicOrder(new Client("guilherme silveira"), 15.0, "pack it nicely, please", Type.basic);
 		serializer.from(order).serialize();
 		String result = result();
@@ -146,7 +145,6 @@ public class XStreamXMLSerializerTest {
 
 	@Test
 	public void shouldSerializeParentFields() {
-//		String expectedResult = "<advancedOrder>\n  <notes>complex package</notes>\n  <price>15.0</price>\n  <comments>pack it nicely, please</comments>\n</advancedOrder>";
 		Order order = new AdvancedOrder(null, 15.0, "pack it nicely, please", "complex package");
 		serializer.from(order).serialize();
 		assertThat(result(), containsString("<notes>complex package</notes>"));
@@ -210,6 +208,7 @@ public class XStreamXMLSerializerTest {
 	private String result() {
 		return new String(stream.toByteArray());
 	}
+
 
 
 }

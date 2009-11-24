@@ -17,5 +17,10 @@ public interface Restfulie {
 	public List<Transition> getTransitions();
 
 	public List<State> getStates();
+	
+	/**
+	 * TODO Should be removed soon.
+	 */
+	public void clear();
 
 }

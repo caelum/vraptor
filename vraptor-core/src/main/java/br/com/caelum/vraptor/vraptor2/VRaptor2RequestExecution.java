@@ -28,6 +28,7 @@ import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
 import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
 import br.com.caelum.vraptor.interceptor.download.DownloadInterceptor;
 import br.com.caelum.vraptor.interceptor.multipart.MultipartInterceptor;
+import br.com.caelum.vraptor.ioc.PrototypeScoped;
 import br.com.caelum.vraptor.vraptor2.outject.OutjectionInterceptor;
 
 /**
@@ -35,6 +36,7 @@ import br.com.caelum.vraptor.vraptor2.outject.OutjectionInterceptor;
  *
  * @author Guilherme Silveira
  */
+@PrototypeScoped
 public class VRaptor2RequestExecution implements RequestExecution {
     private final InterceptorStack interceptorStack;
     private final InstantiateInterceptor instantiator;

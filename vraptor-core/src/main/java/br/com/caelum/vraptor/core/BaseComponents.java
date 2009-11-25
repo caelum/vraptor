@@ -171,15 +171,18 @@ public class BaseComponents {
     		TypeCreator.class, CacheBasedTypeCreator.class
     );
 
+    private static final Map<Class<?>, Class<?>> PROTOTYPE_COMPONENTS = classMap(
+    		InterceptorStack.class, 						DefaultInterceptorStack.class,
+    		RequestExecution.class, 						DefaultRequestExecution.class
+    );
+
     private static final Map<Class<?>, Class<?>> REQUEST_COMPONENTS = classMap(
-            InterceptorStack.class, 						DefaultInterceptorStack.class,
             MethodInfo.class, 								DefaultMethodInfo.class,
             LogicResult.class, 								DefaultLogicResult.class,
             PageResult.class, 								DefaultPageResult.class,
             HttpResult.class, 								DefaultHttpResult.class,
             RefererResult.class, 							DefaultRefererResult.class,
             PathResolver.class, 							DefaultPathResolver.class,
-            RequestExecution.class, 						DefaultRequestExecution.class,
             ValidationViewsFactory.class,					DefaultValidationViewsFactory.class,
             Result.class, 									DefaultResult.class,
             Validator.class, 								DefaultValidator.class,
@@ -269,11 +272,13 @@ public class BaseComponents {
         return REQUEST_COMPONENTS;
     }
 
+    public static Map<Class<?>, Class<?>> getPrototypeScoped() {
+		return PROTOTYPE_COMPONENTS;
+	}
+
     public static Class<? extends Converter<?>>[] getBundledConverters() {
         return BUNDLED_CONVERTERS;
     }
-
-
 
     public static Class<? extends Annotation>[] getStereotypes() {
     	return STEREOTYPES;

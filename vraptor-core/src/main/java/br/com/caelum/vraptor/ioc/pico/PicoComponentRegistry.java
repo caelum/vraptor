@@ -2,17 +2,17 @@
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource
  * All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); 
- * you may not use this file except in compliance with the License. 
- * You may obtain a copy of the License at 
- * 
- * 	http://www.apache.org/licenses/LICENSE-2.0 
- * 
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an "AS IS" BASIS, 
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
- * See the License for the specific language governing permissions and 
- * limitations under the License. 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * 	http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package br.com.caelum.vraptor.ioc.pico;
@@ -22,6 +22,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import org.picocontainer.Characteristics;
 import org.picocontainer.DefaultPicoContainer;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.behaviors.Caching;
@@ -36,6 +37,7 @@ import br.com.caelum.vraptor.ioc.AbstractComponentRegistry;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.ComponentFactory;
 import br.com.caelum.vraptor.ioc.ComponentFactoryIntrospector;
+import br.com.caelum.vraptor.ioc.PrototypeScoped;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.ioc.SessionScoped;
 
@@ -56,6 +58,7 @@ public class PicoComponentRegistry extends AbstractComponentRegistry {
     private final Map<Class<?>, Class<?>> applicationScoped = new HashMap<Class<?>, Class<?>>();
     private final Map<Class<?>, Class<?>> sessionScoped = new HashMap<Class<?>, Class<?>>();
     private final Map<Class<?>, Class<?>> requestScoped = new HashMap<Class<?>, Class<?>>();
+    private final Map<Class<?>, Class<?>> prototypeScoped = new HashMap<Class<?>, Class<?>>();
     private MutablePicoContainer appContainer;
     private boolean initialized = false;
 
@@ -89,8 +92,11 @@ public class PicoComponentRegistry extends AbstractComponentRegistry {
                 this.appContainer.addComponent(requiredType, type);
             }
         } else if (type.isAnnotationPresent(SessionScoped.class)) {
-            logger.debug("Registering " + type.getName() + " a an session component");
+            logger.debug("Registering " + type.getName() + " as a session component");
             this.sessionScoped.put(requiredType, type);
+        } else if (type.isAnnotationPresent(PrototypeScoped.class)) {
+        	logger.debug("Registering " + type.getName() + " as a prototype component");
+        	this.prototypeScoped.put(requiredType, type);
         } else {
             // default behaviour: even without @RequestScoped
             if (!type.isAnnotationPresent(RequestScoped.class)) {
@@ -149,6 +155,9 @@ public class PicoComponentRegistry extends AbstractComponentRegistry {
 
         for (Map.Entry<Class<?>, Class<?>> entry : requestScoped.entrySet()) {
             requestContainer.addComponent(entry.getKey(), entry.getValue());
+        }
+        for (Map.Entry<Class<?>, Class<?>> entry : prototypeScoped.entrySet()) {
+        	requestContainer.as(Characteristics.NO_CACHE).addComponent(entry.getKey(), entry.getValue());
         }
         requestContainer.addComponent(request).addComponent(request.getRequest()).addComponent(request.getResponse());
 

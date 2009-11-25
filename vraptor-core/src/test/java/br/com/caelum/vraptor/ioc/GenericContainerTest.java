@@ -128,6 +128,12 @@ public abstract class GenericContainerTest {
 		mockery.assertIsSatisfied();
 	}
 
+	@Test
+	public void canProvideAllPrototypeScopedComponents() {
+		checkAvailabilityFor(false, BaseComponents.getPrototypeScoped().keySet());
+		mockery.assertIsSatisfied();
+	}
+
 	@SuppressWarnings("unchecked")
 	@Test
 	public void canProvideAllRequestScopedComponents() {
@@ -206,6 +212,33 @@ public abstract class GenericContainerTest {
 	@Test
 	public void processesCorrectlyRequestBasedComponents() {
 		checkAvailabilityFor(false, MyRequestComponent.class, MyRequestComponent.class);
+		mockery.assertIsSatisfied();
+	}
+	@Component
+	@PrototypeScoped
+	public static class MyPrototypeComponent {
+
+	}
+
+	@SuppressWarnings("unchecked")
+	@Test
+	public void processesCorrectlyPrototypeBasedComponents() {
+		registerAndGetFromContainer(MyPrototypeComponent.class, MyPrototypeComponent.class);
+		executeInsideRequest(new WhatToDo() {
+			public Object execute(RequestInfo request, int counter) {
+				return provider.provideForRequest(request, new Execution() {
+					public Object insideRequest(Container container) {
+						ComponentRegistry registry = container.instanceFor(ComponentRegistry.class);
+						registry.register(MyPrototypeComponent.class, MyPrototypeComponent.class);
+
+						MyPrototypeComponent instance1 = container.instanceFor(MyPrototypeComponent.class);
+						MyPrototypeComponent instance2 = container.instanceFor(MyPrototypeComponent.class);
+						assertThat(instance1, not(sameInstance(instance2)));
+						return null;
+					}
+				});
+			}
+		});
 		mockery.assertIsSatisfied();
 	}
 

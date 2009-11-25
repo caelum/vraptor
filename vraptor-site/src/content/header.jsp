@@ -32,7 +32,7 @@
             
             <ul id="langMenu">
             	<li><a id="engBtn" href="${path }/en/"><span>ENGLISH</span></a></li>
-                <li><a id="ptBtn" href="${path }/"><span>PORTUGUÊS</span></a></li>
+                <li><a id="ptBtn" href="${path }/pt/"><span>PORTUGUÊS</span></a></li>
             </ul><!-- langMenu-->            
         </div><!-- header content -->
     </div><!-- header wrap-->

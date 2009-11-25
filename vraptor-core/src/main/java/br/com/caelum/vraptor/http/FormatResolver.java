@@ -13,15 +13,16 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package br.com.caelum.vraptor.serialization;
-
+package br.com.caelum.vraptor.http;
 
 /**
- * Basic json serialization support using a Json Serializer.
+ * Decides which format the request accepts.
  *
  * @author Lucas Cavalcanti
- * @version 3.0.2
+ * @author Jose Donizetti
+ * @since 3.0.3
+ *
  */
-public interface JSONSerialization extends Serialization {
-
+public interface FormatResolver {
+	String getAcceptFormat();
 }

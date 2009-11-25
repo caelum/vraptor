@@ -18,6 +18,7 @@
 package br.com.caelum.vraptor.view;
 
 import br.com.caelum.vraptor.serialization.JSONSerialization;
+import br.com.caelum.vraptor.serialization.RepresentationResult;
 import br.com.caelum.vraptor.serialization.XMLSerialization;
 
 /**
@@ -84,5 +85,14 @@ public class Results {
     public static Class<JSONSerialization> json() {
     	return JSONSerialization.class;
     }
+
+    /**
+     * Uses a representation of an object based on request accept format.
+     */
+    public static Class<RepresentationResult> representation() {
+    	return RepresentationResult.class;
+    }
+
+
 
 }

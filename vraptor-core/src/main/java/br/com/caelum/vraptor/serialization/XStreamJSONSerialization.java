@@ -43,6 +43,10 @@ public class XStreamJSONSerialization implements JSONSerialization {
 		this.extractor = extractor;
 	}
 
+	public boolean accepts(String format) {
+		return "json".equals(format);
+	}
+
 	public <T> Serializer from(T object) {
 		response.setContentType("application/json");
 		try {

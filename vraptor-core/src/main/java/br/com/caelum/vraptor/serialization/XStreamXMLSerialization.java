@@ -42,6 +42,10 @@ public class XStreamXMLSerialization implements XMLSerialization {
 		this.extractor = extractor;
 	}
 
+	public boolean accepts(String format) {
+		return "xml".equals(format);
+	}
+
 	public <T> Serializer from(T object) {
 		response.setContentType("application/xml");
 		try {

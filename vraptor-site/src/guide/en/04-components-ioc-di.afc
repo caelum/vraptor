@@ -54,6 +54,14 @@ public class HibernateControl {
 }
 [/java]
 
+The implemented scopes are:
+[list]
+* @RequestScoped - component is the same during a request
+* @SessionScoped - component is the same during an Http session
+* @ApplicationScoped - component is a singleton, only one per application
+* @PrototypeScoped - component is instantiated whenever it is requested.
+[/list]
+
 [section ComponentFactory]
 
 It can happen that one of your class dependencies doesn't belong to your project, like 

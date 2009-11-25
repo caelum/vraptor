@@ -69,6 +69,8 @@ Por padrão existem estes tipos de views implementadas:
 	* Results.nothing(), apenas retorna o código de sucesso (HTTP 200 OK).
 	* Results.xml(), serializa objetos em xml.
 	* Results.json(), serializa objetos em json.
+	* Results.representation(), serializa objetos em um formato determinado pela requisição
+	 (parametro _format ou header Accept)
 [/list]
 
 [section Redirecionamento e forward]

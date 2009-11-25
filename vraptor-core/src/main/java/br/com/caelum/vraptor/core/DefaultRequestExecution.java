@@ -29,7 +29,7 @@ import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
 import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
 import br.com.caelum.vraptor.interceptor.download.DownloadInterceptor;
 import br.com.caelum.vraptor.interceptor.multipart.MultipartInterceptor;
-import br.com.caelum.vraptor.ioc.RequestScoped;
+import br.com.caelum.vraptor.ioc.PrototypeScoped;
 
 /**
  * A request execution process. The default order is extremely important but
@@ -37,7 +37,7 @@ import br.com.caelum.vraptor.ioc.RequestScoped;
  *
  * @author Guilherme Silveira
  */
-@RequestScoped
+@PrototypeScoped
 public class DefaultRequestExecution implements RequestExecution {
     private final InterceptorStack interceptorStack;
     private final InstantiateInterceptor instantiator;

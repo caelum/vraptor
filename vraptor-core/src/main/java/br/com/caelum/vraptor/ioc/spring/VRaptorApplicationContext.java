@@ -75,6 +75,7 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
         beanFactory.ignoreDependencyType(ServletContext.class);
         registerApplicationScopedComponentsOn(beanFactory);
         registerRequestScopedComponentsOn(beanFactory);
+        registerPrototypeScopedComponentsOn(beanFactory);
         registerCustomComponentsOn(beanFactory);
 
         new ComponentScanner(beanFactory, container).scan(basePackages);
@@ -91,6 +92,11 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
 		}
 	}
 
+    private void registerPrototypeScopedComponentsOn(DefaultListableBeanFactory beanFactory) {
+    	for (Class<?> prototypeComponent : BaseComponents.getPrototypeScoped().values()) {
+    		registerOn(beanFactory, prototypeComponent);
+    	}
+    }
 	private void registerCachedComponentsOn(DefaultListableBeanFactory beanFactory) {
         for (Class<?> cachedComponent : BaseComponents.getCachedComponents().values()) {
 			registerOn(beanFactory, cachedComponent, true);

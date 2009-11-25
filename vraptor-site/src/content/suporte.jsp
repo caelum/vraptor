@@ -10,6 +10,7 @@
                 	<li><a href="http://guj.com.br/forums/show/23.java" target="_blank"><em class="bigger"><fmt:message key="guj.link.text"/> »</em><br/>
 						<span><fmt:message key="guj.link.text2"/></span></a></li>
                     <li><a href="http://groups.google.com/group/caelum-vraptor/" target="_blank"><em><fmt:message key="lista.discussao"/> »</em></a></li>
+                    <li><a href="http://groups.google.com/group/caelum-vraptor-en/" target="_blank"><em><fmt:message key="lista.discussao.ingles"/> »</em></a></li>
                     <li><a href="http://groups.google.com/group/caelum-vraptor-dev/" target="_blank"><em><fmt:message key="lista.discussao.avancada"/> »</em></a></li>
                     <li><a href="http://github.com/caelum/vraptor/issues" target="_blank"><em><fmt:message key="bugs.features"/> »</em></a></li>
                 </ul>

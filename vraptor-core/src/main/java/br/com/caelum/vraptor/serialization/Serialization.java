@@ -15,13 +15,24 @@
  */
 package br.com.caelum.vraptor.serialization;
 
+import java.io.IOException;
+
+import br.com.caelum.vraptor.View;
 
 /**
- * Basic json serialization support using a Json Serializer.
+ * Creates a serializer of a given format.
  *
  * @author Lucas Cavalcanti
+ * @author Jose Donizetti
  * @version 3.0.2
  */
-public interface JSONSerialization extends Serialization {
+public interface Serialization extends View {
+	/**
+	 * Serializes this object to the clients writer.
+	 * @throws IOException
+	 */
+	public <T> Serializer from(T object);
+
+	public boolean accepts(String format);
 
 }

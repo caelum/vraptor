@@ -15,13 +15,16 @@
  */
 package br.com.caelum.vraptor.serialization;
 
+import br.com.caelum.vraptor.View;
 
 /**
- * Basic json serialization support using a Json Serializer.
- *
+ * Chooses a serializer to serialize an object.
  * @author Lucas Cavalcanti
- * @version 3.0.2
+ * @author Jose Donizetti
+ * @since 3.0.3
  */
-public interface JSONSerialization extends Serialization {
+public interface RepresentationResult extends View {
+
+	<T> Serializer from(T object);
 
 }

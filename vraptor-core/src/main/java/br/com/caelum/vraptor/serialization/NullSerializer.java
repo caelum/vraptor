@@ -15,13 +15,27 @@
  */
 package br.com.caelum.vraptor.serialization;
 
-
 /**
- * Basic json serialization support using a Json Serializer.
- *
+ * Doesn't serialize anything
  * @author Lucas Cavalcanti
- * @version 3.0.2
+ * @author Jose Donizetti
+ * @since 3.0.3
  */
-public interface JSONSerialization extends Serialization {
+public class NullSerializer implements Serializer {
+
+	public Serializer exclude(String... names) {
+		return this;
+	}
+
+	public <T> Serializer from(T object) {
+		return this;
+	}
+
+	public Serializer include(String... names) {
+		return this;
+	}
+
+	public void serialize() {
+	}
 
 }

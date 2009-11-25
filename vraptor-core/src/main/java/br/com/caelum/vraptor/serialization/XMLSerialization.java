@@ -15,9 +15,6 @@
  */
 package br.com.caelum.vraptor.serialization;
 
-import java.io.IOException;
-
-import br.com.caelum.vraptor.View;
 
 /**
  * Basic xml serialization support using a xml BasicSerializer.
@@ -25,12 +22,6 @@ import br.com.caelum.vraptor.View;
  * @author guilherme silveira
  * @version 3.0.2
  */
-public interface XMLSerialization extends View {
-
-	/**
-	 * Serializes this object to the clients writer.
-	 * @throws IOException
-	 */
-	public <T> Serializer from(T object);
+public interface XMLSerialization extends Serialization {
 
 }

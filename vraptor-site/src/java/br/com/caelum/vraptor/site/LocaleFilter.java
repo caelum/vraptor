@@ -10,6 +10,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.ImmutableBiMap;
@@ -18,6 +19,7 @@ import com.google.common.collect.ImmutableBiMap;
  * Servlet Filter implementation class LocaleFilter
  */
 public class LocaleFilter implements Filter {
+	private static final String VRAPTOR_LOCALE = "VRAPTOR_LOCALE";
 	private static final Locale PT_BR = new Locale("pt", "br");
 	private BiMap<String, String> en2pt;
 
@@ -27,11 +29,35 @@ public class LocaleFilter implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 
 		HttpServletRequest req = (HttpServletRequest) request;
-
 		String path = req.getContextPath();
 		String uri = req.getRequestURI().replaceFirst(path, "");
+		HttpServletResponse res = (HttpServletResponse) response;
+
+		if (uri.equals("/")) {
+			Locale locale = (Locale) req.getSession().getAttribute(VRAPTOR_LOCALE);
+			if (locale == null) {
+				String accept = req.getHeader("accept-language");
+				if (accept != null && accept.startsWith("en")) {
+					req.getSession().setAttribute(VRAPTOR_LOCALE, Locale.ENGLISH);
+					res.sendRedirect(req.getContextPath() + "/en");
+					return;
+				}
+				req.getSession().setAttribute(VRAPTOR_LOCALE, PT_BR);
+				locale = PT_BR;
+			} else if (locale.equals(Locale.ENGLISH)) {
+				res.sendRedirect(req.getContextPath() + "/en");
+				return;
+			}
+			request.setAttribute("locale", PT_BR);
+		} else if (uri.equals("/pt") || uri.equals("/pt/")){
+			req.getSession().setAttribute(VRAPTOR_LOCALE, PT_BR);
+			res.sendRedirect(req.getContextPath() + "/");
+			return;
+		}
 
 		request.setAttribute("locale", isEnglish(uri)? Locale.ENGLISH : PT_BR);
+		req.getSession().setAttribute(VRAPTOR_LOCALE, req.getAttribute("locale"));
+
 		request.setAttribute("path", path);
 
 		if (en2pt.containsKey(uri)) {

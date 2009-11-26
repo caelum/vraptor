@@ -221,7 +221,7 @@ will result in something like:
 
 The default implementation is based on XStream, so you can configure the serialization
 with annotations and direct configuration on XStream. It is just creating a class like:
-[code]
+[java]
 @Component
 public class CustomXMLSerialization extends XStreamXMLSerialization {
 //or public class CustomJSONSerialization extends XStreamJSONSerialization {
@@ -234,4 +234,92 @@ public class CustomXMLSerialization extends XStreamXMLSerialization {
 		return xStream;
 	}
 }
+[/java]
+
+[title Serializando Collections]
+
+When serializing collections, vRaptor will wrap their elements with a "list" tag:
+
+[java]
+	List<Client> clients = ...;
+	result.use(json()).from(clients).serialize();
+	//or
+	result.use(xml()).from(clients).serialize();
+[/java]
+
+will result in something like
+[code]
+{"list": [
+	{
+		"name": "John"
+	},
+	{
+		"name": "Sue"
+	}
+]}
+[/code]
+or
+[code]
+<list>
+	<client>
+		<name>John</name>
+	</client>
+	<client>
+		<name>Sue</name>
+	</client>
+</list>
+[/code]
+
+You can customize the wrapper element via:
+[java]
+	List<Client> clients = ...;
+	result.use(json()).from(clients, "clients").serialize();
+	//or
+	result.use(xml()).from(clients, "clients").serialize();
+[/java]
+will result in something like:
+[code]
+{"clients": [
+	{
+		"name": "John"
+	},
+	{
+		"name": "Sue"
+	}
+]}
+[/code]
+or
+[code]
+<clients>
+	<client>
+		<name>John</name>
+	</client>
+	<client>
+		<name>Sue</name>
+	</client>
+</clients>
+[/code]
+
+Includes and excludes work the same as if you were serializing an element inside the collection.
+For instance, if you want to include the client's address:
+[java]
+	List<Cliente> clients = ...;
+	result.use(json()).from(clients).include("address").serialize();
+[/java]
+results in:
+[code]
+{"list": [
+	{
+		"name": "John",
+		"address": {
+			"street": "Vergueiro, 3185"
+		}
+	},
+	{
+		"name": "Sue",
+		"address": {
+			"street": "Vergueiro, 3185"
+		}
+	}
+]}
 [/code]

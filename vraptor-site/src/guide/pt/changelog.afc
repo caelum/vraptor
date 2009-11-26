@@ -2,6 +2,7 @@
 
 [section 3.0.3 (a ser lançado)]
 [list]
+* agora é possível serializar coleções usando result.use(xml()) e result.use(json())
 * novo escopo @PrototypeScoped, que cria sempre uma nova instância da classe anotada cada vez que
 ela for requisitada.
 * nova view: result.use(Results.representation()).from(objeto).serialize();

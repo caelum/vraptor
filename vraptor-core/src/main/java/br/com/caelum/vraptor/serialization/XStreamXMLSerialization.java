@@ -24,6 +24,7 @@ import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.view.ResultException;
 
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.mapper.MapperWrapper;
 
 /**
  * XStream implementation for XmlSerialization
@@ -68,8 +69,13 @@ public class XStreamXMLSerialization implements XMLSerialization {
 	 * You can override this method for configuring XStream before serialization
 	 */
 	protected XStream getXStream() {
-		XStream xStream = new XStream();
-		return xStream;
+		return new XStream() {
+			{setMode(NO_REFERENCES);}
+			@Override
+			protected MapperWrapper wrapMapper(MapperWrapper next) {
+				return new VRaptorClassMapper(next, extractor);
+			}
+		};
 	}
 
 }

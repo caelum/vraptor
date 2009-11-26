@@ -19,9 +19,11 @@ import java.io.Writer;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.Map.Entry;
 
 import net.vidageek.mirror.dsl.Mirror;
@@ -87,14 +89,20 @@ public class XStreamXMLSerializer implements Serializer {
 			throw new NullPointerException("You can't serialize null objects");
 		}
 		if (Collection.class.isInstance(object)) {
-			throw new IllegalArgumentException("It's not possible to serialize colections yet. " +
-				"Create a class that wraps this collections by now.");
+			xstream.alias(alias, List.class);
+			List<Object> list = new ArrayList<Object>((Collection<?>)object);
+			for (Object element : list) {
+				if (element != null && !isPrimitive(element.getClass()) && !excludes.containsKey(element.getClass())) {
+					excludeNonPrimitiveFields(element.getClass());
+				}
+			}
+			this.toSerialize = list;
 		} else {
 			Class<?> type = object.getClass();
 			xstream.alias(alias, type);
 			excludeNonPrimitiveFields(type);
+			this.toSerialize = object;
 		}
-		this.toSerialize = object;
 		return this;
 	}
 

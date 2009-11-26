@@ -127,7 +127,7 @@ public class XStreamXMLSerializerTest {
 	public void shouldSerializeCollection() {
 		String expectedResult = "  <order>\n    <price>15.0</price>\n    <comments>pack it nicely, please</comments>\n  </order>\n";
 		expectedResult += expectedResult;
-		expectedResult = "<arrayList>\n" + expectedResult + "</arrayList>";
+		expectedResult = "<list>\n" + expectedResult + "</list>";
 		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
 		serialization.from(Arrays.asList(order, order)).serialize();
 		assertThat(result(), is(equalTo(expectedResult)));

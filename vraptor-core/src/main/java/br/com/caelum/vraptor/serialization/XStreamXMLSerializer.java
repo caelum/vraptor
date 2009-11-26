@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import net.vidageek.mirror.dsl.Mirror;
-import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
@@ -43,13 +42,11 @@ public class XStreamXMLSerializer implements Serializer {
 	private final XStream xstream;
 	private final Writer writer;
 	private Object toSerialize;
-	private final TypeNameExtractor extractor;
 	private final Multimap<Class<?>, String> excludes = LinkedListMultimap.create();
 
-	public XStreamXMLSerializer(XStream xstream, Writer writer, TypeNameExtractor extractor) {
+	public XStreamXMLSerializer(XStream xstream, Writer writer) {
 		this.xstream = xstream;
 		this.writer = writer;
-		this.extractor = extractor;
 	}
 
 	private boolean isPrimitive(Class<?> type) {
@@ -85,11 +82,20 @@ public class XStreamXMLSerializer implements Serializer {
 	}
 
 	public <T> Serializer from(T object, String alias) {
+		from(object);
+		if (Collection.class.isInstance(object)) {
+			xstream.alias(alias, List.class);
+		} else {
+			xstream.alias(alias, object.getClass());
+		}
+		return this;
+	}
+
+	public <T> Serializer from(T object) {
 		if (object == null) {
 			throw new NullPointerException("You can't serialize null objects");
 		}
 		if (Collection.class.isInstance(object)) {
-			xstream.alias(alias, List.class);
 			List<Object> list = new ArrayList<Object>((Collection<?>)object);
 			for (Object element : list) {
 				if (element != null && !isPrimitive(element.getClass()) && !excludes.containsKey(element.getClass())) {
@@ -99,18 +105,10 @@ public class XStreamXMLSerializer implements Serializer {
 			this.toSerialize = list;
 		} else {
 			Class<?> type = object.getClass();
-			xstream.alias(alias, type);
 			excludeNonPrimitiveFields(type);
 			this.toSerialize = object;
 		}
 		return this;
-	}
-
-	public <T> Serializer from(T object) {
-		if (object == null) {
-			throw new NullPointerException("You can't serialize null objects");
-		}
-		return from(object, extractor.nameFor(object.getClass()));
 	}
 
 	private void excludeNonPrimitiveFields(Class<?> type) {
@@ -127,9 +125,7 @@ public class XStreamXMLSerializer implements Serializer {
 			String fieldName = getNameFor(field);
 			Type genericType = new Mirror().on(parentType).reflect().field(fieldName).getGenericType();
 			Class<?> fieldType = getActualType(genericType);
-			if (isCollection(genericType)) {
-				xstream.alias(extractor.nameFor(fieldType), fieldType);
-			}
+
 			if (!excludes.containsKey(fieldType)) {
 				excludeNonPrimitiveFields(fieldType);
 			}

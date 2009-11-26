@@ -130,7 +130,7 @@ public class XStreamJSONSerializationTest {
 	public void shouldSerializeCollection() {
 		String expectedResult = "  {\n    \"price\": 15.0,\n    \"comments\": \"pack it nicely, please\"\n  }";
 		expectedResult += ",\n" + expectedResult;
-		expectedResult = "{\"arrayList\": [\n" + expectedResult + "\n]}";
+		expectedResult = "{\"list\": [\n" + expectedResult + "\n]}";
 
 		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
 		serialization.from(Arrays.asList(order, order)).serialize();

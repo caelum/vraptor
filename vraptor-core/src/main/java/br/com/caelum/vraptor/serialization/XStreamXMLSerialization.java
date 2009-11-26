@@ -54,7 +54,7 @@ public class XStreamXMLSerialization implements XMLSerialization {
 
 	protected Serializer getSerializer() {
 		try {
-			return new XStreamXMLSerializer(getXStream(), response.getWriter(), extractor);
+			return new XStreamXMLSerializer(getXStream(), response.getWriter());
 		} catch (IOException e) {
 			throw new ResultException("Unable to serialize data", e);
 		}

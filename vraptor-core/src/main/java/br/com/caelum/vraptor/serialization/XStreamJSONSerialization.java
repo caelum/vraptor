@@ -55,7 +55,7 @@ public class XStreamJSONSerialization implements JSONSerialization {
 
 	protected Serializer getSerializer() {
 		try {
-			return new XStreamXMLSerializer(getXStream(), response.getWriter());
+			return new XStreamSerializer(getXStream(), response.getWriter());
 		} catch (IOException e) {
 			throw new ResultException("Unable to serialize data", e);
 		}

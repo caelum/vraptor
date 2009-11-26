@@ -18,6 +18,7 @@ package br.com.caelum.vraptor.config;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.typeCompatibleWith;
+import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 
@@ -26,11 +27,11 @@ import javax.servlet.ServletException;
 
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.jmock.Expectations;
-import org.jmock.Mockery;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.core.Execution;
 import br.com.caelum.vraptor.core.RequestInfo;
@@ -39,27 +40,20 @@ import br.com.caelum.vraptor.ioc.spring.SpringProvider;
 
 public class BasicConfigurationTest {
 
-    private Mockery mockery;
-    private ServletContext context;
+    @Mock private ServletContext context;
     private BasicConfiguration config;
 
     @Before
     public void config() {
-        this.mockery = new Mockery();
-        this.context = mockery.mock(ServletContext.class);
+        MockitoAnnotations.initMocks(this);
         this.config = new BasicConfiguration(context);
     }
 
     @Test
     public void shouldUseSpringContainerAsDefaultProvider() throws ServletException {
-        mockery.checking(new Expectations() {
-            {
-                one(context).getInitParameter(BasicConfiguration.CONTAINER_PROVIDER);
-                will(returnValue(null));
-            }
-        });
+        when(context.getInitParameter(BasicConfiguration.CONTAINER_PROVIDER)).thenReturn(null);
+
         MatcherAssert.assertThat(config.getProvider().getClass(), is(typeCompatibleWith(SpringProvider.class)));
-        mockery.assertIsSatisfied();
     }
 
     public static class MyCustomProvider implements ContainerProvider {
@@ -76,15 +70,11 @@ public class BasicConfigurationTest {
 
     @Test
     public void shouldAllowProviderOverriding() throws ServletException {
-        mockery.checking(new Expectations() {
-            {
-                one(context).getInitParameter(BasicConfiguration.CONTAINER_PROVIDER);
-                will(returnValue(MyCustomProvider.class.getName()));
-            }
-        });
+        when(context.getInitParameter(BasicConfiguration.CONTAINER_PROVIDER))
+        	.thenReturn(MyCustomProvider.class.getName());
+
         MatcherAssert.assertThat(config.getProvider().getClass(), Matchers.is(Matchers
                 .typeCompatibleWith(MyCustomProvider.class)));
-        mockery.assertIsSatisfied();
     }
 
     public static class DogProvider implements ContainerProvider {
@@ -105,19 +95,14 @@ public class BasicConfigurationTest {
 
     @Test
     public void shouldThrowInstantiationExceptionCauseIfThereIsSuchException() {
-        mockery.checking(new Expectations() {
-            {
-                one(context).getInitParameter(BasicConfiguration.CONTAINER_PROVIDER);
-                will(returnValue(DogProvider.class.getName()));
-            }
-        });
+        when(context.getInitParameter(BasicConfiguration.CONTAINER_PROVIDER))
+        	.thenReturn(DogProvider.class.getName());
         try {
             config.getProvider();
             Assert.fail();
         } catch (ServletException e) {
         	Assert.assertNotNull("Should have a cause", e.getRootCause());
             Assert.assertEquals(IOException.class, e.getRootCause().getClass());
-            mockery.assertIsSatisfied();
         }
     }
 }

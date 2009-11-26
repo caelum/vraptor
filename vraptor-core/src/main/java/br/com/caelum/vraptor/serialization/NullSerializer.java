@@ -38,4 +38,8 @@ public class NullSerializer implements Serializer {
 	public void serialize() {
 	}
 
+	public <T> Serializer from(T object, String alias) {
+		return this;
+	}
+
 }

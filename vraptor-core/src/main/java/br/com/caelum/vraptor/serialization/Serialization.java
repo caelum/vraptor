@@ -33,6 +33,12 @@ public interface Serialization extends View {
 	 */
 	public <T> Serializer from(T object);
 
+	/**
+	 * Serializes this object to the clients writer, with a given alias.
+	 * @throws IOException
+	 */
+	public <T> Serializer from(T object, String alias);
+
 	public boolean accepts(String format);
 
 }

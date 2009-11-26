@@ -223,7 +223,7 @@ vai resultar em algo parecido com:
 
 A implementação padrão é baseada no XStream, então é possível configurar a serialização
 via anotações ou configurações diretas ao XStream, bastando criar a classe:
-[code]
+[java]
 @Component
 public class CustomXMLSerialization extends XStreamXMLSerialization {
 //or public class CustomJSONSerialization extends XStreamJSONSerialization {
@@ -236,4 +236,92 @@ public class CustomXMLSerialization extends XStreamXMLSerialization {
 		return xStream;
 	}
 }
+[/java]
+
+[title Serializando Collections]
+
+Ao serializar coleções, o padrão é colocar a tag "list" em volta dos elementos:
+
+[java]
+	List<Cliente> clientes = ...;
+	result.use(json()).from(clientes).serialize();
+	//ou
+	result.use(xml()).from(clientes).serialize();
+[/java]
+
+vai resultar em algo como:
+[code]
+{"list": [
+	{
+		"nome": "Joao"
+	},
+	{
+		"nome": "Maria"
+	}
+]}
+[/code]
+ou 
+[code]
+<list>
+	<cliente>
+		<nome>Joao</nome>
+	</cliente>
+	<cliente>
+		<nome>Maria</nome>
+	</cliente>
+</list>
+[/code]
+
+É possível personalizar o elemento de fora usando o método:
+[java]
+	List<Cliente> clientes = ...;
+	result.use(json()).from(clientes, "clientes").serialize();
+	//ou
+	result.use(xml()).from(clientes, "clientes").serialize();
+[/java]
+vai resultar em algo como:
+[code]
+{"clientes": [
+	{
+		"nome": "Joao"
+	},
+	{
+		"nome": "Maria"
+	}
+]}
+[/code]
+ou 
+[code]
+<clientes>
+	<cliente>
+		<nome>Joao</nome>
+	</cliente>
+	<cliente>
+		<nome>Maria</nome>
+	</cliente>
+</clientes>
+[/code]
+
+Os includes e excludes funcionam como se você os estivesse aplicando num elemento de dentro da lista.
+Por exemplo se você quiser incluir o endereço no cliente:
+[java]
+	List<Cliente> clientes = ...;
+	result.use(json()).from(clientes).include("endereco").serialize();
+[/java]
+com resultado:
+[code]
+{"list": [
+	{
+		"nome": "Joao",
+		"endereco": {
+			"rua": "Vergueiro, 3185"
+		}
+	},
+	{
+		"nome": "Maria",
+		"endereco": {
+			"rua": "Vergueiro, 3185"
+		}
+	}
+]}
 [/code]

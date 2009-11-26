@@ -69,7 +69,9 @@ public class XStreamJSONSerialization implements JSONSerialization {
 	 * You can override this method for configuring XStream before serialization
 	 */
 	protected XStream getXStream() {
-		return new XStream(new JsonHierarchicalStreamDriver());
+		XStream stream = new XStream(new JsonHierarchicalStreamDriver());
+		stream.setMode(XStream.NO_REFERENCES);
+		return stream;
 	}
 
 }

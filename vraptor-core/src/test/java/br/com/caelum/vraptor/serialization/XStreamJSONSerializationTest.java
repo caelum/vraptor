@@ -5,6 +5,8 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
@@ -14,8 +16,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.jmock.Expectations;
-import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -27,23 +27,15 @@ public class XStreamJSONSerializationTest {
 
 	private XStreamJSONSerialization serialization;
 	private ByteArrayOutputStream stream;
-	private Mockery mockery;
-	private HttpServletResponse response;
 
 	@Before
     public void setup() throws Exception {
-		mockery = new Mockery();
         this.stream = new ByteArrayOutputStream();
-        response = mockery.mock(HttpServletResponse.class);
 
-		mockery.checking(new Expectations() {
-			{
-				one(response).setContentType("application/json");
-				allowing(response).getWriter();
-				will(returnValue(new PrintWriter(stream)));
-			}
-		});
-		this.serialization = new XStreamJSONSerialization(response, new DefaultTypeNameExtractor());
+        HttpServletResponse response = mock(HttpServletResponse.class);
+        when(response.getWriter()).thenReturn(new PrintWriter(stream));
+
+        this.serialization = new XStreamJSONSerialization(response, new DefaultTypeNameExtractor());
     }
 
 	public static class Address {
@@ -135,23 +127,23 @@ public class XStreamJSONSerializationTest {
 
 
 	@Test
-	@Ignore("It makes sense?")
 	public void shouldSerializeCollection() {
-		String expectedResult = "<order>\n  <price>15.0</price>\n  <comments>pack it nicely, please</comments>\n</order>";
-		expectedResult += expectedResult;
+		String expectedResult = "  {\n    \"price\": 15.0,\n    \"comments\": \"pack it nicely, please\"\n  }";
+		expectedResult += ",\n" + expectedResult;
+		expectedResult = "{\"arrayList\": [\n" + expectedResult + "\n]}";
+
 		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
 		serialization.from(Arrays.asList(order, order)).serialize();
 		assertThat(result(), is(equalTo(expectedResult)));
 	}
 
 	@Test
-	@Ignore("not supported yet")
 	public void shouldSerializeCollectionWithPrefixTag() {
-		String expectedResult = "<order>\n  <price>15.0</price>\n  <comments>pack it nicely, please</comments>\n</order>";
-		expectedResult += expectedResult;
-		expectedResult = "<orders>" + expectedResult + "</orders>";
+		String expectedResult = "  {\n    \"price\": 15.0,\n    \"comments\": \"pack it nicely, please\"\n  }";
+		expectedResult += ",\n" + expectedResult;
+		expectedResult = "{\"orders\": [\n" + expectedResult + "\n]}";
 		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
-		//serializer.from("orders", Arrays.asList(order, order)).serialize();
+		serialization.from(Arrays.asList(order, order), "orders").serialize();
 		assertThat(result(), is(equalTo(expectedResult)));
 	}
 

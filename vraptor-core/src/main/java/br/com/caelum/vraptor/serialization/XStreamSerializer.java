@@ -22,8 +22,11 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.Map.Entry;
 
 import net.vidageek.mirror.dsl.Mirror;
@@ -33,18 +36,19 @@ import com.google.common.collect.Multimap;
 import com.thoughtworks.xstream.XStream;
 
 /**
- * A Xml Serializer based on XStream
+ * A Serializer based on XStream
  * @author Lucas Cavalcanti
  * @since 3.0.2
  */
-public class XStreamXMLSerializer implements Serializer {
+public class XStreamSerializer implements Serializer {
 
 	private final XStream xstream;
 	private final Writer writer;
 	private Object toSerialize;
 	private final Multimap<Class<?>, String> excludes = LinkedListMultimap.create();
+	private Set<Class<?>> elementTypes;
 
-	public XStreamXMLSerializer(XStream xstream, Writer writer) {
+	public XStreamSerializer(XStream xstream, Writer writer) {
 		this.xstream = xstream;
 		this.writer = writer;
 	}
@@ -62,7 +66,10 @@ public class XStreamXMLSerializer implements Serializer {
 
 	public Serializer exclude(String... names) {
 		for (String name : names) {
-			xstream.omitField(getParentTypeFor(name), getNameFor(name));
+			Set<Class<?>> parentTypes = getParentTypesFor(name);
+			for (Class<?> type : parentTypes) {
+				xstream.omitField(type, getNameFor(name));
+			}
 		}
 		return this;
 	}
@@ -72,8 +79,20 @@ public class XStreamXMLSerializer implements Serializer {
 		return path[path.length-1];
 	}
 
-	private Class<?> getParentTypeFor(String name) {
-		Class<?> type = toSerialize.getClass();
+	private Set<Class<?>> getParentTypesFor(String name) {
+		if (elementTypes == null) {
+			Class<?> type = toSerialize.getClass();
+			return Collections.<Class<?>>singleton(getParentType(name, type));
+		} else {
+			Set<Class<?>> result = new HashSet<Class<?>>();
+			for (Class<?> type : elementTypes) {
+				result.add(getParentType(name, type));
+			}
+			return result;
+		}
+	}
+
+	private Class<?> getParentType(String name, Class<?> type) {
 		String[] path = name.split("\\.");
 		for (int i = 0; i < path.length - 1; i++) {
 			type = getActualType(new Mirror().on(type).reflect().field(path[i]).getGenericType());
@@ -97,10 +116,9 @@ public class XStreamXMLSerializer implements Serializer {
 		}
 		if (Collection.class.isInstance(object)) {
 			List<Object> list = new ArrayList<Object>((Collection<?>)object);
-			for (Object element : list) {
-				if (element != null && !isPrimitive(element.getClass()) && !excludes.containsKey(element.getClass())) {
-					excludeNonPrimitiveFields(element.getClass());
-				}
+			elementTypes = findElementTypes(list);
+			for (Class<?> type : elementTypes) {
+				excludeNonPrimitiveFields(type);
 			}
 			this.toSerialize = list;
 		} else {
@@ -109,6 +127,16 @@ public class XStreamXMLSerializer implements Serializer {
 			this.toSerialize = object;
 		}
 		return this;
+	}
+
+	private Set<Class<?>> findElementTypes(List<Object> list) {
+		Set<Class<?>> set = new HashSet<Class<?>>();
+		for (Object element : list) {
+			if (element != null && !isPrimitive(element.getClass())) {
+				set.add(element.getClass());
+			}
+		}
+		return set;
 	}
 
 	private void excludeNonPrimitiveFields(Class<?> type) {
@@ -121,15 +149,21 @@ public class XStreamXMLSerializer implements Serializer {
 
 	public Serializer include(String... fields) {
 		for (String field : fields) {
-			Class<?> parentType = getParentTypeFor(field);
-			String fieldName = getNameFor(field);
-			Type genericType = new Mirror().on(parentType).reflect().field(fieldName).getGenericType();
-			Class<?> fieldType = getActualType(genericType);
+			try {
+				Set<Class<?>> parentTypes = getParentTypesFor(field);
+				String fieldName = getNameFor(field);
+				for (Class<?> parentType : parentTypes) {
+					Type genericType = new Mirror().on(parentType).reflect().field(fieldName).getGenericType();
+					Class<?> fieldType = getActualType(genericType);
 
-			if (!excludes.containsKey(fieldType)) {
-				excludeNonPrimitiveFields(fieldType);
+					if (!excludes.containsKey(fieldType)) {
+						excludeNonPrimitiveFields(fieldType);
+					}
+					excludes.remove(parentType, fieldName);
+				}
+			} catch (NullPointerException e) {
+				throw new IllegalArgumentException("Field path " + field + " doesn't exist");
 			}
-			excludes.remove(parentType, fieldName);
 		}
 		return this;
 	}

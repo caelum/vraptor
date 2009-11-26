@@ -22,7 +22,7 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
 
-public class XStreamXMLSerializerTest {
+public class XStreamXMLSerializationTest {
 
 	private Serialization serialization;
 	private ByteArrayOutputStream stream;
@@ -141,6 +141,40 @@ public class XStreamXMLSerializerTest {
 		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
 		serialization.from(Arrays.asList(order, order), "orders").serialize();
 		assertThat(result(), is(equalTo(expectedResult)));
+	}
+	@Test
+	public void shouldIncludeFieldsFromACollection() {
+		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please",
+				new Item("name", 12.99));
+		serialization.from(Arrays.asList(order, order), "orders").include("items").serialize();
+
+		assertThat(result(), containsString("<items>"));
+		assertThat(result(), containsString("<name>name</name>"));
+		assertThat(result(), containsString("<price>12.99</price>"));
+		assertThat(result(), containsString("</items>"));
+	}
+	@Test
+	public void shouldExcludeNonPrimitiveFieldsFromACollection() {
+		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please",
+				new Item("name", 12.99));
+		serialization.from(Arrays.asList(order, order), "orders").serialize();
+
+		assertThat(result(), not(containsString("<items>")));
+		assertThat(result(), not(containsString("<name>name</name>")));
+		assertThat(result(), not(containsString("<price>12.99</price>")));
+	}
+	@Test
+	public void shouldExcludeFieldsFromACollection() {
+		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
+		serialization.from(Arrays.asList(order, order), "orders").exclude("price").serialize();
+
+		assertThat(result(), not(containsString("<price>")));
+	}
+	@Test(expected=IllegalArgumentException.class)
+	public void shouldThrowAnExceptionWhenYouIncludeANonExistantField() {
+		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please",
+				new Item("name", 12.99));
+		serialization.from(order).include("wrongFieldName").serialize();
 	}
 
 	@Test

@@ -49,8 +49,6 @@ public class DefaultValidator implements Validator {
 		this.outjector = outjector;
     }
 
-    // TODO: do not use String consequences anymore
-    // TODO: on error action should be defined by the onError method
     public void checking(Validations validations) {
         addAll(validations.getErrors());
     }

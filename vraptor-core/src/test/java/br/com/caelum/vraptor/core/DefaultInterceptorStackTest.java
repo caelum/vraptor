@@ -19,11 +19,12 @@ package br.com.caelum.vraptor.core;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 
-import org.jmock.Expectations;
-import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -34,11 +35,9 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 public class DefaultInterceptorStackTest {
 
     private int count;
-    private Mockery mockery;
 
     @Before
     public void setup() {
-        this.mockery = new Mockery();
         count = 0;
     }
 
@@ -52,7 +51,6 @@ public class DefaultInterceptorStackTest {
         stack.next(null, null);
         assertThat(first.run, is(equalTo(0)));
         assertThat(second.run, is(equalTo(1)));
-        mockery.assertIsSatisfied();
     }
 
     class CountInterceptor implements Interceptor {
@@ -71,38 +69,32 @@ public class DefaultInterceptorStackTest {
 
     @Test
     public void shouldAddNextInterceptorAsNext() throws InterceptionException, IOException {
-        Interceptor firstMocked = mockery.mock(Interceptor.class, "firstMocked");
-        final Interceptor secondMocked = mockery.mock(Interceptor.class, "secondMocked");
+        Interceptor firstMocked = mock(Interceptor.class, "firstMocked");
+        final Interceptor secondMocked = mock(Interceptor.class, "secondMocked");
         final DefaultInterceptorStack stack = new DefaultInterceptorStack(null);
         stack.add(firstMocked);
         stack.addAsNext(secondMocked);
-        mockery.checking(new Expectations() {
-            {
-            	allowing(secondMocked).accepts(null); will(returnValue(true));
 
-                one(secondMocked).intercept(stack, null, null);
-            }
-        });
+        when(secondMocked.accepts(null)).thenReturn(true);
+
         stack.next(null, null);
-        mockery.assertIsSatisfied();
+
+        verify(secondMocked).intercept(stack, null, null);
     }
 
     @Test
     public void shouldAddInterceptorAsLast() throws InterceptionException, IOException {
-        final Interceptor firstMocked = mockery.mock(Interceptor.class, "firstMocked");
-        final Interceptor secondMocked = mockery.mock(Interceptor.class, "secondMocked");
+        final Interceptor firstMocked = mock(Interceptor.class, "firstMocked");
+        final Interceptor secondMocked = mock(Interceptor.class, "secondMocked");
         final DefaultInterceptorStack stack = new DefaultInterceptorStack(null);
         stack.add(firstMocked);
         stack.add(secondMocked);
-        mockery.checking(new Expectations() {
-            {
-            	allowing(firstMocked).accepts(null); will(returnValue(true));
 
-                one(firstMocked).intercept(stack, null, null);
-            }
-        });
+        when(firstMocked.accepts(null)).thenReturn(true);
+
         stack.next(null, null);
-        mockery.assertIsSatisfied();
+
+        verify(firstMocked).intercept(stack, null, null);
     }
 
 }

@@ -21,6 +21,8 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.typeCompatibleWith;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -28,11 +30,11 @@ import java.util.HashMap;
 import java.util.ResourceBundle;
 import java.util.Map.Entry;
 
-import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.VRaptorException;
@@ -56,25 +58,15 @@ import br.com.caelum.vraptor.converter.ShortConverter;
 import br.com.caelum.vraptor.interceptor.multipart.UploadedFile;
 import br.com.caelum.vraptor.interceptor.multipart.UploadedFileConverter;
 import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.test.VRaptorMockery;
 
 public class DefaultConvertersTest {
 
-    private VRaptorMockery mockery;
-    private Container container;
+    @Mock private Container container;
     private DefaultConverters converters;
-    private ComponentRegistry componentRegistry;
 
     @Before
     public void setup() {
-        this.mockery = new VRaptorMockery(true);
-        this.container = mockery.mock(Container.class);
-        this.componentRegistry = mockery.mock(ComponentRegistry.class);
-        mockery.checking(new Expectations() {
-            {
-                allowing(componentRegistry).register((Class<?>) with(an(Class.class)), (Class<?>) with(an(Class.class)));
-            }
-        });
+    	MockitoAnnotations.initMocks(this);
         this.converters = new DefaultConverters();
     }
 
@@ -105,16 +97,10 @@ public class DefaultConvertersTest {
             private static final long serialVersionUID = 8559316558416038474L;
         };
 
-        mockery.checking(new Expectations() {
-            {
-                for (Class<? extends Converter> converterType : EXPECTED_CONVERTERS.values()) {
-                    Converter<?> expected = mockery.mock(converterType);
-                    one(componentRegistry).register(converterType, converterType);
-                    one(container).instanceFor(converterType);
-                    will(returnValue(expected));
-                }
-            }
-        });
+        for (Class<? extends Converter> converterType : EXPECTED_CONVERTERS.values()) {
+            Converter<?> expected = mock(converterType);
+            when((Converter)container.instanceFor(converterType)).thenReturn(expected);
+        }
 
         for (Entry<Class, Class<? extends Converter>> entry : EXPECTED_CONVERTERS.entrySet()) {
             Class<?> typeFor = entry.getKey();
@@ -161,42 +147,27 @@ public class DefaultConvertersTest {
     @Test
     public void registersAndUsesTheConverterInstaceForTheSpecifiedType() {
         converters.register(MyConverter.class);
-        mockery.checking(new Expectations() {
-            {
-                one(container).instanceFor(MyConverter.class);
-                will(returnValue(new MyConverter()));
-            }
-        });
+        when(container.instanceFor(MyConverter.class)).thenReturn(new MyConverter());
+
         Converter<?> found = converters.to(MyData.class, container);
         assertThat(found.getClass(), is(typeCompatibleWith(MyConverter.class)));
-        mockery.assertIsSatisfied();
     }
 
     @Test
     public void usesTheLastConverterInstanceRegisteredForTheSpecifiedType() {
         converters.register(MyConverter.class);
         converters.register(MySecondConverter.class);
-        mockery.checking(new Expectations() {
-            {
-                one(container).instanceFor(MySecondConverter.class);
-                will(returnValue(new MySecondConverter()));
-            }
-        });
+        when(container.instanceFor(MySecondConverter.class)).thenReturn(new MySecondConverter());
+
         Converter<?> found = converters.to(MyData.class, container);
         assertThat(found.getClass(), is(typeCompatibleWith(MySecondConverter.class)));
-        mockery.assertIsSatisfied();
     }
 
     @Test
 	public void existsForWillReturnTrueForRegisteredConverters() throws Exception {
 		converters.register(MyConverter.class);
 
-		mockery.checking(new Expectations() {
-            {
-                allowing(container).instanceFor(MyConverter.class);
-                will(returnValue(new MyConverter()));
-            }
-        });
+		when(container.instanceFor(MyConverter.class)).thenReturn(new MyConverter());
 
 		assertTrue(converters.existsFor(MyData.class, container));
 	}

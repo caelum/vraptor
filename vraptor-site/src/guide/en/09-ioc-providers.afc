@@ -115,6 +115,28 @@ Behind the curtains, VRaptor uses a specific DI provider and has out-of-the-box 
 Each implementation give you all you can find in VRaptor's documentation, but also different
 extension points.
 
+For letting the providers be able to find your annotated classes, you must set this parameter
+on your web.xml, with your app's base package:
+
+[xml]
+	<context-param>
+		<param-name>br.com.caelum.vraptor.packages</param-name>
+		<param-value>com.yourcompany.yourapp</param-value>
+	</context-param>
+[/xml]
+
+You can set more than one base package, with commas and no spaces:
+[xml]
+<context-param>
+	<param-name>br.com.caelum.vraptor.packages</param-name>
+	<param-value>com.yourcompany.yourapp,com.another.package</param-value>
+</context-param>
+[/xml]
+
+It is even possible to have annotated classes inside jars, if your jars include directory
+entries ("Add directory entries" on eclipse, or on ant without the option "files only").
+
+
 [section Spring]
 
 When using Spring, you gain all its features and built-in components to use with VRaptor.

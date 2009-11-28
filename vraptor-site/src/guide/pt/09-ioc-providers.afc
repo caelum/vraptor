@@ -114,6 +114,29 @@ ao uso interno do Picocontainer ou do Spring IoC.
 Cada implementação disponibiliza tudo o que você encontra na documentação do vraptor, mas acaba por fornecer
 também pontos de extensão diferentes, claro.
 
+Para que os providers possam encontrar suas classes anotadas com as anotações do VRaptor,
+você precisa colocar o seguinte parâmetro no seu web.xml, com o pacote base da sua aplicação:
+
+[xml]
+	<context-param>
+		<param-name>br.com.caelum.vraptor.packages</param-name>
+		<param-value>br.com.suaempresa.suaapplicacao</param-value>
+	</context-param>
+[/xml]
+
+É possível colocar mais de um pacote básico, separando os pacotes por vírgula (sem espaços):
+[xml]
+<context-param>
+	<param-name>br.com.caelum.vraptor.packages</param-name>
+	<param-value>br.com.suaempresa.suaapplicacao,br.com.outro.pacote</param-value>
+</context-param>
+[/xml]
+
+É possível, ainda, colocar classes anotadas da sua aplicação dentro de jars, desde que os jars
+incluam as entradas de diretório ("Add directory entries" no eclipse, ou ant sem a
+opção "files only").
+
+
 [section Spring]
 
 Ao utilizar o Spring, você ganha todas as características e componentes prontos do Spring para uso dentro do
@@ -134,10 +157,10 @@ configurações avançadas que desejar.
 Para utilizar o Picocontainer como provider de sua aplicação, basta colocar no seu arquivo web.xml:
 
 [xml]
-		<context-param>
-        <param-name>br.com.caelum.vraptor.provider</param-name>
-        <param-value>br.com.caelum.vraptor.ioc.pico.PicoProvider</param-value>
-    </context-param>
+	<context-param>
+		<param-name>br.com.caelum.vraptor.provider</param-name>
+		<param-value>br.com.caelum.vraptor.ioc.pico.PicoProvider</param-value>
+	</context-param>
 [/xml]
 
 [section Seu próprio provider]

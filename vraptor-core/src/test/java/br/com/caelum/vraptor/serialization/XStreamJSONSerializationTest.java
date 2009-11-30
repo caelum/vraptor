@@ -148,6 +148,19 @@ public class XStreamJSONSerializationTest {
 	}
 
 	@Test
+	public void shouldExcludeNonPrimitiveFieldsFromACollection() {
+		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please",
+				new Item("name", 12.99));
+		serialization.from(Arrays.asList(order, order), "orders").exclude("price").serialize();
+
+		assertThat(result(), not(containsString("\"items\"")));
+		assertThat(result(), not(containsString("name")));
+		assertThat(result(), not(containsString("\"price\"")));
+		assertThat(result(), not(containsString("12.99")));
+		assertThat(result(), not(containsString("15.0")));
+	}
+
+	@Test
 	@Ignore("not supported yet")
 	public void shouldSerializeCollectionWithPrefixTagAndNamespace() {
 		String expectedResult = "<o:order>\n  <o:price>15.0</o:price>\n  <o:comments>pack it nicely, please</o:comments>\n</o:order>";

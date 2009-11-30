@@ -54,7 +54,8 @@ public class ExecuteMethodInterceptor implements Interceptor {
 						"There are validation errors and you forgot to specify where to go. Please add in your method "
 								+ "something like:\n"
 								+ "validator.onErrorUse(page()).of(AnyController.class).anyMethod();\n"
-								+ "or any view that you like.");
+								+ "or any view that you like.\n" +
+								"If you didn't add any validation error, it is possible that a conversion error had happened.");
 			}
 
 			if (reflectionMethod.getReturnType().equals(Void.TYPE)) {

@@ -157,11 +157,12 @@ public class XStreamXMLSerializationTest {
 	public void shouldExcludeNonPrimitiveFieldsFromACollection() {
 		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please",
 				new Item("name", 12.99));
-		serialization.from(Arrays.asList(order, order), "orders").serialize();
+		serialization.from(Arrays.asList(order, order), "orders").exclude("price").serialize();
 
 		assertThat(result(), not(containsString("<items>")));
 		assertThat(result(), not(containsString("<name>name</name>")));
 		assertThat(result(), not(containsString("<price>12.99</price>")));
+		assertThat(result(), not(containsString("<price>15.0</price>")));
 	}
 	@Test
 	public void shouldExcludeFieldsFromACollection() {

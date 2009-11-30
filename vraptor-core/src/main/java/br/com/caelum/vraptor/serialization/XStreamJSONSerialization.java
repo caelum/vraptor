@@ -24,6 +24,7 @@ import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.view.ResultException;
 
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.HierarchicalStreamDriver;
 import com.thoughtworks.xstream.io.json.JsonHierarchicalStreamDriver;
 import com.thoughtworks.xstream.mapper.MapperWrapper;
 
@@ -70,13 +71,20 @@ public class XStreamJSONSerialization implements JSONSerialization {
 	 * You can override this method for configuring XStream before serialization
 	 */
 	protected XStream getXStream() {
-		return new XStream(new JsonHierarchicalStreamDriver()) {
+		return new XStream(getHierarchicalStreamDriver()) {
 			{setMode(NO_REFERENCES);}
 			@Override
 			protected MapperWrapper wrapMapper(MapperWrapper next) {
 				return new VRaptorClassMapper(next, extractor);
 			}
 		};
+	}
+
+	/**
+	 * You can override this method for configuring Driver before serialization
+	 */
+	protected HierarchicalStreamDriver getHierarchicalStreamDriver() {
+		return new JsonHierarchicalStreamDriver();
 	}
 
 }

@@ -157,7 +157,8 @@ e fazer qualquer conven&ccedil;&atilde;o que voc&ecirc; queira, n&atilde;o esque
 }</span></code></div>
 	    	<span class="paragraph">Por padr&atilde;o existem estes tipos de views implementadas:</span>
 	    	<ul class="list"><li><span class="paragraph">Results.logic(), que vai redirecionar para uma outra l&oacute;gica qualquer do sistema</span></li><li><span class="paragraph">Results.page(), que vai redirecionar diretamente para uma p&aacute;gina, podendo ser um
-	jsp, um html, ou qualquer uri relativa ao web application dir, ou ao contexto da aplica&ccedil;&atilde;o.</span></li><li><span class="paragraph">Results.http(), que manda informa&ccedil;&otilde;es do protocolo HTTP como status codes e headers.</span></li><li><span class="paragraph">Results.referer(), que usa o header Referer para fazer redirects ou forwards.</span></li><li><span class="paragraph">Results.nothing(), apenas retorna o c&oacute;digo de sucesso (HTTP 200 OK).</span></li><li><span class="paragraph">Results.xml(), serializa objetos em xml.</span></li><li><span class="paragraph">Results.json(), serializa objetos em json.</span></li></ul>
+	jsp, um html, ou qualquer uri relativa ao web application dir, ou ao contexto da aplica&ccedil;&atilde;o.</span></li><li><span class="paragraph">Results.http(), que manda informa&ccedil;&otilde;es do protocolo HTTP como status codes e headers.</span></li><li><span class="paragraph">Results.referer(), que usa o header Referer para fazer redirects ou forwards.</span></li><li><span class="paragraph">Results.nothing(), apenas retorna o c&oacute;digo de sucesso (HTTP 200 OK).</span></li><li><span class="paragraph">Results.xml(), serializa objetos em xml.</span></li><li><span class="paragraph">Results.json(), serializa objetos em json.</span></li><li><span class="paragraph">Results.representation(), serializa objetos em um formato determinado pela requisi&ccedil;&atilde;o
+	 (parametro _format ou header Accept)</span></li></ul>
 		
 
 <h3 class="section">Redirecionamento e forward</h3>
@@ -268,18 +269,88 @@ se voc&ecirc; quiser incluir um campo de tipo n&atilde;o primitivo voc&ecirc; pr
 }}</code></div>
 	    	<span class="paragraph">A implementa&ccedil;&atilde;o padr&atilde;o &eacute; baseada no XStream, ent&atilde;o &eacute; poss&iacute;vel configurar a serializa&ccedil;&atilde;o
 via anota&ccedil;&otilde;es ou configura&ccedil;&otilde;es diretas ao XStream, bastando criar a classe:</span>
-	    	<div class="java"><code class="java">@Component<br />
-public&nbsp;class&nbsp;CustomXMLSerialization&nbsp;extends&nbsp;XStreamXMLSerialization&nbsp;{<br />
-//or&nbsp;public&nbsp;class&nbsp;CustomJSONSerialization&nbsp;extends&nbsp;XStreamJSONSerialization&nbsp;{<br />
-&nbsp;&nbsp;&nbsp;&nbsp;//delegate&nbsp;constructor<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<br />
-&nbsp;&nbsp;&nbsp;&nbsp;@Override<br />
-&nbsp;&nbsp;&nbsp;&nbsp;protected&nbsp;XStream&nbsp;getXStream()&nbsp;{<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XStream&nbsp;xStream&nbsp;=&nbsp;super.getXStream();<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//suas&nbsp;configura&ccedil;&otilde;es&nbsp;ao&nbsp;XStream&nbsp;aqui<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;xStream;<br />
+	    	<div class="java"><code class="java">
+<span class="java16">@Component<br />
+</span><span class="java4">public class </span><span class="java10">CustomXMLSerialization </span><span class="java4">extends </span><span class="java10">XStreamXMLSerialization </span><span class="java8">{<br />
+</span><span class="java3">//or public class CustomJSONSerialization extends XStreamJSONSerialization {<br />
+&nbsp;&nbsp;&nbsp; //delegate constructor<br />
+&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java16">@Override<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">protected </span><span class="java10">XStream getXStream</span><span class="java8">() {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">XStream xStream = </span><span class="java4">super</span><span class="java10">.getXStream</span><span class="java8">()</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java3">//suas configura&ccedil;ões ao XStream aqui<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return </span><span class="java10">xStream;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+}</span></code></div>
+	    	<span class="paragraph"><strong class="title">Serializando Collections</strong></span>
+	    	<span class="paragraph">Ao serializar cole&ccedil;&otilde;es, o padr&atilde;o &eacute; colocar a tag "list" em volta dos elementos:</span>
+	    	<div class="java"><code class="java">
+<span class="java10">List&lt;Cliente&gt; clientes = ...;<br />
+result.use</span><span class="java8">(</span><span class="java10">json</span><span class="java8">())</span><span class="java10">.from</span><span class="java8">(</span><span class="java10">clientes</span><span class="java8">)</span><span class="java10">.serialize</span><span class="java8">()</span><span class="java10">;<br />
+</span><span class="java3">//ou<br />
+</span><span class="java10">result.use</span><span class="java8">(</span><span class="java10">xml</span><span class="java8">())</span><span class="java10">.from</span><span class="java8">(</span><span class="java10">clientes</span><span class="java8">)</span><span class="java10">.serialize</span><span class="java8">()</span><span class="java10">;</span></code></div>
+	    	<span class="paragraph">vai resultar em algo como:</span>
+	    	<div class="java"><code class="java">{"list":&nbsp;[<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"nome":&nbsp;"Joao"<br />
+&nbsp;&nbsp;&nbsp;&nbsp;},<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"nome":&nbsp;"Maria"<br />
 &nbsp;&nbsp;&nbsp;&nbsp;}<br />
-}</code></div>
+]}</code></div>
+	    	<span class="paragraph">ou</span>
+	    	<div class="java"><code class="java">&lt;list&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;cliente&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;nome&gt;Joao&lt;/nome&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/cliente&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;cliente&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;nome&gt;Maria&lt;/nome&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/cliente&gt;<br />
+&lt;/list&gt;</code></div>
+	    	<span class="paragraph">&Eacute; poss&iacute;vel personalizar o elemento de fora usando o m&eacute;todo:</span>
+	    	<div class="java"><code class="java">
+<span class="java10">List&lt;Cliente&gt; clientes = ...;<br />
+result.use</span><span class="java8">(</span><span class="java10">json</span><span class="java8">())</span><span class="java10">.from</span><span class="java8">(</span><span class="java10">clientes, </span><span class="java5">&#34;clientes&#34;</span><span class="java8">)</span><span class="java10">.serialize</span><span class="java8">()</span><span class="java10">;<br />
+</span><span class="java3">//ou<br />
+</span><span class="java10">result.use</span><span class="java8">(</span><span class="java10">xml</span><span class="java8">())</span><span class="java10">.from</span><span class="java8">(</span><span class="java10">clientes, </span><span class="java5">&#34;clientes&#34;</span><span class="java8">)</span><span class="java10">.serialize</span><span class="java8">()</span><span class="java10">;</span></code></div>
+	    	<span class="paragraph">vai resultar em algo como:</span>
+	    	<div class="java"><code class="java">{"clientes":&nbsp;[<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"nome":&nbsp;"Joao"<br />
+&nbsp;&nbsp;&nbsp;&nbsp;},<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"nome":&nbsp;"Maria"<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}<br />
+]}</code></div>
+	    	<span class="paragraph">ou</span>
+	    	<div class="java"><code class="java">&lt;clientes&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;cliente&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;nome&gt;Joao&lt;/nome&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/cliente&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;cliente&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;nome&gt;Maria&lt;/nome&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/cliente&gt;<br />
+&lt;/clientes&gt;</code></div>
+	    	<span class="paragraph">Os includes e excludes funcionam como se voc&ecirc; os estivesse aplicando num elemento de dentro da lista.
+Por exemplo se voc&ecirc; quiser incluir o endere&ccedil;o no cliente:</span>
+	    	<div class="java"><code class="java">
+<span class="java10">List&lt;Cliente&gt; clientes = ...;<br />
+result.use</span><span class="java8">(</span><span class="java10">json</span><span class="java8">())</span><span class="java10">.from</span><span class="java8">(</span><span class="java10">clientes</span><span class="java8">)</span><span class="java10">.include</span><span class="java8">(</span><span class="java5">&#34;endereco&#34;</span><span class="java8">)</span><span class="java10">.serialize</span><span class="java8">()</span><span class="java10">;</span></code></div>
+	    	<span class="paragraph">com resultado:</span>
+	    	<div class="java"><code class="java">{"list":&nbsp;[<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"nome":&nbsp;"Joao",<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"endereco":&nbsp;{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"rua":&nbsp;"Vergueiro,&nbsp;3185"<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;},<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"nome":&nbsp;"Maria",<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"endereco":&nbsp;{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"rua":&nbsp;"Vergueiro,&nbsp;3185"<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}<br />
+]}</code></div>
 		
 
 </div><!-- content -->

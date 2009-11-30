@@ -196,6 +196,19 @@ Session instances for our application:</span>
 	    	<span class="paragraph">Behind the curtains, VRaptor uses a specific DI provider and has out-of-the-box support for PicoContainer or Spring DI.</span>
 	    	<span class="paragraph">Each implementation give you all you can find in VRaptor's documentation, but also different
 extension points.</span>
+	    	<span class="paragraph">For letting the providers be able to find your annotated classes, you must set this parameter
+on your web.xml, with your app's base package:</span>
+	    	<div class="xml"><code class="xml"><span class="textag">&lt;context-param&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-name&gt;</span><span class="texnormal">br.com.caelum.vraptor.packages</span><span class="textag">&lt;/param-name&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-value&gt;</span><span class="texnormal">com.yourcompany.yourapp</span><span class="textag">&lt;/param-value&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal"></span><span class="textag">&lt;/context-param&gt;</span></code></div>
+	    	<span class="paragraph">You can set more than one base package, with commas and no spaces:</span>
+	    	<div class="xml"><code class="xml"><span class="textag">&lt;context-param&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-name&gt;</span><span class="texnormal">br.com.caelum.vraptor.packages</span><span class="textag">&lt;/param-name&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-value&gt;</span><span class="texnormal">com.yourcompany.yourapp,com.another.package</span><span class="textag">&lt;/param-value&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal"></span><span class="textag">&lt;/context-param&gt;</span></code></div>
+	    	<span class="paragraph">It is even possible to have annotated classes inside jars, if your jars include directory
+entries ("Add directory entries" on eclipse, or on ant without the option "files only").</span>
 		
 
 <h3 class="section">Spring</h3>

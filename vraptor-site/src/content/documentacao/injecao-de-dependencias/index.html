@@ -199,6 +199,20 @@ e utiliza essa configura&ccedil;&atilde;o para fornecer sess&otilde;es para noss
 ao uso interno do Picocontainer ou do Spring IoC.</span>
 	    	<span class="paragraph">Cada implementa&ccedil;&atilde;o disponibiliza tudo o que voc&ecirc; encontra na documenta&ccedil;&atilde;o do vraptor, mas acaba por fornecer
 tamb&eacute;m pontos de extens&atilde;o diferentes, claro.</span>
+	    	<span class="paragraph">Para que os providers possam encontrar suas classes anotadas com as anota&ccedil;&otilde;es do VRaptor,
+voc&ecirc; precisa colocar o seguinte par&acirc;metro no seu web.xml, com o pacote base da sua aplica&ccedil;&atilde;o:</span>
+	    	<div class="xml"><code class="xml"><span class="textag">&lt;context-param&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-name&gt;</span><span class="texnormal">br.com.caelum.vraptor.packages</span><span class="textag">&lt;/param-name&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-value&gt;</span><span class="texnormal">br.com.suaempresa.suaapplicacao</span><span class="textag">&lt;/param-value&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal"></span><span class="textag">&lt;/context-param&gt;</span></code></div>
+	    	<span class="paragraph">&Eacute; poss&iacute;vel colocar mais de um pacote b&aacute;sico, separando os pacotes por v&iacute;rgula (sem espa&ccedil;os):</span>
+	    	<div class="xml"><code class="xml"><span class="textag">&lt;context-param&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-name&gt;</span><span class="texnormal">br.com.caelum.vraptor.packages</span><span class="textag">&lt;/param-name&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-value&gt;</span><span class="texnormal">br.com.suaempresa.suaapplicacao,br.com.outro.pacote</span><span class="textag">&lt;/param-value&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal"></span><span class="textag">&lt;/context-param&gt;</span></code></div>
+	    	<span class="paragraph">&Eacute; poss&iacute;vel, ainda, colocar classes anotadas da sua aplica&ccedil;&atilde;o dentro de jars, desde que os jars
+incluam as entradas de diret&oacute;rio ("Add directory entries" no eclipse, ou ant sem a
+op&ccedil;&atilde;o "files only").</span>
 		
 
 <h3 class="section">Spring</h3>

@@ -104,6 +104,14 @@
 		
 
 
+<h3 class="section">3.0.3 (to be released)</h3>
+	    	<ul class="list"><li><span class="paragraph">it is now possible to serialize collections via result.use(xml()) or result.use(json().</span></li><li><span class="paragraph">new scope: @PrototypeScoped, that creates a new instance of annotated class whenever it is requested.</span></li><li><span class="paragraph">new view: result.use(Results.representation()).from(object).serialize();
+This view tries to discover the request format (through _format or Accept header)
+and then serialize the given object in this format. For now only xml and json are supported, but you can
+add a serializer for any format you like. If there is no format given, or it is unsupported the default
+jsp page will be shown.</span></li></ul>
+		
+
 <h3 class="section">3.0.2</h3>
 	    	<ul class="list"><li><span class="paragraph">servlet 2.4 containers are now supported</span></li><li><span class="paragraph">bugfix: Results.referer() now implements View</span></li><li><span class="paragraph">bugfix: content-type is now set when using File/InputStreamDownload</span></li><li><span class="paragraph">removed java 6 api calls</span></li><li><span class="paragraph">new providers, spring based: HibernateCustomProvider and JPACustomProvider. These providers
   register optional Hibernate or JPA components.</span></li><li><span class="paragraph">bugfix: converters are not throwing exceptions when there is no ResourceBundle configured.</span></li><li><span class="paragraph">bugfix: method return values are now included on result when forwarding.</span></li><li><span class="paragraph">bugfix: request parameters are now kept when there is a validation error.</span></li><li><span class="paragraph">bugfix: throwing exception when paranamer can't find parameters metadata, so you can recover

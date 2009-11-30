@@ -153,7 +153,8 @@ Don't forget to annotate your new classe with <code class="inlineCode">@Componen
 }</span></code></div>
 	    	<span class="paragraph">By default, there are these view implementations:</span>
 	    	<ul class="list"><li><span class="paragraph">Results.logic(), redirects to any other logic in the application.</span></li><li><span class="paragraph">Results.page(), redirects directly to a page, that can be a jsp, an html, or any
-	URI relative to the web application directory or the application context.</span></li><li><span class="paragraph">Results.http(), sends HTTP protocol informations, like status codes and headers.</span></li><li><span class="paragraph">Results.referer(), uses Referer header to redirect or forward.</span></li><li><span class="paragraph">Results.nothing(), simply returns the HTTP success code (HTTP 200 OK).</span></li><li><span class="paragraph">Results.xml(), uses xml serialization.</span></li><li><span class="paragraph">Results.json(), uses json serialization.</span></li></ul>
+	URI relative to the web application directory or the application context.</span></li><li><span class="paragraph">Results.http(), sends HTTP protocol informations, like status codes and headers.</span></li><li><span class="paragraph">Results.referer(), uses Referer header to redirect or forward.</span></li><li><span class="paragraph">Results.nothing(), simply returns the HTTP success code (HTTP 200 OK).</span></li><li><span class="paragraph">Results.xml(), uses xml serialization.</span></li><li><span class="paragraph">Results.json(), uses json serialization.</span></li><li><span class="paragraph">Results.representation(), serializes objects in a format set by the request
+	 (_format parameter or Accept header)</span></li></ul>
 		
 
 <h3 class="section">Redirect and forward</h3>
@@ -264,18 +265,88 @@ if you want to include a field of a non-primitive type you must explicitly inclu
 }}</code></div>
 	    	<span class="paragraph">The default implementation is based on XStream, so you can configure the serialization
 with annotations and direct configuration on XStream. It is just creating a class like:</span>
-	    	<div class="java"><code class="java">@Component<br />
-public&nbsp;class&nbsp;CustomXMLSerialization&nbsp;extends&nbsp;XStreamXMLSerialization&nbsp;{<br />
-//or&nbsp;public&nbsp;class&nbsp;CustomJSONSerialization&nbsp;extends&nbsp;XStreamJSONSerialization&nbsp;{<br />
-&nbsp;&nbsp;&nbsp;&nbsp;//delegate&nbsp;constructor<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<br />
-&nbsp;&nbsp;&nbsp;&nbsp;@Override<br />
-&nbsp;&nbsp;&nbsp;&nbsp;protected&nbsp;XStream&nbsp;getXStream()&nbsp;{<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XStream&nbsp;xStream&nbsp;=&nbsp;super.getXStream();<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//your&nbsp;xStream&nbsp;setup&nbsp;here<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;xStream;<br />
+	    	<div class="java"><code class="java">
+<span class="java16">@Component<br />
+</span><span class="java4">public class </span><span class="java10">CustomXMLSerialization </span><span class="java4">extends </span><span class="java10">XStreamXMLSerialization </span><span class="java8">{<br />
+</span><span class="java3">//or public class CustomJSONSerialization extends XStreamJSONSerialization {<br />
+&nbsp;&nbsp;&nbsp; //delegate constructor<br />
+&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java16">@Override<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">protected </span><span class="java10">XStream getXStream</span><span class="java8">() {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">XStream xStream = </span><span class="java4">super</span><span class="java10">.getXStream</span><span class="java8">()</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java3">//your xStream setup here<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return </span><span class="java10">xStream;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+}</span></code></div>
+	    	<span class="paragraph"><strong class="title">Serializando Collections</strong></span>
+	    	<span class="paragraph">When serializing collections, vRaptor will wrap their elements with a "list" tag:</span>
+	    	<div class="java"><code class="java">
+<span class="java10">List&lt;Client&gt; clients = ...;<br />
+result.use</span><span class="java8">(</span><span class="java10">json</span><span class="java8">())</span><span class="java10">.from</span><span class="java8">(</span><span class="java10">clients</span><span class="java8">)</span><span class="java10">.serialize</span><span class="java8">()</span><span class="java10">;<br />
+</span><span class="java3">//or<br />
+</span><span class="java10">result.use</span><span class="java8">(</span><span class="java10">xml</span><span class="java8">())</span><span class="java10">.from</span><span class="java8">(</span><span class="java10">clients</span><span class="java8">)</span><span class="java10">.serialize</span><span class="java8">()</span><span class="java10">;</span></code></div>
+	    	<span class="paragraph">will result in something like</span>
+	    	<div class="java"><code class="java">{"list":&nbsp;[<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"name":&nbsp;"John"<br />
+&nbsp;&nbsp;&nbsp;&nbsp;},<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"name":&nbsp;"Sue"<br />
 &nbsp;&nbsp;&nbsp;&nbsp;}<br />
-}</code></div>
+]}</code></div>
+	    	<span class="paragraph">or</span>
+	    	<div class="java"><code class="java">&lt;list&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;client&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;name&gt;John&lt;/name&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/client&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;client&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;name&gt;Sue&lt;/name&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/client&gt;<br />
+&lt;/list&gt;</code></div>
+	    	<span class="paragraph">You can customize the wrapper element via:</span>
+	    	<div class="java"><code class="java">
+<span class="java10">List&lt;Client&gt; clients = ...;<br />
+result.use</span><span class="java8">(</span><span class="java10">json</span><span class="java8">())</span><span class="java10">.from</span><span class="java8">(</span><span class="java10">clients, </span><span class="java5">&#34;clients&#34;</span><span class="java8">)</span><span class="java10">.serialize</span><span class="java8">()</span><span class="java10">;<br />
+</span><span class="java3">//or<br />
+</span><span class="java10">result.use</span><span class="java8">(</span><span class="java10">xml</span><span class="java8">())</span><span class="java10">.from</span><span class="java8">(</span><span class="java10">clients, </span><span class="java5">&#34;clients&#34;</span><span class="java8">)</span><span class="java10">.serialize</span><span class="java8">()</span><span class="java10">;</span></code></div>
+	    	<span class="paragraph">will result in something like:</span>
+	    	<div class="java"><code class="java">{"clients":&nbsp;[<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"name":&nbsp;"John"<br />
+&nbsp;&nbsp;&nbsp;&nbsp;},<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"name":&nbsp;"Sue"<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}<br />
+]}</code></div>
+	    	<span class="paragraph">or</span>
+	    	<div class="java"><code class="java">&lt;clients&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;client&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;name&gt;John&lt;/name&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/client&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;client&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;name&gt;Sue&lt;/name&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/client&gt;<br />
+&lt;/clients&gt;</code></div>
+	    	<span class="paragraph">Includes and excludes work the same as if you were serializing an element inside the collection.
+For instance, if you want to include the client's address:</span>
+	    	<div class="java"><code class="java">
+<span class="java10">List&lt;Cliente&gt; clients = ...;<br />
+result.use</span><span class="java8">(</span><span class="java10">json</span><span class="java8">())</span><span class="java10">.from</span><span class="java8">(</span><span class="java10">clients</span><span class="java8">)</span><span class="java10">.include</span><span class="java8">(</span><span class="java5">&#34;address&#34;</span><span class="java8">)</span><span class="java10">.serialize</span><span class="java8">()</span><span class="java10">;</span></code></div>
+	    	<span class="paragraph">results in:</span>
+	    	<div class="java"><code class="java">{"list":&nbsp;[<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"name":&nbsp;"John",<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"address":&nbsp;{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"street":&nbsp;"Vergueiro,&nbsp;3185"<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;},<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"name":&nbsp;"Sue",<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"address":&nbsp;{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"street":&nbsp;"Vergueiro,&nbsp;3185"<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}<br />
+]}</code></div>
 		
 
 </div><!-- content -->

@@ -3,11 +3,12 @@ package br.com.caelum.vraptor.deserialization;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
-import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,12 +16,9 @@ import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.resource.DefaultResourceClass;
 import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.test.VRaptorMockery;
 
 public class XStreamXmlDeserializerTest {
 
-
-	private VRaptorMockery mockery;
 	private XStreamXMLDeserializer deserializer;
 	private ResourceMethod bark;
 	private ParameterNameProvider provider;
@@ -30,9 +28,7 @@ public class XStreamXmlDeserializerTest {
 
 	@Before
 	public void setUp() throws Exception {
-		mockery = new VRaptorMockery();
-
-		provider = mockery.mock(ParameterNameProvider.class);
+		provider = mock(ParameterNameProvider.class);
 
 		deserializer = new XStreamXMLDeserializer(provider);
 		DefaultResourceClass resourceClass = new DefaultResourceClass(DogController.class);
@@ -71,12 +67,8 @@ public class XStreamXmlDeserializerTest {
 		InputStream stream = new ByteArrayInputStream("<dog><name>Brutus</name><age>7</age></dog>".getBytes());
 
 
-		mockery.checking(new Expectations() {
-			{
-				one(provider).parameterNamesFor(bark.getMethod());
-				will(returnValue(new String[] {"dog"}));
-			}
-		});
+		when(provider.parameterNamesFor(bark.getMethod())).thenReturn(new String[] {"dog"});
+
 		Object[] deserialized = deserializer.deserialize(stream, bark);
 
 		assertThat(deserialized.length, is(1));
@@ -89,13 +81,8 @@ public class XStreamXmlDeserializerTest {
 	public void shouldBeAbleToDeserializeADogWhenMethodHasMoreThanOneArgument() throws Exception {
 		InputStream stream = new ByteArrayInputStream("<dog><name>Brutus</name><age>7</age></dog>".getBytes());
 
+		when(provider.parameterNamesFor(jump.getMethod())).thenReturn(new String[] {"dog", "times"});
 
-		mockery.checking(new Expectations() {
-			{
-				one(provider).parameterNamesFor(jump.getMethod());
-				will(returnValue(new String[] {"dog", "times"}));
-			}
-		});
 		Object[] deserialized = deserializer.deserialize(stream, jump);
 
 		assertThat(deserialized.length, is(2));
@@ -108,12 +95,7 @@ public class XStreamXmlDeserializerTest {
 	public void shouldBeAbleToDeserializeADogWhenMethodHasMoreThanOneArgumentAndTheXmlIsTheLastOne() throws Exception {
 		InputStream stream = new ByteArrayInputStream("<dog><name>Brutus</name><age>7</age></dog>".getBytes());
 
-		mockery.checking(new Expectations() {
-			{
-				one(provider).parameterNamesFor(dropDead.getMethod());
-				will(returnValue(new String[] {"times", "dog"}));
-			}
-		});
+		when(provider.parameterNamesFor(dropDead.getMethod())).thenReturn(new String[] {"times", "dog"});
 
 		Object[] deserialized = deserializer.deserialize(stream, dropDead);
 
@@ -128,13 +110,8 @@ public class XStreamXmlDeserializerTest {
 	public void shouldBeAbleToDeserializeADogNamedDifferently() throws Exception {
 		InputStream stream = new ByteArrayInputStream("<pet><name>Brutus</name><age>7</age></pet>".getBytes());
 
+		when(provider.parameterNamesFor(bark.getMethod())).thenReturn(new String[] {"pet"});
 
-		mockery.checking(new Expectations() {
-			{
-				one(provider).parameterNamesFor(bark.getMethod());
-				will(returnValue(new String[] {"pet"}));
-			}
-		});
 		Object[] deserialized = deserializer.deserialize(stream, bark);
 
 		assertThat(deserialized.length, is(1));

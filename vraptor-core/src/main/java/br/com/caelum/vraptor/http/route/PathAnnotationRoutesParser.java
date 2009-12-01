@@ -100,22 +100,41 @@ public class PathAnnotationRoutesParser implements RoutesParser {
 	}
 
 	private String[] getURIsFor(Method javaMethod, Class<?> type) {
+
 		if (javaMethod.isAnnotationPresent(Path.class)) {
 			String[] uris = javaMethod.getAnnotation(Path.class).value();
 
-			if (uris.length == 0)
+			if (uris.length == 0) {
 				throw new IllegalArgumentException("You must specify at least one path in @Path at " + javaMethod);
-
-			for (int i = 0; i < uris.length; i++) {
-				String uri = uris[i];
-				if (!uri.startsWith("/")) {
-					logger.warn("All uris from @Path must start with a '/'. Please change it on " + javaMethod);
-					uris[i] = "/" + uri;
-				}
 			}
+
+			fixURIs(javaMethod, type, uris);
+
 			return uris;
 		}
+
 		return new String[] { defaultUriFor(extractControllerNameFrom(type), javaMethod.getName()) };
+	}
+
+	private void fixURIs(Method javaMethod, Class<?> type, String[] uris) {
+		String prefix = extractPrefix(type);
+		for (int i = 0; i < uris.length; i++) {
+			String uri = uris[i];
+			if (!uri.startsWith("/")) {
+				logger.warn("All uris from @Path must start with a '/'. Please change it on " + javaMethod);
+				uris[i] = "/" + uri;
+			}
+			uris[i] = prefix + uris[i];
+		}
+	}
+
+	private String extractPrefix(Class<?> type) {
+		if (type.isAnnotationPresent(Path.class)) {
+			String[] uris = type.getAnnotation(Path.class).value();
+			return uris[0];
+		} else {
+			return "";
+		}
 	}
 
 	/**
@@ -123,11 +142,16 @@ public class PathAnnotationRoutesParser implements RoutesParser {
 	 * controller name, given a type
 	 */
 	protected String extractControllerNameFrom(Class<?> type) {
-		String baseName = lowerFirstCharacter(type.getSimpleName());
-		if (baseName.endsWith("Controller")) {
-			return "/" + baseName.substring(0, baseName.lastIndexOf("Controller"));
+		String prefix = extractPrefix(type);
+		if ("".equals(prefix)) {
+			String baseName = lowerFirstCharacter(type.getSimpleName());
+			if (baseName.endsWith("Controller")) {
+				return "/" + baseName.substring(0, baseName.lastIndexOf("Controller"));
+			}
+			return "/" + baseName;
+		} else {
+			return prefix;
 		}
-		return "/" + baseName;
 	}
 
 	/**

@@ -21,6 +21,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
+import javax.annotation.Resource;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -49,13 +51,37 @@ public class PathAnnotationRoutesParserTest {
     public void setup() {
         this.mockery = new VRaptorMockery();
         this.resource = mockery.resource(Clients.class);
+        ResourceClass pathAnnotated = mockery.resource(PathAnnotatedController.class);
         this.request = mockery.mock(MutableRequest.class);
         this.proxifier = new DefaultProxifier();
         this.router = new DefaultRouter(new NoRoutesConfiguration(), new PathAnnotationRoutesParser(proxifier, new NoTypeFinder()),
         		proxifier, null, new NoTypeFinder());
         router.register(resource);
+        router.register(pathAnnotated);
     }
 
+    @Resource
+    @Path("/prefix")
+    public static class PathAnnotatedController {
+    	public void withoutPath() {
+    	}
+    	@Path("/customPath")
+    	public void withPath() {
+    	}
+    }
+
+    @Test
+    public void addsAPrefixToMethodsWhenTheControllerAndTheMethodAreAnnotatedWithPath() throws Exception {
+    	ResourceMethod method = router.parse("/prefix/customPath", HttpMethod.POST, request);
+    	assertThat(method.getMethod(), is(equalTo(PathAnnotatedController.class.getMethod("withPath"))));
+    	mockery.assertIsSatisfied();
+    }
+    @Test
+    public void addsAPrefixToMethodsWhenTheControllerIsAnnotatedWithPath() throws Exception {
+    	ResourceMethod method = router.parse("/prefix/withoutPath", HttpMethod.POST, request);
+    	assertThat(method.getMethod(), is(equalTo(PathAnnotatedController.class.getMethod("withoutPath"))));
+    	mockery.assertIsSatisfied();
+    }
     @Test
     public void findsTheCorrectAnnotatedMethodIfThereIsNoWebMethodAnnotationPresent() throws SecurityException,
             NoSuchMethodException {

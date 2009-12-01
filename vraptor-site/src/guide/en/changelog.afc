@@ -24,6 +24,13 @@ public class MyController {
 	public void customPath() {...}
 }
 [/java]
+* @Path now supports regexes: %%@Path("/abc/{abc:a+b+c+}")%% will match URIs like:
+[code]
+/abc/abc
+/abc/aaaaabbcccc
+/abc/abbc
+[/code]
+whenever the parameter matches the %%a+b+c+%% regex.
 
 [/list]
 [section 3.0.2]

@@ -9,6 +9,7 @@ This view tries to discover the request format (through _format or Accept header
 and then serialize the given object in this format. For now only xml and json are supported, but you can
 add a serializer for any format you like. If there is no format given, or it is unsupported the default
 jsp page will be shown.
+* bugfix: Flash scope parameters are now set with arrays, so it will work on GAE
 * you can annotate your controller class with @Path, and all methods URIs will have the path specified 
 as prefix:
 [java]

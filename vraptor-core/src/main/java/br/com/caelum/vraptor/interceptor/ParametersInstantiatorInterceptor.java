@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,13 +48,16 @@ public class ParametersInstantiatorInterceptor implements Interceptor {
     private final Validator validator;
     private final Localization localization;
 	private final List<Message> errors = new ArrayList<Message>();
+	private final HttpSession session;
+	public static final String FLASH_PARAMETERS = "_vraptor_flash_parameters";
 
     public ParametersInstantiatorInterceptor(ParametersProvider provider, MethodInfo parameters,
-            Validator validator, Localization localization) {
+            Validator validator, Localization localization, HttpSession session) {
         this.provider = provider;
         this.parameters = parameters;
         this.validator = validator;
         this.localization = localization;
+		this.session = session;
     }
 
     public boolean accepts(ResourceMethod method) {
@@ -60,7 +65,7 @@ public class ParametersInstantiatorInterceptor implements Interceptor {
     }
 
     public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws InterceptionException {
-        Object[] values = provider.getParametersFor(method, errors, localization.getBundle());
+        Object[] values = getParametersFor(method);
 
         validator.addAll(errors);
 
@@ -71,4 +76,13 @@ public class ParametersInstantiatorInterceptor implements Interceptor {
         parameters.setParameters(values);
         stack.next(method, resourceInstance);
     }
+
+	private Object[] getParametersFor(ResourceMethod method) {
+		Object[] args = (Object[]) session.getAttribute(ParametersInstantiatorInterceptor.FLASH_PARAMETERS);
+		if (args == null) {
+			return provider.getParametersFor(method, errors, localization.getBundle());
+		}
+		session.removeAttribute(ParametersInstantiatorInterceptor.FLASH_PARAMETERS);
+		return args;
+	}
 }

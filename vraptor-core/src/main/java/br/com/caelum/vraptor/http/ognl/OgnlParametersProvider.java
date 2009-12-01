@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import ognl.MethodFailedException;
 import ognl.NoSuchPropertyException;
@@ -49,7 +48,6 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.ValidationMessage;
 import br.com.caelum.vraptor.validator.annotation.ValidationException;
-import br.com.caelum.vraptor.view.DefaultLogicResult;
 import br.com.caelum.vraptor.vraptor2.Info;
 
 /**
@@ -107,14 +105,7 @@ public class OgnlParametersProvider implements ParametersProvider {
 	}
 
 	private Object createRoot(ResourceMethod method, List<Message> errors, ResourceBundle bundle) {
-		HttpSession session = request.getSession();
-		Object parameters = session.getAttribute(DefaultLogicResult.FLASH_PARAMETERS);
-		if (parameters != null) {
-			session.removeAttribute(DefaultLogicResult.FLASH_PARAMETERS);
-			return parameters;
-		} else {
-			return createViaOgnl(method, errors, bundle);
-		}
+		return createViaOgnl(method, errors, bundle);
 	}
 
 	private Object createViaOgnl(ResourceMethod method, List<Message> errors,

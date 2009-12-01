@@ -20,24 +20,31 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 
-import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.asm.AsmBasedTypeCreator;
 import br.com.caelum.vraptor.proxy.DefaultProxifier;
-import br.com.caelum.vraptor.test.VRaptorMockery;
+import br.com.caelum.vraptor.proxy.Proxifier;
+import br.com.caelum.vraptor.resource.DefaultResourceClass;
+import br.com.caelum.vraptor.resource.DefaultResourceMethod;
+import br.com.caelum.vraptor.resource.ResourceMethod;
 
 public class RouteBuilderTest {
 
-	private VRaptorMockery mockery;
 	private ParameterNameProvider provider;
 	private RouteBuilder builder;
+	private ResourceMethod method;
+	private Proxifier proxifier;
+	private TypeFinder typeFinder;
 
 	public static class MyResource {
 
@@ -47,21 +54,23 @@ public class RouteBuilderTest {
 	}
 	@Before
 	public void setUp() throws Exception {
-		mockery = new VRaptorMockery();
-		provider = mockery.mock(ParameterNameProvider.class);
+		provider = mock(ParameterNameProvider.class);
 
-		mockery.checking(new Expectations() {
-			{
-				allowing(provider).parameterNamesFor(with(any(Method.class)));
-				will(returnValue(new String[] { "abc", "def", "ghi"}));
-			}
-		});
-		builder = new RouteBuilder(new DefaultProxifier(), new DefaultTypeFinder(provider), "/abc/{abc}/def/{def}/ghi/{ghi}");
+		when(provider.parameterNamesFor(any(Method.class))).thenReturn(new String[] { "abc", "def", "ghi"});
+
+		method = new DefaultResourceMethod(new DefaultResourceClass(MyResource.class), MyResource.class.getMethod("method", String.class, Integer.class, BigDecimal.class));
+
+		proxifier = new DefaultProxifier();
+
+		typeFinder = new DefaultTypeFinder(provider);
+
 	}
 
 	@Test
 	public void usePatternMatchinForPrimitiveParameters() throws Exception {
-		builder.is(MyResource.class, MyResource.class.getDeclaredMethods()[0]);
+		builder = new RouteBuilder(proxifier, typeFinder, "/abc/{abc}/def/{def}/ghi/{ghi}");
+
+		builder.is(MyResource.class, method.getMethod());
 		Route route = builder.build();
 
 		assertTrue("valid uri", route.canHandle("/abc/AnythingHere/def/123/ghi/123.45"));
@@ -71,13 +80,24 @@ public class RouteBuilderTest {
 		assertFalse("invalid decimal", route.canHandle("/abc/AnythingHere/def/123/ghi/kkk"));
 	}
 	@Test
+	public void usePatternMatchinForRegexParameters() throws Exception {
+		builder = new RouteBuilder(proxifier, typeFinder, "/abc/{abc:a+b+c+}/def/{def}/ghi/{ghi}");
+
+		builder.is(MyResource.class, method.getMethod());
+		Route route = builder.build();
+
+		assertFalse("invalid uri", route.canHandle("/abc/itIsInvalid/def/123/ghi/123.45"));
+		assertTrue("valid uri", route.canHandle("/abc/aaabbccccc/def/-123/ghi/-1"));
+	}
+	@Test
 	public void fillingUriForPrimitiveParameters() throws Exception {
+		builder = new RouteBuilder(proxifier, typeFinder, "/abc/{abc}/def/{def}/ghi/{ghi}");
+
 		Method method = MyResource.class.getDeclaredMethods()[0];
 		builder.is(MyResource.class, method);
 		Route route = builder.build();
 		Object parameters = new AsmBasedTypeCreator(provider)
-			.instanceWithParameters(mockery.methodFor(MyResource.class, "method", String.class, Integer.class, BigDecimal.class),
-						"Anything", 123, new BigDecimal("123.45"));
+			.instanceWithParameters(this.method, "Anything", 123, new BigDecimal("123.45"));
 		String url = route.urlFor(MyResource.class, method, parameters);
 		assertThat(url, is("/abc/Anything/def/123/ghi/123.45"));
 	}

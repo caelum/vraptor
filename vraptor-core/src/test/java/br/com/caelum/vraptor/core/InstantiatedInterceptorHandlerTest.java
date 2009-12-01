@@ -1,57 +1,47 @@
 package br.com.caelum.vraptor.core;
 
-import org.jmock.Expectations;
-import org.jmock.Mockery;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 public class InstantiatedInterceptorHandlerTest {
 
-
-	private Mockery mockery;
-	private Interceptor interceptor;
+	@Mock private Interceptor interceptor;
+	@Mock private InterceptorStack stack;
+	@Mock private ResourceMethod method;
 	private InstantiatedInterceptorHandler handler;
-	private InterceptorStack stack;
-	private ResourceMethod method;
 
 	@Before
 	public void setUp() throws Exception {
-		this.mockery = new Mockery();
-		this.interceptor = mockery.mock(Interceptor.class);
-		this.stack = mockery.mock(InterceptorStack.class);
-		this.method = mockery.mock(ResourceMethod.class);
+		MockitoAnnotations.initMocks(this);
 		this.handler = new InstantiatedInterceptorHandler(interceptor);
 	}
 
 	@Test
 	public void shouldExecuteInterceptorIfItAcceptsMethod() throws Exception {
-
-		mockery.checking(new Expectations() {
-			{
-				one(interceptor).accepts(method); will(returnValue(true));
-				one(interceptor).intercept(stack, method, null);
-				never(stack).next(method, null);
-			}
-		});
+		when(interceptor.accepts(method)).thenReturn(true);
 
 		handler.execute(stack, method, null);
-		mockery.assertIsSatisfied();
+
+		verify(interceptor).intercept(stack, method, null);
+		verify(stack, never()).next(method, null);
 	}
+
 	@Test
 	public void shouldContinueStackIfInterceptorDoesntAcceptMethod() throws Exception {
-
-		mockery.checking(new Expectations() {
-			{
-				one(interceptor).accepts(method); will(returnValue(false));
-				never(interceptor).intercept(stack, method, null);
-				one(stack).next(method, null);
-			}
-		});
+		when(interceptor.accepts(method)).thenReturn(false);
 
 		handler.execute(stack, method, null);
-		mockery.assertIsSatisfied();
+
+		verify(interceptor, never()).intercept(stack, method, null);
+		verify(stack).next(method, null);
 	}
 }

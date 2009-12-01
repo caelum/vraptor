@@ -16,13 +16,15 @@
  */
 package br.com.caelum.vraptor.core;
 
+import static org.mockito.Mockito.inOrder;
+
 import java.io.IOException;
 
-import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.Sequence;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.InOrder;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.extra.ForwardToDefaultViewInterceptor;
@@ -39,40 +41,36 @@ import br.com.caelum.vraptor.interceptor.multipart.MultipartInterceptor;
 
 public class DefaultRequestExecutionTest {
 
-    private Mockery mockery;
-    private InterceptorStack stack;
+    @Mock private InterceptorStack stack;
     private DefaultRequestExecution execution;
     private InstantiateInterceptor instantiator;
 
     @Before
     public void setup() {
-        this.mockery = new Mockery();
-        this.stack = mockery.mock(InterceptorStack.class);
+    	MockitoAnnotations.initMocks(this);
         this.instantiator = new InstantiateInterceptor(null);
         this.execution = new DefaultRequestExecution(stack, instantiator);
     }
 
     @Test
     public void shouldAddInterceptorsInOrder() throws InterceptionException, IOException {
-        final Sequence sequence = mockery.sequence("executionSequence");
-        mockery.checking(new Expectations() {
-            {
-                one(stack).add(ResourceLookupInterceptor.class); inSequence(sequence);
-                one(stack).add(FlashInterceptor.class); inSequence(sequence);
-                one(stack).add(InterceptorListPriorToExecutionExtractor.class); inSequence(sequence);
-                one(stack).add(MultipartInterceptor.class); inSequence(sequence);
-                one(stack).add(instantiator); inSequence(sequence);
-                one(stack).add(ParametersInstantiatorInterceptor.class); inSequence(sequence);
-                one(stack).add(DeserializingInterceptor.class); inSequence(sequence);
-                one(stack).add(ExecuteMethodInterceptor.class); inSequence(sequence);
-                one(stack).add(OutjectResult.class); inSequence(sequence);
-                one(stack).add(DownloadInterceptor.class); inSequence(sequence);
-                one(stack).add(ForwardToDefaultViewInterceptor.class); inSequence(sequence);
-                one(stack).next(null, null); inSequence(sequence);
-            }
-        });
+
         execution.execute();
-        mockery.assertIsSatisfied();
+
+        InOrder order = inOrder(stack);
+
+        order.verify(stack).add(ResourceLookupInterceptor.class);
+        order.verify(stack).add(FlashInterceptor.class);
+        order.verify(stack).add(InterceptorListPriorToExecutionExtractor.class);
+        order.verify(stack).add(MultipartInterceptor.class);
+        order.verify(stack).add(instantiator);
+        order.verify(stack).add(ParametersInstantiatorInterceptor.class);
+        order.verify(stack).add(DeserializingInterceptor.class);
+        order.verify(stack).add(ExecuteMethodInterceptor.class);
+        order.verify(stack).add(OutjectResult.class);
+        order.verify(stack).add(DownloadInterceptor.class);
+        order.verify(stack).add(ForwardToDefaultViewInterceptor.class);
+        order.verify(stack).next(null, null);
     }
 
 }

@@ -51,13 +51,13 @@ public class PathAnnotationRoutesParserTest {
     public void setup() {
         this.mockery = new VRaptorMockery();
         this.resource = mockery.resource(Clients.class);
-        ResourceClass pathAnnotated = mockery.resource(PathAnnotatedController.class);
         this.request = mockery.mock(MutableRequest.class);
         this.proxifier = new DefaultProxifier();
         this.router = new DefaultRouter(new NoRoutesConfiguration(), new PathAnnotationRoutesParser(proxifier, new NoTypeFinder()),
         		proxifier, null, new NoTypeFinder());
         router.register(resource);
-        router.register(pathAnnotated);
+        router.register(mockery.resource(PathAnnotatedController.class));
+        router.register(mockery.resource(WrongPathAnnotatedController.class));
     }
 
     @Resource
@@ -70,6 +70,19 @@ public class PathAnnotationRoutesParserTest {
     	}
     }
 
+    @Resource
+    @Path("prefix")
+    public static class WrongPathAnnotatedController {
+    	public void noSlashPath() {
+    	}
+    }
+
+    @Test
+    public void addsAPrefixToMethodsWhenTheControllerHasNoSlashAnnotatedPath() throws Exception {
+    	ResourceMethod method = router.parse("/prefix/noSlashPath", HttpMethod.POST, request);
+    	assertThat(method.getMethod(), is(equalTo(WrongPathAnnotatedController.class.getMethod("noSlashPath"))));
+    	mockery.assertIsSatisfied();
+    }
     @Test
     public void addsAPrefixToMethodsWhenTheControllerAndTheMethodAreAnnotatedWithPath() throws Exception {
     	ResourceMethod method = router.parse("/prefix/customPath", HttpMethod.POST, request);

@@ -23,6 +23,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import javax.servlet.http.HttpSession;
+
 import org.hamcrest.Description;
 import org.jmock.Expectations;
 import org.jmock.api.Action;
@@ -52,6 +54,7 @@ public class ParametersInstantiatorInterceptorTest {
 	private InterceptorStack stack;
 	private ResourceBundle bundle;
 	private List<Message> errors ;
+	private HttpSession session;
 
 	@Before
 	@SuppressWarnings("unchecked")
@@ -61,7 +64,9 @@ public class ParametersInstantiatorInterceptorTest {
         this.parametersProvider = mockery.mock(ParametersProvider.class);
         this.validator = mockery.mock(Validator.class);
         this.localization = mockery.localization();
-        this.instantiator = new ParametersInstantiatorInterceptor(parametersProvider, params, validator, localization);
+        this.session = mockery.mock(HttpSession.class);
+
+        this.instantiator = new ParametersInstantiatorInterceptor(parametersProvider, params, validator, localization, session);
         this.stack = mockery.mock(InterceptorStack.class);
         this.bundle = localization.getBundle();
 
@@ -91,6 +96,7 @@ public class ParametersInstantiatorInterceptorTest {
         	one(parametersProvider).getParametersFor(method, errors, bundle);
             will(returnValue(values));
 
+            allowing(session).getAttribute(ParametersInstantiatorInterceptor.FLASH_PARAMETERS); will(returnValue(null));
             one(validator).addAll(Collections.<Message>emptyList());
             one(stack).next(method, null);
             one(params).setParameters(values);
@@ -98,6 +104,26 @@ public class ParametersInstantiatorInterceptorTest {
 
         instantiator.intercept(stack, method, null);
         mockery.assertIsSatisfied();
+    }
+    @Test
+    public void shouldUseAndDiscardFlashParameters() throws InterceptionException, IOException, NoSuchMethodException {
+    	final ResourceMethod method = mockery.methodFor(Component.class, "method");
+
+    	mockery.checking(new Expectations() {{
+    		Object[] values = new Object[] { new Object() };
+
+    		one(session).getAttribute(ParametersInstantiatorInterceptor.FLASH_PARAMETERS); will(returnValue(values));
+    		one(session).removeAttribute(ParametersInstantiatorInterceptor.FLASH_PARAMETERS);
+
+    		never(parametersProvider).getParametersFor(method, errors, bundle);
+
+    		one(validator).addAll(Collections.<Message>emptyList());
+    		one(stack).next(method, null);
+    		one(params).setParameters(values);
+    	}});
+
+    	instantiator.intercept(stack, method, null);
+    	mockery.assertIsSatisfied();
     }
 
     @Test
@@ -109,6 +135,8 @@ public class ParametersInstantiatorInterceptorTest {
 
         	one(parametersProvider).getParametersFor(method, errors, bundle);
         	will(doAll(addErrorsToList("error1"),returnValue(values)));
+
+        	allowing(session).getAttribute(ParametersInstantiatorInterceptor.FLASH_PARAMETERS); will(returnValue(null));
 
         	one(validator).addAll(errors);
             one(stack).next(method, null);
@@ -125,6 +153,8 @@ public class ParametersInstantiatorInterceptorTest {
         final ResourceMethod method = mockery.methodFor(Component.class, "method");
 
         mockery.checking(new Expectations() {{
+        	allowing(session).getAttribute(ParametersInstantiatorInterceptor.FLASH_PARAMETERS); will(returnValue(null));
+
         	one(parametersProvider).getParametersFor(method, errors, bundle);
         	will(throwException(new RuntimeException()));
         }});

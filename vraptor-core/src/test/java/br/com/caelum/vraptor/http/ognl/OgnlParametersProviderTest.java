@@ -2,17 +2,17 @@
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource
  * All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); 
- * you may not use this file except in compliance with the License. 
- * You may obtain a copy of the License at 
- * 
- * 	http://www.apache.org/licenses/LICENSE-2.0 
- * 
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an "AS IS" BASIS, 
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
- * See the License for the specific language governing permissions and 
- * limitations under the License. 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * 	http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package br.com.caelum.vraptor.http.ognl;
@@ -51,7 +51,6 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.test.VRaptorMockery;
 import br.com.caelum.vraptor.validator.DefaultValidationException;
 import br.com.caelum.vraptor.validator.Message;
-import br.com.caelum.vraptor.view.DefaultLogicResult;
 
 public class OgnlParametersProviderTest {
 
@@ -149,7 +148,7 @@ public class OgnlParametersProviderTest {
         	throw new DefaultValidationException("AngryCat Exception");
         }
     }
-    
+
     public static class WrongCat {
         public void setId(String id) {
         	throw new IllegalArgumentException("AngryCat Exception"); //it isn't a ValidationException
@@ -159,7 +158,7 @@ public class OgnlParametersProviderTest {
         	throw new IllegalArgumentException("AngryCat Exception"); //it isn't a ValidationException
         }
     }
-    
+
     class MyResource {
         void buyA(House house) {
         }
@@ -183,28 +182,28 @@ public class OgnlParametersProviderTest {
 
     public static class KickSetter {
     	private AngryCat AngryCat_;
-    	
+
     	public void setAngryCat(AngryCat angryCat) {
 			AngryCat_ = angryCat;
 		}
-    	
+
     	public AngryCat getAngryCat() {
 			return AngryCat_;
 		}
     }
-    
+
     public static class ErrorSetter {
     	private WrongCat WrongCat_;
-    	
+
     	public void setWrongCat(WrongCat angryCat) {
     		WrongCat_ = angryCat;
 		}
-    	
+
     	public WrongCat getWrongCat() {
 			return WrongCat_;
 		}
     }
-    
+
     private void ignoreSession() {
 		mockery.checking(new Expectations() {
 			{
@@ -216,35 +215,6 @@ public class OgnlParametersProviderTest {
 		});
     }
 
-    @Test
-	public void shouldUseOriginalRequestParametersWhenThereIsAnyOnSession() throws Exception {
-    	final House house = new House();
-    	final Method method = MyResource.class.getDeclaredMethod("buyA", House.class);
-    	mockery.checking(new Expectations() {
-			{
-				HttpSession session = mockery.mock(HttpSession.class);
-				allowing(parameters).getSession(); will(returnValue(session));
-
-				BuyASetter result = new BuyASetter();
-				result.setHouse(house);
-
-				one(session).getAttribute(DefaultLogicResult.FLASH_PARAMETERS);
-				will(returnValue(result));
-
-				one(session).removeAttribute(DefaultLogicResult.FLASH_PARAMETERS);
-
-				one(nameProvider).parameterNamesFor(method);
-                will(returnValue(new String[]{"House"}));
-			}
-		});
-
-    	Object[] params = provider.getParametersFor(mockery.methodFor(MyResource.class, "buyA", House.class), errors,
-                null);
-        House provided = (House) params[0];
-		assertThat(provided, is(house));
-
-
-	}
     @Test
     public void isCapableOfDealingWithEmptyParameterForInternalWrapperValue() throws OgnlException,
             NoSuchMethodException {
@@ -358,14 +328,14 @@ public class OgnlParametersProviderTest {
         assertThat(house.owners.get(0), is(equalTo("guilherme")));
         mockery.assertIsSatisfied();
     }
-    
+
     @Test
     public void addsValidationMessageWhenSetterFailsWithAValidationException() throws Exception {
     	ignoreSession();
-    	
+
         final Method method = MyResource.class.getDeclaredMethod("kick", AngryCat.class);
         final Matcher<ResourceMethod> resourceMethod = VRaptorMatchers.resourceMethod(method);
-        
+
         mockery.checking(new Expectations() {
             {
                 one(parameters).getParameterValues("angryCat.id");
@@ -383,14 +353,14 @@ public class OgnlParametersProviderTest {
         assertThat(errors.size(), is(greaterThan(0)));
         mockery.assertIsSatisfied();
     }
-    
+
     @Test(expected=InvalidParameterException.class)
     public void throwsExceptionWhenSetterFailsWithOtherException() throws Exception {
     	ignoreSession();
-    	
+
         final Method method = MyResource.class.getDeclaredMethod("error", WrongCat.class);
         final Matcher<ResourceMethod> resourceMethod = VRaptorMatchers.resourceMethod(method);
-        
+
         mockery.checking(new Expectations() {{
             one(parameters).getParameterValues("wrongCat.id");
             will(returnValue(new String[]{"guilherme"}));

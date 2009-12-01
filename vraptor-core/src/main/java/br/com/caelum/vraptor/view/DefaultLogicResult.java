@@ -25,8 +25,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor.http.TypeCreator;
 import br.com.caelum.vraptor.http.route.Router;
+import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.proxy.MethodInvocation;
@@ -44,14 +44,10 @@ import br.com.caelum.vraptor.resource.HttpMethod;
  */
 public class DefaultLogicResult implements LogicResult {
 
-	public static final String FLASH_PARAMETERS = "_vraptor_flash_parameters";
-
-    private final Proxifier proxifier;
+	private final Proxifier proxifier;
     private final Router router;
     private final MutableRequest request;
     private final HttpServletResponse response;
-
-	private final TypeCreator creator;
 
 	private final Container container;
 
@@ -60,13 +56,12 @@ public class DefaultLogicResult implements LogicResult {
 	private final TypeNameExtractor extractor;
 
     public DefaultLogicResult(Proxifier proxifier, Router router, MutableRequest request,
-            HttpServletResponse response, TypeCreator creator, Container container, PathResolver resolver,
+            HttpServletResponse response, Container container, PathResolver resolver,
             TypeNameExtractor extractor) {
         this.proxifier = proxifier;
         this.response = response;
         this.request = request;
         this.router = router;
-		this.creator = creator;
 		this.container = container;
 		this.resolver = resolver;
 		this.extractor = extractor;
@@ -96,8 +91,7 @@ public class DefaultLogicResult implements LogicResult {
 
     private <T> void includeParametersInFlash(final Class<T> type,
     		Method method, Object[] args) {
-    	Object params = creator.instanceWithParameters(DefaultResourceMethod.instanceFor(type, method), args);
-    	request.getSession().setAttribute(FLASH_PARAMETERS, params);
+    	request.getSession().setAttribute(ParametersInstantiatorInterceptor.FLASH_PARAMETERS, args);
     }
     public <T> T redirectTo(final Class<T> type) {
         return proxifier.proxify(type, new MethodInvocation<T>() {

@@ -18,7 +18,6 @@
 package br.com.caelum.vraptor.view;
 
 import static org.hamcrest.Matchers.is;
-
 import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
@@ -35,8 +34,8 @@ import org.junit.Test;
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor.http.TypeCreator;
 import br.com.caelum.vraptor.http.route.Router;
+import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.proxy.DefaultProxifier;
@@ -49,7 +48,6 @@ public class DefaultLogicResultTest {
     private Router router;
     private HttpServletResponse response;
     private MutableRequest request;
-	private TypeCreator creator;
 	private Container container;
 	private PathResolver resolver;
 	private TypeNameExtractor extractor;
@@ -80,14 +78,12 @@ public class DefaultLogicResultTest {
         this.router = mockery.mock(Router.class);
         this.response = mockery.mock(HttpServletResponse.class);
         this.request = mockery.mock(MutableRequest.class);
-        this.creator = mockery.mock(TypeCreator.class);
 
         container = mockery.mock(Container.class);
 		resolver = mockery.mock(PathResolver.class);
 		this.extractor = mockery.mock(TypeNameExtractor.class);
 
-		this.logicResult = new DefaultLogicResult(new DefaultProxifier(), router, request, response,
-				creator, container, resolver, extractor);
+		this.logicResult = new DefaultLogicResult(new DefaultProxifier(), router, request, response, container, resolver, extractor);
     }
 
 	private void ignoreFlashScope() {
@@ -96,7 +92,6 @@ public class DefaultLogicResultTest {
 				HttpSession session = mockery.mock(HttpSession.class);
 				ignoring(session);
 
-				allowing(creator).instanceWithParameters(with(any(ResourceMethod.class)), with(any(Object[].class)));
 				allowing(request).getSession(); will(returnValue(session));
 			}
 		});
@@ -162,7 +157,7 @@ public class DefaultLogicResultTest {
 		mockery.checking(new Expectations() {
 			{
 				HttpSession session = mockery.mock(HttpSession.class);
-				one(session).setAttribute(with(equal(DefaultLogicResult.FLASH_PARAMETERS)), with(any(Object.class)));
+				one(session).setAttribute(with(equal(ParametersInstantiatorInterceptor.FLASH_PARAMETERS)), with(any(Object.class)));
 
 				one(request).getSession(); will(returnValue(session));
 

@@ -2,13 +2,28 @@
 
 [section 3.0.3 (to be released)]
 [list]
-* it is now possible to serialize collections via result.use(xml()) or result.use(json().
+* it is now possible to serialize collections via result.use(xml()) or result.use(json()).
 * new scope: @PrototypeScoped, that creates a new instance of annotated class whenever it is requested. 
 * new view: result.use(Results.representation()).from(object).serialize();
 This view tries to discover the request format (through _format or Accept header)
 and then serialize the given object in this format. For now only xml and json are supported, but you can
 add a serializer for any format you like. If there is no format given, or it is unsupported the default
 jsp page will be shown.
+* you can annotate your controller class with @Path, and all methods URIs will have the path specified 
+as prefix:
+[java]
+@Resource
+@Path("/prefix")
+public class MyController {
+	//URI: /prefix/aMethod
+	public void aMethod() {...}
+	
+	//URI: /prefix/custom
+	@Path("/custom")
+	public void customPath() {...}
+}
+[/java]
+
 [/list]
 [section 3.0.2]
 [list]

@@ -193,6 +193,21 @@ public class ClientController {
 }
 [/java]
 
+If you place the @Path on ClientController, the specified value will be used as prefix for all
+URIs from this controller:
+[java]
+@Resource
+@Path("/clients")
+public class ClientController {
+	//URI: /clients/list
+	public void list() {...}
+	
+	//URI: /clients/save
+	@Path("/save")
+	public void add() {...}
+}
+[/java]
+
 [title Path with variable injection]
 Sometimes we want the ::uri:: to include, for example, the unique identifier of
 my resource.

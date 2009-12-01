@@ -200,6 +200,21 @@ public class ClienteController {
 }
 [/java]
 
+Se você anotar o ClienteController com @Path, o valor especificado vai ser usado como prefixo
+para todas as URIs desse controller:
+[java]
+@Resource
+@Path("/clientes")
+public class ClienteController {
+	//URI: /clientes/lista
+	public void lista() {...}
+	
+	//URI: /clientes/salva
+	@Path("/salva")
+	public void adiciona() {...}
+}
+[/java]
+
 [title Path com injeção de variáveis]
 
 Em diversos casos desejamos que a ::uri:: que identifica meu recurso tenha

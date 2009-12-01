@@ -105,7 +105,7 @@ public class PathAnnotationRoutesParser implements RoutesParser {
 			String[] uris = javaMethod.getAnnotation(Path.class).value();
 
 			if (uris.length == 0) {
-				throw new IllegalArgumentException("You must specify at least one path in @Path at " + javaMethod);
+				throw new IllegalArgumentException("You must specify at least one path on @Path at " + javaMethod);
 			}
 
 			fixURIs(javaMethod, type, uris);
@@ -127,6 +127,9 @@ public class PathAnnotationRoutesParser implements RoutesParser {
 	private String extractPrefix(Class<?> type) {
 		if (type.isAnnotationPresent(Path.class)) {
 			String[] uris = type.getAnnotation(Path.class).value();
+			if (uris.length != 1) {
+				throw new IllegalArgumentException("You must specify exactly one path on @Path at " + type);
+			}
 			return fixLeadingSlash(type, uris[0]);
 		} else {
 			return "";

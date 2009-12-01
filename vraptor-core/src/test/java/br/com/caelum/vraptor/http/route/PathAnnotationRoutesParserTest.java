@@ -77,11 +77,16 @@ public class PathAnnotationRoutesParserTest {
     	}
     }
 
-    @Test
-    public void addsAPrefixToMethodsWhenTheControllerHasNoSlashAnnotatedPath() throws Exception {
-    	ResourceMethod method = router.parse("/prefix/noSlashPath", HttpMethod.POST, request);
-    	assertThat(method.getMethod(), is(equalTo(WrongPathAnnotatedController.class.getMethod("noSlashPath"))));
-    	mockery.assertIsSatisfied();
+    @Resource
+    @Path({"/prefix", "/prefix2"})
+    public static class MoreThanOnePathAnnotatedController {
+    	public void noSlashPath() {
+    	}
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void addsAPrefixToMethodsWhenTheControllerHasMoreThanOneAnnotatedPath() throws Exception {
+    	router.register(mockery.resource(MoreThanOnePathAnnotatedController.class));
     }
     @Test
     public void addsAPrefixToMethodsWhenTheControllerAndTheMethodAreAnnotatedWithPath() throws Exception {

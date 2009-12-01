@@ -29,7 +29,7 @@ import java.lang.annotation.Target;
  *
  * @author Guilherme Silveira
  */
-@Target(ElementType.METHOD)
+@Target({ElementType.METHOD, ElementType.TYPE})
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Path {

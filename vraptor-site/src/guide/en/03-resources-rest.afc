@@ -250,6 +250,22 @@ public class ClientController {
 }
 [/java]
 
+[title Paths with regular expressions]
+You can limit your parameter values using regular expressions using this idiom:
+[java]
+@Path("/color/{color:[0-9A-Fa-f]{6}}")
+public void setColor(String color) {
+	//...
+}
+[/java]
+Everything that is after the colon is treated as a regex, and the URI will only match
+if the parameter matches the regex:
+[code]
+/color/a0b3c4 => matches
+/color/AABBCC => matches
+/color/white => doesn't match
+[/code]
+
 [title Paths with wildcards]
 
 You can also use the * wildcard as a selection method for your URI. The following

@@ -215,6 +215,23 @@ public class ClienteController {
 }
 [/java]
 
+[title Paths com expressões regulares]
+Você pode restringir o valor dos parâmetros da sua URI com expressões regulares,
+dessa maneira:
+[java]
+@Path("/cor/{cor:[0-9A-Fa-f]{6}}")
+public void setCor(String cor) {
+	//...
+}
+[/java]
+Tudo que estiver depois do ":" será tratado como uma regex, e a URI só vai casar
+se o parâmetro casar com a regex:
+[code]
+/cor/a0b3c4 => casa
+/cor/AABBCC => casa
+/cor/branco => não casa
+[/code]
+
 [title Path com injeção de variáveis]
 
 Em diversos casos desejamos que a ::uri:: que identifica meu recurso tenha

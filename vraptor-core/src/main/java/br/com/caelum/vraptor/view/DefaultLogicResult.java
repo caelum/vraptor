@@ -80,7 +80,9 @@ public class DefaultLogicResult implements LogicResult {
 					if (!(returnType == void.class)) {
                 		request.setAttribute(extractor.nameFor(returnType), result);
                 	}
-                    request.getRequestDispatcher(resolver.pathFor(DefaultResourceMethod.instanceFor(type, method))).forward(request, response);
+					if(!response.isCommitted()) {
+						request.getRequestDispatcher(resolver.pathFor(DefaultResourceMethod.instanceFor(type, method))).forward(request, response);
+					}
                     return null;
                 } catch (Exception e) {
                     throw new ProxyInvocationException(e);

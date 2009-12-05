@@ -17,6 +17,8 @@
 
 package br.com.caelum.vraptor.view;
 
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
@@ -25,7 +27,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
-import java.lang.reflect.Method;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletResponse;
@@ -41,7 +42,10 @@ import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
+import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
+import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.proxy.DefaultProxifier;
+import br.com.caelum.vraptor.resource.ResourceMethod;
 
 public class DefaultLogicResultTest {
 
@@ -50,6 +54,9 @@ public class DefaultLogicResultTest {
     @Mock private Router router;
     @Mock private HttpServletResponse response;
     @Mock private MutableRequest request;
+	@Mock private Container container;
+	@Mock private PathResolver resolver;
+	@Mock private TypeNameExtractor extractor;
 	@Mock private HttpSession session;
 	@Mock private RequestDispatcher dispatcher;
 
@@ -57,9 +64,6 @@ public class DefaultLogicResultTest {
     	int calls = 0;
         public void base() {
         	calls++;
-        }
-
-        public void withArgs(String arg) {
         }
 
         @Post
@@ -82,39 +86,65 @@ public class DefaultLogicResultTest {
 
     	when(request.getSession()).thenReturn(session);
 
-		this.logicResult = new DefaultLogicResult(new DefaultProxifier(), router, request, response);
+		this.logicResult = new DefaultLogicResult(new DefaultProxifier(), router, request, response, container, resolver, extractor);
     }
 
 
 	@Test
-	public void shouldIncludeArgsOnFlashScopeAndDispatchOnForward() throws Exception {
+	public void shouldIncludeReturnValueOnForward() throws Exception {
 		givenDispatcherWillBeReturnedWhenRequested();
+		when(extractor.nameFor(String.class)).thenReturn("string");
 
-		logicResult.forwardTo(MyComponent.class).withArgs("Abc");
+		logicResult.forwardTo(MyComponent.class).returnsValue();
 
-		verify(session).setAttribute(
-				ParametersInstantiatorInterceptor.FLASH_PARAMETERS,
-				new Object[] {"Abc"});
+		verify(dispatcher).forward(request, response);
+		verify(request).setAttribute("string", "A value");
+	}
+	@Test
+	public void shouldExecuteTheLogicAndRedirectToItsViewOnForward() throws Exception {
+		final MyComponent component = givenDispatcherWillBeReturnedWhenRequested();
+
+		assertThat(component.calls, is(0));
+		logicResult.forwardTo(MyComponent.class).base();
+		assertThat(component.calls, is(1));
 
 		verify(dispatcher).forward(request, response);
 	}
 
+
 	private MyComponent givenDispatcherWillBeReturnedWhenRequested() {
 		final MyComponent component = new MyComponent();
-		when(router.urlFor(eq(MyComponent.class), any(Method.class), any(Object[].class)))
-			.thenReturn("Abc123");
+		when(container.instanceFor(MyComponent.class)).thenReturn(component);
+		when(resolver.pathFor(any(ResourceMethod.class))).thenReturn("Abc123");
 		when(request.getRequestDispatcher("Abc123")).thenReturn(dispatcher);
 		return component;
 	}
+	@Test
+	public void shouldForwardToMethodsDefaultViewWhenResponseIsNotCommited() throws Exception {
+		givenDispatcherWillBeReturnedWhenRequested();
+		when(response.isCommitted()).thenReturn(false);
 
+		logicResult.forwardTo(MyComponent.class).base();
+
+		verify(dispatcher).forward(request, response);
+	}
+	@Test
+	public void shouldNotForwardToMethodsDefaultViewWhenResponseIsCommited() throws Exception {
+		givenDispatcherWillBeReturnedWhenRequested();
+		when(response.isCommitted()).thenReturn(true);
+
+		logicResult.forwardTo(MyComponent.class).base();
+
+		verify(dispatcher, never()).forward(request, response);
+	}
 	@Test
 	public void shouldPutParametersOnFlashScopeOnRedirect() throws Exception {
 
 		logicResult.redirectTo(MyComponent.class).base();
 
 		verify(session).setAttribute(
-				ParametersInstantiatorInterceptor.FLASH_PARAMETERS,
-				new Object[0]);
+				eq(ParametersInstantiatorInterceptor.FLASH_PARAMETERS),
+				any(Object.class));
 	}
 
     @Test

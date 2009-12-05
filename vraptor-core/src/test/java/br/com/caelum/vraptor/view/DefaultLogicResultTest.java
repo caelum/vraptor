@@ -19,6 +19,12 @@ package br.com.caelum.vraptor.view;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 
@@ -26,10 +32,10 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.jmock.Expectations;
-import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Post;
@@ -43,14 +49,16 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 
 public class DefaultLogicResultTest {
 
-    private Mockery mockery;
     private LogicResult logicResult;
-    private Router router;
-    private HttpServletResponse response;
-    private MutableRequest request;
-	private Container container;
-	private PathResolver resolver;
-	private TypeNameExtractor extractor;
+
+    @Mock private Router router;
+    @Mock private HttpServletResponse response;
+    @Mock private MutableRequest request;
+	@Mock private Container container;
+	@Mock private PathResolver resolver;
+	@Mock private TypeNameExtractor extractor;
+	@Mock private HttpSession session;
+	@Mock private RequestDispatcher dispatcher;
 
     public static class MyComponent {
     	int calls = 0;
@@ -74,147 +82,103 @@ public class DefaultLogicResultTest {
 
     @Before
     public void setup() {
-        this.mockery = new Mockery();
-        this.router = mockery.mock(Router.class);
-        this.response = mockery.mock(HttpServletResponse.class);
-        this.request = mockery.mock(MutableRequest.class);
+    	MockitoAnnotations.initMocks(this);
 
-        container = mockery.mock(Container.class);
-		resolver = mockery.mock(PathResolver.class);
-		this.extractor = mockery.mock(TypeNameExtractor.class);
+    	when(request.getSession()).thenReturn(session);
 
 		this.logicResult = new DefaultLogicResult(new DefaultProxifier(), router, request, response, container, resolver, extractor);
     }
 
-	private void ignoreFlashScope() {
-		mockery.checking(new Expectations() {
-			{
-				HttpSession session = mockery.mock(HttpSession.class);
-				ignoring(session);
-
-				allowing(request).getSession(); will(returnValue(session));
-			}
-		});
-	}
 
 	@Test
 	public void shouldIncludeReturnValueOnForward() throws Exception {
-		final MyComponent component = new MyComponent();
-		mockery.checking(new Expectations() {
-			{
-				one(container).instanceFor(MyComponent.class);
-				will(returnValue(component));
+		givenDispatcherWillBeReturnedWhenRequested();
+		when(extractor.nameFor(String.class)).thenReturn("string");
 
-				one(resolver).pathFor(with(any(ResourceMethod.class)));
-				will(returnValue("Abc123"));
-
-				one(request).getRequestDispatcher("Abc123");
-				RequestDispatcher dispatcher = mockery.mock(RequestDispatcher.class);
-                will(returnValue(dispatcher));
-                one(dispatcher).forward(request, response);
-
-                one(extractor).nameFor(String.class); will(returnValue("string"));
-
-                one(request).setAttribute("string", "A value");
-			}
-		});
 		logicResult.forwardTo(MyComponent.class).returnsValue();
 
-		mockery.assertIsSatisfied();
+		verify(dispatcher).forward(request, response);
+		verify(request).setAttribute("string", "A value");
 	}
 	@Test
 	public void shouldExecuteTheLogicAndRedirectToItsViewOnForward() throws Exception {
-		final MyComponent component = new MyComponent();
-		mockery.checking(new Expectations() {
-			{
-				one(container).instanceFor(MyComponent.class);
-				will(returnValue(component));
+		final MyComponent component = givenDispatcherWillBeReturnedWhenRequested();
 
-				one(resolver).pathFor(with(any(ResourceMethod.class)));
-				will(returnValue("Abc123"));
-
-				one(request).getRequestDispatcher("Abc123");
-				RequestDispatcher dispatcher = mockery.mock(RequestDispatcher.class);
-				will(returnValue(dispatcher));
-				one(dispatcher).forward(request, response);
-			}
-		});
 		assertThat(component.calls, is(0));
 		logicResult.forwardTo(MyComponent.class).base();
 		assertThat(component.calls, is(1));
 
-		mockery.assertIsSatisfied();
+		verify(dispatcher).forward(request, response);
+	}
+
+
+	private MyComponent givenDispatcherWillBeReturnedWhenRequested() {
+		final MyComponent component = new MyComponent();
+		when(container.instanceFor(MyComponent.class)).thenReturn(component);
+		when(resolver.pathFor(any(ResourceMethod.class))).thenReturn("Abc123");
+		when(request.getRequestDispatcher("Abc123")).thenReturn(dispatcher);
+		return component;
+	}
+	@Test
+	public void shouldForwardToMethodsDefaultViewWhenResponseIsNotCommited() throws Exception {
+		givenDispatcherWillBeReturnedWhenRequested();
+		when(response.isCommitted()).thenReturn(false);
+
+		logicResult.forwardTo(MyComponent.class).base();
+
+		verify(dispatcher).forward(request, response);
+	}
+	@Test
+	public void shouldNotForwardToMethodsDefaultViewWhenResponseIsCommited() throws Exception {
+		givenDispatcherWillBeReturnedWhenRequested();
+		when(response.isCommitted()).thenReturn(true);
+
+		logicResult.forwardTo(MyComponent.class).base();
+
+		verify(dispatcher, never()).forward(request, response);
 	}
 	@Test
 	public void shouldPutParametersOnFlashScopeOnRedirect() throws Exception {
 
-		shouldPutOnFlashScope();
 		logicResult.redirectTo(MyComponent.class).base();
-		mockery.assertIsSatisfied();
-	}
 
-	private void shouldPutOnFlashScope() {
-		mockery.checking(new Expectations() {
-			{
-				HttpSession session = mockery.mock(HttpSession.class);
-				one(session).setAttribute(with(equal(ParametersInstantiatorInterceptor.FLASH_PARAMETERS)), with(any(Object.class)));
-
-				one(request).getSession(); will(returnValue(session));
-
-				ignoring(anything());
-			}
-		});
+		verify(session).setAttribute(
+				eq(ParametersInstantiatorInterceptor.FLASH_PARAMETERS),
+				any(Object.class));
 	}
 
     @Test
     public void clientRedirectingWillRedirectToTranslatedUrl() throws NoSuchMethodException, IOException {
-    	ignoreFlashScope();
 
         final String url = "custom_url";
-        mockery.checking(new Expectations() {
-            {
-                one(request).getContextPath();
-                will(returnValue("/context"));
-                one(router).urlFor(MyComponent.class, MyComponent.class.getDeclaredMethod("base"));
-                will(returnValue(url));
-                one(response).sendRedirect("/context" + url);
-            }
-        });
+        when(request.getContextPath()).thenReturn("/context");
+        when(router.urlFor(MyComponent.class, MyComponent.class.getDeclaredMethod("base"))).thenReturn(url);
+
         logicResult.redirectTo(MyComponent.class).base();
-        mockery.assertIsSatisfied();
+
+        verify(response).sendRedirect("/context" + url);
     }
 
     @Test
 	public void canRedirectWhenLogicMethodIsNotAnnotatedWithHttpMethods() throws Exception {
 
-		mockery.checking(new Expectations() {
-			{
-				one(response).sendRedirect(with(any(String.class)));
-				ignoring(anything());
-			}
-		});
     	logicResult.redirectTo(MyComponent.class).base();
+
+    	verify(response).sendRedirect(any(String.class));
 	}
     @Test
     public void canRedirectWhenLogicMethodIsAnnotatedWithHttpGetMethod() throws Exception {
-
-    	mockery.checking(new Expectations() {
-    		{
-    			one(response).sendRedirect(with(any(String.class)));
-    			ignoring(anything());
-    		}
-    	});
     	logicResult.redirectTo(MyComponent.class).annotatedWithGet();
-    }
-    @Test(expected=IllegalArgumentException.class)
-    public void cannotRedirectWhenLogicMethodIsAnnotatedWithAnyHttpMethodButGet() throws Exception {
 
-    	mockery.checking(new Expectations() {
-    		{
-    			never(response).sendRedirect(with(any(String.class)));
-    			ignoring(anything());
-    		}
-    	});
-    	logicResult.redirectTo(MyComponent.class).annotated();
+    	verify(response).sendRedirect(any(String.class));
+    }
+    @Test
+    public void cannotRedirectWhenLogicMethodIsAnnotatedWithAnyHttpMethodButGet() throws Exception {
+    	try {
+    		logicResult.redirectTo(MyComponent.class).annotated();
+    		fail("Expected IllegalArgumentException");
+    	} catch (IllegalArgumentException e) {
+    		verify(response, never()).sendRedirect(any(String.class));
+		}
     }
 }

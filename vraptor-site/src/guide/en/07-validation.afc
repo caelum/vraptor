@@ -133,3 +133,14 @@ public add(Employee employee) {
 
 If your logic may add any validation error you **must** specify where to go in case of error.
 Validator.onErrorUse works just like result.use: you can use any view from Results class.
+
+[section Showing validation errors on JSP]
+
+When there are validation errors, VRaptor will set a request attribute named %%errors%%
+with the error list, so you can show them on your JSP with:
+
+[xml]
+<c:forEach var="error" items="${errors}">
+	${error.category} - ${error.message}<br />
+</c:forEach>
+[/xml]

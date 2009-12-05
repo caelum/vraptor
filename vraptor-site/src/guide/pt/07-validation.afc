@@ -132,3 +132,14 @@ public adiciona(Funcionario funcionario) {
 Note que se sua lógica adiciona algum erro de validação você **precisa** dizer pra onde o VRaptor deve ir.
 O validator.onErrorUse funciona do mesmo jeito que o result.use: você pode usar qualquer view da
 classe Results.
+
+[section Mostrando os erros de validação no JSP]
+
+Quando existem erros de validação, o VRaptor coloca um atributo na requisição chamado
+%%errors%% contendo a lista de erros, então você pode mostrá-los na sua JSP de um jeito
+parecido com:
+[xml]
+<c:forEach var="error" items="${errors}">
+	${error.category} - ${error.message}<br />
+</c:forEach>
+[/xml]

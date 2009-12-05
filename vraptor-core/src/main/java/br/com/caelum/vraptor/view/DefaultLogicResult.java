@@ -19,7 +19,6 @@ package br.com.caelum.vraptor.view;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Type;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -27,13 +26,10 @@ import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
-import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
-import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.proxy.MethodInvocation;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.ProxyInvocationException;
 import br.com.caelum.vraptor.proxy.SuperMethod;
-import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.resource.HttpMethod;
 
 /**
@@ -49,22 +45,12 @@ public class DefaultLogicResult implements LogicResult {
     private final MutableRequest request;
     private final HttpServletResponse response;
 
-	private final Container container;
-
-	private final PathResolver resolver;
-
-	private final TypeNameExtractor extractor;
-
     public DefaultLogicResult(Proxifier proxifier, Router router, MutableRequest request,
-            HttpServletResponse response, Container container, PathResolver resolver,
-            TypeNameExtractor extractor) {
+            HttpServletResponse response) {
         this.proxifier = proxifier;
         this.response = response;
         this.request = request;
         this.router = router;
-		this.container = container;
-		this.resolver = resolver;
-		this.extractor = extractor;
     }
 
     /**
@@ -75,14 +61,12 @@ public class DefaultLogicResult implements LogicResult {
         return proxifier.proxify(type, new MethodInvocation<T>() {
             public Object intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {
                 try {
-                	Object result = method.invoke(container.instanceFor(type), args);
-                	Type returnType = method.getGenericReturnType();
-					if (!(returnType == void.class)) {
-                		request.setAttribute(extractor.nameFor(returnType), result);
-                	}
-					if(!response.isCommitted()) {
-						request.getRequestDispatcher(resolver.pathFor(DefaultResourceMethod.instanceFor(type, method))).forward(request, response);
-					}
+                	includeParametersInFlash(type, method, args);
+
+                	String uri = router.urlFor(type, method, args);
+
+                	request.getRequestDispatcher(uri).forward(request, response);
+
                     return null;
                 } catch (Exception e) {
                     throw new ProxyInvocationException(e);

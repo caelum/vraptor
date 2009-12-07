@@ -201,7 +201,8 @@ public class ClienteController {
 [/java]
 
 Se você anotar o ClienteController com @Path, o valor especificado vai ser usado como prefixo
-para todas as URIs desse controller:
+para todas as URIs desse controller. Nesse caso o @Path dos métodos pode conter tanto URIs
+relativas quanto absolutas:
 [java]
 @Resource
 @Path("/clientes")
@@ -210,8 +211,12 @@ public class ClienteController {
 	public void lista() {...}
 	
 	//URI: /clientes/salva
-	@Path("/salva")
+	@Path("salva")
 	public void adiciona() {...}
+	
+	//URI: /todosOsClientes
+	@Path("/todosOsClientes")
+	public void listaTudo() {...}
 }
 [/java]
 

@@ -12,7 +12,7 @@ para qualquer formato. Se o formato não foi passado ou ele não é suportado, o
 * bugfix: os parâmetros agora são passados via array no escopo Flash, então tudo vai funcionar como 
  deveria no GAE
 * você pode anotar sua classe controller com @Path, e todas as URIs dos métodos vão incluir o prefixo 
-especificado.
+especificado. Nesse caso, @Path dos métodos pode conter URIs absolutas e relativas...
   
 [java]
 @Resource
@@ -21,9 +21,13 @@ public class MeuController {
 	//URI: /prefixo/umMetodo
 	public void umMetodo() {...}
 	
-	//URI: /prefixo/personalizado
-	@Path("/personalizado")
-	public void pathPersonalizado() {...}
+	//URI: /prefixo/relativo
+	@Path("relativo")
+	public void pathRelativo() {...}
+
+	//URI: /absoluto
+	@Path("/absoluto")
+	public void pathAbsoluto() {...}
 }
 [/java]
 

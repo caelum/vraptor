@@ -89,7 +89,6 @@ public class DefaultLogicResultTest {
 		this.logicResult = new DefaultLogicResult(new DefaultProxifier(), router, request, response, container, resolver, extractor);
     }
 
-
 	@Test
 	public void shouldIncludeReturnValueOnForward() throws Exception {
 		givenDispatcherWillBeReturnedWhenRequested();

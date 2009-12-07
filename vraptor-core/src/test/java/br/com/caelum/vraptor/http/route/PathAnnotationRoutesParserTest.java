@@ -65,8 +65,14 @@ public class PathAnnotationRoutesParserTest {
     public static class PathAnnotatedController {
     	public void withoutPath() {
     	}
-    	@Path("/customPath")
-    	public void withPath() {
+    	@Path("/absolutePath")
+    	public void withAbsolutePath() {
+    	}
+    	@Path("relativePath")
+    	public void withRelativePath() {
+    	}
+    	@Path("")
+    	public void withEmptyPath() {
     	}
     }
 
@@ -89,9 +95,21 @@ public class PathAnnotationRoutesParserTest {
     	router.register(mockery.resource(MoreThanOnePathAnnotatedController.class));
     }
     @Test
-    public void addsAPrefixToMethodsWhenTheControllerAndTheMethodAreAnnotatedWithPath() throws Exception {
-    	ResourceMethod method = router.parse("/prefix/customPath", HttpMethod.POST, request);
-    	assertThat(method.getMethod(), is(equalTo(PathAnnotatedController.class.getMethod("withPath"))));
+    public void addsAPrefixToMethodsWhenTheControllerAndTheMethodAreAnnotatedWithRelativePath() throws Exception {
+    	ResourceMethod method = router.parse("/prefix/relativePath", HttpMethod.POST, request);
+    	assertThat(method.getMethod(), is(equalTo(PathAnnotatedController.class.getMethod("withRelativePath"))));
+    	mockery.assertIsSatisfied();
+    }
+    @Test
+    public void addsAPrefixToMethodsWhenTheControllerAndTheMethodAreAnnotatedWithAbsolutePath() throws Exception {
+    	ResourceMethod method = router.parse("/absolutePath", HttpMethod.POST, request);
+    	assertThat(method.getMethod(), is(equalTo(PathAnnotatedController.class.getMethod("withAbsolutePath"))));
+    	mockery.assertIsSatisfied();
+    }
+    @Test
+    public void addsAPrefixToMethodsWhenTheControllerAndTheMethodAreAnnotatedWithEmptyPath() throws Exception {
+    	ResourceMethod method = router.parse("/prefix", HttpMethod.POST, request);
+    	assertThat(method.getMethod(), is(equalTo(PathAnnotatedController.class.getMethod("withEmptyPath"))));
     	mockery.assertIsSatisfied();
     }
     @Test

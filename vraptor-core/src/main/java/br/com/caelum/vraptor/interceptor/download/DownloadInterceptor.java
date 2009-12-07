@@ -25,6 +25,7 @@ import java.io.OutputStream;
 import javax.servlet.http.HttpServletResponse;
 
 import br.com.caelum.vraptor.InterceptionException;
+import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.interceptor.Interceptor;
@@ -40,10 +41,12 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 public class DownloadInterceptor implements Interceptor {
 	private final HttpServletResponse response;
 	private final MethodInfo info;
+	private final Result result;
 
-	public DownloadInterceptor(HttpServletResponse response, MethodInfo info) {
+	public DownloadInterceptor(HttpServletResponse response, MethodInfo info, Result result) {
 		this.response = response;
 		this.info = info;
+		this.result = result;
 	}
 
 	public boolean accepts(ResourceMethod method) {
@@ -55,7 +58,7 @@ public class DownloadInterceptor implements Interceptor {
 		Object result = info.getResult();
 
 		if (result == null) {
-			if (response.isCommitted()) {
+			if (this.result.used()) {
 				stack.next(method, instance);
 				return;
 			} else {

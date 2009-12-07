@@ -23,7 +23,7 @@ import static org.mockito.Matchers.argThat;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
 import java.io.ByteArrayInputStream;
@@ -45,6 +45,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.interceptor.download.Download;
@@ -60,6 +61,7 @@ public class DownloadInterceptorTest {
 	@Mock private ResourceMethod resourceMethod;
 	@Mock private InterceptorStack stack;
 	@Mock private ServletOutputStream outputStream;
+	@Mock private Result result;
 
     @Before
     public void setup() throws Exception {
@@ -67,7 +69,7 @@ public class DownloadInterceptorTest {
 
 		when(response.getOutputStream()).thenReturn(outputStream);
 
-        interceptor = new DownloadInterceptor(response, info);
+        interceptor = new DownloadInterceptor(response, info, result);
     }
 
 	@Test
@@ -127,31 +129,29 @@ public class DownloadInterceptorTest {
 
 	}
 	@Test
-	public void whenResultIsNullAndResponseIsCommitedShouldDoNothing() throws Exception {
+	public void whenResultIsNullAndResultWasUsedShouldDoNothing() throws Exception {
 
 		when(info.getResult()).thenReturn(null);
-		when(response.isCommitted()).thenReturn(true);
+		when(result.used()).thenReturn(true);
 
 
 		interceptor.intercept(stack, resourceMethod, null);
 
-		verify(response).isCommitted();
 		verify(stack).next(resourceMethod, null);
-		verifyNoMoreInteractions(response);
+		verifyZeroInteractions(response);
 
 	}
 	@Test
-	public void whenResultIsNullAndResponseIsNotCommitedShouldThrowNPE() throws Exception {
+	public void whenResultIsNullAndResultWasNotUsedShouldThrowNPE() throws Exception {
 
 		when(info.getResult()).thenReturn(null);
-		when(response.isCommitted()).thenReturn(false);
+		when(result.used()).thenReturn(false);
 
 		try {
 			interceptor.intercept(stack, resourceMethod, null);
 			fail("expected NullPointerException");
 		} catch (NullPointerException e) {
-			verify(response).isCommitted();
-			verifyNoMoreInteractions(response);
+			verifyZeroInteractions(response);
 		}
 
 

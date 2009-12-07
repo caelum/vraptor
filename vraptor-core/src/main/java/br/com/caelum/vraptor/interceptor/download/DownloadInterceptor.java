@@ -54,6 +54,14 @@ public class DownloadInterceptor implements Interceptor {
 	public void intercept(InterceptorStack stack, ResourceMethod method, Object instance) throws InterceptionException {
 		Object result = info.getResult();
 
+		if (result == null) {
+			if (response.isCommitted()) {
+				stack.next(method, instance);
+				return;
+			} else {
+				throw new NullPointerException("You've just returned a Null Download. Consider redirecting to another page/logic");
+			}
+		}
 		try {
 			Download download = null;
 

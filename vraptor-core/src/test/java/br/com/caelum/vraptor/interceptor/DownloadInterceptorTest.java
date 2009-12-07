@@ -17,17 +17,33 @@
 
 package br.com.caelum.vraptor.interceptor;
 
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.fail;
+import static org.mockito.Matchers.argThat;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
+
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.InputStream;
+import java.io.PrintWriter;
+import java.util.Arrays;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
 import junit.framework.Assert;
 
-import org.jmock.Expectations;
-import org.jmock.Mockery;
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodInfo;
@@ -36,52 +52,134 @@ import br.com.caelum.vraptor.interceptor.download.DownloadInterceptor;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 public class DownloadInterceptorTest {
-    private Mockery mockery;
 
     private DownloadInterceptor interceptor;
-    private MethodInfo info;
-	private HttpServletResponse response;
-	private ResourceMethod resourceMethod;
-	private InterceptorStack stack;
+
+    @Mock private MethodInfo info;
+	@Mock private HttpServletResponse response;
+	@Mock private ResourceMethod resourceMethod;
+	@Mock private InterceptorStack stack;
+	@Mock private ServletOutputStream outputStream;
 
     @Before
-    public void setup() {
-        this.mockery = new Mockery();
-        this.response = mockery.mock(HttpServletResponse.class);
-        this.info = mockery.mock(MethodInfo.class);
+    public void setup() throws Exception {
+    	MockitoAnnotations.initMocks(this);
+
+		when(response.getOutputStream()).thenReturn(outputStream);
+
         interceptor = new DownloadInterceptor(response, info);
-        this.resourceMethod = mockery.mock(ResourceMethod.class);
-        this.stack = mockery.mock(InterceptorStack.class);
     }
 
 	@Test
 	public void testIfAcceptsFile() throws Exception {
-		mockery.checking(new Expectations() {{
-			one(resourceMethod).getMethod(); will(returnValue(FakeResource.class.getMethod("file")));
-		}});
+		when(resourceMethod.getMethod()).thenReturn(FakeResource.class.getMethod("file"));
 
 		Assert.assertTrue("Nao aceitou java.io.File", interceptor.accepts(resourceMethod));
-		mockery.assertIsSatisfied();
 	}
 	@Test
 	public void testIfAcceptsInputStream() throws Exception {
-		mockery.checking(new Expectations() {{
-			one(resourceMethod).getMethod(); will(returnValue(FakeResource.class.getMethod("input")));
-		}});
+		when(resourceMethod.getMethod()).thenReturn(FakeResource.class.getMethod("input"));
 
 		Assert.assertTrue("Nao aceitou java.io.InputStream", interceptor.accepts(resourceMethod));
-		mockery.assertIsSatisfied();
 	}
 	@Test
 	public void testIfAcceptsDownload() throws Exception {
-		mockery.checking(new Expectations() {{
-			one(resourceMethod).getMethod(); will(returnValue(FakeResource.class.getMethod("download")));
-		}});
+		when(resourceMethod.getMethod()).thenReturn(FakeResource.class.getMethod("download"));
 
 		Assert.assertTrue("Nao aceitou Download", interceptor.accepts(resourceMethod));
-		mockery.assertIsSatisfied();
 	}
 
+	@Test
+	public void whenResultIsADownloadShouldUseIt() throws Exception {
+		Download download = mock(Download.class);
+
+		when(info.getResult()).thenReturn(download);
+
+		interceptor.intercept(stack, resourceMethod, null);
+
+		verify(download).write(response);
+
+	}
+
+	@Test
+	public void whenResultIsAnInputStreamShouldCreateAInputStreamDownload() throws Exception {
+
+		byte[] bytes = "abc".getBytes();
+		when(info.getResult()).thenReturn(new ByteArrayInputStream(bytes));
+
+		interceptor.intercept(stack, resourceMethod, null);
+
+		verify(outputStream).write(argThat(is(arrayStartingWith(bytes))), eq(0), eq(3));
+
+	}
+
+	@Test
+	public void whenResultIsAFileShouldCreateAFileDownload() throws Exception {
+
+		File tmp = File.createTempFile("test", "test");
+		new PrintWriter(tmp).append("abc").close();
+
+		when(info.getResult()).thenReturn(tmp);
+
+		interceptor.intercept(stack, resourceMethod, null);
+
+		verify(outputStream).write(argThat(is(arrayStartingWith("abc".getBytes()))), eq(0), eq(3));
+
+	}
+	@Test
+	public void whenResultIsNullAndResponseIsCommitedShouldDoNothing() throws Exception {
+
+		when(info.getResult()).thenReturn(null);
+		when(response.isCommitted()).thenReturn(true);
+
+
+		interceptor.intercept(stack, resourceMethod, null);
+
+		verify(response).isCommitted();
+		verify(stack).next(resourceMethod, null);
+		verifyNoMoreInteractions(response);
+
+	}
+	@Test
+	public void whenResultIsNullAndResponseIsNotCommitedShouldThrowNPE() throws Exception {
+
+		when(info.getResult()).thenReturn(null);
+		when(response.isCommitted()).thenReturn(false);
+
+		try {
+			interceptor.intercept(stack, resourceMethod, null);
+			fail("expected NullPointerException");
+		} catch (NullPointerException e) {
+			verify(response).isCommitted();
+			verifyNoMoreInteractions(response);
+		}
+
+
+	}
+
+	private Matcher<byte[]> arrayStartingWith(final byte[] array) {
+		return new TypeSafeMatcher<byte[]>() {
+			@Override
+			protected void describeMismatchSafely(byte[] item, Description mismatchDescription) {
+			}
+			@Override
+			protected boolean matchesSafely(byte[] item) {
+				if (item.length < array.length) {
+					return false;
+				}
+				for (int i = 0; i < array.length; i++) {
+					if (array[i] != item[i]) {
+						return false;
+					}
+				}
+				return true;
+			}
+
+			public void describeTo(Description description) {
+				description.appendText("a byte array starting with " + Arrays.toString(array));
+			}
+		};
+	}
 	static class FakeResource {
 		public String string() {
 			return null;

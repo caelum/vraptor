@@ -11,7 +11,7 @@ add a serializer for any format you like. If there is no format given, or it is 
 jsp page will be shown.
 * bugfix: Flash scope parameters are now set with arrays, so it will work on GAE
 * you can annotate your controller class with @Path, and all methods URIs will have the path specified 
-as prefix:
+as prefix. In this case, @Path on methods may contain either absolute or relative paths:
 [java]
 @Resource
 @Path("/prefix")
@@ -19,9 +19,13 @@ public class MyController {
 	//URI: /prefix/aMethod
 	public void aMethod() {...}
 	
-	//URI: /prefix/custom
-	@Path("/custom")
-	public void customPath() {...}
+	//URI: /prefix/relative
+	@Path("relative")
+	public void relativePath() {...}
+
+	//URI: /absolute
+	@Path("/absolute")
+	public void absolutePath() {...}
 }
 [/java]
 * @Path now supports regexes: %%@Path("/abc/{abc:a+b+c+}")%% will match URIs like:

@@ -119,8 +119,13 @@ public class PathAnnotationRoutesParser implements RoutesParser {
 	private void fixURIs(Method javaMethod, Class<?> type, String[] uris) {
 		String prefix = extractPrefix(type);
 		for (int i = 0; i < uris.length; i++) {
-			String uri = fixLeadingSlash(type, uris[i]);
-			uris[i] = prefix + uri;
+			if ("".equals(prefix)) {
+				uris[i] = fixLeadingSlash(type, uris[i]);
+			} else if ("".equals(uris[i])) {
+				uris[i] = prefix;
+			} else if (!uris[i].startsWith("/")) {
+				uris[i] = prefix + "/" + uris[i];
+			}
 		}
 	}
 
@@ -137,10 +142,11 @@ public class PathAnnotationRoutesParser implements RoutesParser {
 	}
 
 	private String fixLeadingSlash(Class<?> type, String uri) {
-		if (!uri.startsWith("/")) {
-			logger.warn("All uris from @Path must start with a '/'. Please change it on " + type);
+		if (!uri.startsWith("/") && !type.isAnnotationPresent(Path.class)) {
+			logger.warn("All absolute uris from @Path must start with a '/'. Please change it on " + type);
 			return  "/" + uri;
 		}
+
 		return uri;
 	}
 

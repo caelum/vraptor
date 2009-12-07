@@ -194,7 +194,7 @@ public class ClientController {
 [/java]
 
 If you place the @Path on ClientController, the specified value will be used as prefix for all
-URIs from this controller:
+URIs from this controller. In this case, @Path on methods may contain either relative or absolute paths:
 [java]
 @Resource
 @Path("/clients")
@@ -203,8 +203,12 @@ public class ClientController {
 	public void list() {...}
 	
 	//URI: /clients/save
-	@Path("/save")
+	@Path("save")
 	public void add() {...}
+	
+	//URI: /allClients
+	@Path("/allClients")
+	public void listAll() {...}
 }
 [/java]
 

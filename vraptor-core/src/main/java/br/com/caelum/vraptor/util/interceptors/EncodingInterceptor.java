@@ -28,7 +28,8 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 
 public class EncodingInterceptor implements Interceptor {
 
-	private final HttpServletRequest request;
+	private static final String UTF_8 = "UTF-8";
+    private final HttpServletRequest request;
 	private final HttpServletResponse response;
 
 	public EncodingInterceptor(HttpServletRequest request, HttpServletResponse response) {
@@ -43,8 +44,8 @@ public class EncodingInterceptor implements Interceptor {
 	public void intercept(InterceptorStack stack, ResourceMethod method,
 			Object resourceInstance) throws InterceptionException {
 		try {
-			request.setCharacterEncoding("UTF-8");
-			response.setCharacterEncoding("UTF-8");
+			request.setCharacterEncoding(UTF_8);
+			response.setCharacterEncoding(UTF_8);
 		} catch (UnsupportedEncodingException e) {
 			throw new InterceptionException(e);
 		}

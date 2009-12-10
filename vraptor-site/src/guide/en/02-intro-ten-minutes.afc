@@ -2,7 +2,7 @@
 
 [section Starting a project: a on-line store]
 Let's start by downloading the ::vraptor-blank-project:: from 
-http://vraptor.caelum.com.br/download.jsp. This blank-project has the required configuration on 
+http://vraptor.caelum.com.br/download.jsp . This blank-project has the required configuration on 
 %%web.xml%% and the dependencies on %%WEB-INF/lib%% that are needed to start using VRaptor. You 
 can also import this project on Eclipse.
 
@@ -392,11 +392,11 @@ different HTTP methods in the same URI to invoke different Controllers' methods.
 want to use the following URIs on the products' crud:
 
 [code]
-	GET /products - lista todos os products
-	POST /products - adiciona um product
-	GET /products/{id} - visualiza o product com o id passado
-	PUT /products/{id} - atualiza as informações do product com o id passado
-	DELETE /products/{id} - remove o product com o id passado
+	GET /products - list all products
+	POST /products - insert a product
+	GET /products/{id} - show product identified by id
+	PUT /products/{id} - update product identified by id
+	DELETE /products/{id} - delete product identified by id
 [/code]
 
 In order to create a REST behaviour in VRaptor, we can use the @Path annotations - that changes

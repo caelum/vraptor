@@ -76,7 +76,7 @@ public class DefaultParametersControl implements ParametersControl {
 		String base = originalPattern.replaceAll("\\.\\*", "");
 		for (String key : parameters) {
 			Object result = new Evaluator().get(params, key);
-			base = base.replace("{" + key + "}", result == null ? "" : result.toString());
+			base = base.replaceAll("\\{" + key + "\\*?\\}", result == null ? "" : result.toString());
 		}
 		return base;
 	}

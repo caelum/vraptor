@@ -36,46 +36,50 @@ public class BasicConfiguration {
 	/**
 	 * context parameter that represents the class of IoC provider
 	 */
-    public static final String CONTAINER_PROVIDER = "br.com.caelum.vraptor.provider";
+	public static final String CONTAINER_PROVIDER = "br.com.caelum.vraptor.provider";
 
-    /**
-     * context parameter that represents application character encoding
-     */
-    public static final String ENCODING = "br.com.caelum.vraptor.encoding";
+	/**
+	 * context parameter that represents application character encoding
+	 */
+	public static final String ENCODING = "br.com.caelum.vraptor.encoding";
 
-    /**
-     * context parameter that represents the base package(s) of your application
-     */
-    public static final String BASE_PACKAGES_PARAMETER_NAME = "br.com.caelum.vraptor.packages";
+	/**
+	 * context parameter that represents the base package(s) of your application
+	 */
+	public static final String BASE_PACKAGES_PARAMETER_NAME = "br.com.caelum.vraptor.packages";
 
-    private final ServletContext servletContext;
+	private final ServletContext servletContext;
 
-    public BasicConfiguration(ServletContext servletContext) {
-        this.servletContext = servletContext;
-    }
+	public BasicConfiguration(ServletContext servletContext) {
+		this.servletContext = servletContext;
+	}
 
-    public ContainerProvider getProvider() throws ServletException {
-        String provider = servletContext.getInitParameter(CONTAINER_PROVIDER);
-        if (provider == null) {
-            provider = SpringProvider.class.getName();
-        }
-        try {
-            return (ContainerProvider) Class.forName(provider).getDeclaredConstructor().newInstance();
-        } catch (InvocationTargetException e) {
-            throw new ServletException(e.getCause());
-        } catch (Exception e) {
-            throw new ServletException(e);
-        }
-    }
-
-    public String getBasePackages() {
-    	String packages = servletContext.getInitParameter(BasicConfiguration.BASE_PACKAGES_PARAMETER_NAME);
-    	if (packages == null) {
-			throw new MissingConfigurationException(BasicConfiguration.BASE_PACKAGES_PARAMETER_NAME + " context-param not found in web.xml. " +
-					"Set this parameter with your base package");
+	public ContainerProvider getProvider() throws ServletException {
+		String provider = servletContext.getInitParameter(CONTAINER_PROVIDER);
+		if (provider == null) {
+			provider = SpringProvider.class.getName();
 		}
-    	return packages;
-    }
+		try {
+			return (ContainerProvider) Class.forName(provider).getDeclaredConstructor().newInstance();
+		} catch (InvocationTargetException e) {
+			throw new ServletException(e.getCause());
+		} catch (Exception e) {
+			throw new ServletException(e);
+		}
+	}
+
+	public boolean hasBasePackages() {
+		return servletContext.getInitParameter(BasicConfiguration.BASE_PACKAGES_PARAMETER_NAME) != null;
+	}
+
+	public String[] getBasePackages() {
+		String packages = servletContext.getInitParameter(BasicConfiguration.BASE_PACKAGES_PARAMETER_NAME);
+		if (packages == null) {
+			throw new MissingConfigurationException(BasicConfiguration.BASE_PACKAGES_PARAMETER_NAME
+					+ " context-param not found in web.xml. " + "Set this parameter with your base package");
+		}
+		return packages.split(",");
+	}
 
 	public String getEncoding() {
 		return servletContext.getInitParameter(ENCODING);

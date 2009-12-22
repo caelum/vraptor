@@ -34,6 +34,7 @@ import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.Converter;
+import br.com.caelum.vraptor.config.BasicConfiguration;
 import br.com.caelum.vraptor.converter.jodatime.LocalDateConverter;
 import br.com.caelum.vraptor.converter.jodatime.LocalTimeConverter;
 import br.com.caelum.vraptor.core.BaseComponents;
@@ -75,7 +76,8 @@ public class PicoProvider implements ContainerProvider {
 
 	    this.picoContainer.addComponent(context);
 
-	    Scanner scanner = new ReflectionsScanner(context);
+	    BasicConfiguration config = new BasicConfiguration(context);
+	    Scanner scanner = new ReflectionsScanner(config);
 
 	    this.picoContainer.addComponent(scanner);
 

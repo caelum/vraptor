@@ -86,6 +86,7 @@ public class SpringBasedContainerTest {
 				will(returnValue(null));
 
 				allowing(servletContext).getInitParameter(BasicConfiguration.BASE_PACKAGES_PARAMETER_NAME);
+				will(returnValue("br.com.caelum.vraptor.ioc.spring"));
 			}
 		});
 
@@ -96,7 +97,7 @@ public class SpringBasedContainerTest {
         FilterChain chain = mockery.mock(FilterChain.class);
 		VRaptorRequestHolder.setRequestForCurrentThread(new RequestInfo(servletContext, chain, request, response));
         RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
-        container = new SpringBasedContainer(null, "br.com.caelum.vraptor.ioc.spring");
+        container = new SpringBasedContainer(null, new BasicConfiguration(servletContext));
         container.start(servletContext);
     }
 

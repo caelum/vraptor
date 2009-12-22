@@ -67,11 +67,10 @@ public class SpringProvider implements ContainerProvider {
     }
 
     public void start(ServletContext context) {
-        String packagesParameter = new BasicConfiguration(context).getBasePackages();
+        BasicConfiguration config = new BasicConfiguration(context);
 
-        String[] packages = packagesParameter.split(",");
 
-        container = new SpringBasedContainer(getParentApplicationContext(context), packages);
+        container = new SpringBasedContainer(getParentApplicationContext(context), config);
         registerCustomComponents(container);
         container.start(context);
     }

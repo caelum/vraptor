@@ -25,6 +25,7 @@ import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.proxy.MethodInvocation;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.SuperMethod;
+import br.com.caelum.vraptor.serialization.Serializer;
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.ValidationException;
 
@@ -54,15 +55,18 @@ public class DefaultValidationViewsFactory implements ValidationViewsFactory {
 		this.proxifier = proxifier;
 	}
 
-	@SuppressWarnings("unchecked")
 	public <T extends View> T instanceFor(final Class<T> view, final List<Message> errors) {
 		if (view.equals(EmptyResult.class)) {
 			throw new ValidationException(errors);
 		}
 
-		final T viewInstance = result.use(view);
+		return proxifier.proxify(view, throwValidationErrorOnFinalMethods(view, errors, result.use(view)));
 
-		return proxifier.proxify(view, new MethodInvocation<T>() {
+	}
+
+	private <T> MethodInvocation<T> throwValidationErrorOnFinalMethods(final Class<T> view, final List<Message> errors,
+			final T viewInstance) {
+		return new MethodInvocation<T>() {
 			public Object intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {
 				final Object instance = new Mirror().on(viewInstance).invoke().method(method).withArgs(args);
 				if (method.getReturnType() == void.class) {
@@ -74,17 +78,27 @@ public class DefaultValidationViewsFactory implements ValidationViewsFactory {
 				}
 
 				if (args.length > 0 && args[0] instanceof Class) {
-					return proxifier.proxify((Class) args[0], new MethodInvocation() {
-						public Object intercept(Object proxy, Method method, Object[] args, SuperMethod superMethod) {
-							new Mirror().on(instance).invoke().method(method).withArgs(args);
+					return proxifier.proxify((Class<?>) args[0], throwValidationExceptionOnFirstInvocation(errors, instance));
+				}
 
-							throw new ValidationException(errors);
-						}
-					});
+				if (Serializer.class.isAssignableFrom(method.getReturnType())) {
+					return proxifier.proxify(Serializer.class,
+							throwValidationErrorOnFinalMethods(Serializer.class, errors, Serializer.class.cast(instance)));
 				}
 				throw new ResultException("It's not possible to create a validation version of " + method + ". You must provide a Custom Validation version of your class, or inform this corner case to VRaptor developers");
 			}
-		});
 
+		};
+	}
+
+	private <T> MethodInvocation<T> throwValidationExceptionOnFirstInvocation(final List<Message> errors,
+			final T instance) {
+		return new MethodInvocation<T>() {
+			public Object intercept(Object proxy, Method method, Object[] args, SuperMethod superMethod) {
+				new Mirror().on(instance).invoke().method(method).withArgs(args);
+
+				throw new ValidationException(errors);
+			}
+		};
 	}
 }

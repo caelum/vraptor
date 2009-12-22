@@ -35,21 +35,20 @@ import br.com.caelum.vraptor.ioc.Container;
  */
 class ComponentScanner extends ClassPathBeanDefinitionScanner {
 
-
 	private static final Logger logger = LoggerFactory.getLogger(ComponentScanner.class);
 
 	private final DefaultListableBeanFactory registry;
 	private final Container container;
 
 	public ComponentScanner(DefaultListableBeanFactory registry, Container container) {
-        super(registry, false);
+		super(registry, false);
 		this.registry = registry;
 		this.container = container;
-        addIncludeFilter(new ComponentTypeFilter());
+		addIncludeFilter(new ComponentTypeFilter());
 
-        setScopeMetadataResolver(new VRaptorScopeResolver());
-        setBeanNameGenerator(new UniqueBeanNameGenerator(new AnnotationBeanNameGenerator()));
-    }
+		setScopeMetadataResolver(new VRaptorScopeResolver());
+		setBeanNameGenerator(new UniqueBeanNameGenerator(new AnnotationBeanNameGenerator()));
+	}
 
 	public static class UniqueBeanNameGenerator implements BeanNameGenerator {
 
@@ -69,17 +68,19 @@ class ComponentScanner extends ClassPathBeanDefinitionScanner {
 	}
 
 	@Override
-    protected void postProcessBeanDefinition(AbstractBeanDefinition beanDefinition, String beanName) {
-    	super.postProcessBeanDefinition(beanDefinition, beanName);
-    	beanDefinition.setPrimary(true);
+	protected void postProcessBeanDefinition(AbstractBeanDefinition beanDefinition, String beanName) {
+		super.postProcessBeanDefinition(beanDefinition, beanName);
+		beanDefinition.setPrimary(true);
 		try {
 			Class<?> componentType = Class.forName(beanDefinition.getBeanClassName());
 			if (ComponentFactory.class.isAssignableFrom(componentType)) {
-	            registry.registerSingleton(beanDefinition.getBeanClassName(), new ComponentFactoryBean(container, componentType));
-	        }
+				registry.registerSingleton(beanDefinition.getBeanClassName(), new ComponentFactoryBean(container,
+						componentType));
+			}
 		} catch (ClassNotFoundException e) {
-			logger.debug("Class " + beanDefinition.getBeanClassName() + " was not found during bean definition proccess");
+			logger.debug("Class " + beanDefinition.getBeanClassName()
+					+ " was not found during bean definition proccess");
 		}
-    }
+	}
 
 }

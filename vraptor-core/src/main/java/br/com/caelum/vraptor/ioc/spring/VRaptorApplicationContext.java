@@ -43,6 +43,7 @@ import org.springframework.web.context.support.AbstractRefreshableWebApplication
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import br.com.caelum.vraptor.Converter;
+import br.com.caelum.vraptor.config.BasicConfiguration;
 import br.com.caelum.vraptor.converter.jodatime.LocalDateConverter;
 import br.com.caelum.vraptor.converter.jodatime.LocalTimeConverter;
 import br.com.caelum.vraptor.core.BaseComponents;
@@ -56,12 +57,12 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
     public static final String RESOURCES_LIST = "br.com.caelum.vraptor.resources.list";
 
     private final AnnotationBeanNameGenerator beanNameGenerator = new AnnotationBeanNameGenerator();
-    private final String[] basePackages;
     private final SpringBasedContainer container;
+	private final BasicConfiguration config;
 
-    public VRaptorApplicationContext(SpringBasedContainer container, String... basePackages) {
+    public VRaptorApplicationContext(SpringBasedContainer container, BasicConfiguration config) {
         this.container = container;
-        this.basePackages = basePackages;
+        this.config = config;
     }
 
     @Override
@@ -78,7 +79,13 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
         registerPrototypeScopedComponentsOn(beanFactory);
         registerCustomComponentsOn(beanFactory);
 
-        new ComponentScanner(beanFactory, container).scan(basePackages);
+        ComponentScanner scanner = new ComponentScanner(beanFactory, container);
+        if(config.hasBasePackages()) {
+        	scanner.scan(config.getBasePackages());
+        }
+        else {
+            // if there is no base packages, scan all package
+        }
 
         AnnotationConfigUtils.registerAnnotationConfigProcessors(beanFactory);
         AopConfigUtils.registerAspectJAnnotationAutoProxyCreatorIfNecessary(beanFactory);

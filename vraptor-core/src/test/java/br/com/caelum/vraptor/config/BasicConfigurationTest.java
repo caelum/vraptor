@@ -56,6 +56,30 @@ public class BasicConfigurationTest {
         MatcherAssert.assertThat(config.getProvider().getClass(), is(typeCompatibleWith(SpringProvider.class)));
     }
 
+
+    @Test
+    public void shouldReturnThatHasNoBasePackageWhenInitParamNull() throws ServletException {
+        when(context.getInitParameter(BasicConfiguration.BASE_PACKAGES_PARAMETER_NAME)).thenReturn(null);
+
+        MatcherAssert.assertThat(config.hasBasePackages(),  is(false));
+    }
+
+
+    @Test
+    public void shouldReturnBasePackagesWhenInitParamNotNull() throws ServletException {
+        when(context.getInitParameter(BasicConfiguration.BASE_PACKAGES_PARAMETER_NAME)).thenReturn("some.packages");
+
+        MatcherAssert.assertThat(config.getBasePackages(), is(new String[] {"some.packages"}));
+    }
+
+    @Test
+    public void shouldReturnBasePackagesArrayWhenInitParamNotNullAndHasComas() throws ServletException {
+        when(context.getInitParameter(BasicConfiguration.BASE_PACKAGES_PARAMETER_NAME)).thenReturn("some.packages,other.packages");
+
+        MatcherAssert.assertThat(config.getBasePackages(), is(new String[] {"some.packages", "other.packages"}));
+    }
+
+
     public static class MyCustomProvider implements ContainerProvider {
         public void start(ServletContext context) {
         }

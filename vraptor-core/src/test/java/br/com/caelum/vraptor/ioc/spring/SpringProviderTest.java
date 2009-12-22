@@ -2,22 +2,21 @@
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource
  * All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); 
- * you may not use this file except in compliance with the License. 
- * You may obtain a copy of the License at 
- * 
- * 	http://www.apache.org/licenses/LICENSE-2.0 
- * 
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an "AS IS" BASIS, 
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
- * See the License for the specific language governing permissions and 
- * limitations under the License. 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * 	http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package br.com.caelum.vraptor.ioc.spring;
 
 import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.jmock.Expectations;
@@ -40,7 +39,6 @@ public class SpringProviderTest {
     private ServletContext servletContext;
     private HttpServletRequestMock request;
     private HttpSession session;
-    private HttpServletResponse response;
 
     @Before
     public void init() {
@@ -49,7 +47,6 @@ public class SpringProviderTest {
 
         session = new HttpSessionMock(servletContext, "session");
         request = new HttpServletRequestMock(session);
-        response = mockery.mock(HttpServletResponse.class);
 
         ServletRequestAttributes requestAttributes = new ServletRequestAttributes(request);
         RequestContextHolder.setRequestAttributes(requestAttributes);

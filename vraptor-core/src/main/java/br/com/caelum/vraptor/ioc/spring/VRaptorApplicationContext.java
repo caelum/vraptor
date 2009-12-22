@@ -17,10 +17,13 @@
 
 package br.com.caelum.vraptor.ioc.spring;
 
+import java.util.Arrays;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.aop.config.AopConfigUtils;
 import org.springframework.aop.scope.ScopedProxyUtils;
 import org.springframework.beans.factory.BeanFactoryUtils;
@@ -54,196 +57,205 @@ import br.com.caelum.vraptor.ioc.StereotypeHandler;
  * @author Fabio Kung
  */
 public class VRaptorApplicationContext extends AbstractRefreshableWebApplicationContext {
-    public static final String RESOURCES_LIST = "br.com.caelum.vraptor.resources.list";
 
-    private final AnnotationBeanNameGenerator beanNameGenerator = new AnnotationBeanNameGenerator();
-    private final SpringBasedContainer container;
+	private static final Logger logger = LoggerFactory.getLogger(VRaptorApplicationContext.class);
+
+	public static final String RESOURCES_LIST = "br.com.caelum.vraptor.resources.list";
+
+	private final AnnotationBeanNameGenerator beanNameGenerator = new AnnotationBeanNameGenerator();
+	private final SpringBasedContainer container;
 	private final BasicConfiguration config;
 
-    public VRaptorApplicationContext(SpringBasedContainer container, BasicConfiguration config) {
-        this.container = container;
-        this.config = config;
-    }
+	public VRaptorApplicationContext(SpringBasedContainer container, BasicConfiguration config) {
+		this.container = container;
+		this.config = config;
+	}
 
-    @Override
-    protected void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) {
-        WebApplicationContextUtils.registerWebApplicationScopes(beanFactory);
-    }
+	@Override
+	protected void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) {
+		WebApplicationContextUtils.registerWebApplicationScopes(beanFactory);
+	}
 
-    @Override
+	@Override
 	protected void loadBeanDefinitions(DefaultListableBeanFactory beanFactory) {
-        beanFactory.registerSingleton(ServletContext.class.getName(), getServletContext());
-        beanFactory.ignoreDependencyType(ServletContext.class);
-        registerApplicationScopedComponentsOn(beanFactory);
-        registerRequestScopedComponentsOn(beanFactory);
-        registerPrototypeScopedComponentsOn(beanFactory);
-        registerCustomComponentsOn(beanFactory);
+		beanFactory.registerSingleton(ServletContext.class.getName(), getServletContext());
+		beanFactory.ignoreDependencyType(ServletContext.class);
+		registerApplicationScopedComponentsOn(beanFactory);
+		registerRequestScopedComponentsOn(beanFactory);
+		registerPrototypeScopedComponentsOn(beanFactory);
+		registerCustomComponentsOn(beanFactory);
 
-        ComponentScanner scanner = new ComponentScanner(beanFactory, container);
-        if(config.hasBasePackages()) {
-        	scanner.scan(config.getBasePackages());
-        }
-        else {
-            // if there is no base packages, scan all package
-        }
+		ComponentScanner scanner = new ComponentScanner(beanFactory, container);
+		if (config.hasBasePackages()) {
+			logger.info("Scanning packages: " + Arrays.toString(config.getBasePackages()));
+			scanner.scan(config.getBasePackages());
+		} else {
+			logger.info("Scanning all packages from WEB-INF/classes: ");
+			//scanner.scan();
+		}
 
-        AnnotationConfigUtils.registerAnnotationConfigProcessors(beanFactory);
-        AopConfigUtils.registerAspectJAnnotationAutoProxyCreatorIfNecessary(beanFactory);
-        registerCustomInjectionProcessor(beanFactory);
-        registerCachedComponentsOn(beanFactory);
-    }
+		AnnotationConfigUtils.registerAnnotationConfigProcessors(beanFactory);
+		AopConfigUtils.registerAspectJAnnotationAutoProxyCreatorIfNecessary(beanFactory);
+		registerCustomInjectionProcessor(beanFactory);
+		registerCachedComponentsOn(beanFactory);
+	}
 
-    private void registerCustomComponentsOn(DefaultListableBeanFactory beanFactory) {
-    	for (Class<?> type : container.getToRegister()) {
+	private void registerCustomComponentsOn(DefaultListableBeanFactory beanFactory) {
+		for (Class<?> type : container.getToRegister()) {
 			register(type, beanFactory);
 		}
 	}
 
-    private void registerPrototypeScopedComponentsOn(DefaultListableBeanFactory beanFactory) {
-    	for (Class<?> prototypeComponent : BaseComponents.getPrototypeScoped().values()) {
-    		registerOn(beanFactory, prototypeComponent);
-    	}
-    }
+	private void registerPrototypeScopedComponentsOn(DefaultListableBeanFactory beanFactory) {
+		for (Class<?> prototypeComponent : BaseComponents.getPrototypeScoped().values()) {
+			registerOn(beanFactory, prototypeComponent);
+		}
+	}
+
 	private void registerCachedComponentsOn(DefaultListableBeanFactory beanFactory) {
-        for (Class<?> cachedComponent : BaseComponents.getCachedComponents().values()) {
+		for (Class<?> cachedComponent : BaseComponents.getCachedComponents().values()) {
 			registerOn(beanFactory, cachedComponent, true);
 		}
 	}
 
 	private void registerApplicationScopedComponentsOn(DefaultListableBeanFactory beanFactory) {
-        for (Class<?> type : BaseComponents.getApplicationScoped().values()) {
-            registerOn(beanFactory, type);
-            registerFactory(type, beanFactory);
-        }
+		for (Class<?> type : BaseComponents.getApplicationScoped().values()) {
+			registerOn(beanFactory, type);
+			registerFactory(type, beanFactory);
+		}
 
-        for (Class<? extends StereotypeHandler> handlerType : BaseComponents.getStereotypeHandlers()) {
+		for (Class<? extends StereotypeHandler> handlerType : BaseComponents.getStereotypeHandlers()) {
 			registerOn(beanFactory, handlerType);
 		}
 
-        registerOn(beanFactory, StereotypedBeansRegistrar.class);
-        registerOn(beanFactory, DefaultSpringLocator.class);
-    }
+		registerOn(beanFactory, StereotypedBeansRegistrar.class);
+		registerOn(beanFactory, DefaultSpringLocator.class);
+	}
 
-    private void registerRequestScopedComponentsOn(DefaultListableBeanFactory beanFactory) {
-        for (Class<?> type : BaseComponents.getRequestScoped().values()) {
-            registerOn(beanFactory, type);
-            registerFactory(type, beanFactory);
-        }
+	private void registerRequestScopedComponentsOn(DefaultListableBeanFactory beanFactory) {
+		for (Class<?> type : BaseComponents.getRequestScoped().values()) {
+			registerOn(beanFactory, type);
+			registerFactory(type, beanFactory);
+		}
 
-        for (Class<? extends Converter<?>> converterType : BaseComponents.getBundledConverters()) {
-	        registerOn(beanFactory, converterType);
-	    }
+		for (Class<? extends Converter<?>> converterType : BaseComponents.getBundledConverters()) {
+			registerOn(beanFactory, converterType);
+		}
 
-        registerOn(beanFactory, VRaptorRequestProvider.class, true);
-        registerOn(beanFactory, HttpServletRequestProvider.class, true);
-        registerOn(beanFactory, HttpServletResponseProvider.class, true);
-        registerOn(beanFactory, HttpSessionProvider.class, true);
+		registerOn(beanFactory, VRaptorRequestProvider.class, true);
+		registerOn(beanFactory, HttpServletRequestProvider.class, true);
+		registerOn(beanFactory, HttpServletResponseProvider.class, true);
+		registerOn(beanFactory, HttpSessionProvider.class, true);
 
-        beanFactory.registerSingleton(SpringBasedContainer.class.getName(), container);
+		beanFactory.registerSingleton(SpringBasedContainer.class.getName(), container);
 
-        try {
+		try {
 			Class.forName("org.joda.time.LocalDate");
 			registerOn(beanFactory, LocalDateConverter.class);
 			registerOn(beanFactory, LocalTimeConverter.class);
 		} catch (ClassNotFoundException e) {
-			//OK, only register jodatime converters if jodatime is imported
+			// OK, only register jodatime converters if jodatime is imported
 		}
-    }
+	}
 
-    private void register(final Class<?> type, ConfigurableListableBeanFactory beanFactory) {
-        registerOn((BeanDefinitionRegistry) beanFactory, type, true);
-        registerFactory(type, beanFactory);
-    }
+	private void register(final Class<?> type, ConfigurableListableBeanFactory beanFactory) {
+		registerOn((BeanDefinitionRegistry) beanFactory, type, true);
+		registerFactory(type, beanFactory);
+	}
 
 	private void registerFactory(final Class<?> type, ConfigurableListableBeanFactory beanFactory) {
 		if (ComponentFactory.class.isAssignableFrom(type)) {
-            beanFactory.registerSingleton(type.getName(), new ComponentFactoryBean(container, type));
-        }
+			beanFactory.registerSingleton(type.getName(), new ComponentFactoryBean(container, type));
+		}
 	}
-    public void register(Class<?> type) {
-    	register(type, getBeanFactory());
-    }
 
-    private void registerOn(BeanDefinitionRegistry registry, Class<?> type) {
-        registerOn(registry, type, false);
-    }
+	public void register(Class<?> type) {
+		register(type, getBeanFactory());
+	}
 
-    private void registerOn(BeanDefinitionRegistry registry, Class<?> type, boolean customComponent) {
+	private void registerOn(BeanDefinitionRegistry registry, Class<?> type) {
+		registerOn(registry, type, false);
+	}
+
+	private void registerOn(BeanDefinitionRegistry registry, Class<?> type, boolean customComponent) {
 		AnnotatedGenericBeanDefinition definition = new AnnotatedGenericBeanDefinition(type);
-        definition.setLazyInit(true);
-        definition.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_NO);
-        if (customComponent) {
-            definition.setPrimary(true);
-            definition.setRole(BeanDefinition.ROLE_APPLICATION);
-        } else {
-            definition.setPrimary(false);
-            definition.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-        }
+		definition.setLazyInit(true);
+		definition.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_NO);
+		if (customComponent) {
+			definition.setPrimary(true);
+			definition.setRole(BeanDefinition.ROLE_APPLICATION);
+		} else {
+			definition.setPrimary(false);
+			definition.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
+		}
 
-        String name = beanNameGenerator.generateBeanName(definition, registry);
-        BeanDefinitionHolder definitionHolder = new BeanDefinitionHolder(definition, name);
+		String name = beanNameGenerator.generateBeanName(definition, registry);
+		BeanDefinitionHolder definitionHolder = new BeanDefinitionHolder(definition, name);
 
-        VRaptorScopeResolver scopeResolver = new VRaptorScopeResolver();
-        ScopeMetadata scopeMetadata = scopeResolver.resolveScopeMetadata(definition);
-        definitionHolder = applyScopeOn(registry, definitionHolder, scopeMetadata);
+		VRaptorScopeResolver scopeResolver = new VRaptorScopeResolver();
+		ScopeMetadata scopeMetadata = scopeResolver.resolveScopeMetadata(definition);
+		definitionHolder = applyScopeOn(registry, definitionHolder, scopeMetadata);
 
-        BeanDefinitionReaderUtils.registerBeanDefinition(definitionHolder, registry);
+		BeanDefinitionReaderUtils.registerBeanDefinition(definitionHolder, registry);
 	}
 
-    /**
-     * From org.springframework.context.annotation.ClassPathBeanDefinitionScanner#applyScope()
-     *
-     * @param definition
-     * @param scopeMetadata
-     * @return
-     */
-    private BeanDefinitionHolder applyScopeOn(BeanDefinitionRegistry registry, BeanDefinitionHolder definition, ScopeMetadata scopeMetadata) {
-        String scope = scopeMetadata.getScopeName();
-        ScopedProxyMode proxyMode = scopeMetadata.getScopedProxyMode();
-        definition.getBeanDefinition().setScope(scope);
-        if (BeanDefinition.SCOPE_SINGLETON.equals(scope) || BeanDefinition.SCOPE_PROTOTYPE.equals(scope) ||
-                proxyMode.equals(ScopedProxyMode.NO)) {
-            return definition;
-        } else {
-            boolean proxyTargetClass = proxyMode.equals(ScopedProxyMode.TARGET_CLASS);
-            return ScopedProxyUtils.createScopedProxy(definition, registry, proxyTargetClass);
-        }
-    }
+	/**
+	 * From
+	 * org.springframework.context.annotation.ClassPathBeanDefinitionScanner
+	 * #applyScope()
+	 *
+	 * @param definition
+	 * @param scopeMetadata
+	 * @return
+	 */
+	private BeanDefinitionHolder applyScopeOn(BeanDefinitionRegistry registry, BeanDefinitionHolder definition,
+			ScopeMetadata scopeMetadata) {
+		String scope = scopeMetadata.getScopeName();
+		ScopedProxyMode proxyMode = scopeMetadata.getScopedProxyMode();
+		definition.getBeanDefinition().setScope(scope);
+		if (BeanDefinition.SCOPE_SINGLETON.equals(scope) || BeanDefinition.SCOPE_PROTOTYPE.equals(scope)
+				|| proxyMode.equals(ScopedProxyMode.NO)) {
+			return definition;
+		} else {
+			boolean proxyTargetClass = proxyMode.equals(ScopedProxyMode.TARGET_CLASS);
+			return ScopedProxyUtils.createScopedProxy(definition, registry, proxyTargetClass);
+		}
+	}
 
-    private void registerCustomInjectionProcessor(BeanDefinitionRegistry registry) {
-        RootBeanDefinition definition = new RootBeanDefinition(InjectionBeanPostProcessor.class);
-        definition.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-        definition.getPropertyValues().addPropertyValue("order", Ordered.LOWEST_PRECEDENCE);
-        registry.registerBeanDefinition(AnnotationConfigUtils.AUTOWIRED_ANNOTATION_PROCESSOR_BEAN_NAME, definition);
-    }
+	private void registerCustomInjectionProcessor(BeanDefinitionRegistry registry) {
+		RootBeanDefinition definition = new RootBeanDefinition(InjectionBeanPostProcessor.class);
+		definition.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
+		definition.getPropertyValues().addPropertyValue("order", Ordered.LOWEST_PRECEDENCE);
+		registry.registerBeanDefinition(AnnotationConfigUtils.AUTOWIRED_ANNOTATION_PROCESSOR_BEAN_NAME, definition);
+	}
 
-    public <T> T getBean(Class<T> type) {
-        @SuppressWarnings("unchecked")
-        Map<String, ? extends T> instances = BeanFactoryUtils.beansOfTypeIncludingAncestors(this, type);
-        if (instances.size() == 0) {
-            throw new NoSuchBeanDefinitionException(type, "no bean for this type registered");
-        } else if (instances.size() == 1) {
-            return instances.values().iterator().next();
-        } else {
-            for (Map.Entry<String, ? extends T> entry : instances.entrySet()) {
-                BeanDefinition definition = getBeanFactory().getBeanDefinition(entry.getKey());
-                if (isPrimary(definition)) {
-                    return entry.getValue();
-                } else if (hasGreaterRoleThanInfrastructure(definition)) {
-                    return entry.getValue();
-                }
-            }
-            throw new NoSuchBeanDefinitionException("there are " + instances.size() +
-                    " implementations for the type [" + type +
-                    "], but none of them is primary or has a Role greater than BeanDefinition.ROLE_INFRASTRUCTURE");
-        }
-    }
+	public <T> T getBean(Class<T> type) {
+		@SuppressWarnings("unchecked")
+		Map<String, ? extends T> instances = BeanFactoryUtils.beansOfTypeIncludingAncestors(this, type);
+		if (instances.size() == 0) {
+			throw new NoSuchBeanDefinitionException(type, "no bean for this type registered");
+		} else if (instances.size() == 1) {
+			return instances.values().iterator().next();
+		} else {
+			for (Map.Entry<String, ? extends T> entry : instances.entrySet()) {
+				BeanDefinition definition = getBeanFactory().getBeanDefinition(entry.getKey());
+				if (isPrimary(definition)) {
+					return entry.getValue();
+				} else if (hasGreaterRoleThanInfrastructure(definition)) {
+					return entry.getValue();
+				}
+			}
+			throw new NoSuchBeanDefinitionException("there are " + instances.size() + " implementations for the type ["
+					+ type
+					+ "], but none of them is primary or has a Role greater than BeanDefinition.ROLE_INFRASTRUCTURE");
+		}
+	}
 
-    private boolean isPrimary(BeanDefinition definition) {
-        return definition instanceof AbstractBeanDefinition && ((AbstractBeanDefinition) definition).isPrimary();
-    }
+	private boolean isPrimary(BeanDefinition definition) {
+		return definition instanceof AbstractBeanDefinition && ((AbstractBeanDefinition) definition).isPrimary();
+	}
 
-    private boolean hasGreaterRoleThanInfrastructure(BeanDefinition definition) {
-        return definition.getRole() < BeanDefinition.ROLE_INFRASTRUCTURE;
-    }
+	private boolean hasGreaterRoleThanInfrastructure(BeanDefinition definition) {
+		return definition.getRole() < BeanDefinition.ROLE_INFRASTRUCTURE;
+	}
 }

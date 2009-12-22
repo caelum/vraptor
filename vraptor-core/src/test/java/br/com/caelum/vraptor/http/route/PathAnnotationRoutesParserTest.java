@@ -327,6 +327,11 @@ public class PathAnnotationRoutesParserTest {
     }
 
     static class NiceClients extends Clients {
+
+    	@Override
+    	public void add() {
+    		super.add();
+    	}
     }
 
     @Test
@@ -336,6 +341,14 @@ public class PathAnnotationRoutesParserTest {
         ResourceMethod method = router.parse("/niceClients/toInherit", HttpMethod.POST, request);
         assertThat(method, is(VRaptorMatchers.resourceMethod(Clients.class.getMethod("toInherit"))));
         mockery.assertIsSatisfied();
+    }
+    @Test
+    public void supportMethodOverriding() throws SecurityException, NoSuchMethodException {
+    	ResourceClass childResource = mockery.resource(NiceClients.class);
+    	router.register(childResource);
+    	ResourceMethod method = router.parse("/niceClients/add", HttpMethod.POST, request);
+    	assertThat(method, is(VRaptorMatchers.resourceMethod(NiceClients.class.getMethod("add"))));
+    	mockery.assertIsSatisfied();
     }
 
 }

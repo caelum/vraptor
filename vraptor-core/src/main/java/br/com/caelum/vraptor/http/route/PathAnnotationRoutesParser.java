@@ -58,17 +58,13 @@ public class PathAnnotationRoutesParser implements RoutesParser {
 	}
 
 	public List<Route> rulesFor(ResourceClass resource) {
-		List<Route> routes = new ArrayList<Route>();
 		Class<?> baseType = resource.getType();
-		registerRulesFor(baseType, baseType, routes);
-		return routes;
+		return registerRulesFor(baseType);
 	}
 
-	protected void registerRulesFor(Class<?> actualType, Class<?> baseType, List<Route> routes) {
-		if (actualType.equals(Object.class)) {
-			return;
-		}
-		for (Method javaMethod : actualType.getDeclaredMethods()) {
+	protected List<Route> registerRulesFor(Class<?> baseType) {
+		List<Route> routes = new ArrayList<Route>();
+		for (Method javaMethod : baseType.getMethods()) {
 			if (isEligible(javaMethod)) {
 				String[] uris = getURIsFor(javaMethod, baseType);
 
@@ -87,11 +83,14 @@ public class PathAnnotationRoutesParser implements RoutesParser {
 				}
 			}
 		}
-		registerRulesFor(actualType.getSuperclass(), baseType, routes);
+		return routes;
 	}
 
 	protected boolean isEligible(Method javaMethod) {
-		return Modifier.isPublic(javaMethod.getModifiers()) && !Modifier.isStatic(javaMethod.getModifiers());
+		return Modifier.isPublic(javaMethod.getModifiers())
+			&& !Modifier.isStatic(javaMethod.getModifiers())
+			&& !javaMethod.isBridge()
+			&& !javaMethod.getDeclaringClass().equals(Object.class);
 	}
 
 	protected String[] getURIsFor(Method javaMethod, Class<?> type) {

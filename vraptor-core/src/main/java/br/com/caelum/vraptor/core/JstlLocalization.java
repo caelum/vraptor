@@ -63,7 +63,7 @@ public class JstlLocalization implements Localization {
             try {
 				this.bundle = new SafeResourceBundle(ResourceBundle.getBundle(baseName, locale));
 			} catch (MissingResourceException e) {
-				logger.warn("couldn't find message bundle, creating an empty one", e);
+				logger.warn("couldn't find message bundle, creating an empty one");
 				this.bundle = new SafeResourceBundle(createEmptyBundle());
 			}
         }

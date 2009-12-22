@@ -11,10 +11,11 @@ dado nesse formato. Por enquanto apenas xml e json são suportados, mas é poss�
 para qualquer formato. Se o formato não foi passado ou ele não é suportado, o jsp padrão vai ser mostrado.
 * bugfix: os parâmetros agora são passados via array no escopo Flash, então tudo vai funcionar como 
  deveria no GAE
+* bugfix: agora o validator.onErrorUse(...) funciona com todos os Results padrão.
 * bugfix: retornar um Download/File/InputStream null não dá mais NullPointerException se já houve algum 
   redirecionamento (result.use(...)).
 * você pode anotar sua classe controller com @Path, e todas as URIs dos métodos vão incluir o prefixo 
-especificado. Nesse caso, @Path dos métodos pode conter URIs absolutas e relativas...
+especificado.
   
 [java]
 @Resource
@@ -27,7 +28,7 @@ public class MeuController {
 	@Path("relativo")
 	public void pathRelativo() {...}
 
-	//URI: /absoluto
+	//URI: /prefixo/absoluto
 	@Path("/absoluto")
 	public void pathAbsoluto() {...}
 }

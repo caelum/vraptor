@@ -92,6 +92,7 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
 		} else {
 			logger.info("Scanning all packages from WEB-INF/classes: ");
 			//scanner.scan();
+			// scanner use loader: PathMatchingResourcePatternResolver
 		}
 
 		AnnotationConfigUtils.registerAnnotationConfigProcessors(beanFactory);

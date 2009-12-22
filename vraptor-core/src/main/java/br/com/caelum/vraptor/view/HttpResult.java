@@ -35,7 +35,7 @@ public interface HttpResult extends View {
 
 	void sendError(int statusCode, String message);
 
-	HttpResult setStatusCode(int statusCode);
+	void setStatusCode(int statusCode);
 
 	HttpResult addHeader(String name, String value);
 
@@ -45,21 +45,14 @@ public interface HttpResult extends View {
 
 
 	/**
-	 * Send redirect with Moved Permanently Header
-	 * Example:
-	 * result.use(http()).movedPermanentlyTo("/clients");
-	 * will move to /<contextPath>/clients
-	 *
-	 * @param uri absolute uri to redirect
+	 * @deprecated use result.use(status()).movedPermanentlyTo(url) instead
 	 */
+	@Deprecated
 	void movedPermanentlyTo(String url);
 
 	/**
-	 * same as movedPermanentlyTo(String), but will use
-	 * the url for controller.method(args);
-	 *
-	 * Example:
-	 * result.use(http()).movedPermanentlyTo(ClientsController.class).list();
+	 * @deprecated use result.use(status()).movedPermanentlyTo(ClientsController.class).list(); instead
 	 */
+	@Deprecated
 	<T> T movedPermanentlyTo(Class<T> controller);
 }

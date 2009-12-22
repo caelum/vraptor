@@ -2,20 +2,21 @@ package br.com.caelum.vraptor.view;
 
 import java.util.EnumSet;
 
+import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.resource.HttpMethod;
 
 /**
  * Allows header related results.
- * 
+ *
  * @author guilherme silveira
  * @since 3.0.3
  */
-public interface Status {
+public interface Status extends View {
 
 	public void notFound();
 
 	void header(String key, String value);
-	
+
 	void created();
 
 	/**
@@ -24,11 +25,29 @@ public interface Status {
 	 * @param location
 	 */
 	void created(String location);
-	
+
 	void ok();
-	
+
 	void conflict();
-	
+
 	void methodNotAllowed(EnumSet<HttpMethod> allowedMethods);
 
+	/**
+	 * Send redirect with Moved Permanently Header
+	 * Example:
+	 * result.use(http()).movedPermanentlyTo("/clients");
+	 * will move to /<contextPath>/clients
+	 *
+	 * @param uri absolute uri to redirect
+	 */
+	void movedPermanentlyTo(String url);
+
+	/**
+	 * same as movedPermanentlyTo(String), but will use
+	 * the url for controller.method(args);
+	 *
+	 * Example:
+	 * result.use(http()).movedPermanentlyTo(ClientsController.class).list();
+	 */
+	<T> T movedPermanentlyTo(Class<T> controller);
 }

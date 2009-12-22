@@ -58,11 +58,27 @@ public class PathAnnotationRoutesParserTest {
         router.register(resource);
         router.register(mockery.resource(PathAnnotatedController.class));
         router.register(mockery.resource(WrongPathAnnotatedController.class));
+        router.register(mockery.resource(EndSlashAnnotatedController.class));
     }
 
     @Resource
     @Path("/prefix")
     public static class PathAnnotatedController {
+    	public void withoutPath() {
+    	}
+    	@Path("/absolutePath")
+    	public void withAbsolutePath() {
+    	}
+    	@Path("relativePath")
+    	public void withRelativePath() {
+    	}
+    	@Path("")
+    	public void withEmptyPath() {
+    	}
+    }
+    @Resource
+    @Path("/endSlash/")
+    public static class EndSlashAnnotatedController {
     	public void withoutPath() {
     	}
     	@Path("/absolutePath")
@@ -101,8 +117,31 @@ public class PathAnnotationRoutesParserTest {
     	mockery.assertIsSatisfied();
     }
     @Test
+    public void addsAPrefixToMethodsWhenTheControllerEndsWithSlashAndTheMethodAreAnnotatedWithRelativePath() throws Exception {
+    	ResourceMethod method = router.parse("/endSlash/relativePath", HttpMethod.POST, request);
+    	assertThat(method.getMethod(), is(equalTo(EndSlashAnnotatedController.class.getMethod("withRelativePath"))));
+    	mockery.assertIsSatisfied();
+    }
+    @Test
+    public void addsAPrefixToMethodsWhenTheControllerEndsWithSlashAndTheMethodAreAnnotatedWithAbsolutePath() throws Exception {
+    	ResourceMethod method = router.parse("/endSlash/absolutePath", HttpMethod.POST, request);
+    	assertThat(method.getMethod(), is(equalTo(EndSlashAnnotatedController.class.getMethod("withAbsolutePath"))));
+    	mockery.assertIsSatisfied();
+    }
+    @Test
+    public void addsAPrefixToMethodsWhenTheControllerEndsWithSlashAndTheMethodAreAnnotatedWithEmptyPath() throws Exception {
+    	ResourceMethod method = router.parse("/endSlash/", HttpMethod.POST, request);
+    	assertThat(method.getMethod(), is(equalTo(EndSlashAnnotatedController.class.getMethod("withEmptyPath"))));
+    	mockery.assertIsSatisfied();
+    }
+    public void addsAPrefixToMethodsWhenTheControllerEndsWithSlashAndTheMethodAreNotAnnotated() throws Exception {
+    	ResourceMethod method = router.parse("/endSlash/withoutPath", HttpMethod.POST, request);
+    	assertThat(method.getMethod(), is(equalTo(EndSlashAnnotatedController.class.getMethod("withoutPath"))));
+    	mockery.assertIsSatisfied();
+    }
+    @Test
     public void addsAPrefixToMethodsWhenTheControllerAndTheMethodAreAnnotatedWithAbsolutePath() throws Exception {
-    	ResourceMethod method = router.parse("/absolutePath", HttpMethod.POST, request);
+    	ResourceMethod method = router.parse("/prefix/absolutePath", HttpMethod.POST, request);
     	assertThat(method.getMethod(), is(equalTo(PathAnnotatedController.class.getMethod("withAbsolutePath"))));
     	mockery.assertIsSatisfied();
     }

@@ -22,9 +22,6 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.proxy.Proxifier;
@@ -52,8 +49,6 @@ import br.com.caelum.vraptor.resource.ResourceClass;
 @ApplicationScoped
 public class PathAnnotationRoutesParser implements RoutesParser {
 
-	private static final Logger logger = LoggerFactory.getLogger(PathAnnotationRoutesParser.class);
-
 	private final Proxifier proxifier;
 	private final TypeFinder finder;
 
@@ -69,7 +64,7 @@ public class PathAnnotationRoutesParser implements RoutesParser {
 		return routes;
 	}
 
-	private void registerRulesFor(Class<?> actualType, Class<?> baseType, List<Route> routes) {
+	protected void registerRulesFor(Class<?> actualType, Class<?> baseType, List<Route> routes) {
 		if (actualType.equals(Object.class)) {
 			return;
 		}
@@ -95,11 +90,11 @@ public class PathAnnotationRoutesParser implements RoutesParser {
 		registerRulesFor(actualType.getSuperclass(), baseType, routes);
 	}
 
-	private boolean isEligible(Method javaMethod) {
+	protected boolean isEligible(Method javaMethod) {
 		return Modifier.isPublic(javaMethod.getModifiers()) && !Modifier.isStatic(javaMethod.getModifiers());
 	}
 
-	private String[] getURIsFor(Method javaMethod, Class<?> type) {
+	protected String[] getURIsFor(Method javaMethod, Class<?> type) {
 
 		if (javaMethod.isAnnotationPresent(Path.class)) {
 			String[] uris = javaMethod.getAnnotation(Path.class).value();
@@ -108,7 +103,7 @@ public class PathAnnotationRoutesParser implements RoutesParser {
 				throw new IllegalArgumentException("You must specify at least one path on @Path at " + javaMethod);
 			}
 
-			fixURIs(javaMethod, type, uris);
+			fixURIs(type, uris);
 
 			return uris;
 		}
@@ -116,37 +111,39 @@ public class PathAnnotationRoutesParser implements RoutesParser {
 		return new String[] { defaultUriFor(extractControllerNameFrom(type), javaMethod.getName()) };
 	}
 
-	private void fixURIs(Method javaMethod, Class<?> type, String[] uris) {
+	protected void fixURIs(Class<?> type, String[] uris) {
 		String prefix = extractPrefix(type);
 		for (int i = 0; i < uris.length; i++) {
 			if ("".equals(prefix)) {
-				uris[i] = fixLeadingSlash(type, uris[i]);
+				uris[i] = fixLeadingSlash(uris[i]);
 			} else if ("".equals(uris[i])) {
 				uris[i] = prefix;
-			} else if (!uris[i].startsWith("/")) {
-				uris[i] = prefix + "/" + uris[i];
+			} else {
+				uris[i] = removeTrailingSlash(prefix) + fixLeadingSlash(uris[i]);
 			}
 		}
 	}
 
-	private String extractPrefix(Class<?> type) {
+	protected String removeTrailingSlash(String prefix) {
+		return prefix.replaceFirst("/$", "");
+	}
+
+	protected String extractPrefix(Class<?> type) {
 		if (type.isAnnotationPresent(Path.class)) {
 			String[] uris = type.getAnnotation(Path.class).value();
 			if (uris.length != 1) {
 				throw new IllegalArgumentException("You must specify exactly one path on @Path at " + type);
 			}
-			return fixLeadingSlash(type, uris[0]);
+			return fixLeadingSlash(uris[0]);
 		} else {
 			return "";
 		}
 	}
 
-	private String fixLeadingSlash(Class<?> type, String uri) {
-		if (!uri.startsWith("/") && !type.isAnnotationPresent(Path.class)) {
-			logger.warn("All absolute uris from @Path must start with a '/'. Please change it on " + type);
+	private String fixLeadingSlash(String uri) {
+		if (!uri.startsWith("/")) {
 			return  "/" + uri;
 		}
-
 		return uri;
 	}
 
@@ -175,7 +172,7 @@ public class PathAnnotationRoutesParser implements RoutesParser {
 		return controllerName + "/" + methodName;
 	}
 
-	private String lowerFirstCharacter(String baseName) {
+	protected String lowerFirstCharacter(String baseName) {
 		return baseName.toLowerCase().substring(0, 1) + baseName.substring(1, baseName.length());
 	}
 

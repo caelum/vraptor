@@ -16,6 +16,7 @@
  */
 package br.com.caelum.vraptor.view;
 
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -26,11 +27,15 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.proxy.DefaultProxifier;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.resource.HttpMethod;
+import br.com.caelum.vraptor.serialization.JSONSerialization;
+import br.com.caelum.vraptor.serialization.Serializer;
 import br.com.caelum.vraptor.util.test.MockedLogic;
 import br.com.caelum.vraptor.util.test.MockedPage;
 import br.com.caelum.vraptor.validator.Message;
@@ -43,6 +48,7 @@ public class DefaultValidationViewsFactoryTest {
 	private Proxifier proxifier;
 	private DefaultValidationViewsFactory factory;
 	private List<Message> errors;
+	private Serializer serializer;
 
 	@Before
 	public void setUp() throws Exception {
@@ -259,6 +265,69 @@ public class DefaultValidationViewsFactoryTest {
 			Assert.fail("Should not throw exception yet");
 		}
 		factory.instanceFor(Status.class, errors).movedPermanentlyTo(RandomComponent.class).random();
+	}
+	@Test(expected=ValidationException.class)
+	public void onXMLSerializationResultShouldThrowExceptionOnlyOnSerializeMethod() throws Exception {
+		JSONSerialization serialization = mock(JSONSerialization.class);
+
+		serializer = mock(Serializer.class, new Answer<Serializer>() {
+			public Serializer answer(InvocationOnMock invocation) throws Throwable {
+				return serializer;
+			}
+		});
+
+		when(result.use(JSONSerialization.class)).thenReturn(serialization);
+		when(serialization.from(any())).thenReturn(serializer);
+
+		try {
+			factory.instanceFor(JSONSerialization.class, errors).from(new Object());
+			factory.instanceFor(JSONSerialization.class, errors).from(new Object()).include("abc");
+			factory.instanceFor(JSONSerialization.class, errors).from(new Object()).exclude("abc");
+		} catch (ValidationException e) {
+			Assert.fail("Should not throw exception yet");
+		}
+		factory.instanceFor(JSONSerialization.class, errors).from(new Object()).serialize();
+	}
+
+	static class RandomSerializer implements Serializer {
+
+		public RandomSerializer exclude(String... names) {
+			return this;
+		}
+
+		public <T> RandomSerializer from(T object) {
+			return this;
+		}
+
+		public <T> RandomSerializer from(T object, String alias) {
+			return this;
+		}
+
+		public RandomSerializer include(String... names) {
+			return this;
+		}
+
+		public void serialize() {
+		}
+
+	}
+	@Test(expected=ValidationException.class)
+	public void onSerializerResultsShouldBeAbleToCreateValidationInstancesEvenIfChildClassesUsesCovariantType() throws Exception {
+		JSONSerialization serialization = mock(JSONSerialization.class);
+
+		serializer = new RandomSerializer();
+
+		when(result.use(JSONSerialization.class)).thenReturn(serialization);
+		when(serialization.from(any())).thenReturn(serializer);
+
+		try {
+			factory.instanceFor(JSONSerialization.class, errors).from(new Object());
+			factory.instanceFor(JSONSerialization.class, errors).from(new Object()).include("abc");
+			factory.instanceFor(JSONSerialization.class, errors).from(new Object()).exclude("abc");
+		} catch (ValidationException e) {
+			Assert.fail("Should not throw exception yet");
+		}
+		factory.instanceFor(JSONSerialization.class, errors).from(new Object()).serialize();
 	}
 
 }

@@ -14,6 +14,7 @@ para qualquer formato. Se o formato não foi passado ou ele não é suportado, o
 * bugfix: agora o validator.onErrorUse(...) funciona com todos os Results padrão.
 * bugfix: retornar um Download/File/InputStream null não dá mais NullPointerException se já houve algum 
   redirecionamento (result.use(...)).
+* bugfix: result.use(page()).redirect("...") agora inclui o contextPath se a url começar com /
 * bugfix: agora é possível criar Controllers genéricos:
 [java]
  public class ClientesController extends GenericController<Cliente> {

@@ -13,6 +13,7 @@ jsp page will be shown.
 * bugfix: validation.onErrorUse(...) now works with all default Results
 * bugfix: when returning a null Download/File/InputStream will not throw NullPointerException if any redirect
   has occurred (result.use(...)).
+* bugfix: result.use(page()).redirect("...") now includes the contextPath if given url starts with /
 * bugfix: one can create generic Controllers now:
 [java]
  public class ClientsController extends GenericController<Client> {

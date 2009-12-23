@@ -74,19 +74,37 @@ public class DefaultPageResultTest {
     	}
     }
     @Test
-	public void shouldRedirectWhenUriDoesntBelongToAnyLogic() throws Exception {
+	public void shouldRedirectWhenUriDoesntBelongToAnyLogicIncludingContextPath() throws Exception {
 		mockery.checking(new Expectations() {
 			{
 				one(router).parse("/any/url", HttpMethod.GET, request);
 				will(throwException(new ResourceNotFoundException()));
 
-				one(response).sendRedirect("/any/url");
+				one(request).getContextPath(); will(returnValue("/context"));
+
+				one(response).sendRedirect("/context/any/url");
 			}
 		});
 
 		view.redirect("/any/url");
 		mockery.assertIsSatisfied();
 	}
+    @Test
+    public void shouldNotIncludeContextPathIfURIIsAbsolute() throws Exception {
+    	mockery.checking(new Expectations() {
+    		{
+    			one(router).parse("http://vraptor.caelum.com.br", HttpMethod.GET, request);
+    			will(throwException(new ResourceNotFoundException()));
+
+    			never(request).getContextPath();
+
+    			one(response).sendRedirect("http://vraptor.caelum.com.br");
+    		}
+    	});
+
+    	view.redirect("http://vraptor.caelum.com.br");
+    	mockery.assertIsSatisfied();
+    }
     @Test
     public void shouldForwardWhenUriDoesntBelongToAnyLogic() throws Exception {
     	mockery.checking(new Expectations() {

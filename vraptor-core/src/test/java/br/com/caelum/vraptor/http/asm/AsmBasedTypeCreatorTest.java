@@ -36,6 +36,8 @@ import org.junit.Test;
 import br.com.caelum.vraptor.http.DefaultParameterNameProvider;
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor.interceptor.DogAlike;
+import br.com.caelum.vraptor.resource.DefaultResourceClass;
+import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.test.VRaptorMockery;
 
 public class AsmBasedTypeCreatorTest {
@@ -158,6 +160,29 @@ public class AsmBasedTypeCreatorTest {
     	float f = 1.0f;
     	setter.invoke(instance, f);
     	assertEquals(getter.invoke(instance), f);
+    	mockery.assertIsSatisfied();
+    }
+    static class Generic<T> {
+    	public void add(T object) {
+
+    	}
+    }
+
+    static class Specific extends Generic<String> {
+
+    }
+
+    @Test
+    public void shouldHandleOverridenGenericTypes() throws SecurityException, NoSuchMethodException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+    	DefaultResourceMethod method = new DefaultResourceMethod(new DefaultResourceClass(Specific.class), Specific.class.getMethod("add", Object.class));
+    	Class<?> type = creator.typeFor(method);
+
+    	Method getter = type.getDeclaredMethod("getT");
+    	Method setter = type.getDeclaredMethod("setT", String.class);
+
+    	Object instance = type.newInstance();
+    	setter.invoke(instance, "abc");
+    	assertEquals(getter.invoke(instance), "abc");
     	mockery.assertIsSatisfied();
     }
 

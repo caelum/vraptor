@@ -73,7 +73,7 @@ public class DefaultTypeNameExtractor implements TypeNameExtractor {
 
 	private String lowercaseFirst(String name) {
 		// common case: SomeClass -> someClass
-		if(Character.isLowerCase(name.charAt(1))) {
+		if(name.length() > 1 && Character.isLowerCase(name.charAt(1))) {
 			return Info.decapitalize(name);
 		}
 

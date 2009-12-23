@@ -13,6 +13,16 @@ jsp page will be shown.
 * bugfix: validation.onErrorUse(...) now works with all default Results
 * bugfix: when returning a null Download/File/InputStream will not throw NullPointerException if any redirect
   has occurred (result.use(...)).
+* bugfix: one can create generic Controllers now:
+[java]
+ public class ClientsController extends GenericController<Client> {
+ 
+ }
+ public class GenericController<T> {
+    public T show(Long id) {...} // exported variable will be called t
+    public void add(T obj) {...} // request parameters will be like obj.field 
+ }
+[/java]
 * you can annotate your controller class with @Path, and all methods URIs will have the path specified 
 as prefix.:
 [java]

@@ -60,7 +60,7 @@ ou seja, onde o parâmetro casa com a regex %%a+b+c+%%
 	* result.redirectTo(ClienteController.class).lista() ==> result.use(logic()).redirectTo(ClienteController.class).lista();
 	* result.of(ClienteController.class).lista() ==> result.use(page()).of(ClienteController.class).lista();
 	[/list]
-  Além disso, se você num método de dentro do controller que você quer redirecionar, você pode usar outro atalho:
+  Além disso, se o redirecionamento é para um método do mesmo controller, você pode usar:
   	[list]
   	* result.forwardTo(this).lista() ==> result.use(logic()).forwardTo(this.getClass()).lista();
 	* result.redirectTo(this).lista() ==> result.use(logic()).redirectTo(this.getClass()).lista();

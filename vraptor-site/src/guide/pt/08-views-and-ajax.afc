@@ -73,6 +73,24 @@ Por padrão existem estes tipos de views implementadas:
 	 (parametro _format ou header Accept)
 [/list]
 
+[section Atalhos no Result]
+
+Alguns redirecionamentos são bastante utilizados, então foram criados atalhos para eles.
+Os atalhos disponíveis são:
+[list]
+* result.forwardTo("/some/uri") ==> result.use(page()).forward("/some/uri");
+* result.forwardTo(ClientController.class).() ==> result.use(logic()).forwardTo(ClientController.class).list();
+* result.redirectTo(ClientController.class).list() ==> result.use(logic()).redirectTo(ClientController.class).list();
+* result.of(ClientController.class).list() ==> result.use(page()).of(ClientController.class).list();
+[/list]
+Além disso, se o redirecionamento é para um método do mesmo controller, podemos usar:
+[list]
+* result.forwardTo(this).list() ==> result.use(logic()).forwardTo(this.getClass()).list();
+* result.redirectTo(this).list() ==> result.use(logic()).redirectTo(this.getClass()).list();
+* result.of(this).list() ==> result.use(page()).of(this.getClass()).list();
+[/list]
+
+
 [section Redirecionamento e forward]
 
 No VRaptor3, podemos tanto redirecionar ou fazermos um forward do usuário para uma outra lógica ou um jsp.

@@ -59,10 +59,10 @@ public class DefaultRequestExecutionTest {
 
         InOrder order = inOrder(stack);
 
+        order.verify(stack).add(MultipartInterceptor.class);
         order.verify(stack).add(ResourceLookupInterceptor.class);
         order.verify(stack).add(FlashInterceptor.class);
         order.verify(stack).add(InterceptorListPriorToExecutionExtractor.class);
-        order.verify(stack).add(MultipartInterceptor.class);
         order.verify(stack).add(instantiator);
         order.verify(stack).add(ParametersInstantiatorInterceptor.class);
         order.verify(stack).add(DeserializingInterceptor.class);

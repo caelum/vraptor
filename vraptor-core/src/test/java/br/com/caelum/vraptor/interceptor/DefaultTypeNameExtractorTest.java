@@ -62,15 +62,15 @@ public class DefaultTypeNameExtractorTest {
 	}
 	@Test
 	public void shouldDiscoverGenericTypeParametersWhenThereIsInheritance() throws Exception {
-		Assert.assertEquals("resource",extractor.nameFor(XController.class.getMethod("edit").getGenericReturnType()));
-		Assert.assertEquals("resourceList",extractor.nameFor(XController.class.getMethod("list").getGenericReturnType()));
+		Assert.assertEquals("t",extractor.nameFor(XController.class.getMethod("edit").getGenericReturnType()));
+		Assert.assertEquals("tList",extractor.nameFor(XController.class.getMethod("list").getGenericReturnType()));
 	}
 
-	static class Generic<Resource> {
-		public Resource edit() {
+	static class Generic<T> {
+		public T edit() {
 			return null;
 		}
-		public List<Resource> list() {
+		public List<T> list() {
 			return null;
 		}
 	}

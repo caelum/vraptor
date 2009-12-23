@@ -17,6 +17,7 @@ package br.com.caelum.vraptor.interceptor;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
 import java.util.Collection;
 
@@ -53,6 +54,11 @@ public class DefaultTypeNameExtractor implements TypeNameExtractor {
 			}
 		}
 
+		if (generic instanceof TypeVariable<?>) {
+			TypeVariable<?> variable = (TypeVariable<?>) generic;
+			return lowercaseFirst(variable.getName());
+		}
+
 		Class raw = (Class) generic;
 
 
@@ -62,6 +68,10 @@ public class DefaultTypeNameExtractor implements TypeNameExtractor {
 
 		String name = raw.getSimpleName();
 
+		return lowercaseFirst(name);
+	}
+
+	private String lowercaseFirst(String name) {
 		// common case: SomeClass -> someClass
 		if(Character.isLowerCase(name.charAt(1))) {
 			return Info.decapitalize(name);

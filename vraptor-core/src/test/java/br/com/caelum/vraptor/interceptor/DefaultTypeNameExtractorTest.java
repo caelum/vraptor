@@ -6,6 +6,7 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Vector;
 
 import junit.framework.Assert;
@@ -59,7 +60,24 @@ public class DefaultTypeNameExtractorTest {
 		Assert.assertEquals("bigDecimalList",extractor.nameFor(getField("bigsLimited2")));
 		Assert.assertEquals("objectList",extractor.nameFor(getField("objects")));
 	}
+	@Test
+	public void shouldDiscoverGenericTypeParametersWhenThereIsInheritance() throws Exception {
+		Assert.assertEquals("resource",extractor.nameFor(XController.class.getMethod("edit").getGenericReturnType()));
+		Assert.assertEquals("resourceList",extractor.nameFor(XController.class.getMethod("list").getGenericReturnType()));
+	}
 
+	static class Generic<Resource> {
+		public Resource edit() {
+			return null;
+		}
+		public List<Resource> list() {
+			return null;
+		}
+	}
+
+	static class XController extends Generic<String> {
+
+	}
 
 	private Type getField(String string) throws SecurityException, NoSuchFieldException {
 		return this.getClass().getDeclaredField(string).getGenericType();

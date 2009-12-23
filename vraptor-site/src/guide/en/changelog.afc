@@ -53,7 +53,7 @@ whenever the parameter matches the %%a+b+c+%% regex.
 * New methods on %%Result%% interface as shortcuts for most common operations:
 	[list]
 	* result.forwardTo("/some/uri") ==> result.use(page()).forward("/some/uri");
-	* result.forwardTo(ClientController.class).() ==> result.use(logic()).forwardTo(ClientController.class).list();
+	* result.forwardTo(ClientController.class).list() ==> result.use(logic()).forwardTo(ClientController.class).list();
 	* result.redirectTo(ClientController.class).list() ==> result.use(logic()).redirectTo(ClientController.class).list();
 	* result.of(ClientController.class).list() ==> result.use(page()).of(ClientController.class).list();
 	[/list]

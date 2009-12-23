@@ -79,7 +79,7 @@ Alguns redirecionamentos são bastante utilizados, então foram criados atalhos 
 Os atalhos disponíveis são:
 [list]
 * result.forwardTo("/some/uri") ==> result.use(page()).forward("/some/uri");
-* result.forwardTo(ClientController.class).() ==> result.use(logic()).forwardTo(ClientController.class).list();
+* result.forwardTo(ClientController.class).list() ==> result.use(logic()).forwardTo(ClientController.class).list();
 * result.redirectTo(ClientController.class).list() ==> result.use(logic()).redirectTo(ClientController.class).list();
 * result.of(ClientController.class).list() ==> result.use(page()).of(ClientController.class).list();
 [/list]

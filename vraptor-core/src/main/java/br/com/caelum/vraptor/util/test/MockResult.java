@@ -17,6 +17,9 @@
 
 package br.com.caelum.vraptor.util.test;
 
+import static br.com.caelum.vraptor.view.Results.logic;
+import static br.com.caelum.vraptor.view.Results.page;
+
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
@@ -82,5 +85,33 @@ public class MockResult implements Result {
 
 	public Map<String, Object> included() {
 		return values;
+	}
+
+	public void forwardTo(String uri) {
+		use(page()).forward(uri);
+	}
+
+	public <T> T forwardTo(Class<T> controller) {
+		return use(logic()).forwardTo(controller);
+	}
+
+	public <T> T redirectTo(Class<T> controller) {
+		return use(logic()).redirectTo(controller);
+	}
+
+	public <T> T of(Class<T> controller) {
+		return use(page()).of(controller);
+	}
+
+	public <T> T redirectTo(T controller) {
+		return (T) redirectTo(controller.getClass());
+	}
+
+	public <T> T forwardTo(T controller) {
+		return (T) forwardTo(controller.getClass());
+	}
+
+	public <T> T of(T controller) {
+		return (T) of(controller.getClass());
 	}
 }

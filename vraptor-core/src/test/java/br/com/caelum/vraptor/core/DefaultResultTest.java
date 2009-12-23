@@ -19,6 +19,7 @@ package br.com.caelum.vraptor.core;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -29,17 +30,24 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor.view.LogicResult;
+import br.com.caelum.vraptor.view.PageResult;
+import br.com.caelum.vraptor.view.DefaultHttpResultTest.RandomController;
 
 public class DefaultResultTest {
 
     @Mock private HttpServletRequest request;
     @Mock private Container container;
 
+	private Result result;
+
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
+        result = new DefaultResult(request, container);
     }
 
     public static class MyView implements View {
@@ -48,7 +56,6 @@ public class DefaultResultTest {
 
     @Test
     public void shouldUseContainerForNewView() {
-        DefaultResult result = new DefaultResult(request, container);
         final MyView expectedView = new MyView();
         when(container.instanceFor(MyView.class)).thenReturn(expectedView);
 
@@ -58,11 +65,87 @@ public class DefaultResultTest {
 
     @Test
     public void shouldSetRequestAttribute() {
-        DefaultResult result = new DefaultResult(request, container);
 
         result.include("my_key", "my_value");
 
         verify(request).setAttribute("my_key", "my_value");
     }
 
+    @Test
+	public void shouldDelegateToPageResultOnForwardToURI() throws Exception {
+
+    	PageResult pageResult = mockResult(PageResult.class);
+
+    	result.forwardTo("/any/uri");
+
+    	verify(pageResult).forward("/any/uri");
+	}
+
+	private <T extends View> T mockResult(Class<T> view) {
+		T pageResult = mock(view);
+
+    	when(container.instanceFor(view)).thenReturn(pageResult);
+
+		return pageResult;
+	}
+    @Test
+    public void shouldDelegateToPageResultOnPageOf() throws Exception {
+
+    	PageResult pageResult = mockResult(PageResult.class);
+
+    	result.of(RandomController.class);
+
+    	verify(pageResult).of(RandomController.class);
+    }
+    @Test
+    public void shouldDelegateToLogicResultOnForwardToLogic() throws Exception {
+
+    	LogicResult logicResult = mockResult(LogicResult.class);
+
+    	result.forwardTo(RandomController.class);
+
+    	verify(logicResult).forwardTo(RandomController.class);
+
+    }
+    @Test
+    public void shouldDelegateToLogicResultOnRedirectToLogic() throws Exception {
+
+    	LogicResult logicResult = mockResult(LogicResult.class);
+
+    	result.redirectTo(RandomController.class);
+
+    	verify(logicResult).redirectTo(RandomController.class);
+
+    }
+    @Test
+    public void shouldDelegateToLogicResultOnRedirectToLogicWithInstance() throws Exception {
+
+    	LogicResult logicResult = mockResult(LogicResult.class);
+
+    	result.redirectTo(new RandomController());
+
+    	verify(logicResult).redirectTo(RandomController.class);
+
+    }
+
+    @Test
+    public void shouldDelegateToLogicResultOnForwardToLogicWithInstance() throws Exception {
+
+    	LogicResult logicResult = mockResult(LogicResult.class);
+
+    	result.forwardTo(new RandomController());
+
+    	verify(logicResult).forwardTo(RandomController.class);
+
+    }
+    @Test
+    public void shouldDelegateToPageResultOnPageOfWithInstance() throws Exception {
+
+    	PageResult pageResult = mockResult(PageResult.class);
+
+    	result.of(new RandomController());
+
+    	verify(pageResult).of(RandomController.class);
+
+    }
 }

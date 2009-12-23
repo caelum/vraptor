@@ -19,6 +19,9 @@ package br.com.caelum.vraptor;
 
 import java.util.Map;
 
+import br.com.caelum.vraptor.view.LogicResult;
+import br.com.caelum.vraptor.view.PageResult;
+
 /**
  * A resource requisition result.
  *
@@ -40,5 +43,66 @@ public interface Result {
      * @return
      */
     Map<String, Object> included();
+
+    /**
+     * A shortcut to result.use(page()).forward(uri);
+     * @see PageResult#forward(String)
+     */
+	void forwardTo(String uri);
+
+	/**
+	 * A shortcut to result.use(logic()).forwardTo(controller)
+	 * @see LogicResult#forwardTo(Class)
+	 * @param controller
+	 */
+	<T> T forwardTo(Class<T> controller);
+
+	/**
+	 * A shortcut to result.use(logic()).redirectTo(controller)
+	 * @see LogicResult#redirectTo(Class)
+	 * @param controller
+	 */
+	<T> T redirectTo(Class<T> controller);
+
+	/**
+	 * A shortcut to result.use(page()).of(controller)
+	 * @see PageResult#of(Class)
+	 * @param controller
+	 */
+	<T> T of(Class<T> controller);
+
+	/**
+	 * A shortcut to result.use(logic()).redirectTo(controller.getClass())
+	 * so you can use on your controller:<br>
+	 *
+	 * result.redirectTo(this).aMethod();
+	 *
+	 * @param controller
+	 * @see LogicResult#redirectTo(Class)
+	 */
+	<T> T redirectTo(T controller);
+
+	/**
+	 * A shortcut to result.use(logic()).forwardTo(controller.getClass())
+	 * so you can use on your controller:<br>
+	 *
+	 * result.forwardTo(this).aMethod();
+	 *
+	 * @param controller
+	 * @see LogicResult#forwardTo(Class)
+	 */
+	<T> T forwardTo(T controller);
+
+	/**
+	 * A shortcut to result.use(page()).of(controller.getClass())
+	 * so you can use on your controller:<br>
+	 *
+	 * result.of(this).aMethod();
+	 *
+	 * @param controller
+	 * @see PageResult#of(Class)
+	 */
+	<T> T of(T controller);
+
 
 }

@@ -50,6 +50,20 @@ public class MyController {
 [/code]
 whenever the parameter matches the %%a+b+c+%% regex.
 
+* New methods on %%Result%% interface as shortcuts for most common operations:
+	[list]
+	* result.forwardTo("/some/uri") ==> result.use(page()).forward("/some/uri");
+	* result.forwardTo(ClientController.class).() ==> result.use(logic()).forwardTo(ClientController.class).list();
+	* result.redirectTo(ClientController.class).list() ==> result.use(logic()).redirectTo(ClientController.class).list();
+	* result.of(ClientController.class).list() ==> result.use(page()).of(ClientController.class).list();
+	[/list]
+  Furthermore, if one are redirecting to a method on the same controller, one can use:
+  	[list]
+  	* result.forwardTo(this).list() ==> result.use(logic()).forwardTo(this.getClass()).list();
+	* result.redirectTo(this).list() ==> result.use(logic()).redirectTo(this.getClass()).list();
+	* result.of(this).list() ==> result.use(page()).of(this.getClass()).list();
+  	[/list]
+
 [/list]
 [section 3.0.2]
 [list]

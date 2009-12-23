@@ -46,7 +46,7 @@ public class DefaultHttpResultTest {
 		verify(status).movedPermanentlyTo("/my/uri");
 	}
 
-	public class RandomController {
+	public static class RandomController {
 		public void method() {
 		}
 	}

@@ -90,7 +90,11 @@ public class DefaultPageResult implements PageResult {
     public void redirect(String url) {
         try {
         	checkForLogic(url, HttpMethod.GET); // redirect only makes sense with GET method
-            response.sendRedirect(url);
+        	if (url.startsWith("/")) {
+				response.sendRedirect(request.getContextPath() + url);
+			} else {
+				response.sendRedirect(url);
+			}
         } catch (IOException e) {
             throw new ResultException(e);
         }

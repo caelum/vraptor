@@ -1,6 +1,6 @@
 [chapter ChangeLog]
 
-[section 3.0.3 (a ser lançado)]
+[section 3.1 (a ser lançado)]
 [list]
 * agora é possível serializar coleções usando result.use(xml()) e result.use(json())
 * novo escopo @PrototypeScoped, que cria sempre uma nova instância da classe anotada cada vez que
@@ -66,6 +66,8 @@ ou seja, onde o parâmetro casa com a regex %%a+b+c+%%
 	* result.redirectTo(this).lista() ==> result.use(logic()).redirectTo(this.getClass()).lista();
 	* result.of(this).lista() ==> result.use(page()).of(this.getClass()).lista();
   	[/list]
+* Se o base package não é configurado no web.xml, VRaptor scaneia por componentes e recursos em todo WEB-INF/classes
+* Suporte a Servlet 3.0, fazendo desnecessário configurar o filtro no web.xml (usando recurso de webfragments)
 [/list]
 
 [section 3.0.2]

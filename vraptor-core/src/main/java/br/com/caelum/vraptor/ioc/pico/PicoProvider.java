@@ -71,6 +71,7 @@ public class PicoProvider implements ContainerProvider {
     }
 
     public final void start(ServletContext context) {
+    	logger.warn("PicoProvider is deprecated. Use SpringProvider for VRaptor instead");
 	    ComponentRegistry componentRegistry = getComponentRegistry();
 	    registerBundledComponents(componentRegistry);
 

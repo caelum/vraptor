@@ -5,12 +5,19 @@
 	id="WebApp_ID" version="2.5">
 	<display-name>vraptor-blank-project</display-name>
 
+	<!--
+		VRaptor will scan classpath for all @Component and 
+		@Resource inside WEB-INF/classes
+
+		If you wanna load them also from WEB-INF/lib/ jars, 
+		you need to specify from which packages they will
+		be loaded, comma separated:
 	<context-param>
-        <param-name>br.com.caelum.vraptor.packages</param-name>
-        <!-- Change this parameter to your app base package -->
-        <param-value>br.com.caelum.vraptor.blank</param-value>
-    </context-param>
-    
+        	<param-name>br.com.caelum.vraptor.packages</param-name>
+	        <param-value>br.com.caelum.vraptor.blank</param-value>
+    	</context-param>
+    	-->
+
 	<filter>
 		<filter-name>vraptor</filter-name>
 		<filter-class>br.com.caelum.vraptor.VRaptor</filter-class>

@@ -1,6 +1,6 @@
 [chapter ChangeLog]
 
-[section 3.0.3 (to be released)]
+[section 3.1 (to be released)]
 [list]
 * it is now possible to serialize collections via result.use(xml()) or result.use(json()).
 * new scope: @PrototypeScoped, that creates a new instance of annotated class whenever it is requested. 
@@ -63,8 +63,10 @@ whenever the parameter matches the %%a+b+c+%% regex.
 	* result.redirectTo(this).list() ==> result.use(logic()).redirectTo(this.getClass()).list();
 	* result.of(this).list() ==> result.use(page()).of(this.getClass()).list();
   	[/list]
-
+* If no base-package is specified in web.xml, VRaptor will scan for all resources and components inside WEB-INF/classes
+* support for servlets 3.0, so it is not necessary configure the filter anymore (webfragment feature)
 [/list]
+
 [section 3.0.2]
 [list]
 * servlet 2.4 containers are now supported

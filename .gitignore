@@ -1,9 +1,11 @@
 out
 .classpath
 .project
+*.zip
 *.ipr
 *.iws
 *.iml
+*.class
 target
 classes
 build
@@ -12,7 +14,6 @@ cobertura.ser
 bin
 .DS_Store
 xsite-1.0
-*.class
 classes
 vraptor-example-compatibility/src/main/webapp/WEB-INF/lib/*.jar
 vraptor-blank-project/WebContent/WEB-INF/lib/*.jar
@@ -23,3 +24,4 @@ vraptor-mydvds/mydvds.war
 vraptor-mydvds/mydvdsDB.*
 vraptor-mydvds/src/main/webapp/WEB-INF/lib/vraptor3-*.jar
 *~
+

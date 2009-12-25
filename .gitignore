@@ -1,6 +1,8 @@
 out
 .classpath
 .project
+!vraptor-blank-project/.classpath
+!vraptor-blank-project/.project
 *.zip
 *.ipr
 *.iws

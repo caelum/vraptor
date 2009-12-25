@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jst.server.core.container/org.eclipse.jst.server.tomcat.runtimeTarget/Apache Tomcat v6.0">
+		<attributes>
+			<attribute name="owner.project.facets" value="jst.web"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
+	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/aopalliance.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/aspectjrt.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/cglib-nodep-2.1_3.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/commons-fileupload-1.2.1.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/commons-logging.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/google-collect-1.0-rc2.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/javassist-3.8.0.GA.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jstl.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/log4j-1.2.15.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/mirror-1.5.1.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/objenesis-1.1.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/ognl-2.7.3.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/org.springframework.aop-3.0.0.RELEASE.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/org.springframework.asm-3.0.0.RELEASE.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/org.springframework.beans-3.0.0.RELEASE.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/org.springframework.context-3.0.0.RELEASE.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/org.springframework.core-3.0.0.RELEASE.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/org.springframework.expression-3.0.0.RELEASE.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/org.springframework.web-3.0.0.RELEASE.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/paranamer-1.5.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/slf4j-api-1.5.8.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/slf4j-log4j12-1.5.8.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/standard-1.1.2.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/vraptor-3.1.0-SNAPSHOT.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path="build/classes"/>
+</classpath>

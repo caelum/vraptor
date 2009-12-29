@@ -1,7 +1,9 @@
 out
 .classpath
 .project
+.settings
 !vraptor-blank-project/.classpath
+!vraptor-blank-project/.settings/
 !vraptor-blank-project/.project
 *.zip
 *.ipr
@@ -11,7 +13,6 @@ out
 target
 classes
 build
-.settings
 cobertura.ser
 bin
 .DS_Store

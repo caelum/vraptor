@@ -70,6 +70,7 @@ ou seja, onde o parâmetro casa com a regex %%a+b+c+%%
 * Suporte a Servlet 3.0, fazendo desnecessário configurar o filtro no web.xml (usando recurso de webfragments)
 * Jars do spring atualizados (3.0.0) e do hibernate também, para os projetos de exemplo.
 * Blank project atualizado para WTP mais novo e refletindo novidades do VR 3.1
+* Blank project muito mais fácil de se importar no Eclipse WTP. Configurações e logging ajustados para melhor compreensão
 [/list]
 
 [section 3.0.2]

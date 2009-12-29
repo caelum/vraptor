@@ -5,6 +5,7 @@ out
 !vraptor-blank-project/.classpath
 !vraptor-blank-project/.settings/
 !vraptor-blank-project/.project
+org.eclipse.wst.common.project.facet.core.xml 
 *.zip
 *.ipr
 *.iws

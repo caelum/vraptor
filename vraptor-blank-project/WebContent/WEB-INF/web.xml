@@ -18,6 +18,10 @@
     	</context-param>
     	-->
 
+	<!--  if you are using a servlet 3.0 container 
+		as glassfish 3 or jetty 8, you dont need this
+		filter configuration -->
+		
 	<filter>
 		<filter-name>vraptor</filter-name>
 		<filter-class>br.com.caelum.vraptor.VRaptor</filter-class>
@@ -29,8 +33,4 @@
 		<dispatcher>FORWARD</dispatcher>
 		<dispatcher>REQUEST</dispatcher>
 	</filter-mapping>
-
-	<welcome-file-list>
-		<welcome-file>index.html</welcome-file>
-	</welcome-file-list>
 </web-app>

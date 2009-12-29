@@ -3,7 +3,9 @@ VRAPTOR BLANK PROJECT
 
 IMPORTING THIS PROJECT ON ECLIPSE
 
-In order to import this project on Eclipse, you'll need to rename:
-	* classpath-example to .classpath
-	* project-example to .project
+In order to import this project on Eclipse, you'll need:
+	* file/import existent projects
+	* choose the directory
+	* after importing, right click in the project, choose validate
+	*
 

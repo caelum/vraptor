@@ -1,12 +1,17 @@
 VRAPTOR BLANK PROJECT FOR GOOGLE APP ENGINE
 --------------------------------------------------------------------------------
-
 IMPORTING THIS PROJECT ON ECLIPSE
 
-In order to import this project on Eclipse, you'll need to rename:
-	* classpath-example to .classpath
-	* project-example to .project
-	* settings-example to .settings
 
-You may want Google Plugin for Eclipse too:
+You will need Google Plugin for Eclipse too:
 	* http://code.google.com/appengine/docs/java/tools/eclipse.html
+
+In order to import this project on Eclipse, you'll need:
+	* choose menu file/import existent projects
+	* choose the directory that contains vraptor-blank-project-gae (the directory in which you decompressed it)
+	* just right click on the project, run as, run on server. choose a servlet container or configure a new one
+	
+	
+	
+
+

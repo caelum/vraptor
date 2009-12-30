@@ -6,6 +6,8 @@ IMPORTING THIS PROJECT ON ECLIPSE
 You will need Google Plugin for Eclipse too:
 	* http://code.google.com/appengine/docs/java/tools/eclipse.html
 
+WARNING: check if the jars inside the project are the same of your installed GAE plugin.
+
 In order to import this project on Eclipse, you'll need:
 	* choose menu file/import existent projects
 	* choose the directory that contains vraptor-blank-project-gae (the directory in which you decompressed it)

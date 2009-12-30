@@ -12,12 +12,15 @@
 		If you wanna load them also from WEB-INF/lib/ jars, 
 		you need to specify from which packages they will
 		be loaded, comma separated:
+	-->
+	
+	<!-- 
 	<context-param>
         	<param-name>br.com.caelum.vraptor.packages</param-name>
 	        <param-value>br.com.caelum.vraptor.blank</param-value>
-    	</context-param>
-    	-->
-
+    </context-param>
+     -->
+    
 	<!--  if you are using a servlet 3.0 container 
 		as glassfish 3 or jetty 8, you dont need this
 		filter configuration -->

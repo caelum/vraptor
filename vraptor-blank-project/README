@@ -4,8 +4,12 @@ VRAPTOR BLANK PROJECT
 IMPORTING THIS PROJECT ON ECLIPSE
 
 In order to import this project on Eclipse, you'll need:
-	* file/import existent projects
-	* choose the directory
-	* after importing, right click in the project, choose validate
-	*
+	* choose menu file/import existent projects
+	* choose the directory that contains vraptor-blank-project (the directory in which you decompressed it)
+	* after importing, if there is any problems prohibiting the project to be built, right click in the project, choose validate if
+	* jsut right click on the project, run as, run on server. choose a servlet container or configure a new one
+	* done! check the log files. access http://localhost:8080/vraptor-blank-project/ (or change 8080 to the appropriate port).
+	
+	
+	
 

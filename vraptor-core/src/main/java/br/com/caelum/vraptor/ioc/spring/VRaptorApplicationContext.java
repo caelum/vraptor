@@ -87,14 +87,13 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
 
 		ComponentScanner scanner = new ComponentScanner(beanFactory, container);
 		if (config.hasBasePackages()) {
-			logger.info("Scanning packages: " + Arrays.toString(config.getBasePackages()));
+			logger
+					.info("Scanning packages from WEB-INF/classes and jars: "
+							+ Arrays.toString(config.getBasePackages()));
 			scanner.scan(config.getBasePackages());
 		} else {
-			logger.info("Scanning all packages from /WEB-INF/classes: ");
-			// ResourceLoader resolver = new
-			// PathMatchingResourcePatternResolver(); and set more properties?
-			// maybe remove a slash for some servers?
-			scanner.setResourcePattern("/WEB-INF/classes/**/*.class");
+			logger.info("No basepackage configured. Scanning all packages only from /WEB-INF/classes: ");
+			scanner.setResourcePattern("**/*.class");
 			scanner.scan("");
 		}
 

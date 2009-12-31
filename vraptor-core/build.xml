@@ -119,6 +119,7 @@
 	<target name="artifacts" depends="clean, compile" description="--> generate project's artifacts">
 		<jar destfile="${jar.file}" compress="true">
 			<fileset dir="${tmp.classes.dir}" includes="**/*.class" />
+			<fileset dir="${resources.dir}" />
 		</jar>
 	</target>
 

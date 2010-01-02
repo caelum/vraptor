@@ -18,8 +18,6 @@
 package br.com.caelum.vraptor.config;
 
 import java.lang.reflect.InvocationTargetException;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -87,12 +85,8 @@ public class BasicConfiguration {
 		return servletContext.getInitParameter(ENCODING);
 	}
 	
-	public URL getWebinfClassesDirectory() {
-		try {
-			return servletContext.getResource("/WEB-INF/classes/");
-		} catch (MalformedURLException e) {
-			throw new IllegalStateException(e);
-		}
+	public String getWebinfClassesDirectory() {
+		return servletContext.getRealPath("/WEB-INF/classes/");
 	}
 
 }

@@ -21,9 +21,12 @@
     </context-param>
      -->
     
-	<!--  if you are using a servlet 3.0 container 
+	<!--  
+	   if you are using a servlet 3.0 container 
 		as glassfish 3 or jetty 8, you dont need this
-		filter configuration -->
+		filter configuration 
+	-->
+		
 		
 	<filter>
 		<filter-name>vraptor</filter-name>

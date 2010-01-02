@@ -20,7 +20,7 @@
         </category>
                 
         <category name="br.com.caelum.vraptor">
-                <priority value="DEBUG" />
+                <priority value="INFO" />
                 <appender-ref ref="stdout" />
         </category>
         
@@ -28,4 +28,5 @@
                 <priority value="INFO" />
                 <appender-ref ref="stdout" />
         </category>
+ 
 </log4j:configuration>

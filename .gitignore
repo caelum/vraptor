@@ -9,6 +9,7 @@ out
 !vraptor-blank-project-gae/.settings/
 !vraptor-blank-project-gae/.project
 !vraptor-site/.project
+!vraptor-site/.settings
 *.zip
 *.ipr
 *.iws

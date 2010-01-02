@@ -8,6 +8,7 @@ out
 !vraptor-blank-project-gae/.classpath
 !vraptor-blank-project-gae/.settings/
 !vraptor-blank-project-gae/.project
+!vraptor-site/.project
 *.zip
 *.ipr
 *.iws

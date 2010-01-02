@@ -17,6 +17,8 @@
 
 package br.com.caelum.vraptor.ioc.spring;
 
+import java.util.Arrays;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -81,6 +83,13 @@ class ComponentScanner extends ClassPathBeanDefinitionScanner {
 			logger.debug("Class " + beanDefinition.getBeanClassName()
 					+ " was not found during bean definition proccess");
 		}
+	}
+	
+	@Override
+	public int scan(String... basePackages) {
+		logger.debug("resource loader: " +  this.getResourceLoader());
+		logger.debug("scanning " + Arrays.toString(basePackages));
+		return super.scan(basePackages);
 	}
 
 }

@@ -21,6 +21,8 @@ import static org.hamcrest.Matchers.typeCompatibleWith;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -49,6 +51,16 @@ public class BasicConfigurationTest {
         this.config = new BasicConfiguration(context);
     }
 
+
+    @Test
+    public void shouldReadRootDirectoryAsWebinfClasses() throws ServletException, MalformedURLException {
+        URL url = new URL("file://c/project/WEB-INF/classes/");
+		when(context.getResource("/WEB-INF/classes/")).thenReturn(url);
+
+        Assert.assertSame(url , config.getWebinfClassesDirectory());
+    }
+
+    
     @Test
     public void shouldUseSpringContainerAsDefaultProvider() throws ServletException {
         when(context.getInitParameter(BasicConfiguration.CONTAINER_PROVIDER)).thenReturn(null);

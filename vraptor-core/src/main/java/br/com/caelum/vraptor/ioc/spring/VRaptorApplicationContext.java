@@ -42,6 +42,7 @@ import org.springframework.context.annotation.AnnotationConfigUtils;
 import org.springframework.context.annotation.ScopeMetadata;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.core.Ordered;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.web.context.support.AbstractRefreshableWebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -92,8 +93,11 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
 							+ Arrays.toString(config.getBasePackages()));
 			scanner.scan(config.getBasePackages());
 		} else {
-			logger.info("No basepackage configured. Scanning all packages only from /WEB-INF/classes: ");
-			scanner.setResourcePattern("**/*.class");
+			logger.info("No basepackage configured. Scanning packages only from: " + config.getWebinfClassesDirectory());
+			String pattern = "**/*.class";
+			logger.info("using resource pattern " + pattern);
+			scanner.setResourcePattern(pattern);
+			scanner.setResourceLoader(new WebinfClassesPatternResolver(config.getWebinfClassesDirectory()));
 			scanner.scan("");
 		}
 

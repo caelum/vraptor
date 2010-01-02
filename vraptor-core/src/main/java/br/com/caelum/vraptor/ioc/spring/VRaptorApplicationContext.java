@@ -93,9 +93,8 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
 							+ Arrays.toString(config.getBasePackages()));
 			scanner.scan(config.getBasePackages());
 		} else {
-			logger.info("No basepackage configured. Scanning packages only from: " + config.getWebinfClassesDirectory());
+			logger.info("No basepackage configured. Scanning only from: " + config.getWebinfClassesDirectory());
 			String pattern = "**/*.class";
-			logger.info("using resource pattern " + pattern);
 			scanner.setResourcePattern(pattern);
 			scanner.setResourceLoader(new WebinfClassesPatternResolver(config.getWebinfClassesDirectory()));
 			scanner.scan("");

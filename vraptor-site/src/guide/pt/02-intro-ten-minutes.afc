@@ -2,27 +2,38 @@
 
 [section Começando o projeto: uma loja virtual]
 Vamos começar baixando o ::vraptor-blank-project::, do site http://vraptor.caelum.com.br/download.jsp.
-Esse blank-project já possui a configuração no web.xml e os jars no WEB-INF/lib necessários para começar
-a desenvolver no VRaptor. E você pode, ainda, importar esse projeto diretamente no Eclipse.
+Esse blank-project já possui a configuração no %%web.xml%% e os jars no WEB-INF/lib necessários para começar
+a desenvolver no VRaptor.
 
-Da configuração padrão, vamos apenas mudar o pacote base da configuração, no web.xml:
-[xml h=3]
-<context-param>
-    <param-name>br.com.caelum.vraptor.packages</param-name>
-    <param-value>br.com.nomedaempresa.nomedoprojeto</param-value>
-</context-param>
-[/xml]
-Desse modo, toda a sua aplicação **deve** estar abaixo do pacote %%br.com.nomedaempresa.nomedoprojeto%%,
-para que o VRaptor consiga encontrar seus componentes e gerenciar suas dependências. No nosso caso será:
-[xml h=3]
-<context-param>
-    <param-name>br.com.caelum.vraptor.packages</param-name>
-    <param-value>br.com.caelum.lojavirtual</param-value>
-</context-param>
+Como você pode ver, a única configuração necessária no %%web.xml%% é o filtro do VRaptor:
+
+[xml]
+	<filter>
+		<filter-name>vraptor</filter-name>
+		<filter-class>br.com.caelum.vraptor.VRaptor</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>vraptor</filter-name>
+		<url-pattern>/*</url-pattern>
+		<dispatcher>FORWARD</dispatcher>
+		<dispatcher>REQUEST</dispatcher>
+	</filter-mapping>
 [/xml]
 
-Supondo que o contexto web da aplicação foi mudado para %%/lojavirtual%%, se você rodar o exemplo e
-acessar a URI http://localhost:8080/lojavirtual você deve ver um **It works!** na tela.
+
+Você pode facilmente importar esse projeto no Eclipse, e roda-lo clicando com o botão da direita
+e escolhendo ::Run as... / Run on server...::. Escolha então um  servlet container (ou
+faça o setup de um novo) e então acesse  %%http://localhost:8080/vraptor-blank-project/%%. 
+
+Você pode escolher, nas propriedades do projetor, dentro de ::Web Project Settings::, o nome
+do contexto para algo melhor, como  %%onlinestore%%. Agora se você rodar esse exemplo
+deve ser possível acessar %%http://localhost:8080/onlinestore%% e ver
+**It works!** no navegador.
+
+Nota: se você está usando um container de servlet 3.0 (java EE 6), você nem precisa
+de %%web.xml%%, pois o VRaptor vai configurar esse filtro através do novo recurso de
+web-fragments.
 
 [section Um cadastro de produtos]
 Para começar o sistema, vamos começar com cadastro de produtos. Precisamos de uma classe que vai

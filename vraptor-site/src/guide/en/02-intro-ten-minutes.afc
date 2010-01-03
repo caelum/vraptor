@@ -1,34 +1,34 @@
 [chapter VRaptor3 - Ten minutes guide]
 
-[section Starting a project: a on-line store]
+[section Starting a project: an online store]
 Let's start by downloading the ::vraptor-blank-project:: from 
 http://vraptor.caelum.com.br/download.jsp . This blank-project has the required configuration on 
-%%web.xml%% and the dependencies on %%WEB-INF/lib%% that are needed to start using VRaptor. You 
-can also import this project on Eclipse.
+%%web.xml%% and the dependencies on %%WEB-INF/lib%% that are needed to start using VRaptor. 
 
-We need to change the base package using this config at %%web.xml%%:
+As you can see, the only required configuration in %%web.xml%% is the VRaptor filter:
 
-[xml h=3]
-<context-param>
-    <param-name>br.com.caelum.vraptor.packages</param-name>
-    <param-value>com.companyname.projectname</param-value>
-</context-param>
+[xml]
+	<filter>
+		<filter-name>vraptor</filter-name>
+		<filter-class>br.com.caelum.vraptor.VRaptor</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>vraptor</filter-name>
+		<url-pattern>/*</url-pattern>
+		<dispatcher>FORWARD</dispatcher>
+		<dispatcher>REQUEST</dispatcher>
+	</filter-mapping>
 [/xml]
 
-On the example, all classes from your application **must** be in a subpackage of 
-%%com.companyname.projectname%%, so VRaptor can find your components and manage your dependencies. 
-In this example project the base package will be:
+You can also easily import this project on Eclipse, and run it right clicking on it and choosing
+::Run as... / Run on server...::. Choose a servlet container (or setup a new one) and then just go
+for %%http://localhost:8080/vraptor-blank-project/%%. 
 
-[xml h=3]
-<context-param>
-    <param-name>br.com.caelum.vraptor.packages</param-name>
-    <param-value>br.com.caelum.onlinestore</param-value>
-</context-param>
-[/xml]
-
-Assuming that the context root of the application was changed to %%/onlinestore%%, if you run
-this example you should be able to access http://localhost:8080/onlinestore and see
-an **It works!** on screen.
+You can right click on the project name, go to ::Properties:: and in ::Web Project Settings:: you can change
+the context name to something better, like %%onlinestore%%. Now if you run
+this example you should be able to access %%http://localhost:8080/onlinestore%% and see
+**It works!** on the browser.
 
 [section Product registry]
 Let's start the system with a products registry. We need a class that will represent the products,

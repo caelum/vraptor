@@ -1,7 +1,7 @@
 [chapter Utility Components]
 
 [section Registering optional components]
-VRaptor have some optional components, on package br.com.caelum.vraptor.util.
+VRaptor has some optional components, inside package br.com.caelum.vraptor.util.
 For registering them you can do as follows:
 
 [list]

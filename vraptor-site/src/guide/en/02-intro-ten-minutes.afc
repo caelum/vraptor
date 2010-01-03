@@ -30,6 +30,9 @@ the context name to something better, like %%onlinestore%%. Now if you run
 this example you should be able to access %%http://localhost:8080/onlinestore%% and see
 **It works!** on the browser.
 
+Note: if you are using a servlet 3.0 container, you dont even need the %%web.xml%% at all,
+because VRaptor will configure the filter through the new web-fragments feature.
+
 [section Product registry]
 Let's start the system with a products registry. We need a class that will represent the products,
 and we'll use it to persist products on the database, with Hibernate:

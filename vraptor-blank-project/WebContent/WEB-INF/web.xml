@@ -9,7 +9,7 @@
 		VRaptor will scan classpath for all @Component and 
 		@Resource inside WEB-INF/classes
 
-		If you wanna load them also from WEB-INF/lib/ jars, 
+		If you want to load them also from WEB-INF/lib/ jars, 
 		you need to specify from which packages they will
 		be loaded, comma separated:
 	-->

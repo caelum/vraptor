@@ -16,8 +16,13 @@
  */
 package br.com.caelum.vraptor.view;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
@@ -42,19 +47,80 @@ public class DefaultAcceptHeaderToFormat implements AcceptHeaderToFormat {
 	}
 
 	public String getFormat(String acceptHeader) {
-		if(acceptHeader == null) {
+
+		if (acceptHeader == null) {
 			throw new NullPointerException("accept header cant be null");
 		}
-		String[] mimeTypes = acceptHeader.split("(;[^,]*)?,\\s*");
 
+		if (acceptHeader.contains(DEFAULT_FORMAT)) {
+			return DEFAULT_FORMAT;
+		}
+
+		// TODO: we really could cache acceptHeader -> format
+		String[] mimeTypes = getOrderedMimeTypes(acceptHeader);
+
+		// String[] mimeTypes = acceptHeader.split("(;[^,]*)?,\\s*");
 
 		for (String mimeType : mimeTypes) {
-			String format = map.get(mimeType);
-			if (format != null) {
-				return format;
+			if (map.containsKey(mimeType)) {
+				return map.get(mimeType);
 			}
 		}
 
 		return DEFAULT_FORMAT;
+	}
+
+	private static class MimeType implements Comparable<MimeType> {
+		String type;
+		double qualifier;
+
+		public MimeType(String type, double qualifier) {
+			this.type = type;
+			this.qualifier = qualifier;
+		}
+
+		public int compareTo(MimeType mime) {
+			return Double.compare(this.qualifier, mime.qualifier);
+		}
+
+		public String getType() {
+			return type;
+		}
+	}
+
+	String[] getOrderedMimeTypes(String acceptHeader) {
+		String[] types = acceptHeader.split(",");
+
+		if (types.length == 0) {
+			if (types[0].contains(";")) {
+				return new String[] { types[0].substring(0, types[0].indexOf(';')) };
+			}
+			return new String[] { types[0] };
+		}
+
+		List<MimeType> mimes = new ArrayList<MimeType>();
+		for (String string : types) {
+			if (string.contains(";")) {
+				String type = string.substring(0, string.indexOf(';'));
+				double qualifier = 1;
+				if (string.contains("q=")) {
+					Matcher matcher = Pattern.compile("q=(.+?)\\s*").matcher(string);
+					matcher.find();
+					String value = matcher.group(1);
+					qualifier = Double.parseDouble(value);
+				}
+
+				mimes.add(new MimeType(type, qualifier));
+			} else {
+				mimes.add(new MimeType(string, 1));
+			}
+		}
+
+		Collections.sort(mimes);
+		for (int i = 0; i < mimes.size(); i++) {
+			types[i] = mimes.get(i).getType();
+		}
+
+		return types;
 	}
 }

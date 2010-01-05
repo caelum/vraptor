@@ -44,6 +44,7 @@ public class DefaultAcceptHeaderToFormat implements AcceptHeaderToFormat {
 	public String getFormat(String acceptHeader) {
 		String[] mimeTypes = acceptHeader.split("(;[^,]*)?,\\s*");
 
+
 		for (String mimeType : mimeTypes) {
 			String format = map.get(mimeType);
 			if (format != null) {

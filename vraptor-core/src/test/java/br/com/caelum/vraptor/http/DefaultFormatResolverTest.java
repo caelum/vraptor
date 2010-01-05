@@ -35,6 +35,16 @@ public class DefaultFormatResolverTest {
 		assertThat(format, is("xml"));
 	}
 
+
+	@Test
+	public void if_formatIsSpecifiedReturnItEvenIfAcceptsHtml() throws Exception {
+		when(request.getParameter("_format")).thenReturn("xml");
+		when(request.getHeader("Accept")).thenReturn("html");
+
+		String format = resolver.getAcceptFormat();
+		assertThat(format, is("xml"));
+	}
+
 	@Test
 	public void if_formatNotSpecifiedShouldReturnRequestAcceptFormat() {
 		when(request.getParameter("_format")).thenReturn(null);
@@ -47,6 +57,18 @@ public class DefaultFormatResolverTest {
 		verify(request).getHeader("Accept");
 	}
 
+
+	@Test
+	public void if_formatNotSpecifiedAndNoAcceptsHaveFormat() {
+		when(request.getParameter("_format")).thenReturn(null);
+		when(request.getHeader("Accept")).thenReturn("application/zml");
+		when(acceptHeaderToFormat.getFormat("application/xml")).thenReturn("xml");
+
+		String format = resolver.getAcceptFormat();
+		assertThat(format, is("xml"));
+
+		verify(request).getHeader("Accept");
+	}
 	@Test
 	public void ifAcceptHeaderIsNullShouldReturnDefault() {
 		when(request.getParameter("_format")).thenReturn(null);

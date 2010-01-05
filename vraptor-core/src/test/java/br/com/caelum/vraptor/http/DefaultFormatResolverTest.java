@@ -1,6 +1,7 @@
 package br.com.caelum.vraptor.http;
 
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -61,14 +62,15 @@ public class DefaultFormatResolverTest {
 	@Test
 	public void if_formatNotSpecifiedAndNoAcceptsHaveFormat() {
 		when(request.getParameter("_format")).thenReturn(null);
-		when(request.getHeader("Accept")).thenReturn("application/zml");
-		when(acceptHeaderToFormat.getFormat("application/xml")).thenReturn("xml");
+		when(request.getHeader("Accept")).thenReturn("application/SOMETHING_I_DONT_HAVE");
 
 		String format = resolver.getAcceptFormat();
-		assertThat(format, is("xml"));
+		assertNull(format);
 
 		verify(request).getHeader("Accept");
 	}
+
+
 	@Test
 	public void ifAcceptHeaderIsNullShouldReturnDefault() {
 		when(request.getParameter("_format")).thenReturn(null);

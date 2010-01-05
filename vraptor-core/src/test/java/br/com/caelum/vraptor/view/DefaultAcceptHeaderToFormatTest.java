@@ -45,6 +45,17 @@ public class DefaultAcceptHeaderToFormatTest {
 		Assert.assertEquals("json", mimeTypeToFormat.getFormat("application/json"));
 	}
 
+
+	@Test
+	public void testJsonWithQualifier() {
+		Assert.assertEquals("json", mimeTypeToFormat.getFormat("application/json; q=0.4"));
+	}
+
+	@Test
+	public void testAnything() {
+		Assert.assertEquals("html", mimeTypeToFormat.getFormat("*/*"));
+	}
+
 	@Test(expected = NullPointerException.class)
 	public void testNull() {
 		mimeTypeToFormat.getFormat(null);

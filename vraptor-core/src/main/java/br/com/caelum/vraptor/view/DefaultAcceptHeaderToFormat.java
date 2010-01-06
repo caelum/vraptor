@@ -59,7 +59,6 @@ public class DefaultAcceptHeaderToFormat implements AcceptHeaderToFormat {
 		// TODO: we really could cache acceptHeader -> format
 		String[] mimeTypes = getOrderedMimeTypes(acceptHeader);
 
-		// String[] mimeTypes = acceptHeader.split("(;[^,]*)?,\\s*");
 
 		for (String mimeType : mimeTypes) {
 			if (map.containsKey(mimeType)) {
@@ -80,7 +79,8 @@ public class DefaultAcceptHeaderToFormat implements AcceptHeaderToFormat {
 		}
 
 		public int compareTo(MimeType mime) {
-			return Double.compare(this.qualifier, mime.qualifier);
+			// reverse order
+			return Double.compare(mime.qualifier, this.qualifier);
 		}
 
 		public String getType() {
@@ -100,13 +100,16 @@ public class DefaultAcceptHeaderToFormat implements AcceptHeaderToFormat {
 
 		List<MimeType> mimes = new ArrayList<MimeType>();
 		for (String string : types) {
+			if (string.contains("*/*"))
+				continue;
 			if (string.contains(";")) {
 				String type = string.substring(0, string.indexOf(';'));
 				double qualifier = 1;
 				if (string.contains("q=")) {
-					Matcher matcher = Pattern.compile("q=(.+?)\\s*").matcher(string);
+					Matcher matcher = Pattern.compile("\\s*q=(.+)\\s*").matcher(string);
 					matcher.find();
 					String value = matcher.group(1);
+					System.out.println(value);
 					qualifier = Double.parseDouble(value);
 				}
 
@@ -117,10 +120,11 @@ public class DefaultAcceptHeaderToFormat implements AcceptHeaderToFormat {
 		}
 
 		Collections.sort(mimes);
+		String[] orderedTypes = new String[mimes.size()];
 		for (int i = 0; i < mimes.size(); i++) {
-			types[i] = mimes.get(i).getType();
+			orderedTypes[i] = mimes.get(i).getType().trim();
 		}
 
-		return types;
+		return orderedTypes;
 	}
 }

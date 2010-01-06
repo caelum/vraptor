@@ -36,6 +36,11 @@ public class DefaultAcceptHeaderToFormatTest {
 	}
 
 	@Test
+	public void testHtmlForAnything() {
+		Assert.assertEquals("html", mimeTypeToFormat.getFormat("*/*"));
+	}
+
+	@Test
 	public void testHtml() {
 		Assert.assertEquals("html", mimeTypeToFormat.getFormat("text/html"));
 	}
@@ -73,12 +78,12 @@ public class DefaultAcceptHeaderToFormatTest {
 
 	@Test
 	public void testJsonInAComplexAcceptHeaderWithParameters() {
-		Assert.assertEquals("json", mimeTypeToFormat.getFormat("application/json; q=0.7, text/javascript; q=0.1, */*"));
+		Assert.assertEquals("json", mimeTypeToFormat.getFormat("application/json; q=0.7, application/xml; q=0.1, */*"));
 	}
 
 	@Test
-	public void testJsonInAComplexAcceptHeaderWithParametersNorOrdered() {
-		Assert.assertEquals("javascript", mimeTypeToFormat.getFormat("application/json; q=0.1, text/javascript; q=0.7, */*"));
+	public void testXMLInAComplexAcceptHeaderWithParametersNotOrdered() {
+		Assert.assertEquals("xml", mimeTypeToFormat.getFormat("application/json; q=0.1, application/xml; q=0.7, */*"));
 	}
 
 }

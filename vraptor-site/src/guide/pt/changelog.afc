@@ -72,6 +72,8 @@ ou seja, onde o parâmetro casa com a regex %%a+b+c+%%
 * Blank project atualizado para WTP mais novo e refletindo novidades do VR 3.1
 * Blank project muito mais fácil de se importar no Eclipse WTP. Configurações e logging ajustados para melhor compreensão
 * bugfix: mimetypes funcionam corretamente para browsers webkit, favorecendo html quando nao ha priorizacao
+* bugfix: quando há erros de validação, os parâmetros da requisição são passados como String, não como mapas como antes.
+Isso previne ClassCastExceptions quando se usa taglibs, como a fmt:formatNumber.
 [/list]
 
 [section 3.0.2]

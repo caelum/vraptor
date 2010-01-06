@@ -69,6 +69,8 @@ whenever the parameter matches the %%a+b+c+%% regex.
 * blank project now working for wtp 3.5 and using vraptor 3.1 new features	
 * blank project much easier to import under wtp now. logging and other configs adjusted
 * bugfix: mimetypes now work for webkit browsers, priorizing html when no order specified
+* bugfix: in case of validation erros, the request parameters are outjected as Strings, not Maps as before.
+It prevents ClassCastExceptions when using taglibs, like fmt:formatNumber.
 [/list]
 
 [section 3.0.2]

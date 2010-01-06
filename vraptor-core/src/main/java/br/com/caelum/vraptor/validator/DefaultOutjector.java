@@ -47,21 +47,25 @@ public class DefaultOutjector implements Outjector {
 				request.setAttribute(paramName, request.getParameter(paramName));
 			} else {
 				String baseName = extractBaseParamName(paramName);
-				if (request.getAttribute(baseName) == null) {
-					request.setAttribute(baseName, new HashMap<String, Object>());
-				}
-				processComplexParameter(paramName, stripBaseName(paramName, baseName), castMap(request.getAttribute(baseName)));
+
+				Map<Object, Object> map = castMap(request.getAttribute(baseName));
+				request.setAttribute(baseName, map);
+
+				processComplexParameter(paramName, stripBaseName(paramName, baseName), map);
 			}
 		}
 	}
 
 	@SuppressWarnings({ "unchecked", "serial" })
-	private Map<String, Object> castMap(final Object object) {
+	private Map<Object, Object> castMap(final Object object) {
+		if (object == null) {
+			return new HashMap<Object, Object>();
+		}
 		if (object instanceof Map<?,?>) {
-			return (Map<String, Object>) object ;
+			return (Map<Object, Object>) object ;
 		}
 		if (object instanceof String) {
-			return new HashMap<String, Object>() {
+			return new HashMap<Object, Object>() {
 				@Override
 				public String toString() {
 					return object.toString();
@@ -76,15 +80,24 @@ public class DefaultOutjector implements Outjector {
 		return paramName.replaceFirst("^" + baseName + DELIMITERS + "+", "");
 	}
 
-	private void processComplexParameter(String fullName, String paramName, Map<String, Object> parent) {
+	private void processComplexParameter(String fullName, String paramName, Map<Object, Object> parent) {
 		if (isSimple(paramName)) {
-			parent.put(paramName.replaceFirst("\\]$", ""), request.getParameter(fullName));
+			parent.put(fixParameter(paramName.replaceFirst("\\]$", "")), request.getParameter(fullName));
 		} else {
 			String baseName = extractBaseParamName(paramName);
-			if (parent.get(baseName) == null) {
-				parent.put(baseName, new HashMap<String, Object>());
-			}
-			processComplexParameter(fullName, stripBaseName(paramName, baseName), castMap(parent.get(baseName)));
+
+			Map<Object, Object> map = castMap(parent.get(fixParameter(baseName)));
+			parent.put(fixParameter(baseName), map);
+
+			processComplexParameter(fullName, stripBaseName(paramName, baseName), map);
+		}
+	}
+
+	private Object fixParameter(String paramName) {
+		if (paramName.matches("\\d+")) {
+			return Long.valueOf(paramName);
+		} else {
+			return paramName;
 		}
 	}
 

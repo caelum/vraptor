@@ -18,6 +18,7 @@ package br.com.caelum.vraptor.view;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -35,6 +36,7 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
 @ApplicationScoped
 public class DefaultAcceptHeaderToFormat implements AcceptHeaderToFormat {
 
+	private static Cache cache = new Cache();
 	private static final String DEFAULT_FORMAT = "html";
 	protected final Map<String, String> map;
 
@@ -56,17 +58,31 @@ public class DefaultAcceptHeaderToFormat implements AcceptHeaderToFormat {
 			return DEFAULT_FORMAT;
 		}
 
+		if (cache.containsKey(acceptHeader)) {
+			return cache.get(acceptHeader);
+		}
+
 		// TODO: we really could cache acceptHeader -> format
 		String[] mimeTypes = getOrderedMimeTypes(acceptHeader);
 
-
+		String format = DEFAULT_FORMAT;
 		for (String mimeType : mimeTypes) {
 			if (map.containsKey(mimeType)) {
-				return map.get(mimeType);
+
+				format = map.get(mimeType);
+				break;
 			}
 		}
 
-		return DEFAULT_FORMAT;
+		cache.put(acceptHeader, format);
+		return format;
+	}
+
+	private static class Cache extends LinkedHashMap<String, String> {
+		@Override
+		protected boolean removeEldestEntry(java.util.Map.Entry<String, String> eldest) {
+			return this.size() > 100;
+		}
 	}
 
 	private static class MimeType implements Comparable<MimeType> {
@@ -109,7 +125,6 @@ public class DefaultAcceptHeaderToFormat implements AcceptHeaderToFormat {
 					Matcher matcher = Pattern.compile("\\s*q=(.+)\\s*").matcher(string);
 					matcher.find();
 					String value = matcher.group(1);
-					System.out.println(value);
 					qualifier = Double.parseDouble(value);
 				}
 

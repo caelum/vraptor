@@ -113,7 +113,7 @@ public class DefaultOutjectorTest {
 
 		Map<?,?> indexed = castMap(request.getAttribute("indexed"));
 
-		assertThat(indexed.get("0"), is("value"));
+		assertThat(indexed.get(0L), is("value"));
 	}
 
 	@Test
@@ -125,7 +125,7 @@ public class DefaultOutjectorTest {
 
 		Map<?,?> indexed = castMap(request.getAttribute("indexed"));
 
-		Map<?,?> zero = castMap(indexed.get("0"));
+		Map<?,?> zero = castMap(indexed.get(0L));
 
 		assertThat(zero.get("dots"), is("value"));
 	}

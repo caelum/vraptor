@@ -1,57 +1,159 @@
 package br.com.caelum.vraptor.validator;
 
-import javax.servlet.http.HttpServletRequest;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
 
-import org.jmock.Expectations;
-import org.jmock.Mockery;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
+
+import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.view.RequestOutjectMap;
-
-import com.google.common.collect.ImmutableMap;
-
 public class DefaultOutjectorTest {
 
-	private Mockery mockery;
-	private HttpServletRequest request;
+	private RequestAttributes request;
 	private DefaultOutjector outjector;
 
+	static class RequestAttributes extends HttpServletRequestWrapper {
+		private Map<String, Object> attributes = new HashMap<String, Object>();
+		private Map<String, String> parameters = new HashMap<String, String>();
+
+		public RequestAttributes(HttpServletRequest request) {
+			super(request);
+		}
+
+		@Override
+		public Object getAttribute(String name) {
+			return attributes.get(name);
+		}
+
+		@Override
+		public void setAttribute(String name, Object o) {
+			attributes.put(name, o);
+		}
+
+		public void setParameter(String name, String value) {
+			parameters.put(name, value);
+		}
+
+		@Override
+		public String getParameter(String name) {
+			return parameters.get(name);
+		}
+		@Override
+		public Map<?,?> getParameterMap() {
+			return parameters;
+		}
+	}
 	@Before
 	public void setUp() throws Exception {
-		mockery = new Mockery();
-		request = mockery.mock(HttpServletRequest.class);
-
+		request = new RequestAttributes(mock(HttpServletRequest.class));
 		outjector = new DefaultOutjector(request);
 	}
 
 	@Test
-	public void shouldIncludeMagicMaps() throws Exception {
+	public void shouldNotThrowExceptions() throws Exception {
 
-		mockery.checking(new Expectations() {
-			{
-				one(request).getParameterMap();
-				will(returnValue(ImmutableMap.of(
-						"simple","anything",
-						"with.dots", "anything",
-						"with.dots.again", "anything",
-						"an[0].array", "anything"
-					)));
-
-				one(request).getAttribute("simple"); will(returnValue(null));
-				one(request).getAttribute("with"); will(returnValue(null));
-				one(request).getAttribute("with"); will(returnValue("anything"));
-				one(request).getAttribute("an"); will(returnValue(null));
-
-				one(request).setAttribute(with(equal("simple")), with(any(RequestOutjectMap.class)));
-				one(request).setAttribute(with(equal("with")), with(any(RequestOutjectMap.class)));
-				one(request).setAttribute(with(equal("an")), with(any(RequestOutjectMap.class)));
-
-			}
-		});
+		givenParameterIsPresent("simple","anything");
+		givenParameterIsPresent("with.dots", "anything");
+		givenParameterIsPresent("with.dots.again", "anything");
+		givenParameterIsPresent("an[0].array", "anything");
 
 		outjector.outjectRequestMap();
 
-		mockery.assertIsSatisfied();
+	}
+
+	@Test
+	public void shouldOutjectSimpleParameters() throws Exception {
+
+		givenParameterIsPresent("simple", "anything");
+
+		outjector.outjectRequestMap();
+
+		assertThat(request.getAttribute("simple"), is("anything"));
+	}
+
+	@Test
+	public void shouldOutjectParametersWithDot() throws Exception {
+
+		givenParameterIsPresent("with.dot", "value");
+
+		outjector.outjectRequestMap();
+
+		Map<?, ?> with = castMap(request.getAttribute("with"));
+
+		assertThat(with.get("dot"), is("value"));
+	}
+
+	@Test
+	public void shouldOutjectParametersWithSeveralDots() throws Exception {
+
+		givenParameterIsPresent("with.several.dots", "value");
+
+		outjector.outjectRequestMap();
+
+		Map<?,?> with = castMap(request.getAttribute("with"));
+
+		Map<?,?> several = castMap(with.get("several"));
+
+		assertThat(several.get("dots"), is("value"));
+	}
+	@Test
+	public void shouldOutjectIndexedParameters() throws Exception {
+
+		givenParameterIsPresent("indexed[0]", "value");
+
+		outjector.outjectRequestMap();
+
+		Map<?,?> indexed = castMap(request.getAttribute("indexed"));
+
+		assertThat(indexed.get("0"), is("value"));
+	}
+
+	@Test
+	public void shouldOutjectIndexedParametersWithDots() throws Exception {
+
+		givenParameterIsPresent("indexed[0].dots", "value");
+
+		outjector.outjectRequestMap();
+
+		Map<?,?> indexed = castMap(request.getAttribute("indexed"));
+
+		Map<?,?> zero = castMap(indexed.get("0"));
+
+		assertThat(zero.get("dots"), is("value"));
+	}
+
+	@Test
+	public void shouldOutjectSeveralParametersWithDots() throws Exception {
+
+		givenParameterIsPresent("with.dot", "value");
+		givenParameterIsPresent("with.other", "abc");
+
+		outjector.outjectRequestMap();
+
+		Map<?, ?> with = castMap(request.getAttribute("with"));
+
+		assertThat(with.get("dot"), is("value"));
+		assertThat(with.get("other"), is("abc"));
+	}
+
+	private Matcher<? super Object> is(Object object) {
+		return Matchers.is(object);
+	}
+
+	private Map<?, ?> castMap(Object map) {
+		assertTrue("should be an instance of Map, but was " + map,map instanceof Map<?,?>);
+		return ((Map<?, ?>) map);
+	}
+
+	private void givenParameterIsPresent(String key, String value) {
+		request.setParameter(key, value);
 	}
 }

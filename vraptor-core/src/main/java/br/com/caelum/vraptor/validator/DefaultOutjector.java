@@ -15,45 +15,84 @@
  */
 package br.com.caelum.vraptor.validator;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
-import br.com.caelum.vraptor.view.RequestOutjectMap;
-
 /**
  * Default implementation for {@link Outjector}.
- * It uses a magic map that mimics objects on request.
+ * It uses a chain of maps that mimics objects on request.
  *
  * @author Lucas Cavalcanti
  * @since 3.0.2
  */
 public class DefaultOutjector implements Outjector {
 
+	private static final String DELIMITERS = "(\\[|\\]|\\.)";
+	private static final String DELIM_CHARS = "\\[\\]\\.";
 	private final HttpServletRequest request;
 
 	public DefaultOutjector(HttpServletRequest request) {
 		this.request = request;
 	}
 
+	@SuppressWarnings("unchecked")
 	public void outjectRequestMap() {
-		@SuppressWarnings("unchecked")
 		Set<String> paramNames = request.getParameterMap().keySet();
 
 		for (String paramName : paramNames) {
-			paramName = extractBaseParamName(paramName);
-			if (request.getAttribute(paramName) == null) {
-				request.setAttribute(paramName, new RequestOutjectMap(paramName, request));
+			if (isSimple(paramName)) {
+				request.setAttribute(paramName, request.getParameter(paramName));
+			} else {
+				String baseName = extractBaseParamName(paramName);
+				if (request.getAttribute(baseName) == null) {
+					request.setAttribute(baseName, new HashMap<String, Object>());
+				}
+				processComplexParameter(paramName, stripBaseName(paramName, baseName), castMap(request.getAttribute(baseName)));
 			}
 		}
 	}
 
-	private String extractBaseParamName(String paramName) {
-		int indexOf = paramName.indexOf('.');
-		paramName = paramName.substring(0, indexOf != -1 ? indexOf : paramName.length());
+	@SuppressWarnings({ "unchecked", "serial" })
+	private Map<String, Object> castMap(final Object object) {
+		if (object instanceof Map<?,?>) {
+			return (Map<String, Object>) object ;
+		}
+		if (object instanceof String) {
+			return new HashMap<String, Object>() {
+				@Override
+				public String toString() {
+					return object.toString();
+				}
+			};
+		}
+		throw new IllegalStateException("Some request parameter has the same name as a request attribute. " +
+				"It shouldn't happen, please report this bug.");
+	}
 
-		indexOf = paramName.indexOf('[');
-		paramName = paramName.substring(0, indexOf != -1 ? indexOf : paramName.length());
-		return paramName;
+	private String stripBaseName(String paramName, String baseName) {
+		return paramName.replaceFirst("^" + baseName + DELIMITERS + "+", "");
+	}
+
+	private void processComplexParameter(String fullName, String paramName, Map<String, Object> parent) {
+		if (isSimple(paramName)) {
+			parent.put(paramName.replaceFirst("\\]$", ""), request.getParameter(fullName));
+		} else {
+			String baseName = extractBaseParamName(paramName);
+			if (parent.get(baseName) == null) {
+				parent.put(baseName, new HashMap<String, Object>());
+			}
+			processComplexParameter(fullName, stripBaseName(paramName, baseName), castMap(parent.get(baseName)));
+		}
+	}
+
+	private boolean isSimple(String paramName) {
+		return paramName.matches("[^" + DELIM_CHARS + "]+?\\]?");
+	}
+
+	private String extractBaseParamName(String paramName) {
+		return paramName.replaceFirst("^([^" + DELIM_CHARS + "]+)[" + DELIM_CHARS + "].*$", "$1");
 	}
 }

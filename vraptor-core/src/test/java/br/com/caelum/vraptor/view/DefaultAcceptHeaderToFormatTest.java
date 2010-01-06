@@ -77,6 +77,11 @@ public class DefaultAcceptHeaderToFormatTest {
 	}
 
 	@Test
+	public void testPrecendenceInAComplexAcceptHeaderHtmlShouldPrevailWhenTied2() {
+		Assert.assertEquals("html", mimeTypeToFormat.getFormat("text/html, application/json, */*"));
+	}
+
+	@Test
 	public void testJsonInAComplexAcceptHeaderWithParameters() {
 		Assert.assertEquals("json", mimeTypeToFormat.getFormat("application/json; q=0.7, application/xml; q=0.1, */*"));
 	}

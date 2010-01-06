@@ -25,6 +25,7 @@ import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 
 import javax.servlet.jsp.jstl.core.Config;
+import javax.servlet.jsp.jstl.fmt.LocalizationContext;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,16 +57,25 @@ public class JstlLocalization implements Localization {
     public ResourceBundle getBundle() {
         if (this.bundle == null) {
             Locale locale = getLocale();
-            String baseName = (String) get(Config.FMT_LOCALIZATION_CONTEXT);
-            if (baseName == null) {
-                baseName = DEFAULT_BUNDLE_NAME;
+            Object bundle = get(Config.FMT_LOCALIZATION_CONTEXT);
+            if (bundle instanceof String || bundle == null) {
+				String baseName = (String) bundle;
+	            if (baseName == null) {
+	                baseName = DEFAULT_BUNDLE_NAME;
+	            }
+	            try {
+					this.bundle = new SafeResourceBundle(ResourceBundle.getBundle(baseName, locale));
+				} catch (MissingResourceException e) {
+					logger.debug("couldn't find message bundle, creating an empty one");
+					this.bundle = new SafeResourceBundle(createEmptyBundle());
+				}
+            } else if (bundle instanceof LocalizationContext) {
+            	LocalizationContext context = (LocalizationContext) bundle;
+            	this.bundle = context.getResourceBundle();
+            } else {
+            	logger.warn("Can't handle bundle: " + bundle + ". Please report this bug. Using an empty bundle");
+            	this.bundle = new SafeResourceBundle(createEmptyBundle());
             }
-            try {
-				this.bundle = new SafeResourceBundle(ResourceBundle.getBundle(baseName, locale));
-			} catch (MissingResourceException e) {
-				logger.warn("couldn't find message bundle, creating an empty one");
-				this.bundle = new SafeResourceBundle(createEmptyBundle());
-			}
         }
         return this.bundle;
     }

@@ -16,7 +16,6 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/datanucleus-jpa-1.1.5.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/geronimo-jpa_3.0_spec-1.1.1.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/geronimo-jta_1.1_spec-1.1.1.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/gmultipart-0.1.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/javassist-3.8.0.GA.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/jdo2-api-2.3-eb.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/jstl.jar"/>
@@ -40,5 +39,6 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/xstream-1.3.1.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/vraptor-gae.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/google-collect-1.0.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/gmultipart.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

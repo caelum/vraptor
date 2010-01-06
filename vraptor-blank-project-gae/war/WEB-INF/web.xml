@@ -17,7 +17,7 @@
 
 	<context-param>
 		<param-name>br.com.caelum.vraptor.packages</param-name>
-		<param-value>br.com.caelum.vraptor.gae,br.com.caelum.vraptor.blank</param-value>
+		<param-value>br.com.caelum.vraptor.gae</param-value>
 	</context-param>
 
 

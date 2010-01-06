@@ -239,10 +239,10 @@ public class ProductsController {
 In order to redirect to the listing, you can use the result object:
 
 [java]
-	result.use(Results.logic()).redirectTo(ProductsController.class).list();
+	result.redirectTo(ProductsController.class).list();
 [/java]
 
-This code snippet can be read as: ::As a result, use a logic, redirecting to the 
+This code snippet can be read as: ::As result, redirect to the 
 list method in ProductsController::. All redirect configuration is 100% java code, 
 with no strings involved! It's clear from the code that the result from your logic
 is not the default, and which one you're using. There is no need to worry about 
@@ -255,7 +255,7 @@ Our %%add%% method would look like this:
 [java]
 	public void add(Product product) {
 		dao.add(product);
-		result.use(Results.logic()).redirectTo(ProductsController.class).list();
+		result.redirectTo(ProductsController.class).list();
 	}
 [/java]
 
@@ -283,7 +283,7 @@ public class ProductsController {
 		validator.onErrorUse(Results.page()).of(ProductsController.class).form();
 		
 		dao.add(product);
-		result.use(Results.logic()).redirectTo(ProductsController.class).list();
+		result.redirectTo(ProductsController.class).list();
 	}
 }
 [/java]

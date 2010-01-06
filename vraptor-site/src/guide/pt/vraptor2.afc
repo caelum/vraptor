@@ -187,7 +187,7 @@ public class ClientsController {
 	public void save(Client client) {
 		dao.save(client);
 		
-		result.use(Results.logic()).redirectTo(ClientsController.class).list();
+		result.redirectTo(ClientsController.class).list();
 	}
 }
 [/java]
@@ -197,7 +197,7 @@ para o método serão usados para chamar a lógica.
 
 Se for para uma jsp direto você pode usar:
 [java]
-  result.use(Results.page()).forward("/WEB-INF/jsp/clients/save.ok.jsp");
+  result.forwardTo("/WEB-INF/jsp/clients/save.ok.jsp");
 [/java]
 
 [section Validação]

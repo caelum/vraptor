@@ -238,10 +238,10 @@ public class ProdutosController {
 [/java]
 E para redirecionar para a listagem basta usar o result:
 [java]
-	result.use(Results.logic()).redirectTo(ProdutosController.class).lista();
+	result.redirectTo(ProdutosController.class).lista();
 [/java]
 
-Podemos ler esse código como: ::Como resultado, use uma lógica, redirecionando para o
+Podemos ler esse código como: ::Como resultado, redirecione para o
 método lista do ProdutosController::. A configuração de redirecionamento é 100% java,
 sem strings envolvidas! Fica explícito no seu código que o resultado da sua lógica não
 é o padrão, e qual resultado você está usando! Você não precisa ficar se preocupando com
@@ -253,7 +253,7 @@ Então nosso método %%adiciona%% ficaria:
 [java]
 	public void adiciona(Produto produto) {
 		dao.adiciona(produto);
-		result.use(Results.logic()).redirectTo(ProdutosController.class).lista();
+		result.redirectTo(ProdutosController.class).lista();
 	}
 [/java]
 
@@ -281,7 +281,7 @@ public class ProdutosController {
 		validator.onErrorUse(Results.page()).of(ProdutosController.class).form();
 		
 		dao.adiciona(produto);
-		result.use(Results.logic()).redirectTo(ProdutosController.class).lista();
+		result.redirectTo(ProdutosController.class).lista();
 	}
 }
 [/java]

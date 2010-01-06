@@ -111,7 +111,7 @@ próxima requisição.
 public void adiciona(Cliente cliente) {
 	dao.adiciona(cliente);
 	result.include("mensagem", "Cliente adicionado com sucesso");
-	result.use(logic()).redirectTo(ClientesController.class).lista();
+	result.redirectTo(ClientesController.class).lista();
 }
 [/java]
 

@@ -16,7 +16,7 @@ instantiated by filling with %%null%% all of its arguments. This
 said, one should avoid call like:
 
 [java]
-	result.use(Results.logic()).redirectTo(SomeController.class).someMethod();
+	result.redirectTo(SomeController.class).someMethod();
 	validator.onErrorUse(Results.logic()).of(SomeController.class).someMethod();
 [/java]
 

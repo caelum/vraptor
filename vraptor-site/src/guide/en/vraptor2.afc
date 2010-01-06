@@ -191,7 +191,7 @@ public class ClientsController {
 	public void save(Client client) {
 		dao.save(client);
 		
-		result.use(Results.logic()).redirectTo(ClientsController.class).list();
+		result.redirectTo(ClientsController.class).list();
 	}
 }
 [/java]
@@ -201,7 +201,7 @@ the called logic.
 
 If you want to forward to a JSP page, you can use: 
 [java]
-  result.use(Results.page()).forward("/WEB-INF/jsp/clients/save.ok.jsp");
+  result.forwardTo("/WEB-INF/jsp/clients/save.ok.jsp");
 [/java]
 
 [section Validation]

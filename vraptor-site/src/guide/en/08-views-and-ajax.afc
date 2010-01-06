@@ -52,7 +52,7 @@ If you want to change a specific logic's view, you can use the %%Result%% object
 		
 		public void save(Client client) {
 			//...
-			this.result.use(Results.logic()).redirectTo(ClientsController.class).list();
+			this.result.redirectTo(ClientsController.class).list();
 		}
 	}
 [/java]

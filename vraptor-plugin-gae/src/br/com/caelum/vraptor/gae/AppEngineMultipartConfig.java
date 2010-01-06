@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor.blank.infra;
+package br.com.caelum.vraptor.gae;
 
 import java.io.File;
 

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and 
  * limitations under the License. 
  */
-package br.com.caelum.vraptor.blank.infra;
+package br.com.caelum.vraptor.gae;
 
 import ognl.OgnlRuntime;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;

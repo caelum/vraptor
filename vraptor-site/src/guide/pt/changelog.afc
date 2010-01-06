@@ -66,7 +66,7 @@ ou seja, onde o parâmetro casa com a regex %%a+b+c+%%
 	* result.redirectTo(this).lista() ==> result.use(logic()).redirectTo(this.getClass()).lista();
 	* result.of(this).lista() ==> result.use(page()).of(this.getClass()).lista();
   	[/list]
-* Se o base package não é configurado no web.xml, VRaptor scaneia por componentes e recursos em todo WEB-INF/classes
+* VRaptor agora scaneia por componentes e recursos em todo WEB-INF/classes automaticamente sem configuracao
 * Suporte a Servlet 3.0, fazendo desnecessário configurar o filtro no web.xml (usando recurso de webfragments)
 * Jars do spring atualizados (3.0.0) e do hibernate também, para os projetos de exemplo. Google Collections atualizada para 1.0
 * Blank project atualizado para WTP mais novo e refletindo novidades do VR 3.1

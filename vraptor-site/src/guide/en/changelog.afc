@@ -63,7 +63,7 @@ whenever the parameter matches the %%a+b+c+%% regex.
 	* result.redirectTo(this).list() ==> result.use(logic()).redirectTo(this.getClass()).list();
 	* result.of(this).list() ==> result.use(page()).of(this.getClass()).list();
   	[/list]
-* If no base-package is specified in web.xml, VRaptor will scan for all resources and components inside WEB-INF/classes
+* VRaptor will scan for all resources and components inside WEB-INF/classes automatically
 * support for servlets 3.0, so it is not necessary configure the filter anymore (webfragment feature)
 * using latest spring version (3.0.0) and also hibernate (for examples and so on). google collections updated to final version
 * blank project now working for wtp 3.5 and using vraptor 3.1 new features	

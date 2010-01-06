@@ -42,7 +42,6 @@ import org.springframework.context.annotation.AnnotationConfigUtils;
 import org.springframework.context.annotation.ScopeMetadata;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.core.Ordered;
-import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.web.context.support.AbstractRefreshableWebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -86,18 +85,19 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
 		registerPrototypeScopedComponentsOn(beanFactory);
 		registerCustomComponentsOn(beanFactory);
 
-		ComponentScanner scanner = new ComponentScanner(beanFactory, container);
+		{
+			logger.info("Scanning WEB-INF/classes: " + config.getWebinfClassesDirectory());
+			ComponentScanner scanner = new ComponentScanner(beanFactory, container);
+			scanner.setResourcePattern("**/*.class");
+			scanner.setResourceLoader(new WebinfClassesPatternResolver(config.getWebinfClassesDirectory()));
+			scanner.scan("");
+		}
 		if (config.hasBasePackages()) {
+			ComponentScanner scanner = new ComponentScanner(beanFactory, container);
 			logger
 					.info("Scanning packages from WEB-INF/classes and jars: "
 							+ Arrays.toString(config.getBasePackages()));
 			scanner.scan(config.getBasePackages());
-		} else {
-			logger.info("No basepackage configured. Scanning only from: " + config.getWebinfClassesDirectory());
-			String pattern = "**/*.class";
-			scanner.setResourcePattern(pattern);
-			scanner.setResourceLoader(new WebinfClassesPatternResolver(config.getWebinfClassesDirectory()));
-			scanner.scan("");
 		}
 
 		AnnotationConfigUtils.registerAnnotationConfigProcessors(beanFactory);

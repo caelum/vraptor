@@ -62,13 +62,16 @@
 	<target name="zips-blank-project">
 		<mkdir dir="target"/>
 		<zip destfile="target/vraptor-blank-project-${vraptor.version}.zip">
-			<fileset dir="vraptor-blank-project/" excludes="*.zip"/>
+			<fileset dir="vraptor-blank-project/" excludes="*.zip">
+				<exclude name="build.xml"/>
+			</fileset>
 		</zip>
 	</target>
 	<target name="zips-blank-project-gae">
 		<mkdir dir="target"/>
 		<zip destfile="target/vraptor-blank-project-gae-${vraptor.version}.zip">
 			<fileset dir="vraptor-blank-project-gae/" excludes="*.zip">
+				<exclude name="build.xml"/>
 				<exclude name="**/*.zip"/>
 				<exclude name="lib/**/*"/>
 			</fileset>
@@ -79,6 +82,7 @@
 		<mkdir dir="target" />
 		<zip destfile="target/vraptor-mydvds-${vraptor.version}.zip">
 			<fileset dir="vraptor-mydvds/">
+				<exclude name="build.xml"/>
 				<exclude name="**/*.zip"/>
 				<exclude name="**/*.war"/>
 				<exclude name="bin/**/*"/>

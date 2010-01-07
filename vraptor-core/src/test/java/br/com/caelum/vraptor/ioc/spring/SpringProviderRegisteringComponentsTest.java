@@ -87,6 +87,9 @@ public class SpringProviderRegisteringComponentsTest extends GenericContainerTes
 
 				allowing(context).getAttribute("org.springframework.web.context.WebApplicationContext.ROOT");
 				will(returnValue(null));
+
+				allowing(context).getRealPath(with(any(String.class)));
+				will(returnValue(SpringBasedContainer.class.getResource("nothing").getFile()));
             }
         });
     }

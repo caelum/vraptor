@@ -86,7 +86,7 @@ public class ViewsPropertiesPageResultTest {
         });
         FilterChain chain = mockery.mock(FilterChain.class);
 		this.webRequest = new RequestInfo(context, chain, request, response);
-        DefaultPageResult delegate = new DefaultPageResult(request, response, info, resolver, null, null);
+        DefaultPageResult delegate = new DefaultPageResult(request, response, info, resolver, null);
         this.result = new ViewsPropertiesPageResult(this.config, this.resolver, this.info, this.webRequest, info, null, delegate);
     }
 

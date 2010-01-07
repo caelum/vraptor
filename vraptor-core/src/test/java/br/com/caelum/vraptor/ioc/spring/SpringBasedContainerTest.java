@@ -87,6 +87,9 @@ public class SpringBasedContainerTest {
 
 				allowing(servletContext).getInitParameter(BasicConfiguration.BASE_PACKAGES_PARAMETER_NAME);
 				will(returnValue("br.com.caelum.vraptor.ioc.spring"));
+
+				allowing(servletContext).getRealPath(with(any(String.class)));
+				will(returnValue(SpringBasedContainer.class.getResource("nothing").getFile()));
 			}
 		});
 

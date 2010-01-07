@@ -25,18 +25,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.core.DefaultMethodInfo;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor.http.route.ResourceNotFoundException;
-import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.resource.DefaultResourceMethod;
-import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 public class DefaultPageResultTest {
@@ -49,7 +45,6 @@ public class DefaultPageResultTest {
     private PathResolver fixedResolver;
     private MethodInfo requestInfo;
 	private DefaultPageResult view;
-	private Router router;
 
     @Before
     public void setup() {
@@ -65,8 +60,7 @@ public class DefaultPageResultTest {
                 return "fixed";
             }
         };
-        router = mockery.mock(Router.class);
-		view = new DefaultPageResult(request, response, requestInfo, fixedResolver, mockery.mock(Proxifier.class), router);
+		view = new DefaultPageResult(request, response, requestInfo, fixedResolver, mockery.mock(Proxifier.class));
     }
 
     public static class AnyResource {
@@ -74,12 +68,9 @@ public class DefaultPageResultTest {
     	}
     }
     @Test
-	public void shouldRedirectWhenUriDoesntBelongToAnyLogicIncludingContextPath() throws Exception {
+	public void shouldRedirectIncludingContext() throws Exception {
 		mockery.checking(new Expectations() {
 			{
-				one(router).parse("/any/url", HttpMethod.GET, request);
-				will(throwException(new ResourceNotFoundException()));
-
 				one(request).getContextPath(); will(returnValue("/context"));
 
 				one(response).sendRedirect("/context/any/url");
@@ -93,9 +84,6 @@ public class DefaultPageResultTest {
     public void shouldNotIncludeContextPathIfURIIsAbsolute() throws Exception {
     	mockery.checking(new Expectations() {
     		{
-    			one(router).parse("http://vraptor.caelum.com.br", HttpMethod.GET, request);
-    			will(throwException(new ResourceNotFoundException()));
-
     			never(request).getContextPath();
 
     			one(response).sendRedirect("http://vraptor.caelum.com.br");
@@ -106,67 +94,20 @@ public class DefaultPageResultTest {
     	mockery.assertIsSatisfied();
     }
     @Test
-    public void shouldForwardWhenUriDoesntBelongToAnyLogic() throws Exception {
+    public void shouldForwardToGivenURI() throws Exception {
     	mockery.checking(new Expectations() {
     		{
-				one(router).parse("/any/url", HttpMethod.GET, request);
-				will(throwException(new ResourceNotFoundException()));
-
     			one(request).getRequestDispatcher("/any/url");
                 will(returnValue(dispatcher));
                 one(dispatcher).forward(request, response);
 
-                one(request).getParameter("_method");
-                will(returnValue("GET"));
-
-                one(request).getMethod(); will(returnValue("POST"));
     		}
     	});
 
     	view.forward("/any/url");
     	mockery.assertIsSatisfied();
     }
-    @Test
-    public void shouldThrowExceptionWhenUriDoesntBelongToAnyLogicOnRedirect() throws Exception {
-    	mockery.checking(new Expectations() {
-    		{
-    			one(router).parse("/any/url", HttpMethod.GET, request);
-    			will(returnValue(method));
 
-    			never(response).sendRedirect("/any/url");
-    		}
-    	});
-
-    	try {
-			view.redirect("/any/url");
-			Assert.fail("Should throw exception");
-		} catch (ResultException e) {
-			mockery.assertIsSatisfied();
-		}
-    }
-    @Test
-    public void shouldThrowExceptionWhenUriDoesntBelongToAnyLogicOnForward() throws Exception {
-    	mockery.checking(new Expectations() {
-    		{
-    			one(router).parse("/any/url", HttpMethod.GET, request);
-    			will(returnValue(method));
-
-    			never(request).getRequestDispatcher("/any/url");
-
-                one(request).getParameter("_method");
-                will(returnValue("GET"));
-
-                one(request).getMethod(); will(returnValue("POST"));
-    		}
-    	});
-
-    	try {
-    		view.forward("/any/url");
-    		Assert.fail("Should throw exception");
-    	} catch (ResultException e) {
-    		mockery.assertIsSatisfied();
-    	}
-    }
     @Test
     public void shouldAllowCustomPathResolverWhileForwarding() throws ServletException, IOException {
         mockery.checking(new Expectations() {

@@ -25,25 +25,15 @@ import javax.servlet.http.HttpServletResponse;
 
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor.http.route.MethodNotAllowedException;
-import br.com.caelum.vraptor.http.route.ResourceNotFoundException;
-import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.proxy.MethodInvocation;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.ProxyInvocationException;
 import br.com.caelum.vraptor.proxy.SuperMethod;
 import br.com.caelum.vraptor.resource.DefaultResourceMethod;
-import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**
  * Default page result implementation.
- *
- * By default, if you try to redirect or forward to an URI that is matched
- * by a route, an exception will be thrown.
- *
- * If you want to disable this exception, you can override the {@link DefaultPageResult#checkForLogic(String, HttpMethod)}
- * method.
  *
  * @author Guilherme Silveira
  * @author Lucas Cavalcanti
@@ -55,14 +45,12 @@ public class DefaultPageResult implements PageResult {
     private final ResourceMethod method;
     private final PathResolver resolver;
 	private final Proxifier proxifier;
-	private final Router router;
 
     public DefaultPageResult(MutableRequest req, HttpServletResponse res, MethodInfo requestInfo,
-            PathResolver resolver, Proxifier proxifier, Router router) {
+            PathResolver resolver, Proxifier proxifier) {
         this.request = req;
         this.response = res;
 		this.proxifier = proxifier;
-		this.router = router;
         this.method = requestInfo.getResourceMethod();
         this.resolver = resolver;
     }
@@ -89,7 +77,6 @@ public class DefaultPageResult implements PageResult {
 
     public void redirect(String url) {
         try {
-        	checkForLogic(url, HttpMethod.GET); // redirect only makes sense with GET method
         	if (url.startsWith("/")) {
 				response.sendRedirect(request.getContextPath() + url);
 			} else {
@@ -100,21 +87,8 @@ public class DefaultPageResult implements PageResult {
         }
     }
 
-	protected void checkForLogic(String url, HttpMethod httpMethod) {
-		try {
-			ResourceMethod method = router.parse(url, httpMethod, request);
-			throw new ResultException("Given uri " + url + " responds to method: " + method.getMethod() + ".\n" +
-					"Use result.use(logic()).redirectTo(" + method.getResource().getType().getSimpleName() + ".class)."
-					+ method.getMethod().getName() + "() instead.");
-		} catch (ResourceNotFoundException e) {
-			//Ok
-		} catch (MethodNotAllowedException e) {
-			//Ok
-		}
-	}
 	public void forward(String url) {
         try {
-        	checkForLogic(url, HttpMethod.of(request)); // keep http method
             request.getRequestDispatcher(url).forward(request, response);
         } catch (ServletException e) {
             throw new ResultException(e);

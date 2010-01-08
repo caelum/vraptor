@@ -62,7 +62,8 @@ class ComponentScanner extends ClassPathBeanDefinitionScanner {
 
 		public String generateBeanName(BeanDefinition definition, BeanDefinitionRegistry registry) {
 			String name = delegate.generateBeanName(definition, registry);
-			if (registry.containsBeanDefinition(name)) {
+			while (registry.containsBeanDefinition(name) &&
+					!registry.getBeanDefinition(name).getBeanClassName().equals(definition.getBeanClassName())) {
 				name = name + "$";
 			}
 			return name;
@@ -94,7 +95,7 @@ class ComponentScanner extends ClassPathBeanDefinitionScanner {
 
 	@Override
 	protected boolean checkCandidate(String beanName, BeanDefinition beanDefinition) throws IllegalStateException {
-		if (registry.containsBeanDefinition(beanDefinition.getBeanClassName())) {
+		if (registry.containsBeanDefinition(beanName) && registry.getBeanDefinition(beanName).getBeanClassName().equals(beanDefinition.getBeanClassName())) {
 			logger
 					.warn("bean already found previously, there is probably no need to declare its package in web.xml:"
 							+ beanDefinition.getBeanClassName());

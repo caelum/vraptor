@@ -18,6 +18,7 @@ out
 target
 classes
 build
+!vraptor-core/lib/build
 cobertura.ser
 bin
 .DS_Store

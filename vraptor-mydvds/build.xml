@@ -6,7 +6,7 @@
 	<property name="vraptor.core" value="../vraptor-core"/>
 	<property name="mandatory.jars" value="${vraptor.core}/${libs.dir}/mandatory"/>
 	<property name="optional.jars" value="${vraptor.core}/${libs.dir}/optional"/>
-	<property name="webinf.lib.dir" value="src/main/webapp/WEB-INF/lib"/>
+	<property name="webinf.lib.dir" value="WebContent/WEB-INF/lib"/>
 
     <!-- - - - - - - - - - - - - - - - - - 
           target: clean                      
@@ -48,20 +48,11 @@
     	<copy todir="${webinf.lib.dir}" file="${vraptor.core}/${jar.file}"/>
     </target>
 
-	
-	<!-- ================================= 
-          target: copy-resources              
-         ================================= -->
-    <target name="copy-resources" depends="" description="--> copy resources to output">
-    	<copy todir="src/main/webapp/WEB-INF/classes">
-	    	<fileset dir="src/main/resources"/>
-    	</copy> 
-    </target>
 
     <!-- ================================= 
           target: assembly              
          ================================= -->
-    <target name="assembly" depends="clean, compile, copy-resources" description="--> assemblies the distribution">
+    <target name="assembly" depends="clean, compile" description="--> assemblies the distribution">
     	
 		<war destfile="mydvds.war" webxml="src/main/webapp/WEB-INF/web.xml">
         	<fileset dir="src/main/webapp" excludes="src/main/webapp/WEB-INF/web.xml"/>

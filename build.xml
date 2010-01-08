@@ -86,7 +86,6 @@
 				<exclude name="**/*.zip"/>
 				<exclude name="**/*.war"/>
 				<exclude name="bin/**/*"/>
-				<exclude name="build-lib/extras/**/*"/>
 			</fileset>
 		</zip>
 	</target>

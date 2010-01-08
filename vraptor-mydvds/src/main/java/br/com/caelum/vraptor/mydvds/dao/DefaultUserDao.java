@@ -2,17 +2,17 @@
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource
  * All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); 
- * you may not use this file except in compliance with the License. 
- * You may obtain a copy of the License at 
- * 
- * 	http://www.apache.org/licenses/LICENSE-2.0 
- * 
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an "AS IS" BASIS, 
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
- * See the License for the specific language governing permissions and 
- * limitations under the License. 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * 	http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package br.com.caelum.vraptor.mydvds.dao;
 
@@ -57,47 +57,31 @@ public class DefaultUserDao implements UserDao {
 		return (User) query.uniqueResult();
 	}
 
-	@Override
 	public User find(String login) {
 		String hql = "from User u where u.login = :login";
 
 		Query query = session.createQuery(hql).setParameter("login", login);
 
 		return (User) query.uniqueResult();
-
 	}
-	/* (non-Javadoc)
-	 * @see br.com.caelum.vraptor.mydvds.dao.UserDao#add(br.com.caelum.vraptor.mydvds.model.User)
-	 */
+
 	public void add(User user) {
 		session.save(user);
 	}
 
-	/* (non-Javadoc)
-	 * @see br.com.caelum.vraptor.mydvds.dao.UserDao#refresh(br.com.caelum.vraptor.mydvds.model.User)
-	 */
 	public void refresh(User user) {
 		session.refresh(user);
 	}
 
-	/* (non-Javadoc)
-	 * @see br.com.caelum.vraptor.mydvds.dao.UserDao#update(br.com.caelum.vraptor.mydvds.model.User)
-	 */
 	public void update(User user) {
 		session.update(user);
 	}
 
-	/* (non-Javadoc)
-	 * @see br.com.caelum.vraptor.mydvds.dao.UserDao#listAll()
-	 */
 	@SuppressWarnings("unchecked")
 	public List<User> listAll() {
 		return session.createCriteria(User.class).list();
 	}
 
-	/* (non-Javadoc)
-	 * @see br.com.caelum.vraptor.mydvds.dao.UserDao#containsUserWithLogin(java.lang.String)
-	 */
 	public boolean containsUserWithLogin(String login) {
 		String hql = "from User user where user.login = :login";
 		Query query = session.createQuery(hql).setParameter("login", login);

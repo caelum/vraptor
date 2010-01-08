@@ -1,0 +1,373 @@
+@charset "UTF-8";
+/* CSS Document */
+input, label, select {
+	display: block;
+	text-align: left;
+	width: 27em;
+}
+fieldset {
+	width: 300px;
+	margin: 15px auto 0;
+	border:1px solid #a29bc0;
+	padding: 10px;
+}
+code *, pre * {
+	font-family: monospace;
+}
+*{margin:0px; padding:0px; font-family:Arial, Helvetica, sans-serif;}
+body{
+	background-color:#2a2948; 
+	text-align:center;}
+
+h1 {
+	width: 800px;
+	margin: 0 auto 20px;
+	text-align: left;
+	border-bottom: 1px black solid;
+}
+
+table {
+	width: 800px;
+	margin: 0 auto;
+	text-align: left;
+	border: 1px white solid;	
+}
+
+table thead {
+	background-color: #2a2948;
+	color: white;
+	font-weight: bold;
+}
+
+table thead td {
+	padding-left: 10px;	
+}
+
+table tbody tr.even {
+	background-color: #a29bc0;
+}
+/* errors and notice */
+
+#errors {
+	background-color: red;	
+}
+
+#notice {
+	background-color: yellow;
+	text-align: left;
+}
+#notice p {
+	margin: 0 auto;
+	width: 750px;
+}
+#errors li {
+	width: 750px;
+	color: white;
+	text-align: left;
+	list-style: none;
+	margin: 0 auto;
+}
+
+#userInfo p {
+	text-align: right;
+	color: white;
+	padding: 3px;
+}
+#userInfo a {
+	color: white;	
+}
+#userInfo a:hover {
+	color: lightblue;	
+}
+/*language bar*/
+		#langMenu{
+			display:block;
+			width:221px;
+			height:50px;
+			position:relative;
+			float:right;
+			margin:0px;}
+		
+			#langMenu li { list-style:none; }
+			
+			#langMenu li, #langMenu a{ height:50px; display:block;}
+			
+			#langMenu li a span{display:none;}
+			
+			#engBtn{
+				background-image:url(images/vraptorSprites-trans.png);
+				background-repeat:no-repeat;
+				background-position:-317px 1px;
+				position:absolute;
+				top:0;
+				width:96px;
+				left:0px;} 
+				
+				a#engBtn:hover{background-position:-317px -50px;}
+			
+			#ptBtn{
+				background-image:url(images/vraptorSprites-trans.png);
+				background-repeat:no-repeat;
+				background-position:-414px 1px;
+				position:absolute;
+				top:0;				
+				width:127px;
+				right:0px;}
+				
+				a#ptBtn:hover{background-position:-414px -50px;}
+				
+/* menu */
+#menuWrap input, #menuWrap button {
+	display: inline;
+	border: 1px solid black;
+	padding: 2px;
+	-moz-border-radius: 5px;
+}
+#menuWrap input {
+	width: 15em;
+	color: #ababab;
+}
+#menuWrap input:focus {
+	color: black ;
+}
+#menuWrap {
+	display:block;
+	width:100%;
+	height:59;
+	position:relative;
+	overflow:hidden;
+	background-image:url(images/bgHeader.png);
+	background-position:0px -100px;
+	background-repeat:repeat-x;}
+	
+	#menuElements, #menuElementsEn{
+		display:block;
+		width:832px;
+		height:59px;
+		position:relative;
+		margin:0px auto;
+		text-align:left;}
+		
+		#menuElements li, #menuElementsEn li {list-style:none;}
+		
+		#menuElements li, #menuElements a{
+			height:59px; 
+			display:block;
+			position:absolute;
+			top:0px;}
+		
+		#menuElementsEn li {
+			float: left;
+			margin: 16px 5px;
+		}
+		#menuElementsEn li a:hover {
+			color: #2a2948;
+			background-color: #a29bc0;
+			-moz-border-radius: 5px;
+			-webkit-border-radius: 5px;
+			-khtml-border-radius: 5px;
+			-opera-border-radius: 5px;
+			border-radius: 5px;
+		}
+		#menuElementsEn li a {
+			font-size: 12pt;
+			text-transform: uppercase;
+			text-decoration: none;
+			font-weight: bold;
+			position:relative;
+			padding: 5px 15px;
+			color: white;
+			top: auto;
+		}
+		
+/*header structure*/
+#headerWrap{
+	background-image:url(images/bgHeader.png);
+	background-position:left top;
+	background-repeat:repeat;
+	background-color:#0CF;
+	display:block; 
+	width:100%;
+	height:100px;
+	position:relative;}
+	
+	#headerContent{
+		width:918px;
+		display:block;
+		height:100%;
+		position:relative;
+		margin:0px auto;}
+		
+		#logoVraptor {
+			display:block;
+			width:302px;
+			height:92px;
+			background-image:url(images/vraptorSprites-trans.png);
+			background-position:-6px 0px;
+			background-repeat:no-repeat;
+			position:absolute;
+			border:none;
+			left:0px;
+			top:0px;}
+			
+			#logoVraptor span {display:none;}
+
+/*menus like langbar and menuelements menu.css*/
+
+/*banner css configuration*/
+#bannerWrap{
+	background-image:url(images/bgHeader.png);
+	background-position:0 -158px;
+	background-repeat:repeat;
+	display:block; 
+	width:100%;
+	height:302px;
+	position:relative;}	
+
+	#banner{
+		width:918px;	
+		height:auto;
+		margin:0px auto;	
+		display:block;	
+		height:auto;	
+		text-align:left;}
+		
+		#banner #floatBoxBanner {display:block; float:right; position:relative; height:auto; width:650px;}
+		
+		 #banner #floatBoxBanner h1{
+			font-size:30px;
+			margin-top:45px;
+			margin-bottom:35px;
+			color:#FFF;
+			text-transform:uppercase;
+		}
+		
+		 #banner #floatBoxBanner #downloadBtn2{
+			background-image:url(images/vraptorSprites-trans.png);
+			background-repeat:no-repeat;
+			background-position:-767px -56px;
+			margin-top:15px;
+			display:block;
+			width:238px;
+			height:54px;
+			float:right;}
+			#banner #downloadBtn2 span{display:none;}
+		
+		#banner #floatBoxBanner p{color:#FFF; float:right; padding-top:35px; padding-right:10px; text-transform:uppercase; font-size:10px;}
+			#banner #floatBoxBanner p a {color:#FFF; font-size: 11pt; margin-right: 10px;}
+			#banner #floatBoxBanner p a:hover{color:#FF0;}
+		
+		#banner #floatBoxBanner ul {color:#FFF; font-size:16px; list-style-type:none; width:450px;}
+		 #banner #floatBoxBanner ul li {
+			padding:4px 0px 4px 25px;
+			background-image:url(images/yellowArrow-trans.png);
+			background-repeat:no-repeat;
+			background-position:2px 5px;}
+			
+		 #banner #floatBoxBanner #openSourceIcon {
+			position:absolute; 
+			top:120px;
+			right:60px;}
+		
+
+/*content css*/
+#contentWrap{
+	display:block;
+	width:100%;
+	height:auto;
+	position:relative;
+	overflow:auto;
+	padding: 20px 0;
+	background-color:#FFF;
+	background-image:url(images/bgHeader.png);
+	background-position:0px -461px;
+	background-repeat:repeat-x;}
+	
+/*footer css*/
+#footerWrap{
+	display:block; 
+	width:100%;
+	position:relative;}
+	
+	#footerContent{
+		width:918px;
+		display:block;
+		height:100%;
+		position:relative;
+		margin:10px auto;
+		overflow:hidden;
+		position:relative;}
+		
+		#footerContent div#suporteFooter, #footerContent div#consultoriaFooter, #footerContent div#treinamentoFooter{
+			width:280px; 
+			display:block; 
+			float:left; 
+			text-align:justify;
+			padding:10px 12px 20px 12px;}
+
+			
+			div#consultoriaFooter {
+				margin:0px;/*espacamento entre as colunas*/
+				border-left:solid 1px #FFF;
+				border-right:solid 1px #fff;
+			}
+			
+		#footerContent div#suporteFooter h3 a, #footerContent div#consultoriaFooter h3 a, #footerContent div#treinamentoFooter h3 a{
+			color:#fffc01;
+			font-size:18px;
+			font-weight:normal;
+			padding-bottom:15px;
+			padding-left:25px;
+			background-image:url(images/yellowArrow-trans.png);
+			background-repeat:no-repeat;
+			background-position:2px 2px;
+			text-decoration:none;
+			cursor:pointer;
+			display:block;}
+
+		#footerContent div#suporteFooter p a, #footerContent div#consultoriaFooter p a, #footerContent div#treinamentoFooter p a{
+			color:#f0f0f0;
+			font-size:14px;
+			font-weight:normal;
+			padding-left:25px;
+			padding-right:20px;
+			text-decoration:none;
+			display:block;
+			cursor:pointer;}
+			
+			div#footerContent a.moreIcon{
+				background-image:url(images/vraptorSprites-trans.png);
+				background-repeat:no-repeat;
+				background-position: -958px 0px;
+				height:26px;
+				width:18px;
+				display:block;
+				float:right;}
+				
+				div#footerContent a.moreIcon:hover{background-position:-977px 0px;}
+				
+				a.moreIcon span {display:none;}
+
+		#footerContent div.footbar{
+			width:918px;
+			height:100px;
+			display:block; 
+			position:relative;
+			overflow:hidden;
+			float:left;
+			color:#CCC;
+			text-transform:uppercase;
+			text-align:left;
+			padding-top:5px;
+			margin-top:10px;}
+			
+			div.footbar img.logoFooter{float:right;}
+			div.footbar a:hover{color:#FF0; text-decoration:underline;}			
+			div.footbar ul {display:block; float:left; margin:5px 0px 5px 20px;}
+			div.footbar ul li{ display:block; float:left; text-decoration:none; font-size:10px; font-weight:bold; margin:0px 2px 0px 0px;}
+			div.footbar ul li a{color:#FFF; text-decoration:none; font-weight:normal;}
+			div.footbar p{font-size:11px; padding:5px 20px; display:block; color:#576296; float:left; width:685px; border-top:solid 1px #576296;}
+			div.footbar p a{color:#aaafc6; text-decoration:none;}
+
+#signature { background-image:url(images/ldl-trans.png); background-repeat:no-repeat; background-position:left top; position:absolute; display:block; bottom:0px; left:10px; font-family:Georgia, "Times New Roman", Times, serif; font-size:10px; color:#FFF; padding:5px 0px 15px 30px; text-decoration:none;}
+a#signature:hover{color:#C90;}

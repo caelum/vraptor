@@ -18,7 +18,7 @@
 		<property name="hibernate.cache.provider_class">org.hibernate.cache.HashtableCacheProvider</property>
 
  		<mapping class="br.com.caelum.vraptor.mydvds.model.Dvd" />
- 		<mapping class="br.com.caelum.vraptor.mydvds.model.DvdCopy" />
+ 		<mapping class="br.com.caelum.vraptor.mydvds.model.DvdRental" />
  		<mapping class="br.com.caelum.vraptor.mydvds.model.User" />
 
 	</session-factory>

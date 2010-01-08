@@ -12,13 +12,6 @@
 		<param-value>messages</param-value>
 	</context-param>
 	
-	<!-- 
-	<context-param>
-        <param-name>br.com.caelum.vraptor.packages</param-name>
-        <param-value>br.com.caelum.vraptor.mydvds</param-value>
-    </context-param>
-	 -->
-
 	<context-param>
         <param-name>br.com.caelum.vraptor.provider</param-name>
         <param-value>br.com.caelum.vraptor.mydvds.provider.CustomProvider</param-value>

@@ -76,6 +76,12 @@ class ComponentScanner extends ClassPathBeanDefinitionScanner {
 		try {
 			Class<?> componentType = Class.forName(beanDefinition.getBeanClassName());
 			if (ComponentFactory.class.isAssignableFrom(componentType)) {
+				if (registry.containsSingleton(beanDefinition.getBeanClassName())) {
+					logger
+							.warn("bean already found previously, there is probably no need to declare its package in web.xml:"
+									+ beanDefinition.getBeanClassName());
+					return;
+				}
 				registry.registerSingleton(beanDefinition.getBeanClassName(), new ComponentFactoryBean(container,
 						componentType));
 			}
@@ -84,10 +90,10 @@ class ComponentScanner extends ClassPathBeanDefinitionScanner {
 					+ " was not found during bean definition proccess");
 		}
 	}
-	
+
 	@Override
 	public int scan(String... basePackages) {
-		logger.debug("resource loader: " +  this.getResourceLoader());
+		logger.debug("resource loader: " + this.getResourceLoader());
 		logger.debug("scanning " + Arrays.toString(basePackages));
 		return super.scan(basePackages);
 	}

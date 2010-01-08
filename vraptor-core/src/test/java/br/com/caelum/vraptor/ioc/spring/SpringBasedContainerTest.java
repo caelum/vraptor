@@ -68,17 +68,17 @@ import br.com.caelum.vraptor.test.HttpSessionMock;
  * @author Fabio Kung
  */
 public class SpringBasedContainerTest {
-    private SpringBasedContainer container;
-    private Mockery mockery;
-    private HttpServletRequestMock request;
-    private HttpSessionMock session;
-    private ServletContext servletContext;
-    private MutableResponse response;
+	private SpringBasedContainer container;
+	private Mockery mockery;
+	private HttpServletRequestMock request;
+	private HttpSessionMock session;
+	private ServletContext servletContext;
+	private MutableResponse response;
 
-    @Before
-    public void initContainer() {
-        mockery = new Mockery();
-        servletContext = mockery.mock(ServletContext.class);
+	@Before
+	public void initContainer() {
+		mockery = new Mockery();
+		servletContext = mockery.mock(ServletContext.class);
 
 		mockery.checking(new Expectations() {
 			{
@@ -89,113 +89,116 @@ public class SpringBasedContainerTest {
 				will(returnValue("br.com.caelum.vraptor.ioc.spring"));
 
 				allowing(servletContext).getRealPath(with(any(String.class)));
-				will(returnValue(SpringBasedContainer.class.getResource("nothing").getFile()));
+				will(returnValue(SpringBasedContainer.class.getResource(".").getFile()));
 			}
 		});
 
-        session = new HttpSessionMock(servletContext, "session");
-        request = new HttpServletRequestMock(session);
-        response = mockery.mock(MutableResponse.class);
+		session = new HttpSessionMock(servletContext, "session");
+		request = new HttpServletRequestMock(session);
+		response = mockery.mock(MutableResponse.class);
 
-        FilterChain chain = mockery.mock(FilterChain.class);
+		FilterChain chain = mockery.mock(FilterChain.class);
 		VRaptorRequestHolder.setRequestForCurrentThread(new RequestInfo(servletContext, chain, request, response));
-        RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
-        container = new SpringBasedContainer(null, new BasicConfiguration(servletContext));
-        container.start(servletContext);
-    }
+		RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
+		container = new SpringBasedContainer(null, new BasicConfiguration(servletContext));
+		container.start(servletContext);
+	}
 
-    @After
-    public void destroyContainer() {
-        container.stop();
-        container = null;
-        RequestContextHolder.resetRequestAttributes();
-        VRaptorRequestHolder.resetRequestForCurrentThread();
-    }
+	@After
+	public void destroyContainer() {
+		container.stop();
+		container = null;
+		RequestContextHolder.resetRequestAttributes();
+		VRaptorRequestHolder.resetRequestForCurrentThread();
+	}
 
-    @Test
+	@Test
 	public void twoClassesWithSameNameButDifferentPackages() throws Exception {
 		SameName instance1 = container.instanceFor(SameName.class);
-		br.com.caelum.vraptor.ioc.spring.components.sub.SameName instance2 = container.instanceFor(br.com.caelum.vraptor.ioc.spring.components.sub.SameName.class);
+		br.com.caelum.vraptor.ioc.spring.components.sub.SameName instance2 = container
+				.instanceFor(br.com.caelum.vraptor.ioc.spring.components.sub.SameName.class);
 		assertNotNull(instance1);
 		assertNotNull(instance2);
 	}
-    @Test
-    public void shouldScanAndRegisterAnnotatedBeans() {
-        DummyComponent component = container.instanceFor(DummyComponent.class);
-        assertNotNull("can instantiate", component);
-        assertTrue("is the right implementation", component instanceof DummyImplementation);
-    }
 
-    @Test
-    public void shouldSupportOtherStereotypeAnnotations() {
-        SpecialImplementation component = container.instanceFor(SpecialImplementation.class);
-        assertNotNull("can instantiate", component);
-    }
+	@Test
+	public void shouldScanAndRegisterAnnotatedBeans() {
+		DummyComponent component = container.instanceFor(DummyComponent.class);
+		assertNotNull("can instantiate", component);
+		assertTrue("is the right implementation", component instanceof DummyImplementation);
+	}
 
-    @Test
-    public void shouldSupportConstructorInjection() {
-        ConstructorInjection component = container.instanceFor(ConstructorInjection.class);
-        assertNotNull("can instantiate", component);
-        assertNotNull("inject dependencies", component.getDependecy());
-    }
+	@Test
+	public void shouldSupportOtherStereotypeAnnotations() {
+		SpecialImplementation component = container.instanceFor(SpecialImplementation.class);
+		assertNotNull("can instantiate", component);
+	}
 
-    @Test
-    public void shouldProvideCurrentHttpRequest() {
-        ServletRequest httpRequest = container.instanceFor(ServletRequest.class);
-        assertNotNull("can provide request", httpRequest);
-    }
+	@Test
+	public void shouldSupportConstructorInjection() {
+		ConstructorInjection component = container.instanceFor(ConstructorInjection.class);
+		assertNotNull("can instantiate", component);
+		assertNotNull("inject dependencies", component.getDependecy());
+	}
 
-    @Test
-    public void shouldProvideCurrentVRaptorRequest() {
-        RequestInfo vraptorRequest = container.instanceFor(RequestInfo.class);
-        assertNotNull("can provide request", vraptorRequest);
-    }
+	@Test
+	public void shouldProvideCurrentHttpRequest() {
+		ServletRequest httpRequest = container.instanceFor(ServletRequest.class);
+		assertNotNull("can provide request", httpRequest);
+	}
 
-    @Test
-    public void shouldProvideServletContext() {
-        ServletContext context = container.instanceFor(ServletContext.class);
-        assertNotNull("can provide ServletContext", context);
-    }
+	@Test
+	public void shouldProvideCurrentVRaptorRequest() {
+		RequestInfo vraptorRequest = container.instanceFor(RequestInfo.class);
+		assertNotNull("can provide request", vraptorRequest);
+	}
 
-    @Test
-    public void shouldProvideTheContainer() {
-        Container itself = this.container.instanceFor(Container.class);
-        assertNotNull("can provide the container", itself);
-    }
+	@Test
+	public void shouldProvideServletContext() {
+		ServletContext context = container.instanceFor(ServletContext.class);
+		assertNotNull("can provide ServletContext", context);
+	}
 
-    @Test
-    public void shouldSupportManualRegistration() {
-        this.container.register(RequestScopedContract.class, RequestScopedComponent.class);
-        RequestScopedContract requestScopedContract = this.container.instanceFor(RequestScopedContract.class);
-        assertNotNull("can provide manual registered components", requestScopedContract);
-    }
+	@Test
+	public void shouldProvideTheContainer() {
+		Container itself = this.container.instanceFor(Container.class);
+		assertNotNull("can provide the container", itself);
+	}
 
-    @Test
-    public void shoudSupportCustomImplementationsForAlreadyRegisteredComponents() {
-        this.container.register(UrlToResourceTranslator.class, CustomTranslator.class);
-        UrlToResourceTranslator translator = this.container.instanceFor(UrlToResourceTranslator.class);
-        assertThat(translator, is(notNullValue()));
-        assertThat(translator, is(instanceOf(CustomTranslator.class)));
+	@Test
+	public void shouldSupportManualRegistration() {
+		this.container.register(RequestScopedContract.class, RequestScopedComponent.class);
+		RequestScopedContract requestScopedContract = this.container.instanceFor(RequestScopedContract.class);
+		assertNotNull("can provide manual registered components", requestScopedContract);
+	}
 
-    }
+	@Test
+	public void shoudSupportCustomImplementationsForAlreadyRegisteredComponents() {
+		this.container.register(UrlToResourceTranslator.class, CustomTranslator.class);
+		UrlToResourceTranslator translator = this.container.instanceFor(UrlToResourceTranslator.class);
+		assertThat(translator, is(notNullValue()));
+		assertThat(translator, is(instanceOf(CustomTranslator.class)));
 
-    @Test
-    public void shoudRegisterResourcesInRouter() {
-    	Router router = container.instanceFor(Router.class);
-    	Matcher<Iterable<? super Route>> hasItem = hasItem(canHandle(DummyResource.class, DummyResource.class.getDeclaredMethods()[0]));
+	}
+
+	@Test
+	public void shoudRegisterResourcesInRouter() {
+		Router router = container.instanceFor(Router.class);
+		Matcher<Iterable<? super Route>> hasItem = hasItem(canHandle(DummyResource.class, DummyResource.class
+				.getDeclaredMethods()[0]));
 		assertThat(router.allRoutes(), hasItem);
-    }
+	}
 
-    @Test
-    public void shoudRegisterConvertersInConverters() {
-    	Converters converters = container.instanceFor(Converters.class);
-    	Converter<?> converter = converters.to(Foo.class, container);
+	@Test
+	public void shoudRegisterConvertersInConverters() {
+		Converters converters = container.instanceFor(Converters.class);
+		Converter<?> converter = converters.to(Foo.class, container);
 		assertThat(converter, is(instanceOf(DummyConverter.class)));
-    }
+	}
 
-    @Test
-    public void shoudRegisterInterceptorsInInterceptorRegistry() {
-    	InterceptorRegistry registry = container.instanceFor(InterceptorRegistry.class);
-    	assertThat(registry.all(), hasItem(DummyInterceptor.class));
-    }
+	@Test
+	public void shoudRegisterInterceptorsInInterceptorRegistry() {
+		InterceptorRegistry registry = container.instanceFor(InterceptorRegistry.class);
+		assertThat(registry.all(), hasItem(DummyInterceptor.class));
+	}
 }

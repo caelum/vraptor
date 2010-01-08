@@ -6,6 +6,7 @@
 	<property name="vraptor.core" value="../vraptor-core"/>
 	<property name="mandatory.jars" value="${vraptor.core}/${libs.dir}/mandatory"/>
 	<property name="optional.jars" value="${vraptor.core}/${libs.dir}/optional"/>
+	<property name="extra.jars" value="build-lib/extra"/>
 	<property name="webinf.lib.dir" value="WebContent/WEB-INF/lib"/>
 
     <!-- - - - - - - - - - - - - - - - - - 
@@ -42,6 +43,9 @@
 			    <include name="*.jar"/>
 			</fileset>
 			<fileset dir="${optional.jars}">
+			    <include name="*.jar"/>
+			</fileset>
+			<fileset dir="${extra.jars}">
 			    <include name="*.jar"/>
 			</fileset>
     	</copy>

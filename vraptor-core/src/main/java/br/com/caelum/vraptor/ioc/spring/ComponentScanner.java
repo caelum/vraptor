@@ -76,8 +76,7 @@ class ComponentScanner extends ClassPathBeanDefinitionScanner {
 		beanDefinition.setPrimary(true);
 		try {
 			Class<?> componentType = Class.forName(beanDefinition.getBeanClassName());
-			if (ComponentFactory.class.isAssignableFrom(componentType)) {
-
+			if (ComponentFactory.class.isAssignableFrom(componentType) && checkCandidate(beanName, beanDefinition)) {
 				registry.registerSingleton(beanDefinition.getBeanClassName(), new ComponentFactoryBean(container,
 						componentType));
 			}

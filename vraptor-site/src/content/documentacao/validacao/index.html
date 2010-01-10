@@ -219,6 +219,15 @@ O validator.onErrorUse funciona do mesmo jeito que o result.use: voc&ecirc; pode
 classe Results.</span>
 		
 
+<h3 class="section">Mostrando os erros de validação no JSP</h3>
+	    	<span class="paragraph">Quando existem erros de valida&ccedil;&atilde;o, o VRaptor coloca um atributo na requisi&ccedil;&atilde;o chamado
+<code class="inlineCode">errors</code> contendo a lista de erros, ent&atilde;o voc&ecirc; pode mostr&aacute;-los na sua JSP de um jeito
+parecido com:</span>
+	    	<div class="xml"><code class="xml"><span class="textag">&lt;c:forEach</span>&nbsp;<span class="texattrib">var=</span><span class="texvalue">"error"</span>&nbsp;<span class="texattrib">items=</span><span class="texvalue">"${errors}"</span><span class="textag">&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;${error.category}&nbsp;-&nbsp;${error.message}</span><span class="textag">&lt;br</span>&nbsp;<span class="textag">/&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal"></span><span class="textag">&lt;/c:forEach&gt;</span></code></div>
+		
+
 </div><!-- content -->
             
         </div><!-- content cnt -->

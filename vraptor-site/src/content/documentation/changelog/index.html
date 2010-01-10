@@ -104,12 +104,38 @@
 		
 
 
-<h3 class="section">3.0.3 (to be released)</h3>
-	    	<ul class="list"><li><span class="paragraph">it is now possible to serialize collections via result.use(xml()) or result.use(json().</span></li><li><span class="paragraph">new scope: @PrototypeScoped, that creates a new instance of annotated class whenever it is requested.</span></li><li><span class="paragraph">new view: result.use(Results.representation()).from(object).serialize();
+<h3 class="section">3.1 (to be released)</h3>
+	    	<ul class="list"><li><span class="paragraph">it is now possible to serialize collections via result.use(xml()) or result.use(json()).</span></li><li><span class="paragraph">new scope: @PrototypeScoped, that creates a new instance of annotated class whenever it is requested.</span></li><li><span class="paragraph">new view: result.use(Results.representation()).from(object).serialize();
 This view tries to discover the request format (through _format or Accept header)
 and then serialize the given object in this format. For now only xml and json are supported, but you can
 add a serializer for any format you like. If there is no format given, or it is unsupported the default
-jsp page will be shown.</span></li></ul>
+jsp page will be shown.</span></li><li><span class="paragraph">bugfix: Flash scope parameters are now set with arrays, so it will work on GAE</span></li><li><span class="paragraph">bugfix: validation.onErrorUse(...) now works with all default Results</span></li><li><span class="paragraph">bugfix: when returning a null Download/File/InputStream will not throw NullPointerException if any redirect
+  has occurred (result.use(...)).</span></li><li><span class="paragraph">bugfix: result.use(page()).redirect("...") now includes the contextPath if given url starts with /</span></li><li><span class="paragraph">bugfix: one can create generic Controllers now:</span><div class="java"><code class="java">
+<span class="java4">public class </span><span class="java10">ClientsController </span><span class="java4">extends </span><span class="java10">GenericController&lt;Client&gt; </span><span class="java8">{<br />
+<br />
+}<br />
+</span><span class="java4">public class </span><span class="java10">GenericController&lt;T&gt; </span><span class="java8">{<br />
+&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">T show</span><span class="java8">(</span><span class="java10">Long id</span><span class="java8">) {</span><span class="java10">...</span><span class="java8">} </span><span class="java3">// exported variable will be called t<br />
+&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">add</span><span class="java8">(</span><span class="java10">T obj</span><span class="java8">) {</span><span class="java10">...</span><span class="java8">} </span><span class="java3">// request parameters will be like obj.field <br />
+</span><span class="java8">}</span></code></div></li><li><span class="paragraph">you can annotate your controller class with @Path, and all methods URIs will have the path specified 
+as prefix.:</span><div class="java"><code class="java">
+<span class="java16">@Resource<br />
+@Path</span><span class="java8">(</span><span class="java5">&#34;/prefix&#34;</span><span class="java8">)<br />
+</span><span class="java4">public class </span><span class="java10">MyController </span><span class="java8">{<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java3">//URI: /prefix/aMethod<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">aMethod</span><span class="java8">() {</span><span class="java10">...</span><span class="java8">}<br />
+&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java3">//URI: /prefix/relative<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java16">@Path</span><span class="java8">(</span><span class="java5">&#34;relative&#34;</span><span class="java8">)<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">relativePath</span><span class="java8">() {</span><span class="java10">...</span><span class="java8">}<br />
+<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java3">//URI: /prefix/absolute<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java16">@Path</span><span class="java8">(</span><span class="java5">&#34;/absolute&#34;</span><span class="java8">)<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">absolutePath</span><span class="java8">() {</span><span class="java10">...</span><span class="java8">}<br />
+}</span></code></div></li><li><span class="paragraph">@Path now supports regexes: <code class="inlineCode">@Path("/abc/{abc:a+b+c+}")</code> will match URIs like:</span><div class="java"><code class="java">/abc/abc<br />
+/abc/aaaaabbcccc<br />
+/abc/abbc</code></div><span class="paragraph">whenever the parameter matches the <code class="inlineCode">a+b+c+</code> regex.</span></li><li><span class="paragraph">New methods on <code class="inlineCode">Result</code> interface as shortcuts for most common operations:</span><ul class="list"><li><span class="paragraph">result.forwardTo("/some/uri") ==&gt; result.use(page()).forward("/some/uri");</span></li><li><span class="paragraph">result.forwardTo(ClientController.class).list() ==&gt; result.use(logic()).forwardTo(ClientController.class).list();</span></li><li><span class="paragraph">result.redirectTo(ClientController.class).list() ==&gt; result.use(logic()).redirectTo(ClientController.class).list();</span></li><li><span class="paragraph">result.of(ClientController.class).list() ==&gt; result.use(page()).of(ClientController.class).list();</span></li></ul><span class="paragraph">Furthermore, if one are redirecting to a method on the same controller, one can use:</span><ul class="list"><li><span class="paragraph">result.forwardTo(this).list() ==&gt; result.use(logic()).forwardTo(this.getClass()).list();</span></li><li><span class="paragraph">result.redirectTo(this).list() ==&gt; result.use(logic()).redirectTo(this.getClass()).list();</span></li><li><span class="paragraph">result.of(this).list() ==&gt; result.use(page()).of(this.getClass()).list();</span></li></ul></li><li><span class="paragraph">VRaptor will scan for all resources and components inside WEB-INF/classes automatically</span></li><li><span class="paragraph">support for servlets 3.0, so it is not necessary configure the filter anymore (webfragment feature)</span></li><li><span class="paragraph">using latest spring version (3.0.0) and also hibernate (for examples and so on). google collections updated to final version</span></li><li><span class="paragraph">blank project now working for wtp 3.5 and using vraptor 3.1 new features</span></li><li><span class="paragraph">blank project much easier to import under wtp now. logging and other configs adjusted</span></li><li><span class="paragraph">bugfix: mimetypes now work for webkit browsers, priorizing html when no order specified</span></li><li><span class="paragraph">bugfix: in case of validation erros, the request parameters are outjected as Strings, not Maps as before.
+It prevents ClassCastExceptions when using taglibs, like fmt:formatNumber.</span></li></ul>
 		
 
 <h3 class="section">3.0.2</h3>

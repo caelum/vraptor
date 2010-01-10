@@ -269,6 +269,36 @@ a customiza&ccedil;&atilde;o de uma URI para um m&eacute;todo, que somente receb
 &nbsp; }<br />
 &nbsp;&nbsp;&nbsp; <br />
 }</span></code></div>
+	    	<span class="paragraph">Se voc&ecirc; anotar o ClienteController com @Path, o valor especificado vai ser usado como prefixo
+para todas as URIs desse controller:</span>
+	    	<div class="java"><code class="java">
+<span class="java16">@Resource<br />
+@Path</span><span class="java8">(</span><span class="java5">&#34;/clientes&#34;</span><span class="java8">)<br />
+</span><span class="java4">public class </span><span class="java10">ClienteController </span><span class="java8">{<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java3">//URI: /clientes/lista<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">lista</span><span class="java8">() {</span><span class="java10">...</span><span class="java8">}<br />
+&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java3">//URI: /clientes/salva<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java16">@Path</span><span class="java8">(</span><span class="java5">&#34;salva&#34;</span><span class="java8">)<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">adiciona</span><span class="java8">() {</span><span class="java10">...</span><span class="java8">}<br />
+&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java3">//URI: /clientes/todosOsClientes<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java16">@Path</span><span class="java8">(</span><span class="java5">&#34;/todosOsClientes&#34;</span><span class="java8">)<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">listaTudo</span><span class="java8">() {</span><span class="java10">...</span><span class="java8">}<br />
+}</span></code></div>
+	    	<span class="paragraph"><strong class="title">Paths com express&otilde;es regulares</strong>
+Voc&ecirc; pode restringir o valor dos par&acirc;metros da sua URI com express&otilde;es regulares,
+dessa maneira:</span>
+	    	<div class="java"><code class="java">
+<span class="java16">@Path</span><span class="java8">(</span><span class="java5">&#34;/cor/{cor:[0-9A-Fa-f]{6}}&#34;</span><span class="java8">)<br />
+</span><span class="java4">public </span><span class="java9">void </span><span class="java10">setCor</span><span class="java8">(</span><span class="java10">String cor</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java3">//...<br />
+</span><span class="java8">}</span></code></div>
+	    	<span class="paragraph">Tudo que estiver depois do ":" ser&aacute; tratado como uma regex, e a URI s&oacute; vai casar
+se o par&acirc;metro casar com a regex:</span>
+	    	<div class="java"><code class="java">/cor/a0b3c4&nbsp;=&gt;&nbsp;casa<br />
+/cor/AABBCC&nbsp;=&gt;&nbsp;casa<br />
+/cor/branco&nbsp;=&gt;&nbsp;n&atilde;o&nbsp;casa</code></div>
 	    	<span class="paragraph"><strong class="title">Path com inje&ccedil;&atilde;o de vari&aacute;veis</strong></span>
 	    	<span class="paragraph">Em diversos casos desejamos que a <em class="italic">uri</em> que identifica meu recurso tenha
 como parte de seu valor, por exemplo, o identificador &uacute;nico de meu recurso.</span>

@@ -1,6 +1,6 @@
 [chapter ChangeLog]
 
-[section 3.1 (to be released)]
+[section 3.1.0]
 [list]
 * it is now possible to serialize collections via result.use(xml()) or result.use(json()).
 * new scope: @PrototypeScoped, that creates a new instance of annotated class whenever it is requested. 

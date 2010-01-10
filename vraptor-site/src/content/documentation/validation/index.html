@@ -217,6 +217,14 @@ when an error occurs. How do one redirect the user to another resource using VRa
 Validator.onErrorUse works just like result.use: you can use any view from Results class.</span>
 		
 
+<h3 class="section">Showing validation errors on JSP</h3>
+	    	<span class="paragraph">When there are validation errors, VRaptor will set a request attribute named <code class="inlineCode">errors</code>
+with the error list, so you can show them on your JSP with:</span>
+	    	<div class="xml"><code class="xml"><span class="textag">&lt;c:forEach</span>&nbsp;<span class="texattrib">var=</span><span class="texvalue">"error"</span>&nbsp;<span class="texattrib">items=</span><span class="texvalue">"${errors}"</span><span class="textag">&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;${error.category}&nbsp;-&nbsp;${error.message}</span><span class="textag">&lt;br</span>&nbsp;<span class="textag">/&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal"></span><span class="textag">&lt;/c:forEach&gt;</span></code></div>
+		
+
 </div><!-- content -->
             
         </div><!-- content cnt -->

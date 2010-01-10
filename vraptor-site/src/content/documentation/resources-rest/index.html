@@ -260,6 +260,23 @@ we want to specify is <strong class="definition">/client</strong>:</span>
 &nbsp; }<br />
 &nbsp;&nbsp;&nbsp; <br />
 }</span></code></div>
+	    	<span class="paragraph">If you place the @Path on ClientController, the specified value will be used as prefix for all
+URIs from this controller.</span>
+	    	<div class="java"><code class="java">
+<span class="java16">@Resource<br />
+@Path</span><span class="java8">(</span><span class="java5">&#34;/clients&#34;</span><span class="java8">)<br />
+</span><span class="java4">public class </span><span class="java10">ClientController </span><span class="java8">{<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java3">//URI: /clients/list<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">list</span><span class="java8">() {</span><span class="java10">...</span><span class="java8">}<br />
+&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java3">//URI: /clients/save<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java16">@Path</span><span class="java8">(</span><span class="java5">&#34;save&#34;</span><span class="java8">)<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">add</span><span class="java8">() {</span><span class="java10">...</span><span class="java8">}<br />
+&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java3">//URI: /clients/allClients<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java16">@Path</span><span class="java8">(</span><span class="java5">&#34;/allClients&#34;</span><span class="java8">)<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">listAll</span><span class="java8">() {</span><span class="java10">...</span><span class="java8">}<br />
+}</span></code></div>
 	    	<span class="paragraph"><strong class="title">Path with variable injection</strong>
 Sometimes we want the <em class="italic">uri</em> to include, for example, the unique identifier of
 my resource.</span>
@@ -293,6 +310,18 @@ See the mentioned example:</span>
 &nbsp; </span><span class="java8">}<br />
 &nbsp; <br />
 }</span></code></div>
+	    	<span class="paragraph"><strong class="title">Paths with regular expressions</strong>
+You can limit your parameter values using regular expressions using this idiom:</span>
+	    	<div class="java"><code class="java">
+<span class="java16">@Path</span><span class="java8">(</span><span class="java5">&#34;/color/{color:[0-9A-Fa-f]{6}}&#34;</span><span class="java8">)<br />
+</span><span class="java4">public </span><span class="java9">void </span><span class="java10">setColor</span><span class="java8">(</span><span class="java10">String color</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java3">//...<br />
+</span><span class="java8">}</span></code></div>
+	    	<span class="paragraph">Everything that is after the colon is treated as a regex, and the URI will only match
+if the parameter matches the regex:</span>
+	    	<div class="java"><code class="java">/color/a0b3c4&nbsp;=&gt;&nbsp;matches<br />
+/color/AABBCC&nbsp;=&gt;&nbsp;matches<br />
+/color/white&nbsp;=&gt;&nbsp;doesn't&nbsp;match</code></div>
 	    	<span class="paragraph"><strong class="title">Paths with wildcards</strong></span>
 	    	<span class="paragraph">You can also use the * wildcard as a selection method for your URI. The following
 example ignores anything that comes after the word <em class="italic">photo/</em> :</span>

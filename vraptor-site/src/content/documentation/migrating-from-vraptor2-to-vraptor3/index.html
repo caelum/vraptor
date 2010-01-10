@@ -274,14 +274,14 @@ compatibility mode. Thus, all redirections are made on the underlying logic, usi
 &nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">save</span><span class="java8">(</span><span class="java10">Client client</span><span class="java8">) {<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">dao.save</span><span class="java8">(</span><span class="java10">client</span><span class="java8">)</span><span class="java10">;<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; result.use</span><span class="java8">(</span><span class="java10">Results.logic</span><span class="java8">())</span><span class="java10">.redirectTo</span><span class="java8">(</span><span class="java10">ClientsController.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">.list</span><span class="java8">()</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; result.redirectTo</span><span class="java8">(</span><span class="java10">ClientsController.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">.list</span><span class="java8">()</span><span class="java10">;<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
 }</span></code></div>
 	    	<span class="paragraph">If it's redirection to a logic, you can refer to it directly, and the given parameters will be passed to
 the called logic.</span>
 	    	<span class="paragraph">If you want to forward to a JSP page, you can use:</span>
 	    	<div class="java"><code class="java">
-<span class="java10">result.use</span><span class="java8">(</span><span class="java10">Results.page</span><span class="java8">())</span><span class="java10">.forward</span><span class="java8">(</span><span class="java5">&#34;/WEB-INF/jsp/clients/save.ok.jsp&#34;</span><span class="java8">)</span><span class="java10">;</span></code></div>
+<span class="java10">result.forwardTo</span><span class="java8">(</span><span class="java5">&#34;/WEB-INF/jsp/clients/save.ok.jsp&#34;</span><span class="java8">)</span><span class="java10">;</span></code></div>
 		
 
 <h3 class="section">Validation</h3>

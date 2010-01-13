@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>br.com.caelum</groupId>
 	<artifactId>vraptor</artifactId>
-	<version>3.0.3-SNAPSHOT</version>
+	<version>3.1.0</version>
 	<name>VRaptor3</name>
 	<packaging>jar</packaging>
 	
@@ -160,6 +160,12 @@
 		    </exclusions>
 		    <scope>test</scope>
 		</dependency>
+		<dependency>
+				<groupId>org.mockito</groupId>
+				<artifactId>mockito-all</artifactId>
+				<version>1.8.1</version>
+				<scope>test</scope>
+		</dependency> 
 		<dependency>
     		<groupId>joda-time</groupId>
     		<artifactId>joda-time</artifactId>

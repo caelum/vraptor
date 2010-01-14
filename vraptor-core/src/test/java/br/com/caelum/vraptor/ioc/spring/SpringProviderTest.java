@@ -35,38 +35,47 @@ import br.com.caelum.vraptor.test.HttpSessionMock;
  * @author Fabio Kung
  */
 public class SpringProviderTest {
-    private Mockery mockery;
-    private ServletContext servletContext;
-    private HttpServletRequestMock request;
-    private HttpSession session;
+	private Mockery mockery;
+	private ServletContext servletContext;
+	private HttpServletRequestMock request;
+	private HttpSession session;
 
-    @Before
-    public void init() {
-        mockery = new Mockery();
-        servletContext = mockery.mock(ServletContext.class);
+	@Before
+	public void init() {
+		mockery = new Mockery();
+		servletContext = mockery.mock(ServletContext.class);
 
-        session = new HttpSessionMock(servletContext, "session");
-        request = new HttpServletRequestMock(session);
+		session = new HttpSessionMock(servletContext, "session");
+		request = new HttpServletRequestMock(session);
 
-        ServletRequestAttributes requestAttributes = new ServletRequestAttributes(request);
-        RequestContextHolder.setRequestAttributes(requestAttributes);
-    }
+		ServletRequestAttributes requestAttributes = new ServletRequestAttributes(
+				request);
+		RequestContextHolder.setRequestAttributes(requestAttributes);
+	}
 
-    @After
-    public void destroy() {
-        mockery.assertIsSatisfied();
-        RequestContextHolder.resetRequestAttributes();
-    }
+	@After
+	public void destroy() {
+		mockery.assertIsSatisfied();
+		RequestContextHolder.resetRequestAttributes();
+	}
 
-    @Test
-    public void shouldLoadInitParameterForBasePackages() {
-        mockery.checking(new Expectations() {{
-            atLeast(1).of(servletContext).getInitParameter(BasicConfiguration.BASE_PACKAGES_PARAMETER_NAME);
-            will(returnValue("br.com.caelum.vraptor.ioc.spring.components.registrar"));
-            allowing(servletContext);will(returnValue(null));
-        }});
-        SpringProvider provider = new SpringProvider();
-        provider.start(servletContext);
-    }
+	@Test
+	public void shouldLoadInitParameterForBasePackages() {
+		mockery.checking(new Expectations() {
+			{
+				atLeast(1).of(servletContext).getInitParameter(
+						BasicConfiguration.BASE_PACKAGES_PARAMETER_NAME);
+				will(returnValue("br.com.caelum.vraptor.ioc.spring.components.registrar"));
+				
+				allowing(servletContext).getRealPath("/WEB-INF/classes/");
+				will(returnValue(this.getClass().getResource(".").getPath()));
+				
+				allowing(servletContext).getAttribute(with(any(String.class)));
+				will(returnValue(null));
+			}
+		});
+		SpringProvider provider = new SpringProvider();
+		provider.start(servletContext);
+	}
 
 }

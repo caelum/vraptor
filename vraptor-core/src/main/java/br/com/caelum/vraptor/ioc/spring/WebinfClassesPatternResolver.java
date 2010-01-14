@@ -12,6 +12,10 @@ public class WebinfClassesPatternResolver extends
 	private final String webinfClassesDirectory;
 
 	public WebinfClassesPatternResolver(String webinfClassesDirectory) {
+		if (webinfClassesDirectory == null) {
+			throw new NullPointerException(
+					"web inf class directory cant be null");
+		}
 		this.webinfClassesDirectory = webinfClassesDirectory;
 
 	}

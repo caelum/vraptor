@@ -27,8 +27,9 @@ public class ApplicationConfiguration implements Configuration {
 	 * One can implement this method to return a fixed http/ip prefix.
 	 */
 	public String getApplicationPath() {
-		return "http://" + request.getServerName() + ":"
-				+ request.getServerPort() + request.getContextPath();
+		return "http://" + request.getServerName() 
+			+ (request.getServerPort() != 80? ":" + request.getServerPort() : "") 
+			+ request.getContextPath();
 	}
 
 }

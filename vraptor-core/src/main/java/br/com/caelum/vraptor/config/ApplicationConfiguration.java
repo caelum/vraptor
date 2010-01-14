@@ -7,7 +7,7 @@ import br.com.caelum.vraptor.ioc.RequestScoped;
 
 /**
  * Basic implementation of an application configuration.<br>
- * 
+ *
  * @author guilherme silveira
  * @author lucas cavalcanti
  * @since 3.0.3
@@ -27,8 +27,8 @@ public class ApplicationConfiguration implements Configuration {
 	 * One can implement this method to return a fixed http/ip prefix.
 	 */
 	public String getApplicationPath() {
-		return "http://" + request.getServerName() 
-			+ (request.getServerPort() != 80? ":" + request.getServerPort() : "") 
+		return request.getScheme() + "://" + request.getServerName()
+			+ (request.getServerPort() != 80? ":" + request.getServerPort() : "")
 			+ request.getContextPath();
 	}
 

@@ -80,14 +80,17 @@ public class DefaultResult implements Result {
 		return use(page()).of(controller);
 	}
 
+	@SuppressWarnings("unchecked")
 	public <T> T redirectTo(T controller) {
 		return (T) redirectTo(controller.getClass());
 	}
 
+	@SuppressWarnings("unchecked")
 	public <T> T forwardTo(T controller) {
 		return (T) forwardTo(controller.getClass());
 	}
 
+	@SuppressWarnings("unchecked")
 	public <T> T of(T controller) {
 		return (T) of(controller.getClass());
 	}

@@ -58,6 +58,7 @@ public class DefaultInterceptorStack implements InterceptorStack {
 
     public void next(ResourceMethod method, Object resourceInstance) throws InterceptionException {
         if (nextInterceptor == interceptors.size()) {
+        	logger.debug("All registered interceptors have being called. End of VRaptor Request Execution.");
             return;
         }
         InterceptorHandler handler = interceptors.get(nextInterceptor++);

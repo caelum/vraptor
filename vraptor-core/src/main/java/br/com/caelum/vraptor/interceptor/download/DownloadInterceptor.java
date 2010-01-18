@@ -24,6 +24,9 @@ import java.io.OutputStream;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.core.InterceptorStack;
@@ -39,6 +42,10 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  */
 @RequestScoped
 public class DownloadInterceptor implements Interceptor {
+
+    private static final Logger logger = LoggerFactory.getLogger(DownloadInterceptor.class);
+
+
 	private final HttpServletResponse response;
 	private final MethodInfo info;
 	private final Result result;
@@ -55,6 +62,8 @@ public class DownloadInterceptor implements Interceptor {
 	}
 
 	public void intercept(InterceptorStack stack, ResourceMethod method, Object instance) throws InterceptionException {
+    	logger.debug("Sending a file to the client");
+
 		Object result = info.getResult();
 
 		if (result == null) {

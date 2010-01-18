@@ -49,9 +49,10 @@ public class ForwardToDefaultViewInterceptor implements Interceptor {
     public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
             throws InterceptionException {
         if (result.used()) {
-        	logger.debug("Request already dispatched somehere, not forwarding.");
+        	logger.debug("Request already dispatched and commited somewhere else, not forwarding.");
             return;
         }
+        logger.debug("forwarding to the dafeult page for this logic");
         result.use(Results.page()).forward();
     }
 

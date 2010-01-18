@@ -19,6 +19,9 @@ package br.com.caelum.vraptor.interceptor;
 
 import java.lang.reflect.Type;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
@@ -32,6 +35,8 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  * @author guilherme silveira
  */
 public class OutjectResult implements Interceptor {
+
+	private static final Logger logger = LoggerFactory.getLogger(OutjectResult.class);
 
 	private final Result result;
 	private final MethodInfo info;
@@ -51,7 +56,11 @@ public class OutjectResult implements Interceptor {
 			throws InterceptionException {
 		Type returnType = method.getMethod().getGenericReturnType();
 		if (!returnType.equals(void.class)) {
-			result.include(extractor.nameFor(returnType), this.info.getResult());
+			String name = extractor.nameFor(returnType);
+			Object value = this.info.getResult();
+
+			logger.debug("outjecting {}={}", name, value);
+			result.include(name, value);
 		}
 		stack.next(method, resourceInstance);
 	}

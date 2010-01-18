@@ -78,8 +78,9 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
 
 	@Override
 	protected void loadBeanDefinitions(DefaultListableBeanFactory beanFactory) {
-		beanFactory.registerSingleton(ServletContext.class.getName(), getServletContext());
-		beanFactory.ignoreDependencyType(ServletContext.class);
+		beanFactory.registerSingleton(ServletContext.class.getName(), config.getServletContext());
+		// beanFactory.ignoreDependencyType(ServletContext.class);
+
 		registerApplicationScopedComponentsOn(beanFactory);
 		registerRequestScopedComponentsOn(beanFactory);
 		registerPrototypeScopedComponentsOn(beanFactory);
@@ -136,6 +137,9 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
 
 		registerOn(beanFactory, StereotypedBeansRegistrar.class);
 		registerOn(beanFactory, DefaultSpringLocator.class);
+
+
+		config.getServletContext();
 	}
 
 	private void registerRequestScopedComponentsOn(DefaultListableBeanFactory beanFactory) {

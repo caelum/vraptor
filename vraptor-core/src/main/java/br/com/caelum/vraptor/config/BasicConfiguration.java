@@ -84,9 +84,13 @@ public class BasicConfiguration {
 	public String getEncoding() {
 		return servletContext.getInitParameter(ENCODING);
 	}
-	
+
 	public String getWebinfClassesDirectory() {
 		return servletContext.getRealPath("/WEB-INF/classes/");
+	}
+
+	public ServletContext getServletContext() {
+		return servletContext;
 	}
 
 }

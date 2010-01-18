@@ -95,6 +95,8 @@ public class ViewsPropertiesPageResult implements PageResult {
 
 	private void vraptor2Forward(ResourceMethod method) throws ServletException,
 			IOException {
+    	logger.debug("Forwading using VRaptor2 URLs");
+
 		String result = info.getResult().toString();
 		ResourceClass resource = method.getResource();
 

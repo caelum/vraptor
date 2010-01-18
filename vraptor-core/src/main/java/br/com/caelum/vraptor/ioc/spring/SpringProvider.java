@@ -68,9 +68,8 @@ public class SpringProvider implements ContainerProvider {
 
     public void start(ServletContext context) {
         BasicConfiguration config = new BasicConfiguration(context);
-
-
         container = new SpringBasedContainer(getParentApplicationContext(context), config);
+
         registerCustomComponents(container);
         container.start(context);
     }

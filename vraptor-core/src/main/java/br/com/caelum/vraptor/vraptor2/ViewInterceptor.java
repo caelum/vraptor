@@ -58,6 +58,7 @@ public class ViewInterceptor implements Interceptor {
 				logger.debug("Not forwarding (viewless component)");
 			}
 		} else {
+			logger.debug("Not a VRaptor2 Component");
 			stack.next(method, resourceInstance);
 		}
 	}

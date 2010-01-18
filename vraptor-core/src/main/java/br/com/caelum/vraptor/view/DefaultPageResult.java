@@ -23,6 +23,9 @@ import java.lang.reflect.Method;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.proxy.MethodInvocation;
@@ -39,6 +42,8 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  * @author Lucas Cavalcanti
  */
 public class DefaultPageResult implements PageResult {
+
+    private static final Logger logger = LoggerFactory.getLogger(DefaultPageResult.class);
 
     private final MutableRequest request;
     private final HttpServletResponse response;
@@ -57,7 +62,9 @@ public class DefaultPageResult implements PageResult {
 
     public void forward() {
         try {
-            request.getRequestDispatcher(resolver.pathFor(method)).forward(request, response);
+        	String to = resolver.pathFor(method);
+        	logger.debug("forwarding to ", to);
+            request.getRequestDispatcher(to).forward(request, response);
         } catch (ServletException e) {
             throw new ResultException(e);
         } catch (IOException e) {
@@ -67,7 +74,9 @@ public class DefaultPageResult implements PageResult {
 
     public void include() {
         try {
-            request.getRequestDispatcher(resolver.pathFor(method)).include(request, response);
+        	String to = resolver.pathFor(method);
+        	logger.debug("including ",to);
+            request.getRequestDispatcher(to).include(request, response);
         } catch (ServletException e) {
             throw new ResultException(e);
         } catch (IOException e) {
@@ -76,6 +85,8 @@ public class DefaultPageResult implements PageResult {
     }
 
     public void redirect(String url) {
+    	logger.debug("redirection to ", url);
+
         try {
         	if (url.startsWith("/")) {
 				response.sendRedirect(request.getContextPath() + url);
@@ -88,6 +99,8 @@ public class DefaultPageResult implements PageResult {
     }
 
 	public void forward(String url) {
+    	logger.debug("forwarding to ", url);
+
         try {
             request.getRequestDispatcher(url).forward(request, response);
         } catch (ServletException e) {

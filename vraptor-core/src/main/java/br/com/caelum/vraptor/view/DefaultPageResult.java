@@ -43,84 +43,86 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  */
 public class DefaultPageResult implements PageResult {
 
-    private static final Logger logger = LoggerFactory.getLogger(DefaultPageResult.class);
+	private static final Logger logger = LoggerFactory.getLogger(DefaultPageResult.class);
 
-    private final MutableRequest request;
-    private final HttpServletResponse response;
-    private final ResourceMethod method;
-    private final PathResolver resolver;
+	private final MutableRequest request;
+	private final HttpServletResponse response;
+	private final ResourceMethod method;
+	private final PathResolver resolver;
 	private final Proxifier proxifier;
 
-    public DefaultPageResult(MutableRequest req, HttpServletResponse res, MethodInfo requestInfo,
-            PathResolver resolver, Proxifier proxifier) {
-        this.request = req;
-        this.response = res;
+	public DefaultPageResult(MutableRequest req, HttpServletResponse res, MethodInfo requestInfo,
+			PathResolver resolver, Proxifier proxifier) {
+		this.request = req;
+		this.response = res;
 		this.proxifier = proxifier;
-        this.method = requestInfo.getResourceMethod();
-        this.resolver = resolver;
-    }
+		this.method = requestInfo.getResourceMethod();
+		this.resolver = resolver;
+	}
 
-    public void forward() {
-        try {
-        	String to = resolver.pathFor(method);
-        	logger.debug("forwarding to ", to);
-            request.getRequestDispatcher(to).forward(request, response);
-        } catch (ServletException e) {
-            throw new ResultException(e);
-        } catch (IOException e) {
-            throw new ResultException(e);
-        }
-    }
+	public void forward() {
+		try {
+			String to = resolver.pathFor(method);
+			logger.debug("forwarding to {}", to);
+			request.getRequestDispatcher(to).forward(request, response);
+		} catch (ServletException e) {
+			throw new ResultException(e);
+		} catch (IOException e) {
+			throw new ResultException(e);
+		}
+	}
 
-    public void include() {
-        try {
-        	String to = resolver.pathFor(method);
-        	logger.debug("including ",to);
-            request.getRequestDispatcher(to).include(request, response);
-        } catch (ServletException e) {
-            throw new ResultException(e);
-        } catch (IOException e) {
-            throw new ResultException(e);
-        }
-    }
+	public void include() {
+		try {
+			String to = resolver.pathFor(method);
+			logger.debug("including {}", to);
+			request.getRequestDispatcher(to).include(request, response);
+		} catch (ServletException e) {
+			throw new ResultException(e);
+		} catch (IOException e) {
+			throw new ResultException(e);
+		}
+	}
 
-    public void redirect(String url) {
-    	logger.debug("redirection to ", url);
+	public void redirect(String url) {
+		logger.debug("redirection to {}", url);
 
-        try {
-        	if (url.startsWith("/")) {
+		try {
+			if (url.startsWith("/")) {
 				response.sendRedirect(request.getContextPath() + url);
 			} else {
 				response.sendRedirect(url);
 			}
-        } catch (IOException e) {
-            throw new ResultException(e);
-        }
-    }
+		} catch (IOException e) {
+			throw new ResultException(e);
+		}
+	}
 
 	public void forward(String url) {
-    	logger.debug("forwarding to ", url);
+		logger.debug("forwarding to {}", url);
 
-        try {
-            request.getRequestDispatcher(url).forward(request, response);
-        } catch (ServletException e) {
-            throw new ResultException(e);
-        } catch (IOException e) {
-            throw new ResultException(e);
-        }
+		try {
+			request.getRequestDispatcher(url).forward(request, response);
+		} catch (ServletException e) {
+			throw new ResultException(e);
+		} catch (IOException e) {
+			throw new ResultException(e);
+		}
 	}
 
 	public <T> T of(final Class<T> controllerType) {
 		return proxifier.proxify(controllerType, new MethodInvocation<T>() {
-            public Object intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {
-                try {
-                    request.getRequestDispatcher(resolver.pathFor(DefaultResourceMethod.instanceFor(controllerType, method))).forward(request, response);
-                    return null;
-                } catch (Exception e) {
-                    throw new ProxyInvocationException(e);
+			public Object intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {
+				try {
+					request.getRequestDispatcher(
+							resolver.pathFor(DefaultResourceMethod.instanceFor(controllerType, method))).forward(
+							request, response);
+					return null;
+				} catch (Exception e) {
+					throw new ProxyInvocationException(e);
 				}
-            }
-        });
+			}
+		});
 	}
 
 }

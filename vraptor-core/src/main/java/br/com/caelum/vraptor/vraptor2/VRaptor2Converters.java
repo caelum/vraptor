@@ -35,18 +35,13 @@ import br.com.caelum.vraptor.ioc.Container;
 @ApplicationScoped
 public class VRaptor2Converters implements Converters {
 
-	private final Converters vraptor3;
+	private  Converters delegateConverters;
 	private final List<org.vraptor.converter.Converter> converterList = new ArrayList<org.vraptor.converter.Converter>();
 
 	public VRaptor2Converters(Config config) throws ClassNotFoundException,
 			InstantiationException, IllegalAccessException {
-		this(config, new DefaultConverters());
-	}
-
-	@SuppressWarnings("unchecked")
-	public VRaptor2Converters(Config config, Converters delegateConverters) throws InstantiationException,
-			IllegalAccessException, ClassNotFoundException {
-		this.vraptor3 = delegateConverters;
+		// probably vraptor3 converters
+		this.delegateConverters = new DefaultConverters();
 		List<String> list = config.getConverters();
 		for (String l : list) {
 			Class<? extends org.vraptor.converter.Converter> converterType = (Class<? extends org.vraptor.converter.Converter>) Class
@@ -55,9 +50,14 @@ public class VRaptor2Converters implements Converters {
 		}
 	}
 
+	// for unit tests only
+	void setDelegateConverters(Converters delegateConverters) {
+		this.delegateConverters = delegateConverters;
+	}
+
 	public Converter<?> to(Class<?> type, Container container) {
 		Converter<?> vraptor2Convterter = findVRaptor2Converter(type);
-		return vraptor2Convterter == null ? vraptor3.to(type, container) : vraptor2Convterter;
+		return vraptor2Convterter == null ? delegateConverters.to(type, container) : vraptor2Convterter;
 	}
 
 	private Converter<?> findVRaptor2Converter(Class<?> type) {
@@ -72,7 +72,7 @@ public class VRaptor2Converters implements Converters {
 	}
 
 	public void register(Class<? extends Converter<?>> converterClass) {
-		vraptor3.register(converterClass);
+		delegateConverters.register(converterClass);
 	}
 
 	public boolean existsFor(Class<?> type, Container container) {
@@ -80,7 +80,7 @@ public class VRaptor2Converters implements Converters {
 	}
 
 	private boolean existsVRaptor3ConverterFor(Class<?> type, Container container) {
-		return vraptor3.existsFor(type, container);
+		return delegateConverters.existsFor(type, container);
 	}
 
 	private boolean existsVRaptor2ConverterFor(Class<?> type) {

@@ -105,7 +105,7 @@ public class ViewsPropertiesPageResult implements PageResult {
 
 		if (path == null) {
 			String forwardPath = resolver.pathFor(method);
-        	logger.debug("Forwading to ", forwardPath);
+        	logger.debug("Forwading to {}", forwardPath);
 
 			request.getRequestDispatcher(forwardPath).forward(request, response);
 		} else {

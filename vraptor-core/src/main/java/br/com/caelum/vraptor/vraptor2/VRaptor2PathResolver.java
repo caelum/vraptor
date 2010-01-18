@@ -2,22 +2,25 @@
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource
  * All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); 
- * you may not use this file except in compliance with the License. 
- * You may obtain a copy of the License at 
- * 
- * 	http://www.apache.org/licenses/LICENSE-2.0 
- * 
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an "AS IS" BASIS, 
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
- * See the License for the specific language governing permissions and 
- * limitations under the License. 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * 	http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package br.com.caelum.vraptor.vraptor2;
 
 import javax.servlet.http.HttpServletRequest;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.ioc.RequestScoped;
@@ -34,6 +37,8 @@ import br.com.caelum.vraptor.view.PathResolver;
  */
 @RequestScoped
 public class VRaptor2PathResolver implements PathResolver {
+
+	private static final Logger logger = LoggerFactory.getLogger(VRaptor2PathResolver.class);
 
     private final PathResolver vraptor3;
     private final String pattern;
@@ -54,6 +59,8 @@ public class VRaptor2PathResolver implements PathResolver {
         if (Info.isOldComponent(resource)) {
             String component = Info.getComponentName(resource.getType());
             String logicName = Info.getLogicName(method.getMethod());
+        	logger.debug("path for {} - {}", component, logicName);
+
             return pattern.replaceAll("\\$component", component).replaceAll("\\$logic", logicName).replaceAll("\\$result", info.getResult().toString());
         }
         return vraptor3.pathFor(method);

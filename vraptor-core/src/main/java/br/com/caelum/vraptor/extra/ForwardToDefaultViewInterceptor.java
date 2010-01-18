@@ -17,6 +17,9 @@
 
 package br.com.caelum.vraptor.extra;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.core.InterceptorStack;
@@ -33,6 +36,8 @@ import br.com.caelum.vraptor.view.Results;
 public class ForwardToDefaultViewInterceptor implements Interceptor {
     private final Result result;
 
+    private static final Logger logger = LoggerFactory.getLogger(ForwardToDefaultViewInterceptor.class);
+
     public ForwardToDefaultViewInterceptor(Result result) {
         this.result = result;
     }
@@ -44,6 +49,7 @@ public class ForwardToDefaultViewInterceptor implements Interceptor {
     public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
             throws InterceptionException {
         if (result.used()) {
+        	logger.debug("Request already dispatched somehere, not forwarding.");
             return;
         }
         result.use(Results.page()).forward();

@@ -20,7 +20,7 @@
         </category>
                 
         <category name="br.com.caelum.vraptor">
-                <priority value="INFO" />
+                <priority value="DEBUG" />
                 <appender-ref ref="stdout" />
         </category>
         

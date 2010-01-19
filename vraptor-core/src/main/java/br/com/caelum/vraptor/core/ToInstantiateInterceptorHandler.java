@@ -53,7 +53,7 @@ public class ToInstantiateInterceptorHandler implements InterceptorHandler {
 			logger.debug("Interceptor {} being invoked", interceptor.getClass().getName());
 			interceptor.intercept(stack, method, resourceInstance);
 		} else {
-			// logger.debug("Interceptor {} NOT being invoked", interceptor);
+			logger.debug("Interceptor {} NOT being invoked", interceptor);
 			stack.next(method, resourceInstance);
 		}
 	}

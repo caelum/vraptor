@@ -43,11 +43,14 @@ public class ForwardToDefaultViewInterceptor implements Interceptor {
     }
 
     public boolean accepts(ResourceMethod method) {
+    	System.out.println("aceito");
         return true;
     }
 
     public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
             throws InterceptionException {
+    	System.out.println(result.used());
+    	System.out.println(result);
         if (result.used()) {
         	logger.debug("Request already dispatched and commited somewhere else, not forwarding.");
             return;

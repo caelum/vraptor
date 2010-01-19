@@ -56,6 +56,8 @@ public class LogicAnnotationWithParanamerParameterNameProvider implements Parame
         try {
 			return delegate.parameterNamesFor(method);
 		} catch (IllegalStateException e) {
+			// TODO: complete hack for Scala based components
+			// (because scFunction).
 			logger.warn("VRaptor2 Component method without parameter names! Returning null array {}", method);
 			return new String[((Method) method).getParameterTypes().length];
 		}

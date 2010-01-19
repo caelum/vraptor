@@ -17,6 +17,9 @@
 
 package br.com.caelum.vraptor.core;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.resource.ResourceMethod;
@@ -29,6 +32,8 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  */
 public class InstantiatedInterceptorHandler implements InterceptorHandler {
 
+	private static final Logger logger = LoggerFactory.getLogger(InstantiatedInterceptorHandler.class);
+
 	private final Interceptor interceptor;
 
 	public InstantiatedInterceptorHandler(Interceptor interceptor) {
@@ -38,6 +43,7 @@ public class InstantiatedInterceptorHandler implements InterceptorHandler {
 	public void execute(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
 			throws InterceptionException {
 		if (interceptor.accepts(method)) {
+			logger.debug("Interceptor {} being invoked", interceptor.getClass().getName());
 			interceptor.intercept(stack, method, resourceInstance);
 		} else {
 			stack.next(method, resourceInstance);

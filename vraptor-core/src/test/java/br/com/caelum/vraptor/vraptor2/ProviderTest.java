@@ -19,6 +19,7 @@ package br.com.caelum.vraptor.vraptor2;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Locale;
 
 import org.jmock.Expectations;
 import org.junit.Test;
@@ -64,6 +65,10 @@ public class ProviderTest extends GenericContainerTest {
                 allowing(request).getSession(); will(returnValue(session));
                 allowing(request).getParameterMap(); will(returnValue(new HashMap<Object, Object>()));
                 allowing(request).getParameter("view"); will(returnValue(null));
+                allowing(request).setAttribute(with(any(String.class)), with(anything()));
+                allowing(request).getLocale(); will(returnValue(Locale.ENGLISH));
+                allowing(request); will(returnValue(null));
+
             }
         });
         MutableResponse response = mockery.mock(MutableResponse.class, "response" + counter);
@@ -78,6 +83,13 @@ public class ProviderTest extends GenericContainerTest {
                 {
                     allowing(context).getRealPath("/WEB-INF/classes/vraptor.xml");
                     will(returnValue("non-existing-vraptor.xml"));
+
+                    allowing(context).getAttribute("org.springframework.web.context.WebApplicationContext.ROOT");
+                    will(returnValue(null));
+
+                    allowing(context).getRealPath("/WEB-INF/classes/");
+                    will(returnValue(ProviderTest.class.getResource(".").getFile()));
+
                     allowing(context).getRealPath("/WEB-INF/classes/views.properties");
                     will(returnValue("views.properties"));
 

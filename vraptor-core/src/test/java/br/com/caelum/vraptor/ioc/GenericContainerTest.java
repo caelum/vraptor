@@ -162,14 +162,15 @@ public abstract class GenericContainerTest {
 	}
 	@Test
 	public void canProvideJodaTimeConverters() {
-		assertNotNull(getFromContainer(LocalDateConverter.class));
-		assertNotNull(getFromContainer(LocalTimeConverter.class));
 		executeInsideRequest(new WhatToDo<String>() {
 
 			public String execute(RequestInfo request, int counter) {
-				Converters converters = getFromContainer(Converters.class);
-				assertTrue(converters.existsFor(LocalDate.class, getFromContainer(Container.class)));
-				assertTrue(converters.existsFor(LocalTime.class, getFromContainer(Container.class)));
+				assertNotNull(getFromContainerInCurrentThread(LocalDateConverter.class, request));
+				assertNotNull(getFromContainerInCurrentThread(LocalTimeConverter.class, request));
+				
+				Converters converters = getFromContainerInCurrentThread(Converters.class, request);
+				assertTrue(converters.existsFor(LocalDate.class, getFromContainerInCurrentThread(Container.class, request)));
+				assertTrue(converters.existsFor(LocalTime.class, getFromContainerInCurrentThread(Container.class, request)));
 				return null;
 			}
 
@@ -336,11 +337,15 @@ public abstract class GenericContainerTest {
 	public <T> T getFromContainer(final Class<T> componentToBeRetrieved) {
 		return executeInsideRequest(new WhatToDo<T>() {
 			public T execute(RequestInfo request, final int counter) {
-				return provider.provideForRequest(request, new Execution<T>() {
-					public T insideRequest(Container firstContainer) {
-						return firstContainer.instanceFor(componentToBeRetrieved);
-					}
-				});
+				return getFromContainerInCurrentThread(componentToBeRetrieved, request);
+			}
+		});
+	}
+	
+	private <T> T getFromContainerInCurrentThread(final Class<T> componentToBeRetrieved, RequestInfo request) {
+		return provider.provideForRequest(request, new Execution<T>() {
+			public T insideRequest(Container firstContainer) {
+				return firstContainer.instanceFor(componentToBeRetrieved);
 			}
 		});
 	}

@@ -145,7 +145,7 @@ public class OgnlParametersProvider implements ParametersProvider {
 			} catch (NoSuchPropertyException ex) {
 				// TODO optimization: be able to ignore or not
 				if (logger.isDebugEnabled()) {
-					logger.debug("Ignoring exception", ex);
+					logger.debug("cant find property for expression " + key + ", ignoring", ex);
 				}
 			} catch (OgnlException e) {
 				// TODO it fails when parameter name is not a valid java identifier... ignoring by now

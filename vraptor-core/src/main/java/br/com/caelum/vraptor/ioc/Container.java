@@ -37,5 +37,16 @@ public interface Container {
      * @return the registered component
      */
     <T> T instanceFor(Class<T> type);
+    
+    /**
+     * Verifies if this container can provide an instance for
+     * the given class.
+     * 
+     * @param type
+     *            of the required component
+     * @param <T>
+     * @return true iff instanceFor(type) can return a valid instance.
+     */
+    <T> boolean canProvide(Class<T> type);
 
 }

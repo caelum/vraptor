@@ -9,6 +9,7 @@ import br.com.caelum.iogi.MultiInstantiator;
 import br.com.caelum.iogi.ObjectInstantiator;
 import br.com.caelum.iogi.collections.ArrayInstantiator;
 import br.com.caelum.iogi.collections.ListInstantiator;
+import br.com.caelum.iogi.conversion.FallbackConverter;
 import br.com.caelum.iogi.conversion.StringConverter;
 import br.com.caelum.iogi.parameters.Parameter;
 import br.com.caelum.iogi.parameters.Parameters;
@@ -49,7 +50,7 @@ public class VRaptorInstantiator implements Instantiator<Object> {
 
 		List<Instantiator<?>> instantiatorList = ImmutableList.of(
 			new VRaptorTypeConverter(),
-			new StringConverter(),
+			FallbackConverter.fallbackToNull(new StringConverter()),
 			new ArrayInstantiator(this),
 			new NullDecorator(new ListInstantiator(this)), //NOTE: NullDecorator is here to preserve existing behaviour. Don't know if it is the ideal one, though.
 			new ObjectInstantiator(this, dependencyProvider, parameterNamesProvider));
@@ -72,8 +73,7 @@ public class VRaptorInstantiator implements Instantiator<Object> {
 		public Object instantiate(Target<?> target, Parameters parameters) {
 			try {
 				Parameter parameter = parameters.namedAfter(target);
-				final String stringValue = parameter != null ? parameter.getValue() : null;
-				return converterForTarget(target).convert(stringValue, target.getClassType(), localization.getBundle());
+				return converterForTarget(target).convert(parameter.getValue(), target.getClassType(), localization.getBundle());
 			}
 			catch (ConversionError ex) {
 				validator.add(new ValidationMessage(ex.getMessage(), target.getName()));

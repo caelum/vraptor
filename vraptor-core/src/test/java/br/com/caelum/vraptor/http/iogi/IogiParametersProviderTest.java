@@ -359,6 +359,22 @@ public class IogiParametersProviderTest {
 
     	assertArrayEquals(new Object[] {null}, params);
     }
+    
+    @Test
+    public void returnsNullWhenInstantiatingAStringForWhichThereAreNoParameters() throws Exception {
+    	final ResourceMethod method = mockery.methodFor(Cat.class, "setId", String.class);
+    	
+    	mockery.checking(new Expectations() {
+    		{
+    			ignoring(mockHttpServletRequest);
+    			allowing(mockNameProvider).parameterNamesFor(with(any(Method.class)));
+    			will(returnValue(new String[] {"kittens"}));
+    		}
+    	});
+    	Object[] params = iogiProvider.getParametersFor(method, errors, null);
+    	
+    	assertArrayEquals(new Object[] {null}, params);
+    }
 
 	@Test
 	public void canInjectADependencyProvidedByVraptor() throws Exception {

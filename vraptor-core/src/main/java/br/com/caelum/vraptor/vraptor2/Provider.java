@@ -17,7 +17,6 @@
 
 package br.com.caelum.vraptor.vraptor2;
 
-import org.picocontainer.PicoContainer;
 import org.vraptor.validator.BasicValidationErrors;
 import org.vraptor.validator.ValidationErrors;
 
@@ -27,8 +26,7 @@ import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.core.RequestExecution;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.route.RoutesParser;
-import br.com.caelum.vraptor.ioc.pico.PicoProvider;
-import br.com.caelum.vraptor.ioc.pico.Scanner;
+import br.com.caelum.vraptor.ioc.spring.SpringProvider;
 import br.com.caelum.vraptor.view.PageResult;
 import br.com.caelum.vraptor.view.PathResolver;
 import br.com.caelum.vraptor.vraptor2.outject.OutjectionInterceptor;
@@ -38,13 +36,11 @@ import br.com.caelum.vraptor.vraptor2.outject.OutjectionInterceptor;
  *
  * @author Guilherme Silveira
  */
-public class Provider extends PicoProvider {
+public class Provider extends SpringProvider {
 
-	// TODO extends Spring
-
-	@Override
-    protected void registerBundledComponents(ComponentRegistry registry) {
-        super.registerBundledComponents(registry);
+    @Override
+	protected void registerCustomComponents(ComponentRegistry registry) {
+    	super.registerCustomComponents(registry);
         registry.register(RoutesParser.class, ComponentRoutesParser.class);
         registry.register(PathResolver.class, VRaptor2PathResolver.class);
         registry.register(Config.class, VRaptor2Config.class);
@@ -61,12 +57,7 @@ public class Provider extends PicoProvider {
         registry.register(Validator.class, MessageCreatorValidator.class);
         registry.register(ValidationErrors.class, BasicValidationErrors.class);
         registry.register(VRaptor2ComponentRegistrar.class, VRaptor2ComponentRegistrar.class);
-    }
-
-    @Override
-    protected void registerCustomComponents(PicoContainer picoContainer, Scanner scanner) {
-    	super.registerCustomComponents(picoContainer, scanner);
-    	picoContainer.getComponent(VRaptor2ComponentRegistrar.class).registerFrom(scanner);
+        registry.register(VRaptor2ComponentHandler.class, VRaptor2ComponentHandler.class);
     }
 
 }

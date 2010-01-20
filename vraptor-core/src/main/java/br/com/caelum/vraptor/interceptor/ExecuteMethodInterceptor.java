@@ -74,7 +74,7 @@ public class ExecuteMethodInterceptor implements Interceptor {
 			if (cause instanceof ValidationException) {
 				// fine... already parsed
 			} else {
-				throw new InterceptionException(cause);
+				throw new InterceptionException("an exception was raised while executing resource method", cause);
 			}
 		}
 	}

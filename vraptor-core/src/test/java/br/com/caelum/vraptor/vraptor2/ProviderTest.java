@@ -21,8 +21,14 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
 
+import javax.servlet.FilterChain;
+import javax.servlet.ServletRequestEvent;
+
 import org.jmock.Expectations;
 import org.junit.Test;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.RequestContextListener;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.vraptor.validator.ValidationErrors;
 
 import br.com.caelum.vraptor.config.BasicConfiguration;
@@ -32,6 +38,7 @@ import br.com.caelum.vraptor.http.MutableResponse;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
 import br.com.caelum.vraptor.ioc.GenericContainerTest;
 import br.com.caelum.vraptor.ioc.WhatToDo;
+import br.com.caelum.vraptor.ioc.spring.VRaptorRequestHolder;
 import br.com.caelum.vraptor.test.HttpSessionMock;
 import br.com.caelum.vraptor.vraptor2.outject.OutjectionInterceptor;
 
@@ -73,7 +80,17 @@ public class ProviderTest extends GenericContainerTest {
         });
         MutableResponse response = mockery.mock(MutableResponse.class, "response" + counter);
         RequestInfo webRequest = new RequestInfo(context, null, request, response);
-        return execution.execute(webRequest, counter);
+        VRaptorRequestHolder.setRequestForCurrentThread(new RequestInfo(context, mockery.mock(FilterChain.class, "chain" + + + counter), request, response));
+		RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
+		RequestContextListener requestListener = new RequestContextListener();
+
+		requestListener.requestInitialized(new ServletRequestEvent(context, request));
+		T result = execution.execute(webRequest, counter);
+		requestListener.requestDestroyed(new ServletRequestEvent(context, request));
+		RequestContextHolder.resetRequestAttributes();
+		VRaptorRequestHolder.resetRequestForCurrentThread();
+		
+		return result;
     }
 
     @Override

@@ -17,6 +17,9 @@
 
 package br.com.caelum.vraptor.ioc.pico;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.jmock.Mockery;
@@ -61,6 +64,14 @@ public class PicoBasedContainerTest {
         this.picoContainer.addComponent(Fruit.class);
         MatcherAssert.assertThat(container.instanceFor(Fruit.class), Matchers.is(Matchers.notNullValue()));
         mockery.assertIsSatisfied();
+    }
+    
+    @Test
+    public void shouldBeAbleToProvideAFruitButNotAJuice() {
+    	this.picoContainer.addComponent(Fruit.class);
+    	assertTrue(container.canProvide(Fruit.class));
+    	assertFalse(container.canProvide(Juice.class));
+    	mockery.assertIsSatisfied();
     }
 
     @Test

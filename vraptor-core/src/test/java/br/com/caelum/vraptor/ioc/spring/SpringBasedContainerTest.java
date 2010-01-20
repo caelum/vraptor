@@ -23,6 +23,7 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -126,6 +127,13 @@ public class SpringBasedContainerTest {
 		DummyComponent component = container.instanceFor(DummyComponent.class);
 		assertNotNull("can instantiate", component);
 		assertTrue("is the right implementation", component instanceof DummyImplementation);
+	}
+
+	static class NotRegisterd {}
+	@Test
+	public void shouldProvideOnlyIfBeanIsRegistered() {
+		assertTrue(container.canProvide(DummyComponent.class));
+		assertFalse(container.canProvide(NotRegisterd.class));
 	}
 
 	@Test

@@ -40,6 +40,10 @@ public class PicoBasedContainer implements Container {
         return container.getComponent(type);
     }
     
+    public <T> boolean canProvide(Class<T> type) {
+    	return instanceFor(type) != null;
+    }
+    
     public MutablePicoContainer getContainer() {
 		return container;
 	}

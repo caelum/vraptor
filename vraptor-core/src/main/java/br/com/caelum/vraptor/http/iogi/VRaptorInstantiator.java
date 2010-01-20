@@ -96,7 +96,7 @@ public class VRaptorInstantiator implements Instantiator<Object> {
 
 	private final class VRaptorDependencyProvider implements DependencyProvider {
 		public boolean canProvide(Target<?> target) {
-			return container.instanceFor(target.getClassType()) != null;
+			return container.canProvide(target.getClassType());
 		}
 
 		public Object provide(Target<?> target) {

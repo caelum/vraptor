@@ -37,7 +37,7 @@ public class DefaultResult implements Result {
     private final HttpServletRequest request;
     private final Container container;
     private final Map<String, Object> includedAttributes;
-    private boolean went = false;
+    private boolean responseCommitted = false;
 
     public DefaultResult(HttpServletRequest request, Container container) {
         this.request = request;
@@ -46,7 +46,7 @@ public class DefaultResult implements Result {
     }
 
     public <T extends View> T use(Class<T> view) {
-        this.went = true;
+        this.responseCommitted = true;
         return container.instanceFor(view);
     }
 
@@ -57,7 +57,7 @@ public class DefaultResult implements Result {
     }
 
     public boolean used() {
-        return went;
+        return responseCommitted;
     }
 
 	public Map<String, Object> included() {

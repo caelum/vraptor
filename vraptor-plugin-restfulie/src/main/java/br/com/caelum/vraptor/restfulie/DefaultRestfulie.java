@@ -28,7 +28,7 @@ import br.com.caelum.vraptor.proxy.MethodInvocation;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.SuperMethod;
 import br.com.caelum.vraptor.restfulie.relation.Relation;
-import br.com.caelum.vraptor.restfulie.relation.RelationBuilder;
+import br.com.caelum.vraptor.restfulie.relation.DefaultRelationBuilder;
 
 /**
  * Helper to create transitions and states when using restfulie.
@@ -40,7 +40,7 @@ import br.com.caelum.vraptor.restfulie.relation.RelationBuilder;
 @RequestScoped
 public class DefaultRestfulie implements Restfulie {
 	
-	private final List<RelationBuilder> relations = new ArrayList<RelationBuilder>();
+	private final List<DefaultRelationBuilder> relations = new ArrayList<DefaultRelationBuilder>();
 	private final Routes routes;
 	private final Proxifier proxifier;
 	
@@ -53,8 +53,8 @@ public class DefaultRestfulie implements Restfulie {
 		return "status";
 	}
 	
-	public RelationBuilder relation(String name) {
-		RelationBuilder builder = createBuilderFor(name);
+	public DefaultRelationBuilder relation(String name) {
+		DefaultRelationBuilder builder = createBuilderFor(name);
 		this.relations.add(builder);
 		return builder;
 	}
@@ -62,13 +62,13 @@ public class DefaultRestfulie implements Restfulie {
 	/**
 	 * Allows the use of different relation builders.
 	 */
-	protected RelationBuilder createBuilderFor(String name) {
-		return new RelationBuilder(name, routes, proxifier);
+	protected DefaultRelationBuilder createBuilderFor(String name) {
+		return new DefaultRelationBuilder(name, routes, proxifier);
 	}
 
 	public List<Relation> getRelations() {
 		List<Relation> transitions = new ArrayList<Relation>();
-		for(RelationBuilder builder : this.relations) {
+		for(DefaultRelationBuilder builder : this.relations) {
 			transitions.add(builder.build());
 		}
 		return transitions;
@@ -93,7 +93,7 @@ public class DefaultRestfulie implements Restfulie {
 		relations.clear();
 	}
 
-	public RelationBuilder transition(String name) {
+	public DefaultRelationBuilder transition(String name) {
 		return relation(name);
 	}
 

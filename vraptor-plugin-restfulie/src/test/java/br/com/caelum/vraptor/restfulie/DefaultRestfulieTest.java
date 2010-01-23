@@ -10,16 +10,16 @@ import java.util.Arrays;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.restfulie.relation.Relation;
-import br.com.caelum.vraptor.restfulie.relation.RelationBuilder;
+import br.com.caelum.vraptor.restfulie.relation.DefaultRelationBuilder;
 
 public class DefaultRestfulieTest {
 	
 	@Test
 	public void shouldCreateAndRegisterABuilderWhenInvokingRelationOrTransition() {
-		final RelationBuilder builder = mock(RelationBuilder.class);
+		final DefaultRelationBuilder builder = mock(DefaultRelationBuilder.class);
 		
 		DefaultRestfulie restfulie = new DefaultRestfulie(null, null) {
-			protected RelationBuilder createBuilderFor(String name) {
+			protected DefaultRelationBuilder createBuilderFor(String name) {
 				return builder;
 			}
 		};
@@ -32,10 +32,10 @@ public class DefaultRestfulieTest {
 
 	@Test
 	public void shouldAllowObjectCleanUp() {
-		final RelationBuilder builder = mock(RelationBuilder.class);
+		final DefaultRelationBuilder builder = mock(DefaultRelationBuilder.class);
 		
 		DefaultRestfulie restfulie = new DefaultRestfulie(null, null) {
-			protected RelationBuilder createBuilderFor(String name) {
+			protected DefaultRelationBuilder createBuilderFor(String name) {
 				return builder;
 			}
 		};

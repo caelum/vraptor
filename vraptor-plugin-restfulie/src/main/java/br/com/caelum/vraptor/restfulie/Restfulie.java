@@ -20,7 +20,7 @@ package br.com.caelum.vraptor.restfulie;
 import java.util.List;
 
 import br.com.caelum.vraptor.restfulie.relation.Relation;
-import br.com.caelum.vraptor.restfulie.relation.RelationBuilder;
+import br.com.caelum.vraptor.restfulie.relation.DefaultRelationBuilder;
 
 /**
  * Controls the process of creating new relations and notifying the resource
@@ -35,12 +35,12 @@ public interface Restfulie {
 	/**
 	 * Creates a new relation
 	 */
-	RelationBuilder transition(String name);
+	DefaultRelationBuilder transition(String name);
 	
 	/**
 	 * Creates a new relation
 	 */
-	RelationBuilder relation(String name);
+	DefaultRelationBuilder relation(String name);
 
 	/**
 	 * Creates a new relation

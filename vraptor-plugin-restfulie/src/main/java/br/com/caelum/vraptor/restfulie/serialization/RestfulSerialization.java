@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package br.com.caelum.restfulie.vraptor;
+package br.com.caelum.vraptor.restfulie.serialization;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -24,11 +24,16 @@ import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.rest.Restfulie;
+import br.com.caelum.vraptor.restfulie.hypermedia.LinkConverter;
 import br.com.caelum.vraptor.serialization.XStreamXMLSerialization;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.reflection.ReflectionConverter;
 
+/**
+ * Custom serialization process provides a way to add links to your resource representations.
+ * @author guilherme silveira
+ */
 @Component
 @RequestScoped
 public class RestfulSerialization extends XStreamXMLSerialization {

@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package br.com.caelum.restfulie.vraptor;
+package br.com.caelum.vraptor.restfulie.hypermedia;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

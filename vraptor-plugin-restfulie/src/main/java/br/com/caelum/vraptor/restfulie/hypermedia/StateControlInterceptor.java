@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package br.com.caelum.restfulie.vraptor;
+package br.com.caelum.vraptor.restfulie.hypermedia;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
@@ -33,7 +33,7 @@ import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.rest.Restfulie;
-import br.com.caelum.vraptor.rest.HypermidiaResource;
+import br.com.caelum.vraptor.rest.HypermediaResource;
 import br.com.caelum.vraptor.view.Status;
 
 /**
@@ -44,7 +44,7 @@ import br.com.caelum.vraptor.view.Status;
  */
 @SuppressWarnings("unchecked")
 @RequestScoped
-public class StateControlInterceptor<T extends HypermidiaResource> implements Interceptor {
+public class StateControlInterceptor<T extends HypermediaResource> implements Interceptor {
 
 	private final StateControl<T> control;
 	private final List<Class> controllers;

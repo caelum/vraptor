@@ -32,15 +32,31 @@ import br.com.caelum.vraptor.restfulie.relation.RelationBuilder;
  */
 public interface Restfulie {
 
-	public RelationBuilder transition(String name);
+	/**
+	 * Creates a new relation
+	 */
+	RelationBuilder transition(String name);
+	
+	/**
+	 * Creates a new relation
+	 */
+	RelationBuilder relation(String name);
 
+	/**
+	 * Creates a new relation
+	 */
 	<T> T transition(Class<T> type);
 
-	public List<Relation> getTransitions();
+	/**
+	 * Creates a new relation
+	 */
+	<T> T relation(Class<T> type);
+
+	List<Relation> getRelations();
 
 	/**
 	 * TODO Should be removed soon.
 	 */
-	public void clear();
+	void clear();
 
 }

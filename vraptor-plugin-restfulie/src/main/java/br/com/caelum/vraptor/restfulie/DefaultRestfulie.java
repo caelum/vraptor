@@ -59,7 +59,7 @@ public class DefaultRestfulie implements Restfulie {
 		return builder;
 	}
 
-	public List<Relation> getTransitions() {
+	public List<Relation> getRelations() {
 		List<Relation> transitions = new ArrayList<Relation>();
 		for(RelationBuilder builder : this.transitions) {
 			transitions.add(builder.build());
@@ -84,6 +84,14 @@ public class DefaultRestfulie implements Restfulie {
 
 	public void clear() {
 		transitions.clear();
+	}
+
+	public RelationBuilder relation(String name) {
+		return transition(name);
+	}
+
+	public <T> T relation(Class<T> type) {
+		return transition(type);
 	}
 
 }

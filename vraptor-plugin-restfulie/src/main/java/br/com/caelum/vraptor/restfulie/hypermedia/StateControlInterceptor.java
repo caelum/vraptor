@@ -32,7 +32,6 @@ import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.restfulie.HypermediaResource;
 import br.com.caelum.vraptor.restfulie.Restfulie;
 import br.com.caelum.vraptor.view.Status;
 

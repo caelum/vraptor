@@ -20,6 +20,9 @@ package br.com.caelum.vraptor.restfulie;
 import java.util.List;
 
 /**
+ * Controls the process of creating new relations and notifying the resource
+ * representation builder how these relations can be translated into links.
+ * 
  * @author lucas cavalcanti
  * @author guilherme silveira
  * @since 3.0.3
@@ -27,14 +30,11 @@ import java.util.List;
 public interface Restfulie {
 
 	public TransitionBuilder transition(String name);
-	<T> T transition(Class<T> type);
 
-	public StateBuilder state(String name);
+	<T> T transition(Class<T> type);
 
 	public List<Relation> getTransitions();
 
-	public List<State> getStates();
-	
 	/**
 	 * TODO Should be removed soon.
 	 */

@@ -30,9 +30,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.config.Configuration;
-import br.com.caelum.vraptor.restfulie.HypermediaResource;
 import br.com.caelum.vraptor.restfulie.Restfulie;
 import br.com.caelum.vraptor.restfulie.Relation;
+import br.com.caelum.vraptor.restfulie.hypermedia.HypermediaResource;
 import br.com.caelum.vraptor.restfulie.hypermedia.LinkConverter;
 
 import com.thoughtworks.xstream.XStream;

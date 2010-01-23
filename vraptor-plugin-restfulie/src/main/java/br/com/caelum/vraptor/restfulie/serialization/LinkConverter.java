@@ -15,11 +15,12 @@
  * limitations under the License.
  */
 
-package br.com.caelum.vraptor.restfulie.hypermedia;
+package br.com.caelum.vraptor.restfulie.serialization;
 
 import br.com.caelum.vraptor.config.Configuration;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.restfulie.Restfulie;
+import br.com.caelum.vraptor.restfulie.hypermedia.HypermediaResource;
 import br.com.caelum.vraptor.restfulie.relation.Relation;
 
 import com.thoughtworks.xstream.converters.Converter;

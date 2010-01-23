@@ -24,7 +24,6 @@ import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.restfulie.Restfulie;
-import br.com.caelum.vraptor.restfulie.hypermedia.LinkConverter;
 import br.com.caelum.vraptor.serialization.XStreamXMLSerialization;
 
 import com.thoughtworks.xstream.XStream;

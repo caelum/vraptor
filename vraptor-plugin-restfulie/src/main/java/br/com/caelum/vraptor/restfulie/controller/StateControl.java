@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package br.com.caelum.vraptor.restfulie.hypermedia;
+package br.com.caelum.vraptor.restfulie.controller;
 
 
 /**

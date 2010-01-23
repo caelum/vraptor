@@ -32,8 +32,8 @@ import org.junit.Test;
 import br.com.caelum.vraptor.config.Configuration;
 import br.com.caelum.vraptor.restfulie.Restfulie;
 import br.com.caelum.vraptor.restfulie.hypermedia.HypermediaResource;
-import br.com.caelum.vraptor.restfulie.hypermedia.LinkConverter;
 import br.com.caelum.vraptor.restfulie.relation.Relation;
+import br.com.caelum.vraptor.restfulie.serialization.LinkConverter;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.reflection.ReflectionConverter;

@@ -55,7 +55,7 @@ public interface Restfulie {
 	List<Relation> getRelations();
 
 	/**
-	 * TODO Should be removed soon.
+	 * Clears all links from within this restfulie implementation.
 	 */
 	void clear();
 

@@ -15,12 +15,11 @@
  * limitations under the License.
  */
 
-package br.com.caelum.vraptor.restfulie;
+package br.com.caelum.vraptor.restfulie.relation;
 
 import java.lang.reflect.Method;
 
 import br.com.caelum.vraptor.core.Routes;
-import br.com.caelum.vraptor.restfulie.relation.Relation;
 
 /**
  * A transition which will invoke a controller's method.
@@ -29,7 +28,7 @@ import br.com.caelum.vraptor.restfulie.relation.Relation;
  * @author caires vinicius
  * @since 3.0.3
  */
-public class ControllerTransition implements Relation {
+public class ControllerBasedRelation implements Relation {
 
 	private final Class<?> controller;
 	private final String name;
@@ -37,7 +36,7 @@ public class ControllerTransition implements Relation {
 	private final Method method;
 	private final Object[] parameters;
 
-	public ControllerTransition(Class<?> controller, String rel, Method method,
+	public ControllerBasedRelation(Class<?> controller, String rel, Method method,
 			Object[] parameters, Routes routes) {
 		this.controller = controller;
 		this.name = rel;

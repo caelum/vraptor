@@ -63,8 +63,7 @@ public class LinkConverter implements Converter {
 				writer.endNode();
 			}
 		} finally {
-			// TODO remove this thing from here
-			// restfulie.clear();
+			restfulie.clear();
 		}
 	}
 

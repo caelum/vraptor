@@ -21,6 +21,7 @@ import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
@@ -54,19 +55,22 @@ public class LinkConverterTest {
 		
 	}
 	private XStream xstream;
+	private Restfulie restfulie;
 	
 	@Before
 	public void setup() {
 		this.xstream = new XStream();
+		this.restfulie = mock(Restfulie.class);
 		Configuration config = mock(Configuration.class);
 		when(config.getApplicationPath()).thenReturn("http://www.caelum.com.br");
-		xstream.registerConverter(new LinkConverter(new ReflectionConverter(xstream.getMapper(), xstream.getReflectionProvider()), null, config));
+		xstream.registerConverter(new LinkConverter(new ReflectionConverter(xstream.getMapper(), xstream.getReflectionProvider()), restfulie, config));
 	}
 	
 	@Test
 	public void shouldSerializeNoLinksIfThereIsNoTransition() {
 		String xml = xstream.toXML(new Client());
 		assertThat(xml, not(containsString("atom:link")));
+		verify(restfulie).clear();
 	}
 	
 	@Test
@@ -77,6 +81,7 @@ public class LinkConverterTest {
 		
 		String xml = xstream.toXML(new Client(t));
 		assertThat(xml, containsString("<atom:link rel=\"kill\" href=\"http://www.caelum.com.br/kill\" xmlns:atom=\"http://www.w3.org/2005/Atom\"/>"));
+		verify(restfulie).clear();
 	}
 	
 	@Test
@@ -92,6 +97,7 @@ public class LinkConverterTest {
 		String xml = xstream.toXML(new Client(t,t2));
 		assertThat(xml, containsString("<atom:link rel=\"kill\" href=\"http://www.caelum.com.br/kill\" xmlns:atom=\"http://www.w3.org/2005/Atom\"/>"));
 		assertThat(xml, containsString("<atom:link rel=\"ressurect\" href=\"http://www.caelum.com.br/ressurect\" xmlns:atom=\"http://www.w3.org/2005/Atom\"/>"));
+		verify(restfulie).clear();
 	}
 	
 }

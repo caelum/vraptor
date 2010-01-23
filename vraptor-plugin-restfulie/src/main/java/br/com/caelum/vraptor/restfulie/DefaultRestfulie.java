@@ -27,6 +27,8 @@ import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.proxy.MethodInvocation;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.SuperMethod;
+import br.com.caelum.vraptor.restfulie.relation.Relation;
+import br.com.caelum.vraptor.restfulie.relation.RelationBuilder;
 
 /**
  * Helper to create transitions and states when using restfulie.
@@ -38,7 +40,7 @@ import br.com.caelum.vraptor.proxy.SuperMethod;
 @RequestScoped
 public class DefaultRestfulie implements Restfulie {
 	
-	private final List<TransitionBuilder> transitions = new ArrayList<TransitionBuilder>();
+	private final List<RelationBuilder> transitions = new ArrayList<RelationBuilder>();
 	private final Routes routes;
 	private final Proxifier proxifier;
 	
@@ -51,15 +53,15 @@ public class DefaultRestfulie implements Restfulie {
 		return "status";
 	}
 	
-	public TransitionBuilder transition(String name) {
-		TransitionBuilder builder = new TransitionBuilder(name, routes, proxifier);
+	public RelationBuilder transition(String name) {
+		RelationBuilder builder = new RelationBuilder(name, routes, proxifier);
 		this.transitions.add(builder);
 		return builder;
 	}
 
 	public List<Relation> getTransitions() {
 		List<Relation> transitions = new ArrayList<Relation>();
-		for(TransitionBuilder builder : this.transitions) {
+		for(RelationBuilder builder : this.transitions) {
 			transitions.add(builder.build());
 		}
 		return transitions;

@@ -19,8 +19,8 @@ package br.com.caelum.vraptor.restfulie.hypermedia;
 
 import java.util.List;
 
-import br.com.caelum.vraptor.restfulie.Relation;
 import br.com.caelum.vraptor.restfulie.Restfulie;
+import br.com.caelum.vraptor.restfulie.relation.Relation;
 
 /**
  * Basic restfulie implementation: use this interface to implement and let the

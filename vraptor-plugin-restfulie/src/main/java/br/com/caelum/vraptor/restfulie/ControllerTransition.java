@@ -20,6 +20,7 @@ package br.com.caelum.vraptor.restfulie;
 import java.lang.reflect.Method;
 
 import br.com.caelum.vraptor.core.Routes;
+import br.com.caelum.vraptor.restfulie.relation.Relation;
 
 /**
  * A transition which will invoke a controller's method.

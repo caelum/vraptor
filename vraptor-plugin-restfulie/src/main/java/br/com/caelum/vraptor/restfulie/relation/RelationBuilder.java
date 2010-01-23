@@ -15,13 +15,14 @@
  * limitations under the License.
  */
 
-package br.com.caelum.vraptor.restfulie;
+package br.com.caelum.vraptor.restfulie.relation;
 
 import java.lang.reflect.Method;
 
 import br.com.caelum.vraptor.core.Routes;
 import br.com.caelum.vraptor.proxy.MethodInvocation;
 import br.com.caelum.vraptor.proxy.Proxifier;
+import br.com.caelum.vraptor.restfulie.ControllerTransition;
 
 /**
  * Builder to help creating transitions.
@@ -29,7 +30,7 @@ import br.com.caelum.vraptor.proxy.Proxifier;
  * @author guilherme silveira
  * @since 3.0.3
  */
-public class TransitionBuilder {
+public class RelationBuilder {
 
 	private final String name;
 	private String resultingStatus;
@@ -39,13 +40,13 @@ public class TransitionBuilder {
 	private Method method;
 	private Object[] parameters = new Object[0];
 
-	public TransitionBuilder(String name, Routes routes, Proxifier proxifier) {
+	public RelationBuilder(String name, Routes routes, Proxifier proxifier) {
 		this.name = name;
 		this.routes = routes;
 		this.proxifier = proxifier;
 	}
 
-	public TransitionBuilder resultsInStatus(String newStatus) {
+	public RelationBuilder resultsInStatus(String newStatus) {
 		this.resultingStatus = newStatus;
 		return this;
 	}
@@ -55,14 +56,14 @@ public class TransitionBuilder {
 		return proxifier.proxify(type, new MethodInvocation<T>() {
 			public Object intercept(T proxy, java.lang.reflect.Method method,
 					Object[] args, br.com.caelum.vraptor.proxy.SuperMethod superMethod) {
-				TransitionBuilder.this.method = method;
+				RelationBuilder.this.method = method;
 				parameters = args;
 				return null;
 			};
 		});
 	}
 
-	public TransitionBuilder uses(String customURI) {
+	public RelationBuilder uses(String customURI) {
 		return this;
 	}
 

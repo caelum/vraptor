@@ -9,9 +9,9 @@ import java.util.List;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.restfulie.Restfulie;
-import br.com.caelum.vraptor.restfulie.Relation;
 import br.com.caelum.vraptor.restfulie.hypermedia.HypermediaResource;
 import br.com.caelum.vraptor.restfulie.hypermedia.LinkConverter;
+import br.com.caelum.vraptor.restfulie.relation.Relation;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.Converter;

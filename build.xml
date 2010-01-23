@@ -37,7 +37,7 @@
 		<ant dir="vraptor-plugin-restfulie" target="artifacts"/>
 	</target>
 
-	<target name="test" depends="deploy-to-examples">
+	<target name="test" depends="core-tests, deploy-to-examples">
 		<ant dir="vraptor-plugin-restfulie" target="test"/>
 	</target>
 

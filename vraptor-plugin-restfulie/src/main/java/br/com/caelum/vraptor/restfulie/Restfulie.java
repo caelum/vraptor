@@ -15,27 +15,29 @@
  * limitations under the License.
  */
 
-package br.com.caelum.vraptor.rest;
+package br.com.caelum.vraptor.restfulie;
 
-import java.lang.reflect.Method;
+import java.util.List;
 
 /**
- * Represents a transition between a resource state and another.
- * 
+ * @author lucas cavalcanti
  * @author guilherme silveira
- * @author pedro mariano
  * @since 3.0.3
- *
  */
-public interface Transition {
+public interface Restfulie {
 
-	String getUri();
+	public TransitionBuilder transition(String name);
+	<T> T transition(Class<T> type);
 
-	String getName();
+	public StateBuilder state(String name);
 
+	public List<Relation> getTransitions();
+
+	public List<State> getStates();
+	
 	/**
-	 * Whether this transition uses this specific method in order to get executed.
+	 * TODO Should be removed soon.
 	 */
-	boolean matches(Method method);
+	public void clear();
 
 }

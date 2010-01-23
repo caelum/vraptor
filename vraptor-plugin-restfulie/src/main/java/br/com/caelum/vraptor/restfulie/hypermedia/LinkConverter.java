@@ -19,9 +19,9 @@ package br.com.caelum.vraptor.restfulie.hypermedia;
 
 import br.com.caelum.vraptor.config.Configuration;
 import br.com.caelum.vraptor.core.RequestInfo;
-import br.com.caelum.vraptor.rest.Restfulie;
-import br.com.caelum.vraptor.rest.HypermediaResource;
-import br.com.caelum.vraptor.rest.Transition;
+import br.com.caelum.vraptor.restfulie.HypermediaResource;
+import br.com.caelum.vraptor.restfulie.Restfulie;
+import br.com.caelum.vraptor.restfulie.Relation;
 
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;
@@ -55,7 +55,7 @@ public class LinkConverter implements Converter {
 		base.marshal(root, writer, context);
 		HypermediaResource resource = (HypermediaResource) root;
 		try {
-			for (Transition t : resource.getRelations(restfulie)) {
+			for (Relation t : resource.getRelations(restfulie)) {
 				writer.startNode("atom:link");
 				writer.addAttribute("rel", t.getName());
 				writer.addAttribute("href", config.getApplicationPath() + t.getUri());

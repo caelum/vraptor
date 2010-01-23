@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package br.com.caelum.vraptor.rest;
+package br.com.caelum.vraptor.restfulie;
 
 import java.lang.reflect.Method;
 
@@ -66,7 +66,7 @@ public class TransitionBuilder {
 		return this;
 	}
 
-	public Transition build() {
+	public Relation build() {
 		if (controller != null) {
 			if(method==null) {
 				method = findMethod(name, controller);

@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package br.com.caelum.vraptor.rest;
+package br.com.caelum.vraptor.restfulie;
 
 import java.util.List;
 
@@ -30,5 +30,5 @@ import java.util.List;
  * 
  */
 public interface HypermediaResource {
-	public List<Transition> getRelations(Restfulie control);
+	public List<Relation> getRelations(Restfulie control);
 }

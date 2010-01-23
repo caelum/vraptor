@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package br.com.caelum.vraptor.rest;
+package br.com.caelum.vraptor.restfulie;
 
 public class StateBuilder {
 

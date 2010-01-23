@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package br.com.caelum.restfulie.vraptor;
+package br.com.caelum.vraptor.restfulie;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.not;
@@ -30,9 +30,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.config.Configuration;
-import br.com.caelum.vraptor.rest.Restfulie;
-import br.com.caelum.vraptor.rest.HypermediaResource;
-import br.com.caelum.vraptor.rest.Transition;
+import br.com.caelum.vraptor.restfulie.HypermediaResource;
+import br.com.caelum.vraptor.restfulie.Restfulie;
+import br.com.caelum.vraptor.restfulie.Relation;
 import br.com.caelum.vraptor.restfulie.hypermedia.LinkConverter;
 
 import com.thoughtworks.xstream.XStream;
@@ -42,13 +42,13 @@ public class LinkConverterTest {
 	
 	public static class Client implements HypermediaResource{
 		
-		private transient final Transition[] list;
+		private transient final Relation[] list;
 
-		public Client(Transition ... t) {
+		public Client(Relation ... t) {
 			this.list = t;
 		}
 
-		public List<Transition> getRelations(Restfulie control) {
+		public List<Relation> getRelations(Restfulie control) {
 			return Arrays.asList(list);
 		}
 		
@@ -71,7 +71,7 @@ public class LinkConverterTest {
 	
 	@Test
 	public void shouldSerializeOneLinkIfThereIsATransition() {
-		Transition t = mock(Transition.class);
+		Relation t = mock(Relation.class);
 		when(t.getName()).thenReturn("kill");
 		when(t.getUri()).thenReturn("/kill");
 		
@@ -81,11 +81,11 @@ public class LinkConverterTest {
 	
 	@Test
 	public void shouldSerializeAllLinksIfThereAreTransitions() {
-		Transition t = mock(Transition.class);
+		Relation t = mock(Relation.class);
 		when(t.getName()).thenReturn("kill");
 		when(t.getUri()).thenReturn("/kill");
 		
-		Transition t2 = mock(Transition.class);
+		Relation t2 = mock(Relation.class);
 		when(t2.getName()).thenReturn("ressurect");
 		when(t2.getUri()).thenReturn("/ressurect");
 		

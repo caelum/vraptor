@@ -15,10 +15,8 @@
  * limitations under the License.
  */
 
-package br.com.caelum.vraptor.rest;
+package br.com.caelum.vraptor.restfulie;
 
-public interface Dependency<T> {
-	
-	boolean allows(T object);
+public interface State {
 
 }

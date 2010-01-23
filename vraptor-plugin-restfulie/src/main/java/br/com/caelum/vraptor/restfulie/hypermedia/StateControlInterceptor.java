@@ -32,8 +32,8 @@ import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.rest.Restfulie;
-import br.com.caelum.vraptor.rest.HypermediaResource;
+import br.com.caelum.vraptor.restfulie.HypermediaResource;
+import br.com.caelum.vraptor.restfulie.Restfulie;
 import br.com.caelum.vraptor.view.Status;
 
 /**
@@ -107,8 +107,8 @@ public class StateControlInterceptor<T extends HypermediaResource> implements In
 
 	private boolean allows(T resource, Method method) {
 		try {
-			List<br.com.caelum.vraptor.rest.Transition> transitions = resource.getRelations(restfulie);
-			for (br.com.caelum.vraptor.rest.Transition transition : transitions) {
+			List<br.com.caelum.vraptor.restfulie.Relation> transitions = resource.getRelations(restfulie);
+			for (br.com.caelum.vraptor.restfulie.Relation transition : transitions) {
 				if(transition.matches(method)) {
 					return true;
 				}

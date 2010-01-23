@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package br.com.caelum.vraptor.rest;
+package br.com.caelum.vraptor.restfulie;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -62,8 +62,8 @@ public class DefaultRestfulie implements Restfulie {
 		return new StateBuilder(name);
 	}
 
-	public List<Transition> getTransitions() {
-		List<Transition> transitions = new ArrayList<Transition>();
+	public List<Relation> getTransitions() {
+		List<Relation> transitions = new ArrayList<Relation>();
 		for(TransitionBuilder builder : this.transitions) {
 			transitions.add(builder.build());
 		}

@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package br.com.caelum.vraptor.rest;
+package br.com.caelum.vraptor.restfulie;
 
 import java.lang.reflect.Method;
 
@@ -28,7 +28,7 @@ import br.com.caelum.vraptor.core.Routes;
  * @author caires vinicius
  * @since 3.0.3
  */
-public class ControllerTransition implements Transition {
+public class ControllerTransition implements Relation {
 
 	private final Class<?> controller;
 	private final String name;

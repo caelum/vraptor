@@ -8,9 +8,9 @@ import java.util.List;
 
 import org.junit.Test;
 
-import br.com.caelum.vraptor.rest.HypermediaResource;
-import br.com.caelum.vraptor.rest.Restfulie;
-import br.com.caelum.vraptor.rest.Transition;
+import br.com.caelum.vraptor.restfulie.HypermediaResource;
+import br.com.caelum.vraptor.restfulie.Restfulie;
+import br.com.caelum.vraptor.restfulie.Relation;
 import br.com.caelum.vraptor.restfulie.hypermedia.LinkConverter;
 
 import com.thoughtworks.xstream.XStream;
@@ -25,7 +25,7 @@ public class RestfulSerializationTest {
 	
 	class CustomType implements HypermediaResource{
 
-		public List<Transition> getRelations(Restfulie control) {
+		public List<Relation> getRelations(Restfulie control) {
 			return null;
 		}
 	}

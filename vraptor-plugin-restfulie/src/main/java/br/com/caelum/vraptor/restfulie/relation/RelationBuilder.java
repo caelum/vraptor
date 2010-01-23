@@ -22,7 +22,6 @@ import java.lang.reflect.Method;
 import br.com.caelum.vraptor.core.Routes;
 import br.com.caelum.vraptor.proxy.MethodInvocation;
 import br.com.caelum.vraptor.proxy.Proxifier;
-import br.com.caelum.vraptor.restfulie.ControllerTransition;
 
 /**
  * Builder to help creating transitions.
@@ -73,7 +72,7 @@ public class RelationBuilder {
 				method = findMethod(name, controller);
 				parameters = new Object[method.getParameterTypes().length];
 			}
-			return new ControllerTransition(controller, name, method, parameters, routes);
+			return new ControllerBasedRelation(controller, name, method, parameters, routes);
 		}
 		throw new IllegalStateException(
 				"Transition was not correctly created: '" + name + "'");

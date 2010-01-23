@@ -78,7 +78,7 @@ public class DefaultRestfulie implements Restfulie {
 		return proxifier.proxify(type, new MethodInvocation<T>() {
 			public Object intercept(T proxy, Method method, Object[] args,
 					SuperMethod superMethod) {
-				T instance = transition(method.getName()).uses(type);
+				T instance = relation(method.getName()).uses(type);
 				try {
 					method.invoke(instance, args);
 				} catch (Exception e) {

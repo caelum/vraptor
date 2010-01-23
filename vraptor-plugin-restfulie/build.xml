@@ -2,22 +2,22 @@
 <!-- ====================================================================== 
 	VRaptor 3 core module build
 	====================================================================== -->
-<project name="VRaptor 3 Google App Engine Plugin" default="artifacts" basedir=".">
+<project name="VRaptor 3 Restfulie plugin" default="artifacts" basedir=".">
 
-	<description>VRaptor 3 core module build</description>
+	<description>VRaptor 3 restfulie module build</description>
+
+	<property file="../vraptor-core/build.properties" />
 
 	<property name="vraptor.core" value="../vraptor-core"/>
-	<property name="vraptor.jar" value="${vraptor.core}/target/" />
+	<property name="vraptor.jar" value="${vraptor.core}/lib/" />
 	<property name="core.lib.dir" value="${vraptor.core}/lib/mandatory"/>
-	<property name="gae.lib.dir" value="../vraptor-blank-project-gae/lib/extras"/>
-	<property name="compile.dir" value="build.tmp"/>
 	<property name="target.dir" value="target"/>
-	<property name="target.file" value="${target.dir}/vraptor-gae.jar" />
-
-	<path id="test.classpath">
-		<path refid="compile.classpath" />
-		<dirset dir="${tmp.classes.dir}" />
-	</path>
+	<property name="compile.dir" value="target/classes"/>
+	<property name="test.dir" value="target/test-classes"/>
+	<property name="target.file" value="${target.dir}/vraptor-restfulie-${version}.jar" />
+	<property name="webinf.lib.dir" value="lib" />
+	<property name="mandatory.jars" value="${vraptor.core}/${libs.dir}/mandatory"/>
+	<property name="optional.jars" value="${vraptor.core}/${libs.dir}/optional"/>
 
 	<path id="libs.classpath" path=".">
 		<fileset dir="../common">
@@ -29,29 +29,35 @@
 		<fileset dir="${core.lib.dir}">
 			<include name="**/*.jar" />
 		</fileset>
-		<fileset dir="${gae.lib.dir}">
-			<include name="**/*.jar" />
-		</fileset>
 	</path>
 
 	<path id="compile.classpath">
 		<path refid="libs.classpath" />
+		<fileset dir="lib"/>
+	</path>
+
+	<path id="test.classpath">
+		<path refid="compile.classpath" />
+		<path location="${compile.dir}" />
+		<fileset dir="lib"/>
 	</path>
 
 	<target name="compile" depends="clean" description="--> compiles classes">
 		<mkdir dir="${compile.dir}" />
-		<javac destdir="${compile.dir}" srcdir="src/main/java" classpathref="compile.classpath" debug="true" encoding="UTF-8" target="1.5" source="1.5">
-			<compilerarg value="-Xlint:none" />
-		</javac>
+		<javac srcdir="src/main/java" destdir="${compile.dir}" classpathref="compile.classpath"/>
+		
+		<mkdir dir="${test.dir}" />
+    	<javac srcdir="src/test/java" destdir="${test.dir}" classpathref="test.classpath"/>
 	</target>
 
 	<target name="test" depends="compile">
+		<mkdir dir="${reports.dir}/test-results" />
 		<taskdef classpathref="test.classpath" resource="tasks.properties" />
-		<fileset dir="${tmp.test.classes.dir}" id="unittests.fileset" includes="**/*Test.class" />
-		<junit fork="yes" forkmode="once" printsummary="false" showoutput="true" failureproperty="failed-test">
+		<fileset dir="${test.dir}" id="unittests.fileset" includes="**/*Test.class" />
+		<junit printsummary="false" showoutput="false" failureproperty="failed-test">
 			<classpath>
-				<pathelement path="${tmp.classes.dir}" />
-				<pathelement path="${tmp.test.classes.dir}" />
+				<pathelement path="${compile.dir}" />
+				<pathelement path="${test.dir}" />
 			</classpath>
 			<classpath refid="test.classpath" />
 
@@ -59,7 +65,9 @@
 			<formatter type="xml" />
 
 			<batchtest fork="yes" todir="${reports.dir}/test-results">
-				<fileset refid="unittests.fileset" />
+				<fileset dir="${test.dir}">
+					<include name="**/*Test.class" />
+				</fileset>
 			</batchtest>
 		</junit>
 		<junitreport todir="${reports.dir}/">
@@ -71,7 +79,7 @@
 		<fail if="failed-test" message="Failing tests" />
 	</target>
 
-	<target name="artifacts" depends="test" description="--> generate project's artifacts">
+	<target name="artifacts" depends="update-jars, test" description="--> generate project's artifacts">
 		<mkdir dir="${target.dir}" />
 		<jar destfile="${target.file}" compress="true">
 			<fileset dir="${compile.dir}" includes="**/*.class" />
@@ -83,4 +91,21 @@
 		<delete dir="${target.dir}" />
 	</target>
 	
+	<target name="update-jars">
+    	<delete>
+			<fileset dir="${webinf.lib.dir}">
+			    <include name="*.jar"/>
+			</fileset>
+		</delete>
+    	<copy todir="${webinf.lib.dir}">
+			<fileset dir="${mandatory.jars}">
+			    <include name="*.jar"/>
+			</fileset>
+			<fileset dir="${optional.jars}">
+			    <include name="*.jar"/>
+			</fileset>
+    	</copy>
+    	<copy todir="${webinf.lib.dir}" file="${vraptor.core}/${jar.file}"/>
+    </target>
+
 </project>

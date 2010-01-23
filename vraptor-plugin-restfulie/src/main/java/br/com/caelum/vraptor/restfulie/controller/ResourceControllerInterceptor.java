@@ -45,9 +45,9 @@ import br.com.caelum.vraptor.view.Status;
  */
 @SuppressWarnings("unchecked")
 @RequestScoped
-public class StateControlInterceptor<T extends HypermediaResource> implements Interceptor {
+public class ResourceControllerInterceptor<T extends HypermediaResource> implements Interceptor {
 
-	private final StateControl<T> control;
+	private final ResourceControl<T> control;
 	private final List<Class> controllers;
 	private final Status status;
 	private final Restfulie restfulie;
@@ -55,7 +55,7 @@ public class StateControlInterceptor<T extends HypermediaResource> implements In
 	private final RequestInfo info;
 	private final ParameterizedTypeSearcher searcher = new ParameterizedTypeSearcher();
 
-	public StateControlInterceptor(StateControl<T> control, Restfulie restfulie, Status status, RequestInfo info, Routes routes) {
+	public ResourceControllerInterceptor(ResourceControl<T> control, Restfulie restfulie, Status status, RequestInfo info, Routes routes) {
 		this.control = control;
 		this.restfulie = restfulie;
 		this.status = status;

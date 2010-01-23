@@ -40,7 +40,7 @@ import br.com.caelum.vraptor.restfulie.relation.RelationBuilder;
 @RequestScoped
 public class DefaultRestfulie implements Restfulie {
 	
-	private final List<RelationBuilder> transitions = new ArrayList<RelationBuilder>();
+	private final List<RelationBuilder> relations = new ArrayList<RelationBuilder>();
 	private final Routes routes;
 	private final Proxifier proxifier;
 	
@@ -53,21 +53,28 @@ public class DefaultRestfulie implements Restfulie {
 		return "status";
 	}
 	
-	public RelationBuilder transition(String name) {
-		RelationBuilder builder = new RelationBuilder(name, routes, proxifier);
-		this.transitions.add(builder);
+	public RelationBuilder relation(String name) {
+		RelationBuilder builder = createBuilderFor(name);
+		this.relations.add(builder);
 		return builder;
+	}
+
+	/**
+	 * Allows the use of different relation builders.
+	 */
+	protected RelationBuilder createBuilderFor(String name) {
+		return new RelationBuilder(name, routes, proxifier);
 	}
 
 	public List<Relation> getRelations() {
 		List<Relation> transitions = new ArrayList<Relation>();
-		for(RelationBuilder builder : this.transitions) {
+		for(RelationBuilder builder : this.relations) {
 			transitions.add(builder.build());
 		}
 		return transitions;
 	}
 
-	public <T> T transition(final Class<T> type) {
+	public <T> T relation(final Class<T> type) {
 		return proxifier.proxify(type, new MethodInvocation<T>() {
 			public Object intercept(T proxy, Method method, Object[] args,
 					SuperMethod superMethod) {
@@ -83,15 +90,15 @@ public class DefaultRestfulie implements Restfulie {
 	}
 
 	public void clear() {
-		transitions.clear();
+		relations.clear();
 	}
 
-	public RelationBuilder relation(String name) {
-		return transition(name);
+	public RelationBuilder transition(String name) {
+		return relation(name);
 	}
 
-	public <T> T relation(Class<T> type) {
-		return transition(type);
+	public <T> T transition(Class<T> type) {
+		return relation(type);
 	}
 
 }

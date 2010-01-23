@@ -19,6 +19,9 @@ package br.com.caelum.vraptor.restfulie;
 
 import java.util.List;
 
+import br.com.caelum.vraptor.restfulie.relation.Relation;
+import br.com.caelum.vraptor.restfulie.relation.RelationBuilder;
+
 /**
  * Controls the process of creating new relations and notifying the resource
  * representation builder how these relations can be translated into links.
@@ -29,7 +32,7 @@ import java.util.List;
  */
 public interface Restfulie {
 
-	public TransitionBuilder transition(String name);
+	public RelationBuilder transition(String name);
 
 	<T> T transition(Class<T> type);
 

@@ -106,8 +106,8 @@ public class StateControlInterceptor<T extends HypermediaResource> implements In
 
 	private boolean allows(T resource, Method method) {
 		try {
-			List<br.com.caelum.vraptor.restfulie.Relation> transitions = resource.getRelations(restfulie);
-			for (br.com.caelum.vraptor.restfulie.Relation transition : transitions) {
+			List<br.com.caelum.vraptor.restfulie.relation.Relation> transitions = resource.getRelations(restfulie);
+			for (br.com.caelum.vraptor.restfulie.relation.Relation transition : transitions) {
 				if(transition.matches(method)) {
 					return true;
 				}

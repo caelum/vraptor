@@ -20,7 +20,7 @@ package br.com.caelum.vraptor.restfulie.hypermedia;
 import br.com.caelum.vraptor.config.Configuration;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.restfulie.Restfulie;
-import br.com.caelum.vraptor.restfulie.Relation;
+import br.com.caelum.vraptor.restfulie.relation.Relation;
 
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;

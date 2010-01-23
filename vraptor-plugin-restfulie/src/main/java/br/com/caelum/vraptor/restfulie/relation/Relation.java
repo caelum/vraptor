@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package br.com.caelum.vraptor.restfulie;
+package br.com.caelum.vraptor.restfulie.relation;
 
 import java.lang.reflect.Method;
 

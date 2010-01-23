@@ -20,7 +20,7 @@ package br.com.caelum.vraptor.restfulie;
 import java.lang.reflect.Method;
 
 /**
- * Represents a transition between a resource state and another.
+ * Represents a relation between a resource and another.
  * 
  * @author guilherme silveira
  * @author pedro mariano
@@ -34,7 +34,7 @@ public interface Relation {
 	String getName();
 
 	/**
-	 * Whether this transition uses this specific method in order to get executed.
+	 * Whether this relation uses this specific method in order to get executed.
 	 */
 	boolean matches(Method method);
 

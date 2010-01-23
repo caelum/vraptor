@@ -15,26 +15,23 @@
  * limitations under the License.
  */
 
-package br.com.caelum.vraptor.restfulie;
+package br.com.caelum.vraptor.restfulie.hypermedia;
 
-public class StateBuilder {
+import java.util.List;
 
-	private final String name;
+import br.com.caelum.vraptor.restfulie.Relation;
+import br.com.caelum.vraptor.restfulie.Restfulie;
 
-	public StateBuilder( String name) {
-		this.name = name;
-	}
-
-	public StateBuilder allow(String ... states) {
-		return this;
-	}
-	
-	public StateBuilder when(Dependency dependency) {
-		return this;
-	}
-
-	public State build() {
-		return null;
-	}
-
+/**
+ * Basic restfulie implementation: use this interface to implement and let the
+ * serializer know which are the possible followign transitions from this
+ * object's state.
+ * 
+ * @author guilherme silveira
+ * @author caires vinicius
+ * @since 3.0.3
+ * 
+ */
+public interface HypermediaResource {
+	public List<Relation> getRelations(Restfulie control);
 }

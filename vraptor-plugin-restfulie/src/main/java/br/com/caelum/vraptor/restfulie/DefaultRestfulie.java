@@ -39,7 +39,6 @@ import br.com.caelum.vraptor.proxy.SuperMethod;
 public class DefaultRestfulie implements Restfulie {
 	
 	private final List<TransitionBuilder> transitions = new ArrayList<TransitionBuilder>();
-	private final List<StateBuilder> states = new ArrayList<StateBuilder>();
 	private final Routes routes;
 	private final Proxifier proxifier;
 	
@@ -58,24 +57,12 @@ public class DefaultRestfulie implements Restfulie {
 		return builder;
 	}
 
-	public StateBuilder state(String name) {
-		return new StateBuilder(name);
-	}
-
 	public List<Relation> getTransitions() {
 		List<Relation> transitions = new ArrayList<Relation>();
 		for(TransitionBuilder builder : this.transitions) {
 			transitions.add(builder.build());
 		}
 		return transitions;
-	}
-
-	public List<State> getStates() {
-		List<State> states = new ArrayList<State>();
-		for(StateBuilder builder : this.states) {
-			states.add(builder.build());
-		}
-		return states;
 	}
 
 	public <T> T transition(final Class<T> type) {

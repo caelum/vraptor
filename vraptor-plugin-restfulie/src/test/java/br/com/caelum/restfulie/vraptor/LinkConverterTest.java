@@ -31,15 +31,16 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.config.Configuration;
 import br.com.caelum.vraptor.rest.Restfulie;
-import br.com.caelum.vraptor.rest.HypermidiaResource;
+import br.com.caelum.vraptor.rest.HypermediaResource;
 import br.com.caelum.vraptor.rest.Transition;
+import br.com.caelum.vraptor.restfulie.hypermedia.LinkConverter;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.reflection.ReflectionConverter;
 
 public class LinkConverterTest {
 	
-	public static class Client implements HypermidiaResource{
+	public static class Client implements HypermediaResource{
 		
 		private transient final Transition[] list;
 

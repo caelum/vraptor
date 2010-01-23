@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package br.com.caelum.restfulie.vraptor;
+package br.com.caelum.vraptor.restfulie.serialization;
 
 import java.io.Writer;
 

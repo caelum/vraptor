@@ -15,20 +15,28 @@
  * limitations under the License.
  */
 
-package br.com.caelum.vraptor.rest;
+package br.com.caelum.vraptor.restfulie.hypermedia;
 
-import java.util.List;
 
 /**
- * Basic restfulie implementation: use this interface to implement and let the
- * serializer know which are the possible followign transitions from this
- * object's state.
+ * Resources implementing this interface will be serialized with their links.
  * 
  * @author guilherme silveira
  * @author caires vinicius
  * @since 3.0.3
  * 
  */
-public interface HypermidiaResource {
-	public List<Transition> getRelations(Restfulie control);
+public interface StateControl<T> {
+
+	/**
+	 * Returns a list of controllers to be intercepted.
+	 */
+	Class[] getControllers();
+
+	/**
+	 * Given its id (retrieved from the request parameter %id%), returns an
+	 * element from the database or null if its not found.
+	 */
+	T retrieve(String id);
+
 }

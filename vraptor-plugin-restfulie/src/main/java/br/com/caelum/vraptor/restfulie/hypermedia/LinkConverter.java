@@ -15,12 +15,12 @@
  * limitations under the License.
  */
 
-package br.com.caelum.restfulie.vraptor;
+package br.com.caelum.vraptor.restfulie.hypermedia;
 
 import br.com.caelum.vraptor.config.Configuration;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.rest.Restfulie;
-import br.com.caelum.vraptor.rest.HypermidiaResource;
+import br.com.caelum.vraptor.rest.HypermediaResource;
 import br.com.caelum.vraptor.rest.Transition;
 
 import com.thoughtworks.xstream.converters.Converter;
@@ -53,7 +53,7 @@ public class LinkConverter implements Converter {
 	public void marshal(Object root, HierarchicalStreamWriter writer,
 			MarshallingContext context) {
 		base.marshal(root, writer, context);
-		HypermidiaResource resource = (HypermidiaResource) root;
+		HypermediaResource resource = (HypermediaResource) root;
 		try {
 			for (Transition t : resource.getRelations(restfulie)) {
 				writer.startNode("atom:link");
@@ -74,7 +74,7 @@ public class LinkConverter implements Converter {
 	}
 
 	public boolean canConvert(Class type) {
-		return HypermidiaResource.class.isAssignableFrom(type)
+		return HypermediaResource.class.isAssignableFrom(type)
 				&& base.canConvert(type);
 	}
 

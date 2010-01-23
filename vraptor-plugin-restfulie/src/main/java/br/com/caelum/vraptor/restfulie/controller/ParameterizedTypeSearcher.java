@@ -15,10 +15,11 @@
  * limitations under the License.
  */
 
-package br.com.caelum.vraptor.restfulie.hypermedia;
+package br.com.caelum.vraptor.restfulie.controller;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+
 
 public class ParameterizedTypeSearcher {
 

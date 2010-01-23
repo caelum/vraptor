@@ -15,7 +15,7 @@
 	    <delete dir="target" />
 	</target>
 	
-	<target name="core-tests" description="core module tests">
+	<target name="core-tests" description="core tests">
 		<ant dir="vraptor-core" target="test" />
 	</target>
 
@@ -34,11 +34,14 @@
 		<ant dir="vraptor-plugin-gae" target="artifacts"/>
 		<ant dir="vraptor-blank-project-gae" target="update-jars"/>
 		<ant dir="vraptor-mydvds" target="update-jars"/>
+		<ant dir="vraptor-plugin-restfulie" target="artifacts"/>
 	</target>
 
-	<target name="test" depends="core-tests" />
+	<target name="test" depends="deploy-to-examples">
+		<ant dir="vraptor-plugin-restfulie" target="test"/>
+	</target>
 
-	<target name="all" depends="deploy-to-examples" />
+	<target name="all" depends="test" />
 	
 	<target name="zips-site">
 		<ant dir="vraptor-site" target="assembly"/>

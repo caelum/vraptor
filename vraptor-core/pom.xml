@@ -139,7 +139,7 @@
 		<dependency>
 			<groupId>br.com.caelum</groupId>
 			<artifactId>iogi</artifactId>
-			<version>1.0</version>
+			<version>0.8</version>
 		    <optional>true</optional>
 		</dependency>
 		<!-- [/Out of Maven Repo] -->

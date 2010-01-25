@@ -28,6 +28,7 @@ import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.config.BasicConfiguration;
 import br.com.caelum.vraptor.core.Execution;
 import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
 
 /**
@@ -43,7 +44,7 @@ public class SpringProvider implements ContainerProvider {
      */
     public <T> T provideForRequest(RequestInfo request, Execution<T> execution) {
     	if (springListenerAlreadyCalled()) {
-    		return execution.insideRequest(container);
+    		return execution.insideRequest(getContainer());
     	}
         VRaptorRequestHolder.setRequestForCurrentThread(request);
         T result;
@@ -52,7 +53,7 @@ public class SpringProvider implements ContainerProvider {
             HttpServletRequest webRequest = request.getRequest();
             requestListener.requestInitialized(new ServletRequestEvent(context, webRequest));
             try {
-            	result = execution.insideRequest(container);
+            	result = execution.insideRequest(getContainer());
             } finally {
             	requestListener.requestDestroyed(new ServletRequestEvent(context, webRequest));
             }
@@ -60,6 +61,10 @@ public class SpringProvider implements ContainerProvider {
         	VRaptorRequestHolder.resetRequestForCurrentThread();
         }
         return result;
+    }
+    
+    protected Container getContainer() {
+   	 return container;
     }
 
     public void stop() {

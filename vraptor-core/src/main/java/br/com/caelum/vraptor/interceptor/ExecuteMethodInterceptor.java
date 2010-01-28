@@ -20,6 +20,9 @@ package br.com.caelum.vraptor.interceptor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.core.InterceptorStack;
@@ -36,6 +39,7 @@ public class ExecuteMethodInterceptor implements Interceptor {
 
 	private final MethodInfo info;
 	private final Validator validator;
+	private final static Logger log = LoggerFactory.getLogger(ExecuteMethodInterceptor.class);
 
 	public ExecuteMethodInterceptor(MethodInfo info, Validator validator) {
 		this.info = info;
@@ -73,6 +77,7 @@ public class ExecuteMethodInterceptor implements Interceptor {
 			Throwable cause = e.getCause();
 			if (cause instanceof ValidationException) {
 				// fine... already parsed
+				log.trace("swallowing {}", cause);
 			} else {
 				throw new InterceptionException("an exception was raised while executing resource method", cause);
 			}

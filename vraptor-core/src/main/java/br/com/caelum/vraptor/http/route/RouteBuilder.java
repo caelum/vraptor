@@ -164,15 +164,15 @@ public class RouteBuilder {
 		this.strategy = new FixedMethodStrategy(originalUri, type, method, this.supportedMethods, builder.build(),
 				priority);
 		logger.info(originalUri + " -> " + method.getDeclaringClass().getSimpleName() + "." + method.getName()
-				+ string(method.getParameterTypes()));
+				+ argumentsToString(method.getParameterTypes()));
 	}
 
-	private String string(Class<?>[] parameterTypes) {
+	private static String argumentsToString(Class<?>[] parameterTypes) {
 		StringBuilder builder = new StringBuilder();
 		for (Class<?> type : parameterTypes) {
 			builder.append(type.getSimpleName() + " ");
 		}
-		return builder.toString();
+		return "(" + builder.toString() + ")";
 	}
 
 	private void addParametersInfo(Method method) {

@@ -67,8 +67,9 @@ import com.google.common.base.Joiner;
  * Should be used in one of two ways, either configure the type and invoke the
  * method or pass the method (java reflection) object.
  *
- * If not specified, the built route will have the lowest priority (higher value of priority),
- * so will be the last to be used.
+ * If not specified, the built route will have the lowest priority (higher value
+ * of priority), so will be the last to be used.
+ *
  * @author Guilherme Silveira
  */
 public class RouteBuilder {
@@ -110,12 +111,13 @@ public class RouteBuilder {
 		}
 
 		private String regexFor(Class<?> type) {
-			if (Arrays.asList(Integer.class, Long.class, int.class, long.class, BigInteger.class, char.class, Character.class, Short.class, short.class)
-						.contains(type)) {
+			if (Arrays.asList(Integer.class, Long.class, int.class, long.class, BigInteger.class, char.class,
+					Character.class, Short.class, short.class).contains(type)) {
 				return "-?\\d+";
-			} else if (Arrays.asList(Double.class, BigDecimal.class, double.class, Float.class, float.class).contains(type)) {
+			} else if (Arrays.asList(Double.class, BigDecimal.class, double.class, Float.class, float.class).contains(
+					type)) {
 				return "-?\\d*\\.?\\d+";
-			} else if (Arrays.asList(Boolean.class, boolean.class).contains(type)){
+			} else if (Arrays.asList(Boolean.class, boolean.class).contains(type)) {
 				return "true|false";
 			} else if (Enum.class.isAssignableFrom(type)) {
 				return Joiner.on("|").join(type.getEnumConstants());
@@ -153,16 +155,24 @@ public class RouteBuilder {
 	}
 
 	public void is(PatternBasedType type, PatternBasedType method) {
-		this.strategy = new PatternBasedStrategy(builder.build(), type, method,
-				this.supportedMethods, priority);
+		this.strategy = new PatternBasedStrategy(builder.build(), type, method, this.supportedMethods, priority);
 
 	}
 
 	public void is(Class<?> type, Method method) {
 		addParametersInfo(method);
-		this.strategy = new FixedMethodStrategy(originalUri, type, method, this.supportedMethods,
-				builder.build(), priority);
-		logger.info(originalUri + " --> " + method);
+		this.strategy = new FixedMethodStrategy(originalUri, type, method, this.supportedMethods, builder.build(),
+				priority);
+		logger.info(originalUri + " -> " + method.getDeclaringClass().getSimpleName() + "." + method.getName()
+				+ string(method.getParameterTypes()));
+	}
+
+	private String string(Class<?>[] parameterTypes) {
+		StringBuilder builder = new StringBuilder();
+		for (Class<?> type : parameterTypes) {
+			builder.append(type.getSimpleName() + " ");
+		}
+		return builder.toString();
 	}
 
 	private void addParametersInfo(Method method) {
@@ -187,11 +197,7 @@ public class RouteBuilder {
 		String betweenBraces = "\\}[^\\{]*\\{";
 		String closeBracesUntilEnd = "\\}[^\\{]*$";
 
-		return uri.split(startUntilOpenBraces +
-				or +
-				betweenBraces +
-				or +
-				closeBracesUntilEnd);
+		return uri.split(startUntilOpenBraces + or + betweenBraces + or + closeBracesUntilEnd);
 	}
 
 	/**
@@ -208,6 +214,7 @@ public class RouteBuilder {
 
 	/**
 	 * Changes Route priority
+	 *
 	 * @param priority
 	 * @return
 	 */
@@ -215,7 +222,6 @@ public class RouteBuilder {
 		this.priority = priority;
 		return this;
 	}
-
 
 	public Route build() {
 		if (strategy instanceof NoStrategy) {

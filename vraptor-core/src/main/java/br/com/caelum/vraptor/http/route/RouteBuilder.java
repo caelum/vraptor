@@ -169,8 +169,10 @@ public class RouteBuilder {
 
 	private static String argumentsToString(Class<?>[] parameterTypes) {
 		StringBuilder builder = new StringBuilder();
-		for (Class<?> type : parameterTypes) {
-			builder.append(type.getSimpleName() + " ");
+		for (int i = 0; i < parameterTypes.length; i++) {
+			builder.append(parameterTypes[i].getSimpleName());
+			if (i != parameterTypes.length - 1)
+				builder.append(", ");
 		}
 		return "(" + builder.toString() + ")";
 	}

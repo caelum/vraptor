@@ -34,11 +34,6 @@ public class DefaultResourceMethod implements ResourceMethod {
 		return new DefaultResourceMethod(new DefaultResourceClass(type), method);
 	}
 
-	@Override
-	public String toString() {
-		return "[DefaultResourceMethod: " + method.getDeclaringClass().getSimpleName() + "." + method.getName() + "]";
-	}
-
 	public Method getMethod() {
 		return method;
 	}
@@ -49,6 +44,24 @@ public class DefaultResourceMethod implements ResourceMethod {
 
 	public boolean containsAnnotation(Class<? extends Annotation> annotation) {
 		return method.isAnnotationPresent(annotation);
+	}
+
+	private static String argumentsToString(Class<?>[] parameterTypes) {
+		StringBuilder builder = new StringBuilder();
+		for (int i = 0; i < parameterTypes.length; i++) {
+			builder.append(parameterTypes[i].getSimpleName());
+			if (i != parameterTypes.length - 1)
+				builder.append(", ");
+		}
+		return "(" + builder.toString() + ")";
+	}
+
+	@Override
+	public String toString() {
+		return "[DefaultResourceMethod: "
+				+ method.getDeclaringClass().getSimpleName() + "."
+				+ method.getName()
+				+ argumentsToString(method.getParameterTypes()) + "]";
 	}
 
 }

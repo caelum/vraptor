@@ -9,32 +9,20 @@
 	<classpathentry kind="lib" path="lib/mandatory/cglib-nodep-2.1_3.jar"/>
 	<classpathentry kind="lib" path="lib/mandatory/commons-fileupload-1.2.1.jar"/>
 	<classpathentry kind="lib" path="lib/mandatory/commons-logging.jar"/>
-	<classpathentry kind="lib" path="lib/mandatory/google-collect-1.0-rc2.jar"/>
-	<classpathentry kind="lib" path="lib/mandatory/javassist-3.8.0.GA.jar"/>
-	<classpathentry kind="lib" path="lib/mandatory/jstl.jar"/>
 	<classpathentry kind="lib" path="lib/mandatory/mirror-1.5.1.jar"/>
 	<classpathentry kind="lib" path="lib/mandatory/objenesis-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/mandatory/ognl-2.7.3.jar"/>
 	<classpathentry kind="lib" path="lib/mandatory/paranamer-1.5.jar"/>
-	<classpathentry kind="lib" path="lib/mandatory/standard-1.1.2.jar"/>
 	<classpathentry kind="lib" path="lib/optional/commons-vfs-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/optional/dom4j-1.6.1.jar"/>
 	<classpathentry kind="lib" path="lib/optional/ejb3-persistence-1.0.1.GA.jar"/>
 	<classpathentry kind="lib" path="lib/optional/hamcrest-all-1.2RC3.jar"/>
-	<classpathentry kind="lib" path="lib/optional/hibernate-validator-3.0.0.ga.jar"/>
-	<classpathentry kind="lib" path="lib/optional/iogi.jar"/>
-	<classpathentry kind="lib" path="lib/optional/jmock-2.4.0.jar"/>
-	<classpathentry kind="lib" path="lib/optional/jmock-junit4-2.4.0.jar"/>
 	<classpathentry kind="lib" path="lib/optional/joda-time-1.6.jar"/>
-	<classpathentry kind="lib" path="lib/optional/jsp-api-2.1.jar"/>
 	<classpathentry kind="lib" path="lib/optional/jsr250-api-1.0.jar"/>
-	<classpathentry kind="lib" path="lib/optional/junit-4.5.jar"/>
 	<classpathentry kind="lib" path="lib/optional/picocontainer-2.8.jar"/>
 	<classpathentry kind="lib" path="lib/optional/reflections-0.9.4.jar"/>
 	<classpathentry kind="lib" path="lib/optional/vraptor2-2.6.2.jar"/>
-	<classpathentry kind="lib" path="lib/optional/servlet-api-2.4.jar"/>
 	<classpathentry kind="lib" path="lib/optional/commons-io-1.3.2.jar"/>
-	<classpathentry kind="lib" path="lib/optional/mockito-all-1.8.1.jar"/>
 	<classpathentry kind="lib" path="lib/optional/xpp3_min-1.1.4c.jar"/>
 	<classpathentry kind="lib" path="lib/mandatory/slf4j-api-1.5.8.jar"/>
 	<classpathentry kind="lib" path="lib/mandatory/slf4j-log4j12-1.5.8.jar"/>
@@ -53,5 +41,19 @@
 	<classpathentry kind="lib" path="lib/mandatory/log4j-1.2.15.jar"/>
 	<classpathentry kind="lib" path="lib/mandatory/org.springframework.aspects-3.0.0.RELEASE.jar"/>
 	<classpathentry kind="lib" path="lib/mandatory/xstream-1.3.1.jar"/>
+	<classpathentry kind="lib" path="lib/build/jmock-2.4.0.jar"/>
+	<classpathentry kind="lib" path="lib/build/jmock-junit4-2.4.0.jar"/>
+	<classpathentry kind="lib" path="lib/build/jsp-api-2.1.jar"/>
+	<classpathentry kind="lib" path="lib/build/junit-4.5.jar"/>
+	<classpathentry kind="lib" path="lib/build/mockito-all-1.8.1.jar"/>
+	<classpathentry kind="lib" path="lib/build/servlet-api-2.4.jar"/>
+	<classpathentry kind="lib" path="lib/mandatory/google-collect-1.0.jar"/>
+	<classpathentry kind="lib" path="lib/mandatory/javassist-3.9.0.GA.jar"/>
+	<classpathentry kind="lib" path="lib/mandatory/jstl-api-1.2.jar"/>
+	<classpathentry kind="lib" path="lib/mandatory/jstl-impl-1.2.jar"/>
+	<classpathentry kind="lib" path="lib/optional/antlr-2.7.6.jar"/>
+	<classpathentry kind="lib" path="lib/optional/commons-collections-3.1.jar"/>
+	<classpathentry kind="lib" path="lib/optional/hibernate-validator-3.1.ga.jar"/>
+	<classpathentry kind="lib" path="lib/optional/iogi-0.8.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

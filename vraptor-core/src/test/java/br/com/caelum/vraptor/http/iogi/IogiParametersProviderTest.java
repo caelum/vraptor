@@ -359,11 +359,11 @@ public class IogiParametersProviderTest {
 
     	assertArrayEquals(new Object[] {null}, params);
     }
-    
+
     @Test
     public void returnsNullWhenInstantiatingAStringForWhichThereAreNoParameters() throws Exception {
     	final ResourceMethod method = mockery.methodFor(Cat.class, "setId", String.class);
-    	
+
     	mockery.checking(new Expectations() {
     		{
     			ignoring(mockHttpServletRequest);
@@ -372,7 +372,7 @@ public class IogiParametersProviderTest {
     		}
     	});
     	Object[] params = iogiProvider.getParametersFor(method, errors, null);
-    	
+
     	assertArrayEquals(new Object[] {null}, params);
     }
 
@@ -387,6 +387,9 @@ public class IogiParametersProviderTest {
 
     		allowing(mockNameProvider).parameterNamesFor(with(any(Method.class)));
     		will(returnValue(new String[] {"param"}));
+
+    		allowing(mockContainer).canProvide(MyResource.class);
+    		will(returnValue(true));
 
     		allowing(mockContainer).instanceFor(MyResource.class);
     		will(returnValue(providedInstance));

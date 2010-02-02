@@ -81,8 +81,14 @@ class ComponentScanner extends ClassPathBeanDefinitionScanner {
 						componentType));
 			}
 		} catch (ClassNotFoundException e) {
-			logger.debug("Class " + beanDefinition.getBeanClassName()
+			logger.warn("Class " + beanDefinition.getBeanClassName()
 					+ " was not found during bean definition proccess");
+		}
+		catch (ExceptionInInitializerError e) {
+			// log and rethrow antipattern is needed, this is rally important
+			logger.warn("Class " + beanDefinition.getBeanClassName()
+					+ " has problems during initialization", e.getCause());
+			throw e;
 		}
 	}
 

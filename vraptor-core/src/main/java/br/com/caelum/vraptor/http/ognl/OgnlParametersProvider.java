@@ -108,8 +108,7 @@ public class OgnlParametersProvider implements ParametersProvider {
 		return createViaOgnl(method, errors, bundle);
 	}
 
-	private Object createViaOgnl(ResourceMethod method, List<Message> errors,
-			ResourceBundle bundle) {
+	private Object createViaOgnl(ResourceMethod method, List<Message> errors, ResourceBundle bundle) {
 		Class<?> type = creator.typeFor(method);
 		Object root;
 		try {
@@ -145,10 +144,15 @@ public class OgnlParametersProvider implements ParametersProvider {
 			} catch (NoSuchPropertyException ex) {
 				// TODO optimization: be able to ignore or not
 				if (logger.isDebugEnabled()) {
-					logger.debug("cant find property for expression " + key + ", ignoring", ex);
+					logger.debug("cant find property for expression {} ignoring", key);
+				}
+				if (logger.isTraceEnabled()) {
+					logger.trace("cant find property for expression " + key + ", ignoring. Reason:", ex);
+
 				}
 			} catch (OgnlException e) {
-				// TODO it fails when parameter name is not a valid java identifier... ignoring by now
+				// TODO it fails when parameter name is not a valid java
+				// identifier... ignoring by now
 				if (logger.isDebugEnabled()) {
 					logger.debug("unable to parse expression '" + key + "'", e);
 				}

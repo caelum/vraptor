@@ -76,8 +76,6 @@ public class ViewsPropertiesPageResult implements PageResult {
 	}
 
 	public void forward() {
-    	logger.debug("Forwading...");
-
 		try {
 			forward(this.method);
 		} catch (ServletException e) {

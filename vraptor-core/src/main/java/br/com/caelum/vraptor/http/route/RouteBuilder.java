@@ -167,7 +167,7 @@ public class RouteBuilder {
 				+ argumentsToString(method.getParameterTypes()));
 	}
 
-	private static String argumentsToString(Class<?>[] parameterTypes) {
+	public static String argumentsToString(Class<?>[] parameterTypes) {
 		StringBuilder builder = new StringBuilder();
 		for (int i = 0; i < parameterTypes.length; i++) {
 			builder.append(parameterTypes[i].getSimpleName());

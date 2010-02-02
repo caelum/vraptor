@@ -60,6 +60,7 @@ import br.com.caelum.vraptor.proxy.MethodInvocation;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.SuperMethod;
 import br.com.caelum.vraptor.resource.HttpMethod;
+import br.com.caelum.vraptor.util.Stringnifier;
 
 import com.google.common.base.Joiner;
 
@@ -163,18 +164,7 @@ public class RouteBuilder {
 		addParametersInfo(method);
 		this.strategy = new FixedMethodStrategy(originalUri, type, method, this.supportedMethods, builder.build(),
 				priority);
-		logger.info(originalUri + " -> " + method.getDeclaringClass().getSimpleName() + "." + method.getName()
-				+ argumentsToString(method.getParameterTypes()));
-	}
-
-	public static String argumentsToString(Class<?>[] parameterTypes) {
-		StringBuilder builder = new StringBuilder();
-		for (int i = 0; i < parameterTypes.length; i++) {
-			builder.append(parameterTypes[i].getSimpleName());
-			if (i != parameterTypes.length - 1)
-				builder.append(", ");
-		}
-		return "(" + builder.toString() + ")";
+		logger.info(originalUri + " -> " + Stringnifier.simpleNameFor(method));
 	}
 
 	private void addParametersInfo(Method method) {

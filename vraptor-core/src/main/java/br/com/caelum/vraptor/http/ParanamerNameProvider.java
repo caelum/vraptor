@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
+import br.com.caelum.vraptor.util.Stringnifier;
 
 import com.thoughtworks.paranamer.BytecodeReadingParanamer;
 import com.thoughtworks.paranamer.CachingParanamer;
@@ -46,8 +47,8 @@ public class ParanamerNameProvider implements ParameterNameProvider {
 		try {
 			String[] parameterNames = info.lookupParameterNames(method);
 			if (logger.isDebugEnabled()) {
-				logger.debug("Found parameter names with paranamer for " + method + " as "
-						+ Arrays.toString(parameterNames));
+				logger.debug("Found parameter names with paranamer for "
+						+ Stringnifier.simpleNameFor(method) + " as " + Arrays.toString(parameterNames));
 			}
 
 			// maybe paranamer cache already provides defensive copies?
@@ -55,9 +56,9 @@ public class ParanamerNameProvider implements ParameterNameProvider {
 			System.arraycopy(parameterNames, 0, defensiveCopy, 0, parameterNames.length);
 			return defensiveCopy;
 		} catch (ParameterNamesNotFoundException e) {
-			throw new IllegalStateException("Paranamer were not able to find your parameter names for " + method +
-					"You must compile your code with debug information (javac -g) or register another " +
-					"name provider. Try to use " + DefaultParameterNameProvider.class.getName() + " instead.");
+			throw new IllegalStateException("Paranamer were not able to find your parameter names for " + method
+					+ "You must compile your code with debug information (javac -g) or register another "
+					+ "name provider. Try to use " + DefaultParameterNameProvider.class.getName() + " instead.");
 		}
 	}
 

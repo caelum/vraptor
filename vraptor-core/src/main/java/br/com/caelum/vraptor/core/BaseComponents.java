@@ -115,9 +115,9 @@ import br.com.caelum.vraptor.serialization.RepresentationResult;
 import br.com.caelum.vraptor.serialization.XMLSerialization;
 import br.com.caelum.vraptor.serialization.xstream.XStreamJSONSerialization;
 import br.com.caelum.vraptor.serialization.xstream.XStreamXMLSerialization;
-import br.com.caelum.vraptor.validator.DefaultOutjector;
 import br.com.caelum.vraptor.validator.DefaultValidator;
 import br.com.caelum.vraptor.validator.Outjector;
+import br.com.caelum.vraptor.validator.ReplicatorOutjector;
 import br.com.caelum.vraptor.view.AcceptHeaderToFormat;
 import br.com.caelum.vraptor.view.DefaultAcceptHeaderToFormat;
 import br.com.caelum.vraptor.view.DefaultHttpResult;
@@ -186,7 +186,7 @@ public class BaseComponents {
             ValidationViewsFactory.class,					DefaultValidationViewsFactory.class,
             Result.class, 									DefaultResult.class,
             Validator.class, 								DefaultValidator.class,
-            Outjector.class, 								DefaultOutjector.class,
+            Outjector.class, 								ReplicatorOutjector.class,
             DownloadInterceptor.class, 						DownloadInterceptor.class,
             EmptyResult.class, 								EmptyResult.class,
             ExecuteMethodInterceptor.class, 				ExecuteMethodInterceptor.class,

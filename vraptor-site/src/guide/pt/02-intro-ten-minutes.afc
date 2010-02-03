@@ -49,7 +49,8 @@ public class Produto {
 	private String nome;
 	private String descricao;
 	private Double preco;
-	//getter e setters
+	
+	// getter e setters e métodos de negócio que julgar necessário
 }
 [/java]
 
@@ -105,6 +106,9 @@ A convenção para o nome dos atributos exportados é bastante intuitiva: se for
 como o caso do método acima, o atributo será <tipoDaCollection>List, produtoList no caso;
 se for uma classe qualquer vai ser o nome da classe com a primeira letra minúscula. Se o
 método retorna %%Produto%%, o atributo exportado será %%produto%%.
+
+Veremos em outro capítulo que podemos expor mais de um objeto sem usar o retorno, e sim
+através do %%Result%%, onde podemos dar nome a variável exposta.
 
 [section Criando o ProdutoDao: injeção de Dependências]
 O VRaptor usa fortemente o conceito de Injeção de Dependências e Inversão de Controle.

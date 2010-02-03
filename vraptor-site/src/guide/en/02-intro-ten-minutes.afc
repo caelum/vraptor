@@ -105,6 +105,9 @@ The convention for the attribute names is pretty intuitive: if it is a collectio
 the name will be %%<collection_type>List%%; if it is any other type, the name will be the class name
 with the first letter in lowercase, i.e, if the type is %%Product%%, the name will be %%product%%.
 
+We will see further, in another chapter, that we can outject more than one object using
+%%Result%%, where we can also name each exposed variable to the JSP.
+
 [section Creating ProductDao: Dependency Injection]
 VRaptor widely uses the Dependency Injection and Inversion of Control concept.
 The whole idea is simple: if you need a resource, you won't create it, but will have it ready for 

@@ -20,6 +20,8 @@ package br.com.caelum.vraptor.resource;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
+import br.com.caelum.vraptor.util.Stringnifier;
+
 public class DefaultResourceMethod implements ResourceMethod {
 
 	private final ResourceClass resource;
@@ -46,22 +48,12 @@ public class DefaultResourceMethod implements ResourceMethod {
 		return method.isAnnotationPresent(annotation);
 	}
 
-	private static String argumentsToString(Class<?>[] parameterTypes) {
-		StringBuilder builder = new StringBuilder();
-		for (int i = 0; i < parameterTypes.length; i++) {
-			builder.append(parameterTypes[i].getSimpleName());
-			if (i != parameterTypes.length - 1)
-				builder.append(", ");
-		}
-		return "(" + builder.toString() + ")";
-	}
-
 	@Override
 	public String toString() {
 		return "[DefaultResourceMethod: "
 				+ method.getDeclaringClass().getSimpleName() + "."
 				+ method.getName()
-				+ argumentsToString(method.getParameterTypes()) + "]";
+				+ Stringnifier.simpleNameFor(method) + "]";
 	}
 
 }

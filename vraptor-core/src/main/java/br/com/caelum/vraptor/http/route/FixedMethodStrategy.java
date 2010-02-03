@@ -26,6 +26,7 @@ import br.com.caelum.vraptor.resource.DefaultResourceClass;
 import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.util.Stringnifier;
 
 /**
  * A route strategy which invokes a fixed type's method.
@@ -44,16 +45,18 @@ public class FixedMethodStrategy implements Route {
 
 	private final String originalUri;
 
-	public FixedMethodStrategy(String originalUri, Class<?> type, Method method, Set<HttpMethod> methods, ParametersControl control, int priority) {
+	public FixedMethodStrategy(String originalUri, Class<?> type, Method method, Set<HttpMethod> methods,
+			ParametersControl control, int priority) {
 		this.originalUri = originalUri;
-		this.methods = methods.isEmpty()? EnumSet.allOf(HttpMethod.class) : EnumSet.copyOf(methods);
+		this.methods = methods.isEmpty() ? EnumSet.allOf(HttpMethod.class) : EnumSet.copyOf(methods);
 		this.parameters = control;
 		this.resourceMethod = new DefaultResourceMethod(new DefaultResourceClass(type), method);
 		this.priority = priority;
 	}
 
 	public boolean canHandle(Class<?> type, Method method) {
-		return type.equals(this.resourceMethod.getResource().getType()) && method.equals(this.resourceMethod.getMethod());
+		return type.equals(this.resourceMethod.getResource().getType())
+				&& method.equals(this.resourceMethod.getMethod());
 	}
 
 	public ResourceMethod resourceMethod(MutableRequest request, String uri) {
@@ -69,7 +72,6 @@ public class FixedMethodStrategy implements Route {
 		return parameters.matches(uri);
 	}
 
-
 	public String urlFor(Class<?> type, Method m, Object params) {
 		return parameters.fillUri(params);
 	}
@@ -80,6 +82,7 @@ public class FixedMethodStrategy implements Route {
 
 	@Override
 	public String toString() {
-		return "[FixedMethodStrategy: uri " + originalUri + " methods " + methods + "]";
+		return "[FixedMethodStrategy: " + originalUri + " " + Stringnifier.simpleNameFor(resourceMethod.getMethod())
+				+ " " + methods + "]";
 	}
 }

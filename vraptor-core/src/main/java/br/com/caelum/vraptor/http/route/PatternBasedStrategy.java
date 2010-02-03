@@ -49,11 +49,11 @@ public class PatternBasedStrategy implements Route {
 	private final int priority;
 
 	public PatternBasedStrategy(ParametersControl control, PatternBasedType type, PatternBasedType method,
-				Set<HttpMethod> methods, int priority) {
+			Set<HttpMethod> methods, int priority) {
 		this.control = control;
 		this.type = type;
 		this.method = method;
-		this.methods = methods.isEmpty()? EnumSet.allOf(HttpMethod.class) : EnumSet.copyOf(methods);
+		this.methods = methods.isEmpty() ? EnumSet.allOf(HttpMethod.class) : EnumSet.copyOf(methods);
 		this.priority = priority;
 	}
 
@@ -65,7 +65,7 @@ public class PatternBasedStrategy implements Route {
 		control.fillIntoRequest(uri, request);
 		String webLogic = request.getParameter("webLogic");
 		String webMethod = request.getParameter("webMethod");
-		String typeName = type.apply("webLogic",webLogic);
+		String typeName = type.apply("webLogic", webLogic);
 		try {
 			DefaultResourceClass resource = new DefaultResourceClass(Class.forName(typeName));
 			Method resourceMethod = method(resource.getType(), this.method.apply("webMethod", webMethod));
@@ -79,18 +79,19 @@ public class PatternBasedStrategy implements Route {
 	public EnumSet<HttpMethod> allowedMethods() {
 		return methods;
 	}
+
 	public boolean canHandle(String uri) {
 		return control.matches(uri);
 	}
 
 	private Method method(Class<?> type, String methodName) {
 		Method[] methods = type.getDeclaredMethods();
-		for(Method m :methods) {
-			if(m.getName().equals(methodName) && isEligible(m)) {
+		for (Method m : methods) {
+			if (m.getName().equals(methodName) && isEligible(m)) {
 				return m;
 			}
 		}
-		if(type.getSuperclass().equals(Object.class)) {
+		if (type.getSuperclass().equals(Object.class)) {
 			return null;
 		}
 		return method(type.getSuperclass(), methodName);
@@ -101,10 +102,17 @@ public class PatternBasedStrategy implements Route {
 	}
 
 	public String urlFor(Class<?> type, Method m, Object params) {
-		return control.apply(new String[] {this.type.extract("webLogic", type.getName()), this.method.extract("webMethod", m.getName())});
+		return control.apply(new String[] { this.type.extract("webLogic", type.getName()),
+				this.method.extract("webMethod", m.getName()) });
 	}
 
 	public int getPriority() {
 		return this.priority;
 	}
+
+	@Override
+	public String toString() {
+		return "[PatternBasedStrategy: " + type + " " + method + " " + methods + "]";
+	}
+
 }

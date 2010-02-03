@@ -2,17 +2,17 @@
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource
  * All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); 
- * you may not use this file except in compliance with the License. 
- * You may obtain a copy of the License at 
- * 
- * 	http://www.apache.org/licenses/LICENSE-2.0 
- * 
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an "AS IS" BASIS, 
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
- * See the License for the specific language governing permissions and 
- * limitations under the License. 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * 	http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package br.com.caelum.vraptor.http.route;
@@ -26,14 +26,15 @@ public class PatternBasedType {
 
 	private final List<String> parameters = new ArrayList<String>();
 	private final Pattern pattern;
-	private String originalPattern;
-	private String finalPattern;
+	private final String originalPattern;
+	private final String finalPattern;
 
 	public PatternBasedType(String pattern) {
 		this.originalPattern = pattern;
 		String finalUri = "";
 		String patternUri = "";
 		String paramName = "";
+
 		// not using stringbuffer because this is only run in startup
 		boolean ignore = false;
 		for (int i = 0; i < pattern.length(); i++) {
@@ -55,7 +56,7 @@ public class PatternBasedType {
 				paramName += pattern.charAt(i);
 			}
 		}
-		if(ignore) {
+		if (ignore) {
 			throw new IllegalRouteException("Illegal route contains invalid pattern: " + originalPattern);
 		}
 		this.finalPattern = patternUri;
@@ -67,13 +68,17 @@ public class PatternBasedType {
 	}
 
 	public String apply(String key, String value) {
-		return originalPattern.replace("{"+key+"}", value);
+		return originalPattern.replace("{" + key + "}", value);
 	}
 
 	public String extract(String paramName, String from) {
 		Matcher matcher = pattern.matcher(from);
 		matcher.matches();
-		return matcher.group(parameters.indexOf(paramName)+1);
+		return matcher.group(parameters.indexOf(paramName) + 1);
 	}
 
+	@Override
+	public String toString() {
+		return "[PatternBasedType" + originalPattern + " ]";
+	}
 }

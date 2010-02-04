@@ -60,7 +60,7 @@ public class DefaultStaticContentHandler implements StaticContentHandler {
 
 	public void deferProcessingToContainer(FilterChain filterChain, HttpServletRequest request,
 			HttpServletResponse response) throws IOException, ServletException {
-		logger.trace("Deferring request to container: {} ", request.getRequestURI());
+		logger.debug("Deferring request to container: {} ", request.getRequestURI());
 		filterChain.doFilter(request, response);
 	}
 

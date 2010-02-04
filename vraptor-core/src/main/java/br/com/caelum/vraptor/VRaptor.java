@@ -68,7 +68,6 @@ public class VRaptor implements Filter {
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException,
 			ServletException {
 
-		logger.debug("VRaptor received a new request {}", req);
 
 		if (!(req instanceof HttpServletRequest) || !(res instanceof HttpServletResponse)) {
 			throw new ServletException(
@@ -81,6 +80,8 @@ public class VRaptor implements Filter {
 		if (staticHandler.requestingStaticFile(baseRequest)) {
 			staticHandler.deferProcessingToContainer(chain, baseRequest, baseResponse);
 		} else {
+			logger.debug("VRaptor received a new request {}", req);
+
 			VRaptorRequest mutableRequest = new VRaptorRequest(baseRequest);
 			VRaptorResponse mutableResponse = new VRaptorResponse(baseResponse);
 
@@ -92,8 +93,8 @@ public class VRaptor implements Filter {
 					return null;
 				}
 			});
+			logger.debug("VRaptor ended the request {}", req);
 		}
-		logger.debug("VRaptor ended the request {}", req);
 	}
 
 	public void init(FilterConfig cfg) throws ServletException {

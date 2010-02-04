@@ -32,5 +32,6 @@ public class IndexController {
 	@Path("/")
 	public void index() {
 		result.include("variable", "VRaptor!");
+		result.forwardTo("/WEB-INF/jsp/index/index2.jsp");
 	}
 }

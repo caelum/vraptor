@@ -28,6 +28,7 @@ import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.util.Stringnifier;
 import br.com.caelum.vraptor.validator.ValidationException;
 
 /**
@@ -51,15 +52,18 @@ public class ExecuteMethodInterceptor implements Interceptor {
 		try {
 			Method reflectionMethod = method.getMethod();
 			Object[] parameters = this.info.getParameters();
+
+			log.debug("Invoking {}", Stringnifier.simpleNameFor(reflectionMethod));
 			Object result = reflectionMethod.invoke(resourceInstance, parameters);
+
 			if (validator.hasErrors()) { // method should have thrown
 				// ValidationError
 				throw new InterceptionException(
 						"There are validation errors and you forgot to specify where to go. Please add in your method "
 								+ "something like:\n"
 								+ "validator.onErrorUse(page()).of(AnyController.class).anyMethod();\n"
-								+ "or any view that you like.\n" +
-								"If you didn't add any validation error, it is possible that a conversion error had happened.");
+								+ "or any view that you like.\n"
+								+ "If you didn't add any validation error, it is possible that a conversion error had happened.");
 			}
 
 			if (reflectionMethod.getReturnType().equals(Void.TYPE)) {

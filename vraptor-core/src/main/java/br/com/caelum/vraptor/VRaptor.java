@@ -52,59 +52,61 @@ import br.com.caelum.vraptor.ioc.ContainerProvider;
  * @author Fabio Kung
  */
 public class VRaptor implements Filter {
-    private ContainerProvider provider;
-    private ServletContext servletContext;
+	private ContainerProvider provider;
+	private ServletContext servletContext;
 
-    private StaticContentHandler staticHandler;
+	private StaticContentHandler staticHandler;
 
-    private static final Logger logger = LoggerFactory.getLogger(VRaptor.class);
+	private static final Logger logger = LoggerFactory.getLogger(VRaptor.class);
 
-    public void destroy() {
-        provider.stop();
-        provider = null;
-        servletContext = null;
-    }
+	public void destroy() {
+		provider.stop();
+		provider = null;
+		servletContext = null;
+	}
 
-    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException,
-            ServletException {
+	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException,
+			ServletException {
 
-        if (!(req instanceof HttpServletRequest) || !(res instanceof HttpServletResponse)) {
-            throw new ServletException(
-                    "VRaptor must be run inside a Servlet environment. Portlets and others aren't supported.");
-        }
+		logger.debug("VRaptor received a new request {}", req);
 
-        final HttpServletRequest baseRequest = (HttpServletRequest) req;
-        final HttpServletResponse baseResponse = (HttpServletResponse) res;
+		if (!(req instanceof HttpServletRequest) || !(res instanceof HttpServletResponse)) {
+			throw new ServletException(
+					"VRaptor must be run inside a Servlet environment. Portlets and others aren't supported.");
+		}
 
-        if (staticHandler.requestingStaticFile(baseRequest)) {
-            staticHandler.deferProcessingToContainer(chain, baseRequest, baseResponse);
-            return;
-        }
+		final HttpServletRequest baseRequest = (HttpServletRequest) req;
+		final HttpServletResponse baseResponse = (HttpServletResponse) res;
 
-        VRaptorRequest mutableRequest = new VRaptorRequest(baseRequest);
-        VRaptorResponse mutableResponse = new VRaptorResponse(baseResponse);
+		if (staticHandler.requestingStaticFile(baseRequest)) {
+			staticHandler.deferProcessingToContainer(chain, baseRequest, baseResponse);
+		} else {
+			VRaptorRequest mutableRequest = new VRaptorRequest(baseRequest);
+			VRaptorResponse mutableResponse = new VRaptorResponse(baseResponse);
 
-        final RequestInfo request = new RequestInfo(servletContext, chain, mutableRequest, mutableResponse);
-        provider.provideForRequest(request, new Execution<Object>() {
-            public Object insideRequest(Container container) {
-            	container.instanceFor(EncodingHandler.class).setEncoding(baseRequest, baseResponse);
-                container.instanceFor(RequestExecution.class).execute();
-                return null;
-            }
-        });
-    }
+			final RequestInfo request = new RequestInfo(servletContext, chain, mutableRequest, mutableResponse);
+			provider.provideForRequest(request, new Execution<Object>() {
+				public Object insideRequest(Container container) {
+					container.instanceFor(EncodingHandler.class).setEncoding(baseRequest, baseResponse);
+					container.instanceFor(RequestExecution.class).execute();
+					return null;
+				}
+			});
+		}
+		logger.debug("VRaptor ended the request {}", req);
+	}
 
-    public void init(FilterConfig cfg) throws ServletException {
-        servletContext = cfg.getServletContext();
-        BasicConfiguration config = new BasicConfiguration(servletContext);
-        init(config.getProvider(), new DefaultStaticContentHandler(servletContext));
-        logger.info("VRaptor 3.1.1-SNAP successfuly initialized");
-    }
+	public void init(FilterConfig cfg) throws ServletException {
+		servletContext = cfg.getServletContext();
+		BasicConfiguration config = new BasicConfiguration(servletContext);
+		init(config.getProvider(), new DefaultStaticContentHandler(servletContext));
+		logger.info("VRaptor 3.1.1-SNAP successfuly initialized");
+	}
 
-    void init(ContainerProvider provider, StaticContentHandler handler) {
-        this.provider = provider;
-        this.staticHandler = handler;
-        this.provider.start(servletContext);
-    }
+	void init(ContainerProvider provider, StaticContentHandler handler) {
+		this.provider = provider;
+		this.staticHandler = handler;
+		this.provider.start(servletContext);
+	}
 
 }

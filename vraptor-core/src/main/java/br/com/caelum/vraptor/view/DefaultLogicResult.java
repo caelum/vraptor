@@ -74,7 +74,7 @@ public class DefaultLogicResult implements LogicResult {
 	 * view.
 	 */
 	public <T> T forwardTo(final Class<T> type) {
-		logger.debug("forwarding to {}", type);
+		logger.debug("forwarding to class {}", type.getSimpleName());
 
 		return proxifier.proxify(type, new MethodInvocation<T>() {
 			public Object intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {
@@ -101,7 +101,7 @@ public class DefaultLogicResult implements LogicResult {
 	}
 
 	public <T> T redirectTo(final Class<T> type) {
-		logger.debug("redirecting to {}", type);
+		logger.debug("redirecting to class {}", type.getSimpleName());
 
 		return proxifier.proxify(type, new MethodInvocation<T>() {
 			public Object intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {

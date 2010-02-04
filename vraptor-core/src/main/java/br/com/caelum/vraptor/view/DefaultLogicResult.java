@@ -38,6 +38,7 @@ import br.com.caelum.vraptor.proxy.ProxyInvocationException;
 import br.com.caelum.vraptor.proxy.SuperMethod;
 import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.resource.HttpMethod;
+import br.com.caelum.vraptor.util.Stringnifier;
 
 /**
  * The default implementation of LogicResult.<br>
@@ -79,7 +80,9 @@ public class DefaultLogicResult implements LogicResult {
 		return proxifier.proxify(type, new MethodInvocation<T>() {
 			public Object intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {
 				try {
+					logger.debug("Executing {}", Stringnifier.simpleNameFor(method));
 					Object result = method.invoke(container.instanceFor(type), args);
+
 					Type returnType = method.getGenericReturnType();
 					if (!(returnType == void.class)) {
 						request.setAttribute(extractor.nameFor(returnType), result);

@@ -43,7 +43,7 @@ public class InstantiatedInterceptorHandler implements InterceptorHandler {
 	public void execute(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
 			throws InterceptionException {
 		if (interceptor.accepts(method)) {
-			logger.debug("Interceptor {} being invoked", interceptor.getClass().getName());
+			logger.debug("Invoking interceptor {}", interceptor.getClass().getSimpleName());
 			interceptor.intercept(stack, method, resourceInstance);
 		} else {
 			stack.next(method, resourceInstance);

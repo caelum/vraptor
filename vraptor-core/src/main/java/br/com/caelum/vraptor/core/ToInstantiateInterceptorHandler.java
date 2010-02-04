@@ -50,7 +50,7 @@ public class ToInstantiateInterceptorHandler implements InterceptorHandler {
 					+ ": the container returned null.");
 		}
 		if (interceptor.accepts(method)) {
-			logger.trace("Interceptor {} being invoked", interceptor.getClass().getName());
+			logger.debug("Invoking interceptor {}", interceptor.getClass().getSimpleName());
 			interceptor.intercept(stack, method, resourceInstance);
 		} else {
 			stack.next(method, resourceInstance);

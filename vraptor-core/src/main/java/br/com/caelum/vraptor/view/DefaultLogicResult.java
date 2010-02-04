@@ -85,8 +85,9 @@ public class DefaultLogicResult implements LogicResult {
 						request.setAttribute(extractor.nameFor(returnType), result);
 					}
 					if (!response.isCommitted()) {
-						request.getRequestDispatcher(resolver.pathFor(DefaultResourceMethod.instanceFor(type, method)))
-								.forward(request, response);
+						String path = resolver.pathFor(DefaultResourceMethod.instanceFor(type, method));
+						logger.debug("forwarding to  {}", path);
+						request.getRequestDispatcher(path).forward(request, response);
 					}
 					return null;
 				} catch (Exception e) {
@@ -113,7 +114,11 @@ public class DefaultLogicResult implements LogicResult {
 					String path = request.getContextPath();
 					String url = router.urlFor(type, method, args);
 					includeParametersInFlash(type, method, args);
-					response.sendRedirect(path + url);
+
+					path = path + url;
+
+					logger.debug("redirecting to {}", path);
+					response.sendRedirect(path);
 					return null;
 				} catch (IOException e) {
 					throw new ProxyInvocationException(e);

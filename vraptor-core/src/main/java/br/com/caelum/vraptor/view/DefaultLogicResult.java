@@ -23,6 +23,9 @@ import java.lang.reflect.Type;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.route.Router;
@@ -44,86 +47,92 @@ import br.com.caelum.vraptor.resource.HttpMethod;
  */
 public class DefaultLogicResult implements LogicResult {
 
+	private static final Logger logger = LoggerFactory.getLogger(DefaultLogicResult.class);
+
 	private final Proxifier proxifier;
-    private final Router router;
-    private final MutableRequest request;
-    private final HttpServletResponse response;
-
+	private final Router router;
+	private final MutableRequest request;
+	private final HttpServletResponse response;
 	private final Container container;
-
 	private final PathResolver resolver;
-
 	private final TypeNameExtractor extractor;
 
-    public DefaultLogicResult(Proxifier proxifier, Router router, MutableRequest request,
-            HttpServletResponse response, Container container, PathResolver resolver,
-            TypeNameExtractor extractor) {
-        this.proxifier = proxifier;
-        this.response = response;
-        this.request = request;
-        this.router = router;
+	public DefaultLogicResult(Proxifier proxifier, Router router, MutableRequest request, HttpServletResponse response,
+			Container container, PathResolver resolver, TypeNameExtractor extractor) {
+		this.proxifier = proxifier;
+		this.response = response;
+		this.request = request;
+		this.router = router;
 		this.container = container;
 		this.resolver = resolver;
 		this.extractor = extractor;
-    }
+	}
 
-    /**
-     * This implementation don't actually use request dispatcher for the forwarding.
-     * It runs forwarding logic, and renders its <b>default</b> view.
-     */
-    public <T> T forwardTo(final Class<T> type) {
-        return proxifier.proxify(type, new MethodInvocation<T>() {
-            public Object intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {
-                try {
-                	Object result = method.invoke(container.instanceFor(type), args);
-                	Type returnType = method.getGenericReturnType();
+	/**
+	 * This implementation don't actually use request dispatcher for the
+	 * forwarding. It runs forwarding logic, and renders its <b>default</b>
+	 * view.
+	 */
+	public <T> T forwardTo(final Class<T> type) {
+		logger.debug("forwarding to {}", type);
+
+		return proxifier.proxify(type, new MethodInvocation<T>() {
+			public Object intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {
+				try {
+					Object result = method.invoke(container.instanceFor(type), args);
+					Type returnType = method.getGenericReturnType();
 					if (!(returnType == void.class)) {
-                		request.setAttribute(extractor.nameFor(returnType), result);
-                	}
-					if(!response.isCommitted()) {
-						request.getRequestDispatcher(resolver.pathFor(DefaultResourceMethod.instanceFor(type, method))).forward(request, response);
+						request.setAttribute(extractor.nameFor(returnType), result);
 					}
-                    return null;
-                } catch (Exception e) {
-                    throw new ProxyInvocationException(e);
+					if (!response.isCommitted()) {
+						request.getRequestDispatcher(resolver.pathFor(DefaultResourceMethod.instanceFor(type, method)))
+								.forward(request, response);
+					}
+					return null;
+				} catch (Exception e) {
+					throw new ProxyInvocationException(e);
 				}
-            }
-        });
-    }
+			}
+		});
+	}
 
-    private <T> void includeParametersInFlash(final Class<T> type,
-    		Method method, Object[] args) {
-    	request.getSession().setAttribute(ParametersInstantiatorInterceptor.FLASH_PARAMETERS, args);
-    }
-    public <T> T redirectTo(final Class<T> type) {
-        return proxifier.proxify(type, new MethodInvocation<T>() {
-            public Object intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {
-            	if (!acceptsHttpGet(method)) {
-            		throw new IllegalArgumentException("Your logic method must accept HTTP GET method if you want to redirect to it");
-            	}
-                try {
-                    String path = request.getContextPath();
-                    String url = router.urlFor(type, method, args);
-                    includeParametersInFlash(type, method, args);
-                    response.sendRedirect(path + url);
-                    return null;
-                } catch (IOException e) {
-                    throw new ProxyInvocationException(e);
-                }
-            }
+	private <T> void includeParametersInFlash(final Class<T> type, Method method, Object[] args) {
+		request.getSession().setAttribute(ParametersInstantiatorInterceptor.FLASH_PARAMETERS, args);
+	}
 
-        });
-    }
-    private boolean acceptsHttpGet(Method method) {
-    	if (method.isAnnotationPresent(Get.class)) {
+	public <T> T redirectTo(final Class<T> type) {
+		logger.debug("redirecting to {}", type);
+
+		return proxifier.proxify(type, new MethodInvocation<T>() {
+			public Object intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {
+				if (!acceptsHttpGet(method)) {
+					throw new IllegalArgumentException(
+							"Your logic method must accept HTTP GET method if you want to redirect to it");
+				}
+				try {
+					String path = request.getContextPath();
+					String url = router.urlFor(type, method, args);
+					includeParametersInFlash(type, method, args);
+					response.sendRedirect(path + url);
+					return null;
+				} catch (IOException e) {
+					throw new ProxyInvocationException(e);
+				}
+			}
+
+		});
+	}
+
+	private boolean acceptsHttpGet(Method method) {
+		if (method.isAnnotationPresent(Get.class)) {
 			return true;
 		}
-    	for (HttpMethod httpMethod : HttpMethod.values()) {
+		for (HttpMethod httpMethod : HttpMethod.values()) {
 			if (method.isAnnotationPresent(httpMethod.getAnnotation())) {
 				return false;
 			}
 		}
-    	return true;
-    }
+		return true;
+	}
 
 }

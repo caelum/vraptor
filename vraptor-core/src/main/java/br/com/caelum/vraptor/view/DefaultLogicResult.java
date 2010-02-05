@@ -75,8 +75,6 @@ public class DefaultLogicResult implements LogicResult {
 	 * view.
 	 */
 	public <T> T forwardTo(final Class<T> type) {
-		logger.debug("forwarding to class {}", type.getSimpleName());
-
 		return proxifier.proxify(type, new MethodInvocation<T>() {
 			public Object intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {
 				try {
@@ -89,7 +87,7 @@ public class DefaultLogicResult implements LogicResult {
 					}
 					if (!response.isCommitted()) {
 						String path = resolver.pathFor(DefaultResourceMethod.instanceFor(type, method));
-						logger.debug("forwarding to  {}", path);
+						logger.debug("Forwarding to {}", path);
 						request.getRequestDispatcher(path).forward(request, response);
 					}
 					return null;

@@ -49,45 +49,56 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 
 public class DefaultLogicResultTest {
 
-    private LogicResult logicResult;
+	private LogicResult logicResult;
 
-    @Mock private Router router;
-    @Mock private HttpServletResponse response;
-    @Mock private MutableRequest request;
-	@Mock private Container container;
-	@Mock private PathResolver resolver;
-	@Mock private TypeNameExtractor extractor;
-	@Mock private HttpSession session;
-	@Mock private RequestDispatcher dispatcher;
+	@Mock
+	private Router router;
+	@Mock
+	private HttpServletResponse response;
+	@Mock
+	private MutableRequest request;
+	@Mock
+	private Container container;
+	@Mock
+	private PathResolver resolver;
+	@Mock
+	private TypeNameExtractor extractor;
+	@Mock
+	private HttpSession session;
+	@Mock
+	private RequestDispatcher dispatcher;
 
-    public static class MyComponent {
-    	int calls = 0;
-        public void base() {
-        	calls++;
-        }
+	public static class MyComponent {
+		int calls = 0;
 
-        @Post
-        public void annotated() {
+		public void base() {
+			calls++;
+		}
 
-        }
-        @Get
-        public void annotatedWithGet() {
+		@Post
+		public void annotated() {
 
-        }
+		}
 
-        public String returnsValue() {
-        	return "A value";
-        }
-    }
+		@Get
+		public void annotatedWithGet() {
 
-    @Before
-    public void setup() {
-    	MockitoAnnotations.initMocks(this);
+		}
 
-    	when(request.getSession()).thenReturn(session);
+		public String returnsValue() {
+			return "A value";
+		}
+	}
 
-		this.logicResult = new DefaultLogicResult(new DefaultProxifier(), router, request, response, container, resolver, extractor);
-    }
+	@Before
+	public void setup() {
+		MockitoAnnotations.initMocks(this);
+
+		when(request.getSession()).thenReturn(session);
+
+		this.logicResult = new DefaultLogicResult(new DefaultProxifier(), router, request, response, container,
+				resolver, extractor);
+	}
 
 	@Test
 	public void shouldIncludeReturnValueOnForward() throws Exception {
@@ -99,6 +110,7 @@ public class DefaultLogicResultTest {
 		verify(dispatcher).forward(request, response);
 		verify(request).setAttribute("string", "A value");
 	}
+
 	@Test
 	public void shouldExecuteTheLogicAndRedirectToItsViewOnForward() throws Exception {
 		final MyComponent component = givenDispatcherWillBeReturnedWhenRequested();
@@ -110,7 +122,6 @@ public class DefaultLogicResultTest {
 		verify(dispatcher).forward(request, response);
 	}
 
-
 	private MyComponent givenDispatcherWillBeReturnedWhenRequested() {
 		final MyComponent component = new MyComponent();
 		when(container.instanceFor(MyComponent.class)).thenReturn(component);
@@ -118,6 +129,7 @@ public class DefaultLogicResultTest {
 		when(request.getRequestDispatcher("Abc123")).thenReturn(dispatcher);
 		return component;
 	}
+
 	@Test
 	public void shouldForwardToMethodsDefaultViewWhenResponseIsNotCommited() throws Exception {
 		givenDispatcherWillBeReturnedWhenRequested();
@@ -127,6 +139,7 @@ public class DefaultLogicResultTest {
 
 		verify(dispatcher).forward(request, response);
 	}
+
 	@Test
 	public void shouldNotForwardToMethodsDefaultViewWhenResponseIsCommited() throws Exception {
 		givenDispatcherWillBeReturnedWhenRequested();
@@ -136,48 +149,49 @@ public class DefaultLogicResultTest {
 
 		verify(dispatcher, never()).forward(request, response);
 	}
+
 	@Test
 	public void shouldPutParametersOnFlashScopeOnRedirect() throws Exception {
 
 		logicResult.redirectTo(MyComponent.class).base();
 
-		verify(session).setAttribute(
-				eq(ParametersInstantiatorInterceptor.FLASH_PARAMETERS),
-				any(Object.class));
+		verify(session).setAttribute(eq(ParametersInstantiatorInterceptor.FLASH_PARAMETERS), any(Object.class));
 	}
 
-    @Test
-    public void clientRedirectingWillRedirectToTranslatedUrl() throws NoSuchMethodException, IOException {
+	@Test
+	public void clientRedirectingWillRedirectToTranslatedUrl() throws NoSuchMethodException, IOException {
 
-        final String url = "custom_url";
-        when(request.getContextPath()).thenReturn("/context");
-        when(router.urlFor(MyComponent.class, MyComponent.class.getDeclaredMethod("base"))).thenReturn(url);
+		final String url = "custom_url";
+		when(request.getContextPath()).thenReturn("/context");
+		when(router.urlFor(MyComponent.class, MyComponent.class.getDeclaredMethod("base"))).thenReturn(url);
 
-        logicResult.redirectTo(MyComponent.class).base();
+		logicResult.redirectTo(MyComponent.class).base();
 
-        verify(response).sendRedirect("/context" + url);
-    }
+		verify(response).sendRedirect("/context" + url);
+	}
 
-    @Test
+	@Test
 	public void canRedirectWhenLogicMethodIsNotAnnotatedWithHttpMethods() throws Exception {
 
-    	logicResult.redirectTo(MyComponent.class).base();
+		logicResult.redirectTo(MyComponent.class).base();
 
-    	verify(response).sendRedirect(any(String.class));
+		verify(response).sendRedirect(any(String.class));
 	}
-    @Test
-    public void canRedirectWhenLogicMethodIsAnnotatedWithHttpGetMethod() throws Exception {
-    	logicResult.redirectTo(MyComponent.class).annotatedWithGet();
 
-    	verify(response).sendRedirect(any(String.class));
-    }
-    @Test
-    public void cannotRedirectWhenLogicMethodIsAnnotatedWithAnyHttpMethodButGet() throws Exception {
-    	try {
-    		logicResult.redirectTo(MyComponent.class).annotated();
-    		fail("Expected IllegalArgumentException");
-    	} catch (IllegalArgumentException e) {
-    		verify(response, never()).sendRedirect(any(String.class));
+	@Test
+	public void canRedirectWhenLogicMethodIsAnnotatedWithHttpGetMethod() throws Exception {
+		logicResult.redirectTo(MyComponent.class).annotatedWithGet();
+
+		verify(response).sendRedirect(any(String.class));
+	}
+
+	@Test
+	public void cannotRedirectWhenLogicMethodIsAnnotatedWithAnyHttpMethodButGet() throws Exception {
+		try {
+			logicResult.redirectTo(MyComponent.class).annotated();
+			fail("Expected IllegalArgumentException");
+		} catch (IllegalArgumentException e) {
+			verify(response, never()).sendRedirect(any(String.class));
 		}
-    }
+	}
 }

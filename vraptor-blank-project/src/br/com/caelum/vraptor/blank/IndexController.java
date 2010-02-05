@@ -33,4 +33,5 @@ public class IndexController {
 	public void index() {
 		result.include("variable", "VRaptor!");
 	}
+
 }

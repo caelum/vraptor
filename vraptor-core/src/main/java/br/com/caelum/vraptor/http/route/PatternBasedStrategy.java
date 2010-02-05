@@ -112,6 +112,7 @@ public class PatternBasedStrategy implements Route {
 
 	@Override
 	public String toString() {
-		return String.format("[PatternBasedStrategy: %-50s %-50s %s]", type ,method, methods);
+		return String.format("[PatternBasedStrategy: %-50s %-50s %s]", type, method, methods.size() == HttpMethod
+				.values().length ? "ALL" : methods);
 	}
 }

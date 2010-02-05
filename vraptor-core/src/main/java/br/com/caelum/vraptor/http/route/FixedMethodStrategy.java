@@ -82,7 +82,7 @@ public class FixedMethodStrategy implements Route {
 
 	@Override
 	public String toString() {
-		return String.format("[FixedMethodStrategy: %-70s   %-70s    %s]", originalUri, Stringnifier
-				.simpleNameFor(resourceMethod.getMethod()), methods);
+		return String.format("[FixedMethodStrategy: %-65s %-70s %s]", originalUri, Stringnifier
+				.simpleNameFor(resourceMethod.getMethod()), methods.size() == HttpMethod.values().length ? "ALL" : methods);
 	}
 }

@@ -10,6 +10,31 @@
 	<description>Java web MVC framework for fast and maintainable development</description>
 	<url>http://vraptor.caelum.com.br</url>
 
+	<developers>
+		<developer>
+			<id>lucascs</id>
+			<name>Lucas Cavalcanti</name>
+			<email>lucasmrtuner@gmail.com</email>
+			<organization>Caelum</organization>
+			<organizationUrl>http://www.caelum.com.br</organizationUrl>
+			<roles>
+				<role>developer</role>
+			</roles>
+			<timezone>-3</timezone>
+		</developer>
+		<developer>
+			<id>peas</id>
+			<name>Paulo Silveira</name>
+			<email>paulo.silveira@caelum.com.br</email>
+			<organization>Caelum</organization>
+			<organizationUrl>http://www.caelum.com.br</organizationUrl>
+			<roles>
+				<role>developer</role>
+			</roles>
+			<timezone>-3</timezone>
+		</developer>
+	</developers>
+
 	<organization>
 		<name>Caelum</name>
 		<url>http://www.caelum.com.br</url>
@@ -24,6 +49,7 @@
 		</license>
 	</licenses>
 	<scm>
+		<url>http://github.com/caelum/vraptor</url>
 		<connection>scm:git:git://github.com/caelum/vraptor</connection>
 		<developerConnection>scm:git:[fetch=]git://github.com/caelum/vraptor[push=]ssh://git@github.com:caelum/vraptor.git</developerConnection>
 	</scm>

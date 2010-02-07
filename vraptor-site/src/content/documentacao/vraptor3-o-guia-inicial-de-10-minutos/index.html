@@ -149,7 +149,8 @@ representar o produto, e vamos us&aacute;-la para guardar produtos no banco, usa
 &nbsp;&nbsp;&nbsp; </span><span class="java4">private </span><span class="java10">String nome;<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java4">private </span><span class="java10">String descricao;<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java4">private </span><span class="java10">Double preco;<br />
-&nbsp;&nbsp;&nbsp; </span><span class="java3">//getter e setters<br />
+&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java3">// getter e setters e m&eacute;todos de neg&oacute;cio que julgar necess&aacute;rio<br />
 </span><span class="java8">}</span></code></div>
 	    	<span class="paragraph">Precisamos tamb&eacute;m de uma classe que vai <em class="italic">controlar</em> o cadastro de produtos, tratando requisi&ccedil;&otilde;es
 web. Essa classe vai ser o <code class="inlineCode">Controller</code> de produtos:</span>
@@ -189,6 +190,8 @@ vai existir um atributo chamado <strong class="definition">produtoList</strong> 
 como o caso do m&eacute;todo acima, o atributo ser&aacute; &lt;tipoDaCollection&gt;List, produtoList no caso;
 se for uma classe qualquer vai ser o nome da classe com a primeira letra min&uacute;scula. Se o
 m&eacute;todo retorna <code class="inlineCode">Produto</code>, o atributo exportado ser&aacute; <code class="inlineCode">produto</code>.</span>
+	    	<span class="paragraph">Veremos em outro cap&iacute;tulo que podemos expor mais de um objeto sem usar o retorno, e sim
+atrav&eacute;s do <code class="inlineCode">Result</code>, onde podemos dar nome a vari&aacute;vel exposta.</span>
 		
 
 <h3 class="section">Criando o ProdutoDao: injeção de Dependências</h3>

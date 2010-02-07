@@ -12,8 +12,7 @@
 	<scm>
 		<url>http://github.com/caelum/vraptor</url>
 		<connection>scm:git:git://github.com/caelum/vraptor</connection>
-		<developerConnection>scm:git:git@github.com:caelum/vraptor.git
-		</developerConnection>
+		<developerConnection>scm:git:git@github.com:caelum/vraptor.git</developerConnection>
 	</scm>
 </project>
 

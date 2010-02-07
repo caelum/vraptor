@@ -51,7 +51,7 @@
 	<scm>
 		<url>http://github.com/caelum/vraptor</url>
 		<connection>scm:git:git://github.com/caelum/vraptor</connection>
-		<developerConnection>scm:git:[fetch=]git://github.com/caelum/vraptor[push=]ssh://git@github.com:caelum/vraptor.git</developerConnection>
+		<developerConnection>scm:git:git@github.com:caelum/vraptor.git</developerConnection>
 	</scm>
 	<dependencies>
 		<!-- mandatory -->

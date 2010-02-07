@@ -1,13 +1,19 @@
 <project>
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>br.com.caelum</groupId>
-  <artifactId>vraptor-parent</artifactId>
-  <version>3.1.1-SNAPSHOT</version>
-  <name>VRaptor3 - Parent</name>
-  <packaging>pom</packaging>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>br.com.caelum</groupId>
+	<artifactId>vraptor-parent</artifactId>
+	<version>3.1.1-SNAPSHOT</version>
+	<name>VRaptor3 - Parent</name>
+	<packaging>pom</packaging>
 
-  <modules>
-    <module>vraptor-core</module>
-  </modules>
+	<modules>
+		<module>vraptor-core</module>
+	</modules>
+	<scm>
+		<url>http://github.com/caelum/vraptor</url>
+		<connection>scm:git:git://github.com/caelum/vraptor</connection>
+		<developerConnection>scm:git:git@github.com:caelum/vraptor.git
+		</developerConnection>
+	</scm>
 </project>
 

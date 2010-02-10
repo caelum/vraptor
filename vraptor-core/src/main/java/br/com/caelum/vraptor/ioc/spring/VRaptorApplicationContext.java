@@ -87,11 +87,19 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
 		registerCustomComponentsOn(beanFactory);
 
 		{
-			logger.info("Scanning WEB-INF/classes: " + config.getWebinfClassesDirectory());
-			ComponentScanner scanner = new ComponentScanner(beanFactory, container);
-			scanner.setResourcePattern("**/*.class");
-			scanner.setResourceLoader(new WebinfClassesPatternResolver(config.getWebinfClassesDirectory()));
-			scanner.scan("");
+			String directory = config.getWebinfClassesDirectory();
+			if (directory != null) {
+				logger.info("Scanning WEB-INF/classes: " + directory);
+				ComponentScanner scanner = new ComponentScanner(beanFactory, container);
+				scanner.setResourcePattern("**/*.class");
+				scanner.setResourceLoader(new WebinfClassesPatternResolver(config.getWebinfClassesDirectory()));
+				scanner.scan("");
+			} else {
+				logger
+						.warn("Cant invoke ServletContext.getRealPath. Some application servers, as WebLogic, must be configured to be able to do so."
+								+ "Not scanning WEB-INF/classes for VRaptor and Spring components.");
+			}
+
 		}
 		if (config.hasBasePackages()) {
 			ComponentScanner scanner = new ComponentScanner(beanFactory, container);
@@ -137,7 +145,6 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
 
 		registerOn(beanFactory, StereotypedBeansRegistrar.class);
 		registerOn(beanFactory, DefaultSpringLocator.class);
-
 
 		config.getServletContext();
 	}
@@ -213,7 +220,7 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
 	 * From
 	 * org.springframework.context.annotation.ClassPathBeanDefinitionScanner
 	 * #applyScope()
-	 *
+	 * 
 	 * @param definition
 	 * @param scopeMetadata
 	 * @return

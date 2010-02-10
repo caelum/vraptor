@@ -108,6 +108,16 @@
 		
 
 
+<h3 class="section">3.1.1</h3>
+	    	<ul class="list"><li><span class="paragraph">VRaptor 3 publicado no reposit&oacute;rio central do maven!</span><div class="xml"><code class="xml"><span class="textag">&lt;dependency&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;groupId&gt;</span><span class="texnormal">br.com.caelum</span><span class="textag">&lt;/groupId&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;artifactId&gt;</span><span class="texnormal">vraptor</span><span class="textag">&lt;/artifactId&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;version&gt;</span><span class="texnormal">3.1.1</span><span class="textag">&lt;/version&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal"></span><span class="textag">&lt;/dependency&gt;</span></code></div></li><li><span class="paragraph">nova implementa&ccedil;&atilde;o do Outjector. Agora quando acontecem erros de valida&ccedil;&atilde;o os objetos populados s&atilde;o
+replicados para a pr&oacute;xima requisi&ccedil;&atilde;o, e n&atilde;o mais os par&acirc;metros do request, prevenindo class cast exceptions
+nas taglibs</span></li><li><span class="paragraph">fixados alguns bugs da compatibilidade com o VRaptor 2</span></li></ul>
+		
+
 <h3 class="section">3.1.0</h3>
 	    	<ul class="list"><li><span class="paragraph">agora &eacute; poss&iacute;vel serializar cole&ccedil;&otilde;es usando result.use(xml()) e result.use(json())</span></li><li><span class="paragraph">novo escopo @PrototypeScoped, que cria sempre uma nova inst&acirc;ncia da classe anotada cada vez que
 ela for requisitada.</span></li><li><span class="paragraph">nova view: result.use(Results.representation()).from(objeto).serialize();

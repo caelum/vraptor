@@ -1,6 +1,7 @@
 [chapter ChangeLog]
 
 [section 3.1.1]
+[list]
 * VRaptor 3 publicado no repositório central do maven!
 [xml]
 <dependency>
@@ -13,7 +14,7 @@
 replicados para a próxima requisição, e não mais os parâmetros do request, prevenindo class cast exceptions
 nas taglibs
 * fixados alguns bugs da compatibilidade com o VRaptor 2
-
+[/list]
 [section 3.1.0]
 [list]
 * agora é possível serializar coleções usando result.use(xml()) e result.use(json())

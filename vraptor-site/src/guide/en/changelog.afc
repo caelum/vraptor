@@ -1,5 +1,18 @@
 [chapter ChangeLog]
 
+[section 3.1.1]
+* VRaptor 3 was published on Maven central repository!
+[xml]
+<dependency>
+	<groupId>br.com.caelum</groupId>
+	<artifactId>vraptor</artifactId>
+	<version>3.1.1</version>
+</dependency>
+[/xml]
+* new implementation for Outjector. Now when there are validation errors actual objects are replicated
+to the next request, not string parameters as before, preventing class cast exceptions on taglibs.
+* bugfixes on VRaptor 2 compatibility
+
 [section 3.1.0]
 [list]
 * it is now possible to serialize collections via result.use(xml()) or result.use(json()).

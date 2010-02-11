@@ -43,7 +43,6 @@ import br.com.caelum.vraptor.view.Status;
  * @author guilherme silveira
  * @author pedro mariano
  */
-@SuppressWarnings("unchecked")
 @RequestScoped
 public class ResourceControllerInterceptor<T extends HypermediaResource> implements Interceptor {
 

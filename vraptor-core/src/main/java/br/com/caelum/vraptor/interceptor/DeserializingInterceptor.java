@@ -61,12 +61,12 @@ public class DeserializingInterceptor implements Interceptor {
 
 	public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws InterceptionException {
 		Consumes consumesAnnotation = method.getMethod().getAnnotation(Consumes.class);
-		List<String> supportedMimeTypes =  Arrays.asList(consumesAnnotation.value());
+		List<String> supported =  Arrays.asList(consumesAnnotation.value());
 
 		String contentType = request.getContentType();
-		if (!supportedMimeTypes.contains(contentType)) {
+		if (!supported.isEmpty() && !supported.contains(contentType)) {
 			String errorMessage = String.format("Request with media type [%s]. Expecting one of %s.",
-							contentType, supportedMimeTypes);
+							contentType, supported);
 			result.sendError(UNSUPPORTED_MEDIA_TYPE, errorMessage);
 			return;
 		}

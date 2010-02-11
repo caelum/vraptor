@@ -61,6 +61,9 @@ public class DeserializingInterceptorTest {
 		@Consumes("application/xml")
 		public void consumeXml() {}
 
+		@Consumes()
+		public void consumesAnything() {}
+
 		public void doesntConsume() {}
 	}
 	@Test
@@ -108,6 +111,35 @@ public class DeserializingInterceptorTest {
 		assertEquals(methodInfo.getParameters()[0], "abc");
 		assertEquals(methodInfo.getParameters()[1], "def");
 	}
+	
+	@Test
+	public void willDeserializeForAnyContentTypeIfPossible() throws Exception {
+		methodInfo.setParameters(new Object[2]);
+		final DefaultResourceMethod consumesAnything = new DefaultResourceMethod(null, DummyResource.class.getDeclaredMethod("consumesAnything"));
+		mockery.checking(new Expectations() {{
+			allowing(request).getInputStream();
+
+			allowing(request).getContentType();
+			will(returnValue("application/xml"));
+
+			Deserializer deserializer = mockery.mock(Deserializer.class);
+
+			one(deserializers).deserializerFor("application/xml", container);
+			will(returnValue(deserializer));
+
+			one(deserializer).deserialize(null, consumesAnything);
+			will(returnValue(new Object[] {"abc", "def"}));
+
+			one(stack).next(consumesAnything, null);
+
+		}});
+
+		interceptor.intercept(stack, consumesAnything, null);
+
+		assertEquals(methodInfo.getParameters()[0], "abc");
+		assertEquals(methodInfo.getParameters()[1], "def");
+	}
+	
 	@Test
 	public void willSetOnlyNonNullParameters() throws Exception {
 		methodInfo.setParameters(new Object[] {"original1", "original2"});

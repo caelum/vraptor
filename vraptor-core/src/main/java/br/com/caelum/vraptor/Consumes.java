@@ -29,9 +29,9 @@ import java.lang.annotation.Target;
  * Indicates that the resource method expects the specified MIME content-types
  * in the request.
  *
- * @author Lucas Cavalcanti, Rafael Ferreira
+ * @author Lucas Cavalcanti, Rafael Ferreira, GUilherme Silveira
  * @since 3.0.2
  */
 public @interface Consumes {
-	String[] value();
+	String[] value() default {};
 }

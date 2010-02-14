@@ -37,7 +37,7 @@ public class DefaultRepresentationResultTest {
 
 		Serializer serializer = representation.from(new Object());
 
-		assertThat(serializer, is(instanceOf(NullSerializer.class)));
+		assertThat(serializer, is(instanceOf(IgnoringSerializer.class)));
 		verify(result).forward();
 	}
 	@Test

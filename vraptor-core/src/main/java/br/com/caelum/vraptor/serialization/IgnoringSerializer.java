@@ -21,8 +21,8 @@ package br.com.caelum.vraptor.serialization;
  * @author Jose Donizetti
  * @since 3.0.3
  */
-public class NullSerializer implements Serializer {
-
+public class IgnoringSerializer implements Serializer {
+	
 	public Serializer exclude(String... names) {
 		return this;
 	}

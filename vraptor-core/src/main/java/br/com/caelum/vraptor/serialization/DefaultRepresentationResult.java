@@ -46,7 +46,8 @@ public class DefaultRepresentationResult implements RepresentationResult {
 				return serialization.from(object);
 			}
 		}
+		// if content negotiation fails, relies to html
 		result.forward();
-		return new NullSerializer();
+		return new IgnoringSerializer();
 	}
 }

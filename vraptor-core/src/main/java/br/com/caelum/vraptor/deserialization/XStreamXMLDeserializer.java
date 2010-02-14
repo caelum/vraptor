@@ -74,10 +74,10 @@ public class XStreamXMLDeserializer implements XMLDeserializer {
 		}
 	}
 
-	private void aliasParams(Method javaMethod, Class<?>[] types, XStream xStream) {
-		String[] names = provider.parameterNamesFor(javaMethod);
+	private void aliasParams(Method method, Class<?>[] types, XStream deserializer) {
+		String[] names = provider.parameterNamesFor(method);
 		for (int i = 0; i < names.length; i++) {
-			xStream.alias(names[i], types[i]);
+			deserializer.alias(names[i], types[i]);
 		}
 	}
 

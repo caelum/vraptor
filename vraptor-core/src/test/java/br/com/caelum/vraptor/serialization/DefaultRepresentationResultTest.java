@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.http.FormatResolver;
+import br.com.caelum.vraptor.restfulie.RestHeadersHandler;
 import br.com.caelum.vraptor.view.PageResult;
 
 public class DefaultRepresentationResultTest {
@@ -22,13 +23,14 @@ public class DefaultRepresentationResultTest {
 	@Mock private FormatResolver formatResolver;
 	@Mock private Serialization serialization;
 	@Mock private PageResult result;
+	@Mock private RestHeadersHandler headerHandler;
 
 	private RepresentationResult representation;
 
 	@Before
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
-		representation = new DefaultRepresentationResult(formatResolver, result, Arrays.asList(serialization));
+		representation = new DefaultRepresentationResult(formatResolver, result, Arrays.asList(serialization), headerHandler);
 	}
 
 	@Test
@@ -62,4 +64,8 @@ public class DefaultRepresentationResultTest {
 
 		verify(serialization, never()).from(object);
 	}
+	
+	// @Test
+	// should invoke header if hypermedia resource
+	
 }

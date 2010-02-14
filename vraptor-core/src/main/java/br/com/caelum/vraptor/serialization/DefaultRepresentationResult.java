@@ -18,6 +18,8 @@ package br.com.caelum.vraptor.serialization;
 import java.util.List;
 
 import br.com.caelum.vraptor.http.FormatResolver;
+import br.com.caelum.vraptor.restfulie.RestHeadersHandler;
+import br.com.caelum.vraptor.restfulie.hypermedia.HypermediaResource;
 import br.com.caelum.vraptor.view.PageResult;
 
 /**
@@ -32,14 +34,19 @@ public class DefaultRepresentationResult implements RepresentationResult {
 	private final FormatResolver formatResolver;
 	private List<Serialization> serializations;
 	private final PageResult result;
+	private final RestHeadersHandler headersHandler;
 
-	public DefaultRepresentationResult(FormatResolver formatResolver, PageResult result, List<Serialization> serializations) {
+	public DefaultRepresentationResult(FormatResolver formatResolver, PageResult result, List<Serialization> serializations, RestHeadersHandler headersHandler) {
 		this.formatResolver = formatResolver;
 		this.result = result;
 		this.serializations = serializations;
+		this.headersHandler = headersHandler;
 	}
 
 	public <T> Serializer from(T object) {
+		if(HypermediaResource.class.isAssignableFrom(object.getClass())) {
+			headersHandler.handle(HypermediaResource.class.cast(object));
+		}
 		String format = formatResolver.getAcceptFormat();
 		for (Serialization serialization : serializations) {
 			if (serialization.accepts(format)) {

@@ -109,6 +109,8 @@ import br.com.caelum.vraptor.resource.DefaultMethodNotAllowedHandler;
 import br.com.caelum.vraptor.resource.DefaultResourceNotFoundHandler;
 import br.com.caelum.vraptor.resource.MethodNotAllowedHandler;
 import br.com.caelum.vraptor.resource.ResourceNotFoundHandler;
+import br.com.caelum.vraptor.restfulie.RestHeadersHandler;
+import br.com.caelum.vraptor.restfulie.headers.DefaultRestHeadersHandler;
 import br.com.caelum.vraptor.serialization.DefaultRepresentationResult;
 import br.com.caelum.vraptor.serialization.JSONSerialization;
 import br.com.caelum.vraptor.serialization.RepresentationResult;
@@ -206,7 +208,8 @@ public class BaseComponents {
             JSONSerialization.class,						XStreamJSONSerialization.class,
             RepresentationResult.class,						DefaultRepresentationResult.class,
             FormatResolver.class,							DefaultFormatResolver.class,
-            Configuration.class,							ApplicationConfiguration.class
+            Configuration.class,							ApplicationConfiguration.class,
+            RestHeadersHandler.class,						DefaultRestHeadersHandler.class
     );
 
     @SuppressWarnings("unchecked")

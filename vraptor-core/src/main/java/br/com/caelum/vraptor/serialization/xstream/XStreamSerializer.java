@@ -46,7 +46,7 @@ public class XStreamSerializer implements Serializer {
 
 	private final XStream xstream;
 	private final Writer writer;
-	private Object toSerialize;
+	private Object root;
 	private final Multimap<Class<?>, String> excludes = LinkedListMultimap.create();
 	private Set<Class<?>> elementTypes;
 
@@ -83,7 +83,7 @@ public class XStreamSerializer implements Serializer {
 
 	private Set<Class<?>> getParentTypesFor(String name) {
 		if (elementTypes == null) {
-			Class<?> type = toSerialize.getClass();
+			Class<?> type = root.getClass();
 			return Collections.<Class<?>>singleton(getParentType(name, type));
 		} else {
 			Set<Class<?>> result = new HashSet<Class<?>>();
@@ -122,11 +122,11 @@ public class XStreamSerializer implements Serializer {
 			for (Class<?> type : elementTypes) {
 				excludeNonPrimitiveFields(type);
 			}
-			this.toSerialize = list;
+			this.root = list;
 		} else {
 			Class<?> type = object.getClass();
 			excludeNonPrimitiveFields(type);
-			this.toSerialize = object;
+			this.root = object;
 		}
 		return this;
 	}
@@ -192,7 +192,7 @@ public class XStreamSerializer implements Serializer {
 		for (Entry<Class<?>, String> exclude : excludes.entries()) {
 			xstream.omitField(exclude.getKey(), exclude.getValue());
 		}
-		xstream.toXML(toSerialize, writer);
+		xstream.toXML(root, writer);
 	}
 
 

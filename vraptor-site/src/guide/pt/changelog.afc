@@ -1,5 +1,11 @@
 [chapter ChangeLog]
 
+[section 3.1.2 (in dev]
+
+[list]
+* Encoding agora suportado quando faz upload de arquivos no Google App Engine
+[/list]
+
 [section 3.1.1]
 [list]
 * VRaptor 3 publicado no repositório central do maven!

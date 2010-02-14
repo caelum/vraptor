@@ -16,6 +16,7 @@
  */
 package br.com.caelum.vraptor.interceptor.multipart;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 import java.util.List;
 
@@ -54,7 +55,7 @@ public class MultipartItemsProcessor {
     	Multimap<String, String> params = LinkedListMultimap.create();
         for (FileItem item : items) {
             if (item.isFormField()) {
-                params.put(item.getFieldName(), item.getString());
+                params.put(item.getFieldName(), getValue(item));
                 continue;
             }
             if (notEmpty(item)) {
@@ -76,6 +77,18 @@ public class MultipartItemsProcessor {
 			parameters.setParameter(paramName, paramValues.toArray(new String[paramValues.size()]));
 		}
     }
+
+	private String getValue(FileItem item) {
+		String encoding = request.getCharacterEncoding();
+		if (encoding != null && !encoding.equals("")) {
+			try {
+				return item.getString(encoding);
+			} catch (UnsupportedEncodingException e) {
+				logger.warn("Request have an invalid encoding. Ignoring it");
+			}
+		}
+		return item.getString();
+	}
 
     private static boolean notEmpty(FileItem item) {
         return !item.getName().trim().equals("");

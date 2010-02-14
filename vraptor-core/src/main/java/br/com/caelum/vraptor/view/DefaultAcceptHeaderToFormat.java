@@ -45,6 +45,7 @@ public class DefaultAcceptHeaderToFormat implements AcceptHeaderToFormat {
 		map.put("text/html", "html");
 		map.put("application/json", "json");
 		map.put("application/xml", "xml");
+		map.put("xml", "xml");
 		// TODO add more mime types
 	}
 

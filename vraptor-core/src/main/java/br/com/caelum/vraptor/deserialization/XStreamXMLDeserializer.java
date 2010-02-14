@@ -29,6 +29,7 @@ import com.thoughtworks.xstream.XStream;
  * XStream based Xml Deserializer
  * @author Lucas Cavalcanti
  * @author Cecilia Fernandes
+ * @author Guilherme Silveira
  * @since 3.0.2
  */
 @Component
@@ -47,15 +48,22 @@ public class XStreamXMLDeserializer implements XMLDeserializer {
 		if (types.length == 0) {
 			throw new IllegalArgumentException("Methods that consumes xml must receive just one argument: the xml root element");
 		}
-		XStream xStream = getXStream();
-
-		aliasParams(javaMethod, types, xStream);
+		XStream xStream = getConfiguredXStream(javaMethod, types);
 
 		Object[] params = new Object[types.length];
 
 		chooseParam(types, params, xStream.fromXML(inputStream));
 
 		return params;
+	}
+
+	/**
+	 * Returns an xstream instance already configured.
+	 */
+	public XStream getConfiguredXStream(Method javaMethod, Class<?>[] types) {
+		XStream xStream = getXStream();
+		aliasParams(javaMethod, types, xStream);
+		return xStream;
 	}
 
 	private void chooseParam(Class<?>[] types, Object[] params, Object deserialized) {

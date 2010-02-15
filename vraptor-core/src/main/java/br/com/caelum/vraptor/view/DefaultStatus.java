@@ -99,4 +99,14 @@ public class DefaultStatus implements Status {
 		});
 	}
 
+	public void unsupportedMediaType(String message) {
+		response.setStatus(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE, message);
+		result.use(Results.nothing());
+	}
+
+	public void badRequest(String message) {
+		response.setStatus(HttpServletResponse.SC_BAD_REQUEST, message);
+		result.use(Results.nothing());
+	}
+
 }

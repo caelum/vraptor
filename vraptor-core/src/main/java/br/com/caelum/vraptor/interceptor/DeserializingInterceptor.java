@@ -30,6 +30,7 @@ import br.com.caelum.vraptor.deserialization.Deserializers;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.view.HttpResult;
+import br.com.caelum.vraptor.view.Status;
 
 /**
  * Important: this interceptor must be after the {@link ParametersInstantiatorInterceptor}
@@ -39,20 +40,21 @@ import br.com.caelum.vraptor.view.HttpResult;
  * @since 3.0.2
  */
 public class DeserializingInterceptor implements Interceptor {
-	private static final int UNSUPPORTED_MEDIA_TYPE = 415;
 	private final HttpServletRequest request;
 	private final HttpResult result;
 	private final Deserializers deserializers;
 	private final MethodInfo methodInfo;
 	private final Container container;
+	private final Status status;
 
 	public DeserializingInterceptor(HttpServletRequest servletRequest, HttpResult result,
-			Deserializers deserializers, MethodInfo methodInfo, Container container) {
+			Deserializers deserializers, MethodInfo methodInfo, Container container, Status status) {
 		this.request = servletRequest;
 		this.result = result;
 		this.deserializers = deserializers;
 		this.methodInfo = methodInfo;
 		this.container = container;
+		this.status = status;
 	}
 
 	public boolean accepts(ResourceMethod method) {
@@ -65,14 +67,17 @@ public class DeserializingInterceptor implements Interceptor {
 
 		String contentType = request.getContentType();
 		if (!supported.isEmpty() && !supported.contains(contentType)) {
-			String errorMessage = String.format("Request with media type [%s]. Expecting one of %s.",
-							contentType, supported);
-			result.sendError(UNSUPPORTED_MEDIA_TYPE, errorMessage);
+			unsupported(String.format("Request with media type [%s]. Expecting one of %s.",
+					contentType, supported));
 			return;
 		}
 
 		try {
 			Deserializer deserializer = deserializers.deserializerFor(contentType, container);
+			if (deserializer == null) {
+				unsupported(String.format("Unable to handle media type [%s]: no deserializer found.", contentType));
+				return;
+			}
 
 			Object[] deserialized = deserializer.deserialize(request.getInputStream(), method);
 			Object[] parameters = methodInfo.getParameters();
@@ -88,6 +93,10 @@ public class DeserializingInterceptor implements Interceptor {
 			throw new InterceptionException(e);
 		}
 
+	}
+
+	private void unsupported(String message) {
+		this.status.unsupportedMediaType(message);
 	}
 
 }

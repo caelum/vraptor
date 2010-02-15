@@ -18,13 +18,13 @@ package br.com.caelum.vraptor.deserialization;
 import java.util.HashMap;
 import java.util.Map;
 
-import br.com.caelum.vraptor.VRaptorException;
 import br.com.caelum.vraptor.core.BaseComponents;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Container;
 
 /**
- * A set of deserializers.
+ * A set of deserializers.<br/>
+ * Returns null if no serializer is capable of coping with the required media type.
  *
  * @author Lucas Cavalcanti
  * @author Ricardo Nakamura
@@ -51,10 +51,9 @@ public class DefaultDeserializers implements Deserializers {
 	private Deserializer subpathDeserializerFor(String contentType,
 			Container container) {
 		if(contentType.contains("/")) {
-			contentType = removeChar(contentType, "/");
-			if (deserializers.containsKey(contentType)) {
-				Class<? extends Deserializer> type = deserializers.get(contentType);
-				return container.instanceFor(type);
+			String newType = removeChar(contentType, "/");
+			if (deserializers.containsKey(newType)) {
+				return container.instanceFor(deserializers.get(newType));
 			}
 		}
 		return subpathDeserializerForPlus(contentType, container);
@@ -63,12 +62,12 @@ public class DefaultDeserializers implements Deserializers {
 	private Deserializer subpathDeserializerForPlus(String contentType,
 			Container container) {
 		if(contentType.contains("+")) {
-			contentType = removeChar(contentType, "+");
-			if (deserializers.containsKey(contentType)) {
-				return container.instanceFor(deserializers.get(contentType));
+			String newType = removeChar(contentType, "+");
+			if (deserializers.containsKey(newType)) {
+				return container.instanceFor(deserializers.get(newType));
 			}
 		}
-		throw new VRaptorException("There is no deserializer for the content type " + contentType);
+		return null;
 	}
 
 	private String removeChar(String type, String by) {

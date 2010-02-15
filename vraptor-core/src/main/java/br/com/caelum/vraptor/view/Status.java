@@ -50,4 +50,10 @@ public interface Status extends View {
 	 * result.use(http()).movedPermanentlyTo(ClientsController.class).list();
 	 */
 	<T> T movedPermanentlyTo(Class<T> controller);
+
+	/**
+	 * The media type sent to the server is not supported.
+	 * @param errorMessage 
+	 */
+	void unsupportedMediaType(String errorMessage);
 }

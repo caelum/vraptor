@@ -3,13 +3,17 @@ package br.com.caelum.vraptor.interceptor;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.when;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.jmock.Expectations;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.Consumes;
 import br.com.caelum.vraptor.core.DefaultMethodInfo;
@@ -19,43 +23,35 @@ import br.com.caelum.vraptor.deserialization.Deserializer;
 import br.com.caelum.vraptor.deserialization.Deserializers;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.resource.DefaultResourceMethod;
-import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.test.VRaptorMockery;
 import br.com.caelum.vraptor.view.HttpResult;
+import br.com.caelum.vraptor.view.Status;
 
 
 public class DeserializingInterceptorTest {
-	private VRaptorMockery mockery;
 	private DeserializingInterceptor interceptor;
 	private DefaultResourceMethod consumeXml;
 	private DefaultResourceMethod doesntConsume;
-	private HttpServletRequest request;
-	private HttpResult result;
-	private InterceptorStack stack;
-	private Deserializers deserializers;
+	@Mock private HttpServletRequest request;
+	@Mock private HttpResult result;
+	@Mock private InterceptorStack stack;
+	@Mock Deserializers deserializers;
 	private MethodInfo methodInfo;
-	protected Container container;
+	@Mock Container container;
+	@Mock private Status status;
+	private VRaptorMockery mockery;
 
 	@Before
 	public void setUp() throws Exception {
-		mockery = new VRaptorMockery();
+		MockitoAnnotations.initMocks(this);
+		this.mockery = new VRaptorMockery();
 
-		stack = mockery.mock(InterceptorStack.class);
-		request = mockery.mock(HttpServletRequest.class);
-		result = mockery.mock(HttpResult.class);
-		deserializers = mockery.mock(Deserializers.class);
 		methodInfo = new DefaultMethodInfo();
-		container = mockery.mock(Container.class);
-		interceptor = new DeserializingInterceptor(request, result, deserializers, methodInfo, container);
+		interceptor = new DeserializingInterceptor(request, result, deserializers, methodInfo, container, status);
 		consumeXml = new DefaultResourceMethod(null, DummyResource.class.getDeclaredMethod("consumeXml"));
 		doesntConsume = new DefaultResourceMethod(null, DummyResource.class.getDeclaredMethod("doesntConsume"));
 	}
 
-
-	@After
-	public void tearDown() throws Exception {
-		mockery.assertIsSatisfied();
-	}
 
 	static class DummyResource {
 		@Consumes("application/xml")
@@ -74,97 +70,85 @@ public class DeserializingInterceptorTest {
 
 	@Test
 	public void willSetHttpStatusCode415IfTheResourceMethodDoesNotSupportTheGivenMediaTypes() throws Exception {
-		mockery.checking(new Expectations(){{
-			allowing(request).getContentType();
-			will(returnValue("image/jpeg"));
+		when(request.getContentType()).thenReturn("image/jpeg");
+		
+		interceptor.intercept(stack, consumeXml, null);
+		verify(status).unsupportedMediaType("Request with media type [image/jpeg]. Expecting one of [application/xml].");
+		verifyZeroInteractions(stack);
+	}
 
-			one(result).sendError(with(equal(415)), with(any(String.class)));
-			never(stack).next(with(any(ResourceMethod.class)), with(any(Object.class)));
-		}});
+
+	@Test
+	public void willSetHttpStatusCode415IfThereIsNoDeserializerButIsAccepted() throws Exception {
+		when(request.getContentType()).thenReturn("application/xml");
+		when(deserializers.deserializerFor("application/xml", container)).thenReturn(null);
 
 		interceptor.intercept(stack, consumeXml, null);
+		verify(status).unsupportedMediaType("Unable to handle media type [application/xml]: no deserializer found.");
+		verifyZeroInteractions(stack);
 	}
 
 	@Test
 	public void willSetMethodParametersWithDeserializationAndContinueStackAfterDeserialization() throws Exception {
+		when(request.getContentType()).thenReturn("application/xml");
+
+		final Deserializer deserializer = mockery.mock(Deserializer.class);
 		methodInfo.setParameters(new Object[2]);
 		mockery.checking(new Expectations() {{
-			allowing(request).getInputStream();
-
-			allowing(request).getContentType();
-			will(returnValue("application/xml"));
-
-			Deserializer deserializer = mockery.mock(Deserializer.class);
-
-			one(deserializers).deserializerFor("application/xml", container);
-			will(returnValue(deserializer));
 
 			one(deserializer).deserialize(null, consumeXml);
 			will(returnValue(new Object[] {"abc", "def"}));
 
-			one(stack).next(consumeXml, null);
-
 		}});
+		when(deserializers.deserializerFor("application/xml", container)).thenReturn(deserializer);
 
 		interceptor.intercept(stack, consumeXml, null);
 
 		assertEquals(methodInfo.getParameters()[0], "abc");
 		assertEquals(methodInfo.getParameters()[1], "def");
+		verify(stack).next(consumeXml, null);
 	}
 	
 	@Test
 	public void willDeserializeForAnyContentTypeIfPossible() throws Exception {
+		when(request.getContentType()).thenReturn("application/xml");
+
+		final Deserializer deserializer = mockery.mock(Deserializer.class);
 		methodInfo.setParameters(new Object[2]);
 		final DefaultResourceMethod consumesAnything = new DefaultResourceMethod(null, DummyResource.class.getDeclaredMethod("consumesAnything"));
 		mockery.checking(new Expectations() {{
-			allowing(request).getInputStream();
-
-			allowing(request).getContentType();
-			will(returnValue("application/xml"));
-
-			Deserializer deserializer = mockery.mock(Deserializer.class);
-
-			one(deserializers).deserializerFor("application/xml", container);
-			will(returnValue(deserializer));
-
 			one(deserializer).deserialize(null, consumesAnything);
 			will(returnValue(new Object[] {"abc", "def"}));
 
-			one(stack).next(consumesAnything, null);
-
 		}});
 
+		when(deserializers.deserializerFor("application/xml", container)).thenReturn(deserializer);
 		interceptor.intercept(stack, consumesAnything, null);
 
 		assertEquals(methodInfo.getParameters()[0], "abc");
 		assertEquals(methodInfo.getParameters()[1], "def");
+		verify(stack).next(consumesAnything, null);
 	}
 	
 	@Test
 	public void willSetOnlyNonNullParameters() throws Exception {
+		when(request.getContentType()).thenReturn("application/xml");
+
+		final Deserializer deserializer = mockery.mock(Deserializer.class);
 		methodInfo.setParameters(new Object[] {"original1", "original2"});
 		mockery.checking(new Expectations() {{
-			allowing(request).getInputStream();
-
-			allowing(request).getContentType();
-			will(returnValue("application/xml"));
-
-			Deserializer deserializer = mockery.mock(Deserializer.class);
-
-			one(deserializers).deserializerFor("application/xml", container);
-			will(returnValue(deserializer));
 
 			one(deserializer).deserialize(null, consumeXml);
 			will(returnValue(new Object[] {null, "deserialized"}));
 
-			one(stack).next(consumeXml, null);
-
 		}});
 
+		when(deserializers.deserializerFor("application/xml", container)).thenReturn(deserializer);
 		interceptor.intercept(stack, consumeXml, null);
 
 		assertEquals(methodInfo.getParameters()[0], "original1");
 		assertEquals(methodInfo.getParameters()[1], "deserialized");
+		verify(stack).next(consumeXml, null);
 	}
 
 }

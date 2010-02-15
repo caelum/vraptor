@@ -54,7 +54,7 @@ public class DefaultRestHeadersHandlerTest {
 	}
 
 	@Test
-	public void whenResourceIsCacheableAddMaxAge() {
+	public void whenResourceHasLinksAddThemToTheHeader() {
 		CacheableOrder cacheable = new CacheableOrder();
 		handler.handle(cacheable);
 		// TODO add link headers

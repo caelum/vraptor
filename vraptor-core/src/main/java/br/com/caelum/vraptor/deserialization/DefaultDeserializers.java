@@ -45,12 +45,23 @@ public class DefaultDeserializers implements Deserializers {
 		if (deserializers.containsKey(contentType)) {
 			return container.instanceFor(deserializers.get(contentType));
 		}
+		return subpathDeserializerFor(contentType, container);
+	}
+
+	private Deserializer subpathDeserializerFor(String contentType,
+			Container container) {
 		if(contentType.contains("/")) {
 			contentType = removeChar(contentType, "/");
 			if (deserializers.containsKey(contentType)) {
-				return container.instanceFor(deserializers.get(contentType));
+				Class<? extends Deserializer> type = deserializers.get(contentType);
+				return container.instanceFor(type);
 			}
 		}
+		return subpathDeserializerForPlus(contentType, container);
+	}
+
+	private Deserializer subpathDeserializerForPlus(String contentType,
+			Container container) {
 		if(contentType.contains("+")) {
 			contentType = removeChar(contentType, "+");
 			if (deserializers.containsKey(contentType)) {
@@ -64,9 +75,6 @@ public class DefaultDeserializers implements Deserializers {
 		return type.substring(type.lastIndexOf(by)+1);
 	}
 
-	private String parse(String contentType) {
-		return contentType.replace("(.*[\\+\\/])?(.*)", "$2");
-	}
 	public void register(Class<? extends Deserializer> type) {
 		if (!type.isAnnotationPresent(Deserializes.class)) {
 			throw new IllegalArgumentException("You must annotate your deserializers with @Deserializes");

@@ -7,7 +7,7 @@ import br.com.caelum.vraptor.resource.HttpMethod;
 
 /**
  * Allows header related results.
- *
+ * 
  * @author guilherme silveira
  * @since 3.0.3
  */
@@ -20,8 +20,10 @@ public interface Status extends View {
 	void created();
 
 	/**
-	 * Sets the header to 201 and sets the location to the server's location + the location content.<br>
+	 * Sets the header to 201 and sets the location to the server's location +
+	 * the location content.<br>
 	 * created("/order/2") ==> http://localhost:8080/my_context/order/2
+	 * 
 	 * @param location
 	 */
 	void created(String location);
@@ -33,19 +35,19 @@ public interface Status extends View {
 	void methodNotAllowed(EnumSet<HttpMethod> allowedMethods);
 
 	/**
-	 * Send redirect with Moved Permanently Header
-	 * Example:
-	 * result.use(http()).movedPermanentlyTo("/clients");
-	 * will move to /<contextPath>/clients
-	 *
-	 * @param uri absolute uri to redirect
+	 * Send redirect with Moved Permanently Header Example:
+	 * result.use(http()).movedPermanentlyTo("/clients"); will move to
+	 * /<contextPath>/clients
+	 * 
+	 * @param uri
+	 *            absolute uri to redirect
 	 */
 	void movedPermanentlyTo(String url);
 
 	/**
-	 * same as movedPermanentlyTo(String), but will use
-	 * the url for controller.method(args);
-	 *
+	 * same as movedPermanentlyTo(String), but will use the url for
+	 * controller.method(args);
+	 * 
 	 * Example:
 	 * result.use(http()).movedPermanentlyTo(ClientsController.class).list();
 	 */
@@ -53,7 +55,16 @@ public interface Status extends View {
 
 	/**
 	 * The media type sent to the server is not supported.
-	 * @param errorMessage 
+	 * 
+	 * @param errorMessage
 	 */
 	void unsupportedMediaType(String errorMessage);
+
+	/**
+	 * Notifies the client that he should not try to execute the same request
+	 * again: part of its representation is somehow invalid.
+	 * 
+	 * @param message
+	 */
+	void badRequest(String message);
 }

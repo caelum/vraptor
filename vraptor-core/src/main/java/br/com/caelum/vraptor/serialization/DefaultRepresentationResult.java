@@ -15,6 +15,7 @@
  */
 package br.com.caelum.vraptor.serialization;
 
+import java.util.Collections;
 import java.util.List;
 
 import br.com.caelum.vraptor.http.FormatResolver;
@@ -40,6 +41,7 @@ public class DefaultRepresentationResult implements RepresentationResult {
 		this.formatResolver = formatResolver;
 		this.result = result;
 		this.serializations = serializations;
+		Collections.reverse(this.serializations);
 		this.headersHandler = headersHandler;
 	}
 

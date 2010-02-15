@@ -8,6 +8,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -16,6 +17,9 @@ import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.http.FormatResolver;
 import br.com.caelum.vraptor.restfulie.RestHeadersHandler;
+import br.com.caelum.vraptor.restfulie.Restfulie;
+import br.com.caelum.vraptor.restfulie.hypermedia.HypermediaResource;
+import br.com.caelum.vraptor.restfulie.relation.Relation;
 import br.com.caelum.vraptor.view.PageResult;
 
 public class DefaultRepresentationResultTest {
@@ -65,7 +69,21 @@ public class DefaultRepresentationResultTest {
 		verify(serialization, never()).from(object);
 	}
 	
-	// @Test
-	// should invoke header if hypermedia resource
+	@Test
+	public void whenTheResourceIsHypermediaAddRestHeaders() throws Exception {
+		when(formatResolver.getAcceptFormat()).thenReturn("xml");
+
+		when(serialization.accepts("xml")).thenReturn(true);
+		HypermediaResource object = new HypermediaResource() {
+			public List<Relation> getRelations(Restfulie control) {
+				return null;
+			}};
+
+		representation.from(object);
+
+		verify(serialization).from(object);
+		verify(headerHandler).handle(object);
+	}
+
 	
 }

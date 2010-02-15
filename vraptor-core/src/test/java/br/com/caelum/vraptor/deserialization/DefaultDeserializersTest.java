@@ -1,5 +1,6 @@
 package br.com.caelum.vraptor.deserialization;
 
+import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
@@ -8,7 +9,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor.VRaptorException;
 import br.com.caelum.vraptor.ioc.Container;
 
 public class DefaultDeserializersTest {
@@ -23,9 +23,9 @@ public class DefaultDeserializersTest {
 		deserializers = new DefaultDeserializers();
 	}
 
-	@Test(expected=VRaptorException.class)
+	@Test
 	public void shouldThrowExceptionWhenThereIsNoDeserializerRegisteredForGivenContentType() throws Exception {
-		deserializers.deserializerFor("bogus content type", container);
+		assertNull(deserializers.deserializerFor("bogus content type", container));
 	}
 
 	static interface NotAnnotatedDeserializer extends Deserializer {}
@@ -38,11 +38,11 @@ public class DefaultDeserializersTest {
 	@Deserializes({"application/xml", "json"})
 	static interface MyDeserializer extends Deserializer {}
 
-	@Test(expected=VRaptorException.class)
+	@Test
 	public void shouldNotCallDeserializerIfItDoesntAcceptGivenContentType() throws Exception {
 		deserializers.register(MyDeserializer.class);
 
-		deserializers.deserializerFor("image/jpeg", container);
+		assertNull(deserializers.deserializerFor("image/jpeg", container));
 
 		verify(container, never()).instanceFor(MyDeserializer.class);
 	}

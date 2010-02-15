@@ -24,7 +24,7 @@ import com.thoughtworks.xstream.XStream;
  * @author Lucas Cavalcanti, Cecilia Fernandes
  * @since 3.0.2
  */
-@Deserializes("application/xml")
+@Deserializes({"application/xml","xml"})
 public interface XMLDeserializer extends Deserializer {
 
 }

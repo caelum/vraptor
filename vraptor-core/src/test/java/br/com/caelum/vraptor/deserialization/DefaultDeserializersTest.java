@@ -35,7 +35,7 @@ public class DefaultDeserializersTest {
 		deserializers.register(NotAnnotatedDeserializer.class);
 	}
 
-	@Deserializes("application/xml")
+	@Deserializes({"application/xml", "json"})
 	static interface MyDeserializer extends Deserializer {}
 
 	@Test(expected=VRaptorException.class)
@@ -46,11 +46,30 @@ public class DefaultDeserializersTest {
 
 		verify(container, never()).instanceFor(MyDeserializer.class);
 	}
+
 	@Test
 	public void shouldUseTheDeserializerThatAcceptsTheGivenContentType() throws Exception {
 		deserializers.register(MyDeserializer.class);
 
 		deserializers.deserializerFor("application/xml", container);
+
+		verify(container).instanceFor(MyDeserializer.class);
+	}
+
+	@Test
+	public void shouldUseTheDeserializerThatAcceptsTheGivenContentTypeIfVendorized() throws Exception {
+		deserializers.register(MyDeserializer.class);
+
+		deserializers.deserializerFor("application/json", container);
+
+		verify(container).instanceFor(MyDeserializer.class);
+	}
+
+	@Test
+	public void shouldUseTheDeserializerThatAcceptsTheGivenContentTypeIfAtomizedAlike() throws Exception {
+		deserializers.register(MyDeserializer.class);
+
+		deserializers.deserializerFor("application/atom+json", container);
 
 		verify(container).instanceFor(MyDeserializer.class);
 	}

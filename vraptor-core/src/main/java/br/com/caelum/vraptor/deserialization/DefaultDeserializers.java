@@ -24,9 +24,11 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Container;
 
 /**
+ * A set of deserializers.
  *
- * @author Lucas Cavalcanti, Ricardo Nakamura
- *
+ * @author Lucas Cavalcanti
+ * @author Ricardo Nakamura
+ * @author Guilherme Silveira
  */
 @ApplicationScoped
 public class DefaultDeserializers implements Deserializers {
@@ -38,13 +40,33 @@ public class DefaultDeserializers implements Deserializers {
 			register(type);
 		}
 	}
+	
 	public Deserializer deserializerFor(String contentType, Container container) {
-		if (!deserializers.containsKey(contentType)) {
-			throw new VRaptorException("There is no deserializer for the content type " + contentType);
+		if (deserializers.containsKey(contentType)) {
+			return container.instanceFor(deserializers.get(contentType));
 		}
-		return container.instanceFor(deserializers.get(contentType));
+		if(contentType.contains("/")) {
+			contentType = removeChar(contentType, "/");
+			if (deserializers.containsKey(contentType)) {
+				return container.instanceFor(deserializers.get(contentType));
+			}
+		}
+		if(contentType.contains("+")) {
+			contentType = removeChar(contentType, "+");
+			if (deserializers.containsKey(contentType)) {
+				return container.instanceFor(deserializers.get(contentType));
+			}
+		}
+		throw new VRaptorException("There is no deserializer for the content type " + contentType);
 	}
 
+	private String removeChar(String type, String by) {
+		return type.substring(type.lastIndexOf(by)+1);
+	}
+
+	private String parse(String contentType) {
+		return contentType.replace("(.*[\\+\\/])?(.*)", "$2");
+	}
 	public void register(Class<? extends Deserializer> type) {
 		if (!type.isAnnotationPresent(Deserializes.class)) {
 			throw new IllegalArgumentException("You must annotate your deserializers with @Deserializes");

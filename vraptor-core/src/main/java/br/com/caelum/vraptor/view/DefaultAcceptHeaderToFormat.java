@@ -28,10 +28,12 @@ import java.util.regex.Pattern;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
 /**
- * The default AcceptHeaderToFormat implementation
+ * The default AcceptHeaderToFormat implementation searches for registered mime types. It also
+ * handles conneg with extended media types (i.e. vnd+xml)
  *
  * @author Sérgio Lopes
  * @author Jonas Abreu
+ * @author Guilherme Silveira
  */
 @ApplicationScoped
 public class DefaultAcceptHeaderToFormat implements AcceptHeaderToFormat {
@@ -46,7 +48,6 @@ public class DefaultAcceptHeaderToFormat implements AcceptHeaderToFormat {
 		map.put("application/json", "json");
 		map.put("application/xml", "xml");
 		map.put("xml", "xml");
-		// TODO add more mime types
 	}
 
 	public String getFormat(String acceptHeader) {

@@ -1,5 +1,7 @@
 package br.com.caelum.vraptor.restfulie.resource;
 
+import java.util.Calendar;
+
 /**
  * An interface that defines caching characteristics for a resource.<br/>
  * Annotations where avoided in order to provide programmatic support to

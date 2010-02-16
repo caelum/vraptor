@@ -22,7 +22,7 @@ import java.lang.reflect.WildcardType;
 import java.util.Collection;
 
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
-import br.com.caelum.vraptor.vraptor2.Info;
+import br.com.caelum.vraptor.util.StringUtils;
 
 /**
  * Default implementation for {@link TypeNameExtractor}.
@@ -56,7 +56,7 @@ public class DefaultTypeNameExtractor implements TypeNameExtractor {
 
 		if (generic instanceof TypeVariable<?>) {
 			TypeVariable<?> variable = (TypeVariable<?>) generic;
-			return lowercaseFirst(variable.getName());
+			return StringUtils.lowercaseFirst(variable.getName());
 		}
 
 		Class raw = (Class) generic;
@@ -68,24 +68,7 @@ public class DefaultTypeNameExtractor implements TypeNameExtractor {
 
 		String name = raw.getSimpleName();
 
-		return lowercaseFirst(name);
-	}
-
-	private String lowercaseFirst(String name) {
-		// common case: SomeClass -> someClass
-		if(name.length() > 1 && Character.isLowerCase(name.charAt(1))) {
-			return Info.decapitalize(name);
-		}
-
-		// different case: URLClassLoader -> urlClassLoader
-		for (int i = 1; i < name.length(); i++) {
-			if(Character.isLowerCase(name.charAt(i))) {
-				return name.substring(0, i-1).toLowerCase()+name.substring(i-1, name.length());
-			}
-		}
-
-		// all uppercase: URL -> url
-		return name.toLowerCase();
+		return StringUtils.lowercaseFirst(name);
 	}
 
 }

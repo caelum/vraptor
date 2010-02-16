@@ -53,7 +53,8 @@ public class RestfulSerialization extends XStreamXMLSerialization {
 	@Override
 	protected XStream getXStream() {
 		XStream xStream = new XStream();
-		xStream.registerConverter(new LinkConverter(new ReflectionConverter(xStream.getMapper(), xStream.getReflectionProvider()), restfulie, config));
+		MethodValueSupportConverter converter = new MethodValueSupportConverter(new ReflectionConverter(xStream.getMapper(), xStream.getReflectionProvider()));
+		xStream.registerConverter(new LinkConverter(converter, restfulie, config));
 		return xStream;
 	}
 

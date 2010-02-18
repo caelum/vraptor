@@ -17,19 +17,26 @@ package br.com.caelum.vraptor.restfulie.headers;
 
 import java.util.Calendar;
 
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
+import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.restfulie.hypermedia.HypermediaResource;
 
 /**
- * Interface that provides defaults for Resource information
+ * Default implementation for REST defaults.
+ * Uses resource's hash code to generate ETag and doesn't provide a lastModified value.
  * @author Lucas Cavalcanti
- * @author Guilherme Silveira
- * @author Cecilia Fernandes
  * @since 3.1.2
  */
-public interface RestDefaults {
+@Component
+@ApplicationScoped
+public class DefaultRestDefaults implements RestDefaults {
 
-	Calendar getLastModifiedFor(HypermediaResource resource);
+	public String getEtagFor(HypermediaResource resource) {
+		return resource.hashCode() + "";
+	}
 
-	String getEtagFor(HypermediaResource resource);
+	public Calendar getLastModifiedFor(HypermediaResource resource) {
+		return null;
+	}
 
 }

@@ -110,7 +110,9 @@ import br.com.caelum.vraptor.resource.DefaultResourceNotFoundHandler;
 import br.com.caelum.vraptor.resource.MethodNotAllowedHandler;
 import br.com.caelum.vraptor.resource.ResourceNotFoundHandler;
 import br.com.caelum.vraptor.restfulie.RestHeadersHandler;
+import br.com.caelum.vraptor.restfulie.headers.DefaultRestDefaults;
 import br.com.caelum.vraptor.restfulie.headers.DefaultRestHeadersHandler;
+import br.com.caelum.vraptor.restfulie.headers.RestDefaults;
 import br.com.caelum.vraptor.serialization.DefaultRepresentationResult;
 import br.com.caelum.vraptor.serialization.JSONSerialization;
 import br.com.caelum.vraptor.serialization.RepresentationResult;
@@ -166,7 +168,8 @@ public class BaseComponents {
             TypeFinder.class, 				DefaultTypeFinder.class,
             XMLDeserializer.class,			XStreamXMLDeserializer.class,
             RoutesParser.class, 			PathAnnotationRoutesParser.class,
-            Routes.class,					DefaultRoutes.class
+            Routes.class,					DefaultRoutes.class,
+            RestDefaults.class,				DefaultRestDefaults.class
     );
 
     private final static Map<Class<?>, Class<?>> CACHED_COMPONENTS = classMap(

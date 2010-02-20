@@ -95,7 +95,7 @@ VRaptor 3 also supports HibernateValidator integration. In the example above, to
 [java]
 public add(Employee employee) {
 	//Validation with Hibernate Validator
-	validator.add(Hibernate.validate(employee));
+	validator.addAll(Hibernate.validate(employee));
 	
 	validator.checking(new Validations(){{
 		that(!employee.getName().isEmpty(), "error","nameIsRequired");

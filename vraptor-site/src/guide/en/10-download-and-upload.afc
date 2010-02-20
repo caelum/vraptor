@@ -61,7 +61,7 @@ easy way, you can use the %%commons-io IOUtils%%, that is already a VRaptor depe
 [java]
 	public void updatePicture(Profile profile, UploadedFile picture) {
 		File pictureOnDisk = new File();	
-		IOUtils.copy(picture.getFile(), new PrintWriter(pictureOnDisk));
+		IOUtils.copyLarge(picture.getFile(), new FileOutputStream(pictureOnDisk));
 		dao.atribui(pictureOnDisk, profile);
 	}
 [/java]

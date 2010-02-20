@@ -94,7 +94,7 @@ usando o Hibernate Validator basta adicionar uma linha de código:
 [java]
 public adiciona(Funcionario funcionario) {
 	//Validação do Funcionario com Hibernate Validator
-	validator.add(Hibernate.validate(funcionario));
+	validator.addAll(Hibernate.validate(funcionario));
 
 	validator.checking(new Validations(){{
 		that(!funcionario.getNome().isEmpty(), "erro","nomeNaoInformado");

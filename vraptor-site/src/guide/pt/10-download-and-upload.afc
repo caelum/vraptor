@@ -65,7 +65,7 @@ VRaptor:
 [java]
 	public void atualizaFoto(Perfil perfil, UploadedFile foto) {
 		File fotoSalva = new File();	
-		IOUtils.copy(foto.getFile(), new PrintWriter(fotoSalva));
+		IOUtils.copyLarge(foto.getFile(), new FileOutputStream(fotoSalva));
 		dao.atribui(fotoSalva, perfil);
 	}
 [/java]

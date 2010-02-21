@@ -30,13 +30,14 @@ public class DefaultAcceptHeaderToFormatTest {
 		mimeTypeToFormat = new DefaultAcceptHeaderToFormat();
 	}
 
+
 	@Test
-	public void testHtmlDefault() {
-		Assert.assertEquals("html", mimeTypeToFormat.getFormat("invalid"));
+	public void shouldComplainIfThereIsNothingRegistered() {
+		Assert.assertEquals("unknown", mimeTypeToFormat.getFormat("unknown"));
 	}
 
 	@Test
-	public void testHtmlForAnything() {
+	public void shouldReturnHtmlWhenRequestingAnyContentType() {
 		Assert.assertEquals("html", mimeTypeToFormat.getFormat("*/*"));
 	}
 
@@ -54,11 +55,6 @@ public class DefaultAcceptHeaderToFormatTest {
 	@Test
 	public void testJsonWithQualifier() {
 		Assert.assertEquals("json", mimeTypeToFormat.getFormat("application/json; q=0.4"));
-	}
-
-	@Test
-	public void testAnything() {
-		Assert.assertEquals("html", mimeTypeToFormat.getFormat("*/*"));
 	}
 
 	@Test(expected = NullPointerException.class)

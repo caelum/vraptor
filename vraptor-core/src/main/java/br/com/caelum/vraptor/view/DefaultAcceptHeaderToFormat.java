@@ -67,17 +67,15 @@ public class DefaultAcceptHeaderToFormat implements AcceptHeaderToFormat {
 		// TODO: we really could cache acceptHeader -> format
 		String[] mimeTypes = getOrderedMimeTypes(acceptHeader);
 
-		String format = DEFAULT_FORMAT;
 		for (String mimeType : mimeTypes) {
 			if (map.containsKey(mimeType)) {
-
-				format = map.get(mimeType);
-				break;
+				String format = map.get(mimeType);
+				cache.put(acceptHeader, format);
+				return format;
 			}
 		}
 
-		cache.put(acceptHeader, format);
-		return format;
+		return mimeTypes[0];
 	}
 
 	private static class Cache extends LinkedHashMap<String, String> {
@@ -118,9 +116,10 @@ public class DefaultAcceptHeaderToFormat implements AcceptHeaderToFormat {
 
 		List<MimeType> mimes = new ArrayList<MimeType>();
 		for (String string : types) {
-			if (string.contains("*/*"))
+			if (string.contains("*/*")) {
+				mimes.add(new MimeType("html", 1));
 				continue;
-			if (string.contains(";")) {
+			} else if (string.contains(";")) {
 				String type = string.substring(0, string.indexOf(';'));
 				double qualifier = 1;
 				if (string.contains("q=")) {

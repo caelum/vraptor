@@ -1,0 +1,17 @@
+VRAPTOR BLANK PROJECT
+--------------------------------------------------------------------------------
+
+IMPORTING THIS PROJECT ON ECLIPSE
+
+In order to import this project on Eclipse, you'll need:
+	* choose menu file/import existent projects
+	* choose the directory that contains vraptor-blank-project (the directory in which you decompressed it)
+	* after importing, if there is  a classpath problem it means you dont have Apache Tomcat 6 configured. You
+	   can just configure a new server in window/preferences/servers, creating a new instance, and add the Server Runtime
+	   as a library inside the project build path
+	* just right click on the project, run as, run on server. choose a servlet container or configure a new one
+	* done! check the log files. access http://localhost:8080/vraptor-blank-project/ (or change 8080 to the appropriate port).
+	
+	
+	
+

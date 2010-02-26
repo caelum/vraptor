@@ -78,8 +78,10 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
 
 	@Override
 	protected void loadBeanDefinitions(DefaultListableBeanFactory beanFactory) {
-		beanFactory.registerSingleton(ServletContext.class.getName(), config.getServletContext());
+		if (getParent() == null || getParent().getBeanNamesForType(ServletContext.class).length == 0) {
+			beanFactory.registerSingleton(ServletContext.class.getName(), config.getServletContext());
 		// beanFactory.ignoreDependencyType(ServletContext.class);
+		}
 
 		registerApplicationScopedComponentsOn(beanFactory);
 		registerRequestScopedComponentsOn(beanFactory);
@@ -220,7 +222,7 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
 	 * From
 	 * org.springframework.context.annotation.ClassPathBeanDefinitionScanner
 	 * #applyScope()
-	 * 
+	 *
 	 * @param definition
 	 * @param scopeMetadata
 	 * @return
@@ -246,6 +248,7 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
 		registry.registerBeanDefinition(AnnotationConfigUtils.AUTOWIRED_ANNOTATION_PROCESSOR_BEAN_NAME, definition);
 	}
 
+	@Override
 	public <T> T getBean(Class<T> type) {
 		@SuppressWarnings("unchecked")
 		Map<String, ? extends T> instances = BeanFactoryUtils.beansOfTypeIncludingAncestors(this, type);

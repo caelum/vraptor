@@ -182,7 +182,7 @@ Hamcrest allows:</span>
 	    	<div class="java"><code class="java">
 <span class="java4">public </span><span class="java10">add</span><span class="java8">(</span><span class="java10">Employee employee</span><span class="java8">) {<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java3">//Validation with Hibernate Validator<br />
-&nbsp;&nbsp;&nbsp; </span><span class="java10">validator.add</span><span class="java8">(</span><span class="java10">Hibernate.validate</span><span class="java8">(</span><span class="java10">employee</span><span class="java8">))</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java10">validator.addAll</span><span class="java8">(</span><span class="java10">Hibernate.validate</span><span class="java8">(</span><span class="java10">employee</span><span class="java8">))</span><span class="java10">;<br />
 &nbsp;&nbsp;&nbsp; <br />
 &nbsp;&nbsp;&nbsp; validator.checking</span><span class="java8">(</span><span class="java4">new </span><span class="java10">Validations</span><span class="java8">(){{<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">that</span><span class="java8">(</span><span class="java10">!employee.getName</span><span class="java8">()</span><span class="java10">.isEmpty</span><span class="java8">()</span><span class="java10">, </span><span class="java5">&#34;error&#34;</span><span class="java10">,</span><span class="java5">&#34;nameIsRequired&#34;</span><span class="java8">)</span><span class="java10">;<br />

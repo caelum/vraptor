@@ -1,7 +1,8 @@
 [chapter ChangeLog]
 
-[section 3.1.2 (in dev]
+[section 3.1.2 (in dev)]
 [list]
+* Blank project now also runs on netbeans 6.8
 * Supports encoding for file uploads in Google App Engine
 [/list]
 

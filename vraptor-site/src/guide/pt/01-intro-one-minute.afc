@@ -16,6 +16,14 @@ necessárias e a configuração no %%web.xml%%. Ele pode ser baixado em:
 
 http://vraptor.caelum.com.br/download.jsp
 
+Se você quiser usar o Maven, você pode adicionar o artefato do VRaptor como dependência no seu pom.xml:
+[xml]
+<dependency>
+	<groupId>br.com.caelum</groupId>
+	<artifactId>vraptor</artifactId>
+	<version>3.1.1</version><!--ou a última versão disponível-->
+</dependency>
+[/xml]
 [section Um Controller simples]
 
 Chamaremos de **Controller** as classes contendo a lógica de negócio do seu sistema. 

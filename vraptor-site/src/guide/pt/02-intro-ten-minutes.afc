@@ -31,9 +31,11 @@ do contexto para algo melhor, como  %%onlinestore%%. Agora se você rodar esse e
 deve ser possível acessar %%http://localhost:8080/onlinestore%% e ver
 **It works!** no navegador.
 
-Nota: se você está usando um container de servlet 3.0 (java EE 6), você nem precisa
+[box Nota]
+Se você está usando um container de servlet 3.0 (java EE 6), você nem precisa
 de %%web.xml%%, pois o VRaptor vai configurar esse filtro através do novo recurso de
 web-fragments.
+[/box]
 
 [section Um cadastro de produtos]
 Para começar o sistema, vamos começar com cadastro de produtos. Precisamos de uma classe que vai

@@ -15,6 +15,15 @@ You can start your project based on vraptor-blank-project, available on
 http://vraptor.caelum.com.br/download.jsp. It contains all required jar dependencies, and
 the minimal web.xml configuration for working with VRaptor.
 
+If you want to use Maven, you can add VRaptor's Maven artifact on your pom.xml:
+[xml]
+<dependency>
+	<groupId>br.com.caelum</groupId>
+	<artifactId>vraptor</artifactId>
+	<version>3.1.1</version><!--or the latest version-->
+</dependency>
+[/xml]
+
 [section A simple controller]
 
 Having VRaptor properly configured on your web.xml, you can create your controllers for

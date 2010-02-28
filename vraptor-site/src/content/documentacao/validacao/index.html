@@ -56,6 +56,8 @@
 				<li><a href="../../javadoc">Javadoc</a></li>
 				<li>|</li>
 				<li><a href="../../equipe.jsp">Equipe</a></li>
+				<li>|</li>
+				<li><a href="../../comunidade.jsp">Comunidade</a></li>
 			</ul>
 		<div id="contentDocumentacao">
 			<div class="download"><a href="../vraptor3.pdf">Download em PDF</a></div>
@@ -184,7 +186,7 @@ usando o Hibernate Validator basta adicionar uma linha de c&oacute;digo:</span>
 	    	<div class="java"><code class="java">
 <span class="java4">public </span><span class="java10">adiciona</span><span class="java8">(</span><span class="java10">Funcionario funcionario</span><span class="java8">) {<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java3">//Valida&ccedil;ão do Funcionario com Hibernate Validator<br />
-&nbsp;&nbsp;&nbsp; </span><span class="java10">validator.add</span><span class="java8">(</span><span class="java10">Hibernate.validate</span><span class="java8">(</span><span class="java10">funcionario</span><span class="java8">))</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java10">validator.addAll</span><span class="java8">(</span><span class="java10">Hibernate.validate</span><span class="java8">(</span><span class="java10">funcionario</span><span class="java8">))</span><span class="java10">;<br />
 <br />
 &nbsp;&nbsp;&nbsp; validator.checking</span><span class="java8">(</span><span class="java4">new </span><span class="java10">Validations</span><span class="java8">(){{<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">that</span><span class="java8">(</span><span class="java10">!funcionario.getNome</span><span class="java8">()</span><span class="java10">.isEmpty</span><span class="java8">()</span><span class="java10">, </span><span class="java5">&#34;erro&#34;</span><span class="java10">,</span><span class="java5">&#34;nomeNaoInformado&#34;</span><span class="java8">)</span><span class="java10">;<br />

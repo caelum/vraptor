@@ -12,6 +12,10 @@ In order to import this project on Eclipse, you'll need:
 	* just right click on the project, run as, run on server. choose a servlet container or configure a new one
 	* done! check the log files. access http://localhost:8080/vraptor-blank-project/ (or change 8080 to the appropriate port).
 	
+IMPORTING THIS PROJECT ON NETBEANS 6.8
 	
-	
+	* choose menu File >> Open Project
+	* choose the directory that contains vraptor-blank-project
+	* right click on project and choose Run
+	* There might be a "It Works! VRaptor" message on the browser that has just opened. 
 

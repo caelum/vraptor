@@ -35,73 +35,81 @@ import br.com.caelum.vraptor.ioc.ContainerProvider;
  * @author Fabio Kung
  */
 public class SpringProvider implements ContainerProvider {
-    private final RequestContextListener requestListener = new RequestContextListener();
-    private SpringBasedContainer container;
+	private final RequestContextListener requestListener = new RequestContextListener();
+	private SpringBasedContainer container;
 
-    /**
-     * Provides request scope support for Spring IoC Container when
-     * org.springframework.web.context.request.RequestContextListener has not been called.
-     */
-    public <T> T provideForRequest(RequestInfo request, Execution<T> execution) {
-    	if (springListenerAlreadyCalled()) {
-    		return execution.insideRequest(getContainer());
-    	}
-        VRaptorRequestHolder.setRequestForCurrentThread(request);
-        T result;
-        try {
-            ServletContext context = request.getServletContext();
-            HttpServletRequest webRequest = request.getRequest();
-            requestListener.requestInitialized(new ServletRequestEvent(context, webRequest));
-            try {
-            	result = execution.insideRequest(getContainer());
-            } finally {
-            	requestListener.requestDestroyed(new ServletRequestEvent(context, webRequest));
-            }
-        } finally {
-        	VRaptorRequestHolder.resetRequestForCurrentThread();
-        }
-        return result;
-    }
-    
-    protected Container getContainer() {
-   	 return container;
-    }
+	/**
+	 * Provides request scope support for Spring IoC Container when
+	 * org.springframework.web.context.request.RequestContextListener has not
+	 * been called.
+	 */
+	public <T> T provideForRequest(RequestInfo request, Execution<T> execution) {
+		if (springListenerAlreadyCalled()) {
+			return execution.insideRequest(getContainer());
+		}
+		VRaptorRequestHolder.setRequestForCurrentThread(request);
+		T result;
+		try {
+			ServletContext context = request.getServletContext();
+			HttpServletRequest webRequest = request.getRequest();
+			requestListener.requestInitialized(new ServletRequestEvent(context, webRequest));
+			try {
+				result = execution.insideRequest(getContainer());
+			} finally {
+				requestListener.requestDestroyed(new ServletRequestEvent(context, webRequest));
+			}
+		} finally {
+			VRaptorRequestHolder.resetRequestForCurrentThread();
+		}
+		return result;
+	}
 
-    public void stop() {
-        container.stop();
-    }
+	protected Container getContainer() {
+		return container;
+	}
 
-    public void start(ServletContext context) {
-        BasicConfiguration config = new BasicConfiguration(context);
-        container = new SpringBasedContainer(getParentApplicationContext(context), config);
+	public void stop() {
+		container.stop();
+	}
 
-        registerCustomComponents(container);
-        container.start(context);
-    }
+	/**
+	 * You can override this method to start some components, remember to call super before.
+	 */
+	public void start(ServletContext context) {
+		BasicConfiguration config = new BasicConfiguration(context);
+		container = new SpringBasedContainer(getParentApplicationContext(context), config);
 
-    /**
-     * you can override this method for registering custom components, or
-     * use optional vraptor components, like hibernate session and session factory creators:
-     *
-     * registry.register(SessionCreator.class, SessionCreator.class);
-     * registry.register(SessionFactoryCreator.class, SessionFactoryCreator.class);
-     *
-     * @param registry
-     */
-    protected void registerCustomComponents(ComponentRegistry registry) {
+		registerCustomComponents(container);
+		container.start(context);
+	}
 
-    }
+	/**
+	 * you can override this method for registering custom components, or use
+	 * optional vraptor components, like hibernate session and session factory
+	 * creators:
+	 *
+	 * registry.register(SessionCreator.class, SessionCreator.class);
+	 * registry.register(SessionFactoryCreator.class,
+	 * SessionFactoryCreator.class);
+	 *
+	 * @param registry
+	 */
+	protected void registerCustomComponents(ComponentRegistry registry) {
 
-    /**
-     * You can override this method for providing your own Spring ApplicationContext
-     * @return your spring application context
-     */
-    protected ApplicationContext getParentApplicationContext(ServletContext context) {
-    	return new DefaultSpringLocator().getApplicationContext(context);
-    }
+	}
 
-    private boolean springListenerAlreadyCalled() {
-        return RequestContextHolder.getRequestAttributes() != null;
-    }
+	/**
+	 * You can override this method for providing your own Spring
+	 * ApplicationContext
+	 *
+	 * @return your spring application context
+	 */
+	protected ApplicationContext getParentApplicationContext(ServletContext context) {
+		return new DefaultSpringLocator().getApplicationContext(context);
+	}
+
+	private boolean springListenerAlreadyCalled() {
+		return RequestContextHolder.getRequestAttributes() != null;
+	}
 
 }

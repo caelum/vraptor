@@ -28,7 +28,6 @@ import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.config.BasicConfiguration;
 import br.com.caelum.vraptor.core.Execution;
 import br.com.caelum.vraptor.core.RequestInfo;
-import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
 
 /**
@@ -64,7 +63,7 @@ public class SpringProvider implements ContainerProvider {
 		return result;
 	}
 
-	protected Container getContainer() {
+	protected SpringBasedContainer getContainer() {
 		return container;
 	}
 

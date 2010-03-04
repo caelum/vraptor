@@ -23,7 +23,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.InterceptionException;
-import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodInfo;
@@ -49,7 +48,7 @@ public class OutjectResult implements Interceptor {
 	}
 
 	public boolean accepts(ResourceMethod method) {
-		return method.getResource().getType().isAnnotationPresent(Resource.class);
+		return true;
 	}
 
 	public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)

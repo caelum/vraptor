@@ -4,6 +4,7 @@
 [list]
 * Blank project agora rodando também no netbeans 6.8
 * Encoding agora suportado quando faz upload de arquivos no Google App Engine
+* bugfix: validator.onErrorUse(json()).... não dá mais NullPointerException
 [/list]
 
 [section 3.1.1]

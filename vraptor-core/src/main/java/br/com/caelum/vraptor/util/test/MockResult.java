@@ -26,10 +26,14 @@ import java.util.Map;
 
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.View;
+import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.proxy.MethodInvocation;
 import br.com.caelum.vraptor.proxy.ObjenesisProxifier;
+import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.SuperMethod;
-import br.com.caelum.vraptor.view.Results;
+import br.com.caelum.vraptor.serialization.Serializer;
+import br.com.caelum.vraptor.view.EmptyResult;
+import br.com.caelum.vraptor.view.ResultException;
 
 /**
  *
@@ -41,10 +45,20 @@ import br.com.caelum.vraptor.view.Results;
  * @author Lucas Cavalcanti
  * @author Guilherme Silveira
  */
+@Component
 public class MockResult implements Result {
 
 	private final Map<String, Object> values = new HashMap<String, Object>();
 	private Class<?> typeToUse;
+	private final Proxifier proxifier;
+
+	public MockResult(Proxifier proxifier) {
+		this.proxifier = proxifier;
+	}
+
+	public MockResult() {
+		this(new ObjenesisProxifier());
+	}
 
 	public Result include(String key, Object value) {
 		this.values.put(key, value);
@@ -53,20 +67,42 @@ public class MockResult implements Result {
 
 	public <T extends View> T use(final Class<T> view) {
 		this.typeToUse = view;
-		if (view.equals(Results.page())) {
-			return view.cast(new MockedPage());
-		}
-		if (view.equals(Results.nothing())) {
+		if (view.equals(EmptyResult.class)) {
 			return null;
 		}
-		if (view.equals(Results.logic())) {
-		    return view.cast(new MockedLogic());
-		}
-		return new ObjenesisProxifier().proxify(view, new MethodInvocation<T>() {
-            public Object intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {
-                return null;
-            }
-        });
+		return proxifier.proxify(view, returnOnFinalMethods(view));
+	}
+
+	private <T> MethodInvocation<T> returnOnFinalMethods(final Class<T> view) {
+		return new MethodInvocation<T>() {
+			public Object intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {
+				if (method.getReturnType() == void.class) {
+					return null;
+				}
+
+				if (view.isAssignableFrom(method.getReturnType())) {
+					return proxy;
+				}
+
+				if (args.length > 0 && args[0] instanceof Class) {
+					return proxifier.proxify((Class<?>) args[0], returnOnFirstInvocation());
+				}
+
+				if (Serializer.class.isAssignableFrom(method.getReturnType())) {
+					return proxifier.proxify(Serializer.class, returnOnFinalMethods(Serializer.class));
+				}
+				throw new ResultException("It's not possible to create a mocked version of " + method + ". Please inform this corner case to VRaptor developers");
+			}
+
+		};
+	}
+
+	private <T> MethodInvocation<T> returnOnFirstInvocation() {
+		return new MethodInvocation<T>() {
+			public Object intercept(Object proxy, Method method, Object[] args, SuperMethod superMethod) {
+				return null;
+			}
+		};
 	}
 
 	public boolean used() {

@@ -25,6 +25,7 @@ import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.ioc.RequestScoped;
+import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.util.test.MockResult;
 import br.com.caelum.vraptor.view.ValidationViewsFactory;
 
@@ -43,10 +44,13 @@ public class DefaultValidator implements Validator {
 
 	private final Outjector outjector;
 
-    public DefaultValidator(Result result, ValidationViewsFactory factory, Outjector outjector) {
+	private final Proxifier proxifier;
+
+    public DefaultValidator(Result result, ValidationViewsFactory factory, Outjector outjector, Proxifier proxifier) {
         this.result = result;
 		this.viewsFactory = factory;
 		this.outjector = outjector;
+		this.proxifier = proxifier;
     }
 
     public void checking(Validations validations) {
@@ -56,7 +60,7 @@ public class DefaultValidator implements Validator {
 
     public <T extends View> T onErrorUse(Class<T> view) {
     	if (!hasErrors()) {
-    		return new MockResult().use(view); //ignore anything, no errors occurred
+    		return new MockResult(proxifier).use(view); //ignore anything, no errors occurred
     	}
     	result.include("errors", errors);
     	outjector.outjectRequestMap();

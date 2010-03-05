@@ -27,6 +27,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.Result;
+import br.com.caelum.vraptor.proxy.ObjenesisProxifier;
 import br.com.caelum.vraptor.view.LogicResult;
 import br.com.caelum.vraptor.view.PageResult;
 import br.com.caelum.vraptor.view.Results;
@@ -58,7 +59,7 @@ public class ValidatorAcceptanceTest {
 
     @Test
     public void validDataDoesntThrowException() {
-        DefaultValidator validator = new DefaultValidator(result, mockery.mock(ValidationViewsFactory.class), mockery.mock(Outjector.class));
+        DefaultValidator validator = new DefaultValidator(result, mockery.mock(ValidationViewsFactory.class), mockery.mock(Outjector.class), new ObjenesisProxifier());
         final Student guilherme = new Student();
         guilherme.id = 15L;
         validator.checking(new Validations() {

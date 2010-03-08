@@ -74,6 +74,29 @@ of the validation:
 
 So the second validation will execute only if the first didn't fail.
 
+[section Validation with message parameters]
+You can add parameters to you message keys:
+[code properties]
+greater_than = {0} should be greater than {1}
+[/code]
+And use it on your validations code:
+[java]
+	validator.checking(new Validations(){{
+		that(user.getAge() >= 18, "user.age", "greater_than", "Age", 18);
+		// Age should be greater than 18
+	}});
+[/java]
+You can even i18n your parameters:
+[code properties]
+user.age = User age
+[/code]
+
+[java]
+	validator.checking(new Validations(){{
+		that(user.getAge() >= 18, "user.age", "greater_than", i18n("user.age"), 18);
+		// User age should be greater than 18
+	}});
+[/java]
 [section Validation using Hamcrest Matchers]
 You can use Hamcrest matchers for making validation even more fluent and readable,
 with the advantage of matcher composition and the creation of new matchers that

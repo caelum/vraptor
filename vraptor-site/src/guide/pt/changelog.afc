@@ -11,14 +11,14 @@
  [/java]
  Assim, toda a árvore de objetos a partir do meuObjeto será serializada. 
 
-* Os parâmetros das mensagens do Validations agora também são internacionalizados:
+* Os parâmetros das mensagens do Validations agora também podem ser internacionalizados:
 	[java]
-	// nome = Nome
+	// idade = Idade
 	// maior_que = {0} deveria ser maior que {1}
 	
 	validator.checking(new Validations() {{
-		that(nome > 10, "nome", "maior_que", "nome", 10);
-		//resulta na mensagem "Nome deveria ser maior que 10"  
+		that(idade > 18, "idade", "maior_que", i18n("idade"), 18);
+		//resulta na mensagem "Idade deveria ser maior que 18"  
 	}});
 	[/java]
 [/list]

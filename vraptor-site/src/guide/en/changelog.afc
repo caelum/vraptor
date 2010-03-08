@@ -10,6 +10,16 @@
  result.use(xml()).from(myObject).recursive().serialize();
  [/java]
  It means that all object tree from myObject will be serialized.
+* Message parameters on Validations now can be i18n'ed:
+	[java]
+	// age = Age
+	// greater_than = {0} should be greater than {1}
+	
+	validator.checking(new Validations() {{
+		that(age > 18, "age", "greater_than", i18n("age"), 10);
+		//results on "Age should be greater than 18"  
+	}});
+	[/java]
 [/list]
 
 

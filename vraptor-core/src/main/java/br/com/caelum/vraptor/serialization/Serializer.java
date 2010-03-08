@@ -32,6 +32,10 @@ public interface Serializer {
 	Serializer include(String... names);
 
 	/**
+	 * Include all fields, recursively.
+	 */
+	Serializer recursive();
+	/**
 	 * end method for this fluent interface
 	 */
 	void serialize();

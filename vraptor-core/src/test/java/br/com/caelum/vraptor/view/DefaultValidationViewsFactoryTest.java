@@ -307,6 +307,10 @@ public class DefaultValidationViewsFactoryTest {
 			return this;
 		}
 
+		public Serializer recursive() {
+			return this;
+		}
+
 		public void serialize() {
 		}
 

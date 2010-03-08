@@ -25,7 +25,7 @@ import br.com.caelum.vraptor.serialization.xstream.XStreamSerializer;
 import com.thoughtworks.xstream.XStream;
 
 public class LinksSerializer implements Serializer {
-	
+
 	private final XStreamSerializer serializer;
 
 	public LinksSerializer(XStream xstream, Writer writer) {
@@ -50,6 +50,10 @@ public class LinksSerializer implements Serializer {
 
 	public <T> Serializer from(T arg0, String arg1) {
 		return serializer.from(arg0, arg1);
+	}
+
+	public Serializer recursive() {
+		return serializer.recursive();
 	}
 
 }

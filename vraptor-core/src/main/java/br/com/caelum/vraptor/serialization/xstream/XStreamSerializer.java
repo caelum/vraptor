@@ -30,7 +30,6 @@ import java.util.Set;
 import java.util.Map.Entry;
 
 import net.vidageek.mirror.dsl.Mirror;
-
 import br.com.caelum.vraptor.serialization.Serializer;
 
 import com.google.common.collect.LinkedListMultimap;
@@ -193,6 +192,11 @@ public class XStreamSerializer implements Serializer {
 			xstream.omitField(exclude.getKey(), exclude.getValue());
 		}
 		xstream.toXML(root, writer);
+	}
+
+	public Serializer recursive() {
+		excludes.clear();
+		return this;
 	}
 
 

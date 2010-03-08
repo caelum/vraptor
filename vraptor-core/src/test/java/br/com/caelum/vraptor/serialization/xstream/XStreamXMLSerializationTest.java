@@ -22,7 +22,6 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor.serialization.Serialization;
-import br.com.caelum.vraptor.serialization.xstream.XStreamXMLSerialization;
 
 public class XStreamXMLSerializationTest {
 
@@ -156,15 +155,14 @@ public class XStreamXMLSerializationTest {
 		assertThat(result(), containsString("</items>"));
 	}
 	@Test
-	public void shouldExcludeNonPrimitiveFieldsFromACollection() {
+	public void shouldIncludeAllFieldsWhenRecursive() {
 		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please",
 				new Item("name", 12.99));
-		serialization.from(Arrays.asList(order, order), "orders").exclude("price").serialize();
+		serialization.from(order).recursive().serialize();
 
-		assertThat(result(), not(containsString("<items>")));
-		assertThat(result(), not(containsString("<name>name</name>")));
-		assertThat(result(), not(containsString("<price>12.99</price>")));
-		assertThat(result(), not(containsString("<price>15.0</price>")));
+		assertThat(result(), containsString("<items>"));
+		assertThat(result(), containsString("<name>name</name>"));
+		assertThat(result(), containsString("<price>12.99</price>"));
 	}
 	@Test
 	public void shouldExcludeFieldsFromACollection() {

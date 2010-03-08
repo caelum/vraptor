@@ -2,17 +2,17 @@
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource
  * All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); 
- * you may not use this file except in compliance with the License. 
- * You may obtain a copy of the License at 
- * 
- * 	http://www.apache.org/licenses/LICENSE-2.0 
- * 
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an "AS IS" BASIS, 
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
- * See the License for the specific language governing permissions and 
- * limitations under the License. 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * 	http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package br.com.caelum.vraptor.validator;
@@ -119,12 +119,20 @@ public class ValidationsTest {
     }
 
     @Test
-    public void formatsParameterizedValidationMessagesWithSeveralParameters() {
+    public void formatsParameterizedValidationMessagesWithSeveralParametersI18ningStringParameters() {
         final Client client = new Client();
         client.setAge(-1);
         validations.that(client.getAge() > 0 && client.getAge() < 100, "error", "between_field",  "Age", 0, 100);
         assertThat(validations.getErrors(), hasSize(1));
         assertThat(validations.getErrors().get(0).getMessage(), is(equalTo("Age should be a value between 0 and 100")));
+    }
+    @Test
+    public void formatsParameterizedValidationMessagesWithI18nedStringParameters() {
+    	final Client client = new Client();
+    	client.setAge(-1);
+    	validations.that(client.getAge() > 0 && client.getAge() < 100, "error", "between_field",  validations.i18n("age"), 0, 100);
+    	assertThat(validations.getErrors(), hasSize(1));
+    	assertThat(validations.getErrors().get(0).getMessage(), is(equalTo("Age should be a value between 0 and 100")));
     }
 
 }

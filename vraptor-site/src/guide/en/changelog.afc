@@ -5,6 +5,11 @@
 * Blank project now also runs on netbeans 6.8
 * Supports encoding for file uploads in Google App Engine
 * bugfix: no more NullPointerExceptions on validator.onErrorUse(json())...
+* Serializers now have the recursive method:
+ [java]
+ result.use(xml()).from(myObject).recursive().serialize();
+ [/java]
+ It means that all object tree from myObject will be serialized.
 [/list]
 
 

@@ -7,13 +7,12 @@ import javax.servlet.http.HttpServletResponse;
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.restfulie.RestHeadersHandler;
 import br.com.caelum.vraptor.restfulie.hypermedia.HypermediaResource;
-import br.com.caelum.vraptor.restfulie.relation.Relation;
 import br.com.caelum.vraptor.restfulie.resource.Cacheable;
 import br.com.caelum.vraptor.restfulie.resource.RestfulEntity;
 
 @Component
 public class DefaultRestHeadersHandler implements RestHeadersHandler {
-	
+
 	private final HttpServletResponse response;
 	private final RestDefaults defaults;
 
@@ -34,7 +33,7 @@ public class DefaultRestHeadersHandler implements RestHeadersHandler {
 		} else {
 			restfulHeadersFor(defaults.getEtagFor(resource), defaults.getLastModifiedFor(resource));
 		}
-		
+
 //		TagCoisa t = tagInfoFor(resource);
 //		resource.getRelations(control)
 //		Relation rel;
@@ -42,7 +41,7 @@ public class DefaultRestHeadersHandler implements RestHeadersHandler {
 //		rel.getUri()
 //		addHeader("Link", "rel=name;uri=uri")
 //		precisa limpar depois
-		
+
 	}
 
 	private void restfulHeadersFor(String etag, Calendar lastModified) {
@@ -51,6 +50,6 @@ public class DefaultRestHeadersHandler implements RestHeadersHandler {
 			response.setDateHeader("Last-modified", lastModified.getTimeInMillis());
 		}
 	}
-	
+
 
 }

@@ -36,9 +36,10 @@ import java.util.Set;
 
 /**
  * A set of at most two elements.
- * 
+ *
  * @author Eric Bruneton
  */
+@SuppressWarnings("unchecked")
 class SmallSet extends AbstractSet implements Iterator {
 
     // if e1 is null, e2 must be null; otherwise e2 must be different from e1
@@ -56,11 +57,13 @@ class SmallSet extends AbstractSet implements Iterator {
     // Implementation of inherited abstract methods
     // -------------------------------------------------------------------------
 
-    public Iterator iterator() {
+    @Override
+	public Iterator iterator() {
         return new SmallSet(e1, e2);
     }
 
-    public int size() {
+    @Override
+	public int size() {
         return e1 == null ? 0 : (e2 == null ? 1 : 2);
     }
 

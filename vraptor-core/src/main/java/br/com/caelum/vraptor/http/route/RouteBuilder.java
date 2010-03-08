@@ -111,6 +111,7 @@ public class RouteBuilder {
 			return RouteBuilder.this;
 		}
 
+		@SuppressWarnings("unchecked")
 		private String regexFor(Class<?> type) {
 			if (Arrays.asList(Integer.class, Long.class, int.class, long.class, BigInteger.class, char.class,
 					Character.class, Short.class, short.class).contains(type)) {

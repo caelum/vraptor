@@ -39,10 +39,11 @@ import br.com.caelum.vraptor.asm.Opcodes;
 /**
  * A {@link MethodVisitor} that prints the ASM code that generates the methods
  * it visits.
- * 
+ *
  * @author Eric Bruneton
  * @author Eugene Kuleshov
  */
+@SuppressWarnings("unchecked")
 public class ASMifierMethodVisitor extends ASMifierAbstractVisitor implements MethodVisitor {
 
     /**
@@ -349,7 +350,7 @@ public class ASMifierMethodVisitor extends ASMifierAbstractVisitor implements Me
      * Appends a declaration of the given label to {@link #buf buf}. This
      * declaration is of the form "Label lXXX = new Label();". Does nothing if
      * the given label has already been declared.
-     * 
+     *
      * @param l
      *            a label.
      */
@@ -366,7 +367,7 @@ public class ASMifierMethodVisitor extends ASMifierAbstractVisitor implements Me
      * Appends the name of the given label to {@link #buf buf}. The given label
      * <i>must</i> already have a name. One way to ensure this is to always call
      * {@link #declareLabel declared} before calling this method.
-     * 
+     *
      * @param l
      *            a label.
      */

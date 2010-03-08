@@ -84,7 +84,7 @@ public class MockResult implements Result {
 					return proxy;
 				}
 
-				if (args.length > 0 && args[0] instanceof Class) {
+				if (args.length > 0 && args[0] instanceof Class<?>) {
 					return proxifier.proxify((Class<?>) args[0], returnOnFirstInvocation());
 				}
 
@@ -139,14 +139,17 @@ public class MockResult implements Result {
 		return use(page()).of(controller);
 	}
 
+	@SuppressWarnings("unchecked")
 	public <T> T redirectTo(T controller) {
 		return (T) redirectTo(controller.getClass());
 	}
 
+	@SuppressWarnings("unchecked")
 	public <T> T forwardTo(T controller) {
 		return (T) forwardTo(controller.getClass());
 	}
 
+	@SuppressWarnings("unchecked")
 	public <T> T of(T controller) {
 		return (T) of(controller.getClass());
 	}

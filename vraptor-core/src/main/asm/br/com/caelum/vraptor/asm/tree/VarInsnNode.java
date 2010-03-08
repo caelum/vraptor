@@ -37,9 +37,10 @@ import br.com.caelum.vraptor.asm.MethodVisitor;
  * A node that represents a local variable instruction. A local variable
  * instruction is an instruction that loads or stores the value of a local
  * variable.
- * 
+ *
  * @author Eric Bruneton
  */
+@SuppressWarnings("unchecked")
 public class VarInsnNode extends AbstractInsnNode {
 
     /**
@@ -50,7 +51,7 @@ public class VarInsnNode extends AbstractInsnNode {
 
     /**
      * Constructs a new {@link VarInsnNode}.
-     * 
+     *
      * @param opcode
      *            the opcode of the local variable instruction to be
      *            constructed. This opcode must be ILOAD, LLOAD, FLOAD, DLOAD,
@@ -66,7 +67,7 @@ public class VarInsnNode extends AbstractInsnNode {
 
     /**
      * Sets the opcode of this instruction.
-     * 
+     *
      * @param opcode
      *            the new instruction opcode. This opcode must be ILOAD, LLOAD,
      *            FLOAD, DLOAD, ALOAD, ISTORE, LSTORE, FSTORE, DSTORE, ASTORE or
@@ -81,7 +82,8 @@ public class VarInsnNode extends AbstractInsnNode {
         return VAR_INSN;
     }
 
-    public void accept(final MethodVisitor mv) {
+    @Override
+	public void accept(final MethodVisitor mv) {
         mv.visitVarInsn(opcode, var);
     }
 

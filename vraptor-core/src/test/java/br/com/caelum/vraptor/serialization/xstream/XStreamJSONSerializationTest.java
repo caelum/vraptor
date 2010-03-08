@@ -21,7 +21,6 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
-import br.com.caelum.vraptor.serialization.xstream.XStreamJSONSerialization;
 
 public class XStreamJSONSerializationTest {
 
@@ -83,6 +82,7 @@ public class XStreamJSONSerializationTest {
 	}
 	public static class AdvancedOrder extends Order{
 
+		@SuppressWarnings("unused")
 		private final String notes;
 
 		public AdvancedOrder(Client client, double price, String comments, String notes) {
@@ -114,6 +114,7 @@ public class XStreamJSONSerializationTest {
 			super(client, price, comments);
 			this.type = type;
 		}
+		@SuppressWarnings("unused")
 		private final Type type;
 	}
 
@@ -167,7 +168,7 @@ public class XStreamJSONSerializationTest {
 		String expectedResult = "<o:order>\n  <o:price>15.0</o:price>\n  <o:comments>pack it nicely, please</o:comments>\n</o:order>";
 		expectedResult += expectedResult;
 		expectedResult = "<o:orders xmlns:o=\"http://www.caelum.com.br/order\">" + expectedResult + "</o:orders>";
-		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
+//		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
 //		serializer.from("orders", Arrays.asList(order, order)).namespace("http://www.caelum.com.br/order","o").serialize();
 		assertThat(result(), is(equalTo(expectedResult)));
 	}

@@ -37,6 +37,7 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
  *
  * @author Fabio Kung
  */
+@SuppressWarnings("unchecked")
 @ApplicationScoped
 public class DefaultProxifier extends AbstractCglibProxifier {
 	private final Logger logger = LoggerFactory.getLogger(DefaultProxifier.class);

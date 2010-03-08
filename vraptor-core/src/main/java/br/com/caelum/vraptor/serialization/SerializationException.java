@@ -20,6 +20,7 @@ package br.com.caelum.vraptor.serialization;
  * @author guilherme silveira
  * @since 3.0.2
  */
+@SuppressWarnings("serial")
 public class SerializationException extends RuntimeException {
 
 	public SerializationException(String string, Throwable e) {

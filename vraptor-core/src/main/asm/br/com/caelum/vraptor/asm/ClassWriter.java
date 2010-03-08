@@ -38,6 +38,7 @@ package br.com.caelum.vraptor.asm;
  *
  * @author Eric Bruneton
  */
+@SuppressWarnings("unchecked")
 public class ClassWriter implements ClassVisitor {
 
     /**

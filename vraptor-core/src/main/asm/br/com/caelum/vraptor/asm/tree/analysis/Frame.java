@@ -45,9 +45,10 @@ import br.com.caelum.vraptor.asm.tree.VarInsnNode;
  * variable slots, and an operand stack. Warning: long and double values are
  * represented by <i>two</i> slots in local variables, and by <i>one</i> slot in
  * the operand stack.
- * 
+ *
  * @author Eric Bruneton
  */
+@SuppressWarnings("unchecked")
 public class Frame {
 
     /**
@@ -67,7 +68,7 @@ public class Frame {
 
     /**
      * Constructs a new frame with the given size.
-     * 
+     *
      * @param nLocals
      *            the maximum number of local variables of the frame.
      * @param nStack
@@ -80,7 +81,7 @@ public class Frame {
 
     /**
      * Constructs a new frame that is identical to the given frame.
-     * 
+     *
      * @param src
      *            a frame.
      */
@@ -91,7 +92,7 @@ public class Frame {
 
     /**
      * Copies the state of the given frame into this frame.
-     * 
+     *
      * @param src
      *            a frame.
      * @return this frame.
@@ -104,7 +105,7 @@ public class Frame {
 
     /**
      * Returns the maximum number of local variables of this frame.
-     * 
+     *
      * @return the maximum number of local variables of this frame.
      */
     public int getLocals() {
@@ -113,7 +114,7 @@ public class Frame {
 
     /**
      * Returns the value of the given local variable.
-     * 
+     *
      * @param i
      *            a local variable index.
      * @return the value of the given local variable.
@@ -129,7 +130,7 @@ public class Frame {
 
     /**
      * Sets the value of the given local variable.
-     * 
+     *
      * @param i
      *            a local variable index.
      * @param value
@@ -147,7 +148,7 @@ public class Frame {
     /**
      * Returns the number of values in the operand stack of this frame. Long and
      * double values are treated as single values.
-     * 
+     *
      * @return the number of values in the operand stack of this frame.
      */
     public int getStackSize() {
@@ -156,7 +157,7 @@ public class Frame {
 
     /**
      * Returns the value of the given operand stack slot.
-     * 
+     *
      * @param i
      *            the index of an operand stack slot.
      * @return the value of the given operand stack slot.
@@ -176,7 +177,7 @@ public class Frame {
 
     /**
      * Pops a value from the operand stack of this frame.
-     * 
+     *
      * @return the value that has been popped from the stack.
      * @throws IndexOutOfBoundsException
      *             if the operand stack is empty.
@@ -190,7 +191,7 @@ public class Frame {
 
     /**
      * Pushes a value into the operand stack of this frame.
-     * 
+     *
      * @param value
      *            the value that must be pushed into the stack.
      * @throws IndexOutOfBoundsException
@@ -611,7 +612,7 @@ public class Frame {
 
     /**
      * Merges this frame with the given frame.
-     * 
+     *
      * @param frame
      *            a frame.
      * @param interpreter
@@ -638,7 +639,7 @@ public class Frame {
 
     /**
      * Merges this frame with the given frame (case of a RET instruction).
-     * 
+     *
      * @param frame
      *            a frame
      * @param access
@@ -660,7 +661,7 @@ public class Frame {
 
     /**
      * Returns a string representation of this frame.
-     * 
+     *
      * @return a string representation of this frame.
      */
     @Override

@@ -48,9 +48,10 @@ import br.com.caelum.vraptor.asm.Opcodes;
  * <br>
  * (*) this is mandatory only for classes whose version is greater than or equal
  * to {@link Opcodes#V1_6 V1_6}.
- * 
+ *
  * @author Eric Bruneton
  */
+@SuppressWarnings("unchecked")
 public class FrameNode extends AbstractInsnNode {
 
     /**
@@ -83,7 +84,7 @@ public class FrameNode extends AbstractInsnNode {
 
     /**
      * Constructs a new {@link FrameNode}.
-     * 
+     *
      * @param type
      *            the type of this frame. Must be {@link Opcodes#F_NEW} for
      *            expanded frames, or {@link Opcodes#F_FULL},
@@ -135,11 +136,12 @@ public class FrameNode extends AbstractInsnNode {
 
     /**
      * Makes the given visitor visit this stack map frame.
-     * 
+     *
      * @param mv
      *            a method visitor.
      */
-    public void accept(final MethodVisitor mv) {
+    @Override
+	public void accept(final MethodVisitor mv) {
         switch (type) {
         case Opcodes.F_NEW:
         case Opcodes.F_FULL:

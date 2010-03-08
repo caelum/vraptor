@@ -40,9 +40,10 @@ import br.com.caelum.vraptor.asm.Opcodes;
 
 /**
  * A node that represents a LOOKUPSWITCH instruction.
- * 
+ *
  * @author Eric Bruneton
  */
+@SuppressWarnings("unchecked")
 public class LookupSwitchInsnNode extends AbstractInsnNode {
 
     /**
@@ -63,7 +64,7 @@ public class LookupSwitchInsnNode extends AbstractInsnNode {
 
     /**
      * Constructs a new {@link LookupSwitchInsnNode}.
-     * 
+     *
      * @param dflt
      *            beginning of the default handler block.
      * @param keys
@@ -92,7 +93,8 @@ public class LookupSwitchInsnNode extends AbstractInsnNode {
         return LOOKUPSWITCH_INSN;
     }
 
-    public void accept(final MethodVisitor mv) {
+    @Override
+	public void accept(final MethodVisitor mv) {
         int[] keys = new int[this.keys.size()];
         for (int i = 0; i < keys.length; ++i) {
             keys[i] = ((Integer) this.keys.get(i)).intValue();

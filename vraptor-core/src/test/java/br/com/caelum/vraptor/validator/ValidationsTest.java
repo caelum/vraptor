@@ -33,7 +33,6 @@ import org.junit.Test;
 public class ValidationsTest {
 
     public static class Client {
-        private Long id;
         private String name;
         private int age;
 
@@ -81,7 +80,8 @@ public class ValidationsTest {
         assertThat(validations.getErrors(), hasSize(0));
     }
 
-    @Test
+    @SuppressWarnings("null")
+	@Test
     public void canIgnoreInternalPrimitiveValidationIfAlreadyNull() {
         final Client guilherme = null;
         if (validations.that(guilherme, notNullValue())) {

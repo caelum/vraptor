@@ -54,9 +54,10 @@ import br.com.caelum.vraptor.asm.commons.EmptyVisitor;
 
 /**
  * A Jar file optimizer.
- * 
+ *
  * @author Eric Bruneton
  */
+@SuppressWarnings("unchecked")
 public class JarOptimizer {
 
     private static final Set API = new HashSet();

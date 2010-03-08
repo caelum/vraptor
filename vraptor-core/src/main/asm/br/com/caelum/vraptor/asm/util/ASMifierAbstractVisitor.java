@@ -37,9 +37,10 @@ import br.com.caelum.vraptor.asm.Type;
 
 /**
  * An abstract ASMifier visitor.
- * 
+ *
  * @author Eric Bruneton
  */
+@SuppressWarnings("unchecked")
 public class ASMifierAbstractVisitor extends AbstractVisitor {
 
     /**
@@ -55,7 +56,7 @@ public class ASMifierAbstractVisitor extends AbstractVisitor {
 
     /**
      * Constructs a new {@link ASMifierAbstractVisitor}.
-     * 
+     *
      * @param name
      *            the name of the variable for this visitor in the produced
      *            code.
@@ -66,7 +67,7 @@ public class ASMifierAbstractVisitor extends AbstractVisitor {
 
     /**
      * Prints the ASM code that generates the given annotation.
-     * 
+     *
      * @param desc
      *            the class descriptor of the annotation class.
      * @param visible
@@ -87,7 +88,7 @@ public class ASMifierAbstractVisitor extends AbstractVisitor {
 
     /**
      * Prints the ASM code that generates the given attribute.
-     * 
+     *
      * @param attr
      *            an attribute.
      */
@@ -115,7 +116,7 @@ public class ASMifierAbstractVisitor extends AbstractVisitor {
     /**
      * Appends a string representation of the given constant to the given
      * buffer.
-     * 
+     *
      * @param cst
      *            an {@link Integer}, {@link Float}, {@link Long},
      *            {@link Double} or {@link String} object. May be <tt>null</tt>.
@@ -127,7 +128,7 @@ public class ASMifierAbstractVisitor extends AbstractVisitor {
     /**
      * Appends a string representation of the given constant to the given
      * buffer.
-     * 
+     *
      * @param buf
      *            a string buffer.
      * @param cst

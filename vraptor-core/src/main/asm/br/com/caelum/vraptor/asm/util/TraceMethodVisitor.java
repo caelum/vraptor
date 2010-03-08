@@ -43,9 +43,10 @@ import br.com.caelum.vraptor.asm.signature.SignatureReader;
 /**
  * A {@link MethodVisitor} that prints a disassembled view of the methods it
  * visits.
- * 
+ *
  * @author Eric Bruneton
  */
+@SuppressWarnings("unchecked")
 public class TraceMethodVisitor extends TraceAbstractVisitor implements MethodVisitor {
 
     /**
@@ -83,7 +84,7 @@ public class TraceMethodVisitor extends TraceAbstractVisitor implements MethodVi
 
     /**
      * Constructs a new {@link TraceMethodVisitor}.
-     * 
+     *
      * @param mv
      *            the {@link MethodVisitor} to which this visitor delegates
      *            calls. May be <tt>null</tt>.
@@ -496,7 +497,7 @@ public class TraceMethodVisitor extends TraceAbstractVisitor implements MethodVi
     /**
      * Appends the name of the given label to {@link #buf buf}. Creates a new
      * label name if the given label does not yet have one.
-     * 
+     *
      * @param l
      *            a label.
      */

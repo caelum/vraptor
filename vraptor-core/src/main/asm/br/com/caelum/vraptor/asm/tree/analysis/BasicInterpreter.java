@@ -43,10 +43,11 @@ import br.com.caelum.vraptor.asm.tree.TypeInsnNode;
 
 /**
  * An {@link Interpreter} for {@link BasicValue} values.
- * 
+ *
  * @author Eric Bruneton
  * @author Bing Ran
  */
+@SuppressWarnings("unchecked")
 public class BasicInterpreter implements Opcodes, Interpreter {
 
     public Value newValue(final Type type) {

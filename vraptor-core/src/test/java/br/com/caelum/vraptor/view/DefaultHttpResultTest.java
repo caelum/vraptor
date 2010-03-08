@@ -39,6 +39,7 @@ public class DefaultHttpResultTest {
 		httpResult = new DefaultHttpResult(response, status);
 	}
 
+	@SuppressWarnings("deprecation")
 	@Test
 	public void shouldDelegateToStatus() throws Exception {
 		httpResult.movedPermanentlyTo("/my/uri");
@@ -50,6 +51,7 @@ public class DefaultHttpResultTest {
 		public void method() {
 		}
 	}
+	@SuppressWarnings("deprecation")
 	@Test
 	public void shouldDelegateToStatusWhenMovingToLogic() throws Exception {
 		when(status.movedPermanentlyTo(RandomController.class)).thenReturn(new RandomController());

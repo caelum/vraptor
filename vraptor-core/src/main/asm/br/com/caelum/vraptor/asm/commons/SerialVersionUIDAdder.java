@@ -47,18 +47,18 @@ import br.com.caelum.vraptor.asm.Opcodes;
 /**
  * A {@link ClassAdapter} that adds a serial version unique identifier to a
  * class if missing. Here is typical usage of this class:
- * 
+ *
  * <pre>
  *   ClassWriter cw = new ClassWriter(...);
  *   ClassVisitor sv = new SerialVersionUIDAdder(cw);
  *   ClassVisitor ca = new MyClassAdapter(sv);
  *   new ClassReader(orginalClass).accept(ca, false);
  * </pre>
- * 
+ *
  * The SVUID algorithm can be found <a href=
  * "http://java.sun.com/j2se/1.4.2/docs/guide/serialization/spec/class.html"
  * >http://java.sun.com/j2se/1.4.2/docs/guide/serialization/spec/class.html</a>:
- * 
+ *
  * <pre>
  * The serialVersionUID is computed using the signature of a stream of bytes
  * that reflect the class definition. The National Institute of Standards and
@@ -67,9 +67,9 @@ import br.com.caelum.vraptor.asm.Opcodes;
  * 64-bit hash. A java.lang.DataOutputStream is used to convert primitive data
  * types to a sequence of bytes. The values input to the stream are defined by
  * the Java Virtual Machine (VM) specification for classes.
- * 
+ *
  * The sequence of items in the stream is as follows:
- * 
+ *
  * 1. The class name written using UTF encoding.
  * 2. The class modifiers written as a 32-bit integer.
  * 3. The name of each interface sorted by name written using UTF encoding.
@@ -93,12 +93,12 @@ import br.com.caelum.vraptor.asm.Opcodes;
  * 3. The descriptor of the method in UTF encoding.
  * 8. The SHA-1 algorithm is executed on the stream of bytes produced by
  * DataOutputStream and produces five 32-bit values sha[0..4].
- * 
- * 9. The hash value is assembled from the first and second 32-bit values of 
+ *
+ * 9. The hash value is assembled from the first and second 32-bit values of
  * the SHA-1 message digest. If the result of the message digest, the five
- * 32-bit words H0 H1 H2 H3 H4, is in an array of five int values named 
+ * 32-bit words H0 H1 H2 H3 H4, is in an array of five int values named
  * sha, the hash value would be computed as follows:
- * 
+ *
  * long hash = ((sha[0] &gt;&gt;&gt; 24) &amp; 0xFF) |
  * ((sha[0] &gt;&gt;&gt; 16) &amp; 0xFF) &lt;&lt; 8 |
  * ((sha[0] &gt;&gt;&gt; 8) &amp; 0xFF) &lt;&lt; 16 |
@@ -108,9 +108,10 @@ import br.com.caelum.vraptor.asm.Opcodes;
  * ((sha[1] &gt;&gt;&gt; 8) &amp; 0xFF) &lt;&lt; 48 |
  * ((sha[1] &gt;&gt;&gt; 0) &amp; 0xFF) &lt;&lt; 56;
  * </pre>
- * 
+ *
  * @author Rajendra Inamdar, Vishal Vishnoi
  */
+@SuppressWarnings("unchecked")
 public class SerialVersionUIDAdder extends ClassAdapter {
 
     /**
@@ -161,7 +162,7 @@ public class SerialVersionUIDAdder extends ClassAdapter {
 
     /**
      * Creates a new {@link SerialVersionUIDAdder}.
-     * 
+     *
      * @param cv
      *            a {@link ClassVisitor} to which this visitor will delegate
      *            calls.
@@ -287,7 +288,7 @@ public class SerialVersionUIDAdder extends ClassAdapter {
      * Returns the value of SVUID if the class doesn't have one already. Please
      * note that 0 is returned if the class already has SVUID, thus use
      * <code>isHasSVUID</code> to determine if the class already had an SVUID.
-     * 
+     *
      * @return Returns the serial version UID
      */
     protected long computeSVUID() throws IOException {
@@ -322,11 +323,11 @@ public class SerialVersionUIDAdder extends ClassAdapter {
             /*
              * 4. For each field of the class sorted by field name (except
              * private static and private transient fields):
-             * 
+             *
              * 1. The name of the field in UTF encoding. 2. The modifiers of the
              * field written as a 32-bit integer. 3. The descriptor of the field
              * in UTF encoding
-             * 
+             *
              * Note that field signatutes are not dot separated. Method and
              * constructor signatures are dot separated. Go figure...
              */
@@ -376,7 +377,7 @@ public class SerialVersionUIDAdder extends ClassAdapter {
              * digest, the five 32-bit words H0 H1 H2 H3 H4, is in an array of
              * five int values named sha, the hash value would be computed as
              * follows:
-             * 
+             *
              * long hash = ((sha[0] >>> 24) & 0xFF) | ((sha[0] >>> 16) & 0xFF)
              * << 8 | ((sha[0] >>> 8) & 0xFF) << 16 | ((sha[0] >>> 0) & 0xFF) <<
              * 24 | ((sha[1] >>> 24) & 0xFF) << 32 | ((sha[1] >>> 16) & 0xFF) <<
@@ -398,7 +399,7 @@ public class SerialVersionUIDAdder extends ClassAdapter {
 
     /**
      * Returns the SHA-1 message digest of the given value.
-     * 
+     *
      * @param value
      *            the value whose SHA message digest must be computed.
      * @return the SHA-1 message digest of the given value.
@@ -413,7 +414,7 @@ public class SerialVersionUIDAdder extends ClassAdapter {
 
     /**
      * Sorts the items in the collection and writes it to the data output stream
-     * 
+     *
      * @param itemCollection
      *            collection of items
      * @param dos

@@ -25,7 +25,7 @@ import br.com.caelum.vraptor.proxy.Proxifier;
 
 /**
  * Builder to help creating transitions.
- * 
+ *
  * @author guilherme silveira
  * @author pedro matiello
  * @since 3.0.3
@@ -45,7 +45,8 @@ public class DefaultRelationBuilder implements RelationBuilder {
 		this.routes = routes;
 		this.proxifier = proxifier;
 	}
-	
+
+	@SuppressWarnings("unchecked")
 	class Callback implements MethodInvocation{
 		public Object intercept(Object proxy, java.lang.reflect.Method method,
 				Object[] args, br.com.caelum.vraptor.proxy.SuperMethod superMethod) {
@@ -55,8 +56,10 @@ public class DefaultRelationBuilder implements RelationBuilder {
 		};
 	}
 
+	@SuppressWarnings("unchecked")
 	public <T> T uses(Class<T> type) {
 		this.controller = type;
+
 		return type.cast(proxifier.proxify(type, new Callback()));
 	}
 
@@ -79,7 +82,7 @@ public class DefaultRelationBuilder implements RelationBuilder {
 				"Relation was not correctly created: '" + name + "'");
 	}
 
-	private Method findMethod(String name, Class type) {
+	private Method findMethod(String name, Class<?> type) {
 		if(type.equals(Object.class)) {
 			throw new IllegalArgumentException("Controller " + controller.getName() + " does not have a method named " + name);
 		}

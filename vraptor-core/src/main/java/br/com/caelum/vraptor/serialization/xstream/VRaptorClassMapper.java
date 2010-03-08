@@ -14,6 +14,7 @@ public class VRaptorClassMapper extends MapperWrapper {
 		this.extractor = extractor;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public String serializedClass(Class type) {
 		String superName = super.serializedClass(type);

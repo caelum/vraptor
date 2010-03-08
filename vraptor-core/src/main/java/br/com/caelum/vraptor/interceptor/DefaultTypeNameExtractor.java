@@ -38,7 +38,7 @@ public class DefaultTypeNameExtractor implements TypeNameExtractor {
 	public String nameFor(Type generic) {
 		if (generic instanceof ParameterizedType) {
 			ParameterizedType type = (ParameterizedType) generic;
-			Class raw = (Class) type.getRawType();
+			Class<?> raw = (Class<?>) type.getRawType();
 			if (Collection.class.isAssignableFrom(raw)) {
 				return nameFor(type.getActualTypeArguments()[0]) + "List";
 			}
@@ -59,7 +59,7 @@ public class DefaultTypeNameExtractor implements TypeNameExtractor {
 			return StringUtils.lowercaseFirst(variable.getName());
 		}
 
-		Class raw = (Class) generic;
+		Class<?> raw = (Class<?>) generic;
 
 
 		if (raw.isArray()) {

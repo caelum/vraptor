@@ -45,12 +45,13 @@ import br.com.caelum.vraptor.asm.util.AbstractVisitor;
 /**
  * A {@link MethodVisitor} that generates SAX 2.0 events from the visited
  * method.
- * 
+ *
  * @see br.com.caelum.vraptor.asm.xml.SAXClassAdapter
  * @see br.com.caelum.vraptor.asm.xml.Processor
- * 
+ *
  * @author Eugene Kuleshov
  */
+@SuppressWarnings("unchecked")
 public final class SAXCodeAdapter extends SAXAdapter implements MethodVisitor {
 
     static final String[] TYPES = { "top", "int", "float", "double", "long", "null", "uninitializedThis" };
@@ -59,7 +60,7 @@ public final class SAXCodeAdapter extends SAXAdapter implements MethodVisitor {
 
     /**
      * Constructs a new {@link SAXCodeAdapter SAXCodeAdapter} object.
-     * 
+     *
      * @param h
      *            content handler that will be used to send SAX 2.0 events.
      */

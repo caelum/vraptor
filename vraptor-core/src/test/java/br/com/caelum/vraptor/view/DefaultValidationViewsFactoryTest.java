@@ -142,6 +142,7 @@ public class DefaultValidationViewsFactoryTest {
 
 		factory.instanceFor(HttpResult.class, errors).addDateHeader("abc", 123l).addHeader("def", "ghi").addIntHeader("jkl", 234);
 	}
+	@SuppressWarnings("deprecation")
 	@Test(expected=ValidationException.class)
 	public void onHttpResultShouldThrowExceptionsOnMoved() throws Exception {
 		HttpResult httpResult = mock(HttpResult.class);
@@ -157,6 +158,7 @@ public class DefaultValidationViewsFactoryTest {
 		factory.instanceFor(HttpResult.class, errors).movedPermanentlyTo(RandomComponent.class).random();
 	}
 
+	@SuppressWarnings("deprecation")
 	@Test(expected=ValidationException.class)
 	public void onHttpResultShouldThrowExceptionsOnMovedToLogic() throws Exception {
 		HttpResult httpResult = mock(HttpResult.class);

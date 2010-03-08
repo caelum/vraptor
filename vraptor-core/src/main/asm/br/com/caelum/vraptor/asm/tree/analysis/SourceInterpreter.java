@@ -42,9 +42,10 @@ import br.com.caelum.vraptor.asm.tree.MethodInsnNode;
 
 /**
  * An {@link Interpreter} for {@link SourceValue} values.
- * 
+ *
  * @author Eric Bruneton
  */
+@SuppressWarnings("unchecked")
 public class SourceInterpreter implements Opcodes, Interpreter {
 
     public Value newValue(final Type type) {

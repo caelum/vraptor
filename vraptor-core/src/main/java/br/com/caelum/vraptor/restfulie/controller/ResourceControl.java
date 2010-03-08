@@ -20,18 +20,18 @@ package br.com.caelum.vraptor.restfulie.controller;
 
 /**
  * Resources implementing this interface will be serialized with their links.
- * 
+ *
  * @author guilherme silveira
  * @author caires vinicius
  * @since 3.0.3
- * 
+ *
  */
 public interface ResourceControl<T> {
 
 	/**
 	 * Returns a list of controllers to be intercepted.
 	 */
-	Class[] getControllers();
+	Class<?>[] getControllers();
 
 	/**
 	 * Given its id (retrieved from the request parameter %id%), returns an

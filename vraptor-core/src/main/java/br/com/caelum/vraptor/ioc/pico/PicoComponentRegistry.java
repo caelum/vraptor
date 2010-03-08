@@ -203,6 +203,7 @@ public class PicoComponentRegistry extends AbstractComponentRegistry {
      * @param container
      * @param componentFactoryMap
      */
+    @SuppressWarnings("unchecked")
     private void registerComponentFactories(MutablePicoContainer container, Map<Class<?>, Class<? extends ComponentFactory>> componentFactoryMap) {
         for (Class<?> targetType : componentFactoryMap.keySet()) {
             container.addAdapter(new PicoComponentAdapter(targetType, componentFactoryMap.get(targetType)));

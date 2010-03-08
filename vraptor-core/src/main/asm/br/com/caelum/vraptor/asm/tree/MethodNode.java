@@ -43,9 +43,10 @@ import br.com.caelum.vraptor.asm.Type;
 
 /**
  * A node that represents a method.
- * 
+ *
  * @author Eric Bruneton
  */
+@SuppressWarnings("unchecked")
 public class MethodNode extends MemberNode implements MethodVisitor {
 
     /**
@@ -89,7 +90,7 @@ public class MethodNode extends MemberNode implements MethodVisitor {
     /**
      * The runtime visible parameter annotations of this method. These lists are
      * lists of {@link AnnotationNode} objects. May be <tt>null</tt>.
-     * 
+     *
      * @associates br.com.caelum.vraptor.asm.tree.AnnotationNode
      * @label invisible parameters
      */
@@ -98,7 +99,7 @@ public class MethodNode extends MemberNode implements MethodVisitor {
     /**
      * The runtime invisible parameter annotations of this method. These lists
      * are lists of {@link AnnotationNode} objects. May be <tt>null</tt>.
-     * 
+     *
      * @associates br.com.caelum.vraptor.asm.tree.AnnotationNode
      * @label visible parameters
      */
@@ -107,7 +108,7 @@ public class MethodNode extends MemberNode implements MethodVisitor {
     /**
      * The instructions of this method. This list is a list of
      * {@link AbstractInsnNode} objects.
-     * 
+     *
      * @associates br.com.caelum.vraptor.asm.tree.AbstractInsnNode
      * @label instructions
      */
@@ -116,7 +117,7 @@ public class MethodNode extends MemberNode implements MethodVisitor {
     /**
      * The try catch blocks of this method. This list is a list of
      * {@link TryCatchBlockNode} objects.
-     * 
+     *
      * @associates br.com.caelum.vraptor.asm.tree.TryCatchBlockNode
      */
     public List tryCatchBlocks;
@@ -134,7 +135,7 @@ public class MethodNode extends MemberNode implements MethodVisitor {
     /**
      * The local variables of this method. This list is a list of
      * {@link LocalVariableNode} objects. May be <tt>null</tt>
-     * 
+     *
      * @associates br.com.caelum.vraptor.asm.tree.LocalVariableNode
      */
     public List localVariables;
@@ -148,7 +149,7 @@ public class MethodNode extends MemberNode implements MethodVisitor {
 
     /**
      * Constructs a new {@link MethodNode}.
-     * 
+     *
      * @param access
      *            the method's access flags (see {@link Opcodes}). This
      *            parameter also indicates if the method is synthetic and/or
@@ -186,7 +187,8 @@ public class MethodNode extends MemberNode implements MethodVisitor {
     // Implementation of the MethodVisitor interface
     // ------------------------------------------------------------------------
 
-    public AnnotationVisitor visitAnnotationDefault() {
+    @SuppressWarnings("serial")
+	public AnnotationVisitor visitAnnotationDefault() {
         return new AnnotationNode(new ArrayList(0) {
             @Override
             public boolean add(final Object o) {
@@ -304,7 +306,7 @@ public class MethodNode extends MemberNode implements MethodVisitor {
      * LabelNode if necessary. The default implementation of this method uses
      * the {@link Label#info} field to store associations between labels and
      * label nodes.
-     * 
+     *
      * @param l
      *            a Label.
      * @return the LabelNode corresponding to l.
@@ -342,7 +344,7 @@ public class MethodNode extends MemberNode implements MethodVisitor {
 
     /**
      * Makes the given class visitor visit this method.
-     * 
+     *
      * @param cv
      *            a class visitor.
      */
@@ -357,7 +359,7 @@ public class MethodNode extends MemberNode implements MethodVisitor {
 
     /**
      * Makes the given method visitor visit this method.
-     * 
+     *
      * @param mv
      *            a method visitor.
      */

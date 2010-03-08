@@ -34,9 +34,7 @@ import static org.hamcrest.Matchers.is;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
-import java.util.ResourceBundle;
 
-import ognl.OgnlContext;
 import ognl.OgnlException;
 
 import org.jmock.Expectations;
@@ -49,7 +47,6 @@ import br.com.caelum.iogi.parameters.Parameter;
 import br.com.caelum.iogi.reflection.Target;
 import br.com.caelum.iogi.spi.LocaleProvider;
 import br.com.caelum.iogi.util.NullDependencyProvider;
-import br.com.caelum.vraptor.core.Converters;
 
 /**
  * Unfortunately OGNL sucks so bad in its design that we had to create a "unit"
@@ -64,19 +61,13 @@ import br.com.caelum.vraptor.core.Converters;
 public class MiscIogiSupportTest {
 
     private Mockery mockery;
-    private Converters converters;
-    private OgnlContext context;
-    private House house;
-    private ResourceBundle bundle;
-    
+
     private Iogi iogi;
 	private LocaleProvider mockLocaleProvider;
 
     @Before
     public void setup() {
         this.mockery = new Mockery();
-        this.house = new House();
-        this.bundle = ResourceBundle.getBundle("messages");
         this.mockLocaleProvider = mockery.mock(LocaleProvider.class);
     	this.iogi = new Iogi(new NullDependencyProvider(), mockLocaleProvider);
     }

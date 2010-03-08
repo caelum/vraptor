@@ -37,9 +37,10 @@ import br.com.caelum.vraptor.asm.Type;
 
 /**
  * SAXAnnotationAdapter
- * 
+ *
  * @author Eugene Kuleshov
  */
+@SuppressWarnings("unchecked")
 public class SAXAnnotationAdapter extends SAXAdapter implements AnnotationVisitor {
     private final String elementName;
 

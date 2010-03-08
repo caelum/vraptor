@@ -36,9 +36,10 @@ import br.com.caelum.vraptor.asm.MethodVisitor;
 /**
  * A node that represents a method instruction. A method instruction is an
  * instruction that invokes a method.
- * 
+ *
  * @author Eric Bruneton
  */
+@SuppressWarnings("unchecked")
 public class MethodInsnNode extends AbstractInsnNode {
 
     /**
@@ -60,7 +61,7 @@ public class MethodInsnNode extends AbstractInsnNode {
 
     /**
      * Constructs a new {@link MethodInsnNode}.
-     * 
+     *
      * @param opcode
      *            the opcode of the type instruction to be constructed. This
      *            opcode must be INVOKEVIRTUAL, INVOKESPECIAL, INVOKESTATIC or
@@ -84,7 +85,7 @@ public class MethodInsnNode extends AbstractInsnNode {
 
     /**
      * Sets the opcode of this instruction.
-     * 
+     *
      * @param opcode
      *            the new instruction opcode. This opcode must be INVOKEVIRTUAL,
      *            INVOKESPECIAL, INVOKESTATIC or INVOKEINTERFACE.
@@ -98,7 +99,8 @@ public class MethodInsnNode extends AbstractInsnNode {
         return METHOD_INSN;
     }
 
-    public void accept(final MethodVisitor mv) {
+    @Override
+	public void accept(final MethodVisitor mv) {
         mv.visitMethodInsn(opcode, owner, name, desc);
     }
 

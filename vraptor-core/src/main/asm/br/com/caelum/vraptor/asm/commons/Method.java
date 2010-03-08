@@ -36,11 +36,12 @@ import br.com.caelum.vraptor.asm.Type;
 
 /**
  * A named method descriptor.
- * 
+ *
  * @author Juozas Baliuka
  * @author Chris Nokleberg
  * @author Eric Bruneton
  */
+@SuppressWarnings("unchecked")
 public class Method {
 
     /**
@@ -73,7 +74,7 @@ public class Method {
 
     /**
      * Creates a new {@link Method}.
-     * 
+     *
      * @param name the method's name.
      * @param desc the method's descriptor.
      */
@@ -84,7 +85,7 @@ public class Method {
 
     /**
      * Creates a new {@link Method}.
-     * 
+     *
      * @param name the method's name.
      * @param returnType the method's return type.
      * @param argumentTypes the method's argument types.
@@ -100,7 +101,7 @@ public class Method {
     /**
      * Returns a {@link Method} corresponding to the given Java method
      * declaration.
-     * 
+     *
      * @param method a Java method declaration, without argument names, of the
      *        form "returnType name (argumentType1, ... argumentTypeN)", where
      *        the types are in plain Java (e.g. "int", "float",
@@ -121,7 +122,7 @@ public class Method {
     /**
      * Returns a {@link Method} corresponding to the given Java method
      * declaration.
-     * 
+     *
      * @param method a Java method declaration, without argument names, of the
      *        form "returnType name (argumentType1, ... argumentTypeN)", where
      *        the types are in plain Java (e.g. "int", "float",
@@ -201,7 +202,7 @@ public class Method {
 
     /**
      * Returns the name of the method described by this object.
-     * 
+     *
      * @return the name of the method described by this object.
      */
     public String getName() {
@@ -210,7 +211,7 @@ public class Method {
 
     /**
      * Returns the descriptor of the method described by this object.
-     * 
+     *
      * @return the descriptor of the method described by this object.
      */
     public String getDescriptor() {
@@ -219,7 +220,7 @@ public class Method {
 
     /**
      * Returns the return type of the method described by this object.
-     * 
+     *
      * @return the return type of the method described by this object.
      */
     public Type getReturnType() {
@@ -228,18 +229,20 @@ public class Method {
 
     /**
      * Returns the argument types of the method described by this object.
-     * 
+     *
      * @return the argument types of the method described by this object.
      */
     public Type[] getArgumentTypes() {
         return Type.getArgumentTypes(desc);
     }
 
-    public String toString() {
+    @Override
+	public String toString() {
         return name + desc;
     }
 
-    public boolean equals(final Object o) {
+    @Override
+	public boolean equals(final Object o) {
         if (!(o instanceof Method)) {
             return false;
         }
@@ -247,7 +250,8 @@ public class Method {
         return name.equals(other.name) && desc.equals(other.desc);
     }
 
-    public int hashCode() {
+    @Override
+	public int hashCode() {
         return name.hashCode() ^ desc.hashCode();
     }
 }

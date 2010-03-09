@@ -40,6 +40,7 @@
 	<target name="compile" depends="clean" description="--> compiles classes">
 		<mkdir dir="${compile.dir}" />
 		<scalac destdir="${compile.dir}" srcdir="src/" classpathref="compile.classpath" />
+		<javac destdir="${compile.dir}" srcdir="src/" classpathref="compile.classpath" />
 	</target>
 
 	<target name="artifacts" depends="compile" description="--> generate project's artifacts">

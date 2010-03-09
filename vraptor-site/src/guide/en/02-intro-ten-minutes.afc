@@ -23,11 +23,11 @@ As you can see, the only required configuration in %%web.xml%% is the VRaptor fi
 
 You can also easily import this project on Eclipse, and run it right clicking on it and choosing
 ::Run as... / Run on server...::. Choose a servlet container (or setup a new one) and then just go
-for %%http://localhost:8080/vraptor-blank-project/%%. 
+for http://localhost:8080/vraptor-blank-project/. 
 
 You can right click on the project name, go to ::Properties:: and in ::Web Project Settings:: you can change
 the context name to something better, like %%onlinestore%%. Now if you run
-this example you should be able to access %%http://localhost:8080/onlinestore%% and see
+this example you should be able to access http://localhost:8080/onlinestore and see
 **It works!** on the browser.
 
 [box Note]

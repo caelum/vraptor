@@ -10,6 +10,7 @@ The following jars must be added to your applications's %%WEB-INF/lib%% director
 	* %%scala-library.jar%% (required, versão 2.8)
 	* %%vraptor-scala.jar%% (required)
 	* %%vraptor-scala-jsp.jar%% (optional, for Expression Language support for Scala collections in the view layer)
+	* %%scalate.jar%% (required)
 [/list]
 
 Now, VRaptor must be configured to load the relevant plugins. In the %%web.xml%% file, define the %%context-param%% section as below:
@@ -20,6 +21,22 @@ Now, VRaptor must be configured to load the relevant plugins. In the %%web.xml%%
 	<param-value>br.com.caelum.vraptor.scala</param-value>
 </context-param>
 [/xml]
+
+Then, add to the file the required changes to use Scalate as the view:
+
+[xml]
+<servlet>
+	<servlet-name>TemplateEngineServlet</servlet-name>
+	<servlet-class>org.fusesource.scalate.servlet.TemplateEngineServlet</servlet-class>
+	<load-on-startup>1</load-on-startup>
+</servlet>
+
+<servlet-mapping>
+	<servlet-name>TemplateEngineServlet</servlet-name>
+	<url-pattern>*.ssp</url-pattern>
+</servlet-mapping>
+[/xml]
+
 
 [section Example]
 

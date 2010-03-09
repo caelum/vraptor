@@ -111,7 +111,15 @@
 
 
 <h3 class="section">3.1.2 (in dev)</h3>
-	    	<ul class="list"><li><span class="paragraph">Blank project agora rodando tamb&eacute;m no netbeans 6.8</span></li><li><span class="paragraph">Encoding agora suportado quando faz upload de arquivos no Google App Engine</span></li></ul>
+	    	<ul class="list"><li><span class="paragraph">Blank project agora rodando tamb&eacute;m no netbeans 6.8</span></li><li><span class="paragraph">Encoding agora suportado quando faz upload de arquivos no Google App Engine</span></li><li><span class="paragraph">bugfix: validator.onErrorUse(json()).... n&atilde;o d&aacute; mais NullPointerException</span></li><li><span class="paragraph">Serializers tem agora o m&eacute;todo recursive:</span><div class="java"><code class="java">
+<span class="java10">result.use</span><span class="java8">(</span><span class="java10">xml</span><span class="java8">())</span><span class="java10">.from</span><span class="java8">(</span><span class="java10">meuObjeto</span><span class="java8">)</span><span class="java10">.recursive</span><span class="java8">()</span><span class="java10">.serialize</span><span class="java8">()</span><span class="java10">;</span></code></div><span class="paragraph">Assim, toda a &aacute;rvore de objetos a partir do meuObjeto ser&aacute; serializada.</span></li><li><span class="paragraph">Os par&acirc;metros das mensagens do Validations agora tamb&eacute;m podem ser internacionalizados:</span><div class="java"><code class="java">
+<span class="java3">// idade = Idade<br />
+// maior_que = {0} deveria ser maior que {1}<br />
+<br />
+</span><span class="java10">validator.checking</span><span class="java8">(</span><span class="java4">new </span><span class="java10">Validations</span><span class="java8">() {{<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java10">that</span><span class="java8">(</span><span class="java10">idade &gt; </span><span class="java7">18</span><span class="java10">, </span><span class="java5">&#34;idade&#34;</span><span class="java10">, </span><span class="java5">&#34;maior_que&#34;</span><span class="java10">, i18n</span><span class="java8">(</span><span class="java5">&#34;idade&#34;</span><span class="java8">)</span><span class="java10">, </span><span class="java7">18</span><span class="java8">)</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java3">//resulta na mensagem &#34;Idade deveria ser maior que 18&#34;&nbsp; <br />
+</span><span class="java8">}})</span><span class="java10">;</span></code></div></li></ul>
 		
 
 <h3 class="section">3.1.1</h3>

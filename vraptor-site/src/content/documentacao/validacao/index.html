@@ -167,6 +167,24 @@ foi passado pra ele &eacute; v&aacute;lido ou n&atilde;o:</span>
 	    	<span class="paragraph">Desse jeito a segunda valida&ccedil;&atilde;o s&oacute; acontece se a primeira n&atilde;o falhou.</span>
 		
 
+<h3 class="section">Validação com parâmetros nas mensagens</h3>
+	    	<span class="paragraph">Voc&ecirc; pode colocar par&acirc;metros nas suas mensagens internacionalizadas:</span>
+	    	<div class="java"><code class="java">maior_que&nbsp;<span class="texvalue">=&nbsp;{0}&nbsp;deveria&nbsp;ser&nbsp;maior&nbsp;que&nbsp;{1}</span></code></div>
+	    	<span class="paragraph">E us&aacute;-los no seu c&oacute;digo de valida&ccedil;&atilde;o:</span>
+	    	<div class="java"><code class="java">
+<span class="java10">validator.checking</span><span class="java8">(</span><span class="java4">new </span><span class="java10">Validations</span><span class="java8">(){{<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java10">that</span><span class="java8">(</span><span class="java10">usuario.getIdade</span><span class="java8">() </span><span class="java10">&gt;= </span><span class="java7">18</span><span class="java10">, </span><span class="java5">&#34;usuario.idade&#34;</span><span class="java10">, </span><span class="java5">&#34;maior_que&#34;</span><span class="java10">, </span><span class="java5">&#34;Idade&#34;</span><span class="java10">, </span><span class="java7">18</span><span class="java8">)</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java3">// Idade deveria ser maior que 18<br />
+</span><span class="java8">}})</span><span class="java10">;</span></code></div>
+	    	<span class="paragraph">Voc&ecirc; pode tamb&eacute;m internacionalizar os par&acirc;metros:</span>
+	    	<div class="java"><code class="java">usuario.idade&nbsp;<span class="texvalue">=&nbsp;Idade&nbsp;do&nbsp;usu&aacute;rio</span></code></div>
+	    	<div class="java"><code class="java">
+<span class="java10">validator.checking</span><span class="java8">(</span><span class="java4">new </span><span class="java10">Validations</span><span class="java8">(){{<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java10">that</span><span class="java8">(</span><span class="java10">usuario.getIdade</span><span class="java8">() </span><span class="java10">&gt;= </span><span class="java7">18</span><span class="java10">, </span><span class="java5">&#34;usuario.idade&#34;</span><span class="java10">, </span><span class="java5">&#34;maior_que&#34;</span><span class="java10">, </span><span class="java5">&#34;usuario.idade&#34;</span><span class="java10">, </span><span class="java7">18</span><span class="java8">)</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java3">// Idade do usu&aacute;rio deveria ser maior que 18<br />
+</span><span class="java8">}})</span><span class="java10">;</span></code></div>
+		
+
 <h3 class="section">Validação usando matchers do Hamcrest</h3>
 	    	<span class="paragraph">Voc&ecirc; pode tamb&eacute;m usar matchers do Hamcrest para deixar a valida&ccedil;&atilde;o mais leg&iacute;vel, e ganhar
 a vantagem da composi&ccedil;&atilde;o de matchers e da cria&ccedil;&atilde;o de novos matchers que o Hamcrest te oferece:</span>

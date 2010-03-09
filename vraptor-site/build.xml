@@ -131,7 +131,7 @@
 	<!-- ================================= 
 	          target: assembly              
 	         ================================= -->
-    <target name="assembly" depends="compile, doc" description="--> assemblies the distribution">
+    <target name="assembly" depends="compile, doc, javadoc" description="--> assemblies the distribution">
 		<war destfile="site.war" webxml="src/content/WEB-INF/web.xml">
         	<fileset dir="src/content" excludes="src/content/WEB-INF/web.xml"/>
     	</war>

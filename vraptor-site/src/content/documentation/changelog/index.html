@@ -105,7 +105,15 @@
 
 
 <h3 class="section">3.1.2 (in dev)</h3>
-	    	<ul class="list"><li><span class="paragraph">Blank project now also runs on netbeans 6.8</span></li><li><span class="paragraph">Supports encoding for file uploads in Google App Engine</span></li></ul>
+	    	<ul class="list"><li><span class="paragraph">Blank project now also runs on netbeans 6.8</span></li><li><span class="paragraph">Supports encoding for file uploads in Google App Engine</span></li><li><span class="paragraph">bugfix: no more NullPointerExceptions on validator.onErrorUse(json())...</span></li><li><span class="paragraph">Serializers now have the recursive method:</span><div class="java"><code class="java">
+<span class="java10">result.use</span><span class="java8">(</span><span class="java10">xml</span><span class="java8">())</span><span class="java10">.from</span><span class="java8">(</span><span class="java10">myObject</span><span class="java8">)</span><span class="java10">.recursive</span><span class="java8">()</span><span class="java10">.serialize</span><span class="java8">()</span><span class="java10">;</span></code></div><span class="paragraph">It means that all object tree from myObject will be serialized.</span></li><li><span class="paragraph">Message parameters on Validations now can be i18n'ed:</span><div class="java"><code class="java">
+<span class="java3">// age = Age<br />
+// greater_than = {0} should be greater than {1}<br />
+<br />
+</span><span class="java10">validator.checking</span><span class="java8">(</span><span class="java4">new </span><span class="java10">Validations</span><span class="java8">() {{<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java10">that</span><span class="java8">(</span><span class="java10">age &gt; </span><span class="java7">18</span><span class="java10">, </span><span class="java5">&#34;age&#34;</span><span class="java10">, </span><span class="java5">&#34;greater_than&#34;</span><span class="java10">, i18n</span><span class="java8">(</span><span class="java5">&#34;age&#34;</span><span class="java8">)</span><span class="java10">, </span><span class="java7">10</span><span class="java8">)</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java3">//results on &#34;Age should be greater than 18&#34;&nbsp; <br />
+</span><span class="java8">}})</span><span class="java10">;</span></code></div></li></ul>
 		
 
 <h3 class="section">3.1.1</h3>

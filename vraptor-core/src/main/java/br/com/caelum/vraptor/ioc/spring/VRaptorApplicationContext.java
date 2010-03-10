@@ -249,7 +249,6 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
 		registry.registerBeanDefinition(AnnotationConfigUtils.AUTOWIRED_ANNOTATION_PROCESSOR_BEAN_NAME, definition);
 	}
 
-	@Override
 	public <T> T getBean(Class<T> type) {
 		Map<String, ? extends T> instances = BeanFactoryUtils.beansOfTypeIncludingAncestors(this, type);
 		if (instances.size() == 0) {

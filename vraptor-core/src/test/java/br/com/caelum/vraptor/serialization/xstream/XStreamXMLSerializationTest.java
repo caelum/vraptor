@@ -22,7 +22,6 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor.serialization.Serialization;
-import br.com.caelum.vraptor.serialization.xstream.XStreamXMLSerialization;
 
 public class XStreamXMLSerializationTest {
 
@@ -83,6 +82,7 @@ public class XStreamXMLSerializationTest {
 	}
 	public static class AdvancedOrder extends Order{
 
+		@SuppressWarnings("unused")
 		private final String notes;
 
 		public AdvancedOrder(Client client, double price, String comments, String notes) {
@@ -113,6 +113,7 @@ public class XStreamXMLSerializationTest {
 			super(client, price, comments);
 			this.type = type;
 		}
+		@SuppressWarnings("unused")
 		private final Type type;
 	}
 
@@ -156,15 +157,14 @@ public class XStreamXMLSerializationTest {
 		assertThat(result(), containsString("</items>"));
 	}
 	@Test
-	public void shouldExcludeNonPrimitiveFieldsFromACollection() {
+	public void shouldIncludeAllFieldsWhenRecursive() {
 		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please",
 				new Item("name", 12.99));
-		serialization.from(Arrays.asList(order, order), "orders").exclude("price").serialize();
+		serialization.from(order).recursive().serialize();
 
-		assertThat(result(), not(containsString("<items>")));
-		assertThat(result(), not(containsString("<name>name</name>")));
-		assertThat(result(), not(containsString("<price>12.99</price>")));
-		assertThat(result(), not(containsString("<price>15.0</price>")));
+		assertThat(result(), containsString("<items>"));
+		assertThat(result(), containsString("<name>name</name>"));
+		assertThat(result(), containsString("<price>12.99</price>"));
 	}
 	@Test
 	public void shouldExcludeFieldsFromACollection() {
@@ -186,7 +186,7 @@ public class XStreamXMLSerializationTest {
 		String expectedResult = "<o:order>\n  <o:price>15.0</o:price>\n  <o:comments>pack it nicely, please</o:comments>\n</o:order>";
 		expectedResult += expectedResult;
 		expectedResult = "<o:orders xmlns:o=\"http://www.caelum.com.br/order\">" + expectedResult + "</o:orders>";
-		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
+//		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
 //		serializer.from("orders", Arrays.asList(order, order)).namespace("http://www.caelum.com.br/order","o").serialize();
 		assertThat(result(), is(equalTo(expectedResult)));
 	}

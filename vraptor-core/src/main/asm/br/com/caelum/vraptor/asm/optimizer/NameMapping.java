@@ -39,9 +39,10 @@ import br.com.caelum.vraptor.asm.Type;
 
 /**
  * A MAPPING from names to names, used to rename classes, fields and methods.
- * 
+ *
  * @author Eric Bruneton
  */
+@SuppressWarnings({ "unchecked", "serial" })
 public class NameMapping extends Properties {
 
     public final Set unused;

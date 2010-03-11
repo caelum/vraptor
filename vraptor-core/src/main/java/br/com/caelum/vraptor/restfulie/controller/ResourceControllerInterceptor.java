@@ -39,7 +39,7 @@ import br.com.caelum.vraptor.view.Status;
 
 /**
  * Intercepts invocations to state control's intercepted controllers.
- * 
+ *
  * @author guilherme silveira
  * @author pedro mariano
  */
@@ -47,7 +47,7 @@ import br.com.caelum.vraptor.view.Status;
 public class ResourceControllerInterceptor<T extends HypermediaResource> implements Interceptor {
 
 	private final ResourceControl<T> control;
-	private final List<Class> controllers;
+	private final List<Class<?>> controllers;
 	private final Status status;
 	private final Restfulie restfulie;
 	private final Routes routes;
@@ -78,7 +78,7 @@ public class ResourceControllerInterceptor<T extends HypermediaResource> impleme
 	private boolean analyzeImplementation(ResourceMethod method,
 			ParameterizedType parameterized) {
 		Type parameterType = parameterized.getActualTypeArguments()[0];
-		Class found = (Class) parameterType;
+		Class<?> found = (Class<?>) parameterType;
 		T resource = retrieveResource(found);
 		if(resource==null) {
 			status.notFound();
@@ -98,7 +98,7 @@ public class ResourceControllerInterceptor<T extends HypermediaResource> impleme
 	}
 
 
-	private T retrieveResource(Class found) {
+	private T retrieveResource(Class<?> found) {
 		String parameterName = lowerFirstChar(found.getSimpleName()) + ".id";
 		String id = info.getRequest().getParameter(parameterName);
 		T resource = control.retrieve(id);

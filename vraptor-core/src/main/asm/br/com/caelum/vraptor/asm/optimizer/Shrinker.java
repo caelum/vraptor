@@ -48,14 +48,15 @@ import br.com.caelum.vraptor.asm.commons.SimpleRemapper;
 
 /**
  * A class file shrinker utility.
- * 
+ *
  * @author Eric Bruneton
  * @author Eugene Kuleshov
  */
+@SuppressWarnings("unchecked")
 public class Shrinker {
 
     static final Properties MAPPING = new Properties();
-    
+
     public static void main(final String[] args) throws IOException {
         int n = args.length - 1;
         for (int i = 0; i < n - 1; ++i) {
@@ -67,7 +68,8 @@ public class Shrinker {
         File d = new File(args[n]);
 
         optimize(f, d, new SimpleRemapper(MAPPING) {
-            public String map(String key) {
+            @Override
+			public String map(String key) {
                 String s = super.map(key);
                 if (s != null) {
                     unused.remove(key);
@@ -75,7 +77,7 @@ public class Shrinker {
                 return s;
             }
         });
-        
+
         Iterator i = unused.iterator();
         while (i.hasNext()) {
             String s = (String) i.next();

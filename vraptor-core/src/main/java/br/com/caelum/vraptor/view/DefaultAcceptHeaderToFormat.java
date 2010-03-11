@@ -78,6 +78,7 @@ public class DefaultAcceptHeaderToFormat implements AcceptHeaderToFormat {
 		return mimeTypes[0];
 	}
 
+	@SuppressWarnings("serial")
 	private static class Cache extends LinkedHashMap<String, String> {
 		@Override
 		protected boolean removeEldestEntry(java.util.Map.Entry<String, String> eldest) {

@@ -3,6 +3,7 @@ br.com.caelum.vraptor.config
 br.com.caelum.vraptor.converter
 br.com.caelum.vraptor.converter.jodatime
 br.com.caelum.vraptor.core
+br.com.caelum.vraptor.deserialization
 br.com.caelum.vraptor.eval
 br.com.caelum.vraptor.extra
 br.com.caelum.vraptor.http
@@ -19,6 +20,16 @@ br.com.caelum.vraptor.ioc.spring
 br.com.caelum.vraptor.proxy
 br.com.caelum.vraptor.reflection
 br.com.caelum.vraptor.resource
+br.com.caelum.vraptor.restfulie
+br.com.caelum.vraptor.restfulie.controller
+br.com.caelum.vraptor.restfulie.headers
+br.com.caelum.vraptor.restfulie.hypermedia
+br.com.caelum.vraptor.restfulie.relation
+br.com.caelum.vraptor.restfulie.resource
+br.com.caelum.vraptor.restfulie.serialization
+br.com.caelum.vraptor.serialization
+br.com.caelum.vraptor.serialization.xstream
+br.com.caelum.vraptor.util
 br.com.caelum.vraptor.util.collections
 br.com.caelum.vraptor.util.hibernate
 br.com.caelum.vraptor.util.interceptors

@@ -52,9 +52,10 @@ import br.com.caelum.vraptor.asm.Type;
  * instruction by reading the value of these fields in its visit<i>XXX</i>
  * methods (this requires a reference to the AnalyzerAdapter that is before it
  * in the chain).
- * 
+ *
  * @author Eric Bruneton
  */
+@SuppressWarnings("unchecked")
 public class AnalyzerAdapter extends MethodAdapter {
 
     /**
@@ -112,7 +113,7 @@ public class AnalyzerAdapter extends MethodAdapter {
 
     /**
      * Creates a new {@link AnalyzerAdapter}.
-     * 
+     *
      * @param owner
      *            the owner's class name.
      * @param access

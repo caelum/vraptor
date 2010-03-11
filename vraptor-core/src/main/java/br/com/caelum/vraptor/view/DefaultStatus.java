@@ -1,5 +1,6 @@
 package br.com.caelum.vraptor.view;
 
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.EnumSet;
 
@@ -100,13 +101,21 @@ public class DefaultStatus implements Status {
 	}
 
 	public void unsupportedMediaType(String message) {
-		response.setStatus(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE, message);
-		result.use(Results.nothing());
+		try {
+			response.sendError(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE, message);
+			result.use(Results.nothing());
+		} catch (IOException e) {
+			throw new ResultException(e);
+		}
 	}
 
 	public void badRequest(String message) {
-		response.setStatus(HttpServletResponse.SC_BAD_REQUEST, message);
-		result.use(Results.nothing());
+		try {
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, message);
+			result.use(Results.nothing());
+		} catch (IOException e) {
+			throw new ResultException(e);
+		}
 	}
 
 }

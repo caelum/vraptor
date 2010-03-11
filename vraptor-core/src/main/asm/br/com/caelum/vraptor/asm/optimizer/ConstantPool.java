@@ -35,9 +35,10 @@ import br.com.caelum.vraptor.asm.Type;
 
 /**
  * A constant pool.
- * 
+ *
  * @author Eric Bruneton
  */
+@SuppressWarnings({ "unchecked", "serial" })
 public class ConstantPool extends HashMap {
 
     private final Constant key1 = new Constant();

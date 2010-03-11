@@ -67,7 +67,7 @@ public class Validations {
     public <T> boolean that(T actual, Matcher<? super T> matcher, String category, String reason, Object... messageParameters) {
         if (!matcher.matches(actual)) {
             if (reason != null) {
-                errors.add(new ValidationMessage(getString(reason), category, messageParameters));
+                errors.add(new ValidationMessage(i18n(reason), category, messageParameters));
             } else {
                 Description description = new ResourceBundleDescription(bundle);
                 description.appendDescriptionOf(matcher);
@@ -80,12 +80,12 @@ public class Validations {
 
     public boolean that(boolean assertion, String category, String reason, Object... messageParameters) {
         if (!assertion) {
-            errors.add(new ValidationMessage(getString(reason), category, messageParameters));
+            errors.add(new ValidationMessage(i18n(reason), category, messageParameters));
         }
         return assertion;
     }
 
-    private String getString(String key) {
+    protected String i18n(String key) {
     	return bundle.getString(key);
     }
 

@@ -29,7 +29,6 @@ import br.com.caelum.vraptor.deserialization.Deserializer;
 import br.com.caelum.vraptor.deserialization.Deserializers;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.view.HttpResult;
 import br.com.caelum.vraptor.view.Status;
 
 /**
@@ -41,16 +40,14 @@ import br.com.caelum.vraptor.view.Status;
  */
 public class DeserializingInterceptor implements Interceptor {
 	private final HttpServletRequest request;
-	private final HttpResult result;
 	private final Deserializers deserializers;
 	private final MethodInfo methodInfo;
 	private final Container container;
 	private final Status status;
 
-	public DeserializingInterceptor(HttpServletRequest servletRequest, HttpResult result,
-			Deserializers deserializers, MethodInfo methodInfo, Container container, Status status) {
+	public DeserializingInterceptor(HttpServletRequest servletRequest, Deserializers deserializers,
+			MethodInfo methodInfo, Container container, Status status) {
 		this.request = servletRequest;
-		this.result = result;
 		this.deserializers = deserializers;
 		this.methodInfo = methodInfo;
 		this.container = container;

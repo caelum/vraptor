@@ -35,14 +35,15 @@ import br.com.caelum.vraptor.asm.MethodVisitor;
 
 /**
  * A node that represents a zero operand instruction.
- * 
+ *
  * @author Eric Bruneton
  */
+@SuppressWarnings("unchecked")
 public class InsnNode extends AbstractInsnNode {
 
     /**
      * Constructs a new {@link InsnNode}.
-     * 
+     *
      * @param opcode
      *            the opcode of the instruction to be constructed. This opcode
      *            must be NOP, ACONST_NULL, ICONST_M1, ICONST_0, ICONST_1,
@@ -71,11 +72,12 @@ public class InsnNode extends AbstractInsnNode {
 
     /**
      * Makes the given visitor visit this instruction.
-     * 
+     *
      * @param mv
      *            a method visitor.
      */
-    public void accept(final MethodVisitor mv) {
+    @Override
+	public void accept(final MethodVisitor mv) {
         mv.visitInsn(opcode);
     }
 

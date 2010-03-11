@@ -27,7 +27,6 @@ public class PatternBasedType {
 	private final List<String> parameters = new ArrayList<String>();
 	private final Pattern pattern;
 	private final String originalPattern;
-	private final String finalPattern;
 
 	public PatternBasedType(String pattern) {
 		this.originalPattern = pattern;
@@ -59,7 +58,6 @@ public class PatternBasedType {
 		if (ignore) {
 			throw new IllegalRouteException("Illegal route contains invalid pattern: " + originalPattern);
 		}
-		this.finalPattern = patternUri;
 		this.pattern = Pattern.compile(patternUri);
 	}
 

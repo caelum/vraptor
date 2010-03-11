@@ -29,6 +29,7 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
  * @author Fabio Kung
  * @see org.springframework.web.context.request.ServletWebRequest
  */
+@SuppressWarnings("unchecked")
 @ApplicationScoped
 class HttpServletResponseProvider implements FactoryBean {
 

@@ -57,6 +57,7 @@ public class FlashInterceptor implements Interceptor {
 
 	public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
 			throws InterceptionException {
+		@SuppressWarnings("unchecked")
 		Map<String, Object> parameters = (Map<String, Object>) session.getAttribute(FLASH_INCLUDED_PARAMETERS);
 		if (parameters != null) {
 			session.removeAttribute(FLASH_INCLUDED_PARAMETERS);

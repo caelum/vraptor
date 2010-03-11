@@ -163,6 +163,24 @@ of the validation:</span>
 	    	<span class="paragraph">So the second validation will execute only if the first didn't fail.</span>
 		
 
+<h3 class="section">Validation with message parameters</h3>
+	    	<span class="paragraph">You can add parameters to you message keys:</span>
+	    	<div class="java"><code class="java">greater_than&nbsp;<span class="texvalue">=&nbsp;{0}&nbsp;should&nbsp;be&nbsp;greater&nbsp;than&nbsp;{1}</span></code></div>
+	    	<span class="paragraph">And use it on your validations code:</span>
+	    	<div class="java"><code class="java">
+<span class="java10">validator.checking</span><span class="java8">(</span><span class="java4">new </span><span class="java10">Validations</span><span class="java8">(){{<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java10">that</span><span class="java8">(</span><span class="java10">user.getAge</span><span class="java8">() </span><span class="java10">&gt;= </span><span class="java7">18</span><span class="java10">, </span><span class="java5">&#34;user.age&#34;</span><span class="java10">, </span><span class="java5">&#34;greater_than&#34;</span><span class="java10">, </span><span class="java5">&#34;Age&#34;</span><span class="java10">, </span><span class="java7">18</span><span class="java8">)</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java3">// Age should be greater than 18<br />
+</span><span class="java8">}})</span><span class="java10">;</span></code></div>
+	    	<span class="paragraph">You can even i18n your parameters:</span>
+	    	<div class="java"><code class="java">user.age&nbsp;<span class="texvalue">=&nbsp;User&nbsp;age</span></code></div>
+	    	<div class="java"><code class="java">
+<span class="java10">validator.checking</span><span class="java8">(</span><span class="java4">new </span><span class="java10">Validations</span><span class="java8">(){{<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java10">that</span><span class="java8">(</span><span class="java10">user.getAge</span><span class="java8">() </span><span class="java10">&gt;= </span><span class="java7">18</span><span class="java10">, </span><span class="java5">&#34;user.age&#34;</span><span class="java10">, </span><span class="java5">&#34;greater_than&#34;</span><span class="java10">, i18n</span><span class="java8">(</span><span class="java5">&#34;user.age&#34;</span><span class="java8">)</span><span class="java10">, </span><span class="java7">18</span><span class="java8">)</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java3">// User age should be greater than 18<br />
+</span><span class="java8">}})</span><span class="java10">;</span></code></div>
+		
+
 <h3 class="section">Validation using Hamcrest Matchers</h3>
 	    	<span class="paragraph">You can use Hamcrest matchers for making validation even more fluent and readable,
 with the advantage of matcher composition and the creation of new matchers that

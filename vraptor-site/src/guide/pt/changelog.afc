@@ -5,6 +5,22 @@
 * Blank project agora rodando também no netbeans 6.8
 * Encoding agora suportado quando faz upload de arquivos no Google App Engine
 * bugfix: validator.onErrorUse(json()).... não dá mais NullPointerException
+* Serializers tem agora o método recursive:
+ [java]
+ result.use(xml()).from(meuObjeto).recursive().serialize();
+ [/java]
+ Assim, toda a árvore de objetos a partir do meuObjeto será serializada. 
+
+* Os parâmetros das mensagens do Validations agora também podem ser internacionalizados:
+	[java]
+	// idade = Idade
+	// maior_que = {0} deveria ser maior que {1}
+	
+	validator.checking(new Validations() {{
+		that(idade > 18, "idade", "maior_que", i18n("idade"), 18);
+		//resulta na mensagem "Idade deveria ser maior que 18"  
+	}});
+	[/java]
 [/list]
 
 [section 3.1.1]

@@ -44,9 +44,9 @@ ClassNode cn = new ClassNode();
 cr.accept(cn, ClassReader.SKIP_DEBUG);
 
 List methods = cn.methods;
-for (int i = 0; i < methods.size(); ++i) {
+for (int i = 0; i &lt; methods.size(); ++i) {
     MethodNode method = (MethodNode) methods.get(i);
-    if (method.instructions.size() > 0) {
+    if (method.instructions.size() &gt; 0) {
         Analyzer a = new Analyzer(new BasicInterpreter());
         a.analyze(cn.name, method);
         Frame[] frames = a.getFrames();

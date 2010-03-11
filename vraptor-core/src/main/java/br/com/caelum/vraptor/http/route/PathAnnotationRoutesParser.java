@@ -37,7 +37,7 @@ import br.com.caelum.vraptor.resource.ResourceClass;
  * class like:
  *
  * public class MyRoutesParser extends PathAnnotationRoutesParser { //delegate
- * constructor protected String extractControllerNameFrom(Class<?> type) {
+ * constructor protected String extractControllerNameFrom(Class&lt;?&gt; type) {
  * return //your convention here }
  *
  * protected String defaultUriFor(String controllerName, String methodName) {

@@ -32,6 +32,7 @@ import br.com.caelum.vraptor.ioc.StereotypeHandler;
 /**
  * @author Fabio Kung
  */
+@SuppressWarnings("unchecked")
 @ApplicationScoped
 public class StereotypedBeansRegistrar implements ApplicationListener {
     private static final Logger LOGGER = LoggerFactory.getLogger(StereotypedBeansRegistrar.class);
@@ -43,8 +44,7 @@ public class StereotypedBeansRegistrar implements ApplicationListener {
 
 	public void onApplicationEvent(ApplicationEvent event) {
 		if (event instanceof ContextRefreshedEvent) {
-			ContextRefreshedEvent contextRefreshedEvent = (ContextRefreshedEvent) event;
-			handleRefresh(contextRefreshedEvent.getApplicationContext());
+			handleRefresh(((ContextRefreshedEvent) event).getApplicationContext());
 		}
 	}
 

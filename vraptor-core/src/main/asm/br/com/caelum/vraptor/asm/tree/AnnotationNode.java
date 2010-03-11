@@ -36,9 +36,10 @@ import br.com.caelum.vraptor.asm.AnnotationVisitor;
 
 /**
  * A node that represents an annotationn.
- * 
+ *
  * @author Eric Bruneton
  */
+@SuppressWarnings("unchecked")
 public class AnnotationNode implements AnnotationVisitor {
 
     /**
@@ -61,7 +62,7 @@ public class AnnotationNode implements AnnotationVisitor {
 
     /**
      * Constructs a new {@link AnnotationNode}.
-     * 
+     *
      * @param desc
      *            the class descriptor of the annotation class.
      */
@@ -71,7 +72,7 @@ public class AnnotationNode implements AnnotationVisitor {
 
     /**
      * Constructs a new {@link AnnotationNode} to visit an array value.
-     * 
+     *
      * @param values
      *            where the visited values must be stored.
      */
@@ -136,7 +137,7 @@ public class AnnotationNode implements AnnotationVisitor {
 
     /**
      * Makes the given visitor visit this annotation.
-     * 
+     *
      * @param av
      *            an annotation visitor. Maybe <tt>null</tt>.
      */
@@ -155,7 +156,7 @@ public class AnnotationNode implements AnnotationVisitor {
 
     /**
      * Makes the given visitor visit a given annotation value.
-     * 
+     *
      * @param av
      *            an annotation visitor. Maybe <tt>null</tt>.
      * @param name

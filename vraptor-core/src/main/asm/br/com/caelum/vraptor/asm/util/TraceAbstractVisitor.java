@@ -34,9 +34,10 @@ import br.com.caelum.vraptor.asm.Attribute;
 
 /**
  * An abstract trace visitor.
- * 
+ *
  * @author Eric Bruneton
  */
+@SuppressWarnings("unchecked")
 public abstract class TraceAbstractVisitor extends AbstractVisitor {
 
     /**
@@ -101,7 +102,7 @@ public abstract class TraceAbstractVisitor extends AbstractVisitor {
 
     /**
      * Prints a disassembled view of the given annotation.
-     * 
+     *
      * @param desc
      *            the class descriptor of the annotation class.
      * @param visible
@@ -122,7 +123,7 @@ public abstract class TraceAbstractVisitor extends AbstractVisitor {
 
     /**
      * Prints a disassembled view of the given attribute.
-     * 
+     *
      * @param attr
      *            an attribute.
      */
@@ -158,7 +159,7 @@ public abstract class TraceAbstractVisitor extends AbstractVisitor {
     /**
      * Appends an internal name, a type descriptor or a type signature to
      * {@link #buf buf}.
-     * 
+     *
      * @param type
      *            indicates if desc is an internal name, a field descriptor, a
      *            method descriptor, a class signature, ...

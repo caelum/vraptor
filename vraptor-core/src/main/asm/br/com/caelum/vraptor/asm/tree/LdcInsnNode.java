@@ -36,9 +36,10 @@ import br.com.caelum.vraptor.asm.Opcodes;
 
 /**
  * A node that represents an LDC instruction.
- * 
+ *
  * @author Eric Bruneton
  */
+@SuppressWarnings("unchecked")
 public class LdcInsnNode extends AbstractInsnNode {
 
     /**
@@ -50,7 +51,7 @@ public class LdcInsnNode extends AbstractInsnNode {
 
     /**
      * Constructs a new {@link LdcInsnNode}.
-     * 
+     *
      * @param cst
      *            the constant to be loaded on the stack. This parameter must be
      *            a non null {@link Integer}, a {@link Float}, a {@link Long}, a
@@ -66,7 +67,8 @@ public class LdcInsnNode extends AbstractInsnNode {
         return LDC_INSN;
     }
 
-    public void accept(final MethodVisitor mv) {
+    @Override
+	public void accept(final MethodVisitor mv) {
         mv.visitLdcInsn(cst);
     }
 

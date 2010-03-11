@@ -24,7 +24,6 @@ import br.com.caelum.vraptor.deserialization.Deserializers;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.test.VRaptorMockery;
-import br.com.caelum.vraptor.view.HttpResult;
 import br.com.caelum.vraptor.view.Status;
 
 
@@ -33,7 +32,6 @@ public class DeserializingInterceptorTest {
 	private DefaultResourceMethod consumeXml;
 	private DefaultResourceMethod doesntConsume;
 	@Mock private HttpServletRequest request;
-	@Mock private HttpResult result;
 	@Mock private InterceptorStack stack;
 	@Mock Deserializers deserializers;
 	private MethodInfo methodInfo;
@@ -47,7 +45,7 @@ public class DeserializingInterceptorTest {
 		this.mockery = new VRaptorMockery();
 
 		methodInfo = new DefaultMethodInfo();
-		interceptor = new DeserializingInterceptor(request, result, deserializers, methodInfo, container, status);
+		interceptor = new DeserializingInterceptor(request, deserializers, methodInfo, container, status);
 		consumeXml = new DefaultResourceMethod(null, DummyResource.class.getDeclaredMethod("consumeXml"));
 		doesntConsume = new DefaultResourceMethod(null, DummyResource.class.getDeclaredMethod("doesntConsume"));
 	}
@@ -71,7 +69,7 @@ public class DeserializingInterceptorTest {
 	@Test
 	public void willSetHttpStatusCode415IfTheResourceMethodDoesNotSupportTheGivenMediaTypes() throws Exception {
 		when(request.getContentType()).thenReturn("image/jpeg");
-		
+
 		interceptor.intercept(stack, consumeXml, null);
 		verify(status).unsupportedMediaType("Request with media type [image/jpeg]. Expecting one of [application/xml].");
 		verifyZeroInteractions(stack);
@@ -108,7 +106,7 @@ public class DeserializingInterceptorTest {
 		assertEquals(methodInfo.getParameters()[1], "def");
 		verify(stack).next(consumeXml, null);
 	}
-	
+
 	@Test
 	public void willDeserializeForAnyContentTypeIfPossible() throws Exception {
 		when(request.getContentType()).thenReturn("application/xml");
@@ -129,7 +127,7 @@ public class DeserializingInterceptorTest {
 		assertEquals(methodInfo.getParameters()[1], "def");
 		verify(stack).next(consumesAnything, null);
 	}
-	
+
 	@Test
 	public void willSetOnlyNonNullParameters() throws Exception {
 		when(request.getContentType()).thenReturn("application/xml");

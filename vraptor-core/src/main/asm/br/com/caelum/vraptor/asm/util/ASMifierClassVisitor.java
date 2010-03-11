@@ -55,23 +55,23 @@ import br.com.caelum.vraptor.asm.Opcodes;
  * following:
  * <p>
  * <blockquote>
- * 
+ *
  * <pre>
  * import br.com.caelum.vraptor.asm.*;
- * 
+ *
  * public class HelloDump implements Opcodes {
- * 
+ *
  *     public static byte[] dump() throws Exception {
- * 
+ *
  *         ClassWriter cw = new ClassWriter(0);
  *         FieldVisitor fv;
  *         MethodVisitor mv;
  *         AnnotationVisitor av0;
- * 
+ *
  *         cw.visit(49, ACC_PUBLIC + ACC_SUPER, &quot;Hello&quot;, null, &quot;java/lang/Object&quot;, null);
- * 
+ *
  *         cw.visitSource(&quot;Hello.java&quot;, null);
- * 
+ *
  *         {
  *             mv = cw.visitMethod(ACC_PUBLIC, &quot;&lt;init&gt;&quot;, &quot;()V&quot;, null, null);
  *             mv.visitVarInsn(ALOAD, 0);
@@ -90,31 +90,32 @@ import br.com.caelum.vraptor.asm.Opcodes;
  *             mv.visitEnd();
  *         }
  *         cw.visitEnd();
- * 
+ *
  *         return cw.toByteArray();
  *     }
  * }
- * 
+ *
  * </pre>
- * 
+ *
  * </blockquote> where <tt>Hello</tt> is defined by:
  * <p>
  * <blockquote>
- * 
+ *
  * <pre>
  * public class Hello {
- * 
+ *
  *     public static void main(String[] args) {
  *         System.out.println(&quot;hello&quot;);
  *     }
  * }
  * </pre>
- * 
+ *
  * </blockquote>
- * 
+ *
  * @author Eric Bruneton
  * @author Eugene Kuleshov
  */
+@SuppressWarnings("unchecked")
 public class ASMifierClassVisitor extends ASMifierAbstractVisitor implements ClassVisitor {
 
     /**
@@ -143,10 +144,10 @@ public class ASMifierClassVisitor extends ASMifierAbstractVisitor implements Cla
      * <p>
      * Usage: ASMifierClassVisitor [-debug] &lt;fully qualified class name or
      * class file name&gt;
-     * 
+     *
      * @param args
      *            the command line arguments.
-     * 
+     *
      * @throws Exception
      *             if the class cannot be found, or if an IO exception occurs.
      */
@@ -182,7 +183,7 @@ public class ASMifierClassVisitor extends ASMifierAbstractVisitor implements Cla
 
     /**
      * Constructs a new {@link ASMifierClassVisitor} object.
-     * 
+     *
      * @param pw
      *            the print writer to be used to print the class.
      */
@@ -389,7 +390,7 @@ public class ASMifierClassVisitor extends ASMifierAbstractVisitor implements Cla
     /**
      * Appends a string representation of the given access modifiers to
      * {@link #buf buf}.
-     * 
+     *
      * @param access
      *            some access modifiers.
      */

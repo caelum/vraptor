@@ -34,9 +34,10 @@ import br.com.caelum.vraptor.asm.AnnotationVisitor;
 /**
  * An {@link AnnotationVisitor} that prints the ASM code that generates the
  * annotations it visits.
- * 
+ *
  * @author Eric Bruneton
  */
+@SuppressWarnings("unchecked")
 public class ASMifierAnnotationVisitor extends AbstractVisitor implements AnnotationVisitor {
 
     /**
@@ -46,7 +47,7 @@ public class ASMifierAnnotationVisitor extends AbstractVisitor implements Annota
 
     /**
      * Constructs a new {@link ASMifierAnnotationVisitor}.
-     * 
+     *
      * @param id
      *            identifier of the annotation visitor variable in the produced
      *            code.

@@ -35,9 +35,10 @@ import br.com.caelum.vraptor.asm.MethodVisitor;
 
 /**
  * A node that represents an instruction with a single int operand.
- * 
+ *
  * @author Eric Bruneton
  */
+@SuppressWarnings("unchecked")
 public class IntInsnNode extends AbstractInsnNode {
 
     /**
@@ -47,7 +48,7 @@ public class IntInsnNode extends AbstractInsnNode {
 
     /**
      * Constructs a new {@link IntInsnNode}.
-     * 
+     *
      * @param opcode
      *            the opcode of the instruction to be constructed. This opcode
      *            must be BIPUSH, SIPUSH or NEWARRAY.
@@ -61,7 +62,7 @@ public class IntInsnNode extends AbstractInsnNode {
 
     /**
      * Sets the opcode of this instruction.
-     * 
+     *
      * @param opcode
      *            the new instruction opcode. This opcode must be BIPUSH, SIPUSH
      *            or NEWARRAY.
@@ -75,7 +76,8 @@ public class IntInsnNode extends AbstractInsnNode {
         return INT_INSN;
     }
 
-    public void accept(final MethodVisitor mv) {
+    @Override
+	public void accept(final MethodVisitor mv) {
         mv.visitIntInsn(opcode, operand);
     }
 

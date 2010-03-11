@@ -24,11 +24,11 @@ Como você pode ver, a única configuração necessária no %%web.xml%% é o fil
 
 Você pode facilmente importar esse projeto no Eclipse, e roda-lo clicando com o botão da direita
 e escolhendo ::Run as... / Run on server...::. Escolha então um  servlet container (ou
-faça o setup de um novo) e então acesse  %%http://localhost:8080/vraptor-blank-project/%%. 
+faça o setup de um novo) e então acesse  http://localhost:8080/vraptor-blank-project/. 
 
 Você pode escolher, nas propriedades do projetor, dentro de ::Web Project Settings::, o nome
 do contexto para algo melhor, como  %%onlinestore%%. Agora se você rodar esse exemplo
-deve ser possível acessar %%http://localhost:8080/onlinestore%% e ver
+deve ser possível acessar http://localhost:8080/onlinestore e ver
 **It works!** no navegador.
 
 [box Nota]

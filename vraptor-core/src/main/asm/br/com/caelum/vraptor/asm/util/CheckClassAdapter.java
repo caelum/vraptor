@@ -56,36 +56,36 @@ import br.com.caelum.vraptor.asm.tree.analysis.SimpleVerifier;
  * of method calls. For example, the invalid sequence
  * <tt>visitField(ACC_PUBLIC, "i", "I", null)</tt> <tt>visitField(ACC_PUBLIC,
  * "i", "D", null)</tt> will <i>not</i> be detected by this class adapter.
- * 
+ *
  * <p>
  * <code>CheckClassAdapter</code> can be also used to verify bytecode
  * transformations in order to make sure transformed bytecode is sane. For
  * example:
- * 
+ *
  * <pre>
  *   InputStream is = ...; // get bytes for the source class
  *   ClassReader cr = new ClassReader(is);
  *   ClassWriter cw = new ClassWriter(cr, ClassWriter.COMPUTE_MAXS);
  *   ClassVisitor cv = new &lt;b&gt;MyClassAdapter&lt;/b&gt;(new CheckClassAdapter(cw));
  *   cr.accept(cv, 0);
- * 
+ *
  *   StringWriter sw = new StringWriter();
  *   PrintWriter pw = new PrintWriter(sw);
  *   CheckClassAdapter.verify(new ClassReader(cw.toByteArray()), false, pw);
  *   assertTrue(sw.toString(), sw.toString().length()==0);
  * </pre>
- * 
+ *
  * Above code runs transformed bytecode trough the
  * <code>CheckClassAdapter</code>. It won't be exactly the same verification as
  * JVM does, but it run data flow analysis for the code of each method and
  * checks that expectations are met for each method instruction.
- * 
+ *
  * <p>
  * If method bytecode has errors, assertion text will show the erroneous
  * instruction number and dump of the failed method with information about
  * locals and stack slot for each instruction. For example (format is -
  * insnNumber locals : stack):
- * 
+ *
  * <pre>
  * br.com.caelum.vraptor.asm.tree.analysis.AnalyzerException: Error at instruction 71: Expected I, but found .
  *   at br.com.caelum.vraptor.asm.tree.analysis.Analyzer.analyze(Analyzer.java:289)
@@ -98,26 +98,27 @@ import br.com.caelum.vraptor.asm.tree.analysis.SimpleVerifier;
  *   ISTORE 2
  * 00001 LinkedBlockingQueue$Itr &lt;b&gt;.&lt;/b&gt; I . . . . . .  :
  * ...
- * 
- * 00071 LinkedBlockingQueue$Itr &lt;b&gt;.&lt;/b&gt; I . . . . . .  : 
+ *
+ * 00071 LinkedBlockingQueue$Itr &lt;b&gt;.&lt;/b&gt; I . . . . . .  :
  *   ILOAD 1
- * 00072 &lt;b&gt;?&lt;/b&gt;                
+ * 00072 &lt;b&gt;?&lt;/b&gt;
  *   INVOKESPECIAL java/lang/Integer.&lt;init&gt; (I)V
  * ...
  * </pre>
- * 
+ *
  * In the above output you can see that variable 1 loaded by
  * <code>ILOAD 1</code> instruction at position <code>00071</code> is not
  * initialized. You can also see that at the beginning of the method (code
  * inserted by the transformation) variable 2 is initialized.
- * 
+ *
  * <p>
  * Note that when used like that, <code>CheckClassAdapter.verify()</code> can
  * trigger additional class loading, because it is using
  * <code>SimpleVerifier</code>.
- * 
+ *
  * @author Eric Bruneton
  */
+@SuppressWarnings("unchecked")
 public class CheckClassAdapter extends ClassAdapter {
 
     /**
@@ -145,10 +146,10 @@ public class CheckClassAdapter extends ClassAdapter {
      * <p>
      * Usage: CheckClassAdapter &lt;fully qualified class name or class file
      * name&gt;
-     * 
+     *
      * @param args
      *            the command line arguments.
-     * 
+     *
      * @throws Exception
      *             if the class cannot be found, or if an IO exception occurs.
      */
@@ -170,7 +171,7 @@ public class CheckClassAdapter extends ClassAdapter {
 
     /**
      * Checks a given class
-     * 
+     *
      * @param cr
      *            a <code>ClassReader</code> that contains bytecode for the
      *            analysis.
@@ -244,7 +245,7 @@ public class CheckClassAdapter extends ClassAdapter {
 
     /**
      * Constructs a new {@link CheckClassAdapter}.
-     * 
+     *
      * @param cv
      *            the class visitor to which this adapter must delegate calls.
      */
@@ -419,7 +420,7 @@ public class CheckClassAdapter extends ClassAdapter {
      * Checks that the given access flags do not contain invalid flags. This
      * method also checks that mutually incompatible flags are not set
      * simultaneously.
-     * 
+     *
      * @param access
      *            the access flags to be checked
      * @param possibleAccess

@@ -15,6 +15,7 @@ import net.sf.cglib.proxy.NoOp;
  * @author guilherme
  *
  */
+@SuppressWarnings("unchecked")
 public abstract class AbstractCglibProxifier implements Proxifier {
 
 	private static final List<Method> OBJECT_METHODS = Arrays.asList(Object.class.getDeclaredMethods());

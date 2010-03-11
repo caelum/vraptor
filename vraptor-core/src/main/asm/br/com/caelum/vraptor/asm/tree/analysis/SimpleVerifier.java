@@ -37,10 +37,11 @@ import br.com.caelum.vraptor.asm.Type;
  * An extended {@link BasicVerifier} that performs more precise verifications.
  * This verifier computes exact class types, instead of using a single "object
  * reference" type (as done in the {@link BasicVerifier}).
- * 
+ *
  * @author Eric Bruneton
  * @author Bing Ran
  */
+@SuppressWarnings("unchecked")
 public class SimpleVerifier extends BasicVerifier {
 
     /**
@@ -73,7 +74,7 @@ public class SimpleVerifier extends BasicVerifier {
     /**
      * Constructs a new {@link SimpleVerifier} to verify a specific class. This
      * class will not be loaded into the JVM since it may be incorrect.
-     * 
+     *
      * @param currentClass the class that is verified.
      * @param currentSuperClass the super class of the class that is verified.
      * @param isInterface if the class that is verified is an interface.
@@ -89,7 +90,7 @@ public class SimpleVerifier extends BasicVerifier {
     /**
      * Constructs a new {@link SimpleVerifier} to verify a specific class. This
      * class will not be loaded into the JVM since it may be incorrect.
-     * 
+     *
      * @param currentClass the class that is verified.
      * @param currentSuperClass the super class of the class that is verified.
      * @param currentClassInterfaces the interfaces implemented by the class
@@ -108,7 +109,8 @@ public class SimpleVerifier extends BasicVerifier {
         this.isInterface = isInterface;
     }
 
-    public Value newValue(final Type type) {
+    @Override
+	public Value newValue(final Type type) {
         if (type == null) {
             return BasicValue.UNINITIALIZED_VALUE;
         }
@@ -140,13 +142,15 @@ public class SimpleVerifier extends BasicVerifier {
         return v;
     }
 
-    protected boolean isArrayValue(final Value value) {
+    @Override
+	protected boolean isArrayValue(final Value value) {
         Type t = ((BasicValue) value).getType();
         return t != null
                 && ("Lnull;".equals(t.getDescriptor()) || t.getSort() == Type.ARRAY);
     }
 
-    protected Value getElementValue(final Value objectArrayValue)
+    @Override
+	protected Value getElementValue(final Value objectArrayValue)
             throws AnalyzerException
     {
         Type arrayType = ((BasicValue) objectArrayValue).getType();
@@ -161,7 +165,8 @@ public class SimpleVerifier extends BasicVerifier {
         throw new Error("Internal error");
     }
 
-    protected boolean isSubTypeOf(final Value value, final Value expected) {
+    @Override
+	protected boolean isSubTypeOf(final Value value, final Value expected) {
         Type expectedType = ((BasicValue) expected).getType();
         Type type = ((BasicValue) value).getType();
         switch (expectedType.getSort()) {
@@ -186,7 +191,8 @@ public class SimpleVerifier extends BasicVerifier {
         }
     }
 
-    public Value merge(final Value v, final Value w) {
+    @Override
+	public Value merge(final Value v, final Value w) {
         if (!v.equals(w)) {
             Type t = ((BasicValue) v).getType();
             Type u = ((BasicValue) w).getType();

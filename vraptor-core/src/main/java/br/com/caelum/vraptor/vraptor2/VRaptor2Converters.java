@@ -44,6 +44,7 @@ public class VRaptor2Converters implements Converters {
 		this.delegateConverters = new DefaultConverters();
 		List<String> list = config.getConverters();
 		for (String l : list) {
+			@SuppressWarnings("unchecked")
 			Class<? extends org.vraptor.converter.Converter> converterType = (Class<? extends org.vraptor.converter.Converter>) Class
 					.forName(l);
 			converterList.add(converterType.newInstance());

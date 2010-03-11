@@ -37,9 +37,10 @@ import br.com.caelum.vraptor.asm.MethodVisitor;
 /**
  * A node that represents a bytecode instruction. <i>An instruction can appear
  * at most once in at most one {@link InsnList} at a time</i>.
- * 
+ *
  * @author Eric Bruneton
  */
+@SuppressWarnings("unchecked")
 public abstract class AbstractInsnNode {
 
     /**
@@ -142,7 +143,7 @@ public abstract class AbstractInsnNode {
 
     /**
      * Constructs a new {@link AbstractInsnNode}.
-     * 
+     *
      * @param opcode
      *            the opcode of the instruction to be constructed.
      */
@@ -153,7 +154,7 @@ public abstract class AbstractInsnNode {
 
     /**
      * Returns the opcode of this instruction.
-     * 
+     *
      * @return the opcode of this instruction.
      */
     public int getOpcode() {
@@ -162,7 +163,7 @@ public abstract class AbstractInsnNode {
 
     /**
      * Returns the type of this instruction.
-     * 
+     *
      * @return the type of this instruction, i.e. one the constants defined in
      *         this class.
      */
@@ -171,7 +172,7 @@ public abstract class AbstractInsnNode {
     /**
      * Returns the previous instruction in the list to which this instruction
      * belongs, if any.
-     * 
+     *
      * @return the previous instruction in the list to which this instruction
      *         belongs, if any. May be <tt>null</tt>.
      */
@@ -182,7 +183,7 @@ public abstract class AbstractInsnNode {
     /**
      * Returns the next instruction in the list to which this instruction
      * belongs, if any.
-     * 
+     *
      * @return the next instruction in the list to which this instruction
      *         belongs, if any. May be <tt>null</tt>.
      */
@@ -192,7 +193,7 @@ public abstract class AbstractInsnNode {
 
     /**
      * Makes the given code visitor visit this instruction.
-     * 
+     *
      * @param cv
      *            a code visitor.
      */
@@ -200,7 +201,7 @@ public abstract class AbstractInsnNode {
 
     /**
      * Returns a copy of this instruction.
-     * 
+     *
      * @param labels
      *            a map from LabelNodes to cloned LabelNodes.
      * @return a copy of this instruction. The returned instruction does not
@@ -210,7 +211,7 @@ public abstract class AbstractInsnNode {
 
     /**
      * Returns the clone of the given label.
-     * 
+     *
      * @param label
      *            a label.
      * @param map
@@ -223,7 +224,7 @@ public abstract class AbstractInsnNode {
 
     /**
      * Returns the clones of the given labels.
-     * 
+     *
      * @param labels
      *            a list of labels.
      * @param map

@@ -38,6 +38,7 @@
 		<dt>Jonas Abreu - <fmt:message key="colaborador"/></dt>
 		<dd><a href="mailto:jonas.abreu@caelum.com.br">jonas.abreu@caelum.com.br</a></dd>
 		<dt>Tomaz Lavieri - <fmt:message key="colaborador"/></dt>
+		<dd><a href="mailto:tomazlavieri@gmail.com">tomazlavieri@gmail.com</a></dd>
 		<dt>Lucas H. G. Toniazzo - <fmt:message key="colaborador"/></dt>
 		<dt>Otávio Scherer Garcia - <fmt:message key="colaborador"/></dt>
 		<dt>Rafael Carneiro - <fmt:message key="colaborador"/></dt>

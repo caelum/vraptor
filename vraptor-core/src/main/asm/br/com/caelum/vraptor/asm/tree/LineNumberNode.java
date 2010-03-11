@@ -36,9 +36,10 @@ import br.com.caelum.vraptor.asm.MethodVisitor;
 /**
  * A node that represents a line number declaration. These nodes are pseudo
  * instruction nodes in order to be inserted in an instruction list.
- * 
+ *
  * @author Eric Bruneton
  */
+@SuppressWarnings("unchecked")
 public class LineNumberNode extends AbstractInsnNode {
 
     /**
@@ -54,7 +55,7 @@ public class LineNumberNode extends AbstractInsnNode {
 
     /**
      * Constructs a new {@link LineNumberNode}.
-     * 
+     *
      * @param line
      *            a line number. This number refers to the source file from
      *            which the class was compiled.
@@ -72,7 +73,8 @@ public class LineNumberNode extends AbstractInsnNode {
         return LINE;
     }
 
-    public void accept(final MethodVisitor mv) {
+    @Override
+	public void accept(final MethodVisitor mv) {
         mv.visitLineNumber(line, start.getLabel());
     }
 

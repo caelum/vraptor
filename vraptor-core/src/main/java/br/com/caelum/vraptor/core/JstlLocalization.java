@@ -152,7 +152,7 @@ public class JstlLocalization implements Localization {
     public String getMessage(String key, String... parameters) {
         try {
             String content = getBundle().getString(key);
-            return MessageFormat.format(content, parameters);
+            return MessageFormat.format(content, (Object[]) parameters);
         } catch (MissingResourceException e) {
             return "???" + key + "???";
         }

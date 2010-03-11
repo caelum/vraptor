@@ -91,7 +91,7 @@ public class AsmBasedTypeCreator extends AbstractTypeCreator implements Opcodes 
 			java.lang.reflect.Type type = types[i];
 			if (type instanceof ParameterizedType) {
 				parse(cw, (ParameterizedType) type, valueLists, newTypeName, names[i]);
-			} else if (type instanceof Class) {
+			} else if (type instanceof Class<?>) {
 				parse(cw, (Class<?>) type, valueLists, newTypeName, names[i]);
 			} else if (type instanceof TypeVariable<?>) {
 				ParameterizedType superclass = (ParameterizedType) resourceMethod.getResource().getType().getGenericSuperclass();
@@ -226,5 +226,4 @@ public class AsmBasedTypeCreator extends AbstractTypeCreator implements Opcodes 
 		}
 		return type.isPrimitive() ? ILOAD : ALOAD;
 	}
-
 }

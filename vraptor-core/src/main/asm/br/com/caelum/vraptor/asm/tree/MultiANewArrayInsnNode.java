@@ -36,9 +36,10 @@ import br.com.caelum.vraptor.asm.Opcodes;
 
 /**
  * A node that represents a MULTIANEWARRAY instruction.
- * 
+ *
  * @author Eric Bruneton
  */
+@SuppressWarnings("unchecked")
 public class MultiANewArrayInsnNode extends AbstractInsnNode {
 
     /**
@@ -53,7 +54,7 @@ public class MultiANewArrayInsnNode extends AbstractInsnNode {
 
     /**
      * Constructs a new {@link MultiANewArrayInsnNode}.
-     * 
+     *
      * @param desc
      *            an array type descriptor (see
      *            {@link br.com.caelum.vraptor.asm.Type}).
@@ -71,7 +72,8 @@ public class MultiANewArrayInsnNode extends AbstractInsnNode {
         return MULTIANEWARRAY_INSN;
     }
 
-    public void accept(final MethodVisitor mv) {
+    @Override
+	public void accept(final MethodVisitor mv) {
         mv.visitMultiANewArrayInsn(desc, dims);
     }
 

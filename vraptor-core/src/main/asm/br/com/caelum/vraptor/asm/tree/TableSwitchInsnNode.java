@@ -40,9 +40,10 @@ import br.com.caelum.vraptor.asm.Opcodes;
 
 /**
  * A node that represents a TABLESWITCH instruction.
- * 
+ *
  * @author Eric Bruneton
  */
+@SuppressWarnings("unchecked")
 public class TableSwitchInsnNode extends AbstractInsnNode {
 
     /**
@@ -68,7 +69,7 @@ public class TableSwitchInsnNode extends AbstractInsnNode {
 
     /**
      * Constructs a new {@link TableSwitchInsnNode}.
-     * 
+     *
      * @param min
      *            the minimum key value.
      * @param max
@@ -95,7 +96,8 @@ public class TableSwitchInsnNode extends AbstractInsnNode {
         return TABLESWITCH_INSN;
     }
 
-    public void accept(final MethodVisitor mv) {
+    @Override
+	public void accept(final MethodVisitor mv) {
         Label[] labels = new Label[this.labels.size()];
         for (int i = 0; i < labels.length; ++i) {
             labels[i] = ((LabelNode) this.labels.get(i)).getLabel();

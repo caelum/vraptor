@@ -37,6 +37,7 @@ import br.com.caelum.vraptor.asm.MethodVisitor;
 /**
  * An {@link AbstractInsnNode} that encapsulates a {@link Label}.
  */
+@SuppressWarnings("unchecked")
 public class LabelNode extends AbstractInsnNode {
 
     private Label label;
@@ -62,7 +63,8 @@ public class LabelNode extends AbstractInsnNode {
         return label;
     }
 
-    public void accept(final MethodVisitor cv) {
+    @Override
+	public void accept(final MethodVisitor cv) {
         cv.visitLabel(getLabel());
     }
 

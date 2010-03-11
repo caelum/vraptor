@@ -182,6 +182,7 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
 		registerFactory(type, beanFactory);
 	}
 
+	@SuppressWarnings("unchecked")
 	private void registerFactory(final Class<?> type, ConfigurableListableBeanFactory beanFactory) {
 		if (ComponentFactory.class.isAssignableFrom(type)) {
 			beanFactory.registerSingleton(type.getName(), new ComponentFactoryBean(container, type));
@@ -248,8 +249,8 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
 		registry.registerBeanDefinition(AnnotationConfigUtils.AUTOWIRED_ANNOTATION_PROCESSOR_BEAN_NAME, definition);
 	}
 
+	@Override
 	public <T> T getBean(Class<T> type) {
-		@SuppressWarnings("unchecked")
 		Map<String, ? extends T> instances = BeanFactoryUtils.beansOfTypeIncludingAncestors(this, type);
 		if (instances.size() == 0) {
 			throw new NoSuchBeanDefinitionException(type, "no bean for this type registered");

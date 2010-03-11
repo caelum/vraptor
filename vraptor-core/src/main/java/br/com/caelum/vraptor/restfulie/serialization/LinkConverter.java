@@ -18,7 +18,6 @@
 package br.com.caelum.vraptor.restfulie.serialization;
 
 import br.com.caelum.vraptor.config.Configuration;
-import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.restfulie.Restfulie;
 import br.com.caelum.vraptor.restfulie.hypermedia.HypermediaResource;
 import br.com.caelum.vraptor.restfulie.relation.Relation;
@@ -34,7 +33,7 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
  * elements.<br>
  * The converter passed in the constructor will be used to marshall the rest of
  * the object.
- * 
+ *
  * @author guilherme silveira
  * @author lucas cavalcanti
  */
@@ -72,6 +71,7 @@ public class LinkConverter implements Converter {
 		return base.unmarshal(arg0, arg1);
 	}
 
+	@SuppressWarnings("unchecked")
 	public boolean canConvert(Class type) {
 		return HypermediaResource.class.isAssignableFrom(type)
 				&& base.canConvert(type);

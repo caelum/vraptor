@@ -35,9 +35,10 @@ import br.com.caelum.vraptor.asm.Type;
 /**
  * An {@link AnnotationVisitor} that prints a disassembled view of the
  * annotations it visits.
- * 
+ *
  * @author Eric Bruneton
  */
+@SuppressWarnings("unchecked")
 public class TraceAnnotationVisitor extends TraceAbstractVisitor implements AnnotationVisitor {
 
     /**

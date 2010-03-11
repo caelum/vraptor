@@ -49,9 +49,10 @@ import br.com.caelum.vraptor.asm.Type;
  * in a method whose signature is <tt>void m ()</tt>, the invalid instruction
  * IRETURN, or the invalid sequence IADD L2I will <i>not</i> be detected by this
  * code adapter.
- * 
+ *
  * @author Eric Bruneton
  */
+@SuppressWarnings("unchecked")
 public class CheckMethodAdapter extends MethodAdapter {
 
     /**
@@ -304,7 +305,7 @@ public class CheckMethodAdapter extends MethodAdapter {
 
     /**
      * Constructs a new {@link CheckMethodAdapter} object.
-     * 
+     *
      * @param cv
      *            the code visitor to which this adapter must delegate calls.
      */
@@ -650,7 +651,7 @@ public class CheckMethodAdapter extends MethodAdapter {
 
     /**
      * Checks a stack frame value.
-     * 
+     *
      * @param value
      *            the value to be checked.
      */
@@ -670,7 +671,7 @@ public class CheckMethodAdapter extends MethodAdapter {
 
     /**
      * Checks that the type of the given opcode is equal to the given type.
-     * 
+     *
      * @param opcode
      *            the opcode to be checked.
      * @param type
@@ -684,7 +685,7 @@ public class CheckMethodAdapter extends MethodAdapter {
 
     /**
      * Checks that the given value is a signed byte.
-     * 
+     *
      * @param value
      *            the value to be checked.
      * @param msg
@@ -698,7 +699,7 @@ public class CheckMethodAdapter extends MethodAdapter {
 
     /**
      * Checks that the given value is a signed short.
-     * 
+     *
      * @param value
      *            the value to be checked.
      * @param msg
@@ -712,7 +713,7 @@ public class CheckMethodAdapter extends MethodAdapter {
 
     /**
      * Checks that the given value is an unsigned short.
-     * 
+     *
      * @param value
      *            the value to be checked.
      * @param msg
@@ -727,7 +728,7 @@ public class CheckMethodAdapter extends MethodAdapter {
     /**
      * Checks that the given value is an {@link Integer}, a{@link Float}, a
      * {@link Long}, a {@link Double} or a {@link String}.
-     * 
+     *
      * @param cst
      *            the value to be checked.
      */
@@ -740,7 +741,7 @@ public class CheckMethodAdapter extends MethodAdapter {
 
     /**
      * Checks that the given string is a valid Java identifier.
-     * 
+     *
      * @param name
      *            the string to be checked.
      * @param msg
@@ -752,7 +753,7 @@ public class CheckMethodAdapter extends MethodAdapter {
 
     /**
      * Checks that the given substring is a valid Java identifier.
-     * 
+     *
      * @param name
      *            the string to be checked.
      * @param start
@@ -782,7 +783,7 @@ public class CheckMethodAdapter extends MethodAdapter {
     /**
      * Checks that the given string is a valid Java identifier or is equal to
      * '&lt;init&gt;' or '&lt;clinit&gt;'.
-     * 
+     *
      * @param name
      *            the string to be checked.
      * @param msg
@@ -809,7 +810,7 @@ public class CheckMethodAdapter extends MethodAdapter {
 
     /**
      * Checks that the given string is a valid internal class name.
-     * 
+     *
      * @param name
      *            the string to be checked.
      * @param msg
@@ -828,7 +829,7 @@ public class CheckMethodAdapter extends MethodAdapter {
 
     /**
      * Checks that the given substring is a valid internal class name.
-     * 
+     *
      * @param name
      *            the string to be checked.
      * @param start
@@ -861,7 +862,7 @@ public class CheckMethodAdapter extends MethodAdapter {
 
     /**
      * Checks that the given string is a valid type descriptor.
-     * 
+     *
      * @param desc
      *            the string to be checked.
      * @param canBeVoid
@@ -876,7 +877,7 @@ public class CheckMethodAdapter extends MethodAdapter {
 
     /**
      * Checks that a the given substring is a valid type descriptor.
-     * 
+     *
      * @param desc
      *            the string to be checked.
      * @param start
@@ -934,7 +935,7 @@ public class CheckMethodAdapter extends MethodAdapter {
 
     /**
      * Checks that the given string is a valid method descriptor.
-     * 
+     *
      * @param desc
      *            the string to be checked.
      */
@@ -962,7 +963,7 @@ public class CheckMethodAdapter extends MethodAdapter {
 
     /**
      * Checks a class signature.
-     * 
+     *
      * @param signature
      *            a string containing the signature that must be checked.
      */
@@ -985,7 +986,7 @@ public class CheckMethodAdapter extends MethodAdapter {
 
     /**
      * Checks a method signature.
-     * 
+     *
      * @param signature
      *            a string containing the signature that must be checked.
      */
@@ -1023,7 +1024,7 @@ public class CheckMethodAdapter extends MethodAdapter {
 
     /**
      * Checks a field signature.
-     * 
+     *
      * @param signature
      *            a string containing the signature that must be checked.
      */
@@ -1036,7 +1037,7 @@ public class CheckMethodAdapter extends MethodAdapter {
 
     /**
      * Checks the formal type parameters of a class or method signature.
-     * 
+     *
      * @param signature
      *            a string containing the signature that must be checked.
      * @param pos
@@ -1057,7 +1058,7 @@ public class CheckMethodAdapter extends MethodAdapter {
 
     /**
      * Checks a formal type parameter of a class or method signature.
-     * 
+     *
      * @param signature
      *            a string containing the signature that must be checked.
      * @param pos
@@ -1081,7 +1082,7 @@ public class CheckMethodAdapter extends MethodAdapter {
 
     /**
      * Checks a field type signature.
-     * 
+     *
      * @param signature
      *            a string containing the signature that must be checked.
      * @param pos
@@ -1107,7 +1108,7 @@ public class CheckMethodAdapter extends MethodAdapter {
 
     /**
      * Checks a class type signature.
-     * 
+     *
      * @param signature
      *            a string containing the signature that must be checked.
      * @param pos
@@ -1138,7 +1139,7 @@ public class CheckMethodAdapter extends MethodAdapter {
 
     /**
      * Checks the type arguments in a class type signature.
-     * 
+     *
      * @param signature
      *            a string containing the signature that must be checked.
      * @param pos
@@ -1159,7 +1160,7 @@ public class CheckMethodAdapter extends MethodAdapter {
 
     /**
      * Checks a type argument in a class type signature.
-     * 
+     *
      * @param signature
      *            a string containing the signature that must be checked.
      * @param pos
@@ -1181,7 +1182,7 @@ public class CheckMethodAdapter extends MethodAdapter {
 
     /**
      * Checks a type variable signature.
-     * 
+     *
      * @param signature
      *            a string containing the signature that must be checked.
      * @param pos
@@ -1199,7 +1200,7 @@ public class CheckMethodAdapter extends MethodAdapter {
 
     /**
      * Checks a type signature.
-     * 
+     *
      * @param signature
      *            a string containing the signature that must be checked.
      * @param pos
@@ -1227,7 +1228,7 @@ public class CheckMethodAdapter extends MethodAdapter {
 
     /**
      * Checks an identifier.
-     * 
+     *
      * @param signature
      *            a string containing the signature that must be checked.
      * @param pos
@@ -1247,7 +1248,7 @@ public class CheckMethodAdapter extends MethodAdapter {
 
     /**
      * Checks a single character.
-     * 
+     *
      * @param signature
      *            a string containing the signature that must be checked.
      * @param pos
@@ -1263,7 +1264,7 @@ public class CheckMethodAdapter extends MethodAdapter {
 
     /**
      * Returns the signature car at the given index.
-     * 
+     *
      * @param signature
      *            a signature.
      * @param pos
@@ -1278,7 +1279,7 @@ public class CheckMethodAdapter extends MethodAdapter {
     /**
      * Checks that the given label is not null. This method can also check that
      * the label has been visited.
-     * 
+     *
      * @param label
      *            the label to be checked.
      * @param checkVisited

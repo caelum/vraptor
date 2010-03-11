@@ -37,9 +37,10 @@ import br.com.caelum.vraptor.asm.tree.LabelNode;
 
 /**
  * A method subroutine (corresponds to a JSR instruction).
- * 
+ *
  * @author Eric Bruneton
  */
+@SuppressWarnings("unchecked")
 class Subroutine {
 
     LabelNode start;

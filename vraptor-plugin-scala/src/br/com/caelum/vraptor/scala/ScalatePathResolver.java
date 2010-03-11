@@ -16,6 +16,9 @@ public class ScalatePathResolver extends DefaultPathResolver {
 		super(request, acceptHeaderToFormat);
 	}
 
+	protected String getPrefix() {
+		return "/WEB-INF/ssp/";
+	}
 	
     protected String getExtension() {
         return "ssp";

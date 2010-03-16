@@ -26,6 +26,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 
@@ -182,7 +183,8 @@ public class XStreamSerializer implements Serializer {
 	private boolean isCollection(Type type) {
 		if (type instanceof ParameterizedType) {
 			ParameterizedType ptype = (ParameterizedType) type;
-			return Collection.class.isAssignableFrom((Class<?>) ptype.getRawType());
+			return Collection.class.isAssignableFrom((Class<?>) ptype.getRawType())
+			  || Map.class.isAssignableFrom((Class<?>) ptype.getRawType());
 		}
 		return Collection.class.isAssignableFrom((Class<?>) type);
 	}

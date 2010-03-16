@@ -12,7 +12,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -47,6 +50,7 @@ public class XStreamXMLSerializationTest {
 	public static class Client {
 		String name;
 		Address address;
+
 		public Client(String name) {
 			this.name = name;
 		}
@@ -80,6 +84,12 @@ public class XStreamXMLSerializationTest {
 		}
 
 	}
+	public static class Properties {
+		Map<String, String> map;
+		public Properties(String key, String value) {
+			map = new HashMap<String, String>(Collections.singletonMap(key, value));
+		}
+	}
 	public static class AdvancedOrder extends Order{
 
 		@SuppressWarnings("unused")
@@ -90,6 +100,13 @@ public class XStreamXMLSerializationTest {
 			this.notes = notes;
 		}
 
+	}
+
+	@Test
+	public void shouldSerializeMaps() {
+		String expectedResult = "<properties>\n  <map>\n    <entry>\n      <string>test</string>\n      <string>true</string>\n    </entry>\n  </map>\n</properties>";
+		serialization.from(new Properties("test", "true")).include("map").serialize();
+		assertThat(result(), is(equalTo(expectedResult)));
 	}
 
 	@Test

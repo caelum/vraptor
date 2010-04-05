@@ -44,6 +44,7 @@ public class XStreamJSONSerialization implements JSONSerialization {
 
 	private final HttpServletResponse response;
 	private final TypeNameExtractor extractor;
+	private boolean noAlias = false;
 
 	public XStreamJSONSerialization(HttpServletResponse response, TypeNameExtractor extractor) {
 		this.response = response;
@@ -83,6 +84,13 @@ public class XStreamJSONSerialization implements JSONSerialization {
 		fixHiberanteProxyIfNeed(object);
 		return getSerializer().from(object, alias);
 	}
+	
+	@Override
+	public <T> Serializer fromNoAlias(T object) {
+		noAlias = true;
+		response.setContentType("application/json");
+		return getSerializer().from(object);
+	}
 
 	/**
 	 * You can override this method for configuring XStream before serialization
@@ -101,7 +109,14 @@ public class XStreamJSONSerialization implements JSONSerialization {
 	 * You can override this method for configuring Driver before serialization
 	 */
 	protected HierarchicalStreamDriver getHierarchicalStreamDriver() {
-		return new JsonHierarchicalStreamDriver();
+		if (noAlias)
+			return new JsonHierarchicalStreamDriver() {  
+				public HierarchicalStreamWriter createWriter(Writer writer) {  
+					return new JsonWriter(writer, JsonWriter.DROP_ROOT_MODE);  
+				}  
+			};
+		else
+			return new JsonHierarchicalStreamDriver();
 	}
 
 }

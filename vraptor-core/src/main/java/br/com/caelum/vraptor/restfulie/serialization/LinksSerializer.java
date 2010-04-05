@@ -19,12 +19,12 @@ package br.com.caelum.vraptor.restfulie.serialization;
 
 import java.io.Writer;
 
-import br.com.caelum.vraptor.serialization.Serializer;
+import br.com.caelum.vraptor.serialization.SerializerBuilder;
 import br.com.caelum.vraptor.serialization.xstream.XStreamSerializer;
 
 import com.thoughtworks.xstream.XStream;
 
-public class LinksSerializer implements Serializer {
+public class LinksSerializer implements SerializerBuilder {
 
 	private final XStreamSerializer serializer;
 
@@ -32,15 +32,15 @@ public class LinksSerializer implements Serializer {
 		this.serializer = new XStreamSerializer(xstream, writer);
 	}
 
-	public Serializer exclude(String... arg0) {
+	public SerializerBuilder exclude(String... arg0) {
 		return serializer.exclude(arg0);
 	}
 
-	public <T> Serializer from(T object) {
+	public <T> SerializerBuilder from(T object) {
 		return serializer.from(object);
 	}
 
-	public Serializer include(String... arg0) {
+	public SerializerBuilder include(String... arg0) {
 		return serializer.include(arg0);
 	}
 
@@ -48,11 +48,11 @@ public class LinksSerializer implements Serializer {
 		serializer.serialize();
 	}
 
-	public <T> Serializer from(T arg0, String arg1) {
+	public <T> SerializerBuilder from(T arg0, String arg1) {
 		return serializer.from(arg0, arg1);
 	}
 
-	public Serializer recursive() {
+	public SerializerBuilder recursive() {
 		return serializer.recursive();
 	}
 

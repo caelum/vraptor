@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.ioc.Component;
+import br.com.caelum.vraptor.serialization.SerializerBuilder;
 import br.com.caelum.vraptor.serialization.Serializer;
 import br.com.caelum.vraptor.serialization.XMLSerialization;
 import br.com.caelum.vraptor.view.ResultException;
@@ -54,7 +55,7 @@ public class XStreamXMLSerialization implements XMLSerialization {
 		return getSerializer().from(object);
 	}
 
-	protected Serializer getSerializer() {
+	protected SerializerBuilder getSerializer() {
 		try {
 			return new XStreamSerializer(getXStream(), response.getWriter());
 		} catch (IOException e) {

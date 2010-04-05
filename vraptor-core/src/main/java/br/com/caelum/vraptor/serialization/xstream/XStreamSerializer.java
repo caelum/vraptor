@@ -31,18 +31,18 @@ import java.util.Set;
 import java.util.Map.Entry;
 
 import net.vidageek.mirror.dsl.Mirror;
-import br.com.caelum.vraptor.serialization.Serializer;
+import br.com.caelum.vraptor.serialization.SerializerBuilder;
 
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
 import com.thoughtworks.xstream.XStream;
 
 /**
- * A Serializer based on XStream
+ * A SerializerBuilder based on XStream
  * @author Lucas Cavalcanti
  * @since 3.0.2
  */
-public class XStreamSerializer implements Serializer {
+public class XStreamSerializer implements SerializerBuilder {
 
 	private final XStream xstream;
 	private final Writer writer;
@@ -66,7 +66,7 @@ public class XStreamSerializer implements Serializer {
 			|| Character.class.equals(type);
 	}
 
-	public Serializer exclude(String... names) {
+	public SerializerBuilder exclude(String... names) {
 		for (String name : names) {
 			Set<Class<?>> parentTypes = getParentTypesFor(name);
 			for (Class<?> type : parentTypes) {
@@ -102,7 +102,7 @@ public class XStreamSerializer implements Serializer {
 		return type;
 	}
 
-	public <T> Serializer from(T object, String alias) {
+	public <T> SerializerBuilder from(T object, String alias) {
 		from(object);
 		if (Collection.class.isInstance(object)) {
 			xstream.alias(alias, List.class);
@@ -112,7 +112,7 @@ public class XStreamSerializer implements Serializer {
 		return this;
 	}
 
-	public <T> Serializer from(T object) {
+	public <T> SerializerBuilder from(T object) {
 		if (object == null) {
 			throw new NullPointerException("You can't serialize null objects");
 		}
@@ -149,7 +149,7 @@ public class XStreamSerializer implements Serializer {
 		}
 	}
 
-	public Serializer include(String... fields) {
+	public SerializerBuilder include(String... fields) {
 		for (String field : fields) {
 			try {
 				Set<Class<?>> parentTypes = getParentTypesFor(field);
@@ -196,7 +196,7 @@ public class XStreamSerializer implements Serializer {
 		xstream.toXML(root, writer);
 	}
 
-	public Serializer recursive() {
+	public SerializerBuilder recursive() {
 		excludes.clear();
 		return this;
 	}

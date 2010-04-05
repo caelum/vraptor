@@ -26,6 +26,7 @@ import br.com.caelum.vraptor.proxy.MethodInvocation;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.SuperMethod;
 import br.com.caelum.vraptor.serialization.Serializer;
+import br.com.caelum.vraptor.serialization.SerializerBuilder;
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.ValidationException;
 
@@ -82,8 +83,8 @@ public class DefaultValidationViewsFactory implements ValidationViewsFactory {
 				}
 
 				if (Serializer.class.isAssignableFrom(method.getReturnType())) {
-					return proxifier.proxify(Serializer.class,
-							throwValidationErrorOnFinalMethods(Serializer.class, errors, Serializer.class.cast(instance)));
+					return proxifier.proxify(SerializerBuilder.class,
+							throwValidationErrorOnFinalMethods(SerializerBuilder.class, errors, SerializerBuilder.class.cast(instance)));
 				}
 				throw new ResultException("It's not possible to create a validation version of " + method + ". You must provide a Custom Validation version of your class, or inform this corner case to VRaptor developers");
 			}

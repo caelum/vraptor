@@ -32,6 +32,7 @@ import br.com.caelum.vraptor.proxy.ObjenesisProxifier;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.SuperMethod;
 import br.com.caelum.vraptor.serialization.Serializer;
+import br.com.caelum.vraptor.serialization.SerializerBuilder;
 import br.com.caelum.vraptor.view.EmptyResult;
 import br.com.caelum.vraptor.view.ResultException;
 
@@ -89,7 +90,7 @@ public class MockResult implements Result {
 				}
 
 				if (Serializer.class.isAssignableFrom(method.getReturnType())) {
-					return proxifier.proxify(Serializer.class, returnOnFinalMethods(Serializer.class));
+					return proxifier.proxify(SerializerBuilder.class, returnOnFinalMethods(SerializerBuilder.class));
 				}
 				throw new ResultException("It's not possible to create a mocked version of " + method + ". Please inform this corner case to VRaptor developers");
 			}

@@ -35,7 +35,7 @@ import br.com.caelum.vraptor.proxy.DefaultProxifier;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.serialization.JSONSerialization;
-import br.com.caelum.vraptor.serialization.Serializer;
+import br.com.caelum.vraptor.serialization.SerializerBuilder;
 import br.com.caelum.vraptor.util.test.MockedLogic;
 import br.com.caelum.vraptor.util.test.MockedPage;
 import br.com.caelum.vraptor.validator.Message;
@@ -48,7 +48,7 @@ public class DefaultValidationViewsFactoryTest {
 	private Proxifier proxifier;
 	private DefaultValidationViewsFactory factory;
 	private List<Message> errors;
-	private Serializer serializer;
+	private SerializerBuilder serializerBuilder;
 
 	@Before
 	public void setUp() throws Exception {
@@ -272,14 +272,14 @@ public class DefaultValidationViewsFactoryTest {
 	public void onXMLSerializationResultShouldThrowExceptionOnlyOnSerializeMethod() throws Exception {
 		JSONSerialization serialization = mock(JSONSerialization.class);
 
-		serializer = mock(Serializer.class, new Answer<Serializer>() {
-			public Serializer answer(InvocationOnMock invocation) throws Throwable {
-				return serializer;
+		serializerBuilder = mock(SerializerBuilder.class, new Answer<SerializerBuilder>() {
+			public SerializerBuilder answer(InvocationOnMock invocation) throws Throwable {
+				return serializerBuilder;
 			}
 		});
 
 		when(result.use(JSONSerialization.class)).thenReturn(serialization);
-		when(serialization.from(any())).thenReturn(serializer);
+		when(serialization.from(any())).thenReturn(serializerBuilder);
 
 		try {
 			factory.instanceFor(JSONSerialization.class, errors).from(new Object());
@@ -291,7 +291,7 @@ public class DefaultValidationViewsFactoryTest {
 		factory.instanceFor(JSONSerialization.class, errors).from(new Object()).serialize();
 	}
 
-	static class RandomSerializer implements Serializer {
+	static class RandomSerializer implements SerializerBuilder {
 
 		public RandomSerializer exclude(String... names) {
 			return this;
@@ -309,7 +309,7 @@ public class DefaultValidationViewsFactoryTest {
 			return this;
 		}
 
-		public Serializer recursive() {
+		public RandomSerializer recursive() {
 			return this;
 		}
 
@@ -321,10 +321,10 @@ public class DefaultValidationViewsFactoryTest {
 	public void onSerializerResultsShouldBeAbleToCreateValidationInstancesEvenIfChildClassesUsesCovariantType() throws Exception {
 		JSONSerialization serialization = mock(JSONSerialization.class);
 
-		serializer = new RandomSerializer();
+		serializerBuilder = new RandomSerializer();
 
 		when(result.use(JSONSerialization.class)).thenReturn(serialization);
-		when(serialization.from(any())).thenReturn(serializer);
+		when(serialization.from(any())).thenReturn(serializerBuilder);
 
 		try {
 			factory.instanceFor(JSONSerialization.class, errors).from(new Object());

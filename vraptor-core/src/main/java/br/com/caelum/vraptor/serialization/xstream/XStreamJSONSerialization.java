@@ -16,6 +16,7 @@
 package br.com.caelum.vraptor.serialization.xstream;
 
 import java.io.IOException;
+import java.io.Writer;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -25,12 +26,16 @@ import org.hibernate.proxy.LazyInitializer;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.serialization.JSONSerialization;
+import br.com.caelum.vraptor.serialization.SerializationNoRoot;
 import br.com.caelum.vraptor.serialization.Serializer;
+import br.com.caelum.vraptor.serialization.SerializerBuilder;
 import br.com.caelum.vraptor.view.ResultException;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.HierarchicalStreamDriver;
+import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.io.json.JsonHierarchicalStreamDriver;
+import com.thoughtworks.xstream.io.json.JsonWriter;
 import com.thoughtworks.xstream.mapper.MapperWrapper;
 
 /**
@@ -44,7 +49,7 @@ public class XStreamJSONSerialization implements JSONSerialization {
 
 	private final HttpServletResponse response;
 	private final TypeNameExtractor extractor;
-	private boolean noAlias = false;
+	private boolean noRoot = false;
 
 	public XStreamJSONSerialization(HttpServletResponse response, TypeNameExtractor extractor) {
 		this.response = response;
@@ -54,7 +59,7 @@ public class XStreamJSONSerialization implements JSONSerialization {
 	public boolean accepts(String format) {
 		return "json".equals(format);
 	}
-	
+
 	private String fixHiberanteProxyIfNeed(Object o) {
 		if (o instanceof HibernateProxy) {
 			LazyInitializer lazy = ((HibernateProxy)o).getHibernateLazyInitializer();
@@ -67,11 +72,11 @@ public class XStreamJSONSerialization implements JSONSerialization {
 	public <T> Serializer from(T object) {
 		response.setContentType("application/json");
 		String alias = fixHiberanteProxyIfNeed(object);
-		return alias == null ? getSerializer().from(object) 
+		return alias == null ? getSerializer().from(object)
 				: getSerializer().from(object,alias);
 	}
 
-	protected Serializer getSerializer() {
+	protected SerializerBuilder getSerializer() {
 		try {
 			return new XStreamSerializer(getXStream(), response.getWriter());
 		} catch (IOException e) {
@@ -83,13 +88,6 @@ public class XStreamJSONSerialization implements JSONSerialization {
 		response.setContentType("application/json");
 		fixHiberanteProxyIfNeed(object);
 		return getSerializer().from(object, alias);
-	}
-	
-	@Override
-	public <T> Serializer fromNoAlias(T object) {
-		noAlias = true;
-		response.setContentType("application/json");
-		return getSerializer().from(object);
 	}
 
 	/**
@@ -109,14 +107,21 @@ public class XStreamJSONSerialization implements JSONSerialization {
 	 * You can override this method for configuring Driver before serialization
 	 */
 	protected HierarchicalStreamDriver getHierarchicalStreamDriver() {
-		if (noAlias)
-			return new JsonHierarchicalStreamDriver() {  
-				public HierarchicalStreamWriter createWriter(Writer writer) {  
-					return new JsonWriter(writer, JsonWriter.DROP_ROOT_MODE);  
-				}  
+		if (noRoot) {
+			return new JsonHierarchicalStreamDriver() {
+				@Override
+				public HierarchicalStreamWriter createWriter(Writer writer) {
+					return new JsonWriter(writer, JsonWriter.DROP_ROOT_MODE);
+				}
 			};
-		else
+		} else {
 			return new JsonHierarchicalStreamDriver();
+		}
+	}
+
+	public <T> SerializationNoRoot withoutRoot() {
+		noRoot = true;
+		return this;
 	}
 
 }

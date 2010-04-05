@@ -23,5 +23,9 @@ package br.com.caelum.vraptor.serialization;
  * @version 3.0.2
  */
 public interface JSONSerialization extends Serialization {
-
+	/**
+	 * Serializes this object to the clients writer, without alias.
+	 * @throws IOException
+	 */
+	public <T> Serializer fromNoAlias(T object);
 }

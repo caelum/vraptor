@@ -31,6 +31,7 @@ import java.util.Set;
 import java.util.Map.Entry;
 
 import net.vidageek.mirror.dsl.Mirror;
+import br.com.caelum.vraptor.serialization.Serializer;
 import br.com.caelum.vraptor.serialization.SerializerBuilder;
 
 import com.google.common.collect.LinkedListMultimap;
@@ -66,7 +67,7 @@ public class XStreamSerializer implements SerializerBuilder {
 			|| Character.class.equals(type);
 	}
 
-	public SerializerBuilder exclude(String... names) {
+	public Serializer exclude(String... names) {
 		for (String name : names) {
 			Set<Class<?>> parentTypes = getParentTypesFor(name);
 			for (Class<?> type : parentTypes) {
@@ -102,7 +103,7 @@ public class XStreamSerializer implements SerializerBuilder {
 		return type;
 	}
 
-	public <T> SerializerBuilder from(T object, String alias) {
+	public <T> Serializer from(T object, String alias) {
 		from(object);
 		if (Collection.class.isInstance(object)) {
 			xstream.alias(alias, List.class);
@@ -112,7 +113,7 @@ public class XStreamSerializer implements SerializerBuilder {
 		return this;
 	}
 
-	public <T> SerializerBuilder from(T object) {
+	public <T> Serializer from(T object) {
 		if (object == null) {
 			throw new NullPointerException("You can't serialize null objects");
 		}
@@ -149,7 +150,7 @@ public class XStreamSerializer implements SerializerBuilder {
 		}
 	}
 
-	public SerializerBuilder include(String... fields) {
+	public Serializer include(String... fields) {
 		for (String field : fields) {
 			try {
 				Set<Class<?>> parentTypes = getParentTypesFor(field);
@@ -196,7 +197,7 @@ public class XStreamSerializer implements SerializerBuilder {
 		xstream.toXML(root, writer);
 	}
 
-	public SerializerBuilder recursive() {
+	public Serializer recursive() {
 		excludes.clear();
 		return this;
 	}

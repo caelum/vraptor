@@ -82,7 +82,8 @@ public class DefaultValidationViewsFactory implements ValidationViewsFactory {
 					return proxifier.proxify((Class<?>) args[0], throwValidationExceptionOnFirstInvocation(errors, instance));
 				}
 
-				if (Serializer.class.isAssignableFrom(method.getReturnType())) {
+				if (Serializer.class.isAssignableFrom(method.getReturnType())
+						|| SerializerBuilder.class.isAssignableFrom(method.getReturnType())) {
 					return proxifier.proxify(SerializerBuilder.class,
 							throwValidationErrorOnFinalMethods(SerializerBuilder.class, errors, SerializerBuilder.class.cast(instance)));
 				}

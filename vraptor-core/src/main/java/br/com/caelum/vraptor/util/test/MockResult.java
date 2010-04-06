@@ -89,7 +89,8 @@ public class MockResult implements Result {
 					return proxifier.proxify((Class<?>) args[0], returnOnFirstInvocation());
 				}
 
-				if (Serializer.class.isAssignableFrom(method.getReturnType())) {
+				if (Serializer.class.isAssignableFrom(method.getReturnType())
+						|| SerializerBuilder.class.isAssignableFrom(method.getReturnType())) {
 					return proxifier.proxify(SerializerBuilder.class, returnOnFinalMethods(SerializerBuilder.class));
 				}
 				throw new ResultException("It's not possible to create a mocked version of " + method + ". Please inform this corner case to VRaptor developers");

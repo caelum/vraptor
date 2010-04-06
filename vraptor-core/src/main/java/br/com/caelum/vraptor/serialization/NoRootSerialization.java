@@ -10,7 +10,7 @@ import br.com.caelum.vraptor.View;
  * @author Tomaz Lavieri
  * @version 3.1.2
  */
-public interface SerializationNoRoot extends View {
+public interface NoRootSerialization extends View {
 	/**
 	 * Serializes this object to the clients writer with out ROOT alias.
 	 * @throws IOException

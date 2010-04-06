@@ -237,7 +237,7 @@ public class XStreamJSONSerializationTest {
 		assertThat(result(), containsString("\"name\": \"any item\""));
 		assertThat(result(), not(containsString("12.99")));
 	}
-	
+
 	@Test
 	public void shouldOptionallyRemoveRoot() {
 		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please",
@@ -246,7 +246,7 @@ public class XStreamJSONSerializationTest {
 		assertThat(result(), containsString("\"items\""));
 		assertThat(result(), containsString("\"name\": \"any item\""));
 		assertThat(result(), not(containsString("12.99")));
-		assertThat(result(), not(containsString("{\"order\": {")));
+		assertThat(result(), not(containsString("\"order\":")));
 	}
 
 	private String result() {

@@ -24,12 +24,7 @@ import java.io.IOException;
  * @author Jose Donizetti
  * @version 3.0.2
  */
-public interface Serialization extends SerializationNoRoot {
-	/**
-	 * Serializes this object to the clients writer.
-	 * @throws IOException
-	 */
-	public <T> Serializer from(T object);
+public interface Serialization extends NoRootSerialization {
 
 	/**
 	 * Serializes this object to the clients writer, with a given alias.

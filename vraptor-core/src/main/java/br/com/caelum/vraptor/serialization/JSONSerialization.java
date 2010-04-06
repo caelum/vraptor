@@ -28,5 +28,5 @@ public interface JSONSerialization extends Serialization {
 	 * @since 3.1.2
 	 * @throws IOException
 	 */
-	public <T> SerializationNoRoot withoutRoot();
+	public <T> NoRootSerialization withoutRoot();
 }

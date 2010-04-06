@@ -26,7 +26,7 @@ import org.hibernate.proxy.LazyInitializer;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.serialization.JSONSerialization;
-import br.com.caelum.vraptor.serialization.SerializationNoRoot;
+import br.com.caelum.vraptor.serialization.NoRootSerialization;
 import br.com.caelum.vraptor.serialization.Serializer;
 import br.com.caelum.vraptor.serialization.SerializerBuilder;
 import br.com.caelum.vraptor.view.ResultException;
@@ -119,7 +119,7 @@ public class XStreamJSONSerialization implements JSONSerialization {
 		}
 	}
 
-	public <T> SerializationNoRoot withoutRoot() {
+	public <T> NoRootSerialization withoutRoot() {
 		noRoot = true;
 		return this;
 	}

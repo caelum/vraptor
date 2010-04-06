@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.io.ByteArrayOutputStream;
@@ -16,6 +17,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.hibernate.proxy.HibernateProxy;
+import org.hibernate.proxy.LazyInitializer;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -237,6 +240,39 @@ public class XStreamJSONSerializationTest {
 
 	private String result() {
 		return new String(stream.toByteArray());
+	}
+
+	public class SomeProxy implements HibernateProxy {
+		private String aField;
+
+		private transient LazyInitializer initializer;
+
+		public SomeProxy(LazyInitializer initializer) {
+			this.initializer = initializer;
+		}
+		public LazyInitializer getHibernateLazyInitializer() {
+			return initializer;
+		}
+
+		public Object writeReplace() {
+			return this;
+		}
+
+	}
+	@Test
+	public void shouldRunHibernateLazyInitialization() throws Exception {
+		LazyInitializer initializer = mock(LazyInitializer.class);
+
+		SomeProxy proxy = new SomeProxy(initializer);
+		proxy.aField = "abc";
+
+		when(initializer.getPersistentClass()).thenReturn(SomeProxy.class);
+
+		serialization.from(proxy).serialize();
+
+		assertThat(result(), is("{\"someProxy\": {\n  \"aField\": \"abc\"\n}}"));
+
+		verify(initializer).initialize();
 	}
 
 

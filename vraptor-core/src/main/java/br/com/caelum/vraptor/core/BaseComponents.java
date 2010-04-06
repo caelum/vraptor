@@ -114,7 +114,10 @@ import br.com.caelum.vraptor.restfulie.headers.DefaultRestDefaults;
 import br.com.caelum.vraptor.restfulie.headers.DefaultRestHeadersHandler;
 import br.com.caelum.vraptor.restfulie.headers.RestDefaults;
 import br.com.caelum.vraptor.serialization.DefaultRepresentationResult;
+import br.com.caelum.vraptor.serialization.HibernateProxyInitializer;
+import br.com.caelum.vraptor.serialization.IgnoreProxyInitializer;
 import br.com.caelum.vraptor.serialization.JSONSerialization;
+import br.com.caelum.vraptor.serialization.ProxyInitializer;
 import br.com.caelum.vraptor.serialization.RepresentationResult;
 import br.com.caelum.vraptor.serialization.XMLSerialization;
 import br.com.caelum.vraptor.serialization.xstream.XStreamJSONSerialization;
@@ -169,7 +172,8 @@ public class BaseComponents {
             XMLDeserializer.class,			XStreamXMLDeserializer.class,
             RoutesParser.class, 			PathAnnotationRoutesParser.class,
             Routes.class,					DefaultRoutes.class,
-            RestDefaults.class,				DefaultRestDefaults.class
+            RestDefaults.class,				DefaultRestDefaults.class,
+            ProxyInitializer.class,			getProxyInitializerImpl()
     );
 
     private final static Map<Class<?>, Class<?>> CACHED_COMPONENTS = classMap(
@@ -266,7 +270,12 @@ public class BaseComponents {
 		return DESERIALIZERS;
 	}
 
-    public static Map<Class<?>, Class<?>> getCachedComponents() {
+    private static Class<? extends ProxyInitializer> getProxyInitializerImpl() {
+		return HibernateProxyInitializer.hibernateJarExists() ?
+				HibernateProxyInitializer.class : IgnoreProxyInitializer.class;
+	}
+
+	public static Map<Class<?>, Class<?>> getCachedComponents() {
 		return CACHED_COMPONENTS;
 	}
 

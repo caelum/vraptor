@@ -24,6 +24,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
+import br.com.caelum.vraptor.serialization.HibernateProxyInitializer;
 
 public class XStreamJSONSerializationTest {
 
@@ -38,7 +39,7 @@ public class XStreamJSONSerializationTest {
         HttpServletResponse response = mock(HttpServletResponse.class);
         when(response.getWriter()).thenReturn(new PrintWriter(stream));
 
-        this.serialization = new XStreamJSONSerialization(response, new DefaultTypeNameExtractor());
+        this.serialization = new XStreamJSONSerialization(response, new DefaultTypeNameExtractor(), new HibernateProxyInitializer());
     }
 
 	public static class Address {
@@ -253,12 +254,13 @@ public class XStreamJSONSerializationTest {
 		return new String(stream.toByteArray());
 	}
 
-	public class SomeProxy implements HibernateProxy {
+	public class SomeProxy extends Client implements HibernateProxy {
 		private String aField;
 
 		private transient LazyInitializer initializer;
 
 		public SomeProxy(LazyInitializer initializer) {
+			super("name");
 			this.initializer = initializer;
 		}
 		public LazyInitializer getHibernateLazyInitializer() {
@@ -277,11 +279,11 @@ public class XStreamJSONSerializationTest {
 		SomeProxy proxy = new SomeProxy(initializer);
 		proxy.aField = "abc";
 
-		when(initializer.getPersistentClass()).thenReturn(SomeProxy.class);
+		when(initializer.getPersistentClass()).thenReturn(Client.class);
 
 		serialization.from(proxy).serialize();
 
-		assertThat(result(), is("{\"someProxy\": {\n  \"aField\": \"abc\"\n}}"));
+		assertThat(result(), is("{\"client\": {\n  \"aField\": \"abc\"\n}}"));
 
 		verify(initializer).initialize();
 	}

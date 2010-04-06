@@ -20,13 +20,11 @@ import java.io.Writer;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.hibernate.proxy.HibernateProxy;
-import org.hibernate.proxy.LazyInitializer;
-
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.serialization.JSONSerialization;
 import br.com.caelum.vraptor.serialization.NoRootSerialization;
+import br.com.caelum.vraptor.serialization.ProxyInitializer;
 import br.com.caelum.vraptor.serialization.Serializer;
 import br.com.caelum.vraptor.serialization.SerializerBuilder;
 import br.com.caelum.vraptor.view.ResultException;
@@ -49,36 +47,27 @@ public class XStreamJSONSerialization implements JSONSerialization {
 
 	private final HttpServletResponse response;
 	private final TypeNameExtractor extractor;
+	private final ProxyInitializer initializer;
 	private HierarchicalStreamDriver driver =  new JsonHierarchicalStreamDriver();
 
-	public XStreamJSONSerialization(HttpServletResponse response, TypeNameExtractor extractor) {
+	public XStreamJSONSerialization(HttpServletResponse response, TypeNameExtractor extractor, ProxyInitializer initializer) {
 		this.response = response;
 		this.extractor = extractor;
+		this.initializer = initializer;
 	}
 
 	public boolean accepts(String format) {
 		return "json".equals(format);
 	}
 
-	private String fixHiberanteProxyIfNeed(Object o) {
-		if (o instanceof HibernateProxy) {
-			LazyInitializer lazy = ((HibernateProxy)o).getHibernateLazyInitializer();
-			lazy.initialize();
-			return extractor.nameFor(lazy.getPersistentClass());
-		}
-		return null;
-	}
-
 	public <T> Serializer from(T object) {
 		response.setContentType("application/json");
-		String alias = fixHiberanteProxyIfNeed(object);
-		return alias == null ? getSerializer().from(object)
-				: getSerializer().from(object,alias);
+		return getSerializer().from(object);
 	}
 
 	protected SerializerBuilder getSerializer() {
 		try {
-			return new XStreamSerializer(getXStream(), response.getWriter());
+			return new XStreamSerializer(getXStream(), response.getWriter(), extractor, initializer);
 		} catch (IOException e) {
 			throw new ResultException("Unable to serialize data", e);
 		}
@@ -86,7 +75,6 @@ public class XStreamJSONSerialization implements JSONSerialization {
 
 	public <T> Serializer from(T object, String alias) {
 		response.setContentType("application/json");
-		fixHiberanteProxyIfNeed(object);
 		return getSerializer().from(object, alias);
 	}
 

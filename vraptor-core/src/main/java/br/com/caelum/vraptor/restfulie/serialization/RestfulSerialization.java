@@ -24,6 +24,7 @@ import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.restfulie.Restfulie;
+import br.com.caelum.vraptor.serialization.ProxyInitializer;
 import br.com.caelum.vraptor.serialization.xstream.XStreamXMLSerialization;
 
 import com.thoughtworks.xstream.XStream;
@@ -40,8 +41,8 @@ public class RestfulSerialization extends XStreamXMLSerialization {
 	private final Restfulie restfulie;
 	private final Configuration config;
 
-	public RestfulSerialization(HttpServletResponse response, TypeNameExtractor extractor, Restfulie restfulie, Configuration config) {
-		super(response,extractor);
+	public RestfulSerialization(HttpServletResponse response, TypeNameExtractor extractor, Restfulie restfulie, Configuration config, ProxyInitializer initializer) {
+		super(response,extractor,initializer);
 		this.restfulie = restfulie;
 		this.config = config;
 	}

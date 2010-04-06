@@ -254,7 +254,7 @@ public class XStreamJSONSerializationTest {
 		return new String(stream.toByteArray());
 	}
 
-	public class SomeProxy extends Client implements HibernateProxy {
+	public static class SomeProxy extends Client implements HibernateProxy {
 		private String aField;
 
 		private transient LazyInitializer initializer;
@@ -277,13 +277,14 @@ public class XStreamJSONSerializationTest {
 		LazyInitializer initializer = mock(LazyInitializer.class);
 
 		SomeProxy proxy = new SomeProxy(initializer);
+		proxy.name = "my name";
 		proxy.aField = "abc";
 
 		when(initializer.getPersistentClass()).thenReturn(Client.class);
 
 		serialization.from(proxy).serialize();
 
-		assertThat(result(), is("{\"client\": {\n  \"aField\": \"abc\"\n}}"));
+		assertThat(result(), is("{\"client\": {\n  \"name\": \"my name\",\n  \"aField\": \"abc\"\n}}"));
 
 		verify(initializer).initialize();
 	}

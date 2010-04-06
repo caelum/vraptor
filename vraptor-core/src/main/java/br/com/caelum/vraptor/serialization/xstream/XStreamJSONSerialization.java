@@ -19,6 +19,9 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.hibernate.proxy.HibernateProxy;
+import org.hibernate.proxy.LazyInitializer;
+
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.serialization.JSONSerialization;
@@ -50,10 +53,21 @@ public class XStreamJSONSerialization implements JSONSerialization {
 	public boolean accepts(String format) {
 		return "json".equals(format);
 	}
+	
+	private String fixHiberanteProxyIfNeed(Object o) {
+		if (o instanceof HibernateProxy) {
+			LazyInitializer lazy = ((HibernateProxy)o).getHibernateLazyInitializer();
+			lazy.initialize();
+			return extractor.nameFor(lazy.getPersistentClass());
+		}
+		return null;
+	}
 
 	public <T> Serializer from(T object) {
 		response.setContentType("application/json");
-		return getSerializer().from(object);
+		String alias = fixHiberanteProxyIfNeed(object);
+		return alias == null ? getSerializer().from(object) 
+				: getSerializer().from(object,alias);
 	}
 
 	protected Serializer getSerializer() {
@@ -66,6 +80,7 @@ public class XStreamJSONSerialization implements JSONSerialization {
 
 	public <T> Serializer from(T object, String alias) {
 		response.setContentType("application/json");
+		fixHiberanteProxyIfNeed(object);
 		return getSerializer().from(object, alias);
 	}
 

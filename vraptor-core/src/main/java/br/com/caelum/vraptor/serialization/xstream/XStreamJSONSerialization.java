@@ -49,7 +49,7 @@ public class XStreamJSONSerialization implements JSONSerialization {
 
 	private final HttpServletResponse response;
 	private final TypeNameExtractor extractor;
-	private boolean noRoot = false;
+	private HierarchicalStreamDriver driver =  new JsonHierarchicalStreamDriver();
 
 	public XStreamJSONSerialization(HttpServletResponse response, TypeNameExtractor extractor) {
 		this.response = response;
@@ -107,20 +107,16 @@ public class XStreamJSONSerialization implements JSONSerialization {
 	 * You can override this method for configuring Driver before serialization
 	 */
 	protected HierarchicalStreamDriver getHierarchicalStreamDriver() {
-		if (noRoot) {
-			return new JsonHierarchicalStreamDriver() {
-				@Override
-				public HierarchicalStreamWriter createWriter(Writer writer) {
-					return new JsonWriter(writer, JsonWriter.DROP_ROOT_MODE);
-				}
-			};
-		} else {
-			return new JsonHierarchicalStreamDriver();
-		}
+		return this.driver;
 	}
 
 	public <T> NoRootSerialization withoutRoot() {
-		noRoot = true;
+		this.driver = new JsonHierarchicalStreamDriver() {
+			@Override
+			public HierarchicalStreamWriter createWriter(Writer writer) {
+				return new JsonWriter(writer, JsonWriter.DROP_ROOT_MODE);
+			}
+		};
 		return this;
 	}
 

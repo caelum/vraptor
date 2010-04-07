@@ -93,7 +93,7 @@ public class XStreamSerializer implements SerializerBuilder {
 		String[] path = name.split("\\.");
 		return path[path.length-1];
 	}
-	
+
 	private Set<Class<?>> getParentTypesFor(String name) {
 		if (elementTypes == null) {
 			Class<?> type = rootClass;
@@ -119,13 +119,13 @@ public class XStreamSerializer implements SerializerBuilder {
 		if (obj == null) {
 			throw new NullPointerException("You can't serialize null objects");
 		}
-		
+
 		rootClass = initializer.getActualClass(obj);
 		if (alias == null && initializer.isProxy(obj.getClass())) {
 			alias = extractor.nameFor(rootClass);
 		}
-		
-		
+
+
 		if (Collection.class.isInstance(obj)) {
 			List<Object> list = new ArrayList<Object>((Collection<?>)obj);
 			elementTypes = findElementTypes(list);
@@ -138,7 +138,7 @@ public class XStreamSerializer implements SerializerBuilder {
 			excludeNonPrimitiveFields(type);
 			this.root = obj;
 		}
-		
+
 		if (alias != null) {
 			if (Collection.class.isInstance(obj)) {
 				xstream.alias(alias, List.class);
@@ -184,7 +184,7 @@ public class XStreamSerializer implements SerializerBuilder {
 				for (Class<?> parentType : parentTypes) {
 					Type genericType = new Mirror().on(parentType).reflect().field(fieldName).getGenericType();
 					Class<?> fieldType = getActualType(genericType);
-					
+
 					if (!excludes.containsKey(fieldType)) {
 						excludeNonPrimitiveFields(fieldType);
 					}
@@ -231,20 +231,17 @@ public class XStreamSerializer implements SerializerBuilder {
 
 	private void registerProxyInitializer() {
 		xstream.registerConverter(new Converter() {
-			
+
 			@SuppressWarnings("unchecked")
-			@Override
 			public boolean canConvert(Class clazz) {
 				return initializer.isProxy(clazz);
 			}
-			
-			@Override
+
 			public Object unmarshal(HierarchicalStreamReader reader,
 					UnmarshallingContext context) {
-				throw new AssertionError(); 
+				throw new AssertionError();
 			}
-			
-			@Override
+
 			public void marshal(Object value, HierarchicalStreamWriter writer,
 					MarshallingContext context) {
 				Converter converter = xstream.getConverterLookup().lookupConverterForType(initializer.getActualClass(value));

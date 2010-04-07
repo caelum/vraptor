@@ -115,8 +115,8 @@ import br.com.caelum.vraptor.restfulie.headers.DefaultRestHeadersHandler;
 import br.com.caelum.vraptor.restfulie.headers.RestDefaults;
 import br.com.caelum.vraptor.serialization.DefaultRepresentationResult;
 import br.com.caelum.vraptor.serialization.HibernateProxyInitializer;
-import br.com.caelum.vraptor.serialization.NullProxyInitializer;
 import br.com.caelum.vraptor.serialization.JSONSerialization;
+import br.com.caelum.vraptor.serialization.NullProxyInitializer;
 import br.com.caelum.vraptor.serialization.ProxyInitializer;
 import br.com.caelum.vraptor.serialization.RepresentationResult;
 import br.com.caelum.vraptor.serialization.XMLSerialization;
@@ -271,8 +271,12 @@ public class BaseComponents {
 	}
 
     private static Class<? extends ProxyInitializer> getProxyInitializerImpl() {
-		return HibernateProxyInitializer.hibernateJarExists() ?
-				HibernateProxyInitializer.class : NullProxyInitializer.class;
+		try {
+			Class.forName("org.hibernate.proxy.HibernateProxy");
+			return HibernateProxyInitializer.class;
+		} catch (ClassNotFoundException e) {
+			return NullProxyInitializer.class;
+		}
 	}
 
 	public static Map<Class<?>, Class<?>> getCachedComponents() {

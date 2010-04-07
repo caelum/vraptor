@@ -24,7 +24,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
-import br.com.caelum.vraptor.serialization.IgnoreProxyInitializer;
+import br.com.caelum.vraptor.serialization.NullProxyInitializer;
 import br.com.caelum.vraptor.serialization.Serialization;
 
 public class XStreamXMLSerializationTest {
@@ -39,7 +39,7 @@ public class XStreamXMLSerializationTest {
         HttpServletResponse response = mock(HttpServletResponse.class);
         when(response.getWriter()).thenReturn(new PrintWriter(stream));
 
-		this.serialization = new XStreamXMLSerialization(response, new DefaultTypeNameExtractor(), new IgnoreProxyInitializer());
+		this.serialization = new XStreamXMLSerialization(response, new DefaultTypeNameExtractor(), new NullProxyInitializer());
     }
 
 	public static class Address {

@@ -115,7 +115,7 @@ import br.com.caelum.vraptor.restfulie.headers.DefaultRestHeadersHandler;
 import br.com.caelum.vraptor.restfulie.headers.RestDefaults;
 import br.com.caelum.vraptor.serialization.DefaultRepresentationResult;
 import br.com.caelum.vraptor.serialization.HibernateProxyInitializer;
-import br.com.caelum.vraptor.serialization.IgnoreProxyInitializer;
+import br.com.caelum.vraptor.serialization.NullProxyInitializer;
 import br.com.caelum.vraptor.serialization.JSONSerialization;
 import br.com.caelum.vraptor.serialization.ProxyInitializer;
 import br.com.caelum.vraptor.serialization.RepresentationResult;
@@ -272,7 +272,7 @@ public class BaseComponents {
 
     private static Class<? extends ProxyInitializer> getProxyInitializerImpl() {
 		return HibernateProxyInitializer.hibernateJarExists() ?
-				HibernateProxyInitializer.class : IgnoreProxyInitializer.class;
+				HibernateProxyInitializer.class : NullProxyInitializer.class;
 	}
 
 	public static Map<Class<?>, Class<?>> getCachedComponents() {

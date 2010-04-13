@@ -52,13 +52,15 @@ public class RouteBuilderTest {
 
 		}
 	}
+
 	@Before
 	public void setUp() throws Exception {
 		provider = mock(ParameterNameProvider.class);
 
-		when(provider.parameterNamesFor(any(Method.class))).thenReturn(new String[] { "abc", "def", "ghi"});
+		when(provider.parameterNamesFor(any(Method.class))).thenReturn(new String[] { "abc", "def", "ghi" });
 
-		method = new DefaultResourceMethod(new DefaultResourceClass(MyResource.class), MyResource.class.getMethod("method", String.class, Integer.class, BigDecimal.class));
+		method = new DefaultResourceMethod(new DefaultResourceClass(MyResource.class), MyResource.class.getMethod(
+				"method", String.class, Integer.class, BigDecimal.class));
 
 		proxifier = new DefaultProxifier();
 
@@ -79,8 +81,9 @@ public class RouteBuilderTest {
 		assertFalse("invalid integer", route.canHandle("/abc/AnythingHere/def/Duh/ghi/123"));
 		assertFalse("invalid decimal", route.canHandle("/abc/AnythingHere/def/123/ghi/kkk"));
 	}
+
 	@Test
-	public void usePatternMatchinForRegexParameters() throws Exception {
+	public void usePatternMatchingForRegexParameters() throws Exception {
 		builder = new RouteBuilder(proxifier, typeFinder, "/abc/{abc:a+b+c+}/def/{def}/ghi/{ghi}");
 
 		builder.is(MyResource.class, method.getMethod());
@@ -88,7 +91,34 @@ public class RouteBuilderTest {
 
 		assertFalse("invalid uri", route.canHandle("/abc/itIsInvalid/def/123/ghi/123.45"));
 		assertTrue("valid uri", route.canHandle("/abc/aaabbccccc/def/-123/ghi/-1"));
+
 	}
+
+	@Test
+	public void usingRegexesWithCurlyBraces() throws Exception {
+		builder = new RouteBuilder(proxifier, typeFinder, "/abc/{abc:[0-9A-Z]{5}}");
+
+		builder.is(MyResource.class, method.getMethod());
+		Route route = builder.build();
+
+		assertFalse("invalid uri", route.canHandle("/abc/notValid"));
+		assertFalse("invalid uri", route.canHandle("/abc/ABC123"));
+		assertTrue("valid uri", route.canHandle("/abc/10AB3"));
+
+	}
+	@Test
+	public void usingRegexesWithCurlyBracesNotOnTheEnd() throws Exception {
+		builder = new RouteBuilder(proxifier, typeFinder, "/abc/{abc:[0-9A-Z]{5}}/");
+
+		builder.is(MyResource.class, method.getMethod());
+		Route route = builder.build();
+
+		assertFalse("invalid uri", route.canHandle("/abc/notValid/"));
+		assertFalse("invalid uri", route.canHandle("/abc/ABC123/"));
+		assertTrue("valid uri", route.canHandle("/abc/10AB3/"));
+
+	}
+
 	@Test
 	public void fillingUriForPrimitiveParameters() throws Exception {
 		builder = new RouteBuilder(proxifier, typeFinder, "/abc/{abc}/def/{def}/ghi/{ghi}");
@@ -96,8 +126,8 @@ public class RouteBuilderTest {
 		Method method = MyResource.class.getDeclaredMethods()[0];
 		builder.is(MyResource.class, method);
 		Route route = builder.build();
-		Object parameters = new AsmBasedTypeCreator(provider)
-			.instanceWithParameters(this.method, "Anything", 123, new BigDecimal("123.45"));
+		Object parameters = new AsmBasedTypeCreator(provider).instanceWithParameters(this.method, "Anything", 123,
+				new BigDecimal("123.45"));
 		String url = route.urlFor(MyResource.class, method, parameters);
 		assertThat(url, is("/abc/Anything/def/123/ghi/123.45"));
 	}

@@ -188,7 +188,7 @@ public class RouteBuilder {
 		String startUntilOpenBraces = "^[^\\{]*\\{";
 		String or = "|";
 		String betweenBraces = "\\}[^\\{]*\\{";
-		String closeBracesUntilEnd = "\\}[^\\{]*$";
+		String closeBracesUntilEnd = "\\}[^\\{\\}]*$";
 
 		return uri.split(startUntilOpenBraces + or + betweenBraces + or + closeBracesUntilEnd);
 	}

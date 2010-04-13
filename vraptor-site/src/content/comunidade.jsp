@@ -33,6 +33,11 @@
 			<a href="http://wbotelhos.wordpress.com/2010/01/20/manipulando-dados-json-via-ajax-com-vraptor-3/">Manipulando Dados JSon Via Ajax Com VRaptor 3</a><br/>
 			<a href="http://wbotelhos.wordpress.com/2009/12/07/iniciando-com-vraptor-3/">Iniciando com VRaptor 3</a>
 		</dd>
+		
+		<dt>bronx</dt>
+		<dd>
+			<a href="http://www.guj.com.br/posts/list/149517.java">Minha contribuição - Controle de acesso VRaptor 3</a>
+		</dd>
 	</dl>
   </div>  
 </div>

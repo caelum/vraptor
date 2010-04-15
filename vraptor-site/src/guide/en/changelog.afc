@@ -20,6 +20,26 @@
 		//results on "Age should be greater than 18"  
 	}});
 	[/java]
+* Hibernate proxies are now nicely serialized (almost) like regular classes (thanks to Tomaz Lavieri)
+* It is now possible to serialize to json without the root element (thanks to Tomaz Lavieri):
+  [java]
+  result.use(json()).from(car).serialize(); //=> {'car': {'color': 'blue'}}
+  result.use(json()).withoutRoot().from(car).serialize(); //=> {'color': 'blue'} 
+  [/java]
+* Google collections updated to version 1.0
+* fixed bug with curly braces on regexes inside @Path's
+* XStream annotations are now automatically read when you use VRaptor's default serialization
+* when you upload a file bigger than the file size limit you get a validation error instead
+  of a generic exception
+* more shortcuts on Result interface:
+  [code]
+	redirectTo("a/uri")				=>  use(page()).redirect("a/uri)
+	notFound()						=>  use(status()).notFound()
+	nothing()						=>  use(nothing());
+	permanentlyRedirectTo(Controller.class) 	=> use(status()).movedPermanentlyTo(Controller.class);
+	permanentlyRedirectTo("a/uri") 	=> use(status()).movedPermanentlyTo("a/uri");
+	permanentlyRedirectTo(this)		=> use(status()).movedPermanentlyTo(this.getClass());
+  [/code]
 [/list]
 
 

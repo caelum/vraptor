@@ -21,6 +21,27 @@
 		//resulta na mensagem "Idade deveria ser maior que 18"  
 	}});
 	[/java]
+* Proxies do Hibernate agora são serializados (quase) como classes normais (graças ao Tomaz Lavieri)
+* Ao serializar para json agora é possível excluir o root (graças ao Tomaz Lavieri):
+  [java]
+  result.use(json()).from(carro).serialize(); //=> {'carro': {'cor': 'azul'}}
+  result.use(json()).withoutRoot().from(carro).serialize(); //=> {'cor': 'azul'} 
+  [/java]
+* Google collections atualizado para a versão 1.0
+* corrigido bug das chaves dentro de expressões regulares dentro do @Path
+* as anotações do XStream agora são lidas automaticamente quando você usa a serialização
+  padrão do vraptor
+* quando um arquivo é maior do que o limite de tamanho de arquivo é criado um erro de validação
+  ao invés de uma exceção genérica
+* mais atalhos na interface Result:
+  [code]
+	redirectTo("uma/uri")			=>  use(page()).redirect("uma/uri)
+	notFound()						=>  use(status()).notFound()
+	nothing()						=>  use(nothing());
+	permanentlyRedirectTo(Controller.class) 	=> use(status()).movedPermanentlyTo(Controller.class);
+	permanentlyRedirectTo("uma/uri") 	=> use(status()).movedPermanentlyTo("uma/uri");
+	permanentlyRedirectTo(this)		=> use(status()).movedPermanentlyTo(this.getClass());
+  [/code]
 [/list]
 
 [section 3.1.1]

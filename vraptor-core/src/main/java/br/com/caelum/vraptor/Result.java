@@ -21,6 +21,7 @@ import java.util.Map;
 
 import br.com.caelum.vraptor.view.LogicResult;
 import br.com.caelum.vraptor.view.PageResult;
+import br.com.caelum.vraptor.view.Status;
 
 /**
  * A resource requisition result.
@@ -49,6 +50,12 @@ public interface Result {
      * @see PageResult#forward(String)
      */
 	void forwardTo(String uri);
+
+	/**
+     * A shortcut to result.use(page()).redirect(uri);
+     * @see PageResult#forward(String)
+     */
+	void redirectTo(String uri);
 
 	/**
 	 * A shortcut to result.use(logic()).forwardTo(controller)
@@ -104,5 +111,40 @@ public interface Result {
 	 */
 	<T> T of(T controller);
 
+	/**
+	 * A shortcut to result.use(nothing())
+	 */
+	void nothing();
 
+	/**
+	 * A shortcut to result.use(status()).notFound();
+	 */
+	void notFound();
+
+	/**
+	 * A shortcut to result.use(status()).movedPermanentlyTo(uri).
+	 *
+	 * @param uri
+	 * @see Status#movedPermanentlyTo(String)
+	 */
+	void permanentlyRedirectTo(String uri);
+
+	/**
+	 * A shortcut to result.use(status()).movedPermanentlyTo(controller).
+	 *
+	 * @param controller
+	 * @see Status#movedPermanentlyTo(Class)
+	 */
+	<T> T permanentlyRedirectTo(Class<T> controller);
+
+	/**
+	 * A shortcut to result.use(status()).movedPermanentlyTo(controller.getClass()).
+	 * so you can use on your controller:<br>
+	 *
+	 * result.permanentlyRedirectTo(this).aMethod();
+	 *
+	 * @param controller
+	 * @see Status#movedPermanentlyTo(Class)
+	 */
+	<T> T permanentlyRedirectTo(T controller);
 }

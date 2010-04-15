@@ -17,15 +17,13 @@
 
 package br.com.caelum.vraptor.util.test;
 
-import static br.com.caelum.vraptor.view.Results.logic;
-import static br.com.caelum.vraptor.view.Results.page;
-
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.View;
+import br.com.caelum.vraptor.core.AbstractResult;
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.proxy.MethodInvocation;
 import br.com.caelum.vraptor.proxy.ObjenesisProxifier;
@@ -47,7 +45,7 @@ import br.com.caelum.vraptor.view.ResultException;
  * @author Guilherme Silveira
  */
 @Component
-public class MockResult implements Result {
+public class MockResult extends AbstractResult {
 
 	private final Map<String, Object> values = new HashMap<String, Object>();
 	private Class<?> typeToUse;
@@ -125,34 +123,4 @@ public class MockResult implements Result {
 		return values;
 	}
 
-	public void forwardTo(String uri) {
-		use(page()).forward(uri);
-	}
-
-	public <T> T forwardTo(Class<T> controller) {
-		return use(logic()).forwardTo(controller);
-	}
-
-	public <T> T redirectTo(Class<T> controller) {
-		return use(logic()).redirectTo(controller);
-	}
-
-	public <T> T of(Class<T> controller) {
-		return use(page()).of(controller);
-	}
-
-	@SuppressWarnings("unchecked")
-	public <T> T redirectTo(T controller) {
-		return (T) redirectTo(controller.getClass());
-	}
-
-	@SuppressWarnings("unchecked")
-	public <T> T forwardTo(T controller) {
-		return (T) forwardTo(controller.getClass());
-	}
-
-	@SuppressWarnings("unchecked")
-	public <T> T of(T controller) {
-		return (T) of(controller.getClass());
-	}
 }

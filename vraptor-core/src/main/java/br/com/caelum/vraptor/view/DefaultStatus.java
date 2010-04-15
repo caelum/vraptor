@@ -135,4 +135,16 @@ public class DefaultStatus implements Status {
 		}
 	}
 
+	public void forbidden(String message) {
+		try {
+			response.sendError(HttpServletResponse.SC_FORBIDDEN, message);
+		} catch (IOException e) {
+			throw new ResultException(e);
+		}
+	}
+
+	public void noContent() {
+		response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+	}
+
 }

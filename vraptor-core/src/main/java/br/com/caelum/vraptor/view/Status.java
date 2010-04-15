@@ -23,39 +23,73 @@ import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.resource.HttpMethod;
 
 /**
- * Allows header related results.
- * 
+ * Allows status + header related results.
+ *
  * @author guilherme silveira
  * @since 3.0.3
  */
 public interface Status extends View {
+	/**
+	 * Returns a Ok status (200)
+	 */
+	void ok();
 
-	public void notFound();
-
-	void header(String key, String value);
-
+	/**
+	 * Returns a Created status (201)
+	 */
 	void created();
 
 	/**
-	 * Sets the header to 201 and sets the location to the server's location +
+	 * Sets the status to 201 and sets the location to the server's location +
 	 * the location content.<br>
 	 * created("/order/2") ==> http://localhost:8080/my_context/order/2
-	 * 
+	 *
 	 * @param location
 	 */
 	void created(String location);
 
-	void ok();
+	/**
+	 * Returns a No Content status (204)
+	 */
+	void noContent();
 
+	/**
+	 * Returns a Bad Request (400) status
+	 *
+	 * Notifies the client that he should not try to execute the same request
+	 * again: part of its representation is somehow invalid.
+	 *
+	 * @param message
+	 */
+	void badRequest(String message);
+
+	/**
+	 * Returns a Forbidden (403) status. You must specify a reason.
+	 *
+	 * @param message
+	 */
+	void forbidden(String message);
+
+	/**
+	 * Returns a Not Found (404) status
+	 */
+	void notFound();
+
+	/**
+	 * Returns a Conflict (409) status
+	 */
 	void conflict();
+
+	void header(String key, String value);
+
 
 	void methodNotAllowed(EnumSet<HttpMethod> allowedMethods);
 
 	/**
-	 * Send redirect with Moved Permanently Header Example:
+	 * Send redirect with Moved Permanently (301) Header Example:
 	 * result.use(http()).movedPermanentlyTo("/clients"); will move to
 	 * /<contextPath>/clients
-	 * 
+	 *
 	 * @param uri
 	 *            absolute uri to redirect
 	 */
@@ -64,24 +98,17 @@ public interface Status extends View {
 	/**
 	 * same as movedPermanentlyTo(String), but will use the url for
 	 * controller.method(args);
-	 * 
+	 *
 	 * Example:
 	 * result.use(http()).movedPermanentlyTo(ClientsController.class).list();
 	 */
 	<T> T movedPermanentlyTo(Class<T> controller);
 
 	/**
-	 * The media type sent to the server is not supported.
-	 * 
+	 * The media type sent to the server is not supported.(415)
+	 *
 	 * @param errorMessage
 	 */
 	void unsupportedMediaType(String errorMessage);
 
-	/**
-	 * Notifies the client that he should not try to execute the same request
-	 * again: part of its representation is somehow invalid.
-	 * 
-	 * @param message
-	 */
-	void badRequest(String message);
 }

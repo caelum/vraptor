@@ -86,7 +86,7 @@ And use it on your validations code:
 		// Age should be greater than 18
 	}});
 [/java]
-You can even i18n your parameters:
+You can even i18n your parameters, with i18n method:
 [code properties]
 user.age = User age
 [/code]

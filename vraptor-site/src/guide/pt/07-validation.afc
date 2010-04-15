@@ -84,14 +84,14 @@ E usá-los no seu código de validação:
 		// Idade deveria ser maior que 18
 	}});
 [/java]
-Você pode também internacionalizar os parâmetros:
+Você pode também internacionalizar os parâmetros, usando o método i18n:
 [code properties]
 usuario.idade = Idade do usuário
 [/code]
 
 [java]
 	validator.checking(new Validations(){{
-		that(usuario.getIdade() >= 18, "usuario.idade", "maior_que", "usuario.idade", 18);
+		that(usuario.getIdade() >= 18, "usuario.idade", "maior_que", i18n("usuario.idade"), 18);
 		// Idade do usuário deveria ser maior que 18
 	}});
 [/java]

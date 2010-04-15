@@ -78,16 +78,22 @@ Por padrão existem estes tipos de views implementadas:
 Alguns redirecionamentos são bastante utilizados, então foram criados atalhos para eles.
 Os atalhos disponíveis são:
 [list]
-* result.forwardTo("/some/uri") ==> result.use(page()).forward("/some/uri");
+* result.forwardTo("/some/uri") 			==> result.use(page()).forward("/some/uri");
+* result.redirectTo("/some/uri") 			==>  result.use(page()).redirect("/some/uri)
+* result.permanentlyRedirectTo("/some/uri") ==> result.use(status()).movedPermanentlyTo("/some/uri");
 * result.forwardTo(ClientController.class).list() ==> result.use(logic()).forwardTo(ClientController.class).list();
 * result.redirectTo(ClientController.class).list() ==> result.use(logic()).redirectTo(ClientController.class).list();
-* result.of(ClientController.class).list() ==> result.use(page()).of(ClientController.class).list();
+* result.of(ClientController.class).list() 	==> result.use(page()).of(ClientController.class).list();
+* result.permanentlyRedirectTo(Controller.class) ==> use(status()).movedPermanentlyTo(Controller.class);
+* result.notFound()							==>  use(status()).notFound()
+* result.nothing()							==>  use(nothing());
 [/list]
 Além disso, se o redirecionamento é para um método do mesmo controller, podemos usar:
 [list]
-* result.forwardTo(this).list() ==> result.use(logic()).forwardTo(this.getClass()).list();
-* result.redirectTo(this).list() ==> result.use(logic()).redirectTo(this.getClass()).list();
-* result.of(this).list() ==> result.use(page()).of(this.getClass()).list();
+* result.forwardTo(this).list() 		==> result.use(logic()).forwardTo(this.getClass()).list();
+* result.redirectTo(this).list() 		==> result.use(logic()).redirectTo(this.getClass()).list();
+* result.of(this).list() 				==> result.use(page()).of(this.getClass()).list();
+* result.permanentlyRedirectTo(this) 	==> use(status()).movedPermanentlyTo(this.getClass());
 [/list]
 
 
@@ -239,6 +245,12 @@ vai resultar em algo parecido com:
 }}
 [/code]
 
+Ou ainda você pode serializar recursivamente (cuidado com ciclos):
+[java]
+	result.use(json()).from(usuario).recursive().serialize();
+	result.use(xml()).from(usuario).recursive().serialize();
+[/java]
+
 A implementação padrão é baseada no XStream, então é possível configurar a serialização
 via anotações ou configurações diretas ao XStream, bastando criar a classe:
 [java]
@@ -343,3 +355,11 @@ com resultado:
 	}
 ]}
 [/code]
+
+[title Serializando JSON sem elemento raíz]
+Se você quiser serializar um objeto em JSON sem dar nomes a eles, pode fazer isso com o método
+withoutRoot:
+[java]
+  result.use(json()).from(carro).serialize(); //=> {'carro': {'cor': 'azul'}}
+  result.use(json()).withoutRoot().from(carro).serialize(); //=> {'cor': 'azul'} 
+[/java]

@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.gmr.web.multipart.GFileItemFactory;
 
+import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.interceptor.multipart.MultipartConfig;
 import br.com.caelum.vraptor.interceptor.multipart.MultipartInterceptor;
@@ -16,9 +17,9 @@ import br.com.caelum.vraptor.ioc.Component;
 @Component
 public class AppEngineMultipartInterceptor extends MultipartInterceptor {
 
-	public AppEngineMultipartInterceptor(HttpServletRequest request, MutableRequest parameters, MultipartConfig config)
+	public AppEngineMultipartInterceptor(HttpServletRequest request, MutableRequest parameters, MultipartConfig config, Validator validator)
 			throws IOException {
-		super(request, parameters, config);
+		super(request, parameters, config, validator);
 	}
 
 	@Override

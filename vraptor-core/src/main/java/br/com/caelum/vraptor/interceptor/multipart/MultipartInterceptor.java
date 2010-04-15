@@ -26,6 +26,7 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.FileUploadBase.SizeLimitExceededException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.servlet.ServletRequestContext;
@@ -33,11 +34,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.InterceptionException;
+import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.validator.Validations;
 
 /**
  * An interceptor which handles multipart requests.<br>
@@ -59,10 +62,13 @@ public class MultipartInterceptor implements Interceptor {
 
 	private final MultipartConfig config;
 
-	public MultipartInterceptor(HttpServletRequest request, MutableRequest parameters, MultipartConfig config)
+	private final Validator validator;
+
+	public MultipartInterceptor(HttpServletRequest request, MutableRequest parameters, MultipartConfig config, Validator validator)
 			throws IOException {
 		this.request = request;
 		this.parameters = parameters;
+		this.validator = validator;
 		this.sizeLimit = config.getSizeLimit();
 		this.config = config;
 	}
@@ -82,6 +88,13 @@ public class MultipartInterceptor implements Interceptor {
 		List<FileItem> fileItems;
 		try {
 			fileItems = fileUploadHandler.parseRequest(request);
+		} catch (final SizeLimitExceededException e) {
+			validator.checking(new Validations() {{
+				that(false, "upload", "file.limit.exceeded", e.getActualSize(), e.getPermittedSize());
+			}});
+			logger.warn("The file size limit was exceeded.", e);
+			stack.next(method, instance);
+			return;
 		} catch (FileUploadException e) {
 			logger.warn("There was some problem parsing this multipart request, "
 					+ "or someone is not sending a RFC1867 compatible multipart request.", e);

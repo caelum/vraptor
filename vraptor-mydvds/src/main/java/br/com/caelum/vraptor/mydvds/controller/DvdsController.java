@@ -86,10 +86,12 @@ public class DvdsController {
 	@Post
 	public void add(final Dvd dvd, UploadedFile file) {
 	    validator.checking(new Validations() {{
-		    that(dvd.getTitle(), is(notEmpty()), "login", "invalid_title");
-		    that(dvd.getType(), is(notNullValue()), "name", "invalid_type");
-		    that(dvd.getDescription(), is(notEmpty()), "description", "invalid_description");
-		    that(dvd.getDescription().length() >= 6, "description", "invalid_description");
+	    	if (dvd != null) {
+	    		that(dvd.getTitle(), is(notEmpty()), "login", "invalid_title");
+	    		that(dvd.getType(), is(notNullValue()), "name", "invalid_type");
+	    		that(dvd.getDescription(), is(notEmpty()), "description", "invalid_description");
+	    		that(dvd.getDescription().length() >= 6, "description", "invalid_description");
+	    	}
 		}});
 
 		validator.onErrorUse(Results.page()).of(UsersController.class).home();

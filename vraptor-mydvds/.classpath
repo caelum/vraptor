@@ -25,5 +25,5 @@
 	<classpathentry kind="lib" path="build-lib/tests/selenium-dsl-0.8.5.5-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="build-lib/tests/xalan-2.7.1.jar"/>
 	<classpathentry kind="lib" path="build-lib/tests/xercesImpl-2.8.1.jar"/>
-	<classpathentry kind="output" path="build/classes"/>
+	<classpathentry kind="output" path="WebContent/WEB-INF/classes"/>
 </classpath>

@@ -77,7 +77,7 @@ public class RouteBuilder {
 	private final Set<HttpMethod> supportedMethods = new HashSet<HttpMethod>();
 
 	private final Proxifier proxifier;
-	private final Logger logger = LoggerFactory.getLogger(RouteBuilder.class);
+	private static final Logger logger = LoggerFactory.getLogger(RouteBuilder.class);
 
 	private final String originalUri;
 

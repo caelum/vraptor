@@ -165,7 +165,10 @@ public class RouteBuilder {
 		addParametersInfo(method);
 		this.strategy = new FixedMethodStrategy(originalUri, type, method, this.supportedMethods, builder.build(),
 				priority);
-		logger.info(String.format("%-60s -> %s", originalUri, Stringnifier.simpleNameFor(method)));
+
+		logger.info(String.format("%-50s%s -> %10s", originalUri,
+				this.supportedMethods.isEmpty() ? "[ALL]" : this.supportedMethods,
+				Stringnifier.simpleNameFor(method)));
 	}
 
 	private void addParametersInfo(Method method) {

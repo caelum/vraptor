@@ -27,6 +27,8 @@ import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor.serialization.NullProxyInitializer;
 import br.com.caelum.vraptor.serialization.Serialization;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+
 public class XStreamXMLSerializationTest {
 
 	private Serialization serialization;
@@ -271,10 +273,38 @@ public class XStreamXMLSerializationTest {
 		assertThat(result(), containsString("</items>"));
 	}
 
+	static class WithAlias {
+		@XStreamAlias("def")
+		private String abc;
+	}
+
+	static class WithAliasedAttribute {
+		private WithAlias aliased;
+	}
+
+	@Test
+	public void shouldAutomaticallyReadXStreamAnnotations() {
+		WithAlias alias = new WithAlias();
+		alias.abc = "Duh!";
+		serialization.from(alias).serialize();
+		assertThat(result(), is("<withAlias>\n  <def>Duh!</def>\n</withAlias>"));
+	}
+
+	@Test
+	public void shouldAutomaticallyReadXStreamAnnotationsForIncludedAttributes() {
+		WithAlias alias = new WithAlias();
+		alias.abc = "Duh!";
+
+		WithAliasedAttribute attribute = new WithAliasedAttribute();
+		attribute.aliased = alias;
+
+		serialization.from(attribute).include("aliased").serialize();
+		assertThat(result(), is("<withAliasedAttribute>\n  <aliased>\n    <def>Duh!</def>\n  </aliased>\n</withAliasedAttribute>"));
+	}
+
 	private String result() {
 		return new String(stream.toByteArray());
 	}
 
-
-
 }
+

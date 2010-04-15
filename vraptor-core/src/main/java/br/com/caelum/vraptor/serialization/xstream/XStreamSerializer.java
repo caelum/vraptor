@@ -120,11 +120,12 @@ public class XStreamSerializer implements SerializerBuilder {
 			throw new NullPointerException("You can't serialize null objects");
 		}
 
+		xstream.processAnnotations(obj.getClass());
+
 		rootClass = initializer.getActualClass(obj);
 		if (alias == null && initializer.isProxy(obj.getClass())) {
 			alias = extractor.nameFor(rootClass);
 		}
-
 
 		if (Collection.class.isInstance(obj)) {
 			List<Object> list = new ArrayList<Object>((Collection<?>)obj);

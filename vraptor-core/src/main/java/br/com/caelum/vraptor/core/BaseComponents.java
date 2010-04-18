@@ -122,7 +122,9 @@ import br.com.caelum.vraptor.serialization.RepresentationResult;
 import br.com.caelum.vraptor.serialization.XMLSerialization;
 import br.com.caelum.vraptor.serialization.xstream.XStreamJSONSerialization;
 import br.com.caelum.vraptor.serialization.xstream.XStreamXMLSerialization;
+import br.com.caelum.vraptor.validator.BeanValidator;
 import br.com.caelum.vraptor.validator.DefaultValidator;
+import br.com.caelum.vraptor.validator.JSR303Validator;
 import br.com.caelum.vraptor.validator.Outjector;
 import br.com.caelum.vraptor.validator.ReplicatorOutjector;
 import br.com.caelum.vraptor.view.AcceptHeaderToFormat;
@@ -173,7 +175,8 @@ public class BaseComponents {
             RoutesParser.class, 			PathAnnotationRoutesParser.class,
             Routes.class,					DefaultRoutes.class,
             RestDefaults.class,				DefaultRestDefaults.class,
-            ProxyInitializer.class,			getProxyInitializerImpl()
+            ProxyInitializer.class,			getProxyInitializerImpl(),
+            BeanValidator.class,            getBeanValidatorImpl()
     );
 
     private final static Map<Class<?>, Class<?>> CACHED_COMPONENTS = classMap(
@@ -278,6 +281,15 @@ public class BaseComponents {
 			return NullProxyInitializer.class;
 		}
 	}
+    
+    private static Class<? extends BeanValidator> getBeanValidatorImpl() {
+        try {
+            Class.forName("javax.validation.Validation");
+            return JSR303Validator.class; 
+        } catch (ClassNotFoundException e) {
+            return null;
+        }
+    }
 
 	public static Map<Class<?>, Class<?>> getCachedComponents() {
 		return CACHED_COMPONENTS;

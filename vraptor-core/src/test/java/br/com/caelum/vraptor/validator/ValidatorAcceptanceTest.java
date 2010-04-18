@@ -59,7 +59,8 @@ public class ValidatorAcceptanceTest {
 
     @Test
     public void validDataDoesntThrowException() {
-        DefaultValidator validator = new DefaultValidator(result, mockery.mock(ValidationViewsFactory.class), mockery.mock(Outjector.class), new ObjenesisProxifier());
+        //TODO testing
+        DefaultValidator validator = new DefaultValidator(result, mockery.mock(ValidationViewsFactory.class), mockery.mock(Outjector.class), new ObjenesisProxifier(), null);
         final Student guilherme = new Student();
         guilherme.id = 15L;
         validator.checking(new Validations() {

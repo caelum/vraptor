@@ -55,7 +55,8 @@ public class DefaultValidatorTest {
 		this.logicResult = mockery.mock(LogicResult.class);
 		this.outjector = mockery.mock(Outjector.class);
 		this.instance = new MyComponent();
-		this.validator = new DefaultValidator(result, new DefaultValidationViewsFactory(result, proxifier), outjector, proxifier);
+		//TODO testing
+		this.validator = new DefaultValidator(result, new DefaultValidationViewsFactory(result, proxifier), outjector, proxifier, null);
 		this.pageResult = mockery.mock(PageResult.class);
 	}
 

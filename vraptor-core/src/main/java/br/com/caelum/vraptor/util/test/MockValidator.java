@@ -56,6 +56,10 @@ public class MockValidator implements Validator {
 	public void checking(Validations validations) {
 		this.errors.addAll(validations.getErrors());
 	}
+	
+	public void validate(Object object) {
+	    // TODO Auto-generated method stub
+	}
 
 	public <T extends View> T onErrorUse(Class<T> view) {
 		if(!this.errors.isEmpty()) {

@@ -25,19 +25,28 @@ import br.com.caelum.vraptor.validator.Validations;
 /**
  * A validator interface for vraptor3.<br>
  * Based on hamcrest, it allows you to assert for specific situations.
- *
+ * 
  * @author Guilherme Silveira
  */
 public interface Validator {
 
     void checking(Validations rules);
 
-	<T extends View> T onErrorUse(Class<T> view);
+    /**
+     * Validate an object using Bean Validation (JSR303). If the object is null, 
+     * the validation will be skiped.
+     * 
+     * @param object The object to be validated.
+     * @since vraptor3.1.2
+     */
+    void validate(Object object);
 
-	void addAll(Collection<? extends Message> message);
+    <T extends View> T onErrorUse(Class<T> view);
 
-	void add(Message message);
+    void addAll(Collection<? extends Message> message);
 
-	boolean hasErrors();
+    void add(Message message);
+
+    boolean hasErrors();
 
 }

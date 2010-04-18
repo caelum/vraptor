@@ -21,6 +21,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.View;
@@ -36,27 +39,40 @@ import br.com.caelum.vraptor.view.ValidationViewsFactory;
  */
 @RequestScoped
 public class DefaultValidator implements Validator {
+    
+    private static final Logger logger = LoggerFactory.getLogger(DefaultValidator.class);
 
     private final Result result;
 
 	private final List<Message> errors = new ArrayList<Message>();
 	private final ValidationViewsFactory viewsFactory;
+	private final List<BeanValidator> beanValidators; //registered bean-validators
 
 	private final Outjector outjector;
 
 	private final Proxifier proxifier;
-
-    public DefaultValidator(Result result, ValidationViewsFactory factory, Outjector outjector, Proxifier proxifier) {
+	
+    public DefaultValidator(Result result, ValidationViewsFactory factory, Outjector outjector, Proxifier proxifier, List<BeanValidator> beanValidators) {
         this.result = result;
 		this.viewsFactory = factory;
 		this.outjector = outjector;
 		this.proxifier = proxifier;
+		this.beanValidators = beanValidators;
     }
 
     public void checking(Validations validations) {
         addAll(validations.getErrors());
     }
-
+    
+    public void validate(Object object) {
+        if (beanValidators == null || beanValidators.isEmpty()) {
+            logger.warn("has no validators registered");
+        } else {
+            for (BeanValidator validator : beanValidators) {
+                addAll(validator.validate(object));
+            }
+        }
+    }
 
     public <T extends View> T onErrorUse(Class<T> view) {
     	if (!hasErrors()) {

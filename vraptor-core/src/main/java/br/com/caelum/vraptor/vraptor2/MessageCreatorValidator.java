@@ -68,6 +68,10 @@ public class MessageCreatorValidator implements Validator {
 			add(s);
 		}
 	}
+	
+	public void validate(Object object) {
+	     throw new UnsupportedOperationException("this feature is not supported by vraptor2");
+	}
 
 	public <T extends View> T onErrorUse(Class<T> view) {
 		if (!hasErrors()) {

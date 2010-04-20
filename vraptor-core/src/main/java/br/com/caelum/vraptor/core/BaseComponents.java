@@ -125,6 +125,7 @@ import br.com.caelum.vraptor.serialization.xstream.XStreamXMLSerialization;
 import br.com.caelum.vraptor.validator.BeanValidator;
 import br.com.caelum.vraptor.validator.DefaultValidator;
 import br.com.caelum.vraptor.validator.JSR303Validator;
+import br.com.caelum.vraptor.validator.NullBeanValidator;
 import br.com.caelum.vraptor.validator.Outjector;
 import br.com.caelum.vraptor.validator.ReplicatorOutjector;
 import br.com.caelum.vraptor.view.AcceptHeaderToFormat;
@@ -281,13 +282,13 @@ public class BaseComponents {
 			return NullProxyInitializer.class;
 		}
 	}
-    
+
     private static Class<? extends BeanValidator> getBeanValidatorImpl() {
         try {
             Class.forName("javax.validation.Validation");
-            return JSR303Validator.class; 
+            return JSR303Validator.class;
         } catch (ClassNotFoundException e) {
-            return null;
+            return NullBeanValidator.class;
         }
     }
 

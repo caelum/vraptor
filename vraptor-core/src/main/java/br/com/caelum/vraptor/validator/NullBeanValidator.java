@@ -15,24 +15,25 @@
  */
 package br.com.caelum.vraptor.validator;
 
+import java.util.Collections;
 import java.util.List;
 
-/**
- * Implements a bean validator. This interface can be used with Bean Validator (JSR-303), Hibernate Validator 3,
- * or any validation engine.
- *
- * @author Otávio Scherer Garcia
- * @since vraptor3.1.2
- */
-public interface BeanValidator {
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-    /**
-     * Validate the bean and return a list of messages if has constraint violations. If the object is null, an empty
-     * list will be returned.
-     *
-     * @param object The object to be validated.
-     * @return List of constraint violations.
-     */
-    List<Message> validate(Object object);
+/**
+ * A bean validator that does nothing
+ * @author Lucas Cavalcanti
+ * @since 3.1.2
+ */
+public class NullBeanValidator implements BeanValidator {
+
+	private static final Logger logger = LoggerFactory.getLogger(NullBeanValidator.class);
+
+	public List<Message> validate(Object object) {
+		logger.warn("You are willing to validate an object, but there is no bean validation engine " +
+				"registered. Please add the jars of some implementation of JSR 303 or Hibernate Validator.");
+		return Collections.emptyList();
+	}
 
 }

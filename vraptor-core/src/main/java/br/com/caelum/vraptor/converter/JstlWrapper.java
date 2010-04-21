@@ -20,7 +20,7 @@ import java.util.Locale;
 
 import br.com.caelum.vraptor.core.RequestInfo;
 
-class JstlWrapper {
+public class JstlWrapper {
 
     public Object find(RequestInfo request, String name) {
         if (request.getRequest().getAttribute(name + ".request")!=null) {

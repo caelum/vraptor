@@ -25,9 +25,11 @@ import org.hibernate.validator.InvalidValue;
 
 /**
  * Uses hibernate's validator api to check for error messages.
- *
+ * 
  * @author Guilherme Silveira
+ * @deprecated Use the {@link BeanValidator}.
  */
+@Deprecated
 public class Hibernate {
 
     private static final ValidatorLocator locator = new ValidatorLocator();

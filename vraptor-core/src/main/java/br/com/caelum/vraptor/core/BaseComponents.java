@@ -124,6 +124,7 @@ import br.com.caelum.vraptor.serialization.xstream.XStreamJSONSerialization;
 import br.com.caelum.vraptor.serialization.xstream.XStreamXMLSerialization;
 import br.com.caelum.vraptor.validator.BeanValidator;
 import br.com.caelum.vraptor.validator.DefaultValidator;
+import br.com.caelum.vraptor.validator.HibernateValidator3;
 import br.com.caelum.vraptor.validator.JSR303Validator;
 import br.com.caelum.vraptor.validator.NullBeanValidator;
 import br.com.caelum.vraptor.validator.Outjector;
@@ -284,11 +285,19 @@ public class BaseComponents {
 	}
 
     private static Class<? extends BeanValidator> getBeanValidatorImpl() {
+        // try to load Bean Validator engine
+        // if Bean Validator not found, try to load hibernate validator 3.x
+        // and both is not found, return a null-implementation
         try {
             Class.forName("javax.validation.Validation");
             return JSR303Validator.class;
-        } catch (ClassNotFoundException e) {
-            return NullBeanValidator.class;
+        } catch (ClassNotFoundException e0) {
+            try {
+                Class.forName("org.hibernate.validator.ClassValidator");
+                return HibernateValidator3.class;
+            } catch (ClassNotFoundException e1) {
+                return NullBeanValidator.class;
+            }
         }
     }
 

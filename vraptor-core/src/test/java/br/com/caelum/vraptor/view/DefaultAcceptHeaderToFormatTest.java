@@ -41,6 +41,12 @@ public class DefaultAcceptHeaderToFormatTest {
 		Assert.assertEquals("html", mimeTypeToFormat.getFormat("*/*"));
 	}
 
+
+	@Test
+	public void shouldReturnHtmlWhenRequestingUnknownAsFirstAndAnyContentType() {
+		Assert.assertEquals("html", mimeTypeToFormat.getFormat("unknow, */*"));
+	}
+
 	@Test
 	public void testHtml() {
 		Assert.assertEquals("html", mimeTypeToFormat.getFormat("text/html"));
@@ -70,6 +76,16 @@ public class DefaultAcceptHeaderToFormatTest {
 	@Test
 	public void testPrecendenceInAComplexAcceptHeaderHtmlShouldPrevailWhenTied() {
 		Assert.assertEquals("html", mimeTypeToFormat.getFormat("application/json, text/html, */*"));
+	}
+
+	@Test
+	public void testPrecendenceInABizzarreMSIE8AcceptHeader() {
+		Assert.assertEquals("html", mimeTypeToFormat.getFormat("image/gif, image/jpeg, image/pjpeg, image/pjpeg, application/x-shockwave-flash,  */*"));
+	}
+
+	@Test
+	public void testPrecendenceInABizzarreMSIE8AcceptHeaderWithHtml() {
+		Assert.assertEquals("html", mimeTypeToFormat.getFormat("image/gif, image/jpeg, image/pjpeg, image/pjpeg, application/x-shockwave-flash, text/html, */*"));
 	}
 
 	@Test

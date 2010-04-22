@@ -40,6 +40,7 @@ public class DefaultAcceptHeaderToFormat implements AcceptHeaderToFormat {
 
 	private static Cache cache = new Cache();
 	private static final String DEFAULT_FORMAT = "html";
+	private static final double DEFAULT_QUALIFIER_VALUE = 0.01;
 	protected final Map<String, String> map;
 
 	public DefaultAcceptHeaderToFormat() {
@@ -51,7 +52,6 @@ public class DefaultAcceptHeaderToFormat implements AcceptHeaderToFormat {
 	}
 
 	public String getFormat(String acceptHeader) {
-
 		if (acceptHeader == null) {
 			throw new NullPointerException("accept header cant be null");
 		}
@@ -64,7 +64,6 @@ public class DefaultAcceptHeaderToFormat implements AcceptHeaderToFormat {
 			return cache.get(acceptHeader);
 		}
 
-		// TODO: we really could cache acceptHeader -> format
 		String[] mimeTypes = getOrderedMimeTypes(acceptHeader);
 
 		for (String mimeType : mimeTypes) {
@@ -103,6 +102,10 @@ public class DefaultAcceptHeaderToFormat implements AcceptHeaderToFormat {
 		public String getType() {
 			return type;
 		}
+
+		public String toString() {
+			return type;
+		}
 	}
 
 	String[] getOrderedMimeTypes(String acceptHeader) {
@@ -118,11 +121,11 @@ public class DefaultAcceptHeaderToFormat implements AcceptHeaderToFormat {
 		List<MimeType> mimes = new ArrayList<MimeType>();
 		for (String string : types) {
 			if (string.contains("*/*")) {
-				mimes.add(new MimeType("html", 1));
+				mimes.add(new MimeType("text/html", DEFAULT_QUALIFIER_VALUE));
 				continue;
 			} else if (string.contains(";")) {
 				String type = string.substring(0, string.indexOf(';'));
-				double qualifier = 1;
+				double qualifier = DEFAULT_QUALIFIER_VALUE;
 				if (string.contains("q=")) {
 					Matcher matcher = Pattern.compile("\\s*q=(.+)\\s*").matcher(string);
 					matcher.find();
@@ -137,6 +140,7 @@ public class DefaultAcceptHeaderToFormat implements AcceptHeaderToFormat {
 		}
 
 		Collections.sort(mimes);
+
 		String[] orderedTypes = new String[mimes.size()];
 		for (int i = 0; i < mimes.size(); i++) {
 			orderedTypes[i] = mimes.get(i).getType().trim();

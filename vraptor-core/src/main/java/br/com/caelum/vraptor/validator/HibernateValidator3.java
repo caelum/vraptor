@@ -22,6 +22,8 @@ import java.util.List;
 import org.hibernate.validator.ClassValidator;
 import org.hibernate.validator.InvalidValue;
 
+import br.com.caelum.vraptor.core.Localization;
+
 /**
  * Implements the {@link BeanValidator} using the Hibernate Validator 3.x. This implementation will be enable by vraptor
  * when the hibernate validator classes is locale in classpath.
@@ -33,11 +35,16 @@ public class HibernateValidator3
     implements BeanValidator {
 
     private static final ValidatorLocator locator = new ValidatorLocator();
+	private final Localization localization;
+
+    public HibernateValidator3(Localization localization) {
+		this.localization = localization;
+	}
 
     @SuppressWarnings("unchecked")
     public List<Message> validate(Object object) {
         List<Message> errors = new ArrayList<Message>();
-        ClassValidator<Object> validator = (ClassValidator<Object>) locator.getValidator(object.getClass(), null);
+        ClassValidator<Object> validator = (ClassValidator<Object>) locator.getValidator(object.getClass(), localization.getBundle());
         InvalidValue[] invalidValues = validator.getInvalidValues(object);
 
         for (InvalidValue value : invalidValues) {

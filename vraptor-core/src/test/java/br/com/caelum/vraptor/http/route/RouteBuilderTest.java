@@ -16,9 +16,9 @@
  */
 package br.com.caelum.vraptor.http.route;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
@@ -131,4 +131,34 @@ public class RouteBuilderTest {
 		String url = route.urlFor(MyResource.class, method, parameters);
 		assertThat(url, is("/abc/Anything/def/123/ghi/123.45"));
 	}
+
+	static class Abc {
+		private String def;
+
+		public void setDef(String def) {
+			this.def = def;
+		}
+
+		public String getDef() {
+			return def;
+		}
+	}
+    static class AbcResource {
+    	public void abc(Abc abc) {
+    	}
+    }
+
+    @Test
+    public void shouldSupportPathsWithDotsAndAsterisks() throws SecurityException, NoSuchMethodException {
+    	builder = new RouteBuilder(proxifier, typeFinder, "/my/{abc.def*}");
+
+		Method method = AbcResource.class.getDeclaredMethods()[0];
+		builder.is(AbcResource.class, method);
+
+		Route route = builder.build();
+
+		assertTrue(route.canHandle("/my/troublesome/uri"));
+    }
+
+
 }

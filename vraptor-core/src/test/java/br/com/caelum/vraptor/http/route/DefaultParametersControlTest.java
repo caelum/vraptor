@@ -188,6 +188,18 @@ public class DefaultParametersControlTest {
 		mockery.assertIsSatisfied();
 	}
 
+	@Test
+	public void registerExtraParametersFromAcessedUrlWithGreedyAndDottedParameters() throws SecurityException, NoSuchMethodException {
+		DefaultParametersControl control = new DefaultParametersControl("/clients/{path.to.file*}");
+		mockery.checking(new Expectations() {
+			{
+				one(request).setParameter("path.to.file", new String[] {"my/path/to/file"});
+			}
+		});
+		control.fillIntoRequest("/clients/my/path/to/file", request);
+		mockery.assertIsSatisfied();
+	}
+
 	static class PathToFile {
 
 		public void withPath(String pathToFile) {

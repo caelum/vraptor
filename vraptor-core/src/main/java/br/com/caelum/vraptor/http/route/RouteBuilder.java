@@ -190,8 +190,8 @@ public class RouteBuilder {
 	private String[] extractParameters(String uri) {
 		String startUntilOpenBraces = "^[^\\{]*\\{";
 		String or = "|";
-		String betweenBraces = "\\}[^\\{]*\\{";
-		String closeBracesUntilEnd = "\\}[^\\{\\}]*$";
+		String betweenBraces = "\\*?\\}[^\\{]*\\{";
+		String closeBracesUntilEnd = "\\*?\\}[^\\{\\}]*$";
 
 		return uri.split(startUntilOpenBraces + or + betweenBraces + or + closeBracesUntilEnd);
 	}

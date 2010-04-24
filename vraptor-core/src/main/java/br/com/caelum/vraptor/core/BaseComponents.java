@@ -176,8 +176,7 @@ public class BaseComponents {
             RoutesParser.class, 			PathAnnotationRoutesParser.class,
             Routes.class,					DefaultRoutes.class,
             RestDefaults.class,				DefaultRestDefaults.class,
-            ProxyInitializer.class,			getProxyInitializerImpl(),
-            BeanValidator.class,            getBeanValidatorImpl()
+            ProxyInitializer.class,			getProxyInitializerImpl()
     );
 
     private final static Map<Class<?>, Class<?>> CACHED_COMPONENTS = classMap(
@@ -220,7 +219,8 @@ public class BaseComponents {
             RepresentationResult.class,						DefaultRepresentationResult.class,
             FormatResolver.class,							DefaultFormatResolver.class,
             Configuration.class,							ApplicationConfiguration.class,
-            RestHeadersHandler.class,						DefaultRestHeadersHandler.class
+            RestHeadersHandler.class,						DefaultRestHeadersHandler.class,
+            BeanValidator.class,            				getBeanValidatorImpl()
     );
 
     @SuppressWarnings("unchecked")

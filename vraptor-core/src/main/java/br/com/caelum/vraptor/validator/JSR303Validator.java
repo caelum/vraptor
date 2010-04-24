@@ -18,7 +18,6 @@ package br.com.caelum.vraptor.validator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
@@ -43,11 +42,12 @@ public class JSR303Validator
 
     private static final Logger logger = LoggerFactory.getLogger(JSR303Validator.class);
 
-    private final Locale locale;
     private static final JSR303ValidatorFactory factory = new JSR303ValidatorFactory();
 
+	private final Localization localization;
+
     public JSR303Validator(Localization localization) {
-        this.locale = localization.getLocale(); // get the locale for i18n proposes
+        this.localization = localization;
     }
 
     public List<Message> validate(Object bean) {
@@ -63,7 +63,7 @@ public class JSR303Validator
         for (ConstraintViolation<Object> violation : violations) {
             // interpolate the message
             final Context ctx = new Context(violation.getConstraintDescriptor(), violation.getInvalidValue());
-            String msg = factory.getInterpolator().interpolate(violation.getMessageTemplate(), ctx, locale);
+            String msg = factory.getInterpolator().interpolate(violation.getMessageTemplate(), ctx, localization.getLocale());
 
             messages.add(new ValidationMessage(msg, violation.getPropertyPath().toString()));
             logger.debug("added message {} to validation of bean {}", msg, violation.getRootBean());

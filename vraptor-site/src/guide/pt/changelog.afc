@@ -1,6 +1,6 @@
 [chapter ChangeLog]
 
-[section 3.1.2 (in dev)]
+[section 3.1.2]
 [list]
 * Blank project agora rodando também no netbeans 6.8
 * Encoding agora suportado quando faz upload de arquivos no Google App Engine
@@ -42,6 +42,23 @@
 	permanentlyRedirectTo("uma/uri") 	=> use(status()).movedPermanentlyTo("uma/uri");
 	permanentlyRedirectTo(this)		=> use(status()).movedPermanentlyTo(this.getClass());
   [/code]
+  
+* adicionado novo método à interface %%Validator%% (graças ao Otávio Garcia)
+	[java]
+		validator.validate(objeto);
+	[/java]
+  Esse método vai validar o objeto usando o Hibernate Validator 3, a Java Validation API (JSR303), 
+  ou qualquer implementação da interface BeanValidator anotada com %%@Component%%
+
+* novos converters de BigDecimal, Double e Float, que levam em consideração o Locale para converter
+  os valores (graças ao Otávio Garcia).
+  Para usá-los basta adicionar ao web.xml:
+  [xml]
+	<context-param>
+		<param-name>br.com.caelum.vraptor.packages</param-name>
+    	<param-value>!!valor anterior!!,br.com.caelum.vraptor.converter.l10n</param-value>
+    </context-param>
+  [/xml]
 [/list]
 
 [section 3.1.1]

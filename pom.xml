@@ -34,6 +34,13 @@
 		</developer>
 	</developers>
 
+	<repositories>
+		<repository>
+			<id>jboss</id>
+			<url>http://repository.jboss.com/maven2/</url>
+		</repository>
+	</repositories>
+	
 	<organization>
 		<name>Caelum</name>
 		<url>http://www.caelum.com.br</url>
@@ -160,6 +167,19 @@
 			<version>3.0.0.ga</version>
 			<optional>true</optional>
 		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>4.0.2.GA</version>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+		    <groupId>javax.validation</groupId>
+		    <artifactId>validation-api</artifactId>
+		    <version>1.0.0.GA</version>
+		    <optional>true</optional>
+		</dependency>
+				
 
 		<!-- [Out of Maven Repo] -->
 		<dependency>

@@ -34,13 +34,6 @@
 		</developer>
 	</developers>
 
-	<repositories>
-		<repository>
-			<id>jboss</id>
-			<url>http://repository.jboss.com/maven2/</url>
-		</repository>
-	</repositories>
-	
 	<organization>
 		<name>Caelum</name>
 		<url>http://www.caelum.com.br</url>

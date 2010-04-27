@@ -16,9 +16,9 @@
 		<link href="../../documentacao/includes/css/xml2html.css" rel="stylesheet" type="text/css" media="screen" />
 		<link href="../../documentacao/includes/css/style.css" rel="stylesheet" type="text/css" media="screen" />
 	
-	<meta name="description" content="VRaptor 3 - a Java web framework focused on fast development"/>
+	<meta name="description" content="???meta.description???"/>
 	<meta name="keywords" content="sites, web, desenvolvimento, development, java, opensource"/>
-	<title>V|Raptor - High productivity in Java web development</title>
+	<title>V|Raptor - ???title.slogan???</title>
 	<link href="../../screen.css" rel="stylesheet" type="text/css" media="screen" />
     <link href="../../menu.css" rel="stylesheet" type="text/css" media="screen" />
     <!--[if lt IE 7]>
@@ -39,13 +39,13 @@
     </div><!-- header wrap-->
     
     <div id="menuWrap">
-    	<ul id="menuElementsEn">
-        	<li><a id="homeBtnEn" href="../../en/"><span>home</span></a></li>
-        	<li><a id="downloadBtnEn" href="../../en/download.jsp"><span>download</span></a></li>
-        	<li><a id="documentacaoBtnEn" href="../../documentation/"><span>Documentation</span></a></li>
-        	<li><a id="beneficiosBtnEn" href="../../benefits.jsp"><span>Benefits</span></a></li>
-        	<li><a id="suporteBtnEn" href="../../support.jsp"><span>Support</span></a></li>
-        	<li><a id="vraptor2BtnEn" href="../../en/vraptor2.jsp"><span>vraptor2</span></a></li>
+    	<ul id="???menu.id???">
+        	<li><a id="???home.id???" href="../../???home.link???"><span>home</span></a></li>
+        	<li><a id="???download.id???" href="../../???download.link???"><span>download</span></a></li>
+        	<li><a id="???docs.id???" href="../../???documentacao.link???"><span>???documentacao???</span></a></li>
+        	<li><a id="???beneficios.id???" href="../../???beneficios.link???"><span>???beneficios???</span></a></li>
+        	<li><a id="???suporte.id???" href="../../???suporte.link???"><span>???suporte???</span></a></li>
+        	<li><a id="???vraptor2.id???" href="../../???vraptor2.link???"><span>vraptor2</span></a></li>
         </ul><!-- menuElements-->
     </div><!-- menuWrap-->
 <div id="contentWrap">
@@ -90,9 +90,11 @@
 		
 									<li><a class="link_toc" href="../../documentation/testing-components-and-controllers/">14. Testing components and controllers</a></li>
 		
-									<li><a class="link_toc" href="../../documentation/changelog/">15. ChangeLog</a></li>
+									<li><a class="link_toc" href="../../documentation/scala/">15. Scala</a></li>
 		
-									<li><a class="link_toc" href="../../documentation/migrating-from-vraptor2-to-vraptor3/">16. Migrating from VRaptor2 to VRaptor3</a></li>
+									<li><a class="link_toc" href="../../documentation/changelog/">16. ChangeLog</a></li>
+		
+									<li><a class="link_toc" href="../../documentation/migrating-from-vraptor2-to-vraptor3/">17. Migrating from VRaptor2 to VRaptor3</a></li>
 		
                 </ol>
             </div><!-- submenu-->
@@ -160,9 +162,9 @@ Don't forget to annotate your new classe with <code class="inlineCode">@Componen
 <h3 class="section">Result shortcuts</h3>
 	    	<span class="paragraph">Some redirections are pretty common, so there are shortcuts on Result interface for them.
 The available shortcuts are:</span>
-	    	<ul class="list"><li><span class="paragraph">result.forwardTo("/some/uri") ==&gt; result.use(page()).forward("/some/uri");</span></li><li><span class="paragraph">result.forwardTo(ClientController.class).list() ==&gt; result.use(logic()).forwardTo(ClientController.class).list();</span></li><li><span class="paragraph">result.redirectTo(ClientController.class).list() ==&gt; result.use(logic()).redirectTo(ClientController.class).list();</span></li><li><span class="paragraph">result.of(ClientController.class).list() ==&gt; result.use(page()).of(ClientController.class).list();</span></li></ul>
+	    	<ul class="list"><li><span class="paragraph">result.forwardTo("/some/uri") 			==&gt; result.use(page()).forward("/some/uri");</span></li><li><span class="paragraph">result.redirectTo("/some/uri") 			==&gt;  result.use(page()).redirect("/some/uri)</span></li><li><span class="paragraph">result.permanentlyRedirectTo("/some/uri") ==&gt; result.use(status()).movedPermanentlyTo("/some/uri");</span></li><li><span class="paragraph">result.forwardTo(ClientController.class).list() ==&gt; result.use(logic()).forwardTo(ClientController.class).list();</span></li><li><span class="paragraph">result.redirectTo(ClientController.class).list() ==&gt; result.use(logic()).redirectTo(ClientController.class).list();</span></li><li><span class="paragraph">result.of(ClientController.class).list() 	==&gt; result.use(page()).of(ClientController.class).list();</span></li><li><span class="paragraph">result.permanentlyRedirectTo(Controller.class) ==&gt; use(status()).movedPermanentlyTo(Controller.class);</span></li><li><span class="paragraph">result.notFound()							==&gt;  use(status()).notFound()</span></li><li><span class="paragraph">result.nothing()							==&gt;  use(nothing());</span></li></ul>
 	    	<span class="paragraph">Furthermore, if one are redirecting to a method on the same controller, one can use:</span>
-	    	<ul class="list"><li><span class="paragraph">result.forwardTo(this).list() ==&gt; result.use(logic()).forwardTo(this.getClass()).list();</span></li><li><span class="paragraph">result.redirectTo(this).list() ==&gt; result.use(logic()).redirectTo(this.getClass()).list();</span></li><li><span class="paragraph">result.of(this).list() ==&gt; result.use(page()).of(this.getClass()).list();</span></li></ul>
+	    	<ul class="list"><li><span class="paragraph">result.forwardTo(this).list() 		==&gt; result.use(logic()).forwardTo(this.getClass()).list();</span></li><li><span class="paragraph">result.redirectTo(this).list() 		==&gt; result.use(logic()).redirectTo(this.getClass()).list();</span></li><li><span class="paragraph">result.of(this).list() 				==&gt; result.use(page()).of(this.getClass()).list();</span></li><li><span class="paragraph">result.permanentlyRedirectTo(this) 	==&gt; use(status()).movedPermanentlyTo(this.getClass());</span></li></ul>
 		
 
 <h3 class="section">Redirect and forward</h3>
@@ -271,6 +273,10 @@ if you want to include a field of a non-primitive type you must explicitly inclu
 &nbsp;&nbsp;&nbsp;&nbsp;"name":&nbsp;"John",<br />
 &nbsp;&nbsp;&nbsp;&nbsp;"login":&nbsp;"john"<br />
 }}</code></div>
+	    	<span class="paragraph">Moreover you can serialize recursively (be careful with cycles):</span>
+	    	<div class="java"><code class="java">
+<span class="java10">result.use</span><span class="java8">(</span><span class="java10">json</span><span class="java8">())</span><span class="java10">.from</span><span class="java8">(</span><span class="java10">user</span><span class="java8">)</span><span class="java10">.recursive</span><span class="java8">()</span><span class="java10">.serialize</span><span class="java8">()</span><span class="java10">;<br />
+result.use</span><span class="java8">(</span><span class="java10">xml</span><span class="java8">())</span><span class="java10">.from</span><span class="java8">(</span><span class="java10">user</span><span class="java8">)</span><span class="java10">.recursive</span><span class="java8">()</span><span class="java10">.serialize</span><span class="java8">()</span><span class="java10">;</span></code></div>
 	    	<span class="paragraph">The default implementation is based on XStream, so you can configure the serialization
 with annotations and direct configuration on XStream. It is just creating a class like:</span>
 	    	<div class="java"><code class="java">
@@ -355,6 +361,12 @@ result.use</span><span class="java8">(</span><span class="java10">json</span><sp
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br />
 &nbsp;&nbsp;&nbsp;&nbsp;}<br />
 ]}</code></div>
+	    	<span class="paragraph"><strong class="title">Serializing JSON without root elemento</strong>
+If you want to serialize an object to json without give it any names, you can use the
+withoutRoot method:</span>
+	    	<div class="java"><code class="java">
+<span class="java10">result.use</span><span class="java8">(</span><span class="java10">json</span><span class="java8">())</span><span class="java10">.from</span><span class="java8">(</span><span class="java10">car</span><span class="java8">)</span><span class="java10">.serialize</span><span class="java8">()</span><span class="java10">; </span><span class="java3">//=&gt; {'car': {'color': 'blue'}}<br />
+</span><span class="java10">result.use</span><span class="java8">(</span><span class="java10">json</span><span class="java8">())</span><span class="java10">.withoutRoot</span><span class="java8">()</span><span class="java10">.from</span><span class="java8">(</span><span class="java10">car</span><span class="java8">)</span><span class="java10">.serialize</span><span class="java8">()</span><span class="java10">; </span><span class="java3">//=&gt; {'color': 'blue'}</span></code></div>
 		
 
 </div><!-- content -->
@@ -372,35 +384,35 @@ result.use</span><span class="java8">(</span><span class="java10">json</span><sp
     	<div id="footerContent">              
             <div id="suporteFooter">
 	           	<a href="http://www.caelum.com.br/contato/" class="moreIcon" title="Saiba Mais"><span>+</span></a>
-	           	<h3><a href="http://www.caelum.com.br/contato/">Support</a></h3>
-                <p><a href="http://www.caelum.com.br/contato/">Get to know about our online support plans and be certain that your doubts and problems will be quickly solved.</a></p>            
+	           	<h3><a href="http://www.caelum.com.br/contato/">???suporte???</a></h3>
+                <p><a href="http://www.caelum.com.br/contato/">???suporte.head???</a></p>            
             </div><!-- suporte-->
             <div id="consultoriaFooter">
            		<a href="http://www.caelum.com.br/servicos/consultoria/" class="moreIcon" title="Saiba Mais"><span>+</span></a>
-           		<h3><a href="http://www.caelum.com.br/servicos/consultoria/">Consulting</a></h3>
-                <p><a href="http://www.caelum.com.br/servicos/consultoria/">The VRaptor development team is available to help your development team. Learn about our consulting plans.</a></p>            
+           		<h3><a href="http://www.caelum.com.br/servicos/consultoria/">???consultoria???</a></h3>
+                <p><a href="http://www.caelum.com.br/servicos/consultoria/">???consultoria.head???</a></p>            
             </div><!-- consultoria-->
         	<div id="treinamentoFooter">
-            	<a href="http://www.caelum.com.br/curso/fj-28-vraptor-hibernate-ajax/" class="moreIcon" title="Saiba Mais"><span>+</span></a><h3><a href="http://www.caelum.com.br/curso/fj-28-vraptor-hibernate-ajax/">Training</a></h3>
-                <p><a href="http://www.caelum.com.br/curso/fj-28-vraptor-hibernate-ajax/">Caelum offers the oficial VRaptor training, with Hibernate and Ajax, focusing on the best practices concerning VRaptor. Click and find out more about it.</a></p>
+            	<a href="http://www.caelum.com.br/curso/fj-28-vraptor-hibernate-ajax/" class="moreIcon" title="Saiba Mais"><span>+</span></a><h3><a href="http://www.caelum.com.br/curso/fj-28-vraptor-hibernate-ajax/">???treinamento???</a></h3>
+                <p><a href="http://www.caelum.com.br/curso/fj-28-vraptor-hibernate-ajax/">???treinamento.head???</a></p>
             </div><!--treinamento-->
      <div class="footbar">
             	<img class="logoFooter" src="../../images/logoCaelumGray-trans.png" alt="vraptor logo" />
                 <ul>
                 	<li>site map:</li>
-                    <li><a href="../../en/">home</a></li>
+                    <li><a href="../../???home.link???">home</a></li>
                     <li>|</li>
-                    <li><a href="../../en/download.jsp">download</a></li>
+                    <li><a href="../../???download.link???">download</a></li>
                     <li>|</li>
-                    <li><a href="../../documentation/">Documentation</a></li>
+                    <li><a href="../../???documentacao.link???">???documentacao???</a></li>
                     <li>|</li>
-                    <li><a href="../../benefits.jsp">Benefits</a></li>
+                    <li><a href="../../???beneficios.link???">???beneficios???</a></li>
                     <li>|</li>
-                    <li><a href="../../support.jsp">Support</a></li>
+                    <li><a href="../../???suporte.link???">???suporte???</a></li>
                     <li>|</li>
-                    <li><a href="../../en/vraptor2.jsp">vraptor2</a></li>
+                    <li><a href="../../???vraptor2.link???">vraptor2</a></li>
                 </ul>
-                <p><a href="http://www.apache.org/licenses/LICENSE-2.0">Apache 2.0 License</a> - VRaptor ©2009 Caelum - Ensino e Inovação</p>
+                <p><a href="http://www.apache.org/licenses/LICENSE-2.0">???license???</a> - VRaptor ©2009 Caelum - Ensino e Inovação</p>
             </div><!-- footnote-->
         </div><!-- footer content -->
         <a id="signature" href="mailto:lokidg@gmail.com">loki|design</a>

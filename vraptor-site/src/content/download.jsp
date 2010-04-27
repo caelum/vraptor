@@ -5,18 +5,18 @@
             <h3 class="title"><fmt:message key="download.head"/>:</h3>
 
 			<div class="passo">
-                <a class="downloadBtn3" href="http://vraptor3.googlecode.com/files/vraptor-3.1.0.zip"><span>Download Now</span></a>            
-            	<p><a href="http://vraptor3.googlecode.com/files/vraptor-3.1.0.zip"><fmt:message key="vraptor.zip"/></a></p>
+                <a class="downloadBtn3" href="http://vraptor3.googlecode.com/files/vraptor-3.1.2.zip"><span>Download Now</span></a>            
+            	<p><a href="http://vraptor3.googlecode.com/files/vraptor-3.1.2.zip"><fmt:message key="vraptor.zip"/></a></p>
             </div><!-- passo 1 -->
             
 			<div class="passo">
-                <a class="downloadBtn3" href="http://vraptor3.googlecode.com/files/vraptor-blank-project-3.1.0.zip"><span>Download Now</span></a>            
-            	<p><a href="http://vraptor3.googlecode.com/files/vraptor-blank-project-3.1.0.zip"><fmt:message key="blank.project.zip"/></a></p>
+                <a class="downloadBtn3" href="http://vraptor3.googlecode.com/files/vraptor-blank-project-3.1.2.zip"><span>Download Now</span></a>            
+            	<p><a href="http://vraptor3.googlecode.com/files/vraptor-blank-project-3.1.2.zip"><fmt:message key="blank.project.zip"/></a></p>
             </div><!-- passo 2 -->
             
 			<div class="passo">
-                <a class="downloadBtn3" href="http://vraptor3.googlecode.com/files/vraptor-mydvds-3.1.0.zip"><span>Download Now</span></a>            
-            	<p><a href="http://vraptor3.googlecode.com/files/vraptor-mydvds-3.1.0.zip"><fmt:message key="mydvds.zip"/></a></p>
+                <a class="downloadBtn3" href="http://vraptor3.googlecode.com/files/vraptor-mydvds-3.1.2.zip"><span>Download Now</span></a>            
+            	<p><a href="http://vraptor3.googlecode.com/files/vraptor-mydvds-3.1.2.zip"><fmt:message key="mydvds.zip"/></a></p>
             </div><!-- passo 2 -->
 
 			<div class="passo">

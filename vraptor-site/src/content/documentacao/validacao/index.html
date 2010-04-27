@@ -96,9 +96,11 @@
 		
 									<li><a class="link_toc" href="../../documentacao/testando-componentes-e-controllers/">15. Testando componentes e controllers</a></li>
 		
-									<li><a class="link_toc" href="../../documentacao/changelog/">16. ChangeLog</a></li>
+									<li><a class="link_toc" href="../../documentacao/scala/">16. Scala</a></li>
 		
-									<li><a class="link_toc" href="../../documentacao/migrando-do-vraptor2-para-o-vraptor3/">17. Migrando do VRaptor2 para o VRaptor3</a></li>
+									<li><a class="link_toc" href="../../documentacao/changelog/">17. ChangeLog</a></li>
+		
+									<li><a class="link_toc" href="../../documentacao/migrando-do-vraptor2-para-o-vraptor3/">18. Migrando do VRaptor2 para o VRaptor3</a></li>
 		
                 </ol>
             </div><!-- submenu-->
@@ -176,11 +178,11 @@ foi passado pra ele &eacute; v&aacute;lido ou n&atilde;o:</span>
 &nbsp;&nbsp;&nbsp; </span><span class="java10">that</span><span class="java8">(</span><span class="java10">usuario.getIdade</span><span class="java8">() </span><span class="java10">&gt;= </span><span class="java7">18</span><span class="java10">, </span><span class="java5">&#34;usuario.idade&#34;</span><span class="java10">, </span><span class="java5">&#34;maior_que&#34;</span><span class="java10">, </span><span class="java5">&#34;Idade&#34;</span><span class="java10">, </span><span class="java7">18</span><span class="java8">)</span><span class="java10">;<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java3">// Idade deveria ser maior que 18<br />
 </span><span class="java8">}})</span><span class="java10">;</span></code></div>
-	    	<span class="paragraph">Voc&ecirc; pode tamb&eacute;m internacionalizar os par&acirc;metros:</span>
+	    	<span class="paragraph">Voc&ecirc; pode tamb&eacute;m internacionalizar os par&acirc;metros, usando o m&eacute;todo i18n:</span>
 	    	<div class="java"><code class="java">usuario.idade&nbsp;<span class="texvalue">=&nbsp;Idade&nbsp;do&nbsp;usu&aacute;rio</span></code></div>
 	    	<div class="java"><code class="java">
 <span class="java10">validator.checking</span><span class="java8">(</span><span class="java4">new </span><span class="java10">Validations</span><span class="java8">(){{<br />
-&nbsp;&nbsp;&nbsp; </span><span class="java10">that</span><span class="java8">(</span><span class="java10">usuario.getIdade</span><span class="java8">() </span><span class="java10">&gt;= </span><span class="java7">18</span><span class="java10">, </span><span class="java5">&#34;usuario.idade&#34;</span><span class="java10">, </span><span class="java5">&#34;maior_que&#34;</span><span class="java10">, </span><span class="java5">&#34;usuario.idade&#34;</span><span class="java10">, </span><span class="java7">18</span><span class="java8">)</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java10">that</span><span class="java8">(</span><span class="java10">usuario.getIdade</span><span class="java8">() </span><span class="java10">&gt;= </span><span class="java7">18</span><span class="java10">, </span><span class="java5">&#34;usuario.idade&#34;</span><span class="java10">, </span><span class="java5">&#34;maior_que&#34;</span><span class="java10">, i18n</span><span class="java8">(</span><span class="java5">&#34;usuario.idade&#34;</span><span class="java8">)</span><span class="java10">, </span><span class="java7">18</span><span class="java8">)</span><span class="java10">;<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java3">// Idade do usu&aacute;rio deveria ser maior que 18<br />
 </span><span class="java8">}})</span><span class="java10">;</span></code></div>
 		

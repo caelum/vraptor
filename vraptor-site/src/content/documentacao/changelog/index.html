@@ -96,9 +96,11 @@
 		
 									<li><a class="link_toc" href="../../documentacao/testando-componentes-e-controllers/">15. Testando componentes e controllers</a></li>
 		
-									<li><a class="link_toc" href="../../documentacao/changelog/">16. ChangeLog</a></li>
+									<li><a class="link_toc" href="../../documentacao/scala/">16. Scala</a></li>
 		
-									<li><a class="link_toc" href="../../documentacao/migrando-do-vraptor2-para-o-vraptor3/">17. Migrando do VRaptor2 para o VRaptor3</a></li>
+									<li><a class="link_toc" href="../../documentacao/changelog/">17. ChangeLog</a></li>
+		
+									<li><a class="link_toc" href="../../documentacao/migrando-do-vraptor2-para-o-vraptor3/">18. Migrando do VRaptor2 para o VRaptor3</a></li>
 		
                 </ol>
             </div><!-- submenu-->
@@ -110,7 +112,7 @@
 		
 
 
-<h3 class="section">3.1.2 (in dev)</h3>
+<h3 class="section">3.1.2</h3>
 	    	<ul class="list"><li><span class="paragraph">Blank project agora rodando tamb&eacute;m no netbeans 6.8</span></li><li><span class="paragraph">Encoding agora suportado quando faz upload de arquivos no Google App Engine</span></li><li><span class="paragraph">bugfix: validator.onErrorUse(json()).... n&atilde;o d&aacute; mais NullPointerException</span></li><li><span class="paragraph">Serializers tem agora o m&eacute;todo recursive:</span><div class="java"><code class="java">
 <span class="java10">result.use</span><span class="java8">(</span><span class="java10">xml</span><span class="java8">())</span><span class="java10">.from</span><span class="java8">(</span><span class="java10">meuObjeto</span><span class="java8">)</span><span class="java10">.recursive</span><span class="java8">()</span><span class="java10">.serialize</span><span class="java8">()</span><span class="java10">;</span></code></div><span class="paragraph">Assim, toda a &aacute;rvore de objetos a partir do meuObjeto ser&aacute; serializada.</span></li><li><span class="paragraph">Os par&acirc;metros das mensagens do Validations agora tamb&eacute;m podem ser internacionalizados:</span><div class="java"><code class="java">
 <span class="java3">// idade = Idade<br />
@@ -119,7 +121,24 @@
 </span><span class="java10">validator.checking</span><span class="java8">(</span><span class="java4">new </span><span class="java10">Validations</span><span class="java8">() {{<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java10">that</span><span class="java8">(</span><span class="java10">idade &gt; </span><span class="java7">18</span><span class="java10">, </span><span class="java5">&#34;idade&#34;</span><span class="java10">, </span><span class="java5">&#34;maior_que&#34;</span><span class="java10">, i18n</span><span class="java8">(</span><span class="java5">&#34;idade&#34;</span><span class="java8">)</span><span class="java10">, </span><span class="java7">18</span><span class="java8">)</span><span class="java10">;<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java3">//resulta na mensagem &#34;Idade deveria ser maior que 18&#34;&nbsp; <br />
-</span><span class="java8">}})</span><span class="java10">;</span></code></div></li></ul>
+</span><span class="java8">}})</span><span class="java10">;</span></code></div></li><li><span class="paragraph">Proxies do Hibernate agora s&atilde;o serializados (quase) como classes normais (gra&ccedil;as ao Tomaz Lavieri)</span></li><li><span class="paragraph">Ao serializar para json agora &eacute; poss&iacute;vel excluir o root (gra&ccedil;as ao Tomaz Lavieri):</span><div class="java"><code class="java">
+<span class="java10">result.use</span><span class="java8">(</span><span class="java10">json</span><span class="java8">())</span><span class="java10">.from</span><span class="java8">(</span><span class="java10">carro</span><span class="java8">)</span><span class="java10">.serialize</span><span class="java8">()</span><span class="java10">; </span><span class="java3">//=&gt; {'carro': {'cor': 'azul'}}<br />
+</span><span class="java10">result.use</span><span class="java8">(</span><span class="java10">json</span><span class="java8">())</span><span class="java10">.withoutRoot</span><span class="java8">()</span><span class="java10">.from</span><span class="java8">(</span><span class="java10">carro</span><span class="java8">)</span><span class="java10">.serialize</span><span class="java8">()</span><span class="java10">; </span><span class="java3">//=&gt; {'cor': 'azul'}</span></code></div></li><li><span class="paragraph">Google collections atualizado para a vers&atilde;o 1.0</span></li><li><span class="paragraph">corrigido bug das chaves dentro de express&otilde;es regulares dentro do @Path</span></li><li><span class="paragraph">as anota&ccedil;&otilde;es do XStream agora s&atilde;o lidas automaticamente quando voc&ecirc; usa a serializa&ccedil;&atilde;o
+  padr&atilde;o do vraptor</span></li><li><span class="paragraph">quando um arquivo &eacute; maior do que o limite de tamanho de arquivo &eacute; criado um erro de valida&ccedil;&atilde;o
+  ao inv&eacute;s de uma exce&ccedil;&atilde;o gen&eacute;rica</span></li><li><span class="paragraph">mais atalhos na interface Result:</span><div class="java"><code class="java">redirectTo("uma/uri")&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt;&nbsp;&nbsp;use(page()).redirect("uma/uri)<br />
+notFound()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt;&nbsp;&nbsp;use(status()).notFound()<br />
+nothing()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt;&nbsp;&nbsp;use(nothing());<br />
+permanentlyRedirectTo(Controller.class)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt;&nbsp;use(status()).movedPermanentlyTo(Controller.class);<br />
+permanentlyRedirectTo("uma/uri")&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt;&nbsp;use(status()).movedPermanentlyTo("uma/uri");<br />
+permanentlyRedirectTo(this)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt;&nbsp;use(status()).movedPermanentlyTo(this.getClass());</code></div></li><li><span class="paragraph">adicionado novo m&eacute;todo &agrave; interface <code class="inlineCode">Validator</code> (gra&ccedil;as ao Ot&aacute;vio Garcia)</span><div class="java"><code class="java">
+<span class="java10">validator.validate</span><span class="java8">(</span><span class="java10">objeto</span><span class="java8">)</span><span class="java10">;</span></code></div><span class="paragraph">Esse m&eacute;todo vai validar o objeto usando o Hibernate Validator 3, a Java Validation API (JSR303), 
+  ou qualquer implementa&ccedil;&atilde;o da interface BeanValidator anotada com <code class="inlineCode">@Component</code></span></li><li><span class="paragraph">novos converters de BigDecimal, Double e Float, que levam em considera&ccedil;&atilde;o o Locale para converter
+  os valores (gra&ccedil;as ao Ot&aacute;vio Garcia).
+  Para us&aacute;-los basta adicionar ao web.xml:</span><div class="xml"><code class="xml"><span class="textag">&lt;context-param&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-name&gt;</span><span class="texnormal">br.com.caelum.vraptor.packages</span><span class="textag">&lt;/param-name&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-value&gt;</span><span class="texnormal">!!valor&nbsp;anterior!!,br.com.caelum.vraptor.converter.l10n</span><span class="textag">&lt;/param-value&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal"></span><span class="textag">&lt;/context-param&gt;</span></code></div></li></ul>
 		
 
 <h3 class="section">3.1.1</h3>

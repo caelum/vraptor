@@ -2,6 +2,7 @@ br.com.caelum.vraptor
 br.com.caelum.vraptor.config
 br.com.caelum.vraptor.converter
 br.com.caelum.vraptor.converter.jodatime
+br.com.caelum.vraptor.converter.l10n
 br.com.caelum.vraptor.core
 br.com.caelum.vraptor.deserialization
 br.com.caelum.vraptor.eval

@@ -96,9 +96,11 @@
 		
 									<li><a class="link_toc" href="../../documentacao/testando-componentes-e-controllers/">15. Testando componentes e controllers</a></li>
 		
-									<li><a class="link_toc" href="../../documentacao/changelog/">16. ChangeLog</a></li>
+									<li><a class="link_toc" href="../../documentacao/scala/">16. Scala</a></li>
 		
-									<li><a class="link_toc" href="../../documentacao/migrando-do-vraptor2-para-o-vraptor3/">17. Migrando do VRaptor2 para o VRaptor3</a></li>
+									<li><a class="link_toc" href="../../documentacao/changelog/">17. ChangeLog</a></li>
+		
+									<li><a class="link_toc" href="../../documentacao/migrando-do-vraptor2-para-o-vraptor3/">18. Migrando do VRaptor2 para o VRaptor3</a></li>
 		
                 </ol>
             </div><!-- submenu-->
@@ -166,9 +168,9 @@ e fazer qualquer conven&ccedil;&atilde;o que voc&ecirc; queira, n&atilde;o esque
 <h3 class="section">Atalhos no Result</h3>
 	    	<span class="paragraph">Alguns redirecionamentos s&atilde;o bastante utilizados, ent&atilde;o foram criados atalhos para eles.
 Os atalhos dispon&iacute;veis s&atilde;o:</span>
-	    	<ul class="list"><li><span class="paragraph">result.forwardTo("/some/uri") ==&gt; result.use(page()).forward("/some/uri");</span></li><li><span class="paragraph">result.forwardTo(ClientController.class).list() ==&gt; result.use(logic()).forwardTo(ClientController.class).list();</span></li><li><span class="paragraph">result.redirectTo(ClientController.class).list() ==&gt; result.use(logic()).redirectTo(ClientController.class).list();</span></li><li><span class="paragraph">result.of(ClientController.class).list() ==&gt; result.use(page()).of(ClientController.class).list();</span></li></ul>
+	    	<ul class="list"><li><span class="paragraph">result.forwardTo("/some/uri") 			==&gt; result.use(page()).forward("/some/uri");</span></li><li><span class="paragraph">result.redirectTo("/some/uri") 			==&gt;  result.use(page()).redirect("/some/uri)</span></li><li><span class="paragraph">result.permanentlyRedirectTo("/some/uri") ==&gt; result.use(status()).movedPermanentlyTo("/some/uri");</span></li><li><span class="paragraph">result.forwardTo(ClientController.class).list() ==&gt; result.use(logic()).forwardTo(ClientController.class).list();</span></li><li><span class="paragraph">result.redirectTo(ClientController.class).list() ==&gt; result.use(logic()).redirectTo(ClientController.class).list();</span></li><li><span class="paragraph">result.of(ClientController.class).list() 	==&gt; result.use(page()).of(ClientController.class).list();</span></li><li><span class="paragraph">result.permanentlyRedirectTo(Controller.class) ==&gt; use(status()).movedPermanentlyTo(Controller.class);</span></li><li><span class="paragraph">result.notFound()							==&gt;  use(status()).notFound()</span></li><li><span class="paragraph">result.nothing()							==&gt;  use(nothing());</span></li></ul>
 	    	<span class="paragraph">Al&eacute;m disso, se o redirecionamento &eacute; para um m&eacute;todo do mesmo controller, podemos usar:</span>
-	    	<ul class="list"><li><span class="paragraph">result.forwardTo(this).list() ==&gt; result.use(logic()).forwardTo(this.getClass()).list();</span></li><li><span class="paragraph">result.redirectTo(this).list() ==&gt; result.use(logic()).redirectTo(this.getClass()).list();</span></li><li><span class="paragraph">result.of(this).list() ==&gt; result.use(page()).of(this.getClass()).list();</span></li></ul>
+	    	<ul class="list"><li><span class="paragraph">result.forwardTo(this).list() 		==&gt; result.use(logic()).forwardTo(this.getClass()).list();</span></li><li><span class="paragraph">result.redirectTo(this).list() 		==&gt; result.use(logic()).redirectTo(this.getClass()).list();</span></li><li><span class="paragraph">result.of(this).list() 				==&gt; result.use(page()).of(this.getClass()).list();</span></li><li><span class="paragraph">result.permanentlyRedirectTo(this) 	==&gt; use(status()).movedPermanentlyTo(this.getClass());</span></li></ul>
 		
 
 <h3 class="section">Redirecionamento e forward</h3>
@@ -277,6 +279,10 @@ se voc&ecirc; quiser incluir um campo de tipo n&atilde;o primitivo voc&ecirc; pr
 &nbsp;&nbsp;&nbsp;&nbsp;"nome":&nbsp;"Joao",<br />
 &nbsp;&nbsp;&nbsp;&nbsp;"login":&nbsp;"joao"<br />
 }}</code></div>
+	    	<span class="paragraph">Ou ainda voc&ecirc; pode serializar recursivamente (cuidado com ciclos):</span>
+	    	<div class="java"><code class="java">
+<span class="java10">result.use</span><span class="java8">(</span><span class="java10">json</span><span class="java8">())</span><span class="java10">.from</span><span class="java8">(</span><span class="java10">usuario</span><span class="java8">)</span><span class="java10">.recursive</span><span class="java8">()</span><span class="java10">.serialize</span><span class="java8">()</span><span class="java10">;<br />
+result.use</span><span class="java8">(</span><span class="java10">xml</span><span class="java8">())</span><span class="java10">.from</span><span class="java8">(</span><span class="java10">usuario</span><span class="java8">)</span><span class="java10">.recursive</span><span class="java8">()</span><span class="java10">.serialize</span><span class="java8">()</span><span class="java10">;</span></code></div>
 	    	<span class="paragraph">A implementa&ccedil;&atilde;o padr&atilde;o &eacute; baseada no XStream, ent&atilde;o &eacute; poss&iacute;vel configurar a serializa&ccedil;&atilde;o
 via anota&ccedil;&otilde;es ou configura&ccedil;&otilde;es diretas ao XStream, bastando criar a classe:</span>
 	    	<div class="java"><code class="java">
@@ -361,6 +367,12 @@ result.use</span><span class="java8">(</span><span class="java10">json</span><sp
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br />
 &nbsp;&nbsp;&nbsp;&nbsp;}<br />
 ]}</code></div>
+	    	<span class="paragraph"><strong class="title">Serializando JSON sem elemento ra&iacute;z</strong>
+Se voc&ecirc; quiser serializar um objeto em JSON sem dar nomes a eles, pode fazer isso com o m&eacute;todo
+withoutRoot:</span>
+	    	<div class="java"><code class="java">
+<span class="java10">result.use</span><span class="java8">(</span><span class="java10">json</span><span class="java8">())</span><span class="java10">.from</span><span class="java8">(</span><span class="java10">carro</span><span class="java8">)</span><span class="java10">.serialize</span><span class="java8">()</span><span class="java10">; </span><span class="java3">//=&gt; {'carro': {'cor': 'azul'}}<br />
+</span><span class="java10">result.use</span><span class="java8">(</span><span class="java10">json</span><span class="java8">())</span><span class="java10">.withoutRoot</span><span class="java8">()</span><span class="java10">.from</span><span class="java8">(</span><span class="java10">carro</span><span class="java8">)</span><span class="java10">.serialize</span><span class="java8">()</span><span class="java10">; </span><span class="java3">//=&gt; {'cor': 'azul'}</span></code></div>
 		
 
 </div><!-- content -->

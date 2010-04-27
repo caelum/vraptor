@@ -38,7 +38,8 @@
 	redirectTo("uma/uri")			=>  use(page()).redirect("uma/uri)
 	notFound()						=>  use(status()).notFound()
 	nothing()						=>  use(nothing());
-	permanentlyRedirectTo(Controller.class) 	=> use(status()).movedPermanentlyTo(Controller.class);
+	permanentlyRedirectTo(Controller.class) 	
+			=> use(status()).movedPermanentlyTo(Controller.class);
 	permanentlyRedirectTo("uma/uri") 	=> use(status()).movedPermanentlyTo("uma/uri");
 	permanentlyRedirectTo(this)		=> use(status()).movedPermanentlyTo(this.getClass());
   [/code]

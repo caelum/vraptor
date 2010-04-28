@@ -35,6 +35,10 @@
 			<a href="http://wbotelhos.wordpress.com/2009/12/07/iniciando-com-vraptor-3/">Iniciando com VRaptor 3</a>
 		</dd>
 		
+		<dt>Thiago Nogueira</dt>
+		<dd>
+			<a href="http://tnogueira.com/blog/2010/04/28/carregando-combo-de-estado-e-municipios-utilizando-ajax-com-jquery-json-e-vraptor-3-1-2/">Carregando combo de Estado e Municípios utilizando Ajax com jQuery, JSON e VRaptor 3.1.2</a>
+		</dd>
 		<dt>bronx</dt>
 		<dd>
 			<a href="http://www.guj.com.br/posts/list/149517.java">Minha contribuição - Controle de acesso VRaptor 3</a>

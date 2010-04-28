@@ -64,14 +64,14 @@ public class JSR303Validator
             return Collections.emptyList(); // skip if the bean is null
         }
 
-        final Set<ConstraintViolation<Object>> violations = factory.getValidator().validate(bean);
+        final Set<ConstraintViolation<Object>> violations = getFactory().getValidator().validate(bean);
         logger.debug("there are {} violations at bean {}.", violations.size(), bean);
 
         List<Message> messages = new ArrayList<Message>();
         for (ConstraintViolation<Object> violation : violations) {
             // interpolate the message
             final Context ctx = new Context(violation.getConstraintDescriptor(), violation.getInvalidValue());
-            String msg = factory.getInterpolator().interpolate(violation.getMessageTemplate(), ctx, localization.getLocale());
+            String msg = getFactory().getInterpolator().interpolate(violation.getMessageTemplate(), ctx, localization.getLocale());
 
             messages.add(new ValidationMessage(msg, violation.getPropertyPath().toString()));
             logger.debug("added message {} to validation of bean {}", msg, violation.getRootBean());

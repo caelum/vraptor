@@ -9,7 +9,7 @@ In Java, this is accomplished by passing components to your controller's constru
 Suppose your clients controller needs to access a clients Dao. Specify that need in your code:
 
 [java]
-@Component
+@Resource
 public class ClientController {
 	private final ClientDao dao;
 	
@@ -64,7 +64,7 @@ public class SessionFactoryCreator implements ComponentFactory<SessionFactory> {
 	
 	@PostConstruct
 	public void create() {
-		factory = new AnnotationConfiguration().configure();
+		factory = new AnnotationConfiguration().configure().buildSessionFactory();
 	}
 	
 	public SessionFactory getInstance() {

@@ -11,7 +11,7 @@ Imagine que seu controlador de clientes necessita acessar um Dao de clientes. Se
 essa necessidade:
 
 [java]
-@Component
+@Resource
 public class ClienteController {
 	private final ClienteDao dao;
 	
@@ -62,7 +62,7 @@ public class SessionFactoryCreator implements ComponentFactory<SessionFactory> {
 	
 	@PostConstruct
 	public void create() {
-		factory = new AnnotationConfiguration().configure();
+		factory = new AnnotationConfiguration().configure().buildSessionFactory();
 	}
 	
 	public SessionFactory getInstance() {

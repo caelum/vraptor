@@ -28,11 +28,11 @@
 		
 		<dt>Washington Botelho</dt>
 		<dd>
-			<a href="http://wbotelhos.wordpress.com/2010/04/23/controle-de-permissao-com-vraptor-3/"> Controle de Permissão com VRaptor 3</a>
-			<a href="http://wbotelhos.wordpress.com/2010/04/07/controle-de-login-com-vraptor-3/">Controle de Login com VRaptor 3</a><br/>
-			<a href="http://wbotelhos.wordpress.com/2010/02/23/jpa-e-vraptor-3/">JPA e VRaptor 3</a><br/>
-			<a href="http://wbotelhos.wordpress.com/2010/01/20/manipulando-dados-json-via-ajax-com-vraptor-3/">Manipulando Dados JSon Via Ajax Com VRaptor 3</a><br/>
-			<a href="http://wbotelhos.wordpress.com/2009/12/07/iniciando-com-vraptor-3/">Iniciando com VRaptor 3</a>
+			<a href="http://wbotelhos.com/2010/04/23/controle-de-permissao-com-vraptor-3/"> Controle de Permissão com VRaptor 3</a>
+			<a href="http://wbotelhos.com/2010/04/07/controle-de-login-com-vraptor-3/">Controle de Login com VRaptor 3</a><br/>
+			<a href="http://wbotelhos.com/2010/02/23/jpa-e-vraptor-3/">JPA e VRaptor 3</a><br/>
+			<a href="http://wbotelhos.com/2010/01/20/manipulando-dados-json-via-ajax-com-vraptor-3/">Manipulando Dados JSon Via Ajax Com VRaptor 3</a><br/>
+			<a href="http://wbotelhos.com/2009/12/07/iniciando-com-vraptor-3/">Iniciando com VRaptor 3</a>
 		</dd>
 		
 		<dt>Thiago Nogueira</dt>

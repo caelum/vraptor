@@ -114,7 +114,7 @@ utilizar dessa id&eacute;ia para juntar seus componentes internos.</span><span c
 mas tudo o que deseja acessar deve ser fornecido para voc&ecirc;.</span><span class="paragraph">Isso se traduz, por exemplo, na passagem de componentes atrav&eacute;s do construtor de seus controladores.
 Imagine que seu controlador de clientes necessita acessar um Dao de clientes. Sendo assim, especifique claramente
 essa necessidade:</span><div class="java"><code class="java">
-<span class="java16">@Component<br />
+<span class="java16">@Resource<br />
 </span><span class="java4">public class </span><span class="java10">ClienteController </span><span class="java8">{<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java4">private final </span><span class="java10">ClienteDao dao;<br />
 &nbsp;&nbsp;&nbsp; <br />
@@ -154,7 +154,7 @@ e utiliza essa configura&ccedil;&atilde;o para fornecer sess&otilde;es para noss
 &nbsp;&nbsp;&nbsp; <br />
 &nbsp;&nbsp;&nbsp; </span><span class="java16">@PostConstruct<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">create</span><span class="java8">() {<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">factory = </span><span class="java4">new </span><span class="java10">AnnotationConfiguration</span><span class="java8">()</span><span class="java10">.configure</span><span class="java8">()</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">factory = </span><span class="java4">new </span><span class="java10">AnnotationConfiguration</span><span class="java8">()</span><span class="java10">.configure</span><span class="java8">()</span><span class="java10">.buildSessionFactory</span><span class="java8">()</span><span class="java10">;<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
 &nbsp;&nbsp;&nbsp; <br />
 &nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">SessionFactory getInstance</span><span class="java8">() {<br />

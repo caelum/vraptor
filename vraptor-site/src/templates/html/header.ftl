@@ -15,9 +15,9 @@
 		<link href="../../documentacao/includes/css/xml2html.css" rel="stylesheet" type="text/css" media="screen" />
 		<link href="../../documentacao/includes/css/style.css" rel="stylesheet" type="text/css" media="screen" />
 	
-	<meta name="description" content="???meta.description???"/>
+	<meta name="description" content="VRaptor 3 - a Java web framework focused on fast development"/>
 	<meta name="keywords" content="sites, web, desenvolvimento, development, java, opensource"/>
-	<title>V|Raptor - ???title.slogan???</title>
+	<title>V|Raptor - High productivity in Java web development</title>
 	<link href="../../screen.css" rel="stylesheet" type="text/css" media="screen" />
     <link href="../../menu.css" rel="stylesheet" type="text/css" media="screen" />
     <!--[if lt IE 7]>
@@ -38,12 +38,12 @@
     </div><!-- header wrap-->
     
     <div id="menuWrap">
-    	<ul id="???menu.id???">
-        	<li><a id="???home.id???" href="../../???home.link???"><span>home</span></a></li>
-        	<li><a id="???download.id???" href="../../???download.link???"><span>download</span></a></li>
-        	<li><a id="???docs.id???" href="../../???documentacao.link???"><span>???documentacao???</span></a></li>
-        	<li><a id="???beneficios.id???" href="../../???beneficios.link???"><span>???beneficios???</span></a></li>
-        	<li><a id="???suporte.id???" href="../../???suporte.link???"><span>???suporte???</span></a></li>
-        	<li><a id="???vraptor2.id???" href="../../???vraptor2.link???"><span>vraptor2</span></a></li>
+    	<ul id="menuElementsEn">
+        	<li><a id="homeBtnEn" href="../../en/"><span>home</span></a></li>
+        	<li><a id="downloadBtnEn" href="../../en/download.jsp"><span>download</span></a></li>
+        	<li><a id="documentacaoBtnEn" href="../../documentation/"><span>Documentation</span></a></li>
+        	<li><a id="beneficiosBtnEn" href="../../benefits.jsp"><span>Benefits</span></a></li>
+        	<li><a id="suporteBtnEn" href="../../support.jsp"><span>Support</span></a></li>
+        	<li><a id="vraptor2BtnEn" href="../../en/vraptor2.jsp"><span>vraptor2</span></a></li>
         </ul><!-- menuElements-->
     </div><!-- menuWrap-->

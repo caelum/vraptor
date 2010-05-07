@@ -33,47 +33,23 @@ import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
  *
  * @author Pedro Matiello <pmatiello@gmail.com>
  * @author Alberto Souza <alberto.souza@caelum.com.br>
+ * @author Sérgio Lopes <sergio.lopes@caelum.com.br>
  */
 @ApplicationScoped
 @Component
 public class ScalaTypeNameExtractor extends DefaultTypeNameExtractor {
 
+    @Override
 	public String nameFor(Type generic) {
 		if (generic instanceof ParameterizedType) {
 			ParameterizedType type = (ParameterizedType) generic;
 			Class<?> raw = (Class<?>) type.getRawType();
-			if (Collection.class.isAssignableFrom(raw)) {
-				return nameFor(type.getActualTypeArguments()[0]) + "List";
-			} else if (scala.collection.Seq.class.isAssignableFrom(raw)) {
+			if (scala.collection.Seq.class.isAssignableFrom(raw)) {
 				return nameFor(type.getActualTypeArguments()[0]) + "List";
 			}
-			return nameFor(raw);
 		}
-
-		if (generic instanceof WildcardType) {
-			WildcardType wild = (WildcardType) generic;
-			if ((wild.getLowerBounds().length != 0)) {
-				return nameFor(wild.getLowerBounds()[0]);
-			} else {
-				return nameFor(wild.getUpperBounds()[0]);
-			}
-		}
-
-		if (generic instanceof TypeVariable<?>) {
-			TypeVariable<?> variable = (TypeVariable<?>) generic;
-			return StringUtils.lowercaseFirst(variable.getName());
-		}
-
-		Class<?> raw = (Class<?>) generic;
-
-
-		if (raw.isArray()) {
-			return nameFor(raw.getComponentType()) + "List";
-		}
-
-		String name = raw.getSimpleName();
-
-		return StringUtils.lowercaseFirst(name);
+		
+    	return super.nameFor(generic);        
 	}
 
 }

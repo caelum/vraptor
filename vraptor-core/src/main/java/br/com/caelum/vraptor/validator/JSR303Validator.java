@@ -18,6 +18,7 @@ package br.com.caelum.vraptor.validator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
@@ -62,11 +63,13 @@ public class JSR303Validator
         final Set<ConstraintViolation<Object>> violations = factory.getValidator().validate(bean);
         logger.debug("there are {} violations at bean {}.", violations.size(), bean);
 
+        Locale locale = localization.getLocale() == null ? Locale.getDefault() : localization.getLocale();
+
         List<Message> messages = new ArrayList<Message>();
         for (ConstraintViolation<Object> violation : violations) {
             // interpolate the message
             final Context ctx = new Context(violation.getConstraintDescriptor(), violation.getInvalidValue());
-            String msg = factory.getInterpolator().interpolate(violation.getMessageTemplate(), ctx, localization.getLocale());
+            String msg = factory.getInterpolator().interpolate(violation.getMessageTemplate(), ctx, locale);
 
             messages.add(new ValidationMessage(msg, violation.getPropertyPath().toString()));
             logger.debug("added message {} to validation of bean {}", msg, violation.getRootBean());

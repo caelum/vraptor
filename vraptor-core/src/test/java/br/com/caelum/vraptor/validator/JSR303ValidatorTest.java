@@ -1,5 +1,6 @@
 package br.com.caelum.vraptor.validator;
 
+import org.jmock.Expectations;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,10 +25,16 @@ public class JSR303ValidatorTest {
     public void setup() {
         this.mockery = new VRaptorMockery();
 
-        Localization localization = mockery.localization();
+        final Localization localization = mockery.localization();
 
         this.jsr303Validator = new JSR303Validator(localization);
         this.hibernateValidator3 = new HibernateValidator3(localization);
+
+        mockery.checking(new Expectations() {
+            {
+                allowing(localization).getLocale();
+            }
+        });
     }
 
     @Test

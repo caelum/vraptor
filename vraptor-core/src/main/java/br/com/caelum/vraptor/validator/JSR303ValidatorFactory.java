@@ -15,6 +15,7 @@
  */
 package br.com.caelum.vraptor.validator;
 
+import javax.validation.Configuration;
 import javax.validation.MessageInterpolator;
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -38,7 +39,9 @@ public class JSR303ValidatorFactory {
     private final MessageInterpolator interpolator;
 
     public JSR303ValidatorFactory() {
-        final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        final Configuration<?> cfg = Validation.byDefaultProvider().configure();
+        ValidatorFactory factory = cfg.traversableResolver(new JSR303TraversableResolver()).buildValidatorFactory();
+
         this.validator = factory.getValidator();
         this.interpolator = factory.getMessageInterpolator();
 

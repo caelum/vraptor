@@ -51,13 +51,12 @@ public class JSR303ValidatorTest {
     /**
      * Customer for using in bean validator tests.
      */
-    class CustomerJSR303 {
+    public class CustomerJSR303 {
 
         @javax.validation.constraints.NotNull
         public Integer id;
 
         @javax.validation.constraints.NotNull
-        @javax.validation.constraints.Size(max = 10)
         public String name;
 
         public CustomerJSR303(Integer id, String name) {
@@ -69,12 +68,12 @@ public class JSR303ValidatorTest {
     /**
      * Customer for using in hibernate validator tests.
      */
-    class CustomerHibernate3 {
+    public class CustomerHibernate3 {
+
         @org.hibernate.validator.NotNull
         public Integer id;
 
         @org.hibernate.validator.NotNull
-        @org.hibernate.validator.Size(max = 10)
         public String name;
 
         public CustomerHibernate3(Integer id, String name) {

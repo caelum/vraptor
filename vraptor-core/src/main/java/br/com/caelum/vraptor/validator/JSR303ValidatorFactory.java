@@ -25,8 +25,8 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Bring up JSR303 Bean Validation factory. This class builds the default validator factory once when application
- * starts.
- *
+ * starts. In the future this components needs to be application scoped (see issue 213).
+ * 
  * @author Otávio Scherer Garcia
  * @since vraptor3.1.2
  */

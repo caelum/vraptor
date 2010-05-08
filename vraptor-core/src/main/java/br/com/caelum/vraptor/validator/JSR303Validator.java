@@ -33,7 +33,7 @@ import br.com.caelum.vraptor.ioc.RequestScoped;
 /**
  * Implements the {@link BeanValidator} using the JSR303 - BeanValidation. This implementation will be enable by vraptor
  * when the hibernate validator classes is locale in classpath.
- *
+ * 
  * @author Otávio Scherer Garcia
  * @since vraptor3.1.2
  */
@@ -43,20 +43,15 @@ public class JSR303Validator
 
     private static final Logger logger = LoggerFactory.getLogger(JSR303Validator.class);
 
-    private static JSR303ValidatorFactory factory;
+    // TODO at this time this field is always initialized. see issue 213
+    // we need to write an application scoped component
+    private static final JSR303ValidatorFactory factory = new JSR303ValidatorFactory();
 
-	private final Localization localization;
+    private final Localization localization;
 
     public JSR303Validator(Localization localization) {
         this.localization = localization;
     }
-
-    public static JSR303ValidatorFactory getFactory() {
-    	if (factory == null) {
-			factory = new JSR303ValidatorFactory();
-		}
-		return factory;
-	}
 
     public List<Message> validate(Object bean) {
         if (bean == null) {
@@ -64,14 +59,14 @@ public class JSR303Validator
             return Collections.emptyList(); // skip if the bean is null
         }
 
-        final Set<ConstraintViolation<Object>> violations = getFactory().getValidator().validate(bean);
+        final Set<ConstraintViolation<Object>> violations = factory.getValidator().validate(bean);
         logger.debug("there are {} violations at bean {}.", violations.size(), bean);
 
         List<Message> messages = new ArrayList<Message>();
         for (ConstraintViolation<Object> violation : violations) {
             // interpolate the message
             final Context ctx = new Context(violation.getConstraintDescriptor(), violation.getInvalidValue());
-            String msg = getFactory().getInterpolator().interpolate(violation.getMessageTemplate(), ctx, localization.getLocale());
+            String msg = factory.getInterpolator().interpolate(violation.getMessageTemplate(), ctx, localization.getLocale());
 
             messages.add(new ValidationMessage(msg, violation.getPropertyPath().toString()));
             logger.debug("added message {} to validation of bean {}", msg, violation.getRootBean());
@@ -83,7 +78,7 @@ public class JSR303Validator
     /**
      * Create a personalized implementation for {@link javax.validation.MessageInterpolator.Context}. This class is need
      * to interpolate the constraint violation message with localized messages.
-     *
+     * 
      * @author Otávio Scherer Garcia
      * @version $Revision$
      */

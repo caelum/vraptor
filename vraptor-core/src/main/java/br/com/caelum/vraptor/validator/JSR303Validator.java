@@ -35,7 +35,7 @@ import br.com.caelum.vraptor.ioc.RequestScoped;
  * when the hibernate validator classes is locale in classpath.
  * 
  * @author Otávio Scherer Garcia
- * @since vraptor3.1.2
+ * @since 3.1.2
  */
 @RequestScoped
 public class JSR303Validator

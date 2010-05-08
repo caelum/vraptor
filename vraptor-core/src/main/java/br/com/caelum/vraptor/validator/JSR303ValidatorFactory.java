@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
  * starts. In the future this components needs to be application scoped (see issue 213).
  * 
  * @author Otávio Scherer Garcia
- * @since vraptor3.1.2
+ * @since 3.1.2
  */
 public class JSR303ValidatorFactory {
 

@@ -113,9 +113,11 @@ public class RouteBuilder {
 
 		@SuppressWarnings("unchecked")
 		private String regexFor(Class<?> type) {
-			if (Arrays.asList(Integer.class, Long.class, int.class, long.class, BigInteger.class, char.class,
-					Character.class, Short.class, short.class).contains(type)) {
+			if (Arrays.asList(Integer.class, Long.class, int.class, long.class, BigInteger.class,
+					Short.class, short.class).contains(type)) {
 				return "-?\\d+";
+			} else if (Arrays.asList(char.class, Character.class).contains(type)){
+				return ".";
 			} else if (Arrays.asList(Double.class, BigDecimal.class, double.class, Float.class, float.class).contains(
 					type)) {
 				return "-?\\d*\\.?\\d+";

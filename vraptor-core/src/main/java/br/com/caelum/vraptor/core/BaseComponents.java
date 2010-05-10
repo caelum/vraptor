@@ -126,11 +126,13 @@ import br.com.caelum.vraptor.serialization.RepresentationResult;
 import br.com.caelum.vraptor.serialization.XMLSerialization;
 import br.com.caelum.vraptor.serialization.xstream.XStreamJSONSerialization;
 import br.com.caelum.vraptor.serialization.xstream.XStreamXMLSerialization;
+import br.com.caelum.vraptor.validator.BeanValidator;
 import br.com.caelum.vraptor.validator.DefaultValidator;
 import br.com.caelum.vraptor.validator.HibernateValidator3;
 import br.com.caelum.vraptor.validator.JSR303Validator;
 import br.com.caelum.vraptor.validator.JSR303ValidatorFactory;
 import br.com.caelum.vraptor.validator.MessageInterpolatorFactory;
+import br.com.caelum.vraptor.validator.NullBeanValidator;
 import br.com.caelum.vraptor.validator.Outjector;
 import br.com.caelum.vraptor.validator.ReplicatorOutjector;
 import br.com.caelum.vraptor.validator.ValidatorFactoryCreator;
@@ -299,18 +301,24 @@ public class BaseComponents {
     }
 
     public static Map<Class<?>, Class<?>> getRequestScoped() {
-    	registerIfClassPresent(REQUEST_COMPONENTS, "javax.validation.Validation",			JSR303Validator.class);
-    	registerIfClassPresent(REQUEST_COMPONENTS, "org.hibernate.validator.ClassValidator",HibernateValidator3.class);
+    	if(!registerIfClassPresent(REQUEST_COMPONENTS, "javax.validation.Validation",			JSR303Validator.class) &&
+    	   !registerIfClassPresent(REQUEST_COMPONENTS, "org.hibernate.validator.ClassValidator",HibernateValidator3.class)) {
+    		REQUEST_COMPONENTS.put(BeanValidator.class, NullBeanValidator.class);
+    	}
         return Collections.unmodifiableMap(REQUEST_COMPONENTS);
     }
 
-	private static void registerIfClassPresent(Map<Class<?>, Class<?>> components, String className, Class<?>... types) {
+	private static boolean registerIfClassPresent(Map<Class<?>, Class<?>> components, String className, Class<?>... types) {
 		try {
-    		Class.forName(className);
-    		for (Class<?> type : types) {
-    			components.put(type, type);
+			Class.forName(className);
+			for (Class<?> type : types) {
+				components.put(type, type);
 			}
-    	} catch (ClassNotFoundException e) { /*ok, don't register*/ }
+			return true;
+		} catch (ClassNotFoundException e) {
+			/* ok, don't register */
+			return false;
+		}
 	}
 
 	private static void registerIfClassPresent(List<Class<? extends Converter<?>>> components, String className, Class<? extends Converter<?>>... types) {

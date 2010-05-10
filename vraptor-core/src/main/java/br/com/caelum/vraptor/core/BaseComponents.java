@@ -122,13 +122,11 @@ import br.com.caelum.vraptor.serialization.RepresentationResult;
 import br.com.caelum.vraptor.serialization.XMLSerialization;
 import br.com.caelum.vraptor.serialization.xstream.XStreamJSONSerialization;
 import br.com.caelum.vraptor.serialization.xstream.XStreamXMLSerialization;
-import br.com.caelum.vraptor.validator.BeanValidator;
 import br.com.caelum.vraptor.validator.DefaultValidator;
 import br.com.caelum.vraptor.validator.HibernateValidator3;
 import br.com.caelum.vraptor.validator.JSR303Validator;
 import br.com.caelum.vraptor.validator.JSR303ValidatorFactory;
 import br.com.caelum.vraptor.validator.MessageInterpolatorFactory;
-import br.com.caelum.vraptor.validator.NullBeanValidator;
 import br.com.caelum.vraptor.validator.Outjector;
 import br.com.caelum.vraptor.validator.ReplicatorOutjector;
 import br.com.caelum.vraptor.validator.ValidatorFactoryCreator;
@@ -180,10 +178,7 @@ public class BaseComponents {
             RoutesParser.class, 			PathAnnotationRoutesParser.class,
             Routes.class,					DefaultRoutes.class,
             RestDefaults.class,				DefaultRestDefaults.class,
-            ProxyInitializer.class,			getProxyInitializerImpl(),
-            JSR303ValidatorFactory.class,	JSR303ValidatorFactory.class,
-            ValidatorFactoryCreator.class,	ValidatorFactoryCreator.class,
-            MessageInterpolatorFactory.class,MessageInterpolatorFactory.class
+            ProxyInitializer.class,			getProxyInitializerImpl()
     );
 
     private final static Map<Class<?>, Class<?>> CACHED_COMPONENTS = classMap(
@@ -226,8 +221,7 @@ public class BaseComponents {
             RepresentationResult.class,						DefaultRepresentationResult.class,
             FormatResolver.class,							DefaultFormatResolver.class,
             Configuration.class,							ApplicationConfiguration.class,
-            RestHeadersHandler.class,						DefaultRestHeadersHandler.class,
-            BeanValidator.class,            				getBeanValidatorImpl()
+            RestHeadersHandler.class,						DefaultRestHeadersHandler.class
     );
 
     @SuppressWarnings("unchecked")
@@ -290,37 +284,33 @@ public class BaseComponents {
 		}
 	}
 
-    private static Class<? extends BeanValidator> getBeanValidatorImpl() {
-        // try to load Bean Validator engine
-        // if Bean Validator not found, try to load hibernate validator 3.x
-        // and both is not found, return a null-implementation
-        try {
-            Class.forName("javax.validation.Validation");
-            return JSR303Validator.class;
-        } catch (ClassNotFoundException e0) {
-            try {
-                Class.forName("org.hibernate.validator.ClassValidator");
-                return HibernateValidator3.class;
-            } catch (ClassNotFoundException e1) {
-                return NullBeanValidator.class;
-            }
-        }
-    }
-
 	public static Map<Class<?>, Class<?>> getCachedComponents() {
-		return CACHED_COMPONENTS;
+		return Collections.unmodifiableMap(CACHED_COMPONENTS);
 	}
 
     public static Map<Class<?>, Class<?>> getApplicationScoped() {
-        return APPLICATION_COMPONENTS;
+    	registerIfClassPresent(APPLICATION_COMPONENTS, "javax.validation.Validation",
+    			JSR303ValidatorFactory.class, ValidatorFactoryCreator.class,MessageInterpolatorFactory.class);
+    	return Collections.unmodifiableMap(APPLICATION_COMPONENTS);
     }
 
     public static Map<Class<?>, Class<?>> getRequestScoped() {
-        return REQUEST_COMPONENTS;
+    	registerIfClassPresent(REQUEST_COMPONENTS, "javax.validation.Validation",			JSR303Validator.class);
+    	registerIfClassPresent(REQUEST_COMPONENTS, "org.hibernate.validator.ClassValidator",HibernateValidator3.class);
+        return Collections.unmodifiableMap(REQUEST_COMPONENTS);
     }
 
+	private static void registerIfClassPresent(Map<Class<?>, Class<?>> components, String className, Class<?>... types) {
+		try {
+    		Class.forName(className);
+    		for (Class<?> type : types) {
+    			components.put(type, type);
+			}
+    	} catch (ClassNotFoundException e) { /*ok, don't register*/ }
+	}
+
     public static Map<Class<?>, Class<?>> getPrototypeScoped() {
-		return PROTOTYPE_COMPONENTS;
+		return Collections.unmodifiableMap(PROTOTYPE_COMPONENTS);
 	}
 
     public static Class<? extends Converter<?>>[] getBundledConverters() {
@@ -346,7 +336,7 @@ public class BaseComponents {
             }
             map.put(key, value);
         }
-        return Collections.unmodifiableMap(map);
+        return map;
     }
 
 

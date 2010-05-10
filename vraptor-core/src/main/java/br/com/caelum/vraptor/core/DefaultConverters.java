@@ -25,8 +25,6 @@ import org.slf4j.LoggerFactory;
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.VRaptorException;
-import br.com.caelum.vraptor.converter.jodatime.LocalDateConverter;
-import br.com.caelum.vraptor.converter.jodatime.LocalTimeConverter;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Container;
 
@@ -43,14 +41,6 @@ public final class DefaultConverters implements Converters {
             logger.debug("bundled converter to be registered: " + converterType);
             register(converterType);
         }
-
-        try {
-			Class.forName("org.joda.time.LocalDate");
-			register(LocalDateConverter.class);
-			register(LocalTimeConverter.class);
-		} catch (ClassNotFoundException e) {
-			//OK, only register jodatime converters if jodatime is imported
-		}
     }
 
     public void register(Class<? extends Converter<?>> converterClass) {

@@ -18,10 +18,12 @@
 package br.com.caelum.vraptor.core;
 
 import java.lang.annotation.Annotation;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import br.com.caelum.vraptor.Convert;
@@ -52,6 +54,8 @@ import br.com.caelum.vraptor.converter.PrimitiveIntConverter;
 import br.com.caelum.vraptor.converter.PrimitiveLongConverter;
 import br.com.caelum.vraptor.converter.PrimitiveShortConverter;
 import br.com.caelum.vraptor.converter.ShortConverter;
+import br.com.caelum.vraptor.converter.jodatime.LocalDateConverter;
+import br.com.caelum.vraptor.converter.jodatime.LocalTimeConverter;
 import br.com.caelum.vraptor.deserialization.DefaultDeserializers;
 import br.com.caelum.vraptor.deserialization.Deserializer;
 import br.com.caelum.vraptor.deserialization.Deserializers;
@@ -225,7 +229,7 @@ public class BaseComponents {
     );
 
     @SuppressWarnings("unchecked")
-	private static final Class<? extends Converter<?>>[] BUNDLED_CONVERTERS = new Class[] {
+	private static final List<Class<? extends Converter<?>>> BUNDLED_CONVERTERS = new ArrayList(Arrays.asList(
     		BigDecimalConverter.class,
     		BigIntegerConverter.class,
     		BooleanConverter.class,
@@ -247,7 +251,7 @@ public class BaseComponents {
 			PrimitiveLongConverter.class,
 			PrimitiveShortConverter.class,
 			ShortConverter.class,
-			UploadedFileConverter.class };
+			UploadedFileConverter.class));
 
 
     @SuppressWarnings("unchecked")
@@ -309,11 +313,22 @@ public class BaseComponents {
     	} catch (ClassNotFoundException e) { /*ok, don't register*/ }
 	}
 
+	private static void registerIfClassPresent(List<Class<? extends Converter<?>>> components, String className, Class<? extends Converter<?>>... types) {
+		try {
+    		Class.forName(className);
+    		for (Class<? extends Converter<?>> type : types) {
+    			components.add(type);
+			}
+    	} catch (ClassNotFoundException e) { /*ok, don't register*/ }
+	}
+
     public static Map<Class<?>, Class<?>> getPrototypeScoped() {
 		return Collections.unmodifiableMap(PROTOTYPE_COMPONENTS);
 	}
 
-    public static Class<? extends Converter<?>>[] getBundledConverters() {
+    @SuppressWarnings("unchecked")
+	public static List<Class<? extends Converter<?>>> getBundledConverters() {
+    	registerIfClassPresent(BUNDLED_CONVERTERS, "org.joda.time.LocalDate", LocalDateConverter.class, LocalTimeConverter.class);
         return BUNDLED_CONVERTERS;
     }
 

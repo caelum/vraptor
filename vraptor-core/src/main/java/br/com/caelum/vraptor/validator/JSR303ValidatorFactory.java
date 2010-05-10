@@ -15,9 +15,7 @@
  */
 package br.com.caelum.vraptor.validator;
 
-import javax.validation.Configuration;
-import javax.validation.MessageInterpolator;
-import javax.validation.Validation;
+import javax.annotation.PostConstruct;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
@@ -26,39 +24,37 @@ import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Component;
+import br.com.caelum.vraptor.ioc.ComponentFactory;
 
 /**
  * Bring up JSR303 Bean Validation factory. This class builds the default validator factory once when application
- * starts. In the future this components needs to be application scoped (see issue 213).
+ * starts.
  *
  * @author Otávio Scherer Garcia
  * @since 3.1.2
  */
 @ApplicationScoped
 @Component
-public class JSR303ValidatorFactory {
+public class JSR303ValidatorFactory implements ComponentFactory<Validator> {
 
     private static final Logger logger = LoggerFactory.getLogger(JSR303ValidatorFactory.class);
 
-    private final Validator validator;
-    private final MessageInterpolator interpolator;
+	private final ValidatorFactory factory;
 
-    public JSR303ValidatorFactory() {
-        final Configuration<?> cfg = Validation.byDefaultProvider().configure();
-        ValidatorFactory factory = cfg.traversableResolver(new JSR303TraversableResolver()).buildValidatorFactory();
+	private Validator validator;
 
-        this.validator = factory.getValidator();
-        this.interpolator = factory.getMessageInterpolator();
-
-        logger.debug("Initializing JSR303 factory for bean validation");
+    public JSR303ValidatorFactory(ValidatorFactory factory) {
+        this.factory = factory;
     }
 
-    public Validator getValidator() {
-        return validator;
+    @PostConstruct
+    public void createValidator() {
+    	this.validator = factory.getValidator();
+    	logger.debug("Initializing JSR303 Validator");
     }
 
-    public MessageInterpolator getInterpolator() {
-        return interpolator;
-    }
+	public Validator getInstance() {
+		return validator;
+	}
 
 }

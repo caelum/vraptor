@@ -23,6 +23,7 @@ import java.util.Set;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.MessageInterpolator;
+import javax.validation.Validator;
 import javax.validation.metadata.ConstraintDescriptor;
 
 import org.slf4j.Logger;
@@ -46,13 +47,16 @@ public class JSR303Validator
 
     private static final Logger logger = LoggerFactory.getLogger(JSR303Validator.class);
 
-    private final JSR303ValidatorFactory factory;
-
     private final Localization localization;
 
-    public JSR303Validator(Localization localization, JSR303ValidatorFactory factory) {
+	private final Validator validator;
+
+	private final MessageInterpolator interpolator;
+
+    public JSR303Validator(Localization localization, Validator validator, MessageInterpolator interpolator) {
         this.localization = localization;
-        this.factory = factory;
+		this.validator = validator;
+		this.interpolator = interpolator;
     }
 
     public List<Message> validate(Object bean) {
@@ -61,7 +65,7 @@ public class JSR303Validator
             return Collections.emptyList(); // skip if the bean is null
         }
 
-        final Set<ConstraintViolation<Object>> violations = factory.getValidator().validate(bean);
+        final Set<ConstraintViolation<Object>> violations = validator.validate(bean);
         logger.debug("there are {} violations at bean {}.", violations.size(), bean);
 
         Locale locale = localization.getLocale() == null ? Locale.getDefault() : localization.getLocale();
@@ -70,7 +74,7 @@ public class JSR303Validator
         for (ConstraintViolation<Object> violation : violations) {
             // interpolate the message
             final Context ctx = new Context(violation.getConstraintDescriptor(), violation.getInvalidValue());
-            String msg = factory.getInterpolator().interpolate(violation.getMessageTemplate(), ctx, locale);
+            String msg = interpolator.interpolate(violation.getMessageTemplate(), ctx, locale);
 
             messages.add(new ValidationMessage(msg, violation.getPropertyPath().toString()));
             logger.debug("added message {} to validation of bean {}", msg, violation.getRootBean());

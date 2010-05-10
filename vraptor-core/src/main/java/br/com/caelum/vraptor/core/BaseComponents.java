@@ -126,9 +126,12 @@ import br.com.caelum.vraptor.validator.BeanValidator;
 import br.com.caelum.vraptor.validator.DefaultValidator;
 import br.com.caelum.vraptor.validator.HibernateValidator3;
 import br.com.caelum.vraptor.validator.JSR303Validator;
+import br.com.caelum.vraptor.validator.JSR303ValidatorFactory;
+import br.com.caelum.vraptor.validator.MessageInterpolatorFactory;
 import br.com.caelum.vraptor.validator.NullBeanValidator;
 import br.com.caelum.vraptor.validator.Outjector;
 import br.com.caelum.vraptor.validator.ReplicatorOutjector;
+import br.com.caelum.vraptor.validator.ValidatorFactoryCreator;
 import br.com.caelum.vraptor.view.AcceptHeaderToFormat;
 import br.com.caelum.vraptor.view.DefaultAcceptHeaderToFormat;
 import br.com.caelum.vraptor.view.DefaultHttpResult;
@@ -177,7 +180,10 @@ public class BaseComponents {
             RoutesParser.class, 			PathAnnotationRoutesParser.class,
             Routes.class,					DefaultRoutes.class,
             RestDefaults.class,				DefaultRestDefaults.class,
-            ProxyInitializer.class,			getProxyInitializerImpl()
+            ProxyInitializer.class,			getProxyInitializerImpl(),
+            JSR303ValidatorFactory.class,	JSR303ValidatorFactory.class,
+            ValidatorFactoryCreator.class,	ValidatorFactoryCreator.class,
+            MessageInterpolatorFactory.class,MessageInterpolatorFactory.class
     );
 
     private final static Map<Class<?>, Class<?>> CACHED_COMPONENTS = classMap(

@@ -17,7 +17,6 @@ import br.com.caelum.vraptor.core.Localization;
 public class JSR303ValidatorTest {
 
 	private @Mock Localization localization;
-	private @Mock JSR303ValidatorFactory factory;
 
     private JSR303Validator jsr303Validator;
 
@@ -25,7 +24,16 @@ public class JSR303ValidatorTest {
     public void setup() {
     	MockitoAnnotations.initMocks(this);
 
-        this.jsr303Validator = new JSR303Validator(localization, factory);
+    	ValidatorFactoryCreator creator = new ValidatorFactoryCreator();
+    	creator.buildFactory();
+
+    	JSR303ValidatorFactory validatorFactory = new JSR303ValidatorFactory(creator.getInstance());
+    	validatorFactory.createValidator();
+
+    	MessageInterpolatorFactory interpolatorFactory = new MessageInterpolatorFactory(creator.getInstance());
+    	interpolatorFactory.createInterpolator();
+
+        this.jsr303Validator = new JSR303Validator(localization, validatorFactory.getInstance(), interpolatorFactory.getInstance());
     }
 
     @Test

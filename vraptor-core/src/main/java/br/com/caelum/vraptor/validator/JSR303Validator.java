@@ -29,29 +29,30 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.core.Localization;
+import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 
 /**
  * Implements the {@link BeanValidator} using the JSR303 - BeanValidation. This implementation will be enable by vraptor
  * when the hibernate validator classes is locale in classpath.
- * 
+ *
  * @author Otávio Scherer Garcia
  * @since 3.1.2
  */
 @RequestScoped
+@Component
 public class JSR303Validator
     implements BeanValidator {
 
     private static final Logger logger = LoggerFactory.getLogger(JSR303Validator.class);
 
-    // TODO at this time this field is always initialized. see issue 213
-    // we need to write an application scoped component
-    private static final JSR303ValidatorFactory factory = new JSR303ValidatorFactory();
+    private final JSR303ValidatorFactory factory;
 
     private final Localization localization;
 
-    public JSR303Validator(Localization localization) {
+    public JSR303Validator(Localization localization, JSR303ValidatorFactory factory) {
         this.localization = localization;
+        this.factory = factory;
     }
 
     public List<Message> validate(Object bean) {
@@ -81,7 +82,7 @@ public class JSR303Validator
     /**
      * Create a personalized implementation for {@link javax.validation.MessageInterpolator.Context}. This class is need
      * to interpolate the constraint violation message with localized messages.
-     * 
+     *
      * @author Otávio Scherer Garcia
      * @version $Revision$
      */

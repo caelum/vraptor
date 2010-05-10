@@ -24,13 +24,18 @@ import javax.validation.ValidatorFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
+import br.com.caelum.vraptor.ioc.Component;
+
 /**
  * Bring up JSR303 Bean Validation factory. This class builds the default validator factory once when application
  * starts. In the future this components needs to be application scoped (see issue 213).
- * 
+ *
  * @author Otávio Scherer Garcia
  * @since 3.1.2
  */
+@ApplicationScoped
+@Component
 public class JSR303ValidatorFactory {
 
     private static final Logger logger = LoggerFactory.getLogger(JSR303ValidatorFactory.class);

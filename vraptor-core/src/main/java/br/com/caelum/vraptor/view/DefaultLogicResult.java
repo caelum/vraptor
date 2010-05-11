@@ -99,7 +99,9 @@ public class DefaultLogicResult implements LogicResult {
 	}
 
 	private <T> void includeParametersInFlash(final Class<T> type, Method method, Object[] args) {
-		request.getSession().setAttribute(ParametersInstantiatorInterceptor.FLASH_PARAMETERS, args);
+		if (args != null && args.length != 0) {
+			request.getSession().setAttribute(ParametersInstantiatorInterceptor.FLASH_PARAMETERS, args);
+		}
 	}
 
 	public <T> T redirectTo(final Class<T> type) {

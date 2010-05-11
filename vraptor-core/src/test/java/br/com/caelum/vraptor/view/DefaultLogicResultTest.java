@@ -51,28 +51,24 @@ public class DefaultLogicResultTest {
 
 	private LogicResult logicResult;
 
-	@Mock
-	private Router router;
-	@Mock
-	private HttpServletResponse response;
-	@Mock
-	private MutableRequest request;
-	@Mock
-	private Container container;
-	@Mock
-	private PathResolver resolver;
-	@Mock
-	private TypeNameExtractor extractor;
-	@Mock
-	private HttpSession session;
-	@Mock
-	private RequestDispatcher dispatcher;
+	private @Mock Router router;
+	private @Mock HttpServletResponse response;
+	private @Mock MutableRequest request;
+	private @Mock Container container;
+	private @Mock PathResolver resolver;
+	private @Mock TypeNameExtractor extractor;
+	private @Mock HttpSession session;
+	private @Mock RequestDispatcher dispatcher;
 
 	public static class MyComponent {
 		int calls = 0;
 
 		public void base() {
 			calls++;
+		}
+
+		public void withParameter(String a) {
+
 		}
 
 		@Post
@@ -153,9 +149,17 @@ public class DefaultLogicResultTest {
 	@Test
 	public void shouldPutParametersOnFlashScopeOnRedirect() throws Exception {
 
+		logicResult.redirectTo(MyComponent.class).withParameter("a");
+
+		verify(session).setAttribute(eq(ParametersInstantiatorInterceptor.FLASH_PARAMETERS), eq(new Object[] {"a"}));
+	}
+
+	@Test
+	public void shouldNotPutParametersOnFlashScopeOnRedirectIfThereAreNoParameters() throws Exception {
+
 		logicResult.redirectTo(MyComponent.class).base();
 
-		verify(session).setAttribute(eq(ParametersInstantiatorInterceptor.FLASH_PARAMETERS), any(Object.class));
+		verify(session, never()).setAttribute(eq(ParametersInstantiatorInterceptor.FLASH_PARAMETERS), any());
 	}
 
 	@Test

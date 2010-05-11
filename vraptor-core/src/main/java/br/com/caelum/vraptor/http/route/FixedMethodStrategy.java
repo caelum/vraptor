@@ -85,4 +85,50 @@ public class FixedMethodStrategy implements Route {
 		return String.format("[FixedMethodStrategy: %-65s %-70s %s]", originalUri, Stringnifier
 				.simpleNameFor(resourceMethod.getMethod()), methods.size() == HttpMethod.values().length ? "ALL" : methods);
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((methods == null) ? 0 : methods.hashCode());
+		result = prime * result + ((originalUri == null) ? 0 : originalUri.hashCode());
+		result = prime * result + ((resourceMethod == null) ? 0 : resourceMethod.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		FixedMethodStrategy other = (FixedMethodStrategy) obj;
+		if (methods == null) {
+			if (other.methods != null) {
+				return false;
+			}
+		} else if (!methods.equals(other.methods)) {
+			return false;
+		}
+		if (originalUri == null) {
+			if (other.originalUri != null) {
+				return false;
+			}
+		} else if (!originalUri.equals(other.originalUri)) {
+			return false;
+		}
+		if (resourceMethod == null) {
+			if (other.resourceMethod != null) {
+				return false;
+			}
+		} else if (!resourceMethod.equals(other.resourceMethod)) {
+			return false;
+		}
+		return true;
+	}
 }

@@ -115,4 +115,50 @@ public class PatternBasedStrategy implements Route {
 		return String.format("[PatternBasedStrategy: %-50s %-50s %s]", type, method, methods.size() == HttpMethod
 				.values().length ? "ALL" : methods);
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((method == null) ? 0 : method.hashCode());
+		result = prime * result + ((methods == null) ? 0 : methods.hashCode());
+		result = prime * result + ((type == null) ? 0 : type.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		PatternBasedStrategy other = (PatternBasedStrategy) obj;
+		if (method == null) {
+			if (other.method != null) {
+				return false;
+			}
+		} else if (!method.equals(other.method)) {
+			return false;
+		}
+		if (methods == null) {
+			if (other.methods != null) {
+				return false;
+			}
+		} else if (!methods.equals(other.methods)) {
+			return false;
+		}
+		if (type == null) {
+			if (other.type != null) {
+				return false;
+			}
+		} else if (!type.equals(other.type)) {
+			return false;
+		}
+		return true;
+	}
 }

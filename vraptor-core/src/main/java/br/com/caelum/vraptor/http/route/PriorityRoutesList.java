@@ -18,8 +18,10 @@ package br.com.caelum.vraptor.http.route;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.Map.Entry;
@@ -33,14 +35,14 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class PriorityRoutesList implements Collection<Route> {
 
-	private final SortedMap<Integer,List<Route>> map;
+	private final SortedMap<Integer, Set<Route>> map;
 
 	private List<Route> cache;
 
 	private Lock cacheLock = new ReentrantLock();
 
 	public PriorityRoutesList() {
-		map = new TreeMap<Integer, List<Route>>();
+		map = new TreeMap<Integer, Set<Route>>();
 	}
 
 	private List<Route> getFullList() {
@@ -48,7 +50,7 @@ public class PriorityRoutesList implements Collection<Route> {
 			cacheLock.lock();
 			if (cache == null) {
 				cache = new LinkedList<Route>();
-				for (Entry<Integer, List<Route>> entry : map.entrySet()) {
+				for (Entry<Integer, Set<Route>> entry : map.entrySet()) {
 					cache.addAll(entry.getValue());
 				}
 			}
@@ -57,16 +59,16 @@ public class PriorityRoutesList implements Collection<Route> {
 			cacheLock.unlock();
 		}
 	}
-	private List<Route> getListFor(Route e) {
+	private Set<Route> getSetFor(Route e) {
 		if (!map.containsKey(e.getPriority())) {
-			map.put(e.getPriority(), new LinkedList<Route>());
+			map.put(e.getPriority(), new LinkedHashSet<Route>());
 		}
 		return map.get(e.getPriority());
 	}
 
 	public boolean add(Route e) {
 		cache = null;
-		return getListFor(e).add(e);
+		return getSetFor(e).add(e);
 	}
 
 

@@ -16,6 +16,9 @@
  */
 package br.com.caelum.vraptor.view;
 
+import java.io.InputStream;
+import java.io.Reader;
+
 import javax.servlet.http.HttpServletResponse;
 
 import br.com.caelum.vraptor.View;
@@ -43,6 +46,11 @@ public interface HttpResult extends View {
 
 	HttpResult addDateHeader(String name, long date);
 
+	HttpResult body(String body);
+
+	HttpResult body(InputStream body);
+
+	HttpResult body(Reader body);
 
 	/**
 	 * @deprecated use result.use(status()).movedPermanentlyTo(url) instead

@@ -57,8 +57,23 @@ public class DefaultStatus implements Status {
 	}
 
 	public void notFound() {
-		response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-		result.use(Results.nothing());
+		sendError(HttpServletResponse.SC_NOT_FOUND);
+	}
+
+	private void sendError(int error) {
+		try {
+			response.sendError(error);
+		} catch (IOException e) {
+			throw new ResultException(e);
+		}
+	}
+
+	private void sendError(int error, String message) {
+		try {
+			response.sendError(error, message);
+		} catch (IOException e) {
+			throw new ResultException(e);
+		}
 	}
 
 	public void header(String key, String value) {
@@ -81,15 +96,13 @@ public class DefaultStatus implements Status {
 	}
 
 	public void conflict() {
-		response.setStatus(HttpServletResponse.SC_CONFLICT);
-		result.use(Results.nothing());
+		sendError(HttpServletResponse.SC_CONFLICT);
 	}
 
 	public void methodNotAllowed(EnumSet<HttpMethod> allowedMethods) {
 		header("Allow", allowedMethods.toString().replaceAll("\\[|\\]", ""));
 
-		response.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
-		result.use(Results.nothing());
+		sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
 	}
 
 	public void movedPermanentlyTo(String location) {
@@ -118,29 +131,15 @@ public class DefaultStatus implements Status {
 	}
 
 	public void unsupportedMediaType(String message) {
-		try {
-			response.sendError(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE, message);
-			result.use(Results.nothing());
-		} catch (IOException e) {
-			throw new ResultException(e);
-		}
+		sendError(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE, message);
 	}
 
 	public void badRequest(String message) {
-		try {
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST, message);
-			result.use(Results.nothing());
-		} catch (IOException e) {
-			throw new ResultException(e);
-		}
+		sendError(HttpServletResponse.SC_BAD_REQUEST, message);
 	}
 
 	public void forbidden(String message) {
-		try {
-			response.sendError(HttpServletResponse.SC_FORBIDDEN, message);
-		} catch (IOException e) {
-			throw new ResultException(e);
-		}
+		sendError(HttpServletResponse.SC_FORBIDDEN, message);
 	}
 
 	public void noContent() {

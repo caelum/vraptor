@@ -39,7 +39,7 @@ public class DefaultStatusTest {
 	public void shouldSetNotFoundStatus() throws Exception {
 		status.notFound();
 
-		verify(response).setStatus(404);
+		verify(response).sendError(404);
 	}
 
 	@Test
@@ -76,14 +76,14 @@ public class DefaultStatusTest {
 	public void shouldSetConflictStatus() throws Exception {
 		status.conflict();
 
-		verify(response).setStatus(409);
+		verify(response).sendError(409);
 	}
 
 	@Test
 	public void shouldSetMethodNotAllowedStatus() throws Exception {
 		status.methodNotAllowed(EnumSet.of(HttpMethod.GET, HttpMethod.POST));
 
-		verify(response).setStatus(405);
+		verify(response).sendError(405);
 		verify(response).addHeader("Allow", "GET, POST");
 	}
 

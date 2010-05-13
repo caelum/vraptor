@@ -12,7 +12,6 @@
 	<classpathentry kind="lib" path="lib/mandatory/mirror-1.5.1.jar"/>
 	<classpathentry kind="lib" path="lib/mandatory/objenesis-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/mandatory/ognl-2.7.3.jar"/>
-	<classpathentry kind="lib" path="lib/mandatory/paranamer-1.5.jar"/>
 	<classpathentry kind="lib" path="lib/optional/commons-vfs-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/optional/dom4j-1.6.1.jar"/>
 	<classpathentry kind="lib" path="lib/optional/ejb3-persistence-1.0.1.GA.jar"/>
@@ -57,5 +56,7 @@
 	<classpathentry kind="lib" path="lib/optional/iogi-0.8.1.jar"/>
 	<classpathentry kind="lib" path="lib/optional/hibernate-validator-4.0.2.GA.jar"/>
 	<classpathentry kind="lib" path="lib/optional/validation-api-1.0.0.GA.jar"/>
+	<classpathentry kind="lib" path="lib/mandatory/paranamer-2.2.jar"/>
+	<classpathentry kind="lib" path="lib/optional/inject-api-1.0.0-PRD.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

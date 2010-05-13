@@ -15,13 +15,15 @@
  */
 package br.com.caelum.vraptor.serialization;
 
+import static br.com.caelum.vraptor.view.Results.page;
+
 import java.util.Collections;
 import java.util.List;
 
+import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.http.FormatResolver;
 import br.com.caelum.vraptor.restfulie.RestHeadersHandler;
 import br.com.caelum.vraptor.restfulie.hypermedia.HypermediaResource;
-import br.com.caelum.vraptor.view.PageResult;
 
 /**
  * Default implementation for RepresentationResult that uses request Accept format to
@@ -34,10 +36,10 @@ public class DefaultRepresentationResult implements RepresentationResult {
 
 	private final FormatResolver formatResolver;
 	private List<Serialization> serializations;
-	private final PageResult result;
+	private final Result result;
 	private final RestHeadersHandler headersHandler;
 
-	public DefaultRepresentationResult(FormatResolver formatResolver, PageResult result, List<Serialization> serializations, RestHeadersHandler headersHandler) {
+	public DefaultRepresentationResult(FormatResolver formatResolver, Result result, List<Serialization> serializations, RestHeadersHandler headersHandler) {
 		this.formatResolver = formatResolver;
 		this.result = result;
 		this.serializations = serializations;
@@ -56,7 +58,22 @@ public class DefaultRepresentationResult implements RepresentationResult {
 			}
 		}
 		// if content negotiation fails, relies to html
-		result.forward();
+		result.use(page()).forward();
+		return new IgnoringSerializer();
+	}
+
+	public <T> Serializer from(T object, String alias) {
+		if(HypermediaResource.class.isAssignableFrom(object.getClass())) {
+			headersHandler.handle(HypermediaResource.class.cast(object));
+		}
+		String format = formatResolver.getAcceptFormat();
+		for (Serialization serialization : serializations) {
+			if (serialization.accepts(format)) {
+				return serialization.from(object, alias);
+			}
+		}
+		result.include(alias, object);
+		result.use(page()).forward();
 		return new IgnoringSerializer();
 	}
 }

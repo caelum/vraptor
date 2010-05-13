@@ -27,4 +27,6 @@ public interface RepresentationResult extends View {
 
 	<T> Serializer from(T object);
 
+	<T> Serializer from(T object, String alias);
+
 }

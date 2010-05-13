@@ -19,8 +19,11 @@ package br.com.caelum.vraptor.http;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 
 import java.util.List;
+
+import javax.inject.Named;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -64,6 +67,28 @@ public class ParanamerNameProviderTest {
 		String[] resultOfSecondCall = provider.parameterNamesFor(Horse.class.getMethod("setLeg", int[].class));
 		assertThat(resultOfSecondCall[0], is(equalTo("length")));
 	}
+    
+    @Test
+    public void shouldNameFieldsAnnotatedWithNamed() throws SecurityException, NoSuchMethodException  {
+    	assertThat(provider.parameterNamesFor(Horse.class.getMethod("runThroughWithAnnotation", Field.class))[0], is(equalTo("one")));
+    }
+    
+    @Test
+    public void shouldNotNameFieldsByTheFieldNameWhenUsingAnnotation() throws SecurityException, NoSuchMethodException  {
+    	assertThat(provider.parameterNamesFor(Horse.class.getMethod("runThroughWithAnnotation", Field.class))[0], is(not(equalTo("field"))));
+    }
+
+    @Test
+    public void shouldNameMethodsFieldsWhenAnnotatedOrNot() throws SecurityException, NoSuchMethodException  {
+    	assertThat(provider.parameterNamesFor(Horse.class.getMethod("runThroughWithAnnotation2", Field.class, Field.class))[0], is(equalTo("one")));
+    	assertThat(provider.parameterNamesFor(Horse.class.getMethod("runThroughWithAnnotation2", Field.class, Field.class))[1], is(equalTo("two")));
+    }
+    
+    @Test
+    public void shouldNameMethodsFieldsWhenAnnotatedOrNot2() throws SecurityException, NoSuchMethodException  {
+    	assertThat(provider.parameterNamesFor(Horse.class.getMethod("runThroughWithAnnotation3", Field.class, Field.class))[0], is(equalTo("one")));
+    	assertThat(provider.parameterNamesFor(Horse.class.getMethod("runThroughWithAnnotation3", Field.class, Field.class))[1], is(equalTo("size")));
+    }
 
     static class Field {
     }
@@ -76,6 +101,18 @@ public class ParanamerNameProviderTest {
         }
 
         public void setLeg(int[] length) {
+        }
+        
+        public void runThroughWithAnnotation(@Named(value="one") Field field) {
+        	
+        }
+        
+        public void runThroughWithAnnotation2(@Named(value="one") Field f, Field two) {
+
+        }
+
+        public void runThroughWithAnnotation3(Field one, @Named(value="size") Field two) {
+        	
         }
     }
 

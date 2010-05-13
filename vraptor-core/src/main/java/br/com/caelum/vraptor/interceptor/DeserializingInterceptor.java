@@ -62,7 +62,7 @@ public class DeserializingInterceptor implements Interceptor {
 		Consumes consumesAnnotation = method.getMethod().getAnnotation(Consumes.class);
 		List<String> supported =  Arrays.asList(consumesAnnotation.value());
 
-		String contentType = request.getContentType();
+		String contentType = mime(request.getContentType());
 		if (!supported.isEmpty() && !supported.contains(contentType)) {
 			unsupported(String.format("Request with media type [%s]. Expecting one of %s.",
 					contentType, supported));
@@ -90,6 +90,13 @@ public class DeserializingInterceptor implements Interceptor {
 			throw new InterceptionException(e);
 		}
 
+	}
+
+	private String mime(String contentType) {
+		if (contentType.contains(";")) {
+			return contentType.split(";")[0];
+		}
+		return contentType;
 	}
 
 	private void unsupported(String message) {

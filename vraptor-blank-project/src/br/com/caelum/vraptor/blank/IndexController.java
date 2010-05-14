@@ -16,6 +16,8 @@
  */
 package br.com.caelum.vraptor.blank;
 
+import java.util.List;
+
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
@@ -30,7 +32,8 @@ public class IndexController {
 	}
 
 	@Path("/")
-	public void index() {
+	public void index(List<String> abc) {
+		System.out.println(abc);
 		result.include("variable", "VRaptor!");
 	}
 

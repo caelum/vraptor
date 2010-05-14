@@ -19,6 +19,7 @@ package br.com.caelum.vraptor.interceptor;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -31,6 +32,7 @@ import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.core.MethodInfo;
+import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.validator.Message;
@@ -50,21 +52,34 @@ public class ParametersInstantiatorInterceptor implements Interceptor {
 	private final List<Message> errors = new ArrayList<Message>();
 	private final HttpSession session;
 	public static final String FLASH_PARAMETERS = "_vraptor_flash_parameters";
+	private final MutableRequest request;
 
     public ParametersInstantiatorInterceptor(ParametersProvider provider, MethodInfo parameters,
-            Validator validator, Localization localization, HttpSession session) {
+            Validator validator, Localization localization, HttpSession session, MutableRequest request) {
         this.provider = provider;
         this.parameters = parameters;
         this.validator = validator;
         this.localization = localization;
 		this.session = session;
+		this.request = request;
     }
 
     public boolean accepts(ResourceMethod method) {
         return true;
     }
 
-    public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws InterceptionException {
+    @SuppressWarnings("unchecked")
+	public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws InterceptionException {
+    	Enumeration<String> names = request.getParameterNames();
+    	while (names.hasMoreElements()) {
+			String name = names.nextElement();
+			if(name.contains("[]")) {
+				String[] values = request.getParameterValues(name);
+				for (int i = 0; i < values.length; i++) {
+					request.setParameter(name.replace("[]", "[" + i + "]"), values[i]);
+				}
+			}
+		}
         Object[] values = getParametersFor(method);
 
         validator.addAll(errors);

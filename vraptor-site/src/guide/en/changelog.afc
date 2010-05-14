@@ -8,6 +8,14 @@
 	result.use(http()).body(content);
 [/java]
 content can be either a String, an InputStream or a Reader.
+
+* support for multiple selects:
+[java]
+public void logic(List<String> abc) {...}
+[/java]
+[xml]
+<select name="abc[]" multiple="multiple">...</select>
+[/xml]
 [/list]
 
 [section 3.1.2]

@@ -99,8 +99,10 @@ import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.interceptor.download.DownloadInterceptor;
 import br.com.caelum.vraptor.interceptor.multipart.DefaultMultipartConfig;
+import br.com.caelum.vraptor.interceptor.multipart.DefaultMultipartInterceptor;
 import br.com.caelum.vraptor.interceptor.multipart.MultipartConfig;
 import br.com.caelum.vraptor.interceptor.multipart.MultipartInterceptor;
+import br.com.caelum.vraptor.interceptor.multipart.NullMultipartInterceptor;
 import br.com.caelum.vraptor.interceptor.multipart.UploadedFileConverter;
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.ioc.ConverterHandler;
@@ -219,7 +221,7 @@ public class BaseComponents {
             DeserializingInterceptor.class, 				DeserializingInterceptor.class,
             InterceptorListPriorToExecutionExtractor.class, InterceptorListPriorToExecutionExtractor.class,
             Localization.class, 							JstlLocalization.class,
-            MultipartInterceptor.class, 					MultipartInterceptor.class,
+            // optional MultipartInterceptor.class, 					MultipartInterceptor.class,
             ParametersProvider.class, 						OgnlParametersProvider.class,
             OutjectResult.class, 							OutjectResult.class,
             ParametersInstantiatorInterceptor.class, 		ParametersInstantiatorInterceptor.class,
@@ -309,6 +311,12 @@ public class BaseComponents {
     	   !registerIfClassPresent(REQUEST_COMPONENTS, "org.hibernate.validator.ClassValidator",HibernateValidator3.class)) {
     		REQUEST_COMPONENTS.put(BeanValidator.class, NullBeanValidator.class);
     	}
+    	
+    	//only register the multipart interceptor if commons file upload exists into classpath
+        if (!registerIfClassPresent(REQUEST_COMPONENTS, "org.apache.commons.fileupload.FileItem", DefaultMultipartInterceptor.class)) {
+            REQUEST_COMPONENTS.put(MultipartInterceptor.class, NullMultipartInterceptor.class);
+        }
+    	
         return Collections.unmodifiableMap(REQUEST_COMPONENTS);
     }
 

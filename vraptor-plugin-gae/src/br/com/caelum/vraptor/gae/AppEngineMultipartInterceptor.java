@@ -25,12 +25,12 @@ import org.gmr.web.multipart.GFileItemFactory;
 
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor.interceptor.multipart.DefaultMultipartInterceptor;
 import br.com.caelum.vraptor.interceptor.multipart.MultipartConfig;
-import br.com.caelum.vraptor.interceptor.multipart.MultipartInterceptor;
 import br.com.caelum.vraptor.ioc.Component;
 
 @Component
-public class AppEngineMultipartInterceptor extends MultipartInterceptor {
+public class AppEngineMultipartInterceptor extends DefaultMultipartInterceptor {
 
 	public AppEngineMultipartInterceptor(HttpServletRequest request, MutableRequest parameters, MultipartConfig config, Validator validator)
 			throws IOException {

@@ -26,33 +26,48 @@ import org.slf4j.LoggerFactory;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
 /**
- * 
- * TODO: should expose not a directory, but a way to define memory or file usage
- * (commons upload has already a common interface to it).
+ * TODO: should expose not a directory, but a way to define memory or file usage (commons upload has already a common
+ * interface to it).
  * 
  * @author Paulo Silveira
- * 
  */
 @ApplicationScoped
-public class DefaultMultipartConfig implements MultipartConfig {
+public class DefaultMultipartConfig
+    implements MultipartConfig {
 
-	private final Logger logger = LoggerFactory.getLogger(DefaultMultipartConfig.class);
+    private final Logger logger = LoggerFactory.getLogger(DefaultMultipartConfig.class);
 
-	public long getSizeLimit() {
-		return 2 * 1024 * 1024;
-	}
+    public long getSizeLimit() {
+        return 2 * 1024 * 1024;
+    }
 
-	public File getDirectory() {
-		try {
-			File tempFile = File.createTempFile("raptor.", ".upload");
-			tempFile.delete();
-			return tempFile.getParentFile();
-		} catch (IOException e) {
-			logger.warn("Unable to find temp directory", e);
-			File tmp = new File(".tmp-multipart-upload");
-			tmp.mkdirs();
-			return tmp;
-		}
-	}
+    public File getDirectory() {
+        // change by Otávio Scherer Garcia
+        // find the tempdir in this order: system-property, create temp file or by create
+        // a empty directory in the user home.
+
+        try {
+            // try to read system-property
+            return new File(System.getProperty("java.io.tmpdir"));
+
+        } catch (SecurityException e0) {
+            // security manager doesn't allow access to read the property
+            logger.warn("Access to property java.io.tmpdir is denied", e0);
+
+            try {
+                // try to create an empty file and return the directory
+                File tempFile = File.createTempFile("raptor.", ".upload");
+                tempFile.delete();
+                return tempFile.getParentFile();
+
+            } catch (IOException e1) {
+                // try to create an empty dir into user home
+                logger.warn("Unable to find temp directory", e1);
+                File tmp = new File(".tmp-multipart-upload");
+                tmp.mkdirs();
+                return tmp;
+            }
+        }
+    }
 
 }

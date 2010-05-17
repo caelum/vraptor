@@ -58,6 +58,12 @@
             	<em>Adolfo Sousa, Líder de desenvolvimento da Locaweb Telecom - <a href="http://www.localweb.com.br" target="_blank">www.localweb.com.br</a><a href="http://www.localweb.com.br" target="_blank"><img src="images/localweb-trans.png" border="0"/></a></em>                
             </div>
             
+            <div class="depoimentoClientes">
+            	<p> Na Blumar Turismo tínhamos um time de desenvolvedores acostumados a trabalhar com linguagens estruturadas e com pouca experiência em Java Web. Após a apresentação do Vraptor todos ficaram maravilhados e adotamos o Vraptor como framework padrão para a maior parte de nossas aplicações. Os destaques ficam pela simplicidade do código, a não obrigatoriedade de configuração de xml,  "independência" da API javax.servlet e altíssima produtividade.
+					Até os donos da empresa que são empresários e profissionais de Turismo querem conhecer o Vraptor pois o salto de qualidade e produtividade do departamento de TI foi muito grande.</p>
+				<em>Lucas Pérez, Gerente de Desenvolvimento da Blumar Turismo - <a href="http://www.blumar.com.br">www.blumar.com.br</a></em>
+            </div>
+            
             <div class="depoimentoClientes">            	
             <p>Utilizamos o VRaptor pela primeira vez, no portal da ESPN no final do ano passado. Estávamos a procura de um framework, que nos trouxesse maior agilidade e facilidades no desenvolvimento, já que tínhamos um curto prazo e uma equipe nova iniciando na empresa. Optamos pelo VRaptor, que agregou muito ao projeto seja pela facilidade nas configurações, através da utilização de convenções ou pela simplicidade na implementação e integração com outros componentes utilizados. Hoje estamos utilizando o framework em outros projetos da própria ESPN e em outros clientes como Gatorade.</p>
             	<em>Edson Sueyoshi,<br /> Gerente Tecnologia AgênciaClick - <a href="http://www.agenciaclick.com.br" target="_blank">www.agenciaclick.com.br</a> Site ESPN e Gatorade.<a href="http://www.agenciaclick.com.br" target="_blank"><img src="images/agencia_click.gif" border="0" /></a></em>                 

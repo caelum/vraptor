@@ -254,6 +254,20 @@ public class ClientController {
 }
 [/java]
 
+[title Multiple paths for the same logic method]
+You can set more than one path for the same logic method:
+[java]
+public class ClientController {
+
+  @Get
+  @Path({"/client/{client.id}/show/{section}", "/client/{client.id}/show/"})  
+  public Client show(Client client, String section) {
+    return ...
+  }
+  
+}
+[/java]
+
 [title Paths with regular expressions]
 You can limit your parameter values using regular expressions using this idiom:
 [java]

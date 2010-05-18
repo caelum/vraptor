@@ -280,6 +280,20 @@ public class ClienteController {
 }
 [/java]
 
+[title Vários paths para a mesma lógica]
+Você pode setar mais de um path pra mesma lógica fazendo:
+[java]
+@Resource
+public class ClienteController {
+
+  @Path({"/cliente/{cliente.id}/visualiza/{secao}", "/cliente/{cliente.id}/visualiza/"})  
+  public Cliente visualiza(Cliente cliente, String secao) {
+    return ...
+  }
+  
+}
+[/java]
+
 [title Paths com *]
 
 Você também pode utilizar o * como método de seleção para a sua uri. O exemplo a

@@ -92,7 +92,6 @@ public class RouteBuilder {
 	public RouteBuilder(Proxifier proxifier, TypeFinder finder, String uri) {
 		this.proxifier = proxifier;
 		this.finder = finder;
-		uri = uri.replaceAll("\\*[^\\}]", ".\\*?");
 		this.originalUri = uri;
 		builder = new ParameterControlBuilder();
 	}
@@ -175,7 +174,7 @@ public class RouteBuilder {
 
 	private void addParametersInfo(Method method) {
 		String[] parameters = extractParameters(originalUri);
-		Map<String, Class<?>> types = finder.getParameterTypes(method, parameters);
+		Map<String, Class<?>> types = finder.getParameterTypes(method, sanitize(parameters));
 		for (Entry<String, Class<?>> entry : types.entrySet()) {
 			if (!builder.parameters.containsKey(entry.getKey())) {
 				builder.withParameter(entry.getKey()).ofType(entry.getValue());
@@ -189,11 +188,19 @@ public class RouteBuilder {
 		}
 	}
 
+	private String[] sanitize(String[] parameters) {
+		String[] sanitized = new String[parameters.length];
+		for (int i = 0; i < parameters.length; i++) {
+			sanitized[i] = parameters[i].replaceAll("(\\:.*|\\*)$", "");
+		}
+		return sanitized;
+	}
+
 	private String[] extractParameters(String uri) {
 		String startUntilOpenBraces = "^[^\\{]*\\{";
 		String or = "|";
-		String betweenBraces = "\\*?\\}[^\\{\\}]*\\{";
-		String closeBracesUntilEnd = "\\*?\\}[^\\{\\}]*$";
+		String betweenBraces = "\\}[^\\{\\}]*\\{";
+		String closeBracesUntilEnd = "\\}[^\\{\\}]*$";
 
 		return uri.split(startUntilOpenBraces + or + betweenBraces + or + closeBracesUntilEnd);
 	}

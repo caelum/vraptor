@@ -132,6 +132,19 @@ public class RouteBuilderTest {
 
 	}
 
+	@Test
+	public void usingRegexesWithAsterisksAtTheEnd() throws Exception {
+		builder = new RouteBuilder(proxifier, typeFinder, "/abc/{abc:[0-9A-Z]*}/def/{def}");
+
+		builder.is(MyResource.class, method.getMethod());
+		Route route = builder.build();
+
+		assertFalse("invalid uri", route.canHandle("/abc/not_Valid/def/12"));
+		assertTrue("valid uri", route.canHandle("/abc/ABC123/def/12"));
+		assertTrue("valid uri", route.canHandle("/abc/10AB3/def/12"));
+
+	}
+
 
 	@Test
 	public void fillingUriForPrimitiveParameters() throws Exception {

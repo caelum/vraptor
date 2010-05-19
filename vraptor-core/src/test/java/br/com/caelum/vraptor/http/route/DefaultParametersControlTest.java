@@ -22,57 +22,65 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.verify;
 
 import java.util.Collections;
 
-import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.ParanamerNameProvider;
 import br.com.caelum.vraptor.http.asm.AsmBasedTypeCreator;
 import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.test.VRaptorMockery;
 
 import com.google.common.collect.ImmutableMap;
 
 public class DefaultParametersControlTest {
 
-	private VRaptorMockery mockery;
-	private MutableRequest request;
+	private @Mock MutableRequest request;
 
 	@Before
 	public void setup() {
-		this.mockery = new VRaptorMockery();
-		this.request = mockery.mock(MutableRequest.class);
+		MockitoAnnotations.initMocks(this);
 	}
 
 	@Test
 	public void registerExtraParametersFromAcessedUrl() throws SecurityException, NoSuchMethodException {
 		DefaultParametersControl control = new DefaultParametersControl("/clients/{dog.id}");
-		mockery.checking(new Expectations() {
-			{
-				one(request).setParameter("dog.id", new String[] {"45"});
-			}
-		});
 		control.fillIntoRequest("/clients/45", request);
-		mockery.assertIsSatisfied();
+		verify(request).setParameter("dog.id", new String[] {"45"});
+	}
+
+	@Test
+	public void registerParametersWithAsterisks() throws SecurityException, NoSuchMethodException {
+		DefaultParametersControl control = new DefaultParametersControl("/clients/{my.path*}");
+		control.fillIntoRequest("/clients/one/path", request);
+		verify(request).setParameter("my.path", new String[] {"one/path"});
+	}
+
+	@Test
+	public void registerParametersWithRegexes() throws SecurityException, NoSuchMethodException {
+		DefaultParametersControl control = new DefaultParametersControl("/clients/{hexa:[0-9A-Z]+}");
+
+		control.fillIntoRequest("/clients/FAF323", request);
+
+		verify(request).setParameter("hexa", new String[] {"FAF323"});
 	}
 
 	@Test
 	public void worksAsRegexWhenUsingParameters() throws SecurityException, NoSuchMethodException {
 		DefaultParametersControl control = new DefaultParametersControl("/clients/{dog.id}");
 		assertThat(control.matches("/clients/15"), is(equalTo(true)));
-		mockery.assertIsSatisfied();
 	}
 
 	@Test
 	public void worksWithBasicRegexEvaluation() throws SecurityException, NoSuchMethodException {
 		DefaultParametersControl control = new DefaultParametersControl("/clients.*");
 		assertThat(control.matches("/clientsWhatever"), is(equalTo(true)));
-		mockery.assertIsSatisfied();
 	}
 
 
@@ -162,42 +170,32 @@ public class DefaultParametersControlTest {
 
 		String uri = "/project/Vraptor3/build/12345/view/artifacts/vraptor.jar";
 		assertThat(control.matches(uri), is(true));
-		mockery.checking(new Expectations() {
-			{
-				one(request).setParameter("project.name", "Vraptor3");
-				one(request).setParameter("filename", new String[] {"artifacts/vraptor.jar"});
-				one(request).setParameter("buildId", new String[] {"12345"});
-			}
-		});
+
 		control.fillIntoRequest(uri, request);
 
+		verify(request).setParameter("project.name", "Vraptor3");
+		verify(request).setParameter("filename", new String[] {"artifacts/vraptor.jar"});
+		verify(request).setParameter("buildId", new String[] {"12345"});
 		assertThat(control.apply(new String[] {"Vraptor3", "12345", "artifacts/vraptor.jar"}),
 				is(uri));
-		mockery.assertIsSatisfied();
 	}
 
 	@Test
 	public void registerExtraParametersFromAcessedUrlWithGreedyParameters() throws SecurityException, NoSuchMethodException {
 		DefaultParametersControl control = new DefaultParametersControl("/clients/{pathToFile*}");
-		mockery.checking(new Expectations() {
-			{
-				one(request).setParameter("pathToFile", new String[] {"my/path/to/file"});
-			}
-		});
+
 		control.fillIntoRequest("/clients/my/path/to/file", request);
-		mockery.assertIsSatisfied();
+
+		verify(request).setParameter("pathToFile", new String[] {"my/path/to/file"});
 	}
 
 	@Test
 	public void registerExtraParametersFromAcessedUrlWithGreedyAndDottedParameters() throws SecurityException, NoSuchMethodException {
 		DefaultParametersControl control = new DefaultParametersControl("/clients/{path.to.file*}");
-		mockery.checking(new Expectations() {
-			{
-				one(request).setParameter("path.to.file", new String[] {"my/path/to/file"});
-			}
-		});
+
 		control.fillIntoRequest("/clients/my/path/to/file", request);
-		mockery.assertIsSatisfied();
+
+		verify(request).setParameter("path.to.file", new String[] {"my/path/to/file"});
 	}
 
 	static class PathToFile {
@@ -213,7 +211,6 @@ public class DefaultParametersControlTest {
 		Object object = new AsmBasedTypeCreator(new ParanamerNameProvider()).instanceWithParameters(method, "my/path/to/file");
 		String filled = control.fillUri(object);
 		assertThat(filled, is("/clients/my/path/to/file"));
-		mockery.assertIsSatisfied();
 	}
 	@Test
 	public void fillURLWithoutGreedyParameters() throws SecurityException, NoSuchMethodException {
@@ -222,7 +219,6 @@ public class DefaultParametersControlTest {
 		Object object = new AsmBasedTypeCreator(new ParanamerNameProvider()).instanceWithParameters(method, "my/path/to/file");
 		String filled = control.fillUri(object);
 		assertThat(filled, is("/clients/my/path/to/file"));
-		mockery.assertIsSatisfied();
 	}
 
 	@Test
@@ -246,14 +242,11 @@ public class DefaultParametersControlTest {
 
 		String uri = "/project/15/build/";
 		assertThat(control.matches(uri), is(true));
-		mockery.checking(new Expectations() {
-			{
-				one(request).setParameter("project.id", "15");
-			}
-		});
+
 		control.fillIntoRequest(uri, request);
 
+		verify(request).setParameter("project.id", "15");
+
 		assertThat(control.apply(new String[] {"15"}),is(uri));
-		mockery.assertIsSatisfied();
 	}
 }

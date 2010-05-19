@@ -58,13 +58,14 @@ public class DefaultParametersControl implements ParametersControl {
 		Matcher matcher = Pattern.compile("\\{([^\\}]+?)\\}").matcher(originalPattern);
 		while (matcher.find()) {
 			String value = matcher.group(1);
-			String defaultPattern = value.endsWith("*")? ".*" : "[^/]*";
+			String defaultPattern = value.matches("^[^:]+\\*$")? ".*" : "[^/]*";
 			if (!parameters.containsKey(value)) {
 				parameters.put(value, defaultPattern);
 			}
-			this.parameters.add(value.replace("*", ""));
+			this.parameters.add(value.replaceAll("(\\:.*|\\*)$", ""));
 		}
 		String patternUri = originalPattern;
+		patternUri = patternUri.replaceAll("/\\*", "/.*");
 		for (Entry<String, String> parameter : parameters.entrySet()) {
 			patternUri = patternUri.replace("{" + parameter.getKey() + "}", "(" + parameter.getValue() + ")");
 		}

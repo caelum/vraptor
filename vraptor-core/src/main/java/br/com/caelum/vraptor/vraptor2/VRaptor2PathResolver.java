@@ -23,10 +23,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.core.MethodInfo;
+import br.com.caelum.vraptor.http.FormatResolver;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.resource.ResourceClass;
 import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.view.AcceptHeaderToFormat;
 import br.com.caelum.vraptor.view.DefaultPathResolver;
 import br.com.caelum.vraptor.view.PathResolver;
 
@@ -47,8 +47,8 @@ public class VRaptor2PathResolver implements PathResolver {
     public VRaptor2PathResolver(Config config, HttpServletRequest request, MethodInfo info) {
         this.info = info;
 		this.pattern = config.getViewPattern();
-        this.vraptor3 = new DefaultPathResolver(request, new AcceptHeaderToFormat() {
-			public String getFormat(String mimeType) {
+        this.vraptor3 = new DefaultPathResolver(new FormatResolver() {
+			public String getAcceptFormat() {
 				return "html";
 			}
 		});

@@ -111,4 +111,11 @@ public interface Status extends View {
 	 */
 	void unsupportedMediaType(String errorMessage);
 
+	/**
+	 * The accepted media type is not supported.(406)
+	 *
+	 * @param errorMessage
+	 */
+	void notAcceptable();
+
 }

@@ -15,7 +15,7 @@
  */
 package br.com.caelum.vraptor.serialization;
 
-import static br.com.caelum.vraptor.view.Results.page;
+import static br.com.caelum.vraptor.view.Results.status;
 
 import java.util.Collections;
 import java.util.List;
@@ -57,8 +57,8 @@ public class DefaultRepresentationResult implements RepresentationResult {
 				return serialization.from(object);
 			}
 		}
-		// if content negotiation fails, relies to html
-		result.use(page()).forward();
+
+		result.use(status()).notAcceptable();
 		return new IgnoringSerializer();
 	}
 
@@ -72,8 +72,8 @@ public class DefaultRepresentationResult implements RepresentationResult {
 				return serialization.from(object, alias);
 			}
 		}
-		result.include(alias, object);
-		result.use(page()).forward();
+		result.use(status()).notAcceptable();
+
 		return new IgnoringSerializer();
 	}
 }

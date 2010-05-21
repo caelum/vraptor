@@ -146,4 +146,8 @@ public class DefaultStatus implements Status {
 		response.setStatus(HttpServletResponse.SC_NO_CONTENT);
 	}
 
+	public void notAcceptable() {
+		sendError(HttpServletResponse.SC_NOT_ACCEPTABLE);
+	}
+
 }

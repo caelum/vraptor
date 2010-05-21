@@ -22,14 +22,16 @@ import br.com.caelum.vraptor.restfulie.Restfulie;
 import br.com.caelum.vraptor.restfulie.hypermedia.HypermediaResource;
 import br.com.caelum.vraptor.restfulie.relation.Relation;
 import br.com.caelum.vraptor.view.PageResult;
+import br.com.caelum.vraptor.view.Status;
 
 public class DefaultRepresentationResultTest {
 
-	@Mock private FormatResolver formatResolver;
-	@Mock private Serialization serialization;
-	@Mock private Result result;
-	@Mock private PageResult pageResult;
-	@Mock private RestHeadersHandler headerHandler;
+	private @Mock FormatResolver formatResolver;
+	private @Mock Serialization serialization;
+	private @Mock Result result;
+	private @Mock PageResult pageResult;
+	private @Mock Status status;
+	private @Mock RestHeadersHandler headerHandler;
 
 	private RepresentationResult representation;
 
@@ -37,6 +39,7 @@ public class DefaultRepresentationResultTest {
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
 		when(result.use(PageResult.class)).thenReturn(pageResult);
+		when(result.use(Status.class)).thenReturn(status);
 		representation = new DefaultRepresentationResult(formatResolver, result, Arrays.asList(serialization), headerHandler);
 	}
 
@@ -48,7 +51,7 @@ public class DefaultRepresentationResultTest {
 
 		assertThat(serializer, is(instanceOf(IgnoringSerializer.class)));
 
-		verify(pageResult).forward();
+		verify(status).notAcceptable();
 	}
 	@Test
 	public void whenThereIsNoFormatGivenShouldForwardToDefaultPageWithAlias() throws Exception {
@@ -59,8 +62,7 @@ public class DefaultRepresentationResultTest {
 
 		assertThat(serializer, is(instanceOf(IgnoringSerializer.class)));
 
-		verify(result).include("Alias!", object);
-		verify(pageResult).forward();
+		verify(status).notAcceptable();
 	}
 	@Test
 	public void whenThereIsAFormatGivenShouldUseCorrectSerializer() throws Exception {

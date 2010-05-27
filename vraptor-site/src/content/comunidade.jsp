@@ -35,6 +35,11 @@
 			<a href="http://wbotelhos.com/2009/12/07/iniciando-com-vraptor-3/">Iniciando com VRaptor 3</a>
 		</dd>
 		
+		<dt>Derlon</dt>
+		<dd>
+			<a href="http://blig.ig.com.br/derlon/2010/05/17/o-vraptor3-e-o-framework-java-mais-coc-que-eu-ja-vi/">VRaptor3: o framework Java mais CoC que eu já vi...</a>
+		</dd>
+		
 		<dt>Thiago Nogueira</dt>
 		<dd>
 			<a href="http://tnogueira.com/blog/2010/04/28/carregando-combo-de-estado-e-municipios-utilizando-ajax-com-jquery-json-e-vraptor-3-1-2/">Carregando combo de Estado e Municípios utilizando Ajax com jQuery, JSON e VRaptor 3.1.2</a>

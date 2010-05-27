@@ -131,6 +131,18 @@ public class RouteBuilderTest {
 		assertTrue("valid uri", route.canHandle("/abc/10AB3/def/12"));
 
 	}
+	@Test
+	public void usingRegexesWithCurlyBracesNotOnTheEndAndOtherVarAndManyOtherThings() throws Exception {
+		builder = new RouteBuilder(proxifier, typeFinder, "/abc/{abc:[0-9A-Z]{5}}{def}{xxx:[0-9A-Z]{5}}");
+
+		builder.is(MyResource.class, method.getMethod());
+		Route route = builder.build();
+
+		assertFalse("invalid uri", route.canHandle("/abc/notValid/def/12"));
+		assertFalse("invalid uri", route.canHandle("/abc/ABC123/def/12"));
+		assertTrue("valid uri", route.canHandle("/abc/AAAAA14BBBBB"));
+
+	}
 
 	@Test
 	public void usingRegexesWithAsterisksAtTheEnd() throws Exception {

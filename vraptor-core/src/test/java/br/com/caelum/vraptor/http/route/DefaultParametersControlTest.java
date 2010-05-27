@@ -27,6 +27,7 @@ import static org.mockito.Mockito.verify;
 import java.util.Collections;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -69,6 +70,17 @@ public class DefaultParametersControlTest {
 		control.fillIntoRequest("/clients/FAF323", request);
 
 		verify(request).setParameter("hexa", new String[] {"FAF323"});
+	}
+	@Test
+	@Ignore("This shit should work someday")
+	public void registerParametersWithMultipleRegexes() throws SecurityException, NoSuchMethodException {
+		DefaultParametersControl control = new DefaultParametersControl("/test/{hash1:[a-z0-9]{16}}{id}{hash2:[a-z0-9]{16}}/", Collections.singletonMap("id", "(\\d+)"));
+
+		control.fillIntoRequest("/test/0123456789abcdef1234fedcba9876543210", request);
+
+		verify(request).setParameter("hash1", new String[] {"0123456789abcdef"});
+		verify(request).setParameter("id", new String[] {"1234"});
+		verify(request).setParameter("hash2", new String[] {"fedcba9876543210"});
 	}
 
 	@Test

@@ -17,6 +17,9 @@
 
 package br.com.caelum.vraptor.util;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import br.com.caelum.vraptor.vraptor2.Info;
 
 /**
@@ -41,6 +44,32 @@ public class StringUtils {
 
 		// all uppercase: URL -> url
 		return name.toLowerCase();
+	}
+
+	public static String[] extractParameters(String uri) {
+		//yeah, regexes are the root of all evil... so falling back to bracket matching!!! =)
+		List<String> params = new ArrayList<String>();
+		StringBuilder param = new StringBuilder();
+		int brackets = 0;
+		for (int i = 0; i < uri.length(); i++) {
+			char character = uri.charAt(i);
+			if (character == '{') {
+				brackets++;
+				if (brackets == 1) {
+					continue;
+				}
+			} else if (character == '}') {
+				brackets--;
+				if (brackets == 0) {
+					params.add(param.toString());
+					param = new StringBuilder();
+				}
+			}
+			if (brackets > 0) {
+				param.append(character);
+			}
+		}
+		return params.toArray(new String[params.size()]);
 	}
 
 }

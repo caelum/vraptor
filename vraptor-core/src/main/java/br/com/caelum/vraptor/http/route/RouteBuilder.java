@@ -46,11 +46,9 @@ package br.com.caelum.vraptor.http.route;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
@@ -62,6 +60,7 @@ import br.com.caelum.vraptor.proxy.MethodInvocation;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.SuperMethod;
 import br.com.caelum.vraptor.resource.HttpMethod;
+import br.com.caelum.vraptor.util.StringUtils;
 import br.com.caelum.vraptor.util.Stringnifier;
 
 import com.google.common.base.Joiner;
@@ -175,8 +174,7 @@ public class RouteBuilder {
 	}
 
 	private void addParametersInfo(Method method) {
-		//yeah, regexes are the root of all evil... so falling back to bracket matching!!! =)
-		String[] parameters = extractParameters(originalUri);
+		String[] parameters = StringUtils.extractParameters(originalUri);
 		Map<String, Class<?>> types = finder.getParameterTypes(method, sanitize(parameters));
 		for (Entry<String, Class<?>> entry : types.entrySet()) {
 			if (!builder.parameters.containsKey(entry.getKey())) {
@@ -197,31 +195,6 @@ public class RouteBuilder {
 			sanitized[i] = parameters[i].replaceAll("(\\:.*|\\*)$", "");
 		}
 		return sanitized;
-	}
-
-	private String[] extractParameters(String uri) {
-		List<String> params = new ArrayList<String>();
-		StringBuilder param = new StringBuilder();
-		int brackets = 0;
-		for (int i = 0; i < uri.length(); i++) {
-			char character = uri.charAt(i);
-			if (character == '{') {
-				brackets++;
-				if (brackets == 1) {
-					continue;
-				}
-			} else if (character == '}') {
-				brackets--;
-				if (brackets == 0) {
-					params.add(param.toString());
-					param = new StringBuilder();
-				}
-			}
-			if (brackets > 0) {
-				param.append(character);
-			}
-		}
-		return params.toArray(new String[params.size()]);
 	}
 
 	/**

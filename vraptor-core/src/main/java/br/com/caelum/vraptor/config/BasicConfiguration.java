@@ -78,7 +78,7 @@ public class BasicConfiguration {
 			throw new MissingConfigurationException(BasicConfiguration.BASE_PACKAGES_PARAMETER_NAME
 					+ " context-param not found in web.xml. " + "Set this parameter with your base package");
 		}
-		return packages.split(",");
+		return packages.trim().split(",\\s*");
 	}
 
 	public String getEncoding() {

@@ -8,10 +8,10 @@ on web.xml:
 <context-param>
 	<param-name>br.com.caelum.vraptor.packages</param-name>
 	<param-value>
-		br.com.caelum.vraptor.util.hibernate, // Session e SessionFactory 
-		br.com.caelum.vraptor.util.jpa, // EntityManager e EntityManagerFactory
-		br.com.caelum.vraptor.converter.l10n, //Converters numericos localizados
-		br.com.caelum.vraptor.http.iogi // suporte a parâmetros imutáveis
+		br.com.caelum.vraptor.util.hibernate, // Session and SessionFactory 
+		br.com.caelum.vraptor.util.jpa, // EntityManager and EntityManagerFactory
+		br.com.caelum.vraptor.converter.l10n, //Localized numeric Converters
+		br.com.caelum.vraptor.http.iogi // Immutable parameters support
 	</param-value>
 </context-param>
 [/xml]

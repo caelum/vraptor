@@ -40,12 +40,16 @@ import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.http.InvalidParameterException;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
+import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.validator.ValidationMessage;
 import br.com.caelum.vraptor.validator.annotation.ValidationException;
 
 import com.google.common.collect.ImmutableList;
 
+@Component
+@RequestScoped
 public class VRaptorInstantiator implements Instantiator<Object> {
 	private final Converters converters;
 	private final Container container;

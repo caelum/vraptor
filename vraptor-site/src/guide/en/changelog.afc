@@ -16,6 +16,7 @@ public void logic(List<String> abc) {...}
 [xml]
 <select name="abc[]" multiple="multiple">...</select>
 [/xml]
+* rendering a null representation means returning a 404
 [/list]
 
 [section 3.1.2]

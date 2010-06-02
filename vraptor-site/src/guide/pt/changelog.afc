@@ -16,6 +16,7 @@ public void logica(List<String> abc) {...}
 [xml]
 <select name="abc[]" multiple="multiple">...</select>
 [/xml]
+* renderizar null para sua representação significa retornar 404
 [/list]
 
 [section 3.1.2]

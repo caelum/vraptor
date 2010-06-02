@@ -53,6 +53,19 @@ public class DefaultRepresentationResultTest {
 
 		verify(status).notAcceptable();
 	}
+
+
+	@Test
+	public void shouldSend404IfNothingIsRendered() throws Exception {
+		when(formatResolver.getAcceptFormat()).thenReturn(null);
+
+		Serializer serializer = representation.from(null);
+
+		assertThat(serializer, is(instanceOf(IgnoringSerializer.class)));
+
+		verify(status).notFound();
+	}
+
 	@Test
 	public void whenThereIsNoFormatGivenShouldForwardToDefaultPageWithAlias() throws Exception {
 		when(formatResolver.getAcceptFormat()).thenReturn(null);

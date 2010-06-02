@@ -48,28 +48,25 @@ public class DefaultRepresentationResult implements RepresentationResult {
 	}
 
 	public <T> Serializer from(T object) {
-		if(HypermediaResource.class.isAssignableFrom(object.getClass())) {
-			headersHandler.handle(HypermediaResource.class.cast(object));
-		}
-		String format = formatResolver.getAcceptFormat();
-		for (Serialization serialization : serializations) {
-			if (serialization.accepts(format)) {
-				return serialization.from(object);
-			}
-		}
-
-		result.use(status()).notAcceptable();
-		return new IgnoringSerializer();
+		return from(object, null);
 	}
 
 	public <T> Serializer from(T object, String alias) {
+		if(object == null) {
+			result.use(status()).notFound();
+			return new IgnoringSerializer();
+		}
 		if(HypermediaResource.class.isAssignableFrom(object.getClass())) {
 			headersHandler.handle(HypermediaResource.class.cast(object));
 		}
 		String format = formatResolver.getAcceptFormat();
 		for (Serialization serialization : serializations) {
 			if (serialization.accepts(format)) {
-				return serialization.from(object, alias);
+				if(alias==null) { 
+					return serialization.from(object);
+				} else {
+					return serialization.from(object, alias);
+				}
 			}
 		}
 		result.use(status()).notAcceptable();

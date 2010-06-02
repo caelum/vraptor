@@ -88,7 +88,7 @@ public class DefaultRouter implements Router {
 	}
 
 	public ResourceMethod parse(String uri, HttpMethod method, MutableRequest request)
-						throws ResourceNotFoundException, MethodNotAllowedException{
+						throws MethodNotAllowedException{
 		Collection<Route> routesMatchingUriAndMethod = routesMatchingUriAndMethod(uri, method);
 
 		Iterator<Route> iterator = routesMatchingUriAndMethod.iterator();

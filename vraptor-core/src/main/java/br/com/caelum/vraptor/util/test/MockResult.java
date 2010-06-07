@@ -29,6 +29,7 @@ import br.com.caelum.vraptor.proxy.MethodInvocation;
 import br.com.caelum.vraptor.proxy.ObjenesisProxifier;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.SuperMethod;
+import br.com.caelum.vraptor.serialization.NoRootSerialization;
 import br.com.caelum.vraptor.serialization.Serializer;
 import br.com.caelum.vraptor.serialization.SerializerBuilder;
 import br.com.caelum.vraptor.view.EmptyResult;
@@ -75,11 +76,12 @@ public class MockResult extends AbstractResult {
 	private <T> MethodInvocation<T> returnOnFinalMethods(final Class<T> view) {
 		return new MethodInvocation<T>() {
 			public Object intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {
-				if (method.getReturnType() == void.class) {
+				Class type = method.getReturnType();
+				if (type == void.class) {
 					return null;
 				}
 
-				if (view.isAssignableFrom(method.getReturnType())) {
+				if (view.isAssignableFrom(type)) {
 					return proxy;
 				}
 
@@ -87,9 +89,10 @@ public class MockResult extends AbstractResult {
 					return proxifier.proxify((Class<?>) args[0], returnOnFirstInvocation());
 				}
 
-				if (Serializer.class.isAssignableFrom(method.getReturnType())
-						|| SerializerBuilder.class.isAssignableFrom(method.getReturnType())) {
-					return proxifier.proxify(SerializerBuilder.class, returnOnFinalMethods(SerializerBuilder.class));
+				if (Serializer.class.isAssignableFrom(type)
+						|| SerializerBuilder.class.isAssignableFrom(type)
+						|| NoRootSerialization.class.isAssignableFrom(type)) {
+					return proxifier.proxify(type, returnOnFinalMethods(type));
 				}
 				throw new ResultException("It's not possible to create a mocked version of " + method + ". Please inform this corner case to VRaptor developers");
 			}

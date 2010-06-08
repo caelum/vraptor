@@ -16,6 +16,7 @@
  */
 package br.com.caelum.vraptor.blank;
 
+import static br.com.caelum.vraptor.view.Results.representation;
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
@@ -32,6 +33,7 @@ public class IndexController {
 	@Path("/")
 	public void index() {
 		result.include("variable", "VRaptor!");
+		result.use(representation()).from("abc").serialize();
 	}
 
 }

@@ -25,6 +25,7 @@
 			    <include name="*.jar"/>
 				<exclude name="objenesis*.jar"/>
 				<exclude name="spring*.jar"/>
+				<exclude name="jstl*.jar"/>
 			</fileset>
     		<fileset dir="${extra.lib.dir}">
 			    <include name="*.jar"/>

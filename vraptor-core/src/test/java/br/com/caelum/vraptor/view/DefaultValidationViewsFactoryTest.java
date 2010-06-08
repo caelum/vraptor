@@ -37,7 +37,6 @@ import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.serialization.JSONSerialization;
 import br.com.caelum.vraptor.serialization.SerializerBuilder;
 import br.com.caelum.vraptor.util.test.MockedLogic;
-import br.com.caelum.vraptor.util.test.MockedPage;
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.ValidationException;
 

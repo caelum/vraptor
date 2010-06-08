@@ -50,7 +50,7 @@ public class MockResultTest {
 	}
 	@Test
 	public void shouldNotThrowNullPointersOnJsonResult() throws Exception {
-		result.use(json()).from("abc").exclude("aaa").include("aaa").serialize();
+		result.use(json()).withoutRoot().from("abc").exclude("aaa").include("aaa").serialize();
 	}
 	@Test
 	public void shouldNotThrowNullPointersOnXmlResult() throws Exception {

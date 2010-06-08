@@ -2,7 +2,20 @@
 
 [section Registrando um componente opcional]
 O VRaptor possui alguns componentes opcionais, que estão no pacote 
-%%br.com.caelum.vraptor.util%%. Para registrá-los você pode fazer o seguinte:
+%%br.com.caelum.vraptor.util%%. Para registrá-los você pode adicionar seus pacotes
+no web.xml:
+
+[xml]
+<context-param>
+	<param-name>br.com.caelum.vraptor.packages</param-name>
+	<param-value>
+		br.com.caelum.vraptor.util.um.pacote, 
+		br.com.caelum.vraptor.util.outro.pacote
+	</param-value>
+</context-param>
+[/xml]
+
+ou você pode criar um custom provider:
 
 [list]
 * Crie uma classe filha do Provider que você está usando:
@@ -36,27 +49,36 @@ public class CustomProvider extends SpringProvider {
 
 [/list]
 
-[section Hibernate Session e SessionFactory]
+[section Componentes opcionais disponíveis]
+
+[title Hibernate Session e SessionFactory]
 
 Se você precisa de Session's e SessionFactory nos seus componentes, você geralmente
 vai precisar de um ComponentFactory para criá-los. Se você usa entidades anotadas,
 e o hibernate.cfg.xml na raiz do WEB-INF/classes, você pode usar as ComponentFactory's para
-isso que já vêm com o VRaptor. O que você precisa fazer é:
+isso que já vêm com o VRaptor. O VRaptor também tem um interceptor que abre a Session e começa
+uma transação no início da requisição e fecha a Session (e commita ou dá rollback na transação)
+no final da requisição. Você pode registrar esses componentes do VRaptor adicionando o pacote
+**br.com.caelum.vraptor.util.hibernate** no seu web.xml:
+[xml]
+<context-param>
+	<param-name>br.com.caelum.vraptor.packages</param-name>
+	<param-value>
+		br.com.caelum.vraptor.util.outros.pacotes...,
+		br.com.caelum.vraptor.util.hibernate
+	</param-value>
+</context-param>
+[/xml]
 
+ou registrá-los manualmente no custom provider:
 [java]
 	@Override
 	protected void registerCustomComponents(ComponentRegistry registry) {
-		registry.register(SessionCreator.class, SessionCreator.class);
-		registry.register(SessionFactoryCreator.class, SessionFactoryCreator.class);
-	}
-[/java]
-
-Inclusive você pode habilitar um interceptor que controla a transação do Hibernate:
-[java]
-	@Override
-	protected void registerCustomComponents(ComponentRegistry registry) {
+		registry.register(SessionCreator.class, SessionCreator.class); //cria Session's
+		registry.register(SessionFactoryCreator.class, 
+			SessionFactoryCreator.class); // cria uma SessionFactory
 		registry.register(HibernateTransactionInterceptor.class, 
-							HibernateTransactionInterceptor.class);
+			HibernateTransactionInterceptor.class); // open session and transaction in view
 	}
 [/java]
 
@@ -68,26 +90,32 @@ registrá-lo no seu web.xml:
 	<param-value>br.com.caelum.vraptor.util.hibernate.HibernateCustomProvider</param-value>
 </context-param>
 [/xml]
+
 [section JPA EntityManager e EntityManagerFactory]
 
 Se você tiver um persistence.xml com o persistence-unit chamado "default", você pode usar
 os ComponentFactories para criar EntityManager e EntityManagerFactory já disponíveis no 
-vraptor:
-[java]
-	@Override
-	protected void registerCustomComponents(ComponentRegistry registry) {
-		registry.register(EntityManagerCreator.class, EntityManagerCreator.class);
-		registry.register(EntityManagerFactoryCreator.class, 
-							EntityManagerFactoryCreator.class);
-	}
-[/java]
+vraptor, adicionando o pacote **br.com.caelum.vraptor.util.jpa** no web.xml:
 
-Inclusive você pode habilitar um interceptor que controla a transação da JPA:
+[xml]
+<context-param>
+	<param-name>br.com.caelum.vraptor.packages</param-name>
+	<param-value>
+		br.com.caelum.vraptor.util.outros.pacotes...,
+		br.com.caelum.vraptor.util.jpa
+	</param-value>
+</context-param>
+[/xml]
+ou adicioná-los manualmente no web.xml:
 [java]
 	@Override
 	protected void registerCustomComponents(ComponentRegistry registry) {
+		registry.register(EntityManagerCreator.class,
+			EntityManagerCreator.class); // cria EntityManager's
+		registry.register(EntityManagerFactoryCreator.class, 
+			EntityManagerFactoryCreator.class); //cria uma EntityManagerFactory
 		registry.register(JPATransactionInterceptor.class, 
-							JPATransactionInterceptor.class);
+			JPATransactionInterceptor.class); //open EntityManager and transaction in view
 	}
 [/java]
 
@@ -97,5 +125,60 @@ registrá-lo no seu web.xml:
 <context-param>
 	<param-name>br.com.caelum.vraptor.provider</param-name>
 	<param-value>br.com.caelum.vraptor.util.jpa.JPACustomProvider</param-value>
+</context-param>
+[/xml]
+
+
+[title Converters Localizados]
+
+Existem alguns converters para números que são localizados, ou seja, que consideram o 
+Locale atual para converter os parâmetros. Você pode registrá-los adicionando o pacote
+**br.com.caelum.vraptor.converter.l10n** no seu web.xml:
+[xml]
+<context-param>
+	<param-name>br.com.caelum.vraptor.packages</param-name>
+	<param-value>
+		br.com.caelum.vraptor.util.outros.pacotes...,
+		br.com.caelum.vraptor.converter.l10n
+	</param-value>
+</context-param>
+[/xml]
+
+[title Instanciador de Parâmetros Imutáveis (beta)]
+Se você quiser trabalhar com objetos imutáveis no seu projeto, você pode usar um parameter
+provider que consegue popular seus objetos a partir dos parâmetros do seu construtor:
+
+[java]
+@Resource
+public class CarrosController {
+	public void lava(Carro carro) {
+	
+	}
+}
+[/java]
+
+[java]
+public class Carro {
+   private final String cor;
+   private final String modelo;
+   public Car(String cor, String modelo) {
+     this.cor = cor;
+     this.modelo = modelo;
+   }
+   //getters
+}
+[/java]
+
+O carro será populado com os request parameters normais: %%carro.cor%% e %%carro.modelo%%
+
+Para habilitar esse comportamento, você pode adicionar o pacote
+**br.com.caelum.vraptor.http.iogi** ao seu web.xml:
+[xml]
+<context-param>
+	<param-name>br.com.caelum.vraptor.packages</param-name>
+	<param-value>
+		br.com.caelum.vraptor.util.outros.pacotes...,
+		br.com.caelum.vraptor.http.iogi
+	</param-value>
 </context-param>
 [/xml]

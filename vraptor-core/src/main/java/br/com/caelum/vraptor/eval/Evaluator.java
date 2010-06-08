@@ -64,10 +64,10 @@ public class Evaluator {
 		}
 		Method method;
 		try {
-			method = current.getClass().getDeclaredMethod("get" + Info.capitalize(path));
+			method = current.getClass().getMethod("get" + Info.capitalize(path));
 		} catch (NoSuchMethodException e) {
 			try {
-				method = current.getClass().getDeclaredMethod("is" + Info.capitalize(path));
+				method = current.getClass().getMethod("is" + Info.capitalize(path));
 			} catch (NoSuchMethodException e1) {
 				throw new InvocationTargetException(e1, "Unable to find get or is method.");
 			}

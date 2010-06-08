@@ -75,6 +75,12 @@ public class EvaluatorTest {
 		}
 	}
 
+	class VipClient extends Client {
+		public VipClient(Long id) {
+			super(id);
+		}
+	}
+
 	class TypeCreated {
 		private Client client;
 
@@ -134,8 +140,25 @@ public class EvaluatorTest {
 		assertThat((String) evaluator.get(c, "client.id"), is(equalTo("")));
 	}
 
+	@Test
+	public void shouldInvokeAGetterDeclaredOnSuperClass() {
+		TypeCreated c = vipClient(1L);
+		assertThat((Long) evaluator.get(c, "client.id"), is(equalTo(1L)));
+	}
+
+	@Test
+	public void shouldInvokeAIsDeclaredOnSuperClass() {
+		TypeCreated c = vipClient(1L);
+		c.client.ugly = true;
+		assertThat((Boolean) evaluator.get(c, "client.ugly"), is(equalTo(true)));
+	}
+
 	private TypeCreated client(Long id) {
 		return new TypeCreated(new Client(id));
+	}
+
+	private TypeCreated vipClient(Long id) {
+		return new TypeCreated(new VipClient(id));
 	}
 
 }

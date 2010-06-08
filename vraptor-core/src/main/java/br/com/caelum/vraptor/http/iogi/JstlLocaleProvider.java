@@ -21,7 +21,9 @@ import java.util.Locale;
 
 import br.com.caelum.iogi.spi.LocaleProvider;
 import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.ioc.Component;
 
+@Component
 public class JstlLocaleProvider implements LocaleProvider {
 	private final RequestInfo request;
 

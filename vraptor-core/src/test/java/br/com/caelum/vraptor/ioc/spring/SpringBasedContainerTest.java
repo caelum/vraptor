@@ -135,6 +135,13 @@ public class SpringBasedContainerTest {
 		assertTrue(container.canProvide(DummyComponent.class));
 		assertFalse(container.canProvide(NotRegisterd.class));
 	}
+	@Test
+	public void shouldNotProvidePrimitiveValues() {
+		assertFalse(container.canProvide(Long.class));
+		assertFalse(container.canProvide(long.class));
+		assertFalse(container.canProvide(long[].class));
+		assertFalse(container.canProvide(Long[].class));
+	}
 
 	@Test
 	public void shouldSupportOtherStereotypeAnnotations() {

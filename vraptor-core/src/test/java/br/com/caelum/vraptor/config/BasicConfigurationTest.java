@@ -57,7 +57,7 @@ public class BasicConfigurationTest {
         MatcherAssert.assertThat(config.getWebinfClassesDirectory(), is("/x/WEB-INF/classes/"));
     }
 
-    
+
     @Test
     public void shouldUseSpringContainerAsDefaultProvider() throws ServletException {
         when(context.getInitParameter(BasicConfiguration.CONTAINER_PROVIDER)).thenReturn(null);
@@ -86,6 +86,18 @@ public class BasicConfigurationTest {
         when(context.getInitParameter(BasicConfiguration.BASE_PACKAGES_PARAMETER_NAME)).thenReturn("some.packages,other.packages");
 
         MatcherAssert.assertThat(config.getBasePackages(), is(new String[] {"some.packages", "other.packages"}));
+    }
+    @Test
+    public void shouldReturnBasePackagesArrayWhenInitParamNotNullAndHasComasAndSpaces() throws ServletException {
+    	when(context.getInitParameter(BasicConfiguration.BASE_PACKAGES_PARAMETER_NAME)).thenReturn("some.packages, \n      other.packages");
+
+    	MatcherAssert.assertThat(config.getBasePackages(), is(new String[] {"some.packages", "other.packages"}));
+    }
+    @Test
+    public void shouldReturnBasePackagesArrayWhenInitParamHasLeadingAndTrailingSpaces() throws ServletException {
+    	when(context.getInitParameter(BasicConfiguration.BASE_PACKAGES_PARAMETER_NAME)).thenReturn("    \nsome.package\n   ");
+
+    	MatcherAssert.assertThat(config.getBasePackages(), is(new String[] {"some.package"}));
     }
 
 

@@ -2,6 +2,19 @@
 
 [section 3.1.3 (in dev)]
 [list]
+* One can register now all optional vraptor components on packages configuration
+on web.xml:
+[xml]
+<context-param>
+	<param-name>br.com.caelum.vraptor.packages</param-name>
+	<param-value>
+		br.com.caelum.vraptor.util.hibernate, // Session and SessionFactory 
+		br.com.caelum.vraptor.util.jpa, // EntityManager and EntityManagerFactory
+		br.com.caelum.vraptor.converter.l10n, //Localized numeric Converters
+		br.com.caelum.vraptor.http.iogi // Immutable parameters support
+	</param-value>
+</context-param>
+[/xml]
 * bugfixes on new Validator
 * new method on http result:
 [java]

@@ -61,6 +61,7 @@ import br.com.caelum.vraptor.deserialization.Deserializer;
 import br.com.caelum.vraptor.deserialization.Deserializers;
 import br.com.caelum.vraptor.deserialization.Deserializes;
 import br.com.caelum.vraptor.deserialization.DeserializesHandler;
+import br.com.caelum.vraptor.deserialization.JsonDeserializer;
 import br.com.caelum.vraptor.deserialization.XMLDeserializer;
 import br.com.caelum.vraptor.deserialization.XStreamXMLDeserializer;
 import br.com.caelum.vraptor.extra.ForwardToDefaultViewInterceptor;
@@ -182,6 +183,7 @@ public class BaseComponents {
             ParameterNameProvider.class, 	ParanamerNameProvider.class,
             TypeFinder.class, 				DefaultTypeFinder.class,
             XMLDeserializer.class,			XStreamXMLDeserializer.class,
+            JsonDeserializer.class,			JsonDeserializer.class,
             RoutesParser.class, 			PathAnnotationRoutesParser.class,
             Routes.class,					DefaultRoutes.class,
             RestDefaults.class,				DefaultRestDefaults.class,

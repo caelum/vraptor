@@ -7,6 +7,11 @@
 	<h3 class="title">O que a comunidade anda falando sobre o VRaptor</h3>
 
 	<dl class="equipe">
+		<dt>Marcelo Marmol</dt>
+		<dd>
+			<a href="http://www.infoq.com/br/news/2010/06/tutorial-vraptor-flex4">Tutorial: Flex4 e VRaptor3 em 1+1 minutos</a>
+		</dd>
+
 		<dt>Lucas H. G. Toniazzo</dt>
 		<dd>
 			<a href="http://www.lucas.hgt.nom.br/wordpress/?p=107">Gerando aplicação com VRaptor3 usando Maven</a>
@@ -42,6 +47,7 @@
 		
 		<dt>Daniel (yorgan)</dt>
 		<dd>
+			<a href="http://k2studio.com.br/site/2010/06/vraptor-login-jquery/">VRaptor: Login com jQuery</a><br/>
 			<a href="http://k2studio.com.br/site/2010/05/introducao-vraptor/">Introdução ao VRaptor - CRUD Completo</a><br/>
 			<a href="http://k2studio.com.br/site/2010/05/integracao-ext-js-com-vraptor3/">Integração Ext JS com VRaptor3</a>
 		</dd>

@@ -35,6 +35,27 @@ public enum Tipo {
 Ambos são suportados utilizando o padrão de localização da virtual machine que serve a sua aplicação.
 Para criar suporte a números decimais baseados no locale do usuário, basta olhar o funcionamento da classe LocaleBasedCalendarConverter.
 
+[section BigDecimal, Double e Float localizados]
+
+A partir da versão 3.1.2 o Vraptor suporta esses tipos baseados na localização da virtual machine. Para ativar esses 
+componentes é necessário adicionar as seguintes linhas no seu web.xml:
+
+[xml]
+	<context-param>
+		<param-name>br.com.caelum.vraptor.packages</param-name>
+    	<param-value>!!previous value!!,br.com.caelum.vraptor.converter.l10n</param-value>
+    </context-param>
+[/xml]
+
+A localização dos componentes pode ser alterada utilizando a seguinte configuração no web.xml:
+
+[xml]
+<context-param>
+	<param-name>javax.servlet.jsp.jstl.fmt.locale</param-name>
+	<param-value>pt_BR</param-value>
+</context-param>
+[/xml]
+
 [section Calendar e Date]
 
 LocaleBasedCalendarConverter e LocaleBasedDateConverter utilizam o locale do usuário,

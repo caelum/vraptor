@@ -35,6 +35,27 @@ public enum Type {
 Both are supported using your JVM's default locale.
 To enable decimal values based on the user's locale, you can check how the class LocaleBasedCalendarConverter works.
 
+[section Localized BigDecimal, Double e Float]
+
+Since version 3.1.2, Vraptor also supports localization for these types. In order to use them you must add to your web.xml:
+
+[xml]
+	<context-param>
+		<param-name>br.com.caelum.vraptor.packages</param-name>
+    	<param-value>!!previous value!!,br.com.caelum.vraptor.converter.l10n</param-value>
+    </context-param>
+[/xml]
+
+The converters uses the JVM's default locale. You can override the JVM locale adding these lines in your web.xml:
+
+[xml]
+<context-param>
+	<param-name>javax.servlet.jsp.jstl.fmt.locale</param-name>
+	<param-value>pt_BR</param-value>
+</context-param>
+[/xml]
+
+
 [section Calendar and Date]
 
 Both LocaleBasedCalendarConverter and LocaleBasedDateConverter are based on the user's locale,

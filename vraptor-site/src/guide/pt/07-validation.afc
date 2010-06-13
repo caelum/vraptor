@@ -110,15 +110,17 @@ public admin(Funcionario funcionario) {
 [/java]
 
 
-[section Hibernate validator]
+[section Bean Validation (JSR303) e Hibernate Validator]
 
-O VRaptor também suporta integração com o HibernateValidator. No exemplo anterior para validar o objeto Funcionario 
-usando o Hibernate Validator basta adicionar uma linha de código:
+O VRaptor também suporta integração com o Bean Validation e o Hibernate Validator. Para usar as validações 
+basta adicionar no seu classpath qualquer implementação do Bean Validation ou do Hibernate Validator.
+
+No exemplo anterior para validar o objeto Funcionario basta uma adicionar uma linha de código:
 
 [java]
 public adiciona(Funcionario funcionario) {
-	//Validação do Funcionario com Hibernate Validator
-	validator.addAll(Hibernate.validate(funcionario));
+	// Validação do Funcionario com o Bean Validator ou Hibernate Validator
+	validator.validate(funcionario);
 
 	validator.checking(new Validations(){{
 		that(!funcionario.getNome().isEmpty(), "erro","nomeNaoInformado");

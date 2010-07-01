@@ -72,13 +72,7 @@ public class ParametersInstantiatorInterceptor implements Interceptor {
 	public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws InterceptionException {
     	Enumeration<String> names = request.getParameterNames();
     	while (names.hasMoreElements()) {
-			String name = names.nextElement();
-			if(name.contains("[]")) {
-				String[] values = request.getParameterValues(name);
-				for (int i = 0; i < values.length; i++) {
-					request.setParameter(name.replace("[]", "[" + i + "]"), values[i]);
-				}
-			}
+			fixParameter(names.nextElement());
 		}
         Object[] values = getParametersFor(method);
 
@@ -91,6 +85,18 @@ public class ParametersInstantiatorInterceptor implements Interceptor {
         parameters.setParameters(values);
         stack.next(method, resourceInstance);
     }
+
+	private void fixParameter(String name) {
+		if (name.contains(".class.")) {
+			throw new IllegalArgumentException("Bug Exploit Attempt with parameter: " + name + "!!!");
+		}
+		if (name.contains("[]")) {
+			String[] values = request.getParameterValues(name);
+			for (int i = 0; i < values.length; i++) {
+				request.setParameter(name.replace("[]", "[" + i + "]"), values[i]);
+			}
+		}
+	}
 
 	private Object[] getParametersFor(ResourceMethod method) {
 		Object[] args = (Object[]) session.getAttribute(ParametersInstantiatorInterceptor.FLASH_PARAMETERS);

@@ -114,6 +114,19 @@ public class ParametersInstantiatorInterceptorTest {
     	verify(request).setParameter("someParam[1].id", "two");
     	verify(request).setParameter("someParam[2].id", "three");
     }
+
+    /**
+     * Bug related
+     */
+    @Test(expected=IllegalArgumentException.class)
+    public void shouldThrowExceptionWhenThereIsAParameterContainingDotClass() throws Exception {
+
+    	when(request.getParameterNames()).thenReturn(Collections.enumeration(Arrays.asList("someParam.class.id", "unrelatedParam")));
+    	when(request.getParameterValues("someParam.class.id")).thenReturn(new String[] {"whatever"});
+
+    	instantiator.intercept(stack, method, null);
+
+    }
     @Test
     public void shouldUseAndDiscardFlashParameters() throws InterceptionException, IOException, NoSuchMethodException {
 		Object[] values = new Object[] { new Object() };

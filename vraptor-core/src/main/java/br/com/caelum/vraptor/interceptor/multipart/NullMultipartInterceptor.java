@@ -5,24 +5,20 @@ import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**
- * A null implementation of {@link MultipartInterceptor}. This class doesn't anything.
- * 
+ * A null implementation of {@link MultipartInterceptor}. This class does nothing.
+ *
  * @author Otávio Scherer Garcia
- * @since 3.1.x-garcia
- * @see DefaultMultipartInterceptor
+ * @since 3.1.3
+ * @see CommonsUploadMultipartInterceptor
  */
-public class NullMultipartInterceptor
-    implements MultipartInterceptor {
+public class NullMultipartInterceptor implements MultipartInterceptor {
 
-    @Override
     public boolean accepts(ResourceMethod method) {
-        return false; // never accepts
+        return false;
     }
 
-    @Override
     public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
         throws InterceptionException {
-        // go to next hope
         stack.next(method, resourceInstance);
     }
 

@@ -17,7 +17,6 @@
 package br.com.caelum.vraptor.interceptor.multipart;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,8 +24,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.FileUploadBase;
-import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.FileUploadBase.SizeLimitExceededException;
+import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.servlet.ServletRequestContext;
@@ -42,16 +41,15 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.validator.Validations;
 
 /**
- * An interceptor which handles multipart requests.<br>
+ * A multipart interceptor based on Apache Commons Upload.
  * Provided parameters are injected through RequestParameters.set and uploaded files are made available through
- * 
+ *
  * @author Guilherme Silveira
  */
 @RequestScoped
-public class DefaultMultipartInterceptor
-    implements MultipartInterceptor {
+public class CommonsUploadMultipartInterceptor implements MultipartInterceptor {
 
-    private static final Logger logger = LoggerFactory.getLogger(DefaultMultipartInterceptor.class);
+    private static final Logger logger = LoggerFactory.getLogger(CommonsUploadMultipartInterceptor.class);
 
     private final long sizeLimit;
 
@@ -63,8 +61,8 @@ public class DefaultMultipartInterceptor
 
     private final Validator validator;
 
-    public DefaultMultipartInterceptor(HttpServletRequest request, MutableRequest parameters, MultipartConfig config, Validator validator)
-        throws IOException {
+    public CommonsUploadMultipartInterceptor(HttpServletRequest request, MutableRequest parameters,
+    		MultipartConfig config, Validator validator) {
         this.request = request;
         this.parameters = parameters;
         this.validator = validator;

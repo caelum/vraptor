@@ -34,7 +34,7 @@ import com.google.common.collect.Multimap;
 
 /**
  * Processes all elements in a multipart request.
- * 
+ *
  * @author Guilherme Silveira
  * @author Paulo Silveira
  */
@@ -52,14 +52,13 @@ public class MultipartItemsProcessor {
     }
 
     public void process() {
-        Multimap<String, String> params = LinkedListMultimap.create();
+    	Multimap<String, String> params = LinkedListMultimap.create();
         for (FileItem item : items) {
             if (item.isFormField()) {
                 params.put(item.getFieldName(), getValue(item));
                 continue;
             }
-
-            if (item.getName().trim().length() == 0) {
+            if (notEmpty(item)) {
                 try {
                     UploadedFile fileInformation = new DefaultUploadedFile(item.getInputStream(), item.getName(), item.getContentType());
                     parameters.setParameter(item.getFieldName(), item.getName());
@@ -70,26 +69,28 @@ public class MultipartItemsProcessor {
                     throw new InvalidParameterException("Cant parse uploaded file " + item.getName(), e);
                 }
             } else {
-                logger.debug("A file field was empty: {}", item.getFieldName());
+                logger.debug("A file field was empty: {}",  item.getFieldName());
             }
         }
-
-        for (String name : params.keySet()) {
-            Collection<String> values = params.get(name);
-            parameters.setParameter(name, values.toArray(new String[values.size()]));
-        }
+        for (String paramName : params.keySet()) {
+			Collection<String> paramValues = params.get(paramName);
+			parameters.setParameter(paramName, paramValues.toArray(new String[paramValues.size()]));
+		}
     }
 
-    private String getValue(FileItem item) {
-        String encoding = request.getCharacterEncoding();
-        if (encoding != null && encoding.length() > 0) {
-            try {
-                return item.getString(encoding);
-            } catch (UnsupportedEncodingException e) {
-                logger.warn("Request have an invalid encoding. Ignoring it");
-            }
-        }
+	private String getValue(FileItem item) {
+		String encoding = request.getCharacterEncoding();
+		if (encoding != null && !encoding.equals("")) {
+			try {
+				return item.getString(encoding);
+			} catch (UnsupportedEncodingException e) {
+				logger.warn("Request have an invalid encoding. Ignoring it");
+			}
+		}
+		return item.getString();
+	}
 
-        return item.getString();
+    private static boolean notEmpty(FileItem item) {
+        return !item.getName().trim().equals("");
     }
 }

@@ -19,14 +19,12 @@ package br.com.caelum.vraptor.interceptor.multipart;
 import br.com.caelum.vraptor.interceptor.Interceptor;
 
 /**
- * An interface to provides a choise between {@link NullMultipartInterceptor} and {@link DefaultMultipartInterceptor}.
- * If the commons file upload is found in classpath the {@link DefaultMultipartInterceptor} is enabled, or
- * {@link NullMultipartInterceptor} otherwise.
- * 
+ * An interceptor which handles multipart requests.
+ *
+ * @author Guilherme Silveira
  * @author Otávio Scherer Gaecia
- * @since 3.1.x-garcia
+ * @since 3.1.3
  */
-public interface MultipartInterceptor
-    extends Interceptor {
+public interface MultipartInterceptor extends Interceptor {
 
 }

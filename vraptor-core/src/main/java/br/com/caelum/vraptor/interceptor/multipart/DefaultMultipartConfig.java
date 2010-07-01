@@ -2,17 +2,17 @@
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource
  * All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); 
- * you may not use this file except in compliance with the License. 
- * You may obtain a copy of the License at 
- * 
- * 	http://www.apache.org/licenses/LICENSE-2.0 
- * 
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an "AS IS" BASIS, 
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
- * See the License for the specific language governing permissions and 
- * limitations under the License. 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * 	http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package br.com.caelum.vraptor.interceptor.multipart;
@@ -28,12 +28,11 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
 /**
  * TODO: should expose not a directory, but a way to define memory or file usage (commons upload has already a common
  * interface to it).
- * 
+ *
  * @author Paulo Silveira
  */
 @ApplicationScoped
-public class DefaultMultipartConfig
-    implements MultipartConfig {
+public class DefaultMultipartConfig implements MultipartConfig {
 
     private final Logger logger = LoggerFactory.getLogger(DefaultMultipartConfig.class);
 
@@ -41,28 +40,24 @@ public class DefaultMultipartConfig
         return 2 * 1024 * 1024;
     }
 
+    /**
+     * find the tempdir in this order: system-property, create temp file or by create
+     * a empty directory in the application.
+     * @author Otávio Scherer Garcia
+     */
     public File getDirectory() {
-        // change by Otávio Scherer Garcia
-        // find the tempdir in this order: system-property, create temp file or by create
-        // a empty directory in the user home.
 
         try {
-            // try to read system-property
             return new File(System.getProperty("java.io.tmpdir"));
-
         } catch (SecurityException e0) {
-            // security manager doesn't allow access to read the property
-            logger.warn("Access to property java.io.tmpdir is denied", e0);
+            logger.warn("Access to property java.io.tmpdir is denied, trying to create a file on the temp dir", e0);
 
             try {
-                // try to create an empty file and return the directory
                 File tempFile = File.createTempFile("raptor.", ".upload");
                 tempFile.delete();
                 return tempFile.getParentFile();
-
             } catch (IOException e1) {
-                // try to create an empty dir into user home
-                logger.warn("Unable to find temp directory", e1);
+                logger.warn("Unable to find temp directory, creating a dir inside the application", e1);
                 File tmp = new File(".tmp-multipart-upload");
                 tmp.mkdirs();
                 return tmp;

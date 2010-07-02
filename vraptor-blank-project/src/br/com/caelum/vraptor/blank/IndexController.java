@@ -16,7 +16,8 @@
  */
 package br.com.caelum.vraptor.blank;
 
-import static br.com.caelum.vraptor.view.Results.representation;
+import javax.servlet.http.HttpServletRequest;
+
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
@@ -26,14 +27,15 @@ public class IndexController {
 
 	private final Result result;
 
-	public IndexController(Result result) {
+	public IndexController(Result result, HttpServletRequest request) {
 		this.result = result;
+		System.out.println(request.getParameter("abc"));
 	}
 
 	@Path("/")
-	public void index() {
+	public void index(Integer[] abc) {
+		System.out.println(abc);
 		result.include("variable", "VRaptor!");
-		result.use(representation()).from("abc").serialize();
 	}
 
 }

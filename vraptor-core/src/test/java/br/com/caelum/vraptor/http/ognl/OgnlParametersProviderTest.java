@@ -84,7 +84,7 @@ public class OgnlParametersProviderTest {
         buyA = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("buyA", House.class));
         kick = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("kick", AngryCat.class));
         error = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("error", WrongCat.class));
-        array = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("array", String[].class));
+        array = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("array", Long[].class));
 
         when(creator.typeFor(buyA)).thenReturn((Class) BuyASetter.class);
         when(creator.typeFor(kick)).thenReturn((Class) KickSetter.class);
@@ -174,7 +174,7 @@ public class OgnlParametersProviderTest {
         }
         void error(WrongCat wrongCat) {
         }
-        void array(String[] abc) {
+        void array(Long[] abc) {
         }
     }
 
@@ -215,13 +215,13 @@ public class OgnlParametersProviderTest {
     }
 
     public static class ArraySetter {
-    	private String[] abc;
+    	private Long[] abc;
 
-		public void setAbc(String[] abc) {
+		public void setAbc(Long[] abc) {
 			this.abc = abc;
 		}
 
-		public String[] getAbc() {
+		public Long[] getAbc() {
 			return abc;
 		}
 
@@ -238,11 +238,11 @@ public class OgnlParametersProviderTest {
     }
     @Test
     public void isCapableOfDealingArraysWithOneElement() throws Exception {
-    	requestParameterIs(array, "abc", "first");
+    	requestParameterIs(array, "abc", "1");
 
-    	String[] abc = getParameters(array);
+    	Long[] abc = getParameters(array);
 
-    	assertThat(abc, is(arrayContaining("first")));
+    	assertThat(abc, is(arrayContaining(1l)));
     }
 
     @Test

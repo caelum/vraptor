@@ -86,6 +86,11 @@ public interface Status extends View {
 	void methodNotAllowed(EnumSet<HttpMethod> allowedMethods);
 
 	/**
+	 * Returns a Not Modified (304) status
+	 */
+	void notModified();
+
+	/**
 	 * Send redirect with Moved Permanently (301) Header Example:
 	 * result.use(http()).movedPermanentlyTo("/clients"); will move to
 	 * /<contextPath>/clients

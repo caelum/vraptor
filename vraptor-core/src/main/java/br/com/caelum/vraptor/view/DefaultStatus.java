@@ -150,4 +150,8 @@ public class DefaultStatus implements Status {
 		sendError(HttpServletResponse.SC_NOT_ACCEPTABLE);
 	}
 
+	public void notModified() {
+		response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
+	}
+
 }

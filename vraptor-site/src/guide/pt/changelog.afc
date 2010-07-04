@@ -2,6 +2,43 @@
 
 [section 3.1.3 (em dev)]
 [list]
+* Corrigidos bugs do novo validator
+
+* Scala Blank Project
+
+* corrigido bug do char como parâmetro na URI
+
+* melhor estratégia no escopo flash
+
+* começo do suporte pra javax.inject API. Agora é possível dar nomes para os parâmetros de uma lógica:
+
+[java]
+public void logica(@Named("um_nome") String outroNome) {...}
+[/java]
+Nesse caso, o parâmetro aceito na requisição se chamará 'um_nome'.
+
+* Melhor suporte ao GAE
+
+* novo método no http result:
+[java]
+	result.use(http()).body(conteudo);
+[/java]
+conteudo pode ser uma String, um InputStream ou um Reader.
+
+* mais métodos disponíveis no result.use(status())
+
+* novo método : result.use(representation()).from(objeto, alias)
+
+* suporte a selects múltiplos:
+[java]
+public void logica(List<String> abc) {...}
+[/java]
+[xml]
+<select name="abc[]" multiple="multiple">...</select>
+[/xml]
+
+* status 406 automatico no result.use(representation())
+
 * Agora é possível registrar os componentes opcionais do vraptor no parâmetro packages
 do web.xml:
 [xml]
@@ -16,21 +53,12 @@ do web.xml:
 </context-param>
 [/xml]
 
-* Corrigidos bugs do novo validator
-* novo método no http result:
-[java]
-	result.use(http()).body(conteudo);
-[/java]
-conteudo pode ser uma String, um InputStream ou um Reader.
-
-* suporte a selects múltiplos:
-[java]
-public void logica(List<String> abc) {...}
-[/java]
-[xml]
-<select name="abc[]" multiple="multiple">...</select>
-[/xml]
 * renderizar null para sua representação significa retornar 404
+
+* nova classe: JsonDeserializer
+* MultipartInterceptor agora é opcional
+
+* bugfix: arrays de tamanho == 1 agora são suportados como parâmetros de lógicas
 [/list]
 
 [section 3.1.2]

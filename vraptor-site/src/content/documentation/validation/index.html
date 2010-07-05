@@ -197,12 +197,14 @@ Hamcrest allows:</span>
 </span><span class="java8">}</span></code></div>
 		
 
-<h3 class="section">Hibernate validator</h3>
-	    	<span class="paragraph">VRaptor 3 also supports HibernateValidator integration. In the example above, to validate the employee object using HibernateValidator, just add one line to your code:</span>
+<h3 class="section">Bean Validation (JSR303) and Hibernate Validator</h3>
+	    	<span class="paragraph">VRaptor 3 also supports Bean Validation and Hibernate Validator. To use these features you only need to put 
+any implementation of Bean Validation or Hibernate Validator jars in your classpath.</span>
+	    	<span class="paragraph">In the example above, to validate the employee object using HibernateValidator, just add one line to your code:</span>
 	    	<div class="java"><code class="java">
 <span class="java4">public </span><span class="java10">add</span><span class="java8">(</span><span class="java10">Employee employee</span><span class="java8">) {<br />
-&nbsp;&nbsp;&nbsp; </span><span class="java3">//Validation with Hibernate Validator<br />
-&nbsp;&nbsp;&nbsp; </span><span class="java10">validator.addAll</span><span class="java8">(</span><span class="java10">Hibernate.validate</span><span class="java8">(</span><span class="java10">employee</span><span class="java8">))</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java3">//Validation with Bean Validation or Hibernate Validator<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java10">validator.validate</span><span class="java8">(</span><span class="java10">funcionario</span><span class="java8">)</span><span class="java10">;<br />
 &nbsp;&nbsp;&nbsp; <br />
 &nbsp;&nbsp;&nbsp; validator.checking</span><span class="java8">(</span><span class="java4">new </span><span class="java10">Validations</span><span class="java8">(){{<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">that</span><span class="java8">(</span><span class="java10">!employee.getName</span><span class="java8">()</span><span class="java10">.isEmpty</span><span class="java8">()</span><span class="java10">, </span><span class="java5">&#34;error&#34;</span><span class="java10">,</span><span class="java5">&#34;nameIsRequired&#34;</span><span class="java8">)</span><span class="java10">;<br />
@@ -235,6 +237,14 @@ when an error occurs. How do one redirect the user to another resource using VRa
 </span><span class="java8">}</span></code></div>
 	    	<span class="paragraph">If your logic may add any validation error you <strong class="definition">must</strong> specify where to go in case of error.
 Validator.onErrorUse works just like result.use: you can use any view from Results class.</span>
+		
+
+<h3 class="section">Shortcuts on Validator</h3>
+	    	<span class="paragraph">Some redirections are pretty common, so there are shortcuts on Result interface for them.
+The available shortcuts are:</span>
+	    	<ul class="list"><li><span class="paragraph">validator.onErrorForwardTo(ClientController.class).list()  ==&gt; validator.onErrorUse(logic()).forwardTo(ClientController.class).list();</span></li><li><span class="paragraph">validator.onErrorRedirectTo(ClientController.class).list() ==&gt; validator.onErrorUse(logic()).redirectTo(ClientController.class).list();</span></li><li><span class="paragraph">validator.onErrorUsePageOf(ClientController.class).list()  ==&gt; validator.onErrorUse(page()).of(ClientController.class).list();</span></li><li><span class="paragraph">validator.onErrorSendBadRequest()	                         ==&gt; validator.onErrorUse(status()).badRequest(errors);</span></li></ul>
+	    	<span class="paragraph">Furthermore, if one are redirecting to a method on the same controller, one can use:</span>
+	    	<ul class="list"><li><span class="paragraph">validator.onErrorForwardTo(this).list()  ==&gt; validator.onErrorUse(logic()).forwardTo(this.getClass()).list();</span></li><li><span class="paragraph">validator.onErrorRedirectTo(this).list() ==&gt; validator.onErrorUse(logic()).redirectTo(this.getClass()).list();</span></li><li><span class="paragraph">validator.onErrorUsePageOf(this).list()  ==&gt; validator.onErrorUse(page()).of(this.getClass()).list();</span></li></ul>
 		
 
 <h3 class="section">Showing validation errors on JSP</h3>

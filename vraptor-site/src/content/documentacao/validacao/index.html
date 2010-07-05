@@ -200,13 +200,14 @@ a vantagem da composi&ccedil;&atilde;o de matchers e da cria&ccedil;&atilde;o de
 </span><span class="java8">}</span></code></div>
 		
 
-<h3 class="section">Hibernate validator</h3>
-	    	<span class="paragraph">O VRaptor tamb&eacute;m suporta integra&ccedil;&atilde;o com o HibernateValidator. No exemplo anterior para validar o objeto Funcionario 
-usando o Hibernate Validator basta adicionar uma linha de c&oacute;digo:</span>
+<h3 class="section">Bean Validation (JSR303) e Hibernate Validator</h3>
+	    	<span class="paragraph">O VRaptor tamb&eacute;m suporta integra&ccedil;&atilde;o com o Bean Validation e o Hibernate Validator. Para usar as valida&ccedil;&otilde;es 
+basta adicionar no seu classpath qualquer implementa&ccedil;&atilde;o do Bean Validation ou do Hibernate Validator.</span>
+	    	<span class="paragraph">No exemplo anterior para validar o objeto Funcionario basta uma adicionar uma linha de c&oacute;digo:</span>
 	    	<div class="java"><code class="java">
 <span class="java4">public </span><span class="java10">adiciona</span><span class="java8">(</span><span class="java10">Funcionario funcionario</span><span class="java8">) {<br />
-&nbsp;&nbsp;&nbsp; </span><span class="java3">//Valida&ccedil;ão do Funcionario com Hibernate Validator<br />
-&nbsp;&nbsp;&nbsp; </span><span class="java10">validator.addAll</span><span class="java8">(</span><span class="java10">Hibernate.validate</span><span class="java8">(</span><span class="java10">funcionario</span><span class="java8">))</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java3">// Valida&ccedil;ão do Funcionario com o Bean Validator ou Hibernate Validator<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java10">validator.validate</span><span class="java8">(</span><span class="java10">funcionario</span><span class="java8">)</span><span class="java10">;<br />
 <br />
 &nbsp;&nbsp;&nbsp; validator.checking</span><span class="java8">(</span><span class="java4">new </span><span class="java10">Validations</span><span class="java8">(){{<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">that</span><span class="java8">(</span><span class="java10">!funcionario.getNome</span><span class="java8">()</span><span class="java10">.isEmpty</span><span class="java8">()</span><span class="java10">, </span><span class="java5">&#34;erro&#34;</span><span class="java10">,</span><span class="java5">&#34;nomeNaoInformado&#34;</span><span class="java8">)</span><span class="java10">;<br />
@@ -239,6 +240,14 @@ Como no exemplo:</span>
 	    	<span class="paragraph">Note que se sua l&oacute;gica adiciona algum erro de valida&ccedil;&atilde;o voc&ecirc; <strong class="definition">precisa</strong> dizer pra onde o VRaptor deve ir.
 O validator.onErrorUse funciona do mesmo jeito que o result.use: voc&ecirc; pode usar qualquer view da
 classe Results.</span>
+		
+
+<h3 class="section">Atalhos no Validator</h3>
+	    	<span class="paragraph">Alguns redirecionamentos s&atilde;o bastante utilizados, ent&atilde;o foram criados atalhos para eles.
+Os atalhos dispon&iacute;veis s&atilde;o:</span>
+	    	<ul class="list"><li><span class="paragraph">validator.onErrorForwardTo(ClientController.class).list()  ==&gt; validator.onErrorUse(logic()).forwardTo(ClientController.class).list();</span></li><li><span class="paragraph">validator.onErrorRedirectTo(ClientController.class).list() ==&gt; validator.onErrorUse(logic()).redirectTo(ClientController.class).list();</span></li><li><span class="paragraph">validator.onErrorUsePageOf(ClientController.class).list()  ==&gt; validator.onErrorUse(page()).of(ClientController.class).list();</span></li><li><span class="paragraph">validator.onErrorSendBadRequest()	                         ==&gt; validator.onErrorUse(status()).badRequest(errors);</span></li></ul>
+	    	<span class="paragraph">Al&eacute;m disso, se o redirecionamento &eacute; para um m&eacute;todo do mesmo controller, podemos usar:</span>
+	    	<ul class="list"><li><span class="paragraph">validator.onErrorForwardTo(this).list()  ==&gt; validator.onErrorUse(logic()).forwardTo(this.getClass()).list();</span></li><li><span class="paragraph">validator.onErrorRedirectTo(this).list() ==&gt; validator.onErrorUse(logic()).redirectTo(this.getClass()).list();</span></li><li><span class="paragraph">validator.onErrorUsePageOf(this).list()  ==&gt; validator.onErrorUse(page()).of(this.getClass()).list();</span></li></ul>
 		
 
 <h3 class="section">Mostrando os erros de validação no JSP</h3>

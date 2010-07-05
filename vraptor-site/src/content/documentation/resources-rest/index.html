@@ -312,6 +312,18 @@ See the mentioned example:</span>
 &nbsp; </span><span class="java8">}<br />
 &nbsp; <br />
 }</span></code></div>
+	    	<span class="paragraph"><strong class="title">Multiple paths for the same logic method</strong>
+You can set more than one path for the same logic method:</span>
+	    	<div class="java"><code class="java">
+<span class="java4">public class </span><span class="java10">ClientController </span><span class="java8">{<br />
+<br />
+&nbsp; </span><span class="java16">@Get<br />
+&nbsp; @Path</span><span class="java8">({</span><span class="java5">&#34;/client/{client.id}/show/{section}&#34;</span><span class="java10">, </span><span class="java5">&#34;/client/{client.id}/show/&#34;</span><span class="java8">})&nbsp; <br />
+&nbsp; </span><span class="java4">public </span><span class="java10">Client show</span><span class="java8">(</span><span class="java10">Client client, String section</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">return </span><span class="java10">...<br />
+&nbsp; </span><span class="java8">}<br />
+&nbsp; <br />
+}</span></code></div>
 	    	<span class="paragraph"><strong class="title">Paths with regular expressions</strong>
 You can limit your parameter values using regular expressions using this idiom:</span>
 	    	<div class="java"><code class="java">

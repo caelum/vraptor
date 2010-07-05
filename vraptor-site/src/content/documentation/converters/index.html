@@ -134,6 +134,19 @@ In the following example, either 1 or DEBIT values are converted to Type.DEBIT:<
 To enable decimal values based on the user's locale, you can check how the class LocaleBasedCalendarConverter works.</span>
 		
 
+<h3 class="section">Localized BigDecimal, Double e Float</h3>
+	    	<span class="paragraph">Since version 3.1.2, Vraptor also supports localization for these types. In order to use them you must add to your web.xml:</span>
+	    	<div class="xml"><code class="xml"><span class="textag">&lt;context-param&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-name&gt;</span><span class="texnormal">br.com.caelum.vraptor.packages</span><span class="textag">&lt;/param-name&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-value&gt;</span><span class="texnormal">!!previous&nbsp;value!!,br.com.caelum.vraptor.converter.l10n</span><span class="textag">&lt;/param-value&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal"></span><span class="textag">&lt;/context-param&gt;</span></code></div>
+	    	<span class="paragraph">The converters uses the JVM's default locale. You can override the JVM locale adding these lines in your web.xml:</span>
+	    	<div class="xml"><code class="xml"><span class="textag">&lt;context-param&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-name&gt;</span><span class="texnormal">javax.servlet.jsp.jstl.fmt.locale</span><span class="textag">&lt;/param-name&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-value&gt;</span><span class="texnormal">pt_BR</span><span class="textag">&lt;/param-value&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal"></span><span class="textag">&lt;/context-param&gt;</span></code></div>
+		
+
 <h3 class="section">Calendar and Date</h3>
 	    	<span class="paragraph">Both LocaleBasedCalendarConverter and LocaleBasedDateConverter are based on the user's locale,
 defined using JSTL pattern to understand the parameter's format.</span>

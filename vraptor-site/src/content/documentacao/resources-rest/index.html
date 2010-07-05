@@ -337,6 +337,18 @@ Veja o exemplo citado:</span>
 &nbsp; </span><span class="java8">}<br />
 &nbsp; <br />
 }</span></code></div>
+	    	<span class="paragraph"><strong class="title">V&aacute;rios paths para a mesma l&oacute;gica</strong>
+Voc&ecirc; pode setar mais de um path pra mesma l&oacute;gica fazendo:</span>
+	    	<div class="java"><code class="java">
+<span class="java16">@Resource<br />
+</span><span class="java4">public class </span><span class="java10">ClienteController </span><span class="java8">{<br />
+<br />
+&nbsp; </span><span class="java16">@Path</span><span class="java8">({</span><span class="java5">&#34;/cliente/{cliente.id}/visualiza/{secao}&#34;</span><span class="java10">, </span><span class="java5">&#34;/cliente/{cliente.id}/visualiza/&#34;</span><span class="java8">})&nbsp; <br />
+&nbsp; </span><span class="java4">public </span><span class="java10">Cliente visualiza</span><span class="java8">(</span><span class="java10">Cliente cliente, String secao</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">return </span><span class="java10">...<br />
+&nbsp; </span><span class="java8">}<br />
+&nbsp; <br />
+}</span></code></div>
 	    	<span class="paragraph"><strong class="title">Paths com *</strong></span>
 	    	<span class="paragraph">Voc&ecirc; tamb&eacute;m pode utilizar o * como m&eacute;todo de sele&ccedil;&atilde;o para a sua uri. O exemplo a
 seguir ignora qualquer coisa ap&oacute;s a palavra <em class="italic">foto/</em> :</span>

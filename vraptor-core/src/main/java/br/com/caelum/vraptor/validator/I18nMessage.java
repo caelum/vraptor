@@ -14,10 +14,12 @@ import java.util.ResourceBundle;
  */
 public class I18nMessage implements Message {
 
+	private static final long serialVersionUID = 1L;
+
 	private final String category;
 	private final String message;
 	private final Object[] parameters;
-	private ResourceBundle bundle;
+	private transient ResourceBundle bundle;
 
 	public I18nMessage(String category, String message, Object... parameters) {
 		this.category = category;

@@ -50,6 +50,7 @@ import br.com.caelum.vraptor.ioc.StereotypeHandler;
  *
  * @author Guilherme Silveira
  */
+@Deprecated
 public class PicoProvider implements ContainerProvider {
 
     private final MutablePicoContainer picoContainer;

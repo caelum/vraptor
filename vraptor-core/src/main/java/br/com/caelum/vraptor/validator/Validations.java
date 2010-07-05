@@ -53,7 +53,9 @@ public class Validations {
 		this.bundle = bundle;
 	}
 
-    public Validations() { }
+    public Validations() {
+    	this.bundle = new SafeResourceBundle(ResourceBundle.getBundle("messages"), true);
+    }
 
     public <T> boolean that(T id, Matcher<? super T> matcher) {
         return that(id, matcher, "", null);
@@ -85,10 +87,6 @@ public class Validations {
     }
 
     protected String i18n(String key) {
-    	if (bundle == null) {
-			throw new IllegalStateException("You must set a ResourceBundle via new Validations(bundle). " +
-					"You can get a Localization via your class constructor and call localization.getBundle() to get the default bundle");
-		}
     	return bundle.getString(key);
     }
 
@@ -108,13 +106,17 @@ public class Validations {
      * Returns the list of errors, using given resource bundle.
      */
     public List<Message> getErrors(ResourceBundle bundle) {
-    	if (this.bundle != null) {
-    		this.bundle = new FallbackResourceBundle(this.bundle, bundle);
-    	} else {
+    	if (isDefaultBundle(this.bundle)) {
     		this.bundle = new SafeResourceBundle(bundle);
+    	} else {
+    		this.bundle = new FallbackResourceBundle(this.bundle, bundle);
     	}
     	return getErrors();
     }
+
+	private boolean isDefaultBundle(ResourceBundle bundle) {
+		return bundle instanceof SafeResourceBundle && ((SafeResourceBundle) bundle).isDefault();
+	}
 
     /**
      * Adds a list of errors to the error list.

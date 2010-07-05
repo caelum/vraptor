@@ -29,10 +29,20 @@ import java.util.ResourceBundle;
 public class SafeResourceBundle extends ResourceBundle {
 
 	private final ResourceBundle delegate;
+	private final boolean isDefault;
 
 	public SafeResourceBundle(ResourceBundle delegate) {
-		this.delegate = delegate;
+		this(delegate, false);
 	}
+	public SafeResourceBundle(ResourceBundle delegate, boolean isDefault) {
+		this.delegate = delegate;
+		this.isDefault = isDefault;
+	}
+
+	public boolean isDefault() {
+		return isDefault;
+	}
+
 	@Override
 	public Enumeration<String> getKeys() {
 		return delegate.getKeys();

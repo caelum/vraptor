@@ -25,7 +25,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.ioc.RequestScoped;
@@ -39,7 +38,7 @@ import br.com.caelum.vraptor.view.ValidationViewsFactory;
  * @author Guilherme Silveira
  */
 @RequestScoped
-public class DefaultValidator implements Validator {
+public class DefaultValidator extends AbstractValidator {
 
     private static final Logger logger = LoggerFactory.getLogger(DefaultValidator.class);
 
@@ -97,5 +96,10 @@ public class DefaultValidator implements Validator {
 
 	public boolean hasErrors() {
 		return !errors.isEmpty();
+	}
+
+	@Override
+	public List<Message> getErrors() {
+		return this.errors;
 	}
 }

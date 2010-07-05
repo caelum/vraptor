@@ -68,6 +68,22 @@ do web.xml:
 
 * novo método: result.use(status()).badRequest(errorList); que serializa a lista de erros
   passada usando result.use(representation()).from(errorList, "errors");
+  
+* atalhos no Validator:
+[java]
+validator.onErrorForwardTo(controller).logica();
+validator.onErrorRedirectTo(controller).logica();
+validator.onErrorUsePageOf(controller).logica();
+[/java]
+onde controller pode ser uma classe ou o this, como acontece no Result.
+
+E ainda o atalho:
+[java]
+validator.onErrorSendBadRequest();
+[/java]
+que retorna o status Bad Request (400) e serializa a lista de erros de validação
+de acordo com o header Accept da requisição (result.use(representation()))
+
 [/list]
 
 [section 3.1.2]

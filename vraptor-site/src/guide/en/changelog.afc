@@ -72,7 +72,25 @@ on web.xml:
   serializes the given error list with:
   [java]
   result.use(representation()).from(errorList, "errors");
-  [/java]  
+  [/java]
+  
+* shortcuts on Validator:
+[java]
+validator.onErrorForwardTo(controller).logic();
+validator.onErrorRedirectTo(controller).logic();
+validator.onErrorUsePageOf(controller).logic();
+[/java]
+where controller can be either a controller class or this, as in Result shortcuts.
+
+And the shortcut:
+[java]
+validator.onErrorSendBadRequest();
+[/java]
+which returns the Bad Request (400) status codes and serializes the validation
+error list according to Accept request header (result.use(representation()))
+que retorna o status Bad Request (400) e serializa a lista de erros de validação
+de acordo com o header Accept da requisição (result.use(representation()))
+
 [/list]
 
 [section 3.1.2]

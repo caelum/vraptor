@@ -27,6 +27,7 @@ import org.vraptor.validator.ValidationErrors;
 
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.View;
+import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.resource.ResourceMethod;
@@ -53,18 +54,20 @@ public class MessageCreatorValidator extends AbstractValidator {
 	private final MethodInfo info;
 	private boolean containsErrors;
 	private final ValidationViewsFactory viewsFactory;
+	private final Localization localization;
 
 	public MessageCreatorValidator(Result result, ValidationErrors errors, MethodInfo info,
-			ValidationViewsFactory viewsFactory) {
+			ValidationViewsFactory viewsFactory, Localization localization) {
 		this.result = result;
 		this.errors = errors;
 		this.viewsFactory = viewsFactory;
+		this.localization = localization;
 		this.resource = info.getResourceMethod();
 		this.info = info;
 	}
 
 	public void checking(Validations validations) {
-		List<Message> messages = validations.getErrors();
+		List<Message> messages = validations.getErrors(localization.getBundle());
 		for (Message s : messages) {
 			add(s);
 		}

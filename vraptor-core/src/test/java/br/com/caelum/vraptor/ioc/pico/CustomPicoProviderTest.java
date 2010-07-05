@@ -43,6 +43,7 @@ import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.ioc.WhatToDo;
 import br.com.caelum.vraptor.test.HttpSessionMock;
 
+@Deprecated
 public class CustomPicoProviderTest extends GenericContainerTest {
     private int counter;
 

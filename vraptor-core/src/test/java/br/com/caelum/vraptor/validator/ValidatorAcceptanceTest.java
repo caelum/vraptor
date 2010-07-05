@@ -30,14 +30,10 @@ import org.mockito.runners.MockitoJUnitRunner;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.proxy.ObjenesisProxifier;
-import br.com.caelum.vraptor.view.LogicResult;
-import br.com.caelum.vraptor.view.PageResult;
 import br.com.caelum.vraptor.view.ValidationViewsFactory;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ValidatorAcceptanceTest {
-    private @Mock PageResult pageResult;
-	private @Mock LogicResult logicResult;
     private @Mock Result result;
 	private @Mock Localization localization;
 	private @Mock ValidationViewsFactory viewsFactory;

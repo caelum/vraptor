@@ -50,8 +50,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -158,6 +158,10 @@ public class RouteBuilder {
 		return proxifier.proxify(type, handler);
 	}
 
+	/**
+	 * @deprecated Use @Path or override RoutesConfiguration behavior
+	 */
+	@Deprecated
 	public void is(PatternBasedType type, PatternBasedType method) {
 		this.strategy = new PatternBasedStrategy(builder.build(), type, method, this.supportedMethods, priority);
 

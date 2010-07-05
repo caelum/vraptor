@@ -255,6 +255,8 @@ public class XStreamJSONSerializationTest {
 	}
 
 	public static class SomeProxy extends Client implements HibernateProxy {
+		private static final long serialVersionUID = 1L;
+
 		private String aField;
 
 		private transient LazyInitializer initializer;
@@ -265,6 +267,10 @@ public class XStreamJSONSerializationTest {
 		}
 		public LazyInitializer getHibernateLazyInitializer() {
 			return initializer;
+		}
+
+		public String getaField() {
+			return aField;
 		}
 
 		public Object writeReplace() {

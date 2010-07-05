@@ -371,6 +371,7 @@ public class DefaultRouterTest {
 	}
 
 	@Test
+	@Deprecated
 	public void canAccessGenericTypeAndMethodRoute() throws NoSuchMethodException, ClassNotFoundException {
 		Class.forName(DefaultRouterTest.class.getPackage().getName() + ".MyCustomResource");
 		new Rules(router) {

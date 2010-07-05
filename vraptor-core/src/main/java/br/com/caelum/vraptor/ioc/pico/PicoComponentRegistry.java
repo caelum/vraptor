@@ -49,6 +49,7 @@ import br.com.caelum.vraptor.ioc.SessionScoped;
  * @author Adriano Almeida
  * @author Sérgio Lopes
  */
+@Deprecated
 public class PicoComponentRegistry extends AbstractComponentRegistry {
 
     public static final String CONTAINER_SESSION_KEY = PicoComponentRegistry.class.getName() + ".session";

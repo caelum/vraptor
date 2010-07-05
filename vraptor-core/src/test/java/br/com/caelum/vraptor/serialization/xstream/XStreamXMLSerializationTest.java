@@ -274,11 +274,13 @@ public class XStreamXMLSerializationTest {
 	}
 
 	static class WithAlias {
+		@SuppressWarnings("unused")
 		@XStreamAlias("def")
 		private String abc;
 	}
 
 	static class WithAliasedAttribute {
+		@SuppressWarnings("unused")
 		private WithAlias aliased;
 	}
 

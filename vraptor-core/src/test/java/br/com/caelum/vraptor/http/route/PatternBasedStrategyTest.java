@@ -30,6 +30,7 @@ import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.test.VRaptorMockery;
 
 
+@Deprecated
 public class PatternBasedStrategyTest {
 
 

@@ -37,6 +37,7 @@ import br.com.caelum.vraptor.interceptor.DefaultInterceptorRegistry;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Container;
 
+@Deprecated
 public class PicoComponentRegistryTest {
 
     private Mockery mockery;

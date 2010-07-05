@@ -60,7 +60,9 @@ on web.xml:
  
 * MultipartInterceptor is now optional.
 
-* bugfix: arrays of length == 1 are now supported as logic parameters  
+* bugfix: arrays of length == 1 are now supported as logic parameters
+
+* Pico provider is deprecated  
 [/list]
 
 [section 3.1.2]

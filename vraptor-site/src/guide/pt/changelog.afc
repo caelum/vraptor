@@ -59,6 +59,8 @@ do web.xml:
 * MultipartInterceptor agora é opcional
 
 * bugfix: arrays de tamanho == 1 agora são suportados como parâmetros de lógicas
+
+* Pico provider deprecated
 [/list]
 
 [section 3.1.2]

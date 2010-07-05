@@ -160,6 +160,24 @@ public add(Employee employee) {
 If your logic may add any validation error you **must** specify where to go in case of error.
 Validator.onErrorUse works just like result.use: you can use any view from Results class.
 
+[section Shortcuts on Validator]
+
+Some redirections are pretty common, so there are shortcuts on Result interface for them.
+The available shortcuts are:
+
+[list]
+* validator.onErrorForwardTo(ClientController.class).list()  ==> validator.onErrorUse(logic()).forwardTo(ClientController.class).list();
+* validator.onErrorRedirectTo(ClientController.class).list() ==> validator.onErrorUse(logic()).redirectTo(ClientController.class).list();
+* validator.onErrorUsePageOf(ClientController.class).list()  ==> validator.onErrorUse(page()).of(ClientController.class).list();
+* validator.onErrorSendBadRequest()	                         ==> validator.onErrorUse(status()).badRequest(errors);
+[/list]
+Furthermore, if one are redirecting to a method on the same controller, one can use:
+[list]
+* validator.onErrorForwardTo(this).list()  ==> validator.onErrorUse(logic()).forwardTo(this.getClass()).list();
+* validator.onErrorRedirectTo(this).list() ==> validator.onErrorUse(logic()).redirectTo(this.getClass()).list();
+* validator.onErrorUsePageOf(this).list()  ==> validator.onErrorUse(page()).of(this.getClass()).list();
+[/list]
+
 [section Showing validation errors on JSP]
 
 When there are validation errors, VRaptor will set a request attribute named %%errors%%

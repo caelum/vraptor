@@ -159,6 +159,23 @@ Note que se sua lógica adiciona algum erro de validação você **precisa** diz
 O validator.onErrorUse funciona do mesmo jeito que o result.use: você pode usar qualquer view da
 classe Results.
 
+[section Atalhos no Validator]
+
+Alguns redirecionamentos são bastante utilizados, então foram criados atalhos para eles.
+Os atalhos disponíveis são:
+[list]
+* validator.onErrorForwardTo(ClientController.class).list()  ==> validator.onErrorUse(logic()).forwardTo(ClientController.class).list();
+* validator.onErrorRedirectTo(ClientController.class).list() ==> validator.onErrorUse(logic()).redirectTo(ClientController.class).list();
+* validator.onErrorUsePageOf(ClientController.class).list()  ==> validator.onErrorUse(page()).of(ClientController.class).list();
+* validator.onErrorSendBadRequest()	                         ==> validator.onErrorUse(status()).badRequest(errors);
+[/list]
+Além disso, se o redirecionamento é para um método do mesmo controller, podemos usar:
+[list]
+* validator.onErrorForwardTo(this).list()  ==> validator.onErrorUse(logic()).forwardTo(this.getClass()).list();
+* validator.onErrorRedirectTo(this).list() ==> validator.onErrorUse(logic()).redirectTo(this.getClass()).list();
+* validator.onErrorUsePageOf(this).list()  ==> validator.onErrorUse(page()).of(this.getClass()).list();
+[/list]
+
 [section Mostrando os erros de validação no JSP]
 
 Quando existem erros de validação, o VRaptor coloca um atributo na requisição chamado

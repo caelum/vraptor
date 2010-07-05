@@ -67,4 +67,9 @@ public interface Route {
 	 * @return route priority
 	 */
 	int getPriority();
+
+	/**
+	 * Returns the original uri for this route
+	 */
+	String getOriginalUri();
 }

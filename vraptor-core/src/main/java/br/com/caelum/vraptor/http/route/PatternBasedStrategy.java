@@ -36,6 +36,7 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  *
  * @author guilherme silveira
  */
+@Deprecated
 public class PatternBasedStrategy implements Route {
 
 	private final Logger logger = LoggerFactory.getLogger(PatternBasedStrategy.class);
@@ -108,6 +109,10 @@ public class PatternBasedStrategy implements Route {
 
 	public int getPriority() {
 		return this.priority;
+	}
+
+	public String getOriginalUri() {
+		return control.toString();
 	}
 
 	@Override

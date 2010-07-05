@@ -56,4 +56,8 @@ public class NoStrategy implements Route {
 		return EnumSet.noneOf(HttpMethod.class);
 	}
 
+	public String getOriginalUri() {
+		return "NoStrategy";
+	}
+
 }

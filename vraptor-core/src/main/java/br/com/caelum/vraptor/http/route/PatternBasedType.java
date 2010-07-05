@@ -22,6 +22,10 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * @deprecated Use @Path instead.
+ */
+@Deprecated
 public class PatternBasedType {
 
 	private final List<String> parameters = new ArrayList<String>();

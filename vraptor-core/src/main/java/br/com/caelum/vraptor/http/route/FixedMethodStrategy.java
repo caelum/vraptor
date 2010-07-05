@@ -80,6 +80,10 @@ public class FixedMethodStrategy implements Route {
 		return this.priority;
 	}
 
+	public String getOriginalUri() {
+		return this.originalUri;
+	}
+
 	@Override
 	public String toString() {
 		return String.format("[FixedMethodStrategy: %-65s %-70s %s]", originalUri, Stringnifier

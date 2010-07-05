@@ -66,7 +66,13 @@ on web.xml:
 
 * Validations using the request bundle (and locale)
 
-* ValidationMessage implements Serializable  
+* ValidationMessage implements Serializable
+
+* new method: result.use(status()).badRequest(errorList); 
+  serializes the given error list with:
+  [java]
+  result.use(representation()).from(errorList, "errors");
+  [/java]  
 [/list]
 
 [section 3.1.2]

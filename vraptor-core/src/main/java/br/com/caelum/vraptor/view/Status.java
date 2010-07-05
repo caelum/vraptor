@@ -18,6 +18,7 @@
 package br.com.caelum.vraptor.view;
 
 import java.util.EnumSet;
+import java.util.List;
 
 import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.resource.HttpMethod;
@@ -62,6 +63,20 @@ public interface Status extends View {
 	 * @param message
 	 */
 	void badRequest(String message);
+
+	/**
+	 * Returns a Bad Request (400) status
+	 *
+	 * Notifies the client that he should not try to execute the same request
+	 * again: part of its representation is somehow invalid.
+	 *
+	 * Serializes the given List as "errors", with
+	 * <pre>
+	 *    result.use(representation()).from(errors, "errors").serialize();
+	 * </pre>
+	 * @param message
+	 */
+	void badRequest(List<?> errors);
 
 	/**
 	 * Returns a Forbidden (403) status. You must specify a reason.

@@ -65,6 +65,9 @@ do web.xml:
 * Validations agora usa o bundle (e locale) da requisição
 
 * ValidationMessage agora implementa Serializable
+
+* novo método: result.use(status()).badRequest(errorList); que serializa a lista de erros
+  passada usando result.use(representation()).from(errorList, "errors");
 [/list]
 
 [section 3.1.2]

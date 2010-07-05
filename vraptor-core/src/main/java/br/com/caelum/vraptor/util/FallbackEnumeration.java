@@ -15,7 +15,7 @@
  * limitations under the License. 
  */
 
-package br.com.caelum.vraptor.vraptor2.util;
+package br.com.caelum.vraptor.util;
 
 import java.util.Enumeration;
 

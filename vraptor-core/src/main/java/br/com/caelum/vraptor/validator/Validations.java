@@ -26,6 +26,7 @@ import org.hamcrest.Matcher;
 import org.hamcrest.ResourceBundleDescription;
 
 import br.com.caelum.vraptor.core.SafeResourceBundle;
+import br.com.caelum.vraptor.util.FallbackResourceBundle;
 
 /**
  * Hamcrest based validation support.
@@ -46,15 +47,13 @@ import br.com.caelum.vraptor.core.SafeResourceBundle;
 public class Validations {
 
     private final List<Message> errors = new ArrayList<Message>();
-	private final ResourceBundle bundle;
+	private ResourceBundle bundle;
 
     public Validations(ResourceBundle bundle) {
-		this.bundle = new SafeResourceBundle(bundle);
+		this.bundle = bundle;
 	}
 
-    public Validations() {
-    	this(ResourceBundle.getBundle("messages"));
-    }
+    public Validations() { }
 
     public <T> boolean that(T id, Matcher<? super T> matcher) {
         return that(id, matcher, "", null);
@@ -66,12 +65,12 @@ public class Validations {
 
     public <T> boolean that(T actual, Matcher<? super T> matcher, String category, String reason, Object... messageParameters) {
         if (!matcher.matches(actual)) {
-            if (reason != null) {
-                errors.add(new ValidationMessage(i18n(reason), category, messageParameters));
+        	if (reason != null) {
+        		errors.add(new I18nMessage(category, reason, messageParameters));
             } else {
-                Description description = new ResourceBundleDescription(bundle);
+                Description description = new ResourceBundleDescription();
                 description.appendDescriptionOf(matcher);
-                errors.add(new ValidationMessage(description.toString(), category));
+                errors.add(new I18nMessage(description.toString(), category));
             }
             return false;
         }
@@ -80,12 +79,16 @@ public class Validations {
 
     public boolean that(boolean assertion, String category, String reason, Object... messageParameters) {
         if (!assertion) {
-            errors.add(new ValidationMessage(i18n(reason), category, messageParameters));
+        	errors.add(new I18nMessage(category, reason, messageParameters));
         }
         return assertion;
     }
 
     protected String i18n(String key) {
+    	if (bundle == null) {
+			throw new IllegalStateException("You must set a ResourceBundle via new Validations(bundle). " +
+					"You can get a Localization via your class constructor and call localization.getBundle() to get the default bundle");
+		}
     	return bundle.getString(key);
     }
 
@@ -93,7 +96,24 @@ public class Validations {
      * Returns the list of errors.
      */
     public List<Message> getErrors() {
+    	for (Message message : errors) {
+			if (message instanceof I18nMessage) {
+				((I18nMessage) message).setBundle(bundle);
+			}
+		}
         return errors;
+    }
+
+    /**
+     * Returns the list of errors, using given resource bundle.
+     */
+    public List<Message> getErrors(ResourceBundle bundle) {
+    	if (this.bundle != null) {
+    		this.bundle = new FallbackResourceBundle(this.bundle, bundle);
+    	} else {
+    		this.bundle = new SafeResourceBundle(bundle);
+    	}
+    	return getErrors();
     }
 
     /**

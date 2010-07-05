@@ -17,8 +17,6 @@
 package org.hamcrest;
 
 import java.io.IOException;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
 
 /**
  * A description which uses a resource bundle to i18n messages.
@@ -30,15 +28,12 @@ public class ResourceBundleDescription extends BaseDescription {
 
     private final Appendable out;
 
-    private final ResourceBundle bundle;
-
-    public ResourceBundleDescription(ResourceBundle bundle) {
-		this(bundle, new StringBuilder());
+    public ResourceBundleDescription() {
+		this(new StringBuilder());
 	}
 
-    public ResourceBundleDescription(ResourceBundle bundle, Appendable out) {
+    public ResourceBundleDescription(Appendable out) {
 		this.out = out;
-		this.bundle = bundle;
 	}
 
 	@Override
@@ -75,12 +70,7 @@ public class ResourceBundleDescription extends BaseDescription {
 		String parsed = ((st > 0) || (len < text.length())) ? text.substring(st, len) : text;
 		if (parsed.length() != 0) {
 			String keyValue = parsed.replace(' ', '_');
-			try {
-				String value = bundle.getString(keyValue);
-				super.appendText(value);
-			} catch (MissingResourceException ex) {
-				super.appendText("???" + keyValue +"???");
-			}
+			super.appendText(keyValue);
 		}
 		while (len != text.length()) {
 			append(val[len++]);

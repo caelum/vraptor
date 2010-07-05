@@ -26,6 +26,8 @@ import java.util.Vector;
 
 import org.junit.Test;
 
+import br.com.caelum.vraptor.util.FallbackEnumeration;
+
 public class FallbackEnumerationTest {
 	@Test
 	public void shouldConcatenateBothLists() {

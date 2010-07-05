@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.View;
+import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.util.test.MockResult;
@@ -39,7 +40,7 @@ import br.com.caelum.vraptor.view.ValidationViewsFactory;
  */
 @RequestScoped
 public class DefaultValidator implements Validator {
-    
+
     private static final Logger logger = LoggerFactory.getLogger(DefaultValidator.class);
 
     private final Result result;
@@ -51,19 +52,22 @@ public class DefaultValidator implements Validator {
 	private final Outjector outjector;
 
 	private final Proxifier proxifier;
-	
-    public DefaultValidator(Result result, ValidationViewsFactory factory, Outjector outjector, Proxifier proxifier, List<BeanValidator> beanValidators) {
+
+	private final Localization localization;
+
+    public DefaultValidator(Result result, ValidationViewsFactory factory, Outjector outjector, Proxifier proxifier, List<BeanValidator> beanValidators, Localization localization) {
         this.result = result;
 		this.viewsFactory = factory;
 		this.outjector = outjector;
 		this.proxifier = proxifier;
 		this.beanValidators = beanValidators;
+		this.localization = localization;
     }
 
     public void checking(Validations validations) {
-        addAll(validations.getErrors());
+        addAll(validations.getErrors(localization.getBundle()));
     }
-    
+
     public void validate(Object object) {
         if (beanValidators == null || beanValidators.isEmpty()) {
             logger.warn("has no validators registered");

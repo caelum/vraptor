@@ -42,5 +42,4 @@ br.com.caelum.vraptor.validator.annotation
 br.com.caelum.vraptor.view
 br.com.caelum.vraptor.vraptor2
 br.com.caelum.vraptor.vraptor2.outject
-br.com.caelum.vraptor.vraptor2.util
 org.hamcrest

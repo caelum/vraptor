@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.jmock.Expectations;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.config.BasicConfiguration;
@@ -33,6 +34,7 @@ import br.com.caelum.vraptor.test.HttpServletRequestMock;
 import br.com.caelum.vraptor.test.HttpSessionMock;
 
 @Deprecated
+@Ignore
 public class PicoProviderTest extends GenericContainerTest {
     private int counter;
 

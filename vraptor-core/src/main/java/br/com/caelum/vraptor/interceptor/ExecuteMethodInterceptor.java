@@ -83,7 +83,7 @@ public class ExecuteMethodInterceptor implements Interceptor {
 				// fine... already parsed
 				log.trace("swallowing {}", cause);
 			} else {
-				throw new InterceptionException("an exception was raised while executing resource method", cause);
+				throw new InterceptionException("exception raised, check root cause for details: " + cause, cause);
 			}
 		}
 	}

@@ -23,7 +23,7 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**
  * The default vraptor3 path resolver uses the type and method name as
- * "/TypeName/methodName.result.jsp".
+ * "/typeName/methodName.jsp".
  *
  * @author Guilherme Silveira
  * @author Sérgio Lopes

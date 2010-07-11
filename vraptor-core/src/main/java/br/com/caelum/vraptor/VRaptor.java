@@ -101,7 +101,7 @@ public class VRaptor implements Filter {
 		servletContext = cfg.getServletContext();
 		BasicConfiguration config = new BasicConfiguration(servletContext);
 		init(config.getProvider(), new DefaultStaticContentHandler(servletContext));
-		logger.info("VRaptor 3.1.3 successfuly initialized");
+		logger.info("VRaptor 3.2.0-SNAPSHOT successfuly initialized");
 	}
 
 	void init(ContainerProvider provider, StaticContentHandler handler) {

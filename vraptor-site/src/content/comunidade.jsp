@@ -25,9 +25,9 @@
 		<dt>Tomaz Lavieri</dt>
 		<dd>
 			<a href="http://blog.tomazlavieri.com.br/2009/vraptor3-interceptando-recursos-anotados/">VRaptor3 – Interceptando recursos anotados</a><br/>
-			<a href="http://blog.tomazlavieri.com.br/2009/vraptor-3-poupando-recursos-lazy-dependence-injection/">VRaptor 3 – Poupando recursos – LAZY Dependence Injection</a>
-			<a href="http://www.guj.com.br/posts/list/199496.java">Contribuição - VRaptor3 - Improved Validator Messages</a>
-			<a href="http://www.guj.com.br/posts/list/200437.java">[CONTRIBUIÇÃO] VRaptor 3 - Plug-in para Controlar Acesso</a>
+			<a href="http://blog.tomazlavieri.com.br/2009/vraptor-3-poupando-recursos-lazy-dependence-injection/">VRaptor 3 – Poupando recursos – LAZY Dependence Injection</a><br/>
+			<a href="http://www.guj.com.br/posts/list/199496.java">Contribuição - VRaptor3 - Improved Validator Messages</a><br/>
+			<a href="http://www.guj.com.br/posts/list/200437.java">[CONTRIBUIÇÃO] VRaptor 3 - Plug-in para Controlar Acesso</a><br/>
 			<a href="http://www.guj.com.br/posts/list/201107.java">[CONTRIBUIÇÃO] VRaptor 3 - JasperMaker (para JasperReporter)</a>
 		</dd>
 		
@@ -60,6 +60,11 @@
 		<dd>
 			<a href="http://www.guj.com.br/posts/list/149517.java">Minha contribuição - Controle de acesso VRaptor 3</a>
 		</dd>
+		<dt>Diogo Soares</dt>
+		<dd>
+			<a href="http://diogosoares.info/?page_id=9">Iniciando com Vraptor 3</a>
+		</dd>
+		
 	</dl>
   </div>  
 </div>

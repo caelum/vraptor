@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.util.Date;
 import java.util.Locale;
 
+import org.joda.time.LocalDateTime;
 import org.joda.time.LocalTime;
 import org.joda.time.base.BaseLocal;
 
@@ -38,7 +39,10 @@ class LocaleBasedJodaTimeConverter {
 	private DateFormat getDateFormat(Class<? extends BaseLocal> type) {
 		if (type.equals(LocalTime.class)) {
 			return DateFormat.getTimeInstance(DateFormat.SHORT, getLocale());
+		} else if (type.equals(LocalDateTime.class)) {
+			return DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, getLocale());
 		}
+		
 		return DateFormat.getDateInstance(DateFormat.SHORT, getLocale());
 	}
 }

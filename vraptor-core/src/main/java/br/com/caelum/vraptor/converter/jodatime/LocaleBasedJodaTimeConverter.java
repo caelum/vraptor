@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.util.Date;
 import java.util.Locale;
 
+import org.joda.time.LocalTime;
 import org.joda.time.base.BaseLocal;
 
 import br.com.caelum.vraptor.converter.JstlWrapper;
@@ -25,7 +26,7 @@ class LocaleBasedJodaTimeConverter {
 		}
 		return getDateFormat(type).parse(value);
 	}
-	
+
 	public Locale getLocale() {
 		Locale locale = jstlWrapper.findLocale(request);
 		if (locale == null) {
@@ -33,8 +34,11 @@ class LocaleBasedJodaTimeConverter {
 		}
 		return locale;
 	}
-	
+
 	private DateFormat getDateFormat(Class<? extends BaseLocal> type) {
-		return DateFormat.getTimeInstance(DateFormat.SHORT, getLocale());
+		if (type.equals(LocalTime.class)) {
+			return DateFormat.getTimeInstance(DateFormat.SHORT, getLocale());
+		}
+		return DateFormat.getDateInstance(DateFormat.SHORT, getLocale());
 	}
 }

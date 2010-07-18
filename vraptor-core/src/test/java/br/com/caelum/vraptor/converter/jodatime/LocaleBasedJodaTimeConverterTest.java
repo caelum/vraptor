@@ -56,7 +56,30 @@ public class LocaleBasedJodaTimeConverterTest {
 				one(context).getInitParameter("javax.servlet.jsp.jstl.fmt.locale");
 				will(returnValue(null));
 				one(request).getLocale();
-				will(returnValue(Locale.getDefault()));
+				will(returnValue(new Locale("pt_BR")));
+			}
+		});
+		
+		assertThat(new Locale("pt_BR"), is(equalTo(converter.getLocale())));
+		mockery.assertIsSatisfied();
+	}
+	
+	@Test
+	public void shouldUseTheDefaulJvmtLocale() throws ParseException {
+		mockery.checking(new Expectations() {
+			{
+				one(request).getAttribute("javax.servlet.jsp.jstl.fmt.locale.request");
+				will(returnValue(null));
+				one(request).getSession();
+				will(returnValue(session));
+				one(session).getAttribute("javax.servlet.jsp.jstl.fmt.locale.session");
+				will(returnValue(null));
+				one(context).getAttribute("javax.servlet.jsp.jstl.fmt.locale.application");
+				will(returnValue(null));
+				one(context).getInitParameter("javax.servlet.jsp.jstl.fmt.locale");
+				will(returnValue(null));
+				one(request).getLocale();
+				will(returnValue(null));
 			}
 		});
 		

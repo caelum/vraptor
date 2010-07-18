@@ -55,6 +55,7 @@ import br.com.caelum.vraptor.converter.PrimitiveLongConverter;
 import br.com.caelum.vraptor.converter.PrimitiveShortConverter;
 import br.com.caelum.vraptor.converter.ShortConverter;
 import br.com.caelum.vraptor.converter.jodatime.LocalDateConverter;
+import br.com.caelum.vraptor.converter.jodatime.LocalDateTimeConverter;
 import br.com.caelum.vraptor.converter.jodatime.LocalTimeConverter;
 import br.com.caelum.vraptor.deserialization.DefaultDeserializers;
 import br.com.caelum.vraptor.deserialization.Deserializer;
@@ -346,7 +347,8 @@ public class BaseComponents {
 
     @SuppressWarnings("unchecked")
 	public static List<Class<? extends Converter<?>>> getBundledConverters() {
-    	registerIfClassPresent(BUNDLED_CONVERTERS, "org.joda.time.LocalDate", LocalDateConverter.class, LocalTimeConverter.class);
+    	registerIfClassPresent(BUNDLED_CONVERTERS, "org.joda.time.LocalDate", 
+    			LocalDateConverter.class, LocalTimeConverter.class, LocalDateTimeConverter.class);
         return BUNDLED_CONVERTERS;
     }
 

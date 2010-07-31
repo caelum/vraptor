@@ -7,14 +7,26 @@
 	<h3 class="title">O que a comunidade anda falando sobre o VRaptor</h3>
 
 	<dl class="equipe">
+		<dt>Washington Botelho</dt>
+		<dd>
+			<a href="http://wbotelhos.com/2010/07/28/upload-e-download-com-vraptor-3/">Upload e Download com VRaptor 3</a>
+			<a href="http://wbotelhos.com/2010/04/23/controle-de-permissao-com-vraptor-3/"> Controle de Permissão com VRaptor 3</a>
+			<a href="http://wbotelhos.com/2010/04/07/controle-de-login-com-vraptor-3/">Controle de Login com VRaptor 3</a><br/>
+			<a href="http://wbotelhos.com/2010/02/23/jpa-e-vraptor-3/">JPA e VRaptor 3</a><br/>
+			<a href="http://wbotelhos.com/2010/01/20/manipulando-dados-json-via-ajax-com-vraptor-3/">Manipulando Dados JSon Via Ajax Com VRaptor 3</a><br/>
+			<a href="http://wbotelhos.com/2009/12/07/iniciando-com-vraptor-3/">Iniciando com VRaptor 3</a>
+		</dd>
+		
+		<dt>Lucas H. G. Toniazzo</dt>
+		<dd>
+			<a href="http://www.lucas.hgt.nom.br/wordpress/?p=170">Enviando dados para tela com VRaptor 3</a>
+			<a href="http://www.lucas.hgt.nom.br/wordpress/?p=138">VRaptor 3 O que era Bom ficou ainda Melhor!</a>
+			<a href="http://www.lucas.hgt.nom.br/wordpress/?p=107">Gerando aplicação com VRaptor3 usando Maven</a>
+		</dd>
+		
 		<dt>Marcelo Marmol</dt>
 		<dd>
 			<a href="http://www.infoq.com/br/news/2010/06/tutorial-vraptor-flex4">Tutorial: Flex4 e VRaptor3 em 1+1 minutos</a>
-		</dd>
-
-		<dt>Lucas H. G. Toniazzo</dt>
-		<dd>
-			<a href="http://www.lucas.hgt.nom.br/wordpress/?p=107">Gerando aplicação com VRaptor3 usando Maven</a>
 		</dd>
 		
 		<dt>Mário Peixoto</dt>
@@ -29,15 +41,6 @@
 			<a href="http://www.guj.com.br/posts/list/199496.java">Contribuição - VRaptor3 - Improved Validator Messages</a><br/>
 			<a href="http://www.guj.com.br/posts/list/200437.java">[CONTRIBUIÇÃO] VRaptor 3 - Plug-in para Controlar Acesso</a><br/>
 			<a href="http://www.guj.com.br/posts/list/201107.java">[CONTRIBUIÇÃO] VRaptor 3 - JasperMaker (para JasperReporter)</a>
-		</dd>
-		
-		<dt>Washington Botelho</dt>
-		<dd>
-			<a href="http://wbotelhos.com/2010/04/23/controle-de-permissao-com-vraptor-3/"> Controle de Permissão com VRaptor 3</a>
-			<a href="http://wbotelhos.com/2010/04/07/controle-de-login-com-vraptor-3/">Controle de Login com VRaptor 3</a><br/>
-			<a href="http://wbotelhos.com/2010/02/23/jpa-e-vraptor-3/">JPA e VRaptor 3</a><br/>
-			<a href="http://wbotelhos.com/2010/01/20/manipulando-dados-json-via-ajax-com-vraptor-3/">Manipulando Dados JSon Via Ajax Com VRaptor 3</a><br/>
-			<a href="http://wbotelhos.com/2009/12/07/iniciando-com-vraptor-3/">Iniciando com VRaptor 3</a>
 		</dd>
 		
 		<dt>Derlon</dt>

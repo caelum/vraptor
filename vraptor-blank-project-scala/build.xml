@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== 
+	VRaptor 3 Blank Project Build
+	====================================================================== -->
+<project name="VRaptor 3 Blank Project Build" default="update-jars" basedir=".">
+
+	<description>VRaptor 3 Blank Project module build</description>
+	
+	<property file="../vraptor-core/build.properties" />
+	
+	<property name="vraptor.core" value="../vraptor-core"/>
+	<property name="vraptor.scala.jar" value="../vraptor-plugin-scala/target/vraptor-scala.jar"/>
+	<property name="mandatory.jars" value="${vraptor.core}/${libs.dir}/mandatory"/>
+	<property name="webinf.lib.dir" value="WebContent/WEB-INF/lib/"/>
+	<property name="extra.lib.dir" value="lib/extras"/>
+	
+    <target name="update-jars">
+    	<delete>
+			<fileset dir="${webinf.lib.dir}">
+			    <include name="*.jar"/>
+			</fileset>
+		</delete>
+    	<copy todir="${webinf.lib.dir}">
+			<fileset dir="${mandatory.jars}">
+			    <include name="*.jar"/>
+				<exclude name="objenesis*.jar"/>
+				<exclude name="spring*.jar"/>
+				<exclude name="jstl*.jar"/>
+			</fileset>
+    		<fileset dir="${extra.lib.dir}">
+			    <include name="*.jar"/>
+			</fileset>
+    	</copy>
+    	<copy todir="${webinf.lib.dir}" file="${vraptor.core}/${jar.file}"/>
+    	<copy todir="${webinf.lib.dir}" file="${vraptor.scala.jar}"/>
+    </target>
+
+	<target name="clean" description="--> delete build artifacts">
+		<delete file="${zip_file}" failonerror="false"/>
+	</target>
+</project>

@@ -30,6 +30,7 @@ classes
 vraptor-example-compatibility/src/main/webapp/WEB-INF/lib/*.jar
 vraptor-blank-project/WebContent/WEB-INF/lib/*.jar
 vraptor-blank-project-gae/war/WEB-INF/lib/*.jar
+vraptor-blank-project-scala/WebContent/WEB-INF/lib/
 vraptor-mydvds/WebContent/WEB-INF/lib/*.jar
 vraptor-site/todo.log
 vraptor-mydvds/mydvds.war

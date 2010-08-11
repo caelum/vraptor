@@ -28,14 +28,14 @@ import java.util.Map;
 import java.util.Set;
 
 import br.com.caelum.vraptor.VRaptorException;
-import br.com.caelum.vraptor.ioc.ApplicationScoped;
+import br.com.caelum.vraptor.ioc.RequestScoped;
 
 /**
  * A component capable of removing null elements out of collections and arrays.
  *
  * @author guilherme silveira
  */
-@ApplicationScoped
+@RequestScoped
 public class EmptyElementsRemoval {
 
 	private final Set<Collection<?>> collections = new HashSet<Collection<?>>();

@@ -17,10 +17,11 @@
 package br.com.caelum.vraptor.interceptor;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.hasItems;
+import static org.hamcrest.Matchers.hasSize;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -71,9 +72,8 @@ public class DefaultInterceptorRegistryTest {
             }
         });
         registry.register(CustomInterceptor.class);
-        Interceptor[] types = registry.interceptorsFor(method, container);
-        assertThat(types.length, is(1));
-        assertThat(types[0], is(equalTo(interceptor)));
+        List<Interceptor> types = registry.interceptorsFor(method, container);
+        assertThat(types, hasItems(interceptor));
         mockery.assertIsSatisfied();
     }
 
@@ -89,15 +89,15 @@ public class DefaultInterceptorRegistryTest {
             }
         });
         registry.register(CustomInterceptor.class);
-        Interceptor[] types = registry.interceptorsFor(method, container);
-        assertThat(types.length, is(0));
+        List<Interceptor> types = registry.interceptorsFor(method, container);
+        assertThat(types, hasSize(0));
         mockery.assertIsSatisfied();
     }
 
     @Test
     public void shouldReturnNoInterceptorIfThereIsNoneRegistered() {
-        Interceptor[] types = registry.interceptorsFor(method, container);
-        assertThat(types.length, is(0));
+        List<Interceptor> types = registry.interceptorsFor(method, container);
+        assertThat(types, hasSize(0));
         mockery.assertIsSatisfied();
     }
 

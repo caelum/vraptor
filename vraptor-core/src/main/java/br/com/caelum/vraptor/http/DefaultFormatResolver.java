@@ -45,7 +45,7 @@ public class DefaultFormatResolver implements FormatResolver {
 
 		format = request.getHeader("Accept");
 
-		return acceptHeaderToFormat.getFormat(format == null ? "" : format) ;
+		return acceptHeaderToFormat.getFormat(format) ;
 	}
 
 }

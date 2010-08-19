@@ -2,15 +2,13 @@
 
 [section 3.1.3]
 [list]
-* Corrigidos bugs do novo validator
-
 * Scala Blank Project
-
-* corrigido bug do char como parâmetro na URI
-
 * melhor estratégia no escopo flash
-
 * começo do suporte pra javax.inject API. Agora é possível dar nomes para os parâmetros de uma lógica:
+* Corrigidos bugs do novo validator
+* corrigido bug do char como parâmetro na URI
+* Corrigido bug para poder aceitar browsers que trabalham mal com o header Accepts
+
 
 [java]
 public void logica(@Named("um_nome") String outroNome) {...}

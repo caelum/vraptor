@@ -18,6 +18,7 @@
 package br.com.caelum.vraptor.ioc.spring;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
@@ -63,6 +64,8 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
 	private final AnnotationBeanNameGenerator beanNameGenerator = new AnnotationBeanNameGenerator();
 	private final SpringBasedContainer container;
 	private final BasicConfiguration config;
+
+	private Map<Class<?>, String> typeToBeanName = new HashMap<Class<?>, String>();
 
 	public VRaptorApplicationContext(SpringBasedContainer container, BasicConfiguration config) {
 		this.container = container;
@@ -239,25 +242,33 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
 	}
 
 	public <T> T getBean(Class<T> type) {
-		Map<String, ? extends T> instances = BeanFactoryUtils.beansOfTypeIncludingAncestors(this, type);
-		if (instances.size() == 0) {
+		if (!typeToBeanName.containsKey(type)) {
+			logger.debug("Cache miss for {}", type);
+			String name = compatibleNameFor(type);
+			typeToBeanName.put(type, name);
+		}
+		return getBean(typeToBeanName.get(type), type);
+	}
+
+	private String compatibleNameFor(Class<?> type) {
+		String[] names = BeanFactoryUtils.beanNamesForTypeIncludingAncestors(this, type);
+		if (names.length == 0) {
 			throw new NoSuchBeanDefinitionException(type, "no bean for this type registered");
-		} else if (instances.size() == 1) {
-			return instances.values().iterator().next();
+		} else if (names.length == 1) {
+			return names[0];
 		} else {
-			for (Map.Entry<String, ? extends T> entry : instances.entrySet()) {
-				BeanDefinition definition = getBeanFactory().getBeanDefinition(entry.getKey());
-				if (isPrimary(definition)) {
-					return entry.getValue();
-				} else if (hasGreaterRoleThanInfrastructure(definition)) {
-					return entry.getValue();
+			for (String name : names) {
+				BeanDefinition definition = getBeanFactory().getBeanDefinition(name);
+				if (isPrimary(definition) || hasGreaterRoleThanInfrastructure(definition)) {
+					return name;
 				}
 			}
-			throw new NoSuchBeanDefinitionException("there are " + instances.size() + " implementations for the type ["
+			throw new NoSuchBeanDefinitionException("there are " + names.length + " implementations for the type ["
 					+ type
 					+ "], but none of them is primary or has a Role greater than BeanDefinition.ROLE_INFRASTRUCTURE");
 		}
 	}
+
 
 	private boolean isPrimary(BeanDefinition definition) {
 		return definition instanceof AbstractBeanDefinition && ((AbstractBeanDefinition) definition).isPrimary();

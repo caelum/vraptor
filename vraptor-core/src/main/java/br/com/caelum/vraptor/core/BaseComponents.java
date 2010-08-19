@@ -99,8 +99,8 @@ import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
 import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.interceptor.download.DownloadInterceptor;
-import br.com.caelum.vraptor.interceptor.multipart.DefaultMultipartConfig;
 import br.com.caelum.vraptor.interceptor.multipart.CommonsUploadMultipartInterceptor;
+import br.com.caelum.vraptor.interceptor.multipart.DefaultMultipartConfig;
 import br.com.caelum.vraptor.interceptor.multipart.MultipartConfig;
 import br.com.caelum.vraptor.interceptor.multipart.MultipartInterceptor;
 import br.com.caelum.vraptor.interceptor.multipart.NullMultipartInterceptor;
@@ -179,7 +179,6 @@ public class BaseComponents {
             TypeNameExtractor.class, 		DefaultTypeNameExtractor.class,
             ResourceNotFoundHandler.class, 	DefaultResourceNotFoundHandler.class,
             MethodNotAllowedHandler.class,	DefaultMethodNotAllowedHandler.class,
-            EmptyElementsRemoval.class, 	EmptyElementsRemoval.class,
             RoutesConfiguration.class, 		NoRoutesConfiguration.class,
             Deserializers.class,			DefaultDeserializers.class,
             Proxifier.class, 				ObjenesisProxifier.class,
@@ -214,6 +213,7 @@ public class BaseComponents {
             Outjector.class, 								ReplicatorOutjector.class,
             DownloadInterceptor.class, 						DownloadInterceptor.class,
             EmptyResult.class, 								EmptyResult.class,
+            EmptyElementsRemoval.class, 					EmptyElementsRemoval.class,
             ExecuteMethodInterceptor.class, 				ExecuteMethodInterceptor.class,
             FlashInterceptor.class, 						FlashInterceptor.class,
             ForwardToDefaultViewInterceptor.class, 			ForwardToDefaultViewInterceptor.class,
@@ -347,7 +347,7 @@ public class BaseComponents {
 
     @SuppressWarnings("unchecked")
 	public static List<Class<? extends Converter<?>>> getBundledConverters() {
-    	registerIfClassPresent(BUNDLED_CONVERTERS, "org.joda.time.LocalDate", 
+    	registerIfClassPresent(BUNDLED_CONVERTERS, "org.joda.time.LocalDate",
     			LocalDateConverter.class, LocalTimeConverter.class, LocalDateTimeConverter.class);
         return BUNDLED_CONVERTERS;
     }

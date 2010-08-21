@@ -74,12 +74,11 @@ public class DefaultFormatResolverTest {
 	public void ifAcceptHeaderIsNullShouldReturnDefault() {
 		when(request.getParameter("_format")).thenReturn(null);
 		when(request.getHeader("Accept")).thenReturn(null);
-		when(acceptHeaderToFormat.getFormat("")).thenReturn("html");
+		when(acceptHeaderToFormat.getFormat(null)).thenReturn("html");
 
 		String format = resolver.getAcceptFormat();
 		assertThat(format, is("html"));
 
-		verify(acceptHeaderToFormat).getFormat("");
 	}
 
 }

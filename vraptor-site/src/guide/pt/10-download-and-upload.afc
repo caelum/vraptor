@@ -1,4 +1,4 @@
-[chapter Downloading]
+[chapter Download e Upload]
 
 [section exemplo de 1 minuto: download]
 
@@ -37,7 +37,11 @@ public class PerfilController {
 }
 [/java]
 
+Você pode também usar a implementação %%InputStreamDownload%% para trabalhar diretamente com Streams.
+
 [section exemplo de 1 minuto: upload]
+
+Nota: o componente para upload é opcional. Para ativar o suporte a upload basta adicionar a biblioteca %%commons-upload%% em seu classpath.
 
 O primeiro exemplo será baseado na funcionalidade de upload multipart.
 
@@ -69,3 +73,21 @@ VRaptor:
 		dao.atribui(fotoSalva, perfil);
 	}
 [/java]
+
+[section Sobrescrevendo as configurações de upload]
+
+Você pode alterar as configurações de upload sobrescrevendo a classe %%MultipartConfig%%. No exemplo abaixo é alterado o tamanho máximo de upload.
+
+[java]@Component
+@ApplicationScoped
+public class CustomMultipartConfig extends DefaultMultipartConfig {
+
+    public long getSizeLimit() {
+        return 50 * 1024 * 1024; // 50MB
+    }
+
+}[/java]
+
+[section Validando o upload]
+
+Quando o tamanho máximo para upload de arquivo exceder o valor configurado, o Vraptor adiciona uma mensagem no objeto Validator.

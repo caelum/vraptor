@@ -38,7 +38,7 @@ import br.com.caelum.vraptor.view.Status;
  * @author Rafael Ferreira
  * @since 3.0.2
  */
-public class DeserializingInterceptor implements Interceptor {
+public class DeserializingInterceptor implements StaticInterceptor {
 	private final HttpServletRequest request;
 	private final Deserializers deserializers;
 	private final MethodInfo methodInfo;

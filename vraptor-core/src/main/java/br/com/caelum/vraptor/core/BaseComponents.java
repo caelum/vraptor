@@ -173,6 +173,7 @@ public class BaseComponents {
     		AcceptHeaderToFormat.class, 	DefaultAcceptHeaderToFormat.class,
     		Converters.class, 				DefaultConverters.class,
             InterceptorRegistry.class, 		DefaultInterceptorRegistry.class,
+            InterceptorHandlerFactory.class,DefaultInterceptorHandlerFactory.class,
             MultipartConfig.class, 			DefaultMultipartConfig.class,
             UrlToResourceTranslator.class, 	DefaultResourceTranslator.class,
             Router.class, 					DefaultRouter.class,

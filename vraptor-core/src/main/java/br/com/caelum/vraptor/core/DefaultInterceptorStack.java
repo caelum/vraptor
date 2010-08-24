@@ -25,7 +25,6 @@ import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.interceptor.Interceptor;
-import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.PrototypeScoped;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
@@ -40,14 +39,10 @@ public class DefaultInterceptorStack implements InterceptorStack {
 	private static final Logger logger = LoggerFactory.getLogger(DefaultInterceptorStack.class);
 
     private final Deque<InterceptorHandler> interceptors = new LinkedList<InterceptorHandler>();
-    private final Container container;
+    private final InterceptorHandlerFactory handlerFactory;
 
-    public DefaultInterceptorStack(Container container) {
-        this.container = container;
-    }
-
-    public void add(Interceptor interceptor) {
-        this.interceptors.addLast(new InstantiatedInterceptorHandler(interceptor));
+    public DefaultInterceptorStack(InterceptorHandlerFactory handlerFactory) {
+        this.handlerFactory = handlerFactory;
     }
 
     public void next(ResourceMethod method, Object resourceInstance) throws InterceptionException {
@@ -59,16 +54,12 @@ public class DefaultInterceptorStack implements InterceptorStack {
         handler.execute(this, method, resourceInstance);
     }
 
-    public <T extends Interceptor> void add(Class<T> type) {
-        this.interceptors.addLast(new ToInstantiateInterceptorHandler(container, type));
+    public void add(Class<? extends Interceptor> type) {
+        this.interceptors.addLast(handlerFactory.handlerFor(type));
     }
 
-    public void addAsNext(Interceptor interceptor) {
-        this.interceptors.addFirst(new InstantiatedInterceptorHandler(interceptor));
-    }
-
-    public void addAsNext(Class<? extends Interceptor> interceptor) {
-    	this.interceptors.addFirst(new ToInstantiateInterceptorHandler(container, interceptor));
+    public void addAsNext(Class<? extends Interceptor> type) {
+    	this.interceptors.addFirst(handlerFactory.handlerFor(type));
     }
 
     @Override

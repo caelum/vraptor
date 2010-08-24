@@ -43,13 +43,11 @@ public class DefaultRequestExecutionTest {
 
     @Mock private InterceptorStack stack;
     private DefaultRequestExecution execution;
-    private InstantiateInterceptor instantiator;
 
     @Before
     public void setup() {
     	MockitoAnnotations.initMocks(this);
-        this.instantiator = new InstantiateInterceptor(null);
-        this.execution = new DefaultRequestExecution(stack, instantiator);
+        this.execution = new DefaultRequestExecution(stack);
     }
 
     @Test
@@ -63,7 +61,7 @@ public class DefaultRequestExecutionTest {
         order.verify(stack).add(ResourceLookupInterceptor.class);
         order.verify(stack).add(FlashInterceptor.class);
         order.verify(stack).add(InterceptorListPriorToExecutionExtractor.class);
-        order.verify(stack).add(instantiator);
+        order.verify(stack).add(InstantiateInterceptor.class);
         order.verify(stack).add(ParametersInstantiatorInterceptor.class);
         order.verify(stack).add(DeserializingInterceptor.class);
         order.verify(stack).add(ExecuteMethodInterceptor.class);

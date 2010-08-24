@@ -16,65 +16,64 @@
  */
 package br.com.caelum.vraptor.core;
 
-import static org.mockito.Mockito.inOrder;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 
+import org.junit.Before;
 import org.junit.Test;
-import org.mockito.InOrder;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.interceptor.Interceptor;
+import br.com.caelum.vraptor.resource.ResourceMethod;
 
 public class DefaultInterceptorStackTest {
 
+	private static final ResourceMethod A_METHOD = null;
+	private static final Object AN_INSTANCE = null;
+
+	private @Mock InterceptorHandlerFactory handlerFactory;
+	private @Mock(name = "first") InterceptorHandler firstHandler;
+	private @Mock(name = "second") InterceptorHandler secondHandler;
+
+	private DefaultInterceptorStack stack;
+
+	@Before
+	public void setUp() throws Exception {
+		MockitoAnnotations.initMocks(this);
+		stack = new DefaultInterceptorStack(handlerFactory);
+		when(handlerFactory.handlerFor(FirstInterceptor.class)).thenReturn(firstHandler);
+		when(handlerFactory.handlerFor(SecondInterceptor.class)).thenReturn(secondHandler);
+	}
+
+	static interface FirstInterceptor extends Interceptor {}
+	static interface SecondInterceptor extends Interceptor {}
+
     @Test
     public void testInvokesAllInterceptorsInItsCorrectOrder() throws IOException, InterceptionException {
-        DefaultInterceptorStack stack = new DefaultInterceptorStack(null);
-        Interceptor first = mock(Interceptor.class, "firstMocked");
-        Interceptor second = mock(Interceptor.class, "secondMocked");
-        stack.add(first);
-        stack.add(second);
-        stack.next(null, null);
+        stack.add(FirstInterceptor.class);
+        stack.add(SecondInterceptor.class);
 
-        InOrder order = inOrder(first,second);
+        stack.next(A_METHOD, AN_INSTANCE);
+        verify(firstHandler).execute(stack, A_METHOD, AN_INSTANCE);
 
-        order.verify(first).accepts(null);
-        order.verify(second).accepts(null);
+        stack.next(A_METHOD, AN_INSTANCE);
+        verify(secondHandler).execute(stack, A_METHOD, AN_INSTANCE);
     }
 
     @Test
     public void shouldAddNextInterceptorAsNext() throws InterceptionException, IOException {
-        Interceptor first = mock(Interceptor.class, "firstMocked");
-        final Interceptor second = mock(Interceptor.class, "secondMocked");
-        final DefaultInterceptorStack stack = new DefaultInterceptorStack(null);
-        stack.add(first);
-        stack.addAsNext(second);
+        stack.add(FirstInterceptor.class);
+        stack.addAsNext(SecondInterceptor.class);
 
-        stack.next(null, null);
+        stack.next(A_METHOD, AN_INSTANCE);
+        verify(secondHandler).execute(stack, A_METHOD, AN_INSTANCE);
 
-        InOrder order = inOrder(first,second);
-
-        order.verify(second).accepts(null);
-        order.verify(first).accepts(null);
-    }
-
-    @Test
-    public void shouldAddInterceptorAsLast() throws InterceptionException, IOException {
-        final Interceptor firstMocked = mock(Interceptor.class, "firstMocked");
-        final Interceptor secondMocked = mock(Interceptor.class, "secondMocked");
-        final DefaultInterceptorStack stack = new DefaultInterceptorStack(null);
-        stack.add(firstMocked);
-        stack.add(secondMocked);
-
-        when(firstMocked.accepts(null)).thenReturn(true);
-
-        stack.next(null, null);
-
-        verify(firstMocked).intercept(stack, null, null);
+        stack.next(A_METHOD, AN_INSTANCE);
+        verify(firstHandler).execute(stack, A_METHOD, AN_INSTANCE);
     }
 
 }

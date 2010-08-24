@@ -28,13 +28,10 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  */
 public interface InterceptorStack {
 
-    void add(Interceptor interceptor);
-
-    <T extends Interceptor> void add(Class<T> interceptor);
-
     void next(ResourceMethod method, Object resourceInstance) throws InterceptionException;
 
-    void addAsNext(Interceptor interceptor);
+    void add(Class<? extends Interceptor> interceptor);
+
     void addAsNext(Class<? extends Interceptor> interceptor);
 
 }

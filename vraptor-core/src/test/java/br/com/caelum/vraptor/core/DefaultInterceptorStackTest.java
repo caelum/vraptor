@@ -16,70 +16,50 @@
  */
 package br.com.caelum.vraptor.core;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 
-import org.junit.Before;
 import org.junit.Test;
+import org.mockito.InOrder;
 
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.interceptor.Interceptor;
-import br.com.caelum.vraptor.resource.ResourceMethod;
 
 public class DefaultInterceptorStackTest {
-
-    private int count;
-
-    @Before
-    public void setup() {
-        count = 0;
-    }
 
     @Test
     public void testInvokesAllInterceptorsInItsCorrectOrder() throws IOException, InterceptionException {
         DefaultInterceptorStack stack = new DefaultInterceptorStack(null);
-        CountInterceptor first = new CountInterceptor();
-        CountInterceptor second = new CountInterceptor();
+        Interceptor first = mock(Interceptor.class, "firstMocked");
+        Interceptor second = mock(Interceptor.class, "secondMocked");
         stack.add(first);
         stack.add(second);
         stack.next(null, null);
-        assertThat(first.run, is(equalTo(0)));
-        assertThat(second.run, is(equalTo(1)));
-    }
 
-    class CountInterceptor implements Interceptor {
-        int run;
+        InOrder order = inOrder(first,second);
 
-        public void intercept(InterceptorStack invocation, ResourceMethod method, Object resourceInstance)
-                throws InterceptionException {
-            run = count++;
-            invocation.next(method, resourceInstance);
-        }
-
-        public boolean accepts(ResourceMethod method) {
-            return true;
-        }
+        order.verify(first).accepts(null);
+        order.verify(second).accepts(null);
     }
 
     @Test
     public void shouldAddNextInterceptorAsNext() throws InterceptionException, IOException {
-        Interceptor firstMocked = mock(Interceptor.class, "firstMocked");
-        final Interceptor secondMocked = mock(Interceptor.class, "secondMocked");
+        Interceptor first = mock(Interceptor.class, "firstMocked");
+        final Interceptor second = mock(Interceptor.class, "secondMocked");
         final DefaultInterceptorStack stack = new DefaultInterceptorStack(null);
-        stack.add(firstMocked);
-        stack.addAsNext(secondMocked);
-
-        when(secondMocked.accepts(null)).thenReturn(true);
+        stack.add(first);
+        stack.addAsNext(second);
 
         stack.next(null, null);
 
-        verify(secondMocked).intercept(stack, null, null);
+        InOrder order = inOrder(first,second);
+
+        order.verify(second).accepts(null);
+        order.verify(first).accepts(null);
     }
 
     @Test

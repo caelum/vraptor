@@ -17,46 +17,38 @@
 
 package br.com.caelum.vraptor.interceptor;
 
+import static org.junit.Assert.assertFalse;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import java.lang.reflect.Method;
 import java.util.List;
 
-import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.test.VRaptorMockery;
 
 public class OutjectResultTest {
 
-	private VRaptorMockery mockery;
-	private Result result;
-	private MethodInfo info;
+	private @Mock Result result;
+	private @Mock MethodInfo info;
+	private @Mock ResourceMethod method;
+	private @Mock Object instance;
+	private @Mock InterceptorStack stack;
+	private @Mock TypeNameExtractor extractor;
+
 	private OutjectResult interceptor;
-	private ResourceMethod method;
-	private Object instance;
-	private InterceptorStack stack;
-	private TypeNameExtractor extractor;
 
 	@Before
 	public void setup() {
-		this.mockery = new VRaptorMockery();
-		this.result = mockery.mock(Result.class);
-		this.info = mockery.mock(MethodInfo.class);
-		this.instance = null;
-		this.method = mockery.mock(ResourceMethod.class);
-		this.stack = mockery.mock(InterceptorStack.class);
-		this.extractor = mockery.mock(TypeNameExtractor.class);
-
+		MockitoAnnotations.initMocks(this);
 		this.interceptor = new OutjectResult(result, info, extractor);
-		mockery.checking(new Expectations() {
-			{
-				one(stack).next(method, instance);
-			}
-		});
 	}
 
 	interface MyComponent {
@@ -67,46 +59,36 @@ public class OutjectResultTest {
 
 	@Test
 	public void shouldOutjectWithASimpleTypeName() throws NoSuchMethodException {
-		mockery.checking(new Expectations() {
-			{
-				one(method).getMethod(); will(returnValue(MyComponent.class.getMethod("returnsAString")));
-				one(info).getResult(); will(returnValue("myString"));
+		when(method.getMethod()).thenReturn(MyComponent.class.getMethod("returnsAString"));
+		when(info.getResult()).thenReturn("myString");
+		when(extractor.nameFor(String.class)).thenReturn("string");
 
-				one(extractor).nameFor(String.class); will(returnValue("string"));
-
-				one(result).include("string", "myString");
-			}
-		});
 		interceptor.intercept(stack, method, instance);
-		mockery.assertIsSatisfied();
+
+		verify(result).include("string", "myString");
+		verify(stack).next(method, instance);
 	}
 
 
 	@Test
 	public void shouldOutjectACollectionAsAList() throws NoSuchMethodException {
-		mockery.checking(new Expectations() {
-			{
-				Method myComponentMethod = MyComponent.class.getMethod("returnsStrings");
-				one(method).getMethod(); will(returnValue(myComponentMethod));
-				one(info).getResult(); will(returnValue("myString"));
-				one(extractor).nameFor(myComponentMethod.getGenericReturnType()); will(returnValue("stringList"));
-				one(result).include("stringList", "myString");
-			}
-		});
+		Method myComponentMethod = MyComponent.class.getMethod("returnsStrings");
+		when(method.getMethod()).thenReturn(myComponentMethod);
+		when(info.getResult()).thenReturn("myString");
+		when(extractor.nameFor(myComponentMethod.getGenericReturnType())).thenReturn("stringList");
+
 		interceptor.intercept(stack, method, instance);
-		mockery.assertIsSatisfied();
+
+		verify(result).include("stringList", "myString");
+		verify(stack).next(method, instance);
 	}
 
 
 	@Test
 	public void shouldNotOutjectIfThereIsNoReturnType() throws NoSuchMethodException {
-		mockery.checking(new Expectations() {
-			{
-				one(method).getMethod(); will(returnValue(MyComponent.class.getMethod("noReturn")));
-			}
-		});
-		interceptor.intercept(stack, method, instance);
-		mockery.assertIsSatisfied();
+		when(method.getMethod()).thenReturn(MyComponent.class.getMethod("noReturn"));
+
+		assertFalse(interceptor.accepts(method));
 	}
 
 

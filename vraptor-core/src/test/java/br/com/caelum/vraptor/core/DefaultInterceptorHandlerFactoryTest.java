@@ -8,8 +8,8 @@ import static org.junit.Assert.assertThat;
 import org.junit.Before;
 import org.junit.Test;
 
+import br.com.caelum.vraptor.Lazy;
 import br.com.caelum.vraptor.interceptor.Interceptor;
-import br.com.caelum.vraptor.interceptor.StaticInterceptor;
 import br.com.caelum.vraptor.ioc.Container;
 
 public class DefaultInterceptorHandlerFactoryTest {
@@ -24,7 +24,8 @@ public class DefaultInterceptorHandlerFactoryTest {
 	}
 
 	static interface RegularInterceptor extends Interceptor {}
-	static interface AStaticInterceptor extends StaticInterceptor {}
+	@Lazy
+	static interface ALazyInterceptor extends Interceptor {}
 
 	@Test
 	public void handlerForRegularInterceptorsShouldBeDynamic() throws Exception {
@@ -32,11 +33,11 @@ public class DefaultInterceptorHandlerFactoryTest {
 	}
 	@Test
 	public void handlerForStaticInterceptorsShouldBeStatic() throws Exception {
-		assertThat(factory.handlerFor(AStaticInterceptor.class), is(instanceOf(StaticInterceptorHandler.class)));
+		assertThat(factory.handlerFor(ALazyInterceptor.class), is(instanceOf(LazyInterceptorHandler.class)));
 	}
 	@Test
 	public void staticHandlersShouldBeCached() throws Exception {
-		InterceptorHandler handler = factory.handlerFor(AStaticInterceptor.class);
-		assertThat(factory.handlerFor(AStaticInterceptor.class), is(sameInstance(handler)));
+		InterceptorHandler handler = factory.handlerFor(ALazyInterceptor.class);
+		assertThat(factory.handlerFor(ALazyInterceptor.class), is(sameInstance(handler)));
 	}
 }

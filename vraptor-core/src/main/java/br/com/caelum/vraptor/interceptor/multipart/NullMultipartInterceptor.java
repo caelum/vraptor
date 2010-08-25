@@ -1,8 +1,8 @@
 package br.com.caelum.vraptor.interceptor.multipart;
 
 import br.com.caelum.vraptor.InterceptionException;
+import br.com.caelum.vraptor.Lazy;
 import br.com.caelum.vraptor.core.InterceptorStack;
-import br.com.caelum.vraptor.interceptor.StaticInterceptor;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**
@@ -12,7 +12,8 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  * @since 3.1.3
  * @see CommonsUploadMultipartInterceptor
  */
-public class NullMultipartInterceptor implements MultipartInterceptor, StaticInterceptor {
+@Lazy
+public class NullMultipartInterceptor implements MultipartInterceptor {
 
     public boolean accepts(ResourceMethod method) {
         return false;

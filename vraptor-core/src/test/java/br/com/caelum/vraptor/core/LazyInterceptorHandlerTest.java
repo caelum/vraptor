@@ -11,12 +11,12 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.InterceptionException;
+import br.com.caelum.vraptor.Lazy;
 import br.com.caelum.vraptor.interceptor.Interceptor;
-import br.com.caelum.vraptor.interceptor.StaticInterceptor;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
-public class StaticHandlerIntecerptorTest {
+public class LazyInterceptorHandlerTest {
 
 	private @Mock Container container;
 	private @Mock InterceptorStack stack;
@@ -32,7 +32,7 @@ public class StaticHandlerIntecerptorTest {
 
 	@Test
 	public void shouldUseContainerIfInterceptorAccepts() throws Exception {
-		StaticInterceptorHandler handler = new StaticInterceptorHandler(container,AlwaysAcceptInterceptor.class);
+		LazyInterceptorHandler handler = new LazyInterceptorHandler(container,AlwaysAcceptInterceptor.class);
 
 		handler.execute(stack,method,instance);
 
@@ -42,7 +42,7 @@ public class StaticHandlerIntecerptorTest {
 	}
 	@Test
 	public void shouldNotUseContainerIfInterceptorDoesntAccept() throws Exception {
-		StaticInterceptorHandler handler = new StaticInterceptorHandler(container, NeverAcceptInterceptor.class);
+		LazyInterceptorHandler handler = new LazyInterceptorHandler(container, NeverAcceptInterceptor.class);
 
 		handler.execute(stack,method,instance);
 
@@ -52,18 +52,19 @@ public class StaticHandlerIntecerptorTest {
 
 	@Test(expected=InterceptionException.class)
 	public void shouldFailIfUsingConstructorParametersOnConstructor() throws Exception {
-		StaticInterceptorHandler handler = new StaticInterceptorHandler(container, InterceptorUsingConstructorParameters.class);
+		LazyInterceptorHandler handler = new LazyInterceptorHandler(container, InterceptorUsingConstructorParameters.class);
 
 		handler.execute(stack,method,instance);
 	}
 	@Test(expected=InterceptionException.class)
 	public void shouldFailIfUsingConstructorParametersOnAcceptsMethod() throws Exception {
-		StaticInterceptorHandler handler = new StaticInterceptorHandler(container, InterceptorUsingConstructorParametersOnAccepts.class);
+		LazyInterceptorHandler handler = new LazyInterceptorHandler(container, InterceptorUsingConstructorParametersOnAccepts.class);
 
 		handler.execute(stack,method,instance);
 	}
 
-	static class AlwaysAcceptInterceptor implements StaticInterceptor {
+	@Lazy
+	static class AlwaysAcceptInterceptor implements Interceptor {
 		public AlwaysAcceptInterceptor(String xxxx) {
 		}
 		public boolean accepts(ResourceMethod method) {
@@ -71,13 +72,17 @@ public class StaticHandlerIntecerptorTest {
 		}
 		public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance){}
 	}
-	private static class NeverAcceptInterceptor implements StaticInterceptor {
+
+	@Lazy
+	private static class NeverAcceptInterceptor implements Interceptor {
 		public boolean accepts(ResourceMethod method) {
 			return false;
 		}
 		public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance){}
 	}
-	static class InterceptorUsingConstructorParameters implements StaticInterceptor {
+
+	@Lazy
+	static class InterceptorUsingConstructorParameters implements Interceptor {
 		public InterceptorUsingConstructorParameters(String xuxu) {
 			xuxu.toString();
 		}
@@ -86,7 +91,8 @@ public class StaticHandlerIntecerptorTest {
 		}
 		public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance){}
 	}
-	static class InterceptorUsingConstructorParametersOnAccepts implements StaticInterceptor {
+	@Lazy
+	static class InterceptorUsingConstructorParametersOnAccepts implements Interceptor {
 		private final String xuxu;
 		public InterceptorUsingConstructorParametersOnAccepts(String xuxu) {
 			this.xuxu = xuxu;

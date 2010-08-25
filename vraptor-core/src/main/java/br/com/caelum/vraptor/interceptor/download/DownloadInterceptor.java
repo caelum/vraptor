@@ -28,10 +28,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.InterceptionException;
+import br.com.caelum.vraptor.Lazy;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodInfo;
-import br.com.caelum.vraptor.interceptor.StaticInterceptor;
+import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
@@ -41,10 +42,10 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  * @author filipesabella
  */
 @RequestScoped
-public class DownloadInterceptor implements StaticInterceptor {
+@Lazy
+public class DownloadInterceptor implements Interceptor {
 
     private static final Logger logger = LoggerFactory.getLogger(DownloadInterceptor.class);
-
 
 	private final HttpServletResponse response;
 	private final MethodInfo info;

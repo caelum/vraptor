@@ -3,8 +3,8 @@ package br.com.caelum.vraptor.core;
 import java.util.HashMap;
 import java.util.Map;
 
+import br.com.caelum.vraptor.Lazy;
 import br.com.caelum.vraptor.interceptor.Interceptor;
-import br.com.caelum.vraptor.interceptor.StaticInterceptor;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Container;
 
@@ -28,9 +28,9 @@ public class DefaultInterceptorHandlerFactory implements InterceptorHandlerFacto
 
 
 	public InterceptorHandler handlerFor(Class<? extends Interceptor> type) {
-		if (StaticInterceptor.class.isAssignableFrom(type)) {
+		if (type.isAnnotationPresent(Lazy.class)) {
 			if (!cachedHandlers.containsKey(type)) {
-				cachedHandlers.put(type, new StaticInterceptorHandler(container, type));
+				cachedHandlers.put(type, new LazyInterceptorHandler(container, type));
 			}
 			return cachedHandlers.get(type);
 		}

@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.InterceptionException;
+import br.com.caelum.vraptor.Lazy;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodInfo;
@@ -33,7 +34,8 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  *
  * @author guilherme silveira
  */
-public class OutjectResult implements StaticInterceptor {
+@Lazy
+public class OutjectResult implements Interceptor {
 
 	private static final Logger logger = LoggerFactory.getLogger(OutjectResult.class);
 

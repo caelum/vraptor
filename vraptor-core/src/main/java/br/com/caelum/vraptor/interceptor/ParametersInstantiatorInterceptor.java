@@ -28,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.InterceptionException;
+import br.com.caelum.vraptor.Lazy;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.Localization;
@@ -42,7 +43,8 @@ import br.com.caelum.vraptor.validator.Message;
  *
  * @author Guilherme Silveira
  */
-public class ParametersInstantiatorInterceptor implements StaticInterceptor {
+@Lazy
+public class ParametersInstantiatorInterceptor implements Interceptor {
     private final ParametersProvider provider;
     private final MethodInfo parameters;
 

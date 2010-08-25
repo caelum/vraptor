@@ -13,15 +13,15 @@ import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
-class StaticInterceptorHandler implements InterceptorHandler {
+class LazyInterceptorHandler implements InterceptorHandler {
 
-	private static final Logger logger = LoggerFactory.getLogger(StaticInterceptorHandler.class);
+	private static final Logger logger = LoggerFactory.getLogger(LazyInterceptorHandler.class);
 
 	private final Container container;
 	private final Class<? extends Interceptor> type;
 	private Interceptor acceptor;
 
-	public StaticInterceptorHandler(Container container, Class<? extends Interceptor> type) {
+	public LazyInterceptorHandler(Container container, Class<? extends Interceptor> type) {
 		this.container = container;
 		this.type = type;
 	}

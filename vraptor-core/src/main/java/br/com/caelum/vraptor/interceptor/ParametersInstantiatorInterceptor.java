@@ -42,7 +42,7 @@ import br.com.caelum.vraptor.validator.Message;
  *
  * @author Guilherme Silveira
  */
-public class ParametersInstantiatorInterceptor implements Interceptor {
+public class ParametersInstantiatorInterceptor implements StaticInterceptor {
     private final ParametersProvider provider;
     private final MethodInfo parameters;
 
@@ -65,7 +65,7 @@ public class ParametersInstantiatorInterceptor implements Interceptor {
     }
 
     public boolean accepts(ResourceMethod method) {
-        return true;
+        return method.getMethod().getParameterTypes().length > 0;
     }
 
     @SuppressWarnings("unchecked")

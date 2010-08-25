@@ -19,7 +19,6 @@ package br.com.caelum.vraptor.ioc.spring;
 
 import java.util.Arrays;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.ServletContext;
 
@@ -52,6 +51,8 @@ import br.com.caelum.vraptor.core.BaseComponents;
 import br.com.caelum.vraptor.ioc.ComponentFactory;
 import br.com.caelum.vraptor.ioc.StereotypeHandler;
 
+import com.google.common.collect.MapMaker;
+
 /**
  * @author Fabio Kung
  */
@@ -65,7 +66,7 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
 	private final SpringBasedContainer container;
 	private final BasicConfiguration config;
 
-	private Map<Class<?>, String> typeToBeanName = new ConcurrentHashMap<Class<?>, String>();
+	private Map<Class<?>, String> typeToBeanName = new MapMaker().weakValues().makeMap();
 
 	public VRaptorApplicationContext(SpringBasedContainer container, BasicConfiguration config) {
 		this.container = container;

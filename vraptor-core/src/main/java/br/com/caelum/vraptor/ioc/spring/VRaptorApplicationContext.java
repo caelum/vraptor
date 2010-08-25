@@ -248,7 +248,7 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
 			String name = compatibleNameFor(type);
 			typeToBeanName.put(type, name);
 		}
-		return getBean(typeToBeanName.get(type), type);
+		return type.cast(getBean(typeToBeanName.get(type)));
 	}
 
 	private String compatibleNameFor(Class<?> type) {

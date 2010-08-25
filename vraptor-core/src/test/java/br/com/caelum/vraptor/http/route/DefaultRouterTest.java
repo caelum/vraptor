@@ -123,9 +123,9 @@ public class DefaultRouterTest {
 
 		mockery.checking(new Expectations() {
 			{
-				allowing(first).getPriority(); will(returnValue(1));
-				allowing(second).getPriority(); will(returnValue(2));
-				allowing(third).getPriority(); will(returnValue(3));
+				allowing(first).getPriority(); will(returnValue(Path.HIGH));
+				allowing(second).getPriority(); will(returnValue(Path.DEFAULT));
+				allowing(third).getPriority(); will(returnValue(Path.LOW));
 
 				allowing(first).canHandle(with(any(String.class))); will(returnValue(false));
 				inSequence(handle);
@@ -213,8 +213,8 @@ public class DefaultRouterTest {
 			one(route).resourceMethod(request, "/clients/add");
 			will(returnValue(method));
 
-			allowing(route).getPriority(); will(returnValue(1));
-			allowing(second).getPriority(); will(returnValue(2));
+			allowing(route).getPriority(); will(returnValue(Path.HIGHEST));
+			allowing(second).getPriority(); will(returnValue(Path.LOWEST));
 		}});
 		router.add(route);
 		router.add(second);
@@ -235,8 +235,8 @@ public class DefaultRouterTest {
 			allowing(route).allowedMethods(); will(returnValue(all));
 			allowing(second).allowedMethods();	will(returnValue(all));
 
-			allowing(route).getPriority(); will(returnValue(1));
-			allowing(second).getPriority(); will(returnValue(1));
+			allowing(route).getPriority(); will(returnValue(Path.DEFAULT));
+			allowing(second).getPriority(); will(returnValue(Path.DEFAULT));
 		}});
 		router.add(route);
 		router.add(second);

@@ -28,6 +28,18 @@ depend on the interceptor internal state:
 	so it should not depend on the interceptor's internal state.
 	Do not use @Lazy if your accepts is trivial (always returns true).
 
+* **slight backwards compatibility break**: the default priority of @Path has changed to Integer.MAX_INTEGER/2.
+  It was Integer.MAX_INTEGER - 1. Despite of this compatibility break, we believe that it won't affect
+  working applications.
+* @Path priority can be defined with constants:
+	[java]
+	@Path(value="/url", priority=Path.HIGHEST)
+	@Path(value="/url", priority=Path.HIGH)
+	@Path(value="/url", priority=Path.DEFAULT)
+	@Path(value="/url", priority=Path.LOW)
+	@Path(value="/url", priority=Path.LOWEST)
+	[/java]
+
 * more Joda Time converters (by Rodolfo Liviero)
 * improvings on Scala Blank Project (by Pedro Matiello)
 * bugfix: null Accept Header fallback to html

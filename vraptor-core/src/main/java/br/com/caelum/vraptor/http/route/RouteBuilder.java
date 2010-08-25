@@ -50,12 +50,13 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
+import java.util.Map.Entry;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.proxy.MethodInvocation;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.SuperMethod;
@@ -84,7 +85,7 @@ public class RouteBuilder {
 
 	private Route strategy = new NoStrategy();
 
-	private int priority = Integer.MAX_VALUE;
+	private int priority = Path.LOWEST;
 
 	private final ParameterControlBuilder builder;
 

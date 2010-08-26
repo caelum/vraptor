@@ -47,6 +47,12 @@ public interface RelationBuilder {
 	}
 
 	/**
+	 * adds a relation
+	 * @param relation
+	 */
+	void add(Relation relation);
+
+	/**
 	 * Creates a relation using default name
 	 */
 	<T> T relation(Class<T> type);

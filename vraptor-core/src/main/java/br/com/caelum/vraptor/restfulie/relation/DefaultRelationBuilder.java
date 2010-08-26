@@ -44,6 +44,10 @@ public class DefaultRelationBuilder implements RelationBuilder {
 		this.proxifier = proxifier;
 	}
 
+	public void add(Relation relation) {
+		relations.add(relation);
+	}
+
 	public WithName relation(String name) {
 		return new WithNameImpl(name);
 	}

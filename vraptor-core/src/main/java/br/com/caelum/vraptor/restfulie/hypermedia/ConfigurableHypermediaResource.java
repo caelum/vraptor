@@ -13,25 +13,16 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package br.com.caelum.vraptor.restfulie;
+package br.com.caelum.vraptor.restfulie.hypermedia;
 
-import br.com.caelum.vraptor.restfulie.hypermedia.ConfigurableHypermediaResource;
 import br.com.caelum.vraptor.restfulie.relation.RelationBuilder;
 
 /**
- *
- * Entry point for Restfulie operations
+ * A hypermedia resource that can be configured.
  *
  * @author Lucas Cavalcanti
  * @since 3.2.0
- *
  */
-public interface Restfulie {
-
-	/**
-	 * Creates a new relation builder
-	 */
-	RelationBuilder newRelationBuilder();
-
-	ConfigurableHypermediaResource enhance(Object object);
+public interface ConfigurableHypermediaResource extends HypermediaResource, RelationBuilder{
+	<T> T getModel();
 }

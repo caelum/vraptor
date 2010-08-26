@@ -17,6 +17,8 @@
 
 package br.com.caelum.vraptor.restfulie.serialization;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletResponse;
 
 import br.com.caelum.vraptor.config.Configuration;
@@ -59,4 +61,7 @@ public class RestfulSerialization extends XStreamXMLSerialization {
 		return xStream;
 	}
 
+	public static void main(String[] args) {
+		System.out.println(new XStream().getConverterLookup().lookupConverterForType(List.class));
+	}
 }

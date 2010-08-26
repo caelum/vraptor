@@ -35,6 +35,8 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.restfulie.Restfulie;
 import br.com.caelum.vraptor.restfulie.hypermedia.HypermediaResource;
 import br.com.caelum.vraptor.restfulie.hypermedia.Transition;
+import br.com.caelum.vraptor.restfulie.relation.Relation;
+import br.com.caelum.vraptor.restfulie.relation.RelationBuilder;
 import br.com.caelum.vraptor.view.Status;
 
 /**
@@ -106,17 +108,15 @@ public class ResourceControllerInterceptor<T extends HypermediaResource> impleme
 	}
 
 	private boolean allows(T resource, Method method) {
-		try {
-			List<br.com.caelum.vraptor.restfulie.relation.Relation> transitions = resource.getRelations(restfulie);
-			for (br.com.caelum.vraptor.restfulie.relation.Relation transition : transitions) {
-				if(transition.matches(method)) {
-					return true;
-				}
+		RelationBuilder builder = restfulie.newRelationBuilder();
+		resource.configureRelations(builder);
+
+		for (Relation relation : builder.getRelations()) {
+			if(relation.matches(method)) {
+				return true;
 			}
-			return false;
-		} finally {
-			restfulie.clear();
 		}
+		return false;
 	}
 
 	private String lowerFirstChar(String simpleName) {

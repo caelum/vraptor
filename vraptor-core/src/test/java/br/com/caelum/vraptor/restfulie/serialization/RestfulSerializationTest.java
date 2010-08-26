@@ -4,13 +4,10 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.typeCompatibleWith;
 import static org.junit.Assert.assertThat;
 
-import java.util.List;
-
 import org.junit.Test;
 
-import br.com.caelum.vraptor.restfulie.Restfulie;
 import br.com.caelum.vraptor.restfulie.hypermedia.HypermediaResource;
-import br.com.caelum.vraptor.restfulie.relation.Relation;
+import br.com.caelum.vraptor.restfulie.relation.RelationBuilder;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.Converter;
@@ -24,9 +21,9 @@ public class RestfulSerializationTest {
 
 	class CustomType implements HypermediaResource{
 
-		public List<Relation> getRelations(Restfulie control) {
-			return null;
+		public void configureRelations(RelationBuilder builder) {
 		}
+
 	}
 
 	@Test

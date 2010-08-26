@@ -21,6 +21,7 @@ import br.com.caelum.vraptor.config.Configuration;
 import br.com.caelum.vraptor.restfulie.Restfulie;
 import br.com.caelum.vraptor.restfulie.hypermedia.HypermediaResource;
 import br.com.caelum.vraptor.restfulie.relation.Relation;
+import br.com.caelum.vraptor.restfulie.relation.RelationBuilder;
 
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;
@@ -53,16 +54,14 @@ public class LinkConverter implements Converter {
 			MarshallingContext context) {
 		base.marshal(root, writer, context);
 		HypermediaResource resource = (HypermediaResource) root;
-		try {
-			for (Relation t : resource.getRelations(restfulie)) {
-				writer.startNode("atom:link");
-				writer.addAttribute("rel", t.getName());
-				writer.addAttribute("href", config.getApplicationPath() + t.getUri());
-				writer.addAttribute("xmlns:atom", "http://www.w3.org/2005/Atom");
-				writer.endNode();
-			}
-		} finally {
-			restfulie.clear();
+		RelationBuilder builder = restfulie.newRelationBuilder();
+		resource.configureRelations(builder);
+		for (Relation t : builder.getRelations()) {
+			writer.startNode("atom:link");
+			writer.addAttribute("rel", t.getName());
+			writer.addAttribute("href", config.getApplicationPath() + t.getUri());
+			writer.addAttribute("xmlns:atom", "http://www.w3.org/2005/Atom");
+			writer.endNode();
 		}
 	}
 

@@ -17,88 +17,33 @@
 
 package br.com.caelum.vraptor.restfulie;
 
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
-
-import br.com.caelum.vraptor.core.Routes;
+import br.com.caelum.vraptor.http.route.Router;
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Component;
-import br.com.caelum.vraptor.ioc.RequestScoped;
-import br.com.caelum.vraptor.proxy.MethodInvocation;
 import br.com.caelum.vraptor.proxy.Proxifier;
-import br.com.caelum.vraptor.proxy.SuperMethod;
-import br.com.caelum.vraptor.restfulie.relation.Relation;
 import br.com.caelum.vraptor.restfulie.relation.DefaultRelationBuilder;
+import br.com.caelum.vraptor.restfulie.relation.RelationBuilder;
 
 /**
- * Helper to create transitions and states when using restfulie.
- * 
- * @author guilherme silveira
- * @since 3.0.3
+ * Default implementation for {@link Restfulie}
+ *
+ * @author Lucas Cavalcanti
+ * @since 3.2.0
  */
 @Component
-@RequestScoped
+@ApplicationScoped
 public class DefaultRestfulie implements Restfulie {
-	
-	private final List<DefaultRelationBuilder> relations = new ArrayList<DefaultRelationBuilder>();
-	private final Routes routes;
+
 	private final Proxifier proxifier;
-	
-	public DefaultRestfulie(Routes routes, Proxifier proxifier) {
-		this.routes = routes;
+	private final Router router;
+
+	public DefaultRestfulie(Proxifier proxifier, Router router) {
 		this.proxifier = proxifier;
-	}
-	
-	public String getStatusField() {
-		return "status";
-	}
-	
-	public DefaultRelationBuilder relation(String name) {
-		DefaultRelationBuilder builder = createBuilderFor(name);
-		this.relations.add(builder);
-		return builder;
+		this.router = router;
 	}
 
-	/**
-	 * Allows the use of different relation builders.
-	 */
-	protected DefaultRelationBuilder createBuilderFor(String name) {
-		return new DefaultRelationBuilder(name, routes, proxifier);
-	}
-
-	public List<Relation> getRelations() {
-		List<Relation> transitions = new ArrayList<Relation>();
-		for(DefaultRelationBuilder builder : this.relations) {
-			transitions.add(builder.build());
-		}
-		return transitions;
-	}
-
-	public <T> T relation(final Class<T> type) {
-		return proxifier.proxify(type, new MethodInvocation<T>() {
-			public Object intercept(T proxy, Method method, Object[] args,
-					SuperMethod superMethod) {
-				T instance = relation(method.getName()).uses(type);
-				try {
-					method.invoke(instance, args);
-				} catch (Exception e) {
-					throw new IllegalArgumentException("Unable to create transition for " + method.getName() + " within " + type.getName(), e);
-				}
-				return null;
-			}
-		});
-	}
-
-	public void clear() {
-		relations.clear();
-	}
-
-	public DefaultRelationBuilder transition(String name) {
-		return relation(name);
-	}
-
-	public <T> T transition(Class<T> type) {
-		return relation(type);
+	public RelationBuilder newRelationBuilder() {
+		return new DefaultRelationBuilder(router, proxifier);
 	}
 
 }

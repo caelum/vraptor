@@ -19,7 +19,6 @@ package br.com.caelum.vraptor.core;
 
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.TwoWayConverter;
-import br.com.caelum.vraptor.ioc.Container;
 
 /**
  * Represents a collection of converters.<br>
@@ -37,7 +36,7 @@ public interface Converters {
 	 * @param container
 	 * @return
 	 */
-	Converter<?> to(Class<?> type, Container container);
+	Converter<?> to(Class<?> type);
 
 	void register(Class<? extends Converter<?>> converterClass);
 
@@ -45,6 +44,6 @@ public interface Converters {
 
 	boolean existsTwoWayFor(Class<?> type);
 
-	TwoWayConverter<?> twoWayConverterFor(Class<?> type, Container container);
+	TwoWayConverter<?> twoWayConverterFor(Class<?> type);
 
 }

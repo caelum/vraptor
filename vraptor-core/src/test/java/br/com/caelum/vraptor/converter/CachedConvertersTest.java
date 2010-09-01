@@ -37,7 +37,7 @@ public class CachedConvertersTest {
     private Mockery mockery;
     private CachedConverters converters;
     private Converters delegate;
-    private Converter<?> converter;
+    private Converter converter;
     private Container container;
 
     @Before
@@ -45,19 +45,18 @@ public class CachedConvertersTest {
         this.mockery = new Mockery();
         this.delegate = mockery.mock(Converters.class);
         this.converter = mockery.mock(Converter.class);
-        this.converters = new CachedConverters(delegate);
         this.container = mockery.mock(Container.class);
+        this.converters = new CachedConverters(delegate, container);
         mockery.checking(new Expectations() {
             {
-                one(delegate).to(CachedConvertersTest.class, container); will(returnValue(converter));
+                one(delegate).to(CachedConvertersTest.class); will(returnValue(converter));
             }
         });
     }
 
 	@Test
     public void shouldUseTheProvidedConverterDuringFirstRequest() {
-		@SuppressWarnings("unchecked")
-        Converter found = converters.to(CachedConvertersTest.class, container);
+        Converter found = converters.to(CachedConvertersTest.class);
         assertThat(found, is(equalTo(this.converter)));
         mockery.assertIsSatisfied();
     }
@@ -67,7 +66,7 @@ public class CachedConvertersTest {
         mockery.checking(new Expectations(){{
             one(container).instanceFor(converter.getClass()); will(returnValue(converter));
         }});
-        assertSame(converters.to(CachedConvertersTest.class, container), converters.to(CachedConvertersTest.class, container));
+        assertSame(converters.to(CachedConvertersTest.class), converters.to(CachedConvertersTest.class));
         mockery.assertIsSatisfied();
     }
 

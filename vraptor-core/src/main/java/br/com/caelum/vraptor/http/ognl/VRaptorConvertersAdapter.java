@@ -29,7 +29,6 @@ import java.util.ResourceBundle;
 import ognl.TypeConverter;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.core.Converters;
-import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 
 @RequestScoped
@@ -48,18 +47,17 @@ public class VRaptorConvertersAdapter implements TypeConverter {
             Class toType) {
         Type genericType = genericTypeToConvert(target, member);
         Class type = rawTypeOf(genericType);
-        Container container = (Container) context.get(Container.class);
         if (type.isArray() && !value.getClass().isArray()) {
         	Class arrayType = type.getComponentType();
         	Object array = Array.newInstance(arrayType, 1);
-        	Array.set(array, 0, convert(value, arrayType, container));
+        	Array.set(array, 0, convert(value, arrayType));
         	return array;
         }
-        return convert(value, type, container);
+        return convert(value, type);
     }
 
-	private Object convert(Object value, Class type, Container container) {
-		Converter<?> converter = converters.to(type, container);
+	private Object convert(Object value, Class type) {
+		Converter<?> converter = converters.to(type);
         if (converter == null) {
             // TODO better, validation error?
             throw new IllegalArgumentException("Cannot instantiate a converter for type " + type.getName());

@@ -34,9 +34,11 @@ public final class DefaultConverters implements Converters {
 
     private final LinkedList<Class<? extends Converter<?>>> classes;
     private final Logger logger = LoggerFactory.getLogger(DefaultConverters.class);
+	private final Container container;
 
-    public DefaultConverters() {
-        this.classes = new LinkedList<Class<? extends Converter<?>>>();
+    public DefaultConverters(Container container) {
+        this.container = container;
+		this.classes = new LinkedList<Class<? extends Converter<?>>>();
         logger.info("Registering bundled converters");
         for (Class<? extends Converter<?>> converterType : BaseComponents.getBundledConverters()) {
             logger.debug("bundled converter to be registered: " + converterType);
@@ -52,7 +54,7 @@ public final class DefaultConverters implements Converters {
         classes.addFirst(converterClass);
     }
 
-    public Converter<?> to(Class<?> clazz, Container container) {
+    public Converter<?> to(Class<?> clazz) {
         if (!existsFor(clazz)) {
 			throw new VRaptorException("Unable to find converter for " + clazz.getName());
 		}
@@ -78,7 +80,7 @@ public final class DefaultConverters implements Converters {
 		return found != null && TwoWayConverter.class.isAssignableFrom(found);
 	}
 
-	public TwoWayConverter<?> twoWayConverterFor(Class<?> type, Container container) {
+	public TwoWayConverter<?> twoWayConverterFor(Class<?> type) {
 		if (!existsTwoWayFor(type)) {
 			throw new VRaptorException("Unable to find two way converter for " + type.getName());
 		}

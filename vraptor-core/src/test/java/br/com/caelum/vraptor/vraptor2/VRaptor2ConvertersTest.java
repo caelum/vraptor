@@ -78,9 +78,9 @@ public class VRaptor2ConvertersTest {
 				will(returnValue(Arrays.asList(new String[] { VRaptor2BasedConverter.class.getName() })));
 			}
 		});
-		VRaptor2Converters converters = new VRaptor2Converters(config);
+		VRaptor2Converters converters = new VRaptor2Converters(config, container);
 		converters.setDelegateConverters(null);
-		br.com.caelum.vraptor.Converter<?> converter = converters.to(Integer.class, container);
+		br.com.caelum.vraptor.Converter<?> converter = converters.to(Integer.class);
 		assertThat(converter.getClass(), is(typeCompatibleWith(ConverterWrapper.class)));
 		mockery.assertIsSatisfied();
 	}
@@ -93,13 +93,13 @@ public class VRaptor2ConvertersTest {
 			{
 				one(config).getConverters();
 				will(returnValue(Arrays.asList(new String[0])));
-				one(delegate).to(Integer.class, container);
+				one(delegate).to(Integer.class);
 				will(returnValue(new VRaptor3BasedConverter()));
 			}
 		});
-		final VRaptor2Converters converters = new VRaptor2Converters(config);
+		final VRaptor2Converters converters = new VRaptor2Converters(config, container);
 		converters.setDelegateConverters(delegate);
-		assertThat(converters.to(Integer.class, container).getClass(),
+		assertThat(converters.to(Integer.class).getClass(),
 				is(typeCompatibleWith(VRaptor3BasedConverter.class)));
 		mockery.assertIsSatisfied();
 	}
@@ -115,7 +115,7 @@ public class VRaptor2ConvertersTest {
 				will(returnValue(true));
 			}
 		});
-		final VRaptor2Converters converters = new VRaptor2Converters(config);
+		final VRaptor2Converters converters = new VRaptor2Converters(config, container);
 		converters.setDelegateConverters(delegate);
 		assertThat(converters.existsFor(Integer.class), is(true));
 	}
@@ -132,7 +132,7 @@ public class VRaptor2ConvertersTest {
 				will(returnValue(Arrays.asList(new String[] { VRaptor2BasedConverter.class.getName() })));
 			}
 		});
-		final VRaptor2Converters converters = new VRaptor2Converters(config);
+		final VRaptor2Converters converters = new VRaptor2Converters(config, container);
 		converters.setDelegateConverters(stubConverters);
 		assertThat(converters.existsFor(Integer.class), is(true));
 	}

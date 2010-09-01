@@ -39,10 +39,10 @@ public class VRaptor2Converters implements Converters {
 	private  Converters delegateConverters;
 	private final List<org.vraptor.converter.Converter> converterList = new ArrayList<org.vraptor.converter.Converter>();
 
-	public VRaptor2Converters(Config config) throws ClassNotFoundException,
+	public VRaptor2Converters(Config config, Container container) throws ClassNotFoundException,
 			InstantiationException, IllegalAccessException {
 		// probably vraptor3 converters
-		this.delegateConverters = new DefaultConverters();
+		this.delegateConverters = new DefaultConverters(container);
 		List<String> list = config.getConverters();
 		for (String l : list) {
 			@SuppressWarnings("unchecked")
@@ -57,9 +57,9 @@ public class VRaptor2Converters implements Converters {
 		this.delegateConverters = delegateConverters;
 	}
 
-	public Converter<?> to(Class<?> type, Container container) {
+	public Converter<?> to(Class<?> type) {
 		Converter<?> vraptor2Convterter = findVRaptor2Converter(type);
-		return vraptor2Convterter == null ? delegateConverters.to(type, container) : vraptor2Convterter;
+		return vraptor2Convterter == null ? delegateConverters.to(type) : vraptor2Convterter;
 	}
 
 	private Converter<?> findVRaptor2Converter(Class<?> type) {
@@ -94,7 +94,7 @@ public class VRaptor2Converters implements Converters {
         	"no new features for VRaptor 2 compatibility, sorry");
 	}
 
-	public TwoWayConverter<?> twoWayConverterFor(Class<?> type, Container container) {
+	public TwoWayConverter<?> twoWayConverterFor(Class<?> type) {
 		throw new UnsupportedOperationException(
 			"no new features for VRaptor 2 compatibility, sorry");
 	}

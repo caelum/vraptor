@@ -34,18 +34,20 @@ public class CachedConverters implements Converters {
     private final Map<Class<?>, Class<?>> cache = new HashMap<Class<?>, Class<?>>();
 
     private static final Logger logger = LoggerFactory.getLogger(CachedConverters.class);
+	private final Container container;
 
-    public CachedConverters(Converters converters) {
+    public CachedConverters(Converters converters, Container container) {
         this.delegate = converters;
+		this.container = container;
     }
 
-    public Converter<?> to(Class<?> type, Container container) {
+    public Converter<?> to(Class<?> type) {
         if (cache.containsKey(type)) {
             Class<?> converterType = cache.get(type);
             return (Converter<?>) container.instanceFor(converterType);
         }
         logger.debug("Caching converter " + type.getName());
-        Converter<?> converter = delegate.to(type, container);
+        Converter<?> converter = delegate.to(type);
         cache.put(type, converter.getClass());
         return converter;
     }
@@ -67,7 +69,7 @@ public class CachedConverters implements Converters {
         "cannot add vr3 converters in cached converters container (or should we delegate?");
 	}
 
-	public TwoWayConverter<?> twoWayConverterFor(Class<?> type, Container container) {
+	public TwoWayConverter<?> twoWayConverterFor(Class<?> type) {
 		throw new UnsupportedOperationException(
         "cannot add vr3 converters in cached converters container (or should we delegate?");
 	}

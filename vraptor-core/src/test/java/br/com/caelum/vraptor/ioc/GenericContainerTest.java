@@ -457,7 +457,7 @@ public abstract class GenericContainerTest {
 				return provider.provideForRequest(request, new Execution<Converters>() {
 					public Converters insideRequest(Container container) {
 						Converters converters = container.instanceFor(Converters.class);
-						Converter<?> converter = converters.to(Void.class, container);
+						Converter<?> converter = converters.to(Void.class);
 						assertThat(converter, is(instanceOf(ConverterInTheClasspath.class)));
 						return null;
 					}

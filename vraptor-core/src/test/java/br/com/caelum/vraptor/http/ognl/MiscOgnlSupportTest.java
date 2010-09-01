@@ -125,7 +125,7 @@ public class MiscOgnlSupportTest {
     @Test
     public void isCapableOfDealingWithEmptyParameterForInternalWrapperValue() throws OgnlException {
         mockery.checking(new Expectations() {{
-            one(converters).to(Integer.class, null);
+            one(converters).to(Integer.class);
             will(returnValue(new IntegerConverter()));
         }});
         Ognl.setValue("cat.firstLeg.id", context, house, "");
@@ -140,7 +140,7 @@ public class MiscOgnlSupportTest {
         mockery.checking(new Expectations() {{
             exactly(2).of(request).getAttribute("javax.servlet.jsp.jstl.fmt.locale.request");
             will(returnValue("pt_br"));
-            one(converters).to(Calendar.class, null);
+            one(converters).to(Calendar.class);
             will(returnValue(new LocaleBasedCalendarConverter(webRequest)));
         }});
         Ognl.setValue("cat.firstLeg.birthDay", context, house, "10/5/2010");

@@ -29,6 +29,7 @@ import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import br.com.caelum.vraptor.TwoWayConverter;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.eval.Evaluator;
 import br.com.caelum.vraptor.http.MutableRequest;
@@ -53,7 +54,7 @@ public class DefaultParametersControl implements ParametersControl {
 	}
 
 	public DefaultParametersControl(String originalPattern, Converters converters) {
-		this(originalPattern, Collections.<String, String>emptyMap(), null);
+		this(originalPattern, Collections.<String, String>emptyMap(), converters);
 	}
 
 	private Pattern compilePattern(String originalPattern, Map<String, String> parameterPatterns) {
@@ -80,6 +81,13 @@ public class DefaultParametersControl implements ParametersControl {
 		String base = originalPattern.replaceAll("\\.\\*", "");
 		for (String key : parameters) {
 			Object result = new Evaluator().get(params, key);
+			if (result != null) {
+				Class type = result.getClass();
+				if (converters.existsTwoWayFor(type)) {
+					TwoWayConverter converter = converters.twoWayConverterFor(type);
+					result = converter.convert(result);
+				}
+			}
 			base = base.replaceAll("\\{" + key + "\\*?\\}", result == null ? "" : result.toString());
 		}
 		return base;

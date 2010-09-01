@@ -22,7 +22,9 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.util.Collections;
 
@@ -32,6 +34,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import br.com.caelum.vraptor.TwoWayConverter;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.ParanamerNameProvider;
@@ -45,6 +48,7 @@ public class DefaultParametersControlTest {
 
 	private @Mock MutableRequest request;
 	private @Mock Converters converters;
+	private @Mock TwoWayConverter converter;
 
 	@Before
 	public void setup() {
@@ -143,6 +147,17 @@ public class DefaultParametersControlTest {
 	public void shouldTranslatePatternArgNullAsEmpty() {
 		String uri = new DefaultParametersControl("/clients/{client.id}", converters).fillUri(client(null));
 		assertThat(uri, is(equalTo("/clients/")));
+	}
+
+	@Test
+	public void shouldUseConverterIfItExists() {
+		when(converters.existsTwoWayFor(Client.class)).thenReturn(true);
+		when(converters.twoWayConverterFor(Client.class)).thenReturn(converter);
+		when(converter.convert(any(Client.class))).thenReturn("john");
+
+		String uri = new DefaultParametersControl("/clients/{client}", converters).fillUri(client(null));
+		assertThat(uri, is(equalTo("/clients/john")));
+
 	}
 
 	@Test

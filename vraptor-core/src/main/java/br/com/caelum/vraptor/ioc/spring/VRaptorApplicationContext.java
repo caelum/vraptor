@@ -95,8 +95,8 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
 				scanner.scan("");
 			} else {
 				logger
-						.warn("Cant invoke ServletContext.getRealPath. Some application servers, as WebLogic, must be configured to be able to do so."
-								+ "Not scanning WEB-INF/classes for VRaptor and Spring components.");
+						.warn("Cant invoke ServletContext.getRealPath. Some application servers, as WebLogic, must be configured to be able to do so." +
+								" Or maybe your container is not exploding the war file.Not scanning WEB-INF/classes for VRaptor and Spring components.");
 			}
 
 		}

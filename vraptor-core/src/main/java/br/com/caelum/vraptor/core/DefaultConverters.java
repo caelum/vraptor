@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
+import br.com.caelum.vraptor.TwoWayConverter;
 import br.com.caelum.vraptor.VRaptorException;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Container;
@@ -52,25 +53,36 @@ public final class DefaultConverters implements Converters {
     }
 
     public Converter<?> to(Class<?> clazz, Container container) {
-        Converter<?> foundConverter = findConverterFor(clazz, container);
-        if (foundConverter == null) {
+        if (!existsFor(clazz)) {
 			throw new VRaptorException("Unable to find converter for " + clazz.getName());
 		}
-        return foundConverter;
+        return container.instanceFor(findConverterType(clazz));
     }
 
-	private Converter<?> findConverterFor(Class<?> clazz, Container container) {
+	private Class<? extends Converter<?>> findConverterType(Class<?> clazz) {
 		for (Class<? extends Converter<?>> converterType : classes) {
             Class<?> boundType = converterType.getAnnotation(Convert.class).value();
             if (boundType.isAssignableFrom(clazz)) {
-                return container.instanceFor(converterType);
+                return converterType;
             }
         }
 		return null;
 	}
 
-	public boolean existsFor(Class<?> type, Container container) {
-		return findConverterFor(type, container) != null;
+	public boolean existsFor(Class<?> type) {
+		return findConverterType(type) != null;
+	}
+
+	public boolean existsTwoWayFor(Class<?> type) {
+		Class<? extends Converter<?>> found = findConverterType(type);
+		return found != null && TwoWayConverter.class.isAssignableFrom(found);
+	}
+
+	public TwoWayConverter<?> twoWayConverterFor(Class<?> type, Container container) {
+		if (!existsTwoWayFor(type)) {
+			throw new VRaptorException("Unable to find two way converter for " + type.getName());
+		}
+        return (TwoWayConverter<?>) container.instanceFor(findConverterType(type));
 	}
 
 }

@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.caelum.vraptor.Path;
+import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.resource.HttpMethod;
@@ -51,10 +52,12 @@ public class PathAnnotationRoutesParser implements RoutesParser {
 
 	private final Proxifier proxifier;
 	private final TypeFinder finder;
+	private final Converters converters;
 
-	public PathAnnotationRoutesParser(Proxifier proxifier, TypeFinder finder) {
+	public PathAnnotationRoutesParser(Proxifier proxifier, TypeFinder finder, Converters converters) {
 		this.proxifier = proxifier;
 		this.finder = finder;
+		this.converters = converters;
 	}
 
 	public List<Route> rulesFor(ResourceClass resource) {
@@ -69,7 +72,7 @@ public class PathAnnotationRoutesParser implements RoutesParser {
 				String[] uris = getURIsFor(javaMethod, baseType);
 
 				for (String uri : uris) {
-					RouteBuilder rule = new RouteBuilder(proxifier, finder, uri);
+					RouteBuilder rule = new RouteBuilder(proxifier, finder, converters, uri);
 					for (HttpMethod m : HttpMethod.values()) {
 						if (javaMethod.isAnnotationPresent(m.getAnnotation())) {
 							rule.with(m);

@@ -111,13 +111,13 @@ public class VRaptor2ConvertersTest {
 			{
 				allowing(config).getConverters();
 				will(returnValue(Arrays.asList(new String[0])));
-				allowing(delegate).existsFor(Integer.class, container);
+				allowing(delegate).existsFor(Integer.class);
 				will(returnValue(true));
 			}
 		});
 		final VRaptor2Converters converters = new VRaptor2Converters(config);
 		converters.setDelegateConverters(delegate);
-		assertThat(converters.existsFor(Integer.class, container), is(true));
+		assertThat(converters.existsFor(Integer.class), is(true));
 	}
 
 	@Test
@@ -125,7 +125,7 @@ public class VRaptor2ConvertersTest {
 		final Converters stubConverters = mockery.mock(Converters.class);
 		mockery.checking(new Expectations() {
 			{
-				allowing(stubConverters).existsFor(with(any(Class.class)), with(any(Container.class)));
+				allowing(stubConverters).existsFor(with(any(Class.class)));
 				will(returnValue(false));
 
 				one(config).getConverters();
@@ -134,7 +134,7 @@ public class VRaptor2ConvertersTest {
 		});
 		final VRaptor2Converters converters = new VRaptor2Converters(config);
 		converters.setDelegateConverters(stubConverters);
-		assertThat(converters.existsFor(Integer.class, container), is(true));
+		assertThat(converters.existsFor(Integer.class), is(true));
 	}
 
 }

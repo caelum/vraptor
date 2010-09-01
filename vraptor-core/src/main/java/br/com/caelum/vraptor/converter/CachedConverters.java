@@ -24,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.Converter;
+import br.com.caelum.vraptor.TwoWayConverter;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.ioc.Container;
 
@@ -54,11 +55,21 @@ public class CachedConverters implements Converters {
                 "cannot add vr3 converters in cached converters container (or should we delegate?");
     }
 
-	public boolean existsFor(Class<?> type, Container container) {
+	public boolean existsFor(Class<?> type) {
 		if (cache.containsKey(type)) {
 			return true;
 		}
-		return delegate.existsFor(type, container);
+		return delegate.existsFor(type);
+	}
+
+	public boolean existsTwoWayFor(Class<?> type) {
+		throw new UnsupportedOperationException(
+        "cannot add vr3 converters in cached converters container (or should we delegate?");
+	}
+
+	public TwoWayConverter<?> twoWayConverterFor(Class<?> type, Container container) {
+		throw new UnsupportedOperationException(
+        "cannot add vr3 converters in cached converters container (or should we delegate?");
 	}
 
 }

@@ -18,47 +18,51 @@
 package br.com.caelum.vraptor.http.route;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
+import java.util.EnumSet;
+import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.junit.Assert;
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
 import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.Delete;
 import br.com.caelum.vraptor.Head;
 import br.com.caelum.vraptor.Path;
+import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
 import br.com.caelum.vraptor.proxy.DefaultProxifier;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.ResourceClass;
-import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.test.VRaptorMockery;
 
 public class PathAnnotationRoutesParserTest {
 
     private VRaptorMockery mockery;
     private ResourceClass resource;
-    private DefaultRouter router;
     private MutableRequest request;
     private Proxifier proxifier;
+	private Converters converters;
+	private PathAnnotationRoutesParser parser;
 
     @Before
     public void setup() {
         this.mockery = new VRaptorMockery();
-        this.resource = mockery.resource(Clients.class);
+        this.resource = mockery.resource(ClientsController.class);
         this.request = mockery.mock(MutableRequest.class);
+        this.converters = mockery.mock(Converters.class);
         this.proxifier = new DefaultProxifier();
-        this.router = new DefaultRouter(new NoRoutesConfiguration(), new PathAnnotationRoutesParser(proxifier, new NoTypeFinder()),
-        		proxifier, null, new NoTypeFinder());
-        router.register(resource);
-        router.register(mockery.resource(PathAnnotatedController.class));
-        router.register(mockery.resource(WrongPathAnnotatedController.class));
-        router.register(mockery.resource(EndSlashAnnotatedController.class));
+        parser = new PathAnnotationRoutesParser(proxifier, new NoTypeFinder(), converters);
     }
 
     @Resource
@@ -108,60 +112,82 @@ public class PathAnnotationRoutesParserTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void addsAPrefixToMethodsWhenTheControllerHasMoreThanOneAnnotatedPath() throws Exception {
-    	router.register(mockery.resource(MoreThanOnePathAnnotatedController.class));
+    	parser.rulesFor(mockery.resource(MoreThanOnePathAnnotatedController.class));
     }
+
     @Test
     public void addsAPrefixToMethodsWhenTheControllerAndTheMethodAreAnnotatedWithRelativePath() throws Exception {
-    	ResourceMethod method = router.parse("/prefix/relativePath", HttpMethod.POST, request);
-    	assertThat(method.getMethod(), is(equalTo(PathAnnotatedController.class.getMethod("withRelativePath"))));
+    	List<Route> routes = parser.rulesFor(mockery.resource(PathAnnotatedController.class));
+    	Route route = getRouteMatching(routes, "/prefix/relativePath");
+
+    	assertThat(route, canHandle(PathAnnotatedController.class, "withRelativePath"));
     	mockery.assertIsSatisfied();
     }
-    @Test
+
+	@Test
     public void addsAPrefixToMethodsWhenTheControllerEndsWithSlashAndTheMethodAreAnnotatedWithRelativePath() throws Exception {
-    	ResourceMethod method = router.parse("/endSlash/relativePath", HttpMethod.POST, request);
-    	assertThat(method.getMethod(), is(equalTo(EndSlashAnnotatedController.class.getMethod("withRelativePath"))));
+		List<Route> routes = parser.rulesFor(mockery.resource(EndSlashAnnotatedController.class));
+		Route route = getRouteMatching(routes, "/endSlash/relativePath");
+
+		assertThat(route, canHandle(EndSlashAnnotatedController.class, "withRelativePath"));
     	mockery.assertIsSatisfied();
     }
     @Test
     public void addsAPrefixToMethodsWhenTheControllerEndsWithSlashAndTheMethodAreAnnotatedWithAbsolutePath() throws Exception {
-    	ResourceMethod method = router.parse("/endSlash/absolutePath", HttpMethod.POST, request);
-    	assertThat(method.getMethod(), is(equalTo(EndSlashAnnotatedController.class.getMethod("withAbsolutePath"))));
+    	List<Route> routes = parser.rulesFor(mockery.resource(EndSlashAnnotatedController.class));
+    	Route route = getRouteMatching(routes, "/endSlash/absolutePath");
+
+    	assertThat(route, canHandle(EndSlashAnnotatedController.class, "withAbsolutePath"));
     	mockery.assertIsSatisfied();
     }
     @Test
     public void addsAPrefixToMethodsWhenTheControllerEndsWithSlashAndTheMethodAreAnnotatedWithEmptyPath() throws Exception {
-    	ResourceMethod method = router.parse("/endSlash/", HttpMethod.POST, request);
-    	assertThat(method.getMethod(), is(equalTo(EndSlashAnnotatedController.class.getMethod("withEmptyPath"))));
+    	List<Route> routes = parser.rulesFor(mockery.resource(EndSlashAnnotatedController.class));
+    	Route route = getRouteMatching(routes, "/endSlash/");
+
+    	assertThat(route, canHandle(EndSlashAnnotatedController.class, "withEmptyPath"));
     	mockery.assertIsSatisfied();
     }
     public void addsAPrefixToMethodsWhenTheControllerEndsWithSlashAndTheMethodAreNotAnnotated() throws Exception {
-    	ResourceMethod method = router.parse("/endSlash/withoutPath", HttpMethod.POST, request);
-    	assertThat(method.getMethod(), is(equalTo(EndSlashAnnotatedController.class.getMethod("withoutPath"))));
+    	List<Route> routes = parser.rulesFor(mockery.resource(EndSlashAnnotatedController.class));
+    	Route route = getRouteMatching(routes, "/endSlash/withoutPath");
+
+    	assertThat(route, canHandle(EndSlashAnnotatedController.class, "withoutPath"));
     	mockery.assertIsSatisfied();
     }
     @Test
     public void addsAPrefixToMethodsWhenTheControllerAndTheMethodAreAnnotatedWithAbsolutePath() throws Exception {
-    	ResourceMethod method = router.parse("/prefix/absolutePath", HttpMethod.POST, request);
-    	assertThat(method.getMethod(), is(equalTo(PathAnnotatedController.class.getMethod("withAbsolutePath"))));
+    	List<Route> routes = parser.rulesFor(mockery.resource(PathAnnotatedController.class));
+    	Route route = getRouteMatching(routes, "/prefix/absolutePath");
+
+    	assertThat(route, canHandle(PathAnnotatedController.class, "withAbsolutePath"));
+
     	mockery.assertIsSatisfied();
     }
     @Test
     public void addsAPrefixToMethodsWhenTheControllerAndTheMethodAreAnnotatedWithEmptyPath() throws Exception {
-    	ResourceMethod method = router.parse("/prefix", HttpMethod.POST, request);
-    	assertThat(method.getMethod(), is(equalTo(PathAnnotatedController.class.getMethod("withEmptyPath"))));
+    	List<Route> routes = parser.rulesFor(mockery.resource(PathAnnotatedController.class));
+    	Route route = getRouteMatching(routes, "/prefix");
+
+    	assertThat(route, canHandle(PathAnnotatedController.class, "withEmptyPath"));
+
     	mockery.assertIsSatisfied();
     }
     @Test
     public void addsAPrefixToMethodsWhenTheControllerIsAnnotatedWithPath() throws Exception {
-    	ResourceMethod method = router.parse("/prefix/withoutPath", HttpMethod.POST, request);
-    	assertThat(method.getMethod(), is(equalTo(PathAnnotatedController.class.getMethod("withoutPath"))));
+    	List<Route> routes = parser.rulesFor(mockery.resource(PathAnnotatedController.class));
+    	Route route = getRouteMatching(routes, "/prefix/withoutPath");
+
+    	assertThat(route, canHandle(PathAnnotatedController.class, "withoutPath"));
     	mockery.assertIsSatisfied();
     }
     @Test
-    public void findsTheCorrectAnnotatedMethodIfThereIsNoWebMethodAnnotationPresent() throws SecurityException,
-            NoSuchMethodException {
-        ResourceMethod method = router.parse("/clients", HttpMethod.POST, request);
-        assertThat(method.getMethod(), is(equalTo(Clients.class.getMethod("list"))));
+    public void findsTheCorrectAnnotatedMethodIfThereIsNoWebMethodAnnotationPresent() throws Exception {
+    	List<Route> routes = parser.rulesFor(mockery.resource(ClientsController.class));
+    	Route route = getRouteMatching(routes, "/clients");
+
+    	assertThat(route, canHandle(ClientsController.class, "list"));
+
         mockery.assertIsSatisfied();
     }
 
@@ -169,64 +195,61 @@ public class PathAnnotationRoutesParserTest {
     @Test
     public void suportsTheDefaultNameForANonAnnotatedMethod() throws SecurityException,
             NoSuchMethodException {
-        ResourceMethod method = router.parse("/clients", HttpMethod.POST, request);
-        assertThat(method.getMethod(), is(equalTo(Clients.class.getMethod("list"))));
+    	List<Route> routes = parser.rulesFor(mockery.resource(ClientsController.class));
+    	Route route = getRouteMatching(routes, "/clients/add");
+
+    	assertThat(route, canHandle(ClientsController.class, "add"));
+
         mockery.assertIsSatisfied();
     }
 
     @Test
     public void ignoresTheControllerSuffixForANonAnnotatedMethod() throws SecurityException,
             NoSuchMethodException {
-        ResourceMethod method = router.parse("/clients", HttpMethod.POST, request);
-        assertThat(method.getMethod(), is(equalTo(Clients.class.getMethod("list"))));
+    	List<Route> routes = parser.rulesFor(mockery.resource(ClientsController.class));
+    	Route route = getRouteMatching(routes, "/clients/add");
+
+    	assertThat(route, canHandle(ClientsController.class, "add"));
+
         mockery.assertIsSatisfied();
     }
     @Test
     public void addsASlashWhenUserForgotIt() throws SecurityException,  NoSuchMethodException {
-    	ResourceMethod method = router.parse("/noSlash", HttpMethod.POST, request);
-    	assertThat(method.getMethod(), is(equalTo(Clients.class.getMethod("noSlash"))));
+    	List<Route> routes = parser.rulesFor(mockery.resource(ClientsController.class));
+    	Route route = getRouteMatching(routes, "/noSlash");
+
+    	assertThat(route, canHandle(ClientsController.class, "noSlash"));
+
     	mockery.assertIsSatisfied();
     }
 
     @Test
     public void matchesWhenUsingAWildcard() throws SecurityException, NoSuchMethodException {
-        ResourceMethod method = router.parse("/move/second/child", HttpMethod.POST, request);
-        assertThat(method, is(VRaptorMatchers.resourceMethod(Clients.class.getMethod("move"))));
+    	List<Route> routes = parser.rulesFor(mockery.resource(ClientsController.class));
+    	Route route = getRouteMatching(routes, "/move/second/child");
+
+    	assertThat(route, canHandle(ClientsController.class, "move"));
         mockery.assertIsSatisfied();
     }
 
     @Test
-    public void throwsExceptionWhenMethodIsNotFound() {
-        try {
-			router.parse("/projects", HttpMethod.POST, request);
-			Assert.fail("ResourceNotFoundException expected");
-		} catch (ResourceNotFoundException e) {
-			mockery.assertIsSatisfied();
-		}
+    public void dontRegisterRouteIfMethodIsNotPublic() {
+    	List<Route> routes = parser.rulesFor(mockery.resource(ClientsController.class));
+    	Route route = getRouteMatching(routes, "/protectMe");
+    	assertNull(route);
+		mockery.assertIsSatisfied();
     }
 
     @Test
-    public void throwsExceptionIfMethodIsNotPublic() {
-    	try {
-			router.parse("/protectMe", HttpMethod.POST, request);
-			Assert.fail("ResourceNotFoundException expected");
-		} catch (ResourceNotFoundException e) {
-			mockery.assertIsSatisfied();
-		}
-    }
-
-    @Test
-    public void returnsNullIfMethodIsStatic() {
-    	try {
-			router.parse("/staticMe", HttpMethod.POST, request);
-			Assert.fail("ResourceNotFoundException expected");
-		} catch (ResourceNotFoundException e) {
-			mockery.assertIsSatisfied();
-		}
+    public void dontRegisterRouteIfMethodIsStatic() {
+    	List<Route> routes = parser.rulesFor(mockery.resource(ClientsController.class));
+    	Route route = getRouteMatching(routes, "/staticMe");
+    	assertNull(route);
+    	mockery.assertIsSatisfied();
     }
 
     @br.com.caelum.vraptor.Resource
-    public static class Clients {
+    public static class ClientsController {
         @Path("/move/*/child")
         public void move() {
         }
@@ -283,26 +306,31 @@ public class PathAnnotationRoutesParserTest {
     @Test(expected=IllegalArgumentException.class)
     public void shouldThrowExceptionIfPathAnnotationHasEmptyArray()
             throws Exception {
-        this.resource = mockery.resource(NoPath.class);
-        router.register(resource);
+        parser.rulesFor(mockery.resource(NoPath.class));
     }
 
 
     @Test
     public void shouldFindNonAnnotatedNonStaticPublicMethodWithComponentNameInVariableCamelCaseConventionAsURI()
             throws Exception {
-        ResourceMethod method = router.parse("/clients/add", HttpMethod.POST, request);
-        assertThat(method, is(VRaptorMatchers.resourceMethod(Clients.class.getMethod("add"))));
+    	List<Route> routes = parser.rulesFor(mockery.resource(ClientsController.class));
+    	Route route = getRouteMatching(routes, "/clients/add");
+
+    	assertThat(route, canHandle(ClientsController.class, "add"));
+
         mockery.assertIsSatisfied();
     }
 
     @Test
     public void shouldFindSeveralPathsForMethodWithManyValue()
             throws Exception {
-        ResourceMethod method1 = router.parse("/path1", HttpMethod.POST, request);
-        assertThat(method1, is(VRaptorMatchers.resourceMethod(Clients.class.getMethod("manyPaths"))));
-        ResourceMethod method2 = router.parse("/path2", HttpMethod.GET, request);
-        assertThat(method2, is(VRaptorMatchers.resourceMethod(Clients.class.getMethod("manyPaths"))));
+    	List<Route> routes = parser.rulesFor(mockery.resource(ClientsController.class));
+
+    	Route route = getRouteMatching(routes, "/path1");
+    	assertThat(route, canHandle(ClientsController.class, "manyPaths"));
+    	Route route2 = getRouteMatching(routes, "/path2");
+    	assertThat(route2, canHandle(ClientsController.class, "manyPaths"));
+
         mockery.assertIsSatisfied();
     }
 
@@ -310,23 +338,24 @@ public class PathAnnotationRoutesParserTest {
 
 
     @Test
-    public void shouldThrowExceptionIfAResourceHasTheWrongWebMethod() throws SecurityException {
-    	try {
-			router.parse("/clients/remove", HttpMethod.POST, request);
-			Assert.fail("MethodNotAllowedException expected");
-		} catch (MethodNotAllowedException e) {
-			mockery.assertIsSatisfied();
-		}
+    public void shouldNotMatchIfAResourceHasTheWrongWebMethod() throws SecurityException {
+    	List<Route> routes = parser.rulesFor(mockery.resource(ClientsController.class));
+    	Route route = getRouteMatching(routes, "/clients/remove");
+
+    	assertThat(route.allowedMethods(), not(contains(HttpMethod.POST)));
+		mockery.assertIsSatisfied();
     }
 
     @Test
     public void shouldAcceptAResultWithASpecificWebMethod() throws SecurityException, NoSuchMethodException {
-        ResourceMethod method = router.parse("/clients/head", HttpMethod.HEAD, request);
-        assertThat(method, is(VRaptorMatchers.resourceMethod(Clients.class.getMethod("head"))));
+    	List<Route> routes = parser.rulesFor(mockery.resource(ClientsController.class));
+    	Route route = getRouteMatching(routes, "/clients/head");
+
+    	assertThat(route.allowedMethods(), is(EnumSet.of(HttpMethod.HEAD)));
         mockery.assertIsSatisfied();
     }
 
-    static class NiceClients extends Clients {
+    static class NiceClients extends ClientsController {
 
     	@Override
     	public void add() {
@@ -336,19 +365,52 @@ public class PathAnnotationRoutesParserTest {
 
     @Test
     public void findsInheritedMethodsWithDefaultNames() throws SecurityException, NoSuchMethodException {
-        ResourceClass childResource = mockery.resource(NiceClients.class);
-        router.register(childResource);
-        ResourceMethod method = router.parse("/niceClients/toInherit", HttpMethod.POST, request);
-        assertThat(method, is(VRaptorMatchers.resourceMethod(Clients.class.getMethod("toInherit"))));
+    	List<Route> routes = parser.rulesFor(mockery.resource(NiceClients.class));
+    	Route route = getRouteMatching(routes, "/niceClients/toInherit");
+
+    	assertTrue(route.canHandle(NiceClients.class, ClientsController.class.getDeclaredMethod("toInherit")));
+
         mockery.assertIsSatisfied();
     }
     @Test
     public void supportMethodOverriding() throws SecurityException, NoSuchMethodException {
-    	ResourceClass childResource = mockery.resource(NiceClients.class);
-    	router.register(childResource);
-    	ResourceMethod method = router.parse("/niceClients/add", HttpMethod.POST, request);
-    	assertThat(method, is(VRaptorMatchers.resourceMethod(NiceClients.class.getMethod("add"))));
+    	List<Route> routes = parser.rulesFor(mockery.resource(NiceClients.class));
+    	Route route = getRouteMatching(routes, "/niceClients/add");
+
+    	assertThat(route, canHandle(NiceClients.class, "add"));
+
     	mockery.assertIsSatisfied();
+    }
+
+    private Route getRouteMatching(List<Route> routes, String uri) {
+    	for (Route route : routes) {
+			if (route.canHandle(uri)) {
+				return route;
+			}
+		}
+		return null;
+	}
+
+    private Matcher<Route> canHandle(final Class<?> type, final String method) {
+    	return new TypeSafeMatcher<Route>() {
+
+			@Override
+			protected void describeMismatchSafely(Route item, Description mismatchDescription) {
+			}
+
+			@Override
+			protected boolean matchesSafely(Route item) {
+				try {
+					return item.canHandle(type, type.getDeclaredMethod(method));
+				} catch (Exception e) {
+					throw new RuntimeException(e);
+				}
+			}
+
+			public void describeTo(Description description) {
+				description.appendText("a route which can handle ").appendValue(type).appendText(".").appendValue(method);
+			}
+		};
     }
 
 }

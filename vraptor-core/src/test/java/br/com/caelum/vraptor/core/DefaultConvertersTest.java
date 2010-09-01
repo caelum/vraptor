@@ -169,7 +169,7 @@ public class DefaultConvertersTest {
 
 		when(container.instanceFor(MyConverter.class)).thenReturn(new MyConverter());
 
-		assertTrue(converters.existsFor(MyData.class, container));
+		assertTrue(converters.existsFor(MyData.class));
 	}
 
 }

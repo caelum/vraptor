@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.caelum.vraptor.Converter;
+import br.com.caelum.vraptor.TwoWayConverter;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.core.DefaultConverters;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
@@ -76,16 +77,26 @@ public class VRaptor2Converters implements Converters {
 		delegateConverters.register(converterClass);
 	}
 
-	public boolean existsFor(Class<?> type, Container container) {
-		return existsVRaptor2ConverterFor(type) || existsVRaptor3ConverterFor(type, container);
+	public boolean existsFor(Class<?> type) {
+		return existsVRaptor2ConverterFor(type) || existsVRaptor3ConverterFor(type);
 	}
 
-	private boolean existsVRaptor3ConverterFor(Class<?> type, Container container) {
-		return delegateConverters.existsFor(type, container);
+	private boolean existsVRaptor3ConverterFor(Class<?> type) {
+		return delegateConverters.existsFor(type);
 	}
 
 	private boolean existsVRaptor2ConverterFor(Class<?> type) {
 		return findVRaptor2Converter(type) != null;
+	}
+
+	public boolean existsTwoWayFor(Class<?> type) {
+		throw new UnsupportedOperationException(
+        	"no new features for VRaptor 2 compatibility, sorry");
+	}
+
+	public TwoWayConverter<?> twoWayConverterFor(Class<?> type, Container container) {
+		throw new UnsupportedOperationException(
+			"no new features for VRaptor 2 compatibility, sorry");
 	}
 
 }

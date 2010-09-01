@@ -28,13 +28,13 @@ import java.util.Iterator;
 import java.util.List;
 
 import br.com.caelum.vraptor.VRaptorException;
+import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.TypeCreator;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.resource.HttpMethod;
-import br.com.caelum.vraptor.resource.ResourceClass;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.util.collections.Filters;
 
@@ -53,28 +53,22 @@ public class DefaultRouter implements Router {
 
 	private final Proxifier proxifier;
 	private final Collection<Route> routes = new PriorityRoutesList();
-	private final RoutesParser routesParser;
 	private final TypeCreator creator;
 	private final TypeFinder finder;
+	private final Converters converters;
 
-	public DefaultRouter(RoutesConfiguration config, RoutesParser resourceRoutesCreator,
-			Proxifier proxifier, TypeCreator creator, TypeFinder finder) {
-		this.routesParser = resourceRoutesCreator;
+	public DefaultRouter(RoutesConfiguration config,
+			Proxifier proxifier, TypeCreator creator, TypeFinder finder, Converters converters) {
 		this.creator = creator;
 		this.proxifier = proxifier;
 		this.finder = finder;
+		this.converters = converters;
 
 		config.config(this);
 	}
 
-	private void add(List<Route> rules) {
-		for (Route r : rules) {
-			add(r);
-		}
-	}
-
 	public RouteBuilder builderFor(String uri) {
-		return new RouteBuilder(proxifier, finder, uri);
+		return new RouteBuilder(proxifier, finder, converters, uri);
 	}
 	public Proxifier getProxifier() {
 		return proxifier;
@@ -135,10 +129,6 @@ public class DefaultRouter implements Router {
 			throw new ResourceNotFoundException();
 		}
 		return routesMatchingURI;
-	}
-
-	public void register(ResourceClass resource) {
-		add(this.routesParser.rulesFor(resource));
 	}
 
 	public <T> String urlFor(Class<T> type, Method method, Object... params) {

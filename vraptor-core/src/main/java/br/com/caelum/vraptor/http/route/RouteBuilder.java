@@ -57,6 +57,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.Path;
+import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.proxy.MethodInvocation;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.SuperMethod;
@@ -91,9 +92,12 @@ public class RouteBuilder {
 
 	private final TypeFinder finder;
 
-	public RouteBuilder(Proxifier proxifier, TypeFinder finder, String uri) {
+	private final Converters converters;
+
+	public RouteBuilder(Proxifier proxifier, TypeFinder finder, Converters converters, String uri) {
 		this.proxifier = proxifier;
 		this.finder = finder;
+		this.converters = converters;
 		this.originalUri = uri;
 		builder = new ParameterControlBuilder();
 	}
@@ -136,7 +140,7 @@ public class RouteBuilder {
 		}
 
 		private ParametersControl build() {
-			return new DefaultParametersControl(originalUri, parameters);
+			return new DefaultParametersControl(originalUri, parameters, converters);
 		}
 	}
 

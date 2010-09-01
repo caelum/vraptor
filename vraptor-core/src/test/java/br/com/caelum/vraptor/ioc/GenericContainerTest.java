@@ -169,8 +169,8 @@ public abstract class GenericContainerTest {
 				assertNotNull(getFromContainerInCurrentThread(LocalTimeConverter.class, request));
 
 				Converters converters = getFromContainerInCurrentThread(Converters.class, request);
-				assertTrue(converters.existsFor(LocalDate.class, getFromContainerInCurrentThread(Container.class, request)));
-				assertTrue(converters.existsFor(LocalTime.class, getFromContainerInCurrentThread(Container.class, request)));
+				assertTrue(converters.existsFor(LocalDate.class));
+				assertTrue(converters.existsFor(LocalTime.class));
 				return null;
 			}
 

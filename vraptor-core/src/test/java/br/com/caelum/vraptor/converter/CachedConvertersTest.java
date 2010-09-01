@@ -2,25 +2,26 @@
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource
  * All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); 
- * you may not use this file except in compliance with the License. 
- * You may obtain a copy of the License at 
- * 
- * 	http://www.apache.org/licenses/LICENSE-2.0 
- * 
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an "AS IS" BASIS, 
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
- * See the License for the specific language governing permissions and 
- * limitations under the License. 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * 	http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package br.com.caelum.vraptor.converter;
 
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -66,32 +67,30 @@ public class CachedConvertersTest {
         mockery.checking(new Expectations(){{
             one(container).instanceFor(converter.getClass()); will(returnValue(converter));
         }});
-        @SuppressWarnings("unchecked")
-        Converter found = converters.to(CachedConvertersTest.class, container);
-        assertThat(converters.to(CachedConvertersTest.class, container), is(equalTo(found)));
+        assertSame(converters.to(CachedConvertersTest.class, container), converters.to(CachedConvertersTest.class, container));
         mockery.assertIsSatisfied();
     }
-    
+
     @Test
 	public void existsForWillReturnTrueIfTypeIsAlreadyCached() throws Exception {
     	mockery.checking(new Expectations(){{
     		one(container).instanceFor(converter.getClass()); will(returnValue(converter));
-    		
-    		allowing(delegate).existsFor(CachedConvertersTest.class, container);
+
+    		allowing(delegate).existsFor(CachedConvertersTest.class);
     		will(returnValue(true));
     	}});
-    	
-    	assertTrue(converters.existsFor(CachedConvertersTest.class, container));
+
+    	assertTrue(converters.existsFor(CachedConvertersTest.class));
 	}
-    
+
     @Test
     public void existsForWillReturnTrueIfDelegateAlsoReturnsTrue() throws Exception {
     	mockery.checking(new Expectations(){{
-    		atLeast(1).of(delegate).existsFor(CachedConvertersTest.class, container);
+    		atLeast(1).of(delegate).existsFor(CachedConvertersTest.class);
     		will(returnValue(true));
     	}});
-    	
-    	assertTrue(converters.existsFor(CachedConvertersTest.class, container));
+
+    	assertTrue(converters.existsFor(CachedConvertersTest.class));
     }
 
 }

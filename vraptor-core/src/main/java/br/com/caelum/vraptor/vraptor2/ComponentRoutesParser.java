@@ -32,6 +32,7 @@ import org.vraptor.annotations.Out;
 import org.vraptor.annotations.Parameter;
 import org.vraptor.plugin.hibernate.Validate;
 
+import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.http.route.PathAnnotationRoutesParser;
 import br.com.caelum.vraptor.http.route.Route;
 import br.com.caelum.vraptor.http.route.RouteBuilder;
@@ -58,10 +59,14 @@ public class ComponentRoutesParser implements RoutesParser {
 
 	private final TypeFinder finder;
 
-    public ComponentRoutesParser(Proxifier proxifier, TypeFinder finder) {
+	private final Converters converters;
+
+
+    public ComponentRoutesParser(Proxifier proxifier, TypeFinder finder, Converters converters) {
         this.proxifier = proxifier;
 		this.finder = finder;
-        this.delegate = new PathAnnotationRoutesParser(proxifier, finder);
+		this.converters = converters;
+        this.delegate = new PathAnnotationRoutesParser(proxifier, finder, converters);
     }
 
 	public List<Route> rulesFor(ResourceClass resource) {
@@ -121,7 +126,7 @@ public class ComponentRoutesParser implements RoutesParser {
                 continue;
             }
 			String uri = getUriFor(javaMethod, baseType);
-			RouteBuilder builder = new RouteBuilder(proxifier, finder, uri);
+			RouteBuilder builder = new RouteBuilder(proxifier, finder, converters, uri);
 			for (HttpMethod m : HttpMethod.values()) {
 				if (javaMethod.isAnnotationPresent(m.getAnnotation())) {
 					builder.with(m);

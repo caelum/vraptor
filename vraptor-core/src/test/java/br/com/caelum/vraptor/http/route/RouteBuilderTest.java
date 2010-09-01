@@ -73,7 +73,7 @@ public class RouteBuilderTest {
 
 	@Test
 	public void usePatternMatchinForPrimitiveParameters() throws Exception {
-		builder = new RouteBuilder(proxifier, typeFinder, converters, "/abc/{abc}/def/{def}/ghi/{ghi}");
+		builder = new DefaultRouteBuilder(proxifier, typeFinder, converters, "/abc/{abc}/def/{def}/ghi/{ghi}");
 
 		builder.is(MyResource.class, method.getMethod());
 		Route route = builder.build();
@@ -87,7 +87,7 @@ public class RouteBuilderTest {
 
 	@Test
 	public void usePatternMatchingForRegexParameters() throws Exception {
-		builder = new RouteBuilder(proxifier, typeFinder, converters, "/abc/{abc:a+b+c+}/def/{def}/ghi/{ghi}");
+		builder = new DefaultRouteBuilder(proxifier, typeFinder, converters, "/abc/{abc:a+b+c+}/def/{def}/ghi/{ghi}");
 
 		builder.is(MyResource.class, method.getMethod());
 		Route route = builder.build();
@@ -99,7 +99,7 @@ public class RouteBuilderTest {
 
 	@Test
 	public void usingRegexesWithCurlyBraces() throws Exception {
-		builder = new RouteBuilder(proxifier, typeFinder, converters, "/abc/{abc:[0-9A-Z]{5}}");
+		builder = new DefaultRouteBuilder(proxifier, typeFinder, converters, "/abc/{abc:[0-9A-Z]{5}}");
 
 		builder.is(MyResource.class, method.getMethod());
 		Route route = builder.build();
@@ -111,7 +111,7 @@ public class RouteBuilderTest {
 	}
 	@Test
 	public void usingRegexesWithCurlyBracesNotOnTheEnd() throws Exception {
-		builder = new RouteBuilder(proxifier, typeFinder, converters, "/abc/{abc:[0-9A-Z]{5}}/");
+		builder = new DefaultRouteBuilder(proxifier, typeFinder, converters, "/abc/{abc:[0-9A-Z]{5}}/");
 
 		builder.is(MyResource.class, method.getMethod());
 		Route route = builder.build();
@@ -124,7 +124,7 @@ public class RouteBuilderTest {
 
 	@Test
 	public void usingRegexesWithCurlyBracesNotOnTheEndAndOtherVar() throws Exception {
-		builder = new RouteBuilder(proxifier, typeFinder, converters, "/abc/{abc:[0-9A-Z]{5}}/def/{def}");
+		builder = new DefaultRouteBuilder(proxifier, typeFinder, converters, "/abc/{abc:[0-9A-Z]{5}}/def/{def}");
 
 		builder.is(MyResource.class, method.getMethod());
 		Route route = builder.build();
@@ -136,7 +136,7 @@ public class RouteBuilderTest {
 	}
 	@Test
 	public void usingRegexesWithCurlyBracesNotOnTheEndAndOtherVarAndManyOtherThings() throws Exception {
-		builder = new RouteBuilder(proxifier, typeFinder, converters, "/abc/{abc:[0-9A-Z]{5}}{def}{xxx:[0-9A-Z]{5}}");
+		builder = new DefaultRouteBuilder(proxifier, typeFinder, converters, "/abc/{abc:[0-9A-Z]{5}}{def}{xxx:[0-9A-Z]{5}}");
 
 		builder.is(MyResource.class, method.getMethod());
 		Route route = builder.build();
@@ -149,7 +149,7 @@ public class RouteBuilderTest {
 
 	@Test
 	public void usingRegexesWithAsterisksAtTheEnd() throws Exception {
-		builder = new RouteBuilder(proxifier, typeFinder, converters, "/abc/{abc:[0-9A-Z]*}/def/{def}");
+		builder = new DefaultRouteBuilder(proxifier, typeFinder, converters, "/abc/{abc:[0-9A-Z]*}/def/{def}");
 
 		builder.is(MyResource.class, method.getMethod());
 		Route route = builder.build();
@@ -163,7 +163,7 @@ public class RouteBuilderTest {
 
 	@Test
 	public void fillingUriForPrimitiveParameters() throws Exception {
-		builder = new RouteBuilder(proxifier, typeFinder, converters, "/abc/{abc}/def/{def}/ghi/{ghi}");
+		builder = new DefaultRouteBuilder(proxifier, typeFinder, converters, "/abc/{abc}/def/{def}/ghi/{ghi}");
 
 		Method method = MyResource.class.getDeclaredMethods()[0];
 		builder.is(MyResource.class, method);
@@ -192,7 +192,7 @@ public class RouteBuilderTest {
 
     @Test
     public void shouldSupportPathsWithDotsAndAsterisks() throws SecurityException, NoSuchMethodException {
-    	builder = new RouteBuilder(proxifier, typeFinder, converters, "/my/{abc.def*}");
+    	builder = new DefaultRouteBuilder(proxifier, typeFinder, converters, "/my/{abc.def*}");
 
 		Method method = AbcResource.class.getDeclaredMethods()[0];
 		builder.is(AbcResource.class, method);

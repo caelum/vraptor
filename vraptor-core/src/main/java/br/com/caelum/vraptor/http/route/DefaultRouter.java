@@ -68,10 +68,7 @@ public class DefaultRouter implements Router {
 	}
 
 	public RouteBuilder builderFor(String uri) {
-		return new RouteBuilder(proxifier, finder, converters, uri);
-	}
-	public Proxifier getProxifier() {
-		return proxifier;
+		return new DefaultRouteBuilder(proxifier, finder, converters, uri);
 	}
 
 	/**

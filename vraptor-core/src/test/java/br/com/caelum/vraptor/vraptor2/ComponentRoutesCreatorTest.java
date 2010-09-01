@@ -40,7 +40,7 @@ import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.http.route.NoTypeFinder;
 import br.com.caelum.vraptor.http.route.Route;
-import br.com.caelum.vraptor.http.route.RouteBuilder;
+import br.com.caelum.vraptor.http.route.DefaultRouteBuilder;
 import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.proxy.DefaultProxifier;
 import br.com.caelum.vraptor.proxy.Proxifier;
@@ -62,10 +62,10 @@ public class ComponentRoutesCreatorTest {
         this.proxifier = new DefaultProxifier();
         this.typeFinder = new NoTypeFinder();
 
-        when(router.builderFor(anyString())).thenAnswer(new Answer<RouteBuilder>() {
+        when(router.builderFor(anyString())).thenAnswer(new Answer<DefaultRouteBuilder>() {
 
-			public RouteBuilder answer(InvocationOnMock invocation) throws Throwable {
-				return new RouteBuilder(proxifier, typeFinder, converters, (String) invocation.getArguments()[0]);
+			public DefaultRouteBuilder answer(InvocationOnMock invocation) throws Throwable {
+				return new DefaultRouteBuilder(proxifier, typeFinder, converters, (String) invocation.getArguments()[0]);
 			}
 		});
 

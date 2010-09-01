@@ -66,10 +66,10 @@ public class PathAnnotationRoutesParserTest {
         this.proxifier = new DefaultProxifier();
         this.typeFinder = new NoTypeFinder();
 
-        when(router.builderFor(anyString())).thenAnswer(new Answer<RouteBuilder>() {
+        when(router.builderFor(anyString())).thenAnswer(new Answer<DefaultRouteBuilder>() {
 
-			public RouteBuilder answer(InvocationOnMock invocation) throws Throwable {
-				return new RouteBuilder(proxifier, typeFinder, converters, (String) invocation.getArguments()[0]);
+			public DefaultRouteBuilder answer(InvocationOnMock invocation) throws Throwable {
+				return new DefaultRouteBuilder(proxifier, typeFinder, converters, (String) invocation.getArguments()[0]);
 			}
 		});
 

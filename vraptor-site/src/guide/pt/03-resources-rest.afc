@@ -374,11 +374,11 @@ primeiro os paths com maior prioridade, ou seja, valor menor de prioridade:
 public class PostController {
 
   @Get
-  @Path(priority = 2, value = "/post/{post.autor}")
+  @Path(value = "/post/{post.autor}", priority=Path.LOW)
   public void mostra(Post post) { ... }
 
   @Get
-  @Path(priority = 1, value = "/post/atual")
+  @Path(value = "/post/atual", priority=Path.HIGH)
   public void atual() { ... }
 }
 [/java]

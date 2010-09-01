@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import br.com.caelum.vraptor.Consumes;
 import br.com.caelum.vraptor.InterceptionException;
+import br.com.caelum.vraptor.Lazy;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.deserialization.Deserializer;
@@ -38,6 +39,7 @@ import br.com.caelum.vraptor.view.Status;
  * @author Rafael Ferreira
  * @since 3.0.2
  */
+@Lazy
 public class DeserializingInterceptor implements Interceptor {
 	private final HttpServletRequest request;
 	private final Deserializers deserializers;

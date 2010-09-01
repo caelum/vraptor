@@ -37,7 +37,7 @@ import com.thoughtworks.xstream.converters.reflection.ReflectionConverter;
 @Component
 @RequestScoped
 public class RestfulSerialization extends XStreamXMLSerialization {
-	
+
 	private final Restfulie restfulie;
 	private final Configuration config;
 
@@ -53,7 +53,7 @@ public class RestfulSerialization extends XStreamXMLSerialization {
 	 */
 	@Override
 	protected XStream getXStream() {
-		XStream xStream = new XStream();
+		XStream xStream = super.getXStream();
 		MethodValueSupportConverter converter = new MethodValueSupportConverter(new ReflectionConverter(xStream.getMapper(), xStream.getReflectionProvider()));
 		xStream.registerConverter(new LinkConverter(converter, restfulie, config));
 		return xStream;

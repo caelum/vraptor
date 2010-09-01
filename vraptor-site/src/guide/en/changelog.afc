@@ -1,5 +1,51 @@
 [chapter ChangeLog]
 
+[section 3.2.0 (in dev)]
+[list]
+* several performance tweaks: about 60% less request time.
+* Internal compatibility break: InterceptorStack interface reorganized.
+* better implementation of VRaptor internal interceptors accepts method.
+* new annotation @Lazy. Use it on interceptors which accepts method doesn't
+depend on the interceptor internal state:
+	[java]
+	@Intercepts
+	@Lazy
+	public class MyLazyInterceptor implements Interceptor {
+	    public MyLazyInterceptor(Dependency dependency) {
+			this.dependency = dependency;
+		}
+		public boolean accepts(ResourceMethod method) {
+			// depends only on method
+			return method.containsAnnotation(Abc.class);
+		}
+		public void intercepts(...) {
+			//...
+		}
+	}
+	[/java]
+	In this case, MyLazyInterceptor will only be instantiated when accepts returns true.
+	A non-functional instance of MyLazyInterceptor will be used to call the accepts method,
+	so it should not depend on the interceptor's internal state.
+	Do not use @Lazy if your accepts is trivial (always returns true).
+
+* **slight backwards compatibility break**: the default priority of @Path has changed to Integer.MAX_INTEGER/2.
+  It was Integer.MAX_INTEGER - 1. Despite of this compatibility break, we believe that it won't affect
+  working applications.
+* @Path priority can be defined with constants:
+	[java]
+	@Path(value="/url", priority=Path.HIGHEST)
+	@Path(value="/url", priority=Path.HIGH)
+	@Path(value="/url", priority=Path.DEFAULT)
+	@Path(value="/url", priority=Path.LOW)
+	@Path(value="/url", priority=Path.LOWEST)
+	[/java]
+
+* more Joda Time converters (by Rodolfo Liviero)
+* improvings on Scala Blank Project (by Pedro Matiello)
+* bugfix: null Accept Header fallback to html
+
+[/list]
+
 [section 3.1.3]
 [list]
 * Scala Blank Project

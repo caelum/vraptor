@@ -45,13 +45,11 @@ public class VRaptor2RequestExecution implements RequestExecution {
 	private static final Logger logger = LoggerFactory.getLogger(VRaptor2RequestExecution.class);
 
 	private final InterceptorStack interceptorStack;
-	private final InstantiateInterceptor instantiator;
 	private final boolean shouldRegisterHibernateValidator;
 
-	public VRaptor2RequestExecution(InterceptorStack interceptorStack, InstantiateInterceptor instantiator,
+	public VRaptor2RequestExecution(InterceptorStack interceptorStack,
 			Config config) {
 		this.interceptorStack = interceptorStack;
-		this.instantiator = instantiator;
 		this.shouldRegisterHibernateValidator = config
 				.hasPlugin("org.vraptor.plugin.hibernate.HibernateValidatorPlugin");
 	}
@@ -64,7 +62,7 @@ public class VRaptor2RequestExecution implements RequestExecution {
 		interceptorStack.add(InterceptorListPriorToExecutionExtractor.class);
 		interceptorStack.add(DownloadInterceptor.class);
 		interceptorStack.add(MultipartInterceptor.class);
-		interceptorStack.add(instantiator);
+		interceptorStack.add(InstantiateInterceptor.class);
 		interceptorStack.add(ParametersInstantiatorInterceptor.class);
 		if (shouldRegisterHibernateValidator) {
 			interceptorStack.add(HibernateValidatorPluginInterceptor.class);

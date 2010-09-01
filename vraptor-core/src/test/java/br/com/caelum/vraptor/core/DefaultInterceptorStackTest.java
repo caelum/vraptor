@@ -16,10 +16,6 @@
  */
 package br.com.caelum.vraptor.core;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -27,6 +23,8 @@ import java.io.IOException;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.interceptor.Interceptor;
@@ -34,67 +32,48 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 
 public class DefaultInterceptorStackTest {
 
-    private int count;
+	private static final ResourceMethod A_METHOD = null;
+	private static final Object AN_INSTANCE = null;
 
-    @Before
-    public void setup() {
-        count = 0;
-    }
+	private @Mock InterceptorHandlerFactory handlerFactory;
+	private @Mock(name = "first") InterceptorHandler firstHandler;
+	private @Mock(name = "second") InterceptorHandler secondHandler;
+
+	private DefaultInterceptorStack stack;
+
+	@Before
+	public void setUp() throws Exception {
+		MockitoAnnotations.initMocks(this);
+		stack = new DefaultInterceptorStack(handlerFactory);
+		when(handlerFactory.handlerFor(FirstInterceptor.class)).thenReturn(firstHandler);
+		when(handlerFactory.handlerFor(SecondInterceptor.class)).thenReturn(secondHandler);
+	}
+
+	static interface FirstInterceptor extends Interceptor {}
+	static interface SecondInterceptor extends Interceptor {}
 
     @Test
     public void testInvokesAllInterceptorsInItsCorrectOrder() throws IOException, InterceptionException {
-        DefaultInterceptorStack stack = new DefaultInterceptorStack(null);
-        CountInterceptor first = new CountInterceptor();
-        CountInterceptor second = new CountInterceptor();
-        stack.add(first);
-        stack.add(second);
-        stack.next(null, null);
-        assertThat(first.run, is(equalTo(0)));
-        assertThat(second.run, is(equalTo(1)));
-    }
+        stack.add(FirstInterceptor.class);
+        stack.add(SecondInterceptor.class);
 
-    class CountInterceptor implements Interceptor {
-        int run;
+        stack.next(A_METHOD, AN_INSTANCE);
+        verify(firstHandler).execute(stack, A_METHOD, AN_INSTANCE);
 
-        public void intercept(InterceptorStack invocation, ResourceMethod method, Object resourceInstance)
-                throws InterceptionException {
-            run = count++;
-            invocation.next(method, resourceInstance);
-        }
-
-        public boolean accepts(ResourceMethod method) {
-            return true;
-        }
+        stack.next(A_METHOD, AN_INSTANCE);
+        verify(secondHandler).execute(stack, A_METHOD, AN_INSTANCE);
     }
 
     @Test
     public void shouldAddNextInterceptorAsNext() throws InterceptionException, IOException {
-        Interceptor firstMocked = mock(Interceptor.class, "firstMocked");
-        final Interceptor secondMocked = mock(Interceptor.class, "secondMocked");
-        final DefaultInterceptorStack stack = new DefaultInterceptorStack(null);
-        stack.add(firstMocked);
-        stack.addAsNext(secondMocked);
+        stack.add(FirstInterceptor.class);
+        stack.addAsNext(SecondInterceptor.class);
 
-        when(secondMocked.accepts(null)).thenReturn(true);
+        stack.next(A_METHOD, AN_INSTANCE);
+        verify(secondHandler).execute(stack, A_METHOD, AN_INSTANCE);
 
-        stack.next(null, null);
-
-        verify(secondMocked).intercept(stack, null, null);
-    }
-
-    @Test
-    public void shouldAddInterceptorAsLast() throws InterceptionException, IOException {
-        final Interceptor firstMocked = mock(Interceptor.class, "firstMocked");
-        final Interceptor secondMocked = mock(Interceptor.class, "secondMocked");
-        final DefaultInterceptorStack stack = new DefaultInterceptorStack(null);
-        stack.add(firstMocked);
-        stack.add(secondMocked);
-
-        when(firstMocked.accepts(null)).thenReturn(true);
-
-        stack.next(null, null);
-
-        verify(firstMocked).intercept(stack, null, null);
+        stack.next(A_METHOD, AN_INSTANCE);
+        verify(firstHandler).execute(stack, A_METHOD, AN_INSTANCE);
     }
 
 }

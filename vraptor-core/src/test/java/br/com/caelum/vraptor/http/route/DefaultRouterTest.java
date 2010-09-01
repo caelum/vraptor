@@ -344,7 +344,7 @@ public class DefaultRouterTest {
 	}
 
 	private void registerRulesFor(Class<?> type) {
-		RoutesParser parser = new PathAnnotationRoutesParser(proxifier, new NoTypeFinder(), converters);
+		RoutesParser parser = new PathAnnotationRoutesParser(router);
 
 		List<Route> rules = parser.rulesFor(mockery.resource(type));
 		for (Route route : rules) {

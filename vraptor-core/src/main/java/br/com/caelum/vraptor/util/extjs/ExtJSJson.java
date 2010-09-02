@@ -25,17 +25,17 @@ import br.com.caelum.vraptor.View;
  */
 public interface ExtJSJson extends View {
 
-	public ExtJSJsonImpl from(Object object);
+	public ExtJSJson from(Object object);
 
-	public ExtJSJsonImpl success();
+	public ExtJSJson success();
 
-	public ExtJSJsonImpl success(boolean success);
+	public ExtJSJson success(boolean success);
 
-	public ExtJSJsonImpl selected(Object value);
+	public ExtJSJson selected(Object value);
 
-	public ExtJSJsonImpl exclude(String... names);
+	public ExtJSJson exclude(String... names);
 
-	public ExtJSJsonImpl include(String... fields);
+	public ExtJSJson include(String... fields);
 
-	public ExtJSJsonImpl serialize();
+	public ExtJSJson serialize();
 }

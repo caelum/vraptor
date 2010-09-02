@@ -70,24 +70,24 @@ public class ExtJSJsonImpl implements ExtJSJson {
 		this.response = response;
 	}
 
-	public ExtJSJsonImpl from(Object object) {
+	public ExtJSJson from(Object object) {
 		response.setContentType("application/json; charset=ISO-8859-1");
 		this.rootClass = object.getClass();
 		this.object    = object;
 		return this;
 	}
 
-	public ExtJSJsonImpl success() {
+	public ExtJSJson success() {
 		return success(true);
 	}
 
-	public ExtJSJsonImpl success(boolean success) {
+	public ExtJSJson success(boolean success) {
 		includeSuccess = true;
 		successValue   = success;
 		return this;
 	}
 
-	public ExtJSJsonImpl selected(Object value) {
+	public ExtJSJson selected(Object value) {
 		if(value != null) {
 			includeSelected = true;
 			selectedValue = value;
@@ -95,7 +95,7 @@ public class ExtJSJsonImpl implements ExtJSJson {
 		return this;
 	}
 
-	public ExtJSJsonImpl exclude(String... names) {
+	public ExtJSJson exclude(String... names) {
 		for (String name : names) {
 			Set<Class<?>> parentTypes = getParentTypesFor(name);
 			for (Class<?> type : parentTypes) {
@@ -105,7 +105,7 @@ public class ExtJSJsonImpl implements ExtJSJson {
 		return this;
 	}
 
-	public ExtJSJsonImpl include(String... fields) {
+	public ExtJSJson include(String... fields) {
 		for (String field : fields) {
 			try {
 				Set<Class<?>> parentTypes = getParentTypesFor(field);
@@ -126,13 +126,15 @@ public class ExtJSJsonImpl implements ExtJSJson {
 		return this;
 	}
 
-	public ExtJSJsonImpl serialize() {
+	public ExtJSJson serialize() {
 		this.json = objectToJSON();
-		if(includeSelected)
+		if(includeSelected) {
 			includeSelected();
+		}
 
-		if(includeSuccess)
+		if(includeSuccess) {
 			includeSuccess();
+		}
 
 		try {
 			response.getWriter().write(json);

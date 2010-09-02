@@ -24,8 +24,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.FileUploadBase;
-import org.apache.commons.fileupload.FileUploadBase.SizeLimitExceededException;
 import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.FileUploadBase.SizeLimitExceededException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.servlet.ServletRequestContext;
@@ -106,8 +106,6 @@ public class CommonsUploadMultipartInterceptor implements MultipartInterceptor {
     }
 
     protected FileItemFactory createFactoryForDiskBasedFileItems(File temporaryDirectory) {
-        // TODO: may use all memory (Integer.MAX_VALUE), based on a config!
-        // this is mandatory for environments as Google App Engine
         int thresholdForUsingDiskInsteadOfMemory = (int) sizeLimit;
         DiskFileItemFactory factory = new DiskFileItemFactory(thresholdForUsingDiskInsteadOfMemory, temporaryDirectory);
         logger.debug("Using repository {} for file upload", factory.getRepository());

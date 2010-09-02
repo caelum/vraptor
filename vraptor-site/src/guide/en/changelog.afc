@@ -3,8 +3,13 @@
 [section 3.2.0 (in dev)]
 [list]
 * several performance tweaks: about 60% less request time.
-* Internal compatibility break: InterceptorStack interface reorganized.
+* **internal compatibility break**: InterceptorStack interface reorganized.
 * better implementation of VRaptor internal interceptors accepts method.
+* **internal compatibility break**: interfaces %%Converters%%, %%Router%%
+	and constructor of %%PathAnnotationRoutesParser%% class were changed. RouteBuilder
+	converted is now an interface => DefaultRouteBuilder is the implementation.
+	Those who extend PathAnnotationRoutesParser must change the call to delegate constructor.
+	Those who instantiate RouteBuilder directly must instantiate DefaultRouteBuilder.
 * new annotation @Lazy. Use it on interceptors which accepts method doesn't
 depend on the interceptor internal state:
 	[java]
@@ -39,7 +44,7 @@ depend on the interceptor internal state:
 	@Path(value="/url", priority=Path.LOW)
 	@Path(value="/url", priority=Path.LOWEST)
 	[/java]
-
+* new interface %%TwoWayConverter%% for bidirecional convertions.
 * more Joda Time converters (by Rodolfo Liviero)
 * improvings on Scala Blank Project (by Pedro Matiello)
 * bugfix: null Accept Header fallback to html

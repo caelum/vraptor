@@ -71,7 +71,7 @@ public class ExtJSJsonImpl implements ExtJSJson {
 	}
 
 	public ExtJSJson from(Object object) {
-		response.setContentType("application/json; charset=ISO-8859-1");
+		response.setContentType("application/json");
 		this.rootClass = object.getClass();
 		this.object    = object;
 		return this;

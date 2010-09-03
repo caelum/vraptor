@@ -90,8 +90,7 @@ public class VRaptor2Converters implements Converters {
 	}
 
 	public boolean existsTwoWayFor(Class<?> type) {
-		throw new UnsupportedOperationException(
-        	"no new features for VRaptor 2 compatibility, sorry");
+		return false;
 	}
 
 	public TwoWayConverter<?> twoWayConverterFor(Class<?> type) {

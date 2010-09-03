@@ -49,8 +49,9 @@
 			<a href="http://blig.ig.com.br/derlon/2010/05/17/o-vraptor3-e-o-framework-java-mais-coc-que-eu-ja-vi/">VRaptor3: o framework Java mais CoC que eu já vi...</a>
 		</dd>
 		
-		<dt>Daniel (yorgan)</dt>
+		<dt>Daniel Kist (yorgan)</dt>
 		<dd>
+			<a href="http://k2studio.com.br/site/2010/09/spring-security/">Spring Security</a><br/>
 			<a href="http://k2studio.com.br/site/2010/06/vraptor-login-jquery/">VRaptor: Login com jQuery</a><br/>
 			<a href="http://k2studio.com.br/site/2010/05/introducao-vraptor/">Introdução ao VRaptor - CRUD Completo</a><br/>
 			<a href="http://k2studio.com.br/site/2010/05/integracao-ext-js-com-vraptor3/">Integração Ext JS com VRaptor3</a>

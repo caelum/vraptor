@@ -83,7 +83,7 @@ public class ResourceLookupInterceptorTest {
             	EnumSet<HttpMethod> allowedMethods = EnumSet.of(HttpMethod.GET);
 
                 one(translator).translate(info);
-				will(throwException(new MethodNotAllowedException(allowedMethods, HttpMethod.POST)));
+				will(throwException(new MethodNotAllowedException(allowedMethods, HttpMethod.POST.toString())));
                 one(methodNotAllowedHandler).deny(info, allowedMethods);
             }
         });

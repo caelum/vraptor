@@ -21,6 +21,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
+import java.util.EnumSet;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.jmock.Expectations;
@@ -29,6 +31,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.http.route.MethodNotAllowedException;
 import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
@@ -36,7 +39,7 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 public class DefaultResourceTranslatorTest {
 
     private Mockery mockery;
-    private Router registry;
+    private Router router;
     private DefaultResourceTranslator translator;
     private HttpServletRequest request;
     private VRaptorRequest webRequest;
@@ -45,8 +48,8 @@ public class DefaultResourceTranslatorTest {
     @Before
     public void setup() {
         this.mockery = new Mockery();
-        this.registry = mockery.mock(Router.class);
-        this.translator = new DefaultResourceTranslator(registry);
+        this.router = mockery.mock(Router.class);
+        this.translator = new DefaultResourceTranslator(router);
         this.request = mockery.mock(HttpServletRequest.class);
         this.webRequest = new VRaptorRequest(request);
         this.info = new RequestInfo(null,null, webRequest,null);
@@ -60,7 +63,7 @@ public class DefaultResourceTranslatorTest {
         mockery.checking(new Expectations(){{
             exactly(2).of(request).getAttribute(RequestInfo.INCLUDE_REQUEST_URI); will(returnValue("/url"));
             one(request).getMethod(); will(returnValue("POST"));
-            one(registry).parse("/url", HttpMethod.POST, webRequest); will(returnValue(expected));
+            one(router).parse("/url", HttpMethod.POST, webRequest); will(returnValue(expected));
             one(request).getParameter("_method"); will(returnValue(null));
         }});
 
@@ -80,7 +83,7 @@ public class DefaultResourceTranslatorTest {
             one(request).getContextPath();   will(returnValue(""));
             one(request).getRequestURI(); will(returnValue("/url"));
             one(request).getMethod(); will(returnValue("POST"));
-            one(registry).parse("/url", HttpMethod.POST,webRequest); will(returnValue(expected));
+            one(router).parse("/url", HttpMethod.POST,webRequest); will(returnValue(expected));
             one(request).getParameter("_method"); will(returnValue(null));
         }});
 
@@ -99,7 +102,7 @@ public class DefaultResourceTranslatorTest {
             one(request).getContextPath();   will(returnValue(""));
             one(request).getRequestURI(); will(returnValue("/url"));
             one(request).getMethod(); will(returnValue("pOsT"));
-            one(registry).parse("/url", HttpMethod.POST, webRequest); will(returnValue(expected));
+            one(router).parse("/url", HttpMethod.POST, webRequest); will(returnValue(expected));
             one(request).getParameter("_method"); will(returnValue(null));
         }});
 
@@ -118,12 +121,30 @@ public class DefaultResourceTranslatorTest {
             one(request).getRequestURI(); will(returnValue("/url"));
             one(request).getParameter("_method"); will(returnValue("gEt"));
             one(request).getMethod(); will(returnValue("POST"));
-            one(registry).parse("/url", HttpMethod.GET, webRequest); will(returnValue(expected));
+            one(router).parse("/url", HttpMethod.GET, webRequest); will(returnValue(expected));
         }});
 
         ResourceMethod resource = translator.translate(info);
         assertThat(resource, is(equalTo(expected)));
         mockery.assertIsSatisfied();
+    }
+
+
+    @Test(expected=MethodNotAllowedException.class)
+    public void shouldThrowExceptionWhenRequestANotKnownMethod() {
+        final ResourceMethod expected = mockery.mock(ResourceMethod.class);
+
+        mockery.checking(new Expectations(){{
+            one(request).getAttribute(RequestInfo.INCLUDE_REQUEST_URI); will(returnValue(null));
+            one(request).getContextPath();   will(returnValue(""));
+            one(request).getRequestURI(); will(returnValue("/url"));
+            one(request).getParameter("_method"); will(returnValue(null));
+            one(request).getMethod(); will(returnValue("OPTIONS"));
+            one(router).parse("/url", HttpMethod.GET, webRequest); will(returnValue(expected));
+            one(router).allowedMethodsFor("/url"); will(returnValue(EnumSet.allOf(HttpMethod.class)));
+        }});
+
+        ResourceMethod resource = translator.translate(info);
     }
 
     @Test
@@ -137,7 +158,7 @@ public class DefaultResourceTranslatorTest {
             one(request).getRequestURI(); will(returnValue("/url"));
             one(request).getParameter("_method"); will(returnValue("DELETE"));
             one(request).getMethod(); will(returnValue("POST"));
-            one(registry).parse("/url", HttpMethod.DELETE,webRequest); will(returnValue(expected));
+            one(router).parse("/url", HttpMethod.DELETE,webRequest); will(returnValue(expected));
         }});
 
         ResourceMethod resource = translator.translate(info);
@@ -156,7 +177,7 @@ public class DefaultResourceTranslatorTest {
             one(request).getContextPath();   will(returnValue(""));
             one(request).getRequestURI(); will(returnValue("/url"));
             one(request).getMethod(); will(returnValue("GET"));
-            one(registry).parse("/url", HttpMethod.GET,webRequest); will(returnValue(expected));
+            one(router).parse("/url", HttpMethod.GET,webRequest); will(returnValue(expected));
             one(request).getParameter("_method"); will(returnValue(null));
         }});
 
@@ -176,7 +197,7 @@ public class DefaultResourceTranslatorTest {
             one(request).getContextPath();   will(returnValue("/custom_context"));
             one(request).getRequestURI(); will(returnValue("/custom_context/url"));
             one(request).getMethod(); will(returnValue("GET"));
-            one(registry).parse("/url", HttpMethod.GET,webRequest); will(returnValue(expected));
+            one(router).parse("/url", HttpMethod.GET,webRequest); will(returnValue(expected));
             one(request).getParameter("_method"); will(returnValue(null));
         }});
 
@@ -196,7 +217,7 @@ public class DefaultResourceTranslatorTest {
             one(request).getContextPath();   will(returnValue(""));
             one(request).getRequestURI(); will(returnValue("/"));
             one(request).getMethod(); will(returnValue("GET"));
-            one(registry).parse("/", HttpMethod.GET,webRequest); will(returnValue(expected));
+            one(router).parse("/", HttpMethod.GET,webRequest); will(returnValue(expected));
             one(request).getParameter("_method"); will(returnValue(null));
         }});
 
@@ -216,7 +237,7 @@ public class DefaultResourceTranslatorTest {
             one(request).getContextPath();   will(returnValue(""));
             one(request).getRequestURI(); will(returnValue("/products/1"));
             one(request).getMethod(); will(returnValue("GET"));
-            one(registry).parse("/products/1", HttpMethod.GET,webRequest); will(returnValue(expected));
+            one(router).parse("/products/1", HttpMethod.GET,webRequest); will(returnValue(expected));
             one(request).getParameter("_method"); will(returnValue(null));
         }});
 
@@ -236,7 +257,7 @@ public class DefaultResourceTranslatorTest {
             one(request).getContextPath();   will(returnValue("/custom_context"));
             one(request).getRequestURI(); will(returnValue("/custom_context/products/1"));
             one(request).getMethod(); will(returnValue("GET"));
-            one(registry).parse("/products/1", HttpMethod.GET,webRequest); will(returnValue(expected));
+            one(router).parse("/products/1", HttpMethod.GET,webRequest); will(returnValue(expected));
             one(request).getParameter("_method"); will(returnValue(null));
         }});
 
@@ -257,7 +278,7 @@ public class DefaultResourceTranslatorTest {
     		one(request).getRequestURI(); will(returnValue("/custom_context/products/1;JSESSIONID=aslfasfaslkj22234lkjsdfaklsf"));
     		one(request).getRequestURI(); will(returnValue("/custom_context/products/1;jsessionID=aslfasfaslkj22234lkjsdfaklsf"));
     		allowing(request).getMethod(); will(returnValue("GET"));
-    		allowing(registry).parse("/products/1", HttpMethod.GET,webRequest); will(returnValue(expected));
+    		allowing(router).parse("/products/1", HttpMethod.GET,webRequest); will(returnValue(expected));
     		allowing(request).getParameter("_method"); will(returnValue(null));
     	}});
 
@@ -279,7 +300,7 @@ public class DefaultResourceTranslatorTest {
             one(request).getContextPath();   will(returnValue("/custom_context"));
             one(request).getRequestURI(); will(returnValue("/custom_context/"));
             one(request).getMethod(); will(returnValue("GET"));
-            one(registry).parse("/", HttpMethod.GET,webRequest); will(returnValue(expected));
+            one(router).parse("/", HttpMethod.GET,webRequest); will(returnValue(expected));
             one(request).getParameter("_method"); will(returnValue(null));
         }});
 

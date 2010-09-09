@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.http.route.MethodNotAllowedException;
 import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.resource.HttpMethod;
@@ -48,7 +49,14 @@ public class DefaultResourceTranslator implements UrlToResourceTranslator {
 		String resourceName = info.getRequestedUri();
 
 		logger.debug("trying to access {}", resourceName);
-		ResourceMethod resource = router.parse(resourceName, HttpMethod.of(request), request);
+		
+		HttpMethod method;
+		try {
+			method = HttpMethod.of(request);
+		} catch (IllegalArgumentException e) {
+			throw new MethodNotAllowedException(router.allowedMethodsFor(resourceName), null);
+		}
+		ResourceMethod resource = router.parse(resourceName, method, request);
 
 		logger.debug("found resource {}", resource);
 		return resource;

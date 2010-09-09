@@ -107,7 +107,7 @@ public class DefaultRouter implements Router {
 		Collection<Route> routesMatchingMethod = Collections2.filter(routesMatchingUri(uri), Filters.allow(method));
 		if (routesMatchingMethod.isEmpty()) {
 			EnumSet<HttpMethod> allowed = allowedMethodsFor(uri);
-			throw new MethodNotAllowedException(allowed, method);
+			throw new MethodNotAllowedException(allowed, method.toString());
 		}
 		return routesMatchingMethod;
 	}

@@ -9,6 +9,8 @@ import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
 
+import br.com.caelum.vraptor.http.route.MethodNotAllowedException;
+
 public class HttpMethodTest {
 
 	private Mockery mockery;
@@ -34,8 +36,8 @@ public class HttpMethodTest {
 
 	}
 
-	@Test(expected = IllegalArgumentException.class)
-	public void shouldThrowIllegalArgumentExceptionForNotKnowHttpMethodsForRequestParameter() throws Exception {
+	@Test(expected = MethodNotAllowedException.class)
+	public void shouldThrowExceptionForNotKnowHttpMethodsForRequestParameter() throws Exception {
 		mockery.checking(new Expectations() {
 			{
 				one(request).getParameter("_method");
@@ -75,8 +77,8 @@ public class HttpMethodTest {
 
 	}
 
-	@Test(expected = IllegalArgumentException.class)
-	public void shouldThrowIllegalArgumentExceptionForNotKnowHttpMethods() throws Exception {
+	@Test(expected = MethodNotAllowedException.class)
+	public void shouldThrowExceptionForNotKnowHttpMethods() throws Exception {
 		mockery.checking(new Expectations() {
 			{
 				one(request).getParameter("_method");

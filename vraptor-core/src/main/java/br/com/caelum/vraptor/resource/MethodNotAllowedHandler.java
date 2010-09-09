@@ -17,7 +17,7 @@
 
 package br.com.caelum.vraptor.resource;
 
-import java.util.EnumSet;
+import java.util.Set;
 
 import br.com.caelum.vraptor.core.RequestInfo;
 
@@ -34,6 +34,6 @@ public interface MethodNotAllowedHandler {
 	 * @param request
 	 * @param allowedMethods
 	 */
-	void deny(RequestInfo request, EnumSet<HttpMethod> allowedMethods);
+	void deny(RequestInfo request, Set<HttpMethod> allowedMethods);
 
 }

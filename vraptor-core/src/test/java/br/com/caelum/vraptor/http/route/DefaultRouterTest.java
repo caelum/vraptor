@@ -24,6 +24,7 @@ import static org.hamcrest.Matchers.is;
 import java.lang.reflect.Method;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -111,7 +112,7 @@ public class DefaultRouterTest {
 			router.parse("any uri", HttpMethod.DELETE, request);
 			Assert.fail("MethodNotAllowedException is expected");
 		} catch (MethodNotAllowedException e) {
-			assertThat(e.getAllowedMethods(), is(EnumSet.of(HttpMethod.GET)));
+			assertThat(e.getAllowedMethods(), is((Set<HttpMethod>)EnumSet.of(HttpMethod.GET)));
 			mockery.assertIsSatisfied();
 		}
 	}

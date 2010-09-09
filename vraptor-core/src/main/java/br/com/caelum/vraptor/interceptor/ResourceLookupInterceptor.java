@@ -68,7 +68,7 @@ public class ResourceLookupInterceptor implements Interceptor {
 		} catch (ResourceNotFoundException e) {
 			resourceNotFoundHandler.couldntFind(requestInfo);
 		} catch (MethodNotAllowedException e) {
-			LOGGER.info(e.getMessage());
+			LOGGER.debug(e.getMessage(), e);
 			methodNotAllowedHandler.deny(requestInfo, e.getAllowedMethods());
 		}
 	}

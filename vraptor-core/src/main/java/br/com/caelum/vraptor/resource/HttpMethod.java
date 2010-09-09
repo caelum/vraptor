@@ -27,6 +27,7 @@ import br.com.caelum.vraptor.Head;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Put;
 import br.com.caelum.vraptor.Trace;
+import br.com.caelum.vraptor.http.route.MethodNotAllowedException;
 
 public enum HttpMethod {
 	// TODO: options?
@@ -54,8 +55,8 @@ public enum HttpMethod {
 		try {
 			return valueOf(methodName.toUpperCase());
 		} catch (IllegalArgumentException e) {
-			// funny, but we need a better explanation
-			throw new IllegalArgumentException("HTTP Method not known: " + methodName, e);
+			// funny, but we need a better explanation, to support sendError
+			throw new MethodNotAllowedException("HTTP Method not known: " + methodName, e);
 		}
 	}
 }

@@ -27,7 +27,6 @@ import br.com.caelum.vraptor.Head;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Put;
 import br.com.caelum.vraptor.Trace;
-import br.com.caelum.vraptor.http.route.MethodNotAllowedException;
 
 public enum HttpMethod {
 	// TODO: options?

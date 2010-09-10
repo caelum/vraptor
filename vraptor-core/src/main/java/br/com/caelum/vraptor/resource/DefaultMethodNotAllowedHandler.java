@@ -38,7 +38,9 @@ public class DefaultMethodNotAllowedHandler implements MethodNotAllowedHandler {
 		request.getResponse().addHeader(
 				"Allow", allowedMethods.toString().replaceAll("\\[|\\]", ""));
 		try {
-			request.getResponse().sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+			if (!"OPTIONS".equalsIgnoreCase(request.getRequest().getMethod())) {
+				request.getResponse().sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+			}
 		} catch (IOException e) {
 			throw new InterceptionException(e);
 		}

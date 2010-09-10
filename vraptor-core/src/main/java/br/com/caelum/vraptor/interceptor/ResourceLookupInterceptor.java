@@ -47,24 +47,24 @@ public class ResourceLookupInterceptor implements Interceptor {
 	private final ResourceNotFoundHandler resourceNotFoundHandler;
 	private final MethodNotAllowedHandler methodNotAllowedHandler;
 
-	public ResourceLookupInterceptor(UrlToResourceTranslator translator, MethodInfo requestInfo,
+	public ResourceLookupInterceptor(UrlToResourceTranslator translator, MethodInfo methodInfo,
 			ResourceNotFoundHandler resourceNotFoundHandler, MethodNotAllowedHandler methodNotAllowedHandler,
-			RequestInfo request) {
+			RequestInfo requestInfo) {
 		this.translator = translator;
-		this.methodInfo = requestInfo;
+		this.methodInfo = methodInfo;
 		this.methodNotAllowedHandler = methodNotAllowedHandler;
 		this.resourceNotFoundHandler = resourceNotFoundHandler;
-		this.requestInfo = request;
+		this.requestInfo = requestInfo;
 	}
 
-	public void intercept(InterceptorStack invocation, ResourceMethod ignorableMethod, Object resourceInstance)
+	public void intercept(InterceptorStack stack, ResourceMethod ignorableMethod, Object resourceInstance)
 			throws InterceptionException {
 
 		try {
 			ResourceMethod method = translator.translate(requestInfo);
 
 			methodInfo.setResourceMethod(method);
-			invocation.next(method, resourceInstance);
+			stack.next(method, resourceInstance);
 		} catch (ResourceNotFoundException e) {
 			resourceNotFoundHandler.couldntFind(requestInfo);
 		} catch (MethodNotAllowedException e) {

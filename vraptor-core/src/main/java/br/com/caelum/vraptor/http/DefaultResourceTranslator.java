@@ -49,12 +49,12 @@ public class DefaultResourceTranslator implements UrlToResourceTranslator {
 		String resourceName = info.getRequestedUri();
 
 		logger.debug("trying to access {}", resourceName);
-		
+
 		HttpMethod method;
 		try {
 			method = HttpMethod.of(request);
 		} catch (IllegalArgumentException e) {
-			throw new MethodNotAllowedException(router.allowedMethodsFor(resourceName), null);
+			throw new MethodNotAllowedException(router.allowedMethodsFor(resourceName), request.getMethod());
 		}
 		ResourceMethod resource = router.parse(resourceName, method, request);
 

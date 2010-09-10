@@ -46,6 +46,8 @@
 	[/java]
 
 * Nova interface %%TwoWayConverter%% para conversões bidirecionais.
+* suporte nativo a requisições OPTIONS
+* fix: 405 ao invés de 500 em requisições com HTTP metodo desconhecido
 * mais converters do Joda Time (por Rodolfo Liviero)
 * melhorias no Scala Blank Project (por Pedro Matiello)
 * bugfix: null Accept Header gera respostas html

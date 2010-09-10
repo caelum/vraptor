@@ -45,6 +45,8 @@ depend on the interceptor internal state:
 	@Path(value="/url", priority=Path.LOWEST)
 	[/java]
 * new interface %%TwoWayConverter%% for bidirecional convertions.
+* native support for OPTIONS requests
+* fix: 405 instead of 500 on requests with unknown HTTP method.
 * more Joda Time converters (by Rodolfo Liviero)
 * improvings on Scala Blank Project (by Pedro Matiello)
 * bugfix: null Accept Header fallback to html

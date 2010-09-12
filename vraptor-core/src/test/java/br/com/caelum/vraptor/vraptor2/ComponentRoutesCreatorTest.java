@@ -18,40 +18,59 @@
 package br.com.caelum.vraptor.vraptor2;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.when;
 
-import org.junit.Assert;
+import java.util.List;
+
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.vraptor.annotations.Component;
 
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Resource;
-import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor.http.route.DefaultRouter;
-import br.com.caelum.vraptor.http.route.NoRoutesConfiguration;
+import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.http.route.NoTypeFinder;
-import br.com.caelum.vraptor.http.route.ResourceNotFoundException;
-import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
+import br.com.caelum.vraptor.http.route.Route;
+import br.com.caelum.vraptor.http.route.DefaultRouteBuilder;
+import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.proxy.DefaultProxifier;
 import br.com.caelum.vraptor.proxy.Proxifier;
-import br.com.caelum.vraptor.resource.HttpMethod;
+import br.com.caelum.vraptor.resource.DefaultResourceClass;
 import br.com.caelum.vraptor.resource.ResourceClass;
-import br.com.caelum.vraptor.test.VRaptorMockery;
 
 public class ComponentRoutesCreatorTest {
 
-    private VRaptorMockery mockery;
-	private DefaultRouter router;
-	private MutableRequest request;
     private Proxifier proxifier;
+	private @Mock Converters converters;
+	private ComponentRoutesParser parser;
+	private NoTypeFinder typeFinder;
+	private @Mock Router router;
 
     @Before
     public void setup() {
-        this.mockery = new VRaptorMockery();
-        this.request = mockery.mock(MutableRequest.class);
+        MockitoAnnotations.initMocks(this);
+
         this.proxifier = new DefaultProxifier();
-        this.router = new DefaultRouter(new NoRoutesConfiguration(), new ComponentRoutesParser(proxifier, new NoTypeFinder()), proxifier, null, new NoTypeFinder());
+        this.typeFinder = new NoTypeFinder();
+
+        when(router.builderFor(anyString())).thenAnswer(new Answer<DefaultRouteBuilder>() {
+
+			public DefaultRouteBuilder answer(InvocationOnMock invocation) throws Throwable {
+				return new DefaultRouteBuilder(proxifier, typeFinder, converters, (String) invocation.getArguments()[0]);
+			}
+		});
+
+
+        parser = new ComponentRoutesParser(router);
     }
 
     class NonVRaptorComponent {
@@ -67,22 +86,20 @@ public class ComponentRoutesCreatorTest {
 
     @Test
     public void shouldUseVRaptor3AlgorithmIfNotAVRaptor2Component() throws SecurityException, NoSuchMethodException {
-        final ResourceClass resource = mockery.resource(VRaptor3Component.class);
-        this.router.register(resource);
-        assertThat(router.parse("/vRaptor3Component/name", HttpMethod.POST, request), is(VRaptorMatchers.resourceMethod(VRaptor3Component.class.getMethod("name"))));
-        mockery.assertIsSatisfied();
+        final ResourceClass resource = new DefaultResourceClass(VRaptor3Component.class);
+        List<Route> rules = parser.rulesFor(resource);
+
+        assertThat(rules, hasRouteMatching("/vRaptor3Component/name"));
+
     }
 
     @Test
     public void shouldThrowExceptionIfNotFound() throws SecurityException, NoSuchMethodException {
-        final ResourceClass resource = mockery.resource(NonVRaptorComponent.class);
-        this.router.register(resource);
-        try {
-			router.parse("/NonVRaptorComponent/name", HttpMethod.POST, request);
-			Assert.fail("ResourceNotFoundException expected");
-		} catch (ResourceNotFoundException e) {
-			mockery.assertIsSatisfied();
-		}
+        final ResourceClass resource = new DefaultResourceClass(NonVRaptorComponent.class);
+        List<Route> rules = parser.rulesFor(resource);
+
+        assertThat(rules, not(hasRouteMatching("/NonVRaptorComponent/name")));
+
     }
 
     @Component
@@ -103,58 +120,70 @@ public class ComponentRoutesCreatorTest {
 
     @Test
     public void ignoresNonPublicMethod() {
-    	final ResourceClass resource = mockery.resource(MyResource.class);
-        this.router.register(resource);
-        try {
-			router.parse("/MyResource.ignorableProtected.logic", HttpMethod.POST, request);
-			Assert.fail("ResourceNotFoundException expected");
-		} catch (ResourceNotFoundException e) {
-			mockery.assertIsSatisfied();
-		}
+    	final ResourceClass resource = new DefaultResourceClass(MyResource.class);
+    	List<Route> rules = parser.rulesFor(resource);
+
+        assertThat(rules, not(hasRouteMatching("/MyResource.ignorableProtected.logic")));
+
     }
 
     @Test
     public void ignoresGetters() {
-    	final ResourceClass resource = mockery.resource(MyResource.class);
-        this.router.register(resource);
-        try {
-			router.parse("/MyResource.getValue.logic", HttpMethod.POST, request);
-			Assert.fail("ResourceNotFoundException expected");
-		} catch (ResourceNotFoundException e) {
-			mockery.assertIsSatisfied();
-		}
+    	final ResourceClass resource = new DefaultResourceClass(MyResource.class);
+    	List<Route> rules = parser.rulesFor(resource);
+
+    	assertThat(rules, not(hasRouteMatching("/MyResource.getValue.logic")));
+
     }
 
     @Test
     public void ignoresStaticMethod() {
-    	final ResourceClass resource = mockery.resource(MyResource.class);
-        this.router.register(resource);
-        try {
-			router.parse("/MyResource.ignorableStatic.logic", HttpMethod.POST, request);
-			Assert.fail("ResourceNotFoundException expected");
-		} catch (ResourceNotFoundException e) {
-			mockery.assertIsSatisfied();
-		}
+    	final ResourceClass resource = new DefaultResourceClass(MyResource.class);
+    	List<Route> rules = parser.rulesFor(resource);
+
+    	assertThat(rules, not(hasRouteMatching("/MyResource.ignorableStatic.logic")));
+
     }
 
     @Test
     public void returnsNullIfNothingFound() {
-    	final ResourceClass resource = mockery.resource(MyResource.class);
-        this.router.register(resource);
-        try {
-			router.parse("/MyResource.iDontExist.logic", HttpMethod.POST, request);
-			Assert.fail("ResourceNotFoundException expected");
-		} catch (ResourceNotFoundException e) {
-			mockery.assertIsSatisfied();
-		}
+    	final ResourceClass resource = new DefaultResourceClass(MyResource.class);
+    	List<Route> rules = parser.rulesFor(resource);
+
+    	assertThat(rules, not(hasRouteMatching("/MyResource.iDontExist.logic")));
     }
 
     @Test
     public void returnsTheCorrectDefaultResourceMethodIfFound() throws SecurityException, NoSuchMethodException {
-        final ResourceClass resource = mockery.resource(MyResource.class);
-        this.router.register(resource);
-        assertThat(router.parse("/MyResource.findable.logic", HttpMethod.POST, request), is(VRaptorMatchers.resourceMethod(MyResource.class.getMethod("findable"))));
-        mockery.assertIsSatisfied();
+        final ResourceClass resource = new DefaultResourceClass(MyResource.class);
+        List<Route> rules = parser.rulesFor(resource);
+
+        assertThat(rules, hasRouteMatching("/MyResource.findable.logic"));
+
+    }
+
+    private Matcher<List<Route>> hasRouteMatching(final String uri) {
+    	return new TypeSafeMatcher<List<Route>>() {
+
+			@Override
+			protected void describeMismatchSafely(List<Route> item, Description mismatchDescription) {
+			}
+
+			@Override
+			protected boolean matchesSafely(List<Route> item) {
+				for (Route route : item) {
+					if (route.canHandle(uri)) {
+						return true;
+					}
+				}
+				return false;
+			}
+
+			public void describeTo(Description description) {
+				description.appendText("a list of routes matching " + uri);
+
+			}
+		};
     }
 
 }

@@ -3,12 +3,12 @@ package br.com.caelum.vraptor.serialization;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
-import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -18,9 +18,7 @@ import org.mockito.MockitoAnnotations;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.http.FormatResolver;
 import br.com.caelum.vraptor.restfulie.RestHeadersHandler;
-import br.com.caelum.vraptor.restfulie.Restfulie;
 import br.com.caelum.vraptor.restfulie.hypermedia.HypermediaResource;
-import br.com.caelum.vraptor.restfulie.relation.Relation;
 import br.com.caelum.vraptor.view.PageResult;
 import br.com.caelum.vraptor.view.Status;
 
@@ -116,11 +114,7 @@ public class DefaultRepresentationResultTest {
 		when(formatResolver.getAcceptFormat()).thenReturn("xml");
 
 		when(serialization.accepts("xml")).thenReturn(true);
-		HypermediaResource object = new HypermediaResource() {
-			public List<Relation> getRelations(Restfulie control) {
-				return null;
-			}};
-
+		HypermediaResource object = mock(HypermediaResource.class);
 		representation.from(object);
 
 		verify(serialization).from(object);

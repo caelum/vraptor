@@ -1,14 +1,9 @@
 [chapter Evitando que o browser faça cache das páginas]
-**::por Otávio Scherer Garcia::**
+**::por Otávio Scherer Garcia e Lucas Cavalcanti::**
 
-Este interceptor indica ao browser para não efetuar cache das páginas.
+Este interceptor indica ao browser para não efetuar cache das páginas, adicionando headers indicando que a página atual
+está expirada.
 [java]
-    /**
-     * Intercepts all requests and set a no-cache information.
-     *
-     * @author Otávio Scherer Garcia
-     * @version $Revision$
-     */
     @Intercepts
     @RequestScoped
     public class NoCacheInterceptor
@@ -45,3 +40,20 @@ Este interceptor indica ao browser para não efetuar cache das páginas.
         }
     }
 [/java]
+
+Você pode também criar uma anotação para que apenas as classes anotadas evitem o cache.
+
+[java]@Target({ElementType.METHOD, ElementType.TYPE})
+@Documented
+@Retention(RetentionPolicy.RUNTIME)
+public @interface NoCache {
+
+}[/java]
+
+E alterar o método accepts do interceptor para o código abaixo:
+
+[java]@Override
+public boolean accepts(ResourceMethod method) {
+    return method.containsAnnotation(NoCache.class);
+}[/java]
+

@@ -17,6 +17,8 @@
 
 package br.com.caelum.vraptor.restfulie.serialization;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletResponse;
 
 import br.com.caelum.vraptor.config.Configuration;
@@ -37,7 +39,7 @@ import com.thoughtworks.xstream.converters.reflection.ReflectionConverter;
 @Component
 @RequestScoped
 public class RestfulSerialization extends XStreamXMLSerialization {
-	
+
 	private final Restfulie restfulie;
 	private final Configuration config;
 
@@ -53,10 +55,13 @@ public class RestfulSerialization extends XStreamXMLSerialization {
 	 */
 	@Override
 	protected XStream getXStream() {
-		XStream xStream = new XStream();
+		XStream xStream = super.getXStream();
 		MethodValueSupportConverter converter = new MethodValueSupportConverter(new ReflectionConverter(xStream.getMapper(), xStream.getReflectionProvider()));
 		xStream.registerConverter(new LinkConverter(converter, restfulie, config));
 		return xStream;
 	}
 
+	public static void main(String[] args) {
+		System.out.println(new XStream().getConverterLookup().lookupConverterForType(List.class));
+	}
 }

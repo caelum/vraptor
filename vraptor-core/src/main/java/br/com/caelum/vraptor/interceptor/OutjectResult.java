@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.InterceptionException;
+import br.com.caelum.vraptor.Lazy;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodInfo;
@@ -33,6 +34,7 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  *
  * @author guilherme silveira
  */
+@Lazy
 public class OutjectResult implements Interceptor {
 
 	private static final Logger logger = LoggerFactory.getLogger(OutjectResult.class);
@@ -48,19 +50,18 @@ public class OutjectResult implements Interceptor {
 	}
 
 	public boolean accepts(ResourceMethod method) {
-		return true;
+		Type returnType = method.getMethod().getGenericReturnType();
+		return !returnType.equals(void.class);
 	}
 
 	public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
 			throws InterceptionException {
 		Type returnType = method.getMethod().getGenericReturnType();
-		if (!returnType.equals(void.class)) {
-			String name = extractor.nameFor(returnType);
-			Object value = this.info.getResult();
+		String name = extractor.nameFor(returnType);
+		Object value = this.info.getResult();
 
-			logger.debug("outjecting {}={}", name, value);
-			result.include(name, value);
-		}
+		logger.debug("outjecting {}={}", name, value);
+		result.include(name, value);
 		stack.next(method, resourceInstance);
 	}
 

@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.caelum.vraptor.Converter;
+import br.com.caelum.vraptor.TwoWayConverter;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.core.DefaultConverters;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
@@ -38,10 +39,10 @@ public class VRaptor2Converters implements Converters {
 	private  Converters delegateConverters;
 	private final List<org.vraptor.converter.Converter> converterList = new ArrayList<org.vraptor.converter.Converter>();
 
-	public VRaptor2Converters(Config config) throws ClassNotFoundException,
+	public VRaptor2Converters(Config config, Container container) throws ClassNotFoundException,
 			InstantiationException, IllegalAccessException {
 		// probably vraptor3 converters
-		this.delegateConverters = new DefaultConverters();
+		this.delegateConverters = new DefaultConverters(container);
 		List<String> list = config.getConverters();
 		for (String l : list) {
 			@SuppressWarnings("unchecked")
@@ -56,9 +57,9 @@ public class VRaptor2Converters implements Converters {
 		this.delegateConverters = delegateConverters;
 	}
 
-	public Converter<?> to(Class<?> type, Container container) {
+	public Converter<?> to(Class<?> type) {
 		Converter<?> vraptor2Convterter = findVRaptor2Converter(type);
-		return vraptor2Convterter == null ? delegateConverters.to(type, container) : vraptor2Convterter;
+		return vraptor2Convterter == null ? delegateConverters.to(type) : vraptor2Convterter;
 	}
 
 	private Converter<?> findVRaptor2Converter(Class<?> type) {
@@ -76,16 +77,25 @@ public class VRaptor2Converters implements Converters {
 		delegateConverters.register(converterClass);
 	}
 
-	public boolean existsFor(Class<?> type, Container container) {
-		return existsVRaptor2ConverterFor(type) || existsVRaptor3ConverterFor(type, container);
+	public boolean existsFor(Class<?> type) {
+		return existsVRaptor2ConverterFor(type) || existsVRaptor3ConverterFor(type);
 	}
 
-	private boolean existsVRaptor3ConverterFor(Class<?> type, Container container) {
-		return delegateConverters.existsFor(type, container);
+	private boolean existsVRaptor3ConverterFor(Class<?> type) {
+		return delegateConverters.existsFor(type);
 	}
 
 	private boolean existsVRaptor2ConverterFor(Class<?> type) {
 		return findVRaptor2Converter(type) != null;
+	}
+
+	public boolean existsTwoWayFor(Class<?> type) {
+		return false;
+	}
+
+	public TwoWayConverter<?> twoWayConverterFor(Class<?> type) {
+		throw new UnsupportedOperationException(
+			"no new features for VRaptor 2 compatibility, sorry");
 	}
 
 }

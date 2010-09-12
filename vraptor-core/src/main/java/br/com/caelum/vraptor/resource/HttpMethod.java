@@ -54,7 +54,7 @@ public enum HttpMethod {
 		try {
 			return valueOf(methodName.toUpperCase());
 		} catch (IllegalArgumentException e) {
-			// funny, but we need a better explanation
+			// funny, but we need a better explanation, to support sendError
 			throw new IllegalArgumentException("HTTP Method not known: " + methodName, e);
 		}
 	}

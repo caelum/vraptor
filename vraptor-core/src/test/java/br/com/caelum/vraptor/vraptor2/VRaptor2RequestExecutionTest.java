@@ -42,14 +42,12 @@ public class VRaptor2RequestExecutionTest {
     private Mockery mockery;
     private InterceptorStack stack;
     private VRaptor2RequestExecution execution;
-    private InstantiateInterceptor instantiator;
     private Config config;
 
     @Before
     public void setup() {
         this.mockery = new Mockery();
         this.stack = mockery.mock(InterceptorStack.class);
-        this.instantiator = new InstantiateInterceptor(null);
         this.config = mockery.mock(Config.class);
         mockery.checking(new Expectations() {
             {
@@ -57,7 +55,7 @@ public class VRaptor2RequestExecutionTest {
                 will(returnValue(true));
             }
         });
-        this.execution = new VRaptor2RequestExecution(stack, instantiator, config);
+        this.execution = new VRaptor2RequestExecution(stack, config);
     }
 
     @Test
@@ -75,7 +73,7 @@ public class VRaptor2RequestExecutionTest {
                 inSequence(sequence);
                 one(stack).add(MultipartInterceptor.class);
                 inSequence(sequence);
-                one(stack).add(instantiator);
+                one(stack).add(InstantiateInterceptor.class);
                 inSequence(sequence);
                 one(stack).add(ParametersInstantiatorInterceptor.class);
                 inSequence(sequence);

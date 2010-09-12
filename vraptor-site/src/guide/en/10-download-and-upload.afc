@@ -1,4 +1,4 @@
-[chapter Downloading]
+[chapter Download and Upload]
 
 [section 1 minute example: download]
 
@@ -34,7 +34,11 @@ public class ProfileController {
 }
 [/java]
 
+You can also use the %%InputStreamDownload%% implementation to work with Streams.
+
 [section 1 minute example: upload]
+
+Nota: the upload component is optional. To enable this feature, you only need to add the %%commons-upload%% library in your classpath.
 
 The first example is based on the multipart upload feature.
 
@@ -65,3 +69,17 @@ easy way, you can use the %%commons-io IOUtils%%, that is already a VRaptor depe
 		dao.atribui(pictureOnDisk, profile);
 	}
 [/java]
+
+[section Overriding upload settings]
+
+You can also change the default upload settings overriding the class %%MultipartConfig%%. In example below, the size limit of upload is changed.
+
+[java]@Component
+@ApplicationScoped
+public class CustomMultipartConfig extends DefaultMultipartConfig {
+
+    public long getSizeLimit() {
+        return 50 * 1024 * 1024; // 50MB
+    }
+
+}[/java]

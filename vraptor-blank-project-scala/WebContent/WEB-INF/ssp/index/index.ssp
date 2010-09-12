@@ -1,0 +1,12 @@
+<html>
+<head>
+<title>VRaptor + Scala</teste>
+</head>
+<body>
+<%@ val string : String %>
+
+${string}
+
+</ul>
+</body>
+</html>

@@ -18,10 +18,9 @@ package br.com.caelum.vraptor.interceptor.multipart;
 
 import java.io.InputStream;
 
-public class DefaultUploadedFile implements UploadedFile {
-    private static final String NOT_UNIX_LIKE_SEPARATOR = "\\";
+import org.apache.commons.io.FilenameUtils;
 
-    private static final String UNIX_LIKE_SEPARATOR = "/";
+public class DefaultUploadedFile implements UploadedFile {
 
     private final String contentType;
 
@@ -34,17 +33,7 @@ public class DefaultUploadedFile implements UploadedFile {
     public DefaultUploadedFile(InputStream content, String completeFileName,
             String contentType) {
         this.content = content;
-		// depends upon the UPLOADER operating system, not on File.separator
-        // File.separator is the separator for the server machine, not the
-        // client, of course
-        // TODO: use File methods to get the fileName from the completeFileName?
-        if (completeFileName.indexOf(UNIX_LIKE_SEPARATOR) == -1) {
-            this.fileName = completeFileName.substring(completeFileName
-                    .lastIndexOf(NOT_UNIX_LIKE_SEPARATOR) + 1);
-        } else {
-            this.fileName = completeFileName.substring(completeFileName
-                    .lastIndexOf(UNIX_LIKE_SEPARATOR) + 1);
-        }
+		this.fileName = FilenameUtils.getName(completeFileName);
         this.completeFileName = completeFileName;
         this.contentType = contentType;
     }

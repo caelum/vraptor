@@ -67,7 +67,7 @@ public class DefaultConvertersTest {
     @Before
     public void setup() {
     	MockitoAnnotations.initMocks(this);
-        this.converters = new DefaultConverters();
+        this.converters = new DefaultConverters(container);
     }
 
     @SuppressWarnings("unchecked")
@@ -105,14 +105,14 @@ public class DefaultConvertersTest {
         for (Entry<Class, Class<? extends Converter>> entry : EXPECTED_CONVERTERS.entrySet()) {
             Class<?> typeFor = entry.getKey();
             Class<? extends Converter> converterType = entry.getValue();
-            Converter<?> converter = converters.to(typeFor, container);
+            Converter<?> converter = converters.to(typeFor);
             assertThat(converter, is(instanceOf(converterType)));
         }
     }
 
     @Test(expected = VRaptorException.class)
     public void complainsIfNoConverterFound() {
-        converters.to(DefaultConvertersTest.class, container);
+        converters.to(DefaultConvertersTest.class);
     }
 
     @Test(expected = VRaptorException.class)
@@ -149,7 +149,7 @@ public class DefaultConvertersTest {
         converters.register(MyConverter.class);
         when(container.instanceFor(MyConverter.class)).thenReturn(new MyConverter());
 
-        Converter<?> found = converters.to(MyData.class, container);
+        Converter<?> found = converters.to(MyData.class);
         assertThat(found.getClass(), is(typeCompatibleWith(MyConverter.class)));
     }
 
@@ -159,7 +159,7 @@ public class DefaultConvertersTest {
         converters.register(MySecondConverter.class);
         when(container.instanceFor(MySecondConverter.class)).thenReturn(new MySecondConverter());
 
-        Converter<?> found = converters.to(MyData.class, container);
+        Converter<?> found = converters.to(MyData.class);
         assertThat(found.getClass(), is(typeCompatibleWith(MySecondConverter.class)));
     }
 
@@ -169,7 +169,7 @@ public class DefaultConvertersTest {
 
 		when(container.instanceFor(MyConverter.class)).thenReturn(new MyConverter());
 
-		assertTrue(converters.existsFor(MyData.class, container));
+		assertTrue(converters.existsFor(MyData.class));
 	}
 
 }

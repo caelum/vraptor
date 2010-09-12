@@ -23,6 +23,8 @@ import java.io.OutputStream;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.IOUtils;
+
 /**
  * Handles download by reading from a input stream byte by byte.
  *
@@ -53,18 +55,7 @@ public class InputStreamDownload implements Download {
 		writeDetails(response);
 
 		OutputStream out = response.getOutputStream();
-
-		int bufferSize = 1024 * 8;
-		byte[] buffer = new byte[bufferSize];
-		while (true) {
-			int read = stream.read(buffer);
-			if (read < 0)
-				break;
-			out.write(buffer, 0, read);
-		}
-		// TODO: close here? try catch here to do a good finally job?
-
-		stream.close();
+		IOUtils.copy(stream, out);
 	}
 
 	void writeDetails(HttpServletResponse response) {

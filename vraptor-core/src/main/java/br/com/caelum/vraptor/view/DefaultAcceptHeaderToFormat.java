@@ -53,11 +53,12 @@ public class DefaultAcceptHeaderToFormat implements AcceptHeaderToFormat {
 	}
 
 	public String getFormat(String acceptHeader) {
-		if (acceptHeader == null) {
-			throw new NullPointerException("accept header cant be null");
+		if (acceptHeader == null || acceptHeader.trim().equals("")) {
+			return DEFAULT_FORMAT;
 		}
 
 		if (acceptHeader.contains(DEFAULT_FORMAT)) {
+			// HACK! Opera may send "application/json, text/html, */*" and this should return html.
 			return DEFAULT_FORMAT;
 		}
 

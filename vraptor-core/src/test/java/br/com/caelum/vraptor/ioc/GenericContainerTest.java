@@ -122,7 +122,7 @@ public abstract class GenericContainerTest {
 	public void canProvideAllApplicationScopedComponents() {
 		List<Class<?>> components = Arrays.asList(ServletContext.class, UrlToResourceTranslator.class, Router.class,
 				TypeCreator.class, InterceptorRegistry.class, ParameterNameProvider.class, Converters.class,
-				EmptyElementsRemoval.class, NoRoutesConfiguration.class, ResourceNotFoundHandler.class);
+				NoRoutesConfiguration.class, ResourceNotFoundHandler.class);
 		checkAvailabilityFor(true, components);
 		checkAvailabilityFor(true, BaseComponents.getApplicationScoped().keySet());
 		mockery.assertIsSatisfied();
@@ -139,7 +139,7 @@ public abstract class GenericContainerTest {
 	public void canProvideAllRequestScopedComponents() {
 		List<Class<?>> components = Arrays.asList(HttpServletRequest.class, HttpServletResponse.class,
 				RequestInfo.class, HttpSession.class, ParametersInstantiatorInterceptor.class,
-				InterceptorListPriorToExecutionExtractor.class,
+				InterceptorListPriorToExecutionExtractor.class, EmptyElementsRemoval.class,
 				InterceptorStack.class, RequestExecution.class, ResourceLookupInterceptor.class,
 				InstantiateInterceptor.class, Result.class, ExecuteMethodInterceptor.class, PageResult.class,
 				ParametersProvider.class, MethodInfo.class, Validator.class, PathResolver.class,
@@ -167,10 +167,10 @@ public abstract class GenericContainerTest {
 			public String execute(RequestInfo request, int counter) {
 				assertNotNull(getFromContainerInCurrentThread(LocalDateConverter.class, request));
 				assertNotNull(getFromContainerInCurrentThread(LocalTimeConverter.class, request));
-				
+
 				Converters converters = getFromContainerInCurrentThread(Converters.class, request);
-				assertTrue(converters.existsFor(LocalDate.class, getFromContainerInCurrentThread(Container.class, request)));
-				assertTrue(converters.existsFor(LocalTime.class, getFromContainerInCurrentThread(Container.class, request)));
+				assertTrue(converters.existsFor(LocalDate.class));
+				assertTrue(converters.existsFor(LocalTime.class));
 				return null;
 			}
 
@@ -341,7 +341,7 @@ public abstract class GenericContainerTest {
 			}
 		});
 	}
-	
+
 	private <T> T getFromContainerInCurrentThread(final Class<T> componentToBeRetrieved, RequestInfo request) {
 		return provider.provideForRequest(request, new Execution<T>() {
 			public T insideRequest(Container firstContainer) {
@@ -457,7 +457,7 @@ public abstract class GenericContainerTest {
 				return provider.provideForRequest(request, new Execution<Converters>() {
 					public Converters insideRequest(Container container) {
 						Converters converters = container.instanceFor(Converters.class);
-						Converter<?> converter = converters.to(Void.class, container);
+						Converter<?> converter = converters.to(Void.class);
 						assertThat(converter, is(instanceOf(ConverterInTheClasspath.class)));
 						return null;
 					}

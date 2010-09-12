@@ -63,7 +63,7 @@ public class DefaultRepresentationResult implements RepresentationResult {
 		String format = formatResolver.getAcceptFormat();
 		for (Serialization serialization : serializations) {
 			if (serialization.accepts(format)) {
-				if(alias==null) { 
+				if(alias==null) {
 					return serialization.from(object);
 				} else {
 					return serialization.from(object, alias);
@@ -77,7 +77,7 @@ public class DefaultRepresentationResult implements RepresentationResult {
 
 	private final class PackageComparator implements Comparator<Serialization> {
 		private int number(Serialization s) {
-			if (s.getClass().getPackage().getName().startsWith("br.com.caelum.vraptor")) {
+			if (s.getClass().getPackage().getName().startsWith("br.com.caelum.vraptor.serialization")) {
 				return 1;
 			}
 			return 0;

@@ -28,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.InterceptionException;
+import br.com.caelum.vraptor.Lazy;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.Localization;
@@ -42,6 +43,7 @@ import br.com.caelum.vraptor.validator.Message;
  *
  * @author Guilherme Silveira
  */
+@Lazy
 public class ParametersInstantiatorInterceptor implements Interceptor {
     private final ParametersProvider provider;
     private final MethodInfo parameters;
@@ -65,7 +67,7 @@ public class ParametersInstantiatorInterceptor implements Interceptor {
     }
 
     public boolean accepts(ResourceMethod method) {
-        return true;
+        return method.getMethod().getParameterTypes().length > 0;
     }
 
     @SuppressWarnings("unchecked")
@@ -79,6 +81,9 @@ public class ParametersInstantiatorInterceptor implements Interceptor {
         validator.addAll(errors);
 
         if (logger.isDebugEnabled()) {
+        	if (!errors.isEmpty()) {
+        		logger.debug("There are conversion errors: {}", errors);
+        	}
             logger.debug("Parameter values for " + method + " are " + Arrays.asList(values));
         }
 

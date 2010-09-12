@@ -77,7 +77,7 @@ public class OgnlParametersProviderTest {
         this.provider = new OgnlParametersProvider(creator, container, converters, nameProvider, parameters, removal);
         this.errors = new ArrayList<Message>();
 
-        when(converters.to(Long.class, container)).thenReturn((Converter) new LongConverter());
+        when(converters.to(Long.class)).thenReturn((Converter) new LongConverter());
         when(parameters.getSession()).thenReturn(session);
         when(container.instanceFor(EmptyElementsRemoval.class)).thenReturn(removal);
 

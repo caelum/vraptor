@@ -35,10 +35,9 @@ import org.vraptor.plugin.hibernate.Validate;
 import br.com.caelum.vraptor.http.route.PathAnnotationRoutesParser;
 import br.com.caelum.vraptor.http.route.Route;
 import br.com.caelum.vraptor.http.route.RouteBuilder;
+import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.http.route.RoutesParser;
-import br.com.caelum.vraptor.http.route.TypeFinder;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
-import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.ResourceClass;
 
@@ -50,18 +49,16 @@ import br.com.caelum.vraptor.resource.ResourceClass;
 @ApplicationScoped
 public class ComponentRoutesParser implements RoutesParser {
 
-    private final Proxifier proxifier;
-
 	private final RoutesParser delegate;
 
 	private final Logger logger = LoggerFactory.getLogger(ComponentRoutesParser.class);
 
-	private final TypeFinder finder;
+	private final Router router;
 
-    public ComponentRoutesParser(Proxifier proxifier, TypeFinder finder) {
-        this.proxifier = proxifier;
-		this.finder = finder;
-        this.delegate = new PathAnnotationRoutesParser(proxifier, finder);
+
+    public ComponentRoutesParser(Router router) {
+        this.router = router;
+        this.delegate = new PathAnnotationRoutesParser(router);
     }
 
 	public List<Route> rulesFor(ResourceClass resource) {
@@ -121,7 +118,7 @@ public class ComponentRoutesParser implements RoutesParser {
                 continue;
             }
 			String uri = getUriFor(javaMethod, baseType);
-			RouteBuilder builder = new RouteBuilder(proxifier, finder, uri);
+			RouteBuilder builder = router.builderFor(uri);
 			for (HttpMethod m : HttpMethod.values()) {
 				if (javaMethod.isAnnotationPresent(m.getAnnotation())) {
 					builder.with(m);

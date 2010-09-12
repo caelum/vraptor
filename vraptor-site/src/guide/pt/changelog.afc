@@ -1,16 +1,68 @@
 [chapter ChangeLog]
 
+[section 3.2.0 (in dev)]
+[list]
+* várias melhorias na performance: por volta de 60% menos no tempo de requisição.
+* **quebra de compatibilidade interna**: interface InterceptorStack reorganizada.
+* melhor implementação do método accepts dos interceptors internos do VRaptor.
+* **quebra de compatibilidade interna**: interfaces %%Converters%%, %%Router%%
+	e construtor da classe %%PathAnnotationRoutesParser%% alterados. RouteBuilder
+	convertido para interface => implementação DefaultRouteBuilder. 
+	Para quem estendia o RoutesParser basta trocar o delegate constructor.
+	Para quem instanciava o RouteBuilder diretamente basta instanciar o DefaultRouteBuilder. 
+* nova anotação @Lazy. Use-a nos interceptors em que o método accepts não depende
+  do estado interno do interceptor:
+	[java]
+	@Intercepts
+	@Lazy
+	public class MeuLazyInterceptor implements Interceptor {
+	    public MeuLazyInterceptor(Dependencia dependencia) {
+			this.dependencia = dependencia;
+		}
+		public boolean accepts(ResourceMethod method) {
+			// depende apenas do method
+			return method.containsAnnotation(Abc.class);
+		}
+		public void intercepts(...) {
+			//...
+		}
+	}
+	[/java]
+	Nesse caso o MeuLazyInterceptor só será instanciado se o método accepts retornar true.
+	Uma instância não funcional do MyLazyInterceptor será usada para chamar o método accepts,
+	então esse método não pode usar o estado interno do interceptor.
+	Não use o @Lazy se o método accepts for trivial (sempre retornar true)
+
+* **pequena quebra de compatibilidade**: prioridade padrão do @Path agora é Integer.MAX_INTEGER/2.
+  Antes era Integer.MAX_INTEGER - 1. Apesar dessa quebra, acreditamos que isso não irá afetar
+  os sistemas já implementados.
+* prioridades do @Path agora podem ser definidas por constantes:
+	[java]
+	@Path(value="/url", priority=Path.HIGHEST)
+	@Path(value="/url", priority=Path.HIGH)
+	@Path(value="/url", priority=Path.DEFAULT)
+	@Path(value="/url", priority=Path.LOW)
+	@Path(value="/url", priority=Path.LOWEST)
+	[/java]
+
+* Nova interface %%TwoWayConverter%% para conversões bidirecionais.
+* suporte nativo a requisições OPTIONS
+* fix: 405 ao invés de 500 em requisições com HTTP metodo desconhecido
+* mais converters do Joda Time (por Rodolfo Liviero)
+* melhorias no Scala Blank Project (por Pedro Matiello)
+* bugfix: null Accept Header gera respostas html
+
+[/list]
+
 [section 3.1.3]
 [list]
-* Corrigidos bugs do novo validator
-
 * Scala Blank Project
-
-* corrigido bug do char como parâmetro na URI
-
 * melhor estratégia no escopo flash
-
 * começo do suporte pra javax.inject API. Agora é possível dar nomes para os parâmetros de uma lógica:
+* Corrigidos bugs do novo validator
+* corrigido bug do char como parâmetro na URI
+* Corrigido bug para poder aceitar browsers que trabalham mal com o header Accepts
+
 
 [java]
 public void logica(@Named("um_nome") String outroNome) {...}

@@ -29,6 +29,8 @@ import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import br.com.caelum.vraptor.TwoWayConverter;
+import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.eval.Evaluator;
 import br.com.caelum.vraptor.http.MutableRequest;
 
@@ -43,14 +45,16 @@ public class DefaultParametersControl implements ParametersControl {
 	private final List<String> parameters = new ArrayList<String>();
 	private final Pattern pattern;
 	private final String originalPattern;
+	private final Converters converters;
 
-	public DefaultParametersControl(String originalPattern, Map<String, String> parameterPatterns) {
+	public DefaultParametersControl(String originalPattern, Map<String, String> parameterPatterns, Converters converters) {
 		this.originalPattern = originalPattern;
+		this.converters = converters;
 		this.pattern = compilePattern(originalPattern, parameterPatterns);
 	}
 
-	public DefaultParametersControl(String originalPattern) {
-		this(originalPattern, Collections.<String, String>emptyMap());
+	public DefaultParametersControl(String originalPattern, Converters converters) {
+		this(originalPattern, Collections.<String, String>emptyMap(), converters);
 	}
 
 	private Pattern compilePattern(String originalPattern, Map<String, String> parameterPatterns) {
@@ -77,6 +81,13 @@ public class DefaultParametersControl implements ParametersControl {
 		String base = originalPattern.replaceAll("\\.\\*", "");
 		for (String key : parameters) {
 			Object result = new Evaluator().get(params, key);
+			if (result != null) {
+				Class type = result.getClass();
+				if (converters.existsTwoWayFor(type)) {
+					TwoWayConverter converter = converters.twoWayConverterFor(type);
+					result = converter.convert(result);
+				}
+			}
 			base = base.replaceAll("\\{" + key + "\\*?\\}", result == null ? "" : result.toString());
 		}
 		return base;

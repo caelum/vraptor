@@ -154,7 +154,7 @@ public class OgnlParametersProvider implements ParametersProvider {
 				// TODO it fails when parameter name is not a valid java
 				// identifier... ignoring by now
 				if (logger.isDebugEnabled()) {
-					logger.debug("unable to parse expression '" + key + "'", e);
+					logger.debug("unable to parse expression '" + key + "'. Ignoring", e);
 				}
 			}
 		}

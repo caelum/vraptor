@@ -16,40 +16,36 @@
  */
 package br.com.caelum.vraptor.interceptor;
 
-import java.io.IOException;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-import org.hamcrest.Description;
-import org.jmock.Expectations;
-import org.jmock.Sequence;
-import org.jmock.api.Action;
-import org.jmock.api.Invocation;
+import java.io.IOException;
+import java.util.Arrays;
+
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.InOrder;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.InterceptionException;
-import br.com.caelum.vraptor.core.DefaultInterceptorStack;
 import br.com.caelum.vraptor.core.InterceptorStack;
-import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.test.VRaptorMockery;
 
 public class InterceptorListPriorToExecutionExtractorTest {
 
-    private VRaptorMockery mockery;
-    private InterceptorRegistry registry;
+    private @Mock InterceptorRegistry registry;
+    private @Mock ResourceMethod method;
+    private @Mock InterceptorStack stack;
+
     private InterceptorListPriorToExecutionExtractor extractor;
-    private ResourceMethod method;
-    private InterceptorStack stack;
-    private Container container;
 
     @Before
     public void setup() throws SecurityException, NoSuchMethodException {
-        this.mockery = new VRaptorMockery();
-        this.container = mockery.mock(Container.class);
-        this.registry = mockery.mock(InterceptorRegistry.class);
-        this.extractor = new InterceptorListPriorToExecutionExtractor(registry, container);
-        this.method = mockery.mock(ResourceMethod.class);
-        this.stack = mockery.mock(InterceptorStack.class);
+    	MockitoAnnotations.initMocks(this);
+
+        this.extractor = new InterceptorListPriorToExecutionExtractor(registry);
     }
 
     public static class FirstInterceptor implements Interceptor {
@@ -70,58 +66,16 @@ public class InterceptorListPriorToExecutionExtractorTest {
     }
     @Test
     public void shouldAddTheListOfInterceptorsAsFollowingInterceptors() throws InterceptionException, IOException {
-        final Interceptor[] array = {new FirstInterceptor(), new SecondInterceptor()};
-        mockery.checking(new Expectations() {
-            {
-                one(registry).interceptorsFor(method, container);
-                will(returnValue(array));
-                for (Interceptor i : array) {
-                    one(stack).addAsNext(i);
-                }
-                one(stack).next(method, null);
-            }
-        });
+        when(registry.all()).thenReturn(Arrays.asList(FirstInterceptor.class, SecondInterceptor.class));
+
         extractor.intercept(this.stack, method, null);
-        mockery.assertIsSatisfied();
+
+        InOrder order = inOrder(stack);
+
+        order.verify(stack).addAsNext(SecondInterceptor.class);
+        order.verify(stack).addAsNext(FirstInterceptor.class);
+
+        verify(stack).next(method, null);
     }
 
-    @Test
-	public void shouldExecuteInterceptorsInOrder() throws Exception {
-    	final Interceptor first = mockery.mock(Interceptor.class, "first");
-		final Interceptor second = mockery.mock(Interceptor.class, "second");
-		final Interceptor[] array = {first, second};
-		final DefaultInterceptorStack stack = new DefaultInterceptorStack(container);
-        mockery.checking(new Expectations() {
-            {
-                one(registry).interceptorsFor(method, container);
-                will(returnValue(array));
-                allowing(first).accepts(method); will(returnValue(true));
-                allowing(second).accepts(method); will(returnValue(true));
-
-                Sequence sequence = mockery.sequence("interceptors");
-                one(first).intercept(stack, method, null);
-                will(continueStack(stack)); inSequence(sequence);
-
-                one(second).intercept(stack, method, null);
-                will(continueStack(stack)); inSequence(sequence);
-
-            }
-        });
-        extractor.intercept(stack, method, null);
-
-
-        mockery.assertIsSatisfied();
-	}
-
-    private Action continueStack(final DefaultInterceptorStack stack) {
-		return new Action() {
-			public Object invoke(Invocation invocation) throws Throwable {
-				stack.next(method, null);
-				return null;
-			}
-			public void describeTo(Description description) {
-				description.appendText("continue stack");
-			}
-		};
-	}
 }

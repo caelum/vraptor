@@ -91,13 +91,13 @@ public class IogiParametersProviderTest {
 		mockLocalization = mockery.mock(Localization.class);
 
 		mockValidator = mockery.mock(Validator.class);
-		Instantiator<Object> instantiator = new VRaptorInstantiator(new DefaultConverters(), mockContainer, mockLocalization, mockNameProvider, mockValidator );
+		Instantiator<Object> instantiator = new VRaptorInstantiator(new DefaultConverters(mockContainer), mockContainer, mockLocalization, mockNameProvider, mockValidator );
 
 		this.iogiProvider = new IogiParametersProvider(mockNameProvider, mockHttpServletRequest, instantiator);
         this.errors = new ArrayList<Message>();
         mockery.checking(new Expectations() {
             {
-                allowing(converters).to((Class) with(an(Class.class)), with(any(Container.class)));
+                allowing(converters).to((Class) with(an(Class.class)));
                 will(returnValue(new LongConverter()));
 
 //                ignoring(mockLocalization);

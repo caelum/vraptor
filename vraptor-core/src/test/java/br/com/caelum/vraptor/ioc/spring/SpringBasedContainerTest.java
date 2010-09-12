@@ -207,7 +207,7 @@ public class SpringBasedContainerTest {
 	@Test
 	public void shoudRegisterConvertersInConverters() {
 		Converters converters = container.instanceFor(Converters.class);
-		Converter<?> converter = converters.to(Foo.class, container);
+		Converter<?> converter = converters.to(Foo.class);
 		assertThat(converter, is(instanceOf(DummyConverter.class)));
 	}
 

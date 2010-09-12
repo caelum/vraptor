@@ -1,0 +1,151 @@
+[chapter VRaptor e Tiles 2.2]
+**::por Rogerio Alcantara em http://www.guj.com.br/posts/list/215206.java#1098196::**
+
+**baixar o tiles-jsp.jar. Como estou utilizando maven2:**
+[xml]
+<dependency>
+	<groupId>org.apache.tiles</groupId>
+	<artifactId>tiles-jsp</artifactId>
+	<version>2.2.2</version>
+	<type>jar</type>
+	<scope>compile</scope>
+</dependency>
+[/xml]
+
+**No web.xml:**
+[xml]
+<!-- tiles configuration -->
+<servlet>
+	<servlet-name>TilesServlet</servlet-name>
+	<servlet-class>org.apache.tiles.web.startup.TilesServlet</servlet-class>
+	<init-param>
+		<param-name>org.apache.tiles.factory.TilesContainerFactory.MUTABLE</param-name>
+		<param-value>true</param-value>
+	</init-param>
+	<load-on-startup>2</load-on-startup>
+</servlet>
+<!-- /tiles configuration -->
+
+<!-- vraptor configuration -->
+<filter>
+    <filter-name>vraptor</filter-name>
+    <filter-class>br.com.caelum.vraptor.VRaptor</filter-class>
+</filter>
+
+<filter-mapping>
+    <filter-name>vraptor</filter-name>
+    <url-pattern>/*</url-pattern>
+    <dispatcher>FORWARD</dispatcher>
+    <dispatcher>REQUEST</dispatcher>
+</filter-mapping>
+<!-- vraptor configuration -->
+[/xml]
+
+Repare que não é declarado o DEFINITIONS_CONFIG, nem registrado o TilesDispatchServlet. Pois não utilizaremos arquivo para guardar as definitions, e quem cuidara dos redirecionamentos continuará sendo o VRaptor, que já faz isso muito bem obrigado! ;D Outro detalhe importante, é deixar o TilesContainerFactory como MUTABLE. ;)
+
+**TilesPathResolver?**
+
+Nessa abordagem, não é necessário criar implementar esse PathResolver, já que essa responsabilidade continuará sendo do VRaptor. ;D
+
+**/WEB-INF/jsp/template.jsp - servirá de base para todas as páginas**
+[xml]
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>  
+<%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>  
+<html>  
+    <head>  
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
+        <title>site</title>  
+    </head>  
+    <body>  
+        <div id="divHeader">  
+            <tiles:insertTemplate template="/WEB-INF/jsp/header.jsp"/>  
+        </div>  
+        <div id="divContent">  
+            <tiles:insertAttribute name="body"/>  
+        </div>  
+        <div id="divFooter">  
+            <tiles:insertTemplate template="/WEB-INF/jsp/footer.jsp"/>  
+        </div>  
+    </body>  
+</html>  
+[/xml]
+**/WEB-INF/jsp/home/index.jsp - exemplo que utilizará o template - repare que o path mantém a convenção do VRaptor3! ^^**
+[xml]
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>  
+<%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>  
+<tiles:insertTemplate template="/WEB-INF/jsp/template.jsp">
+  
+    <tiles:putAttribute name="body">  
+        olá mundo!  
+    </tiles:putAttribute>  
+  
+</tiles:insertTemplate>
+[/xml]
+**HomeController.java - e finalmente o controler para redirecionar para index.jsp **
+[java]
+@Resource
+public class HomeController {
+
+    private Result result;
+
+    public HomeController(final Result result) {
+
+		super();
+		this.result = result;
+	}
+
+    public void index() { }
+}
+[/java]
+
+Prontinho! Estamos utilizando o tiles apenas para montar o template das páginas, o redirecionamento continua sendo cargo do VRaptor! ^^
+
+Só tem um detalhe que eu gostaria de compartilhar, pois me deu muito trabalho de descobrir: suponha que eu queria estender o template.jsp para incluir um outro body. (tive essa necessidade na seção about do site..)
+
+** /WEB-INF/jsp/about/about_base.jsp - base que estenderá a template.jsp para alterar o layout **
+[xml]
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
+
+<tiles:insertTemplate template="/WEB-INF/jsp/template.jsp">
+
+	<tiles:putAttribute name="body">
+
+		<div id="divCenter">
+			<tiles:insertAttribute name="content" />
+		</div>
+
+		<div id="divRight">
+			<p>
+			<tiles:insertAttribute name="content_right" />
+			</p>
+		</div>
+
+	</tiles:putAttribute>
+
+</tiles:insertTemplate>
+[/xml]
+
+Pronto, agora a minha página do about, estenderá about_base.jsp e não template.jsp, por exemplo:
+
+** /WEB-INF/jsp/about/whyUse.jsp - estenderá o about_base.jsp **
+[xml]
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
+
+<tiles:insertTemplate template="/WEB-INF/jsp/about/about_base.jsp" flush="true">
+
+	<tiles:putAttribute name="content" cascade="true">
+		o conteúdo central!
+	</tiles:putAttribute>
+
+	<tiles:putAttribute name="content_right" cascade="true">
+				o conteúdo da direita!
+	</tiles:putAttribute>
+
+</tiles:insertTemplate>
+[/xml]
+
+Repare que dessa vez, o insertTemplate possui o atributo flush="true": isso é importante para que a about_base.jsp seja reinderizado primeiro. Note também que os putAttributes possuem o atributo cascade="true": que serve para disponibilizar esses atributos "para os templates de cima".
+
+Bom, isso foi bem chatinho de descobrir, mas agora a aplicação está rodando bunitinha, sem um xml, com o layout definido nas JSP's e com o mínimo de interferência no VRaptor3! ^^

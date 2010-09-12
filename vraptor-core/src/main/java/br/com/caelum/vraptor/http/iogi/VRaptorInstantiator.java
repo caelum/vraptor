@@ -88,7 +88,7 @@ public class VRaptorInstantiator implements Instantiator<Object> {
 
 	private final class VRaptorTypeConverter implements Instantiator<Object> {
 		public boolean isAbleToInstantiate(Target<?> target) {
-			return converters.existsFor(target.getClassType(), container);
+			return converters.existsFor(target.getClassType());
 		}
 
 		public Object instantiate(Target<?> target, Parameters parameters) {
@@ -111,7 +111,7 @@ public class VRaptorInstantiator implements Instantiator<Object> {
 
 		@SuppressWarnings("unchecked")
 		private Converter<Object> converterForTarget(Target<?> target) {
-			return (Converter<Object>) converters.to(target.getClassType(), container);
+			return (Converter<Object>) converters.to(target.getClassType());
 		}
 	}
 

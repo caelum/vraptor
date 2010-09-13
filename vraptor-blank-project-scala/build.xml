@@ -8,9 +8,9 @@
 	
 	<property file="../vraptor-core/build.properties" />
 	
-	<property name="vraptor.core" value="../vraptor-core"/>
+	<property name="vraptor.lib" value=".."/>
 	<property name="vraptor.scala.jar" value="../vraptor-plugin-scala/target/vraptor-scala.jar"/>
-	<property name="mandatory.jars" value="${vraptor.core}/${libs.dir}/mandatory"/>
+	<property name="mandatory.jars" value="../vraptor-core/${libs.dir}/mandatory"/>
 	<property name="webinf.lib.dir" value="WebContent/WEB-INF/lib/"/>
 	<property name="extra.lib.dir" value="lib/extras"/>
 	
@@ -31,7 +31,7 @@
 			    <include name="*.jar"/>
 			</fileset>
     	</copy>
-    	<copy todir="${webinf.lib.dir}" file="${vraptor.core}/${jar.file}"/>
+    	<copy todir="${webinf.lib.dir}" file="${vraptor.lib}/${jar.file}"/>
     	<copy todir="${webinf.lib.dir}" file="${vraptor.scala.jar}"/>
     </target>
 

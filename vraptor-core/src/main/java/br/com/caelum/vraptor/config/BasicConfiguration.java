@@ -22,6 +22,9 @@ import java.lang.reflect.InvocationTargetException;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import br.com.caelum.vraptor.ioc.ContainerProvider;
 import br.com.caelum.vraptor.ioc.spring.MissingConfigurationException;
 import br.com.caelum.vraptor.ioc.spring.SpringProvider;
@@ -33,6 +36,8 @@ import br.com.caelum.vraptor.ioc.spring.SpringProvider;
  */
 public class BasicConfiguration {
 
+	private static final Logger logger = LoggerFactory.getLogger(BasicConfiguration.class);
+	
 	/**
 	 * context parameter that represents the class of IoC provider
 	 */
@@ -48,6 +53,11 @@ public class BasicConfiguration {
 	 */
 	public static final String BASE_PACKAGES_PARAMETER_NAME = "br.com.caelum.vraptor.packages";
 
+	/**
+	 * Disables/enables classpath scanning
+	 */
+	public static final String SCANNING_PARAM = "br.com.caelum.vraptor.scanning";
+	
 	private final ServletContext servletContext;
 
 	public BasicConfiguration(ServletContext servletContext) {
@@ -93,4 +103,10 @@ public class BasicConfiguration {
 		return servletContext;
 	}
 
+	public boolean isClasspathScanningEnabled() {
+		String scanningParam = servletContext.getInitParameter(SCANNING_PARAM);
+		logger.info("{} = {}", SCANNING_PARAM, servletContext.getInitParameter(SCANNING_PARAM));
+		return scanningParam == null || !scanningParam.trim().equals("disabled");
+	}
+	
 }

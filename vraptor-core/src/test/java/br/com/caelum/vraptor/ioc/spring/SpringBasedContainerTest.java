@@ -91,6 +91,9 @@ public class SpringBasedContainerTest {
 
 				allowing(servletContext).getRealPath(with(any(String.class)));
 				will(returnValue(SpringBasedContainer.class.getResource(".").getFile()));
+				
+                allowing(servletContext).getInitParameter(BasicConfiguration.SCANNING_PARAM);
+                will(returnValue("enabled"));
 			}
 		});
 

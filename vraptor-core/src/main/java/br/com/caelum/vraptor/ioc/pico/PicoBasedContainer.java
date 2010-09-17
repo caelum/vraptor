@@ -32,7 +32,7 @@ public class PicoBasedContainer implements Container {
 
     private final MutablePicoContainer container;
 
-    public PicoBasedContainer(MutablePicoContainer container, Router routes) {
+    public PicoBasedContainer(MutablePicoContainer container) {
         this.container = container;
         this.container.addComponent(this);
     }

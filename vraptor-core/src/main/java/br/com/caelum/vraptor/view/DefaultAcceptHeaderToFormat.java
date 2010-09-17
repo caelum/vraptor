@@ -81,7 +81,10 @@ public class DefaultAcceptHeaderToFormat implements AcceptHeaderToFormat {
 
 	@SuppressWarnings("serial")
 	private static class Cache extends LinkedHashMap<String, String> {
-		@Override
+		public Cache() {
+			super(100, 0.75f, true);
+		}
+		
 		protected boolean removeEldestEntry(java.util.Map.Entry<String, String> eldest) {
 			return this.size() > 100;
 		}

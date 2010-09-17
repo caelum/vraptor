@@ -31,10 +31,12 @@ import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Maps;
+import com.google.inject.Binder;
 import com.google.inject.Binding;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Key;
+import com.google.inject.Module;
 
 /**
  *
@@ -78,7 +80,7 @@ public class GuiceProvider implements ContainerProvider {
 	public void start(ServletContext context) {
 		APPLICATION.start();
 		container = new GuiceContainer();
-		injector = Guice.createInjector(new VRaptorAbstractModule(context, container));
+		injector = Guice.createInjector(new VRaptorAbstractModule(context, container), customModule());
 		Map<Key<?>, Binding<?>> bindings = Maps.filterKeys(injector.getAllBindings(), new Predicate<Key<?>>() {
 			public boolean apply(Key<?> key) {
 				return StereotypeHandler.class.isAssignableFrom(key.getTypeLiteral().getRawType());
@@ -97,6 +99,13 @@ public class GuiceProvider implements ContainerProvider {
 				}
 			}
 		}
+	}
+
+	protected Module customModule() {
+		return new Module() {
+			public void configure(Binder binder) {
+			}
+		};
 	}
 
 	public void stop() {

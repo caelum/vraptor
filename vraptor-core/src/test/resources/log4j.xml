@@ -10,7 +10,7 @@
         </appender>
 
         <category name="br.com.caelum.vraptor">
-                <priority value="WARN" />
+                <priority value="DEBUG" />
                 <appender-ref ref="stdout" />
         </category>
 

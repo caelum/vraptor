@@ -313,9 +313,12 @@ public class BaseComponents {
     		REQUEST_COMPONENTS.put(BeanValidator.class, NullBeanValidator.class);
     	}
 
-        if (!registerIfClassPresent(REQUEST_COMPONENTS, "org.apache.commons.fileupload.FileItem", CommonsUploadMultipartInterceptor.class)) {
-            REQUEST_COMPONENTS.put(MultipartInterceptor.class, NullMultipartInterceptor.class);
-        }
+    	try {
+			Class.forName("org.apache.commons.fileupload.FileItem");
+			REQUEST_COMPONENTS.put(MultipartInterceptor.class, CommonsUploadMultipartInterceptor.class);
+		} catch (ClassNotFoundException e) {
+			REQUEST_COMPONENTS.put(MultipartInterceptor.class, NullMultipartInterceptor.class);
+		}
 
         return Collections.unmodifiableMap(REQUEST_COMPONENTS);
     }

@@ -22,7 +22,6 @@ import br.com.caelum.vraptor.ioc.spring.VRaptorRequestHolder;
 
 import com.google.inject.Key;
 import com.google.inject.Provider;
-import com.google.inject.Scope;
 
 /**
  * Guice's Session Scope. Based on GuiceWeb's session scope.
@@ -32,36 +31,52 @@ import com.google.inject.Scope;
  * @since 3.2
  *
  */
-public class SessionCustomScope implements Scope {
+public class SessionCustomScope implements LifecycleScope {
 
-	 public <T> Provider<T> scope(Key<T> key, final Provider<T> creator) {
-	      final String name = key.toString();
-	      return new Provider<T>() {
-	        public T get() {
-	          HttpSession session = VRaptorRequestHolder.currentRequest().getRequest().getSession();
-	          synchronized (session) {
-	            Object obj = session.getAttribute(name);
-	            if (NullObject.INSTANCE == obj) {
-	              return null;
-	            }
-	            @SuppressWarnings("unchecked")
-	            T t = (T) obj;
-	            if (t == null) {
-	              t = creator.get();
-	              session.setAttribute(name, (t != null) ? t : NullObject.INSTANCE);
-	            }
-	            return t;
-	          }
-	        }
-	        @Override
+	public <T> Provider<T> scope(Key<T> key, final Provider<T> creator) {
+		final String name = key.toString();
+		return new Provider<T>() {
+			public T get() {
+				HttpSession session = VRaptorRequestHolder.currentRequest().getRequest().getSession();
+				synchronized (session) {
+					Object obj = session.getAttribute(name);
+					if (NullObject.INSTANCE == obj) {
+						return null;
+					}
+					@SuppressWarnings("unchecked")
+					T t = (T) obj;
+					if (t == null) {
+						t = creator.get();
+						session.setAttribute(name, (t != null) ? t : NullObject.INSTANCE);
+					}
+					return t;
+				}
+			}
+
+			@Override
 			public String toString() {
-	          return String.format("%s[%s]", creator, this);
-	        }
-	      };
-	    }
+				return String.format("%s[%s]", creator, this);
+			}
+		};
+	}
 
-	    @Override
-		public String toString() {
-	      return "ServletScopes.SESSION";
-	    }
+	@Override
+	public String toString() {
+		return "SESSION";
+	}
+
+	public void registerDestroyListener(LifecycleListener listener) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void start() {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void stop() {
+		// TODO Auto-generated method stub
+
+	}
 }

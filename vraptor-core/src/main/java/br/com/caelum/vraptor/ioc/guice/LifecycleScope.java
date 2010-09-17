@@ -15,34 +15,21 @@
  */
 package br.com.caelum.vraptor.ioc.guice;
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
+import com.google.inject.Scope;
 
 /**
- * A Controlled ParameterizedType
+ *
+ * Extension for Guice Scope in order to support lifecycle callbacks
  *
  * @author Lucas Cavalcanti
+ * @author Sergio Lopes
  * @since 3.2
  *
  */
-class HackedParameterizedType implements ParameterizedType {
-	private final Class<?> target;
-	private final Class<?> owner;
+public interface LifecycleScope extends Scope {
+	void start();
 
-	HackedParameterizedType(Class<?> owner, Class<?> target) {
-		this.owner = owner;
-		this.target = target;
-	}
+	void stop();
 
-	public Type getRawType() {
-		return owner;
-	}
-
-	public Type getOwnerType() {
-		return null;
-	}
-
-	public Type[] getActualTypeArguments() {
-		return new Type[] {target};
-	}
+	void registerDestroyListener(LifecycleListener listener);
 }

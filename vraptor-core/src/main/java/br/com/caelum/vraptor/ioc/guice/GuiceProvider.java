@@ -15,17 +15,26 @@
  */
 package br.com.caelum.vraptor.ioc.guice;
 
+import java.util.Collection;
+import java.util.Map;
+
 import javax.servlet.ServletContext;
 
 import br.com.caelum.vraptor.core.Execution;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
+import br.com.caelum.vraptor.ioc.StereotypeHandler;
 import br.com.caelum.vraptor.ioc.spring.VRaptorRequestHolder;
 
+import com.google.common.base.Function;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.Maps;
+import com.google.inject.Binding;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.google.inject.Scope;
+import com.google.inject.Key;
 
 /**
  *
@@ -38,8 +47,10 @@ import com.google.inject.Scope;
  */
 public class GuiceProvider implements ContainerProvider {
 
-	private static final Scope REQUEST = new RequestCustomScope();
-	private static final Scope SESSION = new SessionCustomScope();
+	static final LifecycleScope REQUEST = new RequestCustomScope();
+	static final LifecycleScope SESSION = new SessionCustomScope();
+	static final LifecycleScope APPLICATION = new ApplicationCustomScope();
+
 	private final class GuiceContainer implements Container {
 		public <T> T instanceFor(Class<T> type) {
 			return injector.getInstance(type);
@@ -55,19 +66,41 @@ public class GuiceProvider implements ContainerProvider {
 
 	public <T> T provideForRequest(RequestInfo request, Execution<T> execution) {
 		VRaptorRequestHolder.setRequestForCurrentThread(request);
+		REQUEST.start();
 		try {
 			return execution.insideRequest(container);
 		} finally {
+			REQUEST.stop();
 			VRaptorRequestHolder.resetRequestForCurrentThread();
 		}
 	}
 
 	public void start(ServletContext context) {
+		APPLICATION.start();
 		container = new GuiceContainer();
-		injector = Guice.createInjector(new VRaptorAbstractModule(REQUEST, SESSION, context, container));
+		injector = Guice.createInjector(new VRaptorAbstractModule(context, container));
+		Map<Key<?>, Binding<?>> bindings = Maps.filterKeys(injector.getAllBindings(), new Predicate<Key<?>>() {
+			public boolean apply(Key<?> key) {
+				return StereotypeHandler.class.isAssignableFrom(key.getTypeLiteral().getRawType());
+			}
+		});
+		Collection<StereotypeHandler> handlers = Collections2.transform(bindings.keySet(), new Function<Key<?>, StereotypeHandler>() {
+			public StereotypeHandler apply(Key<?> key) {
+				return (StereotypeHandler) injector.getInstance(key);
+			}
+		});
+		for (Key<?> key : injector.getAllBindings().keySet()) {
+			for (StereotypeHandler handler : handlers) {
+				Class<?> type = key.getTypeLiteral().getRawType();
+				if (type.isAnnotationPresent(handler.stereotype())) {
+					handler.handle(type);
+				}
+			}
+		}
 	}
 
 	public void stop() {
+		APPLICATION.stop();
 	}
 
 }

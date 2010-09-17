@@ -3,6 +3,7 @@
 	<name>vraptor-blank-project</name>
 	<comment></comment>
 	<projects>
+		<project>vraptor-core</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

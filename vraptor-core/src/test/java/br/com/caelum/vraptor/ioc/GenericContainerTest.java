@@ -198,9 +198,9 @@ public abstract class GenericContainerTest {
 	public void callsPredestroyExactlyOneTime() throws Exception {
 		MyAppComponentWithLifecycle component = registerAndGetFromContainer(MyAppComponentWithLifecycle.class,
 				MyAppComponentWithLifecycle.class);
-		assertThat(0, is(equalTo(component.calls)));
+		assertThat(component.calls, is(0));
 		provider.stop();
-		assertThat(1, is(equalTo(component.calls)));
+		assertThat(component.calls, is(1));
 		provider = getProvider();
 		provider.start(context); // In order to tearDown ok
 	}

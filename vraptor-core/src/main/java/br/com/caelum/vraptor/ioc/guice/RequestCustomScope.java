@@ -15,13 +15,18 @@
  */
 package br.com.caelum.vraptor.ioc.guice;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.ioc.spring.VRaptorRequestHolder;
 
 import com.google.inject.Key;
 import com.google.inject.Provider;
-import com.google.inject.Scope;
 
 /**
  * Guice's Request Scope. Based on GuiceWeb request scope.
@@ -31,9 +36,17 @@ import com.google.inject.Scope;
  * @since 3.2
  *
  */
-public class RequestCustomScope implements Scope {
+public class RequestCustomScope implements LifecycleScope {
 
 	enum NullObject { INSTANCE }
+
+	private static final Logger logger = LoggerFactory.getLogger(RequestCustomScope.class);
+	private final ThreadLocal<List<LifecycleListener>> listeners = new ThreadLocal<List<LifecycleListener>>();
+
+
+	public void start() {
+		listeners.set(new ArrayList<LifecycleListener>());
+	}
 
 	public <T> Provider<T> scope(Key<T> key, final Provider<T> creator) {
 		final String name = key.toString();
@@ -62,8 +75,22 @@ public class RequestCustomScope implements Scope {
 		};
 	}
 
+	public void stop() {
+		for (LifecycleListener listener : listeners.get()) {
+			try {
+				listener.onEvent();
+			} catch (Exception e) {
+				logger.warn("Error while invoking PreDestroy", e);
+			}
+		}
+	}
+
 	@Override
 	public String toString() {
 		return "REQUEST";
+	}
+
+	public void registerDestroyListener(LifecycleListener listener) {
+		listeners.get().add(listener);
 	}
 }

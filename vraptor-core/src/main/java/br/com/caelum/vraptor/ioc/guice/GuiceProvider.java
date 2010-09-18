@@ -81,6 +81,9 @@ public class GuiceProvider implements ContainerProvider {
 		APPLICATION.start();
 		container = new GuiceContainer();
 		injector = Guice.createInjector(new VRaptorAbstractModule(context, container), customModule());
+		
+		registerCustomComponents(injector.getInstance(ComponentRegistry.class));
+		
 		Map<Key<?>, Binding<?>> bindings = Maps.filterKeys(injector.getAllBindings(), new Predicate<Key<?>>() {
 			public boolean apply(Key<?> key) {
 				return StereotypeHandler.class.isAssignableFrom(key.getTypeLiteral().getRawType());
@@ -106,6 +109,10 @@ public class GuiceProvider implements ContainerProvider {
 			public void configure(Binder binder) {
 			}
 		};
+	}
+	
+	protected void registerCustomComponents(ComponentRegistry registry) {
+		
 	}
 
 	public void stop() {

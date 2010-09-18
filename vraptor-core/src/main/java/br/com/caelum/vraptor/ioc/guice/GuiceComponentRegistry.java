@@ -30,7 +30,7 @@ import com.google.inject.Binder;
  * @since 3.2
  *
  */
-class GuiceComponentRegistry implements ComponentRegistry {
+public class GuiceComponentRegistry implements ComponentRegistry {
 	private final Binder binder;
 	public GuiceComponentRegistry(Binder binder) {
 		this.binder = binder;

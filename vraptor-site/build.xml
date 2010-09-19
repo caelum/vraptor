@@ -122,6 +122,7 @@
     </target>
 
 	<target name="compile" description="--> compiles the classes">
+		<mkdir dir="src/content/WEB-INF/classes"/>
 		<delete dir="src/content/WEB-INF/classes" includes="**/*"/>
 		<javac  destdir="src/content/WEB-INF/classes" srcdir="src/java" classpathref="compile.classpath" debug="true" encoding="UTF-8" />
 		<copy todir="src/content/WEB-INF/classes">

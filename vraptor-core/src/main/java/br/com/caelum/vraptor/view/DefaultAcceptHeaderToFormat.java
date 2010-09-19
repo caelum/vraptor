@@ -38,18 +38,18 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
 @ApplicationScoped
 public class DefaultAcceptHeaderToFormat implements AcceptHeaderToFormat {
 
-	private static Cache cache = new Cache();
+	private static final Map<String, String> acceptToFormatCache = Collections.synchronizedMap(new Cache());
 	private static final String DEFAULT_FORMAT = "html";
 	private static final double DEFAULT_QUALIFIER_VALUE = 0.01;
-	protected final Map<String, String> map;
+	protected final Map<String, String> mimeToFormat;
 
 	public DefaultAcceptHeaderToFormat() {
-		map = new ConcurrentHashMap<String, String>();
-		map.put("text/html", "html");
-		map.put("application/json", "json");
-		map.put("application/xml", "xml");
-		map.put("text/xml", "xml");
-		map.put("xml", "xml");
+		mimeToFormat = new ConcurrentHashMap<String, String>();
+		mimeToFormat.put("text/html", "html");
+		mimeToFormat.put("application/json", "json");
+		mimeToFormat.put("application/xml", "xml");
+		mimeToFormat.put("text/xml", "xml");
+		mimeToFormat.put("xml", "xml");
 	}
 
 	public String getFormat(String acceptHeader) {
@@ -62,16 +62,16 @@ public class DefaultAcceptHeaderToFormat implements AcceptHeaderToFormat {
 			return DEFAULT_FORMAT;
 		}
 
-		if (cache.containsKey(acceptHeader)) {
-			return cache.get(acceptHeader);
+		if (acceptToFormatCache.containsKey(acceptHeader)) {
+			return acceptToFormatCache.get(acceptHeader);
 		}
 
 		String[] mimeTypes = getOrderedMimeTypes(acceptHeader);
 
 		for (String mimeType : mimeTypes) {
-			if (map.containsKey(mimeType)) {
-				String format = map.get(mimeType);
-				cache.put(acceptHeader, format);
+			if (mimeToFormat.containsKey(mimeType)) {
+				String format = mimeToFormat.get(mimeType);
+				acceptToFormatCache.put(acceptHeader, format);
 				return format;
 			}
 		}
@@ -81,7 +81,10 @@ public class DefaultAcceptHeaderToFormat implements AcceptHeaderToFormat {
 
 	@SuppressWarnings("serial")
 	private static class Cache extends LinkedHashMap<String, String> {
-		@Override
+		public Cache() {
+			super(100, 0.75f, true);
+		}
+		
 		protected boolean removeEldestEntry(java.util.Map.Entry<String, String> eldest) {
 			return this.size() > 100;
 		}

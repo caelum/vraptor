@@ -65,9 +65,9 @@ public class DefaultInterceptorRegistryTest {
     public void shouldReturnAnInterceptorWhichAcceptsTheGivenResource() throws InterceptionException, IOException {
         mockery.checking(new Expectations() {
             {
-                one(container).instanceFor(CustomInterceptor.class);
+                allowing(container).instanceFor(CustomInterceptor.class);
                 will(returnValue(interceptor));
-                one(interceptor).accepts(method);
+                allowing(interceptor).accepts(method);
                 will(returnValue(true));
             }
         });
@@ -82,9 +82,9 @@ public class DefaultInterceptorRegistryTest {
     public void shouldNotReturnAnInterceptorWhichDoesNotAcceptTheGivenResource() {
         mockery.checking(new Expectations() {
             {
-                one(container).instanceFor(CustomInterceptor.class);
+            	allowing(container).instanceFor(CustomInterceptor.class);
                 will(returnValue(interceptor));
-                one(interceptor).accepts(method);
+                allowing(interceptor).accepts(method);
                 will(returnValue(false));
             }
         });

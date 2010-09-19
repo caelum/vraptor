@@ -18,6 +18,7 @@
 package br.com.caelum.vraptor.ioc.pico;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -40,6 +41,7 @@ import br.com.caelum.vraptor.core.Execution;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.ioc.ComponentFactory;
+import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
 import br.com.caelum.vraptor.ioc.StereotypeHandler;
 
@@ -55,7 +57,8 @@ public class PicoProvider implements ContainerProvider {
 
     private final MutablePicoContainer picoContainer;
     private MutablePicoContainer childContainer;
-
+    private final ThreadLocal<Container> containersByThread = new ThreadLocal<Container>();
+    
     private static final Logger logger = LoggerFactory.getLogger(PicoProvider.class);
 
     public PicoProvider() {
@@ -67,6 +70,20 @@ public class PicoProvider implements ContainerProvider {
 
         this.picoContainer.addComponent(componentRegistry);
         this.picoContainer.addComponent(componentFactoryRegistry);
+        
+        picoContainer.addComponent(Container.class, new Container() {
+			public <T> T instanceFor(Class<T> type) {
+				Container container = containersByThread.get();
+				if (container == null) {
+					return picoContainer.getComponent(type);
+				}
+				return container.instanceFor(type);
+			}
+
+			public <T> boolean canProvide(Class<T> type) {
+				return instanceFor(type) != null;
+			}
+        });
     }
 
     public final void start(ServletContext context) {
@@ -75,24 +92,48 @@ public class PicoProvider implements ContainerProvider {
 	    registerBundledComponents(componentRegistry);
 
 	    this.picoContainer.addComponent(context);
-
 	    BasicConfiguration config = new BasicConfiguration(context);
-	    Scanner scanner = new ReflectionsScanner(config);
 
-	    this.picoContainer.addComponent(scanner);
+	    if (config.isClasspathScanningEnabled()) {
+	    	logger.trace("Start classpath scanning");
+	    	Scanner scanner = new ReflectionsScanner(config);
+	    	this.picoContainer.addComponent(scanner);
 
-	    registerAnnotatedComponents(scanner, componentRegistry);
+	    	registerAnnotatedComponents(scanner, componentRegistry);
 
+	    	StereotypedComponentRegistrar componentRegistrar = picoContainer.getComponent(StereotypedComponentRegistrar.class);
+	    	componentRegistrar.registerFrom(scanner);
+	    	logger.trace("End classpath scanning");
+	    	
+	    	logger.trace("Start registering custom components");
+	    	registerCustomComponents(picoContainer, scanner);
+	    	logger.trace("End custom components registration");
+	    } else {
+	    	logger.info("Classpath scanning disabled");
+	    	
+	    	logger.trace("Start registering custom components");
+	    	registerCustomComponents(picoContainer, null);
+	    	
+	    	
+	    	logger.trace("End custom components registration");
+	    }
+	    	
 	    getComponentRegistry().init();
-
-	    StereotypedComponentRegistrar componentRegistrar = picoContainer.getComponent(StereotypedComponentRegistrar.class);
-	    componentRegistrar.registerFrom(scanner);
-
-	    registerCustomComponents(picoContainer, scanner);
-
 	    picoContainer.start();
-
 	    registerCacheComponents();
+	    
+	    if (!config.isClasspathScanningEnabled()) {
+	    	Collection<Class<?>> components = getComponentRegistry().getAllRegisteredApplicationScopedComponents();
+	    	List<StereotypeHandler> handlers = picoContainer.getComponents(StereotypeHandler.class);
+
+	    	for (Class<?> type : components) {
+		        for (StereotypeHandler handler : handlers) {
+		    		if (type.isAnnotationPresent(handler.stereotype())) {
+		    			handler.handle(type);
+		    		}
+		    	}
+	    	}
+	    }
 	}
 
     /**
@@ -179,6 +220,8 @@ public class PicoProvider implements ContainerProvider {
         try {
             container = getComponentRegistry().provideRequestContainer(request);
             container.getContainer().start();
+            
+            containersByThread.set(container);
             return execution.insideRequest(container);
         } finally {
             if (container != null) {
@@ -186,6 +229,7 @@ public class PicoProvider implements ContainerProvider {
                 picoContainer.stop();
                 picoContainer.dispose();
             }
+            containersByThread.set(null);
         }
     }
 

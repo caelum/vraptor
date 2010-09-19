@@ -15,7 +15,7 @@
  */
 package br.com.caelum.vraptor.core;
 
-import java.util.Map;
+import java.util.concurrent.ConcurrentMap;
 
 import br.com.caelum.vraptor.Lazy;
 import br.com.caelum.vraptor.interceptor.Interceptor;
@@ -36,8 +36,8 @@ public class DefaultInterceptorHandlerFactory implements InterceptorHandlerFacto
 
 	private Container container;
 
-	private Map<Class<? extends Interceptor>, InterceptorHandler> cachedHandlers =
-		new MapMaker().weakValues().makeMap();
+	private ConcurrentMap<Class<? extends Interceptor>, InterceptorHandler> cachedHandlers =
+		new MapMaker().makeMap();
 
 	public DefaultInterceptorHandlerFactory(Container container) {
 		this.container = container;
@@ -45,10 +45,14 @@ public class DefaultInterceptorHandlerFactory implements InterceptorHandlerFacto
 
 	public InterceptorHandler handlerFor(Class<? extends Interceptor> type) {
 		if (type.isAnnotationPresent(Lazy.class)) {
-			if (!cachedHandlers.containsKey(type)) {
-				cachedHandlers.put(type, new LazyInterceptorHandler(container, type));
+			InterceptorHandler handler = cachedHandlers.get(type);
+			if (handler == null) {
+				LazyInterceptorHandler value = new LazyInterceptorHandler(container, type);
+				cachedHandlers.putIfAbsent(type, value);
+				return value;
+			} else {
+				return handler;
 			}
-			return cachedHandlers.get(type);
 		}
 		return new ToInstantiateInterceptorHandler(container, type);
 	}

@@ -115,6 +115,8 @@ public class ProviderTest extends GenericContainerTest {
 
 	                allowing(context).getInitParameter(BasicConfiguration.ENCODING);
 
+	                allowing(context).getInitParameter(BasicConfiguration.SCANNING_PARAM);
+	                will(returnValue("enabled"));
                 }
             });
         } catch (Exception e) {

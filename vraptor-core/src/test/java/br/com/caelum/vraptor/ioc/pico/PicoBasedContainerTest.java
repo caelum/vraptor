@@ -56,7 +56,7 @@ public class PicoBasedContainerTest {
     public void setup() {
         this.mockery = new Mockery();
         this.picoContainer = new PicoBuilder().withCaching().build();
-        this.container = new PicoBasedContainer(picoContainer, new DefaultRouter(new NoRoutesConfiguration(), new DefaultProxifier(), null, new NoTypeFinder(), null));
+        this.container = new PicoBasedContainer(picoContainer);
     }
 
     @Test

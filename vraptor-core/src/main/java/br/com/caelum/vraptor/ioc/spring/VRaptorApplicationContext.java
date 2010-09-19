@@ -61,7 +61,7 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
 	private static final Logger logger = LoggerFactory.getLogger(VRaptorApplicationContext.class);
 
 	public static final String RESOURCES_LIST = "br.com.caelum.vraptor.resources.list";
-
+	
 	private final AnnotationBeanNameGenerator beanNameGenerator = new AnnotationBeanNameGenerator();
 	private final SpringBasedContainer container;
 	private final BasicConfiguration config;
@@ -89,33 +89,41 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
 		registerPrototypeScopedComponentsOn(beanFactory);
 		registerCustomComponentsOn(beanFactory);
 
-		{
-			String directory = config.getWebinfClassesDirectory();
-			if (directory != null) {
-				logger.info("Scanning WEB-INF/classes: " + directory);
-				ComponentScanner scanner = new ComponentScanner(beanFactory, container);
-				scanner.setResourcePattern("**/*.class");
-				scanner.setResourceLoader(new WebinfClassesPatternResolver(config.getWebinfClassesDirectory()));
-				scanner.scan("");
-			} else {
-				logger
-						.warn("Cant invoke ServletContext.getRealPath. Some application servers, as WebLogic, must be configured to be able to do so." +
-								" Or maybe your container is not exploding the war file.Not scanning WEB-INF/classes for VRaptor and Spring components.");
-			}
-
-		}
-		if (config.hasBasePackages()) {
-			ComponentScanner scanner = new ComponentScanner(beanFactory, container);
-			logger
-					.info("Scanning packages from WEB-INF/classes and jars: "
-							+ Arrays.toString(config.getBasePackages()));
-			scanner.scan(config.getBasePackages());
+		if (config.isClasspathScanningEnabled()) {
+			scanWebInfClasses(beanFactory);
+			scanPackages(beanFactory);
+		} else {
+			logger.info("Classpath scanning disabled");
 		}
 
 		AnnotationConfigUtils.registerAnnotationConfigProcessors(beanFactory);
 		AopConfigUtils.registerAspectJAnnotationAutoProxyCreatorIfNecessary(beanFactory);
 		registerCustomInjectionProcessor(beanFactory);
 		registerCachedComponentsOn(beanFactory);
+	}
+
+	private void scanPackages(DefaultListableBeanFactory beanFactory) {
+		if (config.hasBasePackages()) {
+			logger.info("Scanning packages from WEB-INF/classes and jars: {}", Arrays.toString(config.getBasePackages()));
+
+			ComponentScanner scanner = new ComponentScanner(beanFactory, container);
+			scanner.scan(config.getBasePackages());
+		}
+	}
+
+	private void scanWebInfClasses(DefaultListableBeanFactory beanFactory) {
+		String directory = config.getWebinfClassesDirectory();
+		if (directory != null) {
+			logger.info("Scanning WEB-INF/classes: {} ", directory);
+			
+			ComponentScanner scanner = new ComponentScanner(beanFactory, container);
+			scanner.setResourcePattern("**/*.class");
+			scanner.setResourceLoader(new WebinfClassesPatternResolver(config.getWebinfClassesDirectory()));
+			scanner.scan("");
+		} else {
+			logger.warn("Cant invoke ServletContext.getRealPath. Some application servers, as WebLogic, must be configured to be able to do so." +
+						" Or maybe your container is not exploding the war file. Not scanning WEB-INF/classes for VRaptor and Spring components.");
+		}
 	}
 
 	private void registerCustomComponentsOn(DefaultListableBeanFactory beanFactory) {
@@ -175,7 +183,7 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
 		registerFactory(type, beanFactory);
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void registerFactory(final Class<?> type, ConfigurableListableBeanFactory beanFactory) {
 		if (ComponentFactory.class.isAssignableFrom(type)) {
 			beanFactory.registerSingleton(type.getName(), new ComponentFactoryBean(container, type));

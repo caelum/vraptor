@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>br.com.caelum</groupId>
 	<artifactId>vraptor</artifactId>
@@ -129,9 +130,9 @@
 
 		<!-- optionals -->
 		<dependency>
-		    <groupId>org.codehaus.jettison</groupId>
-		    <artifactId>jettison</artifactId>
-		    <version>1.2</version>
+			<groupId>org.codehaus.jettison</groupId>
+			<artifactId>jettison</artifactId>
+			<version>1.2</version>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
@@ -294,7 +295,11 @@
 
 	<build>
 		<sourceDirectory>vraptor-core/src/main/java</sourceDirectory>
-
+		<resources>
+			<resource>
+				<directory>vraptor-core/src/main/resources</directory>
+			</resource>
+		</resources>
 		<testSourceDirectory>vraptor-core/src/test/java</testSourceDirectory>
 		<testResources>
 			<testResource>

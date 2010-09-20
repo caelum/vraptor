@@ -90,6 +90,7 @@ import br.com.caelum.vraptor.http.route.TypeFinder;
 import br.com.caelum.vraptor.interceptor.DefaultInterceptorRegistry;
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor.interceptor.DeserializingInterceptor;
+import br.com.caelum.vraptor.interceptor.ExceptionHandlerInterceptor;
 import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
 import br.com.caelum.vraptor.interceptor.FlashInterceptor;
 import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
@@ -217,6 +218,8 @@ public class BaseComponents {
             EmptyResult.class, 								EmptyResult.class,
             EmptyElementsRemoval.class, 					EmptyElementsRemoval.class,
             ExecuteMethodInterceptor.class, 				ExecuteMethodInterceptor.class,
+            ExceptionHandlerInterceptor.class,              ExceptionHandlerInterceptor.class,
+            ExceptionMapper.class,                          ExceptionMapper.class,
             FlashInterceptor.class, 						FlashInterceptor.class,
             ForwardToDefaultViewInterceptor.class, 			ForwardToDefaultViewInterceptor.class,
             InstantiateInterceptor.class, 					InstantiateInterceptor.class,

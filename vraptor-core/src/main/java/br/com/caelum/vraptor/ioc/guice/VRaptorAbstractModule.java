@@ -3,7 +3,6 @@ package br.com.caelum.vraptor.ioc.guice;
 import static com.google.inject.matcher.Matchers.annotatedWith;
 import static com.google.inject.matcher.Matchers.not;
 
-import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -23,8 +22,6 @@ import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.MutableResponse;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
-import br.com.caelum.vraptor.ioc.ComponentFactory;
-import br.com.caelum.vraptor.ioc.ComponentFactoryIntrospector;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.ioc.SessionScoped;
@@ -34,11 +31,10 @@ import br.com.caelum.vraptor.validator.BeanValidator;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provider;
-import com.google.inject.Scope;
+import com.google.inject.Scopes;
 import com.google.inject.TypeLiteral;
 import com.google.inject.matcher.AbstractMatcher;
 import com.google.inject.matcher.Matcher;
-import com.google.inject.util.Types;
 
 /**
  *
@@ -109,43 +105,27 @@ public class VRaptorAbstractModule extends AbstractModule {
 
 		bind(new TypeLiteral<List<Serialization>>() {}).toInstance(Collections.<Serialization>emptyList());
 		bind(new TypeLiteral<List<BeanValidator>>() {}).toInstance(Collections.<BeanValidator>emptyList());
-		registerScope((Map) BaseComponents.getApplicationScoped(), GuiceProvider.APPLICATION);
-		registerScope((Map) BaseComponents.getPrototypeScoped());
-		registerScope((Map) BaseComponents.getRequestScoped(), GuiceProvider.REQUEST);
+
+		GuiceComponentRegistry registry = new GuiceComponentRegistry(binder());
+
+		bind(ComponentRegistry.class).toInstance(registry);
+
+		registry.registerInScope((Map) BaseComponents.getApplicationScoped(), GuiceProvider.APPLICATION);
+		registry.registerInScope((Map) BaseComponents.getPrototypeScoped(), Scopes.NO_SCOPE);
+		registry.registerInScope((Map) BaseComponents.getRequestScoped(), GuiceProvider.REQUEST);
 
 		for (Class converter : BaseComponents.getBundledConverters()) {
-			bind(converter).toConstructor(converter.getDeclaredConstructors()[0]);
+			registry.register(converter, converter);
 		}
-		bind(ComponentRegistry.class).toInstance(new GuiceComponentRegistry(binder()));
+
 		for (Class handler : BaseComponents.getStereotypeHandlers()) {
-			bind(handler).toConstructor(handler.getDeclaredConstructors()[0]);
+			registry.register(handler, handler);
 		}
-	}
 
-	private void registerScope(Map<Class, Class> requestScoped, Scope scope) {
-		for (Entry<Class, Class> entry : requestScoped.entrySet()) {
-			logger.debug("Binding {} to {}", entry.getKey(), entry.getValue());
-			bind(entry.getKey()).toConstructor(entry.getValue().getDeclaredConstructors()[0]).in(scope);
-			registerFactory(entry);
+		for (Entry<Class<?>, Class<?>> entry : BaseComponents.getCachedComponents().entrySet()) {
+			registry.register(entry.getKey(), entry.getValue());
 		}
-	}
 
-	private void registerScope(Map<Class, Class> scope) {
-		for (Entry<Class, Class> entry : scope.entrySet()) {
-			bind(entry.getKey()).toConstructor(entry.getValue().getDeclaredConstructors()[0]);
-			registerFactory(entry);
-		}
-	}
-
-	private void registerFactory(Entry<Class, Class> entry) {
-		if (ComponentFactory.class.isAssignableFrom(entry.getValue())) {
-			final Class<?> target = new ComponentFactoryIntrospector().targetTypeForComponentFactory(entry.getValue());
-			Type adapterType = Types.newParameterizedType(ComponentFactoryProviderAdapter.class, target);
-			Type factoryType = Types.newParameterizedType(ComponentFactory.class, target);
-			bind(TypeLiteral.get(adapterType));
-			bind(TypeLiteral.get(factoryType)).to(entry.getValue());
-			bind(target).toProvider((TypeLiteral) TypeLiteral.get(adapterType));
-		}
 	}
 
 	private Matcher<TypeLiteral<?>> type(final Matcher<? super Class> matcher) {

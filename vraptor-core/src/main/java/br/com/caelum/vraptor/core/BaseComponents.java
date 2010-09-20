@@ -28,6 +28,7 @@ import java.util.Map;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
+import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
@@ -276,7 +277,8 @@ public class BaseComponents {
     	Resource.class,
     	Convert.class,
     	Component.class,
-    	Deserializes.class
+    	Deserializes.class,
+    	Intercepts.class
     };
     @SuppressWarnings("unchecked")
     private static final Class<? extends Deserializer>[] DESERIALIZERS = new Class[] {

@@ -20,7 +20,10 @@ package br.com.caelum.vraptor;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
+import br.com.caelum.vraptor.ioc.Stereotype;
+
 @Retention(RetentionPolicy.RUNTIME)
+@Stereotype
 public @interface Convert {
 
     Class<?> value();

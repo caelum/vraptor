@@ -37,6 +37,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.Module;
+import com.google.inject.util.Modules;
 
 /**
  *
@@ -80,7 +81,7 @@ public class GuiceProvider implements ContainerProvider {
 	public void start(ServletContext context) {
 		APPLICATION.start();
 		container = new GuiceContainer();
-		injector = Guice.createInjector(new VRaptorAbstractModule(context, container), customModule());
+		injector = Guice.createInjector(Modules.override(new VRaptorAbstractModule(context, container)).with(customModule()));
 		Map<Key<?>, Binding<?>> bindings = Maps.filterKeys(injector.getAllBindings(), new Predicate<Key<?>>() {
 			public boolean apply(Key<?> key) {
 				return StereotypeHandler.class.isAssignableFrom(key.getTypeLiteral().getRawType());

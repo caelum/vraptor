@@ -43,7 +43,7 @@ import com.google.inject.util.Types;
  * @since 3.2
  *
  */
-class GuiceComponentRegistry implements ComponentRegistry {
+public class GuiceComponentRegistry implements ComponentRegistry {
 
 
 	private static final Logger logger = LoggerFactory.getLogger(GuiceComponentRegistry.class);

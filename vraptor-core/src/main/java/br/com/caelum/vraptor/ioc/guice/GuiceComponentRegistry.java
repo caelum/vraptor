@@ -15,12 +15,25 @@
  */
 package br.com.caelum.vraptor.ioc.guice;
 
+import java.lang.reflect.Type;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.ComponentRegistry;
+import br.com.caelum.vraptor.ioc.Cacheable;
+import br.com.caelum.vraptor.ioc.ComponentFactory;
+import br.com.caelum.vraptor.ioc.ComponentFactoryIntrospector;
 
 import com.google.inject.Binder;
+import com.google.inject.Scope;
+import com.google.inject.TypeLiteral;
+import com.google.inject.binder.ScopedBindingBuilder;
+import com.google.inject.util.Types;
 
 /**
  * ComponentRegistry for Guice
@@ -31,12 +44,17 @@ import com.google.inject.Binder;
  *
  */
 public class GuiceComponentRegistry implements ComponentRegistry {
+
+	private static final Logger logger = LoggerFactory.getLogger(GuiceComponentRegistry.class);
+
 	private final Binder binder;
 	public GuiceComponentRegistry(Binder binder) {
 		this.binder = binder;
 	}
 	public void register(Class requiredType, Class componentType) {
-		binder.bind(requiredType).toConstructor(componentType.getDeclaredConstructors()[0]);
+		logger.debug("Binding {} to {}", requiredType, componentType);
+		bindToConstructor(requiredType, componentType);
+		registerFactory(componentType);
 	}
 
 	public void deepRegister(Class componentType) {
@@ -62,4 +80,29 @@ public class GuiceComponentRegistry implements ComponentRegistry {
 
 	    deepRegister(required.getSuperclass(), component, registeredKeys);
 	}
+
+	public void registerInScope(Map<Class, Class> classes, Scope scope) {
+		for (Entry<Class, Class> entry : classes.entrySet()) {
+			bindToConstructor(entry.getKey(), entry.getValue()).in(scope);
+			registerFactory(entry.getValue());
+		}
+	}
+	private ScopedBindingBuilder bindToConstructor(Class requiredType, Class componentType) {
+		if (componentType.isAnnotationPresent(Cacheable.class)) {
+			return binder.bind(requiredType).annotatedWith(Cacheable.class).toConstructor(componentType.getDeclaredConstructors()[0]);
+		}
+		return binder.bind(requiredType).toConstructor(componentType.getDeclaredConstructors()[0]);
+	}
+
+	private void registerFactory(Class componentType) {
+		if (ComponentFactory.class.isAssignableFrom(componentType)) {
+			final Class<?> target = new ComponentFactoryIntrospector().targetTypeForComponentFactory(componentType);
+			Type adapterType = Types.newParameterizedType(ComponentFactoryProviderAdapter.class, target);
+			Type factoryType = Types.newParameterizedType(ComponentFactory.class, target);
+			binder.bind(TypeLiteral.get(adapterType));
+			binder.bind(TypeLiteral.get(factoryType)).to(componentType);
+			binder.bind(target).toProvider((TypeLiteral) TypeLiteral.get(adapterType));
+		}
+	}
+
 }

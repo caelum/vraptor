@@ -20,6 +20,7 @@ import java.util.Map;
 
 import javax.servlet.ServletContext;
 
+import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.core.Execution;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.ioc.Container;
@@ -37,6 +38,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.Module;
+import com.google.inject.util.Modules;
 
 /**
  *
@@ -80,10 +82,7 @@ public class GuiceProvider implements ContainerProvider {
 	public void start(ServletContext context) {
 		APPLICATION.start();
 		container = new GuiceContainer();
-		injector = Guice.createInjector(new VRaptorAbstractModule(context, container), customModule());
-		
-		registerCustomComponents(injector.getInstance(ComponentRegistry.class));
-		
+		injector = Guice.createInjector(Modules.override(new VRaptorAbstractModule(context, container)).with(customModule()));
 		Map<Key<?>, Binding<?>> bindings = Maps.filterKeys(injector.getAllBindings(), new Predicate<Key<?>>() {
 			public boolean apply(Key<?> key) {
 				return StereotypeHandler.class.isAssignableFrom(key.getTypeLiteral().getRawType());

@@ -34,9 +34,11 @@ import br.com.caelum.vraptor.asm.Opcodes;
 import br.com.caelum.vraptor.http.AbstractTypeCreator;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
+import br.com.caelum.vraptor.ioc.Cacheable;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.vraptor2.Info;
 
+@Cacheable
 @ApplicationScoped
 public class AsmBasedTypeCreator extends AbstractTypeCreator implements Opcodes {
 

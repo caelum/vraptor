@@ -23,7 +23,6 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import net.vidageek.mirror.dsl.Mirror;
-import br.com.caelum.vraptor.core.MethodInfo;
 
 import com.google.inject.TypeLiteral;
 import com.google.inject.spi.InjectionListener;
@@ -60,9 +59,6 @@ final class ScopeLifecycleListener implements TypeListener {
 			}
 		}
 
-		if (MethodInfo.class.isAssignableFrom(literal.getRawType())) {
-			System.out.println("!!!!");
-		}
 		if (!constructs.isEmpty() || !destroys.isEmpty()) {
 			encounter.register(new InjectionListener() {
 

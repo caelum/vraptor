@@ -37,6 +37,7 @@ import br.com.caelum.vraptor.ioc.Stereotype;
  *
  * @author Fabio Kung
  */
+@Deprecated
 @ApplicationScoped
 public class ReflectionsScanner implements Scanner {
     private static final Logger LOGGER = LoggerFactory.getLogger(ReflectionsScanner.class);

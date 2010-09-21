@@ -41,9 +41,7 @@ public class PicoProviderTest extends GenericContainerTest {
     @SuppressWarnings("unchecked")
     @Test
     public void canProvidePicoSpecificApplicationScopedComponents() {
-        List<Class<?>> components = Arrays.asList(Scanner.class, StereotypedComponentRegistrar.class,
-                ComponentFactoryRegistrar.class, InterceptorRegistrar.class, ConverterRegistrar.class,
-                ResourceRegistrar.class);
+        List<Class<?>> components = Arrays.asList();
         checkAvailabilityFor(true, components);
         mockery.assertIsSatisfied();
     }

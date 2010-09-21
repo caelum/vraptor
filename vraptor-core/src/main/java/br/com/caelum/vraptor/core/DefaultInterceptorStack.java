@@ -17,7 +17,6 @@
 
 package br.com.caelum.vraptor.core;
 
-import java.util.Deque;
 import java.util.LinkedList;
 
 import org.slf4j.Logger;
@@ -38,7 +37,7 @@ public class DefaultInterceptorStack implements InterceptorStack {
 
 	private static final Logger logger = LoggerFactory.getLogger(DefaultInterceptorStack.class);
 
-    private final Deque<InterceptorHandler> interceptors = new LinkedList<InterceptorHandler>();
+    private final LinkedList<InterceptorHandler> interceptors = new LinkedList<InterceptorHandler>();
     private final InterceptorHandlerFactory handlerFactory;
 
     public DefaultInterceptorStack(InterceptorHandlerFactory handlerFactory) {
@@ -50,7 +49,7 @@ public class DefaultInterceptorStack implements InterceptorStack {
         	logger.debug("All registered interceptors have being called. End of VRaptor Request Execution.");
             return;
         }
-        InterceptorHandler handler = interceptors.pollFirst();
+        InterceptorHandler handler = interceptors.poll();
         handler.execute(this, method, resourceInstance);
     }
 

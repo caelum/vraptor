@@ -17,7 +17,9 @@
 
 package br.com.caelum.vraptor.ioc.pico;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
@@ -32,7 +34,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.core.RequestInfo;
-import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.ioc.AbstractComponentRegistry;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.ComponentFactory;
@@ -49,7 +50,6 @@ import br.com.caelum.vraptor.ioc.SessionScoped;
  * @author Adriano Almeida
  * @author Sérgio Lopes
  */
-@Deprecated
 public class PicoComponentRegistry extends AbstractComponentRegistry {
 
     public static final String CONTAINER_SESSION_KEY = PicoComponentRegistry.class.getName() + ".session";
@@ -78,7 +78,7 @@ public class PicoComponentRegistry extends AbstractComponentRegistry {
     @SuppressWarnings("unchecked")
     public void register(Class<?> requiredType, Class<?> type) {
         logger.debug("Registering " + requiredType.getName() + " with " + type.getName());
-
+        
         boolean overriding = alreadyRegistered(requiredType);
         if (overriding) {
             logger.debug("Overriding interface " + requiredType.getName() + " with " + type.getName());
@@ -127,6 +127,7 @@ public class PicoComponentRegistry extends AbstractComponentRegistry {
      */
     public void init() {
         logger.info("Initializing VRaptor IoC Container implementation based on PicoContainer");
+        
         for (Map.Entry<Class<?>, Class<?>> entry : applicationScoped.entrySet()) {
             logger.debug("Initializing application scope with key: " + entry.getKey() + ", for component: " +
                     entry.getValue());
@@ -141,18 +142,22 @@ public class PicoComponentRegistry extends AbstractComponentRegistry {
     }
 
     PicoBasedContainer provideRequestContainer(RequestInfo request) {
-        HttpSession session = request.getRequest().getSession();
-        MutablePicoContainer sessionScope = (MutablePicoContainer) session.getAttribute(CONTAINER_SESSION_KEY);
-        if (sessionScope == null) {
-            sessionScope = createSessionContainer(session);
+        MutablePicoContainer parentContainer;
+        
+        if (sessionScoped.isEmpty()) {
+        	logger.debug("There's no @SessionScoped component, so skipping session container creation");
+        	parentContainer = this.appContainer;
+        } else {
+        	parentContainer = getSessionContainer(request);
         }
 
         if (logger.isDebugEnabled()) {
             logger.debug("Request components are " + requestScoped);
         }
 
-        MutablePicoContainer requestContainer = new DefaultPicoContainer(new Caching(), new JavaEE5LifecycleStrategy(
-                new NullComponentMonitor()), sessionScope);
+        MutablePicoContainer requestContainer = new DefaultPicoContainer(new Caching(), 
+        			new JavaEE5LifecycleStrategy(new NullComponentMonitor()), parentContainer);
+        requestContainer.addComponent(HttpSession.class, request.getRequest().getSession());
 
         for (Map.Entry<Class<?>, Class<?>> entry : requestScoped.entrySet()) {
             requestContainer.addComponent(entry.getKey(), entry.getValue());
@@ -164,8 +169,17 @@ public class PicoComponentRegistry extends AbstractComponentRegistry {
 
         registerComponentFactories(requestContainer, componentFactoryRegistry.getRequestMap());
 
-        return new PicoBasedContainer(requestContainer, this.appContainer.getComponent(Router.class));
+        return new PicoBasedContainer(requestContainer);
     }
+
+	private MutablePicoContainer getSessionContainer(RequestInfo request) {
+		HttpSession session = request.getRequest().getSession();
+        MutablePicoContainer sessionScope = (MutablePicoContainer) session.getAttribute(CONTAINER_SESSION_KEY);
+        if (sessionScope == null) {
+            sessionScope = createSessionContainer(session);
+        }
+		return sessionScope;
+	}
 
     private boolean alreadyRegistered(Class<?> interfaceType) {
         for (Map<Class<?>, Class<?>> scope : new Map[]{applicationScoped, sessionScoped, requestScoped}) {
@@ -204,11 +218,19 @@ public class PicoComponentRegistry extends AbstractComponentRegistry {
      * @param container
      * @param componentFactoryMap
      */
-    @SuppressWarnings("unchecked")
     private void registerComponentFactories(MutablePicoContainer container, Map<Class<?>, Class<? extends ComponentFactory>> componentFactoryMap) {
         for (Class<?> targetType : componentFactoryMap.keySet()) {
             container.addAdapter(new PicoComponentAdapter(targetType, componentFactoryMap.get(targetType)));
         }
     }
+    
+    public Collection<Class<?>> getAllRegisteredApplicationScopedComponents() {
+    	Collection<Class<?>> components = new HashSet<Class<?>>();
+    	components.addAll(applicationScoped.values());
+    	components.addAll(sessionScoped.values());
+    	components.addAll(requestScoped.values());
+    	components.addAll(prototypeScoped.values());
+		return components;
+	}
 
 }

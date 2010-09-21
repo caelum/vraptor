@@ -39,6 +39,7 @@
 	<path id="compile.classpath">
 		<dirset dir="${target.dir}/classes" />
 		<dirset dir="${vraptor.core}/target/classes" />
+		<dirset dir="${vraptor.core}/target/test-classes" />
 		<path refid="libs.classpath" />
 	</path>
 

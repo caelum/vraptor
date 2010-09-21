@@ -219,7 +219,7 @@ public class BaseComponents {
             EmptyElementsRemoval.class, 					EmptyElementsRemoval.class,
             ExecuteMethodInterceptor.class, 				ExecuteMethodInterceptor.class,
             ExceptionHandlerInterceptor.class,              ExceptionHandlerInterceptor.class,
-            ExceptionMapper.class,                          ExceptionMapper.class,
+            ExceptionMapper.class,                          DefaultExceptionMapper.class,
             FlashInterceptor.class, 						FlashInterceptor.class,
             ForwardToDefaultViewInterceptor.class, 			ForwardToDefaultViewInterceptor.class,
             InstantiateInterceptor.class, 					InstantiateInterceptor.class,

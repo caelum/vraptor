@@ -28,7 +28,6 @@ import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.RequestScoped;
-import br.com.caelum.vraptor.proxy.Proxifier;
 
 @RequestScoped
 public class DefaultResult extends AbstractResult {
@@ -37,14 +36,12 @@ public class DefaultResult extends AbstractResult {
     private final Container container;
     private final Map<String, Object> includedAttributes;
     private boolean responseCommitted = false;
-    private final Proxifier proxifier;
     private final ExceptionMapper exceptions;
 
-    public DefaultResult(HttpServletRequest request, Container container, Proxifier proxifier, ExceptionMapper exceptions) {
+    public DefaultResult(HttpServletRequest request, Container container, ExceptionMapper exceptions) {
         this.request = request;
         this.container = container;
         this.includedAttributes = new HashMap<String, Object>();
-        this.proxifier = proxifier;
         this.exceptions = exceptions;
     }
 
@@ -54,14 +51,7 @@ public class DefaultResult extends AbstractResult {
     }
     
     public Result on(Class<? extends Exception> exception) {
-        if (exception == null) {
-            throw new NullPointerException("Exception cannot be null.");
-        }
-
-        ExceptionRecorder<Result> instance = new ExceptionRecorder<Result>(proxifier);
-        exceptions.add(exception, instance);
-
-        return proxifier.proxify(Result.class, instance);
+        return exceptions.record(exception);
     }
 
     public Result include(String key, Object value) {

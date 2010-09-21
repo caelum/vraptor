@@ -1,7 +1,5 @@
 package br.com.caelum.vraptor.interceptor;
 
-import java.util.Map.Entry;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,50 +38,34 @@ public class ExceptionHandlerInterceptor
         try {
             stack.next(method, resourceInstance);
         } catch (InterceptionException e) {
-            ExceptionRecorder<Result> o = findResultByException(e);
-            if (o == null) {
-                // there are no mapped exceptions
-                throw e;
-            }
-
             reportException(e);
             replay(e);
         }
     }
 
-    protected ExceptionRecorder<Result> findResultByException(Exception exception) {
-        logger.debug("find for exception {}", exception.getClass());
-
-        for (Entry<Class<? extends Exception>, ExceptionRecorder<Result>> entry : exceptions.entries()) {
-            if (entry.getKey().isInstance(exception)) { // with children exceptions
-                logger.debug("found exception mapping: {} -> {}", entry.getKey(), entry.getValue());
-
-                return entry.getValue();
-            }
-        }
-
-        return null;
-    }
-
     protected void reportException(Exception e) {
-        while (e.getCause() != null && e.getCause() instanceof Exception)
+        // get the root cause
+        while (e.getCause() != null && e.getCause() instanceof Exception) {
             e = (Exception) e.getCause();
+        }
 
         // add error attributes compliance with servlets spec
         result.include("javax.servlet.error.status_code", 500);
         result.include("javax.servlet.error.exception", e);
     }
 
-    private boolean replay(Exception exception) {
-        ExceptionRecorder<Result> exresult = findResultByException(exception);
+    private boolean replay(Exception e) {
+        ExceptionRecorder<Result> exresult = exceptions.findByException(e);
 
         if (exresult != null) {
+            logger.debug("handling exception {}", e.getClass());
             exresult.replay(result);
+
             return true;
         }
 
-        if (exception.getCause() != null) {
-            return replay((Exception) exception.getCause());
+        if (e.getCause() != null) {
+            return replay((Exception) e.getCause());
         }
 
         return false;

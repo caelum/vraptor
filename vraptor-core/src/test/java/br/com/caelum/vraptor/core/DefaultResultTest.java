@@ -48,7 +48,7 @@ public class DefaultResultTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        result = new DefaultResult(request, container, null, null);
+        result = new DefaultResult(request, container, null);
     }
 
     public static class MyView implements View {

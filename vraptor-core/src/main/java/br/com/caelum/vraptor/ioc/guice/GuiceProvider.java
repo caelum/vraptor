@@ -21,12 +21,15 @@ import java.util.Map;
 import javax.servlet.ServletContext;
 
 import br.com.caelum.vraptor.ComponentRegistry;
+import br.com.caelum.vraptor.config.BasicConfiguration;
 import br.com.caelum.vraptor.core.Execution;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
 import br.com.caelum.vraptor.ioc.StereotypeHandler;
 import br.com.caelum.vraptor.ioc.spring.VRaptorRequestHolder;
+import br.com.caelum.vraptor.scan.WebAppBootstrap;
+import br.com.caelum.vraptor.scan.WebAppBootstrapFactory;
 
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
@@ -67,6 +70,7 @@ public class GuiceProvider implements ContainerProvider {
 
 	private Injector injector;
 	private GuiceContainer container;
+	private ServletContext context;
 
 	public <T> T provideForRequest(RequestInfo request, Execution<T> execution) {
 		VRaptorRequestHolder.setRequestForCurrentThread(request);
@@ -80,6 +84,8 @@ public class GuiceProvider implements ContainerProvider {
 	}
 
 	public void start(ServletContext context) {
+		this.context = context;
+		
 		APPLICATION.start();
 		container = new GuiceContainer();
 		injector = Guice.createInjector(Modules.override(new VRaptorAbstractModule(context, container)).with(customModule()));
@@ -102,18 +108,32 @@ public class GuiceProvider implements ContainerProvider {
 			}
 		}
 	}
-
+	
 	protected Module customModule() {
 		return new Module() {
 			public void configure(Binder binder) {
+				ComponentRegistry registry = new GuiceComponentRegistry(binder);
+				BasicConfiguration config = new BasicConfiguration(context);
+				
+			    // using the new vraptor.scan
+			    WebAppBootstrap webAppBootstrap = new WebAppBootstrapFactory().create(config);
+			    webAppBootstrap.configure(registry);
+			    
+			    // call old-style custom components registration
+			    registerCustomComponents(registry);
 			}
 		};
 	}
 	
 	protected void registerCustomComponents(ComponentRegistry registry) {
-		
+		/* TODO: For now, this is an empty hook method to enable subclasses to use
+		 * the scanner and register their specific components.
+		 *
+		 * In the future, if we scan the classpath for StereotypeHandlers, we can
+		 * eliminate this hook.
+		 */
 	}
-
+	
 	public void stop() {
 		APPLICATION.stop();
 	}

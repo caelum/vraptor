@@ -18,8 +18,8 @@ package br.com.caelum.vraptor.ioc.guice;
 import java.lang.reflect.Type;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

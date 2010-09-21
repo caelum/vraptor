@@ -24,6 +24,9 @@ import javax.annotation.PreDestroy;
 
 import net.vidageek.mirror.dsl.Mirror;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.inject.TypeLiteral;
 import com.google.inject.spi.InjectionListener;
 import com.google.inject.spi.TypeEncounter;
@@ -40,6 +43,7 @@ import com.google.inject.spi.TypeListener;
  */
 final class ScopeLifecycleListener implements TypeListener {
 
+	private static final Logger logger = LoggerFactory.getLogger(ScopeLifecycleListener.class);
 	private final LifecycleScope scope;
 
 	public ScopeLifecycleListener(LifecycleScope scope) {
@@ -58,7 +62,9 @@ final class ScopeLifecycleListener implements TypeListener {
 				destroys.add(method);
 			}
 		}
-
+		
+		logger.debug("Registering lifecycle listeners for {}", literal);
+		
 		if (!constructs.isEmpty() || !destroys.isEmpty()) {
 			encounter.register(new InjectionListener() {
 

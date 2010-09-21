@@ -35,6 +35,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.Module;
+import com.google.inject.Stage;
 import com.google.inject.TypeLiteral;
 import com.google.inject.util.Modules;
 
@@ -83,7 +84,7 @@ public class GuiceProvider implements ContainerProvider {
 
 		APPLICATION.start();
 		container = new GuiceContainer();
-		injector = Guice.createInjector(Modules.override(new VRaptorAbstractModule(context, container)).with(customModule()));
+		injector = Guice.createInjector(Stage.PRODUCTION, Modules.override(new VRaptorAbstractModule(context, container)).with(customModule()));
 		executeStereotypeHandlers();
 	}
 

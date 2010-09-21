@@ -68,7 +68,7 @@ public class VRaptorAbstractModule extends AbstractModule {
 	protected void configure() {
 		bindScope(RequestScoped.class, GuiceProvider.REQUEST);
 		bindScope(SessionScoped.class, GuiceProvider.SESSION);
-		bindScope(ApplicationScoped.class, GuiceProvider.APPLICATION);
+		bindScope(ApplicationScoped.class,  Scopes.SINGLETON);
 
 		Matcher<TypeLiteral<?>> isApplication = type(annotatedWith(ApplicationScoped.class));
 		Matcher<TypeLiteral<?>> isSession = type(annotatedWith(SessionScoped.class));

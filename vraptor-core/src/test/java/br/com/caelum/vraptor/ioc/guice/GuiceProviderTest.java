@@ -1,13 +1,12 @@
 package br.com.caelum.vraptor.ioc.guice;
 
-import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 
-import java.util.List;
+import java.util.Collection;
 
 import net.vidageek.mirror.dsl.Mirror;
 
@@ -49,8 +48,8 @@ public class GuiceProviderTest extends SpringProviderRegisteringComponentsTest {
 	@Test
 	public void shouldBeAbleToReceiveListsOfSerializationsAsDependency() throws Exception {
 		RepresentationResult instance = getFromContainer(RepresentationResult.class);
-		List serializations = (List) new Mirror().on(instance).get().field("serializations");
-		assertThat(serializations, is(not(empty())));
+		Collection serializations = (Collection) new Mirror().on(instance).get().field("serializations");
+		assertFalse(serializations.isEmpty());
 	}
 	@Override
 	protected void configureExpectations() {

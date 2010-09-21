@@ -56,22 +56,16 @@ public class StandaloneClasspathResolver implements ClasspathResolver {
 		filename = filename.substring(0, filename.lastIndexOf('/'));
 
 		this.webxml = new File(filename.substring(0, filename.lastIndexOf('/')) + "/web.xml");
-		if (!this.webxml.exists()) {
-			throw new ScannerException("Could not locate web.xml. Please use the proper argument in command-line.");
-		}
 	}
 
 	public StandaloneClasspathResolver(String webxml) {
 		this.webxml = new File(webxml);
-		if (!this.webxml.exists()) {
-			throw new ScannerException("Could not locate web.xml. Please use the proper argument in command-line.");
-		}
 	}
 
 	// find WEB-INF classes related to web.xml
 	public URL findWebInfClassesLocation() {
 		try {
-			File webInfClasses = new File(this.webxml.getParent() + "/classes");
+			File webInfClasses = new File(this.getWebxml().getParent() + "/classes");
 			if (webInfClasses.exists()) {
 				return new URL("file:" + webInfClasses.getAbsolutePath() + "/");
 			}
@@ -93,7 +87,7 @@ public class StandaloneClasspathResolver implements ClasspathResolver {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			factory.setNamespaceAware(true);
 			DocumentBuilder builder = factory.newDocumentBuilder();
-			Document doc = builder.parse(this.webxml);
+			Document doc = builder.parse(this.getWebxml());
 
 			NodeList params = doc.getElementsByTagName("context-param");
 			for (int i = 0; i < params.getLength(); i++) {
@@ -131,5 +125,12 @@ public class StandaloneClasspathResolver implements ClasspathResolver {
 		} catch (IOException e) {
 			logger.error("Exception while searching for packages file inside JARs", e);
 		}
+	}
+
+	private File getWebxml() {
+		if (!this.webxml.exists()) {
+			throw new ScannerException("Could not locate web.xml. Please use the proper argument in command-line.");
+		}
+		return webxml;
 	}
 }

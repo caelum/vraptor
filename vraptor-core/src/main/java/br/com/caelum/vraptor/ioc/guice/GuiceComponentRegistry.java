@@ -48,10 +48,14 @@ public class GuiceComponentRegistry implements ComponentRegistry {
 	private static final Logger logger = LoggerFactory.getLogger(GuiceComponentRegistry.class);
 
 	private final Binder binder;
+
+	private final Set<Class<?>> boundClasses = new HashSet<Class<?>>();
+
 	public GuiceComponentRegistry(Binder binder) {
 		this.binder = binder;
 	}
 	public void register(Class requiredType, Class componentType) {
+		boundClasses.add(requiredType);
 		logger.debug("Binding {} to {}", requiredType, componentType);
 		bindToConstructor(requiredType, componentType);
 		registerFactory(componentType);
@@ -59,26 +63,25 @@ public class GuiceComponentRegistry implements ComponentRegistry {
 
 	public void deepRegister(Class componentType) {
 		register(componentType, componentType);
-		Set<Class> registered = new HashSet<Class>();
-		registered.add(componentType);
-		deepRegister(componentType, componentType, registered);
+		deepRegister(componentType, componentType);
 	}
 
-	private void deepRegister(Class required, Class component, Set<Class> registeredKeys) {
+	private void deepRegister(Class required, Class component) {
 	    if (required == null || required.equals(Object.class)) {
 			return;
 		}
-
-	    if (!registeredKeys.contains(required)) {
-	        registeredKeys.add(required);
+	    if (boundClasses.add(required)) {
+	    	logger.debug("Binding {} to {}", required, component);
 	        binder.bind(required).to(component);
+	    } else {
+	    	logger.debug("Ignoring binding of {} to {}", required, component);
 	    }
 
 	    for (Class<?> c : required.getInterfaces()) {
-	        deepRegister(c, component, registeredKeys);
+	        deepRegister(c, component);
 	    }
 
-	    deepRegister(required.getSuperclass(), component, registeredKeys);
+	    deepRegister(required.getSuperclass(), component);
 	}
 
 	public void registerInScope(Map<Class, Class> classes, Scope scope) {

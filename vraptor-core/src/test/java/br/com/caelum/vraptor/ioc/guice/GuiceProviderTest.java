@@ -5,50 +5,21 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
-import java.util.Set;
-
+import org.jmock.Expectations;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.core.RequestInfo;
-import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
-import br.com.caelum.vraptor.ioc.fixture.ComponentFactoryInTheClasspath;
-import br.com.caelum.vraptor.ioc.fixture.ConverterInTheClasspath;
-import br.com.caelum.vraptor.ioc.fixture.InterceptorInTheClasspath;
-import br.com.caelum.vraptor.ioc.fixture.ResourceInTheClasspath;
+import br.com.caelum.vraptor.ioc.fixture.CustomMethodNotAllowedHandler;
+import br.com.caelum.vraptor.ioc.fixture.HasConstructor;
+import br.com.caelum.vraptor.ioc.fixture.NoConstructor;
 import br.com.caelum.vraptor.ioc.spring.SpringProviderRegisteringComponentsTest;
-import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.MethodNotAllowedHandler;
-
-import com.google.inject.AbstractModule;
-import com.google.inject.Module;
 
 public class GuiceProviderTest extends SpringProviderRegisteringComponentsTest {
 
 	@Override
 	protected ContainerProvider getProvider() {
-		//XXX remove subclass when classpath scanning is ready
-		return new GuiceProvider() {
-			@Override
-			protected Module customModule() {
-				return new AbstractModule() {
-					@Override
-					protected void configure() {
-						GuiceComponentRegistry registry = new GuiceComponentRegistry(binder());
-						registry.register(ResourceInTheClasspath.class, ResourceInTheClasspath.class);
-						registry.register(ComponentFactoryInTheClasspath.class, ComponentFactoryInTheClasspath.class);
-						registry.register(InterceptorInTheClasspath.class, InterceptorInTheClasspath.class);
-						registry.register(ConverterInTheClasspath.class, ConverterInTheClasspath.class);
-
-						registry.register(DependentOnSomethingFromComponentFactory.class, DependentOnSomethingFromComponentFactory.class);
-
-						registry.register(HasConstructor.class, HasConstructor.class);
-						registry.register(MethodNotAllowedHandler.class, CustomMethodNotAllowedHandler.class);
-					}
-				};
-			}
-		};
+		return new GuiceProvider();
 	}
 
 
@@ -68,20 +39,13 @@ public class GuiceProviderTest extends SpringProviderRegisteringComponentsTest {
 		assertThat(instance, is(notNullValue()));
 	}
 
-	@ApplicationScoped
-	static class CustomMethodNotAllowedHandler implements MethodNotAllowedHandler {
-
-		public void deny(RequestInfo request, Set<HttpMethod> allowedMethods) {
-		}
-
+	@Override
+	protected void configureExpectations() {
+		mockery.checking(new Expectations() {{
+			allowing(context).getRealPath("/WEB-INF/classes");
+			will(returnValue(GuiceProviderTest.class.getResource("..").getFile()));
+		}});
+		super.configureExpectations();
 	}
 
-	static class NoConstructor {
-
-	}
-
-	static class HasConstructor {
-		public HasConstructor(Result result) {
-		}
-	}
 }

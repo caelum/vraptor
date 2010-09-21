@@ -134,7 +134,9 @@ public class ScannotationComponentScanner implements ComponentScanner {
 
 	private void findComponentsFromWebInfClasses(Map<String, Set<String>> index, Set<String> stereotypeNames, Set<String> results) {
 		for (String stereotype : stereotypeNames) {
-			results.addAll(index.get(stereotype));
+			Set<String> classes = index.get(stereotype);
+			if (classes != null)
+				results.addAll(classes);
 		}
 	}
 

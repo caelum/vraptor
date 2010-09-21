@@ -56,7 +56,6 @@ public class Provider extends SpringProvider {
         registry.register(AjaxInterceptor.class, AjaxInterceptor.class);
         registry.register(Validator.class, MessageCreatorValidator.class);
         registry.register(ValidationErrors.class, BasicValidationErrors.class);
-        registry.register(VRaptor2ComponentRegistrar.class, VRaptor2ComponentRegistrar.class);
         registry.register(VRaptor2ComponentHandler.class, VRaptor2ComponentHandler.class);
     }
 

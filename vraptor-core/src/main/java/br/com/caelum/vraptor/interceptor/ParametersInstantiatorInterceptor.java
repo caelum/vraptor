@@ -18,7 +18,6 @@
 package br.com.caelum.vraptor.interceptor;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.List;
 
@@ -84,7 +83,7 @@ public class ParametersInstantiatorInterceptor implements Interceptor {
         	if (!errors.isEmpty()) {
         		logger.debug("There are conversion errors: {}", errors);
         	}
-            logger.debug("Parameter values for " + method + " are " + Arrays.asList(values));
+            logger.debug("Parameter values for {} are {}", method, values);
         }
 
         parameters.setParameters(values);

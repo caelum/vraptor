@@ -28,6 +28,7 @@ import java.util.Map;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
+import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
@@ -276,7 +277,8 @@ public class BaseComponents {
     	Resource.class,
     	Convert.class,
     	Component.class,
-    	Deserializes.class
+    	Deserializes.class,
+    	Intercepts.class
     };
     @SuppressWarnings("unchecked")
     private static final Class<? extends Deserializer>[] DESERIALIZERS = new Class[] {
@@ -313,9 +315,12 @@ public class BaseComponents {
     		REQUEST_COMPONENTS.put(BeanValidator.class, NullBeanValidator.class);
     	}
 
-        if (!registerIfClassPresent(REQUEST_COMPONENTS, "org.apache.commons.fileupload.FileItem", CommonsUploadMultipartInterceptor.class)) {
-            REQUEST_COMPONENTS.put(MultipartInterceptor.class, NullMultipartInterceptor.class);
-        }
+    	try {
+			Class.forName("org.apache.commons.fileupload.FileItem");
+			REQUEST_COMPONENTS.put(MultipartInterceptor.class, CommonsUploadMultipartInterceptor.class);
+		} catch (ClassNotFoundException e) {
+			REQUEST_COMPONENTS.put(MultipartInterceptor.class, NullMultipartInterceptor.class);
+		}
 
         return Collections.unmodifiableMap(REQUEST_COMPONENTS);
     }

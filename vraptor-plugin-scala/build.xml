@@ -13,7 +13,7 @@
 	<property name="compile.dir" value="build.tmp" />
 	<property name="target.dir" value="target" />
 	<property name="target.file" value="${target.dir}/vraptor-scala.jar" />
-	<property name="src.dir" value="src/main/" />
+	<property name="src.dir" value="src/main/java/" />
 	
 	<path id="libs.classpath" path=".">
 		<fileset dir="../common">

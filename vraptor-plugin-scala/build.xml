@@ -7,7 +7,7 @@
 	<description>VRaptor 3 core module build</description>
 
 	<property name="vraptor.core" value="../vraptor-core" />
-	<property name="vraptor.jar" value="../target/" />
+	<property name="vraptor.jar" value="../vraptor-core/target/" />
 	<property name="core.lib.dir" value="${vraptor.core}/lib/mandatory" />
 	<property name="scala.lib.dir" value="${vraptor.core}/lib/scala" />
 	<property name="compile.dir" value="build.tmp" />
@@ -39,7 +39,7 @@
 
 	<target name="compile" depends="clean" description="--> compiles classes">
 		<mkdir dir="${compile.dir}" />
-		<scalac destdir="${compile.dir}" srcdir="src/" classpathref="compile.classpath" />
+		<scalac destdir="${compile.dir}" srcdir="src/" classpathref="compile.classpath" /> 
 		<javac destdir="${compile.dir}" srcdir="src/" classpathref="compile.classpath" />
 	</target>
 

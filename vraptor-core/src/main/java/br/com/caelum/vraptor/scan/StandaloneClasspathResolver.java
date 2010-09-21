@@ -1,3 +1,18 @@
+/***
+ * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
 package br.com.caelum.vraptor.scan;
 
 import java.io.File;
@@ -21,8 +36,9 @@ import org.w3c.dom.NodeList;
 
 /**
  * A ClasspathResolver for static use, without a web context.
- * 
+ *
  * @author Sérgio Lopes
+ * @since 3.2
  */
 public class StandaloneClasspathResolver implements ClasspathResolver {
 
@@ -34,22 +50,24 @@ public class StandaloneClasspathResolver implements ClasspathResolver {
 		String vraptor = "br/com/caelum/vraptor/VRaptor.class";
 		URL vraptorJAR = Thread.currentThread().getContextClassLoader().getResource(vraptor);
 		String filename = vraptorJAR.getPath();
-		
+
 		int jarSeparationIndex = filename.lastIndexOf('!');
 		filename = filename.substring(filename.indexOf(':') + 1, jarSeparationIndex == -1 ? filename.length() - 1: jarSeparationIndex);
 		filename = filename.substring(0, filename.lastIndexOf('/'));
-		
+
 		this.webxml = new File(filename.substring(0, filename.lastIndexOf('/')) + "/web.xml");
-		if (!this.webxml.exists())
+		if (!this.webxml.exists()) {
 			throw new ScannerException("Could not locate web.xml. Please use the proper argument in command-line.");
+		}
 	}
 
 	public StandaloneClasspathResolver(String webxml) {
 		this.webxml = new File(webxml);
-		if (!this.webxml.exists())
+		if (!this.webxml.exists()) {
 			throw new ScannerException("Could not locate web.xml. Please use the proper argument in command-line.");
+		}
 	}
-	
+
 	// find WEB-INF classes related to web.xml
 	public URL findWebInfClassesLocation() {
 		try {
@@ -69,14 +87,14 @@ public class StandaloneClasspathResolver implements ClasspathResolver {
 		getPackagesFromPluginsJARs(packages);
 		return packages;
 	}
-	
+
 	void getPackagesFromWebXml(List<String> result) {
 		try {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			factory.setNamespaceAware(true);
 			DocumentBuilder builder = factory.newDocumentBuilder();
 			Document doc = builder.parse(this.webxml);
-			
+
 			NodeList params = doc.getElementsByTagName("context-param");
 			for (int i = 0; i < params.getLength(); i++) {
 				Element param = (Element) params.item(i);
@@ -84,7 +102,7 @@ public class StandaloneClasspathResolver implements ClasspathResolver {
 				if ("br.com.caelum.vraptor.packages".equals(paramName.item(0).getTextContent())) {
 					NodeList paramValue = param.getElementsByTagName("param-value");
 					String packages = paramValue.item(0).getTextContent();
-					
+
 					Collections.addAll(result, packages.trim().split("\\s*,\\s*"));
 					return;
 				}
@@ -94,13 +112,13 @@ public class StandaloneClasspathResolver implements ClasspathResolver {
 			throw new ScannerException("Problems while parsing web.xml", e);
 		}
 	}
-	
+
 	void getPackagesFromPluginsJARs(List<String> result) {
 		// find plugin packages
 		try {
 			ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 			Enumeration<URL> urls = classLoader.getResources("META-INF/br.com.caelum.vraptor.packages");
-			
+
 			while (urls.hasMoreElements()) {
 				URL url = urls.nextElement();
 				String packagesConfig = new Scanner(url.openStream()).useDelimiter("\\Z").next();

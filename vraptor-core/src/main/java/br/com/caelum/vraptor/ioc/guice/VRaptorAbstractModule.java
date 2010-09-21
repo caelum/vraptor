@@ -3,11 +3,7 @@ package br.com.caelum.vraptor.ioc.guice;
 import static com.google.inject.matcher.Matchers.annotatedWith;
 import static com.google.inject.matcher.Matchers.not;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
 
 import javax.servlet.ServletContext;
@@ -29,18 +25,22 @@ import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.ioc.SessionScoped;
 import br.com.caelum.vraptor.ioc.StereotypeHandler;
 import br.com.caelum.vraptor.ioc.spring.VRaptorRequestHolder;
-import br.com.caelum.vraptor.serialization.HTMLSerialization;
 import br.com.caelum.vraptor.serialization.Serialization;
+import br.com.caelum.vraptor.serialization.xstream.XStreamJSONSerialization;
+import br.com.caelum.vraptor.serialization.xstream.XStreamXMLSerialization;
 import br.com.caelum.vraptor.validator.BeanValidator;
 
 import com.google.inject.AbstractModule;
-import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Scopes;
 import com.google.inject.TypeLiteral;
 import com.google.inject.matcher.AbstractMatcher;
 import com.google.inject.matcher.Matcher;
+import com.google.inject.matcher.Matchers;
 import com.google.inject.multibindings.Multibinder;
+import com.google.inject.spi.TypeEncounter;
+import com.google.inject.spi.TypeListener;
+import com.google.inject.util.Types;
 
 /**
  *
@@ -53,17 +53,6 @@ import com.google.inject.multibindings.Multibinder;
  *
  */
 public class VRaptorAbstractModule extends AbstractModule {
-
-	static final class SetToListProvider<T> implements Provider<List<T>> {
-		private final Set<T> set;
-		@Inject
-		public SetToListProvider(Set<T> set) {
-			this.set = set;
-		}
-		public List<T> get() {
-			return new ArrayList<T>(set);
-		}
-	}
 
 	private static final Logger logger = LoggerFactory.getLogger(VRaptorAbstractModule.class);
 
@@ -92,7 +81,6 @@ public class VRaptorAbstractModule extends AbstractModule {
 
 		bind(Container.class).toInstance(container);
 
-
 		GuiceComponentRegistry registry = new GuiceComponentRegistry(binder());
 
 		bind(ComponentRegistry.class).toInstance(registry);
@@ -114,13 +102,23 @@ public class VRaptorAbstractModule extends AbstractModule {
 			registry.register(entry.getKey(), entry.getValue());
 		}
 
-		final Multibinder<Serialization> serializationBinder = Multibinder.newSetBinder(binder(), Serialization.class);
-		serializationBinder.addBinding().to(HTMLSerialization.class);
+		//XXX
+		registry.register(XStreamXMLSerialization.class, XStreamXMLSerialization.class);
+		registry.register(XStreamJSONSerialization.class, XStreamJSONSerialization.class);
 
-		TypeLiteral<SetToListProvider<Serialization>> literal = new TypeLiteral<SetToListProvider<Serialization>>() {};
-		bind(new TypeLiteral<List<Serialization>>() {}).toProvider(literal);
-		bind(new TypeLiteral<List<BeanValidator>>() {}).toInstance(Collections.<BeanValidator>emptyList());
+		registerListType(Serialization.class);
+		registerListType(BeanValidator.class);
+	}
 
+	private <T> void registerListType(Class<T> type) {
+		final AllImplementationsProvider<T> provider = new AllImplementationsProvider<T>();
+		bindListener(type(Matchers.subclassesOf(type)), new TypeListener() {
+			public void hear(TypeLiteral literal, TypeEncounter encounter) {
+				provider.addType(literal.getRawType());
+			}
+		});
+		bind(TypeLiteral.get(Types.listOf(type))).toProvider((Provider)provider);
+		requestInjection(provider);
 	}
 
 	private void requestInfoBindings() {

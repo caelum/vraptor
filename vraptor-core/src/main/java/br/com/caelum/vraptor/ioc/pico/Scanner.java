@@ -24,6 +24,7 @@ import java.util.Collection;
  *
  * @author Fabio Kung
  */
+@Deprecated
 public interface Scanner {
 
 	<T> Collection<Class<? extends T>> getSubtypesOf(Class<T> type);

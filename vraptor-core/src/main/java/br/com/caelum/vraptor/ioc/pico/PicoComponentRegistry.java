@@ -50,7 +50,6 @@ import br.com.caelum.vraptor.ioc.SessionScoped;
  * @author Adriano Almeida
  * @author Sérgio Lopes
  */
-@Deprecated
 public class PicoComponentRegistry extends AbstractComponentRegistry {
 
     public static final String CONTAINER_SESSION_KEY = PicoComponentRegistry.class.getName() + ".session";
@@ -219,7 +218,6 @@ public class PicoComponentRegistry extends AbstractComponentRegistry {
      * @param container
      * @param componentFactoryMap
      */
-    @SuppressWarnings("unchecked")
     private void registerComponentFactories(MutablePicoContainer container, Map<Class<?>, Class<? extends ComponentFactory>> componentFactoryMap) {
         for (Class<?> targetType : componentFactoryMap.keySet()) {
             container.addAdapter(new PicoComponentAdapter(targetType, componentFactoryMap.get(targetType)));

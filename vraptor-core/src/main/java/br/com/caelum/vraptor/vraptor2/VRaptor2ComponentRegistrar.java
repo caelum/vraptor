@@ -26,12 +26,11 @@ import br.com.caelum.vraptor.http.route.Route;
 import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.http.route.RoutesParser;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
-import br.com.caelum.vraptor.ioc.pico.Registrar;
 import br.com.caelum.vraptor.ioc.pico.Scanner;
 import br.com.caelum.vraptor.resource.DefaultResourceClass;
 
 @ApplicationScoped
-public class VRaptor2ComponentRegistrar implements Registrar {
+public class VRaptor2ComponentRegistrar {
 	private final ComponentRegistry components;
 	private final Router router;
 	private final RoutesParser parser;

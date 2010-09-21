@@ -3,9 +3,11 @@ package br.com.caelum.vraptor.ioc.guice;
 import static com.google.inject.matcher.Matchers.annotatedWith;
 import static com.google.inject.matcher.Matchers.not;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Map.Entry;
 
 import javax.servlet.ServletContext;
@@ -25,16 +27,20 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.ioc.SessionScoped;
+import br.com.caelum.vraptor.ioc.StereotypeHandler;
 import br.com.caelum.vraptor.ioc.spring.VRaptorRequestHolder;
+import br.com.caelum.vraptor.serialization.HTMLSerialization;
 import br.com.caelum.vraptor.serialization.Serialization;
 import br.com.caelum.vraptor.validator.BeanValidator;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Scopes;
 import com.google.inject.TypeLiteral;
 import com.google.inject.matcher.AbstractMatcher;
 import com.google.inject.matcher.Matcher;
+import com.google.inject.multibindings.Multibinder;
 
 /**
  *
@@ -47,6 +53,17 @@ import com.google.inject.matcher.Matcher;
  *
  */
 public class VRaptorAbstractModule extends AbstractModule {
+
+	static final class SetToListProvider<T> implements Provider<List<T>> {
+		private final Set<T> set;
+		@Inject
+		public SetToListProvider(Set<T> set) {
+			this.set = set;
+		}
+		public List<T> get() {
+			return new ArrayList<T>(set);
+		}
+	}
 
 	private static final Logger logger = LoggerFactory.getLogger(VRaptorAbstractModule.class);
 
@@ -71,7 +88,42 @@ public class VRaptorAbstractModule extends AbstractModule {
 		bindListener(isSession, new ScopeLifecycleListener(GuiceProvider.SESSION));
 		bindListener(not(isApplication).and(not(isSession)), new ScopeLifecycleListener(GuiceProvider.REQUEST));
 
+		requestInfoBindings();
 
+		bind(Container.class).toInstance(container);
+
+
+		GuiceComponentRegistry registry = new GuiceComponentRegistry(binder());
+
+		bind(ComponentRegistry.class).toInstance(registry);
+
+		registry.registerInScope((Map) BaseComponents.getApplicationScoped(), GuiceProvider.APPLICATION);
+		registry.registerInScope((Map) BaseComponents.getPrototypeScoped(), Scopes.NO_SCOPE);
+		registry.registerInScope((Map) BaseComponents.getRequestScoped(), GuiceProvider.REQUEST);
+
+		for (Class converter : BaseComponents.getBundledConverters()) {
+			registry.register(converter, converter);
+		}
+		for (Class handler : BaseComponents.getStereotypeHandlers()) {
+			registry.register(handler, handler);
+			Multibinder<StereotypeHandler> stereotypeHandlers = Multibinder.newSetBinder(binder(), StereotypeHandler.class);
+			stereotypeHandlers.addBinding().to(handler);
+		}
+
+		for (Entry<Class<?>, Class<?>> entry : BaseComponents.getCachedComponents().entrySet()) {
+			registry.register(entry.getKey(), entry.getValue());
+		}
+
+		final Multibinder<Serialization> serializationBinder = Multibinder.newSetBinder(binder(), Serialization.class);
+		serializationBinder.addBinding().to(HTMLSerialization.class);
+
+		TypeLiteral<SetToListProvider<Serialization>> literal = new TypeLiteral<SetToListProvider<Serialization>>() {};
+		bind(new TypeLiteral<List<Serialization>>() {}).toProvider(literal);
+		bind(new TypeLiteral<List<BeanValidator>>() {}).toInstance(Collections.<BeanValidator>emptyList());
+
+	}
+
+	private void requestInfoBindings() {
 		bind(MutableRequest.class).toProvider(new Provider<MutableRequest>() {
 
 			public MutableRequest get() {
@@ -101,31 +153,6 @@ public class VRaptorAbstractModule extends AbstractModule {
 		bind(HttpServletResponse.class).to(MutableResponse.class).in(GuiceProvider.REQUEST);
 		bind(HttpServletRequest.class).to(MutableRequest.class).in(GuiceProvider.REQUEST);
 		bind(ServletContext.class).toInstance(context);
-		bind(Container.class).toInstance(container);
-
-		bind(new TypeLiteral<List<Serialization>>() {}).toInstance(Collections.<Serialization>emptyList());
-		bind(new TypeLiteral<List<BeanValidator>>() {}).toInstance(Collections.<BeanValidator>emptyList());
-
-		GuiceComponentRegistry registry = new GuiceComponentRegistry(binder());
-
-		bind(ComponentRegistry.class).toInstance(registry);
-
-		registry.registerInScope((Map) BaseComponents.getApplicationScoped(), GuiceProvider.APPLICATION);
-		registry.registerInScope((Map) BaseComponents.getPrototypeScoped(), Scopes.NO_SCOPE);
-		registry.registerInScope((Map) BaseComponents.getRequestScoped(), GuiceProvider.REQUEST);
-
-		for (Class converter : BaseComponents.getBundledConverters()) {
-			registry.register(converter, converter);
-		}
-
-		for (Class handler : BaseComponents.getStereotypeHandlers()) {
-			registry.register(handler, handler);
-		}
-
-		for (Entry<Class<?>, Class<?>> entry : BaseComponents.getCachedComponents().entrySet()) {
-			registry.register(entry.getKey(), entry.getValue());
-		}
-
 	}
 
 	private Matcher<TypeLiteral<?>> type(final Matcher<? super Class> matcher) {

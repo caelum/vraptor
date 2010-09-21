@@ -15,8 +15,7 @@
  */
 package br.com.caelum.vraptor.ioc.guice;
 
-import java.util.Collection;
-import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.ServletContext;
 
@@ -31,16 +30,12 @@ import br.com.caelum.vraptor.ioc.spring.VRaptorRequestHolder;
 import br.com.caelum.vraptor.scan.WebAppBootstrap;
 import br.com.caelum.vraptor.scan.WebAppBootstrapFactory;
 
-import com.google.common.base.Function;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Collections2;
-import com.google.common.collect.Maps;
 import com.google.inject.Binder;
-import com.google.inject.Binding;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.Module;
+import com.google.inject.TypeLiteral;
 import com.google.inject.util.Modules;
 
 /**
@@ -85,20 +80,15 @@ public class GuiceProvider implements ContainerProvider {
 
 	public void start(ServletContext context) {
 		this.context = context;
-		
+
 		APPLICATION.start();
 		container = new GuiceContainer();
 		injector = Guice.createInjector(Modules.override(new VRaptorAbstractModule(context, container)).with(customModule()));
-		Map<Key<?>, Binding<?>> bindings = Maps.filterKeys(injector.getAllBindings(), new Predicate<Key<?>>() {
-			public boolean apply(Key<?> key) {
-				return StereotypeHandler.class.isAssignableFrom(key.getTypeLiteral().getRawType());
-			}
-		});
-		Collection<StereotypeHandler> handlers = Collections2.transform(bindings.keySet(), new Function<Key<?>, StereotypeHandler>() {
-			public StereotypeHandler apply(Key<?> key) {
-				return (StereotypeHandler) injector.getInstance(key);
-			}
-		});
+		executeStereotypeHandlers();
+	}
+
+	private void executeStereotypeHandlers() {
+		Set<StereotypeHandler> handlers = injector.getInstance(Key.get(new TypeLiteral<Set<StereotypeHandler>>() {}));
 		for (Key<?> key : injector.getAllBindings().keySet()) {
 			for (StereotypeHandler handler : handlers) {
 				Class<?> type = key.getTypeLiteral().getRawType();
@@ -108,23 +98,23 @@ public class GuiceProvider implements ContainerProvider {
 			}
 		}
 	}
-	
+
 	protected Module customModule() {
 		return new Module() {
 			public void configure(Binder binder) {
 				ComponentRegistry registry = new GuiceComponentRegistry(binder);
 				BasicConfiguration config = new BasicConfiguration(context);
-				
+
 			    // using the new vraptor.scan
 			    WebAppBootstrap webAppBootstrap = new WebAppBootstrapFactory().create(config);
 			    webAppBootstrap.configure(registry);
-			    
+
 			    // call old-style custom components registration
 			    registerCustomComponents(registry);
 			}
 		};
 	}
-	
+
 	protected void registerCustomComponents(ComponentRegistry registry) {
 		/* TODO: For now, this is an empty hook method to enable subclasses to use
 		 * the scanner and register their specific components.
@@ -133,7 +123,7 @@ public class GuiceProvider implements ContainerProvider {
 		 * eliminate this hook.
 		 */
 	}
-	
+
 	public void stop() {
 		APPLICATION.stop();
 	}

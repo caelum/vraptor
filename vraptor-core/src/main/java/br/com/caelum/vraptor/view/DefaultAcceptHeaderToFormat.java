@@ -18,7 +18,6 @@ package br.com.caelum.vraptor.view;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -26,6 +25,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
+import br.com.caelum.vraptor.util.LRUCache;
 
 /**
  * The default AcceptHeaderToFormat implementation searches for registered mime types. It also
@@ -38,7 +38,7 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
 @ApplicationScoped
 public class DefaultAcceptHeaderToFormat implements AcceptHeaderToFormat {
 
-	private static final Map<String, String> acceptToFormatCache = Collections.synchronizedMap(new Cache());
+	private static final Map<String, String> acceptToFormatCache = Collections.synchronizedMap(new LRUCache<String, String>(100));
 	private static final String DEFAULT_FORMAT = "html";
 	private static final double DEFAULT_QUALIFIER_VALUE = 0.01;
 	protected final Map<String, String> mimeToFormat;
@@ -77,17 +77,6 @@ public class DefaultAcceptHeaderToFormat implements AcceptHeaderToFormat {
 		}
 
 		return mimeTypes[0];
-	}
-
-	@SuppressWarnings("serial")
-	private static class Cache extends LinkedHashMap<String, String> {
-		public Cache() {
-			super(100, 0.75f, true);
-		}
-		
-		protected boolean removeEldestEntry(java.util.Map.Entry<String, String> eldest) {
-			return this.size() > 100;
-		}
 	}
 
 	private static class MimeType implements Comparable<MimeType> {

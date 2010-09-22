@@ -2,6 +2,7 @@ out
 .classpath
 .project
 .settings
+.scala_dependencies
 !vraptor-blank-project/.classpath
 !vraptor-blank-project/.settings/
 !vraptor-blank-project/.project

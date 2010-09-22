@@ -16,6 +16,7 @@
 	<property name="extra.lib.dir" value="lib/extras"/>
 	
     <target name="update-jars">
+    	<mkdir dir="${webinf.lib.dir}"/>
     	<delete>
 			<fileset dir="${webinf.lib.dir}">
 			    <include name="*.jar"/>

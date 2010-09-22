@@ -39,7 +39,6 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.ComponentFactory;
 import br.com.caelum.vraptor.ioc.ComponentFactoryIntrospector;
 import br.com.caelum.vraptor.ioc.PrototypeScoped;
-import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.ioc.SessionScoped;
 
 /**
@@ -100,9 +99,6 @@ public class PicoComponentRegistry extends AbstractComponentRegistry {
         	this.prototypeScoped.put(requiredType, type);
         } else {
             // default behaviour: even without @RequestScoped
-            if (!type.isAnnotationPresent(RequestScoped.class)) {
-                logger.info("Class being registered as @RequestScoped, since there is no Scope annotation " + type);
-            }
             logger.debug("Registering " + type.getName() + " as a request component");
             this.requestScoped.put(requiredType, type);
         }

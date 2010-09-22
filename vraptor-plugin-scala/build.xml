@@ -41,12 +41,15 @@
 		<mkdir dir="${compile.dir}" />
 		<scalac destdir="${compile.dir}" srcdir="src/" classpathref="compile.classpath" />
 		<javac destdir="${compile.dir}" srcdir="src/" classpathref="compile.classpath" />
+		<copy todir="${compile.dir}">
+			<fileset dir="src/" includes="META-INF/**" />
+		</copy>
 	</target>
 
 	<target name="artifacts" depends="compile" description="--> generate project's artifacts">
 		<mkdir dir="${target.dir}" />
 		<jar destfile="${target.file}" compress="true">
-			<fileset dir="${compile.dir}" includes="**/*.class" />
+			<fileset dir="${compile.dir}" includes="**" />
 		</jar>
 	</target>
 

@@ -8,9 +8,10 @@
 	
 	<property file="../vraptor-core/build.properties" />
 	
-	<property name="vraptor.lib" value=".."/>
+	<property name="vraptor.lib" value="../vraptor-core/"/>
 	<property name="vraptor.scala.jar" value="../vraptor-plugin-scala/target/vraptor-scala.jar"/>
 	<property name="mandatory.jars" value="../vraptor-core/${libs.dir}/mandatory"/>
+	<property name="optional.jars" value="../vraptor-core/${libs.dir}/optional"/>
 	<property name="webinf.lib.dir" value="WebContent/WEB-INF/lib/"/>
 	<property name="extra.lib.dir" value="lib/extras"/>
 	
@@ -26,6 +27,9 @@
 				<exclude name="objenesis*.jar"/>
 				<exclude name="spring*.jar"/>
 				<exclude name="jstl*.jar"/>
+			</fileset>
+			<fileset dir="${optional.jars}">
+			    <include name="iogi*.jar"/>
 			</fileset>
     		<fileset dir="${extra.lib.dir}">
 			    <include name="*.jar"/>

@@ -15,8 +15,8 @@
 	-->
 	
 	<context-param>
-        	<param-name>br.com.caelum.vraptor.packages</param-name>
-	        <param-value>br.com.caelum.vraptor.scala</param-value>
+        <param-name>br.com.caelum.vraptor.packages</param-name>
+	    <param-value>br.com.caelum.vraptor.scala,br.com.caelum.vraptor.http.iogi</param-value>
     </context-param>
     
 	<!--  

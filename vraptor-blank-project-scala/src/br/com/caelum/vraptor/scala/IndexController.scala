@@ -1,6 +1,9 @@
 package br.com.caelum.vraptor.scala
 import br.com.caelum.vraptor.{Path, Get, Post, Resource};
 
+/*
+ * A simple example controller.
+ */
 @Resource
 class IndexController {
 

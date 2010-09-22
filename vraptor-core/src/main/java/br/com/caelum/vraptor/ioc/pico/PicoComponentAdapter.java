@@ -31,7 +31,7 @@ import br.com.caelum.vraptor.ioc.ComponentFactory;
  *
  * @author Sérgio Lopes
  */
-@SuppressWarnings({"unchecked", "serial"})
+@SuppressWarnings({"serial"})
 public class PicoComponentAdapter extends AbstractAdapter {
 
     private static final Logger logger = LoggerFactory.getLogger(PicoComponentAdapter.class);

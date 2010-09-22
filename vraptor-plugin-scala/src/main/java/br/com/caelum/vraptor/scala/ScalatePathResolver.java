@@ -2,16 +2,13 @@ package br.com.caelum.vraptor.scala;
 
 import java.io.File;
 
-import br.com.caelum.vraptor.ioc.Component;
-import br.com.caelum.vraptor.view.DefaultPathResolver;
-import br.com.caelum.vraptor.ioc.RequestScoped;
-import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.http.FormatResolver;
-
 import javax.servlet.ServletContext;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import br.com.caelum.vraptor.http.FormatResolver;
+import br.com.caelum.vraptor.ioc.Component;
+import br.com.caelum.vraptor.ioc.RequestScoped;
+import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.view.DefaultPathResolver;
 
 /**
  * @author Alberto Souza

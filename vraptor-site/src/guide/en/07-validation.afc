@@ -28,7 +28,7 @@ public void add(Employee employee) {
 	if (!employee.getName().equals("John Doe")) {
 		validator.add(new ValidationMessage("error","invalidName"));
 	}
-	validator.onErrorUse(page()).of(EmployeeController.class).form();
+	validator.onErrorUsePageOf(EmployeeController.class).form();
 	
 	dao.add(employee);
 }
@@ -47,7 +47,7 @@ public add(Employee employee) {
 	validator.checking(new Validations(){{
 		that(!employee.getName().isEmpty(), "error","nameIsRequired");
 	}});
-	validator.onErrorUse(page()).of(EmployeeController.class).form();
+	validator.onErrorUsePageOf(EmployeeController.class).form();
 	
 	dao.add(employee);
 }
@@ -106,7 +106,7 @@ public admin(Employee employee) {
 	validator.checking(new Validations(){{
 		that(employee.getRoles(), hasItem("ADMIN"), "admin","employee.is.not.admin");
 	}});
-	validator.onErrorUse(page()).of(LoginController.class).login();	
+	validator.onErrorUsePageOf(LoginController.class).login();	
 	dao.add(employee);
 }
 [/java]
@@ -126,7 +126,7 @@ public add(Employee employee) {
 	validator.checking(new Validations(){{
 		that(!employee.getName().isEmpty(), "error","nameIsRequired");
 	}});
-	validator.onErrorUse(page()).of(EmployeeController.class).form();
+	validator.onErrorUsePageOf(EmployeeController.class).form();
 		
 	dao.add(employee);
 }

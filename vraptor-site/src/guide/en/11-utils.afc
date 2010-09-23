@@ -181,3 +181,15 @@ its web.xml:
 	</param-value>
 </context-param>
 [/xml]
+
+[title VRaptor 2 compatibility]
+If you want to migrate VRaptor 2 to VRaptor 3 (see Migrating from VRaptor2 to VRaptor3 chapter):
+
+[xml]
+<context-param>
+	<param-name>br.com.caelum.vraptor.packages</param-name>
+	<param-value>
+		br.com.caelum.vraptor.util.other.packages...,
+		br.com.caelum.vraptor.vraptor2
+	</param-value>
+</context-param>

@@ -426,12 +426,3 @@ parameters. You can also add restrictions to these parameters:
   routeFor("/client/{client.id}").withParameter("client.id").matching("\\d+")
   			.is(ClientController.class).show(null);
 [/java]
-
-At last, you can choose the class and the method names in runtime, allowing us to
-create extremely generic routes:
-
-[java]
-    routeFor("/{webResource}/doSomething/{webMethod}").is(
-		type("br.com.caelum.projectname.{webResource}"), 
-		method("{webMethod}"));
-[/java]

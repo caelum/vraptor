@@ -1,5 +1,16 @@
 [chapter Advanced configurations: overriding VRaptor's behavior and conventions]
 
+Most of VRaptor behaviours and conventions can be customized, in a very easy
+way: it is just creating a component that implements an internal interface of VRaptor.
+When you do this, VRaptor will use your custom implementation instead of the default one.
+
+If you want to find out which is the right interface for changing a behaviour,
+just ask it on the developers mailing list: caelum-vraptor-dev@googlegroups.com
+
+This list is for both Portuguese and English discussions.
+
+Below we'll see some customization examples:
+
 [section Changing the default rendered view]
 
 If you need to change the default rendered view, or change the place where it'll be look for,
@@ -51,47 +62,6 @@ public class MyRoutesParser extends PathAnnotationRoutesParser {
 [/java]
 
 If you need a more complex convention, just implement the RoutesParser interface.
-
-[section Changing IoC provider]
-
-VRaptor's default IoC provider is Spring. In order to change, just add the following to your
-web.xml:
-[xml]
-<context-param>
-    <param-name>br.com.caelum.vraptor.provider</param-name>
-    <param-value>com.package.from.your.PrefferedProviderClass</param-value>
-</context-param>
-[/xml]
-VRaptor comes with built-in support to both Spring (br.com.caelum.vraptor.ioc.spring.SpringProvider) and PicoContainer
-(br.com.caelum.vraptor.ioc.pico.PicoProvider).
-You still have the option to extend any of these classes and use your own provider.
-
-[section Changing Spring's base ApplicationContext]
-
-If VRaptor isn't using your ApplicationContext as base, just extend SpringProvider and implement the
-getParentApplicationContext method, giving it your application's ApplicationContext:
-
-[java]
-	package br.com.apackage.aproject;
-	public class CustomProvider extends SpringProvider {
-		public ApplicationContext getParentApplicationContext(ServletContext context) {
-			ApplicationContext applicationContext = //your own logic to create your applicationContext
-			return applicationContext;
-		}
-	}
-[/java]
-
-and change the provider at your web.xml:
-[xml]
-<context-param>
-    <param-name>br.com.caelum.vraptor.provider</param-name>
-    <param-value>br.com.apackage.aproject.CustomProvider</param-value>
-</context-param>
-[/xml]
-
-By default, VRaptor try to find the applicationContext via
-%%WebApplicationContextUtils.getWebApplicationContext(servletContext);%% or loading the applicationContext.xml
-that is on your classpath.
 
 [section Changing the application character encoding]
 

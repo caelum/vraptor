@@ -25,6 +25,8 @@
 	</filter-mapping>
 
 [/xml]
+  and add all jars from lib/mandatory and lib/containers/<one of the containers> from
+  vraptor zip on your classpath.
 
   Don't forget to remove the old VRaptorServlet declaration from VRaptor2, and its
   respective servlet-mapping.

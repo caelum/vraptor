@@ -64,6 +64,7 @@ By default, there are these view implementations:
 	* Results.page(), redirects directly to a page, that can be a jsp, an html, or any
 	URI relative to the web application directory or the application context.
 	* Results.http(), sends HTTP protocol informations, like status codes and headers.
+	* Results.status(), sends status codes with more information.
 	* Results.referer(), uses Referer header to redirect or forward.
 	* Results.nothing(), simply returns the HTTP success code (HTTP 200 OK).
 	* Results.xml(), uses xml serialization.

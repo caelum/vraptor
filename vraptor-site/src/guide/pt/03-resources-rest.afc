@@ -438,11 +438,3 @@ parâmetros do método. Você pode ainda adicionar restrições para esses parâ
   routeFor("/cliente/{cliente.id}").withParameter("cliente.id").matching("\\d+")
   			.is(ClienteController.class).mostra(null);
 [/java]
-Por fim, você pode escolher o nome da classe e o nome do método em tempo de execução,
-que permite criar rotas extremamente genéricas:
-
-[java]
-    routeFor("/{webResource}/facaAlgo/{webMethod}").is(
-		type("br.com.caelum.nomedoprojeto.{webResource}"), 
-		method("{webMethod}"));
-[/java]

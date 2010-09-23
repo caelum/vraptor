@@ -1,12 +1,17 @@
 <html>
 <head>
-<title>VRaptor + Scala</teste>
+<title>VRaptor + Scala (SSP View)</title>
 </head>
 <body>
-<%@ val string : String %>
+<%@ val myModel : br.com.caelum.vraptor.scala.MyModel %>
+${myModel.data}
 
-${string}
+<br />
 
-</ul>
+<form action="." method="post">
+	<label for="field">Type anything here:</label>
+	<input type="text" id="field" name="myModel.data" value="test" />
+	<input type="submit" />
+</form>
 </body>
 </html>

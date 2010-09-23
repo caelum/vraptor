@@ -13,7 +13,7 @@
 	<property name="src.dir" value="src/" />
 	<property name="lib.dir" value="WebContent/WEB-INF/lib/" />
 	<property name="compile.dir" value="WebContent/WEB-INF/classes/" />
-	<property name="scala.home" value="/path/to/scala-2.8/installation/" />
+	<property name="scala.home" value="WebContent/WEB-INF/" />
 	<property name="scala-compiler.jar" value="${scala.home}/lib/scala-compiler.jar" />
 	<property name="scala-library.jar" value="${scala.home}/lib/scala-library.jar" />
 

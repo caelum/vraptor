@@ -27,10 +27,10 @@
 		filter configuration 
 	-->
 		
-	<context-param>
+	<!-- <context-param>
         	<param-name>br.com.caelum.vraptor.provider</param-name>
 	        <param-value>br.com.caelum.vraptor.ioc.guice.GuiceProvider</param-value>
-    </context-param>
+    </context-param>-->
 		
 	<filter>
 		<filter-name>vraptor</filter-name>

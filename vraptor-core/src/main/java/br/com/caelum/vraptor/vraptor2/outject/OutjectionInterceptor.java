@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.interceptor.Interceptor;
+import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.vraptor2.BeanHelper;
 import br.com.caelum.vraptor.vraptor2.ComponentInfoProvider;
@@ -38,6 +39,7 @@ import br.com.caelum.vraptor.vraptor2.ComponentInfoProvider;
  *
  * @author Guilherme Silveira
  */
+@Component
 public class OutjectionInterceptor implements Interceptor {
 
     private static final String GET = "get";

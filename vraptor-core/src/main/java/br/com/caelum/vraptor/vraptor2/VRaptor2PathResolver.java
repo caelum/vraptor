@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.http.FormatResolver;
+import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.resource.ResourceClass;
 import br.com.caelum.vraptor.resource.ResourceMethod;
@@ -35,6 +36,7 @@ import br.com.caelum.vraptor.view.PathResolver;
  *
  * @author Guilherme Silveira
  */
+@Component
 @RequestScoped
 public class VRaptor2PathResolver implements PathResolver {
 

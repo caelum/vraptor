@@ -21,7 +21,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.jmock.Expectations;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.config.BasicConfiguration;
@@ -33,8 +32,6 @@ import br.com.caelum.vraptor.ioc.WhatToDo;
 import br.com.caelum.vraptor.test.HttpServletRequestMock;
 import br.com.caelum.vraptor.test.HttpSessionMock;
 
-@Deprecated
-@Ignore
 public class PicoProviderTest extends GenericContainerTest {
     private int counter;
 
@@ -79,6 +76,9 @@ public class PicoProviderTest extends GenericContainerTest {
 					will(returnValue("br.com.caelum.vraptor.ioc.fixture"));
 
 	                allowing(context).getInitParameter(BasicConfiguration.ENCODING);
+	                allowing(context).getInitParameter(BasicConfiguration.SCANNING_PARAM);
+	                allowing(context).getRealPath("/WEB-INF/classes");
+	                will(returnValue(PicoProviderTest.class.getResource("..").getFile()));
                 }
             });
         } catch (Exception e) {

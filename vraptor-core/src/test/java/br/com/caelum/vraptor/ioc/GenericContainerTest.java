@@ -34,7 +34,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.ServiceLoader;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -50,7 +49,6 @@ import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.ComponentRegistry;
@@ -103,7 +101,6 @@ import br.com.caelum.vraptor.view.PathResolver;
  *
  * @author Guilherme Silveira
  */
-@Ignore
 public abstract class GenericContainerTest {
 
 	protected Mockery mockery;

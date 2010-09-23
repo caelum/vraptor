@@ -95,7 +95,7 @@ public class AbstractComponentRegistryTest {
 
     @SuppressWarnings("serial")
     @Component
-    static class ArrayListSubclass extends ArrayList<Object> {
+    public static class ArrayListSubclass extends ArrayList<Object> {
     }
 
 

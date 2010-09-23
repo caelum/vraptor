@@ -7,7 +7,7 @@
 	<description>VRaptor 3 core module build</description>
 
 	<property name="vraptor.core" value="../vraptor-core" />
-	<property name="vraptor.jar" value="../target/" />
+	<property name="vraptor.jar" value="${vraptor.core}/target/" />
 	<property name="core.lib.dir" value="${vraptor.core}/lib/mandatory" />
 	<property name="scala.lib.dir" value="${vraptor.core}/lib/scala" />
 	<property name="compile.dir" value="build.tmp" />
@@ -41,12 +41,15 @@
 		<mkdir dir="${compile.dir}" />
 		<scalac destdir="${compile.dir}" srcdir="src/" classpathref="compile.classpath" />
 		<javac destdir="${compile.dir}" srcdir="src/" classpathref="compile.classpath" />
+		<copy todir="${compile.dir}">
+			<fileset dir="src/" includes="META-INF/**" />
+		</copy>
 	</target>
 
 	<target name="artifacts" depends="compile" description="--> generate project's artifacts">
 		<mkdir dir="${target.dir}" />
 		<jar destfile="${target.file}" compress="true">
-			<fileset dir="${compile.dir}" includes="**/*.class" />
+			<fileset dir="${compile.dir}" includes="**" />
 		</jar>
 	</target>
 
@@ -56,3 +59,4 @@
 	</target>
 
 </project>
+

@@ -19,7 +19,6 @@ package br.com.caelum.vraptor.ioc.pico;
 
 import org.picocontainer.MutablePicoContainer;
 
-import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.ioc.Container;
 
 /**
@@ -27,7 +26,6 @@ import br.com.caelum.vraptor.ioc.Container;
  *
  * @author Guilherme Silveira
  */
-@Deprecated
 public class PicoBasedContainer implements Container {
 
     private final MutablePicoContainer container;
@@ -48,5 +46,4 @@ public class PicoBasedContainer implements Container {
     public MutablePicoContainer getContainer() {
 		return container;
 	}
-
 }

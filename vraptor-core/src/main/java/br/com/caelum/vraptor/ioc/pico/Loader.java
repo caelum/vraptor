@@ -23,7 +23,5 @@ package br.com.caelum.vraptor.ioc.pico;
  * @author Guilherme Silveira
  */
 public interface Loader {
-
 	void loadAll();
-
 }

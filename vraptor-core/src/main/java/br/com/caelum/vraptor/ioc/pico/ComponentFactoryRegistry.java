@@ -20,7 +20,6 @@ import java.util.Map;
 
 import br.com.caelum.vraptor.ioc.ComponentFactory;
 
-@SuppressWarnings("unchecked")
 public interface ComponentFactoryRegistry {
     public void register(Class<? extends ComponentFactory> componentFactoryClass);
 

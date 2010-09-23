@@ -32,7 +32,6 @@ import br.com.caelum.vraptor.ioc.SessionScoped;
  *
  * @author Sérgio Lopes
  */
-@SuppressWarnings("unchecked")
 @ApplicationScoped
 public class DefaultComponentFactoryRegistry implements ComponentFactoryRegistry {
 

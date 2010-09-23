@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src/main/java"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry kind="lib" path="/home/pedro/Workspace/Caelum/vraptor/vraptor-core/target/vraptor-3.2.0-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="/home/pedro/Workspace/Caelum/vraptor/common/servlet-api-2.5.jar"/>
+	<classpathentry kind="lib" path="/home/pedro/Workspace/Caelum/vraptor/vraptor-core/lib/mandatory/slf4j-api-1.6.1.jar"/>
+	<classpathentry kind="lib" path="/home/pedro/Workspace/Caelum/vraptor/vraptor-core/lib/scala/scala-library.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

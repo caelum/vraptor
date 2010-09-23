@@ -26,7 +26,6 @@ import javax.servlet.ServletContext;
 
 import org.picocontainer.DefaultPicoContainer;
 import org.picocontainer.MutablePicoContainer;
-import org.picocontainer.PicoContainer;
 import org.picocontainer.behaviors.Caching;
 import org.picocontainer.lifecycle.JavaEE5LifecycleStrategy;
 import org.picocontainer.monitors.NullComponentMonitor;
@@ -39,11 +38,11 @@ import br.com.caelum.vraptor.config.BasicConfiguration;
 import br.com.caelum.vraptor.core.BaseComponents;
 import br.com.caelum.vraptor.core.Execution;
 import br.com.caelum.vraptor.core.RequestInfo;
-import br.com.caelum.vraptor.ioc.Component;
-import br.com.caelum.vraptor.ioc.ComponentFactory;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
 import br.com.caelum.vraptor.ioc.StereotypeHandler;
+import br.com.caelum.vraptor.scan.WebAppBootstrap;
+import br.com.caelum.vraptor.scan.WebAppBootstrapFactory;
 
 /**
  * Managing internal components by using pico container.<br>
@@ -52,7 +51,6 @@ import br.com.caelum.vraptor.ioc.StereotypeHandler;
  *
  * @author Guilherme Silveira
  */
-@Deprecated
 public class PicoProvider implements ContainerProvider {
 
     private final MutablePicoContainer picoContainer;
@@ -87,53 +85,35 @@ public class PicoProvider implements ContainerProvider {
     }
 
     public final void start(ServletContext context) {
-    	logger.warn("PicoProvider is deprecated. Use SpringProvider for VRaptor instead");
 	    ComponentRegistry componentRegistry = getComponentRegistry();
 	    registerBundledComponents(componentRegistry);
 
 	    this.picoContainer.addComponent(context);
 	    BasicConfiguration config = new BasicConfiguration(context);
 
-	    if (config.isClasspathScanningEnabled()) {
-	    	logger.trace("Start classpath scanning");
-	    	Scanner scanner = new ReflectionsScanner(config);
-	    	this.picoContainer.addComponent(scanner);
+	    // using the new vraptor.scan
+	    WebAppBootstrap webAppBootstrap = new WebAppBootstrapFactory().create(config);
+	    webAppBootstrap.configure(componentRegistry);
 
-	    	registerAnnotatedComponents(scanner, componentRegistry);
-
-	    	StereotypedComponentRegistrar componentRegistrar = picoContainer.getComponent(StereotypedComponentRegistrar.class);
-	    	componentRegistrar.registerFrom(scanner);
-	    	logger.trace("End classpath scanning");
+	    // call old-style custom components registration
+	    registerCustomComponents(componentRegistry);
 	    	
-	    	logger.trace("Start registering custom components");
-	    	registerCustomComponents(picoContainer, scanner);
-	    	logger.trace("End custom components registration");
-	    } else {
-	    	logger.info("Classpath scanning disabled");
-	    	
-	    	logger.trace("Start registering custom components");
-	    	registerCustomComponents(picoContainer, null);
-	    	
-	    	
-	    	logger.trace("End custom components registration");
-	    }
-	    	
+	    // start the container
 	    getComponentRegistry().init();
 	    picoContainer.start();
 	    registerCacheComponents();
 	    
-	    if (!config.isClasspathScanningEnabled()) {
-	    	Collection<Class<?>> components = getComponentRegistry().getAllRegisteredApplicationScopedComponents();
-	    	List<StereotypeHandler> handlers = picoContainer.getComponents(StereotypeHandler.class);
+	    // call all handlers for registered components
+    	Collection<Class<?>> components = getComponentRegistry().getAllRegisteredApplicationScopedComponents();
+    	List<StereotypeHandler> handlers = picoContainer.getComponents(StereotypeHandler.class);
 
-	    	for (Class<?> type : components) {
-		        for (StereotypeHandler handler : handlers) {
-		    		if (type.isAnnotationPresent(handler.stereotype())) {
-		    			handler.handle(type);
-		    		}
-		    	}
+    	for (Class<?> type : components) {
+	        for (StereotypeHandler handler : handlers) {
+	    		if (type.isAnnotationPresent(handler.stereotype())) {
+	    			handler.handle(type);
+	    		}
 	    	}
-	    }
+    	}
 	}
 
     /**
@@ -152,23 +132,6 @@ public class PicoProvider implements ContainerProvider {
 		this.childContainer.start();
 	}
 
-	private void registerAnnotatedComponents(Scanner scanner, ComponentRegistry componentRegistry) {
-		Collection<Class<?>> collection = scanner.getTypesWithAnnotation(Component.class);
-		for (Class<?> componentType : collection) {
-			if (ComponentFactory.class.isAssignableFrom(componentType)) {
-				if(logger.isDebugEnabled()) {
-					logger.debug("Registering found component factory " + componentType);
-				}
-				componentRegistry.register(componentType, componentType);
-			} else {
-				if(logger.isDebugEnabled()) {
-					logger.debug("Deeply registering found component " + componentType);
-				}
-				componentRegistry.deepRegister(componentType);
-			}
-		}
-	}
-
 	/**
 	 * Register default vraptor-pico implementation components.
 	 */
@@ -177,7 +140,6 @@ public class PicoProvider implements ContainerProvider {
 	    for (Class<? extends StereotypeHandler> entry : BaseComponents.getStereotypeHandlers()) {
 			registry.register(entry, entry);
 		}
-//	    registry.register(ComponentHandler.class, ComponentHandler.class);
 	    for (Map.Entry<Class<?>, Class<?>> entry : BaseComponents.getApplicationScoped().entrySet()) {
 	        registry.register(entry.getKey(), entry.getValue());
 	        registry.register(entry.getValue(), entry.getValue());
@@ -193,15 +155,9 @@ public class PicoProvider implements ContainerProvider {
 	    for (Class<? extends Converter<?>> converterType : BaseComponents.getBundledConverters()) {
 	        registry.register(converterType, converterType);
 	    }
-
-	    registry.register(ResourceRegistrar.class, ResourceRegistrar.class);
-	    registry.register(InterceptorRegistrar.class, InterceptorRegistrar.class);
-	    registry.register(ConverterRegistrar.class, ConverterRegistrar.class);
-	    registry.register(ComponentFactoryRegistrar.class, ComponentFactoryRegistrar.class);
-	    registry.register(StereotypedComponentRegistrar.class, StereotypedComponentRegistrar.class);
 	}
 
-	protected void registerCustomComponents(PicoContainer picoContainer, Scanner scanner) {
+	protected void registerCustomComponents(ComponentRegistry registry) {
 		/* TODO: For now, this is an empty hook method to enable subclasses to use
 		 * the scanner and register their specific components.
 		 *

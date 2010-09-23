@@ -6,37 +6,29 @@
 
 	<description>VRaptor 3 Blank Project module build</description>
 	
-	<property file="../vraptor-core/build.properties" />
+	<property file="../build.properties" />
+	<property file="${vraptor.core}/build.properties" />
 	
-	<property name="vraptor.lib" value="../vraptor-core/"/>
 	<property name="vraptor.scala.jar" value="../vraptor-plugin-scala/target/vraptor-scala.jar"/>
-	<property name="mandatory.jars" value="../vraptor-core/${libs.dir}/mandatory"/>
-	<property name="optional.jars" value="../vraptor-core/${libs.dir}/optional"/>
 	<property name="webinf.lib.dir" value="WebContent/WEB-INF/lib/"/>
 	<property name="extra.lib.dir" value="lib/extras"/>
 	
     <target name="update-jars">
     	<mkdir dir="${webinf.lib.dir}"/>
     	<delete>
-			<fileset dir="${webinf.lib.dir}">
-			    <include name="*.jar"/>
-			</fileset>
+			<fileset dir="${webinf.lib.dir}" includes="*.jar"/>
 		</delete>
     	<copy todir="${webinf.lib.dir}">
 			<fileset dir="${mandatory.jars}">
 			    <include name="*.jar"/>
 				<exclude name="objenesis*.jar"/>
-				<exclude name="spring*.jar"/>
 				<exclude name="jstl*.jar"/>
 			</fileset>
-			<fileset dir="${optional.jars}">
-			    <include name="iogi*.jar"/>
-			</fileset>
-    		<fileset dir="${extra.lib.dir}">
-			    <include name="*.jar"/>
-			</fileset>
+			<fileset dir="${optional.jars}/iogi" includes="*.jar"/>
+			<fileset dir="${container.jars}" includes="*.jar"/>
+			<fileset dir="${extra.lib.dir}" includes="*.jar"/>
     	</copy>
-    	<copy todir="${webinf.lib.dir}" file="${vraptor.lib}/${jar.file}"/>
+    	<copy todir="${webinf.lib.dir}" file="${vraptor.jar}" />
     	<copy todir="${webinf.lib.dir}" file="${vraptor.scala.jar}"/>
     </target>
 

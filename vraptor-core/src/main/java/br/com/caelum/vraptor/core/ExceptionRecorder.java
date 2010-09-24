@@ -18,32 +18,42 @@ package br.com.caelum.vraptor.core;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.TypeVariable;
-import java.util.ArrayList;
 import java.util.List;
 
 import net.vidageek.mirror.dsl.Mirror;
 import br.com.caelum.vraptor.Result;
+import br.com.caelum.vraptor.interceptor.ExceptionHandlerInterceptor;
 import br.com.caelum.vraptor.proxy.MethodInvocation;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.SuperMethod;
 
+import com.google.common.collect.Lists;
+
 /**
- * Create proxies to store state of exception mapping.
+ * Create proxies to store state of exception mapping. 
+ * 
+ * <p>This class is a part of Exception Handling Feature.</p>
  * 
  * @author Otávio Scherer Garcia
  * @author Lucas Cavalcanti
+ * @see ExceptionRecorderParameter
+ * @see ExceptionMapper
+ * @see DefaultExceptionMapper
+ * @see ExceptionHandlerInterceptor
  * @since 3.2
  */
 public class ExceptionRecorder<T>
     implements MethodInvocation<T> {
 
     private final Proxifier proxifier;
-    private final List<ExceptionRecorderParameter> parameters = new ArrayList<ExceptionRecorderParameter>();
+    private final List<ExceptionRecorderParameter> parameters;
 
     public ExceptionRecorder(Proxifier proxifier) {
         this.proxifier = proxifier;
+        parameters = Lists.newArrayList();
     }
 
+    @SuppressWarnings("unchecked")
     public Object intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {
         parameters.add(new ExceptionRecorderParameter(args, method));
         Class<?> c = null; // wich class for proxy

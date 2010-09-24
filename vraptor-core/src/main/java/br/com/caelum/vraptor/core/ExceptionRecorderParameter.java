@@ -19,10 +19,18 @@ package br.com.caelum.vraptor.core;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
+import br.com.caelum.vraptor.interceptor.ExceptionHandlerInterceptor;
+
 /**
  * Wraps the input parameters for {@link ExceptionRecorder}.
  * 
+ * <p>This class is a part of Exception Handling Feature.</p>
+ * 
  * @author Otávio Scherer Garcia
+ * @see ExceptionRecorder
+ * @see ExceptionMapper
+ * @see DefaultExceptionMapper
+ * @see ExceptionHandlerInterceptor
  * @since 3.2
  */
 public class ExceptionRecorderParameter {
@@ -34,10 +42,20 @@ public class ExceptionRecorderParameter {
         this.method = method;
     }
 
+    /**
+     * Gets the method arguments.
+     * 
+     * @return
+     */
     public Object[] getArgs() {
         return args;
     }
 
+    /**
+     * Gets the {@link Method}.
+     * 
+     * @return
+     */
     public Method getMethod() {
         return method;
     }

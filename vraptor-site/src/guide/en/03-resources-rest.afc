@@ -41,7 +41,7 @@ public class ClientController {
 }
 [/java]
 
-[section Parâmetros dos métodos]
+[section Method parameters]
 You can receive parameters on your controller methods, and if those parameters
 follow the java beans convention (getters and setters for class fields), 
 you can use dots for browsing through the fields. For instance, on method:

@@ -12,7 +12,6 @@
 	<property name="vraptor.scala.jar" value="../vraptor-plugin-scala/target/vraptor-scala.jar"/>
 	<property name="webinf.lib.dir" value="WebContent/WEB-INF/lib/"/>
 	<property name="scala.lib.dir" value="../vraptor-core/lib/scala/"/>
-	<property name="extra.lib.dir" value="lib/extras"/>
 	<property name="guice.lib.dir" value="../vraptor-core/lib/containers/guice/"/>	
     <target name="update-jars">
     	<mkdir dir="${webinf.lib.dir}"/>
@@ -23,12 +22,10 @@
 			<fileset dir="${mandatory.jars}">
 			    <include name="*.jar"/>
 				<exclude name="objenesis*.jar"/>
-				<exclude name="jstl*.jar"/>
 			</fileset>
 			<fileset dir="${optional.jars}/iogi" includes="*.jar"/>
 			<fileset dir="${container.jars}" includes="*.jar"/>
 			<fileset dir="${scala.lib.dir}" includes="*.jar"/>
-    		<fileset dir="${extra.lib.dir}" includes="*.jar"/>
     		<fileset dir="${guice.lib.dir}" includes="guice-snapshot.jar"/>
     	</copy>
     	<copy todir="${webinf.lib.dir}" file="${vraptor.jar}" />

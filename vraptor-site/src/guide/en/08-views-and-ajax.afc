@@ -266,7 +266,7 @@ public class CustomXMLSerialization extends XStreamXMLSerialization {
 }
 [/java]
 
-[title Serializando Collections]
+[title Serializing Collections]
 
 When serializing collections, vRaptor will wrap their elements with a "list" tag:
 
@@ -354,7 +354,7 @@ results in:
 ]}
 [/code]
 
-[title Serializing JSON without root elemento]
+[title Serializing JSON without root element]
 If you want to serialize an object to json without give it any names, you can use the
 withoutRoot method:
 [java]

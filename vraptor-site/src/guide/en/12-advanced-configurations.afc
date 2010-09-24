@@ -42,7 +42,7 @@ you'll only need to create the following class:
 
 If you need a more complex convention, just implement the PathResolver interface.
 
-[section Mudando a URI padrão]
+[section Changing default URI]
 
 The default URI for ClientsController.list() is /clients/list, i.e, controller_name/method_name.
 If you want to override this convention, you can create a class like:

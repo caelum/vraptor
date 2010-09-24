@@ -26,16 +26,17 @@ import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.core.DefaultExceptionMapper;
 import br.com.caelum.vraptor.core.ExceptionMapper;
 import br.com.caelum.vraptor.core.ExceptionRecorder;
-import br.com.caelum.vraptor.core.ExceptionRecorderParameter;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.resource.ResourceMethod;
+
+import com.google.common.base.Throwables;
 
 /**
  * Intercept all requests to handling uncaught exceptions.
  * <p>
  * This class is a part of Exception Handling Feature.
  * </p>
- * 
+ *
  * @author Otávio Scherer Garcia
  * @see ExceptionRecorder
  * @see ExceptionRecorderParameter
@@ -67,50 +68,36 @@ public class ExceptionHandlerInterceptor
         try {
             stack.next(method, resourceInstance);
         } catch (InterceptionException e) {
-            if (!replay((Exception) e.getCause())) {
+            if (!(e.getCause() instanceof Exception) || !replay((Exception) e.getCause())) {
                 throw e;
             }
         }
     }
 
     protected void reportException(Exception e) {
-        // skip wrapped exceptions
-        while (e.getCause() != null && !hasMessage(e)) {
-            e = (Exception) e.getCause();
-        }
+    	Throwable rootCause = Throwables.getRootCause(e);
 
         // add error attributes compliance with servlet spec
         result.include("javax.servlet.error.status_code", 500);
-        result.include("javax.servlet.error.exception", e);
-        result.include("javax.servlet.error.exception_type", e.getClass());
-        result.include("javax.servlet.error.message", e.getMessage());
+        result.include("javax.servlet.error.exception", rootCause);
+        result.include("javax.servlet.error.exception_type", rootCause.getClass());
+        result.include("javax.servlet.error.message", rootCause.getMessage());
         result.include("javax.servlet.error.request_uri", request.getRequestURI());
     }
 
     protected boolean replay(Exception e) {
         ExceptionRecorder<Result> exresult = exceptions.findByException(e);
 
-        // found result?
-        if (exresult != null) {
-            reportException(e);
+        if (exresult == null) {
+			return false;
+		}
 
-            logger.debug("handling exception {}", e.getClass());
-            exresult.replay(result);
+        reportException(e);
 
-            return true;
-        }
+        logger.debug("handling exception {}", e.getClass());
+        exresult.replay(result);
 
-        // if not, try to execute with cause (if cause is an exception, not throwable)
-        if (e.getCause() != null && e.getCause() instanceof Exception) {
-            return replay((Exception) e.getCause());
-        }
-
-        return false;
-    }
-
-    // when update to guava, we don't need this method
-    private boolean hasMessage(Exception e) {
-        return e.getMessage() != null && e.getMessage().length() > 0;
+        return true;
     }
 
 }

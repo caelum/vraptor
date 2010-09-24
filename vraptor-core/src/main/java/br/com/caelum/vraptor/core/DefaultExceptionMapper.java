@@ -16,6 +16,8 @@
  */
 package br.com.caelum.vraptor.core;
 
+import static com.google.common.collect.Maps.newLinkedHashMap;
+
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -26,13 +28,11 @@ import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.interceptor.ExceptionHandlerInterceptor;
 import br.com.caelum.vraptor.proxy.Proxifier;
 
-import com.google.common.collect.Maps;
-
 /**
  * Default implementation of {@link ExceptionMapper}.
- * 
+ *
  * <p>This class is a part of Exception Handling Feature.</p>
- * 
+ *
  * @author Otávio Scherer Garcia
  * @see ExceptionRecorder
  * @see ExceptionRecorderParameter
@@ -44,13 +44,13 @@ public class DefaultExceptionMapper
     implements ExceptionMapper {
 
     private static final Logger logger = LoggerFactory.getLogger(DefaultExceptionMapper.class);
-    
+
     private final Map<Class<? extends Exception>, ExceptionRecorder<Result>> exceptions;
     private final Proxifier proxifier;
 
     public DefaultExceptionMapper(Proxifier proxifier) {
         this.proxifier = proxifier;
-        exceptions = Maps.newLinkedHashMap();
+        this.exceptions = newLinkedHashMap();
     }
 
     public Result record(Class<? extends Exception> exception) {
@@ -77,7 +77,7 @@ public class DefaultExceptionMapper
 
         return hasExceptionCause(e) ? findByException((Exception) e.getCause()) : null;
     }
-    
+
     private boolean hasExceptionCause(Exception e) {
         return e.getCause() != null && e.getCause() instanceof Exception;
     }

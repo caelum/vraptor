@@ -23,9 +23,9 @@ import br.com.caelum.vraptor.interceptor.ExceptionHandlerInterceptor;
 
 /**
  * Wraps the input parameters for {@link ExceptionRecorder}.
- * 
+ *
  * <p>This class is a part of Exception Handling Feature.</p>
- * 
+ *
  * @author Otávio Scherer Garcia
  * @see ExceptionRecorder
  * @see ExceptionMapper
@@ -33,7 +33,7 @@ import br.com.caelum.vraptor.interceptor.ExceptionHandlerInterceptor;
  * @see ExceptionHandlerInterceptor
  * @since 3.2
  */
-public class ExceptionRecorderParameter {
+class ExceptionRecorderParameter {
     public Object[] args;
     public Method method;
 
@@ -44,7 +44,7 @@ public class ExceptionRecorderParameter {
 
     /**
      * Gets the method arguments.
-     * 
+     *
      * @return
      */
     public Object[] getArgs() {
@@ -53,7 +53,7 @@ public class ExceptionRecorderParameter {
 
     /**
      * Gets the {@link Method}.
-     * 
+     *
      * @return
      */
     public Method getMethod() {

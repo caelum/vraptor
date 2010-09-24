@@ -21,9 +21,9 @@ import br.com.caelum.vraptor.interceptor.ExceptionHandlerInterceptor;
 
 /**
  * Store the exception mapping for exception handling.
- * 
+ *
  * <p>This class is a part of Exception Handling Feature.</p>
- * 
+ *
  * @author Otávio Scherer Garcia
  * @see ExceptionRecorder
  * @see ExceptionRecorderParameter
@@ -32,10 +32,10 @@ import br.com.caelum.vraptor.interceptor.ExceptionHandlerInterceptor;
  * @since 3.2
  */
 public interface ExceptionMapper {
-    
+
     /**
      * Store the exception and return a proxy with {@link Result} state.
-     * 
+     *
      * @param exception The exception to store.
      * @return
      * @throws NullPointerException if the exception is null.
@@ -43,9 +43,9 @@ public interface ExceptionMapper {
     Result record(Class<? extends Exception> exception);
 
     /**
-     * Finds an {@link ExceptionRecorder} by and {@link Exception}. If  
+     * Finds an {@link ExceptionRecorder} by an {@link Exception}. If
      * {@link ExceptionRecorder} is not found, returns null.
-     * 
+     *
      * @param exception The exception to find.
      * @return
      */

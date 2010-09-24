@@ -1,11 +1,13 @@
 package br.com.caelum.vraptor.interceptor;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -49,28 +51,20 @@ public class ExceptionHandlerInterceptorTest {
     }
 
     /**
-     * Test when the exception is found, but wrapped by another.
-     */
-    @Test
-    public void withNestedException() {
-        final Exception e = new RuntimeException(new IllegalStateException());
-        when(mapper.findByException(e)).thenReturn(mockRecorder);
-        doThrow(new InterceptionException(e)).when(stack).next(method, instance);
-
-        interceptor.intercept(stack, method, instance);
-        verify(mockRecorder).replay(result);
-    }
-
-    /**
      * Test when the exception is not found, so vraptor needs only rethrows the
      * exception.
      */
-    @Test(expected = InterceptionException.class)
+    @Test
     public void whenNotFoundException() {
         final Exception e = new IllegalArgumentException();
         when(mapper.findByException(e)).thenReturn(null);
         doThrow(new InterceptionException(e)).when(stack).next(method, instance);
 
-        interceptor.intercept(stack, method, instance);
+        try {
+        	interceptor.intercept(stack, method, instance);
+        	Assert.fail("Should throw InterceptionException");
+        } catch (InterceptionException e2) {
+        	assertEquals(e2.getCause(), e);
+		}
     }
 }

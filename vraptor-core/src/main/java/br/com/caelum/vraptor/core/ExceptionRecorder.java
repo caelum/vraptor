@@ -16,6 +16,8 @@
  */
 package br.com.caelum.vraptor.core;
 
+import static com.google.common.collect.Lists.newArrayList;
+
 import java.lang.reflect.Method;
 import java.lang.reflect.TypeVariable;
 import java.util.List;
@@ -27,13 +29,11 @@ import br.com.caelum.vraptor.proxy.MethodInvocation;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.SuperMethod;
 
-import com.google.common.collect.Lists;
-
 /**
- * Create proxies to store state of exception mapping. 
- * 
+ * Create proxies to store state of exception mapping.
+ *
  * <p>This class is a part of Exception Handling Feature.</p>
- * 
+ *
  * @author Otávio Scherer Garcia
  * @author Lucas Cavalcanti
  * @see ExceptionRecorderParameter
@@ -50,29 +50,30 @@ public class ExceptionRecorder<T>
 
     public ExceptionRecorder(Proxifier proxifier) {
         this.proxifier = proxifier;
-        parameters = Lists.newArrayList();
+        parameters = newArrayList();
     }
 
     @SuppressWarnings("unchecked")
     public Object intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {
         parameters.add(new ExceptionRecorderParameter(args, method));
-        Class<?> c = null; // wich class for proxy
 
-        if (void.class.equals(method.getReturnType())) { // don't create proxy for void methods
+        if (void.class.equals(method.getReturnType())) {
             return null;
-        } else if (method.getGenericReturnType() instanceof TypeVariable) { // get the class by args
-            if (args[0] instanceof Class) {
-                c = (Class<?>) args[0];
-            } else {
-                c = args[0].getClass();
-            }
-        } else {
-            c = method.getReturnType();
         }
 
-        // return the proxy
-        return proxifier.proxify(c, (MethodInvocation) this);
+        return proxifier.proxify(findReturnType(method, args), (MethodInvocation) this);
     }
+
+	private Class<?> findReturnType(Method method, Object[] args) {
+        if (method.getGenericReturnType() instanceof TypeVariable) {
+            if (args[0] instanceof Class) {
+                return (Class<?>) args[0];
+            }
+            return args[0].getClass();
+        }
+
+        return method.getReturnType();
+	}
 
     public void replay(Result result) {
         Object current = result;

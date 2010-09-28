@@ -34,7 +34,6 @@ import br.com.caelum.vraptor.mydvds.interceptor.UserInfo;
 import br.com.caelum.vraptor.mydvds.model.Dvd;
 import br.com.caelum.vraptor.mydvds.model.DvdRental;
 import br.com.caelum.vraptor.validator.Validations;
-import br.com.caelum.vraptor.view.Results;
 
 /**
  * The resource <code>DvdController</code> handles all Dvd operations,
@@ -94,7 +93,7 @@ public class DvdsController {
 	    	}
 		}});
 
-		validator.onErrorUse(Results.logic()).forwardTo(UsersController.class).home();
+		validator.onErrorForwardTo(UsersController.class).home();
 
 		// is there a file?
 		if (file != null) {
@@ -109,7 +108,7 @@ public class DvdsController {
 		// survive one more request when redirecting.
 		result.include("notice", dvd.getTitle() + " dvd added");
 
-		result.use(Results.logic()).redirectTo(UsersController.class).home();
+		result.redirectTo(UsersController.class).home();
 	}
 
 	/**

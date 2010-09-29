@@ -28,6 +28,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import br.com.caelum.vraptor.config.BasicConfiguration;
+import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.test.HttpServletRequestMock;
 import br.com.caelum.vraptor.test.HttpSessionMock;
 
@@ -46,7 +47,7 @@ public class SpringProviderTest {
 		servletContext = mockery.mock(ServletContext.class);
 
 		session = new HttpSessionMock(servletContext, "session");
-		request = new HttpServletRequestMock(session);
+		request = new HttpServletRequestMock(session, mockery.mock(MutableRequest.class), mockery);
 
 		ServletRequestAttributes requestAttributes = new ServletRequestAttributes(
 				request);
@@ -66,13 +67,13 @@ public class SpringProviderTest {
 				atLeast(1).of(servletContext).getInitParameter(
 						BasicConfiguration.BASE_PACKAGES_PARAMETER_NAME);
 				will(returnValue("br.com.caelum.vraptor.ioc.spring.components.registrar"));
-				
+
 				allowing(servletContext).getRealPath("/WEB-INF/classes/");
 				will(returnValue(this.getClass().getResource(".").getPath()));
-				
+
 				allowing(servletContext).getAttribute(with(any(String.class)));
 				will(returnValue(null));
-				
+
                 allowing(servletContext).getInitParameter(BasicConfiguration.SCANNING_PARAM);
                 will(returnValue("enabled"));
 			}

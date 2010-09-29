@@ -21,6 +21,7 @@ import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.MutableResponse;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor.ioc.PrototypeScoped;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.ioc.SessionScoped;
 import br.com.caelum.vraptor.ioc.StereotypeHandler;
@@ -69,6 +70,7 @@ public class VRaptorAbstractModule extends AbstractModule {
 		bindScope(RequestScoped.class, GuiceProvider.REQUEST);
 		bindScope(SessionScoped.class, GuiceProvider.SESSION);
 		bindScope(ApplicationScoped.class,  Scopes.SINGLETON);
+		bindScope(PrototypeScoped.class,  Scopes.NO_SCOPE);
 
 		Matcher<TypeLiteral<?>> isApplication = type(annotatedWith(ApplicationScoped.class));
 		Matcher<TypeLiteral<?>> isSession = type(annotatedWith(SessionScoped.class));

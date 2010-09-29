@@ -80,7 +80,7 @@
 		
 									<li><a class="link_toc" href="../../documentation/dependency-injection/">9. Dependency injection</a></li>
 		
-									<li><a class="link_toc" href="../../documentation/downloading/">10. Downloading</a></li>
+									<li><a class="link_toc" href="../../documentation/download-and-upload/">10. Download and Upload</a></li>
 		
 									<li><a class="link_toc" href="../../documentation/utility-components/">11. Utility Components</a></li>
 		
@@ -92,9 +92,11 @@
 		
 									<li><a class="link_toc" href="../../documentation/scala/">15. Scala</a></li>
 		
-									<li><a class="link_toc" href="../../documentation/changelog/">16. ChangeLog</a></li>
+									<li><a class="link_toc" href="../../documentation/optimizations/">16. Optimizations</a></li>
 		
-									<li><a class="link_toc" href="../../documentation/migrating-from-vraptor2-to-vraptor3/">17. Migrating from VRaptor2 to VRaptor3</a></li>
+									<li><a class="link_toc" href="../../documentation/changelog/">17. ChangeLog</a></li>
+		
+									<li><a class="link_toc" href="../../documentation/migrating-from-vraptor2-to-vraptor3/">18. Migrating from VRaptor2 to VRaptor3</a></li>
 		
                 </ol>
             </div><!-- submenu-->
@@ -136,13 +138,13 @@ you can inspect the added errors, or simply check if there is any error.</span>
 &nbsp;&nbsp;&nbsp; </span><span class="java10">ClientController controller = </span><span class="java4">new </span><span class="java10">ClientController</span><span class="java8">(</span><span class="java10">..., </span><span class="java4">new </span><span class="java10">MockValidator</span><span class="java8">())</span><span class="java10">;<br />
 &nbsp;&nbsp;&nbsp; controller.add</span><span class="java8">(</span><span class="java4">new </span><span class="java10">Client</span><span class="java8">())</span><span class="java10">;<br />
 </span><span class="java8">}</span></code></div>
-	    	<span class="paragraph">ou</span>
+	    	<span class="paragraph">or</span>
 	    	<div class="java"><code class="java">
 <span class="java16">@Test<br />
 </span><span class="java4">public </span><span class="java9">void </span><span class="java10">testThatAValidationErrorOccurs</span><span class="java8">() {<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java10">ClientController controller = </span><span class="java4">new </span><span class="java10">ClientController</span><span class="java8">(</span><span class="java10">..., </span><span class="java4">new </span><span class="java10">MockValidator</span><span class="java8">())</span><span class="java10">;<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java4">try </span><span class="java8">{<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">controller.add</span><span class="java8">(</span><span class="java4">new </span><span class="java10">Cliente</span><span class="java8">())</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">controller.add</span><span class="java8">(</span><span class="java4">new </span><span class="java10">Client</span><span class="java8">())</span><span class="java10">;<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Assert.fail</span><span class="java8">()</span><span class="java10">;<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java8">} </span><span class="java4">catch </span><span class="java8">(</span><span class="java10">ValidationException e</span><span class="java8">) {<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">List&lt;Message&gt; errors = e.getErrors</span><span class="java8">()</span><span class="java10">;<br />

@@ -195,3 +195,4 @@ Se você quer migrar do VRaptor 2 para o VRaptor 3
 		br.com.caelum.vraptor.vraptor2
 	</param-value>
 </context-param>
+[/xml]

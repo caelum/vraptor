@@ -97,14 +97,9 @@
 	
 		<h2 class="chapter">Evitando que o browser faça cache das páginas</h2>
 
-		<span class="paragraph"><strong class="definition"><em class="italic">por Ot&aacute;vio Scherer Garcia</em></strong></span><span class="paragraph">Este interceptor indica ao browser para n&atilde;o efetuar cache das p&aacute;ginas.</span><div class="java"><code class="java">
-<span class="java14">/**<br />
- * Intercepts all requests and set a no-cache information.<br />
- *<br />
- * </span><span class="java11">@author </span><span class="java14">Ot&aacute;vio Scherer Garcia<br />
- * </span><span class="java11">@version </span><span class="java14">$Revision$<br />
- */<br />
-</span><span class="java16">@Intercepts<br />
+		<span class="paragraph"><strong class="definition"><em class="italic">por Ot&aacute;vio Scherer Garcia e Lucas Cavalcanti</em></strong></span><span class="paragraph">Este interceptor indica ao browser para n&atilde;o efetuar cache das p&aacute;ginas, adicionando headers indicando que a p&aacute;gina atual
+est&aacute; expirada.</span><div class="java"><code class="java">
+<span class="java16">@Intercepts<br />
 @RequestScoped<br />
 </span><span class="java4">public class </span><span class="java10">NoCacheInterceptor<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java4">implements </span><span class="java10">Interceptor </span><span class="java8">{<br />
@@ -138,7 +133,17 @@
 <br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; stack.next</span><span class="java8">(</span><span class="java10">method, resourceInstance</span><span class="java8">)</span><span class="java10">;<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
-}</span></code></div>
+}</span></code></div><span class="paragraph">Voc&ecirc; pode tamb&eacute;m criar uma anota&ccedil;&atilde;o para que apenas as classes anotadas evitem o cache.</span><div class="java"><code class="java">
+<span class="java16">@Target</span><span class="java8">({</span><span class="java10">ElementType.METHOD, ElementType.TYPE</span><span class="java8">})<br />
+</span><span class="java16">@Documented<br />
+@Retention</span><span class="java8">(</span><span class="java10">RetentionPolicy.RUNTIME</span><span class="java8">)<br />
+</span><span class="java4">public @interface </span><span class="java10">NoCache </span><span class="java8">{<br />
+<br />
+}</span></code></div><span class="paragraph">E alterar o m&eacute;todo accepts do interceptor para o c&oacute;digo abaixo:</span><div class="java"><code class="java">
+<span class="java16">@Override<br />
+</span><span class="java4">public </span><span class="java9">boolean </span><span class="java10">accepts</span><span class="java8">(</span><span class="java10">ResourceMethod method</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">return </span><span class="java10">method.containsAnnotation</span><span class="java8">(</span><span class="java10">NoCache.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">;<br />
+</span><span class="java8">}</span></code></div>
 
 
 </div><!-- content -->

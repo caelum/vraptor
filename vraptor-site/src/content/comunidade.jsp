@@ -69,7 +69,11 @@
 		<dd>
 			<a href="http://diogosoares.info/?page_id=9">Iniciando com Vraptor 3</a>
 		</dd>
-		
+		<dt>Fabio "Kym" Nascimento</dt>
+		<dd>
+			<a href="http://www.guj.com.br/posts/list/0/219870.java">Sistema usando VRaptor3 e Hibernate</a>
+		</dd>
+
 	</dl>
   </div>  
 </div>

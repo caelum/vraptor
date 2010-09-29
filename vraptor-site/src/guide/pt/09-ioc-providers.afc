@@ -192,8 +192,11 @@ public class CustomProvider extends GuiceProvider {
 
 	@Override
 	protected void registerCustomComponents(ComponentRegistry registry) {
-		registry.register(UmaClasse.class, ImplementacaoDessaClasse.class); //binding só na UmaClasse
-		registry.deepRegister(OutraClasse.class); //binding da classe e de todas as superclasses e interfaces
+		//binding só na UmaClasse
+		registry.register(UmaClasse.class, ImplementacaoDessaClasse.class);
+		 
+		//binding da classe e de todas as superclasses e interfaces
+		registry.deepRegister(OutraClasse.class); 
 	}
 	
 	@Override

@@ -1,0 +1,13 @@
+[chapter Vraptor scaffold]
+
+O VRaptor3 agora possui uma extensão chamada vraptor-scaffold.
+
+[section Ant]
+
+[java]
+@Test(expected=ValidationException.class)
+public void testaQueVaiDarErroDeValidacao() {
+	ClienteController controller = new ClienteController(..., new MockValidator());
+	controller.adiciona(new Cliente());
+}
+[/java]

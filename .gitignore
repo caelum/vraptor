@@ -16,6 +16,7 @@ out
 *.iws
 *.iml
 *.class
+*.swp
 target
 classes
 build

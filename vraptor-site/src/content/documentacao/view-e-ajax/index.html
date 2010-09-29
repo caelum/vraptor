@@ -84,7 +84,7 @@
 		
 									<li><a class="link_toc" href="../../documentacao/injecao-de-dependencias/">9. Injeção de dependências</a></li>
 		
-									<li><a class="link_toc" href="../../documentacao/downloading/">10. Downloading</a></li>
+									<li><a class="link_toc" href="../../documentacao/download-e-upload/">10. Download e Upload</a></li>
 		
 									<li><a class="link_toc" href="../../documentacao/componentes-utilitarios-opcionais/">11. Componentes Utilitários Opcionais</a></li>
 		
@@ -98,9 +98,13 @@
 		
 									<li><a class="link_toc" href="../../documentacao/scala/">16. Scala</a></li>
 		
-									<li><a class="link_toc" href="../../documentacao/changelog/">17. ChangeLog</a></li>
+									<li><a class="link_toc" href="../../documentacao/otimizacoes/">17. Otimizações</a></li>
 		
-									<li><a class="link_toc" href="../../documentacao/migrando-do-vraptor2-para-o-vraptor3/">18. Migrando do VRaptor2 para o VRaptor3</a></li>
+									<li><a class="link_toc" href="../../documentacao/vraptor-scaffold/">18. Vraptor scaffold</a></li>
+		
+									<li><a class="link_toc" href="../../documentacao/changelog/">19. ChangeLog</a></li>
+		
+									<li><a class="link_toc" href="../../documentacao/migrando-do-vraptor2-para-o-vraptor3/">20. Migrando do VRaptor2 para o VRaptor3</a></li>
 		
                 </ol>
             </div><!-- submenu-->
@@ -161,7 +165,7 @@ e fazer qualquer conven&ccedil;&atilde;o que voc&ecirc; queira, n&atilde;o esque
 }</span></code></div>
 	    	<span class="paragraph">Por padr&atilde;o existem estes tipos de views implementadas:</span>
 	    	<ul class="list"><li><span class="paragraph">Results.logic(), que vai redirecionar para uma outra l&oacute;gica qualquer do sistema</span></li><li><span class="paragraph">Results.page(), que vai redirecionar diretamente para uma p&aacute;gina, podendo ser um
-	jsp, um html, ou qualquer uri relativa ao web application dir, ou ao contexto da aplica&ccedil;&atilde;o.</span></li><li><span class="paragraph">Results.http(), que manda informa&ccedil;&otilde;es do protocolo HTTP como status codes e headers.</span></li><li><span class="paragraph">Results.referer(), que usa o header Referer para fazer redirects ou forwards.</span></li><li><span class="paragraph">Results.nothing(), apenas retorna o c&oacute;digo de sucesso (HTTP 200 OK).</span></li><li><span class="paragraph">Results.xml(), serializa objetos em xml.</span></li><li><span class="paragraph">Results.json(), serializa objetos em json.</span></li><li><span class="paragraph">Results.representation(), serializa objetos em um formato determinado pela requisi&ccedil;&atilde;o
+	jsp, um html, ou qualquer uri relativa ao web application dir, ou ao contexto da aplica&ccedil;&atilde;o.</span></li><li><span class="paragraph">Results.http(), que manda informa&ccedil;&otilde;es do protocolo HTTP como status codes e headers.</span></li><li><span class="paragraph">Results.status(), manda status codes com mais informa&ccedil;&otilde;es.</span></li><li><span class="paragraph">Results.referer(), que usa o header Referer para fazer redirects ou forwards.</span></li><li><span class="paragraph">Results.nothing(), apenas retorna o c&oacute;digo de sucesso (HTTP 200 OK).</span></li><li><span class="paragraph">Results.xml(), serializa objetos em xml.</span></li><li><span class="paragraph">Results.json(), serializa objetos em json.</span></li><li><span class="paragraph">Results.representation(), serializa objetos em um formato determinado pela requisi&ccedil;&atilde;o
 	 (parametro _format ou header Accept)</span></li></ul>
 		
 

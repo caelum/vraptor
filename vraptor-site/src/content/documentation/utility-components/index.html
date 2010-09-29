@@ -80,7 +80,7 @@
 		
 									<li><a class="link_toc" href="../../documentation/dependency-injection/">9. Dependency injection</a></li>
 		
-									<li><a class="link_toc" href="../../documentation/downloading/">10. Downloading</a></li>
+									<li><a class="link_toc" href="../../documentation/download-and-upload/">10. Download and Upload</a></li>
 		
 									<li><a class="link_toc" href="../../documentation/utility-components/">11. Utility Components</a></li>
 		
@@ -92,9 +92,11 @@
 		
 									<li><a class="link_toc" href="../../documentation/scala/">15. Scala</a></li>
 		
-									<li><a class="link_toc" href="../../documentation/changelog/">16. ChangeLog</a></li>
+									<li><a class="link_toc" href="../../documentation/optimizations/">16. Optimizations</a></li>
 		
-									<li><a class="link_toc" href="../../documentation/migrating-from-vraptor2-to-vraptor3/">17. Migrating from VRaptor2 to VRaptor3</a></li>
+									<li><a class="link_toc" href="../../documentation/changelog/">17. ChangeLog</a></li>
+		
+									<li><a class="link_toc" href="../../documentation/migrating-from-vraptor2-to-vraptor3/">18. Migrating from VRaptor2 to VRaptor3</a></li>
 		
                 </ol>
             </div><!-- submenu-->
@@ -237,6 +239,15 @@ its web.xml:</span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-value&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;br.com.caelum.vraptor.util.other.packages...,<br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;br.com.caelum.vraptor.http.iogi<br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;/param-value&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal"></span><span class="textag">&lt;/context-param&gt;</span></code></div>
+	    	<span class="paragraph"><strong class="title">VRaptor 2 compatibility</strong>
+If you want to migrate VRaptor 2 to VRaptor 3 (see Migrating from VRaptor2 to VRaptor3 chapter):</span>
+	    	<div class="xml"><code class="xml"><span class="textag">&lt;context-param&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-name&gt;</span><span class="texnormal">br.com.caelum.vraptor.packages</span><span class="textag">&lt;/param-name&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-value&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;br.com.caelum.vraptor.util.other.packages...,<br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;br.com.caelum.vraptor.vraptor2<br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;/param-value&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal"></span><span class="textag">&lt;/context-param&gt;</span></code></div>
 		

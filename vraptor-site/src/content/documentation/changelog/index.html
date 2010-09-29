@@ -80,7 +80,7 @@
 		
 									<li><a class="link_toc" href="../../documentation/dependency-injection/">9. Dependency injection</a></li>
 		
-									<li><a class="link_toc" href="../../documentation/downloading/">10. Downloading</a></li>
+									<li><a class="link_toc" href="../../documentation/download-and-upload/">10. Download and Upload</a></li>
 		
 									<li><a class="link_toc" href="../../documentation/utility-components/">11. Utility Components</a></li>
 		
@@ -92,9 +92,11 @@
 		
 									<li><a class="link_toc" href="../../documentation/scala/">15. Scala</a></li>
 		
-									<li><a class="link_toc" href="../../documentation/changelog/">16. ChangeLog</a></li>
+									<li><a class="link_toc" href="../../documentation/optimizations/">16. Optimizations</a></li>
 		
-									<li><a class="link_toc" href="../../documentation/migrating-from-vraptor2-to-vraptor3/">17. Migrating from VRaptor2 to VRaptor3</a></li>
+									<li><a class="link_toc" href="../../documentation/changelog/">17. ChangeLog</a></li>
+		
+									<li><a class="link_toc" href="../../documentation/migrating-from-vraptor2-to-vraptor3/">18. Migrating from VRaptor2 to VRaptor3</a></li>
 		
                 </ol>
             </div><!-- submenu-->
@@ -105,6 +107,42 @@
 
 		
 
+
+<h3 class="section">3.2.0 (in dev)</h3>
+	    	<ul class="list"><li><span class="paragraph">several performance tweaks: about 60% less request time.</span></li><li><span class="paragraph"><strong class="definition">internal compatibility break</strong>: InterceptorStack interface reorganized.</span></li><li><span class="paragraph">better implementation of VRaptor internal interceptors accepts method.</span></li><li><span class="paragraph">beta support to Google Guice, that can be used instead of Spring.</span></li><li><span class="paragraph">Pico provider is not deprecated anymore.</span></li><li><span class="paragraph">One can change the DI container without configuring it on web.xml.
+If VRaptor finds the Spring jars on classpath, Spring will be used; if
+PicoContainer jars are found it will be used; the same for Guice jars.
+One can find the container jars on lib/containers folder on vraptor zip.</span></li><li><span class="paragraph"><strong class="definition">internal compatibility break</strong>: interfaces <code class="inlineCode">Converters</code>, <code class="inlineCode">Router</code>
+	and constructor of <code class="inlineCode">PathAnnotationRoutesParser</code> class were changed. RouteBuilder
+	converted is now an interface =&gt; DefaultRouteBuilder is the implementation.
+	Those who extend PathAnnotationRoutesParser must change the call to delegate constructor.
+	Those who instantiate RouteBuilder directly must instantiate DefaultRouteBuilder.</span></li><li><span class="paragraph">new annotation @Lazy. Use it on interceptors which accepts method doesn't
+depend on the interceptor internal state:</span><div class="java"><code class="java">
+<span class="java16">@Intercepts<br />
+@Lazy<br />
+</span><span class="java4">public class </span><span class="java10">MyLazyInterceptor </span><span class="java4">implements </span><span class="java10">Interceptor </span><span class="java8">{<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">MyLazyInterceptor</span><span class="java8">(</span><span class="java10">Dependency dependency</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">this</span><span class="java10">.dependency = dependency;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">boolean </span><span class="java10">accepts</span><span class="java8">(</span><span class="java10">ResourceMethod method</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java3">// depends only on method<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return </span><span class="java10">method.containsAnnotation</span><span class="java8">(</span><span class="java10">Abc.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">intercepts</span><span class="java8">(</span><span class="java10">...</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java3">//...<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+}</span></code></div><span class="paragraph">In this case, MyLazyInterceptor will only be instantiated when accepts returns true.
+	A non-functional instance of MyLazyInterceptor will be used to call the accepts method,
+	so it should not depend on the interceptor's internal state.
+	Do not use @Lazy if your accepts is trivial (always returns true).</span></li><li><span class="paragraph"><strong class="definition">slight backwards compatibility break</strong>: the default priority of @Path has changed to Integer.MAX_INTEGER/2.
+  It was Integer.MAX_INTEGER - 1. Despite of this compatibility break, we believe that it won't affect
+  working applications.</span></li><li><span class="paragraph">@Path priority can be defined with constants:</span><div class="java"><code class="java">
+<span class="java16">@Path</span><span class="java8">(</span><span class="java10">value=</span><span class="java5">&#34;/url&#34;</span><span class="java10">, priority=Path.HIGHEST</span><span class="java8">)<br />
+</span><span class="java16">@Path</span><span class="java8">(</span><span class="java10">value=</span><span class="java5">&#34;/url&#34;</span><span class="java10">, priority=Path.HIGH</span><span class="java8">)<br />
+</span><span class="java16">@Path</span><span class="java8">(</span><span class="java10">value=</span><span class="java5">&#34;/url&#34;</span><span class="java10">, priority=Path.DEFAULT</span><span class="java8">)<br />
+</span><span class="java16">@Path</span><span class="java8">(</span><span class="java10">value=</span><span class="java5">&#34;/url&#34;</span><span class="java10">, priority=Path.LOW</span><span class="java8">)<br />
+</span><span class="java16">@Path</span><span class="java8">(</span><span class="java10">value=</span><span class="java5">&#34;/url&#34;</span><span class="java10">, priority=Path.LOWEST</span><span class="java8">)</span></code></div></li><li><span class="paragraph">new interface <code class="inlineCode">TwoWayConverter</code> for bidirecional convertions.</span></li><li><span class="paragraph">native support for OPTIONS requests</span></li><li><span class="paragraph">fix: 405 instead of 500 on requests with unknown HTTP method.</span></li><li><span class="paragraph">more Joda Time converters (by Rodolfo Liviero)</span></li><li><span class="paragraph">improvings on Scala Blank Project (by Pedro Matiello)</span></li><li><span class="paragraph">bugfix: null Accept Header fallback to html</span></li></ul>
+		
 
 <h3 class="section">3.1.3</h3>
 	    	<ul class="list"><li><span class="paragraph">Scala Blank Project</span></li><li><span class="paragraph">Better strategy on Flash scope</span></li><li><span class="paragraph">starting support for javax.inject API. Naming logic parameters is now possible:</span></li><li><span class="paragraph">bugfixes on new Validator</span></li><li><span class="paragraph">bugfix: char as URI parameter</span></li><li><span class="paragraph">bugfix: now VRaptor works with browsers that do not correctly send Accepts header.</span><div class="java"><code class="java">

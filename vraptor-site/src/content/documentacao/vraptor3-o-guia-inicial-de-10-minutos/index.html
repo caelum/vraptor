@@ -84,7 +84,7 @@
 		
 									<li><a class="link_toc" href="../../documentacao/injecao-de-dependencias/">9. Injeção de dependências</a></li>
 		
-									<li><a class="link_toc" href="../../documentacao/downloading/">10. Downloading</a></li>
+									<li><a class="link_toc" href="../../documentacao/download-e-upload/">10. Download e Upload</a></li>
 		
 									<li><a class="link_toc" href="../../documentacao/componentes-utilitarios-opcionais/">11. Componentes Utilitários Opcionais</a></li>
 		
@@ -98,9 +98,13 @@
 		
 									<li><a class="link_toc" href="../../documentacao/scala/">16. Scala</a></li>
 		
-									<li><a class="link_toc" href="../../documentacao/changelog/">17. ChangeLog</a></li>
+									<li><a class="link_toc" href="../../documentacao/otimizacoes/">17. Otimizações</a></li>
 		
-									<li><a class="link_toc" href="../../documentacao/migrando-do-vraptor2-para-o-vraptor3/">18. Migrando do VRaptor2 para o VRaptor3</a></li>
+									<li><a class="link_toc" href="../../documentacao/vraptor-scaffold/">18. Vraptor scaffold</a></li>
+		
+									<li><a class="link_toc" href="../../documentacao/changelog/">19. ChangeLog</a></li>
+		
+									<li><a class="link_toc" href="../../documentacao/migrando-do-vraptor2-para-o-vraptor3/">20. Migrando do VRaptor2 para o VRaptor3</a></li>
 		
                 </ol>
             </div><!-- submenu-->
@@ -113,7 +117,7 @@
 
 
 <h3 class="section">Começando o projeto: uma loja virtual</h3>
-	    	<span class="paragraph">Vamos come&ccedil;ar baixando o <em class="italic">vraptor-blank-project</em>, do site <a class="link" target="_blank" href="http://vraptor.caelum.com.br/download.jsp.">http://vraptor.caelum.com.br/download.jsp.</a>
+	    	<span class="paragraph">Vamos come&ccedil;ar baixando o <em class="italic">vraptor-blank-project</em>, do site <a class="link" target="_blank" href="http://vraptor.caelum.com.br/download.jsp">http://vraptor.caelum.com.br/download.jsp</a> .
 Esse blank-project j&aacute; possui a configura&ccedil;&atilde;o no <code class="inlineCode">web.xml</code> e os jars no WEB-INF/lib necess&aacute;rios para come&ccedil;ar
 a desenvolver no VRaptor.</span>
 	    	<span class="paragraph">Como voc&ecirc; pode ver, a &uacute;nica configura&ccedil;&atilde;o necess&aacute;ria no <code class="inlineCode">web.xml</code> &eacute; o filtro do VRaptor:</span>
@@ -346,7 +350,7 @@ us&aacute;-lo da seguinte maneira:</span>
 <strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">that</span><span class="java8">(</span><span class="java10">!produto.getNome</span><span class="java8">()</span><span class="java10">.isEmpty</span><span class="java8">()</span><span class="java10">, </span><span class="java5">&#34;produto.nome&#34;</span><span class="java10">, </span><span class="java5">&#34;nome.vazio&#34;</span><span class="java8">)</span><span class="java10">;<br /></strong>
 <strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; that</span><span class="java8">(</span><span class="java10">produto.getPreco</span><span class="java8">() </span><span class="java10">&gt; </span><span class="java7">0</span><span class="java10">, </span><span class="java5">&#34;produto.preco&#34;</span><span class="java10">, </span><span class="java5">&#34;preco.invalido&#34;</span><span class="java8">)</span><span class="java10">;<br /></strong>
 <strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java8">}})</span><span class="java10">;<br /></strong>
-<strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; validator.onErrorUse</span><span class="java8">(</span><span class="java10">Results.page</span><span class="java8">())</span><span class="java10">.of</span><span class="java8">(</span><span class="java10">ProdutosController.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">.form</span><span class="java8">()</span><span class="java10">;<br /></strong>
+<strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; validator.onErrorUsePageOf</span><span class="java8">(</span><span class="java10">ProdutosController.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">.form</span><span class="java8">()</span><span class="java10">;<br /></strong>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; dao.adiciona</span><span class="java8">(</span><span class="java10">produto</span><span class="java8">)</span><span class="java10">;<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; result.redirectTo</span><span class="java8">(</span><span class="java10">ProdutosController.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">.lista</span><span class="java8">()</span><span class="java10">;<br />

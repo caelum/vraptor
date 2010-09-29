@@ -16,6 +16,7 @@ br.com.caelum.vraptor.interceptor
 br.com.caelum.vraptor.interceptor.download
 br.com.caelum.vraptor.interceptor.multipart
 br.com.caelum.vraptor.ioc
+br.com.caelum.vraptor.ioc.guice
 br.com.caelum.vraptor.ioc.pico
 br.com.caelum.vraptor.ioc.spring
 br.com.caelum.vraptor.proxy
@@ -28,14 +29,15 @@ br.com.caelum.vraptor.restfulie.hypermedia
 br.com.caelum.vraptor.restfulie.relation
 br.com.caelum.vraptor.restfulie.resource
 br.com.caelum.vraptor.restfulie.serialization
+br.com.caelum.vraptor.scan
 br.com.caelum.vraptor.serialization
 br.com.caelum.vraptor.serialization.xstream
 br.com.caelum.vraptor.util
 br.com.caelum.vraptor.util.collections
+br.com.caelum.vraptor.util.extjs
 br.com.caelum.vraptor.util.hibernate
 br.com.caelum.vraptor.util.interceptors
 br.com.caelum.vraptor.util.jpa
-br.com.caelum.vraptor.util.migration
 br.com.caelum.vraptor.util.test
 br.com.caelum.vraptor.validator
 br.com.caelum.vraptor.validator.annotation

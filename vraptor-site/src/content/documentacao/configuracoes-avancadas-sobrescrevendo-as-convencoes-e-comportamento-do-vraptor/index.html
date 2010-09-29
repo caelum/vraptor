@@ -84,7 +84,7 @@
 		
 									<li><a class="link_toc" href="../../documentacao/injecao-de-dependencias/">9. Injeção de dependências</a></li>
 		
-									<li><a class="link_toc" href="../../documentacao/downloading/">10. Downloading</a></li>
+									<li><a class="link_toc" href="../../documentacao/download-e-upload/">10. Download e Upload</a></li>
 		
 									<li><a class="link_toc" href="../../documentacao/componentes-utilitarios-opcionais/">11. Componentes Utilitários Opcionais</a></li>
 		
@@ -98,9 +98,13 @@
 		
 									<li><a class="link_toc" href="../../documentacao/scala/">16. Scala</a></li>
 		
-									<li><a class="link_toc" href="../../documentacao/changelog/">17. ChangeLog</a></li>
+									<li><a class="link_toc" href="../../documentacao/otimizacoes/">17. Otimizações</a></li>
 		
-									<li><a class="link_toc" href="../../documentacao/migrando-do-vraptor2-para-o-vraptor3/">18. Migrando do VRaptor2 para o VRaptor3</a></li>
+									<li><a class="link_toc" href="../../documentacao/vraptor-scaffold/">18. Vraptor scaffold</a></li>
+		
+									<li><a class="link_toc" href="../../documentacao/changelog/">19. ChangeLog</a></li>
+		
+									<li><a class="link_toc" href="../../documentacao/migrando-do-vraptor2-para-o-vraptor3/">20. Migrando do VRaptor2 para o VRaptor3</a></li>
 		
                 </ol>
             </div><!-- submenu-->
@@ -109,7 +113,12 @@
 	
 		<h2 class="chapter">Configurações avancadas: sobrescrevendo as convenções e comportamento do VRaptor</h2>
 
-		
+		<span class="paragraph">A maioria dos comportamentos e conven&ccedil;&otilde;es do VRaptor s&atilde;o personaliz&aacute;veis. E a forma
+de personalizar &eacute; bem f&aacute;cil: criar um componente que implementa uma das interfaces
+internas do VRaptor. Ao fazer isso, o VRaptor vai usar a implementa&ccedil;&atilde;o personalizada
+ao inv&eacute;s da padr&atilde;o.</span><span class="paragraph">Para saber qual &eacute; a interface certa para personalizar um certo comportamento,
+pergunte na lista de desenvolvedores do vraptor: caelum-vraptor-dev@googlegroups.com
+ou no forum do guj: <a class="link" target="_blank" href="http://www.guj.com.br/forums/show/23.java">http://www.guj.com.br/forums/show/23.java</a></span><span class="paragraph">Abaixo veremos alguns exemplos de personaliza&ccedil;&atilde;o:</span>
 
 
 <h3 class="section">Mudando a view renderizada por padrão</h3>
@@ -159,38 +168,6 @@ nome_do_controller/nome_do_metodo. Para sobrescrever essa conven&ccedil;&atilde;
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
 }</span></code></div>
 	    	<span class="paragraph">Se voc&ecirc; precisa mudar mais ainda a conven&ccedil;&atilde;o basta implementar a interface RoutesParser.</span>
-		
-
-<h3 class="section">Mudando o IoC provider</h3>
-	    	<span class="paragraph">O IoC provider padr&atilde;o &eacute; o spring. Para mud&aacute;-lo basta colocar no web.xml:</span>
-	    	<div class="xml"><code class="xml"><span class="textag">&lt;context-param&gt;</span><span class="texnormal"><br /></span>
-<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-name&gt;</span><span class="texnormal">br.com.caelum.vraptor.provider</span><span class="textag">&lt;/param-name&gt;</span><span class="texnormal"><br /></span>
-<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-value&gt;</span><span class="texnormal">br.com.classe.do.seu.provider.Preferido</span><span class="textag">&lt;/param-value&gt;</span><span class="texnormal"><br /></span>
-<span class="texnormal"></span><span class="textag">&lt;/context-param&gt;</span></code></div>
-	    	<span class="paragraph">Entre os padr&atilde;o existem: br.com.caelum.vraptor.ioc.spring.SpringProvider e br.com.caelum.vraptor.ioc.pico.PicoProvider.
-Voc&ecirc; pode ainda estender alguma dessas duas classes e usar seu pr&oacute;prio provider.</span>
-		
-
-<h3 class="section">Mudando ApplicationContext base do Spring</h3>
-	    	<span class="paragraph">Caso o VRaptor n&atilde;o esteja usando o seu ApplicationContext como base, basta estender o SpringProvider
-e implementar o m&eacute;todo getParentApplicationContext, passando o ApplicationContext da sua aplica&ccedil;&atilde;o:</span>
-	    	<div class="java"><code class="java">
-<span class="java4">package </span><span class="java10">br.com.nomedaempresa.nomedoprojeto;<br />
-</span><span class="java4">public class </span><span class="java10">CustomProvider </span><span class="java4">extends </span><span class="java10">SpringProvider </span><span class="java8">{<br />
-&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">ApplicationContext getParentApplicationContext</span><span class="java8">(</span><span class="java10">ServletContext context</span><span class="java8">) {<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">ApplicationContext applicationContext = </span><span class="java3">//l&oacute;gica pra criar o applicationContext<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return </span><span class="java10">applicationContext;<br />
-&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
-}</span></code></div>
-	    	<span class="paragraph">e mudar o provider no web.xml:</span>
-	    	<div class="xml"><code class="xml"><span class="textag">&lt;context-param&gt;</span><span class="texnormal"><br /></span>
-<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-name&gt;</span><span class="texnormal">br.com.caelum.vraptor.provider</span><span class="textag">&lt;/param-name&gt;</span><span class="texnormal"><br /></span>
-<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-value&gt;</span><span class="texnormal">br.com.nomedaempresa.nomedoprojeto.CustomProvider</span><span class="textag">&lt;/param-value&gt;</span><span class="texnormal"><br /></span>
-<span class="texnormal"></span><span class="textag">&lt;/context-param&gt;</span></code></div>
-	    	<span class="paragraph">Por padr&atilde;o o VRaptor tenta procurar o applicationContext via 
-<code class="inlineCode">WebApplicationContextUtils.getWebApplicationContext(servletContext);</code> ou carregando do
- applicationContext.xml
-que est&aacute; no classpath.</span>
 		
 
 <h3 class="section">Mudando o encoding da sua aplicação</h3>

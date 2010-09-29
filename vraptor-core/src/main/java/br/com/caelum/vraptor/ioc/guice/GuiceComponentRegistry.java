@@ -15,11 +15,12 @@
  */
 package br.com.caelum.vraptor.ioc.guice;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
+import java.util.Map.Entry;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +32,7 @@ import br.com.caelum.vraptor.ioc.ComponentFactoryIntrospector;
 
 import com.google.inject.Binder;
 import com.google.inject.Scope;
+import com.google.inject.ScopeAnnotation;
 import com.google.inject.TypeLiteral;
 import com.google.inject.binder.ScopedBindingBuilder;
 import com.google.inject.util.Types;
@@ -57,10 +59,21 @@ public class GuiceComponentRegistry implements ComponentRegistry {
 	public void register(Class requiredType, Class componentType) {
 		boundClasses.add(requiredType);
 		logger.debug("Binding {} to {}", requiredType, componentType);
-		bindToConstructor(requiredType, componentType);
+		ScopedBindingBuilder binding = bindToConstructor(requiredType, componentType);
+		if (defaultScope(componentType)) {
+			binding.in(GuiceProvider.REQUEST);
+		}
 		registerFactory(componentType);
 	}
 
+	private boolean defaultScope(Class componentType) {
+		for(Annotation annotation : componentType.getAnnotations()) {
+			if (annotation.annotationType().isAnnotationPresent(ScopeAnnotation.class)) {
+				return false;
+			}
+		}
+		return true;
+	}
 	public void deepRegister(Class componentType) {
 		register(componentType, componentType);
 		deepRegister(componentType, componentType);

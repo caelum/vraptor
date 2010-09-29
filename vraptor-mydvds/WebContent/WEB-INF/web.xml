@@ -13,8 +13,9 @@
 	</context-param>
 	
 	<context-param>
-        <param-name>br.com.caelum.vraptor.provider</param-name>
-        <param-value>br.com.caelum.vraptor.mydvds.provider.CustomProvider</param-value>
+        <param-name>br.com.caelum.vraptor.packages</param-name>
+        <param-value>br.com.caelum.vraptor.util.hibernate</param-value>
+        <!-- you can add optional component packages here -->
     </context-param>
 
 	<filter>
@@ -29,9 +30,4 @@
         <dispatcher>REQUEST</dispatcher>
     </filter-mapping>
     
-	<error-page>
-		<exception-type>br.com.caelum.vraptor.mydvds.interceptor.AuthenticationException</exception-type>
-		<location>/index.jsp</location>
-	</error-page>
-
 </web-app>

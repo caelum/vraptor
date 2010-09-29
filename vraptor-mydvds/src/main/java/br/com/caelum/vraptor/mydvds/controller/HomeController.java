@@ -30,10 +30,10 @@ import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.ioc.ComponentFactory;
 import br.com.caelum.vraptor.mydvds.dao.DefaultUserDao;
 import br.com.caelum.vraptor.mydvds.dao.UserDao;
+import br.com.caelum.vraptor.mydvds.interceptor.Public;
 import br.com.caelum.vraptor.mydvds.interceptor.UserInfo;
 import br.com.caelum.vraptor.mydvds.model.User;
 import br.com.caelum.vraptor.validator.Validations;
-import br.com.caelum.vraptor.view.Results;
 
 /**
  * This class will be responsible to login/logout users.
@@ -82,6 +82,7 @@ public class HomeController {
 	 * This method only accept POST requests
 	 */
 	@Post
+	@Public
 	public void login(String login, String password) {
 		// search for the user in the database
 		final User currentUser = dao.find(login, password);
@@ -92,14 +93,15 @@ public class HomeController {
 		validator.checking(new Validations() {{
 		    that(currentUser, is(notNullValue()), "login", "invalid_login_or_password");
 		}});
-		validator.onErrorUse(Results.page()).of(HomeController.class).login();
+		// you can use "this" to redirect to another logic from this controller
+		validator.onErrorUsePageOf(this).login();
 
 		// the login was valid, add user to session
 		userInfo.login(currentUser);
 
 		// we don't want to go to default page (/WEB-INF/jsp/home/login.jsp)
 		// we want to redirect to the user's home
-		result.use(Results.logic()).redirectTo(UsersController.class).home();
+		result.redirectTo(UsersController.class).home();
 	}
 
 	/**
@@ -109,7 +111,8 @@ public class HomeController {
 	public void logout() {
 	    userInfo.logout();
 	    // after logging out, we want to be redirected to home index.
-	    result.use(Results.logic()).redirectTo(HomeController.class).login();
+	    // you can use "this" to redirect to another logic from this controller
+	    result.redirectTo(this).login();
 	}
 
 	/**
@@ -119,6 +122,7 @@ public class HomeController {
 	 *
 	 * This method only accepts GET requests
 	 */
+	@Public
 	@Get
 	public void login() {
 	}

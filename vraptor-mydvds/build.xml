@@ -38,7 +38,7 @@
     	<copy todir="${webinf.lib.dir}">
 			<fileset dir="${mandatory.jars}" includes="*.jar"/>
 			<fileset dir="${container.jars}" includes="*.jar"/>
-			<fileset dir="${optional.jars}/hibernate" includes="*.jar" />
+			<fileset dir="${optional.jars}/hibernate" includes="*.jar" excludes="*validator-3*" />
 			<fileset dir="${optional.jars}/upload" includes="*.jar" />
 			<fileset dir="${optional.jars}" includes="*.jar" />
 			<fileset dir="${extra.jars}" includes="*.jar"/>

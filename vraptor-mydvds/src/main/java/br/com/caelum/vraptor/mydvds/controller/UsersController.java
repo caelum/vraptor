@@ -26,12 +26,11 @@ import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.mydvds.dao.UserDao;
+import br.com.caelum.vraptor.mydvds.interceptor.Public;
 import br.com.caelum.vraptor.mydvds.interceptor.UserInfo;
 import br.com.caelum.vraptor.mydvds.model.DvdType;
 import br.com.caelum.vraptor.mydvds.model.User;
-import br.com.caelum.vraptor.validator.Hibernate;
 import br.com.caelum.vraptor.validator.Validations;
-import br.com.caelum.vraptor.view.Results;
 
 /**
  * The resource <code>UsersController</code> handles all user operations,
@@ -113,24 +112,25 @@ public class UsersController {
 	 */
 	@Path("/users")
 	@Post
+	@Public
 	public void add(final User user) {
-		// calls Hibernate Validator for the user instance
+		validator.validate(user); // will add all validation errors from Hibernate Validator
 	    validator.checking(new Validations() {{
 		    // checks if there is already an user with the specified login
 		    boolean loginDoesNotExist = !dao.containsUserWithLogin(user.getLogin());
 		    that(loginDoesNotExist, "login", "login_already_exists");
-		    and(Hibernate.validate(user));// will return all errors in a collection
+
 		    that(user.getLogin().matches("[a-z0-9_]+"), "login", "invalid_login");
 		}});
 
 		// redirects to the index page if any validation errors occur.
-		validator.onErrorUse(Results.page()).of(HomeController.class).login();
+		validator.onErrorUsePageOf(HomeController.class).login();
 		this.dao.add(user);
 
 		// you can add objects to result even in redirects. Added objects will
 		// survive one more request when redirecting.
 		result.include("notice", "User " + user.getName() + " successfully added");
-		result.use(Results.logic()).redirectTo(HomeController.class).login();
+		result.redirectTo(HomeController.class).login();
 	}
 
 	/**
@@ -145,8 +145,7 @@ public class UsersController {
 	@Path("/users/{user.login}")
 	@Get
 	public void view(User user) {
-	    this.dao.refresh(user);
-	    result.include("user", user);
+	    result.include("user", dao.find(user.getLogin()));
 	}
 
 }

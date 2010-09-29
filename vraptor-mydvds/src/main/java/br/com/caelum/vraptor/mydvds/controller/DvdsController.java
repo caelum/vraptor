@@ -93,7 +93,7 @@ public class DvdsController {
 	    	}
 		}});
 
-		validator.onErrorForwardTo(UsersController.class).home();
+//		validator.onErrorForwardTo(UsersController.class).home();
 
 		// is there a file?
 		if (file != null) {

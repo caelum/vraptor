@@ -21,6 +21,9 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import br.com.caelum.vraptor.Consumes;
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Lazy;
@@ -37,7 +40,6 @@ import br.com.caelum.vraptor.view.Status;
  *
  * @author Lucas Cavalcanti
  * @author Rafael Ferreira
- * @since 3.0.2
  */
 @Lazy
 public class DeserializingInterceptor implements Interceptor {
@@ -46,6 +48,8 @@ public class DeserializingInterceptor implements Interceptor {
 	private final MethodInfo methodInfo;
 	private final Container container;
 	private final Status status;
+	
+	private static final Logger logger = LoggerFactory.getLogger(DeserializingInterceptor.class);
 
 	public DeserializingInterceptor(HttpServletRequest servletRequest, Deserializers deserializers,
 			MethodInfo methodInfo, Container container, Status status) {
@@ -80,7 +84,14 @@ public class DeserializingInterceptor implements Interceptor {
 
 			Object[] deserialized = deserializer.deserialize(request.getInputStream(), method);
 			Object[] parameters = methodInfo.getParameters();
-
+			
+			if(logger.isDebugEnabled()) {
+				logger.debug("Deserialized parameters for {} are {} ", method, Arrays.asList(deserialized));
+			}
+			
+			// TODO: a new array should be created and then a call to setParameters
+			// setting methodInfo.getParameters() works only because we dont (yet)
+			// return a defensive copy
 			for (int i = 0; i < deserialized.length; i++) {
 				if (deserialized[i] != null) {
 					parameters[i] = deserialized[i];

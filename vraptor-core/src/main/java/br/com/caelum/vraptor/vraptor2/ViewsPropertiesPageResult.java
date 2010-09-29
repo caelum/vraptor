@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.proxy.MethodInvocation;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.ProxyInvocationException;
@@ -46,6 +47,7 @@ import br.com.caelum.vraptor.view.ResultException;
  * @author guilherme silveira
  *
  */
+@Component
 public class ViewsPropertiesPageResult implements PageResult {
 
 	private static final Logger logger = LoggerFactory.getLogger(ViewsPropertiesPageResult.class);

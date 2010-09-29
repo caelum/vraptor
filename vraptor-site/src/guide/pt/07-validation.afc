@@ -27,7 +27,7 @@ public void adiciona(Funcionario funcionario) {
 	if(! funcionario.getNome().equals("Fulano")) {
 		validator.add(new ValidationMessage("erro","nomeInvalido"));
 	}
-	validator.onErrorUse(page()).of(FuncionarioController.class).formulario();
+	validator.onErrorUsePageOf(FuncionarioController.class).formulario();
 	dao.adiciona(funcionario);
 }
 [/java]
@@ -45,7 +45,7 @@ public adiciona(Funcionario funcionario) {
 	validator.checking(new Validations(){{
 		that(!funcionario.getNome().isEmpty(), "erro","nomeNaoInformado");
 	}});
-	validator.onErrorUse(page()).of(FuncionarioController.class).formulario();
+	validator.onErrorUsePageOf(FuncionarioController.class).formulario();
 	
 	dao.adiciona(funcionario);
 }
@@ -104,7 +104,7 @@ public admin(Funcionario funcionario) {
 	validator.checking(new Validations(){{
 		that(funcionario.getRoles(), hasItem("ADMIN"), "admin","funcionario.nao.eh.admin");
 	}});
-	validator.onErrorUse(page()).of(LoginController.class).login();	
+	validator.onErrorUsePageOf(LoginController.class).login();	
 	dao.adiciona(funcionario);
 }
 [/java]
@@ -125,6 +125,7 @@ public adiciona(Funcionario funcionario) {
 	validator.checking(new Validations(){{
 		that(!funcionario.getNome().isEmpty(), "erro","nomeNaoInformado");
 	}});
+	validator.onErrorUsePageOf(FuncionarioController.class).formulario();
 	
 	dao.adiciona(funcionario);
 }

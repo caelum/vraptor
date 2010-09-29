@@ -80,7 +80,7 @@
 		
 									<li><a class="link_toc" href="../../documentation/dependency-injection/">9. Dependency injection</a></li>
 		
-									<li><a class="link_toc" href="../../documentation/downloading/">10. Downloading</a></li>
+									<li><a class="link_toc" href="../../documentation/download-and-upload/">10. Download and Upload</a></li>
 		
 									<li><a class="link_toc" href="../../documentation/utility-components/">11. Utility Components</a></li>
 		
@@ -92,9 +92,11 @@
 		
 									<li><a class="link_toc" href="../../documentation/scala/">15. Scala</a></li>
 		
-									<li><a class="link_toc" href="../../documentation/changelog/">16. ChangeLog</a></li>
+									<li><a class="link_toc" href="../../documentation/optimizations/">16. Optimizations</a></li>
 		
-									<li><a class="link_toc" href="../../documentation/migrating-from-vraptor2-to-vraptor3/">17. Migrating from VRaptor2 to VRaptor3</a></li>
+									<li><a class="link_toc" href="../../documentation/changelog/">17. ChangeLog</a></li>
+		
+									<li><a class="link_toc" href="../../documentation/migrating-from-vraptor2-to-vraptor3/">18. Migrating from VRaptor2 to VRaptor3</a></li>
 		
                 </ol>
             </div><!-- submenu-->
@@ -155,7 +157,7 @@ Don't forget to annotate your new classe with <code class="inlineCode">@Componen
 }</span></code></div>
 	    	<span class="paragraph">By default, there are these view implementations:</span>
 	    	<ul class="list"><li><span class="paragraph">Results.logic(), redirects to any other logic in the application.</span></li><li><span class="paragraph">Results.page(), redirects directly to a page, that can be a jsp, an html, or any
-	URI relative to the web application directory or the application context.</span></li><li><span class="paragraph">Results.http(), sends HTTP protocol informations, like status codes and headers.</span></li><li><span class="paragraph">Results.referer(), uses Referer header to redirect or forward.</span></li><li><span class="paragraph">Results.nothing(), simply returns the HTTP success code (HTTP 200 OK).</span></li><li><span class="paragraph">Results.xml(), uses xml serialization.</span></li><li><span class="paragraph">Results.json(), uses json serialization.</span></li><li><span class="paragraph">Results.representation(), serializes objects in a format set by the request
+	URI relative to the web application directory or the application context.</span></li><li><span class="paragraph">Results.http(), sends HTTP protocol informations, like status codes and headers.</span></li><li><span class="paragraph">Results.status(), sends status codes with more information.</span></li><li><span class="paragraph">Results.referer(), uses Referer header to redirect or forward.</span></li><li><span class="paragraph">Results.nothing(), simply returns the HTTP success code (HTTP 200 OK).</span></li><li><span class="paragraph">Results.xml(), uses xml serialization.</span></li><li><span class="paragraph">Results.json(), uses json serialization.</span></li><li><span class="paragraph">Results.representation(), serializes objects in a format set by the request
 	 (_format parameter or Accept header)</span></li></ul>
 		
 
@@ -292,7 +294,7 @@ with annotations and direct configuration on XStream. It is just creating a clas
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return </span><span class="java10">xStream;<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
 }</span></code></div>
-	    	<span class="paragraph"><strong class="title">Serializando Collections</strong></span>
+	    	<span class="paragraph"><strong class="title">Serializing Collections</strong></span>
 	    	<span class="paragraph">When serializing collections, vRaptor will wrap their elements with a "list" tag:</span>
 	    	<div class="java"><code class="java">
 <span class="java10">List&lt;Client&gt; clients = ...;<br />
@@ -361,7 +363,7 @@ result.use</span><span class="java8">(</span><span class="java10">json</span><sp
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br />
 &nbsp;&nbsp;&nbsp;&nbsp;}<br />
 ]}</code></div>
-	    	<span class="paragraph"><strong class="title">Serializing JSON without root elemento</strong>
+	    	<span class="paragraph"><strong class="title">Serializing JSON without root element</strong>
 If you want to serialize an object to json without give it any names, you can use the
 withoutRoot method:</span>
 	    	<div class="java"><code class="java">

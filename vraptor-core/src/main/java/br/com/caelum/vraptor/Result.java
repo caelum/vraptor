@@ -33,6 +33,14 @@ public interface Result {
     Result include(String key, Object value);
 
 	<T extends View> T use(Class<T> view);
+	
+    /**
+     * TODO doc
+     * 
+     * @param exception The exception to handle.
+     * @throws A {@link NullPointerException} if exception is null.
+     */
+	Result on(Class<? extends Exception> exception);
 
 	/**
 	 * Whether this result was used.

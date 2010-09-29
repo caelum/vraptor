@@ -5,37 +5,33 @@
 <project name="VRaptor 3 Blank Project Build" default="update-jars" basedir=".">
 
 	<description>VRaptor 3 Blank Project module build</description>
-	
-	<property file="../vraptor-core/build.properties" />
-	
-	<property name="vraptor.core" value="../vraptor-core"/>
-	<property name="vraptor.gae.jar" value="../vraptor-plugin-gae/target/vraptor-gae.jar"/>
-	<property name="mandatory.jars" value="${vraptor.core}/${libs.dir}/mandatory"/>
-	<property name="webinf.lib.dir" value="war/WEB-INF/lib"/>
-	<property name="extra.lib.dir" value="lib/extras"/>
-	
-    <target name="update-jars">
-    	<delete>
-			<fileset dir="${webinf.lib.dir}">
-			    <include name="*.jar"/>
-			</fileset>
+
+	<property file="../build.properties" />
+	<property file="${vraptor.core}/build.properties" />
+
+	<property name="vraptor.gae.jar" value="../vraptor-plugin-gae/target/vraptor-gae.jar" />
+	<property name="webinf.lib.dir" value="war/WEB-INF/lib" />
+
+	<target name="update-jars">
+		<mkdir dir="${webinf.lib.dir}"/>
+		<delete>
+			<fileset dir="${webinf.lib.dir}" includes="*.jar" />
 		</delete>
-    	<copy todir="${webinf.lib.dir}">
+		<copy todir="${webinf.lib.dir}">
 			<fileset dir="${mandatory.jars}">
-			    <include name="*.jar"/>
-				<exclude name="objenesis*.jar"/>
-				<exclude name="spring*.jar"/>
-				<exclude name="jstl*.jar"/>
+				<include name="*.jar" />
+				<exclude name="objenesis*.jar" />
+				<exclude name="jstl*.jar" />
 			</fileset>
-    		<fileset dir="${extra.lib.dir}">
-			    <include name="*.jar"/>
-			</fileset>
-    	</copy>
-    	<copy todir="${webinf.lib.dir}" file="${vraptor.core}/${jar.file}"/>
-    	<copy todir="${webinf.lib.dir}" file="${vraptor.gae.jar}"/>
-    </target>
+			<fileset dir="${container.jars}" includes="*.jar" />
+			<fileset dir="${optional.jars}/gae" includes="*.jar" />
+			<fileset dir="${optional.jars}/upload" includes="*.jar" />
+		</copy>
+		<copy todir="${webinf.lib.dir}" file="${vraptor.jar}" />
+		<copy todir="${webinf.lib.dir}" file="${vraptor.gae.jar}" />
+	</target>
 
 	<target name="clean" description="--> delete build artifacts">
-		<delete file="${zip_file}" failonerror="false"/>
+		<delete file="${zip_file}" failonerror="false" />
 	</target>
 </project>

@@ -64,6 +64,11 @@ public class MockResult extends AbstractResult {
 		this.values.put(key, value);
 		return this;
 	}
+	
+	public Result on(Class<? extends Exception> exception) {
+	    // TODO Auto-generated method stub
+	    return null;
+	}
 
 	public <T extends View> T use(final Class<T> view) {
 		this.typeToUse = view;

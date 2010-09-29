@@ -182,3 +182,17 @@ Para habilitar esse comportamento, você pode adicionar o pacote
 	</param-value>
 </context-param>
 [/xml]
+
+[title Compatibilidade com VRaptor 2]
+Se você quer migrar do VRaptor 2 para o VRaptor 3
+(veja o capítulo Migrando do VRaptor 2 para o VRaptor 3):
+
+[xml]
+<context-param>
+	<param-name>br.com.caelum.vraptor.packages</param-name>
+	<param-value>
+		br.com.caelum.vraptor.util.outros.pacotes...,
+		br.com.caelum.vraptor.vraptor2
+	</param-value>
+</context-param>
+[/xml]

@@ -28,12 +28,6 @@ import org.junit.Test;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.PicoBuilder;
 
-import br.com.caelum.vraptor.http.route.DefaultRouter;
-import br.com.caelum.vraptor.http.route.NoRoutesConfiguration;
-import br.com.caelum.vraptor.http.route.NoTypeFinder;
-import br.com.caelum.vraptor.proxy.DefaultProxifier;
-
-@Deprecated
 public class PicoBasedContainerTest {
 
     public static class Fruit {

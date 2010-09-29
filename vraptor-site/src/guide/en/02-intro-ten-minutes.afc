@@ -285,7 +285,7 @@ public class ProductsController {
 			that(!product.getName().isEmpty(), "product.name", "nome.empty");
 			that(product.getPrice() > 0, "product.price", "price.invalid");
 		}});
-		validator.onErrorUse(Results.page()).of(ProductsController.class).form();
+		validator.onErrorUsePageOf(ProductsController.class).form();
 		
 		dao.add(product);
 		result.redirectTo(ProductsController.class).list();

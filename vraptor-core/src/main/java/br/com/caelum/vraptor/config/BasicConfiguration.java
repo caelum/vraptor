@@ -26,6 +26,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.ioc.ContainerProvider;
+import br.com.caelum.vraptor.ioc.guice.GuiceProvider;
+import br.com.caelum.vraptor.ioc.pico.PicoProvider;
 import br.com.caelum.vraptor.ioc.spring.MissingConfigurationException;
 import br.com.caelum.vraptor.ioc.spring.SpringProvider;
 
@@ -37,7 +39,7 @@ import br.com.caelum.vraptor.ioc.spring.SpringProvider;
 public class BasicConfiguration {
 
 	private static final Logger logger = LoggerFactory.getLogger(BasicConfiguration.class);
-	
+
 	/**
 	 * context parameter that represents the class of IoC provider
 	 */
@@ -57,7 +59,7 @@ public class BasicConfiguration {
 	 * Disables/enables classpath scanning
 	 */
 	public static final String SCANNING_PARAM = "br.com.caelum.vraptor.scanning";
-	
+
 	private final ServletContext servletContext;
 
 	public BasicConfiguration(ServletContext servletContext) {
@@ -65,16 +67,47 @@ public class BasicConfiguration {
 	}
 
 	public ContainerProvider getProvider() throws ServletException {
-		String provider = servletContext.getInitParameter(CONTAINER_PROVIDER);
-		if (provider == null) {
-			provider = SpringProvider.class.getName();
-		}
+		Class<? extends ContainerProvider> providerType = getProviderType();
+		logger.info("Using {} as Container Provider", providerType);
 		try {
-			return (ContainerProvider) Class.forName(provider).getDeclaredConstructor().newInstance();
+			return providerType.getDeclaredConstructor().newInstance();
 		} catch (InvocationTargetException e) {
 			throw new ServletException(e.getCause());
 		} catch (Exception e) {
 			throw new ServletException(e);
+		}
+	}
+
+	private Class<? extends ContainerProvider> getProviderType() {
+		String provider = servletContext.getInitParameter(CONTAINER_PROVIDER);
+		if (provider != null) {
+			try {
+				return (Class<? extends ContainerProvider>) Class.forName(provider);
+			} catch (ClassNotFoundException e) {
+				throw new IllegalArgumentException("You must configure a class that exists on the "
+						+ CONTAINER_PROVIDER + " context param.", e);
+			}
+		}
+		if (classExists("org.springframework.context.ApplicationContext")) {
+			return SpringProvider.class;
+		}
+		if (classExists("com.google.inject.Guice")) {
+			return GuiceProvider.class;
+		}
+
+		if (classExists("org.picocontainer.PicoContainer")) {
+			return PicoProvider.class;
+		}
+		throw new IllegalArgumentException("You don't have any DI container jars on your classpath. " +
+				"Please choose one of the lib/containers jars and put it on your classpath.");
+	}
+
+	private boolean classExists(String className) {
+		try {
+			Class.forName(className);
+			return true;
+		} catch (ClassNotFoundException e) {
+			return false;
 		}
 	}
 
@@ -108,5 +141,5 @@ public class BasicConfiguration {
 		logger.info("{} = {}", SCANNING_PARAM, servletContext.getInitParameter(SCANNING_PARAM));
 		return scanningParam == null || !scanningParam.trim().equals("disabled");
 	}
-	
+
 }

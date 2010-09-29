@@ -5,6 +5,12 @@
 * várias melhorias na performance: por volta de 60% menos no tempo de requisição.
 * **quebra de compatibilidade interna**: interface InterceptorStack reorganizada.
 * melhor implementação do método accepts dos interceptors internos do VRaptor.
+* suporte beta ao Google Guice, para ser usado ao invés do Spring.
+* Pico provider não é mais deprecated
+* Agora é possível escolher o DI container sem precisar mudar o web.xml. Se os
+jars do Spring estiverem no classpath, o Spring será usado; se forem os jars
+do PicoContainer ele será usado, e da mesma forma pros jars do Guice. Os jars
+estão na pasta lib/containers do zip do VRaptor.
 * **quebra de compatibilidade interna**: interfaces %%Converters%%, %%Router%%
 	e construtor da classe %%PathAnnotationRoutesParser%% alterados. RouteBuilder
 	convertido para interface => implementação DefaultRouteBuilder. 

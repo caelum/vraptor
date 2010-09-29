@@ -84,7 +84,7 @@
 		
 									<li><a class="link_toc" href="../../documentacao/injecao-de-dependencias/">9. Injeção de dependências</a></li>
 		
-									<li><a class="link_toc" href="../../documentacao/downloading/">10. Downloading</a></li>
+									<li><a class="link_toc" href="../../documentacao/download-e-upload/">10. Download e Upload</a></li>
 		
 									<li><a class="link_toc" href="../../documentacao/componentes-utilitarios-opcionais/">11. Componentes Utilitários Opcionais</a></li>
 		
@@ -98,9 +98,13 @@
 		
 									<li><a class="link_toc" href="../../documentacao/scala/">16. Scala</a></li>
 		
-									<li><a class="link_toc" href="../../documentacao/changelog/">17. ChangeLog</a></li>
+									<li><a class="link_toc" href="../../documentacao/otimizacoes/">17. Otimizações</a></li>
 		
-									<li><a class="link_toc" href="../../documentacao/migrando-do-vraptor2-para-o-vraptor3/">18. Migrando do VRaptor2 para o VRaptor3</a></li>
+									<li><a class="link_toc" href="../../documentacao/vraptor-scaffold/">18. Vraptor scaffold</a></li>
+		
+									<li><a class="link_toc" href="../../documentacao/changelog/">19. ChangeLog</a></li>
+		
+									<li><a class="link_toc" href="../../documentacao/migrando-do-vraptor2-para-o-vraptor3/">20. Migrando do VRaptor2 para o VRaptor3</a></li>
 		
                 </ol>
             </div><!-- submenu-->
@@ -111,6 +115,42 @@
 
 		
 
+
+<h3 class="section">3.2.0 (in dev)</h3>
+	    	<ul class="list"><li><span class="paragraph">v&aacute;rias melhorias na performance: por volta de 60% menos no tempo de requisi&ccedil;&atilde;o.</span></li><li><span class="paragraph"><strong class="definition">quebra de compatibilidade interna</strong>: interface InterceptorStack reorganizada.</span></li><li><span class="paragraph">melhor implementa&ccedil;&atilde;o do m&eacute;todo accepts dos interceptors internos do VRaptor.</span></li><li><span class="paragraph">suporte beta ao Google Guice, para ser usado ao inv&eacute;s do Spring.</span></li><li><span class="paragraph">Pico provider n&atilde;o &eacute; mais deprecated</span></li><li><span class="paragraph">Agora &eacute; poss&iacute;vel escolher o DI container sem precisar mudar o web.xml. Se os
+jars do Spring estiverem no classpath, o Spring ser&aacute; usado; se forem os jars
+do PicoContainer ele ser&aacute; usado, e da mesma forma pros jars do Guice. Os jars
+est&atilde;o na pasta lib/containers do zip do VRaptor.</span></li><li><span class="paragraph"><strong class="definition">quebra de compatibilidade interna</strong>: interfaces <code class="inlineCode">Converters</code>, <code class="inlineCode">Router</code>
+	e construtor da classe <code class="inlineCode">PathAnnotationRoutesParser</code> alterados. RouteBuilder
+	convertido para interface =&gt; implementa&ccedil;&atilde;o DefaultRouteBuilder. 
+	Para quem estendia o RoutesParser basta trocar o delegate constructor.
+	Para quem instanciava o RouteBuilder diretamente basta instanciar o DefaultRouteBuilder.</span></li><li><span class="paragraph">nova anota&ccedil;&atilde;o @Lazy. Use-a nos interceptors em que o m&eacute;todo accepts n&atilde;o depende
+  do estado interno do interceptor:</span><div class="java"><code class="java">
+<span class="java16">@Intercepts<br />
+@Lazy<br />
+</span><span class="java4">public class </span><span class="java10">MeuLazyInterceptor </span><span class="java4">implements </span><span class="java10">Interceptor </span><span class="java8">{<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">MeuLazyInterceptor</span><span class="java8">(</span><span class="java10">Dependencia dependencia</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">this</span><span class="java10">.dependencia = dependencia;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">boolean </span><span class="java10">accepts</span><span class="java8">(</span><span class="java10">ResourceMethod method</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java3">// depende apenas do method<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return </span><span class="java10">method.containsAnnotation</span><span class="java8">(</span><span class="java10">Abc.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">intercepts</span><span class="java8">(</span><span class="java10">...</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java3">//...<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+}</span></code></div><span class="paragraph">Nesse caso o MeuLazyInterceptor s&oacute; ser&aacute; instanciado se o m&eacute;todo accepts retornar true.
+	Uma inst&acirc;ncia n&atilde;o funcional do MyLazyInterceptor ser&aacute; usada para chamar o m&eacute;todo accepts,
+	ent&atilde;o esse m&eacute;todo n&atilde;o pode usar o estado interno do interceptor.
+	N&atilde;o use o @Lazy se o m&eacute;todo accepts for trivial (sempre retornar true)</span></li><li><span class="paragraph"><strong class="definition">pequena quebra de compatibilidade</strong>: prioridade padr&atilde;o do @Path agora &eacute; Integer.MAX_INTEGER/2.
+  Antes era Integer.MAX_INTEGER - 1. Apesar dessa quebra, acreditamos que isso n&atilde;o ir&aacute; afetar
+  os sistemas j&aacute; implementados.</span></li><li><span class="paragraph">prioridades do @Path agora podem ser definidas por constantes:</span><div class="java"><code class="java">
+<span class="java16">@Path</span><span class="java8">(</span><span class="java10">value=</span><span class="java5">&#34;/url&#34;</span><span class="java10">, priority=Path.HIGHEST</span><span class="java8">)<br />
+</span><span class="java16">@Path</span><span class="java8">(</span><span class="java10">value=</span><span class="java5">&#34;/url&#34;</span><span class="java10">, priority=Path.HIGH</span><span class="java8">)<br />
+</span><span class="java16">@Path</span><span class="java8">(</span><span class="java10">value=</span><span class="java5">&#34;/url&#34;</span><span class="java10">, priority=Path.DEFAULT</span><span class="java8">)<br />
+</span><span class="java16">@Path</span><span class="java8">(</span><span class="java10">value=</span><span class="java5">&#34;/url&#34;</span><span class="java10">, priority=Path.LOW</span><span class="java8">)<br />
+</span><span class="java16">@Path</span><span class="java8">(</span><span class="java10">value=</span><span class="java5">&#34;/url&#34;</span><span class="java10">, priority=Path.LOWEST</span><span class="java8">)</span></code></div></li><li><span class="paragraph">Nova interface <code class="inlineCode">TwoWayConverter</code> para convers&otilde;es bidirecionais.</span></li><li><span class="paragraph">suporte nativo a requisi&ccedil;&otilde;es OPTIONS</span></li><li><span class="paragraph">fix: 405 ao inv&eacute;s de 500 em requisi&ccedil;&otilde;es com HTTP metodo desconhecido</span></li><li><span class="paragraph">mais converters do Joda Time (por Rodolfo Liviero)</span></li><li><span class="paragraph">melhorias no Scala Blank Project (por Pedro Matiello)</span></li><li><span class="paragraph">bugfix: null Accept Header gera respostas html</span></li></ul>
+		
 
 <h3 class="section">3.1.3</h3>
 	    	<ul class="list"><li><span class="paragraph">Scala Blank Project</span></li><li><span class="paragraph">melhor estrat&eacute;gia no escopo flash</span></li><li><span class="paragraph">come&ccedil;o do suporte pra javax.inject API. Agora &eacute; poss&iacute;vel dar nomes para os par&acirc;metros de uma l&oacute;gica:</span></li><li><span class="paragraph">Corrigidos bugs do novo validator</span></li><li><span class="paragraph">corrigido bug do char como par&acirc;metro na URI</span></li><li><span class="paragraph">Corrigido bug para poder aceitar browsers que trabalham mal com o header Accepts</span><div class="java"><code class="java">

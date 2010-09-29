@@ -41,7 +41,7 @@ public class ClientController {
 }
 [/java]
 
-[section Parâmetros dos métodos]
+[section Method parameters]
 You can receive parameters on your controller methods, and if those parameters
 follow the java beans convention (getters and setters for class fields), 
 you can use dots for browsing through the fields. For instance, on method:
@@ -425,13 +425,4 @@ parameters. You can also add restrictions to these parameters:
   // If I want to ensure that the parameter is a number:
   routeFor("/client/{client.id}").withParameter("client.id").matching("\\d+")
   			.is(ClientController.class).show(null);
-[/java]
-
-At last, you can choose the class and the method names in runtime, allowing us to
-create extremely generic routes:
-
-[java]
-    routeFor("/{webResource}/doSomething/{webMethod}").is(
-		type("br.com.caelum.projectname.{webResource}"), 
-		method("{webMethod}"));
 [/java]

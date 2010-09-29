@@ -33,6 +33,7 @@ import br.com.caelum.vraptor.ioc.StereotypeHandler;
 import br.com.caelum.vraptor.resource.DefaultResourceClass;
 
 
+@Component
 @ApplicationScoped
 public class VRaptor2ComponentHandler implements StereotypeHandler {
 

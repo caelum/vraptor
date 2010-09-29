@@ -43,7 +43,10 @@ componentes é necessário adicionar as seguintes linhas no seu web.xml:
 [xml]
 	<context-param>
 		<param-name>br.com.caelum.vraptor.packages</param-name>
-    	<param-value>!!previous value!!,br.com.caelum.vraptor.converter.l10n</param-value>
+    	<param-value>
+    		...valor anterior..., 
+    		br.com.caelum.vraptor.converter.l10n
+    	</param-value>
     </context-param>
 [/xml]
 

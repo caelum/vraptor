@@ -5,33 +5,34 @@
 <project name="VRaptor 3 Blank Project Build" default="zip" basedir=".">
 
 	<description>VRaptor 3 Blank Project module build</description>
-	
-	<property file="../vraptor-core/build.properties" />
-	
-	<property name="zip_file" value="vraptor-blank-project.zip"/>
-	<property name="vraptor.core" value="../vraptor-core"/>
-	<property name="mandatory.jars" value="${vraptor.core}/${libs.dir}/mandatory"/>
-	<property name="webinf.lib.dir" value="WebContent/WEB-INF/lib"/>
+
+	<property file="../build.properties" />
+	<property file="${vraptor.core}/build.properties" />
+
+	<property name="zip_file" value="vraptor-blank-project.zip" />
+	<property name="webinf.lib.dir" value="WebContent/WEB-INF/lib" />
+
+	<target name="asdf">
+		<echo message="${vraptor.core}"></echo>
+	</target>
 	
 	<target name="zip" depends="clean, update-jars" description="--> creates zip file">
-		<zip destfile="${zip_file}" basedir="../" includes="vraptor-blank-project/**/*" excludes="${zip_file}"/>
+		<zip destfile="${zip_file}" basedir="../" includes="vraptor-blank-project/**/*" excludes="${zip_file}" />
 	</target>
 
-    <target name="update-jars">
-    	<delete>
-			<fileset dir="${webinf.lib.dir}">
-			    <include name="*.jar"/>
-			</fileset>
+	<target name="update-jars">
+		<mkdir dir="${webinf.lib.dir}"/>
+		<delete>
+			<fileset dir="${webinf.lib.dir}" includes="*.jar" />
 		</delete>
-    	<copy todir="${webinf.lib.dir}">
-			<fileset dir="${mandatory.jars}">
-			    <include name="*.jar"/>
-			</fileset>
-    	</copy>
-    	<copy todir="${webinf.lib.dir}" file="${vraptor.core}/${jar.file}"/>
-    </target>
+		<copy todir="${webinf.lib.dir}">
+			<fileset dir="${mandatory.jars}" includes="*.jar"/>
+			<fileset dir="${container.jars}" includes="*.jar"/>
+		</copy>
+		<copy todir="${webinf.lib.dir}" file="${vraptor.jar}" />
+	</target>
 
 	<target name="clean" description="--> delete build artifacts">
-		<delete file="${zip_file}" failonerror="false"/>
+		<delete file="${zip_file}" failonerror="false" />
 	</target>
 </project>

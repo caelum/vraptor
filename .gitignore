@@ -6,9 +6,6 @@ out
 !vraptor-blank-project/.classpath
 !vraptor-blank-project/.settings/
 !vraptor-blank-project/.project
-!vraptor-blank-project-gae/.classpath
-!vraptor-blank-project-gae/.settings/
-!vraptor-blank-project-gae/.project
 !vraptor-mydvds/.classpath
 !vraptor-mydvds/.settings/
 !vraptor-mydvds/.project
@@ -19,6 +16,7 @@ out
 *.iws
 *.iml
 *.class
+*.swp
 target
 classes
 build
@@ -38,3 +36,4 @@ vraptor-mydvds/mydvds.war
 vraptor-mydvds/mydvdsDB.*
 *~
 
+vraptor-plugin-gae/build.tmp/

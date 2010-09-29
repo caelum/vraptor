@@ -80,7 +80,7 @@
 		
 									<li><a class="link_toc" href="../../documentation/dependency-injection/">9. Dependency injection</a></li>
 		
-									<li><a class="link_toc" href="../../documentation/downloading/">10. Downloading</a></li>
+									<li><a class="link_toc" href="../../documentation/download-and-upload/">10. Download and Upload</a></li>
 		
 									<li><a class="link_toc" href="../../documentation/utility-components/">11. Utility Components</a></li>
 		
@@ -92,9 +92,11 @@
 		
 									<li><a class="link_toc" href="../../documentation/scala/">15. Scala</a></li>
 		
-									<li><a class="link_toc" href="../../documentation/changelog/">16. ChangeLog</a></li>
+									<li><a class="link_toc" href="../../documentation/optimizations/">16. Optimizations</a></li>
 		
-									<li><a class="link_toc" href="../../documentation/migrating-from-vraptor2-to-vraptor3/">17. Migrating from VRaptor2 to VRaptor3</a></li>
+									<li><a class="link_toc" href="../../documentation/changelog/">17. ChangeLog</a></li>
+		
+									<li><a class="link_toc" href="../../documentation/migrating-from-vraptor2-to-vraptor3/">18. Migrating from VRaptor2 to VRaptor3</a></li>
 		
                 </ol>
             </div><!-- submenu-->
@@ -143,7 +145,7 @@ available, each one invoking the respective method.</span>
 }</span></code></div>
 		
 
-<h3 class="section">Parâmetros dos métodos</h3>
+<h3 class="section">Method parameters</h3>
 	    	<span class="paragraph">You can receive parameters on your controller methods, and if those parameters
 follow the java beans convention (getters and setters for class fields), 
 you can use dots for browsing through the fields. For instance, on method:</span>
@@ -400,11 +402,11 @@ test paths with higher priority, in other words, paths with lower priority value
 </span><span class="java4">public class </span><span class="java10">PostController </span><span class="java8">{<br />
 <br />
 &nbsp; </span><span class="java16">@Get<br />
-&nbsp; @Path</span><span class="java8">(</span><span class="java10">priority = </span><span class="java7">2</span><span class="java10">, value = </span><span class="java5">&#34;/post/{post.author}&#34;</span><span class="java8">)<br />
+&nbsp; @Path</span><span class="java8">(</span><span class="java10">value = </span><span class="java5">&#34;/post/{post.author}&#34;</span><span class="java10">, priority = Path.LOW</span><span class="java8">)<br />
 &nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">show</span><span class="java8">(</span><span class="java10">Post post</span><span class="java8">) { </span><span class="java10">... </span><span class="java8">}<br />
 <br />
 &nbsp; </span><span class="java16">@Get<br />
-&nbsp; @Path</span><span class="java8">(</span><span class="java10">priority = </span><span class="java7">1</span><span class="java10">, value = </span><span class="java5">&#34;/post/current&#34;</span><span class="java8">)<br />
+&nbsp; @Path</span><span class="java8">(</span><span class="java10">value = </span><span class="java5">&#34;/post/current&#34;</span><span class="java10">, priority = Path.HIGH</span><span class="java8">)<br />
 &nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">current</span><span class="java8">() { </span><span class="java10">... </span><span class="java8">}<br />
 }</span></code></div>
 	    	<span class="paragraph">This way, the "/post/current" path will be tested before "/post/{post.author}" by VRaptor,
@@ -451,12 +453,6 @@ parameters. You can also add restrictions to these parameters:</span>
 </span><span class="java3">// If I want to ensure that the parameter is a number:<br />
 </span><span class="java10">routeFor</span><span class="java8">(</span><span class="java5">&#34;/client/{client.id}&#34;</span><span class="java8">)</span><span class="java10">.withParameter</span><span class="java8">(</span><span class="java5">&#34;client.id&#34;</span><span class="java8">)</span><span class="java10">.matching</span><span class="java8">(</span><span class="java5">&#34;\\d+&#34;</span><span class="java8">)<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">.is</span><span class="java8">(</span><span class="java10">ClientController.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">.show</span><span class="java8">(</span><span class="java4">null</span><span class="java8">)</span><span class="java10">;</span></code></div>
-	    	<span class="paragraph">At last, you can choose the class and the method names in runtime, allowing us to
-create extremely generic routes:</span>
-	    	<div class="java"><code class="java">
-<span class="java10">routeFor</span><span class="java8">(</span><span class="java5">&#34;/{webResource}/doSomething/{webMethod}&#34;</span><span class="java8">)</span><span class="java10">.is</span><span class="java8">(<br />
-&nbsp;&nbsp;&nbsp; </span><span class="java10">type</span><span class="java8">(</span><span class="java5">&#34;br.com.caelum.projectname.{webResource}&#34;</span><span class="java8">)</span><span class="java10">, <br />
-&nbsp;&nbsp;&nbsp; method</span><span class="java8">(</span><span class="java5">&#34;{webMethod}&#34;</span><span class="java8">))</span><span class="java10">;</span></code></div>
 		
 
 </div><!-- content -->

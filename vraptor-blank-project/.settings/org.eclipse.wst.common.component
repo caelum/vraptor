@@ -3,9 +3,6 @@
 <wb-module deploy-name="vraptor-blank-project">
 <wb-resource deploy-path="/" source-path="/WebContent"/>
 <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
-        <dependent-module archiveName="vraptor-core.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/vraptor-core/vraptor-core">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
 <property name="context-root" value="vraptor-blank-project"/>
 <property name="java-output-path"/>
 </wb-module>

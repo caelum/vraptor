@@ -29,6 +29,7 @@ import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.core.MethodInfo;
+import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.util.test.MockResult;
@@ -44,6 +45,7 @@ import br.com.caelum.vraptor.view.ValidationViewsFactory;
  *
  * @author Guilherme Silveira
  */
+@Component
 @RequestScoped
 public class MessageCreatorValidator extends AbstractValidator {
 

@@ -9,7 +9,7 @@
 	<property name="vraptor.core" value="../vraptor-core"/>
 	<property name="vraptor.jar" value="${vraptor.core}/target/" />
 	<property name="core.lib.dir" value="${vraptor.core}/lib/mandatory"/>
-	<property name="gae.lib.dir" value="../vraptor-blank-project-gae/lib/extras"/>
+	<property name="gae.lib.dir" value="${vraptor.core}/lib/optional/gae"/>
 	<property name="compile.dir" value="build.tmp"/>
 	<property name="target.dir" value="target"/>
 	<property name="target.file" value="${target.dir}/vraptor-gae.jar" />
@@ -27,6 +27,7 @@
 		<fileset dir="${gae.lib.dir}">
 			<include name="**/*.jar" />
 		</fileset>
+		<fileset dir="${gae.lib.dir}/../upload" includes="*.jar"/>
 	</path>
 
 	<path id="compile.classpath">

@@ -42,7 +42,10 @@ Since version 3.1.2, Vraptor also supports localization for these types. In orde
 [xml]
 	<context-param>
 		<param-name>br.com.caelum.vraptor.packages</param-name>
-    	<param-value>!!previous value!!,br.com.caelum.vraptor.converter.l10n</param-value>
+    	<param-value>
+			...previous value...,
+			br.com.caelum.vraptor.converter.l10n
+		</param-value>
     </context-param>
 [/xml]
 

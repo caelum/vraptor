@@ -36,16 +36,22 @@ public class DefaultResult extends AbstractResult {
     private final Container container;
     private final Map<String, Object> includedAttributes;
     private boolean responseCommitted = false;
+    private final ExceptionMapper exceptions;
 
-    public DefaultResult(HttpServletRequest request, Container container) {
+    public DefaultResult(HttpServletRequest request, Container container, ExceptionMapper exceptions) {
         this.request = request;
         this.container = container;
         this.includedAttributes = new HashMap<String, Object>();
+        this.exceptions = exceptions;
     }
 
     public <T extends View> T use(Class<T> view) {
         this.responseCommitted = true;
         return container.instanceFor(view);
+    }
+    
+    public Result on(Class<? extends Exception> exception) {
+        return exceptions.record(exception);
     }
 
     public Result include(String key, Object value) {

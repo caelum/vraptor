@@ -80,7 +80,7 @@
 		
 									<li><a class="link_toc" href="../../documentation/dependency-injection/">9. Dependency injection</a></li>
 		
-									<li><a class="link_toc" href="../../documentation/downloading/">10. Downloading</a></li>
+									<li><a class="link_toc" href="../../documentation/download-and-upload/">10. Download and Upload</a></li>
 		
 									<li><a class="link_toc" href="../../documentation/utility-components/">11. Utility Components</a></li>
 		
@@ -92,9 +92,11 @@
 		
 									<li><a class="link_toc" href="../../documentation/scala/">15. Scala</a></li>
 		
-									<li><a class="link_toc" href="../../documentation/changelog/">16. ChangeLog</a></li>
+									<li><a class="link_toc" href="../../documentation/optimizations/">16. Optimizations</a></li>
 		
-									<li><a class="link_toc" href="../../documentation/migrating-from-vraptor2-to-vraptor3/">17. Migrating from VRaptor2 to VRaptor3</a></li>
+									<li><a class="link_toc" href="../../documentation/changelog/">17. ChangeLog</a></li>
+		
+									<li><a class="link_toc" href="../../documentation/migrating-from-vraptor2-to-vraptor3/">18. Migrating from VRaptor2 to VRaptor3</a></li>
 		
                 </ol>
             </div><!-- submenu-->
@@ -195,47 +197,100 @@ Session instances for our application:</span>
 		
 
 <h3 class="section">Providers</h3>
-	    	<span class="paragraph">Behind the curtains, VRaptor uses a specific DI provider and has out-of-the-box support for PicoContainer or Spring DI.</span>
-	    	<span class="paragraph">Each implementation give you all you can find in VRaptor's documentation, but also different
-extension points.</span>
-	    	<span class="paragraph">For letting the providers be able to find your annotated classes, you must set this parameter
-on your web.xml, with your app's base package:</span>
+	    	<span class="paragraph">Behind the scenes, VRaptor uses a Depenency Injection container.
+There are three supported containers on VRaptor:</span>
+	    	<ul class="list"><li><span class="paragraph"><strong class="definition">Spring IoC</strong>: besides dependency injection, Spring IoC lets you to use any other
+Spring component along with VRaptor, without further configurations.</span></li><li><span class="paragraph"><strong class="definition">Google Guice</strong>: a lighter and faster container, that lets you to have a better
+control of your dependency wiring, the use of the new javax.inject API, and some
+AOP features.</span></li><li><span class="paragraph"><strong class="definition">Pico container</strong>: o lightweight and simple container, for those who will
+use no more than dependency injection.</span></li></ul>
+	    	<span class="paragraph">To choose any of these containers, one have to put their jars on the classpath.
+The required jars can be found on lib/containers folders at vraptor zip.
+Para selecionar qualquer um desses containers basta colocars seus respectivos jars no classpath.
+Os jars est&atilde;o dispon&iacute;veis na pasta lib/containers do zip do VRaptor.</span>
+	    	<span class="paragraph">By default the containers will consider only classes under WEB-INF/classes folder, but
+you can also put annotated classes inside jars, if they include directory entries.
+("Add directory entries" on eclipse, or ant without "files only" option). 
+For enabling this you must put this parameter on web.xml:</span>
 	    	<div class="xml"><code class="xml"><span class="textag">&lt;context-param&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-name&gt;</span><span class="texnormal">br.com.caelum.vraptor.packages</span><span class="textag">&lt;/param-name&gt;</span><span class="texnormal"><br /></span>
-<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-value&gt;</span><span class="texnormal">com.yourcompany.yourapp</span><span class="textag">&lt;/param-value&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-value&gt;</span><span class="texnormal">com.package.inside.the.jar</span><span class="textag">&lt;/param-value&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal"></span><span class="textag">&lt;/context-param&gt;</span></code></div>
-	    	<span class="paragraph">You can set more than one base package, with commas and no spaces:</span>
-	    	<div class="xml"><code class="xml"><span class="textag">&lt;context-param&gt;</span><span class="texnormal"><br /></span>
-<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-name&gt;</span><span class="texnormal">br.com.caelum.vraptor.packages</span><span class="textag">&lt;/param-name&gt;</span><span class="texnormal"><br /></span>
-<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-value&gt;</span><span class="texnormal">com.yourcompany.yourapp,com.another.package</span><span class="textag">&lt;/param-value&gt;</span><span class="texnormal"><br /></span>
-<span class="texnormal"></span><span class="textag">&lt;/context-param&gt;</span></code></div>
-	    	<span class="paragraph">It is even possible to have annotated classes inside jars, if your jars include directory
-entries ("Add directory entries" on eclipse, or on ant without the option "files only").</span>
 		
 
 <h3 class="section">Spring</h3>
-	    	<span class="paragraph">When using Spring, you gain all its features and built-in components to use with VRaptor.
-In other words, all components that work with Sprint DI/IoC, also work with VRaptor.
+	    	<span class="paragraph">When using Spring, you gain all its features and built-in components to use with VRaptor. 
+In other words, all components that work with Sprint DI/IoC, also work with VRaptor. 
 In that case, all the annotations.</span>
-	    	<span class="paragraph">You don't have to configure anything, since Spring is the default container.</span>
-	    	<span class="paragraph">VRaptor will use your Spring configurations, if you have it already configured in your project
-(Context listeners and applicationContext.xml). If VRaptor can't find your Spring configuration
-you can configure it, as you can see on Advanced Configurations Chapter.</span>
-		
-
-<h3 class="section">Pico Container</h3>
-	    	<span class="paragraph">When using PicoContainer with VRaptor, you will be able to access Pico directly in order
-to do advanced configurations.</span>
-	    	<span class="paragraph">If you want PicoContainer to be your application's DI provider, put the following entries
-in your web.xml descriptor:</span>
+	    	<span class="paragraph">To enable Spring on VRaptor, add all jars from lib/containers/spring on your app classpath.</span>
+	    	<span class="paragraph">VRaptor will use your Spring configurations, if you have it already configured in your project 
+(Context listeners and applicationContext.xml on classpath). If VRaptor can't find your Spring 
+configuration or you need to do more complex configurations, you can extend the Spring provider:</span>
+	    	<div class="java"><code class="java">
+<span class="java4">package </span><span class="java10">com.yourapp;<br />
+</span><span class="java4">public class </span><span class="java10">CustomProvider </span><span class="java4">extends </span><span class="java10">SpringProvider </span><span class="java8">{<br />
+<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java16">@Override<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">protected </span><span class="java9">void </span><span class="java10">registerCustomComponents</span><span class="java8">(</span><span class="java10">ComponentRegistry registry</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">registry.register</span><span class="java8">(</span><span class="java10">AClass.class, ImplementationOfThisClass.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java3">//...<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java16">@Override<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">protected </span><span class="java10">ApplicationContext getParentApplicationContext</span><span class="java8">(</span><span class="java10">ServletContext context</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">ApplicationContext context = </span><span class="java3">//configure your own application context<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return </span><span class="java10">context;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+}</span></code></div>
+	    	<span class="paragraph">and to use this provider, add it to web.xml:</span>
 	    	<div class="xml"><code class="xml"><span class="textag">&lt;context-param&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-name&gt;</span><span class="texnormal">br.com.caelum.vraptor.provider</span><span class="textag">&lt;/param-name&gt;</span><span class="texnormal"><br /></span>
-<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-value&gt;</span><span class="texnormal">br.com.caelum.vraptor.ioc.pico.PicoProvider</span><span class="textag">&lt;/param-value&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-value&gt;</span><span class="texnormal">com.yourapp.CustomProvider</span><span class="textag">&lt;/param-value&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal"></span><span class="textag">&lt;/context-param&gt;</span></code></div>
 		
 
-<h3 class="section">Your custom provider</h3>
-	    	<span class="paragraph">You can also create your own Provider, either to extend the default implementations with PicoContainer or Spring, or to base your implementation in another DI container you may prefer.</span>
+<h3 class="section">Google Guice</h3>
+	    	<span class="paragraph">To enable Google Guice, add all jars from lib/containers/guice to your app classpath.</span>
+	    	<span class="paragraph">When using Guice you can choose to not use VRaptor's @Component annotation, and use
+guice or javax.inject annotations to control the injection.</span>
+	    	<span class="paragraph">If you need more complex configurations, just create a class that extends guice provider:</span>
+	    	<div class="java"><code class="java">
+<span class="java4">public class </span><span class="java10">CustomProvider </span><span class="java4">extends </span><span class="java10">GuiceProvider </span><span class="java8">{<br />
+<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java16">@Override<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">protected </span><span class="java9">void </span><span class="java10">registerCustomComponents</span><span class="java8">(</span><span class="java10">ComponentRegistry registry</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java3">//binding only to AClass<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">registry.register</span><span class="java8">(</span><span class="java10">AClass.class, ImplementationOfThisClass.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">; <br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java3">//binding on OtherClass and all its superclasses and interfaces<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">registry.deepRegister</span><span class="java8">(</span><span class="java10">OtherClass.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java16">@Override<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">protected </span><span class="java10">Module customModule</span><span class="java8">() {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java3">//you need to install super.customModule() if you<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //want to enable the registerCustomComponents method<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //and the classpath scanning<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">final </span><span class="java10">Module module = </span><span class="java4">super</span><span class="java10">.customModule</span><span class="java8">()</span><span class="java10">; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return new </span><span class="java10">AbstractModule</span><span class="java8">() {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">configure</span><span class="java8">() {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">module.configure</span><span class="java8">(</span><span class="java10">binder</span><span class="java8">())</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java3">// custom guice bindings<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+}</span></code></div>
+	    	<span class="paragraph">and to use this provider, add to the web.xml:</span>
+	    	<div class="xml"><code class="xml"><span class="textag">&lt;context-param&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-name&gt;</span><span class="texnormal">br.com.caelum.vraptor.provider</span><span class="textag">&lt;/param-name&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-value&gt;</span><span class="texnormal">com.yourapp.CustomProvider</span><span class="textag">&lt;/param-value&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal"></span><span class="textag">&lt;/context-param&gt;</span></code></div>
+		
+
+<h3 class="section">Pico Container</h3>
+	    	<span class="paragraph">To enable Google Guice, add all jars from lib/containers/picocontainer to your app classpath.</span>
 		
 
 </div><!-- content -->

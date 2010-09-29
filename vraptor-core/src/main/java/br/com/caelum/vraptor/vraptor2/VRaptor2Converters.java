@@ -24,6 +24,7 @@ import br.com.caelum.vraptor.TwoWayConverter;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.core.DefaultConverters;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
+import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.ioc.Container;
 
 /**
@@ -33,6 +34,7 @@ import br.com.caelum.vraptor.ioc.Container;
  *
  * @author Guilherme Silveira
  */
+@Component
 @ApplicationScoped
 public class VRaptor2Converters implements Converters {
 

@@ -38,6 +38,7 @@ import br.com.caelum.vraptor.http.route.RouteBuilder;
 import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.http.route.RoutesParser;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
+import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.ResourceClass;
 
@@ -46,6 +47,7 @@ import br.com.caelum.vraptor.resource.ResourceClass;
  *
  * @author Guilherme Silveira
  */
+@Component
 @ApplicationScoped
 public class ComponentRoutesParser implements RoutesParser {
 

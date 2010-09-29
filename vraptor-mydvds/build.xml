@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project default="assembly">
 
-	<property file="../vraptor-core/build.properties" />
+	<property file="../build.properties" />
+	<property file="${vraptor.core}/build.properties" />
 		
-	<property name="vraptor.core" value="../vraptor-core"/>
-	<property name="mandatory.jars" value="${vraptor.core}/${libs.dir}/mandatory"/>
-	<property name="optional.jars" value="${vraptor.core}/${libs.dir}/optional"/>
 	<property name="extra.jars" value="build-lib/extra"/>
 	<property name="webinf.lib.dir" value="WebContent/WEB-INF/lib"/>
 
@@ -33,23 +31,19 @@
     </target>
 	
 	<target name="update-jars">
+		<mkdir dir="${webinf.lib.dir}"/>
     	<delete>
-			<fileset dir="${webinf.lib.dir}">
-			    <include name="*.jar"/>
-			</fileset>
+			<fileset dir="${webinf.lib.dir}" includes="*.jar"/>
 		</delete>
     	<copy todir="${webinf.lib.dir}">
-			<fileset dir="${mandatory.jars}">
-			    <include name="*.jar"/>
-			</fileset>
-			<fileset dir="${optional.jars}">
-			    <include name="*.jar"/>
-			</fileset>
-			<fileset dir="${extra.jars}">
-			    <include name="*.jar"/>
-			</fileset>
+			<fileset dir="${mandatory.jars}" includes="*.jar"/>
+			<fileset dir="${container.jars}" includes="*.jar"/>
+			<fileset dir="${optional.jars}/hibernate" includes="*.jar" excludes="*validator-3*" />
+			<fileset dir="${optional.jars}/upload" includes="*.jar" />
+			<fileset dir="${optional.jars}" includes="*.jar" />
+			<fileset dir="${extra.jars}" includes="*.jar"/>
     	</copy>
-    	<copy todir="${webinf.lib.dir}" file="${vraptor.core}/${jar.file}"/>
+    	<copy todir="${webinf.lib.dir}" file="${vraptor.jar}"/>
     </target>
 
 

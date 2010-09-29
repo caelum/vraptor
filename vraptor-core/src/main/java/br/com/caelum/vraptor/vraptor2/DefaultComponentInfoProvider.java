@@ -20,11 +20,13 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.vraptor.annotations.Viewless;
 
+import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.vraptor2.outject.DefaultOutjecter;
 import br.com.caelum.vraptor.vraptor2.outject.JsonOutjecter;
 import br.com.caelum.vraptor.vraptor2.outject.Outjecter;
 
+@Component
 public class DefaultComponentInfoProvider implements ComponentInfoProvider {
 
 	private final HttpServletRequest request;

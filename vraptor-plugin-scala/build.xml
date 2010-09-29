@@ -13,7 +13,14 @@
 	<property name="compile.dir" value="build.tmp" />
 	<property name="target.dir" value="target" />
 	<property name="target.file" value="${target.dir}/vraptor-scala.jar" />
-	
+	<property name="scala-compiler.jar" value="${scala.lib.dir}/scala-compiler.jar" />
+	<property name="scala-library.jar" value="${scala.lib.dir}/scala-library.jar" />
+
+	<path id="scala.classpath">
+		<pathelement location="${scala-compiler.jar}" />
+		<pathelement location="${scala-library.jar}" />
+	</path>
+
 	<path id="libs.classpath" path=".">
 		<fileset dir="../common">
 			<include name="*.jar" />
@@ -30,6 +37,7 @@
 	</path>
 
 	<path id="compile.classpath">
+		<path refid="scala.classpath" />
 		<path refid="libs.classpath" />
 	</path>
 	

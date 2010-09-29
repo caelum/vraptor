@@ -1,7 +1,7 @@
 [chapter VRaptor3 - o guia inicial de 10 minutos]
 
 [section Começando o projeto: uma loja virtual]
-Vamos começar baixando o ::vraptor-blank-project::, do site http://vraptor.caelum.com.br/download.jsp.
+Vamos começar baixando o ::vraptor-blank-project::, do site http://vraptor.caelum.com.br/download.jsp .
 Esse blank-project já possui a configuração no %%web.xml%% e os jars no WEB-INF/lib necessários para começar
 a desenvolver no VRaptor.
 
@@ -20,7 +20,6 @@ Como você pode ver, a única configuração necessária no %%web.xml%% é o fil
 		<dispatcher>REQUEST</dispatcher>
 	</filter-mapping>
 [/xml]
-
 
 Você pode facilmente importar esse projeto no Eclipse, e roda-lo clicando com o botão da direita
 e escolhendo ::Run as... / Run on server...::. Escolha então um  servlet container (ou
@@ -284,7 +283,7 @@ public class ProdutosController {
 			that(!produto.getNome().isEmpty(), "produto.nome", "nome.vazio");
 			that(produto.getPreco() > 0, "produto.preco", "preco.invalido");
 		}});
-		validator.onErrorUse(Results.page()).of(ProdutosController.class).form();
+		validator.onErrorUsePageOf(ProdutosController.class).form();
 		
 		dao.adiciona(produto);
 		result.redirectTo(ProdutosController.class).lista();

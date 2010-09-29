@@ -43,13 +43,13 @@ public void testThatAValidationErrorOccurs() {
 	controller.add(new Client());
 }
 [/java]
-ou
+or
 [java]
 @Test
 public void testThatAValidationErrorOccurs() {
 	ClientController controller = new ClientController(..., new MockValidator());
 	try {
-		controller.add(new Cliente());
+		controller.add(new Client());
 		Assert.fail();
 	} catch (ValidationException e) {
 		List<Message> errors = e.getErrors();

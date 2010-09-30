@@ -72,7 +72,7 @@ public class ParametersInstantiatorInterceptorTest {
     public void setup() throws Exception {
 		MockitoAnnotations.initMocks(this);
 		when(localization.getBundle()).thenReturn(bundle);
-		when(request.getParameterNames()).thenReturn(Collections.enumeration(Collections.emptyList()));
+		when(request.getParameterNames()).thenReturn(Collections.enumeration(Collections.EMPTY_LIST));
 
         this.instantiator = new ParametersInstantiatorInterceptor(parametersProvider, params, validator, localization, session, request);
 

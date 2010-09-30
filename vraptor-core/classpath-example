@@ -55,11 +55,6 @@
 			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="lib/build/servlet-api-2.4.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
-		</attributes>
-	</classpathentry>
 	<classpathentry exported="true" kind="lib" path="lib/mandatory/javassist-3.9.0.GA.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
@@ -139,5 +134,7 @@
 	<classpathentry kind="lib" path="lib/scala/scala-compiler.jar"/>
 	<classpathentry kind="lib" path="lib/scala/scala-library.jar"/>
 	<classpathentry kind="lib" path="lib/scala/scalate-core-1.2.jar"/>
+	<classpathentry kind="lib" path="lib/build/javax.servlet.jar"/>
+	<classpathentry kind="lib" path="lib/containers/spring/commons-collections-3.2.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

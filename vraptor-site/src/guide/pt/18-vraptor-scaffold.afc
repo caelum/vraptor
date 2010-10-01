@@ -6,13 +6,14 @@ que ter por finalidade facilitar a configuração de novos projetos e plugins.
 [section Instalação]
 
 Para instalar o vraptor scaffold é necessário ter instalado o ruby e o rubygems.
-Tendo instalado isso basta executar o comando a seguir.
+Você pode encontrar informações de instalação no seguinte endereço http://www.ruby-lang.org/pt/downloads .
+Tendo isso instalado basta executar o comando a seguir.
 
 %%gem install vraptor-scaffold --pre%%
 
 [section Começando um projeto]
 
-Abra um terminal e digite vraptor new onlinestore. Esse comando vai criar toda a 
+Abra um terminal e digite %%vraptor new onlinestore%%. Esse comando vai criar toda a 
 estrutra da aplicação, após isso entre na pasta onlinestore e execute a task jetty do ant %ant jetty.run%
 abra o browser no endereço http://localhost:8080 e você deve ver **It works!**.
 
@@ -22,8 +23,8 @@ para isso basta executar %%vraptor scaffold product name:string value:double%%, 
 
 [section Package]
 
-O pacote raiz por padrão é app, para mudar isso quando crie a aplicação com o 
-seguinte comando %%vraptor new onlinestore -p=br.com.caelum%% ou %%vraptor new onlinestore --package=br.com.caelum%% 
+O pacote raiz por padrão é app, para mudar isso crie a aplicação com o seguinte comando 
+%%vraptor new onlinestore -p=br.com.caelum%% ou %%vraptor new onlinestore --package=br.com.caelum%% 
 
 [section Maven]
 
@@ -33,8 +34,8 @@ basta criar o aplicação com %%vraptor new onlinestore -b=mvn%% ou %%vraptor ne
 
 [section Freemarker]
 
-Por padrão a aplicação gera as views com jsp, porém é possível utilizar o freemarker, para isso
-crie o aplicação com %%vraptor new onlinestore -e=ftl%% ou %%vraptor new onlinestore --template-engine=ftl%% 
+O template engine padrão é o jsp, para utilizar o freemarker, crie o aplicação 
+com %%vraptor new onlinestore -e=ftl%% ou %%vraptor new onlinestore --template-engine=ftl%% 
 
 [section Contribuindo]
 

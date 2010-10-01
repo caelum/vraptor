@@ -5,13 +5,15 @@ import java.io.FileOutputStream;
 import org.apache.commons.io.IOUtils;
 import org.jbehave.core.annotations.AfterScenario;
 import org.jbehave.core.annotations.AfterScenario.Outcome;
+import org.jbehave.web.selenium.PerScenarioWebDriverSteps;
 import org.jbehave.web.selenium.WebDriverFactory;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 
 import sun.rmi.rmic.iiop.Generator.OutputType;
+import org.openqa.selenium.OutputType;
 
-public class FailingScenarioScreenshotCapture {
+public class FailingScenarioScreenshotCapture  extends PerScenarioWebDriverSteps  {
     public FailingScenarioScreenshotCapture(WebDriverFactory driverFactory) {
         super(driverFactory);
     }

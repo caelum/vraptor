@@ -86,5 +86,9 @@
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jbehave-web-resources-3.1-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jbehave-web-runner-3.1-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jbehave-web-selenium-3.1-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/selenium-2.0a5.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/selenium-common-2.0a5.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/selenium-remote-client-2.0a5.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/selenium-remote-common-2.0a5.jar"/>
 	<classpathentry kind="output" path="WebContent/WEB-INF/classes"/>
 </classpath>

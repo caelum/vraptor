@@ -74,21 +74,21 @@
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/xstream-1.3.1.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/commons-lang-2.5.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/cssparser-0.9.5.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jbehave-core-3.0.2.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/mockito-all-1.8.5.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/nekohtml-1.9.14.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/sac-1.3.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/selenium-firefox-driver-2.0a5.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/selenium-ie-driver-2.0a5.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/selenium-support-2.0a5.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/xercesImpl-2.9.1.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jbehave-web-io-3.1-SNAPSHOT.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jbehave-web-resources-3.1-SNAPSHOT.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jbehave-web-runner-3.1-SNAPSHOT.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jbehave-web-selenium-3.1-SNAPSHOT.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/selenium-2.0a5.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/selenium-common-2.0a5.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/selenium-remote-client-2.0a5.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/selenium-remote-common-2.0a5.jar"/>
+	<classpathentry kind="lib" path="build-lib/tests/jbehave-core-3.0.2.jar"/>
+	<classpathentry kind="lib" path="build-lib/tests/jbehave-web-io-3.1-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="build-lib/tests/jbehave-web-resources-3.1-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="build-lib/tests/jbehave-web-runner-3.1-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="build-lib/tests/jbehave-web-selenium-3.1-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="build-lib/tests/nekohtml-1.9.14.jar"/>
+	<classpathentry kind="lib" path="build-lib/tests/selenium-2.0a5.jar"/>
+	<classpathentry kind="lib" path="build-lib/tests/selenium-common-2.0a5.jar"/>
+	<classpathentry kind="lib" path="build-lib/tests/selenium-firefox-driver-2.0a5.jar"/>
+	<classpathentry kind="lib" path="build-lib/tests/selenium-ie-driver-2.0a5.jar"/>
+	<classpathentry kind="lib" path="build-lib/tests/selenium-remote-client-2.0a5.jar"/>
+	<classpathentry kind="lib" path="build-lib/tests/selenium-remote-common-2.0a5.jar"/>
+	<classpathentry kind="lib" path="build-lib/tests/selenium-support-2.0a5.jar"/>
 	<classpathentry kind="output" path="WebContent/WEB-INF/classes"/>
 </classpath>

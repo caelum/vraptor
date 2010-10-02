@@ -10,7 +10,6 @@ import org.jbehave.web.selenium.WebDriverFactory;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 
-import sun.rmi.rmic.iiop.Generator.OutputType;
 import org.openqa.selenium.OutputType;
 
 public class FailingScenarioScreenshotCapture  extends PerScenarioWebDriverSteps  {

@@ -90,5 +90,7 @@
 	<classpathentry kind="lib" path="build-lib/tests/selenium-remote-client-2.0a5.jar"/>
 	<classpathentry kind="lib" path="build-lib/tests/selenium-remote-common-2.0a5.jar"/>
 	<classpathentry kind="lib" path="build-lib/tests/selenium-support-2.0a5.jar"/>
+	<classpathentry kind="lib" path="build-lib/tests/maven-ant-tasks-2.1.1.jar"/>
+	<classpathentry kind="lib" path="build-lib/tests/jbehave-ant-3.0.1.jar"/>
 	<classpathentry kind="output" path="WebContent/WEB-INF/classes"/>
 </classpath>

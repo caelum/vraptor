@@ -21,4 +21,10 @@ public class DefaultUploadedFileTest {
 
 		assertThat(file.getFileName(), is("file.txt"));
 	}
+	
+	public void usingOnlyFilename() {
+        DefaultUploadedFile file = new DefaultUploadedFile(new NullInputStream(0), "file.txt", "text/plain");
+
+        assertThat(file.getFileName(), is("file.txt"));
+	}
 }

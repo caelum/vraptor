@@ -21,7 +21,6 @@ public class NullMultipartInterceptor implements MultipartInterceptor {
 
     public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
         throws InterceptionException {
-        stack.next(method, resourceInstance);
+        
     }
-
 }

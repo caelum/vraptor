@@ -17,10 +17,11 @@
 package br.com.caelum.vraptor.interceptor.multipart;
 
 import java.io.InputStream;
-
-import org.apache.commons.io.FilenameUtils;
+import java.util.regex.Pattern;
 
 public class DefaultUploadedFile implements UploadedFile {
+    
+    static final Pattern REGEX_REMOVE_SLASHES = Pattern.compile(".*(?:\\\\|\\/)(.+)$");
 
     private final String contentType;
 
@@ -33,7 +34,7 @@ public class DefaultUploadedFile implements UploadedFile {
     public DefaultUploadedFile(InputStream content, String completeFileName,
             String contentType) {
         this.content = content;
-		this.fileName = FilenameUtils.getName(completeFileName);
+		this.fileName = REGEX_REMOVE_SLASHES.matcher(completeFileName).replaceAll("$1");
         this.completeFileName = completeFileName;
         this.contentType = contentType;
     }

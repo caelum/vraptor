@@ -15,8 +15,6 @@ import org.jbehave.core.io.CodeLocations;
 import org.jbehave.core.io.LoadFromClasspath;
 import org.jbehave.core.io.StoryFinder;
 import org.jbehave.core.junit.JUnitStories;
-import org.jbehave.core.reporters.ConsoleOutput;
-import org.jbehave.core.reporters.StoryReporter;
 import org.jbehave.core.reporters.StoryReporterBuilder;
 import org.jbehave.core.steps.CandidateSteps;
 import org.jbehave.core.steps.InstanceStepsFactory;
@@ -31,40 +29,7 @@ import org.jbehave.web.selenium.WebDriverFactory;
 
 import br.com.caelum.vraptor.mydvds.pages.PageFactory;
 
-class MyBuilder extends StoryReporterBuilder {
-
-	private final SeleniumContext context;
-	private final ContextView contextView;
-
-	public MyBuilder(SeleniumContext context, ContextView contextView) {
-		this.context = context;
-		this.contextView = contextView;
-	}
-
-	@Override
-	public StoryReporter reporterFor(String storyPath, Format format) {
-		if (format == IDE_CONSOLE) {
-			return new ConsoleOutput() {
-				@Override
-				public void beforeScenario(String scenarioTitle) {
-					context.setCurrentScenario(scenarioTitle);
-					super.beforeScenario(scenarioTitle);
-				}
-
-				@Override
-				public void afterStory(boolean givenStory) {
-					contextView.close();
-					super.afterStory(givenStory);
-				}
-			};
-		} else {
-			return super.reporterFor(storyPath, format);
-		}
-	}
-
-}
-
-public class MyDvdsStories extends JUnitStories {
+public class Stories extends JUnitStories {
 
 	private WebDriverFactory driverFactory = new DefaultWebDriverFactory();
 	private PageFactory pageFactory = new PageFactory(driverFactory);
@@ -75,14 +40,14 @@ public class MyDvdsStories extends JUnitStories {
 	@Override
 	public Configuration configuration() {
 		Class<? extends Embeddable> embeddableClass = this.getClass();
-		SeleniumStepMonitor stepMonitor = new SeleniumStepMonitor(contextView,
+		SeleniumStepMonitor monitor = new SeleniumStepMonitor(contextView,
 				context, new SilentStepMonitor());
 		StoryReporterBuilder builder = new MyBuilder(context, contextView);
 		builder = builder.withCodeLocation(
 				CodeLocations.codeLocationFromClass(embeddableClass))
 				.withDefaultFormats().withFormats(IDE_CONSOLE, TXT, HTML, XML);
 		return new SeleniumConfiguration().useSeleniumContext(context)
-				.useWebDriverFactory(driverFactory).useStepMonitor(stepMonitor)
+				.useWebDriverFactory(driverFactory).useStepMonitor(monitor)
 				.useStoryLoader(new LoadFromClasspath(embeddableClass))
 				.useStoryReporterBuilder(builder);
 	}

@@ -29,7 +29,7 @@ import org.jbehave.web.selenium.WebDriverFactory;
 
 import br.com.caelum.vraptor.mydvds.pages.PageFactory;
 
-public class Stories extends JUnitStories {
+public class MyDvdsStories extends JUnitStories {
 
 	private WebDriverFactory driverFactory = new DefaultWebDriverFactory();
 	private PageFactory pageFactory = new PageFactory(driverFactory);

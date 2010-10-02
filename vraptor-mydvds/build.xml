@@ -26,7 +26,7 @@
     	<path id="buildpath">
     		<fileset dir="WebContent/WEB-INF/lib"/>
     	</path>
-    	<javac srcdir="src/main/java" destdir="src/main/webapp/WEB-INF/classes" classpathref="buildpath"/>
+    	<javac srcdir="src/main/java" destdir="WebContent/WEB-INF/classes" classpathref="buildpath"/>
     	
     </target>
 	
@@ -47,8 +47,9 @@
     </target>
 
 
-	<target name="test-behavior">
+	<target name="test-behavior" depends="compile" description="tests mydvds behavior">
 		<path id="testpath">
+    		<fileset dir="WebContent/WEB-INF/classes"/>
     		<fileset dir="WebContent/WEB-INF/lib"/>
 			<fileset dir="build-lib/tests"/>
 		</path>

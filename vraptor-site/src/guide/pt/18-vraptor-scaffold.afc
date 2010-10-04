@@ -9,34 +9,97 @@ Para instalar o vraptor scaffold é necessário ter instalado o ruby e o rubygem
 Você pode encontrar informações de instalação no seguinte endereço http://www.ruby-lang.org/pt/downloads .
 Tendo isso instalado basta executar o comando a seguir.
 
-%%gem install vraptor-scaffold --pre%%
+[code]
+gem install vraptor-scaffold --pre
+[/code]
 
 [section Começando um projeto]
 
-Abra um terminal e digite %%vraptor new onlinestore%%. Esse comando vai criar toda a 
-estrutra da aplicação, após isso entre na pasta onlinestore e execute a task jetty do ant %ant jetty.run%
+Abra um terminal e digite
+ 
+[code]
+vraptor new onlinestore
+[/code]
+
+Esse comando vai criar toda a estrutra da aplicação, após isso entre na pasta onlinestore 
+e execute a task jetty do ant 
+
+[code]
+ant jetty.run
+[/code]
+
 abra o browser no endereço http://localhost:8080 e você deve ver **It works!**.
 
 Agora vamos criar um cadastro completo de produtos para nossa loja virtual, 
-para isso basta executar %%vraptor scaffold product name:string value:double%%, execute novamente
-%ant jetty.run% acesse http://localhost:8080/products.
+para isso basta executar
+
+[code]
+vraptor scaffold product name:string value:double
+[/code]
+
+execute novamente
+
+[code]
+ant jetty.run
+[/code]
+
+acesse http://localhost:8080/products
 
 [section Package]
 
 O pacote raiz por padrão é app, para mudar isso crie a aplicação com o seguinte comando 
-%%vraptor new onlinestore -p=br.com.caelum%% ou %%vraptor new onlinestore --package=br.com.caelum%% 
+
+[code]
+vraptor new onlinestore --package=br.com.caelum
+[/code] 
 
 [section Maven]
 
 Por padrão a aplicação é criada com o ant com ferramenta de build e o ivy como gerenciador de dependências,
-porém é posível utilizar o maven 2 como ferramenta de build e gerenciador de dependências, para isso
-basta criar o aplicação com %%vraptor new onlinestore -b=mvn%% ou %%vraptor new onlinestore --build-tool=mvn%% 
+é posível utilizar o maven 2, basta criar o aplicação com 
+
+[code]
+vraptor new onlinestore --build-tool=mvn
+[/code]
 
 [section Freemarker]
 
-O template engine padrão é o jsp, para utilizar o freemarker, crie o aplicação 
-com %%vraptor new onlinestore -e=ftl%% ou %%vraptor new onlinestore --template-engine=ftl%% 
+O template engine padrão é jsp, para utilizar o freemarker, crie o aplicação com
+
+[code]
+vraptor new onlinestore --template-engine=ftl
+[/code]
+
+[section Eclipse]
+Se você optou pelo maven execute 
+
+[code]
+mvn eclipse:eclipse
+[/code]
+
+para gerar os arquivos de configuração do eclipse, após isso é so importar o projeto normalmente.
+Se você optou pelo ant os arquivos de configuração serão gerados no momento em que criar 
+o projeto, é possível pular a criação desses arquivos com o comando
+
+[code]
+vraptor new onlinestore --skip-eclipse
+[/code]
+
+[section Comando Help]
+O vraptor scaffold está dividindo basicamente em 2 geradores o "new" e o "scaffold"
+É possível ver todas as opções de customização dos geradores.
+
+[code]
+vraptor new -h
+[/code]
+
+[code]
+vraptor scaffold -h
+[/code]
 
 [section Contribuindo]
 
-O código fonte está hospedado no github no seguinte endereço http://github.com/caelum/vraptor-scaffold .
+O projeto está sendo desenvolvido em ruby e o código fonte está hospedado no github 
+no seguinte endereço http://github.com/caelum/vraptor-scaffold.
+Você pode colaborar com o projeto fazendo o fork e enviando seu path ou uma nova funcionalide.
+Não se esqueça dos testes.

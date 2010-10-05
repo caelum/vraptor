@@ -86,7 +86,7 @@ vraptor new onlinestore --skip-eclipse
 [/code]
 
 [section Tipos de atributos suportado]
-É possível gerar o um CRUD com os seguintes atributos: %%boolean, double, float, short, integer, long, string and text%%.
+É possível gerar um CRUD com os seguintes atributos: %%boolean, double, float, short, integer, long, string and text%%.
 
 [section Comando Help]
 O vraptor scaffold está dividindo basicamente em 2 geradores o "new" e o "scaffold"

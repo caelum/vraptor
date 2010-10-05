@@ -94,7 +94,7 @@ public class HomeController {
 		    that(currentUser, is(notNullValue()), "login", "invalid_login_or_password");
 		}});
 		// you can use "this" to redirect to another logic from this controller
-		validator.onErrorUsePageOf(this).login();
+//		validator.onErrorUsePageOf(this).login();
 
 		// the login was valid, add user to session
 		userInfo.login(currentUser);

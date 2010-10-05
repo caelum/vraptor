@@ -10,7 +10,7 @@ Você pode encontrar informações de instalação no seguinte endereço http://
 Tendo isso instalado basta executar o comando a seguir.
 
 [code]
-gem install vraptor-scaffold --pre
+gem install vraptor-scaffold
 [/code]
 
 [section Começando um projeto]
@@ -30,7 +30,7 @@ ant jetty.run
 
 abra o browser no endereço http://localhost:8080 e você deve ver **It works!**.
 
-Agora vamos criar um cadastro completo de produtos para nossa loja virtual, 
+Agora vamos criar um cadastro completo(CRUD) de produtos para nossa loja virtual, 
 para isso basta executar
 
 [code]
@@ -84,6 +84,9 @@ o projeto, é possível pular a criação desses arquivos com o comando
 [code]
 vraptor new onlinestore --skip-eclipse
 [/code]
+
+[section Tipos de atributos suportado]
+É possível gerar o um CRUD com os seguintes atributos: %%boolean, double, float, short, integer, long, string and text%%.
 
 [section Comando Help]
 O vraptor scaffold está dividindo basicamente em 2 geradores o "new" e o "scaffold"

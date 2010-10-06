@@ -12,11 +12,11 @@ import java.util.Map;
 
 import javax.servlet.http.Part;
 
-import com.google.appengine.repackaged.com.google.common.collect.Maps;
+import com.google.common.collect.Maps;
 
 /**
  * A Vraptor implementation of {@link Part}.
- * 
+ *
  * @author Otávio Scherer Garcia
  */
 public class VraptorPart

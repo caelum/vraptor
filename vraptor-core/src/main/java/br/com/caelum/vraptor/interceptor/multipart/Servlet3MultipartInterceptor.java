@@ -34,7 +34,6 @@ import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.validator.ValidationMessage;
@@ -52,7 +51,7 @@ import com.google.common.io.Closeables;
  * <p>
  * If you're using servlet3 upload features, the {@link MultipartConfig#getDirectory()} has no effect.
  * </p>
- * 
+ *
  * @author Otávio Scherer Garcia
  * @since 3.2
  * @see DefaultMultipartConfig
@@ -62,8 +61,7 @@ import com.google.common.io.Closeables;
 
 @Intercepts
 @RequestScoped
-public class Servlet3MultipartInterceptor
-    implements Interceptor {
+public class Servlet3MultipartInterceptor implements MultipartInterceptor {
 
     private static final Logger logger = LoggerFactory.getLogger(Servlet3MultipartInterceptor.class);
 

@@ -318,19 +318,19 @@ public class BaseComponents {
     	   !registerIfClassPresent(REQUEST_COMPONENTS, "org.hibernate.validator.ClassValidator",HibernateValidator3.class)) {
     		REQUEST_COMPONENTS.put(BeanValidator.class, NullBeanValidator.class);
     	}
-    	
-    	if (isPresentClass("javax.servlet.http.Part")) {
+
+    	if (isClassPresent("javax.servlet.http.Part")) {
             REQUEST_COMPONENTS.put(MultipartInterceptor.class, Servlet3MultipartInterceptor.class);
-    	} else if (isPresentClass("org.apache.commons.fileupload.FileItem")) {
+    	} else if (isClassPresent("org.apache.commons.fileupload.FileItem")) {
             REQUEST_COMPONENTS.put(MultipartInterceptor.class, CommonsUploadMultipartInterceptor.class);
     	} else {
             REQUEST_COMPONENTS.put(MultipartInterceptor.class, NullMultipartInterceptor.class);
     	}
-    	
+
         return Collections.unmodifiableMap(REQUEST_COMPONENTS);
     }
-    
-    private static boolean isPresentClass(String className) {
+
+    private static boolean isClassPresent(String className) {
         try {
             Class.forName(className);
             return true;

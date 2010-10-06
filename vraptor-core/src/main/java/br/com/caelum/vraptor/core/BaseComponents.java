@@ -106,6 +106,7 @@ import br.com.caelum.vraptor.interceptor.multipart.DefaultMultipartConfig;
 import br.com.caelum.vraptor.interceptor.multipart.MultipartConfig;
 import br.com.caelum.vraptor.interceptor.multipart.MultipartInterceptor;
 import br.com.caelum.vraptor.interceptor.multipart.NullMultipartInterceptor;
+import br.com.caelum.vraptor.interceptor.multipart.Servlet3MultipartInterceptor;
 import br.com.caelum.vraptor.interceptor.multipart.UploadedFileConverter;
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.ioc.ConverterHandler;
@@ -318,14 +319,24 @@ public class BaseComponents {
     		REQUEST_COMPONENTS.put(BeanValidator.class, NullBeanValidator.class);
     	}
 
-    	try {
-			Class.forName("org.apache.commons.fileupload.FileItem");
-			REQUEST_COMPONENTS.put(MultipartInterceptor.class, CommonsUploadMultipartInterceptor.class);
-		} catch (ClassNotFoundException e) {
-			REQUEST_COMPONENTS.put(MultipartInterceptor.class, NullMultipartInterceptor.class);
-		}
+    	if (isClassPresent("javax.servlet.http.Part")) {
+            REQUEST_COMPONENTS.put(MultipartInterceptor.class, Servlet3MultipartInterceptor.class);
+    	} else if (isClassPresent("org.apache.commons.fileupload.FileItem")) {
+            REQUEST_COMPONENTS.put(MultipartInterceptor.class, CommonsUploadMultipartInterceptor.class);
+    	} else {
+            REQUEST_COMPONENTS.put(MultipartInterceptor.class, NullMultipartInterceptor.class);
+    	}
 
         return Collections.unmodifiableMap(REQUEST_COMPONENTS);
+    }
+
+    private static boolean isClassPresent(String className) {
+        try {
+            Class.forName(className);
+            return true;
+        } catch (ClassNotFoundException e) {
+            return false;
+        }
     }
 
 	private static boolean registerIfClassPresent(Map<Class<?>, Class<?>> components, String className, Class<?>... types) {

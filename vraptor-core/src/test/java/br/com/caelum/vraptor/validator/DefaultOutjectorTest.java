@@ -22,7 +22,7 @@ public class DefaultOutjectorTest {
 
 	static class RequestAttributes extends HttpServletRequestWrapper {
 		private Map<String, Object> attributes = new HashMap<String, Object>();
-		private Map<String, String> parameters = new HashMap<String, String>();
+		private Map<String, String[]> parameters = new HashMap<String, String[]>();
 
 		public RequestAttributes(HttpServletRequest request) {
 			super(request);
@@ -39,15 +39,16 @@ public class DefaultOutjectorTest {
 		}
 
 		public void setParameter(String name, String value) {
-			parameters.put(name, value);
+			parameters.put(name, new String[] { value });
 		}
 
 		@Override
 		public String getParameter(String name) {
-			return parameters.get(name);
+		    String[] s = parameters.get(name);
+			return s == null || s.length == 0 ? null : s[0];
 		}
 		@Override
-		public Map<?,?> getParameterMap() {
+		public Map<String, String[]> getParameterMap() {
 			return parameters;
 		}
 	}

@@ -40,28 +40,16 @@ public class DefaultMultipartConfig implements MultipartConfig {
         return 2 * 1024 * 1024;
     }
 
-    /**
-     * find the tempdir in this order: system-property, create temp file or by create
-     * a empty directory in the application.
-     * @author Otávio Scherer Garcia
-     */
     public File getDirectory() {
-
         try {
-            return new File(System.getProperty("java.io.tmpdir"));
-        } catch (SecurityException e0) {
-            logger.warn("Access to property java.io.tmpdir is denied, trying to create a file on the temp dir", e0);
-
-            try {
-                File tempFile = File.createTempFile("raptor.", ".upload");
-                tempFile.delete();
-                return tempFile.getParentFile();
-            } catch (IOException e1) {
-                logger.warn("Unable to find temp directory, creating a dir inside the application", e1);
-                File tmp = new File(".tmp-multipart-upload");
-                tmp.mkdirs();
-                return tmp;
-            }
+            File tempFile = File.createTempFile("raptor.", ".upload");
+            tempFile.delete();
+            return tempFile.getParentFile();
+        } catch (IOException e) {
+            logger.warn("Unable to find temp directory, creating a dir inside the application", e);
+            File tmp = new File(".tmp-multipart-upload");
+            tmp.mkdirs();
+            return tmp;
         }
     }
 

@@ -1,6 +1,6 @@
 [chapter ChangeLog]
 
-[section 3.2.0 (in dev)]
+[section 3.2.0]
 [list]
 * várias melhorias na performance: por volta de 60% menos no tempo de requisição.
 * **quebra de compatibilidade interna**: interface InterceptorStack reorganizada.
@@ -50,7 +50,12 @@ estão na pasta lib/containers do zip do VRaptor.
 	@Path(value="/url", priority=Path.LOW)
 	@Path(value="/url", priority=Path.LOWEST)
 	[/java]
-
+* Suporte a upload da Servlet 3.0 (por garcia-jj)
+* new Exception handlers (por garcia-jj)
+  [java]
+  result.on(SomeException.class).forwardTo(Controller.class).method();
+  //se uma SomeException é lançada, a requisição será redirecionada
+  [/java]
 * Nova interface %%TwoWayConverter%% para conversões bidirecionais.
 * suporte nativo a requisições OPTIONS
 * fix: 405 ao invés de 500 em requisições com HTTP metodo desconhecido

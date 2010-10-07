@@ -1,5 +1,26 @@
 Run these commands in order to build with maven
 
+mvn install:install-file -DgroupId=org.hibernate -DartifactId=hibernate-validator -Dversion=4.0.2-GA -Dpackaging=jar =Dfile=vraptor-core/lib/optional/hibernate/hibernate-4.0.2-GA.jar
+
+mvn install:install-file -DgroupId=com.google.code.guice -DartifactId=guice-multibindings -Dversion=3.0 -Dpackaging=jar =Dfile=vraptor-core/lib/containers/guice/guice-multibindings-snapshot.jar
+
+mvn install:install-file -DgroupId=com.google.code.guice -DartifactId=guice -Dversion=3.0 -Dpackaging=jar =Dfile=vraptor-core/lib/containers/guice/guice-snapshot.jar
+
+mvn install:install-file -DgroupId=org.hamcrest -DartifactId=hamcrest-all -Dversion=1.2RC3 -Dpackaging=jar =Dfile=vraptor-core/lib/optional/hamcrest-all-1.2RC3.jar
+
+mvn install:install-file -DgroupId=br.com.caelum -DartifactId=iogi -Dversion=0.8.1 -Dpackaging=jar =Dfile=vraptor-core/lib/optional/iogi/iogi.jar
+
+
+
+
+
+
+
+
+
+
+
+
 mvn install:install-file -DgroupId=org.vraptor -DartifactId=vraptor2 -Dversion=2.6.2 -Dpackaging=jar -Dfile=lib/vraptor2-2.6.2.jar
 
 mvn install:install-file -DgroupId=org.hamcrest -DartifactId=hamcrest-all -Dversion=1.2RC3 -Dpackaging=jar -Dfile=lib/hamcrest-all-1.2RC3.jar

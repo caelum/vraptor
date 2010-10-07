@@ -66,7 +66,7 @@ public class GuiceProvider implements ContainerProvider {
 
 	private Injector injector;
 	private GuiceContainer container;
-	private ServletContext context;
+	protected ServletContext context;
 
 	public <T> T provideForRequest(RequestInfo request, Execution<T> execution) {
 		VRaptorRequestHolder.setRequestForCurrentThread(request);

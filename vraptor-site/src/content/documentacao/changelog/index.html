@@ -100,7 +100,7 @@
 		
 									<li><a class="link_toc" href="../../documentacao/otimizacoes/">17. Otimizações</a></li>
 		
-									<li><a class="link_toc" href="../../documentacao/vraptor-scaffold/">18. Vraptor scaffold</a></li>
+									<li><a class="link_toc" href="../../documentacao/vraptor-scaffold/">18. Vraptor Scaffold</a></li>
 		
 									<li><a class="link_toc" href="../../documentacao/changelog/">19. ChangeLog</a></li>
 		
@@ -116,7 +116,7 @@
 		
 
 
-<h3 class="section">3.2.0 (in dev)</h3>
+<h3 class="section">3.2.0</h3>
 	    	<ul class="list"><li><span class="paragraph">v&aacute;rias melhorias na performance: por volta de 60% menos no tempo de requisi&ccedil;&atilde;o.</span></li><li><span class="paragraph"><strong class="definition">quebra de compatibilidade interna</strong>: interface InterceptorStack reorganizada.</span></li><li><span class="paragraph">melhor implementa&ccedil;&atilde;o do m&eacute;todo accepts dos interceptors internos do VRaptor.</span></li><li><span class="paragraph">suporte beta ao Google Guice, para ser usado ao inv&eacute;s do Spring.</span></li><li><span class="paragraph">Pico provider n&atilde;o &eacute; mais deprecated</span></li><li><span class="paragraph">Agora &eacute; poss&iacute;vel escolher o DI container sem precisar mudar o web.xml. Se os
 jars do Spring estiverem no classpath, o Spring ser&aacute; usado; se forem os jars
 do PicoContainer ele ser&aacute; usado, e da mesma forma pros jars do Guice. Os jars
@@ -149,7 +149,9 @@ est&atilde;o na pasta lib/containers do zip do VRaptor.</span></li><li><span cla
 </span><span class="java16">@Path</span><span class="java8">(</span><span class="java10">value=</span><span class="java5">&#34;/url&#34;</span><span class="java10">, priority=Path.HIGH</span><span class="java8">)<br />
 </span><span class="java16">@Path</span><span class="java8">(</span><span class="java10">value=</span><span class="java5">&#34;/url&#34;</span><span class="java10">, priority=Path.DEFAULT</span><span class="java8">)<br />
 </span><span class="java16">@Path</span><span class="java8">(</span><span class="java10">value=</span><span class="java5">&#34;/url&#34;</span><span class="java10">, priority=Path.LOW</span><span class="java8">)<br />
-</span><span class="java16">@Path</span><span class="java8">(</span><span class="java10">value=</span><span class="java5">&#34;/url&#34;</span><span class="java10">, priority=Path.LOWEST</span><span class="java8">)</span></code></div></li><li><span class="paragraph">Nova interface <code class="inlineCode">TwoWayConverter</code> para convers&otilde;es bidirecionais.</span></li><li><span class="paragraph">suporte nativo a requisi&ccedil;&otilde;es OPTIONS</span></li><li><span class="paragraph">fix: 405 ao inv&eacute;s de 500 em requisi&ccedil;&otilde;es com HTTP metodo desconhecido</span></li><li><span class="paragraph">mais converters do Joda Time (por Rodolfo Liviero)</span></li><li><span class="paragraph">melhorias no Scala Blank Project (por Pedro Matiello)</span></li><li><span class="paragraph">bugfix: null Accept Header gera respostas html</span></li></ul>
+</span><span class="java16">@Path</span><span class="java8">(</span><span class="java10">value=</span><span class="java5">&#34;/url&#34;</span><span class="java10">, priority=Path.LOWEST</span><span class="java8">)</span></code></div></li><li><span class="paragraph">Suporte a upload da Servlet 3.0 (por garcia-jj)</span></li><li><span class="paragraph">new Exception handlers (por garcia-jj)</span><div class="java"><code class="java">
+<span class="java10">result.on</span><span class="java8">(</span><span class="java10">SomeException.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">.forwardTo</span><span class="java8">(</span><span class="java10">Controller.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">.method</span><span class="java8">()</span><span class="java10">;<br />
+</span><span class="java3">//se uma SomeException &eacute; lan&ccedil;ada, a requisi&ccedil;ão ser&aacute; redirecionada</span></code></div></li><li><span class="paragraph">Nova interface <code class="inlineCode">TwoWayConverter</code> para convers&otilde;es bidirecionais.</span></li><li><span class="paragraph">suporte nativo a requisi&ccedil;&otilde;es OPTIONS</span></li><li><span class="paragraph">fix: 405 ao inv&eacute;s de 500 em requisi&ccedil;&otilde;es com HTTP metodo desconhecido</span></li><li><span class="paragraph">mais converters do Joda Time (por Rodolfo Liviero)</span></li><li><span class="paragraph">melhorias no Scala Blank Project (por Pedro Matiello)</span></li><li><span class="paragraph">bugfix: null Accept Header gera respostas html</span></li></ul>
 		
 
 <h3 class="section">3.1.3</h3>

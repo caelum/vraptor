@@ -23,6 +23,7 @@
          ================================= -->
     <target name="compile" depends="" description="--> compiles the project">
 
+			<mkdir dir="WebContent/WEB-INF/classes" />
     	<path id="buildpath">
     		<fileset dir="WebContent/WEB-INF/lib"/>
     	</path>
@@ -70,8 +71,8 @@
          ================================= -->
     <target name="assembly" depends="clean, compile" description="--> assemblies the distribution">
     	
-		<war destfile="mydvds.war" webxml="src/main/webapp/WEB-INF/web.xml">
-        	<fileset dir="src/main/webapp" excludes="src/main/webapp/WEB-INF/web.xml"/>
+		<war destfile="mydvds.war" webxml="WebContent/WEB-INF/web.xml">
+        	<fileset dir="WebContent" excludes="src/main/webapp/WEB-INF/web.xml"/>
     	</war>
     	
     </target>

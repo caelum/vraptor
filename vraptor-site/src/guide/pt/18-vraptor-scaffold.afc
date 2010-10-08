@@ -28,7 +28,7 @@ e execute a task jetty do ant
 ant jetty.run
 [/code]
 
-abra o browser no endereço http://localhost:8080 e você deve ver **It works!**.
+Abra o browser no endereço http://localhost:8080 e você deve ver **It works!**.
 
 Agora vamos criar um cadastro completo(CRUD) de produtos para nossa loja virtual, 
 para isso basta executar
@@ -37,17 +37,17 @@ para isso basta executar
 vraptor scaffold product name:string value:double
 [/code]
 
-execute novamente
+Execute novamente
 
 [code]
 ant jetty.run
 [/code]
 
-acesse http://localhost:8080/products
+Acesse http://localhost:8080/products
 
 [section Package]
 
-O pacote raiz por padrão é app, para mudar isso crie a aplicação com o seguinte comando 
+O pacote raiz por padrão é %%app%%, para mudar isso crie a aplicação com o seguinte comando 
 
 [code]
 vraptor new onlinestore --package=br.com.caelum
@@ -64,7 +64,7 @@ vraptor new onlinestore --build-tool=mvn
 
 [section Freemarker]
 
-O template engine padrão é jsp, para utilizar o freemarker, crie o aplicação com
+O template engine padrão é jsp, para utilizar o freemarker, crie a aplicação com
 
 [code]
 vraptor new onlinestore --template-engine=ftl
@@ -77,7 +77,7 @@ Se você optou pelo maven execute
 mvn eclipse:eclipse
 [/code]
 
-para gerar os arquivos de configuração do eclipse, após isso é so importar o projeto normalmente.
+Para gerar os arquivos de configuração do eclipse, após isso é so importar o projeto normalmente.
 Se você optou pelo ant os arquivos de configuração serão gerados no momento em que criar 
 o projeto, é possível pular a criação desses arquivos com o comando
 
@@ -86,10 +86,11 @@ vraptor new onlinestore --skip-eclipse
 [/code]
 
 [section Tipos de atributos suportado]
-É possível gerar um CRUD com os seguintes atributos: %%boolean, double, float, short, integer, long, string and text%%.
+É possível gerar um CRUD com os seguintes atributos: %%boolean, double, float, short, integer, long, string e text%%.
 
 [section Comando Help]
-O vraptor scaffold está dividindo basicamente em 2 geradores o "new" e o "scaffold"
+O vraptor scaffold está dividindo basicamente em 2 geradores o "new" que é responsável por
+criar a estrutura da aplicação e o "scaffold" que é resposável por gerar os CRUDs.
 É possível ver todas as opções de customização dos geradores.
 
 [code]
@@ -103,6 +104,6 @@ vraptor scaffold -h
 [section Contribuindo]
 
 O projeto está sendo desenvolvido em ruby e o código fonte está hospedado no github 
-no seguinte endereço http://github.com/caelum/vraptor-scaffold.
+no seguinte endereço http://github.com/caelum/vraptor-scaffold .
 Você pode colaborar com o projeto fazendo o fork e enviando seu path ou uma nova funcionalide.
 Não se esqueça dos testes.

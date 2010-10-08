@@ -16,5 +16,5 @@ da parte do VRaptor!
 [section Conversores para Joda Time]
 A api de datas do Java é bem ruim, e por esse motivo existe o projeto joda-time (http://joda-time.sourceforge.net/)
 que tem uma api bem mais agradável para trabalhar com datas. Se o jar do joda-time estiver no classpath,
-o VRaptor registra automaticamente os conversores para os tipos LocalDate e LocalTime, logo você pode
+o VRaptor registra automaticamente os conversores para os tipos LocalDate, LocalTime e LocalDateTime, logo você pode
 recebê-los como parâmetro sem problemas.

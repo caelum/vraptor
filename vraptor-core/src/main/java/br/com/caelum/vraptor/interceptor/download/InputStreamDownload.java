@@ -23,7 +23,7 @@ import java.io.OutputStream;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.io.IOUtils;
+import com.google.common.io.ByteStreams;
 
 /**
  * Handles download by reading from a input stream byte by byte.
@@ -55,7 +55,7 @@ public class InputStreamDownload implements Download {
 		writeDetails(response);
 
 		OutputStream out = response.getOutputStream();
-		IOUtils.copy(stream, out);
+		ByteStreams.copy(stream, out);
 	}
 
 	void writeDetails(HttpServletResponse response) {

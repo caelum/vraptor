@@ -92,7 +92,7 @@ public class Servlet3MultipartInterceptor implements MultipartInterceptor {
 
     public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
         throws InterceptionException {
-        logger.debug("Request contains multipart data. Try to parse with Servlet3 Part");
+        logger.info("Request contains multipart data. Try to parse with Servlet3 Part");
 
         final Multimap<String, String> params = LinkedListMultimap.create();
 

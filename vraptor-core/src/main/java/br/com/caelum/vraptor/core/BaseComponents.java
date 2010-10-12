@@ -319,10 +319,10 @@ public class BaseComponents {
     		REQUEST_COMPONENTS.put(BeanValidator.class, NullBeanValidator.class);
     	}
 
-    	if (isClassPresent("javax.servlet.http.Part")) {
-            REQUEST_COMPONENTS.put(MultipartInterceptor.class, Servlet3MultipartInterceptor.class);
-    	} else if (isClassPresent("org.apache.commons.fileupload.FileItem")) {
+    	if (isClassPresent("org.apache.commons.fileupload.FileItem")) {
             REQUEST_COMPONENTS.put(MultipartInterceptor.class, CommonsUploadMultipartInterceptor.class);
+    	} else if (isClassPresent("javax.servlet.http.Part")) {
+            REQUEST_COMPONENTS.put(MultipartInterceptor.class, Servlet3MultipartInterceptor.class);
     	} else {
             REQUEST_COMPONENTS.put(MultipartInterceptor.class, NullMultipartInterceptor.class);
     	}

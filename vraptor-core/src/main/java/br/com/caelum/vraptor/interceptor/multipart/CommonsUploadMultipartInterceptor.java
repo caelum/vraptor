@@ -73,7 +73,7 @@ public class CommonsUploadMultipartInterceptor implements MultipartInterceptor {
     @SuppressWarnings("unchecked")
     public void intercept(InterceptorStack stack, ResourceMethod method, Object instance)
         throws InterceptionException {
-        logger.debug("Trying to parse multipart request.");
+        logger.info("Request contains multipart data. Try to parse with commons-upload.");
 
         FileItemFactory factory = createFactoryForDiskBasedFileItems(config.getDirectory());
 

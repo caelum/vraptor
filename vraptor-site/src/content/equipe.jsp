@@ -42,6 +42,8 @@
 		<dt>Lucas H. G. Toniazzo - <fmt:message key="colaborador"/></dt>
 		<dt>Otávio Scherer Garcia - <fmt:message key="colaborador"/></dt>
 		<dt>Rafael Carneiro - <fmt:message key="colaborador"/></dt>
+		<dt>Allan de Queiroz - <fmt:message key="colaborador"/></dt>
+		<dd><a href="mailto:alsoqz@gmail.com">alsoqz@gmail.com</a></dd>
 	</dl>
   </div>  
 </div>

@@ -60,18 +60,30 @@ public class PathAnnotationRoutesParser implements RoutesParser {
 	}
 
 	protected List<Route> registerRulesFor(Class<?> baseType) {
+		HttpMethod commonHttpMethod = null;
+		for (HttpMethod m : HttpMethod.values()) {
+			if (baseType.isAnnotationPresent(m.getAnnotation())) {
+				commonHttpMethod = m;
+				break;
+			}
+		}
 		List<Route> routes = new ArrayList<Route>();
 		for (Method javaMethod : baseType.getMethods()) {
 			if (isEligible(javaMethod)) {
 				String[] uris = getURIsFor(javaMethod, baseType);
 
 				for (String uri : uris) {
+					boolean isNotHttpMethodAnnotationPresent = true;
 					RouteBuilder rule = router.builderFor(uri);
 					for (HttpMethod m : HttpMethod.values()) {
 						if (javaMethod.isAnnotationPresent(m.getAnnotation())) {
 							rule.with(m);
+							isNotHttpMethodAnnotationPresent = false;
 						}
-					}
+					}					
+					if( isNotHttpMethodAnnotationPresent && commonHttpMethod!=null ){
+						rule.with( commonHttpMethod );
+					}					
 					if (javaMethod.isAnnotationPresent(Path.class)) {
 						rule.withPriority(javaMethod.getAnnotation(Path.class).priority());
 					}

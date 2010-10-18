@@ -47,8 +47,8 @@ import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
@@ -77,7 +77,7 @@ import com.google.common.base.Joiner;
  * @author Guilherme Silveira
  */
 public class DefaultRouteBuilder implements RouteBuilder {
-	private final Set<HttpMethod> supportedMethods = new HashSet<HttpMethod>();
+	private final Set<HttpMethod> supportedMethods = EnumSet.noneOf(HttpMethod.class);
 
 	private final Proxifier proxifier;
 	private static final Logger logger = LoggerFactory.getLogger(DefaultRouteBuilder.class);
@@ -215,6 +215,11 @@ public class DefaultRouteBuilder implements RouteBuilder {
 	 */
 	public DefaultRouteBuilder with(HttpMethod method) {
 		this.supportedMethods.add(method);
+		return this;
+	}
+
+	public DefaultRouteBuilder with(Set<HttpMethod> methods) {
+		this.supportedMethods.addAll(methods);
 		return this;
 	}
 

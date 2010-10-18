@@ -42,8 +42,10 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import br.com.caelum.vraptor.Delete;
+import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Head;
 import br.com.caelum.vraptor.Path;
+import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.proxy.DefaultProxifier;
 import br.com.caelum.vraptor.proxy.Proxifier;
@@ -387,6 +389,28 @@ public class PathAnnotationRoutesParserTest {
     	Route route = getRouteMatching(routes, "/niceClients/add");
 
     	assertThat(route, canHandle(NiceClients.class, "add"));
+    }
+
+    @Post
+    static class AnnotatedController {
+
+    	public void test() {}
+    	@Get
+    	public void overridden() {}
+    }
+
+    @Test
+    public void supportTypeHttpMethodAnnotation() throws SecurityException, NoSuchMethodException {
+    	List<Route> routes = parser.rulesFor(new DefaultResourceClass(AnnotatedController.class));
+    	Route route = getRouteMatching(routes, "/annotated/test");
+    	assertThat(route.allowedMethods(), is(EnumSet.of(HttpMethod.POST)));
+    }
+
+    @Test
+    public void supportOverrideTypeHttpMethodAnnotation() throws SecurityException, NoSuchMethodException {
+    	List<Route> routes = parser.rulesFor(new DefaultResourceClass(AnnotatedController.class));
+    	Route route = getRouteMatching(routes, "/annotated/overridden");
+    	assertThat(route.allowedMethods(), is(EnumSet.of(HttpMethod.GET)));
     }
 
     private Route getRouteMatching(List<Route> routes, String uri) {

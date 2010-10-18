@@ -56,6 +56,8 @@
 		<dd><a href="mailto:bruno@abstractj.com">bruno@abstractj.com</a></dd>
 		<dt>Francisco Souza - <fmt:message key="colaborador"/></dt>
 		<dd><a href="mailto:francisco@franciscosouza.net">francisco@franciscosouza.net</a></dd>
+		<dt>Allan de Queiroz - <fmt:message key="colaborador"/></dt>
+		<dd><a href="mailto:alsoqz@gmail.com">alsoqz@gmail.com</a></dd>
 	</dl>
   </div>  
 </div>

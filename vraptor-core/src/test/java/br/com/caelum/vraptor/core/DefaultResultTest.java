@@ -79,7 +79,7 @@ public class DefaultResultTest {
 
     	result.forwardTo("/any/uri");
 
-    	verify(pageResult).forward("/any/uri");
+    	verify(pageResult).forwardTo("/any/uri");
 	}
 
     @Test
@@ -89,7 +89,7 @@ public class DefaultResultTest {
 
     	result.redirectTo("/any/uri");
 
-    	verify(pageResult).redirect("/any/uri");
+    	verify(pageResult).redirectTo("/any/uri");
 	}
 
 	private <T extends View> T mockResult(Class<T> view) {

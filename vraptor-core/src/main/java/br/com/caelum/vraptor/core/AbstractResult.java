@@ -16,11 +16,11 @@ import br.com.caelum.vraptor.view.Results;
 public abstract class AbstractResult implements Result {
 
 	public void forwardTo(String uri) {
-		use(page()).forward(uri);
+		use(page()).forwardTo(uri);
 	}
 
 	public void redirectTo(String uri) {
-		use(page()).redirect(uri);
+		use(page()).redirectTo(uri);
 	}
 
 	public <T> T forwardTo(Class<T> controller) {

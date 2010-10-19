@@ -60,7 +60,7 @@ public class DefaultPageResult implements PageResult {
 		this.resolver = resolver;
 	}
 
-	public void forward() {
+	public void forwardTo() {
 		try {
 			String to = resolver.pathFor(method);
 			logger.debug("forwarding to {}", to);
@@ -84,7 +84,7 @@ public class DefaultPageResult implements PageResult {
 		}
 	}
 
-	public void redirect(String url) {
+	public void redirectTo(String url) {
 		logger.debug("redirection to {}", url);
 
 		try {
@@ -98,7 +98,7 @@ public class DefaultPageResult implements PageResult {
 		}
 	}
 
-	public void forward(String url) {
+	public void forwardTo(String url) {
 		logger.debug("forwarding to {}", url);
 
 		try {
@@ -123,6 +123,18 @@ public class DefaultPageResult implements PageResult {
 				}
 			}
 		});
+	}
+
+	public void redirect(String url) {
+		this.redirectTo(url);
+	}
+
+	public void forward(String url) {
+		this.forward(url);
+	}
+
+	public void forward() {
+		this.forward();
 	}
 
 }

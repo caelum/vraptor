@@ -92,7 +92,7 @@ public class DefaultRefererResultTest {
 				one(result).use(page());
 				will(returnValue(page));
 
-				one(page).forward("/no-controller");
+				one(page).forwardTo("/no-controller");
 
 				ignoring(anything());
 			}
@@ -119,7 +119,7 @@ public class DefaultRefererResultTest {
 				one(result).use(page());
 				will(returnValue(page));
 
-				one(page).redirect("/no-controller");
+				one(page).redirectTo("/no-controller");
 
 				ignoring(anything());
 			}

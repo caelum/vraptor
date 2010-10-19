@@ -63,7 +63,7 @@ public class ViewInterceptorTest {
         mockery.checking(new Expectations() {
             {
                 one(info).shouldShowView(method); will(returnValue(true));
-                one(result).forward();
+                one(result).forwardTo();
             }
         });
         interceptor.intercept(null, this.method, null);

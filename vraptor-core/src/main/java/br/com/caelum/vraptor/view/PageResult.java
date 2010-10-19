@@ -29,13 +29,13 @@ public interface PageResult extends View {
 	/**
 	 * Server side forwarding to a result.
 	 */
-	void forward();
-
+	void forwardTo();
+	
 	/**
 	 * Server side forwarding to a specific url.
 	 */
-	void forward(String url);
-
+	void forwardTo(String url);
+	
 	/**
 	 * Server side include a result.
 	 */
@@ -46,13 +46,31 @@ public interface PageResult extends View {
 	 *
 	 * @param url
 	 */
-	void redirect(String url);
-
+	void redirectTo(String url);
+	
 	/**
 	 * Render the default view of given logic, without executing the logic.
 	 * Ex: result.use(page()).of(ClientsController.class).list();
 	 * will render the view /WEB-INF/jsp/clients/list.jsp without calling list method.
 	 */
 	<T> T of(Class<T> controllerType);
+	
+	/**
+	 * @deprecated  As of 3.2, replaced by
+	 *              {@link #redirectTo(String url)}
+	 */
+	void redirect(String url);
+	
+	/**
+	 * @deprecated  As of 3.2, replaced by
+	 *              {@link #forwardTo(String url)}
+	 */
+	void forward(String url);
+	
+	/**
+	 * @deprecated  As of 3.2, replaced by
+	 *              {@link #forwardTo()}
+	 */
+	void forward();
 
 }

@@ -54,14 +54,14 @@ public interface Result {
     Map<String, Object> included();
 
     /**
-     * A shortcut to result.use(page()).forward(uri);
-     * @see PageResult#forward(String)
+     * A shortcut to result.use(page()).forwardTo(uri);
+     * @see PageResult#forwardTo(String)
      */
 	void forwardTo(String uri);
 
 	/**
-     * A shortcut to result.use(page()).redirect(uri);
-     * @see PageResult#forward(String)
+     * A shortcut to result.use(page()).redirectTo(uri);
+     * @see PageResult#forwardTo(String)
      */
 	void redirectTo(String uri);
 

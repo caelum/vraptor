@@ -56,7 +56,7 @@ public class ForwardToDefaultViewInterceptor implements Interceptor {
         // TODO: maybe the response.isCommited is true, we should warn before
         // trying to forward
         logger.debug("forwarding to the dafault page for this logic");
-        result.use(Results.page()).forward();
+        result.use(Results.page()).forwardTo();
     }
 
 }

@@ -87,7 +87,7 @@ public class DefaultValidationViewsFactoryTest {
 	public void shouldUseValidationVersionOfPageResult() throws Exception {
 		when(result.use(PageResult.class)).thenReturn(new MockedPage());
 
-		factory.instanceFor(PageResult.class, errors).forward("any uri");
+		factory.instanceFor(PageResult.class, errors).forwardTo("any uri");
 	}
 	@Test(expected=ValidationException.class)
 	public void shouldUseValidationVersionOfEmptyResult() throws Exception {

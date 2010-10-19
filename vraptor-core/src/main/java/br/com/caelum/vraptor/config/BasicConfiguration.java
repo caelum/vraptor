@@ -99,7 +99,8 @@ public class BasicConfiguration {
 			return PicoProvider.class;
 		}
 		throw new IllegalArgumentException("You don't have any DI container jars on your classpath. " +
-				"Please choose one of the lib/containers jars and put it on your classpath.");
+				"You can find them on vraptor-3.x.x.zip, so you must put one of the " +
+				"lib/containers/<container> jars on your classpath, where <container> is your preferred container.");
 	}
 
 	private boolean classExists(String className) {

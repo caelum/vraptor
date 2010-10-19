@@ -56,7 +56,7 @@ public @interface Path {
     int priority() default DEFAULT;
 
     public static final int LOWEST = Integer.MAX_VALUE;
-    public static final int LOW = 3*Integer.MAX_VALUE/4;
+    public static final int LOW = Integer.MAX_VALUE/4*3;
     public static final int DEFAULT = Integer.MAX_VALUE/2;
     public static final int HIGH = Integer.MAX_VALUE/4;
     public static final int HIGHEST = 0;

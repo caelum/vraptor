@@ -77,7 +77,7 @@ public class ViewsPropertiesPageResult implements PageResult {
 		this.delegate = delegate;
 	}
 
-	public void forwardTo() {
+	public void defaultView() {
 		try {
 			forwardTo(this.method);
 		} catch (ServletException e) {
@@ -91,7 +91,7 @@ public class ViewsPropertiesPageResult implements PageResult {
 		if (Info.isOldComponent(method.getResource())) {
 			vraptor2ForwardTo(method);
 		} else {
-			delegate.forwardTo();
+			delegate.defaultView();
 		}
 	}
 
@@ -164,7 +164,7 @@ public class ViewsPropertiesPageResult implements PageResult {
 	}
 
 	public void forward() {
-		this.forward();
+		this.defaultView();
 	}
 
 }

@@ -60,7 +60,7 @@ public class DefaultPageResult implements PageResult {
 		this.resolver = resolver;
 	}
 
-	public void forwardTo() {
+	public void defaultView() {
 		try {
 			String to = resolver.pathFor(method);
 			logger.debug("forwarding to {}", to);
@@ -130,11 +130,12 @@ public class DefaultPageResult implements PageResult {
 	}
 
 	public void forward(String url) {
-		this.forward(url);
+		this.forwardTo(url);
 	}
 
 	public void forward() {
-		this.forward();
+		this.defaultView();
 	}
 
+	
 }

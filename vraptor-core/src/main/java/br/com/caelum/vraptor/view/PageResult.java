@@ -29,7 +29,7 @@ public interface PageResult extends View {
 	/**
 	 * Server side forwarding to a result.
 	 */
-	void forwardTo();
+	void defaultView();
 	
 	/**
 	 * Server side forwarding to a specific url.

@@ -32,7 +32,7 @@ public class MockResultTest {
 
 	@Test
 	public void shouldNotThrowNullPointersOnPageResult() throws Exception {
-		result.use(page()).forwardTo();
+		result.use(page()).defaultView();
 		result.use(page()).forwardTo("Abc");
 		result.use(page()).include();
 		result.use(page()).of(AController.class).aMethod();

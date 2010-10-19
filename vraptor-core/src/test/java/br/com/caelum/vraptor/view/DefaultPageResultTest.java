@@ -117,7 +117,7 @@ public class DefaultPageResultTest {
                 one(dispatcher).forward(request, response);
             }
         });
-        view.forwardTo();
+        view.defaultView();
         mockery.assertIsSatisfied();
     }
 

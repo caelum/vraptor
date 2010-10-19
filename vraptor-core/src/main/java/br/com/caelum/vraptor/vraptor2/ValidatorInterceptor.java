@@ -112,7 +112,7 @@ public class ValidatorInterceptor implements Interceptor {
                 this.outjection.outject(resourceInstance, type);
                 this.result.include("errors", errors);
                 this.info.setResult("invalid");
-                this.result.use(Results.page()).forwardTo();
+                this.result.use(Results.page()).defaultView();
                 return;
             }
         }

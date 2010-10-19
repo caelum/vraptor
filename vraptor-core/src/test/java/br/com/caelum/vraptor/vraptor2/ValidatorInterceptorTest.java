@@ -153,7 +153,7 @@ public class ValidatorInterceptorTest {
                 will(returnValue(new Object[0]));
                 one(result).include(with(equal("errors")), with(an(ValidationErrors.class)));
                 one(methodInfo).setResult("invalid");
-                one(pageResult).forwardTo();
+                one(pageResult).defaultView();
                 one(errors).add(with(fixedMessage("invalid")));
                 one(errors).size();
                 will(returnValue(1));

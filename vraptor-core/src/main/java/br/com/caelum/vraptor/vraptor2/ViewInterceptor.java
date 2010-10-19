@@ -55,7 +55,7 @@ public class ViewInterceptor implements Interceptor {
 		if (vraptor2) {
 			if (info.shouldShowView(method)) {
 				logger.debug("VRaptor 2 component forward");
-				this.result.forwardTo();
+				this.result.defaultView();
 			} else {
 				logger.debug("Not forwarding (viewless component)");
 			}

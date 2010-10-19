@@ -38,6 +38,10 @@ public class MockedPage implements PageResult {
 	public void forwardTo(String url) {
 
 	}
+	
+	public void defaultView() {
+		
+	}
 
 	public void include() {
 	}
@@ -61,11 +65,13 @@ public class MockedPage implements PageResult {
 	}
 
 	public void forward(String url) {
-		this.forward(url);
+		this.forwardTo(url);
 	}
 
 	public void forward() {
-		this.forward();
+		this.defaultView();
 	}
+
+	
 
 }

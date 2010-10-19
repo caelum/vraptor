@@ -87,7 +87,7 @@ public class MessageCreatorValidator extends AbstractValidator {
 		result.include("errors", errors);
 		if (Info.isOldComponent(resource.getResource())) {
 			info.setResult("invalid");
-			result.use(Results.page()).forwardTo();
+			result.use(Results.page()).defaultView();
 			throw new ValidationException(new ArrayList<Message>());
 		} else {
 			return viewsFactory.instanceFor(view, new ArrayList<Message>());

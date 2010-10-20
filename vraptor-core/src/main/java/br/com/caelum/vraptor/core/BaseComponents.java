@@ -18,13 +18,13 @@
 package br.com.caelum.vraptor.core;
 
 import java.lang.annotation.Annotation;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
@@ -243,7 +243,7 @@ public class BaseComponents {
     );
 
     @SuppressWarnings({"unchecked", "rawtypes"})
-	private static final List<Class<? extends Converter<?>>> BUNDLED_CONVERTERS = new ArrayList(Arrays.asList(
+	private static final Set<Class<? extends Converter<?>>> BUNDLED_CONVERTERS = new HashSet(Arrays.asList(
     		BigDecimalConverter.class,
     		BigIntegerConverter.class,
     		BooleanConverter.class,
@@ -285,12 +285,10 @@ public class BaseComponents {
     	Intercepts.class
     };
     @SuppressWarnings("unchecked")
-    private static final Class<? extends Deserializer>[] DESERIALIZERS = new Class[] {
-    	XMLDeserializer.class
-    };
+    private static final Set<Class<? extends Deserializer>> DESERIALIZERS = Collections.<Class<? extends Deserializer>>singleton(XMLDeserializer.class);
 
 
-    public static Class<? extends Deserializer>[] getDeserializers() {
+    public static Set<Class<? extends Deserializer>> getDeserializers() {
 		return DESERIALIZERS;
 	}
 
@@ -352,7 +350,10 @@ public class BaseComponents {
 		}
 	}
 
-	private static void registerIfClassPresent(List<Class<? extends Converter<?>>> components, String className, Class<? extends Converter<?>>... types) {
+	private static void registerIfClassPresent(Set<Class<? extends Converter<?>>> components, String className, Class<? extends Converter<?>>... types) {
+		if (components.contains(types[0])) {
+			return;
+		}
 		try {
     		Class.forName(className);
     		for (Class<? extends Converter<?>> type : types) {
@@ -366,7 +367,7 @@ public class BaseComponents {
 	}
 
     @SuppressWarnings("unchecked")
-	public static List<Class<? extends Converter<?>>> getBundledConverters() {
+	public static Set<Class<? extends Converter<?>>> getBundledConverters() {
     	registerIfClassPresent(BUNDLED_CONVERTERS, "org.joda.time.LocalDate",
     			LocalDateConverter.class, LocalTimeConverter.class, LocalDateTimeConverter.class);
         return BUNDLED_CONVERTERS;

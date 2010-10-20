@@ -17,6 +17,10 @@ package br.com.caelum.vraptor.deserialization;
 
 import java.lang.annotation.Annotation;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import br.com.caelum.vraptor.core.BaseComponents;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.StereotypeHandler;
 
@@ -29,6 +33,8 @@ import br.com.caelum.vraptor.ioc.StereotypeHandler;
 @ApplicationScoped
 public class DeserializesHandler implements StereotypeHandler {
 
+	private static final Logger logger = LoggerFactory.getLogger(DeserializesHandler.class);
+
 	private final Deserializers deserializers;
 
 	public DeserializesHandler(Deserializers deserializers) {
@@ -40,6 +46,11 @@ public class DeserializesHandler implements StereotypeHandler {
 		if (!Deserializer.class.isAssignableFrom(type)) {
 			throw new IllegalArgumentException(type + " must implement Deserializer");
 		}
+		if (BaseComponents.getDeserializers().contains(type)) {
+			logger.debug("Ignoring default deserializer {}", type);
+			return;
+		}
+
 		deserializers.register((Class<? extends Deserializer>) type);
 	}
 

@@ -21,12 +21,23 @@ import java.io.File;
 
 /**
  * Basic multi part interceptor configuration.
+ * 
  * @author guilherme silveira
  */
 public interface MultipartConfig {
 
+    /**
+     * The max size of uploaded files (in bytes).
+     * 
+     * @return
+     */
 	long getSizeLimit();
 
+	/**
+	 * Gets the temporary directory.
+	 * 
+	 * @return
+	 */
 	File getDirectory();
 
 }

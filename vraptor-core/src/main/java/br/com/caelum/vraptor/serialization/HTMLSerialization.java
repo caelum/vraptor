@@ -20,13 +20,13 @@ public class HTMLSerialization implements Serialization {
 
 	public <T> Serializer from(T object, String alias) {
 		result.include(alias, object);
-		result.use(page()).forward();
+		result.use(page()).defaultView();
 		return new IgnoringSerializer();
 	}
 
 	public <T> Serializer from(T object) {
 		result.include(extractor.nameFor(object.getClass()), object);
-		result.use(page()).forward();
+		result.use(page()).defaultView();
 		return new IgnoringSerializer();
 	}
 

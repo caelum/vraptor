@@ -6,6 +6,7 @@
 <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/integration"/>
 <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
 <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
+<wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/behave"/>
 <property name="java-output-path"/>
 <property name="context-root" value="vraptor-mydvds"/>
 </wb-module>

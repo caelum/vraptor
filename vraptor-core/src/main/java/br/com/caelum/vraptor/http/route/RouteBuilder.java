@@ -1,6 +1,7 @@
 package br.com.caelum.vraptor.http.route;
 
 import java.lang.reflect.Method;
+import java.util.Set;
 
 import br.com.caelum.vraptor.resource.HttpMethod;
 
@@ -27,6 +28,14 @@ public interface RouteBuilder {
 	 * @return
 	 */
 	RouteBuilder with(HttpMethod method);
+
+	/**
+	 * Accepts also all given http methods.
+	 *
+	 * @param method
+	 * @return
+	 */
+	RouteBuilder with(Set<HttpMethod> methods);
 
 	/**
 	 * Changes Route priority

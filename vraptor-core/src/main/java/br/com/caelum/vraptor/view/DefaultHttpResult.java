@@ -25,7 +25,8 @@ import java.io.Reader;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.io.IOUtils;
+import com.google.common.io.ByteStreams;
+import com.google.common.io.CharStreams;
 
 /**
  * Implementation that delegates to HttpServletResponse
@@ -98,7 +99,7 @@ public class DefaultHttpResult implements HttpResult {
 
 	public HttpResult body(InputStream body) {
 		try {
-			IOUtils.copy(body, response.getOutputStream());
+		    ByteStreams.copy(body, response.getOutputStream());
 		} catch (IOException e) {
 			throw new ResultException("Couldn't write to response body", e);
 		}
@@ -107,7 +108,7 @@ public class DefaultHttpResult implements HttpResult {
 
 	public HttpResult body(Reader body) {
 		try {
-			IOUtils.copy(body, response.getWriter());
+		    CharStreams.copy(body, response.getWriter());
 		} catch (IOException e) {
 			throw new ResultException("Couldn't write to response body", e);
 		}

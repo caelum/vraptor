@@ -35,12 +35,12 @@ public class HTMLSerializationTest {
 	@Test
 	public void shouldForwardToDefaultViewWithoutAlias() throws Exception {
 		serialization.from(new Object());
-		verify(pageResult).forward();
+		verify(pageResult).defaultView();
 	}
 	@Test
 	public void shouldForwardToDefaultViewWithAlias() throws Exception {
 		serialization.from(new Object(), "Abc");
-		verify(pageResult).forward();
+		verify(pageResult).defaultView();
 	}
 	@Test
 	public void shouldIncludeOnResultWithoutAlias() throws Exception {

@@ -51,7 +51,7 @@ public final class DefaultConverters implements Converters {
             throw new VRaptorException("The converter type " + converterClass.getName()
                     + " should have the Convert annotation");
         }
-        classes.addFirst(converterClass);
+		classes.addFirst(converterClass);
     }
 
     public Converter<?> to(Class<?> clazz) {

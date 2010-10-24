@@ -41,7 +41,23 @@
 		<dd><a href="mailto:tomazlavieri@gmail.com">tomazlavieri@gmail.com</a></dd>
 		<dt>Lucas H. G. Toniazzo - <fmt:message key="colaborador"/></dt>
 		<dt>Otávio Scherer Garcia - <fmt:message key="colaborador"/></dt>
+		<dd><a href="mailto:otavio@otavio.com.br">otavio@otavio.com.br</a></dd>
 		<dt>Rafael Carneiro - <fmt:message key="colaborador"/></dt>
+		<dt>José Donizetti - <fmt:message key="colaborador"/></dt>
+		<dd><a href="mailto:jdbjunior@gmail.com">jdbjunior@gmail.com</a></dd>
+		<dt>Rodolfo Liviero - <fmt:message key="colaborador"/></dt>
+		<dd><a href="mailto:rodolfoliviero@gmail.com">rodolfoliviero@gmail.com</a></dd>
+		<dt>Alberto Souza - <fmt:message key="colaborador"/></dt>
+		<dd><a href="mailto:alots.ssa@gmail.com">alots.ssa@gmail.com</a></dd>
+		<dt>Daniel Kist - <fmt:message key="colaborador"/></dt>
+		<dt>Douglas Campos - <fmt:message key="colaborador"/></dt>
+		<dd><a href="mailto:douglas@theros.info">douglas@theros.info</a></dd>
+		<dt>Bruno Oliveira - <fmt:message key="colaborador"/></dt>
+		<dd><a href="mailto:bruno@abstractj.com">bruno@abstractj.com</a></dd>
+		<dt>Francisco Souza - <fmt:message key="colaborador"/></dt>
+		<dd><a href="mailto:francisco@franciscosouza.net">francisco@franciscosouza.net</a></dd>
+		<dt>Allan de Queiroz - <fmt:message key="colaborador"/></dt>
+		<dd><a href="mailto:alsoqz@gmail.com">alsoqz@gmail.com</a></dd>
 	</dl>
   </div>  
 </div>

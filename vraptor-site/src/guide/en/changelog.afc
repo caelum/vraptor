@@ -1,6 +1,6 @@
 [chapter ChangeLog]
 
-[section 3.2.0 (in dev)]
+[section 3.2.0]
 [list]
 * several performance tweaks: about 60% less request time.
 * **internal compatibility break**: InterceptorStack interface reorganized.
@@ -50,6 +50,12 @@ depend on the interceptor internal state:
 	@Path(value="/url", priority=Path.LOW)
 	@Path(value="/url", priority=Path.LOWEST)
 	[/java]
+* Servlet 3.0 upload support (by garcia-jj)
+* new Exception handlers (by garcia-jj)
+  [java]
+  result.on(SomeException.class).forwardTo(Controller.class).method();
+  //if a SomeException occurs, the request will be redirected
+  [/java]
 * new interface %%TwoWayConverter%% for bidirecional convertions.
 * native support for OPTIONS requests
 * fix: 405 instead of 500 on requests with unknown HTTP method.

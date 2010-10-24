@@ -31,18 +31,22 @@ public class MockedPage implements PageResult {
 		proxifier = new ObjenesisProxifier();
 	}
 
-	public void forward() {
+	public void forwardTo() {
 
 	}
 
-	public void forward(String url) {
+	public void forwardTo(String url) {
 
+	}
+	
+	public void defaultView() {
+		
 	}
 
 	public void include() {
 	}
 
-	public void redirect(String url) {
+	public void redirectTo(String url) {
 
 	}
 
@@ -55,5 +59,19 @@ public class MockedPage implements PageResult {
 
 		});
 	}
+
+	public void redirect(String url) {
+		this.redirectTo(url);
+	}
+
+	public void forward(String url) {
+		this.forwardTo(url);
+	}
+
+	public void forward() {
+		this.defaultView();
+	}
+
+	
 
 }

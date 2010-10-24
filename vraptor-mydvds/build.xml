@@ -17,16 +17,17 @@
     	    <fileset file="mydvdsDB.*" />
 	    </delete>
     </target>
-	
+
 	<!-- ================================= 
           target: compile              
          ================================= -->
     <target name="compile" depends="" description="--> compiles the project">
 
+			<mkdir dir="WebContent/WEB-INF/classes" />
     	<path id="buildpath">
-    		<fileset dir="src/main/webapp/WEB-INF/lib"/>
+    		<fileset dir="WebContent/WEB-INF/lib"/>
     	</path>
-    	<javac srcdir="src/main/java" destdir="src/main/webapp/WEB-INF/classes" classpathref="buildpath"/>
+    	<javac srcdir="src/main/java" destdir="WebContent/WEB-INF/classes" classpathref="buildpath"/>
     	
     </target>
 	
@@ -47,13 +48,31 @@
     </target>
 
 
-    <!-- ================================= 
+	<target name="test-behavior" depends="compile" description="tests mydvds behavior">
+		<path id="testpath">
+    		<fileset dir="WebContent/WEB-INF/classes"/>
+    		<fileset dir="WebContent/WEB-INF/lib"/>
+			<fileset dir="build-lib/tests"/>
+		</path>
+
+		<taskdef name="runStoriesAsEmbeddables"
+	         classname="org.jbehave.ant.RunStoriesAsEmbeddables"
+	         classpathref="testpath"/>
+	 
+		<runStoriesAsEmbeddables
+	        includes="**/*Stories.java"
+	        ignoreFailureInStories="true"
+	        ignoreFailureInView="false"
+	        generateViewAfterStories="true"/>
+	</target>
+
+	<!-- ================================= 
           target: assembly              
          ================================= -->
     <target name="assembly" depends="clean, compile" description="--> assemblies the distribution">
     	
-		<war destfile="mydvds.war" webxml="src/main/webapp/WEB-INF/web.xml">
-        	<fileset dir="src/main/webapp" excludes="src/main/webapp/WEB-INF/web.xml"/>
+		<war destfile="mydvds.war" webxml="WebContent/WEB-INF/web.xml">
+        	<fileset dir="WebContent" excludes="src/main/webapp/WEB-INF/web.xml"/>
     	</war>
     	
     </target>

@@ -58,9 +58,9 @@ public class DefaultRefererResult implements RefererResult {
 			ResourceMethod method = router.parse(referer, HttpMethod.GET, request);
 			executeMethod(method, result.use(logic()).forwardTo(method.getResource().getType()));
 		} catch (ResourceNotFoundException e) {
-			result.use(page()).forward(referer);
+			result.use(page()).forwardTo(referer);
 		} catch (MethodNotAllowedException e) {
-			result.use(page()).forward(referer);
+			result.use(page()).forwardTo(referer);
 		}
 	}
 
@@ -75,9 +75,9 @@ public class DefaultRefererResult implements RefererResult {
 			ResourceMethod method = router.parse(referer, HttpMethod.GET, request);
 			executeMethod(method, result.use(logic()).redirectTo(method.getResource().getType()));
 		} catch (ResourceNotFoundException e) {
-			result.use(page()).redirect(referer);
+			result.use(page()).redirectTo(referer);
 		} catch (MethodNotAllowedException e) {
-			result.use(page()).redirect(referer);
+			result.use(page()).redirectTo(referer);
 		}
 	}
 

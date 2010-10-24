@@ -77,9 +77,9 @@ public class ViewsPropertiesPageResult implements PageResult {
 		this.delegate = delegate;
 	}
 
-	public void forward() {
+	public void defaultView() {
 		try {
-			forward(this.method);
+			forwardTo(this.method);
 		} catch (ServletException e) {
 			throw new ResultException(e);
 		} catch (IOException e) {
@@ -87,15 +87,15 @@ public class ViewsPropertiesPageResult implements PageResult {
 		}
 	}
 
-	private void forward(ResourceMethod method) throws ServletException, IOException {
+	private void forwardTo(ResourceMethod method) throws ServletException, IOException {
 		if (Info.isOldComponent(method.getResource())) {
-			vraptor2Forward(method);
+			vraptor2ForwardTo(method);
 		} else {
-			delegate.forward();
+			delegate.defaultView();
 		}
 	}
 
-	private void vraptor2Forward(ResourceMethod method) throws ServletException,
+	private void vraptor2ForwardTo(ResourceMethod method) throws ServletException,
 			IOException {
     	logger.debug("Forwading using VRaptor2 URLs");
 
@@ -134,7 +134,7 @@ public class ViewsPropertiesPageResult implements PageResult {
             public Object intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {
                 try {
                     ResourceMethod resourceMethod = DefaultResourceMethod.instanceFor(controllerType, method);
-                    forward(resourceMethod);
+                    forwardTo(resourceMethod);
                     return null;
                 } catch (Exception e) {
                     throw new ProxyInvocationException(e);
@@ -147,12 +147,24 @@ public class ViewsPropertiesPageResult implements PageResult {
 		delegate.include();
 	}
 
+	public void redirectTo(String url) {
+		delegate.redirectTo(url);
+	}
+
+	public void forwardTo(String url) {
+        delegate.forwardTo(url);
+	}
+
 	public void redirect(String url) {
-		delegate.redirect(url);
+		this.redirectTo(url);
 	}
 
 	public void forward(String url) {
-        delegate.forward(url);
+		this.forwardTo(url);
+	}
+
+	public void forward() {
+		this.defaultView();
 	}
 
 }

@@ -114,7 +114,7 @@ public class UsersController {
 	@Post
 	@Public
 	public void add(final User user) {
-		validator.validate(user); // will add all validation errors from Hibernate Validator
+//		validator.validate(user); // will add all validation errors from Hibernate Validator
 	    validator.checking(new Validations() {{
 		    // checks if there is already an user with the specified login
 		    boolean loginDoesNotExist = !dao.containsUserWithLogin(user.getLogin());
@@ -124,7 +124,7 @@ public class UsersController {
 		}});
 
 		// redirects to the index page if any validation errors occur.
-		validator.onErrorUsePageOf(HomeController.class).login();
+//		validator.onErrorUsePageOf(HomeController.class).login();
 		this.dao.add(user);
 
 		// you can add objects to result even in redirects. Added objects will

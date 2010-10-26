@@ -17,43 +17,35 @@
 
 package br.com.caelum.vraptor.interceptor.download;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Reads bytes from a file into the result.
+ * Implements {@link Download} from a byte array.
  *
  * @author filipesabella
  * @author Paulo Silveira
- * 
+ * @author Otávio Scherer Garcia
+ * @since 3.2.1
  * @see InputStreamDownload
- * @see ByteArrayDownload
+ * @see FileDownload
  */
-public class FileDownload implements Download {
-	private final InputStreamDownload inputDownload;
+public class ByteArrayDownload implements Download {
+    
+	private final InputStreamDownload download;
 
-    public FileDownload(File file, String contentType, String fileName) {
-        this(file, contentType, fileName, false);
+    public ByteArrayDownload(byte[] buff, String contentType, String fileName) {
+        this(buff, contentType, fileName, false);
     }
 
-    public FileDownload(File file, String contentType) {
-        this(file, contentType, file.getName(), false);
+    public ByteArrayDownload(byte[] buff, String contentType, String fileName, boolean doDownload) {
+        ByteArrayInputStream stream = new ByteArrayInputStream(buff);
+        download = new InputStreamDownload(stream, contentType, fileName, doDownload, buff.length);
     }
-
-	public FileDownload(File file, String contentType, String fileName, boolean doDownload) {
-		try {
-			this.inputDownload = new InputStreamDownload(new FileInputStream(file), contentType, fileName, doDownload,
-					file.length());
-		} catch (FileNotFoundException e) {
-			throw new IllegalArgumentException(e);
-		}
-	}
-	
+    
 	public void write(HttpServletResponse response) throws IOException {
-		inputDownload.write(response);
+		download.write(response);
 	}
 }

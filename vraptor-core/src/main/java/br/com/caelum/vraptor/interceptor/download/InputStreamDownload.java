@@ -31,6 +31,8 @@ import com.google.common.io.ByteStreams;
  * @author filipesabella
  * @author Paulo Silveira
  *
+ * @see ByteArrayDownload
+ * @see FileDownload
  */
 public class InputStreamDownload implements Download {
 	private final InputStream stream;

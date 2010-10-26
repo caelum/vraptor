@@ -37,11 +37,19 @@ public class PerfilController {
 }
 [/java]
 
-Você pode também usar a implementação %%InputStreamDownload%% para trabalhar diretamente com Streams.
+Você pode também usar a implementação %%InputStreamDownload%% para trabalhar diretamente com Streams ou
+%%ByteArrayDownload%% para array de bytes (desde a 3.2-snapshot).
+
+[section Upload]
+
+Para ativar o suporte a upload é necessário adicionar as bibliotecas %%commons-upload%% e %%commons-io%% em seu 
+classpath.
+
+Na versão 3.2 do Vraptor, caso você estiver em um container que implemente a JSR-315 (Servlet 3.0), 
+não serão necessários os jars %%commons-upload%% e %%commons-io%%, pois o próprio container já implementa 
+a funcionalidade de upload.
 
 [section exemplo de 1 minuto: upload]
-
-Nota: o componente para upload é opcional. Para ativar o suporte a upload basta adicionar a biblioteca %%commons-upload%% em seu classpath.
 
 O primeiro exemplo será baseado na funcionalidade de upload multipart.
 
@@ -64,8 +72,7 @@ public class PerfilController {
 [section Mais sobre Upload]
 
 O UploadedFile retorna o arquivo como um InputStream. Se você quiser copiar para
-um arquivo no disco facilmente, basta usar o %%IOUtils%% do %%commons-io%%, que já é dependência do
-VRaptor:
+um arquivo no disco facilmente, basta usar o %%IOUtils%% do %%commons-io%%:
 [java]
 	public void atualizaFoto(Perfil perfil, UploadedFile foto) {
 		File fotoSalva = new File();	
@@ -87,6 +94,12 @@ public class CustomMultipartConfig extends DefaultMultipartConfig {
     }
 
 }[/java]
+
+[section Alterando o formulário de envio]
+
+Para que o browser possa fazer o upload corretamente você precisa adicionar o atributo %%enctype%% para %%multipart/form-data%%:
+
+[html]enctype="multipart/form-data"[/html]
 
 [section Validando o upload]
 

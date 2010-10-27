@@ -132,6 +132,7 @@ public class XStreamSerializer implements SerializerBuilder {
 			elementTypes = findElementTypes(list);
 			for (Class<?> type : elementTypes) {
 				excludeNonPrimitiveFields(type);
+				xstream.processAnnotations(obj.getClass());
 			}
 			this.root = list;
 		} else {

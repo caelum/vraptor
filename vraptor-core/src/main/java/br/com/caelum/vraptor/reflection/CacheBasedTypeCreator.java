@@ -17,8 +17,6 @@
 
 package br.com.caelum.vraptor.reflection;
 
-import java.lang.reflect.Method;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -31,6 +29,8 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Cacheable;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
+import com.google.common.collect.Maps;
+
 /**
  * A type creator which caches its classes so it doesnt keep generating classes
  * between every call.
@@ -42,7 +42,7 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 public class CacheBasedTypeCreator extends AbstractTypeCreator {
 
     private static final Logger logger = LoggerFactory.getLogger(CacheBasedTypeCreator.class);
-    private final Map<Method, Class<?>> cache = new HashMap<Method, Class<?>>();
+    private final Map<ResourceMethod, Class<?>> cache = Maps.newHashMap();
     private final TypeCreator creator;
 
     public CacheBasedTypeCreator(@Cacheable TypeCreator creator, ParameterNameProvider provider) {
@@ -51,11 +51,11 @@ public class CacheBasedTypeCreator extends AbstractTypeCreator {
     }
 
     public Class<?> typeFor(ResourceMethod method) {
-        if (!cache.containsKey(method.getMethod())) {
-            cache.put(method.getMethod(), creator.typeFor(method));
+        if (!cache.containsKey(method)) {
+            cache.put(method, creator.typeFor(method));
             logger.debug("cached generic type for method " + method);
         }
-        return cache.get(method.getMethod());
+        return cache.get(method);
     }
 
 }

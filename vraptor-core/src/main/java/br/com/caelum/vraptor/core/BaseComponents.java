@@ -26,6 +26,9 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.Intercepts;
@@ -169,6 +172,8 @@ import br.com.caelum.vraptor.view.ValidationViewsFactory;
  * @author guilherme silveira
  */
 public class BaseComponents {
+    
+    static final Logger logger = LoggerFactory.getLogger(BaseComponents.class);
 
     private final static Map<Class<?>, Class<?>> APPLICATION_COMPONENTS = classMap(
     		TypeCreator.class, 				AsmBasedTypeCreator.class,
@@ -284,7 +289,7 @@ public class BaseComponents {
     	Deserializes.class,
     	Intercepts.class
     };
-    @SuppressWarnings("unchecked")
+
     private static final Set<Class<? extends Deserializer>> DESERIALIZERS = Collections.<Class<? extends Deserializer>>singleton(XMLDeserializer.class);
 
 
@@ -322,6 +327,9 @@ public class BaseComponents {
     	} else if (isClassPresent("javax.servlet.http.Part")) {
             REQUEST_COMPONENTS.put(MultipartInterceptor.class, Servlet3MultipartInterceptor.class);
     	} else {
+    	    logger.warn("You are willing to upload a file, but there is no commons-fileupload or servlet3 " +
+    	    		"handlers registered. Please add the commons-fileupload in your classpath or use a " +
+    	    		"Servlet 3 Container");
             REQUEST_COMPONENTS.put(MultipartInterceptor.class, NullMultipartInterceptor.class);
     	}
 

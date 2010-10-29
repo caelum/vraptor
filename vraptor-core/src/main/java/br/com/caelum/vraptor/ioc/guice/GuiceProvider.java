@@ -18,11 +18,6 @@ package br.com.caelum.vraptor.ioc.guice;
 import java.util.Set;
 
 import javax.servlet.ServletContext;
-import javax.servlet.http.HttpSessionEvent;
-import javax.servlet.http.HttpSessionListener;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.config.BasicConfiguration;
@@ -55,7 +50,6 @@ import com.google.inject.util.Modules;
  */
 public class GuiceProvider implements ContainerProvider {
 
-	private static final Logger logger = LoggerFactory.getLogger(GuiceProvider.class);
 
 	static final RequestCustomScope REQUEST = new RequestCustomScope();
 	static final SessionCustomScope SESSION = new SessionCustomScope();
@@ -88,17 +82,6 @@ public class GuiceProvider implements ContainerProvider {
 
 	public void start(ServletContext context) {
 		this.context = context;
-		context.addListener(new HttpSessionListener() {
-			public void sessionCreated(HttpSessionEvent event) {
-				logger.debug("starting session {}", event.getSession().getId());
-				SESSION.start(event.getSession());
-			}
-
-			public void sessionDestroyed(HttpSessionEvent event) {
-				logger.debug("stopping session {}", event.getSession().getId());
-				SESSION.stop(event.getSession());
-			}
-		});
 		APPLICATION.start();
 		container = new GuiceContainer();
 		injector = Guice.createInjector(Stage.PRODUCTION, Modules.override(new VRaptorAbstractModule(context, container)).with(customModule()));

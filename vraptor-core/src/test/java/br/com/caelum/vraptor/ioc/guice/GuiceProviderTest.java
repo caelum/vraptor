@@ -8,6 +8,8 @@ import static org.junit.Assert.assertThat;
 
 import java.util.Collection;
 
+import javax.servlet.http.HttpSessionListener;
+
 import net.vidageek.mirror.dsl.Mirror;
 
 import org.jmock.Expectations;
@@ -56,6 +58,8 @@ public class GuiceProviderTest extends SpringProviderRegisteringComponentsTest {
 		mockery.checking(new Expectations() {{
 			allowing(context).getRealPath("/WEB-INF/classes");
 			will(returnValue(GuiceProviderTest.class.getResource("..").getFile()));
+
+			allowing(context).addListener(with(any(HttpSessionListener.class)));
 		}});
 		super.configureExpectations();
 	}

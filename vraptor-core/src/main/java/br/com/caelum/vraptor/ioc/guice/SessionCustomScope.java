@@ -20,6 +20,8 @@ import javax.servlet.http.HttpSession;
 import br.com.caelum.vraptor.ioc.guice.RequestCustomScope.NullObject;
 import br.com.caelum.vraptor.ioc.spring.VRaptorRequestHolder;
 
+import com.google.common.collect.LinkedListMultimap;
+import com.google.common.collect.Multimap;
 import com.google.inject.Key;
 import com.google.inject.Provider;
 
@@ -33,11 +35,13 @@ import com.google.inject.Provider;
  */
 public class SessionCustomScope implements LifecycleScope {
 
+	private Multimap<String, LifecycleListener> listeners = LinkedListMultimap.create();
+
 	public <T> Provider<T> scope(Key<T> key, final Provider<T> creator) {
 		final String name = key.toString();
 		return new Provider<T>() {
 			public T get() {
-				HttpSession session = VRaptorRequestHolder.currentRequest().getRequest().getSession();
+				HttpSession session = getSession();
 				synchronized (session) {
 					Object obj = session.getAttribute(name);
 					if (NullObject.INSTANCE == obj) {
@@ -53,11 +57,16 @@ public class SessionCustomScope implements LifecycleScope {
 				}
 			}
 
+
 			@Override
 			public String toString() {
 				return String.format("%s[%s]", creator, this);
 			}
 		};
+	}
+
+	private HttpSession getSession() {
+		return VRaptorRequestHolder.currentRequest().getRequest().getSession();
 	}
 
 	@Override
@@ -66,17 +75,16 @@ public class SessionCustomScope implements LifecycleScope {
 	}
 
 	public void registerDestroyListener(LifecycleListener listener) {
-		// TODO Auto-generated method stub
-
+		listeners.put(getSession().getId(), listener);
 	}
 
-	public void start() {
-		// TODO Auto-generated method stub
-
+	public void start(HttpSession session) {
+		listeners.removeAll(session.getId());
 	}
 
-	public void stop() {
-		// TODO Auto-generated method stub
-
+	public void stop(HttpSession session) {
+		for (LifecycleListener listener : listeners.removeAll(session.getId())) {
+			listener.onEvent();
+		}
 	}
 }

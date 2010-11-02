@@ -27,9 +27,5 @@ import com.google.inject.Scope;
  *
  */
 public interface LifecycleScope extends Scope {
-	void start();
-
-	void stop();
-
 	void registerDestroyListener(LifecycleListener listener);
 }

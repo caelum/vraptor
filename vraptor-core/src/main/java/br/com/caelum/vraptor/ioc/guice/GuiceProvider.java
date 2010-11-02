@@ -50,9 +50,10 @@ import com.google.inject.util.Modules;
  */
 public class GuiceProvider implements ContainerProvider {
 
-	static final LifecycleScope REQUEST = new RequestCustomScope();
-	static final LifecycleScope SESSION = new SessionCustomScope();
-	static final LifecycleScope APPLICATION = new ApplicationCustomScope();
+
+	static final RequestCustomScope REQUEST = new RequestCustomScope();
+	static final SessionCustomScope SESSION = new SessionCustomScope();
+	static final ApplicationCustomScope APPLICATION = new ApplicationCustomScope();
 
 	private final class GuiceContainer implements Container {
 		public <T> T instanceFor(Class<T> type) {
@@ -81,7 +82,6 @@ public class GuiceProvider implements ContainerProvider {
 
 	public void start(ServletContext context) {
 		this.context = context;
-
 		APPLICATION.start();
 		container = new GuiceContainer();
 		injector = Guice.createInjector(Stage.PRODUCTION, Modules.override(new VRaptorAbstractModule(context, container)).with(customModule()));

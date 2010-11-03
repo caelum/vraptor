@@ -50,7 +50,7 @@ public class ReflectionBasedNullHandler extends ObjectNullHandler {
         OgnlContext ctx = (OgnlContext) context;
 
         try {
-	        if (ctx.getCurrentEvaluation() == null || ctx.getCurrentEvaluation().getPrevious() == null && target instanceof List) {
+	        if (target == ctx.getRoot() && target instanceof List) {
 	        	Container container = (Container) context.get(Container.class);
 
 	        	return list.instantiate(container, target, property, (Type) context.get("rootType"));

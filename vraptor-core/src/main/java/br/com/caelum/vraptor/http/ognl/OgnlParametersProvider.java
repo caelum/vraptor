@@ -128,15 +128,13 @@ public class OgnlParametersProvider implements ParametersProvider {
 			return converters.to(clazz).convert(values[0], getRawType(type), bundle);
 		}
 
-		Object root;
+		OgnlContext context;
 		try {
-			root = new GenericNullHandler().instantiate(getRawType(type), container);
+			context = (OgnlContext) Ognl.createDefaultContext(new GenericNullHandler().instantiate(getRawType(type), container));
 		} catch (Exception ex) {
 			throw new InvalidParameterException("unable to instantiate type " + type, ex);
 		}
 
-
-		OgnlContext context = (OgnlContext) Ognl.createDefaultContext(root);
 		context.setTraceEvaluations(true);
 		context.put(Container.class, this.container);
 		if (List.class.isAssignableFrom(getRawType(type))) {
@@ -155,7 +153,7 @@ public class OgnlParametersProvider implements ParametersProvider {
 				if (logger.isDebugEnabled()) {
 					logger.debug("Applying " + key + " with " + Arrays.toString(values));
 				}
-				Ognl.setValue(key, context, root, values.length == 1 ? values[0] : values);
+				Ognl.setValue(key, context, context.getRoot(), values.length == 1 ? values[0] : values);
 			} catch (ConversionError ex) {
 				errors.add(new ValidationMessage(ex.getMessage(), key));
 			} catch (MethodFailedException e) { // setter threw an exception
@@ -184,7 +182,10 @@ public class OgnlParametersProvider implements ParametersProvider {
 				}
 			}
 		}
-		return root;
+		if (getRawType(type).isArray()) {
+			return removal.removeNullsFromArray(context.getRoot());
+		}
+		return context.getRoot();
 	}
 
 	private Class getActualType(Type type) {

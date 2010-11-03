@@ -31,6 +31,7 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
+import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.test.VRaptorMockery;
@@ -50,8 +51,8 @@ public class FixedMethodStrategyTest {
 
 	@Test
 	public void canTranslate() {
-		FixedMethodStrategy strategy = new FixedMethodStrategy("abc", MyControl.class, method("list"),
-				methods(HttpMethod.POST), control, 0);
+		FixedMethodStrategy strategy = new FixedMethodStrategy("abc", DefaultResourceMethod.instanceFor(MyControl.class, method("list")),
+				methods(HttpMethod.POST), control, 0, new String[] {});
 		mockery.checking(new Expectations() {
 			{
 				one(control).matches("/clients/add"); will(returnValue(true));

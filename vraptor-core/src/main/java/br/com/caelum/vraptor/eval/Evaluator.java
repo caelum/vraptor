@@ -38,9 +38,9 @@ public class Evaluator {
 	public Object get(Object root, String path) {
 		String[] paths = path.split("[\\]\\.]");
 		Object current = root;
-		for (String p : paths) {
+		for (int i = 1; i < paths.length; i++) {
 			try {
-				current = navigate(current, p);
+				current = navigate(current, paths[i]);
 			} catch (InvocationTargetException e) {
 				throw new VRaptorException("Unable to evaluate expression " + path, e.getCause());
 			} catch (Exception e) {

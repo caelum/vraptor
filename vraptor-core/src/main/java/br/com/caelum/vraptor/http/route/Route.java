@@ -54,7 +54,7 @@ public interface Route {
 	 * parameter object. The object contains getters representing each method's
 	 * parameter.
 	 */
-	String urlFor(Class<?> type, Method m, Object params);
+	String urlFor(Class<?> type, Method m, Object... params);
 
 	/**
 	 * Returns true if this route is able to redirect to this method.

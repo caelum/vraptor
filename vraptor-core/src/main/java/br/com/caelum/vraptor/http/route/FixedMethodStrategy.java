@@ -22,8 +22,6 @@ import java.util.EnumSet;
 import java.util.Set;
 
 import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor.resource.DefaultResourceClass;
-import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.util.Stringnifier;
@@ -45,12 +43,16 @@ public class FixedMethodStrategy implements Route {
 
 	private final String originalUri;
 
-	public FixedMethodStrategy(String originalUri, Class<?> type, Method method, Set<HttpMethod> methods,
-			ParametersControl control, int priority) {
+	private final String[] parameterNames;
+
+
+	public FixedMethodStrategy(String originalUri, ResourceMethod method, Set<HttpMethod> methods,
+			ParametersControl control, int priority, String[] parameterNames) {
 		this.originalUri = originalUri;
+		this.parameterNames = parameterNames;
 		this.methods = methods.isEmpty() ? EnumSet.allOf(HttpMethod.class) : EnumSet.copyOf(methods);
 		this.parameters = control;
-		this.resourceMethod = new DefaultResourceMethod(new DefaultResourceClass(type), method);
+		this.resourceMethod = method;
 		this.priority = priority;
 	}
 
@@ -72,8 +74,8 @@ public class FixedMethodStrategy implements Route {
 		return parameters.matches(uri);
 	}
 
-	public String urlFor(Class<?> type, Method m, Object params) {
-		return parameters.fillUri(params);
+	public String urlFor(Class<?> type, Method m, Object... params) {
+		return parameters.fillUri(parameterNames, params);
 	}
 
 	public int getPriority() {

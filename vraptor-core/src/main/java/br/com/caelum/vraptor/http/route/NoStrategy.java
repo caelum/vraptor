@@ -36,7 +36,7 @@ public class NoStrategy implements Route {
 		throw new IllegalRouteException("You have created a route, but did not specify any method to be invoked.");
 	}
 
-	public String urlFor(Class<?> type, Method m, Object params) {
+	public String urlFor(Class<?> type, Method m, Object... params) {
 		return "nothing";
 	}
 

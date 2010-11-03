@@ -32,7 +32,6 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
-import br.com.caelum.vraptor.http.asm.AsmBasedTypeCreator;
 import br.com.caelum.vraptor.proxy.DefaultProxifier;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.resource.DefaultResourceClass;
@@ -73,7 +72,7 @@ public class RouteBuilderTest {
 
 	@Test
 	public void usePatternMatchinForPrimitiveParameters() throws Exception {
-		builder = new DefaultRouteBuilder(proxifier, typeFinder, converters, "/abc/{abc}/def/{def}/ghi/{ghi}");
+		builder = newBuilder("/abc/{abc}/def/{def}/ghi/{ghi}");
 
 		builder.is(MyResource.class, method.getMethod());
 		Route route = builder.build();
@@ -85,9 +84,13 @@ public class RouteBuilderTest {
 		assertFalse("invalid decimal", route.canHandle("/abc/AnythingHere/def/123/ghi/kkk"));
 	}
 
+	private DefaultRouteBuilder newBuilder(String uri) {
+		return new DefaultRouteBuilder(proxifier, typeFinder, converters, provider, uri);
+	}
+
 	@Test
 	public void usePatternMatchingForRegexParameters() throws Exception {
-		builder = new DefaultRouteBuilder(proxifier, typeFinder, converters, "/abc/{abc:a+b+c+}/def/{def}/ghi/{ghi}");
+		builder = newBuilder("/abc/{abc:a+b+c+}/def/{def}/ghi/{ghi}");
 
 		builder.is(MyResource.class, method.getMethod());
 		Route route = builder.build();
@@ -99,7 +102,7 @@ public class RouteBuilderTest {
 
 	@Test
 	public void usingRegexesWithCurlyBraces() throws Exception {
-		builder = new DefaultRouteBuilder(proxifier, typeFinder, converters, "/abc/{abc:[0-9A-Z]{5}}");
+		builder = newBuilder("/abc/{abc:[0-9A-Z]{5}}");
 
 		builder.is(MyResource.class, method.getMethod());
 		Route route = builder.build();
@@ -111,7 +114,7 @@ public class RouteBuilderTest {
 	}
 	@Test
 	public void usingRegexesWithCurlyBracesNotOnTheEnd() throws Exception {
-		builder = new DefaultRouteBuilder(proxifier, typeFinder, converters, "/abc/{abc:[0-9A-Z]{5}}/");
+		builder = newBuilder("/abc/{abc:[0-9A-Z]{5}}/");
 
 		builder.is(MyResource.class, method.getMethod());
 		Route route = builder.build();
@@ -124,7 +127,7 @@ public class RouteBuilderTest {
 
 	@Test
 	public void usingRegexesWithCurlyBracesNotOnTheEndAndOtherVar() throws Exception {
-		builder = new DefaultRouteBuilder(proxifier, typeFinder, converters, "/abc/{abc:[0-9A-Z]{5}}/def/{def}");
+		builder = newBuilder("/abc/{abc:[0-9A-Z]{5}}/def/{def}");
 
 		builder.is(MyResource.class, method.getMethod());
 		Route route = builder.build();
@@ -136,7 +139,7 @@ public class RouteBuilderTest {
 	}
 	@Test
 	public void usingRegexesWithCurlyBracesNotOnTheEndAndOtherVarAndManyOtherThings() throws Exception {
-		builder = new DefaultRouteBuilder(proxifier, typeFinder, converters, "/abc/{abc:[0-9A-Z]{5}}{def}{xxx:[0-9A-Z]{5}}");
+		builder = newBuilder("/abc/{abc:[0-9A-Z]{5}}{def}{xxx:[0-9A-Z]{5}}");
 
 		builder.is(MyResource.class, method.getMethod());
 		Route route = builder.build();
@@ -149,7 +152,7 @@ public class RouteBuilderTest {
 
 	@Test
 	public void usingRegexesWithAsterisksAtTheEnd() throws Exception {
-		builder = new DefaultRouteBuilder(proxifier, typeFinder, converters, "/abc/{abc:[0-9A-Z]*}/def/{def}");
+		builder = newBuilder("/abc/{abc:[0-9A-Z]*}/def/{def}");
 
 		builder.is(MyResource.class, method.getMethod());
 		Route route = builder.build();
@@ -163,14 +166,13 @@ public class RouteBuilderTest {
 
 	@Test
 	public void fillingUriForPrimitiveParameters() throws Exception {
-		builder = new DefaultRouteBuilder(proxifier, typeFinder, converters, "/abc/{abc}/def/{def}/ghi/{ghi}");
+		builder = newBuilder("/abc/{abc}/def/{def}/ghi/{ghi}");
 
 		Method method = MyResource.class.getDeclaredMethods()[0];
 		builder.is(MyResource.class, method);
 		Route route = builder.build();
-		Object parameters = new AsmBasedTypeCreator(provider).instanceWithParameters(this.method, "Anything", 123,
-				new BigDecimal("123.45"));
-		String url = route.urlFor(MyResource.class, method, parameters);
+
+		String url = route.urlFor(MyResource.class, method, "Anything", 123, new BigDecimal("123.45"));
 		assertThat(url, is("/abc/Anything/def/123/ghi/123.45"));
 	}
 
@@ -192,7 +194,7 @@ public class RouteBuilderTest {
 
     @Test
     public void shouldSupportPathsWithDotsAndAsterisks() throws SecurityException, NoSuchMethodException {
-    	builder = new DefaultRouteBuilder(proxifier, typeFinder, converters, "/my/{abc.def*}");
+    	builder = newBuilder("/my/{abc.def*}");
 
 		Method method = AbcResource.class.getDeclaredMethods()[0];
 		builder.is(AbcResource.class, method);

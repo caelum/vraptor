@@ -2,17 +2,17 @@
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource
  * All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); 
- * you may not use this file except in compliance with the License. 
- * You may obtain a copy of the License at 
- * 
- * 	http://www.apache.org/licenses/LICENSE-2.0 
- * 
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an "AS IS" BASIS, 
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
- * See the License for the specific language governing permissions and 
- * limitations under the License. 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * 	http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package br.com.caelum.vraptor.http.ognl;
@@ -49,18 +49,24 @@ public class ReflectionBasedNullHandler extends ObjectNullHandler {
 
         OgnlContext ctx = (OgnlContext) context;
 
-        int indexInParent = ctx.getCurrentEvaluation().getNode().getIndexInParent();
-        int maxIndex = ctx.getRootEvaluation().getNode().jjtGetNumChildren() - 1;
-
-        if (!(indexInParent != -1 && indexInParent < maxIndex)) {
-            return null;
-        }
-
         try {
+	        if (ctx.getCurrentEvaluation() == null || ctx.getCurrentEvaluation().getPrevious() == null && target instanceof List) {
+	        	Container container = (Container) context.get(Container.class);
+
+	        	return list.instantiate(container, target, property, (Type) context.get("rootType"));
+	        }
+
+	        int indexInParent = ctx.getCurrentEvaluation().getNode().getIndexInParent();
+	        int maxIndex = ctx.getRootEvaluation().getNode().jjtGetNumChildren() - 1;
+
+	        if (!(indexInParent != -1 && indexInParent < maxIndex)) {
+	        	return null;
+	        }
+
 
             Container container = (Container) context.get(Container.class);
             if (target instanceof List) {
-                return list.instantiate(container, target, property, ctx.getCurrentEvaluation().getPrevious());
+                return list.instantiate(container, target, property, list.getListType(target, ctx.getCurrentEvaluation().getPrevious()));
             }
 
             String propertyCapitalized = Info.capitalize((String) property);

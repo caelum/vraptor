@@ -21,7 +21,9 @@ import static com.google.common.base.Predicates.containsPattern;
 import static com.google.common.collect.Maps.filterKeys;
 
 import java.lang.reflect.Array;
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -100,32 +102,46 @@ public class OgnlParametersProvider implements ParametersProvider {
 
 	}
 
+
+
 	private Object createParameter(Type type, String name, Map<String, String[]> requestNames, ResourceBundle bundle, List<Message> errors) {
 
 		if (requestNames.containsKey(name)) {
-			Class clazz = (Class) type;
+			Class clazz = getRawType(type);
+			String[] values = requestNames.get(name);
 			if (clazz.isArray()) {
 				Class arrayType = clazz.getComponentType();
-				String[] values = requestNames.get(name);
 				Object array = Array.newInstance(arrayType, values.length);
 				for (int i = 0; i < values.length; i++) {
 					Array.set(array, i, converters.to(arrayType).convert(values[i], arrayType, bundle));
 				}
 				return array;
 			}
-			return converters.to(clazz).convert(requestNames.get(name)[0], (Class) type, bundle);
+			if (List.class.isAssignableFrom(clazz)) {
+				List list = new ArrayList();
+				Class actual = getActualType(type);
+				for (String value : values) {
+					list.add(converters.to(actual).convert(value, actual, bundle));
+				}
+				return list;
+			}
+			return converters.to(clazz).convert(values[0], getRawType(type), bundle);
 		}
 
 		Object root;
 		try {
-			root = new GenericNullHandler().instantiate((Class) type, container);
+			root = new GenericNullHandler().instantiate(getRawType(type), container);
 		} catch (Exception ex) {
 			throw new InvalidParameterException("unable to instantiate type " + type, ex);
 		}
 
+
 		OgnlContext context = (OgnlContext) Ognl.createDefaultContext(root);
 		context.setTraceEvaluations(true);
 		context.put(Container.class, this.container);
+		if (List.class.isAssignableFrom(getRawType(type))) {
+			context.put("rootType", type);
+		}
 
 		VRaptorConvertersAdapter adapter = new VRaptorConvertersAdapter(converters, bundle);
 		Ognl.setTypeConverter(context, adapter);
@@ -170,4 +186,48 @@ public class OgnlParametersProvider implements ParametersProvider {
 		}
 		return root;
 	}
+
+	private Class getActualType(Type type) {
+		return (Class) ((ParameterizedType) type).getActualTypeArguments()[0];
+	}
+
+	private Class getRawType(Type type) {
+		if (type instanceof ParameterizedType) {
+			return (Class) ((ParameterizedType) type).getRawType();
+		}
+		return (Class) type;
+	}
+
+//	public static void main(String[] args) throws OgnlException {
+//
+//		OgnlRuntime.setNullHandler(Object.class, new ReflectionBasedNullHandler());
+//		OgnlRuntime.setPropertyAccessor(List.class, new ListAccessor());
+//
+//		List<ABC> list = new ArrayList<ABC>();
+//		OgnlContext context = (OgnlContext) Ognl.createDefaultContext(list);
+//		context.put("rootType", Types.newParameterizedType(List.class, ABC.class));
+//		context.put(Container.class, new Container() {
+//
+//			public <T> boolean canProvide(Class<T> type) {
+//				return false;
+//			}
+//
+//			public <T> T instanceFor(Class<T> type) {
+//				return (T) new EmptyElementsRemoval();
+//			}
+//
+//		});
+//
+//		Ognl.setValue("[2].x", context, list, "222");
+////		Object object = Ognl.getValue("new java.util.List()", context);
+//
+//		System.out.println(list.get(2).x);
+////		OgnlRuntime.setPropertyAccessor(Object[].class, new ArrayAccessor());
+////		Integer[] ints = new Integer[0];
+////		Map context = Ognl.createDefaultContext(ints);
+////
+////		Ognl.setValue("[1]", context, ints, 23);
+////
+////		System.out.println(Arrays.toString(ints));
+//	}
 }

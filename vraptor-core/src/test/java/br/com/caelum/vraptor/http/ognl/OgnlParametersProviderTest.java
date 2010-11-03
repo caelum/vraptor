@@ -21,6 +21,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.arrayContaining;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
@@ -68,6 +69,8 @@ public class OgnlParametersProviderTest {
 	private ResourceMethod simple;
 
 	private @Mock HttpSession session;
+	private ResourceMethod list;
+	private ResourceMethod listOfObject;
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
 	@Before
@@ -79,12 +82,45 @@ public class OgnlParametersProviderTest {
         when(converters.to(Long.class)).thenReturn((Converter) new LongConverter());
         when(parameters.getSession()).thenReturn(session);
         when(container.instanceFor(EmptyElementsRemoval.class)).thenReturn(removal);
+        when(container.instanceFor(Converters.class)).thenReturn(converters);
 
         buyA = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("buyA", House.class));
         kick = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("kick", AngryCat.class));
         error = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("error", WrongCat.class));
         array = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("array", Long[].class));
+        list = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("list", List.class));
+        listOfObject = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("listOfObject", List.class));
         simple = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("simple", Long.class));
+    }
+
+    @Test
+    public void isCapableOfDealingWithIndexedLists() throws Exception {
+    	requestParameterIs(list, "abc[2]", "1");
+
+    	List<Long> abc = getParameters(list);
+
+    	assertThat(abc, hasSize(1));
+    	assertThat(abc, hasItem(1l));
+    }
+
+    @Test
+    public void isCapableOfDealingWithIndexedListsOfObjects() throws Exception {
+    	requestParameterIs(listOfObject, "abc[2].x", "1");
+
+    	List<ABC> abc = getParameters(listOfObject);
+
+    	assertThat(abc, hasSize(1));
+    	assertThat(abc.get(0).x, is(1l));
+    }
+
+    @Test
+    public void isCapableOfDealingWithLists() throws Exception {
+    	requestParameterIs(list, "abc", "1");
+
+    	List<Long> abc = getParameters(list);
+
+    	assertThat(abc, hasSize(1));
+    	assertThat(abc, hasItem(1l));
     }
 
     @Test
@@ -181,7 +217,7 @@ public class OgnlParametersProviderTest {
     }
 
     private void requestParameterIs(ResourceMethod method, String paramName, String... values) {
-    	String methodName = paramName.replaceAll("\\..*", "");
+    	String methodName = paramName.replaceAll("[\\.\\[].*", "");
 
 		when(parameters.getParameterValues(paramName)).thenReturn(values);
 		String[] values1 = { paramName };
@@ -205,6 +241,10 @@ public class OgnlParametersProviderTest {
         void error(WrongCat wrongCat) {
         }
         void array(Long[] abc) {
+        }
+        void list(List<Long> abc) {
+        }
+        void listOfObject(List<ABC> abc) {
         }
         void simple(Long xyz) {
         }
@@ -264,6 +304,19 @@ public class OgnlParametersProviderTest {
         private Long[] ids;
 
     }
+
+    public static class ABC {
+		private Long x;
+
+		public Long getX() {
+			return x;
+		}
+
+		public void setX(Long x) {
+			this.x = x;
+		}
+	}
+
 
     public static class AngryCat {
         public void setId(String id) {

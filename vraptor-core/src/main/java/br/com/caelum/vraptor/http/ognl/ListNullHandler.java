@@ -17,13 +17,12 @@
 
 package br.com.caelum.vraptor.http.ognl;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
 
+import net.vidageek.mirror.dsl.Mirror;
 import ognl.Evaluation;
 import br.com.caelum.vraptor.VRaptorException;
 import br.com.caelum.vraptor.ioc.Container;
@@ -38,13 +37,10 @@ import br.com.caelum.vraptor.vraptor2.Info;
 class ListNullHandler {
 
 	@SuppressWarnings("unchecked")
-	Object instantiate(Container container, Object target, Object property, Type type)
-			throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+	Object instantiate(Container container, Object target, Object property, Type type) {
 
 		Class typeToInstantiate = (Class) ((ParameterizedType) type).getActualTypeArguments()[0];
-		Constructor constructor = typeToInstantiate.getDeclaredConstructor();
-		constructor.setAccessible(true);
-		Object instance = constructor.newInstance();
+		Object instance = new Mirror().on(typeToInstantiate).invoke().constructor().withoutArgs();
 
 		// setting the position
 		int position = (Integer) property;

@@ -18,8 +18,6 @@
 package br.com.caelum.vraptor.http.ognl;
 
 import java.lang.reflect.Array;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -35,6 +33,7 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import net.vidageek.mirror.dsl.Mirror;
 import br.com.caelum.vraptor.ioc.Container;
 
 /**
@@ -56,12 +55,10 @@ class GenericNullHandler {
     }
 
     @SuppressWarnings("unchecked")
-    <T> T instantiate(Class<T> baseType, Container container) throws InstantiationException, IllegalAccessException,
-            InvocationTargetException, NoSuchMethodException {
+    <T> T instantiate(Class<T> baseType, Container container) {
     	if (baseType.isArray()) {
     		return baseType.cast(Array.newInstance(baseType.getComponentType(), 0));
     	}
-        Object instance;
         Class<?> typeToInstantiate = baseType;
         if (baseType.isInterface() || Modifier.isAbstract(baseType.getModifiers())) {
             if (!CONCRETE_TYPES.containsKey(baseType)) {
@@ -71,15 +68,14 @@ class GenericNullHandler {
             }
             typeToInstantiate = CONCRETE_TYPES.get(baseType);
         }
-        Constructor<?> constructor = typeToInstantiate.getDeclaredConstructor();
-        constructor.setAccessible(true);
-		instance = constructor.newInstance();
+        Object instance = new Mirror().on(typeToInstantiate).invoke().constructor().withoutArgs();
+
         if(Collection.class.isAssignableFrom(typeToInstantiate)) {
 	        EmptyElementsRemoval removal = container.instanceFor(EmptyElementsRemoval.class);
         	removal.add((Collection)instance);
         }
 
-        return (T) instance;
+        return baseType.cast(instance);
     }
 
 }

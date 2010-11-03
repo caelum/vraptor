@@ -17,10 +17,10 @@
 package br.com.caelum.vraptor.http.ognl;
 
 import java.lang.reflect.Array;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
 
+import net.vidageek.mirror.dsl.Mirror;
 import ognl.ArrayPropertyAccessor;
 import ognl.OgnlContext;
 import ognl.OgnlException;
@@ -65,18 +65,8 @@ public class ArrayAccessor extends ArrayPropertyAccessor {
 	            Container container = (Container) context.get(Container.class);
 	            EmptyElementsRemoval removal = container.instanceFor(EmptyElementsRemoval.class);
 	            removal.add(newArray, setter, origin);
-	            try {
-	                setter.invoke(origin, newArray);
-	            } catch (IllegalArgumentException e) {
-	                // TODO better
-	                throw new IllegalArgumentException(e);
-	            } catch (IllegalAccessException e) {
-	                // TODO better
-	                throw new IllegalArgumentException(e);
-	            } catch (InvocationTargetException e) {
-	                // TODO better
-	                throw new IllegalArgumentException(e);
-	            }
+
+	            new Mirror().on(origin).invoke().method(setter).withArgs(newArray);
             }
             array = newArray;
         }

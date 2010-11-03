@@ -93,7 +93,7 @@ public class OgnlParametersProvider implements ParametersProvider {
 		Type[] types = method.getMethod().getGenericParameterTypes();
 		Object[] result = new Object[types.length];
 		for (int i = 0; i < types.length; i++) {
-			Map<String, String[]> requestNames = filterKeys(request.getParameterMap(), containsPattern("^" + names[i]));
+			Map<String, String[]> requestNames = parametersThatStartWith(names[i]);
 			result[i] = createParameter(types[i], names[i], requestNames, bundle, errors);
 		}
 		removal.removeExtraElements();
@@ -102,39 +102,70 @@ public class OgnlParametersProvider implements ParametersProvider {
 
 	}
 
-
-
 	private Object createParameter(Type type, String name, Map<String, String[]> requestNames, ResourceBundle bundle, List<Message> errors) {
 
 		if (requestNames.containsKey(name)) {
-			Class clazz = getRawType(type);
 			String[] values = requestNames.get(name);
-			if (clazz.isArray()) {
-				Class arrayType = clazz.getComponentType();
-				Object array = Array.newInstance(arrayType, values.length);
-				for (int i = 0; i < values.length; i++) {
-					Array.set(array, i, converters.to(arrayType).convert(values[i], arrayType, bundle));
-				}
-				return array;
-			}
-			if (List.class.isAssignableFrom(clazz)) {
-				List list = new ArrayList();
-				Class actual = getActualType(type);
-				for (String value : values) {
-					list.add(converters.to(actual).convert(value, actual, bundle));
-				}
-				return list;
-			}
-			return converters.to(clazz).convert(values[0], getRawType(type), bundle);
+			return createSimpleParameter(type, values, bundle);
 		}
 
+		OgnlContext context = createOgnlContextFor(type, bundle);
+
+		for (Entry<String, String[]> parameter : requestNames.entrySet()) {
+			String key = parameter.getKey().replaceFirst("^" + name + "\\.?", "");
+			String[] values = parameter.getValue();
+			setProperty(context, key, values, errors);
+		}
+
+		if (getRawType(type).isArray()) {
+			return removal.removeNullsFromArray(context.getRoot());
+		}
+
+		return context.getRoot();
+	}
+
+	private void setProperty(OgnlContext context, String key, String[] values, List<Message> errors) {
+		try {
+			if (logger.isDebugEnabled()) {
+				logger.debug("Applying " + key + " with " + Arrays.toString(values));
+			}
+			Ognl.setValue(key, context, context.getRoot(), values.length == 1 ? values[0] : values);
+		} catch (ConversionError ex) {
+			errors.add(new ValidationMessage(ex.getMessage(), key));
+		} catch (MethodFailedException e) { // setter threw an exception
+
+			Throwable cause = e.getCause();
+			if (cause.getClass().isAnnotationPresent(ValidationException.class)) {
+				errors.add(new ValidationMessage(cause.getLocalizedMessage(), key));
+			} else {
+				throw new InvalidParameterException("unable to parse expression '" + key + "'", e);
+			}
+
+		} catch (NoSuchPropertyException ex) {
+			// TODO optimization: be able to ignore or not
+			if (logger.isDebugEnabled()) {
+				logger.debug("cant find property for expression {} ignoring", key);
+			}
+			if (logger.isTraceEnabled()) {
+				logger.trace("cant find property for expression " + key + ", ignoring. Reason:", ex);
+
+			}
+		} catch (OgnlException e) {
+			// TODO it fails when parameter name is not a valid java
+			// identifier... ignoring by now
+			if (logger.isDebugEnabled()) {
+				logger.debug("unable to parse expression '" + key + "'. Ignoring", e);
+			}
+		}
+	}
+
+	private OgnlContext createOgnlContextFor(Type type, ResourceBundle bundle) {
 		OgnlContext context;
 		try {
 			context = (OgnlContext) Ognl.createDefaultContext(new GenericNullHandler().instantiate(getRawType(type), container));
 		} catch (Exception ex) {
 			throw new InvalidParameterException("unable to instantiate type " + type, ex);
 		}
-
 		context.setTraceEvaluations(true);
 		context.put(Container.class, this.container);
 		if (List.class.isAssignableFrom(getRawType(type))) {
@@ -144,48 +175,36 @@ public class OgnlParametersProvider implements ParametersProvider {
 		VRaptorConvertersAdapter adapter = new VRaptorConvertersAdapter(converters, bundle);
 		Ognl.setTypeConverter(context, adapter);
 
+		return context;
+	}
 
-		for (Entry<String, String[]> parameter : requestNames.entrySet()) {
-			String key = parameter.getKey().replaceFirst("^" + name + "\\.?", "");
-			String[] values = parameter.getValue();
-
-			try {
-				if (logger.isDebugEnabled()) {
-					logger.debug("Applying " + key + " with " + Arrays.toString(values));
-				}
-				Ognl.setValue(key, context, context.getRoot(), values.length == 1 ? values[0] : values);
-			} catch (ConversionError ex) {
-				errors.add(new ValidationMessage(ex.getMessage(), key));
-			} catch (MethodFailedException e) { // setter threw an exception
-
-				Throwable cause = e.getCause();
-				if (cause.getClass().isAnnotationPresent(ValidationException.class)) {
-					errors.add(new ValidationMessage(cause.getLocalizedMessage(), key));
-				} else {
-					throw new InvalidParameterException("unable to parse expression '" + key + "'", e);
-				}
-
-			} catch (NoSuchPropertyException ex) {
-				// TODO optimization: be able to ignore or not
-				if (logger.isDebugEnabled()) {
-					logger.debug("cant find property for expression {} ignoring", key);
-				}
-				if (logger.isTraceEnabled()) {
-					logger.trace("cant find property for expression " + key + ", ignoring. Reason:", ex);
-
-				}
-			} catch (OgnlException e) {
-				// TODO it fails when parameter name is not a valid java
-				// identifier... ignoring by now
-				if (logger.isDebugEnabled()) {
-					logger.debug("unable to parse expression '" + key + "'. Ignoring", e);
-				}
-			}
+	private Object createSimpleParameter(Type type, String[] values, ResourceBundle bundle) {
+		Class clazz = getRawType(type);
+		if (clazz.isArray()) {
+			return createArray(clazz, values, bundle);
 		}
-		if (getRawType(type).isArray()) {
-			return removal.removeNullsFromArray(context.getRoot());
+		if (List.class.isAssignableFrom(clazz)) {
+			return createList(type, bundle, values);
 		}
-		return context.getRoot();
+		return converters.to(clazz).convert(values[0], getRawType(type), bundle);
+	}
+
+	private List createList(Type type, ResourceBundle bundle, String[] values) {
+		List list = new ArrayList();
+		Class actual = getActualType(type);
+		for (String value : values) {
+			list.add(converters.to(actual).convert(value, actual, bundle));
+		}
+		return list;
+	}
+
+	private Object createArray(Class clazz, String[] values, ResourceBundle bundle) {
+		Class arrayType = clazz.getComponentType();
+		Object array = Array.newInstance(arrayType, values.length);
+		for (int i = 0; i < values.length; i++) {
+			Array.set(array, i, converters.to(arrayType).convert(values[i], arrayType, bundle));
+		}
+		return array;
 	}
 
 	private Class getActualType(Type type) {
@@ -199,36 +218,8 @@ public class OgnlParametersProvider implements ParametersProvider {
 		return (Class) type;
 	}
 
-//	public static void main(String[] args) throws OgnlException {
-//
-//		OgnlRuntime.setNullHandler(Object.class, new ReflectionBasedNullHandler());
-//		OgnlRuntime.setPropertyAccessor(List.class, new ListAccessor());
-//
-//		List<ABC> list = new ArrayList<ABC>();
-//		OgnlContext context = (OgnlContext) Ognl.createDefaultContext(list);
-//		context.put("rootType", Types.newParameterizedType(List.class, ABC.class));
-//		context.put(Container.class, new Container() {
-//
-//			public <T> boolean canProvide(Class<T> type) {
-//				return false;
-//			}
-//
-//			public <T> T instanceFor(Class<T> type) {
-//				return (T) new EmptyElementsRemoval();
-//			}
-//
-//		});
-//
-//		Ognl.setValue("[2].x", context, list, "222");
-////		Object object = Ognl.getValue("new java.util.List()", context);
-//
-//		System.out.println(list.get(2).x);
-////		OgnlRuntime.setPropertyAccessor(Object[].class, new ArrayAccessor());
-////		Integer[] ints = new Integer[0];
-////		Map context = Ognl.createDefaultContext(ints);
-////
-////		Ognl.setValue("[1]", context, ints, 23);
-////
-////		System.out.println(Arrays.toString(ints));
-//	}
+	private Map<String, String[]> parametersThatStartWith(String name) {
+		Map<String, String[]> requestNames = filterKeys(request.getParameterMap(), containsPattern("^" + name));
+		return requestNames;
+	}
 }

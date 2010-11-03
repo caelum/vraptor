@@ -17,12 +17,16 @@
 
 package br.com.caelum.vraptor.http.ognl;
 
-import java.lang.reflect.InvocationTargetException;
+import static com.google.common.base.Predicates.containsPattern;
+import static com.google.common.collect.Maps.filterKeys;
+
+import java.lang.reflect.Array;
 import java.lang.reflect.Type;
 import java.util.Arrays;
-import java.util.Enumeration;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -41,14 +45,12 @@ import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.http.InvalidParameterException;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParametersProvider;
-import br.com.caelum.vraptor.http.TypeCreator;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.ValidationMessage;
 import br.com.caelum.vraptor.validator.annotation.ValidationException;
-import br.com.caelum.vraptor.vraptor2.Info;
 
 /**
  * Provides parameters using ognl to parse expression values into parameter
@@ -58,8 +60,6 @@ import br.com.caelum.vraptor.vraptor2.Info;
  */
 @RequestScoped
 public class OgnlParametersProvider implements ParametersProvider {
-
-	private final TypeCreator creator;
 
 	private final Container container;
 
@@ -73,9 +73,8 @@ public class OgnlParametersProvider implements ParametersProvider {
 
 	private final EmptyElementsRemoval removal;
 
-	public OgnlParametersProvider(TypeCreator creator, Container container, Converters converters,
+	public OgnlParametersProvider(Container container, Converters converters,
 			ParameterNameProvider provider, HttpServletRequest request, EmptyElementsRemoval removal) {
-		this.creator = creator;
 		this.container = container;
 		this.converters = converters;
 		this.provider = provider;
@@ -87,44 +86,55 @@ public class OgnlParametersProvider implements ParametersProvider {
 	}
 
 	public Object[] getParametersFor(ResourceMethod method, List<Message> errors, ResourceBundle bundle) {
-		Object root = createRoot(method, errors, bundle);
-		removal.removeExtraElements();
+
+		String[] names = provider.parameterNamesFor(method.getMethod());
 		Type[] types = method.getMethod().getGenericParameterTypes();
 		Object[] result = new Object[types.length];
-		String[] names = provider.parameterNamesFor(method.getMethod());
 		for (int i = 0; i < types.length; i++) {
-			try {
-				result[i] = root.getClass().getMethod("get" + Info.capitalize(names[i])).invoke(root);
-			} catch (InvocationTargetException e) {
-				throw new InvalidParameterException("unable to retrieve values to invoke method", e.getCause());
-			} catch (Exception e) {
-				throw new InvalidParameterException("unable to retrieve values to invoke method", e);
-			}
+			Map<String, String[]> requestNames = filterKeys(request.getParameterMap(), containsPattern("^" + names[i]));
+			result[i] = createParameter(types[i], names[i], requestNames, bundle, errors);
 		}
+		removal.removeExtraElements();
+
 		return result;
+
 	}
 
-	private Object createRoot(ResourceMethod method, List<Message> errors, ResourceBundle bundle) {
-		return createViaOgnl(method, errors, bundle);
-	}
+	private Object createParameter(Type type, String name, Map<String, String[]> requestNames, ResourceBundle bundle, List<Message> errors) {
 
-	private Object createViaOgnl(ResourceMethod method, List<Message> errors, ResourceBundle bundle) {
-		Class<?> type = creator.typeFor(method);
+		if (requestNames.containsKey(name)) {
+			Class clazz = (Class) type;
+			if (clazz.isArray()) {
+				Class arrayType = clazz.getComponentType();
+				String[] values = requestNames.get(name);
+				Object array = Array.newInstance(arrayType, values.length);
+				for (int i = 0; i < values.length; i++) {
+					Array.set(array, i, converters.to(arrayType).convert(values[i], arrayType, bundle));
+				}
+				return array;
+			}
+			return converters.to(clazz).convert(requestNames.get(name)[0], (Class) type, bundle);
+		}
+
 		Object root;
 		try {
-			root = type.getDeclaredConstructor().newInstance();
+			root = new GenericNullHandler().instantiate((Class) type, container);
 		} catch (Exception ex) {
-			throw new InvalidParameterException("unable to instantiate type" + type.getName(), ex);
+			throw new InvalidParameterException("unable to instantiate type " + type, ex);
 		}
+
 		OgnlContext context = (OgnlContext) Ognl.createDefaultContext(root);
 		context.setTraceEvaluations(true);
 		context.put(Container.class, this.container);
 
 		VRaptorConvertersAdapter adapter = new VRaptorConvertersAdapter(converters, bundle);
 		Ognl.setTypeConverter(context, adapter);
-		for (Enumeration<?> enumeration = request.getParameterNames(); enumeration.hasMoreElements();) {
-			String key = (String) enumeration.nextElement();
-			String[] values = request.getParameterValues(key);
+
+
+		for (Entry<String, String[]> parameter : requestNames.entrySet()) {
+			String key = parameter.getKey().replaceFirst("^" + name + "\\.?", "");
+			String[] values = parameter.getValue();
+
 			try {
 				if (logger.isDebugEnabled()) {
 					logger.debug("Applying " + key + " with " + Arrays.toString(values));

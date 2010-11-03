@@ -44,7 +44,6 @@ import br.com.caelum.vraptor.converter.LongConverter;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.http.InvalidParameterException;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
-import br.com.caelum.vraptor.http.TypeCreator;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
@@ -55,7 +54,6 @@ import br.com.caelum.vraptor.validator.Message;
 public class OgnlParametersProviderTest {
 
     private @Mock Converters converters;
-    private @Mock TypeCreator creator;
     private @Mock Container container;
     private @Mock ParameterNameProvider nameProvider;
     private @Mock HttpServletRequest parameters;
@@ -67,6 +65,7 @@ public class OgnlParametersProviderTest {
 	private ResourceMethod kick;
 	private ResourceMethod error;
 	private ResourceMethod array;
+	private ResourceMethod simple;
 
 	private @Mock HttpSession session;
 
@@ -74,7 +73,7 @@ public class OgnlParametersProviderTest {
 	@Before
     public void setup() throws Exception {
         this.removal = new EmptyElementsRemoval();
-        this.provider = new OgnlParametersProvider(creator, container, converters, nameProvider, parameters, removal);
+        this.provider = new OgnlParametersProvider(container, converters, nameProvider, parameters, removal);
         this.errors = new ArrayList<Message>();
 
         when(converters.to(Long.class)).thenReturn((Converter) new LongConverter());
@@ -85,11 +84,130 @@ public class OgnlParametersProviderTest {
         kick = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("kick", AngryCat.class));
         error = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("error", WrongCat.class));
         array = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("array", Long[].class));
+        simple = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("simple", Long.class));
+    }
 
-        when(creator.typeFor(buyA)).thenReturn((Class) BuyASetter.class);
-        when(creator.typeFor(kick)).thenReturn((Class) KickSetter.class);
-        when(creator.typeFor(error)).thenReturn((Class) ErrorSetter.class);
-        when(creator.typeFor(array)).thenReturn((Class) ArraySetter.class);
+    @Test
+    public void isCapableOfDealingIndexedArraysWithOneElement() throws Exception {
+    	requestParameterIs(array, "abc[2]", "1");
+
+    	Long[] abc = getParameters(array);
+
+    	assertThat(abc, is(arrayContaining(1l)));
+    }
+
+    @Test
+    public void isCapableOfDealingArraysWithOneElement() throws Exception {
+    	requestParameterIs(array, "abc", "1");
+
+    	Long[] abc = getParameters(array);
+
+    	assertThat(abc, is(arrayContaining(1l)));
+    }
+
+    @Test
+    public void isCapableOfDealingArraysWithSeveralElements() throws Exception {
+    	requestParameterIs(array, "abc", "1", "2", "3");
+
+    	Long[] abc = getParameters(array);
+
+    	assertThat(abc, is(arrayContaining(1l, 2l, 3l)));
+    }
+
+    @Test
+    public void isCapableOfDealingWithEmptyParameterForInternalWrapperValue() throws Exception {
+    	requestParameterIs(buyA, "house.cat.id", "guilherme");
+
+        House house = getParameters(buyA);
+
+        assertThat(house.cat.id, is(equalTo("guilherme")));
+    }
+
+    @Test
+    public void removeFromTheCollectionIfAnElementIsCreatedWithinACollectionButNoFieldIsSet() throws Exception {
+
+    	requestParameterIs(buyA, "house.extraCats[1].id", "guilherme");
+
+        House house = getParameters(buyA);
+
+        assertThat(house.extraCats, hasSize(1));
+        assertThat(house.extraCats.get(0).id, is(equalTo("guilherme")));
+    }
+
+    @Test
+    public void removeFromTheCollectionIfAnElementIsCreatedWithinAnArrayButNoFieldIsSet() throws Exception {
+
+    	requestParameterIs(buyA, "house.ids[1]", "3");
+
+    	House house = getParameters(buyA);
+
+        assertThat(house.ids.length, is(equalTo(1)));
+        assertThat(house.ids[0], is(equalTo(3L)));
+    }
+
+    @Test
+    public void removeFromTheCollectionIfAnElementIsCreatedWithinACollectionButNoFieldIsSetAppartFromTheValueItselfNotAChild()
+            throws Exception {
+    	requestParameterIs(buyA, "house.owners[1]", "guilherme");
+
+    	House house = getParameters(buyA);
+
+    	assertThat(house.owners, hasSize(1));
+        assertThat(house.owners.get(0), is(equalTo("guilherme")));
+    }
+
+    @Test
+    public void addsValidationMessageWhenSetterFailsWithAValidationException() throws Exception {
+    	requestParameterIs(kick, "angryCat.id", "guilherme");
+
+    	getParameters(kick);
+
+        assertThat(errors.size(), is(greaterThan(0)));
+    }
+
+    @Test(expected=InvalidParameterException.class)
+    public void throwsExceptionWhenSetterFailsWithOtherException() throws Exception {
+    	requestParameterIs(error, "wrongCat.id", "guilherme");
+
+    	getParameters(error);
+    }
+
+    @Test
+    public void returnsASimpleValue() throws Exception {
+    	requestParameterIs(simple, "xyz", "42");
+
+    	Long xyz = getParameters(simple);
+    	assertThat(xyz, is(42l));
+    }
+
+    private void requestParameterIs(ResourceMethod method, String paramName, String... values) {
+    	String methodName = paramName.replaceAll("\\..*", "");
+
+		when(parameters.getParameterValues(paramName)).thenReturn(values);
+		String[] values1 = { paramName };
+		when(parameters.getParameterNames()).thenReturn(Collections.enumeration(Arrays.asList(values1)));
+		when(nameProvider.parameterNamesFor(method.getMethod())).thenReturn(new String[]{methodName});
+		when(parameters.getParameterMap()).thenReturn(Collections.singletonMap(paramName, values));
+
+    }
+
+
+    @SuppressWarnings("unchecked")
+	private <T> T getParameters(ResourceMethod method) {
+		return (T) provider.getParametersFor(method, errors, null)[0];
+	}
+
+    static class MyResource {
+        void buyA(House house) {
+        }
+        void kick(AngryCat angryCat) {
+        }
+        void error(WrongCat wrongCat) {
+        }
+        void array(Long[] abc) {
+        }
+        void simple(Long xyz) {
+        }
     }
 
     public static class Cat {
@@ -166,145 +284,4 @@ public class OgnlParametersProviderTest {
         	throw new IllegalArgumentException("AngryCat Exception"); //it isn't a ValidationException
         }
     }
-
-    static class MyResource {
-        void buyA(House house) {
-        }
-        void kick(AngryCat angryCat) {
-        }
-        void error(WrongCat wrongCat) {
-        }
-        void array(Long[] abc) {
-        }
-    }
-
-    public static class BuyASetter {
-        private House House_;
-
-        public void setHouse(House house_) {
-            House_ = house_;
-        }
-
-        public House getHouse() {
-            return House_;
-        }
-    }
-
-    public static class KickSetter {
-    	private AngryCat AngryCat_;
-
-    	public void setAngryCat(AngryCat angryCat) {
-			AngryCat_ = angryCat;
-		}
-
-    	public AngryCat getAngryCat() {
-			return AngryCat_;
-		}
-    }
-
-    public static class ErrorSetter {
-    	private WrongCat WrongCat_;
-
-    	public void setWrongCat(WrongCat angryCat) {
-    		WrongCat_ = angryCat;
-		}
-
-    	public WrongCat getWrongCat() {
-			return WrongCat_;
-		}
-    }
-
-    public static class ArraySetter {
-    	private Long[] abc;
-
-		public void setAbc(Long[] abc) {
-			this.abc = abc;
-		}
-
-		public Long[] getAbc() {
-			return abc;
-		}
-
-    }
-
-    private void requestParameterIs(ResourceMethod method, String paramName, String... values) {
-    	String methodName = paramName.replaceAll("\\..*", "");
-
-		when(parameters.getParameterValues(paramName)).thenReturn(values);
-		String[] values1 = { paramName };
-		when(parameters.getParameterNames()).thenReturn(Collections.enumeration(Arrays.asList(values1)));
-		when(nameProvider.parameterNamesFor(method.getMethod())).thenReturn(new String[]{methodName});
-
-    }
-    @Test
-    public void isCapableOfDealingArraysWithOneElement() throws Exception {
-    	requestParameterIs(array, "abc", "1");
-
-    	Long[] abc = getParameters(array);
-
-    	assertThat(abc, is(arrayContaining(1l)));
-    }
-
-    @Test
-    public void isCapableOfDealingWithEmptyParameterForInternalWrapperValue() throws Exception {
-    	requestParameterIs(buyA, "house.cat.id", "guilherme");
-
-        House house = getParameters(buyA);
-
-        assertThat(house.cat.id, is(equalTo("guilherme")));
-    }
-
-    @Test
-    public void removeFromTheCollectionIfAnElementIsCreatedWithinACollectionButNoFieldIsSet() throws Exception {
-
-    	requestParameterIs(buyA, "house.extraCats[1].id", "guilherme");
-
-        House house = getParameters(buyA);
-
-        assertThat(house.extraCats, hasSize(1));
-        assertThat(house.extraCats.get(0).id, is(equalTo("guilherme")));
-    }
-
-    @Test
-    public void removeFromTheCollectionIfAnElementIsCreatedWithinAnArrayButNoFieldIsSet() throws Exception {
-
-    	requestParameterIs(buyA, "house.ids[1]", "3");
-
-    	House house = getParameters(buyA);
-
-        assertThat(house.ids.length, is(equalTo(1)));
-        assertThat(house.ids[0], is(equalTo(3L)));
-    }
-
-    @Test
-    public void removeFromTheCollectionIfAnElementIsCreatedWithinACollectionButNoFieldIsSetAppartFromTheValueItselfNotAChild()
-            throws Exception {
-    	requestParameterIs(buyA, "house.owners[1]", "guilherme");
-
-    	House house = getParameters(buyA);
-
-    	assertThat(house.owners, hasSize(1));
-        assertThat(house.owners.get(0), is(equalTo("guilherme")));
-    }
-
-    @Test
-    public void addsValidationMessageWhenSetterFailsWithAValidationException() throws Exception {
-    	requestParameterIs(kick, "angryCat.id", "guilherme");
-
-    	getParameters(kick);
-
-        assertThat(errors.size(), is(greaterThan(0)));
-    }
-
-    @Test(expected=InvalidParameterException.class)
-    public void throwsExceptionWhenSetterFailsWithOtherException() throws Exception {
-    	requestParameterIs(error, "wrongCat.id", "guilherme");
-
-    	getParameters(error);
-    }
-
-    @SuppressWarnings("unchecked")
-	private <T> T getParameters(ResourceMethod method) {
-		return (T) provider.getParametersFor(method, errors, null)[0];
-	}
 }

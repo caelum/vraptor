@@ -36,6 +36,9 @@ import br.com.caelum.vraptor.vraptor2.Info;
 public class Evaluator {
 
 	public Object get(Object root, String path) {
+		if (root == null) {
+			return null;
+		}
 		String[] paths = path.split("[\\]\\.]");
 		Object current = root;
 		for (int i = 1; i < paths.length; i++) {

@@ -44,6 +44,7 @@ import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.ComponentRegistry;
@@ -138,6 +139,7 @@ public abstract class GenericContainerTest {
 	}
 
 	@Test
+	@Ignore("No need for typeCreator anymore")
 	public void shouldProvideCachedComponents() throws Exception {
 		TypeCreator creator = getFromContainer(TypeCreator.class);
 		assertThat(creator, is(instanceOf(CacheBasedTypeCreator.class)));

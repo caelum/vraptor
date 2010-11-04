@@ -23,6 +23,7 @@ import static com.google.common.collect.Maps.filterKeys;
 import java.lang.reflect.Array;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -96,7 +97,7 @@ public class OgnlParametersProvider implements ParametersProvider {
 		Object[] result = new Object[types.length];
 		for (int i = 0; i < types.length; i++) {
 			Map<String, String[]> requestNames = parametersThatStartWith(names[i]);
-			result[i] = createParameter(types[i], classes[i], names[i], requestNames, bundle, errors);
+			result[i] = createParameter(new Parameter(types[i], classes[i], names[i], method), requestNames, bundle, errors);
 		}
 		removal.removeExtraElements();
 
@@ -104,25 +105,46 @@ public class OgnlParametersProvider implements ParametersProvider {
 
 	}
 
-	private Object createParameter(Type type, Class clazz, String name, Map<String, String[]> requestNames, ResourceBundle bundle, List<Message> errors) {
+	private static class Parameter {
+		public Type type;
+		public Class clazz;
+		public String name;
+		public ResourceMethod method;
+
+		public Parameter(Type type, Class clazz, String name, ResourceMethod method) {
+			this.type = type;
+			this.clazz = clazz;
+			this.name = name;
+			this.method = method;
+		}
+		public Class actualType() {
+			if (type instanceof TypeVariable) {
+				ParameterizedType superclass = (ParameterizedType) method.getResource().getType().getGenericSuperclass();
+				return (Class) superclass.getActualTypeArguments()[0];
+			}
+			return clazz;
+		}
+	}
+
+	private Object createParameter(Parameter param, Map<String, String[]> requestNames, ResourceBundle bundle, List<Message> errors) {
 		if (requestNames.isEmpty()) {
 			return null;
 		}
 
-		if (requestNames.containsKey(name)) {
-			String[] values = requestNames.get(name);
-			return createSimpleParameter(type, clazz, values, bundle);
+		if (requestNames.containsKey(param.name)) {
+			String[] values = requestNames.get(param.name);
+			return createSimpleParameter(param, values, bundle);
 		}
 
-		OgnlContext context = createOgnlContextFor(type, clazz, bundle);
+		OgnlContext context = createOgnlContextFor(param, bundle);
 
 		for (Entry<String, String[]> parameter : requestNames.entrySet()) {
-			String key = parameter.getKey().replaceFirst("^" + name + "\\.?", "");
+			String key = parameter.getKey().replaceFirst("^" + param.name + "\\.?", "");
 			String[] values = parameter.getValue();
 			setProperty(context, key, values, errors);
 		}
 
-		if (clazz.isArray()) {
+		if (param.clazz.isArray()) {
 			return removal.removeNullsFromArray(context.getRoot());
 		}
 
@@ -164,18 +186,16 @@ public class OgnlParametersProvider implements ParametersProvider {
 		}
 	}
 
-	private OgnlContext createOgnlContextFor(Type type, Class clazz, ResourceBundle bundle) {
+	private OgnlContext createOgnlContextFor(Parameter param, ResourceBundle bundle) {
 		OgnlContext context;
 		try {
-			context = (OgnlContext) Ognl.createDefaultContext(new GenericNullHandler().instantiate(clazz, container));
+			context = (OgnlContext) Ognl.createDefaultContext(new GenericNullHandler().instantiate(param.actualType(), container));
 		} catch (Exception ex) {
-			throw new InvalidParameterException("unable to instantiate type " + type, ex);
+			throw new InvalidParameterException("unable to instantiate type " + param.type, ex);
 		}
 		context.setTraceEvaluations(true);
 		context.put(Container.class, this.container);
-		if (List.class.isAssignableFrom(clazz)) {
-			context.put("rootType", type);
-		}
+		context.put("rootType", param.type);
 
 		VRaptorConvertersAdapter adapter = new VRaptorConvertersAdapter(converters, bundle);
 		Ognl.setTypeConverter(context, adapter);
@@ -183,14 +203,14 @@ public class OgnlParametersProvider implements ParametersProvider {
 		return context;
 	}
 
-	private Object createSimpleParameter(Type type, Class clazz, String[] values, ResourceBundle bundle) {
-		if (clazz.isArray()) {
-			return createArray(clazz, values, bundle);
+	private Object createSimpleParameter(Parameter param, String[] values, ResourceBundle bundle) {
+		if (param.actualType().isArray()) {
+			return createArray(param.actualType(), values, bundle);
 		}
-		if (List.class.isAssignableFrom(clazz)) {
-			return createList(type, bundle, values);
+		if (List.class.isAssignableFrom(param.actualType())) {
+			return createList(param.type, bundle, values);
 		}
-		return convert(clazz, values[0], bundle);
+		return convert(param.actualType(), values[0], bundle);
 	}
 
 	private Object convert(Class clazz, String value, ResourceBundle bundle) {

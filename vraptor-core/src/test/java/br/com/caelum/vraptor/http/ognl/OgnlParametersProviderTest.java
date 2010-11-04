@@ -72,6 +72,7 @@ public class OgnlParametersProviderTest {
 	private ResourceMethod list;
 	private ResourceMethod listOfObject;
 	private ResourceMethod string;
+	private ResourceMethod generic;
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
 	@Before
@@ -93,6 +94,7 @@ public class OgnlParametersProviderTest {
         listOfObject = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("listOfObject", List.class));
         simple = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("simple", Long.class));
         string = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("string", String.class));
+        generic = DefaultResourceMethod.instanceFor(Specific.class, Generic.class.getDeclaredMethod("generic", Object.class));
     }
 
     @Test
@@ -103,6 +105,16 @@ public class OgnlParametersProviderTest {
 
     	assertThat(abc, is("eureka"));
     }
+
+    @Test
+    public void isCapableOfDealingWithGenerics() throws Exception {
+    	requestParameterIs(generic, "abc.x", "123");
+
+    	ABC abc = getParameters(generic);
+
+    	assertThat(abc.x, is(123l));
+    }
+
     @Test
     public void isCapableOfDealingWithIndexedLists() throws Exception {
     	requestParameterIs(list, "abc[2]", "1");
@@ -260,6 +272,14 @@ public class OgnlParametersProviderTest {
         }
         void string(String abc) {
         }
+    }
+
+    static class Generic<T> {
+    	void generic(T t) {
+    	}
+    }
+
+    static class Specific extends Generic<ABC> {
     }
 
     public static class Cat {

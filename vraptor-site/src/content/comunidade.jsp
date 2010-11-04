@@ -73,7 +73,15 @@
 		<dd>
 			<a href="http://www.guj.com.br/posts/list/0/219870.java">Sistema usando VRaptor3 e Hibernate</a>
 		</dd>
-
+		<dt>Gilson Filho</dt>
+		<dd>
+			<a href="http://gilson-filho.blogspot.com/2010/09/vraptor-3-introducao.html">VRaptor3 - Introdução</a>
+			<a href="http://gilson-filho.blogspot.com/2010/10/criando-um-novo-projeto-com-vraptor_12.html">Criando um novo projeto com VRaptor</a>
+		</dd>
+		<dt>Rogério R. Alcântara</dt>
+		<dd>
+			<a href="http://rogerioalcantara.blogspot.com/2010/09/vraptor3-tiles2-runtime-composition.html">VRaptor3 + Tiles2 (Runtime Composition)</a>
+		</dd>
 	</dl>
   </div>  
 </div>

@@ -92,10 +92,11 @@ public class OgnlParametersProvider implements ParametersProvider {
 
 		String[] names = provider.parameterNamesFor(method.getMethod());
 		Type[] types = method.getMethod().getGenericParameterTypes();
+		Class[] classes = method.getMethod().getParameterTypes();
 		Object[] result = new Object[types.length];
 		for (int i = 0; i < types.length; i++) {
 			Map<String, String[]> requestNames = parametersThatStartWith(names[i]);
-			result[i] = createParameter(types[i], names[i], requestNames, bundle, errors);
+			result[i] = createParameter(types[i], classes[i], names[i], requestNames, bundle, errors);
 		}
 		removal.removeExtraElements();
 
@@ -103,17 +104,17 @@ public class OgnlParametersProvider implements ParametersProvider {
 
 	}
 
-	private Object createParameter(Type type, String name, Map<String, String[]> requestNames, ResourceBundle bundle, List<Message> errors) {
+	private Object createParameter(Type type, Class clazz, String name, Map<String, String[]> requestNames, ResourceBundle bundle, List<Message> errors) {
 		if (requestNames.isEmpty()) {
 			return null;
 		}
 
 		if (requestNames.containsKey(name)) {
 			String[] values = requestNames.get(name);
-			return createSimpleParameter(type, values, bundle);
+			return createSimpleParameter(type, clazz, values, bundle);
 		}
 
-		OgnlContext context = createOgnlContextFor(type, bundle);
+		OgnlContext context = createOgnlContextFor(type, clazz, bundle);
 
 		for (Entry<String, String[]> parameter : requestNames.entrySet()) {
 			String key = parameter.getKey().replaceFirst("^" + name + "\\.?", "");
@@ -121,7 +122,7 @@ public class OgnlParametersProvider implements ParametersProvider {
 			setProperty(context, key, values, errors);
 		}
 
-		if (getRawType(type).isArray()) {
+		if (clazz.isArray()) {
 			return removal.removeNullsFromArray(context.getRoot());
 		}
 
@@ -163,16 +164,16 @@ public class OgnlParametersProvider implements ParametersProvider {
 		}
 	}
 
-	private OgnlContext createOgnlContextFor(Type type, ResourceBundle bundle) {
+	private OgnlContext createOgnlContextFor(Type type, Class clazz, ResourceBundle bundle) {
 		OgnlContext context;
 		try {
-			context = (OgnlContext) Ognl.createDefaultContext(new GenericNullHandler().instantiate(getRawType(type), container));
+			context = (OgnlContext) Ognl.createDefaultContext(new GenericNullHandler().instantiate(clazz, container));
 		} catch (Exception ex) {
 			throw new InvalidParameterException("unable to instantiate type " + type, ex);
 		}
 		context.setTraceEvaluations(true);
 		context.put(Container.class, this.container);
-		if (List.class.isAssignableFrom(getRawType(type))) {
+		if (List.class.isAssignableFrom(clazz)) {
 			context.put("rootType", type);
 		}
 
@@ -182,8 +183,7 @@ public class OgnlParametersProvider implements ParametersProvider {
 		return context;
 	}
 
-	private Object createSimpleParameter(Type type, String[] values, ResourceBundle bundle) {
-		Class clazz = getRawType(type);
+	private Object createSimpleParameter(Type type, Class clazz, String[] values, ResourceBundle bundle) {
 		if (clazz.isArray()) {
 			return createArray(clazz, values, bundle);
 		}
@@ -225,13 +225,6 @@ public class OgnlParametersProvider implements ParametersProvider {
 
 	private Class getActualType(Type type) {
 		return (Class) ((ParameterizedType) type).getActualTypeArguments()[0];
-	}
-
-	private Class getRawType(Type type) {
-		if (type instanceof ParameterizedType) {
-			return (Class) ((ParameterizedType) type).getRawType();
-		}
-		return (Class) type;
 	}
 
 	private Map<String, String[]> parametersThatStartWith(String name) {

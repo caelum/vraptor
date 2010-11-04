@@ -19,8 +19,6 @@ mvn install:install-file -DgroupId=br.com.caelum -DartifactId=iogi -Dversion=0.8
 
 
 
-
-
 mvn install:install-file -DgroupId=org.vraptor -DartifactId=vraptor2 -Dversion=2.6.2 -Dpackaging=jar -Dfile=lib/vraptor2-2.6.2.jar
 
 mvn install:install-file -DgroupId=org.hamcrest -DartifactId=hamcrest-all -Dversion=1.2RC3 -Dpackaging=jar -Dfile=lib/optional/hamcrest-all-1.2RC3.jar

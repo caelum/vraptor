@@ -71,6 +71,7 @@ public class OgnlParametersProviderTest {
 	private @Mock HttpSession session;
 	private ResourceMethod list;
 	private ResourceMethod listOfObject;
+	private ResourceMethod string;
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
 	@Before
@@ -91,8 +92,17 @@ public class OgnlParametersProviderTest {
         list = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("list", List.class));
         listOfObject = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("listOfObject", List.class));
         simple = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("simple", Long.class));
+        string = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("string", String.class));
     }
 
+    @Test
+    public void isCapableOfDealingWithStrings() throws Exception {
+    	requestParameterIs(string, "abc", "eureka");
+
+    	String abc = getParameters(string);
+
+    	assertThat(abc, is("eureka"));
+    }
     @Test
     public void isCapableOfDealingWithIndexedLists() throws Exception {
     	requestParameterIs(list, "abc[2]", "1");
@@ -247,6 +257,8 @@ public class OgnlParametersProviderTest {
         void listOfObject(List<ABC> abc) {
         }
         void simple(Long xyz) {
+        }
+        void string(String abc) {
         }
     }
 

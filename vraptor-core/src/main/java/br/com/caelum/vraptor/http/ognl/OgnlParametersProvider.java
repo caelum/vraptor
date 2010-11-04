@@ -42,6 +42,7 @@ import ognl.OgnlRuntime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.converter.ConversionError;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.http.InvalidParameterException;
@@ -103,6 +104,9 @@ public class OgnlParametersProvider implements ParametersProvider {
 	}
 
 	private Object createParameter(Type type, String name, Map<String, String[]> requestNames, ResourceBundle bundle, List<Message> errors) {
+		if (requestNames.isEmpty()) {
+			return null;
+		}
 
 		if (requestNames.containsKey(name)) {
 			String[] values = requestNames.get(name);
@@ -186,14 +190,26 @@ public class OgnlParametersProvider implements ParametersProvider {
 		if (List.class.isAssignableFrom(clazz)) {
 			return createList(type, bundle, values);
 		}
-		return converters.to(clazz).convert(values[0], getRawType(type), bundle);
+		return convert(clazz, values[0], bundle);
+	}
+
+	private Object convert(Class clazz, String value, ResourceBundle bundle) {
+		if (String.class.equals(clazz)) {
+			return value;
+		}
+		Converter<?> converter = converters.to(clazz);
+		if (converter == null) {
+            // TODO better, validation error?
+            throw new IllegalArgumentException("Cannot instantiate a converter for type " + clazz.getName());
+        }
+		return converter.convert(value, clazz, bundle);
 	}
 
 	private List createList(Type type, ResourceBundle bundle, String[] values) {
 		List list = new ArrayList();
 		Class actual = getActualType(type);
 		for (String value : values) {
-			list.add(converters.to(actual).convert(value, actual, bundle));
+			list.add(convert(actual, value, bundle));
 		}
 		return list;
 	}
@@ -202,7 +218,7 @@ public class OgnlParametersProvider implements ParametersProvider {
 		Class arrayType = clazz.getComponentType();
 		Object array = Array.newInstance(arrayType, values.length);
 		for (int i = 0; i < values.length; i++) {
-			Array.set(array, i, converters.to(arrayType).convert(values[i], arrayType, bundle));
+			Array.set(array, i, convert(arrayType, values[i], bundle));
 		}
 		return array;
 	}

@@ -86,6 +86,8 @@ public class GuiceProvider implements ContainerProvider {
 		container = new GuiceContainer();
 		injector = Guice.createInjector(Stage.PRODUCTION, Modules.override(new VRaptorAbstractModule(context, container)).with(customModule()));
 		executeStereotypeHandlers();
+		injector.injectMembers(REQUEST);
+		injector.injectMembers(SESSION);
 	}
 
 	private void executeStereotypeHandlers() {

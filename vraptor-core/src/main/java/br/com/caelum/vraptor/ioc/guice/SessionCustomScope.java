@@ -17,12 +17,9 @@ package br.com.caelum.vraptor.ioc.guice;
 
 import javax.servlet.http.HttpSession;
 
-import br.com.caelum.vraptor.ioc.guice.RequestCustomScope.NullObject;
-import br.com.caelum.vraptor.ioc.spring.VRaptorRequestHolder;
-
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
-import com.google.inject.Key;
+import com.google.inject.Inject;
 import com.google.inject.Provider;
 
 /**
@@ -33,53 +30,42 @@ import com.google.inject.Provider;
  * @since 3.2
  *
  */
-public class SessionCustomScope implements LifecycleScope {
+public class SessionCustomScope extends AbstractScope implements LifecycleScope {
 
 	private Multimap<String, LifecycleListener> listeners = LinkedListMultimap.create();
 
-	public <T> Provider<T> scope(Key<T> key, final Provider<T> creator) {
-		final String name = key.toString();
-		return new Provider<T>() {
-			public T get() {
-				HttpSession session = getSession();
-				synchronized (session) {
-					Object obj = session.getAttribute(name);
-					if (NullObject.INSTANCE == obj) {
-						return null;
-					}
-					@SuppressWarnings("unchecked")
-					T t = (T) obj;
-					if (t == null) {
-						t = creator.get();
-						session.setAttribute(name, (t != null) ? t : NullObject.INSTANCE);
-					}
-					return t;
-				}
+	private Provider<HttpSession> provider;
+
+	@Inject
+	public void setProvider(Provider<HttpSession> provider) {
+		this.provider = provider;
+	}
+
+	@Override
+	ScopeHolder getHolder() {
+		return new ScopeHolder() {
+
+			public void setAttribute(String name, Object value) {
+				provider.get().setAttribute(name, value);
 			}
 
-
-			@Override
-			public String toString() {
-				return String.format("%s[%s]", creator, this);
+			public Object getAttribute(String name) {
+				return provider.get().getAttribute(name);
 			}
 		};
 	}
 
-	private HttpSession getSession() {
-		return VRaptorRequestHolder.currentRequest().getRequest().getSession();
-	}
-
 	@Override
-	public String toString() {
+	String getScopeName() {
 		return "SESSION";
 	}
 
 	public void registerDestroyListener(LifecycleListener listener) {
-		listeners.put(getSession().getId(), listener);
+		listeners.put(provider.get().getId(), listener);
 	}
 
 	public void start(HttpSession session) {
-		listeners.removeAll(session.getId());
+		stop(session);
 	}
 
 	public void stop(HttpSession session) {

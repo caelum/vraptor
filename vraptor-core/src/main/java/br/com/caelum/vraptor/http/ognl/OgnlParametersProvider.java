@@ -25,7 +25,6 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -153,9 +152,7 @@ public class OgnlParametersProvider implements ParametersProvider {
 
 	private void setProperty(OgnlContext context, String key, String[] values, List<Message> errors) {
 		try {
-			if (logger.isDebugEnabled()) {
-				logger.debug("Applying " + key + " with " + Arrays.toString(values));
-			}
+			logger.debug("Applying {} with {}",key, values);
 			Ognl.setValue(key, context, context.getRoot(), values.length == 1 ? values[0] : values);
 		} catch (ConversionError ex) {
 			errors.add(new ValidationMessage(ex.getMessage(), key));
@@ -170,19 +167,13 @@ public class OgnlParametersProvider implements ParametersProvider {
 
 		} catch (NoSuchPropertyException ex) {
 			// TODO optimization: be able to ignore or not
-			if (logger.isDebugEnabled()) {
-				logger.debug("cant find property for expression {} ignoring", key);
-			}
-			if (logger.isTraceEnabled()) {
-				logger.trace("cant find property for expression " + key + ", ignoring. Reason:", ex);
-
-			}
+			logger.debug("cant find property for expression {} ignoring", key);
+			logger.trace("Reason:", ex);
 		} catch (OgnlException e) {
 			// TODO it fails when parameter name is not a valid java
 			// identifier... ignoring by now
-			if (logger.isDebugEnabled()) {
-				logger.debug("unable to parse expression '" + key + "'. Ignoring", e);
-			}
+			logger.debug("unable to parse expression '{}'. Ignoring.", key);
+			logger.trace("Reason:", e);
 		}
 	}
 

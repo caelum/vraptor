@@ -19,7 +19,6 @@ package br.com.caelum.vraptor.proxy;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import net.sf.cglib.proxy.Callback;
@@ -89,18 +88,13 @@ public class DefaultProxifier extends AbstractCglibProxifier {
             Class[] parameterTypes = constructor.getParameterTypes();
             Object[] parameterValues = proxyParameters(parameterTypes);
 
-            if (logger.isTraceEnabled()) {
-                logger.trace("trying constructor with following parameters types: " +
-                        Arrays.toString(parameterTypes) + "values are going to be: " + Arrays.toString(parameterValues));
-            }
+            logger.trace("trying constructor with following parameters types: {} values are going to be: {}",
+            		parameterTypes, parameterValues);
 
             try {
                 return enhancer.create(parameterTypes, parameterValues);
             } catch (Throwable e) {
-                if (logger.isDebugEnabled()) {
-                    logger.debug("Problem while calling constructor with parameters" +
-                            Arrays.toString(constructor.getParameterTypes()) + ". Trying next.", e);
-                }
+                logger.debug("Problem while calling constructor with parameters {}. Trying next.", constructor.getParameterTypes(), e);
                 problems.add(e);
                 continue; // try next constructor
             }

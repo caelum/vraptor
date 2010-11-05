@@ -55,6 +55,8 @@ import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.ValidationMessage;
 import br.com.caelum.vraptor.validator.annotation.ValidationException;
 
+import com.google.common.base.Defaults;
+
 /**
  * Provides parameters using ognl to parse expression values into parameter
  * values.
@@ -127,7 +129,7 @@ public class OgnlParametersProvider implements ParametersProvider {
 
 	private Object createParameter(Parameter param, Map<String, String[]> requestNames, ResourceBundle bundle, List<Message> errors) {
 		if (requestNames.isEmpty()) {
-			return null;
+			return Defaults.defaultValue(param.actualType());
 		}
 
 		if (requestNames.containsKey(param.name)) {

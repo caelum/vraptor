@@ -24,8 +24,11 @@ import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -42,6 +45,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.converter.LongConverter;
+import br.com.caelum.vraptor.converter.PrimitiveLongConverter;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.http.InvalidParameterException;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
@@ -73,6 +77,7 @@ public class OgnlParametersProviderTest {
 	private ResourceMethod listOfObject;
 	private ResourceMethod string;
 	private ResourceMethod generic;
+	private ResourceMethod primitive;
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
 	@Before
@@ -82,6 +87,7 @@ public class OgnlParametersProviderTest {
         this.errors = new ArrayList<Message>();
 
         when(converters.to(Long.class)).thenReturn((Converter) new LongConverter());
+        when(converters.to(long.class)).thenReturn((Converter) new PrimitiveLongConverter());
         when(parameters.getSession()).thenReturn(session);
         when(container.instanceFor(EmptyElementsRemoval.class)).thenReturn(removal);
         when(container.instanceFor(Converters.class)).thenReturn(converters);
@@ -94,6 +100,7 @@ public class OgnlParametersProviderTest {
         listOfObject = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("listOfObject", List.class));
         simple = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("simple", Long.class));
         string = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("string", String.class));
+        primitive = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("primitive", long.class));
         generic = DefaultResourceMethod.instanceFor(Specific.class, Generic.class.getDeclaredMethod("generic", Object.class));
     }
 
@@ -236,9 +243,31 @@ public class OgnlParametersProviderTest {
 
     	Long xyz = getParameters(simple);
     	assertThat(xyz, is(42l));
+
+    }
+    @Test
+    public void returnsNullWhenThereAreNoParameters() throws Exception {
+    	thereAreNoParameters();
+
+    	Long xyz = getParameters(simple);
+    	assertThat(xyz, is(nullValue()));
     }
 
-    private void requestParameterIs(ResourceMethod method, String paramName, String... values) {
+    @Test
+    public void returnsZeroForAPrimitiveWhenThereAreNoParameters() throws Exception {
+    	thereAreNoParameters();
+
+    	Long xyz = getParameters(primitive);
+    	assertThat(xyz, is(0l));
+    }
+
+    private void thereAreNoParameters() {
+    	when(parameters.getParameterNames()).thenReturn(Collections.enumeration(Collections.<String>emptySet()));
+    	when(parameters.getParameterMap()).thenReturn(Collections.<String, String[]>emptyMap());
+    	when(nameProvider.parameterNamesFor(any(Method.class))).thenReturn(new String[]{"any"});
+	}
+
+	private void requestParameterIs(ResourceMethod method, String paramName, String... values) {
     	String methodName = paramName.replaceAll("[\\.\\[].*", "");
 
 		when(parameters.getParameterValues(paramName)).thenReturn(values);
@@ -271,6 +300,8 @@ public class OgnlParametersProviderTest {
         void simple(Long xyz) {
         }
         void string(String abc) {
+        }
+        void primitive(long xyz) {
         }
     }
 

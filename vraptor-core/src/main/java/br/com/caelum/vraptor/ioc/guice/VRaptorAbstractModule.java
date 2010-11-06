@@ -129,29 +129,29 @@ public class VRaptorAbstractModule extends AbstractModule {
 			public MutableRequest get() {
 				return VRaptorRequestHolder.currentRequest().getRequest();
 			}
-		}).in(GuiceProvider.REQUEST);
+		});
 
 		bind(RequestInfo.class).toProvider(new Provider<RequestInfo>() {
 
 			public RequestInfo get() {
 				return VRaptorRequestHolder.currentRequest();
 			}
-		}).in(GuiceProvider.REQUEST);
+		});
 
 		bind(HttpSession.class).toProvider(new Provider<HttpSession>() {
 
 			public HttpSession get() {
 				return VRaptorRequestHolder.currentRequest().getRequest().getSession();
 			}
-		}).in(GuiceProvider.REQUEST);
+		});
 		bind(MutableResponse.class).toProvider(new Provider<MutableResponse>() {
 
 			public MutableResponse get() {
 				return VRaptorRequestHolder.currentRequest().getResponse();
 			}
-		}).in(GuiceProvider.REQUEST);
-		bind(HttpServletResponse.class).to(MutableResponse.class).in(GuiceProvider.REQUEST);
-		bind(HttpServletRequest.class).to(MutableRequest.class).in(GuiceProvider.REQUEST);
+		});
+		bind(HttpServletResponse.class).to(MutableResponse.class);
+		bind(HttpServletRequest.class).to(MutableRequest.class);
 		bind(ServletContext.class).toInstance(context);
 	}
 

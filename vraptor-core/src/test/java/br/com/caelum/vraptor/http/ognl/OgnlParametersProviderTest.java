@@ -21,10 +21,14 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.arrayContaining;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -41,10 +45,10 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.converter.LongConverter;
+import br.com.caelum.vraptor.converter.PrimitiveLongConverter;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.http.InvalidParameterException;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
-import br.com.caelum.vraptor.http.TypeCreator;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
@@ -55,7 +59,6 @@ import br.com.caelum.vraptor.validator.Message;
 public class OgnlParametersProviderTest {
 
     private @Mock Converters converters;
-    private @Mock TypeCreator creator;
     private @Mock Container container;
     private @Mock ParameterNameProvider nameProvider;
     private @Mock HttpServletRequest parameters;
@@ -67,175 +70,97 @@ public class OgnlParametersProviderTest {
 	private ResourceMethod kick;
 	private ResourceMethod error;
 	private ResourceMethod array;
+	private ResourceMethod simple;
 
 	private @Mock HttpSession session;
+	private ResourceMethod list;
+	private ResourceMethod listOfObject;
+	private ResourceMethod string;
+	private ResourceMethod generic;
+	private ResourceMethod primitive;
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
 	@Before
     public void setup() throws Exception {
         this.removal = new EmptyElementsRemoval();
-        this.provider = new OgnlParametersProvider(creator, container, converters, nameProvider, parameters, removal);
+        this.provider = new OgnlParametersProvider(container, converters, nameProvider, parameters, removal);
         this.errors = new ArrayList<Message>();
 
         when(converters.to(Long.class)).thenReturn((Converter) new LongConverter());
+        when(converters.to(long.class)).thenReturn((Converter) new PrimitiveLongConverter());
         when(parameters.getSession()).thenReturn(session);
         when(container.instanceFor(EmptyElementsRemoval.class)).thenReturn(removal);
+        when(container.instanceFor(Converters.class)).thenReturn(converters);
 
         buyA = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("buyA", House.class));
         kick = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("kick", AngryCat.class));
         error = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("error", WrongCat.class));
         array = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("array", Long[].class));
-
-        when(creator.typeFor(buyA)).thenReturn((Class) BuyASetter.class);
-        when(creator.typeFor(kick)).thenReturn((Class) KickSetter.class);
-        when(creator.typeFor(error)).thenReturn((Class) ErrorSetter.class);
-        when(creator.typeFor(array)).thenReturn((Class) ArraySetter.class);
+        list = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("list", List.class));
+        listOfObject = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("listOfObject", List.class));
+        simple = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("simple", Long.class));
+        string = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("string", String.class));
+        primitive = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("primitive", long.class));
+        generic = DefaultResourceMethod.instanceFor(Specific.class, Generic.class.getDeclaredMethod("generic", Object.class));
     }
 
-    public static class Cat {
-        private String id;
+    @Test
+    public void isCapableOfDealingWithStrings() throws Exception {
+    	requestParameterIs(string, "abc", "eureka");
 
-        public void setId(String id) {
-            this.id = id;
-        }
+    	String abc = getParameters(string);
 
-        public String getId() {
-            return id;
-        }
+    	assertThat(abc, is("eureka"));
     }
 
-    public static class House {
-        private Cat cat;
+    @Test
+    public void isCapableOfDealingWithGenerics() throws Exception {
+    	requestParameterIs(generic, "abc.x", "123");
 
-        public void setCat(Cat cat) {
-            this.cat = cat;
-        }
+    	ABC abc = getParameters(generic);
 
-        public Cat getCat() {
-            return cat;
-        }
-
-        public void setExtraCats(List<Cat> extraCats) {
-            this.extraCats = extraCats;
-        }
-
-        public List<Cat> getExtraCats() {
-            return extraCats;
-        }
-
-        public void setIds(Long[] ids) {
-            this.ids = ids;
-        }
-
-        private List<String> owners;
-
-        public Long[] getIds() {
-            return ids;
-        }
-
-        public void setOwners(List<String> owners) {
-            this.owners = owners;
-        }
-
-        public List<String> getOwners() {
-            return owners;
-        }
-
-        private List<Cat> extraCats;
-
-        private Long[] ids;
-
+    	assertThat(abc.x, is(123l));
     }
 
-    public static class AngryCat {
-        public void setId(String id) {
-        	throw new DefaultValidationException("AngryCat Exception");
-        }
+    @Test
+    public void isCapableOfDealingWithIndexedLists() throws Exception {
+    	requestParameterIs(list, "abc[2]", "1");
 
-        public String getId() {
-        	throw new DefaultValidationException("AngryCat Exception");
-        }
+    	List<Long> abc = getParameters(list);
+
+    	assertThat(abc, hasSize(1));
+    	assertThat(abc, hasItem(1l));
     }
 
-    public static class WrongCat {
-        public void setId(String id) {
-        	throw new IllegalArgumentException("AngryCat Exception"); //it isn't a ValidationException
-        }
+    @Test
+    public void isCapableOfDealingWithIndexedListsOfObjects() throws Exception {
+    	requestParameterIs(listOfObject, "abc[2].x", "1");
 
-        public String getId() {
-        	throw new IllegalArgumentException("AngryCat Exception"); //it isn't a ValidationException
-        }
+    	List<ABC> abc = getParameters(listOfObject);
+
+    	assertThat(abc, hasSize(1));
+    	assertThat(abc.get(0).x, is(1l));
     }
 
-    static class MyResource {
-        void buyA(House house) {
-        }
-        void kick(AngryCat angryCat) {
-        }
-        void error(WrongCat wrongCat) {
-        }
-        void array(Long[] abc) {
-        }
+    @Test
+    public void isCapableOfDealingWithLists() throws Exception {
+    	requestParameterIs(list, "abc", "1");
+
+    	List<Long> abc = getParameters(list);
+
+    	assertThat(abc, hasSize(1));
+    	assertThat(abc, hasItem(1l));
     }
 
-    public static class BuyASetter {
-        private House House_;
+    @Test
+    public void isCapableOfDealingIndexedArraysWithOneElement() throws Exception {
+    	requestParameterIs(array, "abc[2]", "1");
 
-        public void setHouse(House house_) {
-            House_ = house_;
-        }
+    	Long[] abc = getParameters(array);
 
-        public House getHouse() {
-            return House_;
-        }
+    	assertThat(abc, is(arrayContaining(1l)));
     }
 
-    public static class KickSetter {
-    	private AngryCat AngryCat_;
-
-    	public void setAngryCat(AngryCat angryCat) {
-			AngryCat_ = angryCat;
-		}
-
-    	public AngryCat getAngryCat() {
-			return AngryCat_;
-		}
-    }
-
-    public static class ErrorSetter {
-    	private WrongCat WrongCat_;
-
-    	public void setWrongCat(WrongCat angryCat) {
-    		WrongCat_ = angryCat;
-		}
-
-    	public WrongCat getWrongCat() {
-			return WrongCat_;
-		}
-    }
-
-    public static class ArraySetter {
-    	private Long[] abc;
-
-		public void setAbc(Long[] abc) {
-			this.abc = abc;
-		}
-
-		public Long[] getAbc() {
-			return abc;
-		}
-
-    }
-
-    private void requestParameterIs(ResourceMethod method, String paramName, String... values) {
-    	String methodName = paramName.replaceAll("\\..*", "");
-
-		when(parameters.getParameterValues(paramName)).thenReturn(values);
-		String[] values1 = { paramName };
-		when(parameters.getParameterNames()).thenReturn(Collections.enumeration(Arrays.asList(values1)));
-		when(nameProvider.parameterNamesFor(method.getMethod())).thenReturn(new String[]{methodName});
-
-    }
     @Test
     public void isCapableOfDealingArraysWithOneElement() throws Exception {
     	requestParameterIs(array, "abc", "1");
@@ -243,6 +168,15 @@ public class OgnlParametersProviderTest {
     	Long[] abc = getParameters(array);
 
     	assertThat(abc, is(arrayContaining(1l)));
+    }
+
+    @Test
+    public void isCapableOfDealingArraysWithSeveralElements() throws Exception {
+    	requestParameterIs(array, "abc", "1", "2", "3");
+
+    	Long[] abc = getParameters(array);
+
+    	assertThat(abc, is(arrayContaining(1l, 2l, 3l)));
     }
 
     @Test
@@ -303,8 +237,167 @@ public class OgnlParametersProviderTest {
     	getParameters(error);
     }
 
+    @Test
+    public void returnsASimpleValue() throws Exception {
+    	requestParameterIs(simple, "xyz", "42");
+
+    	Long xyz = getParameters(simple);
+    	assertThat(xyz, is(42l));
+
+    }
+    @Test
+    public void returnsNullWhenThereAreNoParameters() throws Exception {
+    	thereAreNoParameters();
+
+    	Long xyz = getParameters(simple);
+    	assertThat(xyz, is(nullValue()));
+    }
+
+    @Test
+    public void returnsZeroForAPrimitiveWhenThereAreNoParameters() throws Exception {
+    	thereAreNoParameters();
+
+    	Long xyz = getParameters(primitive);
+    	assertThat(xyz, is(0l));
+    }
+
+    private void thereAreNoParameters() {
+    	when(parameters.getParameterNames()).thenReturn(Collections.enumeration(Collections.<String>emptySet()));
+    	when(parameters.getParameterMap()).thenReturn(Collections.<String, String[]>emptyMap());
+    	when(nameProvider.parameterNamesFor(any(Method.class))).thenReturn(new String[]{"any"});
+	}
+
+	private void requestParameterIs(ResourceMethod method, String paramName, String... values) {
+    	String methodName = paramName.replaceAll("[\\.\\[].*", "");
+
+		when(parameters.getParameterValues(paramName)).thenReturn(values);
+		String[] values1 = { paramName };
+		when(parameters.getParameterNames()).thenReturn(Collections.enumeration(Arrays.asList(values1)));
+		when(nameProvider.parameterNamesFor(method.getMethod())).thenReturn(new String[]{methodName});
+		when(parameters.getParameterMap()).thenReturn(Collections.singletonMap(paramName, values));
+
+    }
+
+
     @SuppressWarnings("unchecked")
 	private <T> T getParameters(ResourceMethod method) {
 		return (T) provider.getParametersFor(method, errors, null)[0];
 	}
+
+    static class MyResource {
+        void buyA(House house) {
+        }
+        void kick(AngryCat angryCat) {
+        }
+        void error(WrongCat wrongCat) {
+        }
+        void array(Long[] abc) {
+        }
+        void list(List<Long> abc) {
+        }
+        void listOfObject(List<ABC> abc) {
+        }
+        void simple(Long xyz) {
+        }
+        void string(String abc) {
+        }
+        void primitive(long xyz) {
+        }
+    }
+
+    static class Generic<T> {
+    	void generic(T t) {
+    	}
+    }
+
+    static class Specific extends Generic<ABC> {
+    }
+
+    public static class Cat {
+        private String id;
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public String getId() {
+            return id;
+        }
+    }
+
+    public static class House {
+        private Cat cat;
+
+        public void setCat(Cat cat) {
+            this.cat = cat;
+        }
+
+        public Cat getCat() {
+            return cat;
+        }
+
+        public void setExtraCats(List<Cat> extraCats) {
+            this.extraCats = extraCats;
+        }
+
+        public List<Cat> getExtraCats() {
+            return extraCats;
+        }
+
+        public void setIds(Long[] ids) {
+            this.ids = ids;
+        }
+
+        private List<String> owners;
+
+        public Long[] getIds() {
+            return ids;
+        }
+
+        public void setOwners(List<String> owners) {
+            this.owners = owners;
+        }
+
+        public List<String> getOwners() {
+            return owners;
+        }
+
+        private List<Cat> extraCats;
+
+        private Long[] ids;
+
+    }
+
+    public static class ABC {
+		private Long x;
+
+		public Long getX() {
+			return x;
+		}
+
+		public void setX(Long x) {
+			this.x = x;
+		}
+	}
+
+
+    public static class AngryCat {
+        public void setId(String id) {
+        	throw new DefaultValidationException("AngryCat Exception");
+        }
+
+        public String getId() {
+        	throw new DefaultValidationException("AngryCat Exception");
+        }
+    }
+
+    public static class WrongCat {
+        public void setId(String id) {
+        	throw new IllegalArgumentException("AngryCat Exception"); //it isn't a ValidationException
+        }
+
+        public String getId() {
+        	throw new IllegalArgumentException("AngryCat Exception"); //it isn't a ValidationException
+        }
+    }
 }

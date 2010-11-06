@@ -83,9 +83,7 @@ public class VRaptorRequest extends HttpServletRequestWrapper implements Mutable
 	}
 
 	public void setParameter(String key, String... value) {
-		if (logger.isDebugEnabled()) {
-			logger.debug("Setting {} with {}", key, Arrays.toString(value));
-		}
+		logger.debug("Setting {} with {}", key, value);
 		this.extraParameters.put(key, value);
 	}
 

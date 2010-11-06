@@ -23,9 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import br.com.caelum.vraptor.ioc.spring.VRaptorRequestHolder;
-
-import com.google.inject.Key;
+import com.google.inject.Inject;
 import com.google.inject.Provider;
 
 /**
@@ -36,43 +34,39 @@ import com.google.inject.Provider;
  * @since 3.2
  *
  */
-public class RequestCustomScope implements LifecycleScope {
-
-	enum NullObject { INSTANCE }
+public class RequestCustomScope extends AbstractScope implements LifecycleScope {
 
 	private static final Logger logger = LoggerFactory.getLogger(RequestCustomScope.class);
 	private final ThreadLocal<List<LifecycleListener>> listeners = new ThreadLocal<List<LifecycleListener>>();
 
+	private Provider<HttpServletRequest> provider;
+
+	@Inject
+	public void setProvider(Provider<HttpServletRequest> provider) {
+		this.provider = provider;
+	}
+
+	@Override
+	ScopeHolder getHolder() {
+		return new ScopeHolder() {
+
+			public void setAttribute(String name, Object value) {
+				provider.get().setAttribute(name, value);
+			}
+
+			public Object getAttribute(String name) {
+				return provider.get().getAttribute(name);
+			}
+		};
+	}
+
+	@Override
+	String getScopeName() {
+		return "REQUEST";
+	}
 
 	public void start() {
 		listeners.set(new ArrayList<LifecycleListener>());
-	}
-
-	public <T> Provider<T> scope(Key<T> key, final Provider<T> creator) {
-		final String name = key.toString();
-		return new Provider<T>() {
-			public T get() {
-				HttpServletRequest request = VRaptorRequestHolder.currentRequest().getRequest();
-				synchronized (request) {
-					Object obj = request.getAttribute(name);
-					if (NullObject.INSTANCE == obj) {
-						return null;
-					}
-					@SuppressWarnings("unchecked")
-					T t = (T) obj;
-					if (t == null) {
-						t = creator.get();
-						request.setAttribute(name, (t != null) ? t : NullObject.INSTANCE);
-					}
-					return t;
-				}
-			}
-
-			@Override
-			public String toString() {
-				return String.format("%s[%s]", creator, this);
-			}
-		};
 	}
 
 	public void stop() {
@@ -83,11 +77,6 @@ public class RequestCustomScope implements LifecycleScope {
 				logger.warn("Error while invoking PreDestroy", e);
 			}
 		}
-	}
-
-	@Override
-	public String toString() {
-		return "REQUEST";
 	}
 
 	public void registerDestroyListener(LifecycleListener listener) {

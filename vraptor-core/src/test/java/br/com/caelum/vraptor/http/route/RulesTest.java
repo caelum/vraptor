@@ -38,7 +38,7 @@ public class RulesTest {
 		mockery.checking(new Expectations() {
 			{
 				one(router).builderFor("");
-				will(returnValue(new DefaultRouteBuilder(proxifier, null, null, "")));
+				will(returnValue(new DefaultRouteBuilder(proxifier, null, null, null, "")));
 			}
 		});
 	}

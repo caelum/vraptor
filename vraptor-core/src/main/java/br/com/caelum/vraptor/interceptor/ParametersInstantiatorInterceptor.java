@@ -79,12 +79,10 @@ public class ParametersInstantiatorInterceptor implements Interceptor {
 
         validator.addAll(errors);
 
-        if (logger.isDebugEnabled()) {
-        	if (!errors.isEmpty()) {
-        		logger.debug("There are conversion errors: {}", errors);
-        	}
-            logger.debug("Parameter values for {} are {}", method, values);
-        }
+    	if (!errors.isEmpty()) {
+    		logger.debug("There are conversion errors: {}", errors);
+    	}
+        logger.debug("Parameter values for {} are {}", method, values);
 
         parameters.setParameters(values);
         stack.next(method, resourceInstance);

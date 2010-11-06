@@ -30,10 +30,9 @@ import java.util.List;
 import br.com.caelum.vraptor.VRaptorException;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor.http.TypeCreator;
+import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.proxy.Proxifier;
-import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.util.collections.Filters;
@@ -53,22 +52,22 @@ public class DefaultRouter implements Router {
 
 	private final Proxifier proxifier;
 	private final Collection<Route> routes = new PriorityRoutesList();
-	private final TypeCreator creator;
 	private final TypeFinder finder;
 	private final Converters converters;
+	private final ParameterNameProvider nameProvider;
 
 	public DefaultRouter(RoutesConfiguration config,
-			Proxifier proxifier, TypeCreator creator, TypeFinder finder, Converters converters) {
-		this.creator = creator;
+			Proxifier proxifier, TypeFinder finder, Converters converters, ParameterNameProvider nameProvider) {
 		this.proxifier = proxifier;
 		this.finder = finder;
 		this.converters = converters;
+		this.nameProvider = nameProvider;
 
 		config.config(this);
 	}
 
 	public RouteBuilder builderFor(String uri) {
-		return new DefaultRouteBuilder(proxifier, finder, converters, uri);
+		return new DefaultRouteBuilder(proxifier, finder, converters, nameProvider, uri);
 	}
 
 	/**
@@ -132,8 +131,7 @@ public class DefaultRouter implements Router {
 		Iterator<Route> matches = Iterators.filter(routes.iterator(), Filters.canHandle(type, method));
 		if (matches.hasNext()) {
 			try {
-				ResourceMethod resourceMethod = DefaultResourceMethod.instanceFor(type, method);
-				return matches.next().urlFor(type, method, creator.instanceWithParameters(resourceMethod, params));
+				return matches.next().urlFor(type, method, params);
 			} catch (Exception e) {
 				throw new VRaptorException("The selected route is invalid for redirection: " + type.getName() + "."
 						+ method.getName(), e);

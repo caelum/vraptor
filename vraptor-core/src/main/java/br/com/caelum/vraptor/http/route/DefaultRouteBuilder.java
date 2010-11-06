@@ -58,10 +58,13 @@ import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.core.Converters;
+import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.proxy.MethodInvocation;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.SuperMethod;
+import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.resource.HttpMethod;
+import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.util.StringUtils;
 import br.com.caelum.vraptor.util.Stringnifier;
 
@@ -94,10 +97,13 @@ public class DefaultRouteBuilder implements RouteBuilder {
 
 	private final Converters converters;
 
-	public DefaultRouteBuilder(Proxifier proxifier, TypeFinder finder, Converters converters, String uri) {
+	private final ParameterNameProvider nameProvider;
+
+	public DefaultRouteBuilder(Proxifier proxifier, TypeFinder finder, Converters converters, ParameterNameProvider nameProvider, String uri) {
 		this.proxifier = proxifier;
 		this.finder = finder;
 		this.converters = converters;
+		this.nameProvider = nameProvider;
 		this.originalUri = uri;
 		builder = new DefaultParameterControlBuilder();
 	}
@@ -174,8 +180,9 @@ public class DefaultRouteBuilder implements RouteBuilder {
 
 	public void is(Class<?> type, Method method) {
 		addParametersInfo(method);
-		this.strategy = new FixedMethodStrategy(originalUri, type, method, this.supportedMethods, builder.build(),
-				priority);
+		ResourceMethod resourceMethod = DefaultResourceMethod.instanceFor(type, method);
+		String[] parameterNames = nameProvider.parameterNamesFor(method);
+		this.strategy = new FixedMethodStrategy(originalUri, resourceMethod, this.supportedMethods, builder.build(), priority, parameterNames);
 
 		logger.info(String.format("%-50s%s -> %10s", originalUri,
 				this.supportedMethods.isEmpty() ? "[ALL]" : this.supportedMethods,

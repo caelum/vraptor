@@ -67,10 +67,7 @@ public class IogiParametersProvider implements ParametersProvider {
 	}
 
 	private List<Object> instantiateParameters(Parameters parameters, List<Target<Object>> targets, List<Message> errors) {
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("getParametersFor() called with parameters " + parameters + " and targets " +
-					targets + ".");
-		}
+		LOGGER.debug("getParametersFor() called with parameters {} and targets {}.", parameters, targets);
 
 		List<Object> arguments = new ArrayList<Object>();
 		for (Target<Object> target : targets) {

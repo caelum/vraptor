@@ -47,6 +47,7 @@ import br.com.caelum.vraptor.Head;
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.core.Converters;
+import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.proxy.DefaultProxifier;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.resource.DefaultResourceClass;
@@ -58,6 +59,7 @@ public class PathAnnotationRoutesParserTest {
 	private @Mock Converters converters;
 	private NoTypeFinder typeFinder;
 	private @Mock Router router;
+	private @Mock ParameterNameProvider nameProvider;
 
 	private PathAnnotationRoutesParser parser;
 
@@ -70,8 +72,9 @@ public class PathAnnotationRoutesParserTest {
 
         when(router.builderFor(anyString())).thenAnswer(new Answer<DefaultRouteBuilder>() {
 
+
 			public DefaultRouteBuilder answer(InvocationOnMock invocation) throws Throwable {
-				return new DefaultRouteBuilder(proxifier, typeFinder, converters, (String) invocation.getArguments()[0]);
+				return new DefaultRouteBuilder(proxifier, typeFinder, converters, nameProvider, (String) invocation.getArguments()[0]);
 			}
 		});
 

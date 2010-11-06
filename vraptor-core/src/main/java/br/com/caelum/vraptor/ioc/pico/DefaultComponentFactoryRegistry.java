@@ -51,19 +51,13 @@ public class DefaultComponentFactoryRegistry implements ComponentFactoryRegistry
         Class<?> targetType = componentFactoryIntrospector.targetTypeForComponentFactory(componentFactoryClass);
 
         if (componentFactoryClass.isAnnotationPresent(ApplicationScoped.class)) {
-            if (logger.isDebugEnabled()) {
-				logger.debug("Registering a ComponentFactory for " + targetType.getName() + " in app scope");
-			}
+			logger.debug("Registering a ComponentFactory for {} in app scope", targetType.getName());
             applicationScoped.put(targetType, componentFactoryClass);
         } else if (componentFactoryClass.isAnnotationPresent(SessionScoped.class)) {
-            if (logger.isDebugEnabled()) {
-				logger.debug("Registering a ComponentFactory for " + targetType.getName() + " in session scope");
-			}
+			logger.debug("Registering a ComponentFactory for {} in session scope", targetType.getName());
             sessionScoped.put(targetType, componentFactoryClass);
         } else { // @RequestScoped
-            if (logger.isDebugEnabled()) {
-				logger.debug("Registering a ComponentFactory for " + targetType.getName() + " in request scope");
-			}
+			logger.debug("Registering a ComponentFactory for {} in request scope", targetType.getName());
             requestScoped.put(targetType, componentFactoryClass);
         }
     }

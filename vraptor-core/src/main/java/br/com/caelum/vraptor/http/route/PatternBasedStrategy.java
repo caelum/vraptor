@@ -102,7 +102,7 @@ public class PatternBasedStrategy implements Route {
 		return Modifier.isPublic(m.getModifiers()) && !Modifier.isStatic(m.getModifiers());
 	}
 
-	public String urlFor(Class<?> type, Method m, Object params) {
+	public String urlFor(Class<?> type, Method m, Object... params) {
 		return control.apply(new String[] { this.type.extract("webLogic", type.getName()),
 				this.method.extract("webMethod", m.getName()) });
 	}

@@ -77,9 +77,7 @@ import br.com.caelum.vraptor.http.FormatResolver;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.http.ParanamerNameProvider;
-import br.com.caelum.vraptor.http.TypeCreator;
 import br.com.caelum.vraptor.http.UrlToResourceTranslator;
-import br.com.caelum.vraptor.http.asm.AsmBasedTypeCreator;
 import br.com.caelum.vraptor.http.ognl.EmptyElementsRemoval;
 import br.com.caelum.vraptor.http.ognl.OgnlParametersProvider;
 import br.com.caelum.vraptor.http.route.DefaultRouter;
@@ -118,7 +116,6 @@ import br.com.caelum.vraptor.ioc.ResourceHandler;
 import br.com.caelum.vraptor.ioc.StereotypeHandler;
 import br.com.caelum.vraptor.proxy.ObjenesisProxifier;
 import br.com.caelum.vraptor.proxy.Proxifier;
-import br.com.caelum.vraptor.reflection.CacheBasedTypeCreator;
 import br.com.caelum.vraptor.resource.DefaultMethodNotAllowedHandler;
 import br.com.caelum.vraptor.resource.DefaultResourceNotFoundHandler;
 import br.com.caelum.vraptor.resource.MethodNotAllowedHandler;
@@ -172,11 +169,11 @@ import br.com.caelum.vraptor.view.ValidationViewsFactory;
  * @author guilherme silveira
  */
 public class BaseComponents {
-    
+
     static final Logger logger = LoggerFactory.getLogger(BaseComponents.class);
 
     private final static Map<Class<?>, Class<?>> APPLICATION_COMPONENTS = classMap(
-    		TypeCreator.class, 				AsmBasedTypeCreator.class,
+//    		TypeCreator.class, 				AsmBasedTypeCreator.class,
     		EncodingHandlerFactory.class, 	EncodingHandlerFactory.class,
     		AcceptHeaderToFormat.class, 	DefaultAcceptHeaderToFormat.class,
     		Converters.class, 				DefaultConverters.class,
@@ -201,7 +198,7 @@ public class BaseComponents {
     );
 
     private final static Map<Class<?>, Class<?>> CACHED_COMPONENTS = classMap(
-    		TypeCreator.class, CacheBasedTypeCreator.class
+//    		TypeCreator.class, CacheBasedTypeCreator.class
     );
 
     private static final Map<Class<?>, Class<?>> PROTOTYPE_COMPONENTS = classMap(

@@ -11,9 +11,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor.core.RequestInfo;
-import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor.ioc.spring.VRaptorRequestHolder;
+import com.google.inject.util.Providers;
 
 public class SessionCustomScopeTest {
 
@@ -22,7 +20,6 @@ public class SessionCustomScopeTest {
 
 	private SessionCustomScope scope;
 	private @Mock HttpSession session;
-	private @Mock MutableRequest request;
 	private @Mock LifecycleListener listener;
 
 
@@ -32,9 +29,8 @@ public class SessionCustomScopeTest {
 		MockitoAnnotations.initMocks(this);
 
 		scope = new SessionCustomScope();
+		scope.setProvider(Providers.of(session));
 		when(session.getId()).thenReturn(SESSION_ID);
-		when(request.getSession()).thenReturn(session);
-		VRaptorRequestHolder.setRequestForCurrentThread(new RequestInfo(null, null, request, null));
 	}
 
 	@Test

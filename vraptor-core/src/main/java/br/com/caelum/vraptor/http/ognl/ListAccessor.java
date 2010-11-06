@@ -70,35 +70,55 @@ public class ListAccessor extends ListPropertyAccessor {
 			// we all just looooove ognl.
 			OgnlContext ctx = (OgnlContext) context;
 			// if direct injecting, cannot find out what to do, use string
-			if (ctx.getRoot() != target) {
-				Evaluation eval = ctx.getCurrentEvaluation();
-				Evaluation previous = eval.getPrevious();
-				String fieldName = previous.getNode().toString();
-				Object origin = previous.getSource();
-				Method getter = ReflectionBasedNullHandler.findMethod(origin.getClass(), "get"
-						+ Info.capitalize(fieldName), origin.getClass(), null);
-				Type genericType = getter.getGenericReturnType();
-                Class type;
-                if (genericType instanceof ParameterizedType) {
-                    type = (Class) ((ParameterizedType) genericType).getActualTypeArguments()[0];
-                } else {
-                    type = (Class) genericType;
-                }
-				if (!type.equals(String.class)) {
-					// suckable ognl doesnt support dependency injection or
-					// anything alike... just that suckable context... therefore
-					// procedural
-					// programming and ognl live together forever!
-					Container container = (Container) context.get(Container.class);
-					Converter<?> converter = container.instanceFor(Converters.class).to(type);
-					ResourceBundle bundle = (ResourceBundle) context.get(ResourceBundle.class);
-					Object result = converter.convert((String) value, type, bundle);
-					super.setProperty(context, target, key, result);
-					return;
-				}
+
+			Type genericType = extractGenericType(ctx, target);
+
+            Class type = getActualType(genericType);
+
+			if (!type.equals(String.class)) {
+				// suckable ognl doesnt support dependency injection or
+				// anything alike... just that suckable context... therefore
+				// procedural
+				// programming and ognl live together forever!
+				Container container = (Container) context.get(Container.class);
+				Converter<?> converter = container.instanceFor(Converters.class).to(type);
+
+				ResourceBundle bundle = (ResourceBundle) context.get(ResourceBundle.class);
+
+				Object result = converter.convert((String) value, type, bundle);
+
+				super.setProperty(context, target, key, result);
+				return;
 			}
 		}
 		super.setProperty(context, target, key, value);
+	}
+
+	private Class getActualType(Type genericType) {
+		Class type;
+		if (genericType instanceof ParameterizedType) {
+		    type = (Class) ((ParameterizedType) genericType).getActualTypeArguments()[0];
+		} else {
+		    type = (Class) genericType;
+		}
+		return type;
+	}
+
+	private Type extractGenericType(OgnlContext ctx, Object target) {
+		Type genericType;
+
+		if (ctx.getRoot() != target) {
+			Evaluation eval = ctx.getCurrentEvaluation();
+			Evaluation previous = eval.getPrevious();
+			String fieldName = previous.getNode().toString();
+			Object origin = previous.getSource();
+			Method getter = ReflectionBasedNullHandler.findMethod(origin.getClass(), "get"
+					+ Info.capitalize(fieldName), origin.getClass(), null);
+			genericType = getter.getGenericReturnType();
+		} else {
+			genericType = (Type) ctx.get("rootType");
+		}
+		return genericType;
 	}
 
 }

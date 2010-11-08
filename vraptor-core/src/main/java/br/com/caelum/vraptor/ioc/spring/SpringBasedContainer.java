@@ -39,7 +39,7 @@ public class SpringBasedContainer extends AbstractComponentRegistry implements C
     private final List<Class<?>> toRegister = new ArrayList<Class<?>>();
 
     public SpringBasedContainer(ApplicationContext parentContext, BasicConfiguration config) {
-        applicationContext = new VRaptorApplicationContext(this, config);
+        applicationContext = new VRaptorApplicationContext(this, config, new SpringRegistry(this, config));
         applicationContext.setParent(parentContext);
     }
 
@@ -62,7 +62,7 @@ public class SpringBasedContainer extends AbstractComponentRegistry implements C
     public <T> boolean canProvide(Class<T> type) {
     	return BeanFactoryUtils.beanNamesForTypeIncludingAncestors(applicationContext, type).length > 0;
     }
-    
+
     public void start(ServletContext context) {
         applicationContext.setServletContext(context);
         applicationContext.refresh();

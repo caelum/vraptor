@@ -10,7 +10,7 @@
 			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="lib/mandatory/log4j-1.2.15.jar">
+	<classpathentry exported="true" kind="lib" path="lib/mandatory/log4j-1.2.16.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
 		</attributes>

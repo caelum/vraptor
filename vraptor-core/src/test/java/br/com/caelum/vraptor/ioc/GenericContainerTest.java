@@ -44,7 +44,6 @@ import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.ComponentRegistry;
@@ -56,7 +55,6 @@ import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.core.Execution;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.core.RequestInfo;
-import br.com.caelum.vraptor.http.TypeCreator;
 import br.com.caelum.vraptor.http.route.Route;
 import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
@@ -67,7 +65,6 @@ import br.com.caelum.vraptor.ioc.fixture.CustomComponentWithLifecycleInTheClassp
 import br.com.caelum.vraptor.ioc.fixture.InterceptorInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.ResourceInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.ComponentFactoryInTheClasspath.Provided;
-import br.com.caelum.vraptor.reflection.CacheBasedTypeCreator;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**
@@ -136,13 +133,6 @@ public abstract class GenericContainerTest {
 
 		});
 		mockery.assertIsSatisfied();
-	}
-
-	@Test
-	@Ignore("No need for typeCreator anymore")
-	public void shouldProvideCachedComponents() throws Exception {
-		TypeCreator creator = getFromContainer(TypeCreator.class);
-		assertThat(creator, is(instanceOf(CacheBasedTypeCreator.class)));
 	}
 
 	@ApplicationScoped

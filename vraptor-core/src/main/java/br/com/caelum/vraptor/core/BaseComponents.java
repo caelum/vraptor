@@ -173,7 +173,6 @@ public class BaseComponents {
     static final Logger logger = LoggerFactory.getLogger(BaseComponents.class);
 
     private final static Map<Class<?>, Class<?>> APPLICATION_COMPONENTS = classMap(
-//    		TypeCreator.class, 				AsmBasedTypeCreator.class,
     		EncodingHandlerFactory.class, 	EncodingHandlerFactory.class,
     		AcceptHeaderToFormat.class, 	DefaultAcceptHeaderToFormat.class,
     		Converters.class, 				DefaultConverters.class,
@@ -198,7 +197,6 @@ public class BaseComponents {
     );
 
     private final static Map<Class<?>, Class<?>> CACHED_COMPONENTS = classMap(
-//    		TypeCreator.class, CacheBasedTypeCreator.class
     );
 
     private static final Map<Class<?>, Class<?>> PROTOTYPE_COMPONENTS = classMap(
@@ -324,9 +322,9 @@ public class BaseComponents {
     	} else if (isClassPresent("javax.servlet.http.Part")) {
             REQUEST_COMPONENTS.put(MultipartInterceptor.class, Servlet3MultipartInterceptor.class);
     	} else {
-    	    logger.warn("You are willing to upload a file, but there is no commons-fileupload or servlet3 " +
-    	    		"handlers registered. Please add the commons-fileupload in your classpath or use a " +
-    	    		"Servlet 3 Container");
+    	    logger.warn("There is neither commons-fileupload nor servlet3 handlers registered. " +
+    	    		"If you are willing to upload a file, please add the commons-fileupload in " +
+    	    		"your classpath or use a Servlet 3 Container");
             REQUEST_COMPONENTS.put(MultipartInterceptor.class, NullMultipartInterceptor.class);
     	}
 

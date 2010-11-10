@@ -110,8 +110,8 @@ public class Servlet3MultipartInterceptor implements MultipartInterceptor {
                     String fileName = getFileName(part);
                     UploadedFile upload = new DefaultUploadedFile(part.getInputStream(), fileName, part.getContentType());
 
-                    parameters.setParameter(part.getName(), fileName);
-                    request.setAttribute(fileName, upload);
+                    parameters.setParameter(part.getName(), part.getName());
+                    request.setAttribute(part.getName(), upload);
                 } else {
                     logger.warn("{} is an empty file", name);
                 }

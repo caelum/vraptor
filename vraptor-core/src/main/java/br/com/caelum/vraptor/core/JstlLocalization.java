@@ -79,6 +79,8 @@ public class JstlLocalization implements Localization {
         }
         return this.bundle;
     }
+    
+
 
 	private ResourceBundle createEmptyBundle() {
 		try {

@@ -39,6 +39,7 @@ import org.junit.Test;
 import br.com.caelum.vraptor.converter.IntegerConverter;
 import br.com.caelum.vraptor.converter.LocaleBasedCalendarConverter;
 import br.com.caelum.vraptor.core.Converters;
+import br.com.caelum.vraptor.core.JstlLocalization;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.http.MutableRequest;
 
@@ -137,11 +138,13 @@ public class MiscOgnlSupportTest {
     public void isCapableOfDealingWithEmptyParameterForInternalValueWhichNeedsAConverter() throws OgnlException {
         final MutableRequest request = mockery.mock(MutableRequest.class);
         final RequestInfo webRequest = new RequestInfo(null, null, request, null);
+        final JstlLocalization jstlLocalization = new JstlLocalization(webRequest);
+        
         mockery.checking(new Expectations() {{
-            exactly(2).of(request).getAttribute("javax.servlet.jsp.jstl.fmt.locale.request");
+            exactly(1).of(request).getAttribute("javax.servlet.jsp.jstl.fmt.locale.request");
             will(returnValue("pt_br"));
             one(converters).to(Calendar.class);
-            will(returnValue(new LocaleBasedCalendarConverter(webRequest)));
+            will(returnValue(new LocaleBasedCalendarConverter(jstlLocalization)));
         }});
         Ognl.setValue("cat.firstLeg.birthDay", context, house, "10/5/2010");
         assertThat(house.cat.firstLeg.birthDay, is(equalTo((Calendar) new GregorianCalendar(2010, 4, 10))));

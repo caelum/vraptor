@@ -37,6 +37,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.converter.ConversionError;
+import br.com.caelum.vraptor.core.JstlLocalization;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.http.MutableRequest;
 
@@ -48,6 +49,7 @@ public class LocaleBasedFloatConverterTest {
     private HttpSession session;
     private ServletContext context;
     private ResourceBundle bundle;
+    private JstlLocalization jstlLocalization;
 
     @Before
     public void setup() {
@@ -57,7 +59,8 @@ public class LocaleBasedFloatConverterTest {
         this.context = mockery.mock(ServletContext.class);
         FilterChain chain = mockery.mock(FilterChain.class);
         final RequestInfo webRequest = new RequestInfo(context, chain, request, null);
-        this.converter = new LocaleBasedFloatConverter(webRequest);
+        this.jstlLocalization = new JstlLocalization(webRequest);
+        this.converter = new LocaleBasedFloatConverter(jstlLocalization);
         this.bundle = ResourceBundle.getBundle("messages");
     }
 
@@ -65,7 +68,7 @@ public class LocaleBasedFloatConverterTest {
     public void shouldBeAbleToConvert() {
         mockery.checking(new Expectations() {
             {
-                exactly(2).of(request).getAttribute("javax.servlet.jsp.jstl.fmt.locale.request");
+                exactly(1).of(request).getAttribute("javax.servlet.jsp.jstl.fmt.locale.request");
                 will(returnValue("pt_br"));
             }
         });

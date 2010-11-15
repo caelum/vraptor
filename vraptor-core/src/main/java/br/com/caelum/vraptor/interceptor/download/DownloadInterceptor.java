@@ -81,6 +81,9 @@ public class DownloadInterceptor implements Interceptor {
 			if (result instanceof InputStream) {
 				InputStream input = (InputStream) result;
 				download = new InputStreamDownload(input, null, null);
+			} else if (result instanceof byte[]) {
+				byte[] bytes = (byte[]) result;
+				download = new ByteArrayDownload(bytes, null, null);
 			} else if (result instanceof File) {
 				File file = (File) result;
 				download = new FileDownload(file, null, null);

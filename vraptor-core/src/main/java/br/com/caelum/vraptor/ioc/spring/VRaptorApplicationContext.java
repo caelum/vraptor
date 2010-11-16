@@ -19,6 +19,7 @@ package br.com.caelum.vraptor.ioc.spring;
 
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.servlet.ServletContext;
 
@@ -33,6 +34,7 @@ import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.beans.factory.support.RootBeanDefinition;
+import org.springframework.context.annotation.AnnotationBeanNameGenerator;
 import org.springframework.context.annotation.AnnotationConfigUtils;
 import org.springframework.core.Ordered;
 import org.springframework.web.context.support.AbstractRefreshableWebApplicationContext;
@@ -51,6 +53,7 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
 
 	public static final String RESOURCES_LIST = "br.com.caelum.vraptor.resources.list";
 
+	private final AnnotationBeanNameGenerator beanNameGenerator = new AnnotationBeanNameGenerator();
 	private final SpringBasedContainer container;
 	private final BasicConfiguration config;
 
@@ -136,12 +139,24 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
 
 	@Override
 	public <T> T getBean(Class<T> type) {
-		if (!typeToBeanName.containsKey(type)) {
-			logger.debug("Cache miss for {}", type);
-			String name = compatibleNameFor(type);
-			typeToBeanName.put(type, name);
+		try {
+			return super.getBean(type);
+		} catch (NoSuchBeanDefinitionException e) {
+			Map<String, T> beans = getBeansOfType(type);
+			for (Entry<String, T> def : beans.entrySet()) {
+				BeanDefinition definition = getBeanFactory().getBeanDefinition(def.getKey());
+				if (isPrimary(definition) || hasGreaterRoleThanInfrastructure(definition)) {
+					return def.getValue();
+				}
+			}
+			throw e;
 		}
-		return (T) getBean(typeToBeanName.get(type));
+//		if (!typeToBeanName.containsKey(type)) {
+//			logger.debug("Cache miss for {}", type);
+//			String name = compatibleNameFor(type);
+//			typeToBeanName.put(type, name);
+//		}
+//		return type.cast(getBean(typeToBeanName.get(type)));
 	}
 
 	private String compatibleNameFor(Class<?> type) {

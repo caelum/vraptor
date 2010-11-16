@@ -27,7 +27,7 @@ import java.util.ResourceBundle;
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.converter.ConversionError;
-import br.com.caelum.vraptor.core.JstlLocalization;
+import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 
 /**
@@ -43,10 +43,10 @@ import br.com.caelum.vraptor.ioc.RequestScoped;
 public class LocaleBasedFloatConverter
     implements Converter<Float> {
 
-    private final JstlLocalization jstlLocalization;
+    private final Localization localization;
 
-    public LocaleBasedFloatConverter(JstlLocalization jstlLocalization) {
-        this.jstlLocalization = jstlLocalization;
+    public LocaleBasedFloatConverter(Localization localization) {
+        this.localization = localization;
     }
 
     public Float convert(String value, Class<? extends Float> type, ResourceBundle bundle) {
@@ -56,7 +56,7 @@ public class LocaleBasedFloatConverter
         }
 
         try {
-            final Locale locale = jstlLocalization.getLocale();
+            final Locale locale = localization.getLocale();
             DecimalFormat fmt = new DecimalFormat("##0,00", new DecimalFormatSymbols(locale));
 
             // DecimalFormat.parse can return long values, so it's more securely call floatValue

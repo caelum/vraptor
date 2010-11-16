@@ -27,7 +27,7 @@ import java.util.ResourceBundle;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
-import br.com.caelum.vraptor.core.JstlLocalization;
+import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 
 /**
@@ -39,10 +39,10 @@ import br.com.caelum.vraptor.ioc.RequestScoped;
 @RequestScoped
 public class LocaleBasedCalendarConverter implements Converter<Calendar> {
 
-    private final JstlLocalization jstlLocalization;
+    private final Localization localization;
     
-    public LocaleBasedCalendarConverter(JstlLocalization jstlLocalization) {
-        this.jstlLocalization = jstlLocalization;
+    public LocaleBasedCalendarConverter(Localization localization) {
+        this.localization = localization;
     }
 
     public Calendar convert(String value, Class<? extends Calendar> type, ResourceBundle bundle) {
@@ -50,7 +50,7 @@ public class LocaleBasedCalendarConverter implements Converter<Calendar> {
             return null;
         }
         
-        Locale locale = jstlLocalization.getLocale();
+        Locale locale = localization.getLocale();
         if (locale == null) {
             locale = Locale.getDefault();
         }

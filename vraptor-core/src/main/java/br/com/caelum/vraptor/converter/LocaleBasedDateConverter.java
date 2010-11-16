@@ -25,7 +25,7 @@ import java.util.ResourceBundle;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
-import br.com.caelum.vraptor.core.JstlLocalization;
+import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 
 /**
@@ -38,10 +38,10 @@ import br.com.caelum.vraptor.ioc.RequestScoped;
 public class LocaleBasedDateConverter
     implements Converter<Date> {
 
-    private final JstlLocalization jstlLocalization;
+    private final Localization localization;
 
-    public LocaleBasedDateConverter(JstlLocalization jstlLocalization) {
-        this.jstlLocalization = jstlLocalization;
+    public LocaleBasedDateConverter(Localization localization) {
+        this.localization = localization;
     }
 
     public Date convert(String value, Class<? extends Date> type, ResourceBundle bundle) {
@@ -49,7 +49,7 @@ public class LocaleBasedDateConverter
             return null;
         }
 
-        Locale locale = jstlLocalization.getLocale();
+        Locale locale = localization.getLocale();
         if (locale == null) {
             locale = Locale.getDefault();
         }

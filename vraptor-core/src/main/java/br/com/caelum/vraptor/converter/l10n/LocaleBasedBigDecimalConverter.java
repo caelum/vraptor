@@ -27,7 +27,7 @@ import java.util.ResourceBundle;
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.converter.ConversionError;
-import br.com.caelum.vraptor.core.JstlLocalization;
+import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 
 /**
@@ -43,10 +43,10 @@ import br.com.caelum.vraptor.ioc.RequestScoped;
 public class LocaleBasedBigDecimalConverter
     implements Converter<BigDecimal> {
 
-    private final JstlLocalization jstlLocalization;
-
-    public LocaleBasedBigDecimalConverter(JstlLocalization jstlLocalization) {
-        this.jstlLocalization = jstlLocalization;
+    private final Localization localization;
+    
+    public LocaleBasedBigDecimalConverter(Localization localization) {
+        this.localization = localization;
     }
 
     public BigDecimal convert(String value, Class<? extends BigDecimal> type, ResourceBundle bundle) {
@@ -55,7 +55,7 @@ public class LocaleBasedBigDecimalConverter
         }
 
         try {
-            final Locale locale = jstlLocalization.getLocale();
+            final Locale locale = localization.getLocale();
             DecimalFormat fmt = new DecimalFormat("##0,00", new DecimalFormatSymbols(locale));
             fmt.setParseBigDecimal(true);
 

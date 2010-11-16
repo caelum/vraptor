@@ -17,6 +17,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.converter.ConversionError;
+import br.com.caelum.vraptor.core.JstlLocalization;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.http.MutableRequest;
 
@@ -30,6 +31,7 @@ public class LocalTimeConverterTest {
 	private ServletContext context;
 	private ResourceBundle bundle;
 	private LocalTimeConverter converter;
+	private JstlLocalization jstlLocalization;
 
 	@Before
 	public void setup() {
@@ -41,15 +43,16 @@ public class LocalTimeConverterTest {
 		FilterChain chain = mockery.mock(FilterChain.class);
 
 		final RequestInfo webRequest = new RequestInfo(context, chain, request, null);
+        this.jstlLocalization = new JstlLocalization(webRequest);
 
-		this.converter = new LocalTimeConverter(webRequest);
+		this.converter = new LocalTimeConverter(jstlLocalization);
 	}
 
 	@Test
 	public void shouldBeAbleToConvert() {
 		mockery.checking(new Expectations() {
 			{
-				exactly(2).of(request).getAttribute("javax.servlet.jsp.jstl.fmt.locale.request");
+				exactly(1).of(request).getAttribute("javax.servlet.jsp.jstl.fmt.locale.request");
 				will(returnValue("pt_br"));
 			}
 		});

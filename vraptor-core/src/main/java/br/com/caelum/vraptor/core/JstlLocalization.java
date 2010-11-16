@@ -16,14 +16,13 @@
  */
 package br.com.caelum.vraptor.core;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.text.MessageFormat;
+import java.util.ListResourceBundle;
 import java.util.Locale;
 import java.util.MissingResourceException;
-import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 
+import javax.servlet.ServletContext;
 import javax.servlet.jsp.jstl.core.Config;
 import javax.servlet.jsp.jstl.fmt.LocalizationContext;
 
@@ -32,22 +31,23 @@ import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.ioc.RequestScoped;
 
+import com.google.common.base.Strings;
+
 /**
- * The default implementation of bundle provider uses jstl's api to access user
- * information on the bundle to be used.
- *
+ * The default implementation of bundle provider uses JSTL's api to access user information on the bundle to be used.
+ * 
  * @author Guilherme Silveira
+ * @author Otávio Scherer Garcia
  */
 @RequestScoped
-public class JstlLocalization implements Localization {
+public class JstlLocalization
+    implements Localization {
 
-
-	private static final Logger logger = LoggerFactory.getLogger(JstlLocalization.class);
+    private static final Logger logger = LoggerFactory.getLogger(JstlLocalization.class);
 
     private static final String DEFAULT_BUNDLE_NAME = "messages";
 
     private final RequestInfo request;
-
     private ResourceBundle bundle;
 
     public JstlLocalization(RequestInfo request) {
@@ -55,39 +55,55 @@ public class JstlLocalization implements Localization {
     }
 
     public ResourceBundle getBundle() {
-        if (this.bundle == null) {
-            Locale locale = getLocale();
-            Object bundle = get(Config.FMT_LOCALIZATION_CONTEXT);
-            if (bundle instanceof String || bundle == null) {
-				String baseName = (String) bundle;
-	            if (baseName == null) {
-	                baseName = DEFAULT_BUNDLE_NAME;
-	            }
-	            try {
-					this.bundle = new SafeResourceBundle(ResourceBundle.getBundle(baseName, locale));
-				} catch (MissingResourceException e) {
-					logger.debug("couldn't find message bundle, creating an empty one");
-					this.bundle = new SafeResourceBundle(createEmptyBundle());
-				}
-            } else if (bundle instanceof LocalizationContext) {
-            	LocalizationContext context = (LocalizationContext) bundle;
-            	this.bundle = context.getResourceBundle();
-            } else {
-            	logger.warn("Can't handle bundle: " + bundle + ". Please report this bug. Using an empty bundle");
-            	this.bundle = new SafeResourceBundle(createEmptyBundle());
-            }
+        if (bundle == null) {
+            initializeBundle();
         }
-        return this.bundle;
+
+        return bundle;
     }
 
-	private ResourceBundle createEmptyBundle() {
-		try {
-			return new PropertyResourceBundle(new ByteArrayInputStream(new byte[0]));
-		} catch (IOException e) {
-			logger.warn("It shouldn't happen. Please report this bug", e);
-			return null;
-		}
-	}
+    /**
+     * Find the bundle. If the bundle is not found, return an empty for safety operations (avoid
+     * {@link MissingResourceException}.
+     */
+    private void initializeBundle() {
+        Object bundle = findByKey(Config.FMT_LOCALIZATION_CONTEXT);
+        ResourceBundle unsafe = null;
+
+        if (bundle instanceof String || bundle == null) {
+            String baseName = (bundle == null) ? DEFAULT_BUNDLE_NAME : bundle.toString();
+
+            try {
+                Locale locale = getLocale();
+                unsafe = ResourceBundle.getBundle(baseName, locale);
+            } catch (MissingResourceException e) {
+                logger.debug("couldn't find message bundle, creating an empty one");
+                this.bundle = new SafeResourceBundle(createEmptyBundle());
+            }
+
+        } else if (bundle instanceof LocalizationContext) {
+            unsafe = ((LocalizationContext) bundle).getResourceBundle();
+
+        } else {
+            logger.warn("Can't handle bundle {}. Please report this bug. Using an empty bundle", bundle);
+            unsafe = createEmptyBundle();
+        }
+
+        this.bundle = new SafeResourceBundle(unsafe);
+    }
+
+    /**
+     * Create a empty bundle.
+     * 
+     * @return
+     */
+    private ResourceBundle createEmptyBundle() {
+        return new ListResourceBundle() {
+            protected Object[][] getContents() {
+                return new Object[0][0];
+            }
+        };
+    }
 
     public Locale getLocale() {
         return localeFor(Config.FMT_LOCALE);
@@ -98,64 +114,71 @@ public class JstlLocalization implements Localization {
     }
 
     private Locale localeFor(String key) {
-        Object localeValue = get(key);
+        Object localeValue = findByKey(key);
+
         if (localeValue instanceof String) {
-            return stringToLocale((String) localeValue);
-        }
-        if (localeValue != null) {
+            return findLocalefromString((String) localeValue);
+        } else if (localeValue instanceof Locale) {
             return (Locale) localeValue;
         }
+
         return request.getRequest().getLocale();
     }
 
     /**
-     * Extracted from XStream project, copyright Joe Walnes
+     * Looks up a configuration variable in the request, session and application scopes. If none is found, return by
+     * {@link ServletContext#getInitParameter(String)} method.
+     * 
+     * @param key
+     * @return
      */
-    private Locale stringToLocale(String str) {
-        int[] underscorePositions = underscorePositions(str);
-        if (underscorePositions[0] == -1) {
-            return new Locale(str);
-        }
-        String language = str.substring(0, underscorePositions[0]);
-        if (underscorePositions[1] == -1) {
-            return new Locale(language, str.substring(underscorePositions[0] + 1));
-        }
-        return new Locale(language, str.substring(underscorePositions[0] + 1, underscorePositions[1]), str
-                .substring(underscorePositions[1] + 1));
-    }
-
-    private int[] underscorePositions(String str) {
-        int[] result = new int[2];
-        for (int i = 0; i < result.length; i++) {
-            int last = i == 0 ? 0 : result[i - 1];
-            result[i] = str.indexOf('_', last + 1);
-        }
-        return result;
-    }
-
-    private Object get(String key) {
+    private Object findByKey(String key) {
         Object value = Config.get(request.getRequest(), key);
         if (value != null) {
             return value;
         }
+
         value = Config.get(request.getRequest().getSession(), key);
         if (value != null) {
             return value;
         }
+
         value = Config.get(request.getServletContext(), key);
         if (value != null) {
             return value;
         }
+
         return request.getServletContext().getInitParameter(key);
     }
 
-    public String getMessage(String key, String... parameters) {
+    public String getMessage(String key, Object... parameters) {
         try {
             String content = getBundle().getString(key);
-            return MessageFormat.format(content, (Object[]) parameters);
+            return MessageFormat.format(content, parameters);
         } catch (MissingResourceException e) {
             return "???" + key + "???";
         }
     }
 
+    /**
+     * Converts a locale string to {@link Locale}. If the input string is null or empty, return an empty {@link Locale}.
+     * 
+     * @param str
+     * @return
+     */
+    private Locale findLocalefromString(String str) {
+        if (!Strings.isNullOrEmpty(str)) {
+            String[] arr = str.split("_");
+            if (arr.length == 1) {
+                return new Locale(arr[0]);
+            } else if (arr.length == 2) {
+                return new Locale(arr[0], arr[1]);
+
+            } else {
+                return new Locale(arr[0], arr[1], arr[2]);
+            }
+        }
+
+        return null;
+    }
 }

@@ -25,20 +25,20 @@ import org.joda.time.LocalTime;
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.converter.ConversionError;
-import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.core.Localization;
 
 @Convert(LocalTime.class)
 public class LocalTimeConverter implements Converter<LocalTime> {
 	
-    private RequestInfo request;
+    private final Localization localization;
 
-	public LocalTimeConverter(RequestInfo request) {
-		this.request = request;
-	}
+	public LocalTimeConverter(Localization localization) {
+        this.localization = localization;
+    }
 
-	public LocalTime convert(String value, Class<? extends LocalTime> type, ResourceBundle bundle) {
+    public LocalTime convert(String value, Class<? extends LocalTime> type, ResourceBundle bundle) {
         try {
-        	Date time = new LocaleBasedJodaTimeConverter(request).convert(value, type);
+        	Date time = new LocaleBasedJodaTimeConverter(localization).convert(value, type);
         	if (time == null) {
         		return null;
         	}

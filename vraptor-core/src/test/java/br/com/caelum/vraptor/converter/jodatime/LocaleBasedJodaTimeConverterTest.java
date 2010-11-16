@@ -16,6 +16,7 @@ import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
 
+import br.com.caelum.vraptor.core.JstlLocalization;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.http.MutableRequest;
 
@@ -29,6 +30,7 @@ public class LocaleBasedJodaTimeConverterTest {
 	private MutableRequest request;
 	private HttpSession session;
 	private ServletContext context;
+	private JstlLocalization jstlLocalization;
 
 	@Before
 	public void setup() {
@@ -38,7 +40,8 @@ public class LocaleBasedJodaTimeConverterTest {
 		this.context = mockery.mock(ServletContext.class);
 		FilterChain chain = mockery.mock(FilterChain.class);
 		final RequestInfo webRequest = new RequestInfo(context, chain, request, null);
-		this.converter = new LocaleBasedJodaTimeConverter(webRequest);
+        this.jstlLocalization = new JstlLocalization(webRequest);
+		this.converter = new LocaleBasedJodaTimeConverter(jstlLocalization);
 	}
 
 	@Test

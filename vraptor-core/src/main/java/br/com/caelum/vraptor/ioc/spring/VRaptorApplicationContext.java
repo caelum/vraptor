@@ -26,7 +26,6 @@ import javax.servlet.ServletContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.aop.config.AopConfigUtils;
-import org.springframework.beans.factory.BeanFactoryUtils;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
@@ -34,15 +33,12 @@ import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.beans.factory.support.RootBeanDefinition;
-import org.springframework.context.annotation.AnnotationBeanNameGenerator;
 import org.springframework.context.annotation.AnnotationConfigUtils;
 import org.springframework.core.Ordered;
 import org.springframework.web.context.support.AbstractRefreshableWebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import br.com.caelum.vraptor.config.BasicConfiguration;
-
-import com.google.common.collect.MapMaker;
 
 /**
  * @author Fabio Kung
@@ -53,11 +49,8 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
 
 	public static final String RESOURCES_LIST = "br.com.caelum.vraptor.resources.list";
 
-	private final AnnotationBeanNameGenerator beanNameGenerator = new AnnotationBeanNameGenerator();
 	private final SpringBasedContainer container;
 	private final BasicConfiguration config;
-
-	private Map<Class<?>, String> typeToBeanName = new MapMaker().weakValues().makeMap();
 
 	private final SpringRegistry registry;
 
@@ -151,33 +144,7 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
 			}
 			throw e;
 		}
-//		if (!typeToBeanName.containsKey(type)) {
-//			logger.debug("Cache miss for {}", type);
-//			String name = compatibleNameFor(type);
-//			typeToBeanName.put(type, name);
-//		}
-//		return type.cast(getBean(typeToBeanName.get(type)));
 	}
-
-	private String compatibleNameFor(Class<?> type) {
-		String[] names = BeanFactoryUtils.beanNamesForTypeIncludingAncestors(this, type);
-		if (names.length == 0) {
-			throw new NoSuchBeanDefinitionException(type, "no bean for this type registered");
-		} else if (names.length == 1) {
-			return names[0];
-		} else {
-			for (String name : names) {
-				BeanDefinition definition = getBeanFactory().getBeanDefinition(name);
-				if (isPrimary(definition) || hasGreaterRoleThanInfrastructure(definition)) {
-					return name;
-				}
-			}
-			throw new NoSuchBeanDefinitionException("there are " + names.length + " implementations for the type ["
-					+ type
-					+ "], but none of them is primary or has a Role greater than BeanDefinition.ROLE_INFRASTRUCTURE");
-		}
-	}
-
 
 	private boolean isPrimary(BeanDefinition definition) {
 		return definition instanceof AbstractBeanDefinition && ((AbstractBeanDefinition) definition).isPrimary();

@@ -1,4 +1,6 @@
 [chapter Configurando o VRaptor na Locaweb]
+**::por Flavio Gabriel Duarte::**
+
 Este tutorial tem como objetivo orientar o deploy de sistemas usando o framework 
 VRaptor na Locaweb com JVM decidado em ambiente Linux compartilhado.
 

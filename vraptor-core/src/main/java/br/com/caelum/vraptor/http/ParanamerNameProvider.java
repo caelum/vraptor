@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.util.Stringnifier;
 
+import com.thoughtworks.paranamer.AnnotationParanamer;
 import com.thoughtworks.paranamer.BytecodeReadingParanamer;
 import com.thoughtworks.paranamer.CachingParanamer;
 import com.thoughtworks.paranamer.ParameterNamesNotFoundException;
@@ -39,7 +40,7 @@ import com.thoughtworks.paranamer.Paranamer;
  */
 @ApplicationScoped
 public class ParanamerNameProvider implements ParameterNameProvider {
-	private final Paranamer info = new CachingParanamer(new BytecodeReadingParanamer());
+	private final Paranamer info = new CachingParanamer(new AnnotationParanamer(new BytecodeReadingParanamer()));
 
 	private static final Logger logger = LoggerFactory.getLogger(ParanamerNameProvider.class);
 

@@ -17,21 +17,22 @@
 
 package br.com.caelum.vraptor.restfulie.hypermedia;
 
-import java.util.List;
-
-import br.com.caelum.vraptor.restfulie.Restfulie;
-import br.com.caelum.vraptor.restfulie.relation.Relation;
+import br.com.caelum.vraptor.restfulie.relation.RelationBuilder;
 
 /**
  * Basic restfulie implementation: use this interface to implement and let the
- * serializer know which are the possible followign transitions from this
+ * serializer know which are the possible followign relations from this
  * object's state.
- * 
+ *
  * @author guilherme silveira
  * @author caires vinicius
  * @since 3.0.3
- * 
+ *
  */
 public interface HypermediaResource {
-	public List<Relation> getRelations(Restfulie control);
+	/**
+	 * configures relations using given relation builder
+	 * @param builder
+	 */
+	void configureRelations(RelationBuilder builder);
 }

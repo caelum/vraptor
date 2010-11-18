@@ -80,7 +80,7 @@
 		
 									<li><a class="link_toc" href="../../documentation/dependency-injection/">9. Dependency injection</a></li>
 		
-									<li><a class="link_toc" href="../../documentation/downloading/">10. Downloading</a></li>
+									<li><a class="link_toc" href="../../documentation/download-and-upload/">10. Download and Upload</a></li>
 		
 									<li><a class="link_toc" href="../../documentation/utility-components/">11. Utility Components</a></li>
 		
@@ -90,9 +90,13 @@
 		
 									<li><a class="link_toc" href="../../documentation/testing-components-and-controllers/">14. Testing components and controllers</a></li>
 		
-									<li><a class="link_toc" href="../../documentation/changelog/">15. ChangeLog</a></li>
+									<li><a class="link_toc" href="../../documentation/scala/">15. Scala</a></li>
 		
-									<li><a class="link_toc" href="../../documentation/migrating-from-vraptor2-to-vraptor3/">16. Migrating from VRaptor2 to VRaptor3</a></li>
+									<li><a class="link_toc" href="../../documentation/optimizations/">16. Optimizations</a></li>
+		
+									<li><a class="link_toc" href="../../documentation/changelog/">17. ChangeLog</a></li>
+		
+									<li><a class="link_toc" href="../../documentation/migrating-from-vraptor2-to-vraptor3/">18. Migrating from VRaptor2 to VRaptor3</a></li>
 		
                 </ol>
             </div><!-- submenu-->
@@ -104,8 +108,96 @@
 		
 
 
-<h3 class="section">3.1.2 (in dev)</h3>
-	    	<ul class="list"><li><span class="paragraph">Blank project now also runs on netbeans 6.8</span></li><li><span class="paragraph">Supports encoding for file uploads in Google App Engine</span></li></ul>
+<h3 class="section">3.2.0</h3>
+	    	<ul class="list"><li><span class="paragraph">several performance tweaks: about 60% less request time.</span></li><li><span class="paragraph"><strong class="definition">internal compatibility break</strong>: InterceptorStack interface reorganized.</span></li><li><span class="paragraph">better implementation of VRaptor internal interceptors accepts method.</span></li><li><span class="paragraph">beta support to Google Guice, that can be used instead of Spring.</span></li><li><span class="paragraph">Pico provider is not deprecated anymore.</span></li><li><span class="paragraph">One can change the DI container without configuring it on web.xml.
+If VRaptor finds the Spring jars on classpath, Spring will be used; if
+PicoContainer jars are found it will be used; the same for Guice jars.
+One can find the container jars on lib/containers folder on vraptor zip.</span></li><li><span class="paragraph"><strong class="definition">internal compatibility break</strong>: interfaces <code class="inlineCode">Converters</code>, <code class="inlineCode">Router</code>
+	and constructor of <code class="inlineCode">PathAnnotationRoutesParser</code> class were changed. RouteBuilder
+	converted is now an interface =&gt; DefaultRouteBuilder is the implementation.
+	Those who extend PathAnnotationRoutesParser must change the call to delegate constructor.
+	Those who instantiate RouteBuilder directly must instantiate DefaultRouteBuilder.</span></li><li><span class="paragraph">new annotation @Lazy. Use it on interceptors which accepts method doesn't
+depend on the interceptor internal state:</span><div class="java"><code class="java">
+<span class="java16">@Intercepts<br />
+@Lazy<br />
+</span><span class="java4">public class </span><span class="java10">MyLazyInterceptor </span><span class="java4">implements </span><span class="java10">Interceptor </span><span class="java8">{<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">MyLazyInterceptor</span><span class="java8">(</span><span class="java10">Dependency dependency</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">this</span><span class="java10">.dependency = dependency;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">boolean </span><span class="java10">accepts</span><span class="java8">(</span><span class="java10">ResourceMethod method</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java3">// depends only on method<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return </span><span class="java10">method.containsAnnotation</span><span class="java8">(</span><span class="java10">Abc.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">intercepts</span><span class="java8">(</span><span class="java10">...</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java3">//...<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+}</span></code></div><span class="paragraph">In this case, MyLazyInterceptor will only be instantiated when accepts returns true.
+	A non-functional instance of MyLazyInterceptor will be used to call the accepts method,
+	so it should not depend on the interceptor's internal state.
+	Do not use @Lazy if your accepts is trivial (always returns true).</span></li><li><span class="paragraph"><strong class="definition">slight backwards compatibility break</strong>: the default priority of @Path has changed to Integer.MAX_INTEGER/2.
+  It was Integer.MAX_INTEGER - 1. Despite of this compatibility break, we believe that it won't affect
+  working applications.</span></li><li><span class="paragraph">@Path priority can be defined with constants:</span><div class="java"><code class="java">
+<span class="java16">@Path</span><span class="java8">(</span><span class="java10">value=</span><span class="java5">&#34;/url&#34;</span><span class="java10">, priority=Path.HIGHEST</span><span class="java8">)<br />
+</span><span class="java16">@Path</span><span class="java8">(</span><span class="java10">value=</span><span class="java5">&#34;/url&#34;</span><span class="java10">, priority=Path.HIGH</span><span class="java8">)<br />
+</span><span class="java16">@Path</span><span class="java8">(</span><span class="java10">value=</span><span class="java5">&#34;/url&#34;</span><span class="java10">, priority=Path.DEFAULT</span><span class="java8">)<br />
+</span><span class="java16">@Path</span><span class="java8">(</span><span class="java10">value=</span><span class="java5">&#34;/url&#34;</span><span class="java10">, priority=Path.LOW</span><span class="java8">)<br />
+</span><span class="java16">@Path</span><span class="java8">(</span><span class="java10">value=</span><span class="java5">&#34;/url&#34;</span><span class="java10">, priority=Path.LOWEST</span><span class="java8">)</span></code></div></li><li><span class="paragraph">Servlet 3.0 upload support (by garcia-jj)</span></li><li><span class="paragraph">new Exception handlers (by garcia-jj)</span><div class="java"><code class="java">
+<span class="java10">result.on</span><span class="java8">(</span><span class="java10">SomeException.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">.forwardTo</span><span class="java8">(</span><span class="java10">Controller.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">.method</span><span class="java8">()</span><span class="java10">;<br />
+</span><span class="java3">//if a SomeException occurs, the request will be redirected</span></code></div></li><li><span class="paragraph">new interface <code class="inlineCode">TwoWayConverter</code> for bidirecional convertions.</span></li><li><span class="paragraph">native support for OPTIONS requests</span></li><li><span class="paragraph">fix: 405 instead of 500 on requests with unknown HTTP method.</span></li><li><span class="paragraph">more Joda Time converters (by Rodolfo Liviero)</span></li><li><span class="paragraph">improvings on Scala Blank Project (by Pedro Matiello)</span></li><li><span class="paragraph">bugfix: null Accept Header fallback to html</span></li></ul>
+		
+
+<h3 class="section">3.1.3</h3>
+	    	<ul class="list"><li><span class="paragraph">Scala Blank Project</span></li><li><span class="paragraph">Better strategy on Flash scope</span></li><li><span class="paragraph">starting support for javax.inject API. Naming logic parameters is now possible:</span></li><li><span class="paragraph">bugfixes on new Validator</span></li><li><span class="paragraph">bugfix: char as URI parameter</span></li><li><span class="paragraph">bugfix: now VRaptor works with browsers that do not correctly send Accepts header.</span><div class="java"><code class="java">
+<span class="java4">public </span><span class="java9">void </span><span class="java10">logic</span><span class="java8">(</span><span class="java16">@Named</span><span class="java8">(</span><span class="java5">&#34;a_name&#34;</span><span class="java8">) </span><span class="java10">String anotherName</span><span class="java8">) {</span><span class="java10">...</span><span class="java8">}</span></code></div><span class="paragraph">So the request parameter must be called 'a_name'.</span></li><li><span class="paragraph">better support for GAE</span></li><li><span class="paragraph">new method on http result:</span><div class="java"><code class="java">
+<span class="java10">result.use</span><span class="java8">(</span><span class="java10">http</span><span class="java8">())</span><span class="java10">.body</span><span class="java8">(</span><span class="java10">content</span><span class="java8">)</span><span class="java10">;</span></code></div><span class="paragraph">content can be either a String, an InputStream or a Reader.</span></li><li><span class="paragraph">more available methods for result.use(status())</span></li><li><span class="paragraph">new method: result.use(representation()).from(object, alias)</span></li><li><span class="paragraph">support for multiple selects:</span><div class="java"><code class="java">
+<span class="java4">public </span><span class="java9">void </span><span class="java10">logic</span><span class="java8">(</span><span class="java10">List&lt;String&gt; abc</span><span class="java8">) {</span><span class="java10">...</span><span class="java8">}</span></code></div><div class="xml"><code class="xml"><span class="textag">&lt;select</span>&nbsp;<span class="texattrib">name=</span><span class="texvalue">"abc[]"</span>&nbsp;<span class="texattrib">multiple=</span><span class="texvalue">"multiple"</span><span class="textag">&gt;</span><span class="texnormal">...</span><span class="textag">&lt;/select&gt;</span></code></div></li><li><span class="paragraph">auto 406 status when using result.use(representation())</span></li><li><span class="paragraph">One can register now all optional vraptor components on packages configuration
+on web.xml:</span><div class="xml"><code class="xml"><span class="textag">&lt;context-param&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-name&gt;</span><span class="texnormal">br.com.caelum.vraptor.packages</span><span class="textag">&lt;/param-name&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-value&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;br.com.caelum.vraptor.util.hibernate,&nbsp;//&nbsp;Session&nbsp;and&nbsp;SessionFactory&nbsp;<br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;br.com.caelum.vraptor.util.jpa,&nbsp;//&nbsp;EntityManager&nbsp;and&nbsp;EntityManagerFactory<br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;br.com.caelum.vraptor.converter.l10n,&nbsp;//Localized&nbsp;numeric&nbsp;Converters<br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;br.com.caelum.vraptor.http.iogi&nbsp;//&nbsp;Immutable&nbsp;parameters&nbsp;support<br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;/param-value&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal"></span><span class="textag">&lt;/context-param&gt;</span></code></div></li><li><span class="paragraph">rendering a null representation means returning a 404</span></li><li><span class="paragraph">new class: JsonDeserializer</span></li><li><span class="paragraph">MultipartInterceptor is now optional.</span></li><li><span class="paragraph">bugfix: arrays of length == 1 are now supported as logic parameters</span></li><li><span class="paragraph">Pico provider is deprecated</span></li><li><span class="paragraph">Validations using the request bundle (and locale)</span></li><li><span class="paragraph">ValidationMessage implements Serializable</span></li><li><span class="paragraph">new method: result.use(status()).badRequest(errorList); 
+  serializes the given error list with:</span><div class="java"><code class="java">
+<span class="java10">result.use</span><span class="java8">(</span><span class="java10">representation</span><span class="java8">())</span><span class="java10">.from</span><span class="java8">(</span><span class="java10">errorList, </span><span class="java5">&#34;errors&#34;</span><span class="java8">)</span><span class="java10">;</span></code></div></li><li><span class="paragraph">shortcuts on Validator:</span><div class="java"><code class="java">
+<span class="java10">validator.onErrorForwardTo</span><span class="java8">(</span><span class="java10">controller</span><span class="java8">)</span><span class="java10">.logic</span><span class="java8">()</span><span class="java10">;<br />
+validator.onErrorRedirectTo</span><span class="java8">(</span><span class="java10">controller</span><span class="java8">)</span><span class="java10">.logic</span><span class="java8">()</span><span class="java10">;<br />
+validator.onErrorUsePageOf</span><span class="java8">(</span><span class="java10">controller</span><span class="java8">)</span><span class="java10">.logic</span><span class="java8">()</span><span class="java10">;</span></code></div><span class="paragraph">where controller can be either a controller class or this, as in Result shortcuts.</span><span class="paragraph">And the shortcut:</span><div class="java"><code class="java">
+<span class="java10">validator.onErrorSendBadRequest</span><span class="java8">()</span><span class="java10">;</span></code></div><span class="paragraph">which returns the Bad Request (400) status codes and serializes the validation
+error list according to Accept request header (result.use(representation()))
+que retorna o status Bad Request (400) e serializa a lista de erros de valida&ccedil;&atilde;o
+de acordo com o header Accept da requisi&ccedil;&atilde;o (result.use(representation()))</span></li></ul>
+		
+
+<h3 class="section">3.1.2</h3>
+	    	<ul class="list"><li><span class="paragraph">Blank project now also runs on netbeans 6.8</span></li><li><span class="paragraph">Supports encoding for file uploads in Google App Engine</span></li><li><span class="paragraph">bugfix: no more NullPointerExceptions on validator.onErrorUse(json())...</span></li><li><span class="paragraph">Serializers now have the recursive method:</span><div class="java"><code class="java">
+<span class="java10">result.use</span><span class="java8">(</span><span class="java10">xml</span><span class="java8">())</span><span class="java10">.from</span><span class="java8">(</span><span class="java10">myObject</span><span class="java8">)</span><span class="java10">.recursive</span><span class="java8">()</span><span class="java10">.serialize</span><span class="java8">()</span><span class="java10">;</span></code></div><span class="paragraph">It means that all object tree from myObject will be serialized.</span></li><li><span class="paragraph">Message parameters on Validations now can be i18n'ed:</span><div class="java"><code class="java">
+<span class="java3">// age = Age<br />
+// greater_than = {0} should be greater than {1}<br />
+<br />
+</span><span class="java10">validator.checking</span><span class="java8">(</span><span class="java4">new </span><span class="java10">Validations</span><span class="java8">() {{<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java10">that</span><span class="java8">(</span><span class="java10">age &gt; </span><span class="java7">18</span><span class="java10">, </span><span class="java5">&#34;age&#34;</span><span class="java10">, </span><span class="java5">&#34;greater_than&#34;</span><span class="java10">, i18n</span><span class="java8">(</span><span class="java5">&#34;age&#34;</span><span class="java8">)</span><span class="java10">, </span><span class="java7">10</span><span class="java8">)</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java3">//results on &#34;Age should be greater than 18&#34;&nbsp; <br />
+</span><span class="java8">}})</span><span class="java10">;</span></code></div></li><li><span class="paragraph">Hibernate proxies are now nicely serialized (almost) like regular classes (thanks to Tomaz Lavieri)</span></li><li><span class="paragraph">It is now possible to serialize to json without the root element (thanks to Tomaz Lavieri):</span><div class="java"><code class="java">
+<span class="java10">result.use</span><span class="java8">(</span><span class="java10">json</span><span class="java8">())</span><span class="java10">.from</span><span class="java8">(</span><span class="java10">car</span><span class="java8">)</span><span class="java10">.serialize</span><span class="java8">()</span><span class="java10">; </span><span class="java3">//=&gt; {'car': {'color': 'blue'}}<br />
+</span><span class="java10">result.use</span><span class="java8">(</span><span class="java10">json</span><span class="java8">())</span><span class="java10">.withoutRoot</span><span class="java8">()</span><span class="java10">.from</span><span class="java8">(</span><span class="java10">car</span><span class="java8">)</span><span class="java10">.serialize</span><span class="java8">()</span><span class="java10">; </span><span class="java3">//=&gt; {'color': 'blue'}</span></code></div></li><li><span class="paragraph">Google collections updated to version 1.0</span></li><li><span class="paragraph">fixed bug with curly braces on regexes inside @Path's</span></li><li><span class="paragraph">XStream annotations are now automatically read when you use VRaptor's default serialization</span></li><li><span class="paragraph">when you upload a file bigger than the file size limit you get a validation error instead
+  of a generic exception</span></li><li><span class="paragraph">more shortcuts on Result interface:</span><div class="java"><code class="java">redirectTo("a/uri")&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt;&nbsp;&nbsp;use(page()).redirect("a/uri)<br />
+notFound()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt;&nbsp;&nbsp;use(status()).notFound()<br />
+nothing()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt;&nbsp;&nbsp;use(nothing());<br />
+permanentlyRedirectTo(Controller.class)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt;&nbsp;use(status()).movedPermanentlyTo(Controller.class);<br />
+permanentlyRedirectTo("a/uri")&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt;&nbsp;use(status()).movedPermanentlyTo("a/uri");<br />
+permanentlyRedirectTo(this)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt;&nbsp;use(status()).movedPermanentlyTo(this.getClass());</code></div></li><li><span class="paragraph">added a new method to <code class="inlineCode">Validator</code> interface (thanks to Ot&aacute;vio Garcia)</span><div class="java"><code class="java">
+<span class="java10">validator.validate</span><span class="java8">(</span><span class="java10">object</span><span class="java8">)</span><span class="java10">;</span></code></div><span class="paragraph">This method will validate the given object using Hibernate Validator 3, Java Validation API (JSR303),
+  or any implementation of BeanValidation annotated with @Component</span></li><li><span class="paragraph">new BigDecimal, Double and Float converters, that consider the current Locale to convert the values
+ (thanks to Ot&aacute;vio Garcia).
+  In order to use them you must add to your web.xml:</span><div class="xml"><code class="xml"><span class="textag">&lt;context-param&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-name&gt;</span><span class="texnormal">br.com.caelum.vraptor.packages</span><span class="textag">&lt;/param-name&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-value&gt;</span><span class="texnormal">!!previous&nbsp;value!!,br.com.caelum.vraptor.converter.l10n</span><span class="textag">&lt;/param-value&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal"></span><span class="textag">&lt;/context-param&gt;</span></code></div></li></ul>
+	    	<span class="paragraph">[/list]</span>
 		
 
 <h3 class="section">3.1.1</h3>
@@ -262,6 +354,7 @@ result.use</span><span class="java8">(</span><span class="java10">logic</span><s
                     <li><a href="../../en/vraptor2.jsp">vraptor2</a></li>
                 </ul>
                 <p><a href="http://www.apache.org/licenses/LICENSE-2.0">Apache 2.0 License</a> - VRaptor ©2009 Caelum - Ensino e Inovação</p>
+                <p>Profiled with <a href="http://www.ej-technologies.com/products/jprofiler/overview.html">JProfiler</a></p>
             </div><!-- footnote-->
         </div><!-- footer content -->
         <a id="signature" href="mailto:lokidg@gmail.com">loki|design</a>

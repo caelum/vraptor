@@ -17,8 +17,6 @@ package br.com.caelum.vraptor.serialization;
 
 import java.io.IOException;
 
-import br.com.caelum.vraptor.View;
-
 /**
  * Creates a serializer of a given format.
  *
@@ -26,12 +24,7 @@ import br.com.caelum.vraptor.View;
  * @author Jose Donizetti
  * @version 3.0.2
  */
-public interface Serialization extends View {
-	/**
-	 * Serializes this object to the clients writer.
-	 * @throws IOException
-	 */
-	public <T> Serializer from(T object);
+public interface Serialization extends NoRootSerialization {
 
 	/**
 	 * Serializes this object to the clients writer, with a given alias.

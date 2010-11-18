@@ -16,18 +16,24 @@
 package br.com.caelum.vraptor.serialization.xstream;
 
 import java.io.IOException;
+import java.io.Writer;
 
 import javax.servlet.http.HttpServletResponse;
 
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.serialization.JSONSerialization;
+import br.com.caelum.vraptor.serialization.NoRootSerialization;
+import br.com.caelum.vraptor.serialization.ProxyInitializer;
 import br.com.caelum.vraptor.serialization.Serializer;
+import br.com.caelum.vraptor.serialization.SerializerBuilder;
 import br.com.caelum.vraptor.view.ResultException;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.HierarchicalStreamDriver;
+import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.io.json.JsonHierarchicalStreamDriver;
+import com.thoughtworks.xstream.io.json.JsonWriter;
 import com.thoughtworks.xstream.mapper.MapperWrapper;
 
 /**
@@ -41,10 +47,13 @@ public class XStreamJSONSerialization implements JSONSerialization {
 
 	private final HttpServletResponse response;
 	private final TypeNameExtractor extractor;
+	private final ProxyInitializer initializer;
+	private HierarchicalStreamDriver driver =  new JsonHierarchicalStreamDriver();
 
-	public XStreamJSONSerialization(HttpServletResponse response, TypeNameExtractor extractor) {
+	public XStreamJSONSerialization(HttpServletResponse response, TypeNameExtractor extractor, ProxyInitializer initializer) {
 		this.response = response;
 		this.extractor = extractor;
+		this.initializer = initializer;
 	}
 
 	public boolean accepts(String format) {
@@ -56,9 +65,9 @@ public class XStreamJSONSerialization implements JSONSerialization {
 		return getSerializer().from(object);
 	}
 
-	protected Serializer getSerializer() {
+	protected SerializerBuilder getSerializer() {
 		try {
-			return new XStreamSerializer(getXStream(), response.getWriter());
+			return new XStreamSerializer(getXStream(), response.getWriter(), extractor, initializer);
 		} catch (IOException e) {
 			throw new ResultException("Unable to serialize data", e);
 		}
@@ -86,7 +95,17 @@ public class XStreamJSONSerialization implements JSONSerialization {
 	 * You can override this method for configuring Driver before serialization
 	 */
 	protected HierarchicalStreamDriver getHierarchicalStreamDriver() {
-		return new JsonHierarchicalStreamDriver();
+		return this.driver;
+	}
+
+	public <T> NoRootSerialization withoutRoot() {
+		this.driver = new JsonHierarchicalStreamDriver() {
+			@Override
+			public HierarchicalStreamWriter createWriter(Writer writer) {
+				return new JsonWriter(writer, JsonWriter.DROP_ROOT_MODE);
+			}
+		};
+		return this;
 	}
 
 }

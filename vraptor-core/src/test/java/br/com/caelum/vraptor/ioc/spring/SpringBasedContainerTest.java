@@ -44,6 +44,7 @@ import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.config.BasicConfiguration;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.MutableResponse;
 import br.com.caelum.vraptor.http.UrlToResourceTranslator;
 import br.com.caelum.vraptor.http.route.Route;
@@ -71,7 +72,7 @@ import br.com.caelum.vraptor.test.HttpSessionMock;
 public class SpringBasedContainerTest {
 	private SpringBasedContainer container;
 	private Mockery mockery;
-	private HttpServletRequestMock request;
+	private MutableRequest request;
 	private HttpSessionMock session;
 	private ServletContext servletContext;
 	private MutableResponse response;
@@ -91,11 +92,14 @@ public class SpringBasedContainerTest {
 
 				allowing(servletContext).getRealPath(with(any(String.class)));
 				will(returnValue(SpringBasedContainer.class.getResource(".").getFile()));
+
+                allowing(servletContext).getInitParameter(BasicConfiguration.SCANNING_PARAM);
+                will(returnValue("enabled"));
 			}
 		});
 
 		session = new HttpSessionMock(servletContext, "session");
-		request = new HttpServletRequestMock(session);
+		request = new HttpServletRequestMock(session, mockery.mock(MutableRequest.class), mockery);
 		response = mockery.mock(MutableResponse.class);
 
 		FilterChain chain = mockery.mock(FilterChain.class);
@@ -134,6 +138,13 @@ public class SpringBasedContainerTest {
 	public void shouldProvideOnlyIfBeanIsRegistered() {
 		assertTrue(container.canProvide(DummyComponent.class));
 		assertFalse(container.canProvide(NotRegisterd.class));
+	}
+	@Test
+	public void shouldNotProvidePrimitiveValues() {
+		assertFalse(container.canProvide(Long.class));
+		assertFalse(container.canProvide(long.class));
+		assertFalse(container.canProvide(long[].class));
+		assertFalse(container.canProvide(Long[].class));
 	}
 
 	@Test
@@ -200,7 +211,7 @@ public class SpringBasedContainerTest {
 	@Test
 	public void shoudRegisterConvertersInConverters() {
 		Converters converters = container.instanceFor(Converters.class);
-		Converter<?> converter = converters.to(Foo.class, container);
+		Converter<?> converter = converters.to(Foo.class);
 		assertThat(converter, is(instanceOf(DummyConverter.class)));
 	}
 

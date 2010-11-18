@@ -61,15 +61,15 @@ public class MultipartItemsProcessor {
             if (notEmpty(item)) {
                 try {
                     UploadedFile fileInformation = new DefaultUploadedFile(item.getInputStream(), item.getName(), item.getContentType());
-                    parameters.setParameter(item.getFieldName(), item.getName());
-                    request.setAttribute(item.getName(), fileInformation);
+                    parameters.setParameter(item.getFieldName(), item.getFieldName());
+                    request.setAttribute(item.getFieldName(), fileInformation);
 
-                    logger.debug("Uploaded file: " + item.getFieldName() + " with " + fileInformation);
+                    logger.debug("Uploaded file: {} with {}", item.getFieldName(), fileInformation);
                 } catch (Exception e) {
                     throw new InvalidParameterException("Cant parse uploaded file " + item.getName(), e);
                 }
             } else {
-                logger.debug("A file field was empty: " + item.getFieldName());
+                logger.debug("A file field was empty: {}",  item.getFieldName());
             }
         }
         for (String paramName : params.keySet()) {

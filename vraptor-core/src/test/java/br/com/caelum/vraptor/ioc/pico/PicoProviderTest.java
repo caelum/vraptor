@@ -25,6 +25,7 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.config.BasicConfiguration;
 import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.MutableResponse;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
 import br.com.caelum.vraptor.ioc.GenericContainerTest;
@@ -38,9 +39,7 @@ public class PicoProviderTest extends GenericContainerTest {
     @SuppressWarnings("unchecked")
     @Test
     public void canProvidePicoSpecificApplicationScopedComponents() {
-        List<Class<?>> components = Arrays.asList(Scanner.class, StereotypedComponentRegistrar.class,
-                ComponentFactoryRegistrar.class, InterceptorRegistrar.class, ConverterRegistrar.class,
-                ResourceRegistrar.class);
+        List<Class<?>> components = Arrays.asList();
         checkAvailabilityFor(true, components);
         mockery.assertIsSatisfied();
     }
@@ -52,18 +51,12 @@ public class PicoProviderTest extends GenericContainerTest {
 
     @Override
     protected <T> T executeInsideRequest(WhatToDo<T> execution) {
-        HttpSessionMock session = new HttpSessionMock(context, "session" + ++counter);
-        HttpServletRequestMock request = new HttpServletRequestMock(session);
+        final HttpSessionMock session = new HttpSessionMock(context, "session" + ++counter);
+        final MutableRequest request = new HttpServletRequestMock(session,
+        		mockery.mock(MutableRequest.class, "request" + counter), mockery);
         MutableResponse response = mockery.mock(MutableResponse.class, "response" + counter);
-        configureExpectations(request);
         RequestInfo webRequest = new RequestInfo(context, null, request, response);
         return execution.execute(webRequest, counter);
-    }
-
-    /**
-     * Children providers can set custom expectations on request.
-     */
-    protected void configureExpectations(HttpServletRequestMock request) {
     }
 
     /**
@@ -78,6 +71,9 @@ public class PicoProviderTest extends GenericContainerTest {
 					will(returnValue("br.com.caelum.vraptor.ioc.fixture"));
 
 	                allowing(context).getInitParameter(BasicConfiguration.ENCODING);
+	                allowing(context).getInitParameter(BasicConfiguration.SCANNING_PARAM);
+	                allowing(context).getRealPath("/WEB-INF/classes");
+	                will(returnValue(PicoProviderTest.class.getResource("..").getFile()));
                 }
             });
         } catch (Exception e) {

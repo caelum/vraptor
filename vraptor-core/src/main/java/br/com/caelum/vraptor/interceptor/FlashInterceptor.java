@@ -57,6 +57,7 @@ public class FlashInterceptor implements Interceptor {
 
 	public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
 			throws InterceptionException {
+		@SuppressWarnings("unchecked")
 		Map<String, Object> parameters = (Map<String, Object>) session.getAttribute(FLASH_INCLUDED_PARAMETERS);
 		if (parameters != null) {
 			session.removeAttribute(FLASH_INCLUDED_PARAMETERS);
@@ -66,14 +67,14 @@ public class FlashInterceptor implements Interceptor {
 		}
 		response.addRedirectListener(new RedirectListener() {
 			public void beforeRedirect() {
-				try {
-					Map<String, Object> included = result.included();
-					if (!included.isEmpty()) {
+				Map<String, Object> included = result.included();
+				if (!included.isEmpty()) {
+					try {
 						session.setAttribute(FLASH_INCLUDED_PARAMETERS, included);
+					} catch (IllegalStateException e) {
+						LOGGER.info("HTTP Session was invalidated. It is not possible to include " +
+								"Result parameters on Flash Scope");
 					}
-				} catch (IllegalStateException e) {
-					LOGGER.warn("HTTP Session was invalidated. It is not possible to include " +
-							"Result parameters on Flash Scope", e);
 				}
 			}
 		});

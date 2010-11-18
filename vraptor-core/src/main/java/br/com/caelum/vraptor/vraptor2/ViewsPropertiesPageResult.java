@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.proxy.MethodInvocation;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.ProxyInvocationException;
@@ -46,6 +47,7 @@ import br.com.caelum.vraptor.view.ResultException;
  * @author guilherme silveira
  *
  */
+@Component
 public class ViewsPropertiesPageResult implements PageResult {
 
 	private static final Logger logger = LoggerFactory.getLogger(ViewsPropertiesPageResult.class);
@@ -75,9 +77,9 @@ public class ViewsPropertiesPageResult implements PageResult {
 		this.delegate = delegate;
 	}
 
-	public void forward() {
+	public void defaultView() {
 		try {
-			forward(this.method);
+			forwardTo(this.method);
 		} catch (ServletException e) {
 			throw new ResultException(e);
 		} catch (IOException e) {
@@ -85,15 +87,15 @@ public class ViewsPropertiesPageResult implements PageResult {
 		}
 	}
 
-	private void forward(ResourceMethod method) throws ServletException, IOException {
+	private void forwardTo(ResourceMethod method) throws ServletException, IOException {
 		if (Info.isOldComponent(method.getResource())) {
-			vraptor2Forward(method);
+			vraptor2ForwardTo(method);
 		} else {
-			delegate.forward();
+			delegate.defaultView();
 		}
 	}
 
-	private void vraptor2Forward(ResourceMethod method) throws ServletException,
+	private void vraptor2ForwardTo(ResourceMethod method) throws ServletException,
 			IOException {
     	logger.debug("Forwading using VRaptor2 URLs");
 
@@ -116,9 +118,7 @@ public class ViewsPropertiesPageResult implements PageResult {
 			} catch (ExpressionEvaluationException e) {
 				throw new ServletException("Unable to redirect while evaluating expression '" + path + "'.", e);
 			}
-			if (logger.isDebugEnabled()) {
-				logger.debug("overriden view found for " + key + " : " + path + " expressed as " + result);
-			}
+			logger.debug("overriden view found for {} : {} expressed as {}", new Object[] { key, path, result });
 			if (result.startsWith("redirect:")) {
 				response.sendRedirect(result.substring(9));
 			} else {
@@ -132,7 +132,7 @@ public class ViewsPropertiesPageResult implements PageResult {
             public Object intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {
                 try {
                     ResourceMethod resourceMethod = DefaultResourceMethod.instanceFor(controllerType, method);
-                    forward(resourceMethod);
+                    forwardTo(resourceMethod);
                     return null;
                 } catch (Exception e) {
                     throw new ProxyInvocationException(e);
@@ -145,12 +145,24 @@ public class ViewsPropertiesPageResult implements PageResult {
 		delegate.include();
 	}
 
+	public void redirectTo(String url) {
+		delegate.redirectTo(url);
+	}
+
+	public void forwardTo(String url) {
+        delegate.forwardTo(url);
+	}
+
 	public void redirect(String url) {
-		delegate.redirect(url);
+		this.redirectTo(url);
 	}
 
 	public void forward(String url) {
-        delegate.forward(url);
+		this.forwardTo(url);
+	}
+
+	public void forward() {
+		this.defaultView();
 	}
 
 }

@@ -32,6 +32,7 @@ import org.junit.Test;
 /**
  * @author Fabio Kung
  */
+@SuppressWarnings("unchecked")
 public class DefaultProxifierTest {
 
     @Test

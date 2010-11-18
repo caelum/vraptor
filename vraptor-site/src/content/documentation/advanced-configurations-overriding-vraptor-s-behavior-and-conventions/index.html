@@ -80,7 +80,7 @@
 		
 									<li><a class="link_toc" href="../../documentation/dependency-injection/">9. Dependency injection</a></li>
 		
-									<li><a class="link_toc" href="../../documentation/downloading/">10. Downloading</a></li>
+									<li><a class="link_toc" href="../../documentation/download-and-upload/">10. Download and Upload</a></li>
 		
 									<li><a class="link_toc" href="../../documentation/utility-components/">11. Utility Components</a></li>
 		
@@ -90,9 +90,13 @@
 		
 									<li><a class="link_toc" href="../../documentation/testing-components-and-controllers/">14. Testing components and controllers</a></li>
 		
-									<li><a class="link_toc" href="../../documentation/changelog/">15. ChangeLog</a></li>
+									<li><a class="link_toc" href="../../documentation/scala/">15. Scala</a></li>
 		
-									<li><a class="link_toc" href="../../documentation/migrating-from-vraptor2-to-vraptor3/">16. Migrating from VRaptor2 to VRaptor3</a></li>
+									<li><a class="link_toc" href="../../documentation/optimizations/">16. Optimizations</a></li>
+		
+									<li><a class="link_toc" href="../../documentation/changelog/">17. ChangeLog</a></li>
+		
+									<li><a class="link_toc" href="../../documentation/migrating-from-vraptor2-to-vraptor3/">18. Migrating from VRaptor2 to VRaptor3</a></li>
 		
                 </ol>
             </div><!-- submenu-->
@@ -101,7 +105,10 @@
 	
 		<h2 class="chapter">Advanced configurations: overriding VRaptor's behavior and conventions</h2>
 
-		
+		<span class="paragraph">Most of VRaptor behaviours and conventions can be customized, in a very easy
+way: it is just creating a component that implements an internal interface of VRaptor.
+When you do this, VRaptor will use your custom implementation instead of the default one.</span><span class="paragraph">If you want to find out which is the right interface for changing a behaviour,
+just ask it on the developers mailing list: caelum-vraptor-dev@googlegroups.com</span><span class="paragraph">This list is for both Portuguese and English discussions.</span><span class="paragraph">Below we'll see some customization examples:</span>
 
 
 <h3 class="section">Changing the default rendered view</h3>
@@ -132,7 +139,7 @@ you'll only need to create the following class:</span>
 	    	<span class="paragraph">If you need a more complex convention, just implement the PathResolver interface.</span>
 		
 
-<h3 class="section">Mudando a URI padrão</h3>
+<h3 class="section">Changing default URI</h3>
 	    	<span class="paragraph">The default URI for ClientsController.list() is /clients/list, i.e, controller_name/method_name.
 If you want to override this convention, you can create a class like:</span>
 	    	<div class="java"><code class="java">
@@ -149,39 +156,6 @@ If you want to override this convention, you can create a class like:</span>
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
 }</span></code></div>
 	    	<span class="paragraph">If you need a more complex convention, just implement the RoutesParser interface.</span>
-		
-
-<h3 class="section">Changing IoC provider</h3>
-	    	<span class="paragraph">VRaptor's default IoC provider is Spring. In order to change, just add the following to your
-web.xml:</span>
-	    	<div class="xml"><code class="xml"><span class="textag">&lt;context-param&gt;</span><span class="texnormal"><br /></span>
-<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-name&gt;</span><span class="texnormal">br.com.caelum.vraptor.provider</span><span class="textag">&lt;/param-name&gt;</span><span class="texnormal"><br /></span>
-<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-value&gt;</span><span class="texnormal">com.package.from.your.PrefferedProviderClass</span><span class="textag">&lt;/param-value&gt;</span><span class="texnormal"><br /></span>
-<span class="texnormal"></span><span class="textag">&lt;/context-param&gt;</span></code></div>
-	    	<span class="paragraph">VRaptor comes with built-in support to both Spring (br.com.caelum.vraptor.ioc.spring.SpringProvider) and PicoContainer
-(br.com.caelum.vraptor.ioc.pico.PicoProvider).
-You still have the option to extend any of these classes and use your own provider.</span>
-		
-
-<h3 class="section">Changing Spring's base ApplicationContext</h3>
-	    	<span class="paragraph">If VRaptor isn't using your ApplicationContext as base, just extend SpringProvider and implement the
-getParentApplicationContext method, giving it your application's ApplicationContext:</span>
-	    	<div class="java"><code class="java">
-<span class="java4">package </span><span class="java10">br.com.apackage.aproject;<br />
-</span><span class="java4">public class </span><span class="java10">CustomProvider </span><span class="java4">extends </span><span class="java10">SpringProvider </span><span class="java8">{<br />
-&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">ApplicationContext getParentApplicationContext</span><span class="java8">(</span><span class="java10">ServletContext context</span><span class="java8">) {<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">ApplicationContext applicationContext = </span><span class="java3">//your own logic to create your applicationContext<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return </span><span class="java10">applicationContext;<br />
-&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
-}</span></code></div>
-	    	<span class="paragraph">and change the provider at your web.xml:</span>
-	    	<div class="xml"><code class="xml"><span class="textag">&lt;context-param&gt;</span><span class="texnormal"><br /></span>
-<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-name&gt;</span><span class="texnormal">br.com.caelum.vraptor.provider</span><span class="textag">&lt;/param-name&gt;</span><span class="texnormal"><br /></span>
-<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-value&gt;</span><span class="texnormal">br.com.apackage.aproject.CustomProvider</span><span class="textag">&lt;/param-value&gt;</span><span class="texnormal"><br /></span>
-<span class="texnormal"></span><span class="textag">&lt;/context-param&gt;</span></code></div>
-	    	<span class="paragraph">By default, VRaptor try to find the applicationContext via
-<code class="inlineCode">WebApplicationContextUtils.getWebApplicationContext(servletContext);</code> or loading the applicationContext.xml
-that is on your classpath.</span>
 		
 
 <h3 class="section">Changing the application character encoding</h3>
@@ -238,6 +212,7 @@ encoding inconsistencies, you can set this parameter on your web.xml.</span>
                     <li><a href="../../en/vraptor2.jsp">vraptor2</a></li>
                 </ul>
                 <p><a href="http://www.apache.org/licenses/LICENSE-2.0">Apache 2.0 License</a> - VRaptor ©2009 Caelum - Ensino e Inovação</p>
+                <p>Profiled with <a href="http://www.ej-technologies.com/products/jprofiler/overview.html">JProfiler</a></p>
             </div><!-- footnote-->
         </div><!-- footer content -->
         <a id="signature" href="mailto:lokidg@gmail.com">loki|design</a>

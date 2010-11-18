@@ -27,7 +27,7 @@ public void adiciona(Funcionario funcionario) {
 	if(! funcionario.getNome().equals("Fulano")) {
 		validator.add(new ValidationMessage("erro","nomeInvalido"));
 	}
-	validator.onErrorUse(page()).of(FuncionarioController.class).formulario();
+	validator.onErrorUsePageOf(FuncionarioController.class).formulario();
 	dao.adiciona(funcionario);
 }
 [/java]
@@ -45,7 +45,7 @@ public adiciona(Funcionario funcionario) {
 	validator.checking(new Validations(){{
 		that(!funcionario.getNome().isEmpty(), "erro","nomeNaoInformado");
 	}});
-	validator.onErrorUse(page()).of(FuncionarioController.class).formulario();
+	validator.onErrorUsePageOf(FuncionarioController.class).formulario();
 	
 	dao.adiciona(funcionario);
 }
@@ -72,6 +72,30 @@ foi passado pra ele é válido ou não:
 
 Desse jeito a segunda validação só acontece se a primeira não falhou.
 
+[section Validação com parâmetros nas mensagens]
+Você pode colocar parâmetros nas suas mensagens internacionalizadas:
+[code properties]
+maior_que = {0} deveria ser maior que {1}
+[/code]
+E usá-los no seu código de validação:
+[java]
+	validator.checking(new Validations(){{
+		that(usuario.getIdade() >= 18, "usuario.idade", "maior_que", "Idade", 18);
+		// Idade deveria ser maior que 18
+	}});
+[/java]
+Você pode também internacionalizar os parâmetros, usando o método i18n:
+[code properties]
+usuario.idade = Idade do usuário
+[/code]
+
+[java]
+	validator.checking(new Validations(){{
+		that(usuario.getIdade() >= 18, "usuario.idade", "maior_que", i18n("usuario.idade"), 18);
+		// Idade do usuário deveria ser maior que 18
+	}});
+[/java]
+
 [section Validação usando matchers do Hamcrest]
 Você pode também usar matchers do Hamcrest para deixar a validação mais legível, e ganhar
 a vantagem da composição de matchers e da criação de novos matchers que o Hamcrest te oferece:
@@ -80,25 +104,28 @@ public admin(Funcionario funcionario) {
 	validator.checking(new Validations(){{
 		that(funcionario.getRoles(), hasItem("ADMIN"), "admin","funcionario.nao.eh.admin");
 	}});
-	validator.onErrorUse(page()).of(LoginController.class).login();	
+	validator.onErrorUsePageOf(LoginController.class).login();	
 	dao.adiciona(funcionario);
 }
 [/java]
 
 
-[section Hibernate validator]
+[section Bean Validation (JSR303) e Hibernate Validator]
 
-O VRaptor também suporta integração com o HibernateValidator. No exemplo anterior para validar o objeto Funcionario 
-usando o Hibernate Validator basta adicionar uma linha de código:
+O VRaptor também suporta integração com o Bean Validation e o Hibernate Validator. Para usar as validações 
+basta adicionar no seu classpath qualquer implementação do Bean Validation ou do Hibernate Validator.
+
+No exemplo anterior para validar o objeto Funcionario basta uma adicionar uma linha de código:
 
 [java]
 public adiciona(Funcionario funcionario) {
-	//Validação do Funcionario com Hibernate Validator
-	validator.addAll(Hibernate.validate(funcionario));
+	// Validação do Funcionario com o Bean Validator ou Hibernate Validator
+	validator.validate(funcionario);
 
 	validator.checking(new Validations(){{
 		that(!funcionario.getNome().isEmpty(), "erro","nomeNaoInformado");
 	}});
+	validator.onErrorUsePageOf(FuncionarioController.class).formulario();
 	
 	dao.adiciona(funcionario);
 }
@@ -132,6 +159,23 @@ public adiciona(Funcionario funcionario) {
 Note que se sua lógica adiciona algum erro de validação você **precisa** dizer pra onde o VRaptor deve ir.
 O validator.onErrorUse funciona do mesmo jeito que o result.use: você pode usar qualquer view da
 classe Results.
+
+[section Atalhos no Validator]
+
+Alguns redirecionamentos são bastante utilizados, então foram criados atalhos para eles.
+Os atalhos disponíveis são:
+[list]
+* validator.onErrorForwardTo(ClientController.class).list()  ==> validator.onErrorUse(logic()).forwardTo(ClientController.class).list();
+* validator.onErrorRedirectTo(ClientController.class).list() ==> validator.onErrorUse(logic()).redirectTo(ClientController.class).list();
+* validator.onErrorUsePageOf(ClientController.class).list()  ==> validator.onErrorUse(page()).of(ClientController.class).list();
+* validator.onErrorSendBadRequest()	                         ==> validator.onErrorUse(status()).badRequest(errors);
+[/list]
+Além disso, se o redirecionamento é para um método do mesmo controller, podemos usar:
+[list]
+* validator.onErrorForwardTo(this).list()  ==> validator.onErrorUse(logic()).forwardTo(this.getClass()).list();
+* validator.onErrorRedirectTo(this).list() ==> validator.onErrorUse(logic()).redirectTo(this.getClass()).list();
+* validator.onErrorUsePageOf(this).list()  ==> validator.onErrorUse(page()).of(this.getClass()).list();
+[/list]
 
 [section Mostrando os erros de validação no JSP]
 

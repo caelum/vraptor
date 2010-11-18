@@ -80,7 +80,7 @@
 		
 									<li><a class="link_toc" href="../../documentation/dependency-injection/">9. Dependency injection</a></li>
 		
-									<li><a class="link_toc" href="../../documentation/downloading/">10. Downloading</a></li>
+									<li><a class="link_toc" href="../../documentation/download-and-upload/">10. Download and Upload</a></li>
 		
 									<li><a class="link_toc" href="../../documentation/utility-components/">11. Utility Components</a></li>
 		
@@ -90,9 +90,13 @@
 		
 									<li><a class="link_toc" href="../../documentation/testing-components-and-controllers/">14. Testing components and controllers</a></li>
 		
-									<li><a class="link_toc" href="../../documentation/changelog/">15. ChangeLog</a></li>
+									<li><a class="link_toc" href="../../documentation/scala/">15. Scala</a></li>
 		
-									<li><a class="link_toc" href="../../documentation/migrating-from-vraptor2-to-vraptor3/">16. Migrating from VRaptor2 to VRaptor3</a></li>
+									<li><a class="link_toc" href="../../documentation/optimizations/">16. Optimizations</a></li>
+		
+									<li><a class="link_toc" href="../../documentation/changelog/">17. ChangeLog</a></li>
+		
+									<li><a class="link_toc" href="../../documentation/migrating-from-vraptor2-to-vraptor3/">18. Migrating from VRaptor2 to VRaptor3</a></li>
 		
                 </ol>
             </div><!-- submenu-->
@@ -122,10 +126,10 @@
 <span class="texnormal"></span><span class="textag">&lt;/filter-mapping&gt;</span></code></div>
 	    	<span class="paragraph">You can also easily import this project on Eclipse, and run it right clicking on it and choosing
 <em class="italic">Run as... / Run on server...</em>. Choose a servlet container (or setup a new one) and then just go
-for <code class="inlineCode"><a class="link" target="_blank" href="http://localhost:8080/vraptor-blank-project/</code>.">http://localhost:8080/vraptor-blank-project/%%.</a> </span>
+for <a class="link" target="_blank" href="http://localhost:8080/vraptor-blank-project/.">http://localhost:8080/vraptor-blank-project/.</a> </span>
 	    	<span class="paragraph">You can right click on the project name, go to <em class="italic">Properties</em> and in <em class="italic">Web Project Settings</em> you can change
 the context name to something better, like <code class="inlineCode">onlinestore</code>. Now if you run
-this example you should be able to access <code class="inlineCode"><a class="link" target="_blank" href="http://localhost:8080/onlinestore</code>">http://localhost:8080/onlinestore%%</a> and see
+this example you should be able to access <a class="link" target="_blank" href="http://localhost:8080/onlinestore">http://localhost:8080/onlinestore</a> and see
 <strong class="definition">It works!</strong> on the browser.</span>
 	    	<div class="box"><h3>Note</h3>
 <span class="paragraph">If you are using a servlet 3.0 container, you dont even need the <code class="inlineCode">web.xml</code> at all,
@@ -332,7 +336,7 @@ Before adding the product, we need to check if it is a valid product - which has
 <strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">that</span><span class="java8">(</span><span class="java10">!product.getName</span><span class="java8">()</span><span class="java10">.isEmpty</span><span class="java8">()</span><span class="java10">, </span><span class="java5">&#34;product.name&#34;</span><span class="java10">, </span><span class="java5">&#34;nome.empty&#34;</span><span class="java8">)</span><span class="java10">;<br /></strong>
 <strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; that</span><span class="java8">(</span><span class="java10">product.getPrice</span><span class="java8">() </span><span class="java10">&gt; </span><span class="java7">0</span><span class="java10">, </span><span class="java5">&#34;product.price&#34;</span><span class="java10">, </span><span class="java5">&#34;price.invalid&#34;</span><span class="java8">)</span><span class="java10">;<br /></strong>
 <strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java8">}})</span><span class="java10">;<br /></strong>
-<strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; validator.onErrorUse</span><span class="java8">(</span><span class="java10">Results.page</span><span class="java8">())</span><span class="java10">.of</span><span class="java8">(</span><span class="java10">ProductsController.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">.form</span><span class="java8">()</span><span class="java10">;<br /></strong>
+<strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; validator.onErrorUsePageOf</span><span class="java8">(</span><span class="java10">ProductsController.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">.form</span><span class="java8">()</span><span class="java10">;<br /></strong>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; dao.add</span><span class="java8">(</span><span class="java10">product</span><span class="java8">)</span><span class="java10">;<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; result.redirectTo</span><span class="java8">(</span><span class="java10">ProductsController.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">.list</span><span class="java8">()</span><span class="java10">;<br />
@@ -545,6 +549,7 @@ as follows:</span>
                     <li><a href="../../en/vraptor2.jsp">vraptor2</a></li>
                 </ul>
                 <p><a href="http://www.apache.org/licenses/LICENSE-2.0">Apache 2.0 License</a> - VRaptor ©2009 Caelum - Ensino e Inovação</p>
+                <p>Profiled with <a href="http://www.ej-technologies.com/products/jprofiler/overview.html">JProfiler</a></p>
             </div><!-- footnote-->
         </div><!-- footer content -->
         <a id="signature" href="mailto:lokidg@gmail.com">loki|design</a>

@@ -41,7 +41,7 @@ public class ClientController {
 }
 [/java]
 
-[section Parâmetros dos métodos]
+[section Method parameters]
 You can receive parameters on your controller methods, and if those parameters
 follow the java beans convention (getters and setters for class fields), 
 you can use dots for browsing through the fields. For instance, on method:
@@ -254,6 +254,20 @@ public class ClientController {
 }
 [/java]
 
+[title Multiple paths for the same logic method]
+You can set more than one path for the same logic method:
+[java]
+public class ClientController {
+
+  @Get
+  @Path({"/client/{client.id}/show/{section}", "/client/{client.id}/show/"})  
+  public Client show(Client client, String section) {
+    return ...
+  }
+  
+}
+[/java]
+
 [title Paths with regular expressions]
 You can limit your parameter values using regular expressions using this idiom:
 [java]
@@ -350,11 +364,11 @@ test paths with higher priority, in other words, paths with lower priority value
 public class PostController {
 
   @Get
-  @Path(priority = 2, value = "/post/{post.author}")
+  @Path(value = "/post/{post.author}", priority = Path.LOW)
   public void show(Post post) { ... }
 
   @Get
-  @Path(priority = 1, value = "/post/current")
+  @Path(value = "/post/current", priority = Path.HIGH)
   public void current() { ... }
 }
 [/java]
@@ -411,13 +425,4 @@ parameters. You can also add restrictions to these parameters:
   // If I want to ensure that the parameter is a number:
   routeFor("/client/{client.id}").withParameter("client.id").matching("\\d+")
   			.is(ClientController.class).show(null);
-[/java]
-
-At last, you can choose the class and the method names in runtime, allowing us to
-create extremely generic routes:
-
-[java]
-    routeFor("/{webResource}/doSomething/{webMethod}").is(
-		type("br.com.caelum.projectname.{webResource}"), 
-		method("{webMethod}"));
 [/java]

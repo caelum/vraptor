@@ -21,6 +21,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.ioc.Component;
+import br.com.caelum.vraptor.serialization.ProxyInitializer;
+import br.com.caelum.vraptor.serialization.SerializerBuilder;
 import br.com.caelum.vraptor.serialization.Serializer;
 import br.com.caelum.vraptor.serialization.XMLSerialization;
 import br.com.caelum.vraptor.view.ResultException;
@@ -39,10 +41,12 @@ public class XStreamXMLSerialization implements XMLSerialization {
 
 	private final HttpServletResponse response;
 	private final TypeNameExtractor extractor;
+	private final ProxyInitializer initializer;
 
-	public XStreamXMLSerialization(HttpServletResponse response, TypeNameExtractor extractor) {
+	public XStreamXMLSerialization(HttpServletResponse response, TypeNameExtractor extractor, ProxyInitializer initializer) {
 		this.response = response;
 		this.extractor = extractor;
+		this.initializer = initializer;
 	}
 
 	public boolean accepts(String format) {
@@ -54,9 +58,9 @@ public class XStreamXMLSerialization implements XMLSerialization {
 		return getSerializer().from(object);
 	}
 
-	protected Serializer getSerializer() {
+	protected SerializerBuilder getSerializer() {
 		try {
-			return new XStreamSerializer(getXStream(), response.getWriter());
+			return new XStreamSerializer(getXStream(), response.getWriter(), extractor, initializer);
 		} catch (IOException e) {
 			throw new ResultException("Unable to serialize data", e);
 		}

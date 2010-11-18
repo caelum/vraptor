@@ -1,5 +1,5 @@
 /***
- * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource
+ * Copyright (c) 2009 Caelum - wwyhiw.caelum.com.br/opensource
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,62 +17,68 @@
 
 package br.com.caelum.vraptor.interceptor;
 
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import java.io.IOException;
-import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 
 import javax.servlet.http.HttpSession;
 
-import org.hamcrest.Description;
-import org.jmock.Expectations;
-import org.jmock.api.Action;
-import org.jmock.api.Invocation;
+import net.vidageek.mirror.dsl.Mirror;
+
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.core.MethodInfo;
+import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.ParametersProvider;
+import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.test.VRaptorMockery;
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.ValidationMessage;
 
 public class ParametersInstantiatorInterceptorTest {
 
-    private VRaptorMockery mockery;
-    private ParametersInstantiatorInterceptor instantiator;
-    private MethodInfo params;
-    private ParametersProvider parametersProvider;
-	private Validator validator;
-	private Localization localization;
-	private InterceptorStack stack;
-	private ResourceBundle bundle;
+    private @Mock MethodInfo params;
+    private @Mock ParametersProvider parametersProvider;
+	private @Mock Validator validator;
+	private @Mock Localization localization;
+	private @Mock InterceptorStack stack;
+	private @Mock ResourceBundle bundle;
+	private @Mock HttpSession session;
+	private @Mock MutableRequest request;
+
 	private List<Message> errors ;
-	private HttpSession session;
+	private ParametersInstantiatorInterceptor instantiator;
+
+	private ResourceMethod method;
+	private ResourceMethod otherMethod;
 
 	@Before
 	@SuppressWarnings("unchecked")
     public void setup() throws Exception {
-        this.mockery = new VRaptorMockery();
-        this.params = mockery.mock(MethodInfo.class);
-        this.parametersProvider = mockery.mock(ParametersProvider.class);
-        this.validator = mockery.mock(Validator.class);
-        this.localization = mockery.localization();
-        this.session = mockery.mock(HttpSession.class);
+		MockitoAnnotations.initMocks(this);
+		when(localization.getBundle()).thenReturn(bundle);
+		when(request.getParameterNames()).thenReturn(Collections.enumeration(Collections.EMPTY_LIST));
 
-        this.instantiator = new ParametersInstantiatorInterceptor(parametersProvider, params, validator, localization, session);
-        this.stack = mockery.mock(InterceptorStack.class);
-        this.bundle = localization.getBundle();
+        this.instantiator = new ParametersInstantiatorInterceptor(parametersProvider, params, validator, localization, session, request);
 
-        Field errorsField = ParametersInstantiatorInterceptor.class.getDeclaredField("errors");
-        errorsField.setAccessible(true);
-		this.errors = (List<Message>) errorsField.get(this.instantiator);
+        this.errors = (List<Message>) new Mirror().on(instantiator).get().field("errors");
+        this.method = DefaultResourceMethod.instanceFor(Component.class, Component.class.getDeclaredMethod("method"));
+        this.otherMethod = DefaultResourceMethod.instanceFor(Component.class, Component.class.getDeclaredMethod("otherMethod", int.class));
     }
 
     class Component {
@@ -80,102 +86,94 @@ public class ParametersInstantiatorInterceptorTest {
         }
         void otherMethod(int oneParam){
         }
-
-        void oneMoreMethod(String a) {
-
-        }
     }
 
     @Test
     public void shouldUseTheProvidedParameters() throws InterceptionException, IOException, NoSuchMethodException {
-        final ResourceMethod method = mockery.methodFor(Component.class, "method");
 
-        mockery.checking(new Expectations() {{
-        	Object[] values = new Object[] { new Object() };
+    	Object[] values = new Object[] { new Object() };
 
-        	one(parametersProvider).getParametersFor(method, errors, bundle);
-            will(returnValue(values));
-
-            allowing(session).getAttribute(ParametersInstantiatorInterceptor.FLASH_PARAMETERS); will(returnValue(null));
-            one(validator).addAll(Collections.<Message>emptyList());
-            one(stack).next(method, null);
-            one(params).setParameters(values);
-        }});
+    	when(parametersProvider.getParametersFor(method, errors, bundle)).thenReturn(values);
 
         instantiator.intercept(stack, method, null);
-        mockery.assertIsSatisfied();
+
+        verify(params).setParameters(values);
+        verify(stack).next(method, null);
+        verify(validator).addAll(Collections.<Message>emptyList());
+    }
+
+    @Test
+    public void shouldConvertArrayParametersToIndexParameters() throws Exception {
+
+    	when(request.getParameterNames()).thenReturn(Collections.enumeration(Arrays.asList("someParam[].id", "unrelatedParam")));
+    	when(request.getParameterValues("someParam[].id")).thenReturn(new String[] {"one", "two", "three"});
+
+    	instantiator.intercept(stack, method, null);
+
+    	verify(request).setParameter("someParam[0].id", "one");
+    	verify(request).setParameter("someParam[1].id", "two");
+    	verify(request).setParameter("someParam[2].id", "three");
+    }
+
+    /**
+     * Bug related
+     */
+    @Test(expected=IllegalArgumentException.class)
+    public void shouldThrowExceptionWhenThereIsAParameterContainingDotClass() throws Exception {
+
+    	when(request.getParameterNames()).thenReturn(Collections.enumeration(Arrays.asList("someParam.class.id", "unrelatedParam")));
+    	when(request.getParameterValues("someParam.class.id")).thenReturn(new String[] {"whatever"});
+
+    	instantiator.intercept(stack, method, null);
+
     }
     @Test
     public void shouldUseAndDiscardFlashParameters() throws InterceptionException, IOException, NoSuchMethodException {
-    	final ResourceMethod method = mockery.methodFor(Component.class, "method");
+		Object[] values = new Object[] { new Object() };
 
-    	mockery.checking(new Expectations() {{
-    		Object[] values = new Object[] { new Object() };
-
-    		one(session).getAttribute(ParametersInstantiatorInterceptor.FLASH_PARAMETERS); will(returnValue(values));
-    		one(session).removeAttribute(ParametersInstantiatorInterceptor.FLASH_PARAMETERS);
-
-    		never(parametersProvider).getParametersFor(method, errors, bundle);
-
-    		one(validator).addAll(Collections.<Message>emptyList());
-    		one(stack).next(method, null);
-    		one(params).setParameters(values);
-    	}});
+		when(session.getAttribute(ParametersInstantiatorInterceptor.FLASH_PARAMETERS)).thenReturn(values);
 
     	instantiator.intercept(stack, method, null);
-    	mockery.assertIsSatisfied();
+
+    	verify(params).setParameters(values);
+    	verify(stack).next(method, null);
+    	verify(validator).addAll(Collections.<Message>emptyList());
+    	verify(parametersProvider, never()).getParametersFor(method, errors, bundle);
+    	verify(session).removeAttribute(ParametersInstantiatorInterceptor.FLASH_PARAMETERS);
     }
 
     @Test
     public void shouldValidateParameters() throws Exception {
-        final ResourceMethod method = mockery.methodFor(Component.class, "otherMethod", int.class);
+    	Object[] values = new Object[]{0};
 
-        mockery.checking(new Expectations() {{
-        	Object[] values = new Object[]{0};
+    	when(parametersProvider.getParametersFor(otherMethod, errors, bundle)).thenAnswer(addErrorsToListAndReturn(values, "error1"));
 
-        	one(parametersProvider).getParametersFor(method, errors, bundle);
-        	will(doAll(addErrorsToList("error1"),returnValue(values)));
+        instantiator.intercept(stack, otherMethod, null);
 
-        	allowing(session).getAttribute(ParametersInstantiatorInterceptor.FLASH_PARAMETERS); will(returnValue(null));
-
-        	one(validator).addAll(errors);
-            one(stack).next(method, null);
-            one(params).setParameters(values);
-
-        }});
-
-        instantiator.intercept(stack, method, null);
-        mockery.assertIsSatisfied();
+        verify(validator).addAll(errors);
+        verify(stack).next(otherMethod, null);
+        verify(params).setParameters(values);
     }
 
-    @Test(expected=RuntimeException.class)
+	@Test(expected=RuntimeException.class)
     public void shouldThrowException() throws Exception {
-        final ResourceMethod method = mockery.methodFor(Component.class, "method");
 
-        mockery.checking(new Expectations() {{
-        	allowing(session).getAttribute(ParametersInstantiatorInterceptor.FLASH_PARAMETERS); will(returnValue(null));
-
-        	one(parametersProvider).getParametersFor(method, errors, bundle);
-        	will(throwException(new RuntimeException()));
-        }});
+    	when(parametersProvider.getParametersFor(method, errors, bundle)).thenThrow(new RuntimeException());
 
         instantiator.intercept(stack, method, null);
-        mockery.assertIsSatisfied();
     }
 
-    private Action addErrorsToList(final String... messages) {
-    	return new Action() {
-			public void describeTo(Description description) {
-		        description.appendText("add something to errors");
-		    }
+    private <T> Answer<T> addErrorsToListAndReturn(final T value, final String... messages) {
+    	return new Answer<T>() {
 
-			public Object invoke(Invocation invocation) throws Throwable {
+			public T answer(InvocationOnMock invocation) throws Throwable {
 				for (String message : messages) {
 					errors.add(new ValidationMessage(message, "test"));
 				}
-				return null;
+				return value;
 			}
 
 		};
+
     }
 }

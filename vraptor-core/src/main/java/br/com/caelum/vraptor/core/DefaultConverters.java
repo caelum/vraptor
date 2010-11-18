@@ -24,9 +24,8 @@ import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
+import br.com.caelum.vraptor.TwoWayConverter;
 import br.com.caelum.vraptor.VRaptorException;
-import br.com.caelum.vraptor.converter.jodatime.LocalDateConverter;
-import br.com.caelum.vraptor.converter.jodatime.LocalTimeConverter;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Container;
 
@@ -35,22 +34,16 @@ public final class DefaultConverters implements Converters {
 
     private final LinkedList<Class<? extends Converter<?>>> classes;
     private final Logger logger = LoggerFactory.getLogger(DefaultConverters.class);
+	private final Container container;
 
-    public DefaultConverters() {
-        this.classes = new LinkedList<Class<? extends Converter<?>>>();
+    public DefaultConverters(Container container) {
+        this.container = container;
+		this.classes = new LinkedList<Class<? extends Converter<?>>>();
         logger.info("Registering bundled converters");
         for (Class<? extends Converter<?>> converterType : BaseComponents.getBundledConverters()) {
             logger.debug("bundled converter to be registered: " + converterType);
             register(converterType);
         }
-
-        try {
-			Class.forName("org.joda.time.LocalDate");
-			register(LocalDateConverter.class);
-			register(LocalTimeConverter.class);
-		} catch (ClassNotFoundException e) {
-			//OK, only register jodatime converters if jodatime is imported
-		}
     }
 
     public void register(Class<? extends Converter<?>> converterClass) {
@@ -58,29 +51,40 @@ public final class DefaultConverters implements Converters {
             throw new VRaptorException("The converter type " + converterClass.getName()
                     + " should have the Convert annotation");
         }
-        classes.addFirst(converterClass);
+		classes.addFirst(converterClass);
     }
 
-    public Converter<?> to(Class<?> clazz, Container container) {
-        Converter<?> foundConverter = findConverterFor(clazz, container);
-        if (foundConverter == null) {
+    public Converter<?> to(Class<?> clazz) {
+        if (!existsFor(clazz)) {
 			throw new VRaptorException("Unable to find converter for " + clazz.getName());
 		}
-        return foundConverter;
+        return container.instanceFor(findConverterType(clazz));
     }
 
-	private Converter<?> findConverterFor(Class<?> clazz, Container container) {
+	private Class<? extends Converter<?>> findConverterType(Class<?> clazz) {
 		for (Class<? extends Converter<?>> converterType : classes) {
             Class<?> boundType = converterType.getAnnotation(Convert.class).value();
             if (boundType.isAssignableFrom(clazz)) {
-                return container.instanceFor(converterType);
+                return converterType;
             }
         }
 		return null;
 	}
 
-	public boolean existsFor(Class<?> type, Container container) {
-		return findConverterFor(type, container) != null;
+	public boolean existsFor(Class<?> type) {
+		return findConverterType(type) != null;
+	}
+
+	public boolean existsTwoWayFor(Class<?> type) {
+		Class<? extends Converter<?>> found = findConverterType(type);
+		return found != null && TwoWayConverter.class.isAssignableFrom(found);
+	}
+
+	public TwoWayConverter<?> twoWayConverterFor(Class<?> type) {
+		if (!existsTwoWayFor(type)) {
+			throw new VRaptorException("Unable to find two way converter for " + type.getName());
+		}
+        return (TwoWayConverter<?>) container.instanceFor(findConverterType(type));
 	}
 
 }

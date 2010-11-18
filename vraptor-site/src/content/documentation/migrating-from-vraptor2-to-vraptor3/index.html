@@ -80,7 +80,7 @@
 		
 									<li><a class="link_toc" href="../../documentation/dependency-injection/">9. Dependency injection</a></li>
 		
-									<li><a class="link_toc" href="../../documentation/downloading/">10. Downloading</a></li>
+									<li><a class="link_toc" href="../../documentation/download-and-upload/">10. Download and Upload</a></li>
 		
 									<li><a class="link_toc" href="../../documentation/utility-components/">11. Utility Components</a></li>
 		
@@ -90,9 +90,13 @@
 		
 									<li><a class="link_toc" href="../../documentation/testing-components-and-controllers/">14. Testing components and controllers</a></li>
 		
-									<li><a class="link_toc" href="../../documentation/changelog/">15. ChangeLog</a></li>
+									<li><a class="link_toc" href="../../documentation/scala/">15. Scala</a></li>
 		
-									<li><a class="link_toc" href="../../documentation/migrating-from-vraptor2-to-vraptor3/">16. Migrating from VRaptor2 to VRaptor3</a></li>
+									<li><a class="link_toc" href="../../documentation/optimizations/">16. Optimizations</a></li>
+		
+									<li><a class="link_toc" href="../../documentation/changelog/">17. ChangeLog</a></li>
+		
+									<li><a class="link_toc" href="../../documentation/migrating-from-vraptor2-to-vraptor3/">18. Migrating from VRaptor2 to VRaptor3</a></li>
 		
                 </ol>
             </div><!-- submenu-->
@@ -125,6 +129,8 @@
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;filter-name&gt;</span><span class="texnormal">vraptor</span><span class="textag">&lt;/filter-name&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;url-pattern&gt;</span><span class="texnormal">/*</span><span class="textag">&lt;/url-pattern&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal"></span><span class="textag">&lt;/filter-mapping&gt;</span></code></div>
+	    	<span class="paragraph">and add all jars from lib/mandatory and lib/containers/&lt;one of the containers&gt; from
+  vraptor zip on your classpath.</span>
 	    	<span class="paragraph">Don't forget to remove the old VRaptorServlet declaration from VRaptor2, and its
   respective servlet-mapping.</span>
 		
@@ -235,7 +241,7 @@ make use of a special object which exposes your objects to the view. This object
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return </span><span class="java10">dao.list</span><span class="java8">()</span><span class="java10">; </span><span class="java3">// the name will be &#34;clientList&#34;<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
 &nbsp;&nbsp;&nbsp; <br />
-&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">listaDiferente</span><span class="java8">() {<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">anotherList</span><span class="java8">() {<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">result.include</span><span class="java8">(</span><span class="java5">&#34;clients&#34;</span><span class="java10">, dao.list</span><span class="java8">())</span><span class="java10">;<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
 &nbsp;&nbsp;&nbsp; <br />
@@ -339,8 +345,8 @@ So in VRaptor3 you have to do one of this two approaches:</span>
 &nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">setMyObject</span><span class="java8">(</span><span class="java10">MyObject object</span><span class="java8">) {<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">this</span><span class="java10">.session.setAttribute</span><span class="java8">(</span><span class="java5">&#34;object&#34;</span><span class="java10">, object</span><span class="java8">)</span><span class="java10">;<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
-&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">MeuObjeto getMeuObjeto</span><span class="java8">() {<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return this</span><span class="java10">.session.getAttribute</span><span class="java8">(</span><span class="java5">&#34;objeto&#34;</span><span class="java8">)</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">MeuObjeto getMyObject</span><span class="java8">() {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return this</span><span class="java10">.session.getAttribute</span><span class="java8">(</span><span class="java5">&#34;object&#34;</span><span class="java8">)</span><span class="java10">;<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
 }</span></code></div></li></ul>
 		
@@ -389,6 +395,7 @@ So in VRaptor3 you have to do one of this two approaches:</span>
                     <li><a href="../../en/vraptor2.jsp">vraptor2</a></li>
                 </ul>
                 <p><a href="http://www.apache.org/licenses/LICENSE-2.0">Apache 2.0 License</a> - VRaptor ©2009 Caelum - Ensino e Inovação</p>
+                <p>Profiled with <a href="http://www.ej-technologies.com/products/jprofiler/overview.html">JProfiler</a></p>
             </div><!-- footnote-->
         </div><!-- footer content -->
         <a id="signature" href="mailto:lokidg@gmail.com">loki|design</a>

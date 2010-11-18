@@ -64,6 +64,7 @@ By default, there are these view implementations:
 	* Results.page(), redirects directly to a page, that can be a jsp, an html, or any
 	URI relative to the web application directory or the application context.
 	* Results.http(), sends HTTP protocol informations, like status codes and headers.
+	* Results.status(), sends status codes with more information.
 	* Results.referer(), uses Referer header to redirect or forward.
 	* Results.nothing(), simply returns the HTTP success code (HTTP 200 OK).
 	* Results.xml(), uses xml serialization.
@@ -77,16 +78,22 @@ By default, there are these view implementations:
 Some redirections are pretty common, so there are shortcuts on Result interface for them.
 The available shortcuts are:
 [list]
-* result.forwardTo("/some/uri") ==> result.use(page()).forward("/some/uri");
+* result.forwardTo("/some/uri") 			==> result.use(page()).forward("/some/uri");
+* result.redirectTo("/some/uri") 			==>  result.use(page()).redirect("/some/uri)
+* result.permanentlyRedirectTo("/some/uri") ==> result.use(status()).movedPermanentlyTo("/some/uri");
 * result.forwardTo(ClientController.class).list() ==> result.use(logic()).forwardTo(ClientController.class).list();
 * result.redirectTo(ClientController.class).list() ==> result.use(logic()).redirectTo(ClientController.class).list();
-* result.of(ClientController.class).list() ==> result.use(page()).of(ClientController.class).list();
+* result.of(ClientController.class).list() 	==> result.use(page()).of(ClientController.class).list();
+* result.permanentlyRedirectTo(Controller.class) ==> use(status()).movedPermanentlyTo(Controller.class);
+* result.notFound()							==>  use(status()).notFound()
+* result.nothing()							==>  use(nothing());
 [/list]
 Furthermore, if one are redirecting to a method on the same controller, one can use:
 [list]
-* result.forwardTo(this).list() ==> result.use(logic()).forwardTo(this.getClass()).list();
-* result.redirectTo(this).list() ==> result.use(logic()).redirectTo(this.getClass()).list();
-* result.of(this).list() ==> result.use(page()).of(this.getClass()).list();
+* result.forwardTo(this).list() 		==> result.use(logic()).forwardTo(this.getClass()).list();
+* result.redirectTo(this).list() 		==> result.use(logic()).redirectTo(this.getClass()).list();
+* result.of(this).list() 				==> result.use(page()).of(this.getClass()).list();
+* result.permanentlyRedirectTo(this) 	==> use(status()).movedPermanentlyTo(this.getClass());
 [/list]
 
 [section Redirect and forward]
@@ -236,6 +243,12 @@ will result in something like:
 }}
 [/code]
 
+Moreover you can serialize recursively (be careful with cycles):
+[java]
+	result.use(json()).from(user).recursive().serialize();
+	result.use(xml()).from(user).recursive().serialize();
+[/java]
+
 The default implementation is based on XStream, so you can configure the serialization
 with annotations and direct configuration on XStream. It is just creating a class like:
 [java]
@@ -253,7 +266,7 @@ public class CustomXMLSerialization extends XStreamXMLSerialization {
 }
 [/java]
 
-[title Serializando Collections]
+[title Serializing Collections]
 
 When serializing collections, vRaptor will wrap their elements with a "list" tag:
 
@@ -340,3 +353,11 @@ results in:
 	}
 ]}
 [/code]
+
+[title Serializing JSON without root element]
+If you want to serialize an object to json without give it any names, you can use the
+withoutRoot method:
+[java]
+  result.use(json()).from(car).serialize(); //=> {'car': {'color': 'blue'}}
+  result.use(json()).withoutRoot().from(car).serialize(); //=> {'color': 'blue'} 
+[/java]

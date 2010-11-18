@@ -1,0 +1,17 @@
+<html>
+<head>
+<title>VRaptor + Scala (List Example)</teste>
+</head>
+<body>
+<%@ val stringList : List[String] %>
+
+<ul>
+#for (each <- stringList)
+	<li>${each}</li>
+#end
+</ul>
+
+
+</ul>
+</body>
+</html>

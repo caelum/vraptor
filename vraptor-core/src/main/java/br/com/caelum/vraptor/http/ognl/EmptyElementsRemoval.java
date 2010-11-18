@@ -2,17 +2,17 @@
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource
  * All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); 
- * you may not use this file except in compliance with the License. 
- * You may obtain a copy of the License at 
- * 
- * 	http://www.apache.org/licenses/LICENSE-2.0 
- * 
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an "AS IS" BASIS, 
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
- * See the License for the specific language governing permissions and 
- * limitations under the License. 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * 	http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package br.com.caelum.vraptor.http.ognl;
@@ -28,14 +28,14 @@ import java.util.Map;
 import java.util.Set;
 
 import br.com.caelum.vraptor.VRaptorException;
-import br.com.caelum.vraptor.ioc.ApplicationScoped;
+import br.com.caelum.vraptor.ioc.RequestScoped;
 
 /**
  * A component capable of removing null elements out of collections and arrays.
  *
  * @author guilherme silveira
  */
-@ApplicationScoped
+@RequestScoped
 public class EmptyElementsRemoval {
 
 	private final Set<Collection<?>> collections = new HashSet<Collection<?>>();
@@ -81,21 +81,7 @@ public class EmptyElementsRemoval {
 		}
 		for (SetValue setter : arrays.keySet()) {
 			Object array = arrays.get(setter);
-			int length = Array.getLength(array);
-			int total = length;
-			for (int i = 0; i < length; i++) {
-				if (Array.get(array, i) == null) {
-					total--;
-				}
-			}
-			Object newArray = Array.newInstance(array.getClass().getComponentType(), total);
-			int actual = 0;
-			for (int i = 0; i < length; i++) {
-				Object value = Array.get(array, i);
-				if (value != null) {
-					Array.set(newArray, actual++, value);
-				}
-			}
+			Object newArray = removeNullsFromArray(array);
 			try {
 				setter.set(newArray);
 			} catch (InvocationTargetException e) {
@@ -104,6 +90,25 @@ public class EmptyElementsRemoval {
 				throw new IllegalArgumentException(e);
 			}
 		}
+	}
+
+	public Object removeNullsFromArray(Object array) {
+		int length = Array.getLength(array);
+		int total = length;
+		for (int i = 0; i < length; i++) {
+			if (Array.get(array, i) == null) {
+				total--;
+			}
+		}
+		Object newArray = Array.newInstance(array.getClass().getComponentType(), total);
+		int actual = 0;
+		for (int i = 0; i < length; i++) {
+			Object value = Array.get(array, i);
+			if (value != null) {
+				Array.set(newArray, actual++, value);
+			}
+		}
+		return newArray;
 	}
 
 	public void add(Collection<?> collection) {

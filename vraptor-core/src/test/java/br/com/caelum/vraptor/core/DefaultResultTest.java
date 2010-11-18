@@ -35,6 +35,7 @@ import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.view.LogicResult;
 import br.com.caelum.vraptor.view.PageResult;
+import br.com.caelum.vraptor.view.Status;
 import br.com.caelum.vraptor.view.DefaultHttpResultTest.RandomController;
 
 public class DefaultResultTest {
@@ -47,7 +48,7 @@ public class DefaultResultTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        result = new DefaultResult(request, container);
+        result = new DefaultResult(request, container, null);
     }
 
     public static class MyView implements View {
@@ -78,7 +79,17 @@ public class DefaultResultTest {
 
     	result.forwardTo("/any/uri");
 
-    	verify(pageResult).forward("/any/uri");
+    	verify(pageResult).forwardTo("/any/uri");
+	}
+
+    @Test
+	public void shouldDelegateToPageResultOnRedirectToURI() throws Exception {
+
+    	PageResult pageResult = mockResult(PageResult.class);
+
+    	result.redirectTo("/any/uri");
+
+    	verify(pageResult).redirectTo("/any/uri");
 	}
 
 	private <T extends View> T mockResult(Class<T> view) {
@@ -146,6 +157,50 @@ public class DefaultResultTest {
     	result.of(new RandomController());
 
     	verify(pageResult).of(RandomController.class);
+
+    }
+
+    @Test
+    public void shouldDelegateToStatusOnNotFound() throws Exception {
+
+    	Status status = mockResult(Status.class);
+
+    	result.notFound();
+
+    	verify(status).notFound();
+
+    }
+
+    @Test
+    public void shouldDelegateToStatusOnPermanentlyRedirectToUri() throws Exception {
+
+    	Status status = mockResult(Status.class);
+
+    	result.permanentlyRedirectTo("url");
+
+    	verify(status).movedPermanentlyTo("url");
+
+    }
+
+    @Test
+    public void shouldDelegateToStatusOnPermanentlyRedirectToControllerClass() throws Exception {
+
+    	Status status = mockResult(Status.class);
+
+    	result.permanentlyRedirectTo(RandomController.class);
+
+    	verify(status).movedPermanentlyTo(RandomController.class);
+
+    }
+
+    @Test
+    public void shouldDelegateToStatusOnPermanentlyRedirectToControllerInstance() throws Exception {
+
+    	Status status = mockResult(Status.class);
+
+    	result.permanentlyRedirectTo(new RandomController());
+
+    	verify(status).movedPermanentlyTo(RandomController.class);
 
     }
 }

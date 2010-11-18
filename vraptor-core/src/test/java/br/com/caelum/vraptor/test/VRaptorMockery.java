@@ -186,6 +186,7 @@ public class VRaptorMockery {
 			protected Object handleGetObject(String key) {
 				return value;
 			}
+			@SuppressWarnings("unchecked")
 			@Override
 			public Enumeration<String> getKeys() {
 				return iogiParametersProviderTest.enumerationFor(key);

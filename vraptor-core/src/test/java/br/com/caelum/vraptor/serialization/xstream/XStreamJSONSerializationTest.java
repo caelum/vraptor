@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.io.ByteArrayOutputStream;
@@ -16,12 +17,14 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.hibernate.proxy.HibernateProxy;
+import org.hibernate.proxy.LazyInitializer;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
-import br.com.caelum.vraptor.serialization.xstream.XStreamJSONSerialization;
+import br.com.caelum.vraptor.serialization.HibernateProxyInitializer;
 
 public class XStreamJSONSerializationTest {
 
@@ -36,7 +39,7 @@ public class XStreamJSONSerializationTest {
         HttpServletResponse response = mock(HttpServletResponse.class);
         when(response.getWriter()).thenReturn(new PrintWriter(stream));
 
-        this.serialization = new XStreamJSONSerialization(response, new DefaultTypeNameExtractor());
+        this.serialization = new XStreamJSONSerialization(response, new DefaultTypeNameExtractor(), new HibernateProxyInitializer());
     }
 
 	public static class Address {
@@ -83,6 +86,7 @@ public class XStreamJSONSerializationTest {
 	}
 	public static class AdvancedOrder extends Order{
 
+		@SuppressWarnings("unused")
 		private final String notes;
 
 		public AdvancedOrder(Client client, double price, String comments, String notes) {
@@ -114,6 +118,7 @@ public class XStreamJSONSerializationTest {
 			super(client, price, comments);
 			this.type = type;
 		}
+		@SuppressWarnings("unused")
 		private final Type type;
 	}
 
@@ -167,7 +172,7 @@ public class XStreamJSONSerializationTest {
 		String expectedResult = "<o:order>\n  <o:price>15.0</o:price>\n  <o:comments>pack it nicely, please</o:comments>\n</o:order>";
 		expectedResult += expectedResult;
 		expectedResult = "<o:orders xmlns:o=\"http://www.caelum.com.br/order\">" + expectedResult + "</o:orders>";
-		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
+//		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
 //		serializer.from("orders", Arrays.asList(order, order)).namespace("http://www.caelum.com.br/order","o").serialize();
 		assertThat(result(), is(equalTo(expectedResult)));
 	}
@@ -234,8 +239,60 @@ public class XStreamJSONSerializationTest {
 		assertThat(result(), not(containsString("12.99")));
 	}
 
+	@Test
+	public void shouldOptionallyRemoveRoot() {
+		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please",
+				new Item("any item", 12.99));
+		serialization.withoutRoot().from(order).include("items").exclude("items.price").serialize();
+		assertThat(result(), containsString("\"items\""));
+		assertThat(result(), containsString("\"name\": \"any item\""));
+		assertThat(result(), not(containsString("12.99")));
+		assertThat(result(), not(containsString("\"order\":")));
+	}
+
 	private String result() {
 		return new String(stream.toByteArray());
+	}
+
+	public static class SomeProxy extends Client implements HibernateProxy {
+		private static final long serialVersionUID = 1L;
+
+		private String aField;
+
+		private transient LazyInitializer initializer;
+
+		public SomeProxy(LazyInitializer initializer) {
+			super("name");
+			this.initializer = initializer;
+		}
+		public LazyInitializer getHibernateLazyInitializer() {
+			return initializer;
+		}
+
+		public String getaField() {
+			return aField;
+		}
+
+		public Object writeReplace() {
+			return this;
+		}
+
+	}
+	@Test
+	public void shouldRunHibernateLazyInitialization() throws Exception {
+		LazyInitializer initializer = mock(LazyInitializer.class);
+
+		SomeProxy proxy = new SomeProxy(initializer);
+		proxy.name = "my name";
+		proxy.aField = "abc";
+
+		when(initializer.getPersistentClass()).thenReturn(Client.class);
+
+		serialization.from(proxy).serialize();
+
+		assertThat(result(), is("{\"client\": {\n  \"name\": \"my name\",\n  \"aField\": \"abc\"\n}}"));
+
+		verify(initializer).initialize();
 	}
 
 

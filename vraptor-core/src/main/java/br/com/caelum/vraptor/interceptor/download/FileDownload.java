@@ -29,13 +29,20 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author filipesabella
  * @author Paulo Silveira
+ * 
+ * @see InputStreamDownload
+ * @see ByteArrayDownload
  */
 public class FileDownload implements Download {
 	private final InputStreamDownload inputDownload;
 
-	public FileDownload(File file, String contentType, String fileName) {
-		this(file, contentType, fileName, false);
-	}
+    public FileDownload(File file, String contentType, String fileName) {
+        this(file, contentType, fileName, false);
+    }
+
+    public FileDownload(File file, String contentType) {
+        this(file, contentType, file.getName(), false);
+    }
 
 	public FileDownload(File file, String contentType, String fileName, boolean doDownload) {
 		try {
@@ -45,7 +52,7 @@ public class FileDownload implements Download {
 			throw new IllegalArgumentException(e);
 		}
 	}
-
+	
 	public void write(HttpServletResponse response) throws IOException {
 		inputDownload.write(response);
 	}

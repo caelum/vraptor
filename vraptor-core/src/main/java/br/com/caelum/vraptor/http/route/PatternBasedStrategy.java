@@ -36,6 +36,7 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  *
  * @author guilherme silveira
  */
+@Deprecated
 public class PatternBasedStrategy implements Route {
 
 	private final Logger logger = LoggerFactory.getLogger(PatternBasedStrategy.class);
@@ -101,7 +102,7 @@ public class PatternBasedStrategy implements Route {
 		return Modifier.isPublic(m.getModifiers()) && !Modifier.isStatic(m.getModifiers());
 	}
 
-	public String urlFor(Class<?> type, Method m, Object params) {
+	public String urlFor(Class<?> type, Method m, Object... params) {
 		return control.apply(new String[] { this.type.extract("webLogic", type.getName()),
 				this.method.extract("webMethod", m.getName()) });
 	}
@@ -110,9 +111,59 @@ public class PatternBasedStrategy implements Route {
 		return this.priority;
 	}
 
+	public String getOriginalUri() {
+		return control.toString();
+	}
+
 	@Override
 	public String toString() {
 		return String.format("[PatternBasedStrategy: %-50s %-50s %s]", type, method, methods.size() == HttpMethod
 				.values().length ? "ALL" : methods);
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((method == null) ? 0 : method.hashCode());
+		result = prime * result + ((methods == null) ? 0 : methods.hashCode());
+		result = prime * result + ((type == null) ? 0 : type.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		PatternBasedStrategy other = (PatternBasedStrategy) obj;
+		if (method == null) {
+			if (other.method != null) {
+				return false;
+			}
+		} else if (!method.equals(other.method)) {
+			return false;
+		}
+		if (methods == null) {
+			if (other.methods != null) {
+				return false;
+			}
+		} else if (!methods.equals(other.methods)) {
+			return false;
+		}
+		if (type == null) {
+			if (other.type != null) {
+				return false;
+			}
+		} else if (!type.equals(other.type)) {
+			return false;
+		}
+		return true;
 	}
 }

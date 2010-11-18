@@ -280,6 +280,20 @@ public class ClienteController {
 }
 [/java]
 
+[title Vários paths para a mesma lógica]
+Você pode setar mais de um path pra mesma lógica fazendo:
+[java]
+@Resource
+public class ClienteController {
+
+  @Path({"/cliente/{cliente.id}/visualiza/{secao}", "/cliente/{cliente.id}/visualiza/"})  
+  public Cliente visualiza(Cliente cliente, String secao) {
+    return ...
+  }
+  
+}
+[/java]
+
 [title Paths com *]
 
 Você também pode utilizar o * como método de seleção para a sua uri. O exemplo a
@@ -360,11 +374,11 @@ primeiro os paths com maior prioridade, ou seja, valor menor de prioridade:
 public class PostController {
 
   @Get
-  @Path(priority = 2, value = "/post/{post.autor}")
+  @Path(value = "/post/{post.autor}", priority=Path.LOW)
   public void mostra(Post post) { ... }
 
   @Get
-  @Path(priority = 1, value = "/post/atual")
+  @Path(value = "/post/atual", priority=Path.HIGH)
   public void atual() { ... }
 }
 [/java]
@@ -423,12 +437,4 @@ parâmetros do método. Você pode ainda adicionar restrições para esses parâ
   // Se eu quiser garantir que o parametro seja um número:
   routeFor("/cliente/{cliente.id}").withParameter("cliente.id").matching("\\d+")
   			.is(ClienteController.class).mostra(null);
-[/java]
-Por fim, você pode escolher o nome da classe e o nome do método em tempo de execução,
-que permite criar rotas extremamente genéricas:
-
-[java]
-    routeFor("/{webResource}/facaAlgo/{webMethod}").is(
-		type("br.com.caelum.nomedoprojeto.{webResource}"), 
-		method("{webMethod}"));
 [/java]

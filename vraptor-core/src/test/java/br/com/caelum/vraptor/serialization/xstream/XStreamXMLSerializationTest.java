@@ -12,7 +12,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -21,8 +24,10 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
+import br.com.caelum.vraptor.serialization.NullProxyInitializer;
 import br.com.caelum.vraptor.serialization.Serialization;
-import br.com.caelum.vraptor.serialization.xstream.XStreamXMLSerialization;
+
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 public class XStreamXMLSerializationTest {
 
@@ -36,7 +41,7 @@ public class XStreamXMLSerializationTest {
         HttpServletResponse response = mock(HttpServletResponse.class);
         when(response.getWriter()).thenReturn(new PrintWriter(stream));
 
-		this.serialization = new XStreamXMLSerialization(response, new DefaultTypeNameExtractor());
+		this.serialization = new XStreamXMLSerialization(response, new DefaultTypeNameExtractor(), new NullProxyInitializer());
     }
 
 	public static class Address {
@@ -48,6 +53,7 @@ public class XStreamXMLSerializationTest {
 	public static class Client {
 		String name;
 		Address address;
+
 		public Client(String name) {
 			this.name = name;
 		}
@@ -81,8 +87,15 @@ public class XStreamXMLSerializationTest {
 		}
 
 	}
+	public static class Properties {
+		Map<String, String> map;
+		public Properties(String key, String value) {
+			map = new HashMap<String, String>(Collections.singletonMap(key, value));
+		}
+	}
 	public static class AdvancedOrder extends Order{
 
+		@SuppressWarnings("unused")
 		private final String notes;
 
 		public AdvancedOrder(Client client, double price, String comments, String notes) {
@@ -90,6 +103,13 @@ public class XStreamXMLSerializationTest {
 			this.notes = notes;
 		}
 
+	}
+
+	@Test
+	public void shouldSerializeMaps() {
+		String expectedResult = "<properties>\n  <map>\n    <entry>\n      <string>test</string>\n      <string>true</string>\n    </entry>\n  </map>\n</properties>";
+		serialization.from(new Properties("test", "true")).include("map").serialize();
+		assertThat(result(), is(equalTo(expectedResult)));
 	}
 
 	@Test
@@ -113,6 +133,7 @@ public class XStreamXMLSerializationTest {
 			super(client, price, comments);
 			this.type = type;
 		}
+		@SuppressWarnings("unused")
 		private final Type type;
 	}
 
@@ -156,15 +177,14 @@ public class XStreamXMLSerializationTest {
 		assertThat(result(), containsString("</items>"));
 	}
 	@Test
-	public void shouldExcludeNonPrimitiveFieldsFromACollection() {
+	public void shouldIncludeAllFieldsWhenRecursive() {
 		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please",
 				new Item("name", 12.99));
-		serialization.from(Arrays.asList(order, order), "orders").exclude("price").serialize();
+		serialization.from(order).recursive().serialize();
 
-		assertThat(result(), not(containsString("<items>")));
-		assertThat(result(), not(containsString("<name>name</name>")));
-		assertThat(result(), not(containsString("<price>12.99</price>")));
-		assertThat(result(), not(containsString("<price>15.0</price>")));
+		assertThat(result(), containsString("<items>"));
+		assertThat(result(), containsString("<name>name</name>"));
+		assertThat(result(), containsString("<price>12.99</price>"));
 	}
 	@Test
 	public void shouldExcludeFieldsFromACollection() {
@@ -186,7 +206,7 @@ public class XStreamXMLSerializationTest {
 		String expectedResult = "<o:order>\n  <o:price>15.0</o:price>\n  <o:comments>pack it nicely, please</o:comments>\n</o:order>";
 		expectedResult += expectedResult;
 		expectedResult = "<o:orders xmlns:o=\"http://www.caelum.com.br/order\">" + expectedResult + "</o:orders>";
-		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
+//		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
 //		serializer.from("orders", Arrays.asList(order, order)).namespace("http://www.caelum.com.br/order","o").serialize();
 		assertThat(result(), is(equalTo(expectedResult)));
 	}
@@ -253,10 +273,40 @@ public class XStreamXMLSerializationTest {
 		assertThat(result(), containsString("</items>"));
 	}
 
+	static class WithAlias {
+		@SuppressWarnings("unused")
+		@XStreamAlias("def")
+		private String abc;
+	}
+
+	static class WithAliasedAttribute {
+		@SuppressWarnings("unused")
+		private WithAlias aliased;
+	}
+
+	@Test
+	public void shouldAutomaticallyReadXStreamAnnotations() {
+		WithAlias alias = new WithAlias();
+		alias.abc = "Duh!";
+		serialization.from(alias).serialize();
+		assertThat(result(), is("<withAlias>\n  <def>Duh!</def>\n</withAlias>"));
+	}
+
+	@Test
+	public void shouldAutomaticallyReadXStreamAnnotationsForIncludedAttributes() {
+		WithAlias alias = new WithAlias();
+		alias.abc = "Duh!";
+
+		WithAliasedAttribute attribute = new WithAliasedAttribute();
+		attribute.aliased = alias;
+
+		serialization.from(attribute).include("aliased").serialize();
+		assertThat(result(), is("<withAliasedAttribute>\n  <aliased>\n    <def>Duh!</def>\n  </aliased>\n</withAliasedAttribute>"));
+	}
+
 	private String result() {
 		return new String(stream.toByteArray());
 	}
 
-
-
 }
+

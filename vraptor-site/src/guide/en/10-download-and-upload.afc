@@ -1,4 +1,4 @@
-[chapter Downloading]
+[chapter Download and Upload]
 
 [section 1 minute example: download]
 
@@ -34,6 +34,16 @@ public class ProfileController {
 }
 [/java]
 
+You can also use the %%InputStreamDownload%% implementation to work with Streams or
+%%ByteArrayDownload%% to work with byte array (since 3.2-snapshot).
+
+[section Upload]
+
+The upload component is optional. To enable this feature, you only need to add the %%commons-upload%% library in your classpath.
+
+Since Vraptor 3.2, if you're in a container that implements the JSR-315 (Servlet 3.0), you don't need %%commons-upload%% nor
+ %%commons-io%% libraries because the servlet container already have this.
+
 [section 1 minute example: upload]
 
 The first example is based on the multipart upload feature.
@@ -57,7 +67,7 @@ public class ProfileController {
 [section More about Upload]
 
 UploadedFile returns the file content as a InputStream. If you want to save this file on disk in an 
-easy way, you can use the %%commons-io IOUtils%%, that is already a VRaptor dependency:
+easy way, you can use the %%commons-io IOUtils%%:
 [java]
 	public void updatePicture(Profile profile, UploadedFile picture) {
 		File pictureOnDisk = new File();	
@@ -65,3 +75,18 @@ easy way, you can use the %%commons-io IOUtils%%, that is already a VRaptor depe
 		dao.atribui(pictureOnDisk, profile);
 	}
 [/java]
+
+[section Overriding upload settings]
+
+You can also change the default upload settings overriding the class %%MultipartConfig%%. In example below, the size limit of upload is changed.
+
+[java]@Component
+@ApplicationScoped
+public class CustomMultipartConfig extends DefaultMultipartConfig {
+
+    public long getSizeLimit() {
+        return 50 * 1024 * 1024; // 50MB
+    }
+
+}[/java]
+

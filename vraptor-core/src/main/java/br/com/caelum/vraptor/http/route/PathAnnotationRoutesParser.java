@@ -17,14 +17,15 @@
 
 package br.com.caelum.vraptor.http.route;
 
+import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
-import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.ResourceClass;
 
@@ -37,7 +38,7 @@ import br.com.caelum.vraptor.resource.ResourceClass;
  * class like:
  *
  * public class MyRoutesParser extends PathAnnotationRoutesParser { //delegate
- * constructor protected String extractControllerNameFrom(Class<?> type) {
+ * constructor protected String extractControllerNameFrom(Class&lt;?&gt; type) {
  * return //your convention here }
  *
  * protected String defaultUriFor(String controllerName, String methodName) {
@@ -49,12 +50,10 @@ import br.com.caelum.vraptor.resource.ResourceClass;
 @ApplicationScoped
 public class PathAnnotationRoutesParser implements RoutesParser {
 
-	private final Proxifier proxifier;
-	private final TypeFinder finder;
+	private final Router router;
 
-	public PathAnnotationRoutesParser(Proxifier proxifier, TypeFinder finder) {
-		this.proxifier = proxifier;
-		this.finder = finder;
+	public PathAnnotationRoutesParser(Router router) {
+		this.router = router;
 	}
 
 	public List<Route> rulesFor(ResourceClass resource) {
@@ -63,27 +62,40 @@ public class PathAnnotationRoutesParser implements RoutesParser {
 	}
 
 	protected List<Route> registerRulesFor(Class<?> baseType) {
+		EnumSet<HttpMethod> typeMethods = getHttpMethods(baseType);
+
 		List<Route> routes = new ArrayList<Route>();
 		for (Method javaMethod : baseType.getMethods()) {
 			if (isEligible(javaMethod)) {
 				String[] uris = getURIsFor(javaMethod, baseType);
 
 				for (String uri : uris) {
-					RouteBuilder rule = new RouteBuilder(proxifier, finder, uri);
-					for (HttpMethod m : HttpMethod.values()) {
-						if (javaMethod.isAnnotationPresent(m.getAnnotation())) {
-							rule.with(m);
-						}
-					}
+					RouteBuilder rule = router.builderFor(uri);
+
+					EnumSet<HttpMethod> methods = getHttpMethods(javaMethod);
+
+					rule.with(methods.isEmpty() ? typeMethods : methods);
+
 					if (javaMethod.isAnnotationPresent(Path.class)) {
 						rule.withPriority(javaMethod.getAnnotation(Path.class).priority());
 					}
+
 					rule.is(baseType, javaMethod);
 					routes.add(rule.build());
 				}
 			}
 		}
 		return routes;
+	}
+
+	private EnumSet<HttpMethod> getHttpMethods(AnnotatedElement annotated) {
+		EnumSet<HttpMethod> methods = EnumSet.noneOf(HttpMethod.class);
+		for (HttpMethod method : HttpMethod.values()) {
+			if (annotated.isAnnotationPresent(method.getAnnotation())) {
+				methods.add(method);
+			}
+		}
+		return methods;
 	}
 
 	protected boolean isEligible(Method javaMethod) {

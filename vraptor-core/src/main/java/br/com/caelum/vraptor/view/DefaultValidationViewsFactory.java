@@ -25,7 +25,9 @@ import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.proxy.MethodInvocation;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.SuperMethod;
+import br.com.caelum.vraptor.serialization.NoRootSerialization;
 import br.com.caelum.vraptor.serialization.Serializer;
+import br.com.caelum.vraptor.serialization.SerializerBuilder;
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.ValidationException;
 
@@ -69,21 +71,24 @@ public class DefaultValidationViewsFactory implements ValidationViewsFactory {
 		return new MethodInvocation<T>() {
 			public Object intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {
 				final Object instance = new Mirror().on(viewInstance).invoke().method(method).withArgs(args);
-				if (method.getReturnType() == void.class) {
+				Class type = method.getReturnType();
+				if (type == void.class) {
 					throw new ValidationException(errors);
 				}
 
-				if (view.isAssignableFrom(method.getReturnType())) {
+				if (view.isAssignableFrom(type)) {
 					return proxy;
 				}
 
-				if (args.length > 0 && args[0] instanceof Class) {
+				if (args.length > 0 && args[0] instanceof Class<?>) {
 					return proxifier.proxify((Class<?>) args[0], throwValidationExceptionOnFirstInvocation(errors, instance));
 				}
 
-				if (Serializer.class.isAssignableFrom(method.getReturnType())) {
-					return proxifier.proxify(Serializer.class,
-							throwValidationErrorOnFinalMethods(Serializer.class, errors, Serializer.class.cast(instance)));
+				if (Serializer.class.isAssignableFrom(type)
+						|| SerializerBuilder.class.isAssignableFrom(type)
+						|| NoRootSerialization.class.isAssignableFrom(type)) {
+					return proxifier.proxify(type,
+							throwValidationErrorOnFinalMethods(type, errors, type.cast(instance)));
 				}
 				throw new ResultException("It's not possible to create a validation version of " + method + ". You must provide a Custom Validation version of your class, or inform this corner case to VRaptor developers");
 			}

@@ -28,13 +28,12 @@ import java.util.Iterator;
 import java.util.List;
 
 import br.com.caelum.vraptor.VRaptorException;
+import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor.http.TypeCreator;
+import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.proxy.Proxifier;
-import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.resource.HttpMethod;
-import br.com.caelum.vraptor.resource.ResourceClass;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.util.collections.Filters;
 
@@ -53,31 +52,22 @@ public class DefaultRouter implements Router {
 
 	private final Proxifier proxifier;
 	private final Collection<Route> routes = new PriorityRoutesList();
-	private final RoutesParser routesParser;
-	private final TypeCreator creator;
 	private final TypeFinder finder;
+	private final Converters converters;
+	private final ParameterNameProvider nameProvider;
 
-	public DefaultRouter(RoutesConfiguration config, RoutesParser resourceRoutesCreator,
-			Proxifier proxifier, TypeCreator creator, TypeFinder finder) {
-		this.routesParser = resourceRoutesCreator;
-		this.creator = creator;
+	public DefaultRouter(RoutesConfiguration config,
+			Proxifier proxifier, TypeFinder finder, Converters converters, ParameterNameProvider nameProvider) {
 		this.proxifier = proxifier;
 		this.finder = finder;
+		this.converters = converters;
+		this.nameProvider = nameProvider;
 
 		config.config(this);
 	}
 
-	private void add(List<Route> rules) {
-		for (Route r : rules) {
-			add(r);
-		}
-	}
-
 	public RouteBuilder builderFor(String uri) {
-		return new RouteBuilder(proxifier, finder, uri);
-	}
-	public Proxifier getProxifier() {
-		return proxifier;
+		return new DefaultRouteBuilder(proxifier, finder, converters, nameProvider, uri);
 	}
 
 	/**
@@ -88,7 +78,7 @@ public class DefaultRouter implements Router {
 	}
 
 	public ResourceMethod parse(String uri, HttpMethod method, MutableRequest request)
-						throws ResourceNotFoundException, MethodNotAllowedException{
+						throws MethodNotAllowedException{
 		Collection<Route> routesMatchingUriAndMethod = routesMatchingUriAndMethod(uri, method);
 
 		Iterator<Route> iterator = routesMatchingUriAndMethod.iterator();
@@ -116,7 +106,7 @@ public class DefaultRouter implements Router {
 		Collection<Route> routesMatchingMethod = Collections2.filter(routesMatchingUri(uri), Filters.allow(method));
 		if (routesMatchingMethod.isEmpty()) {
 			EnumSet<HttpMethod> allowed = allowedMethodsFor(uri);
-			throw new MethodNotAllowedException(allowed, method);
+			throw new MethodNotAllowedException(allowed, method.toString());
 		}
 		return routesMatchingMethod;
 	}
@@ -137,16 +127,11 @@ public class DefaultRouter implements Router {
 		return routesMatchingURI;
 	}
 
-	public void register(ResourceClass resource) {
-		add(this.routesParser.rulesFor(resource));
-	}
-
 	public <T> String urlFor(Class<T> type, Method method, Object... params) {
 		Iterator<Route> matches = Iterators.filter(routes.iterator(), Filters.canHandle(type, method));
 		if (matches.hasNext()) {
 			try {
-				ResourceMethod resourceMethod = DefaultResourceMethod.instanceFor(type, method);
-				return matches.next().urlFor(type, method, creator.instanceWithParameters(resourceMethod, params));
+				return matches.next().urlFor(type, method, params);
 			} catch (Exception e) {
 				throw new VRaptorException("The selected route is invalid for redirection: " + type.getName() + "."
 						+ method.getName(), e);

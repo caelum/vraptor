@@ -23,7 +23,6 @@ import java.util.List;
 
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.resource.HttpMethod;
-import br.com.caelum.vraptor.resource.ResourceClass;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**
@@ -51,12 +50,6 @@ public interface Router {
 	 */
 	ResourceMethod parse(String uri, HttpMethod method, MutableRequest request)
 		throws ResourceNotFoundException, MethodNotAllowedException, IllegalStateException;
-
-	/**
-	 * Registers this resource using the default algorithm for uri
-	 * identification.
-	 */
-	void register(ResourceClass resource);
 
 	/**
 	 * Retrieves a single url to access the desired method.

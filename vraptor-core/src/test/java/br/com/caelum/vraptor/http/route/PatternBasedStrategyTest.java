@@ -26,22 +26,20 @@ import java.util.EnumSet;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.test.VRaptorMockery;
 
 
+@Deprecated
 public class PatternBasedStrategyTest {
 
 
 	private VRaptorMockery mockery;
-	private MutableRequest request;
 	private ParametersControl control;
 
 	@Before
 	public void setup() {
 		this.mockery = new VRaptorMockery();
-		this.request = mockery.mock(MutableRequest.class);
 		this.control = mockery.mock(ParametersControl.class);
 	}
 

@@ -17,8 +17,6 @@
 
 package br.com.caelum.vraptor.core;
 
-import static br.com.caelum.vraptor.view.Results.logic;
-import static br.com.caelum.vraptor.view.Results.page;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -32,22 +30,28 @@ import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 
 @RequestScoped
-public class DefaultResult implements Result {
+public class DefaultResult extends AbstractResult {
 
     private final HttpServletRequest request;
     private final Container container;
     private final Map<String, Object> includedAttributes;
     private boolean responseCommitted = false;
+    private final ExceptionMapper exceptions;
 
-    public DefaultResult(HttpServletRequest request, Container container) {
+    public DefaultResult(HttpServletRequest request, Container container, ExceptionMapper exceptions) {
         this.request = request;
         this.container = container;
         this.includedAttributes = new HashMap<String, Object>();
+        this.exceptions = exceptions;
     }
 
     public <T extends View> T use(Class<T> view) {
         this.responseCommitted = true;
         return container.instanceFor(view);
+    }
+    
+    public Result on(Class<? extends Exception> exception) {
+        return exceptions.record(exception);
     }
 
     public Result include(String key, Object value) {
@@ -62,36 +66,5 @@ public class DefaultResult implements Result {
 
 	public Map<String, Object> included() {
 		return Collections.unmodifiableMap(includedAttributes);
-	}
-
-	public void forwardTo(String uri) {
-		use(page()).forward(uri);
-	}
-
-	public <T> T forwardTo(Class<T> controller) {
-		return use(logic()).forwardTo(controller);
-	}
-
-	public <T> T redirectTo(Class<T> controller) {
-		return use(logic()).redirectTo(controller);
-	}
-
-	public <T> T of(Class<T> controller) {
-		return use(page()).of(controller);
-	}
-
-	@SuppressWarnings("unchecked")
-	public <T> T redirectTo(T controller) {
-		return (T) redirectTo(controller.getClass());
-	}
-
-	@SuppressWarnings("unchecked")
-	public <T> T forwardTo(T controller) {
-		return (T) forwardTo(controller.getClass());
-	}
-
-	@SuppressWarnings("unchecked")
-	public <T> T of(T controller) {
-		return (T) of(controller.getClass());
 	}
 }

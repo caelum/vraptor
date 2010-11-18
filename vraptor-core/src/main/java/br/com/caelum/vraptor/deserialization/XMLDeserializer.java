@@ -15,16 +15,13 @@
  */
 package br.com.caelum.vraptor.deserialization;
 
-import java.lang.reflect.Method;
-
-import com.thoughtworks.xstream.XStream;
 
 /**
  * Deserializes xml
  * @author Lucas Cavalcanti, Cecilia Fernandes
  * @since 3.0.2
  */
-@Deserializes({"application/xml","xml"})
+@Deserializes({"application/xml","xml", "text/xml"})
 public interface XMLDeserializer extends Deserializer {
 
 }

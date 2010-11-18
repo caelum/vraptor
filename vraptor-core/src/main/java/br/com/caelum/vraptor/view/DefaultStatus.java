@@ -1,7 +1,28 @@
+/***
+ * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource
+ * All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package br.com.caelum.vraptor.view;
 
+import static br.com.caelum.vraptor.view.Results.representation;
+
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.EnumSet;
+import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -39,8 +60,23 @@ public class DefaultStatus implements Status {
 	}
 
 	public void notFound() {
-		response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-		result.use(Results.nothing());
+		sendError(HttpServletResponse.SC_NOT_FOUND);
+	}
+
+	private void sendError(int error) {
+		try {
+			response.sendError(error);
+		} catch (IOException e) {
+			throw new ResultException(e);
+		}
+	}
+
+	private void sendError(int error, String message) {
+		try {
+			response.sendError(error, message);
+		} catch (IOException e) {
+			throw new ResultException(e);
+		}
 	}
 
 	public void header(String key, String value) {
@@ -63,15 +99,13 @@ public class DefaultStatus implements Status {
 	}
 
 	public void conflict() {
-		response.setStatus(HttpServletResponse.SC_CONFLICT);
-		result.use(Results.nothing());
+		sendError(HttpServletResponse.SC_CONFLICT);
 	}
 
 	public void methodNotAllowed(EnumSet<HttpMethod> allowedMethods) {
 		header("Allow", allowedMethods.toString().replaceAll("\\[|\\]", ""));
 
-		response.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
-		result.use(Results.nothing());
+		sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
 	}
 
 	public void movedPermanentlyTo(String location) {
@@ -100,13 +134,32 @@ public class DefaultStatus implements Status {
 	}
 
 	public void unsupportedMediaType(String message) {
-		response.setStatus(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE, message);
-		result.use(Results.nothing());
+		sendError(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE, message);
 	}
 
 	public void badRequest(String message) {
-		response.setStatus(HttpServletResponse.SC_BAD_REQUEST, message);
-		result.use(Results.nothing());
+		sendError(HttpServletResponse.SC_BAD_REQUEST, message);
+	}
+
+	public void badRequest(List<?> errors) {
+		result.use(representation()).from(errors, "errors").serialize();
+		response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+	}
+
+	public void forbidden(String message) {
+		sendError(HttpServletResponse.SC_FORBIDDEN, message);
+	}
+
+	public void noContent() {
+		response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+	}
+
+	public void notAcceptable() {
+		sendError(HttpServletResponse.SC_NOT_ACCEPTABLE);
+	}
+
+	public void notModified() {
+		response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
 	}
 
 }

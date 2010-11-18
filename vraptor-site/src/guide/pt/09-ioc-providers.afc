@@ -11,7 +11,7 @@ Imagine que seu controlador de clientes necessita acessar um Dao de clientes. Se
 essa necessidade:
 
 [java]
-@Component
+@Resource
 public class ClienteController {
 	private final ClienteDao dao;
 	
@@ -62,7 +62,7 @@ public class SessionFactoryCreator implements ComponentFactory<SessionFactory> {
 	
 	@PostConstruct
 	public void create() {
-		factory = new AnnotationConfiguration().configure();
+		factory = new AnnotationConfiguration().configure().buildSessionFactory();
 	}
 	
 	public SessionFactory getInstance() {
@@ -108,34 +108,34 @@ public class SessionCreator implements ComponentFactory<Session> {
 Essas implementações já estão disponíveis no código do VRaptor. Para usá-la veja o capítulo de utils.
 
 [section Providers]
-Por trás dos panos, o VRaptor utiliza um provider de DI específico. Por padrão o vraptor vêm com suporte 
-ao uso interno do Picocontainer ou do Spring IoC.
+Por trás dos panos, o VRaptor utiliza um container de injeção de dependências específico.
+Existem três containers suportados pelo VRaptor:
+[list]
+* **Spring IoC**: além da injeção de dependências, o Spring IoC possibilita usar qualquer
+outro componente do Spring integrado com o VRaptor, sem precisar de configurações
 
-Cada implementação disponibiliza tudo o que você encontra na documentação do vraptor, mas acaba por fornecer
-também pontos de extensão diferentes, claro.
+* **Google Guice**: um container mais leve e rápido, que possibilita um melhor controle
+na ligação das dependências, o uso da nova api de injeção de dependências do java: o javax.inject
+e funcionalidades de AOP.
 
-Para que os providers possam encontrar suas classes anotadas com as anotações do VRaptor,
-você precisa colocar o seguinte parâmetro no seu web.xml, com o pacote base da sua aplicação:
+* **Pico container**: um container leve e simples, pra quem não vai usar nada além de injeção de
+dependências. 
+[/list]
+
+Para selecionar qualquer um desses containers basta colocars seus respectivos jars no classpath.
+Os jars estão disponíveis na pasta lib/containers do zip do VRaptor.
+
+Por padrão os containers vão considerar apenas as classes abaixo da pasta WEB-INF/classes da
+sua aplicação, mas é possível, ainda, colocar classes anotadas da sua aplicação dentro de jars, 
+desde que os jars incluam as entradas de diretório ("Add directory entries" no eclipse, ou ant sem a
+opção "files only"). Para isso é necessário usar o seguinte parâmetro no web.xml:
 
 [xml]
 	<context-param>
 		<param-name>br.com.caelum.vraptor.packages</param-name>
-		<param-value>br.com.suaempresa.suaapplicacao</param-value>
+		<param-value>br.com.pacote.dentro.do.jar</param-value>
 	</context-param>
 [/xml]
-
-É possível colocar mais de um pacote básico, separando os pacotes por vírgula (sem espaços):
-[xml]
-<context-param>
-	<param-name>br.com.caelum.vraptor.packages</param-name>
-	<param-value>br.com.suaempresa.suaapplicacao,br.com.outro.pacote</param-value>
-</context-param>
-[/xml]
-
-É possível, ainda, colocar classes anotadas da sua aplicação dentro de jars, desde que os jars
-incluam as entradas de diretório ("Add directory entries" no eclipse, ou ant sem a
-opção "files only").
-
 
 [section Spring]
 
@@ -143,26 +143,90 @@ Ao utilizar o Spring, você ganha todas as características e componentes pronto
 VRaptor, isto é, todos os componentes que funcionam com o Spring DI/Ioc, funcionam com o VRaptor. Nesse caso,
 todas as anotações.
 
-Você não precisa fazer nada para usar o Spring, pois é o container padrão.
+Para usar o spring adicione todos os jars da pasta lib/containers/spring na sua aplicação.
 
 O VRaptor vai usar suas configurações do Spring, caso você já o tenha configurado no seu projeto (
-os listeners e o applicationContext.xml). Caso o VRaptor não tenha encontrado sua configuração, veja
-o capítulo de configurações avançadas.
+os listeners e o applicationContext.xml no classpath).
+Caso o VRaptor não tenha encontrado sua configuração, ou você precise fazer alguma configuração
+mais avançada, você pode estender o provider do Spring:
+
+[java]
+package br.com.suaaplicacao;
+public class CustomProvider extends SpringProvider {
+
+	@Override
+	protected void registerCustomComponents(ComponentRegistry registry) {
+		registry.register(UmaClasse.class, ImplementacaoDessaClasse.class);
+		//...
+	}
+
+	@Override
+	protected ApplicationContext getParentApplicationContext(ServletContext context) {
+		ApplicationContext context = //configure seu próprio application context
+		return context;
+	}
+}
+[/java]
+
+e pra usar o seu provider, coloque no web.xml:
+[xml]
+<context-param>
+	<param-name>br.com.caelum.vraptor.provider</param-name>
+	<param-value>br.com.suaaplicacao.CustomProvider</param-value>
+</context-param>
+[/xml]
+
+[section Google Guice]
+
+Para habilitar o Google Guice basta colocar os jars que estão na pasta lib/containers/guice
+do zip do VRaptor.
+
+Ao usar o Guice você pode escolher não usar a anotação @Component do VRaptor, e usar as anotações
+do guice ou do javax.inject (@Inject, anotações de escopo) para controlar a instanciação dos
+seus componentes.
+
+Se precisar fazer configurações mais específicas crie uma classe que estende o provider
+do Guice:
+[java]
+public class CustomProvider extends GuiceProvider {
+
+	@Override
+	protected void registerCustomComponents(ComponentRegistry registry) {
+		//binding só na UmaClasse
+		registry.register(UmaClasse.class, ImplementacaoDessaClasse.class);
+		 
+		//binding da classe e de todas as superclasses e interfaces
+		registry.deepRegister(OutraClasse.class); 
+	}
+	
+	@Override
+	protected Module customModule() {
+		//você precisa instalar esse modulo se quiser
+		//habilitar o método registerCustomComponents
+		//e o classpath scanning
+		final Module module = super.customModule(); 
+		
+		return new AbstractModule() {
+		   public void configure() {
+		        module.configure(binder());
+		        
+		        // binds personalizados do Guice
+		   }
+		};
+	}
+}
+[/java]
+
+e pra usar esse provider, coloque no web.xml:
+[xml]
+<context-param>
+	<param-name>br.com.caelum.vraptor.provider</param-name>
+	<param-value>br.com.suaaplicacao.CustomProvider</param-value>
+</context-param>
+[/xml]
 
 [section Pico Container]
 
-Ao utilizar o Picocontainer por baixo do VRaptor, você poderá acessar o pico diretamente para fazer 
-configurações avançadas que desejar.
-
-Para utilizar o Picocontainer como provider de sua aplicação, basta colocar no seu arquivo web.xml:
-
-[xml]
-	<context-param>
-		<param-name>br.com.caelum.vraptor.provider</param-name>
-		<param-value>br.com.caelum.vraptor.ioc.pico.PicoProvider</param-value>
-	</context-param>
-[/xml]
-
-[section Seu próprio provider]
-
-Você também pode criar seu próprio Provider, seja para adicionar novas características avançadas a implementação do Picocontainer ou do Spring, ou ainda para se basear em outro contâiner de DI que seja de sua preferência.
+Para utilizar o Picocontainer como provider de sua aplicação, 
+basta colocar os jars da pasta lib/containers/picocontainer do zip do VRaptor no classpath
+da sua aplicação.

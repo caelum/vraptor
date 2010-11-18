@@ -36,7 +36,9 @@ import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.interceptor.Interceptor;
+import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.util.FallbackResourceBundle;
 
 /**
  * Support to vraptor2 hibernate validator plugin.<br>
@@ -44,6 +46,7 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  *
  * @author Guilherme Silveira
  */
+@Component
 public class HibernateValidatorPluginInterceptor implements Interceptor {
 
     private final ValidationErrors errors;

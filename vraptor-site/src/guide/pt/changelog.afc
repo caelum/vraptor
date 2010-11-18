@@ -1,9 +1,214 @@
 [chapter ChangeLog]
 
-[section 3.1.2 (in dev)]
+[section 3.2.0]
+[list]
+* várias melhorias na performance: por volta de 60% menos no tempo de requisição.
+* **quebra de compatibilidade interna**: interface InterceptorStack reorganizada.
+* melhor implementação do método accepts dos interceptors internos do VRaptor.
+* suporte beta ao Google Guice, para ser usado ao invés do Spring.
+* Pico provider não é mais deprecated
+* Agora é possível escolher o DI container sem precisar mudar o web.xml. Se os
+jars do Spring estiverem no classpath, o Spring será usado; se forem os jars
+do PicoContainer ele será usado, e da mesma forma pros jars do Guice. Os jars
+estão na pasta lib/containers do zip do VRaptor.
+* **quebra de compatibilidade interna**: interfaces %%Converters%%, %%Router%%
+	e construtor da classe %%PathAnnotationRoutesParser%% alterados. RouteBuilder
+	convertido para interface => implementação DefaultRouteBuilder. 
+	Para quem estendia o RoutesParser basta trocar o delegate constructor.
+	Para quem instanciava o RouteBuilder diretamente basta instanciar o DefaultRouteBuilder. 
+* nova anotação @Lazy. Use-a nos interceptors em que o método accepts não depende
+  do estado interno do interceptor:
+	[java]
+	@Intercepts
+	@Lazy
+	public class MeuLazyInterceptor implements Interceptor {
+	    public MeuLazyInterceptor(Dependencia dependencia) {
+			this.dependencia = dependencia;
+		}
+		public boolean accepts(ResourceMethod method) {
+			// depende apenas do method
+			return method.containsAnnotation(Abc.class);
+		}
+		public void intercepts(...) {
+			//...
+		}
+	}
+	[/java]
+	Nesse caso o MeuLazyInterceptor só será instanciado se o método accepts retornar true.
+	Uma instância não funcional do MyLazyInterceptor será usada para chamar o método accepts,
+	então esse método não pode usar o estado interno do interceptor.
+	Não use o @Lazy se o método accepts for trivial (sempre retornar true)
+
+* **pequena quebra de compatibilidade**: prioridade padrão do @Path agora é Integer.MAX_INTEGER/2.
+  Antes era Integer.MAX_INTEGER - 1. Apesar dessa quebra, acreditamos que isso não irá afetar
+  os sistemas já implementados.
+* prioridades do @Path agora podem ser definidas por constantes:
+	[java]
+	@Path(value="/url", priority=Path.HIGHEST)
+	@Path(value="/url", priority=Path.HIGH)
+	@Path(value="/url", priority=Path.DEFAULT)
+	@Path(value="/url", priority=Path.LOW)
+	@Path(value="/url", priority=Path.LOWEST)
+	[/java]
+* Suporte a upload da Servlet 3.0 (por garcia-jj)
+* new Exception handlers (por garcia-jj)
+  [java]
+  result.on(SomeException.class).forwardTo(Controller.class).method();
+  //se uma SomeException é lançada, a requisição será redirecionada
+  [/java]
+* Nova interface %%TwoWayConverter%% para conversões bidirecionais.
+* suporte nativo a requisições OPTIONS
+* fix: 405 ao invés de 500 em requisições com HTTP metodo desconhecido
+* mais converters do Joda Time (por Rodolfo Liviero)
+* melhorias no Scala Blank Project (por Pedro Matiello)
+* bugfix: null Accept Header gera respostas html
+
+[/list]
+
+[section 3.1.3]
+[list]
+* Scala Blank Project
+* melhor estratégia no escopo flash
+* começo do suporte pra javax.inject API. Agora é possível dar nomes para os parâmetros de uma lógica:
+* Corrigidos bugs do novo validator
+* corrigido bug do char como parâmetro na URI
+* Corrigido bug para poder aceitar browsers que trabalham mal com o header Accepts
+
+
+[java]
+public void logica(@Named("um_nome") String outroNome) {...}
+[/java]
+Nesse caso, o parâmetro aceito na requisição se chamará 'um_nome'.
+
+* Melhor suporte ao GAE
+
+* novo método no http result:
+[java]
+	result.use(http()).body(conteudo);
+[/java]
+conteudo pode ser uma String, um InputStream ou um Reader.
+
+* mais métodos disponíveis no result.use(status())
+
+* novo método : result.use(representation()).from(objeto, alias)
+
+* suporte a selects múltiplos:
+[java]
+public void logica(List<String> abc) {...}
+[/java]
+[xml]
+<select name="abc[]" multiple="multiple">...</select>
+[/xml]
+
+* status 406 automatico no result.use(representation())
+
+* Agora é possível registrar os componentes opcionais do vraptor no parâmetro packages
+do web.xml:
+[xml]
+<context-param>
+	<param-name>br.com.caelum.vraptor.packages</param-name>
+	<param-value>
+		br.com.caelum.vraptor.util.hibernate, // Session e SessionFactory 
+		br.com.caelum.vraptor.util.jpa, // EntityManager e EntityManagerFactory
+		br.com.caelum.vraptor.converter.l10n, //Converters numericos localizados
+		br.com.caelum.vraptor.http.iogi // suporte a parâmetros imutáveis
+	</param-value>
+</context-param>
+[/xml]
+
+* renderizar null para sua representação significa retornar 404
+
+* nova classe: JsonDeserializer
+* MultipartInterceptor agora é opcional
+
+* bugfix: arrays de tamanho == 1 agora são suportados como parâmetros de lógicas
+
+* Pico provider deprecated
+
+* Validations agora usa o bundle (e locale) da requisição
+
+* ValidationMessage agora implementa Serializable
+
+* novo método: result.use(status()).badRequest(errorList); que serializa a lista de erros
+  passada usando result.use(representation()).from(errorList, "errors");
+  
+* atalhos no Validator:
+[java]
+validator.onErrorForwardTo(controller).logica();
+validator.onErrorRedirectTo(controller).logica();
+validator.onErrorUsePageOf(controller).logica();
+[/java]
+onde controller pode ser uma classe ou o this, como acontece no Result.
+
+E ainda o atalho:
+[java]
+validator.onErrorSendBadRequest();
+[/java]
+que retorna o status Bad Request (400) e serializa a lista de erros de validação
+de acordo com o header Accept da requisição (result.use(representation()))
+
+[/list]
+
+[section 3.1.2]
 [list]
 * Blank project agora rodando também no netbeans 6.8
 * Encoding agora suportado quando faz upload de arquivos no Google App Engine
+* bugfix: validator.onErrorUse(json()).... não dá mais NullPointerException
+* Serializers tem agora o método recursive:
+ [java]
+ result.use(xml()).from(meuObjeto).recursive().serialize();
+ [/java]
+ Assim, toda a árvore de objetos a partir do meuObjeto será serializada. 
+
+* Os parâmetros das mensagens do Validations agora também podem ser internacionalizados:
+	[java]
+	// idade = Idade
+	// maior_que = {0} deveria ser maior que {1}
+	
+	validator.checking(new Validations() {{
+		that(idade > 18, "idade", "maior_que", i18n("idade"), 18);
+		//resulta na mensagem "Idade deveria ser maior que 18"  
+	}});
+	[/java]
+* Proxies do Hibernate agora são serializados (quase) como classes normais (graças ao Tomaz Lavieri)
+* Ao serializar para json agora é possível excluir o root (graças ao Tomaz Lavieri):
+  [java]
+  result.use(json()).from(carro).serialize(); //=> {'carro': {'cor': 'azul'}}
+  result.use(json()).withoutRoot().from(carro).serialize(); //=> {'cor': 'azul'} 
+  [/java]
+* Google collections atualizado para a versão 1.0
+* corrigido bug das chaves dentro de expressões regulares dentro do @Path
+* as anotações do XStream agora são lidas automaticamente quando você usa a serialização
+  padrão do vraptor
+* quando um arquivo é maior do que o limite de tamanho de arquivo é criado um erro de validação
+  ao invés de uma exceção genérica
+* mais atalhos na interface Result:
+  [code]
+	redirectTo("uma/uri")			=>  use(page()).redirect("uma/uri)
+	notFound()						=>  use(status()).notFound()
+	nothing()						=>  use(nothing());
+	permanentlyRedirectTo(Controller.class) 	
+			=> use(status()).movedPermanentlyTo(Controller.class);
+	permanentlyRedirectTo("uma/uri") 	=> use(status()).movedPermanentlyTo("uma/uri");
+	permanentlyRedirectTo(this)		=> use(status()).movedPermanentlyTo(this.getClass());
+  [/code]
+  
+* adicionado novo método à interface %%Validator%% (graças ao Otávio Garcia)
+	[java]
+		validator.validate(objeto);
+	[/java]
+  Esse método vai validar o objeto usando o Hibernate Validator 3, a Java Validation API (JSR303), 
+  ou qualquer implementação da interface BeanValidator anotada com %%@Component%%
+
+* novos converters de BigDecimal, Double e Float, que levam em consideração o Locale para converter
+  os valores (graças ao Otávio Garcia).
+  Para usá-los basta adicionar ao web.xml:
+  [xml]
+	<context-param>
+		<param-name>br.com.caelum.vraptor.packages</param-name>
+    	<param-value>!!valor anterior!!,br.com.caelum.vraptor.converter.l10n</param-value>
+    </context-param>
+  [/xml]
 [/list]
 
 [section 3.1.1]

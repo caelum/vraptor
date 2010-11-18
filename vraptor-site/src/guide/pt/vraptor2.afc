@@ -5,13 +5,8 @@
 
 [xml]
 	<context-param>
-		<param-name>br.com.caelum.vraptor.provider</param-name>
-		<param-value>br.com.caelum.vraptor.vraptor2.Provider</param-value>
-	</context-param>
-
-	<context-param>
 		<param-name>br.com.caelum.vraptor.packages</param-name>
-		<param-value>br.com.pacote.base.do.seu.projeto</param-value>
+		<param-value>br.com.caelum.vraptor.vraptor2</param-value>
 	</context-param>
 	
 	<filter>
@@ -25,6 +20,9 @@
 	</filter-mapping>
 
 [/xml]
+
+  e colocar os jars da pasta lib/mandatory e lib/containers/<um dos containers> do zip do vraptor
+  no classpath. 
 
   Lembre-se de tirar a declaração antiga do VRaptorServlet do vraptor2, e o seu 
   respectivo mapping.

@@ -17,11 +17,16 @@ package br.com.caelum.vraptor.serialization;
 
 
 /**
- * Basic json serialization support using a Json Serializer.
+ * Basic json serialization support using a Json SerializerBuilder.
  *
  * @author Lucas Cavalcanti
  * @version 3.0.2
  */
 public interface JSONSerialization extends Serialization {
-
+	/**
+	 * Exclude the root alias from serialization.
+	 * @since 3.1.2
+	 * @throws IOException
+	 */
+	public <T> NoRootSerialization withoutRoot();
 }

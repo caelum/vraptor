@@ -113,7 +113,7 @@ public class ViewsPropertiesPageResultTest {
                 one(dispatcher).forward(request, response);
             }
         });
-        this.result.forward();
+        this.result.defaultView();
         mockery.assertIsSatisfied();
     }
 
@@ -130,7 +130,7 @@ public class ViewsPropertiesPageResultTest {
                 one(response).sendRedirect("clientSide");
             }
         });
-        this.result.forward();
+        this.result.defaultView();
         mockery.assertIsSatisfied();
     }
 
@@ -154,7 +154,7 @@ public class ViewsPropertiesPageResultTest {
                 one(dispatcher).forward(request, response);
             }
         });
-        this.result.forward();
+        this.result.defaultView();
         mockery.assertIsSatisfied();
     }
 
@@ -173,7 +173,7 @@ public class ViewsPropertiesPageResultTest {
                 one(dispatcher).forward(request, response);
             }
         });
-        this.result.forward();
+        this.result.defaultView();
         mockery.assertIsSatisfied();
     }
 
@@ -190,7 +190,7 @@ public class ViewsPropertiesPageResultTest {
                 exactly(2).of(request).getAttribute("client"); will(returnValue(new CommonComponentOld()));
             }
         });
-        this.result.forward();
+        this.result.defaultView();
         mockery.assertIsSatisfied();
     }
 

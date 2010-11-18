@@ -17,19 +17,23 @@
 
 package br.com.caelum.vraptor.util.test;
 
-import static br.com.caelum.vraptor.view.Results.logic;
-import static br.com.caelum.vraptor.view.Results.page;
-
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.View;
+import br.com.caelum.vraptor.core.AbstractResult;
+import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.proxy.MethodInvocation;
 import br.com.caelum.vraptor.proxy.ObjenesisProxifier;
+import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.SuperMethod;
-import br.com.caelum.vraptor.view.Results;
+import br.com.caelum.vraptor.serialization.NoRootSerialization;
+import br.com.caelum.vraptor.serialization.Serializer;
+import br.com.caelum.vraptor.serialization.SerializerBuilder;
+import br.com.caelum.vraptor.view.EmptyResult;
+import br.com.caelum.vraptor.view.ResultException;
 
 /**
  *
@@ -41,32 +45,72 @@ import br.com.caelum.vraptor.view.Results;
  * @author Lucas Cavalcanti
  * @author Guilherme Silveira
  */
-public class MockResult implements Result {
+@Component
+public class MockResult extends AbstractResult {
 
 	private final Map<String, Object> values = new HashMap<String, Object>();
 	private Class<?> typeToUse;
+	private final Proxifier proxifier;
+
+	public MockResult(Proxifier proxifier) {
+		this.proxifier = proxifier;
+	}
+
+	public MockResult() {
+		this(new ObjenesisProxifier());
+	}
 
 	public Result include(String key, Object value) {
 		this.values.put(key, value);
 		return this;
 	}
+	
+	public Result on(Class<? extends Exception> exception) {
+	    // TODO Auto-generated method stub
+	    return null;
+	}
 
 	public <T extends View> T use(final Class<T> view) {
 		this.typeToUse = view;
-		if (view.equals(Results.page())) {
-			return view.cast(new MockedPage());
-		}
-		if (view.equals(Results.nothing())) {
+		if (view.equals(EmptyResult.class)) {
 			return null;
 		}
-		if (view.equals(Results.logic())) {
-		    return view.cast(new MockedLogic());
-		}
-		return new ObjenesisProxifier().proxify(view, new MethodInvocation<T>() {
-            public Object intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {
-                return null;
-            }
-        });
+		return proxifier.proxify(view, returnOnFinalMethods(view));
+	}
+
+	private <T> MethodInvocation<T> returnOnFinalMethods(final Class<T> view) {
+		return new MethodInvocation<T>() {
+			public Object intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {
+				Class type = method.getReturnType();
+				if (type == void.class) {
+					return null;
+				}
+
+				if (view.isAssignableFrom(type)) {
+					return proxy;
+				}
+
+				if (args.length > 0 && args[0] instanceof Class<?>) {
+					return proxifier.proxify((Class<?>) args[0], returnOnFirstInvocation());
+				}
+
+				if (Serializer.class.isAssignableFrom(type)
+						|| SerializerBuilder.class.isAssignableFrom(type)
+						|| NoRootSerialization.class.isAssignableFrom(type)) {
+					return proxifier.proxify(type, returnOnFinalMethods(type));
+				}
+				throw new ResultException("It's not possible to create a mocked version of " + method + ". Please inform this corner case to VRaptor developers");
+			}
+
+		};
+	}
+
+	private <T> MethodInvocation<T> returnOnFirstInvocation() {
+		return new MethodInvocation<T>() {
+			public Object intercept(Object proxy, Method method, Object[] args, SuperMethod superMethod) {
+				return null;
+			}
+		};
 	}
 
 	public boolean used() {
@@ -87,31 +131,4 @@ public class MockResult implements Result {
 		return values;
 	}
 
-	public void forwardTo(String uri) {
-		use(page()).forward(uri);
-	}
-
-	public <T> T forwardTo(Class<T> controller) {
-		return use(logic()).forwardTo(controller);
-	}
-
-	public <T> T redirectTo(Class<T> controller) {
-		return use(logic()).redirectTo(controller);
-	}
-
-	public <T> T of(Class<T> controller) {
-		return use(page()).of(controller);
-	}
-
-	public <T> T redirectTo(T controller) {
-		return (T) redirectTo(controller.getClass());
-	}
-
-	public <T> T forwardTo(T controller) {
-		return (T) forwardTo(controller.getClass());
-	}
-
-	public <T> T of(T controller) {
-		return (T) of(controller.getClass());
-	}
 }

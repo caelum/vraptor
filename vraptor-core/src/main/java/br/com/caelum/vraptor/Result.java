@@ -21,6 +21,7 @@ import java.util.Map;
 
 import br.com.caelum.vraptor.view.LogicResult;
 import br.com.caelum.vraptor.view.PageResult;
+import br.com.caelum.vraptor.view.Status;
 
 /**
  * A resource requisition result.
@@ -32,6 +33,14 @@ public interface Result {
     Result include(String key, Object value);
 
 	<T extends View> T use(Class<T> view);
+	
+    /**
+     * TODO doc
+     * 
+     * @param exception The exception to handle.
+     * @throws A {@link NullPointerException} if exception is null.
+     */
+	Result on(Class<? extends Exception> exception);
 
 	/**
 	 * Whether this result was used.
@@ -45,10 +54,16 @@ public interface Result {
     Map<String, Object> included();
 
     /**
-     * A shortcut to result.use(page()).forward(uri);
-     * @see PageResult#forward(String)
+     * A shortcut to result.use(page()).forwardTo(uri);
+     * @see PageResult#forwardTo(String)
      */
 	void forwardTo(String uri);
+
+	/**
+     * A shortcut to result.use(page()).redirectTo(uri);
+     * @see PageResult#forwardTo(String)
+     */
+	void redirectTo(String uri);
 
 	/**
 	 * A shortcut to result.use(logic()).forwardTo(controller)
@@ -104,5 +119,40 @@ public interface Result {
 	 */
 	<T> T of(T controller);
 
+	/**
+	 * A shortcut to result.use(nothing())
+	 */
+	void nothing();
 
+	/**
+	 * A shortcut to result.use(status()).notFound();
+	 */
+	void notFound();
+
+	/**
+	 * A shortcut to result.use(status()).movedPermanentlyTo(uri).
+	 *
+	 * @param uri
+	 * @see Status#movedPermanentlyTo(String)
+	 */
+	void permanentlyRedirectTo(String uri);
+
+	/**
+	 * A shortcut to result.use(status()).movedPermanentlyTo(controller).
+	 *
+	 * @param controller
+	 * @see Status#movedPermanentlyTo(Class)
+	 */
+	<T> T permanentlyRedirectTo(Class<T> controller);
+
+	/**
+	 * A shortcut to result.use(status()).movedPermanentlyTo(controller.getClass()).
+	 * so you can use on your controller:<br>
+	 *
+	 * result.permanentlyRedirectTo(this).aMethod();
+	 *
+	 * @param controller
+	 * @see Status#movedPermanentlyTo(Class)
+	 */
+	<T> T permanentlyRedirectTo(T controller);
 }

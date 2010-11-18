@@ -84,7 +84,7 @@
 		
 									<li><a class="link_toc" href="../../documentacao/injecao-de-dependencias/">9. Injeção de dependências</a></li>
 		
-									<li><a class="link_toc" href="../../documentacao/downloading/">10. Downloading</a></li>
+									<li><a class="link_toc" href="../../documentacao/download-e-upload/">10. Download e Upload</a></li>
 		
 									<li><a class="link_toc" href="../../documentacao/componentes-utilitarios-opcionais/">11. Componentes Utilitários Opcionais</a></li>
 		
@@ -96,9 +96,15 @@
 		
 									<li><a class="link_toc" href="../../documentacao/testando-componentes-e-controllers/">15. Testando componentes e controllers</a></li>
 		
-									<li><a class="link_toc" href="../../documentacao/changelog/">16. ChangeLog</a></li>
+									<li><a class="link_toc" href="../../documentacao/scala/">16. Scala</a></li>
 		
-									<li><a class="link_toc" href="../../documentacao/migrando-do-vraptor2-para-o-vraptor3/">17. Migrando do VRaptor2 para o VRaptor3</a></li>
+									<li><a class="link_toc" href="../../documentacao/otimizacoes/">17. Otimizações</a></li>
+		
+									<li><a class="link_toc" href="../../documentacao/vraptor-scaffold/">18. Vraptor Scaffold</a></li>
+		
+									<li><a class="link_toc" href="../../documentacao/changelog/">19. ChangeLog</a></li>
+		
+									<li><a class="link_toc" href="../../documentacao/migrando-do-vraptor2-para-o-vraptor3/">20. Migrando do VRaptor2 para o VRaptor3</a></li>
 		
                 </ol>
             </div><!-- submenu-->
@@ -137,6 +143,23 @@ No exemplo a seguir, tanto o valor 1 como o valor DEBITO s&atilde;o traduzidos p
 <h3 class="section">BigInteger e BigDecimal</h3>
 	    	<span class="paragraph">Ambos s&atilde;o suportados utilizando o padr&atilde;o de localiza&ccedil;&atilde;o da virtual machine que serve a sua aplica&ccedil;&atilde;o.
 Para criar suporte a n&uacute;meros decimais baseados no locale do usu&aacute;rio, basta olhar o funcionamento da classe LocaleBasedCalendarConverter.</span>
+		
+
+<h3 class="section">BigDecimal, Double e Float localizados</h3>
+	    	<span class="paragraph">A partir da vers&atilde;o 3.1.2 o Vraptor suporta esses tipos baseados na localiza&ccedil;&atilde;o da virtual machine. Para ativar esses 
+componentes &eacute; necess&aacute;rio adicionar as seguintes linhas no seu web.xml:</span>
+	    	<div class="xml"><code class="xml"><span class="textag">&lt;context-param&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-name&gt;</span><span class="texnormal">br.com.caelum.vraptor.packages</span><span class="textag">&lt;/param-name&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-value&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...valor&nbsp;anterior...,&nbsp;<br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;br.com.caelum.vraptor.converter.l10n<br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;/param-value&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal"></span><span class="textag">&lt;/context-param&gt;</span></code></div>
+	    	<span class="paragraph">A localiza&ccedil;&atilde;o dos componentes pode ser alterada utilizando a seguinte configura&ccedil;&atilde;o no web.xml:</span>
+	    	<div class="xml"><code class="xml"><span class="textag">&lt;context-param&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-name&gt;</span><span class="texnormal">javax.servlet.jsp.jstl.fmt.locale</span><span class="textag">&lt;/param-name&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-value&gt;</span><span class="texnormal">pt_BR</span><span class="textag">&lt;/param-value&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal"></span><span class="textag">&lt;/context-param&gt;</span></code></div>
 		
 
 <h3 class="section">Calendar e Date</h3>
@@ -248,6 +271,7 @@ para que o conversor seja registrado no Container do VRaptor.</span>
                     <li><a href="../../vraptor2.jsp">vraptor2</a></li>
                 </ul>
                 <p><a href="http://www.apache.org/licenses/LICENSE-2.0">Licença Apache 2.0</a> - VRaptor ©2009 Caelum - Ensino e Inovação</p>
+                <p>Profiled with <a href="http://www.ej-technologies.com/products/jprofiler/overview.html">JProfiler</a></p>
             </div><!-- footnote-->
         </div><!-- footer content -->
         <a id="signature" href="mailto:lokidg@gmail.com">loki|design</a>

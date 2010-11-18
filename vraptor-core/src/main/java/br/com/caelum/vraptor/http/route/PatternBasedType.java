@@ -22,12 +22,15 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * @deprecated Use @Path instead.
+ */
+@Deprecated
 public class PatternBasedType {
 
 	private final List<String> parameters = new ArrayList<String>();
 	private final Pattern pattern;
 	private final String originalPattern;
-	private final String finalPattern;
 
 	public PatternBasedType(String pattern) {
 		this.originalPattern = pattern;
@@ -59,7 +62,6 @@ public class PatternBasedType {
 		if (ignore) {
 			throw new IllegalRouteException("Illegal route contains invalid pattern: " + originalPattern);
 		}
-		this.finalPattern = patternUri;
 		this.pattern = Pattern.compile(patternUri);
 	}
 
@@ -81,4 +83,36 @@ public class PatternBasedType {
 	public String toString() {
 		return "[PatternBasedType" + originalPattern + " ]";
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((originalPattern == null) ? 0 : originalPattern.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		PatternBasedType other = (PatternBasedType) obj;
+		if (originalPattern == null) {
+			if (other.originalPattern != null) {
+				return false;
+			}
+		} else if (!originalPattern.equals(other.originalPattern)) {
+			return false;
+		}
+		return true;
+	}
+
+
 }

@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.interceptor.Interceptor;
+import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.view.PageResult;
 
@@ -31,6 +32,7 @@ import br.com.caelum.vraptor.view.PageResult;
  *
  * @author guilherme silveira
  */
+@Component
 public class ViewInterceptor implements Interceptor {
 
 	private static final Logger logger = LoggerFactory.getLogger(ViewInterceptor.class);
@@ -53,7 +55,7 @@ public class ViewInterceptor implements Interceptor {
 		if (vraptor2) {
 			if (info.shouldShowView(method)) {
 				logger.debug("VRaptor 2 component forward");
-				this.result.forward();
+				this.result.defaultView();
 			} else {
 				logger.debug("Not forwarding (viewless component)");
 			}

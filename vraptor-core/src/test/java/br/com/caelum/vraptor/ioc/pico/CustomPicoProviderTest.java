@@ -158,7 +158,10 @@ public class CustomPicoProviderTest extends GenericContainerTest {
 					will(returnValue("br.com.caelum.vraptor.ioc.fixture"));
 
 	                allowing(context).getInitParameter(BasicConfiguration.ENCODING);
+	                allowing(context).getInitParameter(BasicConfiguration.SCANNING_PARAM);
 
+	                allowing(context).getRealPath("/WEB-INF/classes");
+	                will(returnValue(PicoProviderTest.class.getResource("..").getFile()));
                 }
             });
         } catch (Exception e) {

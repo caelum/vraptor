@@ -18,10 +18,11 @@
 package br.com.caelum.vraptor.restfulie.serialization;
 
 import br.com.caelum.vraptor.config.Configuration;
-import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.restfulie.Restfulie;
+import br.com.caelum.vraptor.restfulie.hypermedia.ConfigurableHypermediaResource;
 import br.com.caelum.vraptor.restfulie.hypermedia.HypermediaResource;
 import br.com.caelum.vraptor.restfulie.relation.Relation;
+import br.com.caelum.vraptor.restfulie.relation.RelationBuilder;
 
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;
@@ -34,7 +35,7 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
  * elements.<br>
  * The converter passed in the constructor will be used to marshall the rest of
  * the object.
- * 
+ *
  * @author guilherme silveira
  * @author lucas cavalcanti
  */
@@ -52,19 +53,29 @@ public class LinkConverter implements Converter {
 
 	public void marshal(Object root, HierarchicalStreamWriter writer,
 			MarshallingContext context) {
-		base.marshal(root, writer, context);
-		HypermediaResource resource = (HypermediaResource) root;
-		try {
-			for (Relation t : resource.getRelations(restfulie)) {
-				writer.startNode("atom:link");
-				writer.addAttribute("rel", t.getName());
-				writer.addAttribute("href", config.getApplicationPath() + t.getUri());
-				writer.addAttribute("xmlns:atom", "http://www.w3.org/2005/Atom");
-				writer.endNode();
-			}
-		} finally {
-			restfulie.clear();
+		if (root instanceof ConfigurableHypermediaResource) {
+			context.convertAnother(((ConfigurableHypermediaResource) root).getModel());
+		} else {
+			base.marshal(root, writer, context);
 		}
+
+		HypermediaResource resource = (HypermediaResource) root;
+		RelationBuilder builder = restfulie.newRelationBuilder();
+		resource.configureRelations(builder);
+		for (Relation t : builder.getRelations()) {
+			writer.startNode("atom:link");
+			writer.addAttribute("rel", t.getName());
+			writer.addAttribute("href", config.getApplicationPath() + t.getUri());
+			writer.addAttribute("xmlns:atom", "http://www.w3.org/2005/Atom");
+			writer.endNode();
+		}
+	}
+
+	private Object getRoot(Object root) {
+		if (root instanceof ConfigurableHypermediaResource) {
+			return ((ConfigurableHypermediaResource) root).getModel();
+		}
+		return root;
 	}
 
 	public Object unmarshal(HierarchicalStreamReader arg0,
@@ -72,6 +83,7 @@ public class LinkConverter implements Converter {
 		return base.unmarshal(arg0, arg1);
 	}
 
+	@SuppressWarnings("unchecked")
 	public boolean canConvert(Class type) {
 		return HypermediaResource.class.isAssignableFrom(type)
 				&& base.canConvert(type);

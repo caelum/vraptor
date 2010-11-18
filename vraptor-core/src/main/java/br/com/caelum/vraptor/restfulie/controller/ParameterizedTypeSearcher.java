@@ -23,7 +23,7 @@ import java.lang.reflect.Type;
 
 public class ParameterizedTypeSearcher {
 
-	private ParameterizedType executeFor(Class control, Class<?> baseType) {
+	private ParameterizedType executeFor(Class<?> control, Class<?> baseType) {
 		if(baseType.equals(Object.class)) {
 			throw new IllegalStateException(
 					"Unable to detect which state control it is because "
@@ -46,7 +46,7 @@ public class ParameterizedTypeSearcher {
 		return executeFor(control, baseType.getSuperclass());
 	}
 
-	public ParameterizedType search(Class at) {
+	public ParameterizedType search(Class<?> at) {
 		return executeFor(at, at);
 	}
 

@@ -26,6 +26,7 @@ import org.vraptor.annotations.Logic;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParanamerNameProvider;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
+import br.com.caelum.vraptor.ioc.Component;
 
 /**
  * Looks up for the Logic annotation on the method, if its found and containing
@@ -34,6 +35,7 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
  *
  * @author Guilherme Silveira
  */
+@Component
 @ApplicationScoped
 public class LogicAnnotationWithParanamerParameterNameProvider implements ParameterNameProvider {
 

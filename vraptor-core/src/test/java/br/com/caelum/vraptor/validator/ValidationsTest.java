@@ -2,17 +2,17 @@
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource
  * All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); 
- * you may not use this file except in compliance with the License. 
- * You may obtain a copy of the License at 
- * 
- * 	http://www.apache.org/licenses/LICENSE-2.0 
- * 
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an "AS IS" BASIS, 
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
- * See the License for the specific language governing permissions and 
- * limitations under the License. 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * 	http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package br.com.caelum.vraptor.validator;
@@ -25,6 +25,10 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 import org.junit.Before;
@@ -33,7 +37,6 @@ import org.junit.Test;
 public class ValidationsTest {
 
     public static class Client {
-        private Long id;
         private String name;
         private int age;
 
@@ -67,6 +70,48 @@ public class ValidationsTest {
     }
 
     @Test
+    public void shouldUseTheConstructorResourceBundle() {
+    	Validations validations = new Validations(singletonBundle("some.message", "The value"));
+
+    	validations.that(false, "category", "some.message");
+
+    	assertThat(validations.getErrors().get(0).getMessage(), is("The value"));
+    }
+
+    @Test
+    public void shouldUseTheConstructorResourceBundleFirst() {
+    	Validations validations = new Validations(singletonBundle("some.message", "The value"));
+
+    	validations.that(false, "category", "some.message");
+
+    	List<Message> errors = validations.getErrors(singletonBundle("some.message", "Other value"));
+
+		assertThat(errors.get(0).getMessage(), is("The value"));
+    }
+
+    @Test
+    public void shouldFallbackToGivenResourceBundle() {
+    	Validations validations = new Validations(singletonBundle("some.message", "The value"));
+
+    	validations.that(false, "category", "some.other.message");
+
+    	List<Message> errors = validations.getErrors(singletonBundle("some.other.message", "Other value"));
+
+    	assertThat(errors.get(0).getMessage(), is("Other value"));
+    }
+
+    @Test
+    public void shouldFallbackToDefaultMessage() {
+    	Validations validations = new Validations(singletonBundle("some.message", "The value"));
+
+    	validations.that(false, "category", "a.different.message");
+
+    	List<Message> errors = validations.getErrors(singletonBundle("some.other.message", "Other value"));
+
+    	assertThat(errors.get(0).getMessage(), is("???a.different.message???"));
+    }
+
+    @Test
     public void canHandleTheSingleCheckWhenProblematic() {
         Client guilherme = null;
         validations.that(guilherme, notNullValue());
@@ -81,7 +126,8 @@ public class ValidationsTest {
         assertThat(validations.getErrors(), hasSize(0));
     }
 
-    @Test
+    @SuppressWarnings("null")
+	@Test
     public void canIgnoreInternalPrimitiveValidationIfAlreadyNull() {
         final Client guilherme = null;
         if (validations.that(guilherme, notNullValue())) {
@@ -119,12 +165,37 @@ public class ValidationsTest {
     }
 
     @Test
-    public void formatsParameterizedValidationMessagesWithSeveralParameters() {
+    public void formatsParameterizedValidationMessagesWithSeveralParametersI18ningStringParameters() {
         final Client client = new Client();
         client.setAge(-1);
         validations.that(client.getAge() > 0 && client.getAge() < 100, "error", "between_field",  "Age", 0, 100);
         assertThat(validations.getErrors(), hasSize(1));
         assertThat(validations.getErrors().get(0).getMessage(), is(equalTo("Age should be a value between 0 and 100")));
     }
+    @Test
+    public void formatsParameterizedValidationMessagesWithI18nedStringParameters() {
+    	final Client client = new Client();
+    	client.setAge(-1);
+    	validations.that(client.getAge() > 0 && client.getAge() < 100, "error", "between_field",  validations.i18n("age"), 0, 100);
+    	assertThat(validations.getErrors(), hasSize(1));
+    	assertThat(validations.getErrors().get(0).getMessage(), is(equalTo("Age should be a value between 0 and 100")));
+    }
+
+    private ResourceBundle singletonBundle(final String key, final String value) {
+		ResourceBundle bundle = new ResourceBundle() {
+			@Override
+			protected Object handleGetObject(String k) {
+				if (k.equals(key)) {
+					return value;
+				}
+				throw new MissingResourceException(k, value, key);
+			}
+			@Override
+			public Enumeration<String> getKeys() {
+				return Collections.enumeration(Collections.singleton(key));
+			}
+    	};
+		return bundle;
+	}
 
 }

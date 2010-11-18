@@ -18,14 +18,16 @@ import br.com.caelum.vraptor.view.AcceptHeaderToFormat;
 public class DefaultFormatResolverTest {
 
 	private FormatResolver resolver;
-	@Mock private HttpServletRequest request;
-	@Mock private AcceptHeaderToFormat acceptHeaderToFormat;
+	@Mock
+	private HttpServletRequest request;
+	@Mock
+	private AcceptHeaderToFormat acceptHeaderToFormat;
 
 	@Before
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
 
-		resolver = new DefaultFormatResolver(request,acceptHeaderToFormat);
+		resolver = new DefaultFormatResolver(request, acceptHeaderToFormat);
 	}
 
 	@Test
@@ -35,7 +37,6 @@ public class DefaultFormatResolverTest {
 		String format = resolver.getAcceptFormat();
 		assertThat(format, is("xml"));
 	}
-
 
 	@Test
 	public void if_formatIsSpecifiedReturnItEvenIfAcceptsHtml() throws Exception {
@@ -58,7 +59,6 @@ public class DefaultFormatResolverTest {
 		verify(request).getHeader("Accept");
 	}
 
-
 	@Test
 	public void if_formatNotSpecifiedAndNoAcceptsHaveFormat() {
 		when(request.getParameter("_format")).thenReturn(null);
@@ -70,18 +70,15 @@ public class DefaultFormatResolverTest {
 		verify(request).getHeader("Accept");
 	}
 
-
 	@Test
 	public void ifAcceptHeaderIsNullShouldReturnDefault() {
 		when(request.getParameter("_format")).thenReturn(null);
 		when(request.getHeader("Accept")).thenReturn(null);
-		when(acceptHeaderToFormat.getFormat("")).thenReturn("html");
-
+		when(acceptHeaderToFormat.getFormat(null)).thenReturn("html");
 
 		String format = resolver.getAcceptFormat();
 		assertThat(format, is("html"));
 
-		verify(acceptHeaderToFormat).getFormat("");
 	}
 
 }

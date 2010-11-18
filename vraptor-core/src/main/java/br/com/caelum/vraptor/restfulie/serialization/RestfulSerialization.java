@@ -17,6 +17,8 @@
 
 package br.com.caelum.vraptor.restfulie.serialization;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletResponse;
 
 import br.com.caelum.vraptor.config.Configuration;
@@ -24,6 +26,7 @@ import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.restfulie.Restfulie;
+import br.com.caelum.vraptor.serialization.ProxyInitializer;
 import br.com.caelum.vraptor.serialization.xstream.XStreamXMLSerialization;
 
 import com.thoughtworks.xstream.XStream;
@@ -36,12 +39,12 @@ import com.thoughtworks.xstream.converters.reflection.ReflectionConverter;
 @Component
 @RequestScoped
 public class RestfulSerialization extends XStreamXMLSerialization {
-	
+
 	private final Restfulie restfulie;
 	private final Configuration config;
 
-	public RestfulSerialization(HttpServletResponse response, TypeNameExtractor extractor, Restfulie restfulie, Configuration config) {
-		super(response,extractor);
+	public RestfulSerialization(HttpServletResponse response, TypeNameExtractor extractor, Restfulie restfulie, Configuration config, ProxyInitializer initializer) {
+		super(response,extractor,initializer);
 		this.restfulie = restfulie;
 		this.config = config;
 	}
@@ -52,10 +55,13 @@ public class RestfulSerialization extends XStreamXMLSerialization {
 	 */
 	@Override
 	protected XStream getXStream() {
-		XStream xStream = new XStream();
+		XStream xStream = super.getXStream();
 		MethodValueSupportConverter converter = new MethodValueSupportConverter(new ReflectionConverter(xStream.getMapper(), xStream.getReflectionProvider()));
 		xStream.registerConverter(new LinkConverter(converter, restfulie, config));
 		return xStream;
 	}
 
+	public static void main(String[] args) {
+		System.out.println(new XStream().getConverterLookup().lookupConverterForType(List.class));
+	}
 }

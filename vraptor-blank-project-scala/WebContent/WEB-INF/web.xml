@@ -14,19 +14,17 @@
 		be loaded, comma separated:
 	-->
 	
-	<!-- 
 	<context-param>
-        	<param-name>br.com.caelum.vraptor.packages</param-name>
-	        <param-value>br.com.caelum.vraptor.blank</param-value>
+        <param-name>br.com.caelum.vraptor.packages</param-name>
+	    <param-value>br.com.caelum.vraptor.scala,br.com.caelum.vraptor.http.iogi</param-value>
     </context-param>
-     -->
     
 	<!--  
 	   if you are using a servlet 3.0 container 
 		as glassfish 3 or jetty 8, you dont need this
 		filter configuration 
 	-->
-	
+		
 		
 	<filter>
 		<filter-name>vraptor</filter-name>
@@ -39,4 +37,16 @@
 		<dispatcher>FORWARD</dispatcher>
 		<dispatcher>REQUEST</dispatcher>
 	</filter-mapping>
+	
+	<!-- START: SSP config -->
+	<servlet>
+		<servlet-name>TemplateEngineServlet</servlet-name>
+		<servlet-class>org.fusesource.scalate.servlet.TemplateEngineServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>TemplateEngineServlet</servlet-name>
+		<url-pattern>*.ssp</url-pattern>
+	</servlet-mapping>
 </web-app>

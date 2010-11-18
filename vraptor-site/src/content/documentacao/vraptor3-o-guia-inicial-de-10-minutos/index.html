@@ -84,7 +84,7 @@
 		
 									<li><a class="link_toc" href="../../documentacao/injecao-de-dependencias/">9. Injeção de dependências</a></li>
 		
-									<li><a class="link_toc" href="../../documentacao/downloading/">10. Downloading</a></li>
+									<li><a class="link_toc" href="../../documentacao/download-e-upload/">10. Download e Upload</a></li>
 		
 									<li><a class="link_toc" href="../../documentacao/componentes-utilitarios-opcionais/">11. Componentes Utilitários Opcionais</a></li>
 		
@@ -96,9 +96,15 @@
 		
 									<li><a class="link_toc" href="../../documentacao/testando-componentes-e-controllers/">15. Testando componentes e controllers</a></li>
 		
-									<li><a class="link_toc" href="../../documentacao/changelog/">16. ChangeLog</a></li>
+									<li><a class="link_toc" href="../../documentacao/scala/">16. Scala</a></li>
 		
-									<li><a class="link_toc" href="../../documentacao/migrando-do-vraptor2-para-o-vraptor3/">17. Migrando do VRaptor2 para o VRaptor3</a></li>
+									<li><a class="link_toc" href="../../documentacao/otimizacoes/">17. Otimizações</a></li>
+		
+									<li><a class="link_toc" href="../../documentacao/vraptor-scaffold/">18. Vraptor Scaffold</a></li>
+		
+									<li><a class="link_toc" href="../../documentacao/changelog/">19. ChangeLog</a></li>
+		
+									<li><a class="link_toc" href="../../documentacao/migrando-do-vraptor2-para-o-vraptor3/">20. Migrando do VRaptor2 para o VRaptor3</a></li>
 		
                 </ol>
             </div><!-- submenu-->
@@ -111,7 +117,7 @@
 
 
 <h3 class="section">Começando o projeto: uma loja virtual</h3>
-	    	<span class="paragraph">Vamos come&ccedil;ar baixando o <em class="italic">vraptor-blank-project</em>, do site <a class="link" target="_blank" href="http://vraptor.caelum.com.br/download.jsp.">http://vraptor.caelum.com.br/download.jsp.</a>
+	    	<span class="paragraph">Vamos come&ccedil;ar baixando o <em class="italic">vraptor-blank-project</em>, do site <a class="link" target="_blank" href="http://vraptor.caelum.com.br/download.jsp">http://vraptor.caelum.com.br/download.jsp</a> .
 Esse blank-project j&aacute; possui a configura&ccedil;&atilde;o no <code class="inlineCode">web.xml</code> e os jars no WEB-INF/lib necess&aacute;rios para come&ccedil;ar
 a desenvolver no VRaptor.</span>
 	    	<span class="paragraph">Como voc&ecirc; pode ver, a &uacute;nica configura&ccedil;&atilde;o necess&aacute;ria no <code class="inlineCode">web.xml</code> &eacute; o filtro do VRaptor:</span>
@@ -128,10 +134,10 @@ a desenvolver no VRaptor.</span>
 <span class="texnormal"></span><span class="textag">&lt;/filter-mapping&gt;</span></code></div>
 	    	<span class="paragraph">Voc&ecirc; pode facilmente importar esse projeto no Eclipse, e roda-lo clicando com o bot&atilde;o da direita
 e escolhendo <em class="italic">Run as... / Run on server...</em>. Escolha ent&atilde;o um  servlet container (ou
-fa&ccedil;a o setup de um novo) e ent&atilde;o acesse  <code class="inlineCode"><a class="link" target="_blank" href="http://localhost:8080/vraptor-blank-project/</code>.">http://localhost:8080/vraptor-blank-project/%%.</a> </span>
+fa&ccedil;a o setup de um novo) e ent&atilde;o acesse  <a class="link" target="_blank" href="http://localhost:8080/vraptor-blank-project/.">http://localhost:8080/vraptor-blank-project/.</a> </span>
 	    	<span class="paragraph">Voc&ecirc; pode escolher, nas propriedades do projetor, dentro de <em class="italic">Web Project Settings</em>, o nome
 do contexto para algo melhor, como  <code class="inlineCode">onlinestore</code>. Agora se voc&ecirc; rodar esse exemplo
-deve ser poss&iacute;vel acessar <code class="inlineCode"><a class="link" target="_blank" href="http://localhost:8080/onlinestore</code>">http://localhost:8080/onlinestore%%</a> e ver
+deve ser poss&iacute;vel acessar <a class="link" target="_blank" href="http://localhost:8080/onlinestore">http://localhost:8080/onlinestore</a> e ver
 <strong class="definition">It works!</strong> no navegador.</span>
 	    	<div class="box"><h3>Nota</h3>
 <span class="paragraph">Se voc&ecirc; est&aacute; usando um container de servlet 3.0 (java EE 6), voc&ecirc; nem precisa
@@ -344,7 +350,7 @@ us&aacute;-lo da seguinte maneira:</span>
 <strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">that</span><span class="java8">(</span><span class="java10">!produto.getNome</span><span class="java8">()</span><span class="java10">.isEmpty</span><span class="java8">()</span><span class="java10">, </span><span class="java5">&#34;produto.nome&#34;</span><span class="java10">, </span><span class="java5">&#34;nome.vazio&#34;</span><span class="java8">)</span><span class="java10">;<br /></strong>
 <strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; that</span><span class="java8">(</span><span class="java10">produto.getPreco</span><span class="java8">() </span><span class="java10">&gt; </span><span class="java7">0</span><span class="java10">, </span><span class="java5">&#34;produto.preco&#34;</span><span class="java10">, </span><span class="java5">&#34;preco.invalido&#34;</span><span class="java8">)</span><span class="java10">;<br /></strong>
 <strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java8">}})</span><span class="java10">;<br /></strong>
-<strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; validator.onErrorUse</span><span class="java8">(</span><span class="java10">Results.page</span><span class="java8">())</span><span class="java10">.of</span><span class="java8">(</span><span class="java10">ProdutosController.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">.form</span><span class="java8">()</span><span class="java10">;<br /></strong>
+<strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; validator.onErrorUsePageOf</span><span class="java8">(</span><span class="java10">ProdutosController.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">.form</span><span class="java8">()</span><span class="java10">;<br /></strong>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; dao.adiciona</span><span class="java8">(</span><span class="java10">produto</span><span class="java8">)</span><span class="java10">;<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; result.redirectTo</span><span class="java8">(</span><span class="java10">ProdutosController.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">.lista</span><span class="java8">()</span><span class="java10">;<br />
@@ -564,6 +570,7 @@ campo.senha&nbsp;<span class="texvalue">=&nbsp;Password</span></code></div>
                     <li><a href="../../vraptor2.jsp">vraptor2</a></li>
                 </ul>
                 <p><a href="http://www.apache.org/licenses/LICENSE-2.0">Licença Apache 2.0</a> - VRaptor ©2009 Caelum - Ensino e Inovação</p>
+                <p>Profiled with <a href="http://www.ej-technologies.com/products/jprofiler/overview.html">JProfiler</a></p>
             </div><!-- footnote-->
         </div><!-- footer content -->
         <a id="signature" href="mailto:lokidg@gmail.com">loki|design</a>

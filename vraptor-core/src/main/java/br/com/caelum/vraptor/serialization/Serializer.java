@@ -15,8 +15,6 @@
  */
 package br.com.caelum.vraptor.serialization;
 
-
-
 /**
  * Serializes given object, including and excluding fields.
  *
@@ -25,16 +23,15 @@ package br.com.caelum.vraptor.serialization;
  * @since 3.0.2
  */
 public interface Serializer {
-
-	<T> Serializer from(T object);
-	<T> Serializer from(T object, String alias);
 	Serializer exclude(String... names);
 	Serializer include(String... names);
 
 	/**
+	 * Include all fields, recursively.
+	 */
+	Serializer recursive();
+	/**
 	 * end method for this fluent interface
 	 */
 	void serialize();
-
-
 }

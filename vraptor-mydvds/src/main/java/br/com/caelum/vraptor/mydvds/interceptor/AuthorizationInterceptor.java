@@ -16,9 +16,6 @@
  */
 package br.com.caelum.vraptor.mydvds.interceptor;
 
-import static br.com.caelum.vraptor.view.Results.logic;
-
-import java.lang.reflect.Method;
 import java.util.Arrays;
 
 import br.com.caelum.vraptor.InterceptionException;
@@ -27,7 +24,6 @@ import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.mydvds.controller.HomeController;
-import br.com.caelum.vraptor.mydvds.controller.UsersController;
 import br.com.caelum.vraptor.mydvds.dao.UserDao;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.validator.ValidationMessage;
@@ -49,20 +45,11 @@ public class AuthorizationInterceptor implements Interceptor {
 		this.result = result;
 	}
 
+	/**
+	 * the easiest way to implement the accepts method is creating an annotation
+	 */
     public boolean accepts(ResourceMethod method) {
-        return notLogin(method) && notNewUser(method);
-    }
-
-    private boolean notNewUser(ResourceMethod method) {
-        Method invokedMethod = method.getMethod();
-        if (invokedMethod.getDeclaringClass().equals(UsersController.class)) {
-            return !"add".equals(invokedMethod.getName()) && !"userAdded".equals(invokedMethod.getName());
-        }
-        return true;
-    }
-
-    private boolean notLogin(ResourceMethod method) {
-        return !method.getMethod().getDeclaringClass().equals(HomeController.class);
+        return !method.containsAnnotation(Public.class);
     }
 
     /**
@@ -76,7 +63,7 @@ public class AuthorizationInterceptor implements Interceptor {
     	if (info.getUser() == null) {
     		// remember added parameters will survive one more request, when there is a redirect
     		result.include("errors", Arrays.asList(new ValidationMessage("user is not logged in", "user")));
-    		result.use(logic()).redirectTo(HomeController.class).login();
+    		result.redirectTo(HomeController.class).login();
     	} else {
 	    	dao.refresh(info.getUser());
 	    	// continues execution

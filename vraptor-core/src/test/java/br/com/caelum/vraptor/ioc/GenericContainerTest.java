@@ -30,17 +30,12 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
@@ -49,39 +44,20 @@ import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.Converter;
-import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.converter.jodatime.LocalDateConverter;
 import br.com.caelum.vraptor.converter.jodatime.LocalTimeConverter;
 import br.com.caelum.vraptor.core.BaseComponents;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.core.Execution;
-import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodInfo;
-import br.com.caelum.vraptor.core.RequestExecution;
 import br.com.caelum.vraptor.core.RequestInfo;
-import br.com.caelum.vraptor.extra.ForwardToDefaultViewInterceptor;
-import br.com.caelum.vraptor.http.ParameterNameProvider;
-import br.com.caelum.vraptor.http.ParametersProvider;
-import br.com.caelum.vraptor.http.TypeCreator;
-import br.com.caelum.vraptor.http.UrlToResourceTranslator;
-import br.com.caelum.vraptor.http.ognl.EmptyElementsRemoval;
-import br.com.caelum.vraptor.http.route.NoRoutesConfiguration;
 import br.com.caelum.vraptor.http.route.Route;
 import br.com.caelum.vraptor.http.route.Router;
-import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
-import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
-import br.com.caelum.vraptor.interceptor.InterceptorListPriorToExecutionExtractor;
 import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
-import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
-import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
-import br.com.caelum.vraptor.interceptor.download.DownloadInterceptor;
-import br.com.caelum.vraptor.interceptor.multipart.MultipartInterceptor;
 import br.com.caelum.vraptor.ioc.fixture.ComponentFactoryInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.ConverterInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.CustomComponentInTheClasspath;
@@ -89,12 +65,7 @@ import br.com.caelum.vraptor.ioc.fixture.CustomComponentWithLifecycleInTheClassp
 import br.com.caelum.vraptor.ioc.fixture.InterceptorInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.ResourceInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.ComponentFactoryInTheClasspath.Provided;
-import br.com.caelum.vraptor.reflection.CacheBasedTypeCreator;
 import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.resource.ResourceNotFoundHandler;
-import br.com.caelum.vraptor.view.LogicResult;
-import br.com.caelum.vraptor.view.PageResult;
-import br.com.caelum.vraptor.view.PathResolver;
 
 /**
  * Acceptance test that checks if the container is capable of giving all
@@ -102,7 +73,6 @@ import br.com.caelum.vraptor.view.PathResolver;
  *
  * @author Guilherme Silveira
  */
-@Ignore
 public abstract class GenericContainerTest {
 
 	protected Mockery mockery;
@@ -120,10 +90,6 @@ public abstract class GenericContainerTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void canProvideAllApplicationScopedComponents() {
-		List<Class<?>> components = Arrays.asList(ServletContext.class, UrlToResourceTranslator.class, Router.class,
-				TypeCreator.class, InterceptorRegistry.class, ParameterNameProvider.class, Converters.class,
-				EmptyElementsRemoval.class, NoRoutesConfiguration.class, ResourceNotFoundHandler.class);
-		checkAvailabilityFor(true, components);
 		checkAvailabilityFor(true, BaseComponents.getApplicationScoped().keySet());
 		mockery.assertIsSatisfied();
 	}
@@ -137,15 +103,6 @@ public abstract class GenericContainerTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void canProvideAllRequestScopedComponents() {
-		List<Class<?>> components = Arrays.asList(HttpServletRequest.class, HttpServletResponse.class,
-				RequestInfo.class, HttpSession.class, ParametersInstantiatorInterceptor.class,
-				InterceptorListPriorToExecutionExtractor.class,
-				InterceptorStack.class, RequestExecution.class, ResourceLookupInterceptor.class,
-				InstantiateInterceptor.class, Result.class, ExecuteMethodInterceptor.class, PageResult.class,
-				ParametersProvider.class, MethodInfo.class, Validator.class, PathResolver.class,
-				ForwardToDefaultViewInterceptor.class, LogicResult.class, MultipartInterceptor.class,
-				DownloadInterceptor.class);
-		checkAvailabilityFor(false, components);
 		checkAvailabilityFor(false, BaseComponents.getRequestScoped().keySet());
 		mockery.assertIsSatisfied();
 	}
@@ -167,21 +124,15 @@ public abstract class GenericContainerTest {
 			public String execute(RequestInfo request, int counter) {
 				assertNotNull(getFromContainerInCurrentThread(LocalDateConverter.class, request));
 				assertNotNull(getFromContainerInCurrentThread(LocalTimeConverter.class, request));
-				
+
 				Converters converters = getFromContainerInCurrentThread(Converters.class, request);
-				assertTrue(converters.existsFor(LocalDate.class, getFromContainerInCurrentThread(Container.class, request)));
-				assertTrue(converters.existsFor(LocalTime.class, getFromContainerInCurrentThread(Container.class, request)));
+				assertTrue(converters.existsFor(LocalDate.class));
+				assertTrue(converters.existsFor(LocalTime.class));
 				return null;
 			}
 
 		});
 		mockery.assertIsSatisfied();
-	}
-
-	@Test
-	public void shouldProvideCachedComponents() throws Exception {
-		TypeCreator creator = getFromContainer(TypeCreator.class);
-		assertThat(creator, is(instanceOf(CacheBasedTypeCreator.class)));
 	}
 
 	@ApplicationScoped
@@ -198,9 +149,9 @@ public abstract class GenericContainerTest {
 	public void callsPredestroyExactlyOneTime() throws Exception {
 		MyAppComponentWithLifecycle component = registerAndGetFromContainer(MyAppComponentWithLifecycle.class,
 				MyAppComponentWithLifecycle.class);
-		assertThat(0, is(equalTo(component.calls)));
+		assertThat(component.calls, is(0));
 		provider.stop();
-		assertThat(1, is(equalTo(component.calls)));
+		assertThat(component.calls, is(1));
 		provider = getProvider();
 		provider.start(context); // In order to tearDown ok
 	}
@@ -341,7 +292,7 @@ public abstract class GenericContainerTest {
 			}
 		});
 	}
-	
+
 	private <T> T getFromContainerInCurrentThread(final Class<T> componentToBeRetrieved, RequestInfo request) {
 		return provider.provideForRequest(request, new Execution<T>() {
 			public T insideRequest(Container firstContainer) {
@@ -457,7 +408,7 @@ public abstract class GenericContainerTest {
 				return provider.provideForRequest(request, new Execution<Converters>() {
 					public Converters insideRequest(Container container) {
 						Converters converters = container.instanceFor(Converters.class);
-						Converter<?> converter = converters.to(Void.class, container);
+						Converter<?> converter = converters.to(Void.class);
 						assertThat(converter, is(instanceOf(ConverterInTheClasspath.class)));
 						return null;
 					}

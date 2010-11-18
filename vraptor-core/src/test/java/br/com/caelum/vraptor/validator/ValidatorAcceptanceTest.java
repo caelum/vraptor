@@ -21,22 +21,24 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertFalse;
 
-import org.jmock.Expectations;
-import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.view.LogicResult;
-import br.com.caelum.vraptor.view.PageResult;
-import br.com.caelum.vraptor.view.Results;
+import br.com.caelum.vraptor.core.Localization;
+import br.com.caelum.vraptor.proxy.ObjenesisProxifier;
 import br.com.caelum.vraptor.view.ValidationViewsFactory;
 
+@RunWith(MockitoJUnitRunner.class)
 public class ValidatorAcceptanceTest {
-    private PageResult pageResult;
-    private Mockery mockery;
-	private LogicResult logicResult;
-    private Result result;
+    private @Mock Result result;
+	private @Mock Localization localization;
+	private @Mock ValidationViewsFactory viewsFactory;
+	private @Mock Outjector outjector;
+	private DefaultValidator validator;
 
     class Student {
         private Long id;
@@ -44,21 +46,12 @@ public class ValidatorAcceptanceTest {
 
     @Before
     public void setup() {
-        this.mockery = new Mockery();
-        this.result = mockery.mock(Result.class);
-        this.pageResult = mockery.mock(PageResult.class);
-        this.logicResult = mockery.mock(LogicResult.class);
-        mockery.checking(new Expectations() {
-            {
-                allowing(result).use(Results.page()); will(returnValue(pageResult));
-                allowing(result).use(Results.logic()); will(returnValue(logicResult));
-            }
-        });
+    	validator = new DefaultValidator(result, viewsFactory, outjector, new ObjenesisProxifier(), null, localization);
     }
 
     @Test
     public void validDataDoesntThrowException() {
-        DefaultValidator validator = new DefaultValidator(result, mockery.mock(ValidationViewsFactory.class), mockery.mock(Outjector.class));
+        //TODO testing
         final Student guilherme = new Student();
         guilherme.id = 15L;
         validator.checking(new Validations() {
@@ -68,7 +61,6 @@ public class ValidatorAcceptanceTest {
             }
         });
         assertFalse(validator.hasErrors());
-        mockery.assertIsSatisfied();
     }
 
 }

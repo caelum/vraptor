@@ -70,6 +70,7 @@ class ComponentScanner extends ClassPathBeanDefinitionScanner {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void postProcessBeanDefinition(AbstractBeanDefinition beanDefinition, String beanName) {
 		super.postProcessBeanDefinition(beanDefinition, beanName);

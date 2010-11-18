@@ -18,7 +18,6 @@ package br.com.caelum.vraptor.view;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -26,6 +25,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
+import br.com.caelum.vraptor.util.LRUCache;
 
 /**
  * The default AcceptHeaderToFormat implementation searches for registered mime types. It also
@@ -38,51 +38,45 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
 @ApplicationScoped
 public class DefaultAcceptHeaderToFormat implements AcceptHeaderToFormat {
 
-	private static Cache cache = new Cache();
+	private static final Map<String, String> acceptToFormatCache = Collections.synchronizedMap(new LRUCache<String, String>(100));
 	private static final String DEFAULT_FORMAT = "html";
-	protected final Map<String, String> map;
+	private static final double DEFAULT_QUALIFIER_VALUE = 0.01;
+	protected final Map<String, String> mimeToFormat;
 
 	public DefaultAcceptHeaderToFormat() {
-		map = new ConcurrentHashMap<String, String>();
-		map.put("text/html", "html");
-		map.put("application/json", "json");
-		map.put("application/xml", "xml");
-		map.put("xml", "xml");
+		mimeToFormat = new ConcurrentHashMap<String, String>();
+		mimeToFormat.put("text/html", "html");
+		mimeToFormat.put("application/json", "json");
+		mimeToFormat.put("application/xml", "xml");
+		mimeToFormat.put("text/xml", "xml");
+		mimeToFormat.put("xml", "xml");
 	}
 
 	public String getFormat(String acceptHeader) {
-
-		if (acceptHeader == null) {
-			throw new NullPointerException("accept header cant be null");
-		}
-
-		if (acceptHeader.contains(DEFAULT_FORMAT)) {
+		if (acceptHeader == null || acceptHeader.trim().equals("")) {
 			return DEFAULT_FORMAT;
 		}
 
-		if (cache.containsKey(acceptHeader)) {
-			return cache.get(acceptHeader);
+		if (acceptHeader.contains(DEFAULT_FORMAT)) {
+			// HACK! Opera may send "application/json, text/html, */*" and this should return html.
+			return DEFAULT_FORMAT;
 		}
 
-		// TODO: we really could cache acceptHeader -> format
+		if (acceptToFormatCache.containsKey(acceptHeader)) {
+			return acceptToFormatCache.get(acceptHeader);
+		}
+
 		String[] mimeTypes = getOrderedMimeTypes(acceptHeader);
 
 		for (String mimeType : mimeTypes) {
-			if (map.containsKey(mimeType)) {
-				String format = map.get(mimeType);
-				cache.put(acceptHeader, format);
+			if (mimeToFormat.containsKey(mimeType)) {
+				String format = mimeToFormat.get(mimeType);
+				acceptToFormatCache.put(acceptHeader, format);
 				return format;
 			}
 		}
 
 		return mimeTypes[0];
-	}
-
-	private static class Cache extends LinkedHashMap<String, String> {
-		@Override
-		protected boolean removeEldestEntry(java.util.Map.Entry<String, String> eldest) {
-			return this.size() > 100;
-		}
 	}
 
 	private static class MimeType implements Comparable<MimeType> {
@@ -102,6 +96,10 @@ public class DefaultAcceptHeaderToFormat implements AcceptHeaderToFormat {
 		public String getType() {
 			return type;
 		}
+
+		public String toString() {
+			return type;
+		}
 	}
 
 	String[] getOrderedMimeTypes(String acceptHeader) {
@@ -117,11 +115,11 @@ public class DefaultAcceptHeaderToFormat implements AcceptHeaderToFormat {
 		List<MimeType> mimes = new ArrayList<MimeType>();
 		for (String string : types) {
 			if (string.contains("*/*")) {
-				mimes.add(new MimeType("html", 1));
+				mimes.add(new MimeType("text/html", DEFAULT_QUALIFIER_VALUE));
 				continue;
 			} else if (string.contains(";")) {
 				String type = string.substring(0, string.indexOf(';'));
-				double qualifier = 1;
+				double qualifier = DEFAULT_QUALIFIER_VALUE;
 				if (string.contains("q=")) {
 					Matcher matcher = Pattern.compile("\\s*q=(.+)\\s*").matcher(string);
 					matcher.find();
@@ -136,6 +134,7 @@ public class DefaultAcceptHeaderToFormat implements AcceptHeaderToFormat {
 		}
 
 		Collections.sort(mimes);
+
 		String[] orderedTypes = new String[mimes.size()];
 		for (int i = 0; i < mimes.size(); i++) {
 			orderedTypes[i] = mimes.get(i).getType().trim();

@@ -2,17 +2,17 @@
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource
  * All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); 
- * you may not use this file except in compliance with the License. 
- * You may obtain a copy of the License at 
- * 
- * 	http://www.apache.org/licenses/LICENSE-2.0 
- * 
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an "AS IS" BASIS, 
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
- * See the License for the specific language governing permissions and 
- * limitations under the License. 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * 	http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package br.com.caelum.vraptor.http.ognl;
@@ -70,35 +70,55 @@ public class ListAccessor extends ListPropertyAccessor {
 			// we all just looooove ognl.
 			OgnlContext ctx = (OgnlContext) context;
 			// if direct injecting, cannot find out what to do, use string
-			if (ctx.getRoot() != target) {
-				Evaluation eval = ctx.getCurrentEvaluation();
-				Evaluation previous = eval.getPrevious();
-				String fieldName = previous.getNode().toString();
-				Object origin = previous.getSource();
-				Method getter = ReflectionBasedNullHandler.findMethod(origin.getClass(), "get"
-						+ Info.capitalize(fieldName), origin.getClass(), null);
-				Type genericType = getter.getGenericReturnType();
-                Class type;
-                if (genericType instanceof ParameterizedType) {
-                    type = (Class) ((ParameterizedType) genericType).getActualTypeArguments()[0];
-                } else {
-                    type = (Class) genericType;
-                }
-				if (!type.equals(String.class)) {
-					// suckable ognl doesnt support dependency injection or
-					// anything alike... just that suckable context... therefore
-					// procedural
-					// programming and ognl live together forever!
-					Container container = (Container) context.get(Container.class);
-					Converter<?> converter = container.instanceFor(Converters.class).to(type, container);
-					ResourceBundle bundle = (ResourceBundle) context.get(ResourceBundle.class);
-					Object result = converter.convert((String) value, type, bundle);
-					super.setProperty(context, target, key, result);
-					return;
-				}
+
+			Type genericType = extractGenericType(ctx, target);
+
+            Class type = getActualType(genericType);
+
+			if (!type.equals(String.class)) {
+				// suckable ognl doesnt support dependency injection or
+				// anything alike... just that suckable context... therefore
+				// procedural
+				// programming and ognl live together forever!
+				Container container = (Container) context.get(Container.class);
+				Converter<?> converter = container.instanceFor(Converters.class).to(type);
+
+				ResourceBundle bundle = (ResourceBundle) context.get(ResourceBundle.class);
+
+				Object result = converter.convert((String) value, type, bundle);
+
+				super.setProperty(context, target, key, result);
+				return;
 			}
 		}
 		super.setProperty(context, target, key, value);
+	}
+
+	private Class getActualType(Type genericType) {
+		Class type;
+		if (genericType instanceof ParameterizedType) {
+		    type = (Class) ((ParameterizedType) genericType).getActualTypeArguments()[0];
+		} else {
+		    type = (Class) genericType;
+		}
+		return type;
+	}
+
+	private Type extractGenericType(OgnlContext ctx, Object target) {
+		Type genericType;
+
+		if (ctx.getRoot() != target) {
+			Evaluation eval = ctx.getCurrentEvaluation();
+			Evaluation previous = eval.getPrevious();
+			String fieldName = previous.getNode().toString();
+			Object origin = previous.getSource();
+			Method getter = ReflectionBasedNullHandler.findMethod(origin.getClass(), "get"
+					+ Info.capitalize(fieldName), origin.getClass(), null);
+			genericType = getter.getGenericReturnType();
+		} else {
+			genericType = (Type) ctx.get("rootType");
+		}
+		return genericType;
 	}
 
 }

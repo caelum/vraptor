@@ -84,7 +84,7 @@
 		
 									<li><a class="link_toc" href="../../documentacao/injecao-de-dependencias/">9. Injeção de dependências</a></li>
 		
-									<li><a class="link_toc" href="../../documentacao/downloading/">10. Downloading</a></li>
+									<li><a class="link_toc" href="../../documentacao/download-e-upload/">10. Download e Upload</a></li>
 		
 									<li><a class="link_toc" href="../../documentacao/componentes-utilitarios-opcionais/">11. Componentes Utilitários Opcionais</a></li>
 		
@@ -96,9 +96,15 @@
 		
 									<li><a class="link_toc" href="../../documentacao/testando-componentes-e-controllers/">15. Testando componentes e controllers</a></li>
 		
-									<li><a class="link_toc" href="../../documentacao/changelog/">16. ChangeLog</a></li>
+									<li><a class="link_toc" href="../../documentacao/scala/">16. Scala</a></li>
 		
-									<li><a class="link_toc" href="../../documentacao/migrando-do-vraptor2-para-o-vraptor3/">17. Migrando do VRaptor2 para o VRaptor3</a></li>
+									<li><a class="link_toc" href="../../documentacao/otimizacoes/">17. Otimizações</a></li>
+		
+									<li><a class="link_toc" href="../../documentacao/vraptor-scaffold/">18. Vraptor Scaffold</a></li>
+		
+									<li><a class="link_toc" href="../../documentacao/changelog/">19. ChangeLog</a></li>
+		
+									<li><a class="link_toc" href="../../documentacao/migrando-do-vraptor2-para-o-vraptor3/">20. Migrando do VRaptor2 para o VRaptor3</a></li>
 		
                 </ol>
             </div><!-- submenu-->
@@ -335,6 +341,18 @@ Veja o exemplo citado:</span>
 &nbsp; </span><span class="java8">}<br />
 &nbsp; <br />
 }</span></code></div>
+	    	<span class="paragraph"><strong class="title">V&aacute;rios paths para a mesma l&oacute;gica</strong>
+Voc&ecirc; pode setar mais de um path pra mesma l&oacute;gica fazendo:</span>
+	    	<div class="java"><code class="java">
+<span class="java16">@Resource<br />
+</span><span class="java4">public class </span><span class="java10">ClienteController </span><span class="java8">{<br />
+<br />
+&nbsp; </span><span class="java16">@Path</span><span class="java8">({</span><span class="java5">&#34;/cliente/{cliente.id}/visualiza/{secao}&#34;</span><span class="java10">, </span><span class="java5">&#34;/cliente/{cliente.id}/visualiza/&#34;</span><span class="java8">})&nbsp; <br />
+&nbsp; </span><span class="java4">public </span><span class="java10">Cliente visualiza</span><span class="java8">(</span><span class="java10">Cliente cliente, String secao</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">return </span><span class="java10">...<br />
+&nbsp; </span><span class="java8">}<br />
+&nbsp; <br />
+}</span></code></div>
 	    	<span class="paragraph"><strong class="title">Paths com *</strong></span>
 	    	<span class="paragraph">Voc&ecirc; tamb&eacute;m pode utilizar o * como m&eacute;todo de sele&ccedil;&atilde;o para a sua uri. O exemplo a
 seguir ignora qualquer coisa ap&oacute;s a palavra <em class="italic">foto/</em> :</span>
@@ -399,11 +417,11 @@ primeiro os paths com maior prioridade, ou seja, valor menor de prioridade:</spa
 </span><span class="java4">public class </span><span class="java10">PostController </span><span class="java8">{<br />
 <br />
 &nbsp; </span><span class="java16">@Get<br />
-&nbsp; @Path</span><span class="java8">(</span><span class="java10">priority = </span><span class="java7">2</span><span class="java10">, value = </span><span class="java5">&#34;/post/{post.autor}&#34;</span><span class="java8">)<br />
+&nbsp; @Path</span><span class="java8">(</span><span class="java10">value = </span><span class="java5">&#34;/post/{post.autor}&#34;</span><span class="java10">, priority=Path.LOW</span><span class="java8">)<br />
 &nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">mostra</span><span class="java8">(</span><span class="java10">Post post</span><span class="java8">) { </span><span class="java10">... </span><span class="java8">}<br />
 <br />
 &nbsp; </span><span class="java16">@Get<br />
-&nbsp; @Path</span><span class="java8">(</span><span class="java10">priority = </span><span class="java7">1</span><span class="java10">, value = </span><span class="java5">&#34;/post/atual&#34;</span><span class="java8">)<br />
+&nbsp; @Path</span><span class="java8">(</span><span class="java10">value = </span><span class="java5">&#34;/post/atual&#34;</span><span class="java10">, priority=Path.HIGH</span><span class="java8">)<br />
 &nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">atual</span><span class="java8">() { </span><span class="java10">... </span><span class="java8">}<br />
 }</span></code></div>
 	    	<span class="paragraph">Assim, o path "/post/atual" vai ser testado antes do "/post/{post.autor}", e o VRaptor vai fazer
@@ -451,12 +469,6 @@ par&acirc;metros do m&eacute;todo. Voc&ecirc; pode ainda adicionar restri&ccedil
 </span><span class="java3">// Se eu quiser garantir que o parametro seja um n&uacute;mero:<br />
 </span><span class="java10">routeFor</span><span class="java8">(</span><span class="java5">&#34;/cliente/{cliente.id}&#34;</span><span class="java8">)</span><span class="java10">.withParameter</span><span class="java8">(</span><span class="java5">&#34;cliente.id&#34;</span><span class="java8">)</span><span class="java10">.matching</span><span class="java8">(</span><span class="java5">&#34;\\d+&#34;</span><span class="java8">)<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">.is</span><span class="java8">(</span><span class="java10">ClienteController.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">.mostra</span><span class="java8">(</span><span class="java4">null</span><span class="java8">)</span><span class="java10">;</span></code></div>
-	    	<span class="paragraph">Por fim, voc&ecirc; pode escolher o nome da classe e o nome do m&eacute;todo em tempo de execu&ccedil;&atilde;o,
-que permite criar rotas extremamente gen&eacute;ricas:</span>
-	    	<div class="java"><code class="java">
-<span class="java10">routeFor</span><span class="java8">(</span><span class="java5">&#34;/{webResource}/facaAlgo/{webMethod}&#34;</span><span class="java8">)</span><span class="java10">.is</span><span class="java8">(<br />
-&nbsp;&nbsp;&nbsp; </span><span class="java10">type</span><span class="java8">(</span><span class="java5">&#34;br.com.caelum.nomedoprojeto.{webResource}&#34;</span><span class="java8">)</span><span class="java10">, <br />
-&nbsp;&nbsp;&nbsp; method</span><span class="java8">(</span><span class="java5">&#34;{webMethod}&#34;</span><span class="java8">))</span><span class="java10">;</span></code></div>
 		
 
 </div><!-- content -->
@@ -503,6 +515,7 @@ que permite criar rotas extremamente gen&eacute;ricas:</span>
                     <li><a href="../../vraptor2.jsp">vraptor2</a></li>
                 </ul>
                 <p><a href="http://www.apache.org/licenses/LICENSE-2.0">Licença Apache 2.0</a> - VRaptor ©2009 Caelum - Ensino e Inovação</p>
+                <p>Profiled with <a href="http://www.ej-technologies.com/products/jprofiler/overview.html">JProfiler</a></p>
             </div><!-- footnote-->
         </div><!-- footer content -->
         <a id="signature" href="mailto:lokidg@gmail.com">loki|design</a>

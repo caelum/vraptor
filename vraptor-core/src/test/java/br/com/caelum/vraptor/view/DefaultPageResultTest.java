@@ -77,7 +77,7 @@ public class DefaultPageResultTest {
 			}
 		});
 
-		view.redirect("/any/url");
+		view.redirectTo("/any/url");
 		mockery.assertIsSatisfied();
 	}
     @Test
@@ -90,7 +90,7 @@ public class DefaultPageResultTest {
     		}
     	});
 
-    	view.redirect("http://vraptor.caelum.com.br");
+    	view.redirectTo("http://vraptor.caelum.com.br");
     	mockery.assertIsSatisfied();
     }
     @Test
@@ -104,7 +104,7 @@ public class DefaultPageResultTest {
     		}
     	});
 
-    	view.forward("/any/url");
+    	view.forwardTo("/any/url");
     	mockery.assertIsSatisfied();
     }
 
@@ -117,7 +117,7 @@ public class DefaultPageResultTest {
                 one(dispatcher).forward(request, response);
             }
         });
-        view.forward();
+        view.defaultView();
         mockery.assertIsSatisfied();
     }
 

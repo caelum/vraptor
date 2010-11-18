@@ -20,273 +20,190 @@ package br.com.caelum.vraptor.http;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.sameInstance;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.when;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.jmock.Expectations;
-import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.http.route.MethodNotAllowedException;
 import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 public class DefaultResourceTranslatorTest {
 
-    private Mockery mockery;
-    private Router registry;
-    private DefaultResourceTranslator translator;
-    private HttpServletRequest request;
+    private @Mock Router router;
+    private @Mock HttpServletRequest request;
+
+    private @Mock ResourceMethod method;
+
     private VRaptorRequest webRequest;
 	private RequestInfo info;
 
+
+	private DefaultResourceTranslator translator;
+
     @Before
     public void setup() {
-        this.mockery = new Mockery();
-        this.registry = mockery.mock(Router.class);
-        this.translator = new DefaultResourceTranslator(registry);
-        this.request = mockery.mock(HttpServletRequest.class);
+    	MockitoAnnotations.initMocks(this);
+
         this.webRequest = new VRaptorRequest(request);
+        this.translator = new DefaultResourceTranslator(router);
         this.info = new RequestInfo(null,null, webRequest,null);
+        when(request.getContextPath()).thenReturn("");
     }
 
     @Test
     public void handlesInclude() {
 
-        final ResourceMethod expected = mockery.mock(ResourceMethod.class);
-
-        mockery.checking(new Expectations(){{
-            exactly(2).of(request).getAttribute(RequestInfo.INCLUDE_REQUEST_URI); will(returnValue("/url"));
-            one(request).getMethod(); will(returnValue("POST"));
-            one(registry).parse("/url", HttpMethod.POST, webRequest); will(returnValue(expected));
-            one(request).getParameter("_method"); will(returnValue(null));
-        }});
+    	when(request.getAttribute(RequestInfo.INCLUDE_REQUEST_URI)).thenReturn("/url");
+    	when(request.getMethod()).thenReturn("POST");
+    	when(router.parse("/url", HttpMethod.POST, webRequest)).thenReturn(method);
 
         ResourceMethod resource = translator.translate(info);
-        assertThat(resource, is(equalTo(expected)));
-        mockery.assertIsSatisfied();
-
+        assertThat(resource, is(sameInstance(method)));
     }
 
     @Test
     public void canHandleTheCorrectMethod() {
 
-        final ResourceMethod expected = mockery.mock(ResourceMethod.class);
-
-        mockery.checking(new Expectations(){{
-            one(request).getAttribute(RequestInfo.INCLUDE_REQUEST_URI); will(returnValue(null));
-            one(request).getContextPath();   will(returnValue(""));
-            one(request).getRequestURI(); will(returnValue("/url"));
-            one(request).getMethod(); will(returnValue("POST"));
-            one(registry).parse("/url", HttpMethod.POST,webRequest); will(returnValue(expected));
-            one(request).getParameter("_method"); will(returnValue(null));
-        }});
+    	when(request.getRequestURI()).thenReturn("/url");
+    	when(request.getMethod()).thenReturn("POST");
+    	when(router.parse("/url", HttpMethod.POST,webRequest)).thenReturn(method);
 
         ResourceMethod resource = translator.translate(info);
-        assertThat(resource, is(equalTo(expected)));
-        mockery.assertIsSatisfied();
-
+        assertThat(resource, is(equalTo(method)));
     }
 
     @Test
     public void shouldAcceptCaseInsensitiveRequestMethods() {
-        final ResourceMethod expected = mockery.mock(ResourceMethod.class);
-
-        mockery.checking(new Expectations(){{
-            one(request).getAttribute(RequestInfo.INCLUDE_REQUEST_URI); will(returnValue(null));
-            one(request).getContextPath();   will(returnValue(""));
-            one(request).getRequestURI(); will(returnValue("/url"));
-            one(request).getMethod(); will(returnValue("pOsT"));
-            one(registry).parse("/url", HttpMethod.POST, webRequest); will(returnValue(expected));
-            one(request).getParameter("_method"); will(returnValue(null));
-        }});
+    	when(request.getRequestURI()).thenReturn("/url");
+    	when(request.getMethod()).thenReturn("pOsT");
+    	when(router.parse("/url", HttpMethod.POST,webRequest)).thenReturn(method);
 
         ResourceMethod resource = translator.translate(info);
-        assertThat(resource, is(equalTo(expected)));
-        mockery.assertIsSatisfied();
+
+        assertThat(resource, is(equalTo(method)));
     }
 
     @Test
     public void shouldAcceptCaseInsensitiveGetRequestUsingThe_methodParameter() {
-        final ResourceMethod expected = mockery.mock(ResourceMethod.class);
-
-        mockery.checking(new Expectations(){{
-            one(request).getAttribute(RequestInfo.INCLUDE_REQUEST_URI); will(returnValue(null));
-            one(request).getContextPath();   will(returnValue(""));
-            one(request).getRequestURI(); will(returnValue("/url"));
-            one(request).getParameter("_method"); will(returnValue("gEt"));
-            one(request).getMethod(); will(returnValue("POST"));
-            one(registry).parse("/url", HttpMethod.GET, webRequest); will(returnValue(expected));
-        }});
+    	when(request.getRequestURI()).thenReturn("/url");
+    	when(request.getParameter("_method")).thenReturn("gEt");
+    	when(request.getMethod()).thenReturn("POST");
+    	when(router.parse("/url", HttpMethod.GET, webRequest)).thenReturn(method);
 
         ResourceMethod resource = translator.translate(info);
-        assertThat(resource, is(equalTo(expected)));
-        mockery.assertIsSatisfied();
+        assertThat(resource, is(equalTo(method)));
+    }
+
+
+    @Test(expected=MethodNotAllowedException.class)
+    public void shouldThrowExceptionWhenRequestANotKnownMethod() {
+    	when(request.getRequestURI()).thenReturn("/url");
+    	when(request.getMethod()).thenReturn("COOK");
+    	when(router.parse(anyString(), any(HttpMethod.class), any(MutableRequest.class))).thenReturn(method);
+
+        translator.translate(info);
     }
 
     @Test
     public void shouldOverrideTheHttpMethodByUsingThe_methodParameter() {
-
-        final ResourceMethod expected = mockery.mock(ResourceMethod.class);
-
-        mockery.checking(new Expectations(){{
-            one(request).getAttribute(RequestInfo.INCLUDE_REQUEST_URI); will(returnValue(null));
-            one(request).getContextPath();   will(returnValue(""));
-            one(request).getRequestURI(); will(returnValue("/url"));
-            one(request).getParameter("_method"); will(returnValue("DELETE"));
-            one(request).getMethod(); will(returnValue("POST"));
-            one(registry).parse("/url", HttpMethod.DELETE,webRequest); will(returnValue(expected));
-        }});
+    	when(request.getRequestURI()).thenReturn("/url");
+    	when(request.getParameter("_method")).thenReturn("DELETE");
+    	when(request.getMethod()).thenReturn("POST");
+    	when(router.parse("/url", HttpMethod.DELETE, webRequest)).thenReturn(method);
 
         ResourceMethod resource = translator.translate(info);
-        assertThat(resource, is(equalTo(expected)));
-        mockery.assertIsSatisfied();
-
+        assertThat(resource, is(equalTo(method)));
     }
 
     @Test
     public void canHandleUrlIfRootContext() {
+    	when(request.getRequestURI()).thenReturn("/url");
+    	when(request.getContextPath()).thenReturn("");
+    	when(request.getMethod()).thenReturn("GET");
+    	when(router.parse("/url", HttpMethod.GET, webRequest)).thenReturn(method);
 
-        final ResourceMethod expected = mockery.mock(ResourceMethod.class);
-
-        mockery.checking(new Expectations(){{
-            one(request).getAttribute(RequestInfo.INCLUDE_REQUEST_URI); will(returnValue(null));
-            one(request).getContextPath();   will(returnValue(""));
-            one(request).getRequestURI(); will(returnValue("/url"));
-            one(request).getMethod(); will(returnValue("GET"));
-            one(registry).parse("/url", HttpMethod.GET,webRequest); will(returnValue(expected));
-            one(request).getParameter("_method"); will(returnValue(null));
-        }});
-
-        ResourceMethod resource = translator.translate(info);
-        assertThat(resource, is(equalTo(expected)));
-        mockery.assertIsSatisfied();
+    	ResourceMethod resource = translator.translate(info);
+    	assertThat(resource, is(equalTo(method)));
 
     }
 
     @Test
     public void canHandleUrlIfNonRootContext() {
+    	when(request.getRequestURI()).thenReturn("/custom_context/url");
+    	when(request.getContextPath()).thenReturn("/custom_context");
+    	when(request.getMethod()).thenReturn("GET");
+    	when(router.parse("/url", HttpMethod.GET, webRequest)).thenReturn(method);
 
-        final ResourceMethod expected = mockery.mock(ResourceMethod.class);
-
-        mockery.checking(new Expectations(){{
-            one(request).getAttribute(RequestInfo.INCLUDE_REQUEST_URI); will(returnValue(null));
-            one(request).getContextPath();   will(returnValue("/custom_context"));
-            one(request).getRequestURI(); will(returnValue("/custom_context/url"));
-            one(request).getMethod(); will(returnValue("GET"));
-            one(registry).parse("/url", HttpMethod.GET,webRequest); will(returnValue(expected));
-            one(request).getParameter("_method"); will(returnValue(null));
-        }});
-
-        ResourceMethod resource = translator.translate(info);
-        assertThat(resource, is(equalTo(expected)));
-        mockery.assertIsSatisfied();
-
+    	ResourceMethod resource = translator.translate(info);
+    	assertThat(resource, is(equalTo(method)));
     }
 
     @Test
     public void canHandleUrlIfPlainRootContext() {
+    	when(request.getRequestURI()).thenReturn("/");
+    	when(request.getMethod()).thenReturn("GET");
+    	when(router.parse("/", HttpMethod.GET, webRequest)).thenReturn(method);
 
-        final ResourceMethod expected = mockery.mock(ResourceMethod.class);
-
-        mockery.checking(new Expectations(){{
-            one(request).getAttribute(RequestInfo.INCLUDE_REQUEST_URI); will(returnValue(null));
-            one(request).getContextPath();   will(returnValue(""));
-            one(request).getRequestURI(); will(returnValue("/"));
-            one(request).getMethod(); will(returnValue("GET"));
-            one(registry).parse("/", HttpMethod.GET,webRequest); will(returnValue(expected));
-            one(request).getParameter("_method"); will(returnValue(null));
-        }});
-
-        ResourceMethod resource = translator.translate(info);
-        assertThat(resource, is(equalTo(expected)));
-        mockery.assertIsSatisfied();
-
-    }
+    	ResourceMethod resource = translator.translate(info);
+    	assertThat(resource, is(equalTo(method)));
+   	}
 
     @Test
     public void canHandleComposedUrlIfPlainRootContext() {
+    	when(request.getRequestURI()).thenReturn("/products/1");
+    	when(request.getMethod()).thenReturn("GET");
+    	when(router.parse("/products/1", HttpMethod.GET, webRequest)).thenReturn(method);
 
-        final ResourceMethod expected = mockery.mock(ResourceMethod.class);
-
-        mockery.checking(new Expectations(){{
-            one(request).getAttribute(RequestInfo.INCLUDE_REQUEST_URI); will(returnValue(null));
-            one(request).getContextPath();   will(returnValue(""));
-            one(request).getRequestURI(); will(returnValue("/products/1"));
-            one(request).getMethod(); will(returnValue("GET"));
-            one(registry).parse("/products/1", HttpMethod.GET,webRequest); will(returnValue(expected));
-            one(request).getParameter("_method"); will(returnValue(null));
-        }});
-
-        ResourceMethod resource = translator.translate(info);
-        assertThat(resource, is(equalTo(expected)));
-        mockery.assertIsSatisfied();
-
+    	ResourceMethod resource = translator.translate(info);
+    	assertThat(resource, is(equalTo(method)));
     }
 
     @Test
     public void canHandleComposedUrlIfNonRootContext() {
+    	when(request.getRequestURI()).thenReturn("/custom_context/products/1");
+    	when(request.getContextPath()).thenReturn("/custom_context");
+    	when(request.getMethod()).thenReturn("GET");
+    	when(router.parse("/products/1", HttpMethod.GET, webRequest)).thenReturn(method);
 
-        final ResourceMethod expected = mockery.mock(ResourceMethod.class);
-
-        mockery.checking(new Expectations(){{
-            one(request).getAttribute(RequestInfo.INCLUDE_REQUEST_URI); will(returnValue(null));
-            one(request).getContextPath();   will(returnValue("/custom_context"));
-            one(request).getRequestURI(); will(returnValue("/custom_context/products/1"));
-            one(request).getMethod(); will(returnValue("GET"));
-            one(registry).parse("/products/1", HttpMethod.GET,webRequest); will(returnValue(expected));
-            one(request).getParameter("_method"); will(returnValue(null));
-        }});
-
-        ResourceMethod resource = translator.translate(info);
-        assertThat(resource, is(equalTo(expected)));
-        mockery.assertIsSatisfied();
-
+    	ResourceMethod resource = translator.translate(info);
+    	assertThat(resource, is(equalTo(method)));
     }
     @Test
     public void canHandleUrlWithAppendedJSessionID() {
+    	when(request.getRequestURI()).thenReturn(
+    			"/custom_context/products/1;jsessionid=aslfasfaslkj22234lkjsdfaklsf",
+    			"/custom_context/products/1;JSESSIONID=aslfasfaslkj22234lkjsdfaklsf",
+    			"/custom_context/products/1;jsessionID=aslfasfaslkj22234lkjsdfaklsf");
+    	when(request.getContextPath()).thenReturn("/custom_context");
+    	when(request.getMethod()).thenReturn("GET");
+    	when(router.parse("/products/1", HttpMethod.GET, webRequest)).thenReturn(method);
 
-    	final ResourceMethod expected = mockery.mock(ResourceMethod.class);
-
-    	mockery.checking(new Expectations(){{
-    		allowing(request).getAttribute(RequestInfo.INCLUDE_REQUEST_URI); will(returnValue(null));
-    		allowing(request).getContextPath();   will(returnValue("/custom_context"));
-    		one(request).getRequestURI(); will(returnValue("/custom_context/products/1;jsessionid=aslfasfaslkj22234lkjsdfaklsf"));
-    		one(request).getRequestURI(); will(returnValue("/custom_context/products/1;JSESSIONID=aslfasfaslkj22234lkjsdfaklsf"));
-    		one(request).getRequestURI(); will(returnValue("/custom_context/products/1;jsessionID=aslfasfaslkj22234lkjsdfaklsf"));
-    		allowing(request).getMethod(); will(returnValue("GET"));
-    		allowing(registry).parse("/products/1", HttpMethod.GET,webRequest); will(returnValue(expected));
-    		allowing(request).getParameter("_method"); will(returnValue(null));
-    	}});
-
-    	assertThat(translator.translate(info), is(equalTo(expected)));
-    	assertThat(translator.translate(info), is(equalTo(expected)));
-    	assertThat(translator.translate(info), is(equalTo(expected)));
-
-    	mockery.assertIsSatisfied();
+    	assertThat(translator.translate(info), is(equalTo(method)));
+    	assertThat(translator.translate(info), is(equalTo(method)));
+    	assertThat(translator.translate(info), is(equalTo(method)));
 
     }
 
     @Test
     public void canHandleUrlIfNonRootContextButPlainRequest() {
+    	when(request.getRequestURI()).thenReturn("/custom_context/");
+    	when(request.getContextPath()).thenReturn("/custom_context");
+    	when(request.getMethod()).thenReturn("GET");
+    	when(router.parse("/", HttpMethod.GET, webRequest)).thenReturn(method);
 
-        final ResourceMethod expected = mockery.mock(ResourceMethod.class);
-
-        mockery.checking(new Expectations(){{
-            one(request).getAttribute(RequestInfo.INCLUDE_REQUEST_URI); will(returnValue(null));
-            one(request).getContextPath();   will(returnValue("/custom_context"));
-            one(request).getRequestURI(); will(returnValue("/custom_context/"));
-            one(request).getMethod(); will(returnValue("GET"));
-            one(registry).parse("/", HttpMethod.GET,webRequest); will(returnValue(expected));
-            one(request).getParameter("_method"); will(returnValue(null));
-        }});
-
-        ResourceMethod resource = translator.translate(info);
-        assertThat(resource, is(equalTo(expected)));
-        mockery.assertIsSatisfied();
-
+    	ResourceMethod resource = translator.translate(info);
+    	assertThat(resource, is(equalTo(method)));
     }
 
 }

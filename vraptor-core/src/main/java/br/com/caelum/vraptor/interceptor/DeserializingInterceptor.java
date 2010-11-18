@@ -21,15 +21,18 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import br.com.caelum.vraptor.Consumes;
 import br.com.caelum.vraptor.InterceptionException;
+import br.com.caelum.vraptor.Lazy;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.deserialization.Deserializer;
 import br.com.caelum.vraptor.deserialization.Deserializers;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.view.HttpResult;
 import br.com.caelum.vraptor.view.Status;
 
 /**
@@ -37,20 +40,20 @@ import br.com.caelum.vraptor.view.Status;
  *
  * @author Lucas Cavalcanti
  * @author Rafael Ferreira
- * @since 3.0.2
  */
+@Lazy
 public class DeserializingInterceptor implements Interceptor {
 	private final HttpServletRequest request;
-	private final HttpResult result;
 	private final Deserializers deserializers;
 	private final MethodInfo methodInfo;
 	private final Container container;
 	private final Status status;
 
-	public DeserializingInterceptor(HttpServletRequest servletRequest, HttpResult result,
-			Deserializers deserializers, MethodInfo methodInfo, Container container, Status status) {
+	private static final Logger logger = LoggerFactory.getLogger(DeserializingInterceptor.class);
+
+	public DeserializingInterceptor(HttpServletRequest servletRequest, Deserializers deserializers,
+			MethodInfo methodInfo, Container container, Status status) {
 		this.request = servletRequest;
-		this.result = result;
 		this.deserializers = deserializers;
 		this.methodInfo = methodInfo;
 		this.container = container;
@@ -65,7 +68,7 @@ public class DeserializingInterceptor implements Interceptor {
 		Consumes consumesAnnotation = method.getMethod().getAnnotation(Consumes.class);
 		List<String> supported =  Arrays.asList(consumesAnnotation.value());
 
-		String contentType = request.getContentType();
+		String contentType = mime(request.getContentType());
 		if (!supported.isEmpty() && !supported.contains(contentType)) {
 			unsupported(String.format("Request with media type [%s]. Expecting one of %s.",
 					contentType, supported));
@@ -82,6 +85,11 @@ public class DeserializingInterceptor implements Interceptor {
 			Object[] deserialized = deserializer.deserialize(request.getInputStream(), method);
 			Object[] parameters = methodInfo.getParameters();
 
+			logger.debug("Deserialized parameters for {} are {} ", method, deserialized);
+
+			// TODO: a new array should be created and then a call to setParameters
+			// setting methodInfo.getParameters() works only because we dont (yet)
+			// return a defensive copy
 			for (int i = 0; i < deserialized.length; i++) {
 				if (deserialized[i] != null) {
 					parameters[i] = deserialized[i];
@@ -93,6 +101,13 @@ public class DeserializingInterceptor implements Interceptor {
 			throw new InterceptionException(e);
 		}
 
+	}
+
+	private String mime(String contentType) {
+		if (contentType.contains(";")) {
+			return contentType.split(";")[0];
+		}
+		return contentType;
 	}
 
 	private void unsupported(String message) {

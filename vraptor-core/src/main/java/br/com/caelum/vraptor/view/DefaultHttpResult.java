@@ -20,8 +20,13 @@
 package br.com.caelum.vraptor.view;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
 
 import javax.servlet.http.HttpServletResponse;
+
+import com.google.common.io.ByteStreams;
+import com.google.common.io.CharStreams;
 
 /**
  * Implementation that delegates to HttpServletResponse
@@ -81,5 +86,32 @@ public class DefaultHttpResult implements HttpResult {
 
 	public <T> T movedPermanentlyTo(final Class<T> controller) {
 		return this.status.movedPermanentlyTo(controller);
+	}
+
+	public HttpResult body(String body) {
+		try {
+			response.getWriter().print(body);
+		} catch (IOException e) {
+			throw new ResultException("Couldn't write to response body", e);
+		}
+		return this;
+	}
+
+	public HttpResult body(InputStream body) {
+		try {
+		    ByteStreams.copy(body, response.getOutputStream());
+		} catch (IOException e) {
+			throw new ResultException("Couldn't write to response body", e);
+		}
+		return this;
+	}
+
+	public HttpResult body(Reader body) {
+		try {
+		    CharStreams.copy(body, response.getWriter());
+		} catch (IOException e) {
+			throw new ResultException("Couldn't write to response body", e);
+		}
+		return this;
 	}
 }

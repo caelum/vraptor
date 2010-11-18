@@ -29,6 +29,8 @@ import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import br.com.caelum.vraptor.TwoWayConverter;
+import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.eval.Evaluator;
 import br.com.caelum.vraptor.http.MutableRequest;
 
@@ -43,14 +45,16 @@ public class DefaultParametersControl implements ParametersControl {
 	private final List<String> parameters = new ArrayList<String>();
 	private final Pattern pattern;
 	private final String originalPattern;
+	private final Converters converters;
 
-	public DefaultParametersControl(String originalPattern, Map<String, String> parameterPatterns) {
+	public DefaultParametersControl(String originalPattern, Map<String, String> parameterPatterns, Converters converters) {
 		this.originalPattern = originalPattern;
+		this.converters = converters;
 		this.pattern = compilePattern(originalPattern, parameterPatterns);
 	}
 
-	public DefaultParametersControl(String originalPattern) {
-		this(originalPattern, Collections.<String, String>emptyMap());
+	public DefaultParametersControl(String originalPattern, Converters converters) {
+		this(originalPattern, Collections.<String, String>emptyMap(), converters);
 	}
 
 	private Pattern compilePattern(String originalPattern, Map<String, String> parameterPatterns) {
@@ -58,13 +62,14 @@ public class DefaultParametersControl implements ParametersControl {
 		Matcher matcher = Pattern.compile("\\{([^\\}]+?)\\}").matcher(originalPattern);
 		while (matcher.find()) {
 			String value = matcher.group(1);
-			String defaultPattern = value.endsWith("*")? ".*" : "[^/]*";
+			String defaultPattern = value.matches("^[^:]+\\*$")? ".*" : "[^/]*";
 			if (!parameters.containsKey(value)) {
 				parameters.put(value, defaultPattern);
 			}
-			this.parameters.add(value.replace("*", ""));
+			this.parameters.add(value.replaceAll("(\\:.*|\\*)$", ""));
 		}
 		String patternUri = originalPattern;
+		patternUri = patternUri.replaceAll("/\\*", "/.*");
 		for (Entry<String, String> parameter : parameters.entrySet()) {
 			patternUri = patternUri.replace("{" + parameter.getKey() + "}", "(" + parameter.getValue() + ")");
 		}
@@ -72,13 +77,33 @@ public class DefaultParametersControl implements ParametersControl {
 		return Pattern.compile(patternUri);
 	}
 
-	public String fillUri(Object params) {
+	public String fillUri(String[] paramNames, Object... paramValues) {
+		if (paramNames.length != paramValues.length) {
+			throw new IllegalArgumentException("paramNames must have the same length as paramValues");
+		}
 		String base = originalPattern.replaceAll("\\.\\*", "");
 		for (String key : parameters) {
-			Object result = new Evaluator().get(params, key);
+			Object param = selectParam(key, paramNames, paramValues);
+			Object result = new Evaluator().get(param, key);
+			if (result != null) {
+				Class type = result.getClass();
+				if (converters.existsTwoWayFor(type)) {
+					TwoWayConverter converter = converters.twoWayConverterFor(type);
+					result = converter.convert(result);
+				}
+			}
 			base = base.replaceAll("\\{" + key + "\\*?\\}", result == null ? "" : result.toString());
 		}
 		return base;
+	}
+
+	private Object selectParam(String key, String[] paramNames, Object[] paramValues) {
+		for (int i = 0; i < paramNames.length; i++) {
+			if (key.matches("^" + paramNames[i] + "(\\..*|$)")) {
+				return paramValues[i];
+			}
+		}
+		return null;
 	}
 
 	public boolean matches(String uri) {

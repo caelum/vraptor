@@ -34,7 +34,6 @@ import br.com.caelum.vraptor.mydvds.interceptor.UserInfo;
 import br.com.caelum.vraptor.mydvds.model.Dvd;
 import br.com.caelum.vraptor.mydvds.model.DvdRental;
 import br.com.caelum.vraptor.validator.Validations;
-import br.com.caelum.vraptor.view.Results;
 
 /**
  * The resource <code>DvdController</code> handles all Dvd operations,
@@ -86,13 +85,15 @@ public class DvdsController {
 	@Post
 	public void add(final Dvd dvd, UploadedFile file) {
 	    validator.checking(new Validations() {{
-		    that(dvd.getTitle(), is(notEmpty()), "login", "invalid_title");
-		    that(dvd.getType(), is(notNullValue()), "name", "invalid_type");
-		    that(dvd.getDescription(), is(notEmpty()), "description", "invalid_description");
-		    that(dvd.getDescription().length() >= 6, "description", "invalid_description");
+	    	if (dvd != null) {
+	    		that(dvd.getTitle(), is(notEmpty()), "login", "invalid_title");
+	    		that(dvd.getType(), is(notNullValue()), "name", "invalid_type");
+	    		that(dvd.getDescription(), is(notEmpty()), "description", "invalid_description");
+	    		that(dvd.getDescription().length() >= 6, "description", "invalid_description");
+	    	}
 		}});
 
-		validator.onErrorUse(Results.page()).of(UsersController.class).home();
+		validator.onErrorForwardTo(UsersController.class).home();
 
 		// is there a file?
 		if (file != null) {
@@ -107,7 +108,7 @@ public class DvdsController {
 		// survive one more request when redirecting.
 		result.include("notice", dvd.getTitle() + " dvd added");
 
-		result.use(Results.logic()).redirectTo(UsersController.class).home();
+		result.redirectTo(UsersController.class).home();
 	}
 
 	/**

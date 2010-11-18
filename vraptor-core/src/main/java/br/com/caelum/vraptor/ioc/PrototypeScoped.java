@@ -23,6 +23,8 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+import com.google.inject.ScopeAnnotation;
+
 /**
  * Components annotated as prototypeScoped will be created whenever asked for an instance.
  * @author Lucas Cavalcanti
@@ -32,5 +34,6 @@ import java.lang.annotation.Target;
 @Target(TYPE)
 @Retention(RUNTIME)
 @Documented
+@ScopeAnnotation
 public @interface PrototypeScoped {
 }

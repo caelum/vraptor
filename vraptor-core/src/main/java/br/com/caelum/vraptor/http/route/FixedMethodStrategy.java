@@ -22,8 +22,6 @@ import java.util.EnumSet;
 import java.util.Set;
 
 import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor.resource.DefaultResourceClass;
-import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.util.Stringnifier;
@@ -45,12 +43,16 @@ public class FixedMethodStrategy implements Route {
 
 	private final String originalUri;
 
-	public FixedMethodStrategy(String originalUri, Class<?> type, Method method, Set<HttpMethod> methods,
-			ParametersControl control, int priority) {
+	private final String[] parameterNames;
+
+
+	public FixedMethodStrategy(String originalUri, ResourceMethod method, Set<HttpMethod> methods,
+			ParametersControl control, int priority, String[] parameterNames) {
 		this.originalUri = originalUri;
+		this.parameterNames = parameterNames;
 		this.methods = methods.isEmpty() ? EnumSet.allOf(HttpMethod.class) : EnumSet.copyOf(methods);
 		this.parameters = control;
-		this.resourceMethod = new DefaultResourceMethod(new DefaultResourceClass(type), method);
+		this.resourceMethod = method;
 		this.priority = priority;
 	}
 
@@ -72,17 +74,67 @@ public class FixedMethodStrategy implements Route {
 		return parameters.matches(uri);
 	}
 
-	public String urlFor(Class<?> type, Method m, Object params) {
-		return parameters.fillUri(params);
+	public String urlFor(Class<?> type, Method m, Object... params) {
+		return parameters.fillUri(parameterNames, params);
 	}
 
 	public int getPriority() {
 		return this.priority;
 	}
 
+	public String getOriginalUri() {
+		return this.originalUri;
+	}
+
 	@Override
 	public String toString() {
 		return String.format("[FixedMethodStrategy: %-65s %-70s %s]", originalUri, Stringnifier
 				.simpleNameFor(resourceMethod.getMethod()), methods.size() == HttpMethod.values().length ? "ALL" : methods);
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((methods == null) ? 0 : methods.hashCode());
+		result = prime * result + ((originalUri == null) ? 0 : originalUri.hashCode());
+		result = prime * result + ((resourceMethod == null) ? 0 : resourceMethod.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		FixedMethodStrategy other = (FixedMethodStrategy) obj;
+		if (methods == null) {
+			if (other.methods != null) {
+				return false;
+			}
+		} else if (!methods.equals(other.methods)) {
+			return false;
+		}
+		if (originalUri == null) {
+			if (other.originalUri != null) {
+				return false;
+			}
+		} else if (!originalUri.equals(other.originalUri)) {
+			return false;
+		}
+		if (resourceMethod == null) {
+			if (other.resourceMethod != null) {
+				return false;
+			}
+		} else if (!resourceMethod.equals(other.resourceMethod)) {
+			return false;
+		}
+		return true;
 	}
 }

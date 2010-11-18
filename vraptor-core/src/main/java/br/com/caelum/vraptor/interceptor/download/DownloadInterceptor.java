@@ -28,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.InterceptionException;
+import br.com.caelum.vraptor.Lazy;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodInfo;
@@ -41,10 +42,10 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  * @author filipesabella
  */
 @RequestScoped
+@Lazy
 public class DownloadInterceptor implements Interceptor {
 
     private static final Logger logger = LoggerFactory.getLogger(DownloadInterceptor.class);
-
 
 	private final HttpServletResponse response;
 	private final MethodInfo info;
@@ -80,6 +81,9 @@ public class DownloadInterceptor implements Interceptor {
 			if (result instanceof InputStream) {
 				InputStream input = (InputStream) result;
 				download = new InputStreamDownload(input, null, null);
+			} else if (result instanceof byte[]) {
+				byte[] bytes = (byte[]) result;
+				download = new ByteArrayDownload(bytes, null, null);
 			} else if (result instanceof File) {
 				File file = (File) result;
 				download = new FileDownload(file, null, null);

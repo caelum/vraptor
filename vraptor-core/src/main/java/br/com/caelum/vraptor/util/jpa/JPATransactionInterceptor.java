@@ -22,6 +22,7 @@ import javax.persistence.EntityTransaction;
 import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.interceptor.Interceptor;
+import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**
@@ -29,6 +30,7 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  * @author Lucas Cavalcanti
  *
  */
+@Component
 @Intercepts
 public class JPATransactionInterceptor implements Interceptor {
 

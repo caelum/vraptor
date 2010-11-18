@@ -1,3 +1,20 @@
+/***
+ * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource
+ * All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package br.com.caelum.vraptor.http.iogi;
 
 import java.lang.reflect.AccessibleObject;
@@ -23,12 +40,16 @@ import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.http.InvalidParameterException;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
+import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.validator.ValidationMessage;
 import br.com.caelum.vraptor.validator.annotation.ValidationException;
 
 import com.google.common.collect.ImmutableList;
 
+@Component
+@RequestScoped
 public class VRaptorInstantiator implements Instantiator<Object> {
 	private final Converters converters;
 	private final Container container;
@@ -67,7 +88,7 @@ public class VRaptorInstantiator implements Instantiator<Object> {
 
 	private final class VRaptorTypeConverter implements Instantiator<Object> {
 		public boolean isAbleToInstantiate(Target<?> target) {
-			return converters.existsFor(target.getClassType(), container);
+			return converters.existsFor(target.getClassType());
 		}
 
 		public Object instantiate(Target<?> target, Parameters parameters) {
@@ -90,7 +111,7 @@ public class VRaptorInstantiator implements Instantiator<Object> {
 
 		@SuppressWarnings("unchecked")
 		private Converter<Object> converterForTarget(Target<?> target) {
-			return (Converter<Object>) converters.to(target.getClassType(), container);
+			return (Converter<Object>) converters.to(target.getClassType());
 		}
 	}
 

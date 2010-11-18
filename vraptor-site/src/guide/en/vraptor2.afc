@@ -25,6 +25,8 @@
 	</filter-mapping>
 
 [/xml]
+  and add all jars from lib/mandatory and lib/containers/<one of the containers> from
+  vraptor zip on your classpath.
 
   Don't forget to remove the old VRaptorServlet declaration from VRaptor2, and its
   respective servlet-mapping.
@@ -149,7 +151,7 @@ public class ClientsController {
 		return dao.list(); // the name will be "clientList"
 	}
 	
-	public void listaDiferente() {
+	public void anotherList() {
 		result.include("clients", dao.list());
 	}
 	
@@ -268,8 +270,8 @@ So in VRaptor3 you have to do one of this two approaches:
 			public void setMyObject(MyObject object) {
 				this.session.setAttribute("object", object);
 			}
-			public MeuObjeto getMeuObjeto() {
-				return this.session.getAttribute("objeto");
+			public MeuObjeto getMyObject() {
+				return this.session.getAttribute("object");
 			}
 		}
 	[/java]

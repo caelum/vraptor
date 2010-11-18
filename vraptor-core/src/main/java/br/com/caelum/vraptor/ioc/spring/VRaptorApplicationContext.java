@@ -47,11 +47,11 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.config.BasicConfiguration;
-import br.com.caelum.vraptor.converter.jodatime.LocalDateConverter;
-import br.com.caelum.vraptor.converter.jodatime.LocalTimeConverter;
 import br.com.caelum.vraptor.core.BaseComponents;
 import br.com.caelum.vraptor.ioc.ComponentFactory;
 import br.com.caelum.vraptor.ioc.StereotypeHandler;
+
+import com.google.common.collect.MapMaker;
 
 /**
  * @author Fabio Kung
@@ -61,10 +61,12 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
 	private static final Logger logger = LoggerFactory.getLogger(VRaptorApplicationContext.class);
 
 	public static final String RESOURCES_LIST = "br.com.caelum.vraptor.resources.list";
-
+	
 	private final AnnotationBeanNameGenerator beanNameGenerator = new AnnotationBeanNameGenerator();
 	private final SpringBasedContainer container;
 	private final BasicConfiguration config;
+
+	private Map<Class<?>, String> typeToBeanName = new MapMaker().weakValues().makeMap();
 
 	public VRaptorApplicationContext(SpringBasedContainer container, BasicConfiguration config) {
 		this.container = container;
@@ -76,7 +78,6 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
 		WebApplicationContextUtils.registerWebApplicationScopes(beanFactory);
 	}
 
-	@Override
 	protected void loadBeanDefinitions(DefaultListableBeanFactory beanFactory) {
 		if (getParent() == null || getParent().getBeanNamesForType(ServletContext.class).length == 0) {
 			beanFactory.registerSingleton(ServletContext.class.getName(), config.getServletContext());
@@ -88,33 +89,41 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
 		registerPrototypeScopedComponentsOn(beanFactory);
 		registerCustomComponentsOn(beanFactory);
 
-		{
-			String directory = config.getWebinfClassesDirectory();
-			if (directory != null) {
-				logger.info("Scanning WEB-INF/classes: " + directory);
-				ComponentScanner scanner = new ComponentScanner(beanFactory, container);
-				scanner.setResourcePattern("**/*.class");
-				scanner.setResourceLoader(new WebinfClassesPatternResolver(config.getWebinfClassesDirectory()));
-				scanner.scan("");
-			} else {
-				logger
-						.warn("Cant invoke ServletContext.getRealPath. Some application servers, as WebLogic, must be configured to be able to do so."
-								+ "Not scanning WEB-INF/classes for VRaptor and Spring components.");
-			}
-
-		}
-		if (config.hasBasePackages()) {
-			ComponentScanner scanner = new ComponentScanner(beanFactory, container);
-			logger
-					.info("Scanning packages from WEB-INF/classes and jars: "
-							+ Arrays.toString(config.getBasePackages()));
-			scanner.scan(config.getBasePackages());
+		if (config.isClasspathScanningEnabled()) {
+			scanWebInfClasses(beanFactory);
+			scanPackages(beanFactory);
+		} else {
+			logger.info("Classpath scanning disabled");
 		}
 
 		AnnotationConfigUtils.registerAnnotationConfigProcessors(beanFactory);
 		AopConfigUtils.registerAspectJAnnotationAutoProxyCreatorIfNecessary(beanFactory);
 		registerCustomInjectionProcessor(beanFactory);
 		registerCachedComponentsOn(beanFactory);
+	}
+
+	private void scanPackages(DefaultListableBeanFactory beanFactory) {
+		if (config.hasBasePackages()) {
+			logger.info("Scanning packages from WEB-INF/classes and jars: {}", Arrays.toString(config.getBasePackages()));
+
+			ComponentScanner scanner = new ComponentScanner(beanFactory, container);
+			scanner.scan(config.getBasePackages());
+		}
+	}
+
+	private void scanWebInfClasses(DefaultListableBeanFactory beanFactory) {
+		String directory = config.getWebinfClassesDirectory();
+		if (directory != null) {
+			logger.info("Scanning WEB-INF/classes: {} ", directory);
+			
+			ComponentScanner scanner = new ComponentScanner(beanFactory, container);
+			scanner.setResourcePattern("**/*.class");
+			scanner.setResourceLoader(new WebinfClassesPatternResolver(config.getWebinfClassesDirectory()));
+			scanner.scan("");
+		} else {
+			logger.warn("Cant invoke ServletContext.getRealPath. Some application servers, as WebLogic, must be configured to be able to do so." +
+						" Or maybe your container is not exploding the war file. Not scanning WEB-INF/classes for VRaptor and Spring components.");
+		}
 	}
 
 	private void registerCustomComponentsOn(DefaultListableBeanFactory beanFactory) {
@@ -167,14 +176,6 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
 		registerOn(beanFactory, HttpSessionProvider.class, true);
 
 		beanFactory.registerSingleton(SpringBasedContainer.class.getName(), container);
-
-		try {
-			Class.forName("org.joda.time.LocalDate");
-			registerOn(beanFactory, LocalDateConverter.class);
-			registerOn(beanFactory, LocalTimeConverter.class);
-		} catch (ClassNotFoundException e) {
-			// OK, only register jodatime converters if jodatime is imported
-		}
 	}
 
 	private void register(final Class<?> type, ConfigurableListableBeanFactory beanFactory) {
@@ -182,6 +183,7 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
 		registerFactory(type, beanFactory);
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void registerFactory(final Class<?> type, ConfigurableListableBeanFactory beanFactory) {
 		if (ComponentFactory.class.isAssignableFrom(type)) {
 			beanFactory.registerSingleton(type.getName(), new ComponentFactoryBean(container, type));
@@ -249,26 +251,33 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
 	}
 
 	public <T> T getBean(Class<T> type) {
-		@SuppressWarnings("unchecked")
-		Map<String, ? extends T> instances = BeanFactoryUtils.beansOfTypeIncludingAncestors(this, type);
-		if (instances.size() == 0) {
+		if (!typeToBeanName.containsKey(type)) {
+			logger.debug("Cache miss for {}", type);
+			String name = compatibleNameFor(type);
+			typeToBeanName.put(type, name);
+		}
+		return type.cast(getBean(typeToBeanName.get(type)));
+	}
+
+	private String compatibleNameFor(Class<?> type) {
+		String[] names = BeanFactoryUtils.beanNamesForTypeIncludingAncestors(this, type);
+		if (names.length == 0) {
 			throw new NoSuchBeanDefinitionException(type, "no bean for this type registered");
-		} else if (instances.size() == 1) {
-			return instances.values().iterator().next();
+		} else if (names.length == 1) {
+			return names[0];
 		} else {
-			for (Map.Entry<String, ? extends T> entry : instances.entrySet()) {
-				BeanDefinition definition = getBeanFactory().getBeanDefinition(entry.getKey());
-				if (isPrimary(definition)) {
-					return entry.getValue();
-				} else if (hasGreaterRoleThanInfrastructure(definition)) {
-					return entry.getValue();
+			for (String name : names) {
+				BeanDefinition definition = getBeanFactory().getBeanDefinition(name);
+				if (isPrimary(definition) || hasGreaterRoleThanInfrastructure(definition)) {
+					return name;
 				}
 			}
-			throw new NoSuchBeanDefinitionException("there are " + instances.size() + " implementations for the type ["
+			throw new NoSuchBeanDefinitionException("there are " + names.length + " implementations for the type ["
 					+ type
 					+ "], but none of them is primary or has a Role greater than BeanDefinition.ROLE_INFRASTRUCTURE");
 		}
 	}
+
 
 	private boolean isPrimary(BeanDefinition definition) {
 		return definition instanceof AbstractBeanDefinition && ((AbstractBeanDefinition) definition).isPrimary();

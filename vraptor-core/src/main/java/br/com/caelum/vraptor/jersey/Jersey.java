@@ -1,0 +1,113 @@
+package br.com.caelum.vraptor.jersey;
+
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.net.URI;
+import java.util.Iterator;
+
+import javax.annotation.PostConstruct;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import br.com.caelum.vraptor.core.InterceptorStack;
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
+import br.com.caelum.vraptor.ioc.Component;
+
+import com.sun.jersey.api.core.HttpContext;
+import com.sun.jersey.api.model.AbstractResourceMethod;
+import com.sun.jersey.server.impl.application.ContextProvider;
+import com.sun.jersey.server.impl.application.DefaultContextProvider;
+import com.sun.jersey.server.impl.application.WebApplicationContext;
+import com.sun.jersey.server.impl.application.WebApplicationImpl;
+import com.sun.jersey.server.impl.model.method.dispatch.ResourceJavaMethodDispatcher;
+import com.sun.jersey.spi.container.ContainerRequest;
+import com.sun.jersey.spi.container.ContainerResponse;
+import com.sun.jersey.spi.container.servlet.RequestUriParser;
+import com.sun.jersey.spi.container.servlet.ServletContainer;
+import com.sun.jersey.spi.container.servlet.WebComponent;
+import com.sun.jersey.spi.container.servlet.WebFilterConfig;
+import com.sun.jersey.spi.uri.rules.UriRule;
+
+@Component
+@ApplicationScoped
+public class Jersey {
+	
+	// JerseyResourceLookupInterceptor: check if its a jersey component
+		// if jersey, just save the rules and next interceptor
+		// if not, delegate to typical vrapto
+	
+	
+	
+//	private ContextProvider myContextProvider = new DefaultContextProvider() {
+//		public WebApplicationContext provide(
+//				WebApplicationImpl application,
+//				ContainerRequest request,
+//				ContainerResponse response) {
+//			request.getProperties().put("...", "...");
+//		};
+//	};
+	
+    static final class HttpReqResDispatcher extends ResourceJavaMethodDispatcher {
+        HttpReqResDispatcher(AbstractResourceMethod abstractResourceMethod) {
+            super(abstractResourceMethod);
+        }
+
+        public void _dispatch(Object resource, HttpContext context) 
+        throws IllegalAccessException, InvocationTargetException {
+        		// just pretend
+        		context.getProperties().put("...", "...");
+            method.invoke(resource, context.getRequest(), context.getResponse());
+        }
+    }
+
+//    better pq nao vai rodar as coisas menores dele, vai direto pra onde tem que ir
+//	config.register(InvokeNextInterceptorResourceMethodDispatchProvider.class)
+
+//	private WebApplication app = new WebApplicationImpl() {
+//		protected UriRule getRootRulesFor(
+//				RulesMap<UriRule> rootRules) {
+//			return new CheckButNotExecuteRule(rootRules);
+//		};
+//	};
+	private final ServletContext context;
+	private final WebComponent webComponent;
+//	private final ServletContainer servletContainer;
+
+	public Jersey(ServletContext context, FilterConfig config) throws ServletException {
+		this.context = context;
+		this.webComponent = new VRaptorResourceConfig();
+		this.webComponent.init(new WebFilterConfig(config));
+//		this.resourceConfig = new DefaultResourceConfig(x);
+//		this.servletContainer = new ServletContainer(webComponent.getResourceConfig());
+//		this.servletContainer.init(config);
+//		this.webComponent.init(config);
+	}
+	
+	@PostConstruct
+	public void init() throws ServletException {
+	}
+
+	public JerseyResourceComponentMethod findComponent(InterceptorStack stack,
+			HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+        final RequestUriParser parser = new RequestUriParser(request, response, webComponent);
+
+        final URI baseUri = parser.getBaseUri();
+		final URI requestUri = parser.getRequestUriFor();
+
+        int result = webComponent.service(baseUri, requestUri, request, response);
+        System.out.println(result);
+        if(result==404) {
+        		return null;
+        }
+		
+		// DO something avoiding thread local to check if it was ok
+		Iterator<UriRule> rules = (Iterator<UriRule>) request.getAttribute(
+				CheckButNotExecuteRule.RULES_FOUND);
+		return new JerseyResourceComponentMethod(rules);
+	}
+
+}

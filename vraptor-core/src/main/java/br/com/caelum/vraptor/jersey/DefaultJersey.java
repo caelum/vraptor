@@ -69,25 +69,14 @@ public class DefaultJersey implements Jersey {
 //	};
 	private final ServletContext context;
 	private final WebComponent webComponent;
-//	private final ServletContainer servletContainer;
 
 	public DefaultJersey(ServletContext context, FilterConfig config) throws ServletException {
 		this.context = context;
 		this.webComponent = new VRaptorResourceConfig();
 		this.webComponent.init(new WebFilterConfig(config));
 //		this.resourceConfig = new DefaultResourceConfig(x);
-//		this.servletContainer = new ServletContainer(webComponent.getResourceConfig());
-//		this.servletContainer.init(config);
-//		this.webComponent.init(config);
 	}
 	
-	@PostConstruct
-	public void init() throws ServletException {
-	}
-
-	/* (non-Javadoc)
-	 * @see br.com.caelum.vraptor.jersey.Jersey#findComponent(br.com.caelum.vraptor.core.InterceptorStack, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
-	 */
 	@SuppressWarnings("unchecked")
 	public JerseyResourceComponentMethod findComponent(InterceptorStack stack,
 			HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

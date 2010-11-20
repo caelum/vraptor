@@ -58,6 +58,8 @@
 		<dd><a href="mailto:francisco@franciscosouza.net">francisco@franciscosouza.net</a></dd>
 		<dt>Allan de Queiroz - <fmt:message key="colaborador"/></dt>
 		<dd><a href="mailto:alsoqz@gmail.com">alsoqz@gmail.com</a></dd>
+		<dt>Flavio Gabriel Duarte - <fmt:message key="colaborador"/></dt>
+		<dd><a href="mailto:flaviogabriel@gmail.com">flaviogabriel@gmail.com</a></dd>
 	</dl>
   </div>  
 </div>

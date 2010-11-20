@@ -94,9 +94,11 @@
 		
 									<li><a class="link_toc" href="../../documentation/optimizations/">16. Optimizations</a></li>
 		
-									<li><a class="link_toc" href="../../documentation/changelog/">17. ChangeLog</a></li>
+									<li><a class="link_toc" href="../../documentation/vraptor-scaffold/">17. Vraptor Scaffold</a></li>
 		
-									<li><a class="link_toc" href="../../documentation/migrating-from-vraptor2-to-vraptor3/">18. Migrating from VRaptor2 to VRaptor3</a></li>
+									<li><a class="link_toc" href="../../documentation/changelog/">18. ChangeLog</a></li>
+		
+									<li><a class="link_toc" href="../../documentation/migrating-from-vraptor2-to-vraptor3/">19. Migrating from VRaptor2 to VRaptor3</a></li>
 		
                 </ol>
             </div><!-- submenu-->
@@ -135,11 +137,17 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return new </span><span class="java10">FileDownload</span><span class="java8">(</span><span class="java10">file, contentType, filename</span><span class="java8">)</span><span class="java10">; <br />
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
 }</span></code></div>
-	    	<span class="paragraph">You can also use the <code class="inlineCode">InputStreamDownload</code> implementation to work with Streams.</span>
+	    	<span class="paragraph">You can also use the <code class="inlineCode">InputStreamDownload</code> implementation to work with Streams or
+<code class="inlineCode">ByteArrayDownload</code> to work with byte array (since 3.2-snapshot).</span>
+		
+
+<h3 class="section">Upload</h3>
+	    	<span class="paragraph">The upload component is optional. To enable this feature, you only need to add the <code class="inlineCode">commons-upload</code> library in your classpath.</span>
+	    	<span class="paragraph">Since Vraptor 3.2, if you're in a container that implements the JSR-315 (Servlet 3.0), you don't need <code class="inlineCode">commons-upload</code> nor
+ <code class="inlineCode">commons-io</code> libraries because the servlet container already have this.</span>
 		
 
 <h3 class="section">1 minute example: upload</h3>
-	    	<span class="paragraph">Nota: the upload component is optional. To enable this feature, you only need to add the <code class="inlineCode">commons-upload</code> library in your classpath.</span>
 	    	<span class="paragraph">The first example is based on the multipart upload feature.</span>
 	    	<div class="java"><code class="java">
 <span class="java16">@Resource<br />
@@ -159,7 +167,7 @@
 
 <h3 class="section">More about Upload</h3>
 	    	<span class="paragraph">UploadedFile returns the file content as a InputStream. If you want to save this file on disk in an 
-easy way, you can use the <code class="inlineCode">commons-io IOUtils</code>, that is already a VRaptor dependency:</span>
+easy way, you can use the <code class="inlineCode">commons-io IOUtils</code>:</span>
 	    	<div class="java"><code class="java">
 <span class="java4">public </span><span class="java9">void </span><span class="java10">updatePicture</span><span class="java8">(</span><span class="java10">Profile profile, UploadedFile picture</span><span class="java8">) {<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java10">File pictureOnDisk = </span><span class="java4">new </span><span class="java10">File</span><span class="java8">()</span><span class="java10">;&nbsp;&nbsp;&nbsp; <br />

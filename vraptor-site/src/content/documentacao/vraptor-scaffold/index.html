@@ -130,17 +130,17 @@ Tendo isso instalado basta executar o comando a seguir.</span>
 	    	<span class="paragraph">Esse comando vai criar toda a estrutra da aplica&ccedil;&atilde;o, ap&oacute;s isso entre na pasta onlinestore 
 e execute a task jetty do ant</span>
 	    	<div class="java"><code class="java">ant&nbsp;jetty.run</code></div>
-	    	<span class="paragraph">abra o browser no endere&ccedil;o <a class="link" target="_blank" href="http://localhost:8080">http://localhost:8080</a> e voc&ecirc; deve ver <strong class="definition">It works!</strong>.</span>
+	    	<span class="paragraph">Abra o browser no endere&ccedil;o <a class="link" target="_blank" href="http://localhost:8080">http://localhost:8080</a> e voc&ecirc; deve ver <strong class="definition">It works!</strong>.</span>
 	    	<span class="paragraph">Agora vamos criar um cadastro completo(CRUD) de produtos para nossa loja virtual, 
 para isso basta executar</span>
 	    	<div class="java"><code class="java">vraptor&nbsp;scaffold&nbsp;product&nbsp;name:string&nbsp;value:double</code></div>
-	    	<span class="paragraph">execute novamente</span>
+	    	<span class="paragraph">Execute novamente</span>
 	    	<div class="java"><code class="java">ant&nbsp;jetty.run</code></div>
-	    	<span class="paragraph">acesse <a class="link" target="_blank" href="http://localhost:8080/products">http://localhost:8080/products</a></span>
+	    	<span class="paragraph">Acesse <a class="link" target="_blank" href="http://localhost:8080/products">http://localhost:8080/products</a></span>
 		
 
 <h3 class="section">Package</h3>
-	    	<span class="paragraph">O pacote raiz por padr&atilde;o &eacute; app, para mudar isso crie a aplica&ccedil;&atilde;o com o seguinte comando</span>
+	    	<span class="paragraph">O pacote raiz por padr&atilde;o &eacute; <code class="inlineCode">app</code>, para mudar isso crie a aplica&ccedil;&atilde;o com o seguinte comando</span>
 	    	<div class="java"><code class="java">vraptor&nbsp;new&nbsp;onlinestore&nbsp;--package=br.com.caelum</code></div>
 		
 
@@ -148,36 +148,54 @@ para isso basta executar</span>
 	    	<span class="paragraph">Por padr&atilde;o a aplica&ccedil;&atilde;o &eacute; criada com o ant com ferramenta de build e o ivy como gerenciador de depend&ecirc;ncias,
 &eacute; pos&iacute;vel utilizar o maven 2, basta criar o aplica&ccedil;&atilde;o com</span>
 	    	<div class="java"><code class="java">vraptor&nbsp;new&nbsp;onlinestore&nbsp;--build-tool=mvn</code></div>
+	    	<span class="paragraph">Execute</span>
+	    	<div class="java"><code class="java">mvn&nbsp;jetty:run</code></div>
+	    	<span class="paragraph">para iniciar a aplica&ccedil;&atilde;o</span>
+		
+
+<h3 class="section">Gradle</h3>
+	    	<span class="paragraph">Gradle &eacute; uma ferramente de build que usa conceitos DRY para deixar o arquivo de build menor e de mais f&aacute;cil manuten&ccedil;&atilde;o, 
+e agora o VRaptor Scaffold vem com suporte ao gradle. Para utilizar &eacute; bem simples execute o comando</span>
+	    	<div class="java"><code class="java">vraptor&nbsp;new&nbsp;onlinestore&nbsp;--build-tool=gradle</code></div>
+	    	<span class="paragraph">Execute</span>
+	    	<div class="java"><code class="java">gradle&nbsp;jettyRun</code></div>
+	    	<span class="paragraph">para iniciar a aplica&ccedil;&atilde;o</span>
 		
 
 <h3 class="section">Freemarker</h3>
-	    	<span class="paragraph">O template engine padr&atilde;o &eacute; jsp, para utilizar o freemarker, crie o aplica&ccedil;&atilde;o com</span>
+	    	<span class="paragraph">O template engine padr&atilde;o &eacute; jsp, para utilizar o freemarker, crie a aplica&ccedil;&atilde;o com</span>
 	    	<div class="java"><code class="java">vraptor&nbsp;new&nbsp;onlinestore&nbsp;--template-engine=ftl</code></div>
 		
 
 <h3 class="section">Eclipse</h3>
 	    	<span class="paragraph">Se voc&ecirc; optou pelo maven execute</span>
 	    	<div class="java"><code class="java">mvn&nbsp;eclipse:eclipse</code></div>
-	    	<span class="paragraph">para gerar os arquivos de configura&ccedil;&atilde;o do eclipse, ap&oacute;s isso &eacute; so importar o projeto normalmente.
+	    	<span class="paragraph">Para gerar os arquivos de configura&ccedil;&atilde;o do eclipse, ap&oacute;s isso &eacute; so importar o projeto normalmente.
 Se voc&ecirc; optou pelo ant os arquivos de configura&ccedil;&atilde;o ser&atilde;o gerados no momento em que criar 
 o projeto, &eacute; poss&iacute;vel pular a cria&ccedil;&atilde;o desses arquivos com o comando</span>
 	    	<div class="java"><code class="java">vraptor&nbsp;new&nbsp;onlinestore&nbsp;--skip-eclipse</code></div>
 		
 
 <h3 class="section">Tipos de atributos suportado</h3>
-	    	<span class="paragraph">&Eacute; poss&iacute;vel gerar um CRUD com os seguintes atributos: <code class="inlineCode">boolean, double, float, short, integer, long, string and text</code>.</span>
+	    	<span class="paragraph">&Eacute; poss&iacute;vel gerar um CRUD com os seguintes atributos: <code class="inlineCode">boolean, double, float, short, integer, long, string e text</code>.</span>
 		
 
 <h3 class="section">Comando Help</h3>
-	    	<span class="paragraph">O vraptor scaffold est&aacute; dividindo basicamente em 2 geradores o "new" e o "scaffold"
+	    	<span class="paragraph">O VRaptor Scaffold est&aacute; dividindo basicamente em 2 geradores o "new" que &eacute; respons&aacute;vel por
+criar a estrutura da aplica&ccedil;&atilde;o e o "scaffold" que &eacute; respos&aacute;vel por gerar os CRUDs.
 &Eacute; poss&iacute;vel ver todas as op&ccedil;&otilde;es de customiza&ccedil;&atilde;o dos geradores.</span>
 	    	<div class="java"><code class="java">vraptor&nbsp;new&nbsp;-h</code></div>
 	    	<div class="java"><code class="java">vraptor&nbsp;scaffold&nbsp;-h</code></div>
 		
 
+<h3 class="section">Spring</h3>
+	    	<span class="paragraph">O Vraptor utiliza por padr&atilde;o o Spring 2.5 como container D.I, para utilizar a vers&atilde;o 3 do Spring execute</span>
+	    	<div class="java"><code class="java">vraptor&nbsp;new&nbsp;onlinestore&nbsp;--spring3</code></div>
+		
+
 <h3 class="section">Contribuindo</h3>
 	    	<span class="paragraph">O projeto est&aacute; sendo desenvolvido em ruby e o c&oacute;digo fonte est&aacute; hospedado no github 
-no seguinte endere&ccedil;o <a class="link" target="_blank" href="http://github.com/caelum/vraptor-scaffold.">http://github.com/caelum/vraptor-scaffold.</a>
+no seguinte endere&ccedil;o <a class="link" target="_blank" href="http://github.com/caelum/vraptor-scaffold">http://github.com/caelum/vraptor-scaffold</a> .
 Voc&ecirc; pode colaborar com o projeto fazendo o fork e enviando seu path ou uma nova funcionalide.
 N&atilde;o se esque&ccedil;a dos testes.</span>
 		

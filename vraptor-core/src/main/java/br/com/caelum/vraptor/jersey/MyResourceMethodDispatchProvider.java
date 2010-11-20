@@ -9,21 +9,6 @@ public class MyResourceMethodDispatchProvider implements ResourceMethodDispatchP
 	public RequestDispatcher create(
 			AbstractResourceMethod abstractResourceMethod) {
 		System.out.println("muhaha");
-		System.out.println("muhaha");
-		System.out.println("muhaha");
-		System.out.println("muhaha");
-		System.out.println("muhaha");
-		System.out.println("muhaha");
-		System.out.println("muhaha");
-		System.out.println("muhaha");
-		System.out.println("muhaha");
-		System.out.println("muhaha");
-		System.out.println("muhaha");
-		System.out.println("muhaha");
-		System.out.println("muhaha");
-		System.out.println("muhaha");
-		System.out.println("muhaha");
-		System.out.println("muhaha");
 		return null;
 	}
 

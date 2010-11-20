@@ -18,7 +18,7 @@ public class VRaptorResourceConfig extends WebComponent {
 	protected ResourceConfig getDefaultResourceConfig(
 			Map<String, Object> props, WebConfig wc) throws ServletException {
 		ResourceConfig config = super.getDefaultResourceConfig(props, wc);
-		config.getSingletons().add(new MyResourceMethodDispatchProvider());
+		config.getSingletons().add(new FakeMethodDispatchProvider());
 		return config;
 	}
 }

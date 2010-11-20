@@ -2,7 +2,6 @@ package br.com.caelum.vraptor.jersey;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.Iterator;
 
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
@@ -14,10 +13,15 @@ import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Component;
 
+import com.sun.jersey.server.impl.application.ContextProvider;
+import com.sun.jersey.server.impl.application.DefaultContextProvider;
+import com.sun.jersey.server.impl.application.WebApplicationContext;
+import com.sun.jersey.server.impl.application.WebApplicationImpl;
+import com.sun.jersey.spi.container.ContainerRequest;
+import com.sun.jersey.spi.container.ContainerResponse;
 import com.sun.jersey.spi.container.servlet.RequestUriParser;
 import com.sun.jersey.spi.container.servlet.WebComponent;
 import com.sun.jersey.spi.container.servlet.WebFilterConfig;
-import com.sun.jersey.spi.uri.rules.UriRule;
 
 /**
  * A default jersey web component handler. Dispatches calls to jerseys
@@ -30,25 +34,20 @@ import com.sun.jersey.spi.uri.rules.UriRule;
 @ApplicationScoped
 public class DefaultJersey implements Jersey {
 
-	public static final String INTERCEPTOR_STACK = Jersey.class.getPackage() + ".stack";
+	public static final String INTERCEPTOR_STACK = Jersey.class.getPackage()
+			+ ".stack";
 
-	// private ContextProvider myContextProvider = new DefaultContextProvider()
-	// {
-	// public WebApplicationContext provide(
-	// WebApplicationImpl application,
-	// ContainerRequest request,
-	// ContainerResponse response) {
-	// request.getProperties().put("...", "...");
-	// };
-	// };
+	private ContextProvider myContextProvider = new DefaultContextProvider() {
+		public WebApplicationContext provide(WebApplicationImpl application,
+				ContainerRequest request, ContainerResponse response) {
+			request.getProperties().put("...", "...");
+			return super.provide(application, request, response);
+		};
+	};
 
 	static final String FOUR_O_FOURED = DefaultJersey.class.getPackage()
 			.getName()
 			+ ".404";
-
-	// better pq nao vai rodar as coisas menores dele, vai direto pra onde tem
-	// que ir
-	// config.register(InvokeNextInterceptorResourceMethodDispatchProvider.class)
 
 	// private WebApplication app = new WebApplicationImpl() {
 	// protected UriRule getRootRulesFor(
@@ -63,28 +62,27 @@ public class DefaultJersey implements Jersey {
 		this.webComponent.init(new WebFilterConfig(config));
 	}
 
-	@SuppressWarnings("unchecked")
-	public JerseyResourceComponentMethod findComponent(InterceptorStack stack,
+	public boolean findComponent(InterceptorStack stack,
 			final HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 
-		HttpServletResponseWrapper fake = new FourOFourResponseWrapper(
-				req, (HttpServletResponse) resp);
+		HttpServletResponseWrapper fake = new FourOFourResponseWrapper(req,
+				(HttpServletResponse) resp);
 
 		RequestUriParser parser = new RequestUriParser(req, fake, webComponent);
 
 		URI base = parser.getBaseUri();
 		URI requestUri = parser.getRequestUriFor();
 
+		req.setAttribute(INTERCEPTOR_STACK, stack);
 		webComponent.service(base, requestUri, req, fake);
-		if (req.getAttribute(FOUR_O_FOURED) != null) {
-			return null;
-		}
+		return req.getAttribute(FakeMethodDispatchProvider.METHOD_TO_EXECUTE) != null;
+		// if (req.getAttribute(FOUR_O_FOURED) != null) { return null; }
 
 		// DO something avoiding thread local to check if it was ok
-		Iterator<UriRule> rules = (Iterator<UriRule>) req
-				.getAttribute(CheckButNotExecuteRule.RULES_FOUND);
-		return new JerseyResourceComponentMethod(rules);
+		// Iterator<UriRule> rules = (Iterator<UriRule>) req
+		// .getAttribute(CheckButNotExecuteRule.RULES_FOUND);
+		// return new JerseyDispatcher();
 	}
 
 	public Object instantiate(HttpServletRequest request) {
@@ -92,7 +90,7 @@ public class DefaultJersey implements Jersey {
 	}
 
 	public boolean isMine(HttpServletRequest request) {
-		context.getProperties().put(METHOD_TO_EXECUTE, method)
+		// context.getProperties().put(METHOD_TO_EXECUTE, method)
 		return false;
 	}
 

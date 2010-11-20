@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import br.com.caelum.vraptor.core.InterceptorStack;
-import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**
  * A jersey to vraptor interface.
@@ -16,7 +15,7 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  */
 public interface Jersey {
 
-	JerseyResourceComponentMethod findComponent(InterceptorStack stack,
+	boolean findComponent(InterceptorStack stack,
 			HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException;
 

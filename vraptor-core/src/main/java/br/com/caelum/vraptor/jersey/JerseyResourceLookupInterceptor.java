@@ -35,11 +35,9 @@ public class JerseyResourceLookupInterceptor implements Interceptor {
 			ResourceMethod ignorableMethod, Object resourceInstance)
 			throws InterceptionException {
 		try {
-			JerseyResourceComponentMethod m = jersey.findComponent(stack, info.getRequest(), info.getResponse());
-			if (m == null) {
+			boolean jerseyed = jersey.findComponent(stack, info.getRequest(), info.getResponse());
+			if (!jerseyed) {
 				delegate.intercept(stack, ignorableMethod, resourceInstance);
-			} else {
-				stack.next(m, resourceInstance);
 			}
 		} catch (ServletException e) {
 			throw new InterceptionException("Error while looking up jersey",e);

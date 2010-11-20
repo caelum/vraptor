@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.util.Iterator;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletContext;
@@ -66,6 +65,10 @@ public class DefaultJersey implements Jersey {
 		}
 	}
 
+	static final String FOUR_O_FOURED = DefaultJersey.class.getPackage()
+			.getName()
+			+ ".404";
+
 	// better pq nao vai rodar as coisas menores dele, vai direto pra onde tem
 	// que ir
 	// config.register(InvokeNextInterceptorResourceMethodDispatchProvider.class)
@@ -76,50 +79,20 @@ public class DefaultJersey implements Jersey {
 	// return new CheckButNotExecuteRule(rootRules);
 	// };
 	// };
-	private final ServletContext context;
 	private final WebComponent webComponent;
 
-	public DefaultJersey(ServletContext context, FilterConfig config)
-			throws ServletException {
-		this.context = context;
+	public DefaultJersey(FilterConfig config) throws ServletException {
 		this.webComponent = new VRaptorResourceConfig();
 		this.webComponent.init(new WebFilterConfig(config));
 	}
 
 	@SuppressWarnings("unchecked")
 	public JerseyResourceComponentMethod findComponent(InterceptorStack stack,
-			HttpServletRequest req, HttpServletResponse resp)
+			final HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 
-		final AtomicBoolean foured = new AtomicBoolean(false);
-		HttpServletResponseWrapper fakeResponse = new HttpServletResponseWrapper(
-				(HttpServletResponse) resp) {
-
-			public void sendError(int sc, String msg) throws IOException {
-				if (sc == 404) {
-					foured.set(true);
-				}
-			}
-
-			public void sendError(int sc) throws IOException {
-				if (sc == 404) {
-					foured.set(true);
-				}
-			}
-
-			public void setStatus(int sc, String sm) {
-				if (sc == 404) {
-					foured.set(true);
-				}
-			}
-
-			public void setStatus(int sc) {
-				if (sc == 404) {
-					foured.set(true);
-				}
-			}
-
-		};
+		HttpServletResponseWrapper fakeResponse = new FourOFourResponseWrapper(
+				req, (HttpServletResponse) resp);
 
 		final RequestUriParser parser = new RequestUriParser(req, fakeResponse,
 				webComponent);
@@ -128,7 +101,7 @@ public class DefaultJersey implements Jersey {
 		final URI requestUri = parser.getRequestUriFor();
 
 		webComponent.service(baseUri, requestUri, req, fakeResponse);
-		if (foured.get()) {
+		if (req.getAttribute("FOUR_O_FOURED") != null) {
 			return null;
 		}
 

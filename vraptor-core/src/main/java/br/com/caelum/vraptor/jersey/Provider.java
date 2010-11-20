@@ -16,7 +16,7 @@ public class Provider extends SpringProvider {
 		super.registerCustomComponents(registry);
 		registry.register(JerseyResourceLookupInterceptor.class,
 				JerseyResourceLookupInterceptor.class);
-		registry.register(RequestExecution.class, JerseyRequestStack.class);
+		registry.register(RequestExecution.class, RequestStack.class);
 	}
 
 }

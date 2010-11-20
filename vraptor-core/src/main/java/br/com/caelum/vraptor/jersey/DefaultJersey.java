@@ -1,12 +1,10 @@
 package br.com.caelum.vraptor.jersey;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.util.Iterator;
 
 import javax.servlet.FilterConfig;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,9 +14,6 @@ import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Component;
 
-import com.sun.jersey.api.core.HttpContext;
-import com.sun.jersey.api.model.AbstractResourceMethod;
-import com.sun.jersey.server.impl.model.method.dispatch.ResourceJavaMethodDispatcher;
 import com.sun.jersey.spi.container.servlet.RequestUriParser;
 import com.sun.jersey.spi.container.servlet.WebComponent;
 import com.sun.jersey.spi.container.servlet.WebFilterConfig;
@@ -35,9 +30,7 @@ import com.sun.jersey.spi.uri.rules.UriRule;
 @ApplicationScoped
 public class DefaultJersey implements Jersey {
 
-	// JerseyResourceLookupInterceptor: check if its a jersey component
-	// if jersey, just save the rules and next interceptor
-	// if not, delegate to typical vrapto
+	public static final String INTERCEPTOR_STACK = Jersey.class.getPackage() + ".stack";
 
 	// private ContextProvider myContextProvider = new DefaultContextProvider()
 	// {
@@ -48,22 +41,6 @@ public class DefaultJersey implements Jersey {
 	// request.getProperties().put("...", "...");
 	// };
 	// };
-
-	static final class HttpReqResDispatcher extends
-			ResourceJavaMethodDispatcher {
-		HttpReqResDispatcher(AbstractResourceMethod abstractResourceMethod) {
-			super(abstractResourceMethod);
-		}
-
-		public void _dispatch(Object resource, HttpContext context)
-				throws IllegalAccessException, InvocationTargetException {
-			// just pretend
-			context.getProperties().put("...", "...");
-			method
-					.invoke(resource, context.getRequest(), context
-							.getResponse());
-		}
-	}
 
 	static final String FOUR_O_FOURED = DefaultJersey.class.getPackage()
 			.getName()
@@ -91,17 +68,16 @@ public class DefaultJersey implements Jersey {
 			final HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 
-		HttpServletResponseWrapper fakeResponse = new FourOFourResponseWrapper(
+		HttpServletResponseWrapper fake = new FourOFourResponseWrapper(
 				req, (HttpServletResponse) resp);
 
-		final RequestUriParser parser = new RequestUriParser(req, fakeResponse,
-				webComponent);
+		RequestUriParser parser = new RequestUriParser(req, fake, webComponent);
 
-		final URI baseUri = parser.getBaseUri();
-		final URI requestUri = parser.getRequestUriFor();
+		URI base = parser.getBaseUri();
+		URI requestUri = parser.getRequestUriFor();
 
-		webComponent.service(baseUri, requestUri, req, fakeResponse);
-		if (req.getAttribute("FOUR_O_FOURED") != null) {
+		webComponent.service(base, requestUri, req, fake);
+		if (req.getAttribute(FOUR_O_FOURED) != null) {
 			return null;
 		}
 
@@ -109,6 +85,15 @@ public class DefaultJersey implements Jersey {
 		Iterator<UriRule> rules = (Iterator<UriRule>) req
 				.getAttribute(CheckButNotExecuteRule.RULES_FOUND);
 		return new JerseyResourceComponentMethod(rules);
+	}
+
+	public Object instantiate(HttpServletRequest request) {
+		return null;
+	}
+
+	public boolean isMine(HttpServletRequest request) {
+		context.getProperties().put(METHOD_TO_EXECUTE, method)
+		return false;
 	}
 
 }

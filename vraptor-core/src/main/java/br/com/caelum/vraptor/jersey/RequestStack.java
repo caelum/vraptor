@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.InterceptionException;
-import br.com.caelum.vraptor.core.DefaultRequestExecution;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.RequestExecution;
 import br.com.caelum.vraptor.extra.ForwardToDefaultViewInterceptor;
@@ -16,18 +15,22 @@ import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
 import br.com.caelum.vraptor.interceptor.InterceptorListPriorToExecutionExtractor;
 import br.com.caelum.vraptor.interceptor.OutjectResult;
 import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
-import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
 import br.com.caelum.vraptor.interceptor.download.DownloadInterceptor;
 import br.com.caelum.vraptor.interceptor.multipart.MultipartInterceptor;
 
-public class JerseyRequestStack implements RequestExecution {
+/**
+ * Jersey's customized default interception stack.
+ * 
+ * @author guilherme silveira
+ */
+public class RequestStack implements RequestExecution {
 
 	private static final Logger LOG = LoggerFactory
-			.getLogger(JerseyRequestStack.class);
+			.getLogger(RequestStack.class);
 
 	private final InterceptorStack interceptorStack;
 
-	public JerseyRequestStack(InterceptorStack interceptorStack) {
+	public RequestStack(InterceptorStack interceptorStack) {
 		this.interceptorStack = interceptorStack;
 	}
 
@@ -39,6 +42,7 @@ public class JerseyRequestStack implements RequestExecution {
 		interceptorStack.add(FlashInterceptor.class);
 		interceptorStack.add(InterceptorListPriorToExecutionExtractor.class);
 		interceptorStack.add(InstantiateInterceptor.class);
+		interceptorStack.add(InstantiateComponentInterceptor.class);
 		interceptorStack.add(ParametersInstantiatorInterceptor.class);
 		interceptorStack.add(DeserializingInterceptor.class);
 		interceptorStack.add(ExceptionHandlerInterceptor.class);

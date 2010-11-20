@@ -9,9 +9,9 @@ import org.jfree.chart.JFreeChart;
 
 /**
  * Reads bytes from a JFreeChart into the result.
- * 
+ *
  * @author David Paniz
- * 
+ *
  * @see InputStreamDownload
  * @see ByteArrayDownload
  */
@@ -32,7 +32,6 @@ public class JFreeChartDownload implements Download {
 		this.fileName = fileName;
 	}
 
-	@Override
 	public void write(HttpServletResponse response) throws IOException {
 		byte[] bs = ChartUtilities.encodeAsPNG(chart.createBufferedImage(width, height));
 

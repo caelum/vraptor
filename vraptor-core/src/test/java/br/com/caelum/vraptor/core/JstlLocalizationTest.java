@@ -1,11 +1,13 @@
 package br.com.caelum.vraptor.core;
 
+import static javax.servlet.jsp.jstl.core.Config.FMT_FALLBACK_LOCALE;
 import static javax.servlet.jsp.jstl.core.Config.FMT_LOCALE;
 import static javax.servlet.jsp.jstl.core.Config.FMT_LOCALIZATION_CONTEXT;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.startsWith;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
 import java.util.ListResourceBundle;
@@ -103,5 +105,11 @@ public class JstlLocalizationTest {
         when(request.getAttribute(FMT_LOCALE + ".request")).thenReturn(PT_BR);
         when(session.getAttribute(FMT_LOCALE + ".session")).thenReturn(Locale.ENGLISH);
         assertThat(localization.getLocale(), equalTo(PT_BR));
+    }
+
+    @Test
+    public void testFallbackLocale() {
+        when(request.getAttribute(FMT_FALLBACK_LOCALE + ".request")).thenReturn(PT_BR);
+        assertThat(localization.getFallbackLocale(), equalTo(PT_BR));
     }
 }

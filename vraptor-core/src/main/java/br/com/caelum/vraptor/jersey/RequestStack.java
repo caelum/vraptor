@@ -41,8 +41,8 @@ public class RequestStack implements RequestExecution {
 		interceptorStack.add(JerseyResourceLookupInterceptor.class);
 		interceptorStack.add(FlashInterceptor.class);
 		interceptorStack.add(InterceptorListPriorToExecutionExtractor.class);
+		interceptorStack.add(InstantiateJerseyComponentInterceptor.class);
 		interceptorStack.add(InstantiateInterceptor.class);
-		interceptorStack.add(InstantiateComponentInterceptor.class);
 		interceptorStack.add(ParametersInstantiatorInterceptor.class);
 		interceptorStack.add(DeserializingInterceptor.class);
 		interceptorStack.add(ExceptionHandlerInterceptor.class);

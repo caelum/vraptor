@@ -13,12 +13,6 @@ import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Component;
 
-import com.sun.jersey.server.impl.application.ContextProvider;
-import com.sun.jersey.server.impl.application.DefaultContextProvider;
-import com.sun.jersey.server.impl.application.WebApplicationContext;
-import com.sun.jersey.server.impl.application.WebApplicationImpl;
-import com.sun.jersey.spi.container.ContainerRequest;
-import com.sun.jersey.spi.container.ContainerResponse;
 import com.sun.jersey.spi.container.servlet.RequestUriParser;
 import com.sun.jersey.spi.container.servlet.WebComponent;
 import com.sun.jersey.spi.container.servlet.WebFilterConfig;
@@ -43,12 +37,6 @@ public class DefaultJersey implements Jersey {
 	public static final String REQUEST = Jersey.class.getPackage().getName()
 			+ ".request";
 
-	// private WebApplication app = new WebApplicationImpl() {
-	// protected UriRule getRootRulesFor(
-	// RulesMap<UriRule> rootRules) {
-	// return new CheckButNotExecuteRule(rootRules);
-	// };
-	// };
 	private final WebComponent webComponent;
 
 	public DefaultJersey(FilterConfig config) throws ServletException {
@@ -71,12 +59,6 @@ public class DefaultJersey implements Jersey {
 		req.setAttribute(INTERCEPTOR_STACK, stack);
 		webComponent.service(base, requestUri, req, fake);
 		return isMine(req);
-		// if (req.getAttribute(FOUR_O_FOURED) != null) { return null; }
-
-		// DO something avoiding thread local to check if it was ok
-		// Iterator<UriRule> rules = (Iterator<UriRule>) req
-		// .getAttribute(CheckButNotExecuteRule.RULES_FOUND);
-		// return new JerseyDispatcher();
 	}
 
 	public Object instantiate(HttpServletRequest request) {

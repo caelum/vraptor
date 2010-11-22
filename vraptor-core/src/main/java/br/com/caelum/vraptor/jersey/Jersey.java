@@ -37,4 +37,9 @@ public interface Jersey {
 	 */
 	Object instantiate(HttpServletRequest request);
 
+	/**
+	 * Continues the execution of this request, using the specified instance.
+	 */
+	void execute(HttpServletRequest request, Object instance);
+
 }

@@ -62,11 +62,16 @@ public class DefaultJersey implements Jersey {
 	}
 
 	public Object instantiate(HttpServletRequest request) {
-		return request.getAttribute(FakeMethodDispatchProvider.RESOURCE_TO_USE);
+		return request.getAttribute(JerseyDispatcher.RESOURCE_TO_USE);
 	}
 
 	public boolean isMine(HttpServletRequest request) {
-		return request.getAttribute(FakeMethodDispatchProvider.METHOD_TO_EXECUTE) != null;
+		return request.getAttribute(JerseyDispatcher.METHOD_TO_EXECUTE) != null;
+	}
+
+	public void execute(HttpServletRequest request, Object instance) {
+		JerseyDispatcher disp = (JerseyDispatcher) request.getAttribute(JerseyDispatcher.DISPATCHER);
+		disp.execute(instance, request);
 	}
 
 }

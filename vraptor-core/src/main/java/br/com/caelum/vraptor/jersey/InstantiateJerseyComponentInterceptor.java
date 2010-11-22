@@ -17,13 +17,13 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  */
 @Component
 @RequestScoped
-public class InstantiateComponentInterceptor implements Interceptor {
+public class InstantiateJerseyComponentInterceptor implements Interceptor {
 
 	private final Container container;
 	private final Jersey jersey;
 	private final HttpServletRequest request;
 
-	public InstantiateComponentInterceptor(Container container, Jersey jersey, HttpServletRequest request) {
+	public InstantiateJerseyComponentInterceptor(Container container, Jersey jersey, HttpServletRequest request) {
 		this.container = container;
 		this.jersey = jersey;
 		this.request = request;

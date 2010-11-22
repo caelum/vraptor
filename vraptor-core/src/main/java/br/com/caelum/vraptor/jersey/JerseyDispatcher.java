@@ -6,6 +6,8 @@ package br.com.caelum.vraptor.jersey;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
+import javax.servlet.http.HttpServletRequest;
+
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.resource.DefaultResourceClass;
 import br.com.caelum.vraptor.resource.ResourceClass;
@@ -23,9 +25,10 @@ final class JerseyDispatcher implements RequestDispatcher, ResourceMethod {
 	}
 
 	public void dispatch(Object resource, HttpContext context) {
-		context.getProperties().put(FakeMethodDispatchProvider.METHOD_TO_EXECUTE, method);
-		context.getProperties().put(FakeMethodDispatchProvider.RESOURCE_TO_USE, resource);
-		InterceptorStack stack = (InterceptorStack) context.getProperties().get(DefaultJersey.INTERCEPTOR_STACK);
+		HttpServletRequest request = (HttpServletRequest) context.getProperties().get(DefaultJersey.REQUEST);
+		request.setAttribute(FakeMethodDispatchProvider.METHOD_TO_EXECUTE, method);
+		request.setAttribute(FakeMethodDispatchProvider.RESOURCE_TO_USE, resource);
+		InterceptorStack stack = (InterceptorStack) request.getAttribute(DefaultJersey.INTERCEPTOR_STACK);
 		stack.next(this, resource);
 	}
 

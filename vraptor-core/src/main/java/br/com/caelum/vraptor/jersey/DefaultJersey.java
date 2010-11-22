@@ -37,17 +37,11 @@ public class DefaultJersey implements Jersey {
 	public static final String INTERCEPTOR_STACK = Jersey.class.getPackage()
 			+ ".stack";
 
-	private ContextProvider myContextProvider = new DefaultContextProvider() {
-		public WebApplicationContext provide(WebApplicationImpl application,
-				ContainerRequest request, ContainerResponse response) {
-			request.getProperties().put("...", "...");
-			return super.provide(application, request, response);
-		};
-	};
-
-	static final String FOUR_O_FOURED = DefaultJersey.class.getPackage()
-			.getName()
+	static final String FOUR_O_FOURED = Jersey.class.getPackage().getName()
 			+ ".404";
+
+	public static final String REQUEST = Jersey.class.getPackage().getName()
+			+ ".request";
 
 	// private WebApplication app = new WebApplicationImpl() {
 	// protected UriRule getRootRulesFor(
@@ -76,7 +70,7 @@ public class DefaultJersey implements Jersey {
 
 		req.setAttribute(INTERCEPTOR_STACK, stack);
 		webComponent.service(base, requestUri, req, fake);
-		return req.getAttribute(FakeMethodDispatchProvider.METHOD_TO_EXECUTE) != null;
+		return isMine(req);
 		// if (req.getAttribute(FOUR_O_FOURED) != null) { return null; }
 
 		// DO something avoiding thread local to check if it was ok
@@ -86,12 +80,11 @@ public class DefaultJersey implements Jersey {
 	}
 
 	public Object instantiate(HttpServletRequest request) {
-		return null;
+		return request.getAttribute(FakeMethodDispatchProvider.RESOURCE_TO_USE);
 	}
 
 	public boolean isMine(HttpServletRequest request) {
-		// context.getProperties().put(METHOD_TO_EXECUTE, method)
-		return false;
+		return request.getAttribute(FakeMethodDispatchProvider.METHOD_TO_EXECUTE) != null;
 	}
 
 }

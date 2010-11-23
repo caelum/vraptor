@@ -35,6 +35,7 @@ final class JerseyDispatcher implements RequestDispatcher, ResourceMethod {
 		request.setAttribute(METHOD_TO_EXECUTE, method);
 		request.setAttribute(RESOURCE_TO_USE, resource);
 		request.setAttribute(DISPATCHER, this);
+		request.setAttribute(HTTP_CONTEXT, context);
 		InterceptorStack stack = (InterceptorStack) request.getAttribute(DefaultJersey.INTERCEPTOR_STACK);
 		stack.next(this, resource);
 	}

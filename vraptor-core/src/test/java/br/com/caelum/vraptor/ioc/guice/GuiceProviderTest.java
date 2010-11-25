@@ -57,10 +57,12 @@ public class GuiceProviderTest extends SpringProviderRegisteringComponentsTest {
 	protected void configureExpectations() {
 		mockery.checking(new Expectations() {{
 			allowing(context).getRealPath("/WEB-INF/classes");
-			will(returnValue(GuiceProviderTest.class.getResource("..").getFile()));
+			will(returnValue(getClassDir()));
 
 			allowing(context).addListener(with(any(HttpSessionListener.class)));
-		}});
+		}
+
+		});
 		super.configureExpectations();
 	}
 

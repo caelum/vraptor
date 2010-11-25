@@ -65,6 +65,7 @@ import br.com.caelum.vraptor.ioc.fixture.CustomComponentWithLifecycleInTheClassp
 import br.com.caelum.vraptor.ioc.fixture.InterceptorInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.ResourceInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.ComponentFactoryInTheClasspath.Provided;
+import br.com.caelum.vraptor.ioc.guice.GuiceProviderTest;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**
@@ -422,6 +423,10 @@ public abstract class GenericContainerTest {
 		provider.start(context);
 	}
 
-
+	protected String getClassDir() {
+		String classFile = GuiceProviderTest.class.getResource("/br/com/caelum/vraptor/ioc/GenericContainerTest.class").getFile();
+		String dir = classFile.replaceFirst("/GenericContainerTest.class$", "");
+		return dir;
+	}
 
 }

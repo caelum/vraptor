@@ -52,7 +52,11 @@
 
 	<target name="test" depends="compile">
 		<taskdef classpathref="test.classpath" resource="tasks.properties" />
-		<fileset dir="${tmp.test.classes.dir}" id="unittests.fileset" includes="**/*Test.class" />
+		<fileset dir="${tmp.test.classes.dir}" id="unittests.fileset"  >
+			<include name="**/*Test.class"/>
+			<exclude name="**/GenericContainerTest.*"/>
+		</fileset>
+			
 		<junit fork="yes" forkmode="once" printsummary="false" showoutput="true" failureproperty="failed-test">
 			<classpath>
 				<pathelement path="${tmp.classes.dir}" />

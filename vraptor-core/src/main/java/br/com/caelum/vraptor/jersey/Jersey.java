@@ -42,4 +42,6 @@ public interface Jersey {
 	 */
 	void execute(HttpServletRequest request, Object instance);
 
+	boolean shouldInstantiate(Class<?> type);
+
 }

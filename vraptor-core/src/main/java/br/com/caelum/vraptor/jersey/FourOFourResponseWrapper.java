@@ -22,40 +22,25 @@ class FourOFourResponseWrapper extends HttpServletResponseWrapper {
 	}
 
 	public void sendError(int sc, String msg) throws IOException {
-		if (sc == 404) {
-			notFound(req);
-		} else {
+		if (sc != 404) {
 			super.sendError(sc, msg);
 		}
 	}
 
-	/**
-	 * Sets the request attribute that a 404 was raised.
-	 */
-	private void notFound(final HttpServletRequest req) {
-		req.setAttribute(DefaultJersey.FOUR_O_FOURED, true);
-	}
-
 	public void sendError(int sc) throws IOException {
-		if (sc == 404) {
-			notFound(req);
-		} else {
+		if (sc != 404) {
 			super.sendError(sc);
 		}
 	}
 
 	public void setStatus(int sc, String sm) {
-		if (sc == 404) {
-			notFound(req);
-		} else {
+		if (sc != 404) {
 			super.setStatus(sc, sm);
 		}
 	}
 
 	public void setStatus(int sc) {
-		if (sc == 404) {
-			notFound(req);
-		} else {
+		if (sc != 404) {
 			super.setStatus(sc);
 		}
 	}

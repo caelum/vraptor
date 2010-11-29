@@ -8,10 +8,12 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
+import javax.ws.rs.Path;
 
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Component;
+import br.com.caelum.vraptor.resource.ResourceMethod;
 
 import com.sun.jersey.spi.container.servlet.RequestUriParser;
 import com.sun.jersey.spi.container.servlet.WebComponent;
@@ -30,9 +32,6 @@ public class DefaultJersey implements Jersey {
 
 	public static final String INTERCEPTOR_STACK = Jersey.class.getPackage()
 			+ ".stack";
-
-	static final String FOUR_O_FOURED = Jersey.class.getPackage().getName()
-			+ ".404";
 
 	public static final String REQUEST = Jersey.class.getPackage().getName()
 			+ ".request";
@@ -72,6 +71,11 @@ public class DefaultJersey implements Jersey {
 	public void execute(HttpServletRequest request, Object instance) {
 		JerseyDispatcher disp = (JerseyDispatcher) request.getAttribute(JerseyDispatcher.DISPATCHER);
 		disp.execute(instance, request);
+	}
+
+	@SuppressWarnings("unchecked")
+	public boolean shouldInstantiate(Class type) {
+		return type.isAnnotationPresent(Path.class);
 	}
 
 }

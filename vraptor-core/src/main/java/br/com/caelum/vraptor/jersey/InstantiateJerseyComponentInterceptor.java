@@ -19,19 +19,17 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 @RequestScoped
 public class InstantiateJerseyComponentInterceptor implements Interceptor {
 
-	private final Container container;
 	private final Jersey jersey;
 	private final HttpServletRequest request;
 
-	public InstantiateJerseyComponentInterceptor(Container container, Jersey jersey, HttpServletRequest request) {
-		this.container = container;
+	public InstantiateJerseyComponentInterceptor(Jersey jersey, HttpServletRequest request) {
 		this.jersey = jersey;
 		this.request = request;
 	}
 
 	public void intercept(InterceptorStack chain, ResourceMethod method,
 			Object instance) throws InterceptionException {
-		if (jersey.isMine(request)) {
+		if (jersey.shouldInstantiate(method.getMethod().getDeclaringClass())) {
 			instance = jersey.instantiate(request);
 		}
 		chain.next(method, instance);

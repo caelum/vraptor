@@ -43,5 +43,6 @@
 	<classpathentry kind="lib" path="build-lib/tests/selenium-support-2.0a5.jar"/>
 	<classpathentry kind="lib" path="build-lib/tests/xalan-2.7.1.jar"/>
 	<classpathentry kind="lib" path="build-lib/tests/xercesImpl-2.8.1.jar"/>
+	<classpathentry kind="lib" path="build-lib/extra/hsqldb-1.8.0.7.jar"/>
 	<classpathentry kind="output" path="WebContent/WEB-INF/classes"/>
 </classpath>

@@ -1,5 +1,6 @@
 package br.com.caelum.vraptor.jersey;
 
+
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -45,9 +46,9 @@ public class JerseyResourceLookupInterceptor implements Interceptor {
 				delegate.intercept(stack, ignorableMethod, resourceInstance);
 			}
 		} catch (ServletException e) {
-			throw new InterceptionException("Error while looking up jersey", e);
+			throw new InterceptionException("Error while looking up jersey",e);
 		} catch (IOException e) {
-			throw new InterceptionException("Error while looking up jersey", e);
+			throw new InterceptionException("Error while looking up jersey",e);
 		}
 	}
 

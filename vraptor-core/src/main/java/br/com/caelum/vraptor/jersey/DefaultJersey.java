@@ -13,7 +13,6 @@ import javax.ws.rs.Path;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Component;
-import br.com.caelum.vraptor.resource.ResourceMethod;
 
 import com.sun.jersey.spi.container.servlet.RequestUriParser;
 import com.sun.jersey.spi.container.servlet.WebComponent;

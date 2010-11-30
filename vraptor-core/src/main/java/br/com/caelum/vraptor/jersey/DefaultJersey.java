@@ -35,6 +35,9 @@ public class DefaultJersey implements Jersey {
 	public static final String REQUEST = Jersey.class.getPackage().getName()
 			+ ".request";
 
+	public static final String CONTAINER =  Jersey.class.getPackage().getName()
+			+ ".container";
+
 	private final WebComponent webComponent;
 
 	public DefaultJersey(FilterConfig config) throws ServletException {

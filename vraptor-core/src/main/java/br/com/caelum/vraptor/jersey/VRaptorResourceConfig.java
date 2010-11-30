@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.sun.jersey.api.core.ResourceConfig;
 import com.sun.jersey.api.model.AbstractResourceMethod;
+import com.sun.jersey.core.spi.component.ioc.IoCComponentProviderFactory;
 import com.sun.jersey.core.spi.factory.InjectableProviderFactory;
 import com.sun.jersey.server.impl.application.DispatcherFactory;
 import com.sun.jersey.server.impl.application.WebApplicationImpl;
@@ -53,11 +54,10 @@ public class VRaptorResourceConfig extends WebComponent {
 	
 	protected WebApplication create() {
 		return new WebApplicationImpl() {
-			
-			public InjectableProviderFactory getInjectableFactory() {
-				InjectableProviderFactory factory = super.getInjectableFactory();
-				factory.add(new VRaptorInjectableProvider(getThreadLocalHttpContext()));
-				return factory;
+			public void initiate(ResourceConfig rc,
+					IoCComponentProviderFactory provider) {
+				getInjectableFactory().add(new VRaptorInjectableProvider(getThreadLocalHttpContext()));
+				super.initiate(rc, provider);
 			}
 			
 			protected DispatcherFactory getDispatcherFactory() {

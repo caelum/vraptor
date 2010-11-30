@@ -11,11 +11,11 @@ import com.sun.jersey.core.spi.component.ioc.IoCComponentProvider;
 import com.sun.jersey.spi.inject.Injectable;
 import com.sun.jersey.spi.inject.InjectableProvider;
 
-public class MyPorra implements InjectableProvider {
+public class VRaptorInjectableProvider implements InjectableProvider {
 
 	private final HttpContext context;
 
-	public MyPorra(HttpContext context) {
+	public VRaptorInjectableProvider(HttpContext context) {
 		this.context = context;
 	}
 

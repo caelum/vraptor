@@ -56,7 +56,7 @@ public class VRaptorResourceConfig extends WebComponent {
 			
 			public InjectableProviderFactory getInjectableFactory() {
 				InjectableProviderFactory factory = super.getInjectableFactory();
-				factory.add(new MyPorra(getThreadLocalHttpContext()));
+				factory.add(new VRaptorInjectableProvider(getThreadLocalHttpContext()));
 				return factory;
 			}
 			

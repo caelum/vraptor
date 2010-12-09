@@ -23,27 +23,31 @@ import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**
- * Using a request scoped container, instantiates a resource.
+ * Using a request scoped container, instantiates a resource.<br/>
+ * Only instantiates the resource if it has not been instantiated so far, thus
+ * allowing composition of another component instantiator and this one.
  * 
  * @author Guilherme Silveira
  */
 public class InstantiateInterceptor implements Interceptor {
 
-    private final Container container;
+	private final Container container;
 
-    public InstantiateInterceptor(Container container) {
-        this.container = container;
-    }
+	public InstantiateInterceptor(Container container) {
+		this.container = container;
+	}
 
-    public void intercept(InterceptorStack invocation, ResourceMethod method, Object resourceInstance)
-            throws InterceptionException {
-        Class<?> type = method.getResource().getType();
-        Object instance = container.instanceFor(type);
-        invocation.next(method, instance);
-    }
+	public void intercept(InterceptorStack invocation, ResourceMethod method,
+			Object instance) throws InterceptionException {
+		if (instance == null) {
+			Class<?> type = method.getResource().getType();
+			instance = container.instanceFor(type);
+		}
+		invocation.next(method, instance);
+	}
 
-    public boolean accepts(ResourceMethod method) {
-        return true;
-    }
+	public boolean accepts(ResourceMethod method) {
+		return true;
+	}
 
 }

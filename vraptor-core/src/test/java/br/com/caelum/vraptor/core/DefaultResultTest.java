@@ -32,6 +32,7 @@ import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.View;
+import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.view.LogicResult;
 import br.com.caelum.vraptor.view.PageResult;
@@ -44,11 +45,12 @@ public class DefaultResultTest {
     @Mock private Container container;
 
 	private Result result;
+	@Mock private TypeNameExtractor extractor;
 
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        result = new DefaultResult(request, container, null);
+        result = new DefaultResult(request, container, null, extractor);
     }
 
     public static class MyView implements View {
@@ -201,6 +203,23 @@ public class DefaultResultTest {
     	result.permanentlyRedirectTo(new RandomController());
 
     	verify(status).movedPermanentlyTo(RandomController.class);
+
+    }
+
+
+    class Account {
+    	
+    }
+
+    @Test
+    public void shouldIncludeExtractedNameWhenSimplyIncluding() throws Exception {
+
+    	Account account = new Account();
+    	when(extractor.nameFor(Account.class)).thenReturn("account");
+    	
+    result.include(account);
+
+    	verify(request).setAttribute("account", account);
 
     }
 }

@@ -69,7 +69,6 @@ public class ParametersInstantiatorInterceptor implements Interceptor {
         return method.getMethod().getParameterTypes().length > 0;
     }
 
-    @SuppressWarnings("unchecked")
 	public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws InterceptionException {
     	Enumeration<String> names = request.getParameterNames();
     	while (names.hasMoreElements()) {

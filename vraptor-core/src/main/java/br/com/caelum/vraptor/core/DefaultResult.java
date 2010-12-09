@@ -26,9 +26,14 @@ import javax.servlet.http.HttpServletRequest;
 
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.View;
+import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 
+/**
+ * A basic implementation of a Result
+ * @author guilherme silveira
+ */
 @RequestScoped
 public class DefaultResult extends AbstractResult {
 
@@ -37,10 +42,12 @@ public class DefaultResult extends AbstractResult {
     private final Map<String, Object> includedAttributes;
     private boolean responseCommitted = false;
     private final ExceptionMapper exceptions;
+	private final TypeNameExtractor extractor;
 
-    public DefaultResult(HttpServletRequest request, Container container, ExceptionMapper exceptions) {
+    public DefaultResult(HttpServletRequest request, Container container, ExceptionMapper exceptions, TypeNameExtractor extractor) {
         this.request = request;
         this.container = container;
+		this.extractor = extractor;
         this.includedAttributes = new HashMap<String, Object>();
         this.exceptions = exceptions;
     }
@@ -66,5 +73,10 @@ public class DefaultResult extends AbstractResult {
 
 	public Map<String, Object> included() {
 		return Collections.unmodifiableMap(includedAttributes);
+	}
+
+	public Result include(Object value) {
+		String key = this.extractor.nameFor(value.getClass());
+		return include(key, value);
 	}
 }

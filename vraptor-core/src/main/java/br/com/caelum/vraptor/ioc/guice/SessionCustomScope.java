@@ -17,6 +17,9 @@ package br.com.caelum.vraptor.ioc.guice;
 
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
 import com.google.inject.Inject;
@@ -31,6 +34,8 @@ import com.google.inject.Provider;
  *
  */
 public class SessionCustomScope extends AbstractScope implements LifecycleScope {
+
+	private static final Logger logger = LoggerFactory.getLogger(SessionCustomScope.class);
 
 	private Multimap<String, LifecycleListener> listeners = LinkedListMultimap.create();
 
@@ -70,7 +75,11 @@ public class SessionCustomScope extends AbstractScope implements LifecycleScope 
 
 	public void stop(HttpSession session) {
 		for (LifecycleListener listener : listeners.removeAll(session.getId())) {
-			listener.onEvent();
+			try {
+				listener.onEvent();
+			} catch (Exception e) {
+				logger.warn("Error while invoking PreDestroy", e);
+			}
 		}
 	}
 }

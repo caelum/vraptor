@@ -18,12 +18,31 @@
 package br.com.caelum.vraptor.ioc.spring;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.servlet.ServletContext;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.aop.config.AopConfigUtils;
 import org.springframework.beans.factory.BeanFactoryUtils;
-import org.springframework.context.ApplicationContext;
+import org.springframework.beans.factory.DisposableBean;
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.beans.factory.support.AbstractBeanDefinition;
+import org.springframework.beans.factory.support.BeanDefinitionRegistry;
+import org.springframework.beans.factory.support.RootBeanDefinition;
+import org.springframework.context.ApplicationEvent;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.annotation.AnnotationConfigUtils;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.core.Ordered;
+import org.springframework.web.context.ConfigurableWebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import br.com.caelum.vraptor.config.BasicConfiguration;
 import br.com.caelum.vraptor.ioc.AbstractComponentRegistry;
@@ -34,45 +53,141 @@ import br.com.caelum.vraptor.ioc.Container;
  */
 public class SpringBasedContainer extends AbstractComponentRegistry implements Container {
 
-    private VRaptorApplicationContext applicationContext;
+	private static final Logger logger = LoggerFactory.getLogger(SpringBasedContainer.class);
 
     private final List<Class<?>> toRegister = new ArrayList<Class<?>>();
 
-    public SpringBasedContainer(ApplicationContext parentContext, BasicConfiguration config) {
-        applicationContext = new VRaptorApplicationContext(this, config, new SpringRegistry(this, config));
-        applicationContext.setParent(parentContext);
+	private final ConfigurableWebApplicationContext parentContext;
+
+	private SpringRegistry registry;
+
+
+	private final BasicConfiguration config;
+
+    public SpringBasedContainer(ConfigurableWebApplicationContext parentContext, BasicConfiguration config) {
+        this.parentContext = parentContext;
+		this.config = config;
+
     }
 
     public void register(Class<?> requiredType, Class<?> componentType) {
-    	if (applicationContext.isActive()) {
-			applicationContext.register(componentType);
+    	if (parentContext.isActive()) {
+    		this.registry.register(componentType);
 		} else {
 			toRegister.add(componentType);
 		}
     }
 
-    public List<Class<?>> getToRegister() {
-		return toRegister;
-	}
-
     public <T> T instanceFor(Class<T> type) {
-        return applicationContext.getBean(type);
+    	try {
+			return parentContext.getBean(type);
+		} catch (NoSuchBeanDefinitionException e) {
+			Map<String, T> beans = parentContext.getBeansOfType(type);
+			for (Entry<String, T> def : beans.entrySet()) {
+				BeanDefinition definition = parentContext.getBeanFactory().getBeanDefinition(def.getKey());
+				if (isPrimary(definition) || hasGreaterRoleThanInfrastructure(definition)) {
+					return def.getValue();
+				}
+			}
+			throw e;
+		}
     }
 
     public <T> boolean canProvide(Class<T> type) {
-    	return BeanFactoryUtils.beanNamesForTypeIncludingAncestors(applicationContext, type).length > 0;
+    	return BeanFactoryUtils.beanNamesForTypeIncludingAncestors(parentContext, type).length > 0;
     }
 
     public void start(ServletContext context) {
-        applicationContext.setServletContext(context);
-        applicationContext.refresh();
-        applicationContext.start();
+        parentContext.setServletContext(context);
+        parentContext.addApplicationListener(new ApplicationListener<ApplicationEvent>() {
+
+			public void onApplicationEvent(ApplicationEvent event) {
+				if (event instanceof ContextRefreshedEvent) {
+					SpringBasedContainer.this.registry = new SpringRegistry(parentContext.getBeanFactory(), config, SpringBasedContainer.this);
+					loadBeanDefinitions(parentContext.getBeanFactory());
+				}
+			}
+		});
+        parentContext.refresh();
+
+        WebApplicationContextUtils.registerWebApplicationScopes(parentContext.getBeanFactory());
+        parentContext.start();
     }
 
     public void stop() {
-        applicationContext.stop();
-        applicationContext.destroy();
-        applicationContext = null;
+        parentContext.stop();
+        if (parentContext instanceof DisposableBean){
+			try {
+				((DisposableBean)parentContext).destroy();
+			} catch (Exception e) {
+				logger.error("Error when destroying application context", e);
+			}
+		}
     }
 
+
+    private boolean isPrimary(BeanDefinition definition) {
+		return definition instanceof AbstractBeanDefinition && ((AbstractBeanDefinition) definition).isPrimary();
+	}
+
+	private boolean hasGreaterRoleThanInfrastructure(BeanDefinition definition) {
+		return definition.getRole() < BeanDefinition.ROLE_INFRASTRUCTURE;
+	}
+
+	private void loadBeanDefinitions(ConfigurableListableBeanFactory configurableListableBeanFactory) {
+		configurableListableBeanFactory.registerSingleton(ServletContext.class.getName(), config.getServletContext());
+		registry.registerVRaptorComponents();
+
+		registerCustomComponentsOn(configurableListableBeanFactory);
+
+		if (config.isClasspathScanningEnabled()) {
+			scanWebInfClasses(configurableListableBeanFactory);
+			scanPackages(configurableListableBeanFactory);
+		} else {
+			logger.info("Classpath scanning disabled");
+		}
+
+		AnnotationConfigUtils.registerAnnotationConfigProcessors((BeanDefinitionRegistry) configurableListableBeanFactory);
+		AopConfigUtils.registerAspectJAnnotationAutoProxyCreatorIfNecessary((BeanDefinitionRegistry) configurableListableBeanFactory);
+		registerCustomInjectionProcessor(configurableListableBeanFactory);
+		registry.registerCachedComponentsOn();
+	}
+
+
+	private void scanPackages(ConfigurableListableBeanFactory configurableListableBeanFactory) {
+		if (config.hasBasePackages()) {
+			logger.info("Scanning packages from WEB-INF/classes and jars: {}", Arrays.toString(config.getBasePackages()));
+
+			ComponentScanner scanner = new ComponentScanner(configurableListableBeanFactory, this);
+			scanner.scan(config.getBasePackages());
+		}
+	}
+
+	private void scanWebInfClasses(ConfigurableListableBeanFactory configurableListableBeanFactory) {
+		String directory = config.getWebinfClassesDirectory();
+		if (directory != null) {
+			logger.info("Scanning WEB-INF/classes: {} ", directory);
+
+			ComponentScanner scanner = new ComponentScanner(configurableListableBeanFactory, this);
+			scanner.setResourcePattern("**/*.class");
+			scanner.setResourceLoader(new WebinfClassesPatternResolver(config.getWebinfClassesDirectory()));
+			scanner.scan("");
+		} else {
+			logger.warn("Cant invoke ServletContext.getRealPath. Some application servers, as WebLogic, must be configured to be able to do so." +
+						" Or maybe your container is not exploding the war file. Not scanning WEB-INF/classes for VRaptor and Spring components.");
+		}
+	}
+
+	private void registerCustomComponentsOn(ConfigurableListableBeanFactory configurableListableBeanFactory) {
+		for (Class<?> type : toRegister) {
+			registry.register(type);
+		}
+	}
+
+	private void registerCustomInjectionProcessor(ConfigurableListableBeanFactory configurableListableBeanFactory) {
+		RootBeanDefinition definition = new RootBeanDefinition(InjectionBeanPostProcessor.class);
+		definition.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
+		definition.getPropertyValues().addPropertyValue("order", Ordered.LOWEST_PRECEDENCE);
+		((BeanDefinitionRegistry) configurableListableBeanFactory).registerBeanDefinition(AnnotationConfigUtils.AUTOWIRED_ANNOTATION_PROCESSOR_BEAN_NAME, definition);
+	}
 }

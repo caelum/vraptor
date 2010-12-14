@@ -89,7 +89,7 @@ public class ProviderTest extends GenericContainerTest {
 		requestListener.requestDestroyed(new ServletRequestEvent(context, request));
 		RequestContextHolder.resetRequestAttributes();
 		VRaptorRequestHolder.resetRequestForCurrentThread();
-		
+
 		return result;
     }
 
@@ -117,6 +117,8 @@ public class ProviderTest extends GenericContainerTest {
 
 	                allowing(context).getInitParameter(BasicConfiguration.SCANNING_PARAM);
 	                will(returnValue("enabled"));
+
+	                allowing(context);
                 }
             });
         } catch (Exception e) {

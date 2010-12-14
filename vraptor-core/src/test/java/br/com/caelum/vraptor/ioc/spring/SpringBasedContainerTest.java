@@ -95,6 +95,8 @@ public class SpringBasedContainerTest {
 
                 allowing(servletContext).getInitParameter(BasicConfiguration.SCANNING_PARAM);
                 will(returnValue("enabled"));
+
+                allowing(servletContext);
 			}
 		});
 
@@ -105,7 +107,7 @@ public class SpringBasedContainerTest {
 		FilterChain chain = mockery.mock(FilterChain.class);
 		VRaptorRequestHolder.setRequestForCurrentThread(new RequestInfo(servletContext, chain, request, response));
 		RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
-		container = new SpringBasedContainer(null, new BasicConfiguration(servletContext));
+		container = new SpringBasedContainer(new DefaultSpringLocator().getApplicationContext(servletContext), new BasicConfiguration(servletContext));
 		container.start(servletContext);
 	}
 

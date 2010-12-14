@@ -95,6 +95,8 @@ public class SpringProviderRegisteringComponentsTest extends GenericContainerTes
 
                 allowing(context).getInitParameter(BasicConfiguration.SCANNING_PARAM);
                 will(returnValue("enabled"));
+
+                allowing(context);
             }
         });
     }

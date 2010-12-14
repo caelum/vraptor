@@ -22,10 +22,10 @@ import java.util.Arrays;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.BeanNameGenerator;
-import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.annotation.AnnotationBeanNameGenerator;
 import org.springframework.context.annotation.ClassPathBeanDefinitionScanner;
 
@@ -39,11 +39,11 @@ class ComponentScanner extends ClassPathBeanDefinitionScanner {
 
 	private static final Logger logger = LoggerFactory.getLogger(ComponentScanner.class);
 
-	private final DefaultListableBeanFactory registry;
+	private final ConfigurableListableBeanFactory registry;
 	private final Container container;
 
-	public ComponentScanner(DefaultListableBeanFactory registry, Container container) {
-		super(registry, false);
+	public ComponentScanner(ConfigurableListableBeanFactory registry, Container container) {
+		super((BeanDefinitionRegistry) registry, false);
 		this.registry = registry;
 		this.container = container;
 		addIncludeFilter(new ComponentTypeFilter());

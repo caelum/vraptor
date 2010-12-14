@@ -74,8 +74,12 @@ public class SpringProviderTest {
 				allowing(servletContext).getAttribute(with(any(String.class)));
 				will(returnValue(null));
 
+				allowing(servletContext).setAttribute(with(any(String.class)), with(any(Object.class)));
+
                 allowing(servletContext).getInitParameter(BasicConfiguration.SCANNING_PARAM);
                 will(returnValue("enabled"));
+
+                allowing(servletContext);
 			}
 		});
 		SpringProvider provider = new SpringProvider();

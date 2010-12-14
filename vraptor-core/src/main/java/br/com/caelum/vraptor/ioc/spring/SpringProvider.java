@@ -20,7 +20,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletRequestEvent;
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.context.ApplicationContext;
+import org.springframework.web.context.ConfigurableWebApplicationContext;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.RequestContextListener;
 
@@ -103,7 +103,7 @@ public class SpringProvider implements ContainerProvider {
 	 *
 	 * @return your spring application context
 	 */
-	protected ApplicationContext getParentApplicationContext(ServletContext context) {
+	protected ConfigurableWebApplicationContext getParentApplicationContext(ServletContext context) {
 		return new DefaultSpringLocator().getApplicationContext(context);
 	}
 

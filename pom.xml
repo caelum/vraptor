@@ -308,7 +308,18 @@
 		</dependency>
 
 		
-
+		<dependency>
+		    <groupId>jersey</groupId>
+		    <artifactId>jersey-server</artifactId>
+		    <version>1</version>
+		    <optional>true</optional>
+		</dependency>
+		<dependency>
+		    <groupId>jersey</groupId>
+		    <artifactId>jersey-core</artifactId>
+		    <version>1</version>
+		    <optional>true</optional>
+		</dependency>
 		
 		
 		

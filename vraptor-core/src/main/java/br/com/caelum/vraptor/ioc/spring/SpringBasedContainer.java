@@ -28,18 +28,17 @@ import javax.servlet.ServletContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.aop.config.AopConfigUtils;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactoryUtils;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.RootBeanDefinition;
-import org.springframework.context.ApplicationEvent;
-import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.AnnotationConfigUtils;
-import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.core.Ordered;
 import org.springframework.web.context.ConfigurableWebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -60,7 +59,6 @@ public class SpringBasedContainer extends AbstractComponentRegistry implements C
 	private final ConfigurableWebApplicationContext parentContext;
 
 	private SpringRegistry registry;
-
 
 	private final BasicConfiguration config;
 
@@ -99,18 +97,16 @@ public class SpringBasedContainer extends AbstractComponentRegistry implements C
 
     public void start(ServletContext context) {
         parentContext.setServletContext(context);
-        parentContext.addApplicationListener(new ApplicationListener<ApplicationEvent>() {
+        parentContext.addBeanFactoryPostProcessor(new BeanFactoryPostProcessor() {
 
-			public void onApplicationEvent(ApplicationEvent event) {
-				if (event instanceof ContextRefreshedEvent) {
-					SpringBasedContainer.this.registry = new SpringRegistry(parentContext.getBeanFactory(), config, SpringBasedContainer.this);
-					loadBeanDefinitions(parentContext.getBeanFactory());
-				}
+			public void postProcessBeanFactory(ConfigurableListableBeanFactory factory) throws BeansException {
+				SpringBasedContainer.this.registry = new SpringRegistry(factory, SpringBasedContainer.this);
+				loadBeanDefinitions(factory);
+				WebApplicationContextUtils.registerWebApplicationScopes(factory);
 			}
 		});
         parentContext.refresh();
 
-        WebApplicationContextUtils.registerWebApplicationScopes(parentContext.getBeanFactory());
         parentContext.start();
     }
 
@@ -135,7 +131,6 @@ public class SpringBasedContainer extends AbstractComponentRegistry implements C
 	}
 
 	private void loadBeanDefinitions(ConfigurableListableBeanFactory configurableListableBeanFactory) {
-		configurableListableBeanFactory.registerSingleton(ServletContext.class.getName(), config.getServletContext());
 		registry.registerVRaptorComponents();
 
 		registerCustomComponentsOn(configurableListableBeanFactory);

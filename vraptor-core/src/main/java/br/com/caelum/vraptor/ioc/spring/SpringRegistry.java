@@ -13,7 +13,6 @@ import org.springframework.context.annotation.ScopeMetadata;
 import org.springframework.context.annotation.ScopedProxyMode;
 
 import br.com.caelum.vraptor.Converter;
-import br.com.caelum.vraptor.config.BasicConfiguration;
 import br.com.caelum.vraptor.core.BaseComponents;
 import br.com.caelum.vraptor.ioc.ComponentFactory;
 import br.com.caelum.vraptor.ioc.StereotypeHandler;
@@ -22,20 +21,18 @@ public class SpringRegistry {
 
 	private final AnnotationBeanNameGenerator beanNameGenerator = new AnnotationBeanNameGenerator();
 	private final ConfigurableListableBeanFactory beanFactory;
-	private final BasicConfiguration config;
 	private final VRaptorScopeResolver scopeResolver = new VRaptorScopeResolver();
 	private final SpringBasedContainer container;
 
-	public SpringRegistry(ConfigurableListableBeanFactory configurableListableBeanFactory, BasicConfiguration config, SpringBasedContainer container) {
+	public SpringRegistry(ConfigurableListableBeanFactory configurableListableBeanFactory, SpringBasedContainer container) {
 		this.beanFactory = configurableListableBeanFactory;
-		this.config = config;
 		this.container = container;
 	}
 
 	public void registerOn(Class<?> type, boolean customComponent) {
 		AnnotatedGenericBeanDefinition definition = new AnnotatedGenericBeanDefinition(type);
 		definition.setLazyInit(true);
-		definition.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_NO);
+		definition.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_CONSTRUCTOR);
 		if (customComponent) {
 			definition.setPrimary(true);
 			definition.setRole(BeanDefinition.ROLE_APPLICATION);
@@ -115,8 +112,6 @@ public class SpringRegistry {
 
 		registerOn(StereotypedBeansRegistrar.class);
 		registerOn(DefaultSpringLocator.class);
-
-		config.getServletContext();
 	}
 
 	void registerRequestScopedComponentsOn() {
@@ -134,7 +129,7 @@ public class SpringRegistry {
 		registerOn(HttpServletResponseProvider.class, true);
 		registerOn(HttpSessionProvider.class, true);
 
-		beanFactory.registerSingleton(SpringBasedContainer.class.getName(), beanFactory);
+		beanFactory.registerSingleton(SpringBasedContainer.class.getName(), container);
 	}
 
 	void registerVRaptorComponents() {

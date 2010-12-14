@@ -75,6 +75,7 @@ class ComponentScanner extends ClassPathBeanDefinitionScanner {
 	protected void postProcessBeanDefinition(AbstractBeanDefinition beanDefinition, String beanName) {
 		super.postProcessBeanDefinition(beanDefinition, beanName);
 		beanDefinition.setPrimary(true);
+		beanDefinition.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_CONSTRUCTOR);
 		try {
 			Class<?> componentType = Class.forName(beanDefinition.getBeanClassName());
 			if (ComponentFactory.class.isAssignableFrom(componentType) && checkCandidate(beanName, beanDefinition)) {

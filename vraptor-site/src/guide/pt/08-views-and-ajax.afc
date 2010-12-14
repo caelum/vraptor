@@ -1,5 +1,45 @@
 [chapter View e Ajax]
 
+[section Compartilhando objetos com a view]
+
+Para registrar objetos a serem acessados na view, usamos o método include:
+
+[java]
+@Resource
+class ClientController {
+	private final Result result;
+	public ClientController(Result result) {
+		this.result = result;
+	}
+	
+	public void busca(int id) {
+		result.include("mensagem", "Alguma mensagem");
+		result.include("cliente", new Cliente(id));
+	}
+}
+[/java]
+
+Agora as variáveis "mensagem" e "cliente" estão disponíveis para uso em seu template engine.
+
+É possível registrar o objeto através da invocação do método include com um único argumento:
+
+[java]
+@Resource
+class ClientController {
+	private final Result result;
+	public ClientController(Result result) {
+		this.result = result;
+	}
+	
+	public void busca(int id) {
+		result.include("Alguma mensagem").include(new Cliente(id));
+	}
+}
+[/java]
+
+Nesse caso a primeira invocação registra a chave "string" e na segunda a chave "cliente".
+Você pode alterar o comportamento de convenção de chaves através de seu próprio TypeNameExtractor.
+
 [section Custom PathResolver]
 Por padrão, para renderizar suas views, o VRaptor segue a convenção:
 

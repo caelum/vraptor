@@ -16,6 +16,8 @@
  */
 package br.com.caelum.vraptor.interceptor;
 
+import static org.junit.Assert.assertTrue;
+
 import java.io.IOException;
 
 import org.jmock.Expectations;
@@ -33,29 +35,42 @@ import br.com.caelum.vraptor.view.DogController;
 public class InstantiateInterceptorTest {
 
     private Mockery mockery;
-    private Container container;
 
     @Before
     public void setup() {
         this.mockery = new Mockery();
-        this.container = mockery.mock(Container.class);
     }
 
     @Test
     public void shouldUseContainerForNewComponent() throws InterceptionException, IOException {
+        final DogController myDog = new DogController();
+        InstanceContainer container = new InstanceContainer(myDog);
         InstantiateInterceptor interceptor = new InstantiateInterceptor(container);
         final InterceptorStack stack = mockery.mock(InterceptorStack.class);
-        final DogController myDog = new DogController();
         final ResourceMethod method = mockery.mock(ResourceMethod.class);
         mockery.checking(new Expectations() {
             {
-                one(container).instanceFor(DogController.class);
-                will(returnValue(myDog));
                 one(stack).next(method, myDog);
                 one(method).getResource(); will(returnValue(new DefaultResourceClass(DogController.class)));
             }
         });
         interceptor.intercept(stack, method, null);
+        assertTrue(container.isEmpty());
+        mockery.assertIsSatisfied();
+    }
+
+    @Test
+    public void shouldNotInstantiateIfThereIsAlreadyAResource() throws InterceptionException, IOException {
+        final DogController myDog = new DogController();
+        InstantiateInterceptor interceptor = new InstantiateInterceptor(null);
+        final InterceptorStack stack = mockery.mock(InterceptorStack.class);
+        final ResourceMethod method = mockery.mock(ResourceMethod.class);
+        mockery.checking(new Expectations() {
+            {
+                one(stack).next(method, myDog);
+            }
+        });
+        interceptor.intercept(stack, method, myDog);
         mockery.assertIsSatisfied();
     }
 

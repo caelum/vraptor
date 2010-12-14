@@ -1,5 +1,45 @@
 [chapter View and Ajax]
 
+[section Sharing objects with the view]
+
+To register objects so they can be accessed in your templates:
+
+[java]
+@Resource
+class ClientController {
+	private final Result result;
+	public ClientController(Result result) {
+		this.result = result;
+	}
+	
+	public void search(int id) {
+		result.include("message", "Some message");
+		result.include("client", new Client(id));
+	}
+}
+[/java]
+
+The first object is accessed as "message", while the second as "client".
+You can register objects by invoking include with only one parameter if you wish:
+
+[java]
+@Resource
+class ClientController {
+	private final Result result;
+	public ClientController(Result result) {
+		this.result = result;
+	}
+	
+	public void search(int id) {
+		result.include("Some message").include(new Client(id));
+	}
+}
+[/java]
+
+In this case, the first key is "string" while the second is "client".
+Mix one argument and two arguments invocation to create simpler code for your application.
+One can change the behaviour of the key extracting process by creating your own TypeNameExtractor.
+
 [section Custom PathResolver]
 By default, VRaptor tries to render your views following the convention:
 

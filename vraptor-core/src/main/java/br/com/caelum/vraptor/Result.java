@@ -31,6 +31,7 @@ import br.com.caelum.vraptor.view.Status;
 public interface Result {
 
     Result include(String key, Object value);
+    Result include(Object value);
 
 	<T extends View> T use(Class<T> view);
 	

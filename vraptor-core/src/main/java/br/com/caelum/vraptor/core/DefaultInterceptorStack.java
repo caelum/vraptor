@@ -28,7 +28,7 @@ import br.com.caelum.vraptor.ioc.PrototypeScoped;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**
- * Default implmentation of a interceptor stack.
+ * Default implementation of a interceptor stack.
  * @author guilherme silveira
  *
  */

@@ -61,7 +61,7 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
 	private static final Logger logger = LoggerFactory.getLogger(VRaptorApplicationContext.class);
 
 	public static final String RESOURCES_LIST = "br.com.caelum.vraptor.resources.list";
-	
+
 	private final AnnotationBeanNameGenerator beanNameGenerator = new AnnotationBeanNameGenerator();
 	private final SpringBasedContainer container;
 	private final BasicConfiguration config;
@@ -78,6 +78,7 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
 		WebApplicationContextUtils.registerWebApplicationScopes(beanFactory);
 	}
 
+	@Override
 	protected void loadBeanDefinitions(DefaultListableBeanFactory beanFactory) {
 		if (getParent() == null || getParent().getBeanNamesForType(ServletContext.class).length == 0) {
 			beanFactory.registerSingleton(ServletContext.class.getName(), config.getServletContext());
@@ -115,7 +116,7 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
 		String directory = config.getWebinfClassesDirectory();
 		if (directory != null) {
 			logger.info("Scanning WEB-INF/classes: {} ", directory);
-			
+
 			ComponentScanner scanner = new ComponentScanner(beanFactory, container);
 			scanner.setResourcePattern("**/*.class");
 			scanner.setResourceLoader(new WebinfClassesPatternResolver(config.getWebinfClassesDirectory()));
@@ -256,7 +257,7 @@ public class VRaptorApplicationContext extends AbstractRefreshableWebApplication
 			String name = compatibleNameFor(type);
 			typeToBeanName.put(type, name);
 		}
-		return type.cast(getBean(typeToBeanName.get(type)));
+		return (T) getBean(typeToBeanName.get(type));
 	}
 
 	private String compatibleNameFor(Class<?> type) {

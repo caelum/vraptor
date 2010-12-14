@@ -45,9 +45,9 @@ import com.thoughtworks.xstream.mapper.MapperWrapper;
 @Component
 public class XStreamJSONSerialization implements JSONSerialization {
 
-	private final HttpServletResponse response;
-	private final TypeNameExtractor extractor;
-	private final ProxyInitializer initializer;
+	protected final HttpServletResponse response;
+	protected final TypeNameExtractor extractor;
+	protected final ProxyInitializer initializer;
 	private HierarchicalStreamDriver driver =  new JsonHierarchicalStreamDriver();
 
 	public XStreamJSONSerialization(HttpServletResponse response, TypeNameExtractor extractor, ProxyInitializer initializer) {

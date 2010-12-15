@@ -17,10 +17,8 @@
 
 package br.com.caelum.vraptor.ioc.spring;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Map.Entry;
 
 import javax.servlet.ServletContext;
@@ -37,9 +35,10 @@ import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.web.context.ConfigurableWebApplicationContext;
 
-import br.com.caelum.vraptor.config.BasicConfiguration;
 import br.com.caelum.vraptor.ioc.AbstractComponentRegistry;
 import br.com.caelum.vraptor.ioc.Container;
+
+import com.google.common.collect.Sets;
 
 /**
  * @author Fabio Kung
@@ -48,18 +47,14 @@ public class SpringBasedContainer extends AbstractComponentRegistry implements C
 
 	private static final Logger logger = LoggerFactory.getLogger(SpringBasedContainer.class);
 
-    final List<Class<?>> toRegister = new ArrayList<Class<?>>();
+    final Set<Class<?>> toRegister = Sets.newHashSet();
 
 	private final ConfigurableWebApplicationContext parentContext;
 
 	private SpringRegistry registry;
 
-	private final BasicConfiguration config;
-
-    public SpringBasedContainer(ConfigurableWebApplicationContext parentContext, BasicConfiguration config) {
+    public SpringBasedContainer(ConfigurableWebApplicationContext parentContext) {
         this.parentContext = parentContext;
-		this.config = config;
-
     }
 
     public void register(Class<?> requiredType, Class<?> componentType) {
@@ -98,14 +93,7 @@ public class SpringBasedContainer extends AbstractComponentRegistry implements C
 
 				registry.configure();
 
-				registry.registerCustomComponents(toRegister);
-				if (config.isClasspathScanningEnabled()) {
-					scanWebInfClasses(factory);
-					scanPackages(factory);
-				} else {
-					logger.info("Classpath scanning disabled");
-				}
-
+				registry.registerComponents(toRegister);
 			}
 		});
         parentContext.refresh();
@@ -124,36 +112,11 @@ public class SpringBasedContainer extends AbstractComponentRegistry implements C
 		}
     }
 
-
     private boolean isPrimary(BeanDefinition definition) {
 		return definition instanceof AbstractBeanDefinition && ((AbstractBeanDefinition) definition).isPrimary();
 	}
 
 	private boolean hasGreaterRoleThanInfrastructure(BeanDefinition definition) {
 		return definition.getRole() < BeanDefinition.ROLE_INFRASTRUCTURE;
-	}
-
-	private void scanPackages(ConfigurableListableBeanFactory configurableListableBeanFactory) {
-		if (config.hasBasePackages()) {
-			logger.info("Scanning packages from WEB-INF/classes and jars: {}", Arrays.toString(config.getBasePackages()));
-
-			ComponentScanner scanner = new ComponentScanner(configurableListableBeanFactory, this);
-			scanner.scan(config.getBasePackages());
-		}
-	}
-
-	private void scanWebInfClasses(ConfigurableListableBeanFactory configurableListableBeanFactory) {
-		String directory = config.getWebinfClassesDirectory();
-		if (directory != null) {
-			logger.info("Scanning WEB-INF/classes: {} ", directory);
-
-			ComponentScanner scanner = new ComponentScanner(configurableListableBeanFactory, this);
-			scanner.setResourcePattern("**/*.class");
-			scanner.setResourceLoader(new WebinfClassesPatternResolver(config.getWebinfClassesDirectory()));
-			scanner.scan("");
-		} else {
-			logger.warn("Cant invoke ServletContext.getRealPath. Some application servers, as WebLogic, must be configured to be able to do so." +
-						" Or maybe your container is not exploding the war file. Not scanning WEB-INF/classes for VRaptor and Spring components.");
-		}
 	}
 }

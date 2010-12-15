@@ -104,8 +104,8 @@ public class ProviderTest extends GenericContainerTest {
                     allowing(context).getAttribute("org.springframework.web.context.WebApplicationContext.ROOT");
                     will(returnValue(null));
 
-                    allowing(context).getRealPath("/WEB-INF/classes/");
-                    will(returnValue(ProviderTest.class.getResource(".").getFile()));
+                    allowing(context).getRealPath("/WEB-INF/classes");
+                    will(returnValue(ProviderTest.class.getResource("../ioc/fixture").getFile()));
 
                     allowing(context).getRealPath("/WEB-INF/classes/views.properties");
                     will(returnValue("views.properties"));

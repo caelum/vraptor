@@ -29,6 +29,8 @@ import br.com.caelum.vraptor.config.BasicConfiguration;
 import br.com.caelum.vraptor.core.Execution;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
+import br.com.caelum.vraptor.scan.WebAppBootstrap;
+import br.com.caelum.vraptor.scan.WebAppBootstrapFactory;
 
 /**
  * @author Fabio Kung
@@ -75,8 +77,11 @@ public class SpringProvider implements ContainerProvider {
 	 * You can override this method to start some components, remember to call super before.
 	 */
 	public void start(ServletContext context) {
+		container = new SpringBasedContainer(getParentApplicationContext(context));
+
 		BasicConfiguration config = new BasicConfiguration(context);
-		container = new SpringBasedContainer(getParentApplicationContext(context), config);
+		WebAppBootstrap bootstrap = new WebAppBootstrapFactory().create(config);
+		bootstrap.configure(container);
 
 		registerCustomComponents(container);
 		container.start(context);

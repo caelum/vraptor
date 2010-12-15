@@ -63,6 +63,7 @@ import br.com.caelum.vraptor.ioc.spring.components.RequestScopedComponent;
 import br.com.caelum.vraptor.ioc.spring.components.RequestScopedContract;
 import br.com.caelum.vraptor.ioc.spring.components.SameName;
 import br.com.caelum.vraptor.ioc.spring.components.SpecialImplementation;
+import br.com.caelum.vraptor.scan.WebAppBootstrapFactory;
 import br.com.caelum.vraptor.test.HttpServletRequestMock;
 import br.com.caelum.vraptor.test.HttpSessionMock;
 
@@ -107,7 +108,9 @@ public class SpringBasedContainerTest {
 		FilterChain chain = mockery.mock(FilterChain.class);
 		VRaptorRequestHolder.setRequestForCurrentThread(new RequestInfo(servletContext, chain, request, response));
 		RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
-		container = new SpringBasedContainer(new DefaultSpringLocator().getApplicationContext(servletContext), new BasicConfiguration(servletContext));
+		BasicConfiguration config = new BasicConfiguration(servletContext);
+		container = new SpringBasedContainer(new DefaultSpringLocator().getApplicationContext(servletContext));
+		new WebAppBootstrapFactory().create(config).configure(container);
 		container.start(servletContext);
 	}
 

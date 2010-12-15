@@ -1,6 +1,6 @@
 package br.com.caelum.vraptor.ioc.spring;
 
-import java.util.List;
+import java.util.Set;
 
 import org.springframework.aop.config.AopConfigUtils;
 import org.springframework.aop.scope.ScopedProxyUtils;
@@ -11,6 +11,7 @@ import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionReaderUtils;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
+import org.springframework.beans.factory.support.BeanNameGenerator;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.context.annotation.AnnotationBeanNameGenerator;
 import org.springframework.context.annotation.AnnotationConfigUtils;
@@ -26,7 +27,7 @@ import br.com.caelum.vraptor.ioc.StereotypeHandler;
 
 public class SpringRegistry {
 
-	private final AnnotationBeanNameGenerator beanNameGenerator = new AnnotationBeanNameGenerator();
+	private final BeanNameGenerator beanNameGenerator = new UniqueBeanNameGenerator(new AnnotationBeanNameGenerator());
 	private final ConfigurableListableBeanFactory beanFactory;
 	private final VRaptorScopeResolver scopeResolver = new VRaptorScopeResolver();
 	private final SpringBasedContainer container;
@@ -39,7 +40,7 @@ public class SpringRegistry {
 	public void registerOn(Class<?> type, boolean customComponent) {
 		AnnotatedGenericBeanDefinition definition = new AnnotatedGenericBeanDefinition(type);
 		definition.setLazyInit(true);
-		definition.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_CONSTRUCTOR);
+		definition.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_NO);
 		if (customComponent) {
 			definition.setPrimary(true);
 			definition.setRole(BeanDefinition.ROLE_APPLICATION);
@@ -152,8 +153,8 @@ public class SpringRegistry {
 		((BeanDefinitionRegistry) beanFactory).registerBeanDefinition(AnnotationConfigUtils.AUTOWIRED_ANNOTATION_PROCESSOR_BEAN_NAME, definition);
 	}
 
-	void registerCustomComponents(List<Class<?>> classes) {
-		for (Class<?> type : classes) {
+	void registerComponents(Set<Class<?>> toRegister) {
+		for (Class<?> type : toRegister) {
 			register(type);
 		}
 	}

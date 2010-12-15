@@ -68,7 +68,7 @@ public class SpringProviderTest {
 						BasicConfiguration.BASE_PACKAGES_PARAMETER_NAME);
 				will(returnValue("br.com.caelum.vraptor.ioc.spring.components.registrar"));
 
-				allowing(servletContext).getRealPath("/WEB-INF/classes/");
+				allowing(servletContext).getRealPath("/WEB-INF/classes");
 				will(returnValue(this.getClass().getResource(".").getPath()));
 
 				allowing(servletContext).getAttribute(with(any(String.class)));

@@ -27,7 +27,6 @@ import javax.servlet.ServletContext;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.aop.config.AopConfigUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactoryUtils;
 import org.springframework.beans.factory.DisposableBean;
@@ -36,12 +35,7 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
-import org.springframework.beans.factory.support.BeanDefinitionRegistry;
-import org.springframework.beans.factory.support.RootBeanDefinition;
-import org.springframework.context.annotation.AnnotationConfigUtils;
-import org.springframework.core.Ordered;
 import org.springframework.web.context.ConfigurableWebApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import br.com.caelum.vraptor.config.BasicConfiguration;
 import br.com.caelum.vraptor.ioc.AbstractComponentRegistry;
@@ -54,7 +48,7 @@ public class SpringBasedContainer extends AbstractComponentRegistry implements C
 
 	private static final Logger logger = LoggerFactory.getLogger(SpringBasedContainer.class);
 
-    private final List<Class<?>> toRegister = new ArrayList<Class<?>>();
+    final List<Class<?>> toRegister = new ArrayList<Class<?>>();
 
 	private final ConfigurableWebApplicationContext parentContext;
 
@@ -101,8 +95,17 @@ public class SpringBasedContainer extends AbstractComponentRegistry implements C
 
 			public void postProcessBeanFactory(ConfigurableListableBeanFactory factory) throws BeansException {
 				SpringBasedContainer.this.registry = new SpringRegistry(factory, SpringBasedContainer.this);
-				loadBeanDefinitions(factory);
-				WebApplicationContextUtils.registerWebApplicationScopes(factory);
+
+				registry.configure();
+
+				registry.registerCustomComponents(toRegister);
+				if (config.isClasspathScanningEnabled()) {
+					scanWebInfClasses(factory);
+					scanPackages(factory);
+				} else {
+					logger.info("Classpath scanning disabled");
+				}
+
 			}
 		});
         parentContext.refresh();
@@ -130,25 +133,6 @@ public class SpringBasedContainer extends AbstractComponentRegistry implements C
 		return definition.getRole() < BeanDefinition.ROLE_INFRASTRUCTURE;
 	}
 
-	private void loadBeanDefinitions(ConfigurableListableBeanFactory configurableListableBeanFactory) {
-		registry.registerVRaptorComponents();
-
-		registerCustomComponentsOn(configurableListableBeanFactory);
-
-		if (config.isClasspathScanningEnabled()) {
-			scanWebInfClasses(configurableListableBeanFactory);
-			scanPackages(configurableListableBeanFactory);
-		} else {
-			logger.info("Classpath scanning disabled");
-		}
-
-		AnnotationConfigUtils.registerAnnotationConfigProcessors((BeanDefinitionRegistry) configurableListableBeanFactory);
-		AopConfigUtils.registerAspectJAnnotationAutoProxyCreatorIfNecessary((BeanDefinitionRegistry) configurableListableBeanFactory);
-		registerCustomInjectionProcessor(configurableListableBeanFactory);
-		registry.registerCachedComponentsOn();
-	}
-
-
 	private void scanPackages(ConfigurableListableBeanFactory configurableListableBeanFactory) {
 		if (config.hasBasePackages()) {
 			logger.info("Scanning packages from WEB-INF/classes and jars: {}", Arrays.toString(config.getBasePackages()));
@@ -171,18 +155,5 @@ public class SpringBasedContainer extends AbstractComponentRegistry implements C
 			logger.warn("Cant invoke ServletContext.getRealPath. Some application servers, as WebLogic, must be configured to be able to do so." +
 						" Or maybe your container is not exploding the war file. Not scanning WEB-INF/classes for VRaptor and Spring components.");
 		}
-	}
-
-	private void registerCustomComponentsOn(ConfigurableListableBeanFactory configurableListableBeanFactory) {
-		for (Class<?> type : toRegister) {
-			registry.register(type);
-		}
-	}
-
-	private void registerCustomInjectionProcessor(ConfigurableListableBeanFactory configurableListableBeanFactory) {
-		RootBeanDefinition definition = new RootBeanDefinition(InjectionBeanPostProcessor.class);
-		definition.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		definition.getPropertyValues().addPropertyValue("order", Ordered.LOWEST_PRECEDENCE);
-		((BeanDefinitionRegistry) configurableListableBeanFactory).registerBeanDefinition(AnnotationConfigUtils.AUTOWIRED_ANNOTATION_PROCESSOR_BEAN_NAME, definition);
 	}
 }

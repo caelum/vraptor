@@ -1,5 +1,8 @@
 package br.com.caelum.vraptor.ioc.spring;
 
+import java.util.List;
+
+import org.springframework.aop.config.AopConfigUtils;
 import org.springframework.aop.scope.ScopedProxyUtils;
 import org.springframework.beans.factory.annotation.AnnotatedGenericBeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -8,9 +11,13 @@ import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionReaderUtils;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
+import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.context.annotation.AnnotationBeanNameGenerator;
+import org.springframework.context.annotation.AnnotationConfigUtils;
 import org.springframework.context.annotation.ScopeMetadata;
 import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.core.Ordered;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.core.BaseComponents;
@@ -136,5 +143,31 @@ public class SpringRegistry {
 		registerApplicationScopedComponentsOn();
 		registerRequestScopedComponentsOn();
 		registerPrototypeScopedComponentsOn();
+	}
+
+	void registerCustomInjectionProcessor() {
+		RootBeanDefinition definition = new RootBeanDefinition(InjectionBeanPostProcessor.class);
+		definition.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
+		definition.getPropertyValues().addPropertyValue("order", Ordered.LOWEST_PRECEDENCE);
+		((BeanDefinitionRegistry) beanFactory).registerBeanDefinition(AnnotationConfigUtils.AUTOWIRED_ANNOTATION_PROCESSOR_BEAN_NAME, definition);
+	}
+
+	void registerCustomComponents(List<Class<?>> classes) {
+		for (Class<?> type : classes) {
+			register(type);
+		}
+	}
+
+	void configure() {
+		registerVRaptorComponents();
+
+		AnnotationConfigUtils.registerAnnotationConfigProcessors((BeanDefinitionRegistry) beanFactory);
+		AopConfigUtils.registerAspectJAnnotationAutoProxyCreatorIfNecessary((BeanDefinitionRegistry) beanFactory);
+
+		registerCustomInjectionProcessor();
+
+		registerCachedComponentsOn();
+
+		WebApplicationContextUtils.registerWebApplicationScopes(beanFactory);
 	}
 }

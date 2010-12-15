@@ -1,5 +1,30 @@
 [chapter ChangeLog]
 
+[section 3.2.1 (in dev)]
+
+* guice: @PostConstruct e @PreDestroy funcionando completamente
+* guice: todos os componentes request e session scoped são exportados para
+a view do mesmo jeito que com o spring (pelo nome da classe)
+
+* bugfix: @Transactional do Spring agora pode ser usado em qualquer classe
+(com as limitações do spring aop)
+* bugfix: upload de arquivos com mesmo nome
+* bugfix: web-fragments.xml no jboss 6
+* novas implementações de Download: ByteArrayDownload e JFreeChartDownload
+* nova view jsonp:
+[java]
+result.use(jsonp()).withCallback("oCallback").from(objeto).serialize();
+[/java]
+que retorna
+[code]
+aCallback({"objeto": {...}})
+[/code]
+* removida a dependência direta com o commons-io
+* métodos do PageResult renomeados para ficarem consistentes com o resto do sistema.
+* melhores logs de upload
+* refatoração nos converters do vraptor: agora eles usam o Localization para
+pegar o Locale e o bundle.
+
 [section 3.2.0]
 [list]
 * várias melhorias na performance: por volta de 60% menos no tempo de requisição.

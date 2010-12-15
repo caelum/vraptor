@@ -1,5 +1,27 @@
 [chapter ChangeLog]
 
+[section 3.2.1 (in dev)]
+* guice: @PostConstruct and @PreDestroy working properly
+* guice: all request and session scoped components are exported to the view in the
+same way as spring provider (class name as key)
+
+* bugfix: @Transactional from Spring can be used in any class (within spring aop limitations)
+* bugfix: upload of files with same name
+* bugfix: web-fragments.xml on jboss 6
+* new Download implementation: ByteArrayDownload and JFreeChartDownload
+* new jsonp view:
+[java]
+result.use(jsonp()).withCallback("theCallback").from(object).serialize();
+[/java]
+which returns
+[code]
+theCallback({"object": {...}})
+[/code]
+* commons-io dependency removed
+* PageResult methods renamed for consistency with other results.
+* better upload logs
+* refactor on converters: using Localization to get Locale and bundle 
+
 [section 3.2.0]
 [list]
 * several performance tweaks: about 60% less request time.

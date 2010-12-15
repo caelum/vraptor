@@ -8,9 +8,6 @@ import static org.mockito.Mockito.when;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -42,38 +39,14 @@ public class XStreamJSONPSerializationTest {
 			this.street = street;
 		}
 	}
-	public static class Client {
-		String name;
-		Address address;
-		public Client(String name) {
-			this.name = name;
-		}
-		public Client(String name, Address address) {
-			this.name = name;
-			this.address = address;
-		}
-	}
-
-	public static class Item {
-		String name;
-		double price;
-		public Item(String name, double price) {
-			this.name = name;
-			this.price = price;
-		}
-	}
 
 	public static class Order {
-		Client client;
 		double price;
 		String comments;
-		List<Item> items;
 
-		public Order(Client client, double price, String comments, Item... items) {
-			this.client = client;
+		public Order(double price, String comments) {
 			this.price = price;
 			this.comments = comments;
-			this.items = new ArrayList<Item>(Arrays.asList(items));
 		}
 		public String nice() {
 			return "nice output";
@@ -84,7 +57,7 @@ public class XStreamJSONPSerializationTest {
 	@Test
 	public void shouldIncludeCallbackPadding() {
 		String expectedResult = "myCallback({\"order\": {\n  \"price\": 15.0,\n  \"comments\": \"pack it nicely, please\"\n}})";
-		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
+		Order order = new Order(15.0, "pack it nicely, please");
 		serialization.withCallback("myCallback").from(order).serialize();
 		assertThat(result(), is(equalTo(expectedResult)));
 	}
@@ -92,6 +65,5 @@ public class XStreamJSONPSerializationTest {
 	private String result() {
 		return new String(stream.toByteArray());
 	}
-
 
 }

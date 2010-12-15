@@ -1,6 +1,7 @@
 package br.com.caelum.vraptor.ioc.spring;
 
-import java.util.Set;
+import java.util.Arrays;
+import java.util.Collection;
 
 import org.springframework.aop.config.AopConfigUtils;
 import org.springframework.aop.scope.ScopedProxyUtils;
@@ -20,24 +21,23 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.core.Ordered;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
-import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.core.BaseComponents;
 import br.com.caelum.vraptor.ioc.ComponentFactory;
-import br.com.caelum.vraptor.ioc.StereotypeHandler;
+import br.com.caelum.vraptor.ioc.Container;
 
 public class SpringRegistry {
 
 	private final BeanNameGenerator beanNameGenerator = new UniqueBeanNameGenerator(new AnnotationBeanNameGenerator());
 	private final ConfigurableListableBeanFactory beanFactory;
 	private final VRaptorScopeResolver scopeResolver = new VRaptorScopeResolver();
-	private final SpringBasedContainer container;
+	private final Container container;
 
-	public SpringRegistry(ConfigurableListableBeanFactory configurableListableBeanFactory, SpringBasedContainer container) {
+	public SpringRegistry(ConfigurableListableBeanFactory configurableListableBeanFactory, Container container) {
 		this.beanFactory = configurableListableBeanFactory;
 		this.container = container;
 	}
 
-	public void registerOn(Class<?> type, boolean customComponent) {
+	private void registerOn(Class<?> type, boolean customComponent) {
 		AnnotatedGenericBeanDefinition definition = new AnnotatedGenericBeanDefinition(type);
 		definition.setLazyInit(true);
 		definition.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_NO);
@@ -59,9 +59,7 @@ public class SpringRegistry {
 	}
 
 	/**
-	 * From
-	 * org.springframework.context.annotation.ClassPathBeanDefinitionScanner
-	 * #applyScope()
+	 * From org.springframework.context.annotation.ClassPathBeanDefinitionScanner#applyScope()
 	 * @param definition
 	 * @param scopeMetadata
 	 *
@@ -80,57 +78,51 @@ public class SpringRegistry {
 		}
 	}
 
-	void registerOn(Class<?> type) {
+	private void registerOn(Class<?> type) {
 		registerOn(type, false);
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	void registerFactory(final Class<?> type) {
+	@SuppressWarnings("unchecked")
+	private void registerFactory(final Class<?> type) {
 		if (ComponentFactory.class.isAssignableFrom(type)) {
 			beanFactory.registerSingleton(type.getName(), new ComponentFactoryBean(container, type));
 		}
 	}
 
 	void register(final Class<?> type) {
-		registerOn(type, true);
+		register(type, true);
+	}
+
+	private void register(final Class<?> type, boolean customComponent) {
+		registerOn(type, customComponent);
 		registerFactory(type);
 	}
 
-	void registerPrototypeScopedComponentsOn() {
+	private void registerPrototypeScopedComponentsOn() {
 		for (Class<?> prototypeComponent : BaseComponents.getPrototypeScoped().values()) {
 			registerOn(prototypeComponent);
 		}
 	}
 
-	void registerCachedComponentsOn() {
+	private void registerCachedComponentsOn() {
 		for (Class<?> cachedComponent : BaseComponents.getCachedComponents().values()) {
 			registerOn(cachedComponent, true);
 		}
 	}
 
-	void registerApplicationScopedComponentsOn() {
-		for (Class<?> type : BaseComponents.getApplicationScoped().values()) {
-			registerOn(type);
-			registerFactory(type);
-		}
+	private void registerApplicationScopedComponentsOn() {
+		registerComponents(BaseComponents.getApplicationScoped().values());
 
-		for (Class<? extends StereotypeHandler> handlerType : BaseComponents.getStereotypeHandlers()) {
-			registerOn(handlerType);
-		}
+		registerComponents(Arrays.asList(BaseComponents.getStereotypeHandlers()));
 
 		registerOn(StereotypedBeansRegistrar.class);
 		registerOn(DefaultSpringLocator.class);
 	}
 
-	void registerRequestScopedComponentsOn() {
-		for (Class<?> type : BaseComponents.getRequestScoped().values()) {
-			registerOn(type);
-			registerFactory(type);
-		}
+	private void registerRequestScopedComponentsOn() {
+		registerComponents(BaseComponents.getRequestScoped().values());
 
-		for (Class<? extends Converter<?>> converterType : BaseComponents.getBundledConverters()) {
-			registerOn(converterType);
-		}
+		registerComponents(BaseComponents.getBundledConverters());
 
 		registerOn(VRaptorRequestProvider.class, true);
 		registerOn(HttpServletRequestProvider.class, true);
@@ -140,22 +132,28 @@ public class SpringRegistry {
 		beanFactory.registerSingleton(SpringBasedContainer.class.getName(), container);
 	}
 
-	void registerVRaptorComponents() {
+	private void registerVRaptorComponents() {
 		registerApplicationScopedComponentsOn();
 		registerRequestScopedComponentsOn();
 		registerPrototypeScopedComponentsOn();
 	}
 
-	void registerCustomInjectionProcessor() {
+	private void registerCustomInjectionProcessor() {
 		RootBeanDefinition definition = new RootBeanDefinition(InjectionBeanPostProcessor.class);
 		definition.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
 		definition.getPropertyValues().addPropertyValue("order", Ordered.LOWEST_PRECEDENCE);
 		((BeanDefinitionRegistry) beanFactory).registerBeanDefinition(AnnotationConfigUtils.AUTOWIRED_ANNOTATION_PROCESSOR_BEAN_NAME, definition);
 	}
 
-	void registerComponents(Set<Class<?>> toRegister) {
+	void registerCustomComponents(Collection<Class<?>> toRegister) {
 		for (Class<?> type : toRegister) {
 			register(type);
+		}
+	}
+
+	private <T> void registerComponents(Collection<Class<? extends T>> toRegister) {
+		for (Class<?> type : toRegister) {
+			register(type, false);
 		}
 	}
 

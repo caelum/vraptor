@@ -45,13 +45,27 @@ import com.google.common.collect.Sets;
  */
 public class SpringBasedContainer extends AbstractComponentRegistry implements Container {
 
+	private static final class BeanRegistrationProcessor implements BeanFactoryPostProcessor {
+		private final SpringBasedContainer container;
+
+		public BeanRegistrationProcessor(SpringBasedContainer container) {
+			this.container = container;
+		}
+
+		public void postProcessBeanFactory(ConfigurableListableBeanFactory factory) throws BeansException {
+			SpringRegistry registry = new SpringRegistry(factory, container);
+
+			registry.configure();
+
+			registry.registerCustomComponents(container.toRegister);
+		}
+	}
+
 	private static final Logger logger = LoggerFactory.getLogger(SpringBasedContainer.class);
 
     final Set<Class<?>> toRegister = Sets.newHashSet();
 
 	private final ConfigurableWebApplicationContext parentContext;
-
-	private SpringRegistry registry;
 
     public SpringBasedContainer(ConfigurableWebApplicationContext parentContext) {
         this.parentContext = parentContext;
@@ -59,7 +73,8 @@ public class SpringBasedContainer extends AbstractComponentRegistry implements C
 
     public void register(Class<?> requiredType, Class<?> componentType) {
     	if (parentContext.isActive()) {
-    		this.registry.register(componentType);
+    		logger.info("registering class {} to {} after container initialization. Please avoid this", requiredType, componentType);
+    		new SpringRegistry(parentContext.getBeanFactory(), this).register(componentType);
 		} else {
 			toRegister.add(componentType);
 		}
@@ -86,16 +101,7 @@ public class SpringBasedContainer extends AbstractComponentRegistry implements C
 
     public void start(ServletContext context) {
         parentContext.setServletContext(context);
-        parentContext.addBeanFactoryPostProcessor(new BeanFactoryPostProcessor() {
-
-			public void postProcessBeanFactory(ConfigurableListableBeanFactory factory) throws BeansException {
-				SpringBasedContainer.this.registry = new SpringRegistry(factory, SpringBasedContainer.this);
-
-				registry.configure();
-
-				registry.registerComponents(toRegister);
-			}
-		});
+        parentContext.addBeanFactoryPostProcessor(new BeanRegistrationProcessor(this));
         parentContext.refresh();
 
         parentContext.start();

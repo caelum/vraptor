@@ -37,8 +37,7 @@ public class ComponentFactoryIntrospectorTest {
 		assertEquals(NeedsCustomInstantiation.class, targetType);
 	}
 
-	@SuppressWarnings("unchecked")
-	public static class FactoryWithoutTargetType implements ComponentFactory {
+	public static class FactoryWithoutTargetType implements ComponentFactory<Object> {
 		public Object getInstance() {
 			return null;
 		}

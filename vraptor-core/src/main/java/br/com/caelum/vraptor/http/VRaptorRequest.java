@@ -60,7 +60,7 @@ public class VRaptorRequest extends HttpServletRequestWrapper implements Mutable
 		return super.getParameter(name);
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public Enumeration getParameterNames() {
 		return new IteratorToEnumerationAdapter(getParameterMap().keySet().iterator());
@@ -74,7 +74,7 @@ public class VRaptorRequest extends HttpServletRequestWrapper implements Mutable
 		return super.getParameterValues(name);
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public Map getParameterMap() {
 		Map complete = new HashMap(super.getParameterMap());

@@ -17,6 +17,8 @@
 
 package br.com.caelum.vraptor.ioc.spring;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.FactoryBean;
 
 import br.com.caelum.vraptor.http.MutableResponse;
@@ -29,15 +31,14 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
  * @author Fabio Kung
  * @see org.springframework.web.context.request.ServletWebRequest
  */
-@SuppressWarnings("unchecked")
 @ApplicationScoped
-class HttpServletResponseProvider implements FactoryBean {
+class HttpServletResponseProvider implements FactoryBean<HttpServletResponse> {
 
-    public Object getObject() throws Exception {
+    public HttpServletResponse getObject() throws Exception {
         return VRaptorRequestHolder.currentRequest().getResponse();
     }
 
-    public Class<?> getObjectType() {
+    public Class<? extends HttpServletResponse> getObjectType() {
         return MutableResponse.class;
     }
 

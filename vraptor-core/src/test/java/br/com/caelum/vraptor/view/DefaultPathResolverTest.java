@@ -39,7 +39,8 @@ public class DefaultPathResolverTest {
 	private DefaultPathResolver resolver;
 
 
-    @Before
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+	@Before
     public void config() throws Exception {
     	MockitoAnnotations.initMocks(this);
 

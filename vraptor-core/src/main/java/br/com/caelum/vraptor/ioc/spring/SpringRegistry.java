@@ -82,7 +82,7 @@ public class SpringRegistry {
 		registerOn(type, false);
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void registerFactory(final Class<?> type) {
 		if (ComponentFactory.class.isAssignableFrom(type)) {
 			beanFactory.registerSingleton(type.getName(), new ComponentFactoryBean(container, type));

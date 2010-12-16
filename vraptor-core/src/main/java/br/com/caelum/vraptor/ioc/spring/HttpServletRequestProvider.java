@@ -17,6 +17,8 @@
 
 package br.com.caelum.vraptor.ioc.spring;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.FactoryBean;
 
 import br.com.caelum.vraptor.http.MutableRequest;
@@ -29,15 +31,14 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
  * @author Fabio Kung
  * @see org.springframework.web.context.request.RequestContextHolder
  */
-@SuppressWarnings("unchecked")
 @ApplicationScoped
-class HttpServletRequestProvider implements FactoryBean {
+class HttpServletRequestProvider implements FactoryBean<HttpServletRequest> {
 
-    public Object getObject() throws Exception {
+    public HttpServletRequest getObject() throws Exception {
         return VRaptorRequestHolder.currentRequest().getRequest();
     }
 
-    public Class<?> getObjectType() {
+    public Class<? extends HttpServletRequest> getObjectType() {
         return MutableRequest.class;
     }
 

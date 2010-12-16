@@ -32,9 +32,8 @@ import br.com.caelum.vraptor.ioc.StereotypeHandler;
 /**
  * @author Fabio Kung
  */
-@SuppressWarnings("unchecked")
 @ApplicationScoped
-public class StereotypedBeansRegistrar implements ApplicationListener {
+public class StereotypedBeansRegistrar implements ApplicationListener<ApplicationEvent> {
     private static final Logger LOGGER = LoggerFactory.getLogger(StereotypedBeansRegistrar.class);
 	private final List<StereotypeHandler> stereotypeHandlers;
 

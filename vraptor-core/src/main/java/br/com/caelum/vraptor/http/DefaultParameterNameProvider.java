@@ -40,7 +40,7 @@ public class DefaultParameterNameProvider implements ParameterNameProvider{
         return names;
     }
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "rawtypes" })
 	private Type[] parameterTypes(AccessibleObject methodOrConstructor) {
 		if (methodOrConstructor instanceof Method) {
 			return ((Method)methodOrConstructor).getGenericParameterTypes();

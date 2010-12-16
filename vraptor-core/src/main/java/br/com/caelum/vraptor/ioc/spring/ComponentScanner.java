@@ -51,7 +51,7 @@ class ComponentScanner extends ClassPathBeanDefinitionScanner {
 		setBeanNameGenerator(new UniqueBeanNameGenerator(new AnnotationBeanNameGenerator()));
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	protected void postProcessBeanDefinition(AbstractBeanDefinition beanDefinition, String beanName) {
 		super.postProcessBeanDefinition(beanDefinition, beanName);

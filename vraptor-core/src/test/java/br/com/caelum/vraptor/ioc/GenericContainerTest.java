@@ -59,12 +59,12 @@ import br.com.caelum.vraptor.http.route.Route;
 import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
 import br.com.caelum.vraptor.ioc.fixture.ComponentFactoryInTheClasspath;
+import br.com.caelum.vraptor.ioc.fixture.ComponentFactoryInTheClasspath.Provided;
 import br.com.caelum.vraptor.ioc.fixture.ConverterInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.CustomComponentInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.CustomComponentWithLifecycleInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.InterceptorInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.ResourceInTheClasspath;
-import br.com.caelum.vraptor.ioc.fixture.ComponentFactoryInTheClasspath.Provided;
 import br.com.caelum.vraptor.ioc.guice.GuiceProviderTest;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
@@ -88,7 +88,6 @@ public abstract class GenericContainerTest {
 
 	protected abstract void configureExpectations();
 
-	@SuppressWarnings("unchecked")
 	@Test
 	public void canProvideAllApplicationScopedComponents() {
 		checkAvailabilityFor(true, BaseComponents.getApplicationScoped().keySet());
@@ -101,7 +100,6 @@ public abstract class GenericContainerTest {
 		mockery.assertIsSatisfied();
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test
 	public void canProvideAllRequestScopedComponents() {
 		checkAvailabilityFor(false, BaseComponents.getRequestScoped().keySet());
@@ -173,13 +171,12 @@ public abstract class GenericContainerTest {
 
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test
 	public void processesCorrectlyPrototypeBasedComponents() {
 		registerAndGetFromContainer(MyPrototypeComponent.class, MyPrototypeComponent.class);
-		executeInsideRequest(new WhatToDo() {
+		executeInsideRequest(new WhatToDo<Object>() {
 			public Object execute(RequestInfo request, int counter) {
-				return provider.provideForRequest(request, new Execution() {
+				return provider.provideForRequest(request, new Execution<Object>() {
 					public Object insideRequest(Container container) {
 						ComponentRegistry registry = container.instanceFor(ComponentRegistry.class);
 						registry.register(MyPrototypeComponent.class, MyPrototypeComponent.class);

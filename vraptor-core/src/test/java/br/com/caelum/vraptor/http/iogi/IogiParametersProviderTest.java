@@ -40,11 +40,11 @@ import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.ListResourceBundle;
 import java.util.ResourceBundle;
-import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -281,9 +281,8 @@ public class IogiParametersProviderTest {
         mockery.assertIsSatisfied();
     }
 
-    @SuppressWarnings("unchecked")
-	public Enumeration enumerationFor(String... values) {
-        return new Vector(Arrays.asList(values)).elements();
+	public Enumeration<String> enumerationFor(String... values) {
+        return Collections.enumeration(Arrays.asList(values));
     }
 
     @Test

@@ -1,7 +1,5 @@
 package br.com.caelum.vraptor.jersey;
 
-import java.util.Set;
-
 import com.sun.jersey.api.model.AbstractResourceMethod;
 import com.sun.jersey.server.impl.application.DispatcherFactory;
 import com.sun.jersey.server.impl.model.method.dispatch.ResourceMethodDispatchProvider;

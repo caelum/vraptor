@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import com.sun.jersey.api.core.ResourceConfig;
 import com.sun.jersey.api.model.AbstractResourceMethod;
 import com.sun.jersey.core.spi.component.ioc.IoCComponentProviderFactory;
-import com.sun.jersey.core.spi.factory.InjectableProviderFactory;
 import com.sun.jersey.server.impl.application.DispatcherFactory;
 import com.sun.jersey.server.impl.application.WebApplicationImpl;
 import com.sun.jersey.server.impl.model.method.dispatch.ResourceMethodDispatchProvider;

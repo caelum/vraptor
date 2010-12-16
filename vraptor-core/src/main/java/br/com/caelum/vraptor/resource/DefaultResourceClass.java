@@ -27,10 +27,10 @@ public class DefaultResourceClass implements ResourceClass {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof DefaultResourceClass)) {
+		if (obj == null) {
 			return false;
 		}
-		if (obj == null) {
+		if (!(obj instanceof DefaultResourceClass)) {
 			return false;
 		}
 		DefaultResourceClass resource = (DefaultResourceClass) obj;

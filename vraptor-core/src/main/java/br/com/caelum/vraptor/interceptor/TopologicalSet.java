@@ -24,7 +24,7 @@ import java.util.Set;
 import br.com.caelum.vraptor.Intercepts;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.HashMultimap;
+import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 
@@ -42,7 +42,7 @@ public class TopologicalSet {
 	static interface FIRST extends Interceptor {};
 	private static interface LAST extends Interceptor {};
 
-	private Multimap<Class<? extends Interceptor>, Class<? extends Interceptor>> graph = HashMultimap.create();
+	private Multimap<Class<? extends Interceptor>, Class<? extends Interceptor>> graph = LinkedHashMultimap.create();
 
 	public boolean add(Class<? extends Interceptor> e) {
 		Intercepts intercepts = e.getAnnotation(Intercepts.class);

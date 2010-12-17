@@ -40,7 +40,9 @@ import br.com.caelum.vraptor.ioc.PrototypeScoped;
  * this behaviour can be change by providing your own RequestExecution.
  *
  * @author Guilherme Silveira
+ * @deprecated This class is deprecated. If you extend a request execution, consider using @Intercepts(after=..., before=...) instead.
  */
+@Deprecated
 @PrototypeScoped
 public class DefaultRequestExecution implements RequestExecution {
 

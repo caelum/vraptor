@@ -27,6 +27,8 @@ public class TopologicalSetTest {
 	@Intercepts(before=A.class, after=C.class)
 	static interface E extends Interceptor {}
 
+	static interface F extends Interceptor {}
+
 	@Test
 	public void returnsAddedClasses() throws Exception {
 		TopologicalSet set = new TopologicalSet();
@@ -74,6 +76,19 @@ public class TopologicalSetTest {
 		set.add(C.class);
 		set.add(E.class);
 		set.toList();
+	}
+
+	@Test
+	public void respectsInsertionOrderIfNoRelationIsSet() throws Exception {
+		TopologicalSet set = new TopologicalSet();
+		set.add(A.class);
+		set.add(F.class);
+		assertThat(set.toList(), contains(A.class, F.class));
+
+		set = new TopologicalSet();
+		set.add(F.class);
+		set.add(A.class);
+		assertThat(set.toList(), contains(F.class, A.class));
 	}
 
 	@Test

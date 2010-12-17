@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.InterceptionException;
+import br.com.caelum.vraptor.extra.ForwardToDefaultViewInterceptor;
 import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.ioc.PrototypeScoped;
 import br.com.caelum.vraptor.resource.ResourceMethod;
@@ -46,7 +47,7 @@ public class DefaultInterceptorStack implements InterceptorStack {
 
     public void next(ResourceMethod method, Object resourceInstance) throws InterceptionException {
         if (interceptors.isEmpty()) {
-        	logger.debug("All registered interceptors have being called. End of VRaptor Request Execution.");
+        	logger.debug("All registered interceptors have been called. End of VRaptor Request Execution.");
             return;
         }
         InterceptorHandler handler = interceptors.poll();
@@ -57,8 +58,12 @@ public class DefaultInterceptorStack implements InterceptorStack {
         this.interceptors.addLast(handlerFactory.handlerFor(type));
     }
 
+    //XXX this method will be removed soon
     public void addAsNext(Class<? extends Interceptor> type) {
-    	this.interceptors.addFirst(handlerFactory.handlerFor(type));
+    	if (!type.getPackage().getName().startsWith("br.com.caelum.vraptor.interceptor") &&
+    			!type.equals(ForwardToDefaultViewInterceptor.class)) {
+			this.interceptors.addFirst(handlerFactory.handlerFor(type));
+		}
     }
 
     @Override

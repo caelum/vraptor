@@ -39,7 +39,7 @@ import com.google.common.collect.Multimap;
  */
 public class TopologicalSet {
 
-	private static interface FIRST extends Interceptor {};
+	static interface FIRST extends Interceptor {};
 	private static interface LAST extends Interceptor {};
 
 	private Multimap<Class<? extends Interceptor>, Class<? extends Interceptor>> graph = HashMultimap.create();
@@ -53,6 +53,10 @@ public class TopologicalSet {
 
 			for (Class<? extends Interceptor> t : intercepts.after()) {
 				graph.put(t, e);
+			}
+			if (intercepts.before().length == 0 && intercepts.after().length == 0) {
+				graph.put(e, ExecuteMethodInterceptor.class);
+				graph.put(ResourceLookupInterceptor.class, e);
 			}
 		}
 		graph.put(FIRST.class, e);

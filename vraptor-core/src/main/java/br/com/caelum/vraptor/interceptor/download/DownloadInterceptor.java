@@ -59,7 +59,8 @@ public class DownloadInterceptor implements Interceptor {
 
 	public boolean accepts(ResourceMethod method) {
 		Class<?> type = method.getMethod().getReturnType();
-		return InputStream.class.isAssignableFrom(type) || type == File.class || Download.class.isAssignableFrom(type);
+		return InputStream.class.isAssignableFrom(type) || type == File.class || Download.class.isAssignableFrom(type)
+				|| type == byte[].class;
 	}
 
 	public void intercept(InterceptorStack stack, ResourceMethod method, Object instance) throws InterceptionException {

@@ -23,37 +23,39 @@ import br.com.caelum.vraptor.view.ResultException;
  * @since 3.2.1
  *
  */
-public class XStreamJSONPSerialization extends XStreamJSONSerialization implements JSONPSerialization {
+public class XStreamJSONPSerialization implements JSONPSerialization {
 
-	private String callbackName;
+	private final HttpServletResponse response;
+	private final TypeNameExtractor extractor;
+	private final ProxyInitializer initializer;
 
 	public XStreamJSONPSerialization(HttpServletResponse response, TypeNameExtractor extractor, ProxyInitializer initializer) {
-		super(response, extractor, initializer);
+		this.response = response;
+		this.extractor = extractor;
+		this.initializer = initializer;
+
 	}
 
-	public JSONSerialization withCallback(String callbackName) {
-		this.callbackName = callbackName;
-		return this;
-	}
-
-	@Override
-	protected SerializerBuilder getSerializer() {
-		try {
-
-			final PrintWriter writer = response.getWriter();
-			final StringWriter out = new StringWriter();
-			return new XStreamSerializer(getXStream(), new PrintWriter(out), extractor, initializer) {
-				@Override
-				public void serialize() {
-					super.serialize();
-					writer.print(callbackName + "(");
-					writer.print(out.getBuffer());
-					writer.print(")");
-					writer.close();
+	public JSONSerialization withCallback(final String callbackName) {
+		return new XStreamJSONSerialization(response, extractor, initializer) {
+			@Override
+			protected SerializerBuilder getSerializer() {
+				try {
+					final PrintWriter writer = response.getWriter();
+					final StringWriter out = new StringWriter();
+					return new XStreamSerializer(getXStream(), new PrintWriter(out), extractor, initializer) {
+						@Override
+						public void serialize() {
+							super.serialize();
+							writer.append(callbackName).append("(").append(out.getBuffer()).append(")");
+							writer.close();
+						}
+					};
+				} catch (IOException e) {
+					throw new ResultException("Unable to serialize data", e);
 				}
-			};
-		} catch (IOException e) {
-			throw new ResultException("Unable to serialize data", e);
-		}
+			}
+		};
 	}
+
 }

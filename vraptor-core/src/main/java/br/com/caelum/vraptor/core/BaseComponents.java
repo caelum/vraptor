@@ -127,11 +127,13 @@ import br.com.caelum.vraptor.restfulie.headers.RestDefaults;
 import br.com.caelum.vraptor.serialization.DefaultRepresentationResult;
 import br.com.caelum.vraptor.serialization.HTMLSerialization;
 import br.com.caelum.vraptor.serialization.HibernateProxyInitializer;
+import br.com.caelum.vraptor.serialization.JSONPSerialization;
 import br.com.caelum.vraptor.serialization.JSONSerialization;
 import br.com.caelum.vraptor.serialization.NullProxyInitializer;
 import br.com.caelum.vraptor.serialization.ProxyInitializer;
 import br.com.caelum.vraptor.serialization.RepresentationResult;
 import br.com.caelum.vraptor.serialization.XMLSerialization;
+import br.com.caelum.vraptor.serialization.xstream.XStreamJSONPSerialization;
 import br.com.caelum.vraptor.serialization.xstream.XStreamJSONSerialization;
 import br.com.caelum.vraptor.serialization.xstream.XStreamXMLSerialization;
 import br.com.caelum.vraptor.validator.BeanValidator;
@@ -235,6 +237,7 @@ public class BaseComponents {
             Status.class,									DefaultStatus.class,
             XMLSerialization.class,							XStreamXMLSerialization.class,
             JSONSerialization.class,						XStreamJSONSerialization.class,
+            JSONPSerialization.class,						XStreamJSONPSerialization.class,
             HTMLSerialization.class,						HTMLSerialization.class,
             RepresentationResult.class,						DefaultRepresentationResult.class,
             FormatResolver.class,							DefaultFormatResolver.class,

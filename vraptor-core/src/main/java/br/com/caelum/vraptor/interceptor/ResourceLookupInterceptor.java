@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.InterceptionException;
+import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.core.RequestInfo;
@@ -38,6 +39,7 @@ import br.com.caelum.vraptor.resource.ResourceNotFoundHandler;
  * @author Guilherme Silveira
  * @author Cecilia Fernandes
  */
+@Intercepts
 public class ResourceLookupInterceptor implements Interceptor {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ResourceLookupInterceptor.class);

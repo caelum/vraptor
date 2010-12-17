@@ -24,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.InterceptionException;
+import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.http.MutableResponse;
@@ -36,6 +37,7 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  * @author Adriano Almeida
  * @since 3.0.2
  */
+@Intercepts
 public class FlashInterceptor implements Interceptor {
 
 	final static String FLASH_INCLUDED_PARAMETERS = "br.com.caelum.vraptor.flash.parameters";

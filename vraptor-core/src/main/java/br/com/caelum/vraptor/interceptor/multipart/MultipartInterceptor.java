@@ -22,7 +22,7 @@ import br.com.caelum.vraptor.interceptor.Interceptor;
  * An interceptor which handles multipart requests.
  *
  * @author Guilherme Silveira
- * @author Otávio Scherer Gaecia
+ * @author Otávio Scherer Garcia
  * @since 3.1.3
  */
 public interface MultipartInterceptor extends Interceptor {

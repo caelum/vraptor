@@ -27,6 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.InterceptionException;
+import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.Lazy;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.core.InterceptorStack;
@@ -42,6 +43,7 @@ import br.com.caelum.vraptor.validator.Message;
  *
  * @author Guilherme Silveira
  */
+@Intercepts(after=ResourceLookupInterceptor.class)
 @Lazy
 public class ParametersInstantiatorInterceptor implements Interceptor {
     private final ParametersProvider provider;

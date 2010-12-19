@@ -24,7 +24,6 @@ import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.validator.Message;
 
 /**
  * Test class for uploading features with servlet 3.
@@ -34,32 +33,39 @@ import br.com.caelum.vraptor.validator.Message;
 public class Servlet3MultipartInterceptorTest {
 
     private Object instance;
-    @Mock private InterceptorStack stack;
-    @Mock private ResourceMethod method;
-    @Mock private HttpServletRequest request;
-    @Mock private MutableRequest parameters;
-    @Mock private Validator validator;
+    @Mock
+    private InterceptorStack stack;
+    @Mock
+    private ResourceMethod method;
+    @Mock
+    private HttpServletRequest request;
+    @Mock
+    private MutableRequest parameters;
+    @Mock
+    private Validator validator;
     private Servlet3MultipartInterceptor interceptor;
 
     @Before
     public void setup()
         throws Exception {
         MockitoAnnotations.initMocks(this);
-        interceptor = new Servlet3MultipartInterceptor(request, parameters, validator, new DefaultMultipartConfig());
+        interceptor = new Servlet3MultipartInterceptor(request, parameters, validator);
     }
 
     @Test
-    public void withFormURLEncoded()
+    public void notAcceptsWithFormURLEncoded()
         throws Exception {
         when(request.getContentType()).thenReturn("application/x-www-form-urlencoded");
+        when(request.getMethod()).thenReturn("POST");
 
         assertThat(interceptor.accepts(method), equalTo(false));
     }
 
     @Test
-    public void withMultipart()
+    public void shouldAcceptsWithMultipart()
         throws Exception {
         when(request.getContentType()).thenReturn("multipart/form-data");
+        when(request.getMethod()).thenReturn("POST");
 
         assertThat(interceptor.accepts(method), equalTo(true));
     }
@@ -68,6 +74,7 @@ public class Servlet3MultipartInterceptorTest {
     public void withoutFiles()
         throws Exception {
         when(request.getContentType()).thenReturn("multipart/form-data");
+        when(request.getMethod()).thenReturn("POST");
         when(request.getParts()).thenReturn(new ArrayList<Part>());
 
         interceptor.intercept(stack, method, instance);
@@ -82,6 +89,7 @@ public class Servlet3MultipartInterceptorTest {
         Part field1 = new VraptorPart("myField1", "other value");
 
         when(request.getContentType()).thenReturn("multipart/form-data");
+        when(request.getMethod()).thenReturn("POST");
         when(request.getParts()).thenReturn(Arrays.asList(field0, field1));
 
         interceptor.intercept(stack, method, instance);
@@ -97,6 +105,7 @@ public class Servlet3MultipartInterceptorTest {
         Part file0 = new VraptorPart("myFile0", "text/plain", "file.txt", "vraptor3".getBytes());
 
         when(request.getContentType()).thenReturn("multipart/form-data");
+        when(request.getMethod()).thenReturn("POST");
         when(request.getParts()).thenReturn(Arrays.asList(field0, field1, file0));
 
         interceptor.intercept(stack, method, instance);
@@ -111,7 +120,8 @@ public class Servlet3MultipartInterceptorTest {
         Part file1 = new VraptorPart("myFile0", "text/plain", "/a/unix/path/file.txt", "vraptor3".getBytes());
 
         when(request.getContentType()).thenReturn("multipart/form-data");
-        when(request.getParts()).thenReturn(Arrays.asList(file0,file1));
+        when(request.getMethod()).thenReturn("POST");
+        when(request.getParts()).thenReturn(Arrays.asList(file0, file1));
 
         interceptor.intercept(stack, method, instance);
 
@@ -119,13 +129,17 @@ public class Servlet3MultipartInterceptorTest {
     }
 
     @Test
-    public void exceedsSizeLimit()
+    public void filesWithSameName()
         throws Exception {
+        Part file0 = new VraptorPart("myFile0", "text/plain", "file.txt", "vraptor3".getBytes());
+        Part file1 = new VraptorPart("myFile1", "text/plain", "file.txt", "vraptor3".getBytes());
+
         when(request.getContentType()).thenReturn("multipart/form-data");
-        when(request.getParts()).thenThrow(new IllegalStateException());
+        when(request.getMethod()).thenReturn("POST");
+        when(request.getParts()).thenReturn(Arrays.asList(file0, file1));
 
         interceptor.intercept(stack, method, instance);
 
-        verify(validator).add(any(Message.class));
+        verify(parameters, atLeast(2)).setParameter(anyString(), anyString());
     }
 }

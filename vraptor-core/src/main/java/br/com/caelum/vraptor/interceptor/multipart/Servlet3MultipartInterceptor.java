@@ -20,9 +20,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.regex.Pattern;
 
+import javax.servlet.Filter;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Part;
 
@@ -36,7 +38,7 @@ import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.validator.ValidationMessage;
+import br.com.caelum.vraptor.validator.Validations;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.LinkedListMultimap;
@@ -46,12 +48,20 @@ import com.google.common.io.Closeables;
 
 /**
  * <p>
- * A multipart interceptor based on Servlet3 File Upload. It's only enabled if you're in Servlet 3 container.
+ * A multipart interceptor based on Servlet3 File Upload. It's only enabled if Servlet Part is avaliable. If you're
+ * using servlet3 upload features, the {@link MultipartConfig#getDirectory()} has no effect.
  * </p>
  * <p>
- * If you're using servlet3 upload features, the {@link MultipartConfig#getDirectory()} has no effect.
+ * TODO This interceptor fails in Apache Tomcat 7.x because request.getParts() doesn't work in a {@link Filter}. So you
+ * need to use {@link CommonsUploadMultipartInterceptor}. See bug
+ * https://issues.apache.org/bugzilla/show_bug.cgi?id=49711 and
+ * https://servlet-spec-public.dev.java.net/issues/show_bug.cgi?id=14 for more info.
  * </p>
- *
+ * <p>
+ * TODO According JSR315, all form fields are also avaliable via request.getParameter and request.getParameters(), but not
+ * all containers implements this issue (Glassfish 3.0 fails).
+ * </p>
+ * 
  * @author Otávio Scherer Garcia
  * @since 3.2
  * @see DefaultMultipartConfig
@@ -61,7 +71,8 @@ import com.google.common.io.Closeables;
 
 @Intercepts
 @RequestScoped
-public class Servlet3MultipartInterceptor implements MultipartInterceptor {
+public class Servlet3MultipartInterceptor
+    implements MultipartInterceptor {
 
     private static final Logger logger = LoggerFactory.getLogger(Servlet3MultipartInterceptor.class);
 
@@ -73,19 +84,20 @@ public class Servlet3MultipartInterceptor implements MultipartInterceptor {
     private final HttpServletRequest request;
     private final MutableRequest parameters;
     private final Validator validator;
-    private final MultipartConfig cfg;
 
-    public Servlet3MultipartInterceptor(HttpServletRequest request, MutableRequest parameters, Validator validator, MultipartConfig cfg) {
+    public Servlet3MultipartInterceptor(HttpServletRequest request, MutableRequest parameters, Validator validator) {
         this.request = request;
         this.parameters = parameters;
         this.validator = validator;
-        this.cfg = cfg;
     }
 
     /**
      * Only accept requests that contains multipart headers.
      */
     public boolean accepts(ResourceMethod method) {
+        if (!request.getMethod().toUpperCase().equals("POST"))
+            return false;
+
         String contentType = request.getContentType();
         return contentType != null && contentType.startsWith(ACCEPT_MULTIPART);
     }
@@ -97,26 +109,30 @@ public class Servlet3MultipartInterceptor implements MultipartInterceptor {
         final Multimap<String, String> params = LinkedListMultimap.create();
 
         try {
-            for (Part part : getParts(request)) {
-                String name = part.getName();
+            for (Part part : request.getParts()) {
+                final String name = part.getName();
 
                 if (isField(part)) {
                     logger.debug("{} is a field", name);
                     params.put(name, getStringValue(part));
 
-                } else if (isNotEmpty(part)) {
+                } else {
                     logger.debug("{} is a file", name);
 
                     String fileName = getFileName(part);
                     UploadedFile upload = new DefaultUploadedFile(part.getInputStream(), fileName, part.getContentType());
 
-                    parameters.setParameter(part.getName(), part.getName());
-                    request.setAttribute(part.getName(), upload);
-                } else {
-                    logger.warn("{} is an empty file", name);
+                    parameters.setParameter(name, name);
+                    request.setAttribute(name, upload);
                 }
             }
+        } catch (IllegalStateException e) {
+            reportSizeLimitExceeded(e);
+
         } catch (IOException e) {
+            throw new InterceptionException(e);
+
+        } catch (ServletException e) {
             throw new InterceptionException(e);
         }
 
@@ -129,42 +145,19 @@ public class Servlet3MultipartInterceptor implements MultipartInterceptor {
     }
 
     /**
-     * Gets all the Part components of this request, provided that it is of type multipart/form-data. If an
-     * IllegalStateException occurs (the max file size is reached) this method adds a message in validator.
+     * This method is called when the max upload size is reached. There are no way to get the maxFileSize() and
+     * maxRequestSize() attributes in a Filter.
+     * 
+     * @param e
      */
-    protected Collection<Part> getParts(HttpServletRequest request) {
-        try {
-            checkMaxSize();
-            return request.getParts();
+    protected void reportSizeLimitExceeded(final IllegalStateException e) {
+        validator.checking(new Validations() {
+            {
+                that(false, "upload", "servlet3.upload.filesize.exceeded");
+            }
+        });
 
-        } catch (IllegalStateException e) {
-            logger.warn("The file size limit was exceeded.", e);
-            validator.add(new ValidationMessage("upload", "file.limit.exceeded"));
-
-            return Collections.emptyList();
-
-        } catch (Exception e) {
-            throw new InterceptionException(e);
-        }
-    }
-
-    /**
-     * By the spec, if the request lengh (not each file) is gt configured max uploaded size we need to throw an
-     * {@link IllegalStateException}.
-     */
-    private void checkMaxSize() {
-        int length = request.getContentLength();
-        long limit = cfg.getSizeLimit();
-        if (length > limit) {
-            throw new IllegalStateException("max " + limit + ", actual " + length);
-        }
-    }
-
-    /**
-     * Check if the part has empty content.
-     */
-    private boolean isNotEmpty(Part part) {
-        return part.getSize() > 0;
+        logger.warn("The file size limit was exceeded.", e);
     }
 
     /**

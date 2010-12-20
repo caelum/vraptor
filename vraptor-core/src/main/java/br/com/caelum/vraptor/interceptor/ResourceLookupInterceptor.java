@@ -28,7 +28,6 @@ import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.http.UrlToResourceTranslator;
 import br.com.caelum.vraptor.http.route.MethodNotAllowedException;
 import br.com.caelum.vraptor.http.route.ResourceNotFoundException;
-import br.com.caelum.vraptor.interceptor.TopologicalSet.FIRST;
 import br.com.caelum.vraptor.resource.MethodNotAllowedHandler;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.resource.ResourceNotFoundHandler;
@@ -40,7 +39,7 @@ import br.com.caelum.vraptor.resource.ResourceNotFoundHandler;
  * @author Guilherme Silveira
  * @author Cecilia Fernandes
  */
-@Intercepts(after=FIRST.class)
+@Intercepts
 public class ResourceLookupInterceptor implements Interceptor {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ResourceLookupInterceptor.class);

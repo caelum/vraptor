@@ -17,6 +17,7 @@ package br.com.caelum.vraptor.interceptor;
 
 import java.util.List;
 
+import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
 /**
@@ -30,18 +31,44 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
 @ApplicationScoped
 public class TopologicalSortedInterceptorRegistry implements InterceptorRegistry {
 
-	private TopologicalSet set = new TopologicalSet();
-	private List<Class<? extends Interceptor>> ordered;
+	private Graph<Class<? extends Interceptor>> set = new Graph<Class<? extends Interceptor>>();
 
 	public List<Class<? extends Interceptor>> all() {
-		if (ordered == null) {
-			ordered = set.toList();
-		}
-		return ordered;
+		return set.topologicalOrder();
 	}
 
 	public void register(Class<? extends Interceptor>... interceptors) {
-		set.addAll(interceptors);
+		for (Class<? extends Interceptor> interceptor : interceptors) {
+			Intercepts intercepts = interceptor.getAnnotation(Intercepts.class);
+			if (intercepts != null) {
+				addEdges(interceptor, intercepts.before(), intercepts.after());
+
+				if (noRelationsSet(intercepts)) {
+					addDefaultEdges(interceptor);
+				}
+			} else {
+				addDefaultEdges(interceptor);
+			}
+		}
+	}
+
+	private void addDefaultEdges(Class<? extends Interceptor> interceptor) {
+		set.addEdge(interceptor, ExecuteMethodInterceptor.class);
+		if (!interceptor.equals(ResourceLookupInterceptor.class)) {
+			set.addEdge(ResourceLookupInterceptor.class, interceptor);
+		}
+	}
+
+	private boolean noRelationsSet(Intercepts intercepts) {
+		return intercepts.before().length == 0 && intercepts.after().length == 0;
+	}
+
+	private void addEdges(Class<? extends Interceptor> interceptor, Class<? extends Interceptor>[] before, Class<? extends Interceptor>[] after) {
+		set.addEdges(interceptor, before);
+
+		for (Class<? extends Interceptor> other : after) {
+			set.addEdge(other, interceptor);
+		}
 	}
 
 }

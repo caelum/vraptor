@@ -9,6 +9,8 @@
 	<dl class="equipe">
 		<dt>Washington Botelho</dt>
 		<dd>
+			<a href="http://www.wbotelhos.com/2010/12/18/jpa-and-vraptor-3/">JPA and VRaptor 3</a><br/>
+			<a href="http://www.wbotelhos.com/2010/11/24/getting-started-with-vraptor-3/">Getting Started with VRaptor 3</a><br/>
 			<a href="http://www.wbotelhos.com/2010/08/26/vraptor-3-evitando-circularreferenceexception-do-xstream/">VRaptor 3 – Evitando CircularReferenceException do XStream</a><br/>
 			<a href="http://wbotelhos.com/2010/07/28/upload-e-download-com-vraptor-3/">Upload e Download com VRaptor 3</a><br/>
 			<a href="http://wbotelhos.com/2010/04/23/controle-de-permissao-com-vraptor-3/"> Controle de Permissão com VRaptor 3</a><br/>

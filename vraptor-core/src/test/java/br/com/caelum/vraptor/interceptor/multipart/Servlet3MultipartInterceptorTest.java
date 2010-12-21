@@ -33,16 +33,11 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 public class Servlet3MultipartInterceptorTest {
 
     private Object instance;
-    @Mock
-    private InterceptorStack stack;
-    @Mock
-    private ResourceMethod method;
-    @Mock
-    private HttpServletRequest request;
-    @Mock
-    private MutableRequest parameters;
-    @Mock
-    private Validator validator;
+    @Mock private InterceptorStack stack;
+    @Mock private ResourceMethod method;
+    @Mock private HttpServletRequest request;
+    @Mock private MutableRequest parameters;
+    @Mock private Validator validator;
     private Servlet3MultipartInterceptor interceptor;
 
     @Before
@@ -53,7 +48,7 @@ public class Servlet3MultipartInterceptorTest {
     }
 
     @Test
-    public void notAcceptsWithFormURLEncoded()
+    public void shouldNotAcceptFormURLEncoded()
         throws Exception {
         when(request.getContentType()).thenReturn("application/x-www-form-urlencoded");
         when(request.getMethod()).thenReturn("POST");
@@ -62,7 +57,7 @@ public class Servlet3MultipartInterceptorTest {
     }
 
     @Test
-    public void shouldAcceptsWithMultipart()
+    public void shouldAcceptMultipart()
         throws Exception {
         when(request.getContentType()).thenReturn("multipart/form-data");
         when(request.getMethod()).thenReturn("POST");
@@ -83,7 +78,7 @@ public class Servlet3MultipartInterceptorTest {
     }
 
     @Test
-    public void withOnlyFields()
+    public void withFieldsOnly()
         throws Exception {
         Part field0 = new VraptorPart("myField0", "the value");
         Part field1 = new VraptorPart("myField1", "other value");

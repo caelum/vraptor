@@ -64,5 +64,4 @@ public class DefaultUploadedFile implements UploadedFile {
     public String getCompleteFileName() {
         return this.completeFileName;
     }
-
 }

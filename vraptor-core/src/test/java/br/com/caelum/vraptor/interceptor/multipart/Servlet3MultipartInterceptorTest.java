@@ -4,12 +4,11 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.atLeast;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 import javax.servlet.http.HttpServletRequest;
@@ -66,18 +65,6 @@ public class Servlet3MultipartInterceptorTest {
     }
 
     @Test
-    public void withoutFiles()
-        throws Exception {
-        when(request.getContentType()).thenReturn("multipart/form-data");
-        when(request.getMethod()).thenReturn("POST");
-        when(request.getParts()).thenReturn(new ArrayList<Part>());
-
-        interceptor.intercept(stack, method, instance);
-
-        verify(parameters, never()).setParameter(any(String.class), anyString());
-    }
-
-    @Test
     public void withFieldsOnly()
         throws Exception {
         Part field0 = new VraptorPart("myField0", "the value");
@@ -89,45 +76,41 @@ public class Servlet3MultipartInterceptorTest {
 
         interceptor.intercept(stack, method, instance);
 
-        verify(parameters, atLeast(2)).setParameter(anyString(), anyString());
+        verify(parameters).setParameter("myField0", "the value");
+        verify(parameters).setParameter("myField1", "other value");
     }
 
     @Test
     public void withFieldsAndFiles()
         throws Exception {
-        Part field0 = new VraptorPart("myField0", "the value");
-        Part field1 = new VraptorPart("myField1", "other value");
-        Part file0 = new VraptorPart("myFile0", "text/plain", "file.txt", "vraptor3".getBytes());
+        Part f0 = new VraptorPart("myField0", "the value");
+        Part f1 = new VraptorPart("myField1", "other value");
+        Part f2 = new VraptorPart("myFile0", "text/plain", "file1.txt", "vraptor3".getBytes());
+        Part f3 = new VraptorPart("myFile1", "text/plain", "file2.txt", "vraptor3".getBytes());
 
         when(request.getContentType()).thenReturn("multipart/form-data");
         when(request.getMethod()).thenReturn("POST");
-        when(request.getParts()).thenReturn(Arrays.asList(field0, field1, file0));
+        when(request.getParts()).thenReturn(Arrays.asList(f0, f1, f2, f3));
 
         interceptor.intercept(stack, method, instance);
 
         verify(parameters, atLeast(3)).setParameter(anyString(), anyString());
-    }
-
-    @Test
-    public void withCompleteFilePath()
-        throws Exception {
-        Part file0 = new VraptorPart("myFile0", "text/plain", "c:\\a\\windows\\path\\file.txt", "vraptor3".getBytes());
-        Part file1 = new VraptorPart("myFile0", "text/plain", "/a/unix/path/file.txt", "vraptor3".getBytes());
-
-        when(request.getContentType()).thenReturn("multipart/form-data");
-        when(request.getMethod()).thenReturn("POST");
-        when(request.getParts()).thenReturn(Arrays.asList(file0, file1));
-
-        interceptor.intercept(stack, method, instance);
-
-        verify(parameters, atLeast(2)).setParameter(anyString(), anyString());
+        
+        verify(parameters).setParameter("myField0", "the value");
+        verify(parameters).setParameter("myField1", "other value");
+        
+        verify(parameters).setParameter("myFile0", "myFile0");
+        verify(parameters).setParameter("myFile1", "myFile1");
+        
+        verify(request).setAttribute(eq("myFile0"), any(UploadedFile.class));
+        verify(request).setAttribute(eq("myFile1"), any(UploadedFile.class));
     }
 
     @Test
     public void filesWithSameName()
         throws Exception {
-        Part file0 = new VraptorPart("myFile0", "text/plain", "file.txt", "vraptor3".getBytes());
-        Part file1 = new VraptorPart("myFile1", "text/plain", "file.txt", "vraptor3".getBytes());
+        Part file0 = new VraptorPart("myfile0", "text/plain", "file.txt", "vraptor3".getBytes());
+        Part file1 = new VraptorPart("myfile1", "text/plain", "file.txt", "vraptor3".getBytes());
 
         when(request.getContentType()).thenReturn("multipart/form-data");
         when(request.getMethod()).thenReturn("POST");
@@ -135,6 +118,10 @@ public class Servlet3MultipartInterceptorTest {
 
         interceptor.intercept(stack, method, instance);
 
-        verify(parameters, atLeast(2)).setParameter(anyString(), anyString());
+        verify(parameters).setParameter("myfile0", "myfile0");
+        verify(parameters).setParameter("myfile1", "myfile1");
+        
+        verify(request).setAttribute(eq("myfile0"), any(UploadedFile.class));
+        verify(request).setAttribute(eq("myfile1"), any(UploadedFile.class));
     }
 }

@@ -8,22 +8,24 @@ import org.junit.Test;
 
 public class DefaultUploadedFileTest {
 
-	@Test
+	private static final NullInputStream CONTENT = new NullInputStream(0);
+
+    @Test
 	public void usingUnixLikeSeparators() throws Exception {
-		DefaultUploadedFile file = new DefaultUploadedFile(new NullInputStream(0), "/a/unix/path/file.txt", "text/plain");
+		DefaultUploadedFile file = new DefaultUploadedFile(CONTENT, "/a/unix/path/file.txt", "text/plain");
 
 		assertThat(file.getFileName(), is("file.txt"));
 	}
 
 	@Test
 	public void usingWindowsLikeSeparators() throws Exception {
-		DefaultUploadedFile file = new DefaultUploadedFile(new NullInputStream(0), "C:\\a\\windows\\path\\file.txt", "text/plain");
+		DefaultUploadedFile file = new DefaultUploadedFile(CONTENT, "C:\\a\\windows\\path\\file.txt", "text/plain");
 
 		assertThat(file.getFileName(), is("file.txt"));
 	}
 	
 	public void usingOnlyFilename() {
-        DefaultUploadedFile file = new DefaultUploadedFile(new NullInputStream(0), "file.txt", "text/plain");
+        DefaultUploadedFile file = new DefaultUploadedFile(CONTENT, "file.txt", "text/plain");
 
         assertThat(file.getFileName(), is("file.txt"));
 	}

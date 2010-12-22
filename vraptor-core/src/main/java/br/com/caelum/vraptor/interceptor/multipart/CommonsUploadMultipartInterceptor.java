@@ -105,9 +105,12 @@ public class CommonsUploadMultipartInterceptor
                     logger.debug("{} is a field", name);
                     params.put(name, getValue(item));
 
-                } else {
+                } else if (isNotEmpty(item)) {
                     logger.debug("{} is a file", name);
                     processFile(item, name);
+                    
+                } else {
+                    logger.debug("A file field was empty: {}",  item.getFieldName());
                 }
             }
 
@@ -125,6 +128,10 @@ public class CommonsUploadMultipartInterceptor
         }
 
         stack.next(method, instance);
+    }
+
+    private boolean isNotEmpty(FileItem item) {
+        return item.getName().length() > 0;
     }
 
     /**

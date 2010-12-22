@@ -20,15 +20,12 @@ package br.com.caelum.vraptor.interceptor.multipart;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
-import br.com.caelum.vraptor.ioc.PrototypeScoped;
-
 /**
  * Default implementation for {@link ServletFileUploadCreator}. Creates a {@link ServletFileUpload} object to using with
  * commons-fileupload.
  * 
  * @author Otávio Scherer Garcia
  */
-@PrototypeScoped
 public class DefaultServletFileUploadCreator
     implements ServletFileUploadCreator {
 

@@ -28,6 +28,7 @@ import br.com.caelum.vraptor.Lazy;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodInfo;
+import br.com.caelum.vraptor.extra.ForwardToDefaultViewInterceptor;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**
@@ -35,7 +36,7 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  *
  * @author guilherme silveira
  */
-@Intercepts(after=ExecuteMethodInterceptor.class)
+@Intercepts(after=ExecuteMethodInterceptor.class, before=ForwardToDefaultViewInterceptor.class)
 @Lazy
 public class OutjectResult implements Interceptor {
 

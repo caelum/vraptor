@@ -37,7 +37,7 @@ import br.com.caelum.vraptor.validator.ValidationException;
  *
  * @author Guilherme Silveira
  */
-@Intercepts(after=ParametersInstantiatorInterceptor.class)
+@Intercepts(after=ParametersInstantiatorInterceptor.class, before={})
 public class ExecuteMethodInterceptor implements Interceptor {
 
 	private final MethodInfo info;

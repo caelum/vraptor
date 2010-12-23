@@ -117,7 +117,7 @@ public class Graph<E> {
 			return;
 		}
 
-		for (E key : graph.keySet()) {
+		for (E key : newHashSet(graph.keySet())) {
 			for (E value : leaves) {
 				graph.remove(key, value);
 			}

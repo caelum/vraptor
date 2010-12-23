@@ -35,7 +35,7 @@ import br.com.caelum.vraptor.view.Results;
  *
  * @author Guilherme Silveira
  */
-@Intercepts(after=ExecuteMethodInterceptor.class)
+@Intercepts(after=ExecuteMethodInterceptor.class, before={})
 public class ForwardToDefaultViewInterceptor implements Interceptor {
     private final Result result;
 

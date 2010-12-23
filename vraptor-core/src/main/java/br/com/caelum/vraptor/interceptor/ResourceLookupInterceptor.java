@@ -39,7 +39,7 @@ import br.com.caelum.vraptor.resource.ResourceNotFoundHandler;
  * @author Guilherme Silveira
  * @author Cecilia Fernandes
  */
-@Intercepts
+@Intercepts(after={})
 public class ResourceLookupInterceptor implements Interceptor {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ResourceLookupInterceptor.class);

@@ -42,10 +42,6 @@ public class TopologicalSortedInterceptorRegistry implements InterceptorRegistry
 			Intercepts intercepts = interceptor.getAnnotation(Intercepts.class);
 			if (intercepts != null) {
 				addEdges(interceptor, intercepts.before(), intercepts.after());
-
-				if (noRelationsSet(intercepts)) {
-					addDefaultEdges(interceptor);
-				}
 			} else {
 				addDefaultEdges(interceptor);
 			}
@@ -57,10 +53,6 @@ public class TopologicalSortedInterceptorRegistry implements InterceptorRegistry
 		if (!interceptor.equals(ResourceLookupInterceptor.class)) {
 			set.addEdge(ResourceLookupInterceptor.class, interceptor);
 		}
-	}
-
-	private boolean noRelationsSet(Intercepts intercepts) {
-		return intercepts.before().length == 0 && intercepts.after().length == 0;
 	}
 
 	private void addEdges(Class<? extends Interceptor> interceptor, Class<? extends Interceptor>[] before, Class<? extends Interceptor>[] after) {

@@ -15,6 +15,8 @@
  */
 package br.com.caelum.vraptor.serialization.xstream;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.io.Writer;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
@@ -116,9 +118,7 @@ public class XStreamSerializer implements SerializerBuilder {
 	}
 
 	private void preConfigure(Object obj,String alias) {
-		if (obj == null) {
-			throw new NullPointerException("You can't serialize null objects");
-		}
+		checkNotNull(obj, "You can't serialize null objects");
 
 		xstream.processAnnotations(obj.getClass());
 
@@ -127,19 +127,31 @@ public class XStreamSerializer implements SerializerBuilder {
 			alias = extractor.nameFor(rootClass);
 		}
 
+		setRoot(obj);
+
+		setAlias(obj, alias);
+	}
+
+	private void setRoot(Object obj) {
 		if (Collection.class.isInstance(obj)) {
-			List<Object> list = new ArrayList<Object>((Collection<?>)obj);
-			elementTypes = findElementTypes(list);
-			for (Class<?> type : elementTypes) {
-				excludeNonPrimitiveFields(type);
-			}
-			this.root = list;
+			this.root = normalizeList(obj);
 		} else {
 			Class<?> type = rootClass;
 			excludeNonPrimitiveFields(type);
 			this.root = obj;
 		}
+	}
 
+	private List<Object> normalizeList(Object obj) {
+		List<Object> list = new ArrayList<Object>((Collection<?>)obj);
+		elementTypes = findElementTypes(list);
+		for (Class<?> type : elementTypes) {
+			excludeNonPrimitiveFields(type);
+		}
+		return list;
+	}
+
+	private void setAlias(Object obj, String alias) {
 		if (alias != null) {
 			if (Collection.class.isInstance(obj)) {
 				xstream.alias(alias, List.class);

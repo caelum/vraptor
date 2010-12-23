@@ -37,31 +37,21 @@ public class DefaultTypeNameExtractor implements TypeNameExtractor {
 
 	public String nameFor(Type generic) {
 		if (generic instanceof ParameterizedType) {
-			ParameterizedType type = (ParameterizedType) generic;
-			Class<?> raw = (Class<?>) type.getRawType();
-			if (Collection.class.isAssignableFrom(raw)) {
-				return nameFor(type.getActualTypeArguments()[0]) + "List";
-			}
-			return nameFor(raw);
+			return nameFor((ParameterizedType) generic);
 		}
 
 		if (generic instanceof WildcardType) {
-			WildcardType wild = (WildcardType) generic;
-			if ((wild.getLowerBounds().length != 0)) {
-				return nameFor(wild.getLowerBounds()[0]);
-			} else {
-				return nameFor(wild.getUpperBounds()[0]);
-			}
+			return nameFor((WildcardType) generic);
 		}
 
 		if (generic instanceof TypeVariable<?>) {
-			TypeVariable<?> variable = (TypeVariable<?>) generic;
-			return StringUtils.lowercaseFirst(variable.getName());
+			return nameFor(((TypeVariable<?>) generic));
 		}
 
-		Class<?> raw = (Class<?>) generic;
+		return nameFor((Class<?>) generic);
+	}
 
-
+	private String nameFor(Class<?> raw) {
 		if (raw.isArray()) {
 			return nameFor(raw.getComponentType()) + "List";
 		}
@@ -69,6 +59,26 @@ public class DefaultTypeNameExtractor implements TypeNameExtractor {
 		String name = raw.getSimpleName();
 
 		return StringUtils.lowercaseFirst(name);
+	}
+
+	private String nameFor(TypeVariable<?> variable) {
+		return StringUtils.lowercaseFirst(variable.getName());
+	}
+
+	private String nameFor(WildcardType wild) {
+		if ((wild.getLowerBounds().length != 0)) {
+			return nameFor(wild.getLowerBounds()[0]);
+		} else {
+			return nameFor(wild.getUpperBounds()[0]);
+		}
+	}
+
+	private String nameFor(ParameterizedType type) {
+		Class<?> raw = (Class<?>) type.getRawType();
+		if (Collection.class.isAssignableFrom(raw)) {
+			return nameFor(type.getActualTypeArguments()[0]) + "List";
+		}
+		return nameFor(raw);
 	}
 
 }

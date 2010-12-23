@@ -17,6 +17,8 @@
 
 package br.com.caelum.vraptor.resource;
 
+import static com.google.common.base.Objects.equal;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
@@ -77,21 +79,7 @@ public class DefaultResourceMethod implements ResourceMethod {
 			return false;
 		}
 		DefaultResourceMethod other = (DefaultResourceMethod) obj;
-		if (method == null) {
-			if (other.method != null) {
-				return false;
-			}
-		} else if (!method.equals(other.method)) {
-			return false;
-		}
-		if (resource == null) {
-			if (other.resource != null) {
-				return false;
-			}
-		} else if (!resource.equals(other.resource)) {
-			return false;
-		}
-		return true;
+		return equal(method, other.method) && equal(resource, other.resource);
 	}
 
 }

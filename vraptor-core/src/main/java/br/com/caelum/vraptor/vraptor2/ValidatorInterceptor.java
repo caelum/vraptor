@@ -17,11 +17,11 @@
 
 package br.com.caelum.vraptor.vraptor2;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
+
+import net.vidageek.mirror.dsl.Mirror;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,42 +74,9 @@ public class ValidatorInterceptor implements Interceptor {
 
     public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws InterceptionException {
         if (Info.isOldComponent(method.getResource())) {
-            Class<?> type = method.getResource().getType();
-            Method validationMethod = getValidationFor(method.getMethod(), type);
-            if (validationMethod != null) {
-                List<Message> convertionErrors = new ArrayList<Message>();
-                ResourceBundle bundle = localization.getBundle();
-                Object[] parameters = provider.getParametersFor(method, convertionErrors, bundle);
-                Object[] validationParameters = new Object[parameters.length + 1];
-                BasicValidationErrors newErrors = new BasicValidationErrors();
-                validationParameters[0] = newErrors;
-                System.arraycopy(parameters, 0, validationParameters, 1, parameters.length);
-                try {
-                    validationMethod.invoke(resourceInstance, validationParameters);
-                } catch (IllegalArgumentException e) {
-                    throw new InterceptionException("Unable to validate.", e);
-                } catch (IllegalAccessException e) {
-                    throw new InterceptionException("Unable to validate.", e);
-                } catch (InvocationTargetException e) {
-                    throw new InterceptionException("Unable to validate.", e.getCause());
-                }
-                for (Message msg : convertionErrors) {
-                    errors.add(new FixedMessage(msg.getCategory(), msg.getMessage(), msg.getCategory()));
-                }
-                for (org.vraptor.i18n.ValidationMessage msg : newErrors) {
-                    if (msg instanceof FixedMessage) {
-                        errors.add(msg);
-                    } else if (msg instanceof org.vraptor.i18n.Message) {
-                        org.vraptor.i18n.Message m = (org.vraptor.i18n.Message) msg;
-                        String content = localization.getMessage(m.getKey(), m.getParameters());
-                        errors.add(new FixedMessage(msg.getPath(), content, msg.getCategory()));
-                    } else {
-                        throw new IllegalArgumentException("Unsupported validation message type: " + msg.getClass().getName());
-                    }
-                }
-            }
+            invokeValidationMethod(method, resourceInstance);
             if (errors.size() != 0) {
-                this.outjection.outject(resourceInstance, type);
+                this.outjection.outject(resourceInstance, method.getResource().getType());
                 this.result.include("errors", errors);
                 this.info.setResult("invalid");
                 this.result.use(Results.page()).defaultView();
@@ -119,7 +86,50 @@ public class ValidatorInterceptor implements Interceptor {
         stack.next(method, resourceInstance);
     }
 
-    private <T> Method getValidationFor(Method method, Class<T> type) {
+	private void invokeValidationMethod(ResourceMethod method, Object resourceInstance) {
+		Method validationMethod = getValidationFor(method);
+		if (validationMethod == null) {
+			return;
+		}
+		List<Message> convertionErrors = new ArrayList<Message>();
+		Object[] parameters = provider.getParametersFor(method, convertionErrors, localization.getBundle());
+		BasicValidationErrors newErrors = new BasicValidationErrors();
+		Object[] validationParameters = createValidatonParameters(newErrors, parameters);
+		new Mirror().on(resourceInstance).invoke().method(validationMethod).withArgs(validationParameters);
+		addConvertionErrors(convertionErrors);
+		convertErrors(newErrors);
+	}
+
+	private Object[] createValidatonParameters(BasicValidationErrors newErrors, Object[] parameters) {
+		Object[] validationParameters = new Object[parameters.length + 1];
+		validationParameters[0] = newErrors;
+		System.arraycopy(parameters, 0, validationParameters, 1, parameters.length);
+		return validationParameters;
+	}
+
+	private void addConvertionErrors(List<Message> convertionErrors) {
+		for (Message msg : convertionErrors) {
+		    errors.add(new FixedMessage(msg.getCategory(), msg.getMessage(), msg.getCategory()));
+		}
+	}
+
+	private void convertErrors(BasicValidationErrors newErrors) {
+		for (org.vraptor.i18n.ValidationMessage msg : newErrors) {
+		    if (msg instanceof FixedMessage) {
+		        errors.add(msg);
+		    } else if (msg instanceof org.vraptor.i18n.Message) {
+		        org.vraptor.i18n.Message m = (org.vraptor.i18n.Message) msg;
+		        String content = localization.getMessage(m.getKey(), (Object[]) m.getParameters());
+		        errors.add(new FixedMessage(msg.getPath(), content, msg.getCategory()));
+		    } else {
+		        throw new IllegalArgumentException("Unsupported validation message type: " + msg.getClass().getName());
+		    }
+		}
+	}
+
+    private <T> Method getValidationFor(ResourceMethod resourceMethod) {
+    	Class<?> type = resourceMethod.getResource().getType();
+    	Method method = resourceMethod.getMethod();
         String validationMethodName = "validate" + capitalize(method.getName());
         for (Method m : type.getDeclaredMethods()) {
             if (m.getName().equals(validationMethodName)) {

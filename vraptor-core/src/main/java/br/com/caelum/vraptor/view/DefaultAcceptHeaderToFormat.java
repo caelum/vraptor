@@ -16,16 +16,20 @@
  */
 package br.com.caelum.vraptor.view;
 
-import java.util.ArrayList;
+import static com.google.common.collect.Collections2.transform;
+import static com.google.common.collect.Sets.newTreeSet;
+
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.util.LRUCache;
+
+import com.google.common.base.Function;
 
 /**
  * The default AcceptHeaderToFormat implementation searches for registered mime types. It also
@@ -66,6 +70,10 @@ public class DefaultAcceptHeaderToFormat implements AcceptHeaderToFormat {
 			return acceptToFormatCache.get(acceptHeader);
 		}
 
+		return chooseMimeType(acceptHeader);
+	}
+
+	private String chooseMimeType(String acceptHeader) {
 		String[] mimeTypes = getOrderedMimeTypes(acceptHeader);
 
 		for (String mimeType : mimeTypes) {
@@ -97,6 +105,7 @@ public class DefaultAcceptHeaderToFormat implements AcceptHeaderToFormat {
 			return type;
 		}
 
+		@Override
 		public String toString() {
 			return type;
 		}
@@ -106,40 +115,43 @@ public class DefaultAcceptHeaderToFormat implements AcceptHeaderToFormat {
 		String[] types = acceptHeader.split(",");
 
 		if (types.length == 0) {
-			if (types[0].contains(";")) {
-				return new String[] { types[0].substring(0, types[0].indexOf(';')) };
-			}
-			return new String[] { types[0] };
+			return new String[] { types[0].split(";")[0] };
 		}
 
-		List<MimeType> mimes = new ArrayList<MimeType>();
+		Set<MimeType> mimes = newTreeSet();
 		for (String string : types) {
-			if (string.contains("*/*")) {
-				mimes.add(new MimeType("text/html", DEFAULT_QUALIFIER_VALUE));
-				continue;
-			} else if (string.contains(";")) {
-				String type = string.substring(0, string.indexOf(';'));
-				double qualifier = DEFAULT_QUALIFIER_VALUE;
-				if (string.contains("q=")) {
-					Matcher matcher = Pattern.compile("\\s*q=(.+)\\s*").matcher(string);
-					matcher.find();
-					String value = matcher.group(1);
-					qualifier = Double.parseDouble(value);
-				}
+			mimes.add(convertToMimeType(string));
+		}
 
-				mimes.add(new MimeType(type, qualifier));
-			} else {
-				mimes.add(new MimeType(string, 1));
+		return transform(mimes, mimeType()).toArray(new String[mimes.size()]);
+	}
+
+	private Function<MimeType, String> mimeType() {
+		return new Function<MimeType, String>() {
+			public String apply(MimeType mime) {
+				return mime.getType().trim();
 			}
+		};
+	}
+
+	private MimeType convertToMimeType(String string) {
+		if (string.contains("*/*")) {
+			return new MimeType("text/html", DEFAULT_QUALIFIER_VALUE);
+		} else if (string.contains(";")) {
+			String type = string.substring(0, string.indexOf(';'));
+			return new MimeType(type, extractQualifier(string));
 		}
+		return new MimeType(string, 1);
+	}
 
-		Collections.sort(mimes);
-
-		String[] orderedTypes = new String[mimes.size()];
-		for (int i = 0; i < mimes.size(); i++) {
-			orderedTypes[i] = mimes.get(i).getType().trim();
+	private double extractQualifier(String string) {
+		double qualifier = DEFAULT_QUALIFIER_VALUE;
+		if (string.contains("q=")) {
+			Matcher matcher = Pattern.compile("\\s*q=(.+)\\s*").matcher(string);
+			matcher.find();
+			String value = matcher.group(1);
+			qualifier = Double.parseDouble(value);
 		}
-
-		return orderedTypes;
+		return qualifier;
 	}
 }

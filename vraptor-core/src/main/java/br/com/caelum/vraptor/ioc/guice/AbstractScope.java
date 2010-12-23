@@ -27,38 +27,46 @@ public abstract class AbstractScope implements Scope {
 	abstract String getScopeName();
 
 	public <T> Provider<T> scope(final Key<T> key, final Provider<T> creator) {
-		return new Provider<T>() {
-			private String name;
+		return new ScopedProvider<T>(key, creator);
+	}
 
-			public T get() {
-				ScopeHolder holder = getHolder();
-				synchronized (holder) {
-					Object obj = holder.getAttribute(getName());
-					if (NullObject.INSTANCE == obj) {
-						return null;
-					}
-					@SuppressWarnings("unchecked")
-					T t = (T) obj;
-					if (t == null) {
-						t = creator.get();
-						holder.setAttribute(getName(), (t != null) ? t : NullObject.INSTANCE);
-					}
-					return t;
+	private class ScopedProvider<T> implements Provider<T> {
+		private final Key<T> key;
+		private final Provider<T> creator;
+		private String name;
+
+		private ScopedProvider(Key<T> key, Provider<T> creator) {
+			this.key = key;
+			this.creator = creator;
+		}
+
+		public T get() {
+			ScopeHolder holder = getHolder();
+			synchronized (holder) {
+				Object obj = holder.getAttribute(getName());
+				if (NullObject.INSTANCE == obj) {
+					return null;
 				}
-			}
-
-			@Override
-			public String toString() {
-				return String.format("%s[%s]", creator, getScopeName());
-			}
-
-			private String getName() {
-				if (name == null) {
-					name = extractor.nameFor(key.getTypeLiteral().getType());
+				T t = (T) obj;
+				if (t == null) {
+					t = creator.get();
+					holder.setAttribute(getName(), (t != null) ? t : NullObject.INSTANCE);
 				}
-				return name;
+				return t;
 			}
-		};
+		}
+
+		@Override
+		public String toString() {
+			return String.format("%s[%s]", creator, getScopeName());
+		}
+
+		private String getName() {
+			if (name == null) {
+				name = extractor.nameFor(key.getTypeLiteral().getType());
+			}
+			return name;
+		}
 	}
 
 }

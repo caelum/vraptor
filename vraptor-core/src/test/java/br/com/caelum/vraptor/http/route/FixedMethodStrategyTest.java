@@ -18,10 +18,13 @@
 package br.com.caelum.vraptor.http.route;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -41,17 +44,19 @@ public class FixedMethodStrategyTest {
 	private VRaptorMockery mockery;
 	private MutableRequest request;
 	private ParametersControl control;
+	private ResourceMethod list;
 
 	@Before
 	public void setup() {
 		this.mockery = new VRaptorMockery();
 		this.request = mockery.mock(MutableRequest.class);
 		this.control = mockery.mock(ParametersControl.class);
+		this.list = DefaultResourceMethod.instanceFor(MyControl.class, method("list"));
 	}
 
 	@Test
 	public void canTranslate() {
-		FixedMethodStrategy strategy = new FixedMethodStrategy("abc", DefaultResourceMethod.instanceFor(MyControl.class, method("list")),
+		FixedMethodStrategy strategy = new FixedMethodStrategy("abc", list,
 				methods(HttpMethod.POST), control, 0, new String[] {});
 		mockery.checking(new Expectations() {
 			{
@@ -61,6 +66,18 @@ public class FixedMethodStrategyTest {
 		});
 		ResourceMethod match = strategy.resourceMethod(request, "/clients/add");
 		assertThat(match, is(VRaptorMatchers.resourceMethod(method("list"))));
+	}
+
+	@Test
+	public void areEquals() throws Exception {
+		FixedMethodStrategy first = new FixedMethodStrategy("/uri", list, EnumSet.of(HttpMethod.GET), control, 0, new String[0]);
+		FixedMethodStrategy second = new FixedMethodStrategy("/uri", list, EnumSet.of(HttpMethod.GET), control, 2, new String[0]);
+		FixedMethodStrategy third = new FixedMethodStrategy("/different", list, EnumSet.of(HttpMethod.GET), control, 2, new String[0]);
+		FixedMethodStrategy forth = new FixedMethodStrategy("/uri", list, EnumSet.of(HttpMethod.POST), control, 2, new String[0]);
+
+		assertThat(first, equalTo(second));
+		assertThat(first, not(equalTo(third)));
+		assertThat(first, not(equalTo(forth)));
 	}
 
 	@SuppressWarnings("unchecked")

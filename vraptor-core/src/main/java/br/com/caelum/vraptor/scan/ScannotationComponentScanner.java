@@ -15,10 +15,13 @@
  */
 package br.com.caelum.vraptor.scan;
 
+import static com.google.common.base.Objects.firstNonNull;
+
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.net.URL;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.List;
@@ -74,26 +77,7 @@ public class ScannotationComponentScanner implements ComponentScanner {
 			AnnotationDB db = createAnnotationDB();
 
 			for (String basePackage : basePackages) {
-				String resource = basePackage.replace('.', '/');
-				Enumeration<URL> urls = Thread.currentThread().getContextClassLoader().getResources(resource);
-				if (!urls.hasMoreElements()) {
-					logger.error("There's no occurence of package {} in classpath", basePackage);
-					continue;
-				}
-				do {
-					URL url = urls.nextElement();
-
-					String file = url.getFile();
-					file = file.substring(0, file.length() - resource.length() - 1);
-					if (file.charAt(file.length() - 1) == '!') {
-						file = file.substring(0, file.length() - 1);
-					}
-					if (!file.startsWith("file:")) {
-						file = "file:" + file;
-					}
-
-					db.scanArchives(new URL(file));
-				} while (urls.hasMoreElements());
+				scanPackage(basePackage, db);
 			}
 
 			return db.getAnnotationIndex();
@@ -102,59 +86,100 @@ public class ScannotationComponentScanner implements ComponentScanner {
 		}
 	}
 
+
+
+	private void scanPackage(String basePackage, AnnotationDB db) throws IOException {
+		String resource = basePackage.replace('.', '/');
+		Enumeration<URL> urls = Thread.currentThread().getContextClassLoader().getResources(resource);
+		if (!urls.hasMoreElements()) {
+			logger.error("There's no occurence of package {} in classpath", basePackage);
+			return;
+		}
+		do {
+			URL url = urls.nextElement();
+
+			String file = toFileName(resource, url);
+
+			db.scanArchives(new URL(file));
+		} while (urls.hasMoreElements());
+	}
+
+	private String toFileName(String resource, URL url) {
+		String file = url.getFile();
+		file = file.substring(0, file.length() - resource.length() - 1);
+		if (file.charAt(file.length() - 1) == '!') {
+			file = file.substring(0, file.length() - 1);
+		}
+		if (!file.startsWith("file:")) {
+			file = "file:" + file;
+		}
+		return file;
+	}
+
 	private Set<String> findStereotypes(Map<String, Set<String>> webInfClassesAnnotationMap, Map<String, Set<String>> basePackagesAnnotationMap, List<String> basePackages) {
 		HashSet<String> results = new HashSet<String>();
 
-		// add VRaptor's default
-		for (Class<? extends Annotation> stereotype : BaseComponents.getStereotypes()) {
-			results.add(stereotype.getName());
-		}
+		addVRaptorStereotypes(results);
 
-		// check WEB-INF/classes first
-		Set<String> myStereotypes = webInfClassesAnnotationMap.get(Stereotype.class.getName());
-		if (myStereotypes != null) {
-			results.addAll(myStereotypes);
-		}
+		addWebInfClassesStereotypes(webInfClassesAnnotationMap, results);
 
-		// check basePackages
-		Set<String> libStereotypes = basePackagesAnnotationMap.get(Stereotype.class.getName());
-		if (libStereotypes != null) {
-			for (String stereotype : libStereotypes) {
-				for (String basePackage : basePackages) {
-					if (stereotype.startsWith(basePackage)) {
-						results.add(stereotype);
-						break;
-					}
-				}
-			}
-		}
+		addBasePackagesStereotypes(basePackagesAnnotationMap, basePackages, results);
 
 		return results;
 	}
 
+	private void addBasePackagesStereotypes(Map<String, Set<String>> basePackagesAnnotationMap,
+			List<String> basePackages, HashSet<String> results) {
+		Set<String> libStereotypes = nullToEmpty(basePackagesAnnotationMap.get(Stereotype.class.getName()));
+		for (String stereotype : libStereotypes) {
+			if (packagesContains(basePackages, stereotype)) {
+				results.add(stereotype);
+			}
+		}
+	}
+
+	private boolean packagesContains(List<String> basePackages, String clazz) {
+		for (String basePackage : basePackages) {
+			if (clazz.startsWith(basePackage)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private void addWebInfClassesStereotypes(Map<String, Set<String>> webInfClassesAnnotationMap,
+			HashSet<String> results) {
+		Set<String> myStereotypes = nullToEmpty(webInfClassesAnnotationMap.get(Stereotype.class.getName()));
+		results.addAll(myStereotypes);
+	}
+
+	private void addVRaptorStereotypes(HashSet<String> results) {
+		for (Class<? extends Annotation> stereotype : BaseComponents.getStereotypes()) {
+			results.add(stereotype.getName());
+		}
+	}
+
 	private void findComponentsFromWebInfClasses(Map<String, Set<String>> index, Set<String> stereotypeNames, Set<String> results) {
 		for (String stereotype : stereotypeNames) {
-			Set<String> classes = index.get(stereotype);
-			if (classes != null)
-				results.addAll(classes);
+			Set<String> classes = nullToEmpty(index.get(stereotype));
+			results.addAll(classes);
 		}
 	}
 
 	private void findComponentsFromBasePackages(Map<String, Set<String>> index, List<String> basePackages, Set<String> results) {
 		for (Class<? extends Annotation> stereotype : BaseComponents.getStereotypes()) {
-			Set<String> classes = index.get(stereotype.getName());
+			Set<String> classes = nullToEmpty(index.get(stereotype.getName()));
 
-			if (classes != null) {
-				for (String clazz : classes) {
-					for (String basePackage : basePackages) {
-						if (clazz.startsWith(basePackage)) {
-							results.add(clazz);
-							break;
-						}
-					}
+			for (String clazz : classes) {
+				if (packagesContains(basePackages, clazz)) {
+					results.add(clazz);
 				}
 			}
 		}
+	}
+
+	private <T> Set<T> nullToEmpty(Set<T> set) {
+		return firstNonNull(set, Collections.<T>emptySet());
 	}
 
 	private AnnotationDB createAnnotationDB() {

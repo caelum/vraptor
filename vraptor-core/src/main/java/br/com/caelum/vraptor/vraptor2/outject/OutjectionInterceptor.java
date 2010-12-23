@@ -16,9 +16,10 @@
  */
 package br.com.caelum.vraptor.vraptor2.outject;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+
+import net.vidageek.mirror.dsl.Mirror;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -80,18 +81,10 @@ public class OutjectionInterceptor implements Interceptor {
                                 + " but was not used because it returns void. Fix it.");
                 continue;
             }
-            try {
-                Object result = outject.invoke(resourceInstance);
-                String name = helper.nameForGetter(outject);
-                logger.debug("Outjecting {} as {}", name, result);
-                outjecter.include(name, result);
-            } catch (IllegalArgumentException e) {
-                throw new InterceptionException("Unable to outject value for " + outject.getName(), e);
-            } catch (IllegalAccessException e) {
-                throw new InterceptionException("Unable to outject value for " + outject.getName(), e);
-            } catch (InvocationTargetException e) {
-                throw new InterceptionException("Unable to outject value for " + outject.getName(), e.getCause());
-            }
+            Object result = new Mirror().on(resourceInstance).invoke().method(outject).withoutArgs();
+            String name = helper.nameForGetter(outject);
+            logger.debug("Outjecting {} as {}", name, result);
+            outjecter.include(name, result);
         }
     }
 

@@ -26,6 +26,8 @@ import org.slf4j.LoggerFactory;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
 /**
+ * Default implementation for {@link MultipartConfig}.
+ * 
  * TODO: should expose not a directory, but a way to define memory or file usage (commons upload has already a common
  * interface to it).
  *

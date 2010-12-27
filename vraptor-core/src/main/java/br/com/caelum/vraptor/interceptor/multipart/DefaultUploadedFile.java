@@ -19,6 +19,9 @@ package br.com.caelum.vraptor.interceptor.multipart;
 import java.io.InputStream;
 import java.util.regex.Pattern;
 
+/**
+ * Default implementation for {@link UploadedFile}.
+ */
 public class DefaultUploadedFile implements UploadedFile {
     
     static final Pattern REGEX_REMOVE_SLASHES = Pattern.compile(".*(?:\\\\|\\/)(.+)$");
@@ -61,5 +64,4 @@ public class DefaultUploadedFile implements UploadedFile {
     public String getCompleteFileName() {
         return this.completeFileName;
     }
-
 }

@@ -104,10 +104,12 @@ import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.interceptor.download.DownloadInterceptor;
 import br.com.caelum.vraptor.interceptor.multipart.CommonsUploadMultipartInterceptor;
 import br.com.caelum.vraptor.interceptor.multipart.DefaultMultipartConfig;
+import br.com.caelum.vraptor.interceptor.multipart.DefaultServletFileUploadCreator;
 import br.com.caelum.vraptor.interceptor.multipart.MultipartConfig;
 import br.com.caelum.vraptor.interceptor.multipart.MultipartInterceptor;
 import br.com.caelum.vraptor.interceptor.multipart.NullMultipartInterceptor;
 import br.com.caelum.vraptor.interceptor.multipart.Servlet3MultipartInterceptor;
+import br.com.caelum.vraptor.interceptor.multipart.ServletFileUploadCreator;
 import br.com.caelum.vraptor.interceptor.multipart.UploadedFileConverter;
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.ioc.ConverterHandler;
@@ -320,11 +322,12 @@ public class BaseComponents {
     		REQUEST_COMPONENTS.put(BeanValidator.class, NullBeanValidator.class);
     	}
 
-    	if (isClassPresent("org.apache.commons.fileupload.FileItem")) {
+        if (isClassPresent("org.apache.commons.fileupload.FileItem")) {
             REQUEST_COMPONENTS.put(MultipartInterceptor.class, CommonsUploadMultipartInterceptor.class);
-    	} else if (isClassPresent("javax.servlet.http.Part")) {
+            REQUEST_COMPONENTS.put(ServletFileUploadCreator.class, DefaultServletFileUploadCreator.class);
+        } else if (isClassPresent("javax.servlet.http.Part")) {
             REQUEST_COMPONENTS.put(MultipartInterceptor.class, Servlet3MultipartInterceptor.class);
-    	} else {
+        } else {
     	    logger.warn("There is neither commons-fileupload nor servlet3 handlers registered. " +
     	    		"If you are willing to upload a file, please add the commons-fileupload in " +
     	    		"your classpath or use a Servlet 3 Container");

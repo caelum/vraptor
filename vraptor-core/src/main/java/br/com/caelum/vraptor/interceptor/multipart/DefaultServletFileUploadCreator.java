@@ -14,32 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package br.com.caelum.vraptor.interceptor.multipart;
 
-import br.com.caelum.vraptor.InterceptionException;
-import br.com.caelum.vraptor.Lazy;
-import br.com.caelum.vraptor.core.InterceptorStack;
-import br.com.caelum.vraptor.resource.ResourceMethod;
+import org.apache.commons.fileupload.FileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 /**
- * A null implementation of {@link MultipartInterceptor}. This class does nothing.
- *
+ * Default implementation for {@link ServletFileUploadCreator}. Creates a {@link ServletFileUpload} object to using with
+ * commons-fileupload.
+ * 
  * @author Otávio Scherer Garcia
- * @since 3.1.3
- * @see CommonsUploadMultipartInterceptor
  */
-@Lazy
-public class NullMultipartInterceptor implements MultipartInterceptor {
+public class DefaultServletFileUploadCreator
+    implements ServletFileUploadCreator {
 
-    /**
-     * Never accepts.
-     */
-    public boolean accepts(ResourceMethod method) {
-        return false;
-    }
-
-    public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
-        throws InterceptionException {
-        
+    @Override
+    public ServletFileUpload create(FileItemFactory fileItemFactory) {
+        return new ServletFileUpload(fileItemFactory);
     }
 }

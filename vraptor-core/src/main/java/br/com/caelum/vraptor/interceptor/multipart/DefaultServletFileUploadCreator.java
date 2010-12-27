@@ -23,13 +23,12 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 /**
  * Default implementation for {@link ServletFileUploadCreator}. Creates a {@link ServletFileUpload} object to using with
  * commons-fileupload.
- * 
+ *
  * @author Otávio Scherer Garcia
  */
 public class DefaultServletFileUploadCreator
     implements ServletFileUploadCreator {
 
-    @Override
     public ServletFileUpload create(FileItemFactory fileItemFactory) {
         return new ServletFileUpload(fileItemFactory);
     }

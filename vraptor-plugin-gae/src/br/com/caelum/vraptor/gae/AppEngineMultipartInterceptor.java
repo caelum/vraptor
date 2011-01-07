@@ -27,14 +27,16 @@ import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.interceptor.multipart.CommonsUploadMultipartInterceptor;
 import br.com.caelum.vraptor.interceptor.multipart.MultipartConfig;
+import br.com.caelum.vraptor.interceptor.multipart.ServletFileUploadCreator;
 import br.com.caelum.vraptor.ioc.Component;
 
 @Component
 public class AppEngineMultipartInterceptor extends CommonsUploadMultipartInterceptor {
 
-	public AppEngineMultipartInterceptor(HttpServletRequest request, MutableRequest parameters, MultipartConfig config, Validator validator)
+	public AppEngineMultipartInterceptor(HttpServletRequest request, MutableRequest parameters,
+			MultipartConfig config, Validator validator, ServletFileUploadCreator creator)
 			throws IOException {
-		super(request, parameters, config, validator);
+		super(request, parameters, config, validator, creator);
 	}
 
 	@Override

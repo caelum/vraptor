@@ -9,7 +9,7 @@ import br.com.caelum.vraptor.Converter;
  * A no-op converter
  *
  * @author Lucas Cavalcanti
- * @since 3.2.1
+ * @since 3.3.0
  *
  */
 @Convert(String.class)

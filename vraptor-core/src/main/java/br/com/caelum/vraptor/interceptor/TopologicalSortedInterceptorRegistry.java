@@ -25,7 +25,7 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
  *
  * @author Lucas Cavalcanti
  * @author David Paniz
- * @since 3.2.1
+ * @since 3.3.0
  *
  */
 @ApplicationScoped

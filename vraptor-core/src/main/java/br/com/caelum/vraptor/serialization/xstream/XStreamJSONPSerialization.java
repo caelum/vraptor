@@ -20,7 +20,7 @@ import br.com.caelum.vraptor.view.ResultException;
  *
  * @author Lucas Cavalcanti
  * @author Pedro Matiello
- * @since 3.2.1
+ * @since 3.3.0
  *
  */
 public class XStreamJSONPSerialization implements JSONPSerialization {

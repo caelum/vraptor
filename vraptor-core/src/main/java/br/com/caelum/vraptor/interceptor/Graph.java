@@ -34,7 +34,7 @@ import com.google.common.collect.Multimap;
  * @author Lucas Cavalcanti
  * @author David Paniz
  * @author Jose Donizetti
- * @since 3.2.1
+ * @since 3.3.0
  *
  */
 public class Graph<E> {

@@ -27,7 +27,7 @@ import br.com.caelum.vraptor.View;
  * </code>
  * @author Lucas Cavalcanti
  * @author Pedro Matiello
- * @version 3.2.1
+ * @version 3.3.0
  */
 public interface JSONPSerialization extends View {
 	/**

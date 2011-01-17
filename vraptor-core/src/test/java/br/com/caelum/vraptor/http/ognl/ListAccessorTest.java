@@ -36,7 +36,6 @@ import org.mockito.MockitoAnnotations;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.converter.StringConverter;
 import br.com.caelum.vraptor.core.Converters;
-import br.com.caelum.vraptor.ioc.Container;
 
 import com.google.inject.util.Types;
 
@@ -44,7 +43,6 @@ public class ListAccessorTest {
 
     private ListAccessor accessor;
     private @Mock OgnlContext context;
-    private @Mock Container container;
     private @Mock List<String> instance;
 	private @Mock Converters converters;
 
@@ -55,10 +53,8 @@ public class ListAccessorTest {
         when(context.getRoot()).thenReturn(instance);
 
         when(context.get("rootType")).thenReturn(Types.listOf(String.class));
-        when(context.get(Container.class)).thenReturn(container);
-        when(container.instanceFor(Converters.class)).thenReturn(converters);
         when(converters.to(String.class)).thenReturn((Converter) new StringConverter());
-        this.accessor = new ListAccessor();
+        this.accessor = new ListAccessor(converters);
     }
 
     @Test

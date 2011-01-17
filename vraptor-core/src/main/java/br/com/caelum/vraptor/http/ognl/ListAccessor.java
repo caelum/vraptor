@@ -30,7 +30,6 @@ import ognl.OgnlContext;
 import ognl.OgnlException;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.core.Converters;
-import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.vraptor2.Info;
 
 /**
@@ -43,6 +42,12 @@ import br.com.caelum.vraptor.vraptor2.Info;
  *
  */
 public class ListAccessor extends ListPropertyAccessor {
+
+	private final Converters converters;
+
+	public ListAccessor(Converters converters) {
+		this.converters = converters;
+	}
 
 	@Override
 	@SuppressWarnings("unchecked")
@@ -79,8 +84,7 @@ public class ListAccessor extends ListPropertyAccessor {
 			// anything alike... just that suckable context... therefore
 			// procedural
 			// programming and ognl live together forever!
-			Container container = (Container) context.get(Container.class);
-			Converter<?> converter = container.instanceFor(Converters.class).to(type);
+			Converter<?> converter = converters.to(type);
 
 			ResourceBundle bundle = (ResourceBundle) context.get(ResourceBundle.class);
 

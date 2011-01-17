@@ -56,7 +56,7 @@ public class VRaptorConvertersAdapter implements TypeConverter {
         return convert(value, type);
     }
 
-	private Object convert(Object value, Class type) {
+	Object convert(Object value, Class type) {
 		Converter<?> converter = converters.to(type);
         if (converter == null) {
             // TODO better, validation error?

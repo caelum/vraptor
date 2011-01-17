@@ -50,7 +50,6 @@ import br.com.caelum.vraptor.converter.StringConverter;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.http.InvalidParameterException;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
-import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.validator.DefaultValidationException;
@@ -60,7 +59,6 @@ import br.com.caelum.vraptor.validator.Message;
 public class OgnlParametersProviderTest {
 
     private @Mock Converters converters;
-    private @Mock Container container;
     private @Mock ParameterNameProvider nameProvider;
     private @Mock HttpServletRequest parameters;
 
@@ -81,19 +79,17 @@ public class OgnlParametersProviderTest {
 	private ResourceMethod primitive;
 	private ResourceMethod stringArray;
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings("unchecked")
 	@Before
     public void setup() throws Exception {
         this.removal = new EmptyElementsRemoval();
-        this.provider = new OgnlParametersProvider(container, converters, nameProvider, parameters, removal);
+        this.provider = new OgnlParametersProvider(converters, nameProvider, parameters, removal);
         this.errors = new ArrayList<Message>();
 
         when(converters.to(Long.class)).thenReturn((Converter) new LongConverter());
         when(converters.to(long.class)).thenReturn((Converter) new PrimitiveLongConverter());
         when(converters.to(String.class)).thenReturn((Converter) new StringConverter());
         when(parameters.getSession()).thenReturn(session);
-        when(container.instanceFor(EmptyElementsRemoval.class)).thenReturn(removal);
-        when(container.instanceFor(Converters.class)).thenReturn(converters);
 
         buyA = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("buyA", House.class));
         kick = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("kick", AngryCat.class));

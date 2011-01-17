@@ -67,7 +67,7 @@ public class MiscOgnlSupportTest {
         this.converters = mockery.mock(Converters.class);
         this.house = new House();
         OgnlRuntime.setNullHandler(Object.class, new ReflectionBasedNullHandler());
-        OgnlRuntime.setPropertyAccessor(List.class, new ListAccessor());
+        OgnlRuntime.setPropertyAccessor(List.class, new ListAccessor(converters));
         OgnlRuntime.setPropertyAccessor(Object[].class, new ArrayAccessor());
         this.context = (OgnlContext) Ognl.createDefaultContext(house);
         context.setTraceEvaluations(true);
@@ -139,7 +139,7 @@ public class MiscOgnlSupportTest {
         final MutableRequest request = mockery.mock(MutableRequest.class);
         final RequestInfo webRequest = new RequestInfo(null, null, request, null);
         final JstlLocalization jstlLocalization = new JstlLocalization(webRequest);
-        
+
         mockery.checking(new Expectations() {{
             exactly(1).of(request).getAttribute("javax.servlet.jsp.jstl.fmt.locale.request");
             will(returnValue("pt_br"));

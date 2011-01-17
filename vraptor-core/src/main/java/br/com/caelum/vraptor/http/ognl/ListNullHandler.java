@@ -25,7 +25,6 @@ import java.util.List;
 import net.vidageek.mirror.dsl.Mirror;
 import ognl.Evaluation;
 import br.com.caelum.vraptor.VRaptorException;
-import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.vraptor2.Info;
 
 /**
@@ -36,8 +35,14 @@ import br.com.caelum.vraptor.vraptor2.Info;
  */
 class ListNullHandler {
 
+	private final EmptyElementsRemoval removal;
+
+	public ListNullHandler(EmptyElementsRemoval removal) {
+		this.removal = removal;
+	}
+
 	@SuppressWarnings("unchecked")
-	Object instantiate(Container container, Object target, Object property, Type type) {
+	Object instantiate(Object target, Object property, Type type) {
 
 		Class typeToInstantiate = (Class) ((ParameterizedType) type).getActualTypeArguments()[0];
 		Object instance = new Mirror().on(typeToInstantiate).invoke().constructor().withoutArgs();
@@ -51,7 +56,6 @@ class ListNullHandler {
 		list.set(position, instance);
 
 		// registering for null entries removal
-		EmptyElementsRemoval removal = container.instanceFor(EmptyElementsRemoval.class);
 		removal.add(list);
 
 		return instance;

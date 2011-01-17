@@ -42,13 +42,11 @@ import ognl.OgnlRuntime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.converter.ConversionError;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.http.InvalidParameterException;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParametersProvider;
-import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.validator.Message;
@@ -66,8 +64,6 @@ import com.google.common.base.Defaults;
 @RequestScoped
 public class OgnlParametersProvider implements ParametersProvider {
 
-	private final Container container;
-
 	private final Converters converters;
 
 	private final ParameterNameProvider provider;
@@ -78,15 +74,14 @@ public class OgnlParametersProvider implements ParametersProvider {
 
 	private final EmptyElementsRemoval removal;
 
-	public OgnlParametersProvider(Container container, Converters converters,
-			ParameterNameProvider provider, HttpServletRequest request, EmptyElementsRemoval removal) {
-		this.container = container;
+	public OgnlParametersProvider(Converters converters, ParameterNameProvider provider,
+			HttpServletRequest request, EmptyElementsRemoval removal) {
 		this.converters = converters;
 		this.provider = provider;
 		this.request = request;
 		this.removal = removal;
 		OgnlRuntime.setNullHandler(Object.class, new ReflectionBasedNullHandler());
-		OgnlRuntime.setPropertyAccessor(List.class, new ListAccessor());
+		OgnlRuntime.setPropertyAccessor(List.class, new ListAccessor(converters));
 		OgnlRuntime.setPropertyAccessor(Object[].class, new ArrayAccessor());
 	}
 
@@ -138,7 +133,6 @@ public class OgnlParametersProvider implements ParametersProvider {
 		}
 
 		OgnlContext context = createOgnlContextFor(param, bundle);
-
 		for (Entry<String, String[]> parameter : requestNames.entrySet()) {
 			String key = parameter.getKey().replaceFirst("^" + param.name + "\\.?", "");
 			String[] values = parameter.getValue();
@@ -182,13 +176,13 @@ public class OgnlParametersProvider implements ParametersProvider {
 	private OgnlContext createOgnlContextFor(Parameter param, ResourceBundle bundle) {
 		OgnlContext context;
 		try {
-			context = (OgnlContext) Ognl.createDefaultContext(new GenericNullHandler().instantiate(param.actualType(), container));
+			context = (OgnlContext) Ognl.createDefaultContext(new GenericNullHandler(removal).instantiate(param.actualType()));
 		} catch (Exception ex) {
 			throw new InvalidParameterException("unable to instantiate type " + param.type, ex);
 		}
 		context.setTraceEvaluations(true);
-		context.put(Container.class, this.container);
 		context.put("rootType", param.type);
+		context.put("removal", removal);
 
 		VRaptorConvertersAdapter adapter = new VRaptorConvertersAdapter(converters, bundle);
 		Ognl.setTypeConverter(context, adapter);
@@ -207,12 +201,7 @@ public class OgnlParametersProvider implements ParametersProvider {
 	}
 
 	private Object convert(Class clazz, String value, ResourceBundle bundle) {
-		Converter<?> converter = converters.to(clazz);
-		if (converter == null) {
-            // TODO better, validation error?
-            throw new IllegalArgumentException("Cannot instantiate a converter for type " + clazz.getName());
-        }
-		return converter.convert(value, clazz, bundle);
+		return new VRaptorConvertersAdapter(converters, bundle).convert(value, clazz);
 	}
 
 	private List createList(Type type, ResourceBundle bundle, String[] values) {

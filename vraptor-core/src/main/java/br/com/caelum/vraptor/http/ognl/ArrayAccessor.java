@@ -24,7 +24,6 @@ import net.vidageek.mirror.dsl.Mirror;
 import ognl.ArrayPropertyAccessor;
 import ognl.OgnlContext;
 import ognl.OgnlException;
-import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.vraptor2.Info;
 
 /**
@@ -36,7 +35,7 @@ import br.com.caelum.vraptor.vraptor2.Info;
  */
 public class ArrayAccessor extends ArrayPropertyAccessor {
 
-    @SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked")
     @Override
     public Object getProperty(Map context, Object target, Object object) throws OgnlException {
         try {
@@ -62,8 +61,7 @@ public class ArrayAccessor extends ArrayPropertyAccessor {
 	            Object origin = ctx.getCurrentEvaluation().getPrevious().getSource();
 	            Method setter = ReflectionBasedNullHandler.findMethod(origin.getClass(),
 	                    "set" + Info.capitalize(fieldName), origin.getClass(), null);
-	            Container container = (Container) context.get(Container.class);
-	            EmptyElementsRemoval removal = container.instanceFor(EmptyElementsRemoval.class);
+	            EmptyElementsRemoval removal = (EmptyElementsRemoval) context.get("removal");
 	            removal.add(newArray, setter, origin);
 
 	            new Mirror().on(origin).invoke().method(setter).withArgs(newArray);

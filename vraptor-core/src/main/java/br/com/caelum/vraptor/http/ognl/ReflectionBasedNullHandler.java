@@ -27,7 +27,6 @@ import java.util.Map;
 import net.vidageek.mirror.dsl.Mirror;
 import ognl.ObjectNullHandler;
 import ognl.OgnlContext;
-import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.vraptor2.Info;
 
 /**
@@ -39,19 +38,22 @@ import br.com.caelum.vraptor.vraptor2.Info;
  */
 public class ReflectionBasedNullHandler extends ObjectNullHandler {
 
-    private final ListNullHandler list = new ListNullHandler();
-    private final GenericNullHandler generic = new GenericNullHandler();
+    public ReflectionBasedNullHandler() {
+	}
 
-    @Override
+	@Override
 	@SuppressWarnings("unchecked")
     public Object nullPropertyValue(Map context, Object target, Object property) {
 
         OgnlContext ctx = (OgnlContext) context;
 
-        if (target == ctx.getRoot() && target instanceof List) {
-        	Container container = (Container) context.get(Container.class);
+        EmptyElementsRemoval removal = (EmptyElementsRemoval) ctx.get("removal");
 
-        	return list.instantiate(container, target, property, (Type) context.get("rootType"));
+        GenericNullHandler generic = new GenericNullHandler(removal);
+        ListNullHandler list = new ListNullHandler(removal);
+
+        if (target == ctx.getRoot() && target instanceof List) {
+        	return list.instantiate(target, property, (Type) context.get("rootType"));
         }
 
         int indexInParent = ctx.getCurrentEvaluation().getNode().getIndexInParent();
@@ -61,9 +63,8 @@ public class ReflectionBasedNullHandler extends ObjectNullHandler {
         	return null;
         }
 
-        Container container = (Container) context.get(Container.class);
         if (target instanceof List) {
-            return list.instantiate(container, target, property, list.getListType(target, ctx.getCurrentEvaluation().getPrevious()));
+            return list.instantiate(target, property, list.getListType(target, ctx.getCurrentEvaluation().getPrevious()));
         }
 
         String propertyCapitalized = Info.capitalize((String) property);
@@ -79,7 +80,7 @@ public class ReflectionBasedNullHandler extends ObjectNullHandler {
         if (baseType.isArray()) {
             instance = instantiateArray(baseType);
         } else {
-            instance = generic.instantiate(baseType, container);
+            instance = generic.instantiate(baseType);
         }
         Method setter = findMethod(target.getClass(), "set" + propertyCapitalized, target.getClass(), getter.getReturnType());
         new Mirror().on(target).invoke().method(setter).withArgs(instance);

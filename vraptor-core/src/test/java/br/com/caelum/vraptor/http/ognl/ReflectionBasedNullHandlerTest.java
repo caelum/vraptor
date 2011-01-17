@@ -48,22 +48,21 @@ public class ReflectionBasedNullHandlerTest {
 
 	@Before
 	public void setup() {
-		this.handler = new ReflectionBasedNullHandler();
 		this.context = (OgnlContext) Ognl.createDefaultContext(null);
 		context.setTraceEvaluations(true);
 		this.mockery = new VRaptorMockery(true);
 		this.container = mockery.mock(Container.class);
-		context.put(Container.class, container);
 		this.removal = mockery.mock(EmptyElementsRemoval.class);
+		context.put("removal", removal);
+		this.handler = new ReflectionBasedNullHandler();
 		this.converters = mockery.mock(Converters.class);
 		mockery.checking(new Expectations() {
 			{
-				allowing(container).instanceFor(EmptyElementsRemoval.class); will(returnValue(removal));
 				allowing(container).instanceFor(Converters.class); will(returnValue(converters));
 				allowing(converters).to(String.class); will(returnValue(new StringConverter()));
 			}
 		});
-		OgnlRuntime.setPropertyAccessor(List.class, new ListAccessor());
+		OgnlRuntime.setPropertyAccessor(List.class, new ListAccessor(converters));
 		OgnlRuntime.setPropertyAccessor(Object[].class, new ArrayAccessor());
 	}
 

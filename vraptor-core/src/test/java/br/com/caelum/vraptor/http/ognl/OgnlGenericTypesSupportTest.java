@@ -80,11 +80,12 @@ public class OgnlGenericTypesSupportTest {
         });
         this.myCat = new Cat();
         OgnlRuntime.setNullHandler(Object.class, new ReflectionBasedNullHandler());
-        OgnlRuntime.setPropertyAccessor(List.class, new ListAccessor());
+        OgnlRuntime.setPropertyAccessor(List.class, new ListAccessor(converters));
         OgnlRuntime.setPropertyAccessor(Object[].class, new ArrayAccessor());
         this.context = (OgnlContext) Ognl.createDefaultContext(myCat);
         context.setTraceEvaluations(true);
         context.put(Container.class, container);
+        context.put("removal", removal);
         // OgnlRuntime.setPropertyAccessor(Set.class, new SetAccessor());
         // OgnlRuntime.setPropertyAccessor(Map.class, new MapAccessor());
         Ognl.setTypeConverter(context, new VRaptorConvertersAdapter(converters, bundle));

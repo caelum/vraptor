@@ -69,16 +69,10 @@ public class ListNullHandlerTest {
 	@Before
 	public void setup() {
 		this.mockery = new VRaptorMockery(true);
-		this.handler = new ListNullHandler();
-		this.container = mockery.mock(Container.class);
 		this.client = new Client();
 		this.evaluation = mockery.mock(Evaluation.class);
 		this.removal = mockery.mock(EmptyElementsRemoval.class);
-		mockery.checking(new Expectations() {
-			{
-				allowing(container).instanceFor(EmptyElementsRemoval.class); will(returnValue(removal));
-			}
-		});
+		this.handler = new ListNullHandler(removal);
 	}
 
 	@Test(expected = VRaptorException.class)
@@ -93,7 +87,7 @@ public class ListNullHandlerTest {
 				will(returnValue(client));
 			}
 		});
-		handler.instantiate(container, client.nonGeneric, "2", handler.getListType(client.nonGeneric, evaluation));
+		handler.instantiate(client.nonGeneric, "2", handler.getListType(client.nonGeneric, evaluation));
 		mockery.assertIsSatisfied();
 	}
 
@@ -110,7 +104,7 @@ public class ListNullHandlerTest {
 				one(removal).add(client.names);
 			}
 		});
-		handler.instantiate(container, client.names, 2, handler.getListType(client.names, evaluation));
+		handler.instantiate(client.names, 2, handler.getListType(client.names, evaluation));
 		assertThat(client.names.size(), is(equalTo(3)));
 		assertThat(client.names.get(2), is(notNullValue()));
 		mockery.assertIsSatisfied();

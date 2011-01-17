@@ -42,6 +42,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.ListResourceBundle;
 import java.util.ResourceBundle;
 import java.util.Vector;
 
@@ -59,9 +60,10 @@ import br.com.caelum.iogi.reflection.Target;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.converter.LongConverter;
 import br.com.caelum.vraptor.converter.PrimitiveIntConverter;
-import br.com.caelum.vraptor.core.Converters;
+import br.com.caelum.vraptor.converter.StringConverter;
 import br.com.caelum.vraptor.core.DefaultConverters;
 import br.com.caelum.vraptor.core.Localization;
+import br.com.caelum.vraptor.core.SafeResourceBundle;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.resource.ResourceMethod;
@@ -70,7 +72,6 @@ import br.com.caelum.vraptor.validator.Message;
 
 public class IogiParametersProviderTest {
     private VRaptorMockery mockery;
-    private Converters converters;
     private IogiParametersProvider iogiProvider;
     private ParameterNameProvider mockNameProvider;
     private HttpServletRequest mockHttpServletRequest;
@@ -83,7 +84,6 @@ public class IogiParametersProviderTest {
     @Before
     public void setup() throws Exception {
         this.mockery = new VRaptorMockery(true);
-        this.converters = mockery.mock(Converters.class);
         this.mockHttpServletRequest = mockery.mock(HttpServletRequest.class);
         this.mockNameProvider = mockery.mock(ParameterNameProvider.class);
 
@@ -97,10 +97,16 @@ public class IogiParametersProviderTest {
         this.errors = new ArrayList<Message>();
         mockery.checking(new Expectations() {
             {
-                allowing(converters).to((Class) with(an(Class.class)));
-                will(returnValue(new LongConverter()));
+                allowing(mockContainer).instanceFor(StringConverter.class);
+                will(returnValue(new StringConverter()));
 
-//                ignoring(mockLocalization);
+                allowing(mockLocalization).getBundle();
+                will(returnValue(new SafeResourceBundle(new ListResourceBundle() {
+					@Override
+					protected Object[][] getContents() {
+						return new Object[0][0];
+					}
+				})));
             }
         });
 

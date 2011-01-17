@@ -207,9 +207,6 @@ public class OgnlParametersProvider implements ParametersProvider {
 	}
 
 	private Object convert(Class clazz, String value, ResourceBundle bundle) {
-		if (String.class.equals(clazz)) {
-			return value;
-		}
 		Converter<?> converter = converters.to(clazz);
 		if (converter == null) {
             // TODO better, validation error?

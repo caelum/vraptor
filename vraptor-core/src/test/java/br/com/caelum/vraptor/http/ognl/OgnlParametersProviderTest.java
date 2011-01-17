@@ -46,6 +46,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.converter.LongConverter;
 import br.com.caelum.vraptor.converter.PrimitiveLongConverter;
+import br.com.caelum.vraptor.converter.StringConverter;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.http.InvalidParameterException;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
@@ -78,6 +79,7 @@ public class OgnlParametersProviderTest {
 	private ResourceMethod string;
 	private ResourceMethod generic;
 	private ResourceMethod primitive;
+	private ResourceMethod stringArray;
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
 	@Before
@@ -88,6 +90,7 @@ public class OgnlParametersProviderTest {
 
         when(converters.to(Long.class)).thenReturn((Converter) new LongConverter());
         when(converters.to(long.class)).thenReturn((Converter) new PrimitiveLongConverter());
+        when(converters.to(String.class)).thenReturn((Converter) new StringConverter());
         when(parameters.getSession()).thenReturn(session);
         when(container.instanceFor(EmptyElementsRemoval.class)).thenReturn(removal);
         when(container.instanceFor(Converters.class)).thenReturn(converters);
@@ -100,6 +103,7 @@ public class OgnlParametersProviderTest {
         listOfObject = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("listOfObject", List.class));
         simple = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("simple", Long.class));
         string = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("string", String.class));
+        stringArray = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("stringArray", String[].class));
         primitive = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("primitive", long.class));
         generic = DefaultResourceMethod.instanceFor(Specific.class, Generic.class.getDeclaredMethod("generic", Object.class));
     }
@@ -111,6 +115,24 @@ public class OgnlParametersProviderTest {
     	String abc = getParameters(string);
 
     	assertThat(abc, is("eureka"));
+    }
+
+    @Test
+    public void isCapableOfDealingWithStringArrays() throws Exception {
+    	requestParameterIs(stringArray, "abc", "eureka");
+
+    	String[] abc = getParameters(stringArray);
+
+    	assertThat(abc, arrayContaining("eureka"));
+    }
+
+    @Test
+    public void isCapableOfDealingWithIndexedStringArrays() throws Exception {
+    	requestParameterIs(stringArray, "abc[0]", "eureka");
+
+    	String[] abc = getParameters(stringArray);
+
+    	assertThat(abc, arrayContaining("eureka"));
     }
 
     @Test
@@ -300,6 +322,8 @@ public class OgnlParametersProviderTest {
         void simple(Long xyz) {
         }
         void string(String abc) {
+        }
+        void stringArray(String[] abc) {
         }
         void primitive(long xyz) {
         }

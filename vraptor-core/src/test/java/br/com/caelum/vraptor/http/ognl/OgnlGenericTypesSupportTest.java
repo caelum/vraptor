@@ -35,6 +35,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.converter.LongConverter;
+import br.com.caelum.vraptor.converter.StringConverter;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.ioc.Container;
 
@@ -71,6 +72,8 @@ public class OgnlGenericTypesSupportTest {
                 will(returnValue(converters));
                 allowing(converters).to(Long.class);
                 will(returnValue(new LongConverter()));
+                allowing(converters).to(String.class);
+                will(returnValue(new StringConverter()));
                 allowing(container).instanceFor(EmptyElementsRemoval.class);
                 will(returnValue(removal));
             }

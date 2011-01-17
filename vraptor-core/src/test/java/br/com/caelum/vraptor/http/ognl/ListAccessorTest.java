@@ -17,55 +17,54 @@
 
 package br.com.caelum.vraptor.http.ognl;
 
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.when;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import ognl.OgnlContext;
 
-import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
+import br.com.caelum.vraptor.Converter;
+import br.com.caelum.vraptor.converter.StringConverter;
+import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.test.VRaptorMockery;
 
 import com.google.inject.util.Types;
 
 public class ListAccessorTest {
 
     private ListAccessor accessor;
-    private VRaptorMockery mockery;
-    private OgnlContext context;
-    private Container container;
-    private List<String> instance;
+    private @Mock OgnlContext context;
+    private @Mock Container container;
+    private @Mock List<String> instance;
+	private @Mock Converters converters;
 
     @Before
     public void setup() {
-        this.mockery = new VRaptorMockery(true);
-        this.context = mockery.mock(OgnlContext.class);
-        this.container = mockery.mock(Container.class);
+    	MockitoAnnotations.initMocks(this);
         this.instance = new ArrayList<String>();
-        mockery.checking(new Expectations() {
-            {
-                allowing(context).getRoot();
-                will(returnValue(instance));
+        when(context.getRoot()).thenReturn(instance);
 
-                allowing(context).get("rootType");
-                will(returnValue(Types.listOf(String.class)));
-
-                one(context).get(Container.class);
-                will(returnValue(container));
-            }
-        });
+        when(context.get("rootType")).thenReturn(Types.listOf(String.class));
+        when(context.get(Container.class)).thenReturn(container);
+        when(container.instanceFor(Converters.class)).thenReturn(converters);
+        when(converters.to(String.class)).thenReturn((Converter) new StringConverter());
         this.accessor = new ListAccessor();
     }
 
     @Test
     public void gettingShouldReturnNullIfIndexNotFound() throws Exception {
         Object value = accessor.getProperty(null, instance, 1);
-        MatcherAssert.assertThat(value, Matchers.is(Matchers.nullValue()));
+        assertThat(value, is(nullValue()));
     }
 
     @Test
@@ -73,14 +72,14 @@ public class ListAccessorTest {
         instance.add("nothing");
         instance.add("guilherme");
         Object value = accessor.getProperty(null, instance, 1);
-        MatcherAssert.assertThat(value, Matchers.is(Matchers.equalTo((Object) "guilherme")));
+        assertThat(value, is(Matchers.equalTo((Object) "guilherme")));
     }
 
     @Test
     public void settingShouldNullifyUpToIndex() throws Exception {
         accessor.setProperty(context, instance, 1, "hello");
-        MatcherAssert.assertThat(instance.get(0), Matchers.is(Matchers.nullValue()));
-        MatcherAssert.assertThat(instance.get(1), Matchers.is(Matchers.equalTo("hello")));
+        assertThat(instance.get(0), is(Matchers.nullValue()));
+        assertThat(instance.get(1), is(Matchers.equalTo("hello")));
     }
 
 }

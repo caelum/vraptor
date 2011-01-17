@@ -1,15 +1,26 @@
 [chapter ChangeLog]
 
-[section 3.2.1 (in dev)]
-
+[section 3.3.0 (in dev)]
+* **melhor integração com o Spring**: agora os componentes do Spring podem acessar os do VRaptor e vice-versa
 * guice: @PostConstruct e @PreDestroy funcionando completamente
 * guice: todos os componentes request e session scoped são exportados para
 a view do mesmo jeito que com o spring (pelo nome da classe)
+
+* **mudança da estratégia da ordem dos interceptors**: agora é possível ordenar interceptors
+na anotação @Intercepts, dizendo quais interceptors devem rodar antes ou depois do interceptor
+anotado.
+[java]
+@Intercepts(before=AnInterceptor.class, after=AnotherInterceptor.class)
+[/java]
+Assim o VRaptor executa os interceptors em uma ordem que respeita o before e o after de todos os
+interceptors.
+Desse modo a interface InterceptorSequence fica deprecada.
 
 * bugfix: @Transactional do Spring agora pode ser usado em qualquer classe
 (com as limitações do spring aop)
 * bugfix: upload de arquivos com mesmo nome
 * bugfix: web-fragments.xml no jboss 6
+* bugfix: melhor suporte para arrays como parâmetros
 * novas implementações de Download: ByteArrayDownload e JFreeChartDownload
 * nova view jsonp:
 [java]

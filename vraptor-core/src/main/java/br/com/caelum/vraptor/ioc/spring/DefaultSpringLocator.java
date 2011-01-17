@@ -44,6 +44,7 @@ public class DefaultSpringLocator implements SpringLocator {
 			return context;
 		}
 		AnnotationConfigWebApplicationContext ctx = new AnnotationConfigWebApplicationContext();
+		ctx.setId("VRaptor");
 		if (DefaultSpringLocator.class.getResource("/applicationContext.xml") != null) {
 			logger.info("Using an AnnotatedClasspathApplicationContext, searching for applicationContext.xml");
 			ctx.setConfigLocation("classpath:applicationContext.xml");

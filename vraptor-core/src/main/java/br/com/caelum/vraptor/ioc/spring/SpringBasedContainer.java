@@ -72,7 +72,7 @@ public class SpringBasedContainer extends AbstractComponentRegistry implements C
     }
 
     public void register(Class<?> requiredType, Class<?> componentType) {
-    	if (parentContext.isActive()) {
+    	if (parentContext.isActive() && "VRaptor".equals(parentContext.getId())) {
     		logger.info("registering class {} to {} after container initialization. Please avoid this", requiredType, componentType);
     		new SpringRegistry(parentContext.getBeanFactory(), this).register(componentType);
 		} else {

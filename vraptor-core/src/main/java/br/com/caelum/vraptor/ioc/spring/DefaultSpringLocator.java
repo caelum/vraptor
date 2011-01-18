@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.context.ConfigurableWebApplicationContext;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
+import org.springframework.web.context.support.XmlWebApplicationContext;
 
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
@@ -43,14 +44,15 @@ public class DefaultSpringLocator implements SpringLocator {
 			logger.info("Using a web application context: " + context);
 			return context;
 		}
-		AnnotationConfigWebApplicationContext ctx = new AnnotationConfigWebApplicationContext();
-		ctx.setId("VRaptor");
 		if (DefaultSpringLocator.class.getResource("/applicationContext.xml") != null) {
-			logger.info("Using an AnnotatedClasspathApplicationContext, searching for applicationContext.xml");
+			logger.info("Using an XmlWebApplicationContext, searching for applicationContext.xml");
+			XmlWebApplicationContext ctx = new XmlWebApplicationContext();
 			ctx.setConfigLocation("classpath:applicationContext.xml");
-		} else {
-			logger.info("No application context found");
+			return ctx;
 		}
+		logger.info("No application context found");
+		ConfigurableWebApplicationContext ctx = new AnnotationConfigWebApplicationContext();
+		ctx.setId("VRaptor");
 		return ctx;
 	}
 

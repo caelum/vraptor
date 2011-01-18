@@ -153,15 +153,15 @@
 		<!-- [guice] -->
 		<!-- [Out of Maven repo] -->
 		<dependency>
-		    <groupId>com.google.code.guice</groupId>
+		    <groupId>com.google.inject</groupId>
 		    <artifactId>guice</artifactId>
-		    <version>3.0</version>
+		    <version>3.0-rc2</version>
 		    <optional>true</optional>
 		</dependency>
 		<dependency>
-		    <groupId>com.google.code.guice</groupId>
+		    <groupId>com.google.inject.extensions</groupId>
 		    <artifactId>guice-multibindings</artifactId>
-		    <version>3.0</version>
+		    <version>3.0-rc2</version>
 		    <optional>true</optional>
 		</dependency>
 		<!-- [/Out of Maven repo] -->

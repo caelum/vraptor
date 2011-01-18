@@ -39,9 +39,8 @@ import javax.servlet.http.HttpSession;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.converter.LongConverter;
@@ -55,7 +54,6 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.validator.DefaultValidationException;
 import br.com.caelum.vraptor.validator.Message;
 
-@RunWith(MockitoJUnitRunner.class)
 public class OgnlParametersProviderTest {
 
     private @Mock Converters converters;
@@ -82,10 +80,10 @@ public class OgnlParametersProviderTest {
     @SuppressWarnings("unchecked")
 	@Before
     public void setup() throws Exception {
+    	MockitoAnnotations.initMocks(this);
         this.removal = new EmptyElementsRemoval();
         this.provider = new OgnlParametersProvider(converters, nameProvider, parameters, removal);
         this.errors = new ArrayList<Message>();
-
         when(converters.to(Long.class)).thenReturn((Converter) new LongConverter());
         when(converters.to(long.class)).thenReturn((Converter) new PrimitiveLongConverter());
         when(converters.to(String.class)).thenReturn((Converter) new StringConverter());

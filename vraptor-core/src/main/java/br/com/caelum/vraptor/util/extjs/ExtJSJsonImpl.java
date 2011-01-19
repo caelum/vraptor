@@ -42,6 +42,7 @@ import com.thoughtworks.xstream.io.json.JsonHierarchicalStreamDriver;
  * Implements the interface ExtJSJson for json serialization in ExtJS standard
  *
  * @author Daniel Kist
+ * @
  */
 @Component
 public class ExtJSJsonImpl implements ExtJSJson {
@@ -50,6 +51,7 @@ public class ExtJSJsonImpl implements ExtJSJson {
 	private final XStream xstream;
 	private final HttpServletResponse response;
 	private final String SUCCESS  = "{\"success\": ";
+	private final String TOTAL = "{\"total\": ";
 	private final String SELECTED = ",\n \"selected\": @value }";
 
 	private Set<Class<?>> elementTypes;
@@ -63,6 +65,7 @@ public class ExtJSJsonImpl implements ExtJSJson {
 
 	private boolean includeSelected = false;
 	private Object  selectedValue;
+	private Integer total;
 
 
 	public ExtJSJsonImpl(HttpServletResponse response) {
@@ -79,6 +82,11 @@ public class ExtJSJsonImpl implements ExtJSJson {
 
 	public ExtJSJson success() {
 		return success(true);
+	}
+	
+	public ExtJSJson addTotal(Integer total) {
+		this.total = total;
+		return this;
 	}
 
 	public ExtJSJson success(boolean success) {
@@ -135,6 +143,10 @@ public class ExtJSJsonImpl implements ExtJSJson {
 		if(includeSuccess) {
 			includeSuccess();
 		}
+		
+		if (total != null) {
+			includeTotal();
+		}
 
 		try {
 			response.getWriter().write(json);
@@ -152,6 +164,7 @@ public class ExtJSJsonImpl implements ExtJSJson {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private String objectToJSON() {
 		xstream.setMode(XStream.NO_REFERENCES);
         xstream.alias("data", object.getClass());
@@ -215,6 +228,12 @@ public class ExtJSJsonImpl implements ExtJSJson {
 	private void includeSuccess() {
 		if(json != null && json.length() > 0 && json.startsWith("{") && json.endsWith("}")) {
 			this.json = SUCCESS + successValue + ", \n " + this.json.substring(1);
+		}
+	}
+	
+	private void includeTotal() {
+		if(json != null && json.length() > 0 && json.startsWith("{") && json.endsWith("}")) {
+			this.json = TOTAL + total + ", \n " + this.json.substring(1);
 		}
 	}
 

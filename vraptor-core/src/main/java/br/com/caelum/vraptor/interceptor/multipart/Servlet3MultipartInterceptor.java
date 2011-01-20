@@ -36,6 +36,7 @@ import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.validator.Validations;
@@ -61,7 +62,7 @@ import com.google.common.io.Closeables;
  * TODO According JSR315, all form fields are also avaliable via request.getParameter and request.getParameters(), but not
  * all containers implements this issue (Glassfish 3.0 fails).
  * </p>
- * 
+ *
  * @author Otávio Scherer Garcia
  * @since 3.2
  * @see DefaultMultipartConfig
@@ -69,7 +70,7 @@ import com.google.common.io.Closeables;
  * @see MultipartInterceptor
  */
 
-@Intercepts
+@Intercepts(before=ParametersInstantiatorInterceptor.class)
 @RequestScoped
 public class Servlet3MultipartInterceptor
     implements MultipartInterceptor {
@@ -95,8 +96,9 @@ public class Servlet3MultipartInterceptor
      * Only accept requests that contains multipart headers.
      */
     public boolean accepts(ResourceMethod method) {
-        if (!request.getMethod().toUpperCase().equals("POST"))
-            return false;
+        if (!request.getMethod().toUpperCase().equals("POST")) {
+			return false;
+		}
 
         String contentType = request.getContentType();
         return contentType != null && contentType.startsWith(ACCEPT_MULTIPART);
@@ -147,7 +149,7 @@ public class Servlet3MultipartInterceptor
     /**
      * This method is called when the max upload size is reached. There are no way to get the maxFileSize() and
      * maxRequestSize() attributes in a Filter.
-     * 
+     *
      * @param e
      */
     protected void reportSizeLimitExceeded(final IllegalStateException e) {

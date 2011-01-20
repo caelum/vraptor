@@ -26,8 +26,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
-import org.apache.commons.fileupload.FileUploadBase.SizeLimitExceededException;
 import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.FileUploadBase.SizeLimitExceededException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.slf4j.Logger;
@@ -39,6 +39,7 @@ import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.http.InvalidParameterException;
 import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.validator.Validations;
@@ -50,11 +51,11 @@ import com.google.common.collect.Multimap;
 /**
  * A multipart interceptor based on Apache Commons Upload. Provided parameters are injected through
  * RequestParameters.set and uploaded files are made available through
- * 
+ *
  * @author Guilherme Silveira
  * @author Otávio Scherer Garcia
  */
-@Intercepts
+@Intercepts(before=ParametersInstantiatorInterceptor.class)
 @RequestScoped
 public class CommonsUploadMultipartInterceptor
     implements MultipartInterceptor {
@@ -67,7 +68,7 @@ public class CommonsUploadMultipartInterceptor
     private final Validator validator;
     private final ServletFileUploadCreator fileUploadCreator;
 
-    public CommonsUploadMultipartInterceptor(HttpServletRequest request, MutableRequest parameters, MultipartConfig cfg, 
+    public CommonsUploadMultipartInterceptor(HttpServletRequest request, MutableRequest parameters, MultipartConfig cfg,
             Validator validator, ServletFileUploadCreator fileUploadCreator) {
         this.request = request;
         this.parameters = parameters;
@@ -108,7 +109,7 @@ public class CommonsUploadMultipartInterceptor
                 } else if (isNotEmpty(item)) {
                     logger.debug("{} is a file", name);
                     processFile(item, name);
-                    
+
                 } else {
                     logger.debug("A file field was empty: {}",  item.getFieldName());
                 }
@@ -137,7 +138,7 @@ public class CommonsUploadMultipartInterceptor
     /**
      * This method is called when the {@link SizeLimitExceededException} was thrown. By default, add the key
      * file.limit.exceeded using {@link Validations}.
-     * 
+     *
      * @param e
      */
     protected void reportSizeLimitExceeded(final SizeLimitExceededException e) {

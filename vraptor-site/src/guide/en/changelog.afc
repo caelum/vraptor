@@ -32,6 +32,7 @@ theCallback({"object": {...}})
 * PageResult methods renamed for consistency with other results.
 * better upload logs
 * refactor on converters: using Localization to get Locale and bundle 
+* Hibernate class removed. Use validator.validate(object) instead.
 
 [section 3.2.0]
 [list]

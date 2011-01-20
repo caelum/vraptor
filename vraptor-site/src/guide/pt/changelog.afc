@@ -35,6 +35,7 @@ aCallback({"objeto": {...}})
 * melhores logs de upload
 * refatoração nos converters do vraptor: agora eles usam o Localization para
 pegar o Locale e o bundle.
+* removida classe Hibernate. Use validator.validate(objeto).
 
 [section 3.2.0]
 [list]

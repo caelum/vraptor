@@ -42,7 +42,6 @@ import com.thoughtworks.xstream.io.json.JsonHierarchicalStreamDriver;
  * Implements the interface ExtJSJson for json serialization in ExtJS standard
  *
  * @author Daniel Kist
- * @
  */
 @Component
 public class ExtJSJsonImpl implements ExtJSJson {
@@ -65,7 +64,7 @@ public class ExtJSJsonImpl implements ExtJSJson {
 
 	private boolean includeSelected = false;
 	private Object  selectedValue;
-	private Integer total;
+	private Integer totalValue;
 
 
 	public ExtJSJsonImpl(HttpServletResponse response) {
@@ -84,8 +83,8 @@ public class ExtJSJsonImpl implements ExtJSJson {
 		return success(true);
 	}
 	
-	public ExtJSJson addTotal(Integer total) {
-		this.total = total;
+	public ExtJSJson total(Integer total) {
+		this.totalValue = total;
 		return this;
 	}
 
@@ -140,13 +139,14 @@ public class ExtJSJsonImpl implements ExtJSJson {
 			includeSelected();
 		}
 
+		if (totalValue != null) {
+			includeTotal();
+		}
+
 		if(includeSuccess) {
 			includeSuccess();
 		}
 		
-		if (total != null) {
-			includeTotal();
-		}
 
 		try {
 			response.getWriter().write(json);
@@ -233,7 +233,7 @@ public class ExtJSJsonImpl implements ExtJSJson {
 	
 	private void includeTotal() {
 		if(json != null && json.length() > 0 && json.startsWith("{") && json.endsWith("}")) {
-			this.json = TOTAL + total + ", \n " + this.json.substring(1);
+			this.json = TOTAL + totalValue + ", \n " + this.json.substring(1);
 		}
 	}
 

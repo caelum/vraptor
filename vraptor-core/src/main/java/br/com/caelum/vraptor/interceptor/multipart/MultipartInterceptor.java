@@ -16,7 +16,9 @@
  */
 package br.com.caelum.vraptor.interceptor.multipart;
 
+import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.interceptor.Interceptor;
+import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
 
 /**
  * An interceptor which handles multipart requests.
@@ -25,6 +27,7 @@ import br.com.caelum.vraptor.interceptor.Interceptor;
  * @author Otávio Scherer Garcia
  * @since 3.1.3
  */
+@Intercepts(before=ParametersInstantiatorInterceptor.class)
 public interface MultipartInterceptor extends Interceptor {
 
 }

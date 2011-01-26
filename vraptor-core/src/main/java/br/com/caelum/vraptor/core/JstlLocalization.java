@@ -17,7 +17,6 @@
 package br.com.caelum.vraptor.core;
 
 import java.text.MessageFormat;
-import java.util.ListResourceBundle;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -30,12 +29,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.ioc.RequestScoped;
+import br.com.caelum.vraptor.util.EmptyBundle;
 
 import com.google.common.base.Strings;
 
 /**
  * The default implementation of bundle provider uses JSTL's api to access user information on the bundle to be used.
- * 
+ *
  * @author Guilherme Silveira
  * @author Otávio Scherer Garcia
  */
@@ -68,42 +68,29 @@ public class JstlLocalization
      */
     private void initializeBundle() {
         Object bundle = findByKey(Config.FMT_LOCALIZATION_CONTEXT);
-        ResourceBundle unsafe = null;
-
-        if (bundle instanceof String || bundle == null) {
-            String baseName = (bundle == null) ? DEFAULT_BUNDLE_NAME : bundle.toString();
-
-            try {
-                Locale locale = getLocale();
-                unsafe = ResourceBundle.getBundle(baseName, locale);
-            } catch (MissingResourceException e) {
-                logger.debug("couldn't find message bundle, creating an empty one");
-                this.bundle = new SafeResourceBundle(createEmptyBundle());
-            }
-
-        } else if (bundle instanceof LocalizationContext) {
-            unsafe = ((LocalizationContext) bundle).getResourceBundle();
-
-        } else {
-            logger.warn("Can't handle bundle {}. Please report this bug. Using an empty bundle", bundle);
-            unsafe = createEmptyBundle();
-        }
+        ResourceBundle unsafe = extractUnsafeBundle(bundle);
 
         this.bundle = new SafeResourceBundle(unsafe);
     }
 
-    /**
-     * Create a empty bundle.
-     * 
-     * @return
-     */
-    private ResourceBundle createEmptyBundle() {
-        return new ListResourceBundle() {
-            protected Object[][] getContents() {
-                return new Object[0][0];
+	private ResourceBundle extractUnsafeBundle(Object bundle) {
+        if (bundle instanceof String || bundle == null) {
+            String baseName = (bundle == null) ? DEFAULT_BUNDLE_NAME : bundle.toString();
+
+            try {
+                return ResourceBundle.getBundle(baseName, getLocale());
+            } catch (MissingResourceException e) {
+                logger.debug("couldn't find message bundle, creating an empty one");
+                return new EmptyBundle();
             }
-        };
-    }
+
+        }
+        if (bundle instanceof LocalizationContext) {
+            return ((LocalizationContext) bundle).getResourceBundle();
+        }
+        logger.warn("Can't handle bundle {}. Please report this bug. Using an empty bundle", bundle);
+        return new EmptyBundle();
+	}
 
     public Locale getLocale() {
         return localeFor(Config.FMT_LOCALE);
@@ -128,7 +115,7 @@ public class JstlLocalization
     /**
      * Looks up a configuration variable in the request, session and application scopes. If none is found, return by
      * {@link ServletContext#getInitParameter(String)} method.
-     * 
+     *
      * @param key
      * @return
      */
@@ -162,7 +149,7 @@ public class JstlLocalization
 
     /**
      * Converts a locale string to {@link Locale}. If the input string is null or empty, return an empty {@link Locale}.
-     * 
+     *
      * @param str
      * @return
      */

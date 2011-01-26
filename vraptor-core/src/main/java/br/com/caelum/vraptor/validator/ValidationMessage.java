@@ -17,6 +17,8 @@
 
 package br.com.caelum.vraptor.validator;
 
+import static com.google.common.base.Objects.toStringHelper;
+
 import java.text.MessageFormat;
 
 /**
@@ -50,6 +52,11 @@ public class ValidationMessage implements Message {
 
 	public String getCategory() {
 		return category;
+	}
+
+	@Override
+	public String toString() {
+		return toStringHelper(this).add("category", category).add("message", message).add("parameters", messageParameters).toString();
 	}
 
 }

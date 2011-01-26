@@ -43,7 +43,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
-import java.util.ListResourceBundle;
 import java.util.ResourceBundle;
 
 import javax.servlet.http.HttpServletRequest;
@@ -68,6 +67,7 @@ import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.test.VRaptorMockery;
+import br.com.caelum.vraptor.util.EmptyBundle;
 import br.com.caelum.vraptor.validator.Message;
 
 public class IogiParametersProviderTest {
@@ -101,12 +101,7 @@ public class IogiParametersProviderTest {
                 will(returnValue(new StringConverter()));
 
                 allowing(mockLocalization).getBundle();
-                will(returnValue(new SafeResourceBundle(new ListResourceBundle() {
-					@Override
-					protected Object[][] getContents() {
-						return new Object[0][0];
-					}
-				})));
+                will(returnValue(new SafeResourceBundle(new EmptyBundle())));
             }
         });
 

@@ -40,6 +40,7 @@ import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.proxy.DefaultProxifier;
 import br.com.caelum.vraptor.proxy.Proxifier;
+import br.com.caelum.vraptor.util.EmptyBundle;
 import br.com.caelum.vraptor.util.test.MockResult;
 import br.com.caelum.vraptor.view.DefaultValidationViewsFactory;
 import br.com.caelum.vraptor.view.LogicResult;
@@ -67,6 +68,7 @@ public class DefaultValidatorTest {
 		when(result.use(PageResult.class)).thenReturn(pageResult);
 		when(logicResult.forwardTo(MyComponent.class)).thenReturn(instance);
 		when(pageResult.of(MyComponent.class)).thenReturn(instance);
+		when(localization.getBundle()).thenReturn(new EmptyBundle());
 	}
 
 	@Test

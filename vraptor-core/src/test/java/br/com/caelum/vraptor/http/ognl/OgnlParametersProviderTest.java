@@ -47,10 +47,12 @@ import br.com.caelum.vraptor.converter.LongConverter;
 import br.com.caelum.vraptor.converter.PrimitiveLongConverter;
 import br.com.caelum.vraptor.converter.StringConverter;
 import br.com.caelum.vraptor.core.Converters;
+import br.com.caelum.vraptor.core.SafeResourceBundle;
 import br.com.caelum.vraptor.http.InvalidParameterException;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.util.EmptyBundle;
 import br.com.caelum.vraptor.validator.DefaultValidationException;
 import br.com.caelum.vraptor.validator.Message;
 
@@ -261,6 +263,16 @@ public class OgnlParametersProviderTest {
     	assertThat(xyz, is(42l));
 
     }
+
+    @Test
+    public void addsValidationErrorsOnConvertionErrors() throws Exception {
+    	requestParameterIs(simple, "xyz", "4s2");
+
+    	getParameters(simple);
+    	assertThat(errors, hasSize(1));
+
+    }
+
     @Test
     public void returnsNullWhenThereAreNoParameters() throws Exception {
     	thereAreNoParameters();
@@ -297,7 +309,7 @@ public class OgnlParametersProviderTest {
 
     @SuppressWarnings("unchecked")
 	private <T> T getParameters(ResourceMethod method) {
-		return (T) provider.getParametersFor(method, errors, null)[0];
+		return (T) provider.getParametersFor(method, errors, new SafeResourceBundle(new EmptyBundle()))[0];
 	}
 
     static class MyResource {

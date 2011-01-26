@@ -15,6 +15,8 @@
  */
 package br.com.caelum.vraptor.core;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.util.Enumeration;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -35,6 +37,7 @@ public class SafeResourceBundle extends ResourceBundle {
 		this(delegate, false);
 	}
 	public SafeResourceBundle(ResourceBundle delegate, boolean isDefault) {
+		checkNotNull(delegate, "Bundle should not be null. Please report it to VRaptor devs.");
 		this.delegate = delegate;
 		this.isDefault = isDefault;
 	}

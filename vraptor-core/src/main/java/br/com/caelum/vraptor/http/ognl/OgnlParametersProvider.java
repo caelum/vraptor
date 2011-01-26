@@ -129,7 +129,12 @@ public class OgnlParametersProvider implements ParametersProvider {
 
 		if (requestNames.containsKey(param.name)) {
 			String[] values = requestNames.get(param.name);
-			return createSimpleParameter(param, values, bundle);
+			try {
+				return createSimpleParameter(param, values, bundle);
+			} catch(ConversionError ex) {
+				errors.add(new ValidationMessage(ex.getMessage(), param.name));
+				return null;
+			}
 		}
 
 		OgnlContext context = createOgnlContextFor(param, bundle);

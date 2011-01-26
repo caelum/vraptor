@@ -73,6 +73,7 @@ public class DefaultParametersControlTest {
 
 		verify(request).setParameter("hexa", new String[] {"FAF323"});
 	}
+
 	@Test
 	@Ignore("This shit should work someday")
 	public void registerParametersWithMultipleRegexes() throws SecurityException, NoSuchMethodException {
@@ -262,4 +263,18 @@ public class DefaultParametersControlTest {
 
 		assertThat(control.apply(new String[] {"15"}),is(uri));
 	}
+
+	@Test
+	public void shouldDecodeUriParameters() throws Exception {
+		DefaultParametersControl control = new DefaultParametersControl("/clients/{name}", converters);
+
+		control.fillIntoRequest("/clients/Joao+Leno", request);
+
+		verify(request).setParameter("name", "Joao Leno");
+
+		control.fillIntoRequest("/clients/Paulo%20Macartinei", request);
+
+		verify(request).setParameter("name", "Paulo Macartinei");
+	}
+
 }

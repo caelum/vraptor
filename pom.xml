@@ -218,12 +218,12 @@
 			<artifactId>hibernate</artifactId>
 			<version>3.2.0.ga</version>
 			<optional>true</optional>
-			<excludes>
-				<exclude>
+			<exclusions>
+				<exclusion>
 					<groupId>javax.transaction</groupId>
 					<artifactId>jta</artifactId>
-				</exclude>
-			</excludes>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>

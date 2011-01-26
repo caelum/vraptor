@@ -409,7 +409,15 @@
 			</testResource>
 		</testResources>
 		<plugins>
-			<plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>cobertura-maven-plugin</artifactId>
+					<version>2.4</version>
+					<configuration>
+						<format>xml</format>
+					</configuration>
+				</plugin>
+				<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
 				<version>2.1.2</version>

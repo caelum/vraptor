@@ -24,7 +24,11 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
+import br.com.caelum.vraptor.Delete;
+import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Path;
+import br.com.caelum.vraptor.Post;
+import br.com.caelum.vraptor.Put;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.ResourceClass;
@@ -76,8 +80,10 @@ public class PathAnnotationRoutesParser implements RoutesParser {
 
 					rule.with(methods.isEmpty() ? typeMethods : methods);
 
-					if (javaMethod.isAnnotationPresent(Path.class)) {
-						rule.withPriority(javaMethod.getAnnotation(Path.class).priority());
+					Integer priority = getPriority(javaMethod);
+					
+					if(priority != null){
+						rule.withPriority(priority);
 					}
 
 					rule.is(baseType, javaMethod);
@@ -85,7 +91,24 @@ public class PathAnnotationRoutesParser implements RoutesParser {
 				}
 			}
 		}
+		
 		return routes;
+	}
+	
+	private Integer getPriority(Method method){
+		if (method.isAnnotationPresent(Path.class)) {
+			return method.getAnnotation(Path.class).priority();
+		}else if (method.isAnnotationPresent(Get.class)) {
+			return method.getAnnotation(Get.class).priority();
+		}else if (method.isAnnotationPresent(Post.class)) {
+			return method.getAnnotation(Post.class).priority();
+		}else if (method.isAnnotationPresent(Put.class)) {
+			return method.getAnnotation(Put.class).priority();
+		}else if (method.isAnnotationPresent(Delete.class)) {
+			return method.getAnnotation(Delete.class).priority();
+		}
+		
+		return null;
 	}
 
 	private EnumSet<HttpMethod> getHttpMethods(AnnotatedElement annotated) {
@@ -117,9 +140,37 @@ public class PathAnnotationRoutesParser implements RoutesParser {
 			fixURIs(type, uris);
 
 			return uris;
+		}else if(javaMethod.getAnnotations().length > 0) {
+			String[] uris = getUris(javaMethod);
+			
+			if(uris.length > 0){
+				fixURIs(type, uris);
+				return uris;
+			}
 		}
 
 		return new String[] { defaultUriFor(extractControllerNameFrom(type), javaMethod.getName()) };
+	}
+	
+	private String[] getUris(Method javaMethod){
+		
+		String[] uris = null;
+		
+		if (javaMethod.isAnnotationPresent(Get.class)) {
+			uris = javaMethod.getAnnotation(Get.class).value();
+		}else if (javaMethod.isAnnotationPresent(Post.class)){
+			uris = javaMethod.getAnnotation(Post.class).value();
+		}else if (javaMethod.isAnnotationPresent(Put.class)) {
+			uris = javaMethod.getAnnotation(Put.class).value();
+		}else if (javaMethod.isAnnotationPresent(Delete.class)) {
+			uris =  javaMethod.getAnnotation(Delete.class).value();
+		}
+		
+		if(uris != null && uris.length > 0 && !uris[0].isEmpty()){
+			return uris;
+		}
+		
+		return new String[]{};
 	}
 
 	protected void fixURIs(Class<?> type, String[] uris) {

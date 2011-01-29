@@ -93,6 +93,24 @@ public class PathAnnotationRoutesParserTest {
     	public void withEmptyPath() {
     	}
     }
+    
+    @Resource
+    @Path("/prefix")
+    public static class GetAnnotatedController {
+    	public void withoutPath() {
+    	}
+    	@Get("/absolutePath")
+    	public void withAbsolutePath() {
+    	}
+    	@Get("relativePath")
+    	public void withRelativePath() {
+    	}
+    	@Get("")
+    	public void withEmptyPath() {
+    	}
+    }
+    
+    
     @Resource
     @Path("/endSlash/")
     public static class EndSlashAnnotatedController {
@@ -105,6 +123,22 @@ public class PathAnnotationRoutesParserTest {
     	public void withRelativePath() {
     	}
     	@Path("")
+    	public void withEmptyPath() {
+    	}
+    }
+    
+    @Resource
+    @Path("/endSlash/")
+    public static class EndSlashAnnotatedGetController {
+    	public void withoutPath() {
+    	}
+    	@Get("/absolutePath")
+    	public void withAbsolutePath() {
+    	}
+    	@Get("relativePath")
+    	public void withRelativePath() {
+    	}
+    	@Get("")
     	public void withEmptyPath() {
     	}
     }
@@ -134,8 +168,15 @@ public class PathAnnotationRoutesParserTest {
     	Route route = getRouteMatching(routes, "/prefix/relativePath");
 
     	assertThat(route, canHandle(PathAnnotatedController.class, "withRelativePath"));
-
     }
+    
+    @Test
+    public void addsAPrefixToMethodsWhenTheGetControllerAndTheMethodAreAnnotatedWithRelativePath() throws Exception {
+    	List<Route> routes = parser.rulesFor(new DefaultResourceClass(GetAnnotatedController.class));
+    	Route route = getRouteMatching(routes, "/prefix/relativePath");
+
+    	assertThat(route, canHandle(GetAnnotatedController.class, "withRelativePath"));
+    }    
 
 	@Test
     public void addsAPrefixToMethodsWhenTheControllerEndsWithSlashAndTheMethodAreAnnotatedWithRelativePath() throws Exception {
@@ -143,8 +184,16 @@ public class PathAnnotationRoutesParserTest {
 		Route route = getRouteMatching(routes, "/endSlash/relativePath");
 
 		assertThat(route, canHandle(EndSlashAnnotatedController.class, "withRelativePath"));
-
     }
+	
+	@Test
+    public void addsAPrefixToMethodsWhenTheGetControllerEndsWithSlashAndTheMethodAreAnnotatedWithRelativePath() throws Exception {
+		List<Route> routes = parser.rulesFor(new DefaultResourceClass(EndSlashAnnotatedGetController.class));
+		Route route = getRouteMatching(routes, "/endSlash/relativePath");
+
+		assertThat(route, canHandle(EndSlashAnnotatedGetController.class, "withRelativePath"));
+    }
+	
     @Test
     public void addsAPrefixToMethodsWhenTheControllerEndsWithSlashAndTheMethodAreAnnotatedWithAbsolutePath() throws Exception {
     	List<Route> routes = parser.rulesFor(new DefaultResourceClass(EndSlashAnnotatedController.class));
@@ -153,14 +202,23 @@ public class PathAnnotationRoutesParserTest {
     	assertThat(route, canHandle(EndSlashAnnotatedController.class, "withAbsolutePath"));
 
     }
+    
+    @Test
+    public void addsAPrefixToMethodsWhenTheGetControllerEndsWithSlashAndTheMethodAreAnnotatedWithAbsolutePath() throws Exception {
+    	List<Route> routes = parser.rulesFor(new DefaultResourceClass(EndSlashAnnotatedGetController.class));
+    	Route route = getRouteMatching(routes, "/endSlash/absolutePath");
+
+    	assertThat(route, canHandle(EndSlashAnnotatedGetController.class, "withAbsolutePath"));
+    }
+    
     @Test
     public void addsAPrefixToMethodsWhenTheControllerEndsWithSlashAndTheMethodAreAnnotatedWithEmptyPath() throws Exception {
     	List<Route> routes = parser.rulesFor(new DefaultResourceClass(EndSlashAnnotatedController.class));
     	Route route = getRouteMatching(routes, "/endSlash/");
 
     	assertThat(route, canHandle(EndSlashAnnotatedController.class, "withEmptyPath"));
-
     }
+    
     public void addsAPrefixToMethodsWhenTheControllerEndsWithSlashAndTheMethodAreNotAnnotated() throws Exception {
     	List<Route> routes = parser.rulesFor(new DefaultResourceClass(EndSlashAnnotatedController.class));
     	Route route = getRouteMatching(routes, "/endSlash/withoutPath");
@@ -168,32 +226,47 @@ public class PathAnnotationRoutesParserTest {
     	assertThat(route, canHandle(EndSlashAnnotatedController.class, "withoutPath"));
 
     }
+
     @Test
     public void addsAPrefixToMethodsWhenTheControllerAndTheMethodAreAnnotatedWithAbsolutePath() throws Exception {
     	List<Route> routes = parser.rulesFor(new DefaultResourceClass(PathAnnotatedController.class));
     	Route route = getRouteMatching(routes, "/prefix/absolutePath");
 
     	assertThat(route, canHandle(PathAnnotatedController.class, "withAbsolutePath"));
-
-
     }
+    
+    @Test
+    public void addsAPrefixToMethodsWhenTheGetControllerAndTheMethodAreAnnotatedWithAbsolutePath() throws Exception {
+    	List<Route> routes = parser.rulesFor(new DefaultResourceClass(GetAnnotatedController.class));
+    	Route route = getRouteMatching(routes, "/prefix/absolutePath");
+
+    	assertThat(route, canHandle(GetAnnotatedController.class, "withAbsolutePath"));
+    }
+    
     @Test
     public void addsAPrefixToMethodsWhenTheControllerAndTheMethodAreAnnotatedWithEmptyPath() throws Exception {
     	List<Route> routes = parser.rulesFor(new DefaultResourceClass(PathAnnotatedController.class));
     	Route route = getRouteMatching(routes, "/prefix");
 
     	assertThat(route, canHandle(PathAnnotatedController.class, "withEmptyPath"));
-
-
     }
+    
     @Test
     public void addsAPrefixToMethodsWhenTheControllerIsAnnotatedWithPath() throws Exception {
     	List<Route> routes = parser.rulesFor(new DefaultResourceClass(PathAnnotatedController.class));
     	Route route = getRouteMatching(routes, "/prefix/withoutPath");
 
     	assertThat(route, canHandle(PathAnnotatedController.class, "withoutPath"));
-
     }
+    
+    @Test
+    public void addsAPrefixToMethodsWhenTheGetControllerIsAnnotatedWithPath() throws Exception {
+    	List<Route> routes = parser.rulesFor(new DefaultResourceClass(GetAnnotatedController.class));
+    	Route route = getRouteMatching(routes, "/prefix/withoutPath");
+
+    	assertThat(route, canHandle(GetAnnotatedController.class, "withoutPath"));
+    }
+    
     @Test
     public void findsTheCorrectAnnotatedMethodIfThereIsNoWebMethodAnnotationPresent() throws Exception {
     	List<Route> routes = parser.rulesFor(new DefaultResourceClass(ClientsController.class));

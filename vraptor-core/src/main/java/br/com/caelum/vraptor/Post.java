@@ -38,20 +38,4 @@ public @interface Post {
 	 * @return
 	 */
     String[] value() default "";
-
-    /**
-     * Used to decide which path will be tested first.
-     * Paths with priority HIGHEST are tested before paths with priority HIGH,
-     * which are tested before paths with priority DEFAULT, and so on.
-     * <pre>
-	     @Path(value="/url", priority=Path.HIGHEST)
-	     @Path(value="/url", priority=Path.HIGH)
-	     @Path(value="/url", priority=Path.DEFAULT)
-	     @Path(value="/url", priority=Path.LOW)
-	     @Path(value="/url", priority=Path.LOWEST)
-     </pre>
-     *
-     */
-    int priority() default Path.DEFAULT;
-
 }

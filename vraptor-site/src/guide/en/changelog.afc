@@ -1,6 +1,12 @@
 [chapter ChangeLog]
 
 [section 3.3.0 (in dev)]
+[box jar changes]
+	[list]
+		* change google-collect 1.0rc to guava-r07.
+		* scannotations 1.0.2 is now mandatory.
+	[/list]
+[/box]
 * **better Spring integration**: now Spring components can access VRaptor components and vice-versa  
 * guice: @PostConstruct and @PreDestroy working properly
 * guice: all request and session scoped components are exported to the view in the

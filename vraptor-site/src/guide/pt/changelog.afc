@@ -1,6 +1,13 @@
 [chapter ChangeLog]
 
 [section 3.3.0 (in dev)]
+[box Mudança de jars]
+	[list]
+		* troque google-collect 1.0rc por guava-r08
+		* scannotations 1.0.2 agora é obrigatório
+	[/list]
+[/box]
+[list]
 * **melhor integração com o Spring**: agora os componentes do Spring podem acessar os do VRaptor e vice-versa
 * guice: @PostConstruct e @PreDestroy funcionando completamente
 * guice: todos os componentes request e session scoped são exportados para
@@ -36,7 +43,7 @@ aCallback({"objeto": {...}})
 * refatoração nos converters do vraptor: agora eles usam o Localization para
 pegar o Locale e o bundle.
 * removida classe Hibernate. Use validator.validate(objeto).
-
+[/list]
 [section 3.2.0]
 [list]
 * várias melhorias na performance: por volta de 60% menos no tempo de requisição.

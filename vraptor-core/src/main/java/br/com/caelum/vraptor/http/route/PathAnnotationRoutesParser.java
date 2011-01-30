@@ -79,11 +79,9 @@ public class PathAnnotationRoutesParser implements RoutesParser {
 					EnumSet<HttpMethod> methods = getHttpMethods(javaMethod);
 
 					rule.with(methods.isEmpty() ? typeMethods : methods);
-
-					Integer priority = getPriority(javaMethod);
 					
-					if(priority != null){
-						rule.withPriority(priority);
+					if(javaMethod.isAnnotationPresent(Path.class)){
+						rule.withPriority(javaMethod.getAnnotation(Path.class).priority());
 					}
 
 					rule.is(baseType, javaMethod);
@@ -95,22 +93,6 @@ public class PathAnnotationRoutesParser implements RoutesParser {
 		return routes;
 	}
 	
-	private Integer getPriority(Method method){
-		if (method.isAnnotationPresent(Path.class)) {
-			return method.getAnnotation(Path.class).priority();
-		}else if (method.isAnnotationPresent(Get.class)) {
-			return method.getAnnotation(Get.class).priority();
-		}else if (method.isAnnotationPresent(Post.class)) {
-			return method.getAnnotation(Post.class).priority();
-		}else if (method.isAnnotationPresent(Put.class)) {
-			return method.getAnnotation(Put.class).priority();
-		}else if (method.isAnnotationPresent(Delete.class)) {
-			return method.getAnnotation(Delete.class).priority();
-		}
-		
-		return null;
-	}
-
 	private EnumSet<HttpMethod> getHttpMethods(AnnotatedElement annotated) {
 		EnumSet<HttpMethod> methods = EnumSet.noneOf(HttpMethod.class);
 		for (HttpMethod method : HttpMethod.values()) {

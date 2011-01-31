@@ -124,17 +124,59 @@ public class EmployeeController {
 }
 [/java]
 
-[section How to ensure ordering: InterceptorSequence]
-If you want to ensure order of the execution of a set of interceptors, you can implement
-the interface InterceptorSequence and return the order you want to execute the interceptors:
-
+[section How to ensure ordering: after and before]
+If you need to ensure order of the execution of a set of interceptors, you can use the after and before
+attributes from @Intercepts. Suppose that FirstInterceptor must run before SecondInterceptor, so you can
+configure it either by:
 [java]
-@Intercepts
-public class MySequence implements InterceptorSequence {
-	public Class<? extends Interceptor>[] getSequence() {
-		return new Class[] { FirstInterceptor.class, SecondInterceptor.class };
-	}
+@Intercepts(before=SecondInterceptor.class)
+public class FirstInterceptor implements Interceptor {
+	...
+}
+[/java]
+or
+[java]
+@Intercepts(after=FirstInterceptor.class)
+public class SecondInterceptor implements Interceptor {
+	...
 }
 [/java]
 
-You should not annotate the interceptors returned by InterceptorSequence.getSequence() with @Intercepts.
+You can specify more than one interceptor:
+
+[java]
+[java]
+@Intercepts(after={FirstInterceptor.class, SecondInterceptor.class}, 
+			before={ForthInterceptor.class, FifthInterceptor.class})
+public class ThirdInterceptor implements Interceptor {
+	...
+}
+[/java]
+
+VRaptor will throw an exception if there is a cycle on the ordering, so be careful.
+
+[section Interacting with VRaptor's interceptors]
+
+VRaptor has its own sequence of interceptors, and you can define the ordering of
+your interceptors based on VRaptor's.
+
+Here are the main VRaptor interceptors and what they produce:
+[list]
+* **ResourceLookupInterceptor** - the first interceptor. Finds the right ResourceMethod, which will be
+passed as argument on accepts() and intercept() methods. It is the default after.
+* **ParametersInstantiatorInterceptor** - instantiates the method parameters based on request. The 
+parameters will be available via MethodInfo#getParameters().
+* **InstantiateInterceptor** - instantiates the controller, which will be passed on the last parameter
+of intercept() method.
+* **ExecuteMethodInterceptor** - executes the ResourceMethod. Return value will be available via
+MethodInfo#getResult(). It is the default before.
+* **OutjectResult** - outjects the ResourceMethod's return value to the view.
+* **ForwardToDefaultViewInterceptor** - forwards to default jsp if no other view was used.
+[/list]
+
+If you need to execute an Interceptor after ExecuteMethodInterceptor, you **must** set the before attribute,
+in order to avoid cycles. ForwardToDefaultViewInterceptor is a good value since no other interceptor
+can run after it:
+[java]
+@Intercepts(after=ExecuteMethodInterceptor.class, before=ForwardToDefaultViewInterceptor.class)
+[/java]

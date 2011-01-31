@@ -183,6 +183,15 @@ Para habilitar esse comportamento, você pode adicionar o pacote
 </context-param>
 [/xml]
 
+[title Integração com ExtJS]
+
+Existe uma View do VRaptor que consegue gerar alguns formatos de JSON que o ExtJS espera.
+Para isso use:
+
+[java]
+result.use(ExtJSJson.class).....serialize();
+[/java] 
+
 [title Compatibilidade com VRaptor 2]
 Se você quer migrar do VRaptor 2 para o VRaptor 3
 (veja o capítulo Migrando do VRaptor 2 para o VRaptor 3):

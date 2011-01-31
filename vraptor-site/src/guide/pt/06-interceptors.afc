@@ -132,17 +132,60 @@ public class FuncionarioController {
 }
 [/java]
 
-[section Como garantir ordem: InterceptorSequence]
-Se você precisa garantir a ordem em que os interceptors são executados, basta implementar
-a interface InterceptorSequence e passar a ordem em que você deseja executar os interceptors:
-
+[section How to ensure ordering: after and before]
+Se você precisa garantir a ordem de execução de um conjunto de interceptors, você pode usar os
+atributos **after** e **before** da @Intercepts. Suponha que o PrimeiroInterceptor tenha que rodar antes
+do SegundoInterceptor, então você pode configurar isso tanto com: 
 [java]
-@Intercepts
-public class MinhaSequencia implements InterceptorSequence {
-	public Class<? extends Interceptor>[] getSequence() {
-		return new Class[] { PrimeiroInterceptor.class, SegundoInterceptor.class };
-	}
+@Intercepts(before=SegundoInterceptor.class)
+public class PrimeiroInterceptor implements Interceptor {
+	...
+}
+[/java]
+quanto com:
+[java]
+@Intercepts(after=PrimeiroInterceptor.class)
+public class SegundoInterceptor implements Interceptor {
+	...
 }
 [/java]
 
-Você não deve anotar os interceptors retornados pela InterceptorSequence com @Intercepts.
+Você pode especificar mais de um Interceptor:
+
+[java]
+[java]
+@Intercepts(after={PrimeiroInterceptor.class, SegundoInterceptor.class}, 
+			before={QuartoInterceptor.class, QuintoInterceptor.class})
+public class TerceiroInterceptor implements Interceptor {
+	...
+}
+[/java]
+
+O VRaptor lançará uma exception se existir um ciclo na ordem dos interceptors, então tenha cuidado.
+
+[section Interagindo com os interceptors do VRaptor]
+
+O VRaptor possui sua própria sequência de interceptor, e você pode definir a ordem dos seus
+interceptors baseados na do VRaptor.
+
+Aqui estão os principais interceptors do VRaptor e o que eles produzem:
+[list]
+* **ResourceLookupInterceptor** - o primeiro interceptor. Procura o ResourceMethod correto, 
+que será passado como argumento nos métodos accepts() e intercept(). É o after padrão.
+* **ParametersInstantiatorInterceptor** - instancia os parâmetros do método baseado no request. Os
+parâmetros estarão disponíveis via MethodInfo#getParameters().
+* **InstantiateInterceptor** - instancia o controller, que será passado como último parâmetro do método
+intercept().
+* **ExecuteMethodInterceptor** - executa o ResourceMethod. O retorno do método estará disponível via
+MethodInfo#getResult(). É o before padrão.
+* **OutjectResult** - inclui o retorno do ResourceMethod na view.
+* **ForwardToDefaultViewInterceptor** - redireciona (forward) para a jsp padrão se nenhuma outra view
+foi usada.
+[/list]
+
+Se você precisa executar um Interceptor após o ExecuteMethodInterceptor, você **deve** setar o atributo
+before, para evitar ciclos. O ForwardToDefaultViewInterceptor é um bom valor, já que nenhum outro 
+interceptor pode rodar depois dele:
+[java]
+@Intercepts(after=ExecuteMethodInterceptor.class, before=ForwardToDefaultViewInterceptor.class)
+[/java]

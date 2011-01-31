@@ -182,6 +182,13 @@ its web.xml:
 </context-param>
 [/xml]
 
+[title ExtJS Integration]
+
+There is a View that generates some ExtJS JSON formats. Use:
+[java]
+result.use(ExtJSJson.class).....serialize();
+[/java] 
+
 [title VRaptor 2 compatibility]
 If you want to migrate VRaptor 2 to VRaptor 3 (see Migrating from VRaptor2 to VRaptor3 chapter):
 

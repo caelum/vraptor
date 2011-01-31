@@ -26,6 +26,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.Result;
+import br.com.caelum.vraptor.interceptor.ForwardToDefaultViewInterceptor;
 import br.com.caelum.vraptor.view.PageResult;
 
 public class ForwardToDefaultViewInterceptorTest {

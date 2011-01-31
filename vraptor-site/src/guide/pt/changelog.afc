@@ -43,6 +43,7 @@ aCallback({"objeto": {...}})
 * refatoração nos converters do vraptor: agora eles usam o Localization para
 pegar o Locale e o bundle.
 * removida classe Hibernate. Use validator.validate(objeto).
+* JSON serializado com indentação opcional.
 [/list]
 [section 3.2.0]
 [list]

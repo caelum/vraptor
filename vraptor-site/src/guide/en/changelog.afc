@@ -39,6 +39,7 @@ theCallback({"object": {...}})
 * better upload logs
 * refactor on converters: using Localization to get Locale and bundle 
 * Hibernate class removed. Use validator.validate(object) instead.
+* JSON response with optional indentation.
 
 [section 3.2.0]
 [list]

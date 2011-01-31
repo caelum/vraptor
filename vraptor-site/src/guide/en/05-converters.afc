@@ -33,7 +33,6 @@ public enum Type {
 [section BigInteger and BigDecimal]
 
 Both are supported using your JVM's default locale.
-To enable decimal values based on the user's locale, you can check how the class LocaleBasedCalendarConverter works.
 
 [section Localized BigDecimal, Double e Float]
 

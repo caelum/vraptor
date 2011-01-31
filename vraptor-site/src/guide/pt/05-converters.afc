@@ -33,7 +33,6 @@ public enum Tipo {
 [section BigInteger e BigDecimal]
 
 Ambos são suportados utilizando o padrão de localização da virtual machine que serve a sua aplicação.
-Para criar suporte a números decimais baseados no locale do usuário, basta olhar o funcionamento da classe LocaleBasedCalendarConverter.
 
 [section BigDecimal, Double e Float localizados]
 

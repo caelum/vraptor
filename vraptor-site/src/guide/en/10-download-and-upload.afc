@@ -90,3 +90,12 @@ public class CustomMultipartConfig extends DefaultMultipartConfig {
 
 }[/java]
 
+[section Changes in form]
+
+You need to add the parameter %%enctype%% with %%multipart/form-data%% value. Without this attribute, the browser cannot upload files:
+
+[xml]<form action="minha-action" enctype="multipart/form-data">[/xml]
+
+[section Validating upload]
+
+When the maximum size for uploaded file exceeds the configured value, VRaptor add a message on the Validator object.

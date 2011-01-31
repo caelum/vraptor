@@ -113,6 +113,13 @@ public class PathAnnotationRoutesParserTest {
     }
 
     @Resource
+    public static class WrongGetAnnotatedController {
+    	@Path("/some") @Get("/other")
+    	public void withAmbiguousDeclaration() {
+    	}
+    }
+
+    @Resource
     @Path("/endSlash/")
     public static class EndSlashAnnotatedController {
     	public void withoutPath() {
@@ -519,6 +526,11 @@ public class PathAnnotationRoutesParserTest {
     	Route route = getRouteMatching(routes, "/prefix/withoutPath");
 
     	assertThat(route, canHandle(GetAnnotatedController.class, "withoutPath"));
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void throwsExceptionWhenTheGetControllerHasAmbiguousDeclaration() throws Exception {
+    	parser.rulesFor(new DefaultResourceClass(WrongGetAnnotatedController.class));
     }
 
 }

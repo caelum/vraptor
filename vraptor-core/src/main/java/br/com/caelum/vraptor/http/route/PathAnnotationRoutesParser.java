@@ -17,6 +17,8 @@
 
 package br.com.caelum.vraptor.http.route;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -79,7 +81,7 @@ public class PathAnnotationRoutesParser implements RoutesParser {
 					EnumSet<HttpMethod> methods = getHttpMethods(javaMethod);
 
 					rule.with(methods.isEmpty() ? typeMethods : methods);
-					
+
 					if(javaMethod.isAnnotationPresent(Path.class)){
 						rule.withPriority(javaMethod.getAnnotation(Path.class).priority());
 					}
@@ -89,10 +91,10 @@ public class PathAnnotationRoutesParser implements RoutesParser {
 				}
 			}
 		}
-		
+
 		return routes;
 	}
-	
+
 	private EnumSet<HttpMethod> getHttpMethods(AnnotatedElement annotated) {
 		EnumSet<HttpMethod> methods = EnumSet.noneOf(HttpMethod.class);
 		for (HttpMethod method : HttpMethod.values()) {
@@ -115,44 +117,37 @@ public class PathAnnotationRoutesParser implements RoutesParser {
 		if (javaMethod.isAnnotationPresent(Path.class)) {
 			String[] uris = javaMethod.getAnnotation(Path.class).value();
 
-			if (uris.length == 0) {
-				throw new IllegalArgumentException("You must specify at least one path on @Path at " + javaMethod);
-			}
+			checkArgument(uris.length > 0, "You must specify at least one path on @Path at " + javaMethod);
+			checkArgument(getUris(javaMethod).length == 0,
+					"You should specify paths either in @Path(\"/path\") or @Get(\"/path\") (or @Post, @Put, @Delete), not both at " + javaMethod);
 
 			fixURIs(type, uris);
-
 			return uris;
-		}else if(javaMethod.getAnnotations().length > 0) {
-			String[] uris = getUris(javaMethod);
-			
-			if(uris.length > 0){
-				fixURIs(type, uris);
-				return uris;
-			}
+		}
+		String[] uris = getUris(javaMethod);
+
+		if(uris.length > 0){
+			fixURIs(type, uris);
+			return uris;
 		}
 
 		return new String[] { defaultUriFor(extractControllerNameFrom(type), javaMethod.getName()) };
 	}
-	
+
 	private String[] getUris(Method javaMethod){
-		
-		String[] uris = null;
-		
 		if (javaMethod.isAnnotationPresent(Get.class)) {
-			uris = javaMethod.getAnnotation(Get.class).value();
-		}else if (javaMethod.isAnnotationPresent(Post.class)){
-			uris = javaMethod.getAnnotation(Post.class).value();
-		}else if (javaMethod.isAnnotationPresent(Put.class)) {
-			uris = javaMethod.getAnnotation(Put.class).value();
-		}else if (javaMethod.isAnnotationPresent(Delete.class)) {
-			uris =  javaMethod.getAnnotation(Delete.class).value();
+			return javaMethod.getAnnotation(Get.class).value();
 		}
-		
-		if(uris != null && uris.length > 0 && !uris[0].isEmpty()){
-			return uris;
+		if (javaMethod.isAnnotationPresent(Post.class)){
+			return javaMethod.getAnnotation(Post.class).value();
 		}
-		
-		return new String[]{};
+		if (javaMethod.isAnnotationPresent(Put.class)) {
+			return javaMethod.getAnnotation(Put.class).value();
+		}
+		if (javaMethod.isAnnotationPresent(Delete.class)) {
+			return javaMethod.getAnnotation(Delete.class).value();
+		}
+		return new String[0];
 	}
 
 	protected void fixURIs(Class<?> type, String[] uris) {

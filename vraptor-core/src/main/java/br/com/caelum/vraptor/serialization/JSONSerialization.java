@@ -23,10 +23,13 @@ package br.com.caelum.vraptor.serialization;
  * @version 3.0.2
  */
 public interface JSONSerialization extends Serialization {
+    
 	/**
 	 * Exclude the root alias from serialization.
 	 * @since 3.1.2
 	 * @throws IOException
 	 */
-	public <T> NoRootSerialization withoutRoot();
+	<T> NoRootSerialization withoutRoot();
+	
+	JSONSerialization indented();
 }

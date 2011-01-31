@@ -45,67 +45,87 @@ import com.thoughtworks.xstream.mapper.MapperWrapper;
 @Component
 public class XStreamJSONSerialization implements JSONSerialization {
 
-	protected final HttpServletResponse response;
-	protected final TypeNameExtractor extractor;
-	protected final ProxyInitializer initializer;
-	private HierarchicalStreamDriver driver =  new JsonHierarchicalStreamDriver();
+    protected final HttpServletResponse response;
+    protected final TypeNameExtractor extractor;
+    protected final ProxyInitializer initializer;
+    private HierarchicalStreamDriver driver;
+    
+    private boolean withoutRoot;
+    private boolean indented;
+    
+    protected static final String DEFAULT_NEW_LINE = "";
+    protected static final char[] DEFAULT_LINE_INDENTER = {};
+    
+    protected static final String INDENTED_NEW_LINE = "\n";
+    protected static final char[] INDENTED_LINE_INDENTER = { ' ', ' '};
 
-	public XStreamJSONSerialization(HttpServletResponse response, TypeNameExtractor extractor, ProxyInitializer initializer) {
-		this.response = response;
-		this.extractor = extractor;
-		this.initializer = initializer;
-	}
+    public XStreamJSONSerialization(HttpServletResponse response, TypeNameExtractor extractor, ProxyInitializer initializer) {
+        this.response = response;
+        this.extractor = extractor;
+        this.initializer = initializer;
+    }
 
-	public boolean accepts(String format) {
-		return "json".equals(format);
-	}
+    public boolean accepts(String format) {
+        return "json".equals(format);
+    }
 
-	public <T> Serializer from(T object) {
-		response.setContentType("application/json");
-		return getSerializer().from(object);
-	}
+    public <T> Serializer from(T object) {
+        return from(object, null);
+    }
 
-	protected SerializerBuilder getSerializer() {
-		try {
-			return new XStreamSerializer(getXStream(), response.getWriter(), extractor, initializer);
-		} catch (IOException e) {
-			throw new ResultException("Unable to serialize data", e);
-		}
-	}
+    public <T> Serializer from(T object, String alias) {
+        final String newLine = (indented ? INDENTED_NEW_LINE : DEFAULT_NEW_LINE);
+        final char[] lineIndenter = (indented ? INDENTED_LINE_INDENTER : DEFAULT_LINE_INDENTER);
 
-	public <T> Serializer from(T object, String alias) {
-		response.setContentType("application/json");
-		return getSerializer().from(object, alias);
-	}
+        driver = new JsonHierarchicalStreamDriver() {
+            public HierarchicalStreamWriter createWriter(Writer writer) {
+                if (withoutRoot) {
+                    return new JsonWriter(writer, lineIndenter, newLine, JsonWriter.DROP_ROOT_MODE);
+                }
 
-	/**
-	 * You can override this method for configuring XStream before serialization
-	 */
-	protected XStream getXStream() {
-		return new XStream(getHierarchicalStreamDriver()) {
-			{setMode(NO_REFERENCES);}
-			@Override
-			protected MapperWrapper wrapMapper(MapperWrapper next) {
-				return new VRaptorClassMapper(next, extractor);
-			}
-		};
-	}
+                return new JsonWriter(writer, lineIndenter, newLine);
+            }
+        };
 
-	/**
-	 * You can override this method for configuring Driver before serialization
-	 */
-	protected HierarchicalStreamDriver getHierarchicalStreamDriver() {
-		return this.driver;
-	}
+        response.setContentType("application/json");
+        return getSerializer().from(object, alias);
+    }
 
-	public <T> NoRootSerialization withoutRoot() {
-		this.driver = new JsonHierarchicalStreamDriver() {
-			@Override
-			public HierarchicalStreamWriter createWriter(Writer writer) {
-				return new JsonWriter(writer, JsonWriter.DROP_ROOT_MODE);
-			}
-		};
-		return this;
-	}
+    protected SerializerBuilder getSerializer() {
+        try {
+            return new XStreamSerializer(getXStream(), response.getWriter(), extractor, initializer);
+        } catch (IOException e) {
+            throw new ResultException("Unable to serialize data", e);
+        }
+    }
 
+    /**
+     * You can override this method for configuring XStream before serialization
+     */
+    protected XStream getXStream() {
+        return new XStream(getHierarchicalStreamDriver()) {
+            {setMode(NO_REFERENCES);}
+            @Override
+            protected MapperWrapper wrapMapper(MapperWrapper next) {
+                return new VRaptorClassMapper(next, extractor);
+            }
+        };
+    }
+
+    /**
+     * You can override this method for configuring Driver before serialization
+     */
+    protected HierarchicalStreamDriver getHierarchicalStreamDriver() {
+        return this.driver;
+    }
+
+    public <T> NoRootSerialization withoutRoot() {
+        withoutRoot = true;
+        return this;
+    }
+    
+    public JSONSerialization indented() {
+        indented = true;
+        return this;
+    }
 }

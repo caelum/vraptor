@@ -56,7 +56,7 @@ public class XStreamJSONPSerializationTest {
 
 	@Test
 	public void shouldIncludeCallbackPadding() {
-		String expectedResult = "myCallback({\"order\": {\n  \"price\": 15.0,\n  \"comments\": \"pack it nicely, please\"\n}})";
+		String expectedResult = "myCallback({\"order\": {\"price\": 15.0,\"comments\": \"pack it nicely, please\"}})";
 		Order order = new Order(15.0, "pack it nicely, please");
 		serialization.withCallback("myCallback").from(order).serialize();
 		assertThat(result(), is(equalTo(expectedResult)));

@@ -6,7 +6,6 @@ br.com.caelum.vraptor.converter.l10n
 br.com.caelum.vraptor.core
 br.com.caelum.vraptor.deserialization
 br.com.caelum.vraptor.eval
-br.com.caelum.vraptor.extra
 br.com.caelum.vraptor.http
 br.com.caelum.vraptor.http.iogi
 br.com.caelum.vraptor.http.ognl
@@ -18,6 +17,7 @@ br.com.caelum.vraptor.ioc
 br.com.caelum.vraptor.ioc.guice
 br.com.caelum.vraptor.ioc.pico
 br.com.caelum.vraptor.ioc.spring
+br.com.caelum.vraptor.jersey
 br.com.caelum.vraptor.proxy
 br.com.caelum.vraptor.resource
 br.com.caelum.vraptor.restfulie

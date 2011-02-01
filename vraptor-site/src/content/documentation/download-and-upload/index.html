@@ -94,11 +94,13 @@
 		
 									<li><a class="link_toc" href="../../documentation/optimizations/">16. Optimizations</a></li>
 		
-									<li><a class="link_toc" href="../../documentation/vraptor-scaffold/">17. Vraptor Scaffold</a></li>
+									<li><a class="link_toc" href="../../documentation/vraptor-scaffold/">17. VRaptor Scaffold</a></li>
 		
-									<li><a class="link_toc" href="../../documentation/changelog/">18. ChangeLog</a></li>
+									<li><a class="link_toc" href="../../documentation/exception-handling/">18. Exception handling</a></li>
 		
-									<li><a class="link_toc" href="../../documentation/migrating-from-vraptor2-to-vraptor3/">19. Migrating from VRaptor2 to VRaptor3</a></li>
+									<li><a class="link_toc" href="../../documentation/changelog/">19. ChangeLog</a></li>
+		
+									<li><a class="link_toc" href="../../documentation/migrating-from-vraptor2-to-vraptor3/">20. Migrating from VRaptor2 to VRaptor3</a></li>
 		
                 </ol>
             </div><!-- submenu-->
@@ -143,7 +145,7 @@
 
 <h3 class="section">Upload</h3>
 	    	<span class="paragraph">The upload component is optional. To enable this feature, you only need to add the <code class="inlineCode">commons-upload</code> library in your classpath.</span>
-	    	<span class="paragraph">Since Vraptor 3.2, if you're in a container that implements the JSR-315 (Servlet 3.0), you don't need <code class="inlineCode">commons-upload</code> nor
+	    	<span class="paragraph">Since VRaptor 3.2, if you're in a container that implements the JSR-315 (Servlet 3.0), you don't need <code class="inlineCode">commons-upload</code> nor
  <code class="inlineCode">commons-io</code> libraries because the servlet container already have this.</span>
 		
 
@@ -188,6 +190,15 @@ easy way, you can use the <code class="inlineCode">commons-io IOUtils</code>:</s
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
 <br />
 }</span></code></div>
+		
+
+<h3 class="section">Changes in form</h3>
+	    	<span class="paragraph">You need to add the parameter <code class="inlineCode">enctype</code> with <code class="inlineCode">multipart/form-data</code> value. Without this attribute, the browser cannot upload files:</span>
+	    	<div class="xml"><code class="xml"><span class="textag">&lt;form</span>&nbsp;<span class="texattrib">action=</span><span class="texvalue">"minha-action"</span>&nbsp;<span class="texattrib">enctype=</span><span class="texvalue">"multipart/form-data"</span><span class="textag">&gt;</span></code></div>
+		
+
+<h3 class="section">Validating upload</h3>
+	    	<span class="paragraph">When the maximum size for uploaded file exceeds the configured value, VRaptor add a message on the Validator object.</span>
 		
 
 </div><!-- content -->

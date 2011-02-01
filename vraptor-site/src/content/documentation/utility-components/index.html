@@ -94,11 +94,13 @@
 		
 									<li><a class="link_toc" href="../../documentation/optimizations/">16. Optimizations</a></li>
 		
-									<li><a class="link_toc" href="../../documentation/vraptor-scaffold/">17. Vraptor Scaffold</a></li>
+									<li><a class="link_toc" href="../../documentation/vraptor-scaffold/">17. VRaptor Scaffold</a></li>
 		
-									<li><a class="link_toc" href="../../documentation/changelog/">18. ChangeLog</a></li>
+									<li><a class="link_toc" href="../../documentation/exception-handling/">18. Exception handling</a></li>
 		
-									<li><a class="link_toc" href="../../documentation/migrating-from-vraptor2-to-vraptor3/">19. Migrating from VRaptor2 to VRaptor3</a></li>
+									<li><a class="link_toc" href="../../documentation/changelog/">19. ChangeLog</a></li>
+		
+									<li><a class="link_toc" href="../../documentation/migrating-from-vraptor2-to-vraptor3/">20. Migrating from VRaptor2 to VRaptor3</a></li>
 		
                 </ol>
             </div><!-- submenu-->
@@ -243,6 +245,10 @@ its web.xml:</span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;br.com.caelum.vraptor.http.iogi<br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;/param-value&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal"></span><span class="textag">&lt;/context-param&gt;</span></code></div>
+	    	<span class="paragraph"><strong class="title">ExtJS Integration</strong></span>
+	    	<span class="paragraph">There is a View that generates some ExtJS JSON formats. Use:</span>
+	    	<div class="java"><code class="java">
+<span class="java10">result.use</span><span class="java8">(</span><span class="java10">ExtJSJson.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">.....serialize</span><span class="java8">()</span><span class="java10">;</span></code></div>
 	    	<span class="paragraph"><strong class="title">VRaptor 2 compatibility</strong>
 If you want to migrate VRaptor 2 to VRaptor 3 (see Migrating from VRaptor2 to VRaptor3 chapter):</span>
 	    	<div class="xml"><code class="xml"><span class="textag">&lt;context-param&gt;</span><span class="texnormal"><br /></span>

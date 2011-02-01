@@ -1,6 +1,6 @@
 [chapter ChangeLog]
 
-[section 3.3.0 (in dev)]
+[section 3.3.0]
 [box jar changes]
 	[list]
 		* change google-collect 1.0rc to guava-r07.

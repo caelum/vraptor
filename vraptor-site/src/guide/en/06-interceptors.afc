@@ -145,7 +145,6 @@ public class SecondInterceptor implements Interceptor {
 You can specify more than one interceptor:
 
 [java]
-[java]
 @Intercepts(after={FirstInterceptor.class, SecondInterceptor.class}, 
 			before={ForthInterceptor.class, FifthInterceptor.class})
 public class ThirdInterceptor implements Interceptor {
@@ -178,5 +177,6 @@ If you need to execute an Interceptor after ExecuteMethodInterceptor, you **must
 in order to avoid cycles. ForwardToDefaultViewInterceptor is a good value since no other interceptor
 can run after it:
 [java]
-@Intercepts(after=ExecuteMethodInterceptor.class, before=ForwardToDefaultViewInterceptor.class)
+@Intercepts(after=ExecuteMethodInterceptor.class, 
+			before=ForwardToDefaultViewInterceptor.class)
 [/java]

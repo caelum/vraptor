@@ -100,11 +100,13 @@
 		
 									<li><a class="link_toc" href="../../documentacao/otimizacoes/">17. Otimizações</a></li>
 		
-									<li><a class="link_toc" href="../../documentacao/vraptor-scaffold/">18. Vraptor Scaffold</a></li>
+									<li><a class="link_toc" href="../../documentacao/vraptor-scaffold/">18. VRaptor Scaffold</a></li>
 		
-									<li><a class="link_toc" href="../../documentacao/changelog/">19. ChangeLog</a></li>
+									<li><a class="link_toc" href="../../documentacao/exception-handling/">19. Exception handling</a></li>
 		
-									<li><a class="link_toc" href="../../documentacao/migrando-do-vraptor2-para-o-vraptor3/">20. Migrando do VRaptor2 para o VRaptor3</a></li>
+									<li><a class="link_toc" href="../../documentacao/changelog/">20. ChangeLog</a></li>
+		
+									<li><a class="link_toc" href="../../documentacao/migrando-do-vraptor2-para-o-vraptor3/">21. Migrando do VRaptor2 para o VRaptor3</a></li>
 		
                 </ol>
             </div><!-- submenu-->
@@ -467,24 +469,19 @@ Ent&atilde;o uma vers&atilde;o REST do nosso ProdutosController seria:</span>
 <span class="java4">public class </span><span class="java10">ProdutosController </span><span class="java8">{<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java3">//...<br />
 &nbsp;&nbsp;&nbsp; <br />
-&nbsp;&nbsp;&nbsp; </span><span class="java16">@Get<br />
-&nbsp;&nbsp;&nbsp; @Path</span><span class="java8">(</span><span class="java5">&#34;/produtos&#34;</span><span class="java8">)<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java16">@Get @Path</span><span class="java8">(</span><span class="java5">&#34;/produtos&#34;</span><span class="java8">)<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">List&lt;Produto&gt; lista</span><span class="java8">() {</span><span class="java10">...</span><span class="java8">}<br />
 &nbsp;&nbsp;&nbsp; <br />
-&nbsp;&nbsp;&nbsp; </span><span class="java16">@Post<br />
-&nbsp;&nbsp;&nbsp; @Path</span><span class="java8">(</span><span class="java5">&#34;/produtos&#34;</span><span class="java8">)<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java16">@Post</span><span class="java8">(</span><span class="java5">&#34;/produtos&#34;</span><span class="java8">)<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">adiciona</span><span class="java8">(</span><span class="java10">Produto produto</span><span class="java8">) {</span><span class="java10">...</span><span class="java8">}<br />
 <br />
-&nbsp;&nbsp;&nbsp; </span><span class="java16">@Get<br />
-&nbsp;&nbsp;&nbsp; @Path</span><span class="java8">(</span><span class="java5">&#34;/produtos/{produto.id}&#34;</span><span class="java8">)<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java16">@Get</span><span class="java8">(</span><span class="java5">&#34;/produtos/{produto.id}&#34;</span><span class="java8">)<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">visualiza</span><span class="java8">(</span><span class="java10">Produto produto</span><span class="java8">) {</span><span class="java10">...</span><span class="java8">}<br />
 &nbsp;&nbsp;&nbsp; <br />
-&nbsp;&nbsp;&nbsp; </span><span class="java16">@Put<br />
-&nbsp;&nbsp;&nbsp; @Path</span><span class="java8">(</span><span class="java5">&#34;/produtos/{produto.id}&#34;</span><span class="java8">)<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java16">@Put</span><span class="java8">(</span><span class="java5">&#34;/produtos/{produto.id}&#34;</span><span class="java8">)<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">atualiza</span><span class="java8">(</span><span class="java10">Produto produto</span><span class="java8">) {</span><span class="java10">...</span><span class="java8">}<br />
 &nbsp;&nbsp;&nbsp; <br />
-&nbsp;&nbsp;&nbsp; </span><span class="java16">@Delete<br />
-&nbsp;&nbsp;&nbsp; @Path</span><span class="java8">(</span><span class="java5">&#34;/produtos/{produto.id}&#34;</span><span class="java8">)<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java16">@Delete</span><span class="java8">(</span><span class="java5">&#34;/produtos/{produto.id}&#34;</span><span class="java8">)<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">remove</span><span class="java8">(</span><span class="java10">Produto produto</span><span class="java8">) {</span><span class="java10">...</span><span class="java8">}<br />
 &nbsp;&nbsp;&nbsp; <br />
 }</span></code></div>

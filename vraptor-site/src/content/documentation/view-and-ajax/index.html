@@ -94,11 +94,13 @@
 		
 									<li><a class="link_toc" href="../../documentation/optimizations/">16. Optimizations</a></li>
 		
-									<li><a class="link_toc" href="../../documentation/vraptor-scaffold/">17. Vraptor Scaffold</a></li>
+									<li><a class="link_toc" href="../../documentation/vraptor-scaffold/">17. VRaptor Scaffold</a></li>
 		
-									<li><a class="link_toc" href="../../documentation/changelog/">18. ChangeLog</a></li>
+									<li><a class="link_toc" href="../../documentation/exception-handling/">18. Exception handling</a></li>
 		
-									<li><a class="link_toc" href="../../documentation/migrating-from-vraptor2-to-vraptor3/">19. Migrating from VRaptor2 to VRaptor3</a></li>
+									<li><a class="link_toc" href="../../documentation/changelog/">19. ChangeLog</a></li>
+		
+									<li><a class="link_toc" href="../../documentation/migrating-from-vraptor2-to-vraptor3/">20. Migrating from VRaptor2 to VRaptor3</a></li>
 		
                 </ol>
             </div><!-- submenu-->
@@ -109,6 +111,40 @@
 
 		
 
+
+<h3 class="section">Sharing objects with the view</h3>
+	    	<span class="paragraph">To register objects so they can be accessed in your templates:</span>
+	    	<div class="java"><code class="java">
+<span class="java16">@Resource<br />
+</span><span class="java4">class </span><span class="java10">ClientController </span><span class="java8">{<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">private final </span><span class="java10">Result result;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">ClientController</span><span class="java8">(</span><span class="java10">Result result</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">this</span><span class="java10">.result = result;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">search</span><span class="java8">(</span><span class="java9">int </span><span class="java10">id</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">result.include</span><span class="java8">(</span><span class="java5">&#34;message&#34;</span><span class="java10">, </span><span class="java5">&#34;Some message&#34;</span><span class="java8">)</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; result.include</span><span class="java8">(</span><span class="java5">&#34;client&#34;</span><span class="java10">, </span><span class="java4">new </span><span class="java10">Client</span><span class="java8">(</span><span class="java10">id</span><span class="java8">))</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+}</span></code></div>
+	    	<span class="paragraph">The first object is accessed as "message", while the second as "client".
+You can register objects by invoking include with only one parameter if you wish:</span>
+	    	<div class="java"><code class="java">
+<span class="java16">@Resource<br />
+</span><span class="java4">class </span><span class="java10">ClientController </span><span class="java8">{<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">private final </span><span class="java10">Result result;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">ClientController</span><span class="java8">(</span><span class="java10">Result result</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">this</span><span class="java10">.result = result;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">search</span><span class="java8">(</span><span class="java9">int </span><span class="java10">id</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">result.include</span><span class="java8">(</span><span class="java5">&#34;Some message&#34;</span><span class="java8">)</span><span class="java10">.include</span><span class="java8">(</span><span class="java4">new </span><span class="java10">Client</span><span class="java8">(</span><span class="java10">id</span><span class="java8">))</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+}</span></code></div>
+	    	<span class="paragraph">In this case, the first key is "string" while the second is "client".
+Mix one argument and two arguments invocation to create simpler code for your application.
+One can change the behaviour of the key extracting process by creating your own TypeNameExtractor.</span>
+		
 
 <h3 class="section">Custom PathResolver</h3>
 	    	<span class="paragraph">By default, VRaptor tries to render your views following the convention:</span>

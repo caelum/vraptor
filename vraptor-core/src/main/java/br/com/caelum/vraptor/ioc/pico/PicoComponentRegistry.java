@@ -74,7 +74,6 @@ public class PicoComponentRegistry extends AbstractComponentRegistry {
     	return appContainer;
     }
 
-    @SuppressWarnings("unchecked")
     public void register(Class<?> requiredType, Class<?> type) {
         logger.debug("Registering " + requiredType.getName() + " with " + type.getName());
 

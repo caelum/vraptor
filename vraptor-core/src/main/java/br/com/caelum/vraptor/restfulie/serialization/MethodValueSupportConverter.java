@@ -37,7 +37,6 @@ public class MethodValueSupportConverter implements Converter {
 		this.delegate = delegate;
 	}
 
-	@SuppressWarnings("unchecked")
 	public boolean canConvert(Class type) {
 		return delegate.canConvert(type);
 	}

@@ -112,7 +112,6 @@ public class RequestOutjectMap implements Map<String, Object> {
 		String thisName = toParameterName();
 		HashSet<String> aux = new HashSet<String>();
 
-		@SuppressWarnings("unchecked")
 		Set<String> paramNames = request.getParameterMap().keySet();
 
 		for (String p : paramNames) {

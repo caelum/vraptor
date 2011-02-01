@@ -40,7 +40,6 @@ public class DefaultTypeNameExtractorTest {
 	HashSet<? extends BigDecimal> bigsLimited;
 	HashSet<? super BigDecimal> bigsLimited2;
 	HashSet<?> objects;
-	@SuppressWarnings("unchecked")
 	HashSet bigsOld;
 	Vector<String> strings;
 	Class<String> clazz;

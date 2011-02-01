@@ -43,7 +43,6 @@ public class VRaptorConvertersAdapterTest {
     private Converters converters;
     private VRaptorConvertersAdapter adapter;
     private Cat myCat;
-    @SuppressWarnings("unchecked")
 	private Converter converter;
 	private ResourceBundle bundle;
 
@@ -141,7 +140,6 @@ public class VRaptorConvertersAdapterTest {
         mockery.assertIsSatisfied();
     }
 
-    @SuppressWarnings("unchecked")
     @Test(expected=IllegalArgumentException.class)
     public void shouldThrowExceptionIfNoConverterIsFound() throws Throwable {
         mockery.checking(new Expectations() {

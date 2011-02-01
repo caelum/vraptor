@@ -85,7 +85,6 @@ public class FixedMethodStrategyTest {
 		return new HashSet(Arrays.asList(method));
 	}
 
-	@SuppressWarnings("unchecked")
 	private Method method(String name, Class... types) {
 		try {
 			return MyControl.class.getDeclaredMethod(name, types);

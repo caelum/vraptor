@@ -47,10 +47,8 @@ public class ListNullHandlerTest {
 	private EmptyElementsRemoval removal;
 
 	public static class Client {
-		@SuppressWarnings( { "unchecked" })
 		private List nonGeneric = new ArrayList();
 
-		@SuppressWarnings("unchecked")
 		public void setNonGeneric(List nonGeneric) {
 			this.nonGeneric = nonGeneric;
 		}

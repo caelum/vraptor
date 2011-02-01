@@ -66,7 +66,6 @@ public class Evaluator {
 		return instance;
 	}
 
-	@SuppressWarnings("unchecked")
 	private Object access(Object current, int position) {
 		if (current.getClass().isArray()) {
 			return Array.get(current, position);

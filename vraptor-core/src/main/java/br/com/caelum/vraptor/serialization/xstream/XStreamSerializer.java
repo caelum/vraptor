@@ -245,7 +245,6 @@ public class XStreamSerializer implements SerializerBuilder {
 	private void registerProxyInitializer() {
 		xstream.registerConverter(new Converter() {
 
-			@SuppressWarnings("unchecked")
 			public boolean canConvert(Class clazz) {
 				return initializer.isProxy(clazz);
 			}

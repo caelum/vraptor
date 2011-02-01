@@ -42,7 +42,6 @@ public class ReflectionBasedNullHandler extends ObjectNullHandler {
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
     public Object nullPropertyValue(Map context, Object target, Object property) {
 
         OgnlContext ctx = (OgnlContext) context;

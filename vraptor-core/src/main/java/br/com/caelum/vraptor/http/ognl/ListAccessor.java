@@ -50,7 +50,6 @@ public class ListAccessor extends ListPropertyAccessor {
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public Object getProperty(Map context, Object target, Object value) throws OgnlException {
 		try {
 			return super.getProperty(context, target, value);

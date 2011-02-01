@@ -80,7 +80,6 @@ public class IogiParametersProviderTest {
 	private Localization mockLocalization;
 	private Validator mockValidator;
 
-    @SuppressWarnings("rawtypes")
 	@Before
     public void setup() throws Exception {
         this.mockery = new VRaptorMockery(true);

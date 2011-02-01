@@ -35,7 +35,6 @@ import br.com.caelum.vraptor.vraptor2.Info;
  */
 public class ArrayAccessor extends ArrayPropertyAccessor {
 
-	@SuppressWarnings("unchecked")
     @Override
     public Object getProperty(Map context, Object target, Object object) throws OgnlException {
         try {
@@ -45,7 +44,6 @@ public class ArrayAccessor extends ArrayPropertyAccessor {
         }
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public void setProperty(Map context, Object array, Object key, Object value) throws OgnlException {
 

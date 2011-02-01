@@ -31,7 +31,6 @@ import br.com.caelum.vraptor.converter.ConversionError;
  * 
  * @author guilherme silveira
  */
-@SuppressWarnings("unchecked")
 public class ConverterWrapper implements Converter {
 
 	private final org.vraptor.converter.Converter converter;

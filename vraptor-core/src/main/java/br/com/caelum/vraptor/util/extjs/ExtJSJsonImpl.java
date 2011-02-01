@@ -164,7 +164,6 @@ public class ExtJSJsonImpl implements ExtJSJson {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	private String objectToJSON() {
 		xstream.setMode(XStream.NO_REFERENCES);
         xstream.alias("data", object.getClass());

@@ -58,7 +58,6 @@ class GenericNullHandler {
 		this.removal = removal;
 	}
 
-	@SuppressWarnings("unchecked")
     <T> T instantiate(Class<T> baseType) {
     	if (baseType.isArray()) {
     		return baseType.cast(Array.newInstance(baseType.getComponentType(), 0));

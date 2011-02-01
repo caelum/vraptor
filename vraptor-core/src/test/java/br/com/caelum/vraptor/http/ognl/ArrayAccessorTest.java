@@ -105,7 +105,6 @@ public class ArrayAccessorTest {
         assertThat(value, is(equalTo((Object) 22L)));
     }
 
-    @SuppressWarnings("unchecked")
     @Test
     public void settingShouldNullifyUpToIndexAndIgnoreRemoval() throws Exception {
         final Long[] l = new Long[] {};

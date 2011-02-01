@@ -36,7 +36,6 @@ import br.com.caelum.vraptor.test.HttpSessionMock;
 public class PicoProviderTest extends GenericContainerTest {
     private int counter;
 
-    @SuppressWarnings("unchecked")
     @Test
     public void canProvidePicoSpecificApplicationScopedComponents() {
         List<Class<?>> components = Arrays.asList();

@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>br.com.caelum</groupId>
 	<artifactId>vraptor</artifactId>
-	<version>3.2.1-SNAPSHOT</version>
+	<version>3.3.0</version>
 	<name>VRaptor3</name>
 	<packaging>jar</packaging>
 

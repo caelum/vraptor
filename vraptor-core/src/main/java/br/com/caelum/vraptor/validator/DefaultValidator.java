@@ -86,11 +86,16 @@ public class DefaultValidator extends AbstractValidator {
     	return viewsFactory.instanceFor(view, errors);
     }
 
-    public void addAll(Collection<? extends Message> message) {
-		this.errors.addAll(message);
+    public void addAll(Collection<? extends Message> messages) {
+		for (Message message : messages) {
+			add(message);
+		}
 	}
 
     public void add(Message message) {
+    	if (message instanceof I18nMessage && !((I18nMessage) message).hasBundle()) {
+    		((I18nMessage) message).setBundle(localization.getBundle());
+    	}
     	this.errors.add(message);
     }
 

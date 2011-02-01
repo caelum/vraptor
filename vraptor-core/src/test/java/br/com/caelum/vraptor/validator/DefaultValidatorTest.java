@@ -20,13 +20,17 @@ package br.com.caelum.vraptor.validator;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
+import java.util.ResourceBundle;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -88,6 +92,7 @@ public class DefaultValidatorTest {
 		}
 		verify(outjector).outjectRequestMap();
 	}
+
 	@Test
 	public void addsTheErrorsOnTheResult() {
 		try {
@@ -97,6 +102,7 @@ public class DefaultValidatorTest {
 		}
 		verify(result).include(eq("errors"), argThat(is(not(empty()))));
 	}
+
 	@Test
 	public void redirectsToCustomOnErrorPage() {
 		try {
@@ -125,6 +131,23 @@ public class DefaultValidatorTest {
 		} catch (ValidationException e) {
 			verify(instance).logic();
 		}
+	}
+
+	@Test
+	public void shouldSetBundleOnI18nMessages() throws Exception {
+		I18nMessage message = mock(I18nMessage.class);
+		validator.add(message);
+		verify(message).setBundle(any(ResourceBundle.class));
+	}
+
+	@Test
+	public void shouldOnlySetBundleOnI18nMessagesThatHasNotBeenSetBefore() throws Exception {
+		I18nMessage message = mock(I18nMessage.class);
+		when(message.hasBundle()).thenReturn(true);
+
+		validator.add(message);
+
+		verify(message, never()).setBundle(any(ResourceBundle.class));
 	}
 
 	@Resource

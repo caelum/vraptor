@@ -33,6 +33,10 @@ public class I18nMessage implements Message {
 		this.bundle = bundle;
 	}
 
+	public boolean hasBundle() {
+		return this.bundle != null;
+	}
+
 	public String getMessage() {
 		if (bundle == null) {
 			throw new IllegalStateException("You must set the bundle before using the I18nMessage");

@@ -36,7 +36,7 @@ Both are supported using your JVM's default locale.
 
 [section Localized BigDecimal, Double e Float]
 
-Since version 3.1.2, Vraptor also supports localization for these types. In order to use them you must add to your web.xml:
+Since version 3.1.2, VRaptor also supports localization for these types. In order to use them you must add to your web.xml:
 
 [xml]
 	<context-param>

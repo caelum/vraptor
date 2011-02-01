@@ -36,7 +36,7 @@ Ambos são suportados utilizando o padrão de localização da virtual machine q
 
 [section BigDecimal, Double e Float localizados]
 
-A partir da versão 3.1.2 o Vraptor suporta esses tipos baseados na localização da virtual machine. Para ativar esses 
+A partir da versão 3.1.2 o VRaptor suporta esses tipos baseados na localização da virtual machine. Para ativar esses 
 componentes é necessário adicionar as seguintes linhas no seu web.xml:
 
 [xml]

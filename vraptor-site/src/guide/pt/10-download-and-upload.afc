@@ -45,7 +45,7 @@ Você pode também usar a implementação %%InputStreamDownload%% para trabalhar
 Para ativar o suporte a upload é necessário adicionar as bibliotecas %%commons-upload%% e %%commons-io%% em seu 
 classpath.
 
-Na versão 3.2 do Vraptor, caso você estiver em um container que implemente a JSR-315 (Servlet 3.0), 
+Na versão 3.2 do VRaptor, caso você estiver em um container que implemente a JSR-315 (Servlet 3.0), 
 não serão necessários os jars %%commons-upload%% e %%commons-io%%, pois o próprio container já implementa 
 a funcionalidade de upload.
 
@@ -103,4 +103,4 @@ Para que o browser possa fazer o upload corretamente você precisa adicionar o a
 
 [section Validando o upload]
 
-Quando o tamanho máximo para upload de arquivo exceder o valor configurado, o Vraptor adiciona uma mensagem no objeto Validator.
+Quando o tamanho máximo para upload de arquivo exceder o valor configurado, o VRaptor adiciona uma mensagem no objeto Validator.

@@ -1,6 +1,6 @@
 [chapter Exception handling]
 
-Since version 3.2, Vraptor has an Exception Handler, which handler all unhandled exceptions in your application. The Exception Handler has a very similar behaviour than Vraptor Validator.
+Since version 3.2, VRaptor has an Exception Handler, which handler all unhandled exceptions in your application. The Exception Handler has a very similar behaviour than VRaptor Validator.
 
 In the example below, if the method %%addCustomer(Customer)%% throws a CustomerAlreadyExistsException%%, the user will be redirected to the method %%addCustomer()%%.
 

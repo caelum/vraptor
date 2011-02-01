@@ -1,6 +1,6 @@
-[chapter Vraptor Scaffold]
+[chapter VRaptor Scaffold]
 
-O VRaptor 3 agora possui uma extensão chamada Vraptor Scaffold, 
+O VRaptor 3 agora possui uma extensão chamada VRaptor Scaffold, 
 que ter por finalidade facilitar a configuração de novos projetos e plugins.
 
 [section Instalação]
@@ -111,7 +111,7 @@ criar a estrutura da aplicação e o "scaffold" que é resposável por gerar os 
 [code]vraptor scaffold -h[/code]
 
 [section Spring]
-O Vraptor utiliza por padrão o Spring 2.5 como container D.I, para utilizar a versão 3 do Spring execute
+O VRaptor utiliza por padrão o Spring 2.5 como container D.I, para utilizar a versão 3 do Spring execute
 
 [code]vraptor new onlinestore --spring3[/code]
 

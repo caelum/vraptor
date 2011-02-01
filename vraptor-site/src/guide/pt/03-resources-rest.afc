@@ -96,17 +96,12 @@ Para definir em que escopo o seu componente vive, basta utilizar as anotações
 Caso nenhuma anotação seja utilizada, o VRaptor assume que seu componente ficará
 no escopo de request, isto é, você terá um novo componente a cada nova requisição.
  
-[section Http Methods]
-
-O ideal é definir uma URI específica para diversos métodos HTTP diferentes, como
-GET, POST, PUT etc.
-
-Para atingir esse objetivo, utilizamos as anotações %%@Get%%, %%@Post%%, %%@Delete%% 
-etc juntamente com a anotação %%@Path%% que permite configurar uma URI diferente da 
-URI padrão.
-
-O exemplo a seguir altera os padrões de URI do %%ClienteController%% para utilizar
-duas URIs distintas, com diversos métodos HTTP:
+[section @Path]
+ 
+A anotação %%@Path%% permite que você customize as URIs de acesso a seus métodos.
+O uso básico dessa anotação é feito através de uma URI fixa. O exemplo a seguir mostra
+a customização de uma URI para um método, que somente receberá requisições do tipo
+::POST:: na URI **/cliente**:
 
 [java]
 @Resource
@@ -116,26 +111,66 @@ public class ClienteController {
   @Post 
   public void adiciona(Cliente cliente) {
   }
+    
+}
+[/java]
+
+Se você anotar o ClienteController com @Path, o valor especificado vai ser usado como prefixo
+para todas as URIs desse controller:
+[java]
+@Resource
+@Path("/clientes")
+public class ClienteController {
+	//URI: /clientes/lista
+	public void lista() {...}
+	
+	//URI: /clientes/salva
+	@Path("salva")
+	public void adiciona() {...}
+	
+	//URI: /clientes/todosOsClientes
+	@Path("/todosOsClientes")
+	public void listaTudo() {...}
+}
+[/java]
+
+
+[section Http Methods]
+
+O ideal é definir uma URI específica para diversos métodos HTTP diferentes, como
+GET, POST, PUT etc.
+
+Para atingir esse objetivo, utilizamos as anotações %%@Get%%, %%@Post%%, %%@Delete%% 
+etc que também permitem configurar uma URI diferente da URI padrão, da mesma forma
+que a anotação @Path.
+
+O exemplo a seguir altera os padrões de URI do %%ClienteController%% para utilizar
+duas URIs distintas, com diversos métodos HTTP:
+
+[java]
+@Resource
+public class ClienteController {
+
+  @Post("/cliente") 
+  public void adiciona(Cliente cliente) {
+  }
   
   @Path("/")
   public List<Cliente> lista() {
     return ...
   }
 
-  @Get
-  @Path("/cliente")  
+  @Get("/cliente")  
   public Cliente visualiza(Cliente cliente) {
     return ...
   }
  
-  @Delete
-  @Path("/cliente")
+  @Delete("/cliente")
   public void remove(Cliente cliente) {
     ...
   }
   
-  @Put
-  @Path("/cliente")
+  @Put("/cliente")
   public void atualiza(Cliente cliente) {
     ...
   }
@@ -181,43 +216,7 @@ parâmetro %%_method%%, uma vez que o browser não suporta ainda tais requisiç�
 </form>
 [/xml]
 
-[section @Path]
- 
-A anotação %%@Path%% permite que você customize as URIs de acesso a seus métodos.
-O uso básico dessa anotação é feito através de uma URI fixa. O exemplo a seguir mostra
-a customização de uma URI para um método, que somente receberá requisições do tipo
-::POST:: na URI **/cliente**:
 
-[java]
-@Resource
-public class ClienteController {
-
-  @Path("/cliente")
-  @Post 
-  public void adiciona(Cliente cliente) {
-  }
-    
-}
-[/java]
-
-Se você anotar o ClienteController com @Path, o valor especificado vai ser usado como prefixo
-para todas as URIs desse controller:
-[java]
-@Resource
-@Path("/clientes")
-public class ClienteController {
-	//URI: /clientes/lista
-	public void lista() {...}
-	
-	//URI: /clientes/salva
-	@Path("salva")
-	public void adiciona() {...}
-	
-	//URI: /clientes/todosOsClientes
-	@Path("/todosOsClientes")
-	public void listaTudo() {...}
-}
-[/java]
 
 [title Paths com expressões regulares]
 Você pode restringir o valor dos parâmetros da sua URI com expressões regulares,

@@ -24,8 +24,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Notifies Vraptor that the annotated method supports the http GET
- * requisitions.
+ * Supports the GET http method.
  *
  * @author Guilherme Silveira
  */
@@ -34,9 +33,9 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Get {
 
-	/**
-	 * All paths that will be mapped to an annotated Resource method.
-	 * @return
-	 */
+    /**
+     * All paths that will be mapped to an annotated Resource method. 
+     * @return
+     */
     String[] value() default {};
 }

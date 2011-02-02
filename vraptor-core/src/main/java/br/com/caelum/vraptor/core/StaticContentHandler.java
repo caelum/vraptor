@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and 
  * limitations under the License. 
  */
+
 package br.com.caelum.vraptor.core;
 
 import java.io.IOException;
@@ -24,10 +25,22 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * Handles the content if the request corresponds to static content (like images, CSS, JS and so on).
+ * 
+ * @author based on VRaptor2
+ */
 public interface StaticContentHandler {
 
-    public boolean requestingStaticFile(HttpServletRequest request) throws MalformedURLException;
-    public void deferProcessingToContainer(FilterChain filterChain, HttpServletRequest request,
+    /**
+     * Return true if the requested file is a static content, false otherwise.
+     */
+    boolean requestingStaticFile(HttpServletRequest request) throws MalformedURLException;
+
+    /**
+     * Defer the process to container.
+     */
+    void deferProcessingToContainer(FilterChain filterChain, HttpServletRequest request,
             HttpServletResponse response) throws IOException, ServletException;
 
 

@@ -19,6 +19,7 @@ package br.com.caelum.vraptor;
 
 import java.util.Map;
 
+import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.view.LogicResult;
 import br.com.caelum.vraptor.view.PageResult;
 import br.com.caelum.vraptor.view.Status;
@@ -30,13 +31,32 @@ import br.com.caelum.vraptor.view.Status;
  */
 public interface Result {
 
+    /**
+     * Stores an attribute in the result.
+     * 
+     * @param key a String specifying the key of the attribute
+     * @param value the object to be stored
+     * @return this own class
+     */
     Result include(String key, Object value);
+    
+    /**
+     * Stores an attribute in the result. The key for the object is defined by 
+     * extracting the value class.
+     * 
+     * @param value the object to be stored
+     * @return this own class
+     * @see TypeNameExtractor
+     */
     Result include(Object value);
 
+    /**
+     * Force result to use the defined view.
+     */
 	<T extends View> T use(Class<T> view);
 	
     /**
-     * TODO doc
+     * Add an {@link Exception} to be handled by Exception Handler.
      * 
      * @param exception The exception to handle.
      * @throws A {@link NullPointerException} if exception is null.
@@ -49,7 +69,7 @@ public interface Result {
     boolean used();
 
     /**
-     * All included attributes via Result.include();
+     * Return all included attributes via Result.include();
      * @return
      */
     Map<String, Object> included();

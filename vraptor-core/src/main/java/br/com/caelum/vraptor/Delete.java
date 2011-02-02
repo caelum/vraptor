@@ -23,13 +23,19 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * Supports the DELETE http method.
+ *
+ * @author Guilherme Silveira
+ */
+
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Delete {
 
 	/**
-	 * All paths that will be mapped to an annotated Resource method.
+	 * All paths that will be mapped to an annotated Resource method. 
 	 * @return
 	 */
     String[] value() default {};

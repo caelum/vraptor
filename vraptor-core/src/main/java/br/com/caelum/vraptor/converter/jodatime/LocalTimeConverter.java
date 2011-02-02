@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and 
  * limitations under the License. 
  */
+
 package br.com.caelum.vraptor.converter.jodatime;
 
 import java.text.MessageFormat;
@@ -27,6 +28,11 @@ import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.converter.ConversionError;
 import br.com.caelum.vraptor.core.Localization;
 
+/**
+ * VRaptor converter for {@link LocalTime}. {@link LocalTime} is part of Joda Time library.
+ * 
+ * @author Lucas Cavalcanti
+ */
 @Convert(LocalTime.class)
 public class LocalTimeConverter implements Converter<LocalTime> {
 	

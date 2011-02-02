@@ -1,0 +1,33 @@
+[chapter How to contribute to VRaptor]
+
+[section Joining the mailing lists]
+
+You can answer questions from other users in our user mailing list (in english) on Google Groups [1].
+
+
+[section Collaborating with the documentation]
+
+You can help us writing Javadocs, improving site content, with a recipe or an article on your blog.
+
+
+[section Reporting bugs and suggesting new features]
+
+If you found a bug, tell the development team using the user mailing list [1] or developers mailing list [2]. You can also create an issue on Github [3].
+
+
+[section Collaborating with code]
+
+If you have any improvements you'd like to see in VRaptor, send your suggestion to the developers mailing list [2]. If you have already implemented, please send your pull request via GitHub.
+
+You can resolve some issue registered on GitHub [3], send us a pull request with your changes.
+
+VRaptor is a MVC Web Framework focused in simplicity and easy of use. When you implement something, take care to follow the best practices of Object Orientation and low coupling, use of composition instead of inheritance, convention over configuration and a well structured code. Make sure you also write the Javadocs classes and unit tests.
+
+Contributions like security, paging, multitenant, and others are welcome through plugins and contributions to vraptor-contrib [4], or extensions to vraptor-scaffold [5].
+
+
+[1] http://groups.google.com/group/caelum-vraptor-en
+[2] http://groups.google.com/group/caelum-vraptor-dev
+[3] http://github.com/caelum/vraptor/issues
+[4] http://github.com/caelum/vraptor-contrib
+[5] https://github.com/caelum/vraptor-scaffold

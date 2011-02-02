@@ -21,6 +21,11 @@ So VRaptor will execute the interceptors in an ordering that respects before and
 of all interceptors. 
 Therefore the InterceptorSequence interface is deprecated.
 
+* HTTP verb annotations now also can set paths:
+[java]
+@Get("/items/{id}"), @Post("/items"), etc 
+[/java]
+
 * bugfix: @Transactional from Spring can be used in any class (within spring aop limitations)
 * bugfix: upload of files with same name
 * bugfix: web-fragments.xml on jboss 6

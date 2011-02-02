@@ -23,6 +23,11 @@ Assim o VRaptor executa os interceptors em uma ordem que respeita o before e o a
 interceptors.
 Desse modo a interface InterceptorSequence fica deprecada.
 
+* As anotações de verbos HTTP agora também podem definir o path do método:
+[java]
+@Get("/items/{id}"), @Post("/items"), etc 
+[/java]
+
 * bugfix: @Transactional do Spring agora pode ser usado em qualquer classe
 (com as limitações do spring aop)
 * bugfix: upload de arquivos com mesmo nome

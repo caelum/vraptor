@@ -132,7 +132,7 @@ public class FuncionarioController {
 }
 [/java]
 
-[section How to ensure ordering: after and before]
+[section Como garantir ordem: after e before]
 Se você precisa garantir a ordem de execução de um conjunto de interceptors, você pode usar os
 atributos **after** e **before** da @Intercepts. Suponha que o PrimeiroInterceptor tenha que rodar antes
 do SegundoInterceptor, então você pode configurar isso tanto com: 

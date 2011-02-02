@@ -126,6 +126,9 @@ specifying which interceptors must run before or after the annotated interceptor
 	    	<span class="paragraph">So VRaptor will execute the interceptors in an ordering that respects before and after restrictions
 of all interceptors. 
 Therefore the InterceptorSequence interface is deprecated.</span>
+	    	<span class="paragraph">* HTTP verb annotations now also can set paths:</span>
+	    	<div class="java"><code class="java">
+<span class="java16">@Get</span><span class="java8">(</span><span class="java5">&#34;/items/{id}&#34;</span><span class="java8">)</span><span class="java10">, </span><span class="java16">@Post</span><span class="java8">(</span><span class="java5">&#34;/items&#34;</span><span class="java8">)</span><span class="java10">, etc</span></code></div>
 	    	<span class="paragraph">* bugfix: @Transactional from Spring can be used in any class (within spring aop limitations)
 * bugfix: upload of files with same name
 * bugfix: web-fragments.xml on jboss 6

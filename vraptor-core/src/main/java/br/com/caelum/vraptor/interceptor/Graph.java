@@ -55,7 +55,7 @@ public class Graph<E> {
 		}
 	}
 
-	public List<E> topologicalOrder() {
+	public synchronized List<E> topologicalOrder() {
 		if (orderedList == null) {
 			this.orderedList = Lists.newArrayList();
 			orderTopologically();

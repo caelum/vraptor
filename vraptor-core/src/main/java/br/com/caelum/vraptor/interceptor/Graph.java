@@ -23,6 +23,8 @@ import static com.google.common.collect.Sets.union;
 
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Lists;
@@ -43,6 +45,7 @@ public class Graph<E> {
 	private Multimap<E, E> graph = LinkedHashMultimap.create();
 	private List<E> orderedList;
 
+	private final Lock lock = new ReentrantLock();
 
 	public void addEdge(E from, E to) {
 		checkState(orderedList == null, "You shouldn't add more interceptors after ordering. Please notify vraptor developers.");
@@ -55,10 +58,17 @@ public class Graph<E> {
 		}
 	}
 
-	public synchronized List<E> topologicalOrder() {
+	public List<E> topologicalOrder() {
 		if (orderedList == null) {
-			this.orderedList = Lists.newArrayList();
-			orderTopologically();
+			lock.lock();
+			try {
+				if (orderedList == null) {
+					this.orderedList = Lists.newArrayList();
+					orderTopologically();
+				}
+			} finally {
+				lock.unlock();
+			}
 		}
 		return this.orderedList;
 	}

@@ -59,6 +59,7 @@ import br.com.caelum.vraptor.ioc.spring.components.DummyImplementation;
 import br.com.caelum.vraptor.ioc.spring.components.DummyInterceptor;
 import br.com.caelum.vraptor.ioc.spring.components.DummyResource;
 import br.com.caelum.vraptor.ioc.spring.components.Foo;
+import br.com.caelum.vraptor.ioc.spring.components.LifecycleComponent;
 import br.com.caelum.vraptor.ioc.spring.components.RequestScopedComponent;
 import br.com.caelum.vraptor.ioc.spring.components.RequestScopedContract;
 import br.com.caelum.vraptor.ioc.spring.components.SameName;
@@ -136,6 +137,11 @@ public class SpringBasedContainerTest {
 		DummyComponent component = container.instanceFor(DummyComponent.class);
 		assertNotNull("can instantiate", component);
 		assertTrue("is the right implementation", component instanceof DummyImplementation);
+	}
+
+	@Test
+	public void shouldRunPostConstructMethodOfApplicationScopedComponentsAtContainerStart() {
+		assertTrue("should have called init", LifecycleComponent.initialized);
 	}
 
 	static class NotRegisterd {}

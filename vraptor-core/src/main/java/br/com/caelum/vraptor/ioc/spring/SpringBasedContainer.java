@@ -59,6 +59,7 @@ public class SpringBasedContainer extends AbstractComponentRegistry implements C
 
 			registry.registerCustomComponents(container.toRegister);
 		}
+
 	}
 
 	private static final Logger logger = LoggerFactory.getLogger(SpringBasedContainer.class);

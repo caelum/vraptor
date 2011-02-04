@@ -39,15 +39,12 @@ public class SpringRegistry {
 
 	private void registerOn(Class<?> type, boolean customComponent) {
 		AnnotatedGenericBeanDefinition definition = new AnnotatedGenericBeanDefinition(type);
-		definition.setLazyInit(true);
-		definition.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_NO);
-		if (customComponent) {
-			definition.setPrimary(true);
-			definition.setRole(BeanDefinition.ROLE_APPLICATION);
-		} else {
-			definition.setPrimary(false);
-			definition.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
+		if (!customComponent) {
+			definition.setLazyInit(true);
 		}
+		definition.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_NO);
+		definition.setPrimary(customComponent);
+		definition.setRole(customComponent ? BeanDefinition.ROLE_APPLICATION : BeanDefinition.ROLE_INFRASTRUCTURE);
 
 		String name = beanNameGenerator.generateBeanName(definition, (BeanDefinitionRegistry) beanFactory);
 		BeanDefinitionHolder definitionHolder = new BeanDefinitionHolder(definition, name);

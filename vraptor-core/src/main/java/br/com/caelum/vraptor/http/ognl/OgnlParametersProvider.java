@@ -181,7 +181,7 @@ public class OgnlParametersProvider implements ParametersProvider {
 	private OgnlContext createOgnlContextFor(Parameter param, ResourceBundle bundle) {
 		OgnlContext context;
 		try {
-			context = (OgnlContext) Ognl.createDefaultContext(new GenericNullHandler(removal).instantiate(param.actualType()));
+			context = createOgnlContext(new GenericNullHandler(removal).instantiate(param.actualType()));
 		} catch (Exception ex) {
 			throw new InvalidParameterException("unable to instantiate type " + param.type, ex);
 		}
@@ -193,6 +193,10 @@ public class OgnlParametersProvider implements ParametersProvider {
 		Ognl.setTypeConverter(context, adapter);
 
 		return context;
+	}
+
+	protected OgnlContext createOgnlContext(Object root) {
+		return (OgnlContext) Ognl.createDefaultContext(root);
 	}
 
 	private Object createSimpleParameter(Parameter param, String[] values, ResourceBundle bundle) {

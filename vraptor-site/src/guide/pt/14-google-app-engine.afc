@@ -38,3 +38,8 @@ No caso de arquivos de tags, deve-se adicionar:
 
 %%<%@ tag isELIgnored="false" %>%%
 
+[section JPA 2] 
+
+O VRaptor possui suporte ao JPA nas versões 1 e 2, porém o ambiente do 
+Google App Engine suporta apenas JPA 1. Por isso você deve evitar de copiar o jar 
+jpa-api-2.0.jar para seu projeto.

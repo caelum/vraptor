@@ -94,7 +94,8 @@ public class DefaultParametersControl implements ParametersControl {
 					result = converter.convert(result);
 				}
 			}
-			base = base.replaceAll("\\{" + key + "\\*?\\}", result == null ? "" : result.toString());
+			String regex = "\\{" + key + "\\*?\\}|\\{" + key + "\\*?:(.*)\\}";
+			base = base.replaceAll(regex, result == null ? "" : result.toString());
 		}
 		return base;
 	}

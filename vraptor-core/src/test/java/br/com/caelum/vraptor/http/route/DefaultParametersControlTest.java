@@ -122,11 +122,17 @@ public class DefaultParametersControlTest {
 		assertThat(uri, is(equalTo("/clients/")));
 	}
 
-	@Test
-	public void shouldTranslatePatternArgs() {
-		String uri = new DefaultParametersControl("/clients/{client.id}", converters).fillUri(new String[] {"client"}, client(3L));
-		assertThat(uri, is(equalTo("/clients/3")));
-	}
+    @Test
+    public void shouldTranslatePatternArgs() {
+        String uri = new DefaultParametersControl("/clients/{client.id}", converters).fillUri(new String[] {"client"}, client(3L));
+        assertThat(uri, is(equalTo("/clients/3")));
+    }
+
+    @Test
+    public void shouldTranslatePatternArgsWithRegex() {
+        String uri = new DefaultParametersControl("/clients/{id:[0-9]{1,}}", converters).fillUri(new String[] {"id"}, 30L);
+        assertThat(uri, is(equalTo("/clients/30")));
+    }
 
 	@Test
 	public void shouldTranslatePatternArgNullAsEmpty() {

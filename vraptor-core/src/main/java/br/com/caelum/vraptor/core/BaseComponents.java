@@ -120,8 +120,12 @@ import br.com.caelum.vraptor.ioc.ConverterHandler;
 import br.com.caelum.vraptor.ioc.InterceptorStereotypeHandler;
 import br.com.caelum.vraptor.ioc.ResourceHandler;
 import br.com.caelum.vraptor.ioc.StereotypeHandler;
-import br.com.caelum.vraptor.proxy.ObjenesisProxifier;
+import br.com.caelum.vraptor.proxy.CglibProxifier;
+import br.com.caelum.vraptor.proxy.InstanceCreator;
+import br.com.caelum.vraptor.proxy.JavassistProxifier;
+import br.com.caelum.vraptor.proxy.ObjenesisInstanceCreator;
 import br.com.caelum.vraptor.proxy.Proxifier;
+import br.com.caelum.vraptor.proxy.ReflectionInstanceCreator;
 import br.com.caelum.vraptor.resource.DefaultMethodNotAllowedHandler;
 import br.com.caelum.vraptor.resource.DefaultResourceNotFoundHandler;
 import br.com.caelum.vraptor.resource.MethodNotAllowedHandler;
@@ -202,7 +206,8 @@ public class BaseComponents {
             MethodNotAllowedHandler.class,	DefaultMethodNotAllowedHandler.class,
             RoutesConfiguration.class, 		NoRoutesConfiguration.class,
             Deserializers.class,			DefaultDeserializers.class,
-            Proxifier.class, 				ObjenesisProxifier.class,
+            Proxifier.class, 				getProxifier(),
+            InstanceCreator.class,          getInstanceCreator(),
             ParameterNameProvider.class, 	ParanamerNameProvider.class,
             TypeFinder.class, 				DefaultTypeFinder.class,
             RoutesParser.class, 			PathAnnotationRoutesParser.class,
@@ -324,6 +329,22 @@ public class BaseComponents {
 			return NullProxyInitializer.class;
 		}
 	}
+    
+    private static Class<? extends InstanceCreator> getInstanceCreator() {
+        if (isClassPresent("org.objenesis.ObjenesisStd")) {
+            return ObjenesisInstanceCreator.class;
+        }
+        
+        return ReflectionInstanceCreator.class;
+    }
+    
+    private static Class<? extends Proxifier> getProxifier() {
+        if (isClassPresent("net.sf.cglib.proxy.Factory")) {
+            return CglibProxifier.class;
+        }
+
+        return JavassistProxifier.class;
+    }
 
 	public static Map<Class<?>, Class<?>> getCachedComponents() {
 		return Collections.unmodifiableMap(CACHED_COMPONENTS);

@@ -21,9 +21,9 @@ package br.com.caelum.vraptor.util.test;
 import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor.ioc.Component;
-import br.com.caelum.vraptor.proxy.ObjenesisProxifier;
+import br.com.caelum.vraptor.proxy.CglibProxifier;
+import br.com.caelum.vraptor.proxy.ObjenesisInstanceCreator;
 import br.com.caelum.vraptor.proxy.Proxifier;
-import br.com.caelum.vraptor.serialization.HibernateProxyInitializer;
 import br.com.caelum.vraptor.serialization.JSONSerialization;
 import br.com.caelum.vraptor.serialization.NullProxyInitializer;
 import br.com.caelum.vraptor.serialization.ProxyInitializer;
@@ -62,7 +62,7 @@ public class MockSerializationResult extends MockResult {
 	}
 
 	public MockSerializationResult() {
-		this(new ObjenesisProxifier(), new NullProxyInitializer());
+		this(new CglibProxifier(new ObjenesisInstanceCreator()), new NullProxyInitializer());
 	}
 
 	public <T extends View> T use(final Class<T> view) {

@@ -19,6 +19,8 @@ package br.com.caelum.vraptor.proxy;
 import br.com.caelum.vraptor.VRaptorException;
 
 /**
+ * Thrown when proxy creation fails.
+ * 
  * @author Fabio Kung
  */
 public class ProxyCreationException extends VRaptorException {

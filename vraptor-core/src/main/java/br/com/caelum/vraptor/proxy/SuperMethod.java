@@ -17,6 +17,8 @@
 package br.com.caelum.vraptor.proxy;
 
 /**
+ * Defines calls to the overriden original method.
+ * 
  * @author Fabio Kung
  */
 public interface SuperMethod {

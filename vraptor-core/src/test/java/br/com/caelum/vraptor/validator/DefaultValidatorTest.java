@@ -42,7 +42,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.core.Localization;
-import br.com.caelum.vraptor.proxy.DefaultProxifier;
+import br.com.caelum.vraptor.proxy.JavassistProxifier;
+import br.com.caelum.vraptor.proxy.ObjenesisInstanceCreator;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.util.EmptyBundle;
 import br.com.caelum.vraptor.util.test.MockResult;
@@ -66,7 +67,7 @@ public class DefaultValidatorTest {
 
 	@Before
 	public void setup() {
-		Proxifier proxifier = new DefaultProxifier();
+		Proxifier proxifier = new JavassistProxifier(new ObjenesisInstanceCreator());
 		this.validator = new DefaultValidator(result, new DefaultValidationViewsFactory(result, proxifier), outjector, proxifier, null, localization);
 		when(result.use(LogicResult.class)).thenReturn(logicResult);
 		when(result.use(PageResult.class)).thenReturn(pageResult);

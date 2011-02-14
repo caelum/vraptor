@@ -33,7 +33,8 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
-import br.com.caelum.vraptor.proxy.DefaultProxifier;
+import br.com.caelum.vraptor.proxy.JavassistProxifier;
+import br.com.caelum.vraptor.proxy.ObjenesisInstanceCreator;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.resource.DefaultResourceClass;
 import br.com.caelum.vraptor.resource.DefaultResourceMethod;
@@ -64,7 +65,7 @@ public class RouteBuilderTest {
 		method = new DefaultResourceMethod(new DefaultResourceClass(MyResource.class), MyResource.class.getMethod(
 				"method", String.class, Integer.class, BigDecimal.class));
 
-		proxifier = new DefaultProxifier();
+		proxifier = new JavassistProxifier(new ObjenesisInstanceCreator());
 
 		typeFinder = new DefaultTypeFinder(provider);
 		converters = mock(Converters.class);

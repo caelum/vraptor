@@ -18,8 +18,9 @@ package br.com.caelum.vraptor.util.test;
 
 import java.lang.reflect.Method;
 
+import br.com.caelum.vraptor.proxy.CglibProxifier;
 import br.com.caelum.vraptor.proxy.MethodInvocation;
-import br.com.caelum.vraptor.proxy.ObjenesisProxifier;
+import br.com.caelum.vraptor.proxy.ObjenesisInstanceCreator;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.SuperMethod;
 import br.com.caelum.vraptor.view.LogicResult;
@@ -28,7 +29,7 @@ public class MockedLogic implements LogicResult {
 	private final Proxifier proxifier;
 
 	public MockedLogic() {
-		proxifier = new ObjenesisProxifier();
+	    proxifier = new CglibProxifier(new ObjenesisInstanceCreator());
 	}
 
 	public <T> T forwardTo(Class<T> type) {

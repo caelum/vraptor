@@ -19,15 +19,16 @@ package br.com.caelum.vraptor.gae;
 import ognl.OgnlRuntime;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Component;
-import br.com.caelum.vraptor.proxy.DefaultProxifier;
 
+/**
+ * AppEngine OGNL workaround.
+ */
 @Component
 @ApplicationScoped
-public class AppEngineProxifier extends DefaultProxifier {
+public class AppEngineOgnlRuntime {
 
-	static {
-		// AppEngine OGNL workaround
-		OgnlRuntime.setSecurityManager(null);
-	}
-	
+    static {
+        OgnlRuntime.setSecurityManager(null);
+    }
+
 }

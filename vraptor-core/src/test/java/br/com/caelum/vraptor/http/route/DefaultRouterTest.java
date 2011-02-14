@@ -41,7 +41,9 @@ import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.VRaptorRequest;
 import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
-import br.com.caelum.vraptor.proxy.DefaultProxifier;
+import br.com.caelum.vraptor.proxy.JavassistProxifier;
+import br.com.caelum.vraptor.proxy.ObjenesisInstanceCreator;
+import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.test.VRaptorMockery;
@@ -52,7 +54,7 @@ import br.com.caelum.vraptor.test.VRaptorMockery;
  */
 public class DefaultRouterTest {
 
-	private DefaultProxifier proxifier;
+    private Proxifier proxifier;
 	private DefaultRouter router;
 	private VRaptorMockery mockery;
 	private VRaptorRequest request;
@@ -64,7 +66,7 @@ public class DefaultRouterTest {
 	public void setup() {
 		this.mockery = new VRaptorMockery();
 		this.request = new VRaptorRequest(mockery.mock(HttpServletRequest.class));
-		this.proxifier = new DefaultProxifier();
+		this.proxifier = new JavassistProxifier(new ObjenesisInstanceCreator());
 		this.method = mockery.mock(ResourceMethod.class);
 		this.converters = mockery.mock(Converters.class);
 		this.nameProvider = mockery.mock(ParameterNameProvider.class);

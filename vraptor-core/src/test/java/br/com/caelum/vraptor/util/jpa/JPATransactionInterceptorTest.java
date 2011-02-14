@@ -1,6 +1,8 @@
 package br.com.caelum.vraptor.util.jpa;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -11,6 +13,7 @@ import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
@@ -21,6 +24,7 @@ public class JPATransactionInterceptorTest {
     @Mock private ResourceMethod method;
     @Mock private EntityTransaction transaction;
     private Object instance;
+	@Mock private Validator validator;
 
     @Before
     public void setUp() {
@@ -29,7 +33,7 @@ public class JPATransactionInterceptorTest {
 
     @Test
     public void shouldStartAndCommitTransaction() throws Exception {
-        JPATransactionInterceptor interceptor = new JPATransactionInterceptor(entityManager);
+        JPATransactionInterceptor interceptor = new JPATransactionInterceptor(entityManager, validator);
 
         when(entityManager.getTransaction()).thenReturn(transaction);
         when(transaction.isActive()).thenReturn(false);
@@ -45,7 +49,7 @@ public class JPATransactionInterceptorTest {
 
     @Test
     public void shouldRollbackTransactionIfStillActiveWhenExecutionFinishes() throws Exception {
-        JPATransactionInterceptor interceptor = new JPATransactionInterceptor(entityManager);
+        JPATransactionInterceptor interceptor = new JPATransactionInterceptor(entityManager, validator);
 
         when(entityManager.getTransaction()).thenReturn(transaction);
         when(transaction.isActive()).thenReturn(true);

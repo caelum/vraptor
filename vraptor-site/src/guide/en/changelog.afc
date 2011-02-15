@@ -1,5 +1,18 @@
 [chapter ChangeLog]
 
+[section 3.3.1]
+[list]
+* bugfix - fixed scannotation as mandatory on maven
+* bugfix - fixed ConcurrentModificationException on interceptors ordering
+* updating spring from 3.0.0 to 3.0.5
+* bugfix - fixed @PostConstruct on @ApplicationScoped components when using
+Spring as DI container.
+* better docs
+* bugfix - redirect to @Path's with regexes
+* bugfix - Hibernate and JPA Transaction interceptors now rollback when there are
+validation errors.
+[/list]
+
 [section 3.3.0]
 [box jar changes]
 	[list]

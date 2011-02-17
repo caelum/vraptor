@@ -6,6 +6,7 @@ import java.io.StringWriter;
 
 import javax.servlet.http.HttpServletResponse;
 
+import br.com.caelum.vraptor.deserialization.XStreamBuilder;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.serialization.JSONPSerialization;
 import br.com.caelum.vraptor.serialization.JSONSerialization;
@@ -28,22 +29,23 @@ public class XStreamJSONPSerialization implements JSONPSerialization {
 	private final HttpServletResponse response;
 	private final TypeNameExtractor extractor;
 	private final ProxyInitializer initializer;
+	private final XStreamBuilder builder;
 
-	public XStreamJSONPSerialization(HttpServletResponse response, TypeNameExtractor extractor, ProxyInitializer initializer) {
+	public XStreamJSONPSerialization(HttpServletResponse response, TypeNameExtractor extractor, ProxyInitializer initializer, XStreamBuilder builder) {
 		this.response = response;
 		this.extractor = extractor;
 		this.initializer = initializer;
-
+		this.builder = builder;
 	}
 
 	public JSONSerialization withCallback(final String callbackName) {
-		return new XStreamJSONSerialization(response, extractor, initializer) {
+		return new XStreamJSONSerialization(response, extractor, initializer, builder) {
 			@Override
 			protected SerializerBuilder getSerializer() {
 				try {
 					final PrintWriter writer = response.getWriter();
 					final StringWriter out = new StringWriter();
-					return new XStreamSerializer(getXStream(), new PrintWriter(out), extractor, initializer) {
+					return new XStreamSerializer(builder.jsonInstance(), new PrintWriter(out), extractor, initializer) {
 						@Override
 						public void serialize() {
 							super.serialize();

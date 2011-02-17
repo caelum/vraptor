@@ -23,6 +23,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import br.com.caelum.vraptor.deserialization.XStreamBuilder;
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor.serialization.HibernateProxyInitializer;
 
@@ -38,8 +39,10 @@ public class XStreamJSONSerializationTest {
 
         HttpServletResponse response = mock(HttpServletResponse.class);
         when(response.getWriter()).thenReturn(new PrintWriter(stream));
-
-        this.serialization = new XStreamJSONSerialization(response, new DefaultTypeNameExtractor(), new HibernateProxyInitializer());
+        
+        XStreamBuilder builder = mock(XStreamBuilder.class);
+        
+        this.serialization = new XStreamJSONSerialization(response, new DefaultTypeNameExtractor(), new HibernateProxyInitializer(), builder);
     }
 
 	public static class Address {

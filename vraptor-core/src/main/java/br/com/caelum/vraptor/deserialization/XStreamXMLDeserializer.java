@@ -30,6 +30,7 @@ import com.thoughtworks.xstream.XStream;
  * @author Lucas Cavalcanti
  * @author Cecilia Fernandes
  * @author Guilherme Silveira
+ * @author Rafael Viana
  * @since 3.0.2
  */
 @Component
@@ -37,9 +38,11 @@ import com.thoughtworks.xstream.XStream;
 public class XStreamXMLDeserializer implements XMLDeserializer {
 
 	private final ParameterNameProvider provider;
+	private final XStreamBuilder builder;
 
-	public XStreamXMLDeserializer(ParameterNameProvider provider) {
+	public XStreamXMLDeserializer(ParameterNameProvider provider, XStreamBuilder builder) {
 		this.provider = provider;
+		this.builder = builder;
 	}
 
 	public Object[] deserialize(InputStream inputStream, ResourceMethod method) {
@@ -51,7 +54,7 @@ public class XStreamXMLDeserializer implements XMLDeserializer {
 		XStream xStream = getConfiguredXStream(javaMethod, types);
 
 		Object[] params = new Object[types.length];
-
+		
 		chooseParam(types, params, xStream.fromXML(inputStream));
 
 		return params;
@@ -60,6 +63,7 @@ public class XStreamXMLDeserializer implements XMLDeserializer {
 	/**
 	 * Returns an xstream instance already configured.
 	 */
+	@Deprecated
 	public XStream getConfiguredXStream(Method javaMethod, Class<?>[] types) {
 		XStream xStream = getXStream();
 		aliasParams(javaMethod, types, xStream);
@@ -85,8 +89,9 @@ public class XStreamXMLDeserializer implements XMLDeserializer {
 	 * Extension point to configure your xstream instance.
 	 * @return the configured xstream instance
 	 */
+	@Deprecated
 	protected XStream getXStream() {
-		return new XStream();
+		return builder.xmlInstance();
 	}
-
+	
 }

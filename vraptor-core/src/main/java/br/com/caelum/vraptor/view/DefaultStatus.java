@@ -24,6 +24,8 @@ import java.lang.reflect.Method;
 import java.util.EnumSet;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.config.Configuration;
 import br.com.caelum.vraptor.http.route.Router;
@@ -155,7 +157,7 @@ public class DefaultStatus implements Status {
 	public void notAcceptable() {
 		sendError(HttpServletResponse.SC_NOT_ACCEPTABLE);
 	}
-	
+
 	public void accepted(){
 		response.setStatus(HttpServletResponse.SC_ACCEPTED );
 		result.use(Results.nothing());

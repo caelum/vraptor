@@ -17,6 +17,7 @@ package br.com.caelum.vraptor.interceptor;
 
 import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.collect.Iterables.get;
+import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Sets.difference;
 import static com.google.common.collect.Sets.newHashSet;
 import static com.google.common.collect.Sets.union;
@@ -63,8 +64,7 @@ public class Graph<E> {
 			lock.lock();
 			try {
 				if (orderedList == null) {
-					this.orderedList = Lists.newArrayList();
-					orderTopologically();
+					this.orderedList = orderTopologically();
 				}
 			} finally {
 				lock.unlock();
@@ -73,7 +73,8 @@ public class Graph<E> {
 		return this.orderedList;
 	}
 
-	private void orderTopologically() {
+	private List<E> orderTopologically() {
+		List<E> list = newArrayList();
 		addDummies();
 
 		while(!graph.keySet().isEmpty()) {
@@ -83,9 +84,10 @@ public class Graph<E> {
 				throw new IllegalStateException("There is a cycle on the interceptor sequence: \n" + cycle());
 			}
 
-			this.orderedList.addAll(roots);
+			list.addAll(roots);
 			removeRoots(roots);
 		}
+		return list;
 	}
 
 	private void addDummies() {

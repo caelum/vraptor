@@ -51,7 +51,11 @@ public class StereotypedBeansRegistrar implements ApplicationListener<Applicatio
 		String[] beanDefinitionNames = beanFactory.getBeanDefinitionNames();
 		for (String name : beanDefinitionNames) {
 			Class<?> beanType = beanFactory.getType(name);
-			LOGGER.debug("scanning {}", beanType);
+			LOGGER.debug("scanning {} for bean definition {}", beanType, name);
+			if (beanType == null) {
+				LOGGER.info("null type for bean {}", name);
+				continue;
+			}
 
 			for (StereotypeHandler handler : stereotypeHandlers) {
 				LOGGER.trace("scanning {} with {}", beanType, handler);

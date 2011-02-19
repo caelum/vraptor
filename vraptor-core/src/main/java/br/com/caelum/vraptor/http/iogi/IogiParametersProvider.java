@@ -46,9 +46,9 @@ public class IogiParametersProvider implements ParametersProvider {
 	private static final Logger LOGGER = LoggerFactory.getLogger(IogiParametersProvider.class);
 	private final ParameterNameProvider nameProvider;
 	private final HttpServletRequest servletRequest;
-	private final Instantiator<Object> instantiator;
+	private final Instantiator instantiator;
 
-	public IogiParametersProvider(ParameterNameProvider provider, HttpServletRequest parameters, Instantiator<Object> instantiator) {
+	public IogiParametersProvider(ParameterNameProvider provider, HttpServletRequest parameters, Instantiator instantiator) {
 		this.nameProvider = provider;
 		this.servletRequest = parameters;
 		this.instantiator = instantiator;

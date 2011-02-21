@@ -31,6 +31,7 @@ import br.com.caelum.vraptor.scan.WebAppBootstrap;
 import br.com.caelum.vraptor.scan.WebAppBootstrapFactory;
 
 import com.google.inject.Binder;
+import com.google.inject.ConfigurationException;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Key;
@@ -61,7 +62,11 @@ public class GuiceProvider implements ContainerProvider {
 		}
 
 		public <T> boolean canProvide(Class<T> type) {
-			return instanceFor(type) != null;
+            try {
+                return injector.getProvider(type) != null;
+            } catch (ConfigurationException e) {
+                return false;
+            }
 		}
 	}
 

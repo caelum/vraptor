@@ -78,8 +78,7 @@ import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.http.ParanamerNameProvider;
 import br.com.caelum.vraptor.http.UrlToResourceTranslator;
-import br.com.caelum.vraptor.http.ognl.EmptyElementsRemoval;
-import br.com.caelum.vraptor.http.ognl.OgnlParametersProvider;
+import br.com.caelum.vraptor.http.iogi.IogiParametersProvider;
 import br.com.caelum.vraptor.http.route.DefaultRouter;
 import br.com.caelum.vraptor.http.route.DefaultTypeFinder;
 import br.com.caelum.vraptor.http.route.NoRoutesConfiguration;
@@ -223,7 +222,6 @@ public class BaseComponents {
             Outjector.class, 								ReplicatorOutjector.class,
             DownloadInterceptor.class, 						DownloadInterceptor.class,
             EmptyResult.class, 								EmptyResult.class,
-            EmptyElementsRemoval.class, 					EmptyElementsRemoval.class,
             ExecuteMethodInterceptor.class, 				ExecuteMethodInterceptor.class,
             ExceptionHandlerInterceptor.class,              ExceptionHandlerInterceptor.class,
             ExceptionMapper.class,                          DefaultExceptionMapper.class,
@@ -233,7 +231,7 @@ public class BaseComponents {
             DeserializingInterceptor.class, 				DeserializingInterceptor.class,
             JsonDeserializer.class,							JsonDeserializer.class,
             Localization.class, 							JstlLocalization.class,
-            ParametersProvider.class, 						OgnlParametersProvider.class,
+            ParametersProvider.class, 						IogiParametersProvider.class,
             OutjectResult.class, 							OutjectResult.class,
             ParametersInstantiatorInterceptor.class, 		ParametersInstantiatorInterceptor.class,
             ResourceLookupInterceptor.class, 				ResourceLookupInterceptor.class,

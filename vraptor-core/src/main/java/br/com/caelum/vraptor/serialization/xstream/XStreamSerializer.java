@@ -142,8 +142,13 @@ public class XStreamSerializer implements SerializerBuilder {
 		}
 	}
 
-	private List<Object> normalizeList(Object obj) {
-		List<Object> list = new ArrayList<Object>((Collection<?>)obj);
+	private Collection<Object> normalizeList(Object obj) {
+		Collection<Object> list;
+		if (hasDefaultConverter()) {
+			list = new ArrayList<Object>((Collection<?>)obj);
+		} else {
+			list = (Collection<Object>) obj;
+		}
 		elementTypes = findElementTypes(list);
 		for (Class<?> type : elementTypes) {
 			excludeNonPrimitiveFields(type);
@@ -151,9 +156,13 @@ public class XStreamSerializer implements SerializerBuilder {
 		return list;
 	}
 
+	private boolean hasDefaultConverter() {
+		return xstream.getConverterLookup().lookupConverterForType(rootClass).equals(xstream.getConverterLookup().lookupConverterForType(Object.class));
+	}
+
 	private void setAlias(Object obj, String alias) {
 		if (alias != null) {
-			if (Collection.class.isInstance(obj)) {
+			if (Collection.class.isInstance(obj) && hasDefaultConverter()) {
 				xstream.alias(alias, List.class);
 			} else {
 				xstream.alias(alias, obj.getClass());
@@ -171,7 +180,7 @@ public class XStreamSerializer implements SerializerBuilder {
 		return this;
 	}
 
-	private Set<Class<?>> findElementTypes(List<Object> list) {
+	private Set<Class<?>> findElementTypes(Collection<Object> list) {
 		Set<Class<?>> set = new HashSet<Class<?>>();
 		for (Object element : list) {
 			if (element != null && !isPrimitive(element.getClass())) {

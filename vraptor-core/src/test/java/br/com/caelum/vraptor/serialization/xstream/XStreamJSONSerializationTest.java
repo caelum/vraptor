@@ -13,6 +13,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -26,20 +27,33 @@ import org.junit.Test;
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor.serialization.HibernateProxyInitializer;
 
+import com.google.common.collect.ForwardingCollection;
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.converters.Converter;
+import com.thoughtworks.xstream.converters.MarshallingContext;
+import com.thoughtworks.xstream.converters.UnmarshallingContext;
+import com.thoughtworks.xstream.io.HierarchicalStreamReader;
+import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
+
 public class XStreamJSONSerializationTest {
 
 
 	private XStreamJSONSerialization serialization;
 	private ByteArrayOutputStream stream;
+	private HttpServletResponse response;
+	private DefaultTypeNameExtractor extractor;
+	private HibernateProxyInitializer initializer;
 
 	@Before
     public void setup() throws Exception {
         this.stream = new ByteArrayOutputStream();
 
-        HttpServletResponse response = mock(HttpServletResponse.class);
+        response = mock(HttpServletResponse.class);
         when(response.getWriter()).thenReturn(new PrintWriter(stream));
 
-        this.serialization = new XStreamJSONSerialization(response, new DefaultTypeNameExtractor(), new HibernateProxyInitializer());
+        extractor = new DefaultTypeNameExtractor();
+		initializer = new HibernateProxyInitializer();
+		this.serialization = new XStreamJSONSerialization(response, extractor, initializer);
     }
 
 	public static class Address {
@@ -310,6 +324,43 @@ public class XStreamJSONSerializationTest {
 		assertThat(result(), is("{\"client\": {\"name\": \"my name\",\"aField\": \"abc\"}}"));
 
 		verify(initializer).initialize();
+	}
+
+
+	static class MyCollection extends ForwardingCollection<Order> {
+		@Override
+		protected Collection<Order> delegate() {
+			return Arrays.asList(new Order(new Client("client"), 12.22, "hoay"));
+		}
+
+	}
+	static class MyColConverter implements Converter {
+
+		public void marshal(Object arg0, HierarchicalStreamWriter writer, MarshallingContext arg2) {
+			writer.setValue("testing");
+		}
+
+		public Object unmarshal(HierarchicalStreamReader arg0, UnmarshallingContext arg1) {
+			return null;
+		}
+
+		public boolean canConvert(Class type) {
+			return MyCollection.class.isAssignableFrom(type);
+		}
+	}
+	@Test
+	public void shouldUseCollectionConverterWhenItExists() {
+		String expectedResult = "[\"testing\"]";
+		XStreamJSONSerialization serialization = new XStreamJSONSerialization(response, extractor, initializer) {
+			@Override
+			protected XStream getXStream() {
+				XStream xStream = super.getXStream();
+				xStream.registerConverter(new MyColConverter(), XStream.PRIORITY_VERY_HIGH);
+				return xStream;
+			}
+		};
+		serialization.withoutRoot().from(new MyCollection()).serialize();
+		assertThat(result(), is(equalTo(expectedResult)));
 	}
 
 

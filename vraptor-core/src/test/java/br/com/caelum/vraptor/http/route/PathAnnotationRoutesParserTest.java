@@ -494,6 +494,14 @@ public class PathAnnotationRoutesParserTest {
     	assertThat(route, canHandle(GetAnnotatedController.class, "withRelativePath"));
     }
 
+    @Test
+    public void priorityForGetAnnotationShouldBeDefault() throws Exception {
+    	List<Route> routes = parser.rulesFor(new DefaultResourceClass(GetAnnotatedController.class));
+    	Route route = getRouteMatching(routes, "/prefix/relativePath");
+
+    	assertThat(route.getPriority(), is(Path.DEFAULT));
+    }
+
 	@Test
     public void addsAPrefixToMethodsWhenTheGetControllerEndsWithSlashAndTheMethodAreAnnotatedWithRelativePath() throws Exception {
 		List<Route> routes = parser.rulesFor(new DefaultResourceClass(EndSlashAnnotatedGetController.class));

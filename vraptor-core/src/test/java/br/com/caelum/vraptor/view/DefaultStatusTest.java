@@ -79,6 +79,13 @@ public class DefaultStatusTest {
 		verify(response).sendError(409);
 	}
 
+	@Test 
+	public void shouldSetAcceptedStatus() throws Exception {
+		status.accepted();
+		
+		verify(response).setStatus(202);
+	}
+	
 	@Test
 	public void shouldSetMethodNotAllowedStatus() throws Exception {
 		status.methodNotAllowed(EnumSet.of(HttpMethod.GET, HttpMethod.POST));

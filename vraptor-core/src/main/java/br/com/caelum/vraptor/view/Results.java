@@ -17,6 +17,7 @@
 
 package br.com.caelum.vraptor.view;
 
+import br.com.caelum.vraptor.serialization.JSONPSerialization;
 import br.com.caelum.vraptor.serialization.JSONSerialization;
 import br.com.caelum.vraptor.serialization.RepresentationResult;
 import br.com.caelum.vraptor.serialization.XMLSerialization;
@@ -79,11 +80,19 @@ public class Results {
     public static Class<XMLSerialization> xml() {
     	return XMLSerialization.class;
     }
+
     /**
      * Uses json serialization.
      */
     public static Class<JSONSerialization> json() {
     	return JSONSerialization.class;
+    }
+
+    /**
+     * Uses jsonp serialization.
+     */
+    public static Class<JSONPSerialization> jsonp() {
+    	return JSONPSerialization.class;
     }
 
     /**

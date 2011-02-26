@@ -83,7 +83,7 @@ public class LinkConverter implements Converter {
 		return base.unmarshal(arg0, arg1);
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	public boolean canConvert(Class type) {
 		return HypermediaResource.class.isAssignableFrom(type)
 				&& base.canConvert(type);

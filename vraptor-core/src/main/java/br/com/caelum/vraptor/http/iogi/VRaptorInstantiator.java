@@ -88,7 +88,7 @@ public class VRaptorInstantiator implements Instantiator<Object> {
 
 	private final class VRaptorTypeConverter implements Instantiator<Object> {
 		public boolean isAbleToInstantiate(Target<?> target) {
-			return converters.existsFor(target.getClassType());
+			return !String.class.equals(target.getClassType()) && converters.existsFor(target.getClassType());
 		}
 
 		public Object instantiate(Target<?> target, Parameters parameters) {

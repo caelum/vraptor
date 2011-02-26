@@ -17,6 +17,8 @@
 
 package br.com.caelum.vraptor.http.route;
 
+import static com.google.common.base.Objects.equal;
+
 import java.lang.reflect.Method;
 import java.util.EnumSet;
 import java.util.Set;
@@ -114,27 +116,6 @@ public class FixedMethodStrategy implements Route {
 			return false;
 		}
 		FixedMethodStrategy other = (FixedMethodStrategy) obj;
-		if (methods == null) {
-			if (other.methods != null) {
-				return false;
-			}
-		} else if (!methods.equals(other.methods)) {
-			return false;
-		}
-		if (originalUri == null) {
-			if (other.originalUri != null) {
-				return false;
-			}
-		} else if (!originalUri.equals(other.originalUri)) {
-			return false;
-		}
-		if (resourceMethod == null) {
-			if (other.resourceMethod != null) {
-				return false;
-			}
-		} else if (!resourceMethod.equals(other.resourceMethod)) {
-			return false;
-		}
-		return true;
+		return equal(methods, other.methods) && equal(originalUri, other.originalUri) && equal(resourceMethod,other.resourceMethod);
 	}
 }

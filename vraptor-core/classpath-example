@@ -3,14 +3,13 @@
 	<classpathentry kind="src" path="src/main/java"/>
 	<classpathentry kind="src" path="src/test/java"/>
 	<classpathentry kind="src" path="src/test/resources"/>
-	<classpathentry kind="src" path="src/main/asm"/>
 	<classpathentry kind="src" path="src/main/resources"/>
 	<classpathentry exported="true" kind="lib" path="lib/mandatory/cglib-nodep-2.1_3.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="lib/mandatory/log4j-1.2.15.jar">
+	<classpathentry exported="true" kind="lib" path="lib/mandatory/log4j-1.2.16.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
 		</attributes>
@@ -86,23 +85,19 @@
 	<classpathentry kind="lib" path="lib/mandatory/slf4j-api-1.6.1.jar"/>
 	<classpathentry kind="lib" path="lib/mandatory/slf4j-log4j12-1.6.1.jar"/>
 	<classpathentry kind="lib" path="lib/containers/guice/aopalliance.jar"/>
-	<classpathentry kind="lib" path="lib/containers/guice/guice-multibindings-snapshot.jar"/>
-	<classpathentry kind="lib" path="lib/containers/guice/guice-snapshot.jar"/>
 	<classpathentry kind="lib" path="lib/containers/guice/javax.inject.jar"/>
-	<classpathentry kind="lib" path="lib/containers/guice/scannotation-1.0.2.jar"/>
 	<classpathentry kind="lib" path="lib/containers/picocontainer/picocontainer-2.8.jar"/>
-	<classpathentry kind="lib" path="lib/containers/picocontainer/scannotation-1.0.2.jar"/>
 	<classpathentry kind="lib" path="lib/containers/spring/aopalliance.jar"/>
 	<classpathentry kind="lib" path="lib/containers/spring/aspectjrt.jar"/>
 	<classpathentry kind="lib" path="lib/containers/spring/commons-logging.jar"/>
-	<classpathentry kind="lib" path="lib/containers/spring/org.springframework.aop-3.0.0.RELEASE.jar"/>
-	<classpathentry kind="lib" path="lib/containers/spring/org.springframework.asm-3.0.0.RELEASE.jar"/>
-	<classpathentry kind="lib" path="lib/containers/spring/org.springframework.aspects-3.0.0.RELEASE.jar"/>
-	<classpathentry kind="lib" path="lib/containers/spring/org.springframework.beans-3.0.0.RELEASE.jar"/>
-	<classpathentry kind="lib" path="lib/containers/spring/org.springframework.context-3.0.0.RELEASE.jar"/>
-	<classpathentry kind="lib" path="lib/containers/spring/org.springframework.core-3.0.0.RELEASE.jar"/>
-	<classpathentry kind="lib" path="lib/containers/spring/org.springframework.expression-3.0.0.RELEASE.jar"/>
-	<classpathentry kind="lib" path="lib/containers/spring/org.springframework.web-3.0.0.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/containers/spring/org.springframework.aop-3.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/containers/spring/org.springframework.asm-3.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/containers/spring/org.springframework.aspects-3.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/containers/spring/org.springframework.beans-3.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/containers/spring/org.springframework.context-3.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/containers/spring/org.springframework.core-3.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/containers/spring/org.springframework.expression-3.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/containers/spring/org.springframework.web-3.0.5.RELEASE.jar"/>
 	<classpathentry kind="lib" path="lib/mandatory/guava-r07.jar"/>
 	<classpathentry kind="lib" path="lib/optional/deserialization/jettison-1.2.jar"/>
 	<classpathentry kind="lib" path="lib/optional/deserialization/xpp3_min-1.1.4c.jar"/>
@@ -128,5 +123,13 @@
 	<classpathentry kind="lib" path="lib/scala/scalate-core-1.2.jar"/>
 	<classpathentry kind="lib" path="lib/build/javax.servlet.jar"/>
 	<classpathentry kind="lib" path="lib/containers/spring/commons-collections-3.2.1.jar"/>
+	<classpathentry kind="lib" path="lib/jersey/jersey-core-1.5-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib/jersey/jersey-server-1.5-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib/optional/jfreechart/jcommon-1.0.16.jar"/>
+	<classpathentry kind="lib" path="lib/optional/jfreechart/jfreechart-1.0.13.jar"/>
+	<classpathentry kind="lib" path="lib/optional/jruby.jar"/>
+	<classpathentry kind="lib" path="lib/containers/guice/guice-3.0-rc2.jar"/>
+	<classpathentry kind="lib" path="lib/containers/guice/guice-multibindings-3.0-rc2.jar"/>
+	<classpathentry kind="lib" path="lib/mandatory/scannotation-1.0.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

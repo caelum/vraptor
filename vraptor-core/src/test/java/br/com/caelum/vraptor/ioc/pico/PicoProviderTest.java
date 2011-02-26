@@ -36,7 +36,6 @@ import br.com.caelum.vraptor.test.HttpSessionMock;
 public class PicoProviderTest extends GenericContainerTest {
     private int counter;
 
-    @SuppressWarnings("unchecked")
     @Test
     public void canProvidePicoSpecificApplicationScopedComponents() {
         List<Class<?>> components = Arrays.asList();
@@ -73,7 +72,7 @@ public class PicoProviderTest extends GenericContainerTest {
 	                allowing(context).getInitParameter(BasicConfiguration.ENCODING);
 	                allowing(context).getInitParameter(BasicConfiguration.SCANNING_PARAM);
 	                allowing(context).getRealPath("/WEB-INF/classes");
-	                will(returnValue(PicoProviderTest.class.getResource("..").getFile()));
+	                will(returnValue(getClassDir()));
                 }
             });
         } catch (Exception e) {

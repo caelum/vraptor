@@ -30,15 +30,14 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
  * @author Fabio Kung
  * @see org.springframework.web.context.request.RequestContextHolder
  */
-@SuppressWarnings("unchecked")
 @ApplicationScoped
-class HttpSessionProvider implements FactoryBean {
+class HttpSessionProvider implements FactoryBean<HttpSession> {
 
-    public Object getObject() throws Exception {
+    public HttpSession getObject() throws Exception {
         return VRaptorRequestHolder.currentRequest().getRequest().getSession();
     }
 
-    public Class<?> getObjectType() {
+    public Class<? extends HttpSession> getObjectType() {
         return HttpSession.class;
     }
 

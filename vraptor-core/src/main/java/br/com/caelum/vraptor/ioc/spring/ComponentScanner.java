@@ -22,10 +22,9 @@ import java.util.Arrays;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
-import org.springframework.beans.factory.support.BeanNameGenerator;
-import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.annotation.AnnotationBeanNameGenerator;
 import org.springframework.context.annotation.ClassPathBeanDefinitionScanner;
 
@@ -39,11 +38,11 @@ class ComponentScanner extends ClassPathBeanDefinitionScanner {
 
 	private static final Logger logger = LoggerFactory.getLogger(ComponentScanner.class);
 
-	private final DefaultListableBeanFactory registry;
+	private final ConfigurableListableBeanFactory registry;
 	private final Container container;
 
-	public ComponentScanner(DefaultListableBeanFactory registry, Container container) {
-		super(registry, false);
+	public ComponentScanner(ConfigurableListableBeanFactory registry, Container container) {
+		super((BeanDefinitionRegistry) registry, false);
 		this.registry = registry;
 		this.container = container;
 		addIncludeFilter(new ComponentTypeFilter());
@@ -52,29 +51,12 @@ class ComponentScanner extends ClassPathBeanDefinitionScanner {
 		setBeanNameGenerator(new UniqueBeanNameGenerator(new AnnotationBeanNameGenerator()));
 	}
 
-	public static class UniqueBeanNameGenerator implements BeanNameGenerator {
-
-		private final BeanNameGenerator delegate;
-
-		public UniqueBeanNameGenerator(BeanNameGenerator delegate) {
-			this.delegate = delegate;
-		}
-
-		public String generateBeanName(BeanDefinition definition, BeanDefinitionRegistry registry) {
-			String name = delegate.generateBeanName(definition, registry);
-			while (registry.containsBeanDefinition(name) &&
-					!registry.getBeanDefinition(name).getBeanClassName().equals(definition.getBeanClassName())) {
-				name = name + "$";
-			}
-			return name;
-		}
-	}
-
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	protected void postProcessBeanDefinition(AbstractBeanDefinition beanDefinition, String beanName) {
 		super.postProcessBeanDefinition(beanDefinition, beanName);
 		beanDefinition.setPrimary(true);
+		beanDefinition.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_CONSTRUCTOR);
 		try {
 			Class<?> componentType = Class.forName(beanDefinition.getBeanClassName());
 			if (ComponentFactory.class.isAssignableFrom(componentType) && checkCandidate(beanName, beanDefinition)) {

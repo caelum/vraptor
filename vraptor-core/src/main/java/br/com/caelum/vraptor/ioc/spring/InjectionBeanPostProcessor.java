@@ -37,7 +37,7 @@ class InjectionBeanPostProcessor extends AutowiredAnnotationBeanPostProcessor {
     //  }
 
     @Override
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Constructor[] determineCandidateConstructors(Class beanClass, String beanName) throws BeansException {
         Constructor[] candidates = super.determineCandidateConstructors(beanClass, beanName);
         if (candidates == null) {
@@ -49,7 +49,7 @@ class InjectionBeanPostProcessor extends AutowiredAnnotationBeanPostProcessor {
         return candidates;
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "rawtypes" })
 	private Constructor checkIfThereIsOnlyOneNonDefaultConstructor(Class beanClass) {
         Constructor[] constructors = beanClass.getDeclaredConstructors();
         if (constructors.length == 1) {

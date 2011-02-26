@@ -56,7 +56,7 @@ public class PicoProvider implements ContainerProvider {
     private final MutablePicoContainer picoContainer;
     private MutablePicoContainer childContainer;
     private final ThreadLocal<Container> containersByThread = new ThreadLocal<Container>();
-    
+
     private static final Logger logger = LoggerFactory.getLogger(PicoProvider.class);
 
     public PicoProvider() {
@@ -68,7 +68,7 @@ public class PicoProvider implements ContainerProvider {
 
         this.picoContainer.addComponent(componentRegistry);
         this.picoContainer.addComponent(componentFactoryRegistry);
-        
+
         picoContainer.addComponent(Container.class, new Container() {
 			public <T> T instanceFor(Class<T> type) {
 				Container container = containersByThread.get();
@@ -97,12 +97,12 @@ public class PicoProvider implements ContainerProvider {
 
 	    // call old-style custom components registration
 	    registerCustomComponents(componentRegistry);
-	    	
+
 	    // start the container
 	    getComponentRegistry().init();
 	    picoContainer.start();
 	    registerCacheComponents();
-	    
+
 	    // call all handlers for registered components
     	Collection<Class<?>> components = getComponentRegistry().getAllRegisteredApplicationScopedComponents();
     	List<StereotypeHandler> handlers = picoContainer.getComponents(StereotypeHandler.class);
@@ -140,20 +140,18 @@ public class PicoProvider implements ContainerProvider {
 	    for (Class<? extends StereotypeHandler> entry : BaseComponents.getStereotypeHandlers()) {
 			registry.register(entry, entry);
 		}
-	    for (Map.Entry<Class<?>, Class<?>> entry : BaseComponents.getApplicationScoped().entrySet()) {
-	        registry.register(entry.getKey(), entry.getValue());
-	        registry.register(entry.getValue(), entry.getValue());
-	    }
-	    for (Map.Entry<Class<?>, Class<?>> entry : BaseComponents.getRequestScoped().entrySet()) {
-	        registry.register(entry.getKey(), entry.getValue());
-	        registry.register(entry.getValue(), entry.getValue());
-	    }
-	    for (Map.Entry<Class<?>, Class<?>> entry : BaseComponents.getPrototypeScoped().entrySet()) {
-	    	registry.register(entry.getKey(), entry.getValue());
-	    	registry.register(entry.getValue(), entry.getValue());
-	    }
+	    registerAll(registry, BaseComponents.getApplicationScoped());
+	    registerAll(registry, BaseComponents.getRequestScoped());
+	    registerAll(registry, BaseComponents.getPrototypeScoped());
 	    for (Class<? extends Converter<?>> converterType : BaseComponents.getBundledConverters()) {
 	        registry.register(converterType, converterType);
+	    }
+	}
+
+	private void registerAll(ComponentRegistry registry, Map<Class<?>, Class<?>> scope) {
+		for (Map.Entry<Class<?>, Class<?>> entry : scope.entrySet()) {
+	        registry.register(entry.getKey(), entry.getValue());
+	        registry.register(entry.getValue(), entry.getValue());
 	    }
 	}
 
@@ -176,7 +174,7 @@ public class PicoProvider implements ContainerProvider {
         try {
             container = getComponentRegistry().provideRequestContainer(request);
             container.getContainer().start();
-            
+
             containersByThread.set(container);
             return execution.insideRequest(container);
         } finally {

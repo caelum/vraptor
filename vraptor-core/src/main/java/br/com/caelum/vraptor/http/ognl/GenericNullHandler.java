@@ -34,7 +34,6 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import net.vidageek.mirror.dsl.Mirror;
-import br.com.caelum.vraptor.ioc.Container;
 
 /**
  * Capable of instantiating generic interfaces and custom types.
@@ -44,6 +43,7 @@ import br.com.caelum.vraptor.ioc.Container;
 class GenericNullHandler {
 
     private static final Map<Class<?>, Class<?>> CONCRETE_TYPES = new HashMap<Class<?>, Class<?>>();
+	private final EmptyElementsRemoval removal;
 
     static {
         CONCRETE_TYPES.put(List.class, ArrayList.class);
@@ -54,8 +54,11 @@ class GenericNullHandler {
         CONCRETE_TYPES.put(Queue.class, LinkedList.class);
     }
 
-    @SuppressWarnings("unchecked")
-    <T> T instantiate(Class<T> baseType, Container container) {
+    public GenericNullHandler(EmptyElementsRemoval removal) {
+		this.removal = removal;
+	}
+
+    <T> T instantiate(Class<T> baseType) {
     	if (baseType.isArray()) {
     		return baseType.cast(Array.newInstance(baseType.getComponentType(), 0));
     	}
@@ -71,7 +74,6 @@ class GenericNullHandler {
         Object instance = new Mirror().on(typeToInstantiate).invoke().constructor().withoutArgs();
 
         if(Collection.class.isAssignableFrom(typeToInstantiate)) {
-	        EmptyElementsRemoval removal = container.instanceFor(EmptyElementsRemoval.class);
         	removal.add((Collection)instance);
         }
 

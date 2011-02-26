@@ -1,6 +1,8 @@
 package br.com.caelum.vraptor.util.hibernate;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -10,6 +12,7 @@ import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
@@ -20,6 +23,7 @@ public class HibernateTransactionInterceptorTest {
     @Mock private ResourceMethod method;
     @Mock private Transaction transaction;
     private Object instance;
+	@Mock private Validator validator;
 
     @Before
     public void setUp() {
@@ -28,7 +32,7 @@ public class HibernateTransactionInterceptorTest {
 
     @Test
     public void shouldStartAndCommitTransaction() throws Exception {
-        HibernateTransactionInterceptor interceptor = new HibernateTransactionInterceptor(session);
+        HibernateTransactionInterceptor interceptor = new HibernateTransactionInterceptor(session, validator);
 
         when(session.beginTransaction()).thenReturn(transaction);
         when(transaction.isActive()).thenReturn(false);
@@ -43,7 +47,7 @@ public class HibernateTransactionInterceptorTest {
 
     @Test
     public void shouldRollbackTransactionIfStillActiveWhenExecutionFinishes() throws Exception {
-        HibernateTransactionInterceptor interceptor = new HibernateTransactionInterceptor(session);
+        HibernateTransactionInterceptor interceptor = new HibernateTransactionInterceptor(session, validator);
 
         when(session.beginTransaction()).thenReturn(transaction);
         when(transaction.isActive()).thenReturn(true);

@@ -24,6 +24,9 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.vidageek.mirror.dsl.Matcher;
+import net.vidageek.mirror.dsl.Mirror;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vraptor.annotations.In;
@@ -51,9 +54,9 @@ import br.com.caelum.vraptor.resource.ResourceClass;
 @ApplicationScoped
 public class ComponentRoutesParser implements RoutesParser {
 
-	private final RoutesParser delegate;
+	private static final Logger logger = LoggerFactory.getLogger(ComponentRoutesParser.class);
 
-	private final Logger logger = LoggerFactory.getLogger(ComponentRoutesParser.class);
+	private final RoutesParser delegate;
 
 	private final Router router;
 
@@ -70,55 +73,61 @@ public class ComponentRoutesParser implements RoutesParser {
         	return delegate.rulesFor(resource);
         }
         logger.warn("VRaptor2 component found, you should migrate it to VRaptor3: " + type.getName());
-		registerRulesFor(type, type, routes);
-        parse(type, type);
+		registerRulesFor(type, routes);
+        parse(type);
 		return routes;
     }
 
-    private void parse(Class<?> type, Class<?> originalType) {
-        if (type.equals(Object.class)) {
-            return;
+    private void parse(Class<?> type) {
+        checkFields(type);
+        for (Method method : new Mirror().on(type).reflectAll().methods()) {
+            checkOutjections(type, method);
+            checkLogic(type, method);
+            checkValidate(type, method);
         }
-        for (Class<? extends Annotation> annotation : new Class[] { Out.class, In.class, Parameter.class }) {
-            for (Field field : type.getDeclaredFields()) {
+    }
+
+	private void checkValidate(Class<?> type, Method method) {
+		if (method.isAnnotationPresent(Validate.class)) {
+		    Validate validate = method.getAnnotation(Validate.class);
+		    if (validate.fields().length != 0) {
+		        logger.error("Method " + method.getName() + " from " + type.getName()
+		                + " is annotated with @Validate with fields. This is not supported.");
+		    }
+		}
+	}
+
+	private void checkLogic(Class<?> type, Method method) {
+		if (method.isAnnotationPresent(Logic.class)) {
+		    logger.warn("Method " + method.getName() + " from " + type.getName()
+		            + " is annotated with @Logic. Although its supported, we suggest you to migrate to @Path.");
+		}
+	}
+
+	private void checkOutjections(Class<?> type, Method method) {
+		for (Class<? extends Annotation> annotation : new Class[] { Out.class, In.class }) {
+		    if (method.isAnnotationPresent(annotation)) {
+		        logger.error("Method " + method.getName() + " from " + type.getName()
+		                + " is annotated with " + annotation.getName()
+		                + " but is not supported by VRaptor3! Read the migration guide.");
+		    }
+		}
+	}
+
+	private void checkFields(Class<?> type) {
+		for (Class<? extends Annotation> annotation : new Class[] { Out.class, In.class, Parameter.class }) {
+            for (Field field : new Mirror().on(type).reflectAll().fields()) {
                 if (field.isAnnotationPresent(annotation)) {
-                    logger.error("Field " + field.getName() + " from " + originalType.getName() + " is annotated with "
+                    logger.error("Field " + field.getName() + " from " + type.getName() + " is annotated with "
                             + annotation.getName() + " but is not supported by VRaptor3! Read the migration guide.");
                 }
             }
         }
-        for (Method method : type.getDeclaredMethods()) {
-            for (Class<? extends Annotation> annotation : new Class[] { Out.class, In.class }) {
-                if (method.isAnnotationPresent(annotation)) {
-                    logger.error("Method " + method.getName() + " from " + originalType.getName()
-                            + " is annotated with " + annotation.getName()
-                            + " but is not supported by VRaptor3! Read the migration guide.");
-                }
-            }
-            if (method.isAnnotationPresent(Logic.class)) {
-                logger.warn("Method " + method.getName() + " from " + originalType.getName()
-                        + " is annotated with @Logic. Although its supported, we suggest you to migrate to @Path.");
-            }
-            if (method.isAnnotationPresent(Validate.class)) {
-                Validate validate = method.getAnnotation(Validate.class);
-                if (validate.fields().length != 0) {
-                    logger.error("Method " + method.getName() + " from " + originalType.getName()
-                            + " is annotated with @Validate with fields. This is not supported.");
-                }
-            }
-        }
-        parse(type.getSuperclass(), type);
-    }
+	}
 
-
-	private void registerRulesFor(Class<?> actualType, Class<?> baseType, List<Route> routes) {
-		if (actualType.equals(Object.class)) {
-			return;
-		}
-        for (Method javaMethod : actualType.getDeclaredMethods()) {
-			if (!isEligible(javaMethod) || isGetter(javaMethod)) {
-                continue;
-            }
+	private void registerRulesFor(Class<?> baseType, List<Route> routes) {
+		List<Method> methods = new Mirror().on(baseType).reflectAll().methodsMatching(suitableMethod());
+		for (Method javaMethod : methods) {
 			String uri = getUriFor(javaMethod, baseType);
 			RouteBuilder builder = router.builderFor(uri);
 			for (HttpMethod m : HttpMethod.values()) {
@@ -128,8 +137,15 @@ public class ComponentRoutesParser implements RoutesParser {
 			}
 			builder.is(baseType, javaMethod);
 			routes.add(builder.build());
-        }
-		registerRulesFor(actualType.getSuperclass(), baseType, routes);
+		}
+	}
+
+	private Matcher<Method> suitableMethod() {
+		return new Matcher<Method>() {
+			public boolean accepts(Method method) {
+				return isEligible(method) && !isGetter(method);
+			}
+		};
 	}
 
 	private boolean isGetter(Method javaMethod) {

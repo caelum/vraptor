@@ -40,10 +40,10 @@ import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -59,18 +59,19 @@ import br.com.caelum.iogi.reflection.Target;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.converter.LongConverter;
 import br.com.caelum.vraptor.converter.PrimitiveIntConverter;
-import br.com.caelum.vraptor.core.Converters;
+import br.com.caelum.vraptor.converter.StringConverter;
 import br.com.caelum.vraptor.core.DefaultConverters;
 import br.com.caelum.vraptor.core.Localization;
+import br.com.caelum.vraptor.core.SafeResourceBundle;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.test.VRaptorMockery;
+import br.com.caelum.vraptor.util.EmptyBundle;
 import br.com.caelum.vraptor.validator.Message;
 
 public class IogiParametersProviderTest {
     private VRaptorMockery mockery;
-    private Converters converters;
     private IogiParametersProvider iogiProvider;
     private ParameterNameProvider mockNameProvider;
     private HttpServletRequest mockHttpServletRequest;
@@ -79,11 +80,9 @@ public class IogiParametersProviderTest {
 	private Localization mockLocalization;
 	private Validator mockValidator;
 
-    @SuppressWarnings("unchecked")
-    @Before
+	@Before
     public void setup() throws Exception {
         this.mockery = new VRaptorMockery(true);
-        this.converters = mockery.mock(Converters.class);
         this.mockHttpServletRequest = mockery.mock(HttpServletRequest.class);
         this.mockNameProvider = mockery.mock(ParameterNameProvider.class);
 
@@ -97,10 +96,11 @@ public class IogiParametersProviderTest {
         this.errors = new ArrayList<Message>();
         mockery.checking(new Expectations() {
             {
-                allowing(converters).to((Class) with(an(Class.class)));
-                will(returnValue(new LongConverter()));
+                allowing(mockContainer).instanceFor(StringConverter.class);
+                will(returnValue(new StringConverter()));
 
-//                ignoring(mockLocalization);
+                allowing(mockLocalization).getBundle();
+                will(returnValue(new SafeResourceBundle(new EmptyBundle())));
             }
         });
 
@@ -275,9 +275,8 @@ public class IogiParametersProviderTest {
         mockery.assertIsSatisfied();
     }
 
-    @SuppressWarnings("unchecked")
-	public Enumeration enumerationFor(String... values) {
-        return new Vector(Arrays.asList(values)).elements();
+	public Enumeration<String> enumerationFor(String... values) {
+        return Collections.enumeration(Arrays.asList(values));
     }
 
     @Test

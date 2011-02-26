@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and 
  * limitations under the License. 
  */
+
 package br.com.caelum.vraptor.converter.jodatime;
 
 import java.text.MessageFormat;
@@ -25,20 +26,25 @@ import org.joda.time.LocalDate;
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.converter.ConversionError;
-import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.core.Localization;
 
+/**
+ * VRaptor converter for {@link LocalDate}. {@link LocalDate} is part of Joda Time library.
+ * 
+ * @author Lucas Cavalcanti
+ */
 @Convert(LocalDate.class)
 public class LocalDateConverter implements Converter<LocalDate> {
 
-	private RequestInfo request;
+    private final Localization localization;
 
-	public LocalDateConverter(RequestInfo request) {
-		this.request = request;
-	}
+	public LocalDateConverter(Localization localization) {
+        this.localization = localization;
+    }
 
-	public LocalDate convert(String value, Class<? extends LocalDate> type, ResourceBundle bundle) {
+    public LocalDate convert(String value, Class<? extends LocalDate> type, ResourceBundle bundle) {
 		try {
-			Date date = new LocaleBasedJodaTimeConverter(request).convert(value, type);
+			Date date = new LocaleBasedJodaTimeConverter(localization).convert(value, type);
 			if (date == null) {
 				return null;
 			}

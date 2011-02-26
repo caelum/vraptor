@@ -79,4 +79,9 @@ class LazyInterceptorHandler implements InterceptorHandler {
 		}
 		return acceptor;
 	}
+
+	@Override
+	public String toString() {
+		return "LazyInterceptorHandler for " + type.getName();
+	}
 }

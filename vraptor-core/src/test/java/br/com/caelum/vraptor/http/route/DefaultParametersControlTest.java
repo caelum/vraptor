@@ -73,6 +73,7 @@ public class DefaultParametersControlTest {
 
 		verify(request).setParameter("hexa", new String[] {"FAF323"});
 	}
+
 	@Test
 	@Ignore("This shit should work someday")
 	public void registerParametersWithMultipleRegexes() throws SecurityException, NoSuchMethodException {
@@ -121,11 +122,17 @@ public class DefaultParametersControlTest {
 		assertThat(uri, is(equalTo("/clients/")));
 	}
 
-	@Test
-	public void shouldTranslatePatternArgs() {
-		String uri = new DefaultParametersControl("/clients/{client.id}", converters).fillUri(new String[] {"client"}, client(3L));
-		assertThat(uri, is(equalTo("/clients/3")));
-	}
+    @Test
+    public void shouldTranslatePatternArgs() {
+        String uri = new DefaultParametersControl("/clients/{client.id}", converters).fillUri(new String[] {"client"}, client(3L));
+        assertThat(uri, is(equalTo("/clients/3")));
+    }
+
+    @Test
+    public void shouldTranslatePatternArgsWithRegex() {
+        String uri = new DefaultParametersControl("/clients/{id:[0-9]{1,}}", converters).fillUri(new String[] {"id"}, 30L);
+        assertThat(uri, is(equalTo("/clients/30")));
+    }
 
 	@Test
 	public void shouldTranslatePatternArgNullAsEmpty() {
@@ -262,4 +269,18 @@ public class DefaultParametersControlTest {
 
 		assertThat(control.apply(new String[] {"15"}),is(uri));
 	}
+
+	@Test
+	public void shouldDecodeUriParameters() throws Exception {
+		DefaultParametersControl control = new DefaultParametersControl("/clients/{name}", converters);
+
+		control.fillIntoRequest("/clients/Joao+Leno", request);
+
+		verify(request).setParameter("name", "Joao Leno");
+
+		control.fillIntoRequest("/clients/Paulo%20Macartinei", request);
+
+		verify(request).setParameter("name", "Paulo Macartinei");
+	}
+
 }

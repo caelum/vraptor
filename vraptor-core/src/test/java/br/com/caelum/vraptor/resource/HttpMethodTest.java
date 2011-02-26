@@ -9,8 +9,6 @@ import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.http.route.MethodNotAllowedException;
-
 public class HttpMethodTest {
 
 	private Mockery mockery;

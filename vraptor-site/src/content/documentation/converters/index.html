@@ -94,9 +94,15 @@
 		
 									<li><a class="link_toc" href="../../documentation/optimizations/">16. Optimizations</a></li>
 		
-									<li><a class="link_toc" href="../../documentation/changelog/">17. ChangeLog</a></li>
+									<li><a class="link_toc" href="../../documentation/vraptor-scaffold/">17. VRaptor Scaffold</a></li>
 		
-									<li><a class="link_toc" href="../../documentation/migrating-from-vraptor2-to-vraptor3/">18. Migrating from VRaptor2 to VRaptor3</a></li>
+									<li><a class="link_toc" href="../../documentation/exception-handling/">18. Exception handling</a></li>
+		
+									<li><a class="link_toc" href="../../documentation/how-to-contribute-to-vraptor/">19. How to contribute to VRaptor</a></li>
+		
+									<li><a class="link_toc" href="../../documentation/changelog/">20. ChangeLog</a></li>
+		
+									<li><a class="link_toc" href="../../documentation/migrating-from-vraptor2-to-vraptor3/">21. Migrating from VRaptor2 to VRaptor3</a></li>
 		
                 </ol>
             </div><!-- submenu-->
@@ -132,12 +138,11 @@ In the following example, either 1 or DEBIT values are converted to Type.DEBIT:<
 		
 
 <h3 class="section">BigInteger and BigDecimal</h3>
-	    	<span class="paragraph">Both are supported using your JVM's default locale.
-To enable decimal values based on the user's locale, you can check how the class LocaleBasedCalendarConverter works.</span>
+	    	<span class="paragraph">Both are supported using your JVM's default locale.</span>
 		
 
 <h3 class="section">Localized BigDecimal, Double e Float</h3>
-	    	<span class="paragraph">Since version 3.1.2, Vraptor also supports localization for these types. In order to use them you must add to your web.xml:</span>
+	    	<span class="paragraph">Since version 3.1.2, VRaptor also supports localization for these types. In order to use them you must add to your web.xml:</span>
 	    	<div class="xml"><code class="xml"><span class="textag">&lt;context-param&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-name&gt;</span><span class="texnormal">br.com.caelum.vraptor.packages</span><span class="textag">&lt;/param-name&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-value&gt;</span><span class="texnormal"><br /></span>

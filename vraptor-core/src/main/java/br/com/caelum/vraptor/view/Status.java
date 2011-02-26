@@ -138,4 +138,10 @@ public interface Status extends View {
 	 */
 	void notAcceptable();
 
+	
+	/**
+	 * Return Accepted (202) Status 
+	 */
+	void accepted();
+
 }

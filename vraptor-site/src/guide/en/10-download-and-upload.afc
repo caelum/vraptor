@@ -41,7 +41,7 @@ You can also use the %%InputStreamDownload%% implementation to work with Streams
 
 The upload component is optional. To enable this feature, you only need to add the %%commons-upload%% library in your classpath.
 
-Since Vraptor 3.2, if you're in a container that implements the JSR-315 (Servlet 3.0), you don't need %%commons-upload%% nor
+Since VRaptor 3.2, if you're in a container that implements the JSR-315 (Servlet 3.0), you don't need %%commons-upload%% nor
  %%commons-io%% libraries because the servlet container already have this.
 
 [section 1 minute example: upload]
@@ -90,3 +90,12 @@ public class CustomMultipartConfig extends DefaultMultipartConfig {
 
 }[/java]
 
+[section Changes in form]
+
+You need to add the parameter %%enctype%% with %%multipart/form-data%% value. Without this attribute, the browser cannot upload files:
+
+[xml]<form action="minha-action" enctype="multipart/form-data">[/xml]
+
+[section Validating upload]
+
+When the maximum size for uploaded file exceeds the configured value, VRaptor add a message on the Validator object.

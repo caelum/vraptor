@@ -417,24 +417,19 @@ A REST version of our %%ProductsControler%% would be something like that:
 public class ProductsController {
 	//...
 	
-	@Get
-	@Path("/products")
+	@Get @Path("/products")
 	public List<Product> list() {...}
 	
-	@Post
-	@Path("/products")
+	@Post("/products")
 	public void add(Product product) {...}
 
-	@Get
-	@Path("/products/{product.id}")
+	@Get("/products/{product.id}")
 	public void view(Product product) {...}
 	
-	@Put
-	@Path("/products/{product.id}")
+	@Put("/products/{product.id}")
 	public void update(Product product) {...}
 	
-	@Delete
-	@Path("/products/{product.id}")
+	@Delete("/products/{product.id}")
 	public void remove(Product product) {...}
 	
 }

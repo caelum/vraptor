@@ -114,6 +114,17 @@ public class DownloadInterceptorTest {
 		verify(outputStream).write(argThat(is(arrayStartingWith(bytes))), eq(0), eq(3));
 
 	}
+	@Test
+	public void whenResultIsAnInputStreamShouldCreateAByteArrayDownload() throws Exception {
+
+		byte[] bytes = "abc".getBytes();
+		when(info.getResult()).thenReturn(bytes);
+
+		interceptor.intercept(stack, resourceMethod, null);
+
+		verify(outputStream).write(argThat(is(arrayStartingWith(bytes))), eq(0), eq(3));
+
+	}
 
 	@Test
 	public void whenResultIsAFileShouldCreateAFileDownload() throws Exception {

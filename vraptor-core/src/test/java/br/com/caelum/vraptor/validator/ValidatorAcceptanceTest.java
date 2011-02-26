@@ -20,6 +20,7 @@ package br.com.caelum.vraptor.validator;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertFalse;
+import static org.mockito.Mockito.when;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -30,6 +31,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.proxy.ObjenesisProxifier;
+import br.com.caelum.vraptor.util.EmptyBundle;
 import br.com.caelum.vraptor.view.ValidationViewsFactory;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -47,6 +49,7 @@ public class ValidatorAcceptanceTest {
     @Before
     public void setup() {
     	validator = new DefaultValidator(result, viewsFactory, outjector, new ObjenesisProxifier(), null, localization);
+    	when(localization.getBundle()).thenReturn(new EmptyBundle());
     }
 
     @Test

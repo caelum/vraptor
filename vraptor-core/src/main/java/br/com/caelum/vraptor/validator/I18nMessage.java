@@ -1,5 +1,7 @@
 package br.com.caelum.vraptor.validator;
 
+import static com.google.common.base.Objects.toStringHelper;
+
 import java.text.MessageFormat;
 import java.util.ResourceBundle;
 
@@ -31,6 +33,10 @@ public class I18nMessage implements Message {
 		this.bundle = bundle;
 	}
 
+	public boolean hasBundle() {
+		return this.bundle != null;
+	}
+
 	public String getMessage() {
 		if (bundle == null) {
 			throw new IllegalStateException("You must set the bundle before using the I18nMessage");
@@ -40,6 +46,11 @@ public class I18nMessage implements Message {
 
 	public String getCategory() {
 		return category;
+	}
+
+	@Override
+	public String toString() {
+		return toStringHelper(this).add("category", category).add("message", message).add("parameters", parameters).toString();
 	}
 
 }

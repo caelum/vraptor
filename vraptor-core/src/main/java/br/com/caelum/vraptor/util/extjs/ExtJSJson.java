@@ -38,4 +38,7 @@ public interface ExtJSJson extends View {
 	public ExtJSJson include(String... fields);
 
 	public ExtJSJson serialize();
+
+	public ExtJSJson total(Integer total);
+	
 }

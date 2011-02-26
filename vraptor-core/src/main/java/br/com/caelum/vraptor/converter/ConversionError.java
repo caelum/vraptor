@@ -24,9 +24,6 @@ package br.com.caelum.vraptor.converter;
  */
 public class ConversionError extends Error {
 
-	/**
-	 * Random
-	 */
 	private static final long serialVersionUID = 8817715363221616696L;
 
 	public ConversionError(String msg) {

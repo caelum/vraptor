@@ -33,7 +33,6 @@ import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.test.VRaptorMockery;
 
 public class ArrayAccessorTest {
@@ -45,7 +44,6 @@ public class ArrayAccessorTest {
     private SimpleNode node;
     private Data instance;
     private TypeConverter typeConverter;
-    private Container container;
 
     class Data {
         private Long[] simpleNode;
@@ -61,16 +59,22 @@ public class ArrayAccessorTest {
 
     @Before
     public void setup() {
-        this.accessor = new ArrayAccessor();
         this.mockery = new VRaptorMockery(true);
         this.context = mockery.mock(OgnlContext.class);
         this.evaluation = mockery.mock(Evaluation.class);
         this.node = mockery.mock(SimpleNode.class);
         this.instance = new Data();
-        this.container = mockery.mock(Container.class);
         this.typeConverter = mockery.mock(TypeConverter.class);
+        final EmptyElementsRemoval removal = new EmptyElementsRemoval() {
+            @Override
+			public void removeExtraElements() {
+                // does nothing
+            }
+        };
+        accessor = new ArrayAccessor();
         mockery.checking(new Expectations() {
             {
+            	allowing(context).get("removal"); will(returnValue(removal));
                 allowing(context).getCurrentEvaluation();
                 will(returnValue(evaluation));
                 allowing(evaluation).getPrevious();
@@ -81,8 +85,6 @@ public class ArrayAccessorTest {
                 will(returnValue("values"));
                 allowing(evaluation).getSource();
                 will(returnValue(instance));
-                one(context).get(Container.class);
-                will(returnValue(container));
                 one(context).getTypeConverter();
                 will(returnValue(typeConverter));
             }
@@ -103,22 +105,12 @@ public class ArrayAccessorTest {
         assertThat(value, is(equalTo((Object) 22L)));
     }
 
-    @SuppressWarnings("unchecked")
     @Test
     public void settingShouldNullifyUpToIndexAndIgnoreRemoval() throws Exception {
         final Long[] l = new Long[] {};
-        final EmptyElementsRemoval removal = new EmptyElementsRemoval() {
-            @Override
-			public void removeExtraElements() {
-                // does nothing
-            }
-        };
         mockery.checking(new Expectations() {
             {
             	allowing(context).getRoot();
-
-                one(container).instanceFor(EmptyElementsRemoval.class);
-                will(returnValue(removal));
                 one(typeConverter).convertValue((Map) with(anything()), with(anything()),
                         (Member) with(anything()), (String) with(an(String.class)), with(anything()),
                         (Class) with(an(Class.class)));

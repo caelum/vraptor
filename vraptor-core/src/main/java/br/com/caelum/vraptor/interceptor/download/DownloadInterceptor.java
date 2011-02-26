@@ -28,10 +28,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.InterceptionException;
+import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.Lazy;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodInfo;
+import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
+import br.com.caelum.vraptor.interceptor.ForwardToDefaultViewInterceptor;
 import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.resource.ResourceMethod;
@@ -41,6 +44,7 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  *
  * @author filipesabella
  */
+@Intercepts(after=ExecuteMethodInterceptor.class, before=ForwardToDefaultViewInterceptor.class)
 @RequestScoped
 @Lazy
 public class DownloadInterceptor implements Interceptor {
@@ -59,7 +63,8 @@ public class DownloadInterceptor implements Interceptor {
 
 	public boolean accepts(ResourceMethod method) {
 		Class<?> type = method.getMethod().getReturnType();
-		return InputStream.class.isAssignableFrom(type) || type == File.class || Download.class.isAssignableFrom(type);
+		return InputStream.class.isAssignableFrom(type) || type == File.class || Download.class.isAssignableFrom(type)
+				|| type == byte[].class;
 	}
 
 	public void intercept(InterceptorStack stack, ResourceMethod method, Object instance) throws InterceptionException {
@@ -81,6 +86,9 @@ public class DownloadInterceptor implements Interceptor {
 			if (result instanceof InputStream) {
 				InputStream input = (InputStream) result;
 				download = new InputStreamDownload(input, null, null);
+			} else if (result instanceof byte[]) {
+				byte[] bytes = (byte[]) result;
+				download = new ByteArrayDownload(bytes, null, null);
 			} else if (result instanceof File) {
 				File file = (File) result;
 				download = new FileDownload(file, null, null);

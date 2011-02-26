@@ -91,10 +91,12 @@ public class SpringProviderRegisteringComponentsTest extends GenericContainerTes
 				will(returnValue(null));
 
 				allowing(context).getRealPath(with(any(String.class)));
-				will(returnValue(SpringBasedContainer.class.getResource(".").getFile()));
+				will(returnValue(SpringBasedContainer.class.getResource("../fixture").getFile()));
 
                 allowing(context).getInitParameter(BasicConfiguration.SCANNING_PARAM);
                 will(returnValue("enabled"));
+
+                allowing(context);
             }
         });
     }

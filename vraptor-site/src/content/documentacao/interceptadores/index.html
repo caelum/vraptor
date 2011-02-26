@@ -100,11 +100,15 @@
 		
 									<li><a class="link_toc" href="../../documentacao/otimizacoes/">17. Otimizações</a></li>
 		
-									<li><a class="link_toc" href="../../documentacao/vraptor-scaffold/">18. Vraptor Scaffold</a></li>
+									<li><a class="link_toc" href="../../documentacao/vraptor-scaffold/">18. VRaptor Scaffold</a></li>
 		
-									<li><a class="link_toc" href="../../documentacao/changelog/">19. ChangeLog</a></li>
+									<li><a class="link_toc" href="../../documentacao/exception-handling/">19. Exception handling</a></li>
 		
-									<li><a class="link_toc" href="../../documentacao/migrando-do-vraptor2-para-o-vraptor3/">20. Migrando do VRaptor2 para o VRaptor3</a></li>
+									<li><a class="link_toc" href="../../documentacao/como-contribuir-com-o-vraptor/">20. Como contribuir com o VRaptor</a></li>
+		
+									<li><a class="link_toc" href="../../documentacao/changelog/">21. ChangeLog</a></li>
+		
+									<li><a class="link_toc" href="../../documentacao/migrando-do-vraptor2-para-o-vraptor3/">22. Migrando do VRaptor2 para o VRaptor3</a></li>
 		
                 </ol>
             </div><!-- submenu-->
@@ -235,17 +239,47 @@ l&oacute;gica e da exibi&ccedil;&atilde;o da p&aacute;gina para o usu&aacute;rio
 }</span></code></div>
 		
 
-<h3 class="section">Como garantir ordem: InterceptorSequence</h3>
-	    	<span class="paragraph">Se voc&ecirc; precisa garantir a ordem em que os interceptors s&atilde;o executados, basta implementar
-a interface InterceptorSequence e passar a ordem em que voc&ecirc; deseja executar os interceptors:</span>
+<h3 class="section">Como garantir ordem: after e before</h3>
+	    	<span class="paragraph">Se voc&ecirc; precisa garantir a ordem de execu&ccedil;&atilde;o de um conjunto de interceptors, voc&ecirc; pode usar os
+atributos <strong class="definition">after</strong> e <strong class="definition">before</strong> da @Intercepts. Suponha que o PrimeiroInterceptor tenha que rodar antes
+do SegundoInterceptor, ent&atilde;o voc&ecirc; pode configurar isso tanto com:</span>
 	    	<div class="java"><code class="java">
-<span class="java16">@Intercepts<br />
-</span><span class="java4">public class </span><span class="java10">MinhaSequencia </span><span class="java4">implements </span><span class="java10">InterceptorSequence </span><span class="java8">{<br />
-&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">Class&lt;? </span><span class="java4">extends </span><span class="java10">Interceptor&gt;</span><span class="java8">[] </span><span class="java10">getSequence</span><span class="java8">() {<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return new </span><span class="java10">Class</span><span class="java8">[] { </span><span class="java10">PrimeiroInterceptor.class, SegundoInterceptor.</span><span class="java4">class </span><span class="java8">}</span><span class="java10">;<br />
-&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
-}</span></code></div>
-	    	<span class="paragraph">Voc&ecirc; n&atilde;o deve anotar os interceptors retornados pela InterceptorSequence com @Intercepts.</span>
+<span class="java16">@Intercepts</span><span class="java8">(</span><span class="java10">before=SegundoInterceptor.</span><span class="java4">class</span><span class="java8">)<br />
+</span><span class="java4">public class </span><span class="java10">PrimeiroInterceptor </span><span class="java4">implements </span><span class="java10">Interceptor </span><span class="java8">{<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java10">...<br />
+</span><span class="java8">}</span></code></div>
+	    	<span class="paragraph">quanto com:</span>
+	    	<div class="java"><code class="java">
+<span class="java16">@Intercepts</span><span class="java8">(</span><span class="java10">after=PrimeiroInterceptor.</span><span class="java4">class</span><span class="java8">)<br />
+</span><span class="java4">public class </span><span class="java10">SegundoInterceptor </span><span class="java4">implements </span><span class="java10">Interceptor </span><span class="java8">{<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java10">...<br />
+</span><span class="java8">}</span></code></div>
+	    	<span class="paragraph">Voc&ecirc; pode especificar mais de um Interceptor:</span>
+	    	<div class="java"><code class="java">
+<span class="java16">@Intercepts</span><span class="java8">(</span><span class="java10">after=</span><span class="java8">{</span><span class="java10">PrimeiroInterceptor.class, SegundoInterceptor.</span><span class="java4">class</span><span class="java8">}</span><span class="java10">, <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; before=</span><span class="java8">{</span><span class="java10">QuartoInterceptor.class, QuintoInterceptor.</span><span class="java4">class</span><span class="java8">})<br />
+</span><span class="java4">public class </span><span class="java10">TerceiroInterceptor </span><span class="java4">implements </span><span class="java10">Interceptor </span><span class="java8">{<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java10">...<br />
+</span><span class="java8">}</span></code></div>
+	    	<span class="paragraph">O VRaptor lan&ccedil;ar&aacute; uma exception se existir um ciclo na ordem dos interceptors, ent&atilde;o tenha cuidado.</span>
+		
+
+<h3 class="section">Interagindo com os interceptors do VRaptor</h3>
+	    	<span class="paragraph">O VRaptor possui sua pr&oacute;pria sequ&ecirc;ncia de interceptor, e voc&ecirc; pode definir a ordem dos seus
+interceptors baseados na do VRaptor.</span>
+	    	<span class="paragraph">Aqui est&atilde;o os principais interceptors do VRaptor e o que eles produzem:</span>
+	    	<ul class="list"><li><span class="paragraph"><strong class="definition">ResourceLookupInterceptor</strong> - o primeiro interceptor. Procura o ResourceMethod correto, 
+que ser&aacute; passado como argumento nos m&eacute;todos accepts() e intercept(). &Eacute; o after padr&atilde;o.</span></li><li><span class="paragraph"><strong class="definition">ParametersInstantiatorInterceptor</strong> - instancia os par&acirc;metros do m&eacute;todo baseado no request. Os
+par&acirc;metros estar&atilde;o dispon&iacute;veis via MethodInfo#getParameters().</span></li><li><span class="paragraph"><strong class="definition">InstantiateInterceptor</strong> - instancia o controller, que ser&aacute; passado como &uacute;ltimo par&acirc;metro do m&eacute;todo
+intercept().</span></li><li><span class="paragraph"><strong class="definition">ExecuteMethodInterceptor</strong> - executa o ResourceMethod. O retorno do m&eacute;todo estar&aacute; dispon&iacute;vel via
+MethodInfo#getResult(). &Eacute; o before padr&atilde;o.</span></li><li><span class="paragraph"><strong class="definition">OutjectResult</strong> - inclui o retorno do ResourceMethod na view.</span></li><li><span class="paragraph"><strong class="definition">ForwardToDefaultViewInterceptor</strong> - redireciona (forward) para a jsp padr&atilde;o se nenhuma outra view
+foi usada.</span></li></ul>
+	    	<span class="paragraph">Se voc&ecirc; precisa executar um Interceptor ap&oacute;s o ExecuteMethodInterceptor, voc&ecirc; <strong class="definition">deve</strong> setar o atributo
+before, para evitar ciclos. O ForwardToDefaultViewInterceptor &eacute; um bom valor, j&aacute; que nenhum outro 
+interceptor pode rodar depois dele:</span>
+	    	<div class="java"><code class="java">
+<span class="java16">@Intercepts</span><span class="java8">(</span><span class="java10">after=ExecuteMethodInterceptor.class, <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; before=ForwardToDefaultViewInterceptor.</span><span class="java4">class</span><span class="java8">)</span></code></div>
 		
 
 </div><!-- content -->

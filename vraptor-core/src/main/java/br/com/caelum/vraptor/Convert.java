@@ -22,10 +22,18 @@ import java.lang.annotation.RetentionPolicy;
 
 import br.com.caelum.vraptor.ioc.Stereotype;
 
+/**
+ * Registers a class as a converter.
+ * 
+ * @author Guilherme Silveira
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Stereotype
 public @interface Convert {
 
+    /**
+     * Register this component as the default converter for a type.
+     */
     Class<?> value();
 
 }

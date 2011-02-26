@@ -20,25 +20,29 @@ package br.com.caelum.vraptor.http.ognl;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.List;
 import java.util.ResourceBundle;
 
 import ognl.Ognl;
 import ognl.OgnlContext;
 import ognl.OgnlException;
-import ognl.OgnlRuntime;
 
-import org.jmock.Expectations;
-import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
+import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.converter.IntegerConverter;
 import br.com.caelum.vraptor.converter.LocaleBasedCalendarConverter;
+import br.com.caelum.vraptor.converter.LongConverter;
+import br.com.caelum.vraptor.converter.StringConverter;
 import br.com.caelum.vraptor.core.Converters;
+import br.com.caelum.vraptor.core.JstlLocalization;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.http.MutableRequest;
 
@@ -54,27 +58,26 @@ import br.com.caelum.vraptor.http.MutableRequest;
  */
 public class MiscOgnlSupportTest {
 
-    private Mockery mockery;
-    private Converters converters;
     private OgnlContext context;
     private House house;
     private ResourceBundle bundle;
+	private @Mock Converters converters;
 
-    @Before
-    public void setup() {
-        this.mockery = new Mockery();
-        this.converters = mockery.mock(Converters.class);
+	@Before
+    public void setup() throws Exception {
+		MockitoAnnotations.initMocks(this);
+		AbstractOgnlTestSupport.configOgnl(converters);
         this.house = new House();
-        OgnlRuntime.setNullHandler(Object.class, new ReflectionBasedNullHandler());
-        OgnlRuntime.setPropertyAccessor(List.class, new ListAccessor());
-        OgnlRuntime.setPropertyAccessor(Object[].class, new ArrayAccessor());
         this.context = (OgnlContext) Ognl.createDefaultContext(house);
         context.setTraceEvaluations(true);
         // OgnlRuntime.setPropertyAccessor(Set.class, new SetAccessor());
         // OgnlRuntime.setPropertyAccessor(Map.class, new MapAccessor());
         this.bundle = ResourceBundle.getBundle("messages");
         Ognl.setTypeConverter(context, new VRaptorConvertersAdapter(converters, bundle));
+        when(converters.to(String.class)).thenReturn((Converter) new StringConverter());
+		when(converters.to(Long.class)).thenReturn((Converter) new LongConverter());
     }
+
 
     public static class Cat {
         private Leg firstLeg;
@@ -124,28 +127,21 @@ public class MiscOgnlSupportTest {
 
     @Test
     public void isCapableOfDealingWithEmptyParameterForInternalWrapperValue() throws OgnlException {
-        mockery.checking(new Expectations() {{
-            one(converters).to(Integer.class);
-            will(returnValue(new IntegerConverter()));
-        }});
+        when(converters.to(Integer.class)).thenReturn((Converter) new IntegerConverter());
         Ognl.setValue("cat.firstLeg.id", context, house, "");
         assertThat(house.cat.firstLeg.id, is(equalTo(null)));
-        mockery.assertIsSatisfied();
     }
 
     @Test
     public void isCapableOfDealingWithEmptyParameterForInternalValueWhichNeedsAConverter() throws OgnlException {
-        final MutableRequest request = mockery.mock(MutableRequest.class);
+        final MutableRequest request = mock(MutableRequest.class);
         final RequestInfo webRequest = new RequestInfo(null, null, request, null);
-        mockery.checking(new Expectations() {{
-            exactly(2).of(request).getAttribute("javax.servlet.jsp.jstl.fmt.locale.request");
-            will(returnValue("pt_br"));
-            one(converters).to(Calendar.class);
-            will(returnValue(new LocaleBasedCalendarConverter(webRequest)));
-        }});
+        final JstlLocalization jstlLocalization = new JstlLocalization(webRequest);
+
+        when(request.getAttribute("javax.servlet.jsp.jstl.fmt.locale.request")).thenReturn("pt_br");
+        when(converters.to(Calendar.class)).thenReturn((Converter) new LocaleBasedCalendarConverter(jstlLocalization));
         Ognl.setValue("cat.firstLeg.birthDay", context, house, "10/5/2010");
         assertThat(house.cat.firstLeg.birthDay, is(equalTo((Calendar) new GregorianCalendar(2010, 4, 10))));
-        mockery.assertIsSatisfied();
     }
 
 }

@@ -17,17 +17,31 @@
 
 package br.com.caelum.vraptor.http.route;
 
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Predicates.instanceOf;
+import static com.google.common.base.Predicates.or;
+import static com.google.common.collect.Iterables.find;
+
+import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 
+import javassist.Modifier;
+import net.vidageek.mirror.dsl.Mirror;
+import br.com.caelum.vraptor.Delete;
+import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Path;
+import br.com.caelum.vraptor.Post;
+import br.com.caelum.vraptor.Put;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.ResourceClass;
+
+import com.google.common.base.Predicate;
 
 /**
  * The default parser routes creator uses the path annotation to create rules.
@@ -76,8 +90,12 @@ public class PathAnnotationRoutesParser implements RoutesParser {
 
 					rule.with(methods.isEmpty() ? typeMethods : methods);
 
-					if (javaMethod.isAnnotationPresent(Path.class)) {
+					if(javaMethod.isAnnotationPresent(Path.class)){
 						rule.withPriority(javaMethod.getAnnotation(Path.class).priority());
+					}
+
+					if (getUris(javaMethod).length > 0) {
+						rule.withPriority(Path.DEFAULT);
 					}
 
 					rule.is(baseType, javaMethod);
@@ -85,6 +103,7 @@ public class PathAnnotationRoutesParser implements RoutesParser {
 				}
 			}
 		}
+
 		return routes;
 	}
 
@@ -110,16 +129,29 @@ public class PathAnnotationRoutesParser implements RoutesParser {
 		if (javaMethod.isAnnotationPresent(Path.class)) {
 			String[] uris = javaMethod.getAnnotation(Path.class).value();
 
-			if (uris.length == 0) {
-				throw new IllegalArgumentException("You must specify at least one path on @Path at " + javaMethod);
-			}
+			checkArgument(uris.length > 0, "You must specify at least one path on @Path at " + javaMethod);
+			checkArgument(getUris(javaMethod).length == 0,
+					"You should specify paths either in @Path(\"/path\") or @Get(\"/path\") (or @Post, @Put, @Delete), not both at " + javaMethod);
 
 			fixURIs(type, uris);
+			return uris;
+		}
+		String[] uris = getUris(javaMethod);
 
+		if(uris.length > 0){
+			fixURIs(type, uris);
 			return uris;
 		}
 
 		return new String[] { defaultUriFor(extractControllerNameFrom(type), javaMethod.getName()) };
+	}
+
+	private String[] getUris(Method javaMethod){
+		Annotation method = find(Arrays.asList(javaMethod.getAnnotations()), instanceOfMethodAnnotation(), null);
+		if (method == null) {
+			return new String[0];
+		}
+		return (String[]) new Mirror().on(method).invoke().method("value").withoutArgs();
 	}
 
 	protected void fixURIs(Class<?> type, String[] uris) {
@@ -185,6 +217,10 @@ public class PathAnnotationRoutesParser implements RoutesParser {
 
 	protected String lowerFirstCharacter(String baseName) {
 		return baseName.toLowerCase().substring(0, 1) + baseName.substring(1, baseName.length());
+	}
+
+	private Predicate<Annotation> instanceOfMethodAnnotation() {
+		return or(instanceOf(Get.class), instanceOf(Post.class), instanceOf(Put.class), instanceOf(Delete.class));
 	}
 
 }

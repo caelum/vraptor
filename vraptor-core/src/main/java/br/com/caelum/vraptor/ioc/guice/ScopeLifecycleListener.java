@@ -53,6 +53,17 @@ final class ScopeLifecycleListener implements TypeListener {
 	public <I> void hear(TypeLiteral<I> literal, TypeEncounter<I> encounter) {
 		final List<Method> constructs = new ArrayList<Method>();
 		final List<Method> destroys = new ArrayList<Method>();
+		extractLifecycleMethods(literal, constructs, destroys);
+
+		logger.debug("Registering lifecycle listeners for {}", literal);
+
+		if (!constructs.isEmpty() || !destroys.isEmpty()) {
+			encounter.register(new LifecycleExecutor(constructs, destroys));
+		}
+	}
+
+	private <I> void extractLifecycleMethods(TypeLiteral<I> literal, final List<Method> constructs,
+			final List<Method> destroys) {
 		for (Method method : new Mirror().on(literal.getRawType()).reflectAll().methods()) {
 			if (method.isAnnotationPresent(PostConstruct.class)) {
 				constructs.add(method);
@@ -62,26 +73,29 @@ final class ScopeLifecycleListener implements TypeListener {
 				destroys.add(method);
 			}
 		}
-		
-		logger.debug("Registering lifecycle listeners for {}", literal);
-		
-		if (!constructs.isEmpty() || !destroys.isEmpty()) {
-			encounter.register(new InjectionListener() {
+	}
 
-				public void afterInjection(final Object instance) {
-					for (Method method : constructs) {
+	private final class LifecycleExecutor implements InjectionListener {
+		private final List<Method> destroys;
+		private final List<Method> constructs;
+
+		private LifecycleExecutor(List<Method> constructs, List<Method> destroys) {
+			this.destroys = destroys;
+			this.constructs = constructs;
+		}
+
+		public void afterInjection(final Object instance) {
+			for (Method method : constructs) {
+				new Mirror().on(instance).invoke().method(method).withoutArgs();
+			}
+			scope.registerDestroyListener(new LifecycleListener() {
+				public void onEvent() {
+					for (Method method : destroys) {
 						new Mirror().on(instance).invoke().method(method).withoutArgs();
 					}
-					scope.registerDestroyListener(new LifecycleListener() {
-						public void onEvent() {
-							for (Method method : destroys) {
-								new Mirror().on(instance).invoke().method(method).withoutArgs();
-							}
-						}
-					});
 				}
-
 			});
 		}
 	}
+
 }

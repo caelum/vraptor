@@ -100,11 +100,15 @@
 		
 									<li><a class="link_toc" href="../../documentacao/otimizacoes/">17. Otimizações</a></li>
 		
-									<li><a class="link_toc" href="../../documentacao/vraptor-scaffold/">18. Vraptor Scaffold</a></li>
+									<li><a class="link_toc" href="../../documentacao/vraptor-scaffold/">18. VRaptor Scaffold</a></li>
 		
-									<li><a class="link_toc" href="../../documentacao/changelog/">19. ChangeLog</a></li>
+									<li><a class="link_toc" href="../../documentacao/exception-handling/">19. Exception handling</a></li>
 		
-									<li><a class="link_toc" href="../../documentacao/migrando-do-vraptor2-para-o-vraptor3/">20. Migrando do VRaptor2 para o VRaptor3</a></li>
+									<li><a class="link_toc" href="../../documentacao/como-contribuir-com-o-vraptor/">20. Como contribuir com o VRaptor</a></li>
+		
+									<li><a class="link_toc" href="../../documentacao/changelog/">21. ChangeLog</a></li>
+		
+									<li><a class="link_toc" href="../../documentacao/migrando-do-vraptor2-para-o-vraptor3/">22. Migrando do VRaptor2 para o VRaptor3</a></li>
 		
                 </ol>
             </div><!-- submenu-->
@@ -117,7 +121,7 @@
 
 
 <h3 class="section">exemplo de 1 minuto: download</h3>
-	    	<span class="paragraph">O exemplo a seguir mostra como disponibilizar o download para seu cliente.</span>
+	    	<span class="paragraph">O exemplo a seguir mostra como disponibilizar o download para seu cliente.</span>
 	    	<span class="paragraph">Note novamente a simplicidade na implementa&ccedil;&atilde;o:</span>
 	    	<div class="java"><code class="java">
 <span class="java16">@Resource<br />
@@ -146,11 +150,19 @@ um FileDownload:</span>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return new </span><span class="java10">FileDownload</span><span class="java8">(</span><span class="java10">file, contentType, filename</span><span class="java8">)</span><span class="java10">; <br />
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
 }</span></code></div>
-	    	<span class="paragraph">Voc&ecirc; pode tamb&eacute;m usar a implementa&ccedil;&atilde;o <code class="inlineCode">InputStreamDownload</code> para trabalhar diretamente com Streams.</span>
+	    	<span class="paragraph">Voc&ecirc; pode tamb&eacute;m usar a implementa&ccedil;&atilde;o <code class="inlineCode">InputStreamDownload</code> para trabalhar diretamente com Streams ou
+<code class="inlineCode">ByteArrayDownload</code> para array de bytes (desde a 3.2-snapshot).</span>
+		
+
+<h3 class="section">Upload</h3>
+	    	<span class="paragraph">Para ativar o suporte a upload &eacute; necess&aacute;rio adicionar as bibliotecas <code class="inlineCode">commons-upload</code> e <code class="inlineCode">commons-io</code> em seu 
+classpath.</span>
+	    	<span class="paragraph">Na vers&atilde;o 3.2 do VRaptor, caso voc&ecirc; estiver em um container que implemente a JSR-315 (Servlet 3.0), 
+n&atilde;o ser&atilde;o necess&aacute;rios os jars <code class="inlineCode">commons-upload</code> e <code class="inlineCode">commons-io</code>, pois o pr&oacute;prio container j&aacute; implementa 
+a funcionalidade de upload.</span>
 		
 
 <h3 class="section">exemplo de 1 minuto: upload</h3>
-	    	<span class="paragraph">Nota: o componente para upload &eacute; opcional. Para ativar o suporte a upload basta adicionar a biblioteca <code class="inlineCode">commons-upload</code> em seu classpath.</span>
 	    	<span class="paragraph">O primeiro exemplo ser&aacute; baseado na funcionalidade de upload multipart.</span>
 	    	<div class="java"><code class="java">
 <span class="java16">@Resource<br />
@@ -170,8 +182,7 @@ um FileDownload:</span>
 
 <h3 class="section">Mais sobre Upload</h3>
 	    	<span class="paragraph">O UploadedFile retorna o arquivo como um InputStream. Se voc&ecirc; quiser copiar para
-um arquivo no disco facilmente, basta usar o <code class="inlineCode">IOUtils</code> do <code class="inlineCode">commons-io</code>, que j&aacute; &eacute; depend&ecirc;ncia do
-VRaptor:</span>
+um arquivo no disco facilmente, basta usar o <code class="inlineCode">IOUtils</code> do <code class="inlineCode">commons-io</code>:</span>
 	    	<div class="java"><code class="java">
 <span class="java4">public </span><span class="java9">void </span><span class="java10">atualizaFoto</span><span class="java8">(</span><span class="java10">Perfil perfil, UploadedFile foto</span><span class="java8">) {<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java10">File fotoSalva = </span><span class="java4">new </span><span class="java10">File</span><span class="java8">()</span><span class="java10">;&nbsp;&nbsp;&nbsp; <br />
@@ -194,8 +205,13 @@ VRaptor:</span>
 }</span></code></div>
 		
 
+<h3 class="section">Alterando o formulário de envio</h3>
+	    	<span class="paragraph">Para que o browser possa fazer o upload corretamente voc&ecirc; precisa adicionar o atributo <code class="inlineCode">enctype</code> para <code class="inlineCode">multipart/form-data</code>:</span>
+	    	<div class="xml"><code class="xml"><span class="textag">&lt;form</span>&nbsp;<span class="texattrib">action=</span><span class="texvalue">"minha-action"</span>&nbsp;<span class="texattrib">enctype=</span><span class="texvalue">"multipart/form-data"</span><span class="textag">&gt;</span></code></div>
+		
+
 <h3 class="section">Validando o upload</h3>
-	    	<span class="paragraph">Quando o tamanho m&aacute;ximo para upload de arquivo exceder o valor configurado, o Vraptor adiciona uma mensagem no objeto Validator.</span>
+	    	<span class="paragraph">Quando o tamanho m&aacute;ximo para upload de arquivo exceder o valor configurado, o VRaptor adiciona uma mensagem no objeto Validator.</span>
 		
 
 </div><!-- content -->

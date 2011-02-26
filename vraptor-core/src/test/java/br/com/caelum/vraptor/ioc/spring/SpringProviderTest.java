@@ -68,14 +68,18 @@ public class SpringProviderTest {
 						BasicConfiguration.BASE_PACKAGES_PARAMETER_NAME);
 				will(returnValue("br.com.caelum.vraptor.ioc.spring.components.registrar"));
 
-				allowing(servletContext).getRealPath("/WEB-INF/classes/");
+				allowing(servletContext).getRealPath("/WEB-INF/classes");
 				will(returnValue(this.getClass().getResource(".").getPath()));
 
 				allowing(servletContext).getAttribute(with(any(String.class)));
 				will(returnValue(null));
 
+				allowing(servletContext).setAttribute(with(any(String.class)), with(any(Object.class)));
+
                 allowing(servletContext).getInitParameter(BasicConfiguration.SCANNING_PARAM);
                 will(returnValue("enabled"));
+
+                allowing(servletContext);
 			}
 		});
 		SpringProvider provider = new SpringProvider();

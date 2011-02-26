@@ -42,7 +42,6 @@ public class VRaptorConvertersAdapter implements TypeConverter {
         this.bundle = bundle;
     }
 
-    @SuppressWarnings("unchecked")
     public Object convertValue(Map context, Object target, Member member, String propertyName, Object value,
             Class toType) {
         Type genericType = genericTypeToConvert(target, member);
@@ -56,7 +55,7 @@ public class VRaptorConvertersAdapter implements TypeConverter {
         return convert(value, type);
     }
 
-	private Object convert(Object value, Class type) {
+	Object convert(Object value, Class type) {
 		Converter<?> converter = converters.to(type);
         if (converter == null) {
             // TODO better, validation error?
@@ -78,7 +77,6 @@ public class VRaptorConvertersAdapter implements TypeConverter {
                 + " from " + target.getClass().getName());
     }
 
-    @SuppressWarnings("unchecked")
     private static Class rawTypeOf(Type genericType) {
         if (genericType instanceof ParameterizedType) {
             return (Class) ((ParameterizedType) genericType).getRawType();

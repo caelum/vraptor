@@ -74,23 +74,22 @@ public class PicoComponentRegistry extends AbstractComponentRegistry {
     	return appContainer;
     }
 
-    @SuppressWarnings("unchecked")
     public void register(Class<?> requiredType, Class<?> type) {
         logger.debug("Registering " + requiredType.getName() + " with " + type.getName());
 
-        boolean overriding = alreadyRegistered(requiredType);
-        if (overriding) {
+        if (alreadyRegistered(requiredType)) {
             logger.debug("Overriding interface " + requiredType.getName() + " with " + type.getName());
         }
-        if (type.isAnnotationPresent(ApplicationScoped.class)) {
+        registerOnScope(requiredType, type);
+
+        registerComponentFactory(requiredType, type);
+        checkInitialization(requiredType, type);
+    }
+
+	private void registerOnScope(Class<?> requiredType, Class<?> type) {
+		if (type.isAnnotationPresent(ApplicationScoped.class)) {
             logger.debug("Registering " + type.getName() + " as an application component");
             this.applicationScoped.put(requiredType, type);
-            if (initialized) {
-                logger.warn("VRaptor was already initialized, the contexts were created but you are registering a component."
-                        + "This is nasty. The original component might already be in use."
-                        + "Avoid doing it: " + requiredType.getName());
-                this.appContainer.addComponent(requiredType, type);
-            }
         } else if (type.isAnnotationPresent(SessionScoped.class)) {
             logger.debug("Registering " + type.getName() + " as a session component");
             this.sessionScoped.put(requiredType, type);
@@ -102,21 +101,31 @@ public class PicoComponentRegistry extends AbstractComponentRegistry {
             logger.debug("Registering " + type.getName() + " as a request component");
             this.requestScoped.put(requiredType, type);
         }
+	}
 
-        if (ComponentFactory.class.isAssignableFrom(type) && !requiredType.equals(ComponentFactory.class)) {
+	private void checkInitialization(Class<?> requiredType, Class<?> type) {
+		if (type.isAnnotationPresent(ApplicationScoped.class) && initialized) {
+		    logger.warn("VRaptor was already initialized, the contexts were created but you are registering a component."
+		            + "This is nasty. The original component might already be in use."
+		            + "Avoid doing it: " + requiredType.getName());
+		    this.appContainer.addComponent(requiredType, type);
+
+		    if (isComponentFactory(requiredType, type)) {
+		    	Class<?> targetType = new ComponentFactoryIntrospector().targetTypeForComponentFactory(type);
+		    	this.appContainer.addAdapter(new PicoComponentAdapter(targetType, (Class<? extends ComponentFactory<?>>) type));
+		    }
+		}
+	}
+
+	private void registerComponentFactory(Class<?> requiredType, Class<?> type) {
+		if (isComponentFactory(requiredType, type)) {
             componentFactoryRegistry.register((Class<? extends ComponentFactory<?>>) type);
-
-            if (type.isAnnotationPresent(ApplicationScoped.class) && initialized) {
-                if (initialized) {
-                    logger.warn("VRaptor was already initialized, the contexts were created but you are registering a component."
-                            + "This is nasty. The original component might already be in use."
-                            + "Avoid doing it: " + requiredType.getName());
-                    Class<?> targetType = new ComponentFactoryIntrospector().targetTypeForComponentFactory(type);
-                    this.appContainer.addAdapter(new PicoComponentAdapter(targetType, (Class<? extends ComponentFactory<?>>) type));
-                }
-            }
         }
-    }
+	}
+
+	private boolean isComponentFactory(Class<?> requiredType, Class<?> type) {
+		return ComponentFactory.class.isAssignableFrom(type) && !requiredType.equals(ComponentFactory.class);
+	}
 
     /**
      * Registers all application scoped elements into the container.

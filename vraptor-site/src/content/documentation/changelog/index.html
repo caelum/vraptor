@@ -94,9 +94,15 @@
 		
 									<li><a class="link_toc" href="../../documentation/optimizations/">16. Optimizations</a></li>
 		
-									<li><a class="link_toc" href="../../documentation/changelog/">17. ChangeLog</a></li>
+									<li><a class="link_toc" href="../../documentation/vraptor-scaffold/">17. VRaptor Scaffold</a></li>
 		
-									<li><a class="link_toc" href="../../documentation/migrating-from-vraptor2-to-vraptor3/">18. Migrating from VRaptor2 to VRaptor3</a></li>
+									<li><a class="link_toc" href="../../documentation/exception-handling/">18. Exception handling</a></li>
+		
+									<li><a class="link_toc" href="../../documentation/how-to-contribute-to-vraptor/">19. How to contribute to VRaptor</a></li>
+		
+									<li><a class="link_toc" href="../../documentation/changelog/">20. ChangeLog</a></li>
+		
+									<li><a class="link_toc" href="../../documentation/migrating-from-vraptor2-to-vraptor3/">21. Migrating from VRaptor2 to VRaptor3</a></li>
 		
                 </ol>
             </div><!-- submenu-->
@@ -107,6 +113,41 @@
 
 		
 
+
+<h3 class="section">3.3.0</h3>
+	    	<div class="box"><h3>jar changes</h3>
+<ul class="list"><li><span class="paragraph">change google-collect 1.0rc to guava-r07.</span></li><li><span class="paragraph">scannotations 1.0.2 is now mandatory.</span></li></ul></div>
+	    	<span class="paragraph">* <strong class="definition">better Spring integration</strong>: now Spring components can access VRaptor components and vice-versa  
+* guice: @PostConstruct and @PreDestroy working properly
+* guice: all request and session scoped components are exported to the view in the
+same way as spring provider (class name as key)</span>
+	    	<span class="paragraph">* <strong class="definition">interceptor ordering strategy changed</strong>: one can order the interceptors using @Intercepts annotation,
+specifying which interceptors must run before or after the annotated interceptor</span>
+	    	<div class="java"><code class="java">
+<span class="java16">@Intercepts</span><span class="java8">(</span><span class="java10">before=AnInterceptor.class, after=AnotherInterceptor.</span><span class="java4">class</span><span class="java8">)</span></code></div>
+	    	<span class="paragraph">So VRaptor will execute the interceptors in an ordering that respects before and after restrictions
+of all interceptors. 
+Therefore the InterceptorSequence interface is deprecated.</span>
+	    	<span class="paragraph">* HTTP verb annotations now also can set paths:</span>
+	    	<div class="java"><code class="java">
+<span class="java16">@Get</span><span class="java8">(</span><span class="java5">&#34;/items/{id}&#34;</span><span class="java8">)</span><span class="java10">, </span><span class="java16">@Post</span><span class="java8">(</span><span class="java5">&#34;/items&#34;</span><span class="java8">)</span><span class="java10">, etc</span></code></div>
+	    	<span class="paragraph">* bugfix: @Transactional from Spring can be used in any class (within spring aop limitations)
+* bugfix: upload of files with same name
+* bugfix: web-fragments.xml on jboss 6
+* bugfix: better support for arrays as parameters
+* new Download implementation: ByteArrayDownload and JFreeChartDownload
+* new jsonp view:</span>
+	    	<div class="java"><code class="java">
+<span class="java10">result.use</span><span class="java8">(</span><span class="java10">jsonp</span><span class="java8">())</span><span class="java10">.withCallback</span><span class="java8">(</span><span class="java5">&#34;theCallback&#34;</span><span class="java8">)</span><span class="java10">.from</span><span class="java8">(</span><span class="java10">object</span><span class="java8">)</span><span class="java10">.serialize</span><span class="java8">()</span><span class="java10">;</span></code></div>
+	    	<span class="paragraph">which returns</span>
+	    	<div class="java"><code class="java">theCallback({"object":&nbsp;{...}})</code></div>
+	    	<span class="paragraph">* commons-io dependency removed
+* PageResult methods renamed for consistency with other results.
+* better upload logs
+* refactor on converters: using Localization to get Locale and bundle 
+* Hibernate class removed. Use validator.validate(object) instead.
+* JSON response with optional indentation.</span>
+		
 
 <h3 class="section">3.2.0</h3>
 	    	<ul class="list"><li><span class="paragraph">several performance tweaks: about 60% less request time.</span></li><li><span class="paragraph"><strong class="definition">internal compatibility break</strong>: InterceptorStack interface reorganized.</span></li><li><span class="paragraph">better implementation of VRaptor internal interceptors accepts method.</span></li><li><span class="paragraph">beta support to Google Guice, that can be used instead of Spring.</span></li><li><span class="paragraph">Pico provider is not deprecated anymore.</span></li><li><span class="paragraph">One can change the DI container without configuring it on web.xml.

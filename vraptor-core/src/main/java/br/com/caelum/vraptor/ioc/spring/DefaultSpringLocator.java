@@ -20,9 +20,10 @@ import javax.servlet.ServletContext;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.web.context.ConfigurableWebApplicationContext;
+import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
+import org.springframework.web.context.support.XmlWebApplicationContext;
 
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
@@ -37,17 +38,22 @@ public class DefaultSpringLocator implements SpringLocator {
 
 	private static final Logger logger = LoggerFactory.getLogger(DefaultSpringLocator.class);
 
-	public ApplicationContext getApplicationContext(ServletContext servletContext) {
-		ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(servletContext);
+	public ConfigurableWebApplicationContext getApplicationContext(ServletContext servletContext) {
+		ConfigurableWebApplicationContext context = (ConfigurableWebApplicationContext) WebApplicationContextUtils.getWebApplicationContext(servletContext);
 		if (context != null) {
 			logger.info("Using a web application context: " + context);
 			return context;
-		} else if (DefaultSpringLocator.class.getResource("/applicationContext.xml") != null) {
-			logger.info("Using a classpath application context");
-			return new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
+		}
+		if (DefaultSpringLocator.class.getResource("/applicationContext.xml") != null) {
+			logger.info("Using an XmlWebApplicationContext, searching for applicationContext.xml");
+			XmlWebApplicationContext ctx = new XmlWebApplicationContext();
+			ctx.setConfigLocation("classpath:applicationContext.xml");
+			return ctx;
 		}
 		logger.info("No application context found");
-		return null;
+		ConfigurableWebApplicationContext ctx = new AnnotationConfigWebApplicationContext();
+		ctx.setId("VRaptor");
+		return ctx;
 	}
 
 }

@@ -100,11 +100,15 @@
 		
 									<li><a class="link_toc" href="../../documentacao/otimizacoes/">17. Otimizações</a></li>
 		
-									<li><a class="link_toc" href="../../documentacao/vraptor-scaffold/">18. Vraptor Scaffold</a></li>
+									<li><a class="link_toc" href="../../documentacao/vraptor-scaffold/">18. VRaptor Scaffold</a></li>
 		
-									<li><a class="link_toc" href="../../documentacao/changelog/">19. ChangeLog</a></li>
+									<li><a class="link_toc" href="../../documentacao/exception-handling/">19. Exception handling</a></li>
 		
-									<li><a class="link_toc" href="../../documentacao/migrando-do-vraptor2-para-o-vraptor3/">20. Migrando do VRaptor2 para o VRaptor3</a></li>
+									<li><a class="link_toc" href="../../documentacao/como-contribuir-com-o-vraptor/">20. Como contribuir com o VRaptor</a></li>
+		
+									<li><a class="link_toc" href="../../documentacao/changelog/">21. ChangeLog</a></li>
+		
+									<li><a class="link_toc" href="../../documentacao/migrando-do-vraptor2-para-o-vraptor3/">22. Migrando do VRaptor2 para o VRaptor3</a></li>
 		
                 </ol>
             </div><!-- submenu-->
@@ -141,12 +145,11 @@ No exemplo a seguir, tanto o valor 1 como o valor DEBITO s&atilde;o traduzidos p
 		
 
 <h3 class="section">BigInteger e BigDecimal</h3>
-	    	<span class="paragraph">Ambos s&atilde;o suportados utilizando o padr&atilde;o de localiza&ccedil;&atilde;o da virtual machine que serve a sua aplica&ccedil;&atilde;o.
-Para criar suporte a n&uacute;meros decimais baseados no locale do usu&aacute;rio, basta olhar o funcionamento da classe LocaleBasedCalendarConverter.</span>
+	    	<span class="paragraph">Ambos s&atilde;o suportados utilizando o padr&atilde;o de localiza&ccedil;&atilde;o da virtual machine que serve a sua aplica&ccedil;&atilde;o.</span>
 		
 
 <h3 class="section">BigDecimal, Double e Float localizados</h3>
-	    	<span class="paragraph">A partir da vers&atilde;o 3.1.2 o Vraptor suporta esses tipos baseados na localiza&ccedil;&atilde;o da virtual machine. Para ativar esses 
+	    	<span class="paragraph">A partir da vers&atilde;o 3.1.2 o VRaptor suporta esses tipos baseados na localiza&ccedil;&atilde;o da virtual machine. Para ativar esses 
 componentes &eacute; necess&aacute;rio adicionar as seguintes linhas no seu web.xml:</span>
 	    	<div class="xml"><code class="xml"><span class="textag">&lt;context-param&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-name&gt;</span><span class="texnormal">br.com.caelum.vraptor.packages</span><span class="textag">&lt;/param-name&gt;</span><span class="texnormal"><br /></span>
@@ -169,7 +172,7 @@ definido seguindo o padr&atilde;o do jstl para entender a formata&ccedil;&atilde
 enquanto para o locale en, o formato "09/18/1981" representa a mesma data.</span>
 		
 
-<h3 class="section">LocalDate e LocalTime do joda-time</h3>
+<h3 class="section">LocalDate, LocalTime e LocalDateTime do joda-time</h3>
 	    	<span class="paragraph">Existem conversores para esses dois tipos no VRaptor e eles s&oacute; ser&atilde;o carregados se voc&ecirc; tiver
 o joda-time.jar no seu classpath</span>
 		

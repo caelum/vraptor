@@ -89,7 +89,7 @@ public class ProviderTest extends GenericContainerTest {
 		requestListener.requestDestroyed(new ServletRequestEvent(context, request));
 		RequestContextHolder.resetRequestAttributes();
 		VRaptorRequestHolder.resetRequestForCurrentThread();
-		
+
 		return result;
     }
 
@@ -104,8 +104,8 @@ public class ProviderTest extends GenericContainerTest {
                     allowing(context).getAttribute("org.springframework.web.context.WebApplicationContext.ROOT");
                     will(returnValue(null));
 
-                    allowing(context).getRealPath("/WEB-INF/classes/");
-                    will(returnValue(ProviderTest.class.getResource(".").getFile()));
+                    allowing(context).getRealPath("/WEB-INF/classes");
+                    will(returnValue(ProviderTest.class.getResource("../ioc/fixture").getFile()));
 
                     allowing(context).getRealPath("/WEB-INF/classes/views.properties");
                     will(returnValue("views.properties"));
@@ -117,6 +117,8 @@ public class ProviderTest extends GenericContainerTest {
 
 	                allowing(context).getInitParameter(BasicConfiguration.SCANNING_PARAM);
 	                will(returnValue("enabled"));
+
+	                allowing(context);
                 }
             });
         } catch (Exception e) {

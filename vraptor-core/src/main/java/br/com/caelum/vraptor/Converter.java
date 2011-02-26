@@ -19,12 +19,11 @@ package br.com.caelum.vraptor;
 
 import java.util.ResourceBundle;
 
-
-
 /**
  * Converts a string value to an object.
  * 
  * @author Guilherme Silveira
+ * @see TwoWayConverter
  */
 public interface Converter<T> {
 

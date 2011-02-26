@@ -9,8 +9,8 @@ Além disso existem interceptors implementados que controlam as transações tan
 Para saber como fazer usar esses componentes veja o capítulo de utils.
  
 [section Integração com Spring]
-O VRaptor roda dentro do Spring, e usa o ApplicationContext da sua aplicação como parent do ApplicationContext
-do VRaptor. Logo todas as funcionalidades e módulos do Spring funcionam com o VRaptor sem nenhuma configuração 
+O VRaptor roda dentro do Spring, e usa o ApplicationContext da sua aplicação se disponível. Logo 
+todas as funcionalidades e módulos do Spring funcionam com o VRaptor sem nenhuma configuração 
 da parte do VRaptor!
 
 [section Conversores para Joda Time]

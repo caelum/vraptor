@@ -70,7 +70,6 @@ public class DefaultConvertersTest {
         this.converters = new DefaultConverters(container);
     }
 
-    @SuppressWarnings("unchecked")
 	@Test
     public void shouldRegisterConvertersForAllDefaultTypes() {
         final HashMap<Class, Class<? extends Converter>> EXPECTED_CONVERTERS = new HashMap<Class, Class<? extends Converter>>() {

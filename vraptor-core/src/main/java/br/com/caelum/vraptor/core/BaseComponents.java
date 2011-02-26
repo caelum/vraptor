@@ -58,6 +58,7 @@ import br.com.caelum.vraptor.converter.PrimitiveIntConverter;
 import br.com.caelum.vraptor.converter.PrimitiveLongConverter;
 import br.com.caelum.vraptor.converter.PrimitiveShortConverter;
 import br.com.caelum.vraptor.converter.ShortConverter;
+import br.com.caelum.vraptor.converter.StringConverter;
 import br.com.caelum.vraptor.converter.jodatime.LocalDateConverter;
 import br.com.caelum.vraptor.converter.jodatime.LocalDateTimeConverter;
 import br.com.caelum.vraptor.converter.jodatime.LocalTimeConverter;
@@ -69,7 +70,6 @@ import br.com.caelum.vraptor.deserialization.DeserializesHandler;
 import br.com.caelum.vraptor.deserialization.JsonDeserializer;
 import br.com.caelum.vraptor.deserialization.XMLDeserializer;
 import br.com.caelum.vraptor.deserialization.XStreamXMLDeserializer;
-import br.com.caelum.vraptor.extra.ForwardToDefaultViewInterceptor;
 import br.com.caelum.vraptor.http.DefaultFormatResolver;
 import br.com.caelum.vraptor.http.DefaultResourceTranslator;
 import br.com.caelum.vraptor.http.EncodingHandlerFactory;
@@ -88,26 +88,29 @@ import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.http.route.RoutesConfiguration;
 import br.com.caelum.vraptor.http.route.RoutesParser;
 import br.com.caelum.vraptor.http.route.TypeFinder;
-import br.com.caelum.vraptor.interceptor.DefaultInterceptorRegistry;
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor.interceptor.DeserializingInterceptor;
 import br.com.caelum.vraptor.interceptor.ExceptionHandlerInterceptor;
 import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
 import br.com.caelum.vraptor.interceptor.FlashInterceptor;
+import br.com.caelum.vraptor.interceptor.ForwardToDefaultViewInterceptor;
 import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
 import br.com.caelum.vraptor.interceptor.InterceptorListPriorToExecutionExtractor;
 import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
 import br.com.caelum.vraptor.interceptor.OutjectResult;
 import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
 import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
+import br.com.caelum.vraptor.interceptor.TopologicalSortedInterceptorRegistry;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.interceptor.download.DownloadInterceptor;
 import br.com.caelum.vraptor.interceptor.multipart.CommonsUploadMultipartInterceptor;
 import br.com.caelum.vraptor.interceptor.multipart.DefaultMultipartConfig;
+import br.com.caelum.vraptor.interceptor.multipart.DefaultServletFileUploadCreator;
 import br.com.caelum.vraptor.interceptor.multipart.MultipartConfig;
 import br.com.caelum.vraptor.interceptor.multipart.MultipartInterceptor;
 import br.com.caelum.vraptor.interceptor.multipart.NullMultipartInterceptor;
 import br.com.caelum.vraptor.interceptor.multipart.Servlet3MultipartInterceptor;
+import br.com.caelum.vraptor.interceptor.multipart.ServletFileUploadCreator;
 import br.com.caelum.vraptor.interceptor.multipart.UploadedFileConverter;
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.ioc.ConverterHandler;
@@ -127,11 +130,13 @@ import br.com.caelum.vraptor.restfulie.headers.RestDefaults;
 import br.com.caelum.vraptor.serialization.DefaultRepresentationResult;
 import br.com.caelum.vraptor.serialization.HTMLSerialization;
 import br.com.caelum.vraptor.serialization.HibernateProxyInitializer;
+import br.com.caelum.vraptor.serialization.JSONPSerialization;
 import br.com.caelum.vraptor.serialization.JSONSerialization;
 import br.com.caelum.vraptor.serialization.NullProxyInitializer;
 import br.com.caelum.vraptor.serialization.ProxyInitializer;
 import br.com.caelum.vraptor.serialization.RepresentationResult;
 import br.com.caelum.vraptor.serialization.XMLSerialization;
+import br.com.caelum.vraptor.serialization.xstream.XStreamJSONPSerialization;
 import br.com.caelum.vraptor.serialization.xstream.XStreamJSONSerialization;
 import br.com.caelum.vraptor.serialization.xstream.XStreamXMLSerialization;
 import br.com.caelum.vraptor.validator.BeanValidator;
@@ -173,12 +178,12 @@ public class BaseComponents {
     static final Logger logger = LoggerFactory.getLogger(BaseComponents.class);
 
     private final static Map<Class<?>, Class<?>> APPLICATION_COMPONENTS = classMap(
-//    		TypeCreator.class, 				AsmBasedTypeCreator.class,
     		EncodingHandlerFactory.class, 	EncodingHandlerFactory.class,
     		AcceptHeaderToFormat.class, 	DefaultAcceptHeaderToFormat.class,
     		Converters.class, 				DefaultConverters.class,
-            InterceptorRegistry.class, 		DefaultInterceptorRegistry.class,
+            InterceptorRegistry.class, 		TopologicalSortedInterceptorRegistry.class,
             InterceptorHandlerFactory.class,DefaultInterceptorHandlerFactory.class,
+            InterceptorListPriorToExecutionExtractor.class, InterceptorListPriorToExecutionExtractor.class,
             MultipartConfig.class, 			DefaultMultipartConfig.class,
             UrlToResourceTranslator.class, 	DefaultResourceTranslator.class,
             Router.class, 					DefaultRouter.class,
@@ -198,12 +203,11 @@ public class BaseComponents {
     );
 
     private final static Map<Class<?>, Class<?>> CACHED_COMPONENTS = classMap(
-//    		TypeCreator.class, CacheBasedTypeCreator.class
     );
 
     private static final Map<Class<?>, Class<?>> PROTOTYPE_COMPONENTS = classMap(
     		InterceptorStack.class, 						DefaultInterceptorStack.class,
-    		RequestExecution.class, 						DefaultRequestExecution.class
+    		RequestExecution.class, 						EnhancedRequestExecution.class
     );
 
     private static final Map<Class<?>, Class<?>> REQUEST_COMPONENTS = classMap(
@@ -227,7 +231,6 @@ public class BaseComponents {
             ForwardToDefaultViewInterceptor.class, 			ForwardToDefaultViewInterceptor.class,
             InstantiateInterceptor.class, 					InstantiateInterceptor.class,
             DeserializingInterceptor.class, 				DeserializingInterceptor.class,
-            InterceptorListPriorToExecutionExtractor.class, InterceptorListPriorToExecutionExtractor.class,
             JsonDeserializer.class,							JsonDeserializer.class,
             Localization.class, 							JstlLocalization.class,
             ParametersProvider.class, 						OgnlParametersProvider.class,
@@ -237,6 +240,7 @@ public class BaseComponents {
             Status.class,									DefaultStatus.class,
             XMLSerialization.class,							XStreamXMLSerialization.class,
             JSONSerialization.class,						XStreamJSONSerialization.class,
+            JSONPSerialization.class,						XStreamJSONPSerialization.class,
             HTMLSerialization.class,						HTMLSerialization.class,
             RepresentationResult.class,						DefaultRepresentationResult.class,
             FormatResolver.class,							DefaultFormatResolver.class,
@@ -267,6 +271,7 @@ public class BaseComponents {
 			PrimitiveLongConverter.class,
 			PrimitiveShortConverter.class,
 			ShortConverter.class,
+			StringConverter.class,
 			UploadedFileConverter.class));
 
 
@@ -319,14 +324,15 @@ public class BaseComponents {
     		REQUEST_COMPONENTS.put(BeanValidator.class, NullBeanValidator.class);
     	}
 
-    	if (isClassPresent("org.apache.commons.fileupload.FileItem")) {
+        if (isClassPresent("org.apache.commons.fileupload.FileItem")) {
             REQUEST_COMPONENTS.put(MultipartInterceptor.class, CommonsUploadMultipartInterceptor.class);
-    	} else if (isClassPresent("javax.servlet.http.Part")) {
+            REQUEST_COMPONENTS.put(ServletFileUploadCreator.class, DefaultServletFileUploadCreator.class);
+        } else if (isClassPresent("javax.servlet.http.Part")) {
             REQUEST_COMPONENTS.put(MultipartInterceptor.class, Servlet3MultipartInterceptor.class);
-    	} else {
-    	    logger.warn("You are willing to upload a file, but there is no commons-fileupload or servlet3 " +
-    	    		"handlers registered. Please add the commons-fileupload in your classpath or use a " +
-    	    		"Servlet 3 Container");
+        } else {
+    	    logger.warn("There is neither commons-fileupload nor servlet3 handlers registered. " +
+    	    		"If you are willing to upload a file, please add the commons-fileupload in " +
+    	    		"your classpath or use a Servlet 3 Container");
             REQUEST_COMPONENTS.put(MultipartInterceptor.class, NullMultipartInterceptor.class);
     	}
 

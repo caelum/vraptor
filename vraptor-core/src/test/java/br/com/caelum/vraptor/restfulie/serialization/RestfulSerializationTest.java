@@ -57,7 +57,6 @@ public class RestfulSerializationTest {
 			return null;
 		}
 
-		@SuppressWarnings("unchecked")
 		public boolean canConvert(Class type) {
 			return true;
 		}

@@ -161,7 +161,7 @@ public class CustomPicoProviderTest extends GenericContainerTest {
 	                allowing(context).getInitParameter(BasicConfiguration.SCANNING_PARAM);
 
 	                allowing(context).getRealPath("/WEB-INF/classes");
-	                will(returnValue(PicoProviderTest.class.getResource("..").getFile()));
+	                will(returnValue(getClassDir()));
                 }
             });
         } catch (Exception e) {

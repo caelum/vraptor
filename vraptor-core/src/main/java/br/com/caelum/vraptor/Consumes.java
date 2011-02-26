@@ -22,9 +22,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target(ElementType.METHOD)
-@Documented
-@Retention(RetentionPolicy.RUNTIME)
 /**
  * Indicates that the resource method expects the specified MIME content-types
  * in the request.
@@ -32,6 +29,9 @@ import java.lang.annotation.Target;
  * @author Lucas Cavalcanti, Rafael Ferreira, GUilherme Silveira
  * @since 3.0.2
  */
+@Target(ElementType.METHOD)
+@Documented
+@Retention(RetentionPolicy.RUNTIME)
 public @interface Consumes {
 	String[] value() default {};
 }

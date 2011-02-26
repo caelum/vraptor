@@ -1,4 +1,4 @@
-[chapter Vraptor Scaffold]
+[chapter VRaptor Scaffold]
 
 VRaptor scaffold extension to make it easier configuring new projects and plugins.
 
@@ -88,7 +88,7 @@ vraptor new onlinestore --skip-eclipse
 The supported attributes type are: %%boolean, double, float, short, integer, long, string and text%%.
 
 [section Help Command]
-Vraptor Scaffold was split into 2 generators "new" that is responsible to create the application
+VRaptor Scaffold was split into 2 generators "new" that is responsible to create the application
 and "scaffold" that is responsible to genrarad the CRUDs.
 To see all the options by running
 

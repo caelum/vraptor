@@ -87,7 +87,7 @@ public class DvdRentalsController {
 		    that(sessionUser.getDvds(), not(hasItem(dvd)), "dvd", "you_already_have_this_dvd");
 		}});
 
-//		validator.onErrorUsePageOf(UsersController.class).home();
+		validator.onErrorUsePageOf(UsersController.class).home();
 
 		dao.add(new DvdRental(user, dvd));
 

@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.Consumes;
 import br.com.caelum.vraptor.InterceptionException;
+import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.Lazy;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodInfo;
@@ -41,6 +42,7 @@ import br.com.caelum.vraptor.view.Status;
  * @author Lucas Cavalcanti
  * @author Rafael Ferreira
  */
+@Intercepts(after=ParametersInstantiatorInterceptor.class, before=ExecuteMethodInterceptor.class)
 @Lazy
 public class DeserializingInterceptor implements Interceptor {
 	private final HttpServletRequest request;

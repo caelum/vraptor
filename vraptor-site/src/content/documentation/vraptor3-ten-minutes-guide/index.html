@@ -94,9 +94,15 @@
 		
 									<li><a class="link_toc" href="../../documentation/optimizations/">16. Optimizations</a></li>
 		
-									<li><a class="link_toc" href="../../documentation/changelog/">17. ChangeLog</a></li>
+									<li><a class="link_toc" href="../../documentation/vraptor-scaffold/">17. VRaptor Scaffold</a></li>
 		
-									<li><a class="link_toc" href="../../documentation/migrating-from-vraptor2-to-vraptor3/">18. Migrating from VRaptor2 to VRaptor3</a></li>
+									<li><a class="link_toc" href="../../documentation/exception-handling/">18. Exception handling</a></li>
+		
+									<li><a class="link_toc" href="../../documentation/how-to-contribute-to-vraptor/">19. How to contribute to VRaptor</a></li>
+		
+									<li><a class="link_toc" href="../../documentation/changelog/">20. ChangeLog</a></li>
+		
+									<li><a class="link_toc" href="../../documentation/migrating-from-vraptor2-to-vraptor3/">21. Migrating from VRaptor2 to VRaptor3</a></li>
 		
                 </ol>
             </div><!-- submenu-->
@@ -444,24 +450,19 @@ are allowed to call that logic - @Get, @Post, @Delete and @Put.</span>
 <span class="java4">public class </span><span class="java10">ProductsController </span><span class="java8">{<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java3">//...<br />
 &nbsp;&nbsp;&nbsp; <br />
-&nbsp;&nbsp;&nbsp; </span><span class="java16">@Get<br />
-&nbsp;&nbsp;&nbsp; @Path</span><span class="java8">(</span><span class="java5">&#34;/products&#34;</span><span class="java8">)<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java16">@Get @Path</span><span class="java8">(</span><span class="java5">&#34;/products&#34;</span><span class="java8">)<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">List&lt;Product&gt; list</span><span class="java8">() {</span><span class="java10">...</span><span class="java8">}<br />
 &nbsp;&nbsp;&nbsp; <br />
-&nbsp;&nbsp;&nbsp; </span><span class="java16">@Post<br />
-&nbsp;&nbsp;&nbsp; @Path</span><span class="java8">(</span><span class="java5">&#34;/products&#34;</span><span class="java8">)<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java16">@Post</span><span class="java8">(</span><span class="java5">&#34;/products&#34;</span><span class="java8">)<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">add</span><span class="java8">(</span><span class="java10">Product product</span><span class="java8">) {</span><span class="java10">...</span><span class="java8">}<br />
 <br />
-&nbsp;&nbsp;&nbsp; </span><span class="java16">@Get<br />
-&nbsp;&nbsp;&nbsp; @Path</span><span class="java8">(</span><span class="java5">&#34;/products/{product.id}&#34;</span><span class="java8">)<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java16">@Get</span><span class="java8">(</span><span class="java5">&#34;/products/{product.id}&#34;</span><span class="java8">)<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">view</span><span class="java8">(</span><span class="java10">Product product</span><span class="java8">) {</span><span class="java10">...</span><span class="java8">}<br />
 &nbsp;&nbsp;&nbsp; <br />
-&nbsp;&nbsp;&nbsp; </span><span class="java16">@Put<br />
-&nbsp;&nbsp;&nbsp; @Path</span><span class="java8">(</span><span class="java5">&#34;/products/{product.id}&#34;</span><span class="java8">)<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java16">@Put</span><span class="java8">(</span><span class="java5">&#34;/products/{product.id}&#34;</span><span class="java8">)<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">update</span><span class="java8">(</span><span class="java10">Product product</span><span class="java8">) {</span><span class="java10">...</span><span class="java8">}<br />
 &nbsp;&nbsp;&nbsp; <br />
-&nbsp;&nbsp;&nbsp; </span><span class="java16">@Delete<br />
-&nbsp;&nbsp;&nbsp; @Path</span><span class="java8">(</span><span class="java5">&#34;/products/{product.id}&#34;</span><span class="java8">)<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java16">@Delete</span><span class="java8">(</span><span class="java5">&#34;/products/{product.id}&#34;</span><span class="java8">)<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">remove</span><span class="java8">(</span><span class="java10">Product product</span><span class="java8">) {</span><span class="java10">...</span><span class="java8">}<br />
 &nbsp;&nbsp;&nbsp; <br />
 }</span></code></div>

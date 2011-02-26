@@ -38,7 +38,6 @@ public class DefaultOutjector implements Outjector {
 		this.request = request;
 	}
 
-	@SuppressWarnings("unchecked")
 	public void outjectRequestMap() {
 		Set<String> paramNames = request.getParameterMap().keySet();
 

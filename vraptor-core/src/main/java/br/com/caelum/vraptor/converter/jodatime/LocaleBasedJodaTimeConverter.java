@@ -9,16 +9,14 @@ import org.joda.time.LocalDateTime;
 import org.joda.time.LocalTime;
 import org.joda.time.base.BaseLocal;
 
-import br.com.caelum.vraptor.converter.JstlWrapper;
-import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.core.Localization;
 
 class LocaleBasedJodaTimeConverter {
 
-	private JstlWrapper jstlWrapper = new JstlWrapper();
-	private RequestInfo request;
+    private final Localization localization;
 
-	public LocaleBasedJodaTimeConverter(RequestInfo request) {
-		this.request = request;
+	public LocaleBasedJodaTimeConverter(Localization localization) {
+		this.localization = localization;
 	}
 
 	public Date convert(String value, Class<? extends BaseLocal> type) throws ParseException {
@@ -29,7 +27,7 @@ class LocaleBasedJodaTimeConverter {
 	}
 
 	public Locale getLocale() {
-		Locale locale = jstlWrapper.findLocale(request);
+		Locale locale = localization.getLocale();
 		if (locale == null) {
 			locale = Locale.getDefault();
 		}

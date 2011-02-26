@@ -53,7 +53,7 @@ public class ExceptionRecorder<T>
         parameters = newArrayList();
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     public Object intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {
         parameters.add(new ExceptionRecorderParameter(args, method));
 

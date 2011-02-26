@@ -30,7 +30,6 @@ import ognl.OgnlContext;
 import ognl.OgnlException;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.core.Converters;
-import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.vraptor2.Info;
 
 /**
@@ -44,8 +43,13 @@ import br.com.caelum.vraptor.vraptor2.Info;
  */
 public class ListAccessor extends ListPropertyAccessor {
 
+	private final Converters converters;
+
+	public ListAccessor(Converters converters) {
+		this.converters = converters;
+	}
+
 	@Override
-	@SuppressWarnings("unchecked")
 	public Object getProperty(Map context, Object target, Object value) throws OgnlException {
 		try {
 			return super.getProperty(context, target, value);
@@ -75,21 +79,18 @@ public class ListAccessor extends ListPropertyAccessor {
 
             Class type = getActualType(genericType);
 
-			if (!type.equals(String.class)) {
-				// suckable ognl doesnt support dependency injection or
-				// anything alike... just that suckable context... therefore
-				// procedural
-				// programming and ognl live together forever!
-				Container container = (Container) context.get(Container.class);
-				Converter<?> converter = container.instanceFor(Converters.class).to(type);
+			// suckable ognl doesnt support dependency injection or
+			// anything alike... just that suckable context... therefore
+			// procedural
+			// programming and ognl live together forever!
+			Converter<?> converter = converters.to(type);
 
-				ResourceBundle bundle = (ResourceBundle) context.get(ResourceBundle.class);
+			ResourceBundle bundle = (ResourceBundle) context.get(ResourceBundle.class);
 
-				Object result = converter.convert((String) value, type, bundle);
+			Object result = converter.convert((String) value, type, bundle);
 
-				super.setProperty(context, target, key, result);
-				return;
-			}
+			super.setProperty(context, target, key, result);
+			return;
 		}
 		super.setProperty(context, target, key, value);
 	}

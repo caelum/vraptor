@@ -22,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.InterceptionException;
+import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.core.DefaultExceptionMapper;
 import br.com.caelum.vraptor.core.ExceptionMapper;
@@ -44,6 +45,7 @@ import com.google.common.base.Throwables;
  * @see DefaultExceptionMapper
  * @since 3.2
  */
+@Intercepts
 public class ExceptionHandlerInterceptor
     implements Interceptor {
 

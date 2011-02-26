@@ -44,7 +44,6 @@ import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.ComponentRegistry;
@@ -56,18 +55,17 @@ import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.core.Execution;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.core.RequestInfo;
-import br.com.caelum.vraptor.http.TypeCreator;
 import br.com.caelum.vraptor.http.route.Route;
 import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
 import br.com.caelum.vraptor.ioc.fixture.ComponentFactoryInTheClasspath;
+import br.com.caelum.vraptor.ioc.fixture.ComponentFactoryInTheClasspath.Provided;
 import br.com.caelum.vraptor.ioc.fixture.ConverterInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.CustomComponentInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.CustomComponentWithLifecycleInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.InterceptorInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.ResourceInTheClasspath;
-import br.com.caelum.vraptor.ioc.fixture.ComponentFactoryInTheClasspath.Provided;
-import br.com.caelum.vraptor.reflection.CacheBasedTypeCreator;
+import br.com.caelum.vraptor.ioc.guice.GuiceProviderTest;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**
@@ -90,7 +88,6 @@ public abstract class GenericContainerTest {
 
 	protected abstract void configureExpectations();
 
-	@SuppressWarnings("unchecked")
 	@Test
 	public void canProvideAllApplicationScopedComponents() {
 		checkAvailabilityFor(true, BaseComponents.getApplicationScoped().keySet());
@@ -103,7 +100,6 @@ public abstract class GenericContainerTest {
 		mockery.assertIsSatisfied();
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test
 	public void canProvideAllRequestScopedComponents() {
 		checkAvailabilityFor(false, BaseComponents.getRequestScoped().keySet());
@@ -136,13 +132,6 @@ public abstract class GenericContainerTest {
 
 		});
 		mockery.assertIsSatisfied();
-	}
-
-	@Test
-	@Ignore("No need for typeCreator anymore")
-	public void shouldProvideCachedComponents() throws Exception {
-		TypeCreator creator = getFromContainer(TypeCreator.class);
-		assertThat(creator, is(instanceOf(CacheBasedTypeCreator.class)));
 	}
 
 	@ApplicationScoped
@@ -182,13 +171,12 @@ public abstract class GenericContainerTest {
 
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test
 	public void processesCorrectlyPrototypeBasedComponents() {
 		registerAndGetFromContainer(MyPrototypeComponent.class, MyPrototypeComponent.class);
-		executeInsideRequest(new WhatToDo() {
+		executeInsideRequest(new WhatToDo<Object>() {
 			public Object execute(RequestInfo request, int counter) {
-				return provider.provideForRequest(request, new Execution() {
+				return provider.provideForRequest(request, new Execution<Object>() {
 					public Object insideRequest(Container container) {
 						ComponentRegistry registry = container.instanceFor(ComponentRegistry.class);
 						registry.register(MyPrototypeComponent.class, MyPrototypeComponent.class);
@@ -432,6 +420,10 @@ public abstract class GenericContainerTest {
 		provider.start(context);
 	}
 
-
+	protected String getClassDir() {
+		String classFile = GuiceProviderTest.class.getResource("/br/com/caelum/vraptor/ioc/GenericContainerTest.class").getFile();
+		String dir = classFile.replaceFirst("/GenericContainerTest.class$", "");
+		return dir;
+	}
 
 }

@@ -35,7 +35,9 @@ import java.lang.annotation.Target;
 public @interface Path {
 
 	/**
-	 * All paths that will be mapped to an annotated Resource method.
+	 * All paths that will be mapped to an annotated Resource method. The path value also can be 
+	 * configured in class level and using {@link Get}, {@link Post}, {@link Trace} and {@link Delete} 
+	 * annotations. If both {@link Path} and these annotations are used, an exception will be thrown.
 	 * @return
 	 */
     String[] value();

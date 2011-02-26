@@ -25,15 +25,14 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
 /**
  * @author Fabio Kung
  */
-@SuppressWarnings("unchecked")
 @ApplicationScoped
-class VRaptorRequestProvider implements FactoryBean {
+class VRaptorRequestProvider implements FactoryBean<RequestInfo> {
 
-    public Object getObject() throws Exception {
+    public RequestInfo getObject() throws Exception {
         return VRaptorRequestHolder.currentRequest();
     }
 
-    public Class<?> getObjectType() {
+    public Class<? extends RequestInfo> getObjectType() {
         return RequestInfo.class;
     }
 

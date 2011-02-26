@@ -25,7 +25,7 @@ import br.com.caelum.vraptor.ioc.Container;
 /**
  * @author: Fabio Kung
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings({ "rawtypes" })
 public class ComponentFactoryBean<T extends ComponentFactory<Object>> implements FactoryBean {
 
     private Container container;

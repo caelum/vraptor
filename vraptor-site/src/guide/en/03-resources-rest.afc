@@ -92,12 +92,49 @@ To specify in which scope your component will live, use the annotations
 If you don't specify a scope for your component, VRaptor assumes the request scope,
 meaning a fresh instance will be created for each request.
  
-[section Http Methods]
-The best practice when using HTTP Methods is to specify a different URI for each method,
-like GET, POST, PUT etc.
+[section @Path]
+The %%@Path%% annotation allows you to specify custom access URIs to your controller methods.
+The basic usage of the annotation is to specify a fixed URI. The following example shows
+how to customize the access URI for a method that accepts ::POST:: requests only. The URI
+we want to specify is **/client**:
 
-In order to accomplish that, we use annotations %%@Get%%, %%@Post%%, %%@Delete%% etc,
-in conjunction with the %%@Path%% annotation, which allows us to configure a custom URI.
+[java]
+@Resource
+public class ClientController {
+
+  @Path("/client")
+  @Post 
+  public void add(Client client) {
+  }
+    
+}
+[/java]
+
+If you place the @Path on ClientController, the specified value will be used as prefix for all
+URIs from this controller.
+[java]
+@Resource
+@Path("/clients")
+public class ClientController {
+	//URI: /clients/list
+	public void list() {...}
+	
+	//URI: /clients/save
+	@Path("save")
+	public void add() {...}
+	
+	//URI: /clients/allClients
+	@Path("/allClients")
+	public void listAll() {...}
+}
+[/java]
+
+[section Http Methods]
+The best practice when using HTTP Methods is to specify a different methods,
+like GET, POST, PUT etc, for the same URI.
+
+In order to accomplish that, we use annotations %%@Get%%, %%@Post%%, %%@Delete%% etc, which 
+also allows us to configure a custom URI in the same way as %%@Path%%.
 
 The following example changes the default URIs for %%ClienteController%%.
 Now we specify two different URIs for different HTTP methods:
@@ -106,8 +143,7 @@ Now we specify two different URIs for different HTTP methods:
 @Resource
 public class ClientController {
 
-  @Path("/client")
-  @Post
+  @Post("/client")
   public void add(Client client) {
   }
   
@@ -116,20 +152,17 @@ public class ClientController {
     return ...
   }
 
-  @Get
-  @Path("/client")
+  @Get("/client")
   public Client show(Client client) {
     return ...
   }
  
-  @Delete
-  @Path("/client")
+  @Delete("/client")
   public void remove(Client client) {
     ...
   }
   
-  @Put
-  @Path("/client")
+  @Put("/client")
   public void update(Client client) {
     ...
   }
@@ -175,42 +208,7 @@ of requests:
 </form>
 [/xml]
 
-[section @Path]
-The %%@Path%% annotation allows you to specify custom access URIs to your controller methods.
-The basic usage of the annotation is to specify a fixed URI. The following example shows
-how to customize the access URI for a method that accepts ::POST:: requests only. The URI
-we want to specify is **/client**:
 
-[java]
-@Resource
-public class ClientController {
-
-  @Path("/client")
-  @Post 
-  public void add(Client client) {
-  }
-    
-}
-[/java]
-
-If you place the @Path on ClientController, the specified value will be used as prefix for all
-URIs from this controller.
-[java]
-@Resource
-@Path("/clients")
-public class ClientController {
-	//URI: /clients/list
-	public void list() {...}
-	
-	//URI: /clients/save
-	@Path("save")
-	public void add() {...}
-	
-	//URI: /clients/allClients
-	@Path("/allClients")
-	public void listAll() {...}
-}
-[/java]
 
 [title Path with variable injection]
 Sometimes we want the ::uri:: to include, for example, the unique identifier of

@@ -17,8 +17,12 @@
 
 package br.com.caelum.vraptor.interceptor;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.core.InterceptorStack;
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 import com.google.common.collect.Iterables;
@@ -28,13 +32,20 @@ import com.google.common.collect.Iterables;
  * resource method.
  *
  * @author Guilherme Silveira
+ * @deprecated This class is deprecated. If you extend a request execution, consider using @Intercepts(after=..., before=...) instead.
  */
+@Deprecated
+@ApplicationScoped
 public class InterceptorListPriorToExecutionExtractor implements Interceptor {
+
+
+	private static final Logger logger = LoggerFactory.getLogger(InterceptorListPriorToExecutionExtractor.class);
 
     private final InterceptorRegistry registry;
 
     public InterceptorListPriorToExecutionExtractor(InterceptorRegistry registry) {
         this.registry = registry;
+        logger.warn("This class is deprecated. If you extend a request execution, consider using @Intercepts(after=..., before=...) instead.");
     }
 
     public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws InterceptionException {

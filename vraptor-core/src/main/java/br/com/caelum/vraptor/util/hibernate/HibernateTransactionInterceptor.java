@@ -20,6 +20,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import br.com.caelum.vraptor.Intercepts;
+import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.resource.ResourceMethod;
@@ -33,9 +34,11 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 public class HibernateTransactionInterceptor implements Interceptor {
 
 	private final Session session;
+	private final Validator validator;
 
-	public HibernateTransactionInterceptor(Session session) {
+	public HibernateTransactionInterceptor(Session session, Validator validator) {
 		this.session = session;
+		this.validator = validator;
 	}
 
 	public void intercept(InterceptorStack stack, ResourceMethod method, Object instance) {
@@ -43,7 +46,9 @@ public class HibernateTransactionInterceptor implements Interceptor {
 		try {
 			transaction = session.beginTransaction();
 			stack.next(method, instance);
-			transaction.commit();
+			if (!validator.hasErrors()) {
+				transaction.commit();
+			}
 		} finally {
 			if (transaction != null && transaction.isActive()) {
 				transaction.rollback();

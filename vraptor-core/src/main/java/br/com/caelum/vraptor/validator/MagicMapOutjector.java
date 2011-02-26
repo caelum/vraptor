@@ -37,7 +37,6 @@ public class MagicMapOutjector implements Outjector {
 	}
 
 	public void outjectRequestMap() {
-		@SuppressWarnings("unchecked")
 		Set<String> paramNames = request.getParameterMap().keySet();
 
 		for (String paramName : paramNames) {

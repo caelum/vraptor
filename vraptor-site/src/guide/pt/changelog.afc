@@ -1,5 +1,68 @@
 [chapter ChangeLog]
 
+[section 3.3.1]
+[list]
+* bugfix - corrigido o scannotation como obrigatório no maven
+* bugfix - corrigido ConcurrentModificationException na ordenação dos interceptors
+* atualizada dependência do spring de 3.0.0 para 3.0.5
+* bugfix - corrigida chamada do @PostConstruct nos componentes @ApplicationScoped quando
+usando o Spring como DI container.
+* melhoria nas documentações
+* bugfix - redirect para @Path's com regexes
+* bugfix - Hibernate e JPA Transaction interceptors agora dão rollback quando existem erros
+de validação
+[/list]
+
+[section 3.3.0]
+[box Mudança de jars]
+	[list]
+		* troque google-collect 1.0rc por guava-r08
+		* scannotations 1.0.2 agora é obrigatório
+	[/list]
+[/box]
+[list]
+* **melhor integração com o Spring**: agora os componentes do Spring podem acessar os do VRaptor e vice-versa
+* guice: @PostConstruct e @PreDestroy funcionando completamente
+* guice: todos os componentes request e session scoped são exportados para
+a view do mesmo jeito que com o spring (pelo nome da classe)
+
+* **mudança da estratégia da ordem dos interceptors**: agora é possível ordenar interceptors
+na anotação @Intercepts, dizendo quais interceptors devem rodar antes ou depois do interceptor
+anotado.
+[java]
+@Intercepts(before=AnInterceptor.class, after=AnotherInterceptor.class)
+[/java]
+Assim o VRaptor executa os interceptors em uma ordem que respeita o before e o after de todos os
+interceptors.
+Desse modo a interface InterceptorSequence fica deprecada.
+
+* As anotações de verbos HTTP agora também podem definir o path do método:
+[java]
+@Get("/items/{id}"), @Post("/items"), etc 
+[/java]
+
+* bugfix: @Transactional do Spring agora pode ser usado em qualquer classe
+(com as limitações do spring aop)
+* bugfix: upload de arquivos com mesmo nome
+* bugfix: web-fragments.xml no jboss 6
+* bugfix: melhor suporte para arrays como parâmetros
+* novas implementações de Download: ByteArrayDownload e JFreeChartDownload
+* nova view jsonp:
+[java]
+result.use(jsonp()).withCallback("oCallback").from(objeto).serialize();
+[/java]
+que retorna
+[code]
+aCallback({"objeto": {...}})
+[/code]
+* removida a dependência direta com o commons-io
+* métodos do PageResult renomeados para ficarem consistentes com o resto do sistema.
+* melhores logs de upload
+* refatoração nos converters do vraptor: agora eles usam o Localization para
+pegar o Locale e o bundle.
+* removida classe Hibernate. Use validator.validate(objeto).
+* JSON serializado com indentação opcional.
+[/list]
 [section 3.2.0]
 [list]
 * várias melhorias na performance: por volta de 60% menos no tempo de requisição.

@@ -39,9 +39,6 @@
 	</target>
 
 	<target name="compile" depends="prepare" description="--> compiles classes">
-		<javac destdir="${tmp.classes.dir}" srcdir="${asm.src.dir}" classpathref="compile.classpath" debug="true" encoding="UTF-8" target="1.5" source="1.5">
-			<compilerarg value="-Xlint:none" />
-		</javac>
 		<javac destdir="${tmp.classes.dir}" srcdir="${src.dir}" classpathref="compile.classpath" debug="true" encoding="UTF-8" target="1.5" source="1.5">
 			<compilerarg value="-Xlint:none" />
 		</javac>
@@ -53,9 +50,14 @@
 		</copy>
 	</target>
 
+    <fileset dir="${tmp.test.classes.dir}" id="unittests.fileset"  >
+        <include name="**/*Test.class"/>
+    		<exclude name="**/GenericContainerTest.*"/>
+    </fileset>
+
 	<target name="test" depends="compile">
 		<taskdef classpathref="test.classpath" resource="tasks.properties" />
-		<fileset dir="${tmp.test.classes.dir}" id="unittests.fileset" includes="**/*Test.class" />
+			
 		<junit fork="yes" forkmode="once" printsummary="false" showoutput="true" failureproperty="failed-test">
 			<classpath>
 				<pathelement path="${tmp.classes.dir}" />
@@ -79,22 +81,23 @@
 		<fail if="failed-test" message="Failing tests" />
 	</target>
 
-	<target name="coverage" depends="compile">
+	<target name="coverage" depends="compile"
+		description="Runs the cobertura task in order to generate the
+					coverage reports">
+		
 		<taskdef classpathref="test.classpath" resource="tasks.properties" />
 		<delete file="cobertura.ser" verbose="false" />
 		<cobertura-instrument todir="${instrumentation.dir}">
 			<fileset dir="${tmp.classes.dir}">
 				<include name="**/*.class" />
-				<include name="**/*Test.class" />
+				<exclude name="**/*Test.class" />
 			</fileset>
 		</cobertura-instrument>
-		<fileset dir="${tmp.test.classes.dir}" id="unittests.fileset" includes="**/*Test.class" />
 		<junit fork="yes" forkmode="once" printsummary="false" showoutput="true" failureproperty="failed-test">
 			<sysproperty key="net.sourceforge.cobertura.datafile" file="cobertura.ser" />
 
 			<classpath>
 				<pathelement path="${instrumentation.dir}" />
-				<pathelement path="${tmp.classes.dir}" />
 				<pathelement path="${tmp.test.classes.dir}" />
 			</classpath>
 			<classpath refid="test.classpath" />

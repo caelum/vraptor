@@ -39,3 +39,7 @@ For tag files, use:
 
 %%<%@ tag isELIgnored="false" %>%%
 
+[section JPA 2] 
+
+VRaptor supports JPA versions 1 and 2, but Google App Engine only supports JPA 1. 
+Therefore you should avoid copying the jpa-api-2.0.jar file to your project.

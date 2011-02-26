@@ -418,24 +418,19 @@ Então uma versão REST do nosso ProdutosController seria:
 public class ProdutosController {
 	//...
 	
-	@Get
-	@Path("/produtos")
+	@Get @Path("/produtos")
 	public List<Produto> lista() {...}
 	
-	@Post
-	@Path("/produtos")
+	@Post("/produtos")
 	public void adiciona(Produto produto) {...}
 
-	@Get
-	@Path("/produtos/{produto.id}")
+	@Get("/produtos/{produto.id}")
 	public void visualiza(Produto produto) {...}
 	
-	@Put
-	@Path("/produtos/{produto.id}")
+	@Put("/produtos/{produto.id}")
 	public void atualiza(Produto produto) {...}
 	
-	@Delete
-	@Path("/produtos/{produto.id}")
+	@Delete("/produtos/{produto.id}")
 	public void remove(Produto produto) {...}
 	
 }

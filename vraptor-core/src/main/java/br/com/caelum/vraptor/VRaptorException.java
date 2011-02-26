@@ -17,6 +17,11 @@
 
 package br.com.caelum.vraptor;
 
+/**
+ * The base {@link Exception} type for VRaptor. All VRaptor exceptions must be extends this.
+ * 
+ * @author Guilherme Silveira
+ */
 public class VRaptorException extends RuntimeException {
     private static final long serialVersionUID = -8040463849613736889L;
 

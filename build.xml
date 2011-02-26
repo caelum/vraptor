@@ -47,7 +47,7 @@
 		<move file="vraptor-site/site.war" tofile="target/vraptor-site-${vraptor.version}.war" />
 	</target>
 	
-	<target name="zips-vraptor">
+	<target name="zips-vraptor" depends="zips-site">
 		<mkdir dir="target"/>
 		<move file="vraptor-core/target/vraptor-${vraptor.version}.jar" tofile="target/vraptor-${vraptor.version}.jar" />
 		<zip destfile="target/vraptor-${vraptor.version}.zip">

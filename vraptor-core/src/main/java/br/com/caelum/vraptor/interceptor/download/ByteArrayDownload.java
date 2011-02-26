@@ -28,7 +28,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author filipesabella
  * @author Paulo Silveira
  * @author Otávio Scherer Garcia
- * @since 3.2.1
+ * @since 3.3.0
  * @see InputStreamDownload
  * @see FileDownload
  */

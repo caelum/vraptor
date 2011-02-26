@@ -39,27 +39,26 @@ import javax.servlet.http.HttpSession;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.converter.LongConverter;
 import br.com.caelum.vraptor.converter.PrimitiveLongConverter;
+import br.com.caelum.vraptor.converter.StringConverter;
 import br.com.caelum.vraptor.core.Converters;
+import br.com.caelum.vraptor.core.SafeResourceBundle;
 import br.com.caelum.vraptor.http.InvalidParameterException;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
-import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.util.EmptyBundle;
 import br.com.caelum.vraptor.validator.DefaultValidationException;
 import br.com.caelum.vraptor.validator.Message;
 
-@RunWith(MockitoJUnitRunner.class)
 public class OgnlParametersProviderTest {
 
     private @Mock Converters converters;
-    private @Mock Container container;
     private @Mock ParameterNameProvider nameProvider;
     private @Mock HttpServletRequest parameters;
 
@@ -78,19 +77,19 @@ public class OgnlParametersProviderTest {
 	private ResourceMethod string;
 	private ResourceMethod generic;
 	private ResourceMethod primitive;
+	private ResourceMethod stringArray;
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings("unchecked")
 	@Before
     public void setup() throws Exception {
+    	MockitoAnnotations.initMocks(this);
         this.removal = new EmptyElementsRemoval();
-        this.provider = new OgnlParametersProvider(container, converters, nameProvider, parameters, removal);
+        this.provider = new OgnlParametersProvider(converters, nameProvider, parameters, removal);
         this.errors = new ArrayList<Message>();
-
         when(converters.to(Long.class)).thenReturn((Converter) new LongConverter());
         when(converters.to(long.class)).thenReturn((Converter) new PrimitiveLongConverter());
+        when(converters.to(String.class)).thenReturn((Converter) new StringConverter());
         when(parameters.getSession()).thenReturn(session);
-        when(container.instanceFor(EmptyElementsRemoval.class)).thenReturn(removal);
-        when(container.instanceFor(Converters.class)).thenReturn(converters);
 
         buyA = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("buyA", House.class));
         kick = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("kick", AngryCat.class));
@@ -100,6 +99,7 @@ public class OgnlParametersProviderTest {
         listOfObject = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("listOfObject", List.class));
         simple = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("simple", Long.class));
         string = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("string", String.class));
+        stringArray = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("stringArray", String[].class));
         primitive = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("primitive", long.class));
         generic = DefaultResourceMethod.instanceFor(Specific.class, Generic.class.getDeclaredMethod("generic", Object.class));
     }
@@ -111,6 +111,24 @@ public class OgnlParametersProviderTest {
     	String abc = getParameters(string);
 
     	assertThat(abc, is("eureka"));
+    }
+
+    @Test
+    public void isCapableOfDealingWithStringArrays() throws Exception {
+    	requestParameterIs(stringArray, "abc", "eureka");
+
+    	String[] abc = getParameters(stringArray);
+
+    	assertThat(abc, arrayContaining("eureka"));
+    }
+
+    @Test
+    public void isCapableOfDealingWithIndexedStringArrays() throws Exception {
+    	requestParameterIs(stringArray, "abc[0]", "eureka");
+
+    	String[] abc = getParameters(stringArray);
+
+    	assertThat(abc, arrayContaining("eureka"));
     }
 
     @Test
@@ -245,6 +263,16 @@ public class OgnlParametersProviderTest {
     	assertThat(xyz, is(42l));
 
     }
+
+    @Test
+    public void addsValidationErrorsOnConvertionErrors() throws Exception {
+    	requestParameterIs(simple, "xyz", "4s2");
+
+    	getParameters(simple);
+    	assertThat(errors, hasSize(1));
+
+    }
+
     @Test
     public void returnsNullWhenThereAreNoParameters() throws Exception {
     	thereAreNoParameters();
@@ -281,7 +309,7 @@ public class OgnlParametersProviderTest {
 
     @SuppressWarnings("unchecked")
 	private <T> T getParameters(ResourceMethod method) {
-		return (T) provider.getParametersFor(method, errors, null)[0];
+		return (T) provider.getParametersFor(method, errors, new SafeResourceBundle(new EmptyBundle()))[0];
 	}
 
     static class MyResource {
@@ -300,6 +328,8 @@ public class OgnlParametersProviderTest {
         void simple(Long xyz) {
         }
         void string(String abc) {
+        }
+        void stringArray(String[] abc) {
         }
         void primitive(long xyz) {
         }

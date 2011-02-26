@@ -27,6 +27,6 @@ import javax.servlet.http.HttpServletResponse;
  */
 public interface Download {
 
-	public abstract void write(HttpServletResponse response) throws IOException;
+	void write(HttpServletResponse response) throws IOException;
 
 }

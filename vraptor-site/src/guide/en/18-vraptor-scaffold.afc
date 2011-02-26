@@ -2,7 +2,7 @@
 
 VRaptor scaffold extension to make it easier configuring new projects and plugins.
 
-[section Instalation]
+[section Installation]
 
 Ensure you have installed ruby and rubygems.
 You can easily find more information how to do this in the follow 

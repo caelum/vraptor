@@ -110,11 +110,6 @@ criar a estrutura da aplicação e o "scaffold" que é resposável por gerar os 
 
 [code]vraptor scaffold -h[/code]
 
-[section Spring]
-O VRaptor utiliza por padrão o Spring 2.5 como container D.I, para utilizar a versão 3 do Spring execute
-
-[code]vraptor new onlinestore --spring3[/code]
-
 [section Contribuindo]
 
 O projeto está sendo desenvolvido em ruby e o código fonte está hospedado no github 

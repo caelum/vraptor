@@ -54,11 +54,6 @@
 			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="lib/mandatory/javassist-3.9.0.GA.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="lib" path="lib/build/mockito-core-1.8.5.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
@@ -104,10 +99,6 @@
 	<classpathentry kind="lib" path="lib/optional/gae/gmultipart.jar"/>
 	<classpathentry kind="lib" path="lib/optional/hibernate/antlr-2.7.6.jar"/>
 	<classpathentry kind="lib" path="lib/optional/hibernate/dom4j-1.6.1.jar"/>
-	<classpathentry kind="lib" path="lib/optional/hibernate/ejb3-persistence-1.0.1.GA.jar"/>
-	<classpathentry kind="lib" path="lib/optional/hibernate/hibernate-3.3.2.jar"/>
-	<classpathentry kind="lib" path="lib/optional/hibernate/hibernate-annotations-3.4.0.jar"/>
-	<classpathentry kind="lib" path="lib/optional/hibernate/hibernate-commons-annotations-3.4.0.jar"/>
 	<classpathentry kind="lib" path="lib/optional/hibernate/hibernate-validator-3.1.ga.jar"/>
 	<classpathentry kind="lib" path="lib/optional/hibernate/hibernate-validator-4.0.2.GA.jar"/>
 	<classpathentry kind="lib" path="lib/optional/hibernate/jta-1.1.jar"/>
@@ -131,5 +122,8 @@
 	<classpathentry kind="lib" path="lib/containers/guice/guice-3.0-rc2.jar"/>
 	<classpathentry kind="lib" path="lib/containers/guice/guice-multibindings-3.0-rc2.jar"/>
 	<classpathentry kind="lib" path="lib/mandatory/scannotation-1.0.2.jar"/>
+	<classpathentry kind="lib" path="lib/mandatory/javassist-3.14.0.GA.jar"/>
+	<classpathentry kind="lib" path="lib/optional/hibernate/hibernate-3.6.1.jar"/>
+	<classpathentry kind="lib" path="lib/optional/hibernate/hibernate-jpa-2.0-api-1.0.0.Final.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -27,6 +27,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
+import java.util.Collections;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletResponse;
@@ -46,6 +47,8 @@ import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.proxy.DefaultProxifier;
 import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.validator.Message;
+import br.com.caelum.vraptor.validator.ValidationException;
 
 public class DefaultLogicResultTest {
 
@@ -83,6 +86,10 @@ public class DefaultLogicResultTest {
 
 		public String returnsValue() {
 			return "A value";
+		}
+
+		public void throwsValidationException() {
+			throw new ValidationException(Collections.<Message>emptyList());
 		}
 	}
 
@@ -198,4 +205,14 @@ public class DefaultLogicResultTest {
 			verify(response, never()).sendRedirect(any(String.class));
 		}
 	}
+
+	@Test(expected=ValidationException.class)
+	public void shouldNotWrapValidationExceptionWhenForwarding() throws Exception {
+		givenDispatcherWillBeReturnedWhenRequested();
+
+		when(response.isCommitted()).thenReturn(true);
+
+		logicResult.forwardTo(MyComponent.class).throwsValidationException();
+	}
+
 }

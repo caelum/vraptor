@@ -18,6 +18,7 @@
 package br.com.caelum.vraptor.view;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 
@@ -91,6 +92,11 @@ public class DefaultLogicResult implements LogicResult {
 						request.getRequestDispatcher(path).forward(request, response);
 					}
 					return null;
+				} catch (InvocationTargetException e) {
+					if (e.getCause() instanceof RuntimeException) {
+						throw (RuntimeException) e.getCause();
+					}
+					throw new ProxyInvocationException(e);
 				} catch (Exception e) {
 					throw new ProxyInvocationException(e);
 				}

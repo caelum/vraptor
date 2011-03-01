@@ -162,11 +162,10 @@ public class XStreamSerializer implements SerializerBuilder {
 
 	private void setAlias(Object obj, String alias) {
 		if (alias != null) {
-			if (Collection.class.isInstance(obj) && hasDefaultConverter()) {
+			if (Collection.class.isInstance(obj) && (List.class.isInstance(obj) || hasDefaultConverter())) {
 				xstream.alias(alias, List.class);
-			} else {
-				xstream.alias(alias, obj.getClass());
 			}
+			xstream.alias(alias, obj.getClass());
 		}
 	}
 

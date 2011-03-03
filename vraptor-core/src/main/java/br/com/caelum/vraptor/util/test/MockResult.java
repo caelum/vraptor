@@ -41,7 +41,7 @@ import br.com.caelum.vraptor.view.ResultException;
  *
  * It will ignore redirections and accumulates included objects,
  * so you can use result.included() for inspect included objects.
- * 
+ *
  * @author Lucas Cavalcanti
  * @author Guilherme Silveira
  */
@@ -64,10 +64,9 @@ public class MockResult extends AbstractResult {
 		this.values.put(key, value);
 		return this;
 	}
-	
+
 	public Result on(Class<? extends Exception> exception) {
-	    // TODO Auto-generated method stub
-	    return null;
+	    return this;
 	}
 
 	public <T extends View> T use(final Class<T> view) {

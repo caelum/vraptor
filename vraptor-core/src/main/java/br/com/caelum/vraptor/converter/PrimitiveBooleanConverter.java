@@ -18,6 +18,8 @@
 package br.com.caelum.vraptor.converter;
 
 
+import static com.google.common.base.Strings.isNullOrEmpty;
+
 import java.util.ResourceBundle;
 
 import br.com.caelum.vraptor.Convert;
@@ -35,9 +37,10 @@ public class PrimitiveBooleanConverter implements Converter<Boolean> {
 	private final BooleanConverter booleanConverter = new BooleanConverter();
 
     public Boolean convert(String value, Class<? extends Boolean> type, ResourceBundle bundle) {
-        if (value == null || "".equals(value)) {
+        if (isNullOrEmpty(value)) {
         	return false;
         }
+        
         return booleanConverter.convert(value, type, bundle);
     }
 

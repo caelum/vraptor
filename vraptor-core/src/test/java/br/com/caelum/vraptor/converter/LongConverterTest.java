@@ -57,4 +57,9 @@ public class LongConverterTest {
         assertThat(converter.convert(null, long.class, bundle), is(nullValue()));
     }
 
+    @Test
+    public void shouldNotComplainAboutEmpty() {
+        assertThat(converter.convert("", long.class, bundle), is(nullValue()));
+    }
+
 }

@@ -17,6 +17,8 @@
 
 package br.com.caelum.vraptor.converter.l10n;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
+
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.MessageFormat;
@@ -50,8 +52,7 @@ public class LocaleBasedFloatConverter
     }
 
     public Float convert(String value, Class<? extends Float> type, ResourceBundle bundle) {
-        // skip null of empty values
-        if (value == null || value.trim().length() == 0) {
+        if (isNullOrEmpty(value)) {
             return null;
         }
 

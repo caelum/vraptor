@@ -1,5 +1,7 @@
 package br.com.caelum.vraptor.converter.jodatime;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Date;
@@ -20,9 +22,10 @@ class LocaleBasedJodaTimeConverter {
 	}
 
 	public Date convert(String value, Class<? extends BaseLocal> type) throws ParseException {
-		if (value == null || value.equals("")) {
+	    if (isNullOrEmpty(value)) {
 			return null;
 		}
+	    
 		return getDateFormat(type).parse(value);
 	}
 

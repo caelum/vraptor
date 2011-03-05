@@ -44,6 +44,11 @@ public class BooleanConverterTest {
         assertThat(converter.convert("true", Boolean.class, bundle), is(equalTo(true)));
         assertThat(converter.convert("false", Boolean.class, bundle), is(equalTo(false)));
     }
+    
+    @Test
+    public void shouldConvertEmptyToNull() {
+        assertThat(converter.convert("", Boolean.class, bundle), is(nullValue()));
+    }
 
     @Test
     public void shouldNotComplainAboutNull() {

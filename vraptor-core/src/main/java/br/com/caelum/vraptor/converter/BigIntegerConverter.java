@@ -16,6 +16,8 @@
  */
 package br.com.caelum.vraptor.converter;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
+
 import java.math.BigInteger;
 import java.text.MessageFormat;
 import java.util.ResourceBundle;
@@ -34,9 +36,10 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
 public class BigIntegerConverter implements Converter<BigInteger>{
 
 	public BigInteger convert(String value, Class<? extends BigInteger> type, ResourceBundle bundle) {
-		if (value == null || value.equals("")) {
+	    if (isNullOrEmpty(value)) {
 			return null;
 		}
+	    
 		try {
 			return new BigInteger(value);
 		} catch (NumberFormatException e) {

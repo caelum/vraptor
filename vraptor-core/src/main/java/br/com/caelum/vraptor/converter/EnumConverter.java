@@ -17,6 +17,8 @@
 
 package br.com.caelum.vraptor.converter;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
+
 import java.text.MessageFormat;
 import java.util.ResourceBundle;
 
@@ -39,9 +41,10 @@ public class EnumConverter<T extends Enum<T>> implements Converter<T> {
 	 */
 	@SuppressWarnings("unchecked")
     public T convert(String value, Class<? extends T> type, ResourceBundle bundle) {
-        if (value == null || value.equals("")) {
+	    if (isNullOrEmpty(value)) {
             return null;
         }
+	    
         if (Character.isDigit(value.charAt(0))) {
             return resolveByOrdinal(value, (Class<T>) type, bundle);
         } else {

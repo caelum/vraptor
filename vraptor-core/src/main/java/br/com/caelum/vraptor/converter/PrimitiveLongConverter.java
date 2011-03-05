@@ -17,6 +17,8 @@
 
 package br.com.caelum.vraptor.converter;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
+
 import java.text.MessageFormat;
 import java.util.ResourceBundle;
 
@@ -35,9 +37,10 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
 public class PrimitiveLongConverter implements Converter<Long> {
 
     public Long convert(String value, Class<? extends Long> type, ResourceBundle bundle) {
-        if (value == null || value.equals("")) {
+        if (isNullOrEmpty(value)) {
             return 0L;
         }
+        
         try {
             return Long.parseLong(value);
         } catch (NumberFormatException e) {

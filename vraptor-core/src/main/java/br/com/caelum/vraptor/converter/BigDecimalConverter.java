@@ -16,6 +16,8 @@
  */
 package br.com.caelum.vraptor.converter;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
+
 import java.math.BigDecimal;
 import java.text.MessageFormat;
 import java.util.ResourceBundle;
@@ -34,9 +36,10 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
 public class BigDecimalConverter implements Converter<BigDecimal>{
 
 	public BigDecimal convert(String value, Class<? extends BigDecimal> type, ResourceBundle bundle) {
-		if (value == null || value.equals("")) {
+		if (isNullOrEmpty(value)) {
 			return null;
 		}
+		
 		try {
 			return new BigDecimal(value);
 		} catch (NumberFormatException e) {
@@ -44,6 +47,4 @@ public class BigDecimalConverter implements Converter<BigDecimal>{
 		}
 
 	}
-
-
 }

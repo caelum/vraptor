@@ -57,4 +57,9 @@ public class ShortConverterTest {
 		assertThat(converter.convert(null, Short.class, bundle), is(nullValue()));
 	}
 
+    @Test
+    public void shouldComplainAboutEmpty() {
+        assertThat(converter.convert("", Short.class, bundle), is(nullValue()));
+    }
+
 }

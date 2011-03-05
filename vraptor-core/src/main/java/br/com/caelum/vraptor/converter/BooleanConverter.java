@@ -17,6 +17,8 @@
 
 package br.com.caelum.vraptor.converter;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
+
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -42,15 +44,18 @@ public class BooleanConverter implements Converter<Boolean> {
 	private static final Set<String> IS_FALSE = new HashSet<String>(Arrays.asList("FALSE", "0", "NO", "N", "OFF"));
 
 	public Boolean convert(String value, Class<? extends Boolean> type, ResourceBundle bundle) {
-		if (value == null || "".equals(value)) {
+	    if (isNullOrEmpty(value)) {
 			return null;
 		}
+	    
 		value = value.toUpperCase();
+		
 		if (matches(IS_TRUE, value)) {
 			return true;
 		} else if (matches(IS_FALSE, value)) {
 			return false;
 		}
+		
 		throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_boolean"), value));
 	}
 

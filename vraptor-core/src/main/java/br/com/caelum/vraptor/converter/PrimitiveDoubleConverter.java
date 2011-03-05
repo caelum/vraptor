@@ -17,6 +17,8 @@
 
 package br.com.caelum.vraptor.converter;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
+
 import java.text.MessageFormat;
 import java.util.ResourceBundle;
 
@@ -34,9 +36,10 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
 public class PrimitiveDoubleConverter implements Converter<Double> {
 
     public Double convert(String value, Class<? extends Double> type, ResourceBundle bundle) {
-        if (value == null || value.equals("")) {
+        if (isNullOrEmpty(value)) {
             return 0d;
         }
+        
         try {
             return Double.parseDouble(value);
         } catch (NumberFormatException e) {

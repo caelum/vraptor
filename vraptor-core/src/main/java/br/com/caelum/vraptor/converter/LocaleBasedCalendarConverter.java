@@ -16,6 +16,8 @@
  */
 package br.com.caelum.vraptor.converter;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
+
 import java.text.DateFormat;
 import java.text.MessageFormat;
 import java.text.ParseException;
@@ -46,7 +48,7 @@ public class LocaleBasedCalendarConverter implements Converter<Calendar> {
     }
 
     public Calendar convert(String value, Class<? extends Calendar> type, ResourceBundle bundle) {
-        if (value == null || value.equals("")) {
+        if (isNullOrEmpty(value)) {
             return null;
         }
         

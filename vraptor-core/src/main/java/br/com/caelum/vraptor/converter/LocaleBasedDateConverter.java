@@ -16,6 +16,8 @@
  */
 package br.com.caelum.vraptor.converter;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
+
 import java.text.DateFormat;
 import java.text.MessageFormat;
 import java.text.ParseException;
@@ -45,7 +47,7 @@ public class LocaleBasedDateConverter
     }
 
     public Date convert(String value, Class<? extends Date> type, ResourceBundle bundle) {
-        if (value == null || value.equals("")) {
+        if (isNullOrEmpty(value)) {
             return null;
         }
 

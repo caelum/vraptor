@@ -16,6 +16,8 @@
  */
 package br.com.caelum.vraptor.converter.l10n;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
+
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -50,7 +52,7 @@ public class LocaleBasedBigDecimalConverter
     }
 
     public BigDecimal convert(String value, Class<? extends BigDecimal> type, ResourceBundle bundle) {
-        if (value == null || value.trim().length() == 0) {
+        if (isNullOrEmpty(value)) {
             return null;
         }
 

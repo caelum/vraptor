@@ -17,6 +17,8 @@
 
 package br.com.caelum.vraptor.converter;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
+
 import java.text.MessageFormat;
 import java.util.ResourceBundle;
 
@@ -34,9 +36,10 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
 public class PrimitiveFloatConverter implements Converter<Float> {
 
     public Float convert(String value, Class<? extends Float> type, ResourceBundle bundle) {
-        if (value == null || value.equals("")) {
+        if (isNullOrEmpty(value)) {
             return 0f;
         }
+        
         try {
             return Float.parseFloat(value);
         } catch (NumberFormatException e) {

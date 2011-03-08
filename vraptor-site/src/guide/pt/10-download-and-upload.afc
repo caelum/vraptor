@@ -99,7 +99,7 @@ public class CustomMultipartConfig extends DefaultMultipartConfig {
 
 Para que o browser possa fazer o upload corretamente você precisa adicionar o atributo %%enctype%% para %%multipart/form-data%%:
 
-[xml]<form action="minha-action" enctype="multipart/form-data">[/xml]
+[xml]<form action="minha-action" method="post" enctype="multipart/form-data">[/xml]
 
 [section Validando o upload]
 

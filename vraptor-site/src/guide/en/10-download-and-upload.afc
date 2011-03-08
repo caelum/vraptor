@@ -94,7 +94,7 @@ public class CustomMultipartConfig extends DefaultMultipartConfig {
 
 You need to add the parameter %%enctype%% with %%multipart/form-data%% value. Without this attribute, the browser cannot upload files:
 
-[xml]<form action="minha-action" enctype="multipart/form-data">[/xml]
+[xml]<form action="minha-action" method="post" enctype="multipart/form-data">[/xml]
 
 [section Validating upload]
 

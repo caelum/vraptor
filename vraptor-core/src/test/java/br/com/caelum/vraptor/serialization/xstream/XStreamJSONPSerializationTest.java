@@ -8,6 +8,8 @@ import static org.mockito.Mockito.when;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -65,5 +67,32 @@ public class XStreamJSONPSerializationTest {
 	private String result() {
 		return new String(stream.toByteArray());
 	}
+	
+	public static class GenericWrapper<T> {
+
+		Collection<T> entityList;
+		Integer total;
+
+		public GenericWrapper(Collection<T> entityList, Integer total) {
+			this.entityList = entityList;
+			this.total = total;
+		}
+
+	}
+
+	@Test
+    public void shouldSerializeGenericClass() {
+		String expectedResult = "myCallback({\"genericWrapper\": {\"entityList\": [{\"street\": \"vergueiro street\"},{\"street\": \"vergueiro street\"}],\"total\": 2}})";
+
+		Collection<Address> entityList = new ArrayList<Address>();
+		entityList.add(new Address("vergueiro street"));
+		entityList.add(new Address("vergueiro street"));
+
+		GenericWrapper<Address> wrapper = new GenericWrapper<Address>(entityList, entityList.size());
+
+        serialization.withCallback("myCallback").from(wrapper).include("entityList").serialize();
+
+        assertThat(result(), is(equalTo(expectedResult)));
+    }
 
 }

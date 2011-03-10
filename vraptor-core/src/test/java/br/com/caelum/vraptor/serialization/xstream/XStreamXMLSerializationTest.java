@@ -12,6 +12,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -104,6 +105,33 @@ public class XStreamXMLSerializationTest {
 		}
 
 	}
+
+	public static class GenericWrapper<T> {
+
+		Collection<T> entityList;
+		Integer total;
+
+		public GenericWrapper(Collection<T> entityList, Integer total) {
+			this.entityList = entityList;
+			this.total = total;
+		}
+
+	}
+
+	@Test
+    public void shouldSerializeGenericClass() {
+		String expectedResult = "<genericWrapper>\n  <entityList class=\"list\">\n    <client>\n      <name>washington botelho</name>\n    </client>\n    <client>\n      <name>washington botelho</name>\n    </client>\n  </entityList>\n  <total>2</total>\n</genericWrapper>";
+
+		Collection<Client> entityList = new ArrayList<Client>();
+		entityList.add(new Client("washington botelho"));
+		entityList.add(new Client("washington botelho"));
+
+		GenericWrapper<Client> wrapper = new GenericWrapper<Client>(entityList, entityList.size());
+
+        serialization.from(wrapper).include("entityList").serialize();
+
+        assertThat(result(), is(equalTo(expectedResult)));
+    }
 
 	@Test
 	public void shouldSerializeMaps() {

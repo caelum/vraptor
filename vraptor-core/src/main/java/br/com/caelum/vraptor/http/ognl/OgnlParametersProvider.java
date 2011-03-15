@@ -126,18 +126,11 @@ public class OgnlParametersProvider implements ParametersProvider {
 		if (requestNames.isEmpty()) {
 			return Defaults.defaultValue(param.actualType());
 		}
-
-		if (requestNames.containsKey(param.name)) {
-			String[] values = requestNames.get(param.name);
-			try {
-				return createSimpleParameter(param, values, bundle);
-			} catch(ConversionError ex) {
-				errors.add(new ValidationMessage(ex.getMessage(), param.name));
-				return null;
-			}
+		Object root = createRoot(param, requestNames, bundle, errors);
+		if (root == null) {
+			return null;
 		}
-
-		OgnlContext context = createOgnlContextFor(param, bundle);
+		OgnlContext context = createOgnlContextFor(param, root, bundle);
 		for (Entry<String, String[]> parameter : requestNames.entrySet()) {
 			String key = parameter.getKey().replaceFirst("^" + param.name + "\\.?", "");
 			String[] values = parameter.getValue();
@@ -149,6 +142,25 @@ public class OgnlParametersProvider implements ParametersProvider {
 		}
 
 		return context.getRoot();
+	}
+
+	private Object createRoot(Parameter param, Map<String, String[]> requestNames, ResourceBundle bundle,
+			List<Message> errors) {
+		if (requestNames.containsKey(param.name)) {
+			String[] values = requestNames.get(param.name);
+			try {
+				return createSimpleParameter(param, values, bundle);
+			} catch(ConversionError ex) {
+				errors.add(new ValidationMessage(ex.getMessage(), param.name));
+				return null;
+			}
+		}
+
+		try {
+			return new GenericNullHandler(removal).instantiate(param.actualType());
+		} catch (Exception ex) {
+			throw new InvalidParameterException("unable to instantiate type " + param.type, ex);
+		}
 	}
 
 	private void setProperty(OgnlContext context, String key, String[] values, List<Message> errors) {
@@ -178,13 +190,9 @@ public class OgnlParametersProvider implements ParametersProvider {
 		}
 	}
 
-	private OgnlContext createOgnlContextFor(Parameter param, ResourceBundle bundle) {
-		OgnlContext context;
-		try {
-			context = createOgnlContext(new GenericNullHandler(removal).instantiate(param.actualType()));
-		} catch (Exception ex) {
-			throw new InvalidParameterException("unable to instantiate type " + param.type, ex);
-		}
+	private OgnlContext createOgnlContextFor(Parameter param, Object root, ResourceBundle bundle) {
+		OgnlContext context = createOgnlContext(root);
+
 		context.setTraceEvaluations(true);
 		context.put("rootType", param.type);
 		context.put("removal", removal);

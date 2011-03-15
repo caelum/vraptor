@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -56,6 +57,8 @@ import br.com.caelum.vraptor.util.EmptyBundle;
 import br.com.caelum.vraptor.validator.DefaultValidationException;
 import br.com.caelum.vraptor.validator.Message;
 
+import com.google.common.collect.ImmutableMap;
+
 public class OgnlParametersProviderTest {
 
     private @Mock Converters converters;
@@ -74,6 +77,7 @@ public class OgnlParametersProviderTest {
 	private @Mock HttpSession session;
 	private ResourceMethod list;
 	private ResourceMethod listOfObject;
+	private ResourceMethod abc;
 	private ResourceMethod string;
 	private ResourceMethod generic;
 	private ResourceMethod primitive;
@@ -97,6 +101,7 @@ public class OgnlParametersProviderTest {
         array = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("array", Long[].class));
         list = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("list", List.class));
         listOfObject = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("listOfObject", List.class));
+        abc = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("abc", ABC.class));
         simple = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("simple", Long.class));
         string = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("string", String.class));
         stringArray = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("stringArray", String[].class));
@@ -288,6 +293,21 @@ public class OgnlParametersProviderTest {
     	Long xyz = getParameters(primitive);
     	assertThat(xyz, is(0l));
     }
+    @Test
+    public void continuesToFillObjectIfItIsConvertable() throws Exception {
+    	when(parameters.getParameterNames()).thenReturn(Collections.enumeration(Arrays.asList("abc", "abc.x")));
+    	when(parameters.getParameterMap()).thenReturn(ImmutableMap.of("abc", new String[] {""}, "abc.x", new String[] {"3"}));
+    	when(nameProvider.parameterNamesFor(any(Method.class))).thenReturn(new String[]{"abc"});
+
+    	when(converters.to(ABC.class)).thenReturn((Converter) new Converter<ABC>() {
+			public ABC convert(String value, Class<? extends ABC> type, ResourceBundle bundle) {
+				return new ABC();
+			}
+		});
+
+    	ABC returned = getParameters(abc);
+    	assertThat(returned.x, is(3l));
+    }
 
     private void thereAreNoParameters() {
     	when(parameters.getParameterNames()).thenReturn(Collections.enumeration(Collections.<String>emptySet()));
@@ -324,6 +344,8 @@ public class OgnlParametersProviderTest {
         void list(List<Long> abc) {
         }
         void listOfObject(List<ABC> abc) {
+        }
+        void abc(ABC abc) {
         }
         void simple(Long xyz) {
         }

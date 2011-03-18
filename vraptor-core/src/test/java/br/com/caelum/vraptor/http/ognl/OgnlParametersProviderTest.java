@@ -26,6 +26,7 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.lang.reflect.Method;
@@ -44,6 +45,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.Converter;
+import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.converter.LongConverter;
 import br.com.caelum.vraptor.converter.PrimitiveLongConverter;
 import br.com.caelum.vraptor.converter.StringConverter;
@@ -51,6 +53,7 @@ import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.core.SafeResourceBundle;
 import br.com.caelum.vraptor.http.InvalidParameterException;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
+import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.util.EmptyBundle;
@@ -63,7 +66,9 @@ public class OgnlParametersProviderTest {
 
     private @Mock Converters converters;
     private @Mock ParameterNameProvider nameProvider;
-    private @Mock HttpServletRequest parameters;
+    private @Mock HttpServletRequest request;
+    private @Mock HttpSession session;
+    private @Mock Container container;
 
     private EmptyElementsRemoval removal;
     private ArrayList<Message> errors;
@@ -74,7 +79,6 @@ public class OgnlParametersProviderTest {
 	private ResourceMethod array;
 	private ResourceMethod simple;
 
-	private @Mock HttpSession session;
 	private ResourceMethod list;
 	private ResourceMethod listOfObject;
 	private ResourceMethod abc;
@@ -82,18 +86,19 @@ public class OgnlParametersProviderTest {
 	private ResourceMethod generic;
 	private ResourceMethod primitive;
 	private ResourceMethod stringArray;
+	private ResourceMethod dependency;
 
     @SuppressWarnings("unchecked")
 	@Before
     public void setup() throws Exception {
     	MockitoAnnotations.initMocks(this);
         this.removal = new EmptyElementsRemoval();
-        this.provider = new OgnlParametersProvider(converters, nameProvider, parameters, removal);
+        this.provider = new OgnlParametersProvider(converters, nameProvider, request, removal, container);
         this.errors = new ArrayList<Message>();
         when(converters.to(Long.class)).thenReturn((Converter) new LongConverter());
         when(converters.to(long.class)).thenReturn((Converter) new PrimitiveLongConverter());
         when(converters.to(String.class)).thenReturn((Converter) new StringConverter());
-        when(parameters.getSession()).thenReturn(session);
+        when(request.getSession()).thenReturn(session);
 
         buyA = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("buyA", House.class));
         kick = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("kick", AngryCat.class));
@@ -105,6 +110,7 @@ public class OgnlParametersProviderTest {
         simple = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("simple", Long.class));
         string = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("string", String.class));
         stringArray = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("stringArray", String[].class));
+        dependency = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("dependency", Result.class));
         primitive = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("primitive", long.class));
         generic = DefaultResourceMethod.instanceFor(Specific.class, Generic.class.getDeclaredMethod("generic", Object.class));
     }
@@ -287,6 +293,30 @@ public class OgnlParametersProviderTest {
     }
 
     @Test
+    public void returnsDependenciesIfContainerCanProvide() throws Exception {
+    	thereAreNoParameters();
+    	Result result = mock(Result.class);
+
+    	when(container.canProvide(Result.class)).thenReturn(true);
+		when(container.instanceFor(Result.class)).thenReturn(result);
+
+    	Result returned = getParameters(dependency);
+    	assertThat(returned, is(result));
+    }
+
+    @Test
+    public void returnsDependenciesIfRequestCanProvide() throws Exception {
+    	thereAreNoParameters();
+    	when(nameProvider.parameterNamesFor(dependency.getMethod())).thenReturn(new String[] {"result"});
+    	Result result = mock(Result.class);
+
+    	when(request.getAttribute("result")).thenReturn(result);
+
+    	Result returned = getParameters(dependency);
+    	assertThat(returned, is(result));
+    }
+
+    @Test
     public void returnsZeroForAPrimitiveWhenThereAreNoParameters() throws Exception {
     	thereAreNoParameters();
 
@@ -295,8 +325,8 @@ public class OgnlParametersProviderTest {
     }
     @Test
     public void continuesToFillObjectIfItIsConvertable() throws Exception {
-    	when(parameters.getParameterNames()).thenReturn(Collections.enumeration(Arrays.asList("abc", "abc.x")));
-    	when(parameters.getParameterMap()).thenReturn(ImmutableMap.of("abc", new String[] {""}, "abc.x", new String[] {"3"}));
+    	when(request.getParameterNames()).thenReturn(Collections.enumeration(Arrays.asList("abc", "abc.x")));
+    	when(request.getParameterMap()).thenReturn(ImmutableMap.of("abc", new String[] {""}, "abc.x", new String[] {"3"}));
     	when(nameProvider.parameterNamesFor(any(Method.class))).thenReturn(new String[]{"abc"});
 
     	when(converters.to(ABC.class)).thenReturn((Converter) new Converter<ABC>() {
@@ -310,19 +340,19 @@ public class OgnlParametersProviderTest {
     }
 
     private void thereAreNoParameters() {
-    	when(parameters.getParameterNames()).thenReturn(Collections.enumeration(Collections.<String>emptySet()));
-    	when(parameters.getParameterMap()).thenReturn(Collections.<String, String[]>emptyMap());
+    	when(request.getParameterNames()).thenReturn(Collections.enumeration(Collections.<String>emptySet()));
+    	when(request.getParameterMap()).thenReturn(Collections.<String, String[]>emptyMap());
     	when(nameProvider.parameterNamesFor(any(Method.class))).thenReturn(new String[]{"any"});
 	}
 
 	private void requestParameterIs(ResourceMethod method, String paramName, String... values) {
     	String methodName = paramName.replaceAll("[\\.\\[].*", "");
 
-		when(parameters.getParameterValues(paramName)).thenReturn(values);
+		when(request.getParameterValues(paramName)).thenReturn(values);
 		String[] values1 = { paramName };
-		when(parameters.getParameterNames()).thenReturn(Collections.enumeration(Arrays.asList(values1)));
+		when(request.getParameterNames()).thenReturn(Collections.enumeration(Arrays.asList(values1)));
 		when(nameProvider.parameterNamesFor(method.getMethod())).thenReturn(new String[]{methodName});
-		when(parameters.getParameterMap()).thenReturn(Collections.singletonMap(paramName, values));
+		when(request.getParameterMap()).thenReturn(Collections.singletonMap(paramName, values));
 
     }
 
@@ -354,6 +384,8 @@ public class OgnlParametersProviderTest {
         void stringArray(String[] abc) {
         }
         void primitive(long xyz) {
+        }
+        void dependency(Result result) {
         }
     }
 

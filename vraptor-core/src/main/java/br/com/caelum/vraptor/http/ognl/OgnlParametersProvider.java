@@ -47,6 +47,7 @@ import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.http.InvalidParameterException;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParametersProvider;
+import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.validator.Message;
@@ -74,12 +75,15 @@ public class OgnlParametersProvider implements ParametersProvider {
 
 	private final EmptyElementsRemoval removal;
 
+	private final Container container;
+
 	public OgnlParametersProvider(Converters converters, ParameterNameProvider provider,
-			HttpServletRequest request, EmptyElementsRemoval removal) {
+			HttpServletRequest request, EmptyElementsRemoval removal, Container container) {
 		this.converters = converters;
 		this.provider = provider;
 		this.request = request;
 		this.removal = removal;
+		this.container = container;
 		OgnlRuntime.setNullHandler(Object.class, new ReflectionBasedNullHandler());
 		OgnlRuntime.setPropertyAccessor(List.class, new ListAccessor(converters));
 		OgnlRuntime.setPropertyAccessor(Object[].class, new ArrayAccessor());
@@ -123,13 +127,22 @@ public class OgnlParametersProvider implements ParametersProvider {
 	}
 
 	private Object createParameter(Parameter param, Map<String, String[]> requestNames, ResourceBundle bundle, List<Message> errors) {
-		if (requestNames.isEmpty()) {
+		if (container.canProvide(param.clazz)) {
+			return container.instanceFor(param.clazz);
+		}
+
+		Object root;
+		if (request.getAttribute(param.name) != null) {
+			root = request.getAttribute(param.name);
+		} else if (requestNames.isEmpty()) {
 			return Defaults.defaultValue(param.actualType());
+		} else {
+			root = createRoot(param, requestNames, bundle, errors);
+			if (root == null) {
+				return null;
+			}
 		}
-		Object root = createRoot(param, requestNames, bundle, errors);
-		if (root == null) {
-			return null;
-		}
+
 		OgnlContext context = createOgnlContextFor(param, root, bundle);
 		for (Entry<String, String[]> parameter : requestNames.entrySet()) {
 			String key = parameter.getKey().replaceFirst("^" + param.name + "\\.?", "");

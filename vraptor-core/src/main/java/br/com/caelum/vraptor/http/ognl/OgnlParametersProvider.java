@@ -47,6 +47,7 @@ import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.http.InvalidParameterException;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParametersProvider;
+import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.validator.Message;
@@ -74,12 +75,15 @@ public class OgnlParametersProvider implements ParametersProvider {
 
 	private final EmptyElementsRemoval removal;
 
+	private final Container container;
+
 	public OgnlParametersProvider(Converters converters, ParameterNameProvider provider,
-			HttpServletRequest request, EmptyElementsRemoval removal) {
+			HttpServletRequest request, EmptyElementsRemoval removal, Container container) {
 		this.converters = converters;
 		this.provider = provider;
 		this.request = request;
 		this.removal = removal;
+		this.container = container;
 		OgnlRuntime.setNullHandler(Object.class, new ReflectionBasedNullHandler());
 		OgnlRuntime.setPropertyAccessor(List.class, new ListAccessor(converters));
 		OgnlRuntime.setPropertyAccessor(Object[].class, new ArrayAccessor());
@@ -123,21 +127,23 @@ public class OgnlParametersProvider implements ParametersProvider {
 	}
 
 	private Object createParameter(Parameter param, Map<String, String[]> requestNames, ResourceBundle bundle, List<Message> errors) {
-		if (requestNames.isEmpty()) {
-			return Defaults.defaultValue(param.actualType());
+		if (container.canProvide(param.clazz)) {
+			return container.instanceFor(param.clazz);
 		}
 
-		if (requestNames.containsKey(param.name)) {
-			String[] values = requestNames.get(param.name);
-			try {
-				return createSimpleParameter(param, values, bundle);
-			} catch(ConversionError ex) {
-				errors.add(new ValidationMessage(ex.getMessage(), param.name));
+		Object root;
+		if (request.getAttribute(param.name) != null) {
+			root = request.getAttribute(param.name);
+		} else if (requestNames.isEmpty()) {
+			return Defaults.defaultValue(param.actualType());
+		} else {
+			root = createRoot(param, requestNames, bundle, errors);
+			if (root == null) {
 				return null;
 			}
 		}
 
-		OgnlContext context = createOgnlContextFor(param, bundle);
+		OgnlContext context = createOgnlContextFor(param, root, bundle);
 		for (Entry<String, String[]> parameter : requestNames.entrySet()) {
 			String key = parameter.getKey().replaceFirst("^" + param.name + "\\.?", "");
 			String[] values = parameter.getValue();
@@ -149,6 +155,25 @@ public class OgnlParametersProvider implements ParametersProvider {
 		}
 
 		return context.getRoot();
+	}
+
+	private Object createRoot(Parameter param, Map<String, String[]> requestNames, ResourceBundle bundle,
+			List<Message> errors) {
+		if (requestNames.containsKey(param.name)) {
+			String[] values = requestNames.get(param.name);
+			try {
+				return createSimpleParameter(param, values, bundle);
+			} catch(ConversionError ex) {
+				errors.add(new ValidationMessage(ex.getMessage(), param.name));
+				return null;
+			}
+		}
+
+		try {
+			return new GenericNullHandler(removal).instantiate(param.actualType());
+		} catch (Exception ex) {
+			throw new InvalidParameterException("unable to instantiate type " + param.type, ex);
+		}
 	}
 
 	private void setProperty(OgnlContext context, String key, String[] values, List<Message> errors) {
@@ -178,13 +203,9 @@ public class OgnlParametersProvider implements ParametersProvider {
 		}
 	}
 
-	private OgnlContext createOgnlContextFor(Parameter param, ResourceBundle bundle) {
-		OgnlContext context;
-		try {
-			context = createOgnlContext(new GenericNullHandler(removal).instantiate(param.actualType()));
-		} catch (Exception ex) {
-			throw new InvalidParameterException("unable to instantiate type " + param.type, ex);
-		}
+	private OgnlContext createOgnlContextFor(Parameter param, Object root, ResourceBundle bundle) {
+		OgnlContext context = createOgnlContext(root);
+
 		context.setTraceEvaluations(true);
 		context.put("rootType", param.type);
 		context.put("removal", removal);

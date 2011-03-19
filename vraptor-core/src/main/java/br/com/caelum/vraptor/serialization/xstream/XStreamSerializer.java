@@ -21,6 +21,7 @@ import java.io.Writer;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -221,10 +222,18 @@ public class XStreamSerializer implements SerializerBuilder {
 	private Class<?> getActualType(Type genericType) {
 		if (genericType instanceof ParameterizedType) {
 			ParameterizedType type = (ParameterizedType) genericType;
+
 			if (isCollection(type)) {
-				return (Class<?>) type.getActualTypeArguments()[0];
+				Type actualType = type.getActualTypeArguments()[0];
+
+				if (actualType instanceof TypeVariable<?>) {
+					return (Class<?>) type.getRawType();
+				}
+
+				return (Class<?>) actualType;
 			}
 		}
+
 		return (Class<?>) genericType;
 	}
 

@@ -139,6 +139,11 @@
 			<version>3.0.5.RELEASE</version>
 		</dependency>
 		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-mock</artifactId>
+			<version>2.0.7</version>
+		</dependency>
+		<dependency>
 		    <groupId>org.aspectj</groupId>
 		    <artifactId>aspectjrt</artifactId>
 		    <version>1.6.9</version>
@@ -391,6 +396,7 @@
 			<version>4.5</version>
 			<scope>test</scope>
 		</dependency>
+		
 		
 	</dependencies>
 

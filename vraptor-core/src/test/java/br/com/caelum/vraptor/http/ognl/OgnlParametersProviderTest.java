@@ -24,6 +24,7 @@ import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
@@ -314,6 +315,18 @@ public class OgnlParametersProviderTest {
 
     	Result returned = getParameters(dependency);
     	assertThat(returned, is(result));
+    }
+
+    @Test
+    public void doesntReturnDependenciesIfThereAreParameters() throws Exception {
+    	requestParameterIs(abc, "abc.x", "abc");
+    	ABC result = mock(ABC.class);
+    	when(container.canProvide(ABC.class)).thenReturn(true);
+    	when(container.instanceFor(ABC.class)).thenReturn(result);
+
+
+    	ABC returned = getParameters(abc);
+    	assertThat(returned, is(not(result)));
     }
 
     @Test

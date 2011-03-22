@@ -110,6 +110,33 @@ public class XStreamJSONSerializationTest {
 
 	}
 
+	public static class GenericWrapper<T> {
+
+		Collection<T> entityList;
+		Integer total;
+
+		public GenericWrapper(Collection<T> entityList, Integer total) {
+			this.entityList = entityList;
+			this.total = total;
+		}
+
+	}
+
+	@Test
+    public void shouldSerializeGenericClass() {
+		String expectedResult = "{\"genericWrapper\": {\"entityList\": [{\"name\": \"washington botelho\"},{\"name\": \"washington botelho\"}],\"total\": 2}}";
+
+		Collection<Client> entityList = new ArrayList<Client>();
+		entityList.add(new Client("washington botelho"));
+		entityList.add(new Client("washington botelho"));
+
+		GenericWrapper<Client> wrapper = new GenericWrapper<Client>(entityList, entityList.size());
+
+        serialization.from(wrapper).include("entityList").serialize();
+
+        assertThat(result(), is(equalTo(expectedResult)));
+    }
+
     @Test
     public void shouldSerializeAllBasicFields() {
         String expectedResult = "{\"order\": {\"price\": 15.0,\"comments\": \"pack it nicely, please\"}}";

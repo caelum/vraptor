@@ -15,10 +15,14 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.Result;
+import br.com.caelum.vraptor.converter.LongConverter;
+import br.com.caelum.vraptor.converter.StringConverter;
+import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.util.test.MockLocalization;
 
 public class ParameterLoaderInterceptorTest {
 
@@ -27,18 +31,25 @@ public class ParameterLoaderInterceptorTest {
 	private @Mock HttpServletRequest request;
 	private @Mock ParameterNameProvider provider;
 	private @Mock Result result;
+	private @Mock Converters converters;
+
 	private ParameterLoaderInterceptor interceptor;
 	private ResourceMethod method;
 	private @Mock InterceptorStack stack;
 	private Object instance;
 	private ResourceMethod managed;
+	private ResourceMethod other;
 
 	@Before
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
-		interceptor = new ParameterLoaderInterceptor(session, request, provider, result);
+		interceptor = new ParameterLoaderInterceptor(session, request, provider, result, converters, new MockLocalization());
 		method = DefaultResourceMethod.instanceFor(Resource.class, Resource.class.getMethod("method", Entity.class));
 		managed = DefaultResourceMethod.instanceFor(Resource.class, Resource.class.getMethod("managed", Entity.class));
+		other = DefaultResourceMethod.instanceFor(Resource.class, Resource.class.getMethod("other", OtherEntity.class));
+
+		when(converters.to(Long.class)).thenReturn(new LongConverter());
+		when(converters.to(String.class)).thenReturn(new StringConverter());
 	}
 
 	@Test
@@ -53,6 +64,20 @@ public class ParameterLoaderInterceptorTest {
 		verify(request).setAttribute("entity", expectedEntity);
 		verify(session).evict(expectedEntity);
 		verify(stack).next(method, instance);
+	}
+
+	@Test
+	public void shouldLoadEntityUsingIdOfAnyType() throws Exception {
+		when(provider.parameterNamesFor(other.getMethod())).thenReturn(new String[] {"entity"});
+		when(request.getParameter("entity.id")).thenReturn("123");
+		OtherEntity expectedEntity = new OtherEntity();
+		when(session.get(OtherEntity.class, "123")).thenReturn(expectedEntity);
+
+		interceptor.intercept(stack, other, instance);
+
+		verify(request).setAttribute("entity", expectedEntity);
+		verify(session).evict(expectedEntity);
+		verify(stack).next(other, instance);
 	}
 
 	@Test
@@ -97,9 +122,14 @@ public class ParameterLoaderInterceptorTest {
 	static class Entity {
 		private Long id;
 	}
+	static class OtherEntity {
+		private String id;
+	}
 
 	static class Resource {
 		public void method(@Load Entity entity) {
+		}
+		public void other(@Load OtherEntity entity) {
 		}
 		public void managed(@Load(managed=true) Entity entity) {
 		}

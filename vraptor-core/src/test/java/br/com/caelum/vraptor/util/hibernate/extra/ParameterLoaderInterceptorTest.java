@@ -2,6 +2,7 @@ package br.com.caelum.vraptor.util.hibernate.extra;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -13,6 +14,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.stubbing.Stubber;
 
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.converter.LongConverter;
@@ -39,6 +41,7 @@ public class ParameterLoaderInterceptorTest {
 	private Object instance;
 	private ResourceMethod managed;
 	private ResourceMethod other;
+	private ResourceMethod noId;
 
 	@Before
 	public void setUp() throws Exception {
@@ -47,6 +50,7 @@ public class ParameterLoaderInterceptorTest {
 		method = DefaultResourceMethod.instanceFor(Resource.class, Resource.class.getMethod("method", Entity.class));
 		managed = DefaultResourceMethod.instanceFor(Resource.class, Resource.class.getMethod("managed", Entity.class));
 		other = DefaultResourceMethod.instanceFor(Resource.class, Resource.class.getMethod("other", OtherEntity.class));
+		noId = DefaultResourceMethod.instanceFor(Resource.class, Resource.class.getMethod("noId", NoIdEntity.class));
 
 		when(converters.to(Long.class)).thenReturn(new LongConverter());
 		when(converters.to(String.class)).thenReturn(new StringConverter());
@@ -119,11 +123,37 @@ public class ParameterLoaderInterceptorTest {
 		verify(stack, never()).next(method, instance);
 	}
 
+	@Test(expected=IllegalArgumentException.class)
+	public void shouldThrowIllegalArgumentIfEntityDoesntHaveId() throws Exception {
+		when(provider.parameterNamesFor(noId.getMethod())).thenReturn(new String[] {"entity"});
+		when(request.getParameter("entity.id")).thenReturn("123");
+		fail().when(request).setAttribute(eq("entity"), any());
+		fail().when(result).notFound();
+		fail().when(stack).next(noId, instance);
+
+		interceptor.intercept(stack, noId, instance);
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void shouldThrowIllegalArgumentIfIdIsNotConvertable() throws Exception {
+		when(provider.parameterNamesFor(method.getMethod())).thenReturn(new String[] {"entity"});
+		when(request.getParameter("entity.id")).thenReturn("123");
+		when(converters.to(Long.class)).thenReturn(null);
+		fail().when(request).setAttribute(eq("entity"), any());
+		fail().when(result).notFound();
+		fail().when(stack).next(method, instance);
+
+		interceptor.intercept(stack, method, instance);
+	}
+
+
 	static class Entity {
 		private Long id;
 	}
 	static class OtherEntity {
 		private String id;
+	}
+	static class NoIdEntity {
 	}
 
 	static class Resource {
@@ -131,8 +161,13 @@ public class ParameterLoaderInterceptorTest {
 		}
 		public void other(@Load OtherEntity entity) {
 		}
+		public void noId(@Load NoIdEntity entity) {
+		}
 		public void managed(@Load(managed=true) Entity entity) {
 		}
+	}
+	private Stubber fail() {
+		return doThrow(new AssertionError());
 	}
 
 }

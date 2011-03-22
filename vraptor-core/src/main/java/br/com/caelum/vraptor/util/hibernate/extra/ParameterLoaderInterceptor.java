@@ -1,5 +1,6 @@
 package br.com.caelum.vraptor.util.hibernate.extra;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Predicates.instanceOf;
 import static com.google.common.collect.Iterables.any;
 import static com.google.common.collect.Iterables.isEmpty;
@@ -7,6 +8,7 @@ import static java.util.Arrays.asList;
 
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -93,8 +95,12 @@ public class ParameterLoaderInterceptor implements Interceptor {
 		if (parameter == null) {
 			return null;
 		}
-		Class<?> idType = new Mirror().on(type).reflect().field("id").getType();
+		Field field = new Mirror().on(type).reflect().field("id");
+		checkArgument(field != null, "Entity " + type.getSimpleName() + " must have an id property for @Load.");
+
+		Class<?> idType = field.getType();
 		Converter<?> converter = converters.to(idType);
+		checkArgument(converter != null, "Entity " + type.getSimpleName() + " id type " + idType + " must have a converter");
 
 		Serializable id = (Serializable) converter.convert(parameter, type, localization.getBundle());
 		return session.get(type, id);

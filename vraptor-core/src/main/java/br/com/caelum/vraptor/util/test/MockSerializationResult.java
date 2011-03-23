@@ -17,7 +17,6 @@
 
 package br.com.caelum.vraptor.util.test;
 
-import org.springframework.mock.web.MockHttpServletResponse;
 
 import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
@@ -37,7 +36,7 @@ import br.com.caelum.vraptor.view.EmptyResult;
  * A mocked Result for testing your serialized objects returns.
  *
  * It will serialize your objects for real and return them as string,
- * than you can use result.use(Resultrs.json()).from(object) for serialize and inspect objects.
+ * this way, you could use result.use(Resultrs.json()).from(object) for serialize and inspect objects.
  *
  * @author Vinícius Oliveira
  */
@@ -91,14 +90,14 @@ public class MockSerializationResult extends MockResult {
 	 * 
 	 * @return String with the object serialized 
 	 */
-	public String restultSerialized() throws Exception {
+	public String serializedRestult() throws Exception {
 		
 		if("application/xml".equals(response.getContentType())){
-			return new String(response.getContentAsByteArray());
+			return response.getContentAsString();
 		}
 		
 		if("application/json".equals(response.getContentType())){
-			return new String(response.getContentAsByteArray());
+			return response.getContentAsString();
 		}
 		
 		return null;

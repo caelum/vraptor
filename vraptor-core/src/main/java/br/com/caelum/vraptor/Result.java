@@ -48,7 +48,7 @@ public interface Result {
      * @return this own class
      * @see TypeNameExtractor
      */
-    Result include(Object value);
+    Result include(Object ... value);
 
     /**
      * Force result to use the defined view.

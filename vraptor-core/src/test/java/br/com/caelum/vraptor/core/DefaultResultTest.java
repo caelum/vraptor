@@ -208,18 +208,23 @@ public class DefaultResultTest {
 
 
     class Account {
-    	
+    }
+    class Client {
     }
 
     @Test
-    public void shouldIncludeExtractedNameWhenSimplyIncluding() throws Exception {
+    public void shouldIncludeExtractedNamesWhenSimplyIncludingObjects() throws Exception {
 
     	Account account = new Account();
     	when(extractor.nameFor(Account.class)).thenReturn("account");
+    	Client client = new Client();
+    	when(extractor.nameFor(Client.class)).thenReturn("client");
     	
-    result.include(account);
+    	result.include(account, client);
 
     	verify(request).setAttribute("account", account);
-
+    	verify(request).setAttribute("client", client);
+    	
     }
+
 }

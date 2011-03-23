@@ -7,6 +7,9 @@ import static br.com.caelum.vraptor.view.Results.page;
 import static br.com.caelum.vraptor.view.Results.representation;
 import static br.com.caelum.vraptor.view.Results.status;
 import static br.com.caelum.vraptor.view.Results.xml;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -63,5 +66,17 @@ public class MockResultTest {
 	@Test
 	public void shouldNotThrowNullPointersOnStatusResult() throws Exception {
 		result.use(status()).movedPermanentlyTo(AController.class).aMethod();
+	}
+
+	class Client {
+	}
+	@Test
+	public void shouldIncludeValuesWithSimpleName() throws Exception {
+		AController controller = new AController();
+		Client client = new Client();
+		result.include(controller, client);
+		
+		assertThat((AController) result.included("AController"), is(equalTo(controller)));
+		assertThat((Client) result.included("Client"), is(equalTo(client)));
 	}
 }

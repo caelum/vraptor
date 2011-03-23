@@ -79,6 +79,7 @@ public class MockResult extends AbstractResult {
 
 	private <T> MethodInvocation<T> returnOnFinalMethods(final Class<T> view) {
 		return new MethodInvocation<T>() {
+			@SuppressWarnings({ "rawtypes", "unchecked" })
 			public Object intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {
 				Class type = method.getReturnType();
 				if (type == void.class) {
@@ -133,8 +134,11 @@ public class MockResult extends AbstractResult {
 	/**
 	 * Uses the type name to include.
 	 */
-	public Result include(Object value) {
-		return include(value.getClass().getSimpleName(), value);
+	public Result include(Object ... values) {
+		for(Object value : values) {
+			include(value.getClass().getSimpleName(), value);
+		}
+		return this;
 	}
 
 }

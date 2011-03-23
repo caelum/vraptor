@@ -75,8 +75,11 @@ public class DefaultResult extends AbstractResult {
 		return Collections.unmodifiableMap(includedAttributes);
 	}
 
-	public Result include(Object value) {
-		String key = this.extractor.nameFor(value.getClass());
-		return include(key, value);
+	public Result include(Object ... values) {
+		for(Object value : values) {
+			String key = extractor.nameFor(value.getClass());
+			include(key, value);
+		}
+		return this;
 	}
 }

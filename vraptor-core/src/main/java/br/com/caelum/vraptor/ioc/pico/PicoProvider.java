@@ -53,27 +53,27 @@ import br.com.caelum.vraptor.scan.WebAppBootstrapFactory;
  */
 public class PicoProvider implements ContainerProvider {
 
-    private final MutablePicoContainer picoContainer;
+    private final MutablePicoContainer application;
     private MutablePicoContainer childContainer;
     private final ThreadLocal<Container> containersByThread = new ThreadLocal<Container>();
 
     private static final Logger logger = LoggerFactory.getLogger(PicoProvider.class);
 
     public PicoProvider() {
-        this.picoContainer = new DefaultPicoContainer(new Caching(),
+        this.application = new DefaultPicoContainer(new Caching(),
                 new JavaEE5LifecycleStrategy(new NullComponentMonitor()), null);
 
         ComponentFactoryRegistry componentFactoryRegistry = new DefaultComponentFactoryRegistry();
-        PicoComponentRegistry componentRegistry = new PicoComponentRegistry(this.picoContainer, componentFactoryRegistry);
+        PicoComponentRegistry componentRegistry = new PicoComponentRegistry(this.application, componentFactoryRegistry);
 
-        this.picoContainer.addComponent(componentRegistry);
-        this.picoContainer.addComponent(componentFactoryRegistry);
+        this.application.addComponent(componentRegistry);
+        this.application.addComponent(componentFactoryRegistry);
 
-        picoContainer.addComponent(Container.class, new Container() {
+        application.addComponent(Container.class, new Container() {
 			public <T> T instanceFor(Class<T> type) {
 				Container container = containersByThread.get();
 				if (container == null) {
-					return picoContainer.getComponent(type);
+					return application.getComponent(type);
 				}
 				return container.instanceFor(type);
 			}
@@ -88,7 +88,7 @@ public class PicoProvider implements ContainerProvider {
 	    ComponentRegistry componentRegistry = getComponentRegistry();
 	    registerBundledComponents(componentRegistry);
 
-	    this.picoContainer.addComponent(context);
+	    this.application.addComponent(context);
 	    BasicConfiguration config = new BasicConfiguration(context);
 
 	    // using the new vraptor.scan
@@ -100,12 +100,12 @@ public class PicoProvider implements ContainerProvider {
 
 	    // start the container
 	    getComponentRegistry().init();
-	    picoContainer.start();
+	    application.start();
 	    registerCacheComponents();
 
 	    // call all handlers for registered components
     	Collection<Class<?>> components = getComponentRegistry().getAllRegisteredApplicationScopedComponents();
-    	List<StereotypeHandler> handlers = picoContainer.getComponents(StereotypeHandler.class);
+    	List<StereotypeHandler> handlers = application.getComponents(StereotypeHandler.class);
 
     	for (Class<?> type : components) {
 	        for (StereotypeHandler handler : handlers) {
@@ -165,8 +165,8 @@ public class PicoProvider implements ContainerProvider {
 	}
 
 	public void stop() {
-	    picoContainer.stop();
-	    picoContainer.dispose();
+	    application.stop();
+	    application.dispose();
 	}
 
 	public <T> T provideForRequest(RequestInfo request, Execution<T> execution) {
@@ -188,6 +188,6 @@ public class PicoProvider implements ContainerProvider {
     }
 
     protected PicoComponentRegistry getComponentRegistry() {
-    	return this.picoContainer.getComponent(PicoComponentRegistry.class);
+    	return this.application.getComponent(PicoComponentRegistry.class);
     }
 }

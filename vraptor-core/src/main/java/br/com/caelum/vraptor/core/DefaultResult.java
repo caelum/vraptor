@@ -33,6 +33,7 @@ import br.com.caelum.vraptor.ioc.RequestScoped;
 /**
  * A basic implementation of a Result
  * @author guilherme silveira
+ * @author jose donizetti
  */
 @RequestScoped
 public class DefaultResult extends AbstractResult {

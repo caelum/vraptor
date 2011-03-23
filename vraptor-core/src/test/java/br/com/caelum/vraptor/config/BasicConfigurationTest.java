@@ -33,6 +33,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import br.com.caelum.vraptor.VRaptorException;
 import br.com.caelum.vraptor.core.Execution;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
@@ -145,9 +146,9 @@ public class BasicConfigurationTest {
         try {
             config.getProvider();
             Assert.fail();
-        } catch (ServletException e) {
-        	Assert.assertNotNull("Should have a cause", e.getRootCause());
-            Assert.assertEquals(IOException.class, e.getRootCause().getClass());
+        } catch (VRaptorException e) {
+        	Assert.assertNotNull("Should have a cause", e.getCause());
+            Assert.assertEquals(IOException.class, e.getCause().getClass());
         }
     }
 }

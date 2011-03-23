@@ -22,27 +22,14 @@ import java.io.IOException;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import br.com.caelum.vraptor.config.BasicConfiguration;
-import br.com.caelum.vraptor.core.DefaultStaticContentHandler;
-import br.com.caelum.vraptor.core.Execution;
-import br.com.caelum.vraptor.core.RequestExecution;
-import br.com.caelum.vraptor.core.RequestInfo;
-import br.com.caelum.vraptor.core.StaticContentHandler;
-import br.com.caelum.vraptor.http.EncodingHandler;
-import br.com.caelum.vraptor.http.VRaptorRequest;
-import br.com.caelum.vraptor.http.VRaptorResponse;
-import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.ioc.ContainerProvider;
+import br.com.caelum.vraptor.core.Application;
+import br.com.caelum.vraptor.core.DefaultApplication;
 
 /**
  * VRaptor entry point.<br>
@@ -52,62 +39,24 @@ import br.com.caelum.vraptor.ioc.ContainerProvider;
  * @author Fabio Kung
  */
 public class VRaptor implements Filter {
-	private ContainerProvider provider;
-	private ServletContext servletContext;
-
-	private StaticContentHandler staticHandler;
-
-	private static final Logger logger = LoggerFactory.getLogger(VRaptor.class);
+	
+	private Application context;
 
 	public void destroy() {
-		provider.stop();
-		provider = null;
-		servletContext = null;
+		context.stop();
 	}
 
-	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException,
-			ServletException {
-
+	public void doFilter(ServletRequest req, ServletResponse res,
+			FilterChain chain) throws IOException, ServletException {
 		if (!(req instanceof HttpServletRequest) || !(res instanceof HttpServletResponse)) {
 			throw new ServletException(
 					"VRaptor must be run inside a Servlet environment. Portlets and others aren't supported.");
 		}
-
-		final HttpServletRequest baseRequest = (HttpServletRequest) req;
-		final HttpServletResponse baseResponse = (HttpServletResponse) res;
-
-		if (staticHandler.requestingStaticFile(baseRequest)) {
-			staticHandler.deferProcessingToContainer(chain, baseRequest, baseResponse);
-		} else {
-			logger.debug("VRaptor received a new request");
-			logger.trace("Request: {}", req);
-
-			VRaptorRequest mutableRequest = new VRaptorRequest(baseRequest);
-			VRaptorResponse mutableResponse = new VRaptorResponse(baseResponse);
-
-			final RequestInfo request = new RequestInfo(servletContext, chain, mutableRequest, mutableResponse);
-			provider.provideForRequest(request, new Execution<Object>() {
-				public Object insideRequest(Container container) {
-					container.instanceFor(EncodingHandler.class).setEncoding(baseRequest, baseResponse);
-					container.instanceFor(RequestExecution.class).execute();
-					return null;
-				}
-			});
-			logger.debug("VRaptor ended the request");
-		}
+		context.parse((HttpServletRequest)req, (HttpServletResponse) res, chain);
 	}
 
-	public void init(FilterConfig cfg) throws ServletException {
-		servletContext = cfg.getServletContext();
-		BasicConfiguration config = new BasicConfiguration(servletContext);
-		init(config.getProvider(), new DefaultStaticContentHandler(servletContext));
-		logger.info("VRaptor 3.3.2-SNAPSHOT successfuly initialized");
+	public void init(FilterConfig config) throws ServletException {
+		context = new DefaultApplication(config.getServletContext());
+		context.start();
 	}
-
-	void init(ContainerProvider provider, StaticContentHandler handler) {
-		this.provider = provider;
-		this.staticHandler = handler;
-		this.provider.start(servletContext);
-	}
-
 }

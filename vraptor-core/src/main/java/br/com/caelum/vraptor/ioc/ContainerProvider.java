@@ -29,7 +29,7 @@ import br.com.caelum.vraptor.core.RequestInfo;
  */
 public interface ContainerProvider {
 
-	<T> T provideForRequest(RequestInfo vraptorRequest, Execution<T> execution);
+	<T> T provideForRequest(RequestInfo info, Execution<T> execution);
 
 	void stop();
 

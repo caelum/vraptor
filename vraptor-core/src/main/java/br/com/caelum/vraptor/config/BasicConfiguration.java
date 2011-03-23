@@ -20,11 +20,11 @@ package br.com.caelum.vraptor.config;
 import java.lang.reflect.InvocationTargetException;
 
 import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import br.com.caelum.vraptor.VRaptorException;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
 import br.com.caelum.vraptor.ioc.guice.GuiceProvider;
 import br.com.caelum.vraptor.ioc.pico.PicoProvider;
@@ -66,15 +66,15 @@ public class BasicConfiguration {
 		this.servletContext = servletContext;
 	}
 
-	public ContainerProvider getProvider() throws ServletException {
+	public ContainerProvider getProvider() {
 		Class<? extends ContainerProvider> providerType = getProviderType();
 		logger.info("Using {} as Container Provider", providerType);
 		try {
 			return providerType.getDeclaredConstructor().newInstance();
 		} catch (InvocationTargetException e) {
-			throw new ServletException(e.getCause());
+			throw new VRaptorException(e.getCause());
 		} catch (Exception e) {
-			throw new ServletException(e);
+			throw new VRaptorException(e);
 		}
 	}
 

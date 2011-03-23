@@ -59,9 +59,9 @@ public class VRaptor2Converters implements Converters {
 		this.delegateConverters = delegateConverters;
 	}
 
-	public Converter<?> to(Class<?> type) {
+	public <T> Converter<T> to(Class<T> type) {
 		Converter<?> vraptor2Convterter = findVRaptor2Converter(type);
-		return vraptor2Convterter == null ? delegateConverters.to(type) : vraptor2Convterter;
+		return (Converter<T>) (vraptor2Convterter == null ? delegateConverters.to(type) : vraptor2Convterter);
 	}
 
 	private Converter<?> findVRaptor2Converter(Class<?> type) {

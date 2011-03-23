@@ -36,7 +36,7 @@ public interface Converters {
 	 * @param container
 	 * @return
 	 */
-	Converter<?> to(Class<?> type);
+	<T> Converter<T> to(Class<T> type);
 
 	void register(Class<? extends Converter<?>> converterClass);
 

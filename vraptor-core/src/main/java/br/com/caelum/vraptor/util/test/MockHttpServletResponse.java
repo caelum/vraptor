@@ -34,7 +34,7 @@ import br.com.caelum.vraptor.ioc.Component;
  *
  * A simple mock for HttpServletResponse.
  *
- * This mock keeps the a contentType and a content  
+ * This mock keeps a contentType and a content  
  * thereby you could be able to retrieve the content as String.
  *
  * @author Vinícius Oliveira

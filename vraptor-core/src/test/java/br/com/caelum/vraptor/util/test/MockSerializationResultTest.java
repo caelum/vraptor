@@ -37,6 +37,6 @@ public class MockSerializationResultTest {
 		Car car = new Car("XXU-5569", "Caelum", "VW", "Polo");
 		String expectedResult = "{\"car\": {\"licensePlate\": \"XXU-5569\",\"owner\": \"Caelum\",\"make\": \"VW\",\"model\": \"Polo\"}}";
 		result.use(json()).from(car).serialize();
-		Assert.assertThat(result.serializedRestult(), is(equalTo(expectedResult)));
+		Assert.assertThat(result.serializedResult(), is(equalTo(expectedResult)));
 	}
 }

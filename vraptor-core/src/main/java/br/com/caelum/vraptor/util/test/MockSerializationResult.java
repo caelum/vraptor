@@ -92,7 +92,7 @@ public class MockSerializationResult extends MockResult {
 	 * 
 	 * @return String with the object serialized 
 	 */
-	public String serializedRestult() throws Exception {
+	public String serializedResult() throws Exception {
 		
 		if("application/xml".equals(response.getContentType())){
 			return response.getContentAsString();

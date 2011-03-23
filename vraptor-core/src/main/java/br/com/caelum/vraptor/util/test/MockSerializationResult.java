@@ -25,6 +25,8 @@ import br.com.caelum.vraptor.proxy.ObjenesisProxifier;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.serialization.HibernateProxyInitializer;
 import br.com.caelum.vraptor.serialization.JSONSerialization;
+import br.com.caelum.vraptor.serialization.NullProxyInitializer;
+import br.com.caelum.vraptor.serialization.ProxyInitializer;
 import br.com.caelum.vraptor.serialization.Serialization;
 import br.com.caelum.vraptor.serialization.XMLSerialization;
 import br.com.caelum.vraptor.serialization.xstream.XStreamJSONSerialization;
@@ -46,18 +48,18 @@ public class MockSerializationResult extends MockResult {
 	private Serialization serialization;
 	private MockHttpServletResponse response;
 	private DefaultTypeNameExtractor extractor;
-	private HibernateProxyInitializer initializer;
+	private ProxyInitializer initializer;
 	
 	
-	public MockSerializationResult(Proxifier proxifier) {
+	public MockSerializationResult(Proxifier proxifier, ProxyInitializer initializer ) {
 		super(proxifier);
+		this.initializer = initializer;
 		this.response = new MockHttpServletResponse();
 		this.extractor = new DefaultTypeNameExtractor();
-		this.initializer = new HibernateProxyInitializer();
 	}
 
 	public MockSerializationResult() {
-		this(new ObjenesisProxifier());
+		this(new ObjenesisProxifier(), new NullProxyInitializer());
 	}
 
 	public <T extends View> T use(final Class<T> view) {

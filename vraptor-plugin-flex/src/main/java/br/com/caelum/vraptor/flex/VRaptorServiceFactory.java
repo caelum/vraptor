@@ -30,10 +30,8 @@ public class VRaptorServiceFactory implements FlexFactory {
 	}
 
 	public FactoryInstance createFactoryInstance(String id, ConfigMap properties) {
-		VRaptorFactoryInstance instance = new VRaptorFactoryInstance(this, id,
-				properties, container);
-		instance.setSource(properties.getPropertyAsString(SOURCE,
-				instance.getId()));
+		VRaptorFactoryInstance instance = new VRaptorFactoryInstance(this, id, properties, container);
+		instance.setSource(properties.getPropertyAsString(SOURCE, instance.getId()));
 		return instance;
 	}
 

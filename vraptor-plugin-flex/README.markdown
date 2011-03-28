@@ -1,4 +1,4 @@
-VRaptor 3 Flex-plugin
+VRpaptor 3 Flex-plugin
 =========
 
 This is a plugin to call a VRator Controller from a flash RemoteObject via AMF

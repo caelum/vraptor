@@ -19,7 +19,7 @@ Then, to register a new destination, use the full qualified name of your control
 VRaptor Factory, like this:
 
 
-   <destination id="myVRaptorController">
+    <destination id="myVRaptorController">
       <properties>
         <factory>vraptor</factory>
         <source>br.com.caelum.vraptor.example.MyController</source>

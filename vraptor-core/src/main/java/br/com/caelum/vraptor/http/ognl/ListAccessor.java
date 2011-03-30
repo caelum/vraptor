@@ -24,6 +24,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import net.vidageek.mirror.dsl.Mirror;
+
 import ognl.Evaluation;
 import ognl.ListPropertyAccessor;
 import ognl.OgnlContext;
@@ -113,8 +115,7 @@ public class ListAccessor extends ListPropertyAccessor {
 			Evaluation previous = eval.getPrevious();
 			String fieldName = previous.getNode().toString();
 			Object origin = previous.getSource();
-			Method getter = ReflectionBasedNullHandler.findMethod(origin.getClass(), "get"
-					+ Info.capitalize(fieldName), origin.getClass(), null);
+			Method getter = ReflectionBasedNullHandler.findGetter(origin, Info.capitalize(fieldName));
 			genericType = getter.getGenericReturnType();
 		} else {
 			genericType = (Type) ctx.get("rootType");

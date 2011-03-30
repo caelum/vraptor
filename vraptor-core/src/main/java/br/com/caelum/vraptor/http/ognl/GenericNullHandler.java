@@ -40,7 +40,7 @@ import net.vidageek.mirror.dsl.Mirror;
  *
  * @author Guilherme Silveira
  */
-class GenericNullHandler {
+class GenericNullHandler implements NullHandler {
 
     private static final Map<Class<?>, Class<?>> CONCRETE_TYPES = new HashMap<Class<?>, Class<?>>();
 	private final EmptyElementsRemoval removal;
@@ -58,7 +58,7 @@ class GenericNullHandler {
 		this.removal = removal;
 	}
 
-    <T> T instantiate(Class<T> baseType) {
+    public <T> T instantiate(Class<T> baseType) {
     	if (baseType.isArray()) {
     		return baseType.cast(Array.newInstance(baseType.getComponentType(), 0));
     	}

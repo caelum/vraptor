@@ -169,7 +169,7 @@ public class OgnlParametersProvider implements ParametersProvider {
 		}
 
 		try {
-			return new GenericNullHandler(removal).instantiate(param.actualType());
+			return nullHandler().instantiate(param.actualType());
 		} catch (Exception ex) {
 			throw new InvalidParameterException("unable to instantiate type " + param.type, ex);
 		}
@@ -208,6 +208,7 @@ public class OgnlParametersProvider implements ParametersProvider {
 		context.setTraceEvaluations(true);
 		context.put("rootType", param.type);
 		context.put("removal", removal);
+		context.put("nullHandler", nullHandler());
 
 		VRaptorConvertersAdapter adapter = new VRaptorConvertersAdapter(converters, bundle);
 		Ognl.setTypeConverter(context, adapter);
@@ -217,6 +218,10 @@ public class OgnlParametersProvider implements ParametersProvider {
 
 	protected OgnlContext createOgnlContext(Object root) {
 		return (OgnlContext) Ognl.createDefaultContext(root);
+	}
+
+	protected NullHandler nullHandler() {
+		return new GenericNullHandler(removal);
 	}
 
 	private Object createSimpleParameter(Parameter param, String[] values, ResourceBundle bundle) {

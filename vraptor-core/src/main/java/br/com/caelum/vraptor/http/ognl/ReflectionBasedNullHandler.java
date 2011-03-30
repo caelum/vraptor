@@ -24,6 +24,7 @@ import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.cglib.proxy.Factory;
 import net.vidageek.mirror.dsl.Mirror;
 import ognl.ObjectNullHandler;
 import ognl.OgnlContext;
@@ -67,7 +68,7 @@ public class ReflectionBasedNullHandler extends ObjectNullHandler {
         }
 
         String propertyCapitalized = Info.capitalize((String) property);
-		Method getter = findMethod(target.getClass(), "get" + propertyCapitalized, target.getClass(), null);
+        Method getter = findGetter(target, propertyCapitalized);
         Type returnType = getter.getGenericReturnType();
         if (returnType instanceof ParameterizedType) {
             ParameterizedType paramType = (ParameterizedType) returnType;
@@ -85,6 +86,13 @@ public class ReflectionBasedNullHandler extends ObjectNullHandler {
         new Mirror().on(target).invoke().method(setter).withArgs(instance);
         return instance;
     }
+
+	public static Method findGetter(Object target, String propertyCapitalized) {
+		Class<? extends Object> targetClass = target.getClass();
+		if (target instanceof Factory)
+			targetClass = targetClass.getSuperclass(); 
+		return new Mirror().on(targetClass).reflect().method("get" + propertyCapitalized).withoutArgs();
+	}
 
     private Object instantiateArray(Class<?> baseType) {
         return Array.newInstance(baseType.getComponentType(), 0);

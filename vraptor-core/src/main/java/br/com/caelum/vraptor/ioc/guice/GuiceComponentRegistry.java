@@ -16,8 +16,11 @@
 package br.com.caelum.vraptor.ioc.guice;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
@@ -31,10 +34,14 @@ import br.com.caelum.vraptor.ioc.ComponentFactory;
 import br.com.caelum.vraptor.ioc.ComponentFactoryIntrospector;
 
 import com.google.inject.Binder;
+import com.google.inject.Provider;
 import com.google.inject.Scope;
 import com.google.inject.ScopeAnnotation;
 import com.google.inject.TypeLiteral;
 import com.google.inject.binder.ScopedBindingBuilder;
+import com.google.inject.matcher.Matchers;
+import com.google.inject.spi.TypeEncounter;
+import com.google.inject.spi.TypeListener;
 import com.google.inject.util.Types;
 
 /**
@@ -52,6 +59,7 @@ public class GuiceComponentRegistry implements ComponentRegistry {
 	private final Binder binder;
 
 	private final Set<Class<?>> boundClasses = new HashSet<Class<?>>();
+	private final Set<Class<?>> listTypes = new HashSet<Class<?>>();
 
 	public GuiceComponentRegistry(Binder binder) {
 		this.binder = binder;
@@ -107,7 +115,18 @@ public class GuiceComponentRegistry implements ComponentRegistry {
 		if (componentType.isAnnotationPresent(Cacheable.class)) {
 			return binder.bind(requiredType).annotatedWith(Cacheable.class).toConstructor(componentType.getDeclaredConstructors()[0]);
 		}
-		return binder.bind(requiredType).toConstructor(componentType.getDeclaredConstructors()[0]);
+		Constructor constructor = componentType.getDeclaredConstructors()[0];
+		for (Type type : constructor.getGenericParameterTypes()) {
+			if (type instanceof ParameterizedType) {
+				ParameterizedType ptype =((ParameterizedType) type);
+				if (ptype.getRawType() instanceof Class<?> && List.class.isAssignableFrom((Class<?>) ptype.getRawType())
+						&& ptype.getRawType() instanceof Class<?> && !listTypes.contains(ptype.getActualTypeArguments()[0])) {
+					listTypes.add((Class<?>) ptype.getActualTypeArguments()[0]);
+					registerListType((Class<?>) ptype.getActualTypeArguments()[0], binder);
+				}
+			}
+		}
+		return binder.bind(requiredType).toConstructor(constructor);
 	}
 
 	private void registerFactory(Class componentType) {
@@ -119,6 +138,16 @@ public class GuiceComponentRegistry implements ComponentRegistry {
 			binder.bind(TypeLiteral.get(factoryType)).to(componentType);
 			binder.bind(target).toProvider((TypeLiteral) TypeLiteral.get(adapterType));
 		}
+	}
+	private <T> void registerListType(Class<T> type, Binder binder) {
+		final AllImplementationsProvider<T> provider = new AllImplementationsProvider<T>();
+		binder.bindListener(VRaptorAbstractModule.type(Matchers.subclassesOf(type)), new TypeListener() {
+			public void hear(TypeLiteral literal, TypeEncounter encounter) {
+				provider.addType(literal.getRawType());
+			}
+		});
+		binder.bind(TypeLiteral.get(Types.listOf(type))).toProvider((Provider)provider);
+		binder.requestInjection(provider);
 	}
 
 }

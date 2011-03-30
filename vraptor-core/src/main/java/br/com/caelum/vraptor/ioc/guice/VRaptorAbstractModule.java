@@ -26,10 +26,8 @@ import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.ioc.SessionScoped;
 import br.com.caelum.vraptor.ioc.StereotypeHandler;
 import br.com.caelum.vraptor.ioc.spring.VRaptorRequestHolder;
-import br.com.caelum.vraptor.serialization.Serialization;
 import br.com.caelum.vraptor.serialization.xstream.XStreamJSONSerialization;
 import br.com.caelum.vraptor.serialization.xstream.XStreamXMLSerialization;
-import br.com.caelum.vraptor.validator.BeanValidator;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provider;
@@ -37,11 +35,7 @@ import com.google.inject.Scopes;
 import com.google.inject.TypeLiteral;
 import com.google.inject.matcher.AbstractMatcher;
 import com.google.inject.matcher.Matcher;
-import com.google.inject.matcher.Matchers;
 import com.google.inject.multibindings.Multibinder;
-import com.google.inject.spi.TypeEncounter;
-import com.google.inject.spi.TypeListener;
-import com.google.inject.util.Types;
 
 /**
  *
@@ -108,19 +102,6 @@ public class VRaptorAbstractModule extends AbstractModule {
 		registry.register(XStreamXMLSerialization.class, XStreamXMLSerialization.class);
 		registry.register(XStreamJSONSerialization.class, XStreamJSONSerialization.class);
 
-		registerListType(Serialization.class);
-		registerListType(BeanValidator.class);
-	}
-
-	private <T> void registerListType(Class<T> type) {
-		final AllImplementationsProvider<T> provider = new AllImplementationsProvider<T>();
-		bindListener(type(Matchers.subclassesOf(type)), new TypeListener() {
-			public void hear(TypeLiteral literal, TypeEncounter encounter) {
-				provider.addType(literal.getRawType());
-			}
-		});
-		bind(TypeLiteral.get(Types.listOf(type))).toProvider((Provider)provider);
-		requestInjection(provider);
 	}
 
 	private void requestInfoBindings() {
@@ -155,7 +136,7 @@ public class VRaptorAbstractModule extends AbstractModule {
 		bind(ServletContext.class).toInstance(context);
 	}
 
-	private Matcher<TypeLiteral<?>> type(final Matcher<? super Class> matcher) {
+	static Matcher<TypeLiteral<?>> type(final Matcher<? super Class> matcher) {
 		return new AbstractMatcher<TypeLiteral<?>>() {
 			public boolean matches(TypeLiteral<?> literal) {
 				return matcher.matches(literal.getRawType());

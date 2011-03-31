@@ -113,5 +113,13 @@ public class ReflectionBasedNullHandler extends ObjectNullHandler {
         }
         return findMethod(type.getSuperclass(), name, type, parameterType);
     }
+    
+	public static Method findSetter(Object target, String propertyCapitalized, Class<? extends Object> argument) {
+		Class<? extends Object> targetClass = target.getClass();
+		if (target instanceof Factory)
+			targetClass = targetClass.getSuperclass(); 
+		return new Mirror().on(targetClass).reflect().method("set" + propertyCapitalized).withArgs(argument);
+	}
+
 
 }

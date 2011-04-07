@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package br.com.caelum.vraptor.eval;
+package br.com.caelum.vraptor.http.route;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -26,16 +26,17 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import br.com.caelum.vraptor.http.route.Evaluator;
 import org.junit.Before;
 import org.junit.Test;
 
-public class EvaluatorTest {
+public class JavaEvaluatorTest {
 
 	private Evaluator evaluator;
 
 	@Before
 	public void setup() {
-		this.evaluator = new Evaluator();
+		this.evaluator = new JavaEvaluator();
 	}
 
 	class Client {

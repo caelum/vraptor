@@ -72,7 +72,7 @@ public class DefaultRouterTest {
 		mockery.checking(new Expectations() {{
 			ignoring(nameProvider);
 		}});
-		this.router = new DefaultRouter(new NoRoutesConfiguration(), proxifier, new NoTypeFinder(), converters, nameProvider);
+		this.router = new DefaultRouter(new NoRoutesConfiguration(), proxifier, new NoTypeFinder(), converters, nameProvider, new JavaEvaluator());
 	}
 
 	@Test

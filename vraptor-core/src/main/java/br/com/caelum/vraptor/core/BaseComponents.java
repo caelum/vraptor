@@ -26,6 +26,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import br.com.caelum.vraptor.http.route.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -80,14 +81,6 @@ import br.com.caelum.vraptor.http.ParanamerNameProvider;
 import br.com.caelum.vraptor.http.UrlToResourceTranslator;
 import br.com.caelum.vraptor.http.ognl.EmptyElementsRemoval;
 import br.com.caelum.vraptor.http.ognl.OgnlParametersProvider;
-import br.com.caelum.vraptor.http.route.DefaultRouter;
-import br.com.caelum.vraptor.http.route.DefaultTypeFinder;
-import br.com.caelum.vraptor.http.route.NoRoutesConfiguration;
-import br.com.caelum.vraptor.http.route.PathAnnotationRoutesParser;
-import br.com.caelum.vraptor.http.route.Router;
-import br.com.caelum.vraptor.http.route.RoutesConfiguration;
-import br.com.caelum.vraptor.http.route.RoutesParser;
-import br.com.caelum.vraptor.http.route.TypeFinder;
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor.interceptor.DeserializingInterceptor;
 import br.com.caelum.vraptor.interceptor.ExceptionHandlerInterceptor;
@@ -199,6 +192,7 @@ public class BaseComponents {
             RoutesParser.class, 			PathAnnotationRoutesParser.class,
             Routes.class,					DefaultRoutes.class,
             RestDefaults.class,				DefaultRestDefaults.class,
+            Evaluator.class,				JavaEvaluator.class,
             ProxyInitializer.class,			getProxyInitializerImpl()
     );
 

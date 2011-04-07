@@ -98,12 +98,14 @@ public class DefaultRouteBuilder implements RouteBuilder {
 	private final Converters converters;
 
 	private final ParameterNameProvider nameProvider;
+    private final Evaluator evaluator;
 
-	public DefaultRouteBuilder(Proxifier proxifier, TypeFinder finder, Converters converters, ParameterNameProvider nameProvider, String uri) {
+    public DefaultRouteBuilder(Proxifier proxifier, TypeFinder finder, Converters converters, ParameterNameProvider nameProvider, Evaluator evaluator, String uri) {
 		this.proxifier = proxifier;
 		this.finder = finder;
 		this.converters = converters;
 		this.nameProvider = nameProvider;
+        this.evaluator = evaluator;
 		this.originalUri = uri;
 		builder = new DefaultParameterControlBuilder();
 	}
@@ -146,7 +148,7 @@ public class DefaultRouteBuilder implements RouteBuilder {
 		}
 
 		private ParametersControl build() {
-			return new DefaultParametersControl(originalUri, parameters, converters);
+			return new DefaultParametersControl(originalUri, parameters, converters, evaluator);
 		}
 	}
 

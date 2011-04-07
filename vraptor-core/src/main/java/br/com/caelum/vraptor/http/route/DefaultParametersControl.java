@@ -20,6 +20,7 @@ package br.com.caelum.vraptor.http.route;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -33,7 +34,6 @@ import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.TwoWayConverter;
 import br.com.caelum.vraptor.core.Converters;
-import br.com.caelum.vraptor.eval.Evaluator;
 import br.com.caelum.vraptor.http.MutableRequest;
 
 /**
@@ -48,15 +48,17 @@ public class DefaultParametersControl implements ParametersControl {
 	private final Pattern pattern;
 	private final String originalPattern;
 	private final Converters converters;
+    private final Evaluator evaluator;
 
-	public DefaultParametersControl(String originalPattern, Map<String, String> parameterPatterns, Converters converters) {
+    public DefaultParametersControl(String originalPattern, Map<String, String> parameterPatterns, Converters converters, Evaluator evaluator) {
 		this.originalPattern = originalPattern;
 		this.converters = converters;
 		this.pattern = compilePattern(originalPattern, parameterPatterns);
+        this.evaluator = evaluator;
 	}
 
-	public DefaultParametersControl(String originalPattern, Converters converters) {
-		this(originalPattern, Collections.<String, String>emptyMap(), converters);
+	public DefaultParametersControl(String originalPattern, Converters converters, Evaluator evaluator) {
+		this(originalPattern, Collections.<String, String>emptyMap(), converters, evaluator);
 	}
 
 	private Pattern compilePattern(String originalPattern, Map<String, String> parameterPatterns) {
@@ -81,12 +83,13 @@ public class DefaultParametersControl implements ParametersControl {
 
 	public String fillUri(String[] paramNames, Object... paramValues) {
 		if (paramNames.length != paramValues.length) {
-			throw new IllegalArgumentException("paramNames must have the same length as paramValues");
+			throw new IllegalArgumentException("paramNames must have the same length as paramValues. Names: " + Arrays.toString(paramNames) + " Values: " + Arrays.toString(paramValues));
 		}
+
 		String base = originalPattern.replaceAll("\\.\\*", "");
 		for (String key : parameters) {
 			Object param = selectParam(key, paramNames, paramValues);
-			Object result = new Evaluator().get(param, key);
+			Object result = evaluator.get(param, key);
 			if (result != null) {
 				Class type = result.getClass();
 				if (converters.existsTwoWayFor(type)) {

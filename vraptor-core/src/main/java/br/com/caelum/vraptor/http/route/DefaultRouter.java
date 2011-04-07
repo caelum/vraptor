@@ -55,19 +55,20 @@ public class DefaultRouter implements Router {
 	private final TypeFinder finder;
 	private final Converters converters;
 	private final ParameterNameProvider nameProvider;
+    private final Evaluator evaluator;
 
-	public DefaultRouter(RoutesConfiguration config,
-			Proxifier proxifier, TypeFinder finder, Converters converters, ParameterNameProvider nameProvider) {
+    public DefaultRouter(RoutesConfiguration config,
+			Proxifier proxifier, TypeFinder finder, Converters converters, ParameterNameProvider nameProvider, Evaluator evaluator) {
 		this.proxifier = proxifier;
 		this.finder = finder;
 		this.converters = converters;
 		this.nameProvider = nameProvider;
-
+        this.evaluator = evaluator;
 		config.config(this);
 	}
 
 	public RouteBuilder builderFor(String uri) {
-		return new DefaultRouteBuilder(proxifier, finder, converters, nameProvider, uri);
+		return new DefaultRouteBuilder(proxifier, finder, converters, nameProvider, evaluator, uri);
 	}
 
 	/**

@@ -28,6 +28,7 @@ import java.lang.reflect.Method;
 import java.math.BigDecimal;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.core.Converters;
@@ -85,7 +86,7 @@ public class RouteBuilderTest {
 	}
 
 	private DefaultRouteBuilder newBuilder(String uri) {
-		return new DefaultRouteBuilder(proxifier, typeFinder, converters, provider, uri);
+		return new DefaultRouteBuilder(proxifier, typeFinder, converters, provider, new JavaEvaluator(), uri);
 	}
 
 	@Test
@@ -204,5 +205,39 @@ public class RouteBuilderTest {
 		assertTrue(route.canHandle("/my/troublesome/uri"));
     }
 
+    static class Generic<T> {
+
+    	public void gee(T abc) {
+
+    	}
+    }
+
+    static class Specific extends Generic<X> {
+
+    }
+    static class X {
+    	private Integer y;
+
+    	public Integer getY() {
+			return y;
+		}
+    	public void setY(Integer y) {
+			this.y = y;
+		}
+    }
+
+    @Test
+    @Ignore("Should it work someday?")
+    public void shouldUseGenericParameters() throws SecurityException, NoSuchMethodException {
+    	builder = newBuilder("/my/{abc.y}");
+
+    	Method method = Generic.class.getDeclaredMethods()[0];
+    	builder.is(Specific.class, method);
+
+    	Route route = builder.build();
+
+    	assertTrue(route.canHandle("/my/123"));
+    	assertFalse(route.canHandle("/my/abc"));
+    }
 
 }

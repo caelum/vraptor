@@ -107,8 +107,11 @@ public class StandaloneClasspathResolver implements ClasspathResolver {
 		}
 	}
 
+	/**
+	 * find plugin packages
+	 * @param result
+	 */
 	void getPackagesFromPluginsJARs(List<String> result) {
-		// find plugin packages
 		try {
 			ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 			Enumeration<URL> urls = classLoader.getResources("META-INF/br.com.caelum.vraptor.packages");

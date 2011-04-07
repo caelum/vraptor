@@ -15,13 +15,14 @@
  * limitations under the License.
  */
 
-package br.com.caelum.vraptor.eval;
+package br.com.caelum.vraptor.http.route;
 
 import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import net.vidageek.mirror.dsl.Mirror;
 import br.com.caelum.vraptor.VRaptorException;
 
@@ -31,9 +32,10 @@ import br.com.caelum.vraptor.VRaptorException;
  * @author guilherme silveira
  *
  */
-public class Evaluator {
+@ApplicationScoped
+public class JavaEvaluator implements Evaluator {
 
-	public Object get(Object root, String path) {
+	@Override public Object get(Object root, String path) {
 		if (root == null) {
 			return null;
 		}

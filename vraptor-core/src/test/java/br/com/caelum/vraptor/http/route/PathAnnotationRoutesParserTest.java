@@ -73,7 +73,7 @@ public class PathAnnotationRoutesParserTest {
         when(router.builderFor(anyString())).thenAnswer(new Answer<DefaultRouteBuilder>() {
 
 			public DefaultRouteBuilder answer(InvocationOnMock invocation) throws Throwable {
-				return new DefaultRouteBuilder(proxifier, typeFinder, converters, nameProvider, (String) invocation.getArguments()[0]);
+				return new DefaultRouteBuilder(proxifier, typeFinder, converters, nameProvider, new JavaEvaluator(), (String) invocation.getArguments()[0]);
 			}
 		});
 

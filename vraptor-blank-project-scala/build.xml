@@ -10,7 +10,7 @@
 	<property file="${vraptor.core}/build.properties" />
 	
 	<property name="vraptor.scala.jar" value="../vraptor-plugin-scala/target/vraptor-scala.jar"/>
-	<property name="webinf.lib.dir" value="WebContent/WEB-INF/lib/"/>
+	<property name="webinf.lib.dir" value="src/main/webapp/WEB-INF/lib/"/>
 	<property name="scala.lib.dir" value="../vraptor-core/lib/scala/"/>
 	<property name="guice.lib.dir" value="../vraptor-core/lib/containers/guice/"/>	
     <target name="update-jars">

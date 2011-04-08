@@ -2,42 +2,50 @@ package br.com.caelum.vraptor.flex;
 
 import java.lang.reflect.Method;
 
+import javax.inject.Inject;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
+import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.proxy.MethodInvocation;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.SuperMethod;
 import br.com.caelum.vraptor.resource.DefaultResourceMethod;
-import flex.messaging.FactoryInstance;
-import flex.messaging.FlexFactory;
-import flex.messaging.config.ConfigMap;
 
-public class VRaptorFactoryInstance extends FactoryInstance {
+@Component
+@ApplicationScoped
+public class VRaptorLookup {
 
-	private final Container container;
+	private static Container container;
 
-	public VRaptorFactoryInstance(FlexFactory factory, String id, ConfigMap properties, Container container) {
-		super(factory, id, properties);
-		this.container = container;
+	@Inject
+	@Autowired
+	public VRaptorLookup(Container container) {
+		VRaptorLookup.container = container;
 	}
 
-	@Override
-	public Object lookup() {
+	public VRaptorLookup() {
+	}
 
-		final Class<?> type;
+	public Object lookup(String className) {
+		Class<?> type;
 		try {
-			type = Class.forName(getSource());
+			type = Class.forName(className);
 		} catch (ClassNotFoundException e) {
 			throw new RuntimeException("Source destination does not match a class name", e);
 		}
 
-		Proxifier proxifier = container.instanceFor(Proxifier.class);
-		Object proxy = proxifier.proxify(type,
-				new InterceptorInvocation(type, container.instanceFor(InterceptorsStack.class)));
+		return lookup(type);
+	}
 
-		return proxy;
+	private Object lookup(Class<?> type) {
+		Proxifier proxifier = container.instanceFor(Proxifier.class);
+		return proxifier.proxify(type, new InterceptorInvocation(type, container.instanceFor(InterceptorsStack.class)));
 	}
 
 	private final class InterceptorInvocation implements MethodInvocation<Object> {
@@ -65,4 +73,5 @@ public class VRaptorFactoryInstance extends FactoryInstance {
 			}
 		}
 	}
+
 }

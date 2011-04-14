@@ -22,9 +22,9 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import net.vidageek.mirror.dsl.Mirror;
 import br.com.caelum.vraptor.VRaptorException;
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
 /**
  * Evaluates expressions in order to access values.
@@ -35,7 +35,7 @@ import br.com.caelum.vraptor.VRaptorException;
 @ApplicationScoped
 public class JavaEvaluator implements Evaluator {
 
-	@Override public Object get(Object root, String path) {
+	public Object get(Object root, String path) {
 		if (root == null) {
 			return null;
 		}

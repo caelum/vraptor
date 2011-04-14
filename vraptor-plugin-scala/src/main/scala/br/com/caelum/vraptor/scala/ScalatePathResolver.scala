@@ -37,30 +37,20 @@ import br.com.caelum.vraptor.view.DefaultPathResolver;
 
 @Component
 @RequestScoped
-public class ScalatePathResolver extends DefaultPathResolver {
+class ScalatePathResolver(context:ServletContext, format:FormatResolver) extends DefaultPathResolver(format) {
 
-	private ServletContext context;
+	override protected def getPrefix = "/WEB-INF/ssp/"
 
-	public ScalatePathResolver(ServletContext context, FormatResolver format) {
-		super(format);
-		this.context = context;
-	}
+	override protected def getExtension = "ssp"
 
-	protected String getPrefix() {
-		return "/WEB-INF/ssp/";
-	}
+	override def pathFor(method:ResourceMethod) = {
+		val path = super.pathFor(method);
+		val realPathToViewFile = context.getRealPath(path);
 
-	protected String getExtension() {
-		return "ssp";
-	}
-
-	@Override
-	public String pathFor(ResourceMethod method) {
-		String path = super.pathFor(method);
-		String realPathToViewFile = context.getRealPath(path);
-
-		return new File(realPathToViewFile).exists() ? path : path.replace(
-				"/WEB-INF/ssp", "/WEB-INF/jsp").replace(".ssp", ".jsp");
+		if (new File(realPathToViewFile).exists())
+      path
+    else
+      path.replace("/WEB-INF/ssp", "/WEB-INF/jsp").replace(".ssp", ".jsp");
 	}
 
 }

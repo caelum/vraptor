@@ -9,16 +9,13 @@ import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Component;
-import br.com.caelum.vraptor.ioc.Container;
 
 @Component
 @ApplicationScoped
 public class InterceptorsStack {
-	private final Container container;
 	private final InterceptorHandlerFactory interceptorHandlerFactory;
 
-	public InterceptorsStack(Container container, InterceptorHandlerFactory interceptorHandlerFactory) {
-		this.container = container;
+	public InterceptorsStack(InterceptorHandlerFactory interceptorHandlerFactory) {
 		this.interceptorHandlerFactory = interceptorHandlerFactory;
 	}
 

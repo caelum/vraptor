@@ -1,6 +1,6 @@
 import sbt._
 
-class GnarusProject(info:ProjectInfo) extends DefaultProject(info) {
+class VRaptorScalaPluginProject(info:ProjectInfo) extends DefaultProject(info) {
   val mavensnapshots= "snaps"     at "https://oss.sonatype.org/content/repositories/snapshots"
 
   val vraptor       = "br.com.caelum"           % "vraptor"               % "3.3.2-SNAPSHOT"  % "compile" intransitive()

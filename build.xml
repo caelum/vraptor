@@ -32,8 +32,10 @@
 		<ant dir="vraptor-example-compatibility" target="update-jars"/>
 		<ant dir="vraptor-blank-project" target="update-jars"/>
 		<ant dir="vraptor-plugin-gae" target="artifacts"/>
-		<ant dir="vraptor-plugin-flex" target="lib"/>
+		<ant dir="vraptor-plugin-flex" target="libs"/>
+		<ant dir="vraptor-plugin-scala"/>
 		<ant dir="vraptor-blank-project-gae" target="update-jars"/>
+		<ant dir="vraptor-blank-project-scala" target="update-jars"/>
 		<ant dir="vraptor-mydvds" target="update-jars"/>
 	</target>
 

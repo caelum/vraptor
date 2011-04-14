@@ -6,4 +6,10 @@ mvn install:install-file -DgroupId=org.hamcrest -DartifactId=hamcrest-all -Dvers
 
 mvn install:install-file -DgroupId=br.com.caelum -DartifactId=iogi -Dversion=0.8.1 -Dpackaging=jar -Dfile=vraptor-core/lib/optional/iogi/iogi-0.8.1.jar
 
+mvn install:install-file -DgroupId=jersey -DartifactId=jersey-core -Dversion=1.5-SNAPSHOT -Dpackaging=jar -DgeneratePom=true -Dfile=vraptor-core/lib/jersey/jersey-core-1.5-SNAPSHOT.jar
+
+mvn install:install-file -DgroupId=jersey -DartifactId=jersey-server -Dversion=1.5-SNAPSHOT -Dpackaging=jar -DgeneratePom=true -Dfile=vraptor-core/lib/jersey/jersey-server-1.5-SNAPSHOT.jar
+
+
+
 

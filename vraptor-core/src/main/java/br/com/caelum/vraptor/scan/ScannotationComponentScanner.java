@@ -105,11 +105,8 @@ public class ScannotationComponentScanner implements ComponentScanner {
 	}
 
 	private String toFileName(String resource, URL url) {
-		String file = url.getFile();
-		file = file.substring(0, file.length() - resource.length() - 1);
-		if (file.charAt(file.length() - 1) == '!') {
-			file = file.substring(0, file.length() - 1);
-		}
+		String file = url.getFile().substring(0, url.getFile().length() - resource.length() - 1).replaceAll("!/$", "");
+
 		if (!file.startsWith("file:")) {
 			file = "file:" + file;
 		}

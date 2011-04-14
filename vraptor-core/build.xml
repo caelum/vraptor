@@ -57,7 +57,6 @@
 
 	<target name="test" depends="compile">
 		<taskdef classpathref="test.classpath" resource="tasks.properties" />
-<!--
 			
 		<junit fork="yes" forkmode="once" printsummary="false" showoutput="true" failureproperty="failed-test">
 			<classpath>
@@ -80,7 +79,6 @@
 			<report format="frames" todir="${reports.dir}/junit" />
 		</junitreport>
 		<fail if="failed-test" message="Failing tests" />
--->
 	</target>
 
 	<target name="coverage" depends="compile"

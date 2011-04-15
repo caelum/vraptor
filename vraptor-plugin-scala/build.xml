@@ -28,6 +28,9 @@
 		<fileset dir="${vraptor.jar}">
 			<include name="*.jar" />
 		</fileset>
+		<fileset dir="${vraptor.core}/lib/containers/guice/">
+			<include name="guice*.jar" />
+		</fileset>
 		<fileset dir="${core.lib.dir}">
 			<include name="**/*.jar" />
 		</fileset>
@@ -47,8 +50,8 @@
 
 	<target name="compile" depends="clean" description="--> compiles classes">
 		<mkdir dir="${compile.dir}" />
-		<scalac destdir="${compile.dir}" srcdir="src/" classpathref="compile.classpath" />
-		<javac destdir="${compile.dir}" srcdir="src/" classpathref="compile.classpath" />
+		<scalac destdir="${compile.dir}" srcdir="src/main/scala" classpathref="compile.classpath" />
+		<!--<javac destdir="${compile.dir}" srcdir="src/" classpathref="compile.classpath" />-->
 		<copy todir="${compile.dir}">
 			<fileset dir="src/" includes="META-INF/**" />
 		</copy>

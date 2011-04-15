@@ -13,16 +13,15 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package br.com.caelum.vraptor.scala;
+package br.com.caelum.vraptor.scala
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
+import scala.collection.JavaConversions._
+import java.lang.reflect.ParameterizedType
+import java.lang.reflect.Type
 
-import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
-import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
-import br.com.caelum.vraptor.ioc.ApplicationScoped;
-import br.com.caelum.vraptor.ioc.Component;
-
+import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor
+import br.com.caelum.vraptor.ioc.ApplicationScoped
+import br.com.caelum.vraptor.ioc.Component
 /**
  * Scala-compatible implementation for {@link TypeNameExtractor}.
  * It decapitalizes the name of the type, or if the type is a generic collection,
@@ -34,19 +33,15 @@ import br.com.caelum.vraptor.ioc.Component;
  */
 @ApplicationScoped
 @Component
-public class ScalaTypeNameExtractor extends DefaultTypeNameExtractor {
+class ScalaTypeNameExtractor extends DefaultTypeNameExtractor {
 
-    @Override
-	public String nameFor(Type generic) {
-		if (generic instanceof ParameterizedType) {
-			ParameterizedType type = (ParameterizedType) generic;
-			Class<?> raw = (Class<?>) type.getRawType();
-			if (scala.collection.Seq.class.isAssignableFrom(raw)) {
-				return nameFor(type.getActualTypeArguments()[0]) + "List";
-			}
-		}
-		
-    	return super.nameFor(generic);        
+  override def nameFor(generic:Type) = {
+    generic match {
+      case ptype:ParameterizedType if classOf[Seq[_]].isAssignableFrom(ptype.getRawType().asInstanceOf[Class[_]]) =>
+				nameFor(ptype.getActualTypeArguments()(0)) + "List";
+      case _ =>
+        super.nameFor(generic);
+    }
 	}
 
 }

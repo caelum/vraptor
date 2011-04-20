@@ -30,7 +30,6 @@ import org.slf4j.LoggerFactory;
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.route.Router;
-import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.proxy.MethodInvocation;
@@ -59,8 +58,10 @@ public class DefaultLogicResult implements LogicResult {
 	private final PathResolver resolver;
 	private final TypeNameExtractor extractor;
 
+	private final FlashScope flash;
+
 	public DefaultLogicResult(Proxifier proxifier, Router router, MutableRequest request, HttpServletResponse response,
-			Container container, PathResolver resolver, TypeNameExtractor extractor) {
+			Container container, PathResolver resolver, TypeNameExtractor extractor, FlashScope flash) {
 		this.proxifier = proxifier;
 		this.response = response;
 		this.request = request;
@@ -68,6 +69,7 @@ public class DefaultLogicResult implements LogicResult {
 		this.container = container;
 		this.resolver = resolver;
 		this.extractor = extractor;
+		this.flash = flash;
 	}
 
 	/**
@@ -106,7 +108,7 @@ public class DefaultLogicResult implements LogicResult {
 
 	private <T> void includeParametersInFlash(final Class<T> type, Method method, Object[] args) {
 		if (args != null && args.length != 0) {
-			request.getSession().setAttribute(ParametersInstantiatorInterceptor.FLASH_PARAMETERS, args);
+			flash.includeParameters(DefaultResourceMethod.instanceFor(type, method), args);
 		}
 	}
 

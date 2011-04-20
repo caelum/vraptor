@@ -31,7 +31,6 @@ import java.util.Collections;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -42,7 +41,6 @@ import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.route.Router;
-import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.proxy.DefaultProxifier;
@@ -60,8 +58,8 @@ public class DefaultLogicResultTest {
 	private @Mock Container container;
 	private @Mock PathResolver resolver;
 	private @Mock TypeNameExtractor extractor;
-	private @Mock HttpSession session;
 	private @Mock RequestDispatcher dispatcher;
+	private @Mock FlashScope flash;
 
 	public static class MyComponent {
 		int calls = 0;
@@ -97,10 +95,8 @@ public class DefaultLogicResultTest {
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
 
-		when(request.getSession()).thenReturn(session);
-
 		this.logicResult = new DefaultLogicResult(new DefaultProxifier(), router, request, response, container,
-				resolver, extractor);
+				resolver, extractor, flash);
 	}
 
 	@Test
@@ -158,7 +154,7 @@ public class DefaultLogicResultTest {
 
 		logicResult.redirectTo(MyComponent.class).withParameter("a");
 
-		verify(session).setAttribute(eq(ParametersInstantiatorInterceptor.FLASH_PARAMETERS), eq(new Object[] {"a"}));
+		verify(flash).includeParameters(any(ResourceMethod.class), eq(new Object[] {"a"}));
 	}
 
 	@Test
@@ -166,7 +162,7 @@ public class DefaultLogicResultTest {
 
 		logicResult.redirectTo(MyComponent.class).base();
 
-		verify(session, never()).setAttribute(eq(ParametersInstantiatorInterceptor.FLASH_PARAMETERS), any());
+		verify(flash, never()).includeParameters(any(ResourceMethod.class), any(Object[].class));
 	}
 
 	@Test

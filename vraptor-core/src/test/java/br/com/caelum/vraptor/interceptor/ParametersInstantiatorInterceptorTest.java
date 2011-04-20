@@ -27,8 +27,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import javax.servlet.http.HttpSession;
-
 import net.vidageek.mirror.dsl.Mirror;
 
 import org.junit.Before;
@@ -49,6 +47,7 @@ import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.ValidationMessage;
+import br.com.caelum.vraptor.view.FlashScope;
 
 public class ParametersInstantiatorInterceptorTest {
 
@@ -58,8 +57,8 @@ public class ParametersInstantiatorInterceptorTest {
 	private @Mock Localization localization;
 	private @Mock InterceptorStack stack;
 	private @Mock ResourceBundle bundle;
-	private @Mock HttpSession session;
 	private @Mock MutableRequest request;
+	private @Mock FlashScope flash;
 
 	private List<Message> errors ;
 	private ParametersInstantiatorInterceptor instantiator;
@@ -74,7 +73,7 @@ public class ParametersInstantiatorInterceptorTest {
 		when(localization.getBundle()).thenReturn(bundle);
 		when(request.getParameterNames()).thenReturn(Collections.enumeration(Collections.EMPTY_LIST));
 
-        this.instantiator = new ParametersInstantiatorInterceptor(parametersProvider, params, validator, localization, session, request);
+        this.instantiator = new ParametersInstantiatorInterceptor(parametersProvider, params, validator, localization, request, flash);
 
         this.errors = (List<Message>) new Mirror().on(instantiator).get().field("errors");
         this.method = DefaultResourceMethod.instanceFor(Component.class, Component.class.getDeclaredMethod("method"));
@@ -131,7 +130,7 @@ public class ParametersInstantiatorInterceptorTest {
     public void shouldUseAndDiscardFlashParameters() throws InterceptionException, IOException, NoSuchMethodException {
 		Object[] values = new Object[] { new Object() };
 
-		when(session.getAttribute(ParametersInstantiatorInterceptor.FLASH_PARAMETERS)).thenReturn(values);
+		when(flash.consumeParameters(method)).thenReturn(values);
 
     	instantiator.intercept(stack, method, null);
 
@@ -139,7 +138,6 @@ public class ParametersInstantiatorInterceptorTest {
     	verify(stack).next(method, null);
     	verify(validator).addAll(Collections.<Message>emptyList());
     	verify(parametersProvider, never()).getParametersFor(method, errors, bundle);
-    	verify(session).removeAttribute(ParametersInstantiatorInterceptor.FLASH_PARAMETERS);
     }
 
     @Test

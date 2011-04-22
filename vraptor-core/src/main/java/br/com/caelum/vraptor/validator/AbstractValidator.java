@@ -33,8 +33,6 @@ import br.com.caelum.vraptor.Validator;
  */
 public abstract class AbstractValidator implements Validator {
 
-	public abstract List<Message> getErrors();
-
 	public <T> T onErrorForwardTo(Class<T> controller) {
 		return onErrorUse(logic()).forwardTo(controller);
 	}

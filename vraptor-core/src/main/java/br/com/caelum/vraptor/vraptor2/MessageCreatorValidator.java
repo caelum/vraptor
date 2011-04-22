@@ -110,7 +110,7 @@ public class MessageCreatorValidator extends AbstractValidator {
 	}
 
 	@Override
-	protected List<Message> getErrors() {
+	public List<Message> getErrors() {
 		List<Message> messages = new ArrayList<Message>();
 		for (ValidationMessage message : errors) {
 			messages.add(new br.com.caelum.vraptor.validator.ValidationMessage(message.getPath(), message.getCategory()));

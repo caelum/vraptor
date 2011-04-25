@@ -19,6 +19,7 @@ package br.com.caelum.vraptor.validator;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -105,6 +106,6 @@ public class DefaultValidator extends AbstractValidator {
 
 	@Override
 	public List<Message> getErrors() {
-		return this.errors;
+		return Collections.unmodifiableList(this.errors);
 	}
 }

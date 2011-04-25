@@ -18,6 +18,7 @@
 package br.com.caelum.vraptor;
 
 import java.util.Collection;
+import java.util.List;
 
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.Validations;
@@ -47,6 +48,8 @@ public interface Validator {
 
     void add(Message message);
 
+    List<Message> getErrors();
+    
     boolean hasErrors();
 
     /**

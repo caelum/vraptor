@@ -79,6 +79,9 @@ public class SpringProviderTest {
                 allowing(servletContext).getInitParameter(BasicConfiguration.SCANNING_PARAM);
                 will(returnValue("enabled"));
 
+                allowing(servletContext).getClassLoader();
+                will(returnValue(Thread.currentThread().getContextClassLoader()));
+
                 allowing(servletContext);
 			}
 		});

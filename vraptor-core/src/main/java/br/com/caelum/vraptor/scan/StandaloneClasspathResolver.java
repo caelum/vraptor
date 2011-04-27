@@ -48,7 +48,7 @@ public class StandaloneClasspathResolver implements ClasspathResolver {
 	public StandaloneClasspathResolver() {
 		// try to discover web.xml location related to vraptor.jar
 		String vraptor = "br/com/caelum/vraptor/VRaptor.class";
-		URL vraptorJAR = Thread.currentThread().getContextClassLoader().getResource(vraptor);
+		URL vraptorJAR = getClassLoader().getResource(vraptor);
 		String filename = vraptorJAR.getPath();
 
 		int jarSeparationIndex = filename.lastIndexOf('!');
@@ -60,6 +60,10 @@ public class StandaloneClasspathResolver implements ClasspathResolver {
 
 	public StandaloneClasspathResolver(String webxml) {
 		this.webxml = new File(webxml);
+	}
+
+	public ClassLoader getClassLoader() {
+		return Thread.currentThread().getContextClassLoader();
 	}
 
 	// find WEB-INF classes related to web.xml
@@ -113,7 +117,7 @@ public class StandaloneClasspathResolver implements ClasspathResolver {
 	 */
 	void getPackagesFromPluginsJARs(List<String> result) {
 		try {
-			ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+			ClassLoader classLoader = getClassLoader();
 			Enumeration<URL> urls = classLoader.getResources("META-INF/br.com.caelum.vraptor.packages");
 
 			while (urls.hasMoreElements()) {

@@ -31,7 +31,6 @@ import org.springframework.web.context.request.RequestContextListener;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.vraptor.validator.ValidationErrors;
 
-import br.com.caelum.vraptor.config.BasicConfiguration;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.MutableResponse;
@@ -104,19 +103,8 @@ public class ProviderTest extends GenericContainerTest {
                     allowing(context).getAttribute("org.springframework.web.context.WebApplicationContext.ROOT");
                     will(returnValue(null));
 
-                    allowing(context).getRealPath("/WEB-INF/classes");
-                    will(returnValue(ProviderTest.class.getResource("../ioc/fixture").getFile()));
-
                     allowing(context).getRealPath("/WEB-INF/classes/views.properties");
                     will(returnValue("views.properties"));
-
-					allowing(context).getInitParameter(BasicConfiguration.BASE_PACKAGES_PARAMETER_NAME);
-					will(returnValue("br.com.caelum.vraptor.ioc.fixture"));
-
-	                allowing(context).getInitParameter(BasicConfiguration.ENCODING);
-
-	                allowing(context).getInitParameter(BasicConfiguration.SCANNING_PARAM);
-	                will(returnValue("enabled"));
 
 	                allowing(context);
                 }

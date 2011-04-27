@@ -20,10 +20,8 @@ package br.com.caelum.vraptor.ioc.pico;
 import java.util.Arrays;
 import java.util.List;
 
-import org.jmock.Expectations;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.config.BasicConfiguration;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.MutableResponse;
@@ -63,20 +61,5 @@ public class PicoProviderTest extends GenericContainerTest {
      */
     @Override
     protected void configureExpectations() {
-        try {
-            mockery.checking(new Expectations() {
-                {
-                	allowing(context).getInitParameter(BasicConfiguration.BASE_PACKAGES_PARAMETER_NAME);
-					will(returnValue("br.com.caelum.vraptor.ioc.fixture"));
-
-	                allowing(context).getInitParameter(BasicConfiguration.ENCODING);
-	                allowing(context).getInitParameter(BasicConfiguration.SCANNING_PARAM);
-	                allowing(context).getRealPath("/WEB-INF/classes");
-	                will(returnValue(getClassDir()));
-                }
-            });
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-		}
     }
 }

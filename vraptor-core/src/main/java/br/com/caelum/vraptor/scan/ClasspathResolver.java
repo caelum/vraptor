@@ -39,4 +39,9 @@ public interface ClasspathResolver {
 	 */
 	List<String> findBasePackages();
 
+	/**
+	 * @return the class loader
+	 */
+	ClassLoader getClassLoader();
+
 }

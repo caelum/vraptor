@@ -52,7 +52,7 @@ public class ScannotationComponentScanner implements ComponentScanner {
 		HashSet<String> results = new HashSet<String>();
 
 		Map<String, Set<String>> webInfClassesAnnotationMap = scanWebInfClasses(webInfClasses);
-		Map<String, Set<String>> basePackagesAnnotationMap = scanBasePackages(basePackages);
+		Map<String, Set<String>> basePackagesAnnotationMap = scanBasePackages(basePackages, resolver);
 
 		Set<String> stereotypeNames = findStereotypes(webInfClassesAnnotationMap, basePackagesAnnotationMap, basePackages);
 
@@ -72,12 +72,12 @@ public class ScannotationComponentScanner implements ComponentScanner {
 		}
 	}
 
-	private Map<String, Set<String>> scanBasePackages(List<String> basePackages) {
+	private Map<String, Set<String>> scanBasePackages(List<String> basePackages, ClasspathResolver resolver) {
 		try {
 			AnnotationDB db = createAnnotationDB();
 
 			for (String basePackage : basePackages) {
-				scanPackage(basePackage, db);
+				scanPackage(basePackage, db, resolver);
 			}
 
 			return db.getAnnotationIndex();
@@ -88,9 +88,9 @@ public class ScannotationComponentScanner implements ComponentScanner {
 
 
 
-	private void scanPackage(String basePackage, AnnotationDB db) throws IOException {
+	private void scanPackage(String basePackage, AnnotationDB db, ClasspathResolver resolver) throws IOException {
 		String resource = basePackage.replace('.', '/');
-		Enumeration<URL> urls = Thread.currentThread().getContextClassLoader().getResources(resource);
+		Enumeration<URL> urls = resolver.getClassLoader().getResources(resource);
 		if (!urls.hasMoreElements()) {
 			logger.error("There's no occurence of package {} in classpath", basePackage);
 			return;

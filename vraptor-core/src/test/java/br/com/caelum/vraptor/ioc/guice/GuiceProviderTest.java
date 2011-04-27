@@ -56,13 +56,8 @@ public class GuiceProviderTest extends SpringProviderRegisteringComponentsTest {
 	@Override
 	protected void configureExpectations() {
 		mockery.checking(new Expectations() {{
-			allowing(context).getRealPath("/WEB-INF/classes");
-			will(returnValue(getClassDir()));
-
 			allowing(context).addListener(with(any(HttpSessionListener.class)));
-		}
-
-		});
+		}});
 		super.configureExpectations();
 	}
 

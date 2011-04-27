@@ -80,7 +80,6 @@ public class MockValidator extends AbstractValidator {
 		return !this.errors.isEmpty();
 	}
 
-	@Override
 	public List<Message> getErrors() {
 		return Collections.unmodifiableList(errors);
 	}

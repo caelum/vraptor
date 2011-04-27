@@ -104,7 +104,6 @@ public class DefaultValidator extends AbstractValidator {
 		return !errors.isEmpty();
 	}
 
-	@Override
 	public List<Message> getErrors() {
 		return Collections.unmodifiableList(this.errors);
 	}

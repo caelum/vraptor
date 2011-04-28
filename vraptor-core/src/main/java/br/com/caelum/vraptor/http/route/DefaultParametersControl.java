@@ -86,7 +86,7 @@ public class DefaultParametersControl implements ParametersControl {
 			throw new IllegalArgumentException("paramNames must have the same length as paramValues. Names: " + Arrays.toString(paramNames) + " Values: " + Arrays.toString(paramValues));
 		}
 	
-		String[] splittedPatterns = splitUriRegexes(paramNames);
+		String[] splittedPatterns = splitUriRegexes();
 		
 		String base = originalPattern;
 		for (int i=0; i<parameters.size(); i++) {
@@ -107,11 +107,11 @@ public class DefaultParametersControl implements ParametersControl {
 		return base.replaceAll("\\.\\*", "");
 	}
 
-	private String[] splitUriRegexes(String[] paramNames) {
+	private String[] splitUriRegexes() {
 		Matcher uriMatcher = Pattern.compile("\\{((?=[^\\{]+?[\\{])[^\\}]+?\\}|[^\\}]+?)\\}").matcher(originalPattern);
-		String[] splittedPatterns = new String[paramNames.length];
+		String[] splittedPatterns = new String[parameters.size()];
 		
-		for(int i=0; i<paramNames.length && uriMatcher.find(); i++) {
+		for(int i=0; i<parameters.size() && uriMatcher.find(); i++) {
 			splittedPatterns[i] = "{" + uriMatcher.group(1) + "}";
 		}
 		return splittedPatterns;

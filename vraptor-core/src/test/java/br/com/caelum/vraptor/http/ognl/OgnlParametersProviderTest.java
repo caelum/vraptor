@@ -94,7 +94,7 @@ public class OgnlParametersProviderTest {
     public void setup() throws Exception {
     	MockitoAnnotations.initMocks(this);
         this.removal = new EmptyElementsRemoval();
-        this.provider = new OgnlParametersProvider(converters, nameProvider, request, removal, container, new OgnlFacade(converters, removal));
+        this.provider = new OgnlParametersProvider(nameProvider, request, container, new OgnlFacade(converters, removal));
         this.errors = new ArrayList<Message>();
         when(converters.to(Long.class)).thenReturn(new LongConverter());
         when(converters.to(long.class)).thenReturn(new PrimitiveLongConverter());

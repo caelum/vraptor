@@ -79,6 +79,7 @@ public class EmptyElementsRemoval {
 				}
 			}
 		}
+		collections.clear();
 		for (SetValue setter : arrays.keySet()) {
 			Object array = arrays.get(setter);
 			Object newArray = removeNullsFromArray(array);
@@ -90,6 +91,7 @@ public class EmptyElementsRemoval {
 				throw new IllegalArgumentException(e);
 			}
 		}
+		arrays.clear();
 	}
 
 	public Object removeNullsFromArray(Object array) {

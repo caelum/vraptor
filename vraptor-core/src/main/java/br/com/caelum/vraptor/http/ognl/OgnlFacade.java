@@ -23,6 +23,14 @@ import br.com.caelum.vraptor.validator.annotation.ValidationException;
 
 import com.google.common.collect.Maps;
 
+/**
+ * Trying to hide all OGNL ugliness
+ *
+ * @author Lucas Cavalcanti
+ * @author Douglas Campos
+ * @since 3.4.0
+ *
+ */
 @RequestScoped
 public class OgnlFacade {
 
@@ -40,7 +48,7 @@ public class OgnlFacade {
 		OgnlRuntime.setPropertyAccessor(Object[].class, new ArrayAccessor());
 	}
 
-	public Object createOgnlContextFor(Type type, Object root, ResourceBundle bundle) {
+	public void startContext(String name, Type type, Object root, ResourceBundle bundle) {
 
 		OgnlContext context = createOgnlContext(root);
 
@@ -49,10 +57,13 @@ public class OgnlFacade {
 		context.put("removal", removal);
 		context.put("nullHandler", nullHandler());
 
-		Ognl.setTypeConverter(context, new VRaptorConvertersAdapter(converters, bundle));
+		Ognl.setTypeConverter(context, createAdapter(bundle));
 
-		contexts.put(context.getRoot(), context);
-		return context.getRoot();
+		contexts.put(name, context);
+	}
+
+	protected VRaptorConvertersAdapter createAdapter(ResourceBundle bundle) {
+		return new VRaptorConvertersAdapter(converters, bundle);
 	}
 
 	protected OgnlContext createOgnlContext(Object root) {
@@ -63,12 +74,11 @@ public class OgnlFacade {
 		return new GenericNullHandler(removal);
 	}
 
-	public Object setValue(Object root, String key, String[] values) {
+	public void setValue(String name, String key, String[] values) {
 		try {
-			OgnlContext ctx = contexts.get(root);
+			OgnlContext ctx = contexts.get(name);
 			Ognl.setValue(key, ctx, ctx.getRoot(), values.length == 1 ? values[0] : values);
 			contexts.put(ctx.getRoot(), ctx);
-			return ctx.getRoot();
 		} catch (MethodFailedException e) { // setter threw an exception
 
 			Throwable cause = e.getCause();
@@ -88,9 +98,18 @@ public class OgnlFacade {
 			logger.debug("unable to parse expression '{}'. Ignoring.", key);
 			logger.trace("Reason:", e);
 		}
-		return root;
 	}
 
+	public Object get(String name) {
+		Object root = contexts.remove(name).getRoot();
 
+		removal.removeExtraElements();
+
+		if (root.getClass().isArray()) {
+			return removal.removeNullsFromArray(root);
+		}
+
+		return root;
+	}
 
 }

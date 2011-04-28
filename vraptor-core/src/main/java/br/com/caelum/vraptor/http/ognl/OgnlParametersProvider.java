@@ -36,7 +36,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.converter.ConversionError;
-import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.http.InvalidParameterException;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParametersProvider;
@@ -57,26 +56,20 @@ import com.google.common.base.Defaults;
 @RequestScoped
 public class OgnlParametersProvider implements ParametersProvider {
 
-	private final Converters converters;
-
 	private final ParameterNameProvider provider;
 
 	private static final Logger logger = LoggerFactory.getLogger(OgnlParametersProvider.class);
 
 	private final HttpServletRequest request;
 
-	private final EmptyElementsRemoval removal;
-
 	private final Container container;
 
 	private final OgnlFacade ognl;
 
-	public OgnlParametersProvider(Converters converters, ParameterNameProvider provider,
-			HttpServletRequest request, EmptyElementsRemoval removal, Container container, OgnlFacade ognl) {
-		this.converters = converters;
+	public OgnlParametersProvider(ParameterNameProvider provider,
+			HttpServletRequest request, Container container, OgnlFacade ognl) {
 		this.provider = provider;
 		this.request = request;
-		this.removal = removal;
 		this.container = container;
 		this.ognl = ognl;
 	}
@@ -91,7 +84,6 @@ public class OgnlParametersProvider implements ParametersProvider {
 			Map<String, String[]> requestNames = parametersThatStartWith(names[i]);
 			result[i] = createParameter(new Parameter(types[i], classes[i], names[i], method), requestNames, bundle, errors);
 		}
-		removal.removeExtraElements();
 
 		return result;
 
@@ -134,18 +126,15 @@ public class OgnlParametersProvider implements ParametersProvider {
 			}
 		}
 
-		root = ognl.createOgnlContextFor(param.type, root, bundle);
+		ognl.startContext(param.name, param.type, root, bundle);
+
 		for (Entry<String, String[]> parameter : requestNames.entrySet()) {
 			String key = parameter.getKey().replaceFirst("^" + param.name + "\\.?", "");
 			String[] values = parameter.getValue();
-			root = setProperty(root, key, values, errors);
+			setProperty(param.name, key, values, errors);
 		}
 
-		if (param.clazz.isArray()) {
-			return removal.removeNullsFromArray(root);
-		}
-
-		return root;
+		return ognl.get(param.name);
 	}
 
 	private Object createRoot(Parameter param, Map<String, String[]> requestNames, ResourceBundle bundle,
@@ -167,14 +156,13 @@ public class OgnlParametersProvider implements ParametersProvider {
 		}
 	}
 
-	private Object setProperty(Object root, String key, String[] values, List<Message> errors) {
+	private void setProperty(String name, String key, String[] values, List<Message> errors) {
 		try {
 			logger.debug("Applying {} with {}",key, values);
-			return ognl.setValue(root, key, values);
+			ognl.setValue(name, key, values);
 		} catch (ConversionError ex) {
 			errors.add(new ValidationMessage(ex.getMessage(), key));
 		}
-		return root;
 	}
 
 	private Object createSimpleParameter(Parameter param, String[] values, ResourceBundle bundle) {
@@ -188,7 +176,7 @@ public class OgnlParametersProvider implements ParametersProvider {
 	}
 
 	private Object convert(Class clazz, String value, ResourceBundle bundle) {
-		return new VRaptorConvertersAdapter(converters, bundle).convert(value, clazz);
+		return ognl.createAdapter(bundle).convert(value, clazz);
 	}
 
 	private List createList(Type type, ResourceBundle bundle, String[] values) {

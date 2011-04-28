@@ -19,6 +19,7 @@ package br.com.caelum.vraptor.util.test;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import br.com.caelum.vraptor.View;
@@ -79,8 +80,7 @@ public class MockValidator extends AbstractValidator {
 		return !this.errors.isEmpty();
 	}
 
-	@Override
-	protected List<Message> getErrors() {
-		return errors;
+	public List<Message> getErrors() {
+		return Collections.unmodifiableList(errors);
 	}
 }

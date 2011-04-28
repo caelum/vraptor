@@ -21,8 +21,6 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
-import javax.servlet.http.HttpSession;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,6 +35,7 @@ import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.validator.Message;
+import br.com.caelum.vraptor.view.FlashScope;
 
 /**
  * An interceptor which instantiates parameters and provide them to the stack.
@@ -53,18 +52,17 @@ public class ParametersInstantiatorInterceptor implements Interceptor {
     private final Validator validator;
     private final Localization localization;
 	private final List<Message> errors = new ArrayList<Message>();
-	private final HttpSession session;
-	public static final String FLASH_PARAMETERS = "_vraptor_flash_parameters";
 	private final MutableRequest request;
+	private final FlashScope flash;
 
     public ParametersInstantiatorInterceptor(ParametersProvider provider, MethodInfo parameters,
-            Validator validator, Localization localization, HttpSession session, MutableRequest request) {
+            Validator validator, Localization localization, MutableRequest request, FlashScope flash) {
         this.provider = provider;
         this.parameters = parameters;
         this.validator = validator;
         this.localization = localization;
-		this.session = session;
 		this.request = request;
+		this.flash = flash;
     }
 
     public boolean accepts(ResourceMethod method) {
@@ -102,11 +100,10 @@ public class ParametersInstantiatorInterceptor implements Interceptor {
 	}
 
 	private Object[] getParametersFor(ResourceMethod method) {
-		Object[] args = (Object[]) session.getAttribute(ParametersInstantiatorInterceptor.FLASH_PARAMETERS);
+		Object[] args = flash.consumeParameters(method);
 		if (args == null) {
 			return provider.getParametersFor(method, errors, localization.getBundle());
 		}
-		session.removeAttribute(ParametersInstantiatorInterceptor.FLASH_PARAMETERS);
 		return args;
 	}
 }

@@ -26,7 +26,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import br.com.caelum.vraptor.http.route.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -81,6 +80,16 @@ import br.com.caelum.vraptor.http.ParanamerNameProvider;
 import br.com.caelum.vraptor.http.UrlToResourceTranslator;
 import br.com.caelum.vraptor.http.ognl.EmptyElementsRemoval;
 import br.com.caelum.vraptor.http.ognl.OgnlParametersProvider;
+import br.com.caelum.vraptor.http.route.DefaultRouter;
+import br.com.caelum.vraptor.http.route.DefaultTypeFinder;
+import br.com.caelum.vraptor.http.route.Evaluator;
+import br.com.caelum.vraptor.http.route.JavaEvaluator;
+import br.com.caelum.vraptor.http.route.NoRoutesConfiguration;
+import br.com.caelum.vraptor.http.route.PathAnnotationRoutesParser;
+import br.com.caelum.vraptor.http.route.Router;
+import br.com.caelum.vraptor.http.route.RoutesConfiguration;
+import br.com.caelum.vraptor.http.route.RoutesParser;
+import br.com.caelum.vraptor.http.route.TypeFinder;
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor.interceptor.DeserializingInterceptor;
 import br.com.caelum.vraptor.interceptor.ExceptionHandlerInterceptor;
@@ -152,11 +161,13 @@ import br.com.caelum.vraptor.view.DefaultRefererResult;
 import br.com.caelum.vraptor.view.DefaultStatus;
 import br.com.caelum.vraptor.view.DefaultValidationViewsFactory;
 import br.com.caelum.vraptor.view.EmptyResult;
+import br.com.caelum.vraptor.view.FlashScope;
 import br.com.caelum.vraptor.view.HttpResult;
 import br.com.caelum.vraptor.view.LogicResult;
 import br.com.caelum.vraptor.view.PageResult;
 import br.com.caelum.vraptor.view.PathResolver;
 import br.com.caelum.vraptor.view.RefererResult;
+import br.com.caelum.vraptor.view.SessionFlashScope;
 import br.com.caelum.vraptor.view.Status;
 import br.com.caelum.vraptor.view.ValidationViewsFactory;
 
@@ -239,7 +250,8 @@ public class BaseComponents {
             RepresentationResult.class,						DefaultRepresentationResult.class,
             FormatResolver.class,							DefaultFormatResolver.class,
             Configuration.class,							ApplicationConfiguration.class,
-            RestHeadersHandler.class,						DefaultRestHeadersHandler.class
+            RestHeadersHandler.class,						DefaultRestHeadersHandler.class,
+            FlashScope.class,								SessionFlashScope.class
     );
 
     @SuppressWarnings({"unchecked", "rawtypes"})

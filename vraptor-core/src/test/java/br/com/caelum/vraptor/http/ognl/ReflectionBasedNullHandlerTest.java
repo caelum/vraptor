@@ -18,15 +18,23 @@
 package br.com.caelum.vraptor.http.ognl;
 
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyCollection;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.List;
 
+import net.sf.cglib.proxy.Callback;
+import net.sf.cglib.proxy.Dispatcher;
+import net.sf.cglib.proxy.Enhancer;
 import ognl.Ognl;
 import ognl.OgnlContext;
 import ognl.OgnlException;
@@ -105,6 +113,60 @@ public class ReflectionBasedNullHandlerTest {
 		Ognl.setTypeConverter(context, typeConverter);
 		Ognl.setValue("mouse", context, house, "22");
 		assertThat(house.getMouse(), is(equalTo(tom)));
+	}
+
+
+	@Test
+	public void shouldFoundASetter() throws Exception {
+		final House aSimpleJavaBeans = new House();
+		final List<Method> methodsOfHouseClass = Arrays.asList(House.class.getMethods());
+		Method foundMethod = ReflectionBasedNullHandler.findSetter(aSimpleJavaBeans, "Mouse", Mouse.class);
+		assertThat(methodsOfHouseClass, hasItem(foundMethod));
+		assertThat(foundMethod.toGenericString(), startsWith("public void "));
+		assertThat(foundMethod.getName(), is(startsWith("setMouse")));
+	}
+	
+	
+	@Test
+	public void shouldFoundAGetter() throws Exception {
+		final House aSimpleJavaBeans = new House();
+		final List<Method> methodsOfHouseClass = Arrays.asList(House.class.getMethods());
+		Method foundMethod = ReflectionBasedNullHandler.findGetter(aSimpleJavaBeans, "Mouse");
+		assertThat(methodsOfHouseClass, hasItem(foundMethod));
+		assertTrue(Mouse.class.isAssignableFrom(foundMethod.getReturnType()));
+		assertThat(foundMethod.getName(), is(startsWith("getMouse")));
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static <T> T proxify(final T pojo) {
+		Enhancer enhancer = new Enhancer();
+		enhancer.setSuperclass(pojo.getClass());
+		enhancer.setCallbackTypes(new Class[] { Dispatcher.class});
+		enhancer.setCallbacks(new Callback[] {  new Dispatcher() { public Object loadObject() throws Exception {return pojo;}	}});
+		return (T) enhancer.create();
+	}
+	
+	@Test
+	public void shouldFoundASetterEvenWithAProxyObject() throws Exception {
+		final House aSimpleJavaBeans = new House();
+		House beanProxified = proxify(aSimpleJavaBeans);
+		final List<Method> methodsOfHouseClass = Arrays.asList(House.class.getMethods());
+		Method foundMethod = ReflectionBasedNullHandler.findSetter(beanProxified, "Mouse", Mouse.class);
+		assertThat(methodsOfHouseClass, hasItem(foundMethod));
+		assertThat(foundMethod.toGenericString(), startsWith("public void "));
+		assertThat(foundMethod.getName(), is(startsWith("setMouse")));
+	}	
+	
+	
+	@Test
+	public void shouldFoundAGetterWithAProxyObject() throws Exception {
+		final House aSimpleJavaBeans = new House();		
+		House beanProxified = proxify(aSimpleJavaBeans);
+		final List<Method> methodsOfHouseClass = Arrays.asList(House.class.getMethods());
+		Method foundMethod = ReflectionBasedNullHandler.findGetter(beanProxified, "Mouse");
+		assertThat(methodsOfHouseClass, hasItem(foundMethod));
+		assertTrue(Mouse.class.isAssignableFrom(foundMethod.getReturnType()));
+		assertThat(foundMethod.getName(), is(startsWith("getMouse")));
 	}
 
 }

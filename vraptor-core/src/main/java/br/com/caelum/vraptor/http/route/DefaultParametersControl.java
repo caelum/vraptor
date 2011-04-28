@@ -63,10 +63,10 @@ public class DefaultParametersControl implements ParametersControl {
 
 	private Pattern compilePattern(String originalPattern, Map<String, String> parameterPatterns) {
 		Map<String, String> parameters = new HashMap<String, String>(parameterPatterns);
-		Matcher matcher = Pattern.compile("\\{([^\\}]+?)\\}").matcher(originalPattern);
+		Matcher matcher = Pattern.compile("\\{((?=[^\\{]+?[\\{])[^\\}]+?\\}|[^\\}]+?)\\}").matcher(originalPattern);
 		while (matcher.find()) {
 			String value = matcher.group(1);
-			String defaultPattern = value.matches("^[^:]+\\*$")? ".*" : "[^/]*";
+			String defaultPattern = value.matches("^[^:]+\\*$")? ".*" : value.indexOf(":") >= 0 ? value.replaceAll("^[^\\:]+?:", "") : "[^/]*";
 			if (!parameters.containsKey(value)) {
 				parameters.put(value, defaultPattern);
 			}
@@ -85,22 +85,36 @@ public class DefaultParametersControl implements ParametersControl {
 		if (paramNames.length != paramValues.length) {
 			throw new IllegalArgumentException("paramNames must have the same length as paramValues. Names: " + Arrays.toString(paramNames) + " Values: " + Arrays.toString(paramValues));
 		}
-
-		String base = originalPattern.replaceAll("\\.\\*", "");
-		for (String key : parameters) {
+	
+		String[] splittedPatterns = splitUriRegexes(paramNames);
+		
+		String base = originalPattern;
+		for (int i=0; i<parameters.size(); i++) {
+			String key = parameters.get(i);
 			Object param = selectParam(key, paramNames, paramValues);
 			Object result = evaluator.get(param, key);
 			if (result != null) {
-				Class type = result.getClass();
+				Class<?> type = result.getClass();
 				if (converters.existsTwoWayFor(type)) {
 					TwoWayConverter converter = converters.twoWayConverterFor(type);
 					result = converter.convert(result);
 				}
 			}
-			String regex = "\\{" + key + "\\*?\\}|\\{" + key + "\\*?:(.*)\\}";
-			base = base.replaceAll(regex, result == null ? "" : result.toString());
+
+			base = base.replace(splittedPatterns[i], result == null ? "" : result.toString());
 		}
-		return base;
+		
+		return base.replaceAll("\\.\\*", "");
+	}
+
+	private String[] splitUriRegexes(String[] paramNames) {
+		Matcher uriMatcher = Pattern.compile("\\{((?=[^\\{]+?[\\{])[^\\}]+?\\}|[^\\}]+?)\\}").matcher(originalPattern);
+		String[] splittedPatterns = new String[paramNames.length];
+		
+		for(int i=0; i<paramNames.length && uriMatcher.find(); i++) {
+			splittedPatterns[i] = "{" + uriMatcher.group(1) + "}";
+		}
+		return splittedPatterns;
 	}
 
 	private Object selectParam(String key, String[] paramNames, Object[] paramValues) {

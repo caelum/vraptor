@@ -94,27 +94,31 @@ public class OgnlParametersProviderTest {
     public void setup() throws Exception {
     	MockitoAnnotations.initMocks(this);
         this.removal = new EmptyElementsRemoval();
-        this.provider = new OgnlParametersProvider(converters, nameProvider, request, removal, container);
+        this.provider = new OgnlParametersProvider(converters, nameProvider, request, removal, container, new OgnlFacade(converters, removal));
         this.errors = new ArrayList<Message>();
-        when(converters.to(Long.class)).thenReturn((Converter) new LongConverter());
-        when(converters.to(long.class)).thenReturn((Converter) new PrimitiveLongConverter());
-        when(converters.to(String.class)).thenReturn((Converter) new StringConverter());
+        when(converters.to(Long.class)).thenReturn(new LongConverter());
+        when(converters.to(long.class)).thenReturn(new PrimitiveLongConverter());
+        when(converters.to(String.class)).thenReturn(new StringConverter());
         when(request.getSession()).thenReturn(session);
 
-        buyA = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("buyA", House.class));
-        kick = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("kick", AngryCat.class));
-        error = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("error", WrongCat.class));
-        array = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("array", Long[].class));
-        list = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("list", List.class));
-        listOfObject = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("listOfObject", List.class));
-        abc = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("abc", ABC.class));
-        simple = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("simple", Long.class));
-        string = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("string", String.class));
-        stringArray = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("stringArray", String[].class));
-        dependency = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("dependency", Result.class));
-        primitive = DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod("primitive", long.class));
-        generic = DefaultResourceMethod.instanceFor(Specific.class, Generic.class.getDeclaredMethod("generic", Object.class));
+        buyA 		= method("buyA", House.class);
+        kick 		= method("kick", AngryCat.class);
+        error 		= method("error", WrongCat.class);
+        array 		= method("array", Long[].class);
+        list 		= method("list", List.class);
+        listOfObject= method("listOfObject", List.class);
+        abc 		= method("abc", ABC.class);
+        simple 		= method("simple", Long.class);
+        string 		= method("string", String.class);
+        stringArray = method("stringArray", String[].class);
+        dependency 	= method("dependency", Result.class);
+        primitive 	= method("primitive", long.class);
+        generic 	= DefaultResourceMethod.instanceFor(Specific.class, Generic.class.getDeclaredMethod("generic", Object.class));
     }
+
+	private ResourceMethod method(String methodName, Class<?>... argTypes) throws NoSuchMethodException {
+		return DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod(methodName, argTypes));
+	}
 
     @Test
     public void isCapableOfDealingWithStrings() throws Exception {
@@ -342,7 +346,7 @@ public class OgnlParametersProviderTest {
     	when(request.getParameterMap()).thenReturn(ImmutableMap.of("abc", new String[] {""}, "abc.x", new String[] {"3"}));
     	when(nameProvider.parameterNamesFor(any(Method.class))).thenReturn(new String[]{"abc"});
 
-    	when(converters.to(ABC.class)).thenReturn((Converter) new Converter<ABC>() {
+    	when(converters.to(ABC.class)).thenReturn(new Converter<ABC>() {
 			public ABC convert(String value, Class<? extends ABC> type, ResourceBundle bundle) {
 				return new ABC();
 			}

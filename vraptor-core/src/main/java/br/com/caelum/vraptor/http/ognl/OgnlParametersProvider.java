@@ -32,13 +32,6 @@ import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletRequest;
 
-import ognl.MethodFailedException;
-import ognl.NoSuchPropertyException;
-import ognl.Ognl;
-import ognl.OgnlContext;
-import ognl.OgnlException;
-import ognl.OgnlRuntime;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,7 +45,6 @@ import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.ValidationMessage;
-import br.com.caelum.vraptor.validator.annotation.ValidationException;
 
 import com.google.common.base.Defaults;
 
@@ -77,16 +69,16 @@ public class OgnlParametersProvider implements ParametersProvider {
 
 	private final Container container;
 
+	private final OgnlFacade ognl;
+
 	public OgnlParametersProvider(Converters converters, ParameterNameProvider provider,
-			HttpServletRequest request, EmptyElementsRemoval removal, Container container) {
+			HttpServletRequest request, EmptyElementsRemoval removal, Container container, OgnlFacade ognl) {
 		this.converters = converters;
 		this.provider = provider;
 		this.request = request;
 		this.removal = removal;
 		this.container = container;
-		OgnlRuntime.setNullHandler(Object.class, new ReflectionBasedNullHandler());
-		OgnlRuntime.setPropertyAccessor(List.class, new ListAccessor(converters));
-		OgnlRuntime.setPropertyAccessor(Object[].class, new ArrayAccessor());
+		this.ognl = ognl;
 	}
 
 	public Object[] getParametersFor(ResourceMethod method, List<Message> errors, ResourceBundle bundle) {
@@ -142,18 +134,18 @@ public class OgnlParametersProvider implements ParametersProvider {
 			}
 		}
 
-		OgnlContext context = createOgnlContextFor(param, root, bundle);
+		root = ognl.createOgnlContextFor(param.type, root, bundle);
 		for (Entry<String, String[]> parameter : requestNames.entrySet()) {
 			String key = parameter.getKey().replaceFirst("^" + param.name + "\\.?", "");
 			String[] values = parameter.getValue();
-			setProperty(context, key, values, errors);
+			root = setProperty(root, key, values, errors);
 		}
 
 		if (param.clazz.isArray()) {
-			return removal.removeNullsFromArray(context.getRoot());
+			return removal.removeNullsFromArray(root);
 		}
 
-		return context.getRoot();
+		return root;
 	}
 
 	private Object createRoot(Parameter param, Map<String, String[]> requestNames, ResourceBundle bundle,
@@ -169,59 +161,20 @@ public class OgnlParametersProvider implements ParametersProvider {
 		}
 
 		try {
-			return nullHandler().instantiate(param.actualType());
+			return ognl.nullHandler().instantiate(param.actualType());
 		} catch (Exception ex) {
 			throw new InvalidParameterException("unable to instantiate type " + param.type, ex);
 		}
 	}
 
-	private void setProperty(OgnlContext context, String key, String[] values, List<Message> errors) {
+	private Object setProperty(Object root, String key, String[] values, List<Message> errors) {
 		try {
 			logger.debug("Applying {} with {}",key, values);
-			Ognl.setValue(key, context, context.getRoot(), values.length == 1 ? values[0] : values);
+			return ognl.setValue(root, key, values);
 		} catch (ConversionError ex) {
 			errors.add(new ValidationMessage(ex.getMessage(), key));
-		} catch (MethodFailedException e) { // setter threw an exception
-
-			Throwable cause = e.getCause();
-			if (cause.getClass().isAnnotationPresent(ValidationException.class)) {
-				errors.add(new ValidationMessage(cause.getLocalizedMessage(), key));
-			} else {
-				throw new InvalidParameterException("unable to parse expression '" + key + "'", e);
-			}
-
-		} catch (NoSuchPropertyException ex) {
-			// TODO optimization: be able to ignore or not
-			logger.debug("cant find property for expression {} ignoring", key);
-			logger.trace("Reason:", ex);
-		} catch (OgnlException e) {
-			// TODO it fails when parameter name is not a valid java
-			// identifier... ignoring by now
-			logger.debug("unable to parse expression '{}'. Ignoring.", key);
-			logger.trace("Reason:", e);
 		}
-	}
-
-	private OgnlContext createOgnlContextFor(Parameter param, Object root, ResourceBundle bundle) {
-		OgnlContext context = createOgnlContext(root);
-
-		context.setTraceEvaluations(true);
-		context.put("rootType", param.type);
-		context.put("removal", removal);
-		context.put("nullHandler", nullHandler());
-
-		VRaptorConvertersAdapter adapter = new VRaptorConvertersAdapter(converters, bundle);
-		Ognl.setTypeConverter(context, adapter);
-
-		return context;
-	}
-
-	protected OgnlContext createOgnlContext(Object root) {
-		return (OgnlContext) Ognl.createDefaultContext(root);
-	}
-
-	protected NullHandler nullHandler() {
-		return new GenericNullHandler(removal);
+		return root;
 	}
 
 	private Object createSimpleParameter(Parameter param, String[] values, ResourceBundle bundle) {

@@ -79,6 +79,7 @@ import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.http.ParanamerNameProvider;
 import br.com.caelum.vraptor.http.UrlToResourceTranslator;
 import br.com.caelum.vraptor.http.ognl.EmptyElementsRemoval;
+import br.com.caelum.vraptor.http.ognl.OgnlFacade;
 import br.com.caelum.vraptor.http.ognl.OgnlParametersProvider;
 import br.com.caelum.vraptor.http.route.DefaultRouter;
 import br.com.caelum.vraptor.http.route.DefaultTypeFinder;
@@ -251,6 +252,7 @@ public class BaseComponents {
             FormatResolver.class,							DefaultFormatResolver.class,
             Configuration.class,							ApplicationConfiguration.class,
             RestHeadersHandler.class,						DefaultRestHeadersHandler.class,
+            OgnlFacade.class,								OgnlFacade.class,
             FlashScope.class,								SessionFlashScope.class
     );
 

@@ -21,6 +21,8 @@ import java.lang.reflect.AccessibleObject;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import br.com.caelum.iogi.Instantiator;
 import br.com.caelum.iogi.MultiInstantiator;
 import br.com.caelum.iogi.ObjectInstantiator;
@@ -34,17 +36,12 @@ import br.com.caelum.iogi.reflection.Target;
 import br.com.caelum.iogi.spi.DependencyProvider;
 import br.com.caelum.iogi.spi.ParameterNamesProvider;
 import br.com.caelum.vraptor.Converter;
-import br.com.caelum.vraptor.Validator;
-import br.com.caelum.vraptor.converter.ConversionError;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.core.Localization;
-import br.com.caelum.vraptor.http.InvalidParameterException;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.RequestScoped;
-import br.com.caelum.vraptor.validator.ValidationMessage;
-import br.com.caelum.vraptor.validator.annotation.ValidationException;
 
 import com.google.common.collect.ImmutableList;
 
@@ -56,25 +53,27 @@ public class VRaptorInstantiator implements Instantiator<Object> {
 	private final Localization localization;
 	private final MultiInstantiator multiInstantiator;
 	private final ParameterNameProvider parameterNameProvider;
-	private final Validator validator;
+	private final HttpServletRequest request;
 
-	public VRaptorInstantiator(Converters converters, Container container, Localization localization, ParameterNameProvider parameterNameProvider, Validator validator) {
+	public VRaptorInstantiator(Converters converters, Container container, Localization localization, ParameterNameProvider parameterNameProvider, HttpServletRequest request) {
 		this.converters = converters;
 		this.container = container;
 		this.localization = localization;
 		this.parameterNameProvider = parameterNameProvider;
-		this.validator = validator;
+		this.request = request;
 
 		DependencyProvider dependencyProvider = new VRaptorDependencyProvider();
-		ParameterNamesProvider parameterNamesProvider =
-			new VRaptorParameterNamesProvider();
+		ParameterNamesProvider parameterNamesProvider = new VRaptorParameterNamesProvider();
 
+		ObjectInstantiator objectInstantiator = new ObjectInstantiator(this, dependencyProvider, parameterNamesProvider);
 		List<Instantiator<?>> instantiatorList = ImmutableList.of(
+			new RequestAttributeInstantiator(),
 			new VRaptorTypeConverter(),
 			FallbackConverter.fallbackToNull(new StringConverter()),
 			new ArrayInstantiator(this),
 			new NullDecorator(new ListInstantiator(this)), //NOTE: NullDecorator is here to preserve existing behaviour. Don't know if it is the ideal one, though.
-			new ObjectInstantiator(this, dependencyProvider, parameterNamesProvider));
+			new DependencyInstantiator(objectInstantiator),
+			objectInstantiator);
 		multiInstantiator = new MultiInstantiator(instantiatorList);
 	}
 
@@ -86,27 +85,45 @@ public class VRaptorInstantiator implements Instantiator<Object> {
 		return multiInstantiator.instantiate(target, parameters);
 	}
 
+	private final class RequestAttributeInstantiator implements Instantiator<Object> {
+		public Object instantiate(Target<?> target, Parameters params) {
+			return request.getAttribute(target.getName());
+		}
+
+		public boolean isAbleToInstantiate(Target<?> target) {
+			return request.getAttribute(target.getName()) != null;
+		}
+
+	}
+
+	private final class DependencyInstantiator implements Instantiator<Object> {
+		private final Instantiator<Object> delegate;
+
+		public DependencyInstantiator(Instantiator<Object> delegate) {
+			this.delegate = delegate;
+		}
+		public Object instantiate(Target<?> target, Parameters params) {
+			if (params.hasRelatedTo(target)) {
+				return delegate.instantiate(target, params);
+			}
+			return container.instanceFor(target.getClassType());
+		}
+
+		public boolean isAbleToInstantiate(Target<?> target) {
+			return container.canProvide(target.getClassType());
+		}
+
+	}
+
 	private final class VRaptorTypeConverter implements Instantiator<Object> {
 		public boolean isAbleToInstantiate(Target<?> target) {
 			return !String.class.equals(target.getClassType()) && converters.existsFor(target.getClassType());
 		}
 
 		public Object instantiate(Target<?> target, Parameters parameters) {
-			try {
-				Parameter parameter = parameters.namedAfter(target);
-				return converterForTarget(target).convert(parameter.getValue(), target.getClassType(), localization.getBundle());
-			}
-			catch (ConversionError ex) {
-				validator.add(new ValidationMessage(ex.getMessage(), target.getName()));
-			}
-			catch (Exception e) {
-				if (e.getClass().isAnnotationPresent(ValidationException.class)) {
-					validator.add(new ValidationMessage(e.getLocalizedMessage(), target.getName()));
-				} else {
-					throw new InvalidParameterException("Exception when trying to instantiate " + target, e);
-				}
-			}
-			return null;
+
+			Parameter parameter = parameters.namedAfter(target);
+			return converterForTarget(target).convert(parameter.getValue(), target.getClassType(), localization.getBundle());
 		}
 
 		@SuppressWarnings("unchecked")

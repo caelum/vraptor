@@ -18,7 +18,9 @@
 package br.com.caelum.vraptor.http.iogi;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -33,12 +35,16 @@ import br.com.caelum.iogi.Instantiator;
 import br.com.caelum.iogi.parameters.Parameter;
 import br.com.caelum.iogi.parameters.Parameters;
 import br.com.caelum.iogi.reflection.Target;
+import br.com.caelum.vraptor.converter.ConversionError;
+import br.com.caelum.vraptor.http.InvalidParameterException;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.validator.Message;
+import br.com.caelum.vraptor.validator.ValidationMessage;
+import br.com.caelum.vraptor.validator.annotation.ValidationException;
 
 @Component
 @RequestScoped
@@ -56,10 +62,8 @@ public class IogiParametersProvider implements ParametersProvider {
 	}
 
 	public Object[] getParametersFor(ResourceMethod method, List<Message> errors, ResourceBundle bundle) {
-		Method javaMethod = method.getMethod();
-
 		Parameters parameters = parseParameters(servletRequest);
-		List<Target<Object>> targets = createTargets(javaMethod);
+		List<Target<Object>> targets = createTargets(method);
 
 		List<Object> arguments = instantiateParameters(parameters, targets, errors);
 
@@ -78,15 +82,38 @@ public class IogiParametersProvider implements ParametersProvider {
 	}
 
 	private Object instantiateOrAddError(Parameters parameters, List<Message> errors, Target<Object> target) {
-		return instantiator.instantiate(target, parameters);
+		try {
+			return instantiator.instantiate(target, parameters);
+		} catch (ConversionError ex) {
+			errors.add(new ValidationMessage(ex.getMessage(), target.getName()));
+		} catch (Exception e) {
+			handleException(target, e, errors);
+		}
+		return null;
 	}
 
-	private List<Target<Object>> createTargets(Method javaMethod) {
+	private void handleException(Target<?> target, Throwable e, List<Message> errors) {
+		if (e.getClass().isAnnotationPresent(ValidationException.class)) {
+			errors.add(new ValidationMessage(e.getLocalizedMessage(), target.getName()));
+		} else if (e.getCause() == null) {
+			throw new InvalidParameterException("Exception when trying to instantiate " + target, e);
+		} else {
+			handleException(target, e.getCause(), errors);
+		}
+	}
+
+
+	private List<Target<Object>> createTargets(ResourceMethod method) {
+		Method javaMethod = method.getMethod();
 		List<Target<Object>> targets = new ArrayList<Target<Object>>();
 
 		Type[] parameterTypes = javaMethod.getGenericParameterTypes();
 		String[] parameterNames = nameProvider.parameterNamesFor(javaMethod);
 		for (int i = 0; i < methodArity(javaMethod); i++) {
+			if (parameterTypes[i] instanceof TypeVariable) {
+				ParameterizedType superclass = (ParameterizedType) method.getResource().getType().getGenericSuperclass();
+				parameterTypes[i] = superclass.getActualTypeArguments()[0];
+			}
 			Target<Object> newTarget = new Target<Object>(parameterTypes[i], parameterNames[i]);
 			targets.add(newTarget);
 		}

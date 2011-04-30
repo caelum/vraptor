@@ -31,20 +31,15 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import br.com.caelum.iogi.Instantiator;
 import br.com.caelum.iogi.parameters.Parameter;
 import br.com.caelum.iogi.parameters.Parameters;
 import br.com.caelum.iogi.reflection.Target;
-import br.com.caelum.vraptor.converter.ConversionError;
-import br.com.caelum.vraptor.http.InvalidParameterException;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.validator.Message;
-import br.com.caelum.vraptor.validator.ValidationMessage;
-import br.com.caelum.vraptor.validator.annotation.ValidationException;
 
 @Component
 @RequestScoped
@@ -52,9 +47,9 @@ public class IogiParametersProvider implements ParametersProvider {
 	private static final Logger LOGGER = LoggerFactory.getLogger(IogiParametersProvider.class);
 	private final ParameterNameProvider nameProvider;
 	private final HttpServletRequest servletRequest;
-	private final Instantiator instantiator;
+	private final InstantiatorWithErrors instantiator;
 
-	public IogiParametersProvider(ParameterNameProvider provider, HttpServletRequest parameters, Instantiator instantiator) {
+	public IogiParametersProvider(ParameterNameProvider provider, HttpServletRequest parameters, InstantiatorWithErrors instantiator) {
 		this.nameProvider = provider;
 		this.servletRequest = parameters;
 		this.instantiator = instantiator;
@@ -82,26 +77,8 @@ public class IogiParametersProvider implements ParametersProvider {
 	}
 
 	private Object instantiateOrAddError(Parameters parameters, List<Message> errors, Target<Object> target) {
-		try {
-			return instantiator.instantiate(target, parameters);
-		} catch (ConversionError ex) {
-			errors.add(new ValidationMessage(ex.getMessage(), target.getName()));
-		} catch (Exception e) {
-			handleException(target, e, errors);
-		}
-		return null;
+		return instantiator.instantiate(target, parameters, errors);
 	}
-
-	private void handleException(Target<?> target, Throwable e, List<Message> errors) {
-		if (e.getClass().isAnnotationPresent(ValidationException.class)) {
-			errors.add(new ValidationMessage(e.getLocalizedMessage(), target.getName()));
-		} else if (e.getCause() == null) {
-			throw new InvalidParameterException("Exception when trying to instantiate " + target, e);
-		} else {
-			handleException(target, e.getCause(), errors);
-		}
-	}
-
 
 	private List<Target<Object>> createTargets(ResourceMethod method) {
 		Method javaMethod = method.getMethod();

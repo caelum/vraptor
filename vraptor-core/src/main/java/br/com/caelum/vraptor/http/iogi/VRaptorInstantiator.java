@@ -36,24 +36,30 @@ import br.com.caelum.iogi.reflection.Target;
 import br.com.caelum.iogi.spi.DependencyProvider;
 import br.com.caelum.iogi.spi.ParameterNamesProvider;
 import br.com.caelum.vraptor.Converter;
+import br.com.caelum.vraptor.converter.ConversionError;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.core.Localization;
+import br.com.caelum.vraptor.http.InvalidParameterException;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.RequestScoped;
+import br.com.caelum.vraptor.validator.Message;
+import br.com.caelum.vraptor.validator.ValidationMessage;
+import br.com.caelum.vraptor.validator.annotation.ValidationException;
 
 import com.google.common.collect.ImmutableList;
 
 @Component
 @RequestScoped
-public class VRaptorInstantiator implements Instantiator<Object> {
+public class VRaptorInstantiator implements InstantiatorWithErrors, Instantiator<Object> {
 	private final Converters converters;
 	private final Container container;
 	private final Localization localization;
 	private final MultiInstantiator multiInstantiator;
 	private final ParameterNameProvider parameterNameProvider;
 	private final HttpServletRequest request;
+	private List<Message> errors;
 
 	public VRaptorInstantiator(Converters converters, Container container, Localization localization, ParameterNameProvider parameterNameProvider, HttpServletRequest request) {
 		this.converters = converters;
@@ -81,8 +87,27 @@ public class VRaptorInstantiator implements Instantiator<Object> {
 		return true;
 	}
 
+	public Object instantiate(Target<?> target, Parameters parameters, List<Message> errors) {
+		this.errors = errors;
+		return instantiate(target, parameters);
+	}
+
 	public Object instantiate(Target<?> target, Parameters parameters) {
-		return multiInstantiator.instantiate(target, parameters);
+		try {
+			return multiInstantiator.instantiate(target, parameters);
+		} catch(Exception e) {
+			handleException(target, e);
+			return null;
+		}
+	}
+	private void handleException(Target<?> target, Throwable e) {
+		if (e.getClass().isAnnotationPresent(ValidationException.class)) {
+			errors.add(new ValidationMessage(e.getLocalizedMessage(), target.getName()));
+		} else if (e.getCause() == null) {
+			throw new InvalidParameterException("Exception when trying to instantiate " + target, e);
+		} else {
+			handleException(target, e.getCause());
+		}
 	}
 
 	private final class RequestAttributeInstantiator implements Instantiator<Object> {
@@ -121,9 +146,13 @@ public class VRaptorInstantiator implements Instantiator<Object> {
 		}
 
 		public Object instantiate(Target<?> target, Parameters parameters) {
-
-			Parameter parameter = parameters.namedAfter(target);
-			return converterForTarget(target).convert(parameter.getValue(), target.getClassType(), localization.getBundle());
+			try {
+				Parameter parameter = parameters.namedAfter(target);
+				return converterForTarget(target).convert(parameter.getValue(), target.getClassType(), localization.getBundle());
+			} catch (ConversionError ex) {
+				errors.add(new ValidationMessage(ex.getMessage(), target.getName()));
+			}
+			return null;
 		}
 
 		@SuppressWarnings("unchecked")

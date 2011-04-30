@@ -9,6 +9,7 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertArrayEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -68,6 +69,7 @@ public abstract class ParametersProviderTest {
 	protected ResourceMethod primitive;
 	protected ResourceMethod stringArray;
 	protected ResourceMethod dependency;
+	protected ResourceMethod doNothing;
 
 	protected abstract ParametersProvider getProvider();
 
@@ -98,6 +100,7 @@ public abstract class ParametersProviderTest {
         stringArray = method("stringArray", String[].class);
         dependency 	= method("dependency", Result.class);
         primitive 	= method("primitive", long.class);
+        doNothing 	= method("doNothing");
         generic 	= DefaultResourceMethod.instanceFor(Specific.class, Generic.class.getDeclaredMethod("generic", Object.class));
     }
 
@@ -345,13 +348,30 @@ public abstract class ParametersProviderTest {
     	assertThat(returned.x, is(3l));
     }
 
-    private void thereAreNoParameters() {
+    @Test
+	public void returnsAnEmptyObjectArrayForZeroArityMethods() throws Exception {
+    	thereAreNoParameters();
+        Object[] params = provider.getParametersFor(doNothing, errors, null);
+
+        assertArrayEquals(new Object[] {}, params);
+    }
+
+    @Test
+    public void returnsNullWhenInstantiatingAListForWhichThereAreNoParameters() throws Exception {
+    	thereAreNoParameters();
+
+    	Object[] params = provider.getParametersFor(list, errors, null);
+
+    	assertArrayEquals(new Object[] {null}, params);
+    }
+
+    protected void thereAreNoParameters() {
     	when(request.getParameterNames()).thenReturn(Collections.enumeration(Collections.<String>emptySet()));
     	when(request.getParameterMap()).thenReturn(Collections.<String, String[]>emptyMap());
     	when(nameProvider.parameterNamesFor(any(Method.class))).thenReturn(new String[]{"any"});
 	}
 
-	private void requestParameterIs(ResourceMethod method, String paramName, String... values) {
+	protected void requestParameterIs(ResourceMethod method, String paramName, String... values) {
     	String methodName = paramName.replaceAll("[\\.\\[].*", "");
 
 		when(request.getParameterValues(paramName)).thenReturn(values);
@@ -364,11 +384,13 @@ public abstract class ParametersProviderTest {
 
 
     @SuppressWarnings("unchecked")
-	private <T> T getParameters(ResourceMethod method) {
+	protected <T> T getParameters(ResourceMethod method) {
 		return (T) provider.getParametersFor(method, errors, new SafeResourceBundle(new EmptyBundle()))[0];
 	}
 
-    static class MyResource {
+    protected static class MyResource {
+    	public MyResource() {
+		}
         void buyA(House house) {
         }
         void kick(AngryCat angryCat) {
@@ -393,6 +415,8 @@ public abstract class ParametersProviderTest {
         }
         void dependency(Result result) {
         }
+        void doNothing() {
+        }
     }
 
     static class Generic<T> {
@@ -405,6 +429,7 @@ public abstract class ParametersProviderTest {
 
     public static class Cat {
         private String id;
+        private Long lols;
 
         public void setId(String id) {
             this.id = id;
@@ -413,6 +438,14 @@ public abstract class ParametersProviderTest {
         public String getId() {
             return id;
         }
+
+		public void setLols(Long lols) {
+			this.lols = lols;
+		}
+
+		public Long getLols() {
+			return lols;
+		}
     }
 
     public static class House {

@@ -62,7 +62,7 @@ public class IogiParametersProviderTest extends ParametersProviderTest {
 	@Override
 	protected ParametersProvider getProvider() {
 		when(mockLocalization.getBundle()).thenReturn(new SafeResourceBundle(new EmptyBundle()));
-		return new IogiParametersProvider(nameProvider, request, new VRaptorInstantiator(converters, container, mockLocalization, nameProvider, request));
+		return new IogiParametersProvider(nameProvider, request, new VRaptorInstantiator(converters, new VRaptorDependencyProvider(container), mockLocalization, new VRaptorParameterNamesProvider(nameProvider), request));
 	}
 
     @Test

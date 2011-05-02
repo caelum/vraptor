@@ -29,7 +29,6 @@ import static org.mockito.Mockito.when;
 import java.util.Collections;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -76,11 +75,10 @@ public class DefaultParametersControlTest {
 	}
 
 	@Test
-	@Ignore("This shit should work someday")
 	public void registerParametersWithMultipleRegexes() throws SecurityException, NoSuchMethodException {
-		DefaultParametersControl control = new DefaultParametersControl("/test/{hash1:[a-z0-9]{16}}{id}{hash2:[a-z0-9]{16}}/", Collections.singletonMap("id", "(\\d+)"), converters, evaluator);
+		DefaultParametersControl control = new DefaultParametersControl("/test/{hash1:[a-z0-9]{16}}{id}{hash2:[a-z0-9]{16}}/", Collections.singletonMap("id", "\\d+"), converters, evaluator);
 
-		control.fillIntoRequest("/test/0123456789abcdef1234fedcba9876543210", request);
+		control.fillIntoRequest("/test/0123456789abcdef1234fedcba9876543210/", request);
 
 		verify(request).setParameter("hash1", new String[] {"0123456789abcdef"});
 		verify(request).setParameter("id", new String[] {"1234"});
@@ -98,7 +96,6 @@ public class DefaultParametersControlTest {
 		DefaultParametersControl control = new DefaultParametersControl("/clients.*", converters, evaluator);
 		assertThat(control.matches("/clientsWhatever"), is(equalTo(true)));
 	}
-
 
 	class Client {
 		private final Long id;
@@ -135,6 +132,12 @@ public class DefaultParametersControlTest {
         assertThat(uri, is(equalTo("/clients/30")));
     }
 
+    @Test
+    public void shouldTranslatePatternArgsWithMultipleRegexes() {
+        String uri = new DefaultParametersControl("/test/{hash1:[a-z0-9]{16}}{id}{hash2:[a-z0-9]{16}}/", converters, evaluator).fillUri(new String[] {"hash1", "id", "hash2"}, "0123456789abcdef", "1234", "fedcba9876543210");
+        assertThat(uri, is(equalTo("/test/0123456789abcdef1234fedcba9876543210/")));
+    }
+    
 	@Test
 	public void shouldTranslatePatternArgNullAsEmpty() {
 		String uri = new DefaultParametersControl("/clients/{client.id}", converters, evaluator).fillUri(new String[] {"client"}, client(null));

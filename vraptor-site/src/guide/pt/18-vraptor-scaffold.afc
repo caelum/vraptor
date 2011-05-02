@@ -91,8 +91,16 @@ mvn eclipse:eclipse
 [/code]
 
 Para gerar os arquivos de configuração do eclipse, após isso é so importar o projeto normalmente.
-Se você optou pelo ant os arquivos de configuração serão gerados no momento em que criar 
-o projeto, é possível pular a criação desses arquivos com o comando
+
+Se você optou pelo ant os arquivos de configuração serão gerados no momento em que criar o projeto, não se esqueça de executar
+
+[code]
+ant compile
+[/code]
+
+para baixar todas as dependências antes de importar o projeto.
+
+É possível pular a criação desses arquivos com o comando
 
 [code]
 vraptor new onlinestore --skip-eclipse

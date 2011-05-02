@@ -35,6 +35,7 @@ import org.slf4j.LoggerFactory;
 import br.com.caelum.vraptor.TwoWayConverter;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor.util.StringUtils;
 
 /**
  * Default implementation of parameters control on uris.
@@ -86,7 +87,7 @@ public class DefaultParametersControl implements ParametersControl {
 			throw new IllegalArgumentException("paramNames must have the same length as paramValues. Names: " + Arrays.toString(paramNames) + " Values: " + Arrays.toString(paramValues));
 		}
 	
-		String[] splittedPatterns = splitUriRegexes();
+		String[] splittedPatterns = StringUtils.extractParameters(originalPattern);
 		
 		String base = originalPattern;
 		for (int i=0; i<parameters.size(); i++) {
@@ -101,20 +102,10 @@ public class DefaultParametersControl implements ParametersControl {
 				}
 			}
 
-			base = base.replace(splittedPatterns[i], result == null ? "" : result.toString());
+			base = base.replace("{" + splittedPatterns[i] + "}", result == null ? "" : result.toString());
 		}
 		
 		return base.replaceAll("\\.\\*", "");
-	}
-
-	private String[] splitUriRegexes() {
-		Matcher uriMatcher = Pattern.compile("\\{((?=[^\\{]+?[\\{])[^\\}]+?\\}|[^\\}]+?)\\}").matcher(originalPattern);
-		String[] splittedPatterns = new String[parameters.size()];
-		
-		for(int i=0; i<parameters.size() && uriMatcher.find(); i++) {
-			splittedPatterns[i] = "{" + uriMatcher.group(1) + "}";
-		}
-		return splittedPatterns;
 	}
 
 	private Object selectParam(String key, String[] paramNames, Object[] paramValues) {

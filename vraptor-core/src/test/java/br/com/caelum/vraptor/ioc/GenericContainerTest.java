@@ -224,6 +224,9 @@ public abstract class GenericContainerTest {
 		this.context = mockery.mock(ServletContext.class, "servlet context");
 
 		mockery.checking(new Expectations() {{
+			allowing(context).getMajorVersion();
+			will(returnValue(3));
+
 			allowing(context).getInitParameter(BasicConfiguration.BASE_PACKAGES_PARAMETER_NAME);
 			will(returnValue("br.com.caelum.vraptor.ioc.fixture"));
 

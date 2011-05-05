@@ -39,7 +39,10 @@ public class WebBasedClasspathResolver implements ClasspathResolver {
 	}
 
 	public ClassLoader getClassLoader() {
-		return servletContext.getClassLoader();
+		if (servletContext.getMajorVersion() == 3) {
+			return servletContext.getClassLoader();
+		}
+		return Thread.currentThread().getContextClassLoader();
 	}
 
 	public URL findWebInfClassesLocation() {

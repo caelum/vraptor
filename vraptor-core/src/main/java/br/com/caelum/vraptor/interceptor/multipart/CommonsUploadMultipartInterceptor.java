@@ -39,7 +39,7 @@ import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.http.InvalidParameterException;
 import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
+import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.validator.Validations;
@@ -55,7 +55,7 @@ import com.google.common.collect.Multimap;
  * @author Guilherme Silveira
  * @author Otávio Scherer Garcia
  */
-@Intercepts(before=ParametersInstantiatorInterceptor.class)
+@Intercepts(before=ResourceLookupInterceptor.class, after = {})
 @RequestScoped
 public class CommonsUploadMultipartInterceptor
     implements MultipartInterceptor {

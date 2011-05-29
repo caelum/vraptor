@@ -66,6 +66,10 @@ public class JavassistProxifier
         return type.cast(proxyInstance);
     }
 
+    public boolean isProxy(Object o) {
+        return o != null && ProxyObject.class.isAssignableFrom(o.getClass());
+    }
+    
     private <T> void setHandler(Object proxyInstance, final MethodInvocation<? super T> handler) {
         ProxyObject proxyObject = (ProxyObject) proxyInstance;
 

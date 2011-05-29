@@ -96,4 +96,17 @@ public class CglibProxifierTest {
         new Mirror().on(proxy).invoke().method("finalize").withoutArgs();
     }
 
+    @Test
+    public void testIfObjectIsProxy() {
+        Object realObject = new Object();
+        Object objectAsProxy = proxifier.proxify(Object.class, new MethodInvocation<Object>() {
+            @Override
+            public Object intercept(Object proxy, Method method, Object[] args, SuperMethod superMethod) {
+                return null;
+            }
+        });
+        
+        assertFalse(proxifier.isProxy(realObject));
+        assertTrue(proxifier.isProxy(objectAsProxy));
+    }
 }

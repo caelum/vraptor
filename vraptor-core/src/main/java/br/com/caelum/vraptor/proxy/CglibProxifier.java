@@ -76,6 +76,10 @@ public class CglibProxifier
         return type.cast(proxyInstance);
     }
 
+    public boolean isProxy(Object o) {
+        return o != null && Factory.class.isAssignableFrom(o.getClass());
+    }
+
     protected <T> Enhancer enhanceTypeWithCGLib(Class<T> type, final MethodInvocation<? super T> handler) {
         Enhancer enhancer = new Enhancer();
         enhancer.setSuperclass(type);

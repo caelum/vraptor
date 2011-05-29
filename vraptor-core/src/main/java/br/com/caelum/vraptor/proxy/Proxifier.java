@@ -31,4 +31,13 @@ public interface Proxifier {
      * @return The proxy.
      */
     <T> T proxify(Class<T> type, MethodInvocation<? super T> handler);
+
+    /**
+     * Return <code>true</code> if the object is a proxy, false otherwise. <code>null</code> objects always return
+     * <code>false</code>.
+     * 
+     * @param o The object to test
+     * @return <code>true</code> if the object is a proxy, false otherwise.
+     */
+    boolean isProxy(Object o);
 }

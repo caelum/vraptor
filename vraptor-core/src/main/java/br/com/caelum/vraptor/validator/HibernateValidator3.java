@@ -30,7 +30,9 @@ import br.com.caelum.vraptor.core.Localization;
  *
  * @author Guilherme Silveira
  * @since 3.1.2
+ * @deprecated Use {@link JSR303Validator} instead.
  */
+@Deprecated
 public class HibernateValidator3
     implements BeanValidator {
 

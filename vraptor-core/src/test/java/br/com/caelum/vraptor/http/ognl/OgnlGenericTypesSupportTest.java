@@ -37,6 +37,8 @@ import br.com.caelum.vraptor.converter.LongConverter;
 import br.com.caelum.vraptor.converter.StringConverter;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor.proxy.CglibProxifier;
+import br.com.caelum.vraptor.proxy.ReflectionInstanceCreator;
 
 /**
  * Unfortunately OGNL sucks so bad in its design that we had to create a "unit"
@@ -88,6 +90,8 @@ public class OgnlGenericTypesSupportTest {
         // OgnlRuntime.setPropertyAccessor(Set.class, new SetAccessor());
         // OgnlRuntime.setPropertyAccessor(Map.class, new MapAccessor());
         Ognl.setTypeConverter(context, new VRaptorConvertersAdapter(converters, bundle));
+        
+        context.put("proxifier", new CglibProxifier(new ReflectionInstanceCreator()));
     }
 
     public static class Cat {

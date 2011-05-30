@@ -24,9 +24,13 @@ import static org.hamcrest.Matchers.notNullValue;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ognl.Evaluation;
+import ognl.Ognl;
+import ognl.OgnlContext;
 import ognl.SimpleNode;
 
 import org.jmock.Expectations;
@@ -35,6 +39,9 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.VRaptorException;
 import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor.proxy.CglibProxifier;
+import br.com.caelum.vraptor.proxy.Proxifier;
+import br.com.caelum.vraptor.proxy.ReflectionInstanceCreator;
 import br.com.caelum.vraptor.test.VRaptorMockery;
 
 public class ListNullHandlerTest {
@@ -45,6 +52,7 @@ public class ListNullHandlerTest {
 	private Client client;
 	private Evaluation evaluation;
 	private EmptyElementsRemoval removal;
+	private OgnlContext context;
 
 	public static class Client {
 		private List nonGeneric = new ArrayList();
@@ -71,6 +79,9 @@ public class ListNullHandlerTest {
 		this.evaluation = mockery.mock(Evaluation.class);
 		this.removal = mockery.mock(EmptyElementsRemoval.class);
 		this.handler = new ListNullHandler(removal);
+		
+        context = (OgnlContext) Ognl.createDefaultContext(null);
+        context.put("proxifier", new CglibProxifier(new ReflectionInstanceCreator()));
 	}
 
 	@Test(expected = VRaptorException.class)
@@ -85,7 +96,7 @@ public class ListNullHandlerTest {
 				will(returnValue(client));
 			}
 		});
-		handler.instantiate(client.nonGeneric, "2", handler.getListType(client.nonGeneric, evaluation));
+		handler.instantiate(client.nonGeneric, "2", handler.getListType(client.nonGeneric, evaluation, context));
 		mockery.assertIsSatisfied();
 	}
 
@@ -102,7 +113,7 @@ public class ListNullHandlerTest {
 				one(removal).add(client.names);
 			}
 		});
-		handler.instantiate(client.names, 2, handler.getListType(client.names, evaluation));
+		handler.instantiate(client.names, 2, handler.getListType(client.names, evaluation, context));
 		assertThat(client.names.size(), is(equalTo(3)));
 		assertThat(client.names.get(2), is(notNullValue()));
 		mockery.assertIsSatisfied();

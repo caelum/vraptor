@@ -19,13 +19,17 @@ package br.com.caelum.vraptor.http.ognl;
 
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.http.ParametersProviderTest;
+import br.com.caelum.vraptor.proxy.CglibProxifier;
+import br.com.caelum.vraptor.proxy.Proxifier;
+import br.com.caelum.vraptor.proxy.ReflectionInstanceCreator;
 
 public class OgnlParametersProviderTest extends ParametersProviderTest {
 
 	@Override
 	protected ParametersProvider getProvider() {
 		EmptyElementsRemoval removal = new EmptyElementsRemoval();
-		return new OgnlParametersProvider(nameProvider, request, container, new OgnlFacade(converters, removal));
+        Proxifier proxifier = new CglibProxifier(new ReflectionInstanceCreator());
+		return new OgnlParametersProvider(nameProvider, request, container, new OgnlFacade(converters, removal, proxifier));
 	}
 
 }

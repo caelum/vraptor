@@ -24,10 +24,10 @@ import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.cglib.proxy.Factory;
 import net.vidageek.mirror.dsl.Mirror;
 import ognl.ObjectNullHandler;
 import ognl.OgnlContext;
+import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.vraptor2.Info;
 
 /**
@@ -64,11 +64,11 @@ public class ReflectionBasedNullHandler extends ObjectNullHandler {
         }
 
         if (target instanceof List) {
-            return list.instantiate(target, property, list.getListType(target, ctx.getCurrentEvaluation().getPrevious()));
+            return list.instantiate(target, property, list.getListType(target, ctx.getCurrentEvaluation().getPrevious(), ctx));
         }
 
         String propertyCapitalized = Info.capitalize((String) property);
-        Method getter = findGetter(target, propertyCapitalized);
+        Method getter = findGetter(target, propertyCapitalized, ctx);
         Type returnType = getter.getGenericReturnType();
         if (returnType instanceof ParameterizedType) {
             ParameterizedType paramType = (ParameterizedType) returnType;
@@ -86,14 +86,6 @@ public class ReflectionBasedNullHandler extends ObjectNullHandler {
         new Mirror().on(target).invoke().method(setter).withArgs(instance);
         return instance;
     }
-
-	public static Method findGetter(Object target, String propertyCapitalized) {
-		Class<? extends Object> targetClass = target.getClass();
-		if (target instanceof Factory) {
-			targetClass = targetClass.getSuperclass();
-		}
-		return new Mirror().on(targetClass).reflect().method("get" + propertyCapitalized).withoutArgs();
-	}
 
     private Object instantiateArray(Class<?> baseType) {
         return Array.newInstance(baseType.getComponentType(), 0);
@@ -115,11 +107,25 @@ public class ReflectionBasedNullHandler extends ObjectNullHandler {
         return findMethod(type.getSuperclass(), name, type, parameterType);
     }
 
-	public static Method findSetter(Object target, String propertyCapitalized, Class<? extends Object> argument) {
+    public static Method findGetter(Object target, String propertyCapitalized, OgnlContext ctx) {
+        Class<? extends Object> targetClass = target.getClass();
+        
+        Proxifier proxifier = (Proxifier) ctx.get("proxifier");
+        if (proxifier.isProxy(target)) {
+            targetClass = targetClass.getSuperclass();
+        }
+        
+        return new Mirror().on(targetClass).reflect().method("get" + propertyCapitalized).withoutArgs();
+    }
+
+	public static Method findSetter(Object target, String propertyCapitalized, Class<? extends Object> argument, OgnlContext ctx) {
 		Class<? extends Object> targetClass = target.getClass();
-		if (target instanceof Factory) {
-			targetClass = targetClass.getSuperclass();
-		}
+		
+		Proxifier proxifier = (Proxifier) ctx.get("proxifier");
+        if (proxifier.isProxy(target)) {
+            targetClass = targetClass.getSuperclass();
+        }
+		
 		return new Mirror().on(targetClass).reflect().method("set" + propertyCapitalized).withArgs(argument);
 	}
 

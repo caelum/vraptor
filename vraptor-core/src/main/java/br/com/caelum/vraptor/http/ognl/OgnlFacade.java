@@ -19,6 +19,7 @@ import br.com.caelum.vraptor.converter.ConversionError;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.http.InvalidParameterException;
 import br.com.caelum.vraptor.ioc.RequestScoped;
+import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.validator.annotation.ValidationException;
 
 import com.google.common.collect.Maps;
@@ -36,13 +37,15 @@ public class OgnlFacade {
 
 	private static final Logger logger = LoggerFactory.getLogger(OgnlFacade.class);
 
+	private final Proxifier proxifier;
 	private final Converters converters;
 	private final EmptyElementsRemoval removal;
 	private final Map<Object, OgnlContext> contexts = Maps.newHashMap();
 
-	public OgnlFacade(Converters converters, EmptyElementsRemoval removal) {
+	public OgnlFacade(Converters converters, EmptyElementsRemoval removal, Proxifier proxifier) {
 		this.converters = converters;
 		this.removal = removal;
+		this.proxifier = proxifier;
 		OgnlRuntime.setNullHandler(Object.class, new ReflectionBasedNullHandler());
 		OgnlRuntime.setPropertyAccessor(List.class, new ListAccessor(converters));
 		OgnlRuntime.setPropertyAccessor(Object[].class, new ArrayAccessor());
@@ -57,6 +60,7 @@ public class OgnlFacade {
 		context.put("removal", removal);
 		context.put("nullHandler", nullHandler());
 		context.put(ResourceBundle.class, bundle);
+        context.put("proxifier", proxifier);
 
 		Ognl.setTypeConverter(context, createAdapter(bundle));
 

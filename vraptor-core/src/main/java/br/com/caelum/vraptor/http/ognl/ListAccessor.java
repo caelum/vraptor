@@ -115,7 +115,7 @@ public class ListAccessor extends ListPropertyAccessor {
 			Evaluation previous = eval.getPrevious();
 			String fieldName = previous.getNode().toString();
 			Object origin = previous.getSource();
-			Method getter = ReflectionBasedNullHandler.findGetter(origin, Info.capitalize(fieldName));
+			Method getter = ReflectionBasedNullHandler.findGetter(origin, Info.capitalize(fieldName), ctx);
 			genericType = getter.getGenericReturnType();
 		} else {
 			genericType = (Type) ctx.get("rootType");

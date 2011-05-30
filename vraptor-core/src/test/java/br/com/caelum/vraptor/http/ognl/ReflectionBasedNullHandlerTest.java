@@ -49,6 +49,8 @@ import br.com.caelum.vraptor.converter.LongConverter;
 import br.com.caelum.vraptor.converter.StringConverter;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor.proxy.CglibProxifier;
+import br.com.caelum.vraptor.proxy.ReflectionInstanceCreator;
 
 public class ReflectionBasedNullHandlerTest {
 
@@ -67,6 +69,8 @@ public class ReflectionBasedNullHandlerTest {
 		context.setTraceEvaluations(true);
 		context.put("removal", removal);
 		context.put("nullHandler", new GenericNullHandler(removal));
+        context.put("proxifier", new CglibProxifier(new ReflectionInstanceCreator()));
+		
 		when(container.instanceFor(Converters.class)).thenReturn(converters);
 		when(converters.to(String.class)).thenReturn(new StringConverter());
 		when(converters.to(Long.class)).thenReturn(new LongConverter());
@@ -120,7 +124,7 @@ public class ReflectionBasedNullHandlerTest {
 	public void shouldFoundASetter() throws Exception {
 		final House aSimpleJavaBeans = new House();
 		final List<Method> methodsOfHouseClass = Arrays.asList(House.class.getMethods());
-		Method foundMethod = ReflectionBasedNullHandler.findSetter(aSimpleJavaBeans, "Mouse", Mouse.class);
+		Method foundMethod = ReflectionBasedNullHandler.findSetter(aSimpleJavaBeans, "Mouse", Mouse.class, context);
 		assertThat(methodsOfHouseClass, hasItem(foundMethod));
 		assertThat(foundMethod.toGenericString(), startsWith("public void "));
 		assertThat(foundMethod.getName(), is(startsWith("setMouse")));
@@ -131,7 +135,7 @@ public class ReflectionBasedNullHandlerTest {
 	public void shouldFoundAGetter() throws Exception {
 		final House aSimpleJavaBeans = new House();
 		final List<Method> methodsOfHouseClass = Arrays.asList(House.class.getMethods());
-		Method foundMethod = ReflectionBasedNullHandler.findGetter(aSimpleJavaBeans, "Mouse");
+		Method foundMethod = ReflectionBasedNullHandler.findGetter(aSimpleJavaBeans, "Mouse", context);
 		assertThat(methodsOfHouseClass, hasItem(foundMethod));
 		assertTrue(Mouse.class.isAssignableFrom(foundMethod.getReturnType()));
 		assertThat(foundMethod.getName(), is(startsWith("getMouse")));
@@ -151,7 +155,7 @@ public class ReflectionBasedNullHandlerTest {
 		final House aSimpleJavaBeans = new House();
 		House beanProxified = proxify(aSimpleJavaBeans);
 		final List<Method> methodsOfHouseClass = Arrays.asList(House.class.getMethods());
-		Method foundMethod = ReflectionBasedNullHandler.findSetter(beanProxified, "Mouse", Mouse.class);
+		Method foundMethod = ReflectionBasedNullHandler.findSetter(beanProxified, "Mouse", Mouse.class, context);
 		assertThat(methodsOfHouseClass, hasItem(foundMethod));
 		assertThat(foundMethod.toGenericString(), startsWith("public void "));
 		assertThat(foundMethod.getName(), is(startsWith("setMouse")));
@@ -163,7 +167,7 @@ public class ReflectionBasedNullHandlerTest {
 		final House aSimpleJavaBeans = new House();
 		House beanProxified = proxify(aSimpleJavaBeans);
 		final List<Method> methodsOfHouseClass = Arrays.asList(House.class.getMethods());
-		Method foundMethod = ReflectionBasedNullHandler.findGetter(beanProxified, "Mouse");
+		Method foundMethod = ReflectionBasedNullHandler.findGetter(beanProxified, "Mouse", context);
 		assertThat(methodsOfHouseClass, hasItem(foundMethod));
 		assertTrue(Mouse.class.isAssignableFrom(foundMethod.getReturnType()));
 		assertThat(foundMethod.getName(), is(startsWith("getMouse")));

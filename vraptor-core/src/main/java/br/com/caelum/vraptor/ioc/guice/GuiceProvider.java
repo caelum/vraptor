@@ -51,7 +51,7 @@ import com.google.inject.util.Modules;
  */
 public class GuiceProvider implements ContainerProvider {
 
-
+	private boolean stopSession = false;
 	static final RequestCustomScope REQUEST = new RequestCustomScope();
 	static final SessionCustomScope SESSION = new SessionCustomScope();
 	static final ApplicationCustomScope APPLICATION = new ApplicationCustomScope();
@@ -131,8 +131,15 @@ public class GuiceProvider implements ContainerProvider {
 		 * eliminate this hook.
 		 */
 	}
+	
+	protected void stopSession(Boolean value) {
+		this.stopSession = value;
+	}
 
 	public void stop() {
+		if(stopSession) {
+			SESSION.stopAll();
+		}
 		APPLICATION.stop();
 	}
 

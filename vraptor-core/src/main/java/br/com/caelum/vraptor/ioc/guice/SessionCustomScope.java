@@ -75,11 +75,21 @@ public class SessionCustomScope extends AbstractScope implements LifecycleScope 
 
 	public void stop(HttpSession session) {
 		for (LifecycleListener listener : listeners.removeAll(session.getId())) {
-			try {
-				listener.onEvent();
-			} catch (Exception e) {
-				logger.warn("Error while invoking PreDestroy", e);
-			}
+			stop(listener);
+		}
+	}
+
+	public void stopAll() {
+		for (LifecycleListener listener : listeners.values()) {
+			stop(listener);
+		}
+	}
+
+	private void stop(LifecycleListener listener) {
+		try {
+			listener.onEvent();
+		} catch (Exception e) {
+			logger.warn("Error while invoking PreDestroy", e);
 		}
 	}
 }

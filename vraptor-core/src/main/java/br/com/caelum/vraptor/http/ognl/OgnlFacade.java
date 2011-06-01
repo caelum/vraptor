@@ -46,7 +46,7 @@ public class OgnlFacade {
 		this.converters = converters;
 		this.removal = removal;
 		this.proxifier = proxifier;
-		OgnlRuntime.setNullHandler(Object.class, new ReflectionBasedNullHandler());
+		OgnlRuntime.setNullHandler(Object.class, new ReflectionBasedNullHandler(proxifier));
 		OgnlRuntime.setPropertyAccessor(List.class, new ListAccessor(converters));
 		OgnlRuntime.setPropertyAccessor(Object[].class, new ArrayAccessor());
 	}

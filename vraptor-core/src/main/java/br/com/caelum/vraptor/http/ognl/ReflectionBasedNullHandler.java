@@ -38,8 +38,11 @@ import br.com.caelum.vraptor.vraptor2.Info;
  * @author Guilherme Silveira
  */
 public class ReflectionBasedNullHandler extends ObjectNullHandler {
+    
+    private final Proxifier proxifier;
 
-    public ReflectionBasedNullHandler() {
+    public ReflectionBasedNullHandler(Proxifier proxifier) {
+        this.proxifier = proxifier;
 	}
 
 	@Override
@@ -68,7 +71,7 @@ public class ReflectionBasedNullHandler extends ObjectNullHandler {
         }
 
         String propertyCapitalized = Info.capitalize((String) property);
-        Method getter = findGetter(target, propertyCapitalized, ctx);
+        Method getter = findGetter(target, propertyCapitalized);
         Type returnType = getter.getGenericReturnType();
         if (returnType instanceof ParameterizedType) {
             ParameterizedType paramType = (ParameterizedType) returnType;
@@ -82,6 +85,7 @@ public class ReflectionBasedNullHandler extends ObjectNullHandler {
         } else {
             instance = nullHandler.instantiate(baseType);
         }
+        
         Method setter = findMethod(target.getClass(), "set" + propertyCapitalized, target.getClass(), getter.getReturnType());
         new Mirror().on(target).invoke().method(setter).withArgs(instance);
         return instance;
@@ -91,7 +95,7 @@ public class ReflectionBasedNullHandler extends ObjectNullHandler {
         return Array.newInstance(baseType.getComponentType(), 0);
     }
 
-    static <P> Method findMethod(Class<?> type, String name, Class<?> baseType, Class<P> parameterType) {
+    <P> Method findMethod(Class<?> type, String name, Class<?> baseType, Class<P> parameterType) {
         Method[] methods = type.getDeclaredMethods();
         for (Method method : methods) {
             if (method.getName().equals(name)) {
@@ -107,10 +111,9 @@ public class ReflectionBasedNullHandler extends ObjectNullHandler {
         return findMethod(type.getSuperclass(), name, type, parameterType);
     }
 
-    public static Method findGetter(Object target, String propertyCapitalized, OgnlContext ctx) {
+    Method findGetter(Object target, String propertyCapitalized) {
         Class<? extends Object> targetClass = target.getClass();
         
-        Proxifier proxifier = (Proxifier) ctx.get("proxifier");
         if (proxifier.isProxy(target)) {
             targetClass = targetClass.getSuperclass();
         }
@@ -118,10 +121,9 @@ public class ReflectionBasedNullHandler extends ObjectNullHandler {
         return new Mirror().on(targetClass).reflect().method("get" + propertyCapitalized).withoutArgs();
     }
 
-	public static Method findSetter(Object target, String propertyCapitalized, Class<? extends Object> argument, OgnlContext ctx) {
+	Method findSetter(Object target, String propertyCapitalized, Class<? extends Object> argument) {
 		Class<? extends Object> targetClass = target.getClass();
 		
-		Proxifier proxifier = (Proxifier) ctx.get("proxifier");
         if (proxifier.isProxy(target)) {
             targetClass = targetClass.getSuperclass();
         }

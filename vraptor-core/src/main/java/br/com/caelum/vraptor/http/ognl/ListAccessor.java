@@ -32,6 +32,7 @@ import ognl.OgnlContext;
 import ognl.OgnlException;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.core.Converters;
+import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.vraptor2.Info;
 
 /**
@@ -115,7 +116,10 @@ public class ListAccessor extends ListPropertyAccessor {
 			Evaluation previous = eval.getPrevious();
 			String fieldName = previous.getNode().toString();
 			Object origin = previous.getSource();
-			Method getter = ReflectionBasedNullHandler.findGetter(origin, Info.capitalize(fieldName), ctx);
+			
+			Proxifier proxifier = (Proxifier) ctx.get("proxifier");
+			Method getter = new ReflectionBasedNullHandler(proxifier).findGetter(origin, Info.capitalize(fieldName));
+			
 			genericType = getter.getGenericReturnType();
 		} else {
 			genericType = (Type) ctx.get("rootType");

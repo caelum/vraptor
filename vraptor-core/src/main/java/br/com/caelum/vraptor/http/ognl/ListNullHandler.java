@@ -26,6 +26,7 @@ import net.vidageek.mirror.dsl.Mirror;
 import ognl.Evaluation;
 import ognl.OgnlContext;
 import br.com.caelum.vraptor.VRaptorException;
+import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.vraptor2.Info;
 
 /**
@@ -66,7 +67,11 @@ public class ListNullHandler {
 		// creating instance
 		Object listHolder = evaluation.getSource();
 		String listPropertyName = evaluation.getNode().toString();
-		Method listSetter = ReflectionBasedNullHandler.findSetter(listHolder, Info.capitalize(listPropertyName), target.getClass(), ctx);
+		
+		Proxifier proxifier = (Proxifier) ctx.get("proxifier");
+		Method listSetter = new ReflectionBasedNullHandler(proxifier).findSetter(listHolder, Info.capitalize(listPropertyName), 
+		        target.getClass());
+		
 		Type[] types = listSetter.getGenericParameterTypes();
 		Type type = types[0];
 		if (!(type instanceof ParameterizedType)) {

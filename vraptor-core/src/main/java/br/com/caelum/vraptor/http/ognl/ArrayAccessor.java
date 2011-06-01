@@ -24,6 +24,7 @@ import net.vidageek.mirror.dsl.Mirror;
 import ognl.ArrayPropertyAccessor;
 import ognl.OgnlContext;
 import ognl.OgnlException;
+import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.vraptor2.Info;
 
 /**
@@ -57,8 +58,11 @@ public class ArrayAccessor extends ArrayPropertyAccessor {
             } else {
 	            String fieldName = ctx.getCurrentEvaluation().getPrevious().getNode().toString();
 	            Object origin = ctx.getCurrentEvaluation().getPrevious().getSource();
-	            Method setter = ReflectionBasedNullHandler.findMethod(origin.getClass(),
+	            
+	            Proxifier proxifier = (Proxifier) context.get("proxifier");
+	            Method setter = new ReflectionBasedNullHandler(proxifier).findMethod(origin.getClass(),
 	                    "set" + Info.capitalize(fieldName), origin.getClass(), null);
+	            
 	            EmptyElementsRemoval removal = (EmptyElementsRemoval) context.get("removal");
 	            removal.add(newArray, setter, origin);
 

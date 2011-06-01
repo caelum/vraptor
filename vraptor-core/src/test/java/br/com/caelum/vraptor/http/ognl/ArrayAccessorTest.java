@@ -33,6 +33,9 @@ import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
 
+import br.com.caelum.vraptor.proxy.CglibProxifier;
+import br.com.caelum.vraptor.proxy.Proxifier;
+import br.com.caelum.vraptor.proxy.ReflectionInstanceCreator;
 import br.com.caelum.vraptor.test.VRaptorMockery;
 
 public class ArrayAccessorTest {
@@ -71,10 +74,12 @@ public class ArrayAccessorTest {
                 // does nothing
             }
         };
+        final Proxifier proxifier = new CglibProxifier(new ReflectionInstanceCreator());
         accessor = new ArrayAccessor();
         mockery.checking(new Expectations() {
             {
             	allowing(context).get("removal"); will(returnValue(removal));
+            	allowing(context).get("proxifier"); will(returnValue(proxifier));
                 allowing(context).getCurrentEvaluation();
                 will(returnValue(evaluation));
                 allowing(evaluation).getPrevious();

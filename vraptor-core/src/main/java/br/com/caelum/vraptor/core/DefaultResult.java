@@ -76,6 +76,10 @@ public class DefaultResult extends AbstractResult {
 	}
 
 	public Result include(Object value) {
+		if(value == null) {
+			return this;
+		}
+		
 		String key = this.extractor.nameFor(value.getClass());
 		return include(key, value);
 	}

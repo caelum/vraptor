@@ -84,6 +84,7 @@ public class OgnlGenericTypesSupportTest {
         context.setTraceEvaluations(true);
         context.put(Container.class, container);
         context.put("removal", removal);
+        context.put("nullHandler", new GenericNullHandler(removal));
         // OgnlRuntime.setPropertyAccessor(Set.class, new SetAccessor());
         // OgnlRuntime.setPropertyAccessor(Map.class, new MapAccessor());
         Ognl.setTypeConverter(context, new VRaptorConvertersAdapter(converters, bundle));

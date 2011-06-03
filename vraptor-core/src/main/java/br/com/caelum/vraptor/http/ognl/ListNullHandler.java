@@ -33,7 +33,7 @@ import br.com.caelum.vraptor.vraptor2.Info;
  *
  * @author Guilherme Silveira
  */
-class ListNullHandler {
+public class ListNullHandler {
 
 	private final EmptyElementsRemoval removal;
 

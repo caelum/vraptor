@@ -40,7 +40,7 @@ import net.vidageek.mirror.dsl.Mirror;
  *
  * @author Guilherme Silveira
  */
-class GenericNullHandler implements NullHandler {
+public class GenericNullHandler implements NullHandler {
 
     private static final Map<Class<?>, Class<?>> CONCRETE_TYPES = new HashMap<Class<?>, Class<?>>();
 	private final EmptyElementsRemoval removal;

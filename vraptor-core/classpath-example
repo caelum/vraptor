@@ -103,7 +103,6 @@
 	<classpathentry kind="lib" path="lib/optional/hibernate/hibernate-validator-4.0.2.GA.jar"/>
 	<classpathentry kind="lib" path="lib/optional/hibernate/jta-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/optional/hibernate/validation-api-1.0.0.GA.jar"/>
-	<classpathentry kind="lib" path="lib/optional/iogi/iogi-0.8.1.jar"/>
 	<classpathentry kind="lib" path="lib/optional/javax.annotation/jsr250-api-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/optional/jodatime/joda-time-1.6.jar"/>
 	<classpathentry kind="lib" path="lib/optional/upload/commons-fileupload-1.2.1.jar"/>
@@ -125,5 +124,6 @@
 	<classpathentry kind="lib" path="lib/mandatory/javassist-3.14.0.GA.jar"/>
 	<classpathentry kind="lib" path="lib/optional/hibernate/hibernate-3.6.1.jar"/>
 	<classpathentry kind="lib" path="lib/optional/hibernate/hibernate-jpa-2.0-api-1.0.0.Final.jar"/>
+	<classpathentry kind="lib" path="lib/optional/iogi/iogi-0.8.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -7,8 +7,9 @@ import br.com.caelum.vraptor.validator.HibernateValidator3;
  *
  * @author Wagner Ferreira and leandros
  * @see MockValidator
+ * @deprecated Use {@link JSR303MockValidator} instead.
  */
-
+@Deprecated
 public class HibernateMockValidator extends MockValidator {
 
 	private HibernateValidator3 hibernateValidator3;

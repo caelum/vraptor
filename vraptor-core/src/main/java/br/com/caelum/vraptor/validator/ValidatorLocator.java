@@ -29,7 +29,9 @@ import org.slf4j.LoggerFactory;
  * Caches instances of hibernate validator instances.
  *
  * @author Guilherme Silveira
+ * @deprecated Use {@link JSR303Validator} instead.
  */
+@Deprecated
 class ValidatorLocator {
 
     private final Map<Key, ClassValidator<?>> cache = new HashMap<Key, ClassValidator<?>>();

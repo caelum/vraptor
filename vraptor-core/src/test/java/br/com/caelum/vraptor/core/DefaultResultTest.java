@@ -22,6 +22,9 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.never;
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Matchers.anyString;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -217,9 +220,15 @@ public class DefaultResultTest {
     	Account account = new Account();
     	when(extractor.nameFor(Account.class)).thenReturn("account");
     	
-    result.include(account);
+    	result.include(account);
 
     	verify(request).setAttribute("account", account);
 
+    }
+    
+    @Test
+    public void shouldNotIncludeTheAttributeWhenTheValueIsNull() throws Exception {
+    	result.include(null);
+    	verify(request, never()).setAttribute(anyString(), anyObject());
     }
 }

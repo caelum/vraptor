@@ -1,5 +1,7 @@
 package br.com.caelum.vraptor.util.hibernate.extra;
 
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doThrow;
@@ -9,10 +11,14 @@ import static org.mockito.Mockito.when;
 
 import javax.servlet.http.HttpServletRequest;
 
+import br.com.caelum.vraptor.view.FlashScope;
+import org.hamcrest.Matchers;
 import org.hibernate.Session;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.stubbing.Stubber;
 
@@ -34,21 +40,20 @@ public class ParameterLoaderInterceptorTest {
 	private @Mock ParameterNameProvider provider;
 	private @Mock Result result;
 	private @Mock Converters converters;
+    private @Mock FlashScope flash;
 
-	private ParameterLoaderInterceptor interceptor;
-	private ResourceMethod method;
-	private @Mock InterceptorStack stack;
-	private Object instance;
-	private ResourceMethod managed;
-	private ResourceMethod other;
-	private ResourceMethod noId;
+    private ParameterLoaderInterceptor interceptor;
+    private ResourceMethod method;
+    private @Mock InterceptorStack stack;
+    private @Mock Object instance;
+    private ResourceMethod other;
+    private ResourceMethod noId;
 
-	@Before
+    @Before
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
-		interceptor = new ParameterLoaderInterceptor(session, request, provider, result, converters, new MockLocalization());
+		interceptor = new ParameterLoaderInterceptor(session, request, provider, result, converters, new MockLocalization(), flash);
 		method = DefaultResourceMethod.instanceFor(Resource.class, Resource.class.getMethod("method", Entity.class));
-		managed = DefaultResourceMethod.instanceFor(Resource.class, Resource.class.getMethod("managed", Entity.class));
 		other = DefaultResourceMethod.instanceFor(Resource.class, Resource.class.getMethod("other", OtherEntity.class));
 		noId = DefaultResourceMethod.instanceFor(Resource.class, Resource.class.getMethod("noId", NoIdEntity.class));
 
@@ -66,7 +71,6 @@ public class ParameterLoaderInterceptorTest {
 		interceptor.intercept(stack, method, instance);
 
 		verify(request).setAttribute("entity", expectedEntity);
-		verify(session).evict(expectedEntity);
 		verify(stack).next(method, instance);
 	}
 
@@ -80,22 +84,26 @@ public class ParameterLoaderInterceptorTest {
 		interceptor.intercept(stack, other, instance);
 
 		verify(request).setAttribute("entity", expectedEntity);
-		verify(session).evict(expectedEntity);
 		verify(stack).next(other, instance);
 	}
 
 	@Test
-	public void shouldNotEvictIfIsManaged() throws Exception {
-		when(provider.parameterNamesFor(managed.getMethod())).thenReturn(new String[] {"entity"});
+	public void shouldOverrideFlashScopedArgsIfAny() throws Exception {
+		when(provider.parameterNamesFor(method.getMethod())).thenReturn(new String[] {"entity"});
 		when(request.getParameter("entity.id")).thenReturn("123");
-		Entity expectedEntity = new Entity();
+        Object[] args = {new Entity()};
+
+        when(flash.consumeParameters(method)).thenReturn(args);
+
+        Entity expectedEntity = new Entity();
 		when(session.get(Entity.class, 123l)).thenReturn(expectedEntity);
 
-		interceptor.intercept(stack, managed, instance);
+		interceptor.intercept(stack, method, instance);
 
-		verify(request).setAttribute("entity", expectedEntity);
-		verify(session, never()).evict(expectedEntity);
-		verify(stack).next(managed, instance);
+		assertThat(args[0], is((Object) expectedEntity));
+
+		verify(stack).next(method, instance);
+        verify(flash).includeParameters(method, args);
 	}
 
 	@Test
@@ -162,8 +170,6 @@ public class ParameterLoaderInterceptorTest {
 		public void other(@Load OtherEntity entity) {
 		}
 		public void noId(@Load NoIdEntity entity) {
-		}
-		public void managed(@Load(managed=true) Entity entity) {
 		}
 	}
 	private Stubber fail() {

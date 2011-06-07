@@ -12,6 +12,7 @@ import java.lang.reflect.Field;
 
 import javax.servlet.http.HttpServletRequest;
 
+import br.com.caelum.vraptor.view.FlashScope;
 import net.vidageek.mirror.dsl.Mirror;
 
 import org.hibernate.Session;
@@ -50,16 +51,18 @@ public class ParameterLoaderInterceptor implements Interceptor {
 	private final Result result;
 	private final Converters converters;
 	private final Localization localization;
+    private final FlashScope flash;
 
-	public ParameterLoaderInterceptor(Session session, HttpServletRequest request, ParameterNameProvider provider,
-			Result result, Converters converters, Localization localization) {
+    public ParameterLoaderInterceptor(Session session, HttpServletRequest request, ParameterNameProvider provider,
+			Result result, Converters converters, Localization localization, FlashScope flash) {
 		this.session = session;
 		this.request = request;
 		this.provider = provider;
 		this.result = result;
 		this.converters = converters;
 		this.localization = localization;
-	}
+        this.flash = flash;
+    }
 
 	public boolean accepts(ResourceMethod method) {
 		return any(asList(method.getMethod().getParameterAnnotations()), hasLoadAnnotation());
@@ -73,19 +76,22 @@ public class ParameterLoaderInterceptor implements Interceptor {
 
 		Class<?>[] types = method.getMethod().getParameterTypes();
 
-		for (int i = 0; i < names.length; i++) {
+        Object[] args = flash.consumeParameters(method);
+
+        for (int i = 0; i < names.length; i++) {
 			Iterable<Load> loads = Iterables.filter(asList(annotations[i]), Load.class);
 			if (!isEmpty(loads)) {
 				Object loaded = load(names[i], types[i]);
-				Load load = loads.iterator().next();
-				if (!load.managed()) {
-					session.evict(loaded);
-				}
-				if (loaded == null) { result.notFound(); return; }
 
-				request.setAttribute(names[i], loaded);
+                if (loaded == null) { result.notFound(); return; }
+
+                if (args != null)
+                    args[i] = loaded;
+                else
+				    request.setAttribute(names[i], loaded);
 			}
 		}
+        flash.includeParameters(method, args);
 
 		stack.next(method, resourceInstance);
 	}

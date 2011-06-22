@@ -6,7 +6,8 @@
 
 	<description>VRaptor 3 site module build</description>
 
-	<property name="sdk.dir" location="/home/luiz/eclipse/plugins/com.google.appengine.eclipse.sdkbundle_1.5.0.r36v201105191508/appengine-java-sdk-1.5.0.1" />
+	<property environment="env"/>
+	<property name="sdk.dir" location="${env.APPENGINE_SDK_HOME}" />
 
 	<import file="${sdk.dir}/config/user/ant-macros.xml" />
 

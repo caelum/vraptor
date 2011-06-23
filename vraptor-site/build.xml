@@ -6,6 +6,11 @@
 
 	<description>VRaptor 3 site module build</description>
 
+	<property environment="env"/>
+	<property name="sdk.dir" location="${env.APPENGINE_SDK_HOME}" />
+
+	<import file="${sdk.dir}/config/user/ant-macros.xml" />
+
 	<path id="libs.classpath" path=".">
 		<fileset dir="lib">
 			<include name="*.jar" />
@@ -15,8 +20,8 @@
 		<fileset dir="src/content/WEB-INF/lib">
 			<include name="*.jar" />
 		</fileset>
-		<fileset dir="../common">
-			<include name="*.jar" />
+		<fileset dir="${sdk.dir}/lib">
+			<include name="shared/**/*.jar" />
 		</fileset>
 	</path>
 
@@ -74,8 +79,8 @@
 	</macrodef>
 	
 	<target name="doc">
-		<get dest="src/templates/html/header.ftl" src="http://localhost:8080/vraptor-site/header.jsp?docs=true"/>
-		<get dest="src/templates/html/footer.ftl" src="http://localhost:8080/vraptor-site/footer.jsp?docs=true"/>
+		<get dest="src/templates/html/header.ftl" src="http://localhost:8080/header.jsp?docs=true"/>
+		<get dest="src/templates/html/footer.ftl" src="http://localhost:8080/footer.jsp?docs=true"/>
 		<copy file="src/templates/html/chapter-title-pt.ftl" tofile="src/templates/html/chapter-title.ftl"/>
 		
 		<tubaina src="src/guide/pt/" dest="src/content" name="documentacao" title="chapter-title-pt.ftl"/>
@@ -91,8 +96,8 @@
 			<arg line="-rf src/content/documentation"/>
 		</exec>
 		
-		<get dest="src/templates/html/header.ftl" src="http://localhost:8080/vraptor-site/en/header.jsp?docs=true"/>
-		<get dest="src/templates/html/footer.ftl" src="http://localhost:8080/vraptor-site/en/footer.jsp?docs=true"/>
+		<get dest="src/templates/html/header.ftl" src="http://localhost:8080/en/header.jsp?docs=true"/>
+		<get dest="src/templates/html/footer.ftl" src="http://localhost:8080/en/footer.jsp?docs=true"/>
 		<tubaina src="src/guide/en/" dest="src/content" name="documentation" title="chapter-title-en.ftl"/>
 		<tubaina-pdf src="src/guide/en/" dest="src/content/documentation/vraptor3.pdf" 
 				title="VRaptor 3 -- Java web MVC framework for fast and maintenable development"/>
@@ -124,17 +129,17 @@
 	<target name="compile" description="--> compiles the classes">
 		<mkdir dir="src/content/WEB-INF/classes"/>
 		<delete dir="src/content/WEB-INF/classes" includes="**/*"/>
-		<javac  destdir="src/content/WEB-INF/classes" srcdir="src/java" classpathref="compile.classpath" debug="true" encoding="UTF-8" />
+		<javac destdir="src/content/WEB-INF/classes" srcdir="src/java" classpathref="compile.classpath" debug="true" encoding="UTF-8" />
 		<copy todir="src/content/WEB-INF/classes">
 			<fileset dir="src/resources" />
 		</copy>
 	</target>
-	<!-- ================================= 
-	          target: assembly              
-	         ================================= -->
-    <target name="assembly" depends="compile, doc, javadoc" description="--> assemblies the distribution">
-		<war destfile="site.war" webxml="src/content/WEB-INF/web.xml">
-        	<fileset dir="src/content" excludes="src/content/WEB-INF/web.xml"/>
-    	</war>
-    </target>
+
+	<target name="runserver" description="Starts the development server.">
+		<dev_appserver war="src/content" />
+	</target>
+
+	<target name="update" description="Uploads the application to App Engine.">
+		<appcfg action="update" war="src/content" />
+	</target>
 </project>

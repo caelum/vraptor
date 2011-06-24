@@ -17,6 +17,7 @@ package br.com.caelum.vraptor.scan;
 
 import static com.google.common.base.Objects.firstNonNull;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.net.URL;
@@ -27,6 +28,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import net.vidageek.mirror.dsl.Mirror;
 
 import org.scannotation.AnnotationDB;
 import org.slf4j.Logger;
@@ -89,29 +92,44 @@ public class ScannotationComponentScanner implements ComponentScanner {
 
 
 	private void scanPackage(String basePackage, AnnotationDB db, ClasspathResolver resolver) throws IOException {
-		String resource = basePackage.replace('.', '/');
-		Enumeration<URL> urls = resolver.getClassLoader().getResources(resource);
-		if (!urls.hasMoreElements()) {
-			logger.error("There's no occurence of package {} in classpath", basePackage);
-			return;
-		}
-		do {
-			URL url = urls.nextElement();
+        String resource = basePackage.replace('.', '/');
+        Enumeration<URL> urls = resolver.getClassLoader().getResources(resource);
+        if (!urls.hasMoreElements()) {
+            logger.error("There's no occurence of package {} in classpath", basePackage);
+            return;
+        }
 
-			String file = toFileName(resource, url);
+        do {
+            String fileName = null;
+            URL url = urls.nextElement();
+            logger.info("scanning url {}", url);
 
-			db.scanArchives(new URL(file));
-		} while (urls.hasMoreElements());
+            if (url.getProtocol().equals("vfs")) {
+                fileName = toJBossVFSFileName(url);
+            } else {
+                fileName = toFileName(resource, url.getFile());
+            }
+
+            db.scanArchives(new URL("file:" + fileName));
+        } while (urls.hasMoreElements());
 	}
 
-	private String toFileName(String resource, URL url) {
-		String file = url.getFile().substring(0, url.getFile().length() - resource.length() - 1).replaceAll("(!)(/)?$", "");
+    private String toJBossVFSFileName(URL url)
+        throws IOException {
+        Object content = url.openConnection().getContent();
+        File pfile = (File) new Mirror().on(content).invoke().method("getPhysicalFile").withoutArgs();
+        logger.info("real file for url {} is {}", url, pfile);
 
-		if (!file.startsWith("file:")) {
-			file = "file:" + file;
-		}
-		return file;
-	}
+        if (pfile.isDirectory()) {
+            return pfile.getAbsolutePath() + "/";
+        }
+
+        return pfile.getAbsolutePath();
+    }
+
+    private String toFileName(String resource, String file) {
+        return file.substring(0, file.length() - resource.length() - 1).replaceAll("(!)(/)?$", "");
+    }
 
 	private Set<String> findStereotypes(Map<String, Set<String>> webInfClassesAnnotationMap, Map<String, Set<String>> basePackagesAnnotationMap, List<String> basePackages) {
 		HashSet<String> results = new HashSet<String>();

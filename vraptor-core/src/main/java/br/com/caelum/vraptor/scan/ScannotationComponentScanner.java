@@ -109,8 +109,12 @@ public class ScannotationComponentScanner implements ComponentScanner {
             } else {
                 fileName = toFileName(resource, url.getFile());
             }
+            
+            if (!fileName.startsWith("file:")) {
+                fileName = "file:" + fileName;
+            }
 
-            db.scanArchives(new URL("file:" + fileName));
+            db.scanArchives(new URL(fileName));
         } while (urls.hasMoreElements());
 	}
 

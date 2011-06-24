@@ -118,12 +118,12 @@
 	<classpathentry kind="lib" path="lib/optional/jfreechart/jcommon-1.0.16.jar"/>
 	<classpathentry kind="lib" path="lib/optional/jfreechart/jfreechart-1.0.13.jar"/>
 	<classpathentry kind="lib" path="lib/optional/jruby.jar"/>
-	<classpathentry kind="lib" path="lib/containers/guice/guice-3.0-rc2.jar"/>
-	<classpathentry kind="lib" path="lib/containers/guice/guice-multibindings-3.0-rc2.jar"/>
 	<classpathentry kind="lib" path="lib/mandatory/scannotation-1.0.2.jar"/>
 	<classpathentry kind="lib" path="lib/mandatory/javassist-3.14.0.GA.jar"/>
 	<classpathentry kind="lib" path="lib/optional/hibernate/hibernate-3.6.1.jar"/>
 	<classpathentry kind="lib" path="lib/optional/hibernate/hibernate-jpa-2.0-api-1.0.0.Final.jar"/>
 	<classpathentry kind="lib" path="lib/optional/iogi/iogi-0.8.2.jar"/>
+	<classpathentry kind="lib" path="lib/containers/guice/guice-3.0.jar"/>
+	<classpathentry kind="lib" path="lib/containers/guice/guice-multibindings-3.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

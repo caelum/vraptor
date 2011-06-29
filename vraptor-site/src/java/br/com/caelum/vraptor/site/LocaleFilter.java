@@ -12,8 +12,8 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.common.collect.BiMap;
-import com.google.common.collect.ImmutableBiMap;
+import com.google.appengine.repackaged.com.google.common.collect.BiMap;
+import com.google.appengine.repackaged.com.google.common.collect.ImmutableBiMap;
 
 /**
  * Servlet Filter implementation class LocaleFilter

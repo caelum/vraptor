@@ -1,25 +1,24 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
-	id="WebApp_ID" version="2.5">
-	<display-name>vraptor-blank-project</display-name>
-
-	<!--
-		VRaptor will scan classpath for all @Component and 
-		@Resource inside WEB-INF/classes
-
-		If you want to load them also from WEB-INF/lib/ jars, 
-		you need to specify from which packages they will
-		be loaded, comma separated:
-	-->
-	
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	version="2.5">
 
 	<context-param>
 		<param-name>br.com.caelum.vraptor.packages</param-name>
 		<param-value>br.com.caelum.vraptor.gae</param-value>
 	</context-param>
 
+	<context-param>
+		<param-name>javax.servlet.jsp.jstl.fmt.localizationContext</param-name>
+		<param-value>messages</param-value>
+	</context-param>
+
+	<context-param>
+		<param-name>javax.servlet.jsp.jstl.fmt.localizationContext</param-name>
+		<param-value>messages</param-value>
+	</context-param>
 
 	<filter>
 		<filter-name>vraptor</filter-name>
@@ -33,7 +32,4 @@
 		<dispatcher>REQUEST</dispatcher>
 	</filter-mapping>
 
-	<welcome-file-list>
-		<welcome-file>index.html</welcome-file>
-	</welcome-file-list>
 </web-app>

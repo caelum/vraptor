@@ -26,10 +26,11 @@ For example, to validate that employee name is 'John Doe':
 [java]
 public void add(Employee employee) {
 	if (!employee.getName().equals("John Doe")) {
-		validator.add(new ValidationMessage("error","invalidName"));
+		validator.add(new ValidationMessage("invalid.name", "error"));
 	}
+
 	validator.onErrorUsePageOf(EmployeeController.class).form();
-	
+
 	dao.add(employee);
 }
 [/java]
@@ -44,11 +45,12 @@ For example, if we want the employee name to be required:
 
 [java]
 public add(Employee employee) {
-	validator.checking(new Validations(){{
-		that(!employee.getName().isEmpty(), "error","nameIsRequired");
+	validator.checking(new Validations() {{
+		that(!employee.getName().isEmpty(), "error", "name.is.required");
 	}});
+
 	validator.onErrorUsePageOf(EmployeeController.class).form();
-	
+
 	dao.add(employee);
 }
 [/java]
@@ -65,7 +67,7 @@ user age only if the user is not null. The that method will return a boolean tha
 of the validation:
 
 [java]
-	validator.checking(new Validations(){{
+	validator.checking(new Validations() {{
 		if (that(user != null, "user", "null.user")) {
 			that(user.getAge() >= 18, "user.age", "user.is.underage");
 		}
@@ -77,12 +79,12 @@ So the second validation will execute only if the first didn't fail.
 [section Validation with message parameters]
 You can add parameters to you message keys:
 [code properties]
-greater_than = {0} should be greater than {1}
+greater.than = {0} should be greater than {1}
 [/code]
 And use it on your validations code:
 [java]
-	validator.checking(new Validations(){{
-		that(user.getAge() >= 18, "user.age", "greater_than", "Age", 18);
+	validator.checking(new Validations() {{
+		that(user.getAge() >= 18, "user.age", "greater.than", "Age", 18);
 		// Age should be greater than 18
 	}});
 [/java]
@@ -92,8 +94,8 @@ user.age = User age
 [/code]
 
 [java]
-	validator.checking(new Validations(){{
-		that(user.getAge() >= 18, "user.age", "greater_than", i18n("user.age"), 18);
+	validator.checking(new Validations() {{
+		that(user.getAge() >= 18, "user.age", "greater.than", i18n("user.age"), 18);
 		// User age should be greater than 18
 	}});
 [/java]
@@ -103,10 +105,12 @@ with the advantage of matcher composition and the creation of new matchers that
 Hamcrest allows:
 [java]
 public admin(Employee employee) {
-	validator.checking(new Validations(){{
-		that(employee.getRoles(), hasItem("ADMIN"), "admin","employee.is.not.admin");
+	validator.checking(new Validations() {{
+		that(employee.getRoles(), hasItem("ADMIN"), "admin", "employee.is.not.admin");
 	}});
-	validator.onErrorUsePageOf(LoginController.class).login();	
+
+	validator.onErrorUsePageOf(LoginController.class).login();
+
 	dao.add(employee);
 }
 [/java]
@@ -120,14 +124,15 @@ In the example above, to validate the employee object using HibernateValidator, 
 
 [java]
 public add(Employee employee) {
-	//Validation with Bean Validation or Hibernate Validator
+	// Validation with Bean Validation or Hibernate Validator
 	validator.validate(funcionario);
-	
-	validator.checking(new Validations(){{
-		that(!employee.getName().isEmpty(), "error","nameIsRequired");
+
+	validator.checking(new Validations() {{
+		that(!employee.getName().isEmpty(), "error", "name.is.required");
 	}});
+
 	validator.onErrorUsePageOf(EmployeeController.class).form();
-		
+
 	dao.add(employee);
 }
 [/java]
@@ -142,17 +147,18 @@ Easy, just tell your validator to do just that: when you find any validation err
 [java h=12]
 public add(Employee employee) {
 	
-	//Fluent validation
-	validator.checking(new Validations(){{
-		that(!employee.getName().isEmpty(), "error","nameIsRequired");
+	// Fluent validation
+	validator.checking(new Validations() {{
+		that(!employee.getName().isEmpty(), "error", "name.is.required");
 	}});
-	
-	//Classic validation
+
+	// Classic validation
 	if (!employee.getName().equals("John Doe")) {
-		validator.add(new ValidationMessage("error","invalidName"));
+		validator.add(new ValidationMessage("error", "invalid.name"));
 	}
+
 	validator.onErrorUse(page()).of(EmployeeController.class).form();
-	
+
 	dao.add(employee);
 }
 [/java]
@@ -177,6 +183,30 @@ Furthermore, if one are redirecting to a method on the same controller, one can 
 * validator.onErrorRedirectTo(this).list() ==> validator.onErrorUse(logic()).redirectTo(this.getClass()).list();
 * validator.onErrorUsePageOf(this).list()  ==> validator.onErrorUse(page()).of(this.getClass()).list();
 [/list]
+
+[section L10N with the bundle of the Localization]
+
+To force translation the parameters of the i18n() methods, simply inject the Localization and 
+use it bundle on the constructor of the Validations():
+
+[java]
+private final Validator validator;
+private final Localization localization;
+
+public UserController(Validator validator, Localization localization) {
+	this.validator = validator;
+	this.localization = localization;
+}
+[/java]
+
+[java]
+validator.checking(new Validations(localization.getBundle()) {{
+	that(user.getAge() >= 18, "user.age", "greater.than", i18n("user.age"), 18);
+}});
+[/java]
+
+Note that here is passed manually the ResourceBundle, so the key "user.age" will be translated 
+correctly in the change of the Locale.
 
 [section Showing validation errors on JSP]
 

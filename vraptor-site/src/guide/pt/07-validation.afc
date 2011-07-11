@@ -24,10 +24,12 @@ Por exemplo, para validar que o nome do funcionario deve ser Fulano, faça:
 
 [java]
 public void adiciona(Funcionario funcionario) {
-	if(! funcionario.getNome().equals("Fulano")) {
-		validator.add(new ValidationMessage("erro","nomeInvalido"));
+	if (!funcionario.getNome().equals("Fulano")) {
+		validator.add(new ValidationMessage("nome.invalido", "erro"));
 	}
+
 	validator.onErrorUsePageOf(FuncionarioController.class).formulario();
+
 	dao.adiciona(funcionario);
 }
 [/java]
@@ -42,11 +44,12 @@ Por exemplo, caso queiramos obrigar que seja informado o nome do funcionario:
 
 [java]
 public adiciona(Funcionario funcionario) {
-	validator.checking(new Validations(){{
-		that(!funcionario.getNome().isEmpty(), "erro","nomeNaoInformado");
+	validator.checking(new Validations() {{
+		that(!funcionario.getNome().isEmpty(), "erro", "nome.nao.informado");
 	}});
+
 	validator.onErrorUsePageOf(FuncionarioController.class).formulario();
-	
+
 	dao.adiciona(funcionario);
 }
 [/java]
@@ -63,7 +66,7 @@ checar a idade do usuário se o usuário não for null. O método that retorna u
 foi passado pra ele é válido ou não:
 
 [java]
-	validator.checking(new Validations(){{
+	validator.checking(new Validations() {{
 		if (that(usuario != null, "usuario", "usuario.nulo")) {
 			that(usuario.getIdade() >= 18, "usuario.idade", "usuario.menor.de.idade");
 		}
@@ -75,12 +78,12 @@ Desse jeito a segunda validação só acontece se a primeira não falhou.
 [section Validação com parâmetros nas mensagens]
 Você pode colocar parâmetros nas suas mensagens internacionalizadas:
 [code properties]
-maior_que = {0} deveria ser maior que {1}
+maior.que = {0} deveria ser maior que {1}
 [/code]
 E usá-los no seu código de validação:
 [java]
-	validator.checking(new Validations(){{
-		that(usuario.getIdade() >= 18, "usuario.idade", "maior_que", "Idade", 18);
+	validator.checking(new Validations() {{
+		that(usuario.getIdade() >= 18, "usuario.idade", "maior.que", "Idade", 18);
 		// Idade deveria ser maior que 18
 	}});
 [/java]
@@ -90,8 +93,8 @@ usuario.idade = Idade do usuário
 [/code]
 
 [java]
-	validator.checking(new Validations(){{
-		that(usuario.getIdade() >= 18, "usuario.idade", "maior_que", i18n("usuario.idade"), 18);
+	validator.checking(new Validations() {{
+		that(usuario.getIdade() >= 18, "usuario.idade", "maior.que", i18n("usuario.idade"), 18);
 		// Idade do usuário deveria ser maior que 18
 	}});
 [/java]
@@ -101,10 +104,12 @@ Você pode também usar matchers do Hamcrest para deixar a validação mais leg�
 a vantagem da composição de matchers e da criação de novos matchers que o Hamcrest te oferece:
 [java]
 public admin(Funcionario funcionario) {
-	validator.checking(new Validations(){{
-		that(funcionario.getRoles(), hasItem("ADMIN"), "admin","funcionario.nao.eh.admin");
+	validator.checking(new Validations() {{
+		that(funcionario.getRoles(), hasItem("ADMIN"), "admin", "funcionario.nao.eh.admin");
 	}});
+
 	validator.onErrorUsePageOf(LoginController.class).login();	
+
 	dao.adiciona(funcionario);
 }
 [/java]
@@ -122,9 +127,10 @@ public adiciona(Funcionario funcionario) {
 	// Validação do Funcionario com o Bean Validator ou Hibernate Validator
 	validator.validate(funcionario);
 
-	validator.checking(new Validations(){{
-		that(!funcionario.getNome().isEmpty(), "erro","nomeNaoInformado");
+	validator.checking(new Validations() {{
+		that(!funcionario.getNome().isEmpty(), "erro", "nome.nao.informado");
 	}});
+
 	validator.onErrorUsePageOf(FuncionarioController.class).formulario();
 	
 	dao.adiciona(funcionario);
@@ -142,16 +148,18 @@ Como no exemplo:
 
 [java h=10]
 public adiciona(Funcionario funcionario) {
-	//Validação na forma fluente
-	validator.checking(new Validations(){{
-		that("erro","nomeNaoInformado", !funcionario.getNome().isEmpty());
+	// Validação na forma fluente
+	validator.checking(new Validations() {{
+		that("erro","nome.nao.informado", !funcionario.getNome().isEmpty());
 	}});
-	//Validação na forma clássica
-	if(! funcionario.getNome().equals("Fulano")) {
+
+	// Validação na forma clássica
+	if (!funcionario.getNome().equals("Fulano")) {
 		validator.add(new ValidationMessage("erro","nomeInvalido"));
 	}
+
 	validator.onErrorUse(page()).of(FuncionarioController.class).formulario();
-	
+
 	dao.adiciona(funcionario);
 }
 [/java]
@@ -176,6 +184,30 @@ Além disso, se o redirecionamento é para um método do mesmo controller, podem
 * validator.onErrorRedirectTo(this).list() ==> validator.onErrorUse(logic()).redirectTo(this.getClass()).list();
 * validator.onErrorUsePageOf(this).list()  ==> validator.onErrorUse(page()).of(this.getClass()).list();
 [/list]
+
+[section L10N com o bundle do Localization]
+
+Para forçar a tradução dos parâmetro do método i18n(), basta injetar o Localization 
+e passar o seu bundle para o contrutor do Validations():
+
+[java]
+private final Validator validator;
+private final Localization localization;
+
+public UsuarioController(Validator validator, Localization localization) {
+	this.validator = validator;
+	this.localization = localization;
+}
+[/java]
+
+[java]
+validator.checking(new Validations(localization.getBundle()) {{
+	that(usuario.getIdade() >= 18, "usuario.idade", "maior.que", i18n("usuario.idade"), 18);
+}});
+[/java]
+
+Repare que aqui esta sendo passado manualmente o ResourceBundle, dessa forma a key "usuario.idade" 
+será traduzida corretamente na troca do Locale.
 
 [section Mostrando os erros de validação no JSP]
 

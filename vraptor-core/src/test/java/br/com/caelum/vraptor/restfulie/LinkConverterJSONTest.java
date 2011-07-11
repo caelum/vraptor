@@ -39,6 +39,12 @@ import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.reflection.ReflectionConverter;
 import com.thoughtworks.xstream.io.json.JsonHierarchicalStreamDriver;
 
+/**
+ * Ensure that JSON serialization, of Restful resources, contains resources links.
+ * 
+ * @author ac de souza
+ *
+ */
 public class LinkConverterJSONTest {
 
 	private @Mock Restfulie restfulie;
@@ -71,10 +77,24 @@ public class LinkConverterJSONTest {
 		when(kill.getUri()).thenReturn("/kill");
 
 		when(builder.getRelations()).thenReturn(Arrays.asList(kill));
-		String xml = xstream.toXML(resource);
-		System.out.println(xml);
+		String json = xstream.toXML(resource);
 		String expectedLinks = "\"links\": [\n    {\n      \"rel\": \"kill\",\n      \"href\": \"http://www.caelum.com.br/kill\"\n    }\n  ]";
-		System.out.println(expectedLinks);
-		assertThat(xml, containsString(expectedLinks));
+		assertThat(json, containsString(expectedLinks));
+	}
+	
+	@Test
+	public void shouldSerializeAllLinksIfThereAreTransitions() {
+		Relation kill = mock(Relation.class);
+		when(kill.getName()).thenReturn("kill");
+		when(kill.getUri()).thenReturn("/kill");
+
+		Relation ressurect = mock(Relation.class);
+		when(ressurect.getName()).thenReturn("ressurect");
+		when(ressurect.getUri()).thenReturn("/ressurect");
+
+		when(builder.getRelations()).thenReturn(Arrays.asList(kill, ressurect));
+		String json = xstream.toXML(resource);
+		String expectedLinks = "\"links\": [\n    {\n      \"rel\": \"kill\",\n      \"href\": \"http://www.caelum.com.br/kill\"\n    },\n    {\n      \"rel\": \"ressurect\",\n      \"href\": \"http://www.caelum.com.br/ressurect\"\n    }\n  ]";
+		assertThat(json, containsString(expectedLinks));
 	}
 }

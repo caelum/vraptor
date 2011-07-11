@@ -67,15 +67,17 @@ public class LinkConverterJSON implements Converter {
 		RelationBuilder builder = restfulie.newRelationBuilder();
 		resource.configureRelations(builder);
 
-		ExtendedHierarchicalStreamWriterHelper.startNode(writer, "links", List.class);
-		Link link = null;
-		for (Relation t : builder.getRelations()) {
-			link = new Link(t.getName(), config.getApplicationPath() + t.getUri());
-			ExtendedHierarchicalStreamWriterHelper.startNode(writer, "link", String.class);
-			context.convertAnother(link);
-			writer.endNode();
+		if( !builder.getRelations().isEmpty() ) {
+			ExtendedHierarchicalStreamWriterHelper.startNode(writer, "links", List.class);
+			Link link = null;
+			for (Relation t : builder.getRelations()) {
+				link = new Link(t.getName(), config.getApplicationPath() + t.getUri());
+				ExtendedHierarchicalStreamWriterHelper.startNode(writer, "link", String.class);
+				context.convertAnother(link);
+				writer.endNode();
+			}
+	        writer.endNode();
 		}
-        writer.endNode();
 	}
 
 	public Object unmarshal(HierarchicalStreamReader arg0,

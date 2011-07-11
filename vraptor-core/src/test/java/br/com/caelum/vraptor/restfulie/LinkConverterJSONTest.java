@@ -18,6 +18,7 @@
 package br.com.caelum.vraptor.restfulie;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -40,10 +41,9 @@ import com.thoughtworks.xstream.converters.reflection.ReflectionConverter;
 import com.thoughtworks.xstream.io.json.JsonHierarchicalStreamDriver;
 
 /**
- * Ensure that JSON serialization, of Restful resources, contains resources links.
+ * Ensure that JSON serialization, of Restful resources, contains resources links. And not restful resources remains untouched.
  * 
  * @author ac de souza
- *
  */
 public class LinkConverterJSONTest {
 
@@ -68,6 +68,12 @@ public class LinkConverterJSONTest {
 		ReflectionConverter base = new ReflectionConverter(xstream.getMapper(), xstream.getReflectionProvider());
 
 		xstream.registerConverter(new LinkConverterJSON(base, restfulie, config));
+	}
+
+	@Test
+	public void shouldSerializeNoLinksIfThereIsNoTransition() {
+		String json = xstream.toXML(resource);
+		assertThat(json, not(containsString("links")));
 	}
 
 	@Test

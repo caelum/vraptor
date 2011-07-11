@@ -184,6 +184,30 @@ Furthermore, if one are redirecting to a method on the same controller, one can 
 * validator.onErrorUsePageOf(this).list()  ==> validator.onErrorUse(page()).of(this.getClass()).list();
 [/list]
 
+[section L10N with the bundle of the Localization]
+
+To force translation the parameters of the i18n() methods, simply inject the Localization and 
+use it bundle on the constructor of the Validations():
+
+[java]
+private final Validator validator;
+private final Localization localization;
+
+public UserController(Validator validator, Localization localization) {
+	this.validator = validator;
+	this.localization = localization;
+}
+[/java]
+
+[java]
+validator.checking(new Validations(localization.getBundle()) {{
+	that(user.getAge() >= 18, "user.age", "greater.than", i18n("user.age"), 18);
+}});
+[/java]
+
+Note that here is passed manually the ResourceBundle, so the key "user.age" will be translated 
+correctly in the change of the Locale.
+
 [section Showing validation errors on JSP]
 
 When there are validation errors, VRaptor will set a request attribute named %%errors%%

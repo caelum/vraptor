@@ -7,11 +7,11 @@ A VRaptor project pre-configured for Eclipse and prepared to run on Google App E
 USAGE
 
 On Eclipse:
-1) File > Import > Existing Projects into Workspace > Select root directory.
-2) Copy all VRaptor jars dependencies to directory 'war/WEB-INF/lib'
+1) File > Import > Existing Projects into Workspace > Select the project root directory.
+2) Copy VRaptor jars to directory 'war/WEB-INF/lib'. If you don't know what the dependencies use the file 'classpath-example' as reference.
 3) Project > Properties > Java Build Path
-	 Add JARs... > Select all jars on 'war/WEB-INF/lib'
-	 Add Library > Google App Engine > Select the SDK.
+	 - Add JARs... > Select all jars on 'war/WEB-INF/lib'
+	 - Add Library > Google App Engine > Select the SDK.
 
 REQUIREMENTS
 

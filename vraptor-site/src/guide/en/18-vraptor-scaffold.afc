@@ -52,13 +52,36 @@ The root default folder is %%app%% to change that you have the fallow command
 vraptor new onlinestore --package=br.com.caelum
 [/code] 
 
-[section Maven]
-
-The default build tool is ant with ivy to deal with dependencies, to use maven just
-create your application with the follow command 
+You can also change the model, controller and repository packages:
 
 [code]
+vraptor new onlinestore --package=br.com.caelum -m model -c controller -r repo
+[/code] 
+
+[section Build tool: Maven, Gradle or Ivy]
+
+The default build tool is ant with ivy to deal with dependencies, to change your
+build tool, just create your application with:
+
+[code]
+# for maven
 vraptor new onlinestore --build-tool=mvn
+
+# for gradle
+vraptor new onlinestore --build-tool=gradle
+[/code]
+
+When using gradle, use [code]gradle jettyRun[/code] to run the application.
+
+[section ORM: JPA or Hibernate, connection pool]
+
+A new project already comes with the connection pool configured and in place.
+Besides that, one can choose between JPA (EntityManager, default), or 
+Hibernate (Session), when creating your project:
+
+[code]
+vraptor new onlinestore -o=jpa
+vraptor new onlinestore -o=hibernate
 [/code]
 
 [section Freemarker]
@@ -87,17 +110,28 @@ vraptor new onlinestore --skip-eclipse
 [section Supported attributes type]
 The supported attributes type are: %%boolean, double, float, short, integer, long, string and text%%.
 
+[section Plugins]
+
+Vraptor plugin can be installed by issuing a
+
+[code]
+vraptor plugin simple-email
+[/code]
+
+You can find a list of available plugins at http://github.com/caelum/vraptor-contrib
+
 [section Help Command]
-VRaptor Scaffold was split into 2 generators "new" that is responsible to create the application
-and "scaffold" that is responsible to genrarad the CRUDs.
-To see all the options by running
+To get hold of all available commands execute
+[code]
+vraptor -h
+[/code]
+
+To get more information on a command usage, use, for example:
 
 [code]
 vraptor new -h
-[/code]
-
-[code]
 vraptor scaffold -h
+vraptor plugin -h
 [/code]
 
 [section Contributing]

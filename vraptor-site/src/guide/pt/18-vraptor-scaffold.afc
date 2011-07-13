@@ -53,27 +53,38 @@ O pacote raiz por padrão é %%app%%, para mudar isso crie a aplicação com o s
 vraptor new onlinestore --package=br.com.caelum
 [/code] 
 
-[section Maven]
-
-Por padrão a aplicação é criada com o ant com ferramenta de build e o ivy como gerenciador de dependências,
-é posível utilizar o maven 2, basta criar o aplicação com 
+Você também pode configurar os pacotes de modelos, controllers e repositórios:
 
 [code]
+vraptor new onlinestore --package=br.com.caelum -m modelo -c controlador -r repositorio
+[/code] 
+
+[section Build: Maven, Gradle ou Ivy]
+
+O vraptor-scaffold gera um projeto com ant e ivy por padrão, mas você pode
+escolher outra ferramenta de build com um simples comando na hora de criar
+seu projeto:
+
+[code]
+# for maven
 vraptor new onlinestore --build-tool=mvn
-[/code]
 
-Execute [code]mvn jetty:run[/code] para iniciar a aplicação 
-
-[section Gradle]
-
-Gradle é uma ferramente de build que usa conceitos DRY para deixar o arquivo de build menor e de mais fácil manutenção, 
-e agora o VRaptor Scaffold vem com suporte ao gradle. Para utilizar é bem simples execute o comando
-
-[code]
+# for gradle
 vraptor new onlinestore --build-tool=gradle
 [/code]
 
-Execute [code]gradle jettyRun[/code] para iniciar a aplicação
+Ao usar gradle, utilize [code]gradle jettyRun[/code] para rodar a aplicação.
+
+[section ORM: JPA ou Hibernate, connection pool]
+
+Um projeto novo já vem por padrão com o c3p0 configurado.
+Além disso você pode escolher entre JPA (EntityManager, padrão), ou 
+Hibernate (Session), ao criar seu projeto:
+
+[code]
+vraptor new onlinestore -o=jpa
+vraptor new onlinestore -o=hibernate
+[/code]
 
 [section Freemarker]
 
@@ -109,14 +120,27 @@ vraptor new onlinestore --skip-eclipse
 [section Tipos de atributos suportado]
 É possível gerar um CRUD com os seguintes atributos: %%boolean, double, float, short, integer, long, string e text%%.
 
+[section Plugins]
+
+Plugins do vraptor são facilmente instalados através do comando
+
+[code]
+vraptor plugin simple-email
+[/code]
+
+Você pode encontrar uma lista de plugins disponíveis em http://github.com/caelum/vraptor-contrib
+
 [section Comando Help]
-O VRaptor Scaffold está dividindo basicamente em 2 geradores o "new" que é responsável por
-criar a estrutura da aplicação e o "scaffold" que é resposável por gerar os CRUDs.
-É possível ver todas as opções de customização dos geradores.
 
-[code]vraptor new -h[/code]
+Para visualizar a lista de comandos disponibilizados pelo vraptor-scaffold, execute:
 
-[code]vraptor scaffold -h[/code]
+[code]
+vraptor -h
+[/code]
+
+vraptor new -h
+vraptor scaffold -h
+vraptor plugin -h
 
 [section Contribuindo]
 

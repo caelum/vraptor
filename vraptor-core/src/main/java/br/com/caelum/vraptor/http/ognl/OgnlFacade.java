@@ -56,6 +56,7 @@ public class OgnlFacade {
 		context.put("rootType", type);
 		context.put("removal", removal);
 		context.put("nullHandler", nullHandler());
+		context.put(ResourceBundle.class, bundle);
 
 		Ognl.setTypeConverter(context, createAdapter(bundle));
 

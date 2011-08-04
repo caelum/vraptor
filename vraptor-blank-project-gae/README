@@ -1,19 +1,19 @@
-VRAPTOR BLANK PROJECT FOR GOOGLE APP ENGINE
---------------------------------------------------------------------------------
-IMPORTING THIS PROJECT ON ECLIPSE
+VRAPTOR BLANK PROJECT FOR GAE
 
+DESCRIPTION
 
-You will need Google Plugin for Eclipse too:
-	* http://code.google.com/appengine/docs/java/tools/eclipse.html
+A VRaptor project pre-configured for Eclipse and prepared to run on Google App Engine.
 
-WARNING: check if the jars inside the project are the same of your installed GAE plugin.
+USAGE
 
-In order to import this project on Eclipse, you'll need:
-	* choose menu file/import existent projects
-	* choose the directory that contains vraptor-blank-project-gae (the directory in which you decompressed it)
-	* just right click on the project, run as, run on server. choose a servlet container or configure a new one
-	
-	
-	
+On Eclipse:
+1) File > Import > Existing Projects into Workspace > Select root directory.
+2) Copy all VRaptor jars dependencies to directory 'war/WEB-INF/lib'
+3) Project > Properties > Java Build Path
+	 Add JARs... > Select all jars on 'war/WEB-INF/lib'
+	 Add Library > Google App Engine > Select the SDK.
 
+REQUIREMENTS
 
+- SDK AppEngine 1.5
+- Google Plugin For Eclipse: http://code.google.com/eclipse/

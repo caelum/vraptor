@@ -8,6 +8,18 @@ selection of dependencies must be used. A version of the
 blank project featuring these modifications is available at
 our download page.
 
+[section Configuration]
+
+To enable VRaptor components replaced to Google App Engine, you 
+need add the lines bellow in your web.xml:
+
+[xml]
+	<context-param>
+		<param-name>br.com.caelum.vraptor.packages</param-name>
+		<param-value>br.com.caelum.vraptor.gae</param-value>
+	</context-param>
+[/xml]
+
 [section Limitations]
 
 A relevant detais is that the dependency injection does not work

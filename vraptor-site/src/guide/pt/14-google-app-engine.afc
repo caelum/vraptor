@@ -8,6 +8,18 @@ seleção diferente de dependências deve ser usada. Uma versão do
 blank project já contendo estas alterações está disponível em
 nossa página de downloads.
 
+[section Configuração]
+
+Para habilitar os componentes do VRaptor para o Google App Engine 
+você precisa adicionar a seguinte configuração no seu web.xml:
+
+[xml]
+	<context-param>
+		<param-name>br.com.caelum.vraptor.packages</param-name>
+		<param-value>br.com.caelum.vraptor.gae</param-value>
+	</context-param>
+[/xml]
+
 [section Limitações]
 
 Um detalhe importante é que a injeção de dependências não funciona

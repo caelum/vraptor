@@ -18,7 +18,6 @@ package br.com.caelum.vraptor.serialization;
 import static br.com.caelum.vraptor.view.Results.status;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import br.com.caelum.vraptor.Result;
@@ -73,18 +72,5 @@ public class DefaultRepresentationResult implements RepresentationResult {
 		result.use(status()).notAcceptable();
 
 		return new IgnoringSerializer();
-	}
-
-	private final class PackageComparator implements Comparator<Serialization> {
-		private int number(Serialization s) {
-			if (s.getClass().getPackage().getName().startsWith("br.com.caelum.vraptor.serialization")) {
-				return 1;
-			}
-			return 0;
-		}
-
-		public int compare(Serialization o1, Serialization o2) {
-			return number(o1) - number(o2);
-		}
 	}
 }

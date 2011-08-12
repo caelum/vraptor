@@ -43,13 +43,22 @@ public class DefaultRepresentationResult implements RepresentationResult {
 		this.formatResolver = formatResolver;
 		this.result = result;
 		this.serializations = serializations;
-		Collections.sort(this.serializations, new PackageComparator());
+        sortSerializations();
 		this.headersHandler = headersHandler;
 	}
 
 	public <T> Serializer from(T object) {
 		return from(object, null);
 	}
+
+    /**
+     * Override this method if you want another ordering strategy.
+     *
+     * @since 3.4.0
+     */
+    protected void sortSerializations() {
+        Collections.sort(this.serializations, new PackageComparator());
+    }
 
 	public <T> Serializer from(T object, String alias) {
 		if(object == null) {

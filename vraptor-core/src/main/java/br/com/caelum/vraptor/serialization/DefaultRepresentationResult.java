@@ -43,7 +43,6 @@ public class DefaultRepresentationResult implements RepresentationResult {
 		this.formatResolver = formatResolver;
 		this.result = result;
 		this.serializations = serializations;
-        sortSerializations();
 		this.headersHandler = headersHandler;
 	}
 
@@ -68,6 +67,7 @@ public class DefaultRepresentationResult implements RepresentationResult {
 		if(HypermediaResource.class.isAssignableFrom(object.getClass())) {
 			headersHandler.handle(HypermediaResource.class.cast(object));
 		}
+        sortSerializations();
 		String format = formatResolver.getAcceptFormat();
 		for (Serialization serialization : serializations) {
 			if (serialization.accepts(format)) {

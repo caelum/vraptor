@@ -310,6 +310,18 @@ public abstract class ParametersProviderTest {
     }
 
     @Test
+    public void ignoresPopulationIfIfRequestCanProvide() throws Exception {
+    	requestParameterIs(abc, "abc.x", "1");
+        ABC expected = new ABC();
+        expected.setX(2l);
+
+        when(request.getAttribute("abc")).thenReturn(expected);
+
+    	ABC returned = getParameters(abc);
+    	assertThat(returned.getX(), is(2l));
+    }
+
+    @Test
     public void doesntReturnDependenciesIfThereAreParameters() throws Exception {
     	requestParameterIs(abc, "abc.x", "abc");
     	ABC result = mock(ABC.class);

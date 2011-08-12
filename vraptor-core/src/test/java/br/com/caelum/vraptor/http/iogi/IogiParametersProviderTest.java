@@ -127,7 +127,7 @@ public class IogiParametersProviderTest extends ParametersProviderTest {
 
 		getParameters(setId);
 
-		assertThat(errors, hasSize(1));
+		assertThat(errors.size(), is(1));
 	}
 
 	@Test

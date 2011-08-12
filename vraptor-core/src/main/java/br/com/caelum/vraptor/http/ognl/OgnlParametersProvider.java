@@ -113,7 +113,7 @@ public class OgnlParametersProvider implements ParametersProvider {
 	private Object createParameter(Parameter param, Map<String, String[]> requestNames, ResourceBundle bundle, List<Message> errors) {
 		Object root;
 		if (request.getAttribute(param.name) != null) {
-			root = request.getAttribute(param.name);
+			return request.getAttribute(param.name);
 		} else if (requestNames.isEmpty()) {
 			if (container.canProvide(param.clazz)) {
 				return container.instanceFor(param.clazz);

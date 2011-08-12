@@ -86,8 +86,8 @@ public class Validations {
         return assertion;
     }
 
-    protected String i18n(String key) {
-    	return bundle.getString(key);
+    protected I18nParam i18n(String key) {
+    	return new I18nParam(key);
     }
 
     /**

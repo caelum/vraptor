@@ -126,6 +126,28 @@ public class ValidationsTest {
         assertThat(validations.getErrors(), hasSize(0));
     }
 
+    @Test
+    public void should18nalizeParametersUsingConstructorBundle() {
+    	Validations validations = new Validations(singletonBundle("some.message", "The value")) {{
+            that(false, "category", "some.param.message", i18n("some.message"));
+        }};
+
+    	List<Message> errors = validations.getErrors(singletonBundle("some.param.message", "The param {0} sucks"));
+
+    	assertThat(errors.get(0).getMessage(), is("The param The value sucks"));
+    }
+
+    @Test
+    public void should18nalizeParametersUsingGivenBundle() {
+    	Validations validations = new Validations(singletonBundle("some.param.message", "The param {0} sucks")) {{
+            that(false, "category", "some.param.message", i18n("some.message"));
+        }};
+
+    	List<Message> errors = validations.getErrors(singletonBundle("some.message", "The value"));
+
+    	assertThat(errors.get(0).getMessage(), is("The param The value sucks"));
+    }
+
     @SuppressWarnings("null")
 	@Test
     public void canIgnoreInternalPrimitiveValidationIfAlreadyNull() {

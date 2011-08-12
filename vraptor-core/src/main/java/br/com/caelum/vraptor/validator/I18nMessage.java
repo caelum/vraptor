@@ -41,10 +41,19 @@ public class I18nMessage implements Message {
 		if (bundle == null) {
 			throw new IllegalStateException("You must set the bundle before using the I18nMessage");
 		}
-		return MessageFormat.format(bundle.getString(message), parameters);
+		return MessageFormat.format(bundle.getString(message), i18n(parameters));
 	}
 
-	public String getCategory() {
+    private Object[] i18n(Object[] parameters) {
+        for (int i = 0; i < parameters.length; i++) {
+            if (parameters[i] instanceof I18nParam) {
+                parameters[i] = ((I18nParam)parameters[i]).getKey(bundle);
+            }
+        }
+        return parameters;
+    }
+
+    public String getCategory() {
 		return category;
 	}
 

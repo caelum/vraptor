@@ -8,7 +8,12 @@ import static org.mockito.Mockito.when;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.util.Collections;
 
+import br.com.caelum.vraptor.serialization.xstream.XStreamBuilderImpl;
+import br.com.caelum.vraptor.serialization.xstream.XStreamConverters;
+import com.thoughtworks.xstream.converters.Converter;
+import com.thoughtworks.xstream.converters.SingleValueConverter;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -30,7 +35,7 @@ public class XStreamXmlDeserializerTest {
 	public void setUp() throws Exception {
 		provider = mock(ParameterNameProvider.class);
 
-		deserializer = new XStreamXMLDeserializer(provider);
+        deserializer = new XStreamXMLDeserializer(provider, XStreamBuilderImpl.cleanInstance());
 		DefaultResourceClass resourceClass = new DefaultResourceClass(DogController.class);
 
 		woof = new DefaultResourceMethod(resourceClass, DogController.class.getDeclaredMethod("woof"));

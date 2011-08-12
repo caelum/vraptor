@@ -185,7 +185,7 @@ public class PicoComponentRegistry extends AbstractComponentRegistry {
 	}
 
     private boolean alreadyRegistered(Class<?> interfaceType) {
-        for (Map<Class<?>, Class<?>> scope : new Map[]{applicationScoped, sessionScoped, requestScoped}) {
+        for (Map<Class<?>, Class<?>> scope : new Map[]{applicationScoped, sessionScoped, requestScoped, prototypeScoped}) {
             if (scope.containsKey(interfaceType)) {
                 scope.remove(interfaceType);
                 return true;

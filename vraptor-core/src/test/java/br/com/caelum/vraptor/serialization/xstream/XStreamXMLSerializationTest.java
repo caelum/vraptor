@@ -41,8 +41,8 @@ public class XStreamXMLSerializationTest {
 
         HttpServletResponse response = mock(HttpServletResponse.class);
         when(response.getWriter()).thenReturn(new PrintWriter(stream));
-
-		this.serialization = new XStreamXMLSerialization(response, new DefaultTypeNameExtractor(), new NullProxyInitializer());
+        
+		this.serialization = new XStreamXMLSerialization(response, new DefaultTypeNameExtractor(), new NullProxyInitializer(), XStreamBuilderImpl.cleanInstance());
     }
 
 	public static class Address {

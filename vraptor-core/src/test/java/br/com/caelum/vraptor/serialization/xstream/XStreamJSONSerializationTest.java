@@ -43,17 +43,17 @@ public class XStreamJSONSerializationTest {
 	private HttpServletResponse response;
 	private DefaultTypeNameExtractor extractor;
 	private HibernateProxyInitializer initializer;
+    private XStreamBuilder builder = XStreamBuilderImpl.cleanInstance();
 
-	@Before
+    @Before
     public void setup() throws Exception {
         this.stream = new ByteArrayOutputStream();
 
         response = mock(HttpServletResponse.class);
         when(response.getWriter()).thenReturn(new PrintWriter(stream));
-
         extractor = new DefaultTypeNameExtractor();
 		initializer = new HibernateProxyInitializer();
-		this.serialization = new XStreamJSONSerialization(response, extractor, initializer);
+		this.serialization = new XStreamJSONSerialization(response, extractor, initializer, builder);
     }
 
 	public static class Address {
@@ -378,7 +378,7 @@ public class XStreamJSONSerializationTest {
 	@Test
 	public void shouldUseCollectionConverterWhenItExists() {
 		String expectedResult = "[\"testing\"]";
-		XStreamJSONSerialization serialization = new XStreamJSONSerialization(response, extractor, initializer) {
+		XStreamJSONSerialization serialization = new XStreamJSONSerialization(response, extractor, initializer, builder) {
 			@Override
 			protected XStream getXStream() {
 				XStream xStream = super.getXStream();

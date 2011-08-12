@@ -29,9 +29,12 @@ import br.com.caelum.vraptor.serialization.NullProxyInitializer;
 import br.com.caelum.vraptor.serialization.ProxyInitializer;
 import br.com.caelum.vraptor.serialization.Serialization;
 import br.com.caelum.vraptor.serialization.XMLSerialization;
-import br.com.caelum.vraptor.serialization.xstream.XStreamJSONSerialization;
-import br.com.caelum.vraptor.serialization.xstream.XStreamXMLSerialization;
+import br.com.caelum.vraptor.serialization.xstream.*;
 import br.com.caelum.vraptor.view.EmptyResult;
+import com.thoughtworks.xstream.converters.Converter;
+import com.thoughtworks.xstream.converters.SingleValueConverter;
+
+import java.util.Collections;
 
 /**
  *
@@ -72,14 +75,13 @@ public class MockSerializationResult extends MockResult {
 
 	@SuppressWarnings("unchecked")
 	private <T extends View> T instanceView(Class<T> view){
-		
-		if(view.isAssignableFrom(JSONSerialization.class)){
-			this.serialization = new XStreamJSONSerialization(response, extractor, initializer); 
+        if(view.isAssignableFrom(JSONSerialization.class)){
+			this.serialization = new XStreamJSONSerialization(response, extractor, initializer, XStreamBuilderImpl.cleanInstance());
 			return (T) serialization;
 		}
 		
 		if( view.isAssignableFrom(XMLSerialization.class)){
-			this.serialization = new XStreamXMLSerialization(response, extractor, initializer); 
+			this.serialization = new XStreamXMLSerialization(response, extractor, initializer, XStreamBuilderImpl.cleanInstance());
 			return (T) serialization;
 		}
 		

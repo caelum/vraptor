@@ -21,14 +21,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.ioc.Component;
-import br.com.caelum.vraptor.serialization.ProxyInitializer;
-import br.com.caelum.vraptor.serialization.SerializerBuilder;
-import br.com.caelum.vraptor.serialization.Serializer;
-import br.com.caelum.vraptor.serialization.XMLSerialization;
+import br.com.caelum.vraptor.serialization.*;
 import br.com.caelum.vraptor.view.ResultException;
 
 import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.mapper.MapperWrapper;
 
 /**
  * XStream implementation for XmlSerialization
@@ -42,11 +38,13 @@ public class XStreamXMLSerialization implements XMLSerialization {
 	private final HttpServletResponse response;
 	private final TypeNameExtractor extractor;
 	private final ProxyInitializer initializer;
-
-	public XStreamXMLSerialization(HttpServletResponse response, TypeNameExtractor extractor, ProxyInitializer initializer) {
+	private final XStreamBuilder builder;
+	
+	public XStreamXMLSerialization(HttpServletResponse response, TypeNameExtractor extractor, ProxyInitializer initializer, XStreamBuilder builder) {
 		this.response = response;
 		this.extractor = extractor;
 		this.initializer = initializer;
+		this.builder = builder;
 	}
 
 	public boolean accepts(String format) {
@@ -73,15 +71,13 @@ public class XStreamXMLSerialization implements XMLSerialization {
 
 	/**
 	 * You can override this method for configuring XStream before serialization
+     *
+     * @deprecated prefer overwriting XStreamBuilderImpl
+     * @return a configured instance of xstream
 	 */
+	@Deprecated
 	protected XStream getXStream() {
-		return new XStream() {
-			{setMode(NO_REFERENCES);}
-			@Override
-			protected MapperWrapper wrapMapper(MapperWrapper next) {
-				return new VRaptorClassMapper(next, extractor);
-			}
-		};
+		return builder.xmlInstance();
 	}
 
 }

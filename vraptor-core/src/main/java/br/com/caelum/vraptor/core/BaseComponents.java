@@ -26,6 +26,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import br.com.caelum.vraptor.serialization.xstream.*;
+import com.thoughtworks.xstream.converters.SingleValueConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -139,9 +141,6 @@ import br.com.caelum.vraptor.serialization.NullProxyInitializer;
 import br.com.caelum.vraptor.serialization.ProxyInitializer;
 import br.com.caelum.vraptor.serialization.RepresentationResult;
 import br.com.caelum.vraptor.serialization.XMLSerialization;
-import br.com.caelum.vraptor.serialization.xstream.XStreamJSONPSerialization;
-import br.com.caelum.vraptor.serialization.xstream.XStreamJSONSerialization;
-import br.com.caelum.vraptor.serialization.xstream.XStreamXMLSerialization;
 import br.com.caelum.vraptor.validator.BeanValidator;
 import br.com.caelum.vraptor.validator.DefaultValidator;
 import br.com.caelum.vraptor.validator.HibernateValidator3;
@@ -200,11 +199,12 @@ public class BaseComponents {
             Proxifier.class, 				ObjenesisProxifier.class,
             ParameterNameProvider.class, 	ParanamerNameProvider.class,
             TypeFinder.class, 				DefaultTypeFinder.class,
-            XMLDeserializer.class,			XStreamXMLDeserializer.class,
             RoutesParser.class, 			PathAnnotationRoutesParser.class,
             Routes.class,					DefaultRoutes.class,
             RestDefaults.class,				DefaultRestDefaults.class,
             Evaluator.class,				JavaEvaluator.class,
+            com.thoughtworks.xstream.converters.Converter.class, XStreamConverters.NullConverter.class,
+            SingleValueConverter.class,     XStreamConverters.NullConverter.class,
             ProxyInitializer.class,			getProxyInitializerImpl()
     );
 
@@ -213,7 +213,8 @@ public class BaseComponents {
 
     private static final Map<Class<?>, Class<?>> PROTOTYPE_COMPONENTS = classMap(
     		InterceptorStack.class, 						DefaultInterceptorStack.class,
-    		RequestExecution.class, 						EnhancedRequestExecution.class
+    		RequestExecution.class, 						EnhancedRequestExecution.class,
+    		XStreamBuilder.class, 						    XStreamBuilderImpl.class
     );
 
     private static final Map<Class<?>, Class<?>> REQUEST_COMPONENTS = classMap(
@@ -244,6 +245,7 @@ public class BaseComponents {
             ParametersInstantiatorInterceptor.class, 		ParametersInstantiatorInterceptor.class,
             ResourceLookupInterceptor.class, 				ResourceLookupInterceptor.class,
             Status.class,									DefaultStatus.class,
+            XMLDeserializer.class,			                XStreamXMLDeserializer.class,
             XMLSerialization.class,							XStreamXMLSerialization.class,
             JSONSerialization.class,						XStreamJSONSerialization.class,
             JSONPSerialization.class,						XStreamJSONPSerialization.class,
@@ -253,7 +255,8 @@ public class BaseComponents {
             Configuration.class,							ApplicationConfiguration.class,
             RestHeadersHandler.class,						DefaultRestHeadersHandler.class,
             OgnlFacade.class,								OgnlFacade.class,
-            FlashScope.class,								SessionFlashScope.class
+            FlashScope.class,								SessionFlashScope.class,
+            XStreamConverters.class,                        XStreamConverters.class
     );
 
     @SuppressWarnings({"unchecked", "rawtypes"})

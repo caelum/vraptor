@@ -17,11 +17,10 @@
 
 package br.com.caelum.vraptor.restfulie.serialization;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletResponse;
 
 import br.com.caelum.vraptor.config.Configuration;
+import br.com.caelum.vraptor.serialization.xstream.XStreamBuilder;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.ioc.RequestScoped;
@@ -43,8 +42,8 @@ public class RestfulSerialization extends XStreamXMLSerialization {
 	private final Restfulie restfulie;
 	private final Configuration config;
 
-	public RestfulSerialization(HttpServletResponse response, TypeNameExtractor extractor, Restfulie restfulie, Configuration config, ProxyInitializer initializer) {
-		super(response,extractor,initializer);
+	public RestfulSerialization(HttpServletResponse response, TypeNameExtractor extractor, Restfulie restfulie, Configuration config, ProxyInitializer initializer, XStreamBuilder builder) {
+		super(response,extractor,initializer, builder);
 		this.restfulie = restfulie;
 		this.config = config;
 	}
@@ -61,7 +60,4 @@ public class RestfulSerialization extends XStreamXMLSerialization {
 		return xStream;
 	}
 
-	public static void main(String[] args) {
-		System.out.println(new XStream().getConverterLookup().lookupConverterForType(List.class));
-	}
 }

@@ -20,10 +20,10 @@ public class PackageComparatorTest {
 		List<Serialization> serializers = new ArrayList<Serialization>();
 
 		serializers.add(new DumbSerialization());
-		serializers.add(new XStreamXMLSerialization(null, null, null));
-		serializers.add(new XStreamJSONSerialization(null, null, null));
+		serializers.add(new XStreamXMLSerialization(null, null, null, null));
+		serializers.add(new XStreamJSONSerialization(null, null, null, null));
 		serializers.add(new HTMLSerialization(null, null));
-		serializers.add(new RestfulSerialization(null, null, null, null, null));
+		serializers.add(new RestfulSerialization(null, null, null, null, null, null));
 
 		Collections.sort(serializers, new PackageComparator());
 		
@@ -35,10 +35,10 @@ public class PackageComparatorTest {
 	public void shouldSortBasedOnPackageNamesLessPriorityToCaelumInitialList3rdPartyLast() {
 		List<Serialization> serializers = new ArrayList<Serialization>();
 		
-		serializers.add(new XStreamXMLSerialization(null, null, null));
-		serializers.add(new XStreamJSONSerialization(null, null, null));
+		serializers.add(new XStreamXMLSerialization(null, null, null, null));
+		serializers.add(new XStreamJSONSerialization(null, null, null, null));
 		serializers.add(new HTMLSerialization(null, null));
-		serializers.add(new RestfulSerialization(null, null, null, null, null));
+		serializers.add(new RestfulSerialization(null, null, null, null, null, null));
 		serializers.add(new DumbSerialization());
 		
 		Collections.sort(serializers, new PackageComparator());
@@ -50,10 +50,10 @@ public class PackageComparatorTest {
 	public void shouldSortBasedOnPackageNamesLessPriorityToCaelumMoreToRestfulieInitialList3rdPartyLast() {
 		List<Serialization> serializers = new ArrayList<Serialization>();
 		
-		serializers.add(new XStreamXMLSerialization(null, null, null));
-		serializers.add(new XStreamJSONSerialization(null, null, null));
+		serializers.add(new XStreamXMLSerialization(null, null, null, null));
+		serializers.add(new XStreamJSONSerialization(null, null, null, null));
 		serializers.add(new HTMLSerialization(null, null));
-		serializers.add(new RestfulSerialization(null, null, null, null, null));
+		serializers.add(new RestfulSerialization(null, null, null, null, null, null));
 		serializers.add(new DumbSerialization());
 		
 		Collections.sort(serializers, new PackageComparator());

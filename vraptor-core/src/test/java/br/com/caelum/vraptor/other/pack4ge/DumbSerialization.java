@@ -1,4 +1,4 @@
-package pacote.antes.da.caelum;
+package br.com.caelum.vraptor.other.pack4ge;
 
 import br.com.caelum.vraptor.serialization.Serialization;
 import br.com.caelum.vraptor.serialization.Serializer;

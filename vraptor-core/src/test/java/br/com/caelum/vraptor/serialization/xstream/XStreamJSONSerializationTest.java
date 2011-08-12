@@ -23,7 +23,6 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.deserialization.XStreamBuilder;
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor.serialization.HibernateProxyInitializer;
 

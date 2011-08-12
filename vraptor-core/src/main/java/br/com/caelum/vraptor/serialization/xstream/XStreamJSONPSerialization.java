@@ -6,12 +6,8 @@ import java.io.StringWriter;
 
 import javax.servlet.http.HttpServletResponse;
 
-import br.com.caelum.vraptor.deserialization.XStreamBuilder;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
-import br.com.caelum.vraptor.serialization.JSONPSerialization;
-import br.com.caelum.vraptor.serialization.JSONSerialization;
-import br.com.caelum.vraptor.serialization.ProxyInitializer;
-import br.com.caelum.vraptor.serialization.SerializerBuilder;
+import br.com.caelum.vraptor.serialization.*;
 import br.com.caelum.vraptor.view.ResultException;
 
 /**
@@ -45,7 +41,7 @@ public class XStreamJSONPSerialization implements JSONPSerialization {
 				try {
 					final PrintWriter writer = response.getWriter();
 					final StringWriter out = new StringWriter();
-					return new XStreamSerializer(builder.jsonInstance(), new PrintWriter(out), extractor, initializer) {
+					return new XStreamSerializer(super.getXStream(), new PrintWriter(out), extractor, initializer) {
 						@Override
 						public void serialize() {
 							super.serialize();

@@ -19,17 +19,12 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpServletResponse;
 
-import br.com.caelum.vraptor.deserialization.XStreamBuilder;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.ioc.Component;
-import br.com.caelum.vraptor.serialization.ProxyInitializer;
-import br.com.caelum.vraptor.serialization.SerializerBuilder;
-import br.com.caelum.vraptor.serialization.Serializer;
-import br.com.caelum.vraptor.serialization.XMLSerialization;
+import br.com.caelum.vraptor.serialization.*;
 import br.com.caelum.vraptor.view.ResultException;
 
 import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.mapper.MapperWrapper;
 
 /**
  * XStream implementation for XmlSerialization
@@ -63,7 +58,7 @@ public class XStreamXMLSerialization implements XMLSerialization {
 
 	protected SerializerBuilder getSerializer() {
 		try {
-			return new XStreamSerializer(builder.xmlInstance(), response.getWriter(), extractor, initializer);
+			return new XStreamSerializer(getXStream(), response.getWriter(), extractor, initializer);
 		} catch (IOException e) {
 			throw new ResultException("Unable to serialize data", e);
 		}
@@ -76,16 +71,13 @@ public class XStreamXMLSerialization implements XMLSerialization {
 
 	/**
 	 * You can override this method for configuring XStream before serialization
+     *
+     * @deprecated prefer overwriting XStreamBuilderImpl
+     * @return a configured instance of xstream
 	 */
 	@Deprecated
 	protected XStream getXStream() {
-		return new XStream() {
-			{setMode(NO_REFERENCES);}
-			@Override
-			protected MapperWrapper wrapMapper(MapperWrapper next) {
-				return new VRaptorClassMapper(next, extractor);
-			}
-		};
+		return builder.xmlInstance();
 	}
 
 }

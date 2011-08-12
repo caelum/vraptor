@@ -19,15 +19,12 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpServletResponse;
 
-import br.com.caelum.vraptor.deserialization.XStreamBuilder;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.ioc.Component;
-import br.com.caelum.vraptor.serialization.JSONSerialization;
-import br.com.caelum.vraptor.serialization.NoRootSerialization;
-import br.com.caelum.vraptor.serialization.ProxyInitializer;
-import br.com.caelum.vraptor.serialization.Serializer;
-import br.com.caelum.vraptor.serialization.SerializerBuilder;
+import br.com.caelum.vraptor.serialization.*;
 import br.com.caelum.vraptor.view.ResultException;
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.HierarchicalStreamDriver;
 
 /**
  * XStream implementation for JSONSerialization
@@ -66,7 +63,7 @@ public class XStreamJSONSerialization implements JSONSerialization {
 
     protected SerializerBuilder getSerializer() {
         try {
-            return new XStreamSerializer(builder.jsonInstance(), response.getWriter(), extractor, initializer);
+            return new XStreamSerializer(getXStream(), response.getWriter(), extractor, initializer);
         } catch (IOException e) {
             throw new ResultException("Unable to serialize data", e);
         }
@@ -84,4 +81,24 @@ public class XStreamJSONSerialization implements JSONSerialization {
         builder.indented();
         return this;
     }
+
+    /**
+     * You can override this method for configuring XStream before serialization
+     *
+     * @deprecated prefer overwriting XStreamBuilder
+     * @return a configured instance of xstream
+     */
+    @Deprecated
+    protected XStream getXStream() {
+        return builder.jsonInstance();
+    }
+
+    /**
+     * You can override this method for configuring Driver before serialization
+     * @deprecated Override this method on XStreamBuilderImpl instead. WARN: this method will be ignored!
+     * @return configured hierarchical driver
+     */
+    @Deprecated
+    protected HierarchicalStreamDriver getHierarchicalStreamDriver() { return null; }
+
 }

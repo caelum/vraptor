@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor.deserialization;
+package br.com.caelum.vraptor.serialization.xstream;
 
 import java.util.List;
 
@@ -18,9 +18,9 @@ import br.com.caelum.vraptor.ioc.Component;
  * Component used to scan all XStream converters
  *
  * @author Rafael Viana
+ * @since 3.4.0
  */
 @Component
-@ApplicationScoped
 public class XStreamConverters {
 
 	private final List<Converter> converters;
@@ -28,11 +28,10 @@ public class XStreamConverters {
 	
 	private static final Logger logger = LoggerFactory.getLogger(XStreamConverters.class);
 	
-	@SuppressWarnings("unchecked")
 	public XStreamConverters(List<Converter> converters, List<SingleValueConverter> singleValueConverters)
 	{
-		this.converters = (List<Converter>) Objects.firstNonNull(converters, Lists.newArrayList());
-		this.singleValueConverters = (List<SingleValueConverter>) Objects.firstNonNull(singleValueConverters, Lists.newArrayList());
+		this.converters = Objects.firstNonNull(converters, Lists.<Converter>newArrayList());
+		this.singleValueConverters = Objects.firstNonNull(singleValueConverters, Lists.<SingleValueConverter>newArrayList());
 	}
 	
 	/**

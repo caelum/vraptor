@@ -23,6 +23,7 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
+import br.com.caelum.vraptor.serialization.xstream.XStreamBuilder;
 import com.thoughtworks.xstream.XStream;
 
 /**
@@ -61,9 +62,8 @@ public class XStreamXMLDeserializer implements XMLDeserializer {
 	}
 
 	/**
-	 * Returns an xstream instance already configured.
+	 * @return an xstream instance already configured.
 	 */
-	@Deprecated
 	public XStream getConfiguredXStream(Method javaMethod, Class<?>[] types) {
 		XStream xStream = getXStream();
 		aliasParams(javaMethod, types, xStream);
@@ -88,6 +88,7 @@ public class XStreamXMLDeserializer implements XMLDeserializer {
 	/**
 	 * Extension point to configure your xstream instance.
 	 * @return the configured xstream instance
+     * @deprecated prefer overriding XStreamBuilder
 	 */
 	@Deprecated
 	protected XStream getXStream() {

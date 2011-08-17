@@ -142,8 +142,8 @@ public class DefaultStatus implements Status {
 	}
 
 	public void badRequest(List<?> errors) {
-		result.use(representation()).from(errors, "errors").serialize();
 		response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+		result.use(representation()).from(errors, "errors").serialize();
 	}
 
 	public void forbidden(String message) {

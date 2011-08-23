@@ -322,8 +322,8 @@ public abstract class ParametersProviderTest {
     }
 
     @Test
-    public void doesntReturnDependenciesIfThereAreParameters() throws Exception {
-    	requestParameterIs(abc, "abc.x", "abc");
+    public void doesntReturnDependenciesIfItIsNotAnInterface() throws Exception {
+    	thereAreNoParameters();
     	ABC result = mock(ABC.class);
     	when(container.canProvide(ABC.class)).thenReturn(true);
     	when(container.instanceFor(ABC.class)).thenReturn(result);

@@ -105,14 +105,11 @@ public class VRaptorInstantiator implements InstantiatorWithErrors, Instantiator
 			this.delegate = delegate;
 		}
 		public Object instantiate(Target<?> target, Parameters params) {
-			if (params.hasRelatedTo(target)) {
-				return delegate.instantiate(target, params);
-			}
 			return provider.provide(target);
 		}
 
 		public boolean isAbleToInstantiate(Target<?> target) {
-			return provider.canProvide(target);
+			return target.getClassType().isInterface() && provider.canProvide(target);
 		}
 
 	}

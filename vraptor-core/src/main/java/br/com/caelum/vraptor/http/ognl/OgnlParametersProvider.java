@@ -114,10 +114,9 @@ public class OgnlParametersProvider implements ParametersProvider {
 		Object root;
 		if (request.getAttribute(param.name) != null) {
 			return request.getAttribute(param.name);
-		} else if (requestNames.isEmpty()) {
-			if (container.canProvide(param.clazz)) {
-				return container.instanceFor(param.clazz);
-			}
+		} else if (param.clazz.isInterface() && container.canProvide(param.clazz)) {
+            return container.instanceFor(param.clazz);
+        } else if (requestNames.isEmpty()) {
 			return Defaults.defaultValue(param.actualType());
 		} else {
 			root = createRoot(param, requestNames, bundle, errors);

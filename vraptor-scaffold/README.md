@@ -33,7 +33,7 @@ The *Windows way*
 ### Create a new project:
 
     $> java -jar vraptor-scaffold.jar -S vraptor new yourProjectName
-    $> copy vraptor-scaffold.jar yourProjectName
+    $> move vraptor-scaffold.jar yourProjectName
     $> cd yourProjectName
 
 ### VRaptor Scaffold:

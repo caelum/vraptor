@@ -240,6 +240,8 @@ public abstract class GenericContainerTest {
             allowing(context).getInitParameter(BasicConfiguration.SCANNING_PARAM);
             will(returnValue("enabled"));
 
+            allowing(context).setAttribute(with(any(String.class)), with(any(Object.class)));
+
         }});
 		configureExpectations();
 		provider = getProvider();

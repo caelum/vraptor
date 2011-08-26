@@ -13,7 +13,7 @@ import br.com.caelum.vraptor.http.route.Router;
 
 import com.google.common.collect.ForwardingMap;
 
-public class LinkToHandler {
+public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 
 	private static final Logger logger = LoggerFactory.getLogger(LinkToHandler.class);
 	
@@ -27,27 +27,19 @@ public class LinkToHandler {
 	
 	public void start() {
 		logger.info("Registering linkTo component");
-		context.setAttribute("linkTo", new LinkClass());
+		context.setAttribute("linkTo", this);
 	}
 	
-	class LinkClass extends ForwardingMap<Class<?>, LinkMethod> {
+    @Override
+    protected Map<Class<?>, Object> delegate() {
+        return Collections.emptyMap();
+    }
 
-		@Override
-		protected Map<Class<?>, LinkMethod> delegate() {
-			return Collections.emptyMap();
-		}
-		
-		@Override
-		public LinkMethod get(Object key) {
-			return new LinkMethod((Class<?>) key);
-		}
-		
-		@Override
-		public String toString() {
-			throw new IllegalStateException("uncomplete linkTo. You must specify both controller and method");
-		}
-	}
-	
+    @Override
+    public LinkMethod get(Object key) {
+        return new LinkMethod((Class<?>) key);
+    }
+
 	class LinkMethod extends ForwardingMap<String, Linker> {
 
 		private final Class<?> controller;

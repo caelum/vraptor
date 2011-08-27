@@ -33,6 +33,8 @@
 		<dt>Sérgio Lopes - <fmt:message key="commiter"/></dt>
 		<dd><a href="mailto:sergio.lopes@caelum.com.br">sergio.lopes@caelum.com.br</a></dd>
 
+		<dt>Otávio Scherer Garcia - <fmt:message key="commiter"/></dt>
+		<dd><a href="mailto:otavio@otavio.com.br">otavio@otavio.com.br</a></dd>
 		<dt>Filipe Sabella - <fmt:message key="colaborador"/></dt>
 		<dd><a href="mailto:filipe.sabella@caelum.com.br">filipe.sabella@caelum.com.br</a></dd>
 		<dt>Jonas Abreu - <fmt:message key="colaborador"/></dt>
@@ -40,8 +42,6 @@
 		<dt>Tomaz Lavieri - <fmt:message key="colaborador"/></dt>
 		<dd><a href="mailto:tomazlavieri@gmail.com">tomazlavieri@gmail.com</a></dd>
 		<dt>Lucas H. G. Toniazzo - <fmt:message key="colaborador"/></dt>
-		<dt>Otávio Scherer Garcia - <fmt:message key="colaborador"/></dt>
-		<dd><a href="mailto:otavio@otavio.com.br">otavio@otavio.com.br</a></dd>
 		<dt>Rafael Carneiro - <fmt:message key="colaborador"/></dt>
 		<dt>José Donizetti - <fmt:message key="colaborador"/></dt>
 		<dd><a href="mailto:jdbjunior@gmail.com">jdbjunior@gmail.com</a></dd>

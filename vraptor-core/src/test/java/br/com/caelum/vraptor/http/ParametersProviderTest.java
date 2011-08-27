@@ -73,7 +73,6 @@ public abstract class ParametersProviderTest {
 
 	protected abstract ParametersProvider getProvider();
 
-    @SuppressWarnings("unchecked")
 	@Before
     public void setup() throws Exception {
     	MockitoAnnotations.initMocks(this);

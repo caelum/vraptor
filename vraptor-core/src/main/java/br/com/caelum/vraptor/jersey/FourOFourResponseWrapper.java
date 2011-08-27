@@ -13,12 +13,9 @@ import javax.servlet.http.HttpServletResponseWrapper;
  * @author guilherme silveira
  */
 class FourOFourResponseWrapper extends HttpServletResponseWrapper {
-	private final HttpServletRequest req;
-
 	FourOFourResponseWrapper(HttpServletRequest req,
 			HttpServletResponse response) {
 		super(response);
-		this.req = req;
 	}
 
 	public void sendError(int sc, String msg) throws IOException {

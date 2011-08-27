@@ -11,9 +11,15 @@ have the control of all Web operations.
 
 [section Starting up]
 
-You can start your project based on vraptor-blank-project, available on 
+You can start your project based on %%vraptor-blank-project%%, available on 
 http://vraptor.caelum.com.br/download.jsp . It contains all required jar dependencies, and
 the minimal web.xml configuration for working with VRaptor.
+
+The %%vraptor-blank-project%% project is configured to work with Eclipse. But if you use 
+Netbeans IDE you can import project using the guide avaliable on 
+http://netbeans.org/kb/docs/java/import-eclipse.html. If you use IntelliJ IDEA you can 
+import the blank project using the guide avaliable on 
+http://www.jetbrains.com/idea/webhelp/importing-eclipse-project-to-intellij-idea.html.
 
 If you want to use Maven, you can add VRaptor's Maven artifact on your pom.xml:
 [xml]

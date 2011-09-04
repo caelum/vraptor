@@ -101,7 +101,7 @@ Se você optou pelo maven execute
 mvn eclipse:eclipse
 [/code]
 
-Para gerar os arquivos de configuração do eclipse, após isso é so importar o projeto normalmente.
+Para gerar os arquivos de configuração do eclipse, após isso apenas faça a importação do projeto normalmente.
 
 Se você optou pelo ant os arquivos de configuração serão gerados no momento em que criar o projeto, não se esqueça de executar
 
@@ -125,10 +125,34 @@ vraptor new onlinestore --skip-eclipse
 Plugins do vraptor são facilmente instalados através do comando
 
 [code]
-vraptor plugin simple-email
+vraptor plugin simple-email -v 1.0.0
 [/code]
 
-Você pode encontrar uma lista de plugins disponíveis em http://github.com/caelum/vraptor-contrib
+Você pode encontrar uma lista de plugins disponíveis em https://github.com/caelum/vraptor-contrib
+
+[section jQuery]
+A versão do jQuery é sempre a última disponível para download, para utilizar uma versão anterior use o comando:
+
+[code]
+vraptor new onlinestore -j 1.4.4
+[/code]
+
+[section Heroku]
+Agora é possível fazer um deploy de qualquer aplicação java no Heroku com um simples: 
+
+[code]
+git push heroku master
+[/code]
+
+E o vrpator-scaffold já tem um comando que gera toda a
+aplicação do jeito que o Heroku espera. Para isso basta utilizar o comando:
+ 
+[code]
+vraptor new onlinestore --heroku
+[/code]
+
+Depois é só fazer o deploy da sua aplicação seguindo os passos do Heroku.
+Para mais informações acesse http://www.heroku.com/java
 
 [section Comando Help]
 
@@ -145,6 +169,6 @@ vraptor plugin -h
 [section Contribuindo]
 
 O projeto está sendo desenvolvido em ruby e o código fonte está hospedado no github 
-no seguinte endereço http://github.com/caelum/vraptor-scaffold .
+no seguinte endereço https://github.com/caelum/vraptor-scaffold .
 Você pode colaborar com o projeto fazendo o fork e enviando seu path ou uma nova funcionalide.
 Não se esqueça dos testes.

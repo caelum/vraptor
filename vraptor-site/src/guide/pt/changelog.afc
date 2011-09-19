@@ -1,5 +1,120 @@
 [chapter ChangeLog]
 
+[section 3.4.0]
+[list]
+* novo status accepted (result.use(status()).accepted()) - by Vinicius Oliveira
+* bugfix - race condition na ordenação de interceptors
+* mock para o bean validations - by @seufagner
+* bugfix - suportando converter para collections no XStream*Serialization
+* mudando prioridades padrão das anotações de método (@Get, @Post, etc) para Path.DEFAULT
+* atualizando jars das dependências do VRaptor - by @wbotelhos
+
+* evitando o wrapping de runtime exceptions nos forwardings.
+* bugfix - upload no GAE, quando usando o Pico
+
+* suportando popular parâmetros de objetos conversíveis:
+  [code]
+  bola = amarela  ==> convertido pelo BolaConverter
+  bola.tamanho = 23 ==> continuando a popular
+  [/code]
+
+* suportando popular parâmetros usando atributos de request:
+  [java]
+  request.setAttribute("bola", new Bola()); //num interceptor, por exemplo
+
+  //...
+
+  public void logica(Bola bola) { //injetado com o atributo do request!
+    //...
+  }
+   
+  [/java]
+
+* suportando popular parâmetros usando injeção de dependências (somente interfaces):
+  [java]
+  public void logica(Parametro parametro, Validator validator) {
+     //parametro populado com parametros do request
+     //validator vindo com injeção de dependências
+  }
+  [/java]
+
+* plugin - @Load nos parâmetros das lógicas (....util.hibernate.extra)
+  [java]
+  @Path("/entidade/{entidade.id}") //o id precisa estar preenchido no request
+  public void minhaLogica(Entidade entidade) {
+    //entidade já vem carregada do banco, pelo id, e se não existir retorna 404 automaticamente
+    //isso desabilita população da entidade por outros parâmetros do request
+  }
+  [/java]
+  
+
+* bugfix - serialização de classes com tipos genéricos
+
+* guice - suportando receber List<QualquerComponent> como dependência
+
+* plugin - vraptor-flex-plugin melhorado, suportando invocação de lógicas, e injeção de dependências - by @davidpaniz
+
+* test - MockSerializationResult, para poder fazer asserções nos objetos serializados. - by Vinicius oliveira
+
+* plugin - vraptor-scala-plugin melhorado (usando acessores de propriedades do scala, e ignorando métodos com $).
+   Blank project scala usando sbt. Scala plugin feito em scala agora ;)
+
+* melhor suporte ao flash scope automático.
+
+* bugfix - corrigido scan de classes no JBoss
+
+* internal - suporte ao OGNL refatorado para melhorar a estensibilidade. - pair @qmx
+
+* bugfix - regexes nos @Path - by Anderson Parra
+
+* guice na versão estável (3.0)
+
+* Hibernate Validator deprecado (preferência para usar Bean Validations)
+
+* bugfix - result.include(null) gerava NullPointerException
+
+* bugfix - conversão de listas - by Narciso Benigno
+
+* melhores docs do plugin pro GAE - by Roberto Nogueira
+
+* serialização de Links em JSON - by A.C de Souza
+
+* lazy 18n para validações:
+
+  [java]
+  validator.checking(new Validations() {{
+     that(a == b, i18n("category"), "message.key", "params"); 
+     // tanto category quanto message.key serão i18n na hora de mostrar a mensagem,
+     // usando o resource bundle padrão (do Localization)
+  }});
+  [/java]
+
+* deixando a ordenação dos serializations estensível (no result.use(representation())) - by A.C de Souza
+
+* Registro do converters do XStream automático. Basta anotar com @Component. - by Rafael Viana
+
+* Refatoração dos XStream (de)serializers para usar um XStreamBuilder centralizado e estensível - by Rafael Viana
+
+  ** quebra compatibilidade de quem sobrescreveu algum Serializer/Deserializer. Testem! **
+
+* bugfix - validator.onErrorSendBadRequest não estava setando status 400 - by @wbotelhos
+
+* linkTo para os jsps:
+  [java]
+  @Resource
+  public class ProdutoController {
+    @Path("/produtos/{id}")
+    public void carrega(Long id) {..}
+  }
+  [/java]
+
+  jsp:
+  [code]
+  ${linkTo[ProdutoController].carrega[2]} ==> /produtos/2
+  [/code]
+[/list]
+
+* suporte a javassist para gerar os proxies - by garcia-jj
 [section 3.3.1]
 [list]
 * bugfix - corrigido o scannotation como obrigatório no maven

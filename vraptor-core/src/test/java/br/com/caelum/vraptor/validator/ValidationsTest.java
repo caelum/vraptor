@@ -138,6 +138,40 @@ public class ValidationsTest {
     }
 
     @Test
+    public void should18nalizeTheCategoryParameterUsingGivenBundle() {
+    	Validations validations = new Validations(singletonBundle("some.category", "The Category")) {{
+    		that(false, i18n("some.category"), "some.message");
+    	}};
+
+    	List<Message> errors = validations.getErrors(singletonBundle("some.message", "The Message"));
+
+    	assertThat(errors.get(0).getMessage(), is("The Message"));
+    	assertThat(errors.get(0).getCategory(), is("The Category"));
+    }
+
+    @Test
+    public void should18nalizeTheCategoryParameterUsingMatchersWithReasonGivenBundle() {
+    	Validations validations = new Validations(singletonBundle("some.category", "The Category")) {{
+    		that(null, is(notNullValue()), i18n("some.category"), "some.reason");
+    	}};
+
+    	List<Message> errors = validations.getErrors();
+
+    	assertThat(errors.get(0).getCategory(), is("The Category"));
+    }
+
+    @Test
+    public void should18nalizeTheCategoryParameterUsingMatchersWithoutReasonGivenBundle() {
+    	Validations validations = new Validations(singletonBundle("some.category", "The Category")) {{
+    		that(null, is(notNullValue()), i18n("some.category"));
+    	}};
+
+    	List<Message> errors = validations.getErrors();
+
+    	assertThat(errors.get(0).getCategory(), is("The Category"));
+    }
+
+    @Test
     public void should18nalizeParametersUsingGivenBundle() {
     	Validations validations = new Validations(singletonBundle("some.param.message", "The param {0} sucks")) {{
             that(false, "category", "some.param.message", i18n("some.message"));

@@ -65,6 +65,10 @@ public class Validations {
         return that(id, matcher, category, null);
     }
 
+    public <T> boolean that(T id, Matcher<? super T> matcher, I18nParam category) {
+		return that(id, matcher, category.getKey(bundle), null);
+	}
+
     public <T> boolean that(T actual, Matcher<? super T> matcher, String category, String reason, Object... messageParameters) {
         if (!matcher.matches(actual)) {
         	if (reason != null) {
@@ -79,12 +83,20 @@ public class Validations {
         return true;
     }
 
+    public <T> boolean that(T actual, Matcher<? super T> matcher, I18nParam category, String reason, Object... messageParameters) {
+    	return that(actual, matcher, category.getKey(bundle), reason, messageParameters);
+	}
+
     public boolean that(boolean assertion, String category, String reason, Object... messageParameters) {
         if (!assertion) {
         	errors.add(new I18nMessage(category, reason, messageParameters));
         }
         return assertion;
     }
+
+    public boolean that(boolean assertion, I18nParam category, String reason, Object... messageParameters) {
+		return that(assertion, category.getKey(bundle), reason, messageParameters);
+	}
 
     protected I18nParam i18n(String key) {
     	return new I18nParam(key);

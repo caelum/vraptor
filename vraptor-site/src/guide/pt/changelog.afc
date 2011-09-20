@@ -48,7 +48,7 @@
   [/java]
   
 
-* bugfix - serialização de classes com tipos genéricos
+* bugfix - serialização de classes com tipos genéricos - by @wbotelhos
 
 * guice - suportando receber List<QualquerComponent> como dependência
 

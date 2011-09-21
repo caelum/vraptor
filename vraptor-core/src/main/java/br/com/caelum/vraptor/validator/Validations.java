@@ -66,7 +66,7 @@ public class Validations {
     }
 
     public <T> boolean that(T id, Matcher<? super T> matcher, I18nParam category) {
-		return that(id, matcher, category.getKey(bundle), null);
+		return that(id, matcher, category, null);
 	}
 
     public <T> boolean that(T actual, Matcher<? super T> matcher, String category, String reason, Object... messageParameters) {
@@ -84,7 +84,17 @@ public class Validations {
     }
 
     public <T> boolean that(T actual, Matcher<? super T> matcher, I18nParam category, String reason, Object... messageParameters) {
-    	return that(actual, matcher, category.getKey(bundle), reason, messageParameters);
+    	if (!matcher.matches(actual)) {
+        	if (reason != null) {
+        		errors.add(new I18nMessage(category, reason, messageParameters));
+            } else {
+                Description description = new ResourceBundleDescription();
+                description.appendDescriptionOf(matcher);
+                errors.add(new I18nMessage(category, description.toString(), actual));
+            }
+            return false;
+        }
+        return true;
 	}
 
     public boolean that(boolean assertion, String category, String reason, Object... messageParameters) {
@@ -95,7 +105,10 @@ public class Validations {
     }
 
     public boolean that(boolean assertion, I18nParam category, String reason, Object... messageParameters) {
-		return that(assertion, category.getKey(bundle), reason, messageParameters);
+    	if (!assertion) {
+        	errors.add(new I18nMessage(category, reason, messageParameters));
+        }
+        return assertion;
 	}
 
     protected I18nParam i18n(String key) {

@@ -138,40 +138,6 @@ public class ValidationsTest {
     }
 
     @Test
-    public void should18nalizeTheCategoryParameterUsingGivenBundle() {
-    	Validations validations = new Validations(singletonBundle("some.category", "The Category")) {{
-    		that(false, i18n("some.category"), "some.message");
-    	}};
-
-    	List<Message> errors = validations.getErrors(singletonBundle("some.message", "The Message"));
-
-    	assertThat(errors.get(0).getMessage(), is("The Message"));
-    	assertThat(errors.get(0).getCategory(), is("The Category"));
-    }
-
-    @Test
-    public void should18nalizeTheCategoryParameterUsingMatchersWithReasonGivenBundle() {
-    	Validations validations = new Validations(singletonBundle("some.category", "The Category")) {{
-    		that(null, is(notNullValue()), i18n("some.category"), "some.reason");
-    	}};
-
-    	List<Message> errors = validations.getErrors();
-
-    	assertThat(errors.get(0).getCategory(), is("The Category"));
-    }
-
-    @Test
-    public void should18nalizeTheCategoryParameterUsingMatchersWithoutReasonGivenBundle() {
-    	Validations validations = new Validations(singletonBundle("some.category", "The Category")) {{
-    		that(null, is(notNullValue()), i18n("some.category"));
-    	}};
-
-    	List<Message> errors = validations.getErrors();
-
-    	assertThat(errors.get(0).getCategory(), is("The Category"));
-    }
-
-    @Test
     public void should18nalizeParametersUsingGivenBundle() {
     	Validations validations = new Validations(singletonBundle("some.param.message", "The param {0} sucks")) {{
             that(false, "category", "some.param.message", i18n("some.message"));
@@ -228,6 +194,7 @@ public class ValidationsTest {
         assertThat(validations.getErrors(), hasSize(1));
         assertThat(validations.getErrors().get(0).getMessage(), is(equalTo("Age should be a value between 0 and 100")));
     }
+
     @Test
     public void formatsParameterizedValidationMessagesWithI18nedStringParameters() {
     	final Client client = new Client();
@@ -235,6 +202,39 @@ public class ValidationsTest {
     	validations.that(client.getAge() > 0 && client.getAge() < 100, "error", "between_field",  validations.i18n("age"), 0, 100);
     	assertThat(validations.getErrors(), hasSize(1));
     	assertThat(validations.getErrors().get(0).getMessage(), is(equalTo("Age should be a value between 0 and 100")));
+    }
+
+    @Test
+    public void should18nalizeTheCategoryParameterUsingGivenBundle() {
+    	Validations validations = new Validations() {{
+    		that(false, i18n("some.category"), "some.message");
+    	}};
+
+    	List<Message> errors = validations.getErrors(singletonBundle("some.category", "The Category"));
+
+    	assertThat(errors.get(0).getCategory(), is("The Category"));
+    }
+
+    @Test
+    public void should18nalizeTheCategoryParameterUsingMatchersWithReasonGivenBundle() {
+    	Validations validations = new Validations() {{
+    		that(null, is(notNullValue()), i18n("some.category"), "some.reason");
+    	}};
+
+    	List<Message> errors = validations.getErrors(singletonBundle("some.category", "The Category"));
+
+    	assertThat(errors.get(0).getCategory(), is("The Category"));
+    }
+
+    @Test
+    public void should18nalizeTheCategoryParameterUsingMatchersWithoutReasonGivenBundle() {
+    	Validations validations = new Validations() {{
+    		that(null, is(notNullValue()), i18n("some.category"));
+    	}};
+
+    	List<Message> errors = validations.getErrors(singletonBundle("some.category", "The Category"));
+
+    	assertThat(errors.get(0).getCategory(), is("The Category"));
     }
 
     private ResourceBundle singletonBundle(final String key, final String value) {

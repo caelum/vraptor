@@ -226,12 +226,32 @@ public class XStreamJSONSerializationTest {
 		assertThat(result(), is(equalTo(expectedResult)));
 	}
 
+	static class WithAdvanced {
+		AdvancedOrder order;
+	}
+	
 	@Test
 	public void shouldSerializeParentFields() {
 //		String expectedResult = "<advancedOrder><notes>complex package</notes><price>15.0</price><comments>pack it nicely, please</comments></advancedOrder>";
 		Order order = new AdvancedOrder(null, 15.0, "pack it nicely, please", "complex package");
 		serialization.from(order).serialize();
 		assertThat(result(), containsString("\"notes\": \"complex package\""));
+	}
+	
+	@Test
+	public void shouldExcludeNonPrimitiveParentFields() {
+//		String expectedResult = "<advancedOrder><notes>complex package</notes><price>15.0</price><comments>pack it nicely, please</comments></advancedOrder>";
+		WithAdvanced advanced = new WithAdvanced();
+		advanced.order = new AdvancedOrder(new Client("john"), 15.0, "pack it nicely, please", "complex package");
+		serialization.from(advanced).include("order").serialize();
+		assertThat(result(), not(containsString("\"client\"")));
+	}
+	
+	@Test
+	public void shouldExcludeParentFields() {
+		Order order = new AdvancedOrder(null, 15.0, "pack it nicely, please", "complex package");
+		serialization.from(order).exclude("comments").serialize();
+		assertThat(result(), not(containsString("\"comments\"")));
 	}
 
 	@Test

@@ -25,13 +25,12 @@ import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import net.vidageek.mirror.dsl.Mirror;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
@@ -41,6 +40,7 @@ import br.com.caelum.vraptor.serialization.SerializerBuilder;
 
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
+import com.google.common.collect.Sets;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;
@@ -100,22 +100,27 @@ public class XStreamSerializer implements SerializerBuilder {
 	private Set<Class<?>> getParentTypesFor(String name) {
 		if (elementTypes == null) {
 			Class<?> type = rootClass;
-			return Collections.<Class<?>>singleton(getParentType(name, type));
+			return getParentTypes(name, type);
 		} else {
 			Set<Class<?>> result = new HashSet<Class<?>>();
 			for (Class<?> type : elementTypes) {
-				result.add(getParentType(name, type));
+				result.addAll(getParentTypes(name, type));
 			}
 			return result;
 		}
 	}
 
-	private Class<?> getParentType(String name, Class<?> type) {
+	private Set<Class<?>> getParentTypes(String name, Class<?> type) {
 		String[] path = name.split("\\.");
 		for (int i = 0; i < path.length - 1; i++) {
 			type = getActualType(new Mirror().on(type).reflect().field(path[i]).getGenericType());
 		}
-		return type;
+		Set<Class<?>> types = Sets.newHashSet();
+		while(type != Object.class) {
+			types.add(type);
+			type = type.getSuperclass();
+		}
+		return types;
 	}
 
 	private void preConfigure(Object obj,String alias) {
@@ -193,7 +198,7 @@ public class XStreamSerializer implements SerializerBuilder {
 	private void excludeNonPrimitiveFields(Class<?> type) {
 		for (Field field : new Mirror().on(type).reflectAll().fields()) {
 			if (!isPrimitive(field.getType())) {
-				excludes.put(type, field.getName());
+				excludes.put(field.getDeclaringClass(), field.getName());
 			}
 		}
 	}

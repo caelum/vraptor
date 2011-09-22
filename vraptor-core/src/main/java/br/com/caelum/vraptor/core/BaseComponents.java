@@ -178,6 +178,7 @@ import br.com.caelum.vraptor.view.RefererResult;
 import br.com.caelum.vraptor.view.SessionFlashScope;
 import br.com.caelum.vraptor.view.Status;
 import br.com.caelum.vraptor.view.ValidationViewsFactory;
+import br.com.caelum.vraptor.vraptor2.VRaptor2RequestExecution;
 
 import com.thoughtworks.xstream.converters.SingleValueConverter;
 
@@ -225,7 +226,8 @@ public class BaseComponents {
     private static final Map<Class<?>, Class<?>> PROTOTYPE_COMPONENTS = classMap(
     		InterceptorStack.class, 						DefaultInterceptorStack.class,
     		RequestExecution.class, 						EnhancedRequestExecution.class,
-    		XStreamBuilder.class, 						    XStreamBuilderImpl.class
+    		XStreamBuilder.class, 							XStreamBuilderImpl.class,
+    		RequestExecution.class,							VRaptor2RequestExecution.class
     );
 
     private static final Map<Class<?>, Class<?>> REQUEST_COMPONENTS = classMap(
@@ -329,15 +331,15 @@ public class BaseComponents {
 			return NullProxyInitializer.class;
 		}
 	}
-    
+
     private static Class<? extends InstanceCreator> getInstanceCreator() {
         if (isClassPresent("org.objenesis.ObjenesisStd")) {
             return ObjenesisInstanceCreator.class;
         }
-        
+
         return ReflectionInstanceCreator.class;
     }
-    
+
     private static Class<? extends Proxifier> getProxifier() {
         if (isClassPresent("net.sf.cglib.proxy.Factory")) {
             return CglibProxifier.class;

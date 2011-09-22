@@ -70,45 +70,19 @@ public class Validations {
 	}
 
     public <T> boolean that(T actual, Matcher<? super T> matcher, String category, String reason, Object... messageParameters) {
-        if (!matcher.matches(actual)) {
-        	if (reason != null) {
-        		errors.add(new I18nMessage(category, reason, messageParameters));
-            } else {
-                Description description = new ResourceBundleDescription();
-                description.appendDescriptionOf(matcher);
-                errors.add(new I18nMessage(category, description.toString(), actual));
-            }
-            return false;
-        }
-        return true;
+        return genericThat(actual, matcher, category, reason, messageParameters);
     }
 
     public <T> boolean that(T actual, Matcher<? super T> matcher, I18nParam category, String reason, Object... messageParameters) {
-    	if (!matcher.matches(actual)) {
-        	if (reason != null) {
-        		errors.add(new I18nMessage(category, reason, messageParameters));
-            } else {
-                Description description = new ResourceBundleDescription();
-                description.appendDescriptionOf(matcher);
-                errors.add(new I18nMessage(category, description.toString(), actual));
-            }
-            return false;
-        }
-        return true;
+    	return genericThat(actual, matcher, category, reason, messageParameters);
 	}
 
     public boolean that(boolean assertion, String category, String reason, Object... messageParameters) {
-        if (!assertion) {
-        	errors.add(new I18nMessage(category, reason, messageParameters));
-        }
-        return assertion;
+        return genericThat(assertion, category, reason, messageParameters);
     }
 
     public boolean that(boolean assertion, I18nParam category, String reason, Object... messageParameters) {
-    	if (!assertion) {
-        	errors.add(new I18nMessage(category, reason, messageParameters));
-        }
-        return assertion;
+    	return genericThat(assertion, category, reason, messageParameters);
 	}
 
     protected I18nParam i18n(String key) {
@@ -160,4 +134,32 @@ public class Validations {
         return this;
     }
 
+	private <T> boolean genericThat(T actual, Matcher<? super T> matcher, Object category, String reason, Object... messageParameters) {
+		if (!matcher.matches(actual)) {
+        	if (reason != null) {
+        		errors.add(i18nMessage(category, reason, messageParameters));
+            } else {
+                Description description = new ResourceBundleDescription();
+                description.appendDescriptionOf(matcher);
+                errors.add(i18nMessage(category, description.toString(), actual));
+            }
+            return false;
+        }
+        return true;
+	}
+
+    private I18nMessage i18nMessage(Object category, String reason, Object... messageParameters) {
+		if (category instanceof I18nParam) {
+			return new I18nMessage((I18nParam) category, reason, messageParameters);
+		}
+		return new I18nMessage(category.toString(), reason, messageParameters);
+	}
+
+	private boolean genericThat(boolean assertion, Object category, String reason, Object... messageParameters) {
+		if (!assertion) {
+        	errors.add(i18nMessage(category, reason, messageParameters));
+        }
+        return assertion;
+	}
+    
 }

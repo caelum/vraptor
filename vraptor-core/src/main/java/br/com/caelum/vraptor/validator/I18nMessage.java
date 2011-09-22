@@ -18,10 +18,16 @@ public class I18nMessage implements Message {
 
 	private static final long serialVersionUID = 1L;
 
-	private final String category;
+	private final Object category;
 	private final String message;
 	private final Object[] parameters;
 	private transient ResourceBundle bundle;
+	
+	public I18nMessage(I18nParam category, String message, Object... parameters) {
+		this.category = category;
+		this.message = message;
+		this.parameters = parameters;
+	}
 
 	public I18nMessage(String category, String message, Object... parameters) {
 		this.category = category;
@@ -38,10 +44,15 @@ public class I18nMessage implements Message {
 	}
 
 	public String getMessage() {
+		checkBundle();
+
+		return MessageFormat.format(bundle.getString(message), i18n(parameters));
+	}
+
+	private void checkBundle() {
 		if (bundle == null) {
 			throw new IllegalStateException("You must set the bundle before using the I18nMessage");
 		}
-		return MessageFormat.format(bundle.getString(message), i18n(parameters));
 	}
 
     private Object[] i18n(Object[] parameters) {
@@ -54,7 +65,13 @@ public class I18nMessage implements Message {
     }
 
     public String getCategory() {
-		return category;
+    	if (category instanceof I18nParam) {
+    		checkBundle();
+
+			return ((I18nParam) category).getKey(bundle);
+		}
+
+		return category.toString();
 	}
 
 	@Override

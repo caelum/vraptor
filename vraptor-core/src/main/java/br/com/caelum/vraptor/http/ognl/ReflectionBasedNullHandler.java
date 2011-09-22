@@ -28,7 +28,7 @@ import net.vidageek.mirror.dsl.Mirror;
 import ognl.ObjectNullHandler;
 import ognl.OgnlContext;
 import br.com.caelum.vraptor.proxy.Proxifier;
-import br.com.caelum.vraptor.vraptor2.Info;
+import br.com.caelum.vraptor.util.StringUtils;
 
 /**
  * This null handler is a decorator for ognl api to invoke vraptor's api in
@@ -70,7 +70,7 @@ public class ReflectionBasedNullHandler extends ObjectNullHandler {
             return list.instantiate(target, property, list.getListType(target, ctx.getCurrentEvaluation().getPrevious(), ctx));
         }
 
-        String propertyCapitalized = Info.capitalize((String) property);
+        String propertyCapitalized = StringUtils.capitalize((String) property);
         Method getter = findGetter(target, propertyCapitalized);
         Type returnType = getter.getGenericReturnType();
         if (returnType instanceof ParameterizedType) {

@@ -178,7 +178,6 @@ import br.com.caelum.vraptor.view.RefererResult;
 import br.com.caelum.vraptor.view.SessionFlashScope;
 import br.com.caelum.vraptor.view.Status;
 import br.com.caelum.vraptor.view.ValidationViewsFactory;
-import br.com.caelum.vraptor.vraptor2.VRaptor2RequestExecution;
 
 import com.thoughtworks.xstream.converters.SingleValueConverter;
 
@@ -226,8 +225,7 @@ public class BaseComponents {
     private static final Map<Class<?>, Class<?>> PROTOTYPE_COMPONENTS = classMap(
     		InterceptorStack.class, 						DefaultInterceptorStack.class,
     		RequestExecution.class, 						EnhancedRequestExecution.class,
-    		XStreamBuilder.class, 							XStreamBuilderImpl.class,
-    		RequestExecution.class,							VRaptor2RequestExecution.class
+    		XStreamBuilder.class, 							XStreamBuilderImpl.class
     );
 
     private static final Map<Class<?>, Class<?>> REQUEST_COMPONENTS = classMap(

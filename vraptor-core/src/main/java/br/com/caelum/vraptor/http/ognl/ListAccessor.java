@@ -24,8 +24,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import net.vidageek.mirror.dsl.Mirror;
-
 import ognl.Evaluation;
 import ognl.ListPropertyAccessor;
 import ognl.OgnlContext;
@@ -33,7 +31,7 @@ import ognl.OgnlException;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.proxy.Proxifier;
-import br.com.caelum.vraptor.vraptor2.Info;
+import br.com.caelum.vraptor.util.StringUtils;
 
 /**
  * This list accessor is responsible for setting null values up to the list
@@ -118,7 +116,7 @@ public class ListAccessor extends ListPropertyAccessor {
 			Object origin = previous.getSource();
 			
 			Proxifier proxifier = (Proxifier) ctx.get("proxifier");
-			Method getter = new ReflectionBasedNullHandler(proxifier).findGetter(origin, Info.capitalize(fieldName));
+			Method getter = new ReflectionBasedNullHandler(proxifier).findGetter(origin, StringUtils.capitalize(fieldName));
 			
 			genericType = getter.getGenericReturnType();
 		} else {

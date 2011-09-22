@@ -296,19 +296,6 @@
 		</dependency>
 		<!-- [/Out of Maven Repo] -->
 		<dependency>
-			<groupId>org.vraptor</groupId>
-			<artifactId>vraptor</artifactId>
-			<version>2.6.2</version>
-			<exclusions>
-				<exclusion>
-					<groupId>javax.servlet</groupId>
-					<artifactId>servlet-api</artifactId>
-				</exclusion>
-			</exclusions>
-			<optional>true</optional>
-		</dependency>
-
-		<dependency>
 			<groupId>com.thoughtworks.xstream</groupId>
 			<artifactId>xstream</artifactId>
 			<version>1.3.1</version>

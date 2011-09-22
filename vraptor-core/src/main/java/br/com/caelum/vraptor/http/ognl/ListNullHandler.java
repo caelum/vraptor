@@ -27,7 +27,7 @@ import ognl.Evaluation;
 import ognl.OgnlContext;
 import br.com.caelum.vraptor.VRaptorException;
 import br.com.caelum.vraptor.proxy.Proxifier;
-import br.com.caelum.vraptor.vraptor2.Info;
+import br.com.caelum.vraptor.util.StringUtils;
 
 /**
  * Capable of instantiating lists. These are registered for later removal of
@@ -69,7 +69,7 @@ public class ListNullHandler {
 		String listPropertyName = evaluation.getNode().toString();
 		
 		Proxifier proxifier = (Proxifier) ctx.get("proxifier");
-		Method listSetter = new ReflectionBasedNullHandler(proxifier).findSetter(listHolder, Info.capitalize(listPropertyName), 
+		Method listSetter = new ReflectionBasedNullHandler(proxifier).findSetter(listHolder, StringUtils.capitalize(listPropertyName), 
 		        target.getClass());
 		
 		Type[] types = listSetter.getGenericParameterTypes();

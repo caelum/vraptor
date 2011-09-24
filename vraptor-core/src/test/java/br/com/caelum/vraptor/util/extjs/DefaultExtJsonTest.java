@@ -18,10 +18,10 @@ import org.mockito.MockitoAnnotations;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.serialization.NullProxyInitializer;
 
-public class FixedExtJsonTest {
+public class DefaultExtJsonTest {
 
 
-	private FixedExtJson fixedExtJson;
+	private DefaultExtJson fixedExtJson;
 	private @Mock HttpServletResponse response;
 	private @Mock TypeNameExtractor extractor;
 	private StringWriter writer;
@@ -32,7 +32,7 @@ public class FixedExtJsonTest {
 		writer = new StringWriter();
 		when(response.getWriter()).thenReturn(new PrintWriter(writer));
 		when(extractor.nameFor(Data.class)).thenReturn("data");
-		fixedExtJson = new FixedExtJson(response, extractor, new NullProxyInitializer());
+		fixedExtJson = new DefaultExtJson(response, extractor, new NullProxyInitializer());
 	}
 
 	@Test

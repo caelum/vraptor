@@ -2,9 +2,6 @@ package br.com.caelum.vraptor.util.extjs;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -19,30 +16,14 @@ import com.thoughtworks.xstream.io.json.JsonHierarchicalStreamDriver;
 import com.thoughtworks.xstream.io.json.JsonWriter;
 
 @Component
-public class FixedExtJson
+public class DefaultExtJson
     implements ExtJSJson {
-
-    private static class ExtJSWrapper {
-        private Object data;
-        private List<Object> list;
-        private Boolean success;
-        private Integer total;
-        private Object selected;
-
-        public ExtJSWrapper(Object object) {
-            if (object instanceof Collection) {
-                this.list = new ArrayList<Object>((Collection<?>) object);
-            } else {
-                this.data = object;
-            }
-        }
-    }
 
     private XStreamSerializer serializer;
     private XStream xstream;
     private ExtJSWrapper wrapper;
 
-    public FixedExtJson(HttpServletResponse response, TypeNameExtractor extractor, ProxyInitializer initializer)
+    public DefaultExtJson(HttpServletResponse response, TypeNameExtractor extractor, ProxyInitializer initializer)
         throws IOException {
         xstream = new XStream(new JsonHierarchicalStreamDriver() {
             @Override
@@ -78,7 +59,7 @@ public class FixedExtJson
     }
 
     public ExtJSJson selected(Object value) {
-        wrapper.selected = value;
+        wrapper.setSelected(value);
         return this;
     }
 
@@ -88,18 +69,17 @@ public class FixedExtJson
     }
 
     public ExtJSJson success() {
-        wrapper.success = true;
+        wrapper.setSuccess(true);
         return this;
     }
 
     public ExtJSJson success(boolean success) {
-        wrapper.success = success;
+        wrapper.setSuccess(success);
         return this;
     }
 
     public ExtJSJson total(Integer total) {
-        wrapper.total = total;
+        wrapper.setTotal(total);
         return this;
     }
-
 }

@@ -8,6 +8,13 @@
 * bugfix - suportando converter para collections no XStream*Serialization
 * mudando prioridades padrão das anotações de método (@Get, @Post, etc) para Path.DEFAULT
 * atualizando jars das dependências do VRaptor - by @wbotelhos
+* suporte a javassist para gerar os proxies - by garcia-jj
+* **quebra de compatibilidade interna** - refatoração da parte de proxies - by garcia-jj. Para todos que
+  usavam diretamente o ObjenesisProxifier ou o DefaultProxifier, o novo jeito é:
+  [code]
+  new ObjenesisProxifier() ==> new CglibProxifier(new ObjenesisInstanceCreator());
+  new DefaultProxifier() ==> new CglibProxifier(new ReflectionInstanceCreator());
+  [/code]
 
 * evitando o wrapping de runtime exceptions nos forwardings.
 * bugfix - upload no GAE, quando usando o Pico
@@ -41,7 +48,7 @@
 * plugin - @Load nos parâmetros das lógicas (....util.hibernate.extra)
   [java]
   @Path("/entidade/{entidade.id}") //o id precisa estar preenchido no request
-  public void minhaLogica(Entidade entidade) {
+  public void minhaLogica(@Load Entidade entidade) {
     //entidade já vem carregada do banco, pelo id, e se não existir retorna 404 automaticamente
     //isso desabilita população da entidade por outros parâmetros do request
   }
@@ -61,7 +68,7 @@
 
 * melhor suporte ao flash scope automático.
 
-* bugfix - corrigido scan de classes no JBoss
+* bugfix - corrigido scan de classes no JBoss - by garcia-jj
 
 * internal - suporte ao OGNL refatorado para melhorar a estensibilidade. - pair @qmx
 
@@ -114,7 +121,7 @@
   [/code]
 [/list]
 
-* suporte a javassist para gerar os proxies - by garcia-jj
+
 [section 3.3.1]
 [list]
 * bugfix - corrigido o scannotation como obrigatório no maven

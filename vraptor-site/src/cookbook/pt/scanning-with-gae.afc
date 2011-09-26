@@ -12,7 +12,8 @@ Basta adicionar as seguintes linhas no seu %%build.xml%% e logo após incluir es
         <fileset dir="war/WEB-INF/lib" includes="*.jar" />
     </path>
 
-    <java classpathref="build.classpath" classname="br.com.caelum.vraptor.scan.VRaptorStaticScanning" fork="true">
+    <java classpathref="build.classpath" 
+    		classname="br.com.caelum.vraptor.scan.VRaptorStaticScanning" fork="true">
         <arg value="war/WEB-INF/web.xml" />
         <classpath refid="build.classpath" />
         <classpath path="war/WEB-INF/classes" />

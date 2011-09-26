@@ -443,7 +443,7 @@ More info on that are on the REST Resources chapter.
 [section Message bundle File]
 
 Internationalization (i18n) is a powerful feature present in almost all Web frameworks 
-nowadays. And it’s no different with VRaptor3. With i18n you can make your applications 
+nowadays. And it's no different with VRaptor3. With i18n you can make your applications 
 support several different languages (such as French, Portuguese, Spanish, English, etc) 
 in a very easy way: simply translating the application messages.
 
@@ -456,7 +456,7 @@ lines which are a set of key/value entries, for example:
 	field.password = Password
 [/code]
 
-So far, it’s easy, but what if you want to create files containing messages in other 
+So far, it's easy, but what if you want to create files containing messages in other 
 languages, for example, Portuguese? Also easy. You just need to create another properties 
 file called %%messages_pt_BR.properties%%. Notice the suffix ::_pt_BR:: on the file name. 
 It indicates that when the user access your application from his computer configured with 

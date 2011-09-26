@@ -72,7 +72,7 @@
 			</exec>
 			<exec executable="bash" dir="target/latex">
 				<arg line="latex.sh" />
-				<arg line="book" />
+				<arg line="book.tex" />
 			</exec>
 			<copy file="target/latex/book.pdf" tofile="@{dest}" />
 		</sequential>
@@ -86,11 +86,11 @@
 		<tubaina src="src/guide/pt/" dest="src/content" name="documentacao" title="chapter-title-pt.ftl"/>
 		<tubaina src="src/cookbook/pt/" dest="src/content" name="cookbook" title="chapter-title-cook-pt.ftl"/>
 		
-		<!--tubaina-pdf src="src/guide/pt/" dest="src/content/documentacao/vraptor3.pdf" 
+		<tubaina-pdf src="src/guide/pt/" dest="src/content/documentacao/vraptor3.pdf" 
 				title="VRaptor 3 - Um framework Java MVC de desenvolvimento rápido e fácil"/>
 
 		<tubaina-pdf src="src/cookbook/pt/" dest="src/content/cookbook/vraptor3cookbook.pdf" 
-				title="VRaptor 3 - Livro de receitas"/-->
+				title="VRaptor 3 - Livro de receitas"/>
 
 		<exec executable="rm">
 			<arg line="-rf src/content/documentation"/>
@@ -99,8 +99,8 @@
 		<get dest="src/templates/html/header.ftl" src="http://localhost:8888/en/header.jsp?docs=true"/>
 		<get dest="src/templates/html/footer.ftl" src="http://localhost:8888/en/footer.jsp?docs=true"/>
 		<tubaina src="src/guide/en/" dest="src/content" name="documentation" title="chapter-title-en.ftl"/>
-		<!--tubaina-pdf src="src/guide/en/" dest="src/content/documentation/vraptor3.pdf" 
-				title="VRaptor 3 - Java web MVC framework for fast and maintenable development"/-->
+		<tubaina-pdf src="src/guide/en/" dest="src/content/documentation/vraptor3.pdf" 
+				title="VRaptor 3 - Java web MVC framework for fast and maintenable development"/>
 		
 		<move file="src/content/htmlflat/" tofile="src/content" />
 		<delete file="src/templates/html/chapter-title.ftl" />

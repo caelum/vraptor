@@ -4,7 +4,7 @@
 Algum tempo sem atualizar as coisas por aqui, resolvi tirar um tempo para me atualizar no 
 framework que acompanho já faz algum tempo, VRAPTOR.
 
-Ultimamente tenho utilizado o Maven para controlar as dependências de Jar’s das aplicações 
+Ultimamente tenho utilizado o Maven para controlar as dependências de Jar's das aplicações 
 que trabalho, e tem me ajudado bastante. Então resolvi tirar um tempo para gerar um POM para 
 o VRaptor, já que na estrutura original dele esse arquivo não o acompanha.
 

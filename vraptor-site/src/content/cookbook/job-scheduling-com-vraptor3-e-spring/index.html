@@ -228,7 +228,7 @@ um resource assim:</p>
 	    	<p>O Spring possui um escopo chamado prototype que define que o componente ter&aacute; uma nova 
 inst&acirc;ncia sempre que for requisitada, este escopo ainda n&atilde;o existe no vRaptor3 mas ser&aacute; 
 implementado em breve. Este escopo servir&aacute; para definir compenentes utilizados por tasks 
-em escopo de application que naturalmente n&atilde;o s&atilde;o singletons, como DAO’s.</p>
+em escopo de application que naturalmente n&atilde;o s&atilde;o singletons, como DAO's.</p>
 	    	<p>Voc&ecirc; n&atilde;o poder&aacute; receber a Session no construtor do seu DAO prototyped pois geralmente a 
 SessionFactory est&aacute; em escopo de request, e o vRaptor ainda n&atilde;o possui suporte &agrave;s 
 scoped-proxies do Spring. Ent&atilde;o precisar&aacute; fazer assim:</p>

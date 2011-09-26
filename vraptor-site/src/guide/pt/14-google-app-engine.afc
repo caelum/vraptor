@@ -32,7 +32,7 @@ chamadas como:
 	validator.onErrorUse(Results.logic()).of(SomeController.class).someMethod();
 [/java]
 
-preferindo %%Results.page()%% — ou então escrever seus controllers
+preferindo %%Results.page()%% - ou então escrever seus controllers
 de forma a esperar pelos valores nulos.
 
 

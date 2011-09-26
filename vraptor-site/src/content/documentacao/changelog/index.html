@@ -121,7 +121,13 @@
 
 
 <h3 class="section">3.4.0</h3>
-	    	<ul><li><p>novo status accepted (result.use(status()).accepted()) - by Vinicius Oliveira</p></li><li><p>bugfix - race condition na ordena&ccedil;&atilde;o de interceptors</p></li><li><p>mock para o bean validations - by @seufagner</p></li><li><p>bugfix - suportando converter para collections no XStream*Serialization</p></li><li><p>mudando prioridades padr&atilde;o das anota&ccedil;&otilde;es de m&eacute;todo (@Get, @Post, etc) para Path.DEFAULT</p></li><li><p>atualizando jars das depend&ecirc;ncias do VRaptor - by @wbotelhos</p></li><li><p>evitando o wrapping de runtime exceptions nos forwardings.</p></li><li><p>bugfix - upload no GAE, quando usando o Pico</p></li><li><p>suportando popular par&acirc;metros de objetos convers&iacute;veis:</p><pre class="code text">
+	    	<ul><li><p>novo status accepted (result.use(status()).accepted()) - by Vinicius Oliveira</p></li><li><p>bugfix - race condition na ordena&ccedil;&atilde;o de interceptors</p></li><li><p>mock para o bean validations - by @seufagner</p></li><li><p>bugfix - suportando converter para collections no XStream*Serialization</p></li><li><p>mudando prioridades padr&atilde;o das anota&ccedil;&otilde;es de m&eacute;todo (@Get, @Post, etc) para Path.DEFAULT</p></li><li><p>atualizando jars das depend&ecirc;ncias do VRaptor - by @wbotelhos</p></li><li><p>suporte a javassist para gerar os proxies - by garcia-jj</p></li><li><p><strong>quebra de compatibilidade interna</strong> - refatora&ccedil;&atilde;o da parte de proxies - by garcia-jj. Para todos que
+  usavam diretamente o ObjenesisProxifier ou o DefaultProxifier, o novo jeito &eacute;:</p><pre class="code text">
+
+  new ObjenesisProxifier() ==&gt; new CglibProxifier(new ObjenesisInstanceCreator());
+  new DefaultProxifier() ==&gt; new CglibProxifier(new ReflectionInstanceCreator());
+  
+</pre></li><li><p>evitando o wrapping de runtime exceptions nos forwardings.</p></li><li><p>bugfix - upload no GAE, quando usando o Pico</p></li><li><p>suportando popular par&acirc;metros de objetos convers&iacute;veis:</p><pre class="code text">
 
   bola = amarela  ==&gt; convertido pelo BolaConverter
   bola.tamanho = 23 ==&gt; continuando a popular
@@ -139,11 +145,11 @@
 &nbsp;&nbsp; //validator vindo com inje&ccedil;ão de depend&ecirc;ncias<br />
 </span><span class="java8">}</span></code></div></li><li><p>plugin - @Load nos par&acirc;metros das l&oacute;gicas (....util.hibernate.extra)</p><div class="java"><code class="java">
 <span class="java16">@Path</span><span class="java8">(</span><span class="java5">&#34;/entidade/{entidade.id}&#34;</span><span class="java8">) </span><span class="java3">//o id precisa estar preenchido no request<br />
-</span><span class="java4">public </span><span class="java9">void </span><span class="java10">minhaLogica</span><span class="java8">(</span><span class="java10">Entidade entidade</span><span class="java8">) {<br />
+</span><span class="java4">public </span><span class="java9">void </span><span class="java10">minhaLogica</span><span class="java8">(</span><span class="java16">@Load </span><span class="java10">Entidade entidade</span><span class="java8">) {<br />
 &nbsp; </span><span class="java3">//entidade j&aacute; vem carregada do banco, pelo id, e se não existir retorna 404 automaticamente<br />
 &nbsp; //isso desabilita popula&ccedil;ão da entidade por outros par&acirc;metros do request<br />
 </span><span class="java8">}</span></code></div></li><li><p>bugfix - serializa&ccedil;&atilde;o de classes com tipos gen&eacute;ricos - by @wbotelhos</p></li><li><p>guice - suportando receber List&lt;QualquerComponent&gt; como depend&ecirc;ncia</p></li><li><p>plugin - vraptor-flex-plugin melhorado, suportando invoca&ccedil;&atilde;o de l&oacute;gicas, e inje&ccedil;&atilde;o de depend&ecirc;ncias - by @davidpaniz</p></li><li><p>test - MockSerializationResult, para poder fazer asser&ccedil;&otilde;es nos objetos serializados. - by Vinicius oliveira</p></li><li><p>plugin - vraptor-scala-plugin melhorado (usando acessores de propriedades do scala, e ignorando m&eacute;todos com $).
-   Blank project scala usando sbt. Scala plugin feito em scala agora ;)</p></li><li><p>melhor suporte ao flash scope autom&aacute;tico.</p></li><li><p>bugfix - corrigido scan de classes no JBoss</p></li><li><p>internal - suporte ao OGNL refatorado para melhorar a estensibilidade. - pair @qmx</p></li><li><p>bugfix - regexes nos @Path - by Anderson Parra</p></li><li><p>guice na vers&atilde;o est&aacute;vel (3.0)</p></li><li><p>Hibernate Validator deprecado (prefer&ecirc;ncia para usar Bean Validations)</p></li><li><p>bugfix - result.include(null) gerava NullPointerException</p></li><li><p>bugfix - convers&atilde;o de listas - by Narciso Benigno</p></li><li><p>melhores docs do plugin pro GAE - by Roberto Nogueira</p></li><li><p>serializa&ccedil;&atilde;o de Links em JSON - by A.C de Souza</p></li><li><p>lazy 18n para valida&ccedil;&otilde;es:</p><div class="java"><code class="java">
+   Blank project scala usando sbt. Scala plugin feito em scala agora ;)</p></li><li><p>melhor suporte ao flash scope autom&aacute;tico.</p></li><li><p>bugfix - corrigido scan de classes no JBoss - by garcia-jj</p></li><li><p>internal - suporte ao OGNL refatorado para melhorar a estensibilidade. - pair @qmx</p></li><li><p>bugfix - regexes nos @Path - by Anderson Parra</p></li><li><p>guice na vers&atilde;o est&aacute;vel (3.0)</p></li><li><p>Hibernate Validator deprecado (prefer&ecirc;ncia para usar Bean Validations)</p></li><li><p>bugfix - result.include(null) gerava NullPointerException</p></li><li><p>bugfix - convers&atilde;o de listas - by Narciso Benigno</p></li><li><p>melhores docs do plugin pro GAE - by Roberto Nogueira</p></li><li><p>serializa&ccedil;&atilde;o de Links em JSON - by A.C de Souza</p></li><li><p>lazy 18n para valida&ccedil;&otilde;es:</p><div class="java"><code class="java">
 <span class="java10">validator.checking</span><span class="java8">(</span><span class="java4">new </span><span class="java10">Validations</span><span class="java8">() {{<br />
 &nbsp;&nbsp; </span><span class="java10">that</span><span class="java8">(</span><span class="java10">a == b, i18n</span><span class="java8">(</span><span class="java5">&#34;category&#34;</span><span class="java8">)</span><span class="java10">, </span><span class="java5">&#34;message.key&#34;</span><span class="java10">, </span><span class="java5">&#34;params&#34;</span><span class="java8">)</span><span class="java10">; <br />
 &nbsp;&nbsp; </span><span class="java3">// tanto category quanto message.key serão i18n na hora de mostrar a mensagem,<br />
@@ -158,7 +164,6 @@
   ${linkTo[ProdutoController].carrega[2]} ==&gt; /produtos/2
   
 </pre></li></ul>
-	    	<p>* suporte a javassist para gerar os proxies - by garcia-jj</p>
 		
 
 <h3 class="section">3.3.1</h3>

@@ -7,7 +7,7 @@
 
 %% For portuguese compatibility
 \usepackage[brazil]{babel}
-\usepackage[utf8]{inputenc}
+\usepackage[latin1]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{float}
 \usepackage[scaled]{helvet}
@@ -22,6 +22,7 @@
 \usepackage{makeidx}
 \usepackage{enumerate}
 \usepackage{fancyhdr}
+\usepackage{mintedx}
 \usepackage{pstcol}
 \usepackage{colortbl}
 \usepackage{url}
@@ -34,6 +35,8 @@
 
 %This has to be the last package declared, for some reason
 \usepackage[pdftex]{hyperref}
+
+\definecolor{boxhead}{gray}{0.8}
 
 %%%%%%%PAGE SETUP%%%%%%%%%%%%%
 \oddsidemargin    -6mm
@@ -49,6 +52,7 @@
 \makeindex
 
 \begin{document}
+\usemintedstyle{eclipse}
 
 \normalfont
 

@@ -43,22 +43,22 @@
 }
 
 %Box
-\newcommand{\boxtag}[2]{
-  \begin{flushright}
-	\renewcommand{\verb}[1]{#1}
-    \parbox{16cm}{
-      \begin{tabular}{p{15.6cm}}
-        \hline
-        \rowcolor{lightgray}
-        #1 \\
-        \hline
-      \end{tabular}
-      \\[-1em]
-      #2 \\[-1ex]
-      \rule{16cm}{0.5pt}
-    }
-  \end{flushright}
-}
+\newenvironment{tubainabox}[1]
+               {\begin{flushright}
+                   \begin{minipage}{16cm}
+                     \begin{tabular}{p{15.6cm}}
+                       \rowcolor{lightgray}
+                       \hline
+                       #1 \\
+                       \hline
+                     \end{tabular}
+                     \\
+               }
+               {\end{minipage}
+                   \\[1em]
+                   \rule{16cm}{0.5pt}
+                 \end{flushright}
+               }
 
 \newcommand{\answerHead}[1]{
 	\subsubsection*{#1\ -\ Exercises}
@@ -127,7 +127,7 @@
 %% keidi (at) ime.usp.br
 %% Para cada nova alteracao, coloque identificacao.
 %%
-%% �ltima atualiza��o: 15/08/1997
+%% Ultima atualizacao: 15/08/1997
 %%
 
 
@@ -263,7 +263,7 @@
 %%  chapapp
 
 \def\quadradocinza#1{%
-  \rlap{\gray \vrule height 0.8cm width 1cm depth 0.2cm}%
+  \rlap{\black \vrule height 0.8cm width 1cm depth 0.2cm}%
   \rlap{\hbox to 1cm{\hss\mbox{\bfseries \white #1}\hss}}%
   \vrule height 0pt width 1cm depth 0pt}
 

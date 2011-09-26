@@ -84,11 +84,15 @@
 		
 									<li><a class="link_toc" href="../../cookbook/evitando-que-o-browser-faca-cache-das-paginas/">10. Evitando que o browser faça cache das páginas</a></li>
 		
-									<li><a class="link_toc" href="../../cookbook/usando-o-header-referer-para-fazer-redirecionamentos/">11. Usando o Header Referer para fazer redirecionamentos</a></li>
+									<li><a class="link_toc" href="../../cookbook/usando-objectify-com-vraptor/">11. Usando Objectify com VRaptor</a></li>
 		
-									<li><a class="link_toc" href="../../cookbook/configurando-o-vraptor-na-locaweb/">12. Configurando o VRaptor na Locaweb</a></li>
+									<li><a class="link_toc" href="../../cookbook/usando-o-static-scanning-no-gae-j/">12. Usando o Static Scanning no GAE/J</a></li>
 		
-									<li><a class="link_toc" href="../../cookbook/vraptor-e-tiles-2-2/">13. VRaptor e Tiles 2.2</a></li>
+									<li><a class="link_toc" href="../../cookbook/usando-o-header-referer-para-fazer-redirecionamentos/">13. Usando o Header Referer para fazer redirecionamentos</a></li>
+		
+									<li><a class="link_toc" href="../../cookbook/configurando-o-vraptor-na-locaweb/">14. Configurando o VRaptor na Locaweb</a></li>
+		
+									<li><a class="link_toc" href="../../cookbook/vraptor-e-tiles-2-2/">15. VRaptor e Tiles 2.2</a></li>
 		
                 </ol>
             </div><!-- submenu-->
@@ -97,14 +101,14 @@
 	
 		<h2 class="chapter">Poupando recursos - LAZY Dependency Injection</h2>
 
-		<span class="paragraph"><strong class="definition"><em class="italic">por Tomaz Lavieri no blog <a class="link" target="_blank" href="http://blog.tomazlavieri.com.br/2009/vraptor-3-poupando-recursos-lazy-dependence-injection/">http://blog.tomazlavieri.com.br/2009/vraptor-3-poupando-recursos-lazy-dependence-injection/</a> </em></strong></span><span class="paragraph">Objetivo: Ao final deste artigo espera-se que voc&ecirc; saiba como poupar recursos caros, trazendo 
-eles de forma <em class="italic">LAZY</em>, ou como prefiro chamar <em class="italic">Just-in-Time</em> (no momento certo).</span><span class="paragraph">No VRaptor3 a inje&ccedil;&atilde;o de depend&ecirc;ncia ficou bem mais f&aacute;cil, os interceptadores que 
+		<p><strong><em>por Tomaz Lavieri no blog <a href="http://blog.tomazlavieri.com.br/2009/vraptor-3-poupando-recursos-lazy-dependence-injection/">http://blog.tomazlavieri.com.br/2009/vraptor-3-poupando-recursos-lazy-dependence-injection/</a> </em></strong></p><p>Objetivo: Ao final deste artigo espera-se que voc&ecirc; saiba como poupar recursos caros, trazendo 
+eles de forma <em>LAZY</em>, ou como prefiro chamar <em>Just-in-Time</em> (no momento certo).</p><p>No VRaptor3 a inje&ccedil;&atilde;o de depend&ecirc;ncia ficou bem mais f&aacute;cil, os interceptadores que 
 eram os respons&aacute;veis para injetar a depend&ecirc;ncia sumiram e agora fica tudo a cargo 
-do container, que pode ser o Spring ou o Pico.</span><span class="paragraph">A facilidade na inje&ccedil;&atilde;o de dependencia tem um custo, como n&atilde;o &eacute; mais controlado 
+do container, que pode ser o Spring ou o Pico.</p><p>A facilidade na inje&ccedil;&atilde;o de dependencia tem um custo, como n&atilde;o &eacute; mais controlado 
 pelo programador que cria o interceptor sempre que declaramos uma depend&ecirc;ncia no 
-construtor de um <code class="inlineCode">@Component</code>, <code class="inlineCode">@Resource</code> ou <code class="inlineCode">@Intercepts</code> ele &eacute; injetado no in&iacute;cio, 
+construtor de um <code>@Component</code>, <code>@Resource</code> ou <code>@Intercepts</code> ele &eacute; injetado no in&iacute;cio, 
 logo na constru&ccedil;&atilde;o, por&eacute;m &agrave;s vezes o fluxo de um requisi&ccedil;&atilde;o faz com que n&atilde;o usemos 
-algumas destas inje&ccedil;&otilde;es de depend&ecirc;ncia, disperdi&ccedil;ando recursos valiosos.</span><span class="paragraph">Por exemplo, vamos supor o seguinte <code class="inlineCode">@Resource</code> abaixo, que cadastra produtos</span><div class="java"><code class="java">
+algumas destas inje&ccedil;&otilde;es de depend&ecirc;ncia, disperdi&ccedil;ando recursos valiosos.</p><p>Por exemplo, vamos supor o seguinte <code>@Resource</code> abaixo, que cadastra produtos</p><div class="java"><code class="java">
 <span class="java4">import </span><span class="java10">java.util.List;<br />
 </span><span class="java4">import </span><span class="java10">org.hibernate.Session;<br />
 </span><span class="java4">import </span><span class="java10">br.com.caelum.vraptor.Result;<br />
@@ -137,17 +141,17 @@ algumas destas inje&ccedil;&otilde;es de depend&ecirc;ncia, disperdi&ccedil;ando
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; result.use</span><span class="java8">(</span><span class="java10">Results.logic</span><span class="java8">())</span><span class="java10">.redirectTo</span><span class="java8">(</span><span class="java10">getClass</span><span class="java8">())</span><span class="java10">.listar</span><span class="java8">()</span><span class="java10">;<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return </span><span class="java10">produto;<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
-}</span></code></div><span class="paragraph">Sempre que alguem faz uma requisi&ccedil;&atilde;o a qualquer l&oacute;gica dentro do recurso 
-<code class="inlineCode">ProdutoController</code> uma <code class="inlineCode">Session</code> &eacute; aberta, porem note que abrir o 
+}</span></code></div><p>Sempre que alguem faz uma requisi&ccedil;&atilde;o a qualquer l&oacute;gica dentro do recurso 
+<code>ProdutoController</code> uma <code>Session</code> &eacute; aberta, porem note que abrir o 
 formul&aacute;rio para adicionar produtos n&atilde;o requer sess&atilde;o com o banco, ele apenas 
 renderiza uma p&aacute;gina, cada vez que o formul&aacute;rio de produtos &eacute; aberto um 
-importante e caro recurso do sistema esta sendo requerido, e de forma totalmente ociosa.</span><div class="box"><h3>Nota do editor</h3>
-<span class="paragraph">&Eacute; criada no m&aacute;ximo uma Session por requisi&ccedil;&atilde;o. A mesma coisa para qualquer componente
-	Request scoped.</span></div><span class="paragraph">Como agir neste caso? Isolar o formul&aacute;rio poderia resolver este problema mais recairia 
-em outro, da mantenabilidade.</span><span class="paragraph">O ideal &eacute; que este recurso s&oacute; fosse realmente injetado no tempo certo 
-(<em class="italic">Just in Time</em>) como seria poss&iacute;vel fazer isso? A solu&ccedil;&atilde;o &eacute; usar proxies din&acirc;micos, 
-enviando uma <code class="inlineCode">Session</code> que s&oacute; realmente abrir&aacute; a conex&atilde;o com o banco quando um de 
-seus m&eacute;todos for invocado.</span><div class="java"><code class="java">
+importante e caro recurso do sistema esta sendo requerido, e de forma totalmente ociosa.</p><div class="box"><h4>Nota do editor</h4>
+<p>&Eacute; criada no m&aacute;ximo uma Session por requisi&ccedil;&atilde;o. A mesma coisa para qualquer componente
+	Request scoped.</p></div><p>Como agir neste caso? Isolar o formul&aacute;rio poderia resolver este problema mais recairia 
+em outro, da mantenabilidade.</p><p>O ideal &eacute; que este recurso s&oacute; fosse realmente injetado no tempo certo 
+(<em>Just in Time</em>) como seria poss&iacute;vel fazer isso? A solu&ccedil;&atilde;o &eacute; usar proxies din&acirc;micos, 
+enviando uma <code>Session</code> que s&oacute; realmente abrir&aacute; a conex&atilde;o com o banco quando um de 
+seus m&eacute;todos for invocado.</p><div class="java"><code class="java">
 <span class="java4">import </span><span class="java10">java.lang.reflect.Method;<br />
 </span><span class="java4">import </span><span class="java10">javax.annotation.PreDestroy;<br />
 </span><span class="java4">import </span><span class="java10">org.hibernate.classic.Session;<br />
@@ -227,27 +231,27 @@ seus m&eacute;todos for invocado.</span><div class="java"><code class="java">
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">session.close</span><span class="java8">()</span><span class="java10">;<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
 &nbsp;&nbsp;&nbsp; }<br />
-}</span></code></div><span class="paragraph">Explicando alguns pontos chaves, comentados com <code class="inlineCode">// *N*</code></span><ul class="list"><li><span class="paragraph">O <code class="inlineCode">Proxfier</code> &eacute; um objeto das libs do VRaptor que auxilia na cria&ccedil;&atilde;o de objetos 
+}</span></code></div><p>Explicando alguns pontos chaves, comentados com <code>// *N*</code></p><ul><li><p>O <code>Proxfier</code> &eacute; um objeto das libs do VRaptor que auxilia na cria&ccedil;&atilde;o de objetos 
    	 proxys ele &eacute; respons&aacute;vel por escolher a biblioteca que implementa o proxy din&acirc;mico, 
-   	 e ent&atilde;o invocar via callback um m&eacute;todo interceptor, como falamos abaixo.</span></li><li><span class="paragraph">Neste ponto temos a implementa&ccedil;&atilde;o do nosso interceptor, sempre que um m&eacute;todo for 
+   	 e ent&atilde;o invocar via callback um m&eacute;todo interceptor, como falamos abaixo.</p></li><li><p>Neste ponto temos a implementa&ccedil;&atilde;o do nosso interceptor, sempre que um m&eacute;todo for 
    	 invocado em nosso proxy, esse intereptor &eacute; invocado primeiro, ele filtra as chamadas 
-   	 ao m&eacute;todo <code class="inlineCode">finalize</code> caso a <code class="inlineCode">Session</code> real ainda n&atilde;o tenha sido criada, isso evita 
-   	 criar a <code class="inlineCode">Session</code> apenas para finaliza-la.
-     O m&eacute;todo <code class="inlineCode">close</code> tamb&eacute;m &eacute; filtrado, isso &eacute; feito para evitar criar uma session apenas 
-     para fech&aacute;-la, e tamb&eacute;m por que o nosso <code class="inlineCode">SessionCreator</code> &eacute; que &eacute; o responsavel por 
+   	 ao m&eacute;todo <code>finalize</code> caso a <code>Session</code> real ainda n&atilde;o tenha sido criada, isso evita 
+   	 criar a <code>Session</code> apenas para finaliza-la.
+     O m&eacute;todo <code>close</code> tamb&eacute;m &eacute; filtrado, isso &eacute; feito para evitar criar uma session apenas 
+     para fech&aacute;-la, e tamb&eacute;m por que o nosso <code>SessionCreator</code> &eacute; que &eacute; o responsavel por 
      fechar a session ao final do scopo, quando a request acabar.
-     Todos os outros m&eacute;todos s&atilde;o repassados para uma session atrav&eacute;s do m&eacute;todo <code class="inlineCode">getSession()</code>
-     onde &eacute; realmente que acontece o <code class="inlineCode">LAZY</code> ou <code class="inlineCode">JIT</code>.</span></li><li><span class="paragraph">Aqui &eacute; onde acontece a m&aacute;gica, da primeira vez que <code class="inlineCode">getSession()</code> &eacute; invocado a sess&atilde;o 
-     &eacute; criada, e ent&atilde;o repassada, todas as outras chamadas a <code class="inlineCode">getSession()</code> repassam a 
-     sess&atilde;o anteriormente criada, assim, se <code class="inlineCode">getSession()</code> nunca for invocado, ou seja, 
-     se nenhum m&eacute;todo for invocado no proxy, <code class="inlineCode">getSession()</code> nunca ser&aacute; invocado, e a 
-     sess&atilde;o real n&atilde;o ser&aacute; criada.</span></li><li><span class="paragraph">O retorno desse <code class="inlineCode">ComponentFactory</code> &eacute; a <code class="inlineCode">Session</code> proxy, que s&oacute; criar&aacute; a session 
-     real se um de seus m&eacute;todos for invocado.</span></li><li><span class="paragraph">Ao final do escopo o <code class="inlineCode">destroy</code> &eacute; invocado, ele verifica se a session real existe, 
+     Todos os outros m&eacute;todos s&atilde;o repassados para uma session atrav&eacute;s do m&eacute;todo <code>getSession()</code>
+     onde &eacute; realmente que acontece o <code>LAZY</code> ou <code>JIT</code>.</p></li><li><p>Aqui &eacute; onde acontece a m&aacute;gica, da primeira vez que <code>getSession()</code> &eacute; invocado a sess&atilde;o 
+     &eacute; criada, e ent&atilde;o repassada, todas as outras chamadas a <code>getSession()</code> repassam a 
+     sess&atilde;o anteriormente criada, assim, se <code>getSession()</code> nunca for invocado, ou seja, 
+     se nenhum m&eacute;todo for invocado no proxy, <code>getSession()</code> nunca ser&aacute; invocado, e a 
+     sess&atilde;o real n&atilde;o ser&aacute; criada.</p></li><li><p>O retorno desse <code>ComponentFactory</code> &eacute; a <code>Session</code> proxy, que s&oacute; criar&aacute; a session 
+     real se um de seus m&eacute;todos for invocado.</p></li><li><p>Ao final do escopo o <code>destroy</code> &eacute; invocado, ele verifica se a session real existe, 
      existindo verifica se esta ainda esta aberta, e estando ele fecha, desta forma &eacute; 
-     possivel garantir que o recurso ser&aacute; sempre liberado.</span></li></ul><span class="paragraph">Assim podemos agora pedir uma Session sempre que acharmos que vamos precisar de uma, 
+     possivel garantir que o recurso ser&aacute; sempre liberado.</p></li></ul><p>Assim podemos agora pedir uma Session sempre que acharmos que vamos precisar de uma, 
 sabendo que o recurso s&oacute; ser&aacute; realmente solicitado quando formos usar um de seus m&eacute;todos, 
-salvando assim o recurso.</span><span class="paragraph">Esta mesma abordagem pode ser usada para outros recursos caros do sistema.</span><span class="paragraph">Os c&oacute;digos fonte para os <code class="inlineCode">ComponentFactory</code> de <code class="inlineCode">EntityManager</code> e <code class="inlineCode">Session</code> 
-que utilizo podem ser encontrados neste link: <a class="link" target="_blank" href="http://guj.com.br/posts/list/141500.java">http://guj.com.br/posts/list/141500.java</a></span>
+salvando assim o recurso.</p><p>Esta mesma abordagem pode ser usada para outros recursos caros do sistema.</p><p>Os c&oacute;digos fonte para os <code>ComponentFactory</code> de <code>EntityManager</code> e <code>Session</code> 
+que utilizo podem ser encontrados neste link: <a href="http://guj.com.br/posts/list/141500.java">http://guj.com.br/posts/list/141500.java</a></p>
 
 
 </div><!-- content -->

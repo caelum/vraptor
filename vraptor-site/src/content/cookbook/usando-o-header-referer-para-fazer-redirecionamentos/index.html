@@ -84,11 +84,15 @@
 		
 									<li><a class="link_toc" href="../../cookbook/evitando-que-o-browser-faca-cache-das-paginas/">10. Evitando que o browser faça cache das páginas</a></li>
 		
-									<li><a class="link_toc" href="../../cookbook/usando-o-header-referer-para-fazer-redirecionamentos/">11. Usando o Header Referer para fazer redirecionamentos</a></li>
+									<li><a class="link_toc" href="../../cookbook/usando-objectify-com-vraptor/">11. Usando Objectify com VRaptor</a></li>
 		
-									<li><a class="link_toc" href="../../cookbook/configurando-o-vraptor-na-locaweb/">12. Configurando o VRaptor na Locaweb</a></li>
+									<li><a class="link_toc" href="../../cookbook/usando-o-static-scanning-no-gae-j/">12. Usando o Static Scanning no GAE/J</a></li>
 		
-									<li><a class="link_toc" href="../../cookbook/vraptor-e-tiles-2-2/">13. VRaptor e Tiles 2.2</a></li>
+									<li><a class="link_toc" href="../../cookbook/usando-o-header-referer-para-fazer-redirecionamentos/">13. Usando o Header Referer para fazer redirecionamentos</a></li>
+		
+									<li><a class="link_toc" href="../../cookbook/configurando-o-vraptor-na-locaweb/">14. Configurando o VRaptor na Locaweb</a></li>
+		
+									<li><a class="link_toc" href="../../cookbook/vraptor-e-tiles-2-2/">15. VRaptor e Tiles 2.2</a></li>
 		
                 </ol>
             </div><!-- submenu-->
@@ -97,9 +101,9 @@
 	
 		<h2 class="chapter">Usando o Header Referer para fazer redirecionamentos</h2>
 
-		<span class="paragraph">Geralmente quando voc&ecirc; clica em um link, ou submete um formul&aacute;rio, o browser
+		<p>Geralmente quando voc&ecirc; clica em um link, ou submete um formul&aacute;rio, o browser
 envia uma requisi&ccedil;&atilde;o para o servidor da sua aplica&ccedil;&atilde;o, colocando um Header
-chamado Referer, que cont&eacute;m qual &eacute; a p&aacute;gina atual, que originou a requisi&ccedil;&atilde;o.</span><span class="paragraph">Voc&ecirc; pode usar esse Header com o VRaptor, para fazer os redirecionamentos:</span><div class="java"><code class="java">
+chamado Referer, que cont&eacute;m qual &eacute; a p&aacute;gina atual, que originou a requisi&ccedil;&atilde;o.</p><p>Voc&ecirc; pode usar esse Header com o VRaptor, para fazer os redirecionamentos:</p><div class="java"><code class="java">
 <span class="java4">import static </span><span class="java10">br.com.caelum.vraptor.view.Results.referer;<br />
 </span><span class="java16">@Resource<br />
 </span><span class="java4">public class </span><span class="java10">ShoppingController </span><span class="java8">{<br />
@@ -112,9 +116,9 @@ chamado Referer, que cont&eacute;m qual &eacute; a p&aacute;gina atual, que orig
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; result.use</span><span class="java8">(</span><span class="java10">referer</span><span class="java8">())</span><span class="java10">.redirect</span><span class="java8">()</span><span class="java10">;<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
-}</span></code></div><span class="paragraph">O problema em usar o Referer &eacute; que ele n&atilde;o &eacute; obrigat&oacute;rio. Ent&atilde;o quando o Referer
+}</span></code></div><p>O problema em usar o Referer &eacute; que ele n&atilde;o &eacute; obrigat&oacute;rio. Ent&atilde;o quando o Referer
 n&atilde;o vem na requisi&ccedil;&atilde;o, o VRaptor vai lan&ccedil;ar uma IllegalStateException, e assim voc&ecirc;
-pode especificar uma outra l&oacute;gica para ir caso o Referer n&atilde;o seja especificado:</span><div class="java"><code class="java">
+pode especificar uma outra l&oacute;gica para ir caso o Referer n&atilde;o seja especificado:</p><div class="java"><code class="java">
 <span class="java4">try </span><span class="java8">{<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java10">result.use</span><span class="java8">(</span><span class="java10">referer</span><span class="java8">())</span><span class="java10">.redirect</span><span class="java8">()</span><span class="java10">;<br />
 </span><span class="java8">} </span><span class="java4">catch </span><span class="java8">(</span><span class="java10">IllegalStateException e</span><span class="java8">) {<br />

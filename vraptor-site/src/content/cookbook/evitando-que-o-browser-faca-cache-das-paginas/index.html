@@ -84,11 +84,15 @@
 		
 									<li><a class="link_toc" href="../../cookbook/evitando-que-o-browser-faca-cache-das-paginas/">10. Evitando que o browser faça cache das páginas</a></li>
 		
-									<li><a class="link_toc" href="../../cookbook/usando-o-header-referer-para-fazer-redirecionamentos/">11. Usando o Header Referer para fazer redirecionamentos</a></li>
+									<li><a class="link_toc" href="../../cookbook/usando-objectify-com-vraptor/">11. Usando Objectify com VRaptor</a></li>
 		
-									<li><a class="link_toc" href="../../cookbook/configurando-o-vraptor-na-locaweb/">12. Configurando o VRaptor na Locaweb</a></li>
+									<li><a class="link_toc" href="../../cookbook/usando-o-static-scanning-no-gae-j/">12. Usando o Static Scanning no GAE/J</a></li>
 		
-									<li><a class="link_toc" href="../../cookbook/vraptor-e-tiles-2-2/">13. VRaptor e Tiles 2.2</a></li>
+									<li><a class="link_toc" href="../../cookbook/usando-o-header-referer-para-fazer-redirecionamentos/">13. Usando o Header Referer para fazer redirecionamentos</a></li>
+		
+									<li><a class="link_toc" href="../../cookbook/configurando-o-vraptor-na-locaweb/">14. Configurando o VRaptor na Locaweb</a></li>
+		
+									<li><a class="link_toc" href="../../cookbook/vraptor-e-tiles-2-2/">15. VRaptor e Tiles 2.2</a></li>
 		
                 </ol>
             </div><!-- submenu-->
@@ -97,8 +101,8 @@
 	
 		<h2 class="chapter">Evitando que o browser faça cache das páginas</h2>
 
-		<span class="paragraph"><strong class="definition"><em class="italic">por Ot&aacute;vio Scherer Garcia e Lucas Cavalcanti</em></strong></span><span class="paragraph">Este interceptor indica ao browser para n&atilde;o efetuar cache das p&aacute;ginas, adicionando headers indicando que a p&aacute;gina atual
-est&aacute; expirada.</span><div class="java"><code class="java">
+		<p><strong><em>por Ot&aacute;vio Scherer Garcia e Lucas Cavalcanti</em></strong></p><p>Este interceptor indica ao browser para n&atilde;o efetuar cache das p&aacute;ginas, adicionando headers indicando que a p&aacute;gina atual
+est&aacute; expirada.</p><div class="java"><code class="java">
 <span class="java16">@Intercepts<br />
 @RequestScoped<br />
 </span><span class="java4">public class </span><span class="java10">NoCacheInterceptor<br />
@@ -133,13 +137,13 @@ est&aacute; expirada.</span><div class="java"><code class="java">
 <br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; stack.next</span><span class="java8">(</span><span class="java10">method, resourceInstance</span><span class="java8">)</span><span class="java10">;<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
-}</span></code></div><span class="paragraph">Voc&ecirc; pode tamb&eacute;m criar uma anota&ccedil;&atilde;o para que apenas as classes anotadas evitem o cache.</span><div class="java"><code class="java">
+}</span></code></div><p>Voc&ecirc; pode tamb&eacute;m criar uma anota&ccedil;&atilde;o para que apenas as classes anotadas evitem o cache.</p><div class="java"><code class="java">
 <span class="java16">@Target</span><span class="java8">({</span><span class="java10">ElementType.METHOD, ElementType.TYPE</span><span class="java8">})<br />
 </span><span class="java16">@Documented<br />
 @Retention</span><span class="java8">(</span><span class="java10">RetentionPolicy.RUNTIME</span><span class="java8">)<br />
 </span><span class="java4">public @interface </span><span class="java10">NoCache </span><span class="java8">{<br />
 <br />
-}</span></code></div><span class="paragraph">E alterar o m&eacute;todo accepts do interceptor para o c&oacute;digo abaixo:</span><div class="java"><code class="java">
+}</span></code></div><p>E alterar o m&eacute;todo accepts do interceptor para o c&oacute;digo abaixo:</p><div class="java"><code class="java">
 <span class="java16">@Override<br />
 </span><span class="java4">public </span><span class="java9">boolean </span><span class="java10">accepts</span><span class="java8">(</span><span class="java10">ResourceMethod method</span><span class="java8">) {<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java4">return </span><span class="java10">method.containsAnnotation</span><span class="java8">(</span><span class="java10">NoCache.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">;<br />

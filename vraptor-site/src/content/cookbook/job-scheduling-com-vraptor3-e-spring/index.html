@@ -84,11 +84,15 @@
 		
 									<li><a class="link_toc" href="../../cookbook/evitando-que-o-browser-faca-cache-das-paginas/">10. Evitando que o browser faça cache das páginas</a></li>
 		
-									<li><a class="link_toc" href="../../cookbook/usando-o-header-referer-para-fazer-redirecionamentos/">11. Usando o Header Referer para fazer redirecionamentos</a></li>
+									<li><a class="link_toc" href="../../cookbook/usando-objectify-com-vraptor/">11. Usando Objectify com VRaptor</a></li>
 		
-									<li><a class="link_toc" href="../../cookbook/configurando-o-vraptor-na-locaweb/">12. Configurando o VRaptor na Locaweb</a></li>
+									<li><a class="link_toc" href="../../cookbook/usando-o-static-scanning-no-gae-j/">12. Usando o Static Scanning no GAE/J</a></li>
 		
-									<li><a class="link_toc" href="../../cookbook/vraptor-e-tiles-2-2/">13. VRaptor e Tiles 2.2</a></li>
+									<li><a class="link_toc" href="../../cookbook/usando-o-header-referer-para-fazer-redirecionamentos/">13. Usando o Header Referer para fazer redirecionamentos</a></li>
+		
+									<li><a class="link_toc" href="../../cookbook/configurando-o-vraptor-na-locaweb/">14. Configurando o VRaptor na Locaweb</a></li>
+		
+									<li><a class="link_toc" href="../../cookbook/vraptor-e-tiles-2-2/">15. VRaptor e Tiles 2.2</a></li>
 		
                 </ol>
             </div><!-- submenu-->
@@ -97,14 +101,14 @@
 	
 		<h2 class="chapter">Job Scheduling com vRaptor3 e Spring</h2>
 
-		<span class="paragraph"><strong class="definition"><em class="italic">Por M&aacute;rio Peixoto no blog <a class="link" target="_blank" href="http://mariopeixoto.wordpress.com/2009/11/17/job-scheduling-com-vraptor3-e-spring3/">http://mariopeixoto.wordpress.com/2009/11/17/job-scheduling-com-vraptor3-e-spring3/</a> </em></strong></span><span class="paragraph">Este artigo tem como objetivo mostrar um caminho simples para fazer job scheduling no vRaptor3 
-quando o Spring for o seu container IoC sem que seja necess&aacute;rio o uso de XML para configura&ccedil;&atilde;o.</span><span class="paragraph">Vers&otilde;es utilizadas:</span><ul class="list"><li><span class="paragraph">vRaptor 3.0.2</span></li><li><span class="paragraph">Spring 3.0.0.RC2</span></li></ul>
+		<p><strong><em>Por M&aacute;rio Peixoto no blog <a href="http://mariopeixoto.wordpress.com/2009/11/17/job-scheduling-com-vraptor3-e-spring3/">http://mariopeixoto.wordpress.com/2009/11/17/job-scheduling-com-vraptor3-e-spring3/</a> </em></strong></p><p>Este artigo tem como objetivo mostrar um caminho simples para fazer job scheduling no vRaptor3 
+quando o Spring for o seu container IoC sem que seja necess&aacute;rio o uso de XML para configura&ccedil;&atilde;o.</p><p>Vers&otilde;es utilizadas:</p><ul><li><p>vRaptor 3.0.2</p></li><li><p>Spring 3.0.0.RC2</p></li></ul>
 
 
 <h3 class="section">O Task Scheduler</h3>
-	    	<span class="paragraph">O Spring j&aacute; vem com suporte a task scheduling/executing, ele precisa apenas que uma implementa&ccedil;&atilde;o 
-de <code class="inlineCode">org.springframework.scheduling.TaskScheduler</code> esteja dispon&iacute;vel no escopo de aplica&ccedil;&atilde;o 
-(<em class="italic">singleton</em> no Spring). Para isso precisamos implementar um <code class="inlineCode">ComponentFactory</code>:</span>
+	    	<p>O Spring j&aacute; vem com suporte a task scheduling/executing, ele precisa apenas que uma implementa&ccedil;&atilde;o 
+de <code>org.springframework.scheduling.TaskScheduler</code> esteja dispon&iacute;vel no escopo de aplica&ccedil;&atilde;o 
+(<em>singleton</em> no Spring). Para isso precisamos implementar um <code>ComponentFactory</code>:</p>
 	    	<div class="java"><code class="java">
 <span class="java16">@Component<br />
 @ApplicationScoped<br />
@@ -128,13 +132,13 @@ de <code class="inlineCode">org.springframework.scheduling.TaskScheduler</code> 
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
 &nbsp;&nbsp;&nbsp;&nbsp; <br />
 }</span></code></div>
-	    	<span class="paragraph">Neste exemplo utilizaremos o <code class="inlineCode">ThreadPoolTaskScheduler</code> como implementa&ccedil;&atilde;o para o 
-<code class="inlineCode">TaskScheduler</code>, por&eacute;m v&aacute;rias outras classes vem com o Spring e podem ser usadas 
-da mesma maneira (documenta&ccedil;&atilde;o).</span>
+	    	<p>Neste exemplo utilizaremos o <code>ThreadPoolTaskScheduler</code> como implementa&ccedil;&atilde;o para o 
+<code>TaskScheduler</code>, por&eacute;m v&aacute;rias outras classes vem com o Spring e podem ser usadas 
+da mesma maneira (documenta&ccedil;&atilde;o).</p>
 		
 
 <h3 class="section">As Tasks/Jobs</h3>
-	    	<span class="paragraph">Vamos criar interfaces para nossas tasks.</span>
+	    	<p>Vamos criar interfaces para nossas tasks.</p>
 	    	<div class="java"><code class="java">
 <span class="java4">public interface </span><span class="java10">Task </span><span class="java4">extends </span><span class="java10">Runnable </span><span class="java8">{<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java9">void </span><span class="java10">schedule</span><span class="java8">(</span><span class="java10">TaskScheduler scheduler</span><span class="java8">)</span><span class="java10">;<br />
@@ -145,8 +149,8 @@ da mesma maneira (documenta&ccedil;&atilde;o).</span>
  <br />
 </span><span class="java4">public interface </span><span class="java10">RequestTask </span><span class="java4">extends </span><span class="java10">Task </span><span class="java8">{<br />
 }</span></code></div>
-	    	<span class="paragraph">Registrando tasks em escopo de application</span>
-	    	<span class="paragraph">Para registrar esse tipo de task, precisaremos de um bean em escopo de application:</span>
+	    	<p>Registrando tasks em escopo de application</p>
+	    	<p>Para registrar esse tipo de task, precisaremos de um bean em escopo de application:</p>
 	    	<div class="java"><code class="java">
 <span class="java16">@Component<br />
 @ApplicationScoped<br />
@@ -162,9 +166,9 @@ da mesma maneira (documenta&ccedil;&atilde;o).</span>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java3">//Neste caso, a task rodar&aacute; sempre &agrave;s 23h0min0s<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
 }</span></code></div>
-	    	<span class="paragraph">Registrando tasks em escopo de request</span>
-	    	<span class="paragraph">Para registrar esse tipo de task, basta receber o scheduler no construtor do seu <code class="inlineCode">Resource</code>
-e registrar a task no m&eacute;todo adequado.</span>
+	    	<p>Registrando tasks em escopo de request</p>
+	    	<p>Para registrar esse tipo de task, basta receber o scheduler no construtor do seu <code>Resource</code>
+e registrar a task no m&eacute;todo adequado.</p>
 	    	<div class="java"><code class="java">
 <span class="java16">@Component<br />
 @RequestScoped<br />
@@ -198,9 +202,9 @@ e registrar a task no m&eacute;todo adequado.</span>
 		
 
 <h3 class="section">Observações</h3>
-	    	<span class="paragraph">Criamos 3 interfaces, pois deste modo ficar&aacute; mais f&aacute;cil injetar diferentes tipos de tasks 
+	    	<p>Criamos 3 interfaces, pois deste modo ficar&aacute; mais f&aacute;cil injetar diferentes tipos de tasks 
 no construtor, por exemplo podemos receber todas as tasks em escopo de request dentro de 
-um resource assim:</span>
+um resource assim:</p>
 	    	<div class="java"><code class="java">
 <span class="java16">@Resource<br />
 </span><span class="java4">public class </span><span class="java10">MyResource </span><span class="java8">{<br />
@@ -221,13 +225,13 @@ um resource assim:</span>
 		
 
 <h3 class="section">O escopo Prototype</h3>
-	    	<span class="paragraph">O Spring possui um escopo chamado prototype que define que o componente ter&aacute; uma nova 
+	    	<p>O Spring possui um escopo chamado prototype que define que o componente ter&aacute; uma nova 
 inst&acirc;ncia sempre que for requisitada, este escopo ainda n&atilde;o existe no vRaptor3 mas ser&aacute; 
 implementado em breve. Este escopo servir&aacute; para definir compenentes utilizados por tasks 
-em escopo de application que naturalmente n&atilde;o s&atilde;o singletons, como DAO’s.</span>
-	    	<span class="paragraph">Voc&ecirc; n&atilde;o poder&aacute; receber a Session no construtor do seu DAO prototyped pois geralmente a 
+em escopo de application que naturalmente n&atilde;o s&atilde;o singletons, como DAO’s.</p>
+	    	<p>Voc&ecirc; n&atilde;o poder&aacute; receber a Session no construtor do seu DAO prototyped pois geralmente a 
 SessionFactory est&aacute; em escopo de request, e o vRaptor ainda n&atilde;o possui suporte &agrave;s 
-scoped-proxies do Spring. Ent&atilde;o precisar&aacute; fazer assim:</span>
+scoped-proxies do Spring. Ent&atilde;o precisar&aacute; fazer assim:</p>
 	    	<div class="java"><code class="java">
 <span class="java16">@Component<br />
 @PrototypeScoped<br />
@@ -241,9 +245,9 @@ scoped-proxies do Spring. Ent&atilde;o precisar&aacute; fazer assim:</span>
  <br />
 &nbsp;&nbsp;&nbsp; </span><span class="java10">...<br />
 </span><span class="java8">}</span></code></div>
-	    	<span class="paragraph">Deste modo, ser&aacute; criado uma inst&acirc;ncia do seu DAO para cada requisi&ccedil;&atilde;o de inst&acirc;ncia 
+	    	<p>Deste modo, ser&aacute; criado uma inst&acirc;ncia do seu DAO para cada requisi&ccedil;&atilde;o de inst&acirc;ncia 
 (l&ecirc;-se: sempre que voc&ecirc; receber uma inst&acirc;ncia pelo construtor, ser&aacute; uma nova), assim 
-como uma Session separada.</span>
+como uma Session separada.</p>
 		
 
 </div><!-- content -->

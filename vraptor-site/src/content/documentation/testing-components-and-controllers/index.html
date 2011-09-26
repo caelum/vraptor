@@ -111,19 +111,19 @@
 	
 		<h2 class="chapter">Testing components and controllers</h2>
 
-		<span class="paragraph">VRaptor3 manages your class dependencies, so there is no need to worry about
+		<p>VRaptor3 manages your class dependencies, so there is no need to worry about
 instantiating your components and controllers, you can just receive your dependencies
-on the constructor and VRaptor3 will locate them and instantiate your class.</span><span class="paragraph">You can take advantage of dependency injection when testing your classes:
-you can instantiate your class with fake implementations and unit test the class.</span><span class="paragraph">Nevertheless, there are two VRaptor3 components that are dependencies of most of your 
-controllers: <code class="inlineCode">Result</code> and <code class="inlineCode">Validator</code>. Their fluent interfaces makes it difficult to
+on the constructor and VRaptor3 will locate them and instantiate your class.</p><p>You can take advantage of dependency injection when testing your classes:
+you can instantiate your class with fake implementations and unit test the class.</p><p>Nevertheless, there are two VRaptor3 components that are dependencies of most of your 
+controllers: <code>Result</code> and <code>Validator</code>. Their fluent interfaces makes it difficult to
 create fake implementations or mocks. Therefore there are fake implementations for
-these components on VRaptor3: <code class="inlineCode">MockResult</code> e <code class="inlineCode">MockValidator</code>.</span>
+these components on VRaptor3: <code>MockResult</code> e <code>MockValidator</code>.</p>
 
 
 <h3 class="section">MockResult</h3>
-	    	<span class="paragraph">MockResult ignores all redirects, and stores the included objects, so you can inspect
-them and make assertions.</span>
-	    	<span class="paragraph">This snippet shows you how you can use MockResult:</span>
+	    	<p>MockResult ignores all redirects, and stores the included objects, so you can inspect
+them and make assertions.</p>
+	    	<p>This snippet shows you how you can use MockResult:</p>
 	    	<div class="java"><code class="java">
 <span class="java10">MockResult result = </span><span class="java4">new </span><span class="java10">MockResult</span><span class="java8">()</span><span class="java10">;<br />
 ClientController controller = </span><span class="java4">new </span><span class="java10">ClientController</span><span class="java8">(</span><span class="java10">..., result</span><span class="java8">)</span><span class="java10">;<br />
@@ -131,20 +131,20 @@ controller.list</span><span class="java8">()</span><span class="java10">; </span
 </span><span class="java10">List&lt;Client&gt; clients = result.included</span><span class="java8">(</span><span class="java5">&#34;clients&#34;</span><span class="java8">)</span><span class="java10">; </span><span class="java3">// the cast is implicit<br />
 </span><span class="java10">Assert.assertNotNull</span><span class="java8">(</span><span class="java10">clients</span><span class="java8">)</span><span class="java10">;<br />
 </span><span class="java3">// more assertions</span></code></div>
-	    	<span class="paragraph">Any calls to result.use(...) will be ignored.</span>
+	    	<p>Any calls to result.use(...) will be ignored.</p>
 		
 
 <h3 class="section">MockValidator</h3>
-	    	<span class="paragraph">MockValidator will store generated errors, so if there is any error when 
+	    	<p>MockValidator will store generated errors, so if there is any error when 
 validator.onErrorUse is called, a ValidationError will be thrown. Therefore
-you can inspect the added errors, or simply check if there is any error.</span>
+you can inspect the added errors, or simply check if there is any error.</p>
 	    	<div class="java"><code class="java">
 <span class="java16">@Test</span><span class="java8">(</span><span class="java10">expected=ValidationException.</span><span class="java4">class</span><span class="java8">)<br />
 </span><span class="java4">public </span><span class="java9">void </span><span class="java10">testThatAValidationErrorOccurs</span><span class="java8">() {<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java10">ClientController controller = </span><span class="java4">new </span><span class="java10">ClientController</span><span class="java8">(</span><span class="java10">..., </span><span class="java4">new </span><span class="java10">MockValidator</span><span class="java8">())</span><span class="java10">;<br />
 &nbsp;&nbsp;&nbsp; controller.add</span><span class="java8">(</span><span class="java4">new </span><span class="java10">Client</span><span class="java8">())</span><span class="java10">;<br />
 </span><span class="java8">}</span></code></div>
-	    	<span class="paragraph">or</span>
+	    	<p>or</p>
 	    	<div class="java"><code class="java">
 <span class="java16">@Test<br />
 </span><span class="java4">public </span><span class="java9">void </span><span class="java10">testThatAValidationErrorOccurs</span><span class="java8">() {<br />
@@ -157,8 +157,8 @@ you can inspect the added errors, or simply check if there is any error.</span>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java3">//assertions on errors<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
 }</span></code></div>
-	    	<span class="paragraph">If one uses Hibernate Validator, and calls validator.validate(object) on the controller, one can use
-the HibernateMockValidator class instead, which will validate the object with the defined rules from HV.</span>
+	    	<p>If one uses Hibernate Validator, and calls validator.validate(object) on the controller, one can use
+the HibernateMockValidator class instead, which will validate the object with the defined rules from HV.</p>
 		
 
 </div><!-- content -->

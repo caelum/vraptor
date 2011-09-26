@@ -121,13 +121,13 @@
 
 
 <h3 class="section">Commons Upload</h3>
-	    	<span class="paragraph">Se voc&ecirc; n&atilde;o for usar upload na sua aplica&ccedil;&atilde;o, remova o jar do commons upload do classpath. 
-Isso evita o carregamento do interceptor de upload, deixando o request mais r&aacute;pido.</span>
+	    	<p>Se voc&ecirc; n&atilde;o for usar upload na sua aplica&ccedil;&atilde;o, remova o jar do commons upload do classpath. 
+Isso evita o carregamento do interceptor de upload, deixando o request mais r&aacute;pido.</p>
 		
 
 <h3 class="section">Anotação @Lazy em Interceptors</h3>
-	    	<span class="paragraph">Se o m&eacute;todo accepts do seu interceptor n&atilde;o depende do seu estado interno voc&ecirc; pode anot&aacute;-lo
-com @Lazy:</span>
+	    	<p>Se o m&eacute;todo accepts do seu interceptor n&atilde;o depende do seu estado interno voc&ecirc; pode anot&aacute;-lo
+com @Lazy:</p>
 	    	<div class="java"><code class="java">
 <span class="java16">@Intercepts<br />
 @Lazy<br />
@@ -143,12 +143,12 @@ com @Lazy:</span>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java3">//...<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
 }</span></code></div>
-	    	<span class="paragraph">Assim o VRaptor s&oacute; vai instanciar esse interceptor se o m&eacute;todo accepts retornar true.
+	    	<p>Assim o VRaptor s&oacute; vai instanciar esse interceptor se o m&eacute;todo accepts retornar true.
 Para fazer isso o VRaptor cria uma inst&acirc;ncia n&atilde;o funcional do interceptor (todas as
 depend&ecirc;ncias nulas) e chama o m&eacute;todo accepts, evitando uma chamada ao Container
 de DI desnecess&aacute;ria.
-Acessos ao estado interno do interceptor podem gerar NullPointerException.</span>
-	    	<span class="paragraph">N&atilde;o use o @Lazy se o accepts &eacute; trivial (apenas retorna true).</span>
+Acessos ao estado interno do interceptor podem gerar NullPointerException.</p>
+	    	<p>N&atilde;o use o @Lazy se o accepts &eacute; trivial (apenas retorna true).</p>
 		
 
 </div><!-- content -->

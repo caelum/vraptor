@@ -115,15 +115,15 @@
 
 
 <h3 class="section">Why intercept</h3>
-	    	<span class="paragraph">Interceptors are implemented in order to execute tasks before and/or after the execution
-of a business logic, being data validation, database connection and transaction control, logging and data cryptography/compression the most common use cases.</span>
+	    	<p>Interceptors are implemented in order to execute tasks before and/or after the execution
+of a business logic, being data validation, database connection and transaction control, logging and data cryptography/compression the most common use cases.</p>
 		
 
 <h3 class="section">How to intercept</h3>
-	    	<span class="paragraph">In VRaptor 3 we adopted an approach in which the interceptor defines who will be intercepted. This is closer to the intercepting style used in systems based on AOP (Aspect Oriented Programming) than the one that was implemented in VRaptor's previous version.</span>
-	    	<span class="paragraph">Therefore, to intercept a request, just implement the <strong class="definition">Interceptor</strong> interface and annotate
-the class with <strong class="definition">@Intercepts</strong>.</span>
-	    	<span class="paragraph">Just like any other component, you can specify the interceptor's scope using the scope annotations.</span>
+	    	<p>In VRaptor 3 we adopted an approach in which the interceptor defines who will be intercepted. This is closer to the intercepting style used in systems based on AOP (Aspect Oriented Programming) than the one that was implemented in VRaptor's previous version.</p>
+	    	<p>Therefore, to intercept a request, just implement the <strong>Interceptor</strong> interface and annotate
+the class with <strong>@Intercepts</strong>.</p>
+	    	<p>Just like any other component, you can specify the interceptor's scope using the scope annotations.</p>
 	    	<div class="java"><code class="java">
 <span class="java4">public interface </span><span class="java10">Interceptor </span><span class="java8">{<br />
 <br />
@@ -136,9 +136,9 @@ the class with <strong class="definition">@Intercepts</strong>.</span>
 		
 
 <h3 class="section">Simple example</h3>
-	    	<span class="paragraph">The following class shows an example of how to intercept all requests using session scope and simply print the invocation to default output.</span>
-	    	<span class="paragraph">Remember that the interceptor is a component just like any other, so it can receive its
-dependencies in the constructor through Dependency Injection.</span>
+	    	<p>The following class shows an example of how to intercept all requests using session scope and simply print the invocation to default output.</p>
+	    	<p>Remember that the interceptor is a component just like any other, so it can receive its
+dependencies in the constructor through Dependency Injection.</p>
 	    	<div class="java"><code class="java">
 <span class="java16">@Intercepts<br />
 @SessionScoped<br />
@@ -164,13 +164,13 @@ dependencies in the constructor through Dependency Injection.</span>
 		
 
 <h3 class="section">Example using Hibernate</h3>
-	    	<span class="paragraph">Probably one of the most common uses of an Interceptor is to implement the Open Session In View pattern,
+	    	<p>Probably one of the most common uses of an Interceptor is to implement the Open Session In View pattern,
 which provides a database connection whenever a request is made to your application.
 And in the end of that request, the connection is disposed.
-This is specially useful to avoid exceptions like LazyInitializationException when rendering JSPs.</span>
-	    	<span class="paragraph">Here is a simple example that starts a database transaction in every request, and when
+This is specially useful to avoid exceptions like LazyInitializationException when rendering JSPs.</p>
+	    	<p>Here is a simple example that starts a database transaction in every request, and when
 the logic execution ends and the page is rendered, it commits the transaction and 
-closes the database connection.</span>
+closes the database connection.</p>
 	    	<div class="java"><code class="java">
 <span class="java16">@RequestScoped<br />
 @Intercepts<br />
@@ -206,7 +206,7 @@ closes the database connection.</span>
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
 <br />
 }</span></code></div>
-	    	<span class="paragraph">This way, to use the available connection in your Resource, the following code would apply:</span>
+	    	<p>This way, to use the available connection in your Resource, the following code would apply:</p>
 	    	<div class="java"><code class="java">
 <span class="java16">@Resource<br />
 </span><span class="java4">public class </span><span class="java10">EmployeeController </span><span class="java8">{<br />
@@ -226,42 +226,42 @@ closes the database connection.</span>
 		
 
 <h3 class="section">How to ensure ordering: after and before</h3>
-	    	<span class="paragraph">If you need to ensure order of the execution of a set of interceptors, you can use the after and before
+	    	<p>If you need to ensure order of the execution of a set of interceptors, you can use the after and before
 attributes from @Intercepts. Suppose that FirstInterceptor must run before SecondInterceptor, so you can
-configure it either by:</span>
+configure it either by:</p>
 	    	<div class="java"><code class="java">
 <span class="java16">@Intercepts</span><span class="java8">(</span><span class="java10">before=SecondInterceptor.</span><span class="java4">class</span><span class="java8">)<br />
 </span><span class="java4">public class </span><span class="java10">FirstInterceptor </span><span class="java4">implements </span><span class="java10">Interceptor </span><span class="java8">{<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java10">...<br />
 </span><span class="java8">}</span></code></div>
-	    	<span class="paragraph">or</span>
+	    	<p>or</p>
 	    	<div class="java"><code class="java">
 <span class="java16">@Intercepts</span><span class="java8">(</span><span class="java10">after=FirstInterceptor.</span><span class="java4">class</span><span class="java8">)<br />
 </span><span class="java4">public class </span><span class="java10">SecondInterceptor </span><span class="java4">implements </span><span class="java10">Interceptor </span><span class="java8">{<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java10">...<br />
 </span><span class="java8">}</span></code></div>
-	    	<span class="paragraph">You can specify more than one interceptor:</span>
+	    	<p>You can specify more than one interceptor:</p>
 	    	<div class="java"><code class="java">
 <span class="java16">@Intercepts</span><span class="java8">(</span><span class="java10">after=</span><span class="java8">{</span><span class="java10">FirstInterceptor.class, SecondInterceptor.</span><span class="java4">class</span><span class="java8">}</span><span class="java10">, <br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; before=</span><span class="java8">{</span><span class="java10">ForthInterceptor.class, FifthInterceptor.</span><span class="java4">class</span><span class="java8">})<br />
 </span><span class="java4">public class </span><span class="java10">ThirdInterceptor </span><span class="java4">implements </span><span class="java10">Interceptor </span><span class="java8">{<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java10">...<br />
 </span><span class="java8">}</span></code></div>
-	    	<span class="paragraph">VRaptor will throw an exception if there is a cycle on the ordering, so be careful.</span>
+	    	<p>VRaptor will throw an exception if there is a cycle on the ordering, so be careful.</p>
 		
 
 <h3 class="section">Interacting with VRaptor's interceptors</h3>
-	    	<span class="paragraph">VRaptor has its own sequence of interceptors, and you can define the ordering of
-your interceptors based on VRaptor's.</span>
-	    	<span class="paragraph">Here are the main VRaptor interceptors and what they produce:</span>
-	    	<ul class="list"><li><span class="paragraph"><strong class="definition">ResourceLookupInterceptor</strong> - the first interceptor. Finds the right ResourceMethod, which will be
-passed as argument on accepts() and intercept() methods. It is the default after.</span></li><li><span class="paragraph"><strong class="definition">ParametersInstantiatorInterceptor</strong> - instantiates the method parameters based on request. The 
-parameters will be available via MethodInfo#getParameters().</span></li><li><span class="paragraph"><strong class="definition">InstantiateInterceptor</strong> - instantiates the controller, which will be passed on the last parameter
-of intercept() method.</span></li><li><span class="paragraph"><strong class="definition">ExecuteMethodInterceptor</strong> - executes the ResourceMethod. Return value will be available via
-MethodInfo#getResult(). It is the default before.</span></li><li><span class="paragraph"><strong class="definition">OutjectResult</strong> - outjects the ResourceMethod's return value to the view.</span></li><li><span class="paragraph"><strong class="definition">ForwardToDefaultViewInterceptor</strong> - forwards to default jsp if no other view was used.</span></li></ul>
-	    	<span class="paragraph">If you need to execute an Interceptor after ExecuteMethodInterceptor, you <strong class="definition">must</strong> set the before attribute,
+	    	<p>VRaptor has its own sequence of interceptors, and you can define the ordering of
+your interceptors based on VRaptor's.</p>
+	    	<p>Here are the main VRaptor interceptors and what they produce:</p>
+	    	<ul><li><p><strong>ResourceLookupInterceptor</strong> - the first interceptor. Finds the right ResourceMethod, which will be
+passed as argument on accepts() and intercept() methods. It is the default after.</p></li><li><p><strong>ParametersInstantiatorInterceptor</strong> - instantiates the method parameters based on request. The 
+parameters will be available via MethodInfo#getParameters().</p></li><li><p><strong>InstantiateInterceptor</strong> - instantiates the controller, which will be passed on the last parameter
+of intercept() method.</p></li><li><p><strong>ExecuteMethodInterceptor</strong> - executes the ResourceMethod. Return value will be available via
+MethodInfo#getResult(). It is the default before.</p></li><li><p><strong>OutjectResult</strong> - outjects the ResourceMethod's return value to the view.</p></li><li><p><strong>ForwardToDefaultViewInterceptor</strong> - forwards to default jsp if no other view was used.</p></li></ul>
+	    	<p>If you need to execute an Interceptor after ExecuteMethodInterceptor, you <strong>must</strong> set the before attribute,
 in order to avoid cycles. ForwardToDefaultViewInterceptor is a good value since no other interceptor
-can run after it:</span>
+can run after it:</p>
 	    	<div class="java"><code class="java">
 <span class="java16">@Intercepts</span><span class="java8">(</span><span class="java10">after=ExecuteMethodInterceptor.class, <br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; before=ForwardToDefaultViewInterceptor.</span><span class="java4">class</span><span class="java8">)</span></code></div>

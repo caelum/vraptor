@@ -111,75 +111,184 @@
 	
 		<h2 class="chapter">VRaptor Scaffold</h2>
 
-		<span class="paragraph">VRaptor scaffold extension to make it easier configuring new projects and plugins.</span>
+		<p>VRaptor scaffold extension to make it easier configuring new projects and plugins.</p>
 
 
-<h3 class="section">Instalation</h3>
-	    	<span class="paragraph">Ensure you have installed ruby and rubygems.
+<h3 class="section">Installation</h3>
+	    	<p>Ensure you have installed ruby and rubygems.
 You can easily find more information how to do this in the follow 
-address <a class="link" target="_blank" href="http://www.ruby-lang.org/en/downloads/">http://www.ruby-lang.org/en/downloads/</a> .
-After installed ruby stuffs open your terminal and run</span>
-	    	<div class="java"><code class="java">gem&nbsp;install&nbsp;vraptor-scaffold</code></div>
+address <a href="http://www.ruby-lang.org/en/downloads/">http://www.ruby-lang.org/en/downloads/</a> .
+After installed ruby stuffs open your terminal and run</p>
+	    	<pre class="code text">
+
+gem install vraptor-scaffold
+
+</pre>
 		
 
 <h3 class="section">Getting Started</h3>
-	    	<span class="paragraph">Open your terminal again and run</span>
-	    	<div class="java"><code class="java">vraptor&nbsp;new&nbsp;onlinestore</code></div>
-	    	<span class="paragraph">This command will create all configurations, after that go into onlinestore folder
-and run</span>
-	    	<div class="java"><code class="java">ant&nbsp;jetty.run</code></div>
-	    	<span class="paragraph">open your browser in the follow address <a class="link" target="_blank" href="http://localhost:8080">http://localhost:8080</a> and you should see  <strong class="definition">It works!</strong>.</span>
-	    	<span class="paragraph">Now lets create a CRUD to online store, to do that just run</span>
-	    	<div class="java"><code class="java">vraptor&nbsp;scaffold&nbsp;product&nbsp;name:string&nbsp;value:double</code></div>
-	    	<span class="paragraph">and run server</span>
-	    	<div class="java"><code class="java">ant&nbsp;jetty.run</code></div>
-	    	<span class="paragraph">Go <a class="link" target="_blank" href="http://localhost:8080/products">http://localhost:8080/products</a></span>
+	    	<p>Open your terminal again and run</p>
+	    	<pre class="code text">
+
+vraptor new onlinestore
+
+</pre>
+	    	<p>This command will create all configurations, after that go into onlinestore folder
+and run</p>
+	    	<pre class="code text">
+
+ant jetty.run
+
+</pre>
+	    	<p>open your browser in the follow address <a href="http://localhost:8080">http://localhost:8080</a> and you should see  <strong>It works!</strong>.</p>
+	    	<p>Now lets create a CRUD to online store, to do that just run</p>
+	    	<pre class="code text">
+
+vraptor scaffold product name:string value:double
+
+</pre>
+	    	<p>and run server</p>
+	    	<pre class="code text">
+
+ant jetty.run
+
+</pre>
+	    	<p>Go <a href="http://localhost:8080/products">http://localhost:8080/products</a></p>
 		
 
 <h3 class="section">Package</h3>
-	    	<span class="paragraph">The root default folder is <code class="inlineCode">app</code> to change that you have the fallow command</span>
-	    	<div class="java"><code class="java">vraptor&nbsp;new&nbsp;onlinestore&nbsp;--package=br.com.caelum</code></div>
+	    	<p>The root default folder is <code>app</code> to change that you have the fallow command</p>
+	    	<pre class="code text">
+
+vraptor new onlinestore --package=br.com.caelum
+
+</pre>
+	    	<p>You can also change the model, controller and repository packages:</p>
+	    	<pre class="code text">
+
+vraptor new onlinestore --package=br.com.caelum -m model -c controller -r repo
+
+</pre>
 		
 
-<h3 class="section">Maven</h3>
-	    	<span class="paragraph">The default build tool is ant with ivy to deal with dependencies, to use maven just
-create your application with the follow command</span>
-	    	<div class="java"><code class="java">vraptor&nbsp;new&nbsp;onlinestore&nbsp;--build-tool=mvn</code></div>
+<h3 class="section">Build tool: Maven, Gradle or Ivy</h3>
+	    	<p>The default build tool is ant with ivy to deal with dependencies, to change your
+build tool, just create your application with:</p>
+	    	<pre class="code text">
+
+# for maven
+vraptor new onlinestore --build-tool=mvn
+
+# for gradle
+vraptor new onlinestore --build-tool=gradle
+
+</pre>
+	    	<p>When using gradle, use</p>
+	    	<pre class="code text">
+gradle jettyRun
+</pre>
+	    	<p>to run the application.</p>
 		
-<h3 class="section">Installing VRaptor plugins</h3>
-	    	<span class="paragraph">In order to install a VRaptor plugin open your terminal on the project root folder and run</span>
-	    	<div class="java"><code class="java">vraptor&nbsp;plugin&nbsp;plugin_name&nbsp;plugin_version&nbsp;plugin_org</code></div>
-	    	<span class="paragraph">plugin_org is optional and its default value is br.com.caelum.vraptor</span>
+
+<h3 class="section">ORM: JPA or Hibernate, connection pool</h3>
+	    	<p>A new project already comes with the connection pool configured and in place.
+Besides that, one can choose between JPA (EntityManager, default), or 
+Hibernate (Session), when creating your project:</p>
+	    	<pre class="code text">
+
+vraptor new onlinestore -o=jpa
+vraptor new onlinestore -o=hibernate
+
+</pre>
+		
 
 <h3 class="section">Freemarker</h3>
-	    	<span class="paragraph">The default template engine is jsp, to change that create your application with</span>
-	    	<div class="java"><code class="java">vraptor&nbsp;new&nbsp;onlinestore&nbsp;--template-engine=ftl</code></div>
+	    	<p>The default template engine is jsp, to change that create your application with</p>
+	    	<pre class="code text">
+
+vraptor new onlinestore --template-engine=ftl
+
+</pre>
 		
 
 <h3 class="section">Eclipse</h3>
-	    	<span class="paragraph">If you choose maven run</span>
-	    	<div class="java"><code class="java">mvn&nbsp;eclipse:eclipse</code></div>
-	    	<span class="paragraph">to create eclipse files.</span>
-	    	<span class="paragraph">If you are using ant eclipse files are generated with the application to skip them run</span>
-	    	<div class="java"><code class="java">vraptor&nbsp;new&nbsp;onlinestore&nbsp;--skip-eclipse</code></div>
+	    	<p>If you choose maven run</p>
+	    	<pre class="code text">
+
+mvn eclipse:eclipse
+
+</pre>
+	    	<p>to create eclipse files.</p>
+	    	<p>If you are using ant eclipse files are generated with the application to skip them run</p>
+	    	<pre class="code text">
+
+vraptor new onlinestore --skip-eclipse
+
+</pre>
 		
 
 <h3 class="section">Supported attributes type</h3>
-	    	<span class="paragraph">The supported attributes type are: <code class="inlineCode">boolean, double, float, short, integer, long, string and text</code>.</span>
+	    	<p>The supported attributes type are: <code>boolean, double, float, short, integer, long, string and text</code>.</p>
+		
+
+<h3 class="section">Plugins</h3>
+	    	<p>Vraptor plugin can be installed by issuing a</p>
+	    	<pre class="code text">
+
+vraptor plugin simple-email -v 1.0.0
+
+</pre>
+	    	<p>You can find a list of available plugins at https://github.com/caelum/vraptor-contrib</p>
+		
+
+<h3 class="section">jQuery</h3>
+	    	<p>The jQuery version is always the latest available, you can choose older version with:</p>
+	    	<pre class="code text">
+
+vraptor new onlinestore -j 1.4.4
+
+</pre>
+		
+
+<h3 class="section">Heroku</h3>
+	    	<p>Now you can deploy any kind of Java application on Heroku with a simple</p>
+	    	<pre class="code text">
+
+git push heroku master
+
+</pre>
+	    	<p>And vraptor-scaffold take care with all the stuff you need to getting started with Heroku.
+To create an application that uses the heroku workflow just run:</p>
+	    	<pre class="code text">
+
+vraptor new onlinestore --heroku
+
+</pre>
+	    	<p>After that you need to follow the Heroku steps to get done.
+You can find more information here <a href="http://www.heroku.com/java">http://www.heroku.com/java</a></p>
 		
 
 <h3 class="section">Help Command</h3>
-	    	<span class="paragraph">VRaptor Scaffold was split into 2 generators "new" that is responsible to create the application
-and "scaffold" that is responsible to genrarad the CRUDs.
-To see all the options by running</span>
-	    	<div class="java"><code class="java">vraptor&nbsp;new&nbsp;-h</code></div>
-	    	<div class="java"><code class="java">vraptor&nbsp;scaffold&nbsp;-h</code></div>
+	    	<p>To get hold of all available commands execute</p>
+	    	<pre class="code text">
+
+vraptor -h
+
+</pre>
+	    	<p>To get more information on a command usage, use, for example:</p>
+	    	<pre class="code text">
+
+vraptor new -h
+vraptor scaffold -h
+vraptor plugin -h
+
+</pre>
 		
 
 <h3 class="section">Contributing</h3>
-	    	<span class="paragraph">This project is being developed in ruby and the source is hosted in
-<a class="link" target="_blank" href="http://github.com/caelum/vraptor-scaffold">http://github.com/caelum/vraptor-scaffold</a> .
-Feel free to fork and create your path or features, dont forget the tests.</span>
+	    	<p>This project is being developed in ruby and the source is hosted in
+https://github.com/caelum/vraptor-scaffold .
+Feel free to fork and create your path or features, dont forget the tests.</p>
 		
 
 </div><!-- content -->

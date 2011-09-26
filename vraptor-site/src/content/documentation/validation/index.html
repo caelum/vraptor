@@ -111,9 +111,9 @@
 	
 		<h2 class="chapter">Validation</h2>
 
-		<span class="paragraph">VRaptor3 supports two different validation styles: classic and fluent. The starting point to both styles is the Validator
+		<p>VRaptor3 supports two different validation styles: classic and fluent. The starting point to both styles is the Validator
 interface.
-In order to access the Validator, your resource must receive it in the constructor:</span><div class="java"><code class="java">
+In order to access the Validator, your resource must receive it in the constructor:</p><div class="java"><code class="java">
 <span class="java4">import </span><span class="java10">br.com.caelum.vraptor.Validator;<br />
 ...<br />
 <br />
@@ -128,136 +128,169 @@ In order to access the Validator, your resource must receive it in the construct
 
 
 <h3 class="section">Classic style</h3>
-	    	<span class="paragraph">The classic style is very similar to VRaptor2's validation.
+	    	<p>The classic style is very similar to VRaptor2's validation.
 Inside your business logic, all you have to do is check the data you want, and if you find any validation errors, add them to the errors list.
-For example, to validate that employee name is 'John Doe':</span>
+For example, to validate that employee name is 'John Doe':</p>
 	    	<div class="java"><code class="java">
 <span class="java4">public </span><span class="java9">void </span><span class="java10">add</span><span class="java8">(</span><span class="java10">Employee employee</span><span class="java8">) {<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java4">if </span><span class="java8">(</span><span class="java10">!employee.getName</span><span class="java8">()</span><span class="java10">.equals</span><span class="java8">(</span><span class="java5">&#34;John Doe&#34;</span><span class="java8">)) {<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">validator.add</span><span class="java8">(</span><span class="java4">new </span><span class="java10">ValidationMessage</span><span class="java8">(</span><span class="java5">&#34;error&#34;</span><span class="java10">,</span><span class="java5">&#34;invalidName&#34;</span><span class="java8">))</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">validator.add</span><span class="java8">(</span><span class="java4">new </span><span class="java10">ValidationMessage</span><span class="java8">(</span><span class="java5">&#34;invalid.name&#34;</span><span class="java10">, </span><span class="java5">&#34;error&#34;</span><span class="java8">))</span><span class="java10">;<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
+<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java10">validator.onErrorUsePageOf</span><span class="java8">(</span><span class="java10">EmployeeController.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">.form</span><span class="java8">()</span><span class="java10">;<br />
-&nbsp;&nbsp;&nbsp; <br />
+<br />
 &nbsp;&nbsp;&nbsp; dao.add</span><span class="java8">(</span><span class="java10">employee</span><span class="java8">)</span><span class="java10">;<br />
 </span><span class="java8">}</span></code></div>
-	    	<span class="paragraph">When you call validator.onErrorUse, if there are any validation errors, VRaptor will stop execution and redirect
-to the page you specified. This redirect has the same behavior as the result.use(..) redirects.</span>
+	    	<p>When you call validator.onErrorUse, if there are any validation errors, VRaptor will stop execution and redirect
+to the page you specified. This redirect has the same behavior as the result.use(..) redirects.</p>
 		
 
 <h3 class="section">Fluent style</h3>
-	    	<span class="paragraph">The goal of fluent style is to write the validation code in such way that it feels natural.
-For example, if we want the employee name to be required:</span>
+	    	<p>The goal of fluent style is to write the validation code in such way that it feels natural.
+For example, if we want the employee name to be required:</p>
 	    	<div class="java"><code class="java">
 <span class="java4">public </span><span class="java10">add</span><span class="java8">(</span><span class="java10">Employee employee</span><span class="java8">) {<br />
-&nbsp;&nbsp;&nbsp; </span><span class="java10">validator.checking</span><span class="java8">(</span><span class="java4">new </span><span class="java10">Validations</span><span class="java8">(){{<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">that</span><span class="java8">(</span><span class="java10">!employee.getName</span><span class="java8">()</span><span class="java10">.isEmpty</span><span class="java8">()</span><span class="java10">, </span><span class="java5">&#34;error&#34;</span><span class="java10">,</span><span class="java5">&#34;nameIsRequired&#34;</span><span class="java8">)</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java10">validator.checking</span><span class="java8">(</span><span class="java4">new </span><span class="java10">Validations</span><span class="java8">() {{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">that</span><span class="java8">(</span><span class="java10">!employee.getName</span><span class="java8">()</span><span class="java10">.isEmpty</span><span class="java8">()</span><span class="java10">, </span><span class="java5">&#34;error&#34;</span><span class="java10">, </span><span class="java5">&#34;name.is.required&#34;</span><span class="java8">)</span><span class="java10">;<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}})</span><span class="java10">;<br />
+<br />
 &nbsp;&nbsp;&nbsp; validator.onErrorUsePageOf</span><span class="java8">(</span><span class="java10">EmployeeController.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">.form</span><span class="java8">()</span><span class="java10">;<br />
-&nbsp;&nbsp;&nbsp; <br />
+<br />
 &nbsp;&nbsp;&nbsp; dao.add</span><span class="java8">(</span><span class="java10">employee</span><span class="java8">)</span><span class="java10">;<br />
 </span><span class="java8">}</span></code></div>
-	    	<span class="paragraph">You can read the code above like this: "Validator, check my validations. First one is that employee name cannot be empty".
-Much closer to natural language.</span>
-	    	<span class="paragraph">So, if employee name is empty, the flow will be redirected to the "form" logic,
+	    	<p>You can read the code above like this: "Validator, check my validations. First one is that employee name cannot be empty".
+Much closer to natural language.</p>
+	    	<p>So, if employee name is empty, the flow will be redirected to the "form" logic,
 which shows the user a form to insert employee data again.
-Also, the error message is sent back to the form.</span>
-	    	<span class="paragraph">There are validations that may occur only if other validation succeeded, for instance I will check
+Also, the error message is sent back to the form.</p>
+	    	<p>There are validations that may occur only if other validation succeeded, for instance I will check
 user age only if the user is not null. The that method will return a boolean that represents the success
-of the validation:</span>
+of the validation:</p>
 	    	<div class="java"><code class="java">
-<span class="java10">validator.checking</span><span class="java8">(</span><span class="java4">new </span><span class="java10">Validations</span><span class="java8">(){{<br />
+<span class="java10">validator.checking</span><span class="java8">(</span><span class="java4">new </span><span class="java10">Validations</span><span class="java8">() {{<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java4">if </span><span class="java8">(</span><span class="java10">that</span><span class="java8">(</span><span class="java10">user != null, </span><span class="java5">&#34;user&#34;</span><span class="java10">, </span><span class="java5">&#34;null.user&#34;</span><span class="java8">)) {<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">that</span><span class="java8">(</span><span class="java10">user.getAge</span><span class="java8">() </span><span class="java10">&gt;= </span><span class="java7">18</span><span class="java10">, </span><span class="java5">&#34;user.age&#34;</span><span class="java10">, </span><span class="java5">&#34;user.is.underage&#34;</span><span class="java8">)</span><span class="java10">;<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
 }})</span><span class="java10">;</span></code></div>
-	    	<span class="paragraph">So the second validation will execute only if the first didn't fail.</span>
+	    	<p>So the second validation will execute only if the first didn't fail.</p>
 		
 
 <h3 class="section">Validation with message parameters</h3>
-	    	<span class="paragraph">You can add parameters to you message keys:</span>
-	    	<div class="java"><code class="java">greater_than&nbsp;<span class="texvalue">=&nbsp;{0}&nbsp;should&nbsp;be&nbsp;greater&nbsp;than&nbsp;{1}</span></code></div>
-	    	<span class="paragraph">And use it on your validations code:</span>
+	    	<p>You can add parameters to you message keys:</p>
+	    	<pre class="code properties">
+
+greater.than = {0} should be greater than {1}
+
+</pre>
+	    	<p>And use it on your validations code:</p>
 	    	<div class="java"><code class="java">
-<span class="java10">validator.checking</span><span class="java8">(</span><span class="java4">new </span><span class="java10">Validations</span><span class="java8">(){{<br />
-&nbsp;&nbsp;&nbsp; </span><span class="java10">that</span><span class="java8">(</span><span class="java10">user.getAge</span><span class="java8">() </span><span class="java10">&gt;= </span><span class="java7">18</span><span class="java10">, </span><span class="java5">&#34;user.age&#34;</span><span class="java10">, </span><span class="java5">&#34;greater_than&#34;</span><span class="java10">, </span><span class="java5">&#34;Age&#34;</span><span class="java10">, </span><span class="java7">18</span><span class="java8">)</span><span class="java10">;<br />
+<span class="java10">validator.checking</span><span class="java8">(</span><span class="java4">new </span><span class="java10">Validations</span><span class="java8">() {{<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java10">that</span><span class="java8">(</span><span class="java10">user.getAge</span><span class="java8">() </span><span class="java10">&gt;= </span><span class="java7">18</span><span class="java10">, </span><span class="java5">&#34;user.age&#34;</span><span class="java10">, </span><span class="java5">&#34;greater.than&#34;</span><span class="java10">, </span><span class="java5">&#34;Age&#34;</span><span class="java10">, </span><span class="java7">18</span><span class="java8">)</span><span class="java10">;<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java3">// Age should be greater than 18<br />
 </span><span class="java8">}})</span><span class="java10">;</span></code></div>
-	    	<span class="paragraph">You can even i18n your parameters, with i18n method:</span>
-	    	<div class="java"><code class="java">user.age&nbsp;<span class="texvalue">=&nbsp;User&nbsp;age</span></code></div>
+	    	<p>You can even i18n your parameters, with i18n method:</p>
+	    	<pre class="code properties">
+
+user.age = User age
+
+</pre>
 	    	<div class="java"><code class="java">
-<span class="java10">validator.checking</span><span class="java8">(</span><span class="java4">new </span><span class="java10">Validations</span><span class="java8">(){{<br />
-&nbsp;&nbsp;&nbsp; </span><span class="java10">that</span><span class="java8">(</span><span class="java10">user.getAge</span><span class="java8">() </span><span class="java10">&gt;= </span><span class="java7">18</span><span class="java10">, </span><span class="java5">&#34;user.age&#34;</span><span class="java10">, </span><span class="java5">&#34;greater_than&#34;</span><span class="java10">, i18n</span><span class="java8">(</span><span class="java5">&#34;user.age&#34;</span><span class="java8">)</span><span class="java10">, </span><span class="java7">18</span><span class="java8">)</span><span class="java10">;<br />
+<span class="java10">validator.checking</span><span class="java8">(</span><span class="java4">new </span><span class="java10">Validations</span><span class="java8">() {{<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java10">that</span><span class="java8">(</span><span class="java10">user.getAge</span><span class="java8">() </span><span class="java10">&gt;= </span><span class="java7">18</span><span class="java10">, </span><span class="java5">&#34;user.age&#34;</span><span class="java10">, </span><span class="java5">&#34;greater.than&#34;</span><span class="java10">, i18n</span><span class="java8">(</span><span class="java5">&#34;user.age&#34;</span><span class="java8">)</span><span class="java10">, </span><span class="java7">18</span><span class="java8">)</span><span class="java10">;<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java3">// User age should be greater than 18<br />
 </span><span class="java8">}})</span><span class="java10">;</span></code></div>
 		
 
 <h3 class="section">Validation using Hamcrest Matchers</h3>
-	    	<span class="paragraph">You can use Hamcrest matchers for making validation even more fluent and readable,
+	    	<p>You can use Hamcrest matchers for making validation even more fluent and readable,
 with the advantage of matcher composition and the creation of new matchers that
-Hamcrest allows:</span>
+Hamcrest allows:</p>
 	    	<div class="java"><code class="java">
 <span class="java4">public </span><span class="java10">admin</span><span class="java8">(</span><span class="java10">Employee employee</span><span class="java8">) {<br />
-&nbsp;&nbsp;&nbsp; </span><span class="java10">validator.checking</span><span class="java8">(</span><span class="java4">new </span><span class="java10">Validations</span><span class="java8">(){{<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">that</span><span class="java8">(</span><span class="java10">employee.getRoles</span><span class="java8">()</span><span class="java10">, hasItem</span><span class="java8">(</span><span class="java5">&#34;ADMIN&#34;</span><span class="java8">)</span><span class="java10">, </span><span class="java5">&#34;admin&#34;</span><span class="java10">,</span><span class="java5">&#34;employee.is.not.admin&#34;</span><span class="java8">)</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java10">validator.checking</span><span class="java8">(</span><span class="java4">new </span><span class="java10">Validations</span><span class="java8">() {{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">that</span><span class="java8">(</span><span class="java10">employee.getRoles</span><span class="java8">()</span><span class="java10">, hasItem</span><span class="java8">(</span><span class="java5">&#34;ADMIN&#34;</span><span class="java8">)</span><span class="java10">, </span><span class="java5">&#34;admin&#34;</span><span class="java10">, </span><span class="java5">&#34;employee.is.not.admin&#34;</span><span class="java8">)</span><span class="java10">;<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}})</span><span class="java10">;<br />
-&nbsp;&nbsp;&nbsp; validator.onErrorUsePageOf</span><span class="java8">(</span><span class="java10">LoginController.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">.login</span><span class="java8">()</span><span class="java10">;&nbsp;&nbsp;&nbsp; <br />
+<br />
+&nbsp;&nbsp;&nbsp; validator.onErrorUsePageOf</span><span class="java8">(</span><span class="java10">LoginController.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">.login</span><span class="java8">()</span><span class="java10">;<br />
+<br />
 &nbsp;&nbsp;&nbsp; dao.add</span><span class="java8">(</span><span class="java10">employee</span><span class="java8">)</span><span class="java10">;<br />
 </span><span class="java8">}</span></code></div>
 		
 
 <h3 class="section">Bean Validation (JSR303) and Hibernate Validator</h3>
-	    	<span class="paragraph">VRaptor 3 also supports Bean Validation and Hibernate Validator. To use these features you only need to put 
-any implementation of Bean Validation or Hibernate Validator jars in your classpath.</span>
-	    	<span class="paragraph">In the example above, to validate the employee object using HibernateValidator, just add one line to your code:</span>
+	    	<p>VRaptor 3 also supports Bean Validation and Hibernate Validator. To use these features you only need to put 
+any implementation of Bean Validation or Hibernate Validator jars in your classpath.</p>
+	    	<p>In the example above, to validate the employee object using HibernateValidator, just add one line to your code:</p>
 	    	<div class="java"><code class="java">
 <span class="java4">public </span><span class="java10">add</span><span class="java8">(</span><span class="java10">Employee employee</span><span class="java8">) {<br />
-&nbsp;&nbsp;&nbsp; </span><span class="java3">//Validation with Bean Validation or Hibernate Validator<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java3">// Validation with Bean Validation or Hibernate Validator<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java10">validator.validate</span><span class="java8">(</span><span class="java10">funcionario</span><span class="java8">)</span><span class="java10">;<br />
-&nbsp;&nbsp;&nbsp; <br />
-&nbsp;&nbsp;&nbsp; validator.checking</span><span class="java8">(</span><span class="java4">new </span><span class="java10">Validations</span><span class="java8">(){{<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">that</span><span class="java8">(</span><span class="java10">!employee.getName</span><span class="java8">()</span><span class="java10">.isEmpty</span><span class="java8">()</span><span class="java10">, </span><span class="java5">&#34;error&#34;</span><span class="java10">,</span><span class="java5">&#34;nameIsRequired&#34;</span><span class="java8">)</span><span class="java10">;<br />
+<br />
+&nbsp;&nbsp;&nbsp; validator.checking</span><span class="java8">(</span><span class="java4">new </span><span class="java10">Validations</span><span class="java8">() {{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">that</span><span class="java8">(</span><span class="java10">!employee.getName</span><span class="java8">()</span><span class="java10">.isEmpty</span><span class="java8">()</span><span class="java10">, </span><span class="java5">&#34;error&#34;</span><span class="java10">, </span><span class="java5">&#34;name.is.required&#34;</span><span class="java8">)</span><span class="java10">;<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}})</span><span class="java10">;<br />
+<br />
 &nbsp;&nbsp;&nbsp; validator.onErrorUsePageOf</span><span class="java8">(</span><span class="java10">EmployeeController.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">.form</span><span class="java8">()</span><span class="java10">;<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
+<br />
 &nbsp;&nbsp;&nbsp; dao.add</span><span class="java8">(</span><span class="java10">employee</span><span class="java8">)</span><span class="java10">;<br />
 </span><span class="java8">}</span></code></div>
 		
 
 <h3 class="section">Where to redirect in case of errors</h3>
-	    	<span class="paragraph">Another issue that one must consider when validating data is where to redirect
-when an error occurs. How do one redirect the user to another resource using VRaptor3 in case of validation errors?</span>
-	    	<span class="paragraph">Easy, just tell your validator to do just that: when you find any validation error, send the user to the specified resource. See the example:</span>
+	    	<p>Another issue that one must consider when validating data is where to redirect
+when an error occurs. How do one redirect the user to another resource using VRaptor3 in case of validation errors?</p>
+	    	<p>Easy, just tell your validator to do just that: when you find any validation error, send the user to the specified resource. See the example:</p>
 	    	<div class="java"><code class="java">
 <span class="java4">public </span><span class="java10">add</span><span class="java8">(</span><span class="java10">Employee employee</span><span class="java8">) {<br />
 &nbsp;&nbsp;&nbsp; <br />
-&nbsp;&nbsp;&nbsp; </span><span class="java3">//Fluent validation<br />
-&nbsp;&nbsp;&nbsp; </span><span class="java10">validator.checking</span><span class="java8">(</span><span class="java4">new </span><span class="java10">Validations</span><span class="java8">(){{<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">that</span><span class="java8">(</span><span class="java10">!employee.getName</span><span class="java8">()</span><span class="java10">.isEmpty</span><span class="java8">()</span><span class="java10">, </span><span class="java5">&#34;error&#34;</span><span class="java10">,</span><span class="java5">&#34;nameIsRequired&#34;</span><span class="java8">)</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java3">// Fluent validation<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java10">validator.checking</span><span class="java8">(</span><span class="java4">new </span><span class="java10">Validations</span><span class="java8">() {{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">that</span><span class="java8">(</span><span class="java10">!employee.getName</span><span class="java8">()</span><span class="java10">.isEmpty</span><span class="java8">()</span><span class="java10">, </span><span class="java5">&#34;error&#34;</span><span class="java10">, </span><span class="java5">&#34;name.is.required&#34;</span><span class="java8">)</span><span class="java10">;<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}})</span><span class="java10">;<br />
-&nbsp;&nbsp;&nbsp; <br />
-&nbsp;&nbsp;&nbsp; </span><span class="java3">//Classic validation<br />
+<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java3">// Classic validation<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java4">if </span><span class="java8">(</span><span class="java10">!employee.getName</span><span class="java8">()</span><span class="java10">.equals</span><span class="java8">(</span><span class="java5">&#34;John Doe&#34;</span><span class="java8">)) {<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">validator.add</span><span class="java8">(</span><span class="java4">new </span><span class="java10">ValidationMessage</span><span class="java8">(</span><span class="java5">&#34;error&#34;</span><span class="java10">,</span><span class="java5">&#34;invalidName&#34;</span><span class="java8">))</span><span class="java10">;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">validator.add</span><span class="java8">(</span><span class="java4">new </span><span class="java10">ValidationMessage</span><span class="java8">(</span><span class="java5">&#34;error&#34;</span><span class="java10">, </span><span class="java5">&#34;invalid.name&#34;</span><span class="java8">))</span><span class="java10">;<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
-<strong>&nbsp;&nbsp;&nbsp; </span><span class="java10">validator.onErrorUse</span><span class="java8">(</span><span class="java10">page</span><span class="java8">())</span><span class="java10">.of</span><span class="java8">(</span><span class="java10">EmployeeController.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">.form</span><span class="java8">()</span><span class="java10">;<br /></strong>
-&nbsp;&nbsp;&nbsp; <br />
+<strong><br /></strong>
+&nbsp;&nbsp;&nbsp; </span><span class="java10">validator.onErrorUse</span><span class="java8">(</span><span class="java10">page</span><span class="java8">())</span><span class="java10">.of</span><span class="java8">(</span><span class="java10">EmployeeController.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">.form</span><span class="java8">()</span><span class="java10">;<br />
+<br />
 &nbsp;&nbsp;&nbsp; dao.add</span><span class="java8">(</span><span class="java10">employee</span><span class="java8">)</span><span class="java10">;<br />
 </span><span class="java8">}</span></code></div>
-	    	<span class="paragraph">If your logic may add any validation error you <strong class="definition">must</strong> specify where to go in case of error.
-Validator.onErrorUse works just like result.use: you can use any view from Results class.</span>
+	    	<p>If your logic may add any validation error you <strong>must</strong> specify where to go in case of error.
+Validator.onErrorUse works just like result.use: you can use any view from Results class.</p>
 		
 
 <h3 class="section">Shortcuts on Validator</h3>
-	    	<span class="paragraph">Some redirections are pretty common, so there are shortcuts on Result interface for them.
-The available shortcuts are:</span>
-	    	<ul class="list"><li><span class="paragraph">validator.onErrorForwardTo(ClientController.class).list()  ==&gt; validator.onErrorUse(logic()).forwardTo(ClientController.class).list();</span></li><li><span class="paragraph">validator.onErrorRedirectTo(ClientController.class).list() ==&gt; validator.onErrorUse(logic()).redirectTo(ClientController.class).list();</span></li><li><span class="paragraph">validator.onErrorUsePageOf(ClientController.class).list()  ==&gt; validator.onErrorUse(page()).of(ClientController.class).list();</span></li><li><span class="paragraph">validator.onErrorSendBadRequest()	                         ==&gt; validator.onErrorUse(status()).badRequest(errors);</span></li></ul>
-	    	<span class="paragraph">Furthermore, if one are redirecting to a method on the same controller, one can use:</span>
-	    	<ul class="list"><li><span class="paragraph">validator.onErrorForwardTo(this).list()  ==&gt; validator.onErrorUse(logic()).forwardTo(this.getClass()).list();</span></li><li><span class="paragraph">validator.onErrorRedirectTo(this).list() ==&gt; validator.onErrorUse(logic()).redirectTo(this.getClass()).list();</span></li><li><span class="paragraph">validator.onErrorUsePageOf(this).list()  ==&gt; validator.onErrorUse(page()).of(this.getClass()).list();</span></li></ul>
+	    	<p>Some redirections are pretty common, so there are shortcuts on Result interface for them.
+The available shortcuts are:</p>
+	    	<ul><li><p>validator.onErrorForwardTo(ClientController.class).list()  ==&gt; validator.onErrorUse(logic()).forwardTo(ClientController.class).list();</p></li><li><p>validator.onErrorRedirectTo(ClientController.class).list() ==&gt; validator.onErrorUse(logic()).redirectTo(ClientController.class).list();</p></li><li><p>validator.onErrorUsePageOf(ClientController.class).list()  ==&gt; validator.onErrorUse(page()).of(ClientController.class).list();</p></li><li><p>validator.onErrorSendBadRequest()	                         ==&gt; validator.onErrorUse(status()).badRequest(errors);</p></li></ul>
+	    	<p>Furthermore, if one are redirecting to a method on the same controller, one can use:</p>
+	    	<ul><li><p>validator.onErrorForwardTo(this).list()  ==&gt; validator.onErrorUse(logic()).forwardTo(this.getClass()).list();</p></li><li><p>validator.onErrorRedirectTo(this).list() ==&gt; validator.onErrorUse(logic()).redirectTo(this.getClass()).list();</p></li><li><p>validator.onErrorUsePageOf(this).list()  ==&gt; validator.onErrorUse(page()).of(this.getClass()).list();</p></li></ul>
+		
+
+<h3 class="section">L10N with the bundle of the Localization</h3>
+	    	<p>To force translation the parameters of the i18n() methods, simply inject the Localization and 
+use it bundle on the constructor of the Validations():</p>
+	    	<div class="java"><code class="java">
+<span class="java4">private final </span><span class="java10">Validator validator;<br />
+</span><span class="java4">private final </span><span class="java10">Localization localization;<br />
+<br />
+</span><span class="java4">public </span><span class="java10">UserController</span><span class="java8">(</span><span class="java10">Validator validator, Localization localization</span><span class="java8">) {<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">this</span><span class="java10">.validator = validator;<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java4">this</span><span class="java10">.localization = localization;<br />
+</span><span class="java8">}</span></code></div>
+	    	<div class="java"><code class="java">
+<span class="java10">validator.checking</span><span class="java8">(</span><span class="java4">new </span><span class="java10">Validations</span><span class="java8">(</span><span class="java10">localization.getBundle</span><span class="java8">()) {{<br />
+&nbsp;&nbsp;&nbsp; </span><span class="java10">that</span><span class="java8">(</span><span class="java10">user.getAge</span><span class="java8">() </span><span class="java10">&gt;= </span><span class="java7">18</span><span class="java10">, </span><span class="java5">&#34;user.age&#34;</span><span class="java10">, </span><span class="java5">&#34;greater.than&#34;</span><span class="java10">, i18n</span><span class="java8">(</span><span class="java5">&#34;user.age&#34;</span><span class="java8">)</span><span class="java10">, </span><span class="java7">18</span><span class="java8">)</span><span class="java10">;<br />
+</span><span class="java8">}})</span><span class="java10">;</span></code></div>
+	    	<p>Note that here is passed manually the ResourceBundle, so the key "user.age" will be translated 
+correctly in the change of the Locale.</p>
 		
 
 <h3 class="section">Showing validation errors on JSP</h3>
-	    	<span class="paragraph">When there are validation errors, VRaptor will set a request attribute named <code class="inlineCode">errors</code>
-with the error list, so you can show them on your JSP with:</span>
+	    	<p>When there are validation errors, VRaptor will set a request attribute named <code>errors</code>
+with the error list, so you can show them on your JSP with:</p>
 	    	<div class="xml"><code class="xml"><span class="textag">&lt;c:forEach</span>&nbsp;<span class="texattrib">var=</span><span class="texvalue">"error"</span>&nbsp;<span class="texattrib">items=</span><span class="texvalue">"${errors}"</span><span class="textag">&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;${error.category}&nbsp;-&nbsp;${error.message}</span><span class="textag">&lt;br</span>&nbsp;<span class="textag">/&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal"></span><span class="textag">&lt;/c:forEach&gt;</span></code></div>

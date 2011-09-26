@@ -84,11 +84,15 @@
 		
 									<li><a class="link_toc" href="../../cookbook/evitando-que-o-browser-faca-cache-das-paginas/">10. Evitando que o browser faça cache das páginas</a></li>
 		
-									<li><a class="link_toc" href="../../cookbook/usando-o-header-referer-para-fazer-redirecionamentos/">11. Usando o Header Referer para fazer redirecionamentos</a></li>
+									<li><a class="link_toc" href="../../cookbook/usando-objectify-com-vraptor/">11. Usando Objectify com VRaptor</a></li>
 		
-									<li><a class="link_toc" href="../../cookbook/configurando-o-vraptor-na-locaweb/">12. Configurando o VRaptor na Locaweb</a></li>
+									<li><a class="link_toc" href="../../cookbook/usando-o-static-scanning-no-gae-j/">12. Usando o Static Scanning no GAE/J</a></li>
 		
-									<li><a class="link_toc" href="../../cookbook/vraptor-e-tiles-2-2/">13. VRaptor e Tiles 2.2</a></li>
+									<li><a class="link_toc" href="../../cookbook/usando-o-header-referer-para-fazer-redirecionamentos/">13. Usando o Header Referer para fazer redirecionamentos</a></li>
+		
+									<li><a class="link_toc" href="../../cookbook/configurando-o-vraptor-na-locaweb/">14. Configurando o VRaptor na Locaweb</a></li>
+		
+									<li><a class="link_toc" href="../../cookbook/vraptor-e-tiles-2-2/">15. VRaptor e Tiles 2.2</a></li>
 		
                 </ol>
             </div><!-- submenu-->
@@ -97,12 +101,12 @@
 	
 		<h2 class="chapter">ComponentFactory como seletor de implementações</h2>
 
-		<span class="paragraph">O uso t&iacute;pico para as ComponentFactories &eacute; para quando a depend&ecirc;ncia que voc&ecirc; quer
+		<p>O uso t&iacute;pico para as ComponentFactories &eacute; para quando a depend&ecirc;ncia que voc&ecirc; quer
 usar n&atilde;o faz parte do VRaptor nem da sua aplica&ccedil;&atilde;o, como &eacute; o caso da Session do
-Hibernate.</span><span class="paragraph">Mas voc&ecirc; pode usar as ComponentFactories para disponibilizar implementa&ccedil;&otilde;es de
-interfaces de acordo com alguma condi&ccedil;&atilde;o, por exemplo alguma configura&ccedil;&atilde;o adicional.</span><span class="paragraph">Vamos supor que voc&ecirc; quer fazer um enviador de Email, mas s&oacute; quer usar o enviador
+Hibernate.</p><p>Mas voc&ecirc; pode usar as ComponentFactories para disponibilizar implementa&ccedil;&otilde;es de
+interfaces de acordo com alguma condi&ccedil;&atilde;o, por exemplo alguma configura&ccedil;&atilde;o adicional.</p><p>Vamos supor que voc&ecirc; quer fazer um enviador de Email, mas s&oacute; quer usar o enviador
 de verdade quando o sistema estiver em produ&ccedil;&atilde;o, em desenvolvimento voc&ecirc; quer um
-enviador falso:</span><div class="java"><code class="java">
+enviador falso:</p><div class="java"><code class="java">
 <span class="java4">public interface </span><span class="java10">EnviadorDeEmail </span><span class="java8">{<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java9">void </span><span class="java10">enviaEmail</span><span class="java8">(</span><span class="java10">Email email</span><span class="java8">)</span><span class="java10">;<br />
 </span><span class="java8">}<br />
@@ -113,8 +117,8 @@ enviador falso:</span><div class="java"><code class="java">
 <br />
 </span><span class="java4">public class </span><span class="java10">EnviadorDeEmailFalso </span><span class="java4">implements </span><span class="java10">EnviadorDeEmail </span><span class="java8">{<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java3">//não faz nada, ou apenas loga o email<br />
-</span><span class="java8">}</span></code></div><span class="paragraph">Sem anotar nenhuma dessas classes com @Component, voc&ecirc; pode criar um ComponentFactory
-de EnviadorDeEmail, e anot&aacute;-lo com @Component:</span><div class="java"><code class="java">
+</span><span class="java8">}</span></code></div><p>Sem anotar nenhuma dessas classes com @Component, voc&ecirc; pode criar um ComponentFactory
+de EnviadorDeEmail, e anot&aacute;-lo com @Component:</p><div class="java"><code class="java">
 <span class="java16">@Component<br />
 @ApplicationScoped </span><span class="java3">//ou @RequestScoped se fizer mais sentido<br />
 </span><span class="java4">public class </span><span class="java10">EnviadorDeEmailFactory </span><span class="java4">implements </span><span class="java10">ComponentFactory&lt;EnviadorDeEmail&gt; </span><span class="java8">{<br />

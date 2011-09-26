@@ -111,18 +111,18 @@
 	
 		<h2 class="chapter">Scala</h2>
 
-		<span class="paragraph">VRaptor3 also supports controllers written in Scala. The required configurations and an example are featured in this chapter.</span>
+		<p>VRaptor3 also supports controllers written in Scala. The required configurations and an example are featured in this chapter.</p>
 
 
 <h3 class="section">Dependencies and Configuration</h3>
-	    	<span class="paragraph">The following jars must be added to your applications's <code class="inlineCode">WEB-INF/lib</code> directory:</span>
-	    	<ul class="list"><li><span class="paragraph"><code class="inlineCode">scala-library.jar</code> (required, vers&atilde;o 2.8)</span></li><li><span class="paragraph"><code class="inlineCode">vraptor-scala.jar</code> (required)</span></li><li><span class="paragraph"><code class="inlineCode">vraptor-scala-jsp.jar</code> (optional, for Expression Language support for Scala collections in the view layer)</span></li><li><span class="paragraph"><code class="inlineCode">scalate.jar</code> (required)</span></li></ul>
-	    	<span class="paragraph">Now, VRaptor must be configured to load the relevant plugins. In the <code class="inlineCode">web.xml</code> file, define the <code class="inlineCode">context-param</code> section as below:</span>
+	    	<p>The following jars must be added to your applications's <code>WEB-INF/lib</code> directory:</p>
+	    	<ul><li><p><code>scala-library.jar</code> (required, vers&atilde;o 2.8)</p></li><li><p><code>vraptor-scala.jar</code> (required)</p></li><li><p><code>vraptor-scala-jsp.jar</code> (optional, for Expression Language support for Scala collections in the view layer)</p></li><li><p><code>scalate.jar</code> (required)</p></li></ul>
+	    	<p>Now, VRaptor must be configured to load the relevant plugins. In the <code>web.xml</code> file, define the <code>context-param</code> section as below:</p>
 	    	<div class="xml"><code class="xml"><span class="textag">&lt;context-param&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-name&gt;</span><span class="texnormal">br.com.caelum.vraptor.packages</span><span class="textag">&lt;/param-name&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-value&gt;</span><span class="texnormal">br.com.caelum.vraptor.scala</span><span class="textag">&lt;/param-value&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal"></span><span class="textag">&lt;/context-param&gt;</span></code></div>
-	    	<span class="paragraph">Then, add to the file the required changes to use Scalate as the view:</span>
+	    	<p>Then, add to the file the required changes to use Scalate as the view:</p>
 	    	<div class="xml"><code class="xml"><span class="textag">&lt;servlet&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;servlet-name&gt;</span><span class="texnormal">TemplateEngineServlet</span><span class="textag">&lt;/servlet-name&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;servlet-class&gt;</span><span class="texnormal">org.fusesource.scalate.servlet.TemplateEngineServlet</span><span class="textag">&lt;/servlet-class&gt;</span><span class="texnormal"><br /></span>
@@ -136,14 +136,18 @@
 		
 
 <h3 class="section">Example</h3>
-	    	<span class="paragraph">A VRaptor3 controller written in Scala:</span>
-	    	<div class="java"><code class="java">@Resource<br />
-class&nbsp;MyController&nbsp;{<br />
-<br />
-&nbsp;&nbsp;&nbsp;&nbsp;@Path(Array("/hello"))<br />
-&nbsp;&nbsp;&nbsp;&nbsp;def&nbsp;myLogic&nbsp;=&nbsp;"Hello,&nbsp;world!"<br />
-<br />
-}</code></div>
+	    	<p>A VRaptor3 controller written in Scala:</p>
+	    	<pre class="code text">
+
+@Resource
+class MyController {
+
+	@Path(Array("/hello"))
+	def myLogic = "Hello, world!"
+
+}
+
+</pre>
 		
 
 </div><!-- content -->

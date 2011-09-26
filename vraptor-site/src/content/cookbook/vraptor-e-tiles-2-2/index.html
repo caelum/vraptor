@@ -84,11 +84,15 @@
 		
 									<li><a class="link_toc" href="../../cookbook/evitando-que-o-browser-faca-cache-das-paginas/">10. Evitando que o browser faça cache das páginas</a></li>
 		
-									<li><a class="link_toc" href="../../cookbook/usando-o-header-referer-para-fazer-redirecionamentos/">11. Usando o Header Referer para fazer redirecionamentos</a></li>
+									<li><a class="link_toc" href="../../cookbook/usando-objectify-com-vraptor/">11. Usando Objectify com VRaptor</a></li>
 		
-									<li><a class="link_toc" href="../../cookbook/configurando-o-vraptor-na-locaweb/">12. Configurando o VRaptor na Locaweb</a></li>
+									<li><a class="link_toc" href="../../cookbook/usando-o-static-scanning-no-gae-j/">12. Usando o Static Scanning no GAE/J</a></li>
 		
-									<li><a class="link_toc" href="../../cookbook/vraptor-e-tiles-2-2/">13. VRaptor e Tiles 2.2</a></li>
+									<li><a class="link_toc" href="../../cookbook/usando-o-header-referer-para-fazer-redirecionamentos/">13. Usando o Header Referer para fazer redirecionamentos</a></li>
+		
+									<li><a class="link_toc" href="../../cookbook/configurando-o-vraptor-na-locaweb/">14. Configurando o VRaptor na Locaweb</a></li>
+		
+									<li><a class="link_toc" href="../../cookbook/vraptor-e-tiles-2-2/">15. VRaptor e Tiles 2.2</a></li>
 		
                 </ol>
             </div><!-- submenu-->
@@ -97,13 +101,13 @@
 	
 		<h2 class="chapter">VRaptor e Tiles 2.2</h2>
 
-		<span class="paragraph"><strong class="definition"><em class="italic">por Rogerio Alcantara em <a class="link" target="_blank" href="http://www.guj.com.br/posts/list/215206.java#1098196">http://www.guj.com.br/posts/list/215206.java#1098196</a></em></strong></span><span class="paragraph"><strong class="definition">baixar o tiles-jsp.jar. Como estou utilizando maven2:</strong></span><div class="xml"><code class="xml"><span class="textag">&lt;dependency&gt;</span><span class="texnormal"><br /></span>
+		<p><strong><em>por Rogerio Alcantara em <a href="http://www.guj.com.br/posts/list/215206.java#1098196">http://www.guj.com.br/posts/list/215206.java#1098196</a></em></strong></p><p><strong>baixar o tiles-jsp.jar. Como estou utilizando maven2:</strong></p><div class="xml"><code class="xml"><span class="textag">&lt;dependency&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;groupId&gt;</span><span class="texnormal">org.apache.tiles</span><span class="textag">&lt;/groupId&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;artifactId&gt;</span><span class="texnormal">tiles-jsp</span><span class="textag">&lt;/artifactId&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;version&gt;</span><span class="texnormal">2.2.2</span><span class="textag">&lt;/version&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;type&gt;</span><span class="texnormal">jar</span><span class="textag">&lt;/type&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;scope&gt;</span><span class="texnormal">compile</span><span class="textag">&lt;/scope&gt;</span><span class="texnormal"><br /></span>
-<span class="texnormal"></span><span class="textag">&lt;/dependency&gt;</span></code></div><span class="paragraph"><strong class="definition">No web.xml:</strong></span><div class="xml"><code class="xml"><span class="texcomment">&lt;!--&nbsp;tiles&nbsp;configuration&nbsp;--&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal"></span><span class="textag">&lt;/dependency&gt;</span></code></div><p><strong>No web.xml:</strong></p><div class="xml"><code class="xml"><span class="texcomment">&lt;!--&nbsp;tiles&nbsp;configuration&nbsp;--&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal"></span><span class="textag">&lt;servlet&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;servlet-name&gt;</span><span class="texnormal">TilesServlet</span><span class="textag">&lt;/servlet-name&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;servlet-class&gt;</span><span class="texnormal">org.apache.tiles.web.startup.TilesServlet</span><span class="textag">&lt;/servlet-class&gt;</span><span class="texnormal"><br /></span>
@@ -127,7 +131,7 @@
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;dispatcher&gt;</span><span class="texnormal">FORWARD</span><span class="textag">&lt;/dispatcher&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;dispatcher&gt;</span><span class="texnormal">REQUEST</span><span class="textag">&lt;/dispatcher&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal"></span><span class="textag">&lt;/filter-mapping&gt;</span><span class="texnormal"><br /></span>
-<span class="texnormal"></span><span class="texcomment">&lt;!--&nbsp;vraptor&nbsp;configuration&nbsp;--&gt;</span></code></div><span class="paragraph">Repare que n&atilde;o &eacute; declarado o DEFINITIONS_CONFIG, nem registrado o TilesDispatchServlet. Pois n&atilde;o utilizaremos arquivo para guardar as definitions, e quem cuidara dos redirecionamentos continuar&aacute; sendo o VRaptor, que j&aacute; faz isso muito bem obrigado! ;D Outro detalhe importante, &eacute; deixar o TilesContainerFactory como MUTABLE. ;)</span><span class="paragraph"><strong class="definition">TilesPathResolver?</strong></span><span class="paragraph">Nessa abordagem, n&atilde;o &eacute; necess&aacute;rio criar implementar esse PathResolver, j&aacute; que essa responsabilidade continuar&aacute; sendo do VRaptor. ;D</span><span class="paragraph"><strong class="definition">/WEB-INF/jsp/template.jsp - servir&aacute; de base para todas as p&aacute;ginas</strong></span><div class="xml"><code class="xml">&lt;%@&nbsp;page&nbsp;language="java"&nbsp;contentType="text/html;&nbsp;charset=UTF-8"&nbsp;pageEncoding="UTF-8"%&gt;<span class="texnormal">&nbsp;&nbsp;<br /></span>
+<span class="texnormal"></span><span class="texcomment">&lt;!--&nbsp;vraptor&nbsp;configuration&nbsp;--&gt;</span></code></div><p>Repare que n&atilde;o &eacute; declarado o DEFINITIONS_CONFIG, nem registrado o TilesDispatchServlet. Pois n&atilde;o utilizaremos arquivo para guardar as definitions, e quem cuidara dos redirecionamentos continuar&aacute; sendo o VRaptor, que j&aacute; faz isso muito bem obrigado! ;D Outro detalhe importante, &eacute; deixar o TilesContainerFactory como MUTABLE. ;)</p><p><strong>TilesPathResolver?</strong></p><p>Nessa abordagem, n&atilde;o &eacute; necess&aacute;rio criar implementar esse PathResolver, j&aacute; que essa responsabilidade continuar&aacute; sendo do VRaptor. ;D</p><p><strong>/WEB-INF/jsp/template.jsp - servir&aacute; de base para todas as p&aacute;ginas</strong></p><div class="xml"><code class="xml">&lt;%@&nbsp;page&nbsp;language="java"&nbsp;contentType="text/html;&nbsp;charset=UTF-8"&nbsp;pageEncoding="UTF-8"%&gt;<span class="texnormal">&nbsp;&nbsp;<br /></span>
 <span class="texnormal"></span>&lt;%@&nbsp;taglib&nbsp;prefix="tiles"&nbsp;uri="http://tiles.apache.org/tags-tiles"&nbsp;%&gt;<span class="texnormal">&nbsp;&nbsp;<br /></span>
 <span class="texnormal"></span><span class="textag">&lt;html&gt;</span><span class="texnormal">&nbsp;&nbsp;<br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;head&gt;</span><span class="texnormal">&nbsp;&nbsp;<br /></span>
@@ -145,7 +149,7 @@
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;tiles:insertTemplate</span>&nbsp;<span class="texattrib">template=</span><span class="texvalue">"/WEB-INF/jsp/footer.jsp"</span><span class="textag">/&gt;</span><span class="texnormal">&nbsp;&nbsp;<br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;/div&gt;</span><span class="texnormal">&nbsp;&nbsp;<br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;/body&gt;</span><span class="texnormal">&nbsp;&nbsp;<br /></span>
-<span class="texnormal"></span><span class="textag">&lt;/html&gt;</span></code></div><span class="paragraph"><strong class="definition">/WEB-INF/jsp/home/index.jsp - exemplo que utilizar&aacute; o template - repare que o path mant&eacute;m a conven&ccedil;&atilde;o do VRaptor3! ^^</strong></span><div class="xml"><code class="xml">&lt;%@&nbsp;page&nbsp;language="java"&nbsp;contentType="text/html;&nbsp;charset=UTF-8"&nbsp;pageEncoding="UTF-8"%&gt;<span class="texnormal">&nbsp;&nbsp;<br /></span>
+<span class="texnormal"></span><span class="textag">&lt;/html&gt;</span></code></div><p><strong>/WEB-INF/jsp/home/index.jsp - exemplo que utilizar&aacute; o template - repare que o path mant&eacute;m a conven&ccedil;&atilde;o do VRaptor3! ^^</strong></p><div class="xml"><code class="xml">&lt;%@&nbsp;page&nbsp;language="java"&nbsp;contentType="text/html;&nbsp;charset=UTF-8"&nbsp;pageEncoding="UTF-8"%&gt;<span class="texnormal">&nbsp;&nbsp;<br /></span>
 <span class="texnormal"></span>&lt;%@&nbsp;taglib&nbsp;prefix="tiles"&nbsp;uri="http://tiles.apache.org/tags-tiles"&nbsp;%&gt;<span class="texnormal">&nbsp;&nbsp;<br /></span>
 <span class="texnormal"></span><span class="textag">&lt;tiles:insertTemplate</span>&nbsp;<span class="texattrib">template=</span><span class="texvalue">"/WEB-INF/jsp/template.jsp"</span><span class="textag">&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;<br /></span>
@@ -153,7 +157,7 @@
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ol&aacute;&nbsp;mundo!&nbsp;&nbsp;<br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;/tiles:putAttribute&gt;</span><span class="texnormal">&nbsp;&nbsp;<br /></span>
 <span class="texnormal">&nbsp;&nbsp;<br /></span>
-<span class="texnormal"></span><span class="textag">&lt;/tiles:insertTemplate&gt;</span></code></div><span class="paragraph"><strong class="definition">HomeController.java - e finalmente o controler para redirecionar para index.jsp </strong></span><div class="java"><code class="java">
+<span class="texnormal"></span><span class="textag">&lt;/tiles:insertTemplate&gt;</span></code></div><p><strong>HomeController.java - e finalmente o controler para redirecionar para index.jsp </strong></p><div class="java"><code class="java">
 <span class="java16">@Resource<br />
 </span><span class="java4">public class </span><span class="java10">HomeController </span><span class="java8">{<br />
 <br />
@@ -166,7 +170,7 @@
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
 <br />
 &nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">index</span><span class="java8">() { }<br />
-}</span></code></div><span class="paragraph">Prontinho! Estamos utilizando o tiles apenas para montar o template das p&aacute;ginas, o redirecionamento continua sendo cargo do VRaptor! ^^</span><span class="paragraph">S&oacute; tem um detalhe que eu gostaria de compartilhar, pois me deu muito trabalho de descobrir: suponha que eu queria estender o template.jsp para incluir um outro body. (tive essa necessidade na se&ccedil;&atilde;o about do site..)</span><span class="paragraph"><strong class="definition"> /WEB-INF/jsp/about/about_base.jsp - base que estender&aacute; a template.jsp para alterar o layout </strong></span><div class="xml"><code class="xml">&lt;%@&nbsp;page&nbsp;language="java"&nbsp;contentType="text/html;&nbsp;charset=UTF-8"&nbsp;pageEncoding="UTF-8"%&gt;<span class="texnormal"><br /></span>
+}</span></code></div><p>Prontinho! Estamos utilizando o tiles apenas para montar o template das p&aacute;ginas, o redirecionamento continua sendo cargo do VRaptor! ^^</p><p>S&oacute; tem um detalhe que eu gostaria de compartilhar, pois me deu muito trabalho de descobrir: suponha que eu queria estender o template.jsp para incluir um outro body. (tive essa necessidade na se&ccedil;&atilde;o about do site..)</p><p><strong> /WEB-INF/jsp/about/about_base.jsp - base que estender&aacute; a template.jsp para alterar o layout </strong></p><div class="xml"><code class="xml">&lt;%@&nbsp;page&nbsp;language="java"&nbsp;contentType="text/html;&nbsp;charset=UTF-8"&nbsp;pageEncoding="UTF-8"%&gt;<span class="texnormal"><br /></span>
 <span class="texnormal"></span>&lt;%@&nbsp;taglib&nbsp;prefix="tiles"&nbsp;uri="http://tiles.apache.org/tags-tiles"&nbsp;%&gt;<span class="texnormal"><br /></span>
 <span class="texnormal"><br /></span>
 <span class="texnormal"></span><span class="textag">&lt;tiles:insertTemplate</span>&nbsp;<span class="texattrib">template=</span><span class="texvalue">"/WEB-INF/jsp/template.jsp"</span><span class="textag">&gt;</span><span class="texnormal"><br /></span>
@@ -185,7 +189,7 @@
 <span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;/tiles:putAttribute&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal"><br /></span>
-<span class="texnormal"></span><span class="textag">&lt;/tiles:insertTemplate&gt;</span></code></div><span class="paragraph">Pronto, agora a minha p&aacute;gina do about, estender&aacute; about_base.jsp e n&atilde;o template.jsp, por exemplo:</span><span class="paragraph"><strong class="definition"> /WEB-INF/jsp/about/whyUse.jsp - estender&aacute; o about_base.jsp </strong></span><div class="xml"><code class="xml">&lt;%@&nbsp;page&nbsp;language="java"&nbsp;contentType="text/html;&nbsp;charset=UTF-8"&nbsp;pageEncoding="UTF-8"%&gt;<span class="texnormal"><br /></span>
+<span class="texnormal"></span><span class="textag">&lt;/tiles:insertTemplate&gt;</span></code></div><p>Pronto, agora a minha p&aacute;gina do about, estender&aacute; about_base.jsp e n&atilde;o template.jsp, por exemplo:</p><p><strong> /WEB-INF/jsp/about/whyUse.jsp - estender&aacute; o about_base.jsp </strong></p><div class="xml"><code class="xml">&lt;%@&nbsp;page&nbsp;language="java"&nbsp;contentType="text/html;&nbsp;charset=UTF-8"&nbsp;pageEncoding="UTF-8"%&gt;<span class="texnormal"><br /></span>
 <span class="texnormal"></span>&lt;%@&nbsp;taglib&nbsp;prefix="tiles"&nbsp;uri="http://tiles.apache.org/tags-tiles"&nbsp;%&gt;<span class="texnormal"><br /></span>
 <span class="texnormal"><br /></span>
 <span class="texnormal"></span><span class="textag">&lt;tiles:insertTemplate</span>&nbsp;<span class="texattrib">template=</span><span class="texvalue">"/WEB-INF/jsp/about/about_base.jsp"</span>&nbsp;<span class="texattrib">flush=</span><span class="texvalue">"true"</span><span class="textag">&gt;</span><span class="texnormal"><br /></span>
@@ -198,7 +202,7 @@
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;o&nbsp;conte&uacute;do&nbsp;da&nbsp;direita!<br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;/tiles:putAttribute&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal"><br /></span>
-<span class="texnormal"></span><span class="textag">&lt;/tiles:insertTemplate&gt;</span></code></div><span class="paragraph">Repare que dessa vez, o insertTemplate possui o atributo flush="true": isso &eacute; importante para que a about_base.jsp seja reinderizado primeiro. Note tamb&eacute;m que os putAttributes possuem o atributo cascade="true": que serve para disponibilizar esses atributos "para os templates de cima".</span><span class="paragraph">Bom, isso foi bem chatinho de descobrir, mas agora a aplica&ccedil;&atilde;o est&aacute; rodando bunitinha, sem um xml, com o layout definido nas JSP's e com o m&iacute;nimo de interfer&ecirc;ncia no VRaptor3! ^^</span>
+<span class="texnormal"></span><span class="textag">&lt;/tiles:insertTemplate&gt;</span></code></div><p>Repare que dessa vez, o insertTemplate possui o atributo flush="true": isso &eacute; importante para que a about_base.jsp seja reinderizado primeiro. Note tamb&eacute;m que os putAttributes possuem o atributo cascade="true": que serve para disponibilizar esses atributos "para os templates de cima".</p><p>Bom, isso foi bem chatinho de descobrir, mas agora a aplica&ccedil;&atilde;o est&aacute; rodando bunitinha, sem um xml, com o layout definido nas JSP's e com o m&iacute;nimo de interfer&ecirc;ncia no VRaptor3! ^^</p>
 
 
 </div><!-- content -->

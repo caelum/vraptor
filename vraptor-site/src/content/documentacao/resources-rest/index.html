@@ -121,17 +121,17 @@
 
 
 <h3 class="section">O que são Resources?</h3>
-	    	<span class="paragraph">Resources s&atilde;o o que poder&iacute;amos pensar como recursos a serem disponibilizados para 
-acesso pelos nossos clientes.</span>
-	    	<span class="paragraph">No caso de uma aplica&ccedil;&atilde;o Web baseada no VRaptor, um recurso deve ser anotado com a 
-anota&ccedil;&atilde;o <code class="inlineCode">@Resource</code>. Assim que o programador insere tal anota&ccedil;&atilde;o em seu c&oacute;digo, 
+	    	<p>Resources s&atilde;o o que poder&iacute;amos pensar como recursos a serem disponibilizados para 
+acesso pelos nossos clientes.</p>
+	    	<p>No caso de uma aplica&ccedil;&atilde;o Web baseada no VRaptor, um recurso deve ser anotado com a 
+anota&ccedil;&atilde;o <code>@Resource</code>. Assim que o programador insere tal anota&ccedil;&atilde;o em seu c&oacute;digo, 
 todos os m&eacute;todos p&uacute;blicos desse recurso se tornam acess&iacute;veis atrav&eacute;s de chamadas do 
-tipo GET a URIs espec&iacute;ficas.</span>
-	    	<span class="paragraph">O exemplo a seguir mostra um recurso chamado <code class="inlineCode">ClienteController</code> que possui m&eacute;todos
-para diversas funcionalidades ligadas a um cliente.</span>
-	    	<span class="paragraph">Simplesmente criar essa classe e os m&eacute;todos faz com que as urls <strong class="definition">/cliente/adiciona</strong>,
-<strong class="definition">/cliente/lista</strong>, <strong class="definition">/cliente/visualiza</strong>, <strong class="definition">/cliente/remove</strong> e <strong class="definition">/cliente/atualiza</strong> 
-sejam disponibilizadas, cada uma invocando o respectivo m&eacute;todo em sua classe.</span>
+tipo GET a URIs espec&iacute;ficas.</p>
+	    	<p>O exemplo a seguir mostra um recurso chamado <code>ClienteController</code> que possui m&eacute;todos
+para diversas funcionalidades ligadas a um cliente.</p>
+	    	<p>Simplesmente criar essa classe e os m&eacute;todos faz com que as urls <strong>/cliente/adiciona</strong>,
+<strong>/cliente/lista</strong>, <strong>/cliente/visualiza</strong>, <strong>/cliente/remove</strong> e <strong>/cliente/atualiza</strong> 
+sejam disponibilizadas, cada uma invocando o respectivo m&eacute;todo em sua classe.</p>
 	    	<div class="java"><code class="java">
 <span class="java16">@Resource<br />
 </span><span class="java4">public class </span><span class="java10">ClienteController </span><span class="java8">{<br />
@@ -162,50 +162,58 @@ sejam disponibilizadas, cada uma invocando o respectivo m&eacute;todo em sua cla
 		
 
 <h3 class="section">Parâmetros dos métodos</h3>
-	    	<span class="paragraph">Voc&ecirc; pode receber par&acirc;metros nos m&eacute;todos dos seus controllers, e se o objeto
+	    	<p>Voc&ecirc; pode receber par&acirc;metros nos m&eacute;todos dos seus controllers, e se o objeto
 usar a conven&ccedil;&atilde;o de java beans (getters e setters para os atributos da classe),
-voc&ecirc; pode usar pontos para navegar entre os atributos. Por exemplo, no m&eacute;todo:</span>
+voc&ecirc; pode usar pontos para navegar entre os atributos. Por exemplo, no m&eacute;todo:</p>
 	    	<div class="java"><code class="java">
 <span class="java4">public </span><span class="java9">void </span><span class="java10">atualiza</span><span class="java8">(</span><span class="java10">Cliente cliente</span><span class="java8">) {<br />
 &nbsp;&nbsp; </span><span class="java3">//...<br />
 </span><span class="java8">}</span></code></div>
-	    	<span class="paragraph">voc&ecirc; pode passar como par&acirc;metro na requisi&ccedil;&atilde;o:</span>
-	    	<div class="java"><code class="java">cliente.id=<span class="texvalue">3<br /></span>
-cliente.nome=<span class="texvalue">Fulano<br /></span>
-cliente.usuario.login=<span class="texvalue">fulano</span></code></div>
-	    	<span class="paragraph">e os campos correspondentes, navegando via getters e setters a partir do cliente,
-ser&atilde;o setados.</span>
-	    	<span class="paragraph">Se um atributo do objeto ou par&acirc;metro do m&eacute;todo for uma lista (List&lt;&gt; ou array), voc&ecirc;
-pode passar v&aacute;rios par&acirc;metros usando colchetes e &iacute;ndices:</span>
-	    	<div class="java"><code class="java">cliente.telefones[0]=(11)&nbsp;<span class="texvalue">5571-2751&nbsp;<span class="texcomment">#no&nbsp;caso&nbsp;de&nbsp;ser&nbsp;uma&nbsp;lista&nbsp;de&nbsp;String<br /></span></span>
-cliente.dependentes[0].id=1&nbsp;<span class="texvalue"><span class="texcomment">#no&nbsp;caso&nbsp;de&nbsp;ser&nbsp;qualquer&nbsp;objeto,&nbsp;voc&ecirc;&nbsp;pode&nbsp;continuar&nbsp;a&nbsp;navega&ccedil;&atilde;o<br /></span></span>
-cliente.dependentes[3].id=1&nbsp;<span class="texvalue"><span class="texcomment">#os&nbsp;&iacute;ndices&nbsp;n&atilde;o&nbsp;precisam&nbsp;ser&nbsp;sequenciais<br /></span></span>
-cliente.dependentes[0].nome=Cicrano&nbsp;<span class="texvalue"><span class="texcomment">#se&nbsp;usar&nbsp;o&nbsp;mesmo&nbsp;&iacute;ndice,&nbsp;vai&nbsp;ser&nbsp;setado&nbsp;no&nbsp;mesmo&nbsp;objeto<br /></span></span>
-clientes[1].id=23&nbsp;<span class="texvalue"><span class="texcomment">#funciona&nbsp;se&nbsp;voc&ecirc;&nbsp;receber&nbsp;uma&nbsp;lista&nbsp;de&nbsp;clientes&nbsp;no&nbsp;m&eacute;todo</span></span></code></div>
-	    	<div class="box"><h3>Reflection no nome dos par&acirc;metros</h3>
-<span class="paragraph">Infelizmente, o Java n&atilde;o realiza reflection em cima de par&acirc;metros, esses dados n&atilde;o ficam
+	    	<p>voc&ecirc; pode passar como par&acirc;metro na requisi&ccedil;&atilde;o:</p>
+	    	<pre class="code properties">
+
+cliente.id=3
+cliente.nome=Fulano
+cliente.usuario.login=fulano
+
+</pre>
+	    	<p>e os campos correspondentes, navegando via getters e setters a partir do cliente,
+ser&atilde;o setados.</p>
+	    	<p>Se um atributo do objeto ou par&acirc;metro do m&eacute;todo for uma lista (List&lt;&gt; ou array), voc&ecirc;
+pode passar v&aacute;rios par&acirc;metros usando colchetes e &iacute;ndices:</p>
+	    	<pre class="code properties">
+
+cliente.telefones[0]=(11) 5571-2751 #no caso de ser uma lista de String
+cliente.dependentes[0].id=1 #no caso de ser qualquer objeto, voc&ecirc; pode continuar a navega&ccedil;&atilde;o
+cliente.dependentes[3].id=1 #os &iacute;ndices n&atilde;o precisam ser sequenciais
+cliente.dependentes[0].nome=Cicrano #se usar o mesmo &iacute;ndice, vai ser setado no mesmo objeto
+clientes[1].id=23 #funciona se voc&ecirc; receber uma lista de clientes no m&eacute;todo
+
+</pre>
+	    	<div class="box"><h4>Reflection no nome dos par&acirc;metros</h4>
+<p>Infelizmente, o Java n&atilde;o realiza reflection em cima de par&acirc;metros, esses dados n&atilde;o ficam
 dispon&iacute;veis em bytecode (a n&atilde;o ser se compilado em debug mode, por&eacute;m &eacute; algo opcional). Isso
 faz com que a maioria dos frameworks que precisam desse tipo de inform&ccedil;&atilde;o criem uma anota&ccedil;&atilde;o
 pr&oacute;pria para isso, o que polui muito o c&oacute;digo (exemplo no JAX-WS, onde &eacute; comum encontrar um
-m&eacute;todo como o acima com a assinatura  <code class="inlineCode">void add(@WebParam(name="cliente") Cliente cliente)</code>.</span><span class="paragraph">O VRaptor tira proveito do framework Paranamer (<a class="link" target="_blank" href="http://paranamer.codehaus.org">http://paranamer.codehaus.org</a>), que consegue 
+m&eacute;todo como o acima com a assinatura  <code>void add(@WebParam(name="cliente") Cliente cliente)</code>.</p><p>O VRaptor tira proveito do framework Paranamer (<a href="http://paranamer.codehaus.org">http://paranamer.codehaus.org</a>), que consegue 
 tirar essa informa&ccedil;&atilde;o atrav&eacute;s de pr&eacute; compila&ccedil;&atilde;o ou dos dados de debug, evitando criar mais uma 
-anota&ccedil;&atilde;o. Alguns dos desenvolvedores do VRaptor tamb&eacute;m participam no desenvolvimento do Paranamer.</span></div>
+anota&ccedil;&atilde;o. Alguns dos desenvolvedores do VRaptor tamb&eacute;m participam no desenvolvimento do Paranamer.</p></div>
 		
 
 <h3 class="section">Escopos</h3>
-	    	<span class="paragraph">Por vezes voc&ecirc; deseja compartilhar um componente entre todos os usu&aacute;rios,
-entre todas as requisi&ccedil;&otilde;es de um mesmo usu&aacute;rio ou a cada requisi&ccedil;&atilde;o de um usu&aacute;rio.</span>
-	    	<span class="paragraph">Para definir em que escopo o seu componente vive, basta utilizar as anota&ccedil;&otilde;es
-<code class="inlineCode">@ApplicationScoped</code>, <code class="inlineCode">@SessionScoped</code> e <code class="inlineCode">@RequestScoped</code>.</span>
-	    	<span class="paragraph">Caso nenhuma anota&ccedil;&atilde;o seja utilizada, o VRaptor assume que seu componente ficar&aacute;
-no escopo de request, isto &eacute;, voc&ecirc; ter&aacute; um novo componente a cada nova requisi&ccedil;&atilde;o.</span>
+	    	<p>Por vezes voc&ecirc; deseja compartilhar um componente entre todos os usu&aacute;rios,
+entre todas as requisi&ccedil;&otilde;es de um mesmo usu&aacute;rio ou a cada requisi&ccedil;&atilde;o de um usu&aacute;rio.</p>
+	    	<p>Para definir em que escopo o seu componente vive, basta utilizar as anota&ccedil;&otilde;es
+<code>@ApplicationScoped</code>, <code>@SessionScoped</code> e <code>@RequestScoped</code>.</p>
+	    	<p>Caso nenhuma anota&ccedil;&atilde;o seja utilizada, o VRaptor assume que seu componente ficar&aacute;
+no escopo de request, isto &eacute;, voc&ecirc; ter&aacute; um novo componente a cada nova requisi&ccedil;&atilde;o.</p>
 		
 
 <h3 class="section">@Path</h3>
-	    	<span class="paragraph">A anota&ccedil;&atilde;o <code class="inlineCode">@Path</code> permite que voc&ecirc; customize as URIs de acesso a seus m&eacute;todos.
+	    	<p>A anota&ccedil;&atilde;o <code>@Path</code> permite que voc&ecirc; customize as URIs de acesso a seus m&eacute;todos.
 O uso b&aacute;sico dessa anota&ccedil;&atilde;o &eacute; feito atrav&eacute;s de uma URI fixa. O exemplo a seguir mostra
 a customiza&ccedil;&atilde;o de uma URI para um m&eacute;todo, que somente receber&aacute; requisi&ccedil;&otilde;es do tipo
-<em class="italic">POST</em> na URI <strong class="definition">/cliente</strong>:</span>
+<em>POST</em> na URI <strong>/cliente</strong>:</p>
 	    	<div class="java"><code class="java">
 <span class="java16">@Resource<br />
 </span><span class="java4">public class </span><span class="java10">ClienteController </span><span class="java8">{<br />
@@ -216,8 +224,8 @@ a customiza&ccedil;&atilde;o de uma URI para um m&eacute;todo, que somente receb
 &nbsp; }<br />
 &nbsp;&nbsp;&nbsp; <br />
 }</span></code></div>
-	    	<span class="paragraph">Se voc&ecirc; anotar o ClienteController com @Path, o valor especificado vai ser usado como prefixo
-para todas as URIs desse controller:</span>
+	    	<p>Se voc&ecirc; anotar o ClienteController com @Path, o valor especificado vai ser usado como prefixo
+para todas as URIs desse controller:</p>
 	    	<div class="java"><code class="java">
 <span class="java16">@Resource<br />
 @Path</span><span class="java8">(</span><span class="java5">&#34;/clientes&#34;</span><span class="java8">)<br />
@@ -236,13 +244,13 @@ para todas as URIs desse controller:</span>
 		
 
 <h3 class="section">Http Methods</h3>
-	    	<span class="paragraph">O ideal &eacute; definir uma URI espec&iacute;fica para diversos m&eacute;todos HTTP diferentes, como
-GET, POST, PUT etc.</span>
-	    	<span class="paragraph">Para atingir esse objetivo, utilizamos as anota&ccedil;&otilde;es <code class="inlineCode">@Get</code>, <code class="inlineCode">@Post</code>, <code class="inlineCode">@Delete</code> 
+	    	<p>O ideal &eacute; definir uma URI espec&iacute;fica para diversos m&eacute;todos HTTP diferentes, como
+GET, POST, PUT etc.</p>
+	    	<p>Para atingir esse objetivo, utilizamos as anota&ccedil;&otilde;es <code>@Get</code>, <code>@Post</code>, <code>@Delete</code> 
 etc que tamb&eacute;m permitem configurar uma URI diferente da URI padr&atilde;o, da mesma forma
-que a anota&ccedil;&atilde;o @Path.</span>
-	    	<span class="paragraph">O exemplo a seguir altera os padr&otilde;es de URI do <code class="inlineCode">ClienteController</code> para utilizar
-duas URIs distintas, com diversos m&eacute;todos HTTP:</span>
+que a anota&ccedil;&atilde;o @Path.</p>
+	    	<p>O exemplo a seguir altera os padr&otilde;es de URI do <code>ClienteController</code> para utilizar
+duas URIs distintas, com diversos m&eacute;todos HTTP:</p>
 	    	<div class="java"><code class="java">
 <span class="java16">@Resource<br />
 </span><span class="java4">public class </span><span class="java10">ClienteController </span><span class="java8">{<br />
@@ -272,52 +280,56 @@ duas URIs distintas, com diversos m&eacute;todos HTTP:</span>
 &nbsp; </span><span class="java8">}<br />
 &nbsp; <br />
 }</span></code></div>
-	    	<span class="paragraph">Como voc&ecirc; pode notar, utilizamos os m&eacute;todos HTTP + uma URI espec&iacute;fica para
-identificar cada um dos m&eacute;todos de minha classe Java.</span>
-	    	<span class="paragraph">No momento de criar os links e formul&aacute;rios HTML devemos tomar um cuidado <strong class="definition">muito
-importante</strong> pois os browsers s&oacute; d&atilde;o suporte aos m&eacute;todos <em class="italic">POST</em> e <em class="italic">GET</em> atrav&eacute;s 
-de formul&aacute;rios hoje em dia.</span>
-	    	<span class="paragraph">Por isso, voc&ecirc; dever&aacute; criar as requisi&ccedil;&otilde;es para m&eacute;todos do tipo <em class="italic">DELETE</em>, <em class="italic">PUT</em> etc
-atrav&eacute;s de JavaScript ou passando um par&acirc;metro extra, chamado <strong class="definition">_method</strong>. O &uacute;ltimo s&oacute; funciona
-em requisi&ccedil;&otilde;es POST.</span>
-	    	<span class="paragraph">Esse par&acirc;metro sobrescrever&aacute; o m&eacute;todo HTTP real sendo invocado.</span>
-	    	<span class="paragraph">O exemplo a seguir mostra um link para o m&eacute;todo visualiza de cliente:</span>
+	    	<p>Como voc&ecirc; pode notar, utilizamos os m&eacute;todos HTTP + uma URI espec&iacute;fica para
+identificar cada um dos m&eacute;todos de minha classe Java.</p>
+	    	<p>No momento de criar os links e formul&aacute;rios HTML devemos tomar um cuidado <strong>muito
+importante</strong> pois os browsers s&oacute; d&atilde;o suporte aos m&eacute;todos <em>POST</em> e <em>GET</em> atrav&eacute;s 
+de formul&aacute;rios hoje em dia.</p>
+	    	<p>Por isso, voc&ecirc; dever&aacute; criar as requisi&ccedil;&otilde;es para m&eacute;todos do tipo <em>DELETE</em>, <em>PUT</em> etc
+atrav&eacute;s de JavaScript ou passando um par&acirc;metro extra, chamado <strong>_method</strong>. O &uacute;ltimo s&oacute; funciona
+em requisi&ccedil;&otilde;es POST.</p>
+	    	<p>Esse par&acirc;metro sobrescrever&aacute; o m&eacute;todo HTTP real sendo invocado.</p>
+	    	<p>O exemplo a seguir mostra um link para o m&eacute;todo visualiza de cliente:</p>
 	    	<div class="xml"><code class="xml"><span class="textag">&lt;a</span>&nbsp;<span class="texattrib">href=</span><span class="texvalue">"/cliente?cliente.id=5"</span><span class="textag">&gt;</span><span class="texnormal">ver&nbsp;cliente&nbsp;5</span><span class="textag">&lt;/a&gt;</span></code></div>
-	    	<span class="paragraph">Agora um exemplo de como invocar o m&eacute;todo de adicionar um cliente:</span>
+	    	<p>Agora um exemplo de como invocar o m&eacute;todo de adicionar um cliente:</p>
 	    	<div class="xml"><code class="xml"><span class="textag">&lt;form</span>&nbsp;<span class="texattrib">action=</span><span class="texvalue">"/cliente"</span>&nbsp;<span class="texattrib">method=</span><span class="texvalue">"post"</span><span class="textag">&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;input</span>&nbsp;<span class="texattrib">name=</span><span class="texvalue">"cliente.nome"</span>&nbsp;<span class="textag">/&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;input</span>&nbsp;<span class="texattrib">type=</span><span class="texvalue">"submit"</span>&nbsp;<span class="textag">/&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal"></span><span class="textag">&lt;/form&gt;</span></code></div>
-	    	<span class="paragraph">E, note que para permitir a remo&ccedil;&atilde;o atrav&eacute;s do m&eacute;todo <em class="italic">DELETE</em>, temos que usar o 
-par&acirc;metro <code class="inlineCode">_method</code>, uma vez que o browser n&atilde;o suporta ainda tais requisi&ccedil;&otilde;es:</span>
+	    	<p>E, note que para permitir a remo&ccedil;&atilde;o atrav&eacute;s do m&eacute;todo <em>DELETE</em>, temos que usar o 
+par&acirc;metro <code>_method</code>, uma vez que o browser n&atilde;o suporta ainda tais requisi&ccedil;&otilde;es:</p>
 	    	<div class="xml"><code class="xml"><span class="textag">&lt;form</span>&nbsp;<span class="texattrib">action=</span><span class="texvalue">"/cliente"</span>&nbsp;<span class="texattrib">method=</span><span class="texvalue">"post"</span><span class="textag">&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;input</span>&nbsp;<span class="texattrib">name=</span><span class="texvalue">"cliente.id"</span>&nbsp;<span class="texattrib">value=</span><span class="texvalue">"5"</span>&nbsp;<span class="texattrib">type=</span><span class="texvalue">"hidden"</span>&nbsp;<span class="textag">/&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;button</span>&nbsp;<span class="texattrib">type=</span><span class="texvalue">"submit"</span>&nbsp;<span class="texattrib">name=</span><span class="texvalue">"_method"</span>&nbsp;<span class="texattrib">value=</span><span class="texvalue">"DELETE"</span><span class="textag">&gt;</span><span class="texnormal">remover&nbsp;cliente&nbsp;5</span><span class="textag">&lt;/button&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal"></span><span class="textag">&lt;/form&gt;</span></code></div>
-	    	<span class="paragraph"><strong class="title">Paths com express&otilde;es regulares</strong>
+	    	<p><h3>Paths com express&otilde;es regulares</h3>
 Voc&ecirc; pode restringir o valor dos par&acirc;metros da sua URI com express&otilde;es regulares,
-dessa maneira:</span>
+dessa maneira:</p>
 	    	<div class="java"><code class="java">
 <span class="java16">@Path</span><span class="java8">(</span><span class="java5">&#34;/cor/{cor:[0-9A-Fa-f]{6}}&#34;</span><span class="java8">)<br />
 </span><span class="java4">public </span><span class="java9">void </span><span class="java10">setCor</span><span class="java8">(</span><span class="java10">String cor</span><span class="java8">) {<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java3">//...<br />
 </span><span class="java8">}</span></code></div>
-	    	<span class="paragraph">Tudo que estiver depois do ":" ser&aacute; tratado como uma regex, e a URI s&oacute; vai casar
-se o par&acirc;metro casar com a regex:</span>
-	    	<div class="java"><code class="java">/cor/a0b3c4&nbsp;=&gt;&nbsp;casa<br />
-/cor/AABBCC&nbsp;=&gt;&nbsp;casa<br />
-/cor/branco&nbsp;=&gt;&nbsp;n&atilde;o&nbsp;casa</code></div>
-	    	<span class="paragraph"><strong class="title">Path com inje&ccedil;&atilde;o de vari&aacute;veis</strong></span>
-	    	<span class="paragraph">Em diversos casos desejamos que a <em class="italic">uri</em> que identifica meu recurso tenha
-como parte de seu valor, por exemplo, o identificador &uacute;nico de meu recurso.</span>
-	    	<span class="paragraph">Suponha o exemplo de um controle de clientes onde meu identificador &uacute;nico (chave
-prim&aacute;ria) &eacute; um n&uacute;mero, podemos ent&atilde;o mapear as uris <em class="italic">/cliente/{cliente.id}</em>
-para a visualiza&ccedil;&atilde;o de cada cliente.</span>
-	    	<span class="paragraph">Isto &eacute;, se acessarmos a uri <em class="italic">/cliente/2</em>, o m&eacute;todo <strong class="definition">visualiza</strong> ser&aacute; invocado
-e o par&acirc;metro <em class="italic">cliente.id</em> ser&aacute; setado para <strong class="definition">2</strong>. Caso a uri <em class="italic">/cliente/1717</em> seja
-acessada, o mesmo m&eacute;todo ser&aacute; invocado com o valor <strong class="definition">1717</strong>.</span>
-	    	<span class="paragraph">Dessa maneira criamos uris &uacute;nicas para identificar recursos diferentes do nosso sistema.
-Veja o exemplo citado:</span>
+	    	<p>Tudo que estiver depois do ":" ser&aacute; tratado como uma regex, e a URI s&oacute; vai casar
+se o par&acirc;metro casar com a regex:</p>
+	    	<pre class="code text">
+
+/cor/a0b3c4 =&gt; casa
+/cor/AABBCC =&gt; casa
+/cor/branco =&gt; n&atilde;o casa
+
+</pre>
+	    	<p><h3>Path com inje&ccedil;&atilde;o de vari&aacute;veis</h3></p>
+	    	<p>Em diversos casos desejamos que a <em>uri</em> que identifica meu recurso tenha
+como parte de seu valor, por exemplo, o identificador &uacute;nico de meu recurso.</p>
+	    	<p>Suponha o exemplo de um controle de clientes onde meu identificador &uacute;nico (chave
+prim&aacute;ria) &eacute; um n&uacute;mero, podemos ent&atilde;o mapear as uris <em>/cliente/{cliente.id}</em>
+para a visualiza&ccedil;&atilde;o de cada cliente.</p>
+	    	<p>Isto &eacute;, se acessarmos a uri <em>/cliente/2</em>, o m&eacute;todo <strong>visualiza</strong> ser&aacute; invocado
+e o par&acirc;metro <em>cliente.id</em> ser&aacute; setado para <strong>2</strong>. Caso a uri <em>/cliente/1717</em> seja
+acessada, o mesmo m&eacute;todo ser&aacute; invocado com o valor <strong>1717</strong>.</p>
+	    	<p>Dessa maneira criamos uris &uacute;nicas para identificar recursos diferentes do nosso sistema.
+Veja o exemplo citado:</p>
 	    	<div class="java"><code class="java">
 <span class="java16">@Resource<br />
 </span><span class="java4">public class </span><span class="java10">ClienteController </span><span class="java8">{<br />
@@ -329,7 +341,7 @@ Veja o exemplo citado:</span>
 &nbsp; </span><span class="java8">}<br />
 &nbsp; <br />
 }</span></code></div>
-	    	<span class="paragraph">Voc&ecirc; pode ir al&eacute;m e setar diversos par&acirc;metros atrav&eacute;s da uri:</span>
+	    	<p>Voc&ecirc; pode ir al&eacute;m e setar diversos par&acirc;metros atrav&eacute;s da uri:</p>
 	    	<div class="java"><code class="java">
 <span class="java16">@Resource<br />
 </span><span class="java4">public class </span><span class="java10">ClienteController </span><span class="java8">{<br />
@@ -341,8 +353,8 @@ Veja o exemplo citado:</span>
 &nbsp; </span><span class="java8">}<br />
 &nbsp; <br />
 }</span></code></div>
-	    	<span class="paragraph"><strong class="title">V&aacute;rios paths para a mesma l&oacute;gica</strong>
-Voc&ecirc; pode setar mais de um path pra mesma l&oacute;gica fazendo:</span>
+	    	<p><h3>V&aacute;rios paths para a mesma l&oacute;gica</h3>
+Voc&ecirc; pode setar mais de um path pra mesma l&oacute;gica fazendo:</p>
 	    	<div class="java"><code class="java">
 <span class="java16">@Resource<br />
 </span><span class="java4">public class </span><span class="java10">ClienteController </span><span class="java8">{<br />
@@ -353,9 +365,9 @@ Voc&ecirc; pode setar mais de um path pra mesma l&oacute;gica fazendo:</span>
 &nbsp; </span><span class="java8">}<br />
 &nbsp; <br />
 }</span></code></div>
-	    	<span class="paragraph"><strong class="title">Paths com *</strong></span>
-	    	<span class="paragraph">Voc&ecirc; tamb&eacute;m pode utilizar o * como m&eacute;todo de sele&ccedil;&atilde;o para a sua uri. O exemplo a
-seguir ignora qualquer coisa ap&oacute;s a palavra <em class="italic">foto/</em> :</span>
+	    	<p><h3>Paths com *</h3></p>
+	    	<p>Voc&ecirc; tamb&eacute;m pode utilizar o * como m&eacute;todo de sele&ccedil;&atilde;o para a sua uri. O exemplo a
+seguir ignora qualquer coisa ap&oacute;s a palavra <em>foto/</em> :</p>
 	    	<div class="java"><code class="java">
 <span class="java16">@Resource<br />
 </span><span class="java4">public class </span><span class="java10">ClienteController </span><span class="java8">{<br />
@@ -367,7 +379,7 @@ seguir ignora qualquer coisa ap&oacute;s a palavra <em class="italic">foto/</em>
 &nbsp; </span><span class="java8">}<br />
 &nbsp; <br />
 }</span></code></div>
-	    	<span class="paragraph">E agora o mesmo c&oacute;digo, mas utilizado para baixar uma foto espec&iacute;fica de um cliente:</span>
+	    	<p>E agora o mesmo c&oacute;digo, mas utilizado para baixar uma foto espec&iacute;fica de um cliente:</p>
 	    	<div class="java"><code class="java">
 <span class="java16">@Resource<br />
 </span><span class="java4">public class </span><span class="java10">ClienteController </span><span class="java8">{<br />
@@ -379,8 +391,8 @@ seguir ignora qualquer coisa ap&oacute;s a palavra <em class="italic">foto/</em>
 &nbsp; </span><span class="java8">}<br />
 &nbsp; <br />
 }</span></code></div>
-	    	<span class="paragraph">Por vezes voc&ecirc; deseja que o par&acirc;metro a ser setado inclua tamb&eacute;m <strong class="definition">/</strong>s. Para isso
-voc&ecirc; deve utilizar o padr&atilde;o {...*}:</span>
+	    	<p>Por vezes voc&ecirc; deseja que o par&acirc;metro a ser setado inclua tamb&eacute;m <strong>/</strong>s. Para isso
+voc&ecirc; deve utilizar o padr&atilde;o {...*}:</p>
 	    	<div class="java"><code class="java">
 <span class="java16">@Resource<br />
 </span><span class="java4">public class </span><span class="java10">ClienteController </span><span class="java8">{<br />
@@ -392,8 +404,8 @@ voc&ecirc; deve utilizar o padr&atilde;o {...*}:</span>
 &nbsp; </span><span class="java8">}<br />
 &nbsp; <br />
 }</span></code></div>
-	    	<span class="paragraph"><strong class="title">Definindo prioridades para seus paths</strong></span>
-	    	<span class="paragraph">&Eacute; poss&iacute;vel que algumas das nossas URIs possa ser tratada por mais de um m&eacute;todo da classe:</span>
+	    	<p><h3>Definindo prioridades para seus paths</h3></p>
+	    	<p>&Eacute; poss&iacute;vel que algumas das nossas URIs possa ser tratada por mais de um m&eacute;todo da classe:</p>
 	    	<div class="java"><code class="java">
 <span class="java16">@Resource<br />
 </span><span class="java4">public class </span><span class="java10">PostController </span><span class="java8">{<br />
@@ -406,12 +418,12 @@ voc&ecirc; deve utilizar o padr&atilde;o {...*}:</span>
 &nbsp; @Path</span><span class="java8">(</span><span class="java5">&#34;/post/atual&#34;</span><span class="java8">)<br />
 &nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">atual</span><span class="java8">() { </span><span class="java10">... </span><span class="java8">}<br />
 }</span></code></div>
-	    	<span class="paragraph">A uri <code class="inlineCode">/post/atual</code> pode ser tratada tanto pelo m&eacute;todo <code class="inlineCode">mostra</code>, quanto pelo <code class="inlineCode">atual</code>.
-Mas eu quero que quando seja exatamente <code class="inlineCode">/post/atual</code> o m&eacute;todo executado seja o atual. 
-O que eu quero &eacute; que o VRaptor teste primeiro o path do m&eacute;todo <code class="inlineCode">atual</code>,
-para n&atilde;o correr o risco de cair no m&eacute;todo <code class="inlineCode">mostra</code>.</span>
-	    	<span class="paragraph">Para fazer isso, podemos definir prioridades para os <code class="inlineCode">@Path</code>s, assim o VRaptor vai testar
-primeiro os paths com maior prioridade, ou seja, valor menor de prioridade:</span>
+	    	<p>A uri <code>/post/atual</code> pode ser tratada tanto pelo m&eacute;todo <code>mostra</code>, quanto pelo <code>atual</code>.
+Mas eu quero que quando seja exatamente <code>/post/atual</code> o m&eacute;todo executado seja o atual. 
+O que eu quero &eacute; que o VRaptor teste primeiro o path do m&eacute;todo <code>atual</code>,
+para n&atilde;o correr o risco de cair no m&eacute;todo <code>mostra</code>.</p>
+	    	<p>Para fazer isso, podemos definir prioridades para os <code>@Path</code>s, assim o VRaptor vai testar
+primeiro os paths com maior prioridade, ou seja, valor menor de prioridade:</p>
 	    	<div class="java"><code class="java">
 <span class="java16">@Resource<br />
 </span><span class="java4">public class </span><span class="java10">PostController </span><span class="java8">{<br />
@@ -424,16 +436,16 @@ primeiro os paths com maior prioridade, ou seja, valor menor de prioridade:</spa
 &nbsp; @Path</span><span class="java8">(</span><span class="java10">value = </span><span class="java5">&#34;/post/atual&#34;</span><span class="java10">, priority=Path.HIGH</span><span class="java8">)<br />
 &nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">atual</span><span class="java8">() { </span><span class="java10">... </span><span class="java8">}<br />
 }</span></code></div>
-	    	<span class="paragraph">Assim, o path "/post/atual" vai ser testado antes do "/post/{post.autor}", e o VRaptor vai fazer
-o que a gente gostaria que ele fizesse.</span>
-	    	<span class="paragraph">Voc&ecirc; n&atilde;o precisa definir prioridades se tivermos as uris: <code class="inlineCode">/post/{post.id}</code> e <code class="inlineCode">/post/atual</code>,
-pois na <code class="inlineCode">/post/{post.id}</code> o vraptor s&oacute; vai aceitar n&uacute;meros.</span>
+	    	<p>Assim, o path "/post/atual" vai ser testado antes do "/post/{post.autor}", e o VRaptor vai fazer
+o que a gente gostaria que ele fizesse.</p>
+	    	<p>Voc&ecirc; n&atilde;o precisa definir prioridades se tivermos as uris: <code>/post/{post.id}</code> e <code>/post/atual</code>,
+pois na <code>/post/{post.id}</code> o vraptor s&oacute; vai aceitar n&uacute;meros.</p>
 		
 
 <h3 class="section">RoutesConfiguration</h3>
-	    	<span class="paragraph">Por fim, a maneira mais avan&ccedil;ada de configurar rotas de acesso aos seus recursos
-&eacute; atrav&eacute;s de um <strong class="definition">RoutesConfiguration</strong>.</span>
-	    	<span class="paragraph">Esse componente deve ser configurado no escopo de aplica&ccedil;&atilde;o e implementar o m&eacute;todo config:</span>
+	    	<p>Por fim, a maneira mais avan&ccedil;ada de configurar rotas de acesso aos seus recursos
+&eacute; atrav&eacute;s de um <strong>RoutesConfiguration</strong>.</p>
+	    	<p>Esse componente deve ser configurado no escopo de aplica&ccedil;&atilde;o e implementar o m&eacute;todo config:</p>
 	    	<div class="java"><code class="java">
 <span class="java16">@Component<br />
 @ApplicationScoped<br />
@@ -443,9 +455,9 @@ pois na <code class="inlineCode">/post/{post.id}</code> o vraptor s&oacute; vai 
 &nbsp;&nbsp;&nbsp; }<br />
 <br />
 }</span></code></div>
-	    	<span class="paragraph">De posse de um <strong class="definition">Router</strong>, voc&ecirc; pode definir rotas para acesso a m&eacute;todos e, o
+	    	<p>De posse de um <strong>Router</strong>, voc&ecirc; pode definir rotas para acesso a m&eacute;todos e, o
 melhor de tudo, &eacute; que a configura&ccedil;&atilde;o &eacute; refactor-friendly, isto &eacute;, se voc&ecirc; alterar
-o nome de um m&eacute;todo, a configura&ccedil;&atilde;o tamb&eacute;m altera, mas mantem a mesma <em class="italic">uri</em> :</span>
+o nome de um m&eacute;todo, a configura&ccedil;&atilde;o tamb&eacute;m altera, mas mantem a mesma <em>uri</em> :</p>
 	    	<div class="java"><code class="java">
 <span class="java16">@Component<br />
 @ApplicationScoped<br />
@@ -461,8 +473,8 @@ o nome de um m&eacute;todo, a configura&ccedil;&atilde;o tamb&eacute;m altera, m
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
 <br />
 }</span></code></div>
-	    	<span class="paragraph">Voc&ecirc; pode tamb&eacute;m colocar par&acirc;metros na uri e eles v&atilde;o ser populados diretamente nos
-par&acirc;metros do m&eacute;todo. Voc&ecirc; pode ainda adicionar restri&ccedil;&otilde;es para esses par&acirc;metros:</span>
+	    	<p>Voc&ecirc; pode tamb&eacute;m colocar par&acirc;metros na uri e eles v&atilde;o ser populados diretamente nos
+par&acirc;metros do m&eacute;todo. Voc&ecirc; pode ainda adicionar restri&ccedil;&otilde;es para esses par&acirc;metros:</p>
 	    	<div class="java"><code class="java">
 <span class="java3">// O m&eacute;todo mostra recebe um Cliente que tem um id<br />
 </span><span class="java10">routeFor</span><span class="java8">(</span><span class="java5">&#34;/cliente/{cliente.id}&#34;</span><span class="java8">)</span><span class="java10">.is</span><span class="java8">(</span><span class="java10">ClienteController.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">.mostra</span><span class="java8">(</span><span class="java4">null</span><span class="java8">)</span><span class="java10">;<br />

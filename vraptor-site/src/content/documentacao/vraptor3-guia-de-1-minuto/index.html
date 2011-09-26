@@ -117,20 +117,25 @@
 	
 		<h2 class="chapter">VRaptor3 - Guia de 1 minuto</h2>
 
-		<span class="paragraph">O VRaptor 3 foca em simplicidade e, portanto, todas as funcionalidades que voc&ecirc; ver&aacute; 
+		<p>O VRaptor 3 foca em simplicidade e, portanto, todas as funcionalidades que voc&ecirc; ver&aacute; 
 t&ecirc;m como primeira meta resolver o problema do programador da maneira menos intrusiva 
-poss&iacute;vel em seu c&oacute;digo. </span><span class="paragraph">Tanto para salvar, remover, buscar e atualizar ou ainda funcionalidades que 
+poss&iacute;vel em seu c&oacute;digo. </p><p>Tanto para salvar, remover, buscar e atualizar ou ainda funcionalidades que 
 costumam ser mais complexas como upload e download de arquivos, resultados em 
 formatos diferentes (xml, json, xhtml etc), tudo isso &eacute; feito atrav&eacute;s de funcionalidades 
-simples do VRaptor 3, que sempre procuram encapsular <code class="inlineCode">HttpServletRequest</code>,
-<code class="inlineCode">Response</code>, <code class="inlineCode">Session</code> e toda a API do <code class="inlineCode">javax.servlet</code>.</span>
+simples do VRaptor 3, que sempre procuram encapsular <code>HttpServletRequest</code>,
+<code>Response</code>, <code>Session</code> e toda a API do <code>javax.servlet</code>.</p>
 
 
 <h3 class="section">Começando um projeto</h3>
-	    	<span class="paragraph">Voc&ecirc; pode come&ccedil;ar seu projeto a partir do <code class="inlineCode">vraptor-blank-project</code>, que contem as depend&ecirc;ncias
-necess&aacute;rias e a configura&ccedil;&atilde;o no <code class="inlineCode">web.xml</code>. Ele pode ser baixado em:</span>
-	    	<span class="paragraph"><a class="link" target="_blank" href="http://vraptor.caelum.com.br/download.jsp">http://vraptor.caelum.com.br/download.jsp</a></span>
-	    	<span class="paragraph">Se voc&ecirc; quiser usar o Maven, voc&ecirc; pode adicionar o artefato do VRaptor como depend&ecirc;ncia no seu pom.xml:</span>
+	    	<p>Voc&ecirc; pode come&ccedil;ar seu projeto a partir do <code>vraptor-blank-project</code>, que contem as depend&ecirc;ncias
+necess&aacute;rias e a configura&ccedil;&atilde;o no <code>web.xml</code>. Ele pode ser baixado em 
+<a href="http://vraptor.caelum.com.br/download.jsp.">http://vraptor.caelum.com.br/download.jsp.</a></p>
+	    	<p>O projeto <code>vraptor-blank-project</code> &eacute; configurado para a IDE Eclipse. Se voc&ecirc; usa Netbeans, &eacute; 
+poss&iacute;vel importar o projeto facilmente conforme a documenta&ccedil;&atilde;o dispon&iacute;vel em 
+<a href="http://netbeans.org/kb/docs/java/import-eclipse.html.">http://netbeans.org/kb/docs/java/import-eclipse.html.</a> Se voc&ecirc; utiliza a IDE IntelliJ 
+IDEA voc&ecirc; pode importar o projeto seguindo o guia dispon&iacute;vel em 
+<a href="http://www.jetbrains.com/idea/webhelp/importing-eclipse-project-to-intellij-idea.html.">http://www.jetbrains.com/idea/webhelp/importing-eclipse-project-to-intellij-idea.html.</a></p>
+	    	<p>Se voc&ecirc; quiser usar o Maven, voc&ecirc; pode adicionar o artefato do VRaptor como depend&ecirc;ncia no seu pom.xml:</p>
 	    	<div class="xml"><code class="xml"><span class="textag">&lt;dependency&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;groupId&gt;</span><span class="texnormal">br.com.caelum</span><span class="textag">&lt;/groupId&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;artifactId&gt;</span><span class="texnormal">vraptor</span><span class="textag">&lt;/artifactId&gt;</span><span class="texnormal"><br /></span>
@@ -139,12 +144,12 @@ necess&aacute;rias e a configura&ccedil;&atilde;o no <code class="inlineCode">we
 		
 
 <h3 class="section">Um Controller simples</h3>
-	    	<span class="paragraph">Chamaremos de <strong class="definition">Controller</strong> as classes contendo a l&oacute;gica de neg&oacute;cio do seu sistema. 
+	    	<p>Chamaremos de <strong>Controller</strong> as classes contendo a l&oacute;gica de neg&oacute;cio do seu sistema. 
 S&atilde;o as classes que alguns frameworks podem vir a chamar de actions ou services, apesar
-de n&atilde;o significarem exatamente a mesma coisa.</span>
-	    	<span class="paragraph">Com o VRaptor configurado no seu <code class="inlineCode">web.xml</code>, basta criar os seus controllers para receber
-as requisi&ccedil;&otilde;es e come&ccedil;ar a construir seu sistema.</span>
-	    	<span class="paragraph">Um controller simples seria:</span>
+de n&atilde;o significarem exatamente a mesma coisa.</p>
+	    	<p>Com o VRaptor configurado no seu <code>web.xml</code>, basta criar os seus controllers para receber
+as requisi&ccedil;&otilde;es e come&ccedil;ar a construir seu sistema.</p>
+	    	<p>Um controller simples seria:</p>
 	    	<div class="java"><code class="java">
 <span class="java2">/*<br />
  * anotando seu controller com @Resource, seus m&eacute;todos p&uacute;blicos ficarão dispon&iacute;veis <br />
@@ -211,17 +216,21 @@ as requisi&ccedil;&otilde;es e come&ccedil;ar a construir seu sistema.</span>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return </span><span class="java10">dao.load</span><span class="java8">(</span><span class="java10">id</span><span class="java8">)</span><span class="java10">;<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
 }</span></code></div>
-	    	<span class="paragraph">Repare como essa classe est&aacute; completamente independente da API de <code class="inlineCode">javax.servlet</code>. 
+	    	<p>Repare como essa classe est&aacute; completamente independente da API de <code>javax.servlet</code>. 
 O c&oacute;digo tamb&eacute;m est&aacute; extremamente simples e f&aacute;cil de ser testado como unidade.
-O VRaptor j&aacute; faz v&aacute;rias associa&ccedil;&otilde;es para as URIs como default:</span>
-	    	<div class="java"><code class="java">/client/form&nbsp;&nbsp;&nbsp;invoca&nbsp;form()<br />
-/client/add&nbsp;&nbsp;&nbsp;&nbsp;invoca&nbsp;add(client)&nbsp;populando&nbsp;o&nbsp;objeto&nbsp;client&nbsp;com&nbsp;os&nbsp;par&acirc;metros&nbsp;da&nbsp;requisi&ccedil;&atilde;o<br />
-/clients/list&nbsp;&nbsp;invoca&nbsp;list()&nbsp;e&nbsp;devolve&nbsp;${clientList}&nbsp;ao&nbsp;JSP<br />
-/clients/view?id=3&nbsp;&nbsp;invoca&nbsp;view(3l)&nbsp;e&nbsp;devolve&nbsp;${client}&nbsp;ao&nbsp;JSP</code></div>
-	    	<span class="paragraph">Mais para a frente veremos como &eacute; f&aacute;cil trocar a URI <code class="inlineCode">/clients/view?id=3</code> para
-<code class="inlineCode">/clients/view/3</code>, deixando a URI mais elegante.</span>
-	    	<span class="paragraph">O ClientDao ser&aacute; injetado pelo VRaptor, como tamb&eacute;m veremos adiante.
-Voc&ecirc; j&aacute; pode passar para o Guia inicial de 10 minutos.</span>
+O VRaptor j&aacute; faz v&aacute;rias associa&ccedil;&otilde;es para as URIs como default:</p>
+	    	<pre class="code text">
+
+/client/form   invoca form()
+/client/add    invoca add(client) populando o objeto client com os par&acirc;metros da requisi&ccedil;&atilde;o
+/clients/list  invoca list() e devolve ${clientList} ao JSP
+/clients/view?id=3  invoca view(3l) e devolve ${client} ao JSP
+
+</pre>
+	    	<p>Mais para a frente veremos como &eacute; f&aacute;cil trocar a URI <code>/clients/view?id=3</code> para
+<code>/clients/view/3</code>, deixando a URI mais elegante.</p>
+	    	<p>O ClientDao ser&aacute; injetado pelo VRaptor, como tamb&eacute;m veremos adiante.
+Voc&ecirc; j&aacute; pode passar para o Guia inicial de 10 minutos.</p>
 		
 
 </div><!-- content -->

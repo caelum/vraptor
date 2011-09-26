@@ -121,9 +121,9 @@
 
 
 <h3 class="section">Registrando um componente opcional</h3>
-	    	<span class="paragraph">O VRaptor possui alguns componentes opcionais, que est&atilde;o no pacote 
-<code class="inlineCode">br.com.caelum.vraptor.util</code>. Para registr&aacute;-los voc&ecirc; pode adicionar seus pacotes
-no web.xml:</span>
+	    	<p>O VRaptor possui alguns componentes opcionais, que est&atilde;o no pacote 
+<code>br.com.caelum.vraptor.util</code>. Para registr&aacute;-los voc&ecirc; pode adicionar seus pacotes
+no web.xml:</p>
 	    	<div class="xml"><code class="xml"><span class="textag">&lt;context-param&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-name&gt;</span><span class="texnormal">br.com.caelum.vraptor.packages</span><span class="textag">&lt;/param-name&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-value&gt;</span><span class="texnormal"><br /></span>
@@ -131,16 +131,16 @@ no web.xml:</span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;br.com.caelum.vraptor.util.outro.pacote<br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;/param-value&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal"></span><span class="textag">&lt;/context-param&gt;</span></code></div>
-	    	<span class="paragraph">ou voc&ecirc; pode criar um custom provider:</span>
-	    	<ul class="list"><li><span class="paragraph">Crie uma classe filha do Provider que voc&ecirc; est&aacute; usando:</span><div class="java"><code class="java">
+	    	<p>ou voc&ecirc; pode criar um custom provider:</p>
+	    	<ul><li><p>Crie uma classe filha do Provider que voc&ecirc; est&aacute; usando:</p><div class="java"><code class="java">
 <span class="java4">package </span><span class="java10">br.com.nomedaempresa.nomedoprojeto;<br />
 <br />
 </span><span class="java4">public class </span><span class="java10">CustomProvider </span><span class="java4">extends </span><span class="java10">SpringProvider </span><span class="java8">{<br />
 &nbsp;&nbsp;&nbsp; <br />
-}</span></code></div></li><li><span class="paragraph">Registre essa classe como provider no web.xml:</span><div class="xml"><code class="xml"><span class="textag">&lt;context-param&gt;</span><span class="texnormal"><br /></span>
+}</span></code></div></li><li><p>Registre essa classe como provider no web.xml:</p><div class="xml"><code class="xml"><span class="textag">&lt;context-param&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-name&gt;</span><span class="texnormal">br.com.caelum.vraptor.provider</span><span class="textag">&lt;/param-name&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-value&gt;</span><span class="texnormal">br.com.nomedaempresa.nomedoprojeto.CustomProvider</span><span class="textag">&lt;/param-value&gt;</span><span class="texnormal"><br /></span>
-<span class="texnormal"></span><span class="textag">&lt;/context-param&gt;</span></code></div></li><li><span class="paragraph">Sobrescreva o m&eacute;todo registerCustomComponents e adicione os componentes opcionais:</span><div class="java"><code class="java">
+<span class="texnormal"></span><span class="textag">&lt;/context-param&gt;</span></code></div></li><li><p>Sobrescreva o m&eacute;todo registerCustomComponents e adicione os componentes opcionais:</p><div class="java"><code class="java">
 <span class="java4">package </span><span class="java10">br.com.nomedaempresa.nomedoprojeto;<br />
 <br />
 </span><span class="java4">public class </span><span class="java10">CustomProvider </span><span class="java4">extends </span><span class="java10">SpringProvider </span><span class="java8">{<br />
@@ -153,14 +153,14 @@ no web.xml:</span>
 		
 
 <h3 class="section">Componentes opcionais disponíveis</h3>
-	    	<span class="paragraph"><strong class="title">Hibernate Session e SessionFactory</strong></span>
-	    	<span class="paragraph">Se voc&ecirc; precisa de Session's e SessionFactory nos seus componentes, voc&ecirc; geralmente
+	    	<p><h3>Hibernate Session e SessionFactory</h3></p>
+	    	<p>Se voc&ecirc; precisa de Session's e SessionFactory nos seus componentes, voc&ecirc; geralmente
 vai precisar de um ComponentFactory para cri&aacute;-los. Se voc&ecirc; usa entidades anotadas,
 e o hibernate.cfg.xml na raiz do WEB-INF/classes, voc&ecirc; pode usar as ComponentFactory's para
 isso que j&aacute; v&ecirc;m com o VRaptor. O VRaptor tamb&eacute;m tem um interceptor que abre a Session e come&ccedil;a
 uma transa&ccedil;&atilde;o no in&iacute;cio da requisi&ccedil;&atilde;o e fecha a Session (e commita ou d&aacute; rollback na transa&ccedil;&atilde;o)
 no final da requisi&ccedil;&atilde;o. Voc&ecirc; pode registrar esses componentes do VRaptor adicionando o pacote
-<strong class="definition">br.com.caelum.vraptor.util.hibernate</strong> no seu web.xml:</span>
+<strong>br.com.caelum.vraptor.util.hibernate</strong> no seu web.xml:</p>
 	    	<div class="xml"><code class="xml"><span class="textag">&lt;context-param&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-name&gt;</span><span class="texnormal">br.com.caelum.vraptor.packages</span><span class="textag">&lt;/param-name&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-value&gt;</span><span class="texnormal"><br /></span>
@@ -168,7 +168,7 @@ no final da requisi&ccedil;&atilde;o. Voc&ecirc; pode registrar esses componente
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;br.com.caelum.vraptor.util.hibernate<br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;/param-value&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal"></span><span class="textag">&lt;/context-param&gt;</span></code></div>
-	    	<span class="paragraph">ou registr&aacute;-los manualmente no custom provider:</span>
+	    	<p>ou registr&aacute;-los manualmente no custom provider:</p>
 	    	<div class="java"><code class="java">
 <span class="java16">@Override<br />
 </span><span class="java4">protected </span><span class="java9">void </span><span class="java10">registerCustomComponents</span><span class="java8">(</span><span class="java10">ComponentRegistry registry</span><span class="java8">) {<br />
@@ -178,8 +178,8 @@ no final da requisi&ccedil;&atilde;o. Voc&ecirc; pode registrar esses componente
 &nbsp;&nbsp;&nbsp; </span><span class="java10">registry.register</span><span class="java8">(</span><span class="java10">HibernateTransactionInterceptor.class, <br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; HibernateTransactionInterceptor.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">; </span><span class="java3">// open session and transaction in view<br />
 </span><span class="java8">}</span></code></div>
-	    	<span class="paragraph">J&aacute; existe um Provider que adiciona esses tr&ecirc;s componentes opcionais. Voc&ecirc; pode apenas
-registr&aacute;-lo no seu web.xml:</span>
+	    	<p>J&aacute; existe um Provider que adiciona esses tr&ecirc;s componentes opcionais. Voc&ecirc; pode apenas
+registr&aacute;-lo no seu web.xml:</p>
 	    	<div class="xml"><code class="xml"><span class="textag">&lt;context-param&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-name&gt;</span><span class="texnormal">br.com.caelum.vraptor.provider</span><span class="textag">&lt;/param-name&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-value&gt;</span><span class="texnormal">br.com.caelum.vraptor.util.hibernate.HibernateCustomProvider</span><span class="textag">&lt;/param-value&gt;</span><span class="texnormal"><br /></span>
@@ -187,9 +187,9 @@ registr&aacute;-lo no seu web.xml:</span>
 		
 
 <h3 class="section">JPA EntityManager e EntityManagerFactory</h3>
-	    	<span class="paragraph">Se voc&ecirc; tiver um persistence.xml com o persistence-unit chamado "default", voc&ecirc; pode usar
+	    	<p>Se voc&ecirc; tiver um persistence.xml com o persistence-unit chamado "default", voc&ecirc; pode usar
 os ComponentFactories para criar EntityManager e EntityManagerFactory j&aacute; dispon&iacute;veis no 
-vraptor, adicionando o pacote <strong class="definition">br.com.caelum.vraptor.util.jpa</strong> no web.xml:</span>
+vraptor, adicionando o pacote <strong>br.com.caelum.vraptor.util.jpa</strong> no web.xml:</p>
 	    	<div class="xml"><code class="xml"><span class="textag">&lt;context-param&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-name&gt;</span><span class="texnormal">br.com.caelum.vraptor.packages</span><span class="textag">&lt;/param-name&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-value&gt;</span><span class="texnormal"><br /></span>
@@ -197,7 +197,7 @@ vraptor, adicionando o pacote <strong class="definition">br.com.caelum.vraptor.u
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;br.com.caelum.vraptor.util.jpa<br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;/param-value&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal"></span><span class="textag">&lt;/context-param&gt;</span></code></div>
-	    	<span class="paragraph">ou adicion&aacute;-los manualmente no web.xml:</span>
+	    	<p>ou adicion&aacute;-los manualmente no web.xml:</p>
 	    	<div class="java"><code class="java">
 <span class="java16">@Override<br />
 </span><span class="java4">protected </span><span class="java9">void </span><span class="java10">registerCustomComponents</span><span class="java8">(</span><span class="java10">ComponentRegistry registry</span><span class="java8">) {<br />
@@ -208,16 +208,16 @@ vraptor, adicionando o pacote <strong class="definition">br.com.caelum.vraptor.u
 &nbsp;&nbsp;&nbsp; </span><span class="java10">registry.register</span><span class="java8">(</span><span class="java10">JPATransactionInterceptor.class, <br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; JPATransactionInterceptor.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">; </span><span class="java3">//open EntityManager and transaction in view<br />
 </span><span class="java8">}</span></code></div>
-	    	<span class="paragraph">J&aacute; existe um Provider que adiciona esses tr&ecirc;s componentes opcionais. Voc&ecirc; pode apenas
-registr&aacute;-lo no seu web.xml:</span>
+	    	<p>J&aacute; existe um Provider que adiciona esses tr&ecirc;s componentes opcionais. Voc&ecirc; pode apenas
+registr&aacute;-lo no seu web.xml:</p>
 	    	<div class="xml"><code class="xml"><span class="textag">&lt;context-param&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-name&gt;</span><span class="texnormal">br.com.caelum.vraptor.provider</span><span class="textag">&lt;/param-name&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-value&gt;</span><span class="texnormal">br.com.caelum.vraptor.util.jpa.JPACustomProvider</span><span class="textag">&lt;/param-value&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal"></span><span class="textag">&lt;/context-param&gt;</span></code></div>
-	    	<span class="paragraph"><strong class="title">Converters Localizados</strong></span>
-	    	<span class="paragraph">Existem alguns converters para n&uacute;meros que s&atilde;o localizados, ou seja, que consideram o 
+	    	<p><h3>Converters Localizados</h3></p>
+	    	<p>Existem alguns converters para n&uacute;meros que s&atilde;o localizados, ou seja, que consideram o 
 Locale atual para converter os par&acirc;metros. Voc&ecirc; pode registr&aacute;-los adicionando o pacote
-<strong class="definition">br.com.caelum.vraptor.converter.l10n</strong> no seu web.xml:</span>
+<strong>br.com.caelum.vraptor.converter.l10n</strong> no seu web.xml:</p>
 	    	<div class="xml"><code class="xml"><span class="textag">&lt;context-param&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-name&gt;</span><span class="texnormal">br.com.caelum.vraptor.packages</span><span class="textag">&lt;/param-name&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-value&gt;</span><span class="texnormal"><br /></span>
@@ -225,9 +225,9 @@ Locale atual para converter os par&acirc;metros. Voc&ecirc; pode registr&aacute;
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;br.com.caelum.vraptor.converter.l10n<br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;/param-value&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal"></span><span class="textag">&lt;/context-param&gt;</span></code></div>
-	    	<span class="paragraph"><strong class="title">Instanciador de Par&acirc;metros Imut&aacute;veis (beta)</strong>
+	    	<p><h3>Instanciador de Par&acirc;metros Imut&aacute;veis (beta)</h3>
 Se voc&ecirc; quiser trabalhar com objetos imut&aacute;veis no seu projeto, voc&ecirc; pode usar um parameter
-provider que consegue popular seus objetos a partir dos par&acirc;metros do seu construtor:</span>
+provider que consegue popular seus objetos a partir dos par&acirc;metros do seu construtor:</p>
 	    	<div class="java"><code class="java">
 <span class="java16">@Resource<br />
 </span><span class="java4">public class </span><span class="java10">CarrosController </span><span class="java8">{<br />
@@ -245,9 +245,9 @@ provider que consegue popular seus objetos a partir dos par&acirc;metros do seu 
 &nbsp;&nbsp; </span><span class="java8">}<br />
 &nbsp;&nbsp; </span><span class="java3">//getters<br />
 </span><span class="java8">}</span></code></div>
-	    	<span class="paragraph">O carro ser&aacute; populado com os request parameters normais: <code class="inlineCode">carro.cor</code> e <code class="inlineCode">carro.modelo</code></span>
-	    	<span class="paragraph">Para habilitar esse comportamento, voc&ecirc; pode adicionar o pacote
-<strong class="definition">br.com.caelum.vraptor.http.iogi</strong> ao seu web.xml:</span>
+	    	<p>O carro ser&aacute; populado com os request parameters normais: <code>carro.cor</code> e <code>carro.modelo</code></p>
+	    	<p>Para habilitar esse comportamento, voc&ecirc; pode adicionar o pacote
+<strong>br.com.caelum.vraptor.http.iogi</strong> ao seu web.xml:</p>
 	    	<div class="xml"><code class="xml"><span class="textag">&lt;context-param&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-name&gt;</span><span class="texnormal">br.com.caelum.vraptor.packages</span><span class="textag">&lt;/param-name&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-value&gt;</span><span class="texnormal"><br /></span>
@@ -255,14 +255,14 @@ provider que consegue popular seus objetos a partir dos par&acirc;metros do seu 
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;br.com.caelum.vraptor.http.iogi<br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;/param-value&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal"></span><span class="textag">&lt;/context-param&gt;</span></code></div>
-	    	<span class="paragraph"><strong class="title">Integra&ccedil;&atilde;o com ExtJS</strong></span>
-	    	<span class="paragraph">Existe uma View do VRaptor que consegue gerar alguns formatos de JSON que o ExtJS espera.
-Para isso use:</span>
+	    	<p><h3>Integra&ccedil;&atilde;o com ExtJS</h3></p>
+	    	<p>Existe uma View do VRaptor que consegue gerar alguns formatos de JSON que o ExtJS espera.
+Para isso use:</p>
 	    	<div class="java"><code class="java">
 <span class="java10">result.use</span><span class="java8">(</span><span class="java10">ExtJSJson.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">.....serialize</span><span class="java8">()</span><span class="java10">;</span></code></div>
-	    	<span class="paragraph"><strong class="title">Compatibilidade com VRaptor 2</strong>
+	    	<p><h3>Compatibilidade com VRaptor 2</h3>
 Se voc&ecirc; quer migrar do VRaptor 2 para o VRaptor 3
-(veja o cap&iacute;tulo Migrando do VRaptor 2 para o VRaptor 3):</span>
+(veja o cap&iacute;tulo Migrando do VRaptor 2 para o VRaptor 3):</p>
 	    	<div class="xml"><code class="xml"><span class="textag">&lt;context-param&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-name&gt;</span><span class="texnormal">br.com.caelum.vraptor.packages</span><span class="textag">&lt;/param-name&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-value&gt;</span><span class="texnormal"><br /></span>

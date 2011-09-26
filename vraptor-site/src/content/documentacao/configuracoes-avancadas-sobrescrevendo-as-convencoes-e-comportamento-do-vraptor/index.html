@@ -117,17 +117,17 @@
 	
 		<h2 class="chapter">Configurações avancadas: sobrescrevendo as convenções e comportamento do VRaptor</h2>
 
-		<span class="paragraph">A maioria dos comportamentos e conven&ccedil;&otilde;es do VRaptor s&atilde;o personaliz&aacute;veis. E a forma
+		<p>A maioria dos comportamentos e conven&ccedil;&otilde;es do VRaptor s&atilde;o personaliz&aacute;veis. E a forma
 de personalizar &eacute; bem f&aacute;cil: criar um componente que implementa uma das interfaces
 internas do VRaptor. Ao fazer isso, o VRaptor vai usar a implementa&ccedil;&atilde;o personalizada
-ao inv&eacute;s da padr&atilde;o.</span><span class="paragraph">Para saber qual &eacute; a interface certa para personalizar um certo comportamento,
+ao inv&eacute;s da padr&atilde;o.</p><p>Para saber qual &eacute; a interface certa para personalizar um certo comportamento,
 pergunte na lista de desenvolvedores do vraptor: caelum-vraptor-dev@googlegroups.com
-ou no forum do guj: <a class="link" target="_blank" href="http://www.guj.com.br/forums/show/23.java">http://www.guj.com.br/forums/show/23.java</a></span><span class="paragraph">Abaixo veremos alguns exemplos de personaliza&ccedil;&atilde;o:</span>
+ou no forum do guj: <a href="http://www.guj.com.br/forums/show/23.java">http://www.guj.com.br/forums/show/23.java</a></p><p>Abaixo veremos alguns exemplos de personaliza&ccedil;&atilde;o:</p>
 
 
 <h3 class="section">Mudando a view renderizada por padrão</h3>
-	    	<span class="paragraph">Se voc&ecirc; precisa mudar a view renderizada por padr&atilde;o, ou mudar o local em que ela &eacute; procurada,
-basta criar a seguinte classe:</span>
+	    	<p>Se voc&ecirc; precisa mudar a view renderizada por padr&atilde;o, ou mudar o local em que ela &eacute; procurada,
+basta criar a seguinte classe:</p>
 	    	<div class="java"><code class="java">
 <span class="java16">@Component<br />
 </span><span class="java4">public class </span><span class="java10">CustomPathResolver </span><span class="java4">extends </span><span class="java10">DefaultPathResolver </span><span class="java8">{<br />
@@ -152,12 +152,12 @@ basta criar a seguinte classe:</span>
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
 <br />
 }</span></code></div>
-	    	<span class="paragraph">Se voc&ecirc; precisa mudar mais ainda a conven&ccedil;&atilde;o basta implementar a interface PathResolver.</span>
+	    	<p>Se voc&ecirc; precisa mudar mais ainda a conven&ccedil;&atilde;o basta implementar a interface PathResolver.</p>
 		
 
 <h3 class="section">Mudando a URI padrão</h3>
-	    	<span class="paragraph">Por padr&atilde;o, a URI para o m&eacute;todo ClientesController.lista() &eacute; /clientes/lista, ou seja,
-nome_do_controller/nome_do_metodo. Para sobrescrever essa conven&ccedil;&atilde;o, basta criar a classe:</span>
+	    	<p>Por padr&atilde;o, a URI para o m&eacute;todo ClientesController.lista() &eacute; /clientes/lista, ou seja,
+nome_do_controller/nome_do_metodo. Para sobrescrever essa conven&ccedil;&atilde;o, basta criar a classe:</p>
 	    	<div class="java"><code class="java">
 <span class="java16">@Component<br />
 @ApplicationScoped<br />
@@ -171,19 +171,19 @@ nome_do_controller/nome_do_metodo. Para sobrescrever essa conven&ccedil;&atilde;
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return </span><span class="java3">//sua conven&ccedil;ão aqui<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
 }</span></code></div>
-	    	<span class="paragraph">Se voc&ecirc; precisa mudar mais ainda a conven&ccedil;&atilde;o basta implementar a interface RoutesParser.</span>
+	    	<p>Se voc&ecirc; precisa mudar mais ainda a conven&ccedil;&atilde;o basta implementar a interface RoutesParser.</p>
 		
 
 <h3 class="section">Mudando o encoding da sua aplicação</h3>
-	    	<span class="paragraph">Se voc&ecirc; quiser que todas as requisi&ccedil;&otilde;es da sua aplica&ccedil;&atilde;o sejam de um encoding determinado,
+	    	<p>Se voc&ecirc; quiser que todas as requisi&ccedil;&otilde;es da sua aplica&ccedil;&atilde;o sejam de um encoding determinado,
 para evitar problemas de acentua&ccedil;&atilde;o por exemplo, voc&ecirc; pode colocar o seguinte par&acirc;metro
-no seu web.xml:</span>
+no seu web.xml:</p>
 	    	<div class="xml"><code class="xml"><span class="textag">&lt;context-param&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-name&gt;</span><span class="texnormal">br.com.caelum.vraptor.encoding</span><span class="textag">&lt;/param-name&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-value&gt;</span><span class="texnormal">UTF-8</span><span class="textag">&lt;/param-value&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal"></span><span class="textag">&lt;/context-param&gt;</span></code></div>
-	    	<span class="paragraph">Assim todas as suas p&aacute;ginas e dados passados para formul&aacute;rio usar&atilde;o o encoding UTF-8,
-evitando problemas de acentua&ccedil;&atilde;o.</span>
+	    	<p>Assim todas as suas p&aacute;ginas e dados passados para formul&aacute;rio usar&atilde;o o encoding UTF-8,
+evitando problemas de acentua&ccedil;&atilde;o.</p>
 		
 
 </div><!-- content -->

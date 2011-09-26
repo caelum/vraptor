@@ -115,34 +115,38 @@
 
 
 <h3 class="section">Default</h3>
-	    	<span class="paragraph">VRaptor registers a default set of converters for your day-to-day use.</span>
+	    	<p>VRaptor registers a default set of converters for your day-to-day use.</p>
 		
 
 <h3 class="section">Primitive types</h3>
-	    	<span class="paragraph">All primitive types (int, long etc) are supported.</span>
-	    	<span class="paragraph">If the request parameter is empty or null, primitive type variables will be set to its default
-value, as if it was a class attribute. In general:</span>
-	    	<ul class="list"><li><span class="paragraph">boolean - false</span></li><li><span class="paragraph">short, int, long, double, float, byte - 0</span></li><li><span class="paragraph">char - caracter de c&oacute;digo 0</span></li></ul>
+	    	<p>All primitive types (int, long etc) are supported.</p>
+	    	<p>If the request parameter is empty or null, primitive type variables will be set to its default
+value, as if it was a class attribute. In general:</p>
+	    	<ul><li><p>boolean - false</p></li><li><p>short, int, long, double, float, byte - 0</p></li><li><p>char - caracter de c&oacute;digo 0</p></li></ul>
 		
 
 <h3 class="section">Primitive type wrappers</h3>
-	    	<span class="paragraph">All primitive type wrappers (Integer, Long, Character, Boolean etc) are supported.</span>
+	    	<p>All primitive type wrappers (Integer, Long, Character, Boolean etc) are supported.</p>
 		
 
 <h3 class="section">Enum</h3>
-	    	<span class="paragraph">Enums are also supported using the element's name or ordinal value.
-In the following example, either 1 or DEBIT values are converted to Type.DEBIT:</span>
-	    	<div class="java"><code class="java">public&nbsp;enum&nbsp;Type&nbsp;{<br />
-&nbsp;&nbsp;&nbsp;&nbsp;CREDIT,&nbsp;DEBIT<br />
-}</code></div>
+	    	<p>Enums are also supported using the element's name or ordinal value.
+In the following example, either 1 or DEBIT values are converted to Type.DEBIT:</p>
+	    	<pre class="code text">
+
+public enum Type {
+	CREDIT, DEBIT
+}
+
+</pre>
 		
 
 <h3 class="section">BigInteger and BigDecimal</h3>
-	    	<span class="paragraph">Both are supported using your JVM's default locale.</span>
+	    	<p>Both are supported using your JVM's default locale.</p>
 		
 
 <h3 class="section">Localized BigDecimal, Double e Float</h3>
-	    	<span class="paragraph">Since version 3.1.2, VRaptor also supports localization for these types. In order to use them you must add to your web.xml:</span>
+	    	<p>Since version 3.1.2, VRaptor also supports localization for these types. In order to use them you must add to your web.xml:</p>
 	    	<div class="xml"><code class="xml"><span class="textag">&lt;context-param&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-name&gt;</span><span class="texnormal">br.com.caelum.vraptor.packages</span><span class="textag">&lt;/param-name&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-value&gt;</span><span class="texnormal"><br /></span>
@@ -150,7 +154,7 @@ In the following example, either 1 or DEBIT values are converted to Type.DEBIT:<
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;br.com.caelum.vraptor.converter.l10n<br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;/param-value&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal"></span><span class="textag">&lt;/context-param&gt;</span></code></div>
-	    	<span class="paragraph">The converters uses the JVM's default locale. You can override the JVM locale adding these lines in your web.xml:</span>
+	    	<p>The converters uses the JVM's default locale. You can override the JVM locale adding these lines in your web.xml:</p>
 	    	<div class="xml"><code class="xml"><span class="textag">&lt;context-param&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-name&gt;</span><span class="texnormal">javax.servlet.jsp.jstl.fmt.locale</span><span class="textag">&lt;/param-name&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-value&gt;</span><span class="texnormal">pt_BR</span><span class="textag">&lt;/param-value&gt;</span><span class="texnormal"><br /></span>
@@ -158,55 +162,71 @@ In the following example, either 1 or DEBIT values are converted to Type.DEBIT:<
 		
 
 <h3 class="section">Calendar and Date</h3>
-	    	<span class="paragraph">Both LocaleBasedCalendarConverter and LocaleBasedDateConverter are based on the user's locale,
-defined using JSTL pattern to understand the parameter's format.</span>
-	    	<span class="paragraph">For example, if the locale is pt-br, then "18/09/1981" stands for September 18th 1981.
-On the other hand, if the locale is en, the same date is formatted as "09/18/1981".</span>
+	    	<p>Both LocaleBasedCalendarConverter and LocaleBasedDateConverter are based on the user's locale,
+defined using JSTL pattern to understand the parameter's format.</p>
+	    	<p>For example, if the locale is pt-br, then "18/09/1981" stands for September 18th 1981.
+On the other hand, if the locale is en, the same date is formatted as "09/18/1981".</p>
 		
 
 <h3 class="section">Interface</h3>
-	    	<span class="paragraph">All converters must implement VRaptor's Converter interface.
+	    	<p>All converters must implement VRaptor's Converter interface.
 The concrete class will define which type it is able to convert, and will be invoked
 with a request parameter, the target type and a resource bundle containing i18n messages,
-useful if you wish to raise a ConversionException in case of convertion errors.</span>
-	    	<div class="java"><code class="java">public&nbsp;interface&nbsp;Converter&lt;T&gt;&nbsp;{<br />
-&nbsp;&nbsp;&nbsp;&nbsp;T&nbsp;convert(String&nbsp;value,&nbsp;Class&lt;?&nbsp;extends&nbsp;T&gt;&nbsp;type,&nbsp;ResourceBundle&nbsp;bundle);<br />
-}</code></div>
-	    	<span class="paragraph">Also, your must tell VRaptor (not the compiler) which type your converter is able to handle. You do that by annotating your converter class with @Convert:</span>
-	    	<div class="java"><code class="java">@Convert(Long.class)<br />
-public&nbsp;class&nbsp;LongConverter&nbsp;implements&nbsp;Converter&lt;Long&gt;&nbsp;{<br />
-&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;...<br />
-}</code></div>
-	    	<span class="paragraph">Finally, don't forget to specify the scope of your converter, just like you do with any other resource in VRaptor.
-For example, if your converter doesn't need any user specific information, it can be registered as application scoped and only one instance of that converter will be created:</span>
-	    	<div class="java"><code class="java">@Convert(Long.class)<br />
-@ApplicationScoped<br />
-public&nbsp;class&nbsp;LongConverter&nbsp;implements&nbsp;Converter&lt;Long&gt;&nbsp;{<br />
-&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;...<br />
-}</code></div>
-	    	<span class="paragraph">In the following lines, you can see a LongConverter implementation, showing how simple it is to assemble all the information mentioned above:</span>
-	    	<div class="java"><code class="java">@Convert(Long.class)<br />
-@ApplicationScoped<br />
-public&nbsp;class&nbsp;LongConverter&nbsp;implements&nbsp;Converter&lt;Long&gt;&nbsp;{<br />
-<br />
-&nbsp;&nbsp;&nbsp;&nbsp;public&nbsp;Long&nbsp;convert(String&nbsp;value,&nbsp;Class&lt;?&nbsp;extends&nbsp;Long&gt;&nbsp;type,&nbsp;ResourceBundle&nbsp;bundle)&nbsp;{<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(value&nbsp;==&nbsp;null&nbsp;||&nbsp;value.equals(""))&nbsp;{<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;null;<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;try&nbsp;{<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;Long.valueOf(value);<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;catch&nbsp;(NumberFormatException&nbsp;e)&nbsp;{<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;throw&nbsp;new&nbsp;<br />
-&nbsp;&nbsp;&nbsp;&nbsp;ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_integer"),&nbsp;value));<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br />
-&nbsp;&nbsp;&nbsp;&nbsp;}<br />
-<br />
-}</code></div>
+useful if you wish to raise a ConversionException in case of convertion errors.</p>
+	    	<pre class="code text">
+
+public interface Converter&lt;T&gt; {
+    T convert(String value, Class&lt;? extends T&gt; type, ResourceBundle bundle);
+}
+
+</pre>
+	    	<p>Also, your must tell VRaptor (not the compiler) which type your converter is able to handle. You do that by annotating your converter class with @Convert:</p>
+	    	<pre class="code text">
+
+@Convert(Long.class)
+public class LongConverter implements Converter&lt;Long&gt; {
+	// ...
+}
+
+</pre>
+	    	<p>Finally, don't forget to specify the scope of your converter, just like you do with any other resource in VRaptor.
+For example, if your converter doesn't need any user specific information, it can be registered as application scoped and only one instance of that converter will be created:</p>
+	    	<pre class="code text">
+
+@Convert(Long.class)
+@ApplicationScoped
+public class LongConverter implements Converter&lt;Long&gt; {
+	// ...
+}
+
+</pre>
+	    	<p>In the following lines, you can see a LongConverter implementation, showing how simple it is to assemble all the information mentioned above:</p>
+	    	<pre class="code text">
+
+@Convert(Long.class)
+@ApplicationScoped
+public class LongConverter implements Converter&lt;Long&gt; {
+
+    public Long convert(String value, Class&lt;? extends Long&gt; type, ResourceBundle bundle) {
+        if (value == null || value.equals("")) {
+            return null;
+        }
+        try {
+            return Long.valueOf(value);
+        } catch (NumberFormatException e) {
+			throw new 
+	ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_integer"), value));
+        }
+    }
+
+}
+
+</pre>
 		
 
 <h3 class="section">Registering a new converter</h3>
-	    	<span class="paragraph">No further configuration is needed except implementing the Converter interface and annotating
-the converter class with @Convert for your custom converter to be registered in VRaptor's container.</span>
+	    	<p>No further configuration is needed except implementing the Converter interface and annotating
+the converter class with @Convert for your custom converter to be registered in VRaptor's container.</p>
 		
 
 <h3 class="section">More complex converters</h3>

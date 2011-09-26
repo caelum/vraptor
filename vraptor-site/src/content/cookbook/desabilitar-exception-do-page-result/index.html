@@ -84,11 +84,15 @@
 		
 									<li><a class="link_toc" href="../../cookbook/evitando-que-o-browser-faca-cache-das-paginas/">10. Evitando que o browser faça cache das páginas</a></li>
 		
-									<li><a class="link_toc" href="../../cookbook/usando-o-header-referer-para-fazer-redirecionamentos/">11. Usando o Header Referer para fazer redirecionamentos</a></li>
+									<li><a class="link_toc" href="../../cookbook/usando-objectify-com-vraptor/">11. Usando Objectify com VRaptor</a></li>
 		
-									<li><a class="link_toc" href="../../cookbook/configurando-o-vraptor-na-locaweb/">12. Configurando o VRaptor na Locaweb</a></li>
+									<li><a class="link_toc" href="../../cookbook/usando-o-static-scanning-no-gae-j/">12. Usando o Static Scanning no GAE/J</a></li>
 		
-									<li><a class="link_toc" href="../../cookbook/vraptor-e-tiles-2-2/">13. VRaptor e Tiles 2.2</a></li>
+									<li><a class="link_toc" href="../../cookbook/usando-o-header-referer-para-fazer-redirecionamentos/">13. Usando o Header Referer para fazer redirecionamentos</a></li>
+		
+									<li><a class="link_toc" href="../../cookbook/configurando-o-vraptor-na-locaweb/">14. Configurando o VRaptor na Locaweb</a></li>
+		
+									<li><a class="link_toc" href="../../cookbook/vraptor-e-tiles-2-2/">15. VRaptor e Tiles 2.2</a></li>
 		
                 </ol>
             </div><!-- submenu-->
@@ -97,10 +101,10 @@
 	
 		<h2 class="chapter">Desabilitar exception do Page Result</h2>
 
-		<span class="paragraph">Quando voc&ecirc; usa redirecionamentos para p&aacute;gina:</span><div class="java"><code class="java">
-<span class="java10">result.use</span><span class="java8">(</span><span class="java10">Results.page</span><span class="java8">())</span><span class="java10">.forward</span><span class="java8">(</span><span class="java10">url</span><span class="java8">)</span><span class="java10">;</span></code></div><span class="paragraph">e tenta passar uma URL que &eacute; tratada por alguma l&oacute;gica da sua aplica&ccedil;&atilde;o, o VRaptor
-vai lan&ccedil;ar uma exce&ccedil;&atilde;o falando para voc&ecirc; usar o <code class="inlineCode">result.use(logic())</code> correspondente.
-Por exemplo:</span><div class="java"><code class="java">
+		<p>Quando voc&ecirc; usa redirecionamentos para p&aacute;gina:</p><div class="java"><code class="java">
+<span class="java10">result.use</span><span class="java8">(</span><span class="java10">Results.page</span><span class="java8">())</span><span class="java10">.forward</span><span class="java8">(</span><span class="java10">url</span><span class="java8">)</span><span class="java10">;</span></code></div><p>e tenta passar uma URL que &eacute; tratada por alguma l&oacute;gica da sua aplica&ccedil;&atilde;o, o VRaptor
+vai lan&ccedil;ar uma exce&ccedil;&atilde;o falando para voc&ecirc; usar o <code>result.use(logic())</code> correspondente.
+Por exemplo:</p><div class="java"><code class="java">
 <span class="java4">public class </span><span class="java10">TesteController </span><span class="java8">{<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java16">@Path</span><span class="java8">(</span><span class="java5">&#34;/teste&#34;</span><span class="java8">)<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">teste</span><span class="java8">() {}<br />
@@ -110,7 +114,7 @@ Por exemplo:</span><div class="java"><code class="java">
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java3">// vai lan&ccedil;ar uma exce&ccedil;ão, falando para voc&ecirc; usar o c&oacute;digo<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // result.use(logic()).redirectTo(TesteController.class).teste();<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
-}</span></code></div><span class="paragraph">Se voc&ecirc; quiser desabilitar esta exce&ccedil;&atilde;o, voc&ecirc; pode criar a seguinte classe:</span><div class="java"><code class="java">
+}</span></code></div><p>Se voc&ecirc; quiser desabilitar esta exce&ccedil;&atilde;o, voc&ecirc; pode criar a seguinte classe:</p><div class="java"><code class="java">
 <span class="java16">@Component<br />
 </span><span class="java4">public class </span><span class="java10">MyPageResult </span><span class="java4">extends </span><span class="java10">DefaultPageResult </span><span class="java8">{<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java3">// delega o construtor<br />

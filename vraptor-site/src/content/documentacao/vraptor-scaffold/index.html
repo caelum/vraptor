@@ -117,96 +117,189 @@
 	
 		<h2 class="chapter">VRaptor Scaffold</h2>
 
-		<span class="paragraph">O VRaptor 3 agora possui uma extens&atilde;o chamada VRaptor Scaffold, 
-que ter por finalidade facilitar a configura&ccedil;&atilde;o de novos projetos e plugins.</span>
+		<p>O VRaptor 3 agora possui uma extens&atilde;o chamada VRaptor Scaffold, 
+que ter por finalidade facilitar a configura&ccedil;&atilde;o de novos projetos e plugins.</p>
 
 
 <h3 class="section">Instalação</h3>
-	    	<span class="paragraph">Para instalar o vraptor scaffold &eacute; necess&aacute;rio ter instalado o ruby e o rubygems.
-Voc&ecirc; pode encontrar informa&ccedil;&otilde;es de instala&ccedil;&atilde;o no seguinte endere&ccedil;o <a class="link" target="_blank" href="http://www.ruby-lang.org/pt/downloads">http://www.ruby-lang.org/pt/downloads</a> .
-Tendo isso instalado basta executar o comando a seguir.</span>
-	    	<div class="java"><code class="java">gem&nbsp;install&nbsp;vraptor-scaffold</code></div>
+	    	<p>Para instalar o vraptor scaffold &eacute; necess&aacute;rio ter instalado o ruby e o rubygems.
+Voc&ecirc; pode encontrar informa&ccedil;&otilde;es de instala&ccedil;&atilde;o no seguinte endere&ccedil;o <a href="http://www.ruby-lang.org/pt/downloads">http://www.ruby-lang.org/pt/downloads</a> .
+Tendo isso instalado basta executar o comando a seguir.</p>
+	    	<pre class="code text">
+
+gem install vraptor-scaffold
+
+</pre>
 		
 
 <h3 class="section">Começando um projeto</h3>
-	    	<span class="paragraph">Abra um terminal e digite</span>
-	    	<div class="java"><code class="java">vraptor&nbsp;new&nbsp;onlinestore</code></div>
-	    	<span class="paragraph">Esse comando vai criar toda a estrutra da aplica&ccedil;&atilde;o, ap&oacute;s isso entre na pasta onlinestore 
-e execute a task jetty do ant</span>
-	    	<div class="java"><code class="java">ant&nbsp;jetty.run</code></div>
-	    	<span class="paragraph">Abra o browser no endere&ccedil;o <a class="link" target="_blank" href="http://localhost:8080">http://localhost:8080</a> e voc&ecirc; deve ver <strong class="definition">It works!</strong>.</span>
-	    	<span class="paragraph">Agora vamos criar um cadastro completo(CRUD) de produtos para nossa loja virtual, 
-para isso basta executar</span>
-	    	<div class="java"><code class="java">vraptor&nbsp;scaffold&nbsp;product&nbsp;name:string&nbsp;value:double</code></div>
-	    	<span class="paragraph">Execute novamente</span>
-	    	<div class="java"><code class="java">ant&nbsp;jetty.run</code></div>
-	    	<span class="paragraph">Acesse <a class="link" target="_blank" href="http://localhost:8080/products">http://localhost:8080/products</a></span>
+	    	<p>Abra um terminal e digite</p>
+	    	<pre class="code text">
+
+vraptor new onlinestore
+
+</pre>
+	    	<p>Esse comando vai criar toda a estrutra da aplica&ccedil;&atilde;o, ap&oacute;s isso entre na pasta onlinestore 
+e execute a task jetty do ant</p>
+	    	<pre class="code text">
+
+ant jetty.run
+
+</pre>
+	    	<p>Abra o browser no endere&ccedil;o <a href="http://localhost:8080">http://localhost:8080</a> e voc&ecirc; deve ver <strong>It works!</strong>.</p>
+	    	<p>Agora vamos criar um cadastro completo(CRUD) de produtos para nossa loja virtual, 
+para isso basta executar</p>
+	    	<pre class="code text">
+
+vraptor scaffold product name:string value:double
+
+</pre>
+	    	<p>Execute novamente</p>
+	    	<pre class="code text">
+
+ant jetty.run
+
+</pre>
+	    	<p>Acesse <a href="http://localhost:8080/products">http://localhost:8080/products</a></p>
 		
 
 <h3 class="section">Package</h3>
-	    	<span class="paragraph">O pacote raiz por padr&atilde;o &eacute; <code class="inlineCode">app</code>, para mudar isso crie a aplica&ccedil;&atilde;o com o seguinte comando</span>
-	    	<div class="java"><code class="java">vraptor&nbsp;new&nbsp;onlinestore&nbsp;--package=br.com.caelum</code></div>
+	    	<p>O pacote raiz por padr&atilde;o &eacute; <code>app</code>, para mudar isso crie a aplica&ccedil;&atilde;o com o seguinte comando</p>
+	    	<pre class="code text">
+
+vraptor new onlinestore --package=br.com.caelum
+
+</pre>
+	    	<p>Voc&ecirc; tamb&eacute;m pode configurar os pacotes de modelos, controllers e reposit&oacute;rios:</p>
+	    	<pre class="code text">
+
+vraptor new onlinestore --package=br.com.caelum -m modelo -c controlador -r repositorio
+
+</pre>
 		
 
-<h3 class="section">Maven</h3>
-	    	<span class="paragraph">Por padr&atilde;o a aplica&ccedil;&atilde;o &eacute; criada com o ant com ferramenta de build e o ivy como gerenciador de depend&ecirc;ncias,
-&eacute; pos&iacute;vel utilizar o maven 2, basta criar o aplica&ccedil;&atilde;o com</span>
-	    	<div class="java"><code class="java">vraptor&nbsp;new&nbsp;onlinestore&nbsp;--build-tool=mvn</code></div>
-	    	<span class="paragraph">Execute</span>
-	    	<div class="java"><code class="java">mvn&nbsp;jetty:run</code></div>
-	    	<span class="paragraph">para iniciar a aplica&ccedil;&atilde;o</span>
+<h3 class="section">Build: Maven, Gradle ou Ivy</h3>
+	    	<p>O vraptor-scaffold gera um projeto com ant e ivy por padr&atilde;o, mas voc&ecirc; pode
+escolher outra ferramenta de build com um simples comando na hora de criar
+seu projeto:</p>
+	    	<pre class="code text">
+
+# for maven
+vraptor new onlinestore --build-tool=mvn
+
+# for gradle
+vraptor new onlinestore --build-tool=gradle
+
+</pre>
+	    	<p>Ao usar gradle, utilize</p>
+	    	<pre class="code text">
+gradle jettyRun
+</pre>
+	    	<p>para rodar a aplica&ccedil;&atilde;o.</p>
 		
 
-<h3 class="section">Gradle</h3>
-	    	<span class="paragraph">Gradle &eacute; uma ferramente de build que usa conceitos DRY para deixar o arquivo de build menor e de mais f&aacute;cil manuten&ccedil;&atilde;o, 
-e agora o VRaptor Scaffold vem com suporte ao gradle. Para utilizar &eacute; bem simples execute o comando</span>
-	    	<div class="java"><code class="java">vraptor&nbsp;new&nbsp;onlinestore&nbsp;--build-tool=gradle</code></div>
-	    	<span class="paragraph">Execute</span>
-	    	<div class="java"><code class="java">gradle&nbsp;jettyRun</code></div>
-	    	<span class="paragraph">para iniciar a aplica&ccedil;&atilde;o</span>
-		
+<h3 class="section">ORM: JPA ou Hibernate, connection pool</h3>
+	    	<p>Um projeto novo j&aacute; vem por padr&atilde;o com o c3p0 configurado.
+Al&eacute;m disso voc&ecirc; pode escolher entre JPA (EntityManager, padr&atilde;o), ou 
+Hibernate (Session), ao criar seu projeto:</p>
+	    	<pre class="code text">
 
-<h3 class="section">Instalando plugins do VRaptor</h3>
-	    	<span class="paragraph">Para instalar plugins do vraptor abra o terminal na raiz do projeto e digite</span>
-	    	<div class="java"><code class="java">vraptor&nbsp;plugin&nbsp;nome_do_plugin&nbsp;vers&atilde;o_do_plugin&nbsp;plugin_org</code></div>
-	    	<span class="paragraph">O par&acirc;metro plugin_org &eacute; opcional e o seu valor default &eacute; br.com.caelum.vraptor</span>
+vraptor new onlinestore -o=jpa
+vraptor new onlinestore -o=hibernate
+
+</pre>
+		
 
 <h3 class="section">Freemarker</h3>
-	    	<span class="paragraph">O template engine padr&atilde;o &eacute; jsp, para utilizar o freemarker, crie a aplica&ccedil;&atilde;o com</span>
-	    	<div class="java"><code class="java">vraptor&nbsp;new&nbsp;onlinestore&nbsp;--template-engine=ftl</code></div>
+	    	<p>O template engine padr&atilde;o &eacute; jsp, para utilizar o freemarker, crie a aplica&ccedil;&atilde;o com</p>
+	    	<pre class="code text">
+
+vraptor new onlinestore --template-engine=ftl
+
+</pre>
 		
 
 <h3 class="section">Eclipse</h3>
-	    	<span class="paragraph">Se voc&ecirc; optou pelo maven execute</span>
-	    	<div class="java"><code class="java">mvn&nbsp;eclipse:eclipse</code></div>
-	    	<span class="paragraph">Para gerar os arquivos de configura&ccedil;&atilde;o do eclipse, ap&oacute;s isso &eacute; so importar o projeto normalmente.
-Se voc&ecirc; optou pelo ant os arquivos de configura&ccedil;&atilde;o ser&atilde;o gerados no momento em que criar 
-o projeto, &eacute; poss&iacute;vel pular a cria&ccedil;&atilde;o desses arquivos com o comando</span>
-	    	<div class="java"><code class="java">vraptor&nbsp;new&nbsp;onlinestore&nbsp;--skip-eclipse</code></div>
+	    	<p>Se voc&ecirc; optou pelo maven execute</p>
+	    	<pre class="code text">
+
+mvn eclipse:eclipse
+
+</pre>
+	    	<p>Para gerar os arquivos de configura&ccedil;&atilde;o do eclipse, ap&oacute;s isso apenas fa&ccedil;a a importa&ccedil;&atilde;o do projeto normalmente.</p>
+	    	<p>Se voc&ecirc; optou pelo ant os arquivos de configura&ccedil;&atilde;o ser&atilde;o gerados no momento em que criar o projeto, n&atilde;o se esque&ccedil;a de executar</p>
+	    	<pre class="code text">
+
+ant compile
+
+</pre>
+	    	<p>para baixar todas as depend&ecirc;ncias antes de importar o projeto.</p>
+	    	<p>&Eacute; poss&iacute;vel pular a cria&ccedil;&atilde;o desses arquivos com o comando</p>
+	    	<pre class="code text">
+
+vraptor new onlinestore --skip-eclipse
+
+</pre>
 		
 
 <h3 class="section">Tipos de atributos suportado</h3>
-	    	<span class="paragraph">&Eacute; poss&iacute;vel gerar um CRUD com os seguintes atributos: <code class="inlineCode">boolean, double, float, short, integer, long, string e text</code>.</span>
+	    	<p>&Eacute; poss&iacute;vel gerar um CRUD com os seguintes atributos: <code>boolean, double, float, short, integer, long, string e text</code>.</p>
+		
+
+<h3 class="section">Plugins</h3>
+	    	<p>Plugins do vraptor s&atilde;o facilmente instalados atrav&eacute;s do comando</p>
+	    	<pre class="code text">
+
+vraptor plugin simple-email -v 1.0.0
+
+</pre>
+	    	<p>Voc&ecirc; pode encontrar uma lista de plugins dispon&iacute;veis em https://github.com/caelum/vraptor-contrib</p>
+		
+
+<h3 class="section">jQuery</h3>
+	    	<p>A vers&atilde;o do jQuery &eacute; sempre a &uacute;ltima dispon&iacute;vel para download, para utilizar uma vers&atilde;o anterior use o comando:</p>
+	    	<pre class="code text">
+
+vraptor new onlinestore -j 1.4.4
+
+</pre>
+		
+
+<h3 class="section">Heroku</h3>
+	    	<p>Agora &eacute; poss&iacute;vel fazer um deploy de qualquer aplica&ccedil;&atilde;o java no Heroku com um simples:</p>
+	    	<pre class="code text">
+
+git push heroku master
+
+</pre>
+	    	<p>E o vrpator-scaffold j&aacute; tem um comando que gera toda a
+aplica&ccedil;&atilde;o do jeito que o Heroku espera. Para isso basta utilizar o comando:</p>
+	    	<pre class="code text">
+
+vraptor new onlinestore --heroku
+
+</pre>
+	    	<p>Depois &eacute; s&oacute; fazer o deploy da sua aplica&ccedil;&atilde;o seguindo os passos do Heroku.
+Para mais informa&ccedil;&otilde;es acesse <a href="http://www.heroku.com/java">http://www.heroku.com/java</a></p>
 		
 
 <h3 class="section">Comando Help</h3>
-	    	<span class="paragraph">O VRaptor Scaffold est&aacute; dividindo basicamente em 2 geradores o "new" que &eacute; respons&aacute;vel por
-criar a estrutura da aplica&ccedil;&atilde;o e o "scaffold" que &eacute; respos&aacute;vel por gerar os CRUDs.
-&Eacute; poss&iacute;vel ver todas as op&ccedil;&otilde;es de customiza&ccedil;&atilde;o dos geradores.</span>
-	    	<div class="java"><code class="java">vraptor&nbsp;new&nbsp;-h</code></div>
-	    	<div class="java"><code class="java">vraptor&nbsp;scaffold&nbsp;-h</code></div>
-		
+	    	<p>Para visualizar a lista de comandos disponibilizados pelo vraptor-scaffold, execute:</p>
+	    	<pre class="code text">
 
-<h3 class="section">Spring</h3>
-	    	<span class="paragraph">O VRaptor utiliza por padr&atilde;o o Spring 2.5 como container D.I, para utilizar a vers&atilde;o 3 do Spring execute</span>
-	    	<div class="java"><code class="java">vraptor&nbsp;new&nbsp;onlinestore&nbsp;--spring3</code></div>
+vraptor -h
+
+</pre>
+	    	<p>vraptor new -h
+vraptor scaffold -h
+vraptor plugin -h</p>
 		
 
 <h3 class="section">Contribuindo</h3>
-	    	<span class="paragraph">O projeto est&aacute; sendo desenvolvido em ruby e o c&oacute;digo fonte est&aacute; hospedado no github 
-no seguinte endere&ccedil;o <a class="link" target="_blank" href="http://github.com/caelum/vraptor-scaffold">http://github.com/caelum/vraptor-scaffold</a> .
+	    	<p>O projeto est&aacute; sendo desenvolvido em ruby e o c&oacute;digo fonte est&aacute; hospedado no github 
+no seguinte endere&ccedil;o https://github.com/caelum/vraptor-scaffold .
 Voc&ecirc; pode colaborar com o projeto fazendo o fork e enviando seu path ou uma nova funcionalide.
-N&atilde;o se esque&ccedil;a dos testes.</span>
+N&atilde;o se esque&ccedil;a dos testes.</p>
 		
 
 </div><!-- content -->

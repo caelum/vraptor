@@ -84,11 +84,15 @@
 		
 									<li><a class="link_toc" href="../../cookbook/evitando-que-o-browser-faca-cache-das-paginas/">10. Evitando que o browser faça cache das páginas</a></li>
 		
-									<li><a class="link_toc" href="../../cookbook/usando-o-header-referer-para-fazer-redirecionamentos/">11. Usando o Header Referer para fazer redirecionamentos</a></li>
+									<li><a class="link_toc" href="../../cookbook/usando-objectify-com-vraptor/">11. Usando Objectify com VRaptor</a></li>
 		
-									<li><a class="link_toc" href="../../cookbook/configurando-o-vraptor-na-locaweb/">12. Configurando o VRaptor na Locaweb</a></li>
+									<li><a class="link_toc" href="../../cookbook/usando-o-static-scanning-no-gae-j/">12. Usando o Static Scanning no GAE/J</a></li>
 		
-									<li><a class="link_toc" href="../../cookbook/vraptor-e-tiles-2-2/">13. VRaptor e Tiles 2.2</a></li>
+									<li><a class="link_toc" href="../../cookbook/usando-o-header-referer-para-fazer-redirecionamentos/">13. Usando o Header Referer para fazer redirecionamentos</a></li>
+		
+									<li><a class="link_toc" href="../../cookbook/configurando-o-vraptor-na-locaweb/">14. Configurando o VRaptor na Locaweb</a></li>
+		
+									<li><a class="link_toc" href="../../cookbook/vraptor-e-tiles-2-2/">15. VRaptor e Tiles 2.2</a></li>
 		
                 </ol>
             </div><!-- submenu-->
@@ -97,11 +101,15 @@
 	
 		<h2 class="chapter">Aceitando URLs com ou sem barra no final</h2>
 
-		<span class="paragraph"><strong class="definition"><em class="italic">por Tomaz Lavieri</em></strong></span><span class="paragraph">Para quem teve dificuldade como eu em conseguir determinar urls como</span><div class="java"><code class="java">@Path("produto/{produto.id}")</code></div><span class="paragraph">quando digitava a URI "/produto/1/" e o link n&atilde;o funcionava, segue abaixo uma modifica&ccedil;&atilde;o 
-que corrige o problema.</span><div class="box"><h3>Nota do editor</h3>
-<span class="paragraph">Isso n&atilde;o &eacute; necessariamente um problema... a URL /abc &eacute; diferente da /abc/
+		<p><strong><em>por Tomaz Lavieri</em></strong></p><p>Para quem teve dificuldade como eu em conseguir determinar urls como</p><pre class="code text">
+
+@Path("produto/{produto.id}")
+
+</pre><p>quando digitava a URI "/produto/1/" e o link n&atilde;o funcionava, segue abaixo uma modifica&ccedil;&atilde;o 
+que corrige o problema.</p><div class="box"><h4>Nota do editor</h4>
+<p>Isso n&atilde;o &eacute; necessariamente um problema... a URL /abc &eacute; diferente da /abc/
 portanto o comportamento de dar 404 &eacute; o esperado. Mas se voc&ecirc; quiser que sejam urls equivalentes
-voc&ecirc; pode escrever a classe abaixo.</span></div><div class="java"><code class="java">
+voc&ecirc; pode escrever a classe abaixo.</p></div><div class="java"><code class="java">
 <span class="java4">import </span><span class="java10">br.com.caelum.vraptor.Result;&nbsp; <br />
 </span><span class="java4">import </span><span class="java10">br.com.caelum.vraptor.core.RequestInfo;&nbsp; <br />
 </span><span class="java4">import </span><span class="java10">br.com.caelum.vraptor.http.route.ResourceNotFoundException;&nbsp; <br />

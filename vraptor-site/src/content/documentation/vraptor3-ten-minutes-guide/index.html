@@ -115,10 +115,10 @@
 
 
 <h3 class="section">Starting a project: an online store</h3>
-	    	<span class="paragraph">Let's start by downloading the <em class="italic">vraptor-blank-project</em> from 
-<a class="link" target="_blank" href="http://vraptor.caelum.com.br/download.jsp">http://vraptor.caelum.com.br/download.jsp</a> . This blank-project has the required configuration on 
-<code class="inlineCode">web.xml</code> and the dependencies on <code class="inlineCode">WEB-INF/lib</code> that are needed to start using VRaptor. </span>
-	    	<span class="paragraph">As you can see, the only required configuration in <code class="inlineCode">web.xml</code> is the VRaptor filter:</span>
+	    	<p>Let's start by downloading the <em>vraptor-blank-project</em> from 
+<a href="http://vraptor.caelum.com.br/download.jsp">http://vraptor.caelum.com.br/download.jsp</a> . This blank-project has the required configuration on 
+<code>web.xml</code> and the dependencies on <code>WEB-INF/lib</code> that are needed to start using VRaptor. </p>
+	    	<p>As you can see, the only required configuration in <code>web.xml</code> is the VRaptor filter:</p>
 	    	<div class="xml"><code class="xml"><span class="textag">&lt;filter&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;filter-name&gt;</span><span class="texnormal">vraptor</span><span class="textag">&lt;/filter-name&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;filter-class&gt;</span><span class="texnormal">br.com.caelum.vraptor.VRaptor</span><span class="textag">&lt;/filter-class&gt;</span><span class="texnormal"><br /></span>
@@ -130,21 +130,21 @@
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;dispatcher&gt;</span><span class="texnormal">FORWARD</span><span class="textag">&lt;/dispatcher&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;dispatcher&gt;</span><span class="texnormal">REQUEST</span><span class="textag">&lt;/dispatcher&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal"></span><span class="textag">&lt;/filter-mapping&gt;</span></code></div>
-	    	<span class="paragraph">You can also easily import this project on Eclipse, and run it right clicking on it and choosing
-<em class="italic">Run as... / Run on server...</em>. Choose a servlet container (or setup a new one) and then just go
-for <a class="link" target="_blank" href="http://localhost:8080/vraptor-blank-project/.">http://localhost:8080/vraptor-blank-project/.</a> </span>
-	    	<span class="paragraph">You can right click on the project name, go to <em class="italic">Properties</em> and in <em class="italic">Web Project Settings</em> you can change
-the context name to something better, like <code class="inlineCode">onlinestore</code>. Now if you run
-this example you should be able to access <a class="link" target="_blank" href="http://localhost:8080/onlinestore">http://localhost:8080/onlinestore</a> and see
-<strong class="definition">It works!</strong> on the browser.</span>
-	    	<div class="box"><h3>Note</h3>
-<span class="paragraph">If you are using a servlet 3.0 container, you dont even need the <code class="inlineCode">web.xml</code> at all,
-because VRaptor will configure the filter through the new web-fragments feature.</span></div>
+	    	<p>You can also easily import this project on Eclipse, and run it right clicking on it and choosing
+<em>Run as... / Run on server...</em>. Choose a servlet container (or setup a new one) and then just go
+for <a href="http://localhost:8080/vraptor-blank-project/.">http://localhost:8080/vraptor-blank-project/.</a> </p>
+	    	<p>You can right click on the project name, go to <em>Properties</em> and in <em>Web Project Settings</em> you can change
+the context name to something better, like <code>onlinestore</code>. Now if you run
+this example you should be able to access <a href="http://localhost:8080/onlinestore">http://localhost:8080/onlinestore</a> and see
+<strong>It works!</strong> on the browser.</p>
+	    	<div class="box"><h4>Note</h4>
+<p>If you are using a servlet 3.0 container, you dont even need the <code>web.xml</code> at all,
+because VRaptor will configure the filter through the new web-fragments feature.</p></div>
 		
 
 <h3 class="section">Product registry</h3>
-	    	<span class="paragraph">Let's start the system with a products registry. We need a class that will represent the products,
-and we'll use it to persist products on the database, with Hibernate:</span>
+	    	<p>Let's start the system with a products registry. We need a class that will represent the products,
+and we'll use it to persist products on the database, with Hibernate:</p>
 	    	<div class="java"><code class="java">
 <span class="java16">@Entity<br />
 </span><span class="java4">public class </span><span class="java10">Product </span><span class="java8">{<br />
@@ -157,19 +157,19 @@ and we'll use it to persist products on the database, with Hibernate:</span>
 &nbsp;&nbsp;&nbsp; </span><span class="java4">private </span><span class="java10">Double price;<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java3">//getter and setters<br />
 </span><span class="java8">}</span></code></div>
-	    	<span class="paragraph">We also need a class that will <em class="italic">control</em> the products' register, handling web requests.
-This class will be the Products <code class="inlineCode">Controller</code>:</span>
+	    	<p>We also need a class that will <em>control</em> the products' register, handling web requests.
+This class will be the Products <code>Controller</code>:</p>
 	    	<div class="java"><code class="java">
 <span class="java4">public class </span><span class="java10">ProductsController </span><span class="java8">{<br />
 }</span></code></div>
-	    	<span class="paragraph">ProductsController will expose URIs to be accessed through web, i.e, will expose resources of your
-application. And for indicate it, you must annotate it with <code class="inlineCode">@Resource</code>:</span>
+	    	<p>ProductsController will expose URIs to be accessed through web, i.e, will expose resources of your
+application. And for indicate it, you must annotate it with <code>@Resource</code>:</p>
 	    	<div class="java"><code class="java">
 <strong><span class="java16">@Resource<br /></strong>
 </span><span class="java4">public class </span><span class="java10">ProductsController </span><span class="java8">{<br />
 }</span></code></div>
-	    	<span class="paragraph">By using this annotation, all public methods of the annotated class will be reachable through web.
-For instance, if there is a <code class="inlineCode">list</code> method on the class:</span>
+	    	<p>By using this annotation, all public methods of the annotated class will be reachable through web.
+For instance, if there is a <code>list</code> method on the class:</p>
 	    	<div class="java"><code class="java">
 <strong><span class="java16">@Resource<br /></strong>
 </span><span class="java4">public class </span><span class="java10">ProductsController </span><span class="java8">{<br />
@@ -177,34 +177,34 @@ For instance, if there is a <code class="inlineCode">list</code> method on the c
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return new </span><span class="java10">ArrayList&lt;Product&gt;</span><span class="java8">()</span><span class="java10">;<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
 }</span></code></div>
-	    	<span class="paragraph">Then, VRaptor will automatically redirect all requests to the URI <code class="inlineCode">/products/list</code> to this method.
-The convention for URIs is: <code class="inlineCode">/&lt;controller_name&gt;/&lt;method_name&gt;</code>.</span>
-	    	<span class="paragraph">At the end of method execution, VRaptor will <code class="inlineCode">dispatch</code> the request to the jsp at
-<code class="inlineCode">/WEB-INF/jsp/products/list.jsp</code>. The convention for the default view is
-<code class="inlineCode">/WEB-INF/jsp/&lt;controller_name&gt;/&lt;method_name&gt;.jsp</code>.</span>
-	    	<span class="paragraph">The <code class="inlineCode">list</code> method will return a product list, so how can I get it on jsp? On VRaptor, 
+	    	<p>Then, VRaptor will automatically redirect all requests to the URI <code>/products/list</code> to this method.
+The convention for URIs is: <code>/&lt;controller_name&gt;/&lt;method_name&gt;</code>.</p>
+	    	<p>At the end of method execution, VRaptor will <code>dispatch</code> the request to the jsp at
+<code>/WEB-INF/jsp/products/list.jsp</code>. The convention for the default view is
+<code>/WEB-INF/jsp/&lt;controller_name&gt;/&lt;method_name&gt;.jsp</code>.</p>
+	    	<p>The <code>list</code> method will return a product list, so how can I get it on jsp? On VRaptor, 
 the method return value will be exported to the jsp by request attributes. In this case,
-the name of the exported attribute will be <code class="inlineCode">productList</code>, holding the method returned value:</span>
-	    	<span class="paragraph">list.jsp</span>
+the name of the exported attribute will be <code>productList</code>, holding the method returned value:</p>
+	    	<p>list.jsp</p>
 	    	<div class="xml"><code class="xml"><span class="textag">&lt;ul&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal"></span><span class="textag">&lt;c:forEach</span>&nbsp;<span class="texattrib">items=</span><span class="texvalue">"${productList}"</span>&nbsp;<span class="texattrib">var=</span><span class="texvalue">"product"</span><span class="textag">&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;li&gt;</span><span class="texnormal">&nbsp;${product.name}&nbsp;-&nbsp;${product.description}&nbsp;</span><span class="textag">&lt;/li&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal"></span><span class="textag">&lt;/c:forEach&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal"></span><span class="textag">&lt;/ul&gt;</span></code></div>
-	    	<span class="paragraph">The convention for the attribute names is pretty intuitive: if it is a collection, as it is the case,
-the name will be <code class="inlineCode">&lt;collection_type&gt;List</code>; if it is any other type, the name will be the class name
-with the first letter in lowercase, i.e, if the type is <code class="inlineCode">Product</code>, the name will be <code class="inlineCode">product</code>.</span>
-	    	<span class="paragraph">We will see further, in another chapter, that we can outject more than one object using
-<code class="inlineCode">Result</code>, where we can also name each exposed variable to the JSP.</span>
+	    	<p>The convention for the attribute names is pretty intuitive: if it is a collection, as it is the case,
+the name will be <code>&lt;collection_type&gt;List</code>; if it is any other type, the name will be the class name
+with the first letter in lowercase, i.e, if the type is <code>Product</code>, the name will be <code>product</code>.</p>
+	    	<p>We will see further, in another chapter, that we can outject more than one object using
+<code>Result</code>, where we can also name each exposed variable to the JSP.</p>
 		
 
 <h3 class="section">Creating ProductDao: Dependency Injection</h3>
-	    	<span class="paragraph">VRaptor widely uses the Dependency Injection and Inversion of Control concept.
+	    	<p>VRaptor widely uses the Dependency Injection and Inversion of Control concept.
 The whole idea is simple: if you need a resource, you won't create it, but will have it ready for 
-you when you ask for it. You can get more information about it on the Dependency Injection chapter.</span>
-	    	<span class="paragraph">We are returning a hard coded empty list on our list method. It would be more helpful if we
+you when you ask for it. You can get more information about it on the Dependency Injection chapter.</p>
+	    	<p>We are returning a hard coded empty list on our list method. It would be more helpful if we
 return a real list, for example all of registered products of the system. In order to do that,
-let's create a product DAO, for listing the products:</span>
+let's create a product DAO, for listing the products:</p>
 	    	<div class="java"><code class="java">
 <span class="java4">public class </span><span class="java10">ProductDao </span><span class="java8">{<br />
 <br />
@@ -213,7 +213,7 @@ let's create a product DAO, for listing the products:</span>
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
 &nbsp;&nbsp;&nbsp; <br />
 }</span></code></div>
-	    	<span class="paragraph">And in the ProductsController we might use the dao for listing products:</span>
+	    	<p>And in the ProductsController we might use the dao for listing products:</p>
 	    	<div class="java"><code class="java">
 <span class="java16">@Resource<br />
 </span><span class="java4">public class </span><span class="java10">ProductsController </span><span class="java8">{<br />
@@ -225,10 +225,10 @@ let's create a product DAO, for listing the products:</span>
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
 &nbsp;&nbsp;&nbsp; <br />
 }</span></code></div>
-	    	<span class="paragraph">We could create a new ProductDao inside the controller, but we can simply loose coupling by
+	    	<p>We could create a new ProductDao inside the controller, but we can simply loose coupling by
 receiving it on the class constructor, and letting VRaptor do its Dependency Management Magic
 and provide an instance of ProductDao when creating our controller! And for enabling this
-behavior we only have to annotate the ProductDao class with @Component:</span>
+behavior we only have to annotate the ProductDao class with @Component:</p>
 	    	<div class="java"><code class="java">
 <strong><span class="java16">@Component<br /></strong>
 </span><span class="java4">public class </span><span class="java10">ProductDao </span><span class="java8">{<br />
@@ -252,9 +252,9 @@ behavior we only have to annotate the ProductDao class with @Component:</span>
 		
 
 <h3 class="section">Add form: redirecting the request</h3>
-	    	<span class="paragraph">We have a Products listing, but no way to register products. Thus, let's create a
+	    	<p>We have a Products listing, but no way to register products. Thus, let's create a
 form for adding products. Since it is not a good idea to access the jsps directly,
-let's create an empty method that only redirects to a jsp:</span>
+let's create an empty method that only redirects to a jsp:</p>
 	    	<div class="java"><code class="java">
 <span class="java16">@Resource<br />
 </span><span class="java4">public class </span><span class="java10">ProductsController </span><span class="java8">{<br />
@@ -262,16 +262,16 @@ let's create an empty method that only redirects to a jsp:</span>
 &nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">form</span><span class="java8">() {<br />
 &nbsp;&nbsp;&nbsp; }<br />
 }</span></code></div>
-	    	<span class="paragraph">So we can access the form by URI <code class="inlineCode">/products/form</code>, and the form will be at
-<code class="inlineCode">/WEB-INF/jsp/products/form.jsp</code>:</span>
+	    	<p>So we can access the form by URI <code>/products/form</code>, and the form will be at
+<code>/WEB-INF/jsp/products/form.jsp</code>:</p>
 	    	<div class="xml"><code class="xml"><span class="textag">&lt;form</span>&nbsp;<span class="texattrib">action=</span><span class="texvalue">"&lt;c:url&nbsp;value="</span>/products/adiciona"<span class="textag">/&gt;</span><span class="texnormal">"&gt;<br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;Name:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;input</span>&nbsp;<span class="texattrib">type=</span><span class="texvalue">"text"</span>&nbsp;<span class="texattrib">name=</span><span class="texvalue">"product.name"</span>&nbsp;<span class="textag">/&gt;</span><span class="texnormal"><span class="textag">&lt;br/&gt;</span><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;Description:</span><span class="textag">&lt;input</span>&nbsp;<span class="texattrib">type=</span><span class="texvalue">"text"</span>&nbsp;<span class="texattrib">name=</span><span class="texvalue">"product.description"</span>&nbsp;<span class="textag">/&gt;</span><span class="texnormal"><span class="textag">&lt;br/&gt;</span><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;Price:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;input</span>&nbsp;<span class="texattrib">type=</span><span class="texvalue">"text"</span>&nbsp;<span class="texattrib">name=</span><span class="texvalue">"product.price"</span>&nbsp;<span class="textag">/&gt;</span><span class="texnormal"><span class="textag">&lt;br/&gt;</span><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;input</span>&nbsp;<span class="texattrib">type=</span><span class="texvalue">"submit"</span>&nbsp;<span class="texattrib">value=</span><span class="texvalue">"Save"</span>&nbsp;<span class="textag">/&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal"></span><span class="textag">&lt;/form&gt;</span></code></div>
-	    	<span class="paragraph">This form will save a product using the URI <code class="inlineCode">/products/add</code>, so we must create
-this method on the controller:</span>
+	    	<p>This form will save a product using the URI <code>/products/add</code>, so we must create
+this method on the controller:</p>
 	    	<div class="java"><code class="java">
 <span class="java16">@Resource<br />
 </span><span class="java4">public class </span><span class="java10">ProductsController </span><span class="java8">{<br />
@@ -279,12 +279,12 @@ this method on the controller:</span>
 &nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">add</span><span class="java8">() {<br />
 &nbsp;&nbsp;&nbsp; }<br />
 }</span></code></div>
-	    	<span class="paragraph">Look at the input names: <strong class="definition">product.name</strong>, <strong class="definition">product.description</strong> and <strong class="definition">product.price</strong>.
-If we receive a <code class="inlineCode">Product</code> named <code class="inlineCode">product</code> as parameter on add method, VRaptor will 
-set the fields <strong class="definition">name</strong>, <strong class="definition">description</strong> and <strong class="definition">price</strong> with the input values, using
-the corresponding setters on Product. The <strong class="definition">product.price</strong> parameter will also be converted
-into Double before being set on the product. More information on Converters chapter.</span>
-	    	<span class="paragraph">Thus, having the correct names on the form inputs, we can create the add method:</span>
+	    	<p>Look at the input names: <strong>product.name</strong>, <strong>product.description</strong> and <strong>product.price</strong>.
+If we receive a <code>Product</code> named <code>product</code> as parameter on add method, VRaptor will 
+set the fields <strong>name</strong>, <strong>description</strong> and <strong>price</strong> with the input values, using
+the corresponding setters on Product. The <strong>product.price</strong> parameter will also be converted
+into Double before being set on the product. More information on Converters chapter.</p>
+	    	<p>Thus, having the correct names on the form inputs, we can create the add method:</p>
 	    	<div class="java"><code class="java">
 <span class="java16">@Resource<br />
 </span><span class="java4">public class </span><span class="java10">ProductsController </span><span class="java8">{<br />
@@ -293,11 +293,11 @@ into Double before being set on the product. More information on Converters chap
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">dao.save</span><span class="java8">(</span><span class="java10">product</span><span class="java8">)</span><span class="java10">;<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
 }</span></code></div>
-	    	<span class="paragraph">Right after saving something on a form we usually want to be redirected to the listing
+	    	<p>Right after saving something on a form we usually want to be redirected to the listing
 or back to the form. In this case we want to be redirected to the products listing.
-For this purpose there is a VRaptor component: the <code class="inlineCode">Result</code>. It is responsible for 
+For this purpose there is a VRaptor component: the <code>Result</code>. It is responsible for 
 adding attributes on the request, and for dispatching to a different view. To get a Result
-instance you must receive it as a constructor parameter:</span>
+instance you must receive it as a constructor parameter:</p>
 	    	<div class="java"><code class="java">
 <span class="java16">@Resource<br />
 </span><span class="java4">public class </span><span class="java10">ProductsController </span><span class="java8">{<br />
@@ -306,29 +306,29 @@ instance you must receive it as a constructor parameter:</span>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">this</span><span class="java10">.result = result;<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
 }</span></code></div>
-	    	<span class="paragraph">In order to redirect to the listing, you can use the result object:</span>
+	    	<p>In order to redirect to the listing, you can use the result object:</p>
 	    	<div class="java"><code class="java">
 <span class="java10">result.redirectTo</span><span class="java8">(</span><span class="java10">ProductsController.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">.list</span><span class="java8">()</span><span class="java10">;</span></code></div>
-	    	<span class="paragraph">This code snippet can be read as: <em class="italic">As result, redirect to the 
+	    	<p>This code snippet can be read as: <em>As result, redirect to the 
 list method in ProductsController</em>. All redirect configuration is 100% java code, 
 with no strings involved! It's clear from the code that the result from your logic
 is not the default, and which one you're using. There is no need to worry about 
-configuration files. Furthermore, if you need to rename the <code class="inlineCode">list</code> method, there
+configuration files. Furthermore, if you need to rename the <code>list</code> method, there
 is no need to go through your entire application looking for redirects to this method,
-just use your usual refactoring IDE to do the rename.</span>
-	    	<span class="paragraph">Our <code class="inlineCode">add</code> method would look like this:</span>
+just use your usual refactoring IDE to do the rename.</p>
+	    	<p>Our <code>add</code> method would look like this:</p>
 	    	<div class="java"><code class="java">
 <span class="java4">public </span><span class="java9">void </span><span class="java10">add</span><span class="java8">(</span><span class="java10">Product product</span><span class="java8">) {<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java10">dao.add</span><span class="java8">(</span><span class="java10">product</span><span class="java8">)</span><span class="java10">;<br />
 &nbsp;&nbsp;&nbsp; result.redirectTo</span><span class="java8">(</span><span class="java10">ProductsController.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">.list</span><span class="java8">()</span><span class="java10">;<br />
 </span><span class="java8">}</span></code></div>
-	    	<span class="paragraph">You can get more info on <code class="inlineCode">Result</code> at the Views and Ajax chapter.</span>
+	    	<p>You can get more info on <code>Result</code> at the Views and Ajax chapter.</p>
 		
 
 <h3 class="section">Validation</h3>
-	    	<span class="paragraph">It wouldn't make sense adding a nameless product in the system, nor a negative value for it's price.
-Before adding the product, we need to check if it is a valid product - which has a name and a positive price. In case it's not valid, we want to get back to the form and show error messages.</span>
-	    	<span class="paragraph">In order to do that, we can use a VRaptor component: the Validator. You can get it in your Controller's constructor and use it like this:</span>
+	    	<p>It wouldn't make sense adding a nameless product in the system, nor a negative value for it's price.
+Before adding the product, we need to check if it is a valid product - which has a name and a positive price. In case it's not valid, we want to get back to the form and show error messages.</p>
+	    	<p>In order to do that, we can use a VRaptor component: the Validator. You can get it in your Controller's constructor and use it like this:</p>
 	    	<div class="java"><code class="java">
 <span class="java16">@Resource<br />
 </span><span class="java4">public class </span><span class="java10">ProductsController </span><span class="java8">{<br />
@@ -348,19 +348,19 @@ Before adding the product, we need to check if it is a valid product - which has
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; result.redirectTo</span><span class="java8">(</span><span class="java10">ProductsController.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">.list</span><span class="java8">()</span><span class="java10">;<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
 }</span></code></div>
-	    	<span class="paragraph">we can read the validation code as <em class="italic">Validate that the name of the product is not empty and that
+	    	<p>we can read the validation code as <em>Validate that the name of the product is not empty and that
 the product's price is bigger than zero. If an error occur, use the ProductsController form page as 
-the result</em>. Therefore, if the product name is empty, the "name.empty" internationalized message will be added to the "product.name" field. If any error occurs, the system will get the user back to the form page, with all fields set, and error messages that can be accessed like this:</span>
+the result</em>. Therefore, if the product name is empty, the "name.empty" internationalized message will be added to the "product.name" field. If any error occurs, the system will get the user back to the form page, with all fields set, and error messages that can be accessed like this:</p>
 	    	<div class="xml"><code class="xml"><span class="textag">&lt;c:forEach</span>&nbsp;<span class="texattrib">var=</span><span class="texvalue">"error"</span>&nbsp;<span class="texattrib">items=</span><span class="texvalue">"${errors}"</span><span class="textag">&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;${error.category}&nbsp;&nbsp;${error.message}</span><span class="textag">&lt;br</span>&nbsp;<span class="textag">/&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal"></span><span class="textag">&lt;/c:forEach&gt;</span></code></div>
-	    	<span class="paragraph">More information on Validation on, well, Validations chapter.</span>
-	    	<span class="paragraph">If you learnt what we said so far, you're able to make 90% of your application. Next sessions on 
-this tutorial show the solution for some of the most frequent problems that lay on that 10% left.</span>
-	    	<span class="paragraph">[sectin Using Hibernate to store Products]</span>
-	    	<span class="paragraph">Let's make a real implementation of ProductDao, now, using Hibernate to persist products. You'll 
+	    	<p>More information on Validation on, well, Validations chapter.</p>
+	    	<p>If you learnt what we said so far, you're able to make 90% of your application. Next sessions on 
+this tutorial show the solution for some of the most frequent problems that lay on that 10% left.</p>
+	    	<p>[sectin Using Hibernate to store Products]</p>
+	    	<p>Let's make a real implementation of ProductDao, now, using Hibernate to persist products. You'll 
 need a Session in your ProductDao. Using injection of dependencies, you'll have to declare you'll 
-receive a Session in your constructor.</span>
+receive a Session in your constructor.</p>
 	    	<div class="java"><code class="java">
 <span class="java16">@Component<br />
 </span><span class="java4">public class </span><span class="java10">ProductDao </span><span class="java8">{<br />
@@ -376,24 +376,24 @@ receive a Session in your constructor.</span>
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java3">//...<br />
 </span><span class="java8">}</span></code></div>
-	    	<span class="paragraph">But, wait, for VRaptor to know how to create that Session, and I can't simply put a @Component on 
+	    	<p>But, wait, for VRaptor to know how to create that Session, and I can't simply put a @Component on 
 the Session class because it is a Hibernate class. That's the reason why the ComponentFactory 
 interface was created. More info on creating your own ComponentFactories can be found in Components 
 chapter. You can also use the ComponentFactories available in VRaptor, as shown in the Utils 
-chapter.</span>
+chapter.</p>
 		
 
 <h3 class="section">Controlling transactions: Interceptors</h3>
-	    	<span class="paragraph">We often want to intercept as requests (or some of them) and execute a business logic, such as in a 
+	    	<p>We often want to intercept as requests (or some of them) and execute a business logic, such as in a 
 transaction control. That why VRaptor has interceptors. Learn more about them on the Interceptors' 
-chapter. There is also an implemented TransactionInterceptor in VRaptor - learn how to use it on the Utils chapter.</span>
+chapter. There is also an implemented TransactionInterceptor in VRaptor - learn how to use it on the Utils chapter.</p>
 		
 
 <h3 class="section">Shopping Cart: session components</h3>
-	    	<span class="paragraph">If we want to make a shopping cart in our system, we need some way to keep cart items in the user's 
+	    	<p>If we want to make a shopping cart in our system, we need some way to keep cart items in the user's 
 session. In order to do it, we can create a session scoped component, i.e., a component that will 
 last as long as the user session last. For that, simply create a component and annotate it with 
-@SessionScoped:</span>
+@SessionScoped:</p>
 	    	<div class="java"><code class="java">
 <span class="java16">@Component<br />
 @SessionScoped<br />
@@ -408,8 +408,8 @@ last as long as the user session last. For that, simply create a component and a
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">items.add</span><span class="java8">(</span><span class="java10">item</span><span class="java8">)</span><span class="java10">;<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
 }</span></code></div>
-	    	<span class="paragraph">As this shopping cart is a component, we can receive it on the shopping cart's Controller's 
-constructor:</span>
+	    	<p>As this shopping cart is a component, we can receive it on the shopping cart's Controller's 
+constructor:</p>
 	    	<div class="java"><code class="java">
 <span class="java16">@Resource<br />
 </span><span class="java4">public class </span><span class="java10">ShoppingCartController </span><span class="java8">{<br />
@@ -428,24 +428,28 @@ constructor:</span>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return </span><span class="java10">cart.getAllItems</span><span class="java8">()</span><span class="java10">;<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
 }</span></code></div>
-	    	<span class="paragraph">Besides session scope, there is also the application scope and the @ApplicationScoped annotation.
-Components annotated with @ApplicationScoped will be created only once for the whole application.</span>
+	    	<p>Besides session scope, there is also the application scope and the @ApplicationScoped annotation.
+Components annotated with @ApplicationScoped will be created only once for the whole application.</p>
 		
 
 <h3 class="section">A bit of REST</h3>
-	    	<span class="paragraph">On REST's ideal of URIs identifying resources on the web to make good use of the structural 
+	    	<p>On REST's ideal of URIs identifying resources on the web to make good use of the structural 
 advantages the HTTP protocol provides us, observe how simple it is, in VRaptor, mapping the 
 different HTTP methods in the same URI to invoke different Controllers' methods. Suppose we 
-want to use the following URIs on the products' crud:</span>
-	    	<div class="java"><code class="java">GET&nbsp;/products&nbsp;-&nbsp;list&nbsp;all&nbsp;products<br />
-POST&nbsp;/products&nbsp;-&nbsp;insert&nbsp;a&nbsp;product<br />
-GET&nbsp;/products/{id}&nbsp;-&nbsp;show&nbsp;product&nbsp;identified&nbsp;by&nbsp;id<br />
-PUT&nbsp;/products/{id}&nbsp;-&nbsp;update&nbsp;product&nbsp;identified&nbsp;by&nbsp;id<br />
-DELETE&nbsp;/products/{id}&nbsp;-&nbsp;delete&nbsp;product&nbsp;identified&nbsp;by&nbsp;id</code></div>
-	    	<span class="paragraph">In order to create a REST behaviour in VRaptor, we can use the @Path annotations - that changes
+want to use the following URIs on the products' crud:</p>
+	    	<pre class="code text">
+
+	GET /products - list all products
+	POST /products - insert a product
+	GET /products/{id} - show product identified by id
+	PUT /products/{id} - update product identified by id
+	DELETE /products/{id} - delete product identified by id
+
+</pre>
+	    	<p>In order to create a REST behaviour in VRaptor, we can use the @Path annotations - that changes
 the URI to access a given method. Also, we use the annotations that indicate which HTTP methods 
-are allowed to call that logic - @Get, @Post, @Delete and @Put.</span>
-	    	<span class="paragraph">A REST version of our <code class="inlineCode">ProductsControler</code> would be something like that:</span>
+are allowed to call that logic - @Get, @Post, @Delete and @Put.</p>
+	    	<p>A REST version of our <code>ProductsControler</code> would be something like that:</p>
 	    	<div class="java"><code class="java">
 <span class="java4">public class </span><span class="java10">ProductsController </span><span class="java8">{<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java3">//...<br />
@@ -466,33 +470,41 @@ are allowed to call that logic - @Get, @Post, @Delete and @Put.</span>
 &nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">void </span><span class="java10">remove</span><span class="java8">(</span><span class="java10">Product product</span><span class="java8">) {</span><span class="java10">...</span><span class="java8">}<br />
 &nbsp;&nbsp;&nbsp; <br />
 }</span></code></div>
-	    	<span class="paragraph">Note we can receive parameters on the URIs. For instance, if we can the <strong class="definition">GET /products/5</strong> URI, 
-the <code class="inlineCode">view</code> method will be invoked and the <code class="inlineCode">product</code> parameter will have its id set as <code class="inlineCode">5</code>.</span>
-	    	<span class="paragraph">More info on that are on the REST Resources chapter.</span>
+	    	<p>Note we can receive parameters on the URIs. For instance, if we can the <strong>GET /products/5</strong> URI, 
+the <code>view</code> method will be invoked and the <code>product</code> parameter will have its id set as <code>5</code>.</p>
+	    	<p>More info on that are on the REST Resources chapter.</p>
 		
 
 <h3 class="section">Message bundle File</h3>
-	    	<span class="paragraph">Internationalization (i18n) is a powerful feature present in almost all Web frameworks 
+	    	<p>Internationalization (i18n) is a powerful feature present in almost all Web frameworks 
 nowadays. And it’s no different with VRaptor3. With i18n you can make your applications 
 support several different languages (such as French, Portuguese, Spanish, English, etc) 
-in a very easy way: simply translating the application messages.</span>
-	    	<span class="paragraph">In order to support i18n, you must create a file called <code class="inlineCode">messages.properties</code> and make 
-it available in your application classpath (<code class="inlineCode">WEB-INF/classes</code>). That file contains 
-lines which are a set of key/value entries, for example:</span>
-	    	<div class="java"><code class="java">field.userName&nbsp;<span class="texvalue">=&nbsp;Username&nbsp;<br /></span>
-field.password&nbsp;<span class="texvalue">=&nbsp;Password</span></code></div>
-	    	<span class="paragraph">So far, it’s easy, but what if you want to create files containing messages in other 
+in a very easy way: simply translating the application messages.</p>
+	    	<p>In order to support i18n, you must create a file called <code>messages.properties</code> and make 
+it available in your application classpath (<code>WEB-INF/classes</code>). That file contains 
+lines which are a set of key/value entries, for example:</p>
+	    	<pre class="code properties">
+
+	field.userName = Username 
+	field.password = Password
+
+</pre>
+	    	<p>So far, it’s easy, but what if you want to create files containing messages in other 
 languages, for example, Portuguese? Also easy. You just need to create another properties 
-file called <code class="inlineCode">messages_pt_BR.properties</code>. Notice the suffix <em class="italic">_pt_BR</em> on the file name. 
+file called <code>messages_pt_BR.properties</code>. Notice the suffix <em>_pt_BR</em> on the file name. 
 It indicates that when the user access your application from his computer configured with 
 Brazilian Portuguese locale, the messages in this file will be used. The file contents 
-would be:</span>
-	    	<div class="java"><code class="java">field.userName&nbsp;<span class="texvalue">=&nbsp;Nome&nbsp;do&nbsp;Usu&aacute;rio<br /></span>
-field.password&nbsp;<span class="texvalue">=&nbsp;Senha</span></code></div>
-	    	<span class="paragraph">Notice that the keys are the same in both files, what changes is the value to the specific 
-language.</span>
-	    	<span class="paragraph">In order to use those messages in your JSP files, you could use JSTL. The code would go 
-as follows:</span>
+would be:</p>
+	    	<pre class="code properties">
+
+field.userName = Nome do Usu&aacute;rio
+field.password = Senha
+
+</pre>
+	    	<p>Notice that the keys are the same in both files, what changes is the value to the specific 
+language.</p>
+	    	<p>In order to use those messages in your JSP files, you could use JSTL. The code would go 
+as follows:</p>
 	    	<div class="xml"><code class="xml"><span class="textag">&lt;html&gt;</span><span class="texnormal">&nbsp;<br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;body&gt;</span><span class="texnormal">&nbsp;<br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;fmt:message</span>&nbsp;<span class="texattrib">key=</span><span class="texvalue">"field.userName"</span>&nbsp;<span class="textag">/&gt;</span><span class="texnormal">&nbsp;</span><span class="textag">&lt;input</span>&nbsp;<span class="texattrib">name=</span><span class="texvalue">"user.userName"</span>&nbsp;<span class="textag">/&gt;</span><span class="texnormal">&nbsp;<br /></span>

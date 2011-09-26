@@ -121,40 +121,49 @@
 
 
 <h3 class="section">Começando um projeto</h3>
-	    	<span class="paragraph">Devido &agrave;s restri&ccedil;&otilde;es de seguran&ccedil;a na sandbox do Google App Engine,
+	    	<p>Devido &agrave;s restri&ccedil;&otilde;es de seguran&ccedil;a na sandbox do Google App Engine,
 alguns componentes do VRaptor3 precisam ser substitu&iacute;dos e uma
 sele&ccedil;&atilde;o diferente de depend&ecirc;ncias deve ser usada. Uma vers&atilde;o do
 blank project j&aacute; contendo estas altera&ccedil;&otilde;es est&aacute; dispon&iacute;vel em
-nossa p&aacute;gina de downloads.</span>
+nossa p&aacute;gina de downloads.</p>
+		
+
+<h3 class="section">Configuração</h3>
+	    	<p>Para habilitar os componentes do VRaptor para o Google App Engine 
+voc&ecirc; precisa adicionar a seguinte configura&ccedil;&atilde;o no seu web.xml:</p>
+	    	<div class="xml"><code class="xml"><span class="textag">&lt;context-param&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-name&gt;</span><span class="texnormal">br.com.caelum.vraptor.packages</span><span class="textag">&lt;/param-name&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-value&gt;</span><span class="texnormal">br.com.caelum.vraptor.gae</span><span class="textag">&lt;/param-value&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal"></span><span class="textag">&lt;/context-param&gt;</span></code></div>
 		
 
 <h3 class="section">Limitações</h3>
-	    	<span class="paragraph">Um detalhe importante &eacute; que a inje&ccedil;&atilde;o de depend&ecirc;ncias n&atilde;o funciona
+	    	<p>Um detalhe importante &eacute; que a inje&ccedil;&atilde;o de depend&ecirc;ncias n&atilde;o funciona
 no redirecionamento para l&oacute;gicas; o controlador &eacute; instanciado
-recebendo <code class="inlineCode">null</code> em todos os seus par&acirc;metros. Sendo assim, deve-se evitar
-chamadas como:</span>
+recebendo <code>null</code> em todos os seus par&acirc;metros. Sendo assim, deve-se evitar
+chamadas como:</p>
 	    	<div class="java"><code class="java">
 <span class="java10">result.use</span><span class="java8">(</span><span class="java10">Results.logic</span><span class="java8">())</span><span class="java10">.redirectTo</span><span class="java8">(</span><span class="java10">SomeController.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">.someMethod</span><span class="java8">()</span><span class="java10">;<br />
 validator.onErrorUse</span><span class="java8">(</span><span class="java10">Results.logic</span><span class="java8">())</span><span class="java10">.of</span><span class="java8">(</span><span class="java10">SomeController.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">.someMethod</span><span class="java8">()</span><span class="java10">;</span></code></div>
-	    	<span class="paragraph">preferindo <code class="inlineCode">Results.page()</code> — ou ent&atilde;o escrever seus controllers
-de forma a esperar pelos valores nulos.</span>
+	    	<p>preferindo <code>Results.page()</code> — ou ent&atilde;o escrever seus controllers
+de forma a esperar pelos valores nulos.</p>
 		
 
 <h3 class="section">Problemas comuns</h3>
-	    	<span class="paragraph">A ambiente de execu&ccedil;&atilde;o do App Engine n&atilde;o habilita o suporte a
+	    	<p>A ambiente de execu&ccedil;&atilde;o do App Engine n&atilde;o habilita o suporte a
 Expression Language por padr&atilde;o, nem suporta a tag
-<code class="inlineCode">&lt;jsp-config/jsp-proprerty-group/el-ignored&gt;</code>. Assim sendo,
+<code>&lt;jsp-config/jsp-proprerty-group/el-ignored&gt;</code>. Assim sendo,
 para habilitar o suporte a EL, &eacute; necess&aacute;rio adicionar a seguinte
-linha nos arquivos JSP:</span>
-	    	<span class="paragraph"><code class="inlineCode">&lt;%@ page isELIgnored="false" %&gt;</code></span>
-	    	<span class="paragraph">No caso de arquivos de tags, deve-se adicionar:</span>
-	    	<span class="paragraph"><code class="inlineCode">&lt;%@ tag isELIgnored="false" %&gt;</code></span>
+linha nos arquivos JSP:</p>
+	    	<p><code>&lt;%@ page isELIgnored="false" %&gt;</code></p>
+	    	<p>No caso de arquivos de tags, deve-se adicionar:</p>
+	    	<p><code>&lt;%@ tag isELIgnored="false" %&gt;</code></p>
 		
 
 <h3 class="section">JPA 2</h3>
-	    	<span class="paragraph">O VRaptor possui suporte ao JPA nas vers&otilde;es 1 e 2, por&eacute;m o ambiente do 
+	    	<p>O VRaptor possui suporte ao JPA nas vers&otilde;es 1 e 2, por&eacute;m o ambiente do 
 Google App Engine suporta apenas JPA 1. Por isso voc&ecirc; deve evitar de copiar o jar 
-jpa-api-2.0.jar para seu projeto.</span>
+jpa-api-2.0.jar para seu projeto.</p>
 		
 
 </div><!-- content -->

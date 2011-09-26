@@ -84,11 +84,15 @@
 		
 									<li><a class="link_toc" href="../../cookbook/evitando-que-o-browser-faca-cache-das-paginas/">10. Evitando que o browser faça cache das páginas</a></li>
 		
-									<li><a class="link_toc" href="../../cookbook/usando-o-header-referer-para-fazer-redirecionamentos/">11. Usando o Header Referer para fazer redirecionamentos</a></li>
+									<li><a class="link_toc" href="../../cookbook/usando-objectify-com-vraptor/">11. Usando Objectify com VRaptor</a></li>
 		
-									<li><a class="link_toc" href="../../cookbook/configurando-o-vraptor-na-locaweb/">12. Configurando o VRaptor na Locaweb</a></li>
+									<li><a class="link_toc" href="../../cookbook/usando-o-static-scanning-no-gae-j/">12. Usando o Static Scanning no GAE/J</a></li>
 		
-									<li><a class="link_toc" href="../../cookbook/vraptor-e-tiles-2-2/">13. VRaptor e Tiles 2.2</a></li>
+									<li><a class="link_toc" href="../../cookbook/usando-o-header-referer-para-fazer-redirecionamentos/">13. Usando o Header Referer para fazer redirecionamentos</a></li>
+		
+									<li><a class="link_toc" href="../../cookbook/configurando-o-vraptor-na-locaweb/">14. Configurando o VRaptor na Locaweb</a></li>
+		
+									<li><a class="link_toc" href="../../cookbook/vraptor-e-tiles-2-2/">15. VRaptor e Tiles 2.2</a></li>
 		
                 </ol>
             </div><!-- submenu-->
@@ -97,16 +101,16 @@
 	
 		<h2 class="chapter">Configurando o VRaptor na Locaweb</h2>
 
-		<span class="paragraph"><strong class="definition"><em class="italic">por Flavio Gabriel Duarte</em></strong></span><span class="paragraph">Este tutorial tem como objetivo orientar o deploy de sistemas usando o framework 
-VRaptor na Locaweb com JVM decidado em ambiente Linux compartilhado.</span><span class="paragraph">Preparando o ambiente:</span><span class="paragraph">Toda a requisi&ccedil;&atilde;o que chega at&eacute; a Locaweb vai primeiramente para o Apache e se 
-necess&aacute;rio no mod_jk (<a class="link" target="_blank" href="http://en.wikipedia.org/wiki/Mod_jk">http://en.wikipedia.org/wiki/Mod_jk</a>) passar&aacute; enviar&aacute; a requisi&ccedil;&atilde;o 
+		<p><strong><em>por Flavio Gabriel Duarte</em></strong></p><p>Este tutorial tem como objetivo orientar o deploy de sistemas usando o framework 
+VRaptor na Locaweb com JVM decidado em ambiente Linux compartilhado.</p><p>Preparando o ambiente:</p><p>Toda a requisi&ccedil;&atilde;o que chega at&eacute; a Locaweb vai primeiramente para o Apache e se 
+necess&aacute;rio no mod_jk (<a href="http://en.wikipedia.org/wiki/Mod_jk">http://en.wikipedia.org/wiki/Mod_jk</a>) passar&aacute; enviar&aacute; a requisi&ccedil;&atilde;o 
 para o Tomcat, como explicado nessa p&aacute;gina 
-<a class="link" target="_blank" href="http://wiki.locaweb.com.br/pt-br/Tomcat_integrado_com_o_Apache">http://wiki.locaweb.com.br/pt-br/Tomcat_integrado_com_o_Apache</a></span><span class="paragraph">A configura&ccedil;&atilde;o sugerida pela Locaweb leva em conta que a sua aplica&ccedil;&atilde;o n&atilde;o usa nenhum 
-framework, apenas arquivos jsps e servlets configurado pelo arquivo web.xml.</span><span class="paragraph">Como o VRaptor n&atilde;o usa o web.xml para definir as urls a configura&ccedil;&atilde;o sugerida pela Locaweb 
+<a href="http://wiki.locaweb.com.br/pt-br/Tomcat_integrado_com_o_Apache">http://wiki.locaweb.com.br/pt-br/Tomcat_integrado_com_o_Apache</a></p><p>A configura&ccedil;&atilde;o sugerida pela Locaweb leva em conta que a sua aplica&ccedil;&atilde;o n&atilde;o usa nenhum 
+framework, apenas arquivos jsps e servlets configurado pelo arquivo web.xml.</p><p>Como o VRaptor n&atilde;o usa o web.xml para definir as urls a configura&ccedil;&atilde;o sugerida pela Locaweb 
 n&atilde;o funcionar&aacute;. Para funcionar voc&ecirc; precisa abrir um chamado na Locaweb informando que 
 gostaria de usar o framework e escrever a seguinte regra: JkMount /* [login] &gt;&gt; TOMCAT e a 
-pasta do servidor que deseja aplicar a regra caso n&atilde;o seja a raiz.</span><span class="paragraph">Aguarde a resposta do chamado para saber quando estar&aacute; funcionando. O procedimento leva 
-+- 24h para eles realizarem, ent&atilde;o pe&ccedil;a com anteced&ecirc;ncia. </span><span class="paragraph">Ap&oacute;s isso basta enviar a sua aplica&ccedil;&atilde;o para a Locaweb e reinicar o ambiente que ela estar&aacute; 
+pasta do servidor que deseja aplicar a regra caso n&atilde;o seja a raiz.</p><p>Aguarde a resposta do chamado para saber quando estar&aacute; funcionando. O procedimento leva 
++- 24h para eles realizarem, ent&atilde;o pe&ccedil;a com anteced&ecirc;ncia. </p><p>Ap&oacute;s isso basta enviar a sua aplica&ccedil;&atilde;o para a Locaweb e reinicar o ambiente que ela estar&aacute; 
 funcionando. A Locaweb n&atilde;o aceita deploy com arquivos WAR, para enviar os arquivos pelo WAR 
 voc&ecirc; precisaria envi&aacute;-lo pelo FTP e depois descompactar pelo SSH. Se voc&ecirc; est&aacute; usando o 
 eclipse para desenvolver a sua aplica&ccedil;&atilde;o e o recurso "servers" do pr&oacute;prio eclipse, a sua 
@@ -114,11 +118,11 @@ aplica&ccedil;&atilde;o fica dentro de workspace/.metadata/.plugins/org.eclipse.
 deve ter algumas pasta "tmp" isso vai de acordo com a quantidade de servidores que voc&ecirc; 
 tenha, alguma delas deve ser a sua aplica&ccedil;&atilde;o. Como a aplica&ccedil;&atilde;o est&aacute; disposta dentro desta 
 pasta, ela poderia ir para a locaweb e ser executada. Essa n&atilde;o &eacute; a melhor de fazer o deploy, 
-mas &eacute; uma das aceitas neste tipo de ambiente na Locaweb.</span><span class="paragraph">A Locaweb define um timeout de 15 segundos em suas conex&otilde;es MySQL, se voc&ecirc; tiver usando este 
+mas &eacute; uma das aceitas neste tipo de ambiente na Locaweb.</p><p>A Locaweb define um timeout de 15 segundos em suas conex&otilde;es MySQL, se voc&ecirc; tiver usando este 
 banco e n&atilde;o atentar para isso ter&aacute; problemas, para contornar essa problema voc&ecirc; pode seguir 
 a sugest&atilde;o da Locaweb 
-<a class="link" target="_blank" href="http://wiki.locaweb.com.br/pt-br/Resolvendo_Problemas_Conex%C3%A3o_JAVA_com_MYSQL">http://wiki.locaweb.com.br/pt-br/Resolvendo_Problemas_Conex%C3%A3o_JAVA_com_MYSQL</a> ou configurar o c3p0 como descrito nesse post <a class="link" target="_blank" href="http://blog.caelum.com.br/2009/10/19/a-java-net-socketexception-broken-pipe/">http://blog.caelum.com.br/2009/10/19/a-java-net-socketexception-broken-pipe/</a> 
-respeitando o tempo imposto pela Locaweb.</span>
+<a href="http://wiki.locaweb.com.br/pt-br/Resolvendo_Problemas_Conex%C3%A3o_JAVA_com_MYSQL">http://wiki.locaweb.com.br/pt-br/Resolvendo_Problemas_Conex%C3%A3o_JAVA_com_MYSQL</a> ou configurar o c3p0 como descrito nesse post <a href="http://blog.caelum.com.br/2009/10/19/a-java-net-socketexception-broken-pipe/">http://blog.caelum.com.br/2009/10/19/a-java-net-socketexception-broken-pipe/</a> 
+respeitando o tempo imposto pela Locaweb.</p>
 
 
 </div><!-- content -->

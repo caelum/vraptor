@@ -111,15 +111,15 @@
 	
 		<h2 class="chapter">Advanced configurations: overriding VRaptor's behavior and conventions</h2>
 
-		<span class="paragraph">Most of VRaptor behaviours and conventions can be customized, in a very easy
+		<p>Most of VRaptor behaviours and conventions can be customized, in a very easy
 way: it is just creating a component that implements an internal interface of VRaptor.
-When you do this, VRaptor will use your custom implementation instead of the default one.</span><span class="paragraph">If you want to find out which is the right interface for changing a behaviour,
-just ask it on the developers mailing list: caelum-vraptor-dev@googlegroups.com</span><span class="paragraph">This list is for both Portuguese and English discussions.</span><span class="paragraph">Below we'll see some customization examples:</span>
+When you do this, VRaptor will use your custom implementation instead of the default one.</p><p>If you want to find out which is the right interface for changing a behaviour,
+just ask it on the developers mailing list: caelum-vraptor-dev@googlegroups.com</p><p>This list is for both Portuguese and English discussions.</p><p>Below we'll see some customization examples:</p>
 
 
 <h3 class="section">Changing the default rendered view</h3>
-	    	<span class="paragraph">If you need to change the default rendered view, or change the place where it'll be look for,
-you'll only need to create the following class:</span>
+	    	<p>If you need to change the default rendered view, or change the place where it'll be look for,
+you'll only need to create the following class:</p>
 	    	<div class="java"><code class="java">
 <span class="java16">@Component<br />
 </span><span class="java4">public class </span><span class="java10">CustomPathResolver </span><span class="java4">extends </span><span class="java10">DefaultPathResolver </span><span class="java8">{<br />
@@ -142,12 +142,12 @@ you'll only need to create the following class:</span>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //and still want to redirect to 'user' and not to 'userResource'<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
 }</span></code></div>
-	    	<span class="paragraph">If you need a more complex convention, just implement the PathResolver interface.</span>
+	    	<p>If you need a more complex convention, just implement the PathResolver interface.</p>
 		
 
 <h3 class="section">Changing default URI</h3>
-	    	<span class="paragraph">The default URI for ClientsController.list() is /clients/list, i.e, controller_name/method_name.
-If you want to override this convention, you can create a class like:</span>
+	    	<p>The default URI for ClientsController.list() is /clients/list, i.e, controller_name/method_name.
+If you want to override this convention, you can create a class like:</p>
 	    	<div class="java"><code class="java">
 <span class="java16">@Component<br />
 @ApplicationScoped<br />
@@ -161,17 +161,17 @@ If you want to override this convention, you can create a class like:</span>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return </span><span class="java3">//your convention here<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
 }</span></code></div>
-	    	<span class="paragraph">If you need a more complex convention, just implement the RoutesParser interface.</span>
+	    	<p>If you need a more complex convention, just implement the RoutesParser interface.</p>
 		
 
 <h3 class="section">Changing the application character encoding</h3>
-	    	<span class="paragraph">For using an arbitrary character encoding on all your requests and responses, avoiding
-encoding inconsistencies, you can set this parameter on your web.xml.</span>
+	    	<p>For using an arbitrary character encoding on all your requests and responses, avoiding
+encoding inconsistencies, you can set this parameter on your web.xml.</p>
 	    	<div class="xml"><code class="xml"><span class="textag">&lt;context-param&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-name&gt;</span><span class="texnormal">br.com.caelum.vraptor.encoding</span><span class="textag">&lt;/param-name&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-value&gt;</span><span class="texnormal">UTF-8</span><span class="textag">&lt;/param-value&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal"></span><span class="textag">&lt;/context-param&gt;</span></code></div>
-	    	<span class="paragraph">This way all of your pages and form data will use the UTF-8.</span>
+	    	<p>This way all of your pages and form data will use the UTF-8.</p>
 		
 
 </div><!-- content -->

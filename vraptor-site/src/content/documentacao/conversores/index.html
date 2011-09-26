@@ -121,23 +121,23 @@
 
 
 <h3 class="section">Padrão</h3>
-	    	<span class="paragraph">Por padr&atilde;o o VRaptor j&aacute; registra diversos conversores para o seu uso no dia a dia.</span>
+	    	<p>Por padr&atilde;o o VRaptor j&aacute; registra diversos conversores para o seu uso no dia a dia.</p>
 		
 
 <h3 class="section">Tipos primitivos</h3>
-	    	<span class="paragraph">Todos os tipos primitivos (int, long etc) s&atilde;o suportados.</span>
-	    	<span class="paragraph">Caso o parametro da requisi&ccedil;&atilde;o seja nulo ou a string vazia, vari&aacute;veis de tipo primitivo
-ser&atilde;o alterados para o valor padr&atilde;o como se essa vari&aacute;vel fosse uma vari&aacute;vel membro, isto &eacute;:</span>
-	    	<ul class="list"><li><span class="paragraph">boolean - false</span></li><li><span class="paragraph">short, int, long, double, float, byte - 0</span></li><li><span class="paragraph">char - caracter de c&oacute;digo 0</span></li></ul>
+	    	<p>Todos os tipos primitivos (int, long etc) s&atilde;o suportados.</p>
+	    	<p>Caso o parametro da requisi&ccedil;&atilde;o seja nulo ou a string vazia, vari&aacute;veis de tipo primitivo
+ser&atilde;o alterados para o valor padr&atilde;o como se essa vari&aacute;vel fosse uma vari&aacute;vel membro, isto &eacute;:</p>
+	    	<ul><li><p>boolean - false</p></li><li><p>short, int, long, double, float, byte - 0</p></li><li><p>char - caracter de c&oacute;digo 0</p></li></ul>
 		
 
 <h3 class="section">Wrappers de tipos primitivos</h3>
-	    	<span class="paragraph">Todos os wrappers dos tipos primitivos (Integer, Long, Character, Boolean etc) s&atilde;o suportados.</span>
+	    	<p>Todos os wrappers dos tipos primitivos (Integer, Long, Character, Boolean etc) s&atilde;o suportados.</p>
 		
 
 <h3 class="section">Enum</h3>
-	    	<span class="paragraph">Todas as enumera&ccedil;&otilde;es s&atilde;o suportadas atrav&eacute;s do nome do elemento ou de seu ordinal.
-No exemplo a seguir, tanto o valor 1 como o valor DEBITO s&atilde;o traduzidos para Tipo.DEBITO:</span>
+	    	<p>Todas as enumera&ccedil;&otilde;es s&atilde;o suportadas atrav&eacute;s do nome do elemento ou de seu ordinal.
+No exemplo a seguir, tanto o valor 1 como o valor DEBITO s&atilde;o traduzidos para Tipo.DEBITO:</p>
 	    	<div class="java"><code class="java">
 <span class="java4">public enum </span><span class="java10">Tipo </span><span class="java8">{<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java10">CREDITO, DEBITO<br />
@@ -145,12 +145,12 @@ No exemplo a seguir, tanto o valor 1 como o valor DEBITO s&atilde;o traduzidos p
 		
 
 <h3 class="section">BigInteger e BigDecimal</h3>
-	    	<span class="paragraph">Ambos s&atilde;o suportados utilizando o padr&atilde;o de localiza&ccedil;&atilde;o da virtual machine que serve a sua aplica&ccedil;&atilde;o.</span>
+	    	<p>Ambos s&atilde;o suportados utilizando o padr&atilde;o de localiza&ccedil;&atilde;o da virtual machine que serve a sua aplica&ccedil;&atilde;o.</p>
 		
 
 <h3 class="section">BigDecimal, Double e Float localizados</h3>
-	    	<span class="paragraph">A partir da vers&atilde;o 3.1.2 o VRaptor suporta esses tipos baseados na localiza&ccedil;&atilde;o da virtual machine. Para ativar esses 
-componentes &eacute; necess&aacute;rio adicionar as seguintes linhas no seu web.xml:</span>
+	    	<p>A partir da vers&atilde;o 3.1.2 o VRaptor suporta esses tipos baseados na localiza&ccedil;&atilde;o da virtual machine. Para ativar esses 
+componentes &eacute; necess&aacute;rio adicionar as seguintes linhas no seu web.xml:</p>
 	    	<div class="xml"><code class="xml"><span class="textag">&lt;context-param&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-name&gt;</span><span class="texnormal">br.com.caelum.vraptor.packages</span><span class="textag">&lt;/param-name&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-value&gt;</span><span class="texnormal"><br /></span>
@@ -158,7 +158,7 @@ componentes &eacute; necess&aacute;rio adicionar as seguintes linhas no seu web.
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;br.com.caelum.vraptor.converter.l10n<br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;/param-value&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal"></span><span class="textag">&lt;/context-param&gt;</span></code></div>
-	    	<span class="paragraph">A localiza&ccedil;&atilde;o dos componentes pode ser alterada utilizando a seguinte configura&ccedil;&atilde;o no web.xml:</span>
+	    	<p>A localiza&ccedil;&atilde;o dos componentes pode ser alterada utilizando a seguinte configura&ccedil;&atilde;o no web.xml:</p>
 	    	<div class="xml"><code class="xml"><span class="textag">&lt;context-param&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-name&gt;</span><span class="texnormal">javax.servlet.jsp.jstl.fmt.locale</span><span class="textag">&lt;/param-name&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-value&gt;</span><span class="texnormal">pt_BR</span><span class="textag">&lt;/param-value&gt;</span><span class="texnormal"><br /></span>
@@ -166,45 +166,45 @@ componentes &eacute; necess&aacute;rio adicionar as seguintes linhas no seu web.
 		
 
 <h3 class="section">Calendar e Date</h3>
-	    	<span class="paragraph">LocaleBasedCalendarConverter e LocaleBasedDateConverter utilizam o locale do usu&aacute;rio,
-definido seguindo o padr&atilde;o do jstl para entender a formata&ccedil;&atilde;o que foi utilizada no par&acirc;metro.</span>
-	    	<span class="paragraph">Por exemplo, se o locale &eacute; pt-br, o formato "18/09/1981" representa 18 de setembro de 1981
-enquanto para o locale en, o formato "09/18/1981" representa a mesma data.</span>
+	    	<p>LocaleBasedCalendarConverter e LocaleBasedDateConverter utilizam o locale do usu&aacute;rio,
+definido seguindo o padr&atilde;o do jstl para entender a formata&ccedil;&atilde;o que foi utilizada no par&acirc;metro.</p>
+	    	<p>Por exemplo, se o locale &eacute; pt-br, o formato "18/09/1981" representa 18 de setembro de 1981
+enquanto para o locale en, o formato "09/18/1981" representa a mesma data.</p>
 		
 
 <h3 class="section">LocalDate, LocalTime e LocalDateTime do joda-time</h3>
-	    	<span class="paragraph">Existem conversores para esses dois tipos no VRaptor e eles s&oacute; ser&atilde;o carregados se voc&ecirc; tiver
-o joda-time.jar no seu classpath</span>
+	    	<p>Existem conversores para esses dois tipos no VRaptor e eles s&oacute; ser&atilde;o carregados se voc&ecirc; tiver
+o joda-time.jar no seu classpath</p>
 		
 
 <h3 class="section">Interface</h3>
-	    	<span class="paragraph">Todos os conversores devem implementar a interface Converter do vraptor.
+	    	<p>Todos os conversores devem implementar a interface Converter do vraptor.
 A classe concreta definir&aacute; o tipo que ela &eacute; capaz de converter, e ser&aacute; invocada
 com o valor do par&acirc;metro do request, o tipo alvo e um bundle com as mensagens de
 internacionaliza&ccedil;&atilde;o para que voc&ecirc; possa retornar uma ConversionException no caso
-de algum erro de convers&atilde;o.</span>
+de algum erro de convers&atilde;o.</p>
 	    	<div class="java"><code class="java">
 <span class="java4">public interface </span><span class="java10">Converter&lt;T&gt; </span><span class="java8">{<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java10">T convert</span><span class="java8">(</span><span class="java10">String value, Class&lt;? </span><span class="java4">extends </span><span class="java10">T&gt; type, ResourceBundle bundle</span><span class="java8">)</span><span class="java10">;<br />
 </span><span class="java8">}</span></code></div>
-	    	<span class="paragraph">Al&eacute;m disso, seu conversor deve ser anotado dizendo agora para o VRaptor (e n&atilde;o mais para o compilador
-java) qual o tipo que seu conversor &eacute; capaz de converter, para isso utilize a anota&ccedil;&atilde;o @Convert:</span>
+	    	<p>Al&eacute;m disso, seu conversor deve ser anotado dizendo agora para o VRaptor (e n&atilde;o mais para o compilador
+java) qual o tipo que seu conversor &eacute; capaz de converter, para isso utilize a anota&ccedil;&atilde;o @Convert:</p>
 	    	<div class="java"><code class="java">
 <span class="java16">@Convert</span><span class="java8">(</span><span class="java10">Long.</span><span class="java4">class</span><span class="java8">)<br />
 </span><span class="java4">public class </span><span class="java10">LongConverter </span><span class="java4">implements </span><span class="java10">Converter&lt;Long&gt; </span><span class="java8">{<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java3">// ...<br />
 </span><span class="java8">}</span></code></div>
-	    	<span class="paragraph">Por fim, lembre-se de dizer se seu conversor pode ser instanciado em um escopo de Application, Session
+	    	<p>Por fim, lembre-se de dizer se seu conversor pode ser instanciado em um escopo de Application, Session
 ou Request, assim como recursos e componentes quaisquer do VRaptor.
 Por exemplo, um conversor que n&atilde;o requer nenhuma informa&ccedil;&atilde;o do usu&aacute;rio logado pode ser registrado no escopo
-de Application e instanciado uma &uacute;nica vez:</span>
+de Application e instanciado uma &uacute;nica vez:</p>
 	    	<div class="java"><code class="java">
 <span class="java16">@Convert</span><span class="java8">(</span><span class="java10">Long.</span><span class="java4">class</span><span class="java8">)<br />
 </span><span class="java16">@ApplicationScoped<br />
 </span><span class="java4">public class </span><span class="java10">LongConverter </span><span class="java4">implements </span><span class="java10">Converter&lt;Long&gt; </span><span class="java8">{<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java3">// ...<br />
 </span><span class="java8">}</span></code></div>
-	    	<span class="paragraph">A seguir, a implementa&ccedil;&atilde;o de LongConverter mostra como tudo isso pode ser utilizado de maneira bem simples:</span>
+	    	<p>A seguir, a implementa&ccedil;&atilde;o de LongConverter mostra como tudo isso pode ser utilizado de maneira bem simples:</p>
 	    	<div class="java"><code class="java">
 <span class="java16">@Convert</span><span class="java8">(</span><span class="java10">Long.</span><span class="java4">class</span><span class="java8">)<br />
 </span><span class="java16">@ApplicationScoped<br />
@@ -226,8 +226,8 @@ de Application e instanciado uma &uacute;nica vez:</span>
 		
 
 <h3 class="section">Registrando um novo conversor</h3>
-	    	<span class="paragraph">N&atilde;o &eacute; necess&aacute;ria nenhuma configura&ccedil;&atilde;o al&eacute;m do @Convert e implementar a interface Converter
-para que o conversor seja registrado no Container do VRaptor.</span>
+	    	<p>N&atilde;o &eacute; necess&aacute;ria nenhuma configura&ccedil;&atilde;o al&eacute;m do @Convert e implementar a interface Converter
+para que o conversor seja registrado no Container do VRaptor.</p>
 		
 
 </div><!-- content -->

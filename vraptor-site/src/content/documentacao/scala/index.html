@@ -117,18 +117,18 @@
 	
 		<h2 class="chapter">Scala</h2>
 
-		<span class="paragraph">O VRaptor3 tamb&eacute;m suporta controllers escritos em Scala. As configura&ccedil;&otilde;es necess&aacute;rias e um exemplo s&atilde;o apresentadas neste cap&iacute;tulo.</span>
+		<p>O VRaptor3 tamb&eacute;m suporta controllers escritos em Scala. As configura&ccedil;&otilde;es necess&aacute;rias e um exemplo s&atilde;o apresentadas neste cap&iacute;tulo.</p>
 
 
 <h3 class="section">Dependências e Configuração</h3>
-	    	<span class="paragraph">Os seguintes jars precisam ser adicionados ao diret&oacute;rio <code class="inlineCode">WEB-INF/lib</code> da sua aplica&ccedil;&atilde;o:</span>
-	    	<ul class="list"><li><span class="paragraph"><code class="inlineCode">scala-library.jar</code> (requerido, vers&atilde;o 2.8)</span></li><li><span class="paragraph"><code class="inlineCode">vraptor-scala.jar</code> (requerido)</span></li><li><span class="paragraph"><code class="inlineCode">vraptor-scala-jsp.jar</code> (opcional, para suporte ao uso de Expression Language sobre cole&ccedil;&otilde;es do Scala na view)</span></li><li><span class="paragraph"><code class="inlineCode">scalate.jar</code> (requerido)</span></li></ul>
-	    	<span class="paragraph">Feito isso, &eacute; preciso configurar o VRaptor para carregar os plugins. No <code class="inlineCode">web.xml</code>, defina a se&ccedil;&atilde;o <code class="inlineCode">context-param</code> como abaixo:</span>
+	    	<p>Os seguintes jars precisam ser adicionados ao diret&oacute;rio <code>WEB-INF/lib</code> da sua aplica&ccedil;&atilde;o:</p>
+	    	<ul><li><p><code>scala-library.jar</code> (requerido, vers&atilde;o 2.8)</p></li><li><p><code>vraptor-scala.jar</code> (requerido)</p></li><li><p><code>vraptor-scala-jsp.jar</code> (opcional, para suporte ao uso de Expression Language sobre cole&ccedil;&otilde;es do Scala na view)</p></li><li><p><code>scalate.jar</code> (requerido)</p></li></ul>
+	    	<p>Feito isso, &eacute; preciso configurar o VRaptor para carregar os plugins. No <code>web.xml</code>, defina a se&ccedil;&atilde;o <code>context-param</code> como abaixo:</p>
 	    	<div class="xml"><code class="xml"><span class="textag">&lt;context-param&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-name&gt;</span><span class="texnormal">br.com.caelum.vraptor.packages</span><span class="textag">&lt;/param-name&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-value&gt;</span><span class="texnormal">br.com.caelum.vraptor.scala</span><span class="textag">&lt;/param-value&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal"></span><span class="textag">&lt;/context-param&gt;</span></code></div>
-	    	<span class="paragraph">Tamb&eacute;m adicione ao arquivo as configura&ccedil;&otilde;es necess&aacute;rias para usar o Scalate como view:</span>
+	    	<p>Tamb&eacute;m adicione ao arquivo as configura&ccedil;&otilde;es necess&aacute;rias para usar o Scalate como view:</p>
 	    	<div class="xml"><code class="xml"><span class="textag">&lt;servlet&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;servlet-name&gt;</span><span class="texnormal">TemplateEngineServlet</span><span class="textag">&lt;/servlet-name&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;servlet-class&gt;</span><span class="texnormal">org.fusesource.scalate.servlet.TemplateEngineServlet</span><span class="textag">&lt;/servlet-class&gt;</span><span class="texnormal"><br /></span>
@@ -142,14 +142,18 @@
 		
 
 <h3 class="section">Exemplo</h3>
-	    	<span class="paragraph">Um controller do VRaptor3 escrito em Scala:</span>
-	    	<div class="java"><code class="java">@Resource<br />
-class&nbsp;MeuController&nbsp;{<br />
-<br />
-&nbsp;&nbsp;&nbsp;&nbsp;@Path(Array("/hello"))<br />
-&nbsp;&nbsp;&nbsp;&nbsp;def&nbsp;minhaLogica&nbsp;=&nbsp;"Hello,&nbsp;world!"<br />
-<br />
-}</code></div>
+	    	<p>Um controller do VRaptor3 escrito em Scala:</p>
+	    	<pre class="code text">
+
+@Resource
+class MeuController {
+
+	@Path(Array("/hello"))
+	def minhaLogica = "Hello, world!"
+
+}
+
+</pre>
 		
 
 </div><!-- content -->

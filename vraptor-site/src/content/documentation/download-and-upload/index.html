@@ -115,8 +115,8 @@
 
 
 <h3 class="section">1 minute example: download</h3>
-	    	<span class="paragraph">The following example shows how to expose the file to be downloaded to its client.</span>
-	    	<span class="paragraph">Again, see how simple this code is:</span>
+	    	<p>The following example shows how to expose the file to be downloaded to its client.</p>
+	    	<p>Again, see how simple this code is:</p>
 	    	<div class="java"><code class="java">
 <span class="java16">@Resource<br />
 </span><span class="java4">public class </span><span class="java10">ProfileController </span><span class="java8">{<br />
@@ -128,7 +128,7 @@
 		
 
 <h3 class="section">Adding more info to download</h3>
-	    	<span class="paragraph">If you want to add more information to download, you can return a FileDownload:</span>
+	    	<p>If you want to add more information to download, you can return a FileDownload:</p>
 	    	<div class="java"><code class="java">
 <span class="java16">@Resource<br />
 </span><span class="java4">public class </span><span class="java10">ProfileController </span><span class="java8">{<br />
@@ -141,18 +141,18 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return new </span><span class="java10">FileDownload</span><span class="java8">(</span><span class="java10">file, contentType, filename</span><span class="java8">)</span><span class="java10">; <br />
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
 }</span></code></div>
-	    	<span class="paragraph">You can also use the <code class="inlineCode">InputStreamDownload</code> implementation to work with Streams or
-<code class="inlineCode">ByteArrayDownload</code> to work with byte array (since 3.2-snapshot).</span>
+	    	<p>You can also use the <code>InputStreamDownload</code> implementation to work with Streams or
+<code>ByteArrayDownload</code> to work with byte array (since 3.2-snapshot).</p>
 		
 
 <h3 class="section">Upload</h3>
-	    	<span class="paragraph">The upload component is optional. To enable this feature, you only need to add the <code class="inlineCode">commons-upload</code> library in your classpath.</span>
-	    	<span class="paragraph">Since VRaptor 3.2, if you're in a container that implements the JSR-315 (Servlet 3.0), you don't need <code class="inlineCode">commons-upload</code> nor
- <code class="inlineCode">commons-io</code> libraries because the servlet container already have this.</span>
+	    	<p>The upload component is optional. To enable this feature, you only need to add the <code>commons-upload</code> library in your classpath.</p>
+	    	<p>Since VRaptor 3.2, if you're in a container that implements the JSR-315 (Servlet 3.0), you don't need <code>commons-upload</code> nor
+ <code>commons-io</code> libraries because the servlet container already have this.</p>
 		
 
 <h3 class="section">1 minute example: upload</h3>
-	    	<span class="paragraph">The first example is based on the multipart upload feature.</span>
+	    	<p>The first example is based on the multipart upload feature.</p>
 	    	<div class="java"><code class="java">
 <span class="java16">@Resource<br />
 </span><span class="java4">public class </span><span class="java10">ProfileController </span><span class="java8">{<br />
@@ -170,8 +170,8 @@
 		
 
 <h3 class="section">More about Upload</h3>
-	    	<span class="paragraph">UploadedFile returns the file content as a InputStream. If you want to save this file on disk in an 
-easy way, you can use the <code class="inlineCode">commons-io IOUtils</code>:</span>
+	    	<p>UploadedFile returns the file content as a InputStream. If you want to save this file on disk in an 
+easy way, you can use the <code>commons-io IOUtils</code>:</p>
 	    	<div class="java"><code class="java">
 <span class="java4">public </span><span class="java9">void </span><span class="java10">updatePicture</span><span class="java8">(</span><span class="java10">Profile profile, UploadedFile picture</span><span class="java8">) {<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java10">File pictureOnDisk = </span><span class="java4">new </span><span class="java10">File</span><span class="java8">()</span><span class="java10">;&nbsp;&nbsp;&nbsp; <br />
@@ -181,7 +181,7 @@ easy way, you can use the <code class="inlineCode">commons-io IOUtils</code>:</s
 		
 
 <h3 class="section">Overriding upload settings</h3>
-	    	<span class="paragraph">You can also change the default upload settings overriding the class <code class="inlineCode">MultipartConfig</code>. In example below, the size limit of upload is changed.</span>
+	    	<p>You can also change the default upload settings overriding the class <code>MultipartConfig</code>. In example below, the size limit of upload is changed.</p>
 	    	<div class="java"><code class="java">
 <span class="java16">@Component<br />
 @ApplicationScoped<br />
@@ -195,12 +195,12 @@ easy way, you can use the <code class="inlineCode">commons-io IOUtils</code>:</s
 		
 
 <h3 class="section">Changes in form</h3>
-	    	<span class="paragraph">You need to add the parameter <code class="inlineCode">enctype</code> with <code class="inlineCode">multipart/form-data</code> value. Without this attribute, the browser cannot upload files:</span>
-	    	<div class="xml"><code class="xml"><span class="textag">&lt;form</span>&nbsp;<span class="texattrib">action=</span><span class="texvalue">"minha-action"</span>&nbsp;<span class="texattrib">enctype=</span><span class="texvalue">"multipart/form-data"</span><span class="textag">&gt;</span></code></div>
+	    	<p>You need to add the parameter <code>enctype</code> with <code>multipart/form-data</code> value. Without this attribute, the browser cannot upload files:</p>
+	    	<div class="xml"><code class="xml"><span class="textag">&lt;form</span>&nbsp;<span class="texattrib">action=</span><span class="texvalue">"minha-action"</span>&nbsp;<span class="texattrib">method=</span><span class="texvalue">"post"</span>&nbsp;<span class="texattrib">enctype=</span><span class="texvalue">"multipart/form-data"</span><span class="textag">&gt;</span></code></div>
 		
 
 <h3 class="section">Validating upload</h3>
-	    	<span class="paragraph">When the maximum size for uploaded file exceeds the configured value, VRaptor add a message on the Validator object.</span>
+	    	<p>When the maximum size for uploaded file exceeds the configured value, VRaptor add a message on the Validator object.</p>
 		
 
 </div><!-- content -->

@@ -117,11 +117,11 @@
 	
 		<h2 class="chapter">Injeção de dependências</h2>
 
-		<span class="paragraph">O VRaptor est&aacute; fortemente baseado no conceito de inje&ccedil;&atilde;o de depend&ecirc;ncias uma vez que chega at&eacute; mesmo a
-utilizar dessa id&eacute;ia para juntar seus componentes internos.</span><span class="paragraph">O conceito b&aacute;sico por tr&aacute;s de Dependency Injection (DI) &eacute; que voc&ecirc; n&atilde;o deve buscar aquilo que deseja acessar
-mas tudo o que deseja acessar deve ser fornecido para voc&ecirc;.</span><span class="paragraph">Isso se traduz, por exemplo, na passagem de componentes atrav&eacute;s do construtor de seus controladores.
+		<p>O VRaptor est&aacute; fortemente baseado no conceito de inje&ccedil;&atilde;o de depend&ecirc;ncias uma vez que chega at&eacute; mesmo a
+utilizar dessa id&eacute;ia para juntar seus componentes internos.</p><p>O conceito b&aacute;sico por tr&aacute;s de Dependency Injection (DI) &eacute; que voc&ecirc; n&atilde;o deve buscar aquilo que deseja acessar
+mas tudo o que deseja acessar deve ser fornecido para voc&ecirc;.</p><p>Isso se traduz, por exemplo, na passagem de componentes atrav&eacute;s do construtor de seus controladores.
 Imagine que seu controlador de clientes necessita acessar um Dao de clientes. Sendo assim, especifique claramente
-essa necessidade:</span><div class="java"><code class="java">
+essa necessidade:</p><div class="java"><code class="java">
 <span class="java16">@Resource<br />
 </span><span class="java4">public class </span><span class="java10">ClienteController </span><span class="java8">{<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java4">private final </span><span class="java10">ClienteDao dao;<br />
@@ -135,24 +135,24 @@ essa necessidade:</span><div class="java"><code class="java">
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">this</span><span class="java10">.dao.adiciona</span><span class="java8">(</span><span class="java10">cliente</span><span class="java8">)</span><span class="java10">;<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
 &nbsp;&nbsp;&nbsp; <br />
-}</span></code></div><span class="paragraph">E anote tamb&eacute;m o componente ClienteDao como sendo controlado pelo vraptor:</span><div class="java"><code class="java">
+}</span></code></div><p>E anote tamb&eacute;m o componente ClienteDao como sendo controlado pelo vraptor:</p><div class="java"><code class="java">
 <span class="java16">@Component<br />
 </span><span class="java4">public class </span><span class="java10">ClienteDao </span><span class="java8">{<br />
-}</span></code></div><span class="paragraph">A partir desse instante, o vraptor fornecer&aacute; uma inst&acirc;ncia de ClienteDao para seu ClienteController
+}</span></code></div><p>A partir desse instante, o vraptor fornecer&aacute; uma inst&acirc;ncia de ClienteDao para seu ClienteController
 sempre que precisar instanci&aacute;-lo. Vale lembrar que o VRaptor honrar&aacute; o escopo de cada componente.
 Por exemplo, se ClienteDao fosse de escopo Session (@SessionScoped), seria criada uma &uacute;nica inst&acirc;ncia desse
-componente por sess&atilde;o. (note que &eacute; provavelmente errado usar um dao no escopo de session, isto &eacute; um mero exemplo).</span>
+componente por sess&atilde;o. (note que &eacute; provavelmente errado usar um dao no escopo de session, isto &eacute; um mero exemplo).</p>
 
 
 <h3 class="section">ComponentFactory</h3>
-	    	<span class="paragraph">Em diversos momentos queremos que nossos componentes recebam componentes de outras bibliotecas.
+	    	<p>Em diversos momentos queremos que nossos componentes recebam componentes de outras bibliotecas.
 Nesse caso n&atilde;o temos como alterar o c&oacute;digo fonte da biblioteca para adicionar a anota&ccedil;&atilde;o @Component (al&eacute;m de poss&iacute;veis
-altera&ccedil;&otilde;es requeridas na biblioteca).</span>
-	    	<span class="paragraph">O exemplo mais famoso envolve adquirir uma Session do Hibernate. Nesses casos precisamos criar um componente
-que possui um &uacute;nico papel: fornecer inst&acirc;ncias de Session para os componentes que precisam dela.</span>
-	    	<span class="paragraph">O VRaptor possui uma interface chamada ComponentFactory que permite que suas classes possuam tal responsabilidade.
+altera&ccedil;&otilde;es requeridas na biblioteca).</p>
+	    	<p>O exemplo mais famoso envolve adquirir uma Session do Hibernate. Nesses casos precisamos criar um componente
+que possui um &uacute;nico papel: fornecer inst&acirc;ncias de Session para os componentes que precisam dela.</p>
+	    	<p>O VRaptor possui uma interface chamada ComponentFactory que permite que suas classes possuam tal responsabilidade.
 Implementa&ccedil;&otilde;es dessa interface definem um &uacute;nico m&eacute;todo. Veja o exemplo a seguir, que inicializa o Hibernate na constru&ccedil;&atilde;o
-e utiliza essa configura&ccedil;&atilde;o para fornecer sess&otilde;es para nosso projeto:</span>
+e utiliza essa configura&ccedil;&atilde;o para fornecer sess&otilde;es para nosso projeto:</p>
 	    	<div class="java"><code class="java">
 <span class="java16">@Component<br />
 @ApplicationScoped<br />
@@ -203,23 +203,23 @@ e utiliza essa configura&ccedil;&atilde;o para fornecer sess&otilde;es para noss
 &nbsp;&nbsp;&nbsp; <br />
 &nbsp;&nbsp;&nbsp; <br />
 }</span></code></div>
-	    	<span class="paragraph">Essas implementa&ccedil;&otilde;es j&aacute; est&atilde;o dispon&iacute;veis no c&oacute;digo do VRaptor. Para us&aacute;-la veja o cap&iacute;tulo de utils.</span>
+	    	<p>Essas implementa&ccedil;&otilde;es j&aacute; est&atilde;o dispon&iacute;veis no c&oacute;digo do VRaptor. Para us&aacute;-la veja o cap&iacute;tulo de utils.</p>
 		
 
 <h3 class="section">Providers</h3>
-	    	<span class="paragraph">Por tr&aacute;s dos panos, o VRaptor utiliza um container de inje&ccedil;&atilde;o de depend&ecirc;ncias espec&iacute;fico.
-Existem tr&ecirc;s containers suportados pelo VRaptor:</span>
-	    	<ul class="list"><li><span class="paragraph"><strong class="definition">Spring IoC</strong>: al&eacute;m da inje&ccedil;&atilde;o de depend&ecirc;ncias, o Spring IoC possibilita usar qualquer
-outro componente do Spring integrado com o VRaptor, sem precisar de configura&ccedil;&otilde;es</span></li><li><span class="paragraph"><strong class="definition">Google Guice</strong>: um container mais leve e r&aacute;pido, que possibilita um melhor controle
+	    	<p>Por tr&aacute;s dos panos, o VRaptor utiliza um container de inje&ccedil;&atilde;o de depend&ecirc;ncias espec&iacute;fico.
+Existem tr&ecirc;s containers suportados pelo VRaptor:</p>
+	    	<ul><li><p><strong>Spring IoC</strong>: al&eacute;m da inje&ccedil;&atilde;o de depend&ecirc;ncias, o Spring IoC possibilita usar qualquer
+outro componente do Spring integrado com o VRaptor, sem precisar de configura&ccedil;&otilde;es</p></li><li><p><strong>Google Guice</strong>: um container mais leve e r&aacute;pido, que possibilita um melhor controle
 na liga&ccedil;&atilde;o das depend&ecirc;ncias, o uso da nova api de inje&ccedil;&atilde;o de depend&ecirc;ncias do java: o javax.inject
-e funcionalidades de AOP.</span></li><li><span class="paragraph"><strong class="definition">Pico container</strong>: um container leve e simples, pra quem n&atilde;o vai usar nada al&eacute;m de inje&ccedil;&atilde;o de
-depend&ecirc;ncias.</span></li></ul>
-	    	<span class="paragraph">Para selecionar qualquer um desses containers basta colocars seus respectivos jars no classpath.
-Os jars est&atilde;o dispon&iacute;veis na pasta lib/containers do zip do VRaptor.</span>
-	    	<span class="paragraph">Por padr&atilde;o os containers v&atilde;o considerar apenas as classes abaixo da pasta WEB-INF/classes da
+e funcionalidades de AOP.</p></li><li><p><strong>Pico container</strong>: um container leve e simples, pra quem n&atilde;o vai usar nada al&eacute;m de inje&ccedil;&atilde;o de
+depend&ecirc;ncias.</p></li></ul>
+	    	<p>Para selecionar qualquer um desses containers basta colocars seus respectivos jars no classpath.
+Os jars est&atilde;o dispon&iacute;veis na pasta lib/containers do zip do VRaptor.</p>
+	    	<p>Por padr&atilde;o os containers v&atilde;o considerar apenas as classes abaixo da pasta WEB-INF/classes da
 sua aplica&ccedil;&atilde;o, mas &eacute; poss&iacute;vel, ainda, colocar classes anotadas da sua aplica&ccedil;&atilde;o dentro de jars, 
 desde que os jars incluam as entradas de diret&oacute;rio ("Add directory entries" no eclipse, ou ant sem a
-op&ccedil;&atilde;o "files only"). Para isso &eacute; necess&aacute;rio usar o seguinte par&acirc;metro no web.xml:</span>
+op&ccedil;&atilde;o "files only"). Para isso &eacute; necess&aacute;rio usar o seguinte par&acirc;metro no web.xml:</p>
 	    	<div class="xml"><code class="xml"><span class="textag">&lt;context-param&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-name&gt;</span><span class="texnormal">br.com.caelum.vraptor.packages</span><span class="textag">&lt;/param-name&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-value&gt;</span><span class="texnormal">br.com.pacote.dentro.do.jar</span><span class="textag">&lt;/param-value&gt;</span><span class="texnormal"><br /></span>
@@ -227,14 +227,14 @@ op&ccedil;&atilde;o "files only"). Para isso &eacute; necess&aacute;rio usar o s
 		
 
 <h3 class="section">Spring</h3>
-	    	<span class="paragraph">Ao utilizar o Spring, voc&ecirc; ganha todas as caracter&iacute;sticas e componentes prontos do Spring para uso dentro do
+	    	<p>Ao utilizar o Spring, voc&ecirc; ganha todas as caracter&iacute;sticas e componentes prontos do Spring para uso dentro do
 VRaptor, isto &eacute;, todos os componentes que funcionam com o Spring DI/Ioc, funcionam com o VRaptor. Nesse caso,
-todas as anota&ccedil;&otilde;es.</span>
-	    	<span class="paragraph">Para usar o spring adicione todos os jars da pasta lib/containers/spring na sua aplica&ccedil;&atilde;o.</span>
-	    	<span class="paragraph">O VRaptor vai usar suas configura&ccedil;&otilde;es do Spring, caso voc&ecirc; j&aacute; o tenha configurado no seu projeto (
+todas as anota&ccedil;&otilde;es.</p>
+	    	<p>Para usar o spring adicione todos os jars da pasta lib/containers/spring na sua aplica&ccedil;&atilde;o.</p>
+	    	<p>O VRaptor vai usar suas configura&ccedil;&otilde;es do Spring, caso voc&ecirc; j&aacute; o tenha configurado no seu projeto (
 os listeners e o applicationContext.xml no classpath).
 Caso o VRaptor n&atilde;o tenha encontrado sua configura&ccedil;&atilde;o, ou voc&ecirc; precise fazer alguma configura&ccedil;&atilde;o
-mais avan&ccedil;ada, voc&ecirc; pode estender o provider do Spring:</span>
+mais avan&ccedil;ada, voc&ecirc; pode estender o provider do Spring:</p>
 	    	<div class="java"><code class="java">
 <span class="java4">package </span><span class="java10">br.com.suaaplicacao;<br />
 </span><span class="java4">public class </span><span class="java10">CustomProvider </span><span class="java4">extends </span><span class="java10">SpringProvider </span><span class="java8">{<br />
@@ -251,7 +251,7 @@ mais avan&ccedil;ada, voc&ecirc; pode estender o provider do Spring:</span>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return </span><span class="java10">context;<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
 }</span></code></div>
-	    	<span class="paragraph">e pra usar o seu provider, coloque no web.xml:</span>
+	    	<p>e pra usar o seu provider, coloque no web.xml:</p>
 	    	<div class="xml"><code class="xml"><span class="textag">&lt;context-param&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-name&gt;</span><span class="texnormal">br.com.caelum.vraptor.provider</span><span class="textag">&lt;/param-name&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-value&gt;</span><span class="texnormal">br.com.suaaplicacao.CustomProvider</span><span class="textag">&lt;/param-value&gt;</span><span class="texnormal"><br /></span>
@@ -259,13 +259,13 @@ mais avan&ccedil;ada, voc&ecirc; pode estender o provider do Spring:</span>
 		
 
 <h3 class="section">Google Guice</h3>
-	    	<span class="paragraph">Para habilitar o Google Guice basta colocar os jars que est&atilde;o na pasta lib/containers/guice
-do zip do VRaptor.</span>
-	    	<span class="paragraph">Ao usar o Guice voc&ecirc; pode escolher n&atilde;o usar a anota&ccedil;&atilde;o @Component do VRaptor, e usar as anota&ccedil;&otilde;es
+	    	<p>Para habilitar o Google Guice basta colocar os jars que est&atilde;o na pasta lib/containers/guice
+do zip do VRaptor.</p>
+	    	<p>Ao usar o Guice voc&ecirc; pode escolher n&atilde;o usar a anota&ccedil;&atilde;o @Component do VRaptor, e usar as anota&ccedil;&otilde;es
 do guice ou do javax.inject (@Inject, anota&ccedil;&otilde;es de escopo) para controlar a instancia&ccedil;&atilde;o dos
-seus componentes.</span>
-	    	<span class="paragraph">Se precisar fazer configura&ccedil;&otilde;es mais espec&iacute;ficas crie uma classe que estende o provider
-do Guice:</span>
+seus componentes.</p>
+	    	<p>Se precisar fazer configura&ccedil;&otilde;es mais espec&iacute;ficas crie uma classe que estende o provider
+do Guice:</p>
 	    	<div class="java"><code class="java">
 <span class="java4">public class </span><span class="java10">CustomProvider </span><span class="java4">extends </span><span class="java10">GuiceProvider </span><span class="java8">{<br />
 <br />
@@ -294,7 +294,7 @@ do Guice:</span>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }</span><span class="java10">;<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
 }</span></code></div>
-	    	<span class="paragraph">e pra usar esse provider, coloque no web.xml:</span>
+	    	<p>e pra usar esse provider, coloque no web.xml:</p>
 	    	<div class="xml"><code class="xml"><span class="textag">&lt;context-param&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-name&gt;</span><span class="texnormal">br.com.caelum.vraptor.provider</span><span class="textag">&lt;/param-name&gt;</span><span class="texnormal"><br /></span>
 <span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-value&gt;</span><span class="texnormal">br.com.suaaplicacao.CustomProvider</span><span class="textag">&lt;/param-value&gt;</span><span class="texnormal"><br /></span>
@@ -302,9 +302,9 @@ do Guice:</span>
 		
 
 <h3 class="section">Pico Container</h3>
-	    	<span class="paragraph">Para utilizar o Picocontainer como provider de sua aplica&ccedil;&atilde;o, 
+	    	<p>Para utilizar o Picocontainer como provider de sua aplica&ccedil;&atilde;o, 
 basta colocar os jars da pasta lib/containers/picocontainer do zip do VRaptor no classpath
-da sua aplica&ccedil;&atilde;o.</span>
+da sua aplica&ccedil;&atilde;o.</p>
 		
 
 </div><!-- content -->

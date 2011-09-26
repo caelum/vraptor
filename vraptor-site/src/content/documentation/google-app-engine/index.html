@@ -115,40 +115,49 @@
 
 
 <h3 class="section">Starting a new project</h3>
-	    	<span class="paragraph">Due to security restrictions on Google App Engine's sandbox,
+	    	<p>Due to security restrictions on Google App Engine's sandbox,
 some of VRaptor3's components must be replaced, and a different
 selection of dependencies must be used. A version of the
 blank project featuring these modifications is available at
-our download page.</span>
+our download page.</p>
+		
+
+<h3 class="section">Configuration</h3>
+	    	<p>To enable VRaptor components replaced to Google App Engine, you 
+need add the lines bellow in your web.xml:</p>
+	    	<div class="xml"><code class="xml"><span class="textag">&lt;context-param&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-name&gt;</span><span class="texnormal">br.com.caelum.vraptor.packages</span><span class="textag">&lt;/param-name&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="textag">&lt;param-value&gt;</span><span class="texnormal">br.com.caelum.vraptor.gae</span><span class="textag">&lt;/param-value&gt;</span><span class="texnormal"><br /></span>
+<span class="texnormal"></span><span class="textag">&lt;/context-param&gt;</span></code></div>
 		
 
 <h3 class="section">Limitations</h3>
-	    	<span class="paragraph">A relevant detais is that the dependency injection does not work
+	    	<p>A relevant detais is that the dependency injection does not work
 when redirecting from one logic to another; the controller is
-instantiated by filling with <code class="inlineCode">null</code> all of its arguments. This
-said, one should avoid call like:</span>
+instantiated by filling with <code>null</code> all of its arguments. This
+said, one should avoid call like:</p>
 	    	<div class="java"><code class="java">
 <span class="java10">result.use</span><span class="java8">(</span><span class="java10">Results.logic</span><span class="java8">())</span><span class="java10">.redirectTo</span><span class="java8">(</span><span class="java10">SomeController.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">.someMethod</span><span class="java8">()</span><span class="java10">;<br />
 validator.onErrorUse</span><span class="java8">(</span><span class="java10">Results.logic</span><span class="java8">())</span><span class="java10">.of</span><span class="java8">(</span><span class="java10">SomeController.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">.someMethod</span><span class="java8">()</span><span class="java10">;</span></code></div>
-	    	<span class="paragraph">using, instead, <code class="inlineCode">Results.page()</code>. An alternative would be to
-prepare your controllers to expect <code class="inlineCode">null</code> as construction
-arguments.</span>
+	    	<p>using, instead, <code>Results.page()</code>. An alternative would be to
+prepare your controllers to expect <code>null</code> as construction
+arguments.</p>
 		
 
 <h3 class="section">Troubleshooting</h3>
-	    	<span class="paragraph">App Engine's execution environment nor does enable support
+	    	<p>App Engine's execution environment nor does enable support
 for Expression Language by default, nor supports the
-<code class="inlineCode">&lt;jsp-config/jsp-proprerty-group/el-ignored&gt;</code> tag. In this
+<code>&lt;jsp-config/jsp-proprerty-group/el-ignored&gt;</code> tag. In this
 situation, to enable the EL support, it's required to add
-the following line to your JSP files:</span>
-	    	<span class="paragraph"><code class="inlineCode">&lt;%@ page isELIgnored="false" %&gt;</code></span>
-	    	<span class="paragraph">For tag files, use:</span>
-	    	<span class="paragraph"><code class="inlineCode">&lt;%@ tag isELIgnored="false" %&gt;</code></span>
+the following line to your JSP files:</p>
+	    	<p><code>&lt;%@ page isELIgnored="false" %&gt;</code></p>
+	    	<p>For tag files, use:</p>
+	    	<p><code>&lt;%@ tag isELIgnored="false" %&gt;</code></p>
 		
 
 <h3 class="section">JPA 2</h3>
-	    	<span class="paragraph">VRaptor supports JPA versions 1 and 2, but Google App Engine only supports JPA 1. 
-Therefore you should avoid copying the jpa-api-2.0.jar file to your project.</span>
+	    	<p>VRaptor supports JPA versions 1 and 2, but Google App Engine only supports JPA 1. 
+Therefore you should avoid copying the jpa-api-2.0.jar file to your project.</p>
 		
 
 </div><!-- content -->

@@ -117,25 +117,25 @@
 	
 		<h2 class="chapter">Testando componentes e controllers</h2>
 
-		<span class="paragraph">Criar um teste unit&aacute;rio do seu controller VRaptor costuma ser muito f&aacute;cil:
-dado o desacoplamento das suas classes com a api <code class="inlineCode">javax.servlet</code> e os
+		<p>Criar um teste unit&aacute;rio do seu controller VRaptor costuma ser muito f&aacute;cil:
+dado o desacoplamento das suas classes com a api <code>javax.servlet</code> e os
 par&acirc;metros serem populados atrav&eacute;s do request, seu teste ser&aacute; como o de uma
-classe qualquer, sem mist&eacute;rios.</span><span class="paragraph">O VRaptor3 gerencia as depend&ecirc;ncias da sua classe, ent&atilde;o voc&ecirc; n&atilde;o precisa 
+classe qualquer, sem mist&eacute;rios.</p><p>O VRaptor3 gerencia as depend&ecirc;ncias da sua classe, ent&atilde;o voc&ecirc; n&atilde;o precisa 
 se preocupar com a cria&ccedil;&atilde;o do seus componentes e controllers, basta receber
 suas depend&ecirc;ncias no construtor que o VRaptor3 vai procur&aacute;-las e instanciar
-sua classe.</span><span class="paragraph">Na hora de testar suas classes voc&ecirc; pode aproveitar que todas as depend&ecirc;ncias
+sua classe.</p><p>Na hora de testar suas classes voc&ecirc; pode aproveitar que todas as depend&ecirc;ncias
 est&atilde;o sendo recebidas no construtor, e passar implementa&ccedil;&otilde;es falsas (mocks)
-dessas depend&ecirc;ncias, para testar unitariamente sua classe.</span><span class="paragraph">Mas os componentes do VRaptor3 que v&atilde;o ser mais presentes na sua aplica&ccedil;&atilde;o
-- o <code class="inlineCode">Result</code> e o <code class="inlineCode">Validator</code> - possuem a interface fluente, o que dificulta a cria&ccedil;&atilde;o
+dessas depend&ecirc;ncias, para testar unitariamente sua classe.</p><p>Mas os componentes do VRaptor3 que v&atilde;o ser mais presentes na sua aplica&ccedil;&atilde;o
+- o <code>Result</code> e o <code>Validator</code> - possuem a interface fluente, o que dificulta a cria&ccedil;&atilde;o
 de implementa&ccedil;&otilde;es falsas (mocks). Por causa disso existem implementa&ccedil;&otilde;es falsas
-j&aacute; dispon&iacute;veis no VRaptor3: <code class="inlineCode">MockResult</code> e <code class="inlineCode">MockValidator</code>. Isso facilita
-em muito os seus testes que seriam mais complexos.</span>
+j&aacute; dispon&iacute;veis no VRaptor3: <code>MockResult</code> e <code>MockValidator</code>. Isso facilita
+em muito os seus testes que seriam mais complexos.</p>
 
 
 <h3 class="section">MockResult</h3>
-	    	<span class="paragraph">O MockResult ignora os redirecionamentos que voc&ecirc; fizer, e acumula os objetos inclu&iacute;dos,
-para voc&ecirc; poder inspeciona-los e fazer as suas asser&ccedil;&otilde;es.</span>
-	    	<span class="paragraph">Um exemplo de uso seria:</span>
+	    	<p>O MockResult ignora os redirecionamentos que voc&ecirc; fizer, e acumula os objetos inclu&iacute;dos,
+para voc&ecirc; poder inspeciona-los e fazer as suas asser&ccedil;&otilde;es.</p>
+	    	<p>Um exemplo de uso seria:</p>
 	    	<div class="java"><code class="java">
 <span class="java10">MockResult result = </span><span class="java4">new </span><span class="java10">MockResult</span><span class="java8">()</span><span class="java10">;<br />
 ClienteController controller = </span><span class="java4">new </span><span class="java10">ClienteController</span><span class="java8">(</span><span class="java10">..., result</span><span class="java8">)</span><span class="java10">;<br />
@@ -143,20 +143,20 @@ controller.list</span><span class="java8">()</span><span class="java10">; </span
 </span><span class="java10">List&lt;Client&gt; clients = result.included</span><span class="java8">(</span><span class="java5">&#34;clients&#34;</span><span class="java8">)</span><span class="java10">; </span><span class="java3">// o cast &eacute; autom&aacute;tico<br />
 </span><span class="java10">Assert.assertNotNull</span><span class="java8">(</span><span class="java10">clients</span><span class="java8">)</span><span class="java10">;<br />
 </span><span class="java3">// mais asserts</span></code></div>
-	    	<span class="paragraph">Quaisquer chamadas do tipo result.use(...) v&atilde;o ser ignoradas.</span>
+	    	<p>Quaisquer chamadas do tipo result.use(...) v&atilde;o ser ignoradas.</p>
 		
 
 <h3 class="section">MockValidator</h3>
-	    	<span class="paragraph">O MockValidator vai acumular os erros gerados, e quando o validator.onErrorUse
+	    	<p>O MockValidator vai acumular os erros gerados, e quando o validator.onErrorUse
 for chamado, vai lan&ccedil;ar um ValidationError caso haja algum erro. Desse jeito
-voc&ecirc; pode inspecionar os erros adicionados, ou simplesmente ver se deu algum erro:</span>
+voc&ecirc; pode inspecionar os erros adicionados, ou simplesmente ver se deu algum erro:</p>
 	    	<div class="java"><code class="java">
 <span class="java16">@Test</span><span class="java8">(</span><span class="java10">expected=ValidationException.</span><span class="java4">class</span><span class="java8">)<br />
 </span><span class="java4">public </span><span class="java9">void </span><span class="java10">testaQueVaiDarErroDeValidacao</span><span class="java8">() {<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java10">ClienteController controller = </span><span class="java4">new </span><span class="java10">ClienteController</span><span class="java8">(</span><span class="java10">..., </span><span class="java4">new </span><span class="java10">MockValidator</span><span class="java8">())</span><span class="java10">;<br />
 &nbsp;&nbsp;&nbsp; controller.adiciona</span><span class="java8">(</span><span class="java4">new </span><span class="java10">Cliente</span><span class="java8">())</span><span class="java10">;<br />
 </span><span class="java8">}</span></code></div>
-	    	<span class="paragraph">ou</span>
+	    	<p>ou</p>
 	    	<div class="java"><code class="java">
 <span class="java16">@Test<br />
 </span><span class="java4">public </span><span class="java9">void </span><span class="java10">testaQueVaiDarErroDeValidacao</span><span class="java8">() {<br />
@@ -169,8 +169,8 @@ voc&ecirc; pode inspecionar os erros adicionados, ou simplesmente ver se deu alg
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java3">//asserts nos erros<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
 }</span></code></div>
-	    	<span class="paragraph">Se voc&ecirc; usa o Hibernate Validator e tem a chamada validator.validate(objeto) no m&eacute;todo do seu controller,
-voc&ecirc; pode usar a classe HibernateMockValidator, que validar&aacute; o objeto com as regras definidas pelo HV.</span>
+	    	<p>Se voc&ecirc; usa o Hibernate Validator e tem a chamada validator.validate(objeto) no m&eacute;todo do seu controller,
+voc&ecirc; pode usar a classe HibernateMockValidator, que validar&aacute; o objeto com as regras definidas pelo HV.</p>
 		
 
 </div><!-- content -->

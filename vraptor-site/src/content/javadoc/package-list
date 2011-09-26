@@ -5,7 +5,6 @@ br.com.caelum.vraptor.converter.jodatime
 br.com.caelum.vraptor.converter.l10n
 br.com.caelum.vraptor.core
 br.com.caelum.vraptor.deserialization
-br.com.caelum.vraptor.eval
 br.com.caelum.vraptor.http
 br.com.caelum.vraptor.http.iogi
 br.com.caelum.vraptor.http.ognl
@@ -34,12 +33,11 @@ br.com.caelum.vraptor.util
 br.com.caelum.vraptor.util.collections
 br.com.caelum.vraptor.util.extjs
 br.com.caelum.vraptor.util.hibernate
+br.com.caelum.vraptor.util.hibernate.extra
 br.com.caelum.vraptor.util.interceptors
 br.com.caelum.vraptor.util.jpa
 br.com.caelum.vraptor.util.test
 br.com.caelum.vraptor.validator
 br.com.caelum.vraptor.validator.annotation
 br.com.caelum.vraptor.view
-br.com.caelum.vraptor.vraptor2
-br.com.caelum.vraptor.vraptor2.outject
 org.hamcrest

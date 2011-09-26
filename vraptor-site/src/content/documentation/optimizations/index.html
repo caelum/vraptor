@@ -115,14 +115,14 @@
 
 
 <h3 class="section">Commons Upload</h3>
-	    	<span class="paragraph">If you don't upload files on your application, remove the commons upload jar from your
+	    	<p>If you don't upload files on your application, remove the commons upload jar from your
 classpath. It avoids the unnecessary load of the upload interceptor, and the request
-will run faster.</span>
+will run faster.</p>
 		
 
 <h3 class="section">@Lazy annotation on Interceptors</h3>
-	    	<span class="paragraph">If the accepts method from an interceptor doesn't depend on its internal state, you
-can annotate it with @Lazy:</span>
+	    	<p>If the accepts method from an interceptor doesn't depend on its internal state, you
+can annotate it with @Lazy:</p>
 	    	<div class="java"><code class="java">
 <span class="java16">@Intercepts<br />
 @Lazy<br />
@@ -138,12 +138,12 @@ can annotate it with @Lazy:</span>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java3">//...<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
 }</span></code></div>
-	    	<span class="paragraph">This way, VRaptor only instantiates the interceptor if the accepts method returns true.
+	    	<p>This way, VRaptor only instantiates the interceptor if the accepts method returns true.
 In order to do that, VRaptor will create a non-functional instance of your interceptor
 (null for all dependencies) and invokes the accept method on it, avoiding unnecessary
 Container calls.
-Using internal state can (and will) result in NullPointerException.</span>
-	    	<span class="paragraph">Do not use @Lazy if the accepts method is trivial (just returns true).</span>
+Using internal state can (and will) result in NullPointerException.</p>
+	    	<p>Do not use @Lazy if the accepts method is trivial (just returns true).</p>
 		
 
 </div><!-- content -->

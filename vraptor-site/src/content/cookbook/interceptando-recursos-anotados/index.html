@@ -84,11 +84,15 @@
 		
 									<li><a class="link_toc" href="../../cookbook/evitando-que-o-browser-faca-cache-das-paginas/">10. Evitando que o browser faça cache das páginas</a></li>
 		
-									<li><a class="link_toc" href="../../cookbook/usando-o-header-referer-para-fazer-redirecionamentos/">11. Usando o Header Referer para fazer redirecionamentos</a></li>
+									<li><a class="link_toc" href="../../cookbook/usando-objectify-com-vraptor/">11. Usando Objectify com VRaptor</a></li>
 		
-									<li><a class="link_toc" href="../../cookbook/configurando-o-vraptor-na-locaweb/">12. Configurando o VRaptor na Locaweb</a></li>
+									<li><a class="link_toc" href="../../cookbook/usando-o-static-scanning-no-gae-j/">12. Usando o Static Scanning no GAE/J</a></li>
 		
-									<li><a class="link_toc" href="../../cookbook/vraptor-e-tiles-2-2/">13. VRaptor e Tiles 2.2</a></li>
+									<li><a class="link_toc" href="../../cookbook/usando-o-header-referer-para-fazer-redirecionamentos/">13. Usando o Header Referer para fazer redirecionamentos</a></li>
+		
+									<li><a class="link_toc" href="../../cookbook/configurando-o-vraptor-na-locaweb/">14. Configurando o VRaptor na Locaweb</a></li>
+		
+									<li><a class="link_toc" href="../../cookbook/vraptor-e-tiles-2-2/">15. VRaptor e Tiles 2.2</a></li>
 		
                 </ol>
             </div><!-- submenu-->
@@ -97,9 +101,9 @@
 	
 		<h2 class="chapter">Interceptando recursos anotados</h2>
 
-		<span class="paragraph"><strong class="definition"><em class="italic">por Tomaz Lavieri, no blog <a class="link" target="_blank" href="http://blog.tomazlavieri.com.br/2009/vraptor3-interceptando-recursos-anotados/">http://blog.tomazlavieri.com.br/2009/vraptor3-interceptando-recursos-anotados/</a> </em></strong></span><span class="paragraph">Em primeira lugar, gostaria de tecer meus mais sinceros elogios a equipe VRaptor, 
-a vers&atilde;o 3 esta muito boa, bem mais intuitiva e f&aacute;cil de usar que a 2.6</span><span class="paragraph">Neste artigo vou mostar como interceptar um m&eacute;todo de um Resource especifico, 
-identificando-o a partir de uma anota&ccedil;&atilde;o e executar a&ccedil;&otilde;es antes do m&eacute;todo executar, e ap&oacute;s ele executar.</span><span class="paragraph">Vamos supor que n&oacute;s temos o seguinte Resource para adicionar produtos no nosso sistema</span><div class="java"><code class="java">
+		<p><strong><em>por Tomaz Lavieri, no blog <a href="http://blog.tomazlavieri.com.br/2009/vraptor3-interceptando-recursos-anotados/">http://blog.tomazlavieri.com.br/2009/vraptor3-interceptando-recursos-anotados/</a> </em></strong></p><p>Em primeira lugar, gostaria de tecer meus mais sinceros elogios a equipe VRaptor, 
+a vers&atilde;o 3 esta muito boa, bem mais intuitiva e f&aacute;cil de usar que a 2.6</p><p>Neste artigo vou mostar como interceptar um m&eacute;todo de um Resource especifico, 
+identificando-o a partir de uma anota&ccedil;&atilde;o e executar a&ccedil;&otilde;es antes do m&eacute;todo executar, e ap&oacute;s ele executar.</p><p>Vamos supor que n&oacute;s temos o seguinte Resource para adicionar produtos no nosso sistema</p><div class="java"><code class="java">
 <span class="java16">@Resource<br />
 </span><span class="java4">public class </span><span class="java10">ProdutoController </span><span class="java8">{<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java4">private final </span><span class="java10">DaoFactory factory;<br />
@@ -137,8 +141,8 @@ identificando-o a partir de uma anota&ccedil;&atilde;o e executar a&ccedil;&otil
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">throw </span><span class="java10">ex;<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
 &nbsp;&nbsp;&nbsp; }<br />
-}</span></code></div><span class="paragraph">Agora nos queremos que um interceptador intercepte meu recurso, e execute a l&oacute;gica 
-dentro de um escopo transacional, como fazer isso? &eacute; s&oacute; criar um interceptador assim.</span><div class="java"><code class="java">
+}</span></code></div><p>Agora nos queremos que um interceptador intercepte meu recurso, e execute a l&oacute;gica 
+dentro de um escopo transacional, como fazer isso? &eacute; s&oacute; criar um interceptador assim.</p><div class="java"><code class="java">
 <span class="java4">import </span><span class="java10">org.hibernate.Session;<br />
 </span><span class="java4">import </span><span class="java10">org.hibernate.Transaction;<br />
  <br />
@@ -169,17 +173,17 @@ dentro de um escopo transacional, como fazer isso? &eacute; s&oacute; criar um i
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java9">boolean </span><span class="java10">accepts</span><span class="java8">(</span><span class="java10">ResourceMethod method</span><span class="java8">) {<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return true</span><span class="java10">; </span><span class="java3">//aceita todas as requisi&ccedil;ões<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
-}</span></code></div><span class="paragraph">Ok, o interceptador vai rodar e abrir transa&ccedil;&atilde;o antes e depois de executar a logica, 
-e os m&eacute;todos transacionais da minha l&oacute;gica ir&atilde;o se reduzir a isto</span><div class="java"><code class="java">
+}</span></code></div><p>Ok, o interceptador vai rodar e abrir transa&ccedil;&atilde;o antes e depois de executar a logica, 
+e os m&eacute;todos transacionais da minha l&oacute;gica ir&atilde;o se reduzir a isto</p><div class="java"><code class="java">
 <span class="java4">public </span><span class="java10">Produto atualizar</span><span class="java8">(</span><span class="java10">Produto produto</span><span class="java8">) {<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java4">return </span><span class="java10">dao.update</span><span class="java8">(</span><span class="java10">produto</span><span class="java8">)</span><span class="java10">;<br />
 </span><span class="java8">}<br />
  <br />
 </span><span class="java4">public </span><span class="java10">Produto adicionar</span><span class="java8">(</span><span class="java10">Produto produto</span><span class="java8">) {<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java4">return </span><span class="java10">dao.store</span><span class="java8">(</span><span class="java10">produto</span><span class="java8">)</span><span class="java10">;<br />
-</span><span class="java8">}</span></code></div><span class="paragraph">Ok mas, neste caso temos o problema de que m&eacute;todos que n&atilde;o exigem transa&ccedil;&atilde;o est&atilde;o 
-abrindo e fechando transa&ccedil;&atilde;o a cada requisi&ccedil;&atilde;o sem necessidade.</span><span class="paragraph">Como ent&atilde;o selecionar apenas algumas l&oacute;gicas para serem transacionais? 
-podem criar uma anota&ccedil;&atilde;o para isto, desta forma:</span><div class="java"><code class="java">
+</span><span class="java8">}</span></code></div><p>Ok mas, neste caso temos o problema de que m&eacute;todos que n&atilde;o exigem transa&ccedil;&atilde;o est&atilde;o 
+abrindo e fechando transa&ccedil;&atilde;o a cada requisi&ccedil;&atilde;o sem necessidade.</p><p>Como ent&atilde;o selecionar apenas algumas l&oacute;gicas para serem transacionais? 
+podem criar uma anota&ccedil;&atilde;o para isto, desta forma:</p><div class="java"><code class="java">
 <span class="java4">import </span><span class="java10">java.lang.annotation.ElementType;<br />
 </span><span class="java4">import </span><span class="java10">java.lang.annotation.Retention;<br />
 </span><span class="java4">import </span><span class="java10">java.lang.annotation.RetentionPolicy;<br />
@@ -193,7 +197,7 @@ podem criar uma anota&ccedil;&atilde;o para isto, desta forma:</span><div class=
  */<br />
 </span><span class="java16">@Retention</span><span class="java8">(</span><span class="java10">RetentionPolicy.RUNTIME</span><span class="java8">)<br />
 </span><span class="java16">@Target</span><span class="java8">({</span><span class="java10">ElementType.METHOD,ElementType.TYPE</span><span class="java8">})<br />
-</span><span class="java4">public @interface </span><span class="java10">Transactional </span><span class="java8">{}</span></code></div><span class="paragraph">Agora precisamos marcar os pontos onde queremos que o escopo seja transacional com esta anota&ccedil;&atilde;o.</span><div class="java"><code class="java">
+</span><span class="java4">public @interface </span><span class="java10">Transactional </span><span class="java8">{}</span></code></div><p>Agora precisamos marcar os pontos onde queremos que o escopo seja transacional com esta anota&ccedil;&atilde;o.</p><div class="java"><code class="java">
 <span class="java16">@Resource<br />
 </span><span class="java4">public class </span><span class="java10">ProdutoController </span><span class="java8">{<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java4">private final </span><span class="java10">ProdutoDao dao;<br />
@@ -215,10 +219,10 @@ podem criar uma anota&ccedil;&atilde;o para isto, desta forma:</span><div class=
 &nbsp;&nbsp;&nbsp; </span><span class="java4">public </span><span class="java10">Produto adicionar</span><span class="java8">(</span><span class="java10">Produto produto</span><span class="java8">) {<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java4">return </span><span class="java10">dao.store</span><span class="java8">(</span><span class="java10">produto</span><span class="java8">)</span><span class="java10">;<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java8">}<br />
-}</span></code></div><span class="paragraph">Ok o c&oacute;digo ficou bem mais enxuto, mas como interceptar apenas os m&eacute;todos marcados 
+}</span></code></div><p>Ok o c&oacute;digo ficou bem mais enxuto, mas como interceptar apenas os m&eacute;todos marcados 
 com esta anota&ccedil;&atilde;o?? para tal basta no nosso accepts do TransactionInterceptor 
 verificarmos se a anota&ccedil;&atilde;o esta presente no m&eacute;todo, ou no proprio rescurso 
-(quando marcado no recurso todos os m&eacute;todos do recurso seriam transacionais).</span><span class="paragraph">A modifica&ccedil;&atilde;o do m&eacute;todo ficaria assim</span><div class="java"><code class="java">
+(quando marcado no recurso todos os m&eacute;todos do recurso seriam transacionais).</p><p>A modifica&ccedil;&atilde;o do m&eacute;todo ficaria assim</p><div class="java"><code class="java">
 <span class="java4">public </span><span class="java9">boolean </span><span class="java10">accepts</span><span class="java8">(</span><span class="java10">ResourceMethod method</span><span class="java8">) {<br />
 &nbsp;&nbsp;&nbsp; </span><span class="java4">return&nbsp; </span><span class="java10">method<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; .getMethod</span><span class="java8">() </span><span class="java3">//metodo anotado<br />
@@ -227,9 +231,9 @@ verificarmos se a anota&ccedil;&atilde;o esta presente no m&eacute;todo, ou no p
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; .getResource</span><span class="java8">() </span><span class="java3">//ou recurso anotado<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">.getType</span><span class="java8">()<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="java10">.isAnnotationPresent</span><span class="java8">(</span><span class="java10">Transactional.</span><span class="java4">class</span><span class="java8">)</span><span class="java10">;<br />
-</span><span class="java8">}</span></code></div><span class="paragraph">Pronto agora somente os m&eacute;todos com a anota&ccedil;&atilde;o @Transacional s&atilde;o executados em 
+</span><span class="java8">}</span></code></div><p>Pronto agora somente os m&eacute;todos com a anota&ccedil;&atilde;o @Transacional s&atilde;o executados em 
 escopo de transa&ccedil;&atilde;o e economisamos linhas e linhas de c&oacute;digos 
-de <code class="inlineCode">try{commit}catch{rollback throw ex}</code></span>
+de <code>try{commit}catch{rollback throw ex}</code></p>
 
 
 </div><!-- content -->

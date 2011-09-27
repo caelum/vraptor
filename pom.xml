@@ -329,24 +329,6 @@
 		    <scope>provided</scope>
 		</dependency>
 
-
-		<dependency>
-		    <groupId>jersey</groupId>
-		    <artifactId>jersey-server</artifactId>
-		    <version>1.5-SNAPSHOT</version>
-		    <optional>true</optional>
-		</dependency>
-		<dependency>
-		    <groupId>jersey</groupId>
-		    <artifactId>jersey-core</artifactId>
-		    <version>1.5-SNAPSHOT</version>
-		    <optional>true</optional>
-		</dependency>
-
-
-
-
-
 		<dependency>
 			<groupId>org.jmock</groupId>
 			<artifactId>jmock</artifactId>

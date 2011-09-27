@@ -45,7 +45,7 @@
   }
   [/java]
 
-* plugin - @Load nos parâmetros das lógicas (....util.hibernate.extra)
+* plugin - @Load nos parâmetros das lógicas (....util.hibernate.extra e ....util.jpa.extra)
   [java]
   @Path("/entidade/{entidade.id}") //o id precisa estar preenchido no request
   public void minhaLogica(@Load Entidade entidade) {

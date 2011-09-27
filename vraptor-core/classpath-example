@@ -49,11 +49,6 @@
 			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="lib/build/junit-4.5.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="lib" path="lib/build/mockito-core-1.8.5.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
@@ -125,5 +120,6 @@
 	<classpathentry kind="lib" path="lib/optional/iogi/iogi-0.8.2.jar"/>
 	<classpathentry kind="lib" path="lib/containers/guice/guice-3.0.jar"/>
 	<classpathentry kind="lib" path="lib/containers/guice/guice-multibindings-3.0.jar"/>
+	<classpathentry kind="lib" path="lib/build/junit-4.9.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

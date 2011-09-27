@@ -154,6 +154,7 @@ import br.com.caelum.vraptor.validator.DefaultValidator;
 import br.com.caelum.vraptor.validator.HibernateValidator3;
 import br.com.caelum.vraptor.validator.JSR303Validator;
 import br.com.caelum.vraptor.validator.JSR303ValidatorFactory;
+import br.com.caelum.vraptor.validator.MessageConverter;
 import br.com.caelum.vraptor.validator.MessageInterpolatorFactory;
 import br.com.caelum.vraptor.validator.NullBeanValidator;
 import br.com.caelum.vraptor.validator.Outjector;
@@ -267,7 +268,8 @@ public class BaseComponents {
             RestHeadersHandler.class,						DefaultRestHeadersHandler.class,
             OgnlFacade.class,								OgnlFacade.class,
             FlashScope.class,								SessionFlashScope.class,
-            XStreamConverters.class,                        XStreamConverters.class
+            XStreamConverters.class,                        XStreamConverters.class,
+            MessageConverter.class,							MessageConverter.class
     );
 
     @SuppressWarnings({"unchecked", "rawtypes"})

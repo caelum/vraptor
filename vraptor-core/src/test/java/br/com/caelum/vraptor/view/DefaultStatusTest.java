@@ -1,6 +1,8 @@
 package br.com.caelum.vraptor.view;
 
-import static org.mockito.Matchers.any;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -19,9 +21,19 @@ import org.mockito.MockitoAnnotations;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.config.Configuration;
 import br.com.caelum.vraptor.http.route.Router;
+import br.com.caelum.vraptor.proxy.CglibProxifier;
 import br.com.caelum.vraptor.proxy.JavassistProxifier;
 import br.com.caelum.vraptor.proxy.ObjenesisInstanceCreator;
 import br.com.caelum.vraptor.resource.HttpMethod;
+import br.com.caelum.vraptor.serialization.xstream.XStreamBuilderImpl;
+import br.com.caelum.vraptor.util.test.MockSerializationResult;
+import br.com.caelum.vraptor.validator.I18nMessage;
+import br.com.caelum.vraptor.validator.Message;
+import br.com.caelum.vraptor.validator.MessageConverter;
+import br.com.caelum.vraptor.validator.SingletonResourceBundle;
+import br.com.caelum.vraptor.validator.ValidationMessage;
+
+import com.google.common.collect.Lists;
 
 public class DefaultStatusTest {
 
@@ -131,4 +143,22 @@ public class DefaultStatusTest {
 		verify(response).addHeader("Location", "http://myapp.com/resource/method");
 	}
 
+	@Test
+	public void shouldSerializeErrorMessages() throws Exception {
+		Message normal = new ValidationMessage("The message", "category");
+		I18nMessage i18ned = new I18nMessage("category", "message");
+		i18ned.setBundle(new SingletonResourceBundle("message", "Something else"));
+		
+		MockSerializationResult result = new MockSerializationResult(XStreamBuilderImpl.cleanInstance(new MessageConverter()));
+		DefaultStatus status = new DefaultStatus(response, result, config, new CglibProxifier(new ObjenesisInstanceCreator()), router);
+		
+		status.badRequest(Lists.newArrayList(normal, i18ned));
+		
+		String serialized = result.serializedResult();
+		assertThat(serialized, containsString("<message>The message</message>"));
+		assertThat(serialized, containsString("<category>category</category>"));
+		assertThat(serialized, containsString("<message>Something else</message>"));
+		assertThat(serialized, not(containsString("<validationMessage>")));
+		assertThat(serialized, not(containsString("<i18nMessage>")));
+	}
 }

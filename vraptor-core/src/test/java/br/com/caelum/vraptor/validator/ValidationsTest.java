@@ -25,10 +25,7 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
-import java.util.Collections;
-import java.util.Enumeration;
 import java.util.List;
-import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 import org.junit.Before;
@@ -238,20 +235,7 @@ public class ValidationsTest {
     }
 
     private ResourceBundle singletonBundle(final String key, final String value) {
-		ResourceBundle bundle = new ResourceBundle() {
-			@Override
-			protected Object handleGetObject(String k) {
-				if (k.equals(key)) {
-					return value;
-				}
-				throw new MissingResourceException(k, value, key);
-			}
-			@Override
-			public Enumeration<String> getKeys() {
-				return Collections.enumeration(Collections.singleton(key));
-			}
-    	};
-		return bundle;
+		return new SingletonResourceBundle(key, value);
 	}
 
 }

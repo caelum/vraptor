@@ -18,23 +18,27 @@
 package br.com.caelum.vraptor.util.test;
 
 
+import java.util.Arrays;
+
 import br.com.caelum.vraptor.View;
+import br.com.caelum.vraptor.http.FormatResolver;
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.proxy.CglibProxifier;
 import br.com.caelum.vraptor.proxy.ObjenesisInstanceCreator;
 import br.com.caelum.vraptor.proxy.Proxifier;
+import br.com.caelum.vraptor.serialization.DefaultRepresentationResult;
 import br.com.caelum.vraptor.serialization.JSONSerialization;
 import br.com.caelum.vraptor.serialization.NullProxyInitializer;
 import br.com.caelum.vraptor.serialization.ProxyInitializer;
+import br.com.caelum.vraptor.serialization.RepresentationResult;
 import br.com.caelum.vraptor.serialization.Serialization;
 import br.com.caelum.vraptor.serialization.XMLSerialization;
-import br.com.caelum.vraptor.serialization.xstream.*;
+import br.com.caelum.vraptor.serialization.xstream.XStreamBuilder;
+import br.com.caelum.vraptor.serialization.xstream.XStreamBuilderImpl;
+import br.com.caelum.vraptor.serialization.xstream.XStreamJSONSerialization;
+import br.com.caelum.vraptor.serialization.xstream.XStreamXMLSerialization;
 import br.com.caelum.vraptor.view.EmptyResult;
-import com.thoughtworks.xstream.converters.Converter;
-import com.thoughtworks.xstream.converters.SingleValueConverter;
-
-import java.util.Collections;
 
 /**
  *
@@ -52,17 +56,27 @@ public class MockSerializationResult extends MockResult {
 	private MockHttpServletResponse response;
 	private DefaultTypeNameExtractor extractor;
 	private ProxyInitializer initializer;
+	private XStreamBuilder builder;
 	
 	
 	public MockSerializationResult(Proxifier proxifier, ProxyInitializer initializer ) {
+		this(proxifier, initializer, XStreamBuilderImpl.cleanInstance());
+	}
+
+	public MockSerializationResult(Proxifier proxifier, ProxyInitializer initializer, XStreamBuilder builder) {
 		super(proxifier);
 		this.initializer = initializer;
 		this.response = new MockHttpServletResponse();
 		this.extractor = new DefaultTypeNameExtractor();
+		this.builder = builder;
 	}
 
 	public MockSerializationResult() {
 		this(new CglibProxifier(new ObjenesisInstanceCreator()), new NullProxyInitializer());
+	}
+	
+	public MockSerializationResult(XStreamBuilder builder) {
+		this(new CglibProxifier(new ObjenesisInstanceCreator()), new NullProxyInitializer(), builder);
 	}
 
 	public <T extends View> T use(final Class<T> view) {
@@ -73,16 +87,26 @@ public class MockSerializationResult extends MockResult {
 		return instanceView(view);
 	}
 
-	@SuppressWarnings("unchecked")
 	private <T extends View> T instanceView(Class<T> view){
-        if(view.isAssignableFrom(JSONSerialization.class)){
-			this.serialization = new XStreamJSONSerialization(response, extractor, initializer, XStreamBuilderImpl.cleanInstance());
-			return (T) serialization;
+		if (view.isAssignableFrom(JSONSerialization.class)){
+			this.serialization = new XStreamJSONSerialization(response, extractor, initializer, builder);
+			return view.cast(serialization);
 		}
 		
-		if( view.isAssignableFrom(XMLSerialization.class)){
-			this.serialization = new XStreamXMLSerialization(response, extractor, initializer, XStreamBuilderImpl.cleanInstance());
-			return (T) serialization;
+		if (view.isAssignableFrom(XMLSerialization.class)){
+			this.serialization = new XStreamXMLSerialization(response, extractor, initializer, builder);
+			return view.cast(serialization);
+		}
+		
+		if (view.isAssignableFrom(RepresentationResult.class)) {
+			this.serialization = new XStreamXMLSerialization(response, extractor, initializer, builder);
+			return view.cast(new DefaultRepresentationResult(new FormatResolver() {
+				@Override
+				public String getAcceptFormat() {
+					return "xml";
+				}
+				
+			}, this, Arrays.asList(this.serialization), null));
 		}
 		
 		return proxifier.proxify(view, returnOnFinalMethods(view));

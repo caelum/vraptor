@@ -1,6 +1,7 @@
 package br.com.caelum.vraptor.serialization.xstream;
 
 import java.io.Writer;
+import java.util.Arrays;
 import java.util.Collections;
 
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
@@ -21,6 +22,7 @@ import com.thoughtworks.xstream.mapper.MapperWrapper;
  * Implementation of default XStream configuration
  *
  * @author Rafael Viana
+ * @since 3.4.0
  */
 @PrototypeScoped
 @Component
@@ -32,15 +34,14 @@ public class XStreamBuilderImpl implements XStreamBuilder {
 	private boolean indented;
 	private boolean withoutRoot;
 	
-	public XStreamBuilderImpl(XStreamConverters converters, TypeNameExtractor extractor)
-	{
+	public XStreamBuilderImpl(XStreamConverters converters, TypeNameExtractor extractor) {
 		this.converters = converters;
 		this.extractor = extractor;
 	}
 
-    public static XStreamBuilder cleanInstance() {
+	public static XStreamBuilder cleanInstance(Converter...converters) {
         return new XStreamBuilderImpl(
-                new XStreamConverters(Collections.<Converter>emptyList(), Collections.<SingleValueConverter>emptyList()),
+                new XStreamConverters(Arrays.asList(converters), Collections.<SingleValueConverter>emptyList()),
                 new DefaultTypeNameExtractor());
     }
 

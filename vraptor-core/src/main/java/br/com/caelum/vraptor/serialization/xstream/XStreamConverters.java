@@ -2,21 +2,17 @@ package br.com.caelum.vraptor.serialization.xstream;
 
 import java.util.List;
 
-import com.thoughtworks.xstream.converters.MarshallingContext;
-import com.thoughtworks.xstream.converters.UnmarshallingContext;
-import com.thoughtworks.xstream.io.HierarchicalStreamReader;
-import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
+import br.com.caelum.vraptor.ioc.Component;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.SingleValueConverter;
-
-import br.com.caelum.vraptor.ioc.ApplicationScoped;
-import br.com.caelum.vraptor.ioc.Component;
 
 /**
  * Component used to scan all XStream converters
@@ -36,11 +32,7 @@ public class XStreamConverters {
      * for DI purposes
      */
     @Component @ApplicationScoped
-	public static class NullConverter implements Converter, SingleValueConverter {
-        public void marshal(Object o, HierarchicalStreamWriter hierarchicalStreamWriter, MarshallingContext marshallingContext) {}
-
-        public Object unmarshal(HierarchicalStreamReader hierarchicalStreamReader, UnmarshallingContext unmarshallingContext) {return null;}
-
+	public static class NullConverter implements SingleValueConverter {
         public String toString(Object o) {return null;}
 
         public Object fromString(String s) {return null;}

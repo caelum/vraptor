@@ -16,7 +16,6 @@ br.com.caelum.vraptor.ioc
 br.com.caelum.vraptor.ioc.guice
 br.com.caelum.vraptor.ioc.pico
 br.com.caelum.vraptor.ioc.spring
-br.com.caelum.vraptor.jersey
 br.com.caelum.vraptor.proxy
 br.com.caelum.vraptor.resource
 br.com.caelum.vraptor.restfulie
@@ -36,6 +35,7 @@ br.com.caelum.vraptor.util.hibernate
 br.com.caelum.vraptor.util.hibernate.extra
 br.com.caelum.vraptor.util.interceptors
 br.com.caelum.vraptor.util.jpa
+br.com.caelum.vraptor.util.jpa.extra
 br.com.caelum.vraptor.util.test
 br.com.caelum.vraptor.validator
 br.com.caelum.vraptor.validator.annotation

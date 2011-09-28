@@ -143,7 +143,7 @@
 <span class="java4">public </span><span class="java9">void </span><span class="java10">logica</span><span class="java8">(</span><span class="java10">Parametro parametro, Validator validator</span><span class="java8">) {<br />
 &nbsp;&nbsp; </span><span class="java3">//parametro populado com parametros do request<br />
 &nbsp;&nbsp; //validator vindo com inje&ccedil;ão de depend&ecirc;ncias<br />
-</span><span class="java8">}</span></code></div></li><li><p>plugin - @Load nos par&acirc;metros das l&oacute;gicas (....util.hibernate.extra)</p><div class="java"><code class="java">
+</span><span class="java8">}</span></code></div></li><li><p>plugin - @Load nos par&acirc;metros das l&oacute;gicas (....util.hibernate.extra e ....util.jpa.extra)</p><div class="java"><code class="java">
 <span class="java16">@Path</span><span class="java8">(</span><span class="java5">&#34;/entidade/{entidade.id}&#34;</span><span class="java8">) </span><span class="java3">//o id precisa estar preenchido no request<br />
 </span><span class="java4">public </span><span class="java9">void </span><span class="java10">minhaLogica</span><span class="java8">(</span><span class="java16">@Load </span><span class="java10">Entidade entidade</span><span class="java8">) {<br />
 &nbsp; </span><span class="java3">//entidade j&aacute; vem carregada do banco, pelo id, e se não existir retorna 404 automaticamente<br />

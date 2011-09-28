@@ -1,6 +1,7 @@
 <project>
   <!-- The sdk location is available on Eclipse: Project > Properties > Google > AppEngine -->
-  <property name="sdk.dir" location="PATH_TO_SDK_FOLDER" />
+  <property environment="env"/>
+  <property name="sdk.dir" location="${env.PATH_TO_SDK_FOLDER}" />
 
   <import file="${sdk.dir}/config/user/ant-macros.xml" />
 

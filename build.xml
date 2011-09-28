@@ -32,9 +32,9 @@
 		<ant dir="vraptor-example-compatibility" target="update-jars"/>
 		<ant dir="vraptor-blank-project" target="update-jars"/>
 		<ant dir="vraptor-plugin-gae" target="artifacts"/>
-		<ant dir="vraptor-plugin-flex" target="libs"/>
-		<ant dir="vraptor-blank-project-gae" target="update-jars"/>
-		<ant dir="vraptor-blank-project-scala" target="update-jars"/>
+		<!--ant dir="vraptor-plugin-flex" target="libs"/-->
+		<!--ant dir="vraptor-blank-project-gae" target="update-jars"/-->
+		<!--ant dir="vraptor-blank-project-scala" target="update-jars"/-->
 		<ant dir="vraptor-mydvds" target="update-jars"/>
 	</target>
 
@@ -44,12 +44,11 @@
 	<target name="all" depends="test" />
 	
 	<target name="zips-site">
-		<ant dir="vraptor-site" target="assembly"/>
-		<mkdir dir="target"/>
-		<move file="vraptor-site/site.war" tofile="target/vraptor-site-${vraptor.version}.war" />
+		<ant dir="vraptor-site" target="doc"/>
+		<ant dir="vraptor-site" target="javadoc"/>
 	</target>
 	
-	<target name="zips-vraptor" depends="zips-site">
+	<target name="zips-vraptor" depends="zips-site" >
 		<mkdir dir="target"/>
 		<move file="vraptor-core/target/vraptor-${vraptor.version}.jar" tofile="target/vraptor-${vraptor.version}.jar" />
 		<zip destfile="target/vraptor-${vraptor.version}.zip">
@@ -93,6 +92,6 @@
 		</zip>
 	</target>
 	
-	<target name="zips" depends="clean,deploy-to-examples,zips-vraptor,zips-blank-project,zips-site,zips-mydvds,zips-blank-project-gae"/>
+	<target name="zips" depends="clean,deploy-to-examples,zips-vraptor,zips-blank-project,zips-mydvds,zips-blank-project-gae"/>
 
 </project>

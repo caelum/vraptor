@@ -12,10 +12,6 @@
 	<property name="zip_file" value="vraptor-blank-project.zip" />
 	<property name="webinf.lib.dir" value="WebContent/WEB-INF/lib" />
 
-	<target name="asdf">
-		<echo message="${vraptor.core}"></echo>
-	</target>
-	
 	<target name="zip" depends="clean, update-jars" description="--> creates zip file">
 		<zip destfile="${zip_file}" basedir="../" includes="vraptor-blank-project/**/*" excludes="${zip_file}" />
 	</target>

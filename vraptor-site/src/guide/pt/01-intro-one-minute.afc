@@ -31,7 +31,7 @@ Se você quiser usar o Maven, você pode adicionar o artefato do VRaptor como de
 [/xml]
 [section Um Controller simples]
 
-Chamaremos de **Controller** as classes contendo a lógica de negócio do seu sistema. 
+Chamaremos de **Controller** as classes que explicam a lógica de negócio a sua página web. 
 São as classes que alguns frameworks podem vir a chamar de actions ou services, apesar
 de não significarem exatamente a mesma coisa.
  

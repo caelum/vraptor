@@ -29,6 +29,8 @@ public interface XStreamBuilder {
 	
 	public XStream jsonInstance();
 	
+	public XStream configure(XStream xstream);
+	
 	public XStreamBuilder indented();
 	
 	public XStreamBuilder withoutRoot();

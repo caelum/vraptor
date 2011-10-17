@@ -15,18 +15,20 @@
  */
 package br.com.caelum.vraptor.deserialization;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
 import java.io.InputStream;
 import java.lang.reflect.Method;
 
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.serialization.xstream.VRaptorClassMapper;
+import br.com.caelum.vraptor.serialization.xstream.VRaptorXStream;
+import br.com.caelum.vraptor.serialization.xstream.XStreamBuilder;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.HierarchicalStreamDriver;
 import com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver;
-import com.thoughtworks.xstream.mapper.MapperWrapper;
 
 /**
  * 
@@ -37,21 +39,22 @@ import com.thoughtworks.xstream.mapper.MapperWrapper;
 public class JsonDeserializer implements Deserializer{
 
 	private final ParameterNameProvider provider;
+	private final XStreamBuilder builder;
+	private final TypeNameExtractor extractor;
 
-	public JsonDeserializer(ParameterNameProvider provider,TypeNameExtractor extractor) {
+	public JsonDeserializer(ParameterNameProvider provider,TypeNameExtractor extractor, XStreamBuilder builder) {
 		this.provider = provider;
 		this.extractor = extractor;
+		this.builder = builder;
 	}
 
-	private final TypeNameExtractor extractor;
-	private HierarchicalStreamDriver driver =  new JettisonMappedXmlDriver();
 
 	public Object[] deserialize(InputStream inputStream, ResourceMethod method) {
 		Method javaMethod = method.getMethod();
 		Class<?>[] types = javaMethod.getParameterTypes();
-		if (types.length == 0) {
-			throw new IllegalArgumentException("Methods that consumes representations must receive just one argument: the root element");
-		}
+		checkArgument(types.length > 0, 
+				"Methods that consumes representations must receive just one argument: the root element");
+		
 		XStream xStream = getConfiguredXStream(javaMethod, types);
 
 		Object[] params = new Object[types.length];
@@ -67,7 +70,7 @@ public class JsonDeserializer implements Deserializer{
 	public XStream getConfiguredXStream(Method javaMethod, Class<?>[] types) {
 		XStream xStream = getXStream();
 		aliasParams(javaMethod, types, xStream);
-		return xStream;
+		return builder.configure(xStream);
 	}
 
 	private void chooseParam(Class<?>[] types, Object[] params, Object deserialized) {
@@ -90,20 +93,14 @@ public class JsonDeserializer implements Deserializer{
 	 * @return the configured xstream instance
 	 */
 	protected XStream getXStream() {
-		return new XStream(getHierarchicalStreamDriver()) {
-			{setMode(NO_REFERENCES);}
-			@Override
-			protected MapperWrapper wrapMapper(MapperWrapper next) {
-				return new VRaptorClassMapper(next, extractor);
-			}
-		};
+		return new VRaptorXStream(extractor, getHierarchicalStreamDriver());
 	}
 
 	/**
 	 * You can override this method for configuring Driver before serialization
 	 */
 	protected HierarchicalStreamDriver getHierarchicalStreamDriver() {
-		return this.driver;
+		return new JettisonMappedXmlDriver();
 	}
 
 }

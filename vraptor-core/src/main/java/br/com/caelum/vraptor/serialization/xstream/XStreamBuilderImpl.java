@@ -31,7 +31,6 @@ import com.thoughtworks.xstream.io.HierarchicalStreamDriver;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.io.json.JsonHierarchicalStreamDriver;
 import com.thoughtworks.xstream.io.json.JsonWriter;
-import com.thoughtworks.xstream.mapper.MapperWrapper;
 
 /**
  * Implementation of default XStream configuration
@@ -61,15 +60,7 @@ public class XStreamBuilderImpl implements XStreamBuilder {
     }
 
 	public XStream xmlInstance() {
-		XStream xstream = new XStream() {
-			{setMode(NO_REFERENCES);}
-			@Override
-			protected MapperWrapper wrapMapper(MapperWrapper next) {
-				return new VRaptorClassMapper(next, extractor);
-			}
-		};
-		converters.registerComponents(xstream);
-		return xstream;
+		return configure(new VRaptorXStream(extractor));
 	}
 	
 	protected static final String DEFAULT_NEW_LINE = "";
@@ -79,13 +70,11 @@ public class XStreamBuilderImpl implements XStreamBuilder {
     protected static final char[] INDENTED_LINE_INDENTER = { ' ', ' '};
     
 	public XStream jsonInstance() {
-		XStream xstream = new XStream(getHierarchicalStreamDriver()) {
-            {setMode(NO_REFERENCES);}
-            @Override
-            protected MapperWrapper wrapMapper(MapperWrapper next) {
-                return new VRaptorClassMapper(next, extractor);
-            }
-        };
+		return configure(new VRaptorXStream(extractor, getHierarchicalStreamDriver()));
+	}
+	
+	@Override
+	public XStream configure(XStream xstream) {
 		converters.registerComponents(xstream);
 		return xstream;
 	}

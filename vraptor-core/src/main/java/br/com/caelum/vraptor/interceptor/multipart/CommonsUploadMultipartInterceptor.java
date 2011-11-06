@@ -99,10 +99,17 @@ public class CommonsUploadMultipartInterceptor
 
             final Multimap<String, String> params = LinkedListMultimap.create();
 
-            int i = 0;
+             Map<String, Integer> variables = new HashMap<String, Integer>(); 
+            
             for (FileItem item : items) {
                 String name = item.getFieldName();
-                name = name.replace("[]", "[" + i++ + "]"); 
+                if (name.contains("[]")) {
+                    Integer count = variables.get(name);
+                	if (count == null)
+                		count = -1;
+                	variables.put(name, ++count);
+                	name = name.replace("[]", "[" + count + "]");
+                }
 
                 if (item.isFormField()) {
                     logger.debug("{} is a field", name);

@@ -124,4 +124,23 @@ public class Servlet3MultipartInterceptorTest {
         verify(request).setAttribute(eq("myfile0"), any(UploadedFile.class));
         verify(request).setAttribute(eq("myfile1"), any(UploadedFile.class));
     }
+    
+    @Test
+    public void multipleUpload()
+        throws Exception {
+        Part file0 = new VraptorPart("myfile0[]", "text/plain", "file.txt", "vraptor3".getBytes());
+        Part file1 = new VraptorPart("myfile0[]", "text/plain", "file.txt", "vraptor3".getBytes());
+
+        when(request.getContentType()).thenReturn("multipart/form-data");
+        when(request.getMethod()).thenReturn("POST");
+        when(request.getParts()).thenReturn(Arrays.asList(file0, file1));
+
+        interceptor.intercept(stack, method, instance);
+
+        verify(parameters).setParameter("myfile0[0]", "myfile0[0]");
+        verify(parameters).setParameter("myfile0[1]", "myfile0[1]");
+        
+        verify(request).setAttribute(eq("myfile0[0]"), any(UploadedFile.class));
+        verify(request).setAttribute(eq("myfile0[1]"), any(UploadedFile.class));
+    }
 }

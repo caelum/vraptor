@@ -143,4 +143,28 @@ public class CommonsUploadMultipartInterceptorTest {
         verify(request).setAttribute(eq("myfile0"), any(UploadedFile.class));
         verify(request).setAttribute(eq("myfile1"), any(UploadedFile.class));
     }
+    
+    @Test
+    public void multipleUpload()
+        throws Exception {
+        interceptor = new CommonsUploadMultipartInterceptor(request, parameters, config, validator, mockCreator);
+
+        final List<FileItem> elements = new ArrayList<FileItem>();
+        elements.add(new MockFileItem("myfile0[]", "foo.txt", "foo".getBytes()));
+        elements.add(new MockFileItem("myfile0[]", "foo.txt", "bar".getBytes()));
+
+        when(request.getContentType()).thenReturn("multipart/form-data");
+        when(request.getMethod()).thenReturn("POST");
+        when(mockUpload.parseRequest(request)).thenReturn(elements);
+
+        interceptor.intercept(stack, method, instance);
+        
+        System.out.println(parameters.getParameterMap());
+
+        verify(parameters).setParameter("myfile0[0]", "myfile0[0]");
+        verify(parameters).setParameter("myfile0[1]", "myfile0[1]");
+        
+        verify(request).setAttribute(eq("myfile0[0]"), any(UploadedFile.class));
+        verify(request).setAttribute(eq("myfile0[1]"), any(UploadedFile.class));
+    }
 }

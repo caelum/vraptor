@@ -26,8 +26,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
-import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.FileUploadBase.SizeLimitExceededException;
+import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.slf4j.Logger;
@@ -45,17 +45,19 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.validator.Validations;
 
 import com.google.common.base.Strings;
+import com.google.common.collect.HashMultiset;
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
+import com.google.common.collect.Multiset;
 
 /**
  * A multipart interceptor based on Apache Commons Upload. Provided parameters are injected through
  * RequestParameters.set and uploaded files are made available through
- *
+ * 
  * @author Guilherme Silveira
  * @author Otávio Scherer Garcia
  */
-@Intercepts(before=ResourceLookupInterceptor.class, after = {})
+@Intercepts(before = ResourceLookupInterceptor.class, after = {})
 @RequestScoped
 public class CommonsUploadMultipartInterceptor
     implements MultipartInterceptor {
@@ -67,6 +69,8 @@ public class CommonsUploadMultipartInterceptor
     private final MultipartConfig config;
     private final Validator validator;
     private final ServletFileUploadCreator fileUploadCreator;
+
+    final Multiset<String> indexes = HashMultiset.create();
 
     public CommonsUploadMultipartInterceptor(HttpServletRequest request, MutableRequest parameters, MultipartConfig cfg,
             Validator validator, ServletFileUploadCreator fileUploadCreator) {
@@ -99,18 +103,10 @@ public class CommonsUploadMultipartInterceptor
 
             final Multimap<String, String> params = LinkedListMultimap.create();
 
-             Map<String, Integer> variables = new HashMap<String, Integer>(); 
-            
             for (FileItem item : items) {
                 String name = item.getFieldName();
-                if (name.contains("[]")) {
-                    Integer count = variables.get(name);
-                	if (count == null)
-                		count = -1;
-                	variables.put(name, ++count);
-                	name = name.replace("[]", "[" + count + "]");
-                }
-
+                name = fixIndexedParameters(name);
+                
                 if (item.isFormField()) {
                     logger.debug("{} is a field", name);
                     params.put(name, getValue(item));
@@ -120,7 +116,7 @@ public class CommonsUploadMultipartInterceptor
                     processFile(item, name);
 
                 } else {
-                    logger.debug("A file field was empty: {}",  item.getFieldName());
+                    logger.debug("A file field was empty: {}", item.getFieldName());
                 }
             }
 
@@ -147,7 +143,7 @@ public class CommonsUploadMultipartInterceptor
     /**
      * This method is called when the {@link SizeLimitExceededException} was thrown. By default, add the key
      * file.limit.exceeded using {@link Validations}.
-     *
+     * 
      * @param e
      */
     protected void reportSizeLimitExceeded(final SizeLimitExceededException e) {
@@ -180,7 +176,7 @@ public class CommonsUploadMultipartInterceptor
         return factory;
     }
 
-    private String getValue(FileItem item) {
+    protected String getValue(FileItem item) {
         String encoding = request.getCharacterEncoding();
         if (!Strings.isNullOrEmpty(encoding)) {
             try {
@@ -190,5 +186,15 @@ public class CommonsUploadMultipartInterceptor
             }
         }
         return item.getString();
+    }
+
+    protected String fixIndexedParameters(String name) {
+        if (name.contains("[]")) {
+            String newName = name.replace("[]", "[" + (indexes.count(name)) + "]");
+            indexes.add(name);
+            logger.debug("{} was renamed to {}", name, newName);
+            name = newName;
+        }
+        return name;
     }
 }

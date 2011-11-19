@@ -42,8 +42,10 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.validator.Validations;
 
 import com.google.common.base.Strings;
+import com.google.common.collect.HashMultiset;
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
+import com.google.common.collect.Multiset;
 import com.google.common.io.ByteStreams;
 import com.google.common.io.Closeables;
 
@@ -59,10 +61,10 @@ import com.google.common.io.Closeables;
  * https://servlet-spec-public.dev.java.net/issues/show_bug.cgi?id=14 for more info.
  * </p>
  * <p>
- * TODO According JSR315, all form fields are also avaliable via request.getParameter and request.getParameters(), but not
- * all containers implements this issue (Glassfish 3.0 fails).
+ * TODO According JSR315, all form fields are also avaliable via request.getParameter and request.getParameters(), but
+ * not all containers implements this issue (Glassfish 3.0 fails).
  * </p>
- *
+ * 
  * @author Otávio Scherer Garcia
  * @since 3.2
  * @see DefaultMultipartConfig
@@ -70,7 +72,7 @@ import com.google.common.io.Closeables;
  * @see MultipartInterceptor
  */
 
-@Intercepts(before=ParametersInstantiatorInterceptor.class)
+@Intercepts(before = ParametersInstantiatorInterceptor.class)
 @RequestScoped
 public class Servlet3MultipartInterceptor
     implements MultipartInterceptor {
@@ -86,6 +88,8 @@ public class Servlet3MultipartInterceptor
     private final MutableRequest parameters;
     private final Validator validator;
 
+    final Multiset<String> indexes = HashMultiset.create();
+
     public Servlet3MultipartInterceptor(HttpServletRequest request, MutableRequest parameters, Validator validator) {
         this.request = request;
         this.parameters = parameters;
@@ -97,8 +101,8 @@ public class Servlet3MultipartInterceptor
      */
     public boolean accepts(ResourceMethod method) {
         if (!request.getMethod().toUpperCase().equals("POST")) {
-			return false;
-		}
+            return false;
+        }
 
         String contentType = request.getContentType();
         return contentType != null && contentType.startsWith(ACCEPT_MULTIPART);
@@ -112,7 +116,8 @@ public class Servlet3MultipartInterceptor
 
         try {
             for (Part part : request.getParts()) {
-                final String name = part.getName();
+                String name = part.getName();
+                name = fixIndexedParameters(name);
 
                 if (isField(part)) {
                     logger.debug("{} is a field", name);
@@ -149,7 +154,7 @@ public class Servlet3MultipartInterceptor
     /**
      * This method is called when the max upload size is reached. There are no way to get the maxFileSize() and
      * maxRequestSize() attributes in a Filter.
-     *
+     * 
      * @param e
      */
     protected void reportSizeLimitExceeded(final IllegalStateException e) {
@@ -165,14 +170,14 @@ public class Servlet3MultipartInterceptor
     /**
      * Returns true if the part is a field, false otherwise.
      */
-    private boolean isField(Part part) {
+    protected boolean isField(Part part) {
         return Strings.isNullOrEmpty(part.getContentType());
     }
 
     /**
      * Get the filename of the part. The filename is extracted by header.
      */
-    private String getFileName(Part part) {
+    protected String getFileName(Part part) {
         String name = part.getHeader(CONTENT_DISPOSITION_KEY);
         return EXTRACT_FILENAME.matcher(name).replaceAll("$2");
     }
@@ -180,7 +185,7 @@ public class Servlet3MultipartInterceptor
     /**
      * Get the content of a part as String.
      */
-    private String getStringValue(Part part)
+    protected String getStringValue(Part part)
         throws IOException {
         String encoding = request.getCharacterEncoding();
 
@@ -197,5 +202,15 @@ public class Servlet3MultipartInterceptor
         }
 
         return new String(out);
+    }
+
+    protected String fixIndexedParameters(String name) {
+        if (name.contains("[]")) {
+            String newName = name.replace("[]", "[" + (indexes.count(name)) + "]");
+            indexes.add(name);
+            logger.debug("{} was renamed to {}", name, newName);
+            name = newName;
+        }
+        return name;
     }
 }

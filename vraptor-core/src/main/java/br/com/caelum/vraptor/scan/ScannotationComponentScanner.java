@@ -104,7 +104,7 @@ public class ScannotationComponentScanner implements ComponentScanner {
             URL url = urls.nextElement();
             logger.info("scanning url {}", url);
 
-            if (url.getProtocol().equals("vfs")) {
+            if (url.getProtocol().startsWith("vfs")) {
                 fileName = toJBossVFSFileName(url);
             } else {
                 fileName = toFileName(resource, url.getFile());

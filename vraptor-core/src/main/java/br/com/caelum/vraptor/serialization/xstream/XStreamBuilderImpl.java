@@ -73,7 +73,6 @@ public class XStreamBuilderImpl implements XStreamBuilder {
 		return configure(new VRaptorXStream(extractor, getHierarchicalStreamDriver()));
 	}
 	
-	@Override
 	public XStream configure(XStream xstream) {
 		converters.registerComponents(xstream);
 		return xstream;

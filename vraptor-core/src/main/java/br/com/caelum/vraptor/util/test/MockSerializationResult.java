@@ -101,7 +101,6 @@ public class MockSerializationResult extends MockResult {
 		if (view.isAssignableFrom(RepresentationResult.class)) {
 			this.serialization = new XStreamXMLSerialization(response, extractor, initializer, builder);
 			return view.cast(new DefaultRepresentationResult(new FormatResolver() {
-				@Override
 				public String getAcceptFormat() {
 					return "xml";
 				}

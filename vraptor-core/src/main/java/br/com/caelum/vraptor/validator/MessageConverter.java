@@ -30,12 +30,10 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 @Component
 public class MessageConverter implements Converter {
 
-	@Override
 	public boolean canConvert(Class type) {
 		return Message.class.isAssignableFrom(type);
 	}
 
-	@Override
 	public void marshal(Object val, HierarchicalStreamWriter writer, MarshallingContext context) {
 		Message message = (Message) val;
 		writer.startNode("message");
@@ -47,7 +45,6 @@ public class MessageConverter implements Converter {
 		writer.endNode();
 	}
 
-	@Override
 	public Object unmarshal(HierarchicalStreamReader reader,
 			UnmarshallingContext context) {
 		return null;

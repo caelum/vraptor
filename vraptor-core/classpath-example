@@ -76,7 +76,6 @@
 	<classpathentry kind="lib" path="lib/mandatory/slf4j-log4j12-1.6.1.jar"/>
 	<classpathentry kind="lib" path="lib/containers/guice/aopalliance.jar"/>
 	<classpathentry kind="lib" path="lib/containers/guice/javax.inject.jar"/>
-	<classpathentry kind="lib" path="lib/containers/picocontainer/picocontainer-2.8.jar"/>
 	<classpathentry kind="lib" path="lib/containers/spring/aopalliance.jar"/>
 	<classpathentry kind="lib" path="lib/containers/spring/aspectjrt.jar"/>
 	<classpathentry kind="lib" path="lib/containers/spring/commons-logging.jar"/>
@@ -119,5 +118,6 @@
 	<classpathentry kind="lib" path="lib/containers/guice/guice-3.0.jar"/>
 	<classpathentry kind="lib" path="lib/containers/guice/guice-multibindings-3.0.jar"/>
 	<classpathentry kind="lib" path="lib/build/junit-4.9.jar"/>
+	<classpathentry kind="lib" path="lib/containers/picocontainer/picocontainer-2.13.6.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

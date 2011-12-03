@@ -17,8 +17,8 @@ package br.com.caelum.vraptor.scan;
 
 import static com.google.common.base.Objects.firstNonNull;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.annotation.Annotation;
 import java.net.URL;
 import java.util.Collection;
@@ -29,9 +29,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import net.vidageek.mirror.dsl.Mirror;
-
 import org.scannotation.AnnotationDB;
+import org.scannotation.archiveiterator.FileProtocolIteratorFactory;
+import org.scannotation.archiveiterator.Filter;
+import org.scannotation.archiveiterator.StreamIterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,33 +66,37 @@ public class ScannotationComponentScanner implements ComponentScanner {
 		return results;
 	}
 
-	private Map<String, Set<String>> scanWebInfClasses(URL webInfClasses) {
-		try {
-			AnnotationDB db = createAnnotationDB();
-			db.scanArchives(webInfClasses);
-			return db.getAnnotationIndex();
-		} catch (IOException e) {
-			throw new ScannerException("Could not scan WEB-INF/classes", e);
-		}
-	}
+    private Map<String, Set<String>> scanWebInfClasses(URL webInfClasses) {
+        logger.debug("scanning WEB-INF/classes at {}", webInfClasses);
+        
+        try {
+            AnnotationDB db = createAnnotationDB();
+            db.scanArchives(webInfClasses);
+            return db.getAnnotationIndex();
+        } catch (IOException e) {
+            throw new ScannerException("Could not scan WEB-INF/classes", e);
+        }
+    }
 
-	private Map<String, Set<String>> scanBasePackages(List<String> basePackages, ClasspathResolver resolver) {
-		try {
-			AnnotationDB db = createAnnotationDB();
+    private Map<String, Set<String>> scanBasePackages(List<String> basePackages, ClasspathResolver resolver) {
+        logger.debug("scanning {} packages", basePackages.size());
+        
+        try {
+            AnnotationDB db = createAnnotationDB();
 
-			for (String basePackage : basePackages) {
-				scanPackage(basePackage, db, resolver);
-			}
+            for (String basePackage : basePackages) {
+                scanPackage(basePackage, db, resolver);
+            }
 
-			return db.getAnnotationIndex();
-		} catch (IOException e) {
-			throw new ScannerException("Could not scan base packages", e);
-		}
-	}
+            return db.getAnnotationIndex();
+        } catch (IOException e) {
+            throw new ScannerException("Could not scan base packages", e);
+        }
+    }
 
+    private void scanPackage(String basePackage, AnnotationDB db, ClasspathResolver resolver) throws IOException {
+        logger.debug("scanning package at {}", basePackage);
 
-
-	private void scanPackage(String basePackage, AnnotationDB db, ClasspathResolver resolver) throws IOException {
         String resource = basePackage.replace('.', '/');
         Enumeration<URL> urls = resolver.getClassLoader().getResources(resource);
         if (!urls.hasMoreElements()) {
@@ -99,40 +104,30 @@ public class ScannotationComponentScanner implements ComponentScanner {
             return;
         }
 
+        // FIXME it's not better way
+        FileProtocolIteratorFactory factory = new FileProtocolIteratorFactory();
+        Filter onlyClassesFilter = new Filter() {
+            public boolean accepts(String filename) {
+                return filename.endsWith(".class");
+            }
+        };
+
         do {
-            String fileName = null;
             URL url = urls.nextElement();
             logger.info("scanning url {}", url);
-
-            if (url.getProtocol().startsWith("vfs")) {
-                fileName = toJBossVFSFileName(url);
-            } else {
-                fileName = toFileName(resource, url.getFile());
-            }
             
-            if (!fileName.startsWith("file:")) {
-                fileName = "file:" + fileName;
+            try {
+                StreamIterator it = factory.create(url, onlyClassesFilter);
+
+                InputStream stream;
+                while ((stream = it.next()) != null) {
+                    db.scanClass(stream);
+                    stream.close();
+                }
+            } catch (IOException e) {
+                throw new ScannerException("Could not scan url '" + url + "'", e);
             }
-
-            db.scanArchives(new URL(fileName));
         } while (urls.hasMoreElements());
-	}
-
-    private String toJBossVFSFileName(URL url)
-        throws IOException {
-        Object content = url.openConnection().getContent();
-        File pfile = (File) new Mirror().on(content).invoke().method("getPhysicalFile").withoutArgs();
-        logger.info("real file for url {} is {}", url, pfile);
-
-        if (pfile.isDirectory()) {
-            return pfile.getAbsolutePath() + "/";
-        }
-
-        return pfile.getAbsolutePath();
-    }
-
-    private String toFileName(String resource, String file) {
-        return file.substring(0, file.length() - resource.length() - 1).replaceAll("(!)(/)?$", "");
     }
 
 	private Set<String> findStereotypes(Map<String, Set<String>> webInfClassesAnnotationMap, Map<String, Set<String>> basePackagesAnnotationMap, List<String> basePackages) {

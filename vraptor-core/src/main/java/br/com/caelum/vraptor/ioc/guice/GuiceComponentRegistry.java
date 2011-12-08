@@ -19,11 +19,12 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +34,13 @@ import br.com.caelum.vraptor.ioc.Cacheable;
 import br.com.caelum.vraptor.ioc.ComponentFactory;
 import br.com.caelum.vraptor.ioc.ComponentFactoryIntrospector;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import com.google.inject.Binder;
+import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Scope;
 import com.google.inject.ScopeAnnotation;
@@ -115,7 +122,7 @@ public class GuiceComponentRegistry implements ComponentRegistry {
 		if (componentType.isAnnotationPresent(Cacheable.class)) {
 			return binder.bind(requiredType).annotatedWith(Cacheable.class).toConstructor(componentType.getDeclaredConstructors()[0]);
 		}
-		Constructor constructor = componentType.getDeclaredConstructors()[0];
+		Constructor constructor = getConstructor(componentType);
 		for (Type type : constructor.getGenericParameterTypes()) {
 			if (type instanceof ParameterizedType) {
 				ParameterizedType ptype =((ParameterizedType) type);
@@ -127,6 +134,15 @@ public class GuiceComponentRegistry implements ComponentRegistry {
 			}
 		}
 		return binder.bind(requiredType).toConstructor(constructor);
+	}
+	private Constructor getConstructor(Class componentType) {
+		Constructor[] constructors = componentType.getDeclaredConstructors();
+		Collection<Constructor> filteredConstructor = Collections2.filter(Lists.newArrayList(constructors), new Predicate<Constructor>() {
+			public boolean apply(Constructor constructor) {
+				return constructor.isAnnotationPresent(Inject.class);
+			}
+		});
+		return filteredConstructor.size() > 0 ? Lists.newArrayList(filteredConstructor).get(0) : constructors[0]; 
 	}
 
 	private void registerFactory(Class componentType) {

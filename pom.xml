@@ -101,6 +101,11 @@
 			<artifactId>paranamer</artifactId>
 			<version>2.2</version>
 		</dependency>
+		<dependency>
+			<groupId>com.thoughtworks.xstream</groupId>
+			<artifactId>xstream</artifactId>
+			<version>1.3.1</version>
+		</dependency>
 
 		<!-- spring -->
 		<dependency>
@@ -295,13 +300,6 @@
 			<optional>true</optional>
 		</dependency>
 		<!-- [/Out of Maven Repo] -->
-		<dependency>
-			<groupId>com.thoughtworks.xstream</groupId>
-			<artifactId>xstream</artifactId>
-			<version>1.3.1</version>
-			<optional>true</optional>
-		</dependency>
-
 
 		<dependency>
 			<groupId>javax.servlet</groupId>

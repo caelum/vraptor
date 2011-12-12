@@ -36,6 +36,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
+import br.com.caelum.vraptor.HeaderParam;
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.core.InterceptorStack;
@@ -85,6 +86,11 @@ public class ParametersInstantiatorInterceptorTest {
         }
         void otherMethod(int oneParam){
         }
+    }
+    
+    class HeaderParamComponent{
+    	void method(@HeaderParam("password") String password) {}
+    	void otherMethod(@HeaderParam("user") String user,@HeaderParam("password") String password, @HeaderParam("token") String token) {}
     }
 
     @Test
@@ -160,6 +166,55 @@ public class ParametersInstantiatorInterceptorTest {
 
         instantiator.intercept(stack, method, null);
     }
+	
+	@Test
+	public void shouldAddHeaderInformationToRequestWhenHeaderParamAnnotationIsPresent() throws Exception {
+		Object[] values = new Object[] { new Object() };
+		ResourceMethod method = DefaultResourceMethod.instanceFor(HeaderParamComponent.class, HeaderParamComponent.class.getDeclaredMethod("method", String.class));
+		when(request.getHeader("password")).thenReturn("123");
+    	when(parametersProvider.getParametersFor(method, errors, bundle)).thenReturn(values);
+
+        instantiator.intercept(stack, method, null);
+        
+        verify(request).setAttribute("password", "123");
+        verify(params).setParameters(values);
+        verify(stack).next(method, null);
+        verify(validator).addAll(Collections.<Message>emptyList());
+	}
+	
+	@Test
+	public void shouldAddHeaderInformationToRequestWhenHeaderParamAnnotationIsNotPresent() throws Exception {
+		Object[] values = new Object[] { new Object() };
+		ResourceMethod method = DefaultResourceMethod.instanceFor(Component.class, Component.class.getDeclaredMethod("method"));
+    	when(parametersProvider.getParametersFor(method, errors, bundle)).thenReturn(values);
+
+        instantiator.intercept(stack, method, null);
+        
+        verify(request, never()).setAttribute("password", "123");
+        verify(params).setParameters(values);
+        verify(stack).next(method, null);
+        verify(validator).addAll(Collections.<Message>emptyList());
+	}
+	
+	@Test
+	public void shouldAddVariousHeaderInformationsToRequestWhenHeaderParamAnnotationIsPresent() throws Exception {
+		Object[] values = new Object[] { new Object() };
+		ResourceMethod method = DefaultResourceMethod.instanceFor(HeaderParamComponent.class, HeaderParamComponent.class.getDeclaredMethod("otherMethod", String.class, String.class, String.class));
+		
+		when(request.getHeader("user")).thenReturn("user");
+		when(request.getHeader("password")).thenReturn("123");
+		when(request.getHeader("token")).thenReturn("daek2321");
+    	when(parametersProvider.getParametersFor(method, errors, bundle)).thenReturn(values);
+
+        instantiator.intercept(stack, method, null);
+        
+        verify(request).setAttribute("user", "user");
+        verify(request).setAttribute("password", "123");
+        verify(request).setAttribute("token", "daek2321");
+        verify(params).setParameters(values);
+        verify(stack).next(method, null);
+        verify(validator).addAll(Collections.<Message>emptyList());
+	}
 
     private <T> Answer<T> addErrorsToListAndReturn(final T value, final String... messages) {
     	return new Answer<T>() {

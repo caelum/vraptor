@@ -202,6 +202,6 @@ public class OgnlParametersProvider implements ParametersProvider {
 
 	private Map<String, String[]> parametersThatStartWith(String name) {
 		Map<String, String[]> requestNames = filterKeys(request.getParameterMap(), containsPattern("^" + name));
-		return requestNames;
+		return new TreeMap<String, String[]>(requestNames);
 	}
 }

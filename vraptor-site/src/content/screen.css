@@ -912,6 +912,11 @@ div#consultoriaFooter {
 	text-decoration: none;
 	display: block;
 	cursor: pointer;
+	margin-bottom: 5px;
+}
+
+#footerContent div#treinamentoFooter > a.image {
+	margin: 5px 0 0 25px;
 }
 
 div#footerContent a.moreIcon {

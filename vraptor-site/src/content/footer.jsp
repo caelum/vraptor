@@ -19,6 +19,8 @@
         	<div id="treinamentoFooter">
             	<a href="http://www.caelum.com.br/curso/fj-28-vraptor-hibernate-ajax/" class="moreIcon" title="Saiba Mais"><span>+</span></a><h3><a href="http://www.caelum.com.br/curso/fj-28-vraptor-hibernate-ajax/"><fmt:message key="treinamento"/></a></h3>
                 <p><a href="http://www.caelum.com.br/curso/fj-28-vraptor-hibernate-ajax/"><fmt:message key="treinamento.head"/></a></p>
+                <a class="image" href="http://triadworks.com.br/"><img src="${path }/images/triadworks-logo.png" width="100" height="30"/></a>
+                <a class="image" href="http://www.caelum.com.br/curso/online/vraptor"><img src="${path }/images/caelum-logo.png" width="100" height="31"/></a>
             </div><!--treinamento-->
      <div class="footbar">
             	<img class="logoFooter" src="${path }/images/logoCaelumGray-trans.png" alt="vraptor logo" />

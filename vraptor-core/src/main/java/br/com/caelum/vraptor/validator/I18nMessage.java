@@ -20,6 +20,9 @@ import static com.google.common.base.Objects.toStringHelper;
 import java.text.MessageFormat;
 import java.util.ResourceBundle;
 
+import com.google.common.base.Supplier;
+import com.google.common.base.Suppliers;
+
 
 /**
  * In this Message implementation, the message is i18n'ed while the category is literal.
@@ -36,7 +39,7 @@ public class I18nMessage implements Message {
 	private final Object category;
 	private final String message;
 	private final Object[] parameters;
-	private transient ResourceBundle bundle;
+	private transient Supplier<ResourceBundle> bundle;
 	
 	public I18nMessage(I18nParam category, String message, Object... parameters) {
 		this.category = category;
@@ -51,6 +54,10 @@ public class I18nMessage implements Message {
 	}
 
 	public void setBundle(ResourceBundle bundle) {
+		this.bundle = Suppliers.ofInstance(bundle);
+	}
+	
+	public void setLazyBundle(Supplier<ResourceBundle> bundle) {
 		this.bundle = bundle;
 	}
 
@@ -61,7 +68,7 @@ public class I18nMessage implements Message {
 	public String getMessage() {
 		checkBundle();
 
-		return MessageFormat.format(bundle.getString(message), i18n(parameters));
+		return MessageFormat.format(bundle.get().getString(message), i18n(parameters));
 	}
 
 	private void checkBundle() {
@@ -73,7 +80,7 @@ public class I18nMessage implements Message {
     private Object[] i18n(Object[] parameters) {
         for (int i = 0; i < parameters.length; i++) {
             if (parameters[i] instanceof I18nParam) {
-                parameters[i] = ((I18nParam)parameters[i]).getKey(bundle);
+                parameters[i] = ((I18nParam)parameters[i]).getKey(bundle.get());
             }
         }
         return parameters;
@@ -83,7 +90,7 @@ public class I18nMessage implements Message {
     	if (category instanceof I18nParam) {
     		checkBundle();
 
-			return ((I18nParam) category).getKey(bundle);
+			return ((I18nParam) category).getKey(bundle.get());
 		}
 
 		return category.toString();

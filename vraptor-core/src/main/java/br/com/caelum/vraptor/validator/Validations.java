@@ -28,6 +28,9 @@ import org.hamcrest.ResourceBundleDescription;
 import br.com.caelum.vraptor.core.SafeResourceBundle;
 import br.com.caelum.vraptor.util.FallbackResourceBundle;
 
+import com.google.common.base.Supplier;
+import com.google.common.base.Suppliers;
+
 /**
  * Hamcrest based validation support.
  *
@@ -47,14 +50,14 @@ import br.com.caelum.vraptor.util.FallbackResourceBundle;
 public class Validations {
 
     private final List<Message> errors = new ArrayList<Message>();
-	private ResourceBundle bundle;
+	private Supplier<ResourceBundle> bundle;
 
     public Validations(ResourceBundle bundle) {
-		this.bundle = bundle;
+		this.bundle = Suppliers.ofInstance(bundle);
 	}
 
     public Validations() {
-    	this.bundle = new SafeResourceBundle(ResourceBundle.getBundle("messages"), true);
+    	this(new SafeResourceBundle(ResourceBundle.getBundle("messages"), true));
     }
 
     public <T> boolean that(T id, Matcher<? super T> matcher) {
@@ -95,7 +98,7 @@ public class Validations {
     public List<Message> getErrors() {
     	for (Message message : errors) {
 			if (message instanceof I18nMessage) {
-				((I18nMessage) message).setBundle(bundle);
+				((I18nMessage) message).setLazyBundle(bundle);
 			}
 		}
         return errors;
@@ -105,16 +108,27 @@ public class Validations {
      * Returns the list of errors, using given resource bundle.
      */
     public List<Message> getErrors(ResourceBundle bundle) {
-    	if (isDefaultBundle(this.bundle)) {
-    		this.bundle = new SafeResourceBundle(bundle);
-    	} else {
-    		this.bundle = new FallbackResourceBundle(this.bundle, bundle);
-    	}
+    	return getErrors(Suppliers.ofInstance(bundle));
+    }
+    /**
+     * Returns the list of errors, using given resource bundle.
+     */
+    public List<Message> getErrors(final Supplier<ResourceBundle> bundle) {
+    	final Supplier<ResourceBundle> oldBundle = this.bundle;
+    	this.bundle = new Supplier<ResourceBundle>() {
+			public ResourceBundle get() {
+				if (isDefaultBundle(oldBundle)) {
+					return new SafeResourceBundle(bundle.get());
+				} else {
+					return new FallbackResourceBundle(oldBundle.get(), bundle.get());
+				}
+			}
+		};
     	return getErrors();
     }
 
-	private boolean isDefaultBundle(ResourceBundle bundle) {
-		return bundle instanceof SafeResourceBundle && ((SafeResourceBundle) bundle).isDefault();
+	private boolean isDefaultBundle(Supplier<ResourceBundle> bundle) {
+		return bundle.get() instanceof SafeResourceBundle && ((SafeResourceBundle) bundle.get()).isDefault();
 	}
 
     /**

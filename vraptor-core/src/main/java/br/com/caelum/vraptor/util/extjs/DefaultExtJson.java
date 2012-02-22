@@ -44,21 +44,15 @@ public class DefaultExtJson implements ExtJSJson {
     private XStream xstream;
     private ExtJSWrapper wrapper;
 
-    public DefaultExtJson(HttpServletResponse response, TypeNameExtractor extractor, ProxyInitializer initializer)
-        throws IOException {
+    public DefaultExtJson(HttpServletResponse response, TypeNameExtractor extractor, ProxyInitializer initializer, XStreamBuilder xStreamBuilder)
+            throws IOException {
         xstream = new XStream(new JsonHierarchicalStreamDriver() {
             @Override
-            public HierarchicalStreamWriter createWriter(Writer writer) {
-                return new JsonWriter(writer, new char[0], "", JsonWriter.DROP_ROOT_MODE) {
-                    @Override
-                    public void addAttribute(String key, String value) {
-                        if (!key.equals("class")) {
-                            super.addAttribute(key, value);
-                        }
-                    }
-                };
+            public HierarchicalStreamWriter createWriter(Writer out) {
+                return new JsonWriter(out, JsonWriter.DROP_ROOT_MODE);
             }
         });
+        xstream.setMode(XStream.NO_REFERENCES);
         xstream.aliasField("data", ExtJSWrapper.class, "list");
         serializer = new XStreamSerializer(xstream, response.getWriter(), extractor, initializer);
     }

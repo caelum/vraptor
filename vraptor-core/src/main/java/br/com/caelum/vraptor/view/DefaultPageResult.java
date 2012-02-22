@@ -33,7 +33,6 @@ import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.ProxyInvocationException;
 import br.com.caelum.vraptor.proxy.SuperMethod;
 import br.com.caelum.vraptor.resource.DefaultResourceMethod;
-import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**
  * Default page result implementation.
@@ -47,22 +46,23 @@ public class DefaultPageResult implements PageResult {
 
 	private final MutableRequest request;
 	private final HttpServletResponse response;
-	private final ResourceMethod method;
 	private final PathResolver resolver;
 	private final Proxifier proxifier;
+
+	private final MethodInfo requestInfo;
 
 	public DefaultPageResult(MutableRequest req, HttpServletResponse res, MethodInfo requestInfo,
 			PathResolver resolver, Proxifier proxifier) {
 		this.request = req;
 		this.response = res;
+		this.requestInfo = requestInfo;
 		this.proxifier = proxifier;
-		this.method = requestInfo.getResourceMethod();
 		this.resolver = resolver;
 	}
 
 	public void defaultView() {
 		try {
-			String to = resolver.pathFor(method);
+			String to = resolver.pathFor(requestInfo.getResourceMethod());
 			logger.debug("forwarding to {}", to);
 			request.getRequestDispatcher(to).forward(request, response);
 		} catch (ServletException e) {
@@ -74,7 +74,7 @@ public class DefaultPageResult implements PageResult {
 
 	public void include() {
 		try {
-			String to = resolver.pathFor(method);
+			String to = resolver.pathFor(requestInfo.getResourceMethod());
 			logger.debug("including {}", to);
 			request.getRequestDispatcher(to).include(request, response);
 		} catch (ServletException e) {

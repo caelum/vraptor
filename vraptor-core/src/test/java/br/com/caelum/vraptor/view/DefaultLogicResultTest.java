@@ -21,17 +21,24 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.argThat;
 import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.util.Collections;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletResponse;
 
+import org.hamcrest.Description;
+import org.hamcrest.TypeSafeMatcher;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -39,12 +46,17 @@ import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Post;
+import br.com.caelum.vraptor.Result;
+import br.com.caelum.vraptor.core.DefaultMethodInfo;
+import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.proxy.CglibProxifier;
 import br.com.caelum.vraptor.proxy.ObjenesisInstanceCreator;
+import br.com.caelum.vraptor.proxy.Proxifier;
+import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.ValidationException;
@@ -61,6 +73,10 @@ public class DefaultLogicResultTest {
     private @Mock TypeNameExtractor extractor;
     private @Mock RequestDispatcher dispatcher;
     private @Mock FlashScope flash;
+
+	private Proxifier proxifier;
+
+	private MethodInfo methodInfo;
 
     public static class MyComponent {
         int calls = 0;
@@ -96,8 +112,10 @@ public class DefaultLogicResultTest {
     public void setup() {
         MockitoAnnotations.initMocks(this);
 
-        this.logicResult = new DefaultLogicResult(new CglibProxifier(new ObjenesisInstanceCreator()), router, request, response, container,
-                resolver, extractor, flash);
+        proxifier = new CglibProxifier(new ObjenesisInstanceCreator());
+        methodInfo = new DefaultMethodInfo();
+		this.logicResult = new DefaultLogicResult(proxifier, router, request, response, container,
+                resolver, extractor, flash, methodInfo);
     }
 
     @Test
@@ -211,5 +229,54 @@ public class DefaultLogicResultTest {
 
         logicResult.forwardTo(MyComponent.class).throwsValidationException();
     }
+    
+    class TheComponent {
+    	private final Result result;
+
+		public TheComponent(Result result) {
+			this.result = result;
+		}
+		
+		public void method() {
+			result.use(Results.page()).defaultView();
+		}
+		
+    }
+    /**
+     * @bug #337
+     */
+    @Test
+	public void shouldForwardToTheRightDefaultValue() throws Exception {
+		Result result = mock(Result.class);
+		PageResult pageResult = new DefaultPageResult(request, response, methodInfo, resolver, proxifier);
+		when(result.use(PageResult.class)).thenReturn(pageResult);
+		when(container.instanceFor(TheComponent.class)).thenReturn(new TheComponent(result));
+		when(resolver.pathFor(argThat(sameMethodAs(TheComponent.class.getDeclaredMethod("method"))))).thenReturn("controlled!");
+		when(request.getRequestDispatcher(anyString())).thenThrow(new AssertionError("should have called with the right method!"));
+		doReturn(dispatcher).when(request).getRequestDispatcher("controlled!");
+		
+		methodInfo.setResourceMethod(DefaultResourceMethod.instanceFor(MyComponent.class, MyComponent.class.getDeclaredMethod("base")));
+		
+		logicResult.forwardTo(TheComponent.class).method();
+	}
+
+	private TypeSafeMatcher<ResourceMethod> sameMethodAs(final Method method) {
+		return new TypeSafeMatcher<ResourceMethod>() {
+
+			@Override
+			public void describeTo(Description description) {
+			}
+
+			@Override
+			protected boolean matchesSafely(ResourceMethod item) {
+				return item.getMethod().equals(method);
+			}
+
+			@Override
+			protected void describeMismatchSafely(ResourceMethod item,
+					Description mismatchDescription) {
+			}
+		};
+	}
 
 }

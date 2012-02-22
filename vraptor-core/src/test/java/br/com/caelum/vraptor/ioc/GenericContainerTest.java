@@ -186,13 +186,13 @@ public abstract class GenericContainerTest {
 	
 	@Test
 	public void setsAnAttributeOnSessionWithTheObjectTypeName() throws Exception {
+		registerAndGetFromContainer(MySessionComponent.class, MySessionComponent.class);
 		executeInsideRequest(new WhatToDo<Void>() {
 			public Void execute(final RequestInfo request, int counter) {
 				return provider.provideForRequest(request, new Execution<Void>() {
 					
 					@Override
 					public Void insideRequest(Container container) {
-						container.instanceFor(ComponentRegistry.class).register(MySessionComponent.class, MySessionComponent.class);
 						HttpSession session = container.instanceFor(HttpSession.class);
 						MySessionComponent component = container.instanceFor(MySessionComponent.class);
 						assertNotNull(component);
@@ -209,11 +209,6 @@ public abstract class GenericContainerTest {
 
 	}
 	
-	@Component @SessionScoped
-	public static class MySessionComponent {
-
-	}
-
 	@Test
 	public void processesCorrectlyRequestBasedComponents() {
 		checkAvailabilityFor(false, MyRequestComponent.class, MyRequestComponent.class);

@@ -21,6 +21,7 @@ import javax.servlet.ServletContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.context.ConfigurableWebApplicationContext;
+import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.context.support.XmlWebApplicationContext;
@@ -48,11 +49,13 @@ public class DefaultSpringLocator implements SpringLocator {
 			logger.info("Using an XmlWebApplicationContext, searching for applicationContext.xml");
 			XmlWebApplicationContext ctx = new XmlWebApplicationContext();
 			ctx.setConfigLocation("classpath:applicationContext.xml");
+			servletContext.setAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE, ctx);
 			return ctx;
 		}
 		logger.info("No application context found");
 		ConfigurableWebApplicationContext ctx = new AnnotationConfigWebApplicationContext();
 		ctx.setId("VRaptor");
+		servletContext.setAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE, ctx);
 		return ctx;
 	}
 

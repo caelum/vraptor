@@ -24,6 +24,8 @@ import org.jmock.Mockery;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.web.context.ConfigurableWebApplicationContext;
+import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -59,9 +61,53 @@ public class SpringProviderTest {
 		mockery.assertIsSatisfied();
 		RequestContextHolder.resetRequestAttributes();
 	}
+	
+	@Test
+	public void shouldIncludeTheApplicationContextOnTheRootApplicationContextParamIfNotSet() throws Exception {
+		mockery.checking(new Expectations() {{
+			one(servletContext).getAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE);
+			will(returnValue(null));
+			
+			one(servletContext).setAttribute(with(equal(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE)), with(any(WebApplicationContext.class)));
+		}});
+		
+		defaultExpectations();
+		
+		SpringProvider provider = new SpringProvider();
+		provider.start(servletContext);
+		
+		mockery.assertIsSatisfied();
+	}
+	
+	@Test
+	public void shouldNotIncludeTheApplicationContextOnTheRootApplicationContextParamIfAlreadySet() throws Exception {
+		mockery.checking(new Expectations() {{
+			ConfigurableWebApplicationContext mock = mockery.mock(ConfigurableWebApplicationContext.class);
+			
+			one(servletContext).getAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE);
+			will(returnValue(mock));
+			
+			never(servletContext).setAttribute(with(equal(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE)), with(any(WebApplicationContext.class)));
+			
+			ignoring(mock);
+		}});
+		
+		defaultExpectations();
+		
+		SpringProvider provider = new SpringProvider();
+		provider.start(servletContext);
+		
+		mockery.assertIsSatisfied();
+	}
 
 	@Test
 	public void shouldLoadInitParameterForBasePackages() {
+		defaultExpectations();
+		SpringProvider provider = new SpringProvider();
+		provider.start(servletContext);
+	}
+
+	private void defaultExpectations() {
 		mockery.checking(new Expectations() {
 			{
 				atLeast(1).of(servletContext).getInitParameter(
@@ -85,8 +131,6 @@ public class SpringProviderTest {
                 allowing(servletContext);
 			}
 		});
-		SpringProvider provider = new SpringProvider();
-		provider.start(servletContext);
 	}
 
 }

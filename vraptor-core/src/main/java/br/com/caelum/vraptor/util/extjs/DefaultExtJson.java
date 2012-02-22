@@ -59,6 +59,7 @@ public class DefaultExtJson implements ExtJSJson {
                 };
             }
         });
+        xstream.setMode(XStream.NO_REFERENCES);
         xstream.aliasField("data", ExtJSWrapper.class, "list");
         serializer = new XStreamSerializer(xstream, response.getWriter(), extractor, initializer);
     }

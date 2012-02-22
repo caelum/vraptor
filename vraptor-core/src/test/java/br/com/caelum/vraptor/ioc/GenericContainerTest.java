@@ -27,6 +27,7 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
@@ -38,6 +39,8 @@ import java.util.Collections;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
@@ -51,6 +54,7 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.Converter;
+import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.config.BasicConfiguration;
 import br.com.caelum.vraptor.converter.jodatime.LocalDateConverter;
 import br.com.caelum.vraptor.converter.jodatime.LocalTimeConverter;
@@ -63,15 +67,17 @@ import br.com.caelum.vraptor.http.route.Route;
 import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
 import br.com.caelum.vraptor.ioc.fixture.ComponentFactoryInTheClasspath;
+import br.com.caelum.vraptor.ioc.fixture.ComponentFactoryInTheClasspath.Provided;
 import br.com.caelum.vraptor.ioc.fixture.ConverterInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.CustomComponentInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.CustomComponentWithLifecycleInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.DependentOnSomethingFromComponentFactory;
 import br.com.caelum.vraptor.ioc.fixture.InterceptorInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.ResourceInTheClasspath;
-import br.com.caelum.vraptor.ioc.fixture.ComponentFactoryInTheClasspath.Provided;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.scan.ScannotationComponentScannerTest;
+
+import com.google.common.base.Objects;
 
 /**
  * Acceptance test that checks if the container is capable of giving all
@@ -159,9 +165,52 @@ public abstract class GenericContainerTest {
 		provider = getProvider();
 		provider.start(context); // In order to tearDown ok
 	}
+	
+	@Test
+	public void setsAnAttributeOnRequestWithTheObjectTypeName() throws Exception {
+		executeInsideRequest(new WhatToDo<Void>() {
+			public Void execute(final RequestInfo request, int counter) {
+				return provider.provideForRequest(request, new Execution<Void>() {
+
+					@Override
+					public Void insideRequest(Container container) {
+						Result result = container.instanceFor(Result.class);
+						HttpServletRequest request = container.instanceFor(HttpServletRequest.class);
+						assertSame(result, Objects.firstNonNull(request.getAttribute("result"), request.getAttribute("defaultResult")));
+						return null;
+					}
+				});
+			}
+		});
+	}
+	
+	@Test
+	public void setsAnAttributeOnSessionWithTheObjectTypeName() throws Exception {
+		executeInsideRequest(new WhatToDo<Void>() {
+			public Void execute(final RequestInfo request, int counter) {
+				return provider.provideForRequest(request, new Execution<Void>() {
+					
+					@Override
+					public Void insideRequest(Container container) {
+						container.instanceFor(ComponentRegistry.class).register(MySessionComponent.class, MySessionComponent.class);
+						HttpSession session = container.instanceFor(HttpSession.class);
+						MySessionComponent component = container.instanceFor(MySessionComponent.class);
+						assertNotNull(component);
+						assertSame(component, session.getAttribute("mySessionComponent"));
+						return null;
+					}
+				});
+			}
+		});
+	}
 
 	@Component
 	public static class MyRequestComponent {
+
+	}
+	
+	@Component @SessionScoped
+	public static class MySessionComponent {
 
 	}
 

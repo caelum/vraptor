@@ -40,6 +40,7 @@ import br.com.caelum.vraptor.ioc.ContainerProvider;
 import br.com.caelum.vraptor.ioc.GenericContainerTest;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.ioc.WhatToDo;
+import br.com.caelum.vraptor.test.HttpServletRequestMock;
 import br.com.caelum.vraptor.test.HttpSessionMock;
 
 public class CustomPicoProviderTest extends GenericContainerTest {
@@ -139,7 +140,7 @@ public class CustomPicoProviderTest extends GenericContainerTest {
             }
         });
         MutableResponse response = mockery.mock(MutableResponse.class, "response" + counter);
-        RequestInfo webRequest = new RequestInfo(context, null, request, response);
+        RequestInfo webRequest = new RequestInfo(context, null, new HttpServletRequestMock(session, request, mockery), response);
         return execution.execute(webRequest, counter);
     }
 

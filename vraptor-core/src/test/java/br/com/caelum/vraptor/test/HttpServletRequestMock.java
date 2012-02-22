@@ -44,6 +44,10 @@ public class HttpServletRequestMock extends HttpServletRequestWrapper implements
     public HttpSession getSession() {
     	return session;
     }
+    @Override
+    public HttpSession getSession(boolean allowCreate) {
+    	return session;
+    }
 
     @Override
     public Object getAttribute(String name) {

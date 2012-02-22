@@ -34,6 +34,8 @@ import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.MutableResponse;
 import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.interceptor.DefaultInterceptorRegistry;
+import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
+import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Container;
 
@@ -50,6 +52,7 @@ public class PicoComponentRegistryTest {
         this.mockery = new Mockery();
         this.container = new PicoBuilder().withCaching().build();
         container.addComponent(DefaultInterceptorRegistry.class);
+        container.addComponent(TypeNameExtractor.class, DefaultTypeNameExtractor.class);
         final Router router = mockery.mock(Router.class, "registry");
         container.addComponent(router);
         this.request = mockery.mock(MutableRequest.class, "request");
@@ -57,8 +60,10 @@ public class PicoComponentRegistryTest {
         mockery.checking(new Expectations() {
             {
                 allowing(request).getSession(); will(returnValue(session));
+                allowing(request).setAttribute(with(any(String.class)), with(any(Object.class)));
+                
                 allowing(session).getAttribute(with(any(String.class))); will(returnValue(null));
-                allowing(session).setAttribute(with(any(String.class)), with(any(String.class))); will(returnValue(null));
+                allowing(session).setAttribute(with(any(String.class)), with(any(String.class)));
             }
         });
         this.webRequest = new RequestInfo(null, null, request, mockery.mock(MutableResponse.class));

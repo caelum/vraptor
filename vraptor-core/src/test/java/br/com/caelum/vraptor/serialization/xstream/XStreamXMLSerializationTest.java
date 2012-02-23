@@ -32,8 +32,8 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 public class XStreamXMLSerializationTest {
 
-	private Serialization serialization;
-	private ByteArrayOutputStream stream;
+	protected Serialization serialization;
+	protected ByteArrayOutputStream stream;
 
 	@Before
     public void setup() throws Exception {

@@ -16,28 +16,20 @@
 package br.com.caelum.vraptor.serialization.xstream;
 
 import static br.com.caelum.vraptor.serialization.xstream.VRaptorClassMapper.isPrimitive;
-import static com.google.common.base.Objects.firstNonNull;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.Writer;
-import java.lang.reflect.Field;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.Set;
 
-import net.vidageek.mirror.dsl.Mirror;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.serialization.ProxyInitializer;
 import br.com.caelum.vraptor.serialization.Serializer;
 import br.com.caelum.vraptor.serialization.SerializerBuilder;
 
-import com.google.common.collect.LinkedListMultimap;
-import com.google.common.collect.Multimap;
 import com.thoughtworks.xstream.XStream;
 
 /**
@@ -133,29 +125,9 @@ public class XStreamSerializer implements SerializerBuilder {
 		return set;
 	}
 
-	private void excludeNonPrimitiveFields(Multimap<Class<?>, String> excludesMap, Class<?> type) {
-		for (Field field : new Mirror().on(type).reflectAll().fields()) {
-			if (!isPrimitive(field.getType())) {
-				excludesMap.put(field.getDeclaringClass(), field.getName());
-			}
-		}
-	}
-
 	public Serializer include(String... fields) {
 		serializee.includeAll(fields);
 		return this;
-	}
-
-	private void parseInclude(Multimap<Class<?>, String> excludesMap, Entry<String, Class<?>> include) {
-		Class<?> parentType = include.getValue();
-		String fieldName = getNameFor(include.getKey());
-		Type genericType = new Mirror().on(parentType).reflect().field(fieldName).getGenericType();
-		Class<?> fieldType = Serializee.getActualType(genericType);
-
-		if (!excludesMap.containsKey(fieldType)) {
-			excludeNonPrimitiveFields(excludesMap, fieldType);
-		}
-		excludesMap.remove(parentType, fieldName);
 	}
 
 	public void serialize() {
@@ -163,25 +135,7 @@ public class XStreamSerializer implements SerializerBuilder {
 			VRaptorClassMapper mapper = ((VRaptorXStream) xstream).getVRaptorMapper();
 			mapper.setSerializee(serializee);
 		} else {
-			Multimap<Class<?>, String> excludesMap = LinkedListMultimap.create();
-			if (!serializee.isRecursive()) {
-				Class<?> type = serializee.getRootClass();
-				excludeNonPrimitiveFields(excludesMap, type);
-				
-				for (Class<?> eType : firstNonNull(serializee.getElementTypes(), Collections.<Class<?>>emptySet())) {
-					excludeNonPrimitiveFields(excludesMap, eType);
-				}
-			}
-			for (Entry<String, Class<?>> exclude : serializee.getExcludes().entries()) {
-				parseExclude(exclude);
-			}
-			for (Entry<String, Class<?>> include : serializee.getIncludes().entries()) {
-				parseInclude(excludesMap, include);
-			}
-			
-			for (Entry<Class<?>, String> exclude : excludesMap.entries()) {
-				xstream.omitField(exclude.getKey(), exclude.getValue());
-			}
+			new OldAndProbablyBuggyConfigurer(xstream).configure(serializee);
 		}
 		
 		registerProxyInitializer();
@@ -197,13 +151,4 @@ public class XStreamSerializer implements SerializerBuilder {
 		xstream.registerConverter(new ProxyConverter(initializer, xstream));
 	}
 	
-	private void parseExclude(Entry<String, Class<?>> exclude) {
-		xstream.omitField(exclude.getValue(), getNameFor(exclude.getKey()));
-	}
-
-	private String getNameFor(String name) {
-		String[] path = name.split("\\.");
-		return path[path.length-1];
-	}
-
 }

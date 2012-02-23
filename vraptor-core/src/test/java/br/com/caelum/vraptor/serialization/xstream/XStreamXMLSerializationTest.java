@@ -234,6 +234,13 @@ public class XStreamXMLSerializationTest {
 				new Item("name", 12.99));
 		serialization.from(order).include("wrongFieldName").serialize();
 	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void shouldThrowAnExceptionWhenYouIncludeANonExistantFieldInsideOther() {
+		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please",
+				new Item("name", 12.99));
+		serialization.from(order).include("wrongFieldName.another").serialize();
+	}
 
 	@Test
 	@Ignore("not supported yet")

@@ -15,8 +15,6 @@
  */
 package br.com.caelum.vraptor.serialization.xstream;
 
-import static br.com.caelum.vraptor.serialization.xstream.VRaptorClassMapper.getActualType;
-import static br.com.caelum.vraptor.serialization.xstream.VRaptorClassMapper.getParentTypesFor;
 import static br.com.caelum.vraptor.serialization.xstream.VRaptorClassMapper.isPrimitive;
 import static com.google.common.base.Objects.firstNonNull;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -33,7 +31,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import net.vidageek.mirror.dsl.Mirror;
-import scala.actors.threadpool.Arrays;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.serialization.ProxyInitializer;
 import br.com.caelum.vraptor.serialization.Serializer;
@@ -64,7 +61,7 @@ public class XStreamSerializer implements SerializerBuilder {
 	}
 
 	public Serializer exclude(String... names) {
-		serializee.excludeAll(Arrays.asList(names));
+		serializee.excludeAll(names);
 		return this;
 	}
 
@@ -145,26 +142,20 @@ public class XStreamSerializer implements SerializerBuilder {
 	}
 
 	public Serializer include(String... fields) {
-		serializee.includeAll(Arrays.asList(fields));
+		serializee.includeAll(fields);
 		return this;
 	}
 
-	private void parseInclude(Multimap<Class<?>, String> excludesMap, String field) {
-		try {
-			Set<Class<?>> parentTypes = getParentTypesFor(serializee, field);
-			String fieldName = getNameFor(field);
-			for (Class<?> parentType : parentTypes) {
-				Type genericType = new Mirror().on(parentType).reflect().field(fieldName).getGenericType();
-				Class<?> fieldType = getActualType(genericType);
+	private void parseInclude(Multimap<Class<?>, String> excludesMap, Entry<String, Class<?>> include) {
+		Class<?> parentType = include.getValue();
+		String fieldName = getNameFor(include.getKey());
+		Type genericType = new Mirror().on(parentType).reflect().field(fieldName).getGenericType();
+		Class<?> fieldType = Serializee.getActualType(genericType);
 
-				if (!excludesMap.containsKey(fieldType)) {
-					excludeNonPrimitiveFields(excludesMap, fieldType);
-				}
-				excludesMap.remove(parentType, fieldName);
-			}
-		} catch (NullPointerException e) {
-			throw new IllegalArgumentException("Field path " + field + " doesn't exist");
+		if (!excludesMap.containsKey(fieldType)) {
+			excludeNonPrimitiveFields(excludesMap, fieldType);
 		}
+		excludesMap.remove(parentType, fieldName);
 	}
 
 	public void serialize() {
@@ -181,10 +172,10 @@ public class XStreamSerializer implements SerializerBuilder {
 					excludeNonPrimitiveFields(excludesMap, eType);
 				}
 			}
-			for (String exclude : serializee.getExcludes()) {
+			for (Entry<String, Class<?>> exclude : serializee.getExcludes().entries()) {
 				parseExclude(exclude);
 			}
-			for (String include : serializee.getIncludes()) {
+			for (Entry<String, Class<?>> include : serializee.getIncludes().entries()) {
 				parseInclude(excludesMap, include);
 			}
 			
@@ -206,11 +197,8 @@ public class XStreamSerializer implements SerializerBuilder {
 		xstream.registerConverter(new ProxyConverter(initializer, xstream));
 	}
 	
-	private void parseExclude(String name) {
-		Set<Class<?>> parentTypes = getParentTypesFor(serializee, name);
-		for (Class<?> type : parentTypes) {
-			xstream.omitField(type, getNameFor(name));
-		}
+	private void parseExclude(Entry<String, Class<?>> exclude) {
+		xstream.omitField(exclude.getValue(), getNameFor(exclude.getKey()));
 	}
 
 	private String getNameFor(String name) {

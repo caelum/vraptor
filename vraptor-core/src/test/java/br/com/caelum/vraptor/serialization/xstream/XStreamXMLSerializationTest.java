@@ -204,6 +204,13 @@ public class XStreamXMLSerializationTest {
 		assertThat(result(), containsString("<price>12.99</price>"));
 		assertThat(result(), containsString("</items>"));
 	}
+	
+	@Test
+	public void shouldWorkWithEmptyCollections() {
+		serialization.from(new ArrayList<Order>(), "orders").serialize();
+		
+		assertThat(result(), containsString("<orders/>"));
+	}
 	@Test
 	public void shouldIncludeAllFieldsWhenRecursive() {
 		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please",
@@ -334,6 +341,26 @@ public class XStreamXMLSerializationTest {
 
 	private String result() {
 		return new String(stream.toByteArray());
+	}
+	
+	/**
+	 * @bug #400
+	 */
+	class A {
+		C field1 = new C();
+	}
+
+	class B extends A {
+		C field2 = new C();
+	}
+	class C {
+		
+	}
+	
+	@Test
+	public void shouldBeAbleToIncludeSubclassesFields() throws Exception {
+		serialization.from(new B()).include("field2").serialize();
+		assertThat(result(), is("<b>\n  <field2/>\n</b>"));
 	}
 
 }

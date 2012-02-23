@@ -8,6 +8,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.EnumSet;
 
 import javax.servlet.http.HttpServletResponse;
@@ -19,12 +20,17 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.Result;
+import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.config.Configuration;
+import br.com.caelum.vraptor.http.FormatResolver;
 import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.proxy.CglibProxifier;
 import br.com.caelum.vraptor.proxy.JavassistProxifier;
 import br.com.caelum.vraptor.proxy.ObjenesisInstanceCreator;
 import br.com.caelum.vraptor.resource.HttpMethod;
+import br.com.caelum.vraptor.serialization.DefaultRepresentationResult;
+import br.com.caelum.vraptor.serialization.JSONSerialization;
+import br.com.caelum.vraptor.serialization.Serialization;
 import br.com.caelum.vraptor.serialization.xstream.XStreamBuilderImpl;
 import br.com.caelum.vraptor.util.test.MockSerializationResult;
 import br.com.caelum.vraptor.validator.I18nMessage;
@@ -160,5 +166,33 @@ public class DefaultStatusTest {
 		assertThat(serialized, containsString("<message>Something else</message>"));
 		assertThat(serialized, not(containsString("<validationMessage>")));
 		assertThat(serialized, not(containsString("<i18nMessage>")));
+	}
+	@Test
+	public void shouldSerializeErrorMessagesInJSON() throws Exception {
+		Message normal = new ValidationMessage("The message", "category");
+		I18nMessage i18ned = new I18nMessage("category", "message");
+		i18ned.setBundle(new SingletonResourceBundle("message", "Something else"));
+
+		MockSerializationResult result = new MockSerializationResult(XStreamBuilderImpl.cleanInstance(new MessageConverter())) {
+			@Override
+			public <T extends View> T use(Class<T> view) {
+				return view.cast(new DefaultRepresentationResult(new FormatResolver() {
+					public String getAcceptFormat() {
+						return "json";
+					}
+					
+				}, this, Arrays.<Serialization>asList(super.use(JSONSerialization.class)), null));
+			}
+		};
+		DefaultStatus status = new DefaultStatus(response, result, config, new CglibProxifier(new ObjenesisInstanceCreator()), router);
+		
+		status.badRequest(Lists.newArrayList(normal, i18ned));
+		
+		String serialized = result.serializedResult();
+		assertThat(serialized, containsString("\"message\": \"The message\""));
+		assertThat(serialized, containsString("\"category\": \"category\""));
+		assertThat(serialized, containsString("\"message\": \"Something else\""));
+		assertThat(serialized, not(containsString("\"validationMessage\"")));
+		assertThat(serialized, not(containsString("\"i18nMessage\"")));
 	}
 }

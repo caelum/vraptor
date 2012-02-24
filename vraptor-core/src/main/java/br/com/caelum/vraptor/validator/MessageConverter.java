@@ -20,6 +20,7 @@ import br.com.caelum.vraptor.ioc.Component;
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
+import com.thoughtworks.xstream.io.ExtendedHierarchicalStreamWriter;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 /**
@@ -36,13 +37,22 @@ public class MessageConverter implements Converter {
 
 	public void marshal(Object val, HierarchicalStreamWriter writer, MarshallingContext context) {
 		Message message = (Message) val;
-		writer.startNode("message");
+		startNode("message", writer);
 		writer.setValue(message.getMessage());
 		writer.endNode();
 		
-		writer.startNode("category");
+		startNode("category", writer);
 		writer.setValue(message.getCategory());
 		writer.endNode();
+	}
+
+	private void startNode(String name, HierarchicalStreamWriter writer) {
+		if (writer instanceof ExtendedHierarchicalStreamWriter) {
+			ExtendedHierarchicalStreamWriter extendedWriter = (ExtendedHierarchicalStreamWriter) writer;
+			extendedWriter.startNode(name, String.class);
+		} else {
+			writer.startNode(name);
+		}
 	}
 
 	public Object unmarshal(HierarchicalStreamReader reader,

@@ -5,10 +5,12 @@
 http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	version="2.5">
 
+	<!-- Uncomment this if the plugin jar doesn't register itself 
 	<context-param>
 		<param-name>br.com.caelum.vraptor.packages</param-name>
 		<param-value>br.com.caelum.vraptor.gae</param-value>
-	</context-param>
+	</context-param> 
+	-->
 
 	<context-param>
 		<param-name>javax.servlet.jsp.jstl.fmt.localizationContext</param-name>

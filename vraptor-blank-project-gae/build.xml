@@ -24,10 +24,15 @@
 		<delete>
 			<fileset dir="${webinf.lib.dir}" includes="*.jar" />
 		</delete>
+		<ant antfile="../vraptor-plugin-gae/build.xml" target="artifacts" />
 		<antcall target="copyjars" />
 		<copy todir="${webinf.lib.dir}">
 			<fileset dir="${mandatory.jars}" includes="*.jar"/>
+			<fileset dir="${optional.jars}/gae" includes="*.jar"/>
+			<fileset dir="${optional.jars}/upload" includes="*.jar"/>
 			<fileset dir="${container.jars}" includes="*.jar"/>
+			<fileset file="${vraptor.jar}"/>
+			<fileset dir="../vraptor-plugin-gae/target" includes="*.jar" />
 		</copy>
 		<copy todir="${webinf.lib.dir}" file="${vraptor.jar}" />
 	</target>

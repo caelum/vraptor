@@ -16,6 +16,8 @@
  */
 package br.com.caelum.vraptor.gae;
 
+import javax.annotation.PostConstruct;
+
 import ognl.OgnlRuntime;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Component;
@@ -26,9 +28,8 @@ import br.com.caelum.vraptor.ioc.Component;
 @Component
 @ApplicationScoped
 public class AppEngineOgnlRuntime {
-
-    static {
-        OgnlRuntime.setSecurityManager(null);
+    @PostConstruct
+    public void init() {
+    	OgnlRuntime.setSecurityManager(null);
     }
-
 }

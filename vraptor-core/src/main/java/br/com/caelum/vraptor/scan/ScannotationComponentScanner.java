@@ -18,6 +18,7 @@ package br.com.caelum.vraptor.scan;
 import static com.google.common.base.Objects.firstNonNull;
 import static com.google.common.io.Closeables.closeQuietly;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.annotation.Annotation;
@@ -74,6 +75,8 @@ public class ScannotationComponentScanner implements ComponentScanner {
             AnnotationDB db = createAnnotationDB();
             db.scanArchives(webInfClasses);
             return db.getAnnotationIndex();
+        } catch (FileNotFoundException e) {
+            return Collections.emptyMap();
         } catch (IOException e) {
             throw new ScannerException("Could not scan WEB-INF/classes", e);
         }

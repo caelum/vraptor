@@ -4,7 +4,6 @@
         <wb-resource deploy-path="/" source-path="/src/content"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/resources"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/"/>
         <property name="context-root" value="vraptor-site"/>
         <property name="java-output-path" value="/vraptor-site/src/content/WEB-INF/classes"/>
     </wb-module>

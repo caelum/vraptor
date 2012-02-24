@@ -9,18 +9,19 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.appengine.repackaged.com.google.common.collect.BiMap;
-import com.google.appengine.repackaged.com.google.common.collect.ImmutableBiMap;
+import com.google.common.collect.BiMap;
+import com.google.common.collect.ImmutableBiMap;
 
 /**
  * Servlet Filter implementation class LocaleFilter
  */
 public class LocaleFilter implements Filter {
 	private static final String VRAPTOR_LOCALE = "VRAPTOR_LOCALE";
-	private static final Locale PT_BR = new Locale("pt", "br");
+	private static final Locale PT_BR = new Locale("pt", "BR");
 	private BiMap<String, String> en2pt;
 
 	public void destroy() {
@@ -34,15 +35,15 @@ public class LocaleFilter implements Filter {
 		HttpServletResponse res = (HttpServletResponse) response;
 
 		if (uri.equals("/")) {
-			Locale locale = (Locale) req.getSession().getAttribute(VRAPTOR_LOCALE);
+			Locale locale = getLocale(req);
 			if (locale == null) {
 				String accept = req.getHeader("accept-language");
 				if (accept != null && accept.startsWith("en")) {
-					req.getSession().setAttribute(VRAPTOR_LOCALE, Locale.ENGLISH);
+					setLocale(res, Locale.ENGLISH);
 					res.sendRedirect(req.getContextPath() + "/en");
 					return;
 				}
-				req.getSession().setAttribute(VRAPTOR_LOCALE, PT_BR);
+				setLocale(res, PT_BR);
 				locale = PT_BR;
 			} else if (locale.equals(Locale.ENGLISH)) {
 				res.sendRedirect(req.getContextPath() + "/en");
@@ -50,13 +51,13 @@ public class LocaleFilter implements Filter {
 			}
 			request.setAttribute("locale", PT_BR);
 		} else if (uri.equals("/pt") || uri.equals("/pt/")){
-			req.getSession().setAttribute(VRAPTOR_LOCALE, PT_BR);
+			setLocale(res, PT_BR);
 			res.sendRedirect(req.getContextPath() + "/");
 			return;
 		}
 
 		request.setAttribute("locale", isEnglish(uri)? Locale.ENGLISH : PT_BR);
-		req.getSession().setAttribute(VRAPTOR_LOCALE, req.getAttribute("locale"));
+//		req.getSession().setAttribute(VRAPTOR_LOCALE, req.getAttribute("locale"));
 
 		request.setAttribute("path", path);
 
@@ -65,6 +66,24 @@ public class LocaleFilter implements Filter {
 		} else {
 			chain.doFilter(request, response);
 		}
+	}
+
+	private void setLocale(HttpServletResponse res, Locale locale) {
+		Cookie cookie = new Cookie(VRAPTOR_LOCALE, locale.toString());
+		cookie.setPath("/");
+		res.addCookie(cookie);
+	}
+
+	private Locale getLocale(HttpServletRequest req) {
+		for (Cookie cookie : req.getCookies()) {
+			if (cookie.getName().equals(VRAPTOR_LOCALE)) {
+				if (cookie.getValue().equals(Locale.ENGLISH.toString()))
+					return Locale.ENGLISH;
+				else
+					return PT_BR;
+			}
+		}
+		return null;
 	}
 
 	private boolean isEnglish(String uri) {

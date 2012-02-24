@@ -1,5 +1,6 @@
-#Mon Sep 26 11:31:10 BRT 2011
+#Fri Feb 24 13:58:23 BRST 2012
 eclipse.preferences.version=1
+jarsExcludedFromWebInfLib=
 lastWarOutDir=/home/lucascs/workspace/vraptor/vraptor-site/src/content
 warSrcDir=src/content
-warSrcDirIsOutput=false
+warSrcDirIsOutput=true

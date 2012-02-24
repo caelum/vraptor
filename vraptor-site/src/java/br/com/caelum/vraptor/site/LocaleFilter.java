@@ -13,6 +13,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.common.base.Objects;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.ImmutableBiMap;
 
@@ -75,7 +76,7 @@ public class LocaleFilter implements Filter {
 	}
 
 	private Locale getLocale(HttpServletRequest req) {
-		for (Cookie cookie : req.getCookies()) {
+		for (Cookie cookie : Objects.firstNonNull(req.getCookies(), new Cookie[0])) {
 			if (cookie.getName().equals(VRAPTOR_LOCALE)) {
 				if (cookie.getValue().equals(Locale.ENGLISH.toString()))
 					return Locale.ENGLISH;

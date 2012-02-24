@@ -1,5 +1,6 @@
 package br.com.caelum.vraptor.blank;
 
+import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 
@@ -14,5 +15,10 @@ public class IndexController {
 
 	public void index() {
 		result.include("variable", "VRaptor!");
+	}
+	
+	@Path("/abc")
+	public void other() {
+		result.redirectTo(IndexController.class).index();
 	}
 }

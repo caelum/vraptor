@@ -27,7 +27,6 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/jstl-impl-1.2.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/log4j-1.2.16.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/mirror-1.5.1.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/objenesis-1.1.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/ognl-2.7.3.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/org.springframework.aop-3.0.5.RELEASE.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/org.springframework.asm-3.0.5.RELEASE.jar"/>
@@ -43,7 +42,6 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/slf4j-log4j12-1.6.1.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/vraptor-3.4.1-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/vraptor-gae.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/xstream-1.3.1.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/xstream-xstream-1.3.2-SNAPSHOT-GAE.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

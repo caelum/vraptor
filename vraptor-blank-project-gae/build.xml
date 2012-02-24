@@ -27,7 +27,10 @@
 		<ant antfile="../vraptor-plugin-gae/build.xml" target="artifacts" />
 		<antcall target="copyjars" />
 		<copy todir="${webinf.lib.dir}">
-			<fileset dir="${mandatory.jars}" includes="*.jar"/>
+			<fileset dir="${mandatory.jars}" includes="*.jar">
+				<exclude name="objenesis*"/>
+				<exclude name="xstream*"/>
+			</fileset>
 			<fileset dir="${optional.jars}/gae" includes="*.jar"/>
 			<fileset dir="${optional.jars}/upload" includes="*.jar"/>
 			<fileset dir="${container.jars}" includes="*.jar"/>

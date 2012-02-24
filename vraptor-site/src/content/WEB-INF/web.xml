@@ -26,7 +26,12 @@
   </filter>
   <filter-mapping>
     <filter-name>LocaleFilter</filter-name>
-	<url-pattern>/*</url-pattern>
+	<url-pattern>*.jsp</url-pattern>
+	<url-pattern>/</url-pattern>
+	<url-pattern>/en</url-pattern>
+	<url-pattern>/en/</url-pattern>
+	<url-pattern>/pt/</url-pattern>
+	<url-pattern>/pt</url-pattern>
 	<dispatcher>REQUEST</dispatcher>
   </filter-mapping>
 </web-app>

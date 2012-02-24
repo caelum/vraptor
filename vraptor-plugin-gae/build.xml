@@ -27,7 +27,7 @@
 		<fileset dir="${gae.lib.dir}">
 			<include name="**/*.jar" />
 		</fileset>
-		<!--fileset dir="${gae.lib.dir}/../upload" includes="*.jar"/-->
+		<fileset dir="${gae.lib.dir}/../upload" includes="*.jar"/>
 	</path>
 
 	<path id="compile.classpath">

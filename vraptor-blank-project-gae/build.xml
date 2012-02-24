@@ -24,7 +24,7 @@
 		<delete>
 			<fileset dir="${webinf.lib.dir}" includes="*.jar" />
 		</delete>
-		<ant antfile="../vraptor-plugin-gae/build.xml" target="artifacts" />
+		<ant dir="../vraptor-plugin-gae/" antfile="../vraptor-plugin-gae/build.xml" target="artifacts" />
 		<antcall target="copyjars" />
 		<copy todir="${webinf.lib.dir}">
 			<fileset dir="${mandatory.jars}" includes="*.jar">

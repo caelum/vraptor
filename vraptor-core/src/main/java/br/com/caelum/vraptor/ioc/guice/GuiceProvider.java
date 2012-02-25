@@ -38,6 +38,7 @@ import com.google.inject.Key;
 import com.google.inject.Module;
 import com.google.inject.Stage;
 import com.google.inject.TypeLiteral;
+import com.google.inject.multibindings.Multibinder;
 import com.google.inject.util.Modules;
 
 /**
@@ -110,7 +111,7 @@ public class GuiceProvider implements ContainerProvider {
 	protected Module customModule() {
 		return new Module() {
 			public void configure(Binder binder) {
-				ComponentRegistry registry = new GuiceComponentRegistry(binder);
+				ComponentRegistry registry = new GuiceComponentRegistry(binder, Multibinder.newSetBinder(binder, StereotypeHandler.class));
 				BasicConfiguration config = new BasicConfiguration(context);
 
 			    // using the new vraptor.scan

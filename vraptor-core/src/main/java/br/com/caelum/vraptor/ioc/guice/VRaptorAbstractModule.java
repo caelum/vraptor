@@ -92,7 +92,7 @@ public class VRaptorAbstractModule extends AbstractModule {
 
 		bind(Container.class).toInstance(container);
 
-		GuiceComponentRegistry registry = new GuiceComponentRegistry(binder());
+		GuiceComponentRegistry registry = new GuiceComponentRegistry(binder(), Multibinder.newSetBinder(binder(), StereotypeHandler.class));
 
 		bind(ComponentRegistry.class).toInstance(registry);
 
@@ -103,10 +103,10 @@ public class VRaptorAbstractModule extends AbstractModule {
 		for (Class converter : BaseComponents.getBundledConverters()) {
 			registry.register(converter, converter);
 		}
+
+
 		for (Class handler : BaseComponents.getStereotypeHandlers()) {
 			registry.register(handler, handler);
-			Multibinder<StereotypeHandler> stereotypeHandlers = Multibinder.newSetBinder(binder(), StereotypeHandler.class);
-			stereotypeHandlers.addBinding().to(handler);
 		}
 
 		for (Entry<Class<?>, Class<?>> entry : BaseComponents.getCachedComponents().entrySet()) {

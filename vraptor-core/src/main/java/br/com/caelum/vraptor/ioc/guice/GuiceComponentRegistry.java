@@ -33,11 +33,10 @@ import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.ioc.Cacheable;
 import br.com.caelum.vraptor.ioc.ComponentFactory;
 import br.com.caelum.vraptor.ioc.ComponentFactoryIntrospector;
+import br.com.caelum.vraptor.ioc.StereotypeHandler;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.inject.Binder;
 import com.google.inject.Inject;
@@ -47,6 +46,7 @@ import com.google.inject.ScopeAnnotation;
 import com.google.inject.TypeLiteral;
 import com.google.inject.binder.ScopedBindingBuilder;
 import com.google.inject.matcher.Matchers;
+import com.google.inject.multibindings.Multibinder;
 import com.google.inject.spi.TypeEncounter;
 import com.google.inject.spi.TypeListener;
 import com.google.inject.util.Types;
@@ -68,12 +68,18 @@ public class GuiceComponentRegistry implements ComponentRegistry {
 	private final Set<Class<?>> boundClasses = new HashSet<Class<?>>();
 	private final Set<Class<?>> listTypes = new HashSet<Class<?>>();
 
-	public GuiceComponentRegistry(Binder binder) {
+	private final Multibinder<StereotypeHandler> stereotypeHandlers;
+
+	public GuiceComponentRegistry(Binder binder, Multibinder<StereotypeHandler> stereotypeHandlers) {
 		this.binder = binder;
+		this.stereotypeHandlers = stereotypeHandlers;
 	}
 	public void register(Class requiredType, Class componentType) {
 		boundClasses.add(requiredType);
 		logger.debug("Binding {} to {}", requiredType, componentType);
+		if (StereotypeHandler.class.isAssignableFrom(requiredType)) {
+			stereotypeHandlers.addBinding().to(requiredType);
+		}
 		ScopedBindingBuilder binding = bindToConstructor(requiredType, componentType);
 		if (defaultScope(componentType)) {
 			binding.in(GuiceProvider.REQUEST);

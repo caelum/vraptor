@@ -19,6 +19,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -35,6 +36,7 @@ import br.com.caelum.vraptor.ioc.ComponentFactory;
 import br.com.caelum.vraptor.ioc.ComponentFactoryIntrospector;
 import br.com.caelum.vraptor.ioc.StereotypeHandler;
 
+import com.google.common.base.Objects;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
@@ -143,12 +145,14 @@ public class GuiceComponentRegistry implements ComponentRegistry {
 	}
 	private Constructor getConstructor(Class componentType) {
 		Constructor[] constructors = componentType.getDeclaredConstructors();
-		Collection<Constructor> filteredConstructor = Collections2.filter(Lists.newArrayList(constructors), new Predicate<Constructor>() {
+		Iterable<Constructor> filteredConstructor = Iterables.filter(Lists.newArrayList(constructors), new Predicate<Constructor>() {
+
 			public boolean apply(Constructor constructor) {
 				return constructor.isAnnotationPresent(Inject.class);
 			}
+			
 		});
-		return filteredConstructor.size() > 0 ? Lists.newArrayList(filteredConstructor).get(0) : constructors[0]; 
+		return Iterables.getFirst(filteredConstructor, constructors[0]); 
 	}
 
 	private void registerFactory(Class componentType) {

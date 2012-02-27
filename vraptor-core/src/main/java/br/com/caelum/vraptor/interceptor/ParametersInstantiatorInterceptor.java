@@ -17,6 +17,8 @@
 
 package br.com.caelum.vraptor.interceptor;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -24,6 +26,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import br.com.caelum.vraptor.HeaderParam;
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.Lazy;
@@ -74,6 +77,9 @@ public class ParametersInstantiatorInterceptor implements Interceptor {
     	while (names.hasMoreElements()) {
 			fixParameter(names.nextElement());
 		}
+    	
+    	addHeaderParametersToAttribute(method);
+    	
         Object[] values = getParametersFor(method);
 
         validator.addAll(errors);
@@ -86,6 +92,21 @@ public class ParametersInstantiatorInterceptor implements Interceptor {
         parameters.setParameters(values);
         stack.next(method, resourceInstance);
     }
+
+	private void addHeaderParametersToAttribute(ResourceMethod method) {
+		Method trueMethod = method.getMethod();
+    	Annotation[][] parameterAnnotations = trueMethod.getParameterAnnotations();
+
+		for (Annotation[] annotations : parameterAnnotations) {
+			for (Annotation annotation : annotations) {
+				if(annotation instanceof HeaderParam){
+			        HeaderParam headerParam = (HeaderParam) annotation;
+			        String value = request.getHeader(headerParam.value());
+			        request.setAttribute(headerParam.value(), value);
+			    }
+			}
+		}
+	}
 
 	private void fixParameter(String name) {
 		if (name.contains(".class.")) {

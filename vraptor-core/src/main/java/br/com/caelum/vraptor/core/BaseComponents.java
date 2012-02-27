@@ -215,6 +215,7 @@ public class BaseComponents {
             Routes.class,					DefaultRoutes.class,
             RestDefaults.class,				DefaultRestDefaults.class,
             Evaluator.class,				JavaEvaluator.class,
+            StaticContentHandler.class,		DefaultStaticContentHandler.class,
             SingleValueConverter.class,     XStreamConverters.NullConverter.class,
             ProxyInitializer.class,			getProxyInitializerImpl()
     );

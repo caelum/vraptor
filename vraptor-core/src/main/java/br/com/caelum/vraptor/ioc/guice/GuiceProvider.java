@@ -85,6 +85,11 @@ public class GuiceProvider implements ContainerProvider {
 			VRaptorRequestHolder.resetRequestForCurrentThread();
 		}
 	}
+	
+	@Override
+	public Container getContainer() {
+		return container;
+	}
 
 	public void start(ServletContext context) {
 		this.context = context;

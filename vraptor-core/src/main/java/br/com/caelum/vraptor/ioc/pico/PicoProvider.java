@@ -53,12 +53,26 @@ import br.com.caelum.vraptor.scan.WebAppBootstrapFactory;
  */
 public class PicoProvider implements ContainerProvider {
 
-    private final MutablePicoContainer picoContainer;
+	private final MutablePicoContainer picoContainer;
     private MutablePicoContainer childContainer;
     private final ThreadLocal<Container> containersByThread = new ThreadLocal<Container>();
 
     private static final Logger logger = LoggerFactory.getLogger(PicoProvider.class);
+	private final Container container;
 
+    private final class AppScopedContainer implements Container {
+		public <T> T instanceFor(Class<T> type) {
+			Container container = containersByThread.get();
+			if (container == null) {
+				return picoContainer.getComponent(type);
+			}
+			return container.instanceFor(type);
+		}
+
+		public <T> boolean canProvide(Class<T> type) {
+			return instanceFor(type) != null;
+		}
+	}
     public PicoProvider() {
         this.picoContainer = new DefaultPicoContainer(new Caching(),
                 new JavaEE5LifecycleStrategy(new NullComponentMonitor()), null);
@@ -69,19 +83,8 @@ public class PicoProvider implements ContainerProvider {
         this.picoContainer.addComponent(componentRegistry);
         this.picoContainer.addComponent(componentFactoryRegistry);
 
-        picoContainer.addComponent(Container.class, new Container() {
-			public <T> T instanceFor(Class<T> type) {
-				Container container = containersByThread.get();
-				if (container == null) {
-					return picoContainer.getComponent(type);
-				}
-				return container.instanceFor(type);
-			}
-
-			public <T> boolean canProvide(Class<T> type) {
-				return instanceFor(type) != null;
-			}
-        });
+        container = new AppScopedContainer();
+		picoContainer.addComponent(Container.class, container);
     }
 
     public final void start(ServletContext context) {
@@ -115,6 +118,11 @@ public class PicoProvider implements ContainerProvider {
 	    	}
     	}
 	}
+    
+    @Override
+    public Container getContainer() {
+    	return container;
+    }
 
     /**
      * Create a child container, and register cached components. This way, Cached components will use registered implementations

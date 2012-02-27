@@ -65,7 +65,7 @@ public class SpringProvider implements ContainerProvider {
 		return result;
 	}
 
-	protected SpringBasedContainer getContainer() {
+	public SpringBasedContainer getContainer() {
 		return container;
 	}
 

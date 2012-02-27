@@ -34,5 +34,7 @@ public interface ContainerProvider {
 	void stop();
 
 	void start(ServletContext context);
+	
+	Container getContainer();
 
 }

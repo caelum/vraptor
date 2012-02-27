@@ -35,6 +35,7 @@ import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.core.Execution;
 import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
 import br.com.caelum.vraptor.ioc.spring.SpringProvider;
 
@@ -111,6 +112,9 @@ public class BasicConfigurationTest {
 
         public void stop() {
         }
+        public Container getContainer() {
+        	return null;
+        }
     }
 
     @Test
@@ -135,6 +139,11 @@ public class BasicConfigurationTest {
         }
 
         public void stop() {
+        }
+        
+        @Override
+        public Container getContainer() {
+        	return null;
         }
     }
 

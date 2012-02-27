@@ -36,6 +36,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.config.BasicConfiguration;
+import br.com.caelum.vraptor.core.DefaultStaticContentHandler;
 import br.com.caelum.vraptor.core.Execution;
 import br.com.caelum.vraptor.core.RequestExecution;
 import br.com.caelum.vraptor.core.RequestInfo;
@@ -51,7 +52,7 @@ public class VRaptorTest {
     private VRaptorMockery mockery;
     private FilterConfig config;
     private ServletContext context;
-    private Container container;
+    private static Container container;
     private RequestExecution execution;
 
     @Before
@@ -59,7 +60,7 @@ public class VRaptorTest {
         this.mockery = new VRaptorMockery();
         this.config = mockery.mock(FilterConfig.class);
         this.context = mockery.mock(ServletContext.class);
-        this.container = mockery.mock(Container.class);
+        container = mockery.mock(Container.class);
         this.execution = mockery.mock(RequestExecution.class);
         started =stoped= false;
     }
@@ -89,10 +90,15 @@ public class VRaptorTest {
                 will(returnValue(context));
                 one(context).getInitParameter(BasicConfiguration.CONTAINER_PROVIDER);
                 will(returnValue(MyProvider.class.getName()));
+                
                 one(context).getAttribute("container");
                 will(returnValue(container));
                 one(container).instanceFor(RequestExecution.class);
                 will(returnValue(execution));
+                
+                one(container).instanceFor(StaticContentHandler.class);
+                will(returnValue(new DefaultStaticContentHandler(context)));
+                
                 one(execution).execute();
 
                 one(container).instanceFor(EncodingHandler.class);
@@ -114,6 +120,9 @@ public class VRaptorTest {
                 will(returnValue(context));
                 one(context).getInitParameter(BasicConfiguration.CONTAINER_PROVIDER);
                 will(returnValue(MyProvider.class.getName()));
+                
+                one(container).instanceFor(StaticContentHandler.class);
+                will(returnValue(new DefaultStaticContentHandler(context)));
             }
         });
         VRaptor raptor = new VRaptor();
@@ -129,7 +138,7 @@ public class VRaptorTest {
     private static boolean started;
 	private static boolean stoped;
     public static class MyProvider implements ContainerProvider {
-
+    	
 		public <T> T provideForRequest(RequestInfo vraptorRequest, Execution<T> execution) {
             Container container = (Container) vraptorRequest.getServletContext().getAttribute("container");
             return execution.insideRequest(container);
@@ -143,10 +152,20 @@ public class VRaptorTest {
         	started= false;
         	stoped = true;
         }
+        @Override
+        public Container getContainer() {
+        	return container;
+        }
     }
 
     public static class DoNothingProvider implements ContainerProvider {
-        public <T> T provideForRequest(RequestInfo vraptorRequest, Execution<T> execution) {
+        private final StaticContentHandler handler;
+
+		public DoNothingProvider(StaticContentHandler handler) {
+			this.handler = handler;
+		}
+
+		public <T> T provideForRequest(RequestInfo vraptorRequest, Execution<T> execution) {
             return execution.insideRequest(null);
         }
 
@@ -154,6 +173,22 @@ public class VRaptorTest {
         }
 
         public void stop() {
+        }
+        
+        public Container getContainer() {
+        	return new Container() {
+				
+				@Override
+				public <T> T instanceFor(Class<T> type) {
+					return type.cast(handler);
+				}
+				
+				@Override
+				public <T> boolean canProvide(Class<T> type) {
+					// TODO Auto-generated method stub
+					return false;
+				}
+			};
         }
     }
 
@@ -173,7 +208,7 @@ public class VRaptorTest {
                 allowing(response).setCharacterEncoding("UTF-8");
             }
         });
-        raptor.init(new DoNothingProvider(), handler);
+        raptor.init(new DoNothingProvider(handler));
         raptor.doFilter(request, response, chain);
         mockery.assertIsSatisfied();
     }

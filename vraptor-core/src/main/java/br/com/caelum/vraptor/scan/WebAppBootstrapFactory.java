@@ -20,55 +20,67 @@ import java.util.Collection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.config.BasicConfiguration;
 
 /**
  * Creates the right WebAppBootstrap
- *
+ * 
  * @author Sérgio Lopes
+ * @author Guilherme Silveira
  * @since 3.2
  */
 public class WebAppBootstrapFactory {
 
-	private static final Logger logger = LoggerFactory.getLogger(WebAppBootstrapFactory.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(WebAppBootstrapFactory.class);
 
 	/**
 	 * Returns the WebAppBootstrap for this web application
-	 *
+	 * 
 	 * @param servletContext
 	 * @return
 	 */
 	public WebAppBootstrap create(BasicConfiguration config) {
-		try {
-			// try the generated static file first
-			Class<?> clazz = Class.forName(WebAppBootstrap.STATIC_BOOTSTRAP_NAME);
+		WebAppBootstrap strap = tryStaticBootstrap();
+		
+		if (strap != null) {
+			return strap;
+		}
+		
+		if (config.isClasspathScanningEnabled()) {
+			return scannerFor(config);
+		}
 
-			logger.info("Found a static WebAppBootstrap; using it and skipping cp scanning.");
+		return new NullWebAppBootstrap();
+	}
+
+	private WebAppBootstrap tryStaticBootstrap() {
+		try {
+			Class<?> clazz = Class
+					.forName(WebAppBootstrap.STATIC_BOOTSTRAP_NAME);
+
+			logger.info("Found a static WebAppBootstrap; using it and skipping classpath scanning.");
 			return (WebAppBootstrap) clazz.newInstance();
 		} catch (ClassNotFoundException e) {
-			logger.info("No static WebAppBootstrap found.");
-
-			// if scanning is disabled, return a null object
-			if (!config.isClasspathScanningEnabled()) {
-				logger.info("Classpath scanning is disabled.");
-				return new WebAppBootstrap() {
-					public void configure(ComponentRegistry registry) { /* does nothing */ }
-				};
-			}
-
-			// dinamically scan the classpath if there's no static cache generated
-			ClasspathResolver resolver = new WebBasedClasspathResolver(config.getServletContext());
-
-			logger.trace("Start classpath scanning");
-			ComponentScanner scanner = new ScannotationComponentScanner();
-			Collection<String> classNames = scanner.scan(resolver);
-			logger.trace("End classpath scanning");
-
-			WebAppBootstrap wab = new DynamicWebAppBootstrap(classNames);
-			return wab;
+			return null;
 		} catch (Exception e) {
-			throw new ScannerException("Error while creating the StaticWebAppBootstrap", e);
+			throw new ScannerException(
+					"Error while creating the StaticWebAppBootstrap", e);
 		}
+	}
+
+	private WebAppBootstrap scannerFor(BasicConfiguration config) {
+		logger.info("Dynamic WebAppBootstrap found.");
+
+		// dinamically scan the classpath if there's no static cache generated
+		ClasspathResolver resolver = new WebBasedClasspathResolver(
+				config.getServletContext());
+
+		logger.trace("Start classpath scanning");
+		ComponentScanner scanner = new ScannotationComponentScanner();
+		Collection<String> classNames = scanner.scan(resolver);
+		logger.trace("End classpath scanning");
+
+		return new DynamicWebAppBootstrap(classNames);
 	}
 }

@@ -244,7 +244,7 @@ public class ClientsController {
 [section Putting objects on Session]
 On VRaptor2 it was enough an @Out(ScopeType.SESSION) for putting an object on HttpSession.
 It doesn't work on VRaptor3, because this way you lose control on your variables.
-So in VRaptor3 you have to do one of this two approaches:
+So in VRaptor3 you have to do one of these two approaches:
 [list]
 * Your object will be accessed only by components and controllers, not by jsps:
 	[java]

@@ -16,11 +16,9 @@
 package br.com.caelum.vraptor.scan;
 
 import static com.google.common.base.Objects.firstNonNull;
-import static com.google.common.io.Closeables.closeQuietly;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.lang.annotation.Annotation;
 import java.net.URL;
 import java.util.Collection;
@@ -32,9 +30,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.scannotation.AnnotationDB;
-import org.scannotation.archiveiterator.FileProtocolIteratorFactory;
-import org.scannotation.archiveiterator.Filter;
-import org.scannotation.archiveiterator.StreamIterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,7 +49,7 @@ public class ScannotationComponentScanner implements ComponentScanner {
     public Collection<String> scan(ClasspathResolver resolver) {
         final URL webInfClasses = resolver.findWebInfClassesLocation();
         final List<String> basePackages = resolver.findBasePackages();
-        
+
         HashSet<String> results = new HashSet<String>();
 
         Map<String, Set<String>> webInfClassesAnnotationMap = scanWebInfClasses(webInfClasses);
@@ -69,8 +64,6 @@ public class ScannotationComponentScanner implements ComponentScanner {
     }
 
     private Map<String, Set<String>> scanWebInfClasses(URL webInfClasses) {
-        logger.debug("scanning WEB-INF/classes at {}", webInfClasses);
-        
         try {
             AnnotationDB db = createAnnotationDB();
             db.scanArchives(webInfClasses);
@@ -83,8 +76,6 @@ public class ScannotationComponentScanner implements ComponentScanner {
     }
 
     private Map<String, Set<String>> scanBasePackages(List<String> basePackages, ClasspathResolver resolver) {
-        logger.debug("scanning {} packages", basePackages.size());
-        
         try {
             AnnotationDB db = createAnnotationDB();
 
@@ -98,28 +89,31 @@ public class ScannotationComponentScanner implements ComponentScanner {
         }
     }
 
-    private void scanPackage(String basePackage, AnnotationDB db, ClasspathResolver resolver) throws IOException {
-        logger.debug("scanning package at {}", basePackage);
 
+
+    private void scanPackage(String basePackage, AnnotationDB db, ClasspathResolver resolver) throws IOException {
         String resource = basePackage.replace('.', '/');
         Enumeration<URL> urls = resolver.getClassLoader().getResources(resource);
         if (!urls.hasMoreElements()) {
             logger.error("There's no occurence of package {} in classpath", basePackage);
             return;
         }
-
         do {
             URL url = urls.nextElement();
-            logger.debug("scanning url {}", url);
-            
-            if (url.getProtocol().equals("jar")) {
-                String fileName = fixJarFileName(resource, url.getFile());
-                logger.debug("fixed jar url to {}", fileName);
-                url = new URL(fileName);
-            }
-            
-            scanArchivesAsStream(db, url);
+
+            String file = toFileName(resource, url);
+
+            db.scanArchives(new URL(file));
         } while (urls.hasMoreElements());
+    }
+
+    private String toFileName(String resource, URL url) {
+        String file = url.getFile().substring(0, url.getFile().length() - resource.length() - 1).replaceAll("(!)(/)?$", "");
+
+        if (!file.startsWith("file:")) {
+            file = "file:" + file;
+        }
+        return file;
     }
 
     private Set<String> findStereotypes(Map<String, Set<String>> webInfClassesAnnotationMap, Map<String, Set<String>> basePackagesAnnotationMap, List<String> basePackages) {
@@ -182,36 +176,6 @@ public class ScannotationComponentScanner implements ComponentScanner {
                 }
             }
         }
-    }
-    
-    private void scanArchivesAsStream(AnnotationDB db, URL url) {
-        Filter onlyClassesFilter = new Filter() {
-            
-            public boolean accepts(String fileName) {
-                return fileName.endsWith(".class");
-            }
-        };
-        
-        try {
-            StreamIterator it = new FileProtocolIteratorFactory().create(url, onlyClassesFilter);
-   
-            InputStream stream;
-            while ((stream = it.next()) != null) {
-                db.scanClass(stream);
-                closeQuietly(stream);
-            }
-        } catch (IOException e) {
-            throw new ScannerException("Could not scan url '" + url + "'", e);
-        }
-    }
-
-   private String fixJarFileName(String resource, String file) {
-        String fileName = file.substring(0, file.length() - resource.length() - 1).replaceAll("(!)(/)?$", "");
-        if (!fileName.startsWith("file:")) {
-            fileName = "file:" + fileName;
-        }
-        
-        return fileName;
     }
 
     private <T> Set<T> nullToEmpty(Set<T> set) {

@@ -63,6 +63,7 @@ public class LocaleBasedDateConverterTest {
 		jstlLocalization = new JstlLocalization(webRequest);
 		this.converter = new LocaleBasedDateConverter(jstlLocalization);
 		this.bundle = ResourceBundle.getBundle("messages");
+        Locale.setDefault(Locale.ENGLISH);
 	}
 
 	@Test

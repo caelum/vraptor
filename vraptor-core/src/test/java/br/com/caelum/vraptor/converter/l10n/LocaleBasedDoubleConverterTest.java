@@ -62,6 +62,7 @@ public class LocaleBasedDoubleConverterTest {
         this.jstlLocalization = new JstlLocalization(webRequest);
         this.converter = new LocaleBasedDoubleConverter(jstlLocalization);
         this.bundle = ResourceBundle.getBundle("messages");
+        Locale.setDefault(Locale.ENGLISH);
     }
 
     @Test

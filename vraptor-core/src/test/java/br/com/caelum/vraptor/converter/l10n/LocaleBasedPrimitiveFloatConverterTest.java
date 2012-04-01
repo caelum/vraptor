@@ -61,6 +61,7 @@ public class LocaleBasedPrimitiveFloatConverterTest {
         this.jstlLocalization = new JstlLocalization(webRequest);
         this.converter = new LocaleBasedPrimitiveFloatConverter(jstlLocalization);
         this.bundle = ResourceBundle.getBundle("messages");
+        Locale.setDefault(Locale.ENGLISH);
     }
 
     @Test

@@ -63,6 +63,7 @@ public class LocaleBasedBigDecimalConverterTest {
         this.jstlLocalization = new JstlLocalization(webRequest);
         this.converter = new LocaleBasedBigDecimalConverter(jstlLocalization);
         this.bundle = ResourceBundle.getBundle("messages");
+        Locale.setDefault(Locale.ENGLISH);
     }
 
     @Test

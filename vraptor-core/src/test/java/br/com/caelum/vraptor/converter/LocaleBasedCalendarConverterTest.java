@@ -65,6 +65,7 @@ public class LocaleBasedCalendarConverterTest {
 		jstlLocalization = new JstlLocalization(webRequest);
 		this.converter = new LocaleBasedCalendarConverter(jstlLocalization);
 		this.bundle = ResourceBundle.getBundle("messages");
+        Locale.setDefault(Locale.ENGLISH);
 	}
 
 	@Test

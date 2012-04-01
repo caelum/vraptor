@@ -23,9 +23,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.core.Localization;
@@ -51,13 +48,11 @@ public class DefaultValidator extends AbstractValidator {
 		}
 	}
 
-	private static final Logger logger = LoggerFactory.getLogger(DefaultValidator.class);
-
     private final Result result;
 
 	private final List<Message> errors = new ArrayList<Message>();
 	private final ValidationViewsFactory viewsFactory;
-	private final List<BeanValidator> beanValidators; //registered bean-validators
+	private final BeanValidator beanValidator;
 
 	private final Outjector outjector;
 
@@ -65,12 +60,12 @@ public class DefaultValidator extends AbstractValidator {
 
 	private final Localization localization;
 
-    public DefaultValidator(Result result, ValidationViewsFactory factory, Outjector outjector, Proxifier proxifier, List<BeanValidator> beanValidators, Localization localization) {
+    public DefaultValidator(Result result, ValidationViewsFactory factory, Outjector outjector, Proxifier proxifier, BeanValidator beanValidator, Localization localization) {
         this.result = result;
 		this.viewsFactory = factory;
 		this.outjector = outjector;
 		this.proxifier = proxifier;
-		this.beanValidators = beanValidators;
+		this.beanValidator = beanValidator;
 		this.localization = localization;
     }
 
@@ -79,13 +74,7 @@ public class DefaultValidator extends AbstractValidator {
     }
 
     public void validate(Object object) {
-        if (beanValidators == null || beanValidators.isEmpty()) {
-            logger.warn("has no validators registered");
-        } else {
-            for (BeanValidator validator : beanValidators) {
-                addAll(validator.validate(object));
-            }
-        }
+        addAll(beanValidator.validate(object));
     }
 
     public <T extends View> T onErrorUse(Class<T> view) {

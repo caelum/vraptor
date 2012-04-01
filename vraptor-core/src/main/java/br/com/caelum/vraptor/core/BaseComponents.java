@@ -159,7 +159,6 @@ import br.com.caelum.vraptor.serialization.xstream.XStreamJSONSerialization;
 import br.com.caelum.vraptor.serialization.xstream.XStreamXMLSerialization;
 import br.com.caelum.vraptor.validator.BeanValidator;
 import br.com.caelum.vraptor.validator.DefaultValidator;
-import br.com.caelum.vraptor.validator.HibernateValidator3;
 import br.com.caelum.vraptor.validator.JSR303Validator;
 import br.com.caelum.vraptor.validator.JSR303ValidatorFactory;
 import br.com.caelum.vraptor.validator.MessageConverter;
@@ -369,9 +368,10 @@ public class BaseComponents {
     }
 
     public static Map<Class<?>, Class<?>> getRequestScoped() {
-    	if(!registerIfClassPresent(REQUEST_COMPONENTS, "javax.validation.Validation",			JSR303Validator.class) &&
-    	   !registerIfClassPresent(REQUEST_COMPONENTS, "org.hibernate.validator.ClassValidator",HibernateValidator3.class)) {
-    		REQUEST_COMPONENTS.put(BeanValidator.class, NullBeanValidator.class);
+    	if(!isClassPresent("javax.validation.Validation")) {
+    		REQUEST_COMPONENTS.put(BeanValidator.class, JSR303Validator.class);
+    	} else {
+            REQUEST_COMPONENTS.put(BeanValidator.class, NullBeanValidator.class);
     	}
 
         if (isClassPresent("org.apache.commons.fileupload.FileItem")) {

@@ -14,11 +14,11 @@ import br.com.caelum.vraptor.core.Localization;
  * @author Otávio Scherer Garcia
  * @since 3.1.2
  */
-public class JSR303ValidatorTest {
+public class BeanValidatorTest {
 
 	private @Mock Localization localization;
 
-    private JSR303Validator jsr303Validator;
+    private DefaultBeanValidator beanValidator;
 
     @Before
     public void setup() {
@@ -27,31 +27,31 @@ public class JSR303ValidatorTest {
     	ValidatorFactoryCreator creator = new ValidatorFactoryCreator();
     	creator.buildFactory();
 
-    	JSR303ValidatorFactory validatorFactory = new JSR303ValidatorFactory(creator.getInstance());
+    	ValidatorCreator validatorFactory = new ValidatorCreator(creator.getInstance());
     	validatorFactory.createValidator();
 
     	MessageInterpolatorFactory interpolatorFactory = new MessageInterpolatorFactory(creator.getInstance());
     	interpolatorFactory.createInterpolator();
 
-        this.jsr303Validator = new JSR303Validator(localization, validatorFactory.getInstance(), interpolatorFactory.getInstance());
+        this.beanValidator = new DefaultBeanValidator(localization, validatorFactory.getInstance(), interpolatorFactory.getInstance());
     }
 
     @Test
     public void withoutViolations() {
-        CustomerJSR303 customer0 = new CustomerJSR303(10, "Vraptor");
-        Assert.assertTrue(jsr303Validator.validate(customer0).isEmpty());
+        CustomerForValidation customer0 = new CustomerForValidation(10, "Vraptor");
+        Assert.assertTrue(beanValidator.validate(customer0).isEmpty());
     }
 
     @Test
     public void withViolations() {
-        CustomerJSR303 customer0 = new CustomerJSR303(null, null);
-        Assert.assertFalse(jsr303Validator.validate(customer0).isEmpty());
+        CustomerForValidation customer0 = new CustomerForValidation(null, null);
+        Assert.assertFalse(beanValidator.validate(customer0).isEmpty());
     }
 
     /**
      * Customer for using in bean validator tests.
      */
-    public class CustomerJSR303 {
+    public class CustomerForValidation {
 
         @javax.validation.constraints.NotNull
         public Integer id;
@@ -59,7 +59,7 @@ public class JSR303ValidatorTest {
         @javax.validation.constraints.NotNull
         public String name;
 
-        public CustomerJSR303(Integer id, String name) {
+        public CustomerForValidation(Integer id, String name) {
             this.id = id;
             this.name = name;
         }

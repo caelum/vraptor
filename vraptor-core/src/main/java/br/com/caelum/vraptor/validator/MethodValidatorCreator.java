@@ -16,45 +16,41 @@
 package br.com.caelum.vraptor.validator;
 
 import javax.annotation.PostConstruct;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
+import javax.validation.Validation;
 
+import org.hibernate.validator.HibernateValidator;
+import org.hibernate.validator.method.MethodValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
-import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.ioc.ComponentFactory;
 
 /**
- * Bring up JSR303 Bean Validation factory. This class builds the default validator factory once when application
- * starts.
- *
+ * Bring up Method Validation factory. This class builds the {@link MethodValidator} factory once when
+ * application starts.
+ * 
  * @author Otávio Scherer Garcia
- * @since 3.1.2
+ * @since 3.5
  */
 @ApplicationScoped
-@Component
-public class JSR303ValidatorFactory implements ComponentFactory<Validator> {
+public class MethodValidatorCreator
+    implements ComponentFactory<MethodValidator> {
 
-    private static final Logger logger = LoggerFactory.getLogger(JSR303ValidatorFactory.class);
+    private static final Logger logger = LoggerFactory.getLogger(MethodValidatorCreator.class);
 
-	private final ValidatorFactory factory;
-
-	private Validator validator;
-
-    public JSR303ValidatorFactory(ValidatorFactory factory) {
-        this.factory = factory;
-    }
+    private MethodValidator methodValidator;
 
     @PostConstruct
-    public void createValidator() {
-    	this.validator = factory.getValidator();
-    	logger.debug("Initializing JSR303 Validator");
+    public void init() {
+        methodValidator = Validation.byProvider(HibernateValidator.class).configure().buildValidatorFactory()
+                .getValidator().unwrap(MethodValidator.class);
+        logger.debug("Initializing Method Validator");
     }
 
-	public Validator getInstance() {
-		return validator;
-	}
+    @Override
+    public MethodValidator getInstance() {
+        return methodValidator;
+    }
 
 }

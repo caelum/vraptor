@@ -5,7 +5,7 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
-import br.com.caelum.vraptor.validator.JSR303Validator;
+import br.com.caelum.vraptor.validator.DefaultBeanValidator;
 import br.com.caelum.vraptor.validator.MessageInterpolatorFactory;
 
 /**
@@ -18,7 +18,7 @@ import br.com.caelum.vraptor.validator.MessageInterpolatorFactory;
  */
 public class JSR303MockValidator extends MockValidator {
 
-	private JSR303Validator that;
+	private DefaultBeanValidator that;
 
 	private static final ValidatorFactory validatorFactory;
 
@@ -34,7 +34,7 @@ public class JSR303MockValidator extends MockValidator {
 		factoryMessageInterpolator.createInterpolator();
 		MessageInterpolator interpolator = factoryMessageInterpolator.getInstance();
 
-		that = new JSR303Validator(new MockLocalization(), validator, interpolator);
+		that = new DefaultBeanValidator(new MockLocalization(), validator, interpolator);
 	}
 
 	@Override

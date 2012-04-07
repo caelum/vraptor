@@ -27,7 +27,7 @@ import javax.validation.TraversableResolver;
  * @author Otávio Scherer Garcia
  * @version 3.1.3
  */
-public class JSR303TraversableResolver
+public class BeanValidatorTraversableResolver
     implements TraversableResolver {
 
     public boolean isReachable(Object traversableObject, Path.Node traversableProperty, Class<?> rootBeanType,

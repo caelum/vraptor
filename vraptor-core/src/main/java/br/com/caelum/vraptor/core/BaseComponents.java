@@ -159,10 +159,12 @@ import br.com.caelum.vraptor.serialization.xstream.XStreamJSONSerialization;
 import br.com.caelum.vraptor.serialization.xstream.XStreamXMLSerialization;
 import br.com.caelum.vraptor.validator.BeanValidator;
 import br.com.caelum.vraptor.validator.DefaultValidator;
-import br.com.caelum.vraptor.validator.JSR303Validator;
-import br.com.caelum.vraptor.validator.JSR303ValidatorFactory;
+import br.com.caelum.vraptor.validator.DefaultBeanValidator;
+import br.com.caelum.vraptor.validator.MethodValidatorCreator;
+import br.com.caelum.vraptor.validator.ValidatorCreator;
 import br.com.caelum.vraptor.validator.MessageConverter;
 import br.com.caelum.vraptor.validator.MessageInterpolatorFactory;
+import br.com.caelum.vraptor.validator.MethodValidatorInterceptor;
 import br.com.caelum.vraptor.validator.NullBeanValidator;
 import br.com.caelum.vraptor.validator.Outjector;
 import br.com.caelum.vraptor.validator.ReplicatorOutjector;
@@ -357,22 +359,28 @@ public class BaseComponents {
 	}
 
     public static Map<Class<?>, Class<?>> getApplicationScoped() {
-    	registerIfClassPresent(APPLICATION_COMPONENTS, "javax.validation.Validation",
-    			JSR303ValidatorFactory.class, ValidatorFactoryCreator.class,MessageInterpolatorFactory.class);
-    	
         if (!isClassPresent("ognl.OgnlRuntime")) {
             APPLICATION_COMPONENTS.put(DependencyProvider.class, VRaptorDependencyProvider.class);
         }
+    	
+        registerIfClassPresent(APPLICATION_COMPONENTS, "javax.validation.Validation",
+                ValidatorCreator.class, ValidatorFactoryCreator.class, MessageInterpolatorFactory.class);
+        
+        registerIfClassPresent(APPLICATION_COMPONENTS, "org.hibernate.validator.method.MethodValidator",
+                MethodValidatorCreator.class);
         
     	return Collections.unmodifiableMap(APPLICATION_COMPONENTS);
     }
 
     public static Map<Class<?>, Class<?>> getRequestScoped() {
-    	if(!isClassPresent("javax.validation.Validation")) {
-    		REQUEST_COMPONENTS.put(BeanValidator.class, JSR303Validator.class);
+    	if(isClassPresent("javax.validation.Validation")) {
+    		REQUEST_COMPONENTS.put(BeanValidator.class, DefaultBeanValidator.class);
     	} else {
             REQUEST_COMPONENTS.put(BeanValidator.class, NullBeanValidator.class);
     	}
+
+        registerIfClassPresent(REQUEST_COMPONENTS, "org.hibernate.validator.method.MethodValidator",
+                MethodValidatorInterceptor.class);
 
         if (isClassPresent("org.apache.commons.fileupload.FileItem")) {
             REQUEST_COMPONENTS.put(MultipartInterceptor.class, CommonsUploadMultipartInterceptor.class);

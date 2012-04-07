@@ -36,7 +36,7 @@ public class MessageInterpolatorFactory implements ComponentFactory<MessageInter
 	@PostConstruct
 	public void createInterpolator() {
 		interpolator = factory.getMessageInterpolator();
-		logger.debug("Initializing JSR303 MessageInterpolator");
+		logger.debug("Initializing Bean Validator MessageInterpolator");
 	}
 
 	public MessageInterpolator getInstance() {

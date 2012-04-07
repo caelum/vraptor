@@ -18,9 +18,8 @@ package br.com.caelum.vraptor.validator;
 import java.util.List;
 
 /**
- * Implements a bean validator. This interface can be used with Bean Validator (JSR-303), Hibernate Validator 3,
- * or any validation engine.
- *
+ * Implements a bean validator, delegating all validation to Bean Validator especification.
+ * 
  * @author Otávio Scherer Garcia
  * @since vraptor3.1.2
  */

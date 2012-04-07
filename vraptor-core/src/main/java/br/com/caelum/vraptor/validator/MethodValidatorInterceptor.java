@@ -55,7 +55,7 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 public class MethodValidatorInterceptor
     implements Interceptor {
 
-    private static final Logger logger = LoggerFactory.getLogger(DefaultBeanValidator.class);
+    private static final Logger logger = LoggerFactory.getLogger(MethodValidatorInterceptor.class);
 
     private final MethodValidator methodValidator;
     private final ParameterNameProvider provider;
@@ -95,7 +95,10 @@ public class MethodValidatorInterceptor
             BeanValidatorContext ctx = BeanValidatorContext.of(violation);
             String msg = interpolator.interpolate(violation.getMessageTemplate(), ctx, locale);
 
-            validator.add(new ValidationMessage(msg, paramNames[violation.getParameterIndex()]));
+            String prefix = paramNames[violation.getParameterIndex()];
+            String path = violation.getPropertyPath().toString();
+
+            validator.add(new ValidationMessage(msg, prefix + path.substring(path.lastIndexOf(")") + 1)));
             logger.debug("added message {} to validation of bean {}", msg, violation.getRootBean());
         }
 

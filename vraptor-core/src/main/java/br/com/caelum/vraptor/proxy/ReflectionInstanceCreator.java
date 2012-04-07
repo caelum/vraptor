@@ -45,8 +45,10 @@ public class ReflectionInstanceCreator
             logger.debug("Default constructor found in {} ", clazz);
             return useDefaultConstructor(clazz);
         } else {
-            logger.info(String.format("No default constructor found for %s. Trying to create the proxy with other "
-                    + "constructors (there are %d).", clazz, constructors.length));
+            if (logger.isDebugEnabled()) {
+                logger.debug(String.format("No default constructor found for %s. Trying to create the "
+                    + "proxy with other constructors (there are %d).", clazz, constructors.length));
+            }
             return tryAllConstructors(clazz, constructors);
         }
     }

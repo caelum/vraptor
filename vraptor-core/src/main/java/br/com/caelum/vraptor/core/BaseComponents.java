@@ -78,6 +78,11 @@ import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.http.ParanamerNameProvider;
 import br.com.caelum.vraptor.http.UrlToResourceTranslator;
+import br.com.caelum.vraptor.http.iogi.InstantiatorWithErrors;
+import br.com.caelum.vraptor.http.iogi.IogiParametersProvider;
+import br.com.caelum.vraptor.http.iogi.VRaptorDependencyProvider;
+import br.com.caelum.vraptor.http.iogi.VRaptorInstantiator;
+import br.com.caelum.vraptor.http.iogi.VRaptorParameterNamesProvider;
 import br.com.caelum.vraptor.http.ognl.EmptyElementsRemoval;
 import br.com.caelum.vraptor.http.ognl.OgnlFacade;
 import br.com.caelum.vraptor.http.ognl.OgnlParametersProvider;
@@ -251,8 +256,6 @@ public class BaseComponents {
             DeserializingInterceptor.class, 				DeserializingInterceptor.class,
             JsonDeserializer.class,							JsonDeserializer.class,
             Localization.class, 							JstlLocalization.class,
-            EmptyElementsRemoval.class,                     EmptyElementsRemoval.class,
-            ParametersProvider.class, 						OgnlParametersProvider.class,
             OutjectResult.class, 							OutjectResult.class,
             ParametersInstantiatorInterceptor.class, 		ParametersInstantiatorInterceptor.class,
             ResourceLookupInterceptor.class, 				ResourceLookupInterceptor.class,
@@ -266,7 +269,6 @@ public class BaseComponents {
             FormatResolver.class,							DefaultFormatResolver.class,
             Configuration.class,							ApplicationConfiguration.class,
             RestHeadersHandler.class,						DefaultRestHeadersHandler.class,
-            OgnlFacade.class,								OgnlFacade.class,
             FlashScope.class,								SessionFlashScope.class,
             XStreamConverters.class,                        XStreamConverters.class,
             MessageConverter.class,							MessageConverter.class
@@ -375,6 +377,17 @@ public class BaseComponents {
     	    		"your classpath or use a Servlet 3 Container");
             REQUEST_COMPONENTS.put(MultipartInterceptor.class, NullMultipartInterceptor.class);
     	}
+        
+        if (isClassPresent("ognl.OgnlRuntime")) {
+            REQUEST_COMPONENTS.put(ParametersProvider.class, OgnlParametersProvider.class);
+            REQUEST_COMPONENTS.put(EmptyElementsRemoval.class, EmptyElementsRemoval.class);
+            REQUEST_COMPONENTS.put(OgnlFacade.class, OgnlFacade.class);
+        } else {
+            REQUEST_COMPONENTS.put(ParametersProvider.class, IogiParametersProvider.class);
+            REQUEST_COMPONENTS.put(VRaptorParameterNamesProvider.class, VRaptorParameterNamesProvider.class);
+            REQUEST_COMPONENTS.put(InstantiatorWithErrors.class, VRaptorInstantiator.class);
+            REQUEST_COMPONENTS.put(VRaptorDependencyProvider.class, VRaptorDependencyProvider.class);
+        }
 
         return Collections.unmodifiableMap(REQUEST_COMPONENTS);
     }

@@ -258,7 +258,7 @@
 		<dependency>
 			<groupId>br.com.caelum</groupId>
 			<artifactId>iogi</artifactId>
-			<version>0.9.0</version>
+			<version>0.9.1</version>
 		</dependency>
 
 		<dependency>

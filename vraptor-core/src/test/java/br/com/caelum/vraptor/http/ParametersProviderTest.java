@@ -122,7 +122,7 @@ public abstract class ParametersProviderTest {
 
     	String[] abc = getParameters(stringArray);
 
-    	assertThat(abc, arrayContaining("eureka"));
+    	assertThat(abc, is(new String[] {"eureka"}));
     }
 
     @Test
@@ -131,7 +131,7 @@ public abstract class ParametersProviderTest {
 
     	String[] abc = getParameters(stringArray);
 
-    	assertThat(abc, arrayContaining("eureka"));
+    	assertThat(abc, is(new String[] {"eureka"}));
     }
 
     @Test

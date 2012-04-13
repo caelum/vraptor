@@ -1,5 +1,46 @@
 [chapter ChangeLog]
 
+[section 3.4.1]
+[list]
+* **PicoProvider** agora também seta atributos do request e da session com os nomes dos
+componentes, da mesma forma que o Guice e o Spring
+* **SpringProvider** agora emula o comportamento do ContextLoaderListener, melhorando
+a integração com os componentes do Spring sem precisar registrar o listener no web.xml.
+* melhor serialização com o XStream, suportando mais casos.
+* correção do plugin do GAE.
+* Locale based converters para tipos primitivos (by Rafael Dipold)
+* **Mudança de padrão** IOGI como instanciador de objetos padrão, ao invés do OGNL
+
+
+* suporte a @Consumes("application/x-www-form-urlencoded") (by Celso Dantas)
+
+* **todas** as dependências declaradas no pom.xml agora estão no maven
+
+* suporte a @HeaderParam nos métodos do controller:
+[java]
+public void metodo(@HeaderParam("X-meu-param") String param) {..}
+[/java]
+
+* suporte a upload de vários arquivos, com nomes file[] (by dgouvea)
+* **bugfix** xstream no GAE
+* atualizando Pico container de 2.8 para 2.13.6 (by Bruno Fuster)
+* corrigindo scanning de classes nas diversas versões do JBoss (by garcia-jj)
+* GuiceProvider agora dá preferência ao construtor anotado com @Inject (by cairesvs)
+* **bugfix** xstream não é mais opcional
+* **bugfix** ordenando parâmetros da requisição, assim é possível usar o converter
+antes de setar os parâmetros (by Celso Dantas)
+* **bugfix** ExtJSView gerando json sem referências (by Éverton Trindade)
+* **bugfix** registro de stereotype handlers customizados com o Guice
+
+* **bugfix** chamada de defaultView() dentro de forwards agora vai para a view correta
+
+* I18n das mensagens de validação agora são feitas no último momento possível, assim é
+possível setar o locale na jsp.
+* Possibilidade de sobrescrever o StaticContentHandler.
+
+
+[/list]
+
 [section 3.4.0]
 [list]
 * novo status accepted (result.use(status()).accepted()) - by Vinicius Oliveira

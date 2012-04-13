@@ -332,7 +332,7 @@ your validation fails.</p>
 <h3 class="section">Putting objects on Session</h3>
 	    	<p>On VRaptor2 it was enough an @Out(ScopeType.SESSION) for putting an object on HttpSession.
 It doesn't work on VRaptor3, because this way you lose control on your variables.
-So in VRaptor3 you have to do one of this two approaches:</p>
+So in VRaptor3 you have to do one of these two approaches:</p>
 	    	<ul><li><p>Your object will be accessed only by components and controllers, not by jsps:</p><div class="java"><code class="java">
 <span class="java16">@Component<br />
 @SessionScoped<br />

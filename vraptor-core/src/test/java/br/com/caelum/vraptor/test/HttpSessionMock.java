@@ -16,17 +16,15 @@
  */
 package br.com.caelum.vraptor.test;
 
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionContext;
-
-import br.com.caelum.vraptor.IteratorToEnumerationAdapter;
 
 /**
  * @author Fabio Kung
@@ -111,8 +109,7 @@ public class HttpSessionMock implements HttpSession {
     }
 
     public Enumeration getAttributeNames() {
-        Iterator<String> names = attributes.keySet().iterator();
-        return new IteratorToEnumerationAdapter<String>(names);
+        return Collections.enumeration(attributes.keySet());
     }
 
     public String[] getValueNames() {

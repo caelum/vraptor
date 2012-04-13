@@ -70,13 +70,13 @@ public class XStreamConverters {
 		for(Converter converter : converters)
 		{
 			xstream.registerConverter(converter);
-			logger.debug("registered Xstream converter for" + converter.getClass().getName());
+			logger.debug("registered Xstream converter for {}", converter.getClass().getName());
 		}
 		
 		for(SingleValueConverter converter : singleValueConverters)
 		{
 			xstream.registerConverter(converter);
-			logger.debug("registered Xstream converter for" + converter.getClass().getName());
+			logger.debug("registered Xstream converter for {}", converter.getClass().getName());
 		}
 	}
 	

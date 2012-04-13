@@ -45,7 +45,7 @@ class ValidatorLocator {
     public <T> ClassValidator<T> getValidator(Class<T> type, ResourceBundle bundle) {
         Key key = new Key(type, bundle);
         if (!cache.containsKey(key)) {
-            logger.debug("Creating hibernate validator locator for " + type.getName());
+            logger.debug("Creating hibernate validator locator for {}", type.getName());
             cache.put(key, new ClassValidator<T>(type, bundle));
         }
         return (ClassValidator<T>) cache.get(key);

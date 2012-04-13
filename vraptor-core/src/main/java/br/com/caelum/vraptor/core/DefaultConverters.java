@@ -41,7 +41,7 @@ public final class DefaultConverters implements Converters {
 		this.classes = new LinkedList<Class<? extends Converter<?>>>();
         logger.info("Registering bundled converters");
         for (Class<? extends Converter<?>> converterType : BaseComponents.getBundledConverters()) {
-            logger.debug("bundled converter to be registered: " + converterType);
+            logger.debug("bundled converter to be registered: {}", converterType);
             register(converterType);
         }
     }

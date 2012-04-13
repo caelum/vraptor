@@ -74,7 +74,7 @@ public class PatternBasedStrategy implements Route {
 			Method resourceMethod = method(resource.getType(), this.method.apply("webMethod", webMethod));
 			return new DefaultResourceMethod(resource, resourceMethod);
 		} catch (ClassNotFoundException e) {
-			logger.debug("Unable to find type " + typeName + " for strategy " + this);
+            logger.debug("Unable to find type {} for strategy {}", typeName, this);
 			throw new IllegalStateException("You must call canHandle before calling this method");
 		}
 	}

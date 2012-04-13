@@ -42,7 +42,7 @@ public class DefaultSpringLocator implements SpringLocator {
 	public ConfigurableWebApplicationContext getApplicationContext(ServletContext servletContext) {
 		ConfigurableWebApplicationContext context = (ConfigurableWebApplicationContext) WebApplicationContextUtils.getWebApplicationContext(servletContext);
 		if (context != null) {
-			logger.info("Using a web application context: " + context);
+			logger.info("Using a web application context: {}", context);
 			return context;
 		}
 		if (DefaultSpringLocator.class.getResource("/applicationContext.xml") != null) {

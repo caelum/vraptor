@@ -64,29 +64,26 @@ class ComponentScanner extends ClassPathBeanDefinitionScanner {
 						componentType));
 			}
 		} catch (ClassNotFoundException e) {
-			logger.warn("Class " + beanDefinition.getBeanClassName()
-					+ " was not found during bean definition proccess");
+			logger.warn("Class {} was not found during bean definition proccess", beanDefinition.getBeanClassName());
 		}
 		catch (ExceptionInInitializerError e) {
 			// log and rethrow antipattern is needed, this is rally important
-			logger.warn("Class " + beanDefinition.getBeanClassName()
-					+ " has problems during initialization", e.getCause());
+			logger.warn("Class {}has problems during initialization", e.getCause());
 			throw e;
 		}
 	}
 
 	@Override
 	public int scan(String... basePackages) {
-		logger.debug("scanning " + Arrays.toString(basePackages));
+		logger.debug("scanning {}", Arrays.toString(basePackages));
 		return super.scan(basePackages);
 	}
 
 	@Override
 	protected boolean checkCandidate(String beanName, BeanDefinition beanDefinition) throws IllegalStateException {
 		if (registry.containsBeanDefinition(beanName) && registry.getBeanDefinition(beanName).getBeanClassName().equals(beanDefinition.getBeanClassName())) {
-			logger
-					.warn("bean already found previously, there is probably no need to declare its package in web.xml:"
-							+ beanDefinition.getBeanClassName());
+			logger.warn("bean already found previously, there is probably no need to declare its package in web.xml: {}", 
+				beanDefinition.getBeanClassName());
 			return false;
 		}
 		return super.checkCandidate(beanName, beanDefinition);

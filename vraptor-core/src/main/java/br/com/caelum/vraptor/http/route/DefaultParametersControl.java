@@ -78,7 +78,10 @@ public class DefaultParametersControl implements ParametersControl {
 		for (Entry<String, String> parameter : parameters.entrySet()) {
 			patternUri = patternUri.replace("{" + parameter.getKey() + "}", "(" + parameter.getValue() + ")");
 		}
-		logger.debug("For " + originalPattern + " retrieved " + patternUri + " with " + parameters);
+		
+		if (logger.isDebugEnabled()) {
+            logger.debug("For {} retrieved {} with {}", new Object[] { originalPattern, patternUri, parameters });
+		}
 		return Pattern.compile(patternUri);
 	}
 

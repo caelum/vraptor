@@ -106,10 +106,10 @@ public class PicoComponentRegistry extends AbstractComponentRegistry {
     }
 
     public void register(Class<?> requiredType, Class<?> type) {
-        logger.debug("Registering " + requiredType.getName() + " with " + type.getName());
+        logger.debug("Registering {} with {}", requiredType.getName(), type.getName());
 
         if (alreadyRegistered(requiredType)) {
-            logger.debug("Overriding interface " + requiredType.getName() + " with " + type.getName());
+            logger.debug("Overriding interface {} with {}", requiredType.getName(), type.getName());
         }
         registerOnScope(requiredType, type);
 
@@ -119,17 +119,17 @@ public class PicoComponentRegistry extends AbstractComponentRegistry {
 
 	private void registerOnScope(Class<?> requiredType, Class<?> type) {
 		if (type.isAnnotationPresent(ApplicationScoped.class)) {
-            logger.debug("Registering " + type.getName() + " as an application component");
+            logger.debug("Registering {} as an application component", type.getName());
             this.applicationScoped.put(requiredType, type);
         } else if (type.isAnnotationPresent(SessionScoped.class)) {
-            logger.debug("Registering " + type.getName() + " as a session component");
+            logger.debug("Registering {} as a session component", type.getName());
             this.sessionScoped.put(requiredType, type);
         } else if (type.isAnnotationPresent(PrototypeScoped.class)) {
-        	logger.debug("Registering " + type.getName() + " as a prototype component");
+            logger.debug("Registering {} as a prototype component", type.getName());
         	this.prototypeScoped.put(requiredType, type);
         } else {
             // default behaviour: even without @RequestScoped
-            logger.debug("Registering " + type.getName() + " as a request component");
+            logger.debug("Registering {} as a request component", type.getName());
             this.requestScoped.put(requiredType, type);
         }
 	}
@@ -165,15 +165,15 @@ public class PicoComponentRegistry extends AbstractComponentRegistry {
         logger.info("Initializing VRaptor IoC Container implementation based on PicoContainer");
 
         for (Map.Entry<Class<?>, Class<?>> entry : applicationScoped.entrySet()) {
-            logger.debug("Initializing application scope with key: " + entry.getKey() + ", for component: " +
-                    entry.getValue());
+            logger.debug("Initializing application scope with key: {}, for component: {}",
+                entry.getKey(), entry.getValue());
             this.appContainer.addComponent(entry.getKey(), entry.getValue());
         }
 
         registerComponentFactories(appContainer, componentFactoryRegistry.getApplicationMap());
 
-        logger.debug("Session components to initialize: " + sessionScoped.keySet());
-        logger.debug("Requets components to initialize: " + requestScoped.keySet());
+        logger.debug("Session components to initialize: {}", sessionScoped.keySet());
+        logger.debug("Requets components to initialize: {}", requestScoped.keySet());
         this.initialized = true;
     }
 

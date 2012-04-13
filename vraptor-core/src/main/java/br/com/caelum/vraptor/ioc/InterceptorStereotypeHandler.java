@@ -56,14 +56,14 @@ public class InterceptorStereotypeHandler implements StereotypeHandler {
 
 	@SuppressWarnings("unchecked")
 	private void registerInterceptor(Class<?> type) {
-		logger.debug("Found interceptor for " + type);
+		logger.debug("Found interceptor for {}", type);
 		Class<? extends Interceptor> interceptorType = (Class<? extends Interceptor>) type;
 		registry.register(interceptorType);
 	}
 
 	@SuppressWarnings("unchecked")
 	private void registerInterceptorSequence(Class<?> type) {
-		logger.debug("Found interceptor sequence for " + type);
+		logger.debug("Found interceptor sequence for {}", type);
 		Class<? extends InterceptorSequence> interceptorSequenceType = (Class<? extends InterceptorSequence>) type;
 		registry.register(parseSequence(interceptorSequenceType));
 	}

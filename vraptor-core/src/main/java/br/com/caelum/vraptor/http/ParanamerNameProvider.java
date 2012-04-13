@@ -48,8 +48,8 @@ public class ParanamerNameProvider implements ParameterNameProvider {
 		try {
 			String[] parameterNames = info.lookupParameterNames(method);
 			if (logger.isDebugEnabled()) {
-				logger.debug("Found parameter names with paranamer for "
-						+ Stringnifier.simpleNameFor(method) + " as " + Arrays.toString(parameterNames));
+				logger.debug("Found parameter names with paranamer for {} as {}",
+					Stringnifier.simpleNameFor(method), Arrays.toString(parameterNames));
 			}
 
 			// maybe paranamer cache already provides defensive copies?

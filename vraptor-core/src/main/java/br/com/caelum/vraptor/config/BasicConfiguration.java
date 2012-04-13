@@ -120,7 +120,7 @@ public class BasicConfiguration {
 		String packages = servletContext.getInitParameter(BasicConfiguration.BASE_PACKAGES_PARAMETER_NAME);
 		if (packages == null) {
 			throw new MissingConfigurationException(BasicConfiguration.BASE_PACKAGES_PARAMETER_NAME
-					+ " context-param not found in web.xml. " + "Set this parameter with your base package");
+					+ " context-param not found in web.xml. Set this parameter with your base package");
 		}
 		return packages.trim().split(",\\s*");
 	}

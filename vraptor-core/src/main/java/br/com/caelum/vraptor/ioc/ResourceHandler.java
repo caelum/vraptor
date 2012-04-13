@@ -55,7 +55,7 @@ public class ResourceHandler implements StereotypeHandler {
 	}
 
 	public void handle(Class<?> annotatedType) {
-		logger.debug("Found resource: " + annotatedType);
+		logger.debug("Found resource: {}", annotatedType);
 		List<Route> routes = parser.rulesFor(new DefaultResourceClass(annotatedType));
 		for (Route route : routes) {
 			router.add(route);

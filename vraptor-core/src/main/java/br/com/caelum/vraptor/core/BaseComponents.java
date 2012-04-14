@@ -29,6 +29,8 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import br.com.caelum.iogi.spi.DependencyProvider;
+import br.com.caelum.iogi.spi.ParameterNamesProvider;
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.Intercepts;
@@ -357,6 +359,11 @@ public class BaseComponents {
     public static Map<Class<?>, Class<?>> getApplicationScoped() {
     	registerIfClassPresent(APPLICATION_COMPONENTS, "javax.validation.Validation",
     			JSR303ValidatorFactory.class, ValidatorFactoryCreator.class,MessageInterpolatorFactory.class);
+    	
+        if (!isClassPresent("ognl.OgnlRuntime")) {
+            APPLICATION_COMPONENTS.put(DependencyProvider.class, VRaptorDependencyProvider.class);
+        }
+        
     	return Collections.unmodifiableMap(APPLICATION_COMPONENTS);
     }
 
@@ -384,9 +391,8 @@ public class BaseComponents {
             REQUEST_COMPONENTS.put(OgnlFacade.class, OgnlFacade.class);
         } else {
             REQUEST_COMPONENTS.put(ParametersProvider.class, IogiParametersProvider.class);
-            REQUEST_COMPONENTS.put(VRaptorParameterNamesProvider.class, VRaptorParameterNamesProvider.class);
+            REQUEST_COMPONENTS.put(ParameterNamesProvider.class, VRaptorParameterNamesProvider.class);
             REQUEST_COMPONENTS.put(InstantiatorWithErrors.class, VRaptorInstantiator.class);
-            REQUEST_COMPONENTS.put(VRaptorDependencyProvider.class, VRaptorDependencyProvider.class);
         }
 
         return Collections.unmodifiableMap(REQUEST_COMPONENTS);

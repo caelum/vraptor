@@ -1,0 +1,9 @@
+_deploy/
+_site/
+_tmp/
+.sass-cache
+*.swp
+.project
+*.bak
+.rvmrc
+TODO

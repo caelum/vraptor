@@ -1,0 +1,12 @@
+!!!
+%html
+  %head
+    %title
+      An awesome site 
+    %link{ :rel=>'stylesheet', :type=>'text/css', :href=>'/stylesheets/screen.css', :media=>'screen, projection' }
+    %link{ :rel=>'stylesheet', :type=>'text/css', :href=>'/stylesheets/print.css', :media=>'print' }
+    /[if lt IE 8]
+      %link{ :rel=>'stylesheet', :type=>'text/css', :href=>'/stylesheets/ie.css', :media=>'screen, projection' }
+  %body.bp
+    #container
+      ~ content

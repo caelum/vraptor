@@ -1,0 +1,51 @@
+GEM
+  remote: http://rubygems.org/
+  specs:
+    RedCloth (4.2.9-java)
+    awestruct (0.2.18)
+      RedCloth (~> 4.2.9)
+      bootstrap-sass (~> 2.0.1)
+      compass (~> 0.12.1)
+      compass-960-plugin (~> 0.10.4)
+      fssm (~> 0.2.8)
+      git (~> 1.2.5)
+      haml (~> 3.1.4)
+      hashery (~> 1.5.0)
+      hpricot (~> 0.8.6)
+      json (~> 1.6.6)
+      notifier (~> 0.1.4)
+      org-ruby (~> 0.5.3)
+      rdiscount (~> 1.6.8)
+      sass (~> 3.1.15)
+      versionomy (~> 0.4.3)
+    blankslate (2.1.2.4)
+    blockenspiel (0.4.3)
+    bootstrap-sass (2.0.2)
+    chunky_png (1.2.5)
+    compass (0.12.1)
+      chunky_png (~> 1.2)
+      fssm (>= 0.2.7)
+      sass (~> 3.1)
+    compass-960-plugin (0.10.4)
+      compass (>= 0.10.0)
+    fssm (0.2.9)
+    git (1.2.5)
+    haml (3.1.4)
+    hashery (1.5.0)
+      blankslate
+    hpricot (0.8.6-java)
+    json (1.6.6-java)
+    notifier (0.1.4)
+    org-ruby (0.5.3)
+      rubypants (>= 0.2.0)
+    rdiscount (1.6.8)
+    rubypants (0.2.0)
+    sass (3.1.16)
+    versionomy (0.4.3)
+      blockenspiel (>= 0.4.3)
+
+PLATFORMS
+  java
+
+DEPENDENCIES
+  awestruct

@@ -51,16 +51,14 @@ import br.com.caelum.vraptor.ioc.ContainerProvider;
  * @author Fabio Kung
  */
 public class VRaptor implements Filter {
-	private ContainerProvider provider;
+	
 	private ServletContext servletContext;
 
-	private StaticContentHandler staticHandler;
+	@Inject private StaticContentHandler staticHandler;
 
 	private static final Logger logger = LoggerFactory.getLogger(VRaptor.class);
 
 	public void destroy() {
-		provider.stop();
-		provider = null;
 		servletContext = null;
 	}
 
@@ -103,10 +101,5 @@ public class VRaptor implements Filter {
 		logger.info("VRaptor 3.5.0-SNAPSHOT successfuly initialized");
 	}
 
-	void init(ContainerProvider provider) {
-		this.provider = provider;
-		this.provider.start(servletContext);
-		this.staticHandler = provider.getContainer().instanceFor(StaticContentHandler.class);
-	}
 
 }

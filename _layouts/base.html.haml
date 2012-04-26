@@ -1,12 +1,41 @@
-!!!
+!!! 5
 %html
   %head
+    %meta( charset='utf-8' )
+    %meta( name='author' content='Caelum' ) 
+    %meta( name='description' content='VRaptor 3 - um framework java para web focado em desenvolvimento rápido' )
+    %meta( name='keywords' content='sites, web, desenvolvimento, development, java, opensource' )
     %title
-      An awesome site 
-    %link{ :rel=>'stylesheet', :type=>'text/css', :href=>'/stylesheets/screen.css', :media=>'screen, projection' }
-    %link{ :rel=>'stylesheet', :type=>'text/css', :href=>'/stylesheets/print.css', :media=>'print' }
+      V|Raptor - Alta produtividade no Desenvolvimento Web em Java
+    %link( rel='stylesheet' type='text/css' href='/stylesheets/screen.css' media='screen, projection' )
+    %link( rel='stylesheet' type='text/css' href='/stylesheets/print.css' media='print' )
     /[if lt IE 8]
-      %link{ :rel=>'stylesheet', :type=>'text/css', :href=>'/stylesheets/ie.css', :media=>'screen, projection' }
-  %body.bp
-    #container
-      ~ content
+      %link( rel='stylesheet' type='text/css' href='/stylesheets/ie.css' media='screen, projection' )
+  %body
+    %header
+      %h1 V|Raptor
+    %nav
+      %ul
+        %li
+          %a( href='/' ) Home
+        %li
+          %a( href='/downloads' ) Downloads
+        %li
+          %a( href='/documentacao' ) Documentação
+        %li
+          %a( href='/beneficios' ) Benefícios
+        %li
+          %a( href='/suporte' ) Suporte
+    ~ content
+    %footer
+      .suporteFooter
+        %a( href='http://www.caelum.com.br/contato/' title='Saiba Mais' ) +
+        %h3
+          %a( href='http://www.caelum.com.br/contato/') Suporte
+        
+        .consultoriaFooter
+          %a( href='http://www.caelum.com.br/servicos/consultoria/' title='Saiba Mais' ) +
+          %h3
+            %a( href='http://www.caelum.com.br/servicos/consultoria/' ) Consultoria
+        
+        

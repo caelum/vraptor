@@ -1,0 +1,13 @@
+---
+layout: base
+---
+#main(role='main')
+  #content-header
+    .container
+      - if page.title_link
+        %h1
+          %a{:href=>page.title_link}= page.header_title ? page.header_title : page.title
+      - else
+        %h1= page.header_title ? page.header_title : page.title
+  .container
+    ~ content

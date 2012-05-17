@@ -1,0 +1,27 @@
+---
+layout: guide-base
+---
+- page.site_title = 'Arquillian Guides'
+- page.body_class = 'guide'
+- page.bottom_javascripts = [ '/javascripts/jquery-scroll.js', 'http://apis.google.com/js/plusone.js' ]
+- groups = [['beg', 'First Steps'], ['int', 'More Coverage'], ['adv', 'Enhance']]
+#content{:lang=>page.language ? page.language.code : nil}
+  %h2= page.title
+  - if page.languages
+    %strong{:style=>'padding-left: 10px;'} Translations:
+    - for translation in page.languages
+      - if translation.language != page.guide.language
+        %a{ :href=>translation.url }<
+          %img.flag{:src=>translation.language.flag_icon, :rel=>'tooltip', :title=>"#{translation.language.display_name_local} (#{translation.language.code})"}
+  %br
+  ~ content
+  :textile
+
+    #{page.languages}
+
+    There's a lot more about Arquillian to cover. If you're ready to learn more, check out the "other available guides":/guides.
+
+    h4. Feedback
+
+    Find a bug in the guide? Something missing? You can fix it by "forking this website":http://github.com/arquillian/arquillian.github.com, making the correction and "sending a pull request":http://help.github.com/send-pull-requests. If you're just plain stuck, feel free to ask a question in the "user discussion forum":#{site.user_forum}.
+     

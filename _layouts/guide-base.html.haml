@@ -1,0 +1,35 @@
+---
+layout: base
+---
+- groups = [['beg', 'First Steps'], ['int', 'More Coverage'], ['adv', 'Enhance']]
+#main(role='main')
+  #content-header
+    .container
+      .headline
+        %h1
+          %a{:href=>'/guides/'} Arquillian Guides
+          %small Designed exclusively to teach you how to use Arquillian to write real tests.
+        .directory
+          %a#guides_menu.guides_menu{:href=>'./'}
+            Guides Index
+            %i.icon-menu-closed
+          #guides{:style=>'display: none'}
+            %a.guides_menu{:href=>'./'}
+              Guides Index
+              %i.icon-menu-open
+            %hr.clear
+            %dl.ref
+              %dt Reference
+              %dd<
+                %a{:href=>site.ref_guide} Reference Guide
+              %dd<
+                %a{:href=>site.api_docs}> API Docs
+                ,
+                %a{:href=>site.spi_docs} SPI Docs
+              %dd<
+                %a{:href=>site.migration_guides} Migration Guides
+              %dd<
+                %a{:href=>site.faqs} FAQs
+        %script $(function() { activateGuideMenuControl() })
+  .container#guide
+    ~ content

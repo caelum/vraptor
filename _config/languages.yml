@@ -1,0 +1,16 @@
+de:
+  display_name: German
+  display_name_local: Deutsch
+  flag_icon: /images/flags/de.png
+en:
+  display_name: English
+  display_name_local: English
+  flag_icon: /images/flags/en.png
+fr:
+  display_name: French
+  display_name_local: Française
+  flag_icon: /images/flags/fr.png
+pt:
+  display_name: Portuguese
+  display_name_local: Português
+  flag_icon: /images/flags/pt.png

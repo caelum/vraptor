@@ -17,10 +17,6 @@
 
 package br.com.caelum.vraptor.http.iogi;
 
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-
 import br.com.caelum.iogi.Instantiator;
 import br.com.caelum.iogi.MultiInstantiator;
 import br.com.caelum.iogi.ObjectInstantiator;
@@ -41,11 +37,16 @@ import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.http.InvalidParameterException;
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.ioc.RequestScoped;
+import br.com.caelum.vraptor.validator.I18nMessage;
+import br.com.caelum.vraptor.validator.I18nParam;
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.ValidationMessage;
 import br.com.caelum.vraptor.validator.annotation.ValidationException;
-
 import com.google.common.collect.ImmutableList;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.ResourceBundle;
 
 @Component
 @RequestScoped
@@ -129,7 +130,17 @@ public class VRaptorInstantiator implements InstantiatorWithErrors, Instantiator
 				Parameter parameter = parameters.namedAfter(target);
 				return converterForTarget(target).convert(parameter.getValue(), target.getClassType(), localization.getBundle());
 			} catch (ConversionError ex) {
-				errors.add(new ValidationMessage(ex.getMessage(), target.getName()));
+                ResourceBundle bundle = localization.getBundle();
+                String property = target.getClassType().getName().toLowerCase() + "." + target.getName();
+
+                if (bundle.containsKey(property)) {
+                    I18nMessage i18nMessage = new I18nMessage(new I18nParam(property), ex.getMessage());
+                    i18nMessage.setBundle(localization.getBundle());
+                    errors.add(i18nMessage);
+                } else {
+                    errors.add(new ValidationMessage(ex.getMessage(), target.getName()));
+                }
+
 			} catch (IllegalStateException e) {
 				return setPropertiesAfterConversions(target, parameters);
 			}

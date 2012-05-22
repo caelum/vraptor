@@ -27,24 +27,6 @@
  */
 package br.com.caelum.vraptor.http.iogi;
 
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.nullValue;
-import static org.hamcrest.Matchers.sameInstance;
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.util.Arrays;
-
-import org.junit.Test;
-import org.mockito.Mock;
-
 import br.com.caelum.iogi.parameters.Parameter;
 import br.com.caelum.iogi.parameters.Parameters;
 import br.com.caelum.iogi.reflection.Target;
@@ -55,13 +37,26 @@ import br.com.caelum.vraptor.http.ParametersProviderTest;
 import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.util.EmptyBundle;
+import org.junit.Test;
+import org.mockito.Mock;
+
+import java.util.Arrays;
+import java.util.ResourceBundle;
+
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.*;
 
 public class IogiParametersProviderTest extends ParametersProviderTest {
-	private @Mock Localization mockLocalization;
+    private @Mock Localization mockLocalization;
 
 	@Override
 	protected ParametersProvider getProvider() {
-		when(mockLocalization.getBundle()).thenReturn(new SafeResourceBundle(new EmptyBundle()));
+		when(mockLocalization.getBundle()).thenReturn(new SafeResourceBundle(ResourceBundle.getBundle("messages")));
 		return new IogiParametersProvider(nameProvider, request, new VRaptorInstantiator(converters, new VRaptorDependencyProvider(container), mockLocalization, new VRaptorParameterNamesProvider(nameProvider), request));
 	}
 
@@ -127,6 +122,26 @@ public class IogiParametersProviderTest extends ParametersProviderTest {
 		getParameters(setId);
 
 		assertThat(errors.size(), is(1));
+	}
+
+    @Test
+	public void shouldTranslateCategoryForConversionError() throws Exception {
+		ResourceMethod setId = simple;
+		requestParameterIs(setId, "id", "asdf");
+
+		getParameters(setId);
+
+        assertEquals("Long ID", errors.get(0).getCategory());
+	}
+
+    @Test
+	public void shouldNotTranslateCategoryWithoutPropertyForConversionError() throws Exception {
+		ResourceMethod setId = simple;
+		requestParameterIs(setId, "other", "asdf");
+
+		getParameters(setId);
+
+        assertEquals("other", errors.get(0).getCategory());
 	}
 
 	@Test

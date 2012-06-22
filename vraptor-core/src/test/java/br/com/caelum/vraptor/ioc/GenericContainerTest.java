@@ -172,7 +172,6 @@ public abstract class GenericContainerTest {
 			public Void execute(final RequestInfo request, int counter) {
 				return provider.provideForRequest(request, new Execution<Void>() {
 
-					@Override
 					public Void insideRequest(Container container) {
 						Result result = container.instanceFor(Result.class);
 						HttpServletRequest request = container.instanceFor(HttpServletRequest.class);
@@ -191,7 +190,6 @@ public abstract class GenericContainerTest {
 			public Void execute(final RequestInfo request, int counter) {
 				return provider.provideForRequest(request, new Execution<Void>() {
 					
-					@Override
 					public Void insideRequest(Container container) {
 						HttpSession session = container.instanceFor(HttpSession.class);
 						MySessionComponent component = container.instanceFor(MySessionComponent.class);

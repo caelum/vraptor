@@ -86,7 +86,6 @@ public class GuiceProvider implements ContainerProvider {
 		}
 	}
 	
-	@Override
 	public Container getContainer() {
 		return container;
 	}

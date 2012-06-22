@@ -152,7 +152,6 @@ public class VRaptorTest {
         	started= false;
         	stoped = true;
         }
-        @Override
         public Container getContainer() {
         	return container;
         }
@@ -178,14 +177,11 @@ public class VRaptorTest {
         public Container getContainer() {
         	return new Container() {
 				
-				@Override
 				public <T> T instanceFor(Class<T> type) {
 					return type.cast(handler);
 				}
 				
-				@Override
 				public <T> boolean canProvide(Class<T> type) {
-					// TODO Auto-generated method stub
 					return false;
 				}
 			};

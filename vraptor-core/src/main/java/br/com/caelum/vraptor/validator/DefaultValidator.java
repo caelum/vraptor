@@ -42,7 +42,6 @@ import com.google.common.base.Supplier;
 public class DefaultValidator extends AbstractValidator {
 
     private final class LocalizationSupplier implements Supplier<ResourceBundle> {
-		@Override
 		public ResourceBundle get() {
 			return localization.getBundle();
 		}

@@ -119,7 +119,6 @@ public class PicoProvider implements ContainerProvider {
     	}
 	}
     
-    @Override
     public Container getContainer() {
     	return container;
     }

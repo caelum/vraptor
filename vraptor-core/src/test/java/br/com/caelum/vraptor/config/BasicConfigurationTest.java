@@ -141,7 +141,6 @@ public class BasicConfigurationTest {
         public void stop() {
         }
         
-        @Override
         public Container getContainer() {
         	return null;
         }

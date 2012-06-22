@@ -263,16 +263,13 @@ public class DefaultLogicResultTest {
 	private TypeSafeMatcher<ResourceMethod> sameMethodAs(final Method method) {
 		return new TypeSafeMatcher<ResourceMethod>() {
 
-			@Override
 			public void describeTo(Description description) {
 			}
 
-			@Override
 			protected boolean matchesSafely(ResourceMethod item) {
 				return item.getMethod().equals(method);
 			}
 
-			@Override
 			protected void describeMismatchSafely(ResourceMethod item,
 					Description mismatchDescription) {
 			}

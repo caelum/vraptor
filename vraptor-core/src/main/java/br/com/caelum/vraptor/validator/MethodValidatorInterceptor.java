@@ -75,12 +75,10 @@ public class MethodValidatorInterceptor
         this.methodValidator = methodValidator;
     }
 
-    @Override
     public boolean accepts(ResourceMethod method) {
         return hasConstraint(method.getMethod());
     }
 
-    @Override
     public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
         throws InterceptionException {
 

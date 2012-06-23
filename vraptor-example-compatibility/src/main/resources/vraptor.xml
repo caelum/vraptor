@@ -1,5 +1,0 @@
-<vraptor>
- 	<regex-view-manager>/WEB-INF/jsp/$component/$logic.$result.jsp</regex-view-manager>
-	<converter>br.com.caelum.vraptor.example.custom.BigDecimalConverter</converter>
-	<plugin>org.vraptor.plugin.hibernate.HibernateValidatorPlugin</plugin>
-</vraptor>

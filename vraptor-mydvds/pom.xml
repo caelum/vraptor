@@ -19,6 +19,40 @@
 			<groupId>${project.groupId}</groupId>
 			<artifactId>vraptor-core</artifactId>
 			<version>${project.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-aop</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-asm</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-beans</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-context</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-expression</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-web</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.aspectj</groupId>
+					<artifactId>aspectjrt</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<dependency>
@@ -30,23 +64,17 @@
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
-			<version>3.6.10.Final</version>
+			<version>3.6.6.Final</version>
 		</dependency>
 		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-annotations</artifactId>
-			<version>3.3.1.GA</version>
+			<groupId>org.hibernate.javax.persistence</groupId>
+			<artifactId>hibernate-jpa-2.0-api</artifactId>
+			<version>1.0.0.Final</version>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-validator</artifactId>
 			<version>4.2.0.Final</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>jstl</groupId>
-			<artifactId>jstl</artifactId>
-			<version>1.2</version>
 		</dependency>
 		
 		<dependency>
@@ -56,49 +84,44 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-core</artifactId>
-			<version>3.0.5.RELEASE</version>
+			<groupId>com.google.inject</groupId>
+			<artifactId>guice</artifactId>
+			<version>3.0</version>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-web</artifactId>
-			<version>3.0.5.RELEASE</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-webmvc</artifactId>
-			<version>3.0.5.RELEASE</version>
+			<groupId>com.google.inject.extensions</groupId>
+			<artifactId>guice-multibindings</artifactId>
+			<version>3.0</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>jstl</artifactId>
 			<version>1.2</version>
 		</dependency>
-		<dependency>
+		<!--dependency>
 			<groupId>org.jbehave.web</groupId>
 			<artifactId>jbehave-web-selenium</artifactId>
 			<version>3.0</version>
-			<!--scope>test</scope-->
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.jbehave.web</groupId>
 			<artifactId>jbehave-web-runner</artifactId>
 			<version>3.0</version>
-			<!--scope>test</scope-->
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.jbehave.web</groupId>
 			<artifactId>jbehave-web-io</artifactId>
 			<version>3.0</version>
-			<!--scope>test</scope-->
-		</dependency>
+			<scope>test</scope>
+		</dependency-->
 	</dependencies>
 	
 	<build>
 		<!--testSourceDirectory>src/test/behave</testSourceDirectory-->
 		<plugins>
-			<plugin>
+			<!--plugin>
 				<groupId>org.jbehave</groupId>
 				<artifactId>jbehave-maven-plugin</artifactId>
 				<version>3.0.1</version>
@@ -132,7 +155,7 @@
 						<version>3.0</version>
 					</dependency>
 				</dependencies>
-			</plugin>
+			</plugin-->
 		</plugins>
 	</build>
 </project>

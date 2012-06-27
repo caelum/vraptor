@@ -17,6 +17,11 @@
 	<dependencies>
 		<!-- mandatory -->
 		<dependency>
+			<groupId>cglib</groupId>
+			<artifactId>cglib-nodep</artifactId>
+			<version>2.1_3</version>
+		</dependency>
+		<dependency>
 		    <groupId>com.google.guava</groupId>
 		    <artifactId>guava</artifactId>
 		    <version>r07</version>
@@ -70,12 +75,6 @@
 			<groupId>ognl</groupId>
 			<artifactId>ognl</artifactId>
 			<version>2.7.3</version>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>cglib</groupId>
-			<artifactId>cglib-nodep</artifactId>
-			<version>2.1_3</version>
 			<optional>true</optional>
 		</dependency>
 		
@@ -185,13 +184,13 @@
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
-			<version>3.6.6.Final</version>
+			<version>3.6.10.Final</version>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
-			<groupId>org.hibernate.javax.persistence</groupId>
-			<artifactId>hibernate-jpa-2.0-api</artifactId>
-			<version>1.0.0.Final</version>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-annotations</artifactId>
+			<version>3.3.1.GA</version>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
@@ -261,7 +260,6 @@
 			<version>2.1</version>
 			<scope>provided</scope>
 		</dependency>
-		
 		<dependency>
 		    <groupId>org.mortbay.jetty</groupId>
 		    <artifactId>servlet-api</artifactId>
@@ -285,7 +283,6 @@
 			</exclusions>
 			<scope>test</scope>
 		</dependency>
-		
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
@@ -300,4 +297,5 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+
 </project>

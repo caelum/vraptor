@@ -5,7 +5,6 @@
 	
 	<groupId>br.com.caelum</groupId>
 	<artifactId>vraptor-blank-project</artifactId>
-	<version>3.5.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	
 	<parent>

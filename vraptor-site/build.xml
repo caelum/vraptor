@@ -110,20 +110,12 @@
           target: javadoc              
          ================================= -->
     <target name="javadoc" description="generates javadoc">
-    	<exec executable="rm">
-			<arg line="-rf src/content/javadoc"/>
-		</exec>
-    	<mkdir dir="src/content/javadoc"/>
-		<javadoc destdir="src/content/javadoc">
-			<classpath>
-				<fileset dir="../vraptor-core/lib">
-					<include name="**/*.jar" />
-				</fileset>
-			</classpath>
-			<fileset dir="../vraptor-core/src/main/java">
-				<include name="**/*.java"/>
-			</fileset>
-		</javadoc>
+		<delete dir="src/content/javadoc" />
+        <copy todir="src/content/javadoc">
+            <fileset dir="../vraptor-core/target/apidocs">
+                 <include name="**/*" />
+            </fileset>
+        </copy>
     </target>
 
 	<target name="compile" description="--> compiles the classes">

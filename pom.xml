@@ -66,6 +66,7 @@
 		<module>vraptor-core</module>
 		<module>vraptor-plugin-gae</module>
 		<module>vraptor-mydvds</module>
+		<module>vraptor-blank-project</module>
 	</modules>
 	
 	<properties>

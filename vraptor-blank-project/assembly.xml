@@ -27,10 +27,10 @@
 			</excludes>
 		</fileSet>
 	</fileSets>
-  <files>
+  <!--files>
     <file>
       <source>classpath-example</source>
       <destName>.classpath</destName>
     </file>
-  </files>
+  </files-->
   </assembly>

@@ -1,0 +1,36 @@
+<link rel="stylesheet" href="/assets/css/menu.css" type="text/css">
+<link rel="stylesheet" href="/assets/css/flags.css" type="text/css">
+<ol>
+	{% for x in site.posts %}
+		{% assign i = forloop.index %}
+		{% assign imprimiu = false %}
+		{% for item in site.posts %}
+			{% if i == item.section %}
+				{% if item.language == 'pt' %}
+					{% assign section = item %}
+				{% endif %}
+				{% if item.language == page.language %}
+					<li><a class="titulo" href="{{item.url}}"><strong>
+						{% if item.section < 10 %}
+							0{{item.section}}
+						{% else %}
+							{{item.section}}
+						{% endif %}
+						</strong>{{item.title}}</a>
+					{% assign imprimiu = true %}
+				{% endif %}
+			{% endif %}
+		{% endfor %}
+		{% if imprimiu == false and i == section.section %}
+			<li><a class="titulo" href="{{section.url}}"><strong>{{section.section}}</strong> {{section.title}}</a>
+		{% endif %}
+		{% for idiomas in site.posts %}
+			{% if i == idiomas.section %}
+				<a class="idioma" href="{{idiomas.url}}"><span class="flag flag-{{idiomas.language}}"/></a>
+			{% endif %}
+			{% if forloop.last == true %}
+				</li>
+			{% endif %}
+		{% endfor %}
+	{% endfor %}
+</ol>

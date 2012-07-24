@@ -1,0 +1,61 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+<link rel="stylesheet" href="/assets/css/reset.css" type="text/css">
+<link rel="stylesheet" href="/assets/css/pygments/default.css" type="text/css">
+<link rel="stylesheet" href="/assets/css/content.css" type="text/css">
+<title>{{page.title}}</title>
+</head>
+<body>
+	
+	<div id="header">
+		<h1 class="titulo-topo">
+			{% if page.language == 'pt' %}
+				Documentação
+			{% else %}
+				Documentation
+			{% endif %}
+		</h1>
+	</div>
+
+	<div id="menu">
+		<img src="/assets/images/logo.png"/>
+		{% include menu.html %}
+	</div>
+	
+	<div id="content">
+		<h1>{{page.title}}</h1>
+		{{content}}
+	</div>
+</div>
+<script type="text/javascript">
+	var menu = document.getElementById("menu");
+	var linhas = menu.getElementsByTagName("li");
+	for(var i=0; i<linhas.length; i++) {
+		var idiomasHTML = "";
+		var linha = linhas[i];
+		var titulo = linha.childNodes[0];
+		var idiomas = linha.getElementsByClassName("idioma");
+		var idiomasOrdenados = Array.prototype.slice.call(idiomas,0);
+		idiomasOrdenados.sort(function(a,b){
+			var aClass = a.childNodes[0].getAttribute("class");
+			var bClass = b.childNodes[0].getAttribute("class");
+			if(aClass > bClass) return 1;
+			if(aClass < bClass) return -1;
+			return 0;
+		});
+		idiomasOrdenados.forEach(function concatena(x){
+			idiomasHTML += x.outerHTML;
+		});
+		linha.innerHTML = titulo.outerHTML + idiomasHTML;
+	}
+
+	for(var i=0;i<linhas.length; i++) {
+		var linha = linhas[i];
+		if(linha.childNodes[0].getAttribute("href") == window.location.pathname) {
+			linha.setAttribute("class", "selected");
+		}
+	}
+</script>
+</body>
+</html>

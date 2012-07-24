@@ -1,0 +1,7 @@
+<div id="idiomasB">
+{% for item in site.posts %}
+	{% if item.section == page.section %}
+		<a hef="{{ item.url }}">{{item.language}}</a>
+	{% endif %}
+{% endfor %}
+</div>

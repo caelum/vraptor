@@ -1,0 +1,8 @@
+baseurl: /
+source: .
+destination: ./_site
+markdown: rdiscount
+auto: true
+permalink: /:title/
+pygments: true
+server: true

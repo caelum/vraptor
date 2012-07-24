@@ -1,0 +1,14 @@
+.idioma {
+	margin-right: 5px;
+	padding-top: 5px;
+}
+
+.flag {
+	width: 16px;
+	height: 11px;
+	display: inline-block;
+	background:url(../images/flags.png) no-repeat
+}
+
+.flag.flag-pt {background-position: 0 0}
+.flag.flag-en {background-position: -19px 0}

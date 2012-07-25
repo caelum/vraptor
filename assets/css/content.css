@@ -30,11 +30,12 @@ h1 {
 }
 
 h1 span {
-	padding:5px 10px;
-	margin-right:10px;
-	border:1px solid #e1e1e1;
-	border-radius:8px;
-	
+display: inline-block;
+max-width: 48px;
+padding: 7.5px 10px;
+margin-right: 10px;
+border: 1px solid #e1e1e1;
+border-radius: 8px;
 }
 
 h3 {

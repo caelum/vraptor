@@ -24,7 +24,7 @@
 		{% endif %}
 		{% for idiomas in site.posts %}
 			{% if i == idiomas.section %}
-				<a class="idioma" href="{{site.baseurl}}{{idiomas.url}}"><span class="flag flag-{{idiomas.language}}"/></a>
+				<a class="idioma" title="{{idiomas.language}}" href="{{site.baseurl}}{{idiomas.url}}"><span class="flag flag-{{idiomas.language}}"/></a>
 			{% endif %}
 			{% if forloop.last == true %}
 				</li>

@@ -1,0 +1,11 @@
+<html>
+<head>
+{% for post in site.posts %}
+	{% if post.section == 1 and post.language == "pt" %}
+		<script type="text/javascript">window.location.href='{{site.baseurl}}{{post.url}}'</script>
+	{% endif %}
+{%endfor%}
+</head>
+<body>
+</body>
+</html>

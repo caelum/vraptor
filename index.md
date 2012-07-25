@@ -1,6 +1,5 @@
 ---
 title: Home
-layout: page
 language: pt
+layout: home
 ---
-Bem-vindo à Home

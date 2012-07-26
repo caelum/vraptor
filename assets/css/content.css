@@ -1,16 +1,17 @@
 #content {
 	font-family: Helvetica, Arial, Sans-serif;
-	font-size:0.9em;
-	line-height:1.5em;
+	font-size: 90%;
+	line-height: 150%;
 	color:#000;
 	max-width: 63em;
 	margin-left: 350px;
 	padding-left: 40px;
+	padding-top: 181px
 }
 
 .highlight {
-	font-size: 1.1em;
-	line-height: 1em;
+	font-size: 110%;
+	line-height: 100%;
 }
 
 .nota {
@@ -25,7 +26,7 @@
 #content h1 {
 	font-family: Helvetica, Arial, Sans-serif;
 	color: #2b2747;
-	font-size:1.6em;
+	font-size:160%;
 	font-weight:bold;
 	padding-bottom:18px;
 }
@@ -42,7 +43,7 @@ border-radius: 8px;
 #content h3 {
 	font-family: Helvetica, Arial, Sans-serif;
 	color:#2b2747;
-	font-size:1.3em;
+	font-size:130%;
 	font-weight:bold;
 	padding-top:20px;
 }

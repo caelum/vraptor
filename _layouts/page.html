@@ -9,9 +9,8 @@
 <title>{{page.title}}</title>
 </head>
 <body>
-	
+	{% include horizontal-menu.html %}
 	<div id="header">
-		{% include horizontal-menu.html %}
 		<h1 class="titulo-topo">
 			{% if page.category == 'docs' %}
 				{% if page.language == 'pt' %}

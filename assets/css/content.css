@@ -1,11 +1,11 @@
 #content {
-	margin-left: 350px;
-	padding: 0 40px;
 	font-family: Helvetica, Arial, Sans-serif;
 	font-size:0.9em;
 	line-height:1.5em;
 	color:#000;
 	max-width: 63em;
+	margin-left: 350px;
+	padding-left: 40px;
 }
 
 .highlight {
@@ -22,7 +22,7 @@
 	margin: 0;
 }
 
-h1 {
+#content h1 {
 	font-family: Helvetica, Arial, Sans-serif;
 	color: #2b2747;
 	font-size:1.6em;
@@ -30,7 +30,7 @@ h1 {
 	padding-bottom:18px;
 }
 
-h1 span {
+#content h1 span {
 display: inline-block;
 max-width: 48px;
 padding: 7.5px 10px;
@@ -39,7 +39,7 @@ border: 1px solid #e1e1e1;
 border-radius: 8px;
 }
 
-h3 {
+#content h3 {
 	font-family: Helvetica, Arial, Sans-serif;
 	color:#2b2747;
 	font-size:1.3em;

@@ -1,21 +1,9 @@
 #header {
 	background-color: #f6f6f6;
 	float: right;
-	height: 91px;
-	padding: 25px 0 25px;
+	height: auto;
 	margin-bottom: 40px;
 	width: 100%;
-}
-
-
-.titulo-topo {
-		font-family: Helvetica, Arial, Sans-serif;
-		color: #ddd;
-		font-size:2.9em;
-		font-weight:bold;
-		text-shadow: 1px 1px white, -1px -1px #bebebe;
-		margin: 20px 389px;
-		padding: 0;
 }
 
 #horizontal-menu {
@@ -43,14 +31,23 @@
 	border-right: none;
 }
 
+#header .titulo-topo {
+		font-family: Helvetica, Arial, Sans-serif;
+		color: #ddd;
+		font-size:2.9em;
+		font-weight:bold;
+		text-shadow: 1px 1px white, -1px -1px #bebebe;
+		margin: 44px 387.7px;
+}
+
 #menu {
 	background-color: #eaeaea;
 	float: left;
 	width: auto;
 	min-width: 300px;
 	max-width: 350px;
-	position: absolute;
-	top: 49px;
+	position: relative;
+	top: -181px;
 }
 
 #menu a#logo {

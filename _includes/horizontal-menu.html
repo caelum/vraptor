@@ -1,0 +1,18 @@
+<div id="horizontal-menu">
+	<ul>
+		<a href="http://www.vraptor.com.br"><li>Home</li></a>
+		{% if page.category == 'cookbook' %}
+			<a href="{{site.baseurl}}/index.html"><li>
+			{% if page.language == 'pt' %}
+				Documentação
+			{% else %}
+				Documentation
+			{% endif %}
+			</li></a>
+		{% else %}
+			<a href="{{site.baseurl}}/cookbook/teste/"><li>Cookbook</li></a>
+		{% endif %}
+		<a href="http://vraptor.caelum.com.br/download.jsp"><li>Download</li></a>
+		<a href="http://vraptor.caelum.com.br/javadoc/"><li>Javadoc</li></a>
+	</ul>
+</div>

@@ -3,6 +3,6 @@ source: .
 destination: ./_site/vraptor/
 markdown: rdiscount
 auto: true
-permalink: /:title/
+permalink: /:categories/:title/
 pygments: true
 server: true

@@ -5,6 +5,7 @@
 	font-size:0.9em;
 	line-height:1.5em;
 	color:#000;
+	max-width: 63em;
 }
 
 .highlight {
@@ -45,13 +46,3 @@ h3 {
 	font-weight:bold;
 	padding-top:20px;
 }
-
-.titulo-topo {
-		font-family: Helvetica, Arial, Sans-serif;
-		color: #ddd;
-		font-size:2.9em;
-		font-weight:bold;
-		text-shadow: 1px 1px white, -1px -1px #bebebe;
-		margin: 20px 389px;
-		
-	}

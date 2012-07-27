@@ -47,3 +47,11 @@ border-radius: 8px;
 	font-weight:bold;
 	padding-top:20px;
 }
+
+.cookbook {
+	list-style-type: decimal;
+}
+
+.cookbook li {
+	padding-bottom: 10px;
+}

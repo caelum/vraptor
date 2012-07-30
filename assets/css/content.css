@@ -9,6 +9,10 @@
 	padding-top: 181px
 }
 
+#content p {
+	padding-left:2px;
+}
+
 .highlight {
 	font-size: 110%;
 	line-height: 100%;

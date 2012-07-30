@@ -17,12 +17,13 @@
 
 package br.com.caelum.vraptor.converter.jodatime;
 
+import static org.joda.time.format.DateTimeFormat.shortTime;
+
 import java.text.MessageFormat;
 import java.util.ResourceBundle;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
-import org.joda.time.format.DateTimeFormat;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
@@ -45,7 +46,7 @@ public class LocalTimeConverter implements Converter<LocalTime> {
 
     public LocalTime convert(String value, Class<? extends LocalTime> type, ResourceBundle bundle) {
         try {
-            DateTime out = new LocaleBasedJodaTimeConverter(localization).convert(value, DateTimeFormat.shortTime());
+            DateTime out = new LocaleBasedJodaTimeConverter(localization).convert(value, shortTime());
             if (out == null) {
                 return null;
             }

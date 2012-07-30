@@ -18,10 +18,11 @@
 package br.com.caelum.vraptor.converter.jodatime;
 
 import java.text.MessageFormat;
-import java.util.Date;
 import java.util.ResourceBundle;
 
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+import org.joda.time.format.DateTimeFormat;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
@@ -43,12 +44,13 @@ public class LocalDateConverter implements Converter<LocalDate> {
     }
 
     public LocalDate convert(String value, Class<? extends LocalDate> type, ResourceBundle bundle) {
-		try {
-			Date date = new LocaleBasedJodaTimeConverter(localization).convert(value, type);
-			if (date == null) {
-				return null;
-			}
-			return LocalDate.fromDateFields(date);
+        try {
+            DateTime out = new LocaleBasedJodaTimeConverter(localization).convert(value, DateTimeFormat.shortDate());
+            if (out == null) {
+                return null;
+            }
+            
+            return out.toLocalDate();
 		} catch (Exception e) {
 			throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_date"), value));
 		}

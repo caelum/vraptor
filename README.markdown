@@ -5,15 +5,22 @@ Criando um novo capítulo
 
 Para que não haja erros, ele deverá conter o seguinte cabeçalho:
 
----
+\-\-\-
+
 title: Título do capítulo
+
 language: Abreviação do idioma do capítulo: pt, en...
+
 section: Índice do último capítulo existente + 1
+
 layout: page
+
 category: docs (para documentação), ou cookbook.
----
+
+\-\-\-
 
 Para o nome do arquivo, siga o padrão YYYY-MM-DD-titulo-do-capitulo.md
+
 Salve o arquivo na pasta docs ou cookbook, de acordo com o que for passado no campo "category", acima.
 
 
@@ -27,19 +34,14 @@ Recomendações
 
 Coloque trechos de código entre a seguinte tag para o highlight:
 
-{% raw %}
 {% highlight nome-da-linguagem %}
+
 {% endhighlight %}
-{% endraw %}
 
 Atente para certos caracteres que podem causar erros na criação da página:
 
-{% raw %}
 {{, _, []
-{% endraw %}
 
 Nesses casos, opte pelas seguintes alternativas:
 
-{% raw %}
 { {, &#95;, &#91;&#93;
-{% endraw %}

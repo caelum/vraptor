@@ -38,4 +38,4 @@ Atente para certos caracteres que podem causar erros na criação da página:
 
 Nesses casos, opte pelas seguintes alternativas:
 
-{ {, &#95;, &#91;&#93;
+{ {, &\#95;, &\#91;&\#93;

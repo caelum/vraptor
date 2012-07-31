@@ -10,7 +10,7 @@ layout: page
 
 Este tutorial tem como objetivo orientar o deploy de sistemas usando o framework VRaptor na Locaweb com JVM decidado em ambiente Linux compartilhado.
 
-<h1>Preparando o ambiente</h1>
+<h3>Preparando o ambiente</h3>
 
 Toda a requisição que chega até a Locaweb vai primeiramente para o Apache e se necessário no <a href="http://en.wikipedia.org/wiki/Mod_jk">mod_jk</a> passará enviará a requisição para o Tomcat, como explicado <a href="http://wiki.locaweb.com.br/pt-br/Tomcat_integrado_com_o_Apache">nessa página</a>.
 

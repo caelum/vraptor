@@ -12,7 +12,7 @@ Este artigo tem como objetivo mostrar um caminho simples para fazer job scheduli
 
 Versões utilizadas: vRaptor 3.0.2, Spring 3.0.0.RC2.
 
-<h1>O Task Scheduler</h1>
+<h3>O Task Scheduler</h3>
 
 O Spring já vem com suporte a task scheduling/executing, ele precisa apenas que uma implementação de org.springframework.scheduling.TaskScheduler esteja disponível no escopo de aplicação (singleton no Spring). Para isso precisamos implementar um ComponentFactory:
 
@@ -43,7 +43,7 @@ public class TaskSchedulerFactory implements ComponentFactory<TaskScheduler> {
 
 Neste exemplo utilizaremos o ThreadPoolTaskScheduler como implementação para o TaskScheduler, porém várias outras classes vem com o Spring e podem ser usadas da mesma maneira (documentação).
 
-<h1>As Tasks/Jobs</h1>
+<h3>As Tasks/Jobs</h3>
 
 Vamos criar interfaces para nossas tasks.
 
@@ -75,7 +75,7 @@ public class MyFirstApplicationTask implements ApplicationTask {
 }
 {% endhighlight %}
 
-<h1>Registrando tasks em escopo de request</h1>
+<h3>Registrando tasks em escopo de request</h3>
 
 Para registrar esse tipo de task, basta receber o scheduler no construtor do seu Resource e registrar a task no método adequado.
 
@@ -111,7 +111,7 @@ public class MyResource {
 }
 {% endhighlight %}
 
-<h1>Observações</h1>
+<h3>Observações</h3>
 
 Criamos 3 interfaces, pois deste modo ficará mais fácil injetar diferentes tipos de tasks no construtor, por exemplo podemos receber todas as tasks em escopo de request dentro de um resource assim:
 
@@ -134,7 +134,7 @@ public class MyResource {
 }
 {% endhighlight %}
 
-<h1>O escopo Prototype</h1>
+<h3>O escopo Prototype</h3>
 
 O Spring possui um escopo chamado prototype que define que o componente terá uma nova instância sempre que for requisitada, este escopo ainda não existe no VRaptor3 mas será implementado em breve. Este escopo servirá para definir compenentes utilizados por tasks em escopo de application que naturalmente não são singletons, como DAOs.
 Você não poderá receber a Session no construtor do seu DAO prototyped pois geralmente a SessionFactory está em escopo de request, e o vRaptor ainda não possui suporte às scoped-proxies do Spring. Então precisará fazer assim:

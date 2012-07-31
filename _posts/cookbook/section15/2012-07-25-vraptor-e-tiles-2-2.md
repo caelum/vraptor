@@ -52,7 +52,7 @@ No web.xml:
 
 Repare que não é declarado o DEFINITIONS_CONFIG, nem registrado o TilesDispatchServlet. Pois não utilizaremos arquivo para guardar as definitions, e quem cuidara dos redirecionamentos continuará sendo o VRaptor, que já faz isso muito bem obrigado! ;D Outro detalhe importante, é deixar o TilesContainerFactory como MUTABLE. ;)
 
-<h1>TilesPathResolver?</h1>
+<h3>TilesPathResolver?</h3>
 
 Nessa abordagem, não é necessário criar implementar esse PathResolver, já que essa responsabilidade continuará sendo do VRaptor. ;D
 

@@ -5,18 +5,12 @@ Criando um novo capítulo
 
 Para que não haja erros, ele deverá conter o seguinte cabeçalho:
 
-\-\-\-
-
-title: Título do capítulo
-
-language: Abreviação do idioma do capítulo: pt, en...
-
-section: Índice do último capítulo existente + 1
-
-layout: page
-
-category: docs (para documentação), ou cookbook.
-
+\-\-\-  
+title: Título do capítulo  
+language: Abreviação do idioma do capítulo: pt, en...  
+section: Índice do último capítulo existente + 1  
+layout: page  
+category: docs (para documentação), ou cookbook.  
 \-\-\-
 
 Para o nome do arquivo, siga o padrão YYYY-MM-DD-titulo-do-capitulo.md

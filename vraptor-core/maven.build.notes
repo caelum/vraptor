@@ -1,6 +1,6 @@
 Run these commands in order to build with maven
 
-mvn install:install-file -DgroupId=org.hibernate -DartifactId=hibernate-validator -Dversion=4.0.2.GA -Dclassifier=new -Dpackaging=jar -Dfile=lib/optional/hibernate/hibernate-validator-4.0.2.GA.jar
+mvn install:install-file -DgroupId=org.hibernate -DartifactId=hibernate-validator -Dversion=4.2.0.Final -Dclassifier=new -Dpackaging=jar -Dfile=lib/optional/hibernate/hibernate-validator-4.2.0.Final.jar
 
 mvn install:install-file -DgroupId=org.hamcrest -DartifactId=hamcrest-all -Dversion=1.2RC3 -Dpackaging=jar -Dfile=lib/optional/hamcrest-all-1.2RC3.jar
 

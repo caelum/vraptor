@@ -9,7 +9,10 @@
 <title>{{page.title}}</title>
 </head>
 <body>
-	{% include horizontal-menu.html %}
+	<div id="horizontal-menu">
+		{% include horizontal-menu.html %}
+		{%include outrasLinguas.html %}
+	</div>
 	<div id="header">
 		<h1 class="titulo-topo">
 			{% if page.category == 'docs' %}
@@ -46,8 +49,8 @@
 		var idiomas = linha.getElementsByClassName("idioma");
 		var idiomasOrdenados = Array.prototype.slice.call(idiomas,0);
 		idiomasOrdenados.sort(function(a,b){
-			var aClass = a.childNodes[0].getAttribute("class");
-			var bClass = b.childNodes[0].getAttribute("class");
+			var aClass = a.getAttribute("title");
+			var bClass = b.getAttribute("title");
 			if(aClass > bClass) return 1;
 			if(aClass < bClass) return -1;
 			return 0;
@@ -57,6 +60,22 @@
 		});
 		linha.innerHTML = titulo.outerHTML + idiomasHTML;
 	}
+	
+	var linhaAtual = document.getElementsByClassName('selected').item(0);
+	var idiomasAtual = linhaAtual.getElementsByClassName('idioma');
+	var header = document.getElementById('horizontal-menu');
+	var idiomas = header.getElementsByClassName('idioma');
+	for(var j=0; j<idiomasAtual.length; j++){
+		var bandeira = idiomasAtual.item(j).cloneNode(true);
+		if(bandeira.getAttribute('href') != window.location.pathname){
+			var span = bandeira.childNodes[0];
+			var classNotSelected = span.getAttribute('class');
+			span.setAttribute('class', classNotSelected+' not-selected');
+		}
+		header.removeChild(idiomas[0]);
+		header.appendChild(bandeira);
+	}
+	
 </script>
 </body>
 </html>

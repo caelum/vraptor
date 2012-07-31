@@ -12,5 +12,5 @@
 
 .flag.flag-pt {background-position: 0 0}
 .flag.flag-en {background-position: -19px 0}
-.flag.flag-pt.active {background-position: 0 -14px}
-.flag.flag-en.active {background-position: -19px -14px}
+.flag.flag-pt.not-selected {background-position: 0 -14px}
+.flag.flag-en.not-selected {background-position: -19px -14px}

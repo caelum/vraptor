@@ -9,7 +9,11 @@
 	background-color: #48476a;
 }
 
-#horizontal-menu a {
+#horizontal-menu ul {
+	display: inline-block;
+}
+
+#horizontal-menu ul a {
 	display: inline-block;
 	padding: 5px 25px;
 	margin: 10px -2px;

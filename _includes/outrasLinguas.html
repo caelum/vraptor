@@ -1,7 +1,11 @@
-<div id="idiomasB">
 {% for item in site.posts %}
-	{% if item.section == page.section %}
-		<a hef="{{ item.url }}">{{item.language}}</a>
+	{% if item.section == page.section and item.category == page.category %}
+		<a class="idioma" title="{{item.language}}" href="{{site.baseurl}}{{item.url}}">
+		{% if item.language == page.language %}
+			<span class="flag flag-{{item.language}}"/>
+		{% else %}
+			<span class="flag flag-{{item.language}} not-selected"/>
+		{% endif %}
+		</a>
 	{% endif %}
 {% endfor %}
-</div>

@@ -1,11 +1,11 @@
 <ol>
-	{% for x in site.posts %}
-		{% assign i = forloop.index %}
-		{% assign imprimiu = false %}
-		{% for item in site.posts %}
-			{% if i == item.section and item.category == page.category %}
-				{% if item.language == page.language %}
-					{%  if i == page.section %}<li class="selected">{% else %}<li>{% endif %}<a class="titulo" href="{{site.baseurl}}{{item.url}}"><strong>
+	{% for x in site.posts %}{% 
+		assign i = forloop.index %}{% 
+		assign imprimiu = false %}{% 
+		for item in site.posts %}{% 
+			if i == item.section and item.category == page.category %}{% 
+				if item.language == page.language %}{%  
+				    if i == page.section %}<li class="selected">{% else %}<li>{% endif %}<a class="titulo" href="{{site.baseurl}}{{item.url}}"><strong>
 					{% if item.section < 10 %}
 						0{{item.section}}
 					{% else %}
@@ -17,18 +17,18 @@
 				{% if imprimiu == false %}
 					{% assign section = item %}
 				{% endif %}
-			{% endif %}
-		{% endfor %}
-		{% if imprimiu == false and i == section.section %}
+			{% endif %}{% 
+		endfor %}{% 
+		if imprimiu == false and i == section.section %}
 			<li><a class="titulo" href="{{site.baseurl}}{{section.url}}"><strong>{{section.section}}</strong> {{section.title}}</a>
-		{% endif %}
-		{% for idiomas in site.posts %}
-			{% if i == idiomas.section and idiomas.category == page.category  %}
+		{% endif %}{% 
+		for idiomas in site.posts %}{% 
+			if i == idiomas.section and idiomas.category == page.category  %}
 				<a class="idioma" title="{{idiomas.language}}" href="{{site.baseurl}}{{idiomas.url}}"><span class="flag flag-{{idiomas.language}}"/></a>
 			{% endif %}
 			{% if forloop.last == true %}
 				</li>
-			{% endif %}
-		{% endfor %}
-	{% endfor %}
+			{% endif %}{% 
+		endfor %}{% 
+	endfor %}
 </ol>

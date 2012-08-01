@@ -8,7 +8,6 @@
 	<meta name="author" content="Caelum"/>
 	<meta name="reply-to" content="contato@caelum.com.br"/>
 	<meta name="author" content="Design"/>
-	<meta name="reply-to" content="lokidg@gmail.com"/>
 	<c:if test="${param.docs}">
 		<c:set var="path">../..</c:set>
 		<link href="${path }/documentacao/includes/css/java.css" rel="stylesheet" type="text/css" media="screen" />
@@ -41,7 +40,7 @@
     	<ul id="<fmt:message key='menu.id'/>">
         	<li><a id="<fmt:message key='home.id'/>" href="${path }/<fmt:message key='home.link'/>"><span>home</span></a></li>
         	<li><a id="<fmt:message key='download.id'/>" href="${path }/<fmt:message key='download.link'/>"><span>download</span></a></li>
-        	<li><a id="<fmt:message key='docs.id'/>" href="${path }/<fmt:message key='documentacao.link'/>"><span><fmt:message key="documentacao"/></span></a></li>
+        	<li><a id="<fmt:message key='docs.id'/>" href="<fmt:message key='documentacao.link'/>"><span><fmt:message key="documentacao"/></span></a></li>
         	<li><a id="<fmt:message key='beneficios.id'/>" href="${path }/<fmt:message key='beneficios.link'/>"><span><fmt:message key="beneficios"/></span></a></li>
         	<li><a id="<fmt:message key='suporte.id'/>" href="${path }/<fmt:message key='suporte.link'/>"><span><fmt:message key="suporte"/></span></a></li>
         	<li><a id="<fmt:message key='vraptor2.id'/>" href="${path }/<fmt:message key='vraptor2.link'/>"><span>vraptor2</span></a></li>

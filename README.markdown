@@ -28,8 +28,7 @@ Recomendações
 
 Coloque trechos de código entre a seguinte tag para o highlight:
 
-{% highlight nome-da-linguagem %}
-
+{% highlight nome-da-linguagem %}  
 {% endhighlight %}
 
 Atente para certos caracteres que podem causar erros na criação da página:

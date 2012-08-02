@@ -1,16 +1,16 @@
-<ul>
-		<a href="http://www.vraptor.com.br"><li>Home</li></a>
+<ul id="hzmenu">
+		<li><a href="http://www.vraptor.com.br">Home</a></li>
 		{% if page.category == 'cookbook' %}
-			<a href="{{site.baseurl}}/index.html"><li>
+			<li><a href="{{site.baseurl}}/index.html">
 			{% if page.language == 'pt' %}
 				Documentação
 			{% else %}
 				Documentation
 			{% endif %}
-			</li></a>
+			</a></li>
 		{% else %}
-			<a href="{{site.baseurl}}/cookbook/aceitando-urls-com-ou-sem-barra-no-final/"><li>Cookbook</li></a>
+			<li><a href="{{site.baseurl}}/cookbook/aceitando-urls-com-ou-sem-barra-no-final/">Cookbook</a></li>
 		{% endif %}
-		<a href="http://vraptor.caelum.com.br/download.jsp"><li>Download</li></a>
-		<a href="http://vraptor.caelum.com.br/javadoc/"><li>Javadoc</li></a>
+		<li><a href="http://vraptor.caelum.com.br/download.jsp">Download</a></li>
+		<li><a href="http://vraptor.caelum.com.br/javadoc/">Javadoc</a></li>
 	</ul>

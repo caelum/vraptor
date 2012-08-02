@@ -1,11 +1,14 @@
+<span id="idiomas">
 {% for item in site.posts %}
 	{% if item.section == page.section and item.category == page.category %}
+		{% assign language = {{item.language}} %}
 		<a class="idioma" title="{{item.language}}" href="{{site.baseurl}}{{item.url}}">
 		{% if item.language == page.language %}
-			<span class="flag flag-{{item.language}}"/>
+			<span class="flag flag-{{item.language}}"></span>{{ language | upcase }}
 		{% else %}
-			<span class="flag flag-{{item.language}} not-selected"/>
+			<span class="flag flag-{{item.language}} not-selected"></span> {{ language | upcase }}
 		{% endif %}
 		</a>
 	{% endif %}
 {% endfor %}
+</ul>

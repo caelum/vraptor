@@ -13,26 +13,55 @@
 	display: inline-block;
 }
 
-#horizontal-menu ul a {
+#horizontal-menu ul li {
+	display: inline-block;
+	font-family: Helvetica, Arial, Sans-serif;
+	font-size:1.1em;
 	display: inline-block;
 	padding: 5px 25px;
 	margin: 10px -2px;
-	font-family: Helvetica, Arial, Sans-serif;
-	font-size:1.1em;
-	color: white;
 	border-left: 1px solid #37365b;
 	border-right: 1px solid #626186;
-	text-decoration: none;
-	
 }
 
-#horizontal-menu a:first-child {
+#horizontal-menu #hzmenu a {
+	text-decoration: none;
+	color: white;
+}
+
+#horizontal-menu #idiomas {
+	float: right;
+	margin-right: 70px;
+}
+
+#horizontal-menu #idiomas span {
+	margin-right: 5px;
+}
+
+#horizontal-menu #idiomas a {
+	text-decoration: none;
+	display: inline-block;
+	font-family: Helvetica, Arial, Sans-serif;
+	font-size: 15px;
+	font-weight: bold;
+	background-color: #FFF;
+	border-bottom: 1px solid #EBEBEB;
+	border-left: 1px solid #EBEBEB;
+	border-right: 1px solid #EBEBEB;
+	border-radius: 0 0 8px 8px;
+	padding: 5px 10px;
+	color:#2b2748;
+}
+
+#horizontal-menu #hzmenu li:first-child {
 	border-left: none;
 }
 
-#horizontal-menu a:last-child {
+#horizontal-menu #hzmenu li:last-child {
 	border-right: none;
 }
+
+
 
 #header .titulo-topo {
 		font-family: Helvetica, Arial, Sans-serif;

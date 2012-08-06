@@ -4,6 +4,7 @@ import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 
 import com.google.common.base.Supplier;
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.converters.reflection.PureJavaReflectionProvider;
 import com.thoughtworks.xstream.io.HierarchicalStreamDriver;
 import com.thoughtworks.xstream.mapper.MapperWrapper;
 
@@ -14,11 +15,11 @@ public final class VRaptorXStream extends XStream {
 	{setMode(NO_REFERENCES);}
 
 	public VRaptorXStream(TypeNameExtractor extractor) {
-		super();
+		super(new PureJavaReflectionProvider());
 		this.extractor = extractor;
 	}
 	public VRaptorXStream(TypeNameExtractor extractor, HierarchicalStreamDriver hierarchicalStreamDriver) {
-		super(hierarchicalStreamDriver);
+		super(new PureJavaReflectionProvider(),hierarchicalStreamDriver);
 		this.extractor = extractor;
 	}
 

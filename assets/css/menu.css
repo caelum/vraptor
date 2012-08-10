@@ -1,7 +1,6 @@
 #header {
 	background-color: #f6f6f6;
 	float: right;
-	height: 141px;
 	width: 100%;
 }
 
@@ -64,12 +63,14 @@
 
 
 #header .titulo-topo {
-		font-family: Helvetica, Arial, Sans-serif;
-		color: #ddd;
-		font-size:2.9em;
-		font-weight:bold;
-		text-shadow: 1px 1px white, -1px -1px #bebebe;
-		margin: 47px 0 0 390px;
+	vertical-align: middle;
+	font-family: Helvetica, Arial, Sans-serif;
+	color: #DDD;
+	font-size: 2.9em;
+	font-weight: bold;
+	text-shadow: 1px 1px white, -1px -1px #BEBEBE;
+	margin-left: 40px;
+	display: inline-block;
 }
 
 #menu {
@@ -78,14 +79,16 @@
 	width: auto;
 	min-width: 300px;
 	max-width: 350px;
-	position: relative;
-	top: -141px;
 }
 
-#menu a#logo {
+#header a#logo {
 	display: inline-block;
-	margin: 35px 47px;
+	vertical-align: middle;
+	background-color: #EAEAEA;
+	padding: 35px 47px;
+	border-left: 1px solid #EAEAEA;
 }
+
 
 #menu ol{
 	list-style-type: none;

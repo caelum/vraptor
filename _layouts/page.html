@@ -10,26 +10,12 @@
 <title>{{page.title}}</title>
 </head>
 <body>
-	<div id="horizontal-menu">
-		{% include horizontal-menu.html %}
-		{%include outrasLinguas.html %}
-	</div>
+
 	<div id="header">
-		<h1 class="titulo-topo">
-			{% if page.category == 'docs' %}
-				{% if page.language == 'pt' %}
-					Documentação
-				{% else %}
-					Documentation
-				{% endif %}
-			{% else %}
-				Cookbook
-			{% endif %}		
-	</h1>
+		{% include header.html %}
 	</div>
 
 	<div id="menu">
-		<a id="logo" href="http://www.vraptor.com.br/{{page.language}}"><img src="{{site.baseurl}}/assets/images/logo.png"/></a>
 		{% include menu.html %}
 	</div>
 	

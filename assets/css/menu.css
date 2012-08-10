@@ -89,6 +89,10 @@
 	border-left: 1px solid #EAEAEA;
 }
 
+#logo img {
+	height: 71px;
+	width: 255px;
+}
 
 #menu ol{
 	list-style-type: none;

@@ -151,7 +151,7 @@ Existem alguns converters para números que são localizados, ou seja, que consi
 </context-param>
 {% endhighlight %}
 
-<h3>Instanciador de Parâmetros Imutáveis (beta)</h3>
+<h3>Instanciador de Parâmetros Imutáveis</h3>
 
 Se você quiser trabalhar com objetos imutáveis no seu projeto, você pode usar um parameter provider que consegue popular seus objetos a partir dos parâmetros do seu construtor:
 

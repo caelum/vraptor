@@ -247,7 +247,7 @@ public class ClientsController {
 
 The results will be like:
 
-{% highlight json %}
+{% highlight jsp %}
 {"client": {
 	"name": "John"
 }}
@@ -267,7 +267,7 @@ result.use(json()).from(client).include("address").serialize();
 
 will result in something like:
 
-{% highlight json %}
+{% highlight jsp %}
 {"client": {
 	"name": "John",
 	"address" {
@@ -284,7 +284,7 @@ result.use(json()).from(user).exclude("password").serialize();
 
 will result in something like:
 
-{% highlight json %}
+{% highlight jsp %}
 {"user": {
 	"name": "John",
 	"login": "john"
@@ -328,7 +328,7 @@ result.use(xml()).from(clients).serialize();
 
 will result in something like
 
-{% highlight json %}
+{% highlight jsp %}
 {"list": [
 	{
 		"name": "John"
@@ -363,7 +363,7 @@ result.use(xml()).from(clients, "clients").serialize();
 
 will result in something like:
 
-{% highlight json %}
+{% highlight jsp %}
 {"clients": [
 	{
 		"name": "John"
@@ -396,7 +396,7 @@ result.use(json()).from(clients).include("address").serialize();
 
 results in:
 
-{% highlight json %}
+{% highlight jsp %}
 {"list": [
 	{
 		"name": "John",

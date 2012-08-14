@@ -8,7 +8,7 @@ category: docs
 
 <h3>Começando o projeto: uma loja virtual</h3>
 
-Vamos começar baixando o vraptor-blank-project do <a href="http://vraptor.caelum.com.br/download.jsp">site do VRaptor</a>. Esse blank-project já possui a configuração no web.xml e os jars no WEB-INF/lib necessários para começar a desenvolver no VRaptor.
+Vamos começar baixando o vraptor-blank-project do <a href="http://vraptor.caelum.com.br/download.jsp">site do VRaptor</a>. Esse blank-project já possui a configuração no web.xml e os JARs no WEB-INF/lib necessários para começar a desenvolver no VRaptor.
 Como você pode ver, a única configuração necessária no web.xml é o filtro do VRaptor:
 
 {% highlight xml %}
@@ -25,13 +25,13 @@ Como você pode ver, a única configuração necessária no web.xml é o filtro 
 </filter-mapping>
 {% endhighlight %}
 
-Você pode facilmente importar esse projeto no Eclipse, e roda-lo clicando com o botão da direita e escolhendo Run as... / Run on server.... Escolha então um servlet container (ou faça o setup de um novo) e então acesse <a href="http://localhost:8080/vraptor-blank-project/">http://localhost:8080/vraptor-blank-project/</a>.
-Você pode escolher, nas propriedades do projetor, dentro de Web Project Settings, o nome do contexto para algo melhor, como onlinestore. Agora se você rodar esse exemplo deve ser possível acessar <a href="http://localhost:8080/onlinestore">http://localhost:8080/onlinestore</a> e ver <strong>It works!</strong> no navegador.
+Você pode facilmente importar esse projeto no Eclipse, e rodá-lo clicando com o botão da direita e escolhendo Run as... / Run on server.... Escolha então um servlet container (ou faça o setup de um novo) e então acesse <a href="http://localhost:8080/vraptor-blank-project/">http://localhost:8080/vraptor-blank-project/</a>.
+Você pode escolher, nas propriedades do projetor, dentro de Web Project Settings, o nome do contexto para algo melhor, como onlinestore. Agora, se você rodar esse exemplo deve ser possível acessar <a href="http://localhost:8080/onlinestore">http://localhost:8080/onlinestore</a> e ver <strong>It works!</strong> no navegador.
 
 
 <div class="nota">
 <h4>Nota</h4>
-Se você está usando um container de servlet 3.0 (java EE 6), você nem precisa de web.xml, pois o VRaptor vai configurar esse filtro através do novo recurso de web-fragments.
+Se você está usando um container de servlet 3.0 (java EE 6), você nem precisa de web.xml, pois o VRaptor vai configurar esse filtro por meio do novo recurso de web-fragments.
 </div>
 
 <h3>Um cadastro de produtos</h3>
@@ -60,7 +60,7 @@ public class ProdutosController {
 }
 {% endhighlight %}
 
-A classe ProdutosController vai expor URIs para serem acessadas via web, ou seja, vai expor recursos da sua aplicação. E para indicar isso, você precisa anotá-la com com @Resource:
+A classe ProdutosController vai expor URIs para serem acessadas via web, ou seja, vai expor recursos da sua aplicação. E, para indicar isso, você precisa anotá-la com com @Resource:
 
 {% highlight java %}
 @Resource
@@ -68,7 +68,7 @@ public class ProdutosController {
 }
 {% endhighlight %}
 
-Ao colocar essa anotação na classe, todos os métodos públicos dela serão acessíveis via web. Por exemplo, se tivermos um método lista na classe:
+Ao colocar essa anotação na classe, todos os métodos públicos dela serão acessíveis pela web. Por exemplo, se tivermos um método lista na classe:
 
 {% highlight java %}
 @Resource
@@ -79,10 +79,9 @@ public class ProdutosController {
 }
 {% endhighlight %}
 
-o VRaptor automaticamente redireciona todas as requisições à URI /produtos/lista para esse método. Ou seja, a convenção para a criação de URIs é /<nome_do_controller>/<nome_do_metodo.
-Ao terminar a execução do método, o VRaptor vai fazer o dispatch da requisição para o jsp /WEB-INF/jsp/produtos/lista.jsp. Ou seja, a convenção para a view padrão é /WEB-INF/jsp/<nome_do_controller>/<nome_do_metodo>.jsp.
-O método lista retorna uma lista de produtos, mas como acessá-la no jsp? No VRaptor, o retorno do método é exportado para a jsp através de atributos da requisição. No caso do método lista, vai existir um atributo chamado <strong>produtoList</strong> contendo a lista retornada:
-lista.jsp
+o VRaptor automaticamente redirecionará todas as requisições à URI /produtos/lista para esse método. Ou seja, a convenção para a criação de URIs é /<nome_do_controller>/<nome_do_metodo.
+Ao terminar a execução do método, o VRaptor fará o dispatch da requisição para o JSP /WEB-INF/jsp/produtos/lista.jsp. Ou seja, a convenção para a view padrão é /WEB-INF/jsp/<nome_do_controller>/<nome_do_metodo>.jsp.
+O método lista retorna uma lista de produtos, mas como acessá-la no JSP? No VRaptor, o retorno do método é exportado para a JSP por meio de atributos da requisição. No caso do método lista, vai existir um atributo chamado <strong>produtoList</strong> contendo a lista retornada:
 
 {% highlight jsp %}
 <ul>
@@ -93,11 +92,11 @@ lista.jsp
 {% endhighlight %}
 
 A convenção para o nome dos atributos exportados é bastante intuitiva: se for uma collection, como o caso do método acima, o atributo será <tipoDaCollection>List, produtoList no caso; se for uma classe qualquer vai ser o nome da classe com a primeira letra minúscula. Se o método retorna Produto, o atributo exportado será produto.
-Veremos em outro capítulo que podemos expor mais de um objeto sem usar o retorno, e sim através do Result, onde podemos dar nome a variável exposta.
+Veremos em outro capítulo que podemos expor mais de um objeto sem usar o retorno, e sim por meio do Result, onde podemos dar nome à variável exposta.
 
 <h3>Criando o ProdutoDao: injeção de Dependências</h3>
 
-O VRaptor usa fortemente o conceito de Injeção de Dependências e Inversão de Controle. A idéia é que você não precisa criar ou buscar as dependências da sua classe, você simplesmente as recebe e o VRaptor se encarrega de criá-las pra você. Mais informações no capítulo de Injeção de Dependências.
+O VRaptor usa fortemente o conceito de Injeção de Dependências e Inversão de Controle. A ideia é que você não precisa criar ou buscar as dependências da sua classe, você simplesmente as recebe e o VRaptor se encarrega de criá-las pra você. Mais informações no capítulo de Injeção de Dependências.
 Estamos retornando uma lista vazia no nosso método lista. Seria muito mais interessante retornar uma lista de verdade, por exemplo todas os produtos cadastrados no sistema. Para isso vamos criar um DAO de produtos, para fazer a listagem:
 
 {% highlight java %}
@@ -125,7 +124,7 @@ public class ProdutosController {
 }
 {% endhighlight %}
 
-Podemos instanciar o ProdutoDao direto do controller, mas é muito mais interessante aproveitar o gerenciamento de dependências que o VRaptor faz e receber o dao no construtor! E para que isso seja possível basta anotar o dao com @Component e o VRaptor vai se encarregar de criar o dao e injetá-lo na sua classe:
+Podemos instanciar o ProdutoDao direto do controller, mas é muito mais interessante aproveitar o gerenciamento de dependências que o VRaptor faz e receber o DAO no construtor! E, para que isso seja possível, basta anotar o DAO com @Component e o VRaptor vai se encarregar de criá-lo e injetá-lo na sua classe:
 
 {% highlight java %}
 @Component
@@ -151,7 +150,7 @@ public class ProdutosController {
 
 <h3>Formulário de adição: redirecionamento</h3>
 
-Temos uma listagem de Produtos, mas ainda não temos como cadastrá-los. Vamos então criar um formulário de adição de produtos. Para não ter que acessar o jsp diretamente, vamos criar uma lógica vazia que só redireciona pro jsp:
+Temos uma listagem de Produtos, mas ainda não temos como cadastrá-los. Vamos então criar um formulário de adição de produtos. Para não ter que acessar o JSP diretamente, vamos criar uma lógica vazia que só redireciona para o JSP:
 
 {% highlight java %}
 @Resource
@@ -162,7 +161,7 @@ public class ProdutosController {
 }
 {% endhighlight %}
 
-Podemos acessar o formulário pela URI /produtos/form, e o formulário estará em /WEB-INF/jsp/produtos/form.jsp:
+Podemos acessar o formulário, que estará em /WEB-INF/jsp/produtos/form.jsp, pela URI /produtos/form:
 
 {% highlight jsp %}
 <form action="<c:url value='/produtos/adiciona'/>">
@@ -173,7 +172,7 @@ Podemos acessar o formulário pela URI /produtos/form, e o formulário estará e
 </form>
 {% endhighlight %}
 
-O formulário vai salvar o Produto pela URI /produtos/adiciona, então precisamos criar esse método no nosso controller:
+Como o formulário vai salvar o Produto pela URI /produtos/adiciona, precisamos criar esse método no nosso controller:
 
 {% highlight java %}
 @Resource
@@ -197,7 +196,7 @@ public class ProdutosController {
 }
 {% endhighlight %}
 
-Geralmente depois de adicionar algo no sistema queremos voltar para a sua listagem, ou para o formulário novamente. No nosso caso, queremos voltar pra listagem de produtos ao adicionar um produto novo. Para isso existe um componente do VRaptor: o <strong>Result</strong>. Ele é responsável por adicionar atributos na requisição, e por mudar a view a ser carregada. Se eu quiser uma instância de Result, basta recebê-lo no construtor:
+Geralmente, depois de adicionar algo no sistema queremos voltar para a sua listagem, ou para o formulário novamente. No nosso caso, queremos voltar pra listagem de produtos ao adicionar um produto novo. Para isso existe um componente do VRaptor: o <strong>Result</strong>. Ele é responsável por adicionar atributos na requisição, e por mudar a view a ser carregada. Se eu quiser uma instância de Result, basta recebê-lo no construtor:
 
 {% highlight java %}
 @Resource
@@ -210,8 +209,12 @@ public class ProdutosController {
 {% endhighlight %}
 
 E para redirecionar para a listagem basta usar o result:
+
+{% highlight java %}
 result.redirectTo(ProdutosController.class).lista();
-Podemos ler esse código como: Como resultado, redirecione para o método lista do ProdutosController. A configuração de redirecionamento é 100% java, sem strings envolvidas! Fica explícito no seu código que o resultado da sua lógica não é o padrão, e qual resultado você está usando! Você não precisa ficar se preocupando com arquivos de configuração! Mais ainda, se eu quiser mudar o nome do método lista, eu não preciso ficar rodando o sistema inteiro procurando onde estão redirecionando pra esse método, basta usar o refactor do eclipse, por exemplo, e tudo continua funcionando!
+{% endhighlight %}
+
+Podemos ler esse código como: Como resultado, redirecione para o método lista do ProdutosController. A configuração de redirecionamento é 100% java, sem strings envolvidas! Fica explícito no seu código que o resultado da sua lógica não é o padrão e qual resultado você está usando! Você não precisa ficar se preocupando com arquivos de configuração! Mais ainda, se eu quiser mudar o nome do método lista, eu não preciso ficar rodando o sistema inteiro procurando onde estão redirecionando pra esse método, basta usar o refactor do eclipse, por exemplo, e tudo continua funcionando!
 Então nosso método adiciona ficaria:
 
 {% highlight java %}
@@ -221,11 +224,11 @@ public void adiciona(Produto produto) {
 }
 {% endhighlight %}
 
-Mais informações sobre o Result no capítulo Views e Ajax.
+Veja mais informações sobre o Result no capítulo Views e Ajax.
 
 <h3>Validação</h3>
 
-Não faz muito sentido adicionar um produto sem nome no sistema, nem um produto com preço negativo. Antes de adicionar o produto, precisamos verificar se é um produto válido, com nome e preço positivo, e caso não seja válido voltamos para o formulário com mensagens de erro. Para fazermos isso, podemos usar um componente do VRaptor: o Validator. Você pode recebê-lo no construtor do seu Controller, e usá-lo da seguinte maneira:
+Não faz muito sentido adicionar um produto sem nome no sistema, nem um produto com preço negativo. Antes de adicionar o produto, precisamos verificar se é um produto válido, com nome e preço positivo, e caso não seja válido voltamos para o formulário com mensagens de erro. Para fazermos isso, podemos usar um componente do VRaptor chamado Validator. Você pode recebê-lo no construtor do seu Controller, e usá-lo da seguinte maneira:
 
 {% highlight java %}
 @Resource
@@ -256,12 +259,13 @@ Podemos ler as validações da seguinte maneira: Valide que o nome do produto n�
 </c:forEach>
 {% endhighlight %}
 
-Mais informações sobre o Validator no capítulo de Validações.
-Com o que foi visto até agora você já consegue fazer 90% da sua aplicação! As próximas sessões desse tutorial mostram a solução para alguns problemas frequentes que estão nos outros 10% da sua aplicação.
+Veja mais informações sobre o Validator no capítulo de Validações.
+
+Com o que foi visto até agora, você já consegue fazer 90% da sua aplicação! As próximas sessões desse tutorial mostram a solução para alguns problemas frequentes que estão nos outros 10% da sua aplicação.
 
 <h3>Usando o Hibernate para guardar os Produtos</h3>
 
-Agora vamos fazer uma implementação de verdade do ProdutoDao, usando o Hibernate para persistir os produtos. Para isso nosso ProdutoDao precisa de uma Session. Como o VRaptor usa injeção de dependências, basta receber uma Session no construtor!
+Agora vamos fazer uma implementação de verdade do ProdutoDao, usando o Hibernate para persistir os produtos. Para isso, nosso ProdutoDao precisa de uma Session. Como o VRaptor usa injeção de dependências, basta receber uma Session no construtor!
 
 {% highlight java %}
 @Component
@@ -280,15 +284,19 @@ public class ProdutoDao {
 }
 {% endhighlight %}
 
-Mas peraí, para o VRaptor precisa saber como criar essa Session, e eu não posso simplesmente colocar um @Component na Session pois é uma classe do Hibernate! Para isso existe a interface ComponentFactory, que você pode usar pra criar uma Session. Mais informações de como fazer ComponentFactories no capítulo de Componentes. Você pode ainda usar os ComponentFactories que já estão disponíveis para isso no VRaptor, como mostra o capítulo de Utils.
+O VRaptor precisa saber como criar essa Session, e eu não posso simplesmente colocar um @Component na Session pois é uma classe do Hibernate! Para isso existe a interface ComponentFactory, que você pode usar pra criar uma Session. 
+
+Veja mais informações de como fazer ComponentFactories no capítulo de Componentes. Você pode, ainda, usar os ComponentFactories que já estão disponíveis para isso no VRaptor, como mostra o capítulo de Utils.
 
 <h3>Controlando transações: Interceptors</h3>
 
-Muitas vezes queremos interceptar todas as requisições (ou uma parte delas) e executar alguma lógica, como acontece com o controle de transações. Para isso existem os Interceptor's no VRaptor. Saiba mais sobre eles no capítulo de Interceptors. Existe um TransactionInterceptor já implementado no VRaptor, saiba como usá-lo no capítulo de Utils.
+Muitas vezes, queremos interceptar todas as requisições (ou uma parte delas) e executar alguma lógica, como acontece com o controle de transações. Para isso, existem os Interceptors no VRaptor. 
+
+Saiba mais sobre eles no capítulo de Interceptors. Existe um TransactionInterceptor já implementado no VRaptor, saiba como usá-lo no capítulo de Utils.
 
 <h3>Carrinho de compras: Componentes na sessão</h3>
 
-Se quisermos criar um carrinho de compras no nosso sistema, precisamos de alguma forma manter os itens do carrinho na Sessão do usuário. Para fazer isso, podemos criar um componente que está no escopo de sessão, ou seja, ele vai ser único na sessão do usuário. Para isso basta criar um componente anotado com @SessionScoped:
+Se quisermos criar um carrinho de compras no nosso sistema, precisamos de alguma forma manter os itens do carrinho na Sessão do usuário. Para fazer isso, podemos criar um componente que está no escopo de sessão, ou seja, ele vai ser único na sessão do usuário. Para isso, basta criar um componente anotado com @SessionScoped:
 
 {% highlight java %}
 @Component
@@ -332,7 +340,7 @@ Além do escopo de sessão existe o escopo de Aplicação com a anotação @Appl
 
 <h3>Um pouco de REST</h3>
 
-Seguindo a idéia REST de que URIs devem identificar recursos na rede para então podermos fazer valer as diversas vantagens estruturais que o protocolo HTTP nos proporciona, note o quão simples fica mapear os diversos métodos HTTP para a mesma URI, e com isso invocar diferentes métodos, por exemplo queremos usar as seguintes URIs para o cadastro de produtos:
+Seguindo a idéia REST de que URIs devem identificar recursos na rede para então podermos fazer valer as diversas vantagens estruturais que o protocolo HTTP nos proporciona, note o quão simples fica mapear os diversos métodos HTTP para a mesma URI, e com isso invocar diferentes métodos. Por exemplo, queremos usar as seguintes URIs para o cadastro de produtos:
 
 {% highlight jsp%}
 	GET /produtos - lista todos os produtos
@@ -342,7 +350,7 @@ Seguindo a idéia REST de que URIs devem identificar recursos na rede para entã
 	DELETE /produtos/{id} - remove o produto com o id passado
 {% endhighlight %}
 
-Para criar esse comportamento REST no VRaptor podemos usar as anotações @Path - que muda qual é a uri que vai acessar o determinado método, e as anotações com os nomes dos métodos HTTP @Get, @Post, @Delete, @Put, que indicam que o método anotado só pode ser acessado se a requisição estiver com o método HTTP indicado. Então uma versão REST do nosso ProdutosController seria:
+Para criar esse comportamento REST no VRaptor, podemos usar as anotações @Path - que muda qual é a URI que vai acessar o determinado método, e as anotações com os nomes dos métodos HTTP @Get, @Post, @Delete, @Put, que indicam que o método anotado só pode ser acessado se a requisição estiver com o método HTTP indicado. Então, uma versão REST do nosso ProdutosController seria:
 
 {% highlight java %}
 public class ProdutosController {
@@ -366,20 +374,20 @@ public class ProdutosController {
 }
 {% endhighlight %}
 
-Note que podemos receber parâmetros nas URIs. Por exemplo se chamarmos a URI <strong>GET /produtos/5</strong>, o método visualiza será invocado, e o parâmetro produto vai ter o id populado com 5.
+Note que podemos receber parâmetros nas URIs. Por exemplo, se chamarmos a URI <strong>GET /produtos/5</strong>, o método visualiza será invocado, e o parâmetro produto vai ter o id populado com 5.
 Mais informações sobre isso no capítulo de Resources-REST.
 
 <h3>Arquivo de mensagens</h3>
 
-Internacionalização (i18n) é um recurso poderoso, e que está presente em quase todos os frameworks Web hoje em dia. E não é diferente no VRaptor3. Com i18n podemos fazer com que nossa aplicação suporte várias línguas (francês, português, espanhol, inglês, etc) de uma maneira que não nos cause muito esforço, bastando apenas fazermos a tradução das mensagens da nossa aplicação.
-Para isso é só criarmos um arquivo chamado messages.properties e disponibilizá-lo no classpath da nossa aplicação (WEB-INF/classes). O conteúdo desse arquivo são várias linhas compostas por um conjunto de chaves/valor, como por exemplo:
+Internacionalização (i18n) é um recurso poderoso, e que está presente em quase todos os frameworks Web,  hoje em dia. E não é diferente no VRaptor3. Com i18n podemos fazer com que nossa aplicação suporte várias línguas (francês, português, espanhol, inglês, etc) de uma maneira que não nos cause muito esforço, bastando apenas fazermos a tradução das mensagens da nossa aplicação.
+Para isso, é só criarmos um arquivo chamado messages.properties e disponibilizá-lo no classpath da nossa aplicação (WEB-INF/classes). Esse arquivo conterá várias linhas compostas por um conjunto de chave/valor, como por exemplo:
 
 {% highlight jsp %}
 campo.nomeUsuario = Nome de Usuário
 campo.senha = Senha
 {% endhighlight %}
 
-Até então está fácil, mas e se quisermos criar esses arquivos para várias línguas, como por exemplo, inglês? Simples, basta criarmos um outro arquivo properties chamado messages_en.properties. Repare no sufixo _en no nome do arquivo. Isso indica que quando o usuário acessar sua aplicação através de uma máquina configurada com locale em inglês as mensagens desse arquivo serão utilizadas. O conteúdo desse arquivo então ficaria:
+Até então está fácil, mas e se quisermos criar esses arquivos para várias línguas, como por exemplo, inglês? Simples, basta criarmos um outro arquivo properties chamado messages_en.properties. Repare no sufixo _en no nome do arquivo. Isso indica que quando o usuário acessar sua aplicação em uma máquina configurada com locale em inglês as mensagens desse arquivo serão utilizadas. O conteúdo desse arquivo então ficaria:
 
 {% highlight jsp %}
 campo.nomeUsuario = Username

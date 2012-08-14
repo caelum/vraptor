@@ -26,7 +26,7 @@ class ClientController {
 {% endhighlight %}
 
 Agora as variáveis "mensagem" e "cliente" estão disponíveis para uso em seu template engine.
-É possível registrar o objeto através da invocação do método include com um único argumento:
+É possível registrar o objeto por meio da invocação do método include com um único argumento:
 
 {% highlight java %}
 @Resource
@@ -42,7 +42,7 @@ class ClientController {
 }
 {% endhighlight %}
 
-Nesse caso, a primeira invocação registra a chave "string" e na segunda a chave "cliente". Você pode alterar o comportamento de convenção de chaves através de seu próprio TypeNameExtractor.
+Nesse caso, a primeira invocação registra a chave "string" e a segunda, a chave "cliente". Você pode alterar o comportamento de convenção de chaves no seu próprio TypeNameExtractor.
 
 <h3>Custom PathResolver</h3>
 
@@ -73,11 +73,11 @@ public class FreemarkerPathResolver extends DefaultPathResolver {
 }
 {% endhighlight %}
 
-Desse jeito, a lógica iria renderizar a view /WEB-INF/freemarker/clients/list.ftl. Se ainda assim isso não for o suficiente você pode implementar a interface PathResolver e fazer qualquer convenção que você queira, não esquecendo de anotar a classe com @Component.
+Desse jeito, a lógica irá renderizar a view /WEB-INF/freemarker/clients/list.ftl. Se, ainda assim, isso não for o suficiente, você pode implementar a interface PathResolver e fazer qualquer convenção que você queira, não esquecendo de anotar a classe com @Component.
 
 <h3>View</h3>
 
-Se você quiser mudar a view de alguma lógica específica você pode usar o objeto Result:
+Se você quiser mudar a view de alguma lógica específica, você pode usar o objeto Result:
 
 {% highlight java %}
 @Resource
@@ -103,7 +103,7 @@ Por padrão, existem estes tipos de views implementadas:
 <ul>
 	<li>Results.logic(), que vai redirecionar para uma outra lógica qualquer do sistema</li>
 
-	<li>Results.page(), que vai redirecionar diretamente para uma página, podendo ser um jsp, um html, ou qualquer uri relativa ao web application dir, ou ao contexto da aplicação.</li>
+	<li>Results.page(), que vai redirecionar diretamente para uma página, podendo ser um JSP, um HTML, ou qualquer URI relativa ao web application dir, ou ao contexto da aplicação.</li>
 
 	<li>Results.http(), que manda informações do protocolo HTTP como status codes e headers.</li>
 
@@ -113,11 +113,11 @@ Por padrão, existem estes tipos de views implementadas:
 
 	<li>Results.nothing(), apenas retorna o código de sucesso (HTTP 200 OK).</li>
 
-	<li>Results.xml(), serializa objetos em xml.</li>
+	<li>Results.xml(), serializa objetos em XML.</li>
 
-	<li>Results.json(), serializa objetos em json.</li>
+	<li>Results.json(), serializa objetos em JSON.</li>
 
-	<li>Results.representation(), serializa objetos em um formato determinado pela requisição (parametro _format ou header Accept)</li>
+	<li>Results.representation(), serializa objetos em um formato determinado pela requisição (parâmetro _format ou header Accept)</li>
 </ul>
 
 <h3>Atalhos no Result</h3>
@@ -144,7 +144,7 @@ Alguns redirecionamentos são bastante utilizados, então foram criados atalhos 
 	<li>result.nothing()	 ==> use(nothing());</li>
 </ul>
 
-Além disso, se o redirecionamento é para um método do mesmo controller, podemos usar:
+Além disso, se o redirecionamento é para um método do mesmo Controller, podemos usar:
 
 <ul>
 	<li>result.forwardTo(this).list() ==> result.use(logic()).forwardTo(this.getClass()).list();</li>
@@ -158,8 +158,10 @@ Além disso, se o redirecionamento é para um método do mesmo controller, podem
 
 <h3>Redirecionamento e forward</h3>
 
-No VRaptor3, podemos tanto realizar um redirect ou um forward do usuário para uma outra lógica ou um jsp. Apesar de serem conceitos da API de Servlets, vale a pena relembrar a diferença: o redirecionamento acontece no lado do cliente, através de códigos HTTP que farão o browser acessar uma nova URL; já o forward acontece no lado do servidor, totalmente transparente para o cliente/browser.
+No VRaptor3, podemos tanto realizar um redirect ou um forward do usuário para uma outra lógica ou um JSP. Apesar de serem conceitos da API de Servlets, vale a pena relembrar a diferença: o redirecionamento acontece no lado do cliente, através de códigos HTTP que farão o browser acessar uma nova URL; já o forward acontece no lado do servidor, totalmente transparente para o cliente/browser.
+
 Um bom exemplo de uso do redirect é no chamado 'redirect-after-post'. Por exemplo: quando você adiciona um cliente e que, após o formulário submetido, o cliente seja retornado para a página de listagem de clientes. Fazendo isso com redirect, impedimos que o usuário atualize a página (F5) e reenvie toda a requisição, acarretando em dados duplicados.
+
 No caso do forward, um exemplo de uso é quando você possui uma validação e essa validação falhou, geralmente você quer que o usuário continue na mesma tela do formulário com os dados da requisição preenchidos, mas internamente você vai fazer o forward para outra lógica de negócios (a que prepara os dados necessários para o formulário).
 
 <div class="nota">
@@ -188,7 +190,8 @@ lista.jsp:
 
 <h3>Accepts e o parâmetro _format</h3>
 
-Muitas vezes precisamos renderizar formatos diferentes para uma mesma lógica. Por exemplo queremos retornar um JSON, ao invés de um HTML. Para fazer isso, podemos definir o Header Accepts da requisição para que aceite o tipo desejado, ou colocar um parâmetro &#95;format na requisição.
+Muitas vezes, precisamos renderizar formatos diferentes para uma mesma lógica. Por exemplo queremos retornar um JSON, em vez de um HTML. Para fazer isso, podemos definir o Header Accepts da requisição para que aceite o tipo desejado, ou colocar um parâmetro &#95;format na requisição.
+
 Se o formato for JSON, a view renderizada por padrão será: /WEB-INF/jsp/{controller}/{logic}.json.jsp, ou seja, em geral será renderizada a view: /WEB-INF/jsp/{controller}/{logic}.{formato}.jsp. Se o formato for HTML você não precisa colocá-lo no nome do arquivo.
 O parâmetro &#95;format tem prioridade sobre o header Accepts.
 
@@ -222,7 +225,7 @@ public class ClientsController {
 
 <h3>Ajax: Versão programática</h3>
 
-Se você quiser que o VRaptor serialize automaticamente seus objetos para xml ou json, você pode escrever em sua lógica:
+Se você quiser que o VRaptor serialize automaticamente seus objetos para XML ou JSON, você pode escrever em sua lógica:
 
 {% highlight java %}
 import static br.com.caelum.vraptor.view.Results.*;
@@ -299,7 +302,7 @@ result.use(json()).from(usuario).recursive().serialize();
 result.use(xml()).from(usuario).recursive().serialize();
 {% endhighlight %}
 
-A implementação padrão é baseada no XStream, então é possível configurar a serialização via anotações ou configurações diretas ao XStream, bastando criar a classe:
+A implementação padrão é baseada no XStream, então é possível configurar a serialização por anotações ou configurações diretas ao XStream, bastando criar a classe:
 
 {% highlight java %}
 @Component

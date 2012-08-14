@@ -6,11 +6,11 @@ section: 18
 category: docs
 ---
 
-O VRaptor 3 agora possui uma extensão chamada VRaptor Scaffold, que ter por finalidade facilitar a configuração de novos projetos e plugins.
+O VRaptor 3 agora possui uma extensão chamada VRaptor Scaffold, que tem por finalidade facilitar a configuração de novos projetos e plugins.
 
 <h3>Instalação</h3>
 
-Para instalar o vraptor scaffold é necessário ter instalado o ruby e o rubygems. Você pode encontrar informações de instalação na <a href="http://www.ruby-lang.org/pt/downloads">página de downloads do Ruby</a>. Tendo isso instalado basta executar o comando a seguir.
+Para instalar o VRaptor Scaffold é necessário ter instalado o Ruby e o rubygems. Você pode encontrar informações de instalação na <a href="http://www.ruby-lang.org/pt/downloads">página de downloads do Ruby</a>. Tendo isso instalado, basta executar o comando a seguir.
 
 {% highlight bash %}
 gem install vraptor-scaffold
@@ -18,26 +18,26 @@ gem install vraptor-scaffold
 
 <h3>Começando um projeto</h3>
 
-Abra um terminal e digite
+Abra um terminal e digite:
 
 {% highlight bash %}
 vraptor new onlinestore
 {% endhighlight %}
 
-Esse comando vai criar toda a estrutra da aplicação, após isso entre na pasta onlinestore e execute a task jetty do ant
+Esse comando vai criar toda a estrutra da aplicação, após isso entre na pasta onlinestore e execute a task jetty do ant:
 
 {% highlight bash %}
 ant jetty.run
 {% endhighlight %}
 
 Abra o browser no endereço <a href="http://localhost:8080">http://localhost:8080</a> e você deve ver <strong>It works!</strong>.
-Agora vamos criar um cadastro completo(CRUD) de produtos para nossa loja virtual, para isso basta executar
+Agora vamos criar um cadastro completo (CRUD) de produtos para nossa loja virtual, para isso basta executar
 
 {% highlight bash %}
 vraptor scaffold product name:string value:double
 {% endhighlight %}
 
-Execute novamente
+Execute novamente:
 
 {% highlight bash %}
 ant jetty.run
@@ -46,7 +46,7 @@ ant jetty.run
 Acesse <a href="http://localhost:8080/products">http://localhost:8080/products</a>
 
 <h3>Package</h3>
-O pacote raiz por padrão é app, para mudar isso crie a aplicação com o seguinte comando
+O pacote raiz por padrão é app, para mudar isso crie a aplicação com o seguinte comando:
 
 {% highlight bash %}
 vraptor new onlinestore --package=br.com.caelum
@@ -60,7 +60,7 @@ vraptor new onlinestore --package=br.com.caelum -m modelo -c controlador -r repo
 
 <h3>Build: Maven, Gradle ou Ivy</h3>
 
-O vraptor-scaffold gera um projeto com ant e ivy por padrão, mas você pode escolher outra ferramenta de build com um simples comando na hora de criar seu projeto:
+O VRaptor Scaffold gera um projeto com ant e ivy por padrão, mas você pode escolher outra ferramenta de build com um simples comando na hora de criar seu projeto:
 
 {% highlight bash %}
 # for maven
@@ -70,7 +70,7 @@ vraptor new onlinestore --build-tool=mvn
 vraptor new onlinestore --build-tool=gradle
 {% endhighlight %}
 
-Ao usar gradle, utilize
+Ao usar gradle, utilize:
 
 {% highlight bash %}
 gradle jettyRun
@@ -88,7 +88,7 @@ vraptor new onlinestore -o=hibernate
 {% endhighlight %}
 
 <h3>Freemarker</h3>
-O template engine padrão é jsp, para utilizar o freemarker, crie a aplicação com
+O template engine padrão é JSP, para utilizar o freemarker, crie a aplicação com:
 
 {% highlight bash %}
 vraptor new onlinestore --template-engine=ftl
@@ -96,21 +96,23 @@ vraptor new onlinestore --template-engine=ftl
 
 <h3>Eclipse</h3>
 
-Se você optou pelo maven execute
+Se você optou pelo maven execute:
 
 {% highlight bash %}
 mvn eclipse:eclipse
 {% endhighlight %}
 
-Para gerar os arquivos de configuração do eclipse, após isso apenas faça a importação do projeto normalmente.
-Se você optou pelo ant os arquivos de configuração serão gerados no momento em que criar o projeto, não se esqueça de executar
+Para gerar os arquivos de configuração do Eclipse, após isso apenas faça a importação do projeto normalmente.
+
+Se você optou pelo ant, os arquivos de configuração serão gerados no momento em que criar o projeto, não se esqueça de executar:
 
 {% highlight bash %}
 ant compile
 {% endhighlight %}
 
 para baixar todas as dependências antes de importar o projeto.
-É possível pular a criação desses arquivos com o comando
+
+É possível pular a criação desses arquivos com o comando:
 
 {% highlight bash %}
 vraptor new onlinestore --skip-eclipse
@@ -122,7 +124,7 @@ vraptor new onlinestore --skip-eclipse
 
 <h3>Plugins</h3>
 
-Plugins do vraptor são facilmente instalados através do comando
+Plugins do vraptor são facilmente instalados com o comando:
 
 {% highlight bash %}
 vraptor plugin simple-email -v 1.0.0
@@ -146,7 +148,7 @@ Agora é possível fazer um deploy de qualquer aplicação java no Heroku com um
 git push heroku master
 {% endhighlight %}
 
-E o vraptor-scaffold já tem um comando que gera toda a aplicação do jeito que o Heroku espera. Para isso basta utilizar o comando:
+E o VRaptor Scaffold já tem um comando que gera toda a aplicação do jeito que o Heroku espera. Para isso basta utilizar o comando:
 
 {% highlight bash %}
 vraptor new onlinestore --heroku

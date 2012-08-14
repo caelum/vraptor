@@ -8,12 +8,12 @@ category: docs
 
 <h3>Padrão</h3>
 
-Por padrão o VRaptor já registra diversos conversores para o seu uso no dia a dia.
+Por padrão, o VRaptor já registra diversos conversores para o seu uso no dia a dia.
 
 <h3>Tipos primitivos</h3>
 
 Todos os tipos primitivos (int, long etc) são suportados.
-Caso o parametro da requisição seja nulo ou a string vazia, variáveis de tipo primitivo serão alterados para o valor padrão como se essa variável fosse uma variável membro, isto é:
+Caso o parâmetro da requisição seja nulo ou a string vazia, variáveis de tipo primitivo serão alterados para o valor padrão como se essa variável fosse uma variável membro, isto é:
 
 <ul>
 	<li>boolean - false</li>
@@ -27,7 +27,7 @@ Todos os wrappers dos tipos primitivos (Integer, Long, Character, Boolean etc) s
 
 <h3>Enum</h3>
 
-Todas as enumerações são suportadas através do nome do elemento ou de seu ordinal. No exemplo a seguir, tanto o valor 1 como o valor DEBITO são traduzidos para Tipo.DEBITO:
+Todas as enumerações são suportadas por meio do nome do elemento ou de seu ordinal. No exemplo a seguir, tanto o valor 1 como o valor DEBITO são traduzidos para Tipo.DEBITO:
 
 {% highlight java %}
 public enum Tipo {
@@ -64,16 +64,16 @@ A localização dos componentes pode ser alterada utilizando a seguinte configur
 
 <h3>Calendar e Date</h3>
 
-LocaleBasedCalendarConverter e LocaleBasedDateConverter utilizam o locale do usuário, definido seguindo o padrão do jstl para entender a formatação que foi utilizada no parâmetro.
+LocaleBasedCalendarConverter e LocaleBasedDateConverter utilizam o locale do usuário, definido seguindo o padrão do JSTL para entender a formatação que foi utilizada no parâmetro.
 Por exemplo, se o locale é pt-br, o formato "18/09/1981" representa 18 de setembro de 1981 enquanto para o locale en, o formato "09/18/1981" representa a mesma data.
 
 <h3>LocalDate, LocalTime e LocalDateTime do joda-time</h3>
 
-Existem conversores para esses dois tipos no VRaptor e eles só serão carregados se você tiver o joda-time.jar no seu classpath
+Existem conversores para esses dois tipos no VRaptor e eles só serão carregados se você tiver o joda-time.jar no seu classpath.
 
 <h3>Interface</h3>
 
-Todos os conversores devem implementar a interface Converter do vraptor. A classe concreta definirá o tipo que ela é capaz de converter, e será invocada com o valor do parâmetro do request, o tipo alvo e um bundle com as mensagens de internacionalização para que você possa retornar uma ConversionException no caso de algum erro de conversão.
+Todos os conversores devem implementar a interface Converter do vraptor. A classe concreta definirá o tipo que ela é capaz de converter e será invocada com o valor do parâmetro do request, o tipo alvo e um bundle com as mensagens de internacionalização para que você possa retornar uma ConversionException no caso de algum erro de conversão.
 
 {% highlight java %}
 public interface Converter<T> {
@@ -81,7 +81,7 @@ public interface Converter<T> {
 }
 {% endhighlight %}
 
-Além disso, seu conversor deve ser anotado dizendo agora para o VRaptor (e não mais para o compilador java) qual o tipo que seu conversor é capaz de converter, para isso utilize a anotação @Convert:
+Além disso, seu conversor deve ser anotado dizendo agora para o VRaptor (e não mais para o compilador Java) qual o tipo que seu conversor é capaz de converter, para isso utilize a anotação @Convert:
 
 {% highlight java %}
 @Convert(Long.class)

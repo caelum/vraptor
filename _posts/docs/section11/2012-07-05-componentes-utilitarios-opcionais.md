@@ -66,7 +66,7 @@ ou você pode criar um custom provider:
 
 <h3>Hibernate Session e SessionFactory</h3>
 
-Se você precisa de Session's e SessionFactory nos seus componentes, você geralmente vai precisar de um ComponentFactory para criá-los. Se você usa entidades anotadas, e o hibernate.cfg.xml na raiz do WEB-INF/classes, você pode usar as ComponentFactory's para isso que já vêm com o VRaptor. O VRaptor também tem um interceptor que abre a Session e começa uma transação no início da requisição e fecha a Session (e commita ou dá rollback na transação) no final da requisição. Você pode registrar esses componentes do VRaptor adicionando o pacote <strong>br.com.caelum.vraptor.util.hibernate</strong> no seu web.xml:
+Se você precisa de Sessions e SessionFactories nos seus componentes, você geralmente vai precisar de um ComponentFactory para criá-los. Se você usa entidades anotadas e o hibernate.cfg.xml na raiz do WEB-INF/classes, você pode usar as ComponentFactories para isso, que já vêm com o VRaptor. O VRaptor também tem um interceptor que abre a Session e começa uma transação no início da requisição e fecha a Session (e commita ou dá rollback na transação) no final da requisição. Você pode registrar esses componentes do VRaptor adicionando o pacote <strong>br.com.caelum.vraptor.util.hibernate</strong> no seu web.xml:
 
 {% highlight xml %}
 <context-param>
@@ -102,7 +102,7 @@ Já existe um Provider que adiciona esses três componentes opcionais. Você pod
 
 <h3>JPA EntityManager e EntityManagerFactory</h3>
 
-Se você tiver um persistence.xml com o persistence-unit chamado "default", você pode usar os ComponentFactories para criar EntityManager e EntityManagerFactory já disponíveis no vraptor, adicionando o pacote br.com.caelum.vraptor.util.jpa no web.xml:
+Se você tiver um persistence.xml com o persistence-unit chamado "default", você pode usar os ComponentFactories para criar EntityManager e EntityManagerFactory já disponíveis no VRaptor, adicionando o pacote br.com.caelum.vraptor.util.jpa no web.xml:
 
 {% highlight xml %}
 <context-param>

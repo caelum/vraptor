@@ -199,7 +199,7 @@ O parâmetro &#95;format tem prioridade sobre o header Accepts.
 
 Para devolver um JSON na sua view, basta que sua lógica disponibilize o objeto para a view, e dentro da view você forme o JSON como desejar. Como no exemplo, o seu /WEB-INF/jsp/clients/load.json.jsp:
 
-{% highlight jsp %}
+{% highlight javascript %}
 { nome: '${client.name}', id: '${client.id}' }
 {% endhighlight %}
 
@@ -251,7 +251,7 @@ public class ClientsController {
 
 Os resultados vão ser parecidos com:
 
-{% highlight jsp %}
+{% highlight javascript %}
 {"cliente": {
 	"nome": "Joao"
 }}
@@ -271,7 +271,7 @@ result.use(json()).from(cliente).include("endereco").serialize();
 
 vai resultar em algo parecido com:
 
-{% highlight jsp %}
+{% highlight javascript %}
 {"cliente": {
 	"nome": "Joao",
 	"endereco" {
@@ -288,7 +288,7 @@ result.use(json()).from(usuario).exclude("senha").serialize();
 
 vai resultar em algo parecido com:
 
-{% highlight jsp %}
+{% highlight javascript %}
 {"usuario": {
 	"nome": "Joao",
 	"login": "joao"
@@ -332,7 +332,7 @@ result.use(xml()).from(clientes).serialize();
 
 vai resultar em algo como:
 
-{% highlight jsp %}
+{% highlight javascript %}
 {"list": [
 	{
 		"nome": "Joao"
@@ -367,7 +367,7 @@ result.use(xml()).from(clientes, "clientes").serialize();
 
 vai resultar em algo como:
 
-{% highlight jsp %}
+{% highlight javascript %}
 {"clientes": [
 	{
 		"nome": "Joao"
@@ -400,7 +400,7 @@ result.use(json()).from(clientes).include("endereco").serialize();
 
 com resultado:
 
-{% highlight jsp %}
+{% highlight javascript %}
 {"list": [
 	{
 		"nome": "Joao",

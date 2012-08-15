@@ -72,6 +72,7 @@ import br.com.caelum.vraptor.deserialization.Deserializer;
 import br.com.caelum.vraptor.deserialization.Deserializers;
 import br.com.caelum.vraptor.deserialization.Deserializes;
 import br.com.caelum.vraptor.deserialization.DeserializesHandler;
+import br.com.caelum.vraptor.deserialization.FormDeserializer;
 import br.com.caelum.vraptor.deserialization.JsonDeserializer;
 import br.com.caelum.vraptor.deserialization.XMLDeserializer;
 import br.com.caelum.vraptor.deserialization.XStreamXMLDeserializer;
@@ -160,16 +161,16 @@ import br.com.caelum.vraptor.serialization.xstream.XStreamJSONPSerialization;
 import br.com.caelum.vraptor.serialization.xstream.XStreamJSONSerialization;
 import br.com.caelum.vraptor.serialization.xstream.XStreamXMLSerialization;
 import br.com.caelum.vraptor.validator.BeanValidator;
-import br.com.caelum.vraptor.validator.DefaultValidator;
 import br.com.caelum.vraptor.validator.DefaultBeanValidator;
-import br.com.caelum.vraptor.validator.MethodValidatorCreator;
-import br.com.caelum.vraptor.validator.ValidatorCreator;
+import br.com.caelum.vraptor.validator.DefaultValidator;
 import br.com.caelum.vraptor.validator.MessageConverter;
 import br.com.caelum.vraptor.validator.MessageInterpolatorFactory;
+import br.com.caelum.vraptor.validator.MethodValidatorCreator;
 import br.com.caelum.vraptor.validator.MethodValidatorInterceptor;
 import br.com.caelum.vraptor.validator.NullBeanValidator;
 import br.com.caelum.vraptor.validator.Outjector;
 import br.com.caelum.vraptor.validator.ReplicatorOutjector;
+import br.com.caelum.vraptor.validator.ValidatorCreator;
 import br.com.caelum.vraptor.validator.ValidatorFactoryCreator;
 import br.com.caelum.vraptor.view.AcceptHeaderToFormat;
 import br.com.caelum.vraptor.view.DefaultAcceptHeaderToFormat;
@@ -261,6 +262,7 @@ public class BaseComponents {
             InstantiateInterceptor.class, 					InstantiateInterceptor.class,
             DeserializingInterceptor.class, 				DeserializingInterceptor.class,
             JsonDeserializer.class,							JsonDeserializer.class,
+            FormDeserializer.class,							FormDeserializer.class,
             Localization.class, 							JstlLocalization.class,
             OutjectResult.class, 							OutjectResult.class,
             ParametersInstantiatorInterceptor.class, 		ParametersInstantiatorInterceptor.class,

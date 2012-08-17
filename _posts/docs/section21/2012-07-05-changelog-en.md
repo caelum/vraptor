@@ -3,7 +3,7 @@ title: Changelog
 layout: page
 language: en
 section: 21
-category: docs
+category: [en, docs]
 ---
 
 <h3>3.3.1</h3>

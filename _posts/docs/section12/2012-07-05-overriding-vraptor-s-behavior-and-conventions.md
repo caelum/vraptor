@@ -3,7 +3,7 @@ title: Overriding Vraptor's behavior and conventions
 layout: page
 language: en
 section: 12
-category: docs
+category: [en, docs]
 ---
 
 Most of VRaptor behaviours and conventions can be customized, in a very easy way: it is just creating a component that implements an internal interface of VRaptor. When you do this, VRaptor will use your custom implementation instead of the default one.

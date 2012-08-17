@@ -2,7 +2,7 @@
 section: 2
 title: Colocando objetos na sessão
 language: pt
-category: cookbook
+category: [pt, cookbook]
 layout: page
 ---
 

@@ -2,7 +2,7 @@
 section: 13
 title: Usando o Header Referer para fazer redirecionamentos
 language: pt
-category: cookbook
+category: [pt, cookbook]
 layout: page
 ---
 

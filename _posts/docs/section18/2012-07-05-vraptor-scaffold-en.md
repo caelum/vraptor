@@ -3,7 +3,7 @@ title: VRaptor Scaffold
 layout: page
 language: en
 section: 18
-category: docs
+category: [en, docs]
 ---
 
 VRaptor scaffold extension to make it easier configuring new projects and plugins.

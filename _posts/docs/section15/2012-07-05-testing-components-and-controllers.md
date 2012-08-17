@@ -3,7 +3,7 @@ title: Testing components and controllers
 layout: page
 language: en
 section: 15
-category: docs
+category: [en, docs]
 ---
 
 VRaptor3 manages your class dependencies, so there is no need to worry about instantiating your components and controllers, you can just receive your dependencies on the constructor and VRaptor3 will locate them and instantiate your class.

@@ -2,7 +2,7 @@
 section: 10
 title: Evitando que o browser faça cache das páginas
 language: pt
-category: cookbook
+category: [pt, cookbook]
 layout: page
 ---
 

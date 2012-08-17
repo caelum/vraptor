@@ -2,7 +2,7 @@
 section: 1
 title: Aceitando URLs com ou sem barra no final
 language: pt
-category: cookbook
+category: [pt, cookbook]
 layout: page
 ---
 

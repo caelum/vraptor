@@ -3,7 +3,7 @@ title: Sobrescrevendo as convenções e o comportamento do VRaptor
 layout: page
 language: pt
 section: 12
-category: docs
+category: [pt, docs]
 ---
 
 A maioria dos comportamentos e convenções do VRaptor são personalizáveis. E a forma de personalizar é bem fácil: criar um componente que implementa uma das interfaces internas do VRaptor. Ao fazer isso, o VRaptor vai usar a implementação personalizada ao invés da padrão.

@@ -3,7 +3,7 @@ title: Dependency injection
 layout: page
 language: en
 section: 9
-category: docs
+category: [en, docs]
 ---
 
 VRaptor is strongly based on Dependency Injection, since all its internal components are managed using this technique.

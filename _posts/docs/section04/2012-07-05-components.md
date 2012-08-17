@@ -3,7 +3,7 @@ title: Components
 layout: page
 language: en
 section: 4
-category: docs
+category: [en, docs]
 ---
 
 <h3>What are components?</h3>

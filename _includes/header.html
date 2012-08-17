@@ -2,16 +2,19 @@
 	{% include horizontal-menu.html %}
 	{%include outrasLinguas.html %}
 </div>
-	<a id="logo" href="http://www.vraptor.com.br/{{page.language}}"><img src="{{site.baseurl}}/assets/images/logo.png"/></a>
+	<a id="logo" href="{{site.baseurl}}/{{page.language}}"><img src="{{site.baseurl}}/assets/images/logo.png"/></a>
 <h1 class="titulo-topo">
-	{% if page.category == 'docs' %}
+	{% if page.layout == 'index' %}
+		Home
+	{% endif %}
+	{% if page.category.last == 'docs' %}
 		{% if page.language == 'pt' %}
 			Documentação
 		{% else %}
 			Documentation
 		{% endif %}
 	{% endif %}
-	{% if page.category == 'cookbook' %}
+	{% if page.category.last == 'cookbook' %}
 		Cookbook
 	{% endif %}
 </h1>

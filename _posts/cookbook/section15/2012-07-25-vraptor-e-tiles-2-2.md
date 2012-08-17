@@ -2,7 +2,7 @@
 section: 15
 title: VRaptor e Tiles 2.2
 language: pt
-category: cookbook
+category: [pt, cookbook]
 layout: page
 ---
 

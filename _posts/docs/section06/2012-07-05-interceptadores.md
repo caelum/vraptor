@@ -3,7 +3,7 @@ title: Interceptadores
 layout: page
 language: pt
 section: 6
-category: docs
+category: [pt, docs]
 ---
 
 <h3>Para quê interceptar?</h3>

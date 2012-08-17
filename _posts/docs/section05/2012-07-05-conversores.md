@@ -3,7 +3,7 @@ title: Conversores
 layout: page
 language: pt
 section: 5
-category: docs
+category: [pt, docs]
 ---
 
 <h3>Padrão</h3>

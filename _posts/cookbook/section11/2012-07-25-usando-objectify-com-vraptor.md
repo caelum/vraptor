@@ -2,7 +2,7 @@
 section: 11
 title: Usando Objectify com VRaptor
 language: pt
-category: cookbook
+category: [pt, cookbook]
 layout: page
 ---
 

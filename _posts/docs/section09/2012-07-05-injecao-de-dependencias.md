@@ -3,7 +3,7 @@ title: Injeção de dependências
 layout: page
 language: pt
 section: 9
-category: docs
+category: [pt, docs]
 ---
 
 O VRaptor está fortemente baseado no conceito de injeção de dependências uma vez que chega até mesmo a utilizar dessa idéia para juntar seus componentes internos.

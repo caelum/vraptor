@@ -3,7 +3,7 @@ title: VRaptor3 - O guia inicial de 1 minuto
 layout: page
 language: pt
 section: 1
-category: docs
+category: [pt, docs]
 ---
 
 O VRaptor 3 foca em simplicidade e, portanto, todas as funcionalidades que você verá têm como primeira meta resolver o problema do programador da maneira menos intrusiva possível em seu código.

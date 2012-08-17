@@ -3,7 +3,7 @@ title: Componentes
 layout: page
 language: pt
 section: 4
-category: docs
+category: [pt, docs]
 ---
 
 <h3>O que são componentes?</h3>

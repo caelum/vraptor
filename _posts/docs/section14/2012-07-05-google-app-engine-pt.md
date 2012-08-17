@@ -3,7 +3,7 @@ title: Google App Engine
 layout: page
 language: pt
 section: 14
-category: docs
+category: [pt, docs]
 ---
 
 <h3>Começando um projeto</h3>

@@ -3,7 +3,7 @@ title: Testando componentes e controllers
 layout: page
 language: pt
 section: 15
-category: docs
+category: [pt, docs]
 ---
 
 Criar um teste unitário do seu controller VRaptor costuma ser muito fácil: dado o desacoplamento das suas classes com a api javax.servlet e os parâmetros serem populados através do request, seu teste será como o de uma classe qualquer, sem mistérios.

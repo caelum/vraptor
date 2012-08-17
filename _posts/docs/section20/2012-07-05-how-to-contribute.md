@@ -3,7 +3,7 @@ title: How to contribute to VRaptor
 layout: page
 language: en
 section: 20
-category: docs
+category: [en, docs]
 ---
 
 <h3>Joining the mailing lists</h3>

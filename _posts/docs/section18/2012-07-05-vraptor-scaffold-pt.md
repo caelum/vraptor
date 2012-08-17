@@ -3,7 +3,7 @@ title: VRaptor Scaffold
 layout: page
 language: pt
 section: 18
-category: docs
+category: [pt, docs]
 ---
 
 O VRaptor 3 agora possui uma extensão chamada VRaptor Scaffold, que ter por finalidade facilitar a configuração de novos projetos e plugins.

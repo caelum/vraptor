@@ -2,7 +2,7 @@
 section: 3
 title: ComponentFactory como seletor de implementações
 language: pt
-category: cookbook
+category: [pt, cookbook]
 layout: page
 ---
 

@@ -1,6 +1,6 @@
 ---
-title: Home
+title: index
 language: pt
-layout: home
-category: docs
+category: pt
+layout: index
 ---

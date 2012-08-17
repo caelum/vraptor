@@ -3,7 +3,7 @@ title: Converters
 layout: page
 language: en
 section: 5
-category: docs
+category: [en, docs]
 ---
 
 <h3>Default</h3>

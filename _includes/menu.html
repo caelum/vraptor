@@ -3,7 +3,7 @@
 		{% assign i = forloop.index %}
 		{% assign imprimiu = false %}
 		{% for item in site.posts %}
-			{% if i == item.section and item.category == page.category %}
+			{% if i == item.section and item.category.last == page.category.last %}
 				{% if item.language == page.language %}
 					{%  if i == page.section %}<li class="selected">{% else %}<li>{% endif %}<a class="titulo" href="{{site.baseurl}}{{item.url}}"><strong>
 					{% if item.section < 10 %}
@@ -23,7 +23,7 @@
 			<li><a class="titulo" href="{{site.baseurl}}{{section.url}}"><strong>{{section.section}}</strong> {{section.title}}</a>
 		{% endif %}
 		{% for idiomas in site.posts %}
-			{% if i == idiomas.section and idiomas.category == page.category  %}
+			{% if i == idiomas.section and idiomas.category.last == page.category.last  %}
 				<a class="idioma" title="{{idiomas.language}}" href="{{site.baseurl}}{{idiomas.url}}"><span class="flag flag-{{idiomas.language}}"></span></a>
 			{% endif %}
 			{% if forloop.last == true %}

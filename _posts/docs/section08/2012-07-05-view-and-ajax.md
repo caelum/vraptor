@@ -3,7 +3,7 @@ title: View and Ajax
 layout: page
 language: en
 section: 8
-category: docs
+category: [en, docs]
 ---
 
 <h3>Sharing objects with the view</h3>

@@ -3,7 +3,7 @@ title: Componentes utilitários opcionais
 layout: page
 language: pt
 section: 11
-category: docs
+category: [pt, docs]
 ---
 
 <h3>Registrando um componente opcional</h3>

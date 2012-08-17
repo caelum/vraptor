@@ -2,7 +2,7 @@
 section: 7
 title: Interceptando recursos anotados
 language: pt
-category: cookbook
+category: [pt, cookbook]
 layout: page
 ---
 

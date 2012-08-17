@@ -3,7 +3,7 @@ title: VRaptor3 - 10 minute guide
 layout: page
 language: en
 section: 2
-category: docs
+category: [en, docs]
 ---
 
 <h3>Starting a project: an online store</h3>

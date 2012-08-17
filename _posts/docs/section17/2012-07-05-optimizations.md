@@ -3,7 +3,7 @@ title: Optimizations
 layout: page
 language: en
 section: 17
-category: docs
+category: [en, docs]
 ---
 
 <h3>Commons Upload</h3>

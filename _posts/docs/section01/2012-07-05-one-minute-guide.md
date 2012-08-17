@@ -3,7 +3,7 @@ title: VRaptor3 - One minute guide
 layout: page
 language: en
 section: 1
-category: docs
+category: [en, docs]
 ---
 
 VRaptor 3 focuses in simplicity and, therefore, all of its functionalities have as main goal solve the developer's problem in the less intrusive way.

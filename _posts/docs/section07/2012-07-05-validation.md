@@ -3,7 +3,7 @@ title: Validation
 layout: page
 language: en
 section: 7
-category: docs
+category: [en, docs]
 ---
 
 VRaptor3 supports two different validation styles: classic and fluent. The starting point to both styles is the Validator interface. In order to access the Validator, your resource must receive it in the constructor:

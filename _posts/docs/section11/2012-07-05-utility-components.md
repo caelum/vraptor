@@ -3,7 +3,7 @@ title: Utility components
 layout: page
 language: en
 section: 11
-category: docs
+category: [en, docs]
 ---
 
 <h3>Registering optional components</h3>

@@ -3,7 +3,7 @@ title: Download and Upload
 layout: page
 language: en
 section: 10
-category: docs
+category: [en, docs]
 ---
 
 <h3>One minute example: download</h3>

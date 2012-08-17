@@ -1,6 +1,6 @@
 <span id="idiomas">
 {% for item in site.posts %}
-	{% if item.section == page.section and item.category == page.category %}
+	{% if item.section == page.section and item.category.last == page.category.last %}
 		{% assign language = {{item.language}} %}
 		<a class="idioma" title="{{item.language}}" href="{{site.baseurl}}{{item.url}}">
 		{% if item.language == page.language %}

@@ -3,7 +3,7 @@ title: Migrando do VRaptor2 para o VRaptor3
 layout: page
 language: pt
 section: 22
-category: docs
+category: [pt, docs]
 ---
 
 <h3>web.xml</h3>

@@ -3,7 +3,7 @@ title: Interceptors
 layout: page
 language: en
 section: 6
-category: docs
+category: [en, docs]
 ---
 
 <h3>Why intercept?</h3>

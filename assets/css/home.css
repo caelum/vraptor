@@ -1,0 +1,148 @@
+.content {
+	margin: 0 auto;
+	font-family: Helvetica, Arial, Sans-serif;
+	font-size: 90%;
+	line-height: 150%;
+	color:#000;
+	max-width: 63em;
+}
+
+.content-title {
+	color: #2b2747;
+	font-size:160%;
+	font-weight:bold;
+	padding-bottom:18px;
+}
+
+.content h3 {
+	color:#2b2747;
+	font-size:130%;
+	font-weight:bold;
+	padding-top:20px;
+}
+
+
+#chamada {
+	/* 110px/16px  e 75px/16px*/
+	margin: 6.8em auto;
+	height: 150px;
+}
+
+#chamada p {
+	text-align: justify;
+}
+
+#divisao {
+	border-top: 2em solid #2A2948;
+	background-color: #48476A;
+	box-sizing: border-box;
+}
+
+#chamada-img {
+	display: inline-block;
+	width: 23.75em;
+	height: 10.8em;
+	float: left;
+	border: 1px dotted red;
+	margin-right: 5em;
+}
+
+.download{
+display: inline-block;
+float: right;
+font-family: "HelveticaNeue-CondensedBold", Helvetica, Arial, sans-serif;
+font-size: 3em;
+color: #FFF;
+margin: 30px 0;
+}
+
+.download h1 {
+display: inline;
+}
+
+#beneficios {
+	margin-top: 6.8em;
+}
+
+.benefitsBox h4 {
+font-size: 21px;
+color: #293049;
+text-transform: uppercase;
+}
+
+.benefitsBox p {
+font-size: 14px;
+color: #353535;
+text-align: justify;
+}
+
+.benefitsbox {
+display: block;
+float: left;
+width: 416px;
+height: 185px;
+margin-bottom: 20px;
+margin-left: 37px;
+padding-bottom: 10px;
+border-bottom: solid 1px #999;
+}
+
+.benefitsLogo {
+	width: 105px;
+	height: 100px;
+	background-image: url(/vraptor/assets/images/vraptorSprites2.png);
+	background-repeat: no-repeat;
+	display: inline-block;
+	float: left;
+	margin: 41px 30px 41px 0 ;
+	vertical-align: middle;
+}
+
+#produtividadeFB {
+background-position: 0 -585px;
+}
+
+#aprendizadoFB {
+background-position: 0 0;
+}
+
+#testabilidadeFB {
+background-position: 0 -690px;
+}
+
+#economiaFB {
+background-position: 0 -100px;
+}
+
+#flexibleFB {
+background-position: 0 -221px;
+}
+
+#soaFB {
+background-position: 0 -824px
+}
+
+#melhoresFB {
+background-position: 0 -448px
+}
+
+#documentacaoFB {
+background-position: 0px -336px;
+}
+
+#empresas {
+	display: inline-block; 
+	margin: 28px 0;
+}
+
+.empresaLogo {
+	background: url(/vraptor/assets/images/empresasR.png) no-repeat;
+	display: inline-block;
+	vertical-align: middle;
+	margin-right: 11px;
+}
+
+#agencia-click{ background-position: 0 0; width: 172px; height: 22px; } 
+#defferrari{ background-position: 0 -72px; width: 120px; height: 61px; vertical-align: bottom;} 
+#locaweb{ background-position: 0 -183px; width: 87px; height: 27px; } 
+#wine{ background-position: 0 -260px; width: 131px; height: 55px; } 

@@ -3,7 +3,7 @@ title: Resources-Rest
 layout: page
 language: en
 section: 3
-category: docs
+category: [en, docs]
 ---
 
 <h3>What are Resources?</h3>

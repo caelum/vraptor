@@ -3,7 +3,7 @@ title: Validação
 layout: page
 language: pt
 section: 7
-category: docs
+category: [pt, docs]
 ---
 
 O VRaptor3 suporta dois estilos de validação. Clássico e fluente. A porta de entrada para ambos os estilos é a interface Validator. Para que seu recurso tenha acesso ao Validator, basta recebê-lo no construtor do seu recurso:

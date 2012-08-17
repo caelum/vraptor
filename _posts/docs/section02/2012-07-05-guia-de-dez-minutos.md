@@ -3,7 +3,7 @@ title: VRaptor3 - O guia inicial de 10 minutos
 layout: page
 language: pt
 section: 2
-category: docs
+category: [pt, docs]
 ---
 
 <h3>Começando o projeto: uma loja virtual</h3>

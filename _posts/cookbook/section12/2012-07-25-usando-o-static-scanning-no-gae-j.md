@@ -1,7 +1,6 @@
 ---
 section: 12
 title: Usando o Static Scanning no GAE/J
-language: pt
 category: [pt, cookbook]
 layout: page
 ---

@@ -1,7 +1,6 @@
 ---
 title: VRaptor Scaffold
 layout: page
-language: pt
 section: 18
 category: [pt, docs]
 ---

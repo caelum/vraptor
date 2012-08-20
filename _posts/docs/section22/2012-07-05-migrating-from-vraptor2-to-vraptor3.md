@@ -1,7 +1,6 @@
 ---
 title: Migrating from VRaptor2 to VRaptor3
 layout: page
-language: en
 section: 22
 category: [en, docs]
 ---

@@ -1,7 +1,6 @@
 ---
 section: 9
 title: Poupando recursos&#58; lazy dependency injection
-language: pt
 category: [pt, cookbook]
 layout: page
 ---

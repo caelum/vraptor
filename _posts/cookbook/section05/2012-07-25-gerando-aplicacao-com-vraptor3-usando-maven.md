@@ -1,7 +1,6 @@
 ---
 section: 5
 title: Gerando aplicação com VRaptor3 usando Maven
-language: pt
 category: [pt, cookbook]
 layout: page
 ---

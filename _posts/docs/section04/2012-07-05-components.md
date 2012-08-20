@@ -1,7 +1,6 @@
 ---
 title: Components
 layout: page
-language: en
 section: 4
 category: [en, docs]
 ---

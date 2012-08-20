@@ -1,6 +1,5 @@
 ---
-title: index
-language: pt
+title: home
 category: pt
-layout: index
+layout: home
 ---

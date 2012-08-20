@@ -1,7 +1,6 @@
 ---
 title: Testing components and controllers
 layout: page
-language: en
 section: 15
 category: [en, docs]
 ---

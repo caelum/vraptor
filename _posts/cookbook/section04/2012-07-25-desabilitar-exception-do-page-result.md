@@ -1,7 +1,6 @@
 ---
 section: 4
 title: Desabilitar exception do Page Result
-language: pt
 category: [pt, cookbook]
 layout: page
 ---

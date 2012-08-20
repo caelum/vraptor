@@ -1,7 +1,6 @@
 ---
 title: Resources-Rest
 layout: page
-language: pt
 section: 3
 category: [pt, docs]
 ---

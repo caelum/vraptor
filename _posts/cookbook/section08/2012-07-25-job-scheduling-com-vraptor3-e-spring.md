@@ -1,7 +1,6 @@
 ---
 section: 8
 title: Job scheduling com VRaptor e Spring
-language: pt
 category: [pt, cookbook]
 layout: page
 ---

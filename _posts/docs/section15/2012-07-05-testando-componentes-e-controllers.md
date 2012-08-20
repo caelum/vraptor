@@ -1,7 +1,6 @@
 ---
 title: Testando componentes e controllers
 layout: page
-language: pt
 section: 15
 category: [pt, docs]
 ---

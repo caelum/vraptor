@@ -1,7 +1,6 @@
 ---
 title: Injeção de dependências
 layout: page
-language: pt
 section: 9
 category: [pt, docs]
 ---

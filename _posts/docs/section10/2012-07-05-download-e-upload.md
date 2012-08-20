@@ -1,7 +1,6 @@
 ---
 title: Download e Upload
 layout: page
-language: pt
 section: 10
 category: [pt, docs]
 ---

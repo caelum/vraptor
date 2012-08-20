@@ -1,7 +1,6 @@
 ---
 title: Converters
 layout: page
-language: en
 section: 5
 category: [en, docs]
 ---

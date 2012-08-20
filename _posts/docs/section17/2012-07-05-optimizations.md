@@ -1,7 +1,6 @@
 ---
 title: Optimizations
 layout: page
-language: en
 section: 17
 category: [en, docs]
 ---

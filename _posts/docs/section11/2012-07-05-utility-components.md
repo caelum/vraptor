@@ -1,7 +1,6 @@
 ---
 title: Utility components
 layout: page
-language: en
 section: 11
 category: [en, docs]
 ---

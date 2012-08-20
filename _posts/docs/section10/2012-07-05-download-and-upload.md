@@ -1,7 +1,6 @@
 ---
 title: Download and Upload
 layout: page
-language: en
 section: 10
 category: [en, docs]
 ---

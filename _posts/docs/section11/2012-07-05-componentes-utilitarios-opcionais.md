@@ -1,7 +1,6 @@
 ---
 title: Componentes utilitários opcionais
 layout: page
-language: pt
 section: 11
 category: [pt, docs]
 ---

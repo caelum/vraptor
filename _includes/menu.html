@@ -4,7 +4,7 @@
 		{% assign imprimiu = false %}
 		{% for item in site.posts %}
 			{% if i == item.section and item.category.last == page.category.last %}
-				{% if item.language == page.language %}
+				{% if item.category.first == page.category.first %}
 					{%  if i == page.section %}<li class="selected">{% else %}<li>{% endif %}<a class="titulo" href="{{site.baseurl}}{{item.url}}"><strong>
 					{% if item.section < 10 %}
 						0{{item.section}}
@@ -24,7 +24,7 @@
 		{% endif %}
 		{% for idiomas in site.posts %}
 			{% if i == idiomas.section and idiomas.category.last == page.category.last  %}
-				<a class="idioma" title="{{idiomas.language}}" href="{{site.baseurl}}{{idiomas.url}}"><span class="flag flag-{{idiomas.language}}"></span></a>
+				<a class="idioma" title="{{idiomas.category.first}}" href="{{site.baseurl}}{{idiomas.url}}"><span class="flag flag-{{idiomas.category.first}}"></span></a>
 			{% endif %}
 			{% if forloop.last == true %}
 				</li>

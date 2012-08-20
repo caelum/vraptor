@@ -1,7 +1,6 @@
 ---
 title: Spring, Joda Time e Hibernate
 layout: page
-language: pt
 section: 13
 category: [pt, docs]
 ---

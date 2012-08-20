@@ -2,13 +2,22 @@
 	{% include horizontal-menu.html %}
 	{%include outrasLinguas.html %}
 </div>
-	<a id="logo" href="{{site.baseurl}}/{{page.language}}"><img src="{{site.baseurl}}/assets/images/logo.png"/></a>
+	{% if page.category.first == 'pt' %}
+		<a id="logo" href="{{site.baseurl}}/pt">
+	{% else %}
+		<a id="logo" href="{{site.baseurl}}/en">
+	{% endif %}
+	<img src="{{site.baseurl}}/assets/images/logo.png"/></a>
 <h1 class="titulo-topo">
-	{% if page.layout == 'index' %}
-		Home
+	{% if page.layout == 'home' %}
+		{% if page.category.first == 'pt' %}
+			Framework Java MVC
+		{% else %}
+			Java MVC Framework
+		{% endif %}
 	{% endif %}
 	{% if page.category.last == 'docs' %}
-		{% if page.language == 'pt' %}
+		{% if page.category.first == 'pt' %}
 			Documentação
 		{% else %}
 			Documentation

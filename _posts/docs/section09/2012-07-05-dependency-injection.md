@@ -1,7 +1,6 @@
 ---
 title: Dependency injection
 layout: page
-language: en
 section: 9
 category: [en, docs]
 ---

@@ -1,7 +1,6 @@
 ---
 title: VRaptor3 - One minute guide
 layout: page
-language: en
 section: 1
 category: [en, docs]
 ---

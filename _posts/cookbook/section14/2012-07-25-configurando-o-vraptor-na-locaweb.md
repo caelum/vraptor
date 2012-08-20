@@ -1,7 +1,6 @@
 ---
 section: 14
 title: Configurando o VRaptor na Locaweb
-language: pt
 category: [pt, cookbook]
 layout: page
 ---

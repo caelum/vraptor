@@ -1,7 +1,6 @@
 ---
 title: Sobrescrevendo as convenções e o comportamento do VRaptor
 layout: page
-language: pt
 section: 12
 category: [pt, docs]
 ---

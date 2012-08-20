@@ -1,7 +1,6 @@
 ---
 title: Conversores
 layout: page
-language: pt
 section: 5
 category: [pt, docs]
 ---

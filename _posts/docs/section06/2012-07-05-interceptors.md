@@ -1,7 +1,6 @@
 ---
 title: Interceptors
 layout: page
-language: en
 section: 6
 category: [en, docs]
 ---

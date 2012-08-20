@@ -1,7 +1,6 @@
 ---
 title: Validação
 layout: page
-language: pt
 section: 7
 category: [pt, docs]
 ---

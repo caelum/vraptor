@@ -1,7 +1,6 @@
 ---
 title: View e Ajax
 layout: page
-language: pt
 section: 8
 category: [pt, docs]
 ---

@@ -1,7 +1,6 @@
 ---
 title: Interceptadores
 layout: page
-language: pt
 section: 6
 category: [pt, docs]
 ---

@@ -1,7 +1,6 @@
 ---
 title: Overriding Vraptor's behavior and conventions
 layout: page
-language: en
 section: 12
 category: [en, docs]
 ---

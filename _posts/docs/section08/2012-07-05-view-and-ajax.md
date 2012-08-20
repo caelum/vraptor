@@ -1,7 +1,6 @@
 ---
 title: View and Ajax
 layout: page
-language: en
 section: 8
 category: [en, docs]
 ---

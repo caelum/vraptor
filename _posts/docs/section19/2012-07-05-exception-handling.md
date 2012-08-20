@@ -1,7 +1,6 @@
 ---
 title: Exception handling
 layout: page
-language: en
 section: 19
 category: [en, docs]
 ---

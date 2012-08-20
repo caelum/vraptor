@@ -1,7 +1,6 @@
 ---
 title: Otimizações
 layout: page
-language: pt
 section: 17
 category: [pt, docs]
 ---

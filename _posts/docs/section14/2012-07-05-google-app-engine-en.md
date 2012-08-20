@@ -1,7 +1,6 @@
 ---
 title: Google App Engine
 layout: page
-language: en
 section: 14
 category: [en, docs]
 ---

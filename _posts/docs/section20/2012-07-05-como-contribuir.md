@@ -1,7 +1,6 @@
 ---
 title: Como contribuir com o VRaptor
 layout: page
-language: pt
 section: 20
 category: [pt, docs]
 ---

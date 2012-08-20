@@ -1,7 +1,6 @@
 ---
 title: Changelog
 layout: page
-language: en
 section: 21
 category: [en, docs]
 ---

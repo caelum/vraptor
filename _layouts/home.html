@@ -1,11 +1,23 @@
 <html>
 <head>
-{% for post in site.posts %}
-	{% if post.section == 1 and post.category == page.category and post.language == page.language %}
-		<script type="text/javascript">window.location.href='{{site.baseurl}}{{post.url}}'</script>
-	{% endif %}
-{%endfor%}
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+<link rel="shortcut icon" href="http://www.caelum.com.br/favicon.ico" type="image/x-icon">
+<link rel="stylesheet" href="{{site.baseurl}}/assets/css/reset.css" type="text/css">
+<link rel="stylesheet" href="{{site.baseurl}}/assets/css/home.css" type="text/css">
+<link rel="stylesheet" href="{{site.baseurl}}/assets/css/menu.css" type="text/css">
+<link rel="stylesheet" href="{{site.baseurl}}/assets/css/flags.css" type="text/css">
+{% if page.title == 'home' %}
+	<meta http-equiv="Refresh" content="0; url={{site.baseurl}}/pt/" />
+{% endif %}
+<title>{{page.title}}</title>
 </head>
 <body>
+
+	<div id="header">
+		{% include header.html %}
+	</div>
+	
+		{{content}}
+	
 </body>
 </html>

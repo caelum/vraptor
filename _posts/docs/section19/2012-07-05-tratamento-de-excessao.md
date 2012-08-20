@@ -1,7 +1,6 @@
 ---
 title: Tratamento de Excessões
 layout: page
-language: pt
 section: 19
 category: [pt, docs]
 ---

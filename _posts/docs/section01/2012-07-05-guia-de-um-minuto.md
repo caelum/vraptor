@@ -1,7 +1,6 @@
 ---
 title: VRaptor3 - O guia inicial de 1 minuto
 layout: page
-language: pt
 section: 1
 category: [pt, docs]
 ---

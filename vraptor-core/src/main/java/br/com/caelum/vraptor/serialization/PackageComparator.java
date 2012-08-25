@@ -39,9 +39,12 @@ final class PackageComparator implements Comparator<Serialization> {
 		if(packageNameO1.startsWith("br.com.caelum.vraptor.serialization") 
 		&& packageNameO2.startsWith("br.com.caelum.vraptor.restfulie.serialization")) {
 			return 1;
+		} else if (packageNameO2.startsWith("br.com.caelum.vraptor.serialization") 
+		&& packageNameO1.startsWith("br.com.caelum.vraptor.restfulie.serialization")){
+			return -1;
 		}
+		return packageNameO1.compareTo(packageNameO2);
 		
-		return 0;
 	}
 
 	public int compare(Serialization o1, Serialization o2) {

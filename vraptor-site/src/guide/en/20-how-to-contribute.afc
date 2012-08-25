@@ -26,6 +26,12 @@ VRaptor is a MVC Web Framework focused in simplicity and easy of use. When you i
 Contributions like security, paging, multitenant, and others are welcome through plugins and contributions to vraptor-contrib [4], or extensions to vraptor-scaffold [5].
 
 
+[section Setting up the environment]
+
+All VRaptor's modules have the %%classpath-example%% and %%project-example%% files, making it easy to import the project to Eclipse. In this case, rename the files to %%.classpath%% and %%.project%% respectively.
+
+If you use another IDE, just make the directories %%src/main/java%%, %%src/test/java%%, %%src/test/resources%% and %%src/main/resources%% as source folders. The libraries used stays in %%lib%% directory.
+
 [1] http://groups.google.com/group/caelum-vraptor-en
 [2] http://groups.google.com/group/caelum-vraptor-dev
 [3] http://github.com/caelum/vraptor/issues

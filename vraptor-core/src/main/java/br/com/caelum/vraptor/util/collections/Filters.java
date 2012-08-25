@@ -16,6 +16,11 @@
  */
 package br.com.caelum.vraptor.util.collections;
 
+import static com.google.common.base.Predicates.instanceOf;
+import static com.google.common.collect.Iterables.any;
+import static java.util.Arrays.asList;
+
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 import br.com.caelum.vraptor.http.route.Route;
@@ -57,4 +62,12 @@ public class Filters {
 			}
 		};
 	}
+	
+    public static Predicate<Annotation[]> hasAnnotation(final Class<?> annotation) {
+        return new Predicate<Annotation[]>() {
+            public boolean apply(Annotation[] param) {
+                return any(asList(param), instanceOf(annotation));
+            }
+        };
+    }
 }

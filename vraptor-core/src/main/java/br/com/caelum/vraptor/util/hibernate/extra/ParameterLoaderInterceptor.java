@@ -15,21 +15,19 @@
  */
 package br.com.caelum.vraptor.util.hibernate.extra;
 
+import static br.com.caelum.vraptor.util.collections.Filters.hasAnnotation;
 import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Predicates.instanceOf;
 import static com.google.common.collect.Iterables.any;
 import static com.google.common.collect.Iterables.isEmpty;
 import static java.util.Arrays.asList;
 
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
 
 import javax.servlet.http.HttpServletRequest;
 
-import net.vidageek.mirror.dsl.Mirror;
-
 import org.hibernate.Session;
+import org.hibernate.type.Type;
 
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.InterceptionException;
@@ -45,7 +43,6 @@ import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.view.FlashScope;
 
-import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 
 /**
@@ -53,6 +50,7 @@ import com.google.common.collect.Iterables;
  *
  * @author Lucas Cavalcanti
  * @author Cecilia Fernandes
+ * @author Otávio Scherer Garcia
  * @since 3.4.0
  *
  */
@@ -60,80 +58,79 @@ import com.google.common.collect.Iterables;
 @Lazy
 public class ParameterLoaderInterceptor implements Interceptor {
 
-	private final Session session;
-	private final HttpServletRequest request;
-	private final ParameterNameProvider provider;
-	private final Result result;
-	private final Converters converters;
-	private final Localization localization;
+    private final Session session;
+    private final HttpServletRequest request;
+    private final ParameterNameProvider provider;
+    private final Result result;
+    private final Converters converters;
+    private final Localization localization;
     private final FlashScope flash;
 
     public ParameterLoaderInterceptor(Session session, HttpServletRequest request, ParameterNameProvider provider,
-			Result result, Converters converters, Localization localization, FlashScope flash) {
-		this.session = session;
-		this.request = request;
-		this.provider = provider;
-		this.result = result;
-		this.converters = converters;
-		this.localization = localization;
+            Result result, Converters converters, Localization localization, FlashScope flash) {
+        this.session = session;
+        this.request = request;
+        this.provider = provider;
+        this.result = result;
+        this.converters = converters;
+        this.localization = localization;
         this.flash = flash;
     }
 
-	public boolean accepts(ResourceMethod method) {
-		return any(asList(method.getMethod().getParameterAnnotations()), hasLoadAnnotation());
-	}
+    public boolean accepts(ResourceMethod method) {
+        return any(asList(method.getMethod().getParameterAnnotations()), hasAnnotation(Load.class));
+    }
 
-	public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
-			throws InterceptionException {
-		Annotation[][] annotations = method.getMethod().getParameterAnnotations();
+    public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
+        throws InterceptionException {
+        Annotation[][] annotations = method.getMethod().getParameterAnnotations();
 
-		String[] names = provider.parameterNamesFor(method.getMethod());
-
-		Class<?>[] types = method.getMethod().getParameterTypes();
-
-        Object[] args = flash.consumeParameters(method);
+        final String[] names = provider.parameterNamesFor(method.getMethod());
+        final Class<?>[] types = method.getMethod().getParameterTypes();
+        final Object[] args = flash.consumeParameters(method);
 
         for (int i = 0; i < names.length; i++) {
-			Iterable<Load> loads = Iterables.filter(asList(annotations[i]), Load.class);
-			if (!isEmpty(loads)) {
-				Object loaded = load(names[i], types[i]);
+            if (hasLoadAnnotation(annotations[i])) {
+                Object loaded = load(names[i], types[i]);
 
-                if (loaded == null) { result.notFound(); return; }
+                // TODO extract to method, so users can override behaviour
+                if (loaded == null) {
+                    result.notFound();
+                    return;
+                }
 
-                if (args != null)
+                if (args != null) {
                     args[i] = loaded;
-                else
-				    request.setAttribute(names[i], loaded);
-			}
-		}
+                } else {
+                    request.setAttribute(names[i], loaded);
+                }
+            }
+        }
+
         flash.includeParameters(method, args);
+        stack.next(method, resourceInstance);
+    }
 
-		stack.next(method, resourceInstance);
-	}
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    private Object load(String name, Class type) {
+        String idProperty = session.getSessionFactory().getClassMetadata(type).getIdentifierPropertyName();
+        checkArgument(idProperty != null, "Entity " + type.getSimpleName() + " must have an id property for @Load.");
 
-	private Object load(String name, Class type) {
-		String parameter = request.getParameter(name + ".id");
-		if (parameter == null) {
-			return null;
-		}
-		Field field = new Mirror().on(type).reflect().field("id");
-		checkArgument(field != null, "Entity " + type.getSimpleName() + " must have an id property for @Load.");
+        String parameter = request.getParameter(name + "." + idProperty);
+        if (parameter == null) {
+            return null;
+        }
 
-		Class<?> idType = field.getType();
-		Converter<?> converter = converters.to(idType);
-		checkArgument(converter != null, "Entity " + type.getSimpleName() + " id type " + idType + " must have a converter");
+        Type idType = session.getSessionFactory().getClassMetadata(type).getIdentifierType();
+        Converter<?> converter = converters.to(idType.getReturnedClass());
+        checkArgument(converter != null, "Entity " + type.getSimpleName() + " id type " + idType
+                + " must have a converter");
 
-		Serializable id = (Serializable) converter.convert(parameter, type, localization.getBundle());
-		return session.get(type, id);
-	}
+        Serializable id = (Serializable) converter.convert(parameter, type, localization.getBundle());
+        return session.get(type, id);
+    }
 
-	private Predicate<Annotation[]> hasLoadAnnotation() {
-		return new Predicate<Annotation[]>() {
-			public boolean apply(Annotation[] param) {
-				return any(asList(param), instanceOf(Load.class));
-			}
-		};
-	}
-
-
+    private boolean hasLoadAnnotation(Annotation[] annotations) {
+        return !isEmpty(Iterables.filter(asList(annotations), Load.class));
+    }
 }

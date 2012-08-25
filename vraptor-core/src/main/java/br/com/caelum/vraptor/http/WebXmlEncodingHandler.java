@@ -25,9 +25,9 @@ import javax.servlet.http.HttpServletResponse;
 import br.com.caelum.vraptor.VRaptorException;
 
 /**
- * EncodingHandler that uses Encoding from web.xml
+ * {@link EncodingHandler} that uses Encoding from web.xml.
+ * 
  * @author Lucas Cavalcanti
- *
  */
 public class WebXmlEncodingHandler implements EncodingHandler {
 
@@ -45,5 +45,4 @@ public class WebXmlEncodingHandler implements EncodingHandler {
 			throw new VRaptorException(e);
 		}
 	}
-
 }

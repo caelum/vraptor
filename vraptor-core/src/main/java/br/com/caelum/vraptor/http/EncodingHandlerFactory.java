@@ -23,19 +23,23 @@ import br.com.caelum.vraptor.config.BasicConfiguration;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.ComponentFactory;
 
+/**
+ * Create an instance for {@link EncodingHandler}. If {@link BasicConfiguration#ENCODING} is defined into web.xml,
+ * the {@link WebXmlEncodingHandler} instance is created, otherwise {@link NullEncodingHandler} is created.
+ * 
+ * @author Lucas Cavalcanti
+ */
 @ApplicationScoped
-public class EncodingHandlerFactory implements ComponentFactory<EncodingHandler>{
-
+public class EncodingHandlerFactory implements ComponentFactory<EncodingHandler> {
 
 	private final EncodingHandler handler;
 
 	public EncodingHandlerFactory(ServletContext context) {
 		String encoding = new BasicConfiguration(context).getEncoding();
-		this.handler = encoding == null? new NullEncodingHandler() : new WebXmlEncodingHandler(encoding);
+		this.handler = (encoding == null) ? new NullEncodingHandler() : new WebXmlEncodingHandler(encoding);
 	}
 
 	public EncodingHandler getInstance() {
 		return handler;
 	}
-
 }

@@ -21,9 +21,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Component for setting request and response encoding
+ * Component for setting request and response encoding.
+ * 
  * @author Lucas Cavalcanti
- *
  */
 public interface EncodingHandler {
 

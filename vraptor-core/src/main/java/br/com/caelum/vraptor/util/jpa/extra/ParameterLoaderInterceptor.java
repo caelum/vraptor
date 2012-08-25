@@ -15,20 +15,21 @@
  */
 package br.com.caelum.vraptor.util.jpa.extra;
 
+import static br.com.caelum.vraptor.util.collections.Filters.hasAnnotation;
 import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Predicates.instanceOf;
 import static com.google.common.collect.Iterables.any;
 import static com.google.common.collect.Iterables.isEmpty;
 import static java.util.Arrays.asList;
 
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
 
 import javax.persistence.EntityManager;
+import javax.persistence.metamodel.EntityType;
+import javax.persistence.metamodel.SingularAttribute;
+import javax.persistence.metamodel.Type;
 import javax.servlet.http.HttpServletRequest;
 
-import net.vidageek.mirror.dsl.Mirror;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Intercepts;
@@ -43,7 +44,6 @@ import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.view.FlashScope;
 
-import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 
 /**
@@ -51,6 +51,7 @@ import com.google.common.collect.Iterables;
  *
  * @author Lucas Cavalcanti
  * @author Cecilia Fernandes
+ * @author Otávio Scherer Garcia
  * @since 3.3.2
  *
  */
@@ -77,31 +78,33 @@ public class ParameterLoaderInterceptor implements Interceptor {
         this.flash = flash;
     }
 
-	public boolean accepts(ResourceMethod method) {
-		return any(asList(method.getMethod().getParameterAnnotations()), hasLoadAnnotation());
-	}
+    public boolean accepts(ResourceMethod method) {
+        return any(asList(method.getMethod().getParameterAnnotations()), hasAnnotation(Load.class));
+    }
 
 	public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
 			throws InterceptionException {
 		Annotation[][] annotations = method.getMethod().getParameterAnnotations();
 
 		String[] names = provider.parameterNamesFor(method.getMethod());
-
 		Class<?>[] types = method.getMethod().getParameterTypes();
 
         Object[] args = flash.consumeParameters(method);
 
         for (int i = 0; i < names.length; i++) {
-			Iterable<Load> loads = Iterables.filter(asList(annotations[i]), Load.class);
-			if (!isEmpty(loads)) {
+            if (hasLoadAnnotation(annotations[i])) {
 				Object loaded = load(names[i], types[i]);
 
-                if (loaded == null) { result.notFound(); return; }
+                if (loaded == null) {
+                    result.notFound();
+                    return;
+                }
 
-                if (args != null)
+                if (args != null) {
                     args[i] = loaded;
-                else
-				    request.setAttribute(names[i], loaded);
+                } else {
+                    request.setAttribute(names[i], loaded);
+                }
 			}
 		}
         flash.includeParameters(method, args);
@@ -109,29 +112,28 @@ public class ParameterLoaderInterceptor implements Interceptor {
 		stack.next(method, resourceInstance);
 	}
 
-	private Object load(String name, Class type) {
-		String parameter = request.getParameter(name + ".id");
-		if (parameter == null) {
-			return null;
-		}
-		Field field = new Mirror().on(type).reflect().field("id");
-		checkArgument(field != null, "Entity " + type.getSimpleName() + " must have an id property for @Load.");
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    private <T> Object load(String name, Class type) {
+        EntityType<T> entity = em.getMetamodel().entity(type);
+        
+        Type<?> idType = entity.getIdType();
+	    checkArgument(idType != null, "Entity " + type.getSimpleName() + " must have an id property for @Load.");
+	    
+        SingularAttribute idProperty = entity.getDeclaredId(idType.getJavaType());
+        String parameter = request.getParameter(name + "." + idProperty.getName());
+        if (parameter == null) {
+            return null;
+        }
+	    
+        Converter<?> converter = converters.to(idType.getJavaType());
+        checkArgument(converter != null, "Entity " + type.getSimpleName() + " id type " + idType
+                + " must have a converter");
 
-		Class<?> idType = field.getType();
-		Converter<?> converter = converters.to(idType);
-		checkArgument(converter != null, "Entity " + type.getSimpleName() + " id type " + idType + " must have a converter");
-
-		Serializable id = (Serializable) converter.convert(parameter, type, localization.getBundle());
-		return em.find(type, id);
+        Serializable id = (Serializable) converter.convert(parameter, type, localization.getBundle());
+        return em.find(type, id);
 	}
 
-	private Predicate<Annotation[]> hasLoadAnnotation() {
-		return new Predicate<Annotation[]>() {
-			public boolean apply(Annotation[] param) {
-				return any(asList(param), instanceOf(Load.class));
-			}
-		};
-	}
-
-
+    private boolean hasLoadAnnotation(Annotation[] annotation) {
+        return !isEmpty(Iterables.filter(asList(annotation), Load.class));
+    }
 }

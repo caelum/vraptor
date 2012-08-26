@@ -21,6 +21,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -35,10 +37,10 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 
-import org.jmock.Expectations;
-import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.core.JstlLocalization;
 import br.com.caelum.vraptor.core.RequestInfo;
@@ -46,92 +48,68 @@ import br.com.caelum.vraptor.http.MutableRequest;
 
 public class LocaleBasedCalendarConverterTest {
 
+	static final String LOCALE_KEY = "javax.servlet.jsp.jstl.fmt.locale";
+	
 	private LocaleBasedCalendarConverter converter;
-	private Mockery mockery;
-	private MutableRequest request;
-	private HttpSession session;
-	private ServletContext context;
-	private ResourceBundle bundle;
-	private JstlLocalization jstlLocalization;
+	private @Mock MutableRequest request;
+	private @Mock HttpSession session;
+	private @Mock ServletContext context;
+	private @Mock ResourceBundle bundle;
+    private @Mock JstlLocalization jstlLocalization;
 
 	@Before
 	public void setup() {
-		this.mockery = new Mockery();
-		this.request = mockery.mock(MutableRequest.class);
-		this.session = mockery.mock(HttpSession.class);
-		this.context = mockery.mock(ServletContext.class);
-		FilterChain chain = mockery.mock(FilterChain.class);
+		MockitoAnnotations.initMocks(this);
+		
+		FilterChain chain = mock(FilterChain.class);
 		final RequestInfo webRequest = new RequestInfo(context, chain, request, null);
 		jstlLocalization = new JstlLocalization(webRequest);
-		this.converter = new LocaleBasedCalendarConverter(jstlLocalization);
-		this.bundle = ResourceBundle.getBundle("messages");
+		converter = new LocaleBasedCalendarConverter(jstlLocalization);
+		bundle = ResourceBundle.getBundle("messages");
         Locale.setDefault(Locale.ENGLISH);
 	}
 
 	@Test
 	public void shouldBeAbleToConvert() {
-		mockery.checking(new Expectations() {
-			{
-				exactly(1).of(request).getAttribute("javax.servlet.jsp.jstl.fmt.locale.request");
-				will(returnValue("pt_br"));
-			}
-		});
+		when(request.getAttribute(LOCALE_KEY + ".request")).thenReturn("pt_br");
+		
 		assertThat(converter.convert("10/06/2008", Calendar.class, bundle),
 				is(equalTo((Calendar) new GregorianCalendar(2008, 5, 10))));
-		mockery.assertIsSatisfied();
 	}
 
 	@Test
 	public void shouldUseTheDefaultLocale() throws ParseException {
-		mockery.checking(new Expectations() {
-			{
-				one(request).getAttribute("javax.servlet.jsp.jstl.fmt.locale.request");
-				will(returnValue(null));
-				one(request).getSession();
-				will(returnValue(session));
-				one(session).getAttribute("javax.servlet.jsp.jstl.fmt.locale.session");
-				will(returnValue(null));
-				one(context).getAttribute("javax.servlet.jsp.jstl.fmt.locale.application");
-				will(returnValue(null));
-				one(context).getInitParameter("javax.servlet.jsp.jstl.fmt.locale");
-				will(returnValue(null));
-				one(request).getLocale();
-				will(returnValue(Locale.getDefault()));
-			}
-		});
+		when(request.getAttribute(LOCALE_KEY + ".request")).thenReturn(null);
+		when(request.getSession()).thenReturn(session);
+		when(session.getAttribute(LOCALE_KEY + ".session")). thenReturn(null);
+		when(context.getAttribute(LOCALE_KEY + ".application")). thenReturn(null);
+		when(context.getInitParameter(LOCALE_KEY)). thenReturn(null);
+		when(request.getLocale()).thenReturn(null);
+		
 		Date date = new SimpleDateFormat("dd/MM/yyyy").parse("10/05/2010");
 		Calendar cal = new GregorianCalendar();
 		cal.setTime(date);
 		String formattedToday = DateFormat.getDateInstance(DateFormat.SHORT).format(date);
 		assertThat(converter.convert(formattedToday, Calendar.class, bundle), is(equalTo(cal)));
-		mockery.assertIsSatisfied();
 	}
 
 	@Test
 	public void shouldBeAbleToConvertEmpty() {
 		assertThat(converter.convert("", Calendar.class, bundle), is(nullValue()));
-		mockery.assertIsSatisfied();
 	}
 
 	@Test
 	public void shouldBeAbleToConvertNull() {
 		assertThat(converter.convert(null, Calendar.class, bundle), is(nullValue()));
-		mockery.assertIsSatisfied();
 	}
 
 	@Test
 	public void shouldThrowExceptionWhenUnableToParse() {
-		mockery.checking(new Expectations() {
-			{
-				exactly(2).of(request).getAttribute("javax.servlet.jsp.jstl.fmt.locale.request");
-				will(returnValue("pt_br"));
-			}
-		});
+		when(request.getAttribute(LOCALE_KEY + ".request")).thenReturn("pt_br");
 		try {
 			converter.convert("a,10/06/2008/a/b/c", Calendar.class, bundle);
 		} catch (ConversionError e) {
 			assertThat(e.getMessage(), is(equalTo("a,10/06/2008/a/b/c is not a valid date.")));
 		}
 	}
-
 }

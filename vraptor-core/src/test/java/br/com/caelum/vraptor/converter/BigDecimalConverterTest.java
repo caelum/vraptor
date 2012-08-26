@@ -40,8 +40,8 @@ public class BigDecimalConverterTest {
 
 	@Before
 	public void setup() {
-		this.converter = new BigDecimalConverter();
-		this.bundle = ResourceBundle.getBundle("messages");
+		converter = new BigDecimalConverter();
+		bundle = ResourceBundle.getBundle("messages");
 	}
 
 	@Test

@@ -1,6 +1,8 @@
 package br.com.caelum.vraptor.util.jpa;
 
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -59,4 +61,58 @@ public class JPATransactionInterceptorTest {
         verify(transaction).rollback();
     }
 
+    @Test
+    public void shouldRollbackIfValidatorHasErrors() {
+        JPATransactionInterceptor interceptor = new JPATransactionInterceptor(entityManager, validator);
+
+        when(entityManager.getTransaction()).thenReturn(transaction);
+        when(transaction.isActive()).thenReturn(true);
+        when(validator.hasErrors()).thenReturn(true);
+
+        interceptor.intercept(stack, method, instance);
+
+        verify(transaction).rollback();
+    }
+    
+    @Test
+    public void shouldCommitIfValidatorHasNoErrors() {
+        JPATransactionInterceptor interceptor = new JPATransactionInterceptor(entityManager, validator);
+
+        when(entityManager.getTransaction()).thenReturn(transaction);
+        when(transaction.isActive()).thenReturn(true);
+        when(validator.hasErrors()).thenReturn(false);
+
+        interceptor.intercept(stack, method, instance);
+
+        verify(transaction).commit();
+    }
+    
+    @Test
+    public void doNothingIfHasNoActiveTransation() {
+        JPATransactionInterceptor interceptor = new JPATransactionInterceptor(entityManager, validator);
+
+        when(entityManager.getTransaction()).thenReturn(transaction);
+        when(transaction.isActive()).thenReturn(false);
+
+        interceptor.intercept(stack, method, instance);
+
+        verify(transaction, never()).rollback();
+    }
+
+    @Test
+    public void doNothingIfHasNoActiveTransationAsNull() {
+        JPATransactionInterceptor interceptor = new JPATransactionInterceptor(entityManager, validator);
+
+        when(entityManager.getTransaction()).thenReturn(null);
+        when(validator.hasErrors()).thenReturn(false);
+
+        interceptor.intercept(stack, method, instance);
+
+        verify(transaction, never()).rollback();
+    }
+    
+    @Test
+    public void shouldAcceptAllRequests() {
+        assertTrue(new JPATransactionInterceptor(null, null).accepts(null));
+    }
 }

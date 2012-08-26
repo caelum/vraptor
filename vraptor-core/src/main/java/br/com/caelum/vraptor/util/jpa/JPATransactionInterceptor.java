@@ -27,9 +27,11 @@ import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**
- * An example of JPA Transaction management on VRaptor
+ * An interceptor that manages Entity Manager Transaction. All requests are intercepted
+ * and a transaction is created before execution. If the request has no erros, the transaction
+ * will commited, or a rollback occurs otherwise. 
+ * 
  * @author Lucas Cavalcanti
- *
  */
 @Component
 @Intercepts
@@ -43,13 +45,19 @@ public class JPATransactionInterceptor implements Interceptor {
 		this.validator = validator;
 	}
 
+    //TODO I think that transaction null check is unnecessary, since we never get null transation (garcia-jj)
 	public void intercept(InterceptorStack stack, ResourceMethod method, Object instance) {
 		EntityTransaction transaction = null;
 		try {
 			transaction = manager.getTransaction();
-			transaction.begin();
+			
+			if (transaction != null) {
+			    transaction.begin();
+			}
+			
 			stack.next(method, instance);
-			if (!validator.hasErrors()) {
+			
+			if (transaction != null && !validator.hasErrors()) {
 				transaction.commit();
 			}
 		} finally {

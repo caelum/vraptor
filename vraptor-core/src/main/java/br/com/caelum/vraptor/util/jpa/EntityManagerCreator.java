@@ -26,9 +26,8 @@ import br.com.caelum.vraptor.ioc.ComponentFactory;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 
 /**
- * An example of how to create EntityManager's for your components
+ * An {@link EntityManager} creator, that creates an instance for each requests.
  * @author Lucas Cavalcanti
- *
  */
 @Component
 @RequestScoped

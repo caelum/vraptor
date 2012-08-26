@@ -38,7 +38,7 @@ public class EntityManagerFactoryCreator implements ComponentFactory<EntityManag
 
 	@PostConstruct
 	public void create() {
-		factory = Persistence.createEntityManagerFactory("default");
+		factory = getEntityManagerFactory();
 	}
 
 	public EntityManagerFactory getInstance() {
@@ -50,4 +50,7 @@ public class EntityManagerFactoryCreator implements ComponentFactory<EntityManag
 		factory.close();
 	}
 
+    protected EntityManagerFactory getEntityManagerFactory() {
+        return Persistence.createEntityManagerFactory("default");
+    }
 }

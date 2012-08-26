@@ -1,7 +1,9 @@
 package br.com.caelum.vraptor.util.hibernate.extra;
 
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doThrow;
@@ -52,18 +54,30 @@ public class ParameterLoaderInterceptorTest {
     private ResourceMethod methodOtherIdName;
     private ResourceMethod other;
     private ResourceMethod noId;
+    private ResourceMethod methodWithoutLoad;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         interceptor = new ParameterLoaderInterceptor(session, request, provider, result, converters, new MockLocalization(), flash);
         method = DefaultResourceMethod.instanceFor(Resource.class, Resource.class.getMethod("method", Entity.class));
+        methodWithoutLoad = DefaultResourceMethod.instanceFor(Resource.class, Resource.class.getMethod("methodWithoutLoad"));
         methodOtherIdName = DefaultResourceMethod.instanceFor(Resource.class, Resource.class.getMethod("methodOtherIdName", EntityOtherIdName.class));
         other = DefaultResourceMethod.instanceFor(Resource.class, Resource.class.getMethod("other", OtherEntity.class));
         noId = DefaultResourceMethod.instanceFor(Resource.class, Resource.class.getMethod("noId", NoIdEntity.class));
 
         when(converters.to(Long.class)).thenReturn(new LongConverter());
         when(converters.to(String.class)).thenReturn(new StringConverter());
+    }
+    
+    @Test
+    public void shouldAcceptsIfHasLoadAnnotation() {
+        assertTrue(interceptor.accepts(method));
+    }
+
+    @Test
+    public void shouldNotAcceptIfHasNoLoadAnnotation() {
+        assertFalse(interceptor.accepts(methodWithoutLoad));
     }
 
     @Test
@@ -241,6 +255,8 @@ public class ParameterLoaderInterceptorTest {
         public void noId(@Load NoIdEntity entity) {
         }
         public void methodOtherIdName(@Load EntityOtherIdName entity) {
+        }
+        public void methodWithoutLoad() {
         }
     }
     

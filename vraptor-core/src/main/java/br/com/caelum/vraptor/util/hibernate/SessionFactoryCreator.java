@@ -40,7 +40,7 @@ public class SessionFactoryCreator implements ComponentFactory<SessionFactory> {
 
 	@PostConstruct
 	public void create() {
-		factory = new AnnotationConfiguration().configure().buildSessionFactory();
+		factory = getAnnotationConfiguration().configure().buildSessionFactory();
 	}
 
 	public SessionFactory getInstance() {
@@ -52,4 +52,7 @@ public class SessionFactoryCreator implements ComponentFactory<SessionFactory> {
 		factory.close();
 	}
 
+    protected AnnotationConfiguration getAnnotationConfiguration() {
+        return new AnnotationConfiguration();
+    }
 }

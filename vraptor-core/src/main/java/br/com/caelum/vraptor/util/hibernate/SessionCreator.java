@@ -28,7 +28,7 @@ import br.com.caelum.vraptor.ioc.RequestScoped;
 
 /**
  * Opens and closes a Session from a SessionFactory and
- * provides it to container
+ * provides it to container.
  * @author Lucas Cavalcanti
  */
 @Component

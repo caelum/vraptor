@@ -1,6 +1,8 @@
 package br.com.caelum.vraptor.util.hibernate;
 
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -56,5 +58,59 @@ public class HibernateTransactionInterceptorTest {
 
         verify(transaction).rollback();
     }
+    
+    @Test
+    public void shouldRollbackIfValidatorHasErrors() {
+        HibernateTransactionInterceptor interceptor = new HibernateTransactionInterceptor(session, validator);
 
+        when(session.beginTransaction()).thenReturn(transaction);
+        when(transaction.isActive()).thenReturn(true);
+        when(validator.hasErrors()).thenReturn(true);
+
+        interceptor.intercept(stack, method, instance);
+
+        verify(transaction).rollback();
+    }
+
+    @Test
+    public void shouldCommitIfValidatorHasNoErrors() {
+        HibernateTransactionInterceptor interceptor = new HibernateTransactionInterceptor(session, validator);
+
+        when(session.beginTransaction()).thenReturn(transaction);
+        when(transaction.isActive()).thenReturn(true);
+        when(validator.hasErrors()).thenReturn(false);
+
+        interceptor.intercept(stack, method, instance);
+
+        verify(transaction).commit();
+    }
+    
+    @Test
+    public void doNothingIfHasNoActiveTransation() {
+        HibernateTransactionInterceptor interceptor = new HibernateTransactionInterceptor(session, validator);
+
+        when(session.beginTransaction()).thenReturn(transaction);
+        when(transaction.isActive()).thenReturn(false);
+
+        interceptor.intercept(stack, method, instance);
+
+        verify(transaction, never()).rollback();
+    }
+
+    @Test
+    public void doNothingIfHasNoActiveTransationAsNull() {
+        HibernateTransactionInterceptor interceptor = new HibernateTransactionInterceptor(session, validator);
+
+        when(session.beginTransaction()).thenReturn(null);
+        when(validator.hasErrors()).thenReturn(false);
+
+        interceptor.intercept(stack, method, instance);
+
+        verify(transaction, never()).rollback();
+    }
+    
+    @Test
+    public void shouldAcceptAllRequests() {
+        assertTrue(new HibernateTransactionInterceptor(null, null).accepts(null));
+    }
 }

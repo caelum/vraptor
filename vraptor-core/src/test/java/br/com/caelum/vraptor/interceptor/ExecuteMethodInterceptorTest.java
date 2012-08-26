@@ -18,6 +18,7 @@
 package br.com.caelum.vraptor.interceptor;
 
 import static br.com.caelum.vraptor.view.Results.nothing;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -56,6 +57,11 @@ public class ExecuteMethodInterceptorTest {
 		this.interceptor = new ExecuteMethodInterceptor(info, validator);
 	}
 
+    @Test
+    public void shouldAcceptAlways() {
+    	assertTrue(interceptor.accepts(null));
+    }
+    
 	@Test
 	public void shouldInvokeTheMethodAndNotProceedWithInterceptorStack() throws SecurityException,
 			NoSuchMethodException, IOException, InterceptionException {

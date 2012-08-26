@@ -41,6 +41,11 @@ public class InstantiateInterceptorTest {
     }
 
     @Test
+    public void shouldAcceptAlways() {
+    	assertTrue(new InstantiateInterceptor(null).accepts(null));
+    }
+    
+    @Test
     public void shouldUseContainerForNewComponent() throws InterceptionException, IOException {
         final DogController myDog = new DogController();
         InstanceContainer container = new InstanceContainer(myDog);

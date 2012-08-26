@@ -1,5 +1,7 @@
 package br.com.caelum.vraptor.interceptor;
 
+import static org.junit.Assert.assertTrue;
+
 import java.util.Collections;
 import java.util.Map;
 
@@ -47,6 +49,11 @@ public class FlashInterceptorTest {
 		interceptor = new FlashInterceptor(session, result, response);
 	}
 
+    @Test
+    public void shouldAcceptAlways() {
+    	assertTrue(interceptor.accepts(null));
+    }
+    
 	@Test
 	public void shouldDoNothingWhenThereIsNoFlashParameters() throws Exception {
 

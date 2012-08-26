@@ -44,15 +44,22 @@ public class DefaultMultipartConfig implements MultipartConfig {
 
     public File getDirectory() {
         try {
-            File tempFile = File.createTempFile("raptor.", ".upload");
+            File tempFile = createTempFile();
             tempFile.delete();
             return tempFile.getParentFile();
         } catch (IOException e) {
             logger.warn("Unable to find temp directory, creating a dir inside the application", e);
-            File tmp = new File(".tmp-multipart-upload");
+            File tmp = createDirInsideApplication();
             tmp.mkdirs();
             return tmp;
         }
     }
 
+	protected File createDirInsideApplication() {
+		return new File(".tmp-multipart-upload");
+	}
+
+	protected File createTempFile() throws IOException {
+		return File.createTempFile("raptor.", ".upload");
+	}
 }

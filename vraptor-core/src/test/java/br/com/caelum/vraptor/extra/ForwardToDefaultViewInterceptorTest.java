@@ -17,6 +17,7 @@
 
 package br.com.caelum.vraptor.extra;
 
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -27,6 +28,7 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.interceptor.ForwardToDefaultViewInterceptor;
+import br.com.caelum.vraptor.view.MockedPage;
 import br.com.caelum.vraptor.view.PageResult;
 
 public class ForwardToDefaultViewInterceptorTest {
@@ -40,6 +42,11 @@ public class ForwardToDefaultViewInterceptorTest {
 		this.interceptor = new ForwardToDefaultViewInterceptor(result);
 	}
 
+    @Test
+    public void shouldAcceptAlways() {
+    	assertTrue(interceptor.accepts(null));
+    }
+    
 	@Test
 	public void doesNothingIfResultWasAlreadyUsed() {
 		when(result.used()).thenReturn(true);
@@ -49,4 +56,13 @@ public class ForwardToDefaultViewInterceptorTest {
 		verify(result, never()).use(PageResult.class);
 	}
 
+	@Test
+	public void shouldForwardToViewWhenResultWasNotUsed() {
+		when(result.used()).thenReturn(false);
+		when(result.use(PageResult.class)).thenReturn(new MockedPage());
+
+		interceptor.intercept(null, null, null);
+
+		verify(result).use(PageResult.class);
+	}
 }

@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 
 import org.apache.commons.fileupload.FileItem;
 
@@ -29,6 +30,13 @@ public class MockFileItem
     public MockFileItem(String fieldName, String name, byte[] content) {
         this.fieldName = fieldName;
         this.contentType = "application/octet-stream";
+        this.name = name;
+        this.content = content;
+    }
+    
+    public MockFileItem(String fieldName, String contentType, String name, byte[] content) {
+        this.fieldName = fieldName;
+        this.contentType = contentType;
         this.name = name;
         this.content = content;
     }
@@ -69,8 +77,12 @@ public class MockFileItem
         return new String(content);
     }
 
-    public String getString(String arg0) throws UnsupportedEncodingException {
-        return null;
+    public String getString(String charsetName) throws UnsupportedEncodingException {
+    	try {
+    		return new String(content, Charset.forName(charsetName));
+    	}catch (Exception e) {
+			throw new UnsupportedEncodingException();
+		}
     }
 
     public boolean isFormField() {

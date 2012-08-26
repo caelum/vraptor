@@ -16,6 +16,8 @@
  */
 package br.com.caelum.vraptor.interceptor;
 
+import static org.junit.Assert.assertTrue;
+
 import java.io.IOException;
 import java.util.EnumSet;
 
@@ -61,6 +63,11 @@ public class ResourceLookupInterceptorTest {
         this.notFoundHandler = mockery.mock(ResourceNotFoundHandler.class);
         this.methodNotAllowedHandler = mockery.mock(MethodNotAllowedHandler.class);
         this.lookup = new ResourceLookupInterceptor(translator, methodInfo, notFoundHandler, methodNotAllowedHandler, info);
+    }
+    
+    @Test
+    public void shouldAcceptAlways() {
+    	assertTrue(lookup.accepts(null));
     }
 
     @Test

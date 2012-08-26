@@ -18,14 +18,21 @@ package br.com.caelum.vraptor.util.interceptors;
 
 import java.io.UnsupportedEncodingException;
 
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.core.InterceptorStack;
+import br.com.caelum.vraptor.http.EncodingHandler;
 import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
+/**
+ * @deprecated Since this interceptor only set a fixed UTF-8, we encourage to use
+ * {@link EncodingHandler} instead.
+ */
+@Deprecated
 public class EncodingInterceptor implements Interceptor {
 
 	private static final String UTF_8 = "UTF-8";

@@ -20,8 +20,10 @@ package br.com.caelum.vraptor.interceptor;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.anyString;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -43,6 +45,7 @@ import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
@@ -54,6 +57,7 @@ public class ParametersInstantiatorInterceptorTest {
 
     private @Mock MethodInfo params;
     private @Mock ParametersProvider parametersProvider;
+    private @Mock ParameterNameProvider parameterNameProvider;
 	private @Mock Validator validator;
 	private @Mock Localization localization;
 	private @Mock InterceptorStack stack;
@@ -74,7 +78,7 @@ public class ParametersInstantiatorInterceptorTest {
 		when(localization.getBundle()).thenReturn(bundle);
 		when(request.getParameterNames()).thenReturn(Collections.enumeration(Collections.EMPTY_LIST));
 
-        this.instantiator = new ParametersInstantiatorInterceptor(parametersProvider, params, validator, localization, request, flash);
+        this.instantiator = new ParametersInstantiatorInterceptor(parametersProvider, parameterNameProvider, params, validator, localization, request, flash);
 
         this.errors = (List<Message>) new Mirror().on(instantiator).get().field("errors");
         this.method = DefaultResourceMethod.instanceFor(Component.class, Component.class.getDeclaredMethod("method"));
@@ -132,6 +136,7 @@ public class ParametersInstantiatorInterceptorTest {
     	instantiator.intercept(stack, method, null);
 
     }
+    
     @Test
     public void shouldUseAndDiscardFlashParameters() throws InterceptionException, IOException, NoSuchMethodException {
 		Object[] values = new Object[] { new Object() };
@@ -170,49 +175,57 @@ public class ParametersInstantiatorInterceptorTest {
 	@Test
 	public void shouldAddHeaderInformationToRequestWhenHeaderParamAnnotationIsPresent() throws Exception {
 		Object[] values = new Object[] { new Object() };
-		ResourceMethod method = DefaultResourceMethod.instanceFor(HeaderParamComponent.class, HeaderParamComponent.class.getDeclaredMethod("method", String.class));
+		Method method = HeaderParamComponent.class.getDeclaredMethod("method", String.class);
+		ResourceMethod resourceMethod = DefaultResourceMethod.instanceFor(HeaderParamComponent.class, method);
+		
 		when(request.getHeader("password")).thenReturn("123");
-    	when(parametersProvider.getParametersFor(method, errors, bundle)).thenReturn(values);
+    	when(parametersProvider.getParametersFor(resourceMethod, errors, bundle)).thenReturn(values);
+    	when(parameterNameProvider.parameterNamesFor(method)).thenReturn(new String[]{"passwordParam"});
 
-        instantiator.intercept(stack, method, null);
+        instantiator.intercept(stack, resourceMethod, null);
         
-        verify(request).setAttribute("password", "123");
+		verify(request).setParameter("passwordParam", "123");
         verify(params).setParameters(values);
-        verify(stack).next(method, null);
+        verify(stack).next(resourceMethod, null);
         verify(validator).addAll(Collections.<Message>emptyList());
 	}
 	
 	@Test
 	public void shouldAddHeaderInformationToRequestWhenHeaderParamAnnotationIsNotPresent() throws Exception {
 		Object[] values = new Object[] { new Object() };
-		ResourceMethod method = DefaultResourceMethod.instanceFor(Component.class, Component.class.getDeclaredMethod("method"));
-    	when(parametersProvider.getParametersFor(method, errors, bundle)).thenReturn(values);
+		Method method = Component.class.getDeclaredMethod("method");
+		ResourceMethod resourceMethod = DefaultResourceMethod.instanceFor(Component.class, method);
+		
+    	when(parametersProvider.getParametersFor(resourceMethod, errors, bundle)).thenReturn(values);
+    	when(parameterNameProvider.parameterNamesFor(method)).thenReturn(new String[]{"passwordParam"});
 
-        instantiator.intercept(stack, method, null);
+        instantiator.intercept(stack, resourceMethod, null);
         
-        verify(request, never()).setAttribute("password", "123");
+        verify(request, never()).setParameter(anyString(), anyString());
         verify(params).setParameters(values);
-        verify(stack).next(method, null);
+        verify(stack).next(resourceMethod, null);
         verify(validator).addAll(Collections.<Message>emptyList());
 	}
 	
 	@Test
 	public void shouldAddVariousHeaderInformationsToRequestWhenHeaderParamAnnotationIsPresent() throws Exception {
 		Object[] values = new Object[] { new Object() };
-		ResourceMethod method = DefaultResourceMethod.instanceFor(HeaderParamComponent.class, HeaderParamComponent.class.getDeclaredMethod("otherMethod", String.class, String.class, String.class));
+		Method method = HeaderParamComponent.class.getDeclaredMethod("otherMethod", String.class, String.class, String.class);
+		ResourceMethod resouceMethod = DefaultResourceMethod.instanceFor(HeaderParamComponent.class, method);
 		
 		when(request.getHeader("user")).thenReturn("user");
 		when(request.getHeader("password")).thenReturn("123");
 		when(request.getHeader("token")).thenReturn("daek2321");
-    	when(parametersProvider.getParametersFor(method, errors, bundle)).thenReturn(values);
+    	when(parametersProvider.getParametersFor(resouceMethod, errors, bundle)).thenReturn(values);
+    	when(parameterNameProvider.parameterNamesFor(method)).thenReturn(new String[]{"UserParam", "PasswordParam", "TokenParam"});
 
-        instantiator.intercept(stack, method, null);
+        instantiator.intercept(stack, resouceMethod, null);
         
-        verify(request).setAttribute("user", "user");
-        verify(request).setAttribute("password", "123");
-        verify(request).setAttribute("token", "daek2321");
+        verify(request).setParameter("UserParam", "user");
+        verify(request).setParameter("PasswordParam", "123");
+        verify(request).setParameter("TokenParam", "daek2321");
         verify(params).setParameters(values);
-        verify(stack).next(method, null);
+        verify(stack).next(resouceMethod, null);
         verify(validator).addAll(Collections.<Message>emptyList());
 	}
 

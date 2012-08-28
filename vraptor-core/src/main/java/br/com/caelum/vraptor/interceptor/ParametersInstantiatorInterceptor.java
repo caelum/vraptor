@@ -35,6 +35,7 @@ import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.validator.Message;
@@ -49,6 +50,7 @@ import br.com.caelum.vraptor.view.FlashScope;
 @Lazy
 public class ParametersInstantiatorInterceptor implements Interceptor {
     private final ParametersProvider provider;
+    private final ParameterNameProvider parameterNameProvider;
     private final MethodInfo parameters;
 
     private static final Logger logger = LoggerFactory.getLogger(ParametersInstantiatorInterceptor.class);
@@ -58,9 +60,10 @@ public class ParametersInstantiatorInterceptor implements Interceptor {
 	private final MutableRequest request;
 	private final FlashScope flash;
 
-    public ParametersInstantiatorInterceptor(ParametersProvider provider, MethodInfo parameters,
+    public ParametersInstantiatorInterceptor(ParametersProvider provider, ParameterNameProvider parameterNameProvider, MethodInfo parameters,
             Validator validator, Localization localization, MutableRequest request, FlashScope flash) {
         this.provider = provider;
+        this.parameterNameProvider = parameterNameProvider;
         this.parameters = parameters;
         this.validator = validator;
         this.localization = localization;
@@ -92,20 +95,23 @@ public class ParametersInstantiatorInterceptor implements Interceptor {
         parameters.setParameters(values);
         stack.next(method, resourceInstance);
     }
-
+ 
 	private void addHeaderParametersToAttribute(ResourceMethod method) {
-		Method trueMethod = method.getMethod();
-    	Annotation[][] parameterAnnotations = trueMethod.getParameterAnnotations();
+		Method trueMethod = method.getMethod();  
+		  
+        String[] parameters = parameterNameProvider.parameterNamesFor(trueMethod);  
 
-		for (Annotation[] annotations : parameterAnnotations) {
-			for (Annotation annotation : annotations) {
-				if(annotation instanceof HeaderParam){
-			        HeaderParam headerParam = (HeaderParam) annotation;
-			        String value = request.getHeader(headerParam.value());
-			        request.setAttribute(headerParam.value(), value);
-			    }
-			}
-		}
+        Annotation[][] annotations = trueMethod.getParameterAnnotations();  
+        for (int i = 0; i < annotations.length; i++) {  
+            for (Annotation annotation : annotations[i]) {  
+                if (annotation instanceof HeaderParam) {  
+                    HeaderParam headerParam = (HeaderParam) annotation;  
+                    String value = request.getHeader(headerParam.value());  
+                    request.setAttribute(parameters[i], value);  
+                }  
+            }  
+        }  
+		
 	}
 
 	private void fixParameter(String name) {

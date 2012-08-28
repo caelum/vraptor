@@ -1,10 +1,10 @@
 <html>
 <head>
-{% for post in site.posts %}
-	{% if post.section == 1 and post.category.last == page.category.last and post.category.first == page.category.first %}
-		<meta http-equiv="Refresh" content="0; url={{site.baseurl}}{{post.url}}" />
-	{% endif %}
-{%endfor%}
+	{% for post in site.posts %}
+		{% if post.section == 1 and post.category.last == page.category.last and post.category.first == page.category.first %}
+			<meta http-equiv="Refresh" content="0; url={{site.baseurl}}{{post.url}}" />
+		{% endif %}
+	{%endfor%}
 </head>
 <body>
 </body>

@@ -14,7 +14,6 @@
 	display: inline-block;
 	font-family: Helvetica, Arial, Sans-serif;
 	font-size:1.1em;
-	display: inline-block;
 	padding: 5px 25px;
 	margin: 10px -2px;
 	border-left: 1px solid #37365b;
@@ -28,14 +27,10 @@
 
 #horizontal-menu #idiomas {
 	float: right;
-	margin-right: 70px;
+	margin-right: 74px;
 }
 
-#horizontal-menu #idiomas span {
-	margin-right: 5px;
-}
-
-#horizontal-menu #idiomas a {
+#horizontal-menu .idioma {
 	text-decoration: none;
 	display: inline-block;
 	font-family: Helvetica, Arial, Sans-serif;
@@ -47,7 +42,20 @@
 	border-right: 1px solid #EBEBEB;
 	border-radius: 0 0 8px 8px;
 	padding: 5px 10px;
+	margin-right: 1px;
 	color:#2b2748;
+}
+
+#horizontal-menu .idioma.not-selected {
+	color: #C0BFC8;
+}
+
+#horizontal-menu #idiomas .flag {
+	margin-right: 5px;
+}
+
+#horizontal-menu #idiomas .flag.not-selected {
+	margin-right: 1px;
 }
 
 #horizontal-menu #hzmenu li:first-child {
@@ -110,6 +118,7 @@
 	background: linear-gradient(to bottom,  #3b3a60 0%,#2a2949 100%); /* W3C */
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3b3a60', endColorstr='#2a2949',GradientType=0 ); /* IE6-9 */
 	margin-bottom: 1px;
+	line-height: 0;
 }
 
 #menu li:active{
@@ -136,14 +145,15 @@
 	padding-left: 19px;
 }
 
-#menu li a {
+#menu li .titulo {
 	font-family: Helvetica, Arial, Sans-serif;
 	font-size: 90%;
 	line-height:150%;
 	color: white;
 	text-decoration: none;
+	display: block;
 }
 
-#menu li .titulo {
-	display: block;
+#menu li .idioma {
+	margin-right: 1px;
 }

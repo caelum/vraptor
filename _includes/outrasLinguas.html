@@ -2,13 +2,12 @@
 {% for item in site.posts %}
 	{% if item.section == page.section and item.category.last == page.category.last %}
 		{% assign language = {{item.category.first}} %}
-		<a class="idioma" title="{{item.category.first}}" href="{{site.baseurl}}{{item.url}}">
 		{% if item.category.first == page.category.first %}
-			<span class="flag flag-{{item.category.first}}"></span>{{ language | upcase }}
+			<a class="idioma" title="{{item.category.first}}" href="{{site.baseurl}}{{item.url}}"><span class="flag flag-{{item.category.first}}"></span>{{ language | upcase }}
 		{% else %}
-			<span class="flag flag-{{item.category.first}} not-selected"></span> {{ language | upcase }}
+			<a class="idioma not-selected" title="{{item.category.first}}" href="{{site.baseurl}}{{item.url}}"><span class="flag flag-{{item.category.first}} not-selected"></span> {{ language | upcase }}
 		{% endif %}
 		</a>
 	{% endif %}
 {% endfor %}
-</ul>
+</span>

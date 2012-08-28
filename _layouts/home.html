@@ -18,6 +18,24 @@
 	</div>
 	
 		{{content}}
+		
+	<script type="text/javascript">
+		var  headeri = document.getElementById('header').getElementsByClassName('idioma');
+		var referrer = document.referrer.substring(30,32);
+		var verifica = false;
+			for(i=0; i<headeri.length; i++){
+				if (headeri[i].title  == referrer){
+					verifica = true;
+				}
+			}
+		if (verifica == false){
+			if (referrer == 'pt'){
+				alert("Essa página não está disponível em "+document.referrer.substring(30,32)+". Ajude traduzindo.");
+			}else{
+				alert("This page isn't available in "+document.referrer.substring(30,32)+". Help us translating it.");
+			}
+		}
+	</script>
 	
 </body>
 </html>

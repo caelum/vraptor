@@ -26,57 +26,73 @@
 		{{content}}
 	</div>
 
-<script type="text/javascript">
-	var menu = document.getElementById("menu");
-	var linhas = menu.getElementsByTagName("li");
-	for(var i=0; i<linhas.length; i++) {
-		var idiomasHTML = "";
-		var linha = linhas[i];
-		var titulo = linha.childNodes[0];
-		var idiomas = linha.getElementsByClassName("idioma");
-		var idiomasOrdenados = Array.prototype.slice.call(idiomas,0);
-		idiomasOrdenados.sort(function(a,b){
-			var aClass = a.getAttribute("title");
-			var bClass = b.getAttribute("title");
-			if(aClass > bClass) return 1;
-			if(aClass < bClass) return -1;
-			return 0;
-		});
-		idiomasOrdenados.forEach(function concatena(x){
-			idiomasHTML += x.outerHTML;
-		});
-		linha.innerHTML = titulo.outerHTML + idiomasHTML;
-	}
-	
-	var linhaAtual = document.getElementsByClassName('selected').item(0);
-	var idiomasAtual = linhaAtual.getElementsByClassName('idioma');
-	var header = document.getElementById('idiomas');
-	var idiomas = header.getElementsByClassName('idioma');
-	for(var j=0; j<idiomasAtual.length; j++){
-		var bandeira = idiomasAtual.item(j).cloneNode(true);
-		var span = bandeira.childNodes[0];
-		if(bandeira.getAttribute('href') != window.location.pathname){
-			var classNotSelected = span.getAttribute('class');
-			span.setAttribute('class', classNotSelected+' not-selected');
-			bandeira.style.color = '#c0bfc8';
+	<script type="text/javascript">
+		var menu = document.getElementById("menu");
+		var linhas = menu.getElementsByTagName("li");
+		for(var i=0; i<linhas.length; i++) {
+			var idiomasHTML = "";
+			var linha = linhas[i];
+			var titulo = linha.childNodes[0];
+			var idiomas = linha.getElementsByClassName("idioma");
+			var idiomasOrdenados = Array.prototype.slice.call(idiomas,0);
+			idiomasOrdenados.sort(function(a,b){
+				var aClass = a.getAttribute("title");
+				var bClass = b.getAttribute("title");
+				if(aClass > bClass) return 1;
+				if(aClass < bClass) return -1;
+				return 0;
+			});
+			idiomasOrdenados.forEach(function concatena(x){
+				idiomasHTML += x.outerHTML;
+			});
+			linha.innerHTML = titulo.outerHTML + idiomasHTML;
 		}
-		bandeira.innerHTML = span.outerHTML + bandeira.getAttribute('title').toUpperCase();
-		header.removeChild(idiomas[0]);
-		header.appendChild(bandeira);
-	}
+		
+		var linhaAtual = document.getElementsByClassName('selected').item(0);
+		var idiomasAtual = linhaAtual.getElementsByClassName('idioma');
+		var header = document.getElementById('idiomas');
+		var idiomas = header.getElementsByClassName('idioma');
+		for(var j=0; j<idiomasAtual.length; j++){
+			var bandeira = idiomasAtual.item(j).cloneNode(true);
+			var span = bandeira.childNodes[0];
+			if(bandeira.getAttribute('href') != window.location.pathname){
+				var classNotSelected = span.getAttribute('class');
+				span.setAttribute('class', classNotSelected+' not-selected');
+				bandeira.style.color = '#c0bfc8';
+			}
+			bandeira.innerHTML = span.outerHTML + bandeira.getAttribute('title').toUpperCase();
+			header.removeChild(idiomas[0]);
+			header.appendChild(bandeira);
+		}
+		
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-270161-11']);
+		_gaq.push(['_setDomainName', 'caelum.github.com']);
+		_gaq.push(['_setAllowLinker', true]);
+		_gaq.push(['_trackPageview']);
 	
-	var _gaq = _gaq || [];
-	_gaq.push(['_setAccount', 'UA-270161-11']);
-	_gaq.push(['_setDomainName', 'caelum.github.com']);
-	_gaq.push(['_setAllowLinker', true]);
-	_gaq.push(['_trackPageview']);
-
-	(function() {
-	var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-	ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-	})();
-
-</script>
+		(function() {
+		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+	<script type="text/javascript">
+		var  headeri = document.getElementById('header').getElementsByClassName('idioma');
+		var referrer = document.referrer.substring(30,32);
+		var verifica = false;
+			for(i=0; i<headeri.length; i++){
+				if (headeri[i].title  == referrer){
+					verifica = true;
+				}
+			}
+		if (verifica == false){
+			if (referrer == 'pt'){
+				alert("Essa página não está disponível em "+document.referrer.substring(30,32)+". Ajude traduzindo.");
+			}else{
+				alert("This page isn't available in "+document.referrer.substring(30,32)+". Help us translating it.");
+			}
+		}
+	</script>
 </body>
 </html>

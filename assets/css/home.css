@@ -4,7 +4,7 @@
 	font-size: 90%;
 	line-height: 150%;
 	color:#000;
-	max-width: 63em;
+	max-width: 990px;
 }
 
 .content-title {
@@ -34,8 +34,8 @@
 
 #divisao {
 	border-top: 2em solid #2A2948;
-	background-color: #48476A;
-	box-sizing: border-box;
+	border-bottom: 15px solid #FFF;
+	background-color: #ededed;
 }
 
 #chamada-img {
@@ -45,19 +45,6 @@
 	float: left;
 	border: 1px dotted red;
 	margin-right: 5em;
-}
-
-.download{
-display: inline-block;
-float: right;
-font-family: "HelveticaNeue-CondensedBold", Helvetica, Arial, sans-serif;
-font-size: 3em;
-color: #FFF;
-margin: 30px 0;
-}
-
-.download h1 {
-display: inline;
 }
 
 #beneficios {
@@ -131,18 +118,41 @@ background-position: 0px -336px;
 }
 
 #empresas {
-	display: inline-block; 
-	margin: 28px 0;
+	display: inline-block;
+}
+
+.sprite{
+	background: url(/vraptor/assets/images/spritesHome.png) no-repeat;
+	display: inline-block;
+	vertical-align: middle;
 }
 
 .empresaLogo {
-	background: url(/vraptor/assets/images/empresasR.png) no-repeat;
-	display: inline-block;
-	vertical-align: middle;
-	margin-right: 11px;
+	margin-right: 25px;
 }
 
-#agencia-click{ background-position: 0 0; width: 172px; height: 22px; } 
-#defferrari{ background-position: 0 -72px; width: 120px; height: 61px; vertical-align: bottom;} 
-#locaweb{ background-position: 0 -183px; width: 87px; height: 27px; } 
-#wine{ background-position: 0 -260px; width: 131px; height: 55px; } 
+.quem {
+	margin: 16px 25px 16px 0;
+}
+
+.download{
+	display: inline-block;
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 19px;
+	color: #fff;
+	background-color: #2a2a46;
+	padding: 6px 15px;
+	border-radius: 6px;
+}
+
+#who_uses{background-position: 0 -306px ; width: 15px; height: 86px; }
+#quem_usa{background-position: -20px -310px ; width: 16px; height: 91px;}
+#wine{ background-position: 0 -39px ; width: 140px; height: 54px; }
+#defferrari{background-position: -55px -306px ; width: 131px; height: 67px; vertical-align: bottom;}
+#locaweb{background-position: -2px -255px ; width: 144px; height: 45px; }
+#agenciaclick{background-position: 0 0; width: 186px; height: 33px; margin-right: 108px;}
+#seta{ background-position: -101px -130px ; width: 22px; height: 40px; border-right: 1px solid grey;}
+
+#vraptor{background-position: 0 -102px ; width: 87px; height: 86px; }
+#caelum{background-position: -56px -379px ; width: 130px; height: 41px; }
+#triadworks{ background-position: 0 -198px ; width: 146px; height: 49px; }

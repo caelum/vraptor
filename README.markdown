@@ -6,11 +6,10 @@ Criando um novo capítulo
 Para que não haja erros, ele deverá conter o seguinte cabeçalho:
 
 \-\-\-  
-title: Título do capítulo  
-language: Abreviação do idioma do capítulo: pt, en...  
+title: Título do capítulo   
 section: Índice do último capítulo existente + 1  
-layout: page  
-category: docs (para documentação), ou cookbook.  
+layout: page 
+category: [Abreviação do idioma do capítulo: pt/en/etc , docs (para documentação) ou cookbook.] Os dois dados entre colchetes e separados por uma vírgula.
 \-\-\-
 
 Para o nome do arquivo, siga o padrão YYYY-MM-DD-titulo-do-capitulo.md
@@ -21,7 +20,7 @@ Salve o arquivo na pasta docs ou cookbook, de acordo com o que for passado no ca
 Traduzindo um capítulo existente
 ================================
 
-Para a tradução, basta criar um novo arquivo, mantendo inalterados os campos section, layout e category do cabeçalho.
+Para a tradução, basta criar um novo arquivo, mantendo inalterados os campos section e layout. Altere apenas o primeiro item do campo category (abreviação do idioma) e traduza o title adequadamente.
 
 Recomendações
 =============

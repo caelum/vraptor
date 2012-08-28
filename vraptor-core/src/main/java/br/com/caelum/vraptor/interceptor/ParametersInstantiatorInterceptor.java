@@ -107,7 +107,7 @@ public class ParametersInstantiatorInterceptor implements Interceptor {
                 if (annotation instanceof HeaderParam) {  
                     HeaderParam headerParam = (HeaderParam) annotation;  
                     String value = request.getHeader(headerParam.value());  
-                    request.setParameter(parameters[i], value);  
+                    request.setAttribute(parameters[i], value);  
                 }  
             }  
         }  

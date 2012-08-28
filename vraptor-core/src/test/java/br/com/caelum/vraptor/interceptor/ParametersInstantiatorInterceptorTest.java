@@ -93,8 +93,8 @@ public class ParametersInstantiatorInterceptorTest {
     }
     
     class HeaderParamComponent{
-    	void method(@HeaderParam("password") String password) {}
-    	void otherMethod(@HeaderParam("user") String user,@HeaderParam("password") String password, @HeaderParam("token") String token) {}
+    	void method(@HeaderParam("X-MyApp-Password") String password) {}
+    	void otherMethod(@HeaderParam("X-MyApp-User") String user,@HeaderParam("X-MyApp-Password") String password, @HeaderParam("X-MyApp-Token") String token) {}
     }
 
     @Test
@@ -178,13 +178,13 @@ public class ParametersInstantiatorInterceptorTest {
 		Method method = HeaderParamComponent.class.getDeclaredMethod("method", String.class);
 		ResourceMethod resourceMethod = DefaultResourceMethod.instanceFor(HeaderParamComponent.class, method);
 		
-		when(request.getHeader("password")).thenReturn("123");
+		when(request.getHeader("X-MyApp-Password")).thenReturn("123");
     	when(parametersProvider.getParametersFor(resourceMethod, errors, bundle)).thenReturn(values);
-    	when(parameterNameProvider.parameterNamesFor(method)).thenReturn(new String[]{"passwordParam"});
+    	when(parameterNameProvider.parameterNamesFor(method)).thenReturn(new String[]{"password"});
 
         instantiator.intercept(stack, resourceMethod, null);
         
-		verify(request).setParameter("passwordParam", "123");
+		verify(request).setAttribute("password", "123");
         verify(params).setParameters(values);
         verify(stack).next(resourceMethod, null);
         verify(validator).addAll(Collections.<Message>emptyList());
@@ -197,11 +197,11 @@ public class ParametersInstantiatorInterceptorTest {
 		ResourceMethod resourceMethod = DefaultResourceMethod.instanceFor(Component.class, method);
 		
     	when(parametersProvider.getParametersFor(resourceMethod, errors, bundle)).thenReturn(values);
-    	when(parameterNameProvider.parameterNamesFor(method)).thenReturn(new String[]{"passwordParam"});
+    	when(parameterNameProvider.parameterNamesFor(method)).thenReturn(new String[]{"password"});
 
         instantiator.intercept(stack, resourceMethod, null);
         
-        verify(request, never()).setParameter(anyString(), anyString());
+        verify(request, never()).setAttribute(anyString(), anyString());
         verify(params).setParameters(values);
         verify(stack).next(resourceMethod, null);
         verify(validator).addAll(Collections.<Message>emptyList());
@@ -213,17 +213,17 @@ public class ParametersInstantiatorInterceptorTest {
 		Method method = HeaderParamComponent.class.getDeclaredMethod("otherMethod", String.class, String.class, String.class);
 		ResourceMethod resouceMethod = DefaultResourceMethod.instanceFor(HeaderParamComponent.class, method);
 		
-		when(request.getHeader("user")).thenReturn("user");
-		when(request.getHeader("password")).thenReturn("123");
-		when(request.getHeader("token")).thenReturn("daek2321");
+		when(request.getHeader("X-MyApp-User")).thenReturn("user");
+		when(request.getHeader("X-MyApp-Password")).thenReturn("123");
+		when(request.getHeader("X-MyApp-Token")).thenReturn("daek2321");
     	when(parametersProvider.getParametersFor(resouceMethod, errors, bundle)).thenReturn(values);
-    	when(parameterNameProvider.parameterNamesFor(method)).thenReturn(new String[]{"UserParam", "PasswordParam", "TokenParam"});
+    	when(parameterNameProvider.parameterNamesFor(method)).thenReturn(new String[]{"user", "password", "token"});
 
         instantiator.intercept(stack, resouceMethod, null);
         
-        verify(request).setParameter("UserParam", "user");
-        verify(request).setParameter("PasswordParam", "123");
-        verify(request).setParameter("TokenParam", "daek2321");
+        verify(request).setAttribute("user", "user");
+        verify(request).setAttribute("password", "123");
+        verify(request).setAttribute("token", "daek2321");
         verify(params).setParameters(values);
         verify(stack).next(resouceMethod, null);
         verify(validator).addAll(Collections.<Message>emptyList());

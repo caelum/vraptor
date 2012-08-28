@@ -194,7 +194,7 @@ The &#95;format parameter has a higher priority over the Accepts header.
 
 In order to return a JSON object to the view, your logic must make that object available somehow. Just like the following example, your /WEB-INF/jsp/clients/load.json.jsp:
 
-{% highlight jsp %}
+{% highlight javascript %}
 { name: '${client.name}', id: '${client.id}' }
 {% endhighlight %}
 
@@ -246,7 +246,7 @@ public class ClientsController {
 
 The results will be like:
 
-{% highlight json %}
+{% highlight javascript %}
 {"client": {
 	"name": "John"
 }}
@@ -266,7 +266,7 @@ result.use(json()).from(client).include("address").serialize();
 
 will result in something like:
 
-{% highlight json %}
+{% highlight javascript %}
 {"client": {
 	"name": "John",
 	"address" {
@@ -283,7 +283,7 @@ result.use(json()).from(user).exclude("password").serialize();
 
 will result in something like:
 
-{% highlight json %}
+{% highlight javascript %}
 {"user": {
 	"name": "John",
 	"login": "john"
@@ -327,7 +327,7 @@ result.use(xml()).from(clients).serialize();
 
 will result in something like
 
-{% highlight json %}
+{% highlight javascript %}
 {"list": [
 	{
 		"name": "John"
@@ -362,7 +362,7 @@ result.use(xml()).from(clients, "clients").serialize();
 
 will result in something like:
 
-{% highlight json %}
+{% highlight javascript %}
 {"clients": [
 	{
 		"name": "John"
@@ -395,7 +395,7 @@ result.use(json()).from(clients).include("address").serialize();
 
 results in:
 
-{% highlight json %}
+{% highlight javascript %}
 {"list": [
 	{
 		"name": "John",

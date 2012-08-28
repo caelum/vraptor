@@ -6,7 +6,8 @@ category: [pt, docs]
 ---
 
 A maioria dos comportamentos e convenções do VRaptor são personalizáveis. E a forma de personalizar é bem fácil: criar um componente que implementa uma das interfaces internas do VRaptor. Ao fazer isso, o VRaptor vai usar a implementação personalizada ao invés da padrão.
-Para saber qual é a interface certa para personalizar um certo comportamento, pergunte na lista de desenvolvedores do vraptor: caelum-vraptor-dev@googlegroups.com ou no <a href="http://www.guj.com.br/forums/show/23.java">fórum do GUJ</a>.
+Para saber qual é a interface certa para personalizar um certo comportamento, pergunte na lista de desenvolvedores do VRaptor: caelum-vraptor-dev@googlegroups.com ou no <a href="http://www.guj.com.br/forums/show/23.java">fórum do GUJ</a>.
+
 Abaixo veremos alguns exemplos de personalização:
 
 <h3>Mudando a view renderizada por padrão</h3>
@@ -30,7 +31,7 @@ public class CustomPathResolver extends DefaultPathResolver {
     @Override
     protected String extractControllerFromName(String baseName) {
         return //sua convenção aqui
-               //ex.: Ao invés de redirecionar UserController para 'user'
+               //ex.: Em vez de redirecionar UserController para 'user'
                //você quer redirecionar para 'userResource'
                //ex.2: Se você sobrescreveu a conveção para nome dos Controllers para XXXResource
                //e quer continuar redirecionando para 'user' e não para 'userResource'
@@ -60,7 +61,7 @@ public class MeuRoutesParser extends PathAnnotationRoutesParser {
 }
 {% endhighlight %}
 
-Se você precisa mudar mais ainda a convenção basta implementar a interface RoutesParser.
+Se você precisa mudar mais ainda a convenção, basta implementar a interface RoutesParser.
 
 <h3>Mudando o encoding da sua aplicação</h3>
 

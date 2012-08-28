@@ -9,8 +9,8 @@ category: [pt, docs]
 
 Componentes são instâncias de classes que seu projeto precisa para executar tarefas ou armazenar estados em diferentes situações.
 Exemplos clássicos de uso de componentes seriam os DAOs, enviadores de email etc.
-A sugestão de boa prática indica sempre criar uma interface para seus componentes. Dessa maneira seu código também fica mais fácil de testar unitariamente.
-O exemplo a seguir mostra um componente a ser gerenciado pelo vraptor:
+A sugestão de boa prática indica sempre criar uma interface para seus componentes. Dessa maneira seu código também fica mais fácil de ser testado unitariamente.
+O exemplo a seguir mostra um componente a ser gerenciado pelo VRaptor:
 
 {% highlight java %}
 @Component
@@ -31,7 +31,7 @@ public class ClienteDao {
 <h3>Escopos</h3>
 
 Assim como os recursos, os componentes vivem em um escopo específico e seguem as mesmas regras, por padrão pertencendo ao escopo de requisicão, isto é, a cada nova requisição seu componente será novamente instanciado.
-O exemplo a seguir mostra o fornecedor de conexoes com o banco baseado no hibernate. Esse fornecedor esta no escopo de aplicacação, portanto será instanciado somente uma vez por contexto:
+O exemplo a seguir mostra o fornecedor de conexões com o banco baseado no Hibernate. Esse fornecedor está no escopo de aplicacação, portanto será instanciado somente uma vez por contexto:
 
 {% highlight java %}
 @ApplicationScoped
@@ -61,7 +61,7 @@ Os escopos implementados são:
 
 <h3>ComponentFactory</h3>
 
-Muitas vezes você quer receber como dependência da sua classe alguma classe que não é do seu projeto, como por exemplo uma Session do hibernate ou um EntityManager da JPA.
+Muitas vezes você quer receber como dependência da sua classe alguma classe que não é do seu projeto, como por exemplo uma Session do Hibernate ou um EntityManager da JPA.
 Para poder fazer isto, basta criar um ComponentFactory:
 
 {% highlight java %}
@@ -97,7 +97,7 @@ Note que você pode adicionar os listeners @PostConstruct e @PreDestroy para con
 <h3>Injeção de dependências</h3>
 
 O VRaptor utiliza um de seus provedores de injeção de dependências para controlar o que é necessário para instanciar cada um de seus componentes e recursos.
-Sendo assim, os dois exemplos anteriores permitem que qualquer um de seus recursos ou componentes receba um ClienteDao em seu construtor, por exemplo:
+Sendo assim, os dois exemplos anteriores permitem que quaisquer um dos seus recursos ou componentes recebam um ClienteDao em seu construtor, por exemplo:
 
 {% highlight java %}
 @Resource

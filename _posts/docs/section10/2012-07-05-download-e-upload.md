@@ -45,7 +45,7 @@ Você pode também usar a implementação InputStreamDownload para trabalhar dir
 <h3>Upload</h3>
 
 Para ativar o suporte a upload é necessário adicionar as bibliotecas commons-upload e commons-io em seu classpath.
-Na versão 3.2 do VRaptor, caso você estiver em um container que implemente a JSR-315 (Servlet 3.0), não serão necessários os jars commons-upload e commons-io, pois o próprio container já implementa a funcionalidade de upload.
+Na versão 3.2 do VRaptor, caso você estiver em um container que implemente a JSR-315 (Servlet 3.0), não serão necessários os JARs commons-upload e commons-io, pois o próprio container já implementa a funcionalidade de upload.
 
 <h3>Exemplo de 1 minuto: upload</h3>
 
@@ -97,7 +97,7 @@ public class CustomMultipartConfig extends DefaultMultipartConfig {
 
 <h3>Alterando o formulário de envio</h3>
 
-Para que o browser possa fazer o upload corretamente você precisa adicionar o atributo enctype para multipart/form-data:
+Para que o browser possa fazer o upload corretamente, você precisa adicionar o atributo enctype para multipart/form-data:
 
 {% highlight jsp %}
 <form action="minha-action" method="post" enctype="multipart/form-data">

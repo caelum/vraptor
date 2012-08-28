@@ -5,15 +5,15 @@ section: 1
 category: [pt, docs]
 ---
 
-O VRaptor 3 foca em simplicidade e, portanto, todas as funcionalidades que você verá têm como primeira meta resolver o problema do programador da maneira menos intrusiva possível em seu código.
+O VRaptor 3 foca em simplicidade e, portanto, todas as funcionalidades que você verá têm como meta resolver o problema do programador da maneira menos intrusiva possível em seu código.
 
-Tanto para salvar, remover, buscar e atualizar ou ainda funcionalidades que costumam ser mais complexas como upload e download de arquivos, resultados em formatos diferentes (xml, json, xhtml etc), tudo isso é feito através de funcionalidades simples do VRaptor 3, que sempre procuram encapsular HttpServletRequest, Response, Session e toda a API do javax.servlet.
+Tanto para salvar, remover, buscar e atualizar ou ainda funcionalidades que costumam ser mais complexas como upload e download de arquivos, resultados em formatos diferentes (XML, JSON, XHTML, etc), tudo isso é feito por meio de funcionalidades simples do VRaptor 3, que sempre procuram encapsular HttpServletRequest, Response, Session e toda a API do javax.servlet.
 
 <h3>Começando um projeto</h3>
 
-Você pode começar seu projeto a partir do vraptor-blank-project, que contem as dependências necessárias e a configuração no web.xml. Ele pode ser baixado no <a href="http://vraptor.caelum.com.br/download.jsp">site oficial do VRaptor</a>.
+Você pode começar seu projeto a partir do vraptor-blank-project, que contém as dependências necessárias e a configuração no web.xml. Ele pode ser baixado no <a href="http://vraptor.caelum.com.br/download.jsp">site oficial do VRaptor</a>.
 
-O projeto vraptor-blank-project é configurado para a IDE Eclipse. Se você usa Netbeans, é possível importar o projeto facilmente conforme a documentação disponível na <a href="http://netbeans.org/kb/docs/java/import-eclipse.html">seção de suporte do NetBeans</a>. Se você utiliza a IDE IntelliJ IDEA você pode importar o projeto seguindo o guia disponível na <a href="http://www.jetbrains.com/idea/webhelp/importing-eclipse-project-to-intellij-idea.html">página de ajuda do IntelliJ IDEA</a>.
+O projeto vraptor-blank-project é configurado para a IDE Eclipse. Se você usa Netbeans, é possível importar o projeto facilmente conforme a documentação disponível na <a href="http://netbeans.org/kb/docs/java/import-eclipse.html">seção de suporte do NetBeans</a>. Por outro lado, se você utiliza a IDE IntelliJ IDEA você pode importar o projeto seguindo o guia disponível na <a href="http://www.jetbrains.com/idea/webhelp/importing-eclipse-project-to-intellij-idea.html">página de ajuda do IntelliJ IDEA</a>.
 
 Se você quiser usar o Maven, você pode adicionar o artefato do VRaptor como dependência no seu pom.xml:
 
@@ -32,7 +32,6 @@ Chamaremos de <strong>Controller</strong> as classes contendo a lógica de negó
 Com o VRaptor configurado no seu web.xml, basta criar os seus controllers para receber as requisições e começar a construir seu sistema.
 
 Um controller simples seria:
-
 
 {% highlight java %}
 /*
@@ -55,7 +54,7 @@ public class ClientsController {
     }
    
     /*
-     * Todos os métodos públicos do seu controller estarão acessíveis via web.
+     * Todos os métodos públicos do seu controller estarão acessíveis pela web.
      * Por exemplo, o método form pode ser acessado pela URI /clients/form e
      * vai redirecionar para a jsp /WEB-INF/jsp/clients/form.jsp
      */
@@ -64,11 +63,11 @@ public class ClientsController {
     }
    
     /*
-     * Você pode receber parâmetros no seu método, e o VRaptor vai tentar popular os
+     * Você pode receber parâmetros no seu método e o VRaptor tentará popular os
      * campos dos parâmetro de acordo com a requisição. Se houver na requisição:
      * custom.name=Lucas
      * custom.address=R.Vergueiro
-     * então teremos os campos name e address do Client custom estarão populados com
+     * então teremos os campos name e address do Client custom populados com
      * Lucas e R.Vergueiro via getters e setters
      * URI: /clients/add
      * view: /WEB-INF/jsp/clients/add.jsp

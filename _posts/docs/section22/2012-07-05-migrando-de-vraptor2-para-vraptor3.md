@@ -27,9 +27,9 @@ Para migrar aos poucos, basta colocar no seu web.xml:
 
 {% endhighlight %}
 
-e colocar os jars da pasta lib/mandatory e lib/containers/<um dos containers> do zip do vraptor no classpath.
+e colocar os JARs da pasta lib/mandatory e lib/containers/<um dos containers> do zip do VRaptor no classpath.
 
-Lembre-se de tirar a declaração antiga do VRaptorServlet do vraptor2, e o seu respectivo mapping.
+Lembre-se de tirar a declaração antiga do VRaptorServlet do VRaptor2, e o seu respectivo mapping.
 
 
 <h3>Migrando de @org.vraptor.annotations.Component para @br.com.caelum.vraptor.Resource</h3>
@@ -52,6 +52,7 @@ public class ClientsLogic {
 {% endhighlight %}
 
 No VRaptor 3:
+
 {% highlight java %}
 @Resource
 public class ClientsController {
@@ -62,12 +63,12 @@ public class ClientsController {
 }
 {% endhighlight %}
 
-O método form estará acessível pela uri: "/clients/form", e a view padrão será a WEB-INF/jsp/clients/form.jsp. Ou seja, o sufixo Controller é removido do nome da classe e não tem mais o sufixo .logic na uri. Não é colocado o resultado "ok" ou "invalid" no nome do jsp.
+O método form estará acessível pela uri: "/clients/form", e a view padrão será a WEB-INF/jsp/clients/form.jsp. Ou seja, o sufixo Controller é removido do nome da classe e não tem mais o sufixo .logic na URI. Não é colocado o resultado "ok" ou "invalid" no nome do JSP.
 
 
 <h3>@In</h3>
 
-O VRaptor3 gerencia as dependências para você, logo o que você usava como @In no vraptor2, basta receber pelo construtor:
+O VRaptor3 gerencia as dependências para você; logo, o que você usava como @In no vraptor2, basta receber pelo construtor:
 
 No VRaptor 2:
 
@@ -85,6 +86,7 @@ public class ClientsLogic {
 {% endhighlight %}
 
 No VRaptor 3:
+
 {% highlight java %}
 @Resource
 public class ClientsController {
@@ -100,14 +102,15 @@ public class ClientsController {
 }
 {% endhighlight %}
 
-E para que isso funcione você só precisa que o seu ClientDao esteja anotado com o @br.com.caelum.vraptor.ioc.Component do VRaptor3.
+E, para que isso funcione, você só precisa que o seu ClientDao esteja anotado com o @br.com.caelum.vraptor.ioc.Component do VRaptor3.
 
 
 <h3>@Out e getters</h3>
 
-No VRaptor2 você usava a anotação @Out ou um getter para disponibilizar um objeto para a view. No VRaptor3 basta retornar o objeto, se for um só, ou usar um objeto especial para expôr os objetos para a view. Este objeto é o Result:
+No VRaptor2 você usava a anotação @Out ou um getter para disponibilizar um objeto para a view. No VRaptor3 basta retornar o objeto, se for um só, ou usar um objeto especial para expor os objetos para a view. Este objeto é o Result:
 
 No VRaptor 2:
+
 {% highlight java %}
 @Component
 public class ClientsLogic {
@@ -132,6 +135,7 @@ public class ClientsLogic {
 {% endhighlight %}
 
 No VRaptor 3:
+
 {% highlight java %}
 @Resource
 public class ClientsController {
@@ -163,7 +167,7 @@ Quando você usa o retorno do método, o vraptor usa o tipo do retorno para dete
 
 <h3>views.properties</h3>
 
-No VRaptor3 não existe o arquivo views.properties, embora ele seja suportado no modo de compatibilidade com o vraptor2. Todos os redirecionamentos são feitos na própria lógica, usando o Result:
+No VRaptor3 não existe o arquivo views.properties, embora ele seja suportado no modo de compatibilidade com o VRaptor2. Todos os redirecionamentos são feitos na própria lógica, usando o Result:
 
 {% highlight java %}
 @Resource
@@ -191,9 +195,11 @@ public class ClientsController {
 
 Se o redirecionamento for para uma lógica, você pode referenciá-la diretamente, e os parâmetros passados para o método serão usados para chamar a lógica.
 
-Se for para uma jsp direto você pode usar:
-result.forwardTo("/WEB-INF/jsp/clients/save.ok.jsp");
+Se for para uma JSP direto você pode usar:
 
+{% highlight java %}
+result.forwardTo("/WEB-INF/jsp/clients/save.ok.jsp");
+{% endhighlight %}
 
 <h3>Validação</h3>
 
@@ -233,7 +239,8 @@ No VRaptor2 bastava colocar um @Out(ScopeType.SESSION) para que o objeto fosse c
 
 Para colocar objetos na sessão no VRaptor3 você deve fazer uma das duas coisas:
 
-    O objeto vai ser acessível apenas por lógicas e componentes da aplicação, não pelos jsps:
+O objeto vai ser acessível apenas por lógicas e componentes da aplicação, não pelos JSPs:
+
 {% highlight java %}
     @Component
     @SessionScoped
@@ -246,6 +253,7 @@ Para colocar objetos na sessão no VRaptor3 você deve fazer uma das duas coisas
 E nas classes onde você precisa do MeuObjeto basta receber no construtor o MeuObjetoNaSessao e usar o getter e setter pra manipular o MeuObjeto.
 
 O objeto vai ser acessível nos jsps também:
+
 {% highlight java %}
     @Component
     @SessionScoped

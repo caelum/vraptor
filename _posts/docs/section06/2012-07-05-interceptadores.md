@@ -7,13 +7,13 @@ category: [pt, docs]
 
 <h3>Para quê interceptar?</h3>
 
-O uso de interceptadores é feito para executar alguma tarefa antes e/ou depois de uma lógica de negócios, sendo os usos mais comuns para validação de dados, controle de conexão e transação do banco, log e criptografia/compactação de dados.
+O uso de interceptadores é feito para executar alguma tarefa antes e/ou depois de uma lógica de negócios, sendo os usos mais comuns a validação de dados, controle de conexão e transação do banco, log e criptografia/compactação de dados.
 
 <h3>Como interceptar?</h3>
 
 No VRaptor 3 utilizamos uma abordagem onde o interceptador define quem será interceptado, muito mais próxima a abordagens de interceptação que aparecem em sistemas baseados em AOP (programação orientada a aspectos) do que a abordagem da versão anterior do vraptor.
-Portanto, para interceptar uma requisição basta implementar a interface <strong>Interceptor</strong> e anotar a classe com a anotação <strong>@Intercepts</strong>.
-Assim como qualquer outro componente, você pode dizer em que escopo o interceptador, será armazenado através das anotações de escopo.
+Portanto, para interceptar uma requisição, basta implementar a interface <strong>Interceptor</strong> e anotar a classe com a anotação <strong>@Intercepts</strong>.
+Assim como qualquer outro componente, com o uso das anotações de escopo você pode dizer em que escopo o interceptador será armazenado.
 
 {% highlight java %}
 public interface Interceptor {
@@ -29,7 +29,7 @@ public interface Interceptor {
 <h3>Exemplo simples</h3>
 
 A classe a seguir mostra um exemplo de como interceptar todas as requisições em um escopo de requisição e simplesmente mostrar na saída do console o que está sendo invocado.
-Lembre-se que o interceptador é um componente como qualquer outro e pode receber em seu construtor quaisquer dependencias atraves de Injecao de Dependencias.
+Lembre-se de que o interceptador é um componente como qualquer outro e pode receber em seu construtor quaisquer dependências por meio de Injeção de Dependências.
 
 {% highlight java %}
 @Intercepts
@@ -67,7 +67,7 @@ public class Log implements Interceptor {
 
 <h3>Exemplo com Hibernate</h3>
 
-Provavelmente, um dos usos mais comuns do Interceptor é para a implementação do famigerado pattern Open Session In View, que fornece uma conexão com o banco de dados sempre que há uma requisição para sua aplicação. E ao fim dessa requisição, a conexão é liberada. O grande ganho disso é evitar exceções como LazyInitializationException no momento da renderização dos jsps.
+Provavelmente, um dos usos mais comuns do Interceptor é para a implementação do famigerado pattern Open Session In View, que fornece uma conexão com o banco de dados sempre que há uma requisição para sua aplicação. E ao fim dessa requisição, a conexão é liberada. O grande ganho disso é evitar exceções como LazyInitializationException no momento da renderização dos JSPs.
 Abaixo, está um simples exemplo, que para todas as requisições abre uma transação com o banco de dados. E ao fim da execução da lógica e da exibição da página para o usuário, commita a transação e logo em seguida fecha a conexão com o banco.
 
 {% highlight java %}
@@ -124,7 +124,7 @@ public class FuncionarioController {
 
 <h3>Como garantir ordem: after e before</h3>
 
-Se você precisa garantir a ordem de execução de um conjunto de interceptors, você pode usar os atributos <strong>after</strong> e <strong>before</strong> da @Intercepts. Suponha que o PrimeiroInterceptor tenha que rodar antes do SegundoInterceptor, então você pode configurar isso tanto com:
+Se é preciso garantir a ordem de execução de um conjunto de interceptors, você pode usar os atributos <strong>after</strong> e <strong>before</strong> da anotação @Intercepts. Suponha que o PrimeiroInterceptor tenha que rodar antes do SegundoInterceptor, então você pode configurar isso tanto com:
 
 {% highlight java %}
 @Intercepts(before=SegundoInterceptor.class)

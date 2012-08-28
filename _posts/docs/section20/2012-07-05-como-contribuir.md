@@ -23,13 +23,13 @@ Se você encontrou um bug, avise a equipe de desenvolvimento do VRaptor usando a
 
 <h3>Colaborando com código</h3>
 
-Se você tem alguma melhoria que gostaria de ver no VRaptor, envie sua sugestão para os desenvolvedores na <a href="http://groups.google.com/group/caelum-vraptor-dev">lista de discussão</a>. Se você já implementou a melhoria, envie seu pull request através do Github.
+Se você tem alguma melhoria que gostaria de ver no VRaptor, envie sua sugestão para os desenvolvedores na <a href="http://groups.google.com/group/caelum-vraptor-dev">lista de discussão</a>. Se você já implementou a melhoria, envie seu pull request pelo Github.
 
 Você pode resolver umas das <a href="http://github.com/caelum/vraptor/issues">issues cadastradas no Github</a>, enviando-nos um pull request com as suas alterações.
 
-O VRaptor é um Framework Web MVC focado em simplicidade e facilidade de uso. Quando você implementar algo, cuide para seguir as boas práticas de Orientação a Objetos e baixo acoplamento, uso de composição ao invés de herança, convenção ao invés de configurações e um código bem estruturado. Não deixe também de escrever os Javadocs e classes de testes unitários.
+O VRaptor é um Framework Web MVC focado em simplicidade e facilidade de uso. Quando você implementar algo, cuide para seguir as boas práticas de Orientação a Objetos e baixo acoplamento, uso de composição ao invés de herança, convenção ao invés de configurações e um código bem estruturado. Não deixe, também, de escrever os Javadocs e classes de testes unitários.
 
-Contribuições de funcionalidades como segurança, paginação, multitenant, e outros são muito bem vindos através de plugins e contribuições para o <a href="http://github.com/caelum/vraptor-contrib">vraptor-contrib</a>, ou extensões para o <a href="https://github.com/caelum/vraptor-scaffold">vraptor-scaffold</a>.
+Contribuições de funcionalidades como segurança, paginação, multitenant, e outros são muito bem vindos por meio de plugins e contribuições para o <a href="http://github.com/caelum/vraptor-contrib">vraptor-contrib</a>, ou extensões para o <a href="https://github.com/caelum/vraptor-scaffold">vraptor-scaffold</a>.
 
 <h3>Montando o ambiente</h3>
 

@@ -5,7 +5,7 @@ section: 7
 category: [pt, docs]
 ---
 
-O VRaptor3 suporta dois estilos de validação. Clássico e fluente. A porta de entrada para ambos os estilos é a interface Validator. Para que seu recurso tenha acesso ao Validator, basta recebê-lo no construtor do seu recurso:
+O VRaptor3 suporta dois estilos de validação: clássico e fluente. A porta de entrada para ambos os estilos é a interface Validator. Para que seu recurso tenha acesso ao Validator, basta recebê-lo no seu construtor:
 
 {% highlight java %}
 import br.com.caelum.vraptor.Validator;
@@ -23,7 +23,7 @@ class FuncionarioController {
 
 <h3>Estilo clássico</h3>
 
-A forma clássica é semelhante a forma como as validações eram feitas no VRaptor2. Dentro da sua lógica de negócios, basta fazer a verificação que deseja e caso haja um erro de validação, adicionar esse erro na lista de erros de validação. Por exemplo, para validar que o nome do funcionario deve ser Fulano, faça:
+A forma clássica é semelhante à forma como as validações eram feitas no VRaptor2. Dentro da sua lógica de negócios, basta fazer a verificação que deseja e caso haja um erro de validação, adicionar esse erro na lista de erros de validação. Por exemplo, para validar que o nome do funcionario deve ser Fulano, faça:
 
 {% highlight java %}
 public void adiciona(Funcionario funcionario) {
@@ -37,11 +37,11 @@ public void adiciona(Funcionario funcionario) {
 }
 {% endhighlight %}
 
-Ao chamar o validator.onErrorUse, se existirem erros de validação, o VRaptor para a execução e redireciona a página que você indicou. O redirecionamento funciona da mesma forma que o result.use(..).
+Ao chamar o validator.onErrorUse, se existirem erros de validação, o VRaptor para a execução e redireciona à página que você indicou. O redirecionamento funciona da mesma forma que o result.use(..).
 
 <h3>Estilo fluente</h3>
 
-No estilo fluente, a idéia é que o código para fazer a validação seja algo muito parecido com a linguagem natural. Por exemplo, caso queiramos obrigar que seja informado o nome do funcionario:
+No estilo fluente, a ideia é que o código para fazer a validação seja algo muito parecido com a linguagem natural. Por exemplo, caso queiramos obrigar que seja informado o nome do funcionário:
 
 {% highlight java %}
 public adiciona(Funcionario funcionario) {
@@ -56,8 +56,8 @@ public adiciona(Funcionario funcionario) {
 {% endhighlight %}
 
 Você pode ler esse código como: "Validador, cheque as minhas validações. A primeira validação é que o nome do funcionário não pode ser vazio". Bem mais próximo a linguagem natural.
-Assim sendo, caso o nome do funcionario seja vazio, ele vai ser redirecionado novamente para a logica "formulario", que exibe o formulario para que o usuário adicione o funcionário novamente. Além disso, ele devolve para o formulario a mensagem de erro que aconteceu na validação.
-Muitas vezes algumas validações só precisam acontecer se uma outra deu certo, por exemplo, eu só vou checar a idade do usuário se o usuário não for null. O método that retorna um boolean dizendo se o que foi passado pra ele é válido ou não:
+Assim sendo, caso o nome do funcionário seja vazio, ele vai ser redirecionado novamente para a lógica "formulario", para que o funcionário seja adicionado novamente. Além disso, ele devolve para o formulario a mensagem de erro que aconteceu na validação.
+Muitas vezes, algumas validações só precisam acontecer se uma outra deu certo, por exemplo, eu só vou checar a idade do usuário se o usuário não for null. O método that retorna um boolean dizendo se o que foi passado pra ele é válido ou não:
 
 {% highlight java %}
 validator.checking(new Validations() { {
@@ -101,7 +101,7 @@ validator.checking(new Validations() { {
 
 <h3>Validação usando matchers do Hamcrest</h3>
 
-Você pode também usar matchers do Hamcrest para deixar a validação mais legível, e ganhar a vantagem da composição de matchers e da criação de novos matchers que o Hamcrest te oferece:
+Você pode também usar matchers do Hamcrest para deixar a validação mais legível, e ganhar a vantagem da composição de matchers e da criação de novos matchers que o Hamcrest lhe oferece:
 
 {% highlight java %}
 public admin(Funcionario funcionario) {
@@ -118,7 +118,7 @@ public admin(Funcionario funcionario) {
 <h3>Bean Validation (JSR303) e Hibernate Validator</h3>
 
 O VRaptor também suporta integração com o Bean Validation e o Hibernate Validator. Para usar as validações basta adicionar no seu classpath qualquer implementação do Bean Validation ou do Hibernate Validator.
-No exemplo anterior para validar o objeto Funcionario basta uma adicionar uma linha de código:
+No exemplo anterior, para validar o objeto Funcionario basta uma adicionar uma linha de código:
 
 {% highlight java %}
 public adiciona(Funcionario funcionario) {
@@ -135,7 +135,7 @@ public adiciona(Funcionario funcionario) {
 }
 {% endhighlight %}
 
-<h3>Para onde redirecionar no caso de erro</h3>
+<h3>Para onde redirecionar no caso de erro?</h3>
 
 Outro ponto importante que deve ser levado em consideração no momento de fazer validações é o redirecionamento quando ocorrer um erro. Como enviamos o usuário para outro recurso com o VRaptor3, caso haja erro na validação?
 Simples, apenas diga no seu código que quando correr um erro, é para o usuário ser enviado para algum recurso. Como no exemplo:
@@ -201,7 +201,7 @@ validator.checking(new Validations(localization.getBundle()) { {
 } });
 {% endhighlight %}
 
-Repare que aqui esta sendo passado manualmente o ResourceBundle, dessa forma a key "usuario.idade" será traduzida corretamente na troca do Locale.
+Repare que aqui está sendo passado manualmente o ResourceBundle, dessa forma a key "usuario.idade" será traduzida corretamente na troca do Locale.
 
 <h3>Mostrando os erros de validação no JSP</h3>
 

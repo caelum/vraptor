@@ -218,15 +218,9 @@
 		<!--  [hibernate] -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate</artifactId>
-			<version>3.2.0.ga</version>
+			<artifactId>hibernate-core</artifactId>
+			<version>3.6.10.Final</version>
 			<optional>true</optional>
-			<exclusions>
-				<exclusion>
-					<groupId>javax.transaction</groupId>
-					<artifactId>jta</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>

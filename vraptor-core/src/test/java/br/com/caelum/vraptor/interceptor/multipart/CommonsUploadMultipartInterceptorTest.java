@@ -6,7 +6,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
@@ -29,7 +31,6 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -67,7 +68,7 @@ public class CommonsUploadMultipartInterceptorTest {
 
         mockCreator = mock(ServletFileUploadCreator.class);
         mockUpload = mock(ServletFileUpload.class);
-        when(mockCreator.create(Mockito.any(FileItemFactory.class))).thenReturn(mockUpload);
+        when(mockCreator.create(any(FileItemFactory.class))).thenReturn(mockUpload);
     }
 
     @Test
@@ -248,8 +249,8 @@ public class CommonsUploadMultipartInterceptorTest {
     
     @Test
     public void shouldCreateDirInsideAppIfTempDirAreNotAvailable() throws Exception {
-    	DefaultMultipartConfig configSpy = (DefaultMultipartConfig) Mockito.spy(config);
-    	Mockito.doThrow(new IOException()).when(configSpy).createTempFile();
+    	DefaultMultipartConfig configSpy = (DefaultMultipartConfig) spy(config);
+    	doThrow(new IOException()).when(configSpy).createTempFile();
     	
         interceptor = new CommonsUploadMultipartInterceptor(request, parameters, configSpy, validator, mockCreator);
 
@@ -277,14 +278,15 @@ public class CommonsUploadMultipartInterceptorTest {
         when(request.getContentType()).thenReturn("multipart/form-data");
         when(request.getMethod()).thenReturn("POST");
         
-        Mockito.doAnswer(new Answer<Object>() {
+        Answer<Object> answer = new Answer<Object>() {
         	public Object answer(InvocationOnMock invocation) throws Throwable {
                 Object[] args = invocation.getArguments();
         		attributes.put((String) args[0], args[1]);
         		return null;
         	}
-		}).when(request).setAttribute(Mockito.anyString(), Mockito.anyString());
-        
+		};
+		
+		doAnswer(answer).when(request).setAttribute(anyString(), anyString());
         when(mockUpload.parseRequest(request)).thenReturn(elements);
 
         interceptor.intercept(stack, method, instance);

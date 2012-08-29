@@ -12,7 +12,7 @@ public class NullMultipartInterceptorTest {
 	}
 	
 	@Test(expected=UnsupportedOperationException.class)
-	public void shouldThrowsUnsuportedOperationExceptionWhenInvoked() {
+	public void shouldThrowUnsuportedOperationExceptionWhenInvoked() {
 		new NullMultipartInterceptor().intercept(null, null, null);
 	}
 }

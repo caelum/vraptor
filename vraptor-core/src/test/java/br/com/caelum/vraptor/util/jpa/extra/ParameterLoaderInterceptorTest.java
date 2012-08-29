@@ -67,7 +67,7 @@ public class ParameterLoaderInterceptorTest {
         method = DefaultResourceMethod.instanceFor(Resource.class, Resource.class.getMethod("method", Entity.class));
         methodWithoutLoad = DefaultResourceMethod.instanceFor(Resource.class, Resource.class.getMethod("methodWithoutLoad"));
         methodOtherIdName = DefaultResourceMethod.instanceFor(Resource.class, Resource.class.getMethod("methodOtherIdName", EntityOtherIdName.class));
-        other = DefaultResourceMethod.instanceFor(Resource.class, Resource.class.getMethod("other", OtherEntity.class));
+        other = DefaultResourceMethod.instanceFor(Resource.class, Resource.class.getMethod("other", OtherEntity.class, String.class));
         noId = DefaultResourceMethod.instanceFor(Resource.class, Resource.class.getMethod("noId", NoIdEntity.class));
 
 		when(converters.to(Long.class)).thenReturn(new LongConverter());
@@ -125,8 +125,9 @@ public class ParameterLoaderInterceptorTest {
     
 	@Test
 	public void shouldLoadEntityUsingIdOfAnyType() throws Exception {
-		when(provider.parameterNamesFor(other.getMethod())).thenReturn(new String[] {"entity"});
+		when(provider.parameterNamesFor(other.getMethod())).thenReturn(new String[] {"entity", "ignored"});
 		when(request.getParameter("entity.id")).thenReturn("123");
+		when(request.getParameter("ignored")).thenReturn("bar");
 		OtherEntity expectedEntity = new OtherEntity();
 		when(em.find(OtherEntity.class, "123")).thenReturn(expectedEntity);
 
@@ -244,7 +245,7 @@ public class ParameterLoaderInterceptorTest {
     static class Resource {
         public void method(@Load Entity entity) {
         }
-        public void other(@Load OtherEntity entity) {
+        public void other(@Load OtherEntity entity, String ignored) {
         }
         public void noId(@Load NoIdEntity entity) {
         }

@@ -16,8 +16,16 @@
  */
 package br.com.caelum.vraptor.config;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.startsWith;
 import static org.hamcrest.Matchers.typeCompatibleWith;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
@@ -25,19 +33,24 @@ import java.io.IOException;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
-import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.picocontainer.PicoContainer;
+import org.springframework.context.ApplicationContext;
 
 import br.com.caelum.vraptor.core.Execution;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
+import br.com.caelum.vraptor.ioc.guice.GuiceProvider;
+import br.com.caelum.vraptor.ioc.pico.PicoProvider;
+import br.com.caelum.vraptor.ioc.spring.MissingConfigurationException;
 import br.com.caelum.vraptor.ioc.spring.SpringProvider;
+
+import com.google.inject.Guice;
 
 public class BasicConfigurationTest {
 
@@ -47,7 +60,7 @@ public class BasicConfigurationTest {
     @Before
     public void config() {
         MockitoAnnotations.initMocks(this);
-        this.config = new BasicConfiguration(context);
+        config = new BasicConfiguration(context);
     }
 
 
@@ -55,7 +68,7 @@ public class BasicConfigurationTest {
     public void shouldReadRootDirectoryAsWebinfClasses() throws ServletException {
         when(context.getRealPath("/WEB-INF/classes/")).thenReturn("/x/WEB-INF/classes/");
 
-        MatcherAssert.assertThat(config.getWebinfClassesDirectory(), is("/x/WEB-INF/classes/"));
+        assertThat(config.getWebinfClassesDirectory(), is("/x/WEB-INF/classes/"));
     }
 
 
@@ -63,45 +76,116 @@ public class BasicConfigurationTest {
     public void shouldUseSpringContainerAsDefaultProvider() throws ServletException {
         when(context.getInitParameter(BasicConfiguration.CONTAINER_PROVIDER)).thenReturn(null);
 
-        MatcherAssert.assertThat(config.getProvider().getClass(), is(typeCompatibleWith(SpringProvider.class)));
+        assertThat(config.getProvider().getClass(), is(typeCompatibleWith(SpringProvider.class)));
     }
 
+    @Test
+    public void shouldUseGuiceAs1stAlternative() throws ServletException {
+        BasicConfiguration configSpy = spy(config);
+        
+        when(context.getInitParameter(BasicConfiguration.CONTAINER_PROVIDER)).thenReturn(null);
+		doReturn(false).when(configSpy).classExists(ApplicationContext.class.getName());
+		doReturn(true).when(configSpy).classExists(Guice.class.getName());
+
+        assertThat(configSpy.getProvider().getClass(), is(typeCompatibleWith(GuiceProvider.class)));
+    }
+    
+    @Test
+    public void shouldUsePicoAs2ndAlternative() throws ServletException {
+        BasicConfiguration configSpy = spy(config);
+        
+        when(context.getInitParameter(BasicConfiguration.CONTAINER_PROVIDER)).thenReturn(null);
+		doReturn(false).when(configSpy).classExists(ApplicationContext.class.getName());
+		doReturn(false).when(configSpy).classExists(Guice.class.getName());
+		doReturn(true).when(configSpy).classExists(PicoContainer.class.getName());
+
+        assertThat(configSpy.getProvider().getClass(), is(typeCompatibleWith(PicoProvider.class)));
+    }
+
+	@Test
+    public void shouldThrowExceptionWhenProviderClassWasNotFound() throws ServletException {
+        when(context.getInitParameter(BasicConfiguration.CONTAINER_PROVIDER)).thenReturn("UnknowClass");
+        
+        try {
+        	config.getProvider();
+        	fail();
+        } catch (IllegalArgumentException e) {
+			assertThat(e.getMessage(), startsWith("You must configure"));
+		}
+    }
+	
+	@Test
+	public void shouldThrowIllegalArgumentExceptionWhenProvidersWasNotFound() throws Exception {
+		BasicConfiguration configSpy = spy(config);
+		
+        when(context.getInitParameter(BasicConfiguration.CONTAINER_PROVIDER)).thenReturn(null);
+		doReturn(false).when(configSpy).classExists(anyString());
+		
+        try {
+        	configSpy.getProvider();
+        	fail();
+        } catch (IllegalArgumentException e) {
+			assertThat(e.getMessage(), startsWith("You don't have any DI container jars on your classpath."));
+		}
+	}
 
     @Test
     public void shouldReturnThatHasNoBasePackageWhenInitParamNull() throws ServletException {
         when(context.getInitParameter(BasicConfiguration.BASE_PACKAGES_PARAMETER_NAME)).thenReturn(null);
 
-        MatcherAssert.assertThat(config.hasBasePackages(),  is(false));
+        assertThat(config.hasBasePackages(), is(false));
     }
-
+    
+	@Test(expected = MissingConfigurationException.class)
+    public void shouldThrowMissingConfigurationExceptionIfHasNoBasePackages() {
+        when(context.getInitParameter(BasicConfiguration.CONTAINER_PROVIDER)).thenReturn(null);
+    	config.getBasePackages();
+    }
+	
+	@Test
+	public void testIfClasspathScanningIsEnabled() {
+        when(context.getInitParameter(BasicConfiguration.SCANNING_PARAM)).thenReturn(null, "disabled");
+        
+		assertThat(config.isClasspathScanningEnabled(), is(true));
+		assertThat(config.isClasspathScanningEnabled(), is(false));
+	}
+	
+	@Test
+	public void testIfHasBasePackages() {
+        when(context.getInitParameter(BasicConfiguration.BASE_PACKAGES_PARAMETER_NAME)).thenReturn(null, "foo.bar");
+        
+		assertThat(config.hasBasePackages(), is(false));
+		assertThat(config.hasBasePackages(), is(true));
+	}
 
     @Test
     public void shouldReturnBasePackagesWhenInitParamNotNull() throws ServletException {
         when(context.getInitParameter(BasicConfiguration.BASE_PACKAGES_PARAMETER_NAME)).thenReturn("some.packages");
 
-        MatcherAssert.assertThat(config.getBasePackages(), is(new String[] {"some.packages"}));
+        assertThat(config.getBasePackages(), is(new String[] {"some.packages"}));
     }
 
     @Test
     public void shouldReturnBasePackagesArrayWhenInitParamNotNullAndHasComas() throws ServletException {
         when(context.getInitParameter(BasicConfiguration.BASE_PACKAGES_PARAMETER_NAME)).thenReturn("some.packages,other.packages");
 
-        MatcherAssert.assertThat(config.getBasePackages(), is(new String[] {"some.packages", "other.packages"}));
+        assertThat(config.getBasePackages(), is(new String[] {"some.packages", "other.packages"}));
     }
+    
     @Test
     public void shouldReturnBasePackagesArrayWhenInitParamNotNullAndHasComasAndSpaces() throws ServletException {
     	when(context.getInitParameter(BasicConfiguration.BASE_PACKAGES_PARAMETER_NAME)).thenReturn("some.packages, \n      other.packages");
 
-    	MatcherAssert.assertThat(config.getBasePackages(), is(new String[] {"some.packages", "other.packages"}));
+    	assertThat(config.getBasePackages(), is(new String[] {"some.packages", "other.packages"}));
     }
+    
     @Test
     public void shouldReturnBasePackagesArrayWhenInitParamHasLeadingAndTrailingSpaces() throws ServletException {
     	when(context.getInitParameter(BasicConfiguration.BASE_PACKAGES_PARAMETER_NAME)).thenReturn("    \nsome.package\n   ");
 
-    	MatcherAssert.assertThat(config.getBasePackages(), is(new String[] {"some.package"}));
+    	assertThat(config.getBasePackages(), is(new String[] {"some.package"}));
     }
-
-
+    
     public static class MyCustomProvider implements ContainerProvider {
         public void start(ServletContext context) {
         }
@@ -122,7 +206,7 @@ public class BasicConfigurationTest {
         when(context.getInitParameter(BasicConfiguration.CONTAINER_PROVIDER))
         	.thenReturn(MyCustomProvider.class.getName());
 
-        MatcherAssert.assertThat(config.getProvider().getClass(), Matchers.is(Matchers
+        assertThat(config.getProvider().getClass(), Matchers.is(Matchers
                 .typeCompatibleWith(MyCustomProvider.class)));
     }
 
@@ -152,10 +236,10 @@ public class BasicConfigurationTest {
         	.thenReturn(DogProvider.class.getName());
         try {
             config.getProvider();
-            Assert.fail();
+            fail();
         } catch (ServletException e) {
-        	Assert.assertNotNull("Should have a cause", e.getRootCause());
-            Assert.assertEquals(IOException.class, e.getRootCause().getClass());
+        	assertNotNull("Should have a cause", e.getRootCause());
+            assertEquals(IOException.class, e.getRootCause().getClass());
         }
     }
 }

@@ -186,7 +186,7 @@ public class Servlet3MultipartInterceptorTest {
     }
     
 	@Test(expected = InterceptionException.class)
-    public void shouldThrowsInterceptionExceptionIfIOExceptionOccurs() throws Exception {
+    public void shouldThrowInterceptionExceptionIfIOExceptionOccurs() throws Exception {
         when(request.getContentType()).thenReturn("multipart/form-data");
         when(request.getMethod()).thenReturn("POST");
         when(request.getParts()).thenThrow(new IOException());
@@ -195,7 +195,7 @@ public class Servlet3MultipartInterceptorTest {
     }
 
 	@Test(expected = InterceptionException.class)
-    public void shouldThrowsInterceptionExceptionIfServletExceptionOccurs() throws Exception {
+    public void shouldThrowInterceptionExceptionIfServletExceptionOccurs() throws Exception {
         when(request.getContentType()).thenReturn("multipart/form-data");
         when(request.getMethod()).thenReturn("POST");
 		when(request.getParts()).thenThrow(new ServletException());

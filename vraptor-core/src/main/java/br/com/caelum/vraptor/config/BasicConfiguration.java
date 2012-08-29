@@ -103,7 +103,7 @@ public class BasicConfiguration {
 				"lib/containers/<container> jars on your classpath, where <container> is your preferred container.");
 	}
 
-	private boolean classExists(String className) {
+	protected boolean classExists(String className) {
 		try {
 			Class.forName(className);
 			return true;

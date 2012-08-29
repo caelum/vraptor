@@ -18,6 +18,8 @@
 package br.com.caelum.vraptor.interceptor;
 
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.argThat;
@@ -33,12 +35,11 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
-
-import junit.framework.Assert;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -148,7 +149,7 @@ public class DownloadInterceptorTest {
 	}
 	
     @Test
-    public void shouldThrowsInterceptionExceptionIfIOExceptionOccurs() throws Exception {
+    public void shouldThrowInterceptionExceptionIfIOExceptionOccurs() throws Exception {
         Download download = mock(Download.class);
         
         when(info.getResult()).thenReturn(download);
@@ -165,40 +166,56 @@ public class DownloadInterceptorTest {
     
     @Test
     public void shouldNotAcceptStringReturn() throws Exception {
-        ResourceMethod method = DefaultResourceMethod.instanceFor(FakeResource.class, FakeResource.class.getMethod("string"));
-        Assert.assertFalse(new DownloadInterceptor(null, null, null).accepts(method));
+        Method method = FakeResource.class.getMethod("string");
+        assertThat(interceptor, not(accepts(method)));
     }
     
 	@Test
 	public void shouldAcceptFile() throws Exception {
-	    ResourceMethod method = DefaultResourceMethod.instanceFor(FakeResource.class, FakeResource.class.getMethod("file"));
-        Assert.assertTrue(new DownloadInterceptor(null, null, null).accepts(method));
+	    Method method = FakeResource.class.getMethod("file");
+        assertThat(interceptor, accepts(method));
 	}
 
     @Test
     public void shouldAcceptInput() throws Exception {
-        ResourceMethod method = DefaultResourceMethod.instanceFor(FakeResource.class, FakeResource.class.getMethod("input"));
-        Assert.assertTrue(new DownloadInterceptor(null, null, null).accepts(method));
+        Method method = FakeResource.class.getMethod("input");
+        assertThat(interceptor, accepts(method));
     }
     
     @Test
     public void shouldAcceptDownload() throws Exception {
-        ResourceMethod method = DefaultResourceMethod.instanceFor(FakeResource.class, FakeResource.class.getMethod("download"));
-        Assert.assertTrue(new DownloadInterceptor(null, null, null).accepts(method));
+        Method method = FakeResource.class.getMethod("download");
+        assertThat(interceptor, accepts(method));
     }
     
     @Test
     public void shouldAcceptByte() throws Exception {
-        ResourceMethod method = DefaultResourceMethod.instanceFor(FakeResource.class, FakeResource.class.getMethod("asByte"));
-        Assert.assertTrue(new DownloadInterceptor(null, null, null).accepts(method));
+        Method method = FakeResource.class.getMethod("asByte");
+        assertThat(interceptor, accepts(method));
+    }
+    
+    private Matcher<Interceptor> accepts(final Method method) {
+    	return new TypeSafeMatcher<Interceptor>() {
+
+			public void describeTo(Description description) {
+				description.appendText("the method ").appendValue(method);
+			}
+
+			protected boolean matchesSafely(Interceptor item) {
+				ResourceMethod m = DefaultResourceMethod.instanceFor(method.getDeclaringClass(), method);
+				return interceptor.accepts(m);
+			}
+
+			protected void describeMismatchSafely(Interceptor item, Description mismatchDescription) {
+			}
+		};
     }
     
 	private Matcher<byte[]> arrayStartingWith(final byte[] array) {
 		return new TypeSafeMatcher<byte[]>() {
-			@Override
 			protected void describeMismatchSafely(byte[] item, Description mismatchDescription) {
 			}
-			@Override
+			
 			protected boolean matchesSafely(byte[] item) {
 				if (item.length < array.length) {
 					return false;

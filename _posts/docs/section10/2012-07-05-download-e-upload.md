@@ -64,6 +64,8 @@ public class PerfilController {
 
     public void atualizaFoto(Perfil perfil, UploadedFile foto) {
         dao.atribui(foto.getFile(), perfil);
+        //O stream deve ser fechado
+        foto.getFile().close();
     }
 }
 {% endhighlight %}

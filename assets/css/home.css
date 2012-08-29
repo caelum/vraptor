@@ -14,6 +14,10 @@
 	padding-bottom:18px;
 }
 
+#beneficios .content-title {
+	padding-bottom: 60px;
+}
+
 .content h3 {
 	color:#2b2747;
 	font-size:130%;
@@ -26,6 +30,7 @@
 	/* 110px/16px  e 75px/16px*/
 	margin: 110px auto;
 	height: 150px;
+	width: 875px;
 }
 
 #chamada p {
@@ -36,19 +41,17 @@
 	border-top: 32px solid #2A2948;
 	border-bottom: 15px solid #FFF;
 	background-color: #ededed;
+	height: 123px;
 }
 
-#chamada-img {
-	display: inline-block;
-	width: 23.75em;
-	height: 10.8em;
-	float: left;
-	border: 1px dotted red;
-	margin-right: 5em;
+#chamada img {
+float: left;
+width: 275px;
+margin: -85px 65px 0 0;
 }
 
 #beneficios {
-	margin-top: 6.8em;
+	margin-top: 95px;
 }
 
 .benefitsBox h4 {
@@ -63,7 +66,7 @@
 	text-align: justify;
 }
 
-.benefitsbox {
+.benefitsBox {
 	display: block;
 	float: left;
 	width: 416px;
@@ -132,6 +135,8 @@ background-position: 0px -336px;
 }
 
 .quem {
+	width: 15px; 
+	height: 90px; 
 	margin: 16px 25px 16px 0;
 }
 
@@ -174,8 +179,8 @@ background-position: 0px -336px;
 	max-width: 165px;
 }
 
-#who_uses{background-position: 0 -306px ; width: 15px; height: 86px; }
-#quem_usa{background-position: -20px -310px ; width: 16px; height: 91px;}
+#who_uses{background-position: 0 -306px ;}
+#quem_usa{background-position: -20px -310px ;}
 #wine{ background-position: 0 -39px ; width: 140px; height: 54px; }
 #defferrari{background-position: -55px -306px ; width: 131px; height: 67px; vertical-align: bottom;}
 #locaweb{background-position: -2px -255px ; width: 144px; height: 45px; }

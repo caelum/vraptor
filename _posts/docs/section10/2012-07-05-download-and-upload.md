@@ -62,6 +62,8 @@ public class ProfileController {
 
     public void updatePicture(Profile profile, UploadedFile picture) {
         dao.update(picture.getFile(), profile);
+        //The stream must be closed
+        picture.getFile().close();
     }
 }
 {% endhighlight %}

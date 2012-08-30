@@ -1,4 +1,4 @@
-baseurl: /vraptor
+baseurl: /
 source: .
 destination: ./_site/vraptor/
 markdown: rdiscount

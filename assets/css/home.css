@@ -80,7 +80,7 @@ margin: -85px 65px 0 0;
 .benefitsLogo {
 	width: 105px;
 	height: 100px;
-	background-image: url(/vraptor/assets/images/vraptorSprites2.png);
+	background-image: url(../images/vraptorSprites2.png);
 	background-repeat: no-repeat;
 	display: inline-block;
 	float: left;
@@ -125,7 +125,7 @@ background-position: 0px -336px;
 }
 
 .sprite{
-	background: url(/vraptor/assets/images/spritesHome.png) no-repeat;
+	background: url(../images/spritesHome.png) no-repeat;
 	display: inline-block;
 	vertical-align: middle;
 }

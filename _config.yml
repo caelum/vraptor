@@ -1,4 +1,4 @@
-baseurl: /
+baseurl: .
 source: .
 destination: ./_site/
 markdown: rdiscount

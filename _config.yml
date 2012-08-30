@@ -1,6 +1,6 @@
 baseurl: /
 source: .
-destination: ./_site/vraptor/
+destination: ./_site/
 markdown: rdiscount
 auto: true
 permalink: /:categories/:title/

@@ -148,6 +148,9 @@ background-position: 0px -336px;
 	background-color: #2a2a46;
 	padding: 6px 15px;
 	border-radius: 6px;
+	position:relative;
+	top:0;
+	left: 75px;
 }
 
 .treinamento {
@@ -184,7 +187,7 @@ background-position: 0px -336px;
 #wine{ background-position: 0 -39px ; width: 140px; height: 54px; }
 #defferrari{background-position: -55px -306px ; width: 131px; height: 67px; vertical-align: bottom;}
 #locaweb{background-position: -2px -255px ; width: 144px; height: 45px; }
-#agenciaclick{background-position: 0 0; width: 186px; height: 33px; margin-right: 108px;}
+#agenciaclick{background-position: 0 0; width: 186px; height: 33px; }
 #seta{ background-position: -101px -130px ; width: 22px; height: 40px; border-right: 1px solid grey;}
 
 #vraptor{background-position: 0 -102px ; width: 87px; height: 86px; margin-right: 30px;}

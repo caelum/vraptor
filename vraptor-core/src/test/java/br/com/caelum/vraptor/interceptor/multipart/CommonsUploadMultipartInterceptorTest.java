@@ -4,11 +4,10 @@ import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.io.ByteStreams.toByteArray;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertEquals;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
@@ -17,9 +16,7 @@ import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -30,10 +27,9 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.core.InterceptorStack;
@@ -267,34 +263,26 @@ public class CommonsUploadMultipartInterceptorTest {
     }
 
     @Test
-    public void checkUploadedFile() throws Exception {
+    public void checkIfFileHasBeenUploaded() throws Exception {
         final List<FileItem> elements = new ArrayList<FileItem>();
-        elements.add(new MockFileItem("thefile0", "text/plain", "foo.txt", "foo".getBytes()));
+		byte[] content = "foo".getBytes();
+		elements.add(new MockFileItem("thefile0", "text/plain", "file.txt", content));
         
-        final Map<String, Object> attributes = new LinkedHashMap<String, Object>();
-
         interceptor = new CommonsUploadMultipartInterceptor(request, parameters, config, validator, mockCreator);
 
         when(request.getContentType()).thenReturn("multipart/form-data");
         when(request.getMethod()).thenReturn("POST");
         
-        Answer<Object> answer = new Answer<Object>() {
-        	public Object answer(InvocationOnMock invocation) throws Throwable {
-                Object[] args = invocation.getArguments();
-        		attributes.put((String) args[0], args[1]);
-        		return null;
-        	}
-		};
-		
-		doAnswer(answer).when(request).setAttribute(anyString(), anyString());
         when(mockUpload.parseRequest(request)).thenReturn(elements);
 
         interceptor.intercept(stack, method, instance);
         
-        UploadedFile file = (UploadedFile) attributes.get("thefile0");
-
-		assertEquals("foo.txt", file.getFileName());
-		assertEquals("text/plain", file.getContentType());
-		assertEquals("foo", new String(toByteArray(file.getFile())));
+		ArgumentCaptor<UploadedFile> argument = ArgumentCaptor.forClass(UploadedFile.class);
+		verify(request).setAttribute(anyString(), argument.capture());
+		
+		UploadedFile file = argument.getValue();
+		assertThat(file.getFileName(), is("file.txt"));
+		assertThat(file.getContentType(), is("text/plain"));
+		assertThat(toByteArray(file.getFile()), is(content));
     }
 }

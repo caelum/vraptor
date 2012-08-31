@@ -1,11 +1,11 @@
 package br.com.caelum.vraptor.interceptor.multipart;
 
 import static br.com.caelum.vraptor.interceptor.multipart.Servlet3MultipartInterceptor.CONTENT_DISPOSITION_KEY;
+import static java.util.Arrays.asList;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
@@ -31,7 +31,7 @@ public class VraptorPart
         this.name = name;
         this.contentType = contentType;
         this.content = content;
-        headers.put(CONTENT_DISPOSITION_KEY, Arrays.asList("form-data; name=\"" + filename + "\""));
+        headers.put(CONTENT_DISPOSITION_KEY, asList("form-data; name=\"" + name + "\"; filename=\"" + filename + "\""));
     }
 
     public VraptorPart(String name, String content) {

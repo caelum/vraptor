@@ -1,7 +1,10 @@
 package br.com.caelum.vraptor.interceptor.multipart;
 
+import static com.google.common.io.ByteStreams.toByteArray;
+import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
@@ -18,6 +21,7 @@ import javax.servlet.http.Part;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -163,7 +167,7 @@ public class Servlet3MultipartInterceptorTest {
 
         when(request.getContentType()).thenReturn("multipart/form-data");
         when(request.getMethod()).thenReturn("POST");
-        when(request.getParts()).thenReturn(Arrays.asList(file0, file1));
+        when(request.getParts()).thenReturn(asList(file0, file1));
 
         interceptor.intercept(stack, method, instance);
 
@@ -174,6 +178,26 @@ public class Servlet3MultipartInterceptorTest {
         verify(request).setAttribute(eq("myfile0[1]"), any(UploadedFile.class));
     }
 
+    @Test
+    public void checkIfFileHasBeenUploaded() throws Exception {
+        byte[] content = "vraptor3".getBytes();
+		Part file0 = new VraptorPart("myfile0[]", "text/plain", "file.txt", content);
+        
+        when(request.getContentType()).thenReturn("multipart/form-data");
+        when(request.getMethod()).thenReturn("POST");
+        when(request.getParts()).thenReturn(asList(file0));
+        
+        interceptor.intercept(stack, method, instance);
+        
+		ArgumentCaptor<UploadedFile> argument = ArgumentCaptor.forClass(UploadedFile.class);
+		verify(request).setAttribute(anyString(), argument.capture());
+		
+		UploadedFile file = argument.getValue();
+		assertThat(file.getFileName(), is("file.txt"));
+		assertThat(file.getContentType(), is("text/plain"));
+		assertThat(toByteArray(file.getFile()), is(content));
+    }
+    
     @Test
     public void shouldValidateWhenSizeLimitExceededExceptionOccurs() throws Exception {
         when(request.getContentType()).thenReturn("multipart/form-data");

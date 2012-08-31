@@ -79,7 +79,7 @@ public class Servlet3MultipartInterceptor
 
     private static final Logger logger = LoggerFactory.getLogger(Servlet3MultipartInterceptor.class);
 
-    private static final Pattern EXTRACT_FILENAME = Pattern.compile("(.*)filename=\"(.*)\"");
+    private static final Pattern EXTRACT_FILENAME = Pattern.compile("(.*)name=\"(.*)\"");
 
     public static final String ACCEPT_MULTIPART = "multipart/form-data";
     public static final String CONTENT_DISPOSITION_KEY = "content-disposition";

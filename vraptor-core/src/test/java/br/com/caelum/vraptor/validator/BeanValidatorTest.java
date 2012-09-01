@@ -1,6 +1,14 @@
 package br.com.caelum.vraptor.validator;
 
-import org.junit.Assert;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.when;
+
+import java.util.List;
+import java.util.Locale;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -22,6 +30,7 @@ public class BeanValidatorTest {
 
     @Before
     public void setup() {
+    	Locale.setDefault(new Locale("en"));
     	MockitoAnnotations.initMocks(this);
 
     	ValidatorFactoryCreator creator = new ValidatorFactoryCreator();
@@ -33,19 +42,52 @@ public class BeanValidatorTest {
     	MessageInterpolatorFactory interpolatorFactory = new MessageInterpolatorFactory(creator.getInstance());
     	interpolatorFactory.createInterpolator();
 
-        this.beanValidator = new DefaultBeanValidator(localization, validatorFactory.getInstance(), interpolatorFactory.getInstance());
+        beanValidator = new DefaultBeanValidator(localization, validatorFactory.getInstance(), interpolatorFactory.getInstance());
     }
 
     @Test
     public void withoutViolations() {
         CustomerForValidation customer0 = new CustomerForValidation(10, "Vraptor");
-        Assert.assertTrue(beanValidator.validate(customer0).isEmpty());
+		assertThat(beanValidator.validate(customer0), hasSize(0));
     }
 
     @Test
-    public void withViolations() {
+    public void shouldValidate() {
         CustomerForValidation customer0 = new CustomerForValidation(null, null);
-        Assert.assertFalse(beanValidator.validate(customer0).isEmpty());
+		assertThat(beanValidator.validate(customer0), not(hasSize(0)));
+    }
+    
+    @Test
+    public void shouldValidateWithMyLocale() {
+    	when(localization.getLocale()).thenReturn(new Locale("pt", "br"));
+        CustomerForValidation customer0 = new CustomerForValidation(null, null);
+		List<Message> messages = beanValidator.validate(customer0);
+		
+		assertThat(messages, not(hasSize(0)));
+		assertThat(messages.toString(), containsString("não pode ser nulo"));
+    }
+    
+    @Test
+    public void shouldValidateWithDefaultLocale() {
+    	when(localization.getLocale()).thenReturn(null);
+        CustomerForValidation customer0 = new CustomerForValidation(null, null);
+		List<Message> messages = beanValidator.validate(customer0);
+		
+		assertThat(messages, not(hasSize(0)));
+		assertThat(messages.toString(), containsString("may not be null"));
+    }
+    
+    @Test
+    public void shouldReturnEmptyCollectionIsBeanIsNull() {
+		assertThat(beanValidator.validate(null), hasSize(0));
+    }
+    
+    @Test
+    public void nullValidatorShouldNeverValidate() {
+    	BeanValidator validator = new NullBeanValidator();
+		assertThat(validator.validate(null), hasSize(0));
+		assertThat(validator.validate(new Object()), hasSize(0));
+		assertThat(validator.validate(new CustomerForValidation(null, null)), hasSize(0));
     }
 
     /**

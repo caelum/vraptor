@@ -17,9 +17,10 @@
 
 package br.com.caelum.vraptor.validator;
 
+import static java.util.Collections.unmodifiableList;
+
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -95,7 +96,7 @@ public class DefaultValidator extends AbstractValidator {
     	if (message instanceof I18nMessage && !((I18nMessage) message).hasBundle()) {
     		((I18nMessage) message).setLazyBundle(new LocalizationSupplier());
     	}
-    	this.errors.add(message);
+    	errors.add(message);
     }
 
 	public boolean hasErrors() {
@@ -103,6 +104,6 @@ public class DefaultValidator extends AbstractValidator {
 	}
 
 	public List<Message> getErrors() {
-		return Collections.unmodifiableList(this.errors);
+		return unmodifiableList(errors);
 	}
 }

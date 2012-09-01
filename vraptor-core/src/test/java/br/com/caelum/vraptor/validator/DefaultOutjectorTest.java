@@ -144,6 +144,17 @@ public class DefaultOutjectorTest {
 		assertThat(with.get("dot"), is("value"));
 		assertThat(with.get("other"), is("abc"));
 	}
+	
+	@Test(expected = IllegalStateException.class)
+	public void shouldThrowIllegalStateExceptionIfAttributeAlreadyExists() throws Exception {
+		givenAttributeIsPresent("vraptor", new Integer(0));
+		givenParameterIsPresent("vraptor.theKey", "0");
+		
+		outjector.outjectRequestMap();
+
+		assertThat(request.getParameter("vraptor.theKey"), is("0"));
+		assertThat(request.getAttribute("vraptor.theKey"), is(new Integer(0)));
+	}
 
 	private Matcher<? super Object> is(Object object) {
 		return Matchers.is(object);
@@ -156,5 +167,9 @@ public class DefaultOutjectorTest {
 
 	private void givenParameterIsPresent(String key, String value) {
 		request.setParameter(key, value);
+	}
+	
+	private void givenAttributeIsPresent(String key, Object value) {
+		request.setAttribute(key, value);
 	}
 }

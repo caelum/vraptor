@@ -18,9 +18,11 @@
 package br.com.caelum.vraptor.validator;
 
 import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Matchers.eq;
@@ -31,10 +33,11 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.ResourceBundle;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -52,7 +55,6 @@ import br.com.caelum.vraptor.util.test.MockResult;
 import br.com.caelum.vraptor.view.DefaultValidationViewsFactory;
 import br.com.caelum.vraptor.view.LogicResult;
 import br.com.caelum.vraptor.view.PageResult;
-import br.com.caelum.vraptor.view.Results;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DefaultValidatorTest {
@@ -63,6 +65,7 @@ public class DefaultValidatorTest {
 	private @Mock PageResult pageResult;
 	private @Mock Outjector outjector;
 	private @Mock Localization localization;
+	private @Mock BeanValidator beanValidator;
 
 	private @Mock MyComponent instance;
 	private DefaultValidator validator;
@@ -70,7 +73,7 @@ public class DefaultValidatorTest {
 	@Before
 	public void setup() {
 		Proxifier proxifier = new JavassistProxifier(new ObjenesisInstanceCreator());
-		this.validator = new DefaultValidator(result, new DefaultValidationViewsFactory(result, proxifier), outjector, proxifier, null, localization);
+		this.validator = new DefaultValidator(result, new DefaultValidationViewsFactory(result, proxifier), outjector, proxifier, beanValidator, localization);
 		when(result.use(LogicResult.class)).thenReturn(logicResult);
 		when(result.use(PageResult.class)).thenReturn(pageResult);
 		when(logicResult.forwardTo(MyComponent.class)).thenReturn(instance);
@@ -90,7 +93,7 @@ public class DefaultValidatorTest {
 	public void outjectsTheRequestParameters() {
 		try {
 			validator.add(A_MESSAGE);
-			validator.onErrorUse(Results.logic()).forwardTo(MyComponent.class).logic();
+			validator.onErrorForwardTo(MyComponent.class).logic();
 		} catch (ValidationException e) {
 		}
 		verify(outjector).outjectRequestMap();
@@ -100,22 +103,47 @@ public class DefaultValidatorTest {
 	public void addsTheErrorsOnTheResult() {
 		try {
 			validator.add(A_MESSAGE);
-			validator.onErrorUse(Results.logic()).forwardTo(MyComponent.class).logic();
+			validator.onErrorForwardTo(MyComponent.class).logic();
 		} catch (ValidationException e) {
 		}
 		verify(result).include(eq("errors"), argThat(is(not(empty()))));
 	}
 
 	@Test
-	public void redirectsToCustomOnErrorPage() {
+	public void forwardToCustomOnErrorPage() {
 		try {
 			when(logicResult.forwardTo(MyComponent.class)).thenReturn(instance);
 			validator.add(A_MESSAGE);
-			validator.onErrorUse(Results.logic()).forwardTo(MyComponent.class).logic();
-			Assert.fail("should stop flow");
+			validator.onErrorForwardTo(MyComponent.class).logic();
+			fail("should stop flow");
 		} catch (ValidationException e) {
 			verify(instance).logic();
 		}
+	}
+
+	@Test
+	public void shouldNotRedirectIfHasNotErrors() {
+		try {
+    		validator.onErrorRedirectTo(MyComponent.class).logic();
+    		assertThat(validator.getErrors(), hasSize(0));
+    		verify(outjector, never()).outjectRequestMap();
+		} catch (ValidationException e) {
+			fail("no error occurs");
+		}
+	}
+
+	@Test
+	public void shouldAddBeanValidatorErrorsIfPossible() {
+		List<Message> messages = new ArrayList<Message>();
+		
+		when(beanValidator.validate(any())).thenReturn(messages);
+		validator.validate(new Object());
+		assertThat(validator.getErrors(), hasSize(0));
+		
+		messages.add(new ValidationMessage("", ""));
+		when(beanValidator.validate(any())).thenReturn(messages);
+		validator.validate(new Object());
+		assertThat(validator.getErrors(), hasSize(1));
 	}
 
 	@Test
@@ -129,11 +157,20 @@ public class DefaultValidatorTest {
 
 			when(pageResult.of(MyComponent.class)).thenReturn(instance);
 
-			validator.onErrorUse(Results.page()).of(MyComponent.class).logic();
-			Assert.fail("should stop flow");
+			validator.onErrorUsePageOf(MyComponent.class).logic();
+			fail("should stop flow");
 		} catch (ValidationException e) {
 			verify(instance).logic();
 		}
+	}
+	
+	@Test
+	public void shouldParametrizeMessage() {
+		Message message0 = new ValidationMessage("The simple message", "category");
+		Message message1 = new ValidationMessage("The {0} message", "category", "simple");
+		
+		assertThat(message0.getMessage(), is("The simple message"));
+		assertThat(message1.getMessage(), is("The simple message"));
 	}
 
 	@Test
@@ -146,9 +183,14 @@ public class DefaultValidatorTest {
 		doReturn(new SingletonResourceBundle("msg", "hoooooray!")).when(localization).getBundle();
 		
 		assertThat(message.getMessage(), is("hoooooray!"));
-		
 	}
 
+	@Test(expected = IllegalStateException.class)
+	public void shouldThrowIllegalStateExceptionIfI18nBundleHasNotBeenSet() throws Exception {
+		I18nMessage message = new I18nMessage("cat", "msg");
+		message.getMessage();
+	}
+	
 	@Test
 	public void shouldOnlySetBundleOnI18nMessagesThatHasNotBeenSetBefore() throws Exception {
 		I18nMessage message = mock(I18nMessage.class);

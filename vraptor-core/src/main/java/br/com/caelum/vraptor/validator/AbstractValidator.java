@@ -18,9 +18,6 @@ package br.com.caelum.vraptor.validator;
 import static br.com.caelum.vraptor.view.Results.logic;
 import static br.com.caelum.vraptor.view.Results.page;
 import static br.com.caelum.vraptor.view.Results.status;
-
-import java.util.List;
-
 import br.com.caelum.vraptor.Validator;
 
 /**
@@ -38,7 +35,7 @@ public abstract class AbstractValidator implements Validator {
 	}
 
 	public <T> T onErrorForwardTo(T controller) {
-		return (T) onErrorUse(logic()).forwardTo(controller.getClass());
+		return (T) onErrorForwardTo(controller.getClass());
 	}
 
 	public <T> T onErrorRedirectTo(Class<T> controller) {
@@ -46,7 +43,7 @@ public abstract class AbstractValidator implements Validator {
 	}
 
 	public <T> T onErrorRedirectTo(T controller) {
-		return (T) onErrorUse(logic()).redirectTo(controller.getClass());
+		return (T) onErrorRedirectTo(controller.getClass());
 	}
 
 	public <T> T onErrorUsePageOf(Class<T> controller) {
@@ -54,7 +51,7 @@ public abstract class AbstractValidator implements Validator {
 	}
 
 	public <T> T onErrorUsePageOf(T controller) {
-		return (T) onErrorUse(page()).of(controller.getClass());
+		return (T) onErrorUsePageOf(controller.getClass());
 	}
 
 	public void onErrorSendBadRequest() {

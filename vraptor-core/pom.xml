@@ -308,5 +308,36 @@
 	
 	<build>
 		<finalName>vraptor-${project.version}</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>cobertura-maven-plugin</artifactId>
+				<version>2.5.1</version>
+				<configuration>
+					<instrumentation>
+						<excludes>
+							<exclude>**/*Test.class</exclude>
+						</excludes>
+					</instrumentation>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>clean</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
 	</build>
+
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>cobertura-maven-plugin</artifactId>
+				<version>2.5.1</version>
+			</plugin>
+		</plugins>
+	</reporting>
 </project>

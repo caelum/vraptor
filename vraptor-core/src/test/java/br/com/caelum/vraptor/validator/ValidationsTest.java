@@ -17,6 +17,7 @@
 
 package br.com.caelum.vraptor.validator;
 
+import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
@@ -187,7 +188,10 @@ public class ValidationsTest {
     public void formatsParameterizedValidationMessagesWithSeveralParametersI18ningStringParameters() {
         final Client client = new Client();
         client.setAge(-1);
+        
         validations.that(client.getAge() > 0 && client.getAge() < 100, "error", "between_field",  "Age", 0, 100);
+        validations.that(client.getAge() < 0, "error", "never_happens");
+        
         assertThat(validations.getErrors(), hasSize(1));
         assertThat(validations.getErrors().get(0).getMessage(), is(equalTo("Age should be a value between 0 and 100")));
     }
@@ -233,9 +237,20 @@ public class ValidationsTest {
 
     	assertThat(errors.get(0).getCategory(), is("The Category"));
     }
+    
+    @Test
+    public void shouldAppendErrors() {
+    	Message msg0 = new ValidationMessage("message 0", "category");
+    	Message msg1 = new ValidationMessage("message 1", "category");
+    	Message msg2 = new ValidationMessage("message 1", "category");
+    	
+    	validations.and(msg0);
+    	validations.and(asList(msg1, msg2));
+    	
+    	assertThat(validations.getErrors(), hasSize(3));
+    }
 
     private ResourceBundle singletonBundle(final String key, final String value) {
 		return new SingletonResourceBundle(key, value);
 	}
-
 }

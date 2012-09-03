@@ -16,8 +16,22 @@
  */
 package br.com.caelum.vraptor.view;
 
+import static javax.servlet.http.HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
+import static org.junit.Assert.fail;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.only;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
+import java.io.Reader;
+import java.io.StringReader;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -51,6 +65,7 @@ public class DefaultHttpResultTest {
 		public void method() {
 		}
 	}
+	
 	@SuppressWarnings("deprecation")
 	@Test
 	public void shouldDelegateToStatusWhenMovingToLogic() throws Exception {
@@ -60,5 +75,105 @@ public class DefaultHttpResultTest {
 
 		verify(status).movedPermanentlyTo(RandomController.class);
 	}
+	
+	@Test
+	public void shouldHeadersProperly() {
+		httpResult.addDateHeader("key", 10L);
+		verify(response).addDateHeader("key", 10L);
+		
+		httpResult.addHeader("key", "value");
+		verify(response).addHeader("key", "value");
+		
+		httpResult.addIntHeader("key", 10);
+		verify(response).addIntHeader("key", 10);
+	}
 
+	@Test
+	public void shouldSendError() throws Exception {
+		httpResult.sendError(SC_INTERNAL_SERVER_ERROR);
+		verify(response).sendError(SC_INTERNAL_SERVER_ERROR);
+	}
+	
+	@Test
+	public void shouldThrowsResultExceptionIfAnIOExceptionWhenSendError() throws Exception {
+		doThrow(new IOException()).when(response).sendError(anyInt());
+
+		try {
+			httpResult.sendError(SC_INTERNAL_SERVER_ERROR);
+			fail("should throw ResultException");
+		} catch (ResultException e) {
+			verify(response, only()).sendError(anyInt());
+		}
+	}
+	
+	@Test
+	public void shouldSendErrorWithMessage() throws Exception {
+		httpResult.sendError(SC_INTERNAL_SERVER_ERROR, "A simple message");
+		verify(response).sendError(SC_INTERNAL_SERVER_ERROR, "A simple message");
+	}
+
+	@Test
+	public void shouldThrowResultExceptionIfAnIOExceptionWhenSendErrorWithMessage() throws Exception {
+		doThrow(new IOException()).when(response).sendError(anyInt(), anyString());
+
+		try {
+			httpResult.sendError(SC_INTERNAL_SERVER_ERROR, "A simple message");
+			fail("should throw ResultException");
+		} catch (ResultException e) {
+			verify(response, only()).sendError(anyInt(), anyString());
+		}
+	}
+	
+	@Test
+	public void shouldSetStatusCode() throws Exception {
+		httpResult.setStatusCode(SC_INTERNAL_SERVER_ERROR);
+		verify(response).setStatus(SC_INTERNAL_SERVER_ERROR);
+	}
+	
+	@Test
+	public void shouldWriteStringBody() throws Exception {
+		PrintWriter writer = mock(PrintWriter.class);
+		when(response.getWriter()).thenReturn(writer);
+		
+		httpResult.body("The text");
+		verify(writer).print(anyString());
+	}
+	
+	@Test
+	public void shouldThrowResultExceptionIfAnIOExceptionWhenWriteStringBody() throws Exception {
+		doThrow(new IOException()).when(response).getWriter();
+		
+		try {
+			httpResult.body("The text");
+			fail("should throw ResultException");
+		} catch (ResultException e) {
+			
+		}
+	}
+
+	@Test
+	public void shouldThrowResultExceptionIfAnIOExceptionWhenWriteInputStreamBody() throws Exception {
+		doThrow(new IOException()).when(response).getOutputStream();
+		InputStream in = new ByteArrayInputStream("the text".getBytes());
+		
+		try {
+			httpResult.body(in);
+			fail("should throw ResultException");
+		} catch (ResultException e) {
+			
+		}
+	}
+
+	@Test
+	public void shouldThrowResultExceptionIfAnIOExceptionWhenWriteReaderBody() throws Exception {
+		doThrow(new IOException()).when(response).getWriter();
+		Reader reader = new StringReader("the text");
+		
+		try {
+			httpResult.body(reader);
+			fail("should throw ResultException");
+		} catch (ResultException e) {
+			
+		}
+	}
 }

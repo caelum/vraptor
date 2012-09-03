@@ -17,42 +17,51 @@
 
 package br.com.caelum.vraptor.view;
 
+import static org.junit.Assert.fail;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.only;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import java.io.IOException;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 
-import org.jmock.Expectations;
-import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.core.DefaultMethodInfo;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor.proxy.JavassistProxifier;
+import br.com.caelum.vraptor.proxy.ObjenesisInstanceCreator;
 import br.com.caelum.vraptor.proxy.Proxifier;
+import br.com.caelum.vraptor.proxy.ProxyInvocationException;
 import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 public class DefaultPageResultTest {
 
-    private Mockery mockery;
-    private MutableRequest request;
-    private HttpServletResponse response;
-    private RequestDispatcher dispatcher;
+    private @Mock MutableRequest request;
+    private @Mock HttpServletResponse response;
+    private @Mock RequestDispatcher dispatcher;
+    private Proxifier proxifier;
     private ResourceMethod method;
     private PathResolver fixedResolver;
     private MethodInfo requestInfo;
 	private DefaultPageResult view;
-
+	
     @Before
     public void setup() {
-        this.mockery = new Mockery();
-        request = mockery.mock(MutableRequest.class);
-        response = mockery.mock(HttpServletResponse.class);
-        dispatcher = mockery.mock(RequestDispatcher.class);
+    	MockitoAnnotations.initMocks(this);
         method = DefaultResourceMethod.instanceFor(AnyResource.class, AnyResource.class.getDeclaredMethods()[0]);
+        proxifier = new JavassistProxifier(new ObjenesisInstanceCreator());
         requestInfo = new DefaultMethodInfo();
         requestInfo.setResourceMethod(method);
         fixedResolver = new PathResolver() {
@@ -60,79 +69,132 @@ public class DefaultPageResultTest {
                 return "fixed";
             }
         };
-		view = new DefaultPageResult(request, response, requestInfo, fixedResolver, mockery.mock(Proxifier.class));
+		view = new DefaultPageResult(request, response, requestInfo, fixedResolver, proxifier);
     }
 
     public static class AnyResource {
     	public void method() {
     	}
     }
+    
     @Test
 	public void shouldRedirectIncludingContext() throws Exception {
-		mockery.checking(new Expectations() {
-			{
-				one(request).getContextPath(); will(returnValue("/context"));
-
-				one(response).sendRedirect("/context/any/url");
-			}
-		});
-
+    	when(request.getContextPath()).thenReturn("/context");
+    	
 		view.redirectTo("/any/url");
-		mockery.assertIsSatisfied();
+		
+    	verify(response).sendRedirect("/context/any/url");
 	}
+    
     @Test
     public void shouldNotIncludeContextPathIfURIIsAbsolute() throws Exception {
-    	mockery.checking(new Expectations() {
-    		{
-    			never(request).getContextPath();
-
-    			one(response).sendRedirect("http://vraptor.caelum.com.br");
-    		}
-    	});
-
     	view.redirectTo("http://vraptor.caelum.com.br");
-    	mockery.assertIsSatisfied();
+    	
+    	verify(request, never()).getContextPath();
+    	verify(response, only()).sendRedirect("http://vraptor.caelum.com.br");
     }
+    
+	@Test(expected=ResultException.class)
+    public void shouldThrowResultExceptionIfIOExceptionOccursWhileRedirect() throws Exception {
+    	doThrow(new IOException()).when(response).sendRedirect(anyString());
+    	
+		view.redirectTo("/any/url");
+    }
+    
     @Test
     public void shouldForwardToGivenURI() throws Exception {
-    	mockery.checking(new Expectations() {
-    		{
-    			one(request).getRequestDispatcher("/any/url");
-                will(returnValue(dispatcher));
-                one(dispatcher).forward(request, response);
-
-    		}
-    	});
-
+    	when(request.getRequestDispatcher("/any/url")).thenReturn(dispatcher);
+    	
     	view.forwardTo("/any/url");
-    	mockery.assertIsSatisfied();
+    	verify(dispatcher, only()).forward(request, response);
+    }
+    
+    
+	@Test(expected=ResultException.class)
+    public void shouldThrowResultExceptionIfServletExceptionOccursWhileForwarding() throws Exception {
+    	when(request.getRequestDispatcher(anyString())).thenReturn(dispatcher);
+    	doThrow(new ServletException()).when(dispatcher).forward(request, response);
+    	
+    	view.forwardTo("/any/url");
     }
 
+	@Test(expected=ResultException.class)
+    public void shouldThrowResultExceptionIfIOExceptionOccursWhileForwarding() throws Exception {
+    	when(request.getRequestDispatcher(anyString())).thenReturn(dispatcher);
+    	doThrow(new IOException()).when(dispatcher).forward(request, response);
+    	
+    	view.forwardTo("/any/url");
+    }
+    
     @Test
-    public void shouldAllowCustomPathResolverWhileForwarding() throws ServletException, IOException {
-        mockery.checking(new Expectations() {
-            {
-                one(request).getRequestDispatcher("fixed");
-                will(returnValue(dispatcher));
-                one(dispatcher).forward(request, response);
-            }
-        });
+    public void shouldAllowCustomPathResolverWhileForwardingView() throws ServletException, IOException {
+    	when(request.getRequestDispatcher("fixed")).thenReturn(dispatcher);
+    	
         view.defaultView();
-        mockery.assertIsSatisfied();
+        
+    	verify(dispatcher, only()).forward(request, response);
+    }
+    
+	@Test(expected=ResultException.class)
+    public void shouldThrowResultExceptionIfServletExceptionOccursWhileForwardingView() throws Exception {
+    	when(request.getRequestDispatcher(anyString())).thenReturn(dispatcher);
+    	doThrow(new ServletException()).when(dispatcher).forward(request, response);
+    	
+        view.defaultView();
     }
 
+	@Test(expected=ResultException.class)
+    public void shouldThrowResultExceptionIfIOExceptionOccursWhileForwardingView() throws Exception {
+    	when(request.getRequestDispatcher(anyString())).thenReturn(dispatcher);
+    	doThrow(new IOException()).when(dispatcher).forward(request, response);
+    	
+        view.defaultView();
+    }
 
     @Test
     public void shouldAllowCustomPathResolverWhileIncluding() throws ServletException, IOException {
-        mockery.checking(new Expectations() {
-            {
-                one(request).getRequestDispatcher("fixed");
-                will(returnValue(dispatcher));
-                one(dispatcher).include(request, response);
-            }
-        });
+    	when(request.getRequestDispatcher("fixed")).thenReturn(dispatcher);
+    	
         view.include();
-        mockery.assertIsSatisfied();
+        
+    	verify(dispatcher, only()).include(request, response);
     }
 
+	@Test(expected=ResultException.class)
+    public void shouldThrowResultExceptionIfServletExceptionOccursWhileIncluding() throws Exception {
+    	when(request.getRequestDispatcher(anyString())).thenReturn(dispatcher);
+    	doThrow(new ServletException()).when(dispatcher).include(request, response);
+    	
+        view.include();
+    }
+
+	@Test(expected=ResultException.class)
+    public void shouldThrowResultExceptionIfIOExceptionOccursWhileIncluding() throws Exception {
+    	when(request.getRequestDispatcher(anyString())).thenReturn(dispatcher);
+    	doThrow(new IOException()).when(dispatcher).include(request, response);
+    	
+        view.include();
+    }
+	
+	@Test
+	public void shoudNotExecuteLogicWhenUsingResultOf() {
+		when(request.getRequestDispatcher(anyString())).thenReturn(dispatcher);
+		try {
+			view.of(SimpleController.class).notAllowedMethod();
+		} catch (UnsupportedOperationException e) {
+			fail("Method should not be executed");
+		}
+	}
+
+	@Test(expected = ProxyInvocationException.class)
+	public void shoudThrowProxyInvocationExceptionIfAndExceptionOccursWhenUsingResultOf() {
+		doThrow(new NullPointerException()).when(request).getRequestDispatcher(anyString());
+		view.of(SimpleController.class).notAllowedMethod();
+	}
+
+	public static class SimpleController {
+		public void notAllowedMethod() {
+			throw new UnsupportedOperationException();
+		}
+	}
 }

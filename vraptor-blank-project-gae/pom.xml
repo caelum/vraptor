@@ -9,14 +9,14 @@
 	
 	<parent>
 		<groupId>br.com.caelum</groupId>
-		<artifactId>vraptor</artifactId>
+		<artifactId>vraptor-parent</artifactId>
 		<version>3.5.0-SNAPSHOT</version>
 	</parent>
 
 	<dependencies>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>vraptor-core</artifactId>
+			<artifactId>vraptor</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>

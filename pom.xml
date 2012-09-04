@@ -67,6 +67,7 @@
 		<module>vraptor-plugin-gae</module>
 		<module>vraptor-mydvds</module>
 		<module>vraptor-blank-project</module>
+		<module>vraptor-blank-project-gae</module>
 	</modules>
 	
 	<properties>
@@ -75,14 +76,6 @@
 
 	<build>
 		<plugins>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>cobertura-maven-plugin</artifactId>
-				<version>2.4</version>
-				<configuration>
-					<format>html</format>
-				</configuration>
-			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>

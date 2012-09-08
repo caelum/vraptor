@@ -11,7 +11,7 @@ Tanto para salvar, remover, buscar e atualizar ou ainda funcionalidades que cost
 
 <h3>Começando um projeto</h3>
 
-Você pode começar seu projeto a partir do vraptor-blank-project, que contém as dependências necessárias e a configuração no web.xml. Ele pode ser baixado no <a href="http://vraptor.caelum.com.br/download.jsp">site oficial do VRaptor</a>.
+Você pode começar seu projeto a partir do vraptor-blank-project, que contém as dependências necessárias e a configuração no web.xml. Ele pode ser baixado no <a href="https://code.google.com/p/vraptor3/downloads/list">site oficial do VRaptor</a>.
 
 O projeto vraptor-blank-project é configurado para a IDE Eclipse. Se você usa Netbeans, é possível importar o projeto facilmente conforme a documentação disponível na <a href="http://netbeans.org/kb/docs/java/import-eclipse.html">seção de suporte do NetBeans</a>. Por outro lado, se você utiliza a IDE IntelliJ IDEA você pode importar o projeto seguindo o guia disponível na <a href="http://www.jetbrains.com/idea/webhelp/importing-eclipse-project-to-intellij-idea.html">página de ajuda do IntelliJ IDEA</a>.
 

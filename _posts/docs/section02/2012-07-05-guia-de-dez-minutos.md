@@ -7,7 +7,7 @@ category: [pt, docs]
 
 <h3>Começando o projeto: uma loja virtual</h3>
 
-Vamos começar baixando o vraptor-blank-project do <a href="http://vraptor.caelum.com.br/download.jsp">site do VRaptor</a>. Esse blank-project já possui a configuração no web.xml e os JARs no WEB-INF/lib necessários para começar a desenvolver no VRaptor.
+Vamos começar baixando o vraptor-blank-project em <a href="https://code.google.com/p/vraptor3/downloads/list">site do VRaptor</a>. Esse blank-project já possui a configuração no web.xml e os JARs no WEB-INF/lib necessários para começar a desenvolver no VRaptor.
 Como você pode ver, a única configuração necessária no web.xml é o filtro do VRaptor:
 
 {% highlight xml %}

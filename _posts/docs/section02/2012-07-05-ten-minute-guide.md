@@ -7,7 +7,7 @@ category: [en, docs]
 
 <h3>Starting a project: an online store</h3>
 
-Let's start by downloading the vraptor-blank-project from <a href="http://vraptor.caelum.com.br/download.jsp">http://vraptor.caelum.com.br/download.jsp</a>. This blank-project has the required configuration on web.xml and the dependencies on WEB-INF/lib that are needed to start using VRaptor.
+Let's start by downloading the vraptor-blank-project from <a href="https://code.google.com/p/vraptor3/downloads/list">https://code.google.com/p/vraptor3/downloads/list</a>. This blank-project has the required configuration on web.xml and the dependencies on WEB-INF/lib that are needed to start using VRaptor.
 As you can see, the only required configuration in web.xml is the VRaptor filter:
 
 {% highlight xml %}

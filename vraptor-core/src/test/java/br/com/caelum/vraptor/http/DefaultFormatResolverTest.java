@@ -18,10 +18,8 @@ import br.com.caelum.vraptor.view.AcceptHeaderToFormat;
 public class DefaultFormatResolverTest {
 
 	private FormatResolver resolver;
-	@Mock
-	private HttpServletRequest request;
-	@Mock
-	private AcceptHeaderToFormat acceptHeaderToFormat;
+	private @Mock HttpServletRequest request;
+	private @Mock AcceptHeaderToFormat acceptHeaderToFormat;
 
 	@Before
 	public void setUp() throws Exception {

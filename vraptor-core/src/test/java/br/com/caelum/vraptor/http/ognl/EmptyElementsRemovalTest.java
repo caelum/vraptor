@@ -30,6 +30,7 @@ import org.junit.Test;
 public class EmptyElementsRemovalTest {
 	
 	private EmptyElementsRemoval removal;
+	
 	@Before
 	public void setup() {
 		this.removal = new EmptyElementsRemoval();
@@ -55,6 +56,7 @@ public class EmptyElementsRemovalTest {
 			return names;
 		}
 	}
+	
 	@Test
 	public void shouldRemoveNullElementsOutOfAnArray() throws SecurityException, NoSuchMethodException {
 		Dog dog = new Dog();
@@ -88,7 +90,4 @@ public class EmptyElementsRemovalTest {
 		assertThat(dog.names.length, is(equalTo(3)));
 		assertThat(dog2.names.length, is(equalTo(2)));
 	}
-	
-		
-
 }

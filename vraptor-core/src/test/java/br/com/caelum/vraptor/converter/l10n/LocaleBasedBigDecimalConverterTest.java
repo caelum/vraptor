@@ -21,6 +21,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
@@ -32,10 +35,10 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 
-import org.jmock.Expectations;
-import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.converter.ConversionError;
 import br.com.caelum.vraptor.core.JstlLocalization;
@@ -44,59 +47,43 @@ import br.com.caelum.vraptor.http.MutableRequest;
 
 public class LocaleBasedBigDecimalConverterTest {
 
+	static final String LOCALE_KEY = "javax.servlet.jsp.jstl.fmt.locale";
+	
     private LocaleBasedBigDecimalConverter converter;
-    private Mockery mockery;
-    private MutableRequest request;
-    private HttpSession session;
-    private ServletContext context;
+    private @Mock MutableRequest request;
+    private @Mock HttpSession session;
+    private @Mock ServletContext context;
     private ResourceBundle bundle;
     private JstlLocalization jstlLocalization;
 
     @Before
     public void setup() {
-        this.mockery = new Mockery();
-        this.request = mockery.mock(MutableRequest.class);
-        this.session = mockery.mock(HttpSession.class);
-        this.context = mockery.mock(ServletContext.class);
-        FilterChain chain = mockery.mock(FilterChain.class);
+    	MockitoAnnotations.initMocks(this);
+    	
+        FilterChain chain = mock(FilterChain.class);
         final RequestInfo webRequest = new RequestInfo(context, chain, request, null);
-        this.jstlLocalization = new JstlLocalization(webRequest);
-        this.converter = new LocaleBasedBigDecimalConverter(jstlLocalization);
-        this.bundle = ResourceBundle.getBundle("messages");
+        jstlLocalization = new JstlLocalization(webRequest);
+        converter = new LocaleBasedBigDecimalConverter(jstlLocalization);
+        bundle = ResourceBundle.getBundle("messages");
         Locale.setDefault(Locale.ENGLISH);
     }
 
     @Test
     public void shouldBeAbleToConvert() {
-        mockery.checking(new Expectations() {
-            {
-                exactly(1).of(request).getAttribute("javax.servlet.jsp.jstl.fmt.locale.request");
-                will(returnValue("pt_br"));
-            }
-        });
+    	when(request.getAttribute("javax.servlet.jsp.jstl.fmt.locale.request")).thenReturn("pt_br");
         assertThat(converter.convert("19,91", BigDecimal.class, bundle), is(equalTo(new BigDecimal("19.91"))));
-        mockery.assertIsSatisfied();
     }
 
     @Test
     public void shouldUseTheDefaultLocale()
         throws ParseException {
-        mockery.checking(new Expectations() {
-            {
-                one(request).getAttribute("javax.servlet.jsp.jstl.fmt.locale.request");
-                will(returnValue(null));
-                one(request).getSession();
-                will(returnValue(session));
-                one(session).getAttribute("javax.servlet.jsp.jstl.fmt.locale.session");
-                will(returnValue(null));
-                one(context).getAttribute("javax.servlet.jsp.jstl.fmt.locale.application");
-                will(returnValue(null));
-                one(context).getInitParameter("javax.servlet.jsp.jstl.fmt.locale");
-                will(returnValue(null));
-                one(request).getLocale();
-                will(returnValue(Locale.getDefault()));
-            }
-        });
+		when(request.getSession()).thenReturn(session);
+		when(request.getAttribute("javax.servlet.jsp.jstl.fmt.locale.request")).thenReturn(null);
+		when(session.getAttribute("javax.servlet.jsp.jstl.fmt.locale.session")). thenReturn(null);
+		when(context.getAttribute("javax.servlet.jsp.jstl.fmt.locale.application")). thenReturn(null);
+		when(context.getInitParameter("javax.servlet.jsp.jstl.fmt.locale")). thenReturn(null);
+		when(request.getLocale()).thenReturn(Locale.getDefault());
+		
         DecimalFormat fmt = new DecimalFormat("##0,00");
         fmt.setParseBigDecimal(true);
         fmt.setMinimumFractionDigits(2);
@@ -104,34 +91,26 @@ public class LocaleBasedBigDecimalConverterTest {
         BigDecimal theValue = new BigDecimal("10.00");
         String formattedValue = fmt.format(theValue);
         assertThat(converter.convert(formattedValue, BigDecimal.class, bundle), is(equalTo(theValue)));
-        mockery.assertIsSatisfied();
     }
 
      @Test
      public void shouldBeAbleToConvertEmpty() {
          assertThat(converter.convert("", BigDecimal.class, bundle), is(nullValue()));
-         mockery.assertIsSatisfied();
      }
     
      @Test
      public void shouldBeAbleToConvertNull() {
          assertThat(converter.convert(null, BigDecimal.class, bundle), is(nullValue()));
-         mockery.assertIsSatisfied();
      }
     
     @Test
     public void shouldThrowExceptionWhenUnableToParse() {
-        mockery.checking(new Expectations() {
-            {
-                exactly(2).of(request).getAttribute("javax.servlet.jsp.jstl.fmt.locale.request");
-                will(returnValue("pt_br"));
-            }
-        });
+    	when(request.getAttribute("javax.servlet.jsp.jstl.fmt.locale.request")).thenReturn("pt_br");
         try {
             converter.convert("vr3.9", BigDecimal.class, bundle);
+            fail("Should throw exception");
         } catch (ConversionError e) {
             assertThat(e.getMessage(), is(equalTo("vr3.9 is not a valid number.")));
         }
     }
-
 }

@@ -20,6 +20,7 @@ package br.com.caelum.vraptor.http.ognl;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.when;
 
 import java.util.List;
 import java.util.ResourceBundle;
@@ -28,10 +29,10 @@ import ognl.Ognl;
 import ognl.OgnlContext;
 import ognl.OgnlException;
 
-import org.jmock.Expectations;
-import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.converter.LongConverter;
 import br.com.caelum.vraptor.converter.StringConverter;
@@ -54,33 +55,24 @@ public class OgnlGenericTypesSupportTest {
 
     private Cat myCat;
     private OgnlContext context;
-    private Container container;
+    private @Mock Container container;
     private EmptyElementsRemoval removal;
     private ResourceBundle bundle;
-	private Mockery mockery;
-	private Converters converters;
+	private @Mock Converters converters;
 
     @Before
     public void setup() throws Exception {
-    	mockery = new Mockery();
-    	converters = mockery.mock(Converters.class);
+    	MockitoAnnotations.initMocks(this);
     	AbstractOgnlTestSupport.configOgnl(converters);
 
-        this.container = mockery.mock(Container.class);
-        this.removal = new EmptyElementsRemoval();
-        this.bundle = ResourceBundle.getBundle("messages");
-        mockery.checking(new Expectations() {
-            {
-                allowing(container).instanceFor(Converters.class);
-                will(returnValue(converters));
-                allowing(converters).to(Long.class);
-                will(returnValue(new LongConverter()));
-                allowing(converters).to(String.class);
-                will(returnValue(new StringConverter()));
-                allowing(container).instanceFor(EmptyElementsRemoval.class);
-                will(returnValue(removal));
-            }
-        });
+        removal = new EmptyElementsRemoval();
+        bundle = ResourceBundle.getBundle("messages");
+        
+        when(container.instanceFor(Converters.class)).thenReturn(converters);
+        when(converters.to(Long.class)).thenReturn(new LongConverter());
+        when(converters.to(String.class)).thenReturn(new StringConverter());
+        when(container.instanceFor(EmptyElementsRemoval.class)).thenReturn(removal);
+        
         this.myCat = new Cat();
         this.context = (OgnlContext) Ognl.createDefaultContext(myCat);
         context.setTraceEvaluations(true);
@@ -153,7 +145,6 @@ public class OgnlGenericTypesSupportTest {
         assertThat(legs.get(0), is(equalTo("small")));
         Ognl.setValue("legLength[1]", context, myCat, "big");
         assertThat(legs.get(1), is(equalTo("big")));
-        mockery.assertIsSatisfied();
     }
 
     @Test
@@ -162,7 +153,6 @@ public class OgnlGenericTypesSupportTest {
         assertThat(myCat.ids[0], is(equalTo(3L)));
         Ognl.setValue("ids[1]", context, myCat, "5");
         assertThat(myCat.ids[1], is(equalTo(5L)));
-        mockery.assertIsSatisfied();
     }
 
     @Test
@@ -171,7 +161,5 @@ public class OgnlGenericTypesSupportTest {
         assertThat(myCat.eyeColorCode.get(0), is(equalTo(3L)));
         Ognl.setValue("eyeColorCode[1]", context, myCat, "5");
         assertThat(myCat.eyeColorCode.get(1), is(equalTo(5L)));
-        mockery.assertIsSatisfied();
     }
-
 }

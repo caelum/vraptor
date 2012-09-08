@@ -1,19 +1,17 @@
 package br.com.caelum.vraptor.view;
 
-import br.com.caelum.vraptor.http.route.Router;
-import org.hamcrest.Matchers;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
-
-import javax.servlet.ServletContext;
-
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
+
+import javax.servlet.ServletContext;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import br.com.caelum.vraptor.http.route.Router;
 
 public class LinkToHandlerTest {
     private @Mock ServletContext context;

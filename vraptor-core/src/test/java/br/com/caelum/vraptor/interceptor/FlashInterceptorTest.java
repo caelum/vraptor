@@ -1,6 +1,15 @@
 package br.com.caelum.vraptor.interceptor;
 
+import static br.com.caelum.vraptor.interceptor.FlashInterceptor.FLASH_INCLUDED_PARAMETERS;
+import static java.util.Collections.singletonMap;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.when;
 
 import java.util.Collections;
 import java.util.Map;
@@ -8,10 +17,10 @@ import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.jmock.Expectations;
-import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.core.InterceptorStack;
@@ -28,24 +37,18 @@ import br.com.caelum.vraptor.http.VRaptorResponse;
 public class FlashInterceptorTest {
 
 
-	private Mockery mockery;
-	private HttpSession session;
-	private Result result;
+	private @Mock HttpSession session;
+	private @Mock Result result;
+	private @Mock InterceptorStack stack;
+	private @Mock HttpServletResponse mockResponse;
 	private MutableResponse response;
 	private FlashInterceptor interceptor;
-	private InterceptorStack stack;
-	private HttpServletResponse mockResponse;
 
 	@Before
 	public void setUp() throws Exception {
-		mockery = new Mockery();
-		session = mockery.mock(HttpSession.class);
-		result = mockery.mock(Result.class);
-		stack = mockery.mock(InterceptorStack.class);
-
-		mockResponse = mockery.mock(HttpServletResponse.class);
+		MockitoAnnotations.initMocks(this);
+		
 		response = new VRaptorResponse(mockResponse);
-
 		interceptor = new FlashInterceptor(session, result, response);
 	}
 
@@ -56,132 +59,62 @@ public class FlashInterceptorTest {
     
 	@Test
 	public void shouldDoNothingWhenThereIsNoFlashParameters() throws Exception {
-
-		mockery.checking(new Expectations() {
-			{
-				one(session).getAttribute(FlashInterceptor.FLASH_INCLUDED_PARAMETERS);
-				will(returnValue(null));
-
-				never(result);
-
-				ignoring(anything());
-			}
-		});
+		when(session.getAttribute(FLASH_INCLUDED_PARAMETERS)).thenReturn(null);
 
 		interceptor.intercept(stack, null, null);
-		mockery.assertIsSatisfied();
+		verifyZeroInteractions(result);
 	}
 
 	@Test
 	public void shouldAddAllFlashParametersToResult() throws Exception {
-
-		mockery.checking(new Expectations() {
-			{
-				one(session).getAttribute(FlashInterceptor.FLASH_INCLUDED_PARAMETERS);
-				will(returnValue(Collections.singletonMap("Abc", 1002)));
-
-				one(result).include("Abc", 1002);
-
-				ignoring(anything());
-			}
-		});
-
+		when(session.getAttribute(FLASH_INCLUDED_PARAMETERS)).thenReturn(singletonMap("Abc", 1002));
+		
 		interceptor.intercept(stack, null, null);
-		mockery.assertIsSatisfied();
+		verify(result).include("Abc", 1002);
 	}
 
 	@Test
 	public void shouldRemoveFlashIncludedParameters() throws Exception {
-
-		mockery.checking(new Expectations() {
-			{
-				one(session).getAttribute(FlashInterceptor.FLASH_INCLUDED_PARAMETERS);
-				will(returnValue(Collections.singletonMap("Abc", 1002)));
-
-				one(session).removeAttribute(FlashInterceptor.FLASH_INCLUDED_PARAMETERS);
-
-				ignoring(anything());
-			}
-		});
-
+		when(session.getAttribute(FLASH_INCLUDED_PARAMETERS)).thenReturn(singletonMap("Abc", 1002));
+		
 		interceptor.intercept(stack, null, null);
-		mockery.assertIsSatisfied();
+		verify(session).removeAttribute(FLASH_INCLUDED_PARAMETERS);
 	}
+	
 	@Test
 	public void shouldIncludeFlashParametersWhenARedirectHappens() throws Exception {
+		Map<String, Object> parameters = Collections.<String, Object>singletonMap("Abc", 1002);
 
-		mockery.checking(new Expectations() {
-			{
-				Map<String, Object> parameters = Collections.<String, Object>singletonMap("Abc", 1002);
-
-				one(result).included();
-				will(returnValue(parameters));
-
-				one(session).setAttribute(FlashInterceptor.FLASH_INCLUDED_PARAMETERS, parameters);
-
-				allowing(session).getAttribute(FlashInterceptor.FLASH_INCLUDED_PARAMETERS);
-				will(returnValue(null));
-
-				ignoring(anything());
-			}
-		});
+		when(result.included()).thenReturn(parameters);
+		when(session.getAttribute(FLASH_INCLUDED_PARAMETERS)).thenReturn(null);
 
 		interceptor.intercept(stack, null, null);
-
 		response.sendRedirect("Anything");
-
-		mockery.assertIsSatisfied();
+		
+		verify(session).setAttribute(FLASH_INCLUDED_PARAMETERS, parameters);
 	}
 	@Test
 	public void shouldNotIncludeFlashParametersWhenThereIsNoIncludedParameter() throws Exception {
+		Map<String, Object> parameters = Collections.emptyMap();
 
-		mockery.checking(new Expectations() {
-			{
-				Map<String, Object> parameters = Collections.emptyMap();
-
-				one(result).included();
-				will(returnValue(parameters));
-
-				never(session).setAttribute(with(any(String.class)), with(any(Object.class)));
-
-				allowing(session).getAttribute(FlashInterceptor.FLASH_INCLUDED_PARAMETERS);
-				will(returnValue(null));
-
-				ignoring(stack);
-				ignoring(mockResponse);
-			}
-		});
+		when(result.included()).thenReturn(parameters);
+		when(session.getAttribute(FLASH_INCLUDED_PARAMETERS)).thenReturn(null);
 
 		interceptor.intercept(stack, null, null);
-
 		response.sendRedirect("Anything");
 
-		mockery.assertIsSatisfied();
+		verify(session, never()).setAttribute(anyString(), anyObject());
 	}
+	
 	@Test
 	public void shouldNotCrashWhenSessionIsInvalid() throws Exception {
+		Map<String, Object> parameters = Collections.<String, Object>singletonMap("Abc", 1002);
 
-		mockery.checking(new Expectations() {
-			{
-				Map<String, Object> parameters = Collections.<String, Object>singletonMap("Abc", 1002);
-
-				one(result).included();
-				will(returnValue(parameters));
-
-				one(session).setAttribute(FlashInterceptor.FLASH_INCLUDED_PARAMETERS, parameters);
-				will(throwException(new IllegalStateException()));
-
-				allowing(session).getAttribute(FlashInterceptor.FLASH_INCLUDED_PARAMETERS);
-				will(returnValue(null));
-
-				ignoring(anything());
-			}
-		});
+		when(result.included()).thenReturn(parameters);
+		doThrow(new IllegalStateException()).when(session).setAttribute(FLASH_INCLUDED_PARAMETERS, parameters);
+		when(session.getAttribute(FLASH_INCLUDED_PARAMETERS)).thenReturn(null);
 
 		interceptor.intercept(stack, null, null);
-
 		response.sendRedirect("Anything");
-
-		mockery.assertIsSatisfied();
 	}
 }

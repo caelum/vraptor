@@ -17,14 +17,18 @@
 package br.com.caelum.vraptor.interceptor;
 
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.util.EnumSet;
 
-import org.jmock.Expectations;
-import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.core.InterceptorStack;
@@ -42,27 +46,20 @@ import br.com.caelum.vraptor.resource.ResourceNotFoundHandler;
 
 public class ResourceLookupInterceptorTest {
 
-    private Mockery mockery;
-    private UrlToResourceTranslator translator;
-    private RequestInfo info;
+    private @Mock UrlToResourceTranslator translator;
+    private @Mock MutableRequest webRequest;
+    private @Mock MutableResponse webResponse;
+    private @Mock RequestInfo info;
     private ResourceLookupInterceptor lookup;
-    private MutableRequest webRequest;
-    private MutableResponse webResponse;
-    private MethodInfo methodInfo;
-	private ResourceNotFoundHandler notFoundHandler;
-	private MethodNotAllowedHandler methodNotAllowedHandler;
+    private @Mock MethodInfo methodInfo;
+	private @Mock ResourceNotFoundHandler notFoundHandler;
+	private @Mock MethodNotAllowedHandler methodNotAllowedHandler;
 
     @Before
     public void config() {
-        this.mockery = new Mockery();
-        this.translator = mockery.mock(UrlToResourceTranslator.class);
-        this.webRequest = mockery.mock(MutableRequest.class);
-        this.webResponse = mockery.mock(MutableResponse.class);
-        this.info = new RequestInfo(null, null, webRequest, webResponse);
-        this.methodInfo = mockery.mock(MethodInfo.class);
-        this.notFoundHandler = mockery.mock(ResourceNotFoundHandler.class);
-        this.methodNotAllowedHandler = mockery.mock(MethodNotAllowedHandler.class);
-        this.lookup = new ResourceLookupInterceptor(translator, methodInfo, notFoundHandler, methodNotAllowedHandler, info);
+    	MockitoAnnotations.initMocks(this);
+        info = new RequestInfo(null, null, webRequest, webResponse);
+        lookup = new ResourceLookupInterceptor(translator, methodInfo, notFoundHandler, methodNotAllowedHandler, info);
     }
     
     @Test
@@ -72,46 +69,31 @@ public class ResourceLookupInterceptorTest {
 
     @Test
     public void shouldHandle404() throws IOException, InterceptionException {
-        mockery.checking(new Expectations() {
-            {
-                one(translator).translate(info);
-                will(throwException(new ResourceNotFoundException()));
-                one(notFoundHandler).couldntFind(info);
-            }
-        });
+        when(translator.translate(info)).thenThrow(new ResourceNotFoundException());
+        verify(notFoundHandler, never()).couldntFind(info);
+                
         lookup.intercept(null, null, null);
-        mockery.assertIsSatisfied();
     }
 
     @Test
     public void shouldHandle405() throws IOException, InterceptionException {
-        mockery.checking(new Expectations() {
-            {
-            	EnumSet<HttpMethod> allowedMethods = EnumSet.of(HttpMethod.GET);
-
-                one(translator).translate(info);
-				will(throwException(new MethodNotAllowedException(allowedMethods, HttpMethod.POST.toString())));
-                one(methodNotAllowedHandler).deny(info, allowedMethods);
-            }
-        });
+    	EnumSet<HttpMethod> allowedMethods = EnumSet.of(HttpMethod.GET);
+    	
+        when(translator.translate(info)).thenThrow(new MethodNotAllowedException(allowedMethods, HttpMethod.POST.toString()));
+        verify(methodNotAllowedHandler, never()).deny(info, allowedMethods);
+                
         lookup.intercept(null, null, null);
-        mockery.assertIsSatisfied();
     }
 
     @Test
     public void shouldUseResourceMethodFoundWithNextInterceptor() throws IOException, InterceptionException {
-        final ResourceMethod method = mockery.mock(ResourceMethod.class);
-        final InterceptorStack stack = mockery.mock(InterceptorStack.class);
-        mockery.checking(new Expectations() {
-            {
-                one(translator).translate(info);
-                will(returnValue(method));
-                one(stack).next(method, null);
-                one(methodInfo).setResourceMethod(method);
-            }
-        });
+        final ResourceMethod method = mock(ResourceMethod.class);
+        final InterceptorStack stack = mock(InterceptorStack.class);
+        
+        when(translator.translate(info)).thenReturn(method);
+        verify(stack, never()).next(method, null);
+        verify(methodInfo, never()).setResourceMethod(method);
+        
         lookup.intercept(stack, null, null);
-        mockery.assertIsSatisfied();
     }
-
 }

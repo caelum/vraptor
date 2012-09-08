@@ -21,6 +21,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
+import static org.mockito.Mockito.when;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -28,63 +29,52 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.jmock.Expectations;
-import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 public class VRaptorRequestTest {
 
-	private Mockery mockery;
-	private HttpServletRequest request;
+	private @Mock HttpServletRequest request;
 	private VRaptorRequest vraptor;
 
 	@Before
 	public void setup() {
-		this.mockery = new Mockery();
-		this.request = mockery.mock(HttpServletRequest.class);
-		final Hashtable<String, String> t = new Hashtable<String, String>();
-		t.put("name", "guilherme");
-		t.put("age", "27");
-		mockery.checking(new Expectations() {
-			{
-				allowing(request).getParameterNames();
-				will(returnValue(t.keys()));
-				allowing(request).getParameterMap();
-				will(returnValue(t));
-				allowing(request).getParameter("name");
-				will(returnValue("guilherme"));
-				allowing(request).getParameter("minimum");
-				will(returnValue(null));
-			}
-		});
-		this.vraptor = new VRaptorRequest(request);
+		MockitoAnnotations.initMocks(this);
+		
+		final Hashtable<String, String[]> t = new Hashtable<String, String[]>();
+		t.put("name", new String[] { "guilherme" });
+		t.put("age", new String[] { "27" });
+		
+		when(request.getParameterNames()).thenReturn(t.keys());
+		when(request.getParameterMap()).thenReturn(t);
+		when(request.getParameter("name")).thenReturn("guilherme");
+		when(request.getParameter("minimum")).thenReturn(null);
+		
+		vraptor = new VRaptorRequest(request);
 	}
 
 	@Test
 	public void allowsParametersToBeOverriden() {
 		vraptor.setParameter("name", "silveira");
 		assertThat(vraptor.getParameter("name"), is(equalTo("silveira")));
-		mockery.assertIsSatisfied();
 	}
 
 	@Test
 	public void searchesOnTheFallbackRequest() {
 		assertThat(vraptor.getParameter("name"), is(equalTo("guilherme")));
-		mockery.assertIsSatisfied();
 	}
 
 	@Test
 	public void searchesOnAddedParameters() {
 		vraptor.setParameter("minimum", "12");
 		assertThat(vraptor.getParameter("minimum"), is(equalTo("12")));
-		mockery.assertIsSatisfied();
 	}
 
 	@Test
 	public void returnsNullIfNotFound() {
 		assertThat(vraptor.getParameter("minimum"), is(nullValue()));
-		mockery.assertIsSatisfied();
 	}
 
 	@Test
@@ -92,7 +82,6 @@ public class VRaptorRequestTest {
 		String[] values = new String[] {"guilherme","silveira"};
 		vraptor.setParameter("name", values);
 		assertThat(vraptor.getParameterValues("name"), is(equalTo(values)));
-		mockery.assertIsSatisfied();
 	}
 
 	@Test
@@ -116,18 +105,16 @@ public class VRaptorRequestTest {
 		assertThat(nameFound, is(equalTo(true)));
 		assertThat(ageFound, is(equalTo(true)));
 		assertThat(sizeFound, is(equalTo(true)));
-		mockery.assertIsSatisfied();
 	}
 
 	@Test
 	public void returnsBothMapsWithFirstOverridingSecond() {
 		vraptor.setParameter("name", "silveira");
 		vraptor.setParameter("size", "m");
+		
 		Map<?,?> map = vraptor.getParameterMap();
-		assertThat((String[])map.get("name"), is(equalTo(new String[] {"silveira"})));
-		assertThat((String[])map.get("size"), is(equalTo(new String[] {"m"})));
-		assertThat((String)map.get("age"), is(equalTo("27")));
-		mockery.assertIsSatisfied();
+		assertThat((String[]) map.get("name"), is(equalTo(new String[] {"silveira"})));
+		assertThat((String[]) map.get("size"), is(equalTo(new String[] {"m"})));
+		assertThat((String[]) map.get("age"), is(equalTo(new String[] {"27"})));
 	}
-
 }

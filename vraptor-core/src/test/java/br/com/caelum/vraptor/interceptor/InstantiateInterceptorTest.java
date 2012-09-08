@@ -17,13 +17,15 @@
 package br.com.caelum.vraptor.interceptor;
 
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 
-import org.jmock.Expectations;
-import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.core.InterceptorStack;
@@ -33,11 +35,12 @@ import br.com.caelum.vraptor.view.DogController;
 
 public class InstantiateInterceptorTest {
 
-    private Mockery mockery;
-
+    private @Mock InterceptorStack stack;
+    private @Mock ResourceMethod method;
+    
     @Before
     public void setup() {
-        this.mockery = new Mockery();
+        MockitoAnnotations.initMocks(this);
     }
 
     @Test
@@ -50,32 +53,21 @@ public class InstantiateInterceptorTest {
         final DogController myDog = new DogController();
         InstanceContainer container = new InstanceContainer(myDog);
         InstantiateInterceptor interceptor = new InstantiateInterceptor(container);
-        final InterceptorStack stack = mockery.mock(InterceptorStack.class);
-        final ResourceMethod method = mockery.mock(ResourceMethod.class);
-        mockery.checking(new Expectations() {
-            {
-                one(stack).next(method, myDog);
-                one(method).getResource(); will(returnValue(new DefaultResourceClass(DogController.class)));
-            }
-        });
+        
+        when(method.getResource()).thenReturn(new DefaultResourceClass(DogController.class));
+        
         interceptor.intercept(stack, method, null);
         assertTrue(container.isEmpty());
-        mockery.assertIsSatisfied();
+        
+        verify(stack).next(method, myDog);
     }
 
     @Test
     public void shouldNotInstantiateIfThereIsAlreadyAResource() throws InterceptionException, IOException {
         final DogController myDog = new DogController();
         InstantiateInterceptor interceptor = new InstantiateInterceptor(null);
-        final InterceptorStack stack = mockery.mock(InterceptorStack.class);
-        final ResourceMethod method = mockery.mock(ResourceMethod.class);
-        mockery.checking(new Expectations() {
-            {
-                one(stack).next(method, myDog);
-            }
-        });
+        
         interceptor.intercept(stack, method, myDog);
-        mockery.assertIsSatisfied();
+        verify(stack).next(method, myDog);
     }
-
 }

@@ -27,8 +27,6 @@ import br.com.caelum.vraptor.http.MutableRequest;
  */
 public class LocaleBasedJodaTimeConverterTest {
 
-	static final String LOCALE_KEY = "javax.servlet.jsp.jstl.fmt.locale";
-	
 	private LocaleBasedJodaTimeConverter converter;
 	private @Mock MutableRequest request;
 	private @Mock HttpSession session;
@@ -48,11 +46,11 @@ public class LocaleBasedJodaTimeConverterTest {
 
 	@Test
 	public void shouldUseTheDefaultLocale() throws ParseException {
-		when(request.getAttribute(LOCALE_KEY + ".request")).thenReturn(null);
 		when(request.getSession()).thenReturn(session);
-		when(session.getAttribute(LOCALE_KEY + ".session")). thenReturn(null);
-		when(context.getAttribute(LOCALE_KEY + ".application")). thenReturn(null);
-		when(context.getInitParameter(LOCALE_KEY)). thenReturn(null);
+		when(request.getAttribute("javax.servlet.jsp.jstl.fmt.locale.request")).thenReturn(null);
+		when(session.getAttribute("javax.servlet.jsp.jstl.fmt.locale.session")). thenReturn(null);
+		when(context.getAttribute("javax.servlet.jsp.jstl.fmt.locale.application")). thenReturn(null);
+		when(context.getInitParameter("javax.servlet.jsp.jstl.fmt.locale")). thenReturn(null);
 		when(request.getLocale()).thenReturn(new Locale("pt_BR"));
 		
 		assertThat(new Locale("pt_BR"), is(equalTo(converter.getLocale())));
@@ -60,11 +58,11 @@ public class LocaleBasedJodaTimeConverterTest {
 	
 	@Test
 	public void shouldUseTheDefaulJvmtLocale() throws ParseException {
-		when(request.getAttribute(LOCALE_KEY + ".request")).thenReturn(null);
 		when(request.getSession()).thenReturn(session);
-		when(session.getAttribute(LOCALE_KEY + ".session")). thenReturn(null);
-		when(context.getAttribute(LOCALE_KEY + ".application")). thenReturn(null);
-		when(context.getInitParameter(LOCALE_KEY)). thenReturn(null);
+		when(request.getAttribute("javax.servlet.jsp.jstl.fmt.locale.request")).thenReturn(null);
+		when(session.getAttribute("javax.servlet.jsp.jstl.fmt.locale.session")). thenReturn(null);
+		when(context.getAttribute("javax.servlet.jsp.jstl.fmt.locale.application")). thenReturn(null);
+		when(context.getInitParameter("javax.servlet.jsp.jstl.fmt.locale")). thenReturn(null);
 		when(request.getLocale()).thenReturn(null);
 		
 		assertThat(Locale.getDefault(), is(equalTo(converter.getLocale())));

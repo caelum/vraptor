@@ -1,6 +1,6 @@
 package br.com.caelum.vraptor.interceptor;
 
-import static java.util.Arrays.asList;
+import static com.google.common.collect.Lists.newArrayList;
 
 import java.util.List;
 
@@ -14,7 +14,10 @@ public class DefaultInterceptorRegistryTest {
 		DefaultInterceptorRegistry registry = new DefaultInterceptorRegistry();
 		registry.register(ExecuteMethodInterceptor.class, ExceptionHandlerInterceptor.class);
 		
-		List<Class<? extends Interceptor>> expected = asList(ExecuteMethodInterceptor.class, ExceptionHandlerInterceptor.class);
+		List<Class<? extends Interceptor>> expected = newArrayList();
+		expected.add(ExecuteMethodInterceptor.class);
+		expected.add(ExceptionHandlerInterceptor.class);
+		
 		Assert.assertEquals(expected, registry.all());
 	}
 }

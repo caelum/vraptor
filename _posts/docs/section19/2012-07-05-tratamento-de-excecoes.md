@@ -1,5 +1,5 @@
 ---
-title: Tratamento de Excessões
+title: Tratamento de Exceções
 layout: page
 section: 19
 category: [pt, docs]

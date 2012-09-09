@@ -93,15 +93,6 @@ protected void registerCustomComponents(ComponentRegistry registry) {
 }
 {% endhighlight %}
 
-There is already a built-in Provider that adds these three optional components. You can just register it on your web.xml:
-
-{% highlight xml %}
-<context-param>
-    <param-name>br.com.caelum.vraptor.provider</param-name>
-    <param-value>br.com.caelum.vraptor.util.hibernate.HibernateCustomProvider</param-value>
-</context-param>
-{% endhighlight %}
-
 <h3>JPA EntityManager e EntityManagerFactory</h3>
 
 If you have a persistence.xml with the persistence-unit called "default", you can use VRaptor3 built-in ComponentFactories for EntityManager and EntityManagerFactory, by adding the package br.com.caelum.vraptor.util.jpa on your web.xml:
@@ -128,15 +119,6 @@ protected void registerCustomComponents(ComponentRegistry registry) {
     registry.register(JPATransactionInterceptor.class, 
         JPATransactionInterceptor.class); //open EntityManager and Transaction in view
 }
-{% endhighlight %}
-
-There is already a built-in Provider that adds these three optional components. You can just register it on your web.xml:
-
-{% highlight xml %}
-<context-param>
-    <param-name>br.com.caelum.vraptor.provider</param-name>
-    <param-value>br.com.caelum.vraptor.util.jpa.JPACustomProvider</param-value>
-</context-param>
 {% endhighlight %}
 
 <h3>Localized Converters</h3>
@@ -194,18 +176,4 @@ There is a View that generates some ExtJS JSON formats. Use:
 
 {% highlight java %}
 result.use(ExtJSJson.class).....serialize();
-{% endhighlight %}
-
-<h3>VRaptor 2 compatibility</h3>
-
-If you want to migrate VRaptor 2 to VRaptor 3 (see Migrating from VRaptor2 to VRaptor3 chapter):
-
-{% highlight xml %}
-<context-param>
-    <param-name>br.com.caelum.vraptor.packages</param-name>
-    <param-value>
-        br.com.caelum.vraptor.util.other.packages...,
-        br.com.caelum.vraptor.vraptor2
-    </param-value>
-</context-param>
 {% endhighlight %}

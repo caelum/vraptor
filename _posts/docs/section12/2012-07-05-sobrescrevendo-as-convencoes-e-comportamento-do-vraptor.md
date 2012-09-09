@@ -6,7 +6,7 @@ category: [pt, docs]
 ---
 
 A maioria dos comportamentos e convenções do VRaptor são personalizáveis. E a forma de personalizar é bem fácil: criar um componente que implementa uma das interfaces internas do VRaptor. Ao fazer isso, o VRaptor vai usar a implementação personalizada ao invés da padrão.
-Para saber qual é a interface certa para personalizar um certo comportamento, pergunte na lista de desenvolvedores do VRaptor: caelum-vraptor-dev@googlegroups.com ou no <a href="http://www.guj.com.br/forums/show/23.java">fórum do GUJ</a>.
+Para saber qual é a interface certa para personalizar um certo comportamento, pergunte na lista de usuários do VRaptor: caelum-vraptor@googlegroups.com ou no <a href="http://www.guj.com.br/forums/show/23.java">fórum do GUJ</a>.
 
 Abaixo veremos alguns exemplos de personalização:
 

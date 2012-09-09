@@ -11,7 +11,7 @@ VRaptor registers a default set of converters for your day-to-day use.
 
 <h3>Primitive types</h3>
 
-All primitive types (int, long etc) are supported.
+All primitive types (int, long and so on) are supported.
 If the request parameter is empty or null, primitive type variables will be set to its default value, as if it was a class attribute. In general:
 
 <ul>
@@ -22,7 +22,7 @@ If the request parameter is empty or null, primitive type variables will be set 
 
 <h3>Primitive type wrappers</h3>
 
-All primitive type wrappers (Integer, Long, Character, Boolean etc) are supported.
+All primitive type wrappers (Integer, Long, Character, Boolean and so on) are supported.
 
 <h3>Enum</h3>
 
@@ -66,6 +66,10 @@ The converters uses the JVM's default locale. You can override the JVM locale ad
 
 Both LocaleBasedCalendarConverter and LocaleBasedDateConverter are based on the user's locale, defined using JSTL pattern to understand the parameter's format.
 For example, if the locale is pt-br, then "18/09/1981" stands for September 18th 1981. On the other hand, if the locale is en, the same date is formatted as "09/18/1981".
+
+<h3>Joda-time</h3>
+
+There are converters for DateMidnight, DateTime, LocalDate, LocalDateTime and LocalTime, that only are loaded if you have joda-time.jar in your classpath.
 
 <h3>Interface</h3>
 

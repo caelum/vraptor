@@ -6,7 +6,7 @@ category: [en, docs]
 ---
 
 Most of VRaptor behaviours and conventions can be customized, in a very easy way: it is just creating a component that implements an internal interface of VRaptor. When you do this, VRaptor will use your custom implementation instead of the default one.
-If you want to find out which is the right interface for changing a behaviour, just ask it on the developers mailing list: caelum-vraptor-dev@googlegroups.com
+If you want to find out which is the right interface for changing a behaviour, just ask it on the users mailing list: caelum-vraptor@googlegroups.com
 This list is for both Portuguese and English discussions.
 Below we'll see some customization examples:
 

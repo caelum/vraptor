@@ -66,9 +66,9 @@ A localização dos componentes pode ser alterada utilizando a seguinte configur
 LocaleBasedCalendarConverter e LocaleBasedDateConverter utilizam o locale do usuário, definido seguindo o padrão do JSTL para entender a formatação que foi utilizada no parâmetro.
 Por exemplo, se o locale é pt-br, o formato "18/09/1981" representa 18 de setembro de 1981 enquanto para o locale en, o formato "09/18/1981" representa a mesma data.
 
-<h3>LocalDate, LocalTime e LocalDateTime do joda-time</h3>
+<h3>Joda-time</h3>
 
-Existem conversores para esses dois tipos no VRaptor e eles só serão carregados se você tiver o joda-time.jar no seu classpath.
+Existem conversores para os tipos DateMidnight, DateTime, LocalDate, LocalDateTime e LocalTime, que só serão carregados se você tiver o joda-time.jar no seu classpath.
 
 <h3>Interface</h3>
 

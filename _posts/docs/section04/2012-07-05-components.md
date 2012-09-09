@@ -113,3 +113,16 @@ public class ClientController {
     
 }
 {% endhighlight %}
+
+You can also use method injection. But keep in mind that with this way, all redirect/forwards to these methods will inject NULL.
+
+{% highlight java %}
+@Resource
+public class ClienteController {
+
+    @Post
+    public void adiciona(Cliente cliente, ClienteDao dao) {
+        dao.adiciona(cliente);
+    }
+}
+{% endhighlight %}

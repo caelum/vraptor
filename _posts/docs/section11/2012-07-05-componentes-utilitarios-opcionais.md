@@ -90,15 +90,6 @@ protected void registerCustomComponents(ComponentRegistry registry) {
 }
 {% endhighlight %}
 
-Já existe um Provider que adiciona esses três componentes opcionais. Você pode apenas registrá-lo no seu web.xml:
-
-{% highlight xml %}
-<context-param>
-    <param-name>br.com.caelum.vraptor.provider</param-name>
-    <param-value>br.com.caelum.vraptor.util.hibernate.HibernateCustomProvider</param-value>
-</context-param>
-{% endhighlight %}
-
 <h3>JPA EntityManager e EntityManagerFactory</h3>
 
 Se você tiver um persistence.xml com o persistence-unit chamado "default", você pode usar os ComponentFactories para criar EntityManager e EntityManagerFactory já disponíveis no VRaptor, adicionando o pacote br.com.caelum.vraptor.util.jpa no web.xml:
@@ -128,13 +119,6 @@ protected void registerCustomComponents(ComponentRegistry registry) {
 {% endhighlight %}
 
 Já existe um Provider que adiciona esses três componentes opcionais. Você pode apenas registrá-lo no seu web.xml:
-
-{% highlight xml %}
-<context-param>
-    <param-name>br.com.caelum.vraptor.provider</param-name>
-    <param-value>br.com.caelum.vraptor.util.jpa.JPACustomProvider</param-value>
-</context-param>
-{% endhighlight %}
 
 <h3>Converters Localizados</h3>
 
@@ -191,18 +175,4 @@ Existe uma View do VRaptor que consegue gerar alguns formatos de JSON que o ExtJ
 
 {% highlight java %}
 result.use(ExtJSJson.class).....serialize();
-{% endhighlight %}
-
-<h3>Compatibilidade com VRaptor 2</h3>
-
-Se você quer migrar do VRaptor 2 para o VRaptor 3 (veja o capítulo Migrando do VRaptor 2 para o VRaptor 3):
-
-{% highlight xml %}
-<context-param>
-    <param-name>br.com.caelum.vraptor.packages</param-name>
-    <param-value>
-        br.com.caelum.vraptor.util.outros.pacotes...,
-        br.com.caelum.vraptor.vraptor2
-    </param-value>
-</context-param>
 {% endhighlight %}

@@ -115,3 +115,16 @@ public class ClienteController {
     
 }
 {% endhighlight %}
+
+Também é possível usar injeção de dependências em métodos. No entanto quando houver forwared/redirect para métodos com injeção desta forma, os objetos não serão injetados, recebendo NULL.
+
+{% highlight java %}
+@Resource
+public class ClienteController {
+
+    @Post
+    public void adiciona(Cliente cliente, ClienteDao dao) {
+        dao.adiciona(cliente);
+    }
+}
+{% endhighlight %}

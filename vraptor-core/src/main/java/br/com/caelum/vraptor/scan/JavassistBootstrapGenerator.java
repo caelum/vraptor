@@ -40,7 +40,7 @@ import javax.annotation.Generated;
  */
 public class JavassistBootstrapGenerator implements BootstrapGenerator {
 
-	public void generate(Collection<String> components, ClasspathResolver resolver) {
+	public Class<WebAppBootstrap> generate(Collection<String> components, ClasspathResolver resolver) {
 		// many initial variables
 		final String fullName = WebAppBootstrap.STATIC_BOOTSTRAP_NAME;
 		final String simpleName = fullName.substring(WebAppBootstrap.STATIC_BOOTSTRAP_NAME.lastIndexOf('.') + 1);
@@ -52,17 +52,7 @@ public class JavassistBootstrapGenerator implements BootstrapGenerator {
 		// create the entire package path
 		new File(path).mkdirs();
 
-		// construct the method implementation
-		StringBuilder methodDef = new StringBuilder()
-			.append("public void configure (br.com.caelum.vraptor.ComponentRegistry registry){");
-
-		for (String componentName : components) {
-			methodDef.append("registry.deepRegister(")
-					 .append(componentName).append(".class")
-					 .append(");");
-		}
-
-		methodDef.append("}");
+		String methodDef = createMethodDef(components);
 
 		// generate class file
 		try {
@@ -76,7 +66,7 @@ public class JavassistBootstrapGenerator implements BootstrapGenerator {
 			clazz.addConstructor(constructor);
 
 			// add the method implementation
-			CtMethod m = CtNewMethod.make(methodDef.toString(), clazz);
+			CtMethod m = CtNewMethod.make(methodDef, clazz);
 			clazz.addMethod(m);
 
 			// make this class implements WebAppBootstrap
@@ -92,8 +82,25 @@ public class JavassistBootstrapGenerator implements BootstrapGenerator {
 
 			// write the file
 			cf.write(new DataOutputStream(new FileOutputStream(filename)));
+
+			return clazz.toClass();
 		} catch (Exception e) {
 			throw new ScannerException("Error while generating the class file", e);
 		}
+	}
+
+	private String createMethodDef(Collection<String> components) {
+		StringBuilder methodDef = new StringBuilder()
+			.append("public void configure (br.com.caelum.vraptor.ComponentRegistry registry){");
+
+		for (String componentName : components) {
+			methodDef.append("registry.deepRegister(")
+					 .append(componentName)
+					 .append(".class);");
+		}
+
+		methodDef.append("}");
+
+		return methodDef.toString();
 	}
 }

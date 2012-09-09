@@ -25,6 +25,6 @@ import java.util.Collection;
  */
 public interface BootstrapGenerator {
 
-	void generate(Collection<String> components, ClasspathResolver resolver);
+	Class<WebAppBootstrap> generate(Collection<String> components, ClasspathResolver resolver);
 
 }

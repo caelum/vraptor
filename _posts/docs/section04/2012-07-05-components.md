@@ -114,7 +114,7 @@ public class ClientController {
 }
 {% endhighlight %}
 
-You can also use method injection. But keep in mind that with this way, all redirect/forwards to these methods will inject NULL.
+You can also use method injection. But keep in mind that with this way, all redirects and forwards to these methods will inject NULL.
 
 {% highlight java %}
 @Resource

@@ -30,8 +30,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.view.Status;
-
 /**
  * @author Fabio Kung
  */

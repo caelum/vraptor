@@ -20,14 +20,12 @@ package br.com.caelum.vraptor.proxy;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.lang.reflect.Method;
 
 import net.vidageek.mirror.dsl.Mirror;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -50,7 +48,7 @@ public class JavassistProxifierTest {
                 return true;
             }
         });
-        assertTrue(proxy.wasCalled());
+        assertThat(proxy.wasCalled(), is(true));
     }
 
     @Test
@@ -60,7 +58,7 @@ public class JavassistProxifierTest {
                 return true;
             }
         });
-        assertTrue(proxy.wasCalled());
+        assertThat(proxy.wasCalled(), is(true));
     }
 
     @Test
@@ -81,7 +79,7 @@ public class JavassistProxifierTest {
                 return superMethod.invoke(proxy, args);
             }
         });
-        assertFalse(proxy.wasNumberConstructorCalled());
+        assertThat(proxy.wasNumberConstructorCalled(), is(false));
         assertThat(proxy.getNumber(), is(nullValue()));
     }
 
@@ -89,7 +87,7 @@ public class JavassistProxifierTest {
     public void shouldNotProxifyJavaLangObjectMethods() throws Exception {
         Object proxy = proxifier.proxify(JavassistProxifierTest.class, new MethodInvocation<Object>() {
             public Object intercept(Object proxy, Method method, Object[] args, SuperMethod superMethod) {
-                Assert.fail("should not call this Method interceptor");
+                fail("should not call this Method interceptor");
                 return null;
             }
         });
@@ -105,7 +103,55 @@ public class JavassistProxifierTest {
             }
         });
         
-        assertFalse(proxifier.isProxy(realObject));
-        assertTrue(proxifier.isProxy(objectAsProxy));
+        assertThat(proxifier.isProxy(null), is(false));
+        assertThat(proxifier.isProxy(realObject), is(false));
+        assertThat(proxifier.isProxy(objectAsProxy), is(true));
     }
+    
+    @Test
+    public void shouldThrowProxyInvocationExceptionIfAnErrorOccurs() {
+    	C proxy = proxifier.proxify(C.class, new MethodInvocation<C>() {
+    		public Object intercept(C proxy, Method method, Object[] args, SuperMethod superMethod) {
+				return superMethod.invoke(proxy, args);
+    		}
+    	});
+    	
+    	try {
+    		proxy.doThrow();
+    		fail("Should throw exception");
+    	} catch (ProxyInvocationException e) {
+			
+		}
+    }
+
+    @Test
+    public void shouldNotProxifyBridges() throws Exception {
+    	B proxy = proxifier.proxify(B.class, new MethodInvocation<B>() {
+    		public Object intercept(B proxy, Method method, Object[] args, SuperMethod superMethod) {
+				if (method.isBridge()) {
+					fail("Method " + method + " is a bridge");
+				}
+				return null;
+    		}
+    	});
+    	
+		Method[] methods = proxy.getClass().getMethods();
+		for (Method m : methods) {
+			if (m.getName().equals("getT")) {
+				m.invoke(proxy, "");
+			}
+		}
+    }
+
+	public static class A<T> {
+		public T getT(T t) { return t; }
+	}
+
+	static class B extends A<String> {
+		public String getT(String s) { return s; }
+	}
+
+	static class C {
+		public String doThrow() { throw new IllegalStateException(); }
+	}
 }

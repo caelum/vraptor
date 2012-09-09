@@ -29,3 +29,7 @@ You can resolve some <a href="http://github.com/caelum/vraptor/issues">issue reg
 VRaptor is a MVC Web Framework focused in simplicity and easy of use. When you implement something, take care to follow the best practices of Object Orientation and low coupling, use of composition instead of inheritance, convention over configuration and a well structured code. Make sure you also write the Javadocs classes and unit tests.
 
 Contributions like security, paging, multitenant, and others are welcome through plugins and contributions to <a href="http://github.com/caelum/vraptor-contrib">vraptor-contrib</a>, or extensions to <a href="https://github.com/caelum/vraptor-scaffold">vraptor-scaffold</a>.
+
+<h3>Starting the job</h3>
+
+All VRaptor modules works with <a href="https://maven.apache.org/">Apache Maven</a>, that has plugins for mostly used IDEs: <a href="https://maven.apache.org/plugins/maven-eclipse-plugin/">Eclipse</a>, <a href="http://wiki.netbeans.org/Maven">Netbeans</a> and <a href="https://maven.apache.org/plugins/maven-idea-plugin/">IDEA</a>. 

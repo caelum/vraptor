@@ -33,6 +33,4 @@ Contribuições de funcionalidades como segurança, paginação, multitenant, e 
 
 <h3>Montando o ambiente</h3>
 
-Todos os módulos do VRaptor possuem os arquivos _classpath-example_ e _project-example_, facilitando a importação do projeto para quem usa Eclipse. Neste caso basta renomear os arquivos para _.classpath_ e _.project_ respectivamente.
-
-Se você utiliza outra IDE, basta montar os diretórios _src/main/java_, _src/test/java_, _src/test/resources_ e _src/main/resources_ como source folders. As bibliotecas utilizadas ficam no diretório _lib_.
+Todos os módulos do VRaptor usam o <a href="https://maven.apache.org/">Apache Maven</a>, que possui plugins para as principais IDEs: <a href="https://maven.apache.org/plugins/maven-eclipse-plugin/">Eclipse</a>, <a href="http://wiki.netbeans.org/Maven">Netbeans</a> e <a href="https://maven.apache.org/plugins/maven-idea-plugin/">IDEA</a>. No Eclipse, por exemplo, basta você usar o comando mvn eclipse:eclipse para montar os arquivos de configuração do projeto automaticamente.

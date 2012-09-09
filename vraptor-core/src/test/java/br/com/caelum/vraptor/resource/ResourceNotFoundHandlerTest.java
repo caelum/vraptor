@@ -16,13 +16,21 @@
  */
 package br.com.caelum.vraptor.resource;
 
-import javax.servlet.FilterChain;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.only;
+import static org.mockito.Mockito.verify;
 
-import org.jmock.Expectations;
-import org.jmock.Mockery;
+import java.io.IOException;
+
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
+import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.MutableResponse;
@@ -30,30 +38,34 @@ import br.com.caelum.vraptor.http.MutableResponse;
 public class ResourceNotFoundHandlerTest {
 
 	private ResourceNotFoundHandler notFoundHandler;
-	private Mockery mockery;
-    private MutableRequest webRequest;
-    private MutableResponse webResponse;
+    private @Mock MutableRequest webRequest;
+    private @Mock MutableResponse webResponse;
+	private @Mock FilterChain chain;
     private RequestInfo request;
-	private FilterChain chain;
 
     @Before
 	public void setUp() {
-		this.mockery = new Mockery();
-        this.webRequest = mockery.mock(MutableRequest.class);
-        this.webResponse = mockery.mock(MutableResponse.class);
-        this.chain = mockery.mock(FilterChain.class);
-        this.request = new RequestInfo(null, chain, webRequest, webResponse);
-		this.notFoundHandler = new DefaultResourceNotFoundHandler();
+    	MockitoAnnotations.initMocks(this);
+        request = new RequestInfo(null, chain, webRequest, webResponse);
+		notFoundHandler = new DefaultResourceNotFoundHandler();
 	}
 
 	@Test
 	public void couldntFindDefersRequestToContainer() throws Exception {
-        mockery.checking(new Expectations() {
-            {
-                one(chain).doFilter(webRequest, webResponse);
-            }
-        });
 		notFoundHandler.couldntFind(request);
-        mockery.assertIsSatisfied();
+		verify(chain, only()).doFilter(webRequest, webResponse);
 	}
+	
+	@Test(expected=InterceptionException.class)
+	public void shouldThrowInterceptionExceptionIfIOExceptionOccurs() throws Exception {
+		doThrow(new IOException()).when(chain).doFilter(webRequest, webResponse);
+		notFoundHandler.couldntFind(request);
+	}
+	
+	@Test(expected=InterceptionException.class)
+	public void shouldThrowInterceptionExceptionIfServletExceptionOccurs() throws Exception {
+		doThrow(new ServletException()).when(chain).doFilter(webRequest, webResponse);
+		notFoundHandler.couldntFind(request);
+	}
+	
 }

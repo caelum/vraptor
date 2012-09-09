@@ -29,14 +29,14 @@
 			</excludes>
 		</fileSet>
 	</fileSets>
-  <files>
-    <file>
-      <source>classpath-example</source>
-      <destName>.classpath</destName>
-    </file>
-    <file>
-      <source>project-example</source>
-      <destName>.project</destName>
-    </file>
-  </files>
+	<files>
+		<file>
+			<source>classpath-example</source>
+			<destName>.classpath</destName>
+		</file>
+		<file>
+			<source>project-example</source>
+			<destName>.project</destName>
+		</file>
+	</files>
 </assembly>

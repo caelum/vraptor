@@ -24,13 +24,19 @@
 				<exclude>pom.xml</exclude>
 				<exclude>assembly.xml</exclude>
 				<exclude>build.xml</exclude>
+				<exclude>classpath-example</exclude>
+				<exclude>project-example</exclude>
 			</excludes>
 		</fileSet>
 	</fileSets>
-  <!--files>
-    <file>
-      <source>classpath-example</source>
-      <destName>.classpath</destName>
-    </file>
-  </files-->
-  </assembly>
+	<files>
+		<file>
+			<source>classpath-example</source>
+			<destName>.classpath</destName>
+		</file>
+		<file>
+			<source>project-example</source>
+			<destName>.project</destName>
+		</file>
+	</files>
+</assembly>

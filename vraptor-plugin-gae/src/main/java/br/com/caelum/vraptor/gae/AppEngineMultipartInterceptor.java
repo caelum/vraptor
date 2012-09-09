@@ -32,6 +32,13 @@ import br.com.caelum.vraptor.interceptor.multipart.MultipartConfig;
 import br.com.caelum.vraptor.interceptor.multipart.ServletFileUploadCreator;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 
+/**
+ * Implementation for {@link CommonsUploadMultipartInterceptor} to use in GAE/J, that creates
+ * a {@link GFileItemFactory} as {@link FileItemFactory}.
+ * 
+ * @author Pedro Matiello
+ * @since 3.0
+ */
 @Intercepts(before=ParametersInstantiatorInterceptor.class)
 @RequestScoped
 public class AppEngineMultipartInterceptor extends CommonsUploadMultipartInterceptor {

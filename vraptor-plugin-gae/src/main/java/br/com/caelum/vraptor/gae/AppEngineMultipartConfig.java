@@ -21,6 +21,13 @@ import br.com.caelum.vraptor.interceptor.multipart.MultipartConfig;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Component;
 
+/**
+ * Implementation for {@link MultipartConfig} to use in GAE/J, that ignores temporary
+ * directory and upload size limit.
+ * 
+ * @author Pedro Matiello
+ * @since 3.0
+ */
 @Component
 @ApplicationScoped
 public class AppEngineMultipartConfig implements MultipartConfig {

@@ -20,28 +20,29 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyMap;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.lang.reflect.Member;
-import java.util.Map;
 
 import ognl.Evaluation;
 import ognl.OgnlContext;
 import ognl.SimpleNode;
 import ognl.TypeConverter;
 
-import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.proxy.CglibProxifier;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.ReflectionInstanceCreator;
-import br.com.caelum.vraptor.test.VRaptorMockery;
 
 public class ArrayAccessorTest {
 
     private ArrayAccessor accessor;
-    private VRaptorMockery mockery;
     private OgnlContext context;
     private Evaluation evaluation;
     private SimpleNode node;
@@ -62,12 +63,11 @@ public class ArrayAccessorTest {
 
     @Before
     public void setup() {
-        this.mockery = new VRaptorMockery(true);
-        this.context = mockery.mock(OgnlContext.class);
-        this.evaluation = mockery.mock(Evaluation.class);
-        this.node = mockery.mock(SimpleNode.class);
+        this.context = mock(OgnlContext.class);
+        this.evaluation = mock(Evaluation.class);
+        this.node = mock(SimpleNode.class);
         this.instance = new Data();
-        this.typeConverter = mockery.mock(TypeConverter.class);
+        this.typeConverter = mock(TypeConverter.class);
         final EmptyElementsRemoval removal = new EmptyElementsRemoval() {
             @Override
 			public void removeExtraElements() {
@@ -76,24 +76,15 @@ public class ArrayAccessorTest {
         };
         final Proxifier proxifier = new CglibProxifier(new ReflectionInstanceCreator());
         accessor = new ArrayAccessor();
-        mockery.checking(new Expectations() {
-            {
-            	allowing(context).get("removal"); will(returnValue(removal));
-            	allowing(context).get("proxifier"); will(returnValue(proxifier));
-                allowing(context).getCurrentEvaluation();
-                will(returnValue(evaluation));
-                allowing(evaluation).getPrevious();
-                will(returnValue(evaluation));
-                allowing(evaluation).getNode();
-                will(returnValue(node));
-                one(node).toString();
-                will(returnValue("values"));
-                allowing(evaluation).getSource();
-                will(returnValue(instance));
-                one(context).getTypeConverter();
-                will(returnValue(typeConverter));
-            }
-        });
+        
+    	when(context.get("removal")).thenReturn(removal);
+    	when(context.get("proxifier")).thenReturn(proxifier);
+    	when(context.getCurrentEvaluation()).thenReturn(evaluation);
+    	when(evaluation.getPrevious()).thenReturn(evaluation);
+    	when(evaluation.getNode()).thenReturn(node);
+    	when(node.toString()).thenReturn("values");
+    	when(evaluation.getSource()).thenReturn(instance);
+    	when(context.getTypeConverter()).thenReturn(typeConverter);
     }
 
     @Test
@@ -113,15 +104,10 @@ public class ArrayAccessorTest {
     @Test
     public void settingShouldNullifyUpToIndexAndIgnoreRemoval() throws Exception {
         final Long[] l = new Long[] {};
-        mockery.checking(new Expectations() {
-            {
-            	allowing(context).getRoot();
-                one(typeConverter).convertValue((Map) with(anything()), with(anything()),
-                        (Member) with(anything()), (String) with(an(String.class)), with(anything()),
-                        (Class) with(an(Class.class)));
-                will(returnValue(22L));
-            }
-        });
+        when(typeConverter.convertValue(anyMap(), any(),
+                (Member) any(Member.class), anyString(), any(),
+                any(Class.class))).thenReturn(22L);
+
         accessor.setProperty(context, l, 1, 22L);
         assertThat(instance.simpleNode[0], is(nullValue()));
         assertThat(instance.simpleNode[1], is(equalTo(22L)));

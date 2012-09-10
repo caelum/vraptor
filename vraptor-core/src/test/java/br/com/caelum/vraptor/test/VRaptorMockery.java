@@ -70,17 +70,6 @@ public class VRaptorMockery {
 		return mockery.mock(typeToMock);
 	}
 
-	public ResourceMethod method(final Method declaredMethod) {
-		final ResourceMethod method = mockery.mock(ResourceMethod.class,"method" + declaredMethod.getName());
-		checking(new Expectations() {
-			{
-				one(method).getMethod();
-				will(returnValue(declaredMethod));
-			}
-		});
-		return method;
-	}
-
 	public <T> ResourceClass resource(final Class<T> type) {
 		final ResourceClass resource = mockery.mock(ResourceClass.class, "resource : " + type + (++count));
 		mockery.checking(new Expectations() {
@@ -92,103 +81,10 @@ public class VRaptorMockery {
 		return resource;
 	}
 
-	public <T> Container container(final Class<T> type, final T object) {
-		final Container container = mockery.mock(Container.class);
-		mockery.checking(new Expectations() {
-			{
-				one(container).instanceFor(type);
-				will(returnValue(object));
-			}
-		});
-		return container;
-	}
-
-	public <T> ResourceMethod methodForResource(Class<T> type) {
-		final ResourceClass resource = resource(type);
-		final ResourceMethod method = mockery.mock(ResourceMethod.class);
-		checking(new Expectations() {
-			{
-				one(method).getResource();
-				will(returnValue(resource));
-			}
-		});
-		return method;
-	}
-
-	public <T> ResourceMethod methodFor(final Class<T> type, final String methodName, final Class<?>... params)
-			throws NoSuchMethodException {
-		final ResourceClass resource = mockery.mock(ResourceClass.class, "resource" + type.getSimpleName());
-		mockery.checking(new Expectations() {
-			{
-				allowing(resource).getType();
-				will(returnValue(type));
-			}
-		});
-		final ResourceMethod method = mockery.mock(ResourceMethod.class, "method"  + methodName);
-		checking(new Expectations() {
-			{
-				allowing(method).getResource();
-				will(returnValue(resource));
-				allowing(method).getMethod();
-				will(returnValue(type.getDeclaredMethod(methodName, params)));
-			}
-		});
-		return method;
-	}
-
-	public Localization localization() {
-		final Localization loc = mockery.mock(Localization.class);
-		final ResourceBundle bundle = ResourceBundle.getBundle("messages");
-		mockery.checking(new Expectations() {
-			{
-				allowing(loc).getBundle();
-				will(returnValue(bundle));
-			}
-		});
-		return loc;
-	}
-
-	/**
-	 * Creates a "simplenode" from ognl which returns the desired toString.
-	 */
-	public SimpleNode ognlNode(final String name) {
-		// ognl design sucks when methods should return the interface types, not the implementation types
-		return new SimpleNode(0) {
-			private static final long serialVersionUID = 1L;
-			@Override
-			protected Object getValueBody(OgnlContext arg0, Object arg1) throws OgnlException {
-				return null;
-			}
-			@Override
-			public String toString() {
-				return name;
-			}
-		};
-
-	}
-
-	public HttpServletRequest request() {
-		return mockery.mock(HttpServletRequest.class);
-	}
-
 	/**
 	 * Mocks a type and says its local name for better error output.
 	 */
 	public <T> T mock(Class<T> type, String name) {
 		return mockery.mock(type,name);
 	}
-
-//	public ResourceBundle stubResourceBundle(final IogiParametersProviderTest iogiParametersProviderTest, final String key, final String value) {
-//		return new ResourceBundle(){
-//			@Override
-//			protected Object handleGetObject(String key) {
-//				return value;
-//			}
-//			@Override
-//			public Enumeration<String> getKeys() {
-//				return iogiParametersProviderTest.enumerationFor(key);
-//			}
-//		};
-//	}
-
 }

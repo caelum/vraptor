@@ -343,8 +343,7 @@ public class DefaultRouterTest {
 	@Test
 	public void usesAsteriskBothWays() throws NoSuchMethodException {
 		registerRulesFor(MyResource.class);
-		final ResourceMethod resourceMethod = mockery.methodFor(MyResource.class, "starPath");
-		final Method method = resourceMethod.getMethod();
+		final Method method = MyResource.class.getMethod("starPath");
 		String url = router.urlFor(MyResource.class, method, new Object[] {});
 		assertThat(router.parse(url, HttpMethod.POST, null).getMethod(), is(equalTo(method)));
 		mockery.assertIsSatisfied();
@@ -363,7 +362,7 @@ public class DefaultRouterTest {
 	public void canTranslateAInheritedResourceBothWays() throws NoSuchMethodException {
 		registerRulesFor(MyResource.class);
 		registerRulesFor(InheritanceExample.class);
-		final Method method = mockery.methodFor(MyResource.class, "notAnnotated").getMethod();
+		final Method method = MyResource.class.getMethod("notAnnotated");
 		String url = router.urlFor(InheritanceExample.class, method, new Object[] {});
 		assertThat(router.parse(url, HttpMethod.POST, null).getMethod(), is(equalTo(method)));
 		mockery.assertIsSatisfied();
@@ -372,7 +371,7 @@ public class DefaultRouterTest {
 	@Test
 	public void canTranslateAnnotatedMethodBothWays() throws NoSuchMethodException {
 		registerRulesFor(MyResource.class);
-		final Method method = mockery.methodFor(MyResource.class, "customizedPath").getMethod();
+		final Method method = MyResource.class.getMethod("customizedPath");
 		String url = router.urlFor(MyResource.class, method, new Object[] {});
 		assertThat(router.parse(url, HttpMethod.POST, null).getMethod(), is(equalTo(method)));
 		mockery.assertIsSatisfied();

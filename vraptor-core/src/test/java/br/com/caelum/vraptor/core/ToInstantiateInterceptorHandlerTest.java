@@ -16,25 +16,32 @@
  */
 package br.com.caelum.vraptor.core;
 
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import java.io.IOException;
 
-import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.test.VRaptorMockery;
 
 public class ToInstantiateInterceptorHandlerTest {
 
-    private VRaptorMockery mockery;
+	private @Mock Container container;
+	private @Mock Interceptor interceptor;
+	private @Mock InterceptorStack stack;
+	private @Mock ResourceMethod method;
 
     @Before
     public void setup() {
-        this.mockery = new VRaptorMockery();
+        MockitoAnnotations.initMocks(this);
     }
 
     public static class MyWeirdInterceptor implements Interceptor {
@@ -56,7 +63,8 @@ public class ToInstantiateInterceptorHandlerTest {
 
     @Test(expected = InterceptionException.class)
     public void shouldComplainWhenUnableToInstantiateAnInterceptor() throws InterceptionException, IOException {
-        Container container = mockery.container(MyWeirdInterceptor.class, null);
+        when(container.instanceFor(MyWeirdInterceptor.class)).thenReturn(null);
+        
         ToInstantiateInterceptorHandler handler = new ToInstantiateInterceptorHandler(container,
                 MyWeirdInterceptor.class);
         handler.execute(null, null, null);
@@ -64,40 +72,26 @@ public class ToInstantiateInterceptorHandlerTest {
 
     @Test
     public void shouldInvokeInterceptorsMethodIfAbleToInstantiateIt() throws InterceptionException, IOException {
-        final Interceptor interceptor = mockery.mock(Interceptor.class);
-        final InterceptorStack stack = mockery.mock(InterceptorStack.class);
-        final ResourceMethod method = mockery.mock(ResourceMethod.class);
         final Object instance = new Object();
-        Container container = mockery.container(Interceptor.class, interceptor);
-        mockery.checking(new Expectations() {
-            {
-            	one(interceptor).accepts(method); will(returnValue(true));
-                one(interceptor).intercept(stack, method, instance);
-            }
-        });
+        
+        when(container.instanceFor(Interceptor.class)).thenReturn(interceptor);
+        when(interceptor.accepts(method)).thenReturn(true);
+
         ToInstantiateInterceptorHandler handler = new ToInstantiateInterceptorHandler(container, Interceptor.class);
         handler.execute(stack, method, instance);
-        mockery.assertIsSatisfied();
+
+        verify(interceptor).intercept(stack, method, instance);
     }
     @Test
     public void shouldNotInvokeInterceptorsMethodIfInterceptorDoesntAcceptsResource() throws InterceptionException, IOException {
-    	final Interceptor interceptor = mockery.mock(Interceptor.class);
-    	final InterceptorStack stack = mockery.mock(InterceptorStack.class);
-    	final ResourceMethod method = mockery.mock(ResourceMethod.class);
     	final Object instance = new Object();
-    	Container container = mockery.container(Interceptor.class, interceptor);
-    	mockery.checking(new Expectations() {
-    		{
-    			one(interceptor).accepts(method); will(returnValue(false));
+        when(container.instanceFor(Interceptor.class)).thenReturn(interceptor);
+        when(interceptor.accepts(method)).thenReturn(false);
 
-    			never(interceptor).intercept(stack, method, instance);
-
-    			one(stack).next(method, instance);
-    		}
-    	});
     	ToInstantiateInterceptorHandler handler = new ToInstantiateInterceptorHandler(container, Interceptor.class);
     	handler.execute(stack, method, instance);
-    	mockery.assertIsSatisfied();
+    	
+        verify(interceptor, never()).intercept(stack, method, instance);
+        verify(stack).next(method, instance);
     }
-
 }

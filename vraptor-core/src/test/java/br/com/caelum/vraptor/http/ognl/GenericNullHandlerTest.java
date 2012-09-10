@@ -21,6 +21,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -34,26 +36,23 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.test.VRaptorMockery;
 
 public class GenericNullHandlerTest {
 
-	private VRaptorMockery mockery;
-	private EmptyElementsRemoval removal;
-	private Container container;
+	private @Mock EmptyElementsRemoval removal;
+	private @Mock Container container;
 	private GenericNullHandler handler;
 
 	@Before
 	public void setup() {
-		this.mockery = new VRaptorMockery(true);
-		this.removal = mockery.mock(EmptyElementsRemoval.class);
-		this.container = mockery.mock(Container.class);
-		this.handler = new GenericNullHandler(removal);
+		MockitoAnnotations.initMocks(this);
+		handler = new GenericNullHandler(removal);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -83,63 +82,43 @@ public class GenericNullHandlerTest {
 	@Test
 	public void shouldInstantiateArrayListForCollectionInterface()
 			throws Exception {
-		mockery.checking(new Expectations() {
-			{
-				one(removal).add(new ArrayList<Object>());
-			}
-		});
 		Collection<?> collection = handler.instantiate(Collection.class);
 		assertThat(collection, is(notNullValue()));
 		assertThat(collection, is(instanceOf(ArrayList.class)));
+		verify(removal, times(1)).add(new ArrayList<Object>());
 	}
 
 	@Test
 	public void shouldInstantiateArrayListForListInterface() throws Exception {
-		mockery.checking(new Expectations() {
-			{
-				one(removal).add(new ArrayList<Object>());
-			}
-		});
 		List<?> list = handler.instantiate(List.class);
 		assertThat(list, is(notNullValue()));
 		assertThat(list, is(instanceOf(ArrayList.class)));
+		verify(removal, times(1)).add(new ArrayList<Object>());
 	}
 
 	@Test
 	public void shouldInstantiateLinkedListForQueueInterface() throws Exception {
-		mockery.checking(new Expectations() {
-			{
-				one(removal).add(new LinkedList<Object>());
-			}
-		});
 		Queue<?> queue = handler.instantiate(Queue.class);
 		assertThat(queue, is(notNullValue()));
 		assertThat(queue, is(instanceOf(LinkedList.class)));
+		verify(removal, times(1)).add(new LinkedList<Object>());
 	}
 
 	@Test
 	public void shouldInstantiateHashSetListForSetInterface() throws Exception {
-		mockery.checking(new Expectations() {
-			{
-				one(removal).add(new HashSet<Object>());
-			}
-		});
 		Set<?> set = handler.instantiate(Set.class);
 		assertThat(set, is(notNullValue()));
 		assertThat(set, is(instanceOf(HashSet.class)));
+		verify(removal, times(1)).add(new HashSet<Object>());
 	}
 
 	@Test
 	public void shouldInstantiateTreeSetListForSortedSetInterface()
 			throws Exception {
-		mockery.checking(new Expectations() {
-			{
-				one(removal).add(new TreeSet<Object>());
-			}
-		});
 		Set<?> set = handler.instantiate(SortedSet.class);
 		assertThat(set, is(notNullValue()));
 		assertThat(set, is(instanceOf(TreeSet.class)));
+		verify(removal, times(1)).add(new TreeSet<Object>());
 	}
 
 }

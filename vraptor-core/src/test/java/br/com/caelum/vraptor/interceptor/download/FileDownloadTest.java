@@ -30,11 +30,7 @@ public class FileDownloadTest {
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
 
-		this.bytes = new byte[10000];
-		for (int i = 0; i < 10000; i++) {
-			// just to have something not trivial
-			bytes[i] = (byte) (i % 100);
-		}
+		bytes = new byte[] { (byte) 0 };
 		this.outputStream = new ByteArrayOutputStream();
 
 		this.file = File.createTempFile("test", "vraptor");
@@ -48,13 +44,12 @@ public class FileDownloadTest {
 			}
 		};
 
+		when(response.getOutputStream()).thenReturn(socketStream);
 	}
 
 	@Test
 	public void shouldFlushWholeFileToHttpResponse() throws IOException {
 		FileDownload fd = new FileDownload(file, "type");
-		
-		when(response.getOutputStream()).thenReturn(socketStream);
 		fd.write(response);
 
 		assertArrayEquals(bytes, outputStream.toByteArray());
@@ -63,11 +58,18 @@ public class FileDownloadTest {
 	@Test
 	public void shouldUseHeadersToHttpResponse() throws IOException {
 		FileDownload fd = new FileDownload(file, "type", "x.txt", false);
-
-		when(response.getOutputStream()).thenReturn(socketStream);
 		fd.write(response);
+		
 		verify(response, times(1)).setHeader("Content-type", "type");
-
+		verify(response, times(1)).setHeader("Content-disposition", "inline; filename=x.txt");
 		assertArrayEquals(bytes, outputStream.toByteArray());
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void shouldThrowIllegalArgumentExceptionIfFileDoesntExists() throws Exception {
+		File file0 = new File("a.path.that.doesnot.exists");
+		FileDownload fd = new FileDownload(file0, "type", "x.txt", false);
+		fd.write(response);
+		
 	}
 }

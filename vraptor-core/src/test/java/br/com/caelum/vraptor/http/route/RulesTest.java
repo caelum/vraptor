@@ -17,30 +17,27 @@
 
 package br.com.caelum.vraptor.http.route;
 
-import org.jmock.Expectations;
+import static org.mockito.Mockito.when;
+
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.proxy.Proxifier;
-import br.com.caelum.vraptor.test.VRaptorMockery;
 
 public class RulesTest {
 
-	private VRaptorMockery mockery;
-	private Router router;
-	private Proxifier proxifier;
+	private @Mock Router router;
+	private @Mock Proxifier proxifier;
+	private DefaultRouteBuilder routeBuilder;
 
 	@Before
 	public void setup() {
-		this.mockery = new VRaptorMockery();
-		this.router = mockery.mock(Router.class);
-		this.proxifier = mockery.mock(Proxifier.class);
-		mockery.checking(new Expectations() {
-			{
-				one(router).builderFor("");
-				will(returnValue(new DefaultRouteBuilder(proxifier, null, null, null, new JavaEvaluator(), "")));
-			}
-		});
+		MockitoAnnotations.initMocks(this);
+		
+		routeBuilder = new DefaultRouteBuilder(proxifier, null, null, null, new JavaEvaluator(), "");
+		when(router.builderFor("")).thenReturn(routeBuilder);
 	}
 
 	@Test(expected=IllegalRouteException.class)
@@ -51,7 +48,5 @@ public class RulesTest {
 				routeFor("");
 			}
 		};
-		mockery.assertIsSatisfied();
 	}
-
 }

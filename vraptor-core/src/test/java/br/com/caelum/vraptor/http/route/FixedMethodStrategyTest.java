@@ -21,51 +21,47 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
+import static org.mockito.Mockito.only;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.EnumSet;
-import java.util.HashSet;
 import java.util.Set;
 
-import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
 import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.test.VRaptorMockery;
+
+import com.google.common.collect.Sets;
 
 public class FixedMethodStrategyTest {
 
-	private VRaptorMockery mockery;
-	private MutableRequest request;
-	private ParametersControl control;
+	private @Mock MutableRequest request;
+	private @Mock ParametersControl control;
 	private ResourceMethod list;
 
 	@Before
 	public void setup() {
-		this.mockery = new VRaptorMockery();
-		this.request = mockery.mock(MutableRequest.class);
-		this.control = mockery.mock(ParametersControl.class);
-		this.list = DefaultResourceMethod.instanceFor(MyControl.class, method("list"));
+		MockitoAnnotations.initMocks(this);
+		list = DefaultResourceMethod.instanceFor(MyControl.class, method("list"));
 	}
 
 	@Test
 	public void canTranslate() {
 		FixedMethodStrategy strategy = new FixedMethodStrategy("abc", list,
 				methods(HttpMethod.POST), control, 0, new String[] {});
-		mockery.checking(new Expectations() {
-			{
-				one(control).matches("/clients/add"); will(returnValue(true));
-				one(control).fillIntoRequest("/clients/add", request);
-			}
-		});
+		when(control.matches("/clients/add")).thenReturn(true);
 		ResourceMethod match = strategy.resourceMethod(request, "/clients/add");
 		assertThat(match, is(VRaptorMatchers.resourceMethod(method("list"))));
+		verify(control, only()).fillIntoRequest("/clients/add", request);
 	}
 
 	@Test
@@ -80,9 +76,8 @@ public class FixedMethodStrategyTest {
 		assertThat(first, not(equalTo(forth)));
 	}
 
-	@SuppressWarnings("unchecked")
 	private Set<HttpMethod> methods(HttpMethod method) {
-		return new HashSet(Arrays.asList(method));
+		return Sets.newHashSet(method);
 	}
 
 	private Method method(String name, Class... types) {
@@ -121,5 +116,4 @@ public class FixedMethodStrategyTest {
 		public void show(Dog dog) {
 		}
 	}
-
 }

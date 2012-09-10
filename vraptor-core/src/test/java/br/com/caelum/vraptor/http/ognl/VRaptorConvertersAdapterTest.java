@@ -20,6 +20,7 @@ package br.com.caelum.vraptor.http.ognl;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,31 +30,28 @@ import java.util.ResourceBundle;
 import ognl.Ognl;
 import ognl.OgnlException;
 
-import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.core.Converters;
-import br.com.caelum.vraptor.test.VRaptorMockery;
 
 public class VRaptorConvertersAdapterTest {
 
-    private VRaptorMockery mockery;
-    private Converters converters;
+    private @Mock Converters converters;
+	private @Mock Converter converter;
     private VRaptorConvertersAdapter adapter;
     private Cat myCat;
-	private Converter converter;
 	private ResourceBundle bundle;
 
     @Before
     public void setup() {
-        this.mockery = new VRaptorMockery();
-        this.converters = mockery.mock(Converters.class);
-        this.bundle = ResourceBundle.getBundle("messages");
-        this.adapter = new VRaptorConvertersAdapter(converters, bundle);
-        this.converter = mockery.mock(Converter.class);
-        this.myCat = new Cat();
+    	MockitoAnnotations.initMocks(this);
+        bundle = ResourceBundle.getBundle("messages");
+        adapter = new VRaptorConvertersAdapter(converters, bundle);
+        myCat = new Cat();
     }
 
     public static class Cat {
@@ -107,55 +105,37 @@ public class VRaptorConvertersAdapterTest {
 	@Test
 	@SuppressWarnings("unchecked")
     public void shouldInvokePrimitiveConverter() throws OgnlException {
-        mockery.checking(new Expectations() {
-            {
-                one(converters).to(int.class);
-                will(returnValue(converter));
-                one(converter).convert("2", int.class, bundle);
-                will(returnValue(2));
-            }
-        });
+		when(converters.to(int.class)).thenReturn(converter);
+		when(converter.convert("2", int.class, bundle)).thenReturn(2);
+        
         Map<?,?> context = Ognl.createDefaultContext(myCat);
         Ognl.setTypeConverter(context, adapter);
         Ognl.setValue("length", context, myCat, "2");
         assertThat(myCat.length, is(equalTo(2)));
-        mockery.assertIsSatisfied();
     }
 
     @SuppressWarnings("unchecked")
 	@Test
     public void shouldInvokeCustomTypeConverter() throws OgnlException {
-        mockery.checking(new Expectations() {
-            {
-                one(converters).to(Tail.class);
-                will(returnValue(converter));
-                one(converter).convert("15", Tail.class, bundle);
-                will(returnValue(new Tail(15)));
-            }
-        });
+        when(converters.to(Tail.class)).thenReturn(converter);
+        when(converter.convert("15", Tail.class, bundle)).thenReturn(new Tail(15));
+                
         Map<?,?> context = Ognl.createDefaultContext(myCat);
         Ognl.setTypeConverter(context, adapter);
         Ognl.setValue("tail", context, myCat, "15");
         assertThat(myCat.tail.length, is(equalTo(15)));
-        mockery.assertIsSatisfied();
     }
 
     @Test(expected=IllegalArgumentException.class)
     public void shouldThrowExceptionIfNoConverterIsFound() throws Throwable {
-        mockery.checking(new Expectations() {
-            {
-                one(converters).to(Tail.class);
-                will(returnValue(null));
-            }
-        });
-        Map context = Ognl.createDefaultContext(myCat);
+        when(converters.to(Tail.class)).thenReturn(null);
+        
+        Map<?,?> context = Ognl.createDefaultContext(myCat);
         Ognl.setTypeConverter(context, adapter);
         try {
             Ognl.setValue("tail", context, myCat, "15");
         } catch (OgnlException e) {
-            mockery.assertIsSatisfied();
             throw e.getCause();
         }
     }
-
 }

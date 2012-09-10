@@ -18,17 +18,24 @@
 package br.com.caelum.vraptor.interceptor;
 
 import static br.com.caelum.vraptor.view.Results.nothing;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.util.Collections;
 
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
-import org.jmock.Expectations;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Validator;
@@ -36,25 +43,20 @@ import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.test.VRaptorMockery;
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.ValidationException;
 
 public class ExecuteMethodInterceptorTest {
 
-	private VRaptorMockery mockery;
-	private MethodInfo info;
-	private InterceptorStack stack;
-	private Validator validator;
+	private @Mock MethodInfo info;
+	private @Mock InterceptorStack stack;
+	private @Mock Validator validator;
 	private ExecuteMethodInterceptor interceptor;
 
 	@Before
 	public void setup() throws NoSuchMethodException {
-		this.mockery = new VRaptorMockery();
-		this.info = mockery.mock(MethodInfo.class);
-		this.stack = mockery.mock(InterceptorStack.class);
-		this.validator = mockery.mock(Validator.class);
-		this.interceptor = new ExecuteMethodInterceptor(info, validator);
+		MockitoAnnotations.initMocks(this);
+		interceptor = new ExecuteMethodInterceptor(info, validator);
 	}
 
     @Test
@@ -65,62 +67,48 @@ public class ExecuteMethodInterceptorTest {
 	@Test
 	public void shouldInvokeTheMethodAndNotProceedWithInterceptorStack() throws SecurityException,
 			NoSuchMethodException, IOException, InterceptionException {
-		final ResourceMethod method = new DefaultResourceMethod(null, DogAlike.class.getMethod("bark"));
-		final DogAlike auau = mockery.mock(DogAlike.class);
-		mockery.checking(new Expectations() {
-			{
-				one(auau).bark();
-				one(info).getParameters();
-				will(returnValue(new Object[] {}));
-				one(stack).next(method, auau);
-				one(info).setResult("ok");
-				allowing(validator);
-			}
-		});
+		ResourceMethod method = new DefaultResourceMethod(null, DogAlike.class.getMethod("bark"));
+		DogAlike auau = mock(DogAlike.class);
+		when(info.getParameters()).thenReturn(new Object[0]);
+		
 		interceptor.intercept(stack, method, auau);
-		mockery.assertIsSatisfied();
+		
+		verify(auau).bark();
+		verify(stack).next(method, auau);
+		verify(info).setResult("ok");
 	}
 
 	@Test
 	public void shouldThrowMethodExceptionIfThereIsAnInvocationException() throws IOException, SecurityException,
 			NoSuchMethodException {
 		ResourceMethod method = new DefaultResourceMethod(null, DogAlike.class.getMethod("bark"));
-		final DogAlike auau = mockery.mock(DogAlike.class);
+		final DogAlike auau = mock(DogAlike.class);
 		final RuntimeException exception = new RuntimeException();
-		mockery.checking(new Expectations() {
-			{
-				one(auau).bark();
-				will(throwException(exception));
-				one(info).getParameters();
-				will(returnValue(new Object[] {}));
-			}
-		});
+		
+		doThrow(exception).when(auau).bark();
+		when(info.getParameters()).thenReturn(new Object[0]);
+		
 		try {
 			interceptor.intercept(stack, method, auau);
 			Assert.fail();
 		} catch (InterceptionException e) {
-			MatcherAssert.assertThat((RuntimeException) e.getCause(), Matchers.is(Matchers.equalTo(exception)));
-			mockery.assertIsSatisfied();
+			assertThat((RuntimeException) e.getCause(), is(equalTo(exception)));
 		}
 	}
 
 	@Test
 	public void shouldUseTheProvidedArguments() throws SecurityException, NoSuchMethodException, InterceptionException,
 			IOException {
-		final ResourceMethod method = new DefaultResourceMethod(null, DogAlike.class.getMethod("bark", int.class));
-		final DogAlike auau = mockery.mock(DogAlike.class);
-		mockery.checking(new Expectations() {
-			{
-				one(auau).bark(3);
-				one(info).getParameters();
-				will(returnValue(new Object[] { 3 }));
-				one(stack).next(method, auau);
-				one(info).setResult("ok");
-				allowing(validator);
-			}
-		});
+		ResourceMethod method = new DefaultResourceMethod(null, DogAlike.class.getMethod("bark", int.class));
+		DogAlike auau = mock(DogAlike.class);
+
+		when(info.getParameters()).thenReturn(new Object[] { 3 });
+
 		interceptor.intercept(stack, method, auau);
-		mockery.assertIsSatisfied();
+
+		verify(auau).bark(3);
+		verify(stack).next(method, auau);
+		verify(info).setResult("ok");
 	}
 
 	public static class XController {
@@ -136,96 +124,74 @@ public class ExecuteMethodInterceptorTest {
 	@Test
 	public void shouldSetResultReturnedValueFromInvokedMethod() throws SecurityException, NoSuchMethodException,
 			InterceptionException, IOException {
-		final ResourceMethod method = new DefaultResourceMethod(null, XController.class.getMethod("method",
-				Object.class));
+		ResourceMethod method = new DefaultResourceMethod(null, XController.class.getMethod("method", Object.class));
 		final XController x = new XController();
-		mockery.checking(new Expectations() {
-			{
-				one(info).getParameters();
-				will(returnValue(new Object[] { "string" }));
-				one(stack).next(method, x);
-				one(info).setResult("string");
-				allowing(validator);
-			}
-		});
+		
+		when(info.getParameters()).thenReturn(new Object[] { "string" });
+
 		interceptor.intercept(stack, method, x);
-		mockery.assertIsSatisfied();
+
+		verify(stack).next(method, x);
+		verify(info).setResult("string");
 	}
 
 	@Test
 	public void shouldSetNullWhenNullReturnedFromInvokedMethod() throws SecurityException, NoSuchMethodException,
 			InterceptionException, IOException {
-		final ResourceMethod method = new DefaultResourceMethod(null, XController.class.getMethod("method",
-				Object.class));
+		ResourceMethod method = new DefaultResourceMethod(null, XController.class.getMethod("method", Object.class));
 		final XController x = new XController();
-		mockery.checking(new Expectations() {
-			{
-				one(info).getParameters();
-				will(returnValue(new Object[] { null }));
-				one(stack).next(method, x);
-				one(info).setResult(null);
-				allowing(validator);
-			}
-		});
+		
+		when(info.getParameters()).thenReturn(new Object[] { null });
+
 		interceptor.intercept(stack, method, x);
-		mockery.assertIsSatisfied();
+
+		verify(stack).next(method, x);
+		verify(info).setResult(null);
 	}
 
 	@Test
 	public void shouldSetOkWhenVoidReturnedFromInvokedMethod() throws SecurityException, NoSuchMethodException,
 			InterceptionException, IOException {
-		final ResourceMethod method = new DefaultResourceMethod(null, XController.class.getMethod("method"));
-		final XController x = new XController();
-		mockery.checking(new Expectations() {
-			{
-				one(info).getParameters();
-				will(returnValue(new Object[] {}));
-				one(stack).next(method, x);
-				one(info).setResult("ok");
-				allowing(validator);
-			}
-		});
+		ResourceMethod method = new DefaultResourceMethod(null, XController.class.getMethod("method"));
+		XController x = new XController();
+		
+		when(info.getParameters()).thenReturn(new Object[] {});
+		
 		interceptor.intercept(stack, method, x);
-		mockery.assertIsSatisfied();
+		
+		verify(stack).next(method, x);
+		verify(info).setResult("ok");
 	}
 
 	@Test
 	public void shouldBeOkIfThereIsValidationErrorsAndYouSpecifiedWhereToGo() throws SecurityException,
 			NoSuchMethodException, InterceptionException, IOException {
-		final ResourceMethod method = mockery.methodFor(AnyController.class, "specifiedWhereToGo");
-		final AnyController controller = new AnyController(validator);
-		mockery.checking(new Expectations() {
-			{
-				one(info).getParameters();
-				will(returnValue(new Object[0]));
-				one(validator).onErrorUse(nothing());
-				will(throwException(new ValidationException(Collections.<Message> emptyList())));
-				allowing(validator).hasErrors();
-				will(returnValue(true));
-			}
-		});
+		Method specifiedWhereToGo = AnyController.class.getMethod("specifiedWhereToGo");
+		ResourceMethod method = DefaultResourceMethod.instanceFor(AnyController.class, specifiedWhereToGo);
+		AnyController controller = new AnyController(validator);
+		
+		when(info.getParameters()).thenReturn(new Object[0]);
+		doThrow(new ValidationException(Collections.<Message> emptyList())).when(validator).onErrorUse(nothing());
+		when(validator.hasErrors()).thenReturn(true);
+				
 		interceptor.intercept(stack, method, controller);
-		mockery.assertIsSatisfied();
 	}
 
 	@Test
 	public void shouldThrowExceptionIfYouHaventSpecifiedWhereToGoOnValidationError() throws SecurityException,
 			NoSuchMethodException, InterceptionException, IOException {
-		final ResourceMethod method = mockery.methodFor(AnyController.class, "didntSpecifyWhereToGo");
+		Method didntSpecifyWhereToGo = AnyController.class.getMethod("didntSpecifyWhereToGo");
+		final ResourceMethod method = DefaultResourceMethod.instanceFor(AnyController.class, didntSpecifyWhereToGo);
 		final AnyController controller = new AnyController(validator);
-		mockery.checking(new Expectations() {
-			{
-				one(info).getParameters();
-				will(returnValue(new Object[0]));
-				one(validator).hasErrors();
-				will(returnValue(true));
-			}
-		});
+		
+		when(info.getParameters()).thenReturn(new Object[0]);
+		when(validator.hasErrors()).thenReturn(true);
+				
 		try {
 			interceptor.intercept(stack, method, controller);
 			Assert.fail();
 		} catch (InterceptionException e) {
-			mockery.assertIsSatisfied();
+			
 		}
 	}
 

@@ -16,9 +16,14 @@
  */
 package br.com.caelum.vraptor;
 
+ import static br.com.caelum.vraptor.config.BasicConfiguration.CONTAINER_PROVIDER;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 
@@ -31,9 +36,10 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.config.BasicConfiguration;
 import br.com.caelum.vraptor.core.DefaultStaticContentHandler;
@@ -45,94 +51,69 @@ import br.com.caelum.vraptor.http.EncodingHandler;
 import br.com.caelum.vraptor.http.NullEncodingHandler;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
-import br.com.caelum.vraptor.test.VRaptorMockery;
 
 public class VRaptorTest {
 
-    private VRaptorMockery mockery;
-    private FilterConfig config;
-    private ServletContext context;
-    private static Container container;
-    private RequestExecution execution;
+    private @Mock FilterConfig config;
+    private @Mock ServletContext context;
+    private @Mock static Container container;
+    private @Mock RequestExecution execution;
 
     @Before
     public void setup() {
-        this.mockery = new VRaptorMockery();
-        this.config = mockery.mock(FilterConfig.class);
-        this.context = mockery.mock(ServletContext.class);
-        container = mockery.mock(Container.class);
-        this.execution = mockery.mock(RequestExecution.class);
-        started =stoped= false;
+    	MockitoAnnotations.initMocks(this);
+        started = stoped = false;
     }
 
     @Test(expected = ServletException.class)
     public void shoudlComplainIfNotInAServletEnviroment() throws IOException, ServletException {
-        ServletRequest request = mockery.mock(ServletRequest.class);
-        ServletResponse response = mockery.mock(ServletResponse.class);
+        ServletRequest request = mock(ServletRequest.class);
+        ServletResponse response = mock(ServletResponse.class);
+        
         new VRaptor().doFilter(request, response, null);
-        mockery.assertIsSatisfied();
     }
 
     @Test
     public void shouldExecuteARequestUsingTheSpecifiedContainer() throws ServletException, IOException,
             VRaptorException {
-        final HttpServletRequest request = mockery.mock(HttpServletRequest.class);
-        final ServletResponse response = mockery.mock(HttpServletResponse.class);
-        mockery.checking(new Expectations() {
-            {
-                one(request).getRequestURI();
-                will(returnValue("/unknown_file"));
-                one(request).getContextPath();
-                will(returnValue(""));
-                one(context).getResource("/unknown_file");
-                will(returnValue(null));
-                one(config).getServletContext();
-                will(returnValue(context));
-                one(context).getInitParameter(BasicConfiguration.CONTAINER_PROVIDER);
-                will(returnValue(MyProvider.class.getName()));
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        HttpServletResponse response = mock(HttpServletResponse.class);
+        
+        when(request.getRequestURI()).thenReturn("/unknown_file");
+        when(request.getContextPath()).thenReturn("");
+        when(context.getResource("/unknown_file")).thenReturn(null);
+        when(config.getServletContext()).thenReturn(context);
+        when(context.getInitParameter(BasicConfiguration.CONTAINER_PROVIDER)).thenReturn(MyProvider.class.getName());
+        
+        when(context.getAttribute("container")).thenReturn(container);
+        when(container.instanceFor(RequestExecution.class)).thenReturn(execution);
+        
+        when(container.instanceFor(StaticContentHandler.class)).thenReturn(new DefaultStaticContentHandler(context));
+        
+        when(container.instanceFor(EncodingHandler.class)).thenReturn(new NullEncodingHandler());
                 
-                one(context).getAttribute("container");
-                will(returnValue(container));
-                one(container).instanceFor(RequestExecution.class);
-                will(returnValue(execution));
-                
-                one(container).instanceFor(StaticContentHandler.class);
-                will(returnValue(new DefaultStaticContentHandler(context)));
-                
-                one(execution).execute();
-
-                one(container).instanceFor(EncodingHandler.class);
-                will(returnValue(new NullEncodingHandler()));
-            }
-        });
-        VRaptor raptor = new VRaptor();
-        raptor.init(this.config);
-        raptor.doFilter(request, response, null);
-        mockery.assertIsSatisfied();
+        VRaptor vraptor = new VRaptor();
+        vraptor.init(this.config);
+        vraptor.doFilter(request, response, null);
+        
+        verify(execution, times(1)).execute();
     }
 
     @Test
     public void shouldStopContainer() throws ServletException, IOException,
             VRaptorException {
-        mockery.checking(new Expectations() {
-            {
-                one(config).getServletContext();
-                will(returnValue(context));
-                one(context).getInitParameter(BasicConfiguration.CONTAINER_PROVIDER);
-                will(returnValue(MyProvider.class.getName()));
-                
-                one(container).instanceFor(StaticContentHandler.class);
-                will(returnValue(new DefaultStaticContentHandler(context)));
-            }
-        });
-        VRaptor raptor = new VRaptor();
-        raptor.init(this.config);
+        when(config.getServletContext()).thenReturn(context);
+        when(context.getInitParameter(CONTAINER_PROVIDER)).thenReturn(MyProvider.class.getName());
+        when(container.instanceFor(StaticContentHandler.class)).thenReturn(new DefaultStaticContentHandler(context));
+        
+        VRaptor vraptor = new VRaptor();
+        vraptor.init(this.config);
         assertThat(started, is(equalTo(true)));
         assertThat(stoped, is(equalTo(false)));
-        raptor.destroy();
+        
+        vraptor.destroy();
         assertThat(started, is(equalTo(false)));
         assertThat(stoped, is(equalTo(true)));
-        mockery.assertIsSatisfied();
     }
 
     private static boolean started;
@@ -190,23 +171,17 @@ public class VRaptorTest {
 
     @Test
     public void shouldDeferToContainerIfStaticFile() throws IOException, ServletException {
-        VRaptor raptor = new VRaptor();
-        final HttpServletRequest request = mockery.mock(HttpServletRequest.class);
-        final HttpServletResponse response = mockery.mock(HttpServletResponse.class);
-        final StaticContentHandler handler = mockery.mock(StaticContentHandler.class);
-        final FilterChain chain = mockery.mock(FilterChain.class);
-        mockery.checking(new Expectations() {
-            {
-                one(handler).requestingStaticFile(request);
-                will(returnValue(true));
-                one(handler).deferProcessingToContainer(chain, request, response);
-                allowing(request).setCharacterEncoding("UTF-8");
-                allowing(response).setCharacterEncoding("UTF-8");
-            }
-        });
-        raptor.init(new DoNothingProvider(handler));
-        raptor.doFilter(request, response, chain);
-        mockery.assertIsSatisfied();
+        VRaptor vraptor = new VRaptor();
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        HttpServletResponse response = mock(HttpServletResponse.class);
+        StaticContentHandler handler = mock(StaticContentHandler.class);
+        FilterChain chain = mock(FilterChain.class);
+        
+        when(handler.requestingStaticFile(request)).thenReturn(true);
+        
+        vraptor.init(new DoNothingProvider(handler));
+        vraptor.doFilter(request, response, chain);
+        
+        verify(handler, times(1)).deferProcessingToContainer(chain, request, response);
     }
-
 }

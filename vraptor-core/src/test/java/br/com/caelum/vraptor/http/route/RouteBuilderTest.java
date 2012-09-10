@@ -21,7 +21,6 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.lang.reflect.Method;
@@ -30,6 +29,8 @@ import java.math.BigDecimal;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
@@ -42,12 +43,12 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 
 public class RouteBuilderTest {
 
-	private ParameterNameProvider provider;
+	private @Mock ParameterNameProvider provider;
+	private @Mock Converters converters;
 	private RouteBuilder builder;
 	private ResourceMethod method;
 	private Proxifier proxifier;
 	private TypeFinder typeFinder;
-	private Converters converters;
 
 	public static class MyResource {
 
@@ -58,7 +59,7 @@ public class RouteBuilderTest {
 
 	@Before
 	public void setUp() throws Exception {
-		provider = mock(ParameterNameProvider.class);
+		MockitoAnnotations.initMocks(this);
 
 		when(provider.parameterNamesFor(any(Method.class))).thenReturn(new String[] { "abc", "def", "ghi" });
 
@@ -68,8 +69,6 @@ public class RouteBuilderTest {
 		proxifier = new JavassistProxifier(new ObjenesisInstanceCreator());
 
 		typeFinder = new DefaultTypeFinder(provider);
-		converters = mock(Converters.class);
-
 	}
 
 	@Test

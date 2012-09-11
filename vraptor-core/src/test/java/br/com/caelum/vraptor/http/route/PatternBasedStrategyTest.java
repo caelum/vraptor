@@ -25,22 +25,20 @@ import java.util.EnumSet;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.resource.HttpMethod;
-import br.com.caelum.vraptor.test.VRaptorMockery;
 
 
 @Deprecated
 public class PatternBasedStrategyTest {
 
-
-	private VRaptorMockery mockery;
-	private ParametersControl control;
+	private @Mock ParametersControl control;
 
 	@Before
 	public void setup() {
-		this.mockery = new VRaptorMockery();
-		this.control = mockery.mock(ParametersControl.class);
+		MockitoAnnotations.initMocks(this);
 	}
 
 	@Test

@@ -8,12 +8,7 @@ import static org.mockito.Mockito.when;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.util.Collections;
 
-import br.com.caelum.vraptor.serialization.xstream.XStreamBuilderImpl;
-import br.com.caelum.vraptor.serialization.xstream.XStreamConverters;
-import com.thoughtworks.xstream.converters.Converter;
-import com.thoughtworks.xstream.converters.SingleValueConverter;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -21,6 +16,7 @@ import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.resource.DefaultResourceClass;
 import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.serialization.xstream.XStreamBuilderImpl;
 
 public class XStreamXmlDeserializerTest {
 

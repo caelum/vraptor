@@ -9,7 +9,6 @@ import static org.mockito.Mockito.when;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

@@ -19,11 +19,10 @@ import java.io.InputStream;
 import java.lang.reflect.Method;
 
 import br.com.caelum.vraptor.http.ParameterNameProvider;
-import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.resource.ResourceMethod;
-
 import br.com.caelum.vraptor.serialization.xstream.XStreamBuilder;
+
 import com.thoughtworks.xstream.XStream;
 
 /**

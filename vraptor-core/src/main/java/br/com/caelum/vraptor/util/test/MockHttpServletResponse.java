@@ -20,7 +20,6 @@ package br.com.caelum.vraptor.util.test;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 import java.util.Locale;
 

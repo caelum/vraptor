@@ -18,15 +18,12 @@
 package br.com.caelum.vraptor.converter.jodatime;
 
 import static org.joda.time.format.DateTimeFormat.shortDate;
-import static org.joda.time.format.DateTimeFormat.shortDateTime;
 
 import java.text.MessageFormat;
 import java.util.ResourceBundle;
 
 import org.joda.time.DateMidnight;
 import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;

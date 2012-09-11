@@ -25,7 +25,6 @@ import static org.mockito.Mockito.when;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

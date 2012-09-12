@@ -21,13 +21,14 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.HashMap;
 
 import javax.annotation.PreDestroy;
 
-import org.jmock.Expectations;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.ComponentRegistry;
@@ -130,31 +131,23 @@ public class CustomPicoProviderTest extends GenericContainerTest {
     @Override
 	protected <T> T executeInsideRequest(WhatToDo<T> execution) {
         final HttpSessionMock session = new HttpSessionMock(context, "session" + ++counter);
-        final MutableRequest request = mockery.mock(MutableRequest.class, "request" + ++counter);
-        mockery.checking(new Expectations() {
-            {
-                allowing(request).getRequestURI(); will(returnValue("what.ever.request.uri"));
-                allowing(request).getSession(); will(returnValue(session));
-                allowing(request).getParameterMap(); will(returnValue(new HashMap<Object, Object>()));
-                allowing(request).getParameter("view"); will(returnValue(null));
-            }
-        });
-        MutableResponse response = mockery.mock(MutableResponse.class, "response" + counter);
-        RequestInfo webRequest = new RequestInfo(context, null, new HttpServletRequestMock(session, request, mockery), response);
+        final MutableRequest request = mock(MutableRequest.class, "request" + ++counter);
+        
+        when(request.getRequestURI()).thenReturn("what.ever.request.uri");
+        when(request.getSession()).thenReturn(session);
+        when(request.getParameterMap()).thenReturn(new HashMap<String, String[]>());
+        when(request.getParameter("view")).thenReturn(null);
+        
+        MutableResponse response = mock(MutableResponse.class, "response" + counter);
+        RequestInfo webRequest = new RequestInfo(context, null, new HttpServletRequestMock(session, request), response);
         return execution.execute(webRequest, counter);
     }
 
     @Override
     protected void configureExpectations() {
         try {
-            mockery.checking(new Expectations() {
-                {
-                    allowing(context).getRealPath("/WEB-INF/classes/vraptor.xml");
-                    will(returnValue("non-existing-vraptor.xml"));
-                    allowing(context).getRealPath("/WEB-INF/classes/views.properties");
-                    will(returnValue("views.properties"));
-                }
-            });
+            when(context.getRealPath("/WEB-INF/classes/vraptor.xml")).thenReturn("non-existing-vraptor.xml");
+            when(context.getRealPath("/WEB-INF/classes/views.properties")).thenReturn("views.properties");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

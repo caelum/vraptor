@@ -8,11 +8,8 @@ import static org.junit.Assert.assertThat;
 
 import java.util.Collection;
 
-import javax.servlet.http.HttpSessionListener;
-
 import net.vidageek.mirror.dsl.Mirror;
 
-import org.jmock.Expectations;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.ioc.ContainerProvider;
@@ -29,7 +26,6 @@ public class GuiceProviderTest extends SpringProviderRegisteringComponentsTest {
 	protected ContainerProvider getProvider() {
 		return new GuiceProvider();
 	}
-
 
 	@Test
 	public void shouldBeAbleToOverrideVRaptorsDefaultImplementation() throws Exception {
@@ -53,12 +49,4 @@ public class GuiceProviderTest extends SpringProviderRegisteringComponentsTest {
 		Collection serializations = (Collection) new Mirror().on(instance).get().field("serializations");
 		assertFalse(serializations.isEmpty());
 	}
-	@Override
-	protected void configureExpectations() {
-		mockery.checking(new Expectations() {{
-			allowing(context).addListener(with(any(HttpSessionListener.class)));
-		}});
-		super.configureExpectations();
-	}
-
 }

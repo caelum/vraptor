@@ -18,6 +18,7 @@
 package br.com.caelum.vraptor.ioc.spring;
 
 import static br.com.caelum.vraptor.VRaptorMatchers.canHandle;
+import static java.util.Collections.enumeration;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.instanceOf;
@@ -26,14 +27,18 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import java.util.Collections;
+import java.util.Enumeration;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 
 import org.hamcrest.Matcher;
-import org.jmock.Expectations;
-import org.jmock.Mockery;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -73,7 +78,6 @@ import br.com.caelum.vraptor.test.HttpSessionMock;
  */
 public class SpringBasedContainerTest {
 	private SpringBasedContainer container;
-	private Mockery mockery;
 	private MutableRequest request;
 	private HttpSessionMock session;
 	private ServletContext servletContext;
@@ -81,35 +85,32 @@ public class SpringBasedContainerTest {
 
 	@Before
 	public void initContainer() {
-		mockery = new Mockery();
-		servletContext = mockery.mock(ServletContext.class);
+		servletContext = mock(ServletContext.class);
 
-		mockery.checking(new Expectations() {
-			{
-				allowing(servletContext).getAttribute("org.springframework.web.context.WebApplicationContext.ROOT");
-				will(returnValue(null));
+		when(servletContext.getAttribute("org.springframework.web.context.WebApplicationContext.ROOT"))
+			.thenReturn(null);
 
-				allowing(servletContext).getInitParameter(BasicConfiguration.BASE_PACKAGES_PARAMETER_NAME);
-				will(returnValue("br.com.caelum.vraptor.ioc.spring"));
+		when(servletContext.getInitParameter(BasicConfiguration.BASE_PACKAGES_PARAMETER_NAME))
+			.thenReturn("br.com.caelum.vraptor.ioc.spring");
 
-				allowing(servletContext).getRealPath(with(any(String.class)));
-				will(returnValue(SpringBasedContainer.class.getResource(".").getFile()));
+		when(servletContext.getRealPath(anyString()))
+			.thenReturn(SpringBasedContainer.class.getResource(".").getFile());
 
-                allowing(servletContext).getInitParameter(BasicConfiguration.SCANNING_PARAM);
-                will(returnValue("enabled"));
+		when(servletContext.getInitParameter(BasicConfiguration.SCANNING_PARAM))
+        	.thenReturn("enabled");
 
-                allowing(servletContext).getClassLoader();
-                will(returnValue(Thread.currentThread().getContextClassLoader()));
+        when(servletContext.getClassLoader())
+        	.thenReturn(Thread.currentThread().getContextClassLoader());
 
-                allowing(servletContext);
-			}
-		});
-
+    	Enumeration<String> emptyEnumeration = enumeration(Collections.<String>emptyList());
+    	when(servletContext.getInitParameterNames()).thenReturn(emptyEnumeration);
+    	when(servletContext.getAttributeNames()).thenReturn(emptyEnumeration);
+	
 		session = new HttpSessionMock(servletContext, "session");
-		request = new HttpServletRequestMock(session, mockery.mock(MutableRequest.class), mockery);
-		response = mockery.mock(MutableResponse.class);
+		request = new HttpServletRequestMock(session, mock(MutableRequest.class));
+		response = mock(MutableResponse.class);
 
-		FilterChain chain = mockery.mock(FilterChain.class);
+		FilterChain chain = mock(FilterChain.class);
 		VRaptorRequestHolder.setRequestForCurrentThread(new RequestInfo(servletContext, chain, request, response));
 		RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
 		BasicConfiguration config = new BasicConfiguration(servletContext);

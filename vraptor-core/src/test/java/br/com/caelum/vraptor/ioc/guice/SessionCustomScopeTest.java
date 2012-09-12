@@ -15,14 +15,11 @@ import com.google.inject.util.Providers;
 
 public class SessionCustomScopeTest {
 
-
 	private static final String SESSION_ID = "abc";
 
 	private SessionCustomScope scope;
 	private @Mock HttpSession session;
 	private @Mock LifecycleListener listener;
-
-
 
 	@Before
 	public void setUp() throws Exception {
@@ -58,6 +55,5 @@ public class SessionCustomScopeTest {
 		scope.stop(session);
 
 		verify(listener).onEvent();
-
 	}
 }

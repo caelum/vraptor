@@ -22,9 +22,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpSession;
 
-import org.jmock.Expectations;
-import org.jmock.Mockery;
-
 import br.com.caelum.vraptor.http.MutableRequest;
 
 /**
@@ -34,9 +31,8 @@ public class HttpServletRequestMock extends HttpServletRequestWrapper implements
     private final Map<String, Object> attributes = new HashMap<String, Object>();
 	private HttpSession session;
 
-    public HttpServletRequestMock(HttpSession session, final MutableRequest mock, Mockery mockery) {
+    public HttpServletRequestMock(HttpSession session, final MutableRequest mock) {
     	super(mock);
-    	mockery.checking(new Expectations() {{ignoring(mock);}});
         this.session = session;
     }
 

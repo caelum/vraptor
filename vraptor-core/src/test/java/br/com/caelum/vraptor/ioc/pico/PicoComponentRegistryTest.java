@@ -19,13 +19,16 @@ package br.com.caelum.vraptor.ioc.pico;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.typeCompatibleWith;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import javax.servlet.http.HttpSession;
 
-import org.jmock.Expectations;
-import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.PicoBuilder;
 
@@ -41,34 +44,28 @@ import br.com.caelum.vraptor.ioc.Container;
 
 public class PicoComponentRegistryTest {
 
-    private Mockery mockery;
     private MutablePicoContainer container;
     private PicoComponentRegistry provider;
-    private MutableRequest request;
+    private @Mock MutableRequest request;
     private RequestInfo webRequest;
+    private @Mock Router router;
+	private @Mock HttpSession session;
 
     @Before
     public void setup() {
-        this.mockery = new Mockery();
-        this.container = new PicoBuilder().withCaching().build();
+    	MockitoAnnotations.initMocks(this);
+    	
+        container = new PicoBuilder().withCaching().build();
         container.addComponent(DefaultInterceptorRegistry.class);
         container.addComponent(TypeNameExtractor.class, DefaultTypeNameExtractor.class);
-        final Router router = mockery.mock(Router.class, "registry");
         container.addComponent(router);
-        this.request = mockery.mock(MutableRequest.class, "request");
-        final HttpSession session = mockery.mock(HttpSession.class, "session");
-        mockery.checking(new Expectations() {
-            {
-                allowing(request).getSession(); will(returnValue(session));
-                allowing(request).setAttribute(with(any(String.class)), with(any(Object.class)));
-                
-                allowing(session).getAttribute(with(any(String.class))); will(returnValue(null));
-                allowing(session).setAttribute(with(any(String.class)), with(any(String.class)));
-            }
-        });
-        this.webRequest = new RequestInfo(null, null, request, mockery.mock(MutableResponse.class));
-        this.provider = new PicoComponentRegistry(container, new DefaultComponentFactoryRegistry());
-        this.provider.init();
+        
+        when(request.getSession()).thenReturn(session);
+        when(session.getAttribute(anyString())).thenReturn(null);
+        
+        webRequest = new RequestInfo(null, null, request, mock(MutableResponse.class));
+        provider = new PicoComponentRegistry(container, new DefaultComponentFactoryRegistry());
+        provider.init();
     }
 
     interface Base {

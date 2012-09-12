@@ -16,11 +16,23 @@
  */
 package br.com.caelum.vraptor.ioc.spring;
 
+import static br.com.caelum.vraptor.config.BasicConfiguration.BASE_PACKAGES_PARAMETER_NAME;
+import static br.com.caelum.vraptor.config.BasicConfiguration.SCANNING_PARAM;
+import static java.util.Arrays.asList;
+import static java.util.Collections.enumeration;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Matchers.isA;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.web.context.WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE;
+
+import java.util.Collections;
+
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 
-import org.jmock.Expectations;
-import org.jmock.Mockery;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,7 +41,6 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import br.com.caelum.vraptor.config.BasicConfiguration;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.test.HttpServletRequestMock;
 import br.com.caelum.vraptor.test.HttpSessionMock;
@@ -38,99 +49,76 @@ import br.com.caelum.vraptor.test.HttpSessionMock;
  * @author Fabio Kung
  */
 public class SpringProviderTest {
-	private Mockery mockery;
 	private ServletContext servletContext;
 	private HttpServletRequestMock request;
 	private HttpSession session;
 
 	@Before
 	public void init() {
-		mockery = new Mockery();
-		servletContext = mockery.mock(ServletContext.class);
+		servletContext = mock(ServletContext.class);
 
 		session = new HttpSessionMock(servletContext, "session");
-		request = new HttpServletRequestMock(session, mockery.mock(MutableRequest.class), mockery);
+		request = new HttpServletRequestMock(session, mock(MutableRequest.class));
 
-		ServletRequestAttributes requestAttributes = new ServletRequestAttributes(
-				request);
+		ServletRequestAttributes requestAttributes = new ServletRequestAttributes(request);
 		RequestContextHolder.setRequestAttributes(requestAttributes);
 	}
 
 	@After
 	public void destroy() {
-		mockery.assertIsSatisfied();
 		RequestContextHolder.resetRequestAttributes();
 	}
 	
 	@Test
 	public void shouldIncludeTheApplicationContextOnTheRootApplicationContextParamIfNotSet() throws Exception {
-		mockery.checking(new Expectations() {{
-			one(servletContext).getAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE);
-			will(returnValue(null));
-			
-			one(servletContext).setAttribute(with(equal(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE)), with(any(WebApplicationContext.class)));
-		}});
+		when(servletContext.getAttributeNames()).thenReturn(enumeration(Collections.<String> emptyList()));
+		when(servletContext.getAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE))
+			.thenReturn(null);
 		
 		defaultExpectations();
 		
 		SpringProvider provider = new SpringProvider();
 		provider.start(servletContext);
 		
-		mockery.assertIsSatisfied();
+		verify(servletContext).setAttribute(eq(ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE), isA(WebApplicationContext.class));
 	}
 	
 	@Test
 	public void shouldNotIncludeTheApplicationContextOnTheRootApplicationContextParamIfAlreadySet() throws Exception {
-		mockery.checking(new Expectations() {{
-			ConfigurableWebApplicationContext mock = mockery.mock(ConfigurableWebApplicationContext.class);
+		ConfigurableWebApplicationContext ctx = mock(ConfigurableWebApplicationContext.class);
+
+		when(servletContext.getAttributeNames()).thenReturn(enumeration(Collections.<String> emptyList()));
+		when(servletContext.getAttribute(ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE)).thenReturn(ctx);
 			
-			one(servletContext).getAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE);
-			will(returnValue(mock));
-			
-			never(servletContext).setAttribute(with(equal(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE)), with(any(WebApplicationContext.class)));
-			
-			ignoring(mock);
-		}});
-		
 		defaultExpectations();
 		
 		SpringProvider provider = new SpringProvider();
 		provider.start(servletContext);
 		
-		mockery.assertIsSatisfied();
+		verify(servletContext, never()).setAttribute(eq(ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE), isA(WebApplicationContext.class));
 	}
 
 	@Test
 	public void shouldLoadInitParameterForBasePackages() {
+		when(servletContext.getAttributeNames()).thenReturn(enumeration(Collections.<String> emptyList()));
+		
 		defaultExpectations();
 		SpringProvider provider = new SpringProvider();
 		provider.start(servletContext);
 	}
 
 	private void defaultExpectations() {
-		mockery.checking(new Expectations() {
-			{
-				atLeast(1).of(servletContext).getInitParameter(
-						BasicConfiguration.BASE_PACKAGES_PARAMETER_NAME);
-				will(returnValue("br.com.caelum.vraptor.ioc.spring.components.registrar"));
+		when(servletContext.getInitParameter(BASE_PACKAGES_PARAMETER_NAME))
+			.thenReturn("br.com.caelum.vraptor.ioc.spring.components.registrar");
 
-				allowing(servletContext).getRealPath("/WEB-INF/classes");
-				will(returnValue(this.getClass().getResource(".").getPath()));
+		when(servletContext.getRealPath("/WEB-INF/classes"))
+			.thenReturn(this.getClass().getResource(".").getPath());
 
-				allowing(servletContext).getAttribute(with(any(String.class)));
-				will(returnValue(null));
+		when(servletContext.getInitParameter(SCANNING_PARAM)).thenReturn("enabled");
 
-				allowing(servletContext).setAttribute(with(any(String.class)), with(any(Object.class)));
-
-                allowing(servletContext).getInitParameter(BasicConfiguration.SCANNING_PARAM);
-                will(returnValue("enabled"));
-
-                allowing(servletContext).getClassLoader();
-                will(returnValue(Thread.currentThread().getContextClassLoader()));
-
-                allowing(servletContext);
-			}
-		});
+        when(servletContext.getClassLoader())
+        	.thenReturn(Thread.currentThread().getContextClassLoader());
+        
+    	when(servletContext.getInitParameterNames()).thenReturn(enumeration(asList(SCANNING_PARAM)));
 	}
-
 }

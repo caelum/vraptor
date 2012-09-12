@@ -19,6 +19,9 @@ package br.com.caelum.vraptor.ioc;
 
 import static br.com.caelum.vraptor.VRaptorMatchers.canHandle;
 import static br.com.caelum.vraptor.VRaptorMatchers.hasOneCopyOf;
+import static br.com.caelum.vraptor.config.BasicConfiguration.BASE_PACKAGES_PARAMETER_NAME;
+import static br.com.caelum.vraptor.config.BasicConfiguration.SCANNING_PARAM;
+import static java.lang.Thread.currentThread;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.instanceOf;
@@ -30,6 +33,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -44,8 +49,6 @@ import javax.servlet.http.HttpSession;
 
 import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
-import org.jmock.Expectations;
-import org.jmock.Mockery;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.junit.After;
@@ -55,7 +58,6 @@ import org.junit.Test;
 import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.config.BasicConfiguration;
 import br.com.caelum.vraptor.converter.jodatime.LocalDateConverter;
 import br.com.caelum.vraptor.converter.jodatime.LocalTimeConverter;
 import br.com.caelum.vraptor.core.BaseComponents;
@@ -87,34 +89,25 @@ import com.google.common.base.Objects;
  */
 public abstract class GenericContainerTest {
 
-	protected Mockery mockery;
-
 	protected ContainerProvider provider;
-
 	protected ServletContext context;
-
 	protected abstract ContainerProvider getProvider();
-
 	protected abstract <T> T executeInsideRequest(WhatToDo<T> execution);
-
 	protected abstract void configureExpectations();
 
 	@Test
 	public void canProvideAllApplicationScopedComponents() {
 		checkAvailabilityFor(true, BaseComponents.getApplicationScoped().keySet());
-		mockery.assertIsSatisfied();
 	}
 
 	@Test
 	public void canProvideAllPrototypeScopedComponents() {
 		checkAvailabilityFor(false, BaseComponents.getPrototypeScoped().keySet());
-		mockery.assertIsSatisfied();
 	}
 
 	@Test
 	public void canProvideAllRequestScopedComponents() {
 		checkAvailabilityFor(false, BaseComponents.getRequestScoped().keySet());
-		mockery.assertIsSatisfied();
 	}
 
 	@ApplicationScoped
@@ -125,7 +118,6 @@ public abstract class GenericContainerTest {
 	@Test
 	public void processesCorrectlyAppBasedComponents() {
 		checkAvailabilityFor(true, MyAppComponent.class, MyAppComponent.class);
-		mockery.assertIsSatisfied();
 	}
 	@Test
 	public void canProvideJodaTimeConverters() {
@@ -142,7 +134,6 @@ public abstract class GenericContainerTest {
 			}
 
 		});
-		mockery.assertIsSatisfied();
 	}
 
 	@ApplicationScoped
@@ -210,8 +201,8 @@ public abstract class GenericContainerTest {
 	@Test
 	public void processesCorrectlyRequestBasedComponents() {
 		checkAvailabilityFor(false, MyRequestComponent.class, MyRequestComponent.class);
-		mockery.assertIsSatisfied();
 	}
+	
 	@Component
 	@PrototypeScoped
 	public static class MyPrototypeComponent {
@@ -236,7 +227,6 @@ public abstract class GenericContainerTest {
 				});
 			}
 		});
-		mockery.assertIsSatisfied();
 	}
 
 	@Test
@@ -262,29 +252,21 @@ public abstract class GenericContainerTest {
 
 	@Before
 	public void setup() throws Exception {
-		this.mockery = new Mockery();
-		this.context = mockery.mock(ServletContext.class, "servlet context");
+		context = mock(ServletContext.class, "servlet context");
 
-		mockery.checking(new Expectations() {{
-			allowing(context).getMajorVersion();
-			will(returnValue(3));
+		when(context.getMajorVersion()).thenReturn(3);
+		when(context.getInitParameter(BASE_PACKAGES_PARAMETER_NAME)).thenReturn("br.com.caelum.vraptor.ioc.fixture");
+		when(context.getRealPath("/WEB-INF/classes")).thenReturn(getClassDir());
 
-			allowing(context).getInitParameter(BasicConfiguration.BASE_PACKAGES_PARAMETER_NAME);
-			will(returnValue("br.com.caelum.vraptor.ioc.fixture"));
+		when(context.getClassLoader()).thenReturn(
+				new URLClassLoader(new URL[] {ScannotationComponentScannerTest.class.getResource("/test-fixture.jar")}, 
+						currentThread().getContextClassLoader()));
 
-            allowing(context).getRealPath("/WEB-INF/classes");
-            will(returnValue(getClassDir()));
+        //allowing(context).getInitParameter(ENCODING);
+        //allowing(context).setAttribute(with(any(String.class)), with(any(Object.class)));
+            
+        when(context.getInitParameter(SCANNING_PARAM)).thenReturn("enabled");
 
-            allowing(context).getClassLoader();
-            will(returnValue(new URLClassLoader(new URL[] {ScannotationComponentScannerTest.class.getResource("/test-fixture.jar")}, Thread.currentThread().getContextClassLoader())));
-
-            allowing(context).getInitParameter(BasicConfiguration.ENCODING);
-            allowing(context).getInitParameter(BasicConfiguration.SCANNING_PARAM);
-            will(returnValue("enabled"));
-
-            allowing(context).setAttribute(with(any(String.class)), with(any(Object.class)));
-
-        }});
 		configureExpectations();
 		provider = getProvider();
 		provider.start(context);
@@ -309,7 +291,7 @@ public abstract class GenericContainerTest {
 							registry.register(componentToRegister, componentToRegister);
 						}
 
-						ResourceMethod secondMethod = mockery.mock(ResourceMethod.class, "rm" + counter);
+						ResourceMethod secondMethod = mock(ResourceMethod.class, "rm" + counter);
 						secondContainer.instanceFor(MethodInfo.class).setResourceMethod(secondMethod);
 						return secondContainer.instanceFor(component);
 					}
@@ -332,7 +314,7 @@ public abstract class GenericContainerTest {
 							ComponentRegistry registry = firstContainer.instanceFor(ComponentRegistry.class);
 							registry.register(componentToRegister, componentToRegister);
 						}
-						ResourceMethod firstMethod = mockery.mock(ResourceMethod.class, "rm" + counter);
+						ResourceMethod firstMethod = mock(ResourceMethod.class, "rm" + counter);
 						firstContainer.instanceFor(MethodInfo.class).setResourceMethod(firstMethod);
 						return firstContainer.instanceFor(componentToBeRetrieved);
 					}

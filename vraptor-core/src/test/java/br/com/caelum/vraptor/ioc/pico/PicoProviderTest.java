@@ -17,6 +17,8 @@
 
 package br.com.caelum.vraptor.ioc.pico;
 
+import static org.mockito.Mockito.mock;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -38,7 +40,6 @@ public class PicoProviderTest extends GenericContainerTest {
     public void canProvidePicoSpecificApplicationScopedComponents() {
         List<Class<?>> components = Arrays.asList();
         checkAvailabilityFor(true, components);
-        mockery.assertIsSatisfied();
     }
 
     @Override
@@ -50,8 +51,8 @@ public class PicoProviderTest extends GenericContainerTest {
     protected <T> T executeInsideRequest(WhatToDo<T> execution) {
         final HttpSessionMock session = new HttpSessionMock(context, "session" + ++counter);
         final MutableRequest request = new HttpServletRequestMock(session,
-        		mockery.mock(MutableRequest.class, "request" + counter), mockery);
-        MutableResponse response = mockery.mock(MutableResponse.class, "response" + counter);
+        		mock(MutableRequest.class, "request" + counter));
+        MutableResponse response = mock(MutableResponse.class, "response" + counter);
         RequestInfo webRequest = new RequestInfo(context, null, request, response);
         return execution.execute(webRequest, counter);
     }

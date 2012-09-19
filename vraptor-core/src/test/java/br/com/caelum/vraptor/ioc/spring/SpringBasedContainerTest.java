@@ -87,9 +87,6 @@ public class SpringBasedContainerTest {
 	public void initContainer() {
 		servletContext = mock(ServletContext.class);
 
-		when(servletContext.getAttribute("org.springframework.web.context.WebApplicationContext.ROOT"))
-			.thenReturn(null);
-
 		when(servletContext.getInitParameter(BasicConfiguration.BASE_PACKAGES_PARAMETER_NAME))
 			.thenReturn("br.com.caelum.vraptor.ioc.spring");
 

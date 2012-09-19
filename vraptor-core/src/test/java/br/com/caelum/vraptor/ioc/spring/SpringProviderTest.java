@@ -72,8 +72,6 @@ public class SpringProviderTest {
 	@Test
 	public void shouldIncludeTheApplicationContextOnTheRootApplicationContextParamIfNotSet() throws Exception {
 		when(servletContext.getAttributeNames()).thenReturn(enumeration(Collections.<String> emptyList()));
-		when(servletContext.getAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE))
-			.thenReturn(null);
 		
 		defaultExpectations();
 		

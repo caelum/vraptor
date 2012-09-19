@@ -84,9 +84,6 @@ public class SpringProviderRegisteringComponentsTest extends GenericContainerTes
 
     @Override
     protected void configureExpectations() {
-		when(context.getAttribute("org.springframework.web.context.WebApplicationContext.ROOT"))
-			.thenReturn(null);
-
 		when(context.getRealPath(anyString()))
 			.thenReturn(SpringBasedContainer.class.getResource("../fixture").getFile());
 

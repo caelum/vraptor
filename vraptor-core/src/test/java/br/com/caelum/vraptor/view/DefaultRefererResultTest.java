@@ -101,6 +101,7 @@ public class DefaultRefererResultTest {
 	@Test
 	public void whenRefererMatchesAControllerShouldRedirectToIt() throws Exception {
 		LogicResult logic = mock(LogicResult.class);
+		RefererController controller = mock(RefererController.class);
 
 		Method index = RefererController.class.getMethod("index");
 		ResourceMethod method = DefaultResourceMethod.instanceFor(RefererController.class, index);
@@ -109,13 +110,17 @@ public class DefaultRefererResultTest {
 		when(request.getContextPath()).thenReturn("/vraptor");
 		when(router.parse("/no-controller", HttpMethod.GET, request)).thenReturn(method);
 		doReturn(logic).when(result).use(logic());
-		when(logic.redirectTo(RefererController.class)).thenReturn(new RefererController());
+		when(logic.redirectTo(RefererController.class)).thenReturn(controller);
 
 		refererResult.redirect();
+		
+		verify(logic).redirectTo(RefererController.class);
+		verify(controller).index();
 	}
 	@Test
 	public void whenRefererMatchesAControllerShouldForwardToIt() throws Exception {
 		LogicResult logic = mock(LogicResult.class);
+		RefererController controller = mock(RefererController.class);
 		
 		Method index = RefererController.class.getMethod("index");
 		ResourceMethod method = DefaultResourceMethod.instanceFor(RefererController.class, index);
@@ -124,8 +129,11 @@ public class DefaultRefererResultTest {
 		when(request.getContextPath()).thenReturn("/vraptor");
 		when(router.parse("/no-controller", HttpMethod.GET, request)).thenReturn(method);
 		doReturn(logic).when(result).use(logic());
-		when(logic.forwardTo(RefererController.class)).thenReturn(new RefererController());
+		when(logic.forwardTo(RefererController.class)).thenReturn(controller);
 		
 		refererResult.forward();
+		
+		verify(logic).forwardTo(RefererController.class);
+		verify(controller).index();
 	}
 }

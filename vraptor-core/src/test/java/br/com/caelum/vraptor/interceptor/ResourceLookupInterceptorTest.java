@@ -18,7 +18,6 @@ package br.com.caelum.vraptor.interceptor;
 
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -70,9 +69,9 @@ public class ResourceLookupInterceptorTest {
     @Test
     public void shouldHandle404() throws IOException, InterceptionException {
         when(translator.translate(info)).thenThrow(new ResourceNotFoundException());
-        verify(notFoundHandler, never()).couldntFind(info);
                 
         lookup.intercept(null, null, null);
+        verify(notFoundHandler).couldntFind(info);
     }
 
     @Test
@@ -80,9 +79,9 @@ public class ResourceLookupInterceptorTest {
     	EnumSet<HttpMethod> allowedMethods = EnumSet.of(HttpMethod.GET);
     	
         when(translator.translate(info)).thenThrow(new MethodNotAllowedException(allowedMethods, HttpMethod.POST.toString()));
-        verify(methodNotAllowedHandler, never()).deny(info, allowedMethods);
                 
         lookup.intercept(null, null, null);
+        verify(methodNotAllowedHandler).deny(info, allowedMethods);
     }
 
     @Test
@@ -91,9 +90,9 @@ public class ResourceLookupInterceptorTest {
         final InterceptorStack stack = mock(InterceptorStack.class);
         
         when(translator.translate(info)).thenReturn(method);
-        verify(stack, never()).next(method, null);
-        verify(methodInfo, never()).setResourceMethod(method);
         
         lookup.intercept(stack, null, null);
+        verify(stack).next(method, null);
+        verify(methodInfo).setResourceMethod(method);
     }
 }

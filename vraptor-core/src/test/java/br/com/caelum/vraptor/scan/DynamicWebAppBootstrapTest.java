@@ -2,7 +2,6 @@ package br.com.caelum.vraptor.scan;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
-import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -41,14 +40,10 @@ public class DynamicWebAppBootstrapTest {
 		verify(registry, never()).deepRegister(any(Class.class));
 	}
 	
-	@Test
+	@Test(expected=ScannerException.class)
 	public void shouldThrowScannerExceptionIfClassNotExists() {
 	    Collection<String> classNames = asList("a.resource.that.NotExists");
 	    
-	    try {
-	    	new DynamicWebAppBootstrap(classNames).configure(registry);
-	    	fail("If a class don't exists, a ScannerException should throw");
-	    } catch (ScannerException e) {
-		}
+    	new DynamicWebAppBootstrap(classNames).configure(registry);
 	}
 }

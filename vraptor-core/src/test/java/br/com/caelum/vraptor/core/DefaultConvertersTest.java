@@ -27,8 +27,8 @@ import static org.mockito.Mockito.when;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.ResourceBundle;
 import java.util.Map.Entry;
+import java.util.ResourceBundle;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -55,8 +55,6 @@ import br.com.caelum.vraptor.converter.PrimitiveIntConverter;
 import br.com.caelum.vraptor.converter.PrimitiveLongConverter;
 import br.com.caelum.vraptor.converter.PrimitiveShortConverter;
 import br.com.caelum.vraptor.converter.ShortConverter;
-import br.com.caelum.vraptor.interceptor.multipart.UploadedFile;
-import br.com.caelum.vraptor.interceptor.multipart.UploadedFileConverter;
 import br.com.caelum.vraptor.ioc.Container;
 
 public class DefaultConvertersTest {
@@ -91,7 +89,6 @@ public class DefaultConvertersTest {
                 put(Calendar.class, LocaleBasedCalendarConverter.class);
                 put(Date.class, LocaleBasedDateConverter.class);
                 put(Enum.class, EnumConverter.class);
-                put(UploadedFile.class, UploadedFileConverter.class);
             }
             private static final long serialVersionUID = 8559316558416038474L;
         };

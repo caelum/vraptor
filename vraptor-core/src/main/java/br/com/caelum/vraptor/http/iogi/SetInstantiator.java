@@ -9,6 +9,13 @@ import br.com.caelum.iogi.collections.ListInstantiator;
 import br.com.caelum.iogi.parameters.Parameters;
 import br.com.caelum.iogi.reflection.Target;
 
+/**
+ * An instantiator that supports Sets.
+ * 
+ * @author Otávio Scherer Garcia
+ * @author Lucas Cavalcanti
+ * @since 3.5.0-SNAPSHOT
+ */
 public class SetInstantiator implements Instantiator<Set<Object>> {
 	
 	private ListInstantiator listInstantiator;

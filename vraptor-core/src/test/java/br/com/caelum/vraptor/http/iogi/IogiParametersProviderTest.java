@@ -27,6 +27,7 @@
  */
 package br.com.caelum.vraptor.http.iogi;
 
+import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -143,26 +144,26 @@ public class IogiParametersProviderTest extends ParametersProviderTest {
 	}
 	
 	@Test
-	public void shouldUseSetForSingleProperty() throws Exception {
+	public void isCapableOfDealingWithSets() throws Exception {
     	when(nameProvider.parameterNamesFor(any(Method.class))).thenReturn(new String[]{"abc"});
     	
         ResourceMethod set = method("set", Set.class);
 
-    	requestParameterIs(list, "abc[0]", "1");
+    	requestParameterIs(set, "abc", "1", "2");
 
     	Set<Long> abc = getParameters(set);
 
-    	assertThat(abc, hasSize(1));
-    	assertThat(abc, hasItem(1l));
+    	assertThat(abc, hasSize(2));
+    	assertThat(abc, allOf(hasItem(1l), hasItem(2l)));
 	}
 	
 	@Test
-	public void shouldUseSetForComplexProperty() throws Exception {
+	public void isCapableOfDealingWithSetsOfObjects() throws Exception {
     	when(nameProvider.parameterNamesFor(any(Method.class))).thenReturn(new String[]{"abc"});
     	
         ResourceMethod set = method("setOfObject", Set.class);
 
-    	requestParameterIs(list, "abc[0].x", "1");
+    	requestParameterIs(set, "abc.x", "1");
 
     	Set<ABC> abc = getParameters(set);
 

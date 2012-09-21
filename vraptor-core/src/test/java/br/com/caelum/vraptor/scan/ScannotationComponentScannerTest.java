@@ -1,6 +1,7 @@
 package br.com.caelum.vraptor.scan;
 
 import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 
@@ -35,6 +36,7 @@ public class ScannotationComponentScannerTest {
         ScannotationComponentScanner scanner = new ScannotationComponentScanner();
         assertThat(scanner.scan(classPathResolver), hasItem(ResourceInTheClasspath.class.getName()));
     }
+    
     @Test
     public void shouldScanBasePackages() {
     	ClassLoader classLoader = new URLClassLoader(new URL[] {ScannotationComponentScannerTest.class.getResource("/test-fixture.jar")});
@@ -45,5 +47,23 @@ public class ScannotationComponentScannerTest {
     	ScannotationComponentScanner scanner = new ScannotationComponentScanner();
     	Collection<String> classes = scanner.scan(classPathResolver);
     	assertThat(classes, hasItem(ResourceInTheClasspath.class.getName()));
+    }
+    
+    @Test
+    public void shouldReturnEmptyCollectionIfWebinfClassesNotFound() throws Exception {
+		URL webinfLocation = new URL("file:/a/url/that/not-found");
+		when(classPathResolver.findWebInfClassesLocation()).thenReturn(webinfLocation);
+		
+        ScannotationComponentScanner scanner = new ScannotationComponentScanner();
+        assertThat(scanner.scan(classPathResolver), hasSize(0));
+    }
+
+    @Test(expected=ScannerException.class)
+    public void shouldThrowScannerExceptionIfHasExceptionWhenProcessWebinfClasses() throws Exception {
+		URL webinfLocation = new URL("file://x");
+		when(classPathResolver.findWebInfClassesLocation()).thenReturn(webinfLocation);
+		
+        ScannotationComponentScanner scanner = new ScannotationComponentScanner();
+        assertThat(scanner.scan(classPathResolver), hasSize(0));
     }
 }

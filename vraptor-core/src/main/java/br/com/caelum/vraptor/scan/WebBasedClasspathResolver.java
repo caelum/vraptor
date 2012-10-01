@@ -40,7 +40,11 @@ public class WebBasedClasspathResolver implements ClasspathResolver {
 
 	public ClassLoader getClassLoader() {
 		if (servletContext.getMajorVersion() == 3) {
-			return servletContext.getClassLoader();
+			try {
+				return servletContext.getClassLoader();
+			} catch (SecurityException e) {
+				return Thread.currentThread().getContextClassLoader();
+			}
 		}
 		return Thread.currentThread().getContextClassLoader();
 	}

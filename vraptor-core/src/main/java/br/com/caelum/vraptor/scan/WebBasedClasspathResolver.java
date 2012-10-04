@@ -50,7 +50,6 @@ public class WebBasedClasspathResolver implements ClasspathResolver {
 			} catch (SecurityException e) {
 				logger.error("Could not get class loader from servlet context. " +
 						"Using current thread class loader...", e);
-				return Thread.currentThread().getContextClassLoader();
 			}
 		}
 		return Thread.currentThread().getContextClassLoader();

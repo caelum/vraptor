@@ -36,6 +36,7 @@ import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.http.InvalidParameterException;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.validator.I18nMessage;
 import br.com.caelum.vraptor.validator.Validations;
 
 /**
@@ -240,7 +241,7 @@ public class CommonsUploadMultipartInterceptorTest {
     	
         interceptor.intercept(stack, method, instance);
         
-        verify(validator).checking(any(Validations.class));
+        verify(validator).add(any(I18nMessage.class));
     }
     
     @Test

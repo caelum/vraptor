@@ -32,7 +32,7 @@ import com.thoughtworks.xstream.mapper.MapperWrapper;
 public class VRaptorClassMapper extends MapperWrapper {
 
 	private final Supplier<TypeNameExtractor> extractor;
-	private Serializee serializee;
+	private Serializee serializee = new Serializee();
 	
 	public VRaptorClassMapper(Mapper wrapped, Supplier<TypeNameExtractor> supplier) {
 		super(wrapped);

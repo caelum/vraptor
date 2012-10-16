@@ -30,7 +30,7 @@ import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.validator.Validations;
+import br.com.caelum.vraptor.validator.I18nMessage;
 
 /**
  * Test class for uploading features with servlet 3.
@@ -206,7 +206,7 @@ public class Servlet3MultipartInterceptorTest {
 
         interceptor.intercept(stack, method, instance);
         
-        verify(validator).checking(any(Validations.class));
+        verify(validator).add(any(I18nMessage.class));
     }
     
 	@Test(expected = InterceptionException.class)

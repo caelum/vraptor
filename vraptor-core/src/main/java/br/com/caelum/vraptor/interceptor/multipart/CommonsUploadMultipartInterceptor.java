@@ -42,6 +42,7 @@ import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.validator.I18nMessage;
 import br.com.caelum.vraptor.validator.Validations;
 
 import com.google.common.base.Strings;
@@ -147,12 +148,7 @@ public class CommonsUploadMultipartInterceptor
      * @param e
      */
     protected void reportSizeLimitExceeded(final SizeLimitExceededException e) {
-        validator.checking(new Validations() {
-            {
-                that(false, "upload", "file.limit.exceeded", e.getActualSize(), e.getPermittedSize());
-            }
-        });
-
+        validator.add(new I18nMessage("upload", "file.limit.exceeded", e.getActualSize(), e.getPermittedSize()));
         logger.warn("The file size limit was exceeded.", e);
     }
 

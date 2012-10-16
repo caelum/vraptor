@@ -39,7 +39,7 @@ import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.validator.Validations;
+import br.com.caelum.vraptor.validator.I18nMessage;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.HashMultiset;
@@ -158,12 +158,7 @@ public class Servlet3MultipartInterceptor
      * @param e
      */
     protected void reportSizeLimitExceeded(final IllegalStateException e) {
-        validator.checking(new Validations() {
-            {
-                that(false, "upload", "servlet3.upload.filesize.exceeded");
-            }
-        });
-
+        validator.add(new I18nMessage("upload", "servlet3.upload.filesize.exceeded"));
         logger.warn("The file size limit was exceeded.", e);
     }
 

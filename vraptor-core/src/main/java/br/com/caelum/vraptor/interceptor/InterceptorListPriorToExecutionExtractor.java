@@ -25,7 +25,7 @@ import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
-import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 
 /**
  * Extracts all interceptors which are supposed to be applied for this current
@@ -49,7 +49,7 @@ public class InterceptorListPriorToExecutionExtractor implements Interceptor {
     }
 
     public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws InterceptionException {
-    	for (Class<? extends Interceptor> type : Iterables.reverse(registry.all())) {
+    	for (Class<? extends Interceptor> type : Lists.reverse(registry.all())) {
 			stack.addAsNext(type);
 		}
         stack.next(method, resourceInstance);

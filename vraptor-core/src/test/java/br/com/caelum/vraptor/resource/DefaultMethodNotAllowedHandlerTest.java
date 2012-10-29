@@ -3,7 +3,6 @@ package br.com.caelum.vraptor.resource;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -51,12 +50,12 @@ public class DefaultMethodNotAllowedHandlerTest {
 	}
 	
 	@Test
-	public void shouldNotSendMethodNotAllowedIfTheRequestMethodIsOptions() throws Exception {
+	public void shouldSendMethodNotAllowedIfTheRequestMethodIsOptions() throws Exception {
 		when(mockRequest.getMethod()).thenReturn("OPTIONS");
 
-		this.handler.deny(request, EnumSet.of(HttpMethod.GET, HttpMethod.POST));
+		this.handler.deny(request, EnumSet.of(HttpMethod.OPTIONS));
 
-		verify(response, never()).sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+		verify(response).sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
 	}
 	
 	@Test(expected=InterceptionException.class)

@@ -44,6 +44,7 @@ import org.mockito.stubbing.Answer;
 import br.com.caelum.vraptor.Delete;
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Head;
+import br.com.caelum.vraptor.Options;
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.core.Converters;
@@ -329,6 +330,10 @@ public class PathAnnotationRoutesParserTest {
         public void head() {
         }
 
+        @Options("/clients/options")
+        public void options() {
+        }
+        
         public void add() {
         }
 
@@ -411,6 +416,15 @@ public class PathAnnotationRoutesParserTest {
 
     }
 
+
+    @Test
+    public void shouldAcceptAResultWithOptionsWebMethod() throws SecurityException, NoSuchMethodException {
+    	List<Route> routes = parser.rulesFor(new DefaultResourceClass(ClientsController.class));
+    	Route route = getRouteMatching(routes, "/clients/options");
+
+    	assertThat(route.allowedMethods(), is(EnumSet.of(HttpMethod.OPTIONS)));
+    }
+    
     static class NiceClients extends ClientsController {
 
     	@Override

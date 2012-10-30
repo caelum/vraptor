@@ -25,12 +25,13 @@ import br.com.caelum.vraptor.Delete;
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Head;
 import br.com.caelum.vraptor.Options;
+import br.com.caelum.vraptor.Patch;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Put;
 import br.com.caelum.vraptor.Trace;
 
 public enum HttpMethod {
-	GET(Get.class), POST(Post.class), PUT(Put.class), DELETE(Delete.class), TRACE(Trace.class), HEAD(Head.class), OPTIONS(Options.class);
+	GET(Get.class), POST(Post.class), PUT(Put.class), DELETE(Delete.class), TRACE(Trace.class), HEAD(Head.class), OPTIONS(Options.class), PATCH(Patch.class);
 
 	private static final String METHOD_PARAMETER = "_method";
 	private final Class<? extends Annotation> type;

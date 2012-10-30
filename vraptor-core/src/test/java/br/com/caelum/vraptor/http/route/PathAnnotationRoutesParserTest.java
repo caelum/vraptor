@@ -45,6 +45,7 @@ import br.com.caelum.vraptor.Delete;
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Head;
 import br.com.caelum.vraptor.Options;
+import br.com.caelum.vraptor.Patch;
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.core.Converters;
@@ -334,6 +335,10 @@ public class PathAnnotationRoutesParserTest {
         public void options() {
         }
         
+        @Patch("/clients/update")
+        public void update() {
+        }
+        
         public void add() {
         }
 
@@ -423,6 +428,14 @@ public class PathAnnotationRoutesParserTest {
     	Route route = getRouteMatching(routes, "/clients/options");
 
     	assertThat(route.allowedMethods(), is(EnumSet.of(HttpMethod.OPTIONS)));
+    }
+    
+    @Test
+    public void shouldAcceptAResultWithPatchWebMethod() throws SecurityException, NoSuchMethodException {
+    	List<Route> routes = parser.rulesFor(new DefaultResourceClass(ClientsController.class));
+    	Route route = getRouteMatching(routes, "/clients/update");
+
+    	assertThat(route.allowedMethods(), is(EnumSet.of(HttpMethod.PATCH)));
     }
     
     static class NiceClients extends ClientsController {

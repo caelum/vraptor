@@ -330,8 +330,7 @@ public class PathAnnotationRoutesParserTest {
         public void head() {
         }
 
-        @Path("/clients/options")
-        @Options
+        @Options("/clients/options")
         public void options() {
         }
         

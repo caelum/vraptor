@@ -24,7 +24,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Supports the OPTIONS http method.
+ * Supports the PATCH http method.
  *
  * @author Nykolas Lima
  */

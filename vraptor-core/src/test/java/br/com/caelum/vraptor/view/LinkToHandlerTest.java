@@ -56,11 +56,11 @@ public class LinkToHandlerTest {
     }
     
     @Test
-    public void shouldReturnWantedUrlForOverrideMethodWithParamArgs() {
+    public void shouldReturnWantedUrlForOverrideMethodWithParamArgs() throws NoSuchMethodException, SecurityException {
     	String a = "test";
-    	when(router.urlFor(TestSubGenericController.class, TestSubGenericController.class.getDeclaredMethods()[0], new Object[]{a})).thenReturn("/expectedURL");
+    	when(router.urlFor(SubGenericController.class, SubGenericController.class.getDeclaredMethod("method", new Class[]{String.class}), new Object[]{a})).thenReturn("/expectedURL");
     	//${linkTo[TestSubGenericController].method['test']}]
-    	String uri = handler.get(TestSubGenericController.class).get("method").get(a).toString();
+    	String uri = handler.get(SubGenericController.class).get("method").get(a).toString();
     	assertThat(uri, is("/path/expectedURL"));
     }
 
@@ -68,17 +68,5 @@ public class LinkToHandlerTest {
         void method(String a, int b) {
 
         }
-    }
-    
-    static class TestGenericController<T> {
-    	void method(T a) {
-    		
-    	}
-    }
-    
-    static class TestSubGenericController extends TestGenericController<String>  {
-    	void method(String a) {
-    		
-    	}
     }
 }

@@ -54,10 +54,31 @@ public class LinkToHandlerTest {
         String uri = handler.get(TestController.class).get("method").get(a).get(b).toString();
         assertThat(uri, is("/path/expectedURL"));
     }
+    
+    @Test
+    public void shouldReturnWantedUrlForOverrideMethodWithParamArgs() {
+    	String a = "test";
+    	when(router.urlFor(TestSubGenericController.class, TestSubGenericController.class.getDeclaredMethods()[0], new Object[]{a})).thenReturn("/expectedURL");
+    	//${linkTo[TestSubGenericController].method['test']}]
+    	String uri = handler.get(TestSubGenericController.class).get("method").get(a).toString();
+    	assertThat(uri, is("/path/expectedURL"));
+    }
 
     static class TestController {
         void method(String a, int b) {
 
         }
+    }
+    
+    static class TestGenericController<T> {
+    	void method(T a) {
+    		
+    	}
+    }
+    
+    static class TestSubGenericController extends TestGenericController<String>  {
+    	void method(String a) {
+    		
+    	}
     }
 }

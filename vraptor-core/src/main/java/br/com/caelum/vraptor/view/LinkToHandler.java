@@ -80,7 +80,7 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 		}
 		private Method findMethodWithName(Class<?> type, String name) {
 			for (Method method : type.getDeclaredMethods()) {
-				if (method.getName().equals(name)) {
+				if (!method.isBridge() && method.getName().equals(name)) {
 					return method;
 				}
 			}

@@ -154,7 +154,7 @@ public class CommonsUploadMultipartInterceptor
 
     protected void processFile(FileItem item, String name) {
         try {
-            UploadedFile upload = new DefaultUploadedFile(item.getInputStream(), item.getName(), item.getContentType());
+            UploadedFile upload = new DefaultUploadedFile(item.getInputStream(), item.getName(), item.getContentType(), item.getSize());
             parameters.setParameter(name, name);
             request.setAttribute(name, upload);
 

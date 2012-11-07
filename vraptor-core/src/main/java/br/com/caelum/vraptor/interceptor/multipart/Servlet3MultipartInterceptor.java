@@ -127,7 +127,7 @@ public class Servlet3MultipartInterceptor
                     logger.debug("{} is a file", name);
 
                     String fileName = getFileName(part);
-                    UploadedFile upload = new DefaultUploadedFile(part.getInputStream(), fileName, part.getContentType());
+                    UploadedFile upload = new DefaultUploadedFile(part.getInputStream(), fileName, part.getContentType(), part.getSize());
 
                     parameters.setParameter(name, name);
                     request.setAttribute(name, upload);

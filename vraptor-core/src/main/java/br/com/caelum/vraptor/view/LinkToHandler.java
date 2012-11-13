@@ -16,7 +16,9 @@
 package br.com.caelum.vraptor.view;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
@@ -25,6 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.http.route.Router;
+import br.com.caelum.vraptor.util.ReflectionUtils;
 
 import com.google.common.collect.ForwardingMap;
 
@@ -74,21 +77,9 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 		
 		@Override
 		public Linker get(Object key) {
-			Method method = findMethodWithName(controller, (String) key);
-			
-			return new Linker(controller, method);
+			return new Linker(controller, key.toString());
 		}
-		private Method findMethodWithName(Class<?> type, String name) {
-			for (Method method : type.getDeclaredMethods()) {
-				if (!method.isBridge() && method.getName().equals(name)) {
-					return method;
-				}
-			}
-			if (type.getSuperclass().equals(Object.class)) {
-				throw new IllegalArgumentException("There are no methods on " + controller + " named " + name);
-			}
-			return findMethodWithName(type.getSuperclass(), name);
-		}
+		
 		
 		@Override
 		public String toString() {
@@ -98,27 +89,25 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 	
 	class Linker extends ForwardingMap<Object, Linker> {
 
-		private final Object[] args;
-		private final Method method;
+		private final List<Object> args;
+		private final String methodName;
 		private final Class<?> controller;
-		private final int filled;
 
-		public Linker(Class<?> controller, Method method) {
-			this(controller, method, new Object[method.getParameterTypes().length], 0);
+		public Linker(Class<?> controller, String methodName) {
+			this(controller, methodName, new ArrayList<Object>());
 		}
 
-		public Linker(Class<?> controller, Method method, Object[] args, int filled) {
+		public Linker(Class<?> controller, String methodName, List<Object> args) {
 			this.controller = controller;
-			this.method = method;
+			this.methodName = methodName;
 			this.args = args;
-			this.filled = filled;
 		}
 		
 		@Override
 		public Linker get(Object key) {
-			Object[] newArgs = args.clone();
-			newArgs[filled] = key;
-			return new Linker(controller, method, newArgs, filled + 1);
+			List<Object> newArgs = new ArrayList<Object>(args);
+			newArgs.add(key);
+			return new Linker(controller, methodName, newArgs);
 		}
 
 		@Override
@@ -128,7 +117,8 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 		
 		@Override
 		public String toString() {
-			return context.getContextPath() + router.urlFor(controller, method, args);
+			Method method = ReflectionUtils.findMethodWithName(controller, methodName, args);
+			return context.getContextPath() + router.urlFor(controller, method, args.toArray());
 		}
 	}
 }

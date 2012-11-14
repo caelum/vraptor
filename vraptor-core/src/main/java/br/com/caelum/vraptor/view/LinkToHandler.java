@@ -23,11 +23,12 @@ import java.util.Map;
 
 import javax.servlet.ServletContext;
 
+import net.vidageek.mirror.dsl.Mirror;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.http.route.Router;
-import br.com.caelum.vraptor.util.ReflectionUtils;
 
 import com.google.common.collect.ForwardingMap;
 
@@ -117,8 +118,51 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 		
 		@Override
 		public String toString() {
-			Method method = ReflectionUtils.findMethodWithName(controller, methodName, args);
+			Method method = null;
+			
+			if(getMethodsAmountWithSameName() > 1 && args.size() > 0) {
+				method = new Mirror().on(controller).reflect().method(methodName).withArgs(getClasses(args));
+			} else {
+				method = findMethodWithName(controller, methodName);
+			}
+			
+			if(method == null)
+				throw new IllegalArgumentException("There are no methods on " + controller + " named " + methodName);
+			
 			return context.getContextPath() + router.urlFor(controller, method, args.toArray());
 		}
+
+		private Method findMethodWithName(Class<?> type, String name) {
+			for (Method method : type.getDeclaredMethods()) {
+				if (!method.isBridge() && method.getName().equals(name)) {
+					return method;
+				}
+			}
+			
+			if (type.getSuperclass().equals(Object.class)) {
+				return null;
+			}
+			
+			return findMethodWithName(type.getSuperclass(), name);
+		}
+		
+		private int getMethodsAmountWithSameName() {
+			int amount = 0;
+			for (Method method : controller.getDeclaredMethods()) {
+				if (!method.isBridge() && method.getName().equals(methodName)) {
+					amount++;
+				}
+			}
+			
+			return amount;
+		}
+		
+		private Class<?>[] getClasses(List<Object> params) {
+			Class<?>[] classes = new Class<?>[params.size()];
+			for(int i = 0; i < params.size(); i ++) {
+				classes[i] = params.get(i).getClass();
+			}
+			return classes;
+	   }
 	}
 }

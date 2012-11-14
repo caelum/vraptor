@@ -72,7 +72,7 @@ public class LinkToHandlerTest {
     	String uri = handler.get(TestController.class).get("method").get(a).toString();
     	assertThat(uri, is("/path/expectedUrl"));
     }
-
+    
     static class TestController {
         void method(String a, int b) {
 

@@ -38,7 +38,7 @@ public class LinkToHandlerTest {
     }
     @Test
     public void shouldReturnWantedUrlWithoutArgs() {
-        when(router.urlFor(TestController.class, TestController.class.getDeclaredMethods()[0], new Object[2])).thenReturn("/expectedURL");
+        when(router.urlFor(TestController.class, TestController.class.getDeclaredMethods()[0], new Object[0])).thenReturn("/expectedURL");
 
         //${linkTo[TestController].method}
         String uri = handler.get(TestController.class).get("method").toString();
@@ -63,10 +63,22 @@ public class LinkToHandlerTest {
     	String uri = handler.get(SubGenericController.class).get("method").get(a).toString();
     	assertThat(uri, is("/path/expectedURL"));
     }
-
+    
+    @Test
+    public void shouldReturnWantedUrlForMethodsWithSameName() {
+    	String a = "test";
+    	when(router.urlFor(TestController.class, TestController.class.getDeclaredMethods()[1], a)).thenReturn("/expectedUrl");
+    	//${linkTo[TestController].method['test']}
+    	String uri = handler.get(TestController.class).get("method").get(a).toString();
+    	assertThat(uri, is("/path/expectedUrl"));
+    }
+    
     static class TestController {
         void method(String a, int b) {
 
+        }
+        void method(String a) {
+        	
         }
     }
 }

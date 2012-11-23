@@ -395,6 +395,7 @@ public class XStreamJSONSerializationTest {
 			return MyCollection.class.isAssignableFrom(type);
 		}
 	}
+	
 	@Test
 	public void shouldUseCollectionConverterWhenItExists() {
 		String expectedResult = "[\"testing\"]";

@@ -23,7 +23,6 @@ import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.serialization.*;
 import br.com.caelum.vraptor.view.ResultException;
-
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.HierarchicalStreamDriver;
 
@@ -57,6 +56,7 @@ public class XStreamJSONSerialization implements JSONSerialization {
     }
 
     public <T> Serializer from(T object, String alias) {
+
         response.setContentType("application/json");
         return getSerializer().from(object, alias);
     }

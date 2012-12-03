@@ -90,9 +90,9 @@ public class Results {
     }
     
     /**
-     * Alias for i18nMessage serialization
+     * Alias for json i18nMessage serialization
      */
-    public static Class<I18nMessageSerialization> message() {
+    public static Class<I18nMessageSerialization> jsonMessage() {
     	return I18nMessageSerialization.class;
     }
 

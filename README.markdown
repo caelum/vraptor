@@ -1,5 +1,6 @@
 VRaptor 3
 =========
+![Build status](https://secure.travis-ci.org/caelum/vraptor.png)
 
 A web MVC framework for fast and maintainable development.
 It's website can be found at http://vraptor.caelum.com.br

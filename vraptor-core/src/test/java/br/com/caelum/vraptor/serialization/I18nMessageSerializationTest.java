@@ -1,5 +1,7 @@
 package br.com.caelum.vraptor.serialization;
 
+import static br.com.caelum.vraptor.view.Results.json;
+import static br.com.caelum.vraptor.view.Results.xml;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -15,10 +17,13 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
+import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.serialization.xstream.XStreamBuilder;
 import br.com.caelum.vraptor.serialization.xstream.XStreamBuilderImpl;
 import br.com.caelum.vraptor.serialization.xstream.XStreamJSONSerialization;
+import br.com.caelum.vraptor.serialization.xstream.XStreamXMLSerialization;
 import br.com.caelum.vraptor.util.test.MockLocalization;
+import br.com.caelum.vraptor.validator.MessageConverter;
 import br.com.caelum.vraptor.validator.SingletonResourceBundle;
 
 public class I18nMessageSerializationTest {
@@ -33,29 +38,38 @@ public class I18nMessageSerializationTest {
         when(response.getWriter()).thenReturn(new PrintWriter(stream));
         DefaultTypeNameExtractor extractor = new DefaultTypeNameExtractor();
 		HibernateProxyInitializer initializer = new HibernateProxyInitializer();
-	    XStreamBuilder builder = XStreamBuilderImpl.cleanInstance();
+	    XStreamBuilder builder = XStreamBuilderImpl.cleanInstance(new MessageConverter());
 		XStreamJSONSerialization jsonSerialization = new XStreamJSONSerialization(response, extractor, initializer, builder);
+		XStreamXMLSerialization xmlSerialization = new XStreamXMLSerialization(response, extractor, initializer, builder);
+		
+		Container container = mock(Container.class);
+		when(container.instanceFor(JSONSerialization.class)).thenReturn(jsonSerialization);
+		when(container.instanceFor(XMLSerialization.class)).thenReturn(xmlSerialization);
 		
 		MockLocalization mockLocalization = mock(MockLocalization.class);
 		when(mockLocalization.getBundle()).thenReturn(new SingletonResourceBundle("message.cat", "Sweet"));
 
-		serialization = new I18nMessageSerialization(jsonSerialization, mockLocalization);
+		serialization = new I18nMessageSerialization(container , mockLocalization);
     
     }
     
     @Test
     public void shouldCallXStreamJsonSerialization() {
-    	String expectedResult = "{\"message\": \"Sweet\"}";
-        serialization.from("message.cat").serialize();
+    	String expectedResult = "{\"message\": {\"message\": \"Sweet\",\"category\": \"success\"}}";
+        serialization.from("success", "message.cat").as(json());
         assertThat(result(), is(equalTo(expectedResult)));
     }
 
     @Test
-    public void shouldCallXStreamJsonSerializationWithAlias() {
-    	String expectedResult = "{\"message\": \"Sweet\"}";
-    	serialization.from("message.cat", "message").serialize();
+    public void shouldCallXStreamXmlSerialization() {
+    	String expectedResult = "<message>\n" + 
+				    			"  <message>Sweet</message>\n" + 
+				    			"  <category>success</category>\n" + 
+				    			"</message>";
+    	serialization.from("success", "message.cat").as(xml());
     	assertThat(result(), is(equalTo(expectedResult)));
     }
+    
     
 	private String result() {
 		return new String(stream.toByteArray());

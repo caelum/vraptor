@@ -92,7 +92,7 @@ public class Results {
     /**
      * Alias for json i18nMessage serialization
      */
-    public static Class<I18nMessageSerialization> jsonMessage() {
+    public static Class<I18nMessageSerialization> message() {
     	return I18nMessageSerialization.class;
     }
 

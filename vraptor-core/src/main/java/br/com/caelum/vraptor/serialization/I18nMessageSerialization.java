@@ -19,6 +19,7 @@ package br.com.caelum.vraptor.serialization;
 import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.ioc.Component;
+import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.validator.I18nMessage;
 
 
@@ -31,30 +32,30 @@ import br.com.caelum.vraptor.validator.I18nMessage;
 @Component
 public class I18nMessageSerialization implements View{
 
-	private final JSONSerialization jsonSerialization;
 	private final Localization localization;
+	private final Container container;
+	private I18nMessage i18nMessage;
+	private String alias;
 
-	public I18nMessageSerialization(JSONSerialization jsonSerialization, Localization localization) {
-		this.jsonSerialization = jsonSerialization;
+	public I18nMessageSerialization(Container container, Localization localization) {
+		this.container = container;
 		this.localization = localization;
     }
 
-	public <T> Serializer from(String key) {
-		return from(key, "message");
+	public I18nMessageSerialization from(String category, String key) {
+		return from(category, key, null);
 	}
 	
-	public <T> Serializer from(String key, String alias) {
-		I18nMessage i18nMessage = new I18nMessage("teste", key);
+	public I18nMessageSerialization from(String category, String key, String alias) {
+		I18nMessage i18nMessage = new I18nMessage(category, key);
 		i18nMessage.setBundle(localization.getBundle());
-		return jsonSerialization.from(i18nMessage.getMessage(), alias);
+		this.i18nMessage = i18nMessage;
+		this.alias = alias;
+		return this;
 	}
 
-	public boolean accepts(String format) {
-		return jsonSerialization.accepts(format);
+	public void as(Class<? extends Serialization> method){
+		Serialization serialization = container.instanceFor(method);
+		serialization.from(i18nMessage, alias).serialize();
 	}
-
-	public JSONSerialization indented() {
-		return jsonSerialization.indented();
-	}
-	
 }

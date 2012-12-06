@@ -35,27 +35,21 @@ public class I18nMessageSerialization implements View{
 	private final Localization localization;
 	private final Container container;
 	private I18nMessage i18nMessage;
-	private String alias;
 
 	public I18nMessageSerialization(Container container, Localization localization) {
 		this.container = container;
 		this.localization = localization;
     }
 
-	public I18nMessageSerialization from(String category, String key) {
-		return from(category, key, null);
-	}
-	
-	public I18nMessageSerialization from(String category, String key, String alias) {
-		I18nMessage i18nMessage = new I18nMessage(category, key);
+	public I18nMessageSerialization from(String category, String key, Object...params) {
+		I18nMessage i18nMessage = new I18nMessage(category, key, params);
 		i18nMessage.setBundle(localization.getBundle());
 		this.i18nMessage = i18nMessage;
-		this.alias = alias;
 		return this;
 	}
-
+	
 	public void as(Class<? extends Serialization> method){
 		Serialization serialization = container.instanceFor(method);
-		serialization.from(i18nMessage, alias).serialize();
+		serialization.from(i18nMessage).serialize();
 	}
 }

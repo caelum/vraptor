@@ -47,7 +47,7 @@ public class I18nMessageSerializationTest {
 		when(container.instanceFor(XMLSerialization.class)).thenReturn(xmlSerialization);
 		
 		MockLocalization mockLocalization = mock(MockLocalization.class);
-		when(mockLocalization.getBundle()).thenReturn(new SingletonResourceBundle("message.cat", "Sweet"));
+		when(mockLocalization.getBundle()).thenReturn(new SingletonResourceBundle("message.cat", "Just another {0} in {1}"));
 
 		serialization = new I18nMessageSerialization(container , mockLocalization);
     
@@ -55,7 +55,7 @@ public class I18nMessageSerializationTest {
     
     @Test
     public void shouldCallXStreamJsonSerialization() {
-    	String expectedResult = "{\"message\": {\"message\": \"Sweet\",\"category\": \"success\"}}";
+    	String expectedResult = "{\"message\": {\"message\": \"Just another {0} in {1}\",\"category\": \"success\"}}";
         serialization.from("success", "message.cat").as(json());
         assertThat(result(), is(equalTo(expectedResult)));
     }
@@ -63,10 +63,21 @@ public class I18nMessageSerializationTest {
     @Test
     public void shouldCallXStreamXmlSerialization() {
     	String expectedResult = "<message>\n" + 
-				    			"  <message>Sweet</message>\n" + 
+				    			"  <message>Just another {0} in {1}</message>\n" + 
 				    			"  <category>success</category>\n" + 
 				    			"</message>";
     	serialization.from("success", "message.cat").as(xml());
+    	assertThat(result(), is(equalTo(expectedResult)));
+    }
+    
+    @Test
+    public void shouldCallXStreamSerializationWithParams() {
+    	String expectedResult = "<message>\n" + 
+    			"  <message>Just another object in memory</message>\n" + 
+    			"  <category>success</category>\n" + 
+    			"</message>";
+    	Object[] params = {"object", "memory"};
+    	serialization.from("success", "message.cat", params).as(xml());
     	assertThat(result(), is(equalTo(expectedResult)));
     }
     

@@ -18,6 +18,7 @@
 package br.com.caelum.vraptor.util.test;
 
 import br.com.caelum.vraptor.View;
+import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.proxy.CglibProxifier;
 import br.com.caelum.vraptor.proxy.ObjenesisInstanceCreator;
 import br.com.caelum.vraptor.util.test.MockHttpServletResponse;
@@ -38,30 +39,30 @@ import br.com.caelum.vraptor.view.HttpResult;
 @Component
 public class MockHttpResult extends MockResult{
 	private MockHttpServletResponse response = new MockHttpServletResponse();
-	
+
 	public MockHttpResult() {
 		super(new CglibProxifier(new ObjenesisInstanceCreator()));
 	}
-	
+
 	@Override
 	public <T extends View> T use(Class<T> view) {
 		if (view.isAssignableFrom(HttpResult.class)){
 			DefaultHttpResult defaultHttpResult = new DefaultHttpResult(response, new DefaultStatus(response, this, null, proxifier, null));
 			return view.cast(defaultHttpResult);
 		}
-		
+
 		return proxifier.proxify(view, returnOnFinalMethods(view));
 	}
-	
+
 	public String getBody(){
 		response.getWriter().flush();
 		return response.getContentAsString();
 	}
-	
+
 	public String getContentType(){
 		return response.getContentType();
 	}
-	
+
 	public String getCharacterEncoding(){
 		return response.getCharacterEncoding();
 	}

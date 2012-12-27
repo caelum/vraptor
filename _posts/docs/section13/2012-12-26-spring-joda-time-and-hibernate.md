@@ -11,8 +11,8 @@ There are ComponentFactories written for Session, SessionFactory, EntityManager 
 
 <h3>Spring Integration</h3>
 
-The VRaptor works inside Spring and uses ApplicationContext from your application once available. Then, all the Spring functionalities and modules work with VRaptor whithout any VRaptor configuration.
+The VRaptor works inside Spring and uses ApplicationContext from your application once available. Then, all the Spring functionalities and modules work with VRaptor without any VRaptor configuration.
 
 <h3>Joda Time Conversors</h3>
 
-The Java date API is weak. That's why the Joda Time project exists and offer a better and more comfortable API to work with dates. If the Joda Time JAR is in classpath the VRaptor will register the LocalDate, LocalTime and LocalDateTime conversors automatically and you will be able to receive them as parameters perfectly.
+The Java date API is weak. That's why the Joda Time project exists and offers a better and more comfortable API to work with dates. If the Joda Time JAR is in classpath the VRaptor will register the LocalDate, LocalTime and LocalDateTime conversors automatically and you will be able to receive them as parameters perfectly.

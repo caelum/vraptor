@@ -11,7 +11,7 @@ There are ComponentFactories written for Session, SessionFactory, EntityManager 
 
 <h3>Spring Integration</h3>
 
-The VRaptor works inside Spring and uses ApplicationContext from your application once available. Then, all the Spring functionalities and modules work with VRaptor without any VRaptor configuration.
+VRaptor works inside Spring and uses ApplicationContext from your application once available. Then, all the Spring functionalities and modules work with VRaptor without any VRaptor configuration.
 
 <h3>Joda Time Conversors</h3>
 

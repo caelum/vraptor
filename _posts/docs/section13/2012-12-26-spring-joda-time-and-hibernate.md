@@ -7,7 +7,7 @@ category: [en, docs]
 
 <h3>Hibernate or JPA Integration</h3>
 
-There are ComponentFactories written for Session, SessionFactory, EntityManager and EntityManagerFactory which may either be used or help as creation base of your own classes' ComponentFactory. Furthermore, there are written interceptors which control the JPA transactions and Hibernate as well. More informations about how to use them please take a look at the Utils issue.
+There are ComponentFactories written for Session, SessionFactory, EntityManager and EntityManagerFactory which may either be used or help as creation base of your own ComponentFactory classes. Furthermore, there are written interceptors which control the JPA transactions and Hibernate as well. More informations about how to use them please take a look at the Utils issue.
 
 <h3>Spring Integration</h3>
 

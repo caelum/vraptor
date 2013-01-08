@@ -50,6 +50,6 @@ public class I18nMessageSerialization implements View{
 	
 	public void as(Class<? extends Serialization> method){
 		Serialization serialization = container.instanceFor(method);
-		serialization.from(i18nMessage).serialize();
+		serialization.from(i18nMessage, "message").serialize();
 	}
 }

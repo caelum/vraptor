@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -103,7 +104,7 @@ public abstract class ParametersProviderTest {
         generic 	= DefaultResourceMethod.instanceFor(Specific.class, Generic.class.getDeclaredMethod("generic", Object.class));
     }
 
-	private ResourceMethod method(String methodName, Class<?>... argTypes) throws NoSuchMethodException {
+	protected ResourceMethod method(String methodName, Class<?>... argTypes) throws NoSuchMethodException {
 		return DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod(methodName, argTypes));
 	}
 
@@ -413,6 +414,10 @@ public abstract class ParametersProviderTest {
         void list(List<Long> abc) {
         }
         void listOfObject(List<ABC> abc) {
+        }
+        void set(Set<Long> abc) {
+        }
+        void setOfObject(Set<ABC> abc) {
         }
         void abc(ABC abc) {
         }

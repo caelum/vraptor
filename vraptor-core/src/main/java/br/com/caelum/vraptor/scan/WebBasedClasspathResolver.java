@@ -22,6 +22,9 @@ import java.util.List;
 
 import javax.servlet.ServletContext;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import br.com.caelum.vraptor.config.BasicConfiguration;
 
 /**
@@ -32,6 +35,8 @@ import br.com.caelum.vraptor.config.BasicConfiguration;
  */
 public class WebBasedClasspathResolver implements ClasspathResolver {
 
+	private static Logger logger = LoggerFactory.getLogger(WebBasedClasspathResolver.class);
+	
 	private final ServletContext servletContext;
 
 	public WebBasedClasspathResolver(ServletContext servletContext) {
@@ -40,7 +45,12 @@ public class WebBasedClasspathResolver implements ClasspathResolver {
 
 	public ClassLoader getClassLoader() {
 		if (servletContext.getMajorVersion() == 3) {
-			return servletContext.getClassLoader();
+			try {
+				return servletContext.getClassLoader();
+			} catch (SecurityException e) {
+				logger.error("Could not get class loader from servlet context. " +
+						"Using current thread class loader...", e);
+			}
 		}
 		return Thread.currentThread().getContextClassLoader();
 	}

@@ -27,6 +27,9 @@
  */
 package br.com.caelum.vraptor.http.iogi;
 
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
@@ -39,7 +42,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.Set;
 
 import org.junit.Test;
 import org.mockito.Mock;
@@ -137,6 +142,35 @@ public class IogiParametersProviderTest extends ParametersProviderTest {
 		assertThat(cat, is(notNullValue()));
 		assertThat(cat.getLols(), is(nullValue()));
 	}
+	
+	@Test
+	public void isCapableOfDealingWithSets() throws Exception {
+    	when(nameProvider.parameterNamesFor(any(Method.class))).thenReturn(new String[]{"abc"});
+    	
+        ResourceMethod set = method("set", Set.class);
+
+    	requestParameterIs(set, "abc", "1", "2");
+
+    	Set<Long> abc = getParameters(set);
+
+    	assertThat(abc, hasSize(2));
+    	assertThat(abc, allOf(hasItem(1l), hasItem(2l)));
+	}
+	
+	@Test
+	public void isCapableOfDealingWithSetsOfObjects() throws Exception {
+    	when(nameProvider.parameterNamesFor(any(Method.class))).thenReturn(new String[]{"abc"});
+    	
+        ResourceMethod set = method("setOfObject", Set.class);
+
+    	requestParameterIs(set, "abc.x", "1");
+
+    	Set<ABC> abc = getParameters(set);
+
+    	assertThat(abc, hasSize(1));
+    	assertThat(abc.iterator().next().getX(), is(1l));
+	}
+	
 	//----------
 
 	class OtherResource {

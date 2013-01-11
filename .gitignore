@@ -3,6 +3,7 @@ out
 .project
 .settings
 .scala_dependencies
+.metadata
 !vraptor-blank-project/.classpath
 !vraptor-blank-project/.settings/
 !vraptor-blank-project/.project

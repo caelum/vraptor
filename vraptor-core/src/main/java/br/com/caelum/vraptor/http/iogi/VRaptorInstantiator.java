@@ -66,6 +66,7 @@ public class VRaptorInstantiator implements InstantiatorWithErrors, Instantiator
 			FallbackConverter.fallbackToNull(new StringConverter()),
 			new ArrayAdapter(new ArrayInstantiator(this)),
 			new NullDecorator(new ListInstantiator(this)), //NOTE: NullDecorator is here to preserve existing behaviour. Don't know if it is the ideal one, though.
+			new NullDecorator(new SetInstantiator(this)),
 			new DependencyInstantiator(objectInstantiator),
 			objectInstantiator);
 		multiInstantiator = new MultiInstantiator(instantiatorList);

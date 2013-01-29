@@ -55,10 +55,23 @@ public class DefaultStaticContentHandlerTest {
     }
     
     @Test
-    public void returnsTrueForRealStaticResourcesWithJSessionId() throws Exception {
+    public void returnsTrueForRealStaticResourcesWithQueryString() throws Exception {
     	File file = File.createTempFile("_test", ".xml");
     	String key = file.getAbsolutePath();
     	when(request.getRequestURI()).thenReturn("/contextName/" + key + "?jsesssionid=12lkjahfsd12414");
+        when(request.getContextPath()).thenReturn("/contextName/");
+        when(context.getResource(key)).thenReturn(file.toURI().toURL());
+
+        boolean result = new DefaultStaticContentHandler(context).requestingStaticFile(request);
+
+        assertThat(result, is(equalTo(true)));
+    }
+    
+    @Test
+    public void returnsTrueForRealStaticResourcesWithJSessionId() throws Exception {
+    	File file = File.createTempFile("_test", ".xml");
+    	String key = file.getAbsolutePath();
+    	when(request.getRequestURI()).thenReturn("/contextName/" + key + ";jsesssionid=12lkjahfsd12414");
         when(request.getContextPath()).thenReturn("/contextName/");
         when(context.getResource(key)).thenReturn(file.toURI().toURL());
 

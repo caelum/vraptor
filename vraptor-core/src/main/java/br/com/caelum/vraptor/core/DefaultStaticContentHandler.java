@@ -57,11 +57,11 @@ public class DefaultStaticContentHandler implements StaticContentHandler {
 
 	private String uriRelativeToContextRoot(HttpServletRequest request) {
 		String uri = request.getRequestURI().substring(request.getContextPath().length());
-		return removeQueryString(uri);
+		return removeQueryStringAndJSessionId(uri);
 	}
 	
-	private String removeQueryString(String uri) {
-		return uri.replaceAll("\\?.+", "");
+	private String removeQueryStringAndJSessionId(String uri) {
+		return uri.replaceAll("\\?.+", "").replaceAll(";.+", "");
 	}
 
 	private boolean isAFile(URL resourceUrl) {

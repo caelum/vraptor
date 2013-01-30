@@ -61,7 +61,7 @@ public class DefaultStaticContentHandler implements StaticContentHandler {
 	}
 	
 	private String removeQueryStringAndJSessionId(String uri) {
-		return uri.replaceAll("\\?.+", "").replaceAll(";.+", "");
+		return uri.replaceAll("[\\?;].+", "");
 	}
 
 	private boolean isAFile(URL resourceUrl) {

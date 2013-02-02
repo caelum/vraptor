@@ -20,10 +20,8 @@ import static com.google.common.base.Strings.isNullOrEmpty;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.text.MessageFormat;
 import java.text.ParseException;
-import java.util.Locale;
 import java.util.ResourceBundle;
 
 import br.com.caelum.vraptor.Convert;
@@ -55,16 +53,22 @@ public class LocaleBasedBigDecimalConverter
         if (isNullOrEmpty(value)) {
             return null;
         }
-
+        
         try {
-            final Locale locale = localization.getLocale();
-            DecimalFormat fmt = new DecimalFormat("##0,00", new DecimalFormatSymbols(locale));
-            fmt.setParseBigDecimal(true);
-
-            return (BigDecimal) fmt.parse(value);
-        } catch (ParseException e) {
-            throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_number"), value));
+        	return new BigDecimal(value);
+        } catch (NumberFormatException e) {
+        	try {
+        		DecimalFormat formatBigDecimal = ((DecimalFormat) DecimalFormat.getInstance(localization.getLocale()));
+            	formatBigDecimal.setParseBigDecimal(true);
+            	return (BigDecimal) formatBigDecimal.parse(value);
+        	} catch(ParseException pe){
+        		throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_number"), value));
+        	}
+            
         }
     }
 
+    public static void main(String[] args) {
+		
+	}
 }

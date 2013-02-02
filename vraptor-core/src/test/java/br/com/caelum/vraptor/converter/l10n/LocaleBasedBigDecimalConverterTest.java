@@ -72,6 +72,8 @@ public class LocaleBasedBigDecimalConverterTest {
     public void shouldBeAbleToConvert() {
     	when(request.getAttribute("javax.servlet.jsp.jstl.fmt.locale.request")).thenReturn("pt_br");
         assertThat(converter.convert("19,91", BigDecimal.class, bundle), is(equalTo(new BigDecimal("19.91"))));
+        assertThat(converter.convert("10.00", BigDecimal.class, bundle), is(equalTo(new BigDecimal("10.00"))));
+        mockery.assertIsSatisfied();
     }
 
     @Test
@@ -102,7 +104,7 @@ public class LocaleBasedBigDecimalConverterTest {
      public void shouldBeAbleToConvertNull() {
          assertThat(converter.convert(null, BigDecimal.class, bundle), is(nullValue()));
      }
-    
+     
     @Test
     public void shouldThrowExceptionWhenUnableToParse() {
     	when(request.getAttribute("javax.servlet.jsp.jstl.fmt.locale.request")).thenReturn("pt_br");

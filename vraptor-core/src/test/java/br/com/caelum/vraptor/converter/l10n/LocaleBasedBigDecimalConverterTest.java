@@ -75,6 +75,7 @@ public class LocaleBasedBigDecimalConverterTest {
             }
         });
         assertThat(converter.convert("19,91", BigDecimal.class, bundle), is(equalTo(new BigDecimal("19.91"))));
+        assertThat(converter.convert("10.00", BigDecimal.class, bundle), is(equalTo(new BigDecimal("10.00"))));
         mockery.assertIsSatisfied();
     }
 
@@ -118,7 +119,7 @@ public class LocaleBasedBigDecimalConverterTest {
          assertThat(converter.convert(null, BigDecimal.class, bundle), is(nullValue()));
          mockery.assertIsSatisfied();
      }
-    
+     
     @Test
     public void shouldThrowExceptionWhenUnableToParse() {
         mockery.checking(new Expectations() {

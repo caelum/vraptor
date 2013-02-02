@@ -56,12 +56,20 @@ public class LocaleBasedDateConverter
             locale = Locale.getDefault();
         }
 
-        DateFormat format = DateFormat.getDateInstance(DateFormat.SHORT, locale);
-        try {
-            return format.parse(value);
-        } catch (ParseException e) {
-            throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_date"), value));
-        }
+        DateFormat formatDateTime = DateFormat.getDateTimeInstance(  
+                DateFormat.MEDIUM, DateFormat.MEDIUM, locale);  
+        try {  
+            return formatDateTime.parse(value);  
+        } catch (ParseException pe) {  
+            DateFormat formatDate = DateFormat.getDateInstance(  
+                    DateFormat.SHORT, locale);  
+            try {  
+                return formatDate.parse(value);  
+            } catch (ParseException pe1) {  
+                throw new ConversionError(MessageFormat.format(  
+                        bundle.getString("is_not_a_valid_date"), value));  
+            }  
+        }  
     }
 
 }

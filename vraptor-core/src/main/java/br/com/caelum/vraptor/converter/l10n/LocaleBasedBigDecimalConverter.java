@@ -67,8 +67,4 @@ public class LocaleBasedBigDecimalConverter
             
         }
     }
-
-    public static void main(String[] args) {
-		
-	}
 }

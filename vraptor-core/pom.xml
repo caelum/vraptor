@@ -176,15 +176,6 @@
 		</dependency>
 		<!-- [/deserialization] -->
 
-		<!-- [JFreeChart] -->
-		<dependency>
-			<groupId>jfree</groupId>
-			<artifactId>jfreechart</artifactId>
-			<version>1.0.12</version>
-			<optional>true</optional>
-		</dependency>
-		<!-- [/JFreeChart] -->
-
 		<!--  [hibernate] -->
 		<dependency>
 			<groupId>org.hibernate</groupId>

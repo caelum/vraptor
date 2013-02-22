@@ -87,18 +87,20 @@ public class ExceptionHandlerInterceptor
         result.include("javax.servlet.error.request_uri", request.getRequestURI());
     }
 
+    
+    /*
+    * Alterado por Markus Reichel
+    * @date 29/06/2012
+    * @change So lancara o erro HTTP 500 caso nao exista um tratamento explicito
+    */
     protected boolean replay(Exception e) {
         ExceptionRecorder<Result> exresult = exceptions.findByException(e);
-
         if (exresult == null) {
-			return false;
-		}
-
-        reportException(e);
-
+            reportException(e);
+            return false;
+        }
         logger.debug("handling exception {}", e.getClass());
-        exresult.replay(result);
-
+	exresult.replay(result);
         return true;
     }
 

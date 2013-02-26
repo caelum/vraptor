@@ -28,14 +28,13 @@ public class ExceptionHandlerInterceptorTest {
     @Mock private ResourceMethod method;
     @Mock private ExceptionMapper mapper;
     @Mock private Result result;
-    @Mock private HttpServletRequest request;
     @Mock private ExceptionRecorder<Result> mockRecorder;
     private ExceptionHandlerInterceptor interceptor;
 
     @Before
     public void setup() throws Exception {
         MockitoAnnotations.initMocks(this);
-        interceptor = new ExceptionHandlerInterceptor(mapper, result, request);
+        interceptor = new ExceptionHandlerInterceptor(mapper, result);
     }
     
     @Test

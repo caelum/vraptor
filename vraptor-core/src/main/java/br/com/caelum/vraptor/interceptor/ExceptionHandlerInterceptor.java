@@ -16,8 +16,6 @@
  */
 package br.com.caelum.vraptor.interceptor;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,12 +51,10 @@ public class ExceptionHandlerInterceptor
 
     private final ExceptionMapper exceptions;
     private final Result result;
-    private final HttpServletRequest request;
 
-    public ExceptionHandlerInterceptor(ExceptionMapper exceptions, Result result, HttpServletRequest request) {
+    public ExceptionHandlerInterceptor(ExceptionMapper exceptions, Result result) {
         this.exceptions = exceptions;
         this.result = result;
-        this.request = request;
     }
 
     public boolean accepts(ResourceMethod method) {
@@ -77,14 +73,7 @@ public class ExceptionHandlerInterceptor
     }
 
     protected void reportException(Exception e) {
-    	Throwable rootCause = Throwables.getRootCause(e);
-
-        // add error attributes compliance with servlet spec
-        result.include("javax.servlet.error.status_code", 500);
-        result.include("javax.servlet.error.exception", rootCause);
-        result.include("javax.servlet.error.exception_type", rootCause.getClass());
-        result.include("javax.servlet.error.message", rootCause.getMessage());
-        result.include("javax.servlet.error.request_uri", request.getRequestURI());
+        result.include("exception", Throwables.getRootCause(e));
     }
 
     protected boolean replay(Exception e) {

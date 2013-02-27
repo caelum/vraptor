@@ -24,7 +24,7 @@ import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.http.FormatResolver;
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor.ioc.Component;
-import br.com.caelum.vraptor.proxy.CglibProxifier;
+import br.com.caelum.vraptor.proxy.JavassistProxifier;
 import br.com.caelum.vraptor.proxy.ObjenesisInstanceCreator;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.serialization.DefaultRepresentationResult;
@@ -72,11 +72,11 @@ public class MockSerializationResult extends MockResult {
 	}
 
 	public MockSerializationResult() {
-		this(new CglibProxifier(new ObjenesisInstanceCreator()), new NullProxyInitializer());
+		this(new JavassistProxifier(new ObjenesisInstanceCreator()), new NullProxyInitializer());
 	}
 	
 	public MockSerializationResult(XStreamBuilder builder) {
-		this(new CglibProxifier(new ObjenesisInstanceCreator()), new NullProxyInitializer(), builder);
+		this(new JavassistProxifier(new ObjenesisInstanceCreator()), new NullProxyInitializer(), builder);
 	}
 
 	public <T extends View> T use(final Class<T> view) {

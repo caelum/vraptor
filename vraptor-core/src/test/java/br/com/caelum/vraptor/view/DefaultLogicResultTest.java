@@ -53,7 +53,7 @@ import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.proxy.CglibProxifier;
+import br.com.caelum.vraptor.proxy.JavassistProxifier;
 import br.com.caelum.vraptor.proxy.ObjenesisInstanceCreator;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.resource.DefaultResourceMethod;
@@ -112,7 +112,7 @@ public class DefaultLogicResultTest {
     public void setup() {
         MockitoAnnotations.initMocks(this);
 
-        proxifier = new CglibProxifier(new ObjenesisInstanceCreator());
+        proxifier = new JavassistProxifier(new ObjenesisInstanceCreator());
         methodInfo = new DefaultMethodInfo();
 		this.logicResult = new DefaultLogicResult(proxifier, router, request, response, container,
                 resolver, extractor, flash, methodInfo);

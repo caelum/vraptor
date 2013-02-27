@@ -40,7 +40,7 @@ public class ReflectionInstanceCreatorTest {
 
     @Before
     public void setUp() throws Exception {
-        proxifier = new CglibProxifier(new ReflectionInstanceCreator());
+        proxifier = new JavassistProxifier(new ReflectionInstanceCreator());
     }
     
     @Test

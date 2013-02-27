@@ -37,7 +37,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.proxy.CglibProxifier;
+import br.com.caelum.vraptor.proxy.JavassistProxifier;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.ReflectionInstanceCreator;
 
@@ -75,7 +75,7 @@ public class ArrayAccessorTest {
                 // does nothing
             }
         };
-        final Proxifier proxifier = new CglibProxifier(new ReflectionInstanceCreator());
+        final Proxifier proxifier = new JavassistProxifier(new ReflectionInstanceCreator());
         accessor = new ArrayAccessor();
         
     	when(context.get("removal")).thenReturn(removal);

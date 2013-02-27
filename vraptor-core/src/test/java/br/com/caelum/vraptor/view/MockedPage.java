@@ -18,7 +18,7 @@ package br.com.caelum.vraptor.view;
 
 import java.lang.reflect.Method;
 
-import br.com.caelum.vraptor.proxy.CglibProxifier;
+import br.com.caelum.vraptor.proxy.JavassistProxifier;
 import br.com.caelum.vraptor.proxy.MethodInvocation;
 import br.com.caelum.vraptor.proxy.ObjenesisInstanceCreator;
 import br.com.caelum.vraptor.proxy.Proxifier;
@@ -29,7 +29,7 @@ public class MockedPage implements PageResult {
 	private final Proxifier proxifier;
 
 	public MockedPage() {
-		proxifier = new CglibProxifier(new ObjenesisInstanceCreator());
+		proxifier = new JavassistProxifier(new ObjenesisInstanceCreator());
 	}
 
 	public void forwardTo() {

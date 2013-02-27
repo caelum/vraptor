@@ -38,7 +38,7 @@ public class CglibProxifierTest {
     
     @Before
     public void setUp() throws Exception {
-        proxifier= new CglibProxifier(new ObjenesisInstanceCreator());
+        proxifier= new JavassistProxifier(new ObjenesisInstanceCreator());
     }
     
     @Test

@@ -129,7 +129,6 @@ import br.com.caelum.vraptor.ioc.ConverterHandler;
 import br.com.caelum.vraptor.ioc.InterceptorStereotypeHandler;
 import br.com.caelum.vraptor.ioc.ResourceHandler;
 import br.com.caelum.vraptor.ioc.StereotypeHandler;
-import br.com.caelum.vraptor.proxy.CglibProxifier;
 import br.com.caelum.vraptor.proxy.InstanceCreator;
 import br.com.caelum.vraptor.proxy.JavassistProxifier;
 import br.com.caelum.vraptor.proxy.ObjenesisInstanceCreator;
@@ -217,7 +216,7 @@ public class BaseComponents {
             MethodNotAllowedHandler.class,	DefaultMethodNotAllowedHandler.class,
             RoutesConfiguration.class, 		NoRoutesConfiguration.class,
             Deserializers.class,			DefaultDeserializers.class,
-            Proxifier.class, 				getProxifier(),
+            Proxifier.class, 				JavassistProxifier.class,
             InstanceCreator.class,          getInstanceCreator(),
             ParameterNameProvider.class, 	ParanamerNameProvider.class,
             TypeFinder.class, 				DefaultTypeFinder.class,
@@ -344,14 +343,6 @@ public class BaseComponents {
         }
 
         return ReflectionInstanceCreator.class;
-    }
-
-    private static Class<? extends Proxifier> getProxifier() {
-        if (isClassPresent("net.sf.cglib.proxy.Factory")) {
-            return CglibProxifier.class;
-        }
-
-        return JavassistProxifier.class;
     }
 
 	public static Map<Class<?>, Class<?>> getCachedComponents() {

@@ -38,7 +38,7 @@ import br.com.caelum.vraptor.converter.LongConverter;
 import br.com.caelum.vraptor.converter.StringConverter;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.proxy.CglibProxifier;
+import br.com.caelum.vraptor.proxy.JavassistProxifier;
 import br.com.caelum.vraptor.proxy.ReflectionInstanceCreator;
 
 /**
@@ -83,7 +83,7 @@ public class OgnlGenericTypesSupportTest {
         // OgnlRuntime.setPropertyAccessor(Map.class, new MapAccessor());
         Ognl.setTypeConverter(context, new VRaptorConvertersAdapter(converters, bundle));
         
-        context.put("proxifier", new CglibProxifier(new ReflectionInstanceCreator()));
+        context.put("proxifier", new JavassistProxifier(new ReflectionInstanceCreator()));
     }
 
     public static class Cat {

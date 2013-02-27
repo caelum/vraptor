@@ -19,10 +19,8 @@ package br.com.caelum.vraptor.util.test;
 
 import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.ioc.Component;
-import br.com.caelum.vraptor.proxy.CglibProxifier;
+import br.com.caelum.vraptor.proxy.JavassistProxifier;
 import br.com.caelum.vraptor.proxy.ObjenesisInstanceCreator;
-import br.com.caelum.vraptor.util.test.MockHttpServletResponse;
-import br.com.caelum.vraptor.util.test.MockResult;
 import br.com.caelum.vraptor.view.DefaultHttpResult;
 import br.com.caelum.vraptor.view.DefaultStatus;
 import br.com.caelum.vraptor.view.HttpResult;
@@ -41,7 +39,7 @@ public class MockHttpResult extends MockResult{
 	private MockHttpServletResponse response = new MockHttpServletResponse();
 
 	public MockHttpResult() {
-		super(new CglibProxifier(new ObjenesisInstanceCreator()));
+		super(new JavassistProxifier(new ObjenesisInstanceCreator()));
 	}
 
 	@Override

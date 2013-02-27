@@ -40,7 +40,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.VRaptorException;
-import br.com.caelum.vraptor.proxy.CglibProxifier;
+import br.com.caelum.vraptor.proxy.JavassistProxifier;
 import br.com.caelum.vraptor.proxy.ReflectionInstanceCreator;
 
 public class ListNullHandlerTest {
@@ -77,7 +77,7 @@ public class ListNullHandlerTest {
 		handler = new ListNullHandler(removal);
 		
         context = (OgnlContext) Ognl.createDefaultContext(null);
-        context.put("proxifier", new CglibProxifier(new ReflectionInstanceCreator()));
+        context.put("proxifier", new JavassistProxifier(new ReflectionInstanceCreator()));
 	}
 
 	@Test(expected = VRaptorException.class)

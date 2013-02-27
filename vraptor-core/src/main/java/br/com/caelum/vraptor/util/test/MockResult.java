@@ -25,7 +25,7 @@ import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.core.AbstractResult;
 import br.com.caelum.vraptor.ioc.Component;
-import br.com.caelum.vraptor.proxy.CglibProxifier;
+import br.com.caelum.vraptor.proxy.JavassistProxifier;
 import br.com.caelum.vraptor.proxy.MethodInvocation;
 import br.com.caelum.vraptor.proxy.ObjenesisInstanceCreator;
 import br.com.caelum.vraptor.proxy.Proxifier;
@@ -58,7 +58,7 @@ public class MockResult extends AbstractResult {
 	}
 
 	public MockResult() {
-	    this(new CglibProxifier(new ObjenesisInstanceCreator()));
+	    this(new JavassistProxifier(new ObjenesisInstanceCreator()));
 	}
 
 	public Result include(String key, Object value) {

@@ -14,7 +14,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.http.route.Router;
-import br.com.caelum.vraptor.proxy.CglibProxifier;
+import br.com.caelum.vraptor.proxy.JavassistProxifier;
 import br.com.caelum.vraptor.proxy.ObjenesisInstanceCreator;
 
 public class DefaultRelationBuilderTest {
@@ -26,7 +26,7 @@ public class DefaultRelationBuilderTest {
 	@Before
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
-		builder = new DefaultRelationBuilder(router, new CglibProxifier(new ObjenesisInstanceCreator()));
+		builder = new DefaultRelationBuilder(router, new JavassistProxifier(new ObjenesisInstanceCreator()));
 		doIt = Controller.class.getMethod("doIt");
 	}
 	@Test

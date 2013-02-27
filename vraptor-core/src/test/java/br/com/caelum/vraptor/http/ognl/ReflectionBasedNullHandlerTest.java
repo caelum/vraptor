@@ -32,9 +32,9 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 
-import net.sf.cglib.proxy.Callback;
-import net.sf.cglib.proxy.Dispatcher;
-import net.sf.cglib.proxy.Enhancer;
+import javassist.util.proxy.MethodHandler;
+import javassist.util.proxy.ProxyFactory;
+import javassist.util.proxy.ProxyObject;
 import ognl.Ognl;
 import ognl.OgnlContext;
 import ognl.OgnlException;
@@ -49,7 +49,8 @@ import br.com.caelum.vraptor.converter.LongConverter;
 import br.com.caelum.vraptor.converter.StringConverter;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.proxy.CglibProxifier;
+import br.com.caelum.vraptor.proxy.JavassistProxifier;
+import br.com.caelum.vraptor.proxy.ObjenesisInstanceCreator;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.ReflectionInstanceCreator;
 
@@ -67,7 +68,7 @@ public class ReflectionBasedNullHandlerTest {
 
 		AbstractOgnlTestSupport.configOgnl(converters);
 
-        this.proxifier = new CglibProxifier(new ReflectionInstanceCreator());
+        this.proxifier = new JavassistProxifier(new ReflectionInstanceCreator());
 		this.context = (OgnlContext) Ognl.createDefaultContext(null);
 		context.setTraceEvaluations(true);
 		context.put("removal", removal);
@@ -146,11 +147,21 @@ public class ReflectionBasedNullHandlerTest {
 
 	@SuppressWarnings("unchecked")
 	public static <T> T proxify(final T pojo) {
-		Enhancer enhancer = new Enhancer();
-		enhancer.setSuperclass(pojo.getClass());
-		enhancer.setCallbackTypes(new Class[] { Dispatcher.class});
-		enhancer.setCallbacks(new Callback[] {  new Dispatcher() { public Object loadObject() throws Exception {return pojo;}	}});
-		return (T) enhancer.create();
+	    
+        ProxyFactory factory = new ProxyFactory();
+        factory.setSuperclass(pojo.getClass());
+        
+        Class<?> proxyClass = factory.createClass();
+        Object proxyInstance = new ObjenesisInstanceCreator().instanceFor(proxyClass);
+        ProxyObject proxyObject = (ProxyObject) proxyInstance;
+        proxyObject.setHandler(new MethodHandler() {
+            public Object invoke(final Object self, final Method thisMethod, final Method proceed, Object[] args)
+                    throws Throwable {
+                return pojo;
+                }
+        });        
+
+        return (T) proxyInstance;
 	}
 
 	@Test

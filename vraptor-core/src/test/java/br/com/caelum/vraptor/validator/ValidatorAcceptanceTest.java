@@ -30,7 +30,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.core.Localization;
-import br.com.caelum.vraptor.proxy.CglibProxifier;
+import br.com.caelum.vraptor.proxy.JavassistProxifier;
 import br.com.caelum.vraptor.proxy.ObjenesisInstanceCreator;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.util.EmptyBundle;
@@ -50,7 +50,7 @@ public class ValidatorAcceptanceTest {
 
     @Before
     public void setup() {
-        Proxifier proxifier = new CglibProxifier(new ObjenesisInstanceCreator());
+        Proxifier proxifier = new JavassistProxifier(new ObjenesisInstanceCreator());
         validator = new DefaultValidator(result, viewsFactory, outjector, proxifier, null, localization);
         when(localization.getBundle()).thenReturn(new EmptyBundle());
     }

@@ -48,21 +48,4 @@ public abstract class Rules {
         this.routesToBuild.add(rule);
         return rule;
     }
-
-    /**
-     * @deprecated Override the behavior of RoutesParser instead
-     */
-    @Deprecated
-    protected final PatternBasedType type(String pattern) {
-        return new PatternBasedType(pattern);
-    }
-
-    /**
-     * @deprecated Override the behavior of RoutesParser instead
-     */
-    @Deprecated
-    protected final PatternBasedType method(String pattern) {
-        return new PatternBasedType(pattern);
-    }
-
 }

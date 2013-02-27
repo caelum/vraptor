@@ -26,6 +26,7 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
  * Initializer for Hibernate proxy objects
  * @author Tomaz Lavieri
  * @since 3.1.2
+ * @deprecated 3.5.0-SNAPSHOT, since persistence plugins have their own projects
  */
 @ApplicationScoped
 public class HibernateProxyInitializer implements ProxyInitializer {

@@ -22,6 +22,7 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.MessageFormat;
 import java.text.ParseException;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 import br.com.caelum.vraptor.Convert;
@@ -55,16 +56,13 @@ public class LocaleBasedBigDecimalConverter
         }
         
         try {
-        	return new BigDecimal(value);
-        } catch (NumberFormatException e) {
-        	try {
-        		DecimalFormat formatBigDecimal = ((DecimalFormat) DecimalFormat.getInstance(localization.getLocale()));
-            	formatBigDecimal.setParseBigDecimal(true);
-            	return (BigDecimal) formatBigDecimal.parse(value);
-        	} catch(ParseException pe){
-        		throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_number"), value));
-        	}
+            final Locale locale = localization.getLocale();
+            DecimalFormat fmt = ((DecimalFormat) DecimalFormat.getInstance(locale));
+            fmt.setParseBigDecimal(true);
             
+            return (BigDecimal) fmt.parse(value);
+        } catch (ParseException e) {
+            throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_number"), value));
         }
     }
 }

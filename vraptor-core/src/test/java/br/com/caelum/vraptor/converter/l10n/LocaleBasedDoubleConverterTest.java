@@ -68,9 +68,17 @@ public class LocaleBasedDoubleConverterTest {
     }
 
     @Test
-    public void shouldBeAbleToConvert() {
-    	when(request.getAttribute("javax.servlet.jsp.jstl.fmt.locale.request")).thenReturn("pt_br");
-        assertThat(converter.convert("19,91", Double.class, bundle), is(equalTo(new Double("19.91"))));
+    public void shouldBeAbleToConvertWithPTBR() {
+        when(request.getAttribute("javax.servlet.jsp.jstl.fmt.locale.request")).thenReturn("pt_BR");
+        assertThat(converter.convert("10,00", Double.class, bundle), is(equalTo(new Double("10.00"))));
+        assertThat(converter.convert("10,01", Double.class, bundle), is(equalTo(new Double("10.01"))));
+    }
+
+    @Test
+    public void shouldBeAbleToConvertWithENUS() {
+        when(request.getAttribute("javax.servlet.jsp.jstl.fmt.locale.request")).thenReturn("en_US");
+        assertThat(converter.convert("10.00", Double.class, bundle), is(equalTo(new Double("10.00"))));
+        assertThat(converter.convert("10.01", Double.class, bundle), is(equalTo(new Double("10.01"))));
     }
 
     @Test

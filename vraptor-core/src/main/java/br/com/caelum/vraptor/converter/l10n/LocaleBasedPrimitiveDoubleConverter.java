@@ -20,7 +20,6 @@ package br.com.caelum.vraptor.converter.l10n;
 import static com.google.common.base.Strings.isNullOrEmpty;
 
 import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.text.MessageFormat;
 import java.text.ParseException;
 import java.util.Locale;
@@ -57,11 +56,9 @@ public class LocaleBasedPrimitiveDoubleConverter implements Converter<Double> {
 		}
 
 		try {
-			final Locale locale = localization.getLocale();
-			DecimalFormat fmt = new DecimalFormat("##0,00", new DecimalFormatSymbols(locale));
+            final Locale locale = localization.getLocale();
+            DecimalFormat fmt = ((DecimalFormat) DecimalFormat.getInstance(locale));
 
-			// DecimalFormat.parse can return long values, so it's more securely
-			// call floatValue
 			return fmt.parse(value).doubleValue();
 		} catch (ParseException e) {
 			throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_number"), value));

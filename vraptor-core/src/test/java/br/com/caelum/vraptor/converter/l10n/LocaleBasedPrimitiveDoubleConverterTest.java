@@ -67,9 +67,17 @@ public class LocaleBasedPrimitiveDoubleConverterTest {
     }
 
     @Test
-    public void shouldBeAbleToConvert() {
-    	when(request.getAttribute("javax.servlet.jsp.jstl.fmt.locale.request")).thenReturn("pt_br");
-        assertThat((Double) converter.convert("8,77", double.class, bundle), is(equalTo(8.77d)));
+    public void shouldBeAbleToConvertWithPTBR() {
+        when(request.getAttribute("javax.servlet.jsp.jstl.fmt.locale.request")).thenReturn("pt_BR");
+        assertThat(converter.convert("10,00", double.class, bundle), is(equalTo(Double.parseDouble("10.00"))));
+        assertThat(converter.convert("10,01", double.class, bundle), is(equalTo(Double.parseDouble("10.01"))));
+    }
+
+    @Test
+    public void shouldBeAbleToConvertWithENUS() {
+        when(request.getAttribute("javax.servlet.jsp.jstl.fmt.locale.request")).thenReturn("en_US");
+        assertThat(converter.convert("10.00", double.class, bundle), is(equalTo(Double.parseDouble("10.00"))));
+        assertThat(converter.convert("10.01", double.class, bundle), is(equalTo(Double.parseDouble("10.01"))));
     }
 
     @Test

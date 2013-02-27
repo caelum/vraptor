@@ -69,13 +69,19 @@ public class LocaleBasedBigDecimalConverterTest {
     }
 
     @Test
-    public void shouldBeAbleToConvert() {
-    	when(request.getAttribute("javax.servlet.jsp.jstl.fmt.locale.request")).thenReturn("pt_br");
-        assertThat(converter.convert("19,91", BigDecimal.class, bundle), is(equalTo(new BigDecimal("19.91"))));
-        assertThat(converter.convert("10.00", BigDecimal.class, bundle), is(equalTo(new BigDecimal("10.00"))));
-        mockery.assertIsSatisfied();
+    public void shouldBeAbleToConvertWithPTBR() {
+    	when(request.getAttribute("javax.servlet.jsp.jstl.fmt.locale.request")).thenReturn("pt_BR");
+        assertThat(converter.convert("10,00", BigDecimal.class, bundle), is(equalTo(new BigDecimal("10.00"))));
+        assertThat(converter.convert("10,01", BigDecimal.class, bundle), is(equalTo(new BigDecimal("10.01"))));
     }
 
+    @Test
+    public void shouldBeAbleToConvertWithENUS() {
+        when(request.getAttribute("javax.servlet.jsp.jstl.fmt.locale.request")).thenReturn("en_US");
+        assertThat(converter.convert("10.00", BigDecimal.class, bundle), is(equalTo(new BigDecimal("10.00"))));
+        assertThat(converter.convert("10.01", BigDecimal.class, bundle), is(equalTo(new BigDecimal("10.01"))));
+    }
+    
     @Test
     public void shouldUseTheDefaultLocale()
         throws ParseException {

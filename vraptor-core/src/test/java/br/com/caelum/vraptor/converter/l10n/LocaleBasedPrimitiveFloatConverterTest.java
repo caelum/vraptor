@@ -64,9 +64,17 @@ public class LocaleBasedPrimitiveFloatConverterTest {
     }
 
     @Test
-    public void shouldBeAbleToConvert() {
-    	when(request.getAttribute("javax.servlet.jsp.jstl.fmt.locale.request")).thenReturn("pt_br");
-        assertThat((Float) converter.convert("8,77", float.class, bundle), is(equalTo(8.77f)));
+    public void shouldBeAbleToConvertWithPTBR() {
+        when(request.getAttribute("javax.servlet.jsp.jstl.fmt.locale.request")).thenReturn("pt_BR");
+        assertThat(converter.convert("10,00", float.class, bundle), is(equalTo(Float.parseFloat("10.00"))));
+        assertThat(converter.convert("10,01", float.class, bundle), is(equalTo(Float.parseFloat("10.01"))));
+    }
+
+    @Test
+    public void shouldBeAbleToConvertWithENUS() {
+        when(request.getAttribute("javax.servlet.jsp.jstl.fmt.locale.request")).thenReturn("en_US");
+        assertThat(converter.convert("10.00", float.class, bundle), is(equalTo(Float.parseFloat("10.00"))));
+        assertThat(converter.convert("10.01", float.class, bundle), is(equalTo(Float.parseFloat("10.01"))));
     }
 
     @Test

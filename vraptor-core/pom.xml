@@ -21,11 +21,6 @@
 			<version>r07</version>
 		</dependency>
 		<dependency>
-			<groupId>javax.validation</groupId>
-			<artifactId>validation-api</artifactId>
-			<version>1.0.0.GA</version>
-		</dependency>
-		<dependency>
 			<groupId>br.com.caelum</groupId>
 			<artifactId>iogi</artifactId>
 			<version>0.9.1</version>
@@ -196,6 +191,12 @@
 		</dependency>
 		<!--  [/hibernate] -->
 
+		<dependency>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
+			<version>1.0.0.GA</version>
+			<optional>true</optional>
+		</dependency>
 		<dependency>
 			<groupId>javax.annotation</groupId>
 			<artifactId>jsr250-api</artifactId>

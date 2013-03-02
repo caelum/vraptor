@@ -113,10 +113,10 @@ public admin(Employee employee) {
 }
 {% endhighlight %}
 
-<h3>Bean Validation (JSR303) and Hibernate Validator</h3>
+<h3>Bean Validation</h3>
 
-VRaptor 3 also supports Bean Validation and Hibernate Validator. To use these features you only need to put any implementation of Bean Validation or Hibernate Validator jars in your classpath.
-In the example above, to validate the employee object using HibernateValidator, just add one line to your code:
+VRaptor 3 also supports Bean Validation. To use these features you only need to put any implementation of Bean Validation in your classpath.
+In the example above, to validate the employee object, just add one line to your code:
 
 {% highlight java %}
 public add(Employee employee) {
@@ -130,6 +130,14 @@ public add(Employee employee) {
     validator.onErrorUsePageOf(EmployeeController.class).form();
 
     dao.add(employee);
+}
+{% endhighlight %}
+
+Since 3.5 release, there is support to method validation. You need only to put any implementation of Bean Validator 1.1 in the classpath. See example bellow:
+
+{% highlight java %}
+public adiciona(@NotNull String name, @Future dueDate) {
+    ...
 }
 {% endhighlight %}
 

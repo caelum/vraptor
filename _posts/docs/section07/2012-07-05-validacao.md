@@ -115,9 +115,9 @@ public admin(Funcionario funcionario) {
 }
 {% endhighlight %}
 
-<h3>Bean Validation (JSR303) e Hibernate Validator</h3>
+<h3>Bean Validation</h3>
 
-O VRaptor também suporta integração com o Bean Validation e o Hibernate Validator. Para usar as validações basta adicionar no seu classpath qualquer implementação do Bean Validation ou do Hibernate Validator.
+O VRaptor também suporta integração com o Bean Validation e o Hibernate Validator. Para usar as validações basta adicionar no seu classpath qualquer implementação do Bean Validation.
 No exemplo anterior, para validar o objeto Funcionario basta uma adicionar uma linha de código:
 
 {% highlight java %}
@@ -132,6 +132,14 @@ public adiciona(Funcionario funcionario) {
     validator.onErrorUsePageOf(FuncionarioController.class).formulario();
     
     dao.adiciona(funcionario);
+}
+{% endhighlight %}
+
+A partir da versão 3.5 o VRaptor possui suporte para validações nos métodos. Para isso é necessário ter no classpath alguma implementação do Bean Validator 1.1. Desta forma qualquer parâmetro pode ser validado usando anotações conforme o exemplo abaixo:
+
+{% highlight java %}
+public adiciona(@NotNull String name, @Future dueDate) {
+    ...
 }
 {% endhighlight %}
 

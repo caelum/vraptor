@@ -63,63 +63,6 @@ ou você pode criar um custom provider:
 
 <h3>Componentes opcionais disponíveis</h3>
 
-<h3>Hibernate Session e SessionFactory</h3>
-
-Se você precisa de Sessions e SessionFactories nos seus componentes, você geralmente vai precisar de um ComponentFactory para criá-los. Se você usa entidades anotadas e o hibernate.cfg.xml na raiz do WEB-INF/classes, você pode usar as ComponentFactories para isso, que já vêm com o VRaptor. O VRaptor também tem um interceptor que abre a Session e começa uma transação no início da requisição e fecha a Session (e commita ou dá rollback na transação) no final da requisição. Você pode registrar esses componentes do VRaptor adicionando o pacote <strong>br.com.caelum.vraptor.util.hibernate</strong> no seu web.xml:
-
-{% highlight xml %}
-<context-param>
-    <param-name>br.com.caelum.vraptor.packages</param-name>
-    <param-value>
-        br.com.caelum.vraptor.util.outros.pacotes...,
-        br.com.caelum.vraptor.util.hibernate
-    </param-value>
-</context-param>
-{% endhighlight %}
-
-ou registrá-los manualmente no custom provider:
-
-{% highlight java %}
-@Override
-protected void registerCustomComponents(ComponentRegistry registry) {
-    registry.register(SessionCreator.class, SessionCreator.class); //cria Session's
-    registry.register(SessionFactoryCreator.class, 
-        SessionFactoryCreator.class); // cria uma SessionFactory
-    registry.register(HibernateTransactionInterceptor.class, 
-        HibernateTransactionInterceptor.class); // open session and transaction in view
-}
-{% endhighlight %}
-
-<h3>JPA EntityManager e EntityManagerFactory</h3>
-
-Se você tiver um persistence.xml com o persistence-unit chamado "default", você pode usar os ComponentFactories para criar EntityManager e EntityManagerFactory já disponíveis no VRaptor, adicionando o pacote br.com.caelum.vraptor.util.jpa no web.xml:
-
-{% highlight xml %}
-<context-param>
-    <param-name>br.com.caelum.vraptor.packages</param-name>
-    <param-value>
-        br.com.caelum.vraptor.util.outros.pacotes...,
-        br.com.caelum.vraptor.util.jpa
-    </param-value>
-</context-param>
-{% endhighlight %}
-
-ou adicioná-los manualmente no web.xml:
-
-{% highlight java %}
-@Override
-protected void registerCustomComponents(ComponentRegistry registry) {
-    registry.register(EntityManagerCreator.class,
-        EntityManagerCreator.class); // cria EntityManager's
-    registry.register(EntityManagerFactoryCreator.class, 
-        EntityManagerFactoryCreator.class); //cria uma EntityManagerFactory
-    registry.register(JPATransactionInterceptor.class, 
-        JPATransactionInterceptor.class); //open EntityManager and transaction in view
-}
-{% endhighlight %}
-
-Já existe um Provider que adiciona esses três componentes opcionais. Você pode apenas registrá-lo no seu web.xml:
-
 <h3>Converters Localizados</h3>
 
 Existem alguns converters para números que são localizados, ou seja, que consideram o Locale atual para converter os parâmetros. Você pode registrá-los adicionando o pacote br.com.caelum.vraptor.converter.l10n no seu web.xml:

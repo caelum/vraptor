@@ -108,7 +108,6 @@ import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
 import br.com.caelum.vraptor.interceptor.FlashInterceptor;
 import br.com.caelum.vraptor.interceptor.ForwardToDefaultViewInterceptor;
 import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
-import br.com.caelum.vraptor.interceptor.InterceptorListPriorToExecutionExtractor;
 import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
 import br.com.caelum.vraptor.interceptor.OutjectResult;
 import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
@@ -207,7 +206,6 @@ public class BaseComponents {
     		Converters.class, 				DefaultConverters.class,
             InterceptorRegistry.class, 		TopologicalSortedInterceptorRegistry.class,
             InterceptorHandlerFactory.class,DefaultInterceptorHandlerFactory.class,
-            InterceptorListPriorToExecutionExtractor.class, InterceptorListPriorToExecutionExtractor.class,
             MultipartConfig.class, 			DefaultMultipartConfig.class,
             UrlToResourceTranslator.class, 	DefaultResourceTranslator.class,
             Router.class, 					DefaultRouter.class,

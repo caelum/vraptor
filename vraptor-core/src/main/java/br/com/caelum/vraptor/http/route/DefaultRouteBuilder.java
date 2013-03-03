@@ -171,15 +171,6 @@ public class DefaultRouteBuilder implements RouteBuilder {
 		return proxifier.proxify(type, handler);
 	}
 
-	/**
-	 * @deprecated Use @Path or override RoutesConfiguration behavior
-	 */
-	@Deprecated
-	public void is(PatternBasedType type, PatternBasedType method) {
-		this.strategy = new PatternBasedStrategy(builder.build(), type, method, this.supportedMethods, priority);
-
-	}
-
 	public void is(Class<?> type, Method method) {
 		addParametersInfo(method);
 		ResourceMethod resourceMethod = DefaultResourceMethod.instanceFor(type, method);

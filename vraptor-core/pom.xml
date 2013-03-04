@@ -170,17 +170,11 @@
 		</dependency>
 		<!-- [/deserialization] -->
 
-		<!--  [hibernate] -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
 			<version>3.6.6.Final</version>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate.javax.persistence</groupId>
-			<artifactId>hibernate-jpa-2.0-api</artifactId>
-			<version>1.0.0.Final</version>
+			<scope>compile</scope>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
@@ -189,7 +183,6 @@
 			<version>4.2.0.Final</version>
 			<optional>true</optional>
 		</dependency>
-		<!--  [/hibernate] -->
 
 		<dependency>
 			<groupId>javax.validation</groupId>

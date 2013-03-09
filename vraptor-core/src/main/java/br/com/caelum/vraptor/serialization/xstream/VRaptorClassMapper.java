@@ -33,12 +33,12 @@ public class VRaptorClassMapper extends MapperWrapper {
 
 	private final Supplier<TypeNameExtractor> extractor;
 	private Serializee serializee = new Serializee();
-	
+
 	public VRaptorClassMapper(Mapper wrapped, Supplier<TypeNameExtractor> supplier) {
 		super(wrapped);
 		this.extractor = supplier;
 	}
-	
+
 	static boolean isPrimitive(Class<?> type) {
 		return type.isPrimitive()
 			|| type.isEnum()
@@ -49,7 +49,7 @@ public class VRaptorClassMapper extends MapperWrapper {
 			|| Boolean.class.equals(type)
 			|| Character.class.equals(type);
 	}
-	
+
 	@Override
 	public boolean shouldSerializeMember(Class definedIn, String fieldName) {
 		for (Entry<String, Class<?>> include : serializee.getIncludes().entries()) {
@@ -62,10 +62,10 @@ public class VRaptorClassMapper extends MapperWrapper {
 				return false;
 			}
 		}
-		
-		boolean should = super.shouldSerializeMember(definedIn, fieldName); 
+
+		boolean should = super.shouldSerializeMember(definedIn, fieldName);
 		if (!serializee.isRecursive())
-			should = should && isPrimitive(new Mirror().on(definedIn).reflect().field(fieldName).getType()); 
+			should = should && isPrimitive(new Mirror().on(definedIn).reflect().field(fieldName).getType());
 		return should;
 	}
 
@@ -75,6 +75,7 @@ public class VRaptorClassMapper extends MapperWrapper {
 
 	@Override
 	public String serializedClass(Class type) {
+		if (type == null) return super.serializedClass(type);
 		if (Message.class.isAssignableFrom(type)) {
 			return "message";
 		}
@@ -84,7 +85,7 @@ public class VRaptorClassMapper extends MapperWrapper {
 		}
 		return superName;
 	}
-	
+
 	public void setSerializee(Serializee serializee) {
 		this.serializee = serializee;
 	}

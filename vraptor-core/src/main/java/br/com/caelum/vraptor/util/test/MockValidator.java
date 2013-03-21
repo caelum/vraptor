@@ -21,11 +21,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.ResourceBundle;
 
 import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.validator.AbstractValidator;
-import br.com.caelum.vraptor.validator.I18nMessage;
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.ValidationException;
 import br.com.caelum.vraptor.validator.Validations;
@@ -60,7 +58,10 @@ public class MockValidator extends AbstractValidator {
 		this.errors.addAll(validations.getErrors());
 	}
 
-	public void validate(Object object) {
+	public void validate(Object object, Class<?>... groups) {
+	}
+	
+	public void validateProperties(Object object, String... properties) {
 	}
 
 	public <T extends View> T onErrorUse(Class<T> view) {
@@ -84,17 +85,5 @@ public class MockValidator extends AbstractValidator {
 
 	public List<Message> getErrors() {
 		return Collections.unmodifiableList(errors);
-	}
-	
-	public boolean containsMessage(String messageKey, Object... messageParameters) {
-		I18nMessage expectedMessage = new I18nMessage("validation", messageKey, messageParameters);
-		expectedMessage.setBundle(ResourceBundle.getBundle("messages"));
-		for(Message error : this.getErrors()) {
-			if(expectedMessage.getMessage().equals(error.getMessage())) {
-				return true;
-			}
-		}
-		
-		return false;
 	}
 }

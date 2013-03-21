@@ -145,6 +145,20 @@ public class DefaultValidatorTest {
 		validator.validate(new Object());
 		assertThat(validator.getErrors(), hasSize(1));
 	}
+	
+	@Test
+	public void shouldAddBeanValidatorErrorsIfPossibleForSpecificProperties() {
+		List<Message> messages = new ArrayList<Message>();
+		
+		when(beanValidator.validateProperties(any())).thenReturn(messages);
+		validator.validateProperties(new Object());
+		assertThat(validator.getErrors(), hasSize(0));
+		
+		messages.add(new ValidationMessage("", ""));
+		when(beanValidator.validateProperties(any())).thenReturn(messages);
+		validator.validateProperties(new Object());
+		assertThat(validator.getErrors(), hasSize(1));
+	}
 
 	@Test
 	public void testThatValidatorGoToRedirectsToTheErrorPageImmediatellyAndNotBeforeThis() {

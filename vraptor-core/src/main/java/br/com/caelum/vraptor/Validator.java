@@ -20,6 +20,8 @@ package br.com.caelum.vraptor;
 import java.util.Collection;
 import java.util.List;
 
+import javax.validation.groups.Default;
+
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.Validations;
 
@@ -38,9 +40,19 @@ public interface Validator {
      * the validation will be skipped.
      *
      * @param object The object to be validated.
+     * @param groups The groups to be validated. Use the {@link Default} group if no groups has been passed.
      * @since vraptor3.1.2
      */
-    void validate(Object object);
+    void validate(Object object, Class<?>... groups);
+
+    /**
+     * Validate the specifics propeties of an object using some Bean Validation engine. If the object is null,
+     * the validation will be skipped. Only validate properties of {@link Default} group.
+     * 
+     * @param object The object to be validated.
+     * @param properties The names of properties to be validated. This properties must belong to {@link Default} group to be validated.
+     */
+    void validateProperties(Object object, String... properties);
 
     <T extends View> T onErrorUse(Class<T> view);
 

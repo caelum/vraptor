@@ -38,9 +38,19 @@ public interface Validator {
      * the validation will be skipped.
      *
      * @param object The object to be validated.
+     * @param groups The groups to be validated.
      * @since vraptor3.1.2
      */
-    void validate(Object object);
+    void validate(Object object, Class<?>... groups);
+
+    /**
+     * Validate the specifics propeties of an object using some Bean Validation engine. If the object is null,
+     * the validation will be skipped.
+     * 
+     * @param object The object to be validated.
+     * @param properties The names of properties to be validated.
+     */
+    void validateProperties(Object object, String... properties);
 
     <T extends View> T onErrorUse(Class<T> view);
 

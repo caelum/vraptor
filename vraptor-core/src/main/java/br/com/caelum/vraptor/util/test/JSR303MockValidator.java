@@ -38,8 +38,13 @@ public class JSR303MockValidator extends MockValidator {
 	}
 
 	@Override
-	public void validate(Object bean) {
-		addAll(that.validate(bean));
+	public void validate(Object bean, Class<?>... groups) {
+		addAll(that.validate(bean, groups));
+	}
+	
+	@Override
+	public void validateProperties(Object bean, String... properties) {
+		addAll(that.validateProperties(bean, properties));
 	}
 
 }

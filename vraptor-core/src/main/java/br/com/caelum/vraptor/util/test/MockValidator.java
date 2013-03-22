@@ -60,7 +60,10 @@ public class MockValidator extends AbstractValidator {
 		this.errors.addAll(validations.getErrors());
 	}
 
-	public void validate(Object object) {
+	public void validate(Object object, Class<?>... groups) {
+	}
+	
+	public void validateProperties(Object object, String... properties) {
 	}
 
 	public <T extends View> T onErrorUse(Class<T> view) {

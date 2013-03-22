@@ -58,27 +58,57 @@ public class DefaultBeanValidator
         this.interpolator = interpolator;
     }
 
-    public List<Message> validate(Object bean) {
+    public List<Message> validate(Object bean, Class<?>... groups) {
         if (bean == null) {
             logger.warn("skiping validation, input bean is null.");
             return Collections.emptyList();
         }
 
-        final Set<ConstraintViolation<Object>> violations = validator.validate(bean);
+        final Set<ConstraintViolation<Object>> violations = validator.validate(bean, groups);
         logger.debug("there are {} violations at bean {}.", violations.size(), bean);
 
-        Locale locale = localization.getLocale() == null ? Locale.getDefault() : localization.getLocale();
-        List<Message> messages = new ArrayList<Message>();
-
-        for (ConstraintViolation<Object> violation : violations) {
-            BeanValidatorContext ctx = BeanValidatorContext.of(violation);
-            String msg = interpolator.interpolate(violation.getMessageTemplate(), ctx, locale);
-
-            messages.add(new ValidationMessage(msg, violation.getPropertyPath().toString()));
-            logger.debug("added message {} to validation of bean {}", msg, violation.getRootBean());
-        }
-
-        return messages;
+        return getMessages(violations);
     }
 
+    public List<Message> validateProperties(Object bean, String... properties) {
+    	if(bean == null) {
+    		logger.warn("skiping validation, input bean is null.");
+            return Collections.emptyList();
+    	}
+    	
+    	if(!hasProperties(properties)) throw new IllegalArgumentException("No properties were defined to be validated");
+    	
+    	List<Message> messages = new ArrayList<Message>();
+    	
+    	for(String property : properties) {        
+            Set<ConstraintViolation<Object>> violations = validator.validateProperty(bean, property);
+            logger.debug("there are {} violations at bean {}.", violations.size(), bean);
+
+            messages.addAll(getMessages(violations));
+        }
+    	
+    	return messages;
+    }
+    
+    private List<Message> getMessages(final Set<ConstraintViolation<Object>> violations) {
+    	List<Message> messages = new ArrayList<Message>();
+    	
+    	for(ConstraintViolation<Object> violation : violations) {
+    		BeanValidatorContext ctx = BeanValidatorContext.of(violation);
+    		String msg = interpolator.interpolate(violation.getMessageTemplate(), ctx, getLocale());
+    		
+    		messages.add(new ValidationMessage(msg, violation.getPropertyPath().toString()));
+    		logger.debug("added message {} to validation of bean {}", msg, violation.getRootBean());
+    	}
+    	
+    	return messages;
+    }
+
+    private Locale getLocale() {
+    	return localization.getLocale() == null ? Locale.getDefault() : localization.getLocale();
+    }
+
+    private boolean hasProperties(String... properties) {
+    	return properties != null && properties.length > 0;
+    }
 }

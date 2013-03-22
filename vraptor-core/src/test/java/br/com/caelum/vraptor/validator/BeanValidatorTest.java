@@ -95,13 +95,13 @@ public class BeanValidatorTest {
     @Test
     public void shouldValidateOneSpecifiedGroup() {
     	CustomerForValidation customer0 = new CustomerForValidation(null, null, null);
-		assertThat(beanValidator.validate(customer0, SomeGroupValidation.class), hasSize(1));
+    	assertThat(beanValidator.validate(customer0, SomeGroupValidation.class), hasSize(1));
     }
     
     @Test
     public void shouldValidateManySpecifiedGroups() {
     	CustomerForValidation customer0 = new CustomerForValidation(null, null, null);
-		assertThat(beanValidator.validate(customer0, SomeGroupValidation.class, AnotherGroupValidation.class), hasSize(2));
+    	assertThat(beanValidator.validate(customer0, SomeGroupValidation.class, AnotherGroupValidation.class), hasSize(2));
     }
     
     @Test

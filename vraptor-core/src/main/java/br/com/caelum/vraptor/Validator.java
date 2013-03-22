@@ -20,8 +20,6 @@ package br.com.caelum.vraptor;
 import java.util.Collection;
 import java.util.List;
 
-import javax.validation.groups.Default;
-
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.Validations;
 
@@ -40,7 +38,7 @@ public interface Validator {
      * the validation will be skipped.
      *
      * @param object The object to be validated.
-     * @param groups The groups to be validated. Use the {@link Default} group if no groups has been passed.
+     * @param groups The groups to be validated.
      * @since vraptor3.1.2
      */
     void validate(Object object, Class<?>... groups);

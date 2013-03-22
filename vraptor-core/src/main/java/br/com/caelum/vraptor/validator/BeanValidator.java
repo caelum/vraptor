@@ -17,8 +17,6 @@ package br.com.caelum.vraptor.validator;
 
 import java.util.List;
 
-import javax.validation.groups.Default;
-
 /**
  * Implements a bean validator, delegating all validation to Bean Validator especification.
  * 
@@ -39,10 +37,10 @@ public interface BeanValidator {
     
     /**
      * Validate the specified bean's properties and return a list of messages if has constraint violations. 
-     * If the object is null, an empty list will be returned. Only validate properties of {@link Default} group.
+     * If the object is null, an empty list will be returned.
      * 
      * @param object The object to be validated.
-     * @param properties The properties that must be validated. This properties must belong to {@link Default} group to be validated.
+     * @param properties The properties that must be validated.
      * @return List of constraint violations.
      */
     List<Message> validateProperties(Object object, String... properties);

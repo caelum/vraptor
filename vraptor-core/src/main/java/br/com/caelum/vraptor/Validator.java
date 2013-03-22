@@ -47,10 +47,10 @@ public interface Validator {
 
     /**
      * Validate the specifics propeties of an object using some Bean Validation engine. If the object is null,
-     * the validation will be skipped. Only validate properties of {@link Default} group.
+     * the validation will be skipped.
      * 
      * @param object The object to be validated.
-     * @param properties The names of properties to be validated. This properties must belong to {@link Default} group to be validated.
+     * @param properties The names of properties to be validated.
      */
     void validateProperties(Object object, String... properties);
 

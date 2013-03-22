@@ -81,44 +81,44 @@ public class BeanValidatorTest {
     
     @Test
     public void shouldReturnEmptyCollectionIsBeanIsNull() {
-		assertThat(beanValidator.validate(null), hasSize(0));
+    	assertThat(beanValidator.validate(null), hasSize(0));
     }
     
     @Test
     public void nullValidatorShouldNeverValidate() {
-		BeanValidator validator = new NullBeanValidator();
-		assertThat(validator.validate(null), hasSize(0));
-		assertThat(validator.validate(new Object()), hasSize(0));
-		assertThat(validator.validate(new CustomerForValidation(null, null, null)), hasSize(0));
+    	BeanValidator validator = new NullBeanValidator();
+    	assertThat(validator.validate(null), hasSize(0));
+    	assertThat(validator.validate(new Object()), hasSize(0));
+    	assertThat(validator.validate(new CustomerForValidation(null, null, null)), hasSize(0));
     }
     
     @Test
     public void shouldValidateOneSpecifiedGroup() {
-		CustomerForValidation customer0 = new CustomerForValidation(null, null, null);
-		assertThat(beanValidator.validate(customer0, SomeGroupValidation.class), hasSize(1));
+    	CustomerForValidation customer0 = new CustomerForValidation(null, null, null);
+    	assertThat(beanValidator.validate(customer0, SomeGroupValidation.class), hasSize(1));
     }
     
     @Test
     public void shouldValidateManySpecifiedGroups() {
-		CustomerForValidation customer0 = new CustomerForValidation(null, null, null);
-		assertThat(beanValidator.validate(customer0, SomeGroupValidation.class, AnotherGroupValidation.class), hasSize(2));
+    	CustomerForValidation customer0 = new CustomerForValidation(null, null, null);
+    	assertThat(beanValidator.validate(customer0, SomeGroupValidation.class, AnotherGroupValidation.class), hasSize(2));
     }
     
     @Test
     public void shouldValidateOnlySpecifiedProperties() {
-		CustomerForValidation customer0 = new CustomerForValidation(null, null, null);
-		assertThat(beanValidator.validateProperties(customer0, "id"), hasSize(1));
+    	CustomerForValidation customer0 = new CustomerForValidation(null, null, null);
+    	assertThat(beanValidator.validateProperties(customer0, "id"), hasSize(1));
     }
     
     @Test(expected=IllegalArgumentException.class)
     public void shouldThrowExceptionIfNoPropertiesWereSpecified() {
-		CustomerForValidation customer0 = new CustomerForValidation(null, null, null);
-		beanValidator.validateProperties(customer0);
+    	CustomerForValidation customer0 = new CustomerForValidation(null, null, null);
+    	beanValidator.validateProperties(customer0);
     }
     
     @Test
     public void shouldReturnEmptyCollectionIfBeanIsNullForValidationProperties() {
-		assertThat(beanValidator.validateProperties(null, "id"), hasSize(0));
+    	assertThat(beanValidator.validateProperties(null, "id"), hasSize(0));
     }
 
     /**

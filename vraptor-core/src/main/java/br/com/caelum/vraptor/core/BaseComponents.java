@@ -72,6 +72,7 @@ import br.com.caelum.vraptor.deserialization.Deserializer;
 import br.com.caelum.vraptor.deserialization.Deserializers;
 import br.com.caelum.vraptor.deserialization.Deserializes;
 import br.com.caelum.vraptor.deserialization.DeserializesHandler;
+import br.com.caelum.vraptor.deserialization.FormDeserializer;
 import br.com.caelum.vraptor.deserialization.JsonDeserializer;
 import br.com.caelum.vraptor.deserialization.XMLDeserializer;
 import br.com.caelum.vraptor.deserialization.XStreamXMLDeserializer;
@@ -258,6 +259,7 @@ public class BaseComponents {
             InstantiateInterceptor.class, 					InstantiateInterceptor.class,
             DeserializingInterceptor.class, 				DeserializingInterceptor.class,
             JsonDeserializer.class,							JsonDeserializer.class,
+            FormDeserializer.class,							FormDeserializer.class,
             Localization.class, 							JstlLocalization.class,
             OutjectResult.class, 							OutjectResult.class,
             ParametersInstantiatorInterceptor.class, 		ParametersInstantiatorInterceptor.class,

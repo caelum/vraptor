@@ -65,6 +65,8 @@ import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.core.Execution;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.deserialization.Deserializer;
+import br.com.caelum.vraptor.deserialization.Deserializers;
 import br.com.caelum.vraptor.http.route.Route;
 import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
@@ -454,6 +456,29 @@ public abstract class GenericContainerTest {
 				});
 			}
 		});
+	}
+	
+	/**
+	 * Check if exist {@link Deserializer} registered in VRaptor for determined Content-Types. 
+	 */
+	@Test
+	public void shouldReturnAllDefaultDeserealizers() {
+		WhatToDo<Void> whatToDo = new WhatToDo<Void>(){
+
+			public Void execute(RequestInfo request, int counter) {
+				Deserializers deserializers = getFromContainer(Deserializers.class);
+				assertNotNull(deserializers.deserializerFor("application/json", provider.getContainer()));
+				assertNotNull(deserializers.deserializerFor("json", provider.getContainer()));
+				assertNotNull(deserializers.deserializerFor("application/xml", provider.getContainer()));
+				assertNotNull(deserializers.deserializerFor("xml", provider.getContainer()));
+				assertNotNull(deserializers.deserializerFor("text/xml", provider.getContainer()));
+				assertNotNull(deserializers.deserializerFor("application/x-www-form-urlencoded", provider.getContainer()));
+				return null;
+			}
+		};
+		
+		executeInsideRequest(whatToDo);
+		
 	}
 
 	protected void resetProvider() {

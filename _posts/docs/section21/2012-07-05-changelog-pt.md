@@ -5,6 +5,11 @@ section: 21
 category: [pt, docs]
 ---
 
+<h3>3.5.0</h3>
+<ul>
+  <li>Bean Validations: Se vocêusa o Hibernate Validator 3, o suporte foi removido. Atualize para o
+    hiberante validator 4 e adicione o jar da validations api no classpath</li>
+</ul>
 
 <h3>3.4.1</h3>
 <ul>
@@ -118,7 +123,7 @@ public void minhaLogica(@Load Entidade entidade) {
 
 	  {% highlight java %}
 validator.checking(new Validations() { {
-	that(a == b, i18n("category"), "message.key", "params"); 
+	that(a == b, i18n("category"), "message.key", "params");
 	// tanto category quanto message.key serão i18n na hora de mostrar a mensagem,
 	// usando o resource bundle padrão (do Localization)
 }});
@@ -185,7 +190,7 @@ ${linkTo[ProdutoController].carrega[2]} ==> /produtos/2
 	<li>As anotações de verbos HTTP agora também podem definir o path do método:
 
 		{% highlight java %}
-@Get("/items/{id}"), @Post("/items"), etc 
+@Get("/items/{id}"), @Post("/items"), etc
 		{% endhighlight %}
 
 	</li>
@@ -316,7 +321,7 @@ public void logica(List<String> abc) {...}
 <context-param>
 	<param-name>br.com.caelum.vraptor.packages</param-name>
 	<param-value>
-		br.com.caelum.vraptor.util.hibernate, // Session e SessionFactory 
+		br.com.caelum.vraptor.util.hibernate, // Session e SessionFactory
 		br.com.caelum.vraptor.util.jpa, // EntityManager e EntityManagerFactory
 		br.com.caelum.vraptor.converter.l10n, //Converters numericos localizados
 		br.com.caelum.vraptor.http.iogi // suporte a parâmetros imutáveis
@@ -363,7 +368,7 @@ validator.onErrorSendBadRequest();
 result.use(xml()).from(meuObjeto).recursive().serialize();
 		{% endhighlight %}
 
-		Assim, toda a árvore de objetos a partir do meuObjeto será serializada. 
+		Assim, toda a árvore de objetos a partir do meuObjeto será serializada.
 	</li>
 	<li>Os parâmetros das mensagens do Validations agora também podem ser internacionalizados:
 
@@ -373,7 +378,7 @@ result.use(xml()).from(meuObjeto).recursive().serialize();
 
 validator.checking(new Validations() { {
 	that(idade > 18, "idade", "maior_que", i18n("idade"), 18);
-	//resulta na mensagem "Idade deveria ser maior que 18"  
+	//resulta na mensagem "Idade deveria ser maior que 18"
 }});
 		{% endhighlight %}
 
@@ -383,7 +388,7 @@ validator.checking(new Validations() { {
 
 		{% highlight java %}
 result.use(json()).from(carro).serialize(); //=> {'carro': {'cor': 'azul'}}
-result.use(json()).withoutRoot().from(carro).serialize(); //=> {'cor': 'azul'} 
+result.use(json()).withoutRoot().from(carro).serialize(); //=> {'cor': 'azul'}
 		{% endhighlight %}
 	</li>
 	<li>Google collections atualizado para a versão 1.0</li>
@@ -391,12 +396,12 @@ result.use(json()).withoutRoot().from(carro).serialize(); //=> {'cor': 'azul'}
 	<li>as anotações do XStream agora são lidas automaticamente quando você usa a serialização padrão do vraptor</li>
 	<li>quando um arquivo é maior do que o limite de tamanho de arquivo é criado um erro de validação ao invés de uma exceção genérica</li>
 	<li>mais atalhos na interface Result:
-	
+
 		{% highlight java %}
 redirectTo("uma/uri")			=>  use(page()).redirect("uma/uri")
 notFound()						=>  use(status()).notFound()
 nothing()						=>  use(nothing());
-permanentlyRedirectTo(Controller.class) 	
+permanentlyRedirectTo(Controller.class)
 		=> use(status()).movedPermanentlyTo(Controller.class);
 permanentlyRedirectTo("uma/uri") 	=> use(status()).movedPermanentlyTo("uma/uri");
 permanentlyRedirectTo(this)		=> use(status()).movedPermanentlyTo(this.getClass());
@@ -460,12 +465,12 @@ public class ClientesController extends GenericController<Cliente> {
 }
 public class GenericController<T> {
 	public T mostra(Long id) {...} // a variável da view vai se chamar t
-	public void adiciona(T obj) {...} // os parâmetros da requisição vão ser obj.campo 
+	public void adiciona(T obj) {...} // os parâmetros da requisição vão ser obj.campo
 }
 		{% endhighlight %}
 	</li>
 	<li>você pode anotar sua classe controller com @Path, e todas as URIs dos métodos vão incluir o prefixo especificado.
-  
+
 		{% highlight java %}
 @Resource
 @Path("/prefixo")
@@ -484,7 +489,7 @@ public class MeuController {
 		{% endhighlight %}
 	</li>
 	<li>@Path agora aceita regexes: <em>@Path("/abc/{abc:a+b+c+}")</em> vai aceitar as URIs do tipo:
-		
+
 		{% highlight jsp %}
 /abc/abc
 /abc/aaaaabbcccc
@@ -587,7 +592,7 @@ result.use(logic()).redirectTo(UmController.class).umMetodo();
 
 		{% highlight java %}
 public class CustomProvider extends SpringProvider {
-	
+
 	@Override
 	protected void registerCustomComponents(ComponentRegistry registry) {
 		registry.registry(ComponenteOpcional.class, ComponenteOpcional.class);
@@ -611,7 +616,7 @@ public void visualiza(Cliente cliente) {
 		that(cliente.getId() != null, "id", "id.deve.ser.preenchido");
 	}});
 	validator.onErrorUse(page()).of(ClientesController.class).list();
-	
+
 	//continua o metodo
 }
 		{% endhighlight %}

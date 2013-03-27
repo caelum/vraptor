@@ -51,10 +51,9 @@ public class ValidatorFactoryCreator implements ComponentFactory<ValidatorFactor
 	}
 
 	public ValidatorFactory getInstance() {
-		if (factory == null) {
+		if (factory == null) { //pico don't call PostConstruct
 			buildFactory();
 		}
 		return factory;
 	}
-
 }

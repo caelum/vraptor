@@ -2,9 +2,9 @@ package br.com.caelum.vraptor.validator;
 
 import static java.lang.annotation.ElementType.PARAMETER;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 
@@ -15,9 +15,9 @@ import java.util.Locale;
 
 import javax.validation.MessageInterpolator;
 import javax.validation.Valid;
+import javax.validation.ValidatorFactory;
 import javax.validation.constraints.NotNull;
 
-import org.hibernate.validator.method.MethodValidator;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -48,7 +48,7 @@ public class MethodValidatorTest {
     private MethodValidatorInterceptor interceptor;
     private ParameterNameProvider provider;
     private Validator validator;
-    private MethodValidator methodValidator;
+    private ValidatorFactory factory;
     private MessageInterpolator interpolator;
     
 	private ResourceMethod withConstraint;
@@ -65,15 +65,16 @@ public class MethodValidatorTest {
         ValidatorFactoryCreator creator = new ValidatorFactoryCreator();
         creator.buildFactory();
 
-        MethodValidatorCreator methodValidatorCreator = new MethodValidatorCreator();
-        methodValidatorCreator.init();
-        methodValidator = methodValidatorCreator.getInstance();
+        provider = new ParanamerNameProvider();
+        
+        MethodValidatorFactoryCreator methodValidatorCreator = new MethodValidatorFactoryCreator(provider);
+        methodValidatorCreator.buildFactory();
+        factory = methodValidatorCreator.getInstance();
 
         MessageInterpolatorFactory interpolatorFactory = new MessageInterpolatorFactory(creator.getInstance());
         interpolatorFactory.createInterpolator();
         interpolator = interpolatorFactory.getInstance();
 
-        provider = new ParanamerNameProvider();
         validator = new MockValidator();
         
         withConstraint = DefaultResourceMethod.instanceFor(MyController.class, MyController.class.getMethod("withConstraint", String.class));
@@ -84,19 +85,19 @@ public class MethodValidatorTest {
     
     @Test
     public void shouldAcceptIfMethodHasConstraint() {
-        interceptor = new MethodValidatorInterceptor(null, null, null, null, null, null);
+        interceptor = new MethodValidatorInterceptor(null, null, null, null, factory.getValidator());
     	assertThat(interceptor.accepts(withConstraint), is(true));
     	
-        interceptor = new MethodValidatorInterceptor(null, null, null, null, null, null);
+        interceptor = new MethodValidatorInterceptor(null, null, null, null, factory.getValidator());
     	assertThat(interceptor.accepts(withTwoConstraints), is(true));
     	
-        interceptor = new MethodValidatorInterceptor(null, null, null, null, null, null);
+        interceptor = new MethodValidatorInterceptor(null, null, null, null, factory.getValidator());
     	assertThat(interceptor.accepts(cascadeConstraint), is(true));
     }
 
     @Test
     public void shouldNotAcceptIfMethodHasConstraint() {
-        interceptor = new MethodValidatorInterceptor(null, null, null, null, null, null);
+        interceptor = new MethodValidatorInterceptor(null, null, null, null, factory.getValidator());
     	assertThat(interceptor.accepts(withoutConstraint), is(false));
     }
 
@@ -107,13 +108,14 @@ public class MethodValidatorTest {
         info.setParameters(new Object[] { null });
         info.setResourceMethod(withConstraint);
 
-        interceptor = new MethodValidatorInterceptor(provider, l10n, interpolator, validator, info, methodValidator);
+        interceptor = new MethodValidatorInterceptor(l10n, interpolator, validator, info, factory.getValidator());
         when(l10n.getLocale()).thenReturn(new Locale("pt", "br"));
 
         MyController controller = new MyController();
         interceptor.intercept(stack, info.getResourceMethod(), controller);
-
-        assertThat(validator.getErrors(), is(hasSize(1)));
+        
+        assertThat(validator.getErrors(), hasSize(1));
+        assertThat(validator.getErrors().get(0).getCategory(), is("withConstraint.email"));
     }
 
     @Test
@@ -123,12 +125,14 @@ public class MethodValidatorTest {
         info.setParameters(new Object[] { null });
         info.setResourceMethod(withConstraint);
 
-        interceptor = new MethodValidatorInterceptor(provider, l10n, interpolator, validator, info, methodValidator);
+        interceptor = new MethodValidatorInterceptor(l10n, interpolator, validator, info, factory.getValidator());
 
         MyController controller = new MyController();
         interceptor.intercept(stack, info.getResourceMethod(), controller);
 
-        assertThat(validator.getErrors(), not(hasSize(0)));
+        assertThat(validator.getErrors(), hasSize(1));
+        assertThat(validator.getErrors().get(0).getCategory(), is("withConstraint.email"));
+        assertThat(validator.getErrors().get(0).getMessage(), is("may not be null"));
     }
 
     @Test
@@ -138,13 +142,19 @@ public class MethodValidatorTest {
         info.setParameters(new Object[] { null, new Customer(null, null) });
         info.setResourceMethod(withTwoConstraints);
 
-        interceptor = new MethodValidatorInterceptor(provider, l10n, interpolator, validator, info, methodValidator);
+        interceptor = new MethodValidatorInterceptor(l10n, interpolator, validator, info, factory.getValidator());
         when(l10n.getLocale()).thenReturn(new Locale("pt", "br"));
 
         MyController controller = new MyController();
         interceptor.intercept(stack, info.getResourceMethod(), controller);
+        String messages = validator.getErrors().toString();
 
-        assertThat(validator.getErrors(), not(hasSize(0)));
+        assertThat(validator.getErrors(), hasSize(3));
+        
+        assertThat(messages, containsString("não pode ser nulo"));
+        assertThat(messages, containsString("withTwoConstraints.name"));
+        assertThat(messages, containsString("withTwoConstraints.customer.name"));
+        assertThat(messages, containsString("withTwoConstraints.customer.id"));
     }
     
     /**

@@ -24,9 +24,11 @@ import javax.validation.TraversableResolver;
  * A custom {@link TraversableResolver} to bootstrap Bean Validation avoiding classpath problems with Hibernate
  * Validator 4 and JPA2. See https://forum.hibernate.org/viewtopic.php?p=2422115#p2422115 for more details.
  * 
+ * @deprecated since we don't have two providers at classpath
  * @author Otávio Scherer Garcia
  * @version 3.1.3
  */
+@Deprecated
 public class BeanValidatorTraversableResolver
     implements TraversableResolver {
 

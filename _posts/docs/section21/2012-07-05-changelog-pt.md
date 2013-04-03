@@ -7,8 +7,31 @@ category: [pt, docs]
 
 <h3>3.5.0</h3>
 <ul>
-  <li>Bean Validations: Se vocêusa o Hibernate Validator 3, o suporte foi removido. Atualize para o
+  <li>Bean Validations: Se você usa o Hibernate Validator 3, o suporte foi removido. Atualize para o
     hiberante validator 4 e adicione o jar da validations api no classpath</li>
+  <li>Pacotes do hibernate e do jpa: Agora é necessário usar os plugins respectivos</li>
+  <li>Migração do build para maven.</li>
+  <li>Adicionado novos converters localizados e joda-time (jlemes).</li>
+  <li>Remoção de objetos deprecated e não usados.</li>
+  <li>Removido CGLIB em favor ao Javassist Proxifier.</li>
+  <li>Guice agora é o container padrão.</li>
+  <li>Inclusão de suporte a java.util.Set para o IOGI.</li>
+  <li>Atualização das libs externas.</li>
+  <li>Suporte ao verbo OPTIONS  (douglasrodrigo) e PATCH (nykolaslima).</li>
+  <li>Os testes unitários foram migrados do jmock para mockito. Aumento da cobertura de testes.</li>
+  <li>Adicionado suporte a serialização com GSON (renanreismartins)</li>
+  <li>Alterada a forma como o Exception Handler reporta a exception (vulpios).</li>
+  <li>O suporte ao hibernate e jpa foram migrados para projetos externos.</li>
+  <li>Os subprojetos vraptor-vraptor2, vraptor-scala, vraptor-flex foram movidos para seus próprios repositórios.</li>
+  <li>Melhoria da anotação @Load, onde agora não é mais necessário que o @Id possua o nome fixo ID. Atual: bastar anotar com @Id o campo da chave primaria.</li>
+
+  <li>Melhorias internas na validação usando Bean Validation, suporte inicial para validação de métodos. Hibernate-validation não é mais usado.</li>
+  <li>Adicionada validação de beans para algumas propriedades (nykolaslima)</li>
+  <li>Bugfix para acesso a arquivos estáticos sem o querystring  e jsessionid (nykolaslima)</li>
+  <li>Bugfix na chamada do método servletContext.getClassLoader, blah blah blah (detinho)</li>
+  <li>Bugfix para linkto quando o método possui sobrecarga e métodos bridge  (nykolaslima)</li>
+  <li>Melhorias na validação do upload (marceloemanoel)</li>
+  <li>Melhorias na documentação (bbviana, awvalenti, igordeoliveirasa)</li>
 </ul>
 
 <h3>3.4.1</h3>

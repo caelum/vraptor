@@ -296,6 +296,10 @@ public class DefaultValidationViewsFactoryTest {
 		public RandomSerializer exclude(String... names) {
 			return this;
 		}
+		
+		public RandomSerializer excludeAll() {
+			return this;
+		}
 
 		public <T> RandomSerializer from(T object) {
 			return this;

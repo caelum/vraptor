@@ -45,4 +45,8 @@ public class IgnoringSerializer implements SerializerBuilder {
 		return this;
 	}
 
+	public Serializer excludeAll() {
+		return this;
+	}
+
 }

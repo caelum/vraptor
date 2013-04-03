@@ -253,6 +253,22 @@ public class XStreamJSONSerializationTest {
 		serialization.from(order).exclude("comments").serialize();
 		assertThat(result(), not(containsString("\"comments\"")));
 	}
+	
+	@Test
+	public void shouldExcludeAllPrimitiveFields() {
+		String expectedResult = "{\"order\": {}}";
+		Order order = new Order(new Client("nykolas lima"), 15.0, "gift bags, please");
+		serialization.from(order).excludeAll().serialize();
+		assertThat(result(), is(equalTo(expectedResult)));
+	}
+	
+	@Test
+	public void shouldExcludeAllPrimitiveParentFields() {
+		String expectedResult = "{\"advancedOrder\": {}}";
+		Order order = new AdvancedOrder(null, 15.0, "pack it nicely, please", "complex package");
+		serialization.from(order).excludeAll().serialize();
+		assertThat(result(), is(equalTo(expectedResult)));
+	}
 
 	@Test
 	public void shouldOptionallyExcludeFields() {

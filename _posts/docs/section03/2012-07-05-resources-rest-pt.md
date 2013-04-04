@@ -2,7 +2,7 @@
 title: Resources-Rest
 layout: page
 section: 3
-category: [pt, docs]
+categories: [pt, docs]
 ---
 
 <h3>O que são Resources?</h3>
@@ -19,11 +19,11 @@ public class ClienteController {
   public void adiciona(Cliente cliente) {
 
   }
-  
+
   public List<Cliente> lista() {
     return ...
   }
-  
+
   public Cliente visualiza(Cliente perfil) {
     return ...
   }
@@ -32,7 +32,7 @@ public class ClienteController {
 
   ...
   }
-  
+
 
   public void atualiza(Cliente cliente) {
     ...
@@ -91,10 +91,10 @@ A anotação @Path permite que você customize as URIs de acesso a seus métodos
 public class ClienteController {
 
   @Path("/cliente")
-  @Post 
+  @Post
   public void adiciona(Cliente cliente) {
   }
-    
+
 }
 {% endhighlight %}
 
@@ -106,11 +106,11 @@ Se você anotar o ClienteController com @Path, o valor especificado vai ser usad
 public class ClienteController {
     //URI: /clientes/lista
     public void lista() {...}
-    
+
     //URI: /clientes/salva
     @Path("salva")
     public void adiciona() {...}
-    
+
     //URI: /clientes/todosOsClientes
     @Path("/todosOsClientes")
     public void listaTudo() {...}
@@ -127,16 +127,16 @@ O exemplo a seguir altera os padrões de URI do ClienteController para utilizar 
 @Resource
 public class ClienteController {
 
-  @Post("/cliente") 
+  @Post("/cliente")
   public void adiciona(Cliente cliente) {
   }
-  
+
   @Path("/")
   public List<Cliente> lista() {
     return ...
   }
 
-  @Get("/cliente")  
+  @Get("/cliente")
   public Cliente visualiza(Cliente cliente) {
     return ...
   }
@@ -145,12 +145,12 @@ public class ClienteController {
   public void remove(Cliente cliente) {
     ...
   }
-  
+
   @Put("/cliente")
   public void atualiza(Cliente cliente) {
     ...
   }
-  
+
 }
 {% endhighlight %}
 
@@ -213,7 +213,7 @@ Dessa maneira, criamos URIs únicas para identificar recursos diferentes do noss
 public class ClienteController {
 
   @Get
-  @Path("/cliente/{cliente.id}")  
+  @Path("/cliente/{cliente.id}")
   public Cliente visualiza(Cliente cliente) {
     return ...
   }
@@ -227,11 +227,11 @@ Você pode ir além e setar diversos parâmetros pela URI:
 public class ClienteController {
 
   @Get
-  @Path("/cliente/{cliente.id}/visualiza/{secao}")  
+  @Path("/cliente/{cliente.id}/visualiza/{secao}")
   public Cliente visualiza(Cliente cliente, String secao) {
     return ...
   }
-  
+
 }
 {% endhighlight %}
 
@@ -243,11 +243,11 @@ Você pode setar mais de um path para a mesma lógica fazendo:
 @Resource
 public class ClienteController {
 
-  @Path({"/cliente/{cliente.id}/visualiza/{secao}", "/cliente/{cliente.id}/visualiza/"})  
+  @Path({"/cliente/{cliente.id}/visualiza/{secao}", "/cliente/{cliente.id}/visualiza/"})
   public Cliente visualiza(Cliente cliente, String secao) {
     return ...
   }
-  
+
 }
 {% endhighlight %}
 
@@ -260,11 +260,11 @@ Você também pode utilizar o * como método de seleção para a sua URI. O exem
 public class ClienteController {
 
   @Get
-  @Path("/cliente/{cliente.id}/foto/*")  
+  @Path("/cliente/{cliente.id}/foto/*")
   public File foto(Cliente cliente) {
     return ...
   }
-  
+
 }
 {% endhighlight %}
 
@@ -275,11 +275,11 @@ E agora o mesmo código, mas utilizado para baixar uma foto específica de um cl
 public class ClienteController {
 
   @Get
-  @Path("/cliente/{cliente.id}/foto/{foto.id}")  
+  @Path("/cliente/{cliente.id}/foto/{foto.id}")
   public File foto(Cliente cliente, Foto foto) {
     return ...
   }
-  
+
 }
 {% endhighlight %}
 
@@ -290,11 +290,11 @@ Por vezes você deseja que o parâmetro a ser setado inclua também /s. Para iss
 public class ClienteController {
 
   @Get
-  @Path("/cliente/{cliente.id}/download/{path*}")  
+  @Path("/cliente/{cliente.id}/download/{path*}")
   public File download(Cliente cliente, String path) {
     return ...
   }
-  
+
 }
 {% endhighlight %}
 

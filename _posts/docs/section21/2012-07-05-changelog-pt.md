@@ -2,7 +2,7 @@
 title: Changelog
 layout: page
 section: 21
-category: [pt, docs]
+categories: [pt, docs]
 ---
 
 <h3>3.5.0</h3>

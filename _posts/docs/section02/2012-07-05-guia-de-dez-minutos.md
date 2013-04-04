@@ -2,7 +2,7 @@
 title: VRaptor3 - O guia inicial de 10 minutos
 layout: page
 section: 2
-category: [pt, docs]
+categories: [pt, docs]
 ---
 
 <h3>Começando o projeto: uma loja virtual</h3>
@@ -43,11 +43,11 @@ public class Produto {
     @Id
     @GeneratedValue
     private Long id;
-    
+
     private String nome;
     private String descricao;
     private Double preco;
-    
+
     // getter e setters e métodos de negócio que julgar necessário
 }
 {% endhighlight %}
@@ -104,7 +104,7 @@ public class ProdutoDao {
     public List<Produto> listaTodos() {
         return new ArrayList<Produto>();
     }
-    
+
 }
 {% endhighlight %}
 
@@ -113,13 +113,13 @@ E no nosso ProdutosController podemos usar o dao pra fazer a listagem de produto
 {% highlight java %}
 @Resource
 public class ProdutosController {
-    
+
     private ProdutoDao dao;
-    
+
     public List<Produto> lista() {
         return dao.listaTodos();
     }
-    
+
 }
 {% endhighlight %}
 
@@ -133,17 +133,17 @@ public class ProdutoDao {
 
 @Resource
 public class ProdutosController {
-    
+
     private ProdutoDao dao;
 
     public ProdutosController(ProdutoDao dao) {
         this.dao = dao;
     }
-        
+
     public List<Produto> lista() {
         return dao.listaTodos();
     }
-    
+
 }
 {% endhighlight %}
 
@@ -236,14 +236,14 @@ public class ProdutosController {
         //...
         this.validator = validator;
     }
-    
+
     public void adiciona(Produto produto) {
         validator.checking(new Validations() { {
             that(!produto.getNome().isEmpty(), "produto.nome", "nome.vazio");
             that(produto.getPreco() > 0, "produto.preco", "preco.invalido");
         } });
         validator.onErrorUsePageOf(ProdutosController.class).form();
-        
+
         dao.adiciona(produto);
         result.redirectTo(ProdutosController.class).lista();
     }
@@ -269,9 +269,9 @@ Agora vamos fazer uma implementação de verdade do ProdutoDao, usando o Hiberna
 {% highlight java %}
 @Component
 public class ProdutoDao {
-    
+
     private Session session;
-    
+
     public ProdutoDao(Session session) {
         this.session = session;
     }
@@ -283,13 +283,13 @@ public class ProdutoDao {
 }
 {% endhighlight %}
 
-O VRaptor precisa saber como criar essa Session, e eu não posso simplesmente colocar um @Component na Session pois é uma classe do Hibernate! Para isso existe a interface ComponentFactory, que você pode usar pra criar uma Session. 
+O VRaptor precisa saber como criar essa Session, e eu não posso simplesmente colocar um @Component na Session pois é uma classe do Hibernate! Para isso existe a interface ComponentFactory, que você pode usar pra criar uma Session.
 
 Veja mais informações de como fazer ComponentFactories no capítulo de Componentes. Você pode, ainda, usar os ComponentFactories que já estão disponíveis para isso no VRaptor, como mostra o capítulo de Utils.
 
 <h3>Controlando transações: Interceptors</h3>
 
-Muitas vezes, queremos interceptar todas as requisições (ou uma parte delas) e executar alguma lógica, como acontece com o controle de transações. Para isso, existem os Interceptors no VRaptor. 
+Muitas vezes, queremos interceptar todas as requisições (ou uma parte delas) e executar alguma lógica, como acontece com o controle de transações. Para isso, existem os Interceptors no VRaptor.
 
 Saiba mais sobre eles no capítulo de Interceptors. Existe um TransactionInterceptor já implementado no VRaptor, saiba como usá-lo no capítulo de Utils.
 
@@ -302,11 +302,11 @@ Se quisermos criar um carrinho de compras no nosso sistema, precisamos de alguma
 @SessionScoped
 public class CarrinhoDeCompras {
     private List<Produto> itens = new ArrayList<Produto>();
-    
+
     public List<Produto> getTodosOsItens() {
         return itens;
     }
-    
+
     public void adicionaItem(Produto item) {
         itens.add(item);
     }
@@ -320,7 +320,7 @@ Como esse carrinho de compras é um componente, podemos recebê-lo no construtor
 public class CarrinhoController {
 
     private final CarrinhoDeCompras carrinho;
-    
+
     public CarrinhoController(CarrinhoDeCompras carrinho) {
         this.carrinho = carrinho;
     }
@@ -328,7 +328,7 @@ public class CarrinhoController {
     public void adiciona(Produto produto) {
         carrinho.adicionaItem(produto);
     }
-    
+
     public List<Produto> listaItens() {
         return carrinho.getTodosOsItens();
     }
@@ -354,22 +354,22 @@ Para criar esse comportamento REST no VRaptor, podemos usar as anotações @Path
 {% highlight java %}
 public class ProdutosController {
     //...
-    
+
     @Get @Path("/produtos")
     public List<Produto> lista() {...}
-    
+
     @Post("/produtos")
     public void adiciona(Produto produto) {...}
 
     @Get("/produtos/{produto.id}")
     public void visualiza(Produto produto) {...}
-    
+
     @Put("/produtos/{produto.id}")
     public void atualiza(Produto produto) {...}
-    
+
     @Delete("/produtos/{produto.id}")
     public void remove(Produto produto) {...}
-    
+
 }
 {% endhighlight %}
 
@@ -401,11 +401,11 @@ Para usar essas mensagens em seus arquivos JSP, você pode utilizar a JSTL. Dess
 <html>
     <body>
         <fmt:message key="campo.usuario" /> <input name="usuario.nomeUsuario" />
-        
+
         <br />
-        
+
         <fmt:message key="campo.senha" /> <input type="password" name="usuario.senha" />
-        
+
         <input type="submit" />
     </body>
 </html>

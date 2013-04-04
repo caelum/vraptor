@@ -2,7 +2,7 @@
 title: View and Ajax
 layout: page
 section: 8
-category: [en, docs]
+categories: [en, docs]
 ---
 
 <h3>Sharing objects with the view</h3>
@@ -16,7 +16,7 @@ class ClientController {
     public ClientController(Result result) {
         this.result = result;
     }
-    
+
     public void search(int id) {
         result.include("message", "Some message");
         result.include("client", new Client(id));
@@ -33,7 +33,7 @@ class ClientController {
     public ClientController(Result result) {
         this.result = result;
     }
-    
+
     public void search(int id) {
         result.include("Some message").include(new Client(id));
     }
@@ -64,7 +64,7 @@ public class FreemarkerPathResolver extends DefaultPathResolver {
     protected String getPrefix() {
         return "/WEB-INF/freemarker/";
     }
-    
+
     protected String getExtension() {
         return "ftl";
     }
@@ -80,15 +80,15 @@ If you want to change a specific logic's view, you can use the Result object:
 {% highlight java %}
 @Resource
 public class ClientsController {
-    
+
     private final Result result;
-    
+
     public ClientsController(Result result) {
         this.result = result;
     }
-    
+
     public void list() {}
-    
+
     public void save(Client client) {
         //...
         this.result.use(Results.logic()).redirectTo(ClientsController.class).list();
@@ -203,15 +203,15 @@ And in the controller:
 {% highlight java %}
 @Resource
 public class ClientsController {
-    
+
     private final Result result;
     private final ClientDao dao;
-    
+
     public ClientsController(Result result, ClientDao dao) {
         this.result = result;
         this.dao = dao;
     }
-    
+
     public void load(Client client) {
         result.include("client", dao.load(client));
     }
@@ -226,15 +226,15 @@ If you want that VRaptor automatically serializes your objects into xml or json,
 import static br.com.caelum.vraptor.view.Results.*;
 @Resource
 public class ClientsController {
-    
+
     private final Result result;
     private final ClientDao dao;
-    
+
     public ClientsController(Result result, ClientDao dao) {
         this.result = result;
         this.dao = dao;
     }
-    
+
     public void loadJson(Client client) {
         result.use(json()).from(client).serialize();
     }
@@ -304,7 +304,7 @@ The default implementation is based on XStream, so you can configure the seriali
 public class CustomXMLSerialization extends XStreamXMLSerialization {
 //or public class CustomJSONSerialization extends XStreamJSONSerialization {
     //delegate constructor
-    
+
     @Override
     protected XStream getXStream() {
         XStream xStream = super.getXStream();

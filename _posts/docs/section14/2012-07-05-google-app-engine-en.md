@@ -2,7 +2,7 @@
 title: Google App Engine
 layout: page
 section: 14
-category: [en, docs]
+categories: [en, docs]
 ---
 
 <h3>Starting a new project</h3>

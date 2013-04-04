@@ -2,7 +2,7 @@
 title: Interceptors
 layout: page
 section: 6
-category: [en, docs]
+categories: [en, docs]
 ---
 
 <h3>Why intercept?</h3>
@@ -18,7 +18,7 @@ Just like any other component, you can specify the interceptor's scope using the
 {% highlight java %}
 public interface Interceptor {
 
-    void intercept(InterceptorStack stack, ResourceMethod method, 
+    void intercept(InterceptorStack stack, ResourceMethod method,
                     Object resourceInstance) throws InterceptionException;
 
     boolean accepts(ResourceMethod method);
@@ -42,7 +42,7 @@ public class Log implements Interceptor {
         this.request = request;
     }
 
-    public void intercept(InterceptorStack stack, ResourceMethod method, 
+    public void intercept(InterceptorStack stack, ResourceMethod method,
                         Object resourceInstance) throws InterceptionException {
         System.out.println("Intercepting " + request.getRequestURI());
         stack.next(method, resourceInstance);
@@ -75,7 +75,7 @@ public class DatabaseInterceptor implements br.com.caelum.vraptor.Interceptor {
         this.request = request;
     }
 
-    public void intercept(InterceptorStack stack, ResourceMethod method, 
+    public void intercept(InterceptorStack stack, ResourceMethod method,
                             Object instance) throws InterceptionException {
         result.include("contextPath", request.getContextPath());
         try {
@@ -102,12 +102,12 @@ This way, to use the available connection in your Resource, the following code w
 {% highlight java %}
 @Resource
 public class EmployeeController {
-    
+
     public EmployeeController(Result result, Database controller) {
         this.result = result;
         this.controller = controller;
     }
-    
+
     @Post
     @Path("/employee")
     public void add(Employee employee) {
@@ -140,7 +140,7 @@ public class SecondInterceptor implements Interceptor {
 You can specify more than one interceptor:
 
 {% highlight java %}
-@Intercepts(after={FirstInterceptor.class, SecondInterceptor.class}, 
+@Intercepts(after={FirstInterceptor.class, SecondInterceptor.class},
             before={ForthInterceptor.class, FifthInterceptor.class})
 public class ThirdInterceptor implements Interceptor {
     ...
@@ -171,6 +171,6 @@ Here are the main VRaptor interceptors and what they produce:
 If you need to execute an Interceptor after ExecuteMethodInterceptor, you <strong>must</strong> set the before attribute, in order to avoid cycles. ForwardToDefaultViewInterceptor is a good value since no other interceptor can run after it:
 
 {% highlight java %}
-@Intercepts(after=ExecuteMethodInterceptor.class, 
+@Intercepts(after=ExecuteMethodInterceptor.class,
             before=ForwardToDefaultViewInterceptor.class)
 {% endhighlight %}

@@ -2,7 +2,7 @@
 title: VRaptor3 - O guia inicial de 1 minuto
 layout: page
 section: 1
-category: [pt, docs]
+categories: [pt, docs]
 ---
 
 O VRaptor 3 foca em simplicidade e, portanto, todas as funcionalidades que você verá têm como meta resolver o problema do programador da maneira menos intrusiva possível em seu código.
@@ -40,9 +40,9 @@ Um controller simples seria:
 */
 @Resource
 public class ClientsController {
-   
+
     private ClientDao dao;
-   
+
     /*
      * Você pode receber as dependências da sua classe no construtor, e o VRaptor vai
      * se encarregar de criar ou localizar essas dependências pra você e usá-las pra
@@ -50,9 +50,9 @@ public class ClientsController {
      * deve anotá-lo com @Component.
      */
     public ClientsController(ClientDao dao) {
-        this.dao = dao;   
+        this.dao = dao;
     }
-   
+
     /*
      * Todos os métodos públicos do seu controller estarão acessíveis pela web.
      * Por exemplo, o método form pode ser acessado pela URI /clients/form e
@@ -61,7 +61,7 @@ public class ClientsController {
     public void form() {
         // código que carrega dados para checkboxes, selects, etc
     }
-   
+
     /*
      * Você pode receber parâmetros no seu método e o VRaptor tentará popular os
      * campos dos parâmetro de acordo com a requisição. Se houver na requisição:
@@ -75,7 +75,7 @@ public class ClientsController {
     public void add(Client custom) {
         dao.save(custom);
     }
-   
+
     /*
      * O retorno do seu método é exportado para a view. Nesse caso, como o retorno é
      * uma lista de clientes, a variável acessível no jsp será ${clientList}.
@@ -85,7 +85,7 @@ public class ClientsController {
     public List<Client> list() {
         return dao.listAll():
     }
-   
+
     /*
      * Se o retorno for um tipo simples, o nome da variável exportada será o nome da
      * classe com a primeira letra minúscula. Nesse caso, como retornou um Client, a

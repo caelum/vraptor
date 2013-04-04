@@ -1,7 +1,7 @@
 ---
 section: 15
 title: VRaptor e Tiles 2.2
-category: [pt, cookbook]
+categories: [pt, cookbook]
 layout: page
 ---
 
@@ -58,38 +58,38 @@ Nessa abordagem, não é necessário criar implementar esse PathResolver, já qu
 <strong>/WEB-INF/jsp/template.jsp</strong> - servirá de base para todas as páginas
 
 {% highlight jsp %}
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>  
-<%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>  
-<html>  
-    <head>  
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
-        <title>site</title>  
-    </head>  
-    <body>  
-        <div id="divHeader">  
-            <tiles:insertTemplate template="/WEB-INF/jsp/header.jsp"/>  
-        </div>  
-        <div id="divContent">  
-            <tiles:insertAttribute name="body"/>  
-        </div>  
-        <div id="divFooter">  
-            <tiles:insertTemplate template="/WEB-INF/jsp/footer.jsp"/>  
-        </div>  
-    </body>  
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>site</title>
+    </head>
+    <body>
+        <div id="divHeader">
+            <tiles:insertTemplate template="/WEB-INF/jsp/header.jsp"/>
+        </div>
+        <div id="divContent">
+            <tiles:insertAttribute name="body"/>
+        </div>
+        <div id="divFooter">
+            <tiles:insertTemplate template="/WEB-INF/jsp/footer.jsp"/>
+        </div>
+    </body>
 </html>
 {% endhighlight %}
 
 <strong>/WEB-INF/jsp/home/index.jsp</strong> - exemplo que utilizará o template - repare que o path mantém a convenção do VRaptor3! ^^
 
 {% highlight jsp %}
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>  
-<%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>  
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
 <tiles:insertTemplate template="/WEB-INF/jsp/template.jsp">
-  
-    <tiles:putAttribute name="body">  
-        olá mundo!  
-    </tiles:putAttribute>  
-  
+
+    <tiles:putAttribute name="body">
+        olá mundo!
+    </tiles:putAttribute>
+
 </tiles:insertTemplate>
 {% endhighlight %}
 

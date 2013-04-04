@@ -2,7 +2,7 @@
 title: VRaptor3 - One minute guide
 layout: page
 section: 1
-category: [en, docs]
+categories: [en, docs]
 ---
 
 VRaptor 3 focuses in simplicity and, therefore, all of its functionalities have as main goal solve the developer's problem in the less intrusive way.
@@ -34,9 +34,9 @@ A simple controller would be:
 */
 @Resource
 public class ClientsController {
-    
+
     private ClientDao dao;
-    
+
     /*
      * You can get your class dependencies through constructor, and VRaptor will be in charge
      * of creating or locating these dependencies and manage them to create your controller.
@@ -44,9 +44,9 @@ public class ClientsController {
      * @Component
      */
     public ClientsController(ClientDao dao) {
-        this.dao = dao;    
+        this.dao = dao;
     }
-    
+
     /*
      * All public methods from your controller will be reachable through web.
      * For example, form method can be accessed by URI /clients/form,
@@ -69,7 +69,7 @@ public class ClientsController {
     public void add(Client custom) {
         dao.save(custom);
     }
-    
+
     /*
      * VRaptor will export your method return value to the view. In this case,
      * since your method return type is List<Clients>, then you can access the
@@ -80,7 +80,7 @@ public class ClientsController {
     public List<Client> list() {
         return dao.listAll():
     }
-    
+
     /*
      * If the return type is a simple type, the name of exported variable will be
      * the class name with the first letter in lower case. Since this method return

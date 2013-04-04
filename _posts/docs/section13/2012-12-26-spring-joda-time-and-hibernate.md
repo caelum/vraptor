@@ -2,7 +2,7 @@
 title: Spring, Joda Time and Hibernate
 layout: page
 section: 13
-category: [en, docs]
+categories: [en, docs]
 ---
 
 <h3>Hibernate or JPA Integration</h3>

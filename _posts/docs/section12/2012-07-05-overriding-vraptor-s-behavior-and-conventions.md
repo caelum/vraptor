@@ -2,7 +2,7 @@
 title: Overriding Vraptor's behavior and conventions
 layout: page
 section: 12
-category: [en, docs]
+categories: [en, docs]
 ---
 
 Most of VRaptor behaviours and conventions can be customized, in a very easy way: it is just creating a component that implements an internal interface of VRaptor. When you do this, VRaptor will use your custom implementation instead of the default one.
@@ -17,12 +17,12 @@ If you need to change the default rendered view, or change the place where it'll
 {% highlight java %}
 @Component
 public class CustomPathResolver extends DefaultPathResolver {
-    
+
     @Override
     protected String getPrefix() {
         return "/root/directory/";
     }
-    
+
     @Override
     protected String getExtension() {
         return "ftl"; // or any other extension

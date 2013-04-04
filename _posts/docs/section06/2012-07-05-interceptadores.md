@@ -2,7 +2,7 @@
 title: Interceptadores
 layout: page
 section: 6
-category: [pt, docs]
+categories: [pt, docs]
 ---
 
 <h3>Para quê interceptar?</h3>
@@ -18,7 +18,7 @@ Assim como qualquer outro componente, com o uso das anotações de escopo você 
 {% highlight java %}
 public interface Interceptor {
 
-    void intercept(InterceptorStack stack, ResourceMethod method, 
+    void intercept(InterceptorStack stack, ResourceMethod method,
                     Object resourceInstance) throws InterceptionException;
 
     boolean accepts(ResourceMethod method);
@@ -49,16 +49,16 @@ public class Log implements Interceptor {
      * method.getResourceClass().getType() retorna a classe que está sendo executada
      */
     public boolean accepts(ResourceMethod method) {
-        return true; 
+        return true;
     }
 
-    public void intercept(InterceptorStack stack, ResourceMethod method, 
+    public void intercept(InterceptorStack stack, ResourceMethod method,
                         Object resourceInstance) throws InterceptionException {
         System.out.println("Interceptando " + request.getRequestURI());
         // código a ser executado antes da lógica
-        
+
         stack.next(method, resourceInstance); // continua a execução
-        
+
         // código a ser executádo depois da lógica
     }
 
@@ -107,12 +107,12 @@ Dessa forma, no seu Recurso, bastaria o seguinte código para utilizar a conexã
 {% highlight java %}
 @Resource
 public class FuncionarioController {
-    
+
     public FuncionarioController(Result result, Database controller) {
         this.result = result;
         this.controller = controller;
     }
-    
+
     @Post
     @Path("/funcionario")
     public void adiciona(Funcionario funcionario) {
@@ -145,7 +145,7 @@ public class SegundoInterceptor implements Interceptor {
 Você pode especificar mais de um Interceptor:
 
 {% highlight java %}
-@Intercepts(after={PrimeiroInterceptor.class, SegundoInterceptor.class}, 
+@Intercepts(after={PrimeiroInterceptor.class, SegundoInterceptor.class},
             before={QuartoInterceptor.class, QuintoInterceptor.class})
 public class TerceiroInterceptor implements Interceptor {
     ...
@@ -176,6 +176,6 @@ Aqui estão os principais interceptors do VRaptor e o que eles produzem:
 Se você precisa executar um Interceptor após o ExecuteMethodInterceptor, você <strong>deve</strong> setar o atributo before, para evitar ciclos. O ForwardToDefaultViewInterceptor é um bom valor, já que nenhum outro interceptor pode rodar depois dele:
 
 {% highlight java %}
-@Intercepts(after=ExecuteMethodInterceptor.class, 
+@Intercepts(after=ExecuteMethodInterceptor.class,
             before=ForwardToDefaultViewInterceptor.class)
 {% endhighlight %}

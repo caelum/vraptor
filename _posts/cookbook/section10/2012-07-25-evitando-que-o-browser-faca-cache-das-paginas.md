@@ -1,7 +1,7 @@
 ---
 section: 10
 title: Evitando que o browser faça cache das páginas
-category: [pt, cookbook]
+categories: [pt, cookbook]
 layout: page
 ---
 
@@ -27,7 +27,7 @@ public class NoCacheInterceptor
     }
 
     @Override
-    public void intercept(InterceptorStack stack, ResourceMethod method, 
+    public void intercept(InterceptorStack stack, ResourceMethod method,
                 Object resourceInstance)
         throws InterceptionException {
         // set the expires to past

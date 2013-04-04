@@ -2,7 +2,7 @@
 title: Resources-Rest
 layout: page
 section: 3
-category: [en, docs]
+categories: [en, docs]
 ---
 
 <h3>What are Resources?</h3>
@@ -19,11 +19,11 @@ public class ClientController {
   public void add(Client client) {
     ...
   }
-  
+
   public List<Client> list() {
     return ...
   }
-  
+
   public Client show(Client profile) {
     return ...
   }
@@ -35,7 +35,7 @@ public class ClientController {
   public void update(Client client) {
     ...
   }
-  
+
 }
 {% endhighlight %}
 
@@ -90,10 +90,10 @@ The @Path annotation allows you to specify custom access URIs to your controller
 public class ClientController {
 
   @Path("/client")
-  @Post 
+  @Post
   public void add(Client client) {
   }
-    
+
 }
 {% endhighlight %}
 
@@ -105,11 +105,11 @@ If you place the @Path on ClientController, the specified value will be used as 
 public class ClientController {
     //URI: /clients/list
     public void list() {...}
-    
+
     //URI: /clients/save
     @Path("save")
     public void add() {...}
-    
+
     //URI: /clients/allClients
     @Path("/allClients")
     public void listAll() {...}
@@ -120,7 +120,7 @@ public class ClientController {
 
 The best practice when using HTTP Methods is to specify a different methods, like GET, POST, PUT etc, for the same URI.
 In order to accomplish that, we use annotations @Get, @Post, @Delete etc, which also allows us to configure a custom URI in the same way as @Path.
-The following example changes the default URIs for ClienteController. Now we specify two different URIs 
+The following example changes the default URIs for ClienteController. Now we specify two different URIs
 for different HTTP methods:
 
 {% highlight java %}
@@ -130,7 +130,7 @@ public class ClientController {
   @Post("/client")
   public void add(Client client) {
   }
-  
+
   @Path("/")
   public List<Client> list() {
     return ...
@@ -145,12 +145,12 @@ public class ClientController {
   public void remove(Client client) {
     ...
   }
-  
+
   @Put("/client")
   public void update(Client client) {
     ...
   }
-  
+
 }
 {% endhighlight %}
 
@@ -194,11 +194,11 @@ That way we can create unique URIs to identify different resources in our applic
 public class ClientController {
 
   @Get
-  @Path("/client/{client.id}")  
+  @Path("/client/{client.id}")
   public Cliente show(Client client) {
     return ...
   }
-  
+
 }
 {% endhighlight %}
 
@@ -209,11 +209,11 @@ You can go further and set several parameters through the URI:
 public class ClientController {
 
   @Get
-  @Path("/client/{client.id}/show/{section}")  
+  @Path("/client/{client.id}/show/{section}")
   public Client show(Client client, String section) {
     return ...
   }
-  
+
 }
 {% endhighlight %}
 
@@ -225,11 +225,11 @@ You can set more than one path for the same logic method:
 public class ClientController {
 
   @Get
-  @Path({"/client/{client.id}/show/{section}", "/client/{client.id}/show/"})  
+  @Path({"/client/{client.id}/show/{section}", "/client/{client.id}/show/"})
   public Client show(Client client, String section) {
     return ...
   }
-  
+
 }
 {% endhighlight %}
 
@@ -261,11 +261,11 @@ You can also use the * wildcard as a selection method for your URI. The followin
 public class ClientController {
 
   @Get
-  @Path("/client/{client.id}/photo/*")  
+  @Path("/client/{client.id}/photo/*")
   public File photo(Client client) {
     return ...
   }
-  
+
 }
 {% endhighlight %}
 
@@ -276,11 +276,11 @@ And now a similar code, but used to download a specific photo from a client:
 public class ClientController {
 
   @Get
-  @Path("/client/{client.id}/photo/{photo.id}")  
+  @Path("/client/{client.id}/photo/{photo.id}")
   public File photo(Client client, Photo photo) {
     return ...
   }
-  
+
 }
 {% endhighlight %}
 
@@ -291,11 +291,11 @@ Sometimes you want the parameter to include the / character. In that case, you s
 public class ClientController {
 
   @Get
-  @Path("/client/{client.id}/download/{path*}")  
+  @Path("/client/{client.id}/download/{path*}")
   public File download(Client client, String path) {
     return ...
   }
-  
+
 }
 {% endhighlight %}
 

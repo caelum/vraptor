@@ -2,7 +2,7 @@
 title: Migrando do VRaptor2 para o VRaptor3
 layout: page
 section: 22
-category: [pt, docs]
+categories: [pt, docs]
 ---
 
 <h3>web.xml</h3>
@@ -43,11 +43,11 @@ No VRaptor 2:
 {% highlight java %}
 @Component
 public class ClientsLogic {
-   
+
     public void form() {
-   
+
     }
-   
+
 }
 {% endhighlight %}
 
@@ -58,7 +58,7 @@ No VRaptor 3:
 public class ClientsController {
 
    public void form() {
-  
+
    }
 }
 {% endhighlight %}
@@ -77,11 +77,11 @@ No VRaptor 2:
 public class ClientsLogic {
     @In
     private ClientDao dao;
-       
+
     public void form() {
-   
+
     }
-   
+
 }
 {% endhighlight %}
 
@@ -95,9 +95,9 @@ public class ClientsController {
     public ClientsController(ClientDao dao) {
         this.dao = dao;
     }
-   
+
     public void form() {
-  
+
     }
 }
 {% endhighlight %}
@@ -115,22 +115,22 @@ No VRaptor 2:
 @Component
 public class ClientsLogic {
     private Collection<Client> list;
-   
+
     public void list() {
         this.list = dao.list();
     }
-   
+
     public Collection<Client> getClientList() {
         return this.list;
     }
 
     @Out
     private Client client;
-   
+
     public void show(Long id) {
         this.client = dao.load(id);
     }
-   
+
 }
 {% endhighlight %}
 
@@ -142,20 +142,20 @@ public class ClientsController {
 
     private final ClientDao dao;
     private final Result result;
-   
+
     public ClientsController(ClientDao dao, Result result) {
         this.dao = dao;
         this.result = result;
     }
-   
+
     public Collection<Client> list() {
         return dao.list(); // o nome será clientList
     }
-   
+
     public void listaDiferente() {
         result.include("clients", dao.list());
     }
-   
+
     public Client show(Long id) {
         return dao.load(id); // o nome será "client"
     }
@@ -175,7 +175,7 @@ public class ClientsController {
 
     private final ClientDao dao;
     private final Result result;
-   
+
     public ClientsController(ClientDao dao, Result result) {
         this.dao = dao;
         this.result = result;
@@ -187,7 +187,7 @@ public class ClientsController {
 
     public void save(Client client) {
         dao.save(client);
-       
+
         result.redirectTo(ClientsController.class).list();
     }
 }
@@ -212,7 +212,7 @@ public class ClientsController {
     private final ClientDao dao;
     private final Result result;
     private final Validator validator;
-   
+
     public ClientsController(ClientDao dao, Result result, Validator validator) {
         this.dao = dao;
         this.result = result;
@@ -220,9 +220,9 @@ public class ClientsController {
     }
 
     public void form() {
-   
+
     }
-   
+
     public void save(Client client) {
         if (client.getName() == null) {
             validator.add(new ValidationMessage("erro","nomeInvalido"));

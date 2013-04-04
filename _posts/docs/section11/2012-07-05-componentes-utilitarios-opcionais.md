@@ -2,7 +2,7 @@
 title: Componentes utilitários opcionais
 layout: page
 section: 11
-category: [pt, docs]
+categories: [pt, docs]
 ---
 
 <h3>Registrando um componente opcional</h3>
@@ -13,7 +13,7 @@ O VRaptor possui alguns componentes opcionais, que estão no pacote br.com.caelu
 <context-param>
     <param-name>br.com.caelum.vraptor.packages</param-name>
     <param-value>
-        br.com.caelum.vraptor.util.um.pacote, 
+        br.com.caelum.vraptor.util.um.pacote,
         br.com.caelum.vraptor.util.outro.pacote
     </param-value>
 </context-param>
@@ -29,13 +29,13 @@ ou você pode criar um custom provider:
 	package br.com.nomedaempresa.nomedoprojeto;
 
 	public class CustomProvider extends SpringProvider {
-		
+
 	}
 	{% endhighlight %}
 	</li>
 
 	<li>Registre essa classe como provider no web.xml:
-	
+
 	{% highlight xml %}
 	<context-param>
 		<param-name>br.com.caelum.vraptor.provider</param-name>
@@ -51,7 +51,7 @@ ou você pode criar um custom provider:
 	package br.com.nomedaempresa.nomedoprojeto;
 
 	public class CustomProvider extends SpringProvider {
-		
+
 		@Override
 		protected void registerCustomComponents(ComponentRegistry registry) {
 		    registry.register(ComponenteOpcional.class, ComponenteOpcional.class);
@@ -85,7 +85,7 @@ Se você quiser trabalhar com objetos imutáveis no seu projeto, você pode usar
 @Resource
 public class CarrosController {
     public void lava(Carro carro) {
-    
+
     }
 }
 public class Carro {

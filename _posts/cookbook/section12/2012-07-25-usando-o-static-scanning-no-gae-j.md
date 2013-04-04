@@ -1,7 +1,7 @@
 ---
 section: 12
 title: Usando o Static Scanning no GAE/J
-category: [pt, cookbook]
+categories: [pt, cookbook]
 layout: page
 ---
 
@@ -16,7 +16,7 @@ Basta adicionar as seguintes linhas no seu build.xml e logo após incluir esta t
         <fileset dir="war/WEB-INF/lib" includes="*.jar" />
     </path>
 
-    <java classpathref="build.classpath" 
+    <java classpathref="build.classpath"
             classname="br.com.caelum.vraptor.scan.VRaptorStaticScanning" fork="true">
         <arg value="war/WEB-INF/web.xml" />
         <classpath refid="build.classpath" />

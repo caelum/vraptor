@@ -1,7 +1,7 @@
 ---
 section: 8
 title: Job scheduling com VRaptor e Spring
-category: [pt, cookbook]
+categories: [pt, cookbook]
 layout: page
 ---
 
@@ -21,22 +21,22 @@ O Spring já vem com suporte a task scheduling/executing, ele precisa apenas que
 public class TaskSchedulerFactory implements ComponentFactory<TaskScheduler> {
 
     private ThreadPoolTaskScheduler scheduler;
-     
+
     @PostConstruct
     public void create() {
         scheduler = new ThreadPoolTaskScheduler();
         scheduler.initialize();
     }
-     
+
     public TaskScheduler getInstance() {
         return scheduler;
     }
-     
+
     @PreDestroy
     public void destroy() {
         scheduler.destroy();
     }
-     
+
 }
 {% endhighlight %}
 
@@ -61,14 +61,14 @@ Para registrar esse tipo de task, precisaremos de um bean em escopo de applicati
 @Component
 @ApplicationScoped
 public class MyFirstApplicationTask implements ApplicationTask {
-    public MyFirstApplicationTask(TaskScheduler scheduler) { 
-        //Aqui você poderá receber componentes que não estejam em 
+    public MyFirstApplicationTask(TaskScheduler scheduler) {
+        //Aqui você poderá receber componentes que não estejam em
         //escopo de request ou session
         ...
         this.schedule(scheduler);
     }
     public void schedule(TaskScheduler scheduler) {
-        scheduler.schedule(this, new CronTrigger("0 0 23 * * *")); 
+        scheduler.schedule(this, new CronTrigger("0 0 23 * * *"));
         //Neste caso, a task rodará sempre às 23h0min0s
     }
 }
@@ -82,15 +82,15 @@ Para registrar esse tipo de task, basta receber o scheduler no construtor do seu
 @Component
 @RequestScoped
 public class MyFirstRequestTask implements RequestTask {
-    public MyFirstApplicationTask() { 
+    public MyFirstApplicationTask() {
         //Aqui você poderá receber qualquer componente que precisar
         ...
     }
     public void schedule(TaskScheduler schedule) {
         Calendar now = GregorianCalendar.getInstance();
         now.add(Calendar.MINUTE,5);
-        scheduler.schedule(this, now.getTime()); 
-        //Neste caso, a task rodará apenas uma vez, 5 min depois da 
+        scheduler.schedule(this, now.getTime());
+        //Neste caso, a task rodará apenas uma vez, 5 min depois da
         //execução deste método
     }
 }

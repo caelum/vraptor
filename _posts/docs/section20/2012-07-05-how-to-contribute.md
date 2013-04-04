@@ -2,7 +2,7 @@
 title: How to contribute to VRaptor
 layout: page
 section: 20
-category: [en, docs]
+categories: [en, docs]
 ---
 
 <h3>Joining the mailing lists</h3>
@@ -32,4 +32,4 @@ Contributions like security, paging, multitenant, and others are welcome through
 
 <h3>Starting the job</h3>
 
-All VRaptor modules works with <a href="https://maven.apache.org/">Apache Maven</a>, that has plugins for mostly used IDEs: <a href="https://maven.apache.org/plugins/maven-eclipse-plugin/">Eclipse</a>, <a href="http://wiki.netbeans.org/Maven">Netbeans</a> and <a href="https://maven.apache.org/plugins/maven-idea-plugin/">IDEA</a>. 
+All VRaptor modules works with <a href="https://maven.apache.org/">Apache Maven</a>, that has plugins for mostly used IDEs: <a href="https://maven.apache.org/plugins/maven-eclipse-plugin/">Eclipse</a>, <a href="http://wiki.netbeans.org/Maven">Netbeans</a> and <a href="https://maven.apache.org/plugins/maven-idea-plugin/">IDEA</a>.

@@ -1,7 +1,7 @@
 ---
 section: 2
 title: Colocando objetos na sessão
-category: [pt, cookbook]
+categories: [pt, cookbook]
 layout: page
 ---
 
@@ -13,7 +13,7 @@ Se você precisa colocar algum objeto na Sessão (e está usando o Spring como D
 public class UserInfo {
 
     private User user;
-    
+
     // getter e setter
 }
 {% endhighlight %}
@@ -23,13 +23,13 @@ e se você quiser usar ou colocar o usuário na sessão, de dentro de algum Cont
 {% highlight java %}
 @Resource
 public class LoginController {
-    
+
     private UserInfo info;
-    
+
     public LoginController(UserInfo info) {
         this.info = info;
     }
-    
+
     //...
     public void login(User user) {
         //valida o usuario

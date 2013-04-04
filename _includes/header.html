@@ -2,7 +2,7 @@
 	{% include horizontal-menu.html %}
 	{%include outrasLinguas.html %}
 </div>
-	{% if page.category.first == 'pt' %}
+	{% if page.categories.first == 'pt' %}
 		<a id="logo" href="{{site.baseurl}}/pt">
 	{% else %}
 		<a id="logo" href="{{site.baseurl}}/en">
@@ -10,20 +10,20 @@
 	<img src="{{site.baseurl}}/assets/images/logo.png"/></a>
 <h1 class="titulo-topo">
 	{% if page.layout == 'home' %}
-		{% if page.category.first == 'pt' %}
+		{% if page.categories.first == 'pt' %}
 			Framework Java MVC
 		{% else %}
 			Java MVC Framework
 		{% endif %}
 	{% endif %}
-	{% if page.category.last == 'docs' %}
-		{% if page.category.first == 'pt' %}
+	{% if page.categories.last == 'docs' %}
+		{% if page.categories.first == 'pt' %}
 			Documentação
 		{% else %}
 			Documentation
 		{% endif %}
 	{% endif %}
-	{% if page.category.last == 'cookbook' %}
+	{% if page.categories.last == 'cookbook' %}
 		Cookbook
 	{% endif %}
 </h1>

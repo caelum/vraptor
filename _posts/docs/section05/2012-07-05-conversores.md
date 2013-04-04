@@ -2,7 +2,7 @@
 title: Conversores
 layout: page
 section: 5
-category: [pt, docs]
+categories: [pt, docs]
 ---
 
 <h3>Padrão</h3>
@@ -46,7 +46,7 @@ A partir da versão 3.1.2 o VRaptor suporta esses tipos baseados na localizaçã
 <context-param>
     <param-name>br.com.caelum.vraptor.packages</param-name>
     <param-value>
-        ...valor anterior..., 
+        ...valor anterior...,
         br.com.caelum.vraptor.converter.l10n
     </param-value>
 </context-param>

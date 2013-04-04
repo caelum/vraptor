@@ -2,7 +2,7 @@
 title: Validation
 layout: page
 section: 7
-category: [en, docs]
+categories: [en, docs]
 ---
 
 VRaptor3 supports two different validation styles: classic and fluent. The starting point to both styles is the Validator interface. In order to access the Validator, your resource must receive it in the constructor:
@@ -14,7 +14,7 @@ import br.com.caelum.vraptor.Validator;
 @Resource
 class EmployeeController {
     private Validator validator;
-    
+
     public EmployeeController(Validator validator) {
         this.validator = validator;
     }
@@ -148,7 +148,7 @@ Easy, just tell your validator to do just that: when you find any validation err
 
 {% highlight java %}
 public add(Employee employee) {
-    
+
     // Fluent validation
     validator.checking(new Validations() { {
         that(!employee.getName().isEmpty(), "error", "name.is.required");

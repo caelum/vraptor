@@ -2,7 +2,7 @@
 title: VRaptor3 - 10 minute guide
 layout: page
 section: 2
-category: [en, docs]
+categories: [en, docs]
 ---
 
 <h3>Starting a project: an online store</h3>
@@ -42,7 +42,7 @@ public class Product {
     @Id
     @GeneratedValue
     private Long id;
-    
+
     private String name;
     private String description;
     private Double price;
@@ -111,9 +111,9 @@ And in the ProductsController we might use the dao for listing products:
 {% highlight java %}
 @Resource
 public class ProductsController {
-    
+
     private ProductDao dao;
-    
+
     public List<Product> list() {
         return dao.listAll();
     }
@@ -130,13 +130,13 @@ public class ProductDao {
 
 @Resource
 public class ProductsController {
-    
+
     private ProductDao dao;
 
     public ProductsController(ProductDao dao) {
         this.dao = dao;
     }
-        
+
     public List<Product> list() {
         return dao.listAll();
     }
@@ -233,14 +233,14 @@ public class ProductsController {
         //...
         this.validator = validator;
     }
-    
+
     public void add(Product product) {
         validator.checking(new Validations() { {
             that(!product.getName().isEmpty(), "product.name", "nome.empty");
             that(product.getPrice() > 0, "product.price", "price.invalid");
         } });
         validator.onErrorUsePageOf(ProductsController.class).form();
-        
+
         dao.add(product);
         result.redirectTo(ProductsController.class).list();
     }
@@ -263,9 +263,9 @@ Let's make a real implementation of ProductDao, now, using Hibernate to persist 
 {% highlight java %}
 @Component
 public class ProductDao {
-    
+
     private Session session;
-    
+
     public ProductDao(Session session) {
         this.session = session;
     }
@@ -293,11 +293,11 @@ If we want to make a shopping cart in our system, we need some way to keep cart 
 @SessionScoped
 public class ShoppingCart {
     private List<Product> items = new ArrayList<Product>();
-    
+
     public List<Product> getAllItems() {
         return items;
     }
-    
+
     public void addItem(Product item) {
         items.add(item);
     }
@@ -311,7 +311,7 @@ As this shopping cart is a component, we can receive it on the shopping cart's C
 public class ShoppingCartController {
 
     private final ShoppingCart cart;
-    
+
     public ShoppingCartController(ShoppingCart cart) {
         this.cart = cart;
     }
@@ -319,7 +319,7 @@ public class ShoppingCartController {
     public void add(Product product) {
         cart.addItem(product);
     }
-    
+
     public List<Product> listItems() {
         return cart.getAllItems();
     }
@@ -346,22 +346,22 @@ A REST version of our ProductsControler would be something like that:
 {% highlight java %}
 public class ProductsController {
     //...
-    
+
     @Get @Path("/products")
     public List<Product> list() {...}
-    
+
     @Post("/products")
     public void add(Product product) {...}
 
     @Get("/products/{product.id}")
     public void view(Product product) {...}
-    
+
     @Put("/products/{product.id}")
     public void update(Product product) {...}
-    
+
     @Delete("/products/{product.id}")
     public void remove(Product product) {...}
-    
+
 }
 {% endhighlight %}
 
@@ -374,7 +374,7 @@ Internationalization (i18n) is a powerful feature present in almost all Web fram
 In order to support i18n, you must create a file called messages.properties and make it available in your application classpath (WEB-INF/classes). That file contains lines which are a set of key/value entries, for example:
 
 {% highlight jsp%}
-field.userName = Username 
+field.userName = Username
 field.password = Password
 {% endhighlight %}
 
@@ -389,15 +389,15 @@ Notice that the keys are the same in both files, what changes is the value to th
 In order to use those messages in your JSP files, you could use JSTL. The code would go as follows:
 
 {% highlight jsp %}
-<html> 
-    <body> 
-        <fmt:message key="field.userName" /> <input name="user.userName" /> 
-         
-        <br /> 
-        
-        <fmt:message key="field.password" /> <input type="password" name="user.password" /> 
-        
-        <input type="submit" /> 
-    </body> 
+<html>
+    <body>
+        <fmt:message key="field.userName" /> <input name="user.userName" />
+
+        <br />
+
+        <fmt:message key="field.password" /> <input type="password" name="user.password" />
+
+        <input type="submit" />
+    </body>
 </html>
 {% endhighlight %}

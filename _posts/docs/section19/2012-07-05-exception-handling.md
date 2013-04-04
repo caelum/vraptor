@@ -2,7 +2,7 @@
 title: Exception handling
 layout: page
 section: 19
-category: [en, docs]
+categories: [en, docs]
 ---
 
 Since version 3.2, VRaptor has an Exception Handler, which handler all unhandled exceptions in your application. The Exception Handler has a very similar behaviour than VRaptor Validator.

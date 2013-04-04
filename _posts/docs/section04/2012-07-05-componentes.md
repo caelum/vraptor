@@ -2,7 +2,7 @@
 title: Componentes
 layout: page
 section: 4
-category: [pt, docs]
+categories: [pt, docs]
 ---
 
 <h3>O que são componentes?</h3>
@@ -20,11 +20,11 @@ public class ClienteDao {
   public ClienteDao(Session session) {
       this.session = session;
   }
-  
+
   public void adiciona(Cliente cliente) {
         session.save(cliente);
   }
-  
+
 }
 {% endhighlight %}
 
@@ -42,11 +42,11 @@ public class HibernateControl {
   public HibernateControl() {
       this.factory = new AnnotationConfiguration().configure().buildSessionFactory();
   }
-  
+
   public Session getSession() {
       return factory.openSession();
   }
-  
+
 }
 {% endhighlight %}
 
@@ -103,7 +103,7 @@ Sendo assim, os dois exemplos anteriores permitem que quaisquer um dos seus recu
 @Resource
 public class ClienteController {
     private final ClienteDao dao;
-    
+
     public ClienteController(ClienteDao dao) {
         this.dao = dao;
     }
@@ -112,7 +112,7 @@ public class ClienteController {
     public void adiciona(Cliente cliente) {
         this.dao.adiciona(cliente);
     }
-    
+
 }
 {% endhighlight %}
 

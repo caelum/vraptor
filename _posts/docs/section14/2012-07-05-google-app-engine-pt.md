@@ -2,7 +2,7 @@
 title: Google App Engine
 layout: page
 section: 14
-category: [pt, docs]
+categories: [pt, docs]
 ---
 
 <h3>Começando um projeto</h3>
@@ -22,7 +22,7 @@ Para habilitar os componentes do VRaptor para o Google App Engine, você precisa
 
 <h3>Limitações</h3>
 
-Um detalhe importante é que a injeção de dependências não funciona no redirecionamento para lógicas; o controlador é instanciado recebendo null em todos os seus parâmetros. Sendo assim, deve-se evitar chamadas 
+Um detalhe importante é que a injeção de dependências não funciona no redirecionamento para lógicas; o controlador é instanciado recebendo null em todos os seus parâmetros. Sendo assim, deve-se evitar chamadas
 como:
 
 {% highlight java %}

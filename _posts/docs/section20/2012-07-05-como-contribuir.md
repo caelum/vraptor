@@ -2,7 +2,7 @@
 title: Como contribuir com o VRaptor
 layout: page
 section: 20
-category: [pt, docs]
+categories: [pt, docs]
 ---
 
 

@@ -2,7 +2,7 @@
 title: Changelog
 layout: page
 section: 21
-category: [en, docs]
+categories: [en, docs]
 ---
 
 <h3>3.3.1</h3>
@@ -42,7 +42,7 @@ category: [en, docs]
 	<li>HTTP verb annotations now also can set paths:
 
 		{% highlight java %}
-@Get("/items/{id}"), @Post("/items"), etc 
+@Get("/items/{id}"), @Post("/items"), etc
 		{% endhighlight %}
 	</li>
 	<li>bugfix: @Transactional from Spring can be used in any class (within spring aop limitations)</li>
@@ -79,7 +79,7 @@ theCallback({"object": {...} })
 	<li>beta support to Google Guice, that can be used instead of Spring.</li>
 	<li>Pico provider is not deprecated anymore.</li>
 	<li>One can change the DI container without configuring it on web.xml.
-		If VRaptor finds the Spring jars on classpath, Spring will be used; if PicoContainer jars are found it will be used; the same for Guice jars. One can find the container jars on lib/containers folder on vraptor zip. 
+		If VRaptor finds the Spring jars on classpath, Spring will be used; if PicoContainer jars are found it will be used; the same for Guice jars. One can find the container jars on lib/containers folder on vraptor zip.
 	</li>
 	<li><strong>internal compatibility break</strong>: interfaces <em>Converters</em>, <em>Router</em> and constructor of <em>PathAnnotationRoutesParser</em> class were changed. RouteBuilder	converted is now an interface => DefaultRouteBuilder is the implementation.
 		Those who extend PathAnnotationRoutesParser must change the call to delegate constructor.
@@ -144,7 +144,7 @@ result.on(SomeException.class).forwardTo(Controller.class).method();
 	<li>starting support for javax.inject API. Naming logic parameters is now possible:</li>
 	<li>bugfixes on new Validator</li>
 	<li>bugfix: char as URI parameter</li>
-	<li>bugfix: now VRaptor works with browsers that do not correctly send Accepts header. 
+	<li>bugfix: now VRaptor works with browsers that do not correctly send Accepts header.
 
 		{% highlight java %}
 public void logic(@Named("a_name") String anotherName) {...}
@@ -180,7 +180,7 @@ public void logic(List<String> abc) {...}
 <context-param>
 	<param-name>br.com.caelum.vraptor.packages</param-name>
 	<param-value>
-		br.com.caelum.vraptor.util.hibernate, // Session and SessionFactory 
+		br.com.caelum.vraptor.util.hibernate, // Session and SessionFactory
 		br.com.caelum.vraptor.util.jpa, // EntityManager and EntityManagerFactory
 		br.com.caelum.vraptor.converter.l10n, //Localized numeric Converters
 		br.com.caelum.vraptor.http.iogi // Immutable parameters support
@@ -242,7 +242,7 @@ result.use(xml()).from(myObject).recursive().serialize();
 
 validator.checking(new Validations() { {
 	that(age > 18, "age", "greater_than", i18n("age"), 10);
-	//results on "Age should be greater than 18"  
+	//results on "Age should be greater than 18"
 }});
 		{% endhighlight %}
 	</li>
@@ -251,7 +251,7 @@ validator.checking(new Validations() { {
 
 		{% highlight java %}
 result.use(json()).from(car).serialize(); //=> {'car': {'color': 'blue'} }
-result.use(json()).withoutRoot().from(car).serialize(); //=> {'color': 'blue'} 
+result.use(json()).withoutRoot().from(car).serialize(); //=> {'color': 'blue'}
 		{% endhighlight %}
 	</li>
 	<li>Google collections updated to version 1.0</li>
@@ -264,7 +264,7 @@ result.use(json()).withoutRoot().from(car).serialize(); //=> {'color': 'blue'}
 redirectTo("a/uri")				=>  use(page()).redirect("a/uri")
 notFound()						=>  use(status()).notFound()
 nothing()						=>  use(nothing());
-permanentlyRedirectTo(Controller.class) 	
+permanentlyRedirectTo(Controller.class)
 		=> use(status()).movedPermanentlyTo(Controller.class);
 permanentlyRedirectTo("a/uri") 	=> use(status()).movedPermanentlyTo("a/uri");
 permanentlyRedirectTo(this)		=> use(status()).movedPermanentlyTo(this.getClass());
@@ -325,7 +325,7 @@ public class ClientsController extends GenericController<Client> {
 }
 public class GenericController<T> {
 	public T show(Long id) {...} // exported variable will be called t
-	public void add(T obj) {...} // request parameters will be like obj.field 
+	public void add(T obj) {...} // request parameters will be like obj.field
 }
 		{% endhighlight %}</li>
 
@@ -337,7 +337,7 @@ public class GenericController<T> {
 public class MyController {
 	//URI: /prefix/aMethod
 	public void aMethod() {...}
-	
+
 	//URI: /prefix/relative
 	@Path("relative")
 	public void relativePath() {...}
@@ -402,7 +402,7 @@ public class MyController {
 		{% highlight java %}
 result.use(Results.json()).from(myObject).include(...).exclude(...).serialize();
 result.use(Results.xml()).from(myObject).include(...).exclude(...).serialize();
-		{% endhighlight %} 
+		{% endhighlight %}
 	</li>
 </ul>
 
@@ -451,7 +451,7 @@ result.use(logic()).redirectTo(AController.class).aMethod();
 
 		{% highlight java %}
 public class CustomProvider extends SpringProvider {
-	
+
 	@Override
 	protected void registerCustomComponents(ComponentRegistry registry) {
 		registry.registry(OptionComponent.class, OptionComponent.class);
@@ -475,7 +475,7 @@ public void visualiza(Client client) {
 		that(client.getId() != null, "id", "id.should.be.filled");
 	}});
 	validator.onErrorUse(page()).of(ClientsController.class).list();
-	
+
 	//continua o metodo
 }
 		{% endhighlight %}
@@ -512,7 +512,7 @@ routeFor("/clients/{client.id}").withParameter("client.id")
 			<li>WebApplicationContextUtils.getWebApplicationContext(servletContext), when you have Spring's listeners configured.</li>
 			<li>applicationContext.xml inside the classpath</li>
 		</ul>
-		If it's not enough, you can implements the SpringLocator interface and enable the Spring's ApplicationContext used by your application. 
+		If it's not enough, you can implements the SpringLocator interface and enable the Spring's ApplicationContext used by your application.
 	</li>
 	<li>Utils:
 		<ul>

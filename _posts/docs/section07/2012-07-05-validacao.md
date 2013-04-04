@@ -2,7 +2,7 @@
 title: Validação
 layout: page
 section: 7
-category: [pt, docs]
+categories: [pt, docs]
 ---
 
 O VRaptor3 suporta dois estilos de validação: clássico e fluente. A porta de entrada para ambos os estilos é a interface Validator. Para que seu recurso tenha acesso ao Validator, basta recebê-lo no seu construtor:
@@ -14,7 +14,7 @@ import br.com.caelum.vraptor.Validator;
 @Resource
 class FuncionarioController {
     private Validator validator;
-    
+
     public FuncionarioController(Validator validator) {
         this.validator = validator;
     }
@@ -109,7 +109,7 @@ public admin(Funcionario funcionario) {
         that(funcionario.getRoles(), hasItem("ADMIN"), "admin", "funcionario.nao.eh.admin");
     } });
 
-    validator.onErrorUsePageOf(LoginController.class).login();    
+    validator.onErrorUsePageOf(LoginController.class).login();
 
     dao.adiciona(funcionario);
 }
@@ -130,7 +130,7 @@ public adiciona(Funcionario funcionario) {
     } });
 
     validator.onErrorUsePageOf(FuncionarioController.class).formulario();
-    
+
     dao.adiciona(funcionario);
 }
 {% endhighlight %}

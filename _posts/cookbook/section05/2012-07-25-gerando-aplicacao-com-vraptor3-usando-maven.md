@@ -1,7 +1,7 @@
 ---
 section: 5
 title: Gerando aplicação com VRaptor3 usando Maven
-category: [pt, cookbook]
+categories: [pt, cookbook]
 layout: page
 ---
 
@@ -20,8 +20,8 @@ Instale o Maven ou utilize o recurso que está disponível em sua IDE.
 Execute o comando abaixo:
 
 {% highlight bash %}
-mvn install:install-file -DgroupId=br.com.caelum -DartifactId=vraptor 
-	-Dpackaging=jar -Dversion=3.0.0-SNAPSHOT 
+mvn install:install-file -DgroupId=br.com.caelum -DartifactId=vraptor
+	-Dpackaging=jar -Dversion=3.0.0-SNAPSHOT
 	-Dfile=LOCAL_ONDE_ESTA\vraptor3-3.0.0-SNAPSHOT.jar -DgeneratePom=true
 {% endhighlight %}
 
@@ -30,9 +30,9 @@ Edite o pom.xml do VRaptor que deve estar no repositório local ($USER_HOME/.m2/
 {% highlight xml %}
 <?xml version="1.0" encoding="UTF-8"?>
 <project
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
                         http://maven.apache.org/xsd/maven-4.0.0.xsd"
-    xmlns="http://maven.apache.org/POM/4.0.0" 
+    xmlns="http://maven.apache.org/POM/4.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
     <groupId>br.com.caelum</groupId>
@@ -136,9 +136,9 @@ Crie um projeto Maven.
 Edite o pom.xml do mesmo com o seguinte conteúdo:
 
 {% highlight xml %}
-<project xmlns="http://maven.apache.org/POM/4.0.0" 
+<project xmlns="http://maven.apache.org/POM/4.0.0"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
                         http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>GERALMENTE_ESTRUTURA_DO_PACKAGE</groupId>

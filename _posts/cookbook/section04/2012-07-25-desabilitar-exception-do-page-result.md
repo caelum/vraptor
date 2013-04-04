@@ -1,7 +1,7 @@
 ---
 section: 4
 title: Desabilitar exception do Page Result
-category: [pt, cookbook]
+categories: [pt, cookbook]
 layout: page
 ---
 

@@ -2,7 +2,7 @@
 title: Utility components
 layout: page
 section: 11
-category: [en, docs]
+categories: [en, docs]
 ---
 
 <h3>Registering optional components</h3>
@@ -13,7 +13,7 @@ VRaptor has some optional components, inside package br.com.caelum.vraptor.util.
 <context-param>
     <param-name>br.com.caelum.vraptor.packages</param-name>
     <param-value>
-        br.com.caelum.vraptor.util.one.package, 
+        br.com.caelum.vraptor.util.one.package,
         br.com.caelum.vraptor.util.other.package
     </param-value>
 </context-param>
@@ -29,7 +29,7 @@ Or you can create a custom provider:
 	package com.companyname.projectName;
 
 	public class CustomProvider extends SpringProvider {
-		
+
 	}
 	{% endhighlight %}
 	</li>
@@ -52,7 +52,7 @@ Or you can create a custom provider:
 	package com.companyname.projectName;
 
 	public class CustomProvider extends SpringProvider {
-		
+
 		@Override
 		protected void registerCustomComponents(ComponentRegistry registry) {
 		    registry.register(OptionalComponent.class, OptionalComponent.class);
@@ -85,7 +85,7 @@ If you want to work with immutable objects in your project, you can use a parame
 @Resource
 public class CarsController {
     public void wash(Car car) {
-    
+
     }
 }
 public class Car {

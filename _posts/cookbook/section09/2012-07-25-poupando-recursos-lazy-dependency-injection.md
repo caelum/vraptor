@@ -1,7 +1,7 @@
 ---
 section: 9
 title: Poupando recursos&#58; lazy dependency injection
-category: [pt, cookbook]
+categories: [pt, cookbook]
 layout: page
 ---
 
@@ -25,21 +25,21 @@ public class ProdutoController {
      */
     private final Session session;
     private final Result result;
-   
+
     public ProdutoController(final Session session, final Result result) {
         this.session = session;
         this.result = result;
     }
-   
+
     /**
      * apenas renderiza o formulário
      */
     public void form() {}
-   
+
     public List<Produto> listar() {
         return session.createCriteria(Produto.class).list();
     }
-   
+
     public Produto adiciona(Produto produto) {
         session.persist(produto);
         result.use(Results.logic()).redirectTo(getClass()).listar();
@@ -73,9 +73,9 @@ import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.SuperMethod;
 
 /**
-* <b>JIT (Just-in-Time) {@link Session} Creator</b> fábrica para o 
-* componente {@link Session} gerado de forma LAZY ou JIT(Just-in-Time) 
-* a partir de uma {@link SessionFactory}, que normalmente se encontra 
+* <b>JIT (Just-in-Time) {@link Session} Creator</b> fábrica para o
+* componente {@link Session} gerado de forma LAZY ou JIT(Just-in-Time)
+* a partir de uma {@link SessionFactory}, que normalmente se encontra
 * em um ecopo de aplicativo @{@link ApplicationScoped}.
 *
 * @author Tomaz Lavieri
@@ -84,34 +84,34 @@ import br.com.caelum.vraptor.proxy.SuperMethod;
 @Component
 @RequestScoped
 public class JITSessionCreator implements ComponentFactory<Session> {
-       
-    private static final Method CLOSE = 
+
+    private static final Method CLOSE =
             new Mirror().on(Session.class).reflect().method("close").withoutArgs();
-    private static final Method FINALIZE = 
+    private static final Method FINALIZE =
             new Mirror().on(Object.class).reflect().method("finalize").withoutArgs();
-            
+
     private final SessionFactory factory;
     /** Guarda a Proxy Session */
     private final Session proxy;
     /** Guarada a Session real. */
     private Session session;
-   
+
     public JITSessionCreator(SessionFactory factory, Proxifier proxifier) {
         this.factory = factory;
         this.proxy = proxify(Session.class, proxifier); // *1*
     }
-   
+
     /**
      * Cria o JIT Session, que repassa a invocação de qualquer método, exceto
-     * {@link Object#finalize()} e {@link Session#close()}, para uma session real, 
+     * {@link Object#finalize()} e {@link Session#close()}, para uma session real,
      * criando uma se necessário.
      */
     private Session proxify(Class<? extends Session> target, Proxifier proxifier) {
         return proxifier.proxify(target, new MethodInvocation<Session>() {
             @Override // *2*
-            public Object intercept(Session proxy, Method method, Object[] args, 
+            public Object intercept(Session proxy, Method method, Object[] args,
                                                             SuperMethod superMethod) {
-                if (method.equals(CLOSE) 
+                if (method.equals(CLOSE)
                         || (method.equals(FINALIZE) && session == null)) {
                     return null; //skip
                 }
@@ -120,18 +120,18 @@ public class JITSessionCreator implements ComponentFactory<Session> {
             }
         });
     }
-   
+
     public Session getSession() {
         if (session == null) // *3*
                 session = factory.openSession();
         return session;
     }
-   
+
     @Override
     public Session getInstance() {
         return proxy; // *4*
     }
-   
+
     @PreDestroy
     public void destroy() { // *5*
         if (session != null && session.isOpen()) {

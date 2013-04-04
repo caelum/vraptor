@@ -1,7 +1,7 @@
 ---
 section: 7
 title: Interceptando recursos anotados
-category: [pt, cookbook]
+categories: [pt, cookbook]
 layout: page
 ---
 
@@ -16,16 +16,16 @@ Vamos supor que nós temos o seguinte Resource para adicionar produtos no nosso 
 public class ProdutoController {
     private final DaoFactory factory;
     private final ProdutoDao dao;
-   
+
     public ProdutoController(DaoFactory factory) {
         this.factory = factory;
         this.dao = factory.getProdutoDao();
     }
-   
+
     public List<Produto> listar() {
         return dao.list();
     }
-   
+
     public Produto atualizar(Produto produto) {
         try {
             factory.beginTransaction();
@@ -37,7 +37,7 @@ public class ProdutoController {
             throw ex;
         }
     }
-   
+
     public Produto adicionar(Produto produto) {
         try {
             factory.beginTransaction();
@@ -69,7 +69,7 @@ public class TransactionInterceptor implements Interceptor {
         public HibernateTransactionInterceptor(Session session) {
             this.session = session;
         }
-        public void intercept(InterceptorStack stack, ResourceMethod method, 
+        public void intercept(InterceptorStack stack, ResourceMethod method,
                                 Object instance) {
             Transaction transaction = null;
             try {
@@ -122,20 +122,20 @@ Agora precisamos marcar os pontos onde queremos que o escopo seja transacional c
 @Resource
 public class ProdutoController {
     private final ProdutoDao dao;
-   
+
     public ProdutoController(ProdutoDao dao) {
         this.dao = dao;
     }
-   
+
     public List<Produto> listar() {
         return dao.list();
     }
-   
+
     @Transactional
     public Produto atualizar(Produto produto) {
         return dao.update(produto);
     }
-   
+
     @Transactional
     public Produto adicionar(Produto produto) {
         return dao.store(produto);

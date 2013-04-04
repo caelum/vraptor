@@ -2,7 +2,7 @@
 title: Dependency injection
 layout: page
 section: 9
-category: [en, docs]
+categories: [en, docs]
 ---
 
 VRaptor is strongly based on Dependency Injection, since all its internal components are managed using this technique.
@@ -13,7 +13,7 @@ In Java, this is accomplished by passing components to your controller's constru
 @Resource
 public class ClientController {
     private final ClientDao dao;
-    
+
     public ClientController(ClientDao dao) {
         this.dao = dao;
     }
@@ -48,16 +48,16 @@ Classes implementing that interface define a single method. See the following ex
 public class SessionFactoryCreator implements ComponentFactory<SessionFactory> {
 
     private SessionFactory factory;
-    
+
     @PostConstruct
     public void create() {
         factory = new AnnotationConfiguration().configure().buildSessionFactory();
     }
-    
+
     public SessionFactory getInstance() {
         return factory;
     }
-    
+
     @PreDestroy
     public void destroy() {
         factory.close();
@@ -160,23 +160,23 @@ public class CustomProvider extends GuiceProvider {
     @Override
     protected void registerCustomComponents(ComponentRegistry registry) {
         //binding only to AClass
-        registry.register(AClass.class, ImplementationOfThisClass.class); 
+        registry.register(AClass.class, ImplementationOfThisClass.class);
 
         //binding on OtherClass and all its superclasses and interfaces
-        registry.deepRegister(OtherClass.class); 
+        registry.deepRegister(OtherClass.class);
     }
-    
+
     @Override
     protected Module customModule() {
         //you need to install super.customModule() if you
         //want to enable the registerCustomComponents method
         //and the classpath scanning
-        final Module module = super.customModule(); 
-        
+        final Module module = super.customModule();
+
         return new AbstractModule() {
            public void configure() {
                 module.configure(binder());
-                
+
                 // custom guice bindings
            }
         };

@@ -2,7 +2,7 @@
 title: Components
 layout: page
 section: 4
-category: [en, docs]
+categories: [en, docs]
 ---
 
 <h3>What are components?</h3>
@@ -20,11 +20,11 @@ public class ClientDao {
   public ClientDao(HibernateControl control) {
       this.session = control.getSession()
   }
-  
+
   public void add(Client client) {
     session.save(client);
   }
-  
+
 }
 {% endhighlight %}
 
@@ -42,11 +42,11 @@ public class HibernateControl {
   public HibernateControl() {
       this.factory = new AnnotationConfiguration().configure().buildSessionFactory();
   }
-  
+
   public Session getSession() {
       return factory.openSession();
   }
-  
+
 }
 {% endhighlight %}
 
@@ -101,7 +101,7 @@ For that reason, the former two examples allow any of your resources or componen
 @Resource
 public class ClientController {
     private final ClientDao dao;
-    
+
     public ClientController(ClientDao dao) {
         this.dao = dao;
     }
@@ -110,7 +110,7 @@ public class ClientController {
     public void add(Client client) {
         this.dao.add(client);
     }
-    
+
 }
 {% endhighlight %}
 

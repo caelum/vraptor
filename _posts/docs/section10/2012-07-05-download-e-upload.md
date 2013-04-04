@@ -2,7 +2,7 @@
 title: Download e Upload
 layout: page
 section: 10
-category: [pt, docs]
+categories: [pt, docs]
 ---
 
 <h3>Exemplo de 1 minuto: download</h3>
@@ -15,7 +15,7 @@ Note novamente a simplicidade na implementação:
 public class PerfilController {
 
     public File foto(Perfil perfil) {
-        return new File("/path/para/a/foto." + perfil.getId()+ ".jpg"); 
+        return new File("/path/para/a/foto." + perfil.getId()+ ".jpg");
     }
 }
 {% endhighlight %}
@@ -34,8 +34,8 @@ public class PerfilController {
         File file = new File("/path/para/a/foto." + perfil.getId()+ ".jpg");
         String contentType = "image/jpg";
         String filename = perfil.getNome() + ".jpg";
-        
-        return new FileDownload(file, contentType, filename); 
+
+        return new FileDownload(file, contentType, filename);
     }
 }
 {% endhighlight %}
@@ -75,7 +75,7 @@ O UploadedFile retorna o arquivo como um InputStream. Se você quiser copiar par
 
 {% highlight java %}
 public void atualizaFoto(Perfil perfil, UploadedFile foto) {
-    File fotoSalva = new File();    
+    File fotoSalva = new File();
     IOUtils.copyLarge(foto.getFile(), new FileOutputStream(fotoSalva));
     dao.atribui(fotoSalva, perfil);
 }

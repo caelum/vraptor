@@ -2,7 +2,7 @@
 title: Converters
 layout: page
 section: 5
-category: [en, docs]
+categories: [en, docs]
 ---
 
 <h3>Default</h3>
@@ -114,7 +114,7 @@ public class LongConverter implements Converter<Long> {
         try {
             return Long.valueOf(value);
         } catch (NumberFormatException e) {
-			throw new 
+			throw new
 	ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_integer"), value));
         }
     }

@@ -2,7 +2,7 @@
 title: Sobrescrevendo as convenções e o comportamento do VRaptor
 layout: page
 section: 12
-category: [pt, docs]
+categories: [pt, docs]
 ---
 
 A maioria dos comportamentos e convenções do VRaptor são personalizáveis. E a forma de personalizar é bem fácil: criar um componente que implementa uma das interfaces internas do VRaptor. Ao fazer isso, o VRaptor vai usar a implementação personalizada ao invés da padrão.
@@ -17,12 +17,12 @@ Se você precisa mudar a view renderizada por padrão, ou mudar o local em que e
 {% highlight java %}
 @Component
 public class CustomPathResolver extends DefaultPathResolver {
-    
+
     @Override
     protected String getPrefix() {
         return "/pasta/raiz/";
     }
-    
+
     @Override
     protected String getExtension() {
         return "ftl"; // ou qualquer outra extensão

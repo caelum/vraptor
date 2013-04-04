@@ -1,7 +1,7 @@
 ---
 section: 3
 title: ComponentFactory como seletor de implementações
-category: [pt, cookbook]
+categories: [pt, cookbook]
 layout: page
 ---
 
@@ -15,7 +15,7 @@ public interface EnviadorDeEmail {
 }
 
 public class EnviadorDeEmailPadrao implements EnviadorDeEmail {
-    //envia o email de verdade    
+    //envia o email de verdade
 }
 
 public class EnviadorDeEmailFalso implements EnviadorDeEmail {
@@ -37,7 +37,7 @@ public class EnviadorDeEmailFactory implements ComponentFactory<EnviadorDeEmail>
         } else {
             enviador = new EnviadorDeEmailFalso();
         }
-    
+
     }
 
     public EnviadorDeEmail getInstance() {

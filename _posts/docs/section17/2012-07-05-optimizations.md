@@ -2,7 +2,7 @@
 title: Optimizations
 layout: page
 section: 17
-category: [en, docs]
+categories: [en, docs]
 ---
 
 <h3>Commons Upload</h3>

@@ -2,7 +2,7 @@
 title: VRaptor Scaffold
 layout: page
 section: 18
-category: [pt, docs]
+categories: [pt, docs]
 ---
 
 O VRaptor 3 agora possui uma extensão chamada VRaptor Scaffold, que tem por finalidade facilitar a configuração de novos projetos e plugins.
@@ -161,8 +161,8 @@ Para visualizar a lista de comandos disponibilizados pelo vraptor-scaffold, exec
 
 {% highlight bash %}
 vraptor -h
-vraptor new -h 
-vraptor scaffold -h 
+vraptor new -h
+vraptor scaffold -h
 vraptor plugin -h
 {% endhighlight %}
 

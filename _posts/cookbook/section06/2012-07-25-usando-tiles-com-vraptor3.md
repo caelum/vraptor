@@ -1,7 +1,7 @@
 ---
 section: 6
 title: Usando tiles com VRaptor3
-category: [pt, cookbook]
+categories: [pt, cookbook]
 layout: page
 ---
 

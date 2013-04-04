@@ -2,7 +2,7 @@
 title: Injeção de dependências
 layout: page
 section: 9
-category: [pt, docs]
+categories: [pt, docs]
 ---
 
 O VRaptor está fortemente baseado no conceito de injeção de dependências uma vez que chega até mesmo a utilizar dessa ideia para juntar seus componentes internos.
@@ -13,7 +13,7 @@ Isso se traduz, por exemplo, na passagem de componentes ao construtor de seus co
 @Resource
 public class ClienteController {
     private final ClienteDao dao;
-    
+
     public ClienteController(ClienteDao dao) {
         this.dao = dao;
     }
@@ -22,7 +22,7 @@ public class ClienteController {
     public void adiciona(Cliente cliente) {
         this.dao.adiciona(cliente);
     }
-    
+
 }
 {% endhighlight %}
 
@@ -48,21 +48,21 @@ O VRaptor possui uma interface chamada ComponentFactory que permite que suas cla
 public class SessionFactoryCreator implements ComponentFactory<SessionFactory> {
 
     private SessionFactory factory;
-    
+
     @PostConstruct
     public void create() {
         factory = new AnnotationConfiguration().configure().buildSessionFactory();
     }
-    
+
     public SessionFactory getInstance() {
         return factory;
     }
-    
+
     @PreDestroy
     public void destroy() {
         factory.close();
     }
-    
+
 }
 
 @Component
@@ -162,22 +162,22 @@ public class CustomProvider extends GuiceProvider {
     protected void registerCustomComponents(ComponentRegistry registry) {
         //binding só na UmaClasse
         registry.register(UmaClasse.class, ImplementacaoDessaClasse.class);
-         
+
         //binding da classe e de todas as superclasses e interfaces
-        registry.deepRegister(OutraClasse.class); 
+        registry.deepRegister(OutraClasse.class);
     }
-    
+
     @Override
     protected Module customModule() {
         //você precisa instalar esse módulo se quiser
         //habilitar o método registerCustomComponents
         //e o classpath scanning
-        final Module module = super.customModule(); 
-        
+        final Module module = super.customModule();
+
         return new AbstractModule() {
            public void configure() {
                 module.configure(binder());
-                
+
                 // binds personalizados do Guice
            }
         };

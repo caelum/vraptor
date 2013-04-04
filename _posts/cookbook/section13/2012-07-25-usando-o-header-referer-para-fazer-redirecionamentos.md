@@ -1,7 +1,7 @@
 ---
 section: 13
 title: Usando o Header Referer para fazer redirecionamentos
-category: [pt, cookbook]
+categories: [pt, cookbook]
 layout: page
 ---
 
@@ -16,9 +16,9 @@ public class ShoppingController {
     public void adicionaItem(Item item) {
         validator.checking(...);
         validator.onErrorUse(referer()).forward();
-        
+
         dao.adiciona(item);
-        
+
         result.use(referer()).redirect();
     }
 }

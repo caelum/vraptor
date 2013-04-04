@@ -1,28 +1,28 @@
 <ul id="hzmenu">
 		<li>
-			{% if page.category.first == 'pt' or page.category == 'pt' %}
+			{% if page.categories.first == 'pt' or page.categories == 'pt' %}
 				<a href="{{site.baseurl}}/pt">
 			{% endif %}
-			{% unless page.category.first == 'pt' or page.category == 'pt' %}
+			{% unless page.categories.first == 'pt' or page.categories == 'pt' %}
 				<a href="{{site.baseurl}}/en">
 			{% endunless %}
 			Home</a>
 		</li>
-		
-		{% if page.category.last == 'cookbook' or page.layout == 'home' %}
-			<li><a href="{{site.baseurl}}/{{page.category.first}}/docs/">
-			{% if page.category.first == 'pt' %}
+
+		{% if page.categories.last == 'cookbook' or page.layout == 'home' %}
+			<li><a href="{{site.baseurl}}/{{page.categories.first}}/docs/">
+			{% if page.categories.first == 'pt' %}
 					Documentação
 			{% else %}
 					Documentation
 			{% endif %}
 			</a></li>
 		{% endif %}
-		
-		{% if page.category.last == 'docs' or page.layout == 'home' %}
+
+		{% if page.categories.last == 'docs' or page.layout == 'home' %}
 			<li><a href="{{site.baseurl}}/pt/cookbook/">Cookbook</a></li>
 		{% endif %}
-		
+
 		<li><a href="https://code.google.com/p/vraptor3/downloads/list">Download</a></li>
 		<li><a href="http://vraptor.caelum.com.br/javadoc/">Javadoc</a></li>
 </ul>

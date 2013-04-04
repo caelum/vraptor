@@ -2,7 +2,7 @@
 title: Tratamento de Exceções
 layout: page
 section: 19
-category: [pt, docs]
+categories: [pt, docs]
 ---
 
 A partir da versão 3.2, o VRaptor possui um Exception Handler, que captura as exceções não tratadas em sua aplicação. O funcionamento do Exception Handler é muito semelhante ao funcionamento do VRaptor Validator.

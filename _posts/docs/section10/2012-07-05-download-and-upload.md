@@ -2,7 +2,7 @@
 title: Download and Upload
 layout: page
 section: 10
-category: [en, docs]
+categories: [en, docs]
 ---
 
 <h3>One minute example: download</h3>
@@ -32,8 +32,8 @@ public class ProfileController {
         File file = new File("/path/to/the/picture." + profile.getId()+ ".jpg");
         String contentType = "image/jpg";
         String filename = profile.getName() + ".jpg";
-        
-        return new FileDownload(file, contentType, filename); 
+
+        return new FileDownload(file, contentType, filename);
     }
 }
 {% endhighlight %}
@@ -73,7 +73,7 @@ UploadedFile returns the file content as a InputStream. If you want to save this
 
 {% highlight java %}
 public void updatePicture(Profile profile, UploadedFile picture) {
-    File pictureOnDisk = new File();    
+    File pictureOnDisk = new File();
     IOUtils.copyLarge(picture.getFile(), new FileOutputStream(pictureOnDisk));
     dao.atribui(pictureOnDisk, profile);
 }

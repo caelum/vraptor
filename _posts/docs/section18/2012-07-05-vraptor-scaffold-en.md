@@ -2,7 +2,7 @@
 title: VRaptor Scaffold
 layout: page
 section: 18
-category: [en, docs]
+categories: [en, docs]
 ---
 
 VRaptor scaffold extension to make it easier configuring new projects and plugins.
@@ -157,8 +157,8 @@ vraptor -h
 To get more information on a command usage, use, for example:
 
 {% highlight bash %}
-vraptor new -h 
-vraptor scaffold -h 
+vraptor new -h
+vraptor scaffold -h
 vraptor plugin -h
 {% endhighlight %}
 

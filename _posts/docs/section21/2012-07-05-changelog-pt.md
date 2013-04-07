@@ -10,26 +10,26 @@ categories: [pt, docs]
   <li>Bean Validation: Se você usa o Hibernate Validator 3, o suporte foi removido. Atualize para o
     hiberante validator 4 e adicione o jar da validations api no classpath. Suporte inicial a validação de métodos (Bean Validation 1.1).</li>
   <li>Migração do build para maven.</li>
-  <li>Adicionado novos converters localizados e joda-time (por ([jlemes](http://github.com/jlemes))).</li>
+  <li>Adicionado novos converters localizados e joda-time (por jlemes).</li>
   <li>Remoção de objetos deprecated e não usados.</li>
   <li>Removido CGLIB em favor ao Javassist Proxifier.</li>
   <li>Google Guice agora é o container padrão.</li>
   <li>Inclusão de suporte a java.util.Set para o IOGI.</li>
   <li>Atualização das libs externas.</li>
-  <li>Suporte ao verbo OPTIONS (por ([douglasrodrigo](http://github.com/douglasrodrigo))) e PATCH (por ([nykolaslima](http://github.com/nykolaslima))).</li>
+  <li>Suporte ao verbo OPTIONS (por douglasrodrigo) e PATCH (por nykolaslima).</li>
   <li>Os testes unitários foram migrados do jmock para mockito. Aumento da cobertura de testes.</li>
-  <li>Adicionado suporte a serialização com GSON (por ([renanreismartins](http://github.com/renanreismartins))).</li>
-  <li>Alterada a forma como o Exception Handler reporta a exception (por ([vulpios](http://github.com/vulpios))).</li>
-  <li>O suporte ao Hibernate e JPA foram migrados para projetos externos: ([vraptor-hibernate](http://github.com/caelum/vraptor-hibernate)) e ([vraptor-jpa](http://github.com/caelum/vraptor-jpa)).</li>
-  <li>Criado plugin para suporte ao Hibernate 4: ([vraptor-plugin-hibernate4](http://github.com/garcia-jj/vraptor-plugin-hibernate4)).</li>
+  <li>Adicionado suporte a serialização com GSON (por renanreismartins).</li>
+  <li>Alterada a forma como o Exception Handler reporta a exception (por vulpios).</li>
+  <li>O suporte ao Hibernate e JPA foram migrados para projetos externos: http://github.com/caelum/vraptor-hibernate e http://github.com/caelum/vraptor-jpa.</li>
+  <li>Criado plugin para suporte ao Hibernate 4: http://github.com/garcia-jj/vraptor-plugin-hibernate4.</li>
   <li>Os subprojetos vraptor-vraptor2, vraptor-scala, vraptor-flex foram movidos para seus próprios repositórios.</li>
   <li>Melhoria da anotação @Load, onde agora não é mais necessário que o @Id possua o nome fixo ID: basta anotar com @Id o campo da chave primaria.</li>
-  <li>Validação de beans com suporte a grupos e validação por propriedades (por ([nykolaslima](http://github.com/nykolaslima))).</li>
-  <li>Bugfix para acesso a arquivos estáticos sem o querystring e jsessionid (por ([nykolaslima](http://github.com/nykolaslima))).</li>
-  <li>Bugfix na chamada do método servletContext.getClassLoader (por ([nykolaslima](http://github.com/nykolaslima)))</li>
-  <li>Bugfix para linkto quando o método possui sobrecarga e métodos bridge (por ([nykolaslima](http://github.com/nykolaslima))).</li>
-  <li>Melhorias na validação do upload (por ([marceloemanoel](http://github.com/marceloemanoel))).</li>
-  <li>Melhorias na documentação (por ([bbviana](http://github.com/bbviana)), ([awvalenti](http://github.com/awvalenti)) e ([igordeoliveirasa](http://github.com/igordeoliveirasa))).</li>
+  <li>Validação de beans com suporte a grupos e validação por propriedades (por nykolaslima).</li>
+  <li>Bugfix para acesso a arquivos estáticos sem o querystring e jsessionid (por nykolaslima).</li>
+  <li>Bugfix na chamada do método servletContext.getClassLoader (por nykolaslima)</li>
+  <li>Bugfix para linkto quando o método possui sobrecarga e métodos bridge (por nykolaslima).</li>
+  <li>Melhorias na validação do upload (por marceloemanoel).</li>
+  <li>Melhorias na documentação (por bbviana, awvalenti e igordeoliveirasa).</li>
 </ul>
 
 <h3>3.4.1</h3>

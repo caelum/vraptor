@@ -8,7 +8,12 @@ categories: [pt, docs]
 <h3>3.5.0</h3>
 <ul>
   <li>Bean Validation: Se você usa o Hibernate Validator 3, o suporte foi removido. Atualize para o
-    hiberante validator 4 e adicione o jar da validations api no classpath. Suporte inicial a validação de métodos (Bean Validation 1.1).</li>
+    hiberante validator 4 e adicione o jar da validations api no classpath.</li>
+  <li>Suporte inicial a validação de métodos (Bean Validation 1.1):
+		{% highlight java %}
+    public void metodo(@NotNull String param) {..} // valida se param != null
+		{% endhighlight %}
+  </li>
   <li>Migração do build para maven.</li>
   <li>Adicionado novos converters localizados e joda-time (por jlemes).</li>
   <li>Remoção de objetos deprecated e não usados.</li>

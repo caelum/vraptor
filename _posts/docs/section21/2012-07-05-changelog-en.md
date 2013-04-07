@@ -5,6 +5,38 @@ section: 21
 categories: [en, docs]
 ---
 
+<h3>3.5.0</h3>
+<ul>
+  <li>Bean Validation: Hibernate Validator 3 support are removed. If you are using it, please, update to Hibernate Validator 4.</li>
+  <li>Initial support to method validation (Bean Validation 1.1).
+		{% highlight java %}
+    public void theMethod(@NotNull String param) {..} // validates if param != null
+		{% endhighlight %}
+  </li>
+  <li>Build migration from ant to maven.</li>
+  <li>New localized and joda-time converters (by jlemes).</li>
+  <li>Removed deprecated and unused objects.</li>
+  <li>Remove CGLIB in favor to Javassist Proxifier.</li>
+  <li>Google Guice is now the default ioc container.</li>
+  <li>Support to java.util.Set for IOGI.</li>
+  <li>All dependencies are updated.</li>
+  <li>Supports to HTTP method OPTIONS (by douglasrodrigo) and PATCH (by nykolaslima).</li>
+  <li>Migration from Jmock to Mockito. More test coverage.</li>
+  <li>Added supports for GSON (by renanreismartins).</li>
+  <li>Changed how Exception Handler reports exceptions (by vulpios).</li>
+  <li>Hibernate and JPA subprojects now have your own repository: http://github.com/caelum/vraptor-hibernate and http://github.com/caelum/vraptor-jpa.</li>
+  <li>New plugin with Hibernate 4 support: http://github.com/garcia-jj/vraptor-plugin-hibernate4.</li>
+  <li>Subproject now have your own repository: vraptor-vraptor2, vraptor-scala and vraptor-flex.</li>
+  <li>Improvement: @Load annotation now discovery primary key byself.</li>
+  <li>Bean validation with property and group validation (by nykolaslima).</li>
+  <li>Bugfix: static files without querystring and jsessionid (by nykolaslima).</li>
+  <li>Bugfix: when call servletContext.getClassLoader (by nykolaslima)</li>
+  <li>Bugfix: skip bridge and overloaded methods (by nykolaslima).</li>
+  <li>Improvement: upload validation (by marceloemanoel).</li>
+  <li>Improvement: documentation (by bbviana, awvalenti and igordeoliveirasa).</li>
+</ul>
+
+
 <h3>3.3.1</h3>
 
 <ul>

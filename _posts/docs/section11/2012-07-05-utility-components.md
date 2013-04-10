@@ -77,40 +77,9 @@ There are some converters for Numbers that are localized, i.e, that consider you
 </context-param>
 {% endhighlight %}
 
-<h3>Immutable Parameters Instantiator (beta)</h3>
+<h3>Parameters Instantiator: IOGI x OGNL</h3>
 
-If you want to work with immutable objects in your project, you can use a parameter provider that is able to populate your objects via constructor parameters:
-
-{% highlight java %}
-@Resource
-public class CarsController {
-    public void wash(Car car) {
-
-    }
-}
-public class Car {
-   private final String color;
-   private final String model;
-   public Car(String color, String model) {
-     this.color = color;
-     this.model = model;
-   }
-   //getters
-}
-{% endhighlight %}
-
-The car will be populated with the usual request parameters: car.color and car.model.
-To enable this behavior, one can add the package br.com.caelum.vraptor.http.iogi to its web.xml:
-
-{% highlight xml %}
-<context-param>
-    <param-name>br.com.caelum.vraptor.packages</param-name>
-    <param-value>
-        br.com.caelum.vraptor.util.other.packages...,
-        br.com.caelum.vraptor.http.iogi
-    </param-value>
-</context-param>
-{% endhighlight %}
+VRaptor uses IOGI by default as parameter instantiator. If you want to use OGNL you can remove IOGI jar and adding OGNL jars to your application.
 
 <h3>ExtJS Integration</h3>
 

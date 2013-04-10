@@ -77,40 +77,9 @@ Existem alguns converters para números que são localizados, ou seja, que consi
 </context-param>
 {% endhighlight %}
 
-<h3>Instanciador de Parâmetros Imutáveis</h3>
+<h3>Instanciador de Parâmetros: IOGI x OGNL</h3>
 
-Se você quiser trabalhar com objetos imutáveis no seu projeto, você pode usar um parameter provider que consegue popular seus objetos a partir dos parâmetros do seu construtor:
-
-{% highlight java %}
-@Resource
-public class CarrosController {
-    public void lava(Carro carro) {
-
-    }
-}
-public class Carro {
-   private final String cor;
-   private final String modelo;
-   public Car(String cor, String modelo) {
-     this.cor = cor;
-     this.modelo = modelo;
-   }
-   //getters
-}
-{% endhighlight %}
-
-O carro será populado com os request parameters normais: carro.cor e carro.modelo
-Para habilitar esse comportamento, você pode adicionar o pacote br.com.caelum.vraptor.http.iogi ao seu web.xml:
-
-{% highlight xml %}
-<context-param>
-    <param-name>br.com.caelum.vraptor.packages</param-name>
-    <param-value>
-        br.com.caelum.vraptor.util.outros.pacotes...,
-        br.com.caelum.vraptor.http.iogi
-    </param-value>
-</context-param>
-{% endhighlight %}
+O VRaptor utiliza por padrão o IOGI para injetar os parâmetros nos objetos. Se você preverir é possível usar o OGNL, bastando remover o jar do IOGI e adicionar os jars do OGNL.
 
 <h3>Integração com ExtJS</h3>
 

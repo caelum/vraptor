@@ -14,20 +14,21 @@ categories: [pt, docs]
     public void metodo(@NotNull String param) {..} // valida se param != null
 		{% endhighlight %}
   </li>
-  <li>Migração do build para maven.</li>
+  <li>Migração do processo de build para maven.</li>
   <li>Adicionado novos converters localizados e joda-time (por jlemes).</li>
   <li>Remoção de objetos deprecated e não usados.</li>
   <li>Removido CGLIB em favor ao Javassist Proxifier.</li>
-  <li>Google Guice agora é o container padrão.</li>
+  <li>Google Guice agora é o container padrão. Se você usava alguma classe interna do Spring e Pico ou deseja usar outro container, basta alterar seu pom para incluir as dependências.</li>
   <li>Inclusão de suporte a java.util.Set para o IOGI.</li>
   <li>Atualização das libs externas.</li>
   <li>Suporte ao verbo OPTIONS (por douglasrodrigo) e PATCH (por nykolaslima).</li>
   <li>Os testes unitários foram migrados do jmock para mockito. Aumento da cobertura de testes.</li>
   <li>Adicionado suporte a serialização com GSON (por renanreismartins).</li>
   <li>Alterada a forma como o Exception Handler reporta a exception (por vulpios).</li>
-  <li>O suporte ao Hibernate e JPA foram migrados para projetos externos: http://github.com/caelum/vraptor-hibernate e http://github.com/caelum/vraptor-jpa.</li>
+  <li>Alterada a assinatura das classes de upload para reportar o tamanho do arquivo (por ljtfreitas).</li>
+  <li>O suporte ao Hibernate e JPA foram migrados para projetos externos: http://github.com/caelum/vraptor-hibernate e http://github.com/caelum/vraptor-jpa. Caso você use estes projetos deverão ser incluídas manualmente as dependências.</li>
   <li>Criado plugin para suporte ao Hibernate 4: http://github.com/garcia-jj/vraptor-plugin-hibernate4.</li>
-  <li>Os subprojetos vraptor-vraptor2, vraptor-scala, vraptor-flex foram movidos para seus próprios repositórios.</li>
+  <li>Os subprojetos vraptor-vraptor2, vraptor-scala, vraptor-flex foram movidos para seus próprios repositórios. Caso você use estes projetos deverão ser incluídas manualmente as dependências.</li>
   <li>Melhoria da anotação @Load, onde agora não é mais necessário que o @Id possua o nome fixo ID: basta anotar com @Id o campo da chave primaria.</li>
   <li>Validação de beans com suporte a grupos e validação por propriedades (por nykolaslima).</li>
   <li>Bugfix para acesso a arquivos estáticos sem o querystring e jsessionid (por nykolaslima).</li>

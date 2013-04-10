@@ -88,3 +88,15 @@ There is a View that generates some ExtJS JSON formats. Use:
 {% highlight java %}
 result.use(ExtJSJson.class).....serialize();
 {% endhighlight %}
+
+<h3>Integration with JPA and Hibernate</h3>
+
+There are three sub projects for persistence integrations. For each one you need only to add the jar in your classpath without any other configuration.
+
+<ul>
+  <li><a href="http://github.com/caelum/vraptor-jpa">vraptor-jpa</a>, for JPA support</li>
+  <li><a href="http://github.com/caelum/vraptor-hibernate">vraptor-jpa</a>, for Hibernate 3 support</li>
+  <li><a href="http://github.com/garcia-jj/vraptor-hibernate4">vraptor-jpa</a>, for Hibernate 4 support</li>
+</ul>
+
+

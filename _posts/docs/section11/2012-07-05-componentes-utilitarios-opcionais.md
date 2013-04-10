@@ -88,3 +88,14 @@ Existe uma View do VRaptor que consegue gerar alguns formatos de JSON que o ExtJ
 {% highlight java %}
 result.use(ExtJSJson.class).....serialize();
 {% endhighlight %}
+
+<h3>Integração JPA e Hibernate</h3>
+
+Há três projetos externos ao VRaptor para integração persistência. Para cada um deles, basta adicionar o jar no classpath que o suporte será ativado automaticamente sem a necessidade de registrar os componentes.
+
+<ul>
+  <li><a href="http://github.com/caelum/vraptor-jpa">vraptor-jpa</a>, para suporte a JPA</li>
+  <li><a href="http://github.com/caelum/vraptor-hibernate">vraptor-jpa</a>, para suporte ao Hibernate 3</li>
+  <li><a href="http://github.com/garcia-jj/vraptor-hibernate4">vraptor-jpa</a>, para suporte ao Hibernate 4</li>
+</ul>
+

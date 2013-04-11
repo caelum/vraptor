@@ -5,6 +5,7 @@ br.com.caelum.vraptor.converter.jodatime
 br.com.caelum.vraptor.converter.l10n
 br.com.caelum.vraptor.core
 br.com.caelum.vraptor.deserialization
+br.com.caelum.vraptor.deserialization.gson
 br.com.caelum.vraptor.http
 br.com.caelum.vraptor.http.iogi
 br.com.caelum.vraptor.http.ognl
@@ -27,15 +28,12 @@ br.com.caelum.vraptor.restfulie.resource
 br.com.caelum.vraptor.restfulie.serialization
 br.com.caelum.vraptor.scan
 br.com.caelum.vraptor.serialization
+br.com.caelum.vraptor.serialization.gson
+br.com.caelum.vraptor.serialization.gson.adapters
 br.com.caelum.vraptor.serialization.xstream
 br.com.caelum.vraptor.util
 br.com.caelum.vraptor.util.collections
 br.com.caelum.vraptor.util.extjs
-br.com.caelum.vraptor.util.hibernate
-br.com.caelum.vraptor.util.hibernate.extra
-br.com.caelum.vraptor.util.interceptors
-br.com.caelum.vraptor.util.jpa
-br.com.caelum.vraptor.util.jpa.extra
 br.com.caelum.vraptor.util.test
 br.com.caelum.vraptor.validator
 br.com.caelum.vraptor.validator.annotation

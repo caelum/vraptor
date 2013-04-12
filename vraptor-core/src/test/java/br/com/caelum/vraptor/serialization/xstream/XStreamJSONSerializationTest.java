@@ -269,6 +269,14 @@ public class XStreamJSONSerializationTest {
 		serialization.from(order).excludeAll().serialize();
 		assertThat(result(), is(equalTo(expectedResult)));
 	}
+	
+	@Test
+	public void shouldExcludeAllThanIncludeAndSerialize() {
+		String expectedResult = "{\"order\": {\"price\": 15.0}}";
+		Order order = new Order(new Client("nykolas lima"), 15.0, "gift bags, please");
+		serialization.from(order).excludeAll().include("price").serialize();
+		assertThat(result(), is(equalTo(expectedResult)));
+	}
 
 	@Test
 	public void shouldOptionallyExcludeFields() {

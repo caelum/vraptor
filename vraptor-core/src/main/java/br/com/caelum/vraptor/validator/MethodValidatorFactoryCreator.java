@@ -24,7 +24,6 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.validation.Validation;
-import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
 import org.slf4j.Logger;
@@ -35,7 +34,7 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.ComponentFactory;
 
 /**
- * Bring up Method Validation factory. This class builds the {@link Validator} factory once when
+ * Bring up Method Validation factory. This class builds the {@link Validatorfac} factory once when
  * application starts.
  * 
  * @author Otávio Scherer Garcia
@@ -60,6 +59,7 @@ public class MethodValidatorFactoryCreator
         instance = Validation.byDefaultProvider().configure()
             .parameterNameProvider(new CustomParameterNameProvider(nameProvider))
             .buildValidatorFactory();
+        
         logger.debug("Initializing Method Validator");
     }
     
@@ -75,6 +75,11 @@ public class MethodValidatorFactoryCreator
         return instance;
     }
 
+    /**
+     * Allow vraptor to use paranamer to discovery method parameter names.
+     * @author Otávio Scherer Garcia
+     * @since 3.5
+     */
     class CustomParameterNameProvider
         implements javax.validation.ParameterNameProvider {
     
@@ -83,11 +88,19 @@ public class MethodValidatorFactoryCreator
         public CustomParameterNameProvider(ParameterNameProvider nameProvider) {
             this.nameProvider = nameProvider;
         }
-    
+
+        /**
+         * Returns an empty list of parameter names, since we don't validate 
+         * constructors.
+         */
         public List<String> getParameterNames(Constructor<?> constructor) {
             return emptyParameters(constructor.getParameterTypes().length);
         }
-    
+
+        /**
+         * Returns the parameter names for the method, skiping if method is inherited 
+         * from object.
+         */
         public List<String> getParameterNames(Method method) {
             if (OBJECT_METHODS.contains(method)) {
                 return emptyParameters(method.getParameterTypes().length);

@@ -16,7 +16,6 @@
 package br.com.caelum.vraptor.validator;
 
 import javax.annotation.PostConstruct;
-import javax.validation.Configuration;
 import javax.validation.Validation;
 import javax.validation.ValidatorFactory;
 
@@ -45,8 +44,10 @@ public class ValidatorFactoryCreator implements ComponentFactory<ValidatorFactor
 
 	@PostConstruct
 	public void buildFactory() {
-		final Configuration<?> cfg = Validation.byDefaultProvider().configure();
-        factory = cfg.traversableResolver(new BeanValidatorTraversableResolver()).buildValidatorFactory();
+		factory = Validation.byDefaultProvider()
+		        .configure()
+		        .buildValidatorFactory();
+
         logger.debug("Initializing JSR303 factory for bean validation");
 	}
 

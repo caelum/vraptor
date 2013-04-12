@@ -67,6 +67,11 @@ public class GsonSerializer implements SerializerBuilder {
 		serializee.excludeAll(names);
 		return this;
 	}
+	
+	public Serializer excludeAll() {
+		serializee.excludeAll();
+		return this;
+	}
 
 	private void preConfigure(Object obj, String alias) {
 		checkNotNull(obj, "You can't serialize null objects");

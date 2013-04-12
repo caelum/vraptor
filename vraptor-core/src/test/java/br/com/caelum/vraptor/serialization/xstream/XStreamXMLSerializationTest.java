@@ -314,6 +314,33 @@ public class XStreamXMLSerializationTest {
 		assertThat(result(), not(containsString("12.99")));
 		assertThat(result(), containsString("</items>"));
 	}
+	
+	@Test
+	public void shouldExcludeAllPrimitiveFields() {
+		String expectedResult = "<order/>";
+		Order order = new Order(new Client("nykolas lima"), 15.0, "gift bags, please");
+		serialization.from(order).excludeAll().serialize();
+		assertThat(result(), is(equalTo(expectedResult)));
+	}
+	
+	@Test
+	public void shouldExcludeAllPrimitiveParentFields() {
+		String expectedResult = "<advancedOrder/>";
+		Order order = new AdvancedOrder(null, 15.0, "pack it nicely, please", "complex package");
+		serialization.from(order).excludeAll().serialize();
+		assertThat(result(), is(equalTo(expectedResult)));
+	}
+	
+	@Test
+	public void shouldExcludeAllThanIncludeAndSerialize() {
+		Order order = new Order(new Client("nykolas lima"), 15.0, "gift bags, please");
+		serialization.from(order).excludeAll().include("price").serialize();
+		assertThat(result(), containsString("<order>"));
+		assertThat(result(), containsString("<price>"));
+		assertThat(result(), containsString("15.0"));
+		assertThat(result(), containsString("</price>"));
+		assertThat(result(), containsString("</order>"));
+	}
 
 	static class WithAlias {
 		@SuppressWarnings("unused")

@@ -70,6 +70,12 @@ public class Serializee {
 			excludes.putAll(name, getParentTypesFor(name));
 		}
 	}
+	
+	public void excludeAll() {
+		for(Field field : new Mirror().on(getRootClass()).reflectAll().fields()) {
+			excludes.putAll(field.getName(), getParentTypes(field.getName(), getRootClass()));
+		}
+	}
 
 	public void includeAll(String... names) {
 		for (String name : names) {

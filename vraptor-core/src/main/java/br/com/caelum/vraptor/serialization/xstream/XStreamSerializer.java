@@ -57,6 +57,10 @@ public class XStreamSerializer implements SerializerBuilder {
 		return this;
 	}
 
+	public Serializer excludeAll() {
+		serializee.excludeAll();
+		return this;
+	}
 
 	private void preConfigure(Object obj,String alias) {
 		checkNotNull(obj, "You can't serialize null objects");
@@ -81,6 +85,7 @@ public class XStreamSerializer implements SerializerBuilder {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private Collection<Object> normalizeList(Object obj) {
 		Collection<Object> list;
 		if (hasDefaultConverter()) {

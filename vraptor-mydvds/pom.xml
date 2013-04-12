@@ -18,6 +18,12 @@
 			<artifactId>vraptor</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>br.com.caelum.vraptor</groupId>
+			<artifactId>vraptor-plugin-hibernate4</artifactId>
+			<version>1.0.2</version>
+		</dependency>
 
 		<dependency>
 			<groupId>hsqldb</groupId>
@@ -32,6 +38,12 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>4.2.0.Final</version>
+		</dependency>
+		
+		<dependency>
 		    <groupId>com.google.guava</groupId>
 		    <artifactId>guava</artifactId>
 			<version>11.0.2</version>
@@ -43,22 +55,6 @@
 			<version>1.2.17</version>
 		</dependency>
             
-			<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-core</artifactId>
-			<version>3.6.6.Final</version>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate.javax.persistence</groupId>
-			<artifactId>hibernate-jpa-2.0-api</artifactId>
-			<version>1.0.0.Final</version>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-validator</artifactId>
-			<version>4.2.0.Final</version>
-		</dependency>
-		
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -90,64 +86,30 @@
 			<artifactId>hamcrest-library</artifactId>
 			<version>1.2</version>
 		</dependency>
-		<!--dependency>
-			<groupId>org.jbehave.web</groupId>
-			<artifactId>jbehave-web-selenium</artifactId>
-			<version>3.0</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.jbehave.web</groupId>
-			<artifactId>jbehave-web-runner</artifactId>
-			<version>3.0</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.jbehave.web</groupId>
-			<artifactId>jbehave-web-io</artifactId>
-			<version>3.0</version>
-			<scope>test</scope>
-		</dependency-->
 	</dependencies>
 	
 	<build>
-		<!--testSourceDirectory>src/test/behave</testSourceDirectory-->
 		<plugins>
-			<!--plugin>
-				<groupId>org.jbehave</groupId>
-				<artifactId>jbehave-maven-plugin</artifactId>
-				<version>3.0.1</version>
-				<configuration>
-					<scope>test</scope>
-					<includes>
-						<include>**/*Stories.java</include>
-					</includes>
-					<ignoreFailureInStories>true</ignoreFailureInStories>
-					<ignoreFailureInView>false</ignoreFailureInView>
-					<generateViewAfterStories>true</generateViewAfterStories>
-				</configuration>
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>2.3</version>
 				<executions>
 					<execution>
-						<id>run-stories-as-embeddables</id>
-						<phase>test</phase>
+						<phase>package</phase>
+						<configuration>
+							<attach>false</attach>
+							<appendAssemblyId>false</appendAssemblyId>
+							<finalName>vraptor-mydvds</finalName>
+							<descriptors>
+								<descriptor>assembly.xml</descriptor>
+							</descriptors>
+						</configuration>
 						<goals>
-							<goal>run-stories-as-embeddables</goal>
+							<goal>assembly</goal>
 						</goals>
 					</execution>
 				</executions>
-				<dependencies>
-					<dependency>
-						<groupId>log4j</groupId>
-						<artifactId>log4j</artifactId>
-						<version>1.2.16</version>
-					</dependency>
-					<dependency>
-						<groupId>org.jbehave.web</groupId>
-						<artifactId>jbehave-web-selenium</artifactId>
-						<version>3.0</version>
-					</dependency>
-				</dependencies>
-			</plugin-->
+			</plugin>
 		</plugins>
 	</build>
 </project>

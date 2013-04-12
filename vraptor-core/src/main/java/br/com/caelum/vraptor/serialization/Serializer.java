@@ -24,6 +24,7 @@ package br.com.caelum.vraptor.serialization;
  */
 public interface Serializer {
 	Serializer exclude(String... names);
+	Serializer excludeAll();
 	Serializer include(String... names);
 
 	/**

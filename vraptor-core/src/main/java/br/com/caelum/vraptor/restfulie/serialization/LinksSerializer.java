@@ -38,6 +38,10 @@ public class LinksSerializer implements SerializerBuilder {
 	public Serializer exclude(String... arg0) {
 		return serializer.exclude(arg0);
 	}
+	
+	public Serializer excludeAll() {
+		return serializer.excludeAll();
+	}
 
 	public <T> Serializer from(T object) {
 		return serializer.from(object);

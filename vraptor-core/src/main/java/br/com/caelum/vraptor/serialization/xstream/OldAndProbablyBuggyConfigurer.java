@@ -32,11 +32,13 @@ public class OldAndProbablyBuggyConfigurer {
 				excludeNonPrimitiveFields(excludesMap, eType);
 			}
 		}
-		for (Entry<String, Class<?>> exclude : serializee.getExcludes().entries()) {
-			parseExclude(exclude);
-		}
 		for (Entry<String, Class<?>> include : serializee.getIncludes().entries()) {
 			parseInclude(excludesMap, include);
+		}
+		for (Entry<String, Class<?>> exclude : serializee.getExcludes().entries()) {
+			if(!serializee.getIncludes().containsKey(exclude.getKey()))	{
+				parseExclude(exclude);
+			}
 		}
 		
 		for (Entry<Class<?>, String> exclude : excludesMap.entries()) {

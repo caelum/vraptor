@@ -34,11 +34,11 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.ComponentFactory;
 
 /**
- * Bring up Method Validation factory. This class builds the {@link Validatorfac} factory once when
+ * Bring up Method Validation factory. This class builds the {@link ValidatorFactory} factory once when
  * application starts.
  * 
  * @author Otávio Scherer Garcia
- * @since 3.5
+ * @since 3.5.1-SNAPSHOT
  */
 @ApplicationScoped
 public class MethodValidatorFactoryCreator

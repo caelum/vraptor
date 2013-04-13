@@ -3,7 +3,7 @@ package br.com.caelum.vraptor.serialization.gson.adapters;
 import java.lang.reflect.Type;
 import java.util.Calendar;
 
-import org.springframework.stereotype.Component;
+import br.com.caelum.vraptor.ioc.Component;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;

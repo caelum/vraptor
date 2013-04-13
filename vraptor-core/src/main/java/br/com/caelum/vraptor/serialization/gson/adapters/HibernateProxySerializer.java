@@ -3,7 +3,8 @@ package br.com.caelum.vraptor.serialization.gson.adapters;
 import java.lang.reflect.Type;
 
 import org.hibernate.proxy.HibernateProxy;
-import org.springframework.stereotype.Component;
+
+import br.com.caelum.vraptor.ioc.Component;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;

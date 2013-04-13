@@ -37,6 +37,32 @@ categories: [pt, docs]
   <li>Melhorias na validação do upload (por marceloemanoel).</li>
   <li>Melhorias na documentação (por bbviana, awvalenti e igordeoliveirasa).</li>
 </ul>
+<h4>Release Notes</h4>
+<ul>
+  <li>Substitua as chamadas a CglibProxifier para JavassistProxifier</li>
+  <li>Substitua as chamadas a HibernateMockValidator por MockValidator</li>
+  <li>Se você usa o pacote br.com.caelum.vraptor.util.hibernate, adicione as seguintes linhas ao pom.xml (se você usa maven)
+  {% highlight xml %}
+    <dependency>
+        <groupId>br.com.caelum.vraptor</groupId>
+        <artifactId>vraptor-hibernate</artifactId>
+        <version>1.0.0</version>
+        <scope>compile</scope>
+    </dependency>
+  {% endhighlight %}
+  ou adicione o jar no classpath: http://repo1.maven.org/maven2/br/com/caelum/vraptor/vraptor-hibernate/1.0.0/vraptor-hibernate-1.0.0.jar</li>
+  <li>Se você usa o pacote br.com.caelum.vraptor.util.jpa, adicione as seguintes linhas ao pom.xml (se você usa maven)
+  {% highlight xml %}
+    <dependency>
+        <groupId>br.com.caelum.vraptor</groupId>
+        <artifactId>vraptor-jpa</artifactId>
+        <version>1.0.0</version>
+        <scope>compile</scope>
+    </dependency>
+  {% endhighlight %}
+  ou adicione o jar no classpath: http://repo1.maven.org/maven2/br/com/caelum/vraptor/vraptor-jpa/1.0.0/vraptor-jpa-1.0.0.jar</li>
+  
+</ul>
 
 <h3>3.4.1</h3>
 <ul>

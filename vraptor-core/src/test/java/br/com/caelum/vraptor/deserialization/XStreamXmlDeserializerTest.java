@@ -12,6 +12,8 @@ import java.io.InputStream;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.resource.DefaultResourceClass;
 import br.com.caelum.vraptor.resource.DefaultResourceMethod;
@@ -26,6 +28,7 @@ public class XStreamXmlDeserializerTest {
 	private ResourceMethod jump;
 	private DefaultResourceMethod woof;
 	private DefaultResourceMethod dropDead;
+	private DefaultResourceMethod annotated;
 
 	@Before
 	public void setUp() throws Exception {
@@ -38,8 +41,19 @@ public class XStreamXmlDeserializerTest {
 		bark = new DefaultResourceMethod(resourceClass, DogController.class.getDeclaredMethod("bark", Dog.class));
 		jump = new DefaultResourceMethod(resourceClass, DogController.class.getDeclaredMethod("jump", Dog.class, Integer.class));
 		dropDead = new DefaultResourceMethod(resourceClass, DogController.class.getDeclaredMethod("dropDead", Integer.class, Dog.class));
+		annotated = new DefaultResourceMethod(resourceClass, DogController.class.getDeclaredMethod("annotated", DogWithAnnotations.class));
 	}
 
+	@XStreamAlias("dogAnnotated")
+	static class DogWithAnnotations {
+		
+		@XStreamAlias("nameAnnotated")
+		private String name;
+		
+		@XStreamAlias("ageAnnotated")
+		private Integer age;
+	}
+	
 	static class Dog {
 		private String name;
 		private Integer age;
@@ -55,6 +69,8 @@ public class XStreamXmlDeserializerTest {
 		public void jump(Dog dog, Integer times) {
 		}
 		public void dropDead(Integer times, Dog dog) {
+		}
+		public void annotated(DogWithAnnotations dog){
 		}
 
 	}
@@ -120,6 +136,23 @@ public class XStreamXmlDeserializerTest {
 		Dog dog = (Dog) deserialized[0];
 		assertThat(dog.name, is("Brutus"));
 		assertThat(dog.age, is(7));
+	}
+	
+	@Test
+	public void shouldBeAbleToDeserializeADogWhenAliasConfiguredByAnnotations() {
+	
+		InputStream stream = new ByteArrayInputStream("<dogAnnotated><nameAnnotated>Lubi</nameAnnotated><ageAnnotated>8</ageAnnotated></dogAnnotated>".getBytes());
+		
+		when(provider.parameterNamesFor(annotated.getMethod())).thenReturn(new String[] {"dog"});
+		
+		Object[] deserialized = deserializer.deserialize(stream, annotated);
+		
+		assertThat(deserialized.length, is(1));
+		assertThat(deserialized[0], is(instanceOf(DogWithAnnotations.class)));
+		
+		DogWithAnnotations dog = (DogWithAnnotations) deserialized[0];
+		assertThat(dog.name, is("Lubi"));
+		assertThat(dog.age, is(8));
 	}
 
 }

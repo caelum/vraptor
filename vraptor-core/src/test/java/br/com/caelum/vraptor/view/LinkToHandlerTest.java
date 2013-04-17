@@ -38,7 +38,7 @@ public class LinkToHandlerTest {
     }
     @Test
     public void shouldReturnWantedUrlWithoutArgs() {
-        when(router.urlFor(TestController.class, TestController.class.getDeclaredMethods()[0], new Object[0])).thenReturn("/expectedURL");
+        when(router.urlFor(TestController.class, TestController.class.getDeclaredMethods()[0], new Object[2])).thenReturn("/expectedURL");
 
         //${linkTo[TestController].method}
         String uri = handler.get(TestController.class).get("method").toString();

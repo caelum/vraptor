@@ -36,6 +36,7 @@ public class LinkToHandlerTest {
         //${linkTo[TestController].nonExists}
         handler.get(TestController.class).get("nonExists").toString();
     }
+    
     @Test
     public void shouldReturnWantedUrlWithoutArgs() {
         when(router.urlFor(TestController.class, TestController.class.getDeclaredMethods()[0], new Object[2])).thenReturn("/expectedURL");
@@ -56,11 +57,29 @@ public class LinkToHandlerTest {
     }
     
     @Test
+    public void shouldReturnWantedUrlWithPartialParamArgs() {
+    	String a = "test";
+    	when(router.urlFor(TestController.class, TestController.class.getDeclaredMethods()[2], new Object[]{a, null})).thenReturn("/expectedUrl");
+    	//${linkTo[TestController].anotherMethod['test']}
+    	String uri = handler.get(TestController.class).get("anotherMethod").get(a).toString();
+    	assertThat(uri, is("/path/expectedUrl"));
+    }
+    
+    @Test
     public void shouldReturnWantedUrlForOverrideMethodWithParamArgs() throws NoSuchMethodException, SecurityException {
     	String a = "test";
     	when(router.urlFor(SubGenericController.class, SubGenericController.class.getDeclaredMethod("method", new Class[]{String.class}), new Object[]{a})).thenReturn("/expectedURL");
     	//${linkTo[TestSubGenericController].method['test']}]
     	String uri = handler.get(SubGenericController.class).get("method").get(a).toString();
+    	assertThat(uri, is("/path/expectedURL"));
+    }
+    
+    @Test
+    public void shouldReturnWantedUrlForOverrideMethodWithParialParamArgs() throws SecurityException, NoSuchMethodException {
+    	String a = "test";
+    	when(router.urlFor(SubGenericController.class, SubGenericController.class.getDeclaredMethod("anotherMethod", new Class[]{String.class, String.class}), new Object[]{a, null})).thenReturn("/expectedURL");
+    	//${linkTo[TestSubGenericController].anotherMethod['test']}]
+    	String uri = handler.get(SubGenericController.class).get("anotherMethod").get(a).toString();
     	assertThat(uri, is("/path/expectedURL"));
     }
     
@@ -73,11 +92,23 @@ public class LinkToHandlerTest {
     	assertThat(uri, is("/path/expectedUrl"));
     }
     
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldThrowExceptionWhenPassingMoreArgsThanMethodSupports() {
+    	String a = "test";
+        int b = 3;
+        String c = "anotherTest";
+        //${linkTo[TestController].anotherMethod['test'][3]['anotherTest']}
+        handler.get(TestController.class).get("anotherMethod").get(a).get(b).get(c).toString();
+    }
+    
     static class TestController {
         void method(String a, int b) {
 
         }
         void method(String a) {
+        	
+        }
+        void anotherMethod(String a, int b) {
         	
         }
     }

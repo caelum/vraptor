@@ -135,7 +135,11 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 		private Object[] getArgs(Method method) {
 			int methodParamsQuantity = method.getParameterTypes().length;
 			
-			if (args.size() >= methodParamsQuantity) return args.toArray();
+			if (args.size() == methodParamsQuantity) 
+				return args.toArray();
+			
+			if (args.size() > methodParamsQuantity) 
+				throw new IllegalArgumentException(String.format("linkTo param args must have the same or lower length as method param args. linkTo args: %d | method args: %d", args.size(), methodParamsQuantity));
 			
 			Object[] noMissingParamsArgs = new Object[methodParamsQuantity];
 			System.arraycopy(args.toArray(), 0, noMissingParamsArgs, 0, args.size());

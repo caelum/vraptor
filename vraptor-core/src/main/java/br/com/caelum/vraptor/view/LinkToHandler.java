@@ -129,7 +129,22 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 			if(method == null)
 				throw new IllegalArgumentException("There are no methods on " + controller + " named " + methodName);
 			
-			return context.getContextPath() + router.urlFor(controller, method, args.toArray());
+			return context.getContextPath() + router.urlFor(controller, method, getArgs(method));
+		}
+		
+		private Object[] getArgs(Method method) {
+			int methodParamsQuantity = method.getParameterTypes().length;
+			
+			if (args.size() == methodParamsQuantity) 
+				return args.toArray();
+			
+			if (args.size() > methodParamsQuantity) 
+				throw new IllegalArgumentException(String.format("linkTo param args must have the same or lower length as method param args. linkTo args: %d | method args: %d", args.size(), methodParamsQuantity));
+			
+			Object[] noMissingParamsArgs = new Object[methodParamsQuantity];
+			System.arraycopy(args.toArray(), 0, noMissingParamsArgs, 0, args.size());
+			
+			return noMissingParamsArgs;
 		}
 
 		private Method findMethodWithName(Class<?> type, String name) {

@@ -95,7 +95,7 @@ public class LinkToHandlerTest {
     }
 
     @Test
-    public void shouldReturnWantedUrlForMethodsWithSameName() {
+    public void shouldUseClosestMatchedMethodIfThereAreParams() {
     	String a = "test";
     	when(router.urlFor(TestController.class, method1param, a)).thenReturn("/expectedUrl");
     	//${linkTo[TestController].method['test']}

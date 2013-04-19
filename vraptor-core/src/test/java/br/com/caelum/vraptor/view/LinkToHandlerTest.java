@@ -108,7 +108,7 @@ public class LinkToHandlerTest {
     }
 
     @Test
-    public void shouldUseClosestMatchedMethodIfThereAreParams() {
+    public void shouldUseExactlyMatchedMethodIfTheMethodIsOverloaded() {
     	String a = "test";
     	when(router.urlFor(TestController.class, method1param, a)).thenReturn("/expectedUrl");
     	//${linkTo[TestController].method['test']}

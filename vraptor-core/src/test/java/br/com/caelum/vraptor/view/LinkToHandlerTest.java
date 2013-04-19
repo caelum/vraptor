@@ -48,12 +48,25 @@ public class LinkToHandlerTest {
         handler.get(TestController.class).get("nonExists").toString();
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldThrowExceptionWhenMethodIsAmbiguous() {
+        //${linkTo[TestController].method}
+        handler.get(TestController.class).get("method").toString();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldThrowExceptionWhenUsingParametersOfWrongTypes() {
+        //${linkTo[TestController].method[123]}
+        handler.get(TestController.class).get("method").get(123).toString();
+    }
+
+
     @Test
     public void shouldReturnWantedUrlWithoutArgs() {
-        when(router.urlFor(TestController.class, method2params, new Object[2])).thenReturn("/expectedURL");
+        when(router.urlFor(TestController.class, anotherMethod, new Object[2])).thenReturn("/expectedURL");
 
-        //${linkTo[TestController].method}
-        String uri = handler.get(TestController.class).get("method").toString();
+        //${linkTo[TestController].anotherMethod}
+        String uri = handler.get(TestController.class).get("anotherMethod").toString();
         assertThat(uri, is("/path/expectedURL"));
     }
 

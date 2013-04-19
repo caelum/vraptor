@@ -1,12 +1,12 @@
 /***
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource All rights reserved.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -17,6 +17,7 @@ package br.com.caelum.vraptor.view;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -41,7 +42,7 @@ import com.google.common.collect.ForwardingMap;
 public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 
 	private static final Logger logger = LoggerFactory.getLogger(LinkToHandler.class);
-	
+
 	private final ServletContext context;
 	private final Router router;
 
@@ -49,12 +50,12 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 		this.context = context;
 		this.router = router;
 	}
-	
+
 	public void start() {
 		logger.info("Registering linkTo component");
 		context.setAttribute("linkTo", this);
 	}
-	
+
     @Override
     protected Map<Class<?>, Object> delegate() {
         return Collections.emptyMap();
@@ -75,19 +76,18 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 		protected Map<String, Linker> delegate() {
 			return Collections.emptyMap();
 		}
-		
+
 		@Override
 		public Linker get(Object key) {
 			return new Linker(controller, key.toString());
 		}
-		
-		
+
 		@Override
 		public String toString() {
 			throw new IllegalArgumentException("uncomplete linkTo[" + controller.getSimpleName() + "]. You must specify the method.");
 		}
 	}
-	
+
 	class Linker extends ForwardingMap<Object, Linker> {
 
 		private final List<Object> args;
@@ -103,7 +103,7 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 			this.methodName = methodName;
 			this.args = args;
 		}
-		
+
 		@Override
 		public Linker get(Object key) {
 			List<Object> newArgs = new ArrayList<Object>(args);
@@ -115,35 +115,41 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 		protected Map<Object, Linker> delegate() {
 			return Collections.emptyMap();
 		}
-		
+
 		@Override
 		public String toString() {
 			Method method = null;
-			
-			if(getMethodsAmountWithSameName() > 1 && args.size() > 0) {
+
+			if (getMethodsAmountWithSameName() > 1) {
 				method = new Mirror().on(controller).reflect().method(methodName).withArgs(getClasses(args));
+				if (method == null && args.isEmpty()) {
+					throw new IllegalArgumentException("Ambiguous method '" + methodName + "' on " + controller + ". Try to add some parameters to resolve ambiguity, or use different method names.");
+				}
 			} else {
 				method = findMethodWithName(controller, methodName);
 			}
-			
-			if(method == null)
-				throw new IllegalArgumentException("There are no methods on " + controller + " named " + methodName);
-			
+
+			if(method == null) {
+				throw new IllegalArgumentException(
+					String.format("There are no methods on %s named '%s' that receives args of types %s",
+							controller, methodName, Arrays.toString(getClasses(args))));
+			}
+
 			return context.getContextPath() + router.urlFor(controller, method, getArgs(method));
 		}
-		
+
 		private Object[] getArgs(Method method) {
 			int methodParamsQuantity = method.getParameterTypes().length;
-			
-			if (args.size() == methodParamsQuantity) 
+
+			if (args.size() == methodParamsQuantity)
 				return args.toArray();
-			
-			if (args.size() > methodParamsQuantity) 
+
+			if (args.size() > methodParamsQuantity)
 				throw new IllegalArgumentException(String.format("linkTo param args must have the same or lower length as method param args. linkTo args: %d | method args: %d", args.size(), methodParamsQuantity));
-			
+
 			Object[] noMissingParamsArgs = new Object[methodParamsQuantity];
 			System.arraycopy(args.toArray(), 0, noMissingParamsArgs, 0, args.size());
-			
+
 			return noMissingParamsArgs;
 		}
 
@@ -153,14 +159,14 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 					return method;
 				}
 			}
-			
+
 			if (type.getSuperclass().equals(Object.class)) {
 				return null;
 			}
-			
+
 			return findMethodWithName(type.getSuperclass(), name);
 		}
-		
+
 		private int getMethodsAmountWithSameName() {
 			int amount = 0;
 			for (Method method : controller.getDeclaredMethods()) {
@@ -168,10 +174,10 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 					amount++;
 				}
 			}
-			
+
 			return amount;
 		}
-		
+
 		private Class<?>[] getClasses(List<Object> params) {
 			Class<?>[] classes = new Class<?>[params.size()];
 			for(int i = 0; i < params.size(); i ++) {

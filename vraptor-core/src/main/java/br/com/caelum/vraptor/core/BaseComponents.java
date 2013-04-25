@@ -163,7 +163,7 @@ import br.com.caelum.vraptor.validator.DefaultBeanValidator;
 import br.com.caelum.vraptor.validator.DefaultValidator;
 import br.com.caelum.vraptor.validator.MessageConverter;
 import br.com.caelum.vraptor.validator.MessageInterpolatorFactory;
-import br.com.caelum.vraptor.validator.MethodValidatorCreator;
+import br.com.caelum.vraptor.validator.MethodValidatorFactoryCreator;
 import br.com.caelum.vraptor.validator.MethodValidatorInterceptor;
 import br.com.caelum.vraptor.validator.NullBeanValidator;
 import br.com.caelum.vraptor.validator.Outjector;
@@ -356,25 +356,31 @@ public class BaseComponents {
             APPLICATION_COMPONENTS.put(DependencyProvider.class, VRaptorDependencyProvider.class);
         }
     	
-        registerIfClassPresent(APPLICATION_COMPONENTS, "javax.validation.Validation",
-                ValidatorCreator.class, ValidatorFactoryCreator.class, MessageInterpolatorFactory.class);
-        
-        registerIfClassPresent(APPLICATION_COMPONENTS, "org.hibernate.validator.method.MethodValidator",
-                MethodValidatorCreator.class);
+        // try put beanval 1.1 or beanval 1.0 if available
+        if (isClassPresent("javax.validation.executable.ExecutableValidator")) {
+            APPLICATION_COMPONENTS.put(ValidatorCreator.class, ValidatorCreator.class);
+            APPLICATION_COMPONENTS.put(MethodValidatorFactoryCreator.class, MethodValidatorFactoryCreator.class);
+            APPLICATION_COMPONENTS.put(MessageInterpolatorFactory.class, MessageInterpolatorFactory.class);
+        } else if (isClassPresent("javax.validation.Validation")) {
+            APPLICATION_COMPONENTS.put(ValidatorCreator.class, ValidatorCreator.class);
+            APPLICATION_COMPONENTS.put(ValidatorFactoryCreator.class, ValidatorFactoryCreator.class);
+            APPLICATION_COMPONENTS.put(MessageInterpolatorFactory.class, MessageInterpolatorFactory.class);
+        }
         
     	return Collections.unmodifiableMap(APPLICATION_COMPONENTS);
     }
 
     public static Map<Class<?>, Class<?>> getRequestScoped() {
-    	if(isClassPresent("javax.validation.Validation")) {
-    		REQUEST_COMPONENTS.put(BeanValidator.class, DefaultBeanValidator.class);
-    	} else {
+        // try put beanval 1.1 or beanval 1.0 if available
+        if (isClassPresent("javax.validation.executable.ExecutableValidator")) {
+            REQUEST_COMPONENTS.put(BeanValidator.class, DefaultBeanValidator.class);
+            REQUEST_COMPONENTS.put(MethodValidatorInterceptor.class, MethodValidatorInterceptor.class);
+        } else if (isClassPresent("javax.validation.Validation")) {
+            REQUEST_COMPONENTS.put(BeanValidator.class, DefaultBeanValidator.class);
+        } else {
             REQUEST_COMPONENTS.put(BeanValidator.class, NullBeanValidator.class);
-    	}
-
-        registerIfClassPresent(REQUEST_COMPONENTS, "org.hibernate.validator.method.MethodValidator",
-                MethodValidatorInterceptor.class);
-
+        }
+        
         if (isClassPresent("org.apache.commons.fileupload.FileItem")) {
             REQUEST_COMPONENTS.put(MultipartInterceptor.class, CommonsUploadMultipartInterceptor.class);
             REQUEST_COMPONENTS.put(ServletFileUploadCreator.class, DefaultServletFileUploadCreator.class);

@@ -22,5 +22,4 @@ public class CalendarSerializer implements JsonSerializer<Calendar> {
 
 		return new JsonParser().parse(json).getAsJsonObject();
 	}
-
 }

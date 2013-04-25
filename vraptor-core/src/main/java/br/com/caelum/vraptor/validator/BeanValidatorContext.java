@@ -48,4 +48,8 @@ class BeanValidatorContext
     public static BeanValidatorContext of(ConstraintViolation<Object> violation) {
         return new BeanValidatorContext(violation.getConstraintDescriptor(), violation.getInvalidValue());
     }
+    
+    public <T> T unwrap(Class<T> clazz) {
+        return clazz.cast(this);
+    }
 }

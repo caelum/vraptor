@@ -25,6 +25,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import javax.inject.Named;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -94,6 +96,7 @@ public class GuiceComponentRegistry implements ComponentRegistry {
 		}
 		return true;
 	}
+	
 	public void deepRegister(Class componentType) {
 		register(componentType, componentType);
 		deepRegister(componentType, componentType);
@@ -103,13 +106,19 @@ public class GuiceComponentRegistry implements ComponentRegistry {
 	    if (required == null || required.equals(Object.class)) {
 			return;
 		}
-	    if (boundClasses.add(required)) {
-	    	logger.debug("Binding {} to {}", required, component);
-	        binder.bind(required).to(component);
-	    } else {
-	    	logger.debug("Ignoring binding of {} to {}", required, component);
-	    }
-
+	    
+        // try register named component
+        if (component.isAnnotationPresent(Named.class)) {
+            Named named = ((Class<?>) component).getAnnotation(Named.class);
+            logger.debug("Binding {} to {} with @Named({})", new Object[] { required, component, named.value() });
+            binder.bind(required).annotatedWith(named).to(component);
+        } else if (!boundClasses.contains(required)) {
+            logger.debug("Binding {} to {}", required, component);
+            binder.bind(required).to(component);
+        } else {
+            logger.debug("Ignoring binding of {} to {}", required, component);
+        }
+	    
 	    for (Class<?> c : required.getInterfaces()) {
 	        deepRegister(c, component);
 	    }

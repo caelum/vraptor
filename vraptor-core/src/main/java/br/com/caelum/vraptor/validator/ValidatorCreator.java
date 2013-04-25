@@ -49,7 +49,7 @@ public class ValidatorCreator implements ComponentFactory<Validator> {
 
     @PostConstruct
     public void createValidator() {
-    	this.validator = factory.getValidator();
+    	validator = factory.getValidator();
     	logger.debug("Initializing Bean Validator");
     }
 

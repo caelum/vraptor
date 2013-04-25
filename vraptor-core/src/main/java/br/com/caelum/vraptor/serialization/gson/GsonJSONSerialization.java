@@ -16,7 +16,7 @@
 package br.com.caelum.vraptor.serialization.gson;
 
 import java.io.IOException;
-import java.util.Collection;
+import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -38,7 +38,9 @@ import com.google.gson.JsonSerializer;
  * @author Renan Reis
  * @author Guilherme Mangabeira
  */
+
 @Component
+@SuppressWarnings("rawtypes")
 public class GsonJSONSerialization implements JSONSerialization {
 
 	protected final HttpServletResponse response;
@@ -50,8 +52,8 @@ public class GsonJSONSerialization implements JSONSerialization {
 	protected final VraptorGsonBuilder builder;
 
 	public GsonJSONSerialization(HttpServletResponse response, TypeNameExtractor extractor,
-			ProxyInitializer initializer, Collection<JsonSerializer<?>> serializers,
-			Collection<ExclusionStrategy> exclusions) {
+			ProxyInitializer initializer, List<JsonSerializer> serializers,
+			List<ExclusionStrategy> exclusions) {
 		this.response = response;
 		this.extractor = extractor;
 		this.initializer = initializer;

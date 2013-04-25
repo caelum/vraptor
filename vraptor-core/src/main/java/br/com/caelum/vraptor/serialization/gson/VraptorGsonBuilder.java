@@ -3,6 +3,7 @@ package br.com.caelum.vraptor.serialization.gson;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Collection;
+import java.util.List;
 
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.Gson;
@@ -15,19 +16,20 @@ import com.google.gson.JsonSerializer;
  * @author Guilherme Mangabeira
  */
 
+@SuppressWarnings("rawtypes")
 public class VraptorGsonBuilder {
 
-	protected GsonBuilder					builder	= new GsonBuilder();
+	protected GsonBuilder builder = new GsonBuilder();
 
-	private boolean							withoutRoot;
+	private boolean withoutRoot;
 
-	private String							alias;
+	private String alias;
 
-	private Collection<JsonSerializer<?>>	serializers;
+	private Collection<JsonSerializer> serializers;
 
-	private Collection<ExclusionStrategy>	exclusions;
+	private Collection<ExclusionStrategy> exclusions;
 
-	public VraptorGsonBuilder(Collection<JsonSerializer<?>> serializers, Collection<ExclusionStrategy> exclusions) {
+	public VraptorGsonBuilder(List<JsonSerializer> serializers, List<ExclusionStrategy> exclusions) {
 		this.serializers = serializers;
 		this.exclusions = exclusions;
 	}

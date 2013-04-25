@@ -6,6 +6,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Collection;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,15 +31,16 @@ import com.google.gson.JsonParser;
  */
 
 @Deserializes({ "application/json", "json" })
+@SuppressWarnings("rawtypes")
 public class GsonDeserialization implements Deserializer {
 
 	private static final Logger logger = LoggerFactory.getLogger(GsonDeserialization.class);
 
 	private final ParameterNameProvider paramNameProvider;
 
-	private final Collection<JsonDeserializer<?>> adapters;
+	private final Collection<JsonDeserializer> adapters;
 
-	public GsonDeserialization(ParameterNameProvider paramNameProvider, Collection<JsonDeserializer<?>> adapters) {
+	public GsonDeserialization(ParameterNameProvider paramNameProvider, List<JsonDeserializer> adapters) {
 		this.paramNameProvider = paramNameProvider;
 		this.adapters = adapters;
 	}

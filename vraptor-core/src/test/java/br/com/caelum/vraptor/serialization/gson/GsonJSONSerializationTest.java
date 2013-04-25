@@ -51,6 +51,7 @@ public class GsonJSONSerializationTest {
 	private HibernateProxyInitializer initializer;
 
 	@Before
+	@SuppressWarnings("rawtypes")
 	public void setup() throws Exception {
 		this.stream = new ByteArrayOutputStream();
 
@@ -60,7 +61,7 @@ public class GsonJSONSerializationTest {
 		initializer = new HibernateProxyInitializer();
 
 		this.serialization = new GsonJSONSerialization(response, extractor, initializer,
-				Collections.<JsonSerializer<?>> emptyList(), Collections.<ExclusionStrategy> emptyList());
+				Collections.<JsonSerializer> emptyList(), Collections.<ExclusionStrategy> emptyList());
 	}
 
 	public static class Address {
@@ -448,10 +449,11 @@ public class GsonJSONSerializationTest {
 	}
 
 	@Test
+	@SuppressWarnings("rawtypes")
 	public void shouldUseCollectionConverterWhenItExists() {
 		String expectedResult = "[\"testing\"]";
 
-		List<JsonSerializer<?>> adapters = new ArrayList<JsonSerializer<?>>();
+		List<JsonSerializer> adapters = new ArrayList<JsonSerializer>();
 		adapters.add(new CollectionSerializer());
 
 		GsonJSONSerialization serialization = new GsonJSONSerialization(response, extractor, initializer,
@@ -462,8 +464,9 @@ public class GsonJSONSerializationTest {
 	}
 
 	@Test
+	@SuppressWarnings("rawtypes")
 	public void shouldSerializeCalendarLikeXstream() {
-		List<JsonSerializer<?>> adapters = new ArrayList<JsonSerializer<?>>();
+		List<JsonSerializer> adapters = new ArrayList<JsonSerializer>();
 		adapters.add(new CalendarSerializer());
 
 		GsonJSONSerialization serialization = new GsonJSONSerialization(response, extractor, initializer,
@@ -483,19 +486,20 @@ public class GsonJSONSerializationTest {
 	}
 
 	@Test
+	@SuppressWarnings("rawtypes")
 	public void shouldExcludeAttributeUsingExclusionStrategy() {
 		List<ExclusionStrategy> exclusions = new ArrayList<ExclusionStrategy>();
 		exclusions.add(new ClientAddressExclusion());
 
 		GsonJSONSerialization serialization = new GsonJSONSerialization(response, extractor, initializer,
-				Collections.<JsonSerializer<?>> emptyList(), exclusions);
+				Collections.<JsonSerializer> emptyList(), exclusions);
 
 		serialization.withoutRoot().from(new Client("renan", new Address("rua joao sbarai"))).include("address")
 				.serialize();
 
 		assertThat(result(), not(containsString("address")));
 	}
-	
+
 	@Test
 	public void shouldExcludeAllPrimitiveFields() {
 		String expectedResult = "{\"order\":{}}";
@@ -503,7 +507,7 @@ public class GsonJSONSerializationTest {
 		serialization.from(order).excludeAll().serialize();
 		assertThat(result(), is(equalTo(expectedResult)));
 	}
-	
+
 	@Test
 	public void shouldExcludeAllPrimitiveParentFields() {
 		String expectedResult = "{\"advancedOrder\":{}}";
@@ -511,7 +515,7 @@ public class GsonJSONSerializationTest {
 		serialization.from(order).excludeAll().serialize();
 		assertThat(result(), is(equalTo(expectedResult)));
 	}
-	
+
 	@Test
 	public void shouldExcludeAllThanIncludeAndSerialize() {
 		String expectedResult = "{\"order\":{\"price\":15.0}}";

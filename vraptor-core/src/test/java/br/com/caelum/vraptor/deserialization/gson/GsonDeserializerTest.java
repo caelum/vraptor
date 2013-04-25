@@ -11,7 +11,6 @@ import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
@@ -48,7 +47,7 @@ public class GsonDeserializerTest {
 
 		when(localization.getLocale()).thenReturn(new Locale("pt", "BR"));
 
-		Collection<JsonDeserializer<?>> deserializers = new ArrayList<JsonDeserializer<?>>();
+		List<JsonDeserializer> deserializers = new ArrayList<JsonDeserializer>();
 		CalendarDeserializer calendarDeserializer = new CalendarDeserializer(localization);
 		deserializers.add(calendarDeserializer);
 		deserializer = new GsonDeserialization(provider, deserializers);
@@ -121,7 +120,7 @@ public class GsonDeserializerTest {
 
 	@Test
 	public void shouldBeAbleToDeserializeADogWithDeserializerAdapter() throws Exception {
-		List<JsonDeserializer<?>> deserializers = new ArrayList<JsonDeserializer<?>>();
+		List<JsonDeserializer> deserializers = new ArrayList<JsonDeserializer>();
 		deserializers.add(new DogDeserializer());
 
 		deserializer = new GsonDeserialization(provider, deserializers);

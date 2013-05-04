@@ -61,7 +61,7 @@ public class GsonJSONSerializationTest {
 		initializer = new HibernateProxyInitializer();
 
 		this.serialization = new GsonJSONSerialization(response, extractor, initializer,
-				Collections.<JsonSerializer> emptyList());
+				new DefaultJsonSerializers(Collections.<JsonSerializer> emptyList()));
 	}
 
 	public static class Address {

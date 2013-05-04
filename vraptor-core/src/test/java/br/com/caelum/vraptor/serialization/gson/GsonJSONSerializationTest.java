@@ -61,7 +61,7 @@ public class GsonJSONSerializationTest {
 		initializer = new HibernateProxyInitializer();
 
 		this.serialization = new GsonJSONSerialization(response, extractor, initializer,
-				Collections.<JsonSerializer> emptyList());
+				new DefaultJsonSerializers(Collections.<JsonSerializer> emptyList()));
 	}
 
 	public static class Address {
@@ -456,7 +456,7 @@ public class GsonJSONSerializationTest {
 		List<JsonSerializer> adapters = new ArrayList<JsonSerializer>();
 		adapters.add(new CollectionSerializer());
 
-		GsonJSONSerialization serialization = new GsonJSONSerialization(response, extractor, initializer, adapters);
+		GsonJSONSerialization serialization = new GsonJSONSerialization(response, extractor, initializer, new DefaultJsonSerializers(adapters));
 
 		serialization.withoutRoot().from(new MyCollection()).serialize();
 		assertThat(result(), is(equalTo(expectedResult)));
@@ -468,7 +468,7 @@ public class GsonJSONSerializationTest {
 		List<JsonSerializer> adapters = new ArrayList<JsonSerializer>();
 		adapters.add(new CalendarSerializer());
 
-		GsonJSONSerialization serialization = new GsonJSONSerialization(response, extractor, initializer, adapters);
+		GsonJSONSerialization serialization = new GsonJSONSerialization(response, extractor, initializer, new DefaultJsonSerializers(adapters));
 
 		Client c = new Client("renan");
 		c.included = new GregorianCalendar(2012, 8, 3);

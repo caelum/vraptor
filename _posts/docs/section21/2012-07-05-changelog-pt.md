@@ -5,6 +5,23 @@ section: 21
 categories: [pt, docs]
 ---
 
+<h3>3.5.1</h3>
+<ul>
+  <li>Bugfix: Remoção da dependência do Hibernate quando usando GSon como implementação de serialização/deserialização</li>
+  <li>Bugfix: Correção do linkTo com métodos que recebem argumentos</li>
+  <li>Possibilidade de registrar (e receber) mais de um componente do mesmo tipo no Guice usando o @Named</li>
+  <li>Anotações do XStream são processadas automaticamente na serialização e deserialização</li>
+  <li>Suporte ao BeanValidations 1.1</li>
+  <li>Melhorias nas validações do BeanValidations em parâmetros dos métodos do controller</li>
+  <li>Bugfix: Corrigindo registro dos pacotes de serialização e deserialização usando GSon</li>
+  <li>Serializações agora suportam .excludeAll(), assim você consegue escolher exatamente quais campos quer serializar:
+  		{% highlight java %}
+    result.use(json()).from(usuario).excludeAll().include("nome", "email").serialize();
+		{% endhighlight %}
+  </li>
+  <li>Melhorias no MyDVDs</li>
+</ul>
+
 <h3>3.5.0</h3>
 <ul>
   <li>Bean Validation: Se você usa o Hibernate Validator 3, o suporte foi removido. Atualize para o

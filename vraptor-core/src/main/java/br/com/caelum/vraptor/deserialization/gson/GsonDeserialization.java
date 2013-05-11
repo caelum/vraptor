@@ -7,6 +7,8 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Collection;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,10 +39,13 @@ public class GsonDeserialization implements Deserializer {
 	private final ParameterNameProvider paramNameProvider;
 
 	private final Collection<JsonDeserializer<?>> adapters;
+	
+	private final HttpServletRequest request;
 
-	public GsonDeserialization(ParameterNameProvider paramNameProvider, Collection<JsonDeserializer<?>> adapters) {
+	public GsonDeserialization(ParameterNameProvider paramNameProvider, Collection<JsonDeserializer<?>> adapters, HttpServletRequest request) {
 		this.paramNameProvider = paramNameProvider;
 		this.adapters = adapters;
+		this.request = request;
 	}
 
 	public Object[] deserialize(InputStream inputStream, ResourceMethod method) {
@@ -96,14 +101,26 @@ public class GsonDeserialization implements Deserializer {
 	}
 
 	private String getContentOfStream(InputStream input) throws IOException {
+
+		String charset = getRequestCharset();
+		logger.debug("Using charset " + charset);
+
 		StringBuilder content = new StringBuilder();
 
 		byte[] buffer = new byte[1024];
 		int readed = 0;
 		while ((readed = input.read(buffer)) != -1) {
-			content.append(new String(buffer, 0, readed));
+			content.append(new String(buffer, 0, readed, charset));
 		}
 
 		return content.toString();
+	}
+	
+	private String getRequestCharset() { 
+		String charset = request.getHeader("Accept-Charset");
+		if(charset != null) {
+			charset = charset.split(",")[0];
+		}
+		return charset;
 	}
 }

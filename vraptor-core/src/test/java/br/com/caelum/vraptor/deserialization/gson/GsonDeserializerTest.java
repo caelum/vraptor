@@ -16,7 +16,6 @@ import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -184,7 +183,7 @@ public class GsonDeserializerTest {
 	
 	@Test
 	public void shouldHonorRequestHeaderAcceptCharset() throws Exception {
-		InputStream stream = new ByteArrayInputStream("{'pet':{'name':'̤'}}".getBytes("ISO-8859-1"));
+		InputStream stream = new ByteArrayInputStream("{'pet':{'name':'Ã§'}}".getBytes("ISO-8859-1"));
 		when(provider.parameterNamesFor(bark.getMethod())).thenReturn(new String[] { "pet" });
 		
 		when(request.getHeader("Accept-Charset")).thenReturn("UTF-8,*;q=0.5");
@@ -195,6 +194,6 @@ public class GsonDeserializerTest {
 		
 		Dog dog = (Dog) deserialized[0];
 		
-		assertThat(dog.name, is("�"));
+		assertThat(dog.name, is("ç"));
 	}
 }

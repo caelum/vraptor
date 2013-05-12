@@ -18,6 +18,7 @@ import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.view.ResultException;
 
+import com.google.common.base.Objects;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
@@ -103,7 +104,7 @@ public class GsonDeserialization implements Deserializer {
 	private String getContentOfStream(InputStream input) throws IOException {
 
 		String charset = getRequestCharset();
-		logger.debug("Using charset " + charset);
+		logger.debug("Using charset {}", charset);
 
 		StringBuilder content = new StringBuilder();
 
@@ -117,10 +118,7 @@ public class GsonDeserialization implements Deserializer {
 	}
 	
 	private String getRequestCharset() { 
-		String charset = request.getHeader("Accept-Charset");
-		if(charset != null) {
-			charset = charset.split(",")[0];
-		}
-		return charset;
+		String charset = Objects.firstNonNull(request.getHeader("Accept-Charset"), "UTF-8");
+		return charset.split(",")[0];
 	}
 }

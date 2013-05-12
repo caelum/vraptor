@@ -196,4 +196,20 @@ public class GsonDeserializerTest {
 		
 		assertThat(dog.name, is("ç"));
 	}
+	
+	@Test
+	public void whenNoCharsetHeaderIsFoundThanAssumeItIsUTF8() throws Exception {
+		InputStream stream = new ByteArrayInputStream("{'pet':{'name':'Ã§'}}".getBytes("ISO-8859-1"));
+		when(provider.parameterNamesFor(bark.getMethod())).thenReturn(new String[] { "pet" });
+		
+		when(request.getHeader("Accept-Charset")).thenReturn(null);
+		Object[] deserialized = deserializer.deserialize(stream, bark);
+		
+		assertThat(deserialized.length, is(1));
+		assertThat(deserialized[0], is(instanceOf(Dog.class)));
+		
+		Dog dog = (Dog) deserialized[0];
+		
+		assertThat(dog.name, is("ç"));
+	}
 }

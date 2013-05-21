@@ -29,6 +29,8 @@ import br.com.caelum.vraptor.view.Results;
  * @since 3.1.2
  */
 public abstract class AbstractResult implements Result {
+	
+	protected boolean redirected;
 
 	public void forwardTo(String uri) {
 		use(page()).forwardTo(uri);
@@ -36,6 +38,7 @@ public abstract class AbstractResult implements Result {
 
 	public void redirectTo(String uri) {
 		use(page()).redirectTo(uri);
+		this.redirected = true;
 	}
 
 	public <T> T forwardTo(Class<T> controller) {
@@ -43,6 +46,7 @@ public abstract class AbstractResult implements Result {
 	}
 
 	public <T> T redirectTo(Class<T> controller) {
+		this.redirected = true;
 		return use(logic()).redirectTo(controller);
 	}
 
@@ -52,6 +56,7 @@ public abstract class AbstractResult implements Result {
 
 	@SuppressWarnings("unchecked")
 	public <T> T redirectTo(T controller) {
+		this.redirected = true;
 		return (T) redirectTo(controller.getClass());
 	}
 
@@ -74,16 +79,22 @@ public abstract class AbstractResult implements Result {
 	}
 
 	public void permanentlyRedirectTo(String uri) {
+		this.redirected = true;
 		use(status()).movedPermanentlyTo(uri);
 	}
 
 	public <T> T permanentlyRedirectTo(Class<T> controller) {
+		this.redirected = true;
 		return use(status()).movedPermanentlyTo(controller);
 	}
 
 	@SuppressWarnings("unchecked")
 	public <T> T permanentlyRedirectTo(T controller) {
+		this.redirected = true;
 		return (T) use(status()).movedPermanentlyTo(controller.getClass());
 	}
 
+	public boolean redirected() {
+		return this.redirected;
+	}
 }

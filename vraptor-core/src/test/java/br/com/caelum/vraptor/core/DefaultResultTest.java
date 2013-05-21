@@ -231,4 +231,45 @@ public class DefaultResultTest {
     	result.include(null);
     	verify(request, never()).setAttribute(anyString(), anyObject());
     }
+   
+    @Test
+    public void shouldReturnTrueWhenCallRedirectedAfterRedirectingToStringURI() throws Exception {
+    	shouldDelegateToPageResultOnRedirectToURI();
+    	assertThat(result.redirected(), is(true));
+    }
+    
+    @Test
+    public void shouldReturnTrueWhenCallRedirectedAfterRedirectionToController() throws Exception {
+    	shouldDelegateToLogicResultOnRedirectToLogic();
+    	assertThat(result.redirected(), is(true));
+    }  
+    
+    @Test
+    public void shouldReturnTrueWhenCallRedirectedAfterRedirectionToControllerInstance() throws Exception {
+    	shouldDelegateToLogicResultOnRedirectToLogicWithInstance();
+    	assertThat(result.redirected(), is(true));
+    }
+    
+    @Test
+    public void shouldReturnTrueWhenCallRedirectedAfterPermanentlyRedirectingToStringURI() throws Exception {
+    	shouldDelegateToStatusOnPermanentlyRedirectToUri();
+    	assertThat(result.redirected(), is(true));
+    }
+    
+    @Test
+    public void shouldReturnTrueWhenCallRedirectedAfterPermanentlyRedirectionToController() throws Exception {
+    	shouldDelegateToStatusOnPermanentlyRedirectToControllerClass();
+    	assertThat(result.redirected(), is(true));
+    }  
+    
+    @Test
+    public void shouldReturnTrueWhenCallRedirectedAfterPermanentlyRedirectionToControllerInstance() throws Exception {
+    	shouldDelegateToStatusOnPermanentlyRedirectToControllerInstance();
+    	assertThat(result.redirected(), is(true));
+    }
+    
+    @Test
+    public void shouldReturnFalseWhenCallRedirectedWithoutMakingAnyRedirection() throws Exception {
+    	assertThat(result.redirected(), is(false));
+    }
 }

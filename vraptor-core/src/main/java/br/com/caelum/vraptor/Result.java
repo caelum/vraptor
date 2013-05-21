@@ -68,6 +68,10 @@ public interface Result {
 	 */
     boolean used();
 
+	/**
+	 * Whether this result was redirected.
+	 */
+    boolean redirected();
     /**
      * Return all included attributes via Result.include();
      * @return

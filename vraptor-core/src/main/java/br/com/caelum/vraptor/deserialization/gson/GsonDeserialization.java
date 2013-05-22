@@ -9,6 +9,7 @@ import java.util.Collection;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -73,7 +74,11 @@ public class GsonDeserialization implements Deserializer {
 			for (int i = 0; i < types.length; i++) {
 				String name = parameterNames[i];
 				JsonElement node = root.get(name);
-				if (node != null) {
+				if (isWithoutRoot(types, node)) {
+					params[i] = gson.fromJson(root, types[i]);
+					return params;
+				}
+				else {
 					params[i] = gson.fromJson(node, types[i]);
 				}
 			}
@@ -82,6 +87,10 @@ public class GsonDeserialization implements Deserializer {
 		}
 
 		return params;
+	}
+
+	private boolean isWithoutRoot(Class<?>[] types, JsonElement node) {
+		return node == null && types.length == 1;
 	}
 
 	protected Gson getGson() {
@@ -103,19 +112,9 @@ public class GsonDeserialization implements Deserializer {
 	}
 
 	private String getContentOfStream(InputStream input) throws IOException {
-
 		String charset = getRequestCharset();
 		logger.debug("Using charset {}", charset);
-
-		StringBuilder content = new StringBuilder();
-
-		byte[] buffer = new byte[1024];
-		int readed = 0;
-		while ((readed = input.read(buffer)) != -1) {
-			content.append(new String(buffer, 0, readed, charset));
-		}
-
-		return content.toString();
+		return IOUtils.toString(input, charset);
 	}
 
 	private String getRequestCharset() {

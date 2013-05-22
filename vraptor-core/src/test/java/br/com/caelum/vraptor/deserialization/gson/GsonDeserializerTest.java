@@ -110,6 +110,20 @@ public class GsonDeserializerTest {
 		InputStream stream = new ByteArrayInputStream("{'dog':{'name':'Brutus','age':7}}".getBytes());
 
 		when(provider.parameterNamesFor(bark.getMethod())).thenReturn(new String[] { "dog" });
+
+		Object[] deserialized = deserializer.deserialize(stream, bark);
+
+		assertThat(deserialized.length, is(1));
+		assertThat(deserialized[0], is(instanceOf(Dog.class)));
+		Dog dog = (Dog) deserialized[0];
+		assertThat(dog.name, is("Brutus"));
+		assertThat(dog.age, is(7));
+	}
+	
+	@Test
+	public void shouldBeAbleToDeserializeADogWithoutRoot() {
+		InputStream stream = new ByteArrayInputStream("{'name':'Brutus','age':7}".getBytes());
+
 		when(provider.parameterNamesFor(bark.getMethod())).thenReturn(new String[] { "dog" });
 
 		Object[] deserialized = deserializer.deserialize(stream, bark);
@@ -130,7 +144,6 @@ public class GsonDeserializerTest {
 
 		InputStream stream = new ByteArrayInputStream("{'dog':{'name':'Renan Reis','age':'0'}}".getBytes());
 
-		when(provider.parameterNamesFor(bark.getMethod())).thenReturn(new String[] { "dog" });
 		when(provider.parameterNamesFor(bark.getMethod())).thenReturn(new String[] { "dog" });
 
 		Object[] deserialized = deserializer.deserialize(stream, bark);

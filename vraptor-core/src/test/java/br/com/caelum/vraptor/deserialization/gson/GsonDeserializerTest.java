@@ -69,6 +69,11 @@ public class GsonDeserializerTest {
 		private String name;
 		private Integer age;
 		private Calendar birthday;
+		@Override
+		public String toString() {
+			return "Dog [name=" + name + ", age=" + age + ", birthday="
+					+ birthday + "]";
+		}
 	}
 
 	static class DogController {

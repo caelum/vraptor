@@ -77,15 +77,17 @@ public class GsonDeserialization implements Deserializer {
 				JsonElement node = root.get(name);
 				if (isWithoutRoot(types, node)) {
 					params[i] = gson.fromJson(root, types[i]);
+					logger.info("json without root deserialized");
 				}
 				else if(node != null){
 					params[i] = gson.fromJson(node, types[i]);
 				}
+				logger.debug("json deserialized: " + params[i]);
 			}
 		} catch (Exception e) {
 			throw new ResultException("Unable to deserialize data", e);
 		}
-
+		
 		return params;
 	}
 

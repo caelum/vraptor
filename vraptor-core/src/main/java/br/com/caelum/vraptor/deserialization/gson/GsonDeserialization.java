@@ -2,6 +2,7 @@ package br.com.caelum.vraptor.deserialization.gson;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -9,7 +10,6 @@ import java.util.Collection;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,6 +20,7 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.view.ResultException;
 
 import com.google.common.base.Objects;
+import com.google.common.io.CharStreams;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
@@ -76,7 +77,6 @@ public class GsonDeserialization implements Deserializer {
 				JsonElement node = root.get(name);
 				if (isWithoutRoot(types, node)) {
 					params[i] = gson.fromJson(root, types[i]);
-					return params;
 				}
 				else {
 					params[i] = gson.fromJson(node, types[i]);
@@ -114,7 +114,7 @@ public class GsonDeserialization implements Deserializer {
 	private String getContentOfStream(InputStream input) throws IOException {
 		String charset = getRequestCharset();
 		logger.debug("Using charset {}", charset);
-		return IOUtils.toString(input, charset);
+		return CharStreams.toString(new InputStreamReader(input, charset));
 	}
 
 	private String getRequestCharset() {

@@ -78,7 +78,7 @@ public class GsonDeserialization implements Deserializer {
 				if (isWithoutRoot(types, node)) {
 					params[i] = gson.fromJson(root, types[i]);
 				}
-				else {
+				else if(node != null){
 					params[i] = gson.fromJson(node, types[i]);
 				}
 			}

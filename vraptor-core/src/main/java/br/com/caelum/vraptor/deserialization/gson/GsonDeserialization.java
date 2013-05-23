@@ -67,7 +67,7 @@ public class GsonDeserialization implements Deserializer {
 
 		try {
 			String content = getContentOfStream(inputStream);
-			logger.debug("json retrieved: " + content);
+			logger.debug("json retrieved: {}", content);
 
 			JsonParser parser = new JsonParser();
 			JsonObject root = (JsonObject) parser.parse(content);
@@ -82,7 +82,7 @@ public class GsonDeserialization implements Deserializer {
 				else if(node != null){
 					params[i] = gson.fromJson(node, types[i]);
 				}
-				logger.debug("json deserialized: " + params[i]);
+				logger.debug("json deserialized: {}", params[i]);
 			}
 		} catch (Exception e) {
 			throw new ResultException("Unable to deserialize data", e);

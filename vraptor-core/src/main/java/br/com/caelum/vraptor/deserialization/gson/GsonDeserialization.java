@@ -2,6 +2,7 @@ package br.com.caelum.vraptor.deserialization.gson;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -19,6 +20,7 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.view.ResultException;
 
 import com.google.common.base.Objects;
+import com.google.common.io.CharStreams;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
@@ -65,7 +67,7 @@ public class GsonDeserialization implements Deserializer {
 
 		try {
 			String content = getContentOfStream(inputStream);
-			logger.debug("json retrieved: " + content);
+			logger.debug("json retrieved: {}", content);
 
 			JsonParser parser = new JsonParser();
 			JsonObject root = (JsonObject) parser.parse(content);
@@ -73,15 +75,24 @@ public class GsonDeserialization implements Deserializer {
 			for (int i = 0; i < types.length; i++) {
 				String name = parameterNames[i];
 				JsonElement node = root.get(name);
-				if (node != null) {
+				if (isWithoutRoot(types, node)) {
+					params[i] = gson.fromJson(root, types[i]);
+					logger.info("json without root deserialized");
+				}
+				else if(node != null){
 					params[i] = gson.fromJson(node, types[i]);
 				}
+				logger.debug("json deserialized: {}", params[i]);
 			}
 		} catch (Exception e) {
 			throw new ResultException("Unable to deserialize data", e);
 		}
-
+		
 		return params;
+	}
+
+	private boolean isWithoutRoot(Class<?>[] types, JsonElement node) {
+		return node == null && types.length == 1;
 	}
 
 	protected Gson getGson() {
@@ -103,19 +114,9 @@ public class GsonDeserialization implements Deserializer {
 	}
 
 	private String getContentOfStream(InputStream input) throws IOException {
-
 		String charset = getRequestCharset();
 		logger.debug("Using charset {}", charset);
-
-		StringBuilder content = new StringBuilder();
-
-		byte[] buffer = new byte[1024];
-		int readed = 0;
-		while ((readed = input.read(buffer)) != -1) {
-			content.append(new String(buffer, 0, readed, charset));
-		}
-
-		return content.toString();
+		return CharStreams.toString(new InputStreamReader(input, charset));
 	}
 
 	private String getRequestCharset() {

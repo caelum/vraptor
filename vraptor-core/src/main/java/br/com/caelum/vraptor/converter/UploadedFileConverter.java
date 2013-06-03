@@ -31,7 +31,6 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
  *
  */
 @Convert(UploadedFile.class)
-@ApplicationScoped
 public class UploadedFileConverter implements Converter<UploadedFile> {
 
 	private final HttpServletRequest request;

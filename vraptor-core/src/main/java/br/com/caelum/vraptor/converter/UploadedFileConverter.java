@@ -17,30 +17,29 @@
 
 package br.com.caelum.vraptor.converter;
 
-import static com.google.common.base.Strings.isNullOrEmpty;
-
-import java.text.MessageFormat;
 import java.util.ResourceBundle;
+
+import javax.servlet.http.HttpServletRequest;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
-import br.com.caelum.vraptor.ioc.ApplicationScoped;
+import br.com.caelum.vraptor.interceptor.multipart.UploadedFile;
 
 /**
  * VRaptor's file upload converter.
  *
  */
-@Convert(UploadedFile.class)  
-@ApplicationScoped
-public class UploadedFileConverter implements Converter {  
-    private final HttpServletRequest request;  
-  
-    public UploadedFileConverter(HttpServletRequest request) {  
-        this.request = request;  
-    }  
-  
-    public UploadedFile convert(String value, Class extends UploadedFile> type, ResourceBundle bundle) {  
-        Object upload = request.getAttribute(value);  
-        return upload == null ? null : type.cast(upload);  
-    }
+public class UploadedFileConverter implements Converter<UploadedFile> {
+
+	private final HttpServletRequest request;
+
+	public UploadedFileConverter(HttpServletRequest request) {
+		this.request = request;
+	}
+
+	@Override
+	public UploadedFile convert(String value, Class<? extends UploadedFile> type, ResourceBundle bundle) {
+		Object upload = request.getAttribute(value);
+		return upload == null ? null : type.cast(upload);
+	}
 }

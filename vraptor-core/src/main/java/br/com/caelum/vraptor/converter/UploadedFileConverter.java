@@ -29,6 +29,8 @@ import br.com.caelum.vraptor.interceptor.multipart.UploadedFile;
  * VRaptor's file upload converter.
  *
  */
+@Convert(UploadedFile.class)
+@ApplicationScoped
 public class UploadedFileConverter implements Converter<UploadedFile> {
 
 	private final HttpServletRequest request;

@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.interceptor.multipart.UploadedFile;
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
 
 /**
  * VRaptor's file upload converter.

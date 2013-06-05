@@ -119,7 +119,7 @@ vraptor new onlinestore --skip-eclipse
 
 <h3>Tipos de atributos suportados</h3>
 
-É possível gerar um CRUD com os seguintes atributos: boolean, double, float, short, integer, long, string e text.
+É possível gerar um CRUD com os seguintes atributos: boolean, double, float, short, integer, long, string, text, date e references.
 
 <h3>Plugins</h3>
 

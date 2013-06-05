@@ -110,7 +110,7 @@ vraptor new onlinestore --skip-eclipse
 
 <h3>Supported attributes type</h3>
 
-The supported attributes type are: boolean, double, float, short, integer, long, string and text.
+The supported attributes type are: boolean, double, float, short, integer, long, string, text, date and references.
 
 <h3>Plugins</h3>
 

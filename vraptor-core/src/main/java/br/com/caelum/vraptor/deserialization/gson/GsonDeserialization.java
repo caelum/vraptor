@@ -7,6 +7,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Collection;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -46,7 +47,7 @@ public class GsonDeserialization implements Deserializer {
 
 	private final HttpServletRequest request;
 
-	public GsonDeserialization(ParameterNameProvider paramNameProvider, Collection<JsonDeserializer> adapters, HttpServletRequest request) {
+	public GsonDeserialization(ParameterNameProvider paramNameProvider, List<JsonDeserializer> adapters, HttpServletRequest request) {
 		this.paramNameProvider = paramNameProvider;
 		this.adapters = adapters;
 		this.request = request;
@@ -87,7 +88,7 @@ public class GsonDeserialization implements Deserializer {
 		} catch (Exception e) {
 			throw new ResultException("Unable to deserialize data", e);
 		}
-		
+
 		return params;
 	}
 

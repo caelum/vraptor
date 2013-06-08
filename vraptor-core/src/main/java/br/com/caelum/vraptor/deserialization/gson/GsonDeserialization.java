@@ -68,6 +68,12 @@ public class GsonDeserialization implements Deserializer {
 
 		try {
 			String content = getContentOfStream(inputStream);
+			
+			if(content.trim().equals("")) {
+				logger.debug("json with no content");
+				return params;
+			}
+			
 			logger.debug("json retrieved: {}", content);
 
 			JsonParser parser = new JsonParser();

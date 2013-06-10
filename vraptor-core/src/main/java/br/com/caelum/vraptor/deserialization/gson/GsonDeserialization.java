@@ -79,6 +79,7 @@ public class GsonDeserialization implements Deserializer {
 				if (isWithoutRoot(types, node)) {
 					params[i] = gson.fromJson(root, types[i]);
 					logger.info("json without root deserialized");
+					break;
 				}
 				else if(node != null){
 					params[i] = gson.fromJson(node, types[i]);
@@ -93,7 +94,7 @@ public class GsonDeserialization implements Deserializer {
 	}
 
 	private boolean isWithoutRoot(Class<?>[] types, JsonElement node) {
-		return node == null && types.length == 1;
+		return node == null && types.length > 0;
 	}
 
 	protected Gson getGson() {

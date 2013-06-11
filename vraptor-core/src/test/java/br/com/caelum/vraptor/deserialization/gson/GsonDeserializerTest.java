@@ -2,6 +2,7 @@ package br.com.caelum.vraptor.deserialization.gson;
 
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -270,5 +271,16 @@ public class GsonDeserializerTest {
 		Dog dog = (Dog) deserialized[0];
 
 		assertThat(dog.name, is("ç"));
+	}
+	
+	@Test
+	public void shouldByPassDeserializationWhenHasNoContent() {
+		InputStream stream = new ByteArrayInputStream("".getBytes());
+		when(provider.parameterNamesFor(bark.getMethod())).thenReturn(new String[] { "pet" });
+		
+		Object[] deserialized = deserializer.deserialize(stream, bark);
+		
+		assertThat(deserialized.length, is(1));
+		assertThat(deserialized[0], is(nullValue()));
 	}
 }

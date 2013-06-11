@@ -21,6 +21,7 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.view.ResultException;
 
 import com.google.common.base.Objects;
+import com.google.common.base.Strings;
 import com.google.common.io.CharStreams;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -69,7 +70,7 @@ public class GsonDeserialization implements Deserializer {
 		try {
 			String content = getContentOfStream(inputStream);
 			
-			if(content.trim().equals("")) {
+			if(Strings.isNullOrEmpty(content)) {
 				logger.debug("json with no content");
 				return params;
 			}

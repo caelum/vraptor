@@ -15,8 +15,12 @@
  */
 package br.com.caelum.vraptor.deserialization;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import br.com.caelum.vraptor.core.BaseComponents;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
@@ -36,9 +40,19 @@ public class DefaultDeserializers implements Deserializers {
 	private final Map<String, Class<? extends Deserializer>> deserializers = new HashMap<String, Class<? extends Deserializer>>();
 
 	public DefaultDeserializers() {
-		for (Class<? extends Deserializer> type : BaseComponents.getDeserializers()) {
+		for (Class<? extends Deserializer> type : sortDeserializations(BaseComponents.getDeserializers())) {
 			register(type);
 		}
+	}
+	
+	/**
+	 * Override this method if you want another ordering strategy to deserializers .
+	 */
+	protected List<Class<? extends Deserializer>> sortDeserializations(Set<Class<? extends Deserializer>> deserializersSet) {
+		ArrayList<Class<? extends Deserializer>> deserializers = new ArrayList<Class<? extends Deserializer>>(deserializersSet);
+		Collections.sort(deserializers, new PackageComparator());
+		
+		return deserializers;
 	}
 	
 	public Deserializer deserializerFor(String contentType, Container container) {

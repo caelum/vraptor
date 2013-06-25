@@ -40,10 +40,10 @@ import br.com.caelum.vraptor.proxy.InstanceCreator;
 /**
  * Bring up Method Validation factory. This class builds the {@link ValidatorFactory} factory once when
  * application starts. This class only works with Bean Validation 1.1 (for 1.0 use
- * {@link ValidatorFactoryCreator} instead. WARN: Method validation is beta, and are subject to change.
+ * {@link ValidatorFactoryCreator} instead. WARN: Method validation is beta, and is subject to change.
  * 
  * @author Otávio Scherer Garcia
- * @since 3.5.1-SNAPSHOT
+ * @since 3.5.2-SNAPSHOT
  */
 @ApplicationScoped
 public class MethodValidatorFactoryCreator
@@ -86,7 +86,7 @@ public class MethodValidatorFactoryCreator
     /**
      * Allow vraptor to use paranamer to discovery method parameter names.
      * @author Otávio Scherer Garcia
-     * @since 3.5.1-SNAPSHOT
+     * @since 3.5.2-SNAPSHOT
      */
     class CustomParameterNameProvider
         implements javax.validation.ParameterNameProvider {
@@ -126,7 +126,7 @@ public class MethodValidatorFactoryCreator
      * Create a custom {@link ConstraintValidatorFactory} to allow users to use constraints that uses
      * components.
      * @author Otávio Scherer Garcia
-     * @since 3.5.1-SNAPSHOT
+     * @since 3.5.2-SNAPSHOT
      */
     class CustomConstraintValidatorFactory
         implements ConstraintValidatorFactory {

@@ -6,6 +6,8 @@ import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
 import java.lang.annotation.Documented;
@@ -30,6 +32,9 @@ import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParanamerNameProvider;
+import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor.proxy.InstanceCreator;
+import br.com.caelum.vraptor.proxy.ObjenesisInstanceCreator;
 import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.util.test.MockValidator;
@@ -44,7 +49,8 @@ public class MethodValidatorTest {
 
     @Mock private Localization l10n;
     @Mock private InterceptorStack stack;
-
+    @Mock private Container container;
+    
     private MethodValidatorInterceptor interceptor;
     private ParameterNameProvider provider;
     private Validator validator;
@@ -66,8 +72,10 @@ public class MethodValidatorTest {
         creator.buildFactory();
 
         provider = new ParanamerNameProvider();
+        doReturn(false).when(container).canProvide(any(Class.class));
+        doReturn(new ObjenesisInstanceCreator()).when(container).instanceFor(InstanceCreator.class);
         
-        MethodValidatorFactoryCreator methodValidatorCreator = new MethodValidatorFactoryCreator(provider);
+        MethodValidatorFactoryCreator methodValidatorCreator = new MethodValidatorFactoryCreator(provider, container);
         methodValidatorCreator.buildFactory();
         factory = methodValidatorCreator.getInstance();
 

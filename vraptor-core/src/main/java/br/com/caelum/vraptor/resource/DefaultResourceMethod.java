@@ -52,10 +52,7 @@ public class DefaultResourceMethod implements ResourceMethod {
 
 	@Override
 	public String toString() {
-		return "[DefaultResourceMethod: "
-				+ method.getDeclaringClass().getSimpleName() + "."
-				+ method.getName()
-				+ Stringnifier.simpleNameFor(method) + "]";
+		return "[DefaultResourceMethod: " + Stringnifier.simpleNameFor(method) + "]";
 	}
 
 	@Override

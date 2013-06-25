@@ -23,6 +23,8 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorFactory;
 import javax.validation.Validation;
 import javax.validation.ValidatorFactory;
 
@@ -32,13 +34,16 @@ import org.slf4j.LoggerFactory;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.ComponentFactory;
+import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor.proxy.InstanceCreator;
 
 /**
  * Bring up Method Validation factory. This class builds the {@link ValidatorFactory} factory once when
- * application starts.
+ * application starts. This class only works with Bean Validation 1.1 (for 1.0 use
+ * {@link ValidatorFactoryCreator} instead. WARN: Method validation is beta, and is subject to change.
  * 
  * @author Otávio Scherer Garcia
- * @since 3.5.1-SNAPSHOT
+ * @since 3.5.2-SNAPSHOT
  */
 @ApplicationScoped
 public class MethodValidatorFactoryCreator
@@ -49,18 +54,21 @@ public class MethodValidatorFactoryCreator
 
     private ValidatorFactory instance;
     private final ParameterNameProvider nameProvider;
+    private final Container container;
     
-    public MethodValidatorFactoryCreator(ParameterNameProvider nameProvider) {
+    public MethodValidatorFactoryCreator(ParameterNameProvider nameProvider, Container container) {
         this.nameProvider = nameProvider;
+        this.container = container;
     }
     
     @PostConstruct
     public void buildFactory() {
         instance = Validation.byDefaultProvider().configure()
             .parameterNameProvider(new CustomParameterNameProvider(nameProvider))
+            .constraintValidatorFactory(new CustomConstraintValidatorFactory(container))
             .buildValidatorFactory();
         
-        logger.debug("Initializing Method Validator");
+        logger.debug("Initializing Bean Validation (1.1 supported)");
     }
     
     @PreDestroy
@@ -78,7 +86,7 @@ public class MethodValidatorFactoryCreator
     /**
      * Allow vraptor to use paranamer to discovery method parameter names.
      * @author Otávio Scherer Garcia
-     * @since 3.5
+     * @since 3.5.2-SNAPSHOT
      */
     class CustomParameterNameProvider
         implements javax.validation.ParameterNameProvider {
@@ -111,6 +119,35 @@ public class MethodValidatorFactoryCreator
         
         private List<String> emptyParameters(int length) {
             return asList(new String[length]);
+        }
+    }
+
+    /**
+     * Create a custom {@link ConstraintValidatorFactory} to allow users to use constraints that uses
+     * components.
+     * @author Otávio Scherer Garcia
+     * @since 3.5.2-SNAPSHOT
+     */
+    class CustomConstraintValidatorFactory
+        implements ConstraintValidatorFactory {
+
+        private final Container container;
+    
+        public CustomConstraintValidatorFactory(Container container) {
+            this.container = container;
+        }
+    
+        public <T extends ConstraintValidator<?, ?>> T getInstance(Class<T> key) {
+            if (container.canProvide(key)) {
+                logger.debug("we can provide instance for ConstraintValidator {}", key);
+                return container.instanceFor(key);
+            }
+            
+            return container.instanceFor(InstanceCreator.class).instanceFor(key);
+        }
+    
+        public void releaseInstance(ConstraintValidator<?, ?> key) {
+            // we don't need this
         }
     }
 }

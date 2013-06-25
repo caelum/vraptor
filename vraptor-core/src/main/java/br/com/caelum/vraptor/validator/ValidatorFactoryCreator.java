@@ -48,7 +48,7 @@ public class ValidatorFactoryCreator implements ComponentFactory<ValidatorFactor
 		        .configure()
 		        .buildValidatorFactory();
 
-        logger.debug("Initializing JSR303 factory for bean validation");
+        logger.debug("Initializing Bean Validation (1.0 supported)");
 	}
 
 	public ValidatorFactory getInstance() {

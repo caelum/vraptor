@@ -162,6 +162,7 @@ import br.com.caelum.vraptor.serialization.xstream.XStreamXMLSerialization;
 import br.com.caelum.vraptor.validator.BeanValidator;
 import br.com.caelum.vraptor.validator.DefaultBeanValidator;
 import br.com.caelum.vraptor.validator.DefaultValidator;
+import br.com.caelum.vraptor.validator.DIConstraintValidatorFactory;
 import br.com.caelum.vraptor.validator.MessageConverter;
 import br.com.caelum.vraptor.validator.MessageInterpolatorFactory;
 import br.com.caelum.vraptor.validator.MethodValidatorFactoryCreator;
@@ -362,6 +363,7 @@ public class BaseComponents {
         if (isClassPresent("javax.validation.executable.ExecutableValidator")) {
             APPLICATION_COMPONENTS.put(ValidatorCreator.class, ValidatorCreator.class);
             APPLICATION_COMPONENTS.put(MethodValidatorFactoryCreator.class, MethodValidatorFactoryCreator.class);
+            APPLICATION_COMPONENTS.put(DIConstraintValidatorFactory.class, DIConstraintValidatorFactory.class);
             APPLICATION_COMPONENTS.put(MessageInterpolatorFactory.class, MessageInterpolatorFactory.class);
         } else if (isClassPresent("javax.validation.Validation")) {
             APPLICATION_COMPONENTS.put(ValidatorCreator.class, ValidatorCreator.class);

@@ -75,7 +75,8 @@ public class MethodValidatorTest {
         doReturn(false).when(container).canProvide(any(Class.class));
         doReturn(new ObjenesisInstanceCreator()).when(container).instanceFor(InstanceCreator.class);
         
-        MethodValidatorFactoryCreator methodValidatorCreator = new MethodValidatorFactoryCreator(provider, container);
+        DIConstraintValidatorFactory constraintValidatorFactory = new DIConstraintValidatorFactory(container);
+        MethodValidatorFactoryCreator methodValidatorCreator = new MethodValidatorFactoryCreator(provider, constraintValidatorFactory);
         methodValidatorCreator.buildFactory();
         factory = methodValidatorCreator.getInstance();
 

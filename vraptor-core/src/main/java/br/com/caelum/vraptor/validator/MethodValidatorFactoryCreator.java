@@ -23,8 +23,6 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorFactory;
 import javax.validation.Validation;
 import javax.validation.ValidatorFactory;
 
@@ -34,8 +32,6 @@ import org.slf4j.LoggerFactory;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.ComponentFactory;
-import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.proxy.InstanceCreator;
 
 /**
  * Bring up Method Validation factory. This class builds the {@link ValidatorFactory} factory once when
@@ -48,36 +44,36 @@ import br.com.caelum.vraptor.proxy.InstanceCreator;
 @ApplicationScoped
 public class MethodValidatorFactoryCreator
     implements ComponentFactory<ValidatorFactory> {
-    
+
     private static final Logger logger = LoggerFactory.getLogger(MethodValidatorFactoryCreator.class);
     private static final List<Method> OBJECT_METHODS = asList(Object.class.getDeclaredMethods());
 
     private ValidatorFactory instance;
     private final ParameterNameProvider nameProvider;
-    private final Container container;
-    
-    public MethodValidatorFactoryCreator(ParameterNameProvider nameProvider, Container container) {
+    private final DIConstraintValidatorFactory constraintValidatorFactory;
+
+    public MethodValidatorFactoryCreator(ParameterNameProvider nameProvider,
+            DIConstraintValidatorFactory constraintValidatorFactory) {
         this.nameProvider = nameProvider;
-        this.container = container;
+        this.constraintValidatorFactory = constraintValidatorFactory;
     }
-    
+
     @PostConstruct
     public void buildFactory() {
         instance = Validation.byDefaultProvider().configure()
-            .parameterNameProvider(new CustomParameterNameProvider(nameProvider))
-            .constraintValidatorFactory(new CustomConstraintValidatorFactory(container))
-            .buildValidatorFactory();
-        
+                .parameterNameProvider(new CustomParameterNameProvider(nameProvider))
+                .constraintValidatorFactory(constraintValidatorFactory).buildValidatorFactory();
+
         logger.debug("Initializing Bean Validation (1.1 supported)");
     }
-    
+
     @PreDestroy
     public void close() {
         instance.close();
     }
 
     public ValidatorFactory getInstance() {
-        if (instance == null) { //pico don't call PostConstruct
+        if (instance == null) { // pico don't call PostConstruct
             buildFactory();
         }
         return instance;
@@ -85,69 +81,40 @@ public class MethodValidatorFactoryCreator
 
     /**
      * Allow vraptor to use paranamer to discovery method parameter names.
+     * 
      * @author Otávio Scherer Garcia
      * @since 3.5.2-SNAPSHOT
      */
     class CustomParameterNameProvider
         implements javax.validation.ParameterNameProvider {
-    
+
         private final ParameterNameProvider nameProvider;
-        
+
         public CustomParameterNameProvider(ParameterNameProvider nameProvider) {
             this.nameProvider = nameProvider;
         }
 
         /**
-         * Returns an empty list of parameter names, since we don't validate 
-         * constructors.
+         * Returns an empty list of parameter names, since we don't validate constructors.
          */
         public List<String> getParameterNames(Constructor<?> constructor) {
             return emptyParameters(constructor.getParameterTypes().length);
         }
 
         /**
-         * Returns the parameter names for the method, skiping if method is inherited 
-         * from object.
+         * Returns the parameter names for the method, skiping if method is inherited from object.
          */
         public List<String> getParameterNames(Method method) {
             if (OBJECT_METHODS.contains(method)) {
                 return emptyParameters(method.getParameterTypes().length);
             }
-            
+
             return asList(nameProvider.parameterNamesFor(method));
         }
-        
+
         private List<String> emptyParameters(int length) {
             return asList(new String[length]);
         }
     }
 
-    /**
-     * Create a custom {@link ConstraintValidatorFactory} to allow users to use constraints that uses
-     * components.
-     * @author Otávio Scherer Garcia
-     * @since 3.5.2-SNAPSHOT
-     */
-    class CustomConstraintValidatorFactory
-        implements ConstraintValidatorFactory {
-
-        private final Container container;
-    
-        public CustomConstraintValidatorFactory(Container container) {
-            this.container = container;
-        }
-    
-        public <T extends ConstraintValidator<?, ?>> T getInstance(Class<T> key) {
-            if (container.canProvide(key)) {
-                logger.debug("we can provide instance for ConstraintValidator {}", key);
-                return container.instanceFor(key);
-            }
-            
-            return container.instanceFor(InstanceCreator.class).instanceFor(key);
-        }
-    
-        public void releaseInstance(ConstraintValidator<?, ?> key) {
-            // we don't need this
-        }
-    }
 }

@@ -69,6 +69,9 @@ public class JsonDeserializer implements Deserializer{
 	 */
 	public XStream getConfiguredXStream(Method javaMethod, Class<?>[] types) {
 		XStream xStream = getXStream();
+		
+		xStream.processAnnotations(types);
+		
 		aliasParams(javaMethod, types, xStream);
 		return builder.configure(xStream);
 	}

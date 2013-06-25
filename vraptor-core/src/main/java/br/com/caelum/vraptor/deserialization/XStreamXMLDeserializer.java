@@ -64,6 +64,9 @@ public class XStreamXMLDeserializer implements XMLDeserializer {
 	 */
 	public XStream getConfiguredXStream(Method javaMethod, Class<?>[] types) {
 		XStream xStream = getXStream();
+		
+		xStream.processAnnotations(types);
+		
 		aliasParams(javaMethod, types, xStream);
 		return xStream;
 	}

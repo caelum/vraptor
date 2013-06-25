@@ -115,6 +115,7 @@ public class GuiceComponentRegistry implements ComponentRegistry {
         } else if (!boundClasses.contains(required)) {
             logger.debug("Binding {} to {}", required, component);
             binder.bind(required).to(component);
+            boundClasses.add(required);
         } else {
             logger.debug("Ignoring binding of {} to {}", required, component);
         }

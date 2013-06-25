@@ -2,10 +2,14 @@ package br.com.caelum.vraptor.deserialization.gson;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Collection;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +20,9 @@ import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.view.ResultException;
 
+import com.google.common.base.Objects;
+import com.google.common.base.Strings;
+import com.google.common.io.CharStreams;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
@@ -24,23 +31,27 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 /**
- * 
+ *
  * @author Renan Reis
  * @author Guilherme Mangabeira
  */
 
 @Deserializes({ "application/json", "json" })
+@SuppressWarnings("rawtypes")
 public class GsonDeserialization implements Deserializer {
 
 	private static final Logger logger = LoggerFactory.getLogger(GsonDeserialization.class);
 
 	private final ParameterNameProvider paramNameProvider;
 
-	private final Collection<JsonDeserializer<?>> adapters;
+	private final Collection<JsonDeserializer> adapters;
 
-	public GsonDeserialization(ParameterNameProvider paramNameProvider, Collection<JsonDeserializer<?>> adapters) {
+	private final HttpServletRequest request;
+
+	public GsonDeserialization(ParameterNameProvider paramNameProvider, List<JsonDeserializer> adapters, HttpServletRequest request) {
 		this.paramNameProvider = paramNameProvider;
 		this.adapters = adapters;
+		this.request = request;
 	}
 
 	public Object[] deserialize(InputStream inputStream, ResourceMethod method) {
@@ -58,7 +69,13 @@ public class GsonDeserialization implements Deserializer {
 
 		try {
 			String content = getContentOfStream(inputStream);
-			logger.debug("json retrieved: " + content);
+			
+			if(Strings.isNullOrEmpty(content)) {
+				logger.debug("json with no content");
+				return params;
+			}
+			
+			logger.debug("json retrieved: {}", content);
 
 			JsonParser parser = new JsonParser();
 			JsonObject root = (JsonObject) parser.parse(content);
@@ -66,15 +83,28 @@ public class GsonDeserialization implements Deserializer {
 			for (int i = 0; i < types.length; i++) {
 				String name = parameterNames[i];
 				JsonElement node = root.get(name);
-				if (node != null) {
+				if (isWithoutRoot(parameterNames, root)) {
+					params[i] = gson.fromJson(root, types[i]);
+					logger.info("json without root deserialized");
+					break;
+				}
+				else if(node != null){
 					params[i] = gson.fromJson(node, types[i]);
 				}
+				logger.debug("json deserialized: {}", params[i]);
 			}
 		} catch (Exception e) {
 			throw new ResultException("Unable to deserialize data", e);
 		}
 
 		return params;
+	}
+
+	private boolean isWithoutRoot(String[] parameterNames, JsonObject root) {
+		for(String parameterName : parameterNames) {
+			if(root.get(parameterName) != null) return false;
+		}
+		return true;
 	}
 
 	protected Gson getGson() {
@@ -96,14 +126,13 @@ public class GsonDeserialization implements Deserializer {
 	}
 
 	private String getContentOfStream(InputStream input) throws IOException {
-		StringBuilder content = new StringBuilder();
+		String charset = getRequestCharset();
+		logger.debug("Using charset {}", charset);
+		return CharStreams.toString(new InputStreamReader(input, charset));
+	}
 
-		byte[] buffer = new byte[1024];
-		int readed = 0;
-		while ((readed = input.read(buffer)) != -1) {
-			content.append(new String(buffer, 0, readed));
-		}
-
-		return content.toString();
+	private String getRequestCharset() {
+		String charset = Objects.firstNonNull(request.getHeader("Accept-Charset"), "UTF-8");
+		return charset.split(",")[0];
 	}
 }

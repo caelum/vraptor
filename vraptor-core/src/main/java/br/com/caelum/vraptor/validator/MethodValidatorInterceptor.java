@@ -44,7 +44,7 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  * provider that implements method validation.
  * 
  * @author Otávio Scherer Garcia
- * @since 3.5.1-SNAPSHOT
+ * @since 3.5.2-SNAPSHOT
  */
 @RequestScoped
 @Intercepts(before = ExecuteMethodInterceptor.class, after = ParametersInstantiatorInterceptor.class)

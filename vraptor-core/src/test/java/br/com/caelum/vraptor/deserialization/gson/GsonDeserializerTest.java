@@ -242,6 +242,26 @@ public class GsonDeserializerTest {
 	}
 
 	@Test
+	public void shouldDeserializeADogWithCalendarAsObjectAttribute() {
+		InputStream stream = new ByteArrayInputStream(
+				"{'dog':{'name':'Brutus','age':7,'birthday':{'time':1301886000000,'timezone':'America/Sao_Paulo'}}}".getBytes());
+
+		when(provider.parameterNamesFor(bark.getMethod())).thenReturn(new String[] { "dog" });
+		when(provider.parameterNamesFor(bark.getMethod())).thenReturn(new String[] { "dog" });
+
+		Object[] deserialized = deserializer.deserialize(stream, bark);
+
+		assertThat(deserialized.length, is(1));
+		assertThat(deserialized[0], is(instanceOf(Dog.class)));
+		Dog dog = (Dog) deserialized[0];
+		assertThat(dog.name, is("Brutus"));
+		assertThat(dog.age, is(7));
+
+		Calendar birthday = new GregorianCalendar(2011, 03, 04);//04/04/2011
+		assertThat(dog.birthday, is(birthday));
+	}
+
+	@Test
 	public void shouldHonorRequestHeaderAcceptCharset() throws Exception {
 		InputStream stream = new ByteArrayInputStream("{'pet':{'name':'Ã§'}}".getBytes("ISO-8859-1"));
 		when(provider.parameterNamesFor(bark.getMethod())).thenReturn(new String[] { "pet" });

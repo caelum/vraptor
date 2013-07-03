@@ -35,7 +35,7 @@ public class DefaultDeserializersTest {
 		deserializers.register(NotAnnotatedDeserializer.class);
 	}
 
-	@Deserializes({"application/xml", "json"})
+	@Deserializes({"application/xml", "application/json", "application/atom+json"})
 	static interface MyDeserializer extends Deserializer {}
 
 	@Test

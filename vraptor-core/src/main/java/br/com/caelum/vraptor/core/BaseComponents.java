@@ -153,6 +153,7 @@ import br.com.caelum.vraptor.serialization.NullProxyInitializer;
 import br.com.caelum.vraptor.serialization.ProxyInitializer;
 import br.com.caelum.vraptor.serialization.RepresentationResult;
 import br.com.caelum.vraptor.serialization.XMLSerialization;
+import br.com.caelum.vraptor.serialization.gson.JsonSerializers;
 import br.com.caelum.vraptor.serialization.xstream.XStreamBuilder;
 import br.com.caelum.vraptor.serialization.xstream.XStreamBuilderImpl;
 import br.com.caelum.vraptor.serialization.xstream.XStreamConverters;
@@ -326,8 +327,11 @@ public class BaseComponents {
     	Intercepts.class
     };
 
-    private static final Set<Class<? extends Deserializer>> DESERIALIZERS = Collections.<Class<? extends Deserializer>>singleton(XMLDeserializer.class);
-
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	private static final Set<Class<? extends Deserializer>> DESERIALIZERS = new HashSet(Arrays.asList(
+    		XMLDeserializer.class, 
+    		JsonDeserializer.class,
+    		FormDeserializer.class));
 
     public static Set<Class<? extends Deserializer>> getDeserializers() {
 		return DESERIALIZERS;

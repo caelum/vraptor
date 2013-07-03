@@ -15,6 +15,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -258,6 +259,7 @@ public class GsonDeserializerTest {
 		assertThat(dog.age, is(7));
 
 		Calendar birthday = new GregorianCalendar(2011, 03, 04);//04/04/2011
+		birthday.setTimeZone(TimeZone.getTimeZone("America/Sao_Paulo"));
 		assertThat(dog.birthday, is(birthday));
 	}
 

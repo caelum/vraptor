@@ -15,6 +15,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -238,6 +239,27 @@ public class GsonDeserializerTest {
 		assertThat(dog.age, is(7));
 
 		Calendar birthday = new GregorianCalendar(1987, 0, 6);
+		assertThat(dog.birthday, is(birthday));
+	}
+
+	@Test
+	public void shouldDeserializeADogWithCalendarAsObjectAttribute() {
+		InputStream stream = new ByteArrayInputStream(
+				"{'dog':{'name':'Brutus','age':7,'birthday':{'time':1301886000000,'timezone':'America/Sao_Paulo'}}}".getBytes());
+
+		when(provider.parameterNamesFor(bark.getMethod())).thenReturn(new String[] { "dog" });
+		when(provider.parameterNamesFor(bark.getMethod())).thenReturn(new String[] { "dog" });
+
+		Object[] deserialized = deserializer.deserialize(stream, bark);
+
+		assertThat(deserialized.length, is(1));
+		assertThat(deserialized[0], is(instanceOf(Dog.class)));
+		Dog dog = (Dog) deserialized[0];
+		assertThat(dog.name, is("Brutus"));
+		assertThat(dog.age, is(7));
+
+		Calendar birthday = new GregorianCalendar(2011, 03, 04);//04/04/2011
+		birthday.setTimeZone(TimeZone.getTimeZone("America/Sao_Paulo"));
 		assertThat(dog.birthday, is(birthday));
 	}
 

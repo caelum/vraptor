@@ -28,35 +28,37 @@ public class CalendarDeserializer implements JsonDeserializer<Calendar> {
 		this.localization = localization;
 	}
 
-	public Calendar deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
-			throws JsonParseException {
+	public Calendar deserialize(JsonElement json, Type typeOfT,	JsonDeserializationContext context) {
 
 		Calendar calendar = new GregorianCalendar();
-		
+
 		try {
 			if (json.isJsonPrimitive()) {
 				String value = json.getAsString();
-		
+
 				Locale locale = localization.getLocale();
 				if (locale == null)
 					locale = Locale.getDefault();
-		
+
 				DateFormat format = DateFormat.getDateInstance(DateFormat.SHORT, locale);
 				Date date = format.parse(value);
 				calendar.setTime(date);
-			} 
-			else {
+			} else {
 				JsonObject value = json.getAsJsonObject();
-				
-				String timezone	= value.get("timezone").getAsString();
-				Long time		= value.get("time").getAsLong();
-				
-	            calendar.setTimeZone(TimeZone.getTimeZone(timezone));
-	            calendar.setTimeInMillis(time);
+
+				String timezone = value.get("timezone").getAsString();
+				Long time = value.get("time").getAsLong();
+
+				calendar.setTimeZone(TimeZone.getTimeZone(timezone));
+				calendar.setTimeInMillis(time);
 			}
-			
+
 			return calendar;
-		} catch (ParseException e) {
+		}
+		catch (JsonParseException e) {
+			throw new ConversionError("Invalid Json format to convert Calendar: " + e.getMessage());
+		}
+		catch (ParseException e) {
 			throw new ConversionError("Error to convert Calendar: " + e.getMessage());
 		}
 	}

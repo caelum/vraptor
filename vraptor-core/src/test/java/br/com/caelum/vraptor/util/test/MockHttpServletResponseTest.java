@@ -18,9 +18,15 @@ public class MockHttpServletResponseTest {
 	}
 
 	@Test 
-	public void shoudBeAbleToReturnContentIntoWriteAsString() throws IOException {
+	public void shouldBeAbleToReturnContentIntoWriteAsString() throws IOException {
 			response.getWriter().write("X");
 			response.getWriter().flush();
 			assertEquals("X", response.getContentAsString());
+	}
+	
+	@Test
+	public void shouldBeAbleToReturnResponseStatusCode() {
+		response.setStatus(401);
+		assertEquals(401, response.getStatus());
 	}
 }

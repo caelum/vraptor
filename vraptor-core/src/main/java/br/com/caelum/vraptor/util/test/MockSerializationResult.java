@@ -75,6 +75,11 @@ public class MockSerializationResult extends MockResult {
 		this(new JavassistProxifier(new ObjenesisInstanceCreator()), new NullProxyInitializer());
 	}
 	
+	public MockSerializationResult(MockHttpServletResponse response) {
+		this(new JavassistProxifier(new ObjenesisInstanceCreator()), new NullProxyInitializer());
+		this.response = response;
+	}
+	
 	public MockSerializationResult(XStreamBuilder builder) {
 		this(new JavassistProxifier(new ObjenesisInstanceCreator()), new NullProxyInitializer(), builder);
 	}

@@ -45,6 +45,8 @@ public class MockHttpServletResponse implements HttpServletResponse {
 	private String contentType;
 	private ByteArrayOutputStream content =  new ByteArrayOutputStream();
 	
+	private int status;
+	
 	public PrintWriter getWriter() {
 		if (this.writer == null) {
 			this.writer = new PrintWriter(content);
@@ -224,7 +226,7 @@ public class MockHttpServletResponse implements HttpServletResponse {
 	 * TODO Not implemented
 	 */
 	public void setStatus(int sc) {
-		
+		this.status = sc;
 	}
 	/**
 	 * TODO Not implemented
@@ -236,7 +238,7 @@ public class MockHttpServletResponse implements HttpServletResponse {
 	 * TODO Not implemented
 	 */
 	public int getStatus() {
-		return 0;
+		return status;
 	}
 	/**
 	 * TODO Not implemented

@@ -20,14 +20,15 @@ package br.com.caelum.vraptor.view;
 import java.io.IOException;
 import java.lang.reflect.Method;
 
+import javax.inject.Inject;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor.http.MutableResponse;
 import br.com.caelum.vraptor.proxy.MethodInvocation;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.ProxyInvocationException;
@@ -45,13 +46,13 @@ public class DefaultPageResult implements PageResult {
 	private static final Logger logger = LoggerFactory.getLogger(DefaultPageResult.class);
 
 	private final MutableRequest request;
-	private final HttpServletResponse response;
+	private final MutableResponse response;
 	private final PathResolver resolver;
 	private final Proxifier proxifier;
-
 	private final MethodInfo requestInfo;
 
-	public DefaultPageResult(MutableRequest req, HttpServletResponse res, MethodInfo requestInfo,
+	@Inject
+	public DefaultPageResult(MutableRequest req, MutableResponse res, MethodInfo requestInfo,
 			PathResolver resolver, Proxifier proxifier) {
 		this.request = req;
 		this.response = res;
@@ -59,12 +60,12 @@ public class DefaultPageResult implements PageResult {
 		this.proxifier = proxifier;
 		this.resolver = resolver;
 	}
-
+	
 	public void defaultView() {
 		try {
 			String to = resolver.pathFor(requestInfo.getResourceMethod());
-			logger.debug("forwarding to {}", to);
-			request.getRequestDispatcher(to).forward(request, response);
+			logger.debug("forwarding to {}", to);			
+			request.getRequestDispatcher(to).forward(request.getOriginalRequest(), response.getOriginalResponse());
 		} catch (ServletException e) {
 			throw new ResultException(e);
 		} catch (IOException e) {
@@ -76,7 +77,7 @@ public class DefaultPageResult implements PageResult {
 		try {
 			String to = resolver.pathFor(requestInfo.getResourceMethod());
 			logger.debug("including {}", to);
-			request.getRequestDispatcher(to).include(request, response);
+			request.getRequestDispatcher(to).include(request.getOriginalRequest(), response.getOriginalResponse());
 		} catch (ServletException e) {
 			throw new ResultException(e);
 		} catch (IOException e) {
@@ -102,7 +103,7 @@ public class DefaultPageResult implements PageResult {
 		logger.debug("forwarding to {}", url);
 
 		try {
-			request.getRequestDispatcher(url).forward(request, response);
+			request.getRequestDispatcher(url).forward(request.getOriginalRequest(), response.getOriginalResponse());
 		} catch (ServletException e) {
 			throw new ResultException(e);
 		} catch (IOException e) {
@@ -116,7 +117,7 @@ public class DefaultPageResult implements PageResult {
 				try {
 					request.getRequestDispatcher(
 							resolver.pathFor(DefaultResourceMethod.instanceFor(controllerType, method))).forward(
-							request, response);
+							request.getOriginalRequest(), response.getOriginalResponse());
 					return null;
 				} catch (Exception e) {
 					throw new ProxyInvocationException(e);

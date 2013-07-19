@@ -16,6 +16,10 @@
 package br.com.caelum.vraptor.validator;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Priority;
+import javax.enterprise.inject.Alternative;
+import javax.enterprise.inject.Default;
+import javax.inject.Inject;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
@@ -35,6 +39,8 @@ import br.com.caelum.vraptor.ioc.ComponentFactory;
  */
 @ApplicationScoped
 @Component
+@Alternative
+@Priority(1000)
 public class ValidatorCreator implements ComponentFactory<Validator> {
 
     private static final Logger logger = LoggerFactory.getLogger(ValidatorCreator.class);
@@ -43,16 +49,18 @@ public class ValidatorCreator implements ComponentFactory<Validator> {
 
 	private Validator validator;
 
+	@Inject
     public ValidatorCreator(ValidatorFactory factory) {
         this.factory = factory;
     }
-
+	
     @PostConstruct
     public void createValidator() {
     	validator = factory.getValidator();
     	logger.debug("Initializing Bean Validator");
     }
 
+    @Default
 	public Validator getInstance() {
 		return validator;
 	}

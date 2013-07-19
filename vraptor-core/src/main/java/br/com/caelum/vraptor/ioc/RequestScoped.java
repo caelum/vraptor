@@ -16,14 +16,17 @@
  */
 package br.com.caelum.vraptor.ioc;
 
-import static java.lang.annotation.ElementType.TYPE;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+import javax.enterprise.inject.Stereotype;
+import javax.inject.Named;
+
 import com.google.inject.ScopeAnnotation;
+
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
  * @author Fabio Kung
@@ -32,5 +35,8 @@ import com.google.inject.ScopeAnnotation;
 @Retention(RUNTIME)
 @Documented
 @ScopeAnnotation
+@Stereotype
+@javax.enterprise.context.RequestScoped
+@Named
 public @interface RequestScoped {
 }

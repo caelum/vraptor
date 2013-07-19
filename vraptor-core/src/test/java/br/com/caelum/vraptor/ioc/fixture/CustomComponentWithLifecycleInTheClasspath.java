@@ -24,11 +24,15 @@ import br.com.caelum.vraptor.ioc.Component;
 @Component
 @ApplicationScoped
 public class CustomComponentWithLifecycleInTheClasspath {
-	public int callsToPreDestroy = 0 ;
+	private int callsToPreDestroy = 0 ;
 	
 	@PreDestroy
 	public void preDestroy() {
 		callsToPreDestroy++;
+	}
+	
+	public int getCallsToPreDestroy() {
+		return callsToPreDestroy;
 	}
 
 }

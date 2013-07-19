@@ -16,6 +16,9 @@
 package br.com.caelum.vraptor.validator;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Priority;
+import javax.enterprise.inject.Alternative;
+import javax.enterprise.inject.Default;
 import javax.validation.Validation;
 import javax.validation.ValidatorFactory;
 
@@ -36,6 +39,8 @@ import br.com.caelum.vraptor.ioc.ComponentFactory;
  */
 @Component
 @ApplicationScoped
+@Alternative
+@Priority(1000)
 public class ValidatorFactoryCreator implements ComponentFactory<ValidatorFactory> {
 
 	private static final Logger logger = LoggerFactory.getLogger(ValidatorFactoryCreator.class);
@@ -51,6 +56,7 @@ public class ValidatorFactoryCreator implements ComponentFactory<ValidatorFactor
         logger.debug("Initializing Bean Validation (1.0 supported)");
 	}
 
+	@Default
 	public ValidatorFactory getInstance() {
 		if (factory == null) { //pico don't call PostConstruct
 			buildFactory();

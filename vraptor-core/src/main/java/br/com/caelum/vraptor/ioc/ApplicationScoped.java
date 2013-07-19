@@ -17,11 +17,9 @@
 package br.com.caelum.vraptor.ioc;
 
 import java.lang.annotation.Documented;
-import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import javax.enterprise.inject.Stereotype;
 import javax.inject.Named;
 
 import com.google.inject.ScopeAnnotation;

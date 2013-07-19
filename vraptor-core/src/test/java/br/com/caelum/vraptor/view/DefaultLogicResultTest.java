@@ -18,8 +18,10 @@
 package br.com.caelum.vraptor.view;
 
 import static org.hamcrest.Matchers.is;
+
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
+
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.argThat;
@@ -50,6 +52,7 @@ import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.core.DefaultMethodInfo;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor.http.MutableResponse;
 import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.ioc.Container;
@@ -66,7 +69,7 @@ public class DefaultLogicResultTest {
     private LogicResult logicResult;
 
     private @Mock Router router;
-    private @Mock HttpServletResponse response;
+    private @Mock MutableResponse response;
     private @Mock MutableRequest request;
     private @Mock Container container;
     private @Mock PathResolver resolver;

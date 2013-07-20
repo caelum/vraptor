@@ -119,6 +119,8 @@ public class DefaultLogicResultTest {
         methodInfo = new DefaultMethodInfo();
 		this.logicResult = new DefaultLogicResult(proxifier, router, request, response, container,
                 resolver, extractor, flash, methodInfo);
+		when(request.getOriginalRequest()).thenReturn(request);
+		when(response.getOriginalResponse()).thenReturn(response);
     }
 
     @Test

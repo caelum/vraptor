@@ -72,6 +72,8 @@ public class DefaultPageResultTest {
             }
         };
 		view = new DefaultPageResult(request, response, requestInfo, fixedResolver, proxifier);
+		when(request.getOriginalRequest()).thenReturn(request);
+		when(response.getOriginalResponse()).thenReturn(response);		
     }
 
     public static class AnyResource {

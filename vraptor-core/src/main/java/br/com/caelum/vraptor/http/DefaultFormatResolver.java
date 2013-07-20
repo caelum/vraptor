@@ -17,6 +17,7 @@ package br.com.caelum.vraptor.http;
 
 import javax.servlet.http.HttpServletRequest;
 
+import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.view.AcceptHeaderToFormat;
 
 /**
@@ -27,6 +28,7 @@ import br.com.caelum.vraptor.view.AcceptHeaderToFormat;
  * @author Jose Donizetti
  * @since 3.0.3
  */
+@Component
 public class DefaultFormatResolver implements FormatResolver {
 
 	private final HttpServletRequest request;

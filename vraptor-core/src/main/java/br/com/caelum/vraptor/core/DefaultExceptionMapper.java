@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.interceptor.ExceptionHandlerInterceptor;
+import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.proxy.Proxifier;
 
 /**
@@ -40,6 +41,7 @@ import br.com.caelum.vraptor.proxy.Proxifier;
  * @see ExceptionHandlerInterceptor
  * @since 3.2
  */
+@Component
 public class DefaultExceptionMapper
     implements ExceptionMapper {
 

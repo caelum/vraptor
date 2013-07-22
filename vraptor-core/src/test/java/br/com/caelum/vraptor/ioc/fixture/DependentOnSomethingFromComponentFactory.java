@@ -8,7 +8,7 @@ import br.com.caelum.vraptor.ioc.NeedsCustomInstantiation;
 
 @Component
 public class DependentOnSomethingFromComponentFactory {
-	private final NeedsCustomInstantiation dependency;
+	private NeedsCustomInstantiation dependency;
 
 	public DependentOnSomethingFromComponentFactory(NeedsCustomInstantiation dependency) {
 		this.dependency = dependency;

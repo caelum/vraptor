@@ -18,12 +18,14 @@ package br.com.caelum.vraptor.serialization;
 import static br.com.caelum.vraptor.view.Results.page;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
+import br.com.caelum.vraptor.ioc.Component;
 
 /**
  * delegates the serialization for the default view
  * @author Lucas Cavalcanti
  * @since 3.1.3
  */
+@Component
 public class HTMLSerialization implements Serialization {
 
 	private final Result result;

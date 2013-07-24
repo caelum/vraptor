@@ -17,12 +17,17 @@
 
 package br.com.caelum.vraptor.serialization;
 
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
+import br.com.caelum.vraptor.ioc.Component;
+
 /**
  * ProxyInitializer that does nothing.
  *
  * @author Tomaz Lavieri
  * @since 3.1.2
  */
+@Component
+@ApplicationScoped
 public class NullProxyInitializer implements ProxyInitializer {
 
 	public Class<?> getActualClass(Object obj) {

@@ -12,6 +12,7 @@ import com.google.common.collect.Lists;
 import com.google.gson.JsonSerializer;
 
 @Component
+@SuppressWarnings("rawtypes")
 public class DefaultJsonSerializers implements JsonSerializers {
 
 	private static boolean isHibernateProxyPresent;
@@ -25,7 +26,6 @@ public class DefaultJsonSerializers implements JsonSerializers {
 	}
 	private List<JsonSerializer> serializers;
 
-	@SuppressWarnings("rawtypes")
 	public DefaultJsonSerializers(List<JsonSerializer> serializers, ServletContext servletContext) {
 		this.serializers = Lists.newArrayList(serializers);
 		if (isHibernateProxyPresent) 

@@ -18,11 +18,15 @@
 package br.com.caelum.vraptor.core;
 
 
-import java.util.Collections;
+import static java.util.Collections.unmodifiableMap;
+
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.View;
@@ -36,6 +40,8 @@ import br.com.caelum.vraptor.ioc.RequestScoped;
  */
 @RequestScoped
 public class DefaultResult extends AbstractResult {
+    
+    private static final Logger logger = LoggerFactory.getLogger(DefaultResult.class);
 
     private final HttpServletRequest request;
     private final Container container;
@@ -53,7 +59,7 @@ public class DefaultResult extends AbstractResult {
     }
 
     public <T extends View> T use(Class<T> view) {
-        this.responseCommitted = true;
+        responseCommitted = true;
         return container.instanceFor(view);
     }
     
@@ -62,6 +68,10 @@ public class DefaultResult extends AbstractResult {
     }
 
     public Result include(String key, Object value) {
+        if (logger.isDebugEnabled()) {
+            logger.debug("including attribute {}: {}", key, value);
+        }
+        
     	includedAttributes.put(key, value);
         request.setAttribute(key, value);
         return this;
@@ -72,7 +82,7 @@ public class DefaultResult extends AbstractResult {
     }
 
 	public Map<String, Object> included() {
-		return Collections.unmodifiableMap(includedAttributes);
+		return unmodifiableMap(includedAttributes);
 	}
 
 	public Result include(Object value) {
@@ -80,7 +90,7 @@ public class DefaultResult extends AbstractResult {
 			return this;
 		}
 		
-		String key = this.extractor.nameFor(value.getClass());
+		String key = extractor.nameFor(value.getClass());
 		return include(key, value);
 	}
 }

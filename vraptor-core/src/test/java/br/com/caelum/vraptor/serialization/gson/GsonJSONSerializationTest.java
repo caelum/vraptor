@@ -17,7 +17,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.TimeZone;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 
 import org.hibernate.proxy.HibernateProxy;
@@ -25,6 +27,7 @@ import org.hibernate.proxy.LazyInitializer;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.mockito.Mock;
 
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor.serialization.HibernateProxyInitializer;
@@ -49,6 +52,8 @@ public class GsonJSONSerializationTest {
 	private DefaultTypeNameExtractor extractor;
 
 	private HibernateProxyInitializer initializer;
+	
+	private ServletContext context;
 
 	@Before
 	@SuppressWarnings("rawtypes")
@@ -56,12 +61,13 @@ public class GsonJSONSerializationTest {
 		this.stream = new ByteArrayOutputStream();
 
 		response = mock(HttpServletResponse.class);
+		context = mock(ServletContext.class);
 		when(response.getWriter()).thenReturn(new PrintWriter(stream));
 		extractor = new DefaultTypeNameExtractor();
 		initializer = new HibernateProxyInitializer();
 
 		this.serialization = new GsonJSONSerialization(response, extractor, initializer,
-				new DefaultJsonSerializers(Collections.<JsonSerializer> emptyList()));
+				new DefaultJsonSerializers(Collections.<JsonSerializer> emptyList(), context));
 	}
 
 	public static class Address {
@@ -456,7 +462,7 @@ public class GsonJSONSerializationTest {
 		List<JsonSerializer> adapters = new ArrayList<JsonSerializer>();
 		adapters.add(new CollectionSerializer());
 
-		GsonJSONSerialization serialization = new GsonJSONSerialization(response, extractor, initializer, new DefaultJsonSerializers(adapters));
+		GsonJSONSerialization serialization = new GsonJSONSerialization(response, extractor, initializer, new DefaultJsonSerializers(adapters, context));
 
 		serialization.withoutRoot().from(new MyCollection()).serialize();
 		assertThat(result(), is(equalTo(expectedResult)));
@@ -468,7 +474,7 @@ public class GsonJSONSerializationTest {
 		List<JsonSerializer> adapters = new ArrayList<JsonSerializer>();
 		adapters.add(new CalendarSerializer());
 
-		GsonJSONSerialization serialization = new GsonJSONSerialization(response, extractor, initializer, new DefaultJsonSerializers(adapters));
+		GsonJSONSerialization serialization = new GsonJSONSerialization(response, extractor, initializer, new DefaultJsonSerializers(adapters, context));
 
 		Client c = new Client("renan");
 		c.included = new GregorianCalendar(2012, 8, 3);
@@ -479,6 +485,26 @@ public class GsonJSONSerializationTest {
 		String expectedResult = "{\"client\":{\"name\":\"renan\",\"included\":{\"time\":\""
 				+ c.included.getTimeInMillis()
 				+ "\",\"timezone\":\"" + c.included.getTimeZone().getID() + "\"}}}";
+
+		assertThat(result, is(equalTo(expectedResult)));
+	}
+
+	@Test
+	@SuppressWarnings("rawtypes")
+	public void shouldSerializeCalendarLikeISO8601() {
+		List<JsonSerializer> adapters = new ArrayList<JsonSerializer>();
+		adapters.add(new br.com.caelum.vraptor.serialization.gson.adapters.iso8601.CalendarSerializer());
+
+		GsonJSONSerialization serialization = new GsonJSONSerialization(response, extractor, initializer, new DefaultJsonSerializers(adapters, context));
+
+		Client c = new Client("Rafael");
+		c.included = new GregorianCalendar(2013, 6, 27, 9, 52, 38);
+		c.included.setTimeZone(TimeZone.getTimeZone("America/Sao_Paulo"));
+
+		serialization.from(c).serialize();
+		String result = result();
+
+		String expectedResult = "{\"client\":{\"name\":\"Rafael\",\"included\":\"2013-07-27T09:52:38.000-0300\"}}";
 
 		assertThat(result, is(equalTo(expectedResult)));
 	}

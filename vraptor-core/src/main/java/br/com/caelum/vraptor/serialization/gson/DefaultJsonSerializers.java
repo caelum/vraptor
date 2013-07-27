@@ -32,7 +32,7 @@ public class DefaultJsonSerializers implements JsonSerializers {
 			this.serializers.add(new HibernateProxySerializer());
 		
 		String packagesParam = servletContext.getInitParameter(BasicConfiguration.BASE_PACKAGES_PARAMETER_NAME);
-		if (packagesParam.contains("br.com.caelum.vraptor.serialization.gson.adapters.iso8601")) {
+		if ((packagesParam != null) && (packagesParam.contains("br.com.caelum.vraptor.serialization.gson.adapters.iso8601"))) {
 			this.serializers.add(new br.com.caelum.vraptor.serialization.gson.adapters.iso8601.CalendarSerializer());
 			this.serializers.add(new br.com.caelum.vraptor.serialization.gson.adapters.iso8601.DateSerializer());
 		}

@@ -89,6 +89,10 @@ Existe uma View do VRaptor que consegue gerar alguns formatos de JSON que o ExtJ
 result.use(ExtJSJson.class).....serialize();
 {% endhighlight %}
 
+<h3>Registrando um plugin automaticamente</h3>
+
+Para registrar um plugin automaticamente, basta adicionar o arquivo META-INF/br.com.caelum.vraptor.packages dentro do jar, contendo os pacotes do plugin, um por linha.
+
 <h3>Integração JPA e Hibernate</h3>
 
 Há três projetos externos ao VRaptor para integração persistência. Para cada um deles, basta adicionar o jar no classpath que o suporte será ativado automaticamente sem a necessidade de registrar os componentes.

@@ -5,3 +5,4 @@ auto: true
 permalink: /:categories/:title/
 pygments: true
 server: true
+baseurl:

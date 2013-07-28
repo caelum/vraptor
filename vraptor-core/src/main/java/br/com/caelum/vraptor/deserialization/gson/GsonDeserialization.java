@@ -54,7 +54,7 @@ public class GsonDeserialization implements Deserializer {
 
 	public Object[] deserialize(InputStream inputStream, ResourceMethod method) {
 		Method jMethod = method.getMethod();
-		Class<?>[] types = jMethod.getParameterTypes();
+		Class<?>[] types = getTypes(method);
 		if (types.length == 0) {
 			throw new IllegalArgumentException(
 					"Methods that consumes representations must receive just one argument");
@@ -89,6 +89,10 @@ public class GsonDeserialization implements Deserializer {
 		}
 		
 		return params;
+	}
+
+	protected Class<?>[] getTypes(ResourceMethod method) {
+		return method.getMethod().getParameterTypes();
 	}
 
 	private boolean isWithoutRoot(Class<?>[] types, JsonElement node) {

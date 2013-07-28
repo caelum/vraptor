@@ -94,12 +94,12 @@ result.use(ExtJSJson.class).....serialize();
 There are three sub projects for persistence integrations. For each one you need only to add the jar in your classpath without any other configuration.
 
 <ul>
-  <li><a href="http://github.com/caelum/vraptor-jpa">vraptor-jpa</a>, for JPA support</li>
-  <li><a href="http://github.com/caelum/vraptor-hibernate">vraptor-jpa</a>, for Hibernate 3 support</li>
-  <li><a href="http://github.com/garcia-jj/vraptor-hibernate4">vraptor-jpa</a>, for Hibernate 4 support</li>
+  <li><a href="https://github.com/caelum/vraptor-jpa">vraptor-jpa</a>, for JPA support</li>
+  <li><a href="https://github.com/caelum/vraptor-hibernate">vraptor-hibernate</a>, for Hibernate 3 support</li>
+  <li><a href="https://github.com/garcia-jj/vraptor-plugin-hibernate4">vraptor-plugin-hibernate4</a>, for Hibernate 4 support</li>
 </ul>
 
-The <a href="http://github.com/caelum/vraptor-jpa">vraptor-jpa</a> project is released without any provider. If you want to use then, you need to declare a provider as you prefer.
+The <a href="https://github.com/caelum/vraptor-jpa">vraptor-jpa</a> project is released without any provider. If you want to use then, you need to declare a provider as you prefer.
 
 To use Hibernate as provider:
 

@@ -98,12 +98,12 @@ Para registrar um plugin automaticamente, basta adicionar o arquivo META-INF/br.
 Há três projetos externos ao VRaptor para integração persistência. Para cada um deles, basta adicionar o jar no classpath que o suporte será ativado automaticamente sem a necessidade de registrar os componentes.
 
 <ul>
-  <li><a href="http://github.com/caelum/vraptor-jpa">vraptor-jpa</a>, para suporte a JPA</li>
-  <li><a href="http://github.com/caelum/vraptor-hibernate">vraptor-hibernate</a>, para suporte ao Hibernate 3</li>
-  <li><a href="http://github.com/garcia-jj/vraptor-hibernate4">vraptor-hibernate4</a>, para suporte ao Hibernate 4</li>
+  <li><a href="https://github.com/caelum/vraptor-jpa">vraptor-jpa</a>, para suporte a JPA</li>
+  <li><a href="https://github.com/caelum/vraptor-hibernate">vraptor-hibernate</a>, para suporte ao Hibernate 3</li>
+  <li><a href="https://github.com/garcia-jj/vraptor-plugin-hibernate4">vraptor-plugin-hibernate4</a>, para suporte ao Hibernate 4</li>
 </ul>
 
-O projeto <a href="http://github.com/caelum/vraptor-jpa">vraptor-jpa</a> é disponibilizado sem nenhum provider. Então para usá-lo você precisa 
+O projeto <a href="https://github.com/caelum/vraptor-jpa">vraptor-jpa</a> é disponibilizado sem nenhum provider. Então para usá-lo você precisa 
 incluir o provider de sua preferência.
 
 Para usar o Hibernate como provider:

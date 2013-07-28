@@ -17,6 +17,11 @@
 
 package br.com.caelum.vraptor.http.route;
 
+import static com.google.common.base.Predicates.instanceOf;
+import static com.google.common.collect.Iterables.any;
+import static java.util.Arrays.asList;
+
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -35,8 +40,8 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.util.collections.Filters;
 
+import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Iterators;
 
@@ -104,7 +109,7 @@ public class DefaultRouter implements Router {
 
 
 	private Collection<Route> routesMatchingUriAndMethod(String uri, HttpMethod method) {
-		Collection<Route> routesMatchingMethod = Collections2.filter(routesMatchingUri(uri), Filters.allow(method));
+		Collection<Route> routesMatchingMethod = Collections2.filter(routesMatchingUri(uri), allow(method));
 		if (routesMatchingMethod.isEmpty()) {
 			EnumSet<HttpMethod> allowed = allowedMethodsFor(uri);
 			throw new MethodNotAllowedException(allowed, method.toString());
@@ -121,7 +126,7 @@ public class DefaultRouter implements Router {
 	}
 
 	private Collection<Route> routesMatchingUri(String uri) {
-		Collection<Route> routesMatchingURI = Collections2.filter(routes, Filters.canHandle(uri));
+		Collection<Route> routesMatchingURI = Collections2.filter(routes, canHandle(uri));
 		if (routesMatchingURI.isEmpty()) {
 			throw new ResourceNotFoundException();
 		}
@@ -129,7 +134,7 @@ public class DefaultRouter implements Router {
 	}
 
 	public <T> String urlFor(Class<T> type, Method method, Object... params) {
-		Iterator<Route> matches = Iterators.filter(routes.iterator(), Filters.canHandle(type, method));
+		Iterator<Route> matches = Iterators.filter(routes.iterator(), canHandle(type, method));
 		if (matches.hasNext()) {
 			try {
 				return matches.next().urlFor(type, method, params);
@@ -146,4 +151,37 @@ public class DefaultRouter implements Router {
 		return Collections.unmodifiableList(new ArrayList<Route>(routes));
 	}
 
+
+
+    private Predicate<Route> canHandle(final Class<?> type, final Method method) {
+        return new Predicate<Route>() {
+            public boolean apply(Route route) {
+                return route.canHandle(type, method);
+            }
+        };
+    }
+
+    private Predicate<Route> canHandle(final String uri) {
+        return new Predicate<Route>() {
+            public boolean apply(Route route) {
+                return route.canHandle(uri);
+            }
+        };
+    }
+    
+    private Predicate<Route> allow(final HttpMethod method) {
+        return new Predicate<Route>() {
+            public boolean apply(Route route) {
+                return route.allowedMethods().contains(method);
+            }
+        };
+    }
+    
+    private Predicate<Annotation[]> hasAnnotation(final Class<?> annotation) {
+        return new Predicate<Annotation[]>() {
+            public boolean apply(Annotation[] param) {
+                return any(asList(param), instanceOf(annotation));
+            }
+        };
+    }
 }

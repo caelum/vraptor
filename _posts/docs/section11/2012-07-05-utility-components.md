@@ -99,4 +99,27 @@ There are three sub projects for persistence integrations. For each one you need
   <li><a href="http://github.com/garcia-jj/vraptor-hibernate4">vraptor-jpa</a>, for Hibernate 4 support</li>
 </ul>
 
+The <a href="http://github.com/caelum/vraptor-jpa">vraptor-jpa</a> project is released without any provider. If you want to use then, you need to declare a provider as you prefer.
 
+To use Hibernate as provider:
+
+{% highlight xml %}
+	<dependency>
+		<groupId>org.hibernate</groupId>
+		<artifactId>hibernate-entitymanager</artifactId>
+		<version>4.0.1.Final</version>
+	</dependency>
+{% endhighlight %}
+
+
+To use Eclipselink as provider:
+
+{% highlight xml %}
+	<dependency>
+		<groupId>org.eclipse.persistence</groupId>
+		<artifactId>javax.persistence</artifactId>
+		<version>2.0.0</version>
+	</dependency>
+{% endhighlight %}
+
+<br /><br />

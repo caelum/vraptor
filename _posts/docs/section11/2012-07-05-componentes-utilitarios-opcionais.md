@@ -95,7 +95,32 @@ Há três projetos externos ao VRaptor para integração persistência. Para cad
 
 <ul>
   <li><a href="http://github.com/caelum/vraptor-jpa">vraptor-jpa</a>, para suporte a JPA</li>
-  <li><a href="http://github.com/caelum/vraptor-hibernate">vraptor-jpa</a>, para suporte ao Hibernate 3</li>
-  <li><a href="http://github.com/garcia-jj/vraptor-hibernate4">vraptor-jpa</a>, para suporte ao Hibernate 4</li>
+  <li><a href="http://github.com/caelum/vraptor-hibernate">vraptor-hibernate</a>, para suporte ao Hibernate 3</li>
+  <li><a href="http://github.com/garcia-jj/vraptor-hibernate4">vraptor-hibernate4</a>, para suporte ao Hibernate 4</li>
 </ul>
 
+O projeto <a href="http://github.com/caelum/vraptor-jpa">vraptor-jpa</a> é disponibilizado sem nenhum provider. Então para usá-lo você precisa 
+incluir o provider de sua preferência.
+
+Para usar o Hibernate como provider:
+
+{% highlight xml %}
+	<dependency>
+		<groupId>org.hibernate</groupId>
+		<artifactId>hibernate-entitymanager</artifactId>
+		<version>4.0.1.Final</version>
+	</dependency>
+{% endhighlight %}
+
+
+Para usar o Eclipselink como provider:
+
+{% highlight xml %}
+	<dependency>
+		<groupId>org.eclipse.persistence</groupId>
+		<artifactId>javax.persistence</artifactId>
+		<version>2.0.0</version>
+	</dependency>
+{% endhighlight %}
+
+<br /><br />

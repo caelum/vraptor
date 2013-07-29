@@ -91,7 +91,7 @@ result.use(ExtJSJson.class).....serialize();
 
 <h3>Registrando um plugin automaticamente</h3>
 
-Para registrar um plugin automaticamente, basta adicionar o arquivo META-INF/br.com.caelum.vraptor.packages dentro do jar, contendo os pacotes do plugin, um por linha.
+Para registrar um plugin automaticamente, basta adicionar o arquivo META-INF/br.com.caelum.vraptor.packages dentro do jar, contendo os pacotes do plugin separados por vírgulas. O registro dos pacotes é feito recursivamente.
 
 <h3>Integração JPA e Hibernate</h3>
 

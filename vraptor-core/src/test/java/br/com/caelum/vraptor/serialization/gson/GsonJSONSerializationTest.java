@@ -32,6 +32,7 @@ import org.mockito.Mock;
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor.serialization.HibernateProxyInitializer;
 import br.com.caelum.vraptor.serialization.gson.adapters.CalendarSerializer;
+import br.com.caelum.vraptor.util.ISO8601Util;
 
 import com.google.common.collect.ForwardingCollection;
 import com.google.gson.ExclusionStrategy;
@@ -493,7 +494,7 @@ public class GsonJSONSerializationTest {
 	@SuppressWarnings("rawtypes")
 	public void shouldSerializeCalendarLikeISO8601() {
 		List<JsonSerializer> adapters = new ArrayList<JsonSerializer>();
-		adapters.add(new br.com.caelum.vraptor.serialization.gson.adapters.iso8601.CalendarSerializer());
+		adapters.add(new br.com.caelum.vraptor.serialization.gson.adapters.iso8601.CalendarSerializer(new ISO8601Util()));
 
 		GsonJSONSerialization serialization = new GsonJSONSerialization(response, extractor, initializer, new DefaultJsonSerializers(adapters, context));
 

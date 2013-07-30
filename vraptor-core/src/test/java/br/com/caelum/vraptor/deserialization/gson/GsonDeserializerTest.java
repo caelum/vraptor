@@ -31,6 +31,7 @@ import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.serialization.gson.DefaultJsonSerializers;
 import br.com.caelum.vraptor.serialization.gson.adapters.CalendarDeserializer;
+import br.com.caelum.vraptor.util.ISO8601Util;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -257,7 +258,7 @@ public class GsonDeserializerTest {
 		when(provider.parameterNamesFor(bark.getMethod())).thenReturn(new String[] { "dog" });
 		
 		List<JsonDeserializer> deserializers = new ArrayList<JsonDeserializer>();
-		deserializers.add(new br.com.caelum.vraptor.serialization.gson.adapters.iso8601.CalendarDeserializer());
+		deserializers.add(new br.com.caelum.vraptor.serialization.gson.adapters.iso8601.CalendarDeserializer(new ISO8601Util()));
 		
 		deserializer = new GsonDeserialization(provider, new DefaultJsonDeserializers(deserializers, context), request);
 

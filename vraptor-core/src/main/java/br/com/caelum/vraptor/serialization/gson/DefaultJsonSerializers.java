@@ -7,6 +7,7 @@ import javax.servlet.ServletContext;
 import br.com.caelum.vraptor.config.BasicConfiguration;
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.serialization.gson.adapters.HibernateProxySerializer;
+import br.com.caelum.vraptor.util.ISO8601Util;
 
 import com.google.common.collect.Lists;
 import com.google.gson.JsonSerializer;
@@ -33,8 +34,8 @@ public class DefaultJsonSerializers implements JsonSerializers {
 		
 		String packagesParam = servletContext.getInitParameter(BasicConfiguration.BASE_PACKAGES_PARAMETER_NAME);
 		if ((packagesParam != null) && (packagesParam.contains("br.com.caelum.vraptor.serialization.gson.adapters.iso8601"))) {
-			this.serializers.add(new br.com.caelum.vraptor.serialization.gson.adapters.iso8601.CalendarSerializer());
-			this.serializers.add(new br.com.caelum.vraptor.serialization.gson.adapters.iso8601.DateSerializer());
+			this.serializers.add(new br.com.caelum.vraptor.serialization.gson.adapters.iso8601.CalendarSerializer(new ISO8601Util()));
+			this.serializers.add(new br.com.caelum.vraptor.serialization.gson.adapters.iso8601.DateSerializer(new ISO8601Util()));
 		}
 	}
 

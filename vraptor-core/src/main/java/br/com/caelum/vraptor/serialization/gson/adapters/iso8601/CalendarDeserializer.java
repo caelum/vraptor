@@ -13,13 +13,19 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 
 public class CalendarDeserializer implements JsonDeserializer<Calendar> {
+	
+	private final ISO8601Util iso8601;
+	
+	public CalendarDeserializer(ISO8601Util iso8601) {
+		this.iso8601 = iso8601;
+	}
 
 	public Calendar deserialize(JsonElement json, Type typeOfT,	JsonDeserializationContext context) throws JsonParseException {
 
 		try {
 			String value = json.getAsString();
 
-			Calendar calendar = ISO8601Util.toCalendar(value);
+			Calendar calendar = iso8601.toCalendar(value);
 
 			return calendar;
 		} catch (ParseException e) {

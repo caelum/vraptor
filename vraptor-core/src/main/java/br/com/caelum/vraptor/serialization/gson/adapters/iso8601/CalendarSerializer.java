@@ -11,10 +11,16 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
 public class CalendarSerializer implements JsonSerializer<Calendar> {
+	
+	private final ISO8601Util iso8601;
+	
+	public CalendarSerializer(ISO8601Util iso8601) {
+		this.iso8601 = iso8601;
+	}
 
 	public JsonElement serialize(Calendar calendar, Type typeOfSrc, JsonSerializationContext context) {
 
-		String json = ISO8601Util.fromCalendar(calendar);
+		String json = iso8601.fromCalendar(calendar);
 		
 		return new JsonPrimitive(json);
 	}

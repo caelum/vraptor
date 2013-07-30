@@ -14,12 +14,18 @@ import com.google.gson.JsonParseException;
 
 public class DateDeserializer implements JsonDeserializer<Date> {
 
+	private final ISO8601Util iso8601;
+	
+	public DateDeserializer(ISO8601Util iso8601) {
+		this.iso8601 = iso8601;
+	}
+	
 	public Date deserialize(JsonElement json, Type typeOfT,	JsonDeserializationContext context) throws JsonParseException {
 
 		try {
 			String value = json.getAsString();
 
-			Date date = ISO8601Util.toDate(value);
+			Date date = iso8601.toDate(value);
 
 			return date;
 		} catch (ParseException e) {

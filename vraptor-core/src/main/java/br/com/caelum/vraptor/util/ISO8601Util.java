@@ -26,7 +26,7 @@ import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.xml.datatype.DatatypeConfigurationException;
+import br.com.caelum.vraptor.ioc.Component;
 
 /**
  * Helper class for handling ISO8601 strings of the following format:
@@ -34,42 +34,38 @@ import javax.xml.datatype.DatatypeConfigurationException;
  * 
  * @author Rafael Dipold
  */
+@Component
 public final class ISO8601Util {
 
 	/** Default Extended Format */
 	private static final String DEFAULT_ISO8601_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
 	
 	private static final String REGEX_ISO8601 = "^(\\d{4})-?(\\d\\d)-?(\\d\\d)(?:T(\\d\\d)(?::?(\\d\\d)(?::?(\\d\\d)(?:\\.(\\d+))?)?)?(Z|([+-])(\\d\\d):?(\\d\\d)?)?)?$";
-												//1         2         3           4            5            6             7           8  9     10        11
+	//                                            1         2         3           4            5            6             7           8  9     10        11
 
-	/** SimpleDateFormat is not thread-safe, so give one to each thread */
-	private static final ThreadLocal<SimpleDateFormat> formatter = new ThreadLocal<SimpleDateFormat>() {
-		protected SimpleDateFormat initialValue() {
-			return new SimpleDateFormat(DEFAULT_ISO8601_FORMAT); 
-		}
-	};
+	private static final SimpleDateFormat formatter = new SimpleDateFormat(DEFAULT_ISO8601_FORMAT); 
 	
 	/** Transform Calendar to ISO8601 string. */
-	public static String fromCalendar(final Calendar calendar) {
-		formatter.get().setTimeZone(calendar.getTimeZone());
+	public String fromCalendar(final Calendar calendar) {
+		formatter.setTimeZone(calendar.getTimeZone());
 		return fromDate(calendar.getTime());
 	}
 
 	/** Transform java.util.Date to ISO8601 string. */
-	public static String fromDate(final Date date) {
-		String formatted = formatter.get().format(date);
+	public String fromDate(final Date date) {
+		String formatted = formatter.format(date);
 		formatted = formatted.replaceAll("[+-]00:?00$", "Z");
 		return formatted;
 	}
 
 	/** Get current date and time formatted as ISO8601 string. */
-	public static String now() {
+	public String now() {
 		return fromCalendar(GregorianCalendar.getInstance());
 	}
 
 	/** Transform ISO8601 string to Calendar 
-	 * @throws DatatypeConfigurationException */
-	public static Calendar toCalendar(final String iso8601String) throws ParseException {
+	 * @throws ParseException */
+	public Calendar toCalendar(final String iso8601String) throws ParseException {
 		Pattern pattern = Pattern.compile(REGEX_ISO8601);
 		Matcher matcher = pattern.matcher(iso8601String);
 		
@@ -101,7 +97,7 @@ public final class ISO8601Util {
 	}
 
 	/** Transform ISO8601 string to java.util.Date */
-	public static Date toDate(final String iso8601String) throws ParseException {
+	public Date toDate(final String iso8601String) throws ParseException {
 		Calendar calendar = toCalendar(iso8601String);
 		return calendar.getTime();
 	}

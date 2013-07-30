@@ -1,6 +1,5 @@
 package br.com.caelum.vraptor.interceptor.multipart;
 
-import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.io.ByteStreams.toByteArray;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -37,7 +36,6 @@ import br.com.caelum.vraptor.http.InvalidParameterException;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.validator.I18nMessage;
-import br.com.caelum.vraptor.validator.Validations;
 
 /**
  * Test class for uploading features using commons-fileupload.
@@ -177,7 +175,11 @@ public class CommonsUploadMultipartInterceptorTest {
         
         when(request.getContentType()).thenReturn("multipart/form-data");
         when(request.getMethod()).thenReturn("POST");
-        when(mockUpload.parseRequest(request)).thenReturn(newArrayList(item));
+        
+        List<FileItem> items = new ArrayList<FileItem>();
+        items.add(item);
+        
+        when(mockUpload.parseRequest(request)).thenReturn(items);
         
         interceptor.intercept(stack, method, instance);
     }

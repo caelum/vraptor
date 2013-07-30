@@ -48,9 +48,9 @@ public class GsonDeserialization implements Deserializer {
 
 	private final HttpServletRequest request;
 
-	public GsonDeserialization(ParameterNameProvider paramNameProvider, List<JsonDeserializer> adapters, HttpServletRequest request) {
+	public GsonDeserialization(ParameterNameProvider paramNameProvider, JsonDeserializers adapters, HttpServletRequest request) {
 		this.paramNameProvider = paramNameProvider;
-		this.adapters = adapters;
+		this.adapters = adapters.getDeserializers();
 		this.request = request;
 	}
 

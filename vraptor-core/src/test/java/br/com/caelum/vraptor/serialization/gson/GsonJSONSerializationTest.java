@@ -17,6 +17,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -29,6 +30,7 @@ import org.junit.Test;
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor.serialization.HibernateProxyInitializer;
 import br.com.caelum.vraptor.serialization.gson.adapters.CalendarSerializer;
+import br.com.caelum.vraptor.util.ISO8601Util;
 
 import com.google.common.collect.ForwardingCollection;
 import com.google.gson.ExclusionStrategy;
@@ -49,7 +51,7 @@ public class GsonJSONSerializationTest {
 	private DefaultTypeNameExtractor extractor;
 
 	private HibernateProxyInitializer initializer;
-
+	
 	@Before
 	@SuppressWarnings("rawtypes")
 	public void setup() throws Exception {
@@ -479,6 +481,26 @@ public class GsonJSONSerializationTest {
 		String expectedResult = "{\"client\":{\"name\":\"renan\",\"included\":{\"time\":\""
 				+ c.included.getTimeInMillis()
 				+ "\",\"timezone\":\"" + c.included.getTimeZone().getID() + "\"}}}";
+
+		assertThat(result, is(equalTo(expectedResult)));
+	}
+
+	@Test
+	@SuppressWarnings("rawtypes")
+	public void shouldSerializeCalendarLikeISO8601() {
+		List<JsonSerializer> adapters = new ArrayList<JsonSerializer>();
+		adapters.add(new br.com.caelum.vraptor.serialization.iso8601.gson.CalendarISO8601Serializer(new ISO8601Util()));
+
+		GsonJSONSerialization serialization = new GsonJSONSerialization(response, extractor, initializer, new DefaultJsonSerializers(adapters));
+
+		Client c = new Client("Rafael");
+		c.included = new GregorianCalendar(2013, 6, 27, 9, 52, 38);
+		c.included.setTimeZone(TimeZone.getTimeZone("America/Sao_Paulo"));
+
+		serialization.from(c).serialize();
+		String result = result();
+
+		String expectedResult = "{\"client\":{\"name\":\"Rafael\",\"included\":\"2013-07-27T09:52:38.000-0300\"}}";
 
 		assertThat(result, is(equalTo(expectedResult)));
 	}

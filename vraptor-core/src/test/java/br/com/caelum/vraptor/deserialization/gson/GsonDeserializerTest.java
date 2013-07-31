@@ -12,13 +12,11 @@ import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.junit.Before;
@@ -29,7 +27,6 @@ import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.resource.DefaultResourceClass;
 import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.serialization.gson.DefaultJsonSerializers;
 import br.com.caelum.vraptor.serialization.gson.adapters.CalendarDeserializer;
 import br.com.caelum.vraptor.util.ISO8601Util;
 
@@ -37,7 +34,6 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
-import com.google.gson.JsonSerializer;
 
 public class GsonDeserializerTest {
 
@@ -49,21 +45,19 @@ public class GsonDeserializerTest {
 	private DefaultResourceMethod woof;
 	private DefaultResourceMethod dropDead;
 	private HttpServletRequest request;
-	private ServletContext context;
 
 	@Before
 	public void setUp() throws Exception {
 		provider = mock(ParameterNameProvider.class);
 		localization = mock(Localization.class);
 		request = mock(HttpServletRequest.class);
-		context = mock(ServletContext.class);
 		
 		when(localization.getLocale()).thenReturn(new Locale("pt", "BR"));
 
 		List<JsonDeserializer> deserializers = new ArrayList<JsonDeserializer>();
 		CalendarDeserializer calendarDeserializer = new CalendarDeserializer(localization);
 		deserializers.add(calendarDeserializer);
-		deserializer = new GsonDeserialization(provider, new DefaultJsonDeserializers(deserializers, context), request);
+		deserializer = new GsonDeserialization(provider, new DefaultJsonDeserializers(deserializers), request);
 		DefaultResourceClass resourceClass = new DefaultResourceClass(DogController.class);
 
 		woof = new DefaultResourceMethod(resourceClass, DogController.class.getDeclaredMethod("woof"));
@@ -154,7 +148,7 @@ public class GsonDeserializerTest {
 		List<JsonDeserializer> deserializers = new ArrayList<JsonDeserializer>();
 		deserializers.add(new DogDeserializer());
 
-		deserializer = new GsonDeserialization(provider, new DefaultJsonDeserializers(deserializers, context), request);
+		deserializer = new GsonDeserialization(provider, new DefaultJsonDeserializers(deserializers), request);
 
 		InputStream stream = new ByteArrayInputStream("{'dog':{'name':'Renan Reis','age':'0'}}".getBytes());
 
@@ -258,9 +252,9 @@ public class GsonDeserializerTest {
 		when(provider.parameterNamesFor(bark.getMethod())).thenReturn(new String[] { "dog" });
 		
 		List<JsonDeserializer> deserializers = new ArrayList<JsonDeserializer>();
-		deserializers.add(new br.com.caelum.vraptor.serialization.gson.adapters.iso8601.CalendarDeserializer(new ISO8601Util()));
+		deserializers.add(new br.com.caelum.vraptor.serialization.iso8601.gson.CalendarISO8601Deserializer(new ISO8601Util()));
 		
-		deserializer = new GsonDeserialization(provider, new DefaultJsonDeserializers(deserializers, context), request);
+		deserializer = new GsonDeserialization(provider, new DefaultJsonDeserializers(deserializers), request);
 
 		Object[] deserialized = deserializer.deserialize(stream, bark);
 

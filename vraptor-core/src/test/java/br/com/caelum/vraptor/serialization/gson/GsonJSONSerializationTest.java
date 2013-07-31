@@ -19,7 +19,6 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.TimeZone;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 
 import org.hibernate.proxy.HibernateProxy;
@@ -27,7 +26,6 @@ import org.hibernate.proxy.LazyInitializer;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.mockito.Mock;
 
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor.serialization.HibernateProxyInitializer;
@@ -54,21 +52,18 @@ public class GsonJSONSerializationTest {
 
 	private HibernateProxyInitializer initializer;
 	
-	private ServletContext context;
-
 	@Before
 	@SuppressWarnings("rawtypes")
 	public void setup() throws Exception {
 		this.stream = new ByteArrayOutputStream();
 
 		response = mock(HttpServletResponse.class);
-		context = mock(ServletContext.class);
 		when(response.getWriter()).thenReturn(new PrintWriter(stream));
 		extractor = new DefaultTypeNameExtractor();
 		initializer = new HibernateProxyInitializer();
 
 		this.serialization = new GsonJSONSerialization(response, extractor, initializer,
-				new DefaultJsonSerializers(Collections.<JsonSerializer> emptyList(), context));
+				new DefaultJsonSerializers(Collections.<JsonSerializer> emptyList()));
 	}
 
 	public static class Address {
@@ -463,7 +458,7 @@ public class GsonJSONSerializationTest {
 		List<JsonSerializer> adapters = new ArrayList<JsonSerializer>();
 		adapters.add(new CollectionSerializer());
 
-		GsonJSONSerialization serialization = new GsonJSONSerialization(response, extractor, initializer, new DefaultJsonSerializers(adapters, context));
+		GsonJSONSerialization serialization = new GsonJSONSerialization(response, extractor, initializer, new DefaultJsonSerializers(adapters));
 
 		serialization.withoutRoot().from(new MyCollection()).serialize();
 		assertThat(result(), is(equalTo(expectedResult)));
@@ -475,7 +470,7 @@ public class GsonJSONSerializationTest {
 		List<JsonSerializer> adapters = new ArrayList<JsonSerializer>();
 		adapters.add(new CalendarSerializer());
 
-		GsonJSONSerialization serialization = new GsonJSONSerialization(response, extractor, initializer, new DefaultJsonSerializers(adapters, context));
+		GsonJSONSerialization serialization = new GsonJSONSerialization(response, extractor, initializer, new DefaultJsonSerializers(adapters));
 
 		Client c = new Client("renan");
 		c.included = new GregorianCalendar(2012, 8, 3);
@@ -494,9 +489,9 @@ public class GsonJSONSerializationTest {
 	@SuppressWarnings("rawtypes")
 	public void shouldSerializeCalendarLikeISO8601() {
 		List<JsonSerializer> adapters = new ArrayList<JsonSerializer>();
-		adapters.add(new br.com.caelum.vraptor.serialization.gson.adapters.iso8601.CalendarSerializer(new ISO8601Util()));
+		adapters.add(new br.com.caelum.vraptor.serialization.iso8601.gson.CalendarISO8601Serializer(new ISO8601Util()));
 
-		GsonJSONSerialization serialization = new GsonJSONSerialization(response, extractor, initializer, new DefaultJsonSerializers(adapters, context));
+		GsonJSONSerialization serialization = new GsonJSONSerialization(response, extractor, initializer, new DefaultJsonSerializers(adapters));
 
 		Client c = new Client("Rafael");
 		c.included = new GregorianCalendar(2013, 6, 27, 9, 52, 38);

@@ -26,6 +26,7 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor.serialization.HibernateProxyInitializer;
+import br.com.caelum.vraptor.serialization.gson.GsonJSONSerializationTest.Item;
 
 import com.google.common.collect.ForwardingCollection;
 import com.thoughtworks.xstream.XStream;
@@ -280,6 +281,17 @@ public class XStreamJSONSerializationTest {
 		assertThat(result(), is(equalTo(expectedResult)));
 	}
 	
+	@Test
+	public void shouldExcludeAllPrimitiveFieldsAndIncludeInACollection(){
+		String expectedResult = "{\"items\": [{\"name\": \"nykolas\"},{\"name\": \"guilherme\"}]}";
+		List<Item> items = new ArrayList<Item>();
+		items.add(new Item("nykolas", 10.0));
+		items.add(new Item("guilherme", 11.0));
+		
+		serialization.from(items, "items").excludeAll().include("name").serialize();
+		
+		assertThat(result(), is(equalTo(expectedResult)));
+	}
 	
 	@Test
 	public void shouldExcludeAllThanIncludeAndSerialize() {

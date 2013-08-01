@@ -15,6 +15,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -27,6 +28,7 @@ import br.com.caelum.vraptor.resource.DefaultResourceClass;
 import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.serialization.gson.adapters.CalendarDeserializer;
+import br.com.caelum.vraptor.util.ISO8601Util;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -49,13 +51,13 @@ public class GsonDeserializerTest {
 		provider = mock(ParameterNameProvider.class);
 		localization = mock(Localization.class);
 		request = mock(HttpServletRequest.class);
-
+		
 		when(localization.getLocale()).thenReturn(new Locale("pt", "BR"));
 
 		List<JsonDeserializer> deserializers = new ArrayList<JsonDeserializer>();
 		CalendarDeserializer calendarDeserializer = new CalendarDeserializer(localization);
 		deserializers.add(calendarDeserializer);
-		deserializer = new GsonDeserialization(provider, deserializers, request);
+		deserializer = new GsonDeserialization(provider, new DefaultJsonDeserializers(deserializers), request);
 		DefaultResourceClass resourceClass = new DefaultResourceClass(DogController.class);
 
 		woof = new DefaultResourceMethod(resourceClass, DogController.class.getDeclaredMethod("woof"));
@@ -146,7 +148,7 @@ public class GsonDeserializerTest {
 		List<JsonDeserializer> deserializers = new ArrayList<JsonDeserializer>();
 		deserializers.add(new DogDeserializer());
 
-		deserializer = new GsonDeserialization(provider, deserializers, request);
+		deserializer = new GsonDeserialization(provider, new DefaultJsonDeserializers(deserializers), request);
 
 		InputStream stream = new ByteArrayInputStream("{'dog':{'name':'Renan Reis','age':'0'}}".getBytes());
 
@@ -238,6 +240,32 @@ public class GsonDeserializerTest {
 		assertThat(dog.age, is(7));
 
 		Calendar birthday = new GregorianCalendar(1987, 0, 6);
+		assertThat(dog.birthday, is(birthday));
+	}
+
+	@Test
+	public void shouldDeserializeADogWithCalendarAsISO8601Attribute() {
+		InputStream stream = new ByteArrayInputStream(
+				"{'dog':{'name':'Brutus','age':7,'birthday':'2013-07-23T17:14:14.000-0300'}}".getBytes());
+
+		when(provider.parameterNamesFor(bark.getMethod())).thenReturn(new String[] { "dog" });
+		when(provider.parameterNamesFor(bark.getMethod())).thenReturn(new String[] { "dog" });
+		
+		List<JsonDeserializer> deserializers = new ArrayList<JsonDeserializer>();
+		deserializers.add(new br.com.caelum.vraptor.serialization.iso8601.gson.CalendarISO8601Deserializer(new ISO8601Util()));
+		
+		deserializer = new GsonDeserialization(provider, new DefaultJsonDeserializers(deserializers), request);
+
+		Object[] deserialized = deserializer.deserialize(stream, bark);
+
+		assertThat(deserialized.length, is(1));
+		assertThat(deserialized[0], is(instanceOf(Dog.class)));
+		Dog dog = (Dog) deserialized[0];
+		assertThat(dog.name, is("Brutus"));
+		assertThat(dog.age, is(7));
+
+		Calendar birthday = new GregorianCalendar(2013, 6, 23, 17, 14, 14);
+		birthday.setTimeZone(TimeZone.getTimeZone("GMT-0300"));
 		assertThat(dog.birthday, is(birthday));
 	}
 

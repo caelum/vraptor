@@ -9,6 +9,7 @@ import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 
 import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileItemHeaders;
 
 public class MockFileItem
     implements FileItem {
@@ -105,5 +106,12 @@ public class MockFileItem
         throws Exception {
 
     }
-
+    
+    public FileItemHeaders getHeaders() {
+        return null;
+    }
+    
+    public void setHeaders(FileItemHeaders arg0) {
+        
+    }
 }

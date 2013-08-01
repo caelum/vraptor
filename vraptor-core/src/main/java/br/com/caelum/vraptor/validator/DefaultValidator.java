@@ -24,6 +24,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.core.Localization;
@@ -41,6 +44,8 @@ import com.google.common.base.Supplier;
  */
 @RequestScoped
 public class DefaultValidator extends AbstractValidator {
+    
+    private static final Logger logger = LoggerFactory.getLogger(DefaultValidator.class);
 
     private final class LocalizationSupplier implements Supplier<ResourceBundle> {
 		public ResourceBundle get() {
@@ -53,11 +58,8 @@ public class DefaultValidator extends AbstractValidator {
 	private final List<Message> errors = new ArrayList<Message>();
 	private final ValidationViewsFactory viewsFactory;
 	private final BeanValidator beanValidator;
-
 	private final Outjector outjector;
-
 	private final Proxifier proxifier;
-
 	private final Localization localization;
 
     public DefaultValidator(Result result, ValidationViewsFactory factory, Outjector outjector, Proxifier proxifier, BeanValidator beanValidator, Localization localization) {
@@ -85,6 +87,11 @@ public class DefaultValidator extends AbstractValidator {
     	if (!hasErrors()) {
     		return new MockResult(proxifier).use(view); //ignore anything, no errors occurred
     	}
+    	
+    	if (logger.isDebugEnabled()) {
+    	    logger.debug("there are errors on result: {}", errors);
+    	}
+    	
     	result.include("errors", errors);
     	outjector.outjectRequestMap();
     	return viewsFactory.instanceFor(view, errors);

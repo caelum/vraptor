@@ -17,6 +17,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -29,6 +30,7 @@ import org.junit.Test;
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor.serialization.HibernateProxyInitializer;
 import br.com.caelum.vraptor.serialization.gson.adapters.CalendarSerializer;
+import br.com.caelum.vraptor.util.ISO8601Util;
 
 import com.google.common.collect.ForwardingCollection;
 import com.google.gson.JsonElement;
@@ -47,7 +49,7 @@ public class GsonJSONSerializationTest {
 	private DefaultTypeNameExtractor extractor;
 
 	private HibernateProxyInitializer initializer;
-
+	
 	@Before
 	@SuppressWarnings("rawtypes")
 	public void setup() throws Exception {
@@ -470,6 +472,26 @@ public class GsonJSONSerializationTest {
 	}
 
 	@Test
+	@SuppressWarnings("rawtypes")
+	public void shouldSerializeCalendarLikeISO8601() {
+		List<JsonSerializer> adapters = new ArrayList<JsonSerializer>();
+		adapters.add(new br.com.caelum.vraptor.serialization.iso8601.gson.CalendarISO8601Serializer(new ISO8601Util()));
+
+		GsonJSONSerialization serialization = new GsonJSONSerialization(response, extractor, initializer, new DefaultJsonSerializers(adapters));
+
+		Client c = new Client("Rafael");
+		c.included = new GregorianCalendar(2013, 6, 27, 9, 52, 38);
+		c.included.setTimeZone(TimeZone.getTimeZone("America/Sao_Paulo"));
+
+		serialization.from(c).serialize();
+		String result = result();
+
+		String expectedResult = "{\"client\":{\"name\":\"Rafael\",\"included\":\"2013-07-27T09:52:38.000-0300\"}}";
+
+		assertThat(result, is(equalTo(expectedResult)));
+	}
+
+	@Test
 	public void shouldExcludeAllPrimitiveFields() {
 		String expectedResult = "{\"order\":{}}";
 		Order order = new Order(new Client("nykolas lima"), 15.0, "gift bags, please");
@@ -517,4 +539,13 @@ public class GsonJSONSerializationTest {
 		assertThat(result(), is(equalTo(expectedResult)));
 	}
 	
+	@Test
+	public void shouldExcludeAllThanIncludeInCollection() {
+		String expectedResult = "{\"list\":[{\"client\":{\"name\":\"nykolas\"}},{\"client\":{\"name\":\"guilherme\"}}]}";
+		List<Order> orders = new ArrayList<Order>();
+		orders.add(new Order(new Client("nykolas"), 15.0, "gift bags, please"));
+		orders.add(new Order(new Client("guilherme"), 15.0, "gift bags, please"));
+		serialization.from(orders).excludeAll().include("client", "client.name").serialize();
+		assertThat(result(), is(equalTo(expectedResult)));
+	}
 }

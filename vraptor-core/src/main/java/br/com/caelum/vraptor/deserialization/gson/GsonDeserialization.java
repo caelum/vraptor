@@ -92,9 +92,18 @@ public class GsonDeserialization implements Deserializer {
 	}
 
 	protected Class<?>[] getTypes(ResourceMethod method) {
+		Type superclass = method.getResource().getType().getGenericSuperclass();
+		if(!superclass.equals(Object.class)) {
+			Type[] genericsTypes = getGenericsTypes(superclass);
+			Class<?>[] classes = new Class<?>[genericsTypes.length];
+			for (int i = 0; i < genericsTypes.length; i++) {
+				classes[i] = (Class<?>) genericsTypes[i];
+			}
+			return classes;
+		}
 		return method.getMethod().getParameterTypes();
 	}
-
+	
 	private boolean isWithoutRoot(Class<?>[] types, JsonElement node) {
 		return node == null && types.length == 1;
 	}
@@ -111,10 +120,18 @@ public class GsonDeserialization implements Deserializer {
 
 	private Class<?> getAdapterType(JsonDeserializer<?> adapter) {
 		Type[] genericInterfaces = adapter.getClass().getGenericInterfaces();
-		ParameterizedType type = (ParameterizedType) genericInterfaces[0];
-		Type actualType = type.getActualTypeArguments()[0];
+		Type actualType = getFirstGenericType(genericInterfaces[0]);
 
 		return (Class<?>) actualType;
+	}
+	
+	private Type getFirstGenericType(Type type) {
+		return getGenericsTypes(type)[0];
+	}
+	
+	private Type[] getGenericsTypes(Type type) {
+		ParameterizedType paramType = (ParameterizedType) type;
+		return paramType.getActualTypeArguments();
 	}
 
 	private String getContentOfStream(InputStream input) throws IOException {

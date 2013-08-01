@@ -1,5 +1,6 @@
 package br.com.caelum.vraptor.deserialization.gson;
 
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -8,6 +9,7 @@ import static org.mockito.Mockito.when;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -17,6 +19,8 @@ import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
+import net.vidageek.mirror.dsl.Mirror;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -24,8 +28,10 @@ import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.resource.DefaultResourceClass;
 import br.com.caelum.vraptor.resource.DefaultResourceMethod;
+import br.com.caelum.vraptor.resource.ResourceClass;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.serialization.gson.adapters.CalendarDeserializer;
+import br.com.caelum.vraptor.view.GenericController;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -76,6 +82,9 @@ public class GsonDeserializerTest {
 		}
 	}
 
+	static class ExtGenericController extends GenericController<Dog>{
+	}
+	
 	static class DogController {
 
 		public void woof() {
@@ -255,5 +264,21 @@ public class GsonDeserializerTest {
 		Dog dog = (Dog) deserialized[0];
 
 		assertThat(dog.name, is("ç"));
+	}
+	
+	@Test
+	public void shouldReturnAGenericType() {
+		InputStream stream = new ByteArrayInputStream(
+				"{'entity':{'name':'Brutus','age':7,'birthday':'06/01/1987'}}".getBytes());
+		ResourceClass resourceClass = new DefaultResourceClass(ExtGenericController.class);
+		Method method = new Mirror().on(GenericController.class).reflect().method("method").withAnyArgs();
+		ResourceMethod resource = new DefaultResourceMethod(resourceClass, method);
+		when(provider.parameterNamesFor(resource.getMethod())).thenReturn(new String[] { "entity" });
+		
+		Object[] deserialized = deserializer.deserialize(stream, resource);
+		
+		Dog dog = (Dog) deserialized[0];
+		
+		assertThat(dog.name, equalTo("Brutus"));
 	}
 }

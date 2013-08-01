@@ -528,5 +528,29 @@ public class GsonJSONSerializationTest {
 		serialization.from(order).excludeAll().include("price").serialize();
 		assertThat(result(), is(equalTo(expectedResult)));
 	}
+	
+	@Test
+	public void shouldExcludeAllFieldsInACollection() {
+		String expectedResult = "{\"list\":[{},{}]}";
+		
+		List<Order> orders = new ArrayList<Order>();
+		orders.add(new Order(new Client("nykolas"), 15.0, "gift bags, please"));
+		orders.add(new Order(new Client("Guilherme"), 15.0, "gift bags, please"));
+		
+		serialization.from(orders).excludeAll().serialize();
+		assertThat(result(), is(equalTo(expectedResult)));
+	}
+
+	@Test
+	public void shouldExcludeAllPrimitiveFieldsAndIncludeInCollection(){
+		String expectedResult = "{\"items\":[{\"name\":\"nykolas\"},{\"name\":\"guilherme\"}]}";
+		
+		List<Item> items = new ArrayList<Item>();
+		items.add(new Item("nykolas", 10.0));
+		items.add(new Item("guilherme", 11.0));
+		
+		serialization.from(items, "items").excludeAll().include("name").serialize();
+		assertThat(result(), is(equalTo(expectedResult)));
+	}
 
 }

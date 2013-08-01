@@ -21,23 +21,18 @@ import java.util.ResourceBundle;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
-import br.com.caelum.vraptor.converter.ConversionError;
 
 /**
  * A converter capable of setting UploadedFiles based on files parsed by the
  * multipart interceptor.
  *
  * @author Guilherme Silveira
+ * @author Danilo Muñoz
  */
 @Convert(UploadedFile.class)
 public class UploadedFileConverter implements Converter<UploadedFile> {
-
-	private static final Logger logger = LoggerFactory.getLogger(UploadedFileConverter.class);
 
     private final HttpServletRequest request;
 
@@ -47,12 +42,6 @@ public class UploadedFileConverter implements Converter<UploadedFile> {
 
     public UploadedFile convert(String value, Class<? extends UploadedFile> type, ResourceBundle bundle) {
         Object upload = request.getAttribute(value);
-        if (upload == null) {
-        	logger.warn("There was an error when uploading the file {}. " +
-        			"Please verify if commons-fileupload jars are in your classpath or you are using a Servlet 3 Container.");
-        	throw new ConversionError("Invalid upload");
-        }
-		return type.cast(upload);
+        return upload == null ? null : type.cast(upload);
     }
-
 }

@@ -1,7 +1,0 @@
-You MUST run:
-$ ant
-for copying required jars to examples WEB-INF/lib dirs
-
-to use maven you should install manually some dependencies out of maven repo:
-$ sh maven_fix.sh
-

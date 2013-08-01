@@ -71,7 +71,7 @@ public class CommonsUploadMultipartInterceptor
     private final Validator validator;
     private final ServletFileUploadCreator fileUploadCreator;
 
-    final Multiset<String> indexes = HashMultiset.create();
+    private Multiset<String> indexes;
 
     public CommonsUploadMultipartInterceptor(HttpServletRequest request, MutableRequest parameters, MultipartConfig cfg,
             Validator validator, ServletFileUploadCreator fileUploadCreator) {
@@ -94,7 +94,8 @@ public class CommonsUploadMultipartInterceptor
         logger.info("Request contains multipart data. Try to parse with commons-upload.");
 
         FileItemFactory factory = createFactoryForDiskBasedFileItems(config.getDirectory());
-
+        indexes = HashMultiset.create();
+        
         ServletFileUpload uploader = fileUploadCreator.create(factory);
         uploader.setSizeMax(config.getSizeLimit());
 

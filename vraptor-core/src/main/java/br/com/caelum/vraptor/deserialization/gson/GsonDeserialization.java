@@ -93,7 +93,7 @@ public class GsonDeserialization implements Deserializer {
 
 	protected Class<?>[] getTypes(ResourceMethod method) {
 		Type superclass = method.getResource().getType().getGenericSuperclass();
-		if(!superclass.equals(Object.class)) {
+		if(superclass instanceof ParameterizedType) {
 			Type[] genericsTypes = getGenericsTypes(superclass);
 			Class<?>[] classes = new Class<?>[genericsTypes.length];
 			for (int i = 0; i < genericsTypes.length; i++) {

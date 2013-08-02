@@ -92,16 +92,12 @@ public class GsonDeserialization implements Deserializer {
 	}
 
 	protected Class<?>[] getTypes(ResourceMethod method) {
+		Class<?>[] parameterTypes = method.getMethod().getParameterTypes();
 		Type superclass = method.getResource().getType().getGenericSuperclass();
 		if(superclass instanceof ParameterizedType) {
-			Type[] genericsTypes = getGenericsTypes(superclass);
-			Class<?>[] classes = new Class<?>[genericsTypes.length];
-			for (int i = 0; i < genericsTypes.length; i++) {
-				classes[i] = (Class<?>) genericsTypes[i];
-			}
-			return classes;
+			parameterTypes[0] = (Class<?>) getFirstGenericType(superclass);
 		}
-		return method.getMethod().getParameterTypes();
+		return parameterTypes;
 	}
 	
 	private boolean isWithoutRoot(Class<?>[] types, JsonElement node) {

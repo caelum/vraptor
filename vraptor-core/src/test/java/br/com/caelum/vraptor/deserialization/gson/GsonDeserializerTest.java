@@ -3,6 +3,7 @@ package br.com.caelum.vraptor.deserialization.gson;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -23,6 +24,7 @@ import net.vidageek.mirror.dsl.Mirror;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.NullValueInNestedPathException;
 
 import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
@@ -267,7 +269,7 @@ public class GsonDeserializerTest {
 	}
 	
 	@Test
-	public void shouldReturnAGenericType() {
+	public void shouldDeserializeFromGenericTypeOneParam() {
 		InputStream stream = new ByteArrayInputStream(
 				"{'entity':{'name':'Brutus','age':7,'birthday':'06/01/1987'}}".getBytes());
 		ResourceClass resourceClass = new DefaultResourceClass(ExtGenericController.class);
@@ -280,5 +282,24 @@ public class GsonDeserializerTest {
 		Dog dog = (Dog) deserialized[0];
 		
 		assertThat(dog.name, equalTo("Brutus"));
+	}
+	
+	@Test
+	public void shouldDeserializeFromGenericTypeTwoParams() {
+		InputStream stream = new ByteArrayInputStream(
+				"{'entity':{'name':'Brutus','age':7,'birthday':'06/01/1987'}, 'param': 'test', 'over': 'value'}".getBytes());
+		ResourceClass resourceClass = new DefaultResourceClass(ExtGenericController.class);
+		Method method = new Mirror().on(GenericController.class).reflect().method("anotherMethod").withAnyArgs();
+		ResourceMethod resource = new DefaultResourceMethod(resourceClass, method);
+		when(provider.parameterNamesFor(resource.getMethod())).thenReturn(new String[] { "entity", "param", "over" });
+		
+		Object[] deserialized = deserializer.deserialize(stream, resource);
+		
+		Dog dog = (Dog) deserialized[0];
+		String param = (String) deserialized[1];
+		
+		assertThat(dog.name, equalTo("Brutus"));
+		assertThat(param, equalTo("test"));
+		assertThat(deserialized.length, equalTo(2));
 	}
 }

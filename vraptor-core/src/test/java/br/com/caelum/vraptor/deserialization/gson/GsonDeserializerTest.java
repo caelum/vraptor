@@ -1,5 +1,6 @@
 package br.com.caelum.vraptor.deserialization.gson;
 
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
@@ -9,6 +10,7 @@ import static org.mockito.Mockito.when;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -19,6 +21,8 @@ import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
 
+import net.vidageek.mirror.dsl.Mirror;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -26,9 +30,11 @@ import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.resource.DefaultResourceClass;
 import br.com.caelum.vraptor.resource.DefaultResourceMethod;
+import br.com.caelum.vraptor.resource.ResourceClass;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.serialization.gson.adapters.CalendarDeserializer;
 import br.com.caelum.vraptor.util.ISO8601Util;
+import br.com.caelum.vraptor.view.GenericController;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -51,7 +57,7 @@ public class GsonDeserializerTest {
 		provider = mock(ParameterNameProvider.class);
 		localization = mock(Localization.class);
 		request = mock(HttpServletRequest.class);
-		
+
 		when(localization.getLocale()).thenReturn(new Locale("pt", "BR"));
 
 		List<JsonDeserializer> deserializers = new ArrayList<JsonDeserializer>();
@@ -77,6 +83,9 @@ public class GsonDeserializerTest {
 			return "Dog [name=" + name + ", age=" + age + ", birthday="
 					+ birthday + "]";
 		}
+	}
+
+	static class ExtGenericController extends GenericController<Dog>{
 	}
 
 	static class DogController {
@@ -127,7 +136,7 @@ public class GsonDeserializerTest {
 		assertThat(dog.name, is("Brutus"));
 		assertThat(dog.age, is(7));
 	}
-	
+
 	@Test
 	public void shouldBeAbleToDeserializeADogWithoutRoot() {
 		InputStream stream = new ByteArrayInputStream("{'name':'Brutus','age':7}".getBytes());
@@ -177,7 +186,7 @@ public class GsonDeserializerTest {
 		assertThat(dog.name, is("Brutus"));
 		assertThat(dog.age, is(7));
 	}
-	
+
 	@Test
 	public void shouldBeAbleToDeserializeADogWhenMethodHasMoreThanOneArgumentAndHasNotRoot() throws Exception {
 		InputStream stream = new ByteArrayInputStream("{'name':'Brutus','age':7}".getBytes());
@@ -250,10 +259,10 @@ public class GsonDeserializerTest {
 
 		when(provider.parameterNamesFor(bark.getMethod())).thenReturn(new String[] { "dog" });
 		when(provider.parameterNamesFor(bark.getMethod())).thenReturn(new String[] { "dog" });
-		
+
 		List<JsonDeserializer> deserializers = new ArrayList<JsonDeserializer>();
 		deserializers.add(new br.com.caelum.vraptor.serialization.iso8601.gson.CalendarISO8601Deserializer(new ISO8601Util()));
-		
+
 		deserializer = new GsonDeserialization(provider, new DefaultJsonDeserializers(deserializers), request);
 
 		Object[] deserialized = deserializer.deserialize(stream, bark);
@@ -300,15 +309,66 @@ public class GsonDeserializerTest {
 
 		assertThat(dog.name, is("ç"));
 	}
-	
+
 	@Test
 	public void shouldByPassDeserializationWhenHasNoContent() {
 		InputStream stream = new ByteArrayInputStream("".getBytes());
 		when(provider.parameterNamesFor(bark.getMethod())).thenReturn(new String[] { "pet" });
-		
+
 		Object[] deserialized = deserializer.deserialize(stream, bark);
-		
+
 		assertThat(deserialized.length, is(1));
 		assertThat(deserialized[0], is(nullValue()));
+	}
+
+	@Test
+	public void shouldDeserializeFromGenericTypeOneParam() {
+		InputStream stream = new ByteArrayInputStream(
+				"{'entity':{'name':'Brutus','age':7,'birthday':'06/01/1987'}}".getBytes());
+		ResourceClass resourceClass = new DefaultResourceClass(ExtGenericController.class);
+		Method method = new Mirror().on(GenericController.class).reflect().method("method").withAnyArgs();
+		ResourceMethod resource = new DefaultResourceMethod(resourceClass, method);
+		when(provider.parameterNamesFor(resource.getMethod())).thenReturn(new String[] { "entity" });
+
+		Object[] deserialized = deserializer.deserialize(stream, resource);
+
+		Dog dog = (Dog) deserialized[0];
+
+		assertThat(dog.name, equalTo("Brutus"));
+	}
+
+	@Test
+	public void shouldDeserializeFromGenericTypeTwoParams() {
+		InputStream stream = new ByteArrayInputStream(
+				"{'entity':{'name':'Brutus','age':7,'birthday':'06/01/1987'}, 'param': 'test', 'over': 'value'}".getBytes());
+		ResourceClass resourceClass = new DefaultResourceClass(ExtGenericController.class);
+		Method method = new Mirror().on(GenericController.class).reflect().method("anotherMethod").withAnyArgs();
+		ResourceMethod resource = new DefaultResourceMethod(resourceClass, method);
+		when(provider.parameterNamesFor(resource.getMethod())).thenReturn(new String[] { "entity", "param", "over" });
+
+		Object[] deserialized = deserializer.deserialize(stream, resource);
+
+		Dog dog = (Dog) deserialized[0];
+		String param = (String) deserialized[1];
+
+		assertThat(dog.name, equalTo("Brutus"));
+		assertThat(param, equalTo("test"));
+		assertThat(deserialized.length, equalTo(2));
+	}
+
+	@Test
+	public void shouldDeserializeWithoutGenericType() {
+		InputStream stream = new ByteArrayInputStream(
+				"{'param': 'test'}".getBytes());
+		ResourceClass resourceClass = new DefaultResourceClass(ExtGenericController.class);
+		Method method = new Mirror().on(GenericController.class).reflect().method("methodWithoutGenericType").withArgs(String.class);
+		ResourceMethod resource = new DefaultResourceMethod(resourceClass, method);
+		when(provider.parameterNamesFor(resource.getMethod())).thenReturn(new String[] { "param" });
+
+		Object[] deserialized = deserializer.deserialize(stream, resource);
+
+		String param = (String) deserialized[0];
+
+		assertThat(param, equalTo("test"));
 	}
 }

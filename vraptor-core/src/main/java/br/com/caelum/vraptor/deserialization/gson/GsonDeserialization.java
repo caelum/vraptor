@@ -55,7 +55,7 @@ public class GsonDeserialization implements Deserializer {
 
 	public Object[] deserialize(InputStream inputStream, ResourceMethod method) {
 		Method jMethod = method.getMethod();
-		Class<?>[] types = jMethod.getParameterTypes();
+		Class<?>[] types = getTypes(method);
 		if (types.length == 0) {
 			throw new IllegalArgumentException(
 					"Methods that consumes representations must receive just one argument");
@@ -68,12 +68,12 @@ public class GsonDeserialization implements Deserializer {
 
 		try {
 			String content = getContentOfStream(inputStream);
-			
+
 			if(Strings.isNullOrEmpty(content)) {
 				logger.debug("json with no content");
 				return params;
 			}
-			
+
 			logger.debug("json retrieved: {}", content);
 
 			JsonParser parser = new JsonParser();
@@ -106,6 +106,35 @@ public class GsonDeserialization implements Deserializer {
 		return true;
 	}
 
+	protected Class<?>[] getTypes(ResourceMethod method) {
+		Class<?>[] parameterTypes = method.getMethod().getParameterTypes();
+		Type genericType = getGenericSuperClass(method);
+		if (genericType != null) {
+			return parseGenericParameters(parameterTypes, genericType);
+		}
+
+		return parameterTypes;
+	}
+
+	private Class<?>[] parseGenericParameters(Class<?>[] parameterTypes, Type genericType) {
+		Class<?> type = (Class<?>) getGenericType(genericType);
+		for (int i = 0; i < parameterTypes.length; i++) {
+			if (parameterTypes[i].isAssignableFrom(type)) {
+				parameterTypes[i] = type;
+			}
+		}
+		return parameterTypes;
+	}
+
+	private Type getGenericSuperClass(ResourceMethod method) {
+		Type genericType = method.getResource().getType().getGenericSuperclass();
+		if (genericType instanceof ParameterizedType) {
+			return genericType;
+		}
+
+		return null;
+	}
+
 	protected Gson getGson() {
 		GsonBuilder builder = new GsonBuilder();
 
@@ -122,6 +151,11 @@ public class GsonDeserialization implements Deserializer {
 		Type actualType = type.getActualTypeArguments()[0];
 
 		return (Class<?>) actualType;
+	}
+
+	private Type getGenericType(Type type) {
+		ParameterizedType paramType = (ParameterizedType) type;
+		return paramType.getActualTypeArguments()[0];
 	}
 
 	private String getContentOfStream(InputStream input) throws IOException {

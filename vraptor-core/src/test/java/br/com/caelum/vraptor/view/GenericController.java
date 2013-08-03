@@ -13,4 +13,8 @@ public class GenericController<T> {
 	public void anotherMethod(T entity, String param) {
 		System.out.println("Do Another Thing");
 	}
+	
+	public void methodWithoutGenericType(String param) {
+		System.out.println("Without generic");
+	}
 }

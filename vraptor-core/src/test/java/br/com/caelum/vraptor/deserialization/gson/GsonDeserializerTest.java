@@ -340,11 +340,11 @@ public class GsonDeserializerTest {
 	@Test
 	public void shouldDeserializeFromGenericTypeTwoParams() {
 		InputStream stream = new ByteArrayInputStream(
-				"{'entity':{'name':'Brutus','age':7,'birthday':'06/01/1987'}, 'param': 'test', 'over': 'value'}".getBytes());
+				"{'entity':{'name':'Brutus','age':7,'birthday':'06/01/1987'}, 'param': 'test'}".getBytes());
 		ResourceClass resourceClass = new DefaultResourceClass(ExtGenericController.class);
 		Method method = new Mirror().on(GenericController.class).reflect().method("anotherMethod").withAnyArgs();
 		ResourceMethod resource = new DefaultResourceMethod(resourceClass, method);
-		when(provider.parameterNamesFor(resource.getMethod())).thenReturn(new String[] { "entity", "param", "over" });
+		when(provider.parameterNamesFor(resource.getMethod())).thenReturn(new String[] { "entity", "param" });
 
 		Object[] deserialized = deserializer.deserialize(stream, resource);
 

@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import java.util.Collection;
 
 import javax.servlet.http.HttpServletRequest;
@@ -54,17 +55,17 @@ public class GsonDeserialization implements Deserializer {
 	}
 
 	public Object[] deserialize(InputStream inputStream, ResourceMethod method) {
-		Method jMethod = method.getMethod();
 		Class<?>[] types = getTypes(method);
+
 		if (types.length == 0) {
 			throw new IllegalArgumentException(
-					"Methods that consumes representations must receive just one argument");
+					"Methods that consumes representations must receive at least one argument");
 		}
 
 		Gson gson = getGson();
 
 		Object[] params = new Object[types.length];
-		String[] parameterNames = paramNameProvider.parameterNamesFor(jMethod);
+		String[] parameterNames = paramNameProvider.parameterNamesFor(method.getMethod());
 
 		try {
 			String content = getContentOfStream(inputStream);
@@ -107,29 +108,39 @@ public class GsonDeserialization implements Deserializer {
 	}
 
 	protected Class<?>[] getTypes(ResourceMethod method) {
-		Class<?>[] parameterTypes = method.getMethod().getParameterTypes();
-		Type genericType = getGenericSuperClass(method);
+		Class<?> genericType = getSuperClassTypeArgument(method);
+
 		if (genericType != null) {
-			return parseGenericParameters(parameterTypes, genericType);
+			return parseGenericParameters(method.getMethod(), genericType);
 		}
 
-		return parameterTypes;
+		return method.getMethod().getParameterTypes();
 	}
 
-	private Class<?>[] parseGenericParameters(Class<?>[] parameterTypes, Type genericType) {
-		Class<?> type = (Class<?>) getGenericType(genericType);
-		for (int i = 0; i < parameterTypes.length; i++) {
-			if (parameterTypes[i].isAssignableFrom(type)) {
-				parameterTypes[i] = type;
+	private Class<?>[] parseGenericParameters(Method method, Class<?> genericType) {
+		Class<?>[] paramClasses = method.getParameterTypes();
+		Type[] paramTypes = method.getGenericParameterTypes();
+
+		Class<?>[] result = new Class<?>[paramTypes.length];
+
+		for (int i = 0; i < paramTypes.length; i++) {
+			Type paramType = paramTypes[i];
+
+			if (paramType instanceof TypeVariable) {
+				result[i] = genericType;
+			} else {
+				result[i] = paramClasses[i];
 			}
 		}
-		return parameterTypes;
+
+		return result;
 	}
 
-	private Type getGenericSuperClass(ResourceMethod method) {
+	private Class<?> getSuperClassTypeArgument(ResourceMethod method) {
 		Type genericType = method.getResource().getType().getGenericSuperclass();
+
 		if (genericType instanceof ParameterizedType) {
-			return genericType;
+			return (Class<?>) ((ParameterizedType) genericType).getActualTypeArguments()[0];
 		}
 
 		return null;
@@ -151,11 +162,6 @@ public class GsonDeserialization implements Deserializer {
 		Type actualType = type.getActualTypeArguments()[0];
 
 		return (Class<?>) actualType;
-	}
-
-	private Type getGenericType(Type type) {
-		ParameterizedType paramType = (ParameterizedType) type;
-		return paramType.getActualTypeArguments()[0];
 	}
 
 	private String getContentOfStream(InputStream input) throws IOException {

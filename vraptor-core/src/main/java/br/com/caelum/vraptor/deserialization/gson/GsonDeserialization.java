@@ -46,7 +46,7 @@ public class GsonDeserialization implements Deserializer {
 
 	private final HttpServletRequest request;
 
-	public GsonDeserialization(ParameterNameProvider paramNameProvider,	Collection<JsonDeserializer> adapters, HttpServletRequest request) {
+	public GsonDeserialization(ParameterNameProvider paramNameProvider, Collection<JsonDeserializer> adapters, HttpServletRequest request) {
 		this.paramNameProvider = paramNameProvider;
 		this.adapters = adapters;
 		this.request = request;
@@ -97,27 +97,27 @@ public class GsonDeserialization implements Deserializer {
 		if (genericType != null) {
 			return parseGenericParameters(parameterTypes, genericType);
 		}
+		
 		return parameterTypes;
 	}
 
 	private Class<?>[] parseGenericParameters(Class<?>[] parameterTypes, Type genericType) {
-		Type type = getGenericType(genericType);
+		Class<?> type = (Class<?>) getGenericType(genericType);
 		for (int i = 0; i < parameterTypes.length; i++) {
-			if (parameterTypes[i].isAssignableFrom(type.getClass())) {
-				parameterTypes[i] = (Class<?>) type;
+			if (parameterTypes[i].isAssignableFrom(type)) {
+				parameterTypes[i] = type;
 			}
 		}
 		return parameterTypes;
 	}
 
 	private Type getGenericSuperClass(ResourceMethod method) {
-		Type genericType = method.getResource().getType()
-				.getGenericSuperclass();
+		Type genericType = method.getResource().getType().getGenericSuperclass();
 		if (genericType instanceof ParameterizedType) {
 			return genericType;
 		}
+		
 		return null;
-
 	}
 
 	private boolean isWithoutRoot(Class<?>[] types, JsonElement node) {
@@ -128,8 +128,7 @@ public class GsonDeserialization implements Deserializer {
 		GsonBuilder builder = new GsonBuilder();
 
 		for (JsonDeserializer<?> adapter : adapters) {
-			builder.registerTypeHierarchyAdapter(getAdapterType(adapter),
-					adapter);
+			builder.registerTypeHierarchyAdapter(getAdapterType(adapter), adapter);
 		}
 
 		return builder.create();

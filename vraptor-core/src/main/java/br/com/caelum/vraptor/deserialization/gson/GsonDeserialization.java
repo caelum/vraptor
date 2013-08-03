@@ -53,7 +53,7 @@ public class GsonDeserialization implements Deserializer {
 	}
 
 	public Object[] deserialize(InputStream inputStream, ResourceMethod method) {
-		Method jMethod = getJMethod(method);
+		Method jMethod = method.getMethod();
 		Class<?>[] types = getTypes(method);
 		if (types.length == 0) {
 			throw new IllegalArgumentException(
@@ -92,7 +92,7 @@ public class GsonDeserialization implements Deserializer {
 	}
 
 	protected Class<?>[] getTypes(ResourceMethod method) {
-		Class<?>[] parameterTypes = getJMethod(method).getParameterTypes();
+		Class<?>[] parameterTypes = method.getMethod().getParameterTypes();
 		Type genericType = getGenericSuperClass(method);
 		if(genericType != null) {
 			return parseGenericParameters(parameterTypes, genericType);
@@ -103,19 +103,11 @@ public class GsonDeserialization implements Deserializer {
 	private Class<?>[] parseGenericParameters(Class<?>[] parameterTypes, Type genericType) {
 		Type type = getFirstGenericType(genericType);
 		for (int i = 0; i < parameterTypes.length; i++) {
-			if(checkGenericEqualsToParameter(parameterTypes[i], type)) {
+			if(parameterTypes[i].isAssignableFrom(type.getClass())) {
 				parameterTypes[i] = (Class<?>) type;
 			}
 		}
 		return parameterTypes;
-	}
-
-	protected boolean checkGenericEqualsToParameter(Class<?> parameterType, Type type) {
-		return parameterType.isAssignableFrom(type.getClass());
-	}
-
-	private Method getJMethod(ResourceMethod method) {
-		return method.getMethod();
 	}
 
 	private Type getGenericSuperClass(ResourceMethod method) {

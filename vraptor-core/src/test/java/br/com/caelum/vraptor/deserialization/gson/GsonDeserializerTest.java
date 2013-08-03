@@ -317,22 +317,4 @@ public class GsonDeserializerTest {
 		
 		assertThat(param, equalTo("test"));
 	}
-	
-	@Test
-	public void shouldReturnTrueIfTypeEqualsGeneric() {
-		ParameterizedType gen = (ParameterizedType) ExtGenericController.class.getGenericSuperclass();
-		Method method = new Mirror().on(GenericController.class).reflect().method("anotherMethod").withAnyArgs();
-		Class<?> param = method.getParameterTypes()[0];
-		Type type = gen.getActualTypeArguments()[0];
-		assertThat(deserializer.checkGenericEqualsToParameter(param, type), equalTo(true));
-	}
-	
-	@Test
-	public void shouldReturnFalseIfTypeDiffGeneric() {
-		ParameterizedType gen = (ParameterizedType) ExtGenericController.class.getGenericSuperclass();
-		Method method = new Mirror().on(GenericController.class).reflect().method("methodWithoutGenericType").withAnyArgs();
-		Class<?> param = method.getParameterTypes()[0];
-		Type type = gen.getActualTypeArguments()[0];
-		assertThat(deserializer.checkGenericEqualsToParameter(param, type), equalTo(false));
-	}
 }

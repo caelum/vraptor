@@ -53,7 +53,7 @@ public class GsonDeserialization implements Deserializer {
 	}
 
 	public Object[] deserialize(InputStream inputStream, ResourceMethod method) {
-		Method jMethod = method.getMethod();
+		Method jMethod = getJMethod(method);
 		Class<?>[] types = getTypes(method);
 		if (types.length == 0) {
 			throw new IllegalArgumentException(
@@ -92,17 +92,35 @@ public class GsonDeserialization implements Deserializer {
 	}
 
 	protected Class<?>[] getTypes(ResourceMethod method) {
-		Class<?>[] parameterTypes = method.getMethod().getParameterTypes();
-		Type superclass = method.getResource().getType().getGenericSuperclass();
-		if(superclass instanceof ParameterizedType) {
-			Type type = getFirstGenericType(superclass);
-			for (int i = 0; i < parameterTypes.length; i++) {
-				if(parameterTypes[i].isAssignableFrom(type.getClass())) {
-					parameterTypes[i] = (Class<?>) type;
-				}
+		Class<?>[] parameterTypes = getJMethod(method).getParameterTypes();
+		Type genericType = getGenericSuperClass(method);
+		if(genericType != null) {
+			return parseGenericParameters(parameterTypes, genericType);
+		}
+		return parameterTypes;
+	}
+
+	private Class<?>[] parseGenericParameters(Class<?>[] parameterTypes, Type genericType) {
+		Type type = getFirstGenericType(genericType);
+		for (int i = 0; i < parameterTypes.length; i++) {
+			if(parameterTypes[i].isAssignableFrom(type.getClass())) {
+				parameterTypes[i] = (Class<?>) type;
 			}
 		}
 		return parameterTypes;
+	}
+
+	private Method getJMethod(ResourceMethod method) {
+		return method.getMethod();
+	}
+
+	private Type getGenericSuperClass(ResourceMethod method) {
+		Type genericType = method.getResource().getType().getGenericSuperclass();
+		if(genericType instanceof ParameterizedType) {
+			return genericType;
+		}
+		return null;
+		
 	}
 	
 	private boolean isWithoutRoot(Class<?>[] types, JsonElement node) {

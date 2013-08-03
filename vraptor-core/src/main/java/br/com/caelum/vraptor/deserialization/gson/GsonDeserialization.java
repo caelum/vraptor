@@ -103,11 +103,15 @@ public class GsonDeserialization implements Deserializer {
 	private Class<?>[] parseGenericParameters(Class<?>[] parameterTypes, Type genericType) {
 		Type type = getFirstGenericType(genericType);
 		for (int i = 0; i < parameterTypes.length; i++) {
-			if(parameterTypes[i].isAssignableFrom(type.getClass())) {
+			if(checkGenericEqualsToParameter(parameterTypes[i], type)) {
 				parameterTypes[i] = (Class<?>) type;
 			}
 		}
 		return parameterTypes;
+	}
+
+	protected boolean checkGenericEqualsToParameter(Class<?> parameterType, Type type) {
+		return parameterType.isAssignableFrom(type.getClass());
 	}
 
 	private Method getJMethod(ResourceMethod method) {

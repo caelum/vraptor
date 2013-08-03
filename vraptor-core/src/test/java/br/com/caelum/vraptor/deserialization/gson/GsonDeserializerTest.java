@@ -10,6 +10,7 @@ import static org.mockito.Mockito.when;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -315,5 +316,14 @@ public class GsonDeserializerTest {
 		String param = (String) deserialized[0];
 		
 		assertThat(param, equalTo("test"));
+	}
+	
+	@Test
+	public void shouldReturnTrueIfTypeEqualsGeneric() {
+		ParameterizedType gen = (ParameterizedType) ExtGenericController.class.getGenericSuperclass();
+		Method method = new Mirror().on(GenericController.class).reflect().method("anotherMethod").withAnyArgs();
+		Class<?> class1 = method.getParameterTypes()[0];
+		Type type = gen.getActualTypeArguments()[0];
+		assertThat(deserializer.checkGenericEqualsToParameter(class1, type), equalTo(true));
 	}
 }

@@ -95,7 +95,12 @@ public class GsonDeserialization implements Deserializer {
 		Class<?>[] parameterTypes = method.getMethod().getParameterTypes();
 		Type superclass = method.getResource().getType().getGenericSuperclass();
 		if(superclass instanceof ParameterizedType) {
-			parameterTypes[0] = (Class<?>) getFirstGenericType(superclass);
+			Type type = getFirstGenericType(superclass);
+			for (int i = 0; i < parameterTypes.length; i++) {
+				if(parameterTypes[i].isAssignableFrom(type.getClass())) {
+					parameterTypes[i] = (Class<?>) type;
+				}
+			}
 		}
 		return parameterTypes;
 	}

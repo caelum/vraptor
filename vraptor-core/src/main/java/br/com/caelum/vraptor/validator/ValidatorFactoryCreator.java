@@ -16,6 +16,7 @@
 package br.com.caelum.vraptor.validator;
 
 import javax.annotation.PostConstruct;
+import javax.validation.MessageInterpolator;
 import javax.validation.Validation;
 import javax.validation.ValidatorFactory;
 
@@ -41,11 +42,17 @@ public class ValidatorFactoryCreator implements ComponentFactory<ValidatorFactor
 	private static final Logger logger = LoggerFactory.getLogger(ValidatorFactoryCreator.class);
 
 	private ValidatorFactory factory;
+	private MessageInterpolator interpolator;
+
+	public ValidatorFactoryCreator(MessageInterpolator interpolator) {
+		this.interpolator = interpolator;
+	}
 
 	@PostConstruct
 	public void buildFactory() {
 		factory = Validation.byDefaultProvider()
 		        .configure()
+		        .messageInterpolator(interpolator)
 		        .buildValidatorFactory();
 
         logger.debug("Initializing JSR303 factory for bean validation");

@@ -62,18 +62,18 @@ public class MethodValidatorTest {
 
         Locale.setDefault(Locale.ENGLISH);
 
-        ValidatorFactoryCreator creator = new ValidatorFactoryCreator();
-        creator.buildFactory();
-
         provider = new ParanamerNameProvider();
         
         MethodValidatorFactoryCreator methodValidatorCreator = new MethodValidatorFactoryCreator(provider);
         methodValidatorCreator.buildFactory();
         factory = methodValidatorCreator.getInstance();
 
-        MessageInterpolatorFactory interpolatorFactory = new MessageInterpolatorFactory(creator.getInstance());
+        MessageInterpolatorFactory interpolatorFactory = new MessageInterpolatorFactory();
         interpolatorFactory.createInterpolator();
         interpolator = interpolatorFactory.getInstance();
+
+        ValidatorFactoryCreator creator = new ValidatorFactoryCreator(interpolator);
+        creator.buildFactory();
 
         validator = new MockValidator();
         

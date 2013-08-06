@@ -5,6 +5,7 @@ package br.com.caelum.vraptor.validator;
 
 import javax.annotation.PostConstruct;
 import javax.validation.MessageInterpolator;
+import javax.validation.Validation;
 import javax.validation.ValidatorFactory;
 
 import org.slf4j.Logger;
@@ -26,21 +27,31 @@ public class MessageInterpolatorFactory implements ComponentFactory<MessageInter
 
 	private static final Logger logger = LoggerFactory.getLogger(MessageInterpolatorFactory.class);
 
-	private final ValidatorFactory factory;
+	private ValidatorFactory factory;
 	private MessageInterpolator interpolator;
-
-	public MessageInterpolatorFactory(ValidatorFactory factory) {
-		this.factory = factory;
-	}
 
 	@PostConstruct
 	public void createInterpolator() {
-		interpolator = factory.getMessageInterpolator();
+		interpolator = getValidatorFactory().getMessageInterpolator();
 		logger.debug("Initializing Bean Validator MessageInterpolator");
 	}
 
 	public MessageInterpolator getInstance() {
+		if (interpolator == null) { //pico don't call PostConstruct
+			getValidatorFactory().getMessageInterpolator();
+		}
+		
 		return interpolator;
+	}
+	
+	private ValidatorFactory getValidatorFactory() {
+		if(factory == null) {
+			factory = Validation.byDefaultProvider()
+		        .configure()
+		        .buildValidatorFactory();
+		}
+		
+		return factory;
 	}
 
 }

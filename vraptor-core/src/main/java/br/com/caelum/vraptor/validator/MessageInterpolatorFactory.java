@@ -37,10 +37,6 @@ public class MessageInterpolatorFactory implements ComponentFactory<MessageInter
 	}
 
 	public MessageInterpolator getInstance() {
-		if (interpolator == null) { //pico don't call PostConstruct
-			getValidatorFactory().getMessageInterpolator();
-		}
-		
 		return interpolator;
 	}
 	

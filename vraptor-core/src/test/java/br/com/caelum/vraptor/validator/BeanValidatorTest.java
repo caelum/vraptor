@@ -35,14 +35,15 @@ public class BeanValidatorTest {
     	Locale.setDefault(new Locale("en"));
     	MockitoAnnotations.initMocks(this);
 
-    	ValidatorFactoryCreator creator = new ValidatorFactoryCreator();
+    	MessageInterpolatorFactory interpolatorFactory = new MessageInterpolatorFactory();
+    	interpolatorFactory.createInterpolator();
+
+    	ValidatorFactoryCreator creator = new ValidatorFactoryCreator(interpolatorFactory.getInstance());
     	creator.buildFactory();
 
     	ValidatorCreator validatorFactory = new ValidatorCreator(creator.getInstance());
     	validatorFactory.createValidator();
 
-    	MessageInterpolatorFactory interpolatorFactory = new MessageInterpolatorFactory(creator.getInstance());
-    	interpolatorFactory.createInterpolator();
 
         beanValidator = new DefaultBeanValidator(localization, validatorFactory.getInstance(), interpolatorFactory.getInstance());
     }

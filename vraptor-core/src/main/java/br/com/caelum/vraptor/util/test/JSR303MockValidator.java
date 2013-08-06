@@ -28,7 +28,7 @@ public class JSR303MockValidator extends MockValidator {
 
 	public JSR303MockValidator() {
 		Validator validator = validatorFactory.getValidator();
-		MessageInterpolatorFactory factoryMessageInterpolator = new MessageInterpolatorFactory(validatorFactory);
+		MessageInterpolatorFactory factoryMessageInterpolator = new MessageInterpolatorFactory();
 
 		// @PostConstruct not works out of container.
 		factoryMessageInterpolator.createInterpolator();

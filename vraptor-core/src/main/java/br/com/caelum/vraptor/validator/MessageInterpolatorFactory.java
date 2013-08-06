@@ -27,7 +27,6 @@ public class MessageInterpolatorFactory implements ComponentFactory<MessageInter
 
 	private static final Logger logger = LoggerFactory.getLogger(MessageInterpolatorFactory.class);
 
-	private ValidatorFactory factory;
 	private MessageInterpolator interpolator;
 
 	@PostConstruct
@@ -41,13 +40,9 @@ public class MessageInterpolatorFactory implements ComponentFactory<MessageInter
 	}
 	
 	private ValidatorFactory getValidatorFactory() {
-		if(factory == null) {
-			factory = Validation.byDefaultProvider()
+		return Validation.byDefaultProvider()
 		        .configure()
 		        .buildValidatorFactory();
-		}
-		
-		return factory;
 	}
 
 }

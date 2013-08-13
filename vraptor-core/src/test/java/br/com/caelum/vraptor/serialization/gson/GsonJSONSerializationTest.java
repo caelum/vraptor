@@ -66,8 +66,8 @@ public class GsonJSONSerializationTest {
 		initializer = new HibernateProxyInitializer();
 		serializee = new Serializee();
 		
-		VRaptorGsonBuilderCreator gsonBuilderCreator = new VRaptorGsonBuilderCreator(new DefaultJsonSerializers(Collections.<JsonSerializer> emptyList()), serializee);
-		this.serialization = new GsonJSONSerialization(response, extractor, initializer, gsonBuilderCreator.getInstance(), serializee);
+		VraptorGsonBuilder builder = new VraptorGsonBuilder(new DefaultJsonSerializers(Collections.<JsonSerializer> emptyList()), serializee);
+		this.serialization = new GsonJSONSerialization(response, extractor, initializer, builder, serializee);
 	}
 
 	public static class Address {
@@ -462,8 +462,8 @@ public class GsonJSONSerializationTest {
 		List<JsonSerializer> adapters = new ArrayList<JsonSerializer>();
 		adapters.add(new CollectionSerializer());
 
-		VRaptorGsonBuilderCreator gsonBuilderCreator = new VRaptorGsonBuilderCreator(new DefaultJsonSerializers(adapters), serializee);
-		GsonJSONSerialization serialization = new GsonJSONSerialization(response, extractor, initializer, gsonBuilderCreator.getInstance(), serializee);
+		VraptorGsonBuilder builder = new VraptorGsonBuilder(new DefaultJsonSerializers(adapters), serializee);
+		GsonJSONSerialization serialization = new GsonJSONSerialization(response, extractor, initializer, builder, serializee);
 		
 		serialization.withoutRoot().from(new MyCollection()).serialize();
 		assertThat(result(), is(equalTo(expectedResult)));
@@ -475,8 +475,8 @@ public class GsonJSONSerializationTest {
 		List<JsonSerializer> adapters = new ArrayList<JsonSerializer>();
 		adapters.add(new CalendarSerializer());
 
-		VRaptorGsonBuilderCreator gsonBuilderCreator = new VRaptorGsonBuilderCreator(new DefaultJsonSerializers(adapters), serializee);
-		GsonJSONSerialization serialization = new GsonJSONSerialization(response, extractor, initializer, gsonBuilderCreator.getInstance(), serializee);
+		VraptorGsonBuilder builder = new VraptorGsonBuilder(new DefaultJsonSerializers(adapters), serializee);
+		GsonJSONSerialization serialization = new GsonJSONSerialization(response, extractor, initializer, builder, serializee);
 		
 		Client c = new Client("renan");
 		c.included = new GregorianCalendar(2012, 8, 3);
@@ -497,8 +497,8 @@ public class GsonJSONSerializationTest {
 		List<JsonSerializer> adapters = new ArrayList<JsonSerializer>();
 		adapters.add(new br.com.caelum.vraptor.serialization.iso8601.gson.CalendarISO8601Serializer(new ISO8601Util()));
 
-		VRaptorGsonBuilderCreator gsonBuilderCreator = new VRaptorGsonBuilderCreator(new DefaultJsonSerializers(adapters), serializee);
-		GsonJSONSerialization serialization = new GsonJSONSerialization(response, extractor, initializer, gsonBuilderCreator.getInstance(), serializee);
+		VraptorGsonBuilder builder = new VraptorGsonBuilder(new DefaultJsonSerializers(adapters), serializee);
+		GsonJSONSerialization serialization = new GsonJSONSerialization(response, extractor, initializer, builder, serializee);
 		
 		Client c = new Client("Rafael");
 		c.included = new GregorianCalendar(2013, 6, 27, 9, 52, 38);

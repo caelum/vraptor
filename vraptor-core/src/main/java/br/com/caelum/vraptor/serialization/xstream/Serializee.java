@@ -12,11 +12,13 @@ import java.util.Map;
 import java.util.Set;
 
 import net.vidageek.mirror.dsl.Mirror;
+import br.com.caelum.vraptor.ioc.Component;
 
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
 
+@Component
 public class Serializee {
 	private Object root;
 	private Class<?> rootClass;

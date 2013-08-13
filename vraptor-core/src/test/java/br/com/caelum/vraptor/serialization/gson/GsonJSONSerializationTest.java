@@ -462,8 +462,7 @@ public class GsonJSONSerializationTest {
 		List<JsonSerializer> adapters = new ArrayList<JsonSerializer>();
 		adapters.add(new CollectionSerializer());
 
-		VRaptorGsonBuilder builder = new VRaptorGsonBuilder(new DefaultJsonSerializers(adapters), serializee);
-		GsonJSONSerialization serialization = new GsonJSONSerialization(response, extractor, initializer, builder, serializee);
+		GsonJSONSerialization serialization = new GsonJSONSerialization(response, extractor, initializer, createBuilder(adapters), serializee);
 		
 		serialization.withoutRoot().from(new MyCollection()).serialize();
 		assertThat(result(), is(equalTo(expectedResult)));
@@ -475,8 +474,7 @@ public class GsonJSONSerializationTest {
 		List<JsonSerializer> adapters = new ArrayList<JsonSerializer>();
 		adapters.add(new CalendarSerializer());
 
-		VRaptorGsonBuilder builder = new VRaptorGsonBuilder(new DefaultJsonSerializers(adapters), serializee);
-		GsonJSONSerialization serialization = new GsonJSONSerialization(response, extractor, initializer, builder, serializee);
+		GsonJSONSerialization serialization = new GsonJSONSerialization(response, extractor, initializer, createBuilder(adapters), serializee);
 		
 		Client c = new Client("renan");
 		c.included = new GregorianCalendar(2012, 8, 3);
@@ -497,8 +495,7 @@ public class GsonJSONSerializationTest {
 		List<JsonSerializer> adapters = new ArrayList<JsonSerializer>();
 		adapters.add(new br.com.caelum.vraptor.serialization.iso8601.gson.CalendarISO8601Serializer(new ISO8601Util()));
 
-		VRaptorGsonBuilder builder = new VRaptorGsonBuilder(new DefaultJsonSerializers(adapters), serializee);
-		GsonJSONSerialization serialization = new GsonJSONSerialization(response, extractor, initializer, builder, serializee);
+		GsonJSONSerialization serialization = new GsonJSONSerialization(response, extractor, initializer, createBuilder(adapters), serializee);
 		
 		Client c = new Client("Rafael");
 		c.included = new GregorianCalendar(2013, 6, 27, 9, 52, 38);
@@ -534,6 +531,12 @@ public class GsonJSONSerializationTest {
 		Order order = new Order(new Client("nykolas lima"), 15.0, "gift bags, please");
 		serialization.from(order).excludeAll().include("price").serialize();
 		assertThat(result(), is(equalTo(expectedResult)));
+	}
+	
+	@SuppressWarnings("rawtypes")
+	private VRaptorGsonBuilder createBuilder(List<JsonSerializer> adapters) {
+		VRaptorGsonBuilder builder = new VRaptorGsonBuilder(new DefaultJsonSerializers(adapters), serializee);
+		return builder;
 	}
 
 }

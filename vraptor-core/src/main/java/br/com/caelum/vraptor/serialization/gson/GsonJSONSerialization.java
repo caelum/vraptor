@@ -45,12 +45,12 @@ public class GsonJSONSerialization implements JSONSerialization {
 
 	protected final ProxyInitializer initializer;
 
-	protected final VraptorGsonBuilder builder;
+	protected final VRaptorGsonBuilder builder;
 
 	protected final Serializee serializee;
 
 	public GsonJSONSerialization(HttpServletResponse response, TypeNameExtractor extractor,
-			ProxyInitializer initializer, VraptorGsonBuilder builder, Serializee serializee) {
+			ProxyInitializer initializer, VRaptorGsonBuilder builder, Serializee serializee) {
 		this.response = response;
 		this.extractor = extractor;
 		this.initializer = initializer;

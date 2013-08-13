@@ -66,7 +66,7 @@ public class GsonJSONSerializationTest {
 		initializer = new HibernateProxyInitializer();
 		serializee = new Serializee();
 		
-		VraptorGsonBuilder builder = new VraptorGsonBuilder(new DefaultJsonSerializers(Collections.<JsonSerializer> emptyList()), serializee);
+		VRaptorGsonBuilder builder = new VRaptorGsonBuilder(new DefaultJsonSerializers(Collections.<JsonSerializer> emptyList()), serializee);
 		this.serialization = new GsonJSONSerialization(response, extractor, initializer, builder, serializee);
 	}
 
@@ -462,7 +462,7 @@ public class GsonJSONSerializationTest {
 		List<JsonSerializer> adapters = new ArrayList<JsonSerializer>();
 		adapters.add(new CollectionSerializer());
 
-		VraptorGsonBuilder builder = new VraptorGsonBuilder(new DefaultJsonSerializers(adapters), serializee);
+		VRaptorGsonBuilder builder = new VRaptorGsonBuilder(new DefaultJsonSerializers(adapters), serializee);
 		GsonJSONSerialization serialization = new GsonJSONSerialization(response, extractor, initializer, builder, serializee);
 		
 		serialization.withoutRoot().from(new MyCollection()).serialize();
@@ -475,7 +475,7 @@ public class GsonJSONSerializationTest {
 		List<JsonSerializer> adapters = new ArrayList<JsonSerializer>();
 		adapters.add(new CalendarSerializer());
 
-		VraptorGsonBuilder builder = new VraptorGsonBuilder(new DefaultJsonSerializers(adapters), serializee);
+		VRaptorGsonBuilder builder = new VRaptorGsonBuilder(new DefaultJsonSerializers(adapters), serializee);
 		GsonJSONSerialization serialization = new GsonJSONSerialization(response, extractor, initializer, builder, serializee);
 		
 		Client c = new Client("renan");
@@ -497,7 +497,7 @@ public class GsonJSONSerializationTest {
 		List<JsonSerializer> adapters = new ArrayList<JsonSerializer>();
 		adapters.add(new br.com.caelum.vraptor.serialization.iso8601.gson.CalendarISO8601Serializer(new ISO8601Util()));
 
-		VraptorGsonBuilder builder = new VraptorGsonBuilder(new DefaultJsonSerializers(adapters), serializee);
+		VRaptorGsonBuilder builder = new VRaptorGsonBuilder(new DefaultJsonSerializers(adapters), serializee);
 		GsonJSONSerialization serialization = new GsonJSONSerialization(response, extractor, initializer, builder, serializee);
 		
 		Client c = new Client("Rafael");

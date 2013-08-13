@@ -21,7 +21,7 @@ import com.google.gson.JsonSerializer;
 
 @SuppressWarnings("rawtypes")
 @PrototypeScoped
-public class VraptorGsonBuilder {
+public class VRaptorGsonBuilder {
 
 	protected GsonBuilder builder = new GsonBuilder();
 
@@ -33,7 +33,7 @@ public class VraptorGsonBuilder {
 
 	private Collection<ExclusionStrategy> exclusions;
 
-	public VraptorGsonBuilder(JsonSerializers serializers, Serializee serializee) {
+	public VRaptorGsonBuilder(JsonSerializers serializers, Serializee serializee) {
 		this.serializers = serializers.getSerializers();
 		ExclusionStrategy exclusion = new Exclusions(serializee);
 		this.exclusions = Arrays.asList(exclusion);

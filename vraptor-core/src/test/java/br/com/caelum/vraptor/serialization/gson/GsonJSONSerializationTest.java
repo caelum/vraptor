@@ -30,6 +30,7 @@ import org.junit.Test;
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor.serialization.HibernateProxyInitializer;
 import br.com.caelum.vraptor.serialization.gson.adapters.CalendarSerializer;
+import br.com.caelum.vraptor.serialization.iso8601.gson.CalendarISO8601Serializer;
 import br.com.caelum.vraptor.serialization.xstream.Serializee;
 import br.com.caelum.vraptor.util.ISO8601Util;
 
@@ -459,10 +460,7 @@ public class GsonJSONSerializationTest {
 	public void shouldUseCollectionConverterWhenItExists() {
 		String expectedResult = "[\"testing\"]";
 
-		List<JsonSerializer> adapters = new ArrayList<JsonSerializer>();
-		adapters.add(new CollectionSerializer());
-
-		GsonJSONSerialization serialization = new GsonJSONSerialization(response, extractor, initializer, createBuilder(adapters), serializee);
+		GsonJSONSerialization serialization = new GsonJSONSerialization(response, extractor, initializer, createBuilder(new CollectionSerializer()), serializee);
 		
 		serialization.withoutRoot().from(new MyCollection()).serialize();
 		assertThat(result(), is(equalTo(expectedResult)));
@@ -471,10 +469,7 @@ public class GsonJSONSerializationTest {
 	@Test
 	@SuppressWarnings("rawtypes")
 	public void shouldSerializeCalendarLikeXstream() {
-		List<JsonSerializer> adapters = new ArrayList<JsonSerializer>();
-		adapters.add(new CalendarSerializer());
-
-		GsonJSONSerialization serialization = new GsonJSONSerialization(response, extractor, initializer, createBuilder(adapters), serializee);
+		GsonJSONSerialization serialization = new GsonJSONSerialization(response, extractor, initializer, createBuilder(new CalendarSerializer()), serializee);
 		
 		Client c = new Client("renan");
 		c.included = new GregorianCalendar(2012, 8, 3);
@@ -492,10 +487,7 @@ public class GsonJSONSerializationTest {
 	@Test
 	@SuppressWarnings("rawtypes")
 	public void shouldSerializeCalendarLikeISO8601() {
-		List<JsonSerializer> adapters = new ArrayList<JsonSerializer>();
-		adapters.add(new br.com.caelum.vraptor.serialization.iso8601.gson.CalendarISO8601Serializer(new ISO8601Util()));
-
-		GsonJSONSerialization serialization = new GsonJSONSerialization(response, extractor, initializer, createBuilder(adapters), serializee);
+		GsonJSONSerialization serialization = new GsonJSONSerialization(response, extractor, initializer, createBuilder(new CalendarISO8601Serializer(new ISO8601Util())), serializee);
 		
 		Client c = new Client("Rafael");
 		c.included = new GregorianCalendar(2013, 6, 27, 9, 52, 38);
@@ -534,9 +526,8 @@ public class GsonJSONSerializationTest {
 	}
 	
 	@SuppressWarnings("rawtypes")
-	private VRaptorGsonBuilder createBuilder(List<JsonSerializer> adapters) {
-		VRaptorGsonBuilder builder = new VRaptorGsonBuilder(new DefaultJsonSerializers(adapters), serializee);
-		return builder;
+	private VRaptorGsonBuilder createBuilder(JsonSerializer... adapters) {
+		return new VRaptorGsonBuilder(new DefaultJsonSerializers(Arrays.asList(adapters)), serializee);
 	}
 
 }

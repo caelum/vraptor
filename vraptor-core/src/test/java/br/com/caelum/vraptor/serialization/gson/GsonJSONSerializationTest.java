@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.TimeZone;
@@ -30,6 +29,8 @@ import org.junit.Test;
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor.serialization.HibernateProxyInitializer;
 import br.com.caelum.vraptor.serialization.gson.adapters.CalendarSerializer;
+import br.com.caelum.vraptor.serialization.iso8601.gson.CalendarISO8601Serializer;
+import br.com.caelum.vraptor.serialization.xstream.Serializee;
 import br.com.caelum.vraptor.util.ISO8601Util;
 
 import com.google.common.collect.ForwardingCollection;
@@ -40,8 +41,9 @@ import com.google.gson.JsonParser;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
+@SuppressWarnings("deprecation")
 public class GsonJSONSerializationTest {
-
+	
 	private GsonJSONSerialization serialization;
 
 	private ByteArrayOutputStream stream;
@@ -52,8 +54,9 @@ public class GsonJSONSerializationTest {
 
 	private HibernateProxyInitializer initializer;
 	
+	private Serializee serializee;
+	
 	@Before
-	@SuppressWarnings("rawtypes")
 	public void setup() throws Exception {
 		this.stream = new ByteArrayOutputStream();
 
@@ -61,9 +64,9 @@ public class GsonJSONSerializationTest {
 		when(response.getWriter()).thenReturn(new PrintWriter(stream));
 		extractor = new DefaultTypeNameExtractor();
 		initializer = new HibernateProxyInitializer();
-
-		this.serialization = new GsonJSONSerialization(response, extractor, initializer,
-				new DefaultJsonSerializers(Collections.<JsonSerializer> emptyList()));
+		serializee = new Serializee();
+		
+		this.serialization = new GsonJSONSerialization(response, extractor, initializer, createBuilder(), serializee);
 	}
 
 	public static class Address {
@@ -451,27 +454,19 @@ public class GsonJSONSerializationTest {
 	}
 
 	@Test
-	@SuppressWarnings("rawtypes")
 	public void shouldUseCollectionConverterWhenItExists() {
+		GsonJSONSerialization serialization = serializationWithAdapter(new CollectionSerializer());
+
 		String expectedResult = "[\"testing\"]";
-
-		List<JsonSerializer> adapters = new ArrayList<JsonSerializer>();
-		adapters.add(new CollectionSerializer());
-
-		GsonJSONSerialization serialization = new GsonJSONSerialization(response, extractor, initializer, new DefaultJsonSerializers(adapters));
-
+		
 		serialization.withoutRoot().from(new MyCollection()).serialize();
 		assertThat(result(), is(equalTo(expectedResult)));
 	}
 
 	@Test
-	@SuppressWarnings("rawtypes")
 	public void shouldSerializeCalendarLikeXstream() {
-		List<JsonSerializer> adapters = new ArrayList<JsonSerializer>();
-		adapters.add(new CalendarSerializer());
-
-		GsonJSONSerialization serialization = new GsonJSONSerialization(response, extractor, initializer, new DefaultJsonSerializers(adapters));
-
+		GsonJSONSerialization serialization = serializationWithAdapter(new CalendarSerializer());
+		
 		Client c = new Client("renan");
 		c.included = new GregorianCalendar(2012, 8, 3);
 
@@ -486,13 +481,9 @@ public class GsonJSONSerializationTest {
 	}
 
 	@Test
-	@SuppressWarnings("rawtypes")
 	public void shouldSerializeCalendarLikeISO8601() {
-		List<JsonSerializer> adapters = new ArrayList<JsonSerializer>();
-		adapters.add(new br.com.caelum.vraptor.serialization.iso8601.gson.CalendarISO8601Serializer(new ISO8601Util()));
-
-		GsonJSONSerialization serialization = new GsonJSONSerialization(response, extractor, initializer, new DefaultJsonSerializers(adapters));
-
+		GsonJSONSerialization serialization = serializationWithAdapter(new CalendarISO8601Serializer(new ISO8601Util()));
+		
 		Client c = new Client("Rafael");
 		c.included = new GregorianCalendar(2013, 6, 27, 9, 52, 38);
 		c.included.setTimeZone(TimeZone.getTimeZone("America/Sao_Paulo"));
@@ -527,6 +518,16 @@ public class GsonJSONSerializationTest {
 		Order order = new Order(new Client("nykolas lima"), 15.0, "gift bags, please");
 		serialization.from(order).excludeAll().include("price").serialize();
 		assertThat(result(), is(equalTo(expectedResult)));
+	}
+	
+	@SuppressWarnings("rawtypes")
+	private VRaptorGsonBuilder createBuilder(JsonSerializer... adapters) {
+		return new VRaptorGsonBuilder(new DefaultJsonSerializers(Arrays.asList(adapters)), serializee);
+	}
+	
+	@SuppressWarnings("rawtypes")
+	private GsonJSONSerialization serializationWithAdapter(JsonSerializer adapter) {
+		return new GsonJSONSerialization(response, extractor, initializer, createBuilder(adapter), serializee);
 	}
 
 }

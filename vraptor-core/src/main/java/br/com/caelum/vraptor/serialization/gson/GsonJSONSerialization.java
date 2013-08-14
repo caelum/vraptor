@@ -16,7 +16,6 @@
 package br.com.caelum.vraptor.serialization.gson;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -29,8 +28,6 @@ import br.com.caelum.vraptor.serialization.Serializer;
 import br.com.caelum.vraptor.serialization.SerializerBuilder;
 import br.com.caelum.vraptor.serialization.xstream.Serializee;
 import br.com.caelum.vraptor.view.ResultException;
-
-import com.google.gson.ExclusionStrategy;
 
 /**
  * Gson implementation for JSONSerialization
@@ -48,19 +45,18 @@ public class GsonJSONSerialization implements JSONSerialization {
 
 	protected final ProxyInitializer initializer;
 
-	protected final VraptorGsonBuilder builder;
+	protected final VRaptorGsonBuilder builder;
 
 	protected final Serializee serializee;
 
 	public GsonJSONSerialization(HttpServletResponse response, TypeNameExtractor extractor,
-			ProxyInitializer initializer, JsonSerializers serializers) {
+			ProxyInitializer initializer, VRaptorGsonBuilder builder, Serializee serializee) {
 		this.response = response;
 		this.extractor = extractor;
 		this.initializer = initializer;
 
-		this.serializee = new Serializee();
-		ExclusionStrategy exclusion = new Exclusions(serializee);
-		this.builder = new VraptorGsonBuilder(serializers.getSerializers(), Arrays.asList(exclusion));
+		this.serializee = serializee;
+		this.builder = builder;
 	}
 
 	public boolean accepts(String format) {

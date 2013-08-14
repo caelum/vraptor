@@ -41,6 +41,7 @@ import com.google.gson.JsonParser;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
+@SuppressWarnings("deprecation")
 public class GsonJSONSerializationTest {
 	
 	private GsonJSONSerialization serialization;
@@ -56,7 +57,6 @@ public class GsonJSONSerializationTest {
 	private Serializee serializee;
 	
 	@Before
-	@SuppressWarnings("rawtypes")
 	public void setup() throws Exception {
 		this.stream = new ByteArrayOutputStream();
 
@@ -454,20 +454,18 @@ public class GsonJSONSerializationTest {
 	}
 
 	@Test
-	@SuppressWarnings("rawtypes")
 	public void shouldUseCollectionConverterWhenItExists() {
-		String expectedResult = "[\"testing\"]";
+		GsonJSONSerialization serialization = serializationWithAdapter(new CollectionSerializer());
 
-		GsonJSONSerialization serialization = new GsonJSONSerialization(response, extractor, initializer, createBuilder(new CollectionSerializer()), serializee);
+		String expectedResult = "[\"testing\"]";
 		
 		serialization.withoutRoot().from(new MyCollection()).serialize();
 		assertThat(result(), is(equalTo(expectedResult)));
 	}
 
 	@Test
-	@SuppressWarnings("rawtypes")
 	public void shouldSerializeCalendarLikeXstream() {
-		GsonJSONSerialization serialization = new GsonJSONSerialization(response, extractor, initializer, createBuilder(new CalendarSerializer()), serializee);
+		GsonJSONSerialization serialization = serializationWithAdapter(new CalendarSerializer());
 		
 		Client c = new Client("renan");
 		c.included = new GregorianCalendar(2012, 8, 3);
@@ -483,9 +481,8 @@ public class GsonJSONSerializationTest {
 	}
 
 	@Test
-	@SuppressWarnings("rawtypes")
 	public void shouldSerializeCalendarLikeISO8601() {
-		GsonJSONSerialization serialization = new GsonJSONSerialization(response, extractor, initializer, createBuilder(new CalendarISO8601Serializer(new ISO8601Util())), serializee);
+		GsonJSONSerialization serialization = serializationWithAdapter(new CalendarISO8601Serializer(new ISO8601Util()));
 		
 		Client c = new Client("Rafael");
 		c.included = new GregorianCalendar(2013, 6, 27, 9, 52, 38);
@@ -526,6 +523,11 @@ public class GsonJSONSerializationTest {
 	@SuppressWarnings("rawtypes")
 	private VRaptorGsonBuilder createBuilder(JsonSerializer... adapters) {
 		return new VRaptorGsonBuilder(new DefaultJsonSerializers(Arrays.asList(adapters)), serializee);
+	}
+	
+	@SuppressWarnings("rawtypes")
+	private GsonJSONSerialization serializationWithAdapter(JsonSerializer adapter) {
+		return new GsonJSONSerialization(response, extractor, initializer, createBuilder(adapter), serializee);
 	}
 
 }

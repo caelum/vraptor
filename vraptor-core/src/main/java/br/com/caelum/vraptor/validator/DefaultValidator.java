@@ -24,6 +24,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import javax.inject.Inject;
+
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.core.Localization;
@@ -60,6 +62,11 @@ public class DefaultValidator extends AbstractValidator {
 
 	private final Localization localization;
 
+	public DefaultValidator() {
+		this(null, null, null, null, null, null);
+	}
+	
+	@Inject
     public DefaultValidator(Result result, ValidationViewsFactory factory, Outjector outjector, Proxifier proxifier, BeanValidator beanValidator, Localization localization) {
         this.result = result;
 		this.viewsFactory = factory;

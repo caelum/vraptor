@@ -22,6 +22,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
 import br.com.caelum.vraptor.Result;
@@ -44,6 +45,11 @@ public class DefaultResult extends AbstractResult {
     private final ExceptionMapper exceptions;
 	private final TypeNameExtractor extractor;
 
+	public DefaultResult() {
+		this(null, null, null, null);
+	}
+	
+	@Inject
     public DefaultResult(HttpServletRequest request, Container container, ExceptionMapper exceptions, TypeNameExtractor extractor) {
         this.request = request;
         this.container = container;

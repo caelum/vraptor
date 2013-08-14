@@ -53,9 +53,9 @@ public class GsonSerializer implements SerializerBuilder {
 
 	private final Serializee serializee;
 
-	protected VraptorGsonBuilder builder;
+	protected VRaptorGsonBuilder builder;
 
-	public GsonSerializer(VraptorGsonBuilder builder, Writer writer, TypeNameExtractor extractor,
+	public GsonSerializer(VRaptorGsonBuilder builder, Writer writer, TypeNameExtractor extractor,
 			ProxyInitializer initializer, Serializee serializee) {
 		this.writer = writer;
 		this.extractor = extractor;

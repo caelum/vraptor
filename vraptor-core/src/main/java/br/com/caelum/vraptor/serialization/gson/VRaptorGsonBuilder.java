@@ -5,6 +5,7 @@ import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Collection;
 
+import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.ioc.PrototypeScoped;
 import br.com.caelum.vraptor.serialization.xstream.Serializee;
 
@@ -20,6 +21,7 @@ import com.google.gson.JsonSerializer;
  */
 
 @SuppressWarnings("rawtypes")
+@Component
 @PrototypeScoped
 public class VRaptorGsonBuilder {
 

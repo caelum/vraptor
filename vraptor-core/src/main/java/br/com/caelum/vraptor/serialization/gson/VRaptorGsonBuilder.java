@@ -6,7 +6,6 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import br.com.caelum.vraptor.ioc.Component;
-import br.com.caelum.vraptor.ioc.PrototypeScoped;
 import br.com.caelum.vraptor.serialization.xstream.Serializee;
 
 import com.google.gson.ExclusionStrategy;
@@ -15,14 +14,13 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSerializer;
 
 /**
- * 
+ *
  * @author Renan Reis
  * @author Guilherme Mangabeira
  */
 
 @SuppressWarnings("rawtypes")
 @Component
-@PrototypeScoped
 public class VRaptorGsonBuilder {
 
 	protected GsonBuilder builder = new GsonBuilder();
@@ -39,9 +37,9 @@ public class VRaptorGsonBuilder {
 		this.serializers = serializers.getSerializers();
 		ExclusionStrategy exclusion = new Exclusions(serializee);
 		this.exclusions = Arrays.asList(exclusion);
-		
+
 	}
-	
+
 	public boolean isWithoutRoot() {
 		return withoutRoot;
 	}

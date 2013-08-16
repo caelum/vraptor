@@ -12,13 +12,11 @@ import java.util.Map;
 import java.util.Set;
 
 import net.vidageek.mirror.dsl.Mirror;
-import br.com.caelum.vraptor.ioc.Component;
 
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
 
-@Component
 public class Serializee {
 	private Object root;
 	private Class<?> rootClass;
@@ -72,7 +70,7 @@ public class Serializee {
 			excludes.putAll(name, getParentTypesFor(name));
 		}
 	}
-	
+
 	public void excludeAll() {
 		Set<Class<?>> types = new HashSet<Class<?>>();
 
@@ -80,7 +78,7 @@ public class Serializee {
 			types.addAll(getElementTypes());
 		else
 			types.add(getRootClass());
-		
+
 		for (Class<?> type : types) {
 			for(Field field : new Mirror().on(type).reflectAll().fields()) {
 				excludes.putAll(field.getName(), getParentTypes(field.getName(), type));
@@ -109,7 +107,7 @@ public class Serializee {
 
 	private Set<Class<?>> getParentTypes(String name, Class<?> type) {
 		String[] path = name.split("\\.");
-		
+
 		try {
 			for (int i = 0; i < path.length - 1; i++) {
 				Field field = checkNotNull(new Mirror().on(type).reflect().field(path[i]));
@@ -119,7 +117,7 @@ public class Serializee {
 		} catch (NullPointerException e) {
 			throw new IllegalArgumentException("Field path '" + name + "' doesn't exists in " + type, e);
 		}
-		
+
 		Set<Class<?>> types = Sets.newHashSet();
 		while (type != Object.class) {
 			types.add(type);

@@ -53,12 +53,17 @@ import com.google.common.base.Predicate;
  * If you want to override the convention for default URI, you can create a
  * class like:
  *
- * public class MyRoutesParser extends PathAnnotationRoutesParser { //delegate
- * constructor protected String extractControllerNameFrom(Class&lt;?&gt; type) {
- * return //your convention here }
+ * public class MyRoutesParser extends PathAnnotationRoutesParser {
+ *   //delegate constructor
  *
- * protected String defaultUriFor(String controllerName, String methodName) {
- * return //your convention here } }
+ *   protected String extractControllerNameFrom(Class&lt;?&gt; type) {
+ *     return //your convention here
+ *   }
+ *
+ *   protected String defaultUriFor(String controllerName, String methodName) {
+ *     return //your convention here
+ *   }
+ * }
  *
  * @author Guilherme Silveira
  * @author Lucas Cavalcanti
@@ -109,7 +114,7 @@ public class PathAnnotationRoutesParser implements RoutesParser {
 		return routes;
 	}
 
-	private EnumSet<HttpMethod> getHttpMethods(AnnotatedElement annotated) {
+	protected EnumSet<HttpMethod> getHttpMethods(AnnotatedElement annotated) {
 		EnumSet<HttpMethod> methods = EnumSet.noneOf(HttpMethod.class);
 		for (HttpMethod method : HttpMethod.values()) {
 			if (annotated.isAnnotationPresent(method.getAnnotation())) {

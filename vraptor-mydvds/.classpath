@@ -51,8 +51,8 @@
       <attribute value="jar:file:/Users/albertoluizsouza/.m2/repository/org/hibernate/common/hibernate-commons-annotations/4.0.1.Final/hibernate-commons-annotations-4.0.1.Final-javadoc.jar!/" name="javadoc_location"/>
     </attributes>
   </classpathentry>
-  <classpathentry kind="var" path="M2_REPO/org/hibernate/hibernate-core/4.1.4.Final/hibernate-core-4.1.4.Final.jar"/>
-  <classpathentry kind="var" path="M2_REPO/org/hibernate/hibernate-entitymanager/4.1.4.Final/hibernate-entitymanager-4.1.4.Final.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/hibernate/hibernate-core/4.1.4.Final/hibernate-core-4.1.4.Final.jar" sourcepath="M2_REPO/org/hibernate/hibernate-core/4.1.4.Final/hibernate-core-4.1.4.Final-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/hibernate/hibernate-entitymanager/4.1.4.Final/hibernate-entitymanager-4.1.4.Final.jar" sourcepath="M2_REPO/org/hibernate/hibernate-entitymanager/4.1.4.Final/hibernate-entitymanager-4.1.4.Final-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/hibernate/javax/persistence/hibernate-jpa-2.0-api/1.0.1.Final/hibernate-jpa-2.0-api-1.0.1.Final.jar" sourcepath="M2_REPO/org/hibernate/javax/persistence/hibernate-jpa-2.0-api/1.0.1.Final/hibernate-jpa-2.0-api-1.0.1.Final-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/hibernate/hibernate-validator/4.2.0.Final/hibernate-validator-4.2.0.Final.jar" sourcepath="M2_REPO/org/hibernate/hibernate-validator/4.2.0.Final/hibernate-validator-4.2.0.Final-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/hsqldb/hsqldb/1.8.0.10/hsqldb-1.8.0.10.jar"/>
@@ -71,11 +71,15 @@
       <attribute value="jar:file:/Users/albertoluizsouza/.m2/repository/org/javassist/javassist/3.15.0-GA/javassist-3.15.0-GA-javadoc.jar!/" name="javadoc_location"/>
     </attributes>
   </classpathentry>
-  <classpathentry kind="var" path="M2_REPO/org/jboss/logging/jboss-logging/3.1.0.GA/jboss-logging-3.1.0.GA.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/jboss/logging/jboss-logging/3.1.0.GA/jboss-logging-3.1.0.GA.jar" sourcepath="M2_REPO/org/jboss/logging/jboss-logging/3.1.0.GA/jboss-logging-3.1.0.GA-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/jboss/spec/javax/transaction/jboss-transaction-api_1.1_spec/1.0.0.Final/jboss-transaction-api_1.1_spec-1.0.0.Final.jar" sourcepath="M2_REPO/org/jboss/spec/javax/transaction/jboss-transaction-api_1.1_spec/1.0.0.Final/jboss-transaction-api_1.1_spec-1.0.0.Final-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/com/google/code/findbugs/jsr305/1.3.9/jsr305-1.3.9.jar"/>
   <classpathentry kind="var" path="M2_REPO/junit/junit/3.8.1/junit-3.8.1.jar"/>
-  <classpathentry kind="var" path="M2_REPO/log4j/log4j/1.2.17/log4j-1.2.17.jar"/>
+  <classpathentry kind="var" path="M2_REPO/log4j/log4j/1.2.17/log4j-1.2.17.jar" sourcepath="M2_REPO/log4j/log4j/1.2.17/log4j-1.2.17-sources.jar">
+    <attributes>
+      <attribute value="jar:file:/Users/albertoluizsouza/.m2/repository/log4j/log4j/1.2.17/log4j-1.2.17-javadoc.jar!/" name="javadoc_location"/>
+    </attributes>
+  </classpathentry>
   <classpathentry kind="var" path="M2_REPO/net/vidageek/mirror/1.6.1/mirror-1.6.1.jar" sourcepath="M2_REPO/net/vidageek/mirror/1.6.1/mirror-1.6.1-sources.jar">
     <attributes>
       <attribute value="jar:file:/Users/albertoluizsouza/.m2/repository/net/vidageek/mirror/1.6.1/mirror-1.6.1-javadoc.jar!/" name="javadoc_location"/>
@@ -106,7 +110,7 @@
       <attribute value="jar:file:/Users/albertoluizsouza/.m2/repository/org/slf4j/slf4j-log4j12/1.6.1/slf4j-log4j12-1.6.1-javadoc.jar!/" name="javadoc_location"/>
     </attributes>
   </classpathentry>
-  <classpathentry kind="src" path="/vraptor"/>
+  <classpathentry kind="var" path="M2_REPO/br/com/caelum/vraptor/3.5.2-SNAPSHOT/vraptor-3.5.2-SNAPSHOT.jar"/>
   <classpathentry kind="var" path="M2_REPO/br/com/caelum/vraptor/vraptor-plugin-hibernate4/1.0.2/vraptor-plugin-hibernate4-1.0.2.jar"/>
   <classpathentry kind="var" path="M2_REPO/xpp3/xpp3_min/1.1.4c/xpp3_min-1.1.4c.jar" sourcepath="M2_REPO/xpp3/xpp3_min/1.1.4c/xpp3_min-1.1.4c-sources.jar">
     <attributes>

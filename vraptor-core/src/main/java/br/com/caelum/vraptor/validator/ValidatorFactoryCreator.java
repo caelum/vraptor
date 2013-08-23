@@ -40,7 +40,6 @@ import br.com.caelum.vraptor.ioc.ComponentFactory;
 @Component
 @ApplicationScoped
 @Alternative
-@Priority(1000)
 public class ValidatorFactoryCreator implements ComponentFactory<ValidatorFactory> {
 
 	private static final Logger logger = LoggerFactory.getLogger(ValidatorFactoryCreator.class);

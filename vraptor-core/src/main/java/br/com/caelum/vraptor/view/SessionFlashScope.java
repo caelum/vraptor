@@ -17,6 +17,7 @@ package br.com.caelum.vraptor.view;
 
 import javax.servlet.http.HttpSession;
 
+import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 /**
  * FlashScope that uses the HttpSession to hold the data
@@ -24,6 +25,7 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  * @author Lucas Cavalcanti
  * @since 3.3.0
  */
+@Component
 public class SessionFlashScope implements FlashScope {
 
 	private final HttpSession session;

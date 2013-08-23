@@ -42,13 +42,13 @@ import br.com.caelum.vraptor.test.HttpServletRequestMock;
 import br.com.caelum.vraptor.test.HttpSessionMock;
 
 public class SpringProviderRegisteringComponentsTest extends GenericContainerTest {
-    private int counter;
+    protected int counter;
 
     @Override
 	protected ContainerProvider getProvider() {
         return new SpringProvider();
     }
-
+    
     @Override
 	protected <T> T executeInsideRequest(final WhatToDo<T> execution) {
         Callable<T> task = new Callable<T>(){

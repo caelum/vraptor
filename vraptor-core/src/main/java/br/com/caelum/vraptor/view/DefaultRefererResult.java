@@ -30,10 +30,12 @@ import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.http.route.MethodNotAllowedException;
 import br.com.caelum.vraptor.http.route.ResourceNotFoundException;
 import br.com.caelum.vraptor.http.route.Router;
+import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.validator.Message;
 
+@Component
 public class DefaultRefererResult implements RefererResult {
 
 	private final MutableRequest request;

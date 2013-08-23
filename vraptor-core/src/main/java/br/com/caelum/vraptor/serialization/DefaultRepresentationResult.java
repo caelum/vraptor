@@ -22,6 +22,7 @@ import java.util.List;
 
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.http.FormatResolver;
+import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.restfulie.RestHeadersHandler;
 import br.com.caelum.vraptor.restfulie.hypermedia.HypermediaResource;
 
@@ -32,6 +33,7 @@ import br.com.caelum.vraptor.restfulie.hypermedia.HypermediaResource;
  * @author Jose Donizetti
  * @since 3.0.3
  */
+@Component
 public class DefaultRepresentationResult implements RepresentationResult {
 
 	private final FormatResolver formatResolver;

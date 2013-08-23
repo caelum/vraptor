@@ -25,6 +25,7 @@ import java.util.ResourceBundle;
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
+import br.com.caelum.vraptor.ioc.PrototypeScoped;
 
 /**
  * Accepts either the ordinal value or name. Null and empty strings are treated
@@ -33,7 +34,7 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
  * @author Guilherme Silveira
  */
 @Convert(Enum.class)
-@ApplicationScoped
+@PrototypeScoped
 public class EnumConverter<T extends Enum<T>> implements Converter<T> {
 
 	/**

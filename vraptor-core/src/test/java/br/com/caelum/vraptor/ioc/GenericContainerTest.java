@@ -17,25 +17,6 @@
 
 package br.com.caelum.vraptor.ioc;
 
-import static br.com.caelum.vraptor.VRaptorMatchers.canHandle;
-import static br.com.caelum.vraptor.VRaptorMatchers.hasOneCopyOf;
-import static br.com.caelum.vraptor.config.BasicConfiguration.BASE_PACKAGES_PARAMETER_NAME;
-import static br.com.caelum.vraptor.config.BasicConfiguration.SCANNING_PARAM;
-import static java.lang.Thread.currentThread;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.sameInstance;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Collection;
@@ -43,6 +24,7 @@ import java.util.Collections;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.inject.Named;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -83,6 +65,28 @@ import br.com.caelum.vraptor.scan.ScannotationComponentScannerTest;
 
 import com.google.common.base.Objects;
 
+import static br.com.caelum.vraptor.VRaptorMatchers.canHandle;
+import static br.com.caelum.vraptor.VRaptorMatchers.hasOneCopyOf;
+import static br.com.caelum.vraptor.config.BasicConfiguration.BASE_PACKAGES_PARAMETER_NAME;
+import static br.com.caelum.vraptor.config.BasicConfiguration.SCANNING_PARAM;
+import static java.lang.Thread.currentThread;
+
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.sameInstance;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 /**
  * Acceptance test that checks if the container is capable of giving all
  * required components.
@@ -96,6 +100,7 @@ public abstract class GenericContainerTest {
 	protected abstract ContainerProvider getProvider();
 	protected abstract <T> T executeInsideRequest(WhatToDo<T> execution);
 	protected abstract void configureExpectations();
+	
 
 	@Test
 	public void canProvideAllApplicationScopedComponents() {
@@ -140,8 +145,12 @@ public abstract class GenericContainerTest {
 
 	@ApplicationScoped
 	public static class MyAppComponentWithLifecycle {
-		public int calls = 0;
+		private int calls = 0;
 
+		public int getCalls() {
+			return calls;
+		}
+		
 		@PreDestroy
 		public void z() {
 			calls++;
@@ -156,7 +165,7 @@ public abstract class GenericContainerTest {
 		provider.stop();
 		assertThat(component.calls, is(1));
 		provider = getProvider();
-		provider.start(context); // In order to tearDown ok
+		start(provider);
 	}
 
 	@Test
@@ -196,6 +205,8 @@ public abstract class GenericContainerTest {
 	}
 
 	@Component
+	@RequestScoped
+	@Named("teste")
 	public static class MyRequestComponent {
 
 	}
@@ -221,8 +232,8 @@ public abstract class GenericContainerTest {
 						ComponentRegistry registry = container.instanceFor(ComponentRegistry.class);
 						registry.register(MyPrototypeComponent.class, MyPrototypeComponent.class);
 
-						MyPrototypeComponent instance1 = container.instanceFor(MyPrototypeComponent.class);
-						MyPrototypeComponent instance2 = container.instanceFor(MyPrototypeComponent.class);
+						MyPrototypeComponent instance1 = instanceFor(MyPrototypeComponent.class,container);
+						MyPrototypeComponent instance2 = instanceFor(MyPrototypeComponent.class,container);
 						assertThat(instance1, not(sameInstance(instance2)));
 						return null;
 					}
@@ -271,6 +282,9 @@ public abstract class GenericContainerTest {
 
 		configureExpectations();
 		provider = getProvider();
+		start(provider);
+	}
+	protected void start(ContainerProvider provider) {
 		provider.start(context);
 	}
 
@@ -280,7 +294,7 @@ public abstract class GenericContainerTest {
 		provider = null;
 	}
 
-	private <T> void checkAvailabilityFor(final boolean shouldBeTheSame, final Class<T> component,
+	protected <T> void checkAvailabilityFor(final boolean shouldBeTheSame, final Class<T> component,
 			final Class<? super T> componentToRegister) {
 
 		T firstInstance = registerAndGetFromContainer(component, componentToRegister);
@@ -295,7 +309,7 @@ public abstract class GenericContainerTest {
 
 						ResourceMethod secondMethod = mock(ResourceMethod.class, "rm" + counter);
 						secondContainer.instanceFor(MethodInfo.class).setResourceMethod(secondMethod);
-						return secondContainer.instanceFor(component);
+						return instanceFor(component, secondContainer);
 					}
 				});
 
@@ -318,7 +332,7 @@ public abstract class GenericContainerTest {
 						}
 						ResourceMethod firstMethod = mock(ResourceMethod.class, "rm" + counter);
 						firstContainer.instanceFor(MethodInfo.class).setResourceMethod(firstMethod);
-						return firstContainer.instanceFor(componentToBeRetrieved);
+						return instanceFor(componentToBeRetrieved,firstContainer);
 					}
 				});
 
@@ -326,18 +340,18 @@ public abstract class GenericContainerTest {
 		});
 	}
 
-	public <T> T getFromContainer(final Class<T> componentToBeRetrieved) {
+	protected <T> T getFromContainer(final Class<T> componentToBeRetrieved) {
 		return executeInsideRequest(new WhatToDo<T>() {
 			public T execute(RequestInfo request, final int counter) {
 				return getFromContainerInCurrentThread(componentToBeRetrieved, request);
 			}
 		});
 	}
-
-	private <T> T getFromContainerInCurrentThread(final Class<T> componentToBeRetrieved, RequestInfo request) {
+	
+	protected <T> T getFromContainerInCurrentThread(final Class<T> componentToBeRetrieved, RequestInfo request) {
 		return provider.provideForRequest(request, new Execution<T>() {
 			public T insideRequest(Container firstContainer) {
-				return firstContainer.instanceFor(componentToBeRetrieved);
+				return instanceFor(componentToBeRetrieved,firstContainer);
 			}
 		});
 	}
@@ -346,8 +360,9 @@ public abstract class GenericContainerTest {
 		return secondContainer.instanceFor(componentToRegister) != null;
 	}
 
-	private void checkSimilarity(Class<?> component, boolean shouldBeTheSame, Object firstInstance,
+	protected void checkSimilarity(Class<?> component, boolean shouldBeTheSame, Object firstInstance,
 			Object secondInstance) {
+
 		if (shouldBeTheSame) {
 			MatcherAssert.assertThat("Should be the same instance for " + component.getName(), firstInstance,
 					is(equalTo(secondInstance)));
@@ -358,18 +373,28 @@ public abstract class GenericContainerTest {
 	}
 
 	protected void checkAvailabilityFor(boolean shouldBeTheSame, Collection<Class<?>> components) {
-		for (Class<?> component : components) {
+		for (Class<?> component : components) {			
 			checkAvailabilityFor(shouldBeTheSame, component, null);
 		}
 	}
 
 	@Component
+	@RequestScoped
 	static public class DisposableComponent {
 		private boolean destroyed;
+		private Object dependency = new Object();
+		
+		public Object getDependency() {
+			return dependency;
+		}
 
 		@PreDestroy
 		public void preDestroy() {
 			this.destroyed = true;
+		}
+		
+		public boolean isDestroyed() {
+			return destroyed;
 		}
 	}
 
@@ -415,33 +440,7 @@ public abstract class GenericContainerTest {
 		Provided object = getFromContainer(Provided.class);
 		assertThat(object, is(sameInstance(ComponentFactoryInTheClasspath.PROVIDED)));
 	}
-
-	@Test
-	public void shoudRegisterInterceptorsInInterceptorRegistry() {
-		InterceptorRegistry registry = getFromContainer(InterceptorRegistry.class);
-		assertThat(registry.all(), hasOneCopyOf(InterceptorInTheClasspath.class));
-	}
-
-	@Test
-	public void shoudCallPredestroyExactlyOneTimeForComponentsScannedFromTheClasspath() {
-		CustomComponentWithLifecycleInTheClasspath component = getFromContainer(CustomComponentWithLifecycleInTheClasspath.class);
-		assertThat(component.callsToPreDestroy, is(equalTo(0)));
-		provider.stop();
-		assertThat(component.callsToPreDestroy, is(equalTo(1)));
-
-		resetProvider();
-	}
-
-	@Test
-	public void shoudCallPredestroyExactlyOneTimeForComponentFactoriesScannedFromTheClasspath() {
-		ComponentFactoryInTheClasspath componentFactory = getFromContainer(ComponentFactoryInTheClasspath.class);
-		assertThat(componentFactory.callsToPreDestroy, is(equalTo(0)));
-		provider.stop();
-		assertThat(componentFactory.callsToPreDestroy, is(equalTo(1)));
-
-		resetProvider();
-	}
-
+			
 	@Test
 	public void shoudRegisterConvertersInConverters() {
 		executeInsideRequest(new WhatToDo<Converters>() {
@@ -456,8 +455,8 @@ public abstract class GenericContainerTest {
 				});
 			}
 		});
-	}
-
+	}	
+	
 	/**
 	 * Check if exist {@link Deserializer} registered in VRaptor for determined Content-Types.
 	 */
@@ -482,15 +481,53 @@ public abstract class GenericContainerTest {
 				});
 			}
 		});
+	}	
+	
+	@Test
+	public void shoudRegisterInterceptorsInInterceptorRegistry() {
+		InterceptorRegistry registry = getFromContainer(InterceptorRegistry.class);
+		assertThat(registry.all(), hasOneCopyOf(InterceptorInTheClasspath.class));
+	}	
+		
+	
+	
+	@Test
+	public void shoudCallPredestroyExactlyOneTimeForComponentsScannedFromTheClasspath() {
+		CustomComponentWithLifecycleInTheClasspath component = getFromContainer(CustomComponentWithLifecycleInTheClasspath.class);
+		assertThat(component.getCallsToPreDestroy(), is(equalTo(0)));
+		provider.stop();
+		assertThat(component.getCallsToPreDestroy(), is(equalTo(1)));
+
+		resetProvider();
 	}
+	
+	
+	
+	@Test
+	public void shoudCallPredestroyExactlyOneTimeForComponentFactoriesScannedFromTheClasspath() {
+		ComponentFactoryInTheClasspath componentFactory = getFromContainer(ComponentFactoryInTheClasspath.class);
+		assertThat(componentFactory.getCallsToPreDestroy(), is(equalTo(0)));
+		provider.stop();
+		assertThat(componentFactory.getCallsToPreDestroy(), is(equalTo(1)));
+
+		resetProvider();
+	}
+
+
+
 
 	protected void resetProvider() {
 		provider = getProvider();
-		provider.start(context);
+		start(provider);
 	}
 
 	protected String getClassDir() {
 		return getClass().getResource("/br/com/caelum/vraptor/test").getFile();
+	}
+	
+	protected <T> T instanceFor(final Class<T> component,
+			Container secondContainer) {
+		return secondContainer.instanceFor(component);
 	}
 
 }

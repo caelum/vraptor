@@ -19,6 +19,7 @@ package br.com.caelum.vraptor.test;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpSession;
 
@@ -56,5 +57,9 @@ public class HttpServletRequestMock extends HttpServletRequestWrapper implements
     }
 
 	public void setParameter(String key, String... value) {
+	}
+
+	public HttpServletRequest getOriginalRequest() {
+		return this;
 	}
 }

@@ -24,6 +24,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import javax.inject.Inject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,7 +46,7 @@ import com.google.common.base.Supplier;
  */
 @RequestScoped
 public class DefaultValidator extends AbstractValidator {
-    
+
     private static final Logger logger = LoggerFactory.getLogger(DefaultValidator.class);
 
     private final class LocalizationSupplier implements Supplier<ResourceBundle> {
@@ -62,6 +64,11 @@ public class DefaultValidator extends AbstractValidator {
 	private final Proxifier proxifier;
 	private final Localization localization;
 
+	public DefaultValidator() {
+		this(null, null, null, null, null, null);
+	}
+
+	@Inject
     public DefaultValidator(Result result, ValidationViewsFactory factory, Outjector outjector, Proxifier proxifier, BeanValidator beanValidator, Localization localization) {
         this.result = result;
 		this.viewsFactory = factory;
@@ -78,7 +85,7 @@ public class DefaultValidator extends AbstractValidator {
     public void validate(Object object, Class<?>... groups) {
         addAll(beanValidator.validate(object, groups));
     }
-    
+
     public void validateProperties(Object object, String... properties) {
     	addAll(beanValidator.validateProperties(object, properties));
 	}
@@ -87,11 +94,11 @@ public class DefaultValidator extends AbstractValidator {
     	if (!hasErrors()) {
     		return new MockResult(proxifier).use(view); //ignore anything, no errors occurred
     	}
-    	
+
     	if (logger.isDebugEnabled()) {
     	    logger.debug("there are errors on result: {}", errors);
     	}
-    	
+
     	result.include("errors", errors);
     	outjector.outjectRequestMap();
     	return viewsFactory.instanceFor(view, errors);

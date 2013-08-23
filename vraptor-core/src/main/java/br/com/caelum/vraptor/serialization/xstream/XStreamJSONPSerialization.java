@@ -22,6 +22,7 @@ import java.io.StringWriter;
 import javax.servlet.http.HttpServletResponse;
 
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
+import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.serialization.JSONPSerialization;
 import br.com.caelum.vraptor.serialization.JSONSerialization;
 import br.com.caelum.vraptor.serialization.ProxyInitializer;
@@ -38,6 +39,7 @@ import br.com.caelum.vraptor.view.ResultException;
  * @since 3.3.0
  *
  */
+@Component
 public class XStreamJSONPSerialization implements JSONPSerialization {
 
 	private final HttpServletResponse response;

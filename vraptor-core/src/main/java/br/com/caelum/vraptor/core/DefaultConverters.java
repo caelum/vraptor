@@ -30,7 +30,7 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Container;
 
 @ApplicationScoped
-public final class DefaultConverters implements Converters {
+public class DefaultConverters implements Converters {
 
     private final LinkedList<Class<? extends Converter<?>>> classes;
     private final Logger logger = LoggerFactory.getLogger(DefaultConverters.class);

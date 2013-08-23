@@ -18,12 +18,14 @@ package br.com.caelum.vraptor.validator;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
+import br.com.caelum.vraptor.ioc.Component;
 
 /**
  * Outjector implementation that replicates logic parameters to next logic
  * @author Lucas Cavalcanti
  * @since 3.1.1
  */
+@Component
 public class ReplicatorOutjector implements Outjector {
 
     private final Result result;

@@ -25,6 +25,8 @@ import java.io.Reader;
 
 import javax.servlet.http.HttpServletResponse;
 
+import br.com.caelum.vraptor.ioc.Component;
+
 import com.google.common.io.ByteStreams;
 import com.google.common.io.CharStreams;
 
@@ -33,6 +35,7 @@ import com.google.common.io.CharStreams;
  * @author Lucas Cavalcanti
  * @author Sergio Lopes
  */
+@Component
 public class DefaultHttpResult implements HttpResult {
 
 	private final HttpServletResponse response;

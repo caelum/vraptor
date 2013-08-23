@@ -70,7 +70,11 @@ public class CustomPicoProviderTest extends GenericContainerTest {
 
 	@ApplicationScoped
 	public static class MyFactory implements ComponentFactory<Void> {
-		public int calls = 0;
+		private int calls = 0;
+		
+		public int getCalls() {
+			return calls;
+		}
 
 		@PreDestroy
 		public void preDestroy() {
@@ -84,7 +88,7 @@ public class CustomPicoProviderTest extends GenericContainerTest {
 
     @ApplicationScoped
     public static class MyAppComponentWithLifecycle {
-    	public int calls = 0;
+    	private int calls = 0;
 
     	@PreDestroy
     	public void z() {

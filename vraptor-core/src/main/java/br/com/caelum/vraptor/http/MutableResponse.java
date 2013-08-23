@@ -28,6 +28,8 @@ import javax.servlet.http.HttpServletResponse;
 public interface MutableResponse extends HttpServletResponse {
 
 	void addRedirectListener(RedirectListener listener);
+	
+	HttpServletResponse getOriginalResponse();
 
 	interface RedirectListener {
 		void beforeRedirect();

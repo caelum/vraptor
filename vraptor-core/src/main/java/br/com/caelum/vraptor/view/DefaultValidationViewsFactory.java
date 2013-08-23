@@ -22,6 +22,7 @@ import java.util.List;
 import net.vidageek.mirror.dsl.Mirror;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.View;
+import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.proxy.MethodInvocation;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.SuperMethod;
@@ -47,6 +48,7 @@ import br.com.caelum.vraptor.validator.ValidationException;
  * @author Lucas Cavalcanti
  * @author Pedro Matiello
  */
+@Component
 public class DefaultValidationViewsFactory implements ValidationViewsFactory {
 
 	private final Result result;

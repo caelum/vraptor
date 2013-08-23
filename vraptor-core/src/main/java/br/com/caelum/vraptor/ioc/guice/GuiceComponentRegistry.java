@@ -155,7 +155,7 @@ public class GuiceComponentRegistry implements ComponentRegistry {
 		Iterable<Constructor> filteredConstructor = Iterables.filter(Lists.newArrayList(constructors), new Predicate<Constructor>() {
 
 			public boolean apply(Constructor constructor) {
-				return constructor.isAnnotationPresent(Inject.class);
+				return constructor.isAnnotationPresent(Inject.class) || constructor.isAnnotationPresent(javax.inject.Inject.class);
 			}
 			
 		});

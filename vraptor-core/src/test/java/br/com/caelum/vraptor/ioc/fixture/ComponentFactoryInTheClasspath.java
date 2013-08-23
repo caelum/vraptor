@@ -17,6 +17,7 @@
 package br.com.caelum.vraptor.ioc.fixture;
 
 import javax.annotation.PreDestroy;
+import javax.enterprise.inject.Produces;
 
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Component;
@@ -25,7 +26,7 @@ import br.com.caelum.vraptor.ioc.ComponentFactory;
 @Component
 @ApplicationScoped
 public class ComponentFactoryInTheClasspath implements ComponentFactory<br.com.caelum.vraptor.ioc.fixture.ComponentFactoryInTheClasspath.Provided> {
-	public int callsToPreDestroy = 0 ;
+	private int callsToPreDestroy = 0 ;
 	
 	@PreDestroy
 	public void preDestroy() {
@@ -34,12 +35,17 @@ public class ComponentFactoryInTheClasspath implements ComponentFactory<br.com.c
 	
 	
 	public static class Provided {
-		private Provided() {}
+		public Provided() {}
 	}
 	public static Provided PROVIDED = new Provided();
-
+	
+	@Produces		
 	public Provided getInstance() {
 		return PROVIDED;
+	}
+	
+	public int getCallsToPreDestroy() {
+		return callsToPreDestroy;
 	}
 
 }

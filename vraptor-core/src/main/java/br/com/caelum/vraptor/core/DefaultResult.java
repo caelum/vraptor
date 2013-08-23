@@ -23,6 +23,7 @@ import static java.util.Collections.unmodifiableMap;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
@@ -50,6 +51,11 @@ public class DefaultResult extends AbstractResult {
     private final ExceptionMapper exceptions;
 	private final TypeNameExtractor extractor;
 
+	public DefaultResult() {
+		this(null, null, null, null);
+	}
+	
+	@Inject
     public DefaultResult(HttpServletRequest request, Container container, ExceptionMapper exceptions, TypeNameExtractor extractor) {
         this.request = request;
         this.container = container;

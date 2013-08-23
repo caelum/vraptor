@@ -91,4 +91,8 @@ public class VRaptorRequest extends HttpServletRequestWrapper implements Mutable
 		return String.format("[VRaptorRequest %s]", this.getRequest());
 	}
 
+	public HttpServletRequest getOriginalRequest() {
+		return (HttpServletRequest) this.getRequest();
+	}
+
 }

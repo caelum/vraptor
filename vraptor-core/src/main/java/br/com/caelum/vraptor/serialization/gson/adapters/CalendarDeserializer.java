@@ -7,6 +7,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import br.com.caelum.vraptor.converter.ConversionError;
 import br.com.caelum.vraptor.core.Localization;
@@ -15,6 +16,7 @@ import br.com.caelum.vraptor.ioc.Component;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
 @Component
@@ -26,26 +28,39 @@ public class CalendarDeserializer implements JsonDeserializer<Calendar> {
 		this.localization = localization;
 	}
 
-	public Calendar deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
-			throws JsonParseException {
+	public Calendar deserialize(JsonElement json, Type typeOfT,	JsonDeserializationContext context) {
 
-		String value = json.getAsString();
+		Calendar calendar = new GregorianCalendar();
 
-		Locale locale = localization.getLocale();
-		if (locale == null) {
-			locale = Locale.getDefault();
-		}
-
-		DateFormat format = DateFormat.getDateInstance(DateFormat.SHORT, locale);
 		try {
-			Date date = format.parse(value);
-			Calendar calendar = new GregorianCalendar();
-			calendar.setTime(date);
-			return calendar;
-		} catch (ParseException e) {
-			throw new ConversionError("Error to convert Calendar.");
-		}
+			if (json.isJsonPrimitive()) {
+				String value = json.getAsString();
 
+				Locale locale = localization.getLocale();
+				if (locale == null)
+					locale = Locale.getDefault();
+
+				DateFormat format = DateFormat.getDateInstance(DateFormat.SHORT, locale);
+				Date date = format.parse(value);
+				calendar.setTime(date);
+			} else {
+				JsonObject value = json.getAsJsonObject();
+
+				String timezone = value.get("timezone").getAsString();
+				Long time = value.get("time").getAsLong();
+
+				calendar.setTimeZone(TimeZone.getTimeZone(timezone));
+				calendar.setTimeInMillis(time);
+			}
+
+			return calendar;
+		}
+		catch (JsonParseException e) {
+			throw new ConversionError("Invalid Json format to convert Calendar: " + e.getMessage());
+		}
+		catch (ParseException e) {
+			throw new ConversionError("Error to convert Calendar: " + e.getMessage());
+		}
 	}
 
 }

@@ -396,46 +396,29 @@ public class GsonJSONSerializationTest {
 		return new String(stream.toByteArray());
 	}
 
-	public static class SomeProxy extends Client implements HibernateProxy {
-		private static final long serialVersionUID = 1L;
-
-		private String aField;
-
-		private transient LazyInitializer initializer;
-
-		public SomeProxy(LazyInitializer initializer) {
-			super("name");
-			this.initializer = initializer;
+	public static class Bazinga {
+		private HibernateProxy value;
+		
+		public Bazinga(HibernateProxy value) {
+			this.value = value;
 		}
 
-		public LazyInitializer getHibernateLazyInitializer() {
-			return initializer;
-		}
-
-		public String getaField() {
-			return aField;
-		}
-
-		public Object writeReplace() {
-			return this;
-		}
-
+		public HibernateProxy getValue() { return value; }
+		public void setValue(HibernateProxy value) { this.value = value; }
 	}
 
 	@Test
 	public void shouldRunHibernateLazyInitialization() throws Exception {
 		LazyInitializer initializer = mock(LazyInitializer.class);
+		HibernateProxy proxy = mock(HibernateProxy.class);
+		
+		when(proxy.getHibernateLazyInitializer()).thenReturn(initializer);
+		
+		Bazinga bazinga = new Bazinga(proxy);
 
-		SomeProxy proxy = new SomeProxy(initializer);
-		proxy.name = "my name";
-		proxy.aField = "abc";
+		serialization.from(bazinga).include("value").serialize();
 
-		when(initializer.getPersistentClass()).thenReturn(Client.class);
-		when(proxy.getHibernateLazyInitializer().getImplementation()).thenReturn(proxy);
-
-		serialization.from(proxy).serialize();
-
-		assertThat(result(), is("{\"client\":{\"aField\":\"abc\",\"name\":\"my name\"}}"));
+		assertThat(result(), is("{\"bazinga\":{}}"));
 	}
 
 	static class MyCollection extends ForwardingCollection<Order> {

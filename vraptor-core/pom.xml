@@ -136,10 +136,10 @@
 			<groupId>aopalliance</groupId>
 			<artifactId>aopalliance</artifactId>
 			<version>1.0</version>
-		</dependency>                        					 		    
+		</dependency>
 		<!-- [/guice] -->
-		
-		<!-- [cdi] -->		
+
+		<!-- [cdi] -->
 		<dependency>
 			<groupId>javax.inject</groupId>
 			<artifactId>javax.inject</artifactId>
@@ -151,7 +151,7 @@
 	        <artifactId>ejb-api</artifactId>
 	        <version>3.0</version>
 	        <scope>provided</scope>
-	    </dependency>			
+	    </dependency>
 		<dependency>
 			<groupId>javax.enterprise</groupId>
 			<artifactId>cdi-api</artifactId>
@@ -163,8 +163,8 @@
 		    <artifactId>javax.annotation-api</artifactId>
 		    <version>1.2</version>
 	        <scope>provided</scope>
-		</dependency>		
-                        				
+		</dependency>
+
 		<!-- [/cdi] -->
 
 		<!-- [pico] -->
@@ -308,7 +308,7 @@
 			</exclusions>
 		</dependency>
 	</dependencies>
-	
+
 	<build>
 		<plugins>
 			<plugin>
@@ -352,19 +352,38 @@
 					</execution>
 				</executions>
 			</plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jar-plugin</artifactId>
-        <version>2.2</version>
-
-        <executions>
-          <execution>
-            <goals>
-              <goal>test-jar</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.2</version>
+		
+				<executions>
+					<execution>
+						<goals>
+							<goal>test-jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.2</version>
+		
+				<executions>
+					<execution>
+						<configuration>
+							<classifier>no-beans-xml</classifier>
+							<excludes>
+								<exclude>**/beans.xml</exclude>
+							</excludes>
+						</configuration>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 </project>

@@ -89,6 +89,10 @@ public class DefaultValidator extends AbstractValidator {
     public void validateProperties(Object object, String... properties) {
     	addAll(beanValidator.validateProperties(object, properties));
 	}
+    
+    public void validateProperty(Object object, String property, Class<?>... groups) {
+		addAll(beanValidator.validateProperty(object, property, groups));
+	}
 
     public <T extends View> T onErrorUse(Class<T> view) {
     	if (!hasErrors()) {

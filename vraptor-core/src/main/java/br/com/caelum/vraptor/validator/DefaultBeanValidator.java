@@ -95,18 +95,18 @@ public class DefaultBeanValidator
     public List<Message> validateProperty(Object bean, String property, Class<?>... groups) {
     	if(bean == null) {
     		logger.warn("skiping validation, input bean is null.");
-            return emptyList();
+    		return emptyList();
     	}
     	
     	List<Message> messages = new ArrayList<Message>();
     	
-        Set<ConstraintViolation<Object>> violations = validator.validateProperty(bean, property, groups);
-        logger.debug("there are {} violations at bean {}.", violations.size(), bean);
+    	Set<ConstraintViolation<Object>> violations = validator.validateProperty(bean, property, groups);
+    	logger.debug("there are {} violations at bean {}.", violations.size(), bean);
 
-        messages.addAll(getMessages(violations));
+    	messages.addAll(getMessages(violations));
     	
     	return messages;
-	}
+    }
     
     private List<Message> getMessages(final Set<ConstraintViolation<Object>> violations) {
     	List<Message> messages = new ArrayList<Message>();

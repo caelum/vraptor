@@ -41,4 +41,10 @@ public class NullBeanValidator implements BeanValidator {
 		return validate(object);
 	}
 
+	public List<Message> validateProperty(Object object, String property, Class<?>... groups) {
+		logger.warn("You are willing to validate an object, but there is no bean validation engine " +
+				"registered. Please add the jars of some implementation of Bean Validator.");
+		return emptyList();
+	}
+
 }

@@ -44,5 +44,16 @@ public interface BeanValidator {
      * @return List of constraint violations.
      */
     List<Message> validateProperties(Object object, String... properties);
+    
+    /**
+     * Validate the specified bean's property and return a list of messages if has constraint violations. 
+     * If the object is null, an empty list will be returned.
+     * 
+     * @param object The object to be validated.
+     * @param property The property that must be validated.
+     * @param groups The groups that must be validated.
+     * @return List of constraint violations.
+     */
+    List<Message> validateProperty(Object object, String property, Class<?>... groups);
 
 }

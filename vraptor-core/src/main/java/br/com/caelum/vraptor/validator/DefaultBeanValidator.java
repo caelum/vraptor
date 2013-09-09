@@ -94,8 +94,8 @@ public class DefaultBeanValidator
     
     public List<Message> validateProperty(Object bean, String property, Class<?>... groups) {
     	if(bean == null) {
-    		logger.warn("skiping validation, input bean is null.");
-    		return emptyList();
+            logger.warn("skiping validation, input bean is null.");
+            return emptyList();
     	}
     	
     	List<Message> messages = new ArrayList<Message>();

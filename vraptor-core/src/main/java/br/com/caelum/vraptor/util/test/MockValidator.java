@@ -65,6 +65,9 @@ public class MockValidator extends AbstractValidator {
 	
 	public void validateProperties(Object object, String... properties) {
 	}
+	
+	public void validateProperty(Object object, String property, Class<?>... groups) {
+	}
 
 	public <T extends View> T onErrorUse(Class<T> view) {
 		if(!this.errors.isEmpty()) {
@@ -100,4 +103,5 @@ public class MockValidator extends AbstractValidator {
 		
 		return false;
 	}
+	
 }

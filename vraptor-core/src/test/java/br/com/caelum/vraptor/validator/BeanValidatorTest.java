@@ -121,6 +121,17 @@ public class BeanValidatorTest {
     public void shouldReturnEmptyCollectionIfBeanIsNullForValidationProperties() {
     	assertThat(beanValidator.validateProperties(null, "id"), hasSize(0));
     }
+    
+    @Test
+    public void shouldValidateSpecificPropertyOfSpecificValidationGroup() {
+    	CustomerForValidation customer = new CustomerForValidation(null, null, null);
+    	assertThat(beanValidator.validateProperty(customer, "age", AnotherGroupValidation.class), hasSize(1));
+    }
+    
+    @Test
+    public void shouldReturnEmptyCollectionWhenBeanIsNull() {
+    	assertThat(beanValidator.validateProperty(null, "age", AnotherGroupValidation.class), hasSize(0));
+    }
 
     /**
      * Customer for using in bean validator tests.

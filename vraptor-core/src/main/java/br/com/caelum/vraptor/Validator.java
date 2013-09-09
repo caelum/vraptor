@@ -51,6 +51,16 @@ public interface Validator {
      * @param properties The names of properties to be validated.
      */
     void validateProperties(Object object, String... properties);
+    
+    /**
+     * Validate the specific property of an object using some Bean Validation engine. If the object is null,
+     * the validation will be skipped.
+     * 
+     * @param object The object to be validated.
+     * @param property The name of property to be validated.
+     * @param groups The groups to be validated.
+     */
+    void validateProperty(Object object, String property, Class<?>... groups);
 
     <T extends View> T onErrorUse(Class<T> view);
 

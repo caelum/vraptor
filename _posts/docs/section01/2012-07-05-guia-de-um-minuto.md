@@ -9,9 +9,14 @@ O VRaptor 3 foca em simplicidade e, portanto, todas as funcionalidades que você
 
 Tanto para salvar, remover, buscar e atualizar ou ainda funcionalidades que costumam ser mais complexas como upload e download de arquivos, resultados em formatos diferentes (XML, JSON, XHTML, etc), tudo isso é feito por meio de funcionalidades simples do VRaptor 3, que sempre procuram encapsular HttpServletRequest, Response, Session e toda a API do javax.servlet.
 
+Para aprender o VRaptor de forma mais detalhada, continue lendo as outras seções desta documentação,
+o <a href="http://www.casadocodigo.com.br/products/livro-vraptor">Livro de VRaptor</a> do Lucas
+Cavalcanti, publicado pela <a href="http://www.casadocodigo.com.br">Casa do Código</a>, ou a
+<a href="http://www.caelum.com.br/apostila-vraptor-hibernate/">apostila do VRaptor</a> da Caelum.
+
 <h3>Começando um projeto</h3>
 
-Você pode começar seu projeto a partir do vraptor-blank-project, que contém as dependências necessárias e a configuração no web.xml. Ele pode ser baixado no <a href="https://code.google.com/p/vraptor3/downloads/list">site oficial do VRaptor</a>.
+Você pode começar seu projeto a partir do vraptor-blank-project, que contém as dependências necessárias e a configuração no web.xml. Ele pode ser baixado no <a href="https://code.google.com/p/vraptor3/downloads/list">site de downloads do VRaptor</a>.
 
 O projeto vraptor-blank-project é configurado para a IDE Eclipse. Se você usa Netbeans, é possível importar o projeto facilmente conforme a documentação disponível na <a href="http://netbeans.org/kb/docs/java/import-eclipse.html">seção de suporte do NetBeans</a>. Por outro lado, se você utiliza a IDE IntelliJ IDEA você pode importar o projeto seguindo o guia disponível na <a href="http://www.jetbrains.com/idea/webhelp/importing-eclipse-project-to-intellij-idea.html">página de ajuda do IntelliJ IDEA</a>.
 
@@ -21,7 +26,7 @@ Se você quiser usar o Maven, você pode adicionar o artefato do VRaptor como de
 <dependency>
     <groupId>br.com.caelum</groupId>
     <artifactId>vraptor</artifactId>
-    <version>3.2.0</version><!--ou a última versão disponível-->
+    <version>3.5.2</version><!--ou a última versão disponível-->
 </dependency>
 {% endhighlight %}
 

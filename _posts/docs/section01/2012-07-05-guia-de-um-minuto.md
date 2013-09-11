@@ -10,8 +10,8 @@ O VRaptor 3 foca em simplicidade e, portanto, todas as funcionalidades que você
 Tanto para salvar, remover, buscar e atualizar ou ainda funcionalidades que costumam ser mais complexas como upload e download de arquivos, resultados em formatos diferentes (XML, JSON, XHTML, etc), tudo isso é feito por meio de funcionalidades simples do VRaptor 3, que sempre procuram encapsular HttpServletRequest, Response, Session e toda a API do javax.servlet.
 
 Para aprender o VRaptor de forma mais detalhada, continue lendo as outras seções desta documentação,
-o <a href="http://www.casadocodigo.com.br/products/livro-vraptor">Livro de VRaptor</a> do Lucas
-Cavalcanti, publicado pela <a href="http://www.casadocodigo.com.br">Casa do Código</a>, ou a
+o <a href="http://www.casadocodigo.com.br/products/livro-vraptor?utm_source=vraptor-site&utm_medium=docs&utm_campaign=docs_vraptor">Livro de VRaptor</a> do Lucas
+Cavalcanti, publicado pela <a href="http://www.casadocodigo.com.br?utm_source=vraptor-site&utm_medium=docs&utm_campaign=docs_vraptor">Casa do Código</a>, ou a
 <a href="http://www.caelum.com.br/apostila-vraptor-hibernate/">apostila do VRaptor</a> da Caelum.
 
 <h3>Começando um projeto</h3>

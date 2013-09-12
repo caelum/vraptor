@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.MutableResponse;
+import br.com.caelum.vraptor.interceptor.ApplicationLogicException;
 import br.com.caelum.vraptor.proxy.MethodInvocation;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.ProxyInvocationException;
@@ -62,12 +63,12 @@ public class DefaultPageResult implements PageResult {
 	}
 	
 	public void defaultView() {
+		String to = resolver.pathFor(requestInfo.getResourceMethod());
+		logger.debug("forwarding to {}", to);			
 		try {
-			String to = resolver.pathFor(requestInfo.getResourceMethod());
-			logger.debug("forwarding to {}", to);			
 			request.getRequestDispatcher(to).forward(request.getOriginalRequest(), response.getOriginalResponse());
 		} catch (ServletException e) {
-			throw new ResultException(e);
+			throw new ApplicationLogicException(to + " raised an exception", e);
 		} catch (IOException e) {
 			throw new ResultException(e);
 		}

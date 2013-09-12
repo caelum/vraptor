@@ -40,6 +40,7 @@ import br.com.caelum.vraptor.core.StaticContentHandler;
 import br.com.caelum.vraptor.http.EncodingHandler;
 import br.com.caelum.vraptor.http.VRaptorRequest;
 import br.com.caelum.vraptor.http.VRaptorResponse;
+import br.com.caelum.vraptor.interceptor.ApplicationLogicException;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
 
@@ -85,13 +86,23 @@ public class VRaptor implements Filter {
 			VRaptorResponse mutableResponse = new VRaptorResponse(baseResponse);
 
 			final RequestInfo request = new RequestInfo(servletContext, chain, mutableRequest, mutableResponse);
-			provider.provideForRequest(request, new Execution<Object>() {
+			
+			Execution<Object> execution = new Execution<Object>() {
 				public Object insideRequest(Container container) {
 					container.instanceFor(EncodingHandler.class).setEncoding(baseRequest, baseResponse);
 					container.instanceFor(RequestExecution.class).execute();
 					return null;
 				}
-			});
+			};
+			
+			try {
+				provider.provideForRequest(request, execution);
+			} catch (ApplicationLogicException e) {
+				// it is a business logic exception, we dont need to show
+				// all interceptors stack trace
+				throw new ServletException(e.getMessage(), e.getCause());
+			}
+			
 			logger.debug("VRaptor ended the request");
 		}
 	}

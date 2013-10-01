@@ -23,7 +23,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 
 import javax.inject.Inject;
-import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -78,7 +77,7 @@ public class DefaultLogicResult implements LogicResult {
 		this.flash = flash;
 		this.methodInfo = methodInfo;
 	}
-	
+
 	/**
 	 * This implementation don't actually use request dispatcher for the
 	 * forwarding. It runs forwarding logic, and renders its <b>default</b>
@@ -101,7 +100,7 @@ public class DefaultLogicResult implements LogicResult {
 					if (!response.isCommitted()) {
 						String path = resolver.pathFor(DefaultResourceMethod.instanceFor(type, method));
 						logger.debug("Forwarding to {}", path);
-						request.getRequestDispatcher(path).forward(request.getOriginalRequest(), response.getOriginalResponse());
+						request.getRequestDispatcher(path).forward(request, response);
 					}
 					return null;
 				} catch (InvocationTargetException e) {

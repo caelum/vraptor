@@ -18,10 +18,8 @@
 package br.com.caelum.vraptor.view;
 
 import static org.hamcrest.Matchers.is;
-
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
-
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.argThat;
@@ -37,7 +35,6 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 
 import javax.servlet.RequestDispatcher;
-import javax.servlet.http.HttpServletResponse;
 
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
@@ -119,8 +116,6 @@ public class DefaultLogicResultTest {
         methodInfo = new DefaultMethodInfo();
 		this.logicResult = new DefaultLogicResult(proxifier, router, request, response, container,
                 resolver, extractor, flash, methodInfo);
-		when(request.getOriginalRequest()).thenReturn(request);
-		when(response.getOriginalResponse()).thenReturn(response);
     }
 
     @Test
@@ -234,18 +229,18 @@ public class DefaultLogicResultTest {
 
         logicResult.forwardTo(MyComponent.class).throwsValidationException();
     }
-    
+
     class TheComponent {
     	private final Result result;
 
 		public TheComponent(Result result) {
 			this.result = result;
 		}
-		
+
 		public void method() {
 			result.use(Results.page()).defaultView();
 		}
-		
+
     }
     /**
      * @bug #337
@@ -259,9 +254,9 @@ public class DefaultLogicResultTest {
 		when(resolver.pathFor(argThat(sameMethodAs(TheComponent.class.getDeclaredMethod("method"))))).thenReturn("controlled!");
 		when(request.getRequestDispatcher(anyString())).thenThrow(new AssertionError("should have called with the right method!"));
 		doReturn(dispatcher).when(request).getRequestDispatcher("controlled!");
-		
+
 		methodInfo.setResourceMethod(DefaultResourceMethod.instanceFor(MyComponent.class, MyComponent.class.getDeclaredMethod("base")));
-		
+
 		logicResult.forwardTo(TheComponent.class).method();
 	}
 
@@ -271,10 +266,12 @@ public class DefaultLogicResultTest {
 			public void describeTo(Description description) {
 			}
 
+			@Override
 			protected boolean matchesSafely(ResourceMethod item) {
 				return item.getMethod().equals(method);
 			}
 
+			@Override
 			protected void describeMismatchSafely(ResourceMethod item,
 					Description mismatchDescription) {
 			}

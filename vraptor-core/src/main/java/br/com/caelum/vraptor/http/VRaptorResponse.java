@@ -51,8 +51,4 @@ public class VRaptorResponse extends HttpServletResponseWrapper implements Mutab
 		listeners.add(listener);
 	}
 
-	public HttpServletResponse getOriginalResponse() {
-		return this.response;
-	}
-
 }

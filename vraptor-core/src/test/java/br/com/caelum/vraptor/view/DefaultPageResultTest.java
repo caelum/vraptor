@@ -18,7 +18,6 @@
 package br.com.caelum.vraptor.view;
 
 import static org.junit.Assert.fail;
-
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
@@ -30,7 +29,6 @@ import java.io.IOException;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletResponse;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -76,8 +74,6 @@ public class DefaultPageResultTest {
 			}
 		};
 		view = new DefaultPageResult(request, response, requestInfo, fixedResolver, proxifier);
-		when(request.getOriginalRequest()).thenReturn(request);
-		when(response.getOriginalResponse()).thenReturn(response);
 	}
 
 	public static class AnyResource {

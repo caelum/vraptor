@@ -26,7 +26,4 @@ import javax.servlet.http.HttpServletRequest;
 public interface MutableRequest extends HttpServletRequest {
 
 	void setParameter(String key, String... value);
-	
-	HttpServletRequest getOriginalRequest();
-
 }

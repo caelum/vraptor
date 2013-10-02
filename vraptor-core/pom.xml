@@ -381,6 +381,29 @@
 					</execution>
 				</executions>
 			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.7</version>
+				<executions>
+					<execution>
+						<id>package</id>
+						<phase>package</phase>
+						<configuration>
+							<target>
+								<replaceregexp file="src/main/java/br/com/caelum/vraptor/VRaptor.java" 
+									match="VERSION = &quot;(.*)&quot;;" 
+									replace="VERSION = &quot;${project.version}&quot;;"/>
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
 		</plugins>
 	</build>
 </project>

@@ -10,7 +10,7 @@
 	<parent>
 		<groupId>org.sonatype.oss</groupId>
 		<artifactId>oss-parent</artifactId>
-		<version>3</version>
+		<version>7</version>
 	</parent>
 
 	<description>Java web MVC framework for fast and maintainable development</description>
@@ -53,13 +53,13 @@
 			<url>http://apache.org/licenses/LICENSE-2.0.txt</url>
 		</license>
 	</licenses>
-	
+
 	<scm>
 		<url>http://github.com/caelum/vraptor</url>
 		<connection>scm:git:git://github.com/caelum/vraptor</connection>
 		<developerConnection>scm:git:git@github.com:caelum/vraptor.git</developerConnection>
 	</scm>
-	
+
 	<modules>
 		<module>vraptor-core</module>
 		<module>vraptor-plugin-gae</module>
@@ -67,7 +67,7 @@
 		<module>vraptor-blank-project</module>
 		<module>vraptor-blank-project-gae</module>
 	</modules>
-	
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>

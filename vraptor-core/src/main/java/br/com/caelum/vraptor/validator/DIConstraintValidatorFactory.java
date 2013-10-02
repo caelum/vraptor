@@ -12,9 +12,9 @@ import br.com.caelum.vraptor.proxy.InstanceCreator;
 
 /**
  * Create a custom {@link ConstraintValidatorFactory} to allow users to use constraints that uses components.
- * 
+ *
  * @author Otávio Scherer Garcia
- * @since 3.5.2-SNAPSHOT
+ * @since 3.5.2
  */
 @ApplicationScoped
 public class DIConstraintValidatorFactory

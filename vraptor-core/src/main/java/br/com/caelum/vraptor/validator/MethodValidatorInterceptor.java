@@ -40,11 +40,11 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**
  * Validate method parameters using Bean Validation 1.1. The method will be intercepted if any parameter
- * contains Bean Validation annotations. This component is enabled only if you have any Bean Validation 
+ * contains Bean Validation annotations. This component is enabled only if you have any Bean Validation
  * provider that implements method validation.
- * 
+ *
  * @author Otávio Scherer Garcia
- * @since 3.5.2-SNAPSHOT
+ * @since 3.5.2
  */
 @RequestScoped
 @Intercepts(before = ExecuteMethodInterceptor.class, after = ParametersInstantiatorInterceptor.class)
@@ -59,7 +59,7 @@ public class MethodValidatorInterceptor
     private final MethodInfo methodInfo;
     private final Validator validator;
 
-    public MethodValidatorInterceptor(Localization localization, MessageInterpolator interpolator, Validator validator, 
+    public MethodValidatorInterceptor(Localization localization, MessageInterpolator interpolator, Validator validator,
             MethodInfo methodInfo, javax.validation.Validator methodValidator) {
         this.localization = localization;
         this.interpolator = interpolator;

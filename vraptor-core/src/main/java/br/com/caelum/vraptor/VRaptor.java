@@ -86,7 +86,7 @@ public class VRaptor implements Filter {
 			VRaptorResponse mutableResponse = new VRaptorResponse(baseResponse);
 
 			final RequestInfo request = new RequestInfo(servletContext, chain, mutableRequest, mutableResponse);
-			
+
 			Execution<Object> execution = new Execution<Object>() {
 				public Object insideRequest(Container container) {
 					container.instanceFor(EncodingHandler.class).setEncoding(baseRequest, baseResponse);
@@ -94,7 +94,7 @@ public class VRaptor implements Filter {
 					return null;
 				}
 			};
-			
+
 			try {
 				provider.provideForRequest(request, execution);
 			} catch (ApplicationLogicException e) {
@@ -102,7 +102,7 @@ public class VRaptor implements Filter {
 				// all interceptors stack trace
 				throw new ServletException(e.getMessage(), e.getCause());
 			}
-			
+
 			logger.debug("VRaptor ended the request");
 		}
 	}
@@ -111,7 +111,7 @@ public class VRaptor implements Filter {
 		servletContext = cfg.getServletContext();
 		BasicConfiguration config = new BasicConfiguration(servletContext);
 		init(config.getProvider());
-		logger.info("VRaptor 3.5.2-SNAPSHOT successfuly initialized");
+		logger.info("VRaptor 3.5.3 successfuly initialized");
 	}
 
 	void init(ContainerProvider provider) {

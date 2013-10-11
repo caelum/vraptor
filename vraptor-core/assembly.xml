@@ -7,10 +7,124 @@
 	</formats>
 
 	<dependencySets>
+
 		<dependencySet>
 			<unpack>false</unpack>
-			<scope>runtime</scope>
-			<outputDirectory>lib</outputDirectory>
+			<outputDirectory>lib/mandatory</outputDirectory>
+			<includes>
+				<include>com.google.guava:guava</include>
+				<include>br.com.caelum:iogi</include>
+				<include>javassist:javassist</include>
+				<include>org.slf4j:slf4j-api</include>
+				<include>net.vidageek:mirror</include>
+				<include>org.objenesis:objenesis</include>
+				<include>com.thoughtworks.paranamer:paranamer</include>
+				<include>net.sf.scannotation:scannotation</include>
+				<include>com.thoughtworks.xstream:xstream</include>
+				<include>ognl:ognl</include>
+			</includes>
+		</dependencySet>
+
+		<dependencySet>
+			<unpack>false</unpack>
+			<outputDirectory>lib/logging</outputDirectory>
+			<includes>
+				<include>org.slf4j:slf4j-log4j12</include>
+				<include>log4j:log4j</include>
+				<include>commons-logging:commons-logging</include>
+			</includes>
+		</dependencySet>
+
+		<dependencySet>
+			<unpack>false</unpack>
+			<outputDirectory>lib/providers/springframework</outputDirectory>
+			<includes>
+				<include>org.aspectj:aspectjrt</include>
+				<include>org.springframework:spring-aop</include>
+				<include>org.springframework:spring-asm</include>
+				<include>org.springframework:spring-beans</include>
+				<include>org.springframework:spring-context</include>
+				<include>org.springframework:spring-core</include>
+				<include>org.springframework:spring-expression</include>
+				<include>org.springframework:spring-web</include>
+			</includes>
+		</dependencySet>
+
+		<dependencySet>
+			<unpack>false</unpack>
+			<outputDirectory>lib/providers/guice</outputDirectory>
+			<includes>
+				<include>org.aspectj:aspectjrt</include>
+				<include>aopalliance:aopalliance</include>
+				<include>com.google.inject:guice</include>
+				<include>com.google.inject.extensions:guice-multibindings</include>
+			</includes>
+		</dependencySet>
+
+		<dependencySet>
+			<unpack>false</unpack>
+			<outputDirectory>lib/providers/cdi</outputDirectory>
+			<includes>
+				<include>javax.annotation:javax.annotation-api</include>
+				<include>javax.inject:javax.inject</include>
+				<include>javax.ejb:ejb-api</include>
+				<include>javax.enterprise:cdi-api</include>
+				<include>javax.el:el-api</include>
+				<include>org.jboss.spec.javax.interceptor:jboss-interceptors-api_1.1_spec</include>
+			</includes>
+		</dependencySet>
+
+		<dependencySet>
+			<unpack>false</unpack>
+			<outputDirectory>lib/providers/pico</outputDirectory>
+			<includes>
+				<include>javax.annotation:javax.annotation-api</include>
+				<include>org.picocontainer:picocontainer</include>
+			</includes>
+		</dependencySet>
+
+		<dependencySet>
+			<unpack>false</unpack>
+			<outputDirectory>lib/serialization</outputDirectory>
+			<includes>
+				<include>org.codehaus.jettison:jettison</include>
+				<include>stax:stax-api</include>
+				<include>xpp3:xpp3_min</include>
+				<include>com.google.code.gson:gson</include>
+			</includes>
+		</dependencySet>
+
+		<dependencySet>
+			<unpack>false</unpack>
+			<outputDirectory>lib/validation</outputDirectory>
+			<includes>
+				<include>javax.validation:validation-api</include>
+				<include>org.hibernate:hibernate-validator</include>
+				<include>org.jboss.logging:jboss-logging</include>
+				<include>com.fasterxml:classmate</include>
+				<include>org.glassfish.web:javax.el</include>
+				<include>javax.el:javax.el-api</include>
+				<include>javax.annotation:jsr250-api</include>
+				<include>org.hamcrest:hamcrest-core</include>
+				<include>org.hamcrest:hamcrest-library</include>
+			</includes>
+		</dependencySet>
+
+		<dependencySet>
+			<unpack>false</unpack>
+			<outputDirectory>lib/jodatime</outputDirectory>
+			<includes>
+				<include>joda-time:joda-time</include>
+			</includes>
+		</dependencySet>
+
+		<dependencySet>
+			<unpack>false</unpack>
+			<outputDirectory>lib/upload</outputDirectory>
+			<includes>
+				<include>commons-fileupload:commons-fileupload</include>
+				<include>commons-io:commons-io</include>
+			</includes>
 		</dependencySet>
 	</dependencySets>
   

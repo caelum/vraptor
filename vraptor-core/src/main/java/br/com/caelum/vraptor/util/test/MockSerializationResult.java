@@ -29,8 +29,6 @@ import br.com.caelum.vraptor.proxy.ObjenesisInstanceCreator;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.serialization.DefaultRepresentationResult;
 import br.com.caelum.vraptor.serialization.JSONSerialization;
-import br.com.caelum.vraptor.serialization.NullProxyInitializer;
-import br.com.caelum.vraptor.serialization.ProxyInitializer;
 import br.com.caelum.vraptor.serialization.RepresentationResult;
 import br.com.caelum.vraptor.serialization.Serialization;
 import br.com.caelum.vraptor.serialization.XMLSerialization;
@@ -55,33 +53,31 @@ public class MockSerializationResult extends MockResult {
 	private Serialization serialization;
 	private MockHttpServletResponse response;
 	private DefaultTypeNameExtractor extractor;
-	private ProxyInitializer initializer;
 	private XStreamBuilder builder;
 	
 	
-	public MockSerializationResult(Proxifier proxifier, ProxyInitializer initializer ) {
-		this(proxifier, initializer, XStreamBuilderImpl.cleanInstance());
+	public MockSerializationResult(Proxifier proxifier) {
+		this(proxifier, XStreamBuilderImpl.cleanInstance());
 	}
 
-	public MockSerializationResult(Proxifier proxifier, ProxyInitializer initializer, XStreamBuilder builder) {
+	public MockSerializationResult(Proxifier proxifier, XStreamBuilder builder) {
 		super(proxifier);
-		this.initializer = initializer;
 		this.response = new MockHttpServletResponse();
 		this.extractor = new DefaultTypeNameExtractor();
 		this.builder = builder;
 	}
 
 	public MockSerializationResult() {
-		this(new JavassistProxifier(new ObjenesisInstanceCreator()), new NullProxyInitializer());
+		this(new JavassistProxifier(new ObjenesisInstanceCreator()));
 	}
 	
 	public MockSerializationResult(MockHttpServletResponse response) {
-		this(new JavassistProxifier(new ObjenesisInstanceCreator()), new NullProxyInitializer());
+		this(new JavassistProxifier(new ObjenesisInstanceCreator()));
 		this.response = response;
 	}
 	
 	public MockSerializationResult(XStreamBuilder builder) {
-		this(new JavassistProxifier(new ObjenesisInstanceCreator()), new NullProxyInitializer(), builder);
+		this(new JavassistProxifier(new ObjenesisInstanceCreator()), builder);
 	}
 
 	public <T extends View> T use(final Class<T> view) {
@@ -94,17 +90,17 @@ public class MockSerializationResult extends MockResult {
 
 	private <T extends View> T instanceView(Class<T> view){
 		if (view.isAssignableFrom(JSONSerialization.class)){
-			this.serialization = new XStreamJSONSerialization(response, extractor, initializer, builder);
+			this.serialization = new XStreamJSONSerialization(response, extractor, builder);
 			return view.cast(serialization);
 		}
 		
 		if (view.isAssignableFrom(XMLSerialization.class)){
-			this.serialization = new XStreamXMLSerialization(response, extractor, initializer, builder);
+			this.serialization = new XStreamXMLSerialization(response, extractor, builder);
 			return view.cast(serialization);
 		}
 		
 		if (view.isAssignableFrom(RepresentationResult.class)) {
-			this.serialization = new XStreamXMLSerialization(response, extractor, initializer, builder);
+			this.serialization = new XStreamXMLSerialization(response, extractor, builder);
 			return view.cast(new DefaultRepresentationResult(new FormatResolver() {
 				public String getAcceptFormat() {
 					return "xml";

@@ -23,7 +23,6 @@ import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.serialization.JSONSerialization;
 import br.com.caelum.vraptor.serialization.NoRootSerialization;
-import br.com.caelum.vraptor.serialization.ProxyInitializer;
 import br.com.caelum.vraptor.serialization.Serializer;
 import br.com.caelum.vraptor.serialization.SerializerBuilder;
 import br.com.caelum.vraptor.serialization.xstream.Serializee;
@@ -43,18 +42,14 @@ public class GsonJSONSerialization implements JSONSerialization {
 
 	protected final TypeNameExtractor extractor;
 
-	protected final ProxyInitializer initializer;
-
 	protected final VRaptorGsonBuilder builder;
 
 	protected final Serializee serializee;
 
 	public GsonJSONSerialization(HttpServletResponse response, TypeNameExtractor extractor,
-			ProxyInitializer initializer, VRaptorGsonBuilder builder, Serializee serializee) {
+			VRaptorGsonBuilder builder, Serializee serializee) {
 		this.response = response;
 		this.extractor = extractor;
-		this.initializer = initializer;
-
 		this.serializee = serializee;
 		this.builder = builder;
 	}
@@ -74,7 +69,7 @@ public class GsonJSONSerialization implements JSONSerialization {
 
 	protected SerializerBuilder getSerializer() {
 		try {
-			return new GsonSerializer(builder, response.getWriter(), extractor, initializer, serializee);
+			return new GsonSerializer(builder, response.getWriter(), extractor, serializee);
 		} catch (IOException e) {
 			throw new ResultException("Unable to serialize data", e);
 		}

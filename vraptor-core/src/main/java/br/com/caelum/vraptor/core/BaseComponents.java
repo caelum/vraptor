@@ -145,12 +145,9 @@ import br.com.caelum.vraptor.restfulie.headers.DefaultRestHeadersHandler;
 import br.com.caelum.vraptor.restfulie.headers.RestDefaults;
 import br.com.caelum.vraptor.serialization.DefaultRepresentationResult;
 import br.com.caelum.vraptor.serialization.HTMLSerialization;
-import br.com.caelum.vraptor.serialization.HibernateProxyInitializer;
 import br.com.caelum.vraptor.serialization.I18nMessageSerialization;
 import br.com.caelum.vraptor.serialization.JSONPSerialization;
 import br.com.caelum.vraptor.serialization.JSONSerialization;
-import br.com.caelum.vraptor.serialization.NullProxyInitializer;
-import br.com.caelum.vraptor.serialization.ProxyInitializer;
 import br.com.caelum.vraptor.serialization.RepresentationResult;
 import br.com.caelum.vraptor.serialization.XMLSerialization;
 import br.com.caelum.vraptor.serialization.xstream.XStreamBuilder;
@@ -227,8 +224,7 @@ public class BaseComponents {
             RestDefaults.class,				DefaultRestDefaults.class,
             Evaluator.class,				JavaEvaluator.class,
             StaticContentHandler.class,		DefaultStaticContentHandler.class,
-            SingleValueConverter.class,     XStreamConverters.NullConverter.class,
-            ProxyInitializer.class,			getProxyInitializerImpl()
+            SingleValueConverter.class,     XStreamConverters.NullConverter.class
     );
 
     private final static Map<Class<?>, Class<?>> CACHED_COMPONENTS = classMap(
@@ -334,15 +330,6 @@ public class BaseComponents {
 
     public static Set<Class<? extends Deserializer>> getDeserializers() {
 		return DESERIALIZERS;
-	}
-
-    private static Class<? extends ProxyInitializer> getProxyInitializerImpl() {
-		try {
-			Class.forName("org.hibernate.proxy.HibernateProxy");
-			return HibernateProxyInitializer.class;
-		} catch (ClassNotFoundException e) {
-			return NullProxyInitializer.class;
-		}
 	}
 
     private static Class<? extends InstanceCreator> getInstanceCreator() {

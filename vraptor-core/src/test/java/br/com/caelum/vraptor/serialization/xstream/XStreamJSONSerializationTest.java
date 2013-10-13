@@ -25,7 +25,6 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
-import br.com.caelum.vraptor.serialization.HibernateProxyInitializer;
 
 import com.google.common.collect.ForwardingCollection;
 import com.thoughtworks.xstream.XStream;
@@ -42,7 +41,6 @@ public class XStreamJSONSerializationTest {
 	private ByteArrayOutputStream stream;
 	private HttpServletResponse response;
 	private DefaultTypeNameExtractor extractor;
-	private HibernateProxyInitializer initializer;
     private XStreamBuilder builder = XStreamBuilderImpl.cleanInstance();
 
     @Before
@@ -52,8 +50,7 @@ public class XStreamJSONSerializationTest {
         response = mock(HttpServletResponse.class);
         when(response.getWriter()).thenReturn(new PrintWriter(stream));
         extractor = new DefaultTypeNameExtractor();
-		initializer = new HibernateProxyInitializer();
-		this.serialization = new XStreamJSONSerialization(response, extractor, initializer, builder);
+		this.serialization = new XStreamJSONSerialization(response, extractor, builder);
     }
 
 	public static class Address {
@@ -391,23 +388,6 @@ public class XStreamJSONSerializationTest {
 		}
 
 	}
-	@Test
-	public void shouldRunHibernateLazyInitialization() throws Exception {
-		LazyInitializer initializer = mock(LazyInitializer.class);
-
-		SomeProxy proxy = new SomeProxy(initializer);
-		proxy.name = "my name";
-		proxy.aField = "abc";
-
-		when(initializer.getPersistentClass()).thenReturn(Client.class);
-
-		serialization.from(proxy).serialize();
-
-		assertThat(result(), is("{\"client\": {\"name\": \"my name\",\"aField\": \"abc\"}}"));
-
-		verify(initializer).initialize();
-	}
-
 
 	static class MyCollection extends ForwardingCollection<Order> {
 		@Override
@@ -433,7 +413,7 @@ public class XStreamJSONSerializationTest {
 	@Test
 	public void shouldUseCollectionConverterWhenItExists() {
 		String expectedResult = "[\"testing\"]";
-		XStreamJSONSerialization serialization = new XStreamJSONSerialization(response, extractor, initializer, builder) {
+		XStreamJSONSerialization serialization = new XStreamJSONSerialization(response, extractor, builder) {
 			@Override
 			protected XStream getXStream() {
 				XStream xStream = super.getXStream();

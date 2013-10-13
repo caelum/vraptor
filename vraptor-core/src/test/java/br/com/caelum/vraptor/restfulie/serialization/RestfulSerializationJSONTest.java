@@ -29,7 +29,7 @@ public class RestfulSerializationJSONTest {
 
 	@Test
 	public void shouldReturnAnXStreamInstanceWithSupportToLinkConvertersBasedOnReflection() {
-		RestfulSerializationJSON serialization = new RestfulSerializationJSON(null, null, null, null, null, XStreamBuilderImpl.cleanInstance());
+		RestfulSerializationJSON serialization = new RestfulSerializationJSON(null, null, null, null, XStreamBuilderImpl.cleanInstance());
 		XStream xstream = serialization.getXStream();
 		Converter converter = xstream.getConverterLookup().lookupConverterForType(CustomType.class);
 		assertThat(converter.getClass(), is(typeCompatibleWith(LinkConverterJSON.class)));
@@ -41,7 +41,7 @@ public class RestfulSerializationJSONTest {
 
 	@Test
 	public void shouldUseTheDefaultConverterForTypesThatAreNotHypermediaAware() {
-		RestfulSerializationJSON serialization = new RestfulSerializationJSON(null, null, null, null, null, XStreamBuilderImpl.cleanInstance());
+		RestfulSerializationJSON serialization = new RestfulSerializationJSON(null, null, null, null, XStreamBuilderImpl.cleanInstance());
 		XStream xstream = serialization.getXStream();
 		Converter converter = xstream.getConverterLookup().lookupConverterForType(CustomNonHMType.class);
 		assertThat(converter.getClass(), is(typeCompatibleWith(ReflectionConverter.class)));
@@ -67,7 +67,7 @@ public class RestfulSerializationJSONTest {
 	@Test
 	public void shouldAllowCustomXStreamRetrieval() {
 
-		RestfulSerialization serialization = new RestfulSerialization(null, null, null, null, null, XStreamBuilderImpl.cleanInstance()) {
+		RestfulSerialization serialization = new RestfulSerialization(null, null, null, null, XStreamBuilderImpl.cleanInstance()) {
 			@Override
 			protected XStream getXStream() {
 				XStream xStream = super.getXStream();

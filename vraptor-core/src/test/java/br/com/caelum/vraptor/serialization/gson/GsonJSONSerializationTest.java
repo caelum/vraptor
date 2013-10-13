@@ -27,7 +27,6 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
-import br.com.caelum.vraptor.serialization.HibernateProxyInitializer;
 import br.com.caelum.vraptor.serialization.gson.adapters.CalendarSerializer;
 import br.com.caelum.vraptor.serialization.iso8601.gson.CalendarISO8601Serializer;
 import br.com.caelum.vraptor.serialization.xstream.Serializee;
@@ -41,7 +40,6 @@ import com.google.gson.JsonParser;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
-@SuppressWarnings("deprecation")
 public class GsonJSONSerializationTest {
 	
 	private GsonJSONSerialization serialization;
@@ -52,8 +50,6 @@ public class GsonJSONSerializationTest {
 
 	private DefaultTypeNameExtractor extractor;
 
-	private HibernateProxyInitializer initializer;
-	
 	private Serializee serializee;
 	
 	@Before
@@ -63,10 +59,9 @@ public class GsonJSONSerializationTest {
 		response = mock(HttpServletResponse.class);
 		when(response.getWriter()).thenReturn(new PrintWriter(stream));
 		extractor = new DefaultTypeNameExtractor();
-		initializer = new HibernateProxyInitializer();
 		serializee = new Serializee();
 		
-		this.serialization = new GsonJSONSerialization(response, extractor, initializer, createBuilder(), serializee);
+		this.serialization = new GsonJSONSerialization(response, extractor, createBuilder(), serializee);
 	}
 
 	public static class Address {
@@ -510,7 +505,7 @@ public class GsonJSONSerializationTest {
 	
 	@SuppressWarnings("rawtypes")
 	private GsonJSONSerialization serializationWithAdapter(JsonSerializer adapter) {
-		return new GsonJSONSerialization(response, extractor, initializer, createBuilder(adapter), serializee);
+		return new GsonJSONSerialization(response, extractor, createBuilder(adapter), serializee);
 	}
 
 }

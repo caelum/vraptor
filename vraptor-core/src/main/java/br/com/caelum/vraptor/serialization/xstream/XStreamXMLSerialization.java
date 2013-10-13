@@ -37,13 +37,11 @@ public class XStreamXMLSerialization implements XMLSerialization {
 
 	private final HttpServletResponse response;
 	private final TypeNameExtractor extractor;
-	private final ProxyInitializer initializer;
 	private final XStreamBuilder builder;
 	
-	public XStreamXMLSerialization(HttpServletResponse response, TypeNameExtractor extractor, ProxyInitializer initializer, XStreamBuilder builder) {
+	public XStreamXMLSerialization(HttpServletResponse response, TypeNameExtractor extractor, XStreamBuilder builder) {
 		this.response = response;
 		this.extractor = extractor;
-		this.initializer = initializer;
 		this.builder = builder;
 	}
 
@@ -58,7 +56,7 @@ public class XStreamXMLSerialization implements XMLSerialization {
 
 	protected SerializerBuilder getSerializer() {
 		try {
-			return new XStreamSerializer(getXStream(), response.getWriter(), extractor, initializer);
+			return new XStreamSerializer(getXStream(), response.getWriter(), extractor);
 		} catch (IOException e) {
 			throw new ResultException("Unable to serialize data", e);
 		}

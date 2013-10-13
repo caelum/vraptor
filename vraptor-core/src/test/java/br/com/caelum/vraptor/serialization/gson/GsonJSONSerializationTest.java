@@ -20,8 +20,6 @@ import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.hibernate.proxy.HibernateProxy;
-import org.hibernate.proxy.LazyInitializer;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -389,31 +387,6 @@ public class GsonJSONSerializationTest {
 
 	private String result() {
 		return new String(stream.toByteArray());
-	}
-
-	public static class Bazinga {
-		private HibernateProxy value;
-		
-		public Bazinga(HibernateProxy value) {
-			this.value = value;
-		}
-
-		public HibernateProxy getValue() { return value; }
-		public void setValue(HibernateProxy value) { this.value = value; }
-	}
-
-	@Test
-	public void shouldRunHibernateLazyInitialization() throws Exception {
-		LazyInitializer initializer = mock(LazyInitializer.class);
-		HibernateProxy proxy = mock(HibernateProxy.class);
-		
-		when(proxy.getHibernateLazyInitializer()).thenReturn(initializer);
-		
-		Bazinga bazinga = new Bazinga(proxy);
-
-		serialization.from(bazinga).include("value").serialize();
-
-		assertThat(result(), is("{\"bazinga\":{}}"));
 	}
 
 	static class MyCollection extends ForwardingCollection<Order> {

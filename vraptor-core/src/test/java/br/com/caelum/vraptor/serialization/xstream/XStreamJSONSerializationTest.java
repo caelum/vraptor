@@ -6,7 +6,6 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.io.ByteArrayOutputStream;
@@ -18,8 +17,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.hibernate.proxy.HibernateProxy;
-import org.hibernate.proxy.LazyInitializer;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -362,31 +359,6 @@ public class XStreamJSONSerializationTest {
 
 	private String result() {
 		return new String(stream.toByteArray());
-	}
-
-	public static class SomeProxy extends Client implements HibernateProxy {
-		private static final long serialVersionUID = 1L;
-
-		private String aField;
-
-		private transient LazyInitializer initializer;
-
-		public SomeProxy(LazyInitializer initializer) {
-			super("name");
-			this.initializer = initializer;
-		}
-		public LazyInitializer getHibernateLazyInitializer() {
-			return initializer;
-		}
-
-		public String getaField() {
-			return aField;
-		}
-
-		public Object writeReplace() {
-			return this;
-		}
-
 	}
 
 	static class MyCollection extends ForwardingCollection<Order> {

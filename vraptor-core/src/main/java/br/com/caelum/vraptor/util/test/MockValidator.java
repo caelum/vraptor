@@ -54,7 +54,7 @@ import br.com.caelum.vraptor.validator.Validations;
  */
 public class MockValidator extends AbstractValidator {
 
-	private final List<Message> errors = new ArrayList<Message>();
+	private List<Message> errors = new ArrayList<Message>();
 
 	public void checking(Validations validations) {
 		this.errors.addAll(validations.getErrors());
@@ -102,6 +102,10 @@ public class MockValidator extends AbstractValidator {
 		}
 		
 		return false;
+	}
+	
+	public void clearErrors() {
+		this.errors = Collections.emptyList();
 	}
 	
 }

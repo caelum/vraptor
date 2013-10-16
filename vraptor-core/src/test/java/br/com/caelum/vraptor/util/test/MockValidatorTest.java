@@ -1,6 +1,8 @@
 package br.com.caelum.vraptor.util.test;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
@@ -49,4 +51,14 @@ public class MockValidatorTest {
 		
 		assertTrue(validator.containsMessage("required_field", "name"));
 	}
+	
+	@Test
+	public void clearMessagesShouldRemoveAllErrorMessages() {
+		validator.add(mock(Message.class));
+		
+		validator.clearErrors();
+		
+		assertThat(validator.getErrors(), hasSize(0));
+	}
+	
 }

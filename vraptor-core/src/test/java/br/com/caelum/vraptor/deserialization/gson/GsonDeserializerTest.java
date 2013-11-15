@@ -11,6 +11,7 @@ import static org.mockito.Mockito.when;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -50,6 +51,7 @@ public class GsonDeserializerTest {
 	private ResourceMethod jump;
 	private DefaultResourceMethod woof;
 	private DefaultResourceMethod dropDead;
+	private DefaultResourceMethod adopt;
 	private HttpServletRequest request;
 
 	@Before
@@ -72,6 +74,8 @@ public class GsonDeserializerTest {
 				Integer.class));
 		dropDead = new DefaultResourceMethod(resourceClass, DogController.class.getDeclaredMethod("dropDead",
 				Integer.class, Dog.class));
+		adopt = new DefaultResourceMethod(resourceClass, DogController.class.getDeclaredMethod("adopt",
+				List.class));
 	}
 
 	static class Dog {
@@ -100,6 +104,9 @@ public class GsonDeserializerTest {
 		}
 
 		public void dropDead(Integer times, Dog dog) {
+		}
+		
+		public void adopt(List<Dog> dogs) {
 		}
 
 	}
@@ -135,6 +142,26 @@ public class GsonDeserializerTest {
 		Dog dog = (Dog) deserialized[0];
 		assertThat(dog.name, is("Brutus"));
 		assertThat(dog.age, is(7));
+	}
+	
+	@Test
+	public void shouldBeAbleToDeserializeAListOfDogs() throws Exception {
+		String jsonArrayOfDogs = "{'dogs': [{'name':'Brutus','age':7}, {'name':'Snoop','age':10}] }";
+		
+		InputStream stream = new ByteArrayInputStream(jsonArrayOfDogs.getBytes());
+
+		when(provider.parameterNamesFor(adopt.getMethod())).thenReturn(new String[] { "dogs" });
+
+		Object[] deserialized = deserializer.deserialize(stream, adopt);
+		assertThat(deserialized.length, is(1));
+		assertThat(deserialized[0], is(instanceOf(List.class)));
+		
+		List<Dog> dogs = (List<Dog>) deserialized[0];
+		assertThat(dogs.size(), is(2));
+		assertThat(dogs.get(0).name, is("Brutus"));
+		assertThat(dogs.get(0).age, is(7));
+		assertThat(dogs.get(1).name, is("Snoop"));
+		assertThat(dogs.get(1).age, is(10));
 	}
 
 	@Test

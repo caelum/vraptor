@@ -52,6 +52,7 @@ public class GsonDeserializerTest {
 	private DefaultResourceMethod woof;
 	private DefaultResourceMethod dropDead;
 	private DefaultResourceMethod adopt;
+	private DefaultResourceMethod sell;
 	private HttpServletRequest request;
 
 	@Before
@@ -76,6 +77,8 @@ public class GsonDeserializerTest {
 				Integer.class, Dog.class));
 		adopt = new DefaultResourceMethod(resourceClass, DogController.class.getDeclaredMethod("adopt",
 				List.class));
+		sell = new DefaultResourceMethod(resourceClass, DogController.class.getDeclaredMethod("sell",
+				List.class, String.class));
 	}
 
 	static class Dog {
@@ -108,7 +111,10 @@ public class GsonDeserializerTest {
 		
 		public void adopt(List<Dog> dogs) {
 		}
-
+		
+		public void sell(List<Dog> dogs, String customer) {
+		}
+		
 	}
 
 	private class DogDeserializer implements JsonDeserializer<Dog> {
@@ -162,6 +168,49 @@ public class GsonDeserializerTest {
 		assertThat(dogs.get(0).age, is(7));
 		assertThat(dogs.get(1).name, is("Snoop"));
 		assertThat(dogs.get(1).age, is(10));
+	}
+	
+	@Test
+	public void shouldBeAbleToDeserializeAListOfDogsWithNoRoot() throws Exception {
+		String jsonArrayOfDogs = "[{'name':'Brutus','age':7}, {'name':'Snoop','age':10}]";
+		
+		InputStream stream = new ByteArrayInputStream(jsonArrayOfDogs.getBytes());
+
+		when(provider.parameterNamesFor(adopt.getMethod())).thenReturn(new String[] { "dogs" });
+
+		Object[] deserialized = deserializer.deserialize(stream, adopt);
+		assertThat(deserialized.length, is(1));
+		assertThat(deserialized[0], is(instanceOf(List.class)));
+		
+		List<Dog> dogs = (List<Dog>) deserialized[0];
+		assertThat(dogs.size(), is(2));
+		assertThat(dogs.get(0).name, is("Brutus"));
+		assertThat(dogs.get(0).age, is(7));
+		assertThat(dogs.get(1).name, is("Snoop"));
+		assertThat(dogs.get(1).age, is(10));
+	}
+	
+	@Test
+	public void shouldBeAbleToDeserializeAListOfDogsWhenMethodHasMoreThenOneParameter() throws Exception {
+		String jsonArrayOfDogs = "{dogs: [{'name':'Brutus','age':7}, {'name':'Snoop','age':10}], customer: 'Me'}";
+		
+		InputStream stream = new ByteArrayInputStream(jsonArrayOfDogs.getBytes());
+
+		when(provider.parameterNamesFor(sell.getMethod())).thenReturn(new String[] { "dogs", "customer" });
+
+		Object[] deserialized = deserializer.deserialize(stream, sell);
+		assertThat(deserialized.length, is(2));
+		assertThat(deserialized[0], is(instanceOf(List.class)));
+		
+		List<Dog> dogs = (List<Dog>) deserialized[0];
+		assertThat(dogs.size(), is(2));
+		assertThat(dogs.get(0).name, is("Brutus"));
+		assertThat(dogs.get(0).age, is(7));
+		assertThat(dogs.get(1).name, is("Snoop"));
+		assertThat(dogs.get(1).age, is(10));
+		
+		String customer = (String) deserialized[1];
+		assertThat(customer, is("Me"));
 	}
 
 	@Test

@@ -76,7 +76,7 @@ public class GsonDeserialization implements Deserializer {
 				return params;
 			}
 
-			logger.info("json retrieved: {}", content);
+			logger.debug("json retrieved: {}", content);
 
 			JsonParser parser = new JsonParser();
 			JsonElement jsonElement = parser.parse(content);

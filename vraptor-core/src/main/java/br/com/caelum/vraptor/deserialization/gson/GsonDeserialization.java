@@ -25,6 +25,7 @@ import com.google.common.base.Strings;
 import com.google.common.io.CharStreams;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -70,7 +71,7 @@ public class GsonDeserialization implements Deserializer {
 		try {
 			String content = getContentOfStream(inputStream);
 
-			if(Strings.isNullOrEmpty(content)) {
+			if (Strings.isNullOrEmpty(content)) {
 				logger.debug("json with no content");
 				return params;
 			}
@@ -78,25 +79,47 @@ public class GsonDeserialization implements Deserializer {
 			logger.debug("json retrieved: {}", content);
 
 			JsonParser parser = new JsonParser();
-			JsonObject root = (JsonObject) parser.parse(content);
+			JsonElement jsonElement = parser.parse(content);
 
-			for (int i = 0; i < types.length; i++) {
-				String name = parameterNames[i];
-				JsonElement node = root.get(name);
-				if (isWithoutRoot(parameterNames, root)) {
-					params[i] = gson.fromJson(root, types[i]);
-					logger.info("json without root deserialized");
-					break;
+			if (jsonElement.isJsonObject()) {
+				JsonObject root = jsonElement.getAsJsonObject();
+				
+				for (int i = 0; i < types.length; i++) {
+					String name = parameterNames[i];
+					JsonElement node = root.get(name);
+					
+					if (isWithoutRoot(parameterNames, root)) {
+						params[i] = gson.fromJson(root, types[i]);
+						logger.info("json without root deserialized");
+						break;
+					} else if (node != null) {
+						if (node.isJsonArray()) {
+							JsonArray jsonArray = node.getAsJsonArray();
+							
+							Type type = method.getMethod().getGenericParameterTypes()[i];
+							if (type instanceof ParameterizedType) {
+								params[i] = gson.fromJson(jsonArray, type);
+							} else {
+								params[i] = gson.fromJson(jsonArray, types[i]);
+							}
+						} else {
+							params[i] = gson.fromJson(node, types[i]);
+						}
+					}
 				}
-				else if(node != null){
-					params[i] = gson.fromJson(node, types[i]);
+			} else if (jsonElement.isJsonArray()) {
+				if ((parameterNames.length != 1) || (!(method.getMethod().getGenericParameterTypes()[0] instanceof ParameterizedType))) {
+                    throw new IllegalArgumentException("Methods that consumes an array representation must receive only just one collection generic typed argument");
 				}
-				logger.debug("json deserialized: {}", params[i]);
+				
+				JsonArray jsonArray= jsonElement.getAsJsonArray();
+				params[0] = gson.fromJson(jsonArray, method.getMethod().getGenericParameterTypes()[0]);
 			}
 		} catch (Exception e) {
 			throw new ResultException("Unable to deserialize data", e);
 		}
 
+		logger.debug("json deserialized: {}", (Object) params);
 		return params;
 	}
 

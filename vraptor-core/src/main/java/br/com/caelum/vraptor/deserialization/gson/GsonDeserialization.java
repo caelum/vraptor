@@ -113,7 +113,7 @@ public class GsonDeserialization implements Deserializer {
 				}
 				
 				JsonArray jsonArray= jsonElement.getAsJsonArray();
-                params[0] = gson.fromJson(jsonArray, method.getMethod().getGenericParameterTypes()[0]);
+				params[0] = gson.fromJson(jsonArray, method.getMethod().getGenericParameterTypes()[0]);
 			}
 		} catch (Exception e) {
 			throw new ResultException("Unable to deserialize data", e);

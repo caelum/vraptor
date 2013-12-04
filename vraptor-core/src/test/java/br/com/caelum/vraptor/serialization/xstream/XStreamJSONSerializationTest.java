@@ -6,7 +6,6 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.io.ByteArrayOutputStream;
@@ -18,14 +17,11 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.hibernate.proxy.HibernateProxy;
-import org.hibernate.proxy.LazyInitializer;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
-import br.com.caelum.vraptor.serialization.HibernateProxyInitializer;
 
 import com.google.common.collect.ForwardingCollection;
 import com.thoughtworks.xstream.XStream;
@@ -42,7 +38,6 @@ public class XStreamJSONSerializationTest {
 	private ByteArrayOutputStream stream;
 	private HttpServletResponse response;
 	private DefaultTypeNameExtractor extractor;
-	private HibernateProxyInitializer initializer;
     private XStreamBuilder builder = XStreamBuilderImpl.cleanInstance();
 
     @Before
@@ -52,8 +47,7 @@ public class XStreamJSONSerializationTest {
         response = mock(HttpServletResponse.class);
         when(response.getWriter()).thenReturn(new PrintWriter(stream));
         extractor = new DefaultTypeNameExtractor();
-		initializer = new HibernateProxyInitializer();
-		this.serialization = new XStreamJSONSerialization(response, extractor, initializer, builder);
+		this.serialization = new XStreamJSONSerialization(response, extractor, builder);
     }
 
 	public static class Address {
@@ -367,48 +361,6 @@ public class XStreamJSONSerializationTest {
 		return new String(stream.toByteArray());
 	}
 
-	public static class SomeProxy extends Client implements HibernateProxy {
-		private static final long serialVersionUID = 1L;
-
-		private String aField;
-
-		private transient LazyInitializer initializer;
-
-		public SomeProxy(LazyInitializer initializer) {
-			super("name");
-			this.initializer = initializer;
-		}
-		public LazyInitializer getHibernateLazyInitializer() {
-			return initializer;
-		}
-
-		public String getaField() {
-			return aField;
-		}
-
-		public Object writeReplace() {
-			return this;
-		}
-
-	}
-	@Test
-	public void shouldRunHibernateLazyInitialization() throws Exception {
-		LazyInitializer initializer = mock(LazyInitializer.class);
-
-		SomeProxy proxy = new SomeProxy(initializer);
-		proxy.name = "my name";
-		proxy.aField = "abc";
-
-		when(initializer.getPersistentClass()).thenReturn(Client.class);
-
-		serialization.from(proxy).serialize();
-
-		assertThat(result(), is("{\"client\": {\"name\": \"my name\",\"aField\": \"abc\"}}"));
-
-		verify(initializer).initialize();
-	}
-
-
 	static class MyCollection extends ForwardingCollection<Order> {
 		@Override
 		protected Collection<Order> delegate() {
@@ -433,7 +385,7 @@ public class XStreamJSONSerializationTest {
 	@Test
 	public void shouldUseCollectionConverterWhenItExists() {
 		String expectedResult = "[\"testing\"]";
-		XStreamJSONSerialization serialization = new XStreamJSONSerialization(response, extractor, initializer, builder) {
+		XStreamJSONSerialization serialization = new XStreamJSONSerialization(response, extractor, builder) {
 			@Override
 			protected XStream getXStream() {
 				XStream xStream = super.getXStream();

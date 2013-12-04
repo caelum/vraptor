@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.junit.Before;
 
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
-import br.com.caelum.vraptor.serialization.NullProxyInitializer;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.Converter;
@@ -37,7 +36,7 @@ public class XStreamSerializerTest extends XStreamXMLSerializationTest {
         
         
 		final DefaultTypeNameExtractor extractor = new DefaultTypeNameExtractor();
-		this.serialization = new XStreamXMLSerialization(response, extractor, new NullProxyInitializer(), new XStreamBuilderImpl(
+		this.serialization = new XStreamXMLSerialization(response, extractor, new XStreamBuilderImpl(
                 new XStreamConverters(Collections.<Converter>emptyList(), Collections.<SingleValueConverter>emptyList()),
                 extractor) {
 			@Override

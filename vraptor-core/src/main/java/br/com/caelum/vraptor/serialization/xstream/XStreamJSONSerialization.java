@@ -37,13 +37,11 @@ public class XStreamJSONSerialization implements JSONSerialization {
 
     protected final HttpServletResponse response;
     protected final TypeNameExtractor extractor;
-    protected final ProxyInitializer initializer;
     protected final XStreamBuilder builder;
 
-    public XStreamJSONSerialization(HttpServletResponse response, TypeNameExtractor extractor, ProxyInitializer initializer, XStreamBuilder builder) {
+    public XStreamJSONSerialization(HttpServletResponse response, TypeNameExtractor extractor, XStreamBuilder builder) {
         this.response = response;
         this.extractor = extractor;
-        this.initializer = initializer;
         this.builder = builder;
     }
 
@@ -62,7 +60,7 @@ public class XStreamJSONSerialization implements JSONSerialization {
 
     protected SerializerBuilder getSerializer() {
         try {
-        	return new XStreamSerializer(getXStream(), response.getWriter(), extractor, initializer);
+        	return new XStreamSerializer(getXStream(), response.getWriter(), extractor);
         } catch (IOException e) {
             throw new ResultException("Unable to serialize data", e);
         }

@@ -20,7 +20,6 @@ package br.com.caelum.vraptor.restfulie.serialization;
 import java.io.Writer;
 
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
-import br.com.caelum.vraptor.serialization.ProxyInitializer;
 import br.com.caelum.vraptor.serialization.Serializer;
 import br.com.caelum.vraptor.serialization.SerializerBuilder;
 import br.com.caelum.vraptor.serialization.xstream.XStreamSerializer;
@@ -31,8 +30,8 @@ public class LinksSerializer implements SerializerBuilder {
 
 	private final XStreamSerializer serializer;
 
-	public LinksSerializer(XStream xstream, Writer writer, TypeNameExtractor extractor, ProxyInitializer initializer) {
-		this.serializer = new XStreamSerializer(xstream, writer, extractor, initializer);
+	public LinksSerializer(XStream xstream, Writer writer, TypeNameExtractor extractor) {
+		this.serializer = new XStreamSerializer(xstream, writer, extractor);
 	}
 
 	public Serializer exclude(String... arg0) {

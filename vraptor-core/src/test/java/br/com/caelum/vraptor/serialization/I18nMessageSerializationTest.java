@@ -37,10 +37,9 @@ public class I18nMessageSerializationTest {
         HttpServletResponse response = mock(HttpServletResponse.class);
         when(response.getWriter()).thenReturn(new PrintWriter(stream));
         DefaultTypeNameExtractor extractor = new DefaultTypeNameExtractor();
-		HibernateProxyInitializer initializer = new HibernateProxyInitializer();
 	    XStreamBuilder builder = XStreamBuilderImpl.cleanInstance(new MessageConverter());
-		XStreamJSONSerialization jsonSerialization = new XStreamJSONSerialization(response, extractor, initializer, builder);
-		XStreamXMLSerialization xmlSerialization = new XStreamXMLSerialization(response, extractor, initializer, builder);
+		XStreamJSONSerialization jsonSerialization = new XStreamJSONSerialization(response, extractor, builder);
+		XStreamXMLSerialization xmlSerialization = new XStreamXMLSerialization(response, extractor, builder);
 		
 		Container container = mock(Container.class);
 		when(container.instanceFor(JSONSerialization.class)).thenReturn(jsonSerialization);

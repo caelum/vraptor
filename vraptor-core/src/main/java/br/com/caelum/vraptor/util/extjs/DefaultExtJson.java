@@ -23,7 +23,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.ioc.Component;
-import br.com.caelum.vraptor.serialization.ProxyInitializer;
 import br.com.caelum.vraptor.serialization.xstream.XStreamSerializer;
 
 import com.thoughtworks.xstream.XStream;
@@ -44,7 +43,7 @@ public class DefaultExtJson implements ExtJSJson {
     private XStream xstream;
     private ExtJSWrapper wrapper;
 
-    public DefaultExtJson(HttpServletResponse response, TypeNameExtractor extractor, ProxyInitializer initializer)
+    public DefaultExtJson(HttpServletResponse response, TypeNameExtractor extractor)
         throws IOException {
         xstream = new XStream(new JsonHierarchicalStreamDriver() {
             @Override
@@ -61,7 +60,7 @@ public class DefaultExtJson implements ExtJSJson {
         });
         xstream.setMode(XStream.NO_REFERENCES);
         xstream.aliasField("data", ExtJSWrapper.class, "list");
-        serializer = new XStreamSerializer(xstream, response.getWriter(), extractor, initializer);
+        serializer = new XStreamSerializer(xstream, response.getWriter(), extractor);
     }
 
     public ExtJSJson from(Object object) {

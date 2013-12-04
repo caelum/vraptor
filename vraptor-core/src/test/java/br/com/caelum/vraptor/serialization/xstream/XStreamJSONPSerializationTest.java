@@ -17,7 +17,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
-import br.com.caelum.vraptor.serialization.HibernateProxyInitializer;
 
 public class XStreamJSONPSerializationTest {
 
@@ -32,7 +31,7 @@ public class XStreamJSONPSerializationTest {
         HttpServletResponse response = mock(HttpServletResponse.class);
         when(response.getWriter()).thenReturn(new PrintWriter(stream));
         
-        this.serialization = new XStreamJSONPSerialization(response, new DefaultTypeNameExtractor(), new HibernateProxyInitializer(), XStreamBuilderImpl.cleanInstance());
+        this.serialization = new XStreamJSONPSerialization(response, new DefaultTypeNameExtractor(), XStreamBuilderImpl.cleanInstance());
     }
 
 	public static class Address {

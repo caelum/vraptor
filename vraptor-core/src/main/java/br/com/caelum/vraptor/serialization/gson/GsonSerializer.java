@@ -163,7 +163,7 @@ public class GsonSerializer implements SerializerBuilder {
 		return this;
 	}
 
-	static boolean isPrimitive(Class<?> type) {
+	protected static boolean isPrimitive(Class<?> type) {
 		return type.isPrimitive() || type.isEnum() || Number.class.isAssignableFrom(type) || type.equals(String.class)
 				|| Date.class.isAssignableFrom(type) || Calendar.class.isAssignableFrom(type)
 				|| Boolean.class.equals(type) || Character.class.equals(type);

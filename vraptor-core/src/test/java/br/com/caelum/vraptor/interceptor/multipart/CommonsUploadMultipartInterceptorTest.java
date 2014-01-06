@@ -234,6 +234,16 @@ public class CommonsUploadMultipartInterceptorTest {
     	
         interceptor.intercept(stack, method, instance);
     }
+    
+    @Test
+    public void handleValidatorMessageWhenFileUploadExceptionOccurs() throws Exception {
+        interceptor = new CommonsUploadMultipartInterceptor(request, parameters, config, validator, mockCreator);
+        
+        when(mockUpload.parseRequest(request)).thenThrow(new FileUploadException());
+        interceptor.intercept(stack, method, instance);
+        
+        verify(validator).add(any(I18nMessage.class));
+    }
 
     @Test
     public void shouldValidateWhenSizeLimitExceededExceptionOccurs() throws Exception {

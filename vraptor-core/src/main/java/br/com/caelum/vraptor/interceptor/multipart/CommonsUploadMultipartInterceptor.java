@@ -61,137 +61,142 @@ import com.google.common.collect.Multiset;
 @Intercepts(before = ResourceLookupInterceptor.class, after = {})
 @RequestScoped
 public class CommonsUploadMultipartInterceptor
-    implements MultipartInterceptor {
+implements MultipartInterceptor {
 
-    private static final Logger logger = LoggerFactory.getLogger(CommonsUploadMultipartInterceptor.class);
+	private static final Logger logger = LoggerFactory.getLogger(CommonsUploadMultipartInterceptor.class);
 
-    private final HttpServletRequest request;
-    private final MutableRequest parameters;
-    private final MultipartConfig config;
-    private final Validator validator;
-    private final ServletFileUploadCreator fileUploadCreator;
+	private final HttpServletRequest request;
+	private final MutableRequest parameters;
+	private final MultipartConfig config;
+	private final Validator validator;
+	private final ServletFileUploadCreator fileUploadCreator;
 
-    private Multiset<String> indexes;
+	private Multiset<String> indexes;
 
-    public CommonsUploadMultipartInterceptor(HttpServletRequest request, MutableRequest parameters, MultipartConfig cfg,
-            Validator validator, ServletFileUploadCreator fileUploadCreator) {
-        this.request = request;
-        this.parameters = parameters;
-        this.validator = validator;
-        this.config = cfg;
-        this.fileUploadCreator = fileUploadCreator;
-    }
+	public CommonsUploadMultipartInterceptor(HttpServletRequest request, MutableRequest parameters, MultipartConfig cfg,
+			Validator validator, ServletFileUploadCreator fileUploadCreator) {
+		this.request = request;
+		this.parameters = parameters;
+		this.validator = validator;
+		this.config = cfg;
+		this.fileUploadCreator = fileUploadCreator;
+	}
 
-    /**
-     * Will intercept the request if apache file upload says that this request is multipart
-     */
-    public boolean accepts(ResourceMethod method) {
-        return ServletFileUpload.isMultipartContent(request);
-    }
+	/**
+	 * Will intercept the request if apache file upload says that this request is multipart
+	 */
+	public boolean accepts(ResourceMethod method) {
+		return ServletFileUpload.isMultipartContent(request);
+	}
 
-    public void intercept(InterceptorStack stack, ResourceMethod method, Object instance)
-        throws InterceptionException {
-        logger.info("Request contains multipart data. Try to parse with commons-upload.");
+	public void intercept(InterceptorStack stack, ResourceMethod method, Object instance)
+			throws InterceptionException {
+		logger.info("Request contains multipart data. Try to parse with commons-upload.");
 
-        FileItemFactory factory = createFactoryForDiskBasedFileItems(config.getDirectory());
-        indexes = HashMultiset.create();
-        
-        ServletFileUpload uploader = fileUploadCreator.create(factory);
-        uploader.setSizeMax(config.getSizeLimit());
+		FileItemFactory factory = createFactoryForDiskBasedFileItems(config.getDirectory());
+		indexes = HashMultiset.create();
 
-        try {
-            final List<FileItem> items = uploader.parseRequest(request);
-            logger.debug("Found {} attributes in the multipart form submission. Parsing them.", items.size());
+		ServletFileUpload uploader = fileUploadCreator.create(factory);
+		uploader.setSizeMax(config.getSizeLimit());
 
-            final Multimap<String, String> params = LinkedListMultimap.create();
+		try {
+			final List<FileItem> items = uploader.parseRequest(request);
+			logger.debug("Found {} attributes in the multipart form submission. Parsing them.", items.size());
 
-            for (FileItem item : items) {
-                String name = item.getFieldName();
-                name = fixIndexedParameters(name);
-                
-                if (item.isFormField()) {
-                    logger.debug("{} is a field", name);
-                    params.put(name, getValue(item));
+			final Multimap<String, String> params = LinkedListMultimap.create();
 
-                } else if (isNotEmpty(item)) {
-                    logger.debug("{} is a file", name);
-                    processFile(item, name);
+			for (FileItem item : items) {
+				String name = item.getFieldName();
+				name = fixIndexedParameters(name);
 
-                } else {
-                    logger.debug("A file field was empty: {}", item.getFieldName());
-                }
-            }
+				if (item.isFormField()) {
+					logger.debug("{} is a field", name);
+					params.put(name, getValue(item));
 
-            for (String paramName : params.keySet()) {
-                Collection<String> paramValues = params.get(paramName);
-                parameters.setParameter(paramName, paramValues.toArray(new String[paramValues.size()]));
-            }
+				} else if (isNotEmpty(item)) {
+					logger.debug("{} is a file", name);
+					processFile(item, name);
 
-        } catch (final SizeLimitExceededException e) {
-            reportSizeLimitExceeded(e);
+				} else {
+					logger.debug("A file field was empty: {}", item.getFieldName());
+				}
+			}
 
-        } catch (FileUploadException e) {
-            logger.warn("There was some problem parsing this multipart request, "
-                    + "or someone is not sending a RFC1867 compatible multipart request.", e);
-        }
+			for (String paramName : params.keySet()) {
+				Collection<String> paramValues = params.get(paramName);
+				parameters.setParameter(paramName, paramValues.toArray(new String[paramValues.size()]));
+			}
 
-        stack.next(method, instance);
-    }
+		} catch (final SizeLimitExceededException e) {
+			reportSizeLimitExceeded(e);
 
-    private boolean isNotEmpty(FileItem item) {
-        return item.getName().length() > 0;
-    }
+		} catch (FileUploadException e) {
+			reportFileUploadException(e);
 
-    /**
-     * This method is called when the {@link SizeLimitExceededException} was thrown. By default, add the key
-     * file.limit.exceeded using {@link Validations}.
-     * 
-     * @param e
-     */
-    protected void reportSizeLimitExceeded(final SizeLimitExceededException e) {
-        validator.add(new I18nMessage("upload", "file.limit.exceeded", e.getActualSize(), e.getPermittedSize()));
-        logger.warn("The file size limit was exceeded.", e);
-    }
+		}
 
-    protected void processFile(FileItem item, String name) {
-        try {
-            UploadedFile upload = new DefaultUploadedFile(item.getInputStream(), item.getName(), item.getContentType(), item.getSize());
-            parameters.setParameter(name, name);
-            request.setAttribute(name, upload);
+		stack.next(method, instance);
+	}
 
-            logger.debug("Uploaded file: {} with {}", name, upload);
-        } catch (IOException e) {
-            throw new InvalidParameterException("Cant parse uploaded file " + item.getName(), e);
-        }
-    }
+	private boolean isNotEmpty(FileItem item) {
+		return item.getName().length() > 0;
+	}
 
-    protected FileItemFactory createFactoryForDiskBasedFileItems(File temporaryDirectory) {
-        DiskFileItemFactory factory = new DiskFileItemFactory();
-        factory.setRepository(temporaryDirectory);
+	/**
+	 * This method is called when the {@link SizeLimitExceededException} was thrown. By default, add the key
+	 * file.limit.exceeded using {@link Validations}.
+	 * 
+	 * @param e
+	 */
+	protected void reportSizeLimitExceeded(final SizeLimitExceededException e) {
+		validator.add(new I18nMessage("upload", "file.limit.exceeded", e.getActualSize(), e.getPermittedSize()));
+		logger.warn("The file size limit was exceeded.", e);
+	}
 
-        logger.debug("Using repository {} for file upload", factory.getRepository());
-        return factory;
-    }
+	private void reportFileUploadException(FileUploadException e) {
+		validator.add(new I18nMessage("upload", "file.upload.exception"));
+		logger.warn("There was some problem parsing this multipart request, " + "or someone is not sending a RFC1867 compatible multipart request.", e);
+	}
 
-    protected String getValue(FileItem item) {
-        String encoding = request.getCharacterEncoding();
-        if (!Strings.isNullOrEmpty(encoding)) {
-            try {
-                return item.getString(encoding);
-            } catch (UnsupportedEncodingException e) {
-                logger.warn("Request have an invalid encoding. Ignoring it");
-            }
-        }
-        return item.getString();
-    }
+	protected void processFile(FileItem item, String name) {
+		try {
+			UploadedFile upload = new DefaultUploadedFile(item.getInputStream(), item.getName(), item.getContentType(), item.getSize());
+			parameters.setParameter(name, name);
+			request.setAttribute(name, upload);
 
-    protected String fixIndexedParameters(String name) {
-        if (name.contains("[]")) {
-            String newName = name.replace("[]", "[" + (indexes.count(name)) + "]");
-            indexes.add(name);
-            logger.debug("{} was renamed to {}", name, newName);
-            name = newName;
-        }
-        return name;
-    }
+			logger.debug("Uploaded file: {} with {}", name, upload);
+		} catch (IOException e) {
+			throw new InvalidParameterException("Cant parse uploaded file " + item.getName(), e);
+		}
+	}
+
+	protected FileItemFactory createFactoryForDiskBasedFileItems(File temporaryDirectory) {
+		DiskFileItemFactory factory = new DiskFileItemFactory();
+		factory.setRepository(temporaryDirectory);
+
+		logger.debug("Using repository {} for file upload", factory.getRepository());
+		return factory;
+	}
+
+	protected String getValue(FileItem item) {
+		String encoding = request.getCharacterEncoding();
+		if (!Strings.isNullOrEmpty(encoding)) {
+			try {
+				return item.getString(encoding);
+			} catch (UnsupportedEncodingException e) {
+				logger.warn("Request have an invalid encoding. Ignoring it");
+			}
+		}
+		return item.getString();
+	}
+
+	protected String fixIndexedParameters(String name) {
+		if (name.contains("[]")) {
+			String newName = name.replace("[]", "[" + (indexes.count(name)) + "]");
+			indexes.add(name);
+			logger.debug("{} was renamed to {}", name, newName);
+			name = newName;
+		}
+		return name;
+	}
 }

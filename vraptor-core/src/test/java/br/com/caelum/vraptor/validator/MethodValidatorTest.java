@@ -94,19 +94,19 @@ public class MethodValidatorTest {
     
     @Test
     public void shouldAcceptIfMethodHasConstraint() {
-        interceptor = new MethodValidatorInterceptor(null, null, null, null, factory.getValidator());
+        interceptor = new MethodValidatorInterceptor(null, null, null, null, factory.getValidator(), null);
     	assertThat(interceptor.accepts(withConstraint), is(true));
     	
-        interceptor = new MethodValidatorInterceptor(null, null, null, null, factory.getValidator());
+        interceptor = new MethodValidatorInterceptor(null, null, null, null, factory.getValidator(), null);
     	assertThat(interceptor.accepts(withTwoConstraints), is(true));
     	
-        interceptor = new MethodValidatorInterceptor(null, null, null, null, factory.getValidator());
+        interceptor = new MethodValidatorInterceptor(null, null, null, null, factory.getValidator(), null);
     	assertThat(interceptor.accepts(cascadeConstraint), is(true));
     }
 
     @Test
     public void shouldNotAcceptIfMethodHasConstraint() {
-        interceptor = new MethodValidatorInterceptor(null, null, null, null, factory.getValidator());
+        interceptor = new MethodValidatorInterceptor(null, null, null, null, factory.getValidator(), null);
     	assertThat(interceptor.accepts(withoutConstraint), is(false));
     }
 
@@ -117,7 +117,7 @@ public class MethodValidatorTest {
         info.setParameters(new Object[] { null });
         info.setResourceMethod(withConstraint);
 
-        interceptor = new MethodValidatorInterceptor(l10n, interpolator, validator, info, factory.getValidator());
+        interceptor = new MethodValidatorInterceptor(l10n, interpolator, validator, info, factory.getValidator(), provider);
         when(l10n.getLocale()).thenReturn(new Locale("pt", "br"));
 
         MyController controller = new MyController();
@@ -134,7 +134,7 @@ public class MethodValidatorTest {
         info.setParameters(new Object[] { null });
         info.setResourceMethod(withConstraint);
 
-        interceptor = new MethodValidatorInterceptor(l10n, interpolator, validator, info, factory.getValidator());
+        interceptor = new MethodValidatorInterceptor(l10n, interpolator, validator, info, factory.getValidator(), provider);
 
         MyController controller = new MyController();
         interceptor.intercept(stack, info.getResourceMethod(), controller);
@@ -151,7 +151,7 @@ public class MethodValidatorTest {
         info.setParameters(new Object[] { null, new Customer(null, null) });
         info.setResourceMethod(withTwoConstraints);
 
-        interceptor = new MethodValidatorInterceptor(l10n, interpolator, validator, info, factory.getValidator());
+        interceptor = new MethodValidatorInterceptor(l10n, interpolator, validator, info, factory.getValidator(), provider);
         when(l10n.getLocale()).thenReturn(new Locale("pt", "br"));
 
         MyController controller = new MyController();

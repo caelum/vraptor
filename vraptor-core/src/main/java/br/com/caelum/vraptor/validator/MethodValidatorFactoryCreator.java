@@ -61,7 +61,6 @@ public class MethodValidatorFactoryCreator
     @PostConstruct
     public void buildFactory() {
         instance = Validation.byDefaultProvider().configure()
-                .parameterNameProvider(new CustomParameterNameProvider(nameProvider))
                 .constraintValidatorFactory(constraintValidatorFactory).buildValidatorFactory();
 
         logger.debug("Initializing Bean Validation (1.1 supported)");
@@ -78,43 +77,4 @@ public class MethodValidatorFactoryCreator
         }
         return instance;
     }
-
-    /**
-     * Allow vraptor to use paranamer to discovery method parameter names.
-     *
-     * @author Otávio Scherer Garcia
-     * @since 3.5.2
-     */
-    class CustomParameterNameProvider
-        implements javax.validation.ParameterNameProvider {
-
-        private final ParameterNameProvider nameProvider;
-
-        public CustomParameterNameProvider(ParameterNameProvider nameProvider) {
-            this.nameProvider = nameProvider;
-        }
-
-        /**
-         * Returns an empty list of parameter names, since we don't validate constructors.
-         */
-        public List<String> getParameterNames(Constructor<?> constructor) {
-            return emptyParameters(constructor.getParameterTypes().length);
-        }
-
-        /**
-         * Returns the parameter names for the method, skiping if method is inherited from object.
-         */
-        public List<String> getParameterNames(Method method) {
-            if (OBJECT_METHODS.contains(method)) {
-                return emptyParameters(method.getParameterTypes().length);
-            }
-
-            return asList(nameProvider.parameterNamesFor(method));
-        }
-
-        private List<String> emptyParameters(int length) {
-            return asList(new String[length]);
-        }
-    }
-
 }

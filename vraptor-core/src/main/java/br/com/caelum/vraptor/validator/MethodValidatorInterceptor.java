@@ -15,11 +15,14 @@
  */
 package br.com.caelum.vraptor.validator;
 
+import java.util.Iterator;
 import java.util.Locale;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.MessageInterpolator;
+import javax.validation.Path.Node;
+import javax.validation.Path.ParameterNode;
 import javax.validation.metadata.BeanDescriptor;
 import javax.validation.metadata.MethodDescriptor;
 
@@ -32,6 +35,7 @@ import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.core.MethodInfo;
+import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
 import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
@@ -58,14 +62,16 @@ public class MethodValidatorInterceptor
     private final MessageInterpolator interpolator;
     private final MethodInfo methodInfo;
     private final Validator validator;
+	private final ParameterNameProvider parameterNameProvider;
 
     public MethodValidatorInterceptor(Localization localization, MessageInterpolator interpolator, Validator validator,
-            MethodInfo methodInfo, javax.validation.Validator methodValidator) {
+            MethodInfo methodInfo, javax.validation.Validator methodValidator, ParameterNameProvider parameterNameProvider) {
         this.localization = localization;
         this.interpolator = interpolator;
         this.validator = validator;
         this.methodInfo = methodInfo;
         this.methodValidator = methodValidator;
+		this.parameterNameProvider = parameterNameProvider;
     }
 
     public boolean accepts(ResourceMethod method) {
@@ -77,6 +83,7 @@ public class MethodValidatorInterceptor
     public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
         throws InterceptionException {
 
+        String[] paramNames = parameterNameProvider.parameterNamesFor(method.getMethod());
         Set<ConstraintViolation<Object>> violations = methodValidator.forExecutables().validateParameters(resourceInstance,
                 method.getMethod(), methodInfo.getParameters());
         logger.debug("there are {} violations at method {}.", violations.size(), method);
@@ -85,7 +92,7 @@ public class MethodValidatorInterceptor
             BeanValidatorContext ctx = BeanValidatorContext.of(violation);
             String msg = interpolator.interpolate(violation.getMessageTemplate(), ctx, getLocale());
 
-            validator.add(new ValidationMessage(msg, violation.getPropertyPath().toString()));
+            validator.add(new ValidationMessage(msg, extractCategory(paramNames, violation)));
             logger.debug("added message {} to validation of bean {}", msg, violation.getRootBean());
         }
 
@@ -94,5 +101,24 @@ public class MethodValidatorInterceptor
 
     private Locale getLocale() {
         return localization.getLocale() == null ? Locale.getDefault() : localization.getLocale();
+    }
+
+    /**
+     * Returns the category for this constraint violation. By default, the category returned
+     * is the name of method with full path for property. You can override this method to
+     * change this behaviour.
+     */
+    protected String extractCategory(String[] paramNames, ConstraintViolation<Object> violation) {
+            Iterator<Node> path = violation.getPropertyPath().iterator();
+
+            StringBuilder cat = new StringBuilder();
+            cat.append(path.next()).append("."); // method name
+            cat.append(paramNames[path.next().as(ParameterNode.class).getParameterIndex()]);// parameter name
+
+            while (path.hasNext()) {
+                    cat.append(".").append(path.next());
+            }
+
+            return cat.toString();
     }
 }
